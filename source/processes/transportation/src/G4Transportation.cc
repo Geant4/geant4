@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.41 2003-07-31 00:19:47 gum Exp $
+// $Id: G4Transportation.cc,v 1.42 2003-07-31 14:04:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -54,6 +54,7 @@
 
 #include "G4Transportation.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParticleTable.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -416,8 +417,6 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
-#include "G4ParticleTable.hh"
-
 {
   fParticleChange.Initialize(track) ;
 
@@ -446,7 +445,8 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
 
-     const G4ParticleDefinition* fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+     static const G4ParticleDefinition* fOpticalPhoton =
+           G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
      const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
      if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
      {
