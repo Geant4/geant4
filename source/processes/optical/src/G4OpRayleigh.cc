@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpRayleigh.cc,v 1.6 2001-07-11 10:08:22 gunter Exp $
+// $Id: G4OpRayleigh.cc,v 1.7 2001-09-18 15:17:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,8 @@
 // Version:     1.0
 // Created:     1996-05-31  
 // Author:      Juliet Armstrong
+// Updated:     2001-09-18 by mma
+//		>numOfMaterials=G4Material::GetNumberOfMaterials() in BuildPhy
 // Updated:     2001-01-30 by Peter Gumplinger
 //              > allow for positiv and negative CosTheta and force the
 //              > new momentum direction to be in the same plane as the
@@ -108,7 +110,6 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         aParticleChange.Initialize(aTrack);
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-        const G4Material* aMaterial = aTrack.GetMaterial();
 
         if (verboseLevel>0) {
 		G4cout << "Scattering Photon!" << G4endl;
@@ -188,7 +189,7 @@ void G4OpRayleigh::BuildThePhysicsTable()
 
         const G4MaterialTable* theMaterialTable=
                                G4Material::GetMaterialTable();
-        G4int numOfMaterials = theMaterialTable->length();
+        G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
         // create a new physics table
 
@@ -292,8 +293,6 @@ G4OpRayleigh::RayleighAttenuationLengthGenerator(G4MaterialPropertiesTable *aMPT
         G4double c1, c2, c3, c4;
         G4double Dist;
         G4double refraction_index;
-
-        G4double no_unit = 1.0;
 
         G4PhysicsOrderedFreeVector *RayleighScatteringLengths = 
 				new G4PhysicsOrderedFreeVector();
