@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: tree.hh,v 1.1 2002-06-04 07:40:20 gcosmo Exp $
+// $Id: tree.hh,v 1.2 2002-06-04 09:23:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ template <class Data>
 class TreeNode
 {
 
-  friend TreeNodeIterator<Data>;
+  friend class TreeNodeIterator<Data>;
   
 public:
 
@@ -141,7 +141,7 @@ template<class Data>
 class TreeNodeIterator
 {
 public:
-  TreeNodeIterator(Tree<Data>::node_t * np)
+  TreeNodeIterator(TreeNode<Data> * np)
    : myroot_(np), curpos_(np)
      { 
        //if (np->parent())
@@ -150,9 +150,9 @@ public:
    
   ~TreeNodeIterator() { }
   
-  Tree<Data>::node_t * current() { return curpos_; }
+  TreeNode<Data> * current() { return curpos_; }
 
-  Tree<Data>::node_t * next()
+  TreeNode<Data> * next()
   {
      
      if (curpos_->firstChild_)
@@ -194,8 +194,8 @@ protected:
     return result;    
   } 
   
-  Tree<Data>::node_t * myroot_;  
-  Tree<Data>::node_t * curpos_;
+  TreeNode<Data> * myroot_;  
+  TreeNode<Data> * curpos_;
   //Tree<Data>::c_iterator nextc_;
 };
 

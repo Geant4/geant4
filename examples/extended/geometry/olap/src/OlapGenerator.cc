@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapGenerator.cc,v 1.1 2002-06-04 07:40:21 gcosmo Exp $
+// $Id: OlapGenerator.cc,v 1.2 2002-06-04 09:23:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,7 @@ OlapGrid::OlapGrid()
  : count(3,0), gsize(3,3), axis(0), eventsPerRun(27)
 {
   Reset(); 
-  G4cout << "OlapGrid(): " << endl
+  G4cout << "OlapGrid(): " << G4endl
        << "   gsize: " << gsize[0] << " " << gsize[1]
        << " " << gsize[2] << G4endl;    
 }

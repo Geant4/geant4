@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeoNav.hh,v 1.1 2002-06-04 07:40:18 gcosmo Exp $
+// $Id: G4GeoNav.hh,v 1.2 2002-06-04 09:23:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ public:
                   G4std::vector<G4LogicalVolume*> & result, 
                   G4bool stopAtFirst=false);
    // returns a vector of LogicalVolumes reflecting the hierarchy of theCurLVItem
-   G4int PathLV(vector<G4LogicalVolume*> & result);
+   G4int PathLV(G4std::vector<G4LogicalVolume*> & result);
    // "cd /CMS/Tr.*/.*Barrel"
    G4LogicalVolume * ChangeLV(const G4String & aRegExp);
    // get next lv as seen from the current one

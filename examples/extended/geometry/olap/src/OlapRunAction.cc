@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: OlapRunAction.cc,v 1.1 2002-06-04 07:40:22 gcosmo Exp $
+// $Id: OlapRunAction.cc,v 1.2 2002-06-04 09:23:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ void OlapRunAction::EndOfRunAction(const G4Run* aRun)
        fname = logManager->logPath + volume + ".log";
      }
 
-     FILE.open(fname, ios::app);
+     FILE.open(fname, G4std::ios::app);
      FILE << "===== collected overlaps of run [" << aRun->GetRunID() << "] " 
           << "(ol=" << theOlaps.size() << ")"<< G4endl;
 
