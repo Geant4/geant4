@@ -109,13 +109,13 @@ void hTestStanPhysicsList::ConstructProcess()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      /*
+      
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
       pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
-      */
+      
     } else if (
                 particleName == "proton"  
                || particleName == "anti_proton"  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11PhysicsList.hh,v 1.2 2001-07-11 10:03:19 gunter Exp $
+// $Id: Tst11PhysicsList.hh,v 1.3 2002-03-28 14:43:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef Tst11PhysicsList_h

@@ -262,7 +262,8 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { hDet->SetLastEventToDebug(nDebugECmd->GetNewIntValue(newValue));}
 
   if( command == DeltaECmd )
-   { hDet->SetMaxDeltaEnergy(DeltaECmd->GetNewDoubleValue(newValue));}
+   { (hTestHisto::GetPointer())
+      ->SetMaxEnergy(DeltaECmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

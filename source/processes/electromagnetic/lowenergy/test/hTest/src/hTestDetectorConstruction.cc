@@ -440,7 +440,6 @@ void hTestDetectorConstruction::ComputeGeomParameters()
   (hTestHisto::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
   (hTestHisto::GetPointer())->SetHistoName(histoName);
   (hTestHisto::GetPointer())->SetHistoNumber(nHisto);
-  (hTestHisto::GetPointer())->SetMaxEnergy(maxDelta);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
