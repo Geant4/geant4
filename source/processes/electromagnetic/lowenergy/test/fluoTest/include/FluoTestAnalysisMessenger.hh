@@ -25,12 +25,7 @@ public:
 private:
   FluoTestAnalysisManager* FluoTestAnalysis;
   G4UIdirectory*              FluoTestAnalysisDir;
-  
-  G4UIcmdWithAString*        Histo1DDrawCmd;
-  //G4UIcmdWithAString*        Histo2DDrawCmd;
-  G4UIcmdWithAString*        Histo1DSaveCmd;
-  //G4UIcmdWithAString*        Histo2DSaveCmd;
-  //G4UIcmdWithAString*        Histo2DModeCmd;
+ 
 };
 #endif
 #endif

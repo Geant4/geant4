@@ -30,7 +30,7 @@ FluoTestAnalysisManager::FluoTestAnalysisManager(FluoTestDetectorConstruction* F
   histoGamLS(0),
   histoGamLSP(0),
   histoGamBornSam(0),
-  histoEleBornSam(0)
+  histoEleBornSam(0),
   histoSpectrum(0)
 {
    // Define the messenger and the analysis system

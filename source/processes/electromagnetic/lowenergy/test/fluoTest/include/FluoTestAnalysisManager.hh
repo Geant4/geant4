@@ -20,7 +20,7 @@ class NTuple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class FluoTestAnalysisManager: public G4VAnalysisManager
+class FluoTestAnalysisManager
 {
 public:
   FluoTestAnalysisManager(FluoTestDetectorConstruction*);
@@ -48,9 +48,8 @@ private:
   IHistoManager* histoManager;
  
   Lizard::NTupleFactory* factory;
-
-  FluoTestDetectorConstruction*    Detector;
   Lizard::NTuple* ntuple;
+  FluoTestDetectorConstruction*    Detector;
   IHistogram1D* histoGamDet;
   IHistogram1D*  histoGamDetPre;
   IHistogram1D*  histoGamLeavSam;
