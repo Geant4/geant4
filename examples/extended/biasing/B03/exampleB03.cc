@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.8 2002-11-08 17:35:17 dressel Exp $
+// $Id: exampleB03.cc,v 1.9 2002-11-13 08:59:22 mdressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@
 #include "Python.h"
 
 extern "C" {
-  void initB03Appc();
+  void init_B03App();
 }
 int main(int argc, char **argv)
 {  
@@ -61,7 +61,7 @@ int main(int argc, char **argv)
     /* Initialize the Python interpreter.  Required. */
     Py_Initialize();
 
-    initB03Appc();
+    init_B03App();
     FILE *pyrc = fopen("python.rc","r");
     if (pyrc) {
       PyRun_SimpleFile(pyrc,"python.rc");

@@ -138,7 +138,7 @@ public:
   ~G4ScoreTable(){}
   void Print(const G4MapGeometryCellCellScorer &cs, 
 	     G4std::ostream *out = 0);
-  %addmethods {
+  %extend {
     const char *Write(const G4MapGeometryCellCellScorer &cs){
       G4std::ostrstream tmpout;
       self->Print(cs, &tmpout);
@@ -155,7 +155,7 @@ public:
 
   const G4VPhysicalVolume &GetPhysicalVolumeByName(const char *name) const;
   G4VPhysicalVolume &GetWorldVolume() const;
-  %addmethods {
+  %extend {
     const char *ListPhysNames(){
       G4String *value = new G4String(self->ListPhysNamesAsG4String());
       return value->c_str();
