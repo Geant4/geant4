@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HtmlPPReporter.cc,v 1.2 2003-10-30 09:22:41 kurasige Exp $
+// $Id: G4HtmlPPReporter.cc,v 1.3 2004-02-13 06:33:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,6 +99,8 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
   outFile << eTR << G4endl;;
   
   for (size_t i=0; i< pList.size(); i++){
+    if (pList[i]->GetPDGEncoding()<0) continue;
+
     outFile << sTR << G4endl;;
     // column 1  : endcoding
     outFile << sTD << pList[i]->GetPDGEncoding() << eTD << G4endl;; 
@@ -132,6 +134,8 @@ void G4HtmlPPReporter::SparseOption(const G4String& option)
 
  void  G4HtmlPPReporter::GeneratePropertyTable(G4ParticleDefinition* particle)
 {
+  if (particle->GetPDGEncoding()<0) return;
+
   G4String name = particle->GetParticleName();
   //--- open index file -----
   G4String fileName = baseDir + name + ".html";
