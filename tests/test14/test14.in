@@ -19,18 +19,8 @@
 /lowenergy/secphotcut 10 eV
 /run/initialize
 /run/particle/dumpCutValues
-
 #
 /gun/direction 1 0 0
-#
-# gamma 500 eV in Al
-#
-#/tracking/verbose 6
-#/process/inactivate LowEnCompton
-#/process/inactivate LowEnConversion
-#/process/inactivate LowEnBrem
-#/process/inactivate LowEnPhotoElec
-#/process/inactivate LowEnergyIoni
 #
 /gun/particle gamma
 #
@@ -38,27 +28,25 @@
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 10000
 # 
 /gun/energy 2 keV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 10000
 #
-/gun/energy 800 eV
+/gun/energy 500 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
+/run/beamOn 10000
 #
 /gun/energy 250 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
-/run/beamOn 1000
-#
-# electron 500 eV in Al
+/run/beamOn 10000
 #
 /gun/particle e-
 #
@@ -76,17 +64,78 @@
 /run/beamOn 1000
 #
 #/gun/particle e-
-/gun/energy 800 eV
+/gun/energy 600 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
 #/gun/particle e-
-/gun/energy 500 eV
+/gun/energy 300 eV
 /tracking/verbose 2
 /run/beamOn 1
 /tracking/verbose 0
 /run/beamOn 1000
 #
+/calor/setAbsMat Lead      
+#
+#
+/gun/direction 1 0 0
+#
+/gun/particle gamma
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 10000
+# 
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 10000
+#
+/gun/energy 500 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 10000
+#
+/gun/energy 250 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 10000
+#
+/gun/particle e-
+#
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+#/gun/particle e-
+/gun/energy 2 keV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+#/gun/particle e-
+/gun/energy 600 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+#/gun/particle e-
+/gun/energy 300 eV
+/tracking/verbose 2
+/run/beamOn 1
+/tracking/verbose 0
+/run/beamOn 1000
+#
+
 exit
