@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-05-07 16:19:17 pia Exp $
+$Id: History,v 1.10 2000-05-07 16:23:56 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,10 +18,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 19.04.2000 - MGP, tag emlowen-V01-01-10
-             includes Vladimir's test/TestEm6 and test/TestP directories
+             Includes Vladimir's test/TestEm6 and test/TestP directories
              requires removing two (!) duplicate TestEm6 directories
              elsewhere
-
+             Includes Stephane's unit tests  G4hLETestLossTable.cc
+             and 
+              
 19.04.2000 - MGP, tag emlowen-V01-01-09
              same as emlowen-V01-01-08, with modifications by V.L. for
              first implementation of continuous energy loss in 
