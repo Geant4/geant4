@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.2 2001-03-14 07:20:49 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.3 2001-03-26 15:49:02 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,9 +39,25 @@
 #define _G4REFERENCECOUNTEDHANDLE_H_ 1
 
 template <class X>
-   class G4ReferenceCountedHandle
+class G4ReferenceCountedHandle
    {
-   public: // with description
+   private: // with description
+      struct CountedObject {
+         unsigned int fCount;
+         // Reference counter
+         X*           fRep;
+         // The counted object
+      
+         CountedObject::CountedObject( X* pObj = 0 )
+         : fCount(1), fRep( pObj ) {
+         } // Constructor
+         
+         CountedObject::~CountedObject() {
+            delete fRep;
+         } // Destructor
+      };
+
+    public: // with description
       G4ReferenceCountedHandle( X* rep = 0 )
       : fObj( new G4ReferenceCountedHandle::CountedObject(rep) ) {
       } // Constructor
@@ -150,22 +166,7 @@ template <class X>
          return fObj->fRep;
       } // Functor operator (for covinience)
    
-   private: // with description
-      struct CountedObject {
-         unsigned int fCount;
-         // Reference counter
-         X*           fRep;
-         // The counted object
-      
-         CountedObject::CountedObject( X* pObj = 0 )
-         : fCount(1), fRep( pObj ) {
-         } // Constructor
-         
-         CountedObject::~CountedObject() {
-            delete fRep;
-         } // Destructor
-      };
-   
+  
    private:
       G4ReferenceCountedHandle::CountedObject*     fObj;
      // Object being the subject to reference counting
