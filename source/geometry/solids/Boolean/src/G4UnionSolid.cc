@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.8 2000-05-25 07:11:23 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.9 2000-06-24 14:27:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -273,7 +273,9 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
       *n = *nTmp ;   
     }
   }
-  *validNorm = false ;
+  if( calcNorm ) 
+     *validNorm = false ;
+
   return dist ;
 }
 

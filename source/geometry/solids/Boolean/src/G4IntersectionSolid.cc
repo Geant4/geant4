@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectionSolid.cc,v 1.7 2000-05-25 07:11:51 grichine Exp $
+// $Id: G4IntersectionSolid.cc,v 1.8 2000-06-24 14:27:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -343,6 +343,9 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
 			            G4bool *validNorm,
 			            G4ThreeVector *n      ) const 
 {
+  G4bool         validNormA, validNormB;
+  G4ThreeVector  nA, nB;
+
   if( Inside(p) == kOutside )
   {
     G4cout << "Position:"  << G4endl << G4endl;
@@ -355,9 +358,21 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v),  point p is outside") ;
   }
-  G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n) ;
-  G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ;
+  G4double distA = fPtrSolidA->DistanceToOut(p,v,calcNorm,&validNormA,&nA) ;
+  G4double distB = fPtrSolidB->DistanceToOut(p,v,calcNorm,&validNormB,&nB) ;
+
   G4double dist = G4std::min(distA,distB) ; 
+
+  if( calcNorm ){
+     if (distA < distB ) {
+        *validNorm = validNormA;
+	*n =         nA;
+     }else{   
+        *validNorm = validNormB;
+        *n =         nB;
+     }
+  }
+
   return dist ; 
   //  return G4std::min(fPtrSolidA->DistanceToOut(p,v,calcNorm,validNorm,n),
   //	                fPtrSolidB->DistanceToOut(p,v,calcNorm,validNorm,n) ) ; 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SubtractionSolid.cc,v 1.6 2000-05-25 07:12:11 grichine Exp $
+// $Id: G4SubtractionSolid.cc,v 1.7 2000-06-24 14:27:42 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -303,7 +303,8 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
     else
     {
       distout= distA ; 
-      *validNorm = true ;
+      if(calcNorm)
+          *validNorm = true ;
     } 
     return distout;
 }
