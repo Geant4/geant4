@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPolarizedCompton.hh,v 1.3 2001-05-25 16:00:08 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.hh,v 1.4 2001-06-17 21:20:25 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -59,7 +59,7 @@ public:
 			   G4ForceCondition* condition);
 
   G4VParticleChange* PostStepDoIt(const G4Track& aTrack, const G4Step& aStep);
-  
+
 protected:
 
   void BuildScatteringFunctionTable();
@@ -95,6 +95,7 @@ private:
   // hide assignment operator as private 
   G4LowEnergyPolarizedCompton& operator=(const G4LowEnergyPolarizedCompton &right);
   G4LowEnergyPolarizedCompton(const G4LowEnergyPolarizedCompton& );
+
 
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.3 2001-05-25 16:00:09 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.4 2001-06-17 21:20:01 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -46,7 +46,7 @@
 #include "G4VParticleChange.hh"
 
 // constructor
- 
+
 G4LowEnergyPolarizedCompton::G4LowEnergyPolarizedCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     theCrossSectionTable(0),
@@ -310,7 +310,7 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       isPolarised = true;
     }
 
-  // Temporary protection: for some unclear reason a polarisation parallel to the 
+  // Temporary protection: a polarisation parallel to the 
   // direction causes problems; in that case apply the regular LowEnergyCompton algorithm
   G4ThreeVector gammaDirection = aDynamicGamma->GetMomentumDirection();
   G4double angle = gammaPolarization0.angle(gammaDirection);
@@ -337,7 +337,8 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   G4int elementZ = (G4int) theElement->GetZ();
 
   G4double E0_m = gammaEnergy0 / electron_mass_c2 ;
-  G4ParticleMomentum gammaDirection0 = aDynamicGamma->GetMomentumDirection();
+
+  G4ThreeVector gammaDirection0 = aDynamicGamma->GetMomentumDirection();
 
   G4double epsilon, epsilonSq, onecost, sinThetaSqr, greject ;
 
@@ -367,7 +368,8 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 	
 	onecost = (1.- epsilon)/(epsilon*E0_m);
 	sinThetaSqr   = onecost*(2.-onecost);
-        // Protection
+
+	// Protection
 	if (sinThetaSqr > 1.)
 	  {
 	    if (verboseLevel>0) G4cout 
@@ -389,69 +391,76 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
 	    sinThetaSqr = 0.;
 	  }
         // End protection
+	
 	greject = 1. - epsilon*sinThetaSqr/(1.+ epsilonSq);
       } while (greject < G4UniformRand());
-      
       
       // ****************************************************
       //		Phi determination
       // ****************************************************
       
       G4double phi = SetPhi(epsilon,sinThetaSqr);
-      
+
       //
       // scattered gamma angles. ( Z - axis along the parent gamma)
       //
       
       G4double cosTheta = 1. - onecost;
+
       // Protection
-	if (cosTheta > 1.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "cosTheta = " 
-	      << cosTheta
-	      << "; set to 1" 
-	      << G4endl;
-	    cosTheta = 1.;
-	  }
-	if (cosTheta < -1.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "cosTheta = " 
-	      << cosTheta
-	      << "; set to -1" 
-	      << G4endl;
-	    cosTheta = -1.;
-	  }
-        // End protection      
-	G4double sinTheta = sqrt (sinThetaSqr);
+      
+      if (cosTheta > 1.)
+	{
+	  if (verboseLevel>0) G4cout 
+	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	    << "cosTheta = " 
+	    << cosTheta
+	    << "; set to 1" 
+	    << G4endl;
+	  cosTheta = 1.;
+	}
+      if (cosTheta < -1.)
+	{
+	  if (verboseLevel>0) G4cout 
+	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	    << "cosTheta = " 
+	    << cosTheta
+	    << "; set to -1" 
+	    << G4endl;
+	  cosTheta = -1.;
+	}
+      // End protection      
+      
+      
+      G4double sinTheta = sqrt (sinThetaSqr);
+      
       // Protection
-	if (sinTheta > 1.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "sinTheta = " 
-	      << sinTheta
-	      << "; set to 1" 
-	      << G4endl;
-	    sinTheta = 1.;
-	  }
-	if (sinTheta < -1.)
-	  {
-	    if (verboseLevel>0) G4cout 
-	      << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
-	      << "sinTheta = " 
-	      << sinTheta
-	      << "; set to -1" 
-	      << G4endl;
-	    sinTheta = -1.;
-	  }
-        // End protection      
-	G4double dirx = sinTheta*cos(phi);
-	G4double diry = sinTheta*sin(phi);
-	G4double dirz = cosTheta ;
+      if (sinTheta > 1.)
+	{
+	  if (verboseLevel>0) G4cout 
+	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	    << "sinTheta = " 
+	    << sinTheta
+	    << "; set to 1" 
+	    << G4endl;
+	  sinTheta = 1.;
+	}
+      if (sinTheta < -1.)
+	{
+	  if (verboseLevel>0) G4cout 
+	    << " -- Warning -- G4LowEnergyPolarizedCompton::PostStepDoIt "
+	    << "sinTheta = " 
+	    << sinTheta
+	    << "; set to -1" 
+	    << G4endl;
+	  sinTheta = -1.;
+	}
+      // End protection
+      
+      
+      G4double dirx = sinTheta*cos(phi);
+      G4double diry = sinTheta*sin(phi);
+      G4double dirz = cosTheta ;
       
       //
       // update G4VParticleChange for the scattered gamma 
@@ -460,16 +469,21 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
       gammaEnergy1 = epsilon*gammaEnergy0;
       
       // New polarization
+
+
       G4ThreeVector gammaPolarization1 = SetNewPolarization(epsilon,
 							    sinThetaSqr,
 							    phi,
 							    cosTheta);
       
       // Set new direction 
-      G4ThreeVector tmpDirection1( dirx,diry,dirz );
+      //G4ThreeVector tmpDirection1( dirx,diry,dirz );
+      G4ParticleMomentum tmpDirection1( dirx,diry,dirz );
+      
       gammaDirection1 = tmpDirection1;
       
       // Change reference frame.
+
       SystemOfRefChange(gammaDirection0,gammaDirection1,
 			gammaPolarization0,gammaPolarization1);   
       
@@ -602,10 +616,12 @@ G4double G4LowEnergyPolarizedCompton::SetPhi(G4double energyRate,
       a = 2*sinSqrTh;
       b = energyRate + 1/energyRate;
       
-      phiProbability = 1 - (a/b)*(cos(phi)*cos(phi)); 
+      phiProbability = 1 - (a/b)*(cos(phi)*cos(phi));
+
+      
+ 
     }
   while ( rand2 > phiProbability );
-  
   return phi;
 }
 
@@ -625,11 +641,13 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
   //  G4double sinsqrphi = sinPhi*sinPhi;
   G4double normalisation = sqrt(1. - cosSqrPhi*sinSqrTh);
   
-  // Determination of theta 
+
+  // Determination of Theta 
   
   G4double thetaProbability;
   G4double theta;
   G4double a, b;
+  G4double cosTheta;
 
   do
     {
@@ -637,57 +655,58 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
       rand2 = G4UniformRand();
       thetaProbability=0.;
       theta = twopi*rand1;
-      
       a = 4;
       b = (epsilon + 1/epsilon) - 2;
-      
-      thetaProbability = (b + a*cos(theta)*cos(theta))/(a+b); 
+      thetaProbability = (b + a*cos(theta)*cos(theta))/(a+b);
+      cosTheta = cos(theta);       
     }
-  while ( rand2 > thetaProbability );
+  while ( rand2 > thetaProbability || abs(cosTheta) >= abs(normalisation) );
   
-  G4double cosTheta = cos(theta);
-
   G4double cosBeta = cosTheta/normalisation;
   G4double sinBeta = sqrt(1-cosBeta*cosBeta);
-  G4ThreeVector gammaPolarization1;
 
+  G4ThreeVector gammaPolarization1;
+  
   G4double xParallel = normalisation*cosBeta;
   G4double yParallel = -(sinSqrTh*cosPhi*sinPhi)*cosBeta/normalisation;
   G4double zParallel = -(cosTheta*sinTheta*cosPhi)*cosBeta/normalisation;
-
   G4double xPerpendicular = 0.;
   G4double yPerpendicular = (cosTheta)*sinBeta/normalisation;
   G4double zPerpendicular = -(sinTheta*sinPhi)*sinBeta/normalisation;
-
+  
   G4double xTotal = (xParallel + xPerpendicular);
   G4double yTotal = (yParallel + yPerpendicular);
   G4double zTotal = (zParallel + zPerpendicular);
-
+  
   gammaPolarization1.setX(xTotal);
   gammaPolarization1.setY(yTotal);
   gammaPolarization1.setZ(zTotal);
-
+  
   return gammaPolarization1;
+
 }
 
 
-void G4LowEnergyPolarizedCompton::SystemOfRefChange(G4ThreeVector& direction0,
-						    G4ThreeVector& direction1,
-						    G4ThreeVector& polarization0,
-						    G4ThreeVector& polarization1)
-
+void G4LowEnergyPolarizedCompton::SystemOfRefChange
+(G4ThreeVector& direction0,G4ThreeVector& direction1,
+ G4ThreeVector& polarization0,G4ThreeVector& polarization1)
+  
 {
   // Angles for go back to the original RS
+
+
+  
   G4double cosTheta0 = direction0.cosTheta();
   G4double sinTheta0 = sin(direction0.theta());
   G4double cosPhi0 = cos(direction0.phi());
   G4double sinPhi0 = sin(direction0.phi());
-
   G4double cosPsi, sinPsi;
-
+  
+  //  if (sinTheta0 >= 1.e-14 ) {
   if (sinTheta0 != 0. ) 
     {
       cosPsi = -polarization0.z()/sinTheta0;
+      //  if (cosPhi0 >=1.e-14 ) {
       if (cosPhi0 != 0. ) 
 	{
 	  sinPsi = (polarization0.y() - cosTheta0*sinPhi0*cosPsi)/cosPhi0;
@@ -702,26 +721,30 @@ void G4LowEnergyPolarizedCompton::SystemOfRefChange(G4ThreeVector& direction0,
       cosPsi = polarization0.x()/cosTheta0;
       sinPsi = polarization0.y();
     }
-
+  
   // Added protection
-  G4double psi = pi/2.;
+  G4double psi = 0;
   if (sinPsi < 0.) psi = -pi/2.;
+  if (sinPsi > 0.) psi = pi/2.;
+
   if (cosPsi != 0.)
     {
       psi = atan(sinPsi/cosPsi); 
     }
-
+  
   // Rotation along Z axis
   direction1.rotateZ(psi);
   // 
   direction1.rotateUz(direction0);
+
   aParticleChange.SetMomentumChange( direction1 ) ;  
 
   // 3 Euler angles rotation for scattered photon polarization
-
+  
   polarization1.rotateZ(psi);
   polarization1.rotateUz(direction0);
   aParticleChange.SetPolarizationChange( polarization1 );
+
 }
 
 
@@ -759,3 +782,18 @@ G4double G4LowEnergyPolarizedCompton::GetMeanFreePath(const G4Track& aTrack, G4d
   
   return meanFreePath;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

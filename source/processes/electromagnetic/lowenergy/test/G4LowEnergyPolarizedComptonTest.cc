@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPolarizedComptonTest.cc,v 1.1 2001-05-23 16:39:58 flongo Exp $
+// $Id: G4LowEnergyPolarizedComptonTest.cc,v 1.2 2001-06-17 21:21:03 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,7 @@ G4int main()
   G4int nIterations = 100000;
   G4int materialId = 3;
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  //  G4cout.setf( ios::scientific, ios::floatfield );
 
   // -------------------------------------------------------------------
 
@@ -93,10 +93,10 @@ G4int main()
 
   hbookManager = new HBookFile("comptontest.hbook", 58);
   assert (hbookManager != 0);
-  
+
   // ---- Book a histogram and ntuples
 
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<endl;
+  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<G4endl;
  
 
   G4double initEnergy = 1*MeV; 
@@ -260,6 +260,7 @@ G4int main()
   
   // Processes 
   
+
   G4int processType;
   G4cout << "LowEnergy [1] or Standard [2] Compton or Standard PolarizedCompton[3] or LowEnergyPolarizedCompton [4]" << G4endl;
   G4cin >> processType;
@@ -271,6 +272,7 @@ G4int main()
   
   G4VDiscreteProcess* gammaProcess;
   
+
   if (processType == 1)
     {
       gammaProcess = new G4LowEnergyCompton();
@@ -286,10 +288,8 @@ G4int main()
   else if (processType == 4)
     {
       gammaProcess = new G4LowEnergyPolarizedCompton();
-    }
-
-
-  
+      }
+     
   G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
   G4VProcess* theeminusIonisation         = new G4eIonisation();
   G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
@@ -368,14 +368,17 @@ G4int main()
   G4ParticleMomentum eDirection(initX,initY,initZ);
   G4DynamicParticle dynamicGamma(G4Gamma::Gamma(),eDirection,eEnergy);
 
-  if (processType == 3 || processType == 4)
-    {
+  G4cout << eDirection << " Direction" << G4endl;
+
+
+  //  if (processType == 3 || processType == 4)
+  //  {
       G4double PolX, PolY, PolZ;
       G4cout << "Polarization Vector" << G4endl;
       G4cin >> PolX >> PolY >> PolZ;
       dynamicGamma.SetPolarization(PolX, PolY, PolZ);
       //G4cout << "polarization" << dynamicGamma.GetPolarization() << G4endl;
-    }
+      //   }
   
 
   dynamicGamma.DumpInfo();
@@ -410,7 +413,7 @@ G4int main()
     }
   else 
     {
-      G4cout<< "applicability OK" << endl;
+      G4cout<< "applicability OK" << G4endl;
     }
   
   // Initialize the physics tables (in which material?)
@@ -524,6 +527,7 @@ G4int main()
       dummy = gammaProcess->PostStepDoIt(*gTrack, *step);
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       
+
       // Primary physical quantities 
 
 
@@ -546,6 +550,13 @@ G4int main()
       G4double pChange   = 
 	sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       G4double thetaChange = eChange.theta();
+
+
+      const G4ThreeVector* momChange =particleChange->GetMomentumDirectionChange();
+
+      G4cout << (momChange->x()) << " " <<  (momChange->y()) << " "  << (momChange->z()) << " "  << G4endl;
+
+      G4cout << eChange << "newdir" << G4endl;
       G4double phiChange = eChange.phi();
 
       G4double xChange = particleChange->GetPositionChange()->x();
@@ -585,7 +596,7 @@ G4int main()
       //G4cout << energyChange/keV << "ENERGY (keV)" << G4endl;
 
 
-      G4ThreeVector* polChange=particleChange->GetPolarizationChange();
+      const G4ThreeVector* polChange=particleChange->GetPolarizationChange();
 
 
       //G4cout << pxChange/pChange << "X" << G4endl;
@@ -717,14 +728,13 @@ G4int main()
     } 
   
   
-  G4cout  << "Iteration number: "  <<  iter << G4endl;
+  //  G4cout  << "Iteration number: "  <<  iter << G4endl;
   hbookManager->write();
   delete hbookManager;
   
   delete step;
 
-
-  cout << "END OF THE MAIN PROGRAM" << G4endl;
+  G4cout << "END OF THE MAIN PROGRAM" << G4endl;
 }
 
 
