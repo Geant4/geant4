@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.8 2001-12-14 11:50:59 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.9 2001-12-14 12:19:30 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.8  2001/12/14 11:50:59  sadilov
+?RCS: Add words about G4WORKDIR in user mode of Configure.
+?RCS:
 ?RCS: Revision 1.7  2001/12/13 21:16:39  sadilov
 ?RCS: Check and correct END_OF_FILE - should have empty line!
 ?RCS:
@@ -761,7 +764,6 @@ or
 
 . env.sh
 
-They will source in your shell Geant4 environments.
 It will also check G4WORKDIR setting and set it to
 your HOME if needed.
 You can use these files also for further modifications
