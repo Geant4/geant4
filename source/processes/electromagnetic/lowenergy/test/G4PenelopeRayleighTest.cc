@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeRayleighTest.cc,v 1.4 2003-07-07 12:26:53 pandola Exp $
+// $Id: G4PenelopeRayleighTest.cc,v 1.5 2004-06-04 06:29:00 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -251,9 +251,9 @@ G4int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
  
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable();
   //cutsTable->DumpCouples();

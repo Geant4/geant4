@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeIonisationTest.cc,v 1.1 2003-07-04 11:10:07 pandola Exp $
+// $Id: G4PenelopeIonisationTest.cc,v 1.2 2004-06-04 06:28:44 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,8 +44,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -114,12 +112,12 @@ int main()
 
   // ---- HBOOK initialization
 
-  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
-  G4std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
-  G4std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ion_test.hbook","hbook",false,true));
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
+  std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ion_test.hbook","hbook",false,true));
   G4cout << "Tree store: " << tree->storeName() << G4endl;
-  G4std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
-  G4std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
+  std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
+  std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
  
   // ---- primary ntuple ------
   AIDA::ITuple* ntuple1 = tpf->create("1","Primary Ntuple",
@@ -258,9 +256,9 @@ int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
  
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable();
   //cutsTable->DumpCouples();
@@ -466,8 +464,8 @@ int main()
 	}
       else if (processType == 1)
 	{ 
-	  meanFreePath=StdProcess
-	    ->GetMeanFreePath(*eTrack, sti, condition); 
+	  // meanFreePath=StdProcess
+	  // ->GetMeanFreePath(*eTrack, sti, condition); 
 	}
 
       ntuple3->fill(ntuple3->findColumn("kinen"),log10(Tkin[i]));

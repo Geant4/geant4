@@ -5,7 +5,7 @@
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
 // * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
+// *   http://cern.ch/geSant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.4 2003-07-04 11:12:45 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.5 2004-06-04 06:27:48 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -260,9 +260,9 @@ int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
  
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable();
   //cutsTable->DumpCouples();
@@ -407,9 +407,7 @@ int main()
     }
   
   // Initialize the physics tables (in which material?)
-  //G4cout << "Prima del build" << G4endl;
   bremProcess->BuildPhysicsTable(*realpt);
-  //G4cout << "Dopo il buildt" << G4endl;
 
   G4cout<< "table OK" << G4endl;
   
@@ -455,8 +453,8 @@ int main()
       dynamicPrimary.SetKineticEnergy(Tkin[i]);
       if (processType == 3)
 	{
-	  meanFreePath=LowEProcess
-	    ->DumpMeanFreePath(*eTrack, sti, condition);
+	  //meanFreePath=LowEProcess
+	  // ->DumpMeanFreePath(*eTrack, sti, condition);
 	}
       else if (processType == 2)
 	{
@@ -466,8 +464,8 @@ int main()
 	}
       else if (processType == 1)
 	{ 
-	  meanFreePath=StdProcess
-	    ->GetMeanFreePath(*eTrack, sti, condition); 
+	  //meanFreePath=StdProcess
+	  //  ->GetMeanFreePath(*eTrack, sti, condition); 
 	}
 
       ntuple3->fill(ntuple3->findColumn("kinen"),log10(Tkin[i]));

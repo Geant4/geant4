@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeComptonTest.cc,v 1.5 2003-07-07 12:22:45 pandola Exp $
+// $Id: G4PenelopeComptonTest.cc,v 1.6 2004-06-04 06:28:10 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,6 +44,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
+#include "G4Timer.hh"
 #include <fstream>
 #include <iomanip>
 
@@ -239,9 +240,9 @@ G4int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
  
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
   
   cutsTable->UpdateCoupleTable(); 
   //(G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
@@ -411,7 +412,15 @@ G4int main()
     }
   
   // Initialize the physics tables (in which material?)
+  G4Timer* timer = new G4Timer();
+  timer->Start();
   gammaProcess->BuildPhysicsTable(*gamma);
+  timer->Stop();
+  
+  G4cout << "Time for physics table: " << timer->GetSystemElapsed() << G4endl;
+  G4cout << "Real time for physics table: " << timer->GetRealElapsed() << G4endl;
+  
+  delete timer;
 
   theeminusMultipleScattering->BuildPhysicsTable(*electron);
   theeminusIonisation->BuildPhysicsTable(*electron);   
@@ -524,7 +533,7 @@ G4int main()
       G4VParticleChange* dummy;
       dummy = gammaProcess->PostStepDoIt(*gTrack, *step);
       
-      G4cout << "Dopo il PostStep" << G4endl;
+      //G4cout << "Dopo il PostStep" << G4endl;
       
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
       

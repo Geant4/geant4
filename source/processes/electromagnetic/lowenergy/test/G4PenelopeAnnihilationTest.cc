@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeAnnihilationTest.cc,v 1.1 2003-07-04 11:10:21 pandola Exp $
+// $Id: G4PenelopeAnnihilationTest.cc,v 1.2 2004-06-04 06:27:18 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -44,8 +44,6 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
@@ -111,18 +109,18 @@ G4int main()
   G4int nIterations = 100000;
   G4int materialId = 3;
 
-  //G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield );
+  //G4cout.setf(std::ios::scientific,std::ios::floatfield );
 
   // -------------------------------------------------------------------
 
   // ---- HBOOK initialization
 
-  G4std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
-  G4std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
-  G4std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ann_test.hbook","hbook",false,true));
+  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+  std::auto_ptr< AIDA::ITreeFactory > tf (af->createTreeFactory());
+  std::auto_ptr< AIDA::ITree > tree (tf->create("pen_ann_test.hbook","hbook",false,true));
   G4cout << "Tree store: " << tree->storeName() << G4endl;
-  G4std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
-  G4std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
+  std::auto_ptr< AIDA::ITupleFactory > tpf (af->createTupleFactory(*tree));
+  std::auto_ptr< AIDA::IHistogramFactory > hf (af->createHistogramFactory(*tree));
  
   // ---- secondary ntuple ------
   AIDA::ITuple* ntuple1 = tpf->create("1","Secondary Ntuple","double eprimary,px_1,py_1,pz_1,e_1,theta_1,px_2,py_2,pz_2,e_2,theta_2");
@@ -237,9 +235,9 @@ G4int main()
   cuts->SetProductionCut(cutE, 2); //positrons
   G4cout << "Cuts are defined " << G4endl;
 
-  G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
-  G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Gamma::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Electron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
+  //G4Positron::SetEnergyRange(2.5e-4*MeV,1e5*MeV);
 
   cutsTable->UpdateCoupleTable();
   //cutsTable->DumpCouples();
@@ -382,8 +380,8 @@ G4int main()
 	    ->DumpMeanFreePath(*gTrack, sti, condition);
 	}
 
-      ntuple2->fill(ntuple2->findColumn("kinen"),log10(Tkin[i]));
-      ntuple2->fill(ntuple2->findColumn("mfp"),log10(meanFreePath/cm));
+      ntuple2->fill(ntuple2->findColumn("kinen"),Tkin[i]/MeV);
+      ntuple2->fill(ntuple2->findColumn("mfp"),meanFreePath/cm);
       ntuple2->addRow();
 
     
