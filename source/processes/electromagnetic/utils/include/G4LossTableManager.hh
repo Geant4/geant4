@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.hh,v 1.17 2003-10-17 17:59:01 vnivanch Exp $
+// $Id: G4LossTableManager.hh,v 1.18 2003-10-23 15:13:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -151,11 +151,13 @@ public:
 
   G4EnergyLossMessenger* GetMessenger();
 
+  G4bool IsRecalcNeeded(const G4ParticleDefinition* aParticle);
+
 private:
 
   G4LossTableManager();
 
-  void Initialise(const G4ParticleDefinition*);
+  void Initialise();
 
   G4VEnergyLossSTD* BuildTables(const G4ParticleDefinition* aParticle);
 

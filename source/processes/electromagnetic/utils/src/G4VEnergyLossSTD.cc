@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.52 2003-10-17 17:59:01 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.53 2003-10-23 15:13:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -299,31 +299,23 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
     baseParticle = DefineBaseParticle(particle);
   }
 
-  G4bool cutsWasModified = false;
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  // Recalculation is needed because cuts were changed or recalculation is forced
+  G4LossTableManager* lManager = G4LossTableManager::Instance();
+  if ( lManager->IsRecalcNeeded(particle) ) {
 
-  for (size_t j=0; j<numOfCouples; j++){
-    if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
-      cutsWasModified = true;
-      break;
+    // It is responsability of the G4LossTables to build DEDX and range tables
+    lManager->BuildPhysicsTable(particle);
+
+    tablesAreBuilt = true;
+
+    if(!baseParticle) PrintInfoDefinition();
+
+    if(0 < verboseLevel) {
+      G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() done for "
+             << GetProcessName()
+             << " and particle " << part.GetParticleName()
+             << G4endl;
     }
-  }
-  if( !cutsWasModified ) return;
-
-  // It is responsability of the G4LossTables to build DEDX and range tables
-  (G4LossTableManager::Instance())->BuildPhysicsTable(particle);
-
-  tablesAreBuilt = true;
-
-  if(!baseParticle) PrintInfoDefinition();
-
-  if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() done for "
-           << GetProcessName()
-           << " and particle " << part.GetParticleName()
-           << G4endl;
   }
 }
 

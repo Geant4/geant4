@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.25 2003-10-17 17:59:01 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.26 2003-10-23 15:13:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 23-07-03 Add exchange with G4EnergyLossTables (V.Ivanchenko)
 // 05-10-03 Add G4VEmProcesses registration and Verbose command (V.Ivanchenko)
 // 17-10-03 Add SetParameters method (V.Ivanchenko)
+// 23-10-03 Add control on inactive processes (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -64,6 +65,7 @@
 #include "G4Electron.hh"
 #include "G4VMultipleScattering.hh"
 #include "G4VEmProcess.hh"
+#include "G4ProductionCutsTable.hh"
 
 G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -241,14 +243,91 @@ void G4LossTableManager::ParticleHaveNoLoss(const G4ParticleDefinition* aParticl
   exit(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::Initialise(const G4ParticleDefinition* aParticle)
+G4bool G4LossTableManager::IsRecalcNeeded(const G4ParticleDefinition* aParticle)
 {
+  G4bool isNeeded = !all_tables_are_built;
+
+  if (first_entry || (aParticle == firstParticle && all_tables_are_built) ) {
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
+
+    for (size_t j=0; j<numOfCouples; j++){
+      if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
+        isNeeded = true;
+        break;
+      }
+    }
+    if(0 < verbose) 
+      G4cout << "Calculation of tables is needed because of new list of couples" << G4endl; 
+
+    if (!isNeeded) {    
+      for (G4int i=0; i<n_loss; i++) {
+        if(loss_vector[i]) {
+          const G4ProcessManager* pm = loss_vector[i]->GetProcessManager();
+                G4cout << "Process " 
+                       << loss_vector[i]->GetProcessName() 
+                       << " flag= "
+                       << pm->GetProcessActivation(loss_vector[i])
+                       <<  G4endl;
+          if (pm->GetProcessActivation(loss_vector[i])) {
+            if (!tables_are_built[i]) {
+              if(0 < verbose) { 
+                G4cout << "Calculation of tables is needed because tables for a process " 
+                       << loss_vector[i]->GetProcessName() 
+                       << " were not built"
+                       <<  G4endl;
+	      } 
+              isNeeded = true;
+              break;
+	    }
+          } else {
+            if(tables_are_built[i]) {
+              if(0 < verbose) { 
+                G4cout << "Calculation of tables is needed because a process " 
+                       << loss_vector[i]->GetProcessName() 
+                       << " have been inactivated"
+                       <<  G4endl;
+	      } 
+              isNeeded = true;
+              break;
+	    }
+	  }
+	}
+      }
+    }
+
+    if (isNeeded) {
+      all_tables_are_built = false;
+      electron_table_are_built = false;
+      loss_map.clear();
+      for (G4int i=0; i<n_loss; i++) {
+        if(loss_vector[i]) {
+          const G4ProcessManager* pm = loss_vector[i]->GetProcessManager();
+          if (pm->GetProcessActivation(loss_vector[i])) tables_are_built[i] = false;
+          else                                          tables_are_built[i] = true;
+        } else {
+          tables_are_built[i] = true;
+          part_vector[i] = 0;
+        }
+      }
+    }
+  }
+
   if (first_entry) {
     first_entry = false;
     firstParticle = aParticle;
   }
+
+  return isNeeded;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::Initialise()
+{
 
   for(G4int j=0; j<n_loss; j++) {
 
@@ -273,20 +352,7 @@ void G4LossTableManager::Initialise(const G4ParticleDefinition* aParticle)
                << " all_tables_are_built= "     << all_tables_are_built
                << G4endl;
       }
-    } else {
-      tables_are_built[j] = true;
-      part_vector[j] = 0;
     }
-  }
-
-  // All tables have to be rebuilt
-  if (all_tables_are_built && firstParticle == aParticle) {
-    for (G4int i=0; i<n_loss; i++) {
-      if (loss_vector[i]) tables_are_built[i] = false;
-    }
-    all_tables_are_built = false;
-    electron_table_are_built = false;
-    loss_map.clear();
   }
 
   if(1 < verbose) {
@@ -308,7 +374,7 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
            << G4endl;
   }
 
-  Initialise(aParticle);
+  Initialise();
 
   if(aParticle == theElectron) {
     if(!electron_table_are_built) {
@@ -408,7 +474,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
            << aParticle->GetParticleName()
            << G4endl;
   }
-  if (first_entry) Initialise(aParticle);
+  if (first_entry) Initialise();
   if (all_tables_are_built) return;
 
   G4bool hasRange = false;
@@ -503,7 +569,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   G4bool no_el = true;
 
   for (G4int i=0; i<n_loss; i++) {
-    if (aParticle == part_vector[i]) {
+    if (aParticle == part_vector[i] && !tables_are_built[i]) {
       loss_vector[i]->Initialise();
       if(no_el && loss_vector[i]->SecondaryParticle() == theElectron) {
         em = loss_vector[i];
