@@ -41,6 +41,11 @@ all:
 	exit 1
 endif
 
+updateall:
+	@echo Assuming you already preprocessed the DDL files,
+	@echo skip the preprocessing and doing the rest...
+	@G4ODBMS_DEPEND=1; export G4ODBMS_DEPEND; $(MAKE)
+
 cleandb:
 ifndef G4SCHEMA_FDID
 	@echo G4SCHEMA_FDID is not defined.  Stop.

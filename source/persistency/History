@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 26, 99  Y.Morita
+- Introduced G4TransactionManager for sustained transaction control
+
 November 23, 99  Y.Morita (persistency-V00-01-07)
 - bug fix in G4PersistentEventMan, G4PersistentGeomMan, G4PersistentRunMan
 - use /db commands
