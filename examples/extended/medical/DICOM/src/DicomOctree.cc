@@ -1,11 +1,8 @@
-//#include "common.h"
-//#pragma hdrstop
-//---------------------------------------------------------------------------
+
 #include <stddef.h>
-//---------------------------------------------------------------------------
 #include "DicomOctree.hh"
-//---------------------------------------------------------------------------
-Octree::Octree( int noLevels, float size )
+
+Octree::Octree( G4int noLevels, float size )
 {
     mNoLevels = noLevels;
     mSize = size;
@@ -17,22 +14,22 @@ Octree::~Octree()
     if ( mRoot != NULL ) delete mRoot; 
 }
 //---------------------------------------------------------------------------
-OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, int level )
+OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, G4int level )
 {
     OctreeNode* current = mRoot;
     float curr_x = 0;
     float curr_y = 0;
     float curr_z = 0;
     // Make children
-    for ( int i = 0; i < 8; i++ )
+    for ( G4int i = 0; i < 8; i++ )
     {
         float child_level_resolution = (1 << (i+1) );
         float child_size = mSize / child_level_resolution;
 
-        int dir_x = int( nodeX >= curr_x + child_size );
-        int dir_y = int( nodeY >= curr_y + child_size );
-        int dir_z = int( nodeZ >= curr_z + child_size );
-        int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
+        G4int dir_x = G4int( nodeX >= curr_x + child_size );
+        G4int dir_y = G4int( nodeY >= curr_y + child_size );
+        G4int dir_z = G4int( nodeZ >= curr_z + child_size );
+        G4int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
 
         if ( (*current)[direction] == 0 ) // NULL
         {
@@ -53,22 +50,22 @@ OctreeNode* Octree::CreateNode( float nodeX, float nodeY, float nodeZ, int level
     return current;
 }
 //---------------------------------------------------------------------------
-OctreeNode* Octree::operator()( float nodeX, float nodeY, float nodeZ, int level )
+OctreeNode* Octree::operator()( float nodeX, float nodeY, float nodeZ, G4int level )
 {
     OctreeNode* current = mRoot;
     float curr_x = 0;
     float curr_y = 0;
     float curr_z = 0;
     // Make children
-    for ( int i = 0; i < level; i++ )
+    for ( G4int i = 0; i < level; i++ )
     {
         float child_level_resolution = ( 1 << (i+1) );
         float child_size = mSize / child_level_resolution;
 
-        int dir_x = int( nodeX >= curr_x + child_size );
-        int dir_y = int( nodeY >= curr_y + child_size );
-        int dir_z = int( nodeZ >= curr_z + child_size );
-        int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
+        G4int dir_x = G4int( nodeX >= curr_x + child_size );
+        G4int dir_y = G4int( nodeY >= curr_y + child_size );
+        G4int dir_z = G4int( nodeZ >= curr_z + child_size );
+        G4int direction = dir_x + ( dir_y << 1 ) + ( dir_z << 2 );
 
         if ( (*current)[direction] == 0/*NULL*/ ) return 0/*NULL*/;
 
@@ -90,12 +87,12 @@ OctreeNode* Octree::Root()
     return mRoot;
 }
 //---------------------------------------------------------------------------
-int Octree::NoLevels()
+G4int Octree::NoLevels()
 {
     return mNoLevels;
 }
 //---------------------------------------------------------------------------
-int Octree::Resolution()
+G4int Octree::Resolution()
 {
     return ( 1 << mNoLevels );
 }
@@ -106,7 +103,7 @@ void Octree::DeleteTree()
     mRoot = NULL;
 }
 //---------------------------------------------------------------------------
-void Octree::CountRecursive( OctreeNode* pNode, int &rMiddle, int &rTerminal )
+void Octree::CountRecursive( OctreeNode* pNode, G4int &rMiddle, G4int &rTerminal )
 {
     if ( pNode->Type() == MIDDLE_NODE )
     {
@@ -124,10 +121,10 @@ void Octree::CountRecursive( OctreeNode* pNode, int &rMiddle, int &rTerminal )
     }
 }
 //---------------------------------------------------------------------------
-int Octree::CountMemory( int &rMiddle, int &rTerminal )
+G4int Octree::CountMemory( G4int &rMiddle, G4int &rTerminal )
 {
     CountRecursive( mRoot, rMiddle, rTerminal );
-    int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
+    G4int total = rMiddle*sizeof(MiddleNode) + rTerminal*sizeof(TerminalNode);
     return total;
 }
 //---------------------------------------------------------------------------

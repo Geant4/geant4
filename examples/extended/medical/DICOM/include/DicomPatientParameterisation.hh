@@ -43,6 +43,7 @@ public:
   void ComputeTransformation (const G4int copyNo, G4VPhysicalVolume* physVol) const;
   void ComputeDimensions (G4Box & Voxels, const G4int copyNo, const G4VPhysicalVolume* physVol) const;
 
+private:
   G4Material* ComputeMaterial(const G4int copyNo, G4VPhysicalVolume* physVol);
   G4Material* P_lung_exhale;
   G4Material* P_lung_inhale;
@@ -70,6 +71,7 @@ public:
   G4VisAttributes *Attributes_TrabecularBone;
   G4VisAttributes *Attributes_DenseBone;
 
+public:
   DicomPatientParameterisation(G4int  NoVoxels , double max_density , double min_density ,
 			       G4Material* lunginhale,
 			       G4Material* lungexhale,

@@ -1,6 +1,7 @@
 #ifndef __OCTREE_H__
 #define __OCTREE_H__
 
+#include "globals.hh"
 #include "DicomOctreeNode.hh"
 
 //---------------------------------------------------------------------------
@@ -27,24 +28,26 @@ private:
   
   /// Number of levels denotes the maximal number of
   /// nodes in a single branch, starting from the root node.
-  int        mNoLevels;
+  G4int        mNoLevels;
 
-  void CountRecursive( OctreeNode* pNode, int &rMiddle, int &rTerminal );
+  void CountRecursive( OctreeNode* pNode, G4int &rMiddle, G4int &rTerminal );
 
 public:
   
-  Octree( int noLevels, float size );
+  Octree( G4int noLevels, float size );
   ~Octree();
   void DeleteTree();
 
-  OctreeNode* CreateNode( float i, float j, float k, int level );
-  OctreeNode* operator()( float nodeX, float nodeY, float nodeZ, int level );
+  OctreeNode* CreateNode( float i, float j, float k, G4int level );
+  OctreeNode* operator()( float nodeX, float nodeY, float nodeZ, G4int level );
     
-  OctreeNode* Root();
+  OctreeNode* Root(); 
   float Size();
-  int NoLevels();
-  int Resolution();
-  int CountMemory( int &rMiddle, int &rTerminal );
+  G4int CountMemory( G4int &rMiddle, G4int &rTerminal );
+  
+  G4int NoLevels();
+  G4int Resolution();
+  
 };
 #endif 
 
