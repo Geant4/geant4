@@ -35,6 +35,8 @@ ifdef G4ANALYSIS_BUILD_JAS
 endif
 
 # ------------- Hook packages -----------------
+ANALYSISLIBS := 
+#
 ifdef INC_ANALYSIS
   CPPFLAGS += -I$(G4BASE)/analysis/management/include
   CPPFLAGS += -I$(AIDAINCS)
