@@ -1,4 +1,4 @@
-$Id: History,v 1.12 2002-11-25 10:14:40 dressel Exp $
+$Id: History,v 1.13 2002-11-29 09:35:27 mdressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 29th M. Dressel 
+  - remove src/G4Trajectory.cc and added a DrawTrajectory function
+  in Tst33VisEventAction
+  - some changes dut to gcc-3.2 complains.
+
 Nov 25th M. Dressel test33-V04-01-03
   added src/G4Trajectory.cc.
 
