@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB03.cc,v 1.10 2002-11-18 13:22:48 dressel Exp $
+// $Id: exampleB03.cc,v 1.11 2003-06-30 16:17:02 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@
 // 
 // --------------------------------------------------------------
 
-#include "B03App.hh"
+#include "B03AppBase.hh"
 #include "globals.hh"
 
 int main(int argc, char **argv)

@@ -1,7 +1,7 @@
 %module B03App
 %{
 #include "globals.hh"
-#include "B03App.hh"
+#include "B03AppBase.hh"
 #include "G4RunManager.hh"
 #include "G4IStore.hh"
 #include "G4VCellScorerStore.hh"

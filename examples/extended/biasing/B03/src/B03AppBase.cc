@@ -20,11 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: B03App.cc,v 1.5 2003-06-16 16:47:24 gunter Exp $
+// $Id: B03AppBase.cc,v 1.1 2003-06-30 16:17:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
-#include "B03App.hh"
+#include "B03AppBase.hh"
 #include <iostream>
 
 #include "CLHEP/Random/Random.h"

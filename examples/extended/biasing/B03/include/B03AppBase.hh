@@ -20,12 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: B03App.hh,v 1.3 2002-12-13 11:26:33 gcosmo Exp $
+// $Id: B03AppBase.hh,v 1.1 2003-06-30 16:17:03 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
-#ifndef B03App_hh
-#define B03App_hh B03App_hh
+#ifndef B03AppBase_hh
+#define B03AppBase_hh B03AppBase_hh
 
 class G4RunManager;
 class B03PrimaryGeneratorAction;

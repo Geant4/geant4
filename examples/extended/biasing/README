@@ -110,32 +110,44 @@ Example B03
 ===========
 
 This example uses Geant4 and in particular importance sampling and
-scoring through python. It also creates a histogram.
+scoring through python. It creates a simple histogram. It's ment
+to demonstrate how to use a customized scorer and importance sampling 
+in combination with a scripting language, python.
+Geant4 code is executed from a python session. Therefore, swig is used 
+to create python shadow classes and to generate the code necessary to 
+use the Geant4 libraries from python.
+For simplicity it is recommended to use Anaphe. Anaphe comes with 
+python and swig installations. 
+  See http://anaphe.web.cern.ch/
 
-Compiling and running
----------------------
-  To compile and run this example you need a python2.2 installation
-see http://www.python.org.
-  Please set the environment variable "PYTHON_DIR" to your python2.2 
-installation e.g:
-using afs:
-(see also instructions to B02 above)
-to /afs/cern.ch/sw/lhcxx/specific/${PLATF}/PublicDomainPackages/2.0.0
-or if Anaphe is installed in opt /opt/Anaphe/5.0.5/specific/${PLATF}/PublicDomainPackages/2.0.0.
 
-  Please add to your environment variables
+
+
+Building, compiling and running
+-------------------------------
+
+  Follow similar steps as for example B02. If you already have
+the environment set up for example B02 jump to point 3 below:
+
+1) set the following variables (for example):
+setenv ANAPHETOP /afs/cern.ch/sw/lhcxx
+  (or if installed in opt: /opt/Anaphe/5.0.5)
+setenv AIDA_DIR /afs/cern.ch/sw/contrib/AIDA/3.0/src/cpp
+  (or if installed in opt: /opt/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+
+2) Source the script:
+source $ANAPHETOP/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+
+3) and add to lirary path the following directories:
 setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB03
-  and setenv PYTHONPATH $LD_LIBRARY_PATH.
+                               ====
+ setenv PYTHONPATH $LD_LIBRARY_PATH
+
+4) setenv PYTHON_VERSION 2.2
 
  You may run gmake now.
  You should be able to execute the file B03RunApplication.py from your 
-shell now.
-
-  If you have Anaphe 5.0.5 installed you may also execute the file
-B03RunApplication.py from a lizard session. This will create a 
-histogram. Therefore you may follow the steps 1 and two
-in the above exampleB02.
-  See http://anaphe.web.cern.ch/anaphe/index2.html.
+shell or from a lizard session now.
 
 Files in B03;
 env.csh: Is an example script to set the environment. It should work 
