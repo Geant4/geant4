@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepViewer.hh,v 1.8 2002-11-14 18:36:06 duns Exp $
+ * @version $Id: G4HepRepViewer.hh,v 1.9 2002-11-19 21:53:53 duns Exp $
  */
 
 #ifndef G4HEPREPVIEWER_HH

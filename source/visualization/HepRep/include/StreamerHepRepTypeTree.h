@@ -17,7 +17,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepTypeTree.h,v 1.6 2002-11-14 18:36:29 duns Exp $
+ * @version $Id: StreamerHepRepTypeTree.h,v 1.7 2002-11-19 21:54:24 duns Exp $
  */
 class StreamerHepRepTypeTree : public DefaultHepRepTreeID, public virtual HEPREP::HepRepTypeTree {
 

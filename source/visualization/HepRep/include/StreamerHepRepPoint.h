@@ -16,7 +16,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepPoint.h,v 1.6 2002-11-14 18:36:24 duns Exp $
+ * @version $Id: StreamerHepRepPoint.h,v 1.7 2002-11-19 21:54:17 duns Exp $
  */
 class StreamerHepRepPoint : public StreamerHepRepAttribute, public virtual HEPREP::HepRepPoint {
 

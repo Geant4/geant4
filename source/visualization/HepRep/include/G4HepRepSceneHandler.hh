@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.hh,v 1.8 2002-11-14 18:36:03 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.hh,v 1.9 2002-11-19 21:53:49 duns Exp $
  */
 
 #ifndef G4HEPREPSCENEHANDLER_HH

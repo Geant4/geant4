@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.9 2002-11-14 18:36:43 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.cc,v 1.10 2002-11-19 21:54:42 duns Exp $
  */
 
 #include "globals.hh"

@@ -10,7 +10,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: DefaultHepRepAttValue.h,v 1.6 2002-11-14 18:35:55 duns Exp $
+ * @version $Id: DefaultHepRepAttValue.h,v 1.7 2002-11-19 21:53:37 duns Exp $
  */
 
 class DefaultHepRepAttValue : public virtual HEPREP::HepRepAttValue {

@@ -10,7 +10,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: DefaultHepRepAction.h,v 1.6 2002-11-14 18:35:47 duns Exp $
+ * @version $Id: DefaultHepRepAction.h,v 1.7 2002-11-19 21:53:27 duns Exp $
  */
 class DefaultHepRepAction : public virtual HEPREP::HepRepAction {
 
