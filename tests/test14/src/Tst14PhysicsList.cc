@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14PhysicsList.cc,v 1.3 1999-06-14 14:26:15 aforti Exp $
+// $Id: Tst14PhysicsList.cc,v 1.4 1999-06-14 23:26:48 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Tst14PhysicsList.hh"
+#include "Tst14PhysicsListMessenger.hh"
+#include "Tst14DetectorConstruction.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -26,7 +28,6 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Material.hh"
 #include "G4RunManager.hh"
-#include "Tst14DetectorConstruction.hh"
 
 #include "G4UImanager.hh"
 
@@ -36,13 +37,18 @@ Tst14PhysicsList::Tst14PhysicsList()
 : G4VUserPhysicsList()
 {
   defaultCutValue = 1.*mm;
+  cutForGamma = defaultCutValue;
+  cutForElectron = defaultCutValue;
   SetVerboseLevel(1);
+  physicsListMessenger = new Tst14PhysicsListMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Tst14PhysicsList::~Tst14PhysicsList()
-{}
+{
+  delete physicsListMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -185,10 +191,10 @@ void Tst14PhysicsList::ConstructEM()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
       //muon  
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      // pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
+      // pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
+      // pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
      
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
@@ -222,19 +228,83 @@ void Tst14PhysicsList::ConstructGeneral()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst14PhysicsList::SetCuts()
+void Tst14PhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
     G4cout << "Tst14PhysicsList::SetCuts:";
-    G4cout << "Default CutLength : " << defaultCutValue/mm << " (mm)" << endl;
+    G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
   }  
 
- //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
-  //   the default cut value for all particle types 
-  SetCutsWithDefault();   
+  G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
+  G4Electron::SetEnergyRange(lowcut*MeV,1e5*MeV);
+
+}
+
+void Tst14PhysicsList::SetGammaLowLimit(G4double lowcut)
+{
+  if (verboseLevel >0){
+    G4cout << "Tst14PhysicsList::SetCuts:";
+    G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+  }  
+
+  G4Gamma::SetEnergyRange(lowcut*MeV,1e5*MeV);
+
+}
+
+void Tst14PhysicsList::SetElectronLowLimit(G4double lowcut)
+{
+  if (verboseLevel >0){
+
+    G4cout << "Tst14PhysicsList::SetCuts:";
+    G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << endl;
+
+  }  
+
+  G4Electron::SetEnergyRange(lowcut*MeV,1e5*MeV);
+
+}
+void Tst14PhysicsList::SetGammaCut(G4double val)
+{
+  ResetCuts();
+  cutForGamma = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Tst14PhysicsList::SetElectronCut(G4double val)
+{
+  ResetCuts();
+  cutForElectron = val;
+}
+
+void Tst14PhysicsList::SetCuts(){
+
+   SetCutValue(cutForGamma,"gamma");
+   SetCutValue(cutForElectron,"e-");
+
+}
+
+//void Tst14PhysicsList::ListCuts(){
+//
+//  G4Gamma::SetEnergyRange(1*keV,1e5*MeV);
+//  G4Electron::SetEnergyRange(1*keV,1e5*MeV);
+//}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
