@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.13 2003-09-19 10:17:30 vnivanch Exp $
+// $Id: G4SteppingManager2.cc,v 1.14 2004-01-21 01:29:36 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,23 +102,24 @@ void G4SteppingManager::GetProcessNumber()
 
 // Obtain the user defined maximum allowed Step in the volume
 //   1997.12.13 adds argument for  GetMaxAllowedStep by K.Kurashige
-   G4UserLimits* ul= fCurrentVolume->GetLogicalVolume()->GetUserLimits();
-   if (ul) {
-      physIntLength = ul->GetMaxAllowedStep(*fTrack);
-#ifdef G4VERBOSE
-                         // !!!!! Verbose
-           if(verboseLevel>0) fVerbose->DPSLUserLimit();
-#endif
-   }
-
-   if(physIntLength < PhysicalStep ){
-      PhysicalStep = physIntLength;
-      fStepStatus = fUserDefinedLimit;
-      fStep->GetPostStepPoint()
-           ->SetProcessDefinedStep(NULL);
-      // Take note that the process pointer is 'NULL' if the Step
-      // is defined by the user defined limit.
-   }
+//   2004.01.20 Commented out by M.Asai
+//   G4UserLimits* ul= fCurrentVolume->GetLogicalVolume()->GetUserLimits();
+//   if (ul) {
+//      physIntLength = ul->GetMaxAllowedStep(*fTrack);
+//#ifdef G4VERBOSE
+//                         // !!!!! Verbose
+//           if(verboseLevel>0) fVerbose->DPSLUserLimit();
+//#endif
+//   }
+//
+//   if(physIntLength < PhysicalStep ){
+//      PhysicalStep = physIntLength;
+//      fStepStatus = fUserDefinedLimit;
+//      fStep->GetPostStepPoint()
+//           ->SetProcessDefinedStep(NULL);
+//      // Take note that the process pointer is 'NULL' if the Step
+//      // is defined by the user defined limit.
+//   }
 
 // GPIL for PostStep
    fPostStepDoItProcTriggered = MAXofPostStepLoops;
