@@ -24,7 +24,7 @@
 template<class T> 
 T* G4FastSimulationVector<T>::remove (const T* a)
 {
-  for (iterator it = begin();it<end(); it++)
+  for (iterator it = std_pvector::begin();it<std_pvector::end(); it++)
     {
       if (**it==*a) 
 	{
@@ -39,12 +39,12 @@ T* G4FastSimulationVector<T>::remove (const T* a)
 template<class T>
 T* G4FastSimulationVector<T>::removeAt (G4int i)
 {
-  iterator it=begin();
+  iterator it=std_pvector::begin();
   int j;
   for(j=0;j<i;j++) it++;
-  if(it!=end())
+  if(it!=std_pvector::end())
     {
-      T* tmp = operator[](i);
+      T* tmp = std_pvector::operator[](i);
       erase(it);
       return tmp;
     }
@@ -55,7 +55,7 @@ T* G4FastSimulationVector<T>::removeAt (G4int i)
 template<class T>
 void G4FastSimulationVector<T>::clearAndDestroy ()
 {
-  for (iterator it = begin();it<end(); it++)
+  for (iterator it = std_pvector::begin();it<std_pvector::end(); it++)
     if(*it) delete *it;
-  clear();
+  std_pvector::clear();
 }
