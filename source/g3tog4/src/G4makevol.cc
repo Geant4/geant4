@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.10 1999-05-18 18:44:51 lockman Exp $
+// $Id: G4makevol.cc,v 1.11 1999-05-18 19:06:59 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -273,7 +273,7 @@ G4LogicalVolume* G4makevol(G4String& vname, G4String& shape, G4int nmed,
   }
   
   // get the material corresponding to the tracking medium
-  G4Material* material;
+  G4Material* material=0;
   if (nmed>0) {
     material = G3Med.get(nmed);
   } else {
