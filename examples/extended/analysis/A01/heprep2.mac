@@ -9,7 +9,7 @@
 #
 # Create empty scene ("world" is default)
 #
-/vis/scene/create G4Output.zip
+/vis/scene/create G4Output.heprep.zip
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system
