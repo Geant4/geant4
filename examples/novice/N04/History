@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2002-05-30 16:38:37 gcosmo Exp $
+$Id: History,v 1.24 2002-06-19 10:44:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 19, 2002  Gabriele Cosmo (exampleN04-V04-00-02)
+- Added protection for usage of G4UItcsh... in  exampleN04.cc.
 
 May 30, 2002  Makoto Asai (exampleN04-V04-00-01)
 - Fixed the size of the muon counter.
