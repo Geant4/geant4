@@ -37,8 +37,8 @@
 #include "G4DataVector.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4ios.hh"
-#include <g4std/fstream>
-#include <g4std/strstream>
+#include <fstream>
+#include <strstream>
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
@@ -54,7 +54,7 @@ XrayFluoSiLiDetectorType::XrayFluoSiLiDetectorType():
 }
 XrayFluoSiLiDetectorType::~XrayFluoSiLiDetectorType()
 {
-  std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
+  std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
 
   for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
     {
@@ -210,9 +210,9 @@ G4double XrayFluoSiLiDetectorType::GetInfData(G4double, G4double random, G4int p
   
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = energyMap.find(Z);
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posData;
       posData = dataMap.find(Z);
 
 
@@ -267,9 +267,9 @@ G4double XrayFluoSiLiDetectorType::GetSupData(G4double, G4double random, G4int p
   if (Z>zMax) {Z=zMax;}
   if (Z >= zMin && Z <= zMax)
     {
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator pos;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator pos;
       pos = energyMap.find(Z);
-      G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::const_iterator posData;
+      std::map<G4int,G4DataVector*,std::less<G4int> >::const_iterator posData;
       posData = dataMap.find(Z);
       if (pos!= energyMap.end())
 	{
@@ -309,7 +309,7 @@ G4double XrayFluoSiLiDetectorType::GetSupData(G4double, G4double random, G4int p
 void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
 {
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   
   
   ost << fileName<<".dat";
@@ -320,8 +320,8 @@ void XrayFluoSiLiDetectorType::LoadResponseData(G4String fileName)
   
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
     {

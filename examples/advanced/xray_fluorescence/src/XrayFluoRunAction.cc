@@ -89,7 +89,7 @@ XrayFluoRunAction::XrayFluoRunAction()
 XrayFluoRunAction::~XrayFluoRunAction()
 {
 
-  //G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
+  //std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
   
   // delete energies;
   // delete data;

@@ -120,26 +120,26 @@ void XrayFluoEventAction::EndOfEventAction(const G4Event* evt)
 
     {
       n_hit = HPGeHC->entries();
-
+      
       // if (n_hit) {G4cout << "Ecco quante hit ho nel detector "<< n_hit << G4endl;}
-
+      
       for (G4int i=0;i<n_hit;i++)
 	{
-
+	  
 	  totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
 	  
-
-
+	  
+	  
 	  energyD = detectorType->ResponseFunction(totEnergy);
 	  // energyD = totEnergy;
-	  	  G4cout << "deposito energia: "<< totEnergy  << G4endl;
-
-	    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-	    analysis->analyseEnergyDep(energyD);
-
-	    totEnergyDetect += energyD;
-	    
-	    
+	  // G4cout << "energy deposit: "<< totEnergy  << G4endl;
+	  
+	  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+	  analysis->analyseEnergyDep(energyD);
+	  
+	  totEnergyDetect += energyD;
+	  
+	  
 	}
     }
   

@@ -36,7 +36,7 @@
 #define XrayFluoSiLidetectorType_hh 1
 
 #include "globals.hh"
-#include "g4std/map"
+#include <map>
 #include "G4DataVector.hh"
 #include "XrayFluoDataSet.hh"
 #include "XrayFluoVDetectorType.hh"
@@ -86,11 +86,11 @@ private:
 
   //stores the energy data (first column of the file) of the 
   //response function 
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyMap;
+  std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
   
   //stores the values (second column of the file) of the 
   //response function 
-  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > dataMap;
+  std::map<G4int,G4DataVector*,std::less<G4int> > dataMap;
 
 };
 #endif

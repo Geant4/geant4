@@ -103,11 +103,11 @@ private:
   //stores the energy data (first column of the file) of the 
   //response function 
 
-  //G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyMap;
+  //std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
   
   //stores the values (second column of the file) of the 
   //response function 
-  //G4std::map<G4int,G4DataVector*,G4std::less<G4int> > dataMap;
+  //std::map<G4int,G4DataVector*,std::less<G4int> > dataMap;
   
   //read the data for protons and alpha spectra
  void ReadData(G4double,G4String);

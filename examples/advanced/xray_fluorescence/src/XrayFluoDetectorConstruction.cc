@@ -124,7 +124,6 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-<<<<<<< XrayFluoDetectorConstruction.cc
 
 XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
 
@@ -163,46 +162,6 @@ XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-=======
-
-XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
-
-XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::GetInstance()
-{
-  if (instance == 0)
-    {
-      instance = new XrayFluoDetectorConstruction;
-     
-    }
-  return instance;
-}
-
-void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
-{
-
-  if (type=="sili")
-    {
-      detectorType = XrayFluoSiLiDetectorType::GetInstance();
-    }
-//   else if (type=="hpge")
-//     {
-//       detectorType = XrayFluoHPGeDetectorType::GetInstance();
-//     }
-  else 
-    {
-      G4String excep = type + "detector type unknown";
-      G4Exception(excep);
-    }
-}
-
-XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
-{
-  return detectorType;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
->>>>>>> 1.7
 XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
 
 { 
@@ -661,13 +620,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //default materials of the apparate
   
-<<<<<<< XrayFluoDetectorConstruction.cc
   sampleMaterial = anorthosite;
-=======
-
-  sampleMaterial = anorthosite;
-
->>>>>>> 1.7
   Dia1Material = Pb;
   Dia3Material = Pb;
   pixelMaterial = Si;
@@ -985,7 +938,6 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 
 
-<<<<<<< XrayFluoDetectorConstruction.cc
   G4Material* pttoMaterial = G4Material::GetMaterial(newMaterial);     
   if (pttoMaterial){
     G4cout << "Material!!!!" << newMaterial << G4cout;
@@ -994,19 +946,6 @@ void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
   }            
   
 }
-
-
-=======
-  G4Material* pttoMaterial = G4Material::GetMaterial(newMaterial);     
-  if (pttoMaterial){
-    G4cout << "Material!!!!" << newMaterial << G4cout;
-    logicSample->SetMaterial(pttoMaterial);
-    PrintApparateParameters();
-  }            
-  
-}
-
->>>>>>> 1.7
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -149,8 +149,8 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
     dirFile = pathString + "/" + name;
   }
 
-  G4std::ifstream file(dirFile);
-  G4std::filebuf* lsdp = file.rdbuf();
+  std::ifstream file(dirFile);
+  std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{

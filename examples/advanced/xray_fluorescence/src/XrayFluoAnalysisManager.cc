@@ -47,7 +47,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
-  :outputFileName("xrayfluo.hbk"), visPlotter(false), persistencyType("hbook"), 
+  :outputFileName("xrayfluo.hbk"), visPlotter(true), persistencyType("hbook"), 
    analysisFactory(0), tree(0),histogramFactory(0)
 {
   //creating the messenger
