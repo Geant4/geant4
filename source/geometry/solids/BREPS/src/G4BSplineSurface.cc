@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.4 2000-01-21 13:47:50 gcosmo Exp $
+// $Id: G4BSplineSurface.cc,v 1.5 2000-02-14 17:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -165,9 +165,18 @@ G4Point3D G4BSplineSurface::FinalIntersection()
 	  // Move to first
 	  bezier_list.MoveToFirst();
 	  // Find the second last.
+// What!?  Casting a G4Surface* to a G4SurfaceList*  !?!?!? - GC
+//
+//	  if(bezier_list.index != bezier_list.last)
+//	    while ( ((G4SurfaceList*)bezier_list.index)->next !=
+//		    bezier_list.last)  bezier_list.Step();
+//
+// Try the following instead (if that's the wished behavior)...
+//
 	  if(bezier_list.index != bezier_list.last)
-	    while ( ((G4SurfaceList*)bezier_list.index)->next !=
-		    bezier_list.last)  bezier_list.Step();
+	    while (bezier_list.next != bezier_list.last)
+	      bezier_list.Step();
+	  
 	  G4BezierSurface* tmp = (G4BezierSurface*) bezier_list.GetSurface();
 	  tmp->CalcBBox();
 	  
@@ -537,7 +546,8 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
     param = Hit->v;
 	
     // Evaluate the diff_curve...
-    G4PointRat rat_result = (G4PointRat&) InternalEvalCrv(0, diff_curve);
+    // G4PointRat rat_result = (G4PointRat&) InternalEvalCrv(0, diff_curve);
+    G4PointRat rat_result(InternalEvalCrv(0, diff_curve));
     
     // Calc the 3D values.
     // L. Broglia
@@ -552,7 +562,8 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
       for ( i = 0; i < row_size; i++)
       {
 	ord = GetOrder(ROW);
-	G4Point3D rtr_pt  = (G4Point3D&) InternalEvalCrv(i, curves);
+	// G4Point3D rtr_pt  = (G4Point3D&) InternalEvalCrv(i, curves);
+	G4Point3D rtr_pt = (InternalEvalCrv(i, curves)).pt();
 	diff_curve->put(0,i,rtr_pt);
       }
 	
@@ -570,7 +581,7 @@ G4Point3D  G4BSplineSurface::BSEvaluate()
       param = Hit->v;
 
       // Evaluate the diff_curve...
-      result = (G4Point3D&) InternalEvalCrv(0, diff_curve);
+      result = (InternalEvalCrv(0, diff_curve)).pt();
     }
   
   delete diff_curve;

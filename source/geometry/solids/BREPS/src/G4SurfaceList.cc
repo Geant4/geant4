@@ -5,14 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SurfaceList.cc,v 1.2 1999-12-15 14:50:02 gunter Exp $
+// $Id: G4SurfaceList.cc,v 1.3 2000-02-14 17:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4SurfaceList.hh"
 
 G4SurfaceList::G4SurfaceList()
 {
-  first = index = last = (G4Surface*)0;
+  first = index = last = next = temp = (G4Surface*)0;
   number_of_elements=0; 
 }
 
@@ -239,11 +239,3 @@ void G4SurfaceList::QuickG4Sort(G4Surface** Dist, int left, int right)
   if( i < right ) 
     QuickG4Sort(Dist, i, right);    
 }
-
-
-
-
-
-
-
-
