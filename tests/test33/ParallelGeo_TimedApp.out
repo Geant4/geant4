@@ -7,6 +7,30 @@
 phot:  Total cross sections from Sandia parametrisation. 
 Tst33PhysicsList::SetCuts:CutLength : 1 (mm)
 
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : Yes
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : Yes
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : Yes
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  is not ready to print
+
+====================================================================
+
+
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
@@ -178,31 +202,55 @@ DoIt Vector:
    Decay
    WeightCutOffProcess
 ================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 65536
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1020 (mu)seconds
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.0392734, error= 0.178429, fom*time= 31.4103, time= 1020, n= 223
+    mean= 0.035753, error= 0.176179, fom*time= 32.2174, time= 1000, n= 216
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         259 |         303 |         257 |         257 |     8.52515 |     9.36548 |           1 |
-cell_02_rep:0............ |           2 |         171 |         395 |         393 |       196.5 |     7.55947 |     8.89826 |           1 |
-cell_03_rep:0............ |           4 |         204 |         447 |         474 |       118.5 |     7.33907 |     8.82048 |           1 |
-cell_04_rep:0............ |           8 |         254 |         533 |         569 |      71.125 |     7.28891 |     8.62413 |           1 |
-cell_05_rep:0............ |          16 |         286 |         622 |         710 |      44.375 |     7.07159 |     8.48868 |           1 |
-cell_06_rep:0............ |          32 |         308 |         652 |         781 |     24.4062 |     6.03025 |     8.34936 |           1 |
-cell_07_rep:0............ |          64 |         317 |         707 |         870 |     13.5938 |     5.83392 |     8.04414 |           1 |
-cell_08_rep:0............ |         128 |         330 |         724 |         837 |     6.53906 |     6.36236 |     8.16679 |           1 |
-cell_09_rep:0............ |         256 |         368 |         790 |         944 |      3.6875 |     5.87105 |     8.14248 |           1 |
-cell_10_rep:0............ |         512 |         425 |         920 |        1023 |     1.99805 |     5.99162 |     8.22846 |           1 |
-cell_11_rep:0............ |        1024 |         473 |        1011 |        1265 |     1.23535 |      4.9899 |     7.78162 |           1 |
-cell_12_rep:0............ |        2048 |         503 |        1075 |        1335 |    0.651855 |     5.43725 |     7.82132 |           1 |
-cell_13_rep:0............ |        4096 |         572 |        1248 |        1640 |    0.400391 |     4.96863 |      7.6579 |           1 |
-cell_14_rep:0............ |        8192 |         612 |        1308 |        1871 |    0.228394 |     4.32062 |     7.22651 |           1 |
-cell_15_rep:0............ |       16384 |         686 |        1434 |        2069 |    0.126282 |     4.14836 |     7.05403 |           1 |
-cell_16_rep:0............ |       32768 |         785 |        1660 |        2399 |   0.0732117 |     4.09378 |     6.90315 |           1 |
-cell_17_rep:0............ |       65536 |         823 |        1778 |        2824 |   0.0430908 |     3.54241 |     6.42292 |           1 |
-cell_18_rep:0............ |      131072 |         765 |        1795 |        2974 |   0.0226898 |     3.27488 |     6.25464 |           1 |
-cell_19_rep:0............ |      131072 |         781 |         781 |           0 |           0 |           0 |           0 |           0 |
-parallelWorld_rep:-1..... |           1 |         179 |         402 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         252 |         296 |         252 |         252 |     8.49323 |     9.35001 |           1 |
+cell_02_rep:0............ |           2 |         166 |         386 |         384 |         192 |     7.51054 |     8.87108 |           1 |
+cell_03_rep:0............ |           4 |         199 |         436 |         466 |       116.5 |     7.31902 |     8.81985 |           1 |
+cell_04_rep:0............ |           8 |         248 |         520 |         561 |      70.125 |     7.26282 |     8.62346 |           1 |
+cell_05_rep:0............ |          16 |         277 |         603 |         693 |     43.3125 |     7.01621 |     8.45771 |           1 |
+cell_06_rep:0............ |          32 |         296 |         623 |         754 |     23.5625 |     5.93842 |      8.2944 |           1 |
+cell_07_rep:0............ |          64 |         302 |         674 |         834 |     13.0312 |     5.69747 |     7.95283 |           1 |
+cell_08_rep:0............ |         128 |         311 |         682 |         803 |     6.27344 |     6.21065 |     8.06305 |           1 |
+cell_09_rep:0............ |         256 |         337 |         719 |         871 |     3.40234 |     5.66376 |     8.02182 |           1 |
+cell_10_rep:0............ |         512 |         393 |         837 |         940 |     1.83594 |      5.8211 |     8.13998 |           1 |
+cell_11_rep:0............ |        1024 |         439 |         934 |        1167 |     1.13965 |     4.89258 |     7.69903 |           1 |
+cell_12_rep:0............ |        2048 |         466 |         997 |        1245 |     0.60791 |     5.32947 |      7.7351 |           1 |
+cell_13_rep:0............ |        4096 |         537 |        1166 |        1559 |    0.380615 |     4.84162 |     7.55854 |           1 |
+cell_14_rep:0............ |        8192 |         566 |        1205 |        1755 |    0.214233 |     4.20806 |     7.12172 |           1 |
+cell_15_rep:0............ |       16384 |         628 |        1311 |        1922 |     0.11731 |      4.0048 |     6.92347 |           1 |
+cell_16_rep:0............ |       32768 |         712 |        1514 |        2220 |    0.067749 |     4.04307 |     6.82517 |           1 |
+cell_17_rep:0............ |       65536 |         741 |        1593 |        2576 |   0.0393066 |     3.33122 |     6.26787 |           1 |
+cell_18_rep:0............ |      131072 |         694 |        1614 |        2740 |   0.0209045 |     3.10844 |      6.1433 |           1 |
+cell_19_rep:0............ |      131072 |         703 |         703 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |         175 |         391 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
   The initial Vectors: 
@@ -397,31 +445,55 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 32768
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1001 (mu)seconds
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 16384
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1016 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.0522403, error= 0.174674, fom*time= 32.7751, time= 1001, n= 205
+    mean= 0.0589926, error= 0.181391, fom*time= 30.3927, time= 1016, n= 178
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |         234 |         274 |         261 |         261 |     9.45525 |     9.61909 |           1 |
-cell_02_rep:0............ |           2 |         164 |         342 |         320 |         160 |     8.54842 |     9.49258 |           1 |
-cell_03_rep:0............ |           4 |         192 |         418 |         429 |      107.25 |     6.01538 |     9.22665 |           1 |
-cell_04_rep:0............ |           8 |         227 |         475 |         544 |          68 |     5.57971 |     8.88469 |           1 |
-cell_05_rep:0............ |          16 |         248 |         551 |         566 |      35.375 |     7.59785 |     9.20732 |           1 |
-cell_06_rep:0............ |          32 |         274 |         585 |         618 |     19.3125 |     6.79393 |     8.91526 |           1 |
-cell_07_rep:0............ |          64 |         306 |         664 |         801 |     12.5156 |     5.98809 |     8.59997 |           1 |
-cell_08_rep:0............ |         128 |         334 |         730 |         854 |     6.67188 |     5.61065 |      8.2076 |           1 |
-cell_09_rep:0............ |         256 |         389 |         803 |         966 |     3.77344 |     5.82617 |     8.04848 |           1 |
-cell_10_rep:0............ |         512 |         451 |         970 |        1135 |      2.2168 |     6.71988 |     8.22941 |           1 |
-cell_11_rep:0............ |        1024 |         504 |        1022 |        1326 |     1.29492 |     5.91876 |     7.78755 |           1 |
-cell_12_rep:0............ |        2048 |         569 |        1179 |        1557 |    0.760254 |     5.44097 |     7.60572 |           1 |
-cell_13_rep:0............ |        4096 |         645 |        1345 |        1773 |    0.432861 |     5.49496 |     7.47406 |           1 |
-cell_14_rep:0............ |        8192 |         690 |        1448 |        1950 |    0.238037 |     5.62597 |     7.48717 |           1 |
-cell_15_rep:0............ |       16384 |         747 |        1595 |        1961 |     0.11969 |     5.88527 |     7.61034 |           1 |
-cell_16_rep:0............ |       32768 |         815 |        1725 |        2250 |   0.0686646 |     5.81739 |     7.56519 |           1 |
-cell_17_rep:0............ |       65536 |         863 |        1873 |        2515 |   0.0383759 |      5.5994 |       7.357 |           1 |
-cell_18_rep:0............ |      131072 |         777 |        1866 |        2525 |   0.0192642 |     5.35235 |     7.34422 |           1 |
-cell_19_rep:0............ |      131072 |         805 |         805 |           0 |           0 |           0 |           0 |           0 |
-parallelWorld_rep:-1..... |           1 |         237 |         441 |           0 |           0 |          10 |          10 |           1 |
+cell_01_rep:0............ |           1 |         203 |         231 |         216 |         216 |     9.45214 |     9.64306 |           1 |
+cell_02_rep:0............ |           2 |         142 |         301 |         288 |         144 |     8.44054 |     9.46626 |           1 |
+cell_03_rep:0............ |           4 |         170 |         361 |         364 |          91 |     5.68834 |      9.1545 |           1 |
+cell_04_rep:0............ |           8 |         206 |         437 |         502 |       62.75 |     5.48408 |        8.89 |           1 |
+cell_05_rep:0............ |          16 |         228 |         493 |         498 |      31.125 |     7.51751 |     9.25761 |           1 |
+cell_06_rep:0............ |          32 |         260 |         558 |         593 |     18.5312 |      6.6803 |     8.88883 |           1 |
+cell_07_rep:0............ |          64 |         287 |         633 |         779 |     12.1719 |     5.91877 |     8.60325 |           1 |
+cell_08_rep:0............ |         128 |         318 |         688 |         790 |     6.17188 |     5.59657 |     8.26688 |           1 |
+cell_09_rep:0............ |         256 |         384 |         795 |         942 |     3.67969 |     5.86061 |     8.11962 |           1 |
+cell_10_rep:0............ |         512 |         429 |         939 |        1109 |     2.16602 |      6.6415 |     8.20706 |           1 |
+cell_11_rep:0............ |        1024 |         485 |         976 |        1271 |     1.24121 |     5.78183 |     7.81047 |           1 |
+cell_12_rep:0............ |        2048 |         550 |        1143 |        1516 |    0.740234 |     5.32873 |     7.57142 |           1 |
+cell_13_rep:0............ |        4096 |         626 |        1314 |        1732 |    0.422852 |     5.39153 |     7.43806 |           1 |
+cell_14_rep:0............ |        8192 |         667 |        1416 |        1927 |    0.235229 |     5.54388 |     7.48032 |           1 |
+cell_15_rep:0............ |       16384 |         732 |        1555 |        1940 |    0.118408 |     5.78355 |     7.60312 |           1 |
+cell_16_rep:0............ |       32768 |         807 |        1700 |        2235 |   0.0682068 |     5.54236 |     7.48619 |           1 |
+cell_17_rep:0............ |       65536 |         854 |        1864 |        2540 |   0.0387573 |     5.53794 |     7.30883 |           1 |
+cell_18_rep:0............ |      131072 |         771 |        1854 |        2533 |   0.0193253 |     5.26019 |     7.23022 |           1 |
+cell_19_rep:0............ |      131072 |         796 |         796 |           0 |           0 |           0 |           0 |           0 |
+parallelWorld_rep:-1..... |           1 |         221 |         398 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
   The initial Vectors: 
@@ -573,30 +645,54 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0.843095, error= 0.999913, fom*time= 1.00017, time= 1000, n= 5763
+    mean= 0.884536, error= 0.999909, fom*time= 1.00018, time= 1000, n= 5493
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
-cell_01_rep:0............ |           1 |        6110 |        7258 |        6513 |        6513 |     8.82904 |     9.50966 |           1 |
-cell_02_rep:0............ |           1 |        3913 |        4621 |        4565 |        4565 |     8.13413 |     9.31051 |           1 |
-cell_03_rep:0............ |           1 |        2405 |        2862 |        3044 |        3044 |     7.90582 |     9.13565 |           1 |
-cell_04_rep:0............ |           1 |        1401 |        1679 |        1878 |        1878 |     7.20885 |      8.9698 |           1 |
-cell_05_rep:0............ |           1 |         801 |         977 |        1100 |        1100 |     7.20054 |     8.87158 |           1 |
-cell_06_rep:0............ |           1 |         455 |         562 |         705 |         705 |     6.87167 |     8.49708 |           1 |
-cell_07_rep:0............ |           1 |         244 |         296 |         338 |         338 |     6.38323 |     8.53589 |           1 |
-cell_08_rep:0............ |           1 |         137 |         157 |         219 |         219 |     5.87078 |     8.24733 |           1 |
-cell_09_rep:0............ |           1 |          79 |          98 |         124 |         124 |     3.95227 |     7.76253 |           1 |
-cell_10_rep:0............ |           1 |          48 |          52 |          69 |          69 |     2.79476 |     7.93558 |           1 |
-cell_11_rep:0............ |           1 |          27 |          29 |          36 |          36 |     1.76207 |     8.13136 |           1 |
-cell_12_rep:0............ |           1 |          13 |          15 |          22 |          22 |     1.08415 |     8.04772 |           1 |
-cell_13_rep:0............ |           1 |           9 |           9 |          13 |          13 |     1.78417 |     8.17749 |           1 |
-cell_14_rep:0............ |           1 |           6 |           6 |           5 |           5 |     4.29959 |     8.98894 |           1 |
+cell_01_rep:0............ |           1 |        5836 |        6914 |        6152 |        6152 |     8.80054 |     9.51551 |           1 |
+cell_02_rep:0............ |           1 |        3748 |        4437 |        4429 |        4429 |     8.07813 |     9.30202 |           1 |
+cell_03_rep:0............ |           1 |        2309 |        2744 |        2912 |        2912 |     7.86665 |     9.16887 |           1 |
+cell_04_rep:0............ |           1 |        1334 |        1585 |        1741 |        1741 |     7.31798 |     9.05297 |           1 |
+cell_05_rep:0............ |           1 |         756 |         923 |        1030 |        1030 |     7.36718 |     8.97627 |           1 |
+cell_06_rep:0............ |           1 |         421 |         526 |         640 |         640 |     7.07989 |     8.65412 |           1 |
+cell_07_rep:0............ |           1 |         231 |         280 |         303 |         303 |     6.57142 |     8.67333 |           1 |
+cell_08_rep:0............ |           1 |         133 |         155 |         209 |         209 |     5.99352 |     8.31861 |           1 |
+cell_09_rep:0............ |           1 |          79 |          94 |         115 |         115 |     3.92579 |     7.74292 |           1 |
+cell_10_rep:0............ |           1 |          53 |          59 |          78 |          78 |     2.95967 |     7.99349 |           1 |
+cell_11_rep:0............ |           1 |          27 |          29 |          36 |          36 |      1.5256 |      7.9004 |           1 |
+cell_12_rep:0............ |           1 |          12 |          14 |          21 |          21 |     1.09436 |       7.679 |           1 |
+cell_13_rep:0............ |           1 |           9 |          10 |          16 |          16 |     1.97531 |     7.71347 |           1 |
+cell_14_rep:0............ |           1 |           7 |           7 |           6 |           6 |     4.46538 |     8.69156 |           1 |
 cell_15_rep:0............ |           1 |           4 |           4 |           2 |           2 |     9.64588 |     9.64855 |           1 |
 cell_16_rep:0............ |           1 |           2 |           4 |           4 |           4 |     9.58907 |     9.59076 |           1 |
 cell_17_rep:0............ |           1 |           1 |           1 |           1 |           1 |     9.64479 |     9.64479 |           1 |
 cell_18_rep:0............ |           1 |           1 |           2 |           2 |           2 |     9.28139 |     9.29128 |           1 |
 cell_19_rep:0............ |           1 |           0 |           0 |           0 |           0 |           0 |           0 |           0 |
-parallelWorld_rep:-1..... |           1 |         507 |        6249 |           0 |           0 |          10 |          10 |           1 |
+parallelWorld_rep:-1..... |           1 |         470 |        5945 |           0 |           0 |          10 |          10 |           1 |
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelTransport, will be removed!
   The initial Vectors: 
@@ -706,10 +802,34 @@ DoIt Vector:
    LCapture
    Decay
 ================================================
-WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 128
-Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1012 (mu)seconds
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
+WARNING - G4ImportanceAlgorithm::Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = 65536
+Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1006 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
-    mean= 0, error= -1, fom*time= 0, time= 1012, n= 0
+    mean= 0, error= -1, fom*time= 0, time= 1006, n= 0
 Volume name               |   Importance|  Tr.Entering|   Population|   Collisions|     Coll*WGT|    NumWGTedE|   FluxWGTedE|    Av.Tr.WGT|
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ParallelImportanceProcess, will be removed!
@@ -823,6 +943,30 @@ DoIt Vector:
    Decay
    WeightCutOffProcess
 ================================================
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Concrete
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 5.67841 keV    e- 508.439 keV    e+ 490.005 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : No      recalculation needed : No 
+ Material : Galactic
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+
+====================================================================
+
 Tst33TimedEventAction::EndOfEventAction: aborted after running for: 1000 (mu)seconds
 Tst33TimedEventAction::CalculateFOM(): FOM: 
     mean= 0, error= -1, fom*time= 0, time= 1000, n= 0
