@@ -1,26 +1,35 @@
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 |                        DicomG4                          |
 +                                                         +
-|                Latest revision /05/03                 |
+|                        README                           |
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
-DICOM images are read and used as Geometry for simulations. 
+The DICOM application has been developed by the Geant4 users:
+Louis Archambault,Vincent Hubert-Tremblay.
+The example is a preliminary version of Geant4DicomInterface.
 
+1) Introduction
 
+DICOM images are read and used as Geometry for simulation. 
 
-In this version the method DicomHandler read the Data
-contains in .dcm files and build a patient in the Geant4 environment (parametrised
-G4Box)
+Three file .dcm give the experimental set-up 
+(in terms of tissues and  tissue geometry position) are read. 
+It is possible to visualise the reproduced experimental  
+set-up thanks to the use visualisation packages.
 
+2) Installation:
 
-2) The installation (Quick):
+ -example enviroment with the compiler 3.2                              
+ -a standard Geant4 example GNUmakefile is provided            
 
-The program should be compiled in this directory, but it should be run in the bin
-directory, because it needs to read several ASCII files for a correct run
+setup with:                                                    
+compiler = gcc-3.2
+G4SYSTEM = linux-g++  
 
-The program has been successfully compiled and run on the following system :
-	- Gentoo Linux 1.4-rc2 with gnu gcc 3.2.2 and geant4.5.0
-	- Debian Linux 2.4.18-bf2 with gnu gcc 3.2.3 and geant4.5.0
+The following environment variables need to be set:            
+G4LEDATA: points to low energy data base - G4EMLOW2.2      
+
+visualisation package: OpenGL
 
 3) Some details :
 
@@ -49,7 +58,7 @@ Data taken from the International Commission on Radiation Units and measurements
 report 46 was used to build the materials (lung, liver, breast, bones, ...)
 
 For the example included, this is the correspondences used :
-(see the image <informations/PhantomCT.jpg> for a visual example)
+(see the image PhantomCT.jpg for a visual example)
 
 4) More informations :
 
@@ -58,34 +67,24 @@ power point presentation included in the folder <informations>. Both documents
 are in french.
 
 
-5) Contact
-
-This is still a rough draft, and English isn't my primary language.
-Please feel free to correct me on the above text in order to make it as
-clear and correct as possible.  This goes, of course, for the information
-provided as well
-
-   Vincent Hubert-Tremblay
-   3rd year  Physical Engineering student
-   <tigre.2@sympatico.ca> or <vihut@phy.ulaval.ca>
+5) Contacts
 
 If you have any questions or wish to notify of updates and/or modification
-please contact
+please contact:
+ 	
+*Louis Archambault at louis.archambault@phy.ulaval.ca
+ 
+*Luc Beaulieu at beaulieu@phy.ulaval.ca
 
-	Louis Archambault at louis.archambault@phy.ulaval.ca
- or
- 	Luc Beaulieu at beaulieu@phy.ulaval.ca
 
++ Vincent Hubert-Tremblay
+   <tigre.2@sympatico.ca> or <vihut@phy.ulaval.ca>
 
-
-Centre Hospitalier Universitaire de Quebec (CHUQ),
+*Centre Hospitalier Universitaire de Quebec (CHUQ),
 Hotel-Dieu de Quebec, departement de Radio-oncologie
 11 cote du palais. Quebec, QC, Canada, G1R 2J6
 tel (418) 525-4444 #6720
 fax (418) 691 5268
-web : thomson.phy.ulaval.ca/phys_med
+web : thomson.phy.ulaval.ca/phys_med 
 
-
-
-
-
++  3rd year  Physical Engineering student
