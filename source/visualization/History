@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2000-05-04 19:18:01 johna Exp $
+$Id: History,v 1.73 2000-05-11 08:48:35 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,14 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+11th May 2000  Satoshi Tanaka vis-V01-01-03
+- In G4DAWNFILEViewer.cc, 
+  <       strcpy( fPSViewer, "ghostview" );
+  ---
+  > //    strcpy( fPSViewer, "ghostview" );
+  >       strcpy( fPSViewer, "gv" );
+
 
 4th May 2000  John Allison
 - Tidied comments in G4VisManagerRegisterMessengers.cc.
