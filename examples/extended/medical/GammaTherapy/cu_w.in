@@ -13,23 +13,24 @@
 /testem/phys/addPhysics       standard
 #/testem/phys/addPhysics       g4v52
 #/testem/phys/addPhysics       modelP
-#/testem/phys/addPhysics      penelope
+#/testem/phys/addPhysics       lowenergy
 #
 /testem/target1Material       W
 /testem/target2Material       Cu
 /testem/target1Z              5.5 mm
 /testem/target2Z              6.5 mm
 #
-#/testem/histoName            cu_w_le.paw
-/testem/histoName             cu_w_st.paw
-#/testem/histoName            cu_w_52.paw
+#/testem/histoName            results_paw/cu_w_le.paw
+/testem/histoName             results_paw/762sepcu_w_st.paw
+#/testem/histoName            results_paw/cu_w_52.paw
 #/testem/histoNumber          5
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
 #
+#/process/eLoss/preciseRange  true
 /process/eLoss/StepFunction 0.2 1. mm
 /run/initialize
-/testem/stepMax              1 mm
-/run/beamOn 4000000
+/testem/stepMax              0.5 mm
+/run/beamOn 10000000
 #

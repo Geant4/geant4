@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2004-08-03 16:56:22 vnivanch Exp $
+// $Id: StepMax.cc,v 1.2 2004-09-29 16:05:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,10 +77,12 @@ G4double StepMax::PostStepGetPhysicalInteractionLength(
 
   G4VPhysicalVolume* pv = aTrack.GetVolume();
 
-  if(pv == gasVolume || pv == checkVolume)
+  //  if(pv == gasVolume || pv == checkVolume)
+  if(pv == gasVolume && aTrack.GetPosition().z()<-500.*mm )
      ProposedStep = 0.0;
 
-  else if((aTrack.GetMaterial())->GetDensity() > thDensity && aTrack.GetPosition().z()<0.0)
+  //  else if((aTrack.GetMaterial())->GetDensity() > thDensity && aTrack.GetPosition().z()<0.0)
+  else if((aTrack.GetMaterial())->GetDensity() > thDensity)
      ProposedStep = MaxChargedStep;
 
   return ProposedStep;
