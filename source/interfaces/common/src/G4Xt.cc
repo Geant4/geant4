@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Xt.cc,v 1.5 1999-12-15 14:50:47 gunter Exp $
+// $Id: G4Xt.cc,v 1.6 2000-11-28 08:13:54 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -78,17 +78,17 @@ G4Xt::G4Xt (
       }
     }
 #if XtSpecificationRelease == 4
-    Cardinal     argc;
-    argc         = (Cardinal)a_argn;
+    Cardinal     narg;
+    narg         = (Cardinal)a_argn;
 #else
-    int          argc;
-    argc         = a_argn;
+    int          narg;
+    narg         = a_argn;
 #endif
     Arg          xargs[1];
     XtSetArg     (xargs[0],XtNgeometry,"100x100"); 
     topWidget    = XtAppInitialize (&appContext,a_class,
 				    NULL,(Cardinal)0,
-				    &argc,a_args,NULL,
+				    &narg,a_args,NULL,
 				    xargs,1);
     if(topWidget==NULL) {
       G4cout        << "G4Xt : Unable to init Xt." << G4endl;
