@@ -1,0 +1,37 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when runing in interactive mode
+#
+# Sets some default verbose
+#
+#
+# create empty scene
+#
+#/run/verbose 2
+/#event/verbose 0
+#/tracking/verbose 0
+#/control/verbose 	
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#/control/verbose 2 
+#/saveHistory
+#/vis/open OGLIX
+/vis/open DAWNFILE
+/vis/viewer/flush
+#
+# draw scene/
+#
+
+#
+# for drawing the tracks
+# (if too many tracks cause core dump => storeTrajectory 0)
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction accumulate
+/run/verbose 1
+/event/verbose 0
+/tracking/verbose 0
+/control/verbose 0
+/vis/viewer/update
+
