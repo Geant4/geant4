@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 1999-11-26 16:11:28 stesting Exp $
+# $Id: GNUmakefile,v 1.10 1999-12-01 17:06:47 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,24 +10,36 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 #Genuine tests...
-SUBDIRS = test01
+SUBDIRS  = test01 ## Geometry - CSG solids and navigator.
+                  ## (Action? Augment, plsu Booleans.)
 SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
                   ## hadronic processes and stopping, including coherent
-                  ## elastic scattering.
-SUBDIRS += test03
+                  ## elastic scattering.  (Derived originally from ExN04.)
+                  ## (Action? Split into (a) em, (b) had with higher em cuts.)
+SUBDIRS += test03 ## Optical Processes.  (Derived originally from ExN06.)
+                  ## (Action? Shelve if no stronger than N06.)
 # SUBDIRS += test04 ## Persistency.
-SUBDIRS += test05
-SUBDIRS += test06
-SUBDIRS += test07
-SUBDIRS += test08
-SUBDIRS += test09
-SUBDIRS += test10
+SUBDIRS += test05 ## BREPS and STEP Interface.
+SUBDIRS += test06 ## Integral approach electromagnetic processes.  Simple box.
+                  ## (Action?  Add muon test script.)
+SUBDIRS += test07 ## Statistical evaluation prototype.  (Derived originally
+                  ## from ExN03.)
+# SUBDIRS += test08 ## Old em test.  (Action? Replace with transition radiation
+                  ## and PAI (photoabsorption ionisation) model.)  (Derived
+                  ## from TestEm8.)
+SUBDIRS += test09 ## Basic e.m. processes, Polarised Compton, new photelectric
+                  ## effect, synchrotron radiation, simple box.  (Action?  Add
+                  ## magnetic field, ElossPLus, muon test script.)
+SUBDIRS += test10 ## Uses optical photons to test geometry.
 SUBDIRS += test11 ## Neutron transport
 SUBDIRS += test12 ## FTF String Model
 SUBDIRS += test13 ## Dual Parton Model
-SUBDIRS += test14 ## LowEnegery em.
+SUBDIRS += test14 ## LowEnergy em (photons and electrons).  (Derived from
+                  ## TestEm5.)
 SUBDIRS += test15 ## Isotope Production
 SUBDIRS += test16 ## n and p Cross-Sections
+SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions).  (Derived
+                  ## from TestEm6.)
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16
