@@ -80,8 +80,9 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   // Set target
   G4std::vector<G4double> targetMomentum(4, 0.0);
 
+  G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
   G4InuclNuclei * target = new G4InuclNuclei(targetMomentum, 
-					     theNucleus.GetN(), 
+					     theNucleusA, 
 					     theNucleus.GetZ());
   target->setEnergy();
 
