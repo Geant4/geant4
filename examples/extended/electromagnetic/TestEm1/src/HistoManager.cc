@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.3 2004-09-20 15:13:12 maire Exp $
+// $Id: HistoManager.cc,v 1.4 2005-01-31 16:58:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,18 +31,22 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory>       //for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
-:tree(0),hf(0),factoryOn(false)
+:af(0),tree(0),factoryOn(false)
 {
 #ifdef G4ANALYSIS_USE
   // Creating the analysis factory
   af = AIDA_createAnalysisFactory();
+  if(!af) {
+    G4cout << "TestEm1::HistoManager::HistoManager :" 
+           << " problem creating the AIDA analysis factory."
+           << G4endl;
+  }
 #endif 
  
   fileName = "testem1.aida";
@@ -74,16 +78,29 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the tree factory
-  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
+  if(!af) return;
 
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
+  G4String options = "uncompress";
+  AIDA::ITreeFactory* tf  = af->createTreeFactory();
+  tree = tf->create(fileName, fileType, readOnly, createNew, options);
+  delete tf;
+  if(!tree) {
+    G4cout << "TestEm1::HistoManager::book :" 
+           << " problem creating the AIDA tree with "
+           << " storeName = " << fileName
+           << " storeType = " << fileType
+           << " readOnly = " << readOnly
+           << " createNew = " << createNew
+           << " options = " << options
+           << G4endl;
+    return;
+  }
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  hf = af->createHistogramFactory(*tree);
+  AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
 
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -93,6 +110,7 @@ void HistoManager::book()
       factoryOn = true;
     }
   }
+  delete hf;
   if(factoryOn) 
       G4cout << "\n----> Histogram Tree is opened in " << fileName << G4endl;
 #endif
@@ -108,8 +126,8 @@ void HistoManager::save()
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
 
-    delete hf;
     delete tree;
+    tree = 0;
     factoryOn = false;
   }
 #endif
