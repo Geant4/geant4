@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPushButton.cc,v 1.3 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmPushButton.cc,v 1.4 2001-03-07 15:16:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //Push button class. Inherits from G4OpenGLXmVWidgetComponent
@@ -18,7 +18,7 @@
 #include <X11/Intrinsic.h>
 #include "globals.hh"
 
-G4OpenGLXmPushButton::G4OpenGLXmPushButton (char* n,
+G4OpenGLXmPushButton::G4OpenGLXmPushButton (const char* n,
 					    XtCallbackRec* c) 
 {
   name = n;
@@ -28,17 +28,17 @@ G4OpenGLXmPushButton::G4OpenGLXmPushButton (char* n,
 G4OpenGLXmPushButton::~G4OpenGLXmPushButton ()
 {}
 
-void G4OpenGLXmPushButton::SetName (char* n) 
+void G4OpenGLXmPushButton::SetName (const char* n) 
 {
   name = n;
-  XmString button_string = XmStringCreateLocalized (name);
+  XmString button_string = XmStringCreateLocalized ((char*)name);
   XtVaSetValues (button,
 		 XmNlabelString, button_string,
 		 NULL);
   XmStringFree (button_string);
 }
 
-char* G4OpenGLXmPushButton::GetName () 
+const char* G4OpenGLXmPushButton::GetName () 
 {
   return name;
 }
@@ -50,7 +50,7 @@ void G4OpenGLXmPushButton::AddYourselfTo (G4OpenGLXmVWidgetContainer* container)
   ProcesspView ();
   parent = container->GetPointerToWidget ();
 
-  XmString button_str = XmStringCreateLocalized (name);
+  XmString button_str = XmStringCreateLocalized ((char*)name);
   button = XtVaCreateManagedWidget 
     (name,
      xmPushButtonWidgetClass,
