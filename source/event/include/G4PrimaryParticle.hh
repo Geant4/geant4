@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryParticle.hh,v 1.4 2000-07-22 10:40:51 asaim Exp $
+// $Id: G4PrimaryParticle.hh,v 1.5 2000-10-18 12:41:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,7 +83,7 @@ class G4PrimaryParticle
       G4double mass;  // This is just for book keeping.
                       // This will not be used but the mass in
                       // G4ParticleDefinition will be used.
-
+      G4double charge;
       G4double polX;
       G4double polY;
       G4double polZ;
@@ -114,6 +114,8 @@ class G4PrimaryParticle
       { return trackID; }
       inline G4double GetMass() const
       { return mass; }
+      inline G4double GetCharge() const
+      { return charge; }
       inline G4ThreeVector GetPolarization() const
       { return G4ThreeVector(polX,polY,polZ); }
       inline G4double GetPolX() const { return polX; }
@@ -148,7 +150,9 @@ class G4PrimaryParticle
       { trackID = id; }
       inline void SetMass(G4double mas)
       { mass = mas; }
-      inline void SetPolarization(G4double px,G4double py,G4double pz)
+      inline void SetCharge(G4double chg)
+      { charge = chg; }
+     inline void SetPolarization(G4double px,G4double py,G4double pz)
       {
         polX = px;
         polY = py;

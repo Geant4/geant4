@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGun.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4ParticleGun.cc,v 1.3 2000-10-18 12:41:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,6 +45,7 @@ void G4ParticleGun::SetInitialValues()
   particle_position = zero;
   particle_time = 0.0;
   particle_polarization = zero;
+  particle_charge = 0.0;
   theMessenger = new G4ParticleGunMessenger(this);
 }
 
@@ -53,6 +54,13 @@ G4ParticleGun::~G4ParticleGun()
   delete theMessenger;
 }
 
+void G4ParticleGun::SetParticleDefinition
+                 (G4ParticleDefinition * aParticleDefinition)
+{ 
+  particle_definition = aParticleDefinition; 
+  particle_charge = particle_definition->GetPDGCharge();
+}
+ 
 void G4ParticleGun::SetParticleMomentum(G4ParticleMomentum aMomentum)
 {
   if(particle_definition==NULL)
@@ -101,6 +109,7 @@ void G4ParticleGun::GeneratePrimaryVertex(G4Event* evt)
     G4PrimaryParticle* particle =
       new G4PrimaryParticle(particle_definition,px,py,pz);
     particle->SetMass( mass );
+    particle->SetCharge( particle_charge );
     particle->SetPolarization(particle_polarization.x(),
                                particle_polarization.y(),
                                particle_polarization.z());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGun.hh,v 1.3 1999-12-15 14:49:38 gunter Exp $
+// $Id: G4ParticleGun.hh,v 1.4 2000-10-18 12:41:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,9 +68,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      //   By using SetParticleMomentum(), both particle_momentum_direction and
      //   particle_energy(Kinetic Energy) are set.
      //   
-     inline void SetParticleDefinition
-                 (G4ParticleDefinition * aParticleDefinition)
-     { particle_definition = aParticleDefinition; }
+     void SetParticleDefinition
+       (G4ParticleDefinition * aParticleDefinition);
      void SetParticleMomentum(G4ParticleMomentum aMomentum);
      inline void SetParticleMomentumDirection
                  (G4ParticleMomentum aMomentumDirection)
@@ -81,6 +80,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      { particle_position = aPosition; }
      inline void SetParticleTime(G4double aTime)
      { particle_time = aTime; }
+     inline void SetParticleCharge(G4double aCharge)
+     { particle_charge = aCharge; }
      inline void SetParticlePolarization(G4ThreeVector aVal)
      { particle_polarization = aVal; }
      inline void SetNumberOfParticles(G4int i)
@@ -93,6 +94,8 @@ class G4ParticleGun:public G4VPrimaryGenerator
      { return particle_momentum_direction; }
      inline G4double GetParticleEnergy()
      { return particle_energy; }
+     inline G4double GetParticleCharge()
+     { return particle_charge; }
      inline G4ThreeVector GetParticlePosition()
      { return particle_position; }
      inline G4double GetParticleTime()
@@ -109,6 +112,7 @@ class G4ParticleGun:public G4VPrimaryGenerator
      G4ParticleDefinition* particle_definition;
      G4ParticleMomentum    particle_momentum_direction;
      G4double	           particle_energy;
+     G4double	           particle_charge;
      G4ThreeVector         particle_position;
      G4double              particle_time;
      G4ThreeVector         particle_polarization;

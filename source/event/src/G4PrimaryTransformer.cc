@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.3 2000-10-18 12:41:25 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -104,6 +104,10 @@ void G4PrimaryTransformer::GenerateSingleTrack
     DP->SetPolarization(primaryParticle->GetPolX(),
                         primaryParticle->GetPolY(),
                         primaryParticle->GetPolZ());
+    // Set Charge
+    if (abs(primaryParticle->GetCharge()-DP->GetCharge())>eplus) {
+      DP->SetCharge(primaryParticle->GetCharge());
+    } 
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Create G4Track object
