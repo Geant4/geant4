@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.26 2002-01-23 03:17:26 asaim Exp $
+// $Id: G4SteppingManager.cc,v 1.27 2002-01-23 15:21:40 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -261,7 +261,7 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
    //   if(fTrack->GetKineticEnergy() <= 0.0){
    //     fTrack->SetTrackStatus( fStopButAlive );
    //   }
-   if(fTrack->GetKineticEnergy() <= 0.0){
+   if(fTrack->GetKineticEnergy() <= DBL_MIN){
      if( !(fTrack->IsGoodForTracking()) ){
        size_t nAtRestProc = fTrack->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->entries();
        if( nAtRestProc == 0 ){
