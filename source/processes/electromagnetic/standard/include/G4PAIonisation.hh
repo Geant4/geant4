@@ -156,6 +156,7 @@ class G4PAIonisation : public G4VPAIenergyLoss
     //  private data members
     G4LogicalVolume*  fLogicalVolume;
     size_t fMatIndex ;  // index of material, where dE/dx is calculated
+    size_t fMatCutsIndex ;  // index of material, where dE/dx is calculated
     G4Material* fMaterial;
     G4MaterialCutsCouple* fMaterialCutsCouple;
     G4PhysicsTable* theMeanFreePathTable;

@@ -70,14 +70,16 @@ G4PAIonisation::G4PAIonisation( G4LogicalVolume* lVolume,
      fLogicalVolume(NULL), fMaterial(NULL), fMaterialCutsCouple(NULL)
 {
   fLogicalVolume      = lVolume;
-  fMatIndex           = lVolume->GetMaterialCutsCouple()->GetIndex();
+  //  fMatIndex           = lVolume->GetMaterialCutsCouple()->GetIndex();
+  //  fMatIndex           = lVolume->GetMaterial()->GetIndex();
   fMaterial           = lVolume->GetMaterial();
 
   // PAI dN/dx initialisation
 
-  ComputeSandiaPhotoAbsCof() ;
-  BuildPAIonisationTable() ;
+  // ComputeSandiaPhotoAbsCof() ;
+  // BuildPAIonisationTable() ;
 }
+
 //////////////////////////////////////////////////////////////////////////////
 //
 // constructor and destructor
@@ -215,8 +217,26 @@ void
 G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
 {
-    G4double Charge = aParticleType.GetPDGCharge();
+  G4double Charge = aParticleType.GetPDGCharge();
+  fMatCutsIndex           = fLogicalVolume->GetMaterialCutsCouple()->GetIndex();
+  fMatIndex           = fLogicalVolume->GetMaterial()->GetIndex();
+  // fMaterial           = lVolume->GetMaterial();
 
+  G4cout<<"PAI mat name  = "<<fLogicalVolume->GetMaterial()->GetName()<<G4endl;
+  G4cout<<"PAI mat index = "<<fLogicalVolume->GetMaterial()->GetIndex()
+                            <<G4endl<<G4endl;
+  G4cout<<"PAI matcuts name  = "
+        <<fLogicalVolume->GetMaterialCutsCouple()->GetMaterial()->GetName()<<G4endl;
+  G4cout<<"PAI matcuts index = "
+        <<fLogicalVolume->GetMaterialCutsCouple()->GetIndex()<<G4endl<<G4endl;
+
+  // PAI dN/dx initialisation
+
+  ComputeSandiaPhotoAbsCof() ;
+  BuildPAIonisationTable() ;
+  /*
+=======
+>>>>>>> 1.36
     if(Charge>0.)
     {
        RecorderOfpProcess[CounterOfpProcess] = (*this).theLossTable ;
@@ -227,6 +247,7 @@ G4PAIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
        RecorderOfpbarProcess[CounterOfpbarProcess] = (*this).theLossTable ;
        CounterOfpbarProcess++;
     }
+  */
     if( CutsWhereModified() )
     {
        BuildLambdaTable(aParticleType) ;
@@ -349,16 +370,13 @@ G4PAIonisation::BuildPAIonisationTable()
 void
 G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
-
   G4int i ;
   G4double dNdxCut, lambda;
-    //  G4double LowEdgeEnergy , Value ,sigma ;
-    //  G4bool isOutRange ;
-    //  const G4double BigValue = DBL_MAX ;
 
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  //  size_t numOfCouples = theCoupleTable->GetTableSize();
   
   if (theMeanFreePathTable) 
   {
@@ -367,19 +385,8 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   }
   theMeanFreePathTable = new G4PhysicsTable(1);
 
-  // theMeanFreePathTable = new G4PhysicsTable(numOfCouples);
-
-
-  // get electron and particle cuts in kinetic energy
-
-  //  DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
-  // ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
-
   DeltaCutInKineticEnergy = theCoupleTable->GetEnergyCutsVector(idxG4ElectronCut);
-  //create physics vector then fill it ....
 
-    //    for (size_t J=0; J < numOfCouples; J++)  // loop for materials
-    //    {
   if (fLambdaVector)   delete fLambdaVector;
   if (fdNdxCutVector)  delete fdNdxCutVector;
   
@@ -389,11 +396,12 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
   fdNdxCutVector = new G4PhysicsLogVector( LowestKineticEnergy, 
 					  HighestKineticEnergy,
 					  TotBin                ) ;
-  // get the electron kinetic energy cut for the actual material,
-  //  it will be used in ComputeMicroscopicCrossSection
-  // ( it is the SAME for ALL the ELEMENTS in THIS MATERIAL )
 
-  DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatIndex] ;
+  // DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatIndex] ;
+  DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatCutsIndex] ;
+
+  G4cout<<"PAI DeltaCutInKineticEnergyNow = "
+        <<DeltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
 
   for ( i = 0 ; i < TotBin ; i++ )
   {
@@ -404,44 +412,6 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
     fdNdxCutVector->PutValue(i, dNdxCut) ;
   }
   theMeanFreePathTable->insert(fLambdaVector);    
-
-  /*
-       // compute the (macroscopic) cross section first
-       const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(J);
-       const G4Material* material= couple->GetMaterial();
-
-       const G4ElementVector* theElementVector= material->GetElementVector() ;
-       const G4double* theAtomicNumDensityVector =
-                         material->GetAtomicNumDensityVector();
-       const G4int NumberOfElements = material->GetNumberOfElements() ;
-
-       // get the electron kinetic energy cut for the actual material,
-       //  it will be used in ComputeMicroscopicCrossSection
-       // ( it is the SAME for ALL the ELEMENTS in THIS MATERIAL )
-
-       DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[J] ;
-
-       for ( G4int i = 0 ; i < TotBin ; i++ )
-       {
-          LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-          sigma = 0. ;
-          for (G4int iel=0; iel<NumberOfElements; iel++ )
-          {
-              sigma +=  theAtomicNumDensityVector[iel]*
-                        ComputeMicroscopicCrossSection(aParticleType,
-                        LowEdgeEnergy,
-                       (*theElementVector)[iel]->GetZ() ) ;
-          }
-          // mean free path = 1./macroscopic cross section
-
-           Value = sigma <= 0 ? BigValue: 1./sigma ;
-
-           aVector->PutValue(i, Value) ;
-        }
-        theMeanFreePathTable->insert(aVector);
-    }
-  */
-
 }
 
 ////////////////////////////////////////////////////////////////////////////
