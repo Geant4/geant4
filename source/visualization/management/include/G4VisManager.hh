@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.28 2002-11-11 18:33:30 johna Exp $
+// $Id: G4VisManager.hh,v 1.29 2003-01-20 14:12:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,30 +81,18 @@
 #include "globals.hh"
 #include "G4GraphicsSystemList.hh"
 #include "G4SceneHandlerList.hh"
-#include "G4Scene.hh"
 #include "G4SceneList.hh"
 #include "G4Transform3D.hh"
-#include "G4UImessenger.hh"
 #include "G4NullModel.hh"
+#include "G4TrajectoriesModel.hh"
 #include "G4ModelingParameters.hh"
 
 #include "g4std/iostream"
 #include "g4std/vector"
 
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-class G4VSolid;
-class G4VGraphicsSystem;
-class G4VSceneHandler;
-class G4VViewer;
-class G4Polyline;
-class G4Text;
-class G4Circle;
-class G4Scale;
-class G4Square;
-class G4Polymarker;
-class G4Polyhedron;
-class G4NURBS;
+class G4Scene;
+class G4UIcommand;
+class G4UImessenger;
 
 class G4VisManager: public G4VVisManager {
 
@@ -180,43 +168,55 @@ public: // With description
   // for representing hits, digis, etc.
 
   void Draw (const G4Circle&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4NURBS&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Polyhedron&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Polyline&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Polymarker&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Scale&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Square&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   void Draw (const G4Text&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+    const G4Transform3D& objectTransformation);
 
   ////////////////////////////////////////////////////////////////////
   // Now functions that implement the pure virtual functions of
-  // G4VVisManager for drawing a GEANT4 geometry object.  Note that
-  // the 2nd argument overrides any visualization attributes that are
-  // associated with the object itself.
+  // G4VVisManager for drawing a GEANT4 object.  Note that the
+  // visualization attributes needed in some cases override any
+  // visualization attributes that are associated with the object
+  // itself - thus you can, for example, change the colour of a
+  // physical volume.  The objectTransformation defaults to
+  // G4Transform3D::Identity by inheritance from G4VVisManager.
+
+  void Draw (const G4VHit&,
+	     const G4Transform3D& objectTransformation);
+
+  void Draw (const G4VTrajectory&, G4int i_mode,
+	     const G4Transform3D& objectTransformation);
+  // i_mode is a parameter that can be used to control the drawing of
+  // the trajectory.  See, e.g., G4VTrajectory::DrawTrajectory.
+  // i_mode defaults to 0 by inheritance from G4VVisManager.
 
   void Draw (const G4LogicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+	     const G4Transform3D& objectTransformation);
 
   void Draw (const G4VPhysicalVolume&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+	     const G4Transform3D& objectTransformation);
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
-    const G4Transform3D& objectTransformation = G4Transform3D::Identity);
+	     const G4Transform3D& objectTransformation);
 
   ////////////////////////////////////////////////////////////////////////
   // Now other pure virtual functions of G4VVisManager...
@@ -348,6 +348,7 @@ protected:
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
   G4int fWindowSizeHintX, fWindowSizeHintY; // For viewer construction.
   G4NullModel fVisManagerNullModel;         // As a default.
+  G4TrajectoriesModel dummyTrajectoriesModel;  // For passing drawing mode.
   G4ModelingParameters fVisManagerModelingParameters;  // Useful memory.
 
 };
