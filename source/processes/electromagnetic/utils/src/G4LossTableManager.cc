@@ -110,7 +110,7 @@ G4LossTableManager::G4LossTableManager()
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   integral = true;
-  buildPreciseRange = true;
+  buildPreciseRange = false;
   verbose = 0;
 }
 

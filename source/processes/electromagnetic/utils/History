@@ -1,4 +1,4 @@
-$Id: History,v 1.93 2003-04-28 15:33:28 vnivanch Exp $
+$Id: History,v 1.94 2003-05-15 09:48:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15 May 03: V.Ivant (utils-V05-01-00)
+- add precise range calculation for STD
+- defauld step parameters for STD set to be the same as standard
 
 28 Apr 03: V.Ivant (utils-V05-00-13)
 - add control on range for msc (effective for ions)
