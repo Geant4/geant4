@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlinePrimaryGeneratorAction.cc,v 1.1 2003-11-25 09:29:47 gcosmo Exp $
+// $Id: G4BlinePrimaryGeneratorAction.cc,v 1.2 2004-12-03 16:07:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,7 @@ void G4BlinePrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
    
   G4double mass =  pdef->GetPDGMass();
   G4double energy = 10000.*MeV + mass;
-  G4double pmom = sqrt(energy*energy-mass*mass);
+  G4double pmom = std::sqrt(energy*energy-mass*mass);
 
   // The momentum direction and energy do not have an effect in tracing of 
   // bline but still need to be defined.

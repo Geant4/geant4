@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03PrimaryGeneratorAction.cc,v 1.4 2001-11-07 14:34:43 grichine Exp $
+// $Id: F03PrimaryGeneratorAction.cc,v 1.5 2004-12-03 16:07:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,10 +110,10 @@ void F03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   if (rndmFlag == "on")
   {
-      r0 = (F03Detector->GetAbsorberRadius())*sqrt(G4UniformRand());
+      r0 = (F03Detector->GetAbsorberRadius())*std::sqrt(G4UniformRand());
       phi0 = twopi*G4UniformRand();
-      x0 = r0*cos(phi0);
-      y0 = r0*sin(phi0);
+      x0 = r0*std::cos(phi0);
+      y0 = r0*std::sin(phi0);
   } 
 
   particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
