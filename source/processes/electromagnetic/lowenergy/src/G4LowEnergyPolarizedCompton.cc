@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.4 2001-06-17 21:20:01 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.5 2001-06-18 09:59:18 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -660,7 +660,7 @@ G4ThreeVector G4LowEnergyPolarizedCompton::SetNewPolarization(G4double epsilon,
       thetaProbability = (b + a*cos(theta)*cos(theta))/(a+b);
       cosTheta = cos(theta);       
     }
-  while ( rand2 > thetaProbability || abs(cosTheta) >= abs(normalisation) );
+  while ( rand2 > thetaProbability || abs(cosTheta) > abs(normalisation) );
   
   G4double cosBeta = cosTheta/normalisation;
   G4double sinBeta = sqrt(1-cosBeta*cosBeta);
