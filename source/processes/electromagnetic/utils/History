@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2002-12-09 10:25:01 vnivanch Exp $
+$Id: History,v 1.67 2002-12-13 11:15:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 dec 02: V.Ivant (utils-V04-01-12)
+- Fix in multiple scattering for 1 MeV protons in both implementations.
+
 09 dec 02: V.Ivant (utils-V04-01-11)
-- Remove warnings in G4SCProcessorStand and G4UniversalFluctuation
+- Removed warnings in G4SCProcessorStand and G4UniversalFluctuation.
 
 06 dec 02: G.Cosmo (utils-V04-01-10)
 - Merged changes for new G4ApplicationState in messengers.
