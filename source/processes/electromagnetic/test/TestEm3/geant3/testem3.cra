@@ -193,7 +193,10 @@
       CALL GSMATE( 6,'Aluminium', 26.98, 13., 2.7    ,  8.9, 37.2, 0,0)
       CALL GSMATE( 7,'Iron     ', 55.85, 26., 7.87   , 1.76, 17.1, 0,0)             
       CALL GSMATE( 8,'Lead     ',207.19, 82., 11.35  , 0.56, 18.5, 0,0)              
-      CALL GSMATE( 9,'Uranium  ',238.03, 92., 18.95  , 0.32, 12. , 0,0)                    
+      CALL GSMATE( 9,'Uranium  ',238.03, 92., 18.95  , 0.32, 12. , 0,0)
+      
+      CALL GSMATE(10,'Silicium' , 28.09, 14., 2.33   , 9.36, 33.3, 0,0)
+      CALL GSMATE(11,'Tungsten' ,183.85, 74., 19.3   , 0.35,  5.7, 0,0)                   
 *                                               
 *                                                                               
 * *** Defines USER tracking media parameters
