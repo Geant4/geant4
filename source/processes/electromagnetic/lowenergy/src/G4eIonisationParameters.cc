@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.11 2001-10-25 09:32:19 vnivanch Exp $
+// $Id: G4eIonisationParameters.cc,v 1.12 2001-10-25 09:47:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -208,7 +208,6 @@ void G4eIonisationParameters::LoadData()
     do {
       file >> energy;
       if (energy == -2) break;
-      if (energy >  -1) e.push_back(energy);
 
       size_t j;
       for (j=0; j<length; j++) 
@@ -221,10 +220,13 @@ void G4eIonisationParameters::LoadData()
       if (q[15] < q[14]) q[15] = q[14];
       if (q[15] == 0.)   q[15] = DBL_MAX;
 
-      for (j=0; j<length; j++) 
-	{
-	  a[j]->push_back(q[j]);
-	}
+      if (energy >  -1) {
+        e.push_back(energy);
+        for (j=0; j<length; j++) 
+	  {
+	    a[j]->push_back(q[j]);
+	  }
+      }
       q.clear();
 
       // End of set for a shell, fill the map
