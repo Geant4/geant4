@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2001-11-16 10:51:44 johna Exp $
+$Id: History,v 1.6 2002-11-11 18:27:29 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+11th November 2002  John Allison
+- Moved header inclusions from .hh to .cc.
+- Tidied AddThis(traj) and improved (square) and (circle).
 
 16th November 2001  John Allison
 - Added G4XXXDEBUG.
