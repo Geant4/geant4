@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.2 2004-03-01 17:00:31 vnivanch Exp $
+// $Id: G4VTransitionRadiation.cc,v 1.3 2004-12-02 08:31:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VTransitionRadiation class -- implementation file
@@ -40,6 +40,8 @@
 #include "G4TransportationManager.hh"
 
 ///////////////////////////////////////////////////////////////////////
+
+using namespace std;
 
 G4VTransitionRadiation::G4VTransitionRadiation( const G4String& processName )
   : G4VDiscreteProcess(processName),

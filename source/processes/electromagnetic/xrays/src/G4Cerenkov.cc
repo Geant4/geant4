@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.15 2004-10-19 01:37:39 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.16 2004-12-02 08:31:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -54,6 +54,8 @@
 #include "G4ios.hh"
 #include "G4Poisson.hh"
 #include "G4Cerenkov.hh"
+
+using namespace std;
 
 /////////////////////////
 // Class Implementation  

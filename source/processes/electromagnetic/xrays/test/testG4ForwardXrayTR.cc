@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ForwardXrayTR.cc,v 1.5 2004-08-11 14:41:31 vnivanch Exp $
+// $Id: testG4ForwardXrayTR.cc,v 1.6 2004-12-02 08:31:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -294,7 +294,7 @@ int main()
      
   
     energy = 1000.0*GeV + mass ;  // was 1.0*GeV now 1.0*TeV
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
   
     G4ParticleMomentum theMomentum(momentum,0.,0.);
   

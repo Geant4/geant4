@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransitionRadiation.cc,v 1.3 2001-07-11 10:03:42 gunter Exp $
+// $Id: G4TransitionRadiation.cc,v 1.4 2004-12-02 08:31:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation class -- implementation file
@@ -53,6 +53,7 @@ const G4int   G4TransitionRadiation::fSympsonNumber = 100 ;
 const G4int   G4TransitionRadiation::fGammaNumber = 15 ;
 const G4int   G4TransitionRadiation::fPointNumber = 100 ;
 
+using namespace std;
 
 ///////////////////////////////////////////////////////////////////////
 //

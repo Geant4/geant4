@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.11 2004-10-19 01:44:36 gum Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.12 2004-12-02 08:31:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -81,6 +81,7 @@ G4double G4ForwardXrayTR::fPlasmaCof = 4.0*pi*fine_structure_const*
 
 G4double G4ForwardXrayTR::fCofTR     = fine_structure_const/pi ;
 
+using namespace std;
 
 /*   ************************************************************************
 
