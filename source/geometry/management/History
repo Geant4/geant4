@@ -1,4 +1,4 @@
-$Id: History,v 1.65 2003-11-04 15:26:25 gcosmo Exp $
+$Id: History,v 1.66 2003-12-01 14:54:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 01, 2003  P.Gumplinger                 geommng-V05-02-05
+- G4LogicalSurface[.hh.icc]: modified to use G4SurfaceProperty instead
+  of G4OpticalSurface. Requires tag "materials-V05-02-00".
 
 Nov 04, 2003  G.Cosmo                      geommng-V05-02-04
 - G4LogicalVolume.hh: added inclusion of assert.h required by .icc file.
