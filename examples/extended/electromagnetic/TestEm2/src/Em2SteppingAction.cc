@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingAction.cc,v 1.5 2001-12-06 17:55:37 japost Exp $
+// $Id: Em2SteppingAction.cc,v 1.6 2001-12-11 17:44:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,13 +58,17 @@ void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
  // energy deposit
  //
  G4int SlideNb(0), RingNb(0);
- if ((Em2Det->GetnRtot()>1) && (preStepTouchable->GetHistoryDepth()>0))
-    RingNb  = preStepTouchable->GetReplicaNumber(1);
- if (Em2Det->GetnLtot()>1)
-    SlideNb = preStepTouchable->GetReplicaNumber();
-             
+ if (preStepTouchable->GetHistoryDepth()>0)
+ {
+   if (Em2Det->GetnRtot()>1)
+     RingNb  = preStepTouchable->GetReplicaNumber(1);
+   if (Em2Det->GetnLtot()>1)
+     SlideNb = preStepTouchable->GetReplicaNumber();
+ }
+         
  G4double dEStep = aStep->GetTotalEnergyDeposit();
- if (dEStep > 0.) Em2Run->fillPerStep(dEStep,SlideNb,RingNb);
+ if (dEStep > 0.)
+   Em2Run->fillPerStep(dEStep,SlideNb,RingNb);
 
  // particle flux
  //  
