@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.2 2001-08-31 15:41:49 vnivanch Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.3 2001-09-05 12:29:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -77,9 +77,12 @@ public:
 
   G4int SelectRandomShell(G4int Z, G4double e) const;
 
+  // For Discrete Processes
+  G4VEMDataSet* BuildMeanFreePathForMaterials();
+
   G4VEMDataSet* BuildMeanFreePathForMaterials(
-                const G4DataVector& minEnergy = 0,
-                const G4DataVector& maxEnergy = 0);
+                const G4DataVector& minEnergy,
+                const G4DataVector& maxEnergy);
  
   void LoadData(const G4String& dataFile);
 
@@ -90,6 +93,8 @@ public:
   void Clear();
 
   void SetSecondaryGenerator(G4VEMSecondaryGenerator* p) {theGenerator = p;};
+
+  void SetVerbose(G4int val) {verbose = val;};
    
 private:
  
@@ -97,8 +102,11 @@ private:
 
   void BuildCrossSectionsForMaterials(const G4DataVector& energyVector);
 
-  void BuildCrossSectionsWithCut(const G4DataVector& energyThresholds, 
-                                 const G4DataVector& energyVector);
+  void BuildCrossSectionsWithCut(const G4DataVector& energyVector,
+                                 const G4DataVector& minEnergy,
+                                 const G4DataVector& maxEnergy);
+
+  G4VEMDataSet* BuildMeanFreePathForMaterials(const G4DataVector& energies);
 
   void ActiveElements();
 
@@ -116,12 +124,17 @@ private:
 
   G4DataVector activeZ;
 
+  // Data from database
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataMap;
+
+  // Calculated data
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > dataWithCutMap;
   
   G4std::vector<G4VEMDataSet*> crossSections;
 
   G4VEMSecondaryGenerator* theGenerator;
-
+ 
+  G4int verbose;
 };
  
 #endif

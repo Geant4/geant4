@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.1 2001-08-20 16:37:37 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.2 2001-09-05 12:29:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31.07.01   MGP          Created
+// 05.09.01 V.Ivanchenko Minor fix in FindValue
 //
 // -------------------------------------------------------------------
 
@@ -37,7 +38,7 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
-// Constructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EMDataSet::G4EMDataSet(G4int Z,
 			 G4DataVector* points, 
@@ -50,6 +51,8 @@ G4EMDataSet::G4EMDataSet(G4int Z,
   unit1 = unitE;
   unit2 = unitData;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EMDataSet:: G4EMDataSet(G4int Z, 
 			  const G4String& dataFile,
@@ -65,7 +68,7 @@ G4EMDataSet:: G4EMDataSet(G4int Z,
   numberOfBins = energies->size();
 }
 
-// Destructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EMDataSet::~G4EMDataSet()
 { 
@@ -73,6 +76,7 @@ G4EMDataSet::~G4EMDataSet()
   delete data;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4EMDataSet::FindValue(G4double e, G4int id) const
 {
@@ -82,15 +86,11 @@ G4double G4EMDataSet::FindValue(G4double e, G4int id) const
   size_t bin = FindBinLocation(e);
   if (bin == numberOfBins)
     {
-      //      G4cout << "WARNING - G4EMDataSet::LogLogInterpolation: energy outside upper boundary"
-      //     << G4endl;
       value = (*data)[bin];
     }
-  else if (e <= (*energies)[0])
+  else if (bin == 0)
     {
-      G4cout << "WARNING - G4EMDataSet::LogLogInterpolation: energy outside lower boundary"
-	     << G4endl;
-      value = 0.;
+      value = (*data)[bin];
     }
   else
     {
@@ -100,15 +100,18 @@ G4double G4EMDataSet::FindValue(G4double e, G4int id) const
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int G4EMDataSet::FindBinLocation(G4double energy) const
 {
   // Protection against call outside allowed range
   if (energy < (*energies)[0])
     {
       G4cout << z
-	     << " - WARNING - G4EMDataSet::FindBinLocation called with argument " << energy 
-	     << "outside lower limit " << (*energies)[0]
-	     << "; replaced with lower limit" 
+	     << " - WARNING - G4EMDataSet::FindBinLocation(e) called with e= "
+             << energy 
+	     << " outside lower limit " << (*energies)[0]
+	     << " -> is replaced with lower limit" 
 	     << G4endl;
       energy = (*energies)[0];
     }
@@ -126,6 +129,8 @@ G4int G4EMDataSet::FindBinLocation(G4double energy) const
   
   return upperBound;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EMDataSet::LoadData(const G4String& fileName)
 {
@@ -150,11 +155,10 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   G4std::ifstream file(dirFile);
   G4std::filebuf* lsdp = file.rdbuf();
   
-  if (! (lsdp->is_open()) )
-	{
-	  G4String excep = "G4EMDataSet - data file: " + dirFile + " not found";
-	  G4Exception(excep);
-	}
+  if (! (lsdp->is_open()) ) {
+      G4String excep = "G4EMDataSet - data file: " + dirFile + " not found";
+      G4Exception(excep);
+    }
   G4double a = 0;
   G4int k = 1;
 
@@ -191,6 +195,8 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   file.close();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4EMDataSet::PrintData() const
 {
   size_t size = numberOfBins;
@@ -205,3 +211,5 @@ void G4EMDataSet::PrintData() const
 	     << G4endl; 
     }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

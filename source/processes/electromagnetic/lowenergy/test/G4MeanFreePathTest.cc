@@ -49,14 +49,11 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 
-//#include "G4LowEnergyIonisation.hh"
-//#include "G4LowEnergyBremsstrahlung.hh"
-#include "G4LowEnergyIonisationIV.hh"
-#include "G4LowEnergyBremsstrahlungIV.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
-//#include "G4LowEnergyPhotoElectricMG.hh"
 #include "G4LowEnergyRayleigh.hh"
 #include "G4hLowEnergyIonisation.hh"
 
@@ -98,8 +95,8 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-typedef G4LowEnergyIonisationIV G4LowEnergyIonisation;
-typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
+//typedef G4LowEnergyIonisationIV G4LowEnergyIonisation;
+//typedef G4LowEnergyBremsstrahlungIV G4LowEnergyBremsstrahlung;
 //typedef G4LowEnergyPhotoElectricMG G4LowEnergyPhotoElectric;
 
 HepTupleManager* hbookManager;
@@ -409,10 +406,15 @@ int main(int argc,char** argv)
 
       eionle->BuildPhysicsTable(*electron);
       ebrle->BuildPhysicsTable(*electron);
+      G4cout << "Electron tables are built" << G4endl;
       comple->BuildPhysicsTable(*gamma);
+      G4cout << "Compton is built" << G4endl;
       convle->BuildPhysicsTable(*gamma);
+      G4cout << "GammaConvertion is built" << G4endl;
       pele->BuildPhysicsTable(*gamma);
+      G4cout << "PairProduction is built" << G4endl;
       rayle->BuildPhysicsTable(*gamma);
+      G4cout << "Raylai is built" << G4endl;
 
     } else if(!lowE && !eionst) {
 

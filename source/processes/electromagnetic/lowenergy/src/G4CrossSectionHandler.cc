@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.4 2001-08-31 15:41:18 vnivanch Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.5 2001-09-05 12:29:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -50,6 +50,9 @@
 #include "g4std/fstream"
 #include "g4std/strstream"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4CrossSectionHandler::G4CrossSectionHandler(
                        const G4VDataSetAlgorithm* algorithm,
 			     G4double minE, G4double maxE, G4int bins,
@@ -63,27 +66,22 @@ G4CrossSectionHandler::G4CrossSectionHandler(
     unit2(unitData), 
     zMin(minZ), 
     zMax(maxZ),
-    theGenerator(0)
+    theGenerator(0),
+    verbose(0)
 {
   ActiveElements();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4CrossSectionHandler::~G4CrossSectionHandler()
 {
+  Clear();
+  activeZ.clear();
   delete interpolation;
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
-
-  for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
-    {
-      G4VEMDataSet* dataSet = pos->second;
-      delete dataSet;
-    }
-  size_t n = crossSections.size();
-  for (size_t i=0; i<n; i++)
-    {
-      delete crossSections[i];
-    }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionHandler::PrintData() const
 {
@@ -102,8 +100,16 @@ void G4CrossSectionHandler::PrintData() const
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4CrossSectionHandler::LoadData(const G4String& fileName)
 {
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler::Load cross section data from file <" 
+           << fileName
+           << ">" << G4endl;
+  }
+ 
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
@@ -132,7 +138,8 @@ void G4CrossSectionHandler::LoadData(const G4String& fileName)
       
       if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4CrossSectionHandler - data file: " + dirFile + " not found";
+	  G4String excep = "G4CrossSectionHandler - data file: " + 
+                           dirFile + " not found";
 	  G4Exception(excep);
 	}
       G4double a = 0;
@@ -173,10 +180,22 @@ void G4CrossSectionHandler::LoadData(const G4String& fileName)
       G4VEMDataSet* dataSet = new G4EMDataSet(Z,energies,data,interpolation);
       dataMap[Z] = dataSet;
     }
+
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler: end of loading" 
+           << G4endl;
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionHandler::LoadShellData(const G4String& fileName)
 {
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler::Load cross shell data from file <" 
+           << fileName
+           << ">" << G4endl;
+  }
   size_t nZ = activeZ.size();
   for (size_t i=0; i<nZ; i++)
     {
@@ -184,7 +203,14 @@ void G4CrossSectionHandler::LoadShellData(const G4String& fileName)
       G4VEMDataSet* dataSet = new G4ShellEMDataSet(Z,fileName,interpolation);
       dataMap[Z] = dataSet;
     }
+
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler: end of loading" 
+           << G4endl;
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionHandler::Clear()
 {
@@ -192,6 +218,13 @@ void G4CrossSectionHandler::Clear()
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+    {
+      G4VEMDataSet* dataSet = pos->second;
+      dataMap.erase(pos);
+      delete dataSet;
+    }
+
+  for (pos = dataWithCutMap.begin(); pos != dataWithCutMap.end(); pos++)
     {
       G4VEMDataSet* dataSet = pos->second;
       dataMap.erase(pos);
@@ -209,34 +242,56 @@ void G4CrossSectionHandler::Clear()
 
   activeZ.clear();
   ActiveElements();
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler is cleared" 
+           << G4endl;
+  }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4CrossSectionHandler::FindValue(G4int Z, G4double e) const
 {
   G4double value = 0.;
   
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
-  pos = dataMap.find(Z);
-  if (pos!= dataMap.end())
+
+  // First search in the data with cut
+  pos = dataWithCutMap.find(Z);
+  if (pos!= dataWithCutMap.end())
     {
       G4VEMDataSet* dataSet = pos->second;
       value = dataSet->FindValue(e);
     }
   else
     {
-      G4cout << "WARNING: G4CrossSectionHandler::FindValue did not find Z = "
-	     << Z << G4endl;
+
+    // second search in the data without cut
+    pos = dataMap.find(Z);
+    if (pos!= dataMap.end())
+      {
+        G4VEMDataSet* dataSet = pos->second;
+        value = dataSet->FindValue(e);
+      }
+    else
+      {
+        G4cout << "WARNING: G4CrossSectionHandler::FindValue did not find Z = "
+	       << Z << G4endl;
+      }
     }
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4CrossSectionHandler::ValueForMaterial(const G4Material* material, 
-						 G4double e) const
+			  			       G4double e) const
 {
   G4double value = 0.;
 
   const G4ElementVector* elementVector = material->GetElementVector();
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();   
+  G4double totNAtomsPerVolume = material->GetTotNbOfAtomsPerVolume();   
   G4int nElements = material->GetNumberOfElements();
 
   for (G4int i=0 ; i<nElements ; i++)
@@ -247,8 +302,12 @@ G4double G4CrossSectionHandler::ValueForMaterial(const G4Material* material,
       value += nAtomsVol * elementValue;
     }
 
+  value /= totNAtomsPerVolume;
+
   return value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4CrossSectionHandler::BuildCrossSectionsForMaterials(
                             const G4DataVector& energyVector)
@@ -288,15 +347,24 @@ void G4CrossSectionHandler::BuildCrossSectionsForMaterials(
     }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4CrossSectionHandler::BuildCrossSectionsWithCut(
-                                     const G4DataVector& energyVector
+                                     const G4DataVector& energyVector,
                                      const G4DataVector& minEnergy,
                                      const G4DataVector& maxEnergy)
 {
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler::BuildCrossSectionsWithCut start" 
+           << G4endl;
+  }
+
   G4DataVector* energies;
   G4DataVector* data;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator posDB;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   G4VEMDataSet* dataSet;
+  G4VEMDataSet* dataSetWithCut;
 
   //  const G4MaterialTable* materialTable = GetMaterialTable();
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
@@ -305,70 +373,151 @@ void G4CrossSectionHandler::BuildCrossSectionsWithCut(
 
   G4int nMaterials = materialTable->length();
 
-  for (G4int m=0; m<nMaterials; m++)
-    {
+  for (G4int m=0; m<nMaterials; m++) {
+
       const G4Material* material= (*materialTable)[m];
-      energies = new G4DataVector;
-      data = new G4DataVector;
       G4double tcut = minEnergy[m];
       G4double tmax = DBL_MAX;
-      if( maxEnergy ) tmax = maxEnergy[m];
+      if( maxEnergy.size() ) tmax = maxEnergy[m];
+      if(verbose > 1) {
+        G4cout << "Material# " << m
+               << "  tcut(MeV)= " << tcut/MeV 
+               << "  tmax= " << tmax 
+               << G4endl;
+      }
 
       const G4ElementVector* elementVector = material->GetElementVector();
       const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume(); 
+      G4double totNAtomsPerVolume = material->GetTotNbOfAtomsPerVolume(); 
       G4int nElements = material->GetNumberOfElements();
 
       // Build cross section per element
-      for (G4int i=0; i<nElements; i++)
-        { 
-          G4int Z = (G4int) (*elementVector)[i]->GetZ();
-          pos = dataMap.find(Z);
+      for (size_t i=0; i<nElements; i++) {
+ 
+        G4int Z = (G4int) (*elementVector)[i]->GetZ();
+        pos = dataWithCutMap.find(Z);
+
+	// If the element data were not exist then build
+
+        if(pos == dataWithCutMap.end()) {
+
+          energies = new G4DataVector;
+          data = new G4DataVector;
 
 	  // If dataSet exist this mean that total cross section 
-          // for the element is availbale, 
- 
-          if (pos!= dataMap.end()) 
-            {
-              dataSet = pos->second;
+          // for the element is availbale, in that case cross
+	  // section with cut is built on the base of probabilities
+          // else it is built on using cross sections with cut
+
+          posDB = dataMap.find(Z);
+
+          for (G4int bin=0; bin<nBins; bin++) {
+
+	    G4double e = energyVector[bin];
+	    energies->push_back(e);
+	    G4double elemCrossSection = 0.0;
+            if(tmax > tcut) {
+
+              if(posDB!= dataMap.end()) {
+
+                elemCrossSection  = theGenerator->Probability(Z,e,tcut,tmax);
+                elemCrossSection *= (posDB->second)->FindValue(e);
+  	          
+              } else {
+
+                elemCrossSection = 
+                          theGenerator->CrossSectionWithCut(Z, e, tcut, tmax);
+	      }
 	    }
-          else 
-	    {
-               dataSet = new
-      G4VEMDataSet* dataSet = new G4EMDataSet(Z,energies,data,interpolation);
-      dataMap[Z] = dataSet;
+            if(elemCrossSection < 0.0) elemCrossSection = 0.0; 
+            if(verbose > 1) {
+              G4cout << "Energy(MeV) " << e/MeV 
+                     << "; Cross section(barn) = " << elemCrossSection/barn
+                     << "; Element # " << i
+                     << "; Z= " << Z
+                     << G4endl;
+            }
+            data->push_back(elemCrossSection);
+	  }
 
-	    }
-
-
-          G4double elementValue = FindValue(Z,e);
-          G4double nAtomsVol = nAtomsPerVolume[i];
-          value += nAtomsVol * elementValue;
-    }
-
-
-      for (G4int bin=0; bin<nBins; bin++)
-	{
-	  G4double e = energyVector[bin];
-	  energies->push_back(e);
-	  G4double materialCrossSection = 0.0;
-          if(tmax > tcut) {
-            materialCrossSection = theGenerator->CrossSectionWithCut(
-                                          material, e, tcut, tmax);
-	  if (materialCrossSection > 0.0)
-	    {
-	      data->push_back(materialCrossSection);
-	    }
-	  else
-	    {
-	      data->push_back(0.0);
-	    }
+          dataSetWithCut = new G4EMDataSet(Z,energies,data,interpolation);
+          dataWithCutMap[Z] = dataSetWithCut;
 	}
+      }
+
+      // Fill the cross section for the material
+      if(verbose > 0) {
+        G4cout << "For the material # " << m
+               << " dataWithCutMap is filled"
+               << G4endl;
+      }
+      energies = new G4DataVector;
+      data = new G4DataVector;
+
+      for (G4int bin=0; bin<nBins; bin++) {
+
+	G4double e = energyVector[bin];
+	energies->push_back(e);
+        G4double materialCrossSection = 0.0;
+
+        for (size_t j=0; j<nElements; j++) {
+
+          G4double nAtomsVol = nAtomsPerVolume[j];
+          G4int Z = (G4int) (*elementVector)[j]->GetZ();
+          pos = dataWithCutMap.find(Z);
+          if(pos == dataWithCutMap.end()) {
+            G4cout << "Element with Z= " << Z 
+                   << " is not found out in the dataWithCutMap"
+                   << " nAtomsVol= " << nAtomsVol
+                   << G4endl;
+          }
+          G4double x = (pos->second)->FindValue(e);
+          materialCrossSection += x * nAtomsVol; 
+
+	}
+
+	if (materialCrossSection < 0.0) materialCrossSection = 0.0; 
+        data->push_back(materialCrossSection);
+        if(verbose > 1) {
+          G4cout << "Energy(MeV) " << e/MeV 
+                 << "; Material cross section(barn) = " 
+                 << materialCrossSection/barn
+                 << G4endl;
+          }
+      
+      }
       G4VEMDataSet* dataSet = 
                     new G4EMDataSet(m,energies,data,interpolation,1.,1.); 
       crossSections.push_back(dataSet);
+  }
+  if(verbose > 0) {
+    G4cout << "G4CrossSectionHandler::BuildCrossSectionsWithCut end" 
+           << G4endl;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials()
+{
+  // Builds a CompositeDataSet containing the mean free path for each material
+  // in the material table
+
+  G4DataVector energyVector;
+  G4double dBin = 0.0;
+  if(nBins > 1) dBin = log10(eMax/eMin) / (nBins-1);
+
+  for (G4int i=0; i<nBins+1; i++) 
+    {
+      energyVector.push_back(pow(10., log10(eMin)+i*dBin));
     }
 
+  BuildCrossSectionsForMaterials(energyVector);
+  G4VEMDataSet* set = BuildMeanFreePathForMaterials(energyVector);
+  return set;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
                                      const G4DataVector& minEnergy,
@@ -378,24 +527,25 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
   // in the material table
 
   G4DataVector energyVector;
-  G4double dBin = log10(eMax/eMin) / nBins;
+  G4double dBin = 0.0;
+  if(nBins > 1) dBin = log10(eMax/eMin) / (nBins-1);
 
   for (G4int i=0; i<nBins+1; i++) 
     {
       energyVector.push_back(pow(10., log10(eMin)+i*dBin));
     }
 
-  if (energyThresholds)
-    {
-      // For ContinuousDiscrete processes
-      BuildCrossSectionsWithCut(energyVector, minEnergy, maxEnergy);
-    }
-  else
-    {
-      // For Discrete Processes
-      BuildCrossSectionsForMaterials(energyVector);
-    }
+  // For ContinuousDiscrete processes
+  BuildCrossSectionsWithCut(energyVector, minEnergy, maxEnergy);
+  G4VEMDataSet* set = BuildMeanFreePathForMaterials(energyVector);
+  return set;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
+                                     const G4DataVector& energyVector)
+{
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(interpolation);
 
   G4DataVector* energies;
@@ -405,13 +555,11 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
   if (materialTable == 0)
      G4Exception("G4CrossSectionHandler: no MaterialTable found)");
 
-  //  const G4MaterialTable* materialTable = GetMaterialTable();
-
   size_t nMaterials = materialTable->length();
 
   for (size_t m=0; m<nMaterials; m++)
     {
-     energies = new G4DataVector;
+      energies = new G4DataVector;
       data = new G4DataVector;
       for (G4int bin=0; bin<nBins; bin++)
 	{
@@ -420,12 +568,6 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
 	  G4VEMDataSet* materialSet = crossSections[m];
 	  G4double materialCrossSection = materialSet->FindValue(e);
   
-	  // MGP DEBUG
-	  //	  const G4Material* material= (*materialTable)[m];
-	  // 	  G4double materialCrossSection0 = ValueForMaterial(material,e);
-	  //          G4cout << materialCrossSection0 << " " << materialCrossSection << G4endl;
-	  // End debug
-
 	  if (materialCrossSection > 0.)
 	    {
 	      data->push_back(1./materialCrossSection);
@@ -442,6 +584,8 @@ G4VEMDataSet* G4CrossSectionHandler::BuildMeanFreePathForMaterials(
 
   return materialSet;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4CrossSectionHandler::SelectRandomAtom(const G4Material* material, 
                                                     G4double e) const
@@ -462,10 +606,6 @@ G4int G4CrossSectionHandler::SelectRandomAtom(const G4Material* material,
   // Composite material
 
   G4double materialCrossSection0 = ValueForMaterial(material,e);
-  //  size_t materialIndex = material->GetIndex();
-
-  //  G4VEMDataSet* materialSet = crossSections[materialIndex];
-  //  G4double materialCrossSection = materialSet->FindValue(e);
 
   G4double random = G4UniformRand() * materialCrossSection0;
   const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();   
@@ -481,6 +621,8 @@ G4int G4CrossSectionHandler::SelectRandomAtom(const G4Material* material,
   // It should never get here
   return 0;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4Element* G4CrossSectionHandler::SelectRandomElement(
                                   const G4Material* material, 
@@ -503,9 +645,6 @@ const G4Element* G4CrossSectionHandler::SelectRandomElement(
     {
       // Composite material   
       G4double materialCrossSection0 = ValueForMaterial(material,e);
-      //      size_t materialIndex = material->GetIndex();
-      //      G4VEMDataSet* materialSet = crossSections[materialIndex];
-      //      G4double materialCrossSection = materialSet->FindValue(e);
       
       G4double random = G4UniformRand() * materialCrossSection0;
       const G4double* nAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();   
@@ -525,6 +664,8 @@ const G4Element* G4CrossSectionHandler::SelectRandomElement(
            << G4endl;
     return nullElement;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
 {
@@ -561,12 +702,14 @@ G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   return shell;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4CrossSectionHandler::ActiveElements()
 {
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
      G4Exception("G4CrossSectionHandler: no MaterialTable found)");
-  //  const G4MaterialTable* materialTable = GetMaterialTable();  
+
   G4int nMaterials = materialTable->length();
   
   for (G4int m=0; m<nMaterials; m++)
@@ -587,4 +730,4 @@ void G4CrossSectionHandler::ActiveElements()
     }
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

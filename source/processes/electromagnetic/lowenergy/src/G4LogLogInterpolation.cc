@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.1 2001-08-20 16:37:37 pia Exp $
+// $Id: G4LogLogInterpolation.cc,v 1.2 2001-09-05 12:29:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 31 Jul 2001   MGP        Created
+// 31.07.01   MGP        Created
+// 05.09.01 V.Ivanchenko Fix in interpolation 
 //
 // -------------------------------------------------------------------
 
@@ -62,8 +63,14 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
       G4double e2 = points[bin+1];
       G4double d1 = data[bin];
       G4double d2 = data[bin+1];
-      value = (log10(d1)*log10(e2/x) + log10(d2)*log10(x/e1)) / log10(e2/e1);
-      value = pow(10,value);
+      if(d1 == d2) {
+        value = d1;
+      } else if (d1 <= 0. || d2 <= 0.) {
+        value = d1 + (d2 - d1)*(x - e1)/(e2 - e1); 
+      } else {
+        value = (log10(d1)*log10(e2/x) + log10(d2)*log10(x/e1)) / log10(e2/e1);
+        value = pow(10,value);
+      }
     }
   else
     {
