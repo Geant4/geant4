@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.16 2005-03-07 18:09:07 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.17 2005-03-09 19:49:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -544,6 +544,14 @@ void G4VEmProcess::SetIntegral(G4bool val)
 G4bool G4VEmProcess::IsIntegral() const
 {
   return integral;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsVector* G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
+{
+  G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
+  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
