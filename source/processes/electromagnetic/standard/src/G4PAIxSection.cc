@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.15 2003-05-13 09:54:55 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.16 2003-06-25 13:40:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -623,7 +623,7 @@ void
       G4double a = log10(y2/yy1)/log10(x2/x1);
       G4double b = log10(yy1) - a*log10(x1);
       G4double y = a*log10(en1) + b ;
-      y = pow(10,y);
+      y = pow(10.,y);
 
 		 // Calculation of the PAI dif. cross-section at this point
 
@@ -1126,7 +1126,7 @@ G4double G4PAIxSection::SumOverBorder( G4int      i ,
    d = e0/x0;   
    a = log10(yy1/y0)/log10(x1/x0) ;
    // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a);  // pow(10,b) ;
+   b = y0/pow(x0,a);  // pow(10.,b) ;
    
    a += 1 ;
    if(a == 0)
@@ -1201,7 +1201,7 @@ G4double G4PAIxSection::SumOverBordCerenkov( G4int      i ,
    d = e0/x0 ;
    a = log10(yy1/y0)/log10(c) ;
    // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a); // pow(10,b0) ;   
+   b = y0/pow(x0,a); // pow(10.,b0) ;   
    
    a += 1.0 ;
    if( a == 0 ) result = b*log(x0/e0) ;
@@ -1262,7 +1262,7 @@ G4double G4PAIxSection::SumOverBordPlasmon( G4int      i ,
    d = e0/x0 ;   
    a = log10(yy1/y0)/log10(c) ;
    //  b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a); //pow(10,b) ;
+   b = y0/pow(x0,a); //pow(10.,b) ;
    
    a += 1.0 ;
    if( a == 0 ) result = b*log(x0/e0) ;
@@ -1281,7 +1281,7 @@ G4double G4PAIxSection::SumOverBordPlasmon( G4int      i ,
    d = e0/x0 ;
    a = log10(yy1/y0)/log10(c) ;
    // b0 = log10(y0) - a*log10(x0) ;
-   b = y0/pow(x0,a);// pow(10,b0) ;
+   b = y0/pow(x0,a);// pow(10.,b0) ;
 
    a += 1.0 ;
    if( a == 0 ) result += b*log(e0/x0) ;
