@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsListMessenger.hh,v 1.1 2004-08-03 16:56:21 vnivanch Exp $
+// $Id: PhysicsListMessenger.hh,v 1.2 2004-11-30 19:51:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,29 +33,33 @@
 #include "G4UImessenger.hh"
 
 class PhysicsList;
+class G4UIdirectory;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class PhysicsListMessenger: public G4UImessenger
 {
-  public:
+public:
   
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
+  PhysicsListMessenger(PhysicsList* );
+  ~PhysicsListMessenger();
     
-    void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
+private:
   
-    PhysicsList* pPhysicsList;
+  PhysicsList*               pPhysicsList;
     
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
+  G4UIdirectory*             physDir;    
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allCutCmd;    
+  G4UIcmdWithAnInteger*      verbCmd;
+  G4UIcmdWithAString*        pListCmd;
     
 };
 
