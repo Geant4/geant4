@@ -1,0 +1,263 @@
+
+                       geant4-05-00-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced first implementation of 'cuts-by-region' technique,
+    allowing setup of different production cuts associated to different
+    regions (sub-detectors) of the detector geometry.
+  o Dismissed temporary implementation of 'cuts-per-material'. Codes
+    making use of this feature will be required to migrate to the new
+    scheme.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+geometry/management                     geommng-V05-00-04
+-------------------
+- Added method FindOrCreateRegion() to G4RegionStore.
+- Added check in constructor of G4Region for existance of region in store.
+  In case a region with the given name already exists, throw a warning and
+  do not register it.
+
+geometry/solids/CSG                     geom-csg-V05-00-00
+-------------------
+- G4Cons.cc: enhanced treatment of phi-sections,
+  according to algorithm used also in G4Tubs.
+- Updated unit tests.
+
+geometry/volumes                        geomvol-V05-00-00
+----------------
+- Fix in G4GeometryMessenger to check for geometry closed when commands
+  are applied. Command /geometry/navigator/reset and test commands apply
+  only when system is in "Idle" state.
+- G4VCurvedTrajectoryFilter[.hh.cc]: fixed initialisation of data member
+  in constructor. Fixed comments layout for Software Reference Manual.
+- G4IdentityTrajectoryFilter[.hh.cc]: fixed comments layout for
+  Software Reference Manual.
+
+global                                  global-V05-00-01
+------
+- Removed copies of SystemOfUnits.h and PhysicalConstants.h, now using
+  directly headers from CLHEP: changed globals.hh and G4SIunits.hh.
+
+parameterisations                       parmodels-V05-00-01
+-----------------
+- Minor fix in G4IrregularXrayTRmodel, G4VXTRdEdx and G4VXrayTRadModel
+  to use G4Poisson distribution.
+
+persistency                             persistency-V05-00-00
+-----------
+- Corrected inclusion of headers for constant and units from CLHEP
+  in G4MCTSimParticle and G4MCTSimVertex.
+
+processes/electromagnetic/lowenergy     emlowen-V05-00-08
+-----------------------------------
+- First implementation of Penelope processes for photons.
+  Minor design iteration on Bremsstrahlung, to accomodate variable
+  number of parameters compatible with Penelope processes
+  Added related unit tests.
+  Requires new data set EMLOWEN2.0.
+- New Ziegler2000 parameterisation for G4hLowEnergyIonisation.
+- Included minor editing of header files in the cut-per-region
+  migration and protection of energy loss fluctuations.
+- Minor fix in G4QAOLowEnergyLoss to use G4Poisson distribution.
+
+processes/electromagnetic/muons         muons-V05-00-04
+-------------------------------
+- Minor fixes for warnings on SUN for STD classes.
+- Added Initialise() method to STD classes to calculate PartialSumSigma.
+- Substituted Material by MaterialCutsCouple for PostStep in STD processes.
+- Added names for all models.
+- Made the set of model per region available.
+- Made SubCutoff regime available per region.
+
+processes/electromagnetic/standard      stand-V05-00-05
+----------------------------------
+- First implementation of AnnihiToMuPair process.
+- Minor fixes for warnings on SUN for STD classes.
+- Added Initialise() method to STD classes to calculate PartialSumSigma.
+- Substituted Material by MaterialCutsCouple for PostStep in STD processes.
+- Minor fix in G4PAIonisation and G4PAIxSection to use G4Poisson
+  distribution.
+- Added names for all models.
+- Made the set of model per region available.
+- Made SubCutoff regime available per region.
+- Fixed problems with lambda and range tables for STD hadrons/ions
+  processes.
+
+processes/electromagnetic/utils         utils-V05-00-04
+-------------------------------
+- Relevant updates in multiple-scattering:
+  o changes in data members
+  o new algorithm to reduce the step dependence.
+  o new sampling for the geometrical path-lengths.
+- Minor fixes for warnings on SUN for STD classes.
+- Added Initialise() method to STD classes to calculate PartialSumSigma.
+- Substituted Material by MaterialCutsCouple for PostStep in STD processes.
+- Fixed problem in fluctuations for STD processes.
+- Added names for all models.
+- Made the set of model per region available.
+- Made SubCutoff regime available per region.
+- Added control on CutsCouple usage.
+- Utilise SubType for GenericIons.
+- Fixed problems with lambda and range tables for STD hadrons/ions
+  processes
+- Fixed problem of several runs with changed cuts/couples for STD processes.
+
+processes/electromagnetic/xrays         xrays-V05-00-01
+-------------------------------
+- Minor fix in G4Cerenkov, G4ForwardXrayTR and G4VXTRenergyLoss to use
+  G4Poisson distribution.
+
+processes/hadronic/cross_sections                      gcross-V05-00-00
+---------------------------------
+- Fixed bug in Newton method for electro-nuclear cross-sections.
+
+hadronic/management                                    hadman-05-00-02
+-------------------
+- Fixed a missing data-member initialization in G4InelasticInteraction.
+  Fixes bug report #455.
+- G4EnergyRangeManager, G4HadronicProcess: adopt exception handling for
+  'no model found' case.
+
+processes/hadronic/models/chiral_inv_phase_space/interface ghad-chips-int-V05-00-00
+----------------------------------------------------------
+- Minor fix for memory leak.
+- Fixed calculation of the equivalent photon in electro-nuclear. 
+
+processes/hadronic/models/generator/de_excitation      ghad-deex-V05-00-03
+-------------------------------------------------
+- Improved performance for gamma evaporation (~30%).
+
+processes/hadronic/models/generator/high_energy	       ghad-high_gen_V05-00-00
+-----------------------------------------------
+- G4TheoFSGenerator: fix for semantics change in track, added Clear()
+  call to particle-change vector.
+
+processes/hadronic/models/generator/scattering         ghad-scatt-V05-00-00
+----------------------------------------------
+- Removed some redundant inclusions of headers.
+
+processes/hadronic/models/generator/util               hadgen-util-V05-00-01
+----------------------------------------
+- Critical fix for semi-infinite loop in G4Fancy3DNucleus and
+  G4FermiMomentum. 
+
+processes/hadronic/models/low_energy                   ghad-low-V05-00-00
+------------------------------------
+- G4LEKaonZeroLInelastic, G4LEKaonZeroSInelastic: fixed virtual
+  destructor.
+
+processes/hadronic/models/neutron_hp                   ghad-neu-V05-00-03
+------------------------------------
+- Fix in sampling of gammas, in case internal conversion data are
+  available in breit frame.
+- Fixed recoil direction distribution for 14MeV neutrons in Silicon.
+- Fixed cases of uninitialised variables responsible for event
+  irreproducibility.
+- Optimized usage of poisson distribution to adopt G4Poisson. 
+
+processes/hadronic/models/radiative_decay              ghad-rad-V05-00-01
+-----------------------------------------
+- Fix in G4NuclearDecayChannel and G4RadioactiveDecay:
+  adapted to new nuclear level manager.
+
+processes/hadronic/util                                had_util-V05-00-00
+-----------------------
+- Removed some redundant inclusions of headers.
+
+processes/optical                                      op-V05-00-00
+-----------------
+- Fix in calculation of polarization for perpendicular incidence
+  in G4OpBoundaryProcess. Fixes bug report #442.
+
+run                                     run-V05-00-04
+---
+- G4VUserPhysicsList.hh: moved warning for usage of SetCutValueForOthers()
+  from G4cerr to G4cout.
+
+visualization				vis-V05-00-01
+-------------
+- HepRep: modified G4HepRepFileSceneHandler::AddThis()
+  to incorporate G4Attributes into the HepRep1 file.
+  Moved some of HepRepXMLWriter's warning messages to debug blocks.
+- VRML: minor fix to VRML2 driver in G4VRML2SceneHandlerFunc to
+  adopt G4String.
+
+examples				examples-V05-00-00
+--------
+o Updated reference outputs.
+- advanced:
+  o composite_calorimeter (ccal-V05-00-00)
+    + Removed redundant headers.
+  o lAr_calorimeter (lAr_calorimeter-V05-00-03)
+    + Fixes to integrate in system testing, and removed redundant headers.
+  o xray_telescope (xraytel-V05-00-00)
+    + Removed redundant headers.
+- extended:
+  o biasing (exbiasing-V05-00-00)
+    + Removed redundant headers.
+  o electromagnetic
+    + TestEm1 (testem1-V05-00-01)
+      Updated PhysicsList for cut by region.
+    + TestEm2 (testem2-V05-00-01)
+      Updated PhysicsList for cut by region.
+      Cosmetics in output for stepping verbose.
+      Minor improvements to specific UI commands.
+    + TestEm3 (testem3-V05-00-01)
+      Updated PhysicsList for cut by region.
+      Reviewed detector construction.
+    + TestEm4 (testem4-V05-00-00)
+      Cosmetics in output for stepping verbose.
+      Minor improvements to specific UI commands.
+    + TestEm5 (testem5-V05-00-03)
+      Updated PhysicsList for cut by region.
+      Cosmetics in output for stepping verbose.
+      Minor improvements to specific UI commands.
+    + TestEm6 (testem6-V05-00-01)
+      Updated PhysicsList for cut by region.
+      Reviewed detector construction.
+    + TestEm8 (testem8-V05-00-00)
+      Updated PhysicsList for cut by region.
+    + TestEm10 (testem10-V05-00-00)
+      Updated PhysicsList for cut by region.
+  o field (fieldex-V05-00-00)
+    + Updated PhysicsList for cut by region.
+  o g3tog4 (g3tog4Tests-V05-00-00)
+    + Updated PhysicsList for cut by region.
+  o geometry/olap (olapex-V05-00-00)
+    + Removed redundant headers.
+- novice
+  o N02 (exampleN02-V05-00-01)
+    + Cosmetics in output for stepping verbose.
+    + Minor improvements to specific UI commands.
+  o N03 (exampleN03-V05-00-04)
+    + Updated PhysicsList for cut by region.
+    + Added tutorial for random seeds.
+    + Reviewed detector construction.
+  o N06 (exampleN06-V05-00-01)
+    + Added visualisation and interactivity.
+    + Reduced verbosity to output.
+    + Cosmetics in output for stepping verbose.
+    + Minor improvements to specific UI commands.
+
+tests                                     tests-V05-00-00
+-----
+o Updated reference outputs.
+  + test06 (test06-V05-00-00)
+    Cleanup warnings for cuts-by-region.
+  + test14 (test14-V05-00-03)
+    Re-design for modular PhysicsList. Can test LowE (EEDL,EPDL)
+    processes, polarised processes, Penelope processes, standard processes.
+    Requires new data set G4EMLOW2.0. 
+  + test17 (test17-V05-00-00)
+    Cleanup warnings for cuts-by-region.
+  + test18 (test18-V05-00-00)
+    Removed redundant inclusion of headers.
+  + test26 (test26-V05-00-03)
+    New system test for cuts-by-region functionalities.
+  + test33 (test33-V05-00-00)
+    Removed redundant inclusion of headers.
