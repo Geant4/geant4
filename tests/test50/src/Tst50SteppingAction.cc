@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.9 2003-01-16 14:11:51 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.10 2003-01-16 14:58:02 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -279,7 +279,7 @@ if(0 ==Step->GetTrack()->GetParentID() )
  
 		      if(pmtfile.is_open()){
 			G4cout<<"arrivo qui dentro"<<G4endl; 
-          pmtfile<<'\t'<<initial_energy<<'\t'<<range2<<'\t'<<G4endl;}
+          pmtfile<<'\t'<<initial_energy/MeV<<'\t'<<range2/(g/cm2)<<'\t'<<G4endl;}
 	       
 
 		   }
