@@ -106,6 +106,6 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
      11 hits are stored in ExN04TrackerHitsCollection.
-     11 hits are stored in ExN04CalorimeterHitsCollection.
+     13 hits are stored in ExN04CalorimeterHitsCollection.
      Total energy deposition in calorimeter : 4.8511 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
