@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.2 2003-03-19 10:29:09 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.3 2003-03-28 11:16:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -279,20 +279,20 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 											    partName);
       //l'inizializzazione va ripetuta per ogni Z!
       // now comes the loop for the kinetic energy values
-      for (size_t i = 0; i<totBin; i++) {
-	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
+      for (size_t k = 0; k<totBin; k++) {
+	G4double lowEdgeEnergy = aVector->GetLowEdgeEnergy(k);
 	//qui viene chiamato il metodo giusto della perdita continua
-    	(*ionloss)[i] += ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel];
+    	(*ionloss)[k] += ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel];
 	//if (Z == 29)
 	//  G4cout << lowEdgeEnergy << " " << ContLoss->CalculateStopping(lowEdgeEnergy)  * theAtomicNumDensityVector[iel] << G4endl;
 	//va chiamato una volta per ogni energia
-	//per ogni energia i, somma su tutti gli elementi del materiale
+	//per ogni energia k, somma su tutti gli elementi del materiale
       }
       delete ContLoss;
     }
 
-    for (i = 0; i<totBin; i++) {
-      aVector->PutValue(i,(*ionloss)[i]); //un valore per ogni energia (somma sugli elementi del mate)
+    for (size_t ibin = 0; ibin<totBin; ibin++) {
+      aVector->PutValue(ibin,(*ionloss)[ibin]); //un valore per ogni energia (somma sugli elementi del mate)
     }
     delete ionloss;
     theLossTable->insert(aVector);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.3 2003-03-27 16:48:18 gcosmo Exp $
+// $Id: G4PenelopeBremsstrahlungContinuous.cc,v 1.4 2003-03-28 11:16:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -230,8 +230,8 @@ G4double G4PenelopeBremsstrahlungContinuous::CalculateStopping(G4double e1)
   G4double XS1A = interpolator1->CalculateMomentum(wcre,0);
   G4double XS2A = interpolator1->CalculateMomentum(wcre,1);
   delete interpolator1;
-  for (i=0;i<NumberofKPoints;i++){
-    pY[i] = p0[G4std::min(Ke+1,(G4int) NumberofExtendedEGrid-1)][i];
+  for (size_t k=0;k<NumberofKPoints;k++){
+    pY[k] = p0[G4std::min(Ke+1,(G4int) NumberofExtendedEGrid-1)][k];
   }
   G4PenelopeInterpolator* interpolator2 = new G4PenelopeInterpolator (pK,pY,NumberofKPoints);
   G4double XS1B = interpolator2->CalculateMomentum(wcre,0);

@@ -53,12 +53,13 @@ G4PenelopeInterpolator::G4PenelopeInterpolator(G4double* pX,G4double* pY,G4int n
 
   G4int N1=nOfData-1;
   G4int N2=nOfData-2;
+  G4int i;
   G4int k=0;
   G4DataVector A(N1),B(N2),D(nOfData);//auxiliary arrays
   A.clear();
   B.clear();
   D.clear();
-  for (G4int i=0;i<N1;i++){
+  for (i=0;i<N1;i++){
     if ((pX[i+1]-pX[i]) < 1.0e-13) 
       {
 	G4String excep = "Spline x values not in increasing order";
@@ -148,12 +149,13 @@ G4double G4PenelopeInterpolator::FirstDerivative(G4double xx)
 G4double G4PenelopeInterpolator::CalculateMomentum(G4double UpperLimit,
 							  G4int MomentumOrder)
 {
+  G4int i;
   G4int nOfData = (G4int) x->size();
   const G4double eps=1.0e-35;
   if (MomentumOrder < -1) G4Exception("Calculate Momentum: error 0");
   if (nOfData < 2) G4Exception("Calculate Momentum: error 1");
   if ((*x)[0]<0) G4Exception("Calculate Momentum: error 2");
-  for (G4int i=1;i<nOfData;i++)
+  for (i=1;i<nOfData;i++)
     {
       if ((*x)[i]<0) G4Exception("Calculate Momentum: error 3");
       if ((*x)[i] < (*x)[i-1]) G4Exception ("Calculate Momentum: error 4");

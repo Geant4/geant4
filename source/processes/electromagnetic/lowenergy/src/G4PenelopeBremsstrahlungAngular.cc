@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.2 2003-03-19 10:29:37 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.3 2003-03-28 11:16:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -123,25 +123,25 @@ void G4PenelopeBremsstrahlungAngular::InterpolationForK()
   G4double pK[NumberofKPoints] = {0.0,0.6,0.8,0.95};
   G4double ppK[reducedEnergyGrid];
   G4double pX[NumberofKPoints];
+  G4int i,j;
 
-  for(G4int i=0;i<reducedEnergyGrid;i++){
+  for(i=0;i<reducedEnergyGrid;i++){
     ppK[i]=((G4double) i) * 0.05;
   }
 
   for(i=0;i<NumberofEPoints;i++){
     betas[i]=sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
   }
-  
-  
+
   for (i=0;i<NumberofEPoints;i++){
-    for (G4int j=0;j<NumberofKPoints;j++){
+    for (j=0;j<NumberofKPoints;j++){
       Q1[i][j]=Q1[i][j]/((G4double) Zmat);
     }
   }
 
   //Expanded table of distribution parameters
   for (i=0;i<NumberofEPoints;i++){
-    for (G4int j=0;j<NumberofKPoints;j++){
+    for (j=0;j<NumberofKPoints;j++){
       pX[j]=log(Q1[i][j]); //logarithmic 
     }
     G4PenelopeInterpolator* interpolator = new G4PenelopeInterpolator(pK,pX,NumberofKPoints);
@@ -176,8 +176,9 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   G4double pX[NumberofEPoints];
 
   //First coefficient
+  G4int i;
   G4int j = ik;
-  for (G4int i=0;i<NumberofEPoints;i++){
+  for (i=0;i<NumberofEPoints;i++){
     pX[i]=Q1E[i][j];
   }
   G4PenelopeInterpolator* interpolator = new G4PenelopeInterpolator(betas,pX,NumberofEPoints);
