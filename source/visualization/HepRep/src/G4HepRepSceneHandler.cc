@@ -170,14 +170,15 @@ void G4HepRepSceneHandler::open() {
 }
 
 void G4HepRepSceneHandler::close() {
-    if (writer != NULL) {
+    if (writer == NULL) return;
+
 #ifdef DEBUG
-        G4cout << "G4HepRepSceneHandler::close() " << G4endl;
+    G4cout << "G4HepRepSceneHandler::close() " << G4endl;
 #endif
-        writer->close();
-        delete writer;
-        delete out;
-    }
+    writer->close();
+    delete writer;
+    delete out;
+
     writer = NULL;
     out = NULL;
 
