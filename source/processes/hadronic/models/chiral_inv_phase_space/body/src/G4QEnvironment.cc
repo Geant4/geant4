@@ -14,16 +14,17 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.92 2004-06-04 13:40:36 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.93 2004-06-18 09:19:27 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------

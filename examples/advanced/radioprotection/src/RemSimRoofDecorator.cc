@@ -1,3 +1,6 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
 // *                                                                  *
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
@@ -26,7 +29,7 @@
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //
-// $Id: RemSimRoofDecorator.cc,v 1.3 2004-05-27 12:31:31 guatelli Exp $
+// $Id: RemSimRoofDecorator.cc,v 1.4 2004-06-18 09:18:08 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimVGeometryComponent.hh"

@@ -12,7 +12,7 @@
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
 // * use.                                                             *
-// *                      
+// *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
 // * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: MedLinacPhantomSD.hh,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
+//// $Id: MedLinacPhantomSD.hh,v 1.4 2004-06-18 09:17:38 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
+//
 // Code developed by:
 //  S.Larsson
 //
@@ -29,7 +29,7 @@
 //    *                            *
 //    ******************************
 //
-// $Id: PurgMagRunAction.hh,v 1.1 2003-12-09 14:13:23 sussi Exp $
+// $Id: PurgMagRunAction.hh,v 1.2 2004-06-18 09:17:49 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

@@ -19,7 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: MedLinacPrimaryGeneratorMessenger.hh,v 1.2 2004-04-02 17:48:41 mpiergen Exp $
+//
+// $Id: MedLinacPrimaryGeneratorMessenger.hh,v 1.3 2004-06-18 09:17:40 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili

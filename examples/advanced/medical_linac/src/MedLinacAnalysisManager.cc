@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
-// $Id: MedLinacAnalysisManager.cc,v 1.3 2004-05-14 18:25:39 mpiergen Exp $
+//
+// $Id: MedLinacAnalysisManager.cc,v 1.4 2004-06-18 09:17:41 gunter Exp $
 //
 //
 // Code developed by: M. Piergentili

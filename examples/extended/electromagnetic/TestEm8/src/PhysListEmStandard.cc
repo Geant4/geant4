@@ -1,4 +1,4 @@
-// 
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.5 2004-05-27 18:04:31 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.6 2004-06-18 09:18:12 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -19,7 +19,7 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// ********************************************************************
+//
 //
 //    *******************************
 //    *                             *
@@ -29,7 +29,7 @@
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
-// $Id: RemSimRunAction.cc,v 1.8 2004-05-27 10:13:54 guatelli Exp $
+// $Id: RemSimRunAction.cc,v 1.9 2004-06-18 09:18:09 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
