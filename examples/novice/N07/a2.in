@@ -1,3 +1,0 @@
-/run/particle/verbose 3
-/run/particle/retrievePhysicsTable physTable
-/run/beamOn 10
