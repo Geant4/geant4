@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcess.hh,v 1.12 2001-11-07 05:23:37 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.13 2001-12-13 12:59:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,6 +168,9 @@ class G4VProcess
       //      G4double& currentMinimumStep:
       //        this value is used for transformation of
       //        true path length to geometrical path length
+
+      G4double GetCurrentInteractionLength() const;
+      // Returns currentInteractionLength
 
       ////////// PIL factor ////////
       void SetPILfactor(G4double value);
@@ -368,6 +371,11 @@ inline void G4VProcess::ResetNumberOfInteractionLengthLeft()
 inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
 {
   theNumberOfInteractionLengthLeft =  -1.0;
+}
+
+inline G4double G4VProcess::GetCurrentInteractionLength() const
+{
+  return currentInteractionLength;
 }
 
 inline void G4VProcess::SetPILfactor(G4double value)
