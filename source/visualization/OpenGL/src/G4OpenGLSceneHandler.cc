@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.2 1999-01-11 00:47:45 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.3 1999-02-07 17:17:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -335,7 +335,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     {
       glPolygonMode (GL_FRONT, GL_FILL);
       glCullFace (GL_BACK); 
-      glEnable (GL_CULL_FACE);
+      //glEnable (GL_CULL_FACE);
       glEnable (GL_LIGHTING);
       glEnable (GL_DEPTH_TEST);
       GLfloat materialColour [4];
@@ -407,11 +407,12 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
 		  vertex[edgeCount].z());
       edgeCount++;
     } while (notLastEdge);
-    while (edgeCount++ < 4) {  // duplicate last real vertex.
+    while (edgeCount < 4) {  // duplicate last real vertex.
       vertex[edgeCount] = vertex[edgeCount-1];
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
+      edgeCount++;
     }
     
     //do it all over again for hlr 2nd pass...
