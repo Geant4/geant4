@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2001-05-03 14:15:21 gcosmo Exp $
+$Id: History,v 1.36 2001-05-23 17:47:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+May 23rd, 2001  J. Apostolakis - field-V03-01-01
+------------------------------
+- Modified G4FieldManager constructors to give default values to delta
+  parameters.
+
+- Updated testPropagateSpin
+
 
 Apr 12th, 2001  P. Gumplinger - field-V03-01-00
 -----------------------------
