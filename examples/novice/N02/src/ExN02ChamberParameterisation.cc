@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02ChamberParameterisation.cc,v 1.7 2002-01-09 17:24:09 ranjard Exp $
+// $Id: ExN02ChamberParameterisation.cc,v 1.8 2003-05-28 09:54:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -77,8 +77,7 @@ void ExN02ChamberParameterisation::ComputeTransformation
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExN02ChamberParameterisation::ComputeDimensions
-(G4Box& trackerChamber, const G4int copyNo,
- const G4VPhysicalVolume* physVol) const
+(G4Box& trackerChamber, const G4int copyNo, const G4VPhysicalVolume*) const
 {
   G4double  halfLength= fHalfLengthFirst + copyNo * fHalfLengthIncr;
   trackerChamber.SetXHalfLength(halfLength);
