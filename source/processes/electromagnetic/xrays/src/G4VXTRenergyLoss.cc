@@ -22,7 +22,7 @@
 //
 //
 
-// $Id: G4VXTRenergyLoss.cc,v 1.11 2003-06-20 15:10:20 grichine Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.12 2004-03-01 17:00:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // History:
@@ -741,7 +741,7 @@ void G4VXTRenergyLoss::ComputeGasPhotoAbsCof()
    for(i=0;i<fGasIntervalNumber;i++)
    {
      fGasPhotoAbsCof[i] = new G4double[5] ;
-   }
+   } 
    for(i=0;i<fGasIntervalNumber;i++)
    {
       fGasPhotoAbsCof[i][0] = thisMaterialSandiaTable.

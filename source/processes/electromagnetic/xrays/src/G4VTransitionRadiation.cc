@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTransitionRadiation.cc,v 1.1 2004-03-01 11:50:01 vnivanch Exp $
+// $Id: G4VTransitionRadiation.cc,v 1.2 2004-03-01 17:00:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VTransitionRadiation class -- implementation file
@@ -81,14 +81,21 @@ G4VParticleChange* G4VTransitionRadiation::PostStepDoIt(
   G4ThreeVector direction = track.GetMomentumDirection();
 
   if(nSteps == 0) {
+
     nSteps = 1;
     materials.push_back(material);
     steps.push_back(length);
-    normals.push_back(direction);
     const G4StepPoint* point = step.GetPreStepPoint();
     startingPosition = point->GetPosition();
     startingDirection = point->GetMomentumDirection();
+    G4bool valid = true;
+    G4ThreeVector n = G4TransportationManager::GetTransportationManager()
+                    ->GetNavigatorForTracking()->GetLocalExitNormal(&valid);
+    if(valid) normals.push_back(n);
+    else      normals.push_back(direction);
+
   } else {
+
     if(material == materials[nSteps-1]) {
       steps[nSteps-1] += length;
     } else {
