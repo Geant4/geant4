@@ -8,6 +8,7 @@ To add a graphics system:
 
    These should be placed in their own sub-directory under
    visualization, together with a GNUmakefile and a History file.
+   Change the library name G4XXX in "name := G4XXX" in GNUmakefile.
 
 2) Add to SUBDIRS and SUBLIBS in visualization/GNUmakefile.
 

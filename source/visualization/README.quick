@@ -12,7 +12,7 @@ directory>.
      setenv SCRATCH <your-work-directory>  (for binaries)
 
 2)   cd $G4
-     cvs co -r geant4-03-02-ref-01 geant4
+     cvs co -r geant4-03-02-ref-02 geant4
 
 3) Needs CLHEP1.7: go to Geant4 Web Page, Download, CLHEP version 1.6
    (sic), CLHEP, "LINUX V1.7 using egcs 1.1.2" and untar into, say,
@@ -24,16 +24,11 @@ directory>.
 
 4) Optionally, update to later subtags:
      cd $G4/geant4/source/visualization
-     cvs update -d -P -r vis-V03-02-09
-     # Look at History: it will tell you you also need:
-     cd $G4/geant4/config
-     cvs update -d -P -r config-V03-02-01
+     cvs update -d -P -r vis-V03-02-12
      cd $G4/geant4/graphics_reps
-     cvs update -d -P -r greps-V03-02-01
+     cvs update -d -P -r greps-V03-02-03
      cd $G4/geant4/intercoms
-     cvs update -d -P -r intercoms-V03-02-02
-     cd $G4/geant4/global
-     cvs update -d -P -r global-V03-02-01
+     cvs update -d -P -r intercoms-V03-02-04
 
 5)   setenv G4INSTALL $G4/geant4
      setenv G4BIN $SCRATCH/bin
