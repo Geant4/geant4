@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhaseSpaceDecayChannel.cc,v 1.1 1999-01-07 16:10:36 gunter Exp $
+// $Id: G4PhaseSpaceDecayChannel.cc,v 1.2 1999-02-06 10:10:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,7 +111,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::OneBodyDecayIt()
   G4double daughtermass = daughters_mass[0];
 
   //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -147,7 +147,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4double sumofdaughtermass =  daughtermass[0] + daughtermass[1];
 
   //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -158,7 +158,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
   G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector direction(sintheta*cos(phi),sintheta*sin(phi),costheta);
 
   //create daughter G4DynamicParticle 
   G4DynamicParticle * daughterparticle = new G4DynamicParticle( daughters[0], direction*daughtermomentum);
@@ -193,7 +193,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   }
   
    //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -250,7 +250,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   phi  = 2.0*M_PI*G4UniformRand()*rad;
   sinphi = sin(phi);
   cosphi = cos(phi);
-  G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
+  G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
@@ -260,7 +260,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   phin  = 2.0*M_PI*G4UniformRand()*rad;
   sinphin = sin(phin);
   cosphin = cos(phin);
-  G4ParticleMomentum direction2;
+  G4ThreeVector direction2;
   direction2.setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 
   direction2.setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction2.setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
@@ -315,7 +315,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ManyBodyDecayIt()
   
   //Calculate daughter momentum
   G4double *daughtermomentum = new G4double[numberOfDaughters];
-  G4ParticleMomentum direction;  
+  G4ThreeVector direction;  
   G4DynamicParticle **daughterparticle;
   G4double *sm = new G4double[numberOfDaughters];
   G4double tmas;

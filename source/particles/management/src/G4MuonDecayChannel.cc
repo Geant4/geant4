@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuonDecayChannel.cc,v 1.1 1999-01-07 16:10:33 gunter Exp $
+// $Id: G4MuonDecayChannel.cc,v 1.2 1999-02-06 10:10:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   }
 
    //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
   //create G4Decayproducts
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
@@ -123,7 +123,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   phi  = 2.0*M_PI*G4UniformRand()*rad;
   sinphi = sin(phi);
   cosphi = cos(phi);
-  G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
+  G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
@@ -139,7 +139,7 @@ G4DecayProducts *G4MuonDecayChannel::DecayIt(G4double)
   G4double sinphin = sin(phin);
   G4double cosphin = cos(phin);
 
-  G4ParticleMomentum direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
+  G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 
          = new G4DynamicParticle( daughters[1], direction1*(vmass/2.));
   G4DynamicParticle * daughterparticle2

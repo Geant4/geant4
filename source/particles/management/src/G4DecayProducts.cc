@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.cc,v 1.1 1999-01-07 16:10:32 gunter Exp $
+// $Id: G4DecayProducts.cc,v 1.2 1999-02-06 10:10:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ void  G4DecayProducts::SetParentParticle(const G4DynamicParticle &aParticle)
 }
 
 
-void G4DecayProducts::Boost(G4double totalEnergy, const G4ParticleMomentum &momentumDirection)
+void G4DecayProducts::Boost(G4double totalEnergy, const G4ThreeVector &momentumDirection)
 {
   // calcurate new beta
   G4double   mass = theParentParticle->GetMass();
@@ -152,7 +152,7 @@ void G4DecayProducts::Boost(G4double newbetax, G4double newbetay, G4double newbe
   G4double   energy  = theParentParticle->GetTotalEnergy();
   G4double   momentum  = 0.0;
 
-  G4ParticleMomentum direction(0.0,0.0,1.0);    
+  G4ThreeVector direction(0.0,0.0,1.0);    
   G4LorentzVector p4;
 
   if (energy - mass > DBL_MIN) {
@@ -206,7 +206,7 @@ G4bool G4DecayProducts::IsChecked()
   //   energy/momentum
   G4double   parent_mass = theParentParticle->GetMass();
   G4double   parent_energy  = theParentParticle->GetTotalEnergy();
-  G4ParticleMomentum direction = theParentParticle->GetMomentumDirection();
+  G4ThreeVector direction = theParentParticle->GetMomentumDirection();
   G4ThreeVector parent_momentum = direction*(theParentParticle->GetTotalMomentum());
   // check momentum dirction is a unit vector
   if ( (parent_momentum.mag() >0.0) && (abs(direction.mag()-1.0) >1.0e-6 ) ) {

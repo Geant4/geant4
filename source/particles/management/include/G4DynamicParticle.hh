@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.1 1999-01-07 16:10:27 gunter Exp $
+// $Id: G4DynamicParticle.hh,v 1.2 1999-02-06 10:10:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,8 +43,12 @@
 
 #include "G4ParticleDefinition.hh"
 #include "G4Allocator.hh"
-#include "G4ParticleMomentum.hh"
 #include "G4LorentzVector.hh"
+
+#include "G4ParticleMomentum.hh"
+//  G4ParticleMomentum is "momentum direction" not "momentum vector"
+//  The name is miss-leading so you should not use G4ParticleMomentum
+//  and you are recommended to use G4ThreeVector instead
 
 class  G4VProcess;
 class  G4DecayProducts;
@@ -61,7 +65,7 @@ class G4DynamicParticle
      G4DynamicParticle();
 
      G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
-                        const G4ParticleMomentum& aMomentumDirection,
+                        const G4ThreeVector& aMomentumDirection,
                         G4double aKineticEnergy);
      G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
                         const G4ThreeVector& aParticleMomentum);
@@ -89,10 +93,10 @@ class G4DynamicParticle
      // set/get dynamical mass
      // the dynamical mass is set to PDG mass in default
 
-     const G4ParticleMomentum& GetMomentumDirection() const;
+     const G4ThreeVector& GetMomentumDirection() const;
       //  Returns the normalized direction of the momentum
 
-     void SetMomentumDirection(const G4ParticleMomentum &aDirection);
+     void SetMomentumDirection(const G4ThreeVector &aDirection);
       //  Sets the normalized direction of the momentum
 
      void SetMomentumDirection(G4double px, G4double py, G4double pz);
@@ -139,7 +143,7 @@ class G4DynamicParticle
   private:
      G4double           theDynamicalMass;
 
-     G4ParticleMomentum theMomentumDirection;
+     G4ThreeVector theMomentumDirection;
       //  The normalized momentum vector
 
      G4ParticleDefinition *theParticleDefinition;
@@ -198,7 +202,7 @@ inline void G4DynamicParticle::SetMass(G4double newMass)
   theDynamicalMass = newMass;
 }
 
-inline const G4ParticleMomentum& G4DynamicParticle::GetMomentumDirection() const
+inline const G4ThreeVector& G4DynamicParticle::GetMomentumDirection() const
 {
   return theMomentumDirection;
 }
@@ -256,7 +260,7 @@ inline G4double G4DynamicParticle::GetKineticEnergy() const
   return theKineticEnergy;
 }
 
-inline void G4DynamicParticle::SetMomentumDirection(const G4ParticleMomentum &aDirection)
+inline void G4DynamicParticle::SetMomentumDirection(const G4ThreeVector &aDirection)
 {
   theMomentumDirection = aDirection;
 }

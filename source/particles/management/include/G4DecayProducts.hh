@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DecayProducts.hh,v 1.1 1999-01-07 16:10:27 gunter Exp $
+// $Id: G4DecayProducts.hh,v 1.2 1999-02-06 10:10:07 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -59,7 +59,7 @@ class G4DecayProducts
     void SetParentParticle(const G4DynamicParticle &aParticle);
 
    //  boost all products
-    void Boost(G4double totalEnergy, const G4ParticleMomentum &momentumDirection);
+    void Boost(G4double totalEnergy, const G4ThreeVector &momentumDirection);
     void Boost(G4double betax, G4double betay, G4double betaz);
  
   //   push-pop  methods for decay products pointer

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DalitzDecayChannel.cc,v 1.1 1999-01-07 16:10:31 gunter Exp $
+// $Id: G4DalitzDecayChannel.cc,v 1.2 1999-02-06 10:10:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,7 +69,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4double parentmass = parent->GetPDGMass();
  
  //create parent G4DynamicParticle at rest
-  G4ParticleMomentum dummy;
+  G4ThreeVector dummy;
   G4DynamicParticle * parentparticle = new G4DynamicParticle( parent, dummy, 0.0);
  
   //daughters'mass
@@ -101,7 +101,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
   G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum gdirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector gdirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
 
   //create G4DynamicParticle for gamma 
   G4DynamicParticle * gammaparticle
@@ -117,7 +117,7 @@ G4DecayProducts *G4DalitzDecayChannel::DecayIt(G4double)
   costheta = 2.*G4UniformRand()-1.0;
   sintheta = sqrt((1.0 - costheta)*(1.0 + costheta));
   phi  = 2.0*M_PI*G4UniformRand()*rad;
-  G4ParticleMomentum ldirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
+  G4ThreeVector ldirection(sintheta*cos(phi),sintheta*sin(phi),costheta);
   //create G4DynamicParticle for leptons  in the rest frame of (l+ l-)system
   G4DynamicParticle * leptonparticle 
     = new G4DynamicParticle(daughters[idLepton] , 
