@@ -1,4 +1,4 @@
-# $Id: dedx.mac,v 1.2 2004-07-29 08:50:04 maire Exp $
+# $Id: dedx1.mac,v 1.1 2004-07-30 16:10:11 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -8,8 +8,8 @@
 /run/verbose 2
 #
 /testem/det/setAbsMat Graphite   
-/testem/det/setAbsThick 1 cm  
-/testem/det/setAbsYZ    1 cm
+/testem/det/setAbsThick 1 mm  
+/testem/det/setAbsYZ    1 mm
 #
 ###/testem/phys/addPhysics g4v52
 /testem/phys/addPhysics standard
@@ -22,9 +22,8 @@
 #
 /testem/gun/setDefault
 /gun/particle e- 
-/gun/energy 500 MeV
+/gun/energy 10 MeV
 #
-/testem/stepMax 1 mm
 /tracking/verbose 1
 #
 /run/beamOn 2
