@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.hh,v 1.2 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4ImportancePostStepDoIt.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,14 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling.
+// It is responsible for the common part of importance sampling
+// for the "mass" and "parallel" geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ImportancePostStepDoIt_hh
-#define G4ImportancePostStepDoIt_hh
+#define G4ImportancePostStepDoIt_hh G4ImportancePostStepDoIt_hh
 
 class G4VImportanceSampler;
 class G4ParticleChange;
@@ -48,11 +50,16 @@ class G4ImportancePostStepDoIt
 public:  // with description
 
   G4ImportancePostStepDoIt();
+    // simply construct
+
   ~G4ImportancePostStepDoIt();
+    // simple destruct
   
   void DoIt(const G4Track& aTrack, 
 	    G4ParticleChange *aParticleChange, 
 	    const G4Nsplit_Weight nw);
+    // Do the PostStepDoIt part common to importance sampling in the 
+    // "mass" and "parallel" geometry.
   
 private:
 

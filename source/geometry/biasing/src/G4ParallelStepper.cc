@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.2 2002-04-09 16:23:50 gcosmo Exp $
+// $Id: G4ParallelStepper.cc,v 1.3 2002-04-10 13:13:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,7 +40,7 @@ G4ParallelStepper::G4ParallelStepper()
 
 G4ParallelStepper::~G4ParallelStepper()
 {
-  delete fPStep;
+  if (fPStep) delete fPStep;
 }
 
 G4ParallelStepper::G4ParallelStepper(const G4ParallelStepper &rhs)

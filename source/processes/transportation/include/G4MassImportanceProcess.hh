@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.2 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4MassImportanceProcess.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling in the "mass" geometry.
+// This process is a forced post step process. I will apply
+// importance sampling if the particle crosses a boundary in the 
+// "mass" geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4MassImportanceProcess_hh
-#define G4MassImportanceProcess_hh
+#define G4MassImportanceProcess_hh G4MassImportanceProcess_hh
 
 #include "G4VProcess.hh"
 #include "G4ImportancePostStepDoIt.hh"
@@ -51,14 +54,18 @@ public:  // with description
   G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			  const G4VIStore &aIstore,
 			  const G4String &aName = "MassImportanceProcess");
+    // creates a G4ParticleChange
+
   ~G4MassImportanceProcess();
-  
+    // delete the G4ParticleChange
+
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
-  
-  virtual G4VParticleChange * PostStepDoIt(const G4Track&, const G4Step&);
+    // make process beeing forced
+  virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
+    // manage the importance sampling in the "mass" geometry
 
 public:  // without description
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelManager.hh,v 1.2 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4ParallelManager.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling and scoring in a "parallel"
+// geometry.
+// It relates G4ParallelTransport, G4ParallelWorld to one "parallel"
+// geometry and one particle type.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ParallelManager_hh
-#define G4ParallelManager_hh
+#define G4ParallelManager_hh G4ParallelManager_hh 
 
 #include "globals.hh"
 
@@ -49,13 +52,21 @@ public:  // with description
 
   G4ParallelManager(G4VPhysicalVolume &worldvolume, 
 		    const G4String &particlename);
+    // One G4ParallelManager for each particle type
+    // and each "patallel" geometry. Create a 
+    // G4ParallelWorld.
+
   virtual ~G4ParallelManager();
+    // delete G4ParallelWorld and G4ParallelTransport if created.
 
   G4ParallelWorld &GetParallelWorld();
+    // get the G4ParallelWorld
   G4String GetParticleName();
+    // get the particle name this G4ParallelManager is responsible for
   G4ParallelTransport *CreateParallelTransport();
+    // get the G4ParallelTransport
   void Initialize();
-
+    // initialisation
 private:
 
   G4ParallelManager(const G4ParallelManager &);

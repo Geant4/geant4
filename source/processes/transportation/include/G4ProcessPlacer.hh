@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.2 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4ProcessPlacer.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,13 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling and scoring. 
+// See G4VProcessPlacer.hh.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ProcessPlacer_hh
-#define G4ProcessPlacer_hh
+#define G4ProcessPlacer_hh G4ProcessPlacer_hh 
 
 #include "globals.hh"
 #include "G4VProcessPlacer.hh"
@@ -48,9 +49,17 @@ class G4ProcessPlacer : public G4VProcessPlacer
 public:  // with description
 
   G4ProcessPlacer(const G4String &particlename);
+    // create a process placer for a particle type
 
   void AddProcessAsLastDoIt(G4VProcess *process);
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called last
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
+
   void AddProcessAsSecondDoIt(G4VProcess *process);
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called second
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
 private:
 

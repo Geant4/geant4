@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.2 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4VProcessPlacer.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,7 +29,8 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling and scoring to place
+// processes as second or last PostStepDoit processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -49,7 +50,15 @@ public:  // with description
   virtual ~G4VProcessPlacer(){}
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called last
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS     
+
   virtual void AddProcessAsSecondDoIt(G4VProcess *process) = 0;
+    // place a post step do it process such that the 
+    // PostStepDoIt function is called second
+    // THE ORDER CHANGES BY SUBSEQUENT CALLS         
+
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PIScorer.hh,v 1.4 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4PIScorer.hh,v 1.5 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,19 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A scorer delegating the scoring to G4PScorer. It performs
+// a check for consistency between the importance value
+// assigned  to a post G4PTouchableKey and the weight of a track.
+// The relation should be importance value * weight = 1.
+// CAUTION: This holds only in well defined situations:
+// A track starts in a "cell" with importance 1 and has a weight of 1.
+// The particle can not be produced by other not importance sampled
+// particles.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4PIScorer_hh
-#define G4PIScorer_hh
+#define G4PIScorer_hh G4PIScorer_hh
 
 #include "g4std/iostream"
 
@@ -52,12 +59,28 @@ class G4PIScorer : public G4VPScorer
 public:  // with description
 
   G4PIScorer(const G4VIStore &IStore);
+    // simple construction
+
   ~G4PIScorer();
+    // simple destruction
 
   void Score(const G4Step &aStep, const G4PStep &aPStep);
-  const G4PMapPtkTallys &GetMapPtkTallys() const {return fPScorer.GetMapPtkTallys();}
+     // perform scoring for the G4Step and G4PStep
+ 
+  const G4PMapPtkTallys &GetMapPtkTallys() const 
+  {return fPScorer.GetMapPtkTallys();}
+    // get a reference to the G4PMapPtkTallys containing 
+    // the tallies
+  
   G4bool CorrectWeight() const {return fCorrectWeight;}
+    // returns false if the weight was not correct
+    // a user might want to get this information 
+    // to mark the event a incorrect weight occurred
+
   void ResetCorrectWeight() {fCorrectWeight = true;}
+    // reset fCorrectWeight 
+    // the user has to reset the flag fCorrectWeight
+    // if he wants to use CorrectWeight()
 
 private:
 

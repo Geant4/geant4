@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSampler.hh,v 1.2 2002-04-09 16:23:47 gcosmo Exp $
+// $Id: G4ImportanceSampler.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// This class is used internally by importance sampling.
+// Implementation of a importance sampler (see G4VImportanceSampler).
+// This implementation is used for sampling in a "parallel"
+// geometry.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ImportanceSampler_hh
-#define G4ImportanceSampler_hh
+#define G4ImportanceSampler_hh G4ImportanceSampler_hh
 
 #include "G4VImportanceSampler.hh"
 
@@ -51,9 +54,14 @@ public:  // with description
   G4ImportanceSampler(const G4VImportanceAlgorithm &aIalg,
 		      const G4VParallelStepper &astepper,
 		      const G4VIStore &istore);
+    // initialisation and construct G4ImportanceFinder
+
   ~G4ImportanceSampler();
+    // delete G4ImportanceFinder
 
   G4Nsplit_Weight Sample(G4double w) const; 
+    // Get  G4Nsplit_Weight for a given mother track weight.
+  
 
 private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VImportanceSampler.hh,v 1.2 2002-04-09 16:23:48 gcosmo Exp $
+// $Id: G4VImportanceSampler.hh,v 1.3 2002-04-10 13:13:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,16 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// This interface is used internally by importance sampling. 
+// It delivers G4Nsplit_Weight according to a track weight. 
+// An implementation of the interface decides how to obtain 
+// remaining necessary information about the ratio of importances
+// in the pre and post "cell". 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4VImportanceSampler_hh
-#define G4VImportanceSampler_hh
+#define G4VImportanceSampler_hh G4VImportanceSampler_hh
 
 #include "globals.hh"
 #include "G4Nsplit_Weight.hh"
@@ -46,6 +50,7 @@ public:  // with description
 
   virtual ~G4VImportanceSampler(){}
   virtual G4Nsplit_Weight Sample(G4double w) const = 0; 
+    // Get  G4Nsplit_Weight for a given mother track weight.
 };
 
 #endif

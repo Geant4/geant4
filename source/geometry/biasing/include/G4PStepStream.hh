@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: G4PStepStream.hh,v 1.4 2002-04-09 16:23:47 gcosmo Exp $
+// $Id: G4PStepStream.hh,v 1.5 2002-04-10 13:13:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4PStepStream
+// Declarations
 //
-// Class description:
+// Declaration description:
 //
-// <<insert the description here>>
+// declarations of streams for G4PTouchableKey and G4PStep
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4PStepStream_hh
-#define G4PStepStream_hh
+#define G4PStepStream_hh G4PStepStream_hh
 
 #include "G4PTouchableKey.hh"
 #include "G4PStep.hh"

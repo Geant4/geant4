@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPGeoDriver.hh,v 1.2 2002-04-09 16:23:48 gcosmo Exp $
+// $Id: G4VPGeoDriver.hh,v 1.3 2002-04-10 13:13:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling and scoring in a "parallel"
+// geometry.
+// It defines an interface to "drive" or "move" a particle in a 
+// "parallel" geometry. 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4VPGeoDriver_hh
-#define G4VPGeoDriver_hh
+#define G4VPGeoDriver_hh G4VPGeoDriver_hh
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -49,19 +52,27 @@ public:  // with description
   
   virtual G4PTouchableKey LocateOnBoundary(const G4ThreeVector &aPosition, 
 		                           const G4ThreeVector &aDirection) = 0;
+    // The location of a track according to it's position
+    // and direction in case the track crosses a boundary
+    // of a "parallel" geometry.
     // Must be called in the PostDOIT of the ParallelTransportation.
-    // The track crosses the boundary if PostDOIT gets called.
+    // (The track crosses the boundary if PostDOIT gets called.)
   
   virtual G4PTouchableKey GetCurrentTouchableKey() const = 0;
+    // get the current G4PTouchableKey of the "parallel" geometry
 
   virtual G4double ComputeStepLengthInit(const G4ThreeVector &aPosition, 
                                          const G4ThreeVector &aDirection) = 0;
-  
+    // compute step length for a starting track. 
+
   virtual G4double ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition, 
 				                  const G4ThreeVector &aDirection) = 0;
-
+    // compute the step length after a track crossed a boundary
+    // in a "parallel" geometry
+ 
   virtual G4double ComputeStepLengthInVolume(const G4ThreeVector &aPosition, 
                                              const G4ThreeVector &aDirection) = 0;
+    // compute step length when track moves inside a volume.  
 
 };
 

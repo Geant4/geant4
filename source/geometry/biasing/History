@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2002-04-09 16:23:41 gcosmo Exp $
+$Id: History,v 1.5 2002-04-10 13:13:06 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 10th, 2002  M.Dressel - geombias-V04-00-02
+- Added comments.
 
 April 9th, 2002  G.Cosmo
 - Added liability disclaimer to all files and minor cosmetics.

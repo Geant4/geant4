@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.2 2002-04-09 16:23:47 gcosmo Exp $
+// $Id: G4VIStore.hh,v 1.3 2002-04-10 13:13:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,17 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// An interface of an "importance store" used by importance sampling.
+// It defines how a importance value together with a "cell" 
+// (a G4VPhysicalVolume and a replica number) has to be added
+// to the "importance store" and how a importance value can be derived 
+// from the "importance store". 
+// 
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4VIStore_hh
-#define G4VIStore_hh
+#define G4VIStore_hh G4VIStore_hh
 
 #include "globals.hh"
 
@@ -52,12 +57,21 @@ public:  // with description
   virtual void AddImportanceRegion(G4double importance,
 				   const G4VPhysicalVolume &,
 				   G4int aRepNum = 0) = 0;
+    // Add a "cell" together with a importance value to the store.
+
   virtual void ChangeImportance(G4double importance,
 				const G4VPhysicalVolume &,
 				G4int aRepNum = 0) = 0;
+    // Change a importance value of a "cell".
+
   virtual G4double GetImportance(const G4VPhysicalVolume &,
 				 G4int aRepNum = 0) const = 0;
+    // derive the importance value of a "cell" from the store.
+
   virtual G4double GetImportance(const G4PTouchableKey &ptk) const = 0;
+    // derive a importance value of a "cell" addresed by a G4PTouchableKey
+    // from the store.
+
   virtual G4VPhysicalVolume &GetWorldVolume() = 0;
 };
 

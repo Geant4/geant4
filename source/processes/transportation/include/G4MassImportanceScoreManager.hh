@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceScoreManager.hh,v 1.3 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4MassImportanceScoreManager.hh,v 1.4 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A user should use this class to set up importance sampling and scoring
+// in the "mass" geometry.
+// Create an object and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4MassImportanceScoreManager_hh
-#define G4MassImportanceScoreManager_hh
+#define G4MassImportanceScoreManager_hh G4MassImportanceScoreManager_hh
 
 #include "globals.hh"
 
@@ -52,14 +55,22 @@ public:  // with description
   G4MassImportanceScoreManager(G4VIStore &aIstore,
 			       G4VPScorer &ascorer,
 			       const G4String &particlename);
+    // use the G4ImportanceAlgorithm
   
   G4MassImportanceScoreManager(G4VIStore &aIstore,
 			       G4VPScorer &ascorer,
 			       const G4String &particlename,
 			       const G4VImportanceAlgorithm &algorithm);
+    // use a customised  importance algorithm derived from
+    // G4VImportanceAlgorithm  
+  
+
   ~G4MassImportanceScoreManager();
+    // delete G4MassScoreManager and G4MassImportanceManager if created
 
   void Initialize();
+    // the G4MassImportanceScoreManager has to be initialised after
+    // the initialisation of the G4RunManager !
 
 private:
 

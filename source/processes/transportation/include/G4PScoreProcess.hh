@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.2 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4PScoreProcess.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,18 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by scoring in a "parallel" geometry.
+// This forced process messages a "scorer" derived from G4VPScorer.
+// The scorer is  messaged with the current G4Step and G4PStep.
+// This post step process is supposed to be placed as the 
+// process following directly after transportation and the 
+// importance sampling process if applied and before all physical
+// post step processes.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4PScoreProcess_hh 
-#define G4PScoreProcess_hh
+#define G4PScoreProcess_hh G4PScoreProcess_hh
 
 #include "G4VProcess.hh"
 
@@ -49,14 +55,20 @@ public:  // with description
   G4PScoreProcess(G4VParallelStepper  &astepper,
 		  G4VPScorer &aScorer,
 		  const G4String &aName = "PScoreProcess");
+    // create a G4ParticleChange
+
   virtual ~G4PScoreProcess();
+    // delete the G4ParticleChange
 
   virtual G4double 
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
-  
-  virtual G4VParticleChange * PostStepDoIt(const G4Track&, const G4Step&);
+    // make the process beeing forced
+
+  virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
+					   const G4Step&);
+    // get G4PStep and G4Step and message "scorer"
   
 public:  // without description
 
@@ -84,3 +96,7 @@ private:
 };
 
 #endif
+
+
+
+

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.hh,v 1.2 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4ParallelTransport.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,16 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// Used internally by importance sampling and scoring in a "parallel"
+// geometry.
+// This process "moves" a particle in a "parallel" geometry.
+// It should be placed in the post step process do it vector after the 
+// G4Transportation process.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ParallelTransport_hh
-#define G4ParallelTransport_hh
+#define G4ParallelTransport_hh G4ParallelTransport_hh
 
 #include "g4std/strstream"
 
@@ -52,7 +56,10 @@ public:  // with description
   G4ParallelTransport(G4VPGeoDriver &pgeodriver, 
 		      G4VParallelStepper &aStepper,
 		      const G4String &aName = "ParallelTransport");
+    // create G4ParticleChange
+
   virtual ~G4ParallelTransport();
+    // delete G4ParticleChange
 
   // the post step pair of functions may be overwritten
   // in certain derived classes like the importance process
@@ -61,9 +68,15 @@ public:  // with description
   PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				       G4double   previousStepSize,
 				       G4ForceCondition* condition);
-  virtual G4VParticleChange *  PostStepDoIt(const G4Track&, const G4Step&);
+    // straight distance to the boundary in the "parallel" geometry
+    // in the direction of the track   
+
+  virtual G4VParticleChange *PostStepDoIt(const G4Track&, const G4Step&);
+    // move a track in a "parallel" geometry
+    // and update a G4PArallelStepper
 
   G4VParallelStepper &GetPStepper(){return fPStepper;}
+    // get the fPStepper
 
 public:  // without description
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceManager.hh,v 1.2 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4MassImportanceManager.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A user should use this class to set up importance sampling
+// in the "mass" geometry.
+// Create an object and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4MassImportanceManager_hh
-#define G4MassImportanceManager_hh
+#define G4MassImportanceManager_hh G4MassImportanceManager_hh
 
 #include "globals.hh"
 
@@ -50,15 +53,26 @@ public:  // with description
 
   G4MassImportanceManager(G4VIStore &aIstore,
 			  const G4String &particlename);
+    // use the G4ImportanceAlgorithm
 
   G4MassImportanceManager(G4VIStore &aIstore,
 			  const G4String &particlename,
 			  const G4VImportanceAlgorithm &algorithm);
-  
+    // use a customised  importance algorithm derived from
+    // G4VImportanceAlgorithm
+
   ~G4MassImportanceManager();
+    // delete G4MassImportanceProcess and G4VImportanceAlgorithm
+    // if constructed by this object
 
   G4MassImportanceProcess *CreateMassImportanceProcess();
+    // create the mass importance process 
+    // don't use it if you use Initialize()
+  
   void Initialize();
+    // the G4MassImportanceManager has to be initialised after
+    // the initialisation of the G4RunManager !
+  
 
 private:
 

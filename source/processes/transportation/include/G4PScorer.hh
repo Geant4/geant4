@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScorer.hh,v 1.4 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4PScorer.hh,v 1.5 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,16 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A scorer for standard tallies. Under development.
+// See also G4VPScorer.
+// It scores using informations form G4Step and G4PStep.
+// The tallies are contained and related with "cells"
+// in the container G4PMapPtkTallys (see G4PMapPtkTallys.hh)
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4Pscorer_hh
-#define G4Pscorer_hh
+#define G4Pscorer_hh G4Pscorer_hh
 
 #include "g4std/iostream"
 
@@ -50,10 +54,17 @@ class G4PScorer : public G4VPScorer
 public:  // with description
 
   G4PScorer();
+    // simple construction
+
   ~G4PScorer();
+    // simple destruction
 
   void Score(const G4Step &aStep, const G4PStep &aPStep);
+     // perform scoring for the G4Step and G4PStep
+ 
   const G4PMapPtkTallys &GetMapPtkTallys() const {return fPtkTallys;}
+    // get a reference to the G4PMapPtkTallys containing 
+    // the tallies
 
 private:
 

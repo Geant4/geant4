@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceScoreManager.hh,v 1.3 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4ParallelImportanceScoreManager.hh,v 1.4 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A user should use this class to set up importance sampling and scoring
+// in a "parallel" geometry.
+// Create an object and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ParallelImportanceScoreManager_hh
-#define G4ParallelImportanceScoreManager_hh
+#define G4ParallelImportanceScoreManager_hh G4ParallelImportanceScoreManager_hh
 
 #include "globals.hh"
 
@@ -53,14 +56,27 @@ public:  // with description
   G4ParallelImportanceScoreManager(G4VIStore &iw, 
 				   G4VPScorer &ascorer,
 				   const G4String &particlename);
+    // use G4ImportanceAlgorithm, construct and initalise
+    // used objects
+ 
   G4ParallelImportanceScoreManager(G4VIStore &iw, 
 				   G4VPScorer &ascorer,
 				   const G4String &particlename,
 				   G4VImportanceAlgorithm &ialg);
+    // use a customised  importance algorithm derived from
+    // G4VImportanceAlgorithm
+  
+
   ~G4ParallelImportanceScoreManager();
+    // delete constructed objects
 
   G4PScoreProcess *CreateParallelScoreProcess();
+    // create the parallel score process 
+    // don't use it if you use Initialize()
+
   void Initialize();
+    // the G4MassImportanceScoreManager has to be initialised after
+    // the initialisation of the G4RunManager !
 
 private:
 

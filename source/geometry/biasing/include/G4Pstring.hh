@@ -21,26 +21,32 @@
 // ********************************************************************
 //
 //
-// $Id: G4Pstring.hh,v 1.2 2002-04-09 16:23:47 gcosmo Exp $
+// $Id: G4Pstring.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4Pstring
+// Declaration
 //
-// Class description:
+// Declaration description:
 //
-// <<insert the description here>>
+// This fucntions convert some non character objects into 
+// G4Strings
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4Pstring_hh
-#define G4Pstring_hh
+#define G4Pstring_hh G4Pstring_hh
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 
 G4String str(const int &i);
+  // convert an integer into a G4String 
+
 G4String str(const double &d);
+  // convert a double into a G4String
+
 G4String str(const G4ThreeVector &v);
+  // convert a G4ThreeVector into a G4String
 
 #endif

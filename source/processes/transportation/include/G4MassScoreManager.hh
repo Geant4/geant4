@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassScoreManager.hh,v 1.2 2002-04-09 17:40:13 gcosmo Exp $
+// $Id: G4MassScoreManager.hh,v 1.3 2002-04-10 13:14:16 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,13 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A user should use this class to set up scoring in the "mass" geometry.
+// Create an object and initialise it.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4MassScoreManager_hh
-#define G4MassScoreManager_hh
+#define G4MassScoreManager_hh G4MassScoreManager_hh
 
 #include "globals.hh"
 
@@ -48,10 +49,18 @@ class G4MassScoreManager
 public:  // with description
 
   G4MassScoreManager(G4VPScorer &ascorer, const G4String &particlename);
+    // a G4MassScoreManager for a particle type
+
   ~G4MassScoreManager();
+    // delete G4MScoreProcess if constructed
 
   G4MScoreProcess *CreateMassScoreProcess();
+    // create the mass score process 
+    // don't use it if you use Initialize()
+
   void Initialize();
+    // the G4MassScoreManager has to be initialised after
+    // the initialisation of the G4RunManager !
 
 private:
 

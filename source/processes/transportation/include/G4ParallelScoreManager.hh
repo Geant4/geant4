@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelScoreManager.hh,v 1.3 2002-04-09 17:40:14 gcosmo Exp $
+// $Id: G4ParallelScoreManager.hh,v 1.4 2002-04-10 13:14:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// A user should use this class to set up scoring in a "parallel" 
+// geometry.
+// Create an object and initialise it.
+
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4ParallelScoreManager_hh
-#define G4ParallelScoreManager_hh
+#define G4ParallelScoreManager_hh G4ParallelScoreManager_hh
 
 #include "globals.hh"
 
@@ -51,10 +54,19 @@ public:  // with description
   G4ParallelScoreManager(G4VPhysicalVolume &worldvolume,
 			 const G4String &particlename,
 			 G4VPScorer &scorer);
+    // create and initalise members 
+
   ~G4ParallelScoreManager();
+    // delete constructed members
 
   G4PScoreProcess *CreateParallelScoreProcess();
+    // create the parallel score process 
+    // don't use it if you use Initialize()
+
+ 
   void Initialize();
+    // the G4ParallelScoreManager has to be initialised after
+    // the initialisation of the G4RunManager !
 
 private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PTouchableKey.hh,v 1.2 2002-04-09 16:23:47 gcosmo Exp $
+// $Id: G4PTouchableKey.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,12 +29,15 @@
 //
 // Class description:
 //
-// <<insert the description here>>
+// This class is usde by scoring and importance sampling.
+// It serves to address a "cell". A "cell" is somewhat
+// related to a touchable in Geant4. It is identified by a reference
+// to a G4VPhysicalVolume and a number (replica number).
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 #ifndef G4PTouchableKey_hh
-#define G4PTouchableKey_hh
+#define G4PTouchableKey_hh G4PTouchableKey_hh 
 
 #include "globals.hh"
 
@@ -46,12 +49,16 @@ class G4PTouchableKey
 public:  // with description
 
   G4PTouchableKey(const G4VPhysicalVolume &aVolume, G4int RepNum);
-  ~G4PTouchableKey();
+    // initialise volume and replica number
 
-public:  // without description
+  ~G4PTouchableKey();
+    // simple destruction
 
   const G4VPhysicalVolume *fVPhysiclaVolume;
+    // pinter to the G4VPhysicalVolume of the "cell" 
+
   G4int fRepNum;
+    // replica number of the "cell"
 };
 
 // -----------------------------------------------------------------------
