@@ -5,21 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ComptonScattering.cc,v 1.3 1999-12-15 14:51:50 gunter Exp $
+// $Id: G4ComptonScattering.cc,v 1.4 2000-11-17 15:03:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4ComptonScattering physics process --------
+//------------ G4ComptonScattering physics process --------
 //                   by Michel Maire, April 1996
-// **************************************************************
+//
+// --------------------------------------------------------------
 // 28-05-96, DoIt() small change in ElecDirection, by M.Maire
 // 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire

@@ -5,19 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.3 2000-11-12 13:11:13 larazb Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.4 2000-11-17 15:03:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//
-//      ---------- G4PolarizedComptonScattering physics process --------
+//---------- G4PolarizedComptonScattering physics process -------
 //                   by Vicente Lara, March 1998
-// **************************************************************
+//
+// --------------------------------------------------------------
 // Corrections by Rui Curado da Silva (Nov. 2000)
 //    - Sampling of Phi
 //    - Depolarization probability 
@@ -192,8 +187,7 @@ while ((j < 100) && (abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4PolarizedComptonScattering::SetPhi(G4double EnergyRate,
                                               G4double sinsqrth,
@@ -207,8 +201,7 @@ G4double PhiDetermination = ((twopi*rand - phi)*(EnergyRate + 1./EnergyRate - si
 return PhiDetermination;
 }
 
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(G4double EnergyRate, 
 							       G4double sinsqrth,
@@ -244,11 +237,6 @@ G4ThreeVector G4PolarizedComptonScattering::SetNewPolarization(G4double EnergyRa
   
   return GammaPolarization1;
 }
-
-
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

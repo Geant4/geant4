@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-11-08 14:55:01 maire Exp $
+$Id: History,v 1.14 2000-11-17 15:03:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Nov 00 mma : stand-V02-00-04
+     
+12 Nov 00 Corrections by Rui Curado da Silva (Polarized Compton)
+- Sampling of Phi
+- Depolarization probability 
      
 08 Nov 00 mma (stand-V02-00-03)
 -  eBrem
