@@ -87,6 +87,9 @@ class G4KineticTrack : public G4VKineticNucleon
       void Set4Momentum(const G4LorentzVector& a4Momentum);
       void Update4Momentum(G4double aEnergy);			// update E and p, not changing mass
       void Update4Momentum(const G4ThreeVector & aMomentum);	// idem
+      void SetTrackingMomentum(const G4LorentzVector& a4Momentum);
+      void UpdateTrackingMomentum(G4double aEnergy);			// update E and p, not changing mass
+      void UpdateTrackingMomentum(const G4ThreeVector & aMomentum);	// idem
 
       const G4LorentzVector& GetTrackingMomentum() const;
       
@@ -232,11 +235,9 @@ inline void G4KineticTrack::Set4Momentum(const G4LorentzVector& a4Momentum)
 {
 //  set the4Momentum and update theTotal4Momentum
 
-  the4Momentum = a4Momentum;
-  theTotal4Momentum=the4Momentum+theFermi3Momentum;
-  G4double m2 = a4Momentum.mag2();
-  G4double p2=theTotal4Momentum.vect().mag2();
-  theTotal4Momentum.setE(sqrt(m2+p2));
+  theTotal4Momentum=a4Momentum;
+  the4Momentum = theTotal4Momentum;
+  theFermi3Momentum=G4LorentzVector(0);
 }
 
 inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
@@ -244,12 +245,13 @@ inline void G4KineticTrack::Update4Momentum(G4double aEnergy)
 // update the4Momentum with aEnergy at constant mass (the4Momentum.mag()  
 //   updates theTotal4Momentum as well.
   G4double newP(0);
-  if ( aEnergy > GetActualMass() )
+  G4double mass2=theTotal4Momentum.mag2();
+  if ( sqr(aEnergy) > mass2 )
   {
-      newP = sqrt(sqr(aEnergy) - the4Momentum.mag2());
+      newP = sqrt(sqr(aEnergy) - mass2 );
   } else
   {
-      aEnergy=GetActualMass();
+      aEnergy=sqrt(mass2);
   }
   Set4Momentum(G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy));
 }
@@ -258,8 +260,44 @@ inline void G4KineticTrack::Update4Momentum(const G4ThreeVector & aMomentum)
 {
 // update the4Momentum with aMomentum at constant mass (the4Momentum.mag()  
 //   updates theTotal4Momentum as well.
-  G4double newE=sqrt(the4Momentum.mag2() + aMomentum.mag2());
+  G4double newE=sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
   Set4Momentum(G4LorentzVector(aMomentum, newE));
+}
+
+inline void G4KineticTrack::SetTrackingMomentum(const G4LorentzVector& aMomentum)
+{
+//  set the4Momentum and update theTotal4Momentum, keep the mass of aMomentum
+
+  the4Momentum = aMomentum;
+  theTotal4Momentum=the4Momentum+theFermi3Momentum;
+//     keep mass of aMomentum for the total momentum
+  G4double m2 = aMomentum.mag2();
+  G4double p2=theTotal4Momentum.vect().mag2();
+  theTotal4Momentum.setE(sqrt(m2+p2));
+}
+
+inline void G4KineticTrack::UpdateTrackingMomentum(G4double aEnergy)
+{
+// update the4Momentum with aEnergy at constant mass (the4Momentum.mag()  
+//   updates theTotal4Momentum as well.
+  G4double newP(0);
+  G4double mass2=theTotal4Momentum.mag2();
+  if ( sqr(aEnergy) > mass2 )
+  {
+      newP = sqrt(sqr(aEnergy) - mass2 );
+  } else
+  {
+      aEnergy=sqrt(mass2);
+  }
+  SetTrackingMomentum(G4LorentzVector(newP*the4Momentum.vect().unit(), aEnergy));
+}
+
+inline void G4KineticTrack::UpdateTrackingMomentum(const G4ThreeVector & aMomentum)
+{
+// update the4Momentum with aMomentum at constant mass (the4Momentum.mag()  
+//   updates theTotal4Momentum as well.
+  G4double newE=sqrt(theTotal4Momentum.mag2() + aMomentum.mag2());
+  SetTrackingMomentum(G4LorentzVector(aMomentum, newE));
 }
 
 
