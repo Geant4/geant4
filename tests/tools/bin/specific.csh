@@ -23,12 +23,12 @@ else
   setenv DEBOPT optim
 endif
 
-if ( $?G4USE_STL ) then
+if ( $?G4_STT_USE_STL ) then
   setenv DEBOPT ${DEBOPT}_STL
 endif
 
 if ( `uname -n | grep rsplus` != "" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -54,7 +54,7 @@ if ( `uname -n | grep rsplus` != "" ) then
 endif
 
 if ( `uname -n | grep dxplus` != "" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -80,6 +80,9 @@ if ( `uname -n | grep dxplus` != "" ) then
 endif
 
 if ( `uname -n | grep pcgeant` != "" ) then
+  if ( $?G4_STT_USE_STL ) then
+    setenv G4USE_STL 1
+  endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM Linux-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -103,7 +106,7 @@ if ( `uname -n | grep pcgeant` != "" ) then
 endif
 
 if ( `uname -n | grep sgmedia` != "" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -125,7 +128,7 @@ if ( `uname -n | grep sgmedia` != "" ) then
 endif
 
 if ( `uname -n | grep sun` != "" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -147,7 +150,7 @@ if ( `uname -n | grep sun` != "" ) then
 endif
 
 if ( `uname -n | grep hp` != "" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
@@ -169,7 +172,7 @@ if ( `uname -n | grep hp` != "" ) then
 endif
 
 if ( `uname -n` == aleph ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
@@ -225,7 +228,7 @@ endif
 if ( `uname -n` == asc ) then
 # In CLHEP-default.h : //GB #define HEP_USE_STD 1
 #                      //GB #define HEP_HAVE_BOOL 1
-#if ( $?G4USE_STL ) then
+#if ( $?G4_STT_USE_STL ) then
 #???  setenv G4USE_OSPACE 1
 #endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
@@ -335,7 +338,7 @@ endif
 # tvsldict.h. Solved by editing directly the file !
 #---------------------------------------------------
 if ( `uname -n` == "papou1" ) then
-  if ( $?G4USE_STL ) then
+  if ( $?G4_STT_USE_STL ) then
     setenv G4USE_OSPACE 1
   endif
 setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs

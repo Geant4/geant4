@@ -20,14 +20,14 @@ else
   DEBOPT=optim
 fi
 
-if [ $G4USE_STL ]; then
+if [ $G4_STT_USE_STL ]; then
   DEBOPT=${DEBOPT}_STL
 fi
 
 UNAMEN=`uname -n `
 ANS=`uname -n | grep rsplus`
 if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -52,7 +52,7 @@ if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
 fi
 
 if [ `uname -n | grep sunasd1` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -74,7 +74,7 @@ if [ `uname -n | grep sunasd1` ]; then
 fi
 
 if [ `uname -n | grep suncmsb` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -100,7 +100,7 @@ if [ `uname -n | grep suncmsb` ]; then
 fi
 
 if [ `uname -n | grep sungeant` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -123,7 +123,7 @@ fi
 
 
 if [ `uname -n | grep hp` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -145,7 +145,7 @@ if [ `uname -n | grep hp` ]; then
 fi
 
 if [ `uname -n | grep axcnsi` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -167,7 +167,7 @@ if [ `uname -n | grep axcnsi` ]; then
 fi
 
 if [ `uname -n | grep dxplus` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -189,6 +189,9 @@ if [ `uname -n | grep dxplus` ]; then
 fi
 
 if [ `uname -n | grep pcitasd04` ]; then
+  if [ $G4_STT_USE_STL ]; then
+    export G4USE_STL=1
+  fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -208,6 +211,9 @@ if [ `uname -n | grep pcitasd04` ]; then
 fi
 
 if [ `uname -n | grep pcgeant` ]; then
+  if [ $G4_STT_USE_STL ]; then
+    export G4USE_STL=1
+  fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -228,7 +234,7 @@ fi
 
 
 if [ `uname -n | grep sgmedia` ]; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
@@ -257,6 +263,9 @@ if [ "$UNAME" = "AIX" ]; then
  export G4SYSTEM=AIX-xlC
 else
  export G4SYSTEM=Linux-g++
+ if [ $G4_STT_USE_STL ]; then
+   export G4USE_STL=1
+ fi
 fi	
 export G4VIS_DEBUG=1
 export G4VIS_BUILD_DAWN_DRIVER=1
@@ -291,7 +300,7 @@ export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 #
 if [ `uname -n` = aleph ] ; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
 export CVSROOT=:pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
@@ -322,7 +331,7 @@ export SOFREEUSER=/projects/SoFree/user/
 fi
 #
 if [ `uname -n` = asc ] ; then
-  if [ $G4USE_STL ]; then
+  if [ $G4_STT_USE_STL ]; then
     export G4USE_OSPACE=1
   fi
 export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs'

@@ -6,7 +6,7 @@
 #############set -x
 
 TREE=`echo $1|cut -c 1`
-export G4USE_STL=`echo $1 | ggrep -q -i stl && echo 1`
+export G4_STT_USE_STL=`echo $1 | ggrep -q -i stl && echo 1`
 DEBOPT=`echo $2|cut -c 1`
 REFTAG=$3
 ACTION=$4
