@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FlavoredParallelWorldModel.hh,v 1.2 1999-01-11 00:48:42 allison Exp $
+// $Id: G4FlavoredParallelWorldModel.hh,v 1.3 1999-04-16 09:05:39 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
@@ -16,14 +16,14 @@
 
 #include "G4PhysicalVolumeModel.hh"
 
-class G4FlavoredParallelWorld;
+class G4VFlavoredParallelWorld;
 
 class G4FlavoredParallelWorldModel : public G4PhysicalVolumeModel {
   
 public:
   
   G4FlavoredParallelWorldModel
-  (G4FlavoredParallelWorld* FPW,
+  (G4VFlavoredParallelWorld* FPW,
    G4int soughtDepth = G4PhysicalVolumeModel::UNLIMITED,
    const G4Transform3D& modelTransformation = G4Transform3D::Identity,
    const G4ModelingParameters* mp = 0);
@@ -32,7 +32,7 @@ public:
   
 private:
 
-  G4FlavoredParallelWorld* theFlavoredParallelWorld;
+  G4VFlavoredParallelWorld* theFlavoredParallelWorld;
 
 };
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:15:33 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-04-16 09:05:36 mora Exp $
 # --------------------------------------------------------------
 # GNUmakefile for modeling library.  John Allison, 31/12/1997.
 # --------------------------------------------------------------
@@ -19,7 +19,6 @@ CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
-CPPFLAGS += -I$(G4BASE)/processes/parameterisation/include
 CPPFLAGS += -I$(G4BASE)/processes/electromagnetic/utils/include
 CPPFLAGS += -I$(G4BASE)/processes/management/include
 CPPFLAGS += -I$(G4BASE)/particles/management/include

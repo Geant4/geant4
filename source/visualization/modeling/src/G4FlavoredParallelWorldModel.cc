@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FlavoredParallelWorldModel.cc,v 1.2 1999-01-11 00:48:51 allison Exp $
+// $Id: G4FlavoredParallelWorldModel.cc,v 1.3 1999-04-16 09:05:41 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
@@ -13,13 +13,13 @@
 
 #include "G4FlavoredParallelWorldModel.hh"
 
-#include "G4FlavoredParallelWorld.hh"
+#include "G4VFlavoredParallelWorld.hh"
 #include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
 G4FlavoredParallelWorldModel::G4FlavoredParallelWorldModel
-(G4FlavoredParallelWorld* FPW,
+(G4VFlavoredParallelWorld* FPW,
  G4int soughtDepth,
  const G4Transform3D& modelTransformation,
  const G4ModelingParameters* mp)

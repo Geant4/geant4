@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.4 1999-02-07 17:33:11 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.5 1999-04-16 09:06:09 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -17,7 +17,7 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
-#include "G4GlobalFastSimulationManager.hh"
+#include "G4VGlobalFastSimulationManager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4FlavoredParallelWorldModel.hh"
@@ -182,17 +182,17 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4GlobalFastSimulationManager* theGlobalFastSimulationManager;
+  G4VGlobalFastSimulationManager* theGlobalFastSimulationManager;
   if(!(theGlobalFastSimulationManager = 
-       G4GlobalFastSimulationManager::GetGlobalFastSimulationManager())){
+       G4VGlobalFastSimulationManager::GetConcreteInstance ())){
     G4cout<< "WARNING: no G4GlobalFastSimulationManager" << endl;
     return;
   }
-
+  
   G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
-
+  
   if(newValue=="all") {
-    G4FlavoredParallelWorld* CurrentFlavoredWorld;
+    G4VFlavoredParallelWorld* CurrentFlavoredWorld;
     for (G4int iParticle=0; iParticle<theParticleTable->entries(); 
 	 iParticle++)
       if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
@@ -205,7 +205,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 	   << endl;
     return;
   }
-
+  
   G4ParticleDefinition* currentParticle = 
     theParticleTable->FindParticle(newValue);
   if (currentParticle == NULL) {
@@ -213,7 +213,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4FlavoredParallelWorld* worldForThis;
+  G4VFlavoredParallelWorld* worldForThis;
   if(worldForThis=theGlobalFastSimulationManager->
      GetFlavoredWorldForThis(currentParticle)) {
     pCurrentScene -> AddRunDurationModel
