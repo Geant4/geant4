@@ -1,0 +1,211 @@
+
+     =========================================================
+ 		      Geant4 - Hadrontherapy example
+     =========================================================
+
+                             README
+                      ---------------------
+
+This example is developed by G.A.Pablo Cirrone, Giorgio Russo and 
+Francesco Di Rosa of the Laboratori Nazionali del Sud - Istituto Nazionale 
+di Fisica Nucleare, Via S. Sofia, 44 Catania, Sicily, Italy (www.lns.infn.it)
+
+The authors are supported by Laboratori Nazionali del Sud, Catania  and by the
+Dipartimento di Fisica of Catania University, Catania.
+
+The authors wish to thank Susanna Guatelli and Maria Grazia Pia for 
+their support in the realization of the sensitive detector and
+Harald Paganetti (from NPTC, Massachussets (US)) for the
+help in the realization of the movement of the modulator wheel.
+------------------------------------------------------------------------
+----> INTRODUCTION.                                                    
+                                                                       
+The hadrontherapy example simulates a hadron therapy beam line. 
+In particular the example models the specific proton therapy beam line
+installed at Laboratori Nazionali del Sud (INFN) in Catania, Sicily (Italy).
+For more information on the proton therapy center of Catania
+or/and proton/hadron therapy in general, please visit the
+pages:
+> www.lns.infn.it/~catana
+
+----> GEOMETRY SET-UP.
+ 
+The elements simulated are:
+
+1. A scattering system, to spread geometrically the beam;
+
+2. A system of collimators, to avoid the scattering radiation;
+
+3. A modulation system that spreads the beam in energy and
+   produces the so-called spread out bragg peak;
+   It is constituted by a rotating wheel of different thichnesses.
+   The wheel rotates around is axis (parallel to the proton
+   beam axis) and its movement can be obtained by means of a 
+   messenger between runs.
+
+4. A set of monitor chambers (special transmission ionisation 
+   chambers used to control hadron flux during the irradiation);
+
+5. A "nozzle" and a final collimator defining the final shape
+   of the beam before reaching the patient.
+
+6. A water phantom: it is a box of water inside of which the 
+   dosimeter is placed; the dosimeter performs the measurements of 
+   dose distributions.
+   The use of  the water phantom is required by the international protocol
+   on the measure of dose in the case of proton and ion beams (IAEA 398, 2000).
+
+7. A "Markus" ionisation chamber, to reconstruct the depth dose distribution 
+  (Bragg curve).
+
+8. A radiographic film, to evaluate the beam lateral dose
+   distribution, registering the spatial distribution of the 
+   primary particles
+
+------------------------------------------------------------------------
+----> 1.EXPERIMENTAL SET-UP.      
+                                      
+The application fully simulates the proton therapy beam line
+installed at Laboratori Nazionali del Sud. Inside the water
+phantom (placed at the end of the proton beam line) the Markus ionisation
+chamber and a radiographic film are located; these elements permit the
+reconstruction of the Bragg curve (registered on the file BraggPeak.out)
+and of the lateral and energy distribution of the particles (registered
+on the files energyDistribution.out and angularDistribution.out). Please
+see later for the description of the produced files.
+The Markus chamber is realized by means of a water cylinder (placed inside 
+the water phantom) with its main axis coincident with proton beam axis. 
+The cylinder is divided in slices and the energy deposit in each slide is 
+collected at the end of each run. The default thickness of the slices
+is 2 micron. 
+The radiographic film is simulated by a plane. It is located, by default,
+at the entrance window of the water phantom (the isocenter point) and
+its thickness is 1. mm.
+
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                                                        
+- a standard Geant4 example GNUmakefile is provided                     
+
+setup with:                                                             
+compiler = gcc-3.2.3
+G4SYSTEM = linux-g++                                                    
+
+The following section reports the necessary environment variables 
+necessary for the run of Hadrontherapy.                     
+
+----> 2.1  ENVIROMENT VARIABLES
+
+ - G4SYSTEM = Linux-g++
+
+ - G4INSTALL              points to the installation directory of GEANT4;
+
+ - G4LIB                  point to the compiled libraries of GEANT4;
+
+ - G4WORKDIR              points to the work directory;
+
+ - CLHEP_BASE_DIR         points to the installation directory of CHLEP; 
+
+ - G4LEVELGAMMADATA       points to the photoevaporation library;
+
+ - NeutronHPCrossSections points to the neutron data files;
+
+ - G4RADIOACTIVEDATA      points to the libraries for radio-active decay 
+                          hadronic processes;
+ 
+ - G4LEDATA               points to the low energy electromagnetic libraries
+
+ - LD_LIBRARY_PATH = $CLHEP_BASE_DIR/lib
+
+----> 2.2  VISUALISATION
+
+The user can visualise the experimental set-up with OpenGL, DAWN and vrml
+
+------------------------------------------------------------------------
+----> 3. HOW TO RUN THE EXAMPLE.                                         
+
+In interactive mode:
+> $G4WORDIR/bin/Linux-g++/Hadrontherapy
+The defaultMacro.mac is executed
+
+The primary particle beam parameter are:
+Radiation:                proton beam;
+Energy distribution:      gaussian;
+Mean energy:              63.4 MeV;
+Energy spread:            300 keV;
+Beam spot size:           1 mm;
+Beam angular spread:      0.057 deg;
+
+
+Cut per region feature permits to set different cut in different regions.
+In this example it is sufficient to set a small cut inside the dosemeter
+(where the information of dose distribution is collected).
+
+Default values are: 
+cut = 10 mm along the beam line;
+cut = 0.2 mm inside the dosemeter;
+
+The modulator wheel can be rotated via the messenger:
+
+Idle>/modulator/angle/modAngle xx deg
+
+It is sufficient to rotate the modulator from 0 deg (default position) 
+to 45 deg using 1 deg steps to obtain a Spread Out Bragg Peak (SOBP).
+
+Modulator wheel can be omitted setting its material air.
+
+run $G4WORKDIR/bin/Linux-g++/Hadrontherapy visualisation.mac
+to visualise the experimental set-up with OpenGL
+-----------------------------------------------------------------------
+----> 4. PHYSICS
+
+Electromagnetic and hadronic processes are modeled.
+
+The LowEnergy package is used to model the electromagnetic processes
+of all the particles involved in the experimental set-up.
+
+------------------------------------------------------------------------
+----> 5. SIMULATION OUTPUT                                              
+
+The output is in ASCII file format:
+
+1.) BraggPeak.out: a two columns file. 
+The first column represent depth in water (mm), the second contains the energy 
+deposit (MeV).
+
+2.) energyDistribution.out: a two columns file.
+The first column contains the energy deposit (in MeV) by primary particles
+in the plane (radiographic film) positioned at isocenter. 
+The second column indicates the number of the primary particle 
+responsible for the energy deposit.
+
+3.) angularDistribution.out: a three columns file. 
+It contains the coordinates in millimeters (x, y, z) of a primary 
+particle interacting with the plane representing the radiographic film. 
+x direction is along the beam direction, 
+y and z directions are orthogonal to the beam direction.
+
+------------------------------------------------------------------------
+----> 6. FUTURE PLANS
+
+Next planned improvements will be:
+
+** Use of AIDA and PI analysis tools to store the results of the 
+   simulation in .xml/.hbk files
+ 
+** Addition of messengers to interactively change position, dimension
+   and composition of all the beam line elements and of the 
+   simulated dosimetric systems and to change cut values;
+
+** Addition of messenger to change energy, energy spread,
+   beam spot size and angular divergence of the proton beam;
+
+** Realization of the read-out-geometry: this will permit to collect
+   the energy deposit inside a voxelized three dimensional volume. 
+ --------------------------------------------------------------------------
+
+for comments, advices, doubts and questions please contact: 
+cirrone@lns.infn.it, giorgiorusso@lns.infn.it
+
+last modified: Susanna Guatelli, 28/5/2004
+
