@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.16 2001-05-23 14:47:14 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.17 2001-07-10 23:18:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -385,8 +385,7 @@ void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand* command,
     if ((*iSH) -> GetName () == removeName) break;
   }
 
-  iSH = list.end();
-  if (iSH) {
+  if (iSH == list.end()) {
     G4cout << "Scene handler \"" << removeName
 	   << "\" not found - \"/vis/sceneHandler/list\" to see possibilities."
 	   << G4endl;
