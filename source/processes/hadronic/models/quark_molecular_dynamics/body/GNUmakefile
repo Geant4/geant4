@@ -1,0 +1,20 @@
+# $Id: GNUmakefile,v 1.1 1999-12-09 11:50:23 sscherer Exp $
+# -----------------------------------------------------------
+# GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
+# -----------------------------------------------------------
+
+name := G4hadronic_quark_md_body
+
+ifndef G4INSTALL
+  G4INSTALL = ../../../../../..
+endif
+
+include $(G4INSTALL)/config/architecture.gmk
+
+G4TMPDIR = $(G4TMP)/$(G4SYSTEM)/$(name)
+
+CPPFLAGS += -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
+           
+include $(G4INSTALL)/config/common.gmk
+

@@ -1,0 +1,112 @@
+#include "math.hh"
+
+inline Vektor3 Nbody::dr(const Vektor3& x1,const Vektor3& x2) const
+{
+  return x1-x2;
+}
+
+inline double Nbody::distance(int i,int j) const
+{
+  Vektor3 dx = List[i]->Coordinates()-List[j]->Coordinates();
+  Vektor3 P = List[i]->Momentum()+List[j]->Momentum();
+  double E1 = sqrt(sqr(((ParticleBase*)List[i])->Mass())+square(List[i]->Momentum()));
+  double E2 = sqrt(sqr(((ParticleBase*)List[j])->Mass())+square(List[j]->Momentum()));
+  double dist = square(dx)+sqr(double(dx*P))/(sqr(E1+E2)-square(P));
+  return dist;
+}
+
+inline double Nbody::Etot()
+{
+  double s = 0.0;
+  for (int i=0; i<Npart; i++) s += List[i]->E();
+  return s;
+}
+
+
+inline Vektor3 Nbody::dHdp(int i)
+{
+  return List[i]->Momentum()/List[i]->E();
+}
+
+
+inline Vektor3 Particle::Coordinates() const
+{ 
+  return Vektor3(&Soup->array[offset+1]); 
+}
+
+
+inline double Particle::Coordinates(int k) const 
+{ 
+  return Soup->array[offset+k]; 
+}
+
+
+inline double& Particle::Coordinates(int k) 
+{ 
+  return Soup->array[offset+k]; 
+}
+
+
+inline   void Particle::SetCoordinates(const Vektor3& x) 
+{ 
+  for (int k=1; k<=3; k++) 
+    Soup->array[offset+k] = x[k]; 
+  time = Soup->Time();
+}
+
+inline   void Particle::SetCoordinates(const Vektor3& x,double t) 
+{ 
+  for (int k=1; k<=3; k++) 
+    Soup->array[offset+k] = x[k]; 
+  time = t;
+}
+
+inline   void Particle::SetCoordinates4(const Vektor4& x) 
+{ 
+  for (int k=1; k<=3; k++) 
+    Soup->array[offset+k] = x[k]; 
+  time = x[0];
+}
+
+
+inline   Vektor3 Particle::Momentum() const
+{ 
+  return Vektor3(&Soup->array[offset+4]); 
+}
+
+
+inline   double Particle::Momentum(int k) const 
+{ 
+  return Soup->array[offset+k+3]; 
+}
+
+
+inline   double& Particle::Momentum(int k) 
+{ 
+  return Soup->array[offset+k+3]; 
+}
+
+
+inline   void Particle::SetMomentum(const Vektor3& x) 
+{ 
+  memcpy(&Soup->array[offset+4],(void*)x,3*sizeof(double)); 
+}
+
+inline   void Particle::SetMomentum4(const Vektor4& x) 
+{ 
+  for (int k=1; k<=3; k++) 
+    Soup->array[offset+k+3] = x[k]; 
+}
+
+
+inline   Vektor3 Particle::Velocity() const
+{ 
+  return Vektor3(&Soup->forces[offset+1]); 
+}
+
+
+inline   Vektor3 Particle::Force() const
+{ 
+  return Vektor3(&Soup->forces[offset+4]); 
+}
+

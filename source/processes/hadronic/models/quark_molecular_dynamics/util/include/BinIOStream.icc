@@ -1,0 +1,253 @@
+//
+// $RCSfile: BinIOStream.icc,v $
+//
+// $Revision: 1.1 $
+// $Date: 1999-12-09 11:50:34 $
+// $Author: sscherer $
+// $Locker:  $
+// $State: Exp $
+// DOSfile: biostream.icp
+// UNIXfile: BinIOStream.iC
+//
+// $Log: not supported by cvs2svn $
+// Revision 1.1.1.1  1998/09/22 16:31:05  mhofmann
+// U++ V0.9
+//
+// Revision 1.2  1997/07/18 15:47:33  mhofmann
+// Made suitable for compilation on SGI.
+//
+// Revision 1.1.1.1  1997/07/17 12:54:53  mhofmann
+// Initial import
+//
+// Revision 1.1.1.1  1996/10/04 14:37:49  mhofmann
+// Phase Transition Project
+//
+//
+
+inline BinOStream& 
+BinOStream::flush() {
+  os->flush();
+  return *this;
+}
+
+inline BinOStream& 
+operator<<(BinOStream& o,char c) {
+  o.os->write(&c, sizeof(char));
+  return o;
+}      
+
+inline BinOStream& 
+operator<<(BinOStream& o,signed char c) {
+  o.os->write((char*)&c, sizeof(signed char));
+  return o;
+} 
+
+inline BinOStream& 
+operator<<(BinOStream& o,unsigned char c) {
+  o.os->write(&c, sizeof(unsigned char));
+  return o;
+}                        
+
+inline BinOStream& 
+operator<<(BinOStream& o,int i) {
+  o.os->write((char*)&i, sizeof(int));
+  return o;
+}                        
+
+inline BinOStream& 
+operator<<(BinOStream& o,unsigned int i) {
+  o.os->write((char*)&i, sizeof(unsigned int));
+  return o;
+}                        
+
+inline BinOStream& 
+operator<<(BinOStream& o,long i) {
+  o.os->write((char*)&i, sizeof(long));
+  return o;
+}                        
+
+inline BinOStream& 
+operator<<(BinOStream& o,unsigned long i) {
+  o.os->write((char*)&i, sizeof(unsigned long));
+  return o;
+}                        
+
+inline BinOStream& 
+operator<<(BinOStream& o,short i) {
+  o.os->write((char*)&i, sizeof(short));
+  return o;
+}         
+               
+inline BinOStream& 
+operator<<(BinOStream& o,unsigned short i) {
+  o.os->write((char*)&i, sizeof(unsigned short));
+  return o;
+}                     
+
+inline BinOStream& 
+operator<<(BinOStream& o,double f) {
+  o.os->write((char*)&f, sizeof(double));
+  return o;
+}                     
+   
+inline BinOStream& 
+operator<<(BinOStream& o,long double f) {
+  o.os->write((char*)&f, sizeof(long double));
+  return o;
+}        
+             
+inline BinOStream& 
+operator<<(BinOStream& o,float f) {
+  o.os->write((char*)&f, sizeof(float));
+  return o;
+}               
+      
+inline void 
+BinIStream::clear(int i) {
+  is->clear(i);
+}
+
+inline int 
+BinIStream::eof() const {
+  return is->eof();
+} 
+
+inline int 
+BinIStream::fail() const {
+  return is->fail();
+} 
+
+inline int 
+BinIStream::bad() const {
+  return is->bad();
+}             
+
+inline int 
+BinIStream::good() const {
+  return is->good();
+} 
+
+inline 
+BinIStream::operator void*() {
+  return *is;
+}
+
+inline 
+BinIStream::operator const void*() const {
+  return *is;
+}
+
+inline int 
+BinIStream::operator!() const {
+  return !(*is);
+}
+
+inline BinIStream& 
+operator>>(BinIStream& in,char& c) {
+  char cold = c;
+  if( !in.is->read(&c, sizeof(char)) ) {
+    c = cold;
+  };
+  return in;
+}      
+
+inline BinIStream& 
+operator>>(BinIStream& in,signed char& c) {
+  signed char cold = c;
+  if( !in.is->read((char*)&c, sizeof(signed char)) ) {
+    c = cold;
+  };
+  return in;
+} 
+
+inline BinIStream& 
+operator>>(BinIStream& in,unsigned char& c) {
+  unsigned char cold = c;
+  if( !in.is->read(&c, sizeof(unsigned char)) ) {
+    c = cold;
+  };
+  return in;
+}                        
+
+inline BinIStream& 
+operator>>(BinIStream& in,int& i) {
+  int iold = i;
+  if( !in.is->read((char*)&i, sizeof(int)) ) {
+    i = iold;
+  };
+  return in;
+}                        
+
+inline BinIStream& 
+operator>>(BinIStream& in,unsigned int& i) {
+  unsigned int iold = i;  
+  if( !in.is->read((char*)&i, sizeof(unsigned int)) ) {
+    i = iold;
+  };
+  return in;
+}                        
+
+inline BinIStream& 
+operator>>(BinIStream& in,long& i) {
+  long iold = i;  
+  if( !in.is->read((char*)&i, sizeof(long)) ) {
+    i = iold;
+  };
+  return in;
+}                        
+
+inline BinIStream& 
+operator>>(BinIStream& in,unsigned long& i) {
+  unsigned long iold = i;
+  if( !in.is->read((char*)&i, sizeof(unsigned long)) ) {
+    i = iold;
+  };
+  return in;
+}                        
+
+inline BinIStream& 
+operator>>(BinIStream& in,short& i) {
+  short iold = i;
+  if( !in.is->read((char*)&i, sizeof(short)) ) {
+    i = iold;
+  };
+  return in;
+}         
+               
+inline BinIStream& 
+operator>>(BinIStream& in,unsigned short& i) {
+  unsigned short iold = i;
+  if( !in.is->read((char*)&i, sizeof(unsigned short)) ) {
+    i = iold;
+  };
+  return in;
+}                     
+
+inline BinIStream& 
+operator>>(BinIStream& in,double& f) {
+  double cf;
+  if( in.is->read((char*)&cf, sizeof(double)) ) {
+    f = cf;
+  }
+  return in;
+}                     
+   
+inline BinIStream& 
+operator>>(BinIStream& in,long double& f) {
+  long double fold = f;
+  if( !in.is->read((char*)&f, sizeof(long double)) ) {
+    f = fold;
+  }
+  return in;
+}        
+             
+inline BinIStream& 
+operator>>(BinIStream& in,float& f) {
+  float fold = f;
+  if( !in.is->read((char*)&f, sizeof(float)) ) {
+    f = fold;
+  }
+  return in;
+}             
+        
+

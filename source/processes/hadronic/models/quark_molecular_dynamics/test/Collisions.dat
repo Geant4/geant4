@@ -1,0 +1,259 @@
+#
+#   Particle	channel		Probability	
+#		("," sep)
+#
+
+#
+# General declarations
+#
+X	-> in	 1	NORMAL
+X X	-> in,in 10	NORMAL
+
+#
+# Quark - decays
+#
+# Note: each hadron can decompose into quarks. But this decay mode is
+# DIFFERENT from the hadronic decay and has to be forced "by hand".
+# Therefore the fractions are given by NEGATIVE numbers!
+#
+S0	->	q,q'		-1	DECOMPOSITION
+
+K*	->	q,s'		-1	DECOMPOSITION
+Kbar*	->	q',s		-1	DECOMPOSITION
+
+D*	->	q',c		-1	DECOMPOSITION
+Dbar*	->	q,c'		-1	DECOMPOSITION
+Ds*	->	s',c		-1	DECOMPOSITION
+Dsbar*	->	s,c'		-1	DECOMPOSITION
+R	->	q,q,q		-1	DECOMPOSITION
+Y	->	q,q,s		-1	DECOMPOSITION
+Yc	->	q,q,c		-1	DECOMPOSITION
+#Ycs	->	q,s,c		-1	DECOMPOSITION
+Xi*	->	q,s,s		-1	DECOMPOSITION
+Omega*	->	s,s,s		-1	DECOMPOSITION
+
+#
+# Diquark decay:
+#
+# Diquarks are treated NOT like quarks, but like hadrons, since there
+# is no other decay channel than decomposition!
+#
+DQq	->	q,q		1	NORMAL
+DQs	->	q,s		1	NORMAL
+ss_1	->	s,s		1	NORMAL
+
+#
+# String Fragmentation
+#
+#Q	->	in,Q,Q'		1	FLUXTUBE
+
+#
+# Hadron decays
+#
+rho	->	pi,pi		1	NORMAL
+
+eta
+	->	q,q'		-0.5	DECOMPOSITION
+	->	s,s'		-0.5	DECOMPOSITION
+	->	pi+,pi-,pi0	0.3	NORMAL
+	->	pi0,pi0,pi0	0.7	NORMAL
+
+omega
+	->	pi+,pi-,pi0	0.88	NORMAL
+	->	pi+,pi-		0.02	NORMAL
+
+eta_s
+	->	q,q'		-0.67	DECOMPOSITION
+	->	s,s'		-0.33	DECOMPOSITION
+	->	pi+,pi-,eta0	0.44	NORMAL
+	->	pi0,pi0,eta0	0.21	NORMAL
+
+eta_c
+	->	c,c'		-1	DECOMPOSITION
+a_0
+	->	eta,pi		1	NORMAL
+
+f_0
+	->	q,q'		-0.5	DECOMPOSITION
+	->	s,s'		-0.5	DECOMPOSITION
+	->	pi,pi		0.78	NORMAL
+	->	K_bar,K		0.21	NORMAL
+
+Phi
+	->	s,s'		-1	DECOMPOSITION
+	->	K_bar-,K+	0.50	NORMAL
+	->	K_bar0,K0	0.35	NORMAL
+	->	rho,pi		0.13	NORMAL
+
+h_1	->	rho,pi		1	NORMAL
+a_1	->	rho,pi		1	NORMAL
+
+b_1
+	->	omega,pi	1	NORMAL
+
+f_1
+	->	rho,pi,pi	0.4	NORMAL
+	->	eta,pi,pi	0.5	NORMAL
+	->	K_bar,K,pi	0.1	NORMAL
+
+eta(1295)
+	->	q,q'		-0.5	DECOMPOSITION
+	->	s,s'		-0.5	DECOMPOSITION
+	->	eta0,pi+,pi-	1	NORMAL
+
+pi(1300)
+	->	rho,pi		0.5	NORMAL
+	->	pi,pi,pi	0.5	NORMAL
+
+omega(1390)
+	->	rho,pi		0.5	NORMAL
+	->	omega,pi,pi	0.5	NORMAL
+
+J/Psi
+	->	c,c'		-1	DECOMPOSITION
+
+K(892)
+	->	K,pi		1	NORMAL
+
+K_bar(892)
+	->	K_bar,pi	1	NORMAL
+
+# hier
+
+D(2007)	
+	->	D,pi		1	NORMAL
+
+D_bar(2007)
+	->	D_bar,pi	1	NORMAL
+
+D_s(2536)
+	->	D_s,pi		1	NORMAL
+
+D_s_bar(2536)
+	->	D_s_bar,pi	1	NORMAL
+
+N(1440)
+	->	N,pi		0.6	NORMAL
+	->	N,pi,pi		0.4	NORMAL
+
+N(1520)
+	->	N,pi		0.5	NORMAL
+	->	N,pi,pi		0.5	NORMAL
+
+N(1535)
+	->	N,pi		0.4	NORMAL
+	->	N,pi,pi		0.5	NORMAL
+	->	N,eta		0.1	NORMAL
+
+N(1650)
+	->	N,pi		0.6	NORMAL
+	->	N,pi,pi		0.3	NORMAL
+	->	Lambda,K	0.08	NORMAL
+	->	N,eta		0.02	NORMAL
+
+N(1675)
+	->	N,pi		0.37	NORMAL
+	->	N,pi,pi		0.60	NORMAL
+	->	N,eta		0.01	NORMAL
+	->	Lambda,K	0.001	NORMAL
+
+N(1680)
+	->	N,pi		0.60	NORMAL
+	->	N,pi,pi		0.39	NORMAL
+	->	N,eta		0.01	NORMAL
+
+N(1700)
+	->	N,pi		0.10	NORMAL
+	->	N,pi,pi		0.85	NORMAL
+	->	N,eta		0.04	NORMAL
+	->	Lambda,K	0.002	NORMAL
+
+Delta
+	->	N,pi		1	NORMAL
+
+Delta(1620)
+	->	N,pi		0.3	NORMAL
+	->	N,pi,pi		0.7	NORMAL
+
+Delta(1700)
+	->	N,pi		0.15	NORMAL
+	->	N,pi,pi		0.85	NORMAL
+
+Delta(1900)
+	->	N,pi		0.15	NORMAL
+
+Delta(1905)
+	->	N,pi		0.15	NORMAL
+	->	N,pi,pi		0.75	NORMAL
+	->	Sigma,K		0.03	NORMAL
+
+Delta(1910)
+	->	N,pi		0.25	NORMAL
+	->	N,pi,pi		0.75	NORMAL
+
+Delta(1920)
+	->	N,pi		0.20	NORMAL
+	->	Sigma,K		0.05	NORMAL
+
+Delta(1930)
+	->	N,pi		0.15	NORMAL
+
+Delta(1950)
+	->	N,pi		0.45	NORMAL
+	->	N,pi,pi		0.4	NORMAL
+
+Lambda(1405)
+	->	Sigma,pi	1	NORMAL
+
+Lambda(1520)
+	->	N,K_bar		0.45	NORMAL
+	->	Sigma,pi	0.42	NORMAL
+	->	Lambda,pi,pi	0.1	NORMAL
+	->	Sigma,pi,pi	0.01	NORMAL
+
+Lambda(1600)
+	->	N,K_bar		0.3	NORMAL
+	->	Sigma,pi	0.6	NORMAL
+
+Lambda(1670)
+	->	N,K_bar		0.2	NORMAL
+	->	Sigma,pi	0.5	NORMAL
+	->	Lambda,eta	0.3	NORMAL
+
+Lambda(1690)
+	->	N,K_bar		0.25	NORMAL
+	->	Sigma,pi	0.3	NORMAL
+	->	Lambda,pi,pi	0.25	NORMAL
+	->	Sigma,pi,pi	0.2	NORMAL
+
+Sigma(1385)
+	->	Lambda,pi	0.88	NORMAL
+	->	Sigma,pi	0.12	NORMAL
+
+Sigma(1660)
+	->	N,K_bar		0.3	NORMAL
+	->	Lambda,pi	0.35	NORMAL
+	->	Sigma,pi	0.35	NORMAL
+
+Sigma(1670)
+	->	N,K_bar		0.13	NORMAL
+	->	Lambda,pi	0.15	NORMAL
+	->	Sigma,pi	0.5	NORMAL
+
+Sigma(1750)
+	->	N,K_bar		0.3	NORMAL
+	->	Lambda,pi	0.1	NORMAL
+	->	Sigma,pi	0.08	NORMAL
+	->	Sigma,eta	0.4	NORMAL
+
+Xi(1530)
+	->	Xi,pi		1	NORMAL
+
+Xi(1820)
+	->	Lambda,K_bar	0.8	NORMAL
+	->	Xi,pi		0.1	NORMAL
+	->	Sigma,K_bar	0.1	NORMAL
+
+Omega(2250)
+	->	Xi-,pi+,K_bar-	0.5	NORMAL
+	->	Xi(1530)0,K_bar-	0.5	NORMAL
