@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4MScoreProcess.cc,v 1.8 2002-10-22 13:26:04 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,11 +32,11 @@
 // ----------------------------------------------------------------------
 
 #include "G4MScoreProcess.hh"
-#include "G4VPScorer.hh"
-#include "G4PStep.hh"
+#include "G4VScorer.hh"
+#include "G4GeometryCellStep.hh"
 #include "G4VParallelStepper.hh"
 
-G4MScoreProcess::G4MScoreProcess(G4VPScorer &aScorer,
+G4MScoreProcess::G4MScoreProcess(G4VScorer &aScorer,
 				 const G4String &aName)
  : 
   G4VProcess(aName), 
@@ -78,7 +78,7 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
     G4GeometryCell postkey(*(postpoint->GetPhysicalVolume()), 
 			    postpoint->GetTouchable()->GetReplicaNumber());
 
-    G4PStep pstep(prekey, postkey);
+    G4GeometryCellStep pstep(prekey, postkey);
     pstep.SetCrossBoundary(false);
     
     if (prekey != postkey) {

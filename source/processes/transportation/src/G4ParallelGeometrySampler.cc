@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.3 2002-10-22 13:26:04 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4ParallelGeometrySampler.hh"
 
 #include "G4VIStore.hh"
-#include "G4VPScorer.hh"
+#include "G4VScorer.hh"
 
 #include "G4ParallelTransportConfigurator.hh"
 #include "G4PScoreConfigurator.hh"
@@ -105,7 +105,7 @@ PrepareImportanceSampling(G4VIStore *istore,
   }
 }
 
-void G4ParallelGeometrySampler::PrepareScoring(G4VPScorer *scorer){
+void G4ParallelGeometrySampler::PrepareScoring(G4VScorer *scorer){
   fPScoreConfigurator = 
     new G4PScoreConfigurator(fParticleName,
 			     fParallelWorld.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.6 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.7 2002-10-22 13:26:05 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -58,7 +58,7 @@ G4VParticleChange *G4ParallelImportanceProcess::
 PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 {
   if (aTrack.GetTrackStatus()==fStopAndKill) {
-    G4cout << "G4ParallelImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
+    G4std::G4cout << "G4ParallelImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
   }
   G4ParallelTransport::PostStepDoIt(aTrack, aStep);
 
@@ -71,8 +71,8 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   
 void G4ParallelImportanceProcess::Error(const G4String &m)
 {
-  G4cout << "ERROR - G4ImportanceProcess::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4std::G4cout << "ERROR - G4ImportanceProcess::" << m << G4endl;
+  G4std::G4Exception("Program aborted.");
 }
 
 

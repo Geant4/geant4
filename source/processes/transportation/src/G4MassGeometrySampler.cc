@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.3 2002-10-22 13:26:04 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4MassGeometrySampler.hh"
 
 #include "G4VIStore.hh"
-#include "G4VPScorer.hh"
+#include "G4VScorer.hh"
 
 #include "G4MScoreConfigurator.hh"
 #include "G4MImportanceConfigurator.hh"
@@ -86,7 +86,7 @@ G4bool G4MassGeometrySampler::IsConfigured() const{
 }
 
 void G4MassGeometrySampler::
-PrepareScoring(G4VPScorer *scorer){
+PrepareScoring(G4VScorer *scorer){
   fMScoreConfigurator = 
     new G4MScoreConfigurator(fParticleName, *scorer);
   if (!fMScoreConfigurator) {

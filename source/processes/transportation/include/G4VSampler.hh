@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.5 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4VSampler.hh,v 1.6 2002-10-22 13:25:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,7 @@
 class G4VPhysicalVolume;
 class G4VImportanceAlgorithm;
 class G4VIStore;
-class G4VPScorer;
+class G4VScorer;
 
 
 class G4VSampler {
@@ -56,7 +56,7 @@ public:
   G4VSampler();
   virtual ~G4VSampler();
 
-  virtual void PrepareScoring(G4VPScorer *Scorer) = 0;
+  virtual void PrepareScoring(G4VScorer *Scorer) = 0;
 
   virtual void PrepareImportanceSampling(G4VIStore *istore,
 					 const G4VImportanceAlgorithm 

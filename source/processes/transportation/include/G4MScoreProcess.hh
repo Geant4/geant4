@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.hh,v 1.6 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4MScoreProcess.hh,v 1.7 2002-10-22 13:25:55 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,7 +31,7 @@
 //
 // Used internally by scoring in the "mass" world.
 // This is a forced post step process messaging a "scorer" 
-// derived from G4VPScorer.
+// derived from G4VScorer.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4VProcess.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4VPScorer;
+class G4VScorer;
 
 class G4MScoreProcess : public G4VProcess, public G4VTrackTerminator
 
@@ -49,7 +49,7 @@ class G4MScoreProcess : public G4VProcess, public G4VTrackTerminator
 
 public:  // with description
 
-  explicit G4MScoreProcess(G4VPScorer &aScorer,
+  explicit G4MScoreProcess(G4VScorer &aScorer,
 			   const G4String &aName = "MScoreProcess");
     // take reference to scorer and coppy particle name and
     // create a G4ParticleChange
@@ -64,7 +64,7 @@ public:  // with description
     // make processed being forced
 
   virtual G4VParticleChange * PostStepDoIt(const G4Track&, const G4Step&);
-    // message "scorer" with  G4Step and a G4PStep from the "mass" 
+    // message "scorer" with  G4Step and a G4GeometryCellStep from the "mass" 
     // geometry
 
   virtual void KillTrack() const;
@@ -100,7 +100,7 @@ private:
   
 private:
 
-  G4VPScorer &fScorer;  
+  G4VScorer &fScorer;  
   mutable G4bool fKillTrack;
 };
 

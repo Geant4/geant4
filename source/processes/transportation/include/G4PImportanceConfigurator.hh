@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4PImportanceConfigurator.hh,v 1.3 2002-10-22 13:25:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
   
 private:
   G4PImportanceConfigurator(const G4PImportanceConfigurator &);
-  const G4PImportanceConfigurator &
+  G4PImportanceConfigurator &
   operator=(const G4PImportanceConfigurator &);
   G4ProcessPlacer fPlacer;
   G4ParallelWorld &fPWorld;

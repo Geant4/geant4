@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.hh,v 1.6 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4PScoreProcess.hh,v 1.7 2002-10-22 13:25:56 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -30,8 +30,8 @@
 // Class description:
 //
 // Used internally by scoring in a "parallel" geometry.
-// This forced process messages a "scorer" derived from G4VPScorer.
-// The scorer is  messaged with the current G4Step and G4PStep.
+// This forced process messages a "scorer" derived from G4VScorer.
+// The scorer is  messaged with the current G4Step and G4GeometryCellStep.
 // This post step process is supposed to be placed as the 
 // process following directly after transportation and the 
 // importance sampling process if applied and before all physical
@@ -46,7 +46,7 @@
 #include "G4VTrackTerminator.hh"
 
 class G4VParallelStepper;
-class G4VPScorer;
+class G4VScorer;
 
 class G4PScoreProcess : public G4VProcess, 
 			public G4VTrackTerminator
@@ -55,7 +55,7 @@ class G4PScoreProcess : public G4VProcess,
 public:  // with description
 
   G4PScoreProcess(G4VParallelStepper  &astepper,
-		  G4VPScorer &aScorer,
+		  G4VScorer &aScorer,
 		  const G4String &aName = "PScoreProcess");
     // create a G4ParticleChange
 
@@ -70,7 +70,7 @@ public:  // with description
 
   virtual G4VParticleChange * PostStepDoIt(const G4Track&, 
 				   const G4Step&);
-    // get G4PStep and G4Step and message "scorer"
+    // get G4GeometryCellStep and G4Step and message "scorer"
 
   virtual void KillTrack() const;
 
@@ -102,7 +102,7 @@ private:
   G4PScoreProcess &operator=(const G4PScoreProcess &);
 
   G4VParallelStepper &fPstepper;
-  G4VPScorer &fScorer;  
+  G4VScorer &fScorer;  
 
   mutable G4bool fKillTrack;
 };

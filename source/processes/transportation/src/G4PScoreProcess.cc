@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreProcess.cc,v 1.4 2002-10-16 16:27:00 dressel Exp $
+// $Id: G4PScoreProcess.cc,v 1.5 2002-10-22 13:26:04 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,12 +32,12 @@
 // ----------------------------------------------------------------------
 
 #include "G4PScoreProcess.hh"
-#include "G4VPScorer.hh"
-#include "G4PStep.hh"
+#include "G4VScorer.hh"
+#include "G4GeometryCellStep.hh"
 #include "G4VParallelStepper.hh"
 
 G4PScoreProcess::G4PScoreProcess(G4VParallelStepper &astepper,
-				 G4VPScorer &aScorer,
+				 G4VScorer &aScorer,
 				 const G4String &aName)
  : 
   G4VProcess(aName), 

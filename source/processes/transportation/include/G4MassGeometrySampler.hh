@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4MassGeometrySampler.hh,v 1.3 2002-10-22 13:25:55 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,7 @@ public:
   explicit G4MassGeometrySampler(const G4String &particlename);
   virtual ~G4MassGeometrySampler();
 
-  virtual void PrepareScoring(G4VPScorer *Scorer);
+  virtual void PrepareScoring(G4VScorer *Scorer);
   virtual void PrepareImportanceSampling(G4VIStore *istore,
 					 const G4VImportanceAlgorithm 
 					 *ialg);
