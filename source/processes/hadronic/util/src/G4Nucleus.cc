@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Nucleus.cc,v 1.2 1999-01-20 17:55:58 hpw Exp $
+// $Id: G4Nucleus.cc,v 1.3 1999-03-29 09:48:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // original by H.P. Wellisch
@@ -54,10 +54,16 @@
     G4double random = G4UniformRand();
     G4double sum = 0;
     const G4ElementVector *theElementVector = aMaterial->GetElementVector();
-    for( G4int i=0; i<aMaterial->GetNumberOfElements(); ++i )
+    G4int i;
+    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
     {
       sum += aMaterial->GetAtomicNumDensityVector()[i];
-      if( sum > random ) {
+    }
+    G4double running = 0;
+    for(i=0; i<aMaterial->GetNumberOfElements(); ++i )
+    {
+      running += aMaterial->GetAtomicNumDensityVector()[i];
+      if( running/sum > random ) {
         aEff = (*theElementVector)(i)->GetA()*mole/g;
         zEff = (*theElementVector)(i)->GetZ();
         break;
