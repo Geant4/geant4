@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2003-03-31 14:19:25 gcosmo Exp $
+$Id: History,v 1.57 2003-04-03 10:27:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 3, 2003  M. Dressel
+- G4LogicalVolume: added method for scanning recursively the volume tree
+  and retrieve if the current LV is ancestor of a given PV:
+    G4bool IsAncestor(const G4VPhysicalVolume*) const
 
 March 31, 2003  G. Cosmo                   geommng-V05-00-08
 - Fixed trivial strict pedantic warnings in G4VSolid.cc and G4PVPlacement.cc.
