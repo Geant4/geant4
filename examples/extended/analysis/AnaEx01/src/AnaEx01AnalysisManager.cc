@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.6 2000-11-10 14:38:52 gbarrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.7 2000-11-10 14:45:33 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ void AnaEx01AnalysisManager::BeginOfRun(const G4Run* aRun){
 
 void AnaEx01AnalysisManager::EndOfRun(const G4Run*){
   Store();
-  if(fEAbs) Plot(fEAbs);
+  //if(fEAbs) Plot(fEAbs);
 }
 
 void AnaEx01AnalysisManager::BeginOfEvent(const G4Event*){
