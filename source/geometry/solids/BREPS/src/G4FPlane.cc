@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.1 1999-01-07 16:07:43 gunter Exp $
+// $Id: G4FPlane.cc,v 1.2 1999-01-14 16:11:19 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,7 +25,7 @@ G4FPlane::G4FPlane( const G4Vector3D& direction,
   G4Point3D Pt2 = Pt0 + axis.cross(direction);
 
   G4Ray::CalcPlane3Pts( Pl, Pt0, Pt1, Pt2 );
- 
+
   active   = 1;
   CalcNormal();
   distance = kInfinity;
@@ -46,18 +46,32 @@ G4FPlane::G4FPlane(const G4Point3DVector* pVec, const G4Point3DVector* iVec)
   G4CompositeCurve* polygon;
 
   projectedBoundary = new G4SurfaceBoundary;
-  
+
+  // Calcul sense of the plane, for G4BREPSolidPolyhedra 
+  // rule : if direction.z > 0, sense = 1
+  if(pplace.GetRefDirection().z() < 0)
+    sameSense = 1; //0 
+  else 
+    sameSense = 1;
+
   polygon= new G4CompositeCurve(*pVec);
-  bounds.insert(polygon);
-  
+
   if (iVec) 
   {
     polygon= new G4CompositeCurve(*iVec);
     bounds.insert(polygon);
   }
-  
-  SetBoundaries(&bounds);
+ 
+  for (G4int i=0; i< polygon->GetSegments().length(); i++) 
+    polygon->GetSegments()[i]->SetSameSense(sameSense);
 
+  bounds.insert(polygon);
+  for (G4int j=0; j< bounds.length(); j++) 
+    bounds[j]->SetSameSense(sameSense);
+  
+
+  SetBoundaries(&bounds);
+      
   CalcNormal();
   IsConvex();
   distance = kInfinity;
@@ -192,6 +206,15 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     solx = startx + t * dirx;
     soly = starty + t * diry;
     solz = startz + t * dirz;
+
+    if( (solx > -kCarTolerance/2) && (solx < kCarTolerance/2) )
+      solx = 0;
+
+    if( (soly > -kCarTolerance/2) && (soly < kCarTolerance/2) )
+      soly = 0;
+
+    if( (solz > -kCarTolerance/2) && (solz < kCarTolerance/2) )
+      solz = 0;
     
     if(((dirx < 0 && solx < startx)||(dirx >= 0 && solx >= startx))&&
        ((diry < 0 && soly < starty)||(diry >= 0 && soly >= starty))&&
@@ -212,14 +235,6 @@ int G4FPlane::Intersect(const G4Ray& rayref)
   else
   {
     Distance( RayStart.distance2(closest_hit) );
- 
-    if(distance < kCarTolerance*0.5)
-    {
-      // the point is on the surface
-      active=1;             //active=0;
-      Distance(0);          //Distance(kInfinity);
-      return 1;             //return 0;
-    }
 
     G4Point3D hit = closest_hit;    
 
@@ -230,11 +245,34 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     
     // test ray from the hit on the xy plane
     // check if it intersects the boundary
-    G4Ray testRay(projectedHit, G4Vector3D(1, 0, 0));
+    G4Ray testRay(projectedHit, G4Vector3D(1, 0.01, 0));
 
-    G4CurveRayIntersection is;
-    projectedBoundary->IntersectRay2D(testRay, is);
+    G4int nbinter = projectedBoundary->IntersectRay2D(testRay);
 
+    if(nbinter&1)
+    {
+      // the intersection point is into the boundaries
+      // check if the intersection point is on the surface
+      if(distance < kCarTolerance*0.5)
+      {
+	// the point is on the surface            
+	Distance(0);         
+      }
+
+      return 1 ;      
+    }
+    else
+    {
+      // the intersection point is out the boundaries
+      active=0;
+      Distance(kInfinity);
+      return 0;
+    }
+
+    
+   
+
+/*
     // if not, we are outside
     if ( is.GetDistance() >= kInfinity ) 
     {
@@ -242,6 +280,8 @@ int G4FPlane::Intersect(const G4Ray& rayref)
       Distance(kInfinity);
       return 0;
     }
+
+
    
     // if yes, we have to check on which side of the intersected 
     // curve the hit lies
@@ -269,6 +309,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     
     // a real intersection point
     return 1;
+*/
   }
 }
 
@@ -297,8 +338,5 @@ G4double G4FPlane::HowNear( const G4Vector3D& x ) const
   //return d;
   return ( Pt.x()*Pl.a + Pt.y()*Pl.b + Pt.z()*Pl.c - Pl.d);
 }
-
-
-
 
 
