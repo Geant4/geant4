@@ -75,7 +75,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Au203-0/2[79]
 Idle> # neutron at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle neutron
@@ -83,8 +82,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Tl206-0/2[81]
-/run/particle/addProcManager Au199-0/2[79]
 Idle> # pi+ at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle pi+
@@ -92,8 +89,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Hg206-0/2[80]
-/run/particle/addProcManager Hg204-0/2[80]
 Idle> # pi- at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle pi-
@@ -101,7 +96,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Pb206-0/2[82]
 Idle> # kaon+ at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon+
@@ -109,7 +103,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Tl203-0/2[81]
 Idle> # kaon- at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon-
@@ -117,7 +110,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Hg205-0/2[80]
 Idle> # kaon0S at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon0S
@@ -125,7 +117,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Tl204-0/2[81]
 Idle> # kaon0L at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon0L
@@ -133,7 +124,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Au204-0/2[79]
 Idle> # proton at 100 GeV in Al
 Idle> #
 Idle> /gun/particle proton
@@ -141,8 +131,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Al26-0/2[13]
-/run/particle/addProcManager O16-0/2[8]
 Idle> # neutron at 100 GeV in Al
 Idle> #
 Idle> /gun/particle neutron
@@ -150,8 +138,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Mg25-0/2[12]
-/run/particle/addProcManager Al25-0/2[13]
 Idle> # pi+ at 100 GeV in Al
 Idle> #
 Idle> /gun/particle pi+
@@ -166,7 +152,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Na24-0/2[11]
 Idle> # kaon+ at 100 GeV in Al
 Idle> #
 Idle> /gun/particle kaon+
@@ -174,8 +159,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Mg26-0/2[12]
-/run/particle/addProcManager Mg24-0/2[12]
 Idle> # kaon- at 100 GeV in Al
 Idle> #
 Idle> /gun/particle kaon-
@@ -197,7 +180,6 @@ Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Na23-0/2[11]
 Idle> # proton at 100 GeV in Air
 Idle> #
 Idle> /gun/particle proton

@@ -9,7 +9,6 @@ PreInit> /run/initialize
 ionIoni:    Knock-on electron cross sections . 
          MeanFreePath is computed at tracking time.
          delta ray energy sampled from  differential Xsection.
-Tst02PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler

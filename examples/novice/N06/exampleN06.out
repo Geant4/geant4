@@ -11,7 +11,6 @@ PreInit> PreInit> /run/initialize
 0
 
  AddDiscreteProcess to OpticalPhoton 
-ExN06PhysicsList::SetCuts:CutLength : 1 (mm)
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -1785,5 +1784,5 @@ Track (trackID 154, parentID 1) is processed with stopping code 2
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=0.58s Real=0.69s Sys=0.08s
+number of event = 1 User=0.64s Real=0.81s Sys=0.03s
 Idle> 

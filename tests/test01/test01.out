@@ -18,7 +18,6 @@ PreInit> /gun/particle geantino
 PreInit> /gun/energy 100 GeV
 PreInit> /gun/direction 1 0 0
 PreInit> /run/initialize
-Tst01PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler

@@ -2,7 +2,6 @@ RunManager construction starting....
 
 ExN05DetectorConstruction....
 
-ExN05PhysicsList::SetCuts:CutLength : 1 (mm)
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler

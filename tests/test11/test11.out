@@ -76,8 +76,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial U
 SimpleBox is now made of U
 Idle> /run/beamOn 1
-/run/particle/addProcManager U238-0/2[92]
-/run/particle/addProcManager U235-0/2[92]
 Idle> # neutron at 10 GeV in U
 Idle> #
 Idle> /gun/particle neutron
@@ -99,7 +97,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial U
 SimpleBox is now made of U
 Idle> /run/beamOn 1
-/run/particle/addProcManager U234-0/2[92]
 Idle> # kaon+ at 10 GeV in U
 Idle> #
 Idle> /gun/particle kaon+
@@ -135,9 +132,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
-/run/particle/addProcManager Pb208-0/2[82]
-/run/particle/addProcManager Pb206-0/2[82]
-/run/particle/addProcManager Pb207-0/2[82]
 Idle> # neutron at 10 GeV in Pb
 Idle> #
 Idle> /gun/particle neutron
@@ -194,7 +188,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Al27-0/2[13]
 Idle> # neutron at 10 GeV in Al
 Idle> #
 Idle> /gun/particle neutron
@@ -202,7 +195,6 @@ Idle> /gun/energy 10 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
-/run/particle/addProcManager Ne22-0/2[10]
 Idle> # pi+ at 10 GeV in Al
 Idle> #
 Idle> /gun/particle pi+

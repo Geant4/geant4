@@ -11,8 +11,7 @@ PreInit> PreInit> /run/initialize
 0
 
  AddDiscreteProcess to OpticalPhoton 
-Tst03PhysicsList::SetCuts:CutLength : 1 (mm)
-
+Tst03PhysicsList::SetCuts:
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
