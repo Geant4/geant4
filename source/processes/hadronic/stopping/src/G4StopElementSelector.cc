@@ -10,16 +10,25 @@
 //      GEANT 4 class implementation file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuonMinusCaptureAtRest physics process --------
-//                   by Vladimir Ivanchenko
-//                     E-mail: Vladimir.Ivantchenko@cern.ch
-//                            April 2000
-// **************************************************************
-//    25.04.00  V.Ivanchenko replace arrays by STL vectors
+// File: G4StopElementSelector
+//
+// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
+// 
+// Creation date: 2 April 2000
+//
+// Class Description: 
+//
+// Selection of elements for negative particle cupture
+// Selection between decay/capture for mu-
+// N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
+//
+// Class Description: End 
+//
+//-----------------------------------------------------------------------------
+//
+// Modifications: 
+// 18/08/2000  V.Ivanchenko Update description
+//
 //-----------------------------------------------------------------------------
 
 #include "G4StopElementSelector.hh"
@@ -44,7 +53,7 @@ G4Element* G4StopElementSelector::GetElement(const G4Material* aMaterial)
 {
   // Fermi-Teller Z-low of mu- capture and exceptions 
   // for halogens and oxigen.
-  // N.C.Mukhopadhyay Phy. Rep. 30 (1977) 1.
+  // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
   G4int i;
   G4double Z;
   const G4int numberOfElements = aMaterial->GetNumberOfElements();
@@ -188,7 +197,7 @@ G4double  G4StopElementSelector::GetMuonCaptureRate(G4double Z, G4double A)
 G4double  G4StopElementSelector::GetMuonDecayRate(G4double Z, G4double A)
 {
   // Decay time on K-shell 
-  // N.C.Mukhopadhyay Phy. Rep. 30 (1977) 1.
+  // N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
 
   G4double lambda = 1.0 - 2.5 * Z * Z / (137.0*137.0);
   if( 0.5 > lambda ) lambda = 0.5;

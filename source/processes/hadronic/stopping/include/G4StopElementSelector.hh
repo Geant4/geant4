@@ -10,15 +10,27 @@
 //      GEANT 4 class implementation file --- Copyright CERN 1998
 //      CERN Geneva Switzerland
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuonMinusCaptureAtRest physics process --------
-//                   by Vladimir Ivanchenko
-//                     E-mail: Vladimir.Ivantchenko@cern.ch
-//                            April 2000
 // **************************************************************
+//
+// File: G4StopElementSelector
+//
+// Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
+// 
+// Creation date: 2 April 2000
+//
+// Class Description: 
+//
+// Selection of elements for negative particle cupture
+// Selection between decay/capture for mu-
+// N.C.Mukhopadhyay Phys. Rep. 30 (1977) 1.
+//
+// Class Description: End 
+//
+//-----------------------------------------------------------------------------
+//
+// Modifications: 
+// 18/08/2000  V.Ivanchenko Update description
+//
 //-----------------------------------------------------------------------------
 
 #ifndef G4StopElementSelector_h
