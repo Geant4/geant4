@@ -1,4 +1,4 @@
-$Id: README,v 1.7 2001-11-16 14:35:09 barrand Exp $
+$Id: README,v 1.8 2001-11-16 15:17:27 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -13,12 +13,13 @@ $Id: README,v 1.7 2001-11-16 14:35:09 barrand Exp $
  (hooking an AIDA implementation, histo booking, filling, etc...) are 
  concentrated in one class : AnaEx01AnalysisManager.
 
-  To use an AIDA compliant analysis system with this example, 
- the environment variables :
+  To use an AIDA compliant analysis system with this example the environment 
+ variables :
     G4ANALYSIS_USE_AIDA  
     G4ANALYSIS_AIDA_CONFIG_CFLAGS
     G4ANALYSIS_AIDA_CONFIG_LIBS
  must be properly set.
+
   The first one permits to validate/devalidate the AIDA analysis code
  in the example code. The two others permit to give the compilation 
  and link flags of the AIDA compliant system used.
