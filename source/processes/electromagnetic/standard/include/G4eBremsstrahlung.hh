@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.hh,v 1.7 2000-08-08 10:26:19 urban Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.8 2001-01-11 10:39:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,9 +92,6 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
   
      G4double ComputeBremLoss(G4double Z,G4double natom,G4double T,
                               G4double Cut,G4double x);
-
-     G4double ComputeXYPolynomial(G4double x,G4double y,G4int xSize,
-                                  G4int ySize,const G4double coeff[]);
 
      G4double ComputePositronCorrFactorLoss(G4double AtomicNumber,
                                             G4double KineticEnergy,
