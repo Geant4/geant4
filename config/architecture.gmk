@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.9 1999-05-05 09:20:24 johna Exp $
+# $Id: architecture.gmk,v 1.10 1999-05-05 16:01:25 stesting Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -417,6 +417,13 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   VISLIBS  +=  -L/usr/lib -lsocket -lnsl
+  ifdef G4USE_STL
+    OSPACEDIR := /afs/cern.ch/sw/lhcxx/specific/sun/ObjectSpace/2.1/ToolKit
+    CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
+    # obtained from $(OSPACEDIR)/config/local.cfg
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
+  endif
 endif
 
 # -------- HP ---------
@@ -456,6 +463,13 @@ ifeq ($(G4SYSTEM),HP-aCC)
     ifeq ($(OBJY_VERS),4.0.2)
       OBJY_LDLIB := oo
     endif
+  endif
+  ifdef G4USE_STL
+    OSPACEDIR := /afs/cern.ch/sw/lhcxx/specific/hp/ObjectSpace/2.1/ToolKit
+    CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    # obtained from $(OSPACEDIR)/config/local.cfg
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
   endif
 endif
 
@@ -511,6 +525,13 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
 #   OGLLIBS   := -lMesaGLU -lMesaGL
+  endif
+  ifdef G4USE_STL
+    OSPACEDIR := /afs/cern.ch/sw/lhcxx/specific/dec/ObjectSpace/2.1/ToolKit
+    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    # obtained from $(OSPACEDIR)/config/local.cfg
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
   endif
 endif
 

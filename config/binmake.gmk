@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.12 1999-04-18 15:47:25 morita Exp $
+# $Id: binmake.gmk,v 1.13 1999-05-05 16:01:25 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -154,6 +154,8 @@ else
 	$(G4BINDIR)/liblist \
 	  -d $(G4TMPDIR) \
 	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map; fi)
+# Extra libraries to resolve remaining circular dependencies...
+  LDLIBS2 += -lG4hadronic_man_gen
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
@@ -173,6 +175,9 @@ ifdef G4ODBMS
 #        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
 
   LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
+endif
+ifdef G4USE_STL
+  LDLIBS4 += $(OSPACELIBS)
 endif
 
 LDLIBS4 += $(EXTRALIBS)

@@ -1,4 +1,4 @@
-$Id: History,v 1.14 1999-05-05 09:20:23 johna Exp $
+$Id: History,v 1.15 1999-05-05 16:01:24 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -19,6 +19,7 @@ committal in the CVS repository !
 
 5th May 1999  John Allison
 - Eliminated all references to RW in the case of G4USE_STL.
+- Added OSPACE variables.
 
 28th April 1999  Gabriele Cosmo (config-01-00-04)
 - architecture.gmk: moved link for CLHEP to "new" to test the new version
