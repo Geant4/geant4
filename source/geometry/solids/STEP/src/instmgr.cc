@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: instmgr.cc,v 1.1 1999-01-07 16:08:19 gunter Exp $
+// $Id: instmgr.cc,v 1.2 1999-01-27 16:23:34 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -373,8 +373,6 @@ int InstMgr::GetIndex(const char* entityKeyword, int starting_index)
 {
   // L. Broglia
   // When the entity is founded, put return index
-
-  G4cout<<"Warning : GetSTEPentity modified by L. Broglia"<<endl;
 
   MgrNode *node;
   STEPentity *se;

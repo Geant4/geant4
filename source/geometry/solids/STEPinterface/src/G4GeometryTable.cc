@@ -17,32 +17,36 @@ G4GeometryTable::~G4GeometryTable()
 G4bool G4GeometryTable::ExistsInTable(G4String& objectName)
 {
   G4bool existsInTable = false;
+
   for(G4int a=0;a<RegisteredObjects.length();a++)
-    {
-      G4GeometryCreator* gcTmp =  RegisteredObjects(a);
-      G4String rName = gcTmp->Name();
-      if(rName == objectName) existsInTable = true;
-    }
+  {
+    G4GeometryCreator* gcTmp =  RegisteredObjects(a);
+    G4String rName = gcTmp->Name();
+    if(rName == objectName) existsInTable = true;
+  }
+
   return existsInTable;
 }
 
 void G4GeometryTable::RegisterObject(G4GeometryCreator* gc)
 {
-	G4String newName = gc->Name();
-	
-	if(!ExistsInTable(newName))
-		RegisteredObjects.append(gc);
+  G4String newName = gc->Name();
+  
+  if(!ExistsInTable(newName))
+    RegisteredObjects.append(gc);
 }
 
 G4GeometryCreator* G4GeometryTable::GetObject(G4String objectName)
 {
-  for(G4int a=0;a<RegisteredObjects.length();a++)
-    {
-      G4GeometryCreator* gcTmp =  RegisteredObjects(a);
-      G4String rName = gcTmp->Name();
-      if(rName == objectName)
-	return gcTmp;
-    }  
+  for(G4int a=0; a<RegisteredObjects.length(); a++)
+  {
+    G4GeometryCreator* gcTmp =  RegisteredObjects(a);
+    G4String rName = gcTmp->Name();
+    
+    if(rName == objectName)
+      return gcTmp;
+  }
+  
   return (G4GeometryCreator*)0;
 }
 
@@ -54,26 +58,31 @@ void* G4GeometryTable::CreateObject(STEPentity& Ent)
   G4GeometryCreator* gctmp = GetObject(name);
 
   if(gctmp)
-    {
-      gctmp->CreateG4Geometry(Ent);
-      void* obj = gctmp->GetCreatedObject();
-      if (obj == 0) {
-	G4cout << "G4 object of type "
-	       << gctmp->Name() << " not necessary" << endl;
-      } else {
-	G4cout << "Created G4 object of type " << gctmp->Name() << endl;
-      }
-      return obj;
-    }
-  else
-    {
-      G4String err = "Geometry creator for entity " + name +  " not found.";
-      G4cout << err << endl;
-      //      G4Exception(err);
-      return 0;
-    }
+  {
+    gctmp->CreateG4Geometry(Ent);
+    void* obj = gctmp->GetCreatedObject();
 
+//#define G4_STEPINTERFACE_DEBUG 1 
+#ifdef G4_STEPINTERFACE_DEBUG
+    if (obj == 0) 
+      G4cout << "G4 object of type " << gctmp->Name() 
+	     << " not necessary" << endl;
+    else 
+      G4cout << "Created G4 object of type " << gctmp->Name() << endl;
+#endif
+
+    return obj;
+  }
+  else
+  {
+    G4String err = "Geometry creator for entity " + name +  " not found.";
+    G4cout << err << endl;
+    //      G4Exception(err);
+    return 0;
+  } 
 }
+
+
 void* G4GeometryTable::CreateSTEPObject(void* G4obj, G4String& objName)
 {
 

@@ -61,17 +61,19 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
   G4int a;
 
   // L. Broglia
-  // Total assumption ! 
-  
   if(ConDepShapes>0)
   {
+    //#define G4_STEPINTERFACE_DEBUG 1 
+#ifdef G4_STEPINTERFACE_DEBUG
     G4cout<<"\n\n Creating the Context_Dependent_Shape_Representation"<<endl;
+#endif
     index = 0;
   
     for( a=0; a< ConDepShapes; a++)
     {
+#ifdef G4_STEPINTERFACE_DEBUG
       G4cout<<"loop "<<a+1<<" of "<<ConDepShapes<<endl;
-      
+#endif     
       // Be careful, tmpindex not correspond to STEPfile_id !
       tmpindex = 
 	instanceManager.GetIndex("Context_Dependent_Shape_Representation",
@@ -93,8 +95,12 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
 	}
 
 	index = ent->STEPfile_id ;
+
+#ifdef G4_STEPINTERFACE_DEBUG
 	G4cout<<" Context_Dependent_Shape_Representation find in index "
 	      <<index<<endl;
+#endif
+
       }
       
       // Set index to the true value
@@ -105,10 +111,15 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
   }
   else
   {       
+#ifdef G4_STEPINTERFACE_DEBUG
     G4cout<<"\n Creating the Shape_Definition_Representation"<<endl;
+#endif
+
     for(a=0; a<  ShapeDefReps ; a++)
     {
+#ifdef G4_STEPINTERFACE_DEBUG
       G4cout<<"loop "<<a+1<<" of "<<ShapeDefReps<<endl;
+#endif
       
       // Be careful, tmpindex not correspond to STEPfile_id !
       tmpindex = instanceManager.GetIndex("Shape_Definition_Representation",
@@ -130,7 +141,9 @@ void G4AssemblyCreator::CreateG4Geometry(STEPentity& Ent)
 	}
 
 	index = ent->STEPfile_id ;
-	G4cout<<"  Shape_Definition_Representation find in index "<<index<<endl;
+#ifdef G4_STEPINTERFACE_DEBUG
+	G4cout<<" Shape_Definition_Representation find in index "<<index<<endl;
+#endif
       }
       
       // Set index to the true value
