@@ -1,0 +1,80 @@
+/run/verbose 2
+/vis/scene/create
+/vis/open OGLSXm
+/vis/sceneHandler/create OGLSXm
+/vis/sceneHandler/attach
+/vis/viewer/create ! ! 600
+/vis/viewer/refresh
+/tracking/storeTrajectory 1
+/vis/drawView  70 -90 0. 0. cm 1.5
+/vis/viewer/viewpointThetaPhi 70 -90 deg
+/vis/viewer/panTo 0. 0. cm
+/vis/viewer/zoomTo 1.5
+/vis/viewer/dollyTo 0 cm
+/vis/viewer/refresh
+/vis/drawVolume
+/vis/scene/create
+/vis/scene/notifyHandlers
+/vis/scene/add/volume world
+/vis/scene/notifyHandlers
+/vis/sceneHandler/attach
+/vis/viewer/refresh
+/vis/viewer/update
+/control/execute sourceAm241.mac
+/control/verbose 0
+/run/verbose 1
+/tracking/verbose 0
+/hits/verbose 1
+/dmx/draw/drawColours standard
+/dmx/draw/drawTracks noscint
+/dmx/draw/drawHits 0
+/dmx/printModulo 1
+/dmx/savePmt  0
+/dmx/saveHits 1
+/grdm/verbose 0
+/grdm/nucleusLimits 241 0 95 0
+/grdm/analogueMC 1
+/grdm/allVolumes
+/dmx/gun/verbose 0
+/dmx/gun/particle ion
+/dmx/gun/energy 0. MeV
+/dmx/gun/ion 95 241 0
+/run/particle/addProcManager Am241[0.0]
+/run/particle/buildPhysicsTable Am241[0.0]
+/dmx/gun/type Volume
+/dmx/gun/shape Cylinder
+/dmx/gun/radius 250 mum
+/dmx/gun/halfz 10.0 nm
+/dmx/gun/centre 0 0 82.750 mm
+/dmx/gun/confine americium_phys
+/tracking/storeTrajectory 0
+/run/beamOn 1
+/vis/scene/notifyHandlers
+/run/particle/addProcManager Np237[0.0]
+/run/particle/buildPhysicsTable Np237[0.0]
+/run/particle/addProcManager Pa233[0.0]
+/run/particle/buildPhysicsTable Pa233[0.0]
+/run/particle/addProcManager U233[0.0]
+/run/particle/buildPhysicsTable U233[0.0]
+/run/particle/addProcManager Th229[0.0]
+/run/particle/buildPhysicsTable Th229[0.0]
+/run/particle/addProcManager Ra225[0.0]
+/run/particle/buildPhysicsTable Ra225[0.0]
+/run/particle/addProcManager Ac225[0.0]
+/run/particle/buildPhysicsTable Ac225[0.0]
+/run/particle/addProcManager Fr221[0.0]
+/run/particle/buildPhysicsTable Fr221[0.0]
+/run/particle/addProcManager At217[0.0]
+/run/particle/buildPhysicsTable At217[0.0]
+/run/particle/addProcManager Rn217[0.0]
+/run/particle/buildPhysicsTable Rn217[0.0]
+/run/particle/addProcManager Bi213[0.0]
+/run/particle/buildPhysicsTable Bi213[0.0]
+/run/particle/addProcManager Po213[0.0]
+/run/particle/buildPhysicsTable Po213[0.0]
+/run/particle/addProcManager Tl209[0.0]
+/run/particle/buildPhysicsTable Tl209[0.0]
+/run/particle/addProcManager Pb209[0.0]
+/run/particle/buildPhysicsTable Pb209[0.0]
+/run/particle/addProcManager Bi209[0.0]
+/run/particle/buildPhysicsTable Bi209[0.0]

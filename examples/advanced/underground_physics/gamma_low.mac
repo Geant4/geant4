@@ -1,0 +1,35 @@
+
+
+###############################################################################
+#                                                                             #
+# GAMMA.MAC                                                                   #
+# Energy and time spectra of internal calibrator (gammas)                     #
+#                                                                             #
+###############################################################################
+
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+/hits/verbose 1
+
+/event/drawTracks all
+/event/drawHits 1
+/event/savePmt  0
+/event/saveHits 1
+
+/gps/type Volume
+/gps/shape Cylinder
+/gps/radius 0.250 mm
+#/gps/halfz 10.0e-9 m
+/gps/halfz 10.0 nanometer
+/gps/centre 0 0 82.865 mm
+/gps/confine americium_phys
+/gps/particle gamma
+/gps/energytype Mono
+/gps/monoenergy 1.0 keV
+
+/run/beamOn 1
+
+
+
+

@@ -1,0 +1,56 @@
+
+###############################################################################
+#                                                                             #
+# neutron.mac                                                                 #
+# 1 neutron fired in the room                                                 #
+#                                                                             #
+###############################################################################
+
+# output log-file name
+/run/filename n_phantom_100000.log
+
+# verbosities
+/control/verbose 1
+/run/verbose 1
+/tracking/verbose 0
+/hits/verbose 1
+
+# draw flags
+/dmx/draw/drawColours custom
+/dmx/draw/gammaColour green
+/dmx/draw/drawTracks noscint
+/dmx/draw/drawHits 0
+
+# file output
+/dmx/savePmt  0
+/dmx/saveHits 1
+
+# kill gammas in lab wall
+/dmx/KillGammasInConcrete 0
+
+# radioactive decay module
+/grdm/analogueMC 1
+/grdm/verbose 0
+/grdm/allVolumes
+
+# gun: particle
+/dmx/gun/verbose 1
+/dmx/gun/particle neutron
+/dmx/gun/energytype Mono
+/dmx/gun/energy 2.48 MeV
+
+# gun: isotropic
+# /dmx/gun/angtype iso
+
+# OR gun: shoot at detector
+/dmx/gun/angtype direction
+/dmx/gun/direction 0 -1 -0 m
+
+# gun: source
+/dmx/gun/confine NULL
+/dmx/gun/type Volume
+/dmx/gun/shape Sphere
+/dmx/gun/centre 0 2 0.090 m
+/dmx/gun/radius 3 cm
+
+/run/beamOn 1

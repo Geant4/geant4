@@ -1,0 +1,90 @@
+------------------------------Advanced Example---------------------------------					README FILE
+
+
+UNDERGROUND PHYSICS
+
+An example of a underground dark matter example.
+
+Physics included:
+
+
+
+
+Timescale for completion by 30th November:
+TO DO:
+
+Test on multiple platforms SUN platform - so far tested with egcs and g++.
+
+Also add Analysis and possibly
+Digits+Hits
+
+Documentation
+
+Include cavern rock outside of your "wall"
+
+Analysis - will make validation easier
+
+Random engine - from extended example?
+
+Seeds handling
+
+Caveats:
+
+G4NeutronHPNames.cc needs modification/bug-fix - place
+G4NeutronHPNames.cc_required in
+$G4INSTALL/source/processes/hadronic/models/neutron_hp/src
+as G4NeutronHPNames.cc and re-make neutron_hp and then libmap
+
+
+Am241 running:
+G4RadiativeDecayData has to add file z95.a241
+To use it you will have first to make a small change to the file
+G4NucleusLimits.cc in the 
+source/processes/hadronics/model/radiative_decay/src directory. At the
+moment the upper limit for the applicable nucleus is A=240. You need to
+change this to, say, 250 and rebuild the lib.
+
+
+NB:
+If using explicit libraries (?) i.e. non-shared then compilation time with
+neutrons in physics list is very long (>5 minutes) - check this.............
+It is more efficient to use shared libraries that are loaded at run-time with
+increased initialisation time (at run-time).
+
+Also if using shared libraries the load time at run-time may be several minutes
+- this is partially due to the neutron implementation requires full data sets
+for each isotope being specified.
+
+
+--------------------------------------
+
+If running on Redhat 7.0 or above set G4SYSTEM to Linux-g++, alternatively you
+can install backward compatibility to egcs, however, requires
+config/sys/Linux-egcs.gmk to be altered so that CXX is set to kgcc 
+(compared to g++ in original file)
+
+--------------------------------------
+
+Physics checking:
+
+A very easy way to check which processes are assigned to what
+ is to do
+
+   /particle/select e-
+   /particle/process/dump -1
+
+
+ 2. RDM
+
+ apart from the changes to 
+ /processes/hadronic/models/radiative_decay/src/G4NucleusLimits.cc
+
+ we also need to change
+ /hadronic/models/generator/de_excitation/src/G4DiscreteGammaDeexcitation.cc
+ to include Am241 as a discrete deexcitation (change to A,Z limits again)
+ - i.e. change Z>92 to Z>95
+
+committed to CVS 27/11/01
+
+
+
