@@ -225,7 +225,7 @@ class BooleanProcessor {
   vector<int>     internal_contours; // heads of internal contours
 
  private:
-  void   takePolyhedron(const HepPolyhedron & p);
+  void   takePolyhedron(const HepPolyhedron & p, double, double, double);
   double findMinMax();
   void   selectOutsideFaces(int & ifaces, int & iout);
   int    testFaceVsPlane(ExtEdge & edge); 
@@ -304,7 +304,8 @@ inline void ExtFace::invert()
   plane = HepPlane3D(-plane.a(), -plane.b(), -plane.c(), -plane.d());
 }
 
-void BooleanProcessor::takePolyhedron(const HepPolyhedron & p)
+void BooleanProcessor::takePolyhedron(const HepPolyhedron & p,
+	                              double dx, double dy, double dz)
 /***********************************************************************
  *                                                                     *
  * Name: BooleanProcessor::takePolyhedron            Date:    16.12.99 *
@@ -320,8 +321,14 @@ void BooleanProcessor::takePolyhedron(const HepPolyhedron & p)
 
   //   S E T   N O D E S
 
+  HepPoint3D ppp;	
   for (i=1; i <= p.GetNoVertices(); i++) {  
-    nodes.push_back(ExtNode(p.GetVertex(i)));
+//  nodes.push_back(ExtNode(p.GetVertex(i)));
+    ppp = p.GetVertex(i);
+    ppp.setX(ppp.x()+dx);
+    ppp.setY(ppp.y()+dy);
+    ppp.setZ(ppp.z()+dz);
+    nodes.push_back(ExtNode(ppp));
   }
 
   //   S E T   F A C E S
@@ -1699,7 +1706,18 @@ HepPolyhedron BooleanProcessor::execute(int op,
  *                                                                     *
  ***********************************************************************/
 {
-  
+  static int ishift = 0;
+  static double shift[8][3] = {
+    {  31,  23,  17},
+    { -31, -23, -17},
+    { -23,  17,  31},
+    {  23, -17, -31},
+    { -17, -31,  23},
+    {  17,  31, -23},
+    {  31, -23,  17},
+    { -31,  23, -17}
+  }; 	  
+
   //   I N I T I A T E   P R O C E S S O R
 
   operation = op;
@@ -1709,10 +1727,27 @@ HepPolyhedron BooleanProcessor::execute(int op,
 
   //   T A K E   P O L Y H E D R A
 
-  ifaces1 = faces.size(); takePolyhedron(a);
-  ifaces2 = faces.size(); takePolyhedron(b);
+  ifaces1 = faces.size(); takePolyhedron(a,0,0,0);
+  ifaces2 = faces.size(); takePolyhedron(b,0,0,0);
 
   //   S E T   I N I T I A L   M I N - M A X   A N D   T O L E R A N C E
+
+  del = findMinMax();
+
+  //   W O R K   A R O U N D   T O   A V O I D   I E   A N D   E E
+  	
+  double ddxx = del*shift[ishift][0];
+  double ddyy = del*shift[ishift][1];
+  double ddzz = del*shift[ishift][2];
+  ishift++; if (ishift == 8) ishift = 0;
+
+  operation = op;
+  nodes.clear(); nodes.push_back(CRAZY_POINT);
+  edges.clear(); edges.push_back(ExtEdge());
+  faces.clear(); faces.push_back(ExtFace());
+
+  ifaces1 = faces.size(); takePolyhedron(a,0,0,0);
+  ifaces2 = faces.size(); takePolyhedron(b,ddxx,ddyy,ddzz);
 
   del = findMinMax();
 
