@@ -1,0 +1,62 @@
+ 20-Aug-2004 A.R.
+
+ This directory contains a configurable calorimeter setup to be used
+ as statistical acceptance suite of Geant4, that is to validate a
+ new release with respect the previous one (regression test).
+
+ First of all, you need to setup the Geant4 environment variables,
+ and after that you have to source the specific environment variables
+ for this application, as follows:
+            $ . env.sh               in Bash-shell
+            % source env.csh         in c-shell.
+
+ In the main program  * mainStatAccepTest.cc *  you can select 
+ the Physics List (LHEP, QGSP, QGSP_BERT, QGSP_BIC), in the macro
+ command file  * run.g4 *  you can choose which particle to shoot,
+ the beam energy, the number of events, and the kind of calorimeter
+ you are interested in (see that command file to look at the various
+ options available).
+
+ The calorimeter is a box, with the beam along the x-axis, and
+ whose dimensions are the same along y, z (i.e. transverse dimensions
+ with respect the beam), and also equal to the total absorber
+ thickness along the beam (x-) axis. This size (total thickness
+ of the absorber) can be specified either in unit of lambdas of
+ the absorber material, or in normal length in [mm]. 
+ The user has to specified also the thickness (in [mm]) of a
+ single layer of active material, and the number of layers.
+ In the case of an homogeneous calorimeter, for instance PbWO4,
+ the number of layers indicate essentially the number of sampling
+ we can have for the longitudinal shower profile.
+ Finally, the number of bins for the lateral shower profile should
+ also be specified, either in unit of lambda (of the absorber)
+ or in [mm].   
+ Notice that, due to HBOOK limitations, there should be not
+ more than 100 layers for the longitudinal shower profile, 
+ and not more than 30 layers for the lateral shower profile.
+
+ The output of the program is an HBOOK ntuple  * ntuple.hbook *
+ which contains some physics variables, like the total energy 
+ deposit in the active layers, the total deposit in the whole 
+ calorimeter, the energy deposit in each active layer, and the 
+ transverse energy deposition sum over all the active layers, 
+ in a certain number of radial bins.
+
+ The ntuple is then used in the stand-alone (i.e. independent from
+ Geant4) program  pvalue , in the subdirectory dirStat/.
+ This program reads two ntuples, ntuple_a.hbook and ntuple_b.hbook,
+ which can be obtained by running the same simulation program,
+ mainStatAccepTest, and with same configuration, run.g4,
+ for the two versions of Geant4 that we want to compare.
+ The program pvalue make the statitical tests between the
+ various distributions, and signal a  ***WARNING***  when the
+ p-value of that test is below a certain threshold, fixed at 10%.
+ Notice that this does not mean necessarily that the two 
+ distributions are statistically incompatible with each other,
+ because, by definition, 10% of pair of distributions coming
+ from the same parent distributions have a p-value below 10%.
+ However, it is worth to take a look by eye to those distributions
+ to see if there are really so different as could be in the
+ presence of a bug.
+ 
+ 
