@@ -147,10 +147,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 >>> Event 0
+    0 trajectories stored in this event.
      10 hits are stored in ExN03CalorHitsCollection.
    Absorber: total energy: 2.8e+02 MeV       total track length:      16 cm 
         Gap: total energy:     3.7 MeV       total track length:     1.5 cm 
-    0 trajectories stored in this event.
 #
 # list the existing physics processes
      Transportation,                msc,              hIoni,              eIoni
@@ -168,10 +168,10 @@ Cut in energy
  Current couple of seeds = 1081085135, 235076861
 ----------------------------------------
 >>> Event 0
+    0 trajectories stored in this event.
      9 hits are stored in ExN03CalorHitsCollection.
    Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
         Gap: total energy:      20 MeV       total track length:     9.8 cm 
-    0 trajectories stored in this event.
 #
 # switch on MultipleScattering
 #
@@ -197,7 +197,7 @@ Cut in energy
  Current couple of seeds = 1062777741, 543200454
 ----------------------------------------
 >>> Event 0
+    0 trajectories stored in this event.
      30 hits are stored in ExN03CalorHitsCollection.
    Absorber: total energy: 3.9e+02 MeV       total track length:      91 cm 
         Gap: total energy:      81 MeV       total track length:     2.2 m  
-    0 trajectories stored in this event.
