@@ -31,7 +31,7 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
   endif
 
 #
-# Building DLLs (from G.Barrand)
+# Building DLLs (G.Barrand)
 # -------------
 #  The commands below allow to build DLLs from the archive libraries.
 #  From a libG4xxx.a, it will extract the symbols with :
@@ -67,10 +67,15 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     echo "Building lib$(name).exp and lib$(name).lib file ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\
-    lib.exe /nologo /machine:ix86 /def:$(name).def /out:$(G4LIBDIR)/lib$(name).lib;\
+    lib.exe /nologo /machine:ix86 /def:$(name).def \
+            /out:$(G4LIBDIR)/lib$(name).lib;\
     $(RM) $(G4LIBDIR)/$(name).dll;\
     echo "Building $(name).dll file ...";\
-    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a /libpath:$(G4LIBDIR) $(GLOBLIBS) $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB)
+    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+             $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
+             /libpath:$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(INTYLIBS) $(ANALYSISLIBS)
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
@@ -85,9 +90,14 @@ ifeq ($(G4SYSTEM),WIN32-VC7)
     echo "Building lib$(name).exp and lib$(name).lib ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\
-    lib.exe /nologo /machine:ix86 /def:$(name).def /out:$(G4LIBDIR)/lib$(name).lib;\
+    lib.exe /nologo /machine:ix86 /def:$(name).def \
+            /out:$(G4LIBDIR)/lib$(name).lib;\
     $(RM) $(G4LIBDIR)/$(name).dll;\
     echo "Building $(name).dll ...";\
-    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a /libpath:$(G4LIBDIR) $(GLOBLIBS) $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB)
+    link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
+             $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
+             /libpath:$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
+             $(INTYLIBS) $(ANALYSISLIBS)
   endef
 endif
