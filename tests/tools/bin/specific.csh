@@ -519,6 +519,26 @@ if ( `uname -n` == "pc-88172" ) then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
 endif
 
+if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Barrand.local ) then
+  set prompt='g4> ' 
+# Core :
+  setenv MAKECMD make
+  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVS_RSH ssh
+  setenv G4INSTALL /geant4/geant4-05-02-ref-04
+  setenv G4SYSTEM Darwin-g++
+  setenv G4WORKDIR $G4INSTALL
+  setenv G4STTDIR $G4WORKDIR/stt
+  setenv G4LIB $G4WORKDIR/lib
+  setenv G4DEBUG 1
+  setenv CPPVERBOSE 1
+  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.0.0
+  setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
+  setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
+  setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
+  setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
+endif
+
 if ( `uname -n` == "nb-barrand2" ) then
   setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv CVS_RSH ssh
