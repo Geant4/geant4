@@ -1,0 +1,70 @@
+
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+ 
+ null 0 250 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ 
+ 
+ hi/file 1 prec.paw
+ set dmod 3
+ hi/pl 28 shist
+ line 100 1.6 110 1.6
+ itx 115 35 'PREC'
+ close 1
+ 
+ 
+ hi/file 1 kin.paw
+ set dmod 1
+ hi/pl 28 shist
+ line 100 1.2 110 1.2
+ itx 115 15 'KIN'
+ close 1
+ 
+ve/create X(28) R 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295
+ve/create Y(28) R 0.465 0.402 0.356 0.329 0.315 0.309 0.304 0.289 0.276 0.274 0.293 0.317 0.357 0.41 0.488 0.596 0.793 1.087 1.462 1.346 0.39 0.0589 0.0193 0.0176 0.0176 0.0135 0.00022 0.000002
+gr/h/symb X Y 28 21 0.2
+ 
+   ve/create X1(41) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 25 35 45 55 65 75   85 95 105 115 125 135 145 155 165 175 185 195 205 225 245 265
+ve/create Y1(41) R 4.03 4.2 3.07 2.52 2.02 1.53 1.3 1.1 0.97 0.79 0.74 0.72 0.63 0.6 0.54 0.57 0.53 0.53 0.45 0.36 0.32 0.33 0.3 0.28 0.31  0.29 0.28 0.3 0.28 0.28 0.29 0.32 0.34 0.36 0.44 0.55 0.73 1.09 1.13 0.15 0.0014
+gr/h/symb X1 Y1 38 25 0.2
+
+ exe ../prf n_a0 eps
+
+  null 0 250 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ 
+ gr/h/symb X Y 28 21 0.2
+gr/h/symb X1 Y1 38 25 0.2
+
+  hi/file 1 par.paw
+ set dmod 3
+ hi/pl 28 shist
+* itx 20 200 'proton 256 MeV on Al secondary neutrons at theta=7.5'
+ line 100 1.8 110 1.8
+ itx 115 60 'LEPAR'
+ close 1
+ 
+  hi/file 1 chips.paw
+ set dmod 1
+ hi/pl 28 shist
+ line 100 1.4 110 1.4
+ itx 115 22 'CHIPS'
+ close 1
+
+ 
+ opt liny
+
+exe ../prf nk_a0 eps
+
+
+

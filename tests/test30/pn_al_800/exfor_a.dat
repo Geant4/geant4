@@ -1,0 +1,519 @@
+ENTRY            O0276     971021
+SUBENT        O0276001     971021
+BIB                 16        137
+TITLE      Cross Sections For the Production of Residual Nuclides
+           By Low- And Medium-Energy Protons from the Target
+           Elements C, N, O, Mg, Al, Si, Ca, Ti, V, Mn, Fe, Co,
+           Ni, Cu, Sr, Y, Zr, Nb, Ba and Au.
+AUTHOR     (R.MICHEL, R.BODEMANN, H.BUSEMANN, R.DAUNKE, M.GLORIS,
+           H.-J.LANGE, B.KLUG, A.KRINS, I.LEYA, M.LUEPKE,
+           S.NEUMANN, H.REINHARDT, M.SCHNATZ-BUETTGEN,
+           U.HERPERS, TH.SCHIEKEL, F.SUDBROCK, B.HOLMQVIST,
+           H.CONDE, P.MALMBORG, M.SUTER, B.DITTRICH-HANNEN,
+           P.-W.KUBIK, H.-A.SINAL,D.FILGES)
+INSTITUTE  (2GERKLN) University of Cologne.
+           (2GERUH)  University of Hannover.
+           (2SWTETH) Institut  of Particle Physics and Paul
+           Scherrer Institute.
+           (2SWDUPP) University of Uppsala.
+           (2GERJUL) Kfa Julich.
+REFERENCE  (J,NIM/B,129,153,97) Final Publication.
+           (W,MICHEL,96) To be Submitted in Nim/B.
+REL-REF    (N,O0281001,B.DITTRICH+,J,NIM/B,52,588,90) Chemical
+           Separation Method.
+           (N,O0282001,R.BODEMANN+,J,NIM/B,82,9,93) The Stacks
+           Constraction Details.
+           (N,,W.WESTMEIER,J,NIM,180,205,81) Method to Analyse
+           Gamma Spectra.
+           (N,,W.WESTMEYER,J,NIM/A,242,437,86) Method to Analyse
+           Gamma Spectra.
+SAMPLE     The Targets in the Stacks were Pure Element Foils
+           Besides Nitrogen, Oxygen, Calcium, Manganese,
+           Strontium and Barium. Composition Materials For these
+           Elements will be Described in Suitable Subentries.
+           Mostly, at Least Three Foils of Each Element were
+           Irradiated Together in Order to Compensate For Reciol
+           Losses and to Avoid Cross Contamination by Analyzing
+           Only the Inner One were Used For Measurements.
+           Exceptions were the Elements Ca, Sr and Ba, For Which
+           Only One Foil, Each, was Used.
+           All Elemental Target Sets were Separated by Sets of
+           Three Thin Al-Foils (0.035 MM) And Cu-Foils (0.050MM)
+           In Order to Minimize Cross Contamination. In Addition,
+           The Inner Ones of the Three Thin Al and Cu Foils
+           Between the Different Target Elements were Used For
+           Flux Monitoring.
+HISTORY    (960816C)  By CAJAD.
+           (961223A)  Sample is Corrected.
+           (971020A)  Final Reference is Added. Some Reactions are
+           Corrected Too.
+           (971021U) Last checking has been done.
+MONITOR   1(13-AL-27(P,3N+3P)11-NA-22,CUM/UND,SIG,,,EVAL)
+          2(29-CU-0(P,X)30-ZN-65,IND,SIG,,,EXP) For E<45 MeV
+MONIT-REF 1(,J.TOBAILLEM+,R,CEA-N-1466,81) For E>200 MeV
+          1(A0497001,G.F.STEYN+,J,ARI,41,315,90) For E<200 MeV.
+          2(A0507001,S.J.MILLS+,J,ARI,43,1019,92) For E<45 MeV
+FACILITY   (ISOCY,2SWDUPP)  70 MeV200 MeV
+           (CYCLO,2SWTPSI)  E<72 MeV
+           (VDG,2SWTETH) For Ams Method.
+METHOD     (STTA)
+           (EXTB)
+           (EDEG) For E<180 MeV
+           After Finishing the Irradiations of a Set of Typically
+           5 Stacks, the Irradiated Targets were Transported to
+           Cologhe Ad Hannover Within 12 Hours and 24 Hours,
+           Respectivilly. Repeated Measurements During One Year
+           Allowed to Get a Minimum 3 Spectra For All Isotopes
+           Investigated. Often Up to 15 Spectra were Available For
+           The Evaluation.
+           Commerial Available Code (GAMA-V) Ver 15.03 was Used
+           For Unfolding of Complex Gamma Spectra.
+           For Villigen Measurements Only:
+           After the End of Irradiation, First Measurements of
+           Short-Lived Nuclides were Performed at Villigen.
+ADD-RES    (COMP) Hybrid Model of Preequilibrium Reaction in Form
+           Of the Arel Code, Which Ia a Relativistic Version of
+           The Alice Livermore Code. Intranuclear Cascade
+           Evaporation (INC/E) Model was Used in Form of the
+           Het/Kfa2 Code.
+           2.Quantification of the Agreement Between Experiment
+           And Theory.
+           3.Predictive Capabilities of the Arel and Het/Kfa2
+           Codes have Been Studied.
+           4.Modelling Production Cross Sections by the Arel and
+           Het/Kfa2 Codes.
+STATUS     (TABLE) From R.Michel.
+COMMENT    -By Authors-
+           1. Data Tables of this Work Contain the Data For Equal
+           Energies.  These Measurments are Independent.
+           2. This is First Publication of this Group Where New
+           Monitor Data have Been Used.
+CORRECTION Needed Correction For Interference by Reactions of
+           Secondary Particles is Included.
+           Correction on Self-Absorption of Gamma-Rays in the
+           Sample is Included Too.
+ERR-ANALYS (ERR-1) Uncertainty in the Determination of the Number
+           Of Target Atoms.
+           (ERR-2)  Overall Error Due to Fluctuation in Beam
+           Intensity Duing to Irradiation.
+           (ERR-3) Upper Limit of Uncertainty of the
+           Measurement of the Monitoring Radionuclide.
+           (ERR-4) Upper Limit For the Error of Absolute
+           Efficiency Calibration of Gamma-Rays Spectrometer.
+           (ERR-5) Upper Limit For the Error of Relative
+           Efficiency Calibraton of Gamma-Rays Spectrometer.
+           (ERR-6) Upper Limit of the Uncertaity Due to
+           Gamma-Gamma Coincidences.
+           (EN-ERR).  Beam Energy Uncertainty Takes in Account the
+           Finite Thickness of the Foils As  Well  As  the  Energy
+           Straggling  For  Last  Target  of Experiment at Uppsala
+           Beam Energy at this Target was 58 +-1.5 MeV.   This  is
+           Upper Limit For Experiments with Stacks.
+           8. Error of Monitor Cross Section was not Considered.
+           9. Reproducibility of Photopeak Integration - Up to 15
+           Measurements were Used For the Determination of Each
+           Nuclide, Thus Allowing to Properly Account For this
+           Source of Error.
+           10. Dead Time and Pile Up Losses in Gamma-Spectrometry-
+           By Varying the Distance Between Sources and Detector,
+           Dead Time was Always Kept Below 10%, Where the
+           Automatic Dead Time Correction O the Measuring Devices
+           Can be Assumed to be Correct.
+           11. Statistical Counting Error. This Source of
+           Uncertainty is Included by Calculating the Errors of
+           Individual Photopeaks. The Error of Background
+           Subtraction was Taken Into Account.
+           ------------------------------------------------------
+           All these Error were Quadratically Added to Obtain
+           Absolute Errors of the Cross Sections. However, Some of
+           The Sources of Errors are General Ones Affecting All
+           Data of this Experiment in the Same Way, While Others
+           Individually Affect Each Reaction. The General Errors
+           Sum Up Quadratically to About 6% and have to be
+           Quadratically Subtracted When Discussing Ratios of
+           Gross Sections from this Work.
+           ------------------------------------------------------
+           (ERR-T) These Uncertainties are Absolute Ones and
+           Consider  All Sources of Errors Affecting the
+           Determination of Cross Sections.
+ENDBIB             137
+COMMON               6          3
+ERR-1      ERR-2      ERR-3      ERR-4      ERR-5      ERR-6
+PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT   PER-CENT
+         2.         2.         1.         5.         2.         1.
+ENDCOMMON            3
+ENDSUBENT          144
+------------------------------------------------------------------------
+SUBENT        O0276009     971021
+BIB                  6          8
+REACTION   (13-AL-27(P,X)4-BE-7,,SIG,,,EXP) Independent
+METHOD     (ACTIV) 
+COMMENT VI: BE production cross section as a function of energy
+           (GSPEC)
+ANALYSIS   (AREA)
+RAD-DET    (4-BE-7,DG)
+DECAY-DATA (4-BE-7,53.29D,DG,477.6,0.104)
+DETECTOR   (GELI).
+           (HPGE)
+ENDBIB               8
+NOCOMMON
+DATA                 4        162
+EN         EN-ERR     DATA       ERR-T
+MEV        MEV        MB         MB
+  0.239E+02      0.845  0.448E-02  0.183E-02
+  0.266E+02      0.793   0.14E-01  0.381E-02
+  0.291E+02      0.763  0.387E-01   0.56E-02
+  0.296E+02      0.571  0.168E-01  0.853E-02
+  0.314E+02      0.752  0.735E-01  0.105E-01
+  0.332E+02      0.717  0.792E-01  0.328E-01
+  0.336E+02      0.936  0.808E-01  0.766E-02
+  0.339E+02      0.505   0.81E-01  0.166E-01
+  0.357E+02       0.69      0.163  0.349E-01
+  0.364E+02      0.922       0.13  0.103E-01
+  0.378E+02      0.898      0.163   0.17E-01
+  0.379E+02      0.441      0.145  0.234E-01
+  0.384E+02      0.896      0.161  0.137E-01
+  0.385E+02  0.126E+01      0.144  0.224E-01
+  0.386E+02      0.921      0.164  0.141E-01
+   0.39E+02      0.927       0.22  0.435E-01
+  0.394E+02      0.894      0.148  0.114E-01
+  0.397E+02      0.645      0.209  0.255E-01
+  0.407E+02      0.892      0.187  0.263E-01
+  0.415E+02        0.4       0.18   0.33E-01
+  0.415E+02      0.367      0.186  0.256E-01
+  0.415E+02      0.612      0.211  0.289E-01
+  0.433E+02      0.586      0.272  0.499E-01
+  0.436E+02        0.9       0.29   0.22E-01
+  0.436E+02      0.864      0.303   0.16E-01
+  0.437E+02      0.572       0.23  0.607E-01
+   0.44E+02      0.568      0.275  0.662E-01
+  0.446E+02      0.857      0.318  0.558E-01
+  0.449E+02        0.3       0.25    0.4E-01
+  0.449E+02      0.264      0.265  0.349E-01
+  0.463E+02      0.843      0.306  0.252E-01
+  0.479E+02        0.8       0.33   0.54E-01
+  0.479E+02      0.805      0.344  0.501E-01
+   0.48E+02      0.828      0.337  0.292E-01
+  0.496E+02      0.813      0.363  0.405E-01
+  0.512E+02      0.797      0.414   0.41E-01
+  0.518E+02        0.8        0.4   0.24E-01
+  0.518E+02      0.752      0.421  0.222E-01
+  0.527E+02      0.783      0.409  0.447E-01
+  0.531E+02  0.116E+01      0.419  0.483E-01
+  0.532E+02      0.767      0.431  0.276E-01
+  0.542E+02      0.769      0.424  0.456E-01
+  0.547E+02      0.752      0.453  0.268E-01
+  0.553E+02        0.7       0.44   0.54E-01
+  0.553E+02      0.752       0.44  0.255E-01
+  0.553E+02      0.699      0.471  0.498E-01
+  0.557E+02      0.753      0.462    0.3E-01
+  0.557E+02      0.752      0.475  0.258E-01
+  0.562E+02  0.115E+01      0.467  0.406E-01
+  0.567E+02  0.115E+01      0.475  0.441E-01
+  0.572E+02      0.738      0.487   0.47E-01
+  0.581E+02      0.721      0.481  0.278E-01
+  0.583E+02      0.734      0.512  0.272E-01
+  0.587E+02        0.6       0.51    0.3E-01
+  0.587E+02      0.649      0.539  0.274E-01
+  0.602E+02      0.705      0.536  0.456E-01
+  0.616E+02      0.689      0.532   0.49E-01
+  0.619E+02        0.6       0.59   0.54E-01
+  0.619E+02      0.593      0.605  0.504E-01
+  0.629E+02      0.674      0.566  0.434E-01
+  0.643E+02      0.658      0.617  0.476E-01
+  0.649E+02        0.5       0.58   0.37E-01
+  0.649E+02      0.532      0.614  0.326E-01
+  0.656E+02       0.64      0.635  0.341E-01
+  0.669E+02      0.622      0.649  0.336E-01
+  0.679E+02        0.5       0.64   0.58E-01
+  0.679E+02       0.46      0.668   0.54E-01
+  0.682E+02      0.603      0.668  0.345E-01
+  0.682E+02      0.598      0.654  0.368E-01
+  0.683E+02      0.598      0.652  0.387E-01
+  0.694E+02      0.583      0.694  0.361E-01
+  0.708E+02        0.4       0.68   0.44E-01
+  0.708E+02      0.555      0.676  0.355E-01
+  0.708E+02      0.556      0.718  0.381E-01
+  0.708E+02      0.556      0.713  0.374E-01
+  0.708E+02      0.359      0.717  0.366E-01
+  0.708E+02  0.103E+01      0.684  0.556E-01
+  0.708E+02  0.103E+01      0.643  0.535E-01
+  0.708E+02  0.103E+01      0.645  0.568E-01
+  0.708E+02  0.103E+01      0.647  0.499E-01
+  0.709E+02      0.555      0.702  0.377E-01
+  0.117E+03   0.14E+01  0.111E+01       0.13
+  0.117E+03   0.14E+01  0.108E+01      0.107
+  0.128E+03   0.13E+01  0.122E+01       0.13
+  0.128E+03  0.132E+01  0.116E+01      0.106
+  0.139E+03   0.12E+01  0.123E+01       0.12
+  0.139E+03  0.124E+01  0.123E+01      0.101
+  0.151E+03   0.11E+01  0.131E+01       0.12
+  0.151E+03  0.114E+01  0.116E+01      0.104
+  0.162E+03    0.1E+01  0.136E+01       0.13
+  0.162E+03  0.102E+01  0.134E+01      0.106
+  0.256E+03   0.13E+01  0.182E+01       0.12
+  0.298E+03        0.6  0.257E+01       0.43
+  0.362E+03   0.13E+01  0.286E+01        0.2
+  0.553E+03  0.149E+01  0.446E+01      0.359
+  0.554E+03  0.147E+01  0.478E+01      0.366
+  0.556E+03  0.144E+01  0.454E+01      0.369
+  0.557E+03  0.142E+01  0.501E+01      0.408
+  0.559E+03   0.14E+01  0.459E+01      0.351
+   0.56E+03  0.138E+01  0.482E+01      0.396
+  0.561E+03  0.135E+01  0.482E+01      0.362
+  0.562E+03  0.135E+01  0.471E+01      0.346
+  0.563E+03  0.134E+01  0.475E+01      0.352
+  0.563E+03  0.133E+01  0.459E+01      0.342
+  0.565E+03   0.13E+01  0.478E+01       0.35
+  0.567E+03  0.126E+01  0.459E+01      0.343
+  0.568E+03  0.125E+01  0.465E+01      0.344
+  0.569E+03  0.123E+01  0.475E+01      0.351
+  0.569E+03  0.124E+01  0.476E+01      0.348
+  0.571E+03  0.121E+01    0.5E+01      0.381
+  0.572E+03  0.119E+01  0.464E+01      0.344
+  0.573E+03  0.117E+01  0.456E+01       0.33
+  0.575E+03  0.113E+01  0.472E+01      0.343
+  0.575E+03  0.113E+01  0.474E+01      0.346
+  0.575E+03  0.113E+01  0.478E+01      0.347
+  0.577E+03   0.11E+01  0.456E+01      0.333
+  0.578E+03  0.107E+01  0.476E+01      0.347
+   0.58E+03  0.104E+01  0.478E+01      0.349
+  0.581E+03  0.102E+01  0.476E+01      0.346
+  0.584E+03      0.965  0.473E+01      0.338
+  0.586E+03      0.925  0.484E+01      0.349
+  0.587E+03      0.887  0.474E+01      0.342
+  0.587E+03        0.9   0.47E+01      0.339
+   0.59E+03      0.824  0.491E+01      0.352
+  0.593E+03      0.759   0.49E+01       0.35
+  0.596E+03       0.65  0.499E+01      0.354
+  0.598E+03      0.583  0.504E+01      0.365
+  0.598E+03      0.596  0.505E+01      0.372
+    0.6E+03      0.524  0.502E+01      0.355
+  0.758E+03  0.146E+01  0.603E+01      0.467
+   0.76E+03  0.144E+01  0.628E+01      0.475
+  0.761E+03  0.142E+01    0.6E+01       0.45
+  0.762E+03   0.14E+01  0.592E+01      0.437
+  0.763E+03  0.138E+01  0.611E+01      0.453
+  0.764E+03  0.136E+01  0.627E+01      0.456
+  0.766E+03  0.133E+01  0.625E+01      0.452
+  0.766E+03  0.134E+01  0.607E+01      0.449
+  0.768E+03   0.13E+01  0.614E+01      0.445
+   0.77E+03  0.126E+01  0.635E+01      0.456
+  0.771E+03  0.125E+01  0.615E+01      0.445
+  0.772E+03  0.123E+01  0.634E+01      0.455
+  0.772E+03  0.124E+01  0.618E+01      0.471
+  0.773E+03  0.121E+01  0.637E+01      0.459
+  0.774E+03  0.119E+01  0.617E+01       0.44
+  0.775E+03  0.117E+01  0.632E+01      0.457
+  0.777E+03  0.113E+01  0.633E+01      0.469
+  0.777E+03  0.113E+01  0.625E+01      0.474
+  0.777E+03  0.113E+01  0.626E+01      0.449
+  0.779E+03   0.11E+01  0.613E+01      0.439
+   0.78E+03  0.107E+01  0.623E+01       0.45
+  0.782E+03  0.102E+01  0.632E+01      0.455
+  0.782E+03  0.104E+01  0.643E+01      0.462
+  0.785E+03      0.963  0.626E+01      0.449
+  0.787E+03      0.924  0.642E+01      0.461
+  0.788E+03      0.884  0.628E+01       0.45
+  0.788E+03      0.897  0.631E+01      0.453
+  0.791E+03      0.822  0.643E+01      0.461
+  0.793E+03      0.758  0.642E+01      0.459
+  0.796E+03      0.649  0.629E+01      0.451
+  0.798E+03      0.582  0.633E+01      0.457
+  0.798E+03      0.594  0.659E+01      0.474
+    0.8E+03      0.523  0.644E+01      0.457
+ENDDATA            164
+ENDSUBENT          177
+
+ENTRY            O0103          0
+SUBENT        O0103001          0
+BIB                 15         45
+TITLE      PRODUCTION OF HELIUM BY MEDIUM ENERGY (600 AND 800
+           MEV) PROTONS.
+AUTHOR     (S.L.GREEN,W.V.GREEN,F.H.HEGEDUS,M.VICTORIA,
+           W.F.SOMMER,B.M.OLIVER)
+INSTITUTE  (2SWTPSI)
+           (1USALAS)
+           (1USAAI)
+REFERENCE  (J,JNM,155/157,1350,88)
+HISTORY    (950425C)
+           (950905U). LAST CHECKING HAS BEEN DONE.
+SAMPLE     METALS OF FE, CU, MO AND W, AS WELL AS, ADDITIONAL
+           METALS OF GENERAL INTEREST: AL, AU AND NI WERE USED.
+           THE SIZE OF THE HELIUM ACCUMULATION SAMPLES (3 MM
+           DIAMETER BY 0.1 MM THICKNESS).
+           THE SAMPLES THAT WERE ANALYZED FOR HELIUM CONTENT, WERE
+           SANDWICHED BETWEEN THICK SAMPLES OF THE SAME MATERIAL
+           TO ELIMINATE ANY SURFACE EFFECTS DUE TO RECOIL ESCAPE
+           OF ALPHA PARTICLES AND HE-3 ATOMS.
+ADD-RES    (COMP).THE RUTHERFORD VERSION OF THE HIGH ENERGY
+           NUCLEON-MESON TRANSPORT CODE (HETC).
+           SUMMARY OF MEDIUM ENERGY PROTONS IRRADIATIONS DAMAGE
+           PARAMETERS.
+MONITOR    ((MONIT)13-AL-27(P,X)11-NA-22,,SIG,,,EXP)
+           THE  ALUMINUM DOSIMETER FOILS WERE PLACED IN CONTACT
+           WITH THE TEST MATERIALS SO THAT THE PROTON FLUENCES
+           WOULD BE THE SAME.
+MONIT-REF  (,H.R.HEYDEGGER+,J,PR/C,14,1506,76)
+           (,A.GRUTTER,J,ARI,33,725,82)
+DETECTOR   (GELI)  FOR BEAM FLUENCE MEASURMENTS.
+           (MAGSP). FOR 3-HE AND 4-HE CONTENTS.
+FACILITY   (LINAC,1USALAS). LAMPF A-6 PROTON TARGET STATION.
+           A BEAM OF LARGE DIAMETER, ABOUT 50 MM, COMPARED TO  THE
+           SIZE OF THE HE ACCUMULATION SAMPLES SO THAT ANY SPATIAL
+           VARIATION OF PROTON FLUENCE WITHIN THE SAMPLES WOULD BE
+           INSIGNFICANT.
+           (SPECM,1USAAI)
+METHOD     (ASEP,EXTB)
+ERR-ANALYS ANY INFORMATION IS ABSENT.
+CRITIQUE   1. ANY INFORMATION FOR EXPERIMENTAL ACCURACY IS ABSENT.
+           2. THE PRODUCTION OF HELIUM-3 DUE TO RADIOACTIVE DECAY
+           OF TRITIUM IS NOT DISCUSSED. THIS PRODUCTION IS
+           POSSIBLE AND TRITIUM PRODUCTION INFLUENCE DEPENDS FROM
+           TIME INTERVAL FROM PROTON IRRADIATION AND HELIUM
+           CONTENT MEASURMENT.
+STATUS     (TABLE)
+ENDBIB              45          0
+COMMON               1          3
+MONIT
+MB
+        14.
+ENDCOMMON            3          0
+ENDSUBENT           52          0
+------------------------------------------------------------------------
+SUBENT        O0103002     950425
+BIB                  2          3
+REACTION  1(13-AL-27(P,X)2-HE-3,,SIG,,,EXP)
+          2(13-AL-27(P,X)2-HE-3,,SIG,,,CALC)
+PART-DET   (HE3)
+ENDBIB               3          0
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA      1DATA      2
+MEV        MB         MB
+       750.        33.        45.
+ENDDATA              3          0
+ENDSUBENT           11          0
+
+REACTION  1(13-AL-27(P,X)2-HE-4,IND,SIG,,,EXP)
+          2(13-AL-27(P,X)2-HE-4,IND,SIG,,,CALC)
+PART-DET   (A)
+ENDBIB               3          0
+NOCOMMON             0          0
+DATA                 3          1
+EN         DATA      1DATA      2
+MEV        MB         MB
+       750.       295.       390.
+ENDDATA              3          0
+ENDSUBENT           11          0
+
+ENTRY            C0454          0
+SUBENT        C0454001          0
+BIB                  9         20
+INSTITUTE  (1USALAS,2AUSIRK,2AUSPVI,2JPNJAE)
+REFERENCE  (J,PR/C,55,2458,9705)
+AUTHOR     (H.VONACH,A.PAVLIK,A.WALLNER,M.DROSG,R.C.HAIGHT,
+           D.M.DRAKE,S.CHIBA)
+TITLE      Spallation reactions in 27Al and 56Fe induced by 800
+            MeV protons
+FACILITY   WNR facility at Los Alamos National Laboratory
+CORRECTION Corrected for background.
+ERR-ANALYS (DATA-ERR) Uncertainty given is summation in quadrature
+            of contributions from the following:
+           . statistical uncertainty,
+           . error in reference cross section,
+           . uncertainty of efficiency ratio (3%),
+           . possible difference in angular distribution of
+             transitions between nuclide and standard (3%),
+           . possible differences in the fraction decaying from
+             2+ state to g.s. between nuclide and standard (5%).
+STATUS     Data taken from article
+           No reply to author proof, 97/10/30.
+HISTORY    (970710C)
+ENDBIB              20          0
+COMMON               1          3
+EN
+MEV
+800.
+ENDCOMMON            3          0
+ENDSUBENT           27          0
+------------------------------------------------------------------------
+SUBENT        C0454002     970724
+BIB                  5         19
+REACTION   (13-AL-27(P,X)ELEM/MASS,,SIG)
+SAMPLE     Aluminum taget, areal thickness 6.82+-0.27 mg/cm2,
+            backed by be stopping foils.
+METHOD     (ACTIV)
+DETECTOR   (HPGE) High-purity Ge detector at IRK, Vienna.
+           Efficiency of Ge detector calibrated to better than 2%.
+DECAY-DATA ((1.)14-SI-26,2.21SEC,DG,228.,1.0)
+           ((2.)11-NA-25,60.0SEC,DG,389.,0.128)
+           ((3.)11-NA-24,15.024HR,DG,1368.,1.0)
+           ((4.)11-NA-22,2.60YR,DG,1274.,1.0)
+           ((5.)10-NE-23,37.6SEC,DG,439.,0.33)
+           ((6.)10-NE-18,1.67SEC,DG,1041.,0.079)
+           ((7.)9-F-23,2.2SEC,DG,1701.,0.48)
+           ((8.)9-F-22,4.23SEC,DG,1275.,1.0)
+           ((9.)9-F-21,4.32SEC,DG,350.,0.706)
+           ((10.)9-F-20,11.0SEC,DG,1634.,1.0)
+           ((11.)8-O-20,13.5SEC,DG,1057.,1.0)
+           ((12.)8-O-19,26.9SEC,DG,1357.,0.558)
+           ((13.)8-O-14,70.6SEC,DG,2313.,0.994)
+ENDBIB              19          0
+NOCOMMON             0          0
+DATA                 6         13
+ELEMENT    MASS       DATA       DATA-ERR   DATA-MAX   DECAY-FLAG
+NO-DIM     NO-DIM     MB         MB         MB         NO-DIM
+ 14.        26.                                0.03     1.
+ 11.        25.         2.7        0.3                  2.
+ 11.        24.        10.55       0.6                  3.
+ 11.        22.        14.2        0.47                 4.
+ 10.        23.         1.86       0.41                 5.
+ 10.        18.                                1.7      6.
+  9.        23.                                0.05     7.
+  9.        22.         0.16       0.07                 8.
+  9.        21.         1.89       0.15                 9.
+  9.        20.         5.59       0.34                10.
+  8.        20.         0.11       0.07                11.
+  8.        19.         0.43       0.12                12.
+  8.        14.                                0.11    13.
+ENDDATA             15          0
+ENDSUBENT           39          0
+------------------------------------------------------------------------
+SUBENT        C0454004     970724
+BIB                  7         14
+REACTION   (13-AL-27(P,X)ELEM/MASS,,SIG)
+SAMPLE     Aluminum taget, areal thickness 6.82+-0.27 mg/cm2,
+            backed by be stopping foils.
+METHOD     Derived from prompt 2+(T=1) to g.s. gamma transitions.
+DETECTOR   (HPGE) High-purity Ge detector.
+           Efficiency of Ge detector measured  over the range
+            0.12-3.5 MeV to about 3% using 152mEu and 56Co
+            calibrated sources.
+MONITOR    (13-AL-27(N,X)10-NE-22,,SIG)
+            Average of values of Webber, et al. (14.9+-0.78 mb),
+            and Michel, et al. (13.8+-0.88 mb.
+MONIT-REF  (,WEBER+,J,PR/C,41,547,90)
+           (,MICHEL+,J,NIM/B,103,183,95)
+MISC-COL   (MISC) Energy of gamma detected
+ENDBIB              14          0
+COMMON               2          3
+MONIT      MONIT-ERR
+MB         MB
+44.2        2.7
+ENDCOMMON            3          0
+DATA                 6          7
+ELEMENT    MASS       DATA       DATA-ERR   DATA-MAX   MISC
+NO-DIM     NO-DIM     MB         MB         MB         KEV
+ 12.        26.        38.04       3.0                 1808.7
+ 12.        24.        29.0        2.3                 1368.6
+ 12.        22.                               0.5      1247.
+ 10.        20.         9.87       0.8                 1633.8
+ 10.        18.                               0.05     1887.3
+  8.        20.                               0.20     1673.7
+  8.        18.         3.75       0.38                1982.2
+ENDDATA              9          0
+ENDSUBENT           32          0
+
+
+
