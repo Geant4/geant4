@@ -82,7 +82,7 @@
 #include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
-#include "G4HadronKineticModel.hh"
+#include "G4BinaryCascade.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -209,7 +209,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
 		
   } else if(gen_name == "kinetic") {
-    G4HadronKineticModel* hkm = new G4HadronKineticModel();
+    G4BinaryCascade* hkm = new G4BinaryCascade();
     G4ExcitationHandler* excite = new G4ExcitationHandler();
     G4VPreCompoundModel* precompound = new G4PreCompoundModel(excite);
     hkm->SetDeExcitation(precompound);
