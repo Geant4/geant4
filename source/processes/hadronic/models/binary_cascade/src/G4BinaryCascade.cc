@@ -845,13 +845,13 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   }
 
 // debug block
-//  #ifdef debug_1_BinaryCascade
+  #ifdef debug_1_BinaryCascade
      G4KineticTrackVector debug1;
      debug1.push_back(collision->GetPrimary());
      PrintKTVector(&debug1,std::string(" Primary particle"));
      PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
   PrintKTVector(products,std::string(" Scatterer products"));
-//  #endif
+  #endif
 
   G4int finalBaryon(0);
   G4int finalCharge(0);
@@ -1577,8 +1577,8 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
 {
    G4KineticTrackVector * kt_fail(0);
    std::vector<G4KineticTrack *>::iterator iter;
-  G4cout << "CorrectBarionsOnBoundary,currentZ,currentA," 
-         << currentZ << " "<< currentA << G4endl;
+//  G4cout << "CorrectBarionsOnBoundary,currentZ,currentA," 
+//         << currentZ << " "<< currentA << G4endl;
   if (in->size())
   {
      G4int secondaryBarions_in(0);
@@ -1600,8 +1600,8 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      currentZ += secondaryCharge_in;
      currentA += secondaryBarions_in;
      
-  G4cout << "CorrectBarionsOnBoundary,secondaryCharge_in, secondaryBarions_in"
-         <<    secondaryCharge_in << " "<<  secondaryBarions_in << G4endl;
+//  G4cout << "CorrectBarionsOnBoundary,secondaryCharge_in, secondaryBarions_in"
+//         <<    secondaryCharge_in << " "<<  secondaryBarions_in << G4endl;
      
      G4double mass_final= G4ParticleTable::GetParticleTable()->GetIonTable()->
 		      GetIonMass(currentZ,currentA);
@@ -1664,8 +1664,8 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      currentA -=secondaryBarions_out;
      currentZ -=secondaryCharge_out;
 
-  G4cout << "CorrectBarionsOnBoundary,secondaryCharge_out, secondaryBarions_out"
-         <<    secondaryCharge_out << " "<<  secondaryBarions_out << G4endl;
+//  G4cout << "CorrectBarionsOnBoundary,secondaryCharge_out, secondaryBarions_out"
+//         <<    secondaryCharge_out << " "<<  secondaryBarions_out << G4endl;
 
      if (currentA < 0 || currentZ < 0 ) 
      {   
@@ -2073,10 +2073,11 @@ void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, std::string comm
     G4cout << "  track n. " << count << ", id: " << kt << G4endl;
     G4ThreeVector pos = kt->GetPosition();
     G4LorentzVector mom = kt->Get4Momentum();
+    G4LorentzVector tmom = kt->GetTrackingMomentum();
     G4ParticleDefinition * definition = kt->GetDefinition();
     G4cout << "    definition: " << definition->GetPDGEncoding() << " pos: "
 	   << 1/fermi*pos << " R: " << 1/fermi*pos.mag() << " 4mom: "
-	   << 1/MeV*mom << " P: " << 1/MeV*mom.vect().mag() 
+	   << 1/MeV*mom <<"Tr_mom" <<  1/MeV*tmom << " P: " << 1/MeV*mom.vect().mag() 
 	   << " M: " << 1/MeV*mom.mag() << G4endl;
     G4cout <<"trackstatus: "<<kt->GetState()<<G4endl;
   }
