@@ -16,9 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-24.11.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-01
+01.12.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-02
              Migrated to cmath
              Solved some solid conficts
+
+24.11.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-01
+             Failed cvs submission
 
 10.08.2004 - Henrique Araujo, tag cosmicray_charging-V06-02-00
              Removed call by pointer of hadronics classes
