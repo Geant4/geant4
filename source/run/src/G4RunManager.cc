@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.68 2003-04-03 17:47:53 asaim Exp $
+// $Id: G4RunManager.cc,v 1.69 2003-04-03 18:43:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,7 +175,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   if(cond)
   {
     RunInitialization();
-    DoEventLoop(n_event,macroFile,n_select);
+    if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
   }
 }

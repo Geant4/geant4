@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.16 2003-03-11 06:53:07 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.17 2003-04-03 18:43:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -65,7 +65,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
   p1->SetDefaultValue(1);
-  p1->SetParameterRange("numberOfEvent > 0");
+  p1->SetParameterRange("numberOfEvent >= 0");
   beamOnCmd->SetParameter(p1);
   G4UIparameter* p2 = new G4UIparameter("macroFile",'s',true);
   p2->SetDefaultValue("***NULL***");
