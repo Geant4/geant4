@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2000-02-02 08:19:20 barrand Exp $
+$Id: History,v 1.63 2000-02-23 16:03:45 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,26 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+23rd February 2000  John Allison
+- Added G4RayTracerSceneHandler and Viewer.
+- Some modifications to other RayTracer routines for vis compliance.
+- (Note: headAngle still not right - ray traced views are sometimes tipped.)
+
+23rd February 2000  John Allison  vis-V01-00-05
+- Includes raytracer-V01-00-01a which is original version plus fixes for
+  ISO compliance.
+
+21st February 2000  John Allison
+- G4VViewer: introduced data member fShortName.
+- Added G4RTSteppingAction and G4RayTrajectory to list of G4VisManager's
+  friends.
+- Improved G4VisManager::CreateSceneHandler() and CreateViewer() and
+  handling of error in G4VisCommandSceneHandler::Create() and
+  G4VisCommandViewer::Create().
+- OpenGL: char* becomes const char*.  Small output text improvement.
+- test: some changes for Ray Tracer.  Boolean intersection instead of union.
+
 02 February 2000  Guy Barrand
 - OPACS/src/G4XoViewer.cc : change WaitForNotify signature to 
   be able to compile with DEC-cxx 6.1.

@@ -7,6 +7,7 @@
 #include "G4RayTrajectoryPoint.hh"
 #include "G4Step.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4VisManager.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
 #include "G4TransportationManager.hh"
@@ -54,11 +55,16 @@ void G4RayTrajectory::AppendStep(const G4Step* aStep)
 
   G4VPhysicalVolume* prePhys = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4VisAttributes* preVisAtt = prePhys->GetLogicalVolume()->GetVisAttributes();
+  G4VisManager* visManager = G4VisManager::GetInstance();
+  if(visManager) preVisAtt = visManager->GetCurrentViewer()->GetApplicableVisAttributes(preVisAtt);
   trajectoryPoint->SetPreStepAtt(preVisAtt);
 
   const G4VPhysicalVolume* postPhys = aStep->GetPostStepPoint()->GetPhysicalVolume();
   const G4VisAttributes* postVisAtt = NULL;
-  if(postPhys) { postVisAtt = postPhys->GetLogicalVolume()->GetVisAttributes(); }
+  if(postPhys) {
+    postVisAtt = postPhys->GetLogicalVolume()->GetVisAttributes();
+    if(visManager) postVisAtt = visManager->GetCurrentViewer()->GetApplicableVisAttributes(postVisAtt);
+  }
   trajectoryPoint->SetPostStepAtt(postVisAtt);
 
   positionRecord->append(trajectoryPoint);

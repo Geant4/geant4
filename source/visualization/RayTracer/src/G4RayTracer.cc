@@ -1,6 +1,8 @@
 
 #include "G4RayTracer.hh"
 #include "G4RayTracerFeatures.hh"
+#include "G4RayTracerSceneHandler.hh"
+#include "G4RayTracerViewer.hh"
 #include "G4EventManager.hh"
 #include "G4RTMessenger.hh"
 #include "G4RayShooter.hh"
@@ -18,6 +20,7 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4UImanager.hh"
+#include "G4TransportationManager.hh"
 
 G4RayTracer::G4RayTracer(G4VFigureFileMaker* figMaker)
 :G4VGraphicsSystem("RayTracer","RayTracer",RAYTRACER_FEATURES,
@@ -97,6 +100,19 @@ void G4RayTracer::Trace(G4String fileName)
   delete [] colorB;
 }
 
+G4VSceneHandler* G4RayTracer::CreateSceneHandler (const G4String& name) {
+  G4VSceneHandler* pScene = new G4RayTracerSceneHandler (*this, name);
+  G4cout << G4RayTracerSceneHandler::GetSceneCount ()
+       << ' ' << fName << " scenes extanct." << G4endl;
+  return pScene;
+}
+
+G4VViewer* G4RayTracer::CreateViewer (G4VSceneHandler& sceneHandler,
+				      const G4String& name) {
+  G4VViewer* pView = new G4RayTracerViewer (sceneHandler, name);
+  return pView;
+}
+
 void G4RayTracer::StoreUserActions()
 { 
   theUserEventAction = theEventManager->GetUserEventAction();
@@ -156,11 +172,36 @@ G4bool G4RayTracer::CreateBitMap()
       }
       rayDirection.rotateZ(headAngle);
       rayDirection.rotateUz(eyeDirection);
-      theRayShooter->Shoot(anEvent,eyePosition,rayDirection);
-
-      theEventManager->ProcessOneEvent(anEvent);
-      succeeded = GenerateColour(anEvent);
-      //G4cout << iColumn << " " << iRow << " " << anEvent->GetEventID() << G4endl;
+      G4ThreeVector rayPosition(eyePosition);
+      G4bool interceptable = true;
+      // Check if rayPosition is in the world.
+      G4VPhysicalVolume* pWorld =
+	G4TransportationManager::GetTransportationManager()->
+	GetNavigatorForTracking()->GetWorldVolume ();
+      EInside whereisit =
+	pWorld->GetLogicalVolume()->GetSolid()->Inside(rayPosition);
+      if (whereisit != kInside) {
+	// It's outside the world, so move it inside.
+	G4double outsideDistance =
+	  pWorld->GetLogicalVolume()->GetSolid()->
+	  DistanceToIn(rayPosition,rayDirection);  
+	if (outsideDistance != kInfinity) {
+	  rayPosition = rayPosition+outsideDistance*rayDirection;
+	}
+	else {
+	  interceptable = false;
+	}
+      }
+      if (interceptable) {
+	theRayShooter->Shoot(anEvent,rayPosition,rayDirection);
+	theEventManager->ProcessOneEvent(anEvent);
+	succeeded = GenerateColour(anEvent);
+  //G4cout << iColumn << " " << iRow << " " << anEvent->GetEventID() << G4endl;
+      }
+      else {  // Ray does not intercept world at all.
+	// Generate background colour...
+	succeeded = true;
+      }
       delete anEvent;
       if(!succeeded) return false;
     }
