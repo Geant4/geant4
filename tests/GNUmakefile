@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.40 2002-04-03 12:21:38 stesting Exp $
+# $Id: GNUmakefile,v 1.41 2002-06-01 11:13:41 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -66,6 +66,7 @@ SUBDIRS += test18 ## Radioactive decay.
 SUBDIRS += test20 ## Polarised LowE processes.
 SUBDIRS += test21 ## added nov 2001 (info to come).
 SUBDIRS += test22 ## added nov 2001 (info to come).
+SUBDIRS += test23 ## Cut per material and persistency of physics table.
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21
