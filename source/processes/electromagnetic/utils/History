@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2001-03-23 15:12:40 maire Exp $
+$Id: History,v 1.14 2001-03-27 12:24:43 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+27 mar 01: L.Urban
+- another bug fixed in G4VEnergyLoss.cc , in the fluct code.
+  The code gave in some cases (very rarely) small negative energy loss
+  for small (~ micrometer) step size , now it is cured.
 
 23 mar 01: L.Urban (utils-V03-00-05)
 - bug fixed in fluct in G4VEnergyLoss.cc
