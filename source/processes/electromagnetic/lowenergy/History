@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2001-10-30 08:39:04 pia Exp $
+$Id: History,v 1.121 2001-11-01 17:27:42 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01.11.2001 - MGP, tag emlowen-V03-02-39
+             PIXE introduced in G4hLowEnergyIonisation
 
 29.10.2001 - MGP, tag emlowen-V03-02-38
              Bug fixes in new code
