@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.8 2003-04-10 02:51:18 asaim Exp $
+// $Id: G4ProductionCuts.hh,v 1.9 2003-05-22 16:05:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,7 @@ class G4ProductionCuts
   // Set Cuts methods
   void              SetProductionCut(G4double cut, G4int index = -1);
   void              SetProductionCut(G4double cut, G4ParticleDefinition* ptcl);
+  void              SetProductionCut(G4double cut, const G4String& pName);
   // Set the productionCut in range with an index to particle type
   // if index is omitted, the value is applied to all particles
 
@@ -161,6 +162,13 @@ void  G4ProductionCuts::SetProductionCut(G4double cut, G4ParticleDefinition* ptc
 {
   G4int idx = -1;
   if(ptcl) idx = GetIndex(ptcl);
+  if(idx>=0) SetProductionCut(cut,idx);
+}
+
+inline
+void  G4ProductionCuts::SetProductionCut(G4double cut, const G4String& pName)
+{
+  G4int idx = GetIndex(pName);
   if(idx>=0) SetProductionCut(cut,idx);
 }
 
