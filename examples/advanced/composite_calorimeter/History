@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2002-10-24 18:12:35 ribon Exp $
+$Id: History,v 1.5 2002-11-15 07:35:36 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.4 2002-10-24 18:12:35 ribon Exp $
 
                       Example History file
                       ---------------------
+
+15.11.2002 - A.Ribon (ccal-V04-02-00)
+- Fixed problem of Anaphe with c-shell, and tested with
+  geant4.4.1.ref04
 
 24.10.2002 - A.Ribon (ccal-V04-01-01)
 - Changed default physics list to QGSC, with the possibility
