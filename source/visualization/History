@@ -1,4 +1,4 @@
-$Id: History,v 1.53 1999-12-06 16:17:51 johna Exp $
+$Id: History,v 1.54 1999-12-07 11:05:52 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-V00-01-14a  7th December 1999  John Allison
+- Added `class' keyword in friend statement in G4VisStateDependent.hh
+  to keep HP happy.
 
 vis-V00-01-14  6th December 1999  John Allison
 - Invert rotation of boolean component in G4PhysicalVolumeModel.cc.
