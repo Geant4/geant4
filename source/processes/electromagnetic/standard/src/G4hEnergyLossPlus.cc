@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.10 1999-09-08 15:15:22 maire Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.11 1999-09-18 15:59:36 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1171,7 +1171,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
   //   subcutoff delta ray production start                          
   G4double MinDeltaEnergyNow,Tc,TmintoProduceDelta,w,ww ;
-  G4double rcut,T0,presafety,postsafety,
+  G4double rcut,T0,presafety,postsafety,safety,
            delta,fragment,Tmax,mass ;
   G4double frperstep,x1,y1,z1,dx,dy,dz,dTime,time0,DeltaTime;
   G4double epsil = MinKineticEnergy/2. ;
@@ -1201,6 +1201,10 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
     {
       presafety  = stepData.GetPreStepPoint()->GetSafety() ;
       postsafety = stepData.GetPostStepPoint()->GetSafety() ;
+
+      safety = min(presafety,postsafety) ;
+      if(safety < rcut)
+     {
 
       if((presafety>=rcut)&&(postsafety>=rcut))
       {
@@ -1356,7 +1360,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
              aParticleChange.SetMomentumChange(Px,Py,Pz) ;
              E = Tkin ;
            }
-
+          }
          }
        }
      }
