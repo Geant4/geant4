@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.98 2004-06-09 07:15:34 gcosmo Exp $
+# $Id: architecture.gmk,v 1.99 2004-06-14 10:42:12 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -86,9 +86,14 @@ endif
 
 # Specify if to build the DLL libraries on Windows. Default is NO.
 #
+ifneq ($(G4LIB_USE_DLL),)
+  G4LIB_BUILD_DLL = 1
+  CPPFLAGS += -DG4LIB_BUILD_DLL
+endif
 ifneq ($(G4LIB_BUILD_DLL),)
   G4LIB_BUILD_DLL = 1
   CPPFLAGS += -DG4LIB_BUILD_DLL
+  G4LIB_USE_DLL = 1
 endif
 
 # Specify if to build the G3TOG4 module or not. Default is NO.
