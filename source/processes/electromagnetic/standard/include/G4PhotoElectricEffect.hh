@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.2 1999-01-08 16:32:23 gunter Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.3 1999-01-20 12:26:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,8 +90,8 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
      G4double ComputeSandiaCrossSection (G4double PhotonEnergy, 
                                          G4double AtomicNumber);
 						 					  
-     G4double ComputeSandiaMeanFreePath(G4double PhotonEnergy, 
-                                        G4Material* aMaterial);
+     inline G4double ComputeSandiaMeanFreePath(G4double PhotonEnergy, 
+                                               G4Material* aMaterial);
 					  
   private:
 
