@@ -27,7 +27,7 @@ implement an external magnetic field grid and test if the deviation of
 electrons are as expected in this particular field. The data (position, 
 energy and momentum) are collected in a measurement volume.The data is 
 stored in a HBOOK file if the user has set up the AIDA 3.0 environment 
-and Anaphe is avaliable.
+and Anaphe is available.
  
   
 1. Setting up the environment variables
@@ -94,7 +94,7 @@ setenv LD_LIBRARY_PATH $OGLHOME/lib
 
 - Set up for analysis using AIDA
 
-To compile the GammaRayTel example with the analysis tools activated, 
+To compile this example (like GammaRayTel) with the analysis tools activated, 
 set the following variables 
 
 setenv G4ANALYSIS_USE               1 # Use the analysis tools
@@ -122,18 +122,19 @@ setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
 -------------------------
 
 - Run the "PurgMag" executable.
-- File PurgMag.TABLE needs to be avaliable when running.
+- File PurgMag.TABLE needs to be available in the current directory in order to run correctly.
 - For visualisation use vis.mac. 
-  Default visualization with OpenGL
-- Interactiv or batch mode possible.
-  Default: Interactiv mode.
+  Default visualization is with OpenGL
+- Interactive or batch modes possible.
+  Default: Interactive mode.
 
-In interactiv mode:
+To run a certain number of events in interactive mode, 
+type the following at the "idle>" prompt:
 
-idle>run/beamOn  NumberOfEvents
-idle>exit
+idle> run/beamOn  NumberOfEvents
+idle> exit
 
-- Simulation output in purgmag.hbk
+- Simulation histogram output is stored in purgmag.hbk
 
 1)Ntuple with position, energy and momentum for electrons
 2)Ntuple with position, energy and momentum for photons 
@@ -141,14 +142,16 @@ idle>exit
 3)Ntuple with position, energy and momentum for positrons
   (not needed in this example, will be used in further development)
 
-A vizualisation macro (vis.mac) is provided:
-run $G4WORKDIR/bin/Linux-g++/Brachy vis.mac
+A default vizualisation macro (vis.mac) is pre-loaded before interactive runs.
+Executing it
+    osmachine.3% $G4WORKDIR/bin/Linux-g++/PurgMag 
+runs vis.mac before giving you an interactive prompt.
 
 	
 3. Detector description
 -----------------------
 
-Simply a measurement volume. All particles entering the volume is scored.
+Simply a measurement volume. All particles entering the volume are scored.
 
 
 4. Physics processes
@@ -160,11 +163,11 @@ This example uses the standard Electromagnetic processes.
 5. Particle Generator
 ----------------------
 
-The PurgMagPrimaryGeneratorAction sets the default flux of particles to 
+The PurgMagPrimaryGeneratorAction sets the initial state of tracks to
 
 -electrons 50MeV
--Start position (0,0,15cm)
--Momentum direction (0,0,-1)
+-Start position (0, 0, 15cm)
+-Momentum direction (0, 0, -1)
 
  
 6. Geometry and materials
@@ -174,6 +177,9 @@ The world consists of Vacuum to minimize interactions of the electrons
 with the medium. The purging magnet is implemented as a 3D field grid 
 of field values and geometerically as a pole gap made of iron. The 
 measurement volume also contains vacuum. 
+
+The field is interpolated using a simple linear interpolation in two 
+dimensions (z and rho).
 
 7. Comparison
 --------------
@@ -185,8 +191,6 @@ has also been calculated in the OPERA 3D module TOSCA for comparison.
 
 TOSCA:  deviation y-direction: 35.112 cm
 GEANT4: deviation y-direction: 35.170 cm (updated after PurgMag.pdf)
-
-
 
 ****************************************************************
 *                                                              *
