@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.27 2003-01-07 23:40:12 asaim Exp $
+// $Id: G4MuPairProduction.cc,v 1.28 2003-01-08 14:43:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -40,7 +40,8 @@
 // 26-09-01 completion of store/retrieve PhysicsTable
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma)
-// 07-11-01 particleMass becomes a local variable (mma)      
+// 07-11-01 particleMass becomes a local variable (mma)
+// 08-01-03 DoIt: no more 'tracking cut' for the muon (mma)      
 //------------------------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
@@ -756,120 +757,90 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
    }
 
    G4double norm = proba[izz][itt][iy] ;
-
-   G4double r = norm+G4UniformRand()*(1.-norm) ;
+   G4double r = norm + G4UniformRand()*(1.-norm);
  
    iy -= 1 ;
-   do {
-        iy += 1 ;
-      } while ((proba[izz][itt][iy] < r)&&(iy < NBINminus1)) ;
+   do { iy += 1; } while ((proba[izz][itt][iy] < r) && (iy < NBINminus1));
 
    //sampling is uniformly in y in the bin
-   if( iy < NBIN )
-     y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy]) ;
-   else
-     y = ya[iy] ;
+   if (iy < NBIN) y = ya[iy] + G4UniformRand()*(ya[iy+1] - ya[iy]);
+   else           y = ya[iy];
 
-   x = exp(y) ;
+   x = exp(y);
 
-   PairEnergy = MinPairEnergy*exp(x*log(MaxPairEnergy/MinPairEnergy)) ;
+   PairEnergy = MinPairEnergy*exp(x*log(MaxPairEnergy/MinPairEnergy));
 
-  // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
-   G4double rmax = (1.-6.*particleMass*particleMass/(TotalEnergy*
-                                               (TotalEnergy-PairEnergy)))
-                                       *sqrt(1.-MinPairEnergy/PairEnergy) ;
-   r = rmax * (-1.+2.*G4UniformRand()) ;
+   // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
+   G4double rmax = 
+     (1.-6.*particleMass*particleMass/(TotalEnergy*(TotalEnergy-PairEnergy)))
+    *sqrt(1.-MinPairEnergy/PairEnergy);
+   r = rmax * (-1.+2.*G4UniformRand());
 
-  // compute energies from PairEnergy,r
-   G4double ElectronEnergy=(1.-r)*PairEnergy/2. ;  
-   G4double PositronEnergy=(1.+r)*PairEnergy/2. ;
+   // compute energies from PairEnergy,r
+   G4double ElectronEnergy = (1-r)*PairEnergy/2.;  
+   G4double PositronEnergy = (1+r)*PairEnergy/2.;
      
    //  angles of the emitted particles ( Z - axis along the parent particle)
    //      (mean theta for the moment)
-   G4double Teta = electron_mass_c2/TotalEnergy ;
+   G4double Teta = electron_mass_c2/TotalEnergy;
 
-   G4double Phi  = twopi * G4UniformRand() ;
+   G4double Phi  = twopi * G4UniformRand();
    G4double dirx = sin(Teta)*cos(Phi) , diry = sin(Teta)*sin(Phi) ,
-            dirz = cos(Teta) ;
+            dirz = cos(Teta);
 
-   G4double LocalEnerDeposit = 0. ;
-   G4int numberofsecondaries = 1 ;
-   G4int flagelectron = 0 ;
-   G4int flagpositron = 1 ; 
+   G4double LocalEnerDeposit = 0.;
+   G4int numberofsecondaries = 1;
+   G4int flagelectron = 0;
+   G4int flagpositron = 1; 
    G4DynamicParticle* aParticle1 = 0;
    G4DynamicParticle* aParticle2 = 0;
-   G4double ElectronMomentum , PositronMomentum ;
-   //G4double finalPx,finalPy,finalPz ;
 
+   // e-
+   //
    G4double ElectKineEnergy = ElectronEnergy - electron_mass_c2 ;
-
-   if((ElectKineEnergy > ElectronEnergyCut) ||
-      (G4EnergyLossTables::GetRange(
-             G4Electron::Electron(),ElectKineEnergy,aMaterial) >=
-                          stepData.GetPostStepPoint()->GetSafety()))
-      {
-        numberofsecondaries += 1 ;
-        flagelectron = 1 ;
-        ElectronMomentum = sqrt(ElectKineEnergy*
-                                          (ElectronEnergy+electron_mass_c2));
-        G4ThreeVector ElectDirection ( dirx, diry, dirz );
-        ElectDirection.rotateUz(ParticleDirection);   
- 
-        // create G4DynamicParticle object for the particle1  
-        aParticle1= new G4DynamicParticle (G4Electron::Electron(),
-                                           ElectDirection, ElectKineEnergy);
-       }
-    else
-       { LocalEnerDeposit += ElectKineEnergy ; }
+   if (ElectKineEnergy > ElectronEnergyCut)
+    {
+     numberofsecondaries += 1;
+     flagelectron = 1;
+     G4ThreeVector ElectDirection ( dirx, diry, dirz );
+     ElectDirection.rotateUz(ParticleDirection);    
+     // create G4DynamicParticle object for the particle1  
+     aParticle1 = new G4DynamicParticle (G4Electron::Electron(),
+                                         ElectDirection, ElectKineEnergy);
+    }
+   else { LocalEnerDeposit += ElectKineEnergy;}
 
    // the e+ is always created (even with Ekine=0) for further annihilation.
-
-   G4double PositKineEnergy = PositronEnergy - electron_mass_c2 ;
-   PositronMomentum = sqrt(PositKineEnergy*(PositronEnergy+electron_mass_c2));
-
-   if((PositKineEnergy < PositronEnergyCut) &&
-      (G4EnergyLossTables::GetRange(
-             G4Positron::Positron(),PositKineEnergy,aMaterial) <=
-                          stepData.GetPostStepPoint()->GetSafety()))
-      {
-        LocalEnerDeposit += PositKineEnergy ;
-        PositKineEnergy = 0. ;
-      }
+   //
+   G4double PositKineEnergy = PositronEnergy - electron_mass_c2;
+   if (PositKineEnergy < PositronEnergyCut)
+    {
+     LocalEnerDeposit += PositKineEnergy;
+     PositKineEnergy = 0.;
+    }
    G4ThreeVector PositDirection ( -dirx, -diry, dirz );
-   PositDirection.rotateUz(ParticleDirection);   
- 
+   PositDirection.rotateUz(ParticleDirection);    
    // create G4DynamicParticle object for the particle2 
    aParticle2= new G4DynamicParticle (G4Positron::Positron(),
-                                         PositDirection, PositKineEnergy);
+                                      PositDirection, PositKineEnergy);
 
    // fill particle change and update initial particle
    aParticleChange.SetNumberOfSecondaries(numberofsecondaries) ; 
-   if(flagelectron==1)
-        aParticleChange.AddSecondary( aParticle1 ) ; 
-   if(flagpositron==1)       
-        aParticleChange.AddSecondary( aParticle2 ) ; 
+   if (flagelectron==1) aParticleChange.AddSecondary(aParticle1); 
+   if (flagpositron==1) aParticleChange.AddSecondary(aParticle2); 
 
-   G4double NewKinEnergy = KineticEnergy - ElectronEnergy - PositronEnergy ;
-   //G4double finalMomentum=sqrt(NewKinEnergy*(NewKinEnergy+2.*particleMass));
+   G4double NewKinEnergy = KineticEnergy - ElectronEnergy - PositronEnergy;
 
-   aParticleChange.SetMomentumChange( ParticleDirection );
+   aParticleChange.SetMomentumChange(ParticleDirection);
 
-//------   G4double KinEnergyCut = (aDynamicParticle->GetDefinition()->
-//------                            GetEnergyCuts())[aMaterial->GetIndex()];
+   if (NewKinEnergy > 0.) aParticleChange.SetEnergyChange(NewKinEnergy);
+   else {                 aParticleChange.SetEnergyChange(0.);
+                          aParticleChange.SetStatusChange(fStopButAlive);
+        }
 
-//------   if (NewKinEnergy > KinEnergyCut)
-//------      {
-       aParticleChange.SetEnergyChange( NewKinEnergy );
-//------      }
-//------   else
-//------      {
-//------       aParticleChange.SetEnergyChange(0.);
-//------       LocalEnerDeposit += NewKinEnergy ;
-//------       aParticleChange.SetStatusChange(fStopButAlive);
-//------      }
+   aParticleChange.SetLocalEnergyDeposit(LocalEnerDeposit);
 
-   aParticleChange.SetLocalEnergyDeposit( LocalEnerDeposit ) ;
-
+   //reset NumberOfinteractionLengthLeft()
    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
