@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     IonYangFlactuationModel
+// File name:     IonYangFluctuationModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -31,19 +31,19 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4IonYangFlactuationModel_h
-#define G4IonYangFlactuationModel_h 1
+#ifndef G4IonYangFluctuationModel_h
+#define G4IonYangFluctuationModel_h 1
 
 #include "G4VLowEnergyModel.hh"
 
-class G4IonYangFlactuationModel : public G4VLowEnergyModel
+class G4IonYangFluctuationModel : public G4VLowEnergyModel
 {
 
 public:
 
-  G4IonYangFlactuationModel(const G4String& name) ;
+  G4IonYangFluctuationModel(const G4String& name) ;
 
-  ~G4IonYangFlactuationModel() ;
+  ~G4IonYangFluctuationModel() ;
 
   G4double TheValue(const G4DynamicParticle* particle,
 	       	          const G4Material* material);
@@ -72,7 +72,7 @@ protected:
 
 private:
 
-  G4double YangFlactuationModel(const G4Material* material, 
+  G4double YangFluctuationModel(const G4Material* material, 
                                       G4double kineticEnergy,
                                       G4double particleMass,
                                       G4double charge) const;

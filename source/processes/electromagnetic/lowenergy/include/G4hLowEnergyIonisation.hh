@@ -50,8 +50,8 @@
 #include "G4hParametrisedLossModel.hh"
 #include "G4QAOLowEnergyLoss.hh"
 #include "G4hIonEffChargeSquare.hh"
-#include "G4IonChuFlactuationModel.hh"
-#include "G4IonYangFlactuationModel.hh"
+#include "G4IonChuFluctuationModel.hh"
+#include "G4IonYangFluctuationModel.hh"
 
 class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {

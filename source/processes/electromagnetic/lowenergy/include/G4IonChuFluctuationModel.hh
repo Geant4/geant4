@@ -12,7 +12,7 @@
 // For information related to this code contact:
 // Geant4 Collaboration
 //
-// File name:     IonChuFlactuationModel
+// File name:     IonChuFluctuationModel
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
@@ -24,6 +24,8 @@
 // Class Description: 
 //
 // The aproximation of additional ion energy loss fluctuations 
+// W.K.Chu, In: Ion Beam Handbook for Material Analysis.
+// eds. J.W. Mayer and E. Rimini (Academic Press, New York, 1977).
 // Q.Yang et al., NIM B61(1991)149-155.
 //
 // Class Description: End 
@@ -31,19 +33,19 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4IonChuFlactuationModel_h
-#define G4IonChuFlactuationModel_h 1
+#ifndef G4IonChuFluctuationModel_h
+#define G4IonChuFluctuationModel_h 1
 
 #include "G4VLowEnergyModel.hh"
 
-class G4IonChuFlactuationModel : public G4VLowEnergyModel
+class G4IonChuFluctuationModel : public G4VLowEnergyModel
 {
 
 public:
 
-  G4IonChuFlactuationModel(const G4String& name) ;
+  G4IonChuFluctuationModel(const G4String& name) ;
 
-  ~G4IonChuFlactuationModel() ;
+  ~G4IonChuFluctuationModel() ;
 
   G4double TheValue(const G4DynamicParticle* particle,
 	       	          const G4Material* material);
@@ -72,7 +74,7 @@ protected:
 
 private:
 
-  G4double ChuFlactuationModel(const G4Material* material, 
+  G4double ChuFluctuationModel(const G4Material* material, 
                                      G4double kineticEnergy,
                                      G4double particleMass) const;
 
