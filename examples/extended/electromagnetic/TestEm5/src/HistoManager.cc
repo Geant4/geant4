@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.10 2004-09-20 08:33:35 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.11 2004-09-23 11:37:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,6 +31,7 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
+#include <memory> // for the auto_ptr(T>
 #include "AIDA/AIDA.h"
 #endif
 
