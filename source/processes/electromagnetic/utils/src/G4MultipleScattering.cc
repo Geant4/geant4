@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.5 2000-08-10 13:15:13 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.6 2001-01-11 10:44:34 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -27,6 +27,7 @@
 // 22/03/00: value of member cpar has changed! , L.Urban
 // 20/06/00: nuclear size correction for particles other than e+/e- only ,  L.Urban
 // 10/08/00 values of some data members has been changed, L.Urban
+// 09/11/00 bug corrected in sigma computation, L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -292,11 +293,11 @@
      eps = rat2*epsfactor*bg2/Z23 ;
 
      if(eps<epsmin)
-       sigma = 2.*eps*eps*eps/3. ;
+       sigma = 2.*eps*eps ;
      else if(eps<epsmax)
-       sigma = log(1.+2.*eps)-2.*eps/(1.+eps) ;
+       sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps) ;
      else
-       sigma = log(2.*eps)-2.+2.5/eps ;
+       sigma = log(2.*eps)-1.+1./eps ;
 
      sigma *=ChargeSquare*AtomicNumber*AtomicNumber/rat2 ;
      sigma /= beta2*bg2 ;
@@ -483,7 +484,7 @@
     }
     else
       cth = -1.+2.*G4UniformRand() ;
-
+                                                                 
     sth = sqrt(1.-cth*cth) ;
 
     phi = twopi*G4UniformRand() ;
@@ -560,6 +561,7 @@
         }
       }
     }
+
 
     return &fParticleChange ;
  
