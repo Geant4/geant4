@@ -1,29 +1,10 @@
-/*
-** Copyright (C) 2000  <MEDERNACH Emmanuel>
-**  
-** This program is free software; you can redistribute it and/or modify
-** it under the terms of the GNU General Public License as published by
-** the Free Software Foundation; either version 2 of the License, or
-** (at your option) any later version.
-**  
-** This program is distributed in the hope that it will be useful,
-** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-** GNU General Public License for more details.
-**  
-** You should have received a copy of the GNU General Public License
-** along with this program; if not, write to the Free Software
-** Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA.
-**  
-*/
-
 // 
-// E.Medernach 
+// E.Medernach 2000
 //
 
 #define EPSILON 1e-12
 #define INFINITY 1e+12
-#define TORUSPRECISION 1.0  // or whatever you want for precision (it is TorusEquation related)
+#define TORUSPRECISION 0.001 //1.0  // or whatever you want for precision (it is TorusEquation related)
 
 #define NBPOINT 6
 #define ITERATION 8 //20 But 8 is really enough for Newton with a good guess
@@ -82,7 +63,7 @@ inline double IntersectPlanarSection (double x,double y,double dx,double dy,doub
   }
 }
 
-/* inline */ double TorusEquation (x, y, z, R0, R1)
+inline  double TorusEquation (x, y, z, R0, R1)
 double x;
 double y;
 double z;
@@ -108,7 +89,7 @@ double R1;
 }
 
 
-/* inline */ double TorusDerivativeX (x, y, z, R0, R1)
+inline double TorusDerivativeX (x, y, z, R0, R1)
 double x;
 double y;
 double z;
@@ -118,7 +99,7 @@ double R1;
 		return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
 }
 
-/* inline */ double TorusDerivativeY (x, y, z, R0, R1)
+inline double TorusDerivativeY (x, y, z, R0, R1)
 double x;
 double y;
 double z;
@@ -129,7 +110,7 @@ double R1;
 }
 
 
-/* inline */ double TorusDerivativeZ (x, y, z, R0, R1)
+inline double TorusDerivativeZ (x, y, z, R0, R1)
 double x;
 double y;
 double z;
@@ -139,6 +120,264 @@ double R1;
 		return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
 }
 
+
+inline  double ParaboloidEquation (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return z - H*(x*x + y*y)/(L*L) ;
+}
+
+inline  double ParaboloidDerX (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return - 2*H*x/(L*L) ;
+}
+
+inline  double ParaboloidDerY (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return - 2*H*y/(L*L) ;
+}
+
+inline  double ParaboloidDerZ (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return 1 ;
+}
+
+
+inline  double HyperboloidEquation (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return (x*x + y*y) - z*z + H*H - L*L ;
+}
+
+inline  double HyperboloidDerX (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return 2*x ;
+}
+
+inline  double HyperboloidDerY (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return 2*y ;
+}
+
+inline  double HyperboloidDerZ (x, y, z, H, L)
+     double x;
+     double y;
+     double z;
+     double H;
+     double L;
+     
+{
+  return -2*z ;
+}
+
+
+void BVMParaboloidIntersection (G4double x,G4double y,G4double z,
+				G4double dx,G4double dy,G4double dz,
+				G4double H, G4double L,
+				G4double *NewL,int *valid)
+{
+  /* We use the box [-L L]x[-L L]x[0 H] */
+  /* there is only one interval at maximum */
+
+  /* NewL and valid are array of 6 elements */
+
+  if (dz != 0) {
+    /* z = 0 */
+    NewL[0] = -z/dz ;
+    if ((fabs(x + NewL[0]*dx) < L) && (fabs(y + NewL[0]*dy) < L)) {
+      valid[0] = 1;
+    } else {
+      valid[0] = 0;
+    }
+    
+    /* z = H */
+    NewL[1] = -(z-H)/dz ;
+    if ((fabs(x + NewL[1]*dx) < L) && (fabs(y + NewL[1]*dy) < L)) {
+      valid[1] = 1;
+    } else {
+      valid[1] = 0;
+    }
+    
+  } else {
+    NewL[0] = -1.0 ;
+    NewL[1] = -1.0 ;
+    valid[0] = 0;
+    valid[1] = 0;
+  }
+
+  if (dx != 0) {
+    /* x = -L */
+    NewL[2] = -(x+L)/dx ;
+    if ((fabs(z - H/2 +NewL[2]*dz) < H/2) && (fabs(y + NewL[2]*dy) < L)) {
+      valid[2] = 1;
+    } else {
+      valid[2] = 0;
+    }
+    
+    /* z = H */
+    NewL[3] = -(x-L)/dx ;
+    if ((fabs(z - H/2 + NewL[3]*dz) < H/2) && (fabs(y + NewL[3]*dy) < L)) {
+      valid[3] = 1;
+    } else {
+      valid[3] = 0;
+    }
+    
+  } else {
+    NewL[2] = -1.0 ;
+    NewL[3] = -1.0 ;
+    valid[2] = 0;
+    valid[3] = 0;
+  }
+
+  if (dy != 0) {
+    /* y = -L */
+    NewL[4] = -(y+L)/dy ;
+    if ((fabs(z - H/2 +NewL[4]*dz) < H) && (fabs(y + NewL[4]*dy) < L)) {
+      valid[4] = 1;
+    } else {
+      valid[4] = 0;
+    }
+    
+    /* z = H */
+    NewL[5] = -(y-L)/dy ;
+    if ((fabs(z - H/2 + NewL[5]*dz) < H) && (fabs(y + NewL[5]*dy) < L)) {
+      valid[5] = 1;
+    } else {
+      valid[5] = 0;
+    }
+    
+  } else {
+    NewL[4] = -1.0 ;
+    NewL[5] = -1.0 ;
+    valid[4] = 0;
+    valid[5] = 0;
+  }
+
+}
+
+void BVMHyperboloidIntersection (G4double x,G4double y,G4double z,
+				G4double dx,G4double dy,G4double dz,
+				G4double H, G4double L,
+				G4double *NewL,int *valid)
+{
+  /* We use the box [-L L]x[-L L]x[-H H] */
+  /* there is only one interval at maximum */
+
+  /* NewL and valid are array of 6 elements */
+
+  if (dz != 0) {
+    /* z = -H */
+    NewL[0] = -(z+H)/dz ;
+    if ((fabs(x + NewL[0]*dx) < L) && (fabs(y + NewL[0]*dy) < L)) {
+      valid[0] = 1;
+    } else {
+      valid[0] = 0;
+    }
+    
+    /* z = H */
+    NewL[1] = -(z-H)/dz ;
+    if ((fabs(x + NewL[1]*dx) < L) && (fabs(y + NewL[1]*dy) < L)) {
+      valid[1] = 1;
+    } else {
+      valid[1] = 0;
+    }
+    
+  } else {
+    NewL[0] = -1.0 ;
+    NewL[1] = -1.0 ;
+    valid[0] = 0;
+    valid[1] = 0;
+  }
+
+  if (dx != 0) {
+    /* x = -L */
+    NewL[2] = -(x+L)/dx ;
+    if ((fabs(z +NewL[2]*dz) < H) && (fabs(y + NewL[2]*dy) < L)) {
+      valid[2] = 1;
+    } else {
+      valid[2] = 0;
+    }
+    
+    /* z = H */
+    NewL[3] = -(x-L)/dx ;
+    if ((fabs(z + NewL[3]*dz) < H) && (fabs(y + NewL[3]*dy) < L)) {
+      valid[3] = 1;
+    } else {
+      valid[3] = 0;
+    }
+    
+  } else {
+    NewL[2] = -1.0 ;
+    NewL[3] = -1.0 ;
+    valid[2] = 0;
+    valid[3] = 0;
+  }
+
+  if (dy != 0) {
+    /* y = -L */
+    NewL[4] = -(y+L)/dy ;
+    if ((fabs(z +NewL[4]*dz) < H) && (fabs(y + NewL[4]*dy) < L)) {
+      valid[4] = 1;
+    } else {
+      valid[4] = 0;
+    }
+    
+    /* z = H */
+    NewL[5] = -(y-L)/dy ;
+    if ((fabs(z + NewL[5]*dz) < H) && (fabs(y + NewL[5]*dy) < L)) {
+      valid[5] = 1;
+    } else {
+      valid[5] = 0;
+    }
+    
+  } else {
+    NewL[4] = -1.0 ;
+    NewL[5] = -1.0 ;
+    valid[4] = 0;
+    valid[5] = 0;
+  }
+
+}
 
 void BVMIntersection(G4double x,G4double y,G4double z,
 			      G4double dx,G4double dy,G4double dz,
@@ -356,12 +595,12 @@ int SafeNewton(G4double x, G4double y, G4double z,
   Ly = y + (*Lmin)*dy;
   Lz = z + (*Lmin)*dz;
 
-  D[0] = dx*TorusDerivativeX(Lx,Ly,Lz,Rmax,Rmin);
-  D[0] += dy*TorusDerivativeY(Lx,Ly,Lz,Rmax,Rmin);
-  D[0] += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
+  D[0] = dx*HyperboloidDerX(Lx,Ly,Lz,Rmax,Rmin);
+  D[0] += dy*HyperboloidDerY(Lx,Ly,Lz,Rmax,Rmin);
+  D[0] += dz*HyperboloidDerZ(Lx,Ly,Lz,Rmax,Rmin);
 
   P[0][0] = (*Lmin);
-  P[0][1] = TorusEquation(Lx,Ly,Lz,Rmax,Rmin);
+  P[0][1] = HyperboloidEquation(Lx,Ly,Lz,Rmax,Rmin);
 
   if (fabs(P[0][1]) < TORUSPRECISION) {
     NewtonIsSafe = 1;
@@ -381,12 +620,12 @@ int SafeNewton(G4double x, G4double y, G4double z,
   Ly = y + (*Lmax)*dy;
   Lz = z + (*Lmax)*dz;
 
-  D[1] = dx*TorusDerivativeX(Lx,Ly,Lz,Rmax,Rmin);
-  D[1] += dy*TorusDerivativeY(Lx,Ly,Lz,Rmax,Rmin);
-  D[1] += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
+  D[1] = dx*HyperboloidDerX(Lx,Ly,Lz,Rmax,Rmin);
+  D[1] += dy*HyperboloidDerY(Lx,Ly,Lz,Rmax,Rmin);
+  D[1] += dz*HyperboloidDerZ(Lx,Ly,Lz,Rmax,Rmin);
 
   P[4][0] = (*Lmax);
-  P[4][1] = TorusEquation(Lx,Ly,Lz,Rmax,Rmin);
+  P[4][1] = HyperboloidEquation(Lx,Ly,Lz,Rmax,Rmin);
   P[3][0] = (*Lmax) - ((*Lmax) - (*Lmin))/4;
   P[3][1] = P[4][1] - ((*Lmax) - (*Lmin))/4 * D[1];
 
@@ -395,7 +634,7 @@ int SafeNewton(G4double x, G4double y, G4double z,
   Lz = z + ((*Lmax)+(*Lmin))/2*dz;
 
   P[2][0] = ((*Lmax) + (*Lmin))/2;
-  P[2][1] = (16*TorusEquation(Lx,Ly,Lz,Rmax,Rmin) - (P[0][1] + 4*P[1][1] + 4*P[3][1] + P[4][1]))/6 ;
+  P[2][1] = (16*HyperboloidEquation(Lx,Ly,Lz,Rmax,Rmin) - (P[0][1] + 4*P[1][1] + 4*P[3][1] + P[4][1]))/6 ;
 
   
   
@@ -510,7 +749,7 @@ G4double Newton (G4double guess,
       guess += EPSILON;*/
   
   Lambda = guess;
-  Value = TorusEquation(x + Lambda*dx,y + Lambda*dy,z + Lambda*dz,Rmax,Rmin);
+  Value = HyperboloidEquation(x + Lambda*dx,y + Lambda*dy,z + Lambda*dz,Rmax,Rmin);
 
   //fprintf(stderr,"NEWTON begin with L = %f and V = %f\n",Lambda,Value);
   
@@ -527,7 +766,7 @@ G4double Newton (G4double guess,
       Lx = x + (Lmin + i*(Lmax - Lmin)/1000.0)*dx;
       Ly = y + (Lmin + i*(Lmax - Lmin)/1000.0)*dy;
       Lz = z + (Lmin + i*(Lmax - Lmin)/1000.0)*dz;
-      Value = TorusEquation(Lx,Ly,Lz,Rmax,Rmin);
+      Value = HyperboloidEquation(Lx,Ly,Lz,Rmax,Rmin);
       //fprintf(fi," %f %f\n",Lmin + i*(Lmax - Lmin)/1000.0,Value );
     }
 	  
@@ -543,11 +782,11 @@ G4double Newton (G4double guess,
     Lx = x + Lambda*dx;
     Ly = y + Lambda*dy;
     Lz = z + Lambda*dz;
-    Value = TorusEquation(Lx,Ly,Lz,Rmax,Rmin);
+    Value = HyperboloidEquation(Lx,Ly,Lz,Rmax,Rmin);
 
-    Gradient = dx*TorusDerivativeX(Lx,Ly,Lz,Rmax,Rmin);
-    Gradient += dy*TorusDerivativeY(Lx,Ly,Lz,Rmax,Rmin);
-    Gradient += dz*TorusDerivativeZ(Lx,Ly,Lz,Rmax,Rmin);
+    Gradient = dx*HyperboloidDerX(Lx,Ly,Lz,Rmax,Rmin);
+    Gradient += dy*HyperboloidDerY(Lx,Ly,Lz,Rmax,Rmin);
+    Gradient += dz*HyperboloidDerZ(Lx,Ly,Lz,Rmax,Rmin);
 
 	/*
 	if (Gradient > -EPSILON)
@@ -653,7 +892,8 @@ double DistanceToTorus (Intersect * Inter)
 
   /*** Compute Intervals  from Bounding Volume ***/
 
-  BVMIntersection(x,y,z,dx,dy,dz,Rmax,Rmin,NewL,valid);
+		//BVMIntersection(x,y,z,dx,dy,dz,Rmax,Rmin,NewL,valid);
+		BVMHyperboloidIntersection(x,y,z,dx,dy,dz,Rmax,Rmin,NewL,valid);
 
   /*
     We could compute intervals value 
@@ -666,6 +906,8 @@ double DistanceToTorus (Intersect * Inter)
   if (BVM_ONLY == 1)
     return SortL[0] ; 
 
+#if 0
+  // Torus Only
   {
     /*** Length check ***/
     G4double LengthMin = 0.82842712*Rmin;
@@ -673,7 +915,7 @@ double DistanceToTorus (Intersect * Inter)
     switch(NbIntersection) {
     case 1:
       if (SortL[0] < EPSILON) {
-	if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
+	if (fabs(HyperboloidEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
 	  return 0.0;
 	} else {
 	  return NOINTERSECTION;
@@ -685,7 +927,7 @@ double DistanceToTorus (Intersect * Inter)
       break;
     case 3:
       if (SortL[0] < EPSILON) {
-	if (fabs(TorusEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
+	if (fabs(HyperboloidEquation(x,y,z,Rmax,Rmin)) < TORUSPRECISION) {
 	  return 0.0;
 	} else {
 	  NbIntersection --;
@@ -707,7 +949,8 @@ double DistanceToTorus (Intersect * Inter)
       break;
     }
   }
-	
+#endif
+  
 #if DEBUGTORUS
   {
     int i;
@@ -777,7 +1020,7 @@ double DistanceToTorus (Intersect * Inter)
     Lmin = 0.0 ;
     Lmax  = SortL[0] ;
 
-    if (TorusEquation(x,y,z,Rmax,Rmin) < 0.0) {
+    if (HyperboloidEquation(x,y,z,Rmax,Rmin) < 0.0) {
       
       InsideTorus = 1;
       /* As we are inside the torus it must have an intersection */
@@ -799,7 +1042,7 @@ double DistanceToTorus (Intersect * Inter)
 #if DEBUGTORUS
       G4cout.precision(16);
       G4cout << "DistanceToTorus    point " << x << ", " << y << ", " << z << ", "  << " is outside the torus "
-	     << " Rmax = " << Rmax << " Rmin = " << Rmin << " Teq = " << TorusEquation(x,y,z,Rmax,Rmin) << G4endl ;
+	     << " Rmax = " << Rmax << " Rmin = " << Rmin << " Teq = " << HyperboloidEquation(x,y,z,Rmax,Rmin) << G4endl ;
 #endif
       InsideTorus = 0;
       /* PROBLEMS what to choose ? 0.0 ? */
@@ -952,9 +1195,48 @@ inline G4double TorusGradient(G4double dx,
   /* This tell the normal at a surface point */
   G4double result;
   result = 0;
-  result += dx*TorusDerivativeX(x,y,z,Rmax,Rmin); 
-  result += dy*TorusDerivativeY(x,y,z,Rmax,Rmin); 
-  result += dz*TorusDerivativeZ(x,y,z,Rmax,Rmin); 
+  result += dx*HyperboloidDerX(x,y,z,Rmax,Rmin); 
+  result += dy*HyperboloidDerY(x,y,z,Rmax,Rmin); 
+  result += dz*HyperboloidDerZ(x,y,z,Rmax,Rmin); 
+
+  return result;
+}
+
+
+inline G4double ParaboloidGradient(G4double dx,
+				       G4double dy,
+				       G4double dz,
+				       G4double x,
+				       G4double y,
+				       G4double z,
+				       G4double Rmax,
+				       G4double Rmin)
+{
+  /* This tell the normal at a surface point */
+  G4double result;
+  result = 0;
+  result += dx*ParaboloidDerX(x,y,z,Rmax,Rmin); 
+  result += dy*ParaboloidDerY(x,y,z,Rmax,Rmin); 
+  result += dz*ParaboloidDerZ(x,y,z,Rmax,Rmin); 
+
+  return result;
+}
+
+inline G4double HyperboloidGradient(G4double dx,
+				       G4double dy,
+				       G4double dz,
+				       G4double x,
+				       G4double y,
+				       G4double z,
+				       G4double Rmax,
+				       G4double Rmin)
+{
+  /* This tell the normal at a surface point */
+  G4double result;
+  result = 0;
+  result += dx*HyperboloidDerX(x,y,z,Rmax,Rmin); 
+  result += dy*HyperboloidDerY(x,y,z,Rmax,Rmin); 
+  result += dz*HyperboloidDerZ(x,y,z,Rmax,Rmin); 
 
   return result;
 }

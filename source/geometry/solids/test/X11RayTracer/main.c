@@ -100,8 +100,8 @@ void refresh () {
 	Inter.y = 0.20*(j - H/2) ;
 	Inter.z = (65.0)*sin(theta) + 0.20*(i - W/2)*(-cos(theta));
 						  
-	Inter.R0 = 20.0; //20.0 25
-	Inter.R1 = 14.0;  //4.0 19.0
+	Inter.R0 = 20.0; //20.0; //20.0 25
+	Inter.R1 = 24.0; //14.0;  //4.0 19.0
 	Inter.phi = 0.0;
 	Inter.deltaphi = M_PI;
 	d = DistanceToTorus (&Inter);
@@ -111,7 +111,7 @@ void refresh () {
 	    V = 0;
 	    R = 255 ;
 	  } else {
-	    V = d*4;//4 16 32
+	    V = d*2;//4 16 32
 	  }
 	if (V > 255) {
 	  V = 255 ;
