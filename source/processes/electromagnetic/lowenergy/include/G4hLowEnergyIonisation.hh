@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyIonisation.hh,v 1.1 1999-07-20 17:36:49 vnivanch Exp $
+// $Id: G4hLowEnergyIonisation.hh,v 1.2 1999-07-23 16:37:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,11 +43,11 @@ class G4hLowEnergyIonisation : public G4hIonisation
 
     void SetDEDXTableName(const G4String& dedxTable);
     
-    G4double GetZieglerLoss(const G4Material* material, G4double tau);
+    G4double GetZieglerLoss(const G4Material* material, G4double KinEnergy);
 
-    G4double GetBetheBlochLoss(const G4Material* material, G4double tau);
+    G4double GetBetheBlochLoss(const G4Material* material, G4double KinEnergy);
 
-    G4double GetFreeElectronGasLoss(G4double paramA, G4double tau);
+    G4double GetFreeElectronGasLoss(G4double paramA, G4double KinEnergy);
 
     G4double GetStoppingPower1977H(G4int iz, G4double E);
 
@@ -56,9 +56,11 @@ class G4hLowEnergyIonisation : public G4hIonisation
     G4double GetStoppingPower1977n(G4double Z1, G4double Z2, 
                                    G4double M1, G4double M2, G4double E);
 
-    G4double GetUrbanModel(const G4Element* element, G4double tau);
+    G4double GetUrbanModel(const G4Element* element, G4double KinEnergy);
 
-    G4double GetDeltaRaysEnergy(const G4Material* material, G4double tau);
+    G4double GetDeltaRaysEnergy(const G4Material* material, G4double KinEnergy);
+
+    G4double GetChemicalFactor(const G4Material* material, G4double KinEnergy);
 
     void PrintInfoDefinition();
 

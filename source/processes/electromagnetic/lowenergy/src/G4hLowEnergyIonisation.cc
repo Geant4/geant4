@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyIonisation.cc,v 1.1 1999-07-20 17:36:50 vnivanch Exp $
+// $Id: G4hLowEnergyIonisation.cc,v 1.2 1999-07-23 16:37:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -37,7 +37,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
      LowestKineticEnergy(0.10*keV),
      HighestKineticEnergy(100.*TeV),
      ZieglerLowEnergy(1.*keV),
-     ZieglerHighEnergy(2.*MeV),
+     ZieglerHighEnergy(10.*MeV),
      DEDXtable("Ziegler1977H"),
      TotBin(200),
      theProton (G4Proton::Proton()),
@@ -72,6 +72,9 @@ void G4hLowEnergyIonisation::SetDEDXTableName(const G4String& dedxTable)
   } else if(dedxTable == "Ziegler1977He") {
      DEDXtable = "Ziegler1977He";
 
+  } else if(dedxTable == "UrbanModel") {
+     DEDXtable = "UrbanModel";
+
   } else {
     cout << "G4hLowEnergyIonisation Warning: There is no table with the name ="
          << dedxTable; 
@@ -86,7 +89,7 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
   DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
 
   G4double LowEdgeEnergy , ionloss, ionlossBB;
-  G4double Eexc, tau, paramA, paramB;
+  G4double paramA, paramB;
   static const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
 
@@ -122,25 +125,16 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 
     DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
 
-    // define the boundary energies between using Stopping Power Tables and
-    // Geant4 methods which includes delta-ray production
-
-    G4double tauHighEnergy = ZieglerHighEnergy ;
-    G4double tauLowEnergy = ZieglerLowEnergy ;
-
     // define constants A and B for this material  
 
-    tau    = tauLowEnergy/keV ;                     // tau in keV
-    paramA = GetZieglerLoss(material, tau)/sqrt(tau) ; 
-    tau    = tauHighEnergy/keV ;                    // tau in keV
-    ionloss = GetZieglerLoss(material, tau) ; 
-    tau    = tauHighEnergy/proton_mass_c2 ;         // tau is relative energy
-    ionlossBB = GetBetheBlochLoss(material, tau) ; 
+    paramA = GetZieglerLoss(material, ZieglerLowEnergy)/sqrt(ZieglerLowEnergy) ; 
+    ionloss = GetZieglerLoss(material, ZieglerHighEnergy) ; 
+    ionlossBB = GetBetheBlochLoss(material, ZieglerHighEnergy) ; 
     paramB =  ionloss/ionlossBB - 1.0 ; 
 
     cout << "\n ### " << material->GetName() << ": loss = " 
          << ionloss << "; paramB = " << paramB 
-         << "; tauHighEnergy = " << tauHighEnergy << " MeV \n";
+         << "; tauHighEnergy = " << ZieglerHighEnergy << " MeV \n";
 
     // now comes the loop for the kinetic energy values
 
@@ -148,31 +142,33 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
     {
       LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
 
-      if ( LowEdgeEnergy < tauHighEnergy ) {
+      if ( LowEdgeEnergy < ZieglerHighEnergy ) {
       //  low energy part , parametrized energy loss formulae
-     
-        tau = LowEdgeEnergy/keV ;                        // tau in keV
 
-        if ( LowEdgeEnergy < tauLowEnergy ) {
+        if ( LowEdgeEnergy < ZieglerLowEnergy ) {
 
         // The model of free electron gas
-          ionloss = GetFreeElectronGasLoss(paramA, tau) ;
+          ionloss = GetFreeElectronGasLoss(paramA, LowEdgeEnergy) ;
 
         } else {
 	  // Ziegler parametrisation
-          ionloss = GetZieglerLoss(material, tau) ; 
+          ionloss = GetZieglerLoss(material, LowEdgeEnergy) ; 
 	}
       } else {
 
 	// high energy part , Bethe-Bloch formula
-        tau = LowEdgeEnergy/proton_mass_c2 ;           // tau is relative energy   
-        ionloss = GetBetheBlochLoss(material, tau) ; 
-        ionloss *= (1.0 + paramB*tauHighEnergy/LowEdgeEnergy) ;
+        ionloss = GetBetheBlochLoss(material, LowEdgeEnergy) ; 
+        ionloss *= (1.0 + paramB*ZieglerHighEnergy/LowEdgeEnergy) ;
       }
 
-      // now put the loss into the vector
-      //IV  cout << "  E = " << LowEdgeEnergy/MeV << " MeV; ion = " << ionloss << endl ;
+      // Chemical factor
+        G4double x = GetChemicalFactor(material, LowEdgeEnergy) ;
+        ionloss *= x ;
 
+      //IV  
+    cout << "  E = " << LowEdgeEnergy/MeV << " MeV; ion = " << ionloss*mm/MeV << " MeV/mm; ChemicalFactor = " << x << endl ;
+
+      // now put the loss into the vector
       aVector->PutValue(i,ionloss) ;
     }
 
@@ -184,7 +180,7 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetZieglerLoss(const G4Material* material, 
-                                                   G4double tau)
+                                                   G4double KinEnergy)
 {
     G4double ionloss, ion;
 
@@ -213,16 +209,20 @@ G4double G4hLowEnergyIonisation::GetZieglerLoss(const G4Material* material,
       // Choose the parametrisation
  
       if(DEDXtable == "Ziegler1977H") { 
-        ion = GetStoppingPower1977H(iz, tau/ProtonMassAMU) ; 
+        ion = GetStoppingPower1977H(iz, KinEnergy) ; 
         ion *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
 
       } else if(DEDXtable == "Ziegler1977He") {
 	// This must be modified!!!
-        ion = GetStoppingPower1977He(iz, tau) ; 
+        ion = GetStoppingPower1977He(iz, KinEnergy) ; 
         ion *= theAtomicNumDensityVector[iel]*ZieglerFactor ;
+
+      } else if(DEDXtable == "UrbanModel") {
+        ion = theAtomicNumDensityVector[iel]*GetUrbanModel(element, KinEnergy) ;
       }
+
       // Nuclear Stopping Power
-      G4double ionn = GetStoppingPower1977n(1.0, Z2, A1, A2, tau) ;
+      G4double ionn = GetStoppingPower1977n(1.0, Z2, A1, A2, KinEnergy) ;
         ion += ionn*theAtomicNumDensityVector[iel]*ZieglerFactor ;
 
       ionloss += ion ;
@@ -230,8 +230,7 @@ G4double G4hLowEnergyIonisation::GetZieglerLoss(const G4Material* material,
 
     // Correction due to delta-electrons energy loss 
     // Bethe-Bloch formulae is used
-    G4double tauU = tau * keV / proton_mass_c2 ;
-    ionloss -= GetDeltaRaysEnergy(material, tauU) ;
+    ionloss -= GetDeltaRaysEnergy(material, KinEnergy) ;
 
   if ( ionloss <= 0.) ionloss = 0. ;
 
@@ -241,10 +240,11 @@ G4double G4hLowEnergyIonisation::GetZieglerLoss(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material, 
-                                                   G4double tau)
+                                                   G4double KinEnergy)
 {
   G4double ionloss ;
   G4double taul = material->GetIonisation()->GetTaul() ;
+  G4double tau  = KinEnergy/proton_mass_c2 ;         // tau is relative energy
 
   if ( tau < taul ) {
 
@@ -263,7 +263,7 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
     for (G4int iel=0; iel<NumberOfElements; iel++)
       {
       const G4Element* element = (*theElementVector)(iel) ;
-      ionloss += GetUrbanModel(element, tau) * theAtomicNumDensityVector[iel] ;
+      ionloss += GetUrbanModel(element, KinEnergy) * theAtomicNumDensityVector[iel] ;
       }
 
   } else {
@@ -343,9 +343,10 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetDeltaRaysEnergy(const G4Material* material, 
-                                                   G4double tau)
+                                                   G4double KinEnergy)
 {
     G4double ionloss = 0.0 ;
+    G4double tau  = KinEnergy/proton_mass_c2 ;         // tau is relative energy
 
     // some local variables 
 
@@ -367,11 +368,12 @@ G4double G4hLowEnergyIonisation::GetDeltaRaysEnergy(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetUrbanModel(const G4Element* element, 
-                                                     G4double tau)
+                                                     G4double KinEnergy)
 {
   // Parametrisation of low energy protons energy loss by L.Urban 
   // for the class G4hIonisation
 
+  G4double tau  = KinEnergy/proton_mass_c2 ;         // tau is relative energy
   G4double ionloss = 0. ;
 
   if ( tau < element->GetIonisation()->GetTau0()) {  
@@ -387,7 +389,7 @@ G4double G4hLowEnergyIonisation::GetUrbanModel(const G4Element* element,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hLowEnergyIonisation::GetStoppingPower1977H(G4int iz, G4double E)
+G4double G4hLowEnergyIonisation::GetStoppingPower1977H(G4int iz, G4double KinEnergy)
 {
   G4double ionloss ;
   G4int i = iz-1 ;  // index of atom
@@ -395,6 +397,8 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977H(G4int iz, G4double E)
   // The data and the fit from: 
   // H.H.Andersen & J.F.Ziegler Hydrogen Stopping Powers and
   // Ranges in All Elements, Vol.3, Pergamon Press, 1977
+
+  G4double E = KinEnergy/(keV*ProtonMassAMU) ; // energy in keV/amu
  
   static G4double A[92][12] = {
 1.262,1.440,  242.6,12000.,0.115900,0.0005099,54360.0,-5.0520,2.0490,-0.30440,0.019660,-0.0004659,
@@ -501,7 +505,7 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977H(G4int iz, G4double E)
 
   } else {
      G4double le = log(E) ;
-     G4double gam = 1.0 + E * ProtonMassAMU * keV /proton_mass_c2 ;
+     G4double gam = 1.0 + KinEnergy / proton_mass_c2 ;
      G4double beta2 = 1.0 - 1.0/ (gam*gam) ;
      ionloss = ( log(A[i][6]*beta2/(1.0 - beta2)) - beta2 -
                A[i][7] - A[i][8]*le - A[i][9]*le*le - A[i][10]*le*le*le -
@@ -515,7 +519,7 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977H(G4int iz, G4double E)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4hLowEnergyIonisation::GetStoppingPower1977He(G4int iz, G4double E)
+G4double G4hLowEnergyIonisation::GetStoppingPower1977He(G4int iz, G4double KinEnergy)
 {
   G4double ionloss ;
   G4int i = iz-1 ;  // index of atom
@@ -523,7 +527,9 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977He(G4int iz, G4double E)
   // The He4 data and the fit from: 
   // J.F.Ziegler, Helium Stopping Powers and
   // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
- 
+
+  G4double E = KinEnergy/keV ;  // energy in keV
+  
   static G4double A[92][9] = {
 0.9661,0.4126,  6.92, 8.831,  2.582, 2.371, 0.5462,   -0.07932,-0.006853,
 2.027, 0.2931, 26.34, 6.66,   0.3409,2.809, 0.4847,   -0.08756,-0.007281,
@@ -620,7 +626,7 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977He(G4int iz, G4double E)
   };
 
   if ( E < 1.0 ) {
-     G4double Slow  = A[i][0]  ;
+     G4double Slow  = A[i][0] ;
      G4double E1 = 1.0/1000.0 ;
      G4double Shigh = log( 1.0 + A[i][3]/E1 + A[i][4]*E ) * A[i][2]/E1 ;
      ionloss = sqrt(E) * Slow*Shigh / (Slow + Shigh) ; 
@@ -644,13 +650,14 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977He(G4int iz, G4double E)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4hLowEnergyIonisation::GetStoppingPower1977n(G4double Z1, G4double Z2, 
-                                          G4double M1, G4double M2, G4double E)
+                                          G4double M1, G4double M2, G4double KinEnergy)
 {
-  G4double ionloss ;
-
   // The fit of nuclear stopping from: 
   // J.F.Ziegler, Helium Stopping Powers and
   // Ranges in All Elemental Matter, Vol.4, Pergamon Press, 1977
+
+  G4double E = KinEnergy/keV ;  // energy in keV
+  G4double ionloss ;
 
   G4double rm = (M1 + M2) * sqrt( pow(Z1, 2.0/3.0) + pow(Z2, 2.0/3.0) ) ;
 
@@ -675,6 +682,80 @@ G4double G4hLowEnergyIonisation::GetStoppingPower1977n(G4double Z1, G4double Z2,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4hLowEnergyIonisation::GetChemicalFactor(const G4Material* material, 
+                                                         G4double KinEnergy)
+{
+  // Approximation of Chemical Factor according to
+  // J.F.Ziegler and J.M.Manoyan, The stopping of ions in compaunds,
+  // Nucl. Inst. & Meth. in Phys. Res. B35 (1988) 215-228.
+
+  G4double factor = 1.0 ;
+
+  const G4String chFormula = material->GetChemicalFormula() ;
+  if (" " == chFormula ) return factor ;
+  const G4State theState = material->GetState() ;
+  if( theState == kStateGas ) return factor ;
+
+  // Search for the element in the table
+
+  G4double ExpStopPower, ExpKinEnergy, ExpIonCharge = 0.0 ;
+
+  const size_t NumberOfMolecula = 5 ;
+  const G4double HeEff = 2.8735 ;    // The coffecient from Table.4 of Ziegler & Manoyan
+
+  static G4String Name[NumberOfMolecula] = {
+  "C_2H_2","NH_3","C_6H_6","C_2H_4","H_2O"
+  } ;
+  static G4double ExpStopping[NumberOfMolecula] = {
+  41.75, 31.8, 124.1, 51.6, 66.1
+  } ;
+  static G4double ExpCharge[NumberOfMolecula] = {
+  1.0, 1.0, 1.0, 1.0, HeEff,
+  } ;
+  static G4double NumberOfAtomsPerMolecula[NumberOfMolecula] = {
+  4.0, 4.0, 12.0, 6.0, 3.0
+  } ;
+
+  //  loop for the compaunds
+  for (G4int i=0; i<NumberOfMolecula; i++)
+  {
+    if(chFormula == Name[i]) {
+      ExpStopPower = ExpStopping[i] * 
+                     (material-> GetTotNbOfAtomsPerVolume()) *
+                     ZieglerFactor / 
+                     (ExpCharge[i] * NumberOfAtomsPerMolecula[i]) ;
+      ExpKinEnergy = 125*keV ; 
+      ExpIonCharge = ExpCharge[i] ;
+      break ;
+    }
+  }
+
+  if ( ExpIonCharge < 0.5 ) {
+    // The compaund is not in the internal table
+    return factor ;
+  } 
+
+  // The compaund exist in the internal table for H ion
+  G4double gamma    = 1.0 + KinEnergy/proton_mass_c2 ;    
+  G4double gamma25  = 1.0 + 25.0*keV/proton_mass_c2 ;
+  G4double gamma125 = 1.0 + ExpKinEnergy/proton_mass_c2 ;
+  G4double beta     = sqrt(1.0 - 1.0/(gamma*gamma)) ;
+  G4double beta25   = sqrt(1.0 - 1.0/(gamma25*gamma25)) ;
+  G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
+
+  G4double BraggStopPower = GetZieglerLoss(material,ExpKinEnergy) ;
+  factor = 1.0 + (ExpStopPower/BraggStopPower - 1.0) *
+          (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
+          (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+
+  //  cout << "KinEnergy = " << KinEnergy << " MeV; ExpPower = " << ExpStopPower << "; BraggPower = " << BraggStopPower << endl ; 
+  // cout << "  Factor = " << factor << endl ;
+
+  return factor ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4hLowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "  Knock-on electron cross sections . ";
@@ -687,7 +768,7 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
          << " to " << G4BestUnit(HighestKineticEnergy,"Energy")
          << " in " << TotBin << " bins."
          << "\n        Low energy approximation implemented in the function " << DEDXtable
-         << "\n  19.07 from " << G4BestUnit(ZieglerLowEnergy,"Energy")
+         << "\n  22.07 from " << G4BestUnit(ZieglerLowEnergy,"Energy")
          << " to " << G4BestUnit(ZieglerHighEnergy,"Energy") << " \n" << endl ;
 }
 
