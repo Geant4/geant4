@@ -1,10 +1,10 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
-***** Table : Nb of materials = 8 *****
+***** Table : Nb of materials = 9 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -22,6 +22,9 @@
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
    --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -63,13 +66,14 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-            H2liquid         28.675
-               Water         81.507
-         liquidArgon         78.362
-           Aluminium         125.06
-                Iron         224.07
-                Lead         229.55
-             Uranium         296.06
+            H2liquid         28.089
+               Water         81.851
+         liquidArgon         79.954
+           Aluminium         125.02
+             Silicon         116.88
+                Iron         225.11
+                Lead         228.53
+             Uranium         294.24
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -91,13 +95,14 @@ msc:   Tables of transport mean free paths.
            material        min.delta energy(keV) 
 
                  Air           0.99
-            H2liquid         28.675
-               Water         81.507
-         liquidArgon         78.362
-           Aluminium         125.06
-                Iron         224.07
-                Lead         229.55
-             Uranium         296.06
+            H2liquid         28.089
+               Water         81.851
+         liquidArgon         79.954
+           Aluminium         125.02
+             Silicon         116.88
+                Iron         225.11
+                Lead         228.53
+             Uranium         294.24
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -130,11 +135,12 @@ Cut in energy
               Water         2.9 keV         347 keV
         liquidArgon        6.18 keV         343 keV
           Aluminium        6.89 keV         597 keV
+            Silicon        6.89 keV         541 keV
                Iron        20.8 keV        1.28 MeV
                Lead         101 keV        1.38 MeV
             Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.7 2000-11-24 10:36:58 stesting Exp $
+# $Id: TestEm1.out,v 1.8 2001-01-25 10:11:14 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -176,11 +182,12 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
                  Air           0.99
             H2liquid           0.99
                Water         3.2733
-         liquidArgon         3.7293
-           Aluminium         6.3003
-                Iron         10.422
-                Lead         8.9769
-             Uranium          11.54
+         liquidArgon         3.9154
+           Aluminium         6.2979
+             Silicon         5.8817
+                Iron         10.524
+                Lead         9.1135
+             Uranium         11.689
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -204,11 +211,12 @@ msc:   Tables of transport mean free paths.
                  Air           0.99
             H2liquid           0.99
                Water         3.2733
-         liquidArgon         3.7293
-           Aluminium         6.3003
-                Iron         10.422
-                Lead         8.9769
-             Uranium          11.54
+         liquidArgon         3.9154
+           Aluminium         6.2979
+             Silicon         5.8817
+                Iron         10.524
+                Lead         9.1135
+             Uranium         11.689
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -241,6 +249,7 @@ Cut in energy
               Water        4.06 keV        3.27 keV
         liquidArgon        9.08 keV        3.98 keV
           Aluminium        9.99 keV        9.97 keV
+            Silicon          10 keV        8.45 keV
                Iron        31.1 keV        43.3 keV
                Lead         124 keV        42.8 keV
             Uranium         143 keV        53.4 keV
@@ -265,18 +274,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=70.06s Real=75.54s Sys=4.95s
+  User=120.31s Real=130.69s Sys=10.26s
 
- nb tracks/event   neutral:   28.42   charged:  650.00
- nb  steps/event   neutral:  151.89   charged: 1278.63
+ nb tracks/event   neutral:   28.13   charged:  666.69
+ nb  steps/event   neutral:  152.78   charged: 2205.98
 
  nb of process calls per event: 
-       eIoni    eBrem     phot    compt     conv  annihil
-     1251.55    25.69    27.03   123.47     1.39     1.39
+       eIoni    eBrem    compt     phot     conv  annihil
+     2179.31    25.16   124.65    26.62     1.51     1.51
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1391858697, 202982242
+ Current couple of seeds = 214647638, 1893120385
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -85,16 +85,16 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         191.93
-         liquidArgon          118.7
-              Copper          380.8
-                Lead         370.85
-               Water         122.62
-        Scintillator         124.52
-              quartz         175.86
+           Aluminium         191.87
+         liquidArgon         120.89
+              Copper         381.86
+                Lead         368.13
+               Water         123.06
+        Scintillator         125.26
+              quartz         177.43
                  Air           0.99
-             Aerogel          44.69
-         CarbonicGas         14.049
+             Aerogel         45.045
+         CarbonicGas         14.287
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -118,16 +118,16 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Aluminium         191.93
-         liquidArgon          118.7
-              Copper          380.8
-                Lead         370.85
-               Water         122.62
-        Scintillator         124.52
-              quartz         175.86
+           Aluminium         191.87
+         liquidArgon         120.89
+              Copper         381.86
+                Lead         368.13
+               Water         123.06
+        Scintillator         125.26
+              quartz         177.43
                  Air           0.99
-             Aerogel          44.69
-         CarbonicGas         14.049
+             Aerogel         45.045
+         CarbonicGas         14.287
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99

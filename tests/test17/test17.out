@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -97,18 +97,18 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Beryllium         104.75
-            Aluminum         125.06
-              Carbon         113.94
-             Silicon         116.06
-         liquidArgon         78.362
-                Iron         224.07
-              Copper         238.25
-                Gold         334.84
-                Lead         229.53
-               Water         81.507
+           Beryllium         103.96
+            Aluminum         125.02
+              Carbon          115.3
+             Silicon         116.88
+         liquidArgon         79.954
+                Iron         225.11
+              Copper         239.08
+                Gold         332.48
+                Lead         228.52
+               Water         81.852
              Methane        0.11903
-            Graphite         122.94
+            Graphite         124.29
                  Air        0.18052
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -214,7 +214,7 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00920804 +- 6.74003e-06  mm  
+    Range in absorber = 0.00921999 +- 6.80249e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -226,7 +226,7 @@ Cut in energy
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00932708 +- 6.6206e-06  mm  
+    Range in absorber = 0.0093352 +- 6.51491e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -240,7 +240,7 @@ Cut in energy
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Range in absorber = 0.00899735 +- 8.55829e-06  mm  
+    Range in absorber = 0.00898464 +- 8.60799e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 

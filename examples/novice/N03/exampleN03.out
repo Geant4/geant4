@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -87,16 +87,16 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         125.06
-         liquidArgon         78.362
-              Copper         238.25
-                Lead         229.55
-               Water         81.507
-        Scintillator         82.859
-              quartz         115.29
+           Aluminium         125.02
+         liquidArgon         79.954
+              Copper         239.08
+                Lead         228.53
+               Water         81.851
+        Scintillator         83.337
+              quartz         116.29
                  Air           0.99
-             Aerogel         30.097
-         CarbonicGas          9.427
+             Aerogel         30.338
+         CarbonicGas         9.5961
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -115,16 +115,16 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 
            material        min.delta energy(keV) 
 
-           Aluminium         125.06
-         liquidArgon         78.362
-              Copper         238.25
-                Lead         229.55
-               Water         81.507
-        Scintillator         82.859
-              quartz         115.29
+           Aluminium         125.02
+         liquidArgon         79.954
+              Copper         239.08
+                Lead         228.53
+               Water         81.851
+        Scintillator         83.337
+              quartz         116.29
                  Air           0.99
-             Aerogel         30.097
-         CarbonicGas          9.427
+             Aerogel         30.338
+         CarbonicGas         9.5961
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -184,8 +184,8 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  273.44 MeV       total track length:  16.757 cm 
-        Gap: total energy:  17.368 MeV       total track length:  9.3656 cm 
+   Absorber: total energy:   275.7 MeV       total track length:  15.744 cm 
+        Gap: total energy:   15.91 MeV       total track length:  8.5146 cm 
 
      8 hits are stored in ExN03CalorHitsCollection.
 #
@@ -202,11 +202,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1102932771, 1917444181
+ Current couple of seeds = 977297571, 951316126
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  271.92 MeV       total track length:  15.041 cm 
-        Gap: total energy:  19.422 MeV       total track length:  9.2045 cm 
+   Absorber: total energy:  281.73 MeV       total track length:  15.949 cm 
+        Gap: total energy:  13.208 MeV       total track length:  7.3282 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 #
@@ -231,10 +231,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1963963117, 1351553931
+ Current couple of seeds = 627130152, 879601547
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  337.86 MeV       total track length:  77.616 cm 
-        Gap: total energy:  64.609 MeV       total track length:   1.801 m  
+   Absorber: total energy:  397.77 MeV       total track length:  92.777 cm 
+        Gap: total energy:  90.797 MeV       total track length:     2.5 m  
 
-     21 hits are stored in ExN03CalorHitsCollection.
+     30 hits are stored in ExN03CalorHitsCollection.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 Now Detector is rod_place_asm
@@ -58,7 +58,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.55
+                Lead         228.53
             ArgonGas           0.99
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -81,7 +81,7 @@ msc:   Tables of transport mean free paths.
            material        min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.55
+                Lead         228.53
             ArgonGas           0.99
 
 hIoni:    Knock-on electron cross sections . 

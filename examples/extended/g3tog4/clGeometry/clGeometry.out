@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
@@ -80,20 +80,20 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-HYDROGEN                     42.186
-DEUTERIUM                    67.149
-HELIUM                         37.6
-LITHIUM                      76.527
-BERILLIUM                    158.47
-CARBON                       187.35
-NITROGEN                      99.22
-NEON                         121.65
-ALUMINIUM                    191.92
-IRON                         356.49
-COPPER                       380.82
-TUNGSTEN                     561.11
-LEAD                         370.83
-URANIUM                      529.64
+HYDROGEN                     41.322
+DEUTERIUM                     65.86
+HELIUM                       37.951
+LITHIUM                      75.845
+BERILLIUM                    157.35
+CARBON                        189.5
+NITROGEN                     100.11
+NEON                         120.85
+ALUMINIUM                    191.86
+IRON                         358.11
+COPPER                       381.87
+TUNGSTEN                     557.83
+LEAD                         368.12
+URANIUM                      521.92
                  AIR           0.99
 VACUUM                         0.99
 
@@ -118,20 +118,20 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-HYDROGEN                     42.186
-DEUTERIUM                    67.149
-HELIUM                         37.6
-LITHIUM                      76.527
-BERILLIUM                    158.47
-CARBON                       187.35
-NITROGEN                      99.22
-NEON                         121.65
-ALUMINIUM                    191.92
-IRON                         356.49
-COPPER                       380.82
-TUNGSTEN                     561.11
-LEAD                         370.83
-URANIUM                      529.64
+HYDROGEN                     41.322
+DEUTERIUM                     65.86
+HELIUM                       37.951
+LITHIUM                      75.845
+BERILLIUM                    157.35
+CARBON                        189.5
+NITROGEN                     100.11
+NEON                         120.85
+ALUMINIUM                    191.86
+IRON                         358.11
+COPPER                       381.87
+TUNGSTEN                     557.83
+LEAD                         368.12
+URANIUM                      521.92
                  AIR           0.99
 VACUUM                         0.99
 
@@ -229,7 +229,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.02s Real=0.06s Sys=0s
+  User=0.01s Real=0.04s Sys=0s
 Idle> /gun/particle mu+
 Idle> /run/beamOn 1
 ### Run 1 start.
@@ -250,7 +250,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> /gun/particle e-
 Idle> /run/beamOn 1
 ### Run 2 start.
@@ -271,7 +271,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Idle> /gun/particle e+
 Idle> /run/beamOn 1
 ### Run 3 start.
@@ -292,7 +292,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> #
 Idle> /gun/position   0. 1.5 0. mm
 Idle> /gun/direction  1.  0.   0.
@@ -317,7 +317,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /gun/particle mu+
 Idle> /run/beamOn 1
 ### Run 5 start.
@@ -338,7 +338,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> /gun/particle e-
 Idle> /run/beamOn 1
 ### Run 6 start.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -118,7 +118,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 23.54 s
+total time for build X-ray TR tables = 23.53 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -141,15 +141,15 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         125.06
-               Mylar         117.99
-       Polypropelene         111.37
+           Aluminium         125.02
+               Mylar         119.05
+       Polypropelene         111.68
                   Kr         1.0737
                Argon           0.99
                   N2           0.99
                   O2           0.99
                  Air           0.99
-               Xenon         1.8725
+               Xenon         1.9491
                  CO2           0.99
              Xe20CO2         1.6715
              Kr20CO2          1.088
@@ -164,15 +164,15 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
 
            material        min.delta energy(keV) 
 
-           Aluminium         125.06
-               Mylar         117.99
-       Polypropelene         111.37
+           Aluminium         125.02
+               Mylar         119.05
+       Polypropelene         111.68
                   Kr         1.0737
                Argon           0.99
                   N2           0.99
                   O2           0.99
                  Air           0.99
-               Xenon         1.8725
+               Xenon         1.9491
                  CO2           0.99
              Xe20CO2         1.6715
              Kr20CO2          1.088
@@ -182,7 +182,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=41.1 s 
+total time(SetCuts)=36.68 s 
 #
 # Macro file 'run11.mac' for the initialization phase of "TestEm8.cc"
 #
@@ -259,28 +259,28 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=499.2s Real=528.93s Sys=2.64s
+  User=465.62s Real=468.51s Sys=2.49s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=43.6288 +- 0.226983  mm  
+    mean charged track length   in absorber=43.5393 +- 0.163023  mm  
 
-            mean energy deposit in absorber=0.105986 +- 0.00116297  MeV 
+            mean energy deposit in absorber=0.105208 +- 0.00116822  MeV 
 
- mean number of steps in absorber (charged) =523.456 +- 3.87851      
- mean number of steps in absorber (neutral) =5.124 +- 0.0694451      
+ mean number of steps in absorber (charged) =525.746 +- 3.9913      
+ mean number of steps in absorber (neutral) =5.113 +- 0.0723894      
 
-   mean number of charged secondaries = 1.402 +- 0.0366933
+   mean number of charged secondaries = 1.405 +- 0.0367556
 
-   mean number of neutral secondaries = 0.017 +- 0.00408791
+   mean number of neutral secondaries = 0.024 +- 0.00483983
 
-   mean number of e-s =1.402  and e+s =0
+   mean number of e-s =1.405  and e+s =0
 
-(number) transmission coeff=0.109  reflection coeff=0
+(number) transmission coeff=0.11  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1680269066, 2086392423
+ Current couple of seeds = 1769766960, 1011749761
 ----------------------------------------
 #
 #

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -30,11 +30,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
            material       min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.55
+                Lead         228.53
             ArgonGas           0.99
-             Silicon         116.06
-        Scintillator         82.859
-            dummyMat         129.45
+             Silicon         116.88
+        Scintillator         83.337
+            dummyMat         126.97
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -51,11 +51,11 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
            material        min.delta energy(keV) 
 
                  Air           0.99
-                Lead         229.55
+                Lead         228.53
             ArgonGas           0.99
-             Silicon         116.06
-        Scintillator         82.859
-            dummyMat         129.45
+             Silicon         116.88
+        Scintillator         83.337
+            dummyMat         126.97
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -88,9 +88,9 @@ MuPairProd:  theoretical cross sections
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     144 hits are stored in ExN04TrackerHitsCollection.
-     53 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.66269 (GeV)
+     137 hits are stored in ExN04TrackerHitsCollection.
+     67 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.87275 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 0 hits found in the muon chamber.
 ++++++++ event aborted
@@ -103,8 +103,8 @@ Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 0 isolated muon found.
 ++++++++ event aborted
 >>> Event 2
-     85 hits are stored in ExN04TrackerHitsCollection.
+     86 hits are stored in ExN04TrackerHitsCollection.
      13 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.34233 (GeV)
+     Total energy deposition in calorimeter : 0.34272 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 #

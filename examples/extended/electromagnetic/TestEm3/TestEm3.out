@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -107,21 +107,21 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         82.738
-         liquidArgon         52.207
-                Iron         142.65
-              Copper         153.03
-            Tungsten         210.48
-                Lead         145.94
-             Uranium         198.28
-               Water         54.624
-        Scintillator         55.559
-            Silicium         76.801
-              quartz         76.434
-             NemaG10          68.96
+           Aluminium         82.719
+         liquidArgon         53.268
+                Iron         143.41
+              Copper         153.59
+            Tungsten         210.64
+                Lead         145.79
+             Uranium         197.41
+               Water         54.852
+        Scintillator         55.938
+            Silicium         77.338
+              quartz           77.2
+             NemaG10         69.507
                  Air           0.99
-             Aerogel         20.283
-         CarbonicGas          6.298
+             Aerogel         20.477
+         CarbonicGas         6.4196
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -145,21 +145,21 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Aluminium         82.738
-         liquidArgon         52.207
-                Iron         142.65
-              Copper         153.03
-            Tungsten         210.48
-                Lead         145.94
-             Uranium         198.28
-               Water         54.624
-        Scintillator         55.559
-            Silicium         76.801
-              quartz         76.434
-             NemaG10          68.96
+           Aluminium         82.719
+         liquidArgon         53.268
+                Iron         143.41
+              Copper         153.59
+            Tungsten         210.64
+                Lead         145.79
+             Uranium         197.41
+               Water         54.852
+        Scintillator         55.938
+            Silicium         77.338
+              quartz           77.2
+             NemaG10         69.507
                  Air           0.99
-             Aerogel         20.283
-         CarbonicGas          6.298
+             Aerogel         20.477
+         CarbonicGas         6.4196
           WaterSteam           0.99
             Galactic           0.99
                 Beam           0.99
@@ -209,7 +209,7 @@ Cut in energy
            Galactic         990 eV          990 eV 
                Beam         990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.8 2000-11-24 11:02:55 stesting Exp $
+# $Id: TestEm3.out,v 1.9 2001-01-25 10:11:38 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -242,19 +242,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=273.62s Real=311.24s Sys=20.37s
+  User=259.04s Real=278.99s Sys=19.53s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 814.79 MeV +- 14.27 MeV       51.33 cm  +-  1.17 cm 
- Absorber1 ( liquidArgon) : 175.43 MeV +- 13.23 MeV       87.65 cm  +-  6.82 cm 
+ Absorber0 (        Lead) : 809.29 MeV +- 13.04 MeV       51.78 cm  +-  1.25 cm 
+ Absorber1 ( liquidArgon) : 179.18 MeV +- 11.96 MeV       89.87 cm  +-  6.39 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1497149051, 1975036636
+ Current couple of seeds = 1618454911, 758594490
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

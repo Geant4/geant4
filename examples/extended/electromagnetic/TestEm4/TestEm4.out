@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
  Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
@@ -33,7 +33,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-      FluorCarbonate         96.449
+      FluorCarbonate         96.588
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -50,7 +50,7 @@ Cut in range                  1 mm            1 mm
 Cut in energy
      FluorCarbonate        3.61 keV         429 keV
 ===================================================
-# $Id: TestEm4.out,v 1.7 2000-11-24 11:15:45 stesting Exp $
+# $Id: TestEm4.out,v 1.8 2001-01-25 10:11:49 stesting Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -86,11 +86,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=98s Real=112.09s Sys=9.04s
+  User=95.72s Real=105.57s Sys=9.78s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1157306522, 1306681835
+ Current couple of seeds = 366655687, 245817838
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

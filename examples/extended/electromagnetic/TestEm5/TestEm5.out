@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (30-Jun-2000)
+                                (15-Dec-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -100,15 +100,15 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Beryllium         104.75
-           Aluminium         125.06
-             Silicon         116.06
-         liquidArgon         78.362
-                Iron         224.07
-              Copper         238.25
-                Gold         334.85
-                Lead         229.56
-               Water         81.507
+           Beryllium         103.96
+           Aluminium         125.02
+             Silicon         116.88
+         liquidArgon         79.954
+                Iron         225.11
+              Copper         239.08
+                Gold         332.49
+                Lead         228.54
+               Water         81.851
                  Air        0.27455
             XenonGas         1.7521
          CarbonicGas        0.54205
@@ -155,15 +155,15 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Beryllium         104.75
-           Aluminium         125.06
-             Silicon         116.06
-         liquidArgon         78.362
-                Iron         224.07
-              Copper         238.25
-                Gold         334.85
-                Lead         229.56
-               Water         81.507
+           Beryllium         103.96
+           Aluminium         125.02
+             Silicon         116.88
+         liquidArgon         79.954
+                Iron         225.11
+              Copper         239.08
+                Gold         332.49
+                Lead         228.54
+               Water         81.851
                  Air        0.27455
             XenonGas         1.7521
          CarbonicGas        0.54205
@@ -263,14 +263,14 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Beryllium         6.2257
-           Aluminium          6.878
-             Silicon          6.341
-         liquidArgon         4.0982
-                Iron         11.398
-              Copper         11.936
-                Gold         14.357
-                Lead         9.9052
+           Beryllium         6.1522
+           Aluminium         6.8754
+             Silicon         6.4277
+         liquidArgon         4.2884
+                Iron         11.501
+              Copper         12.024
+                Gold         14.484
+                Lead         10.043
                Water         3.9978
                  Air           0.25
             XenonGas           0.25
@@ -318,14 +318,14 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Beryllium         6.2257
-           Aluminium          6.878
-             Silicon          6.341
-         liquidArgon         4.0982
-                Iron         11.398
-              Copper         11.936
-                Gold         14.357
-                Lead         9.9052
+           Beryllium         6.1522
+           Aluminium         6.8754
+             Silicon         6.4277
+         liquidArgon         4.2884
+                Iron         11.501
+              Copper         12.024
+                Gold         14.484
+                Lead         10.043
                Water         3.9978
                  Air           0.25
             XenonGas           0.25
@@ -400,99 +400,99 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=257.69s Real=286.45s Sys=14.71s
+  User=248.62s Real=263.17s Sys=14.22s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209905 +- 1.66548e-05  mm  
+    mean charged track length   in absorber=0.0209432 +- 1.3765e-05  mm  
 
-            mean energy deposit in absorber=0.00682286 +- 2.23919e-05  MeV 
+            mean energy deposit in absorber=0.00661788 +- 2.01721e-05  MeV 
 
- mean number of steps in absorber (charged) =0.04007 +- 0.000740165      
- mean number of steps in absorber (neutral) =5e-05 +- 2.23601e-05      
+ mean number of steps in absorber (charged) =0.05585 +- 0.00112183      
+ mean number of steps in absorber (neutral) =7e-05 +- 2.64566e-05      
 
-   mean number of charged secondaries = 0.03709 +- 0.000635093
+   mean number of charged secondaries = 0.03739 +- 0.000629063
 
-   mean number of neutral secondaries = 5e-05 +- 2.23601e-05
+   mean number of neutral secondaries = 7e-05 +- 2.64566e-05
 
-   mean number of e-s =0.03709  and e+s =0
+   mean number of e-s =0.03739  and e+s =0
 
-(number) transmission coeff=1  reflection coeff=0.50178
+(number) transmission coeff=0.99999  reflection coeff=0.49943
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5815
+#entries=100000    #underflows=0    #overflows=5677
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
     2    0.0004           0           0
     3    0.0006           0           0
-    4    0.0008           0           0
-    5     0.001           4         0.2
-    6    0.0012           7        0.35
-    7    0.0014           9        0.45
-    8    0.0016          52         2.6
-    9    0.0018         104         5.2
-   10     0.002         232        11.6
-   11    0.0022         432        21.6
-   12    0.0024         751       37.55
-   13    0.0026        1268        63.4
-   14    0.0028        1785       89.25
-   15     0.003        2413      120.65
-   16    0.0032        3161      158.05
-   17    0.0034        3701      185.05
-   18    0.0036        4201      210.05
-   19    0.0038        4552       227.6
-   20     0.004        4729      236.45
-   21    0.0042        4816       240.8
-   22    0.0044        4543      227.15
-   23    0.0046        4361      218.05
-   24    0.0048        3999      199.95
-   25     0.005        3778       188.9
-   26    0.0052        3576       178.8
-   27    0.0054        3199      159.95
-   28    0.0056        2984       149.2
-   29    0.0058        2706       135.3
-   30     0.006        2445      122.25
-   31    0.0062        2400         120
-   32    0.0064        2238       111.9
-   33    0.0066        1984        99.2
-   34    0.0068        1911       95.55
-   35     0.007        1802        90.1
-   36    0.0072        1666        83.3
-   37    0.0074        1524        76.2
-   38    0.0076        1422        71.1
-   39    0.0078        1287       64.35
-   40     0.008        1235       61.75
-   41    0.0082        1180          59
-   42    0.0084        1042        52.1
-   43    0.0086         909       45.45
-   44    0.0088         880          44
-   45     0.009         805       40.25
-   46    0.0092         769       38.45
-   47    0.0094         680          34
-   48    0.0096         630        31.5
-   49    0.0098         624        31.2
-   50      0.01         545       27.25
-   51    0.0102         508        25.4
-   52    0.0104         482        24.1
-   53    0.0106         418        20.9
-   54    0.0108         428        21.4
-   55     0.011         403       20.15
-   56    0.0112         381       19.05
-   57    0.0114         353       17.65
-   58    0.0116         294        14.7
-   59    0.0118         304        15.2
-   60     0.012         276        13.8
-   61    0.0122         261       13.05
-   62    0.0124         249       12.45
-   63    0.0126         241       12.05
-   64    0.0128         246        12.3
+    4    0.0008           1        0.05
+    5     0.001           3        0.15
+    6    0.0012           6         0.3
+    7    0.0014          16         0.8
+    8    0.0016          41        2.05
+    9    0.0018         116         5.8
+   10     0.002         275       13.75
+   11    0.0022         463       23.15
+   12    0.0024         916        45.8
+   13    0.0026        1346        67.3
+   14    0.0028        2008       100.4
+   15     0.003        2726       136.3
+   16    0.0032        3528       176.4
+   17    0.0034        4172       208.6
+   18    0.0036        4626       231.3
+   19    0.0038        4801      240.05
+   20     0.004        5040         252
+   21    0.0042        4830       241.5
+   22    0.0044        4673      233.65
+   23    0.0046        4396       219.8
+   24    0.0048        4045      202.25
+   25     0.005        3650       182.5
+   26    0.0052        3389      169.45
+   27    0.0054        3071      153.55
+   28    0.0056        2791      139.55
+   29    0.0058        2650       132.5
+   30     0.006        2443      122.15
+   31    0.0062        2277      113.85
+   32    0.0064        2089      104.45
+   33    0.0066        1920          96
+   34    0.0068        1837       91.85
+   35     0.007        1656        82.8
+   36    0.0072        1542        77.1
+   37    0.0074        1445       72.25
+   38    0.0076        1343       67.15
+   39    0.0078        1237       61.85
+   40     0.008        1149       57.45
+   41    0.0082        1023       51.15
+   42    0.0084         943       47.15
+   43    0.0086         898        44.9
+   44    0.0088         785       39.25
+   45     0.009         738        36.9
+   46    0.0092         689       34.45
+   47    0.0094         629       31.45
+   48    0.0096         574        28.7
+   49    0.0098         540          27
+   50      0.01         511       25.55
+   51    0.0102         464        23.2
+   52    0.0104         449       22.45
+   53    0.0106         425       21.25
+   54    0.0108         407       20.35
+   55     0.011         354        17.7
+   56    0.0112         343       17.15
+   57    0.0114         339       16.95
+   58    0.0116         272        13.6
+   59    0.0118         243       12.15
+   60     0.012         251       12.55
+   61    0.0122         249       12.45
+   62    0.0124         261       13.05
+   63    0.0126         230        11.5
+   64    0.0128         189        9.45
 
- Emp =          0.0042   width=          0.003  MeV 
+ Emp =           0.004   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1120554762, 1278607785
+ Current couple of seeds = 1527606189, 1848314746
 ----------------------------------------
 #
 
