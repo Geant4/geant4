@@ -5,10 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.hh,v 1.6 2001-02-21 12:15:46 maire Exp $
+// $Id: Em2RunAction.hh,v 1.7 2001-03-08 14:28:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// 08.03.01 Hisaya: Adapted MyVector for STL   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -24,8 +26,9 @@
 #include "G4Positron.hh"
 #include "globals.hh"
 
-#include "g4rw/tvvector.h"
-typedef G4RWTValVector<G4double> MyVector;
+#include "g4std/vector"
+
+typedef  G4std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -115,10 +118,10 @@ void Em2RunAction::initializePerEvent()
 {
   //initialize arrays of energy deposit per bin     
   for (G4int i=0; i<nLbin; i++)
-     { dEdL(i) = 0.; }
+     { dEdL[i] = 0.; }
      
   for (G4int j=0; j<nRbin; j++)
-     { dEdR(j) = 0.; }     
+     { dEdR[j] = 0.; }     
   
   //initialize tracklength 
     ChargTrLength = NeutrTrLength = 0.;
@@ -138,7 +141,7 @@ void Em2RunAction::fillPerTrack(G4double charge, G4double trkLength)
 inline
 void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 {
-  dEdL(Lbin) += dEstep; dEdR(Rbin) += dEstep;
+  dEdL[Lbin] += dEstep; dEdR[Rbin] += dEstep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -146,9 +149,9 @@ void Em2RunAction::fillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
 inline
 void Em2RunAction::particleFlux(G4ParticleDefinition* particle, G4int Lplan)
 {
-       if (particle == G4Gamma::Gamma())          gammaFlux(Lplan)++;
-  else if (particle == G4Electron::Electron()) electronFlux(Lplan)++;
-  else if (particle == G4Positron::Positron()) positronFlux(Lplan)++;
+       if (particle == G4Gamma::Gamma())          gammaFlux[Lplan]++;
+  else if (particle == G4Electron::Electron()) electronFlux[Lplan]++;
+  else if (particle == G4Positron::Positron()) positronFlux[Lplan]++;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
