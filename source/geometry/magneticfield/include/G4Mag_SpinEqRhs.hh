@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.7 2001-07-17 02:13:43 gum Exp $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.8 2002-06-07 18:25:09 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,9 +29,10 @@
 //
 // Class description:
 //
-// This is the standard right-hand side for equation of motion.
-// This version of the right-hand side includes the three components
-// of the particle's spin.
+// This is the equation of motion for a particle with spin in a pure
+//   magnetic field. 
+//   The three components of the particle's spin are treated 
+//    utilising BMT equation.
 
 // History:
 // - Created: J.Apostolakis, P.Gumplinger - February 8th, 1999.
