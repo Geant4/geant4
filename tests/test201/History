@@ -1,7 +1,10 @@
-$Id: History,v 1.5 2003-11-14 15:41:15 johna Exp $
+$Id: History,v 1.6 2004-07-15 16:20:16 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+15th July 2004  John Allison  (test201-V06-02-00)
+- Changed /vis/viewer/viewpointThetaPhi -> /vis/viewer/set/viewpointThetaPhi.
 
 14th November 2003  John Allison  (test201-V05-02-00)
 - Removed all references to OPACS.
