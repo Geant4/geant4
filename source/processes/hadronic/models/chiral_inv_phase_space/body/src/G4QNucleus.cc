@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.8 2000-09-21 15:20:50 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.9 2000-09-21 16:44:23 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -643,7 +643,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         //GSResPP=G4QNucleus(Z-2,N,S).GetGSMass();
         GSResPP=G4QPDGCode().GetNuclMass(Z-2,N,S);
         ppQPDG=G4QPDGCode(90000000+1000*(1000*S+Z-2)+N);
-        if(GSResPP+mProt+CBarr+mProt+CBarr<totMass) ppFlag=true;
+        if(GSResPP+2*(mProt+CBarr)<totMass) ppFlag=true;
         if(Z>2)
         {
           //GSRePPP=G4QNucleus(Z-3,N,S).GetGSMass();
@@ -767,12 +767,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         //GSResNL=G4QNucleus(Z,N-1,S-1).GetGSMass();
         GSResNL=G4QPDGCode().GetNuclMass(Z,N-1,S-1);
         nlQPDG=G4QPDGCode(90000000+1000*(1000*(S-1)+Z)+N-1);
-        if(GSResNL+mProt+CBarr+mLamb<totMass) nlFlag=true;
+        if(GSResNL+mNeut+mLamb<totMass) nlFlag=true;
         if(S>1)
         {
           //GSReNLL=G4QNucleus(Z,N-1,S-2).GetGSMass();
           GSReNLL=G4QPDGCode().GetNuclMass(Z,N-1,S-2);
-          if(GSReNLL+mNeut+mNeut+mLamb<totMass) nllF=true;
+          if(GSReNLL+mNeut+mLamb+mLamb<totMass) nllF=true;
 		}
 	  }
 	}
@@ -804,12 +804,12 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         //GSResLL=G4QNucleus(Z,N,S-2).GetGSMass();
         GSResLL=G4QPDGCode().GetNuclMass(Z,N,S-2);
         ppQPDG=G4QPDGCode(90000000+1000*(1000*(S-2)+Z)+N);
-        if(GSResNL+mLamb+mLamb<totMass) llFlag=true;
+        if(GSResLL+mLamb+mLamb<totMass) llFlag=true;
         if(S>2)
         {
           //GSReLLL=G4QNucleus(Z,N,S-3).GetGSMass();
           GSReLLL=G4QPDGCode().GetNuclMass(Z,N,S-3);
-          if(GSRePPP+mLamb*3<totMass) lllF=true;
+          if(GSReLLL+mLamb*3<totMass) lllF=true;
 		}
 	  }
 	}
@@ -1229,7 +1229,6 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
         cout<<"G4QNucl::EvaporateBaryon: b="<<eMass<<bQPDG<<",r="<<rMass<<rQPDG<<endl;
 #endif
       }
-
       if(three)           // Decay in two baryons + Residual Nucleus
 	  {
         h1mom=G4LorentzVector(0.,0.,0.,eMass);
@@ -1372,7 +1371,6 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
             rMass=GSMass;
 		  }
 	    }
-
         h1mom=G4LorentzVector(0.,0.,0.,eMass);
         h2mom=G4LorentzVector(0.,0.,0.,rMass);
         h3mom=G4LorentzVector(0.,0.,0.,fMass);
