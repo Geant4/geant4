@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-02-27 11:18:24 maire Exp $
+$Id: History,v 1.48 2002-02-27 15:04:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27 fev 02: mma (stand-V04-00-02)
+- V.Ivanchenko remove the fix for GenericIons in G4VhEnergyLoss, G4hIonisation;
 
 27 fev 02: mma (stand-V04-00-01)
 - V.Ivanchenko fix G4VhEnergyLoss, G4hIonisation for GenericIons;
