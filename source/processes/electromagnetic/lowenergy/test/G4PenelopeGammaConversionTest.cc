@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeGammaConversionTest.cc,v 1.6 2004-12-02 14:02:33 pia Exp $
+// $Id: G4PenelopeGammaConversionTest.cc,v 1.7 2005-02-17 17:08:13 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -544,15 +544,15 @@ G4int main()
       
       // Primary physical quantities 
       
-      G4double energyChange = particleChange->GetEnergyChange();
+      G4double energyChange = particleChange->GetEnergy();
       
       G4double dedx = initEnergy - energyChange ;
       G4double dedxNow = dedx / (step->GetStepLength());
       
       G4ThreeVector eChange = 
 	particleChange->CalcMomentum(energyChange,
-				     (*particleChange->GetMomentumChange()),
-				     particleChange->GetMassChange());
+				     (*particleChange->GetMomentumDirection()),
+				     particleChange->GetMass());
       
       G4double pxChange  = eChange.x();
       G4double pyChange  = eChange.y();
@@ -560,10 +560,10 @@ G4int main()
       G4double pChange   = 
 	std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       
-      G4double xChange = particleChange->GetPositionChange()->x();
-      G4double yChange = particleChange->GetPositionChange()->y();
-      G4double zChange = particleChange->GetPositionChange()->z();
-      G4double thetaChange = particleChange->GetPositionChange()->theta();
+      G4double xChange = particleChange->GetPosition()->x();
+      G4double yChange = particleChange->GetPosition()->y();
+      G4double zChange = particleChange->GetPosition()->z();
+      G4double thetaChange = particleChange->GetPosition()->theta();
       
       G4cout << "---- Primary after the step ---- " << G4endl;
  
