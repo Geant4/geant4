@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.2 1999-02-09 15:11:36 kurasige Exp $
+// $Id: G4RunManager.cc,v 1.3 1999-04-16 09:32:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -336,7 +336,7 @@ void G4RunManager::InitializeCutOff()
   if(physicsList)
   {
     if(verboseLevel>1) G4cout << "physicsList->setCut() start." << endl;
-    physicsList->SetCutsWithDefault();
+    physicsList->SetCuts();
   }
   cutoffInitialized = true;
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.4 1999-04-15 04:14:18 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.5 1999-04-16 09:32:09 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,21 +23,15 @@
 //       G4BestUnit on output             12 nov. 1998  mma  
 //       Added RemoveProcessManager        9 Feb. 1999 by H.Kurashige
 //       Fixed RemoveProcessManager       15 Apr. 1999 by H.Kurashige
+//       Removed ConstructAllParticles()  15 Apr. 1999 by H.Kurashige
 // ------------------------------------------------------------
 
 #include "globals.hh"
 #include "G4VUserPhysicsList.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
-#include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleWithCuts.hh"
-#include "G4BosonConstructor.hh"
-#include "G4LeptonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BarionConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
 #include "G4Material.hh"
 #include "G4UserPhysicsListMessenger.hh"
 #include "G4UImanager.hh"
@@ -364,6 +358,35 @@ void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
 #endif
 }
 
+void G4VUserPhysicsList::SetCutsWithDefault()
+{
+  // default cut value
+   G4double cut = defaultCutValue;
+
+#ifdef G4VERBOSE    
+  if (verboseLevel >1){
+    G4cout << "G4VUserPhysicsList::SetCutsWithDefault:";
+    G4cout << "CutLength : " << cut/mm << " (mm)" << endl;
+  }  
+#endif
+
+  // set cut values for gamma at first and for e- second and next for e+,
+  // because some processes for e+/e- need cut values for gamma 
+  SetCutValue(cut, "gamma");
+  SetCutValue(cut, "e-");
+  SetCutValue(cut, "e+");
+ 
+  // set cut values for proton and anti_proton before all other hadrons
+  // because some processes for hadrons need cut values for proton/anti_proton 
+  SetCutValue(cut, "proton");
+  SetCutValue(cut, "anti_proton");
+  
+  SetCutValueForOthers(cut);
+
+  if (verboseLevel>1) {
+    DumpCutValuesTable();
+  }
+}  
 
 void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
 {
@@ -511,60 +534,6 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 
   }
 }
-
-void G4VUserPhysicsList::ConstructAllParticles()
-{
-  ConstructAllBosons();
-  ConstructAllLeptons();
-  ConstructAllMesons();
-  ConstructAllBarions();
-  ConstructAllIons();
-  ConstructAllShortLiveds();
-}
-
-void G4VUserPhysicsList::ConstructAllBosons()
-{
-  // Construct all bosons
-  G4BosonConstructor pConstructor;
-  pConstructor.ConstructParticle();
-}
-
-void G4VUserPhysicsList::ConstructAllLeptons()
-{
-  // Construct all leptons
-  G4LeptonConstructor pConstructor;
-  pConstructor.ConstructParticle();
-}
-
-void G4VUserPhysicsList::ConstructAllMesons()
-{
-  //  Construct all mesons
-  G4MesonConstructor pConstructor;
-  pConstructor.ConstructParticle();
-}
-
-void G4VUserPhysicsList::ConstructAllBarions()
-{
-  //  Construct all barions
-  G4BarionConstructor pConstructor;
-  pConstructor.ConstructParticle();
-}
-
-void G4VUserPhysicsList::ConstructAllIons()
-{
-  //  Construct light ions
-  G4IonConstructor pConstructor;
-  pConstructor.ConstructParticle();  
-}
-
-void G4VUserPhysicsList::ConstructAllShortLiveds()
-{
-  //  Construct  resonaces and quarks
-  G4ShortLivedConstructor pConstructor;
-  pConstructor.ConstructParticle();  
-}
-
-
 void G4VUserPhysicsList::DumpList() const
 {
   theParticleIterator->reset();
