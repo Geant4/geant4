@@ -21,15 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.hh,v 1.3 2001-09-26 15:37:05 vnivanch Exp $
+// $Id: G4VCrossSectionHandler.hh,v 1.4 2001-10-04 14:03:56 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 16 Sep 2001   MGP        Created
-// 26.09.01   V.Ivanchenko  add hide operator   
+// 16 Sep 2001   MGP           Created
+// 26 Sep 2001   V.Ivanchenko  Add hide operator   
 //
 // -------------------------------------------------------------------
 
@@ -68,12 +68,11 @@ public:
   G4int SelectRandomAtom(const G4Material* material, G4double e) const;
 
   const G4Element* SelectRandomElement(const G4Material* material, 
-                                             G4double e) const;
+				       G4double e) const;
 
   G4int SelectRandomShell(G4int Z, G4double e) const;
 
-  G4VEMDataSet* BuildMeanFreePathForMaterials(
-                         const G4DataVector* energyCuts = 0);
+  G4VEMDataSet* BuildMeanFreePathForMaterials(const G4DataVector* energyCuts = 0);
  
   void LoadData(const G4String& dataFile);
 
@@ -91,15 +90,14 @@ protected:
 
   void ActiveElements();
 
-  virtual G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(
-                         const G4DataVector& energyVector, 
-		         const G4DataVector* energyCuts = 0) = 0;
+  virtual G4std::vector<G4VEMDataSet*>* 
+  BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
+				 const G4DataVector* energyCuts = 0) = 0;
 
 private:
 
   // Hide copy constructor and assignment operator
 
-  // hide assignment operator 
   G4VCrossSectionHandler(const G4VCrossSectionHandler&);
   G4VCrossSectionHandler & operator=(const G4VCrossSectionHandler &right);
 
