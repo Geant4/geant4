@@ -202,6 +202,10 @@ The file contains histograms:
      
     - 70 (1)   Energy (MeV) of primaries outgoing the phantom
 
+    - 80 (2)   Project the coordinate of the hits on the plane xy
+  
+    - 90 (2)   Project the  energy  deposit of the hits on the plane xy
+
 6.SET-UP 
                                                                         
 - a standard Geant4 example GNUmakefile is provided                     

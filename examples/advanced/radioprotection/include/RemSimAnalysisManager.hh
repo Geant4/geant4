@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.5 2004-05-22 12:57:04 guatelli Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.6 2004-11-22 17:11:59 guatelli Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -80,6 +80,10 @@ public:
   void PrimaryEnergyOut(G4double);
   // Energy of primary particles outgoing the phantom 
 
+  void particleShape(G4double, G4double);
+
+  void energyDepShape(G4double, G4double, G4double);
+
   void finish();
 
 private:
@@ -102,6 +106,8 @@ private:
   AIDA::IHistogram1D* primaryInitialEout;
   AIDA::IHistogram1D* initialE;
   AIDA::IHistogram1D* initialEout;
+  AIDA::IHistogram2D* shape;
+  AIDA::IHistogram2D* energyShape;
 };
 #endif
 #endif

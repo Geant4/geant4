@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.4 2004-05-22 12:57:03 guatelli Exp $
+$Id: History,v 1.5 2004-11-22 17:11:59 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,8 +8,10 @@ $Id: History,v 1.4 2004-05-22 12:57:03 guatelli Exp $
 
                       Category History file
                       ---------------------
-05.2005 - 
-05.2005 - Design iteration with Decorator Design pattern
+
+11.2004 - Add histograms 
+ 
+05.2004 - Design iteration with Decorator Design pattern
 
 01.2004 - S.Guatelli
           First implementation

@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.5 2004-05-22 12:57:06 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.6 2004-11-22 17:11:59 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -47,7 +47,7 @@ RemSimAnalysisManager::RemSimAnalysisManager()
      histogramFactory(0), dataPoint(0), energyDeposit(0),
      primary(0), secondaryDeposit(0), primaryInitialE(0), 
      primaryInitialEout(0), initialE(0), 
-     initialEout(0)
+     initialEout(0), shape(0),energyShape(0)
 { 
   aFact = AIDA_createAnalysisFactory();
   treeFact = aFact -> createTreeFactory();
@@ -55,6 +55,12 @@ RemSimAnalysisManager::RemSimAnalysisManager()
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
 { 
+  delete energyShape;
+  energyShape = 0;
+
+  delete shape;
+  shape = 0;
+ 
   delete initialEout;
   initialEout = 0;
   
@@ -142,6 +148,17 @@ void RemSimAnalysisManager::book()
  initialEout = histogramFactory -> createHistogram1D("70",
 					       "Energy of primaries outgoing the phantom", 
                                                 200000,0.,100000.);
+
+ shape =  histogramFactory -> createHistogram2D("80",
+					       "Shape", 
+                                                300,-150.,150.,
+                                                300, -150.,150.);
+
+ energyShape = histogramFactory -> createHistogram2D("90", 
+                                                        "energyDepShape",
+                                                        300, -150.,150.,
+                                                        300, -150.,150.);
+
 }
 
 void RemSimAnalysisManager::energyDepositStore(G4int layer, G4double eDep)
@@ -178,6 +195,17 @@ void RemSimAnalysisManager::PrimaryEnergyOut(G4double EnergyDep)
 {
   initialEout -> fill(EnergyDep); 
 }
+
+void RemSimAnalysisManager::particleShape(G4double x, G4double y)
+{
+  shape -> fill(x,y); 
+}
+
+void RemSimAnalysisManager::energyDepShape(G4double x, G4double y, G4double energyDep)
+{
+  energyShape -> fill(x,y, energyDep); 
+}
+
 
 void RemSimAnalysisManager::finish() 
 {  
