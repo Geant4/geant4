@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2.hh,v 1.8 2001-09-18 07:53:08 stanaka Exp $
+// $Id: G4VRML2.hh,v 1.9 2002-06-23 03:31:42 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2.hh
 // Satoshi Tanaka and Yasuhide Sawada
+
+#ifndef WIN32
 
 #if defined (G4VIS_BUILD_VRML_DRIVER) || defined (G4VIS_USE_VRML)
 
@@ -61,3 +63,4 @@ private:
 
 #endif //G4VRML2_HH
 #endif //G4VIS_BUILD_VRML_DRIVER
+#endif //WIN32

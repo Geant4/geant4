@@ -21,11 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.cc,v 1.7 2002-06-17 10:13:48 gcosmo Exp $
+// $Id: G4VRML2SceneHandler.cc,v 1.8 2002-06-23 03:31:51 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandler.cc
 // Satoshi Tanaka & Yasuhide Sawada
+
+#ifndef WIN32
+
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -142,3 +145,4 @@ G4int G4VRML2SceneHandler::fSceneIdCount = 0;
 G4int G4VRML2SceneHandler::fSceneCount = 0;
 
 #endif
+#endif //WIN32

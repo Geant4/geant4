@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2.cc,v 1.7 2001-09-18 07:53:16 stanaka Exp $
+// $Id: G4VRML2.cc,v 1.8 2002-06-23 03:31:50 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2.cc
 // Satoshi Tanaka & Yasuhide Sawada
+
+#ifndef WIN32
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -90,3 +92,4 @@ G4VViewer* G4VRML2::CreateViewer(G4VSceneHandler& scene, const G4String& name)
 }
 
 #endif
+#endif //WIN32

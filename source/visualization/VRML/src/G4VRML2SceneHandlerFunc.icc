@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.9 2001-09-18 07:53:16 stanaka Exp $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.10 2002-06-23 03:31:51 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandlerFunc.icc
@@ -572,12 +572,12 @@ G4double  G4VRML2SCENEHANDLER::GetMarkerHalfSize ( const G4VMarker& mark )
 	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
 	//----- get marker radius in 3D units
-	if        ( size = mark.GetWorldSize()  ) {
+	if        ( size == mark.GetWorldSize()  ) {
 
 		// get mark radius in 3D units
 		size = 0.5 * mark.GetWorldSize()  ; 
 
-	} else if ( size = mark.GetScreenSize() ) {
+	} else if ( size == mark.GetScreenSize() ) {
 
 		// local
 		double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;

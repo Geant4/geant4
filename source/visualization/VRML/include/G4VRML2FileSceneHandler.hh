@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2FileSceneHandler.hh,v 1.9 2001-09-18 07:53:08 stanaka Exp $
+// $Id: G4VRML2FileSceneHandler.hh,v 1.10 2002-06-23 03:31:42 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.hh
@@ -134,4 +134,4 @@ public:
 
 };
 
-#endif //G4VRML2File_SCENE_HH
+#endif //G4VRML2FILE_SCENE_HANDLER_HH

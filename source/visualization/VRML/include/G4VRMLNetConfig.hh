@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRMLNetConfig.hh,v 1.5 2001-09-18 07:53:08 stanaka Exp $
+// $Id: G4VRMLNetConfig.hh,v 1.6 2002-06-23 03:31:43 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLNetConfig.hh
 // Satoshi Tanaka
+
+#ifndef WIN32
 
 #ifdef  G4VIS_BUILD_VRML_DRIVER
 
@@ -38,3 +40,4 @@ const char  FR_VRML_HOST_NAME_ENV[]  = "G4VRML_HOST_NAME" ;
 
 #endif // G4VRML_NET_CONFIG_HH
 #endif // G4VIS_BUILD_VRML_DRIVER
+#endif //WIN32

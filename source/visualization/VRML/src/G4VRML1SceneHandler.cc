@@ -21,11 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML1SceneHandler.cc,v 1.6 2001-09-18 07:53:15 stanaka Exp $
+// $Id: G4VRML1SceneHandler.cc,v 1.7 2002-06-23 03:31:50 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandler.cc
 // Yasuhide Sawada and Satoshi Tanaka
+
+#ifndef WIN32
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -129,4 +131,5 @@ void G4VRML1SceneHandler::closePort()
 G4int G4VRML1SceneHandler::fSceneIdCount = 0;
 G4int G4VRML1SceneHandler::fSceneCount = 0;
 
+#endif
 #endif

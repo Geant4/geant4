@@ -21,11 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4FRClient.cc,v 1.6 2001-09-18 07:53:15 stanaka Exp $
+// $Id: G4FRClient.cc,v 1.7 2002-06-23 03:31:50 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FRClient.cc
 // Yasuhide Sawada & Satoshi Tanaka
+
+
+//=================//
+#ifndef WIN32
+//=================//
+
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -109,4 +115,8 @@ G4FRClient& G4FRClient::operator << (G4FRClient& (*func)(G4FRClient&))
 //	return c << "\n";
 //}
 ///////////////////////////////////////
-#endif
+
+#endif //G4VIS_BUILD_VRML_DRIVER
+
+#endif //WIN32
+

@@ -21,12 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: FRClient.cc,v 1.5 2001-09-18 07:53:15 stanaka Exp $
+// $Id: FRClient.cc,v 1.6 2002-06-23 03:31:50 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // FRClient.cc
 // FukuiRenderer Client
 // Yasuhide Sawada & Satoshi Tanaka
+
+
+//=================//
+#ifndef WIN32
+//=================//
+
 
 //=================//
 #ifdef G4VIS_BUILD_VRML_DRIVER
@@ -144,4 +150,6 @@ int FRClient::close()
 	return 0;
 }
 
-#endif
+#endif //G4VIS_BUILD_VRML_DRIVER
+
+#endif // WIN32
