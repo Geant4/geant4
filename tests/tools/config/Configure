@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.3 2002-06-23 18:26:27 sadilov Exp $
+# $Id: Configure,v 1.4 2002-06-26 11:38:56 sadilov Exp $
 #
-# Generated on Sun Jun 23 20:13:17 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 13:35:12 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -52,11 +52,12 @@ esac
 : Proper PATH separator
 p_=:
 : On OS/2 this directory should exist if this is not floppy only system :-]
-if test -d c:/.; then
-	p_=\;
-	PATH=`cmd /c "echo %PATH%" | tr '\\\\' / `
-	OS2_SHELL=`cmd /c "echo %OS2_SHELL%" | tr '\\\\' / | tr '[A-Z]' '[a-z]'`
-fi
+#if test -d c:/.; then
+#	p_=\;
+#	PATH=`cmd /c "echo %PATH%" | tr '\\\\' / `
+#?X: That's a bug in ksh5.22
+#	OS2_SHELL=`cmd /c "echo %OS2_SHELL%" | tr '\\\\' / | tr '[A-Z]' '[a-z]'`
+#fi
 
 : Proper PATH setting
 paths='/bin /usr/bin /usr/local/bin /usr/ucb /usr/local /usr/lbin'
@@ -310,14 +311,26 @@ if `$sh -c '#' >/dev/null 2>&1`; then
 	echo "#!$xcat" >try
 	$eunicefix try
 	chmod +x try
-	./try > today
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
 	if test -s today; then
 		sharpbang='#!'
 	else
 		echo "#! $xcat" > try
 		$eunicefix try
 		chmod +x try
-		./try > today
+#
+# $xcat is wrong on WIN32: there is no /bin/cat and /usr/bin/cat by default.
+# But we are sure that sharpbang is to be '#!' and let 'today' will be !=0.
+#
+#	./try > today
+	echo "#!$xcat" >today
+
 		if test -s today; then
 			sharpbang='#! '
 		else
@@ -1311,6 +1324,8 @@ cd ../..
 		dnix) osname=dnix
 			osvers="$3"
 			;;
+		cygwin*) osname=win32
+			;;
 		domainos) osname=apollo
 			osvers="$3"
 			;;
@@ -1561,6 +1576,8 @@ case "$g4osname" in
 				;;
 		'sunos')	g4osname=SUN
 				;;
+		'win32')	g4osname=WIN32
+				;;
 	esac
 esac
 
@@ -1600,6 +1617,9 @@ case  "$g4compiler" in
 				;;
 		'SUN')
 				g4compiler=CC
+				;;
+		'WIN32')
+				g4compiler=VC
 				;;
 	esac
 esac
@@ -1645,6 +1665,9 @@ gans=$ans
 			'sunos')
 					g4osnamerec=SUN
 					;;
+			'win32')
+					g4osnamerec=WIN32
+					;;
 		esac
 		dflt=$g4osname
 		rp="What is your OS'?"
@@ -1688,6 +1711,9 @@ EOM
 					;;
 			'SUN')
 					g4compilerrec=CC
+					;;
+			'WIN32')
+					g4compilerrec=VC
 					;;
 		esac
 		dflt=$g4compiler
@@ -2159,7 +2185,10 @@ esac
 
 case "$g4install" in
 '')
-	g4install=$HOME/geant4
+	if [ X$HOME = X/ ] ; then
+	G4HOME=""
+	fi
+	g4install=$G4HOME/geant4
 	;;
 esac
 
@@ -2903,7 +2932,7 @@ esac
 
 echo ""
 
-	g4_gmake_version=`(gmake -v)`
+	g4_gmake_version=`(gmake -v) 2>/dev/null` 
 				case $g4_gmake_version in
 				GNU*) 
 				g4_gmake=y				
@@ -2913,7 +2942,7 @@ echo ""
 				;;
 				esac				
 
-	g4_make_version=`(make -v)`
+	g4_make_version=`(make -v) 2>/dev/null`
 				case $g4_make_version in
 				GNU*) 
 				g4_make=y				
@@ -2963,8 +2992,6 @@ You have NO GNU make which could be used to build GEANT4.
 Please select your own 'make' program compatible with GNU make.
 EOM`
 
-fi
-
 dflt=$g4make
 rp=$g4message
 
@@ -2981,6 +3008,9 @@ gans=$ans
 		g4make=$gans
 		;;
 	esac
+
+fi
+
 
 
 
