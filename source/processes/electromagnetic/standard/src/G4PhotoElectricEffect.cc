@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.3 1999-03-04 16:31:26 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.4 1999-05-20 15:32:23 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,7 @@
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of Atomic shells in PostStepDoIt
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
+// 20/05/99, protection against very low energy photons ,L.Urban
 // --------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -222,7 +223,9 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
 // GEANT4 internal units
 //
  
-{
+{ //  protection !
+   static const G4double veryLowEnergy = 1.*eV ;
+
    aParticleChange.Initialize(aTrack);
    G4Material* aMaterial = aTrack.GetMaterial();
 
@@ -231,6 +234,13 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    G4double PhotonEnergy = aDynamicPhoton->GetKineticEnergy();
    G4ParticleMomentum PhotonDirection = aDynamicPhoton->GetMomentumDirection();
 
+  //  protection !
+   if(PhotonEnergy <= veryLowEnergy)
+   {
+     aParticleChange.SetLocalEnergyDeposit(PhotonEnergy);  
+     aParticleChange.SetStatusChange(fStopAndKill); 
+     return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
+   }
    
    // select randomly one element constituing the material.
    G4Element* anElement = SelectRandomAtom(aDynamicPhoton, aMaterial);
