@@ -24,20 +24,21 @@
 
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
+typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
 enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
-G4int nCollisions = 1000;      // collisions to be generated
+G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
-G4double     momZ = 0.16;      // momentum in z-direction
+G4double     momZ = 160;      // momentum in z-direction
 G4double        N = 27.0;      // target atomic weight Al
 G4double        Z = 13.0;      // target atomic number
 
 G4CollisionOutput output;
 
-G4int testINC();
+G4int testINC(G4int, G4int, G4double, G4double, G4double);
 G4int testINCEvap();
-G4int testINCAll();
+G4int testINCAll(G4int, G4int, G4double, G4double, G4double);
 G4int printData(G4int event);
 G4int test();
 
@@ -64,8 +65,8 @@ int main(int argc, char **argv ) {
     G4cout << "           Z " << Z           << G4endl;
   }
 
-  testINC();     // Only INC model  
-  //testINCAll();  // INC, pre-eq, evap, fission
+  //testINC(nCollisions, bulletType, momZ, N, Z);     // Only INC model  
+  testINCAll(nCollisions, bulletType, momZ, N, Z);  // INC, pre-eq, evap, fission
  
   //testINCEvap(); // INC and evaporation 
   test();        // misc. testing
@@ -84,7 +85,7 @@ G4int testINCEvap() {
   return 0;
 };
 
-G4int testINC() {
+G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4double Z) {
   G4int verboseLevel = 1; // eguals 1 for data file production, 2 for testing, 3 all
 
   if (verboseLevel > 1) {
@@ -114,7 +115,7 @@ G4int testINC() {
 
   for (G4int i = 1; i <= nCollisions; i++) {
     // Make INC
-    if (verboseLevel > 2) {
+    if (verboseLevel > 0) {
       G4cout << "collision " << i << G4endl; 
     }
 
@@ -124,7 +125,7 @@ G4int testINC() {
   return 0;
 };
 
-G4int testINCAll() {
+G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4double Z) {
 
   G4int verboseLevel = 1;
 
@@ -176,7 +177,7 @@ G4int testINCAll() {
 
     for (G4int i = 1; i <= nCollisions; i++){
 
-      if (verboseLevel > 2) {
+      if (verboseLevel > 1) {
 	G4cout << "collision " << i << G4endl; 
       }
 
@@ -198,8 +199,35 @@ G4int printData(G4int i) {
   }
 	  
   // Convert Bertini data to Geant4 format
-  G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
 
+  G4std::vector<G4InuclNuclei> fragments = output.getNucleiFragments();
+
+  if(!fragments.empty()) { 
+    nucleiIterator ifrag;
+
+    for(ifrag = fragments.begin(); ifrag != fragments.end(); ifrag++) {
+      G4std::vector<G4double> mom = ifrag->getMomentum();
+      G4double ekin = ifrag->getKineticEnergy() * GeV;
+      G4int type = 0;
+
+      G4double fEx = 0; // fragments[i].getExitationEnergyInGeV();
+      G4double fA = 0; // fragments[i].getA();
+      G4double fZ = 0; // fragments[i].getZ();
+
+
+      if (verboseLevel > 2) {
+	G4cout << " Fragment exitation energy " << fEx << " " << fA << " " << fZ << G4endl;
+      }
+	
+      if (verboseLevel > 0) {
+	cout.precision(4);
+
+	G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << setw(13) << fA << setw(13) << fZ << setw(13) << fEx << G4endl;
+      }
+    }
+  }
+
+  G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
   if(!particles.empty()) { 
     particleIterator ipart;
 
@@ -209,12 +237,9 @@ G4int printData(G4int i) {
       G4int type = ipart->type();
 
       if (verboseLevel > 0) {
+	cout.precision(4);
 
-	if (verboseLevel > 0) {
-	  cout.precision(4);
-
-	  G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << G4endl;
-	}
+	G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << setw(13) << 0 << setw(13) << 0 << setw(13) << 0 << G4endl;
       }
     }
   }
