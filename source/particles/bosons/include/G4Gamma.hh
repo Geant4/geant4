@@ -19,15 +19,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//// $Id: G4Gamma.hh,v 1.9 2001-11-17 04:29:53 kurasige Exp $
+//// $Id: G4Gamma.hh,v 1.10 2001-11-19 09:30:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file
 //
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
 //      History: first implementation, based on object model of
 //      4-th April 1996, G.Cosmo
 // ****************************************************************
