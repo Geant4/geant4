@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2001-12-05 18:55:36 nartallo Exp $
+$Id: History,v 1.14 2001-12-05 19:10:44 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05.12.2001 - RN, tag xraytel-V03-02-01
+             Try again
 05.12.2001 - RN, tag xraytel-V03-02-00
              Adopted new analysis design by AP as in LowEnTest
              Small design iteration by MGP implemented
