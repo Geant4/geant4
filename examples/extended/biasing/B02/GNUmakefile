@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-07-11 08:12:22 dressel Exp $
+# $Id: GNUmakefile,v 1.3 2002-07-11 16:30:34 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,12 +13,7 @@ endif
 
 .PHONY: all
 all: lib bin
-include $(G4INSTALL)/config/architecture.gmk
 
-CPPFLAGS += -I$(G4INSTALL)/examples/extended/biasing/B09/include
-
-LDFLAGS += -L$(G4WORKDIR)/tmp/Linux-g++/exampleB09\
-	   -lexampleB09
-
+CPPFLAGS +=
 
 include $(G4INSTALL)/config/binmake.gmk
