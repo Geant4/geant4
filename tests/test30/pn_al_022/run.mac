@@ -16,6 +16,8 @@ proton
 Al
 #energy(MeV)
 22.2
+#emax(MeV)
+25
 #elim(MeV)
 1.
 #nangle

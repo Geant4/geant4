@@ -11,7 +11,7 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 20 0.1 1000
+ null 0 25 0.1 1000
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
  
@@ -38,7 +38,7 @@ ve/create X(34) R .75 1.25 1.75 2.25 2.75 3.25 3.75 4.25 4.75 5.25 5.75 6.25 6.7
  
  exe ../prf n_a0 eps
 
-  null 0 20 0.1 1000
+  null 0 25 0.1 1000
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
  gr/h/symb X Y 34 21 0.2

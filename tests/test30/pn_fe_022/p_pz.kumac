@@ -12,22 +12,22 @@ set NDVY 010205
  
  hi/file 1 par.paw
  hi/pl 4 hist
- itx 20 2000 'LEPAR'
+ itx 100 1500 'LEPAR'
  close 1
  
  hi/file 1 prec.paw
  hi/pl 4 hist
- itx 20 4000 'PREC'
+ itx 100 1500 'PREC'
  close 1
  
  hi/file 1 chips.paw
  hi/pl 4 hist
- itx 20 4000 'CHIPS'
+ itx 20 200 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
  hi/pl 4 hist
- itx 20 4000 'KIN'
+ itx 20 200 'KIN'
  close 1
  
 exe ../prf p_pz eps

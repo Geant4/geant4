@@ -9,27 +9,25 @@ set NDVX 010206
 set NDVY 010205
  zone
  zone 2 2
-* opt logy
  
  hi/file 1 par.paw
  hi/pl 27 hist
-* itx 3 600000 'protons 160.3 MeV on Al'
- itx 20 300000 'LEPAR'
+ itx 20 500 'LEPAR'
  close 1
  
  hi/file 1 prec.paw
  hi/pl 27 hist
- itx 20 150000 'PREC'
+ itx 20 500 'PREC'
  close 1
  
  hi/file 1 chips.paw
  hi/pl 27 hist
- itx 20 100000 'CHIPS'
+ itx 20 500 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
  hi/pl 27 hist
- itx 20 100000 'KIN'
+ itx 20 500 'KIN'
  close 1
  
  opt liny

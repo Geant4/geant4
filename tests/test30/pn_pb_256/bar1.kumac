@@ -32,7 +32,7 @@ set NDVY 010205
  
  ve/create X(8) R 3  7 10 14 18 22 24 26 
  ve/create Y(8) R 20 2.35 0.39 0.69 6.2 14.9 10.8 25.3
- ve/create DX(8) R 0 0 0 0 0 0 0 0 0 0 0 0
+ ve/create DX(8) R 0 0 0 0 0 0 0 0 0 
  ve/create DY(8) R 6 0.1 0.03 0.03 0.5 1. 1.3 2
  gr/h/err X Y DX DY 8 21 0.2 1
 

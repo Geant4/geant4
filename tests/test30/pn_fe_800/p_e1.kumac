@@ -8,30 +8,29 @@ set XLAB 0.6
 set NDVX 010206
 set NDVY 010205
  zone
- zone 1 4
+ zone 1 3
  opt logy
  opt logx
 
  
  hi/file 1 par.paw
  hi/pl 12(2:100) hist
-* itx 1 200000 'protons 160.3 MeV on Al'
- itx 0.5 5000 'LEPAR'
+ itx 10 100 'LEPAR'
  close 1
  
- hi/file 1 prec.paw
- hi/pl 12(2:100) hist
- itx 0.5 5000 'PREC'
- close 1
+* hi/file 1 prec.paw
+* hi/pl 12(2:100) hist
+* itx 10 100 'PREC'
+* close 1
  
  hi/file 1 chips.paw
  hi/pl 12(2:100) hist
- itx 0.5 2000 'CHIPS'
+ itx 10 100 'CHIPS'
  close 1
  
  hi/file 1 kin.paw
  hi/pl 12(2:100) hist
- itx 0.5 1000 'KIN'
+ itx 10 1000 'KIN'
  close 1
  
  opt liny

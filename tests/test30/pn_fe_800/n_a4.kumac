@@ -42,7 +42,7 @@ ve/create Y(30) R 21.79 19.99 15.45 10.59 8.75 6.61 4.85 3.98 3.21 2.8 2.22 1.77
  gr/h/symb X Y 30 21 0.2
 
  hi/file 1 par.paw
- set dmod 4
+ set dmod 3
  hi/pl 32 shist
  line 200 0.8 210 0.8
  itx  215 6.0 'LEPAR'

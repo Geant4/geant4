@@ -11,7 +11,7 @@ set NDVY 010205
  zone
  opt logy
  
- null 0.5 27.5 0.01 1000
+ null 0.5 56.5 0.01 1000
  atitle 'baryon number' 'cross section(mb)'
  
 

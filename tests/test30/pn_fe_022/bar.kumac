@@ -9,11 +9,9 @@ set NDVX 010206
 set NDVY 010205
  zone
  zone 2 2
-* opt logy
  
  hi/file 1 par.paw
  hi/pl 27 hist
-* itx 3 600000 'protons 160.3 MeV on Al'
  itx 20 300000 'LEPAR'
  close 1
  

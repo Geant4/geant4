@@ -15,7 +15,6 @@ set NDVY 010205
  
  hi/file 1 par.paw
  hi/pl 12(2:100) hist
-* itx 1 200000 'protons 160.3 MeV on Al'
  itx 0.5 5000 'LEPAR'
  close 1
  

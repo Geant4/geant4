@@ -43,6 +43,8 @@ gr/h/symb X1 Y1 4 25 0.2
   null -1.0 1.0 0.01 10000
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
+ gr/h/symb X Y 5 21 0.2
+gr/h/symb X1 Y1 4 25 0.2
 
   hi/file 1 par.paw
  set dmod 2
@@ -57,9 +59,6 @@ gr/h/symb X1 Y1 4 25 0.2
  line 0 2.1 0.1 2.1
  itx 0.15 150 'CHIPS'
  close 1
-
- gr/h/symb X Y 14 21 0.2
-gr/h/symb X1 Y1 4 25 0.2
  
  opt liny
 

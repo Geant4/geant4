@@ -26,8 +26,8 @@ set NDVY 010205
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 31 shist
- line 380 1.2 400 1.2
- itx 415 15 'KIN'
+ line 280 1.2 300 1.2
+ itx 315 15 'KIN'
  close 1
  
   ve/create X(34) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 30 50 70 90 110 130 150 170 190 210 230 250 270 290 310  
@@ -45,15 +45,15 @@ exe ../prf n_a3 eps
  hi/file 1 par.paw
  set dmod 3
  hi/pl 31 shist
- line 380 1.8 410 1.8
- itx 415 60 'LEPAR'
+ line 280 1.8 310 1.8
+ itx 315 60 'LEPAR'
  close 1
  
   hi/file 1 chips.paw
  set dmod 1
  hi/pl 31 shist
- line 380 1.4 410 1.4
- itx 415 22 'CHIPS'
+ line 280 1.4 310 1.4
+ itx 315 22 'CHIPS'
  close 1
  
  exe ../prf nk_a3 eps

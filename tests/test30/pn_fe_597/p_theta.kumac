@@ -12,14 +12,13 @@ set NDVY 010205
  
  hi/file 1 par.paw
  hi/pl 25 hist
-* itx 0.5 1000 'protons 160.3 MeV on Al'
  itx 0 200 'LEPAR'
  close 1
  
- hi/file 1 prec.paw
- hi/pl 25 hist
- itx 0 500 'PREC'
- close 1
+* hi/file 1 prec.paw
+* hi/pl 25 hist
+* itx 0 500 'PREC'
+* close 1
  
  hi/file 1 chips.paw
  hi/pl 25 hist

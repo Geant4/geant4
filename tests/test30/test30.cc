@@ -355,7 +355,7 @@ int main(int argc, char** argv)
     }
 
     G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1; 
-    G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1; 
+    // G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1; 
 		
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
@@ -382,7 +382,7 @@ int main(int argc, char** argv)
 
     const G4int nhisto = 50; 
     IHistogram1D* h[nhisto];
-    IHistogram2D* h2;
+    //    IHistogram2D* h2;
     //ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
@@ -396,7 +396,10 @@ int main(int argc, char** argv)
       // Creating an 1-dimensional histogram in the root directory of the tree
   
       // ---- Book a histogram and ntuples
-      G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
+      G4cout << "Hbook file name: <" << hFile << ">" << G4endl;      
+      G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
+      G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
+      G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
 
       h[0]=hf->create1D("1","Number of Secondaries",50,-0.5,49.5);
       h[1]=hf->create1D("2","Type of secondary",10,-0.5,9.5);
@@ -599,8 +602,10 @@ int main(int argc, char** argv)
       G4int n = aChange->GetNumberOfSecondaries();
       G4int nn= n;
 			
-      if(iter==100*(iter/100)) cerr << "##### " << iter << "-th event  #####" << G4endl;
-			 					
+      if(iter == 1000*(iter/1000)) {
+        cerr << "##### " << iter << "-th event  #####" << G4endl;
+      }	
+		 					
       for(G4int i=0; i<n+1; i++) {
 
 	if(i<n) {
