@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.4 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.5 2004-06-09 14:18:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,7 +34,6 @@
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWith3Vector.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
@@ -114,20 +111,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
   MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
-
-  accCmd1 = new G4UIcmdWith3Vector("/testem/det/acceptanceL1",this);
-  accCmd1->SetGuidance("set Edep and RMS");
-  accCmd1->SetGuidance("acceptance values for first layer");
-  accCmd1->SetParameterName("edep","rms","limit",true);
-  accCmd1->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd1->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  accCmd2 = new G4UIcmdWith3Vector("/testem/det/acceptanceL2",this);
-  accCmd2->SetGuidance("set Edep and RMS");
-  accCmd2->SetGuidance("acceptance values for 2nd layer");
-  accCmd2->SetParameterName("edep","rms","limit",true);
-  accCmd2->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd2->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -142,8 +125,6 @@ DetectorMessenger::~DetectorMessenger()
   delete UpdateCmd;
   delete MaxStepCmd;
   delete testemDir;
-  delete accCmd1;
-  delete accCmd2;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -180,12 +161,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == MaxStepCmd )
    { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
-  
-  if( command == accCmd1 )
-   { Detector->SetEdepAndRMS(0,accCmd1->GetNew3VectorValue(newValue));}
-
-  if( command == accCmd2 )
-   { Detector->SetEdepAndRMS(1,accCmd2->GetNew3VectorValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

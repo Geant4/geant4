@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.cc,v 1.10 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.11 2004-06-09 14:18:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,17 +54,6 @@ DetectorConstruction::DetectorConstruction()
  solidLayer(0),logicLayer(0),physiLayer(0),
  magField(0)
 {
-  for (G4int i=0; i<MaxAbsor; i++)
-     {
-      AbsorMaterial[i]=0; AbsorThickness[i]=0.;
-      solidAbsor[i]=0;logicAbsor[i]=0;physiAbsor[i]=0;
-      limittrue[i]=DBL_MAX;
-      edeptrue[i]=1.0;
-      rmstrue[i]=1.0;
-     }
-  histoName = "testem3.paw";
-  histoType = "hbook";
-  //
   // default parameter values of the calorimeter
   NbOfAbsor = 2;
   AbsorThickness[0] = 2.3*mm;
@@ -527,16 +516,6 @@ void DetectorConstruction::SetMaxStepSize(G4double val)
   userLimits->SetMaxAllowedStep(val);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetEdepAndRMS(G4int i, G4ThreeVector Value)
-{
-  if(i>=0 && i<MaxAbsor) {
-    edeptrue[i] = Value(0);
-    rmstrue[i]  = Value(1);
-    limittrue[i]= Value(2);
-  }
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunActionMessenger.hh,v 1.5 2004-04-28 16:58:48 maire Exp $
+// $Id: RunActionMessenger.hh,v 1.6 2004-06-09 14:18:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,7 @@
 class RunAction;
 class G4UIcommand;
 class G4UIcmdWithAString;
+class G4UIcmdWith3Vector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,7 +53,9 @@ class RunActionMessenger: public G4UImessenger
   private:
     RunAction*          Run;
     G4UIcmdWithAString* fileCmd;
-    G4UIcommand*        HistoCmd;         
+    G4UIcommand*        HistoCmd;
+    G4UIcmdWith3Vector* accCmd1;
+    G4UIcmdWith3Vector* accCmd2;             
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

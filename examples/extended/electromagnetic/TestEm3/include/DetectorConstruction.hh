@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.8 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.9 2004-06-09 14:18:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,6 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4ThreeVector.hh"
 
 class G4Box;
 class G4LogicalVolume;
@@ -91,18 +90,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      const G4Material*        GetWorldMaterial()     {return defaultMaterial;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
 
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4int, G4ThreeVector);
-     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
-     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
-     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
-
-     // Histogram name and type
-     void SetHistoName(G4String& val)   {histoName = val;};
-     void SetHistoType(G4String& val)   {histoType = val;};
-     const G4String& HistoName() const  {return histoName;};
-     const G4String& HistoType() const  {return histoType;};
-
   private:
 
      G4int              NbOfAbsor;
@@ -139,13 +126,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4UserLimits*      userLimits;
 
      DetectorMessenger* detectorMessenger;
-
-     G4double           edeptrue[MaxAbsor];
-     G4double           rmstrue[MaxAbsor];
-     G4double           limittrue[MaxAbsor];
-     G4String           histoName;
-     G4String           histoType;
-
 
   private:
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.11 2004-04-28 16:58:47 maire Exp $
+// $Id: RunAction.hh,v 1.12 2004-06-09 14:18:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 #include "DetectorConstruction.hh"
 
 #include "G4UserRunAction.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,6 +86,12 @@ class RunAction : public G4UserRunAction
     
     void PrintDedxTables();
     
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4int, G4ThreeVector);
+     G4double GetAverageEdep(G4int i) const    {return edeptrue[i];};
+     G4double GetRMSEdep(G4int i) const        {return rmstrue[i];};
+     G4double GetLimitEdep(G4int i) const      {return limittrue[i];};
+         
   private:
 
     G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
@@ -111,7 +118,10 @@ class RunAction : public G4UserRunAction
     TFile* tree;
     TH1F*  histo[MaxAbsor];
 #endif
-                
+
+    G4double edeptrue [MaxAbsor];
+    G4double rmstrue  [MaxAbsor];
+    G4double limittrue[MaxAbsor];                
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

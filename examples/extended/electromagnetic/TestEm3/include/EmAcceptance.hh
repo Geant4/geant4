@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: EmAcceptance.hh,v 1.1 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: EmAcceptance.hh,v 1.2 2004-06-09 14:18:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef EmAcceptance_h
 #define EmAcceptance_h 1
@@ -35,10 +36,10 @@
 
 class EmAcceptance
 {
-
 public:
+
   EmAcceptance();
-  ~EmAcceptance();
+ ~EmAcceptance();
 
   void BeginOfAcceptance(const G4String& title, G4int stat);
   void EndOfAcceptance();
@@ -49,12 +50,7 @@ public:
 
 private:
 
-  // hide assignment operator
-  EmAcceptance & operator=(const EmAcceptance &right);
-  EmAcceptance(const EmAcceptance&);
-
   G4bool isAccepted;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

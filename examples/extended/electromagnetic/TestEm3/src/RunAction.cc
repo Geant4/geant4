@@ -21,27 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.16 2004-05-25 20:24:11 vnivanch Exp $
+// $Id: RunAction.cc,v 1.17 2004-06-09 14:18:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunActionMessenger.hh"
+#include "EmAcceptance.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "EmAcceptance.hh"
 
 #include "Randomize.hh"
-#include "G4ios.hh"
-//#include <iomanip>
-//#include <iostream>
 
 #ifdef USE_AIDA
  #include "AIDA/AIDA.h"
@@ -61,7 +56,9 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 
   fileName = "testem3.paw";
   for (G4int k=0; k<MaxAbsor; k++) {hbins[k] = 0; histoUnit[k] = 1.;}
-
+  for (G4int k=0; k<MaxAbsor; k++) { edeptrue[k] = rmstrue[k] = 1.;
+                                    limittrue[k] = DBL_MAX;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -179,23 +176,21 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //compute and print statistic
   //
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  G4double norm = 1.0/(G4double)NbOfEvents;
+  G4double  norm = 1.0/NbOfEvents;
   G4double qnorm = sqrt(norm);
   G4double beamEnergy = Primary->GetParticleGun()->GetParticleEnergy();
   G4double sqbeam = sqrt(beamEnergy/GeV);
 
   G4double MeanEAbs,MeanEAbs2,rmsEAbs,resolution,rmsres;
   G4double MeanLAbs,MeanLAbs2,rmsLAbs;
-  G4double MeanEleav,MeanEleav2,rmsEleav;
 
   std::ios::fmtflags mode = G4cout.flags();
   G4int  prec = G4cout.precision(2);
-//  G4cout.setf(std::ios::fixed,std::ios::floatfield);
-  G4cout << G4endl;
-  G4cout << "-----------------------------------------------------------------------------------------------------------------------"<<G4endl;
-  G4cout << "           Material          Total Edep               sqrt(E0(GeV))*rmsE/Emean  "
-	 << " total tracklen     Eleak from second Abs" << G4endl;
-  G4cout << G4endl;
+  G4cout << "\n------------------------------------------------------------\n";
+  G4cout << std::setw( 8) << "material"
+         << std::setw(23) << "Total Edep"
+	 << std::setw(27) << "sqrt(E0(GeV))*rmsE/Emean"
+	 << std::setw(23) << "total tracklen \n \n";
 
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -209,32 +204,23 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      MeanLAbs2 = sum2LAbs[k]/norm;
       rmsLAbs  = sqrt(abs(MeanLAbs2 - MeanLAbs*MeanLAbs));
 
-     MeanEleav = sumEleav[k]*norm;
-     MeanEleav2= sum2Eleav[k]*norm;
-      rmsEleav = sqrt(abs(MeanEleav2-MeanEleav*MeanEleav));
-
      //print
      //
-     G4String mat = Detector->GetAbsorMaterial(k)->GetName();
      G4cout
-       << "Absorber" << k << " ("
-       << std::setw(12) << mat << "): "
+       << std::setw(10) << Detector->GetAbsorMaterial(k)->GetName() << ": "
        << std::setprecision(5)
-       << std::setw(8) << G4BestUnit(MeanEAbs,"Energy")
-       << " +- "
+       << std::setw(6) << G4BestUnit(MeanEAbs,"Energy") << " +- "
        << std::setprecision(4)
-       << G4BestUnit( rmsEAbs,"Energy")  << "\t"
-       << resolution  << " +- " << rmsres<< " %\t"
+       << std::setw(5) << G4BestUnit( rmsEAbs,"Energy")  
+       << std::setw(10) << resolution  << " +- " 
+       << std::setw(5) << rmsres << " %"
        << std::setprecision(3)
-       << G4BestUnit(MeanLAbs,"Length")  << " +- "
-       << G4BestUnit( rmsLAbs,"Length")  << "\t"
-       << G4BestUnit(MeanEleav,"Energy") << " +- "
-       << G4BestUnit( rmsEleav,"Energy") << "\t"
+       << std::setw(10) << G4BestUnit(MeanLAbs,"Length")  << " +- "
+       << std::setw(4) << G4BestUnit( rmsLAbs,"Length") 
        << G4endl;
     }
+  G4cout << "\n------------------------------------------------------------\n";
 
-  G4cout << "----------------------------------------------------------------------------------------------------------------------"<<G4endl;
-  G4cout << G4endl;
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
@@ -242,21 +228,19 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   EmAcceptance acc;
   G4bool isStarted = false;
   for (G4int j=0; j<Detector->GetNbOfAbsor(); j++) {
-
-    G4double ltrue = Detector->GetLimitEdep(j);
-    if (ltrue < DBL_MAX) {
+    if (limittrue[j] < DBL_MAX) {
       if (!isStarted) {
         acc.BeginOfAcceptance("Sampling Calorimeter",NbOfEvents);
 	isStarted = true;
       }
-      G4double etrue = Detector->GetAverageEdep(j);
-      G4double rtrue = Detector->GetRMSEdep(j);
       MeanEAbs  = sumEAbs[j]*norm;
       MeanEAbs2 = sum2EAbs[j]*norm;
       rmsEAbs   = sqrt(abs(MeanEAbs2 - MeanEAbs*MeanEAbs));
       G4String mat = Detector->GetAbsorMaterial(j)->GetName();
-      acc.EmAcceptanceGauss("Edep"+mat,NbOfEvents,MeanEAbs,etrue,rtrue,ltrue);
-      acc.EmAcceptanceGauss("Erms"+mat,NbOfEvents,rmsEAbs,rtrue,rtrue,2.0*ltrue);
+      acc.EmAcceptanceGauss("Edep"+mat, NbOfEvents, MeanEAbs,
+                             edeptrue[j], rmstrue[j], limittrue[j]);
+      acc.EmAcceptanceGauss("Erms"+mat, NbOfEvents, rmsEAbs,
+                             rmstrue[j], rmstrue[j], 2.0*limittrue[j]);
     }
   }
   if(isStarted) acc.EndOfAcceptance();
@@ -330,7 +314,8 @@ void RunAction::PrintDedxTables()
 
   G4ParticleDefinition*
   part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
-  const G4ProductionCutsTable* theCoupleTable=
+  
+  G4ProductionCutsTable* theCoupleTable =
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
   const G4MaterialCutsCouple* couple = 0;
@@ -339,14 +324,10 @@ void RunAction::PrintDedxTables()
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
       G4int index = 0;
-      for ( size_t i=0; i<numOfCouples; i++)
-        {
-          couple = theCoupleTable->GetMaterialCutsCouple(i);
-          if(couple->GetMaterial() == mat) {
-	    index = i;
-	    break;
-	  }
-	}
+      for (size_t i=0; i<numOfCouples; i++) {
+         couple = theCoupleTable->GetMaterialCutsCouple(i);
+         if (couple->GetMaterial() == mat) {index = i; break;}
+      }
       G4cout << "\nLIST";
       G4cout << "\nC \nC  dE/dx (MeV/cm) for " << part->GetParticleName()
              << " in " << mat ->GetName() << "\nC";
@@ -381,6 +362,17 @@ void RunAction::PrintDedxTables()
 
   G4cout.precision(prec);
   G4cout.setf(mode,std::ios::floatfield);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::SetEdepAndRMS(G4int i, G4ThreeVector Value)
+{
+  if (i>=0 && i<MaxAbsor) {
+    edeptrue [i] = Value(0);
+    rmstrue  [i] = Value(1);
+    limittrue[i] = Value(2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
