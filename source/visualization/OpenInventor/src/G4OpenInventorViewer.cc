@@ -99,12 +99,10 @@ void G4OpenInventorViewer::KernelVisitDecision () {
       // We need a test for empty scene graph, such as
       // staticRoot.size() or something??????????  See temporary fix
       // in contructor.  (John Allison Aug 2001)
-      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
       CompareForKernelVisit(fLastVP)) {
     NeedKernelVisit ();
   }      
   fLastVP = fVP;
-  fG4OpenInventorSceneHandler.fLastVP = fVP;
 }
  
 G4bool G4OpenInventorViewer::CompareForKernelVisit(G4ViewParameters& vp) {

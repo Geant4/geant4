@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.20 2004-11-17 22:06:22 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.21 2004-11-18 15:10:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,12 +85,6 @@ private:
   static G4int fSceneIdCount;   // static counter for OpenInventor scenes.
   static G4int fSceneCount;
 private:
-  G4ViewParameters fLastVP; // Keeps memory of last view parameters,
-         // namely the ones which go with the graphical database
-         // (display lists).  A view may interrogate this to decide if
-         // it needs to visit the kernel, i.e., to remake the
-         // graphical database.
-
   //
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
