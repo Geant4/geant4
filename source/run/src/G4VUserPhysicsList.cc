@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.36 2003-03-14 00:44:41 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.37 2003-03-16 03:57:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -321,57 +321,6 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
 }
 
 
-////////////////////////////////////////////////////////
-//void  G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
-//{
-//  // Sets a value to particle 
-//  theParticleIterator->reset();
-//  while( (*theParticleIterator)() ){
-//    G4ParticleDefinition* particle = theParticleIterator->value();
-//
-//    // check if the cut value has already been set
-//    if (name =="all" || name =="ALL" ){
-//      particle->SetApplyCutsFlag(value);
-//    } else if (name == particle->GetParticleName()){
-//      particle->SetApplyCutsFlag(value);
-//#ifdef G4VERBOSE    
-//      if (verboseLevel >1) {
-//	G4cout << "Set ApplyCutsFLag ";
-//	if (value) {
-//	  G4cout << "TRUE ";
-//	} else {
-//	  G4cout << "FALSE ";
-//	}
-//	G4cout << "for " << particle->GetParticleName() << G4endl;
-//      }
-//#endif
-//      break;
-//    }
-//  }
-//}
-////////////////////////////////////////////////////////
-//G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
-//{
-//  // Sets a value to particle 
-//  theParticleIterator->reset();
-//  while( (*theParticleIterator)() ){
-//    G4ParticleDefinition* particle = theParticleIterator->value();
-//
-//    // check if the cut value has already been set
-//    if (name == particle->GetParticleName()){
-//      return particle->GetApplyCutsFlag();
-//    }
-//  }
-//#ifdef G4VERBOSE    
-//  if (verboseLevel >0){
-//    G4cout << "G4VUserPhysicsList::GetApplyCuts: ";
-//    G4cout << " particle " <<  name  ;
-//    G4cout << " does not exist " << G4endl;
-//  }
-//#endif
-//  return false;
-//}
-
 
 
 ////////////////////////////////////////////////////////
@@ -511,74 +460,13 @@ void G4VUserPhysicsList::DumpList() const
   G4cout << G4endl;
 }
 
-///////////////////////////////////////////////////////////////
-//void G4VUserPhysicsList::DumpCutValues(const G4String &particle_name) const
-//{
-//  G4ParticleDefinition* particle;
-//  if ((particle_name == "ALL") || (particle_name == "all")) {
-//    theParticleIterator->reset();
-//    while( (*theParticleIterator)() ){
-//      particle = theParticleIterator->value();
-//      DumpCutValues(particle);
-//    }
-//  } else {
-//     particle = theParticleTable->FindParticle(particle_name);
-//     if (particle != 0) DumpCutValues(particle);
-//  }
-//}
 
-///////////////////////////////////////////////////////////////
-//void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
-//{
-//  if (particle == 0) return;
-//  
-//  G4int prec = G4cout.precision(3);
-//
-//  if (particle->IsShortLived()) {
-//    // name field
-//    G4cout << " --- " << particle->GetParticleName() << " is a short lived particle ------ " << G4endl;
-//  } else {
-//    // name field
-//    G4cout << " --- " << particle->GetParticleName() << " ------ " << G4endl;
-//
-//    // cut value in range
-//    G4double* theRangeCuts = particle->GetLengthCuts();
-//
-//    // material and energy cut value for the material 
-//    G4double*  theKineticEnergyCuts = particle->GetEnergyCuts();
-//    
-//    if (theRangeCuts != 0) {
-//      const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-//      size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
-//      G4cout << "   - Material --- Cut in range ------------- Energy Cut ---" << G4endl;
-//      for (size_t idx=0; idx<numberOfMaterials; idx++){
-//	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
-//	G4cout <<" : ";
-//	G4cout << G4std::setw(12)<< G4BestUnit(theRangeCuts[idx],"Length");
-//	if (theKineticEnergyCuts ==0) {
-//	  G4cout << " : --------------------------------";
-//	} else {
-//	  G4cout << " : ";
-//	  G4cout << G4std::setw(10)<< G4BestUnit(theKineticEnergyCuts[idx],"Energy");
-//	}	
-//	G4cout << G4endl;
-//      }
-//      if (theKineticEnergyCuts ==0) {
-//	G4cout << "   - Cuts in energy are not calculated yet --" << G4endl;
-//	G4cout << " Enter /run/initialize command to calculate cuts " << G4endl;
-//      }
-//    } else {
-//      G4cout << "   - Cuts in range are not set yet --" << G4endl;
-//    }
-//
-//  }
-//  G4cout.precision(prec);
-//}
 
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::DumpCutValuesTable(G4int nParticles) 
 { fDisplayThreshold = nParticles; }
 
+///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::DumpCutValuesTableIfRequested()
 {
   if(fDisplayThreshold==0) return;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.15 2003-03-11 02:34:47 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.16 2003-03-16 03:57:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -130,19 +130,6 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   asciiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   asciiCmd->SetRange("ascii ==0 || ascii ==1");
 
-//  //Commnad    /run/particle/applyCuts command
-//  applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
-//  applyCutsCmd->SetGuidance("Set ApplyCuts flag ");
-//  applyCutsCmd->SetGuidance("  applyCuts [value] [particle]");
-//  applyCutsCmd->SetGuidance("  value     : true(default) or false ");
-//  applyCutsCmd->SetGuidance("  particle  : all(default) or particle name ");
-//  param = new G4UIparameter("Flag",'s',true);
-//  param->SetDefaultValue("true");
-//  applyCutsCmd->SetParameter(param);
-//  param = new G4UIparameter("Particle",'s',true);
-//  param->SetDefaultValue("all");
-//  applyCutsCmd->SetParameter(param);
-//  applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
