@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParN04.cc,v 1.1 2002-03-05 15:22:05 gcosmo Exp $
+// $Id: ParN04.cc,v 1.2 2002-03-09 06:21:25 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@
 #include "ExN04TrackingAction.hh"
 #include "ExN04SteppingAction.hh"
 
-#include "ParN04.icc"
+#include "ParTopC.icc"
 
 int main(int argc,char** argv)
 {

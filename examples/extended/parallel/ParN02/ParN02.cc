@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ParN02.cc,v 1.1 2002-03-05 15:21:52 gcosmo Exp $
+// $Id: ParN02.cc,v 1.2 2002-03-09 06:21:18 cooperma Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 #include "ExN02VisManager.hh"
 #endif
 
-#include "ParN02.icc"
+#include "ParTopC.icc"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
