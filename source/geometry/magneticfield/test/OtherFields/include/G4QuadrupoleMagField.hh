@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -20,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QuadrupoleMagField.hh,v 1.1 2002-03-28 13:45:58 japost Exp $
+// $Id: G4QuadrupoleMagField.hh,v 1.2 2002-06-25 13:12:56 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

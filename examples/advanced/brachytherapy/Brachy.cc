@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -40,7 +39,7 @@
 // "Brachy3.hbk".
 
 
-// $Id: Brachy.cc,v 1.11 2002-06-18 22:20:37 guatelli Exp $
+// $Id: Brachy.cc,v 1.12 2002-06-25 13:12:54 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
