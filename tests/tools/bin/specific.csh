@@ -258,7 +258,7 @@ if ( `uname -n` == asc ) then
   #setenv G4VIS_USE_VRMLFILE          1
   # Specific :
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/OSF1-cxx
-  setenv OGLHOME        /lal/Mesa/3.1/OSF1
+  setenv OGLHOME        /lal/Mesa/3.2/OSF1
   setenv OIVHOME        /lal/OpenInventor/2.5
   setenv HEPVISHOME     /lal/HEPVis/v5r1-05-LAL
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
