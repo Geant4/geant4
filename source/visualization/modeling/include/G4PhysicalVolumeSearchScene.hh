@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.2 1999-01-11 00:48:46 allison Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.3 1999-02-07 17:23:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,8 @@
 #include "G4Sphere.hh"
 #include "G4Para.hh"
 #include "G4Torus.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 
@@ -42,6 +44,8 @@ public:
   void AddThis (const G4Sphere& s) {FindVolume (s);}
   void AddThis (const G4Para& s) {FindVolume (s);}
   void AddThis (const G4Torus& s) {FindVolume (s);}
+  void AddThis (const G4Polycone& s) {FindVolume (s);}
+  void AddThis (const G4Polyhedra& s) {FindVolume (s);}
   void AddThis (const G4VSolid& s) {FindVolume (s);}
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&);

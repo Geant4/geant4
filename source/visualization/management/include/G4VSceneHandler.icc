@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.icc,v 1.2 1999-01-11 00:48:16 allison Exp $
+// $Id: G4VSceneHandler.icc,v 1.3 1999-02-07 17:28:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,15 +49,23 @@ inline void G4VSceneHandler::AddThis (const G4Trap& trap) {
 }
 
 inline void G4VSceneHandler::AddThis (const G4Sphere& sphere) {
-  RequestPrimitives ( sphere );
+  RequestPrimitives (sphere );
 }
 
-inline void G4VSceneHandler::AddThis (const G4Para&  para ) {
-  RequestPrimitives ( para );
+inline void G4VSceneHandler::AddThis (const G4Para& para) {
+  RequestPrimitives (para);
 }
 
-inline void G4VSceneHandler::AddThis (const G4Torus& torus ) {
-  RequestPrimitives ( torus );
+inline void G4VSceneHandler::AddThis (const G4Torus& torus) {
+  RequestPrimitives (torus);
+}
+
+inline void G4VSceneHandler::AddThis (const G4Polycone& polycone) {
+  RequestPrimitives (polycone);
+}
+
+inline void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
+  RequestPrimitives (polyhedra);
 }
 
 inline void G4VSceneHandler::AddThis (const G4VSolid& solid) {
