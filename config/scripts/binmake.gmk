@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.5 2003-10-02 12:15:57 stesting Exp $
+# $Id: binmake.gmk,v 1.6 2003-10-02 13:16:18 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.

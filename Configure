@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.36 2003-10-02 12:15:45 stesting Exp $
+# $Id: Configure,v 1.37 2003-10-02 13:16:06 stesting Exp $
 #
-# Generated on Thu Oct  2 13:48:01 CEST 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Oct  2 15:03:54 CEST 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2351,6 +2351,23 @@ while test "$type"; do
 done
 cd .config/UU
 ans="$value"
+
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $ans|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $ans|cut -d"/" -f3`
+winpath=`echo $ans|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+ans=$fullwinpath
+
+fi
+fi
+
 rp="$orig_rp"
 dflt="$orig_dflt"
 rm -f getfile.ok
@@ -2384,6 +2401,25 @@ case "$g4install" in
 	HOME=""
 	fi
 	g4install=$HOME/geant4
+
+# Check for Windows!
+if test $g4system = "WIN32-VC" -o $g4system = "WIN32-VC7"; then
+
+checkdrive=`echo $g4install|cut -d"/" -f2`
+
+if test $checkdrive = "cygdrive"; then
+
+windrive=`echo $g4install|cut -d"/" -f3`
+winpath=`echo $g4install|cut -d"/" -f4-`
+
+fullwinpath="$windrive:/$winpath"
+g4install=$fullwinpath
+
+fi
+fi
+
+
+
 	;;
 esac
 
@@ -3592,7 +3628,7 @@ g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
 else
 case "$g4vis_oglhome" in
 '')
-	$g4vis_oglhome=/usr
+	g4vis_oglhome=/usr
 	;;
 esac
 fi
