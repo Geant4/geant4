@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorer.cc,v 1.1 2002-10-28 10:06:01 dressel Exp $
+// $Id: G4CellScorer.cc,v 1.2 2002-11-23 12:30:40 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,6 +46,7 @@ G4CellScorer::~G4CellScorer()
 void G4CellScorer::ScoreAnExitingStep(const G4Step &aStep,
 				      const G4GeometryCell &pre_gCell){
   fCellScoreComposer.EstimatorCalculation(aStep);
+  ScorePopulation(pre_gCell, aStep);
 }
 
 void G4CellScorer::ScoreAnEnteringStep(const G4Step &aStep,
