@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.8 1999-11-25 16:11:40 stesting Exp $
+# $Id: GNUmakefile,v 1.9 1999-11-26 16:11:28 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,10 +10,20 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 #Genuine tests...
-SUBDIRS = test01 test02 test03
+SUBDIRS = test01
+SUBDIRS += test02 ## Standard em processes.  Low energy and high energy
+                  ## hadronic processes and stopping, including coherent
+                  ## elastic scattering.
+SUBDIRS += test03
 # SUBDIRS += test04 ## Persistency.
-SUBDIRS += test05 test06 test07 test08 test09 test10
-SUBDIRS += test11 test12
+SUBDIRS += test05
+SUBDIRS += test06
+SUBDIRS += test07
+SUBDIRS += test08
+SUBDIRS += test09
+SUBDIRS += test10
+SUBDIRS += test11 ## Neutron transport
+SUBDIRS += test12 ## FTF String Model
 SUBDIRS += test13 ## Dual Parton Model
 SUBDIRS += test14 ## LowEnegery em.
 SUBDIRS += test15 ## Isotope Production
