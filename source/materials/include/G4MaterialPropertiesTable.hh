@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.6 1999-11-11 15:36:09 gunter Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.7 1999-11-16 08:31:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,6 @@
 /////////////
 
 #include <math.h>
-#include "g4rw/tphdict.h"
 #include "g4std/map"
 #include "globals.hh"
 #include "G4MaterialPropertyVector.hh"
