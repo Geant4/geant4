@@ -1,4 +1,4 @@
-$Id: History,v 1.67 2001-02-05 10:37:11 gcosmo Exp $
+$Id: History,v 1.68 2001-02-24 05:42:27 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+February 24, 2001 H.Kurasige
+- Migration to STL vectors for G4PhysicsTable
 
 February 05, 2001 H.Kurasige (global-V03-00-04)
 - Added default constructors to G4DataVector and G4OrderedTable. Removed
