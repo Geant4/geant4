@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingAction.cc,v 1.3 2001-07-11 09:57:38 gunter Exp $
+// $Id: Em2SteppingAction.cc,v 1.4 2001-10-25 15:12:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2SteppingAction.hh"
 #include "Em2DetectorConstruction.hh"
@@ -35,19 +35,19 @@
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2SteppingAction::Em2SteppingAction(Em2DetectorConstruction* det,
                                      Em2RunAction* run)
 :Em2Det(det),Em2Run(run)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2SteppingAction::~Em2SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
@@ -75,6 +75,6 @@ void Em2SteppingAction::UserSteppingAction(const G4Step* aStep)
    }  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

@@ -20,15 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
 //
-// $Id: Em2TrackingAction.cc,v 1.3 2001-07-11 09:57:38 gunter Exp $
+// $Id: Em2TrackingAction.cc,v 1.4 2001-10-25 15:12:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2TrackingAction.hh"
 #include "Em2RunAction.hh"
@@ -36,13 +35,13 @@
 #include "G4TrackingManager.hh"
 #include "G4Track.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2TrackingAction::Em2TrackingAction(Em2RunAction* run)
 :Em2Run(run)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
@@ -52,5 +51,7 @@ void Em2TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   
   Em2Run->fillPerTrack(charge,TrLeng);     
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 

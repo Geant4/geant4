@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm2.cc,v 1.5 2001-07-11 09:57:34 gunter Exp $
+// $Id: TestEm2.cc,v 1.6 2001-10-25 15:12:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -46,7 +46,7 @@
 #include "Em2SteppingAction.hh"
 #include "Em2SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
  
@@ -78,11 +78,8 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(RunAct);
   runManager->SetUserAction(new Em2EventAction   (RunAct));
   runManager->SetUserAction(new Em2TrackingAction(RunAct));
-  runManager->SetUserAction(new Em2SteppingAction(detector,RunAct));
+  runManager->SetUserAction(new Em2SteppingAction(detector,RunAct)); 
   
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -94,7 +91,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif           
-      UI->ApplyCommand("/control/execute init.mac");    
       session->SessionStart();
       delete session;
     }
@@ -114,5 +110,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.5 2001-07-11 09:57:36 gunter Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.6 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2DetectorConstruction.hh"
 #include "Em2DetectorMessenger.hh"
@@ -48,25 +48,25 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorConstruction::Em2DetectorConstruction()
-:solidEcal(NULL) ,logicEcal(NULL) ,physiEcal(NULL),
- solidSlice(NULL),logicSlice(NULL),physiSlice(NULL),
- solidRing(NULL) ,logicRing(NULL) ,physiRing(NULL), 
+:nLtot(20),nRtot(20),dLradl(1.),dRradl(0.25),
  myMaterial(NULL),magField(NULL)  ,
- nLtot(20),dLradl(1.),nRtot(20),dRradl(0.25),
- EcalLength(0.),EcalRadius(0.)
+ EcalLength(0.),EcalRadius(0.)    ,
+ solidEcal(NULL) ,logicEcal(NULL) ,physiEcal(NULL),
+ solidSlice(NULL),logicSlice(NULL),physiSlice(NULL),
+ solidRing(NULL) ,logicRing(NULL) ,physiRing(NULL) 
 {
   detectorMessenger = new Em2DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorConstruction::~Em2DetectorConstruction()
 { delete detectorMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em2DetectorConstruction::Construct()
 {
@@ -74,7 +74,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::Construct()
   return ConstructVolumes();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::DefineMaterials()
 {
@@ -169,7 +169,7 @@ void Em2DetectorConstruction::DefineMaterials()
   myMaterial = PbWO;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
 {
@@ -221,7 +221,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
   return physiEcal;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
 {
@@ -233,21 +233,21 @@ void Em2DetectorConstruction::SetMaterial(G4String materialChoice)
      }             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   nLtot = (G4int)Value(0); dLradl = Value(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0); dRradl = Value(1);
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -267,11 +267,11 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void Em2DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

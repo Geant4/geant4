@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.cc,v 1.6 2001-07-11 09:57:37 gunter Exp $
+// $Id: Em2PhysicsList.cc,v 1.7 2001-10-25 15:12:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2PhysicsList.hh"
 #include "Em2PhysicsListMessenger.hh"
@@ -40,7 +40,7 @@
 #include "G4Material.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsList::Em2PhysicsList()
 : G4VUserPhysicsList()
@@ -55,12 +55,12 @@ Em2PhysicsList::Em2PhysicsList()
   SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsList::~Em2PhysicsList()
 {delete pMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructParticle()
 {
@@ -75,7 +75,7 @@ void Em2PhysicsList::ConstructParticle()
   ConstructBarions();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructBosons()
 {
@@ -89,7 +89,7 @@ void Em2PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+ //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructLeptons()
 {
@@ -104,7 +104,7 @@ void Em2PhysicsList::ConstructLeptons()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructMesons()
 {
@@ -122,7 +122,7 @@ void Em2PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructBarions()
 {
@@ -134,7 +134,7 @@ void Em2PhysicsList::ConstructBarions()
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructProcess()
 {
@@ -143,7 +143,7 @@ void Em2PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -161,7 +161,7 @@ void Em2PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::ConstructEM()
 {
@@ -208,7 +208,7 @@ void Em2PhysicsList::ConstructEM()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
 
@@ -228,7 +228,7 @@ void Em2PhysicsList::ConstructGeneral()
       }
   }
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCuts()
 {
@@ -262,7 +262,7 @@ void Em2PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCutForGamma(G4double cut)
 {
@@ -282,5 +282,5 @@ void Em2PhysicsList::SetCutForProton(G4double cut)
   cutForProton = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

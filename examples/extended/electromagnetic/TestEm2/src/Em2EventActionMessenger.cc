@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2EventActionMessenger.cc,v 1.3 2001-07-11 09:57:37 gunter Exp $
+// $Id: Em2EventActionMessenger.cc,v 1.4 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2EventActionMessenger.hh"
 
@@ -36,7 +36,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
 :eventAction(EvAct)
@@ -56,7 +56,7 @@ Em2EventActionMessenger::Em2EventActionMessenger(Em2EventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2EventActionMessenger::~Em2EventActionMessenger()
 {
@@ -64,9 +64,10 @@ Em2EventActionMessenger::~Em2EventActionMessenger()
   delete PrintCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em2EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 { 
   if(command == DrawCmd)
     {eventAction->SetDrawFlag(newValue);}
@@ -76,4 +77,4 @@ void Em2EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValu
    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

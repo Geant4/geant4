@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorMessenger.cc,v 1.3 2001-07-11 09:57:37 gunter Exp $
+// $Id: Em2DetectorMessenger.cc,v 1.4 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2DetectorMessenger.hh"
 
@@ -38,7 +38,7 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
 :Em2Detector(Det)
@@ -79,7 +79,7 @@ Em2DetectorMessenger::Em2DetectorMessenger(Em2DetectorConstruction * Det)
   UpdateCmd->AvailableForStates(Idle);          
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2DetectorMessenger::~Em2DetectorMessenger()
 {
@@ -91,7 +91,7 @@ Em2DetectorMessenger::~Em2DetectorMessenger()
   delete Em2detDir;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -111,4 +111,4 @@ void Em2DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    { Em2Detector->UpdateGeometry();}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

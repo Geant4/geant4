@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.4 2001-07-11 09:57:35 gunter Exp $
+// $Id: Em2PhysicsList.hh,v 1.5 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2PhysicsList_h
 #define Em2PhysicsList_h 1
@@ -37,7 +37,7 @@
 
 class Em2PhysicsListMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2PhysicsList: public G4VUserPhysicsList
 {
@@ -73,6 +73,8 @@ class Em2PhysicsList: public G4VUserPhysicsList
     
     Em2PhysicsListMessenger* pMessenger;         
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

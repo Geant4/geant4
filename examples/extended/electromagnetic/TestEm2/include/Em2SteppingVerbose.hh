@@ -21,22 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: Em2SteppingVerbose.hh,v 1.6 2001-07-11 09:57:36 gunter Exp $
+// $Id: Em2SteppingVerbose.hh,v 1.7 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
 //   It inherits from G4SteppingVerbose.
 //   It shows how to extract informations during the tracking of a particle.
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2SteppingVerbose_h
 #define Em2SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2SteppingVerbose : public G4SteppingVerbose {
 
@@ -49,5 +49,7 @@ public:
   void TrackingStarted();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

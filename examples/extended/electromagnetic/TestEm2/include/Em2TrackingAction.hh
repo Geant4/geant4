@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2TrackingAction.hh,v 1.3 2001-07-11 09:57:36 gunter Exp $
+// $Id: Em2TrackingAction.hh,v 1.4 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@
 
 class Em2RunAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2TrackingAction : public G4UserTrackingAction {
 
@@ -46,5 +46,7 @@ class Em2TrackingAction : public G4UserTrackingAction {
   private:
     Em2RunAction* Em2Run;  
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

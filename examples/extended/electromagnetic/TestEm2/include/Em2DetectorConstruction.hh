@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.hh,v 1.3 2001-07-11 09:57:34 gunter Exp $
+// $Id: Em2DetectorConstruction.hh,v 1.4 2001-10-25 15:12:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em2DetectorConstruction_h
 #define Em2DetectorConstruction_h 1
@@ -43,7 +43,7 @@ class G4LogicalVolume;
 class G4UniformMagField;
 class Em2DetectorMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em2DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -99,7 +99,7 @@ class Em2DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   logicRing;    //pointer to the logical R-slide
      G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
      
-     Em2DetectorMessenger* detectorMessenger;  //pointer to the Messenger object  
+     Em2DetectorMessenger* detectorMessenger;  //pointer to the Messenger   
       
   private:
     
@@ -107,7 +107,7 @@ class Em2DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructVolumes();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

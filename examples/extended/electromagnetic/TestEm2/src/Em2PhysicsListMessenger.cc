@@ -21,20 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsListMessenger.cc,v 1.2 2001-07-11 09:57:37 gunter Exp $
+// $Id: Em2PhysicsListMessenger.cc,v 1.3 2001-10-25 15:12:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em2PhysicsListMessenger.hh"
 
 #include "Em2PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
 :pPhysicsList(pPhys)
@@ -61,7 +61,7 @@ Em2PhysicsListMessenger::Em2PhysicsListMessenger(Em2PhysicsList* pPhys)
   protoCutCmd->AvailableForStates(PreInit,Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em2PhysicsListMessenger::~Em2PhysicsListMessenger()
 {
@@ -70,9 +70,10 @@ Em2PhysicsListMessenger::~Em2PhysicsListMessenger()
   delete protoCutCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void Em2PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 {       
   if( command == gammaCutCmd )
    { pPhysicsList->SetCutForGamma(gammaCutCmd->GetNewDoubleValue(newValue));}
@@ -81,7 +82,7 @@ void Em2PhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newValue
    { pPhysicsList->SetCutForElectron(electCutCmd->GetNewDoubleValue(newValue));}
      
   if( command == protoCutCmd )
-   { pPhysicsList->SetCutForProton(protoCutCmd->GetNewDoubleValue(newValue));}   
+   { pPhysicsList->SetCutForProton(protoCutCmd->GetNewDoubleValue(newValue));}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
