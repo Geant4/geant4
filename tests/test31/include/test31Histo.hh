@@ -73,7 +73,7 @@ public:
 
 public: // Without description
 
-  void SetHistoName(const G4String& name) {histName = name;};
+    void SetHistoName(const G4String& name) {histName = name;};
     void bookHisto();
     inline ITuple* GetNtuple() const {return ntup;};
     void SaveToTuple(const G4String&, G4double);
@@ -92,6 +92,7 @@ public: // Without description
     void SetVerbose(G4int val) {verbose = val;};
     G4int GetVerbose() const {return verbose;};
     void SetHistoNumber(G4int val) {nHisto = val;};
+    void SetNtuple(G4bool val) {nTuple = val;};
 
     void SetNumberOfAbsorbers(G4int val) {NumberOfAbsorbers = val;};     
     G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
@@ -136,6 +137,7 @@ private:
     G4int n_posit;
     G4int n_gam;
     G4int n_step;
+    G4bool nTuple;
 };
 
 #endif

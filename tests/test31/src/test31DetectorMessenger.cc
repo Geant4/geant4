@@ -41,6 +41,7 @@
 #include "test31DetectorConstruction.hh"
 #include "test31Histo.hh"
 #include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -136,6 +137,11 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   HistoCmd->SetParameterName("histo",false);
   HistoCmd->AvailableForStates(PreInit,Idle);
 
+  ntupCmd = new G4UIcmdWithABool("/hTest/ntuple",this);
+  ntupCmd->SetGuidance("Set number ntuple to fill"); 
+  ntupCmd->SetParameterName("ntuple",false);
+  ntupCmd->AvailableForStates(PreInit,Idle);
+
   NumOfEvt = new G4UIcmdWithAnInteger("/test31/NumberOfEvents",this);
   NumOfEvt->SetGuidance("Set number of event to be simulated");
   NumOfEvt->SetParameterName("Nevt",false);
@@ -201,6 +207,7 @@ test31DetectorMessenger::~test31DetectorMessenger()
   delete test31detDir1;
   delete test31detDir2;
   delete DeltaECmd;
+  delete ntupCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -252,6 +259,9 @@ void test31DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
 
   if( command == HistoCmd ) 
    { (test31Histo::GetPointer())->SetHistoName(newValue);}
+
+  if( command == ntupCmd ) 
+   { (test31Histo::GetPointer())->SetNtuple(ntupCmd->GetNewBoolValue(newValue));}
 
   if( command == NumOfEvt )
    { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
