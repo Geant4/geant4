@@ -195,7 +195,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   tablesAreBuilt = false;
 
   // Are particle defined?
-  if(!particle) {
+  if(!particle || particle->GetParticleType() == "nucleus") {
     particle = &part; 
   }
   if(particle != &part) {

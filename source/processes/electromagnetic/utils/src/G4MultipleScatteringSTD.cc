@@ -494,7 +494,7 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
     if(tPathLength/range < dtrl) zmean = fTransportMeanFreePath*(1.-exp(-tau));
     else
     {  
-      T1 = theManager->GetRange(
+      T1 = theManager->GetEnergy(
                    aParticle->GetDefinition(),range-0.5*tPathLength,aMaterial);
       lambda1 = (*theTransportMeanFreePathTable)
                         (materialIndex)->GetValue(T1,isOut);
