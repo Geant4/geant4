@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2004-06-30 11:13:55 maire Exp $
+# $Id: GNUmakefile,v 1.3 2004-06-30 11:31:18 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,7 +16,7 @@ all: lib bin
 
 #### G4ANALYSIS_USE := true
 
-ifdef USE_AIDA
+ifdef G4ANALYSIS_USE
   CPPFLAGS += -DG4ANALYSIS_USE
 endif
 
