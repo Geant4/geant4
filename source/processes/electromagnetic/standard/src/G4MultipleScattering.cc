@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.5 1999-04-21 16:08:24 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.6 1999-05-10 16:34:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -24,6 +24,8 @@
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
+#include "G4Navigator.hh"
+#include "G4TransportationManager.hh"
 
   G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
@@ -449,8 +451,7 @@
     {
       //  compute mean lateral displacement ...............
       //  only for safety > tolerance !!!!!!!!!
-      safetyminustolerance = stepData.GetPostStepPoint()->GetSafety()
-                             -kCarTolerance ;
+      safetyminustolerance = stepData.GetPostStepPoint()->GetSafety();
 
       if(safetyminustolerance > 0.)
       {
@@ -490,14 +491,16 @@
           latDirection.rotateUz(ParticleDirection) ;
 
           // compute new endpoint of the Step
-          xnew = stepData.GetPostStepPoint()->GetPosition().x()+
-                                         rmean*latDirection.x() ;
-          ynew = stepData.GetPostStepPoint()->GetPosition().y()+
-                                         rmean*latDirection.y() ;
-          znew = stepData.GetPostStepPoint()->GetPosition().z()+
-                                         rmean*latDirection.z() ;
+	  G4ThreeVector newPosition= 
+			 stepData.GetPostStepPoint()->GetPosition()+
+					     rmean*latDirection;
+    
+	  G4Navigator *navigator= 
+	   G4TransportationManager::GetTransportationManager()
+				   ->GetNavigatorForTracking();
+	  navigator->LocateGlobalPointWithinVolume( newPosition );
 
-          fParticleChange.SetPositionChange(xnew,ynew,znew) ;
+	  fParticleChange.SetPositionChange(newPosition) ;
         }
       }
     }
