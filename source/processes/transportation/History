@@ -1,4 +1,4 @@
-$Id: History,v 1.87 2003-10-03 15:47:37 gcosmo Exp $
+$Id: History,v 1.88 2003-11-14 12:32:32 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov. 14th, G.Cosmo transport-V05-02-06
+------------------
+- G4Transportation.cc:
+  o Added inclusion of G4ChordFinder.hh, after latest changes to field.
 
 Oct. 4th, G.Cosmo transport-V05-02-05
 -----------------
