@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.20 2001-09-17 17:05:40 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.21 2001-09-20 06:56:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -341,8 +341,6 @@ G4double G4MuPairProduction::ComputeMicroscopicCrossSection(
     CutInPairEnergy = 4.*electron_mass_c2 ;
 
   G4double MaxPairEnergy = KineticEnergy+ParticleMass*(1.-0.75*sqrte*z13) ;
-  if(MaxPairEnergy < CutInPairEnergy)
-     MaxPairEnergy = CutInPairEnergy ;
   if( CutInPairEnergy >= MaxPairEnergy ) return CrossSection ;
 
   G4double aaa,bbb,hhh,x,epln,ep ;
