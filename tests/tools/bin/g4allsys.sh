@@ -31,6 +31,7 @@ do
     then
 	echo "String is comment!"
     else
+        echo $command
 	echo $PATH >>  $host.$devprod.$debopt.log 2>&1 
 	echo "______________________" >>  $host.$devprod.$debopt.log 2>&1 
 	echo $command >>  $host.$devprod.$debopt.log 2>&1 

@@ -71,8 +71,13 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test104.EMtest
   nice $G4INSTALL/tests/tools/bin/run.sh test105
   nice $G4INSTALL/tests/tools/bin/run.sh test106
+  nice $G4INSTALL/tests/tools/bin/run.sh test501
+  nice $G4INSTALL/tests/tools/bin/run.sh test502
+  nice $G4INSTALL/tests/tools/bin/run.sh test503
+  nice $G4INSTALL/tests/tools/bin/run.sh test504
+  nice $G4INSTALL/tests/tools/bin/run.sh test505
   nice $G4INSTALL/tests/tools/bin/run.sh test506
-#  nice $G4INSTALL/tests/tools/bin/run.sh test508
+  nice $G4INSTALL/tests/tools/bin/run.sh test508
   if [ $G4USE_HEPODBMS ] ; then
     nice $G4INSTALL/tests/tools/bin/run.sh test401
     nice $G4INSTALL/tests/tools/bin/run.sh test402
@@ -122,18 +127,26 @@ else
 #
 echo "Starting $1 in $G4WORKDIR `date`"
 
+    if [ $G4LARGE_N ]; then
+      dot_G4LARGE_N=.$G4LARGE_N
+    fi
+
     if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
       -o $1 = test15 -o $1 = test16 ]
     then
-      $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
-      > $dir/$1.exerciser.in; \
+      $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
+      > $dir/$1.exerciser$dot_G4LARGE_N.in; \
       time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-      $dir/$1.exerciser.in \
-      > $dir/$1.out 2> $dir/$1.err
+      $dir/$1.exerciser$dot_G4LARGE_N.in \
+      > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
     else
-      time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-      $G4INSTALL/tests/$shortname/$1.in \
-      > $dir/$1.out 2> $dir/$1.err
+      if [ ! $G4LARGE_N -o \
+        \( $G4LARGE_N -a \
+           -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
+        time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+        $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
+        > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
+      fi
     fi
 
 echo "Finished $1 in $G4WORKDIR `date`"

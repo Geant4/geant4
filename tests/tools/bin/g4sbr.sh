@@ -14,10 +14,11 @@ ACTARG1=$5
 ACTARG2=$6
 ACTARG3=$7
 NONINCREMENTAL=$8
-##############################################
-# Specify *this* version by a suitable name.
-##############################################
-THISTAG=`echo $REFTAG|cut -d + -f1`
+
+if [ $ACTION != all -a $ACTION != build -a $ACTION != run ]; then
+  export G4LARGE_N=$ACTION
+  ACTION=run
+fi
 
 if [ X$REFTREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
@@ -56,7 +57,7 @@ else
 fi
 
 # Prevent compilation of histograms in examples code...
-export G4NOHIST 1
+export G4NOHIST=1
 
 ####################################################################
 # Setup environment in $REFTREE
@@ -95,15 +96,15 @@ NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
 mv gmake.log gmake.log.${NEXT_NUMBER}
 else
 cd ${G4WORKDIR}
-if [ -d stt.${THISTAG} ]
+if [ -d stt.${REFTAG} ]
 then
-echo stt.${THISTAG} already exists - aborting.
+echo stt.${REFTAG} already exists - aborting.
 exit
 fi
-echo CREATE stt.${THISTAG} and RESET stt symbolic link.
-mkdir stt.${THISTAG}
+echo CREATE stt.${REFTAG} and RESET stt symbolic link.
+mkdir stt.${REFTAG}
 rm -rf stt
-ln -s stt.${THISTAG} stt
+ln -s stt.${REFTAG} stt
 echo 'REMOVE bin/* lib/* tmp/*'
 rm -r bin/* lib/* tmp/*
 fi
