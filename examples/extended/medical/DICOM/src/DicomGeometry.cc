@@ -44,11 +44,11 @@ DicomGeometry::DicomGeometry()
 {
   patientConstructor = new DicomPatientConstructor();
  
-  solidWorld = 0;
-  logicWorld = 0;
-  physiWorld = 0;
-  parameterisedPhysVolume = 0;
-  physicalLungINhale = 0;
+  //solidWorld = 0;
+  //logicWorld = 0;
+  //physiWorld = 0;
+  //parameterisedPhysVolume = 0;
+  //physicalLungINhale = 0;
 }
 
 DicomGeometry::~DicomGeometry()
@@ -233,7 +233,7 @@ void DicomGeometry::InitialisationOfMaterials()
   air->AddElement(elO, 0.3); 
 }
 
-void DicomGeometry::PatientConstruction()
+void DicomGeometry::PatientConstruction(G4LogicalVolume* logicWorld)
 {
   DicomConfiguration readConfiguration;
   readConfiguration.ReadDataFile();
@@ -280,14 +280,15 @@ void DicomGeometry::PatientConstruction()
   middleLocationValue = middleLocationValue / totalNumberOfFile;
     
   G4ThreeVector origin( 0.*mm, 0.*mm, middleLocationValue * mm );
-    parameterisedPhysVolume =  new G4PVPlacement( 0,
-                                                  origin,
-		                                  parameterisedLogicalvolume,
-		                                  "Parameterisation Mother (placement)",
-		                                  logicWorld,
-		                                  false,
-		                                  0 );
-
+  G4VPhysicalVolume* parameterisedPhysVolume;
+  parameterisedPhysVolume =  new G4PVPlacement( 0,
+						origin,
+						parameterisedLogicalvolume,
+						"Parameterisation Mother (placement)",
+						logicWorld,
+						false,
+						0 );
+  
   G4Box* LungINhale = new G4Box( "LungINhale", patientX, patientY, patientZ);
 
   G4Material* lungInhaleMaterial = G4Material::GetMaterial("Lung_Inhale");
@@ -296,16 +297,17 @@ void DicomGeometry::PatientConstruction()
   // ---- MGP ---- Numbers (2.0, 0.207) to be removed from code; move to const
   G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
 
+  // ---- MGP ---- Who deletes paramLungINhale?
   G4VPVParameterisation* paramLungINhale = new DicomPatientParameterisation
     ( numberOfVoxels,
       2.0 , 0.207 );
 
-  physicalLungINhale = 
-    new G4PVParameterised( "Physical_LungINhale" , 
-			   logicLungInHale, 
-			   parameterisedLogicalvolume,
-			   kZAxis, numberOfVoxels, 
-			   paramLungINhale );
+  G4VPhysicalVolume* physicalLungINhale;
+  physicalLungINhale = new G4PVParameterised( "Physical_LungINhale" , 
+					      logicLungInHale, 
+					      parameterisedLogicalvolume,
+					      kZAxis, numberOfVoxels, 
+					      paramLungINhale );
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()
@@ -316,26 +318,26 @@ G4VPhysicalVolume* DicomGeometry::Construct()
   G4double worldYDimension = 1.*m;
   G4double worldZDimension = 1.*m;
 
-  solidWorld = new G4Box( "WorldSolid",
+  G4Box* solidWorld = new G4Box( "WorldSolid",
                           worldXDimension,
                           worldYDimension,
                           worldZDimension );
 
   G4Material* air = G4Material::GetMaterial("Air");
 
-  logicWorld = new G4LogicalVolume( solidWorld, 
+  G4LogicalVolume* logicWorld = new G4LogicalVolume( solidWorld, 
                                     air, 
                                     "WorldLogical", 
                                     0, 0, 0 );
 
-  physiWorld = new G4PVPlacement( 0,
+  G4VPhysicalVolume* physiWorld = new G4PVPlacement( 0,
                                   G4ThreeVector(0,0,0),
                                   "World",
                                   logicWorld,
                                   0,
                                   false,
                                   0 );
-  PatientConstruction();
+  PatientConstruction(logicWorld);
 
   return physiWorld;
 }

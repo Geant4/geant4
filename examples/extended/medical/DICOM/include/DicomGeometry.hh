@@ -32,12 +32,10 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "g4std/vector"
 
-class DicomConfiguration;
 class DicomPatientConstructor;
-class G4Material;
 class G4LogicalVolume;
-class G4PhysicalVolume;
-class G4Box;
+//class G4VPhysicalVolume;
+//class G4Box;
 
 class DicomGeometry : public G4VUserDetectorConstruction
 {
@@ -51,17 +49,17 @@ public:
 private:
 
   void InitialisationOfMaterials();
-  void PatientConstruction();
+  void PatientConstruction(G4LogicalVolume* logicWorld);
  
   DicomPatientConstructor* patientConstructor;
 
   // World ...
 
-  G4Box* solidWorld;
-  G4LogicalVolume* logicWorld;
-  G4VPhysicalVolume* physiWorld;
-  G4VPhysicalVolume* parameterisedPhysVolume;  
-  G4VPhysicalVolume*  physicalLungINhale;
+  //G4Box* solidWorld;
+  //G4LogicalVolume* logicWorld;
+  //G4VPhysicalVolume* physiWorld;
+  //G4VPhysicalVolume* parameterisedPhysVolume;  
+  //G4VPhysicalVolume*  physicalLungINhale;
 };
 
 #endif

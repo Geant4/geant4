@@ -2,18 +2,18 @@
 #define DicomPatientConstructor_h 1
 
 #include "globals.hh"
-#include "g4std/vector"
 
 class DicomPatientConstructor
 {
 public:
 
   DicomPatientConstructor() {;}
+
   ~DicomPatientConstructor() {;}
 
   G4int FindingNbOfVoxels(G4double maxDensity, G4double minDensity);
 
- // Functions to use ROI (region of interest), contour usually drawn by the
+  // Functions to use ROI (region of interest), contour usually drawn by the
   // physician to identify tumor volume and organ at risk
   void readContour();
 

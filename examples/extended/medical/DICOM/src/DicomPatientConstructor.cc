@@ -28,6 +28,8 @@
 
 #include "globals.hh"
 #include "G4String.hh"
+#include "g4std/vector"
+
 
 G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double minDensity)
 {
