@@ -5,13 +5,13 @@
 #
 /control/verbose 2
 /event/setverbose 0
+/tracking/verbose 0
 #
 /run/initialize
 #
 /gun/particle proton
 #/gun/zvertex -0.16 mum
 /gun/energy 500 keV
-/tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/particle anti_proton
