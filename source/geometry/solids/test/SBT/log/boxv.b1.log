@@ -1,0 +1,148 @@
+% SBT voxel logged output ´
+% target =    (0,0,0)
+% widths =    (1000,1000,1000)
+% maxVoxels = 100
+% maxErrors = 20
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -686.47 204.13
+  test point (447.187,-640.939,204.13) [(-0.1,358.848,348.885)] was inside
+  and so was a more tolerant test point
+VOXEL = (447.187 1061.08) (-640.939 -146.884) (unlimited)
+TRANLATE = (233.635,-227.639,388.712)
+ROTATE = (-0.942933,-0.0319142,-0.33145) 2.92441
+ERROR: Voxel MAX limit is too small, axis 0
+  reported limits were: -969.664 -412.869
+  test point (-412.869,1190.06,529.432) [(-0.1,395.604,1383.75)] was inside
+  and so was a more tolerant test point
+VOXEL = (unlimited) (372.575 1190.06) (-460.216 529.432)
+TRANLATE = (-974.993,1376.33,-782.277)
+ROTATE = (-0.648734,-0.671225,0.35861) 0.579919
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -314.569 -100.644
+  test point (711.187,1295.83,-100.644) [(-0.1,-553.151,770.674)] was inside
+  and so was a more tolerant test point
+VOXEL = (711.187 1136.98) (394.369 1295.83) (-314.569 52.6212)
+TRANLATE = (442.217,429.344,-377.734)
+ROTATE = (0.901247,-0.0203303,0.432828) 2.08565
+ERROR: Voxel MAX limit is too small, axis 1
+  reported limits were: -1468.47 -1049.5
+  test point (854.512,-1049.5,-6.59227) [(-0.1,109.213,489.221)] was inside
+  and so was a more tolerant test point
+VOXEL = (738.229 854.512) (unlimited) (-627.866 -6.59227)
+TRANLATE = (565.017,-1311.99,-320.528)
+ROTATE = (-0.116432,-0.644353,-0.755813) 1.77164
+ERROR: Voxel MAX limit is too small, axis 1
+  reported limits were: 823.298 1113.53
+  test point (854.512,1113.53,-6.59227) [(-0.1,287.069,370.118)] was inside
+  and so was a more tolerant test point
+VOXEL = (738.229 854.512) (unlimited) (-627.866 -6.59227)
+TRANLATE = (593.794,784.738,-214.722)
+ROTATE = (-0.242665,-0.770673,-0.589216) 2.52704
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: 330.229 594.783
+  test point (918.271,-811.359,594.783) [(-0.1,413.17,-879.666)] was inside
+  and so was a more tolerant test point
+VOXEL = (750.997 918.271) (-811.359 -151.631) (330.229 679.105)
+TRANLATE = (338.373,-165.439,157.717)
+ROTATE = (0.582869,0.739064,0.33771) 2.33199
+ERROR: Voxel MAX limit is too small, axis 1
+  reported limits were: -443.118 -207.778
+  test point (918.271,-207.778,330.229) [(-0.1,154.52,1721.24)] was inside
+  and so was a more tolerant test point
+VOXEL = (750.997 918.271) (-811.359 -151.631) (330.229 679.105)
+TRANLATE = (-426.041,-1208.54,-91.5039)
+ROTATE = (-0.357877,-0.568721,-0.740594) 2.61393
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -537.093 -448.483
+  test point (869.454,-27.5954,-448.483) [(-0.1,27.5576,-577.319)] was inside
+  and so was a more tolerant test point
+VOXEL = (262.742 869.454) (-27.5954 198.352) (-537.093 323.703)
+TRANLATE = (1040.67,494.613,-627.48)
+ROTATE = (0.410455,0.690928,0.5951) 2.91863
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -537.093 -478.826
+  test point (262.742,-27.5954,-478.826) [(-0.1,-38.4135,-481.356)] was inside
+  and so was a more tolerant test point
+VOXEL = (262.742 869.454) (-27.5954 198.352) (-537.093 323.703)
+TRANLATE = (-86.7094,110.619,-175.577)
+ROTATE = (0.354157,0.917514,-0.180944) 0.870391
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -235.791 128.592
+  test point (262.742,-27.5954,128.592) [(-0.1,-228.567,1109.74)] was inside
+  and so was a more tolerant test point
+VOXEL = (262.742 869.454) (-27.5954 198.352) (-537.093 323.703)
+TRANLATE = (1337.37,-303.666,-101.065)
+ROTATE = (0.493034,0.86342,-0.106879) 1.493
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -73.4323 15.4381
+  test point (262.742,-27.5954,15.4381) [(-0.1,-187.449,1099.76)] was inside
+  and so was a more tolerant test point
+VOXEL = (262.742 869.454) (-27.5954 198.352) (-537.093 323.703)
+TRANLATE = (1337.37,-303.666,-101.065)
+ROTATE = (0.255842,0.951813,0.169106) 1.50935
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -510.662 -441.145
+  test point (262.742,-27.5954,-441.145) [(-0.1,-608.1,-1284.19)] was inside
+  and so was a more tolerant test point
+VOXEL = (262.742 869.454) (-27.5954 198.352) (-537.093 323.703)
+TRANLATE = (-130.965,1330.26,-583.067)
+ROTATE = (0.44669,0.836803,0.316588) 1.7364
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: 104.882 121.854
+  test point (47.5576,631.55,121.854) [(-0.1,505.837,400.118)] was inside
+  and so was a more tolerant test point
+VOXEL = (47.5576 105.746) (-189.563 631.55) (104.882 812.555)
+TRANLATE = (0,0,0)
+ROTATE = (0.620863,0.669022,0.408581) 0.782646
+ERROR: Voxel MAX limit is too small, axis 1
+  reported limits were: 412.693 458.692
+  test point (47.5576,458.692,812.555) [(-0.1,951.948,-992.7)] was inside
+  and so was a more tolerant test point
+VOXEL = (47.5576 105.746) (-189.563 631.55) (104.882 812.555)
+TRANLATE = (-727.856,1081.93,1762.27)
+ROTATE = (0.82133,0.393085,-0.413401) 1.78078
+ERROR: Voxel MAX limit is too small, axis 0
+  reported limits were: -438.589 -301.647
+  test point (-301.647,943.533,42.3438) [(-0.1,866.129,1241.25)] was inside
+  and so was a more tolerant test point
+VOXEL = (-438.589 316.751) (132.195 943.533) (-568.089 42.3438)
+TRANLATE = (-1099.47,797.893,-1235.6)
+ROTATE = (-0.609779,-0.65239,0.450063) 0.726592
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: 668.022 800.851
+  test point (223.43,-518.218,800.851) [(-0.1,-950.229,880.698)] was inside
+  and so was a more tolerant test point
+VOXEL = (132.83 223.43) (-641.087 -518.218) (409.016 985.684)
+TRANLATE = (-121.666,-1624.33,221.206)
+ROTATE = (0.31585,0.0853237,0.944965) 3.01025
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -944.284 -47.9209
+  test point (625.115,717.778,-47.9209) [(-0.1,-334.453,-1228.29)] was inside
+  and so was a more tolerant test point
+VOXEL = (625.115 1036.95) (717.778 1543.56) (unlimited)
+TRANLATE = (906.246,1591.29,-930.246)
+ROTATE = (0.778037,0.576021,0.250715) 2.4354
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: -121.571 155.909
+  test point (-782.833,211.548,155.909) [(-0.1,-337.306,-1392.84)] was inside
+  and so was a more tolerant test point
+VOXEL = (-977.878 -782.833) (-501.181 211.548) (-158.42 438.847)
+TRANLATE = (554.378,-107.76,560.495)
+ROTATE = (0.569168,-0.0735127,0.818929) 2.92278
+ERROR: Voxel MAX limit is too small, axis 2
+  reported limits were: 91.1217 332.693
+  test point (-782.833,211.548,332.693) [(-0.1,-380.179,-1340.69)] was inside
+  and so was a more tolerant test point
+VOXEL = (-977.878 -782.833) (-501.181 211.548) (-158.42 438.847)
+TRANLATE = (554.378,-107.76,560.495)
+ROTATE = (0.617398,-0.0668459,0.783806) 2.91438
+ERROR: Voxel MAX limit is too small, axis 0
+  reported limits were: 1038.9 1225.31
+  test point (1225.31,-766.507,-217.882) [(-0.1,-956.282,-1209.17)] was inside
+  and so was a more tolerant test point
+VOXEL = (unlimited) (-766.507 -238.229) (-217.882 168.037)
+TRANLATE = (782.346,164.992,927.835)
+ROTATE = (0.0359715,0.819899,-0.571377) 0.292355
+% End of test (maximum number errors) ´
+% Statistics: voxels=19 errors=20
+%(End of file)

@@ -1,0 +1,113 @@
+#
+# GEANT4 SBT Script to test G4Polyhedra
+# DCW 25/3/99 First try
+* DCW 23/5/99 Add voxel tests
+#
+# Increment the numbers below to **really** consume CPU time
+#
+/test/maxPoints 10000
+/voxel/maxVoxels 500
+#
+/test/maxPoints 1000
+/voxel/maxVoxels 50
+#
+# --- polyhedra.a1.log
+# Start with a nice and easy case
+#
+/solid/G4Polyhedra 0 360 8 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+/test/errorFileName  ../log/polyhedra.a1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.a1.log
+/voxel/run
+#
+# --- polyhedra.a2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.a2.log
+/test/run
+#
+#
+# --- polyhedra.b1.log
+# Now add a phi slice
+#
+/solid/G4Polyhedra 0 90 8 4 (1.0,1.2,1.4,1.2) (-1.0,-1.0,1.0,1.0)
+/test/gridSizes 0 0 0 m
+/test/errorFileName  ../log/polyhedra.b1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.b1.log
+/voxel/run
+#
+# --- polyhedra.b2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.b2.log
+/test/run
+#
+# --- polyhedra.c1.log
+# Build a much more complicated polyhedra
+#
+/solid/G4Polyhedra 0 360 6 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName  ../log/polyhedra.c1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.c1.log
+/voxel/run
+#
+# --- polyhedra.b2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.c2.log
+/test/run
+#
+# --- polyhedra.d1.log
+# Build a much more complicated polyhedra, now with a slice
+#
+/solid/G4Polyhedra 0 90 2 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName  ../log/polyhedra.d1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.d1.log
+/voxel/run
+#
+# --- polyhedra.d2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.d2.log
+/test/run
+#
+# --- polyhedra.e1.log
+# Build a much more complicated polyhedra, now with a thin slice
+#
+/solid/G4Polyhedra -1 2 2 17 (0.0,0.2,0.3,0.32,0.32,0.4,0.4,0.5,0.5,0.8,0.8,0.9,0.9,0.8,0.8,0.3,0.0) (-0.5,-0.5,-1.1,-1.1,-0.4,-0.4,-1.0,-1.0,-0.4,-1.0,0.0,0.0,0.2,0.2,1.0,0.0,1.0) 
+/test/gridSizes 0 0 0 m
+/test/errorFileName  ../log/polyhedra.e1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.e1.log
+/voxel/run
+#
+# --- polyhedra.e2.log
+# Up the ante and generate points on a grid
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.e2.log
+/test/run
+#
+# --- polyhedra.f1.log
+# One of my old favorites, with a few sharp turns
+#
+/solid/G4Polyhedra2 0 270 6 6 (-0.6,0.0,-1.0,0.5,0.5,1.0) (0.5,0.5,0.4,0.4,0.8,0.8) (0.6,0.6,1.0,1.0,1.0,1.1)
+/test/gridSizes 0 0 0 m
+/test/errorFileName  ../log/polyhedra.f1.log
+/test/run
+/voxel/errorFileName ../log/polyhedrav.f1.log
+/voxel/run
+#
+/test/gridSizes 0.02 0.02 0.02 m
+/test/errorFileName  ../log/polyhedra.f2.log
+/test/run
+#
+exit

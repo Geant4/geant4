@@ -1,0 +1,11 @@
+% SBT logged output ´
+% target =    (100,100,200)
+% widths =    (1000,1000,1000)
+% grids  =    (0,0,0)
+% maxPoints = 10000
+% maxErrors = 100
+% End of test (maximum number points) ´
+% Statistics: points=10000 errors=0 errors reported=0
+%             inside=10000 outside=0 surface=0
+%             cpu time=0
+%(End of file)

@@ -1,0 +1,28 @@
+#
+# GEANT4 SBT Script to test DircTest
+# DCW 7/3/00 
+#
+/test/maxPoints 20000
+#
+# We only have one geometry.
+# it is limited to a region of space near x = 1*m
+#
+/solid/DircTest
+/test/errorFileName  ../log/dirctest.a.log
+/test/target 1 0 0 m
+/test/widths 1 1 1 m
+/test/run
+#
+# Up the ante and generate points on a grid
+#
+/test/errorFileName  ../log/dirctest.b.log
+/test/gridSizes 0.01 0.01 0.1 m
+/test/run
+#
+# Do so a little closer to the shape
+#
+/test/errorFileName  ../log/dirctest.c.log
+/test/widths 0.2 0.5 0.1 m
+/test/run
+#
+exit
