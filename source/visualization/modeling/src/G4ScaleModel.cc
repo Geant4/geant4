@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScaleModel.cc,v 1.2 2001-07-24 21:50:09 johna Exp $
+// $Id: G4ScaleModel.cc,v 1.3 2001-08-14 18:43:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,5 +52,7 @@ G4ScaleModel::G4ScaleModel (const G4Scale& scale): fScale(scale) {
 }
 
 void G4ScaleModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+  sceneHandler.BeginPrimitives ();
   sceneHandler.AddPrimitive (fScale);
+  sceneHandler.EndPrimitives ();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TextModel.cc,v 1.3 2001-07-22 00:57:05 johna Exp $
+// $Id: G4TextModel.cc,v 1.4 2001-08-14 18:43:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,5 +41,7 @@ G4TextModel::G4TextModel (const G4Text& text): fText(text) {
 }
 
 void G4TextModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
+  sceneHandler.BeginPrimitives ();
   sceneHandler.AddPrimitive (fText);
+  sceneHandler.EndPrimitives ();
 }

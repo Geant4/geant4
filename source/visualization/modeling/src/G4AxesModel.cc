@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AxesModel.cc,v 1.4 2001-07-22 00:57:09 johna Exp $
+// $Id: G4AxesModel.cc,v 1.5 2001-08-14 18:43:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,6 +57,8 @@ void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   G4VisAttributes ay(cy);     // VA for y-axis
   G4VisAttributes az(cz);     // VA for z-axis
 
+  sceneHandler.BeginPrimitives();
+
   //----- Draw x-axis
   x_axis.SetVisAttributes(&ax);
   x_axis.push_back(G4Point3D(fX0,fY0,fZ0));
@@ -74,4 +76,6 @@ void G4AxesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler) {
   z_axis.push_back(G4Point3D(fX0,fY0,fZ0));
   z_axis.push_back(G4Point3D(fX0,fY0,(fZ0 + fLength)));
   sceneHandler.AddPrimitive(z_axis);
+
+  sceneHandler.EndPrimitives();
 }
