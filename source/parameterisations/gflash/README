@@ -1,0 +1,3 @@
+This directory contains the code re-implementation of the GFLASH package
+in C++ for Geant4. At the time of the first release, the homogenous shower
+parameterisation part is included.
