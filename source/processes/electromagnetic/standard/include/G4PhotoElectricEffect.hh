@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.10 2001-10-01 15:00:28 maire Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.11 2002-01-10 18:26:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,8 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous process name "phot"
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)      
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 10-01-02, moved few function from icc to cc      
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -128,22 +129,22 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
         
   protected:
   
-     virtual inline G4double ComputeKBindingEnergy(G4double AtomicNumber);
+     virtual G4double ComputeKBindingEnergy(G4double AtomicNumber);
 
-     virtual inline G4double ComputeL1BindingEnergy(G4double AtomicNumber);
+     virtual G4double ComputeL1BindingEnergy(G4double AtomicNumber);
 
-     virtual inline G4double ComputeL2BindingEnergy(G4double AtomicNumber);
+     virtual G4double ComputeL2BindingEnergy(G4double AtomicNumber);
 
      virtual G4double ComputeCrossSectionPerAtom(G4double PhotonEnergy, 
                                                  G4double AtomicNumber);
 						 
+     G4double ComputeSandiaCrossSection (G4double PhotonEnergy, 
+                                         G4double AtomicNumber);						 
+						 
      virtual G4double ComputeMeanFreePath(G4double PhotonEnergy, 
                                           G4Material* aMaterial);
 					  
-     G4double ComputeSandiaCrossSection (G4double PhotonEnergy, 
-                                         G4double AtomicNumber);
-						 					  
-     inline G4double ComputeSandiaMeanFreePath(G4double PhotonEnergy, 
+     G4double ComputeSandiaMeanFreePath(G4double PhotonEnergy, 
                                                G4Material* aMaterial);
 					  
   private:

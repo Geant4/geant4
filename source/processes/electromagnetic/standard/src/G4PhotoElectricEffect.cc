@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.22 2001-10-01 15:00:29 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.23 2002-01-10 18:26:36 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -50,7 +50,8 @@
 // 17-09-01, migration of Materials to pure STL (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)       
-// 
+// 10-01-02, moved few function from icc to cc
+//    
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -222,6 +223,48 @@ G4double G4PhotoElectricEffect::ComputeCrossSectionPerAtom(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+G4double G4PhotoElectricEffect::ComputeKBindingEnergy (G4double Z)
+ 
+// Calculates the binding energy of the K electronic shell, as a function
+// of the Atomic Number, from a parametrized formula of L. Urban.
+
+{
+  const G4double
+  aK (6.6644*eV), bK (2.2077e-1*eV), cK (-3.2552e-3*eV), dK (1.8199e-5*eV);
+
+  return Z*Z*(aK  + Z* (bK + Z* (cK + Z* dK))); 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4PhotoElectricEffect::ComputeL1BindingEnergy (G4double Z)
+ 
+// Calculates the binding energy of the L1 electronic shell, as a function
+// of the Atomic Number, from a parametrized formula of L. Urban.
+
+{
+  const G4double
+  aL1(-2.9179e-1*eV), bL1(8.7983e-2*eV), cL1(-1.2589e-3*eV), dL1(6.9602e-6*eV);
+  
+  return Z*Z*(aL1 + Z* (bL1 + Z* (cL1 + Z* dL1)));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4PhotoElectricEffect::ComputeL2BindingEnergy (G4double Z)
+ 
+// Calculates the binding energy of the L2 electronic shell, as a function
+// of the Atomic Number, from a parametrized formula of L. Urban.
+
+{
+  const G4double
+  aL2(-6.8606e-1*eV), bL2(1.0078e-1*eV), cL2(-1.4496e-3*eV), dL2(7.8809e-6*eV);
+
+  return Z*Z*(aL2 + Z* (bL2 + Z* (cL2 + Z* dL2)));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
                                                           
 G4double G4PhotoElectricEffect::ComputeSandiaCrossSection(G4double PhotonEnergy,
                                                           G4double AtomicNumber)
@@ -236,6 +279,46 @@ G4double G4PhotoElectricEffect::ComputeSandiaCrossSection(G4double PhotonEnergy,
 	 SandiaCof[2]/energy3      + SandiaCof[3]/energy4; 
 }
  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
+                                                          G4Material* aMaterial)
+
+// returns the gamma mean free path in GEANT4 internal units
+
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
+
+  G4double SIGMA = 0;
+
+  for ( size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+      {             
+            SIGMA += NbOfAtomsPerVolume[elm] * 
+                     ComputeCrossSectionPerAtom(GammaEnergy,
+                                             (*theElementVector)[elm]->GetZ());
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+                                                         
+G4double G4PhotoElectricEffect::ComputeSandiaMeanFreePath(G4double GammaEnergy,
+                                                          G4Material* aMaterial)
+{
+  G4double energy2 = GammaEnergy*GammaEnergy, energy3 = GammaEnergy*energy2, 
+           energy4 = energy2*energy2;
+
+  G4double* SandiaCof = aMaterial->GetSandiaTable()
+                                 ->GetSandiaCofForMaterial(GammaEnergy);
+
+  G4double SIGMA = SandiaCof[0]/GammaEnergy + SandiaCof[1]/energy2 +
+	           SandiaCof[2]/energy3     + SandiaCof[3]/energy4; 
+          
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
