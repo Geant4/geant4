@@ -46,8 +46,8 @@
 
 
 TstDrawVox01DetectorConstruction::TstDrawVox01DetectorConstruction()
-:simpleBoxLog(NULL),simpleBoxDetector(NULL),honeycombDetector(NULL),
- detectorChoice(0),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL)
+:simpleBoxLog(0),simpleBoxDetector(0),honeycombDetector(0),
+ Air(0),Al(0),Pb(0),selectedMaterial(0),detectorChoice(0)
 {
   detectorMessenger = new TstDrawVox01DetectorMessenger(this);
   materialChoice = "Pb";
@@ -63,7 +63,7 @@ G4VPhysicalVolume* TstDrawVox01DetectorConstruction::Construct()
   if((!simpleBoxDetector)&&(!honeycombDetector))
   { ConstructDetectors(); }
 
-  G4VPhysicalVolume* worldVol = NULL;
+  G4VPhysicalVolume* worldVol = 0;
   switch(detectorChoice)
   { 
     case 1:
@@ -203,9 +203,9 @@ void TstDrawVox01DetectorConstruction::ConstructDetectors()
     for (i=1;i<= 4;i++)
     {
       xTlate = -1000.0*cm - 20.0*cm + i*160.0*cm - offset;
-      G4PVPlacement *myTargetPhys
-        =new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-                           tName1,myTargetLog,myCalPhys,false,copyNo++);
+      // G4PVPlacement *myTargetPhys=
+      new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                        tName1,myTargetLog,myCalPhys,false,copyNo++);
     }
   }
   for (j=1;j<=3;j++)
@@ -214,9 +214,9 @@ void TstDrawVox01DetectorConstruction::ConstructDetectors()
     for (i=1;i<= 4;i++)
     {
       xTlate = -1000.0*cm - 20.0*cm + i*160.0*cm;
-      G4PVPlacement *myTargetPhys
-        =new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
-                           tName1,myTargetLog,myCalPhys,false,copyNo++);
+      // G4PVPlacement *myTargetPhys=
+      new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
+                        tName1,myTargetLog,myCalPhys,false,copyNo++);
     }
   }
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-11-09 09:20:52 grichine Exp $
+$Id: History,v 1.3 2002-01-08 13:33:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,8 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+08-Jan-2002, Gabriele Cosmo
+- Fixed warnings and updated to release 4.0.
 
 28-Jul-1999, Lionel Grainac
 - Created.
