@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.18 2004-11-11 17:24:22 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.19 2004-11-14 11:34:02 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,8 +46,7 @@ class Geant4_SoStyleCache;
 // Base class for various OpenInventorScene classes.
 class G4OpenInventorSceneHandler: public G4VSceneHandler {
 
-friend class G4OpenInventorXtViewer;
-friend class G4OpenInventorWinViewer;
+friend class G4OpenInventorViewer;
 
 public:
 

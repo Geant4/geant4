@@ -21,43 +21,43 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.3 2004-11-14 11:34:02 gbarrand Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// Jeff Kallenbach 01 Aug 1996
-// OpenInventor viewer - opens window, hard copy, etc.
 
-#ifndef G4OPENINVENTORXTVIEWER_HH
-#define G4OPENINVENTORXTVIEWER_HH
+#ifndef G4OPENINVENTORVIEWER_HH
+#define G4OPENINVENTORVIEWER_HH
 
 #ifdef G4VIS_BUILD_OI_DRIVER
 
 // Inheritance :
-#include "G4OpenInventorViewer.hh"
+#include "G4VViewer.hh"
 
-#include <X11/Intrinsic.h>
-class SoXtExaminerViewer;
+class SoSelection;
+class Geant4_SoImageWriter;
+class G4OpenInventorSceneHandler;
+class G4VInteractorManager;
 
-class G4OpenInventorXtViewer: public G4OpenInventorViewer {
+//
+// Base class for various OpenInventorView classes.
+//
+class G4OpenInventorViewer: public G4VViewer {
 public: //G4VViewer
-  virtual void FinishView();
+  virtual void DrawView();
+  virtual void ShowView();
+  virtual void ClearView();
+  virtual void SetView();
+  virtual void KernelVisitDecision();
 public:
-  G4OpenInventorXtViewer(G4OpenInventorSceneHandler& scene,
-		         const G4String& name = "");
-  virtual ~G4OpenInventorXtViewer();
+  G4OpenInventorViewer(G4OpenInventorSceneHandler& scene,
+		       const G4String& name = "");
+  virtual ~G4OpenInventorViewer();
 private:
-  void WritePostScript(const G4String& file = "g4out.ps");
-  void WritePixmapPostScript(const G4String& file = "g4out.ps");
-  Widget AddMenu(Widget,const G4String&,const G4String&);
-  void AddButton(Widget,const G4String&,XtCallbackProc);
+  G4bool CompareForKernelVisit(G4ViewParameters&);
 private:
-  static void PostScriptButtonCbk(Widget,XtPointer,XtPointer);
-  static void PixmapPostScriptButtonCbk(Widget,XtPointer,XtPointer);
-  static void EscapeButtonCbk(Widget,XtPointer,XtPointer);
-private:
-  Widget fShell;
-  SoXtExaminerViewer* fViewer;
+  G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
+protected:
+  G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
+  G4VInteractorManager* fInteractorManager;
+  SoSelection* fSoSelection;
+  Geant4_SoImageWriter* fSoImageWriter;
 };
 
 #endif

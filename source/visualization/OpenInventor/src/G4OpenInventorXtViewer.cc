@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.9 2004-11-11 16:11:57 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.10 2004-11-14 11:35:14 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -33,7 +33,9 @@
  * gb 09 November 2004 : restore the escape button.
  * gb 09 November 2004 : have a menu bar in the viewer shell.
  * gb 09 November 2004 : have gl2ps file production.
+ * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
+
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
 // this :
@@ -53,110 +55,21 @@
 #include <Xm/CascadeB.h>
 #include <Xm/RowColumn.h>
 
+#include "HEPVis/actions/SoGL2PSAction.h"
+#include "HEPVis/nodes/SoImageWriter.h"
+
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 
-#include "HEPVis/actions/SoGL2PSAction.h"
-
-//
-// Global variables 
-//
-
-//static void SecondaryLoopPostAction ();
-
-void G4OpenInventorXtViewer::FinishView () {
-  if(!fViewer) return;
-  fViewer->viewAll();
-  fViewer->saveHomePosition();
-}
-
-//static void SecondaryLoopPostAction ()
-//{
-//  Display *display = fViewer->getDisplay();
-//  XSync(display, False);
-//  if(interactorManager -> GetExitSecondaryLoopCode ()==OIV_EXIT_CODE) {
-//    if (fShell!=0) XtRealizeWidget(fShell);
-//  }
-//}
-
-void G4OpenInventorXtViewer::KernelVisitDecision () {
-  
-  // If there's a significant difference with the last view parameters
-  // of either the scene handler or this viewer, trigger a rebuild.
-
-  if (
-      //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
-      // We need a test for empty scene graph, such as
-      // staticRoot.size() or something??????????  See temporary fix
-      // in contructor.  (John Allison Aug 2001)
-      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
-      CompareForKernelVisit(fLastVP)) {
-    NeedKernelVisit ();
-  }      
-  fLastVP = fVP;
-  fG4OpenInventorSceneHandler.fLastVP = fVP;
-}
- 
-G4bool G4OpenInventorXtViewer::CompareForKernelVisit
-(G4ViewParameters&) {
-
-  if (
-      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
-      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (fLastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
-      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
-      ) {
-      return true;;
-  }
-  if (fLastVP.IsDensityCulling () &&
-      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    return true;
-
-  if (fLastVP.IsExplode () &&
-      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    return true;
-      
-  return false;
-}
-
-G4OpenInventorXtViewer::G4OpenInventorXtViewer
-(G4OpenInventorSceneHandler& sceneHandler,
- const G4String& name)
-:G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
-,fG4OpenInventorSceneHandler(sceneHandler)
+G4OpenInventorXtViewer::G4OpenInventorXtViewer(
+ G4OpenInventorSceneHandler& sceneHandler
+,const G4String& name)
+:G4OpenInventorViewer (sceneHandler, name)
 ,fShell(0)
 ,fViewer(0)
-,fSelection(0)
-,fInteractorManager(0)
 {
-  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
-
-  fInteractorManager = 
-    ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
-    GetInteractorManager();
-  //Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
-
-  //fInteractorManager->
-  //AddSecondaryLoopPostAction((G4SecondaryLoopAction)SecondaryLoopPostAction);
-
   G4cout << "Window name: " << fName << G4endl;
-
-  // Selection
-  fSelection = new SoSelection;
-  fSelection->policy = SoSelection::SINGLE;
-  fSelection->ref();
-  fSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
   G4String wName = fName;
 
@@ -191,7 +104,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
     XtManageChild(menuBar);
 
     Widget menu = AddMenu(menuBar,"File","File");
-    AddButton(menu,"PostScript",PostScriptButtonCbk);
+    AddButton(menu,"PS (gl2ps)",PostScriptButtonCbk);
+    AddButton(menu,"PS (pixmap)",PixmapPostScriptButtonCbk);
     AddButton(menu,"Escape",EscapeButtonCbk);
 
     fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
@@ -219,7 +133,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
   fViewer->setGLRenderAction(action);
 
   // Else :
-  fViewer->setSceneGraph(fSelection);
+  fViewer->setSceneGraph(fSoSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();
   fViewer->setTitle(fName);
@@ -240,24 +154,12 @@ G4OpenInventorXtViewer::~G4OpenInventorXtViewer () {
     //FIXME : delete fViewer;
   }
   if(fShell) XtDestroyWidget(fShell);
-  if(fSelection) fSelection->unref();
 }
 
-void G4OpenInventorXtViewer::ClearView () {
-}
-
-void G4OpenInventorXtViewer::SetView () {
-}
-
-void G4OpenInventorXtViewer::DrawView () {
-  //G4cout << "debug Iv::DrawViewer " <<G4endl;
-  KernelVisitDecision();
-  ProcessView();
-  FinishView();
-}
-
-void G4OpenInventorXtViewer::ShowView () {
-  fInteractorManager -> SecondaryLoop ();
+void G4OpenInventorXtViewer::FinishView () {
+  if(!fViewer) return;
+  fViewer->viewAll();
+  fViewer->saveHomePosition();
 }
 
 void G4OpenInventorXtViewer::WritePostScript(const G4String& aFile) {
@@ -272,6 +174,24 @@ void G4OpenInventorXtViewer::WritePostScript(const G4String& aFile) {
   action->disableFileWriting();
 }
 
+void G4OpenInventorXtViewer::WritePixmapPostScript(const G4String& aFile) {
+  if(!fViewer) return;
+  fSoImageWriter->fileName.setValue(aFile.c_str());
+  //imageWriter->format.setValue(SoImageWriter::POST_SCRIPT);
+  fSoImageWriter->enable();
+  fViewer->render();
+  fSoImageWriter->disable();
+  if(fSoImageWriter->getStatus()) {
+    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
+           << " produced."
+           << G4endl;
+  } else {
+    G4cout << G4String(fSoImageWriter->fileName.getValue().getString()) 
+           << " not produced."
+           << G4endl;
+  }
+}  
+
 void G4OpenInventorXtViewer::EscapeButtonCbk(
  Widget,XtPointer aData,XtPointer) {
  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
@@ -282,6 +202,12 @@ void G4OpenInventorXtViewer::PostScriptButtonCbk(
  Widget,XtPointer aData,XtPointer) {
  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
  This->WritePostScript();
+}
+
+void G4OpenInventorXtViewer::PixmapPostScriptButtonCbk(
+ Widget,XtPointer aData,XtPointer) {
+ G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+ This->WritePixmapPostScript();
 }
 
 Widget G4OpenInventorXtViewer::AddMenu(
