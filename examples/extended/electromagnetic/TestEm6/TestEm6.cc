@@ -35,12 +35,15 @@
 #include "Em6RunAction.hh"
 #include "Em6EventAction.hh"
 #include "Em6SteppingAction.hh"
-
+#include "Em6SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
   //choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
+  
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new Em6SteppingVerbose);
   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
