@@ -21,15 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: F03FieldSetup.cc,v 1.1 2003-12-01 17:04:26 japost Exp $
+// $Id: F03FieldSetup.cc,v 1.2 2003-12-01 17:29:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
-//   User Field class implementation.
+//   Field Setup class implementation.
 //
 
-
-#include "F03ElectroMagneticField.hh"
+#include "F03FieldSetup.hh"
 #include "F03FieldMessenger.hh"
 
 #include "G4UniformMagField.hh"
@@ -85,7 +84,7 @@ F03FieldSetup::F03FieldSetup()
 F03FieldSetup::F03FieldSetup(G4ThreeVector fieldVector)
 {    
   fMagneticField = new G4UniformMagField(fieldVector);
-  GetGlobalFieldManager()->CreateChordFinder(this);
+  GetGlobalFieldManager()->CreateChordFinder(fMagneticField);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -208,25 +207,21 @@ void F03FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
   // Find the Field Manager for the global field
   G4FieldManager* fieldMgr= GetGlobalFieldManager();
     
+  if(fMagneticField) delete fMagneticField;
+
   if(fieldVector != G4ThreeVector(0.,0.,0.))
   { 
-    if(fMagneticField) delete fMagneticField;
     fMagneticField = new  G4UniformMagField(fieldVector);
-
-    // UpdateField();
-   
-    fieldMgr->SetDetectorField(this);
-
-    // To-do: when making this a factory, change above "this" to "fMagneticfield"
   }
   else 
   {
     // If the new field's value is Zero, then it is best to
     //  insure that it is not used for propagation.
-
-    G4MagneticField* pZeroMagneticField = 0;
-    fieldMgr->SetDetectorField( pZeroMagneticField);
+    fMagneticField = 0; 
   }
+  fieldMgr->SetDetectorField(fMagneticField);
+
+  // UpdateField();
 }
 
 ////////////////////////////////////////////////////////////////////////////////
