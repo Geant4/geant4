@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.12 2000-05-23 09:58:48 urban Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.13 2001-01-24 15:22:06 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -35,7 +35,7 @@ G4double G4MuBremsstrahlung::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e10};
 G4int G4MuBremsstrahlung::NBIN = 1000;    // 100 ;
 G4double G4MuBremsstrahlung::ya[1001]={0.};
 G4double G4MuBremsstrahlung::proba[5][8][1001]={0.};
-G4double G4MuBremsstrahlung::CutFixed=1.*keV ;
+G4double G4MuBremsstrahlung::CutFixed=0.98*keV ;
 
 
 G4double G4MuBremsstrahlung::LowerBoundLambda = 1.*keV ;
@@ -448,7 +448,6 @@ void G4MuBremsstrahlung::MakeSamplingTables(
          for(G4int ib=0; ib<=nbin; ib++)
          {
            proba[iz][it][ib] /= CrossSection ;
-
          }
        }
      }
@@ -461,6 +460,9 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
                                                   const G4Step& stepData)
 {
 
+  static G4double ysmall = -100. ;
+  static G4double ytablelow = -5. ;
+ 
   aParticleChange.Initialize(trackData);
   G4Material* aMaterial=trackData.GetMaterial() ;
 
@@ -487,7 +489,9 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
   G4double dy = 5./G4float(NBIN) ;
 
   G4double ymin=log(log(GammaEnergyCut/CutFixed)/log(KineticEnergy/CutFixed)) ;
-  G4int iymin = G4int((ymin+5.)/dy+0.5) ;  
+
+  if(ymin < ysmall)        
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
   //  sampling using tables 
   G4double v,xc,x,yc,y ;
@@ -518,23 +522,30 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
       itt=it ;
     }
   }
+  G4int iymin = G4int((ymin+5.)/dy+0.5) ;  
 
-  G4double r = G4UniformRand() ;
+  if(ymin < ytablelow)
+  {
+    y = ymin + G4UniformRand()*(ytablelow-ymin) ;
+  }
+  else
+  {
+    G4double r = G4UniformRand() ;
 
-  iy = iymin-1 ;
-  delmin = proba[izz][itt][NBINminus1]-proba[izz][itt][iymin] ;
-  do {
-       iy += 1 ;
-     } while ((r > (proba[izz][itt][iy]-proba[izz][itt][iymin])/delmin)
-               &&(iy < NBINminus1)) ;
+    iy = iymin-1 ;
+    delmin = proba[izz][itt][NBINminus1]-proba[izz][itt][iymin] ;
+    do {
+         iy += 1 ;
+       } while ((r > (proba[izz][itt][iy]-proba[izz][itt][iymin])/delmin)
+                 &&(iy < NBINminus1)) ;
 
-  //sampling is Done uniformly in y in the bin
-    y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
+    //sampling is Done uniformly in y in the bin
+     y = ya[iy] + G4UniformRand() * ( ya[iy+1] - ya[iy] ) ;
+  }
 
   x = exp(y) ;
 
   v = CutFixed*exp(x*log(KineticEnergy/CutFixed)) ;            
-
   if( v <= 0.)
      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
