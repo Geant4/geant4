@@ -21,24 +21,25 @@
 // ********************************************************************
 //
 //
-// 
-//------------- G4MultipleScattering physics process --------------------------
-//               by Laszlo Urban, March 2001   
 //
-// 07-08-01 new methods Store/Retrieve PhysicsTable 
+//------------- G4MultipleScattering physics process --------------------------
+//               by Laszlo Urban, March 2001
+//
+// 07-08-01 new methods Store/Retrieve PhysicsTable
 // 23-08-01 new angle and z distribution,energy dependence reduced,
 //          Store,Retrieve methods commented out temporarily, L.Urban
 // 11-09-01 G4MultipleScatteringx put as default: G4MultipleScattering
 //          Store,Retrieve methods reactived (mma)
 // 13-09-01 Unused TrueToGeomTransformation method deleted,
 //          class description (L.Urban)
-// 19-09-01 come back to previous process name msc 
+// 19-09-01 come back to previous process name msc
 // 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 // 22-04-02 boundary algorithm modified -> important improvement in timing !!!!
 //          (L.Urban)
 // 24-05-02 changes in data members, L.Urban
-// 30-10-02 changes in data members, L.Urban 
-//            
+// 30-10-02 changes in data members, L.Urban
+// 20-01-03 Migrade to cut per region (V.Ivanchenko)
+//
 //------------------------------------------------------------------------------
 
 // class description
@@ -195,7 +196,8 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
    G4int    TotBin;
 
    G4int    materialIndex;
-  
+   G4int    coupleIndex;
+
    G4double tLast;
    G4double zLast;
 

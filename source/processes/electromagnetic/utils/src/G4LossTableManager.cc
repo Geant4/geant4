@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 20-01-03 Migrade to cut per region (V.Ivanchenko)
+//
 // Class Description: 
 //
 // -------------------------------------------------------------------
@@ -45,7 +47,7 @@
 #include "G4EnergyLossMessengerSTD.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Material.hh"
+#include "G4MaterialCutsCouple.hh"
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
 
@@ -72,7 +74,7 @@ G4LossTableManager::~G4LossTableManager()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager::G4LossTableManager()
-{ 
+{
   n_loss = 0;
   all_tables_are_built = false;
   all_particles_are_mapped = false;
@@ -355,7 +357,7 @@ void G4LossTableManager::RetrieveDEDXTable(const G4ParticleDefinition* aParticle
 G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aParticle)
 {
   if(1 < verbose) {
-    G4cout << "G4LossTableManager::BuildTables() for " 
+    G4cout << "G4LossTableManager::BuildTables() for "
            << aParticle->GetParticleName() << G4endl;
   }
 
@@ -376,25 +378,25 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
         em = loss_vector[i];
         iem= i;
         no_el = false;
-      } 
+      }
       if(!em) {
         em = loss_vector[i];
         iem= i;
-      }  
+      }
       tables_are_built[i] = true;
       list.push_back(loss_vector[i]->BuildDEDXTable());
       loss_list.push_back(loss_vector[i]);
     }
   }
 
-  G4int n_dedx = list.size(); 
+  G4int n_dedx = list.size();
   if(!n_dedx) return 0;
 
   if(aParticle == theElectron) eIonisation = em;
 
   if(0 < verbose) {
     G4cout << "G4LossTableManager::BuildTables() start to build range tables"
-           << " and the sum of " << n_dedx << " processes"  
+           << " and the sum of " << n_dedx << " processes"
            << G4endl;
   }
 
@@ -422,7 +424,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   }
   if(1 < verbose) {
     G4cout << "G4LossTableManager::BuildTables: Tables are built"
-           << " for " << em->GetProcessName() 
+           << " for " << em->GetProcessName()
            << G4endl;
   }
   return em;
@@ -430,7 +432,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4LossTableManager::SetLossFluctuations(G4bool val) 
+void G4LossTableManager::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
   for(G4int i=0; i<n_loss; i++) {

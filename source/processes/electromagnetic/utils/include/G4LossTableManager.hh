@@ -30,19 +30,20 @@
 // File name:     G4LossTableManager
 //
 // Author:        Vladimir Ivanchenko on base of G4LossTables class
-//                and Maria Grazia Pia ideas 
-// 
+//                and Maria Grazia Pia ideas
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
 //
+// 20-01-03 Migrade to cut per region (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // A utility static class, responsable for the energy loss tables
 // for each particle
 //
-// Energy loss processes have to register their tables with this 
+// Energy loss processes have to register their tables with this
 // class. The responsibility of creating and deleting the tables
 // remains with the energy loss classes.
 
@@ -60,11 +61,11 @@
 #include "G4VEnergyLossSTD.hh"
 
 class G4PhysicsTable;
-class G4Material;
+class G4MaterialCutsCouple;
 class G4EnergyLossMessengerSTD;
 class G4ParticleDefinition;
 
-class G4LossTableManager 
+class G4LossTableManager
 {
 
 public:
@@ -79,17 +80,17 @@ public:
   G4double GetDEDX(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Material *aMaterial);
+    const G4MaterialCutsCouple *couple);
 
   G4double GetRange(
     const G4ParticleDefinition *aParticle,
     G4double kineticEnergy,
-    const G4Material *aMaterial);
-  
+    const G4MaterialCutsCouple *couple);
+
   G4double GetEnergy(
     const G4ParticleDefinition *aParticle,
     G4double range,
-    const G4Material *aMaterial);  
+    const G4MaterialCutsCouple *couple);
 
   // to be called only by energy loss processes
   void Register(G4VEnergyLossSTD* p);
@@ -116,11 +117,11 @@ public:
   void SetStepLimits(G4double v1, G4double v2);
 
   G4bool StorePhysicsTable(G4VEnergyLossSTD* el,
-		     const G4String& dedx_file, 
-		     const G4String& range_file, 
-		     const G4String& inv_range_file, 
+		     const G4String& dedx_file,
+		     const G4String& range_file,
+		     const G4String& inv_range_file,
 			   G4bool ascii);
- 
+
 private:
 
   G4LossTableManager();
@@ -153,7 +154,7 @@ private:
   PD                   theElectron;
 
   G4int n_loss;
- 
+
   G4bool all_tables_are_built;
   G4bool all_particles_are_mapped;
   G4bool electron_table_are_built;
@@ -181,7 +182,7 @@ private:
 inline G4double G4LossTableManager::GetDEDX(
           const G4ParticleDefinition *aParticle,
                 G4double kineticEnergy,
-          const G4Material *aMaterial) 
+          const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
     G4std::map<PD, G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
@@ -189,7 +190,7 @@ inline G4double G4LossTableManager::GetDEDX(
     currentParticle = aParticle;
     currentLoss = (*pos).second;
   }
-  return currentLoss->GetDEDX(kineticEnergy, aMaterial);
+  return currentLoss->GetDEDX(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -197,7 +198,7 @@ inline G4double G4LossTableManager::GetDEDX(
 inline G4double G4LossTableManager::GetRange(
           const G4ParticleDefinition *aParticle,
                 G4double kineticEnergy,
-          const G4Material *aMaterial) 
+          const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
     G4std::map<PD, G4VEnergyLossSTD*, G4std::less<PD> >::const_iterator pos;
@@ -205,7 +206,7 @@ inline G4double G4LossTableManager::GetRange(
     currentParticle = aParticle;
     currentLoss = (*pos).second;
   }
-  return currentLoss->GetRange(kineticEnergy, aMaterial);
+  return currentLoss->GetRange(kineticEnergy, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,7 +214,7 @@ inline G4double G4LossTableManager::GetRange(
 inline G4double G4LossTableManager::GetEnergy(
           const G4ParticleDefinition *aParticle,
                 G4double range,
-          const G4Material *aMaterial) 
+          const G4MaterialCutsCouple *couple)
 {
   if(aParticle != currentParticle) {
     G4std::map<PD,G4VEnergyLossSTD*,G4std::less<PD> >::const_iterator pos;
@@ -221,7 +222,7 @@ inline G4double G4LossTableManager::GetEnergy(
     currentParticle = aParticle;
     currentLoss = (*pos).second;
   }
-  return currentLoss->GetKineticEnergy(range, aMaterial);
+  return currentLoss->GetKineticEnergy(range, couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.23 2003-01-17 18:54:41 vnivanch Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.24 2003-01-20 18:16:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -109,10 +109,10 @@ G4VMuEnergyLoss::G4VMuEnergyLoss(const G4String& processName)
      theRangeCoeffATable(0),
      theRangeCoeffBTable(0),
      theRangeCoeffCTable(0)
-{ 
+{
 }
 
-G4VMuEnergyLoss::~G4VMuEnergyLoss() 
+G4VMuEnergyLoss::~G4VMuEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
@@ -356,15 +356,16 @@ void G4VMuEnergyLoss::BuildDEDXTable(
         LowerLimitForced[mat] = false ;
 
         // create array for the min. delta cuts in kinetic energy
-        G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(1)))[mat];
-        if(!setMinDeltaCutInRange) MinDeltaCutInRange = ecut/10.0;
+        G4double rcut = (*(theCoupleTable->GetRangeCutsVector(1)))[mat];
+        if(!setMinDeltaCutInRange) MinDeltaCutInRange = rcut/10.0;
         MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                 G4Electron::Electron(),
                                 MinDeltaCutInRange,
                                 theCoupleTable->GetMaterialCutsCouple(mat));
 
         if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat] = Tlowerlimit ;
-
+       
+        G4double ecut = (*(theCoupleTable->GetEnergyCutsVector(1)))[mat];
         if(MinDeltaEnergy[mat]>ecut) MinDeltaEnergy[mat] = ecut;
 
    //  if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.13 2003-01-17 18:54:39 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.14 2003-01-20 18:16:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuBremsstrahlung physics process ------------------
@@ -127,7 +127,7 @@ class G4MuBremsstrahlung : public G4VMuEnergyLoss
                                 G4double Z,G4double A,
                                 G4double T, G4double Cut);
 
-     G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
+     const G4Element* SelectRandomAtom(const G4MaterialCutsCouple* couple) const;
 
      void MakeSamplingTables( const G4ParticleDefinition* ParticleType );
 

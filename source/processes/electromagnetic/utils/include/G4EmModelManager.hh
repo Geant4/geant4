@@ -28,11 +28,14 @@
 //
 // File name:     G4EmModelManager
 //
-// Author:        Vladimir Ivanchenko 
-// 
+// Author:        Vladimir Ivanchenko
+//
 // Creation date: 07.05.2002
 //
-// Modifications: 03.12.2002 V.Ivanchenko fix a bug in model selection
+// Modifications: 
+//
+// 03-12-02 V.Ivanchenko fix a bug in model selection
+// 20-01-03 Migrade to cut per region (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -50,7 +53,6 @@
 #define G4EmModelManager_h 1
 
 #include "globals.hh"
-#include "G4Material.hh"
 #include "G4Track.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
@@ -60,10 +62,11 @@ class G4ParticleDefinition;
 class G4VEmModel;
 class G4DataVector;
 class G4VParticleChange;
+class G4MaterialCutsCouple;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-class G4EmModelManager 
+
+class G4EmModelManager
 {
 public:
 
@@ -73,7 +76,7 @@ public:
 
   void Clear();
 
-  const G4DataVector* Initialise(const G4ParticleDefinition*, 
+  const G4DataVector* Initialise(const G4ParticleDefinition*,
                                  const G4ParticleDefinition*,
 				       G4double,
                                        G4int);
@@ -82,11 +85,11 @@ public:
 
   const G4DataVector* SubCutoff() const;
 
-  void FillDEDXVector(G4PhysicsVector*, const G4Material*);
+  void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  void FillLambdaVector(G4PhysicsVector*, const G4Material*);
+  void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
-  void FillSubLambdaVector(G4PhysicsVector*, const G4Material*);
+  void FillSubLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
   G4VEmModel* SelectModel(G4double energy);
 
@@ -94,7 +97,7 @@ public:
 
 private:
 
-  // hide  assignment operator 
+  // hide  assignment operator
 
   G4EmModelManager(G4EmModelManager &);
   G4EmModelManager & operator=(const G4EmModelManager &right);
@@ -119,7 +122,7 @@ private:
   const G4ParticleDefinition* particle;
   const G4ParticleDefinition* secondaryParticle;
 
-  G4int                       verboseLevel;  
+  G4int                       verboseLevel;
 
   // cash
   G4VEmModel*                 currentModel;
@@ -136,9 +139,9 @@ inline G4VEmModel* G4EmModelManager::SelectModel(G4double energy)
     currentModel = emModels[2];
   } else if(nEmModels >= 2 && energy > upperEkin[0]) {
     currentModel = emModels[1];
-  } else {    
+  } else {
     currentModel = emModels[0];
-  }  
+  }
   return currentModel;
 }
 
@@ -159,6 +162,6 @@ inline const G4DataVector* G4EmModelManager::SubCutoff() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
- 
+
 
 

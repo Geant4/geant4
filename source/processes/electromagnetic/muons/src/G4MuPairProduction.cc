@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.29 2003-01-17 18:54:40 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.30 2003-01-20 18:16:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ---------------------------
@@ -184,8 +184,8 @@ void G4MuPairProduction::BuildLossTable(
     const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(J);
     const G4Material* material= couple->GetMaterial();
 
-    eCut = (*electronEnergyCuts)[J] ;
-    pCut = (*positronEnergyCuts)[J] ;
+    G4double electronCut = (*electronEnergyCuts)[J] ;
+    G4double positronCut = (*positronEnergyCuts)[J] ;
     const G4ElementVector* theElementVector =
                                      material->GetElementVector() ;
     const G4double* theAtomicNumDensityVector =
@@ -197,6 +197,9 @@ void G4MuPairProduction::BuildLossTable(
     {
       KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
       TotalEnergy = KineticEnergy+particleMass ;
+
+      eCut = electronCut;
+      pCut = positronCut;
 
       if(eCut>KineticEnergy)
         eCut = KineticEnergy ;
@@ -704,7 +707,7 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
      return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 
    // select randomly one element constituing the material
-   G4Element* anElement = SelectRandomAtom(couple);
+   const G4Element* anElement = SelectRandomAtom(couple);
 
    // limits of the energy sampling
    G4double TotalEnergy = KineticEnergy + particleMass ;
