@@ -1,4 +1,4 @@
-cvs log $Id: History,v 1.51 2004-06-07 08:55:29 gcosmo Exp $
+cvs log $Id: History,v 1.52 2004-07-28 15:44:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th July 2004  J.Allison  (greps-V06-02-00)
+- Introduced force auxiliary edge visible.
 
 7th June 2004  G.Cosmo  (greps-V06-01-01)
 - Fixed compilation problem on WIN32-VC for G4AttDefStore.
