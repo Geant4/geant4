@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.26 2001-02-20 12:07:17 grichine Exp $
+// $Id: G4Tubs.cc,v 1.27 2001-02-21 15:05:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -412,6 +412,11 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 
 	  if ( fSPhi >= 0 )
 	  {
+	    if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+            { 
+              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            }
 	    if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
 		 pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) in = kSurface ;	
 	  }
@@ -448,6 +453,11 @@ EInside G4Tubs::Inside(const G4ThreeVector& p) const
 
 	if ( fSPhi >= 0 )
 	{
+	    if ( abs(pPhi) < kAngTolerance*0.5 &&
+               abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5 )
+            { 
+              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            }
 	  if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
 	       pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) in = kSurface; 	
 	}
