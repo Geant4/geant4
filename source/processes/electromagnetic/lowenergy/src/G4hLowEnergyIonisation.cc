@@ -481,6 +481,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   
   //
   fRangeNow /= (chargeSquare*massRatio) ;
+  dx        /= (chargeSquare*massRatio) ;
   stepLimit  = fRangeNow ;
   
   // compute the (random) Step limit in standard energy range
