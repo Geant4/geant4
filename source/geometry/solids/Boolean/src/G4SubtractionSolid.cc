@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SubtractionSolid.cc,v 1.11 2000-11-20 17:56:01 gcosmo Exp $
+// $Id: G4SubtractionSolid.cc,v 1.12 2001-01-23 08:26:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -295,7 +295,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p,
       G4cout << "v.x() = "   << v.x() << G4endl;
       G4cout << "v.y() = "   << v.y() << G4endl;
       G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-      G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), point p is outside") ;
+      G4Exception("Invalid call in G4SubtractionSolid::DistanceToOut(p,v), point p is outside") ;
     }
 
     G4double distout;
@@ -328,7 +328,7 @@ G4SubtractionSolid::DistanceToOut( const G4ThreeVector& p ) const
 
   if( Inside(p) == kOutside )
   { 
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p),  point p is outside") ;
+    G4Exception("Invalid call in G4SubtractionSolid::DistanceToOut(p),  point p is outside") ;
   }
   else
   {

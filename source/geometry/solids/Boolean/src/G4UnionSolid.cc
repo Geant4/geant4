@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.12 2001-01-08 14:59:13 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.13 2001-01-23 08:26:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -145,7 +145,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
 
     if( Inside(p) == kOutside )
     {
-       G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p),  point p is outside") ;
+       G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p),  point p is outside") ;
     }
 
     if(fPtrSolidA->Inside(p) == kSurface && fPtrSolidB->Inside(p) != kInside) 
@@ -159,7 +159,7 @@ G4UnionSolid::SurfaceNormal( const G4ThreeVector& p ) const
     }
     else 
     {
-      G4Exception("Invalid call in G4IntersectionSolid::SurfaceNormal(p),  point p is inside") ;
+      G4Exception("Invalid call in G4UnionSolid::SurfaceNormal(p),  point p is inside") ;
     }
 
     return normal;
@@ -175,7 +175,7 @@ G4UnionSolid::DistanceToIn( const G4ThreeVector& p,
 {
   if( Inside(p) == kInside )
   {
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToIn(p,v),  point p is inside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToIn(p,v),  point p is inside") ;
   }
   return G4std::min(fPtrSolidA->DistanceToIn(p,v),
                     fPtrSolidB->DistanceToIn(p,v) ) ;
@@ -224,7 +224,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
      G4cout << "v.x() = "   << v.x() << G4endl;
      G4cout << "v.y() = "   << v.y() << G4endl;
      G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v),  point p is outside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p,v),  point p is outside") ;
   }
   else
   {
@@ -289,7 +289,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p ) const
   G4double distout = kInfinity;
   if( Inside(p) == kOutside )
   {
-    G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p),  point p is outside") ;
+    G4Exception("Invalid call in G4UnionSolid::DistanceToOut(p),  point p is outside") ;
   }
   else
   {
