@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.36 2003-06-16 16:54:55 gunter Exp $
+// $Id: G4Navigator.cc,v 1.1 2003-10-01 15:09:51 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation
@@ -145,18 +145,15 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       else
         if ( fEntering )
         {
-          G4VPhysicalVolume *curPhysical = fHistory.GetTopVolume();
           switch (VolumeType(fBlockedPhysicalVolume))
           {
             case kNormal:
-              fBlockedPhysicalVolume->Setup(curPhysical);
               fHistory.NewLevel(fBlockedPhysicalVolume, kNormal,
                                 fBlockedPhysicalVolume->GetCopyNo());
               break;
             case kReplica:
               freplicaNav.ComputeTransformation(fBlockedReplicaNo,
                                                 fBlockedPhysicalVolume);
-              fBlockedPhysicalVolume->Setup(curPhysical);
               fHistory.NewLevel(fBlockedPhysicalVolume, kReplica,
                                 fBlockedReplicaNo);
               fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
@@ -171,7 +168,6 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
                                         fBlockedPhysicalVolume);
               pParam->ComputeTransformation(fBlockedReplicaNo,
                                             fBlockedPhysicalVolume);
-              fBlockedPhysicalVolume->Setup(curPhysical);
               fHistory.NewLevel(fBlockedPhysicalVolume, kParameterised,
                                 fBlockedReplicaNo);
               fBlockedPhysicalVolume->SetCopyNo(fBlockedReplicaNo);
@@ -855,7 +851,6 @@ void G4Navigator::SetupHierarchy()
         pLogical->SetMaterial( pParam->ComputeMaterial(replicaNo, current));
         break;
     }
-    current->Setup(mother);
     mother = current;
   }
 }

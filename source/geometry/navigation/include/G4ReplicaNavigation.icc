@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.icc,v 1.8 2003-04-02 14:28:04 gcosmo Exp $
+// $Id: G4ReplicaNavigation.icc,v 1.1 2003-10-01 15:13:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -173,7 +173,6 @@ G4ReplicaNavigation::LevelLocate( G4NavigationHistory& history,
   }
 
   ComputeTransformation(nodeNo, pPhysical, localPoint);
-  pPhysical->Setup(motherPhysical);
   history.NewLevel(pPhysical, kReplica, nodeNo);
   pPhysical->SetCopyNo(nodeNo); 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.icc,v 1.5 2002-05-15 10:21:48 gcosmo Exp $
+// $Id: G4NormalNavigation.icc,v 1.1 2003-10-01 15:10:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,9 +63,8 @@ G4NormalNavigation::LevelLocate( G4NavigationHistory& history,
     samplePhysical = targetLogical->GetDaughter(sampleNo);
     if ( samplePhysical!=blockedVol )
     {
-      // Setup volume with mother ptr
+      // Setup history
       //
-      samplePhysical->Setup(targetPhysical);
       history.NewLevel(samplePhysical, kNormal, samplePhysical->GetCopyNo());
       sampleSolid = samplePhysical->GetLogicalVolume()->GetSolid();
       samplePoint = history.GetTopTransform().TransformPoint(globalPoint);

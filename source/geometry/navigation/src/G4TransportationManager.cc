@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.cc,v 1.12 2003-06-13 09:27:34 japost Exp $
+// $Id: G4TransportationManager.cc,v 1.1 2003-10-01 15:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.14 2003-06-16 16:55:00 gunter Exp $
+// $Id: G4VoxelNavigation.cc,v 1.1 2003-10-01 15:15:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -139,7 +139,6 @@ G4VoxelNavigation::ComputeStep( const G4ThreeVector& localPoint,
         samplePhysical = motherLogical->GetDaughter(sampleNo);
         if ( samplePhysical!=blockedExitedVol )
         {
-          samplePhysical->Setup(motherPhysical);
           G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                      samplePhysical->GetTranslation());
           sampleTf.Invert();
@@ -540,7 +539,6 @@ G4VoxelNavigation::ComputeSafety(const G4ThreeVector& localPoint,
     sampleNo = curVoxelNode->GetVolume(contentNo);
     samplePhysical = motherLogical->GetDaughter(sampleNo);
 
-    samplePhysical->Setup(motherPhysical);
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                samplePhysical->GetTranslation());
     sampleTf.Invert();

@@ -20,56 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4AuxiliaryNavServices.hh,v 1.5 2002-07-23 08:50:33 gcosmo Exp $
+// $Id: G4AuxiliaryNavServices.cc,v 1.1 2003-10-01 15:06:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// class G4NormalNavigation
-//
-// Class description:
-//
-// Utility for navigation in volumes containing only G4PVPlacement
-// daughter volumes.
-
-// History:
-// - Created: Paul Kent, Aug 96
 // ********************************************************************
 
-#ifndef G4AuxiliaryNavServices_hh
-#define G4AuxiliaryNavServices_hh
+#include "G4AuxiliaryNavServices.hh"
+#include "globals.hh"
 
-#include "geomdefs.hh"
-#include "G4ThreeVector.hh"
-#include "G4VSolid.hh"
-#include "G4AffineTransform.hh"
-
-
-class G4AuxiliaryNavServices
+// This method currently exists only to allow compilers to find
+// the inline method (which are the core of this class)
+//
+G4bool G4AuxiliaryNavServices::testOne()
 {
-
- public:  // with description
-
-   static G4bool CheckPointOnSurface( const G4VSolid* sampleSolid, 
-                                      const G4ThreeVector& localPoint, 
-                                      const G4ThreeVector* globalDirection, 
-                                      const G4AffineTransform& sampleTransform,
-                                      const G4bool locatedOnEdge);
-     //
-     // Is the track (point, direction) inside the solid 'sampleSolid' ? 
-     // Returns true if we are going to enter the volume,
-     // which is the case if:
-     //   - the point is inside
-     //   - the point is on the surface and the direction points inside
-     //     or along it.
-     // Else returns false.
-
- private:
- 
-   G4bool testOne();
-
-};
-
-#include "G4AuxiliaryNavServices.icc"
-
-#endif
+  return true;
+}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.hh,v 1.5 2002-07-23 08:50:36 gcosmo Exp $
+// $Id: G4ReplicaNavigation.hh,v 1.1 2003-10-01 15:13:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.cc,v 1.5 2002-08-06 10:35:56 gcosmo Exp $
+// $Id: G4NormalNavigation.cc,v 1.1 2003-10-01 15:10:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -91,7 +91,6 @@ G4NormalNavigation::ComputeStep(const G4ThreeVector &localPoint,
     samplePhysical = motherLogical->GetDaughter(sampleNo);
     if ( samplePhysical!=blockedExitedVol )
     {
-      samplePhysical->Setup(motherPhysical);
       G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                  samplePhysical->GetTranslation());
       sampleTf.Invert();
@@ -194,7 +193,6 @@ G4double G4NormalNavigation::ComputeSafety(const G4ThreeVector &localPoint,
   for ( sampleNo=localNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     samplePhysical = motherLogical->GetDaughter(sampleNo);
-    samplePhysical->Setup(motherPhysical);
     G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                samplePhysical->GetTranslation());
     sampleTf.Invert();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.7 2002-05-15 10:23:39 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.1 2003-10-01 15:11:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -128,9 +128,8 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
       pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
       pParam->ComputeTransformation(replicaNo, pPhysical);
 
-      // Setup volume with mother pointer
+      // Setup history
       //
-      pPhysical->Setup(motherPhysical);
       history.NewLevel(pPhysical, kParameterised, replicaNo);
       samplePoint = history.GetTopTransform().TransformPoint(globalPoint);
       if ( !G4AuxiliaryNavServices::CheckPointOnSurface(pSolid,

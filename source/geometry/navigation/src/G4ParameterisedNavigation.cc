@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.9 2003-06-16 16:54:56 gunter Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.1 2003-10-01 15:11:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -150,7 +150,6 @@ G4double G4ParameterisedNavigation::
         sampleSolid = sampleParam->ComputeSolid(sampleNo, samplePhysical);
         sampleSolid->ComputeDimensions(sampleParam, sampleNo, samplePhysical);
         sampleParam->ComputeTransformation(sampleNo, samplePhysical);
-        samplePhysical->Setup(motherPhysical);
         G4AffineTransform sampleTf(samplePhysical->GetRotation(),
                                    samplePhysical->GetTranslation());
         sampleTf.Invert();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.21 2003-06-16 16:54:46 gunter Exp $
+// $Id: G4Navigator.hh,v 1.1 2003-10-01 15:09:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.7 2003-06-13 09:30:06 japost Exp $
+// $Id: G4TransportationManager.icc,v 1.1 2003-10-01 15:14:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //  GEANT 4  inlined function members implementation

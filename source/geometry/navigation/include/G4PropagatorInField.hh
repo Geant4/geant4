@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.36 2003-06-21 00:37:55 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.1 2003-10-01 15:12:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 

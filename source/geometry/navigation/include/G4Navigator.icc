@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.9 2002-06-03 10:17:56 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.1 2003-10-01 15:09:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -88,7 +88,6 @@ G4VPhysicalVolume* G4Navigator::GetWorldVolume() const
 inline
 void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 {
-  pWorld->Setup(0);  // No mother since world volume
   if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
   {
     G4Exception ("G4Navigator::SetWorldVolume - Must be centred on origin");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.hh,v 1.12 2003-06-16 16:54:51 gunter Exp $
+// $Id: G4VoxelNavigation.hh,v 1.1 2003-10-01 15:14:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
