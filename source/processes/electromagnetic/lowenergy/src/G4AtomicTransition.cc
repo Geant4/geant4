@@ -21,11 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4AtomicShell.cc,v 1.2 ????
+// $Id: G4AtomicTransition.cc,v 1.2 ????
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
+// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
@@ -33,35 +32,51 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4AtomicShell.hh"
+#include "G4AtomicTransition.hh"
 
-// this is the constructor: U have to give some information the shell 
-// wich the subshell belongs to
-// the bindingenergy of the subshell u r creating, and the table of the 
-// transition datas
-
-G4AtomicShell::G4AtomicShell(G4int id, G4double energy)
+G4AtomicTransition::G4AtomicTransition(G4int finalShell,
+				       const G4std::vector<G4int>& ids,
+				       const G4DataVector& energies,
+				       const G4DataVector& prob)
 {
-  identifier = id;
-  bindingEnergy = energy;
- 
-} 
+  finalShellId = finalShell;
+  originatingShellIds = ids;
+  transitionEnergies = energies;
+  transitionProbabilities = prob;
+}
 
-G4AtomicShell::~G4AtomicShell()
+G4AtomicTransition::~G4AtomicTransition()
 { }
 
-G4double G4AtomicShell::BindingEnergy() const {
-
-  return bindingEnergy;
+const G4std::vector<G4int>& G4AtomicTransition::OriginatingShellIds() const
+{
+  return  originatingShellIds;
 }
 
-
-G4int G4AtomicShell::ShellId() const{
-
-  return identifier;
+const G4DataVector& G4AtomicTransition::TransitionEnergies() const
+{
+  return transitionEnergies;
 }
 
+const G4DataVector& G4AtomicTransition::TransitionProbabilities() const
+{
+  return transitionProbabilities;
+}
 
+const G4int G4AtomicTransition::FinalShellId() const
+{ 
+  return finalShellId;
+}
 
-
-
+G4int G4AtomicTransition::OriginatingShellId(G4int index) const
+{
+  return originatingShellIds[index];
+}
+G4double G4AtomicTransition::TransitionEnergy(G4int index) const
+{
+  return  transitionEnergies[index];
+}
+G4double G4AtomicTransition::TransitionProbability(G4int index) const
+{
+  return  transitionProbabilities[index];
+}

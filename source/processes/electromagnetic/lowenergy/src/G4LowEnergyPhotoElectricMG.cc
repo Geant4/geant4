@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.1 2001-08-21 10:45:51 pia Exp $
+// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.2 2001-09-16 09:24:58 elena Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -91,7 +91,7 @@ G4LowEnergyPhotoElectricMG::G4LowEnergyPhotoElectricMG(const G4String& processNa
 
   meanFreePathTable = 0;
 
-  G4String shellDataFile = "fluor/binding";
+  G4String shellDataFile = "binding";
   shellData.LoadData(shellDataFile);
 
    if (verboseLevel > 0) 
@@ -160,7 +160,7 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   // (Is the electron vector necessary? To be checked)
-  G4std::vector<G4DynamicParticle*> photonVector;
+  G4std::vector<G4DynamicParticle*>* photonVector;
   G4std::vector<G4DynamicParticle*> electronVector;
 
   G4double energyDeposit = bindingEnergy;
@@ -186,11 +186,45 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
     {
       energyDeposit += eKineticEnergy;    
     }
-
+  if (Z > 5){
+       
+    photonVector = deexcitationManager.GenerateParticles(Z,shellId);
+    for (G4int k=0; k< photonVector->size();k++)
+      {
+	G4DynamicParticle* newPhoton =(*photonVector)[k];
+	if ( newPhoton != 0)
+	  {
+	    G4double photKineticEnergy=newPhoton->GetKineticEnergy();
+	    if (photKineticEnergy>=cutForLowEnergySecondaryPhotons)
+	      {
+		energyDeposit -= photKineticEnergy* MeV;
+		
+	      }
+	  }
+      }
+   
+  }
   // Generate fluorescence here
 
     G4int nElectrons = electronVector.size();
-    G4int nPhotons = photonVector.size();
+    G4int nTotPhotons = photonVector->size();
+    G4int nPhotons=0;
+    for (G4int k=0; k<nTotPhotons; k++)
+      {
+	G4DynamicParticle* aPhoton = (*photonVector)[k];
+	if(aPhoton==0)
+	  {
+	    delete aPhoton;
+	  }
+	else
+	  {
+	    G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
+	    if(itsKineticEnergy>=cutForLowEnergySecondaryPhotons)
+	      {nPhotons++;}
+	    else
+	      {delete aPhoton;}
+	  }
+      }
     G4int nSecondaries  = nElectrons + nPhotons;
 
     aParticleChange.SetNumberOfSecondaries(nSecondaries);
@@ -202,12 +236,13 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
       }
     for (l = 0; l < nPhotons; l++) 
       {
-	aParticleChange.AddSecondary(photonVector[l]); 
+	aParticleChange.AddSecondary((*photonVector)[l]); 
       }
 
     // Is clear necessary?
-    photonVector.clear();
-    electronVector.clear();
+    delete photonVector;
+    //photonVector->clear();
+    //electronVector.clear();
 
     if (energyDeposit < 0)
       {

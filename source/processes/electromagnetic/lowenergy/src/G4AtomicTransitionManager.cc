@@ -1,67 +1,133 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// -------------------------------------------------------------------
-//      GEANT 4 class implementation file 
 //
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      CERN, Geneva, Switzerland
+// $Id: G4AtomicTransitionManager.cc,v 1.2 ????
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      File name:     G4AtomicTransitionManager.cc
+// Authors: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+//          Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
-//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
-//                      Elena Guardincerri (elena.guardincerri@ge.infn.it)
-// 
-//      Creation date: 4 May 2001
+// History:
+// -----------
+// ?????      Created
+//
 // -------------------------------------------------------------------
 
 #include "G4AtomicTransitionManager.hh"
-#include "G4LowEnergyUtilities.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4Element.hh"
 #include "G4ios.hh"
 #include "g4std/fstream"
-
-//----------..................-------------------....................
+#include "G4ShellData.hh"
+#include "G4FluoData.hh"
 
 // constructor
 
-G4AtomicTransitionManager::G4AtomicTransitionManager( )
-  :ZVector(0),
-   tableLimit(0)
+G4AtomicTransitionManager::G4AtomicTransitionManager(G4int minZ, G4int maxZ, G4int limitInfTable,G4int limitSupTable)
+  :zMin(minZ), zMax(maxZ),infTableLimit(limitInfTable),supTableLimit(limitSupTable)
 {
-  tableLimit = 5;
-
-  G4SecondLevel* theBindingEnergyTable=BuildBindingEnergiesTable();
+ 
+  G4ShellData* shellManager = new G4ShellData;
   
-  G4ThirdLevel* theTransitionTable= BuildTransitionTable();
-  
-  size_t ShellIndex=0;
-  
-  
-  for (size_t index=0; index <(ZVector.size()); index++){  
-
-    G4std::vector<G4AtomicShell*> vectorOfShells;  
+  shellManager->LoadData("binding");
+ 
+  for (G4int Z = zMin; Z<= zMax; Z++)
+    {
+      G4std::vector<G4AtomicShell*> vectorOfShells;  
     
-    G4int Z = ZVector[index];
+      size_t numberOfShells=shellManager->NumberOfShells(Z);
+      for (G4int shellIndex = 0; shellIndex<numberOfShells; shellIndex++)
+	{ 
+	  G4int shellId = shellManager->ShellId(Z,shellIndex);
+	  G4double bindingEnergy = shellManager->BindingEnergy(Z,shellIndex);
+	 
+	  G4AtomicShell * shell = new G4AtomicShell(shellId,bindingEnergy);
+	
+	  vectorOfShells.push_back(shell);
+	}
+    
+      shellTable.insert(std::make_pair(Z, vectorOfShells));
+    }
+  for (G4int Znum= infTableLimit; Znum<=supTableLimit; Znum++)
+    {  G4FluoData* fluoManager = new G4FluoData;
+      G4std::vector<G4AtomicTransition*> vectorOfTransitions;
+      fluoManager->LoadData(Znum);
+     
+      size_t numberOfVacancies = fluoManager-> NumberOfVacancies();
+     
+      for (size_t vacancyIndex = 0; vacancyIndex<numberOfVacancies;  vacancyIndex++)
+	
+	{
+	  G4std::vector<G4int>  vectorOfIds;
+	  G4DataVector vectorOfEnergies;
+	  G4DataVector vectorOfProbabilities;
+	
+	  G4int finalShell = fluoManager->VacancyId(vacancyIndex);
+	  size_t numberOfTransitions = fluoManager->NumberOfTransitions(vacancyIndex);
+	  for (size_t origShellIndex = 0; origShellIndex <= numberOfTransitions;origShellIndex++)
+
+	    {
+
+	      G4int originatingShellId = fluoManager->StartShellId(origShellIndex,vacancyIndex);
+
+	      vectorOfIds.push_back(originatingShellId);
+
+	      G4double transitionEnergy = fluoManager->StartShellEnergy(origShellIndex,vacancyIndex);
+	      vectorOfEnergies.push_back(transitionEnergy);
+	      G4double transitionProbability = fluoManager->StartShellProb(origShellIndex,vacancyIndex);
+	      vectorOfProbabilities.push_back(transitionProbability);
+	    }
+	  G4AtomicTransition * transition = new G4AtomicTransition (finalShell,vectorOfIds,
+								    vectorOfEnergies,vectorOfProbabilities);
+	  vectorOfTransitions.push_back(transition); 
+	}
+      transitionTable.insert(std::make_pair(Znum, vectorOfTransitions));
+    
+  delete fluoManager;
+    }
+ delete shellManager;
+}
+/*
+  
+  G4int ShellIndex=0;
+  
+  for (G4int index=0; index <(ZVector.size()); index++){  
+  
+  G4std::vector<G4AtomicShell*> vectorOfShells;  
+  
+  G4int Z = ZVector[index];
+  
     G4FirstLevel* theBindEnVec = (*theBindingEnergyTable)[Z-1];
     
-    size_t size = ((*theBindEnVec)[0])->size();
-    
+    G4int size = ((*theBindEnVec)[0])->size();
+   
     for (ShellIndex=0; ShellIndex<size; ShellIndex++){
       
       G4int  id = (G4int) (*(*theBindEnVec)[0])[ShellIndex];
       
-      G4DataVector finalId = 0;
-      
-      G4DataVector prob = 0;
-      
-      G4DataVector energies = 0;
+       G4DataVector finalId = 0;
+    
+       G4DataVector prob = 0;
+    
+       G4DataVector energies = 0;
       
       G4double energy = ((*(*theBindEnVec)[1])[ShellIndex])*MeV;
       
@@ -75,39 +141,36 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
       
       for (FinalShellIndex=0; FinalShellIndex<SizeOneAtomTrans; FinalShellIndex++){
 	
-	G4int sizeOneFinalShellVec = (*(*oneAtomTrans)[FinalShellIndex]).size();
-	
-	
+	G4int sizeOneFinalShellVec =(*(*oneAtomTrans)[FinalShellIndex])[ShellCol]->size();
+
 	for(G4int k = 0; k<sizeOneFinalShellVec; k++){
-	  
-	  G4int tmpId = (G4int) (*(*(*oneAtomTrans)[FinalShellIndex])[ShellCol])[k];  
-	  
+
+	  G4int tmpId = (G4int) (*(*(*oneAtomTrans)[FinalShellIndex])[ShellCol])[0];
+
 	  if (id == tmpId){
-	    
-	    prob.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[ProbCol])[k]);
-	    
-	    energies.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[EnergyCol])[k]);
-	    
-	    finalId.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[ShellCol])[0]);
-	    
-	  }
-	  else{ 
-	    
+
+	  prob.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[ProbCol])[k]);
+
+	  energies.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[EnergyCol])[k]);
+
+	  finalId.push_back((*(*(*oneAtomTrans)[FinalShellIndex])[ShellCol])[k]);
+
 	  }
 	  
-	} 
+	}
+	
 	
       }  
-      //no radiative transition allowed
       
-      while (prob.size()<=ShellIndex)
-	{
-	  prob.push_back(0.);
-	  
-	  energies.push_back(0.);
-	  
-	  finalId.push_back(0.);
-	  
+      //no radiative transition allowed  
+
+      if (prob.size()==0)
+	
+	{prob.push_back(0.);
+	
+	energies.push_back(0.);
+	
+	finalId.push_back(0.);
 	}
       
       G4AtomicShell *shell = new G4AtomicShell (id,energy,prob,energies,finalId);
@@ -115,8 +178,7 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
       vectorOfShells.push_back(shell);
       
     }
-
-    shellTable.insert(G4std::make_pair<const G4int,G4std::vector<G4AtomicShell*> >(Z, vectorOfShells));
+    shellTable.insert(std::make_pair(Z, vectorOfShells));
     
   }
   
@@ -124,11 +186,11 @@ G4AtomicTransitionManager::G4AtomicTransitionManager( )
   delete theTransitionTable;
   
 }
-
+*/
 G4AtomicTransitionManager::~G4AtomicTransitionManager()
 
-{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
-
+{ G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+ 
  for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
    
    G4std::vector< G4AtomicShell*>vec = pos->second;
@@ -142,81 +204,50 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
    
  }
  
+ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator ppos;
+ 
+ for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ppos++){
+   
+   G4std::vector< G4AtomicTransition*>vec = ppos->second;
+   
+   G4int vecSize=vec.size();
+   
+   for (G4int i=0; i< vecSize; i++){
+     
+     delete vec[i]; 
+   }
+   
+ }   
+ //delete fluoManager;
+ //delete shellManager;
 }
 
-G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
-
+ G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
+ 
 G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {
   if (instance==0)
     {
       instance = new G4AtomicTransitionManager;
-      
+     
     }
   return instance;
 }
 
-//build the table for the binding energies.
+  //build the table for the binding energies.
 //theBindingEnergyTable has three degrees of fredom (consequently three indexes):
 //the first ranges from 0 to the size of ZVector and is used to choose the element.
 //its value os the index of the position the Z of the choosen element occupies in ZVector
 //the second index is used to discriminate between shells[0] and binding energies[0]
 //the third index is used to choose a shell and its binding energy
 
-G4SecondLevel* G4AtomicTransitionManager::BuildBindingEnergiesTable()
-{
-  
-  G4int dataNum = 2;
-  G4SecondLevel*theBindingEnergyTable = util.BuildSecondLevelTables(0,dataNum,"fluor/binding");
-  
-  return theBindingEnergyTable;
-}
-//this function builds the table for the radiative transitions
-//they have four degrees of fredoom (four indexes):
-//the first ranges from 0 to the size of ZVector and is used to choose the element.
-//the second is used to select the values relative to all the radiative transition
-//towards a given final shell
-//the third is used to disctiminate between identities of the shells [0], transition 
-//probabilities[1] and transition energies[2]
-//the fourth is used to select a given starting shell for the transition
-G4ThirdLevel* G4AtomicTransitionManager::BuildTransitionTable()
-{
-  
-  BuildZVec();
-  
-  G4ThirdLevel* theTransitionTable = new G4ThirdLevel();
-  
-  G4int dataNumb = 3;
-  
-  for(size_t tableInd = 0; tableInd <ZVector.size()  ; tableInd++){
-    
-    G4int atomInd =  ZVector[tableInd];
-    
-    if(atomInd > tableLimit){
-      
-      G4SecondLevel* oneAtomTransProb = util.BuildSecondLevelTables(atomInd, dataNumb, "fluor/fl-tr-pr-");
-      
-      theTransitionTable->push_back(oneAtomTransProb);
-    }
-    else{
-      // MGP following line commented out to remove compilation error
-      // To be fixed
-      //      ZVector.erase(remove( ZVector.begin(), ZVector.end(),atomInd),ZVector.end()) ;
-      
-      tableInd=tableInd-1;
-    } 
-    
-  }
-  
-  return theTransitionTable;
-}
-
+/*
 void G4AtomicTransitionManager::BuildZVec(){
   
   const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
   G4int numOfMaterials = theMaterialTable->length();
-  
-  for (G4int J=0 ; J < numOfMaterials; J++){ 
+   
+   for (G4int J=0 ; J < numOfMaterials; J++){ 
     
     const G4Material* material= (*theMaterialTable)[J];        
     const G4ElementVector* theElementVector = material->GetElementVector();
@@ -239,7 +270,7 @@ void G4AtomicTransitionManager::BuildZVec(){
       }
       
       if ( k==ZVectorSize){
-	
+      
 	ZVector.push_back(Zel);
 	
       } 
@@ -250,149 +281,190 @@ void G4AtomicTransitionManager::BuildZVec(){
 	}
     }
     
+   }
+   
+}
+*/
+const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, G4int shellIndex)
+{ 
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+
+  pos = shellTable.find(Z);
+
+  if (pos!= shellTable.end()){
+
+    G4std::vector<G4AtomicShell*> v = pos->second;
+
+    if (shellIndex<v.size()){
+      
+      return(v[shellIndex]);
+      
+    }
+    else {
+      G4Exception("G4AtomicTransitionManager:shell not found");
+      
+    }
   }
-  
+  else{
+    G4Exception("G4AtomicTransitionManager:Z not found");
+    
+  } 
 }
 
-const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int z, G4int shellIdentifier)
-{ 
+const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,G4int shellIndex)
+{
+ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
 
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
+  pos = transitionTable.find(Z);
 
-  pos = shellTable.find(z);
-  
-  if (pos!= shellTable.end()){
-    
-    G4std::vector<G4AtomicShell*> v = pos->second;
-    
-    size_t index =v.size();
-    
-    for (size_t i=0; i<v.size(); i++){
+  if (pos!= transitionTable.end()){
+
+    G4std::vector<G4AtomicTransition*> v = pos->second;
+
+    if (shellIndex<v.size()){
       
+      return(v[shellIndex]);
+      
+    }
+    else {
+      G4Exception("G4AtomicTransitionManager:reachable shell not found");
+      
+    }
+  }
+  else{
+    G4Exception("G4AtomicTransitionManager:Z not found");
+    
+  } 
+}
+
+G4int G4AtomicTransitionManager::NumberOfShells (G4int Z)
+{
+
+G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> >::iterator pos;
+
+  pos = shellTable.find(Z);
+
+  if (pos!= shellTable.end()){
+
+    G4std::vector<G4AtomicShell*> v = pos->second;
+
+    return v.size();
+  }
+
+  else{
+    G4Exception( "G4AtomicTransitionManager: Z not found" );
+  } 
+}
+
+G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z)
+{
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+
+  pos = transitionTable.find(Z);
+
+  if (pos!= transitionTable.end()){
+
+    G4std::vector<G4AtomicTransition*> v = pos->second;
+
+    return v.size();
+  }
+
+  else{
+    G4Exception( "G4AtomicTransitionManager: Z not found" );
+  } 
+}
+G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z, G4int shellIndex)
+
+{
+
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+
+  pos = transitionTable.find(Z);
+
+  if (pos!= transitionTable.end()){
+
+    G4std::vector<G4AtomicTransition*> v = pos->second;
+  
+    /* G4int index = v.size();
+
+    for (G4int i=0; i<v.size(); i++){
+
       G4int tmpId = (v[i])->ShellId();
-      if (tmpId==shellIdentifier)
+      
+      if (tmpId==shellId)
+	
+	{index = i;}
+      
+      else{}
+    }  
+  
+    if (index< v.size()){
+  
+    G4AtomicShell* shell=v[index];*/ 
+
+    if (shellIndex<v.size()){
+
+      G4AtomicTransition* transition=v[shellIndex];
+
+   G4DataVector transProb = transition->TransitionProbabilities();
+
+   G4double totalRadTransProb = 0;
+
+   for(G4int j = 1; j<transProb.size(); j++){
+
+     totalRadTransProb = totalRadTransProb + transProb[j];
+
+   }
+
+   return totalRadTransProb;   
+      
+    }
+ else {
+   G4Exception( "G4AtomicTransitionManager: shell not found" );
+	
+ }
+  }
+  else{
+    G4Exception( "G4AtomicTransitionManager: Z not found");
+  } 
+}
+
+G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, G4int shellIndex)
+
+{
+
+  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> >::iterator pos;
+  
+  pos = transitionTable.find(Z);
+  
+  if (pos!= transitionTable.end()){
+    
+    G4std::vector<G4AtomicTransition*> v = pos->second;
+    
+    /*G4int index = v.size();
+    
+    for (G4int i=0; i<v.size(); i++){
+      
+      G4int tmpId=(v[i])->ShellId();
+      if (tmpId==shellId)
 	{index = i;}
       else{}
     }  
     
     if (index< v.size()){
       
-      
-      return (v[index]);
-      
-    }
-    else {
-      G4Exception("shell not found");
-      return 0;
-    }
-  }
-  else{
-    G4Exception("Z not found");
-    return 0;
-  } 
-}
+    G4AtomicShell* shell=v[index];*/ 
+    
+    if (shellIndex<v.size()){
 
-G4int G4AtomicTransitionManager::NumberOfShells (G4int z)
-  
-{
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
-  
- pos = shellTable.find(z);
-  
-  if (pos!= shellTable.end()){
-    
-    G4std::vector<G4AtomicShell*> v = pos->second;
-    
-    return v.size();
-  }
-  
-  else{
-    G4Exception( "Z not found" );
-    return 0;
-  } 
-}
-
-G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int z, G4int shellId)
-{
-
-G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
-
-  pos = shellTable.find(z);
-  
-  if (pos!= shellTable.end()){
-    
-    G4std::vector<G4AtomicShell*> v = pos->second;
-    
-    size_t index = v.size();
-    
-    for (size_t i=0; i<v.size(); i++){
+      G4AtomicTransition* transition=v[shellIndex];
       
-      G4int tmpId = (v[i])->ShellId();
-      
-      if (tmpId==shellId)
-	
-	{index = i;}
-      
-    }  
-    
-    if (index< v.size()){
-      
-      G4AtomicShell* shell=v[index];
-      
-      G4DataVector transProb = shell->TransitionProbabilities();
+      G4DataVector transProb = transition->TransitionProbabilities();
       
       G4double totalRadTransProb = 0;
       
-      for(size_t j = 0; j<transProb.size(); j++){
-	
-	totalRadTransProb = totalRadTransProb + transProb[j];
-	
-      }
-      
-      return totalRadTransProb;   
-      
-    }
-    else {
-      G4Exception( "shell not found" );
-      return 0.;
-    }
-  }
-  else{
-    G4Exception( "Z not found");
-    return 0.;
-  } 
-}
+      for(G4int j = 1; j<transProb.size(); j++){
 
-G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int z, G4int shellId)
-  
-{
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
-  
-  pos = shellTable.find(z);
-  
-  if (pos!= shellTable.end()){
-    
-    G4std::vector<G4AtomicShell*> v = pos->second;
-    
-    size_t index = v.size();
-    
-    for (size_t i=0; i<v.size(); i++){
-      
-      G4int tmpId=(v[i])->ShellId();
-      if (tmpId==shellId)
-	{index = i;}
-    }  
-    
-    if (index< v.size()){
-      
-      G4AtomicShell* shell=v[index];
-      
-      G4DataVector transProb = shell->TransitionProbabilities();
-      
-      G4double totalRadTransProb = 0;
-      
-      for(size_t j = 0; j<transProb.size(); j++){
-	
 	totalRadTransProb = totalRadTransProb + transProb[j];
       }
       
@@ -402,12 +474,13 @@ G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int
     
     else {
       G4Exception( "shell not found");
-      return 0.;
     }
   }
   else{
     G4Exception("Z not found");
-    return 0.;
   } 
 }
+
+
+
 
