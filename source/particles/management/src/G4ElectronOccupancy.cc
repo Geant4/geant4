@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectronOccupancy.cc,v 1.2 1999-08-21 03:43:34 kurasige Exp $
+// $Id: G4ElectronOccupancy.cc,v 1.3 1999-08-24 02:31:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,7 +57,6 @@ G4ElectronOccupancy::G4ElectronOccupancy(const G4ElectronOccupancy& right)
   theSizeOfOrbit = right.theSizeOfOrbit;
 
   // allocate and clear the array of theOccupancies 
-  if ( theOccupancies != 0 ) delete [] theOccupancies;
   theOccupancies = new G4int[theSizeOfOrbit];
   G4int   index =0;
   for (index = 0; index <  theSizeOfOrbit; index++) {

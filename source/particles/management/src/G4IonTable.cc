@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.12 1999-08-19 08:23:35 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.13 1999-08-24 02:32:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,15 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 ////////////////////
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int L)
 {
+  if ( (A<1) || (Z>numberOfElements) || (Z<0) || (L<0)) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4IonTable::GetIon() : illegal atomic number/mass or excitation level " << endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  L = " << L << endl;
+    }
+#endif
+    G4Exception("G4IonTable::GetIon : illegal atomic number/mass or excitation level ");
+  }
 
   // Search ions with A, Z 
   G4ParticleDefinition* ion = FindIon(Z,A,L);
@@ -171,6 +180,15 @@ G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4double E)
 ////////////////////
 G4ParticleDefinition* G4IonTable::FindIon(G4int Z, G4int A, G4int L)
 {
+  if ( (A<1) || (Z>numberOfElements) || (Z<0) || (L<0)) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4IonTable::FindIon() : illegal atomic number/mass or excitation level " << endl;
+      G4cout << " Z =" << Z << "  A = " << A <<  "  L = " << L << endl;
+    }
+#endif
+    return 0;
+  }
   // Search ions with A, Z 
   G4ParticleDefinition* ion;
   G4bool isFound = false;
@@ -301,6 +319,16 @@ G4ParticleDefinition* G4IonTable::GetLightIon(G4int Z, G4int A) const
 /////////////////
 G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
+  if ( (A<1) || (Z>numberOfElements) || (Z<0)) {
+#ifdef G4VERBOSE
+    if (GetVerboseLevel()>0) {
+      G4cout << "G4IonTable::GetNucleusMass() : illegal atomic number/mass " << endl;
+      G4cout << " Z =" << Z << "  A = " << A  << endl;
+    }
+#endif
+    G4Exception("G4IonTable::GetNucleusMass() : illegal atomic number/mass ");
+  }
+
   // calculate nucleus mass
   G4ParticleDefinition* ion=GetLightIon(Z, A);
   G4double mass;
