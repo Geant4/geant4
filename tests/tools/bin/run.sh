@@ -132,8 +132,11 @@ echo "Starting $1 in $G4WORKDIR `date`"
     if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
       -o $1 = test15 -o $1 = test16 ]
     then
+      rm -f $dir/$1.exerciser$dot_G4LARGE_N.in
       $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser $G4LARGE_N \
-      > $dir/$1.exerciser$dot_G4LARGE_N.in; \
+      > $dir/$1.exerciser$dot_G4LARGE_N.in
+      rm -f $dir/$1$dot_G4LARGE_N.out
+      rm -f $dir/$1$dot_G4LARGE_N.err
       time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
       $dir/$1.exerciser$dot_G4LARGE_N.in \
       > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
@@ -141,6 +144,8 @@ echo "Starting $1 in $G4WORKDIR `date`"
       if [ -z "$G4LARGE_N" -o \
         \( -n "$G4LARGE_N" -a \
            -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
+        rm -f $dir/$1$dot_G4LARGE_N.out
+        rm -f $dir/$1$dot_G4LARGE_N.err
         time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
@@ -150,6 +155,7 @@ echo "Starting $1 in $G4WORKDIR `date`"
 echo "Finished $1 in $G4WORKDIR `date`"
 
     if [ -f $1$dot_G4LARGE_N.evalsh ]; then
+      rm -f $dir/$1$dot_G4LARGE_N.eval
       $1$dot_G4LARGE_N.evalsh $dir/$1$dot_G4LARGE_N.out \
       $1$dot_G4LARGE_N.out > $dir/$1$dot_G4LARGE_N.eval 2>&1
       if [ $? != 0 ]; then
@@ -160,6 +166,8 @@ echo "Finished $1 in $G4WORKDIR `date`"
         >> $dir/$1$dot_G4LARGE_N.badflag 2>&1
       fi
     else
+      rm -f $dir/$1$dot_G4LARGE_N.diff
+      rm -f $dir/$1$dot_G4LARGE_N.diff_err
       diff -w $dir/$1$dot_G4LARGE_N.out $1$dot_G4LARGE_N.out \
       > $dir/$1$dot_G4LARGE_N.diff 2> $dir/$1$dot_G4LARGE_N.diff_err
       #cat $dir/$1$dot_G4LARGE_N.diff
