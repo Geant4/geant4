@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2.hh,v 1.3 1999-01-11 00:48:00 allison Exp $
+// $Id: G4VRML2.hh,v 1.4 1999-04-19 01:18:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2.hh
 // Satoshi Tanaka and Yasuhide Sawada
 
-#if defined (G4VIS_BUILD_VRML_DRIVER) || (G4VIS_USE_VRML)
+#if defined (G4VIS_BUILD_VRML_DRIVER) || defined (G4VIS_USE_VRML)
 
 #ifndef G4VRML2_HH
 #define G4VRML2_HH
