@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2003-11-28 16:08:24 gcosmo Exp $
+$Id: History,v 1.32 2003-12-08 18:24:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V05-02-06 8th December 2003  Sergei Sadilov
+- Updated reference outputs according to candidate tag geant4-06-00-cand-03.
+
+tests-V05-02-05 8th December 2003  Sergei Sadilov
+- Brought up-to-date vis-managers.
 
 tests-V05-02-04 28th November 2003  Gabriele Cosmo
 - Updated reference outputs for development tag geant4-05-02-ref-06.
