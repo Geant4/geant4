@@ -251,17 +251,17 @@ G4Material*  DicomPatientParameterisation::ComputeMaterial(const G4int copyNo,G4
 
 void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mindensity)
 {
-  DicomConfiguration* dicomConfiguration = new DicomConfiguration;
-  dicomConfiguration->ReadDataFile();
+  DicomConfiguration dicomConfiguration;
+  dicomConfiguration.ReadDataFile();
 
   G4int copyCounter = 0;
-  G4int totalNumberOfFile = dicomConfiguration->GetTotalNumberOfFile();
-  for ( G4int z = 0; z < totalNumberOfFile; z++ )
+  G4int totalNumberOfFile = dicomConfiguration.GetTotalNumberOfFile();
+  for ( G4int fileNumber = 0; fileNumber < totalNumberOfFile; fileNumber++ )
     {
-      dicomConfiguration->ReadG4File( dicomConfiguration->GetListOfFile()[z] );
-      G4int compressionValue = dicomConfiguration->GetCompressionValue(); 
-      G4int lenRows = abs(rows/compressionValue);
-      G4int lenColumns=abs(columns/compressionValue);
+      dicomConfiguration.ReadG4File( dicomConfiguration.GetListOfFile()[fileNumber] );
+      G4int compressionValue = dicomConfiguration.GetCompressionValue(); 
+      G4int lenRows = abs(rows / compressionValue);
+      G4int lenColumns=abs(columns / compressionValue);
 
       G4int i = 0;
       for ( G4int j = 1; j <= lenRows; j++ )
@@ -269,30 +269,29 @@ void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mind
 	  for ( G4int w = 1; w <= lenColumns; w++ )
             {
 	      i++;
-              G4double tissueDensity = dicomConfiguration->GetDensityValue(i);
+              G4double tissueDensity = dicomConfiguration.GetDensityValue(i);
 	      if ( tissueDensity != -1 )
                 {
 		  if ( tissueDensity >= mindensity && tissueDensity <= maxdensity )
                     {
 		      density.push_back( tissueDensity );
 		      copyCounter++;
-                      G4int isCompressionUsed = dicomConfiguration->IsCompressionUsed();
-                      G4double xPixelSpacing =  dicomConfiguration->GetXPixelSpacing();
-                      G4double yPixelSpacing =  dicomConfiguration->GetYPixelSpacing();
-		      G4double slicePosition = dicomConfiguration->GetSliceLocation();      
-                      G4double sliceThick =  dicomConfiguration->GetSliceThickness();
-                      G4double xDimension = (lenColumns*xPixelSpacing)/2;
-                      G4double yPixel = (yPixelSpacing/2+(w-1)*yPixelSpacing);
-                      G4double yDimension = ((lenRows*xPixelSpacing)/2)-(yPixelSpacing/2+(j-1)*yPixelSpacing);
+                      G4int isCompressionUsed = dicomConfiguration.IsCompressionUsed();
+                      G4double xPixelSpacing =  dicomConfiguration.GetXPixelSpacing();
+                      G4double yPixelSpacing =  dicomConfiguration.GetYPixelSpacing();
+		      G4double slicePosition = dicomConfiguration.GetSliceLocation();      
+                      G4double sliceThick =  dicomConfiguration.GetSliceThickness();
+                      G4double xDimension = (lenColumns*xPixelSpacing) / 2.;
+                      G4double yPixel = (yPixelSpacing / 2. + (w-1) * yPixelSpacing);
+                      G4double yDimension = ( (lenRows*xPixelSpacing )/ 2.) - (yPixelSpacing/2. + (j-1) * yPixelSpacing);
                       
-                      patientPlacementX.push_back( ( isCompressionUsed*(xDimension- yPixel ) ) *mm );
-                      patientPlacementY.push_back( ( isCompressionUsed* yDimension  ) *mm );
-		      patientPlacementZ.push_back( ( slicePosition + sliceThick/2 ) *mm );
+                      patientPlacementX.push_back( ( isCompressionUsed * (xDimension - yPixel ) ) *mm );
+                      patientPlacementY.push_back( ( isCompressionUsed * yDimension  ) *mm );
+		      patientPlacementZ.push_back( ( slicePosition + sliceThick/2. ) *mm );
                     }
                 }
             }            
         }
     }
-  delete dicomConfiguration;
 }
 
