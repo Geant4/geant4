@@ -1,4 +1,4 @@
-$Id: History,v 1.138 2004-03-01 14:16:56 vnivanch Exp $
+$Id: History,v 1.139 2004-03-06 13:47:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06 March 04: V.Ivant (utils-V06-00-07)
+- fix a bug in link at SUN
 
 01 March 04: V.Ivant (utils-V06-00-06)
 - fixes of bugs coming with transition to model variant of msc 

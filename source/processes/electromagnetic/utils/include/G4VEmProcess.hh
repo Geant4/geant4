@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.2 2004-03-01 13:06:17 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.3 2004-03-06 13:47:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -347,7 +347,8 @@ inline G4double G4VEmProcess::GetMeanLifeTime(const G4Track&,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VParticleChange* AtRestDoIt(const G4Track&, const G4Step&)
+inline G4VParticleChange* G4VEmProcess::AtRestDoIt(const G4Track&, 
+                                                   const G4Step&)
 {
   return 0;
 }
