@@ -447,7 +447,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 				     aT.GetGlobalTime(),
 				     aT.GetPosition());
 	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
-	static G4double pinelcount=0;
+	// static G4double pinelcount=0;
 	if(xBiasOn) newWeight *= XBiasSecondaryWeight();
         /*  G4cout << "#### ParticleDebug "
 	         <<GetProcessName()<<" "
