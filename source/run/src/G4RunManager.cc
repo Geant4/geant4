@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.57 2003-01-14 22:46:33 asaim Exp $
+// $Id: G4RunManager.cc,v 1.58 2003-01-29 21:27:44 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -480,10 +480,11 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   }
 
   // Check if this is not the first time, i.e. replacing the world
-  if(currentWorld)
-  {
-    defaultRegion->RemoveRootLogicalVolume(currentWorld->GetLogicalVolume());
-  }
+  //if(currentWorld)
+  //{
+  //  defaultRegion->RemoveRootLogicalVolume(currentWorld->GetLogicalVolume());
+  //}
+  // This should be done by the destructor of G4LogicalVolume
 
   // set the default region to the world
   currentWorld = worldVol; 
