@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.11 2003-12-10 17:33:53 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.12 2003-12-10 18:34:19 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -297,13 +297,13 @@ G4PropagatorInField::ComputeStep(
                    NewSafety,     do_loop_count,  pPhysVol );
     }
 #endif
-    if( (fVerboseLevel > 0) && (iteration_co > fMax_loop_count-10 )) {
-      if( iteration_co == fMax_loop_count-9 ){
+    if( (fVerboseLevel > 0) && (do_loop_count > fMax_loop_count-10 )) {
+      if( do_loop_count == fMax_loop_count-9 ){
 	G4cout << "G4PropagatorInField::ComputeStep "
 	       << " Difficult track - taking many sub steps." << G4endl;
       }
       printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
-		   NewSafety, iteration_co, pPhysVol );
+		   NewSafety, do_loop_count, pPhysVol );
     }
 
     do_loop_count++;
