@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: reportParticles.cc,v 1.2 1999-12-15 14:51:19 gunter Exp $
+// $Id: reportParticles.cc,v 1.3 2001-04-06 03:09:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,13 +67,15 @@ int main(int argc,char** argv) {
   //reporter.Print(*otherContainer);
   
   tst2HtmlReporter html;
-  html.Print( *quarkContainer,  "quarks  17/June/99");
-  html.Print( *leptonContainer, "leptons 17/June/99");
-  html.Print( *mesonContainer,  "mesons 17/June/99");
-  html.Print( *baryonContainer, "baryons 17/June/99");
-  html.Print( *ionContainer,    "ions 17/June/99");
-  html.Print( *otherContainer,  "others 17/June/99");
+  html.Print( *quarkContainer,  "quarks  7/Apr/01");
+  html.Print( *leptonContainer, "leptons 7/Apr/01");
+  html.Print( *mesonContainer,  "mesons 7/Apr/01");
+  html.Print( *baryonContainer, "baryons 7/Apr/01");
+  html.Print( *ionContainer,    "ions 7/Apr/01");
+  html.Print( *otherContainer,  "others 7/Apr/01");
   return EXIT_SUCCESS;
 }
+
+
 
 
