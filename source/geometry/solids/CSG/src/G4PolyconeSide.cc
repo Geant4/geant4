@@ -242,14 +242,14 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 	//
 	// We have two tries for each hemisphere. Try the closest first.
 	//
-	distFrom = DistanceAway( p, false, distOut2, 0 );
-	if (distFrom*normSign > 0) {
+	distFrom = normSign*DistanceAway( p, false, distOut2, 0 );
+	if (distFrom > -0.5*kCarTolerance ) {
 		//
 		// Good answer
 		//
-		if (distOut2 > 0) 
+		if (distOut2 < 0.5*kCarTolerance ) 
 			return sqrt( distFrom*distFrom + distOut2 );
-		else
+		else 
 			return fabs(distFrom);
 	}
 	
@@ -257,7 +257,7 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 	// Try second side. 
 	//
 	distFrom = DistanceAway( p,  true, distOut2, 0 );
-	if (distFrom*normSign > 0) {
+	if (distFrom*normSign > -0.5*kCarTolerance) {
 
 		if (distOut2 > 0) 
 			return sqrt( distFrom*distFrom + distOut2 );
@@ -644,7 +644,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &p, G4ThreeVector &norma
 	//
 	if (rx<0) rx = p.perp();
 	
-	if (rx < -1.0/kInfinity) 
+	if (rx < 1.0/kInfinity) 
 		normal = G4ThreeVector( 0, 0, zNorm < 0 ? -1 : 1 );
 	else
 		normal = G4ThreeVector( rNorm*p.x()/rx, rNorm*p.y()/rx, zNorm );

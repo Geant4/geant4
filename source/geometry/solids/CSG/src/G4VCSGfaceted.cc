@@ -39,6 +39,14 @@
 //
 // \end{preach mode}
 //
+// ----------------------------------------------------------
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
 #include "G4VCSGfaceted.hh"
 #include "G4VCSGface.hh"
 
@@ -268,7 +276,7 @@ G4double G4VCSGfaceted::DistanceTo( const G4ThreeVector &p, const G4bool outgoin
 		if (distance < best) best = distance;
 	} while( ++face < faces + numFace );
 
-	return best;
+	return (best < 0.5*kCarTolerance) ? 0 : best;
 }
 
 

@@ -460,7 +460,7 @@ G4double G4PolyhedraSide::Distance( const G4ThreeVector &p, const G4bool outgoin
 	G4ThreeVector pdotc = p - vecs[iPhi].center;
 	G4double normDist = pdotc.dot(vecs[iPhi].normal);
 	
-	if (normSign*normDist > 0) {
+	if (normSign*normDist > -0.5*kCarTolerance) {
 		return DistanceAway( p, vecs[iPhi], &normDist );
 	}
 

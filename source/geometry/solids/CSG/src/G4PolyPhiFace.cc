@@ -293,7 +293,10 @@ G4double G4PolyPhiFace::Distance( const G4ThreeVector &p, const G4bool outgoing 
 	G4ThreeVector ps = p - surface;
 	G4double distPhi = -normSign*normal.dot(ps);
 	
-	if (distPhi <= 0) return kInfinity;
+	if (distPhi < -0.5*kCarTolerance) 
+		return kInfinity;
+	else if (distPhi < 0)
+		distPhi = 0.0;
 	
 	//
 	// Calculate projected point in r,z
