@@ -21,8 +21,7 @@
 
 #include "G4TransportationManager.hh"
 #include "G4FieldManager.hh"
-#include "G4Field.hh"
-
+#include "G4MagneticField.hh"
 
 //
 // Constructor
@@ -39,7 +38,7 @@ NTSTLooperDeath::~NTSTLooperDeath(){;}
 //
 G4double NTSTLooperDeath::PostStepGetPhysicalInteractionLength( 
 						const G4Track& track,
-					        G4double   previousStepSize,
+					        G4double  , // previousStepSize,
 					        G4ForceCondition* condition ) 
 {
   const G4DynamicParticle *particle = track.GetDynamicParticle();
@@ -122,7 +121,7 @@ G4double NTSTLooperDeath::PostStepGetPhysicalInteractionLength(
 // PostStepDoit
 //
 G4VParticleChange *
-NTSTLooperDeath::PostStepDoIt( const G4Track &track, const G4Step &step ) 
+NTSTLooperDeath::PostStepDoIt( const G4Track &track, const G4Step & ) // step ) 
 {
   pParticleChange->Initialize(track);
 
