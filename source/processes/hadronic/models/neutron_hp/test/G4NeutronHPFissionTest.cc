@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPFissionTest.cc,v 1.6 2003-06-27 10:20:41 hpw Exp $
+// $Id: G4NeutronHPFissionTest.cc,v 1.7 2003-06-27 10:27:28 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -365,7 +365,7 @@ int j = 0;
              G4cout << isec <<" ";
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries()<<" ";
 	     G4cout << aSec->GetDefinition()->GetParticleName()<<" ";
-             G4cout << " SECONDARIES info";
+             G4cout << " SECONDARIES info ";
              if(isec==0) 
              {
                G4cout << aFinalState->GetNumberOfSecondaries();
