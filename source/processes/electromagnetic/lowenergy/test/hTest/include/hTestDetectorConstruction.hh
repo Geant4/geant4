@@ -60,6 +60,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
 
     void SetMagField(G4double,G4int);
     void SetVerbose(G4int val) {verbose = val;};
+    void SetHistoName(G4String name) {histoName = name;};
      
     G4VPhysicalVolume* Construct();
 
@@ -77,6 +78,8 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      
     const G4VPhysicalVolume* GetPhysWorld() {return physWorld;};           
     const G4LogicalVolume*   GetAbsorber()  {return logicAbs;};
+
+    G4String GetHistoName() const {return histoName;};
                  
   private:
 
@@ -115,6 +118,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      hTestCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
 
      G4int verbose;      
+     G4String histoName;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

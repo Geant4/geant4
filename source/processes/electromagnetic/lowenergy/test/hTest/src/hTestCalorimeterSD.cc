@@ -36,7 +36,7 @@
 hTestCalorimeterSD::hTestCalorimeterSD(G4String name)
  :G4VSensitiveDetector(name)
 {
-  theRun = (G4RunManager::G4RunManager())->GetUserRunAction();
+  theEvent = (G4RunManager::G4RunManager())->GetUserEventAction();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -48,7 +48,7 @@ hTestCalorimeterSD::~hTestCalorimeterSD()
 
 void hTestCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 {
-  verbose = run->GetVerbose();
+  verbose = theEvent->GetVerbose();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -56,19 +56,16 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* h)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  G4double z = 0.0;
 
   if(0.0 < edep) {
-    G4double z1 = (aStep->GetPreStepPoint()->GetPosition()).z();
-    G4double z2 = (aStep->GetPostStepPoint()->GetPosition()).z();
-    z  = (z1 + z2)*0.5;
-    run->AddEnergy(edep, z);
+    G4int j = aStep->GetTrack()->GetPhysicsVolume()->GetCopyNo();
+    theEvent->AddEnergy(edep, j);
+    if(1 < verbose) {
+      G4cout << "hTestCalorimeterSD: energy = " << edep/MeV
+             << " MeV is deposited at " << j
+             << "-th absorber slice " << G4endl;
+    }
   }
-
-  if(1 < verbose) {
-    G4cout << "hTestCalorimeterSD: energy = " << edep/MeV
-           << " MeV is deposited at Z = " << z/mm
-           << " mm " << G4endl;
 
   return true;
 }

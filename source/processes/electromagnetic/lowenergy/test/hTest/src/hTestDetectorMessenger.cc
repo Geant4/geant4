@@ -1,10 +1,11 @@
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
-//
 // 
 // -------------------------------------------------------------
 //      GEANT4 hTest
@@ -102,6 +103,11 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   ZMagFieldCmd->SetUnitCategory("Magnetic flux density");
   ZMagFieldCmd->AvailableForStates(Idle);  
 
+  HistoCmd = new G4UIcmdWithAString("/hTest/setHistoName",this);
+  HistoCmd->SetGuidance("Set the name of the histo file");
+  HistoCmd->SetParameterName("histo",false);
+  HistoCmd->AvailableForStates(Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -118,6 +124,7 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete XMagFieldCmd;
   delete YMagFieldCmd;
   delete ZMagFieldCmd;
+  delete HistoCmd;
   delete hTestdetDir;
 }
 
@@ -154,6 +161,9 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == ZMagFieldCmd )
    { hDet->SetMagField(ZMagFieldCmd->GetNewDoubleValue(newValue),3);}
+
+  if( command == HistoCmd )
+   { hDet->SetHistoName(newValue);}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -27,7 +27,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VSensitiveDetector.hh"
-#include "hTestRunAction.hh"
+#include "hTestEventAction.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
@@ -50,7 +50,7 @@ public: // Without description
 
   private:
   
-      hTestRunAction* theRun;
+      hTestEventAction* theEvent;
       G4int verbose;
 };
 

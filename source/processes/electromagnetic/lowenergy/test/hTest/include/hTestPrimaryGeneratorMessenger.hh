@@ -1,46 +1,58 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+#ifndef hTestPrimaryGeneratorAction_h
+#define hTestPrimaryGeneratorAction_h 1
+
+//---------------------------------------------------------------------------
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ClassName:   hTestPrimaryGeneratorAction
+//  
+// Description: Definition of physics list parameters via UI interface
 //
-// $Id: hTestPrimaryGeneratorMessenger.hh,v 1.1 2000-05-21 18:37:45 chauvie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// Author:      V.Ivanchenko 26/09/00
 //
-// 
+//----------------------------------------------------------------------------
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef hTestPrimaryGeneratorMessenger_h
-#define hTestPrimaryGeneratorMessenger_h 1
 
-#include "G4UImessenger.hh"
+// HARP includes
+#include "Simulation/HsManager.h"
+
+// G4 includes
 #include "globals.hh"
-
-class hTestPrimaryGeneratorAction;
-class G4UIcmdWithoutParameter;
+#include "G4UImessenger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithAnInteger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class hTestPrimaryGeneratorMessenger: public G4UImessenger
+class HsPrimaryGeneratorOld;
+
+class hTestPrimaryGeneratorAction: public G4UImessenger
 {
   public:
-    hTestPrimaryGeneratorMessenger(hTestPrimaryGeneratorAction*);
-   ~hTestPrimaryGeneratorMessenger();
+  
+    hTestPrimaryGeneratorAction(HsPrimaryGeneratorOld* gen);
+   ~hTestPrimaryGeneratorAction();
     
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    void SetNewValue(G4UIcommand* command, G4String newValue);
+
   private:
-    hTestPrimaryGeneratorAction* hTestAction; 
-    G4UIcmdWithoutParameter*   DefaultCmd;
+  
+    HsPrimaryGeneratorOld*  theGeneratorOld;
+    HsManager* theMCmanager;
+
+    G4UIcmdWithADoubleAndUnit* beamXCmd;
+    G4UIcmdWithADoubleAndUnit* beamYCmd;
+    G4UIcmdWithADoubleAndUnit* beamZCmd;
+    G4UIcmdWithADoubleAndUnit* sigmaXCmd;
+    G4UIcmdWithADoubleAndUnit* sigmaYCmd;
+    G4UIcmdWithADoubleAndUnit* sigmaZCmd;
+    G4UIcmdWithADoubleAndUnit* sigmaECmd;
+    G4UIcmdWithADoubleAndUnit* maxThetaCmd;
+
 };
 
 #endif
-
-
-
-
-
 

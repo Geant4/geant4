@@ -1,51 +1,89 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
-// $Id: hTestPrimaryGeneratorAction.hh,v 1.1 2000-05-21 18:37:45 chauvie Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 #ifndef hTestPrimaryGeneratorAction_h
 #define hTestPrimaryGeneratorAction_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "globals.hh"
-
-class G4ParticleGun;
-class G4Event;
-class hTestDetectorConstruction;
-class hTestPrimaryGeneratorMessenger;
+//---------------------------------------------------------------------------
+//
+// ClassName:   hTestPrimaryGeneratorAction
+//  
+// Description: Generate primary beam 
+//
+// Authors:    0.6.04.01 V.Ivanchenko
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "hTestEventAction.hh"
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class hTestPrimaryGeneratorMessenger;
 
 class hTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    hTestPrimaryGeneratorAction(hTestDetectorConstruction*);    
-   ~hTestPrimaryGeneratorAction();
+
+  // The constructor defines a ParticleGun object, which allows 
+  // shooting a beam of particles through the experimental set-up.
+    hTestPrimaryGeneratorAction(hTestEventAction*);
+
+  //The destructor. It deletes the ParticleGun.
+    ~hTestPrimaryGeneratorAction();
 
   public:
-    void SetDefaultKinematic();   
-    void GeneratePrimaries(G4Event*);
-    static G4String GetPrimaryName() ;                
+
+  //It reads the parameters of the primary particles.
+  //Generates the primary event via the ParticleGun method.
+    void GeneratePrimaries(G4Event* anEvent);
+
+  //Get/Set methods
+    void SetBeamX(G4double val) {x0 = val;};
+    void SetBeamY(G4double val) {y0 = val;};
+    void SetBeamZ(G4double val) {z0 = val;};
+    void SetBeamSigmaX(G4double val) {sigmaX = val;};
+    void SetBeamSigmaY(G4double val) {sigmaY = val;};
+    void SetBeamSigmaZ(G4double val) {sigmaY = val;};
+    void SetBeamSigmaE(G4double val) {sigmaE = val;};
+    void SetBeamMinCosTheta(G4double val) {minCosTheta = val;};
+    void SetVerbose(G4int val) {verbose = val;};
+    G4ThreeVector GetBeamPosition() const {return position;}; 
+    G4ThreeVector GetBeamDirection() const {return direction;};
+    G4ThreeVector GetBeamEnergy() const {return energy;};
 
   private:
-    G4ParticleGun*                particleGun;
-    hTestDetectorConstruction*      hTestDetector;
-    
-    static G4String thePrimaryParticleName;
-    
-    hTestPrimaryGeneratorMessenger* gunMessenger;     
+
+    void InitializeMe();
+
+    hTestEventAction* theEvent;
+    G4ParticleGun* particleGun;
+    hTestPrimaryGeneratorMessenger* theMessenger;
+
+    G4int counter;
+    G4int verbose;
+    G4double x0, y0, z0;
+    G4double sigmaX, sigmaY, sigmaZ;
+    G4double sigmaE;
+    G4double energy;
+    G4double minCosTheta;
+    G4ThreeVector position;
+    G4ThreeVector direction;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #endif
+
+
+
+
 
 

@@ -1,3 +1,8 @@
+#ifndef hTestSteppingAction_h
+#define hTestSteppingAction_h 1
+
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,27 +10,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// Class Description:
-// Actions on each step are defined
-// Class Description - end
+// -------------------------------------------------------------
+//      GEANT4 hTest
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTestSteppingAction -------------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
 // 
+// -------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#ifndef hTestSteppingAction_h
-#define hTestSteppingAction_h 1
 
 #include "G4UserSteppingAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "G4ios.hh"
+#include "hTestDetectorConstruction.hh"
+#include "hTestRunAction.hh"
+#include "hTestEventAction.hh"
 #include "globals.hh"
-
-class hTestDetectorConstruction;
-class hTestRunAction;
-class hTestEventAction;
-class hTestSteppingMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -33,8 +38,8 @@ class hTestSteppingAction : public G4UserSteppingAction
 {
 public: // Without description
 
-    hTestSteppingAction(hTestDetectorConstruction*, hTestEventAction*,
-                      hTestRunAction* );
+    hTestSteppingAction(hTestRunAction*, hTestEventAction*, 
+                        hTestDetectorConstruction*);
    ~hTestSteppingAction();
 
     void UserSteppingAction(const G4Step*);
@@ -43,11 +48,13 @@ public: // Without description
     hTestDetectorConstruction* detector;
     hTestEventAction*          eventaction;
     hTestRunAction*            runaction;
-    hTestSteppingMessenger*    steppingMessenger;
 
-    G4int IDnow,IDold;
-    G4int evnoold ;
-
+    G4int trIDnow;
+    G4int trIDold;
+    G4int evnOld;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 #endif
+

@@ -1,3 +1,5 @@
+// -------------------------------------------------------------
+//
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -5,166 +7,95 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// -------------------------------------------------------------
+//      GEANT4 hTest
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ---------- hTestSteppingAction -------------
+//              
+//  Modified: 05.04.01 Vladimir Ivanchenko new design of hTest 
+// 
+// -------------------------------------------------------------
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "hTestDetectorConstruction.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4SteppingManager.hh"
-#include "G4TrackVector.hh"
 #include "hTestSteppingAction.hh"
-#include "hTestPrimaryGeneratorAction.hh"
-#include "hTestEventAction.hh"
-#include "hTestRunAction.hh"
-#include "G4Event.hh"
-#include "G4EventManager.hh"
-#include "hTestSteppingMessenger.hh"
-#include "G4ios.hh"
-#include "g4std/iomanip"
-#include "G4UImanager.hh"
+#include "G4Track.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-hTestSteppingAction::hTestSteppingAction(hTestDetectorConstruction* DET,
-                                     hTestEventAction* EA,
-                                     hTestRunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(NULL),
- IDold(-1) ,evnoold(-1)
-{
-  steppingMessenger = new hTestSteppingMessenger(this);
-}
+hTestSteppingAction::hTestSteppingAction(hTestRunAction* ra,
+                                         hTestEventAction* ea,
+                                         hTestDetectorConstruction* det)
+ :detector(det),
+  eventaction(ea),
+  runaction(ra),
+  trIDnow(-1),
+  trIDold(-1),
+  evnOld(-1)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 hTestSteppingAction::~hTestSteppingAction()
-{
-  delete steppingMessenger ;
- }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void hTestSteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  G4double Edep,Theta,Thetaback,Ttrans,Tback,Tsec,Egamma,xend,yend,zend,rend ;
-  G4double Tkin ;
-  G4int evno = eventaction->GetEventno() ; 
 
-  IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
-          100000000*(aStep->GetTrack()->GetParentID()); 
+  G4int evno = eventaction->GetEventNo(); 
+  trIDnow = aStep->GetTrack()->GetTrackID();
+  G4double tkin = aStep->GetTrack()->GetKineticEnergy(); 
+  G4double theta = (aStep->GetTrack()->GetMomentumDirection()).theta();
 
-  Tkin = aStep->GetTrack()->GetKineticEnergy() ; 
-  //  Edep = -(aStep->GetDeltaEnergy()) ;  
-  Edep = (aStep->GetTotalEnergyDeposit()) ;  
-  xend = 0.5*((aStep->GetPreStepPoint()->GetPosition().x()) +
-              (aStep->GetPostStepPoint()->GetPosition().x())  ) ;
-  runaction->FillEn(Edep,xend) ;
+  G4bool stop = false;
+  G4bool primary = false;
+  G4bool outAbs = false;
 
-  G4int copyNo = aStep->GetTrack()->GetVolume()->GetCopyNo();
-  if(xend > 0.0 && xend < 60.0*mm) eventaction->AddE(Edep, copyNo);
-
-
-  Tsec = Tkin - Edep ;
-  Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
+  if(tkin == 0.0) stop = true;
+  if(0 == aStep->GetTrack()->GetParentID()) primary = true;
+  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber" &&
+     aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="World")
+     outAbs = true;
 
   // new particle
-  if(IDnow != IDold) {
-    IDold=IDnow ;
-
-    // primary
-    if(0 == aStep->GetTrack()->GetParentID() ) {
-      runaction->SaveToTuple("TKIN",Tsec/MeV);      
-      runaction->SaveToTuple("MASS",(aStep->GetTrack()->
-                 GetDynamicParticle()->GetDefinition()->GetPDGMass())/MeV);      
-      runaction->SaveToTuple("CHAR",(aStep->GetTrack()->
-                 GetDynamicParticle()->GetDefinition()->GetPDGCharge()));      
-
-    // secondary
-    } else {
-      if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-            GetParticleName()) == "e-") 
-                 ||
-         ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-            GetParticleName()) == "e+") ) {
-
-            runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
-            eventaction->AddCharged() ;
-            runaction->FillTsec(Tsec) ;
-
-      } else {
-            eventaction->AddNeutral() ;
-      }
-    }
+  if(trIDnow != trIDold || evno != evnOld) {
+    trIDold = trIDnow;
+    evnOld = evno;
   }
 
   // After step in absorber
-  if(aStep->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Absorber") {
+  if(outAbs) {
+    if(theta < M_PI * 0.5) eventaction->AddLeakEnergy(tkin);
+    else                   eventaction->AddBackEnergy(tkin);
 
-    // Count number of steps in absorber
-    if(((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-	        GetPDGCharge()) != 0.0) ) {
-         eventaction->CountStepsCharged() ;
-
-    } else {
-      if ((aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-                  GetParticleName()) == "gamma") 
-         eventaction->CountStepsNeutral() ;
-    }
-
-    // Primary 
-    if(0 == aStep->GetTrack()->GetParentID() ) {
-
-      // Stopping or end of track
-      if((0.0 == Tkin) || 
-         (aStep->GetTrack()->GetNextVolume()->GetName()=="World") ) {
-
-            xend= aStep->GetPostStepPoint()->GetPosition().x()/mm ;
-            yend= aStep->GetPostStepPoint()->GetPosition().y()/mm ;
-            zend= aStep->GetPostStepPoint()->GetPosition().z()/mm ;
-            runaction->SaveToTuple("XEND",xend,1000.0);      
-            runaction->SaveToTuple("YEND",yend,1000.0);      
-            runaction->SaveToTuple("ZEND",zend,1000.0);      
-            runaction->SaveToTuple("TEND",Tkin/MeV,1000.0);
-            runaction->SaveToTuple("TET",Theta/deg,1000.0);      
-            runaction->AddnStepsCharged(xend) ;
-      }
-      rend = sqrt(xend*xend + yend*yend) ;
-
-    //secondary
-    } else {
-
-      if ( aStep->GetTrack()->GetNextVolume()->GetName() == "World" ) {
-
-        // charged secondaries forward
-        if(aStep->GetTrack()->GetDynamicParticle()->GetDefinition()->
-                  GetPDGCharge() != 0.0 ) { 
-
-          eventaction->SetTr();
-
-          if(0.5*pi > Theta) {
-            runaction->FillTh(Theta) ;
-            runaction->FillTt(Tkin) ;
-            yend= aStep->GetTrack()->GetPosition().y() ;
-            zend= aStep->GetTrack()->GetPosition().z() ;
-            rend = sqrt(yend*yend+zend*zend) ;
-            runaction->FillR(rend);
-
-  	 // charged secondaries backword
-          } else {
-            eventaction->SetRef();
-            Thetaback = pi - Theta ;
-            runaction->FillThBack(Thetaback) ;
-            runaction->FillTb(Tsec) ;
-          }
- 
-        // gammas
-        } else {
-          if (0.5*pi > Theta) runaction->FillGammaSpectrum(Tkin) ;
-        }
-      }
+    // primary particles
+    if(primary) {
+      runaction->SaveToTuple("TEND",tkin/MeV);
+      runaction->SaveToTuple("TETA",theta/deg);      
     }
   }
+
+  // Primary particle stop 
+  if(primary && stop) {
+
+    G4double xend = aStep->GetPostStepPoint()->GetPosition().x();
+    G4double yend = aStep->GetPostStepPoint()->GetPosition().y();
+    G4double zend = aStep->GetPostStepPoint()->GetPosition().z();
+    runaction->SaveToTuple("XEND",xend/mm);      
+    runaction->SaveToTuple("YEND",yend/mm);      
+    runaction->SaveToTuple("ZEND",zend/mm);      
+  }
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
