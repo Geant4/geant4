@@ -50,8 +50,8 @@
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
 
-#include "G4LowEnergyIonisationVI.hh"
-#include "G4LowEnergyBremsstrahlungVI.hh"
+#include "G4LowEnergyIonisation.hh"
+#include "G4LowEnergyBremsstrahlung.hh"
 #include "G4LowEnergyCompton.hh"
 #include "G4LowEnergyGammaConversion.hh"
 #include "G4LowEnergyPhotoElectric.hh"
@@ -97,8 +97,6 @@
 #include "hTest/include/G4IonC12.hh"
 #include "hTest/include/G4IonAr40.hh"
 
-typedef G4LowEnergyBremsstrahlungVI G4LowEnergyBremsstrahlung;
-typedef G4LowEnergyIonisationVI G4LowEnergyIonisation;
 
 int main(int argc,char** argv)
 {
