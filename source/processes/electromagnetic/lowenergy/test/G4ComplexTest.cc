@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.17 2003-02-28 07:58:25 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.18 2003-02-28 08:00:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -425,21 +425,7 @@ int main(int argc,char** argv)
     cuts->SetProductionCut(cutE, 2);
     G4cout << "Cuts are defined " << G4endl;
 
-/*
-    G4MaterialCutsCouple* couple;
-    G4MaterialCutsCouple* theCouple = 0;
-    for (mat = 0; mat < nMaterials; mat++) {
-      G4Material* mm = (*theMaterialTable)[mat];
-      couple = new G4MaterialCutsCouple(mm,cuts);
-      couple->SetIndex(mat);
-      if(mm == material) {
-        couple->SetUseFlag(true);
-	theCouple = couple;
-      } else {
-        couple->SetUseFlag(false);
-      }
-    }
-    */
+
     cutsTable->UpdateCoupleTable();
     (G4ProductionCutsTable::GetProductionCutsTable())->DumpCouples();
     const G4MaterialCutsCouple* theCouple = cutsTable->GetMaterialCutsCouple(material,cuts);
