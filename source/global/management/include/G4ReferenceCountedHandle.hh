@@ -21,12 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.8 2001-09-24 22:35:19 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.9 2001-10-22 14:39:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // Class G4RereferenceCountedHandle
+//
 // Class description:
+//
 // A class to provide reference counting mechanism for a class which
 // is designed without this support. It is a templated class, a smart pointer,
 // wrapping the class to be counted and performs the reference counting
@@ -42,6 +44,7 @@
 //  else               { ... } // OK!
 // The code which tries to delete this object won't compile, because it is
 // not a pointer it is an object.
+
 // Author:      Radovan Chytracek
 // Version:     1.0
 // Date:        February 2001

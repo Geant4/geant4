@@ -21,16 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: testReferenceCountedHandle.cc,v 1.5 2001-07-11 10:01:01 gunter Exp $
+// $Id: testReferenceCountedHandle.cc,v 1.6 2001-10-22 14:39:35 gcosmo Exp $
 // 
 //
-// The program testing features and behaviour of the reference counted handle, smart-pointer, class.
+// The program testing features and behaviour of the reference
+// counted handle, smart-pointer, class.
 // ----------------------------------------------------------------------
 #include "globals.hh"
 #include "G4ios.hh"
 #include "G4ReferenceCountedHandle.hh"
 #include <string>
-#include <vector>
+#include "g4std/vector"
 
 class TesterBase
 {
@@ -99,7 +100,7 @@ typedef G4ReferenceCountedHandle<TesterInt>    CountedInt;
 
 class HandleWatcher {
 public:
-  typedef std::vector<G4ReferenceCountedHandle<TesterBase> >       Handles;
+  typedef G4std::vector<G4ReferenceCountedHandle<TesterBase> >       Handles;
   typedef Handles::iterator          HandlesIt;
   typedef Handles::const_iterator    HandlesCIt;
 
