@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.1 2003-10-08 17:28:34 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.2 2004-05-04 07:36:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void UpdateGeometry();
 
-  public:
+     void     SetEdepAndRMS(G4ThreeVector);
+     G4double GetAverageEdep() const   {return edeptrue;};
+     G4double GetRMSEdep() const       {return rmstrue;};
 
      const
      G4VPhysicalVolume* GetEcal() {return physiEcal;};
@@ -104,6 +106,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 
+     G4double           edeptrue;
+     G4double           rmstrue;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

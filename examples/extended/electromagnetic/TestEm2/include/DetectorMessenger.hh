@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.1 2003-10-08 17:28:34 maire Exp $
+// $Id: DetectorMessenger.hh,v 1.2 2004-05-04 07:36:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,7 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithAString*        MaterCmd;
     G4UIcmdWith3Vector*        LBinCmd;
     G4UIcmdWith3Vector*        RBinCmd;
+    G4UIcmdWith3Vector*        accCmd;
     G4UIcmdWithADoubleAndUnit* FieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
