@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.6 2001-11-08 08:45:25 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.7 2001-11-08 10:39:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -340,7 +340,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     if(aleft > amaj) {
 
-      aleft *= 1.8;
+      aleft *= 2.0;
       q3 = (a1 + bindingEnergy);
       aleft *= q3*q3; 
       q1 = 1./q3;
@@ -404,7 +404,7 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
     if(aleft > amaj) {
 
-      aleft *= 1.8;
+      aleft *= 2.0;
       q3 = (a1 + bindingEnergy);
       aleft *= q3*q3; 
       q1 = 1./q3;
