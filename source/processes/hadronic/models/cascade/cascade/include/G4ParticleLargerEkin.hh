@@ -19,6 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4PARTICLE_LARGER_EKIN_HH
+#define G4PARTICLE_LARGER_EKIN_HH
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #include "G4InuclElementaryParticle.hh"

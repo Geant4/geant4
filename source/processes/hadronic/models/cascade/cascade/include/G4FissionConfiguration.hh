@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4FISSION_CONFIGURATION_HH
+#define G4FISSION_CONFIGURATION_HH
+
 #include "globals.hh"
 #include "g4std/iostream"
 

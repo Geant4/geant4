@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#ifndef G4CASCAD_PARTICLE_HH
+#define G4CASCAD_PARTICLE_HH
+
 #include "G4InuclElementaryParticle.hh"
 
 class G4CascadParticle {
