@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleNTST.cc,v 1.1 2003-11-07 21:30:27 japost Exp $
+// $Id: testNTST.cc,v 1.1 2003-11-27 09:02:46 japost Exp $
 // 
 // ----------------------------------------------------------------
 //      GEANT 4 - exampleNTST : BaBar SVT standalone simulation
@@ -17,6 +17,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 // #include "g4std/stdio.h"
 
 #ifdef G4VIS_USE
@@ -64,6 +65,9 @@ void trap_on_NaN ()
 #endif
 }
 
+#include "G4TransportationManager.hh"
+#include "G4PropagatorInField.hh"
+
 int main(int argc,char** argv) {
 
     trap_on_NaN();
@@ -79,7 +83,11 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   
   runManager->SetUserInitialization(physicsList);
-  
+ 
+  // G4PropagatorInField* propagator=
+  //   G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
+  // propagator->SetVerboseLevel(3); 
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new NTSTVisManager;
@@ -97,7 +105,7 @@ int main(int argc,char** argv) {
 
   if (argc==1)   // Define UI terminal for interactive mode  
     { 
-      G4UIsession * session = new G4UIterminal;
+      G4UIsession * session = new G4UIterminal(new G4UItcsh);
       //      UI->ApplyCommand("/control/execute prerunNTST.mac");    
       session->SessionStart();
       delete session;
