@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.cc,v 1.21 2004-04-07 15:18:23 gbarrand Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.22 2004-07-09 15:41:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,13 +46,24 @@
 
 #include <assert.h>
 
-int G4OpenGLXViewer::snglBuf_RGBA[10] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
-  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
+int G4OpenGLXViewer::snglBuf_RGBA[12] =
+{ GLX_RGBA,
+  GLX_RED_SIZE, 1,
+  GLX_GREEN_SIZE, 1, 
+  GLX_BLUE_SIZE, 1,
+  GLX_DEPTH_SIZE, 1,
+  GLX_STENCIL_SIZE, 1,
+  None };
 
-int G4OpenGLXViewer::dblBuf_RGBA[11] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
+int G4OpenGLXViewer::dblBuf_RGBA[13] =
+{ GLX_RGBA,
+  GLX_RED_SIZE, 1,
+  GLX_GREEN_SIZE, 1,
+  GLX_BLUE_SIZE, 1,
+  GLX_DOUBLEBUFFER,
+  GLX_DEPTH_SIZE, 1,
+  GLX_STENCIL_SIZE, 1,
+  None };
 
 #define NewString(str) \
  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)
@@ -289,20 +300,29 @@ vi_stored (0)
     vi_single_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), snglBuf_RGBA);
   }
-  if (!vi_single_buffer) {
-    G4cout <<
-    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a single buffer visual."
-	   << G4endl;
-  }
-
   if (!vi_double_buffer) {
     vi_double_buffer =
       glXChooseVisual (dpy, XDefaultScreen (dpy), dblBuf_RGBA);
   }
-  if (!vi_double_buffer) {
-    G4cout <<
-    "G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
-	   << G4endl;
+
+  if (vi_single_buffer || vi_double_buffer) {
+    if (!vi_double_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
+	"\n  Working with a single buffer."
+	     << G4endl;
+    }
+  } else {
+    if (!vi_single_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a single buffer visual."
+	     << G4endl;
+    }
+    if (!vi_double_buffer) {
+      G4cout <<
+	"G4OpenGLXViewer::G4OpenGLXViewer: unable to get a double buffer visual."
+	     << G4endl;
+    }
   }
 
   if (vi_single_buffer) {
@@ -353,6 +373,7 @@ G4OpenGLXViewer::~G4OpenGLXViewer () {
 
 void G4OpenGLXViewer::print() {
   
+  //using namespace std;
   //cout << "print_col_callback requested with file name: " << print_string << G4endl;
   
   if (vectored_ps) {
