@@ -28,10 +28,18 @@
 //
 // History:
 // -----------
-// 6 Mar 2002: first implementation
-//
+// 1 Jun 2002: first Commited to CVS
 // -------------------------------------------------------------------
 
+// Class description:
+// Low Energy Electromagnetic Physics
+// This Class stores all the information of auger effect relative 
+// to one main vacancy in a atom, like possible auger emission with 
+// relative probabilites, originating shell's Ids, probabilities of 
+// transition and auger electron energies. 
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
+
+// -------------------------------------------------------------------
 
 #ifndef G4AugerTransition_h 
 #define G4AugerTransition_h 1

@@ -22,21 +22,21 @@
 
 //
 //
-// $Id: G4FluoData.hh,v 1.1 ?????
+// $Id: G4AugerData.hh
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
+// Author: Alfonso Mantero (Alfonso.Mantero@ge.infn.it)
 //
 // History:
 // -----------
-//  16 Sept 2001 First committed to cvs
+//  2 June 2002 First committed to cvs
 //
 // -------------------------------------------------------------------
 
 // Class description:
 // Low Energy Electromagnetic Physics
-// Fluorescence data set: shell identifiers, transition probabilities, 
-// transition energies
+// This Class loads and stores all the information of auger effect (shellIds, 
+// probabilities and  energies of the electrons emitted) 
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------

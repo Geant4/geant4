@@ -36,8 +36,8 @@
 // -------------------------------------------------------------------
 
 // Class description:
-// Low Energy Electromagnetic Physics, fills and manages G4AtomicShell 
-// and G4AtomicTransition objects
+// Low Energy Electromagnetic Physics: create or fills and manages G4AtomicShell, 
+// G4FluoTransition, G4AugerTransition objects.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
