@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33Sigma.cc,v 1.4 2003-06-16 17:16:01 gunter Exp $
+// $Id: Tst33Sigma.cc,v 1.5 2003-11-25 10:20:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,7 +83,7 @@ G4int Tst33Sigma::Calculate() const {
   if (fcalc==0) {
     if(fWsum>0) {
       fMean=fWXsum/fWsum;
-      fSigma = std::sqrt( fWXXsum / fWsum - fMean * fMean);
+      fSigma = sqrt( fWXXsum / fWsum - fMean * fMean);
       fcalc = 1;
     } else {
       fcalc = -1;

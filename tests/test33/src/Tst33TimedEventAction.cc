@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.9 2003-11-18 17:22:32 gcosmo Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.10 2003-11-25 10:20:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -101,14 +101,14 @@ void Tst33TimedEventAction::EndOfEventAction(const G4Event*)
 }
 
 void Tst33TimedEventAction::CalculateFOM(){
-  G4int entries(fSig.GetEntries());
-  G4double fom(0);
-  G4double mean(fSig.GetMean());
-  G4double R(-1);
-  G4double sigma(fSig.GetSigma());
+  G4int entries=fSig.GetEntries();
+  G4double fom=0;
+  G4double mean=fSig.GetMean();
+  G4double R=-1;
+  G4double sigma=fSig.GetSigma();
 
   if (sigma>0. && mean > 0.) {
-    R = sigma/(mean*std::sqrt(static_cast<G4double>(entries)));
+    R = sigma/(mean*sqrt(static_cast<G4double>(entries)));
     fom = 1./(R*R);
   }
   G4cout << "Tst33TimedEventAction::CalculateFOM(): FOM: " 

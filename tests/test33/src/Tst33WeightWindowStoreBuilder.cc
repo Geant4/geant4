@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.2 2003-08-19 15:16:21 dressel Exp $
+// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.3 2003-11-25 10:20:25 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
   // create an importance store and fill it with the importance
   // per cell values
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
-  G4WeightWindowStore *wwstore(0);
+  G4WeightWindowStore *wwstore=0;
   wwstore = new G4WeightWindowStore(pworld);
 
 
@@ -73,13 +73,13 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
   
   G4int i(1);
   for (i=1; i <= 19; ++i) {
-    G4double lowerWeight = 1./std::pow(2.0,i-1);
+    G4double lowerWeight = 1./pow(2.0,i-1);
     G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
 
     std::vector<G4double> lowerWeights;
 
     if (i==19) {
-	lowerWeight = 1./std::pow(2.0,17);
+	lowerWeight = 1./pow(2.0,17);
     }
 
     lowerWeights.push_back(lowerWeight);

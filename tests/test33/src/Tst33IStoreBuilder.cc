@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.10 2003-08-15 15:34:33 dressel Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.11 2003-11-25 10:20:25 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   // create an importance store and fill it with the importance
   // per cell values
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolume();
-  G4IStore *istore(0);
+  G4IStore *istore=0;
   istore = new G4IStore(pworld);
   if (!istore) {
     G4Exception("Tst33IStoreBuilder::CreateIStore new failed to create G4IStore!");
@@ -57,12 +57,12 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   G4GeometryCell gWorldCell(pworld, 0);
   istore->AddImportanceGeometryCell(1, gWorldCell);
   
-  G4int i(1);
+  G4int i=1;
   for (i=1; i <= 19; ++i) {
-    G4double imp = std::pow(2.0,i-1);
+    G4double imp = pow(2.0,i-1);
     G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
     if (i==19) {
-	imp = std::pow(2.0,17);
+	imp = pow(2.0,17);
     }
     else {
       G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.7 2003-09-16 13:01:11 dressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.8 2003-11-25 10:20:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
 {
   
   if (G4VVisManager::GetConcreteInstance()) {
-    G4TrajectoryContainer* trajectoryContainer(0);
+    G4TrajectoryContainer* trajectoryContainer=0;
     trajectoryContainer = evt->GetTrajectoryContainer();
     G4int n_trajectories = 0;
     if (trajectoryContainer) {
@@ -96,8 +96,8 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
       G4Trajectory* trj = 0;
       trj = dynamic_cast<G4Trajectory*>((*trajectoryContainer)[i]);
       if (trj) {
-	G4bool charged(false);
-	charged = std::fabs(trj->GetCharge()) > 0;
+	G4bool charged=false;
+	charged = fabs(trj->GetCharge()) > 0;
 	if (drawFlag == "all") {
 	  DrawTrajectory(*trj);
 	}
@@ -128,7 +128,7 @@ void Tst33VisEventAction::DrawTrajectory(G4Trajectory &trj) const
 
    G4ParticleDefinition* pdf = trj.GetParticleDefinition();
    G4String ParticleName(pdf->GetParticleName());
-   G4double PDGCharge(pdf->GetPDGCharge());
+   G4double PDGCharge=pdf->GetPDGCharge();
 
 
    G4Polyline pPolyline;
