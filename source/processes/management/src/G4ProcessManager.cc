@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessManager.cc,v 1.18 2001-07-11 10:08:19 gunter Exp $
+// $Id: G4ProcessManager.cc,v 1.19 2001-08-16 06:06:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,7 +106,7 @@ G4ProcessManager::G4ProcessManager(G4ProcessManager &right)
 #endif
 
    theParticleType    = right.theParticleType;
-   numberOfProcesses  = right.numberOfProcesses;
+   numberOfProcesses  = 0;
  
    // create the process List and ProcessAttr Vector
    theProcessList = new G4ProcessVector();
