@@ -38,19 +38,20 @@
 // 03/10/2000  V.Ivanchenko CodeWizard clean up
 // 10/05/2001  V.Ivanchenko Clean up againist Linux compilation with -Wall
 // 30/12/2003  V.Ivanchenko SRIM2003 model is added
+// 07/05/2004  V.Ivanchenko Fix Graphite problem, add QAO model
 //
-// Class Description: 
+// Class Description:
 //
 // Low energy protons/ions electronic stopping power parametrisation
 //
-// Class Description: End 
+// Class Description: End
 //
 // -------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4hParametrisedLossModel.hh" 
+#include "G4hParametrisedLossModel.hh"
 #include "G4UnitsTable.hh"
 #include "globals.hh"
 #include "G4hZiegler1977p.hh"
@@ -128,10 +129,13 @@ void G4hParametrisedLossModel::InitializeMe()
       eStopingPowerTable = new G4hICRU49p();
       highEnergyLimit = 2.0*MeV;
       lowEnergyLimit  = 1.0*keV;
-      G4cout << "G4hLowEnergyIonisation Warning: default model <"
+      G4cout << "G4hParametrisedLossModel Warning: default model <"
              << modelName << ">" << " is used for Electronic Stopping"
              << G4endl;
   }
+      G4cout << "G4hParametrisedLossModel: the model <"
+             << modelName << ">" << " is used for Electronic Stopping"
+             << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -237,18 +241,20 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
   // compound material with parametrisation
   if( (eStopingPowerTable->HasMaterial(material)) ) {
 
-    eloss = eStopingPowerTable->StoppingPower(material, kineticEnergy)
-                               * (material->GetTotNbOfAtomsPerVolume());
-    if(1 < numberOfElements) {
-      G4int nAtoms = 0;
+    eloss = eStopingPowerTable->StoppingPower(material, kineticEnergy);
+    if ("QAO" != modelName) {
+      eloss *=  material->GetTotNbOfAtomsPerVolume();
+      if(1 < numberOfElements) {
+        G4int nAtoms = 0;
 
-      const G4int* theAtomsVector = material->GetAtomsVector();
-      for (G4int iel=0; iel<numberOfElements; iel++) {
-        nAtoms += theAtomsVector[iel];
+        const G4int* theAtomsVector = material->GetAtomsVector();
+        for (G4int iel=0; iel<numberOfElements; iel++) {
+          nAtoms += theAtomsVector[iel];
+        }
+        eloss /= nAtoms;
       }
-      eloss /= nAtoms;
-    } 
-   
+    }
+
   // pure material
   } else if(1 == numberOfElements) {
 
@@ -257,7 +263,7 @@ G4double G4hParametrisedLossModel::StoppingPower(const G4Material* material,
                                * (material->GetTotNbOfAtomsPerVolume()) ;
 
   // Experimental data exist only for kinetic energy 125 keV
-  } else if( MolecIsInZiegler1988(material) ) {
+  } else if( MolecIsInZiegler1988(material)) {
 
   // Cycle over elements - calculation based on Bragg's rule
     G4double eloss125 = 0.0 ;

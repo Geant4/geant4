@@ -178,9 +178,9 @@ const G4ParticleDefinition* G4hLowEnergyIonisationMA::DefineBaseParticle(
     G4double q = p->GetPDGCharge();
     if(q > 0.0 && p != G4Proton::Proton())              bp = G4Proton::Proton();
     else if(q < 0.0 && p != G4AntiProton::AntiProton()) bp = G4AntiProton::AntiProton();
+    if(p->GetPDGCharge() < 0.0) theTable = "QAO";
   }
   theBaseParticle = bp;
-  if(p->GetPDGCharge() < 0.0) theTable = "QAO";
   if(!isInitialised) InitialiseProcess();
   return bp;
 }
@@ -193,6 +193,8 @@ void G4hLowEnergyIonisationMA::InitialiseProcess()
      theParticle->GetParticleName() == "GenericIon")
                   flucModel = new G4IonFluctuations();
   else            flucModel = new G4BohrFluctuations();
+
+  SetSecondaryParticle(G4Electron::Electron());
 
   G4hParametrisedLossModel* param = new G4hParametrisedLossModel(theTable);
   G4double lowEnergy = MinKinEnergy();

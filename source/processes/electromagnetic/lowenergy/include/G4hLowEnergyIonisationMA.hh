@@ -265,7 +265,7 @@ inline G4double G4hLowEnergyIonisationMA::MaxSecondaryEnergy(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4hLowEnergyIonisationMA::GetMeanFreePath(
-         const G4Track& track, G4double step, G4ForceCondition* cond)
+         const G4Track& track, G4double, G4ForceCondition*)
 {
   G4double mRatio    = proton_mass_c2/track.GetDynamicParticle()->GetMass();
   G4double q_2       = EffectiveChargeSquare(track);
@@ -273,8 +273,7 @@ inline G4double G4hLowEnergyIonisationMA::GetMeanFreePath(
   SetReduceFactor(1.0/(q_2*mRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
-
-  return G4VEnergyLossProcess::GetMeanFreePath(track, step, cond);
+  return G4VEnergyLossProcess::GetMeanFreePath(track, 0.0, 0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

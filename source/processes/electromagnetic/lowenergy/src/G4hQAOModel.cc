@@ -87,18 +87,6 @@ G4double G4hQAOModel::StoppingPower(const G4Material* material,
       eloss += ElectronicStoppingPower(z,kineticEnergy)*theAtomicNumDensityVector[i];
     }
 
-  G4double fac = 1.0;
-  if(1 < numberOfElements) {
-    G4int nAtoms = 0;
-
-    const G4int* theAtomsVector = material->GetAtomsVector();
-    for (G4int iel=0; iel<numberOfElements; iel++) {
-      nAtoms += theAtomsVector[iel];
-    }
-    fac *= nAtoms;
-  }
-  eloss *= fac/material->GetTotNbOfAtomsPerVolume();
-
   return eloss;
 }
 
@@ -137,26 +125,26 @@ G4double G4hQAOModel::ElectronicStoppingPower(G4double z,
     l2 = GetL2(NormalizedEnergy);
     l2Term += shStrength * l2;
 
-    /*
-    if(Z == 6){
+/*
+    //if(Z == 6){
     G4cout << nos << ". "
            << " E(MeV)= " << kineticEnergy/MeV
            << " normE= "  << NormalizedEnergy
-           << " sh en= "  << GetShellEnergy(material,nos)
+           << " sh en= "  << GetShellEnergy(Z,nos)
            << " str= "  << shStrength
            << " v0/v= " << fBetheVelocity
            << " l0= " << l0Term
            << " l1= " << l1Term
            << " l2= " << l2Term
            << G4endl;
-	   }
-     */
+	//   }
+*/
   }
 
   dedx = coeff * (l0Term - fBetheVelocity*l1Term + fBetheVelocity*fBetheVelocity*l2Term);
 
-  //  G4cout << " E(MeV)= " << kineticEnergy/MeV
-  //         << " dedx(Mev/mm)= " << dedx*mm/MeV << G4endl;
+  //G4cout << " E(MeV)= " << kineticEnergy/MeV
+  //       << " dedx(Mev/mm)= " << dedx*mm/MeV << G4endl;
 
   if(dedx < 0.0) dedx = 0.0;
   return dedx;
@@ -186,7 +174,6 @@ G4int G4hQAOModel::GetNumberOfShell(G4int Z) const
 G4double G4hQAOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
 {
   G4double shellEnergy = alShellEnergy[0];
-
   if     (Z == 13) shellEnergy = alShellEnergy[nbOfTheShell];
   else if(Z == 14) shellEnergy = siShellEnergy[nbOfTheShell];
   else if(Z == 29) shellEnergy = cuShellEnergy[nbOfTheShell];
@@ -201,15 +188,16 @@ G4double G4hQAOModel::GetShellEnergy(G4int Z, G4int nbOfTheShell) const
 
 G4double G4hQAOModel::GetOscillatorEnergy(G4int Z, G4int nbOfTheShell) const
 {
-
   G4double squaredPlasmonEnergy = thePlasmonFactor;
+  G4double zeff = (G4double)Z;
   if(currentMaterial)
-    squaredPlasmonEnergy *= (currentMaterial->GetDensity()*G4double(Z)*cm3)
+    squaredPlasmonEnergy *= (currentMaterial->GetDensity()*zeff*cm3)
                           / (g * currentElement->GetN());
 
-  G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)
-                       * squaredPlasmonEnergy / (Z*Z) ;
-  G4double ionTerm = exp(0.5) * (currentElement->GetAtomicShell(nbOfTheShell)) ;
+  G4double occn = GetOccupationNumber(Z,nbOfTheShell);
+  G4double plasmonTerm = 0.66667 * occn * squaredPlasmonEnergy/(zeff*zeff);
+
+  G4double ionTerm = exp(0.5) * currentElement->GetAtomicShell(nbOfTheShell);
 
   ionTerm = ionTerm*ionTerm ;
 
@@ -233,13 +221,13 @@ G4double G4hQAOModel::GetShellStrength(G4int Z, G4int nbOfTheShell) const
 {
   G4double shellStrength = alShellStrength[0];
 
-  if(Z == 13)     shellStrength = alShellStrength[nbOfTheShell];
-  else if(Z == 14)shellStrength =siShellStrength[nbOfTheShell];
-  else if(Z == 29)shellStrength =cuShellStrength[nbOfTheShell];
-  else if(Z == 73)shellStrength =taShellStrength[nbOfTheShell];
-  else if(Z == 79)shellStrength =auShellStrength[nbOfTheShell];
-  else if(Z == 78)shellStrength =ptShellStrength[nbOfTheShell];
-  else            shellStrength = GetOccupationNumber(Z,nbOfTheShell) / Z;
+  if(Z == 13)      shellStrength = alShellStrength[nbOfTheShell];
+  else if(Z == 14) shellStrength = siShellStrength[nbOfTheShell];
+  else if(Z == 29) shellStrength = cuShellStrength[nbOfTheShell];
+  else if(Z == 73) shellStrength = taShellStrength[nbOfTheShell];
+  else if(Z == 79) shellStrength = auShellStrength[nbOfTheShell];
+  else if(Z == 78) shellStrength = ptShellStrength[nbOfTheShell];
+  else             shellStrength = GetOccupationNumber(Z,nbOfTheShell) / (G4double)Z;
 
   return shellStrength;
 }
@@ -249,8 +237,8 @@ G4double G4hQAOModel::GetOccupationNumber(G4int Z, G4int ShellNb) const
 
   G4int indice = ShellNb ;
   for (G4int z = 1 ; z < Z ; z++) {indice += fNumberOfShells[z];}
-
-  return nbOfElectronPerSubShell[indice+1];
+  G4double x = (G4double)(nbOfElectronPerSubShell[indice+1]);
+  return x;
 }
 
 

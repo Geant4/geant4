@@ -85,6 +85,10 @@ private:
   // terms in Z^3
   G4double GetL2(G4double normEnergy) const;
   // terms in Z^4
+  
+  // hide assignment operator
+  G4hQAOModel & operator=(const  G4hQAOModel &right);
+  G4hQAOModel(const  G4hQAOModel&);
 
   // Z of element at now avaliable for the model
   static const G4int materialAvailable[6];
