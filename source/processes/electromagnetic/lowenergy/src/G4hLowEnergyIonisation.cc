@@ -69,6 +69,7 @@
 // 18 Oct.  2001 V.Ivanchenko Add fluorescence
 // 30 Oct.  2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
 // 07 Dec   2001 V.Ivanchenko Add SetFluorescence method
+// 15 Feb   2001 V.Ivanchenko Fix problem of Generic Ions
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -229,13 +230,13 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
 
-  charge = aParticleType.GetPDGCharge()/eplus ;
+  charge = aParticleType.GetPDGCharge()/eplus;
   chargeSquare = charge*charge ;
 
   // ---- MGP ---- workaround for the deprecated "cuts per material"
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   const G4Material* material = (*theMaterialTable)[0];  
-  G4double electronCutInRange = G4Electron::Electron()->GetEnergyThreshold(material);
+  G4double electronCutInRange = G4Electron::Electron()->GetRangeThreshold(material);
   //                    was   = G4Electron::Electron()->GetCuts(); 
   // ---- MGP ----
 
@@ -324,7 +325,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
                              const G4ParticleDefinition& aParticleType) 
 {
   
-  // Inicialisation
+  // Initialisation
   G4double lowEdgeEnergy , ionloss, ionlossBB, paramB ;
   G4double lowEnergy, highEnergy;
   G4Proton* theProton = G4Proton::Proton();
@@ -604,13 +605,14 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
+      /*
       chargeSquare = theIonEffChargeModel->
                      TheValue(&aParticleType,material,lowEdgeEnergy) ;
-	  
+		     */  
       G4double sigma = 0.0 ;  
       for (G4int iel=0; iel<NumberOfElements; iel++ ) {
 	sigma += theAtomicNumDensityVector[iel]*
-                 chargeSquare*
+	  //                 chargeSquare*
 		 ComputeMicroscopicCrossSection(
                         aParticleType,
 			lowEdgeEnergy,
@@ -700,14 +702,15 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
    *condition = NotForced ;
 
    G4double kineticEnergy = aParticle->GetKineticEnergy() ;
+   chargeSquare = theIonEffChargeModel->TheValue(aParticle, aMaterial);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
 
    else {
      if(kineticEnergy > HighestKineticEnergy)
-                    kineticEnergy = HighestKineticEnergy ;
-     meanFreePath = ((*theMeanFreePathTable)(aMaterial->GetIndex()))->
-                    GetValue(kineticEnergy,isOutRange) ;
+                    kineticEnergy = HighestKineticEnergy;
+     meanFreePath = (((*theMeanFreePathTable)(aMaterial->GetIndex()))->
+                    GetValue(kineticEnergy,isOutRange))/chargeSquare;
      }
 
    return meanFreePath ;
@@ -731,14 +734,10 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
-
-
-  charge = (particle->GetCharge())/eplus ;
   
   // Scale the kinetic energy
   
   G4double tscaled = kineticEnergy*massRatio ; 
-  chargeSquare = theIonEffChargeModel->TheValue(particle,material) ;
   
   if(charge > 0.0) {
     
@@ -762,11 +761,11 @@ G4double G4hLowEnergyIonisation::GetConstraints(
         fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
               * chargeSquare ;
         // Correction for positive ions
-        if(theBarkas && 1.0 < charge) {
-          G4double loss = BarkasTerm(material,tscaled)*(charge -1.0) 
-                        * chargeSquare ;
-          loss  += BlochTerm(material,tscaled,chargeSquare) ; 
-          loss  -= BlochTerm(material,tscaled,1.0) ; 
+        if(theBarkas && 0.0 < charge) {
+          G4double loss = BarkasTerm(material,tscaled)*
+                        (chargeSquare*sqrt(chargeSquare) - 1.0); 
+          loss  += BlochTerm(material,tscaled,chargeSquare); 
+          loss  -= BlochTerm(material,tscaled,1.0); 
           fdEdx += loss ;
 	}
 
@@ -957,7 +956,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     if( "proton" == (particle->GetDefinition()->GetParticleName()) )
+     if( theProton == particle->GetDefinition() )
 	aParticleChange.SetStatusChange(fStopAndKill);
      else  
 	aParticleChange.SetStatusChange(fStopButAlive); 
