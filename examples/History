@@ -1,4 +1,4 @@
-$Id: History,v 1.24 1999-10-07 10:32:55 stesting Exp $
+$Id: History,v 1.25 1999-10-20 17:15:19 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20th October 1999  John Allison (examples-V00-01-06)
+- Define G4OODDLX_BOOT in E02/GNUmakefile.
+- Updated .out files for geant4-00-01-ref-04.
 
 29th September 1999  John Allison (examples-V00-01-05)
 - Updated .out files for geant4-00-01-ref-03.
