@@ -1147,7 +1147,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   G4double KineticEnergy,TotalEnergy,TotalMomentum,betasquare,
            DeltaKineticEnergy,DeltaTotalMomentum,costheta,sintheta,phi,
            dirx,diry,dirz,finalKineticEnergy,finalPx,finalPy,finalPz,
-           x,xc,grej,Psquare,Esquare,summass,rate,finalMomentum ;
+           x,xc,grej,Psquare,Esquare,rate,finalMomentum ;
   
   aParticleChange.Initialize(trackData) ;
   G4Material* aMaterial = trackData.GetMaterial() ;
