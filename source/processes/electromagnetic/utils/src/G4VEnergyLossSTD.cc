@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.61 2003-11-11 14:05:10 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.62 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -205,7 +205,9 @@ void G4VEnergyLossSTD::Initialise()
 {
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() for "
-           << GetProcessName() << G4endl;
+           << GetProcessName() 
+           << " for " << particle->GetParticleName()
+           << G4endl;
   }
 
   Clear();
@@ -585,7 +587,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double eloss  = 0.0;
   G4bool b;
 
-  /*  
+  /*    
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -625,7 +627,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
                GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
     }
 
-    /*  
+    /*      
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -770,7 +772,6 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
     SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT <= 0.0) {
-    //    aParticleChange.SetLocalEnergyDeposit(finalT);
     aParticleChange.SetEnergyChange(0.0);
 
     if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
@@ -1102,8 +1103,10 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   }
 
   const G4String particleName = part->GetParticleName();
-  if( !particle ) particle = part;
-  if( !baseParticle ) baseParticle = DefineBaseParticle(particle);
+  if( !particle ) {
+    particle = part;
+    baseParticle = DefineBaseParticle(particle);
+  }
 
   if(particleName != "GenericIon"  &&
      part->GetParticleType() == "nucleus"  &&

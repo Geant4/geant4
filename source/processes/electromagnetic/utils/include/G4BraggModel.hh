@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.9 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.10 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -38,6 +38,7 @@
 // 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 12-11-03 Fix for GenericIons (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -141,20 +142,21 @@ private:
   G4double ratio;
   G4double highKinEnergy;
   G4double lowKinEnergy;
-  G4int    iMolecula;          // index in the molecula's table
   G4double protonMassAMU;
   G4double theZieglerFactor;
   G4double expStopPower125;        // Experimental Stopping power at 125keV
 
+  G4int    iMolecula;          // index in the molecula's table
+  G4bool   isIon;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4BraggModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
+          const G4ParticleDefinition* pd,
                 G4double kinEnergy) 
 {
-
+  if(isIon) SetParticle(pd);
   G4double gamma= kinEnergy/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
@@ -166,6 +168,10 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
 
 inline G4double G4BraggModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
+  if(isIon) {
+    mass =  dp->GetMass();
+    ratio = electron_mass_c2/mass;
+  }
   G4double gamma= dp->GetKineticEnergy()/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);

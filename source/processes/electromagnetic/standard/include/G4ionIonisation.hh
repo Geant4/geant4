@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.20 2003-08-29 07:33:27 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.21 2003-11-12 10:24:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -43,6 +43,7 @@
 // 15-02-03 Add control on delta pointer (V.Ivanchenko)
 // 23-05-03 Add fluctuation model as a member function (V.Ivanchenko)
 // 03-08-03 Add effective charge and saturation of tmax (V.Ivanchenko)
+// 12-11-03 Fix problem of negative effective charge (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -186,17 +187,17 @@ inline std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
                            const G4Step&   step,
 	             	         G4double& tmax,
 			         G4double& eloss,
-                                 G4double& kinEnergy)
+                                 G4double& scaledEnergy)
 {
   std::vector<G4Track*>* newp = 0;
   if(subCutoff) {
     G4VSubCutoffProcessor* sp = SubCutoffProcessor(CurrentMaterialCutsCoupleIndex());
     if (sp) {
-      G4VEmModel* model = SelectModel(kinEnergy);
+      G4VEmModel* model = SelectModel(scaledEnergy);
       newp = sp->SampleSecondaries(step,tmax,eloss,model);
     }
   }
-  G4double e = kinEnergy - eloss;
+  G4double e = step.GetTrack()->GetKineticEnergy() - eloss;
   aParticleChange.SetChargeChange(EffectiveCharge(currentParticle,theMaterial,e));
   return newp;
 }

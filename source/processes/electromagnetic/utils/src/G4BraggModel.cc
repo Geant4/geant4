@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.10 2003-07-21 12:52:10 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.11 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,9 +65,10 @@ G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   particle(0),
   highKinEnergy(2.0*MeV),
   lowKinEnergy(0.0*MeV),
-  iMolecula(0),
   protonMassAMU(1.007276),
-  theZieglerFactor(eV*cm2*1.0e-15)
+  theZieglerFactor(eV*cm2*1.0e-15),
+  iMolecula(0),
+  isIon(false)
 {
   if(p) SetParticle(p);
 }
@@ -81,14 +82,17 @@ G4BraggModel::~G4BraggModel()
 
 void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  massRate     = mass/proton_mass_c2;
-  highKinEnergy *= massRate;
-  ratio = electron_mass_c2/mass;
+  if(particle != p) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    massRate     = mass/proton_mass_c2;
+    highKinEnergy *= massRate;
+    ratio = electron_mass_c2/mass;
+    if(particle->GetParticleName() == "GenericIon") isIon = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -148,7 +152,7 @@ G4double G4BraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
     G4double tau = kineticEnergy/mass;
     G4double gam = tau + 1.0;
     G4double beta2 = 1. - 1./(gam*gam);
-    //    G4double bg2   = tau * (tau+2.0);
+
     dedx += (log(x) + (1.0 - x)*beta2) * twopi_mc2_rcl2
           * (material->GetElectronDensity())/beta2;
   }
@@ -216,14 +220,14 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
     z = xmin*xmax/(xmin*(1.0 - q) + xmax*q);
 
     f = 1.0 - beta2 * z;
-
+    /*
     if(f > grej) {
         G4cout << "G4BraggModel::SampleSecondary Warning! "
                << "Majorant " << grej << " < "
                << f << " for x= " << z
                << G4endl;
     }
-
+    */
   } while( grej*G4UniformRand() >= f );
 
   G4double deltaKinEnergy = z * tmax;

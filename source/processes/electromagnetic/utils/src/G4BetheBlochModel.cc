@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.8 2003-07-21 12:52:09 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.9 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,8 @@ G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4Stri
   lowKinEnergy(2.0*MeV),
   twoln10(2.0*log(10.0)),
   bg2lim(0.0169),
-  taulim(8.4146e-3)
+  taulim(8.4146e-3),
+  isIon(false)
 {
   if(p) SetParticle(p);
 }
@@ -75,14 +76,16 @@ G4BetheBlochModel::~G4BetheBlochModel()
 
 void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 {
-  particle = p;
-  mass = particle->GetPDGMass();
-  spin = particle->GetPDGSpin();
-  G4double q = particle->GetPDGCharge()/eplus;
-  chargeSquare = q*q;
-  lowKinEnergy *= mass/proton_mass_c2;
-  ratio = electron_mass_c2/mass;
-  qc = mass/ratio;
+  if(particle != p) {
+    particle = p;
+    mass = particle->GetPDGMass();
+    spin = particle->GetPDGSpin();
+    G4double q = particle->GetPDGCharge()/eplus;
+    chargeSquare = q*q;
+    lowKinEnergy *= mass/proton_mass_c2;
+    ratio = electron_mass_c2/mass;
+    if(particle->GetParticleName() == "GenericIon") isIon = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -220,6 +223,7 @@ G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
     // +term for spin=1 particle
     } else if( 0.9 < spin ) {
 
+      G4double qc = mass/ratio;
       cross += -log(x)/(3.0*qc) +
 	(tmax - cutEnergy) * ((1.0+ 0.25*tmax*(1.0 + x)/qc)/(energy*energy)
 	- beta2 / (tmax * qc) )/3.0;
@@ -260,6 +264,7 @@ G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
     if(spin < 0.9) {
       grej += xmax*xmax*x;
     } else {
+      G4double qc = mass/ratio;
       y = tmax/(3.0*qc);
       grej += (1.0 - beta2*xmin)*xmin*y + x*xmin*xmin*(2.0/3.0 + xmin*y);
     }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.32 2003-11-11 14:05:10 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.33 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -345,10 +345,10 @@ void G4LossTableManager::BuildPhysicsTable(const G4ParticleDefinition* aParticle
 
       if(aParticle == part_vector[i] && !tables_are_built[i]) {
         SetParameters(loss_vector[i]);
-        if(tables_are_built[i]) break;
+	//        if(tables_are_built[i]) break;
         if(!base_part_vector[i]) {
           G4VEnergyLossSTD* hIonisation = BuildTables(aParticle);
-          for(G4int j=0; j<i; j++) {
+          for(G4int j=0; j<n_loss; j++) {
             if (aParticle == base_part_vector[j]) {
               tables_are_built[j] = true;
               G4VEnergyLossSTD* em = loss_vector[j];
@@ -465,7 +465,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
       if ( base_part_vector[j] == aParticle && !tables_are_built[j] ) {
         G4VEnergyLossSTD* em = loss_vector[j];
         tables_are_built[j] = true;
-	//        em->Initialise();
+	em->Initialise();
         em->SetDEDXTable(theLoss->DEDXTable());
         em->SetRangeTable(theLoss->RangeTable());
         em->SetInverseRangeTable(theLoss->InverseRangeTable());

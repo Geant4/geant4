@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.hh,v 1.8 2003-07-21 12:52:05 vnivanch Exp $
+// $Id: G4BetheBlochModel.hh,v 1.9 2003-11-12 10:24:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,7 +39,7 @@
 // 23-12-02 V.Ivanchenko change interface in order to moveto cut per region
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
-
+// 12-11-03 Fix for GenericIons (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -126,16 +126,16 @@ private:
   G4double twoln10;
   G4double bg2lim;
   G4double taulim;
-  G4double qc;
+  G4bool   isIon;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition*,
+          const G4ParticleDefinition* pd,
                 G4double kinEnergy) 
 {
-
+  if(isIon) SetParticle(pd);
   G4double gamma= kinEnergy/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
@@ -147,7 +147,10 @@ inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
 
 inline G4double G4BetheBlochModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
-
+  if(isIon) {
+    mass =  dp->GetMass();
+    ratio = electron_mass_c2/mass;
+  }
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double gamma= kineticEnergy/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /

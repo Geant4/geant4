@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.cc,v 1.19 2003-08-29 07:33:28 vnivanch Exp $
+// $Id: G4ionIonisation.cc,v 1.20 2003-11-12 10:24:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,7 +148,6 @@ G4double G4ionIonisation::EffectiveCharge(const G4ParticleDefinition* p,
   // J.F.Ziegler, J.P. Biersack, U. Littmark
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
-
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/mass ;
   if( reducedEnergy > energyLowLimit || Zi < 1.5 ) return charge ;
@@ -235,7 +234,6 @@ G4double G4ionIonisation::EffectiveCharge(const G4ParticleDefinition* p,
 
     // Heavy ion case
   } else {
-
     // v1 is ion velocity in vF unit
     G4double v1 = sqrt( reducedEnergy / (25.0 * keV) )/ vF ;
     G4double y ;
@@ -251,6 +249,7 @@ G4double G4ionIonisation::EffectiveCharge(const G4ParticleDefinition* p,
     }
 
     G4double y3 = pow(y, 0.3) ;
+    //    G4cout << "y= " << y << " y3= " << y3 << " v1= " << v1 << " vF= " << vF << G4endl; 
     q = 1.0 - exp( 0.803*y3 - 1.3167*y3*y3 - 0.38157*y - 0.008983*y*y ) ;
 
     if( q < chargeLowLimit ) q = chargeLowLimit ;
@@ -265,6 +264,8 @@ G4double G4ionIonisation::EffectiveCharge(const G4ParticleDefinition* p,
     G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
     chargeCorrection = s * (1.0 + 0.5*(1.0/q - 1.0)*log(1.0 + lambda*lambda)/(vF*vF) );
   }
+  //  G4cout << "G4ionIonisation: charge= " << charge << " q= " << q 
+  //       << " chargeCor= " << chargeCorrection << G4endl; 
   return charge*q;
 }
 
