@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-03-19 11:56:01 japost Exp $
+$Id: History,v 1.9 1999-04-19 17:18:57 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,11 +32,16 @@ March    11, 99      J. Apostolakis
 
    G4GRSVolume.icc: corrected G4Exception messages.
 
-February 17, 99      J. Apostolakis        geomvol-01-00-02
+February 18, 99      J. Apostolakis        
 
  include/G4VoxelNavigation.hh
  src/G4VoxelNavigation.cc    : overwrote versions 1.2 with production version
       --->  when changes are refined and retested, they could be reincorporated
+
+February 17, 99      J. Apostolakis        geomvol-01-00-02
+
+ Moved G4PropagatorInField here from magneticfield to remove correct
+  dependency.
 
 February 15, 99      J. Apostolakis        geomvol-01-00-01
 
