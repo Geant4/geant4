@@ -51,9 +51,8 @@ while (i < nm) {
   r->cd(i);
   gPad->SetBorderMode(0);
   gPad->Draw();
-  gPad->SetLogy();
+  //  gPad->SetLogy();
   //gPad->SetLogx();
-  gPad->SetGrid();
   i++;
 }
 
@@ -66,8 +65,44 @@ gStyle->SetOptStat(10);
 // Proton energy
 r->cd(1);
 ntuple->SetLineColor(1);
-ntuple->SetFillColor(18);
+ntuple->SetFillColor(0);
 ntuple->Draw("eKin", "typePart==1");
+
+SHOWEXP = 1;  // Flag to put experimental data to plot.
+if (SHOWEXP) {
+  // experimental data (run with 3210 events) sigma_rec = 321 mb, original data c= 1
+  const Int_t n = 6;
+  const Int_t c = 10;
+  Double_t exp[n][2] = 
+  {{0.003, 20.0 * c},
+   {0.005, 14.0 * c},
+   { 0.01,  8.0* c}, 
+   { 0.02,  5.5* c},
+   { 0.04,  4.0* c},
+   {0.055,  2.0* c}};
+
+  Double_t e[n], exp[n], measurement[n];
+
+  for (Int_t i = 0; i < n; i++) {
+    e[i] = exp[i][0];
+    measurement[i] = exp[i][1];
+    printf("  %i energy = %f cross-section %f \n", i, e[i], measurement[i]);
+  }
+
+  gr0 = new TGraph(n, e, measurement);
+  gr0->SetLineColor(1);
+  gr0->SetLineWidth(1);
+  gr0->SetMarkerColor(1);
+  gr0->SetMarkerStyle(21);
+  gr0->SetMarkerSize(0.5);
+  gr0->SetTitle("");
+  gr0->Draw("p");
+
+
+  TLatex l;
+  l->DrawLatex(0.01,  200, "C^{12}_{6}(p,xp) at 62 MeV");
+  l->DrawLatex(5,  18, "");
+};
 
 // Neutron energy
 r->cd(2);
