@@ -42,9 +42,15 @@ all:
 	exit 1
 endif
 
-cleandb:
+cleandb: clean newdb
+
+clean:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
+
+newdb:
 	@rm -f $(G4SCHEMA_BOOT_DIR)/G4SCHEMA
 	@rm -f $(G4SCHEMA_BOOT_DIR)/G4SCHEMA.FDDB
 	@rm -f $(G4SCHEMA_BOOT_DIR)/*.G4SCHEMA.DB
+	@$(HEP_ODBMS_DIR)/etc/getdb $(HEP_ODBMS_DIR)/schema/HEP_BASE \
+	  $(G4SCHEMA_BOOT) $(G4SCHEMA_FDID)
 
