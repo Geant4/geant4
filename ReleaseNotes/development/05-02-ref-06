@@ -367,7 +367,7 @@ examples                                              examples-V05-02-05
     + Open the geometry before cleaning stores in ConstructCalorimeter()
       where geometry setup is exchanged.
     + Removed OPACS driver from vis-manager.
-    + TestEm3
+    + TestEm3 (testem3-V05-02-08)
       * added an estimation of the mean energy leaving each absorber
     + TestEm7
       * Updated BinaryCascade; added light ion interactions
