@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RayTracer.cc,v 1.8 2001-07-11 10:09:04 gunter Exp $
+// $Id: G4RayTracer.cc,v 1.9 2002-11-09 07:40:05 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -348,7 +348,10 @@ G4Colour G4RayTracer::Attenuate(G4RayTrajectoryPoint* point, G4Colour sourceCol)
   G4double stepAlpha = objCol.GetAlpha();
   G4double stepLength = point->GetStepLength();
 
-  G4double attenuationFuctor = -stepAlpha/(1.0-stepAlpha)*stepLength/attenuationLength;
+  G4double attenuationFuctor;
+  if(stepAlpha > 0.9999999){ stepAlpha = 0.9999999; } // patch to the next line
+    attenuationFuctor = -stepAlpha/(1.0-stepAlpha)*stepLength/attenuationLength;
+ 
   G4double KtRed = exp((1.0-stepRed)*attenuationFuctor);
   G4double KtGreen = exp((1.0-stepGreen)*attenuationFuctor);
   G4double KtBlue = exp((1.0-stepBlue)*attenuationFuctor);
