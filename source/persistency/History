@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 June, 01    Y.Morita (persistency-V03-01-00)
+- new tag for release 3.2
+
 28 April, 01   Y.Morita
 - Change NULL to 0
 
