@@ -21,47 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserTrackInformation.hh,v 1.5 2004-11-26 06:47:00 asaim Exp $
+// $Id: G4VUserTrackInformation.cc,v 1.1 2004-11-26 06:47:00 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//---------------------------------------------------------------
-//
-// G4VUserTrackInformation
-//
-// Class Description:
-//
-//  Abstract class which the user can derive his/her own concrete
-// class for toring user's information associating with a G4Track
-// class object.
-//
-//  It is user's responsibility 
-//   1) Construct a concrete class object and set the pointer to
-//     proper G4Track object
-//   2) Concrete class derived from this class is expected to use G4Allocator
-//     for memory management or something equivarent for performance reason
-//
-//  To set a pointer of a concrete class object to G4Track in
-// G4UserTrackingAction concrete implementation, given the G4Track
-// object is available only by "pointer to const", SetUserTrackInformation()
-// method of G4TrackingManager is available.
-//
-//  The concrete class object is deleted by Geant4 kernel when
-// associated G4Track object is deleted.
+// 
+// --------------------------------------------------------------
 
+#include "G4VUserTrackInformation.hh"
 
-#ifndef G4VUserTrackInformation_H
-#define G4VUserTrackInformation_H 1
-
-class G4VUserTrackInformation
-{
-  public:
-    G4VUserTrackInformation();
-    virtual ~G4VUserTrackInformation();
-
-  public:
-    virtual void Print() const = 0;
-};
-
-#endif
-
+G4VUserTrackInformation::G4VUserTrackInformation()
+{;}
+G4VUserTrackInformation::~G4VUserTrackInformation()
+{;}
