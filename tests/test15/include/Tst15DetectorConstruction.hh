@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst15DetectorConstruction.hh,v 1.2 1999-12-15 14:54:51 gunter Exp $
+// $Id: Tst15DetectorConstruction.hh,v 1.3 2000-02-23 10:50:17 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,7 @@ class Tst15DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* Air;
      G4Material* Al;
      G4Material* Pb;
+     G4Material* U;
      G4Material* selectedMaterial;
      G4String materialChoice;
      Tst15DetectorMessenger * detectorMessenger;

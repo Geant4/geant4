@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst15DetectorConstruction.cc,v 1.2 1999-12-15 14:54:52 gunter Exp $
+// $Id: Tst15DetectorConstruction.cc,v 1.3 2000-02-23 10:50:20 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,7 +25,7 @@
 #include "G4ios.hh"
 
 Tst15DetectorConstruction::Tst15DetectorConstruction()
-:simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL)
+  :simpleBoxLog(NULL),selectedMaterial(NULL),Air(NULL),Al(NULL),Pb(NULL),U(NULL)
 {
   detectorMessenger = new Tst15DetectorMessenger(this);
   materialChoice = "Pb";
@@ -77,12 +77,21 @@ void Tst15DetectorConstruction::SelectMaterialPointer()
     Pb = new G4Material(name="Lead", z=82., a, density);
   }
 
+  if(!U)
+  {
+    a = 238.*g/mole;
+    density = 21.*g/cm3;
+    U  = new G4Material(name="Lead", z=92., a, density);
+  }
+
   if(materialChoice=="Air")
   { selectedMaterial = Air; }
   else if(materialChoice=="Al")
   { selectedMaterial = Al; }
-  else
+  else if(materialChoice=="Pb")
   { selectedMaterial = Pb; }
+  else
+  { selectedMaterial = U; }
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }
