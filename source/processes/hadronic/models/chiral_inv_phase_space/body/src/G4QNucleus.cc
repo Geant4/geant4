@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.7 2000-09-21 06:51:58 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.8 2000-09-21 15:20:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -415,6 +415,8 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   static const G4QPDGCode NLQPDG(91000001);       // QPDGCode of nL
   static const G4QPDGCode PLQPDG(91001000);       // QPDGCode of pL
   static const G4QPDGCode LLQPDG(92000000);       // QPDGCode of LL
+  static const G4QPDGCode PIPQPDG(211);           // QPDGCode of PI+
+  static const G4QPDGCode PIMQPDG(-211);          // QPDGCode of PI+
   static const G4int      aPDG = 90002002;        // PDGCode of ALPHA
   static const G4QPDGCode aQPDG(aPDG);            // QPDGCode of ALPHA
   static const G4double   mNeut= G4QPDGCode(nPDG).GetMass(); // Mass of neutron
@@ -422,6 +424,7 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   static const G4double   mLamb= G4QPDGCode(lPDG).GetMass(); // Mass of Lambda
   static const G4double   mDeut= G4QPDGCode(nPDG).GetNuclMass(1,1,0);// Mass of deutr
   static const G4double   mAlph= G4QPDGCode(nPDG).GetNuclMass(2,2,0);// Mass of alpha
+  static const G4double   mPi  = G4QPDGCode(211).GetMass();  // Mass of charged pion
   static const G4double   mN2  = mNeut*mNeut;     // Mass^2 of neutron
   static const G4double   mP2  = mProt*mProt;     // Mass^2 of proton
   static const G4double   mL2  = mLamb*mLamb;     // Mass^2 of Lambda
@@ -450,7 +453,49 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   G4double totMass= GetMass();                    // Total mass of the Nucleus
   if(a==2)
   {
-    if     (Z==2)
+    if(Z<0||N<0)
+	{
+      G4int  nucPDG = 2112;
+      G4double nucM = mNeut;
+      G4int   piPDG = -211;
+      G4QPDGCode db = NNQPDG;
+      G4QPDGCode pi = PIMQPDG;
+      if(N<0)
+	  {
+        nucPDG = 2212;
+        nucM   = mProt;
+        piPDG  = 211;
+        db     = PPQPDG;
+        pi     = PIPQPDG;
+	  }
+      if(totMass>mPi+nucM+nucM)
+	  {
+        G4LorentzVector n14M(0.,0.,0.,nucM);
+        G4LorentzVector n24M(0.,0.,0.,nucM);
+        G4LorentzVector pi4M(0.,0.,0.,mPi);
+	    if(!DecayIn3(n14M,n24M,pi4M))
+		{
+          G4cerr<<"***G4QNucl::EvapBary: tM="<<totMass<<"-> 2N="<<nucPDG<<"(M="
+		        <<nucM<<") + pi="<<piPDG<<"(M="<<mPi<<")"<<G4endl;
+		  //G4Exception("G4QNucl::EvapBary:ISO-dibaryon DecayIn3 did not succeed");
+		  return false;
+		}
+        n14M+=n24M;
+        h1->SetQPDG(db);
+        h2->SetQPDG(pi);
+        h1->Set4Momentum(n14M);
+        h2->Set4Momentum(pi4M);
+        return true;
+	  }
+	  else
+	  {
+        G4cerr<<"***G4QNucleus::EvaporateBaryon: M="<<totMass
+              <<", M="<<totMass<<" < M_2N+Pi, d="<<totMass-2*nucM-mPi<<G4endl;
+        //G4Exception("***G4QNucl::EvaporateBaryon: ISO-dibaryon is under a Mass Shell");
+        return false;
+	  }      
+	}
+    else if(Z==2)
     {
       h1mom=G4LorentzVector(0.,0.,0.,mProt);
       h2mom=h1mom;

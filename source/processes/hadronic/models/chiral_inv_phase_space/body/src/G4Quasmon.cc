@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.16 2000-09-21 06:51:58 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.17 2000-09-21 15:20:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1576,7 +1576,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       G4QNucleus  newNpm(totQC+PiQC);
       G4int  PDG2=newNpm.GetPDG();
       G4double m2=newNpm.GetMZNS();
-      if(nZ<0)
+      if(nN<0)
 	  {
         PDG1       =211;
         G4QNucleus  newNpp(totQC-PiQC);
@@ -1617,11 +1617,22 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         G4QHadron* H2 = new G4QHadron(PDG2,qe4M);
         theQHadrons.insert(H2);
 	  }
+      else if(m1+m2-totMass<0.01)              // Split the 4-momentum
+	  {
+        G4double r1=m1/totMass;
+        G4double r2=1.-r1;
+        qH->SetNFragments(2);                  // Put a#of Fragments=2
+        theQHadrons.insert(qH);
+        G4QHadron* H1 = new G4QHadron(PDG1,r1*t);
+        theQHadrons.insert(H1);
+        G4QHadron* H2 = new G4QHadron(PDG2,r2*t);
+        theQHadrons.insert(H2);
+	  }
       else
 	  {
-        G4cerr<<"***G4Quasm::FillHadrVec: QPDG="<<thePDG<<", QM="<<t.m()<<" < Mes="
-              <<PDG1<<"(M="<<m1<<") + ResA="<<PDG2<<"(M="<<m2<<")"<<G4endl;
-	    G4Exception("G4Quasm::FillHadrVec: mass of decayin hadron is too small");
+        G4cerr<<"***G4Quasm::FillHadrVec: PDG="<<thePDG<<"("<<t.m()<<") < Mes="<<PDG1
+              <<"("<<m1<<") + ResA="<<PDG2<<"("<<m2<<"), d="<<totMass-m1-m2<<G4endl;
+	    G4Exception("G4Quasm::FillHadrVec: mass of decaying hadron is too small");
 	  }
 	}
     else if(abs(totMass-GSMass)<.1)            // the Nucleus is too close the Ground State

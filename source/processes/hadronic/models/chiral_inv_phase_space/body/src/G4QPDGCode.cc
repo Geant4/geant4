@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.6 2000-09-21 06:51:58 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.7 2000-09-21 15:20:50 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -614,7 +614,12 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   }
   G4int ZN=Z+N;
   G4int Bn=ZN+S;
-  if(ZN<0&&Bn>0)                      // Bn*LAMBDA's + (-(N+Z))*Kaons
+  //if((Z<0||N<0)&&!Bn)
+  //{
+  //  if     (N<0) return Bn*ml-Z*mK - N*mK0+0.001*   S ;
+  //  else              return Bn*ml+N*mPi-ZN*mK +0.001*(N+S);
+  //}
+  if(ZN<0&&Bn>=0)                     // Bn*LAMBDA's + (-(N+Z))*Kaons
   {
     if     (N<0&&Z<0) return Bn*ml-Z*mK - N*mK0+0.001*   S ;
     else if(N<0)      return Bn*ml+Z*mPi-ZN*mK0+0.001*(Z+S);
@@ -626,7 +631,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     if(Bn<1) return 0.;               // @@ Make it for antinuclei @@ (Bn<0)
     if(Z>0)
 	{
-      if(Z>=-S)                         // => "Enough protons in nucleus" case
+      if(Z>=-S)                       // => "Enough protons in nucleus" case
 	  {
         k=-S*mK;
         Z+=S;
