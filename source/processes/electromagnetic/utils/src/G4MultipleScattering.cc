@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.35 2003-04-14 01:52:39 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.36 2003-04-14 09:30:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -531,11 +531,6 @@ G4double G4MultipleScattering::GetContinuousStepLimit(
     }
   }
 
-  //VI control on range
-  if (tPathLength >= range) {
-    tPathLength = range;
-    valueGPILSelectionMSC = CandidateForSelection;
-  }
   //  do the true -> geom transformation
   zmean = tPathLength;
 
@@ -614,7 +609,7 @@ G4VParticleChange* G4MultipleScattering::AlongStepDoIt(
 
   G4double truePathLength = 0. ;
 
-  //VI change order of if operators 
+  //VI change order of if operators
   if(geomPathLength == zLast)                truePathLength = tLast;
   else if(geomPathLength/lambda0 < tausmall) truePathLength = geomPathLength;
   else
@@ -680,7 +675,7 @@ G4VParticleChange* G4MultipleScattering::PostStepDoIt(
   // do nothing for stopped particles !
   if(KineticEnergy > 0.)
   {
-    //  change direction first ( scattering ) 
+    //  change direction first ( scattering )
     G4double cth = 1.0 ;
     G4double tau = truestep/lambda0 ;
 

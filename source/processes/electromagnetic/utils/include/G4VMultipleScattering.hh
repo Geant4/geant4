@@ -277,8 +277,7 @@ inline G4double G4VMultipleScattering::GetContinuousStepLimit(
 //  G4cout << "StepLimit: tpl= " << truePathLength << " lambda0= "
 //         << lambda0 << " range= " << currentRange
 //	 << " currentMinStep= " << currentMinimalStep << G4endl;
-  if (truePathLength < currentMinimalStep ||
-      truePathLength == currentRange) valueGPILSelectionMSC = CandidateForSelection;
+  if (truePathLength < currentMinimalStep) valueGPILSelectionMSC = CandidateForSelection;
   geomPathLength = currentModel->GeomPathLength(theLambdaTable,currentCouple,
            p,e,lambda0,currentRange,truePathLength);
   if(geomPathLength > lambda0) geomPathLength = lambda0;

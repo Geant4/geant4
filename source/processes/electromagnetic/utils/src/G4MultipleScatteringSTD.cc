@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScatteringSTD.cc,v 1.10 2003-04-14 01:52:39 vnivanch Exp $
+// $Id: G4MultipleScatteringSTD.cc,v 1.11 2003-04-14 09:30:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -527,12 +527,6 @@ G4double G4MultipleScatteringSTD::GetContinuousStepLimit(
         }
       }
     }
-  }
-
-  //VI control on range
-  if (tPathLength >= range) {
-    tPathLength = range;
-    valueGPILSelectionMSC = CandidateForSelection;
   }
 
   //  do the true -> geom transformation
