@@ -40,6 +40,7 @@
 // -------------------------------------------------------------------
 
 #include "globals.hh"
+#include "CLHEP/Matrix/Matrix.h"
 #include "CLHEP/Matrix/SymMatrix.h"
 #include "G4DataVector.hh"
 #include "G4VDataSetAlgorithm.hh"
@@ -151,6 +152,15 @@ int main(int argc,char** argv)
   G4int nibad  = 0;
   G4double zbest = 0.01;
   G4double zgood = 0.10;
+
+  G4DataVector dv1;
+  G4DataVector dv2;
+  G4DataVector dv3;
+  G4DataVector dv4;
+  dv1.resize(25);
+  dv2.resize(25);
+  dv3.resize(25);
+  dv4.resize(25);
 
   size_t counter = 0;
   G4int Zold = -1;
@@ -671,24 +681,67 @@ int main(int argc,char** argv)
             xmax *= yy0;
             x3   *= yy0;
 
-            (*fout_b).precision(5);
-
-            (*fout_b) << eioold/MeV << " " 
-                      << f2
-                      << endl;
-
-            (*fout_b) << x1 << " ";
-            (*fout_b) << xmax << " ";
-            (*fout_b) << x3 << " ";
-
-
-            (*fout_b).precision(4);
-	
-            for (i=0; i<pppp->size(); i++) {
-              (*fout_b) << (*pppp)[i] << " ";
+            dv1 = dv2;
+            dv2 = dv3;
+            dv3[0] = eioold/MeV;
+            dv3[1] = f2;
+            dv3[2] = x1;
+            dv3[3] = xmax;
+            dv3[4] = x3;
+            for (i=5; i<25; i++) {
+              dv3[i] = (*pppp)[i-5];
 	    }
-	
-	
+
+            for(G4double edu=1.0; edu<11.; edu *=3.0) {
+            
+              if(edu > dv2[0] && edu < dv3[0]){
+
+                HepMatrix* m = new HepMatrix(3,3);
+                G4double u  = log10(edu);
+                G4double u1 = log10(dv1[0]);
+                G4double u2 = log10(dv2[0]);
+                G4double u3 = log10(dv3[0]);
+                dv4[0]      = edu; 
+
+                (*m)(1,1) = 1.0;
+                (*m)(2,1) = u1;
+                (*m)(3,1) = u1*u1;
+                (*m)(1,2) = 1.0;
+                (*m)(2,2) = u2;
+                (*m)(3,2) = u2*u2;
+                (*m)(1,3) = 1.0;
+                (*m)(2,3) = u3;
+                (*m)(3,3) = u3*u3;
+                G4int j = 0;
+                HepMatrix invm = m->inverse(j);
+                G4double a1, a2, a3, q1, q2, q3;
+
+                for(i=1; i<25; i++) {
+                  q1 = dv1[i];
+                  q2 = dv2[i];
+                  q3 = dv3[i];
+                  a1 = q1*invm(1,1) + q2*invm(2,1) + q3*invm(3,1);
+                  a2 = q1*invm(1,2) + q2*invm(2,2) + q3*invm(3,2);
+                  a3 = q1*invm(1,3) + q2*invm(2,3) + q3*invm(3,3);
+                  dv4[i] = a1 + a2*u + a3*u*u;
+	        }
+                (*fout_b).precision(5);
+                (*fout_b) << dv4[0] << " " << dv4[1] << endl;
+                for (i=2; i<25; i++) {
+                  if(i == 5) (*fout_b).precision(4);
+                  (*fout_b) << dv4[i] << " ";
+	        }
+                (*fout_b) << endl;
+                delete m;	       
+              }
+	    }
+
+            (*fout_b).precision(5);
+            (*fout_b) << dv3[0] << " " << dv3[1] << endl;
+            for (i=2; i<25; i++) {
+              if(i == 5) (*fout_b).precision(4);
+              (*fout_b) << dv3[i] << " ";
+	    }	
             (*fout_b) << endl;
        
             if(0 < verbose || (Z == zpr)) {

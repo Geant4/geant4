@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.36 2002-06-01 03:14:18 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.37 2002-07-19 17:37:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -87,11 +87,13 @@ public:
 
   void ActivateAuger(G4bool val);
     
-protected:
+  //protected:
  
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
+
+protected:
 
   virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
 							  G4double incidentEnergy,

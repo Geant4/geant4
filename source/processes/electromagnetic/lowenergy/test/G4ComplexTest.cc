@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.13 2002-05-30 17:42:14 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.14 2002-07-19 17:34:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -93,10 +93,22 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+
+// New Histogramming (from AIDA and Anaphe):
+#include <memory> // for the auto_ptr(T>
+
+#include "AIDA/IAnalysisFactory.h"
+
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
 #include "G4Timer.hh"
 
 int main(int argc,char** argv)
@@ -105,16 +117,10 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   // Setup
 
-  HepTupleManager* hbookManager;
-  HepTuple* ntuple1 = 0; 
-  HepTuple* ntuple2 = 0; 
-  HepHistogram* h[4] = {0,0,0,0};
-
-
   G4int  nEvt        = 100;
   G4int  nPart       =-1;
   G4String  nameMat  = "Si";
-  G4int  nProcess    = 3;
+  G4int  nProcess    = 0;
   G4bool usepaw      = false;
   G4bool postDo      = true;
   G4bool lowE        = true;
@@ -368,30 +374,44 @@ int main(int argc,char** argv)
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
-    hbookManager = new HBookFile(hFile, 58);
-    //  assert (hbookManager != 0);
-  
-    // ---- Book a histogram and ntuples
-    G4cout<< "Hbook file name: <" << ((HBookFile*) hbookManager)->filename() 
-          << ">" << G4endl;
+    // Creating the analysis factory
+    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
-    /*
-    // ---- primary ntuple ------
-    ntuple1 = hbookManager->ntuple("Primary Ntuple");
-  
-    // ---- secondary ntuple ------
-    ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-    */
-    // ---- secondaries histos ----
-    h[0] = hbookManager->histogram("Kinetic Energy", 50,0.,1.0);
-  
-    h[1] = hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
-  
-    h[2] = hbookManager->histogram("Number of secondaries", 20,-0.5,19.5);
-  
-    h[3] = hbookManager->histogram("Energy deposition (MeV)", 50,0.,
-                                     gEnergy*0.1/MeV);
-    G4cout<< "Histograms is initialised" << G4endl;
+    // Creating the tree factory
+    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4cout << "Tree store : " << tree->storeName() << G4endl;
+ 
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    //    G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
+    IHistogram1D* hist[4];
+    //ITuple* ntuple1 = 0;
+    //ITuple* ntuple2 = 0;
+
+    if(usepaw) {
+
+      // ---- primary ntuple ------
+      // If using Anaphe HBOOK implementation, there is a limitation on the length of the
+      // variable names in a ntuple
+      //ntuple1 = tpf->create( "100", "Primary", "float ekin, dedx" );
+      //ntuple2 = tpf->create( "101", "Secondary", "float ekin, dedx" );
+
+
+      // Creating a histogram factory, whose histograms will be handled by the tree
+      G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+      // Creating an 1-dimensional histogram in the root directory of the tree
+
+      hist[0] = hf->create1D("11","Kinetic Energy (T/T0)", 50,0.,1.0); 
+      hist[1] = hf->create1D("12","Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
+      hist[2] = hf->create1D("13","Number of secondaries", 20,-0.5,19.5);
+      hist[3] = hf->create1D("14","Energy deposition (MeV)", 50,0.,gEnergy*0.1/MeV);
+
+      G4cout<< "Histograms is initialised" << G4endl;
+    }
 
     G4Timer* timer = new G4Timer();
     timer->Start();
@@ -415,8 +435,8 @@ int main(int argc,char** argv)
         elecLEbr = new G4LowEnergyBremsstrahlung();
         elecManager->AddProcess(elecLEion);
         elecManager->AddProcess(elecLEbr);
-        elecLEbr->BuildPhysicsTable(*electron);
         elecLEion->BuildPhysicsTable(*electron);
+        elecLEbr->BuildPhysicsTable(*electron);
         ionis = false;
       }
       if(nPart == 0) {
@@ -451,8 +471,8 @@ int main(int argc,char** argv)
         elecSTbr  = new G4eBremsstrahlung();
         elecManager->AddProcess(elecSTion);
         elecManager->AddProcess(elecSTbr);
-        elecSTbr->BuildPhysicsTable(*electron);
         elecSTion->BuildPhysicsTable(*electron);
+        elecSTbr->BuildPhysicsTable(*electron);
         ionis = false;
       }
       if(nPart == 0) {
@@ -543,6 +563,8 @@ int main(int argc,char** argv)
     G4double de = 0.0;
     G4double de2 = 0.0;
 
+    G4cout << "dProcess= " << dProcess << "  cdProcess= " << cdProcess << G4endl;
+
     timer = new G4Timer();
     timer->Start();
 
@@ -579,15 +601,7 @@ int main(int argc,char** argv)
       G4double pxChange  = change.x();
       G4double pyChange  = change.y();
       G4double pzChange  = change.z();
-      /*
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange 
-                                                  + pzChange*pzChange);
-      
-      G4double xChange = particleChange->GetPositionChange()->x();
-      G4double yChange = particleChange->GetPositionChange()->y();
-      G4double zChange = particleChange->GetPositionChange()->z();
-      G4double thetaChange = particleChange->GetPositionChange()->theta();
-      */
+
       if(verbose) {
         G4cout << "---- Primary after the step ---- " << G4endl;
         G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
@@ -604,7 +618,7 @@ int main(int argc,char** argv)
       // Primary
  
       G4int nsec = particleChange->GetNumberOfSecondaries();
-
+      /*
       if(ntuple1) {
         ntuple1->column("epri", gEnergy/MeV);
         ntuple1->column("efin", energyChange/MeV);
@@ -614,14 +628,17 @@ int main(int argc,char** argv)
         ntuple1->column("npho", nPhotons);
         ntuple1->dumpData(); 
       }
+      */
       de  += deltaE;
       de2 += deltaE*deltaE; 
       
       // Secondaries physical quantities 
       
-      h[2]->accumulate((float)nsec, 1.0);
-      h[3]->accumulate(particleChange->GetLocalEnergyDeposit()/MeV, 1.0);
-      
+      if(usepaw) {
+        hist[2]->fill((float)nsec, 1.0);
+        hist[3]->fill(particleChange->GetLocalEnergyDeposit()/MeV, 1.0);
+      }      
+
       for (G4int i = 0; i<nsec; i++) {
 	  // The following two items should be filled per event, not
 	  // per secondary; filled here just for convenience, to avoid
@@ -634,7 +651,7 @@ int main(int argc,char** argv)
         G4double px   = (finalParticle->GetMomentum()).x();
         G4double py   = (finalParticle->GetMomentum()).y();
         G4double pz   = (finalParticle->GetMomentum()).z();
-        G4double theta= (finalParticle->GetMomentum()).theta();
+        //G4double theta= (finalParticle->GetMomentum()).theta();
         G4double p    = sqrt(px*px + py*py + pz*pz);
 
         if (eKin > gEnergy) {
@@ -655,8 +672,10 @@ int main(int argc,char** argv)
 		  <<  G4endl;   
 	}
 	  
-	h[0]->accumulate(eKin/gEnergy, 1.0);
-        h[1]->accumulate(p/MeV, 1.0);
+        if(usepaw) {
+	  hist[0]->fill(eKin/gEnergy, 1.0);
+          hist[1]->fill(p/MeV, 1.0);
+	}
 	  
         G4int partType = 0;
         if (partName == "e-") {
@@ -673,6 +692,7 @@ int main(int argc,char** argv)
         }
 	
 	// Fill the secondaries ntuple
+	/*
         if(ntuple2) {
           ntuple2->column("eprimary",gEnergy);
           ntuple2->column("px", px);
@@ -685,16 +705,18 @@ int main(int argc,char** argv)
           ntuple2->column("type", partType);  
 	  ntuple2->dumpData(); 
 	}
+	*/
 	delete particleChange->GetSecondary(i);
       }
 	          
       particleChange->Clear();      
+    
     }
     G4cout << "###### Statistics:" << G4endl;
     G4cout << "Average number of secondary electrons= " 
            << (G4double)nElectrons/(G4double)nEvt << G4endl;
     G4cout << "Average number of secondary positrons= " 
-           << (G4double)nPositrons/(G4double)nEvt << G4endl;
+             << (G4double)nPositrons/(G4double)nEvt << G4endl;
     G4cout << "Average number of secondary photons= " 
            << (G4double)nPhotons/(G4double)nEvt << G4endl;
     G4double x = de/(G4double)nEvt;
@@ -707,10 +729,13 @@ int main(int argc,char** argv)
     G4cout << "  "  << *timer << G4endl;
     delete timer;
   
-    if(usepaw)hbookManager->write();
-    G4cout << "# hbook is writed" << G4endl;
-    delete hbookManager;    
-    G4cout << "# hbook is deleted" << G4endl;
+    if(usepaw) {
+      tree->commit();
+      G4std::cout << "Closing the tree..." << G4std::endl;
+      tree->close();
+      G4cout << "# hbook is writed" << G4endl;
+    }
+
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     
   } while(end);

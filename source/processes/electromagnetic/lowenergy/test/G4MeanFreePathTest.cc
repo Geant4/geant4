@@ -155,6 +155,7 @@ int main(int argc,char** argv)
   //--------- Materials definition ---------
  
   G4Material* ma[15];
+  /*
   ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
   ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
   ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
@@ -165,14 +166,14 @@ int main(int argc,char** argv)
   ma[7] = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
   ma[8] = new G4Material("Pb",      82., 207.19*g/mole, 11.35*g/cm3);
   ma[9] = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
-
+  */
   G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
   G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
   G4Element*   C  = new G4Element ("Carbon"  , "C", 6. , 12.00*g/mole);
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
-
-  ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
+  
+  //ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
   ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
   ma[11]->AddElement(H,2);
   ma[11]->AddElement(O,1);
@@ -394,8 +395,9 @@ int main(int argc,char** argv)
 
       // Creating an 1-dimensional histogram in the root directory of the tree
 
-      hist[0] = hf->create1D("1","Ionisation (E in MeV)", 
+      hist[0] = hf->create1D("1","MeanFreePath (mm)", 
                                      nbin,emin/MeV,emax/MeV);
+      /*
       hist[1] = hf->create1D("2","Bremsstrahlung (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
       hist[2] = hf->create1D("3","Compton (E in MeV)", 
@@ -406,6 +408,7 @@ int main(int argc,char** argv)
                                      nbin,emin/MeV,emax/MeV);
       hist[5] = hf->create1D("6","Raylaigh (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
+      */
     }
 
     gamma->SetCuts(cutG);
@@ -536,9 +539,9 @@ int main(int argc,char** argv)
 	          << x/mm << " mm " << G4endl;
       }
 
-      if(x > 1000.0*meter) x = 1000.0*meter;      
+      if(x > 1000.0*meter) x = 0.0*meter;      
 
-      if(usepaw) hist[nProcess]->fill(e/MeV,x/mm);
+      if(usepaw) hist[0]->fill(e/MeV,x/mm);
     }
     if(usepaw) {
       tree->commit();
