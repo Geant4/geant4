@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SDManager.hh,v 1.1 2003-10-03 10:08:25 gcosmo Exp $
+// $Id: G4SDManager.hh,v 1.2 2004-05-03 08:14:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,7 +71,7 @@ class G4SDManager
       //  These two methods return the ID number of the sensitive detector.
 
   public:
-      G4VSensitiveDetector* FindSensitiveDetector(G4String dName);
+      G4VSensitiveDetector* FindSensitiveDetector(G4String dName, G4bool warning = true);
       G4HCofThisEvent* PrepareNewEvent();
       void TerminateCurrentEvent(G4HCofThisEvent* HCE);
 
