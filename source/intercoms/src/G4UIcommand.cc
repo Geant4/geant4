@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.9 2001-07-11 10:01:16 gunter Exp $
+// $Id: G4UIcommand.cc,v 1.10 2001-07-17 15:53:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,20 @@ G4int G4UIcommand::DoIt(G4String parameterList)
             G4Tokenizer cvt(messenger->GetCurrentValue(this));
             G4String parVal;
             for(int ii=0;ii<i_thParameter;ii++)
-            { parVal = cvt(); }
+            {
+	      parVal = cvt();
+	      if (parVal(0)=='"')
+		{
+		  while( parVal(parVal.length()-1) != '"' )
+		    {
+		      G4String additionalToken = cvt();
+		      if( additionalToken.isNull() )
+			{ return fParameterUnreadable+i_thParameter; }
+		      parVal += " ";
+		      parVal += additionalToken;
+		    }
+		}
+	    }
 	    G4String aCVToken = cvt();
 	    if (aCVToken(0)=='"')
 	    {

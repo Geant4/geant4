@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2001-05-18 17:08:19 gcosmo Exp $
+$Id: History,v 1.19 2001-07-17 15:53:09 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 17, 2001, J.Allison (intercoms-V03-02-00)
+- Fixed parsing of quoted (") tokens in current value for null or defaulted
+  parameters in loop over previous parameters in G4UIcommand::DoIt().
 
 May 18, 2001, G.Cosmo (intercoms-V03-01-00)
 - Cleared pedantic warnings detected in Linux-g++ with ISO/ANSI setup.
