@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.8 1999-08-27 10:25:03 johna Exp $
+// $Id: G4VisManager.cc,v 1.9 1999-08-27 15:50:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -669,35 +669,39 @@ void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   G4cout << "G4VisManager::SetCurrentGraphicsSystem: system now "
 	 << pSystem -> GetName ();
-  const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
-  G4int nSH = sceneHandlerList.entries ();  // No. of scene handlers.
-  G4int iSH;
-  for (iSH = 0; iSH < nSH; iSH++) {
-    if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
-  }
-  if (iSH < nSH) {
-    fpSceneHandler = sceneHandlerList [iSH];
-    G4cout << "\n  Scene Handler now "
-	   << fpSceneHandler -> GetName ();
-    const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
-    if (viewerList.entries ()) {
-      fpViewer = viewerList [0];
-      G4cout << "\n  Viewer now " << fpViewer -> GetName ();
-      IsValidView ();  // Checks.
+  // If current scene handler is of same graphics system, leave unchanged.
+  // Else find the most recent scene handler of same graphics system.
+  // Or clear pointers.
+  if (!(fpSceneHandler && fpSceneHandler -> GetGraphicsSystem () == pSystem)) {
+    const G4SceneHandlerList& sceneHandlerList = fAvailableSceneHandlers;
+    G4int nSH = sceneHandlerList.entries ();  // No. of scene handlers.
+    G4int iSH;
+    for (iSH = nSH - 1; iSH >= 0; iSH--) {
+      if (sceneHandlerList [iSH] -> GetGraphicsSystem () == pSystem) break;
+    }
+    if (iSH >= nSH) {
+      fpSceneHandler = sceneHandlerList [iSH];
+      G4cout << "\n  Scene Handler now "
+	     << fpSceneHandler -> GetName ();
+      const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
+      if (viewerList.entries ()) {
+	fpViewer = viewerList [0];
+	G4cout << "\n  Viewer now " << fpViewer -> GetName ();
+      }
+      else {
+	fpViewer = 0;
+	// Make it impossible for user action code to Draw.
+	fpConcreteInstance = 0;
+      }
     }
     else {
+      fpSceneHandler = 0;
       fpViewer = 0;
       // Make it impossible for user action code to Draw.
-      fpConcreteInstance = 0;
+    fpConcreteInstance = 0;
     }
   }
-  else {
-    fpSceneHandler = 0;
-    fpViewer = 0;
-    // Make it impossible for user action code to Draw.
-    fpConcreteInstance = 0;
-  }
-  G4cout << endl; 
+  G4cout << endl;
 }
 
 void G4VisManager::SetCurrentSceneHandler (G4VSceneHandler* pSceneHandler) {
