@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-01-08 16:33:51 gunter Exp $
+$Id: History,v 1.3 1999-01-09 16:32:50 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-02  9th January 1999  John Allison
+- Changed Scene to SceneHandler, View to Viewer.
 
 vis-01-00-01  6th January 1999  John Allison
 - Made G4VisManager::GetInstance() private to prevent inadvertent misuse.
