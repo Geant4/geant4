@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DecaysBuilder.cc,v 1.1 2004-05-26 11:39:09 vnivanch Exp $
+// $Id: DecaysBuilder.cc,v 1.2 2004-07-02 09:39:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -72,7 +72,7 @@ void DecaysBuilder::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle)) {
+    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) {
 
       pmanager ->AddProcess(fDecayProcess);
 

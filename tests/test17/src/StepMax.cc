@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.cc,v 1.1 2004-05-26 11:39:10 vnivanch Exp $
+// $Id: StepMax.cc,v 1.2 2004-07-02 09:39:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@ StepMax::StepMax(const G4String& processName)
    MaxChargedStep(DBL_MAX)
 {
   pMess = new StepMaxMessenger(this);
+  G4cout << "StepMax is active" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +48,7 @@ StepMax::~StepMax() { delete pMess; }
 
 G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
 {
-  return (particle.GetPDGCharge() != 0.);
+  return (particle.GetPDGCharge() != 0. && !particle.IsShortLived());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

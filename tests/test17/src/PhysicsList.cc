@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.2 2004-06-30 16:49:31 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.3 2004-07-02 09:39:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -202,6 +202,7 @@ void PhysicsList::SetVerbose(G4int val)
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
+  SetCutValue(cutForGamma, "gamma");
   cutForGamma = cut;
 }
 
@@ -209,6 +210,7 @@ void PhysicsList::SetCutForGamma(G4double cut)
 
 void PhysicsList::SetCutForElectron(G4double cut)
 {
+  SetCutValue(cutForElectron, "e-");
   cutForElectron = cut;
 }
 
@@ -216,6 +218,7 @@ void PhysicsList::SetCutForElectron(G4double cut)
 
 void PhysicsList::SetCutForPositron(G4double cut)
 {
+  SetCutValue(cutForPositron, "e+");
   cutForPositron = cut;
 }
 
