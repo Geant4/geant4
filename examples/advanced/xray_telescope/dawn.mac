@@ -1,0 +1,97 @@
+#######################################################################
+#  MACRO FILE NAME: vrml.mac                                          #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#                                                                     #
+#  DATE: October  17, 2000                                            # 
+#                                                                     #
+#  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
+#                                                                     #
+#  USAGE:  % rm *.wrl                                                 #
+#          % $G4BINDIR/exampleXXX                                     #
+#          Idle> /control/execute vrml.mac.                           #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: VRML viewer, e.g. VRMLview         #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_BUILD_VRMLFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_VRMLFILE           1                          #
+#                                                                     #
+#  RECOMMENDED ENVIRONMENTAL VARIABLES FOR THE VRML VIEWER:           #
+#                                                                     #
+#    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
+#     ( The default value is "NONE".)                                 #
+#                                                                     #
+#    % setenv G4VRMLFILE_MAX_FILE_NUM  100                            #
+#     ( The default value is "1".)                                    #
+#                                                                     #
+#  Addional Notes:                                                    #
+#    You may have to set the command path to the directory where      #
+#    a VRML viewer is installed, e.g., to                             #
+#    "/afs/cern.ch/sw/contrib/VRML/bin/Linux/"    at CERN             #
+#                                                                     #
+#######################################################################
+
+#################################################
+# Visualization of detector geometry with 
+# the VRML2FILE driver.
+#################################################
+
+# Invoke the OGLIX driver
+#/vis/open VRML2FILE
+
+# Visualize of the whole detector geometry
+#/vis/viewer/set/style surface
+#/vis/drawVolume
+#/vis/viewer/update
+
+#################################################
+# Visualization of detector geometry and events 
+# with the VRML2FILE driver.
+#
+# Note: "/vis/viewer/set/style wireframe" means 
+#       "half-transparent" in VRML2FILE driever. 
+#################################################
+
+# Store particle trajactories for visualization
+#/tracking/storeTrajectory 1
+
+# Invoke the DAWNFILE driver
+/vis/open DAWNFILE
+
+# Create a new scene 
+/vis/scene/create
+
+# Add the world volume to the current scene
+/vis/scene/add/volume
+
+# Attach the current scene handler 
+# to the current scene
+/vis/sceneHandler/attach 
+
+/vis/camera/viewpoint 30 70
+
+# Visualize one event added to the current scene
+# * Command "/vis/scene/notifyHandlers" is written in 
+#   ExN03RunAction::BeginOfRunAction()
+# * Command "/vis/viewer/update" is written in 
+#   ExN03RunAction::EndOfRunAction()
+#/vis/scene/add/trajectories
+/vis/viewer/set/style wireframe
+/tracking/storeTrajectory 1
+/event/drawTracks charged
+/gun/random aperture
+/gun/particle proton
+/gun/energy 0.53 MeV
+/run/beamOn 100000
+
+
+
+
+
