@@ -55,14 +55,14 @@
  The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
 ExN03PhysicsList::SetCuts:CutLength : 2 (mm)
 
-phot:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to 50 MeV for all Z
-        PhysicsTables from 10 keV to 50 MeV in 100 bins. 
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
+        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
-compt:  Total cross sections from a parametrisation(L.Urban). Good description from 10 KeV to (100/Z) GeV. 
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
 
-conv:  Total cross sections from a parametrisation(L.Urban). Good description from 1.5 MeV to 100 GeV for all Z. 
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
 
@@ -75,7 +75,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
@@ -104,11 +104,11 @@ MuIoni:  knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
       PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
 
-MuBrems:  cross sections from R. Kokoulin 
+MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
 
-MuPairProd:  cross sections from R. Kokoulin 
+MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 #
@@ -177,14 +177,14 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
-        Gap: total energy:      19 MeV       total track length:     8.6  cm
-    174 trajectories stored in this event.
+     9 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      16  cm
+        Gap: total energy:      16 MeV       total track length:     8.4  cm
+    187 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.4s Sys=0.07s
+  User=0.33s Real=0.38s Sys=0.04s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -199,14 +199,14 @@ Idle> /run/beamOn 1
 ### Run 1 start.
 Start Run processing.
 >>> Event 0
-     9 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      16  cm
-        Gap: total energy:      23 MeV       total track length:      11  cm
-    203 trajectories stored in this event.
+     10 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 2.8e+02 MeV       total track length:      15  cm
+        Gap: total energy:      19 MeV       total track length:     8.7  cm
+    181 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.36s Real=0.37s Sys=0.01s
+  User=0.31s Real=0.31s Sys=0s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -233,14 +233,14 @@ Idle> /run/beamOn 1
 Start closing geometry.
 Start Run processing.
 >>> Event 0
-     16 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.5e+02 MeV       total track length:      56  cm
-        Gap: total energy:      43 MeV       total track length:     1.2   m
-    126 trajectories stored in this event.
+     30 hits are stored in ExN03CalorHitsCollection.
+   Absorber: total energy: 4.1e+02 MeV       total track length:      92  cm
+        Gap: total energy:      72 MeV       total track length:       2   m
+    199 trajectories stored in this event.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.54s Real=0.56s Sys=0.02s
+  User=0.85s Real=0.92s Sys=0.07s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
