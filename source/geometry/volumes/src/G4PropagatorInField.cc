@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.39 2002-11-09 00:25:09 jacek Exp $
+// $Id: G4PropagatorInField.cc,v 1.40 2002-11-22 10:48:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -291,9 +291,9 @@ G4PropagatorInField::ComputeStep(
     if( !intersects )
     {
       StepTaken += s_length_taken; 
-      // Introducing smooth trajectory display (jacek 01/11/2002)
-      // The filter pointer holds a valid filter if and only if
-      // intermediate points should be stored.
+
+      // For storing smooth trajectory info -- to analyse or display (jacek 01/11/2002)
+      // The filter pointer is a valid iff intermediate points should be stored.
       if (fpTrajectoryFilter) {
         fpTrajectoryFilter->TakeIntermediatePoint(CurrentState.GetPosition());
       }
@@ -304,11 +304,8 @@ G4PropagatorInField::ComputeStep(
     if( fNoZeroStep > fActionThreshold_NoZeroSteps )
     {
       printStatus( SubStepStartState,  // or OriginalState,
-                   CurrentState,
-                   CurrentProposedStepLength, 
-                   NewSafety,  
-                   do_loop_count, 
-                   pPhysVol );
+                   CurrentState,  CurrentProposedStepLength, 
+                   NewSafety,     do_loop_count,  pPhysVol );
     }
 #endif
 
@@ -335,9 +332,6 @@ G4PropagatorInField::ComputeStep(
   {
     // Chord AB or "minor chords" do not intersect
     // B is the endpoint Step of the current Step.
-    // [ But if we were angle limited we could use B 
-    //   as a new starting point ? ]
-    //  On return we specify the endpoint, point B
     //
     End_PointAndTangent = CurrentState; 
     TruePathLength = StepTaken;
@@ -384,17 +378,14 @@ G4PropagatorInField::ComputeStep(
     fNoZeroStep = 0;
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+     G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
+            << " Zero progress for "  << fNoZeroStep << " attempted steps." 
+	    << G4endl;
 #ifdef G4VERBOSE
-    G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
-           << " No progress after "  << fNoZeroStep << " trial steps. "
-           << G4endl;
-    G4cout << " Particle will be killed." << G4endl; 
-#else
-    G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
-           << " Particle that is stuck will be killed." << G4endl;
+     G4cout << " Particle that is stuck will be killed." << G4endl;
 #endif
-    fNoZeroStep = 0; 
-    fParticleIsLooping = true;
+     fNoZeroStep = 0; 
+     fParticleIsLooping = true;
   }
   return TruePathLength;
 }
@@ -524,12 +515,11 @@ G4PropagatorInField::LocateIntersectionPoint(
         // it is a good enough approximate point for us.
         //       B    <- F
         //       E    <- G
-        //
         CurrentB_PointVelocity = ApproxIntersecPointV;
         CurrentE_Point = PointG;  
-       }
-       else  // not Intersects_AF
-       {  
+      }
+      else  // not Intersects_AF
+      {  
          // In this case:
          // There is NO intersection of AF with a volume boundary.
          // We must continue the search in the segment FB!
