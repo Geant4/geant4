@@ -147,8 +147,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   }
   G4std::vector<G4QContent> theFinalContents;
   G4std::vector<G4LorentzVector> theFinalMomenta;
-//  if(theContents.size()<hitCount)
-  if(1)
+  if(theContents.size()<hitCount || 1)
   {
     for(G4int hp = 0; hp<theContents.size(); hp++)
     {
@@ -194,7 +193,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 
   G4QNucleus::SetParameters(fractionOfSingleQuasiFreeNucleons,
                             fractionOfPairedQuasiFreeNucleons,
-			                clusteringCoefficient);
+			                clusteringCoefficient, 0.01);
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			               etaToEtaPrime);
