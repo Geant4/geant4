@@ -20,6 +20,7 @@
 // charged ions.
 // ************************************************************
 //  6 September 1999 V.Ivanchenko create
+// 30 September 1999 V.Ivanchenko minor upgrade
 // ------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,22 +84,27 @@ G4double G4ionLowEnergyIonisation::GetLowEnergyForParametrisation(const G4Materi
   const G4ElementVector* theElementVector = material->GetElementVector() ;
   const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector() ;
   const G4int NumberOfElements = material->GetNumberOfElements() ;
+  G4double Z = 0.0, Norm = 0.0 ; 
   
+  // only 1 element in the material
+  if( 1 == NumberOfElements ) {
+    Z = material->GetZ() ;
+
   //  loop for the elements in the material
   //  to find out average value of Z
-  G4double Z = 0.0, Norm = 0.0 ; 
-
-  for (G4int iel=0; iel<NumberOfElements; iel++)
-    {
-      const G4Element* element = (*theElementVector)(iel) ;
-      G4double Z2 = element->GetZ() ;
-      const G4double W2 = theAtomicNumDensityVector[iel] ;
-      Norm += W2 ;
-      Z    += Z2 * W2 ;
-    }
-  Z  /= Norm ;
+  } else {
+    for (G4int iel=0; iel<NumberOfElements; iel++)
+      {
+        const G4Element* element = (*theElementVector)(iel) ;
+        G4double Z2 = element->GetZ() ;
+        const G4double W2 = theAtomicNumDensityVector[iel] ;
+        Norm += W2 ;
+        Z    += Z2 * W2 ;
+      }
+    Z  /= Norm ;
+  }
   G4double E1 = 3.25 * keV ;
-  G4double E2 = 25.0 * keV * pow(Z, -0.667) ;
+  G4double E2 = 25.0 * keV / pow(Z, 0.667) ;
   E1 = max (E1, E2) ;
   return max(ParamLowEnergy, E1) / MassRatio ; 
 }

@@ -25,6 +25,7 @@
 // 20 August 1999 G.Mancinelli added ICRU tables for alpha (not functional
 // yet)  
 // 31 August 1999 V.Ivanchenko update and cleen up 
+// 30 Sept.  1999 V.Ivanchenko minor upgrade 
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -2069,7 +2070,8 @@ G4double G4hLowEnergyIonisation::GetIonEffChargeSquare(const G4Material* aMateri
 
   // Fast ions or hadrons
   G4double ReducedEnergy = KinEnergy * MassRatio ;
-  if( (ReducedEnergy > 20.0 * MeV) || IonCharge < 1.5 ) return IonCharge*IonCharge ;
+  if( (ReducedEnergy > IonCharge * 10.0 * MeV) || 
+      (IonCharge < 1.5) ) return IonCharge*IonCharge ;
 
   static G4double VFermi[92] = {
    1.0309,  0.15976, 0.59782, 1.0781,  1.0486,  1.0,     1.058,   0.93942, 0.74562, 0.3424,
@@ -2181,6 +2183,7 @@ G4double G4hLowEnergyIonisation::GetIonEffChargeSquare(const G4Material* aMateri
     G4double Lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (Z13 * (6.0 + q)) ;
     G4double Qeff   = IonCharge * Q *
                       ( q + 0.5*(1.0-q) * log(1.0 + Lambda*Lambda) / (vF*vF) ) ;
+    if( 1.0 > Qeff ) Qeff = 1.0 ; 
     return Qeff*Qeff ;    
   }
 }
