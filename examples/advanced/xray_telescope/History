@@ -1,4 +1,4 @@
-$Id: History,v 1.9 2000-12-06 18:34:34 nartallo Exp $
+$Id: History,v 1.10 2001-06-18 17:43:03 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.06.2001 - RN, tag xraytel-V02-00-11
+             tested with latest global tag geant4-03-01-ref-02
 
 06.12.2000 - RN, tag xraytel-V02-00-10
              Removed old XrayTelPrimaryGeneratorMessenger.cc and .hh
