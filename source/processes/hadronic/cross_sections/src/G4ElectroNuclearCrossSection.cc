@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.12 2002-11-27 15:34:55 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.13 2002-12-04 08:43:33 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,9 +41,9 @@
 #include "G4ElectroNuclearCrossSection.hh"
 
 // Initialization of the
-G4double  G4ElectroNuclearCrossSection::lastE=0;   // Last used in the cross section TheEnergy
+G4double  G4ElectroNuclearCrossSection::lastE=0.;  // Last used in the cross section TheEnergy
 G4int     G4ElectroNuclearCrossSection::lastF=0;   // Last used in the cross section TheFirstBin
-G4double  G4ElectroNuclearCrossSection::lastG=0;   // Last used in the cross section TheGamma
+G4double  G4ElectroNuclearCrossSection::lastG=0.;  // Last used in the cross section TheGamma
 G4double  G4ElectroNuclearCrossSection::lastH=0.;  // Last value of the High Energy A-dependence
 G4double* G4ElectroNuclearCrossSection::lastJ1=0;  // Pointer to the last array of the J1 function
 G4double* G4ElectroNuclearCrossSection::lastJ2=0;  // Pointer to the last array of the J2 function
@@ -118,7 +118,7 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
 #endif
         colN.push_back(targN);
         colZ.push_back(targZ);
-        colF.push_back(targN);
+        colF.push_back(lastF);
         J1.push_back(lastJ1);
         J2.push_back(lastJ2);
         J3.push_back(lastJ3);
@@ -2323,7 +2323,11 @@ G4double G4ElectroNuclearCrossSection::GetEquivalentPhotonEnergy()
   for(G4int i=lastF;i<=lastL;i++) Y[i]=dlg1*lastJ1[i]-lgoe*(lastJ2[i]+lastJ2[i]-lastJ3[i]/lastE);
   if(lastSig>0.99*Y[lastL]&&lastL<mL)
   {
-    if(Y[lastL]<1.E-30) return 3.0*MeV; // quick and dirty workaround @@@ HP.
+    if(Y[lastL]<1.E-30)
+    {
+      G4cerr<<"*HP*G4ElNucCS::GetEqPhotE:S="<<lastSig<<">"<<Y[lastL]<<",l="<<lastL<<">"<<mL<<G4endl;
+      return 3.0*MeV; // quick and dirty workaround @@@ HP. (now can be not necessary M.K.)
+    }
   }
   else
   {
@@ -2382,7 +2386,7 @@ G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
   static const G4double eps=0.001; // Accuracy which satisfies the search
   G4double x=z+f/p/(lastG+lmel-z); // First guess
 #ifdef pdebug
-  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastE="<<lastLE<<",x="<<x<<G4endl;
+  G4cout<<"SolveTheEq: e="<<eps<<",f="<<f<<",z="<<z<<",p="<<p<<",lastG="<<lastG<<",x="<<x<<G4endl;
 #endif
   for(G4int i=0; i<imax; i++)
   {
