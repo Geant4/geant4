@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.5 2001-07-11 09:59:54 gunter Exp $
+// $Id: G4CSGSolid.hh,v 1.6 2002-10-28 11:43:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -32,12 +32,8 @@
 //
 // Class description:
 //
-//   An abstract class for Constructed Solids.
-//   Used primarily to simplify inheritance tree.
-//
-//   Member functions:
-//
-//   As inherited from G4VSolid 
+//   An abstract class inherited from G4VSolid for Constructed Solids.
+//   Used primarily to structure inheritance tree.
 
 // History:
 // 27.03.98 J.Apostolakis   Created first version.
@@ -50,11 +46,12 @@
 
 class G4CSGSolid : public G4VSolid
 {
-  public:
+  public:  // with description
 
     G4CSGSolid(const G4String& pName);
-
     virtual ~G4CSGSolid();
+
+    virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
 };
 
 #endif

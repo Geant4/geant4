@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.11 2002-05-15 09:37:33 gcosmo Exp $
+// $Id: G4Para.cc,v 1.12 2002-10-28 11:43:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -29,12 +29,15 @@
 // Implementation for G4Para class
 //
 // History:
-// 21.03.95 P.Kent Modified for `tolerant' geom
-// 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
-// 18.11.99 V. Grichine , kUndef was added to ESide
-// 14.02.02 V. Grichine , bug fixed in Inside according to proposal of D. Wright
+// 21.03.95 P.Kent: Modified for `tolerant' geom
+// 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
+// 18.11.99 V.Grichine: kUndef was added to ESide
+// 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
+// ********************************************************************
 
 #include "G4Para.hh"
+
+#include "G4UnitsTable.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 
@@ -46,7 +49,7 @@
 #include "G4NURBSbox.hh"
 
 // Private enum: Not for external use 
-  	
+    
 enum ESide {kUndef,kPX,kMX,kPY,kMY,kPZ,kMZ};
 
 // used internally for normal routine
@@ -57,38 +60,52 @@ enum ENSide {kNZ,kNX,kNY};
 //
 // Constructor - check and set half-widths
 
-void G4Para::SetAllParameters(G4double pDx, G4double pDy, G4double pDz, 
-            G4double pAlpha, G4double pTheta, G4double pPhi)
+void G4Para::SetAllParameters( G4double pDx, G4double pDy, G4double pDz, 
+                               G4double pAlpha, G4double pTheta, G4double pPhi )
 {
   if (pDx>0&&pDy>0&&pDz>0)
   {
-	   fDx=pDx;
-	   fDy=pDy;
-	   fDz=pDz;
-	   fTalpha=tan(pAlpha);
-	   fTthetaCphi=tan(pTheta)*cos(pPhi);
-	   fTthetaSphi=tan(pTheta)*sin(pPhi);
+    fDx=pDx;
+    fDy=pDy;
+    fDz=pDz;
+    fTalpha=tan(pAlpha);
+    fTthetaCphi=tan(pTheta)*cos(pPhi);
+    fTthetaSphi=tan(pTheta)*sin(pPhi);
   }
   else
   {
-    G4Exception("Error in G4Para::SetAllParameters - Invalid Length Parameters");
+    G4cout << "ERROR - G4Para()::SetAllParameters(): " << GetName() << G4endl
+           << "        Invalid dimensions ! - "
+           << pDx << ", " << pDy << ", " << pDz << G4endl;
+    G4cerr << "ERROR - G4Para()::SetAllParameters(): " << GetName() << G4endl
+           << "        Invalid dimensions ! - "
+           << pDx << ", " << pDy << ", " << pDz << G4endl;
+    G4Exception("G4Para::SetAllParameters() - Invalid Length Parameters");
   }
 }
 
 ///////////////////////////////////////////////////////////////////////////
 //
 
-G4Para::G4Para(const G4String& pName,G4double pDx, G4double pDy, G4double pDz,
-           G4double pAlpha, G4double pTheta,G4double pPhi) : G4CSGSolid(pName)
+G4Para::G4Para(const G4String& pName,
+                     G4double pDx, G4double pDy, G4double pDz,
+                     G4double pAlpha, G4double pTheta, G4double pPhi)
+  : G4CSGSolid(pName)
 {
-    if (pDx>0&&pDy>0&&pDz>0)
-    {
-           SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
-    }
-    else
-    {
-       G4Exception("Error in G4Para::G4Para - Invalid Length Parameters");
-    }
+  if (pDx>0&&pDy>0&&pDz>0)
+  {
+    SetAllParameters( pDx, pDy, pDz, pAlpha, pTheta, pPhi);
+  }
+  else
+  {
+    G4cout << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
+           << "        Invalid dimensions ! - "
+           << pDx << ", " << pDy << ", " << pDz << G4endl;
+    G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
+           << "        Invalid dimensions ! - "
+           << pDx << ", " << pDy << ", " << pDz << G4endl;
+    G4Exception("G4Para::G4Para() - Invalid Length Parameters");
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -97,39 +114,41 @@ G4Para::G4Para(const G4String& pName,G4double pDx, G4double pDy, G4double pDz,
 // which are its vertices. Checking of planarity with preparation of 
 // fPlanes[] and than calculation of other members
 
-
 G4Para::G4Para( const G4String& pName,
-	        const G4ThreeVector pt[8]) : G4CSGSolid(pName)
+                const G4ThreeVector pt[8] )
+  : G4CSGSolid(pName)
 {
-    if (   pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() && pt[0].z()==pt[3].z()
-	&& pt[4].z()>0 && pt[4].z()==pt[5].z() && pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()
-	&& (pt[0].z()+pt[4].z())== 0
-	&& pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()
-	&& pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()
-	&& (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0      )
-     {
-	   fDz = (pt[7]).z() ;
-	    
-	   fDy = ((pt[2]).y()-(pt[1]).y())*0.5 ;
-	   fDx = ((pt[1]).x()-(pt[0]).x())*0.5 ;
-	   fDx = ((pt[3]).x()-(pt[2]).x())*0.5 ;
-	   fTalpha = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy ;
+  if ( pt[0].z()<0 && pt[0].z()==pt[1].z() && pt[0].z()==pt[2].z() &&
+       pt[0].z()==pt[3].z() && pt[4].z()>0 && pt[4].z()==pt[5].z() &&
+       pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z() &&
+       (pt[0].z()+pt[4].z())==0 &&
+       pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y() &&
+       pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y() &&
+       (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0 )
+  {
+    fDz = (pt[7]).z() ;
 
-	   //	   fDy = ((pt[6]).y()-(pt[5]).y())*0.5 ;
-	   //	   fDx = ((pt[5]).x()-(pt[4]).x())*0.5 ;
-	   //	   fDx = ((pt[7]).x()-(pt[6]).x())*0.5 ;
-	   //	   fTalpha = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy ;
+    fDy = ((pt[2]).y()-(pt[1]).y())*0.5 ;
+    fDx = ((pt[1]).x()-(pt[0]).x())*0.5 ;
+    fDx = ((pt[3]).x()-(pt[2]).x())*0.5 ;
+    fTalpha = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy ;
 
-	   fTthetaCphi = ((pt[4]).x()+fDy*fTalpha+fDx)/fDz ;
-	   fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
+    // fDy = ((pt[6]).y()-(pt[5]).y())*0.5 ;
+    // fDx = ((pt[5]).x()-(pt[4]).x())*0.5 ;
+    // fDx = ((pt[7]).x()-(pt[6]).x())*0.5 ;
+    // fTalpha = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy ;
 
-	}
-    else
-	{
-	    G4Exception("Error in G4Para::G4Para - Invalid vertice coordinates");
-	}
-
-    
+    fTthetaCphi = ((pt[4]).x()+fDy*fTalpha+fDx)/fDz ;
+    fTthetaSphi = ((pt[4]).y()+fDy)/fDz ;
+  }
+  else
+  {
+    G4cout << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
+           << "        Invalid dimensions !" << G4endl;
+    G4cerr << "ERROR - G4Para()::G4Para(): " << GetName() << G4endl
+           << "        Invalid dimensions !" << G4endl;
+    G4Exception("G4Para::G4Para() - Invalid vertice coordinates");
+  }    
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -137,7 +156,6 @@ G4Para::G4Para( const G4String& pName,
 
 G4Para::~G4Para()
 {
-   ;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -145,11 +163,11 @@ G4Para::~G4Para()
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
- void G4Para::ComputeDimensions(G4VPVParameterisation* p,
+void G4Para::ComputeDimensions(      G4VPVParameterisation* p,
                                 const G4int n,
-                                const G4VPhysicalVolume* pRep)
+                                const G4VPhysicalVolume* pRep )
 {
-    p->ComputeDimensions(*this,n,pRep);
+  p->ComputeDimensions(*this,n,pRep);
 }
 
 
@@ -157,214 +175,227 @@ G4Para::~G4Para()
 //
 // Calculate extent under transform and specified limit
 
-G4bool G4Para::CalculateExtent(const EAxis pAxis,
-                               const G4VoxelLimits& pVoxelLimit,
-                               const G4AffineTransform& pTransform,
-                               G4double& pMin, G4double& pMax) const
+G4bool G4Para::CalculateExtent( const EAxis pAxis,
+                                const G4VoxelLimits& pVoxelLimit,
+                                const G4AffineTransform& pTransform,
+                                     G4double& pMin, G4double& pMax ) const
 {
-    G4bool flag;
+  G4bool flag;
 
-    if (!pTransform.IsRotated())
-   {  
-                      // Special case handling for unrotated trapezoids
-                      // Compute z/x/y/ mins and maxs respecting limits, with early returns
-                      // if outside limits. Then switch() on pAxis
-	  G4int i ; 
-          G4double xoffset,xMin,xMax;
-          G4double yoffset,yMin,yMax;
-          G4double zoffset,zMin,zMax;
-	  G4double temp[8] ;          // some points for intersection with zMin/zMax
-	  
-          xoffset=pTransform.NetTranslation().x();	    
-          yoffset=pTransform.NetTranslation().y();
-          zoffset=pTransform.NetTranslation().z();
+  if (!pTransform.IsRotated())
+  {  
+    // Special case handling for unrotated trapezoids
+    // Compute z/x/y/ mins and maxs respecting limits, with early returns
+    // if outside limits. Then switch() on pAxis
+
+    G4int i ; 
+    G4double xoffset,xMin,xMax;
+    G4double yoffset,yMin,yMax;
+    G4double zoffset,zMin,zMax;
+    G4double temp[8] ;       // some points for intersection with zMin/zMax
+    
+    xoffset=pTransform.NetTranslation().x();      
+    yoffset=pTransform.NetTranslation().y();
+    zoffset=pTransform.NetTranslation().z();
  
-          G4ThreeVector pt[8];   // vertices after translation
-          pt[0]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy*fTalpha-fDx,
-               		      yoffset-fDz*fTthetaSphi-fDy,zoffset-fDz);
-          pt[1]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy*fTalpha+fDx,
-		              yoffset-fDz*fTthetaSphi-fDy,zoffset-fDz);
-          pt[2]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy*fTalpha-fDx,
-		              yoffset-fDz*fTthetaSphi+fDy,zoffset-fDz);
-          pt[3]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy*fTalpha+fDx,
-		              yoffset-fDz*fTthetaSphi+fDy,zoffset-fDz);
-          pt[4]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy*fTalpha-fDx,
-		              yoffset+fDz*fTthetaSphi-fDy,zoffset+fDz);
-          pt[5]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy*fTalpha+fDx,
-		              yoffset+fDz*fTthetaSphi-fDy,zoffset+fDz);
-          pt[6]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy*fTalpha-fDx,
-		              yoffset+fDz*fTthetaSphi+fDy,zoffset+fDz);
-          pt[7]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy*fTalpha+fDx,
-		              yoffset+fDz*fTthetaSphi+fDy,zoffset+fDz);
-	    zMin=zoffset-fDz;
-	    zMax=zoffset+fDz;
-	    if (pVoxelLimit.IsZLimited())
-		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
-			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (zMin<pVoxelLimit.GetMinZExtent())
-				{
-				    zMin=pVoxelLimit.GetMinZExtent();
-				}
-			    if (zMax>pVoxelLimit.GetMaxZExtent())
-				{
-				    zMax=pVoxelLimit.GetMaxZExtent();
-				}
-			}
-		}
+    G4ThreeVector pt[8];   // vertices after translation
+    pt[0]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                        yoffset-fDz*fTthetaSphi-fDy,zoffset-fDz);
+    pt[1]=G4ThreeVector(xoffset-fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                        yoffset-fDz*fTthetaSphi-fDy,zoffset-fDz);
+    pt[2]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                        yoffset-fDz*fTthetaSphi+fDy,zoffset-fDz);
+    pt[3]=G4ThreeVector(xoffset-fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                        yoffset-fDz*fTthetaSphi+fDy,zoffset-fDz);
+    pt[4]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                        yoffset+fDz*fTthetaSphi-fDy,zoffset+fDz);
+    pt[5]=G4ThreeVector(xoffset+fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                        yoffset+fDz*fTthetaSphi-fDy,zoffset+fDz);
+    pt[6]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                        yoffset+fDz*fTthetaSphi+fDy,zoffset+fDz);
+    pt[7]=G4ThreeVector(xoffset+fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                        yoffset+fDz*fTthetaSphi+fDy,zoffset+fDz);
+    zMin=zoffset-fDz;
+    zMax=zoffset+fDz;
+    if ( pVoxelLimit.IsZLimited() )
+    {
+      if   ( (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance)
+          || (zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (zMin<pVoxelLimit.GetMinZExtent())
+        {
+          zMin=pVoxelLimit.GetMinZExtent();
+        }
+        if (zMax>pVoxelLimit.GetMaxZExtent())
+        {
+          zMax=pVoxelLimit.GetMaxZExtent();
+        }
+      }
+    }
 
-            temp[0] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-       	    temp[1] = pt[0].y()+(pt[4].y()-pt[0].y())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-	    temp[2] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-	    temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;	      
-	    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy - fDy ;
-	    yMin = -yMax ;
-	    for(i=0;i<4;i++)
-	    {
-	       if(temp[i] > yMax) yMax = temp[i] ;
-	       if(temp[i] < yMin) yMin = temp[i] ;
-	    }
-	    
-	    if (pVoxelLimit.IsYLimited())
-		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
-			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (yMin<pVoxelLimit.GetMinYExtent())
-				{
-				    yMin=pVoxelLimit.GetMinYExtent();
-				}
-			    if (yMax>pVoxelLimit.GetMaxYExtent())
-				{
-				    yMax=pVoxelLimit.GetMaxYExtent();
-				}
-			}
-		}
+    temp[0] = pt[0].y()+(pt[4].y()-pt[0].y())
+                       *(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[1] = pt[0].y()+(pt[4].y()-pt[0].y())
+                       *(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[2] = pt[2].y()+(pt[6].y()-pt[2].y())
+                       *(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[3] = pt[2].y()+(pt[6].y()-pt[2].y())
+                       *(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;        
+    yMax = yoffset - fabs(fDz*fTthetaSphi) - fDy - fDy ;
+    yMin = -yMax ;
+    for(i=0;i<4;i++)
+    {
+      if(temp[i] > yMax) yMax = temp[i] ;
+      if(temp[i] < yMin) yMin = temp[i] ;
+    }
+      
+    if (pVoxelLimit.IsYLimited())
+    {
+      if ( (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance)
+        || (yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (yMin<pVoxelLimit.GetMinYExtent())
+        {
+          yMin=pVoxelLimit.GetMinYExtent();
+        }
+        if (yMax>pVoxelLimit.GetMaxYExtent())
+        {
+          yMax=pVoxelLimit.GetMaxYExtent();
+        }
+      }
+    }
 
-            temp[0] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-       	    temp[1] = pt[0].x()+(pt[4].x()-pt[0].x())*(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
-	    temp[2] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-	    temp[3] = pt[2].x()+(pt[6].x()-pt[2].x())*(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
-            temp[4] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMin-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-       	    temp[5] = pt[3].x()+(pt[7].x()-pt[3].x())*(zMax-pt[3].z())/(pt[7].z()-pt[3].z()) ;
-	    temp[6] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMin-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-	    temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())*(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
-	    
-	    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx - fDx -fDx - fDx;
-	    xMin = -xMax ;
-	    for(i=0;i<8;i++)
-	    {
-	       if(temp[i] > xMax) xMax = temp[i] ;
-	       if(temp[i] < xMin) xMin = temp[i] ;
-	    }
-	                                          // xMax/Min = f(yMax/Min) ?
-	    if (pVoxelLimit.IsXLimited())
-		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
-			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
-			{
-			    return false;
-			}
-		    else
-			{
-			    if (xMin<pVoxelLimit.GetMinXExtent())
-				{
-				    xMin=pVoxelLimit.GetMinXExtent();
-				}
-			    if (xMax>pVoxelLimit.GetMaxXExtent())
-				{
-				    xMax=pVoxelLimit.GetMaxXExtent();
-				}
-			}
-		}
+    temp[0] = pt[0].x()+(pt[4].x()-pt[0].x())
+                       *(zMin-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[1] = pt[0].x()+(pt[4].x()-pt[0].x())
+                       *(zMax-pt[0].z())/(pt[4].z()-pt[0].z()) ;
+    temp[2] = pt[2].x()+(pt[6].x()-pt[2].x())
+                       *(zMin-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[3] = pt[2].x()+(pt[6].x()-pt[2].x())
+                       *(zMax-pt[2].z())/(pt[6].z()-pt[2].z()) ;
+    temp[4] = pt[3].x()+(pt[7].x()-pt[3].x())
+                       *(zMin-pt[3].z())/(pt[7].z()-pt[3].z()) ;
+    temp[5] = pt[3].x()+(pt[7].x()-pt[3].x())
+                       *(zMax-pt[3].z())/(pt[7].z()-pt[3].z()) ;
+    temp[6] = pt[1].x()+(pt[5].x()-pt[1].x())
+                       *(zMin-pt[1].z())/(pt[5].z()-pt[1].z()) ;
+    temp[7] = pt[1].x()+(pt[5].x()-pt[1].x())
+                       *(zMax-pt[1].z())/(pt[5].z()-pt[1].z()) ;
 
-	    switch (pAxis)
-		{
-		case kXAxis:
-		    pMin=xMin;
-		    pMax=xMax;
-		    break;
-		case kYAxis:
-		    pMin=yMin;
-		    pMax=yMax;
-		    break;
-		case kZAxis:
-		    pMin=zMin;
-		    pMax=zMax;
-		    break;
-		default:
-		    break;
-		}
+    xMax = xoffset - fabs(fDz*fTthetaCphi) - fDx - fDx -fDx - fDx;
+    xMin = -xMax ;
+    for(i=0;i<8;i++)
+    {
+      if(temp[i] > xMax) xMax = temp[i] ;
+      if(temp[i] < xMin) xMin = temp[i] ;
+    }
+      // xMax/Min = f(yMax/Min) ?
+    if (pVoxelLimit.IsXLimited())
+    {
+      if ( (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance)
+        || (xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance) )
+      {
+        return false;
+      }
+      else
+      {
+        if (xMin<pVoxelLimit.GetMinXExtent())
+        {
+          xMin=pVoxelLimit.GetMinXExtent();
+        }
+        if (xMax>pVoxelLimit.GetMaxXExtent())
+        {
+          xMax=pVoxelLimit.GetMaxXExtent();
+        }
+      }
+    }
 
-	    pMin-=kCarTolerance;
-	    pMax+=kCarTolerance;
+    switch (pAxis)
+    {
+      case kXAxis:
+        pMin=xMin;
+        pMax=xMax;
+        break;
+      case kYAxis:
+        pMin=yMin;
+        pMax=yMax;
+        break;
+      case kZAxis:
+        pMin=zMin;
+        pMax=zMax;
+        break;
+      default:
+        break;
+    }
 
-	    flag = true;
-   }
+    pMin-=kCarTolerance;
+    pMax+=kCarTolerance;
+    flag = true;
+  }
+  else
+  {
+    // General rotated case - create and clip mesh to boundaries
+
+    G4bool existsAfterClip=false;
+    G4ThreeVectorList *vertices;
+
+    pMin=+kInfinity;
+    pMax=-kInfinity;
+
+    // Calculate rotated vertex coordinates
+
+    vertices=CreateRotatedVertices(pTransform);
+    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
+    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
+      
+    if (pMin!=kInfinity||pMax!=-kInfinity)
+    {
+      existsAfterClip=true;
+        
+      // Add 2*tolerance to avoid precision troubles
+      //
+      pMin-=kCarTolerance;
+      pMax+=kCarTolerance;
+    }
     else
-   {
-// General rotated case - create and clip mesh to boundaries
-
-	    G4bool existsAfterClip=false;
-	    G4ThreeVectorList *vertices;
-
-	    pMin=+kInfinity;
-	    pMax=-kInfinity;
-// Calculate rotated vertex coordinates
-
-	    vertices=CreateRotatedVertices(pTransform);
-	    ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax);
-	    ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax);
-	    
-	    if (pMin!=kInfinity||pMax!=-kInfinity)
-		{
-		    existsAfterClip=true;
-		    
-// Add 2*tolerance to avoid precision troubles
-		    pMin-=kCarTolerance;
-		    pMax+=kCarTolerance;
-		    
-		}
-	    else
-		{
-// Check for case where completely enveloping clipping volume
-// If point inside then we are confident that the solid completely
-// envelopes the clipping volume. Hence set min/max extents according
-// to clipping volume extents along the specified axis.
-		   
-           G4ThreeVector clipCentre(
-			(pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-			(pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-			(pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-		    
-		    if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
-			{
-			    existsAfterClip=true;
-			    pMin=pVoxelLimit.GetMinExtent(pAxis);
-			    pMax=pVoxelLimit.GetMaxExtent(pAxis);
-			}
-		}
-	    delete vertices ;          //  'new' in the function called
-	    flag = existsAfterClip ;
-   }
-   return flag;
+    {
+      // Check for case where completely enveloping clipping volume
+      // If point inside then we are confident that the solid completely
+      // envelopes the clipping volume. Hence set min/max extents according
+      // to clipping volume extents along the specified axis.
+       
+      G4ThreeVector clipCentre(
+        (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+        (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+        (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+        
+      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=kOutside)
+      {
+        existsAfterClip=true;
+        pMin=pVoxelLimit.GetMinExtent(pAxis);
+        pMax=pVoxelLimit.GetMaxExtent(pAxis);
+      }
+    }
+    delete vertices ;          //  'new' in the function called
+    flag = existsAfterClip ;
+  }
+  return flag;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 //
 // Check in p is inside/on surface/outside solid
 
-EInside G4Para::Inside(const G4ThreeVector& p) const
+EInside G4Para::Inside( const G4ThreeVector& p ) const
 {
   G4double xt, yt, yt1;
   EInside  in = kOutside;
@@ -385,15 +416,14 @@ EInside G4Para::Inside(const G4ThreeVector& p) const
     }
     else if ( yt <= fDy + kCarTolerance*0.5)
     {
-      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;	
+      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;  
     }
   }
   else  if ( fabs(p.z()) <= fDz + kCarTolerance*0.5 )
   {
-
     if ( yt <= fDy + kCarTolerance*0.5)
     {
-      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;	
+      if ( xt <= fDx + kCarTolerance*0.5 ) in = kSurface;  
     }
   }
   return in;
@@ -404,89 +434,89 @@ EInside G4Para::Inside(const G4ThreeVector& p) const
 // Calculate side nearest to p, and return normal
 // If 2+ sides equidistant, first side's normal returned (arbitrarily)
 
-G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p) const
+G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p ) const
 {
-    ENSide  side;
-    G4ThreeVector norm;
-    G4double distx,disty,distz;
-    G4double newpx,newpy,xshift;
-    G4double calpha,salpha;	// Sin/Cos(alpha) - needed to recalc G4Parameter 
-    G4double tntheta,cosntheta;	// tan and cos of normal's theta component
-    G4double ycomp;
+  ENSide  side;
+  G4ThreeVector norm;
+  G4double distx,disty,distz;
+  G4double newpx,newpy,xshift;
+  G4double calpha,salpha;  // Sin/Cos(alpha) - needed to recalc G4Parameter 
+  G4double tntheta,cosntheta;  // tan and cos of normal's theta component
+  G4double ycomp;
 
-    newpx=p.x()-fTthetaCphi*p.z();
-    newpy=p.y()-fTthetaSphi*p.z();
+  newpx=p.x()-fTthetaCphi*p.z();
+  newpy=p.y()-fTthetaSphi*p.z();
 
-    calpha=1/sqrt(1+fTalpha*fTalpha);
-    if (fTalpha)
-	{
-	    salpha=-calpha/fTalpha;	// NOTE: actually use MINUS sin(alpha)
-	}
-    else
-	{
-	    salpha=0;
-	}
+  calpha=1/sqrt(1+fTalpha*fTalpha);
+  if (fTalpha)
+  {
+    salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+  }
+  else
+  {
+    salpha=0;
+  }
 
-    xshift=newpx*calpha+newpy*salpha;
+  xshift=newpx*calpha+newpy*salpha;
 
-    distx=fabs(fabs(xshift)-fDx*calpha);
-    disty=fabs(fabs(newpy)-fDy);
-    distz=fabs(fabs(p.z())-fDz);
+  distx=fabs(fabs(xshift)-fDx*calpha);
+  disty=fabs(fabs(newpy)-fDy);
+  distz=fabs(fabs(p.z())-fDz);
     
-    if (distx<disty)
-	{
-	    if (distx<distz) side=kNX;
-	    else side=kNZ;
-	}
-    else
-	{
-	    if (disty<distz) side=kNY;
-	    else side=kNZ;
-	}
+  if (distx<disty)
+  {
+    if (distx<distz) side=kNX;
+    else side=kNZ;
+  }
+  else
+  {
+    if (disty<distz) side=kNY;
+    else side=kNZ;
+  }
 
-    switch (side)
-	{
-	case kNX:
-	    tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-	    if (xshift<0)
-		{
-		    cosntheta=-1/sqrt(1+tntheta*tntheta);
-		}
-	    else
-		{
-		    cosntheta=1/sqrt(1+tntheta*tntheta);
-		}
-	    norm=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
-	    break;
-	case kNY:
-	    if (newpy<0)
-		{
-		    ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
-		}
-	    else
-		{
-		    ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
-		}
-	    norm=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
-	    break;
-	case kNZ:
-// Closest to Z
-	    if (p.z()>=0)
-		{
-		    norm=G4ThreeVector(0,0,1);
-		}
-	    else
-		{
-		    norm=G4ThreeVector(0,0,-1);
-		}
-	    break;
-	}
-    return norm;
+  switch (side)
+  {
+    case kNX:
+      tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
+      if (xshift<0)
+      {
+        cosntheta=-1/sqrt(1+tntheta*tntheta);
+      }
+      else
+      {
+        cosntheta=1/sqrt(1+tntheta*tntheta);
+      }
+      norm=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
+      break;
+    case kNY:
+      if (newpy<0)
+      {
+        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
+      }
+      else
+      {
+        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
+      }
+      norm=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+      break;
+    case kNZ:           // Closest to Z
+      if (p.z()>=0)
+      {
+        norm=G4ThreeVector(0,0,1);
+      }
+      else
+      {
+        norm=G4ThreeVector(0,0,-1);
+      }
+      break;
+  }
+  return norm;
 }
 
 //////////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to shape from outside - return kInfinity if no intersection
+// Calculate distance to shape from outside
+// - return kInfinity if no intersection
 //
 // ALGORITHM:
 // For each component, calculate pair of minimum and maximum intersection
@@ -499,172 +529,175 @@ G4ThreeVector G4Para::SurfaceNormal( const G4ThreeVector& p) const
 // - Note: XZ and YZ planes each divide space into four regions,
 //   characterised by ss1 ss2
 
-G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const
+G4double G4Para::DistanceToIn( const G4ThreeVector& p,
+                               const G4ThreeVector& v ) const
 {
-    G4double snxt;		// snxt = default return value
-    G4double smin,smax;
-    G4double tmin,tmax;
-    G4double yt,vy,xt,vx;
-    G4double max;
-//
-// Z Intersection range
-//
-    if (v.z()>0)
-	{
-	    max=fDz-p.z();
-	    if (max>kCarTolerance*0.5)
-		{
-		    smax=max/v.z();
-		    smin=(-fDz-p.z())/v.z();
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
-    else if (v.z()<0)
-	{
-	    max=-fDz-p.z();
-	    if (max<-kCarTolerance*0.5)
-		{
-		    smax=max/v.z();
-		    smin=(fDz-p.z())/v.z();
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+  G4double snxt;    // snxt = default return value
+  G4double smin,smax;
+  G4double tmin,tmax;
+  G4double yt,vy,xt,vx;
+  G4double max;
+  //
+  // Z Intersection range
+  //
+  if (v.z()>0)
+  {
+    max=fDz-p.z();
+    if (max>kCarTolerance*0.5)
+    {
+      smax=max/v.z();
+      smin=(-fDz-p.z())/v.z();
+    }
     else
-	{
-	    if (fabs(p.z())<=fDz) // Inside
-		{
-		    smin=0;
-		    smax=kInfinity;
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+    {
+      return snxt=kInfinity;
+    }
+  }
+  else if (v.z()<0)
+  {
+    max=-fDz-p.z();
+    if (max<-kCarTolerance*0.5)
+    {
+      smax=max/v.z();
+      smin=(fDz-p.z())/v.z();
+    }
+    else
+    {
+      return snxt=kInfinity;
+    }
+  }
+  else
+  {
+    if (fabs(p.z())<=fDz) // Inside
+    {
+      smin=0;
+      smax=kInfinity;
+    }
+    else
+    {
+      return snxt=kInfinity;
+    }
+  }
     
-//
-// Y G4Parallel planes intersection
-//
-    yt=p.y()-fTthetaSphi*p.z();
-    vy=v.y()-fTthetaSphi*v.z();
+  //
+  // Y G4Parallel planes intersection
+  //
 
-    if (vy>0)
-	{
-	    max=fDy-yt;
-	    if (max>kCarTolerance*0.5)
-		{
-		    tmax=max/vy;
-		    tmin=(-fDy-yt)/vy;
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
-    else if (vy<0)
-	{
-	    max=-fDy-yt;
-	    if (max<-kCarTolerance*0.5)
-		{
-		    tmax=max/vy;
-		    tmin=(fDy-yt)/vy;
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+  yt=p.y()-fTthetaSphi*p.z();
+  vy=v.y()-fTthetaSphi*v.z();
+
+  if (vy>0)
+  {
+    max=fDy-yt;
+    if (max>kCarTolerance*0.5)
+    {
+      tmax=max/vy;
+      tmin=(-fDy-yt)/vy;
+    }
     else
-	{
-	    if (fabs(yt)<=fDy)
-		{
-		    tmin=0;
-		    tmax=kInfinity;
-		}
-	    else
-		{
-		    return snxt=kInfinity;
-		}
-	}
+    {
+      return snxt=kInfinity;
+    }
+  }
+  else if (vy<0)
+  {
+    max=-fDy-yt;
+    if (max<-kCarTolerance*0.5)
+    {
+      tmax=max/vy;
+      tmin=(fDy-yt)/vy;
+    }
+    else
+    {
+      return snxt=kInfinity;
+    }
+  }
+  else
+  {
+    if (fabs(yt)<=fDy)
+    {
+      tmin=0;
+      tmax=kInfinity;
+    }
+    else
+    {
+      return snxt=kInfinity;
+    }
+  }
 
-// Re-Calc valid intersection range
+  // Re-Calc valid intersection range
+  //
+  if (tmin>smin) smin=tmin;
+  if (tmax<smax) smax=tmax;
+  if (smax<=smin)
+  {
+    return snxt=kInfinity;
+  }
+  else
+  {
+    //
+    // X G4Parallel planes intersection
+    //
+    xt=p.x()-fTthetaCphi*p.z()-fTalpha*yt;
+    vx=v.x()-fTthetaCphi*v.z()-fTalpha*vy;
+    if (vx>0)
+    {
+      max=fDx-xt;
+      if (max>kCarTolerance*0.5)
+      {
+        tmax=max/vx;
+        tmin=(-fDx-xt)/vx;
+      }
+      else
+      {
+        return snxt=kInfinity;
+      }
+    }
+    else if (vx<0)
+    {
+      max=-fDx-xt;
+      if (max<-kCarTolerance*0.5)
+      {
+        tmax=max/vx;
+        tmin=(fDx-xt)/vx;
+      }
+      else
+      {
+        return snxt=kInfinity;
+      }
+    }
+    else
+    {
+      if (fabs(xt)<=fDx)
+      {
+        tmin=0;
+        tmax=kInfinity;
+      }
+      else
+      {
+        return snxt=kInfinity;
+      }
+    }
     if (tmin>smin) smin=tmin;
     if (tmax<smax) smax=tmax;
-    if (smax<=smin)
-	{
-	    return snxt=kInfinity;
-	}
+  }
+
+  if (smax>0&&smin<smax)
+  {
+    if (smin>0)
+    {
+      snxt=smin;
+    }
     else
-	{
-//
-// X G4Parallel planes intersection
-//
-	    xt=p.x()-fTthetaCphi*p.z()-fTalpha*yt;
-	    vx=v.x()-fTthetaCphi*v.z()-fTalpha*vy;
-	    if (vx>0)
-		{
-		    max=fDx-xt;
-		    if (max>kCarTolerance*0.5)
-			{
-			    tmax=max/vx;
-			    tmin=(-fDx-xt)/vx;
-			}
-		    else
-			{
-			    return snxt=kInfinity;
-			}
-		}
-	    else if (vx<0)
-		{
-		    max=-fDx-xt;
-		    if (max<-kCarTolerance*0.5)
-			{
-			    tmax=max/vx;
-			    tmin=(fDx-xt)/vx;
-			}
-		    else
-			{
-			    return snxt=kInfinity;
-			}
-		}
-	    else
-		{
-		    if (fabs(xt)<=fDx)
-			{
-			    tmin=0;
-			    tmax=kInfinity;
-			}
-		    else
-			{
-			    return snxt=kInfinity;
-			}
-		}
-	    if (tmin>smin) smin=tmin;
-	    if (tmax<smax) smax=tmax;
-	}
-	 
-    if (smax>0&&smin<smax)
-	{
-	    if (smin>0)
-		{
-		    snxt=smin;
-		}
-	    else
-		{
-		    snxt=0;
-		}
-	}
-    else
-	{
-	    snxt=kInfinity;
-	}
-    return snxt;
+    {
+      snxt=0;
+    }
+  }
+  else
+  {
+    snxt=kInfinity;
+  }
+  return snxt;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -672,284 +705,290 @@ G4double G4Para::DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) con
 // Calculate exact shortest distance to any boundary from outside
 // - Returns 0 is point inside
 
-G4double G4Para::DistanceToIn(const G4ThreeVector& p) const
+G4double G4Para::DistanceToIn( const G4ThreeVector& p ) const
 {
-    G4double safe;
-    G4double distz1,distz2,disty1,disty2,distx1,distx2;
-    G4double trany,cosy,tranx,cosx;
+  G4double safe;
+  G4double distz1,distz2,disty1,disty2,distx1,distx2;
+  G4double trany,cosy,tranx,cosx;
 
-// Z planes
-    distz1=p.z()-fDz;
-    distz2=-fDz-p.z();
-    if (distz1>distz2)
-	{
-	    safe=distz1;
-	}
-    else
-	{
-	    safe=distz2;
-	}
+  // Z planes
+  //
+  distz1=p.z()-fDz;
+  distz2=-fDz-p.z();
+  if (distz1>distz2)
+  {
+    safe=distz1;
+  }
+  else
+  {
+    safe=distz2;
+  }
 
-    trany=p.y()-fTthetaSphi*p.z(); // Transformed y into `box' system
-				// Transformed x into `box' system
-    cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
-    disty1=(trany-fDy)*cosy;
-    disty2=(-fDy-trany)*cosy;
-    
-    if (disty1>safe) safe=disty1;
-    if (disty2>safe) safe=disty2;
+  trany=p.y()-fTthetaSphi*p.z(); // Transformed y into `box' system
 
-    tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
-    cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
-    distx1=(tranx-fDx)*cosx;
-    distx2=(-fDx-tranx)*cosx;
+  // Transformed x into `box' system
+  //
+  cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
+  disty1=(trany-fDy)*cosy;
+  disty2=(-fDy-trany)*cosy;
     
-    if (distx1>safe) safe=distx1;
-    if (distx2>safe) safe=distx2;
+  if (disty1>safe) safe=disty1;
+  if (disty2>safe) safe=disty2;
+
+  tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
+  cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
+  distx1=(tranx-fDx)*cosx;
+  distx2=(-fDx-tranx)*cosx;
     
-    if (safe<0) safe=0;
-    return safe;	
+  if (distx1>safe) safe=distx1;
+  if (distx2>safe) safe=distx2;
+    
+  if (safe<0) safe=0;
+  return safe;  
 }
 
 //////////////////////////////////////////////////////////////////////////
 //
-// Calcluate distance to surface of shape from inside
+// Calculate distance to surface of shape from inside
 // Calculate distance to x/y/z planes - smallest is exiting distance
 
-G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			       const G4bool calcNorm,
-			       G4bool *validNorm,G4ThreeVector *n) const
+G4double G4Para::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
+                               const G4bool calcNorm,
+                               G4bool *validNorm, G4ThreeVector *n) const
 {
-    ESide side = kUndef;
-    G4double snxt;		// snxt = return value
-    G4double max,tmax;
-    G4double yt,vy,xt,vx;
+  ESide side = kUndef;
+  G4double snxt;    // snxt = return value
+  G4double max,tmax;
+  G4double yt,vy,xt,vx;
 
-    G4double ycomp,calpha,salpha,tntheta,cosntheta;
-//
-// Z Intersections
-//
-    if (v.z()>0)
-	{
-	    max=fDz-p.z();
-	    if (max>kCarTolerance*0.5)
-		{
-		    snxt=max/v.z();
-		    side=kPZ;
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *validNorm=true;
-			    *n=G4ThreeVector(0,0,1);
-			}
-		    return snxt=0;
-		}
-	}
-    else if (v.z()<0)
-	{
-	    max=-fDz-p.z();
-	    if (max<-kCarTolerance*0.5)
-		{
-		    snxt=max/v.z();
-		    side=kMZ;
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *validNorm=true;
-			    *n=G4ThreeVector(0,0,-1);
-			}
-		    return snxt=0;
-		}
-	}
+  G4double ycomp,calpha,salpha,tntheta,cosntheta;
+
+  //
+  // Z Intersections
+  //
+
+  if (v.z()>0)
+  {
+    max=fDz-p.z();
+    if (max>kCarTolerance*0.5)
+    {
+      snxt=max/v.z();
+      side=kPZ;
+    }
     else
-	{
-	    snxt=kInfinity;
-	}
-
+    {
+      if (calcNorm)
+      {
+        *validNorm=true;
+        *n=G4ThreeVector(0,0,1);
+      }
+      return snxt=0;
+    }
+  }
+  else if (v.z()<0)
+  {
+    max=-fDz-p.z();
+    if (max<-kCarTolerance*0.5)
+    {
+      snxt=max/v.z();
+      side=kMZ;
+    }
+    else
+    {
+      if (calcNorm)
+      {
+        *validNorm=true;
+        *n=G4ThreeVector(0,0,-1);
+      }
+      return snxt=0;
+    }
+  }
+  else
+  {
+    snxt=kInfinity;
+  }
     
-//
-// Y plane intersection
-//
-    yt=p.y()-fTthetaSphi*p.z();
-    vy=v.y()-fTthetaSphi*v.z();
+  //
+  // Y plane intersection
+  //
 
-    if (vy>0)
-	{
-	    max=fDy-yt;
-	    if (max>kCarTolerance*0.5)
-		{
-		    tmax=max/vy;
-		    if (tmax<snxt)
-			{
-			    snxt=tmax;
-			    side=kPY;
-			}
-		}
-	    else
-		{
-		    if (calcNorm)
-			{      
-			    *validNorm=true; // Leaving via plus Y
-			    ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
-			    *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
-			}
-		    return snxt=0;
-		}
-	}
-    else if (vy<0)
-	{
-	    max=-fDy-yt;
-	    if (max<-kCarTolerance*0.5)
-		{
-		    tmax=max/vy;
-		    if (tmax<snxt)
-			{
-			    snxt=tmax;
-			    side=kMY;
-			}
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *validNorm=true; // Leaving via minus Y
-			    ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
-			    *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+  yt=p.y()-fTthetaSphi*p.z();
+  vy=v.y()-fTthetaSphi*v.z();
 
-			}
-		    return snxt=0;
-		}
-	}
-//
-// X plane intersection
-//
-    xt=p.x()-fTthetaCphi*p.z()-fTalpha*yt;
-    vx=v.x()-fTthetaCphi*v.z()-fTalpha*vy;
-    if (vx>0)
-	{
-	    max=fDx-xt;
-	    if (max>kCarTolerance*0.5)
-		{
-		    tmax=max/vx;
-		    if (tmax<snxt)
-			{
-			    snxt=tmax;
-			    side=kPX;
-			}
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *validNorm=true; // Leaving via plus X
-			    calpha=1/sqrt(1+fTalpha*fTalpha);
-			    if (fTalpha)
-				{
-				    salpha=-calpha/fTalpha;	// NOTE: actually use MINUS sin(alpha)
-				}
-			    else
-				{
-				    salpha=0;
-				}
-			    tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-			    cosntheta=1/sqrt(1+tntheta*tntheta);
-			    *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
-			}
-		    return snxt=0;
-		}
-	}
-    else if (vx<0)
-	{
-	    max=-fDx-xt;
-	    if (max<-kCarTolerance*0.5)
-		{
-		    tmax=max/vx;
-		    if (tmax<snxt)
-			{
-			    snxt=tmax;
-			    side=kMX;
-			}
-		}
-	    else
-		{
-		    if (calcNorm)
-			{
-			    *validNorm=true; // Leaving via minus X
-			    calpha=1/sqrt(1+fTalpha*fTalpha);
-			    if (fTalpha)
-				{
-				    salpha=-calpha/fTalpha;	// NOTE: actually use MINUS sin(alpha)
-				}
-			    else
-				{
-				    salpha=0;
-				}
-			    tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-			    cosntheta=-1/sqrt(1+tntheta*tntheta);
-			    *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);		       
-			    return snxt=0;
-			}
-		}
-	}
+  if (vy>0)
+  {
+    max=fDy-yt;
+    if (max>kCarTolerance*0.5)
+    {
+      tmax=max/vy;
+      if (tmax<snxt)
+      {
+        snxt=tmax;
+        side=kPY;
+      }
+    }
+    else
+    {
+      if (calcNorm)
+      {      
+        *validNorm=true; // Leaving via plus Y
+        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+      }
+      return snxt=0;
+    }
+  }
+  else if (vy<0)
+  {
+    max=-fDy-yt;
+    if (max<-kCarTolerance*0.5)
+    {
+      tmax=max/vy;
+      if (tmax<snxt)
+      {
+        snxt=tmax;
+        side=kMY;
+      }
+    }
+    else
+    {
+      if (calcNorm)
+      {
+        *validNorm=true; // Leaving via minus Y
+        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+      }
+      return snxt=0;
+    }
+  }
 
-    if (calcNorm)
-	{
-	    *validNorm=true;
-	    switch (side)
-		{
-		case kMZ:
-		    *n=G4ThreeVector(0,0,-1);
-		    break;
-		case kPZ:
-		    *n=G4ThreeVector(0,0,1);
-		    break;
-		case kMY:
-		    ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
-		    *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
-		    break;		    
-		case kPY:
-		    ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
-		    *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
-		    break;		    
-		case kMX:
-		    calpha=1/sqrt(1+fTalpha*fTalpha);
-		    if (fTalpha)
-			{
-			    salpha=-calpha/fTalpha;	// NOTE: actually use MINUS sin(alpha)
-			}
-		    else
-			{
-			    salpha=0;
-			}
-		    tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-		    cosntheta=-1/sqrt(1+tntheta*tntheta);
-		    *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
-		    break;
-		case kPX:
-		    calpha=1/sqrt(1+fTalpha*fTalpha);
-		    if (fTalpha)
-			{
-			    salpha=-calpha/fTalpha;	// NOTE: actually use MINUS sin(alpha)
-			}
-		    else
-			{
-			    salpha=0;
-			}
-		    tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
-		    cosntheta=1/sqrt(1+tntheta*tntheta);
-		    *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
-		    break;
-		default:
-		    G4Exception("Invalid enum in G4Para::DistanceToOut");
-		    break;
-		    
-		}
-	}
-    return snxt;
+  //
+  // X plane intersection
+  //
+
+  xt=p.x()-fTthetaCphi*p.z()-fTalpha*yt;
+  vx=v.x()-fTthetaCphi*v.z()-fTalpha*vy;
+  if (vx>0)
+  {
+    max=fDx-xt;
+    if (max>kCarTolerance*0.5)
+    {
+      tmax=max/vx;
+      if (tmax<snxt)
+      {
+        snxt=tmax;
+        side=kPX;
+      }
+    }
+    else
+    {
+      if (calcNorm)
+      {
+        *validNorm=true; // Leaving via plus X
+        calpha=1/sqrt(1+fTalpha*fTalpha);
+        if (fTalpha)
+        {
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+        }
+        else
+        {
+          salpha=0;
+        }
+        tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
+        cosntheta=1/sqrt(1+tntheta*tntheta);
+        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
+      }
+      return snxt=0;
+    }
+  }
+  else if (vx<0)
+  {
+    max=-fDx-xt;
+    if (max<-kCarTolerance*0.5)
+    {
+      tmax=max/vx;
+      if (tmax<snxt)
+      {
+        snxt=tmax;
+        side=kMX;
+      }
+    }
+    else
+    {
+      if (calcNorm)
+      {
+        *validNorm=true; // Leaving via minus X
+        calpha=1/sqrt(1+fTalpha*fTalpha);
+        if (fTalpha)
+        {
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+        }
+        else
+        {
+          salpha=0;
+        }
+        tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
+        cosntheta=-1/sqrt(1+tntheta*tntheta);
+        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);           
+        return snxt=0;
+      }
+    }
+  }
+
+  if (calcNorm)
+  {
+    *validNorm=true;
+    switch (side)
+    {
+      case kMZ:
+        *n=G4ThreeVector(0,0,-1);
+        break;
+      case kPZ:
+        *n=G4ThreeVector(0,0,1);
+        break;
+      case kMY:
+        ycomp=-1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+        break;        
+      case kPY:
+        ycomp=1/sqrt(1+fTthetaSphi*fTthetaSphi);
+        *n=G4ThreeVector(0,ycomp,-fTthetaSphi*ycomp);
+        break;        
+      case kMX:
+        calpha=1/sqrt(1+fTalpha*fTalpha);
+        if (fTalpha)
+        {
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+        }
+        else
+        {
+          salpha=0;
+        }
+        tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
+        cosntheta=-1/sqrt(1+tntheta*tntheta);
+        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
+        break;
+      case kPX:
+        calpha=1/sqrt(1+fTalpha*fTalpha);
+        if (fTalpha)
+        {
+          salpha=-calpha/fTalpha;  // NOTE: actually use MINUS sin(alpha)
+        }
+        else
+        {
+          salpha=0;
+        }
+        tntheta=fTthetaCphi*calpha+fTthetaSphi*salpha;
+        cosntheta=1/sqrt(1+tntheta*tntheta);
+        *n=G4ThreeVector(calpha*cosntheta,salpha*cosntheta,-tntheta*cosntheta);
+        break;
+      default:
+        DumpInfo();
+        G4Exception("G4Para::DistanceToOut() - Invalid enum");
+        break;
+    }
+  }
+  return snxt;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -957,64 +996,61 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
 // Calculate exact shortest distance to any boundary from inside
 // - Returns 0 is point outside
 
-G4double G4Para::DistanceToOut(const G4ThreeVector& p) const
+G4double G4Para::DistanceToOut( const G4ThreeVector& p ) const
 {
-    G4double safe;
-    G4double distz1,distz2,disty1,disty2,distx1,distx2;
-    G4double trany,cosy,tranx,cosx;
+  G4double safe;
+  G4double distz1,distz2,disty1,disty2,distx1,distx2;
+  G4double trany,cosy,tranx,cosx;
 
 #ifdef G4CSGDEBUG
   if( Inside(p) == kOutside )
   {
      G4cout.precision(16) ;
      G4cout << G4endl ;
-     G4cout << "Parallelpiped parameters:" << G4endl << G4endl ;
-     G4cout << "fDx = "     << fDx/mm << " mm" << G4endl ;
-     G4cout << "fDy = "     << fDy/mm << " mm" << G4endl ;
-     G4cout << "fDz = "     << fDz/mm << " mm" << G4endl ;
-     G4cout << "fTalpha =     " << fTalpha/degree << " degree" << G4endl;
-     G4cout << "fTthetaCphi = " << fTthetaCphi/degree << " degree" << G4endl;
-     G4cout << "fTthetaSphi = " << fTthetaSphi/degree << " degree" << G4endl << G4endl ;
+     DumpInfo();
      G4cout << "Position:"  << G4endl << G4endl ;
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
      G4cout << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
-     // G4Exception("Invalid call in G4Para::DistanceToOut(p), point p is outside") ;
+     G4cerr << "G4Para::DistanceToOut(p) - point p is outside ?!" << G4endl ;
   }
 #endif
 
-// Z planes
-    distz1=fDz-p.z();
-    distz2=fDz+p.z();
-    if (distz1<distz2)
-	{
-	    safe=distz1;
-	}
-    else
-	{
-	    safe=distz2;
-	}
+  // Z planes
+  //
+  distz1=fDz-p.z();
+  distz2=fDz+p.z();
+  if (distz1<distz2)
+  {
+    safe=distz1;
+  }
+  else
+  {
+    safe=distz2;
+  }
 
-    trany=p.y()-fTthetaSphi*p.z(); // Transformed y into `box' system
-				// Transformed x into `box' system
-    cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
-    disty1=(fDy-trany)*cosy;
-    disty2=(fDy+trany)*cosy;
-    
-    if (disty1<safe) safe=disty1;
-    if (disty2<safe) safe=disty2;
+  trany=p.y()-fTthetaSphi*p.z(); // Transformed y into `box' system
 
-    tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
-    cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
-    distx1=(fDx-tranx)*cosx;
-    distx2=(fDx+tranx)*cosx;
+  // Transformed x into `box' system
+  //
+  cosy=1.0/sqrt(1.0+fTthetaSphi*fTthetaSphi);
+  disty1=(fDy-trany)*cosy;
+  disty2=(fDy+trany)*cosy;
     
-    if (distx1<safe) safe=distx1;
-    if (distx2<safe) safe=distx2;
+  if (disty1<safe) safe=disty1;
+  if (disty2<safe) safe=disty2;
+
+  tranx=p.x()-fTthetaCphi*p.z()-fTalpha*trany;
+  cosx=1.0/sqrt(1.0+fTalpha*fTalpha+fTthetaCphi*fTthetaCphi);
+  distx1=(fDx-tranx)*cosx;
+  distx2=(fDx+tranx)*cosx;
     
-    if (safe<0) safe=0;
-    return safe;	
+  if (distx1<safe) safe=distx1;
+  if (distx2<safe) safe=distx2;
+    
+  if (safe<0) safe=0;
+  return safe;  
 }
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -1027,61 +1063,101 @@ G4double G4Para::DistanceToOut(const G4ThreeVector& p) const
 //  Caller has deletion resposibility
 
 G4ThreeVectorList*
-   G4Para::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+G4Para::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
 {
-    G4ThreeVectorList *vertices;
-    vertices=new G4ThreeVectorList();
-    vertices->reserve(8);
-    if (vertices)
-	{
-	    G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy*fTalpha-fDx,-fDz*fTthetaSphi-fDy,-fDz);
-	    G4ThreeVector vertex1(-fDz*fTthetaCphi-fDy*fTalpha+fDx,-fDz*fTthetaSphi-fDy,-fDz);
-	    G4ThreeVector vertex2(-fDz*fTthetaCphi+fDy*fTalpha-fDx,-fDz*fTthetaSphi+fDy,-fDz);
-	    G4ThreeVector vertex3(-fDz*fTthetaCphi+fDy*fTalpha+fDx,-fDz*fTthetaSphi+fDy,-fDz);
-	    G4ThreeVector vertex4(+fDz*fTthetaCphi-fDy*fTalpha-fDx,+fDz*fTthetaSphi-fDy,+fDz);
-	    G4ThreeVector vertex5(+fDz*fTthetaCphi-fDy*fTalpha+fDx,+fDz*fTthetaSphi-fDy,+fDz);
-	    G4ThreeVector vertex6(+fDz*fTthetaCphi+fDy*fTalpha-fDx,+fDz*fTthetaSphi+fDy,+fDz);
-	    G4ThreeVector vertex7(+fDz*fTthetaCphi+fDy*fTalpha+fDx,+fDz*fTthetaSphi+fDy,+fDz);
+  G4ThreeVectorList *vertices;
+  vertices=new G4ThreeVectorList();
+  vertices->reserve(8);
+  if (vertices)
+  {
+    G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                          -fDz*fTthetaSphi-fDy, -fDz);
+    G4ThreeVector vertex1(-fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                          -fDz*fTthetaSphi-fDy, -fDz);
+    G4ThreeVector vertex2(-fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                          -fDz*fTthetaSphi+fDy, -fDz);
+    G4ThreeVector vertex3(-fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                          -fDz*fTthetaSphi+fDy, -fDz);
+    G4ThreeVector vertex4(+fDz*fTthetaCphi-fDy*fTalpha-fDx,
+                          +fDz*fTthetaSphi-fDy, +fDz);
+    G4ThreeVector vertex5(+fDz*fTthetaCphi-fDy*fTalpha+fDx,
+                          +fDz*fTthetaSphi-fDy, +fDz);
+    G4ThreeVector vertex6(+fDz*fTthetaCphi+fDy*fTalpha-fDx,
+                          +fDz*fTthetaSphi+fDy, +fDz);
+    G4ThreeVector vertex7(+fDz*fTthetaCphi+fDy*fTalpha+fDx,
+                          +fDz*fTthetaSphi+fDy, +fDz);
 
-	    vertices->push_back(pTransform.TransformPoint(vertex0));
-	    vertices->push_back(pTransform.TransformPoint(vertex1));
-	    vertices->push_back(pTransform.TransformPoint(vertex2));
-	    vertices->push_back(pTransform.TransformPoint(vertex3));
-	    vertices->push_back(pTransform.TransformPoint(vertex4));
-	    vertices->push_back(pTransform.TransformPoint(vertex5));
-	    vertices->push_back(pTransform.TransformPoint(vertex6));
-	    vertices->push_back(pTransform.TransformPoint(vertex7));
-	}
-    else
-	{
-	    G4Exception("G4Para::CreateRotatedVertices - Out of memory !");
-	}
-    return vertices;
+    vertices->push_back(pTransform.TransformPoint(vertex0));
+    vertices->push_back(pTransform.TransformPoint(vertex1));
+    vertices->push_back(pTransform.TransformPoint(vertex2));
+    vertices->push_back(pTransform.TransformPoint(vertex3));
+    vertices->push_back(pTransform.TransformPoint(vertex4));
+    vertices->push_back(pTransform.TransformPoint(vertex5));
+    vertices->push_back(pTransform.TransformPoint(vertex6));
+    vertices->push_back(pTransform.TransformPoint(vertex7));
+  }
+  else
+  {
+    DumpInfo();
+    G4Exception("G4Para::CreateRotatedVertices() - Out of memory !");
+  }
+  return vertices;
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// GetEntityType
+
+G4GeometryType G4Para::GetEntityType() const
+{
+  return G4String("G4Para");
+}
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Stream object contents to an output stream
+
+G4std::ostream& G4Para::StreamInfo( G4std::ostream& os ) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: G4Para\n"
+     << " Parameters: \n"
+     << "    half length X: " << G4BestUnit(fDx, "Length") << "\n"
+     << "    half length Y: " << G4BestUnit(fDy, "Length") << "\n"
+     << "    half length Z: " << G4BestUnit(fDz, "Length") << "\n"
+     << "    tan(alpha)         : " << G4BestUnit(fTalpha, "Angle") << "\n"
+     << "    tan(theta)*cos(phi): " << G4BestUnit(fTthetaCphi, "Angle") << "\n"
+     << "    tan(theta)*sin(phi): " << G4BestUnit(fTthetaSphi, "Angle") << "\n"
+     << "-----------------------------------------------------------\n";
+
+  return os;
 }
 
 ////////////////////////////////////////////////////////////////////////////
 //
 // Methods for visualisation
 
-void G4Para::DescribeYourselfTo (G4VGraphicsScene& scene) const
+void G4Para::DescribeYourselfTo ( G4VGraphicsScene& scene ) const
 {
-   scene.AddThis (*this);
+  scene.AddThis (*this);
 }
 
 G4Polyhedron* G4Para::CreatePolyhedron () const
 {
-    G4double phi = atan2(fTthetaSphi, fTthetaCphi);
-    G4double alpha = atan(fTalpha);
-    G4double theta = atan(sqrt(fTthetaCphi*fTthetaCphi
-                               +fTthetaSphi*fTthetaSphi));
+  G4double phi = atan2(fTthetaSphi, fTthetaCphi);
+  G4double alpha = atan(fTalpha);
+  G4double theta = atan(sqrt(fTthetaCphi*fTthetaCphi
+                            +fTthetaSphi*fTthetaSphi));
     
-    return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
+  return new G4PolyhedronPara(fDx, fDy, fDz, alpha, theta, phi);
 }
 
 G4NURBS* G4Para::CreateNURBS () const
 {
-   // return new G4NURBSbox (fDx, fDy, fDz);
-   return 0 ;
+  // return new G4NURBSbox (fDx, fDy, fDz);
+  return 0 ;
 }
 
 //

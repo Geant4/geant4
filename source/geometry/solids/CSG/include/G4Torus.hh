@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.hh,v 1.13 2001-07-11 09:59:55 gunter Exp $
+// $Id: G4Torus.hh,v 1.14 2002-10-28 11:43:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,29 +65,29 @@
 //   
 //   Member Data:
 //
-//	fRmin	Inside radius
-//	fRmax	Outside radius
-//	fRtor	swept radius of torus
+//  fRmin  Inside radius
+//  fRmax  Outside radius
+//  fRtor  swept radius of torus
 //
-//	fSPhi	The starting phi angle in radians,
-//              adjusted such the fSPhi+fDPhi<=2PI,
-//              fSPhi>-2PI
+//  fSPhi  The starting phi angle in radians,
+//         adjusted such that fSPhi+fDPhi<=2PI, fSPhi>-2PI
 //
-//	fDPhi	Delta angle of the segment in radians
+//  fDPhi  Delta angle of the segment in radians
 //
-//   You could find very often in G4Torus:: functions the values like pt or
-//   it . These are the distances from p or i G4ThreeVector points in the
+//   You could find very often in G4Torus functions values like 'pt' or
+//   'it'. These are the distances from p or i G4ThreeVector points in the
 //   plane (Z axis points p or i) to fRtor point in XY plane. This value is
 //   similar to rho for G4Tubs and is used for definiton of the point
 //   relative to fRmin and fRmax, i.e. for solution of inside/outside
 //   problems
  
 // History:
-// 30.10.96 V.Grichine     First version of G4Torus
-// 21.04.98 J.Apostolakis  Added SetAllParameters function
-// 26.05.00 V.Grichine, new SolveBiQuadratic/Cubic developed by O.Cremonesi were
-//          added     
-// 31.08.00 E.Medernach    Added SolveNumeric Functions 
+// 30.10.96 V.Grichine: first version of G4Torus
+// 21.04.98 J.Apostolakis: added SetAllParameters() function
+// 26.05.00 V.Grichine: added new SolveBiQuadratic/Cubic() developed
+//                      by O.Cremonesi 
+// 31.08.00 E.Medernach: added SolveNumeric functions, migrated to
+//                       numeric solutions 
 // --------------------------------------------------------------------
 
 #ifndef G4Torus_HH
@@ -98,284 +98,154 @@
 class G4Torus : public G4CSGSolid
 {
 
-public:
+  public:  // with description
 
-  G4Torus(const G4String &pName,
-		  G4double pRmin,
-		  G4double pRmax,
-		  G4double pRtor,
-		  G4double pSPhi,
-		  G4double pDPhi);
+    G4Torus(const G4String &pName,
+                  G4double pRmin,
+                  G4double pRmax,
+                  G4double pRtor,
+                  G4double pSPhi,
+                  G4double pDPhi);
 
-  virtual ~G4Torus();
+    virtual ~G4Torus();
     
-  void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
-			G4double pSPhi, G4double pDPhi);
+    // Accessors
+
+    inline G4double GetRmin() const;
+    inline G4double GetRmax() const;
+    inline G4double GetRtor() const;
+    inline G4double GetSPhi() const;
+    inline G4double GetDPhi() const;
+
+    // Methods of solid
+
+    EInside Inside(const G4ThreeVector& p) const;
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
+    void ComputeDimensions(      G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
+    G4double DistanceToIn(const G4ThreeVector& p) const;
+    G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
+                           const G4bool calcNorm=G4bool(false),
+                                 G4bool *validNorm=0,G4ThreeVector *n=0) const;
+    G4double DistanceToOut(const G4ThreeVector& p) const;
+
+    G4GeometryType GetEntityType() const;
+
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
+
+    // Visualisation functions
+
+    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
+    G4Polyhedron*       CreatePolyhedron   () const;
+    G4NURBS*            CreateNURBS        () const;
+
+  public:  // without description
+
+    void SetAllParameters(G4double pRmin, G4double pRmax, G4double pRtor,
+                          G4double pSPhi, G4double pDPhi);
  
-  void ComputeDimensions(G4VPVParameterisation* p,
-			 const G4int n,
-			 const G4VPhysicalVolume* pRep);
-			   
-  G4int TorusRoots(G4double Ri,
-		   const G4ThreeVector& p,
-		   const G4ThreeVector& v) const ;
+    G4int TorusRoots(      G4double Ri,
+                     const G4ThreeVector& p,
+                     const G4ThreeVector& v) const ;
 
-  G4bool CalculateExtent(const EAxis pAxis,
-			 const G4VoxelLimits& pVoxelLimit,
-			 const G4AffineTransform& pTransform,
-			 G4double& pmin, G4double& pmax) const;
+  protected:
 
-  G4double    GetRmin() const { return fRmin ; }
-  G4double    GetRmax() const { return fRmax ; } 
-  G4double    GetRtor() const { return fRtor ; }
-  G4double    GetSPhi() const { return fSPhi ; }
-  G4double    GetDPhi() const { return fDPhi ; }
+    G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
+    G4int SolveCubic(G4double c[], G4double s[]  ) const ;
 
-  EInside Inside(const G4ThreeVector& p) const;
+    G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
+    G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
 
-  G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4int SolveQuadratic(G4double c[], G4double s[]  ) const ;
 
-  G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
-  G4double DistanceToIn(const G4ThreeVector& p) const;
-  G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			 const G4bool calcNorm=G4bool(false),
-			 G4bool *validNorm=0,G4ThreeVector *n=0) const;
-  G4double DistanceToOut(const G4ThreeVector& p) const;
+    G4double SolveNumeric(const G4ThreeVector& p,
+                          const G4ThreeVector& v,
+                                G4bool IsDistanceToIn) const;
 
-  G4GeometryType  GetEntityType() const { return G4String("G4Torus"); }
-    // Naming method (pseudo-RTTI : run-time type identification)
+    G4ThreeVectorList*
+    CreateRotatedVertices(const G4AffineTransform& pTransform,
+                                G4int& noPolygonVertices) const;
 
-  // Visualisation functions
+  protected:
 
-  void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
-  G4Polyhedron*       CreatePolyhedron   () const;
-  G4NURBS*            CreateNURBS        () const;
+    G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
 
-protected:
+    // Used by distanceToOut
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi};
 
-  G4int SolveBiQuadratic(G4double c[], G4double s[]  ) const ;
-  G4int SolveCubic(G4double c[], G4double s[]  ) const ;
+    // used by normal
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
 
-  G4int SolveBiQuadraticNew(G4double c[], G4double s[]  ) const ;
-  G4int SolveCubicNew(G4double c[], G4double s[], G4double& cd  ) const ;
+  private:
 
-  G4int SolveQuadratic(G4double c[], G4double s[]  ) const ;
+    inline G4double TorusEquation (G4double x, G4double y, G4double z,
+                                   G4double R0, G4double R1) const;
+    inline G4double TorusDerivativeX (G4double x, G4double y, G4double z,
+                                      G4double R0, G4double R1) const;
+    inline G4double TorusDerivativeY (G4double x, G4double y, G4double z,
+                                      G4double R0, G4double R1) const;
+    inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
+                                      G4double R0, G4double R1) const;
+    inline G4double TorusGradient(G4double dx, G4double dy, G4double dz,
+                                  G4double x, G4double y, G4double z,
+                                  G4double Rmax, G4double Rmin) const;
 
-  G4double SolveNumeric(const G4ThreeVector& p,
-                        const G4ThreeVector& v,
-			G4bool IsDistanceToIn) const;
-
-  G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pTransform,
-			                   G4int& noPolygonVertices) const;
-
-  G4double fRmin,fRmax,fRtor,fSPhi,fDPhi;
-
-  // Used by distanceToOut
-  enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi};
-  // used by normal
-  enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi};
-
-private:
-
-  G4double TorusEquation (G4double x, G4double y, G4double z,
-                          G4double R0, G4double R1) const
-  {
-	/* R0 : Radius of all little circles
-	   R1 : Radius of little circles
-	*/
-	/*
-	  An interesting property is that the sign
-	  tell if the point is inside or outside
-	  or if > EPSILON on the surface
-	*/
-	G4double temp;
-
-	temp = ((x*x + y*y + z*z) + R0*R0 - R1*R1) ;
-	temp = temp*temp ;
-	temp = temp - 4*R0*R0*(x*x + y*y) ;
-
-	/*
-	  > 0 Outside
-	  < 0 Inside
-	*/
-	return temp ;
-  }
+    void BVMIntersection (G4double x, G4double y, G4double z,
+                          G4double dx, G4double dy, G4double dz,
+                          G4double Rmax, G4double Rmin,
+                          G4double *NewL, G4int *valid) const;
   
-  G4double TorusDerivativeX (G4double x, G4double y, G4double z,
-                             G4double R0, G4double R1) const
-  {
-	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
-  }
-
-  G4double TorusDerivativeY (G4double x, G4double y, G4double z,
-                             G4double R0, G4double R1) const
-  {
-	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
-  }
-
-  G4double TorusDerivativeZ (G4double x, G4double y, G4double z,
-                             G4double R0, G4double R1) const
-  {
-	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
-  }
-
-  G4double TorusGradient(G4double dx, G4double dy, G4double dz,
-			 G4double x, G4double y, G4double z,
-			 G4double Rmax, G4double Rmin) const
-  {
-    /* This tell the normal at a surface point */
-    G4double result;
-    result = 0;
-    result += dx*TorusDerivativeX(x,y,z,Rmax,Rmin); 
-    result += dy*TorusDerivativeY(x,y,z,Rmax,Rmin); 
-    result += dz*TorusDerivativeZ(x,y,z,Rmax,Rmin); 
-
-    return result;
-  }
-
-  void BVMIntersection (G4double x, G4double y, G4double z,
-			G4double dx, G4double dy, G4double dz,
-			G4double Rmax, G4double Rmin,
-			G4double *NewL, G4int *valid) const;
+    void SortIntervals (G4double *SortL, G4double *NewL,
+                        G4int *valid, G4int *NbIntersection) const;
   
-  void SortIntervals (G4double *SortL, G4double *NewL,
-                      G4int *valid, G4int *NbIntersection) const;
-  
-  G4double DistanceToTorus (G4double x, G4double y, G4double z,
-                            G4double dx, G4double dy, G4double dz,
-                            G4double R0,G4double R1) const;
+    G4double DistanceToTorus (G4double x, G4double y, G4double z,
+                              G4double dx, G4double dy, G4double dz,
+                              G4double R0,G4double R1) const;
 };
 
 
-class TorusEquationClass
+class G4TorusEquation
 {
-public:
-  TorusEquationClass()
-  {
-    ;    
-  }
+  public:
 
-  TorusEquationClass(G4double Rmax, G4double Rmin)		
-  {
-    R0 = Rmax;
-    R1 = Rmin;
-  }
+    G4TorusEquation();
+    G4TorusEquation(G4double Rmax, G4double Rmin);
   
-  ~TorusEquationClass() {;}
+    ~G4TorusEquation();
 
-  void setRadius (G4double Rmax, G4double Rmin)		
-  {
-    R0 = Rmax;
-    R1 = Rmin;
-  }
-  
-  
-  void setPosition (G4double x,G4double y,G4double z)
-  {
-    Px = x;
-    Py = y;
-    Pz = z;
-  }
+    inline void setRadius (G4double Rmax, G4double Rmin);
+    inline void setPosition (G4double x,G4double y,G4double z);
+    inline void setPosition (const G4ThreeVector& p);
+    inline void setDirection (G4double dirx,G4double diry,G4double dirz);
+    inline void setDirection (const G4ThreeVector& v);
 
-  void setPosition (const G4ThreeVector& p)
-  {
-    Px = p.x();
-    Py = p.y();
-    Pz = p.z();
-  }
+  public:
 
-  
-  void setDirection (G4double dirx,G4double diry,G4double dirz)
-  {
-    dx = dirx;
-    dy = diry;
-    dz = dirz;    
-  }
+    inline G4double Function (G4double value);
+    inline G4double Derivative(G4double value);
 
-  void setDirection (const G4ThreeVector& v)
-  {
-    dx = v.x();
-    dy = v.y();
-    dz = v.z();    
-  }
+  private:
 
-  
+    inline G4double TorusEquation    (G4double x, G4double y, G4double z);
+    inline G4double TorusDerivativeX (G4double x, G4double y, G4double z);
+    inline G4double TorusDerivativeY (G4double x, G4double y, G4double z);
+    inline G4double TorusDerivativeZ (G4double x, G4double y, G4double z);
 
-private:
-  G4double R0;
-  G4double R1;
+  private:
 
-  G4double Px,Py,Pz;
-  G4double dx,dy,dz;
-  
-  
-  G4double TorusEquation (G4double x, G4double y, G4double z) //const
-  {
-	/*
-	  An interesting property is that the sign
-	  tell if the point is inside or outside
-	  or if > EPSILON on the surface
-	*/
-	G4double temp;
+    G4double R0;
+    G4double R1;
 
-	temp = ((x*x + y*y + z*z) + R0*R0 - R1*R1) ;
-	temp = temp*temp ;
-	temp = temp - 4*R0*R0*(x*x + y*y) ;
+    G4double Px,Py,Pz;
+    G4double dx,dy,dz;  
+};
 
-	/*
-	  > 0 Outside
-	  < 0 Inside
-	*/
-	return temp ;
-  }
-  
-  G4double TorusDerivativeX (G4double x, G4double y, G4double z) // const
-  {
-	return 4*x*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*x ;
-  }
-
-  G4double TorusDerivativeY (G4double x, G4double y, G4double z) // const
-  {
-	return 4*y*(x*x + y*y + z*z +  R0*R0 - R1*R1) - 8*R0*R0*y ;
-  }
-
-  G4double TorusDerivativeZ (G4double x, G4double y, G4double z) // const
-  {
-	return 4*z*(x*x + y*y + z*z +  R0*R0 - R1*R1) ;
-  }
-
-public:  
-  G4double Function (G4double value)
-  {
-    G4double Lx,Ly,Lz;
-    G4double result;  
-       
-    Lx = Px + value*dx;
-    Ly = Py + value*dy;
-    Lz = Pz + value*dz;
-       
-    result = TorusEquation(Lx,Ly,Lz);
-         
-    return result ;  
-  }
-
-  G4double Derivative(G4double value)
-  {
-    G4double Lx,Ly,Lz;
-    G4double result;
-
-     Lx = Px + value*dx;
-     Ly = Py + value*dy;
-     Lz = Pz + value*dz;
-      
-     result = dx*TorusDerivativeX(Lx,Ly,Lz);
-     result += dy*TorusDerivativeY(Lx,Ly,Lz);
-     result += dz*TorusDerivativeZ(Lx,Ly,Lz);
-   
-     return result;
-  }
-} ;
-
-
+#include "G4Torus.icc"
 
 #endif

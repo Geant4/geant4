@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidExtentList.hh,v 1.4 2001-07-11 10:00:15 gunter Exp $
+// $Id: G4SolidExtentList.hh,v 1.5 2002-10-28 11:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 //   Defines a list of (voxel) extents along one axis.
 //
 //   This utility class is designed for one specific purpose:
-//   to calculate the extent of a CSG solid for a voxel
+//   to calculate the extent of a CSG-like solid for a voxel
 //   (G4VSolid::CalculateExtent). 
 
 // Author: 
@@ -53,28 +53,28 @@
 class G4SolidExtentList
 {
   public:
-	
-	G4SolidExtentList();
-	G4SolidExtentList( const EAxis targetAxis, const G4VoxelLimits &voxelLimits );
-	~G4SolidExtentList();
+  
+  G4SolidExtentList();
+  G4SolidExtentList( const EAxis targetAxis,
+                     const G4VoxelLimits &voxelLimits );
+  ~G4SolidExtentList();
 
 
-	void AddSurface( const G4ClippablePolygon &surface );
+  void AddSurface( const G4ClippablePolygon &surface );
 
-	G4bool GetExtent( G4double &min, G4double &max ) const;
+  G4bool GetExtent( G4double &min, G4double &max ) const;
 
-	protected:
-	
-	EAxis	 axis;		// Target axis
-	G4bool   limited;	// True if limited
-	G4double minLimit;	// ... min limit
-	G4double maxLimit;	// ... max limit
+  protected:
+  
+  EAxis    axis;     // Target axis
+  G4bool   limited;  // True if limited
+  G4double minLimit; // ... min limit
+  G4double maxLimit; // ... max limit
 
-	G4ClippablePolygon minSurface,  // Minimum surface within limits
-			   maxSurface,  // Maximum
-			   minAbove,    // Minimum surface totally above max limit
-			   maxBelow;    // Maximum surface totally below min limit
+  G4ClippablePolygon minSurface,  // Minimum surface within limits
+                     maxSurface,  // Maximum
+                     minAbove,    // Minimum surface totally above max limit
+                     maxBelow;    // Maximum surface totally below min limit
 };
-
 
 #endif

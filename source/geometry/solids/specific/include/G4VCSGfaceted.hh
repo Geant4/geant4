@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.6 2001-07-11 10:00:15 gunter Exp $
+// $Id: G4VCSGfaceted.hh,v 1.7 2002-10-28 11:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,7 @@
 //
 // Class description:
 //
-//   Virtual class defining CSG type shape that is built entire
+//   Virtual class defining CSG-like type shape that is built entire
 //   of G4CSGface faces.
 
 // Author:
@@ -50,46 +50,53 @@ class G4VisExtent;
 
 class G4VCSGfaceted : public G4VSolid 
 {
-  public:
+  public:  // with description
 
-	G4VCSGfaceted( G4String name) : G4VSolid(name) {;}
-	virtual ~G4VCSGfaceted();
-	
-	G4VCSGfaceted( const G4VCSGfaceted &source );
-	const G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
-	
-	virtual G4bool CalculateExtent(	const EAxis pAxis,
-					const G4VoxelLimits& pVoxelLimit,
-					const G4AffineTransform& pTransform,
-					G4double& pmin, G4double& pmax) const;
-	
-	virtual EInside Inside( const G4ThreeVector& p) const;
+  G4VCSGfaceted( G4String name );
+  virtual ~G4VCSGfaceted();
+  
+  G4VCSGfaceted( const G4VCSGfaceted &source );
+  const G4VCSGfaceted &operator=( const G4VCSGfaceted &source );
+  
+  virtual G4bool CalculateExtent( const EAxis pAxis,
+                                  const G4VoxelLimits& pVoxelLimit,
+                                  const G4AffineTransform& pTransform,
+                                        G4double& pmin, G4double& pmax ) const;
+  
+  virtual EInside Inside( const G4ThreeVector& p ) const;
 
-	virtual G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+  virtual G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
-	virtual G4double DistanceToIn( const G4ThreeVector& p,const G4ThreeVector& v ) const;
-	virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
-	virtual G4double DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
-					const G4bool calcNorm=false,
-					G4bool *validNorm=0,G4ThreeVector *n=0 ) const;
-	virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
+  virtual G4double DistanceToIn( const G4ThreeVector& p,
+                                 const G4ThreeVector& v ) const;
+  virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
+  virtual G4double DistanceToOut( const G4ThreeVector& p,
+                                  const G4ThreeVector& v,
+                                  const G4bool calcNorm=false,
+                                        G4bool *validNorm=0,
+                                        G4ThreeVector *n=0 ) const;
+  virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
-	G4GeometryType  GetEntityType() const { return G4String("G4CSGfaceted"); }
+  virtual G4GeometryType GetEntityType() const;
 
-        virtual G4Polyhedron* CreatePolyhedron() const = 0;
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
-	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+  virtual G4Polyhedron* CreatePolyhedron() const = 0;
 
-	virtual G4VisExtent GetExtent() const;
+  virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
 
-	protected:
-	G4int	  numFace;
-	G4VCSGface **faces;
+  virtual G4VisExtent GetExtent() const;
 
-	virtual G4double DistanceTo( const G4ThreeVector &p, const G4bool outgoing ) const;
+  protected:  // without description
 
-	void CopyStuff( const G4VCSGfaceted &source );
-	void DeleteStuff();
+  G4int    numFace;
+  G4VCSGface **faces;
+
+  virtual G4double DistanceTo( const G4ThreeVector &p,
+                               const G4bool outgoing ) const;
+
+  void CopyStuff( const G4VCSGfaceted &source );
+  void DeleteStuff();
 };
 
 #endif

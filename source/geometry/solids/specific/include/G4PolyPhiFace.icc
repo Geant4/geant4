@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyPhiFace.icc,v 1.3 2001-07-11 10:00:14 gunter Exp $
+// $Id: G4PolyPhiFace.icc,v 1.4 2002-10-28 11:47:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 inline
 G4VCSGface* G4PolyPhiFace::Clone()
 {
-   return new G4PolyPhiFace(*this);
+  return new G4PolyPhiFace(*this);
 }
 
 // ExactZOrder
@@ -54,19 +54,20 @@ G4VCSGface* G4PolyPhiFace::Clone()
 inline
 G4double G4PolyPhiFace::ExactZOrder( G4double z, 
                                      G4double qx, G4double qy, G4double qz, 
-                                     const G4ThreeVector &v, 
+                               const G4ThreeVector &v, 
                                      G4double normSign,
-                                     const G4PolyPhiFaceVertex *vert ) const
+                               const G4PolyPhiFaceVertex *vert ) const
 {
-	G4double answer = vert->z - z;
-	if (fabs(answer) < kCarTolerance) {
-		G4ThreeVector qa( qx - vert->x + radial.x(),
-				  qy - vert->y + radial.y(), qz - vert->z ),
-			      qb( qx - vert->x, qy - vert->y, qz - vert->z );
-		G4ThreeVector qacb = qa.cross(qb); 
+  G4double answer = vert->z - z;
+  if (fabs(answer) < kCarTolerance)
+  {
+    G4ThreeVector qa( qx - vert->x + radial.x(),
+                      qy - vert->y + radial.y(), qz - vert->z ),
+                      qb( qx - vert->x, qy - vert->y, qz - vert->z );
+    G4ThreeVector qacb = qa.cross(qb); 
 
-		answer = normSign*qacb.dot(v)*(normal.y()*radial.x()-normal.x()*radial.y());
-	}
-	
-	return answer;
+    answer = normSign*qacb.dot(v)*(normal.y()*radial.x()-normal.x()*radial.y());
+  }
+  
+  return answer;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EllipticalTube.hh,v 1.9 2001-07-11 10:00:14 gunter Exp $
+// $Id: G4EllipticalTube.hh,v 1.10 2002-10-28 11:47:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -52,70 +52,71 @@
 
 class G4EllipticalTube : public G4VSolid
 {
-  public:
+  public:  // with description
 
-	G4EllipticalTube( const G4String &name, 
-			  G4double theDx, G4double theDy, G4double theDz );
-	virtual ~G4EllipticalTube();
-			
-	//
-	// Standard CSG methods
-	//
-	virtual G4bool CalculateExtent(	const EAxis pAxis,
-					const G4VoxelLimits& pVoxelLimit,
-					const G4AffineTransform& pTransform,
-					G4double& pmin, G4double& pmax) const;
-	
-	virtual EInside Inside( const G4ThreeVector& p) const;
+  G4EllipticalTube( const G4String &name, 
+                          G4double theDx,
+                          G4double theDy,
+                          G4double theDz );
 
-	virtual G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+  virtual ~G4EllipticalTube();
+      
+  // Standard solid methods
 
-	virtual G4double DistanceToIn( const G4ThreeVector& p,const G4ThreeVector& v ) const;
-	virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
-	virtual G4double DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
-					const G4bool calcNorm=false,
-					G4bool *validNorm=0,G4ThreeVector *n=0 ) const;
-	virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
+  virtual G4bool CalculateExtent( const EAxis pAxis,
+                                  const G4VoxelLimits& pVoxelLimit,
+                                  const G4AffineTransform& pTransform,
+                                        G4double& pmin, G4double& pmax ) const;
+  
+  virtual EInside Inside( const G4ThreeVector& p ) const;
 
-	G4GeometryType GetEntityType() const { return G4String("G4EllipticalTube"); }
+  virtual G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
 
-	//
-	// Visualisation methods
-	//
-        virtual G4Polyhedron* CreatePolyhedron() const;
-	virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
-	virtual G4VisExtent GetExtent() const;
+  virtual G4double DistanceToIn( const G4ThreeVector& p,
+                                 const G4ThreeVector& v ) const;
+  virtual G4double DistanceToIn( const G4ThreeVector& p ) const;
+  virtual G4double DistanceToOut( const G4ThreeVector& p,
+                                  const G4ThreeVector& v,
+                                  const G4bool calcNorm=false,
+                                        G4bool *validNorm=0,
+                                        G4ThreeVector *n=0 ) const;
+  virtual G4double DistanceToOut( const G4ThreeVector& p ) const;
 
+  G4GeometryType GetEntityType() const;
 
-	//
-	// Parameter access
-	//
-	G4double GetDx() const { return dx; }
-	G4double GetDy() const { return dy; }
-	G4double GetDz() const { return dz; }
-	
-	void SetDx( const G4double newDx ) { dx = newDx; }
-	void SetDy( const G4double newDy ) { dy = newDy; }
-	void SetDz( const G4double newDz ) { dz = newDz; }
-	
-  protected:
+  G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
-	G4double dx, dy, dz;
-	
-	//
-	// Utility
-	//
-	inline G4double CheckXY( const G4double x, const G4double y, const G4double toler ) const {
-		G4double rx = x/(dx+toler), ry = y/(dy+toler);
-		return rx*rx + ry*ry;
-	}
-	inline G4double CheckXY( const G4double x, const G4double y ) const {
-		G4double rx = x/dx, ry = y/dy;
-		return rx*rx + ry*ry;
-	}
+  // Visualisation methods
 
-	G4int IntersectXY( const G4ThreeVector &p,
-			   const G4ThreeVector &v, G4double s[2] ) const;
+  virtual G4Polyhedron* CreatePolyhedron() const;
+  virtual void DescribeYourselfTo( G4VGraphicsScene& scene ) const;
+  virtual G4VisExtent GetExtent() const;
+
+  // Accessors
+
+  inline G4double GetDx() const;
+  inline G4double GetDy() const;
+  inline G4double GetDz() const;
+  
+  inline void SetDx( const G4double newDx );
+  inline void SetDy( const G4double newDy );
+  inline void SetDz( const G4double newDz );
+  
+  protected:  // without description
+
+  G4double dx, dy, dz;
+  
+  // Utility
+
+  inline G4double CheckXY( const G4double x,
+                           const G4double y,
+                           const G4double toler ) const;
+  inline G4double CheckXY( const G4double x, const G4double y ) const;
+
+  G4int IntersectXY( const G4ThreeVector &p,
+                     const G4ThreeVector &v, G4double s[2] ) const;
 };
+
+#include "G4EllipticalTube.icc"
 
 #endif

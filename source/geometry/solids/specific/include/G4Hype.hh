@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.5 2001-07-11 10:00:14 gunter Exp $
+// $Id: G4Hype.hh,v 1.6 2002-10-28 11:47:50 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -93,25 +93,25 @@ class G4ClippablePolygon;
 
 class G4Hype : public G4VSolid
 {
- public:
+ public:  // with description
 
   G4Hype(const G4String &pName,
-	       G4double newInnerRadius,
-	       G4double newOuterRadius,
-	       G4double newInnerStereo,
-	       G4double newOuterStereo,
-	       G4double newHalfLenZ);
+         G4double newInnerRadius,
+         G4double newOuterRadius,
+         G4double newInnerStereo,
+         G4double newOuterStereo,
+         G4double newHalfLenZ);
 
   virtual ~G4Hype();
     
   void ComputeDimensions(G4VPVParameterisation* p,
-			 const G4int n,
-			 const G4VPhysicalVolume* pRep);
+                         const G4int n,
+                         const G4VPhysicalVolume* pRep);
 
   G4bool CalculateExtent(const EAxis pAxis,
-			 const G4VoxelLimits& pVoxelLimit,
-			 const G4AffineTransform& pTransform,
-			 G4double& pmin, G4double& pmax) const;
+                         const G4VoxelLimits& pVoxelLimit,
+                         const G4AffineTransform& pTransform,
+                         G4double& pmin, G4double& pmax) const;
 
   inline G4double GetInnerRadius () const;
   inline G4double GetOuterRadius () const;
@@ -129,29 +129,31 @@ class G4Hype : public G4VSolid
 
   G4ThreeVector SurfaceNormal(const G4ThreeVector& p) const;
 
-  G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
+  G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
   G4double DistanceToIn(const G4ThreeVector& p) const;
   G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
-			 const G4bool calcNorm=G4bool(false),
-			 G4bool *validNorm=0, G4ThreeVector *n=0) const;
+                         const G4bool calcNorm=G4bool(false),
+                         G4bool *validNorm=0, G4ThreeVector *n=0) const;
   G4double DistanceToOut(const G4ThreeVector& p) const;
 
-  inline G4GeometryType  GetEntityType() const;
+  G4GeometryType  GetEntityType() const;
+
+  G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
   void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
   G4VisExtent   GetExtent          () const;
   G4Polyhedron* CreatePolyhedron   () const;
   G4NURBS*      CreateNURBS        () const;
 
- protected:
+ protected:  // without description
   
   inline G4bool InnerSurfaceExists() const;
     // whether we have an inner surface or not
 
   static G4double ApproxDistOutside( G4double pr, G4double pz,
-  			  	     G4double r0, G4double tanPhi );
+                                     G4double r0, G4double tanPhi );
   static G4double ApproxDistInside( G4double pr, G4double pz,
-  			  	    G4double r0, G4double tan2Phi );
+                                    G4double r0, G4double tan2Phi );
     // approximate isotropic distance to hyperbolic surface 
 
   inline G4double HypeInnerRadius2(G4double zVal) const;
@@ -163,12 +165,12 @@ class G4Hype : public G4VSolid
     // intersection with hyperbolic surface
 
   static void AddPolyToExtent( const G4ThreeVector &v0,
-  			       const G4ThreeVector &v1,
-			       const G4ThreeVector &w1,
-			       const G4ThreeVector &w0,
-			       const G4VoxelLimits &voxelLimit,
-			       const EAxis axis,
-			       G4SolidExtentList &extentList );
+                               const G4ThreeVector &v1,
+                               const G4ThreeVector &w1,
+                               const G4ThreeVector &w0,
+                               const G4VoxelLimits &voxelLimit,
+                               const EAxis axis,
+                               G4SolidExtentList &extentList );
 
  protected:
 

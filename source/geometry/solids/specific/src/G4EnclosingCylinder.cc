@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.3 2001-07-11 10:00:16 gunter Exp $
+// $Id: G4EnclosingCylinder.cc,v 1.4 2002-10-28 11:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,51 +42,53 @@
 // Constructor
 //
 G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
-					        G4bool thePhiIsOpen, 
-					        G4double theStartPhi,
-						G4double theTotalPhi )
+                                                G4bool thePhiIsOpen, 
+                                                G4double theStartPhi,
+                                                G4double theTotalPhi )
 {
-	//
-	// Obtain largest r and smallest and largest z
-	//
-	radius = rz->Amax();
-	zHi = rz->Bmax();
-	zLo = rz->Bmin();
-	
-	//
-	// Save phi info
-	//
-	phiIsOpen = thePhiIsOpen;
-	if ( phiIsOpen )
-        {
-		startPhi = theStartPhi;
-		totalPhi = theTotalPhi;
-		
-		rx1 = cos(startPhi);
-		ry1 = sin(startPhi);
-		dx1 = +ry1*10*kCarTolerance;
-		dy1 = -rx1*10*kCarTolerance;
-		
-		rx2 = cos(startPhi+totalPhi);
-		ry2 = sin(startPhi+totalPhi);
-		dx2 = -ry2*10*kCarTolerance;
-		dy2 = +rx2*10*kCarTolerance;
-		
-		concave = totalPhi > M_PI;
-	}
-	
-	//
-	// Add safety
-	//
-	radius += 10*kCarTolerance;
-	zLo    -= 10*kCarTolerance;
-	zHi    += 10*kCarTolerance;
+  //
+  // Obtain largest r and smallest and largest z
+  //
+  radius = rz->Amax();
+  zHi = rz->Bmax();
+  zLo = rz->Bmin();
+  
+  //
+  // Save phi info
+  //
+  phiIsOpen = thePhiIsOpen;
+  if ( phiIsOpen )
+  {
+    startPhi = theStartPhi;
+    totalPhi = theTotalPhi;
+    
+    rx1 = cos(startPhi);
+    ry1 = sin(startPhi);
+    dx1 = +ry1*10*kCarTolerance;
+    dy1 = -rx1*10*kCarTolerance;
+    
+    rx2 = cos(startPhi+totalPhi);
+    ry2 = sin(startPhi+totalPhi);
+    dx2 = -ry2*10*kCarTolerance;
+    dy2 = +rx2*10*kCarTolerance;
+    
+    concave = totalPhi > M_PI;
+  }
+  
+  //
+  // Add safety
+  //
+  radius += 10*kCarTolerance;
+  zLo    -= 10*kCarTolerance;
+  zHi    += 10*kCarTolerance;
 }
 
 //
 // Destructor
 //
-G4EnclosingCylinder::~G4EnclosingCylinder() {;}
+G4EnclosingCylinder::~G4EnclosingCylinder()
+{
+}
 
 
 //
@@ -98,25 +100,28 @@ G4EnclosingCylinder::~G4EnclosingCylinder() {;}
 //
 G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector &p ) const
 {
-	if (p.perp() > radius) return true;
-	if (p.z() < zLo) return true;
-	if (p.z() > zHi) return true;
+  if (p.perp() > radius) return true;
+  if (p.z() < zLo) return true;
+  if (p.z() > zHi) return true;
 
-	if (phiIsOpen) {
-		if (concave) {
-			if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) return false;
-			if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) return false;
-		}
-		else {
-			if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return true;
-			if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return true;
-		}
-	}
-	
-	return false;
+  if (phiIsOpen)
+  {
+    if (concave)
+    {
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) < 0) return false;
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) > 0) return false;
+    }
+    else
+    {
+      if ( ((p.x()-dx1)*ry1 - (p.y()-dy1)*rx1) > 0) return true;
+      if ( ((p.x()-dx2)*ry2 - (p.y()-dy2)*rx2) < 0) return true;
+    }
+  }
+  
+  return false;
 }
-		
-		
+    
+    
 //
 // Misses
 //
@@ -124,17 +129,19 @@ G4bool G4EnclosingCylinder::MustBeOutside( const G4ThreeVector &p ) const
 //
 // If one is not sure, return false
 //
-G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const
+G4bool G4EnclosingCylinder::ShouldMiss( const G4ThreeVector &p,
+                                        const G4ThreeVector &v ) const
 {
-	if (!MustBeOutside(p)) return false;
-	
-	G4double cross = p.x()*v.y() - p.y()*v.x();
-	if (cross > radius) return true;
-	
-	if (p.perp() > radius) {
-		G4double dot = p.x()*v.x() + p.y()*v.y();
-		if (dot > 0) return true;
-	}
+  if (!MustBeOutside(p)) return false;
+  
+  G4double cross = p.x()*v.y() - p.y()*v.x();
+  if (cross > radius) return true;
+  
+  if (p.perp() > radius)
+  {
+    G4double dot = p.x()*v.x() + p.y()*v.y();
+    if (dot > 0) return true;
+  }
 
-	return false;
-}		
+  return false;
+}

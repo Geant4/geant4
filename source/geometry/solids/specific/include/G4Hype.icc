@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.icc,v 1.2 2001-07-11 10:00:14 gunter Exp $
+// $Id: G4Hype.icc,v 1.3 2002-10-28 11:47:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -104,12 +104,6 @@ void G4Hype::SetOuterStereo (G4double newOSte)
     tanOuterStereo2=tanOuterStereo*tanOuterStereo;
     endOuterRadius2=HypeOuterRadius2(halfLenZ);
     endOuterRadius=sqrt(endOuterRadius2);
-  }
-
-inline
-G4GeometryType G4Hype::GetEntityType() const
-  {
-    return G4String("G4Hype");
   }
 
 inline

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.6 2001-07-11 09:59:54 gunter Exp $
+// $Id: G4Sphere.hh,v 1.7 2002-10-28 11:43:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,14 +44,14 @@
 //
 //   Member Data:
 //
-//	fRmin	inner radius
-//	fRmax	outer radius
+//   fRmin  inner radius
+//   fRmax  outer radius
 //
-//	fSPhi	starting angle of the segment in radians
-//	fDPhi	delta angle of the segment in radians
+//   fSPhi  starting angle of the segment in radians
+//   fDPhi  delta angle of the segment in radians
 //
-//	fSTheta	starting angle of the segment in radians
-//	fDTheta	delta angle of the segment in radians
+//   fSTheta  starting angle of the segment in radians
+//   fDTheta  delta angle of the segment in radians
 //
 //     
 //   Note:
@@ -60,8 +60,8 @@
 //      made with (say) Phi of a point.
 
 // History:
-// 28.3.94 P.Kent Old C++ code converted to tolerant geometry
-// 17.9.96 V.Grichine Final modifications to commit
+// 28.3.94 P.Kent: old C++ code converted to tolerant geometry
+// 17.9.96 V.Grichine: final modifications to commit
 // --------------------------------------------------------------------
 
 #ifndef G4Sphere_HH
@@ -71,94 +71,103 @@
 
 class G4Sphere : public G4CSGSolid
 {
-  public:
-          G4Sphere(const G4String& pName,
-	           G4double pRmin, G4double pRmax,
-	           G4double pSPhi, G4double pDPhi,
-	           G4double pSTheta, G4double pDTheta);
-		   
-	  virtual ~G4Sphere() ;
-	  
-      // Access functions
-		   
-	  G4double    GetInsideRadius   () const { return fRmin;   }
-	  G4double    GetOuterRadius  () const { return fRmax;   }
-	  G4double    GetStartPhiAngle  () const { return fSPhi;   }
-	  G4double    GetDeltaPhiAngle  () const { return fDPhi;   }
-	  G4double    GetStartThetaAngle() const { return fSTheta; }
-	  G4double    GetDeltaThetaAngle() const { return fDTheta; }
+  public:  // with description
 
-	  void   SetInsideRadius   (G4double newRmin)   { fRmin= newRmin; }
-	  void   SetOuterRadius  (G4double newRmax)   { fRmax= newRmax; }
-	  void   SetStartPhiAngle  (G4double newSphi)   { fSPhi= newSphi; }
-	  void   SetDeltaPhiAngle  (G4double newDphi)   { fDPhi= newDphi; }
-	  void   SetStartThetaAngle(G4double newSTheta) { fSTheta=newSTheta; }
-	  void   SetDeltaThetaAngle(G4double newDTheta) { fDTheta=newDTheta; }
-
-          void ComputeDimensions(G4VPVParameterisation* p,
-                                 const G4int n,
-                                 const G4VPhysicalVolume* pRep);
-
-          G4bool CalculateExtent(const EAxis pAxis,
-			         const G4VoxelLimits& pVoxelLimit,
-			         const G4AffineTransform& pTransform,
-			         G4double& pmin, G4double& pmax) const;
-				 
-          EInside Inside(const G4ThreeVector& p) const;
-
-          G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
-
-          G4double DistanceToIn(const G4ThreeVector& p,
-	                        const G4ThreeVector& v) const;
-	  
-          G4double DistanceToIn(const G4ThreeVector& p) const;
-	  
-          G4double DistanceToOut(const G4ThreeVector& p,
-	                         const G4ThreeVector& v,
-			         const G4bool calcNorm=G4bool(false),
-			         G4bool *validNorm=0,
-				 G4ThreeVector *n=0) const;
-				 
-          G4double DistanceToOut(const G4ThreeVector& p) const;
-
-          G4GeometryType  GetEntityType() const { return G4String("G4Sphere"); }
-            // Naming method (pseudo-RTTI : run-time type identification)
-
-
-      // Visualisation functions
-  
-          void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
-          G4Polyhedron* CreatePolyhedron() const;
-          G4NURBS*      CreateNURBS() const;
+    G4Sphere(const G4String& pName,
+                   G4double pRmin, G4double pRmax,
+                   G4double pSPhi, G4double pDPhi,
+                   G4double pSTheta, G4double pDTheta);
        
-      // Old access functions
+    virtual ~G4Sphere() ;
+    
+    // Accessors
+       
+    inline G4double GetInsideRadius   () const;
+    inline G4double GetOuterRadius    () const;
+    inline G4double GetStartPhiAngle  () const;
+    inline G4double GetDeltaPhiAngle  () const;
+    inline G4double GetStartThetaAngle() const;
+    inline G4double GetDeltaThetaAngle() const;
 
-          G4double  GetRmin()   const { return GetInsideRadius   (); }
-          G4double  GetRmax()   const { return GetOuterRadius    (); }
-          G4double  GetSPhi()   const { return GetStartPhiAngle  (); }
-          G4double  GetDPhi()   const { return GetDeltaPhiAngle  (); }
-	  G4double  GetSTheta() const { return GetStartThetaAngle(); }
-          G4double  GetDTheta() const { return GetDeltaThetaAngle(); }
+    // Modifiers
+
+    inline void SetInsideRadius   (G4double newRmin);
+    inline void SetOuterRadius    (G4double newRmax);
+    inline void SetStartPhiAngle  (G4double newSphi);
+    inline void SetDeltaPhiAngle  (G4double newDphi);
+    inline void SetStartThetaAngle(G4double newSTheta);
+    inline void SetDeltaThetaAngle(G4double newDTheta);
+
+    // Methods for solid
+
+    void ComputeDimensions(      G4VPVParameterisation* p,
+                           const G4int n,
+                           const G4VPhysicalVolume* pRep);
+
+    G4bool CalculateExtent(const EAxis pAxis,
+                           const G4VoxelLimits& pVoxelLimit,
+                           const G4AffineTransform& pTransform,
+                                 G4double& pmin, G4double& pmax) const;
+         
+    EInside Inside(const G4ThreeVector& p) const;
+
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+
+    G4double DistanceToIn(const G4ThreeVector& p,
+                          const G4ThreeVector& v) const;
+    
+    G4double DistanceToIn(const G4ThreeVector& p) const;
+    
+    G4double DistanceToOut(const G4ThreeVector& p,
+                           const G4ThreeVector& v,
+                           const G4bool calcNorm=G4bool(false),
+                                 G4bool *validNorm=0,
+                                 G4ThreeVector *n=0) const;
+         
+    G4double DistanceToOut(const G4ThreeVector& p) const;
+
+    G4GeometryType GetEntityType() const;
+ 
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
+
+    // Visualisation functions
+  
+    void          DescribeYourselfTo(G4VGraphicsScene& scene) const;
+    G4Polyhedron* CreatePolyhedron() const;
+    G4NURBS*      CreateNURBS() const;
+
+  public:  // without description
+   
+    // Old access functions
+
+    inline G4double  GetRmin()   const;
+    inline G4double  GetRmax()   const;
+    inline G4double  GetSPhi()   const;
+    inline G4double  GetDPhi()   const;
+    inline G4double  GetSTheta() const;
+    inline G4double  GetDTheta() const;
 
   protected:
  
-          G4ThreeVectorList*
-          CreateRotatedVertices(const G4AffineTransform& pTransform,
-	                        G4int& noPolygonVertices) const;
-	
-      // Used by distanceToOut
+    G4ThreeVectorList*
+    CreateRotatedVertices(const G4AffineTransform& pTransform,
+                                G4int& noPolygonVertices) const;
   
-          enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
+    // Used by distanceToOut
   
-      // used by normal
+    enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kSTheta,kETheta};
   
-          enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
+    // used by normal
+  
+    enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNSTheta,kNETheta};
 
   private:
 
     G4double fRmin,fRmax,
              fSPhi,fDPhi,
-	     fSTheta,fDTheta;
+             fSTheta,fDTheta;
 };
-   	
+
+#include "G4Sphere.icc"
+
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGface.hh,v 1.4 2001-07-11 10:00:15 gunter Exp $
+// $Id: G4VCSGface.hh,v 1.5 2002-10-28 11:47:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,7 @@
 // Class description:
 //
 //   Definition of the virtual base class G4VCSGface, one side (or face)
-//   of a CSG solid. It should be possible to build a CSG entirely out of
+//   of a CSG-like solid. It should be possible to build a CSG entirely out of
 //   connecting CSG faces.
 //
 //   Each face has an inside and outside surface, the former represents
@@ -42,15 +42,15 @@
 //
 //   Virtual members:
 //
-//	-------------------------------------------------------------------
+//  -------------------------------------------------------------------
 //      Intersect( const G4ThreeVector &p, const G4ThreeVector &v,
-//		         G4bool outGoing, G4double surfTolerance,
-//		   G4double &distance, G4double &distFromSurface,
-//		   G4ThreeVector &normal, G4bool &allBehind );
+//                 G4bool outGoing, G4double surfTolerance,
+//                 G4double &distance, G4double &distFromSurface,
+//                 G4ThreeVector &normal, G4bool &allBehind );
 //
 //          p               - (in) position
 //          v               - (in) direction (assumed to be a unit vector)
-//          outgoing	    - (in) true, to consider only inside surfaces
+//          outgoing        - (in) true, to consider only inside surfaces
 //                                 false, to consider only outside surfaces
 //          distance        - (out) distance to intersection
 //          distFromSurface - (out) distance from surface (along surface normal),
@@ -62,56 +62,56 @@
 //                         false if there is no intersection
 //                               (all output arguments undefined)
 //
-//       Determine the distance along a line to the face.
+//   Determine the distance along a line to the face.
 //
-//	-------------------------------------------------------------------
-//	 Distance( const G4ThreeVector &p, const G4bool outgoing );
+//  -------------------------------------------------------------------
+//   Distance( const G4ThreeVector &p, const G4bool outgoing );
 //
-//	    p		- (in) position
-//	    outgoing	- (in) true, to consider only inside surfaces
+//      p         - (in) position
+//      outgoing  - (in) true, to consider only inside surfaces
 //                             false, to consider only outside surfaces
 //
-//	    return value = distance to closest surface satisifying requirements
+//      return value = distance to closest surface satisifying requirements
 //                         or kInfinity if no such surface exists
 //
-//	 Determine the distance of a point from either the inside or outside
-//       surfaces of the face.
+//   Determine the distance of a point from either the inside or outside
+//   surfaces of the face.
 //
-//	-------------------------------------------------------------------
+//  -------------------------------------------------------------------
 //       Inside( const G4ThreeVector &p, const G4double tolerance, 
-//	         G4double *bestDistance );
+//               G4double *bestDistance );
 //
-//	    p		 - (in) position
-//	    tolerance	 - (in) tolerance defining the bounds of the "kSurface",
-//                              nominally equal to kCarTolerance/2
-//	    bestDistance - (out) distance to closest surface (in or out)
+//      p            - (in) position
+//      tolerance    - (in) tolerance defining the bounds of the "kSurface",
+//                          nominally equal to kCarTolerance/2
+//      bestDistance - (out) distance to closest surface (in or out)
 //
-//          return value = kInside if the point is closest to the inside surface
-//                         kOutside if the point is closest to the outside surface
-//                         kSurface if the point is withing tolerance of the surface
+//      return value = kInside if the point is closest to the inside surface
+//                     kOutside if the point is closest to the outside surface
+//                     kSurface if the point is withing tolerance of the surface
 //
-//	 Determine whether a point is inside, outside, or on the surface of
-//       the face.
+//   Determine whether a point is inside, outside, or on the surface of
+//   the face.
 //
-//	-------------------------------------------------------------------
+//  -------------------------------------------------------------------
 //       Normal( const G4ThreeVector &p,  G4double *bestDistance );
 //
-//	     p		  - (in) position
-//	     bestDistance - (out) distance to closest surface (in or out)
+//       p            - (in) position
+//       bestDistance - (out) distance to closest surface (in or out)
 //
-//	     return value = the normal of the surface nearest the point
+//       return value = the normal of the surface nearest the point
 //
-//	 Return normal of surface closest to the point.
+//   Return normal of surface closest to the point.
 //
-//	-------------------------------------------------------------------
-//	 Extent( const G4ThreeVector axis );
+//  -------------------------------------------------------------------
+//   Extent( const G4ThreeVector axis );
 //
-//	     axis	  - (in) unit vector defining direction
+//       axis    - (in) unit vector defining direction
 //
-//	     return value = the largest point along the given axis of the
-// 		 	    the face's extent.
+//       return value = the largest point along the given axis of the
+//                      the face's extent.
 //
-//	-------------------------------------------------------------------
+//  -------------------------------------------------------------------
 //       CalculateExtent( const EAxis pAxis,
 //                        const G4VoxelLimit &pVoxelLimit,
 //                        const G4AffineTransform &pTransform,
@@ -126,16 +126,16 @@
 //                               surface after tranformation and limits
 //                               along pAxis that is smaller than the value
 //                               of min, than it is used to replace min.
-//                         Undefined if the return value is false.
+//                               Undefined if the return value is false.
 //           max         - (out) Same as min, except for the largest
 //                               point.
-//                         Undefined if the return value is false.
+//                               Undefined if the return value is false.
 //
 //           return value = true if anything remains of the face
 //
-//       Calculate the extent of the face for the voxel navigator.
-//	 In analogy with CalculateExtent for G4VCSGfaceted, this is
-//       done in the following steps:
+//   Calculate the extent of the face for the voxel navigator.
+//   In analogy with CalculateExtent for G4VCSGfaceted, this is
+//   done in the following steps:
 //
 //          1. Transform the face using pTranform, an arbitrary 3D 
 //             rotation/offset/reflection
@@ -153,32 +153,32 @@
 //                   limits) along the direction pAxis.
 //          6. If min/max were updated, return true
 //                           
-//	-------------------------------------------------------------------
+//  -------------------------------------------------------------------
 //       G3VCSGface *Clone()
 //
-//	 This method is invoked by G4CSGfaceted during the copy constructor
-//	 or the assignment operator. Its purpose is to return a pointer
-// 	 (of type G4VCSGface) to a duplicate copy of the face.
-//       The implementation is straight forward for inherited classes. Example:
+//   This method is invoked by G4CSGfaceted during the copy constructor
+//   or the assignment operator. Its purpose is to return a pointer
+//   (of type G4VCSGface) to a duplicate copy of the face.
+//   The implementation is straight forward for inherited classes. Example:
 //
-//	 G4VCSGface G4PolySideFace::Clone() { return new G4PolySideFace(*this); }
+//   G4VCSGface G4PolySideFace::Clone() { return new G4PolySideFace(*this); }
 //
-//	 Of course, this assumes the copy constructor of G4PolySideFace is
-//	 correctly implemented.
+//   Of course, this assumes the copy constructor of G4PolySideFace is
+//   correctly implemented.
 //
 //   Implementation notes:
-//	* distance.
+//   * distance.
 //        The meaning of distance includes the boundaries of the face.
 //        For example, for a rectangular, planer face:
 //
-//       	    	A   |	B	   | C
-//       	    	    |		   |
-//       	     -------+--------------+-----
-//       	    	D   |   I          | E
-//       	    	    |              |
-//       	     -------+--------------+-----
-//       	    	F   |	G	   | H
-//       	    	    |		   |
+//               A   |  B           | C
+//                   |              |
+//              -------+--------------+-----
+//               D   |  I           | E
+//                   |              |
+//              -------+--------------+-----
+//               F   |  G           | H
+//                   |              |
 //       
 //        A, C, F, and H: closest distance is the distance to
 //        the adjacent corner.
@@ -212,20 +212,20 @@
 //   a value of "bestDistance" smaller than any other. While looping, if any
 //   face->Inside returns kSurface, this value can be returned immediately.
 //
-//	EInside answer;
-//	G4VCSGface *face = faces;
-//	G4double best = kInfinity;
-//	do {
-//		G4double distance;
-//		EInside result = (*face)->Inside( p, kCarTolerance/2, distance );
-//		if (result == kSurface) return kSurface;
-//		if (distance < best) {
-//			best = distance;
-//			answer = result;
-//		}
-//	} while( ++face < faces + numFaces );
+//  EInside answer;
+//  G4VCSGface *face = faces;
+//  G4double best = kInfinity;
+//  do {
+//    G4double distance;
+//    EInside result = (*face)->Inside( p, kCarTolerance/2, distance );
+//    if (result == kSurface) return kSurface;
+//    if (distance < best) {
+//      best = distance;
+//      answer = result;
+//    }
+//  } while( ++face < faces + numFaces );
 //
-//	return(answer);
+//  return(answer);
 //
 //   G4VSolid::SurfaceNormal
 //
@@ -272,32 +272,32 @@ class G4SolidExtentList;
 
 class G4VCSGface
 {
-  public: 
+  public:  // with description
 
-	G4VCSGface() {;}
-	virtual ~G4VCSGface() {;}
-	
-	virtual G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
-				  G4bool outgoing, G4double surfTolerance,
-				  G4double &distance, G4double &distFromSurface,
-				  G4ThreeVector &normal, G4bool &allBehind ) = 0;
+  G4VCSGface() {}
+  virtual ~G4VCSGface() {}
+  
+  virtual G4bool Intersect( const G4ThreeVector &p, const G4ThreeVector &v,  
+                            G4bool outgoing, G4double surfTolerance,
+                            G4double &distance, G4double &distFromSurface,
+                            G4ThreeVector &normal, G4bool &allBehind ) = 0;
 
-        virtual G4double Distance( const G4ThreeVector &p, G4bool outgoing ) = 0;
-	
-	virtual EInside Inside( const G4ThreeVector &p, G4double tolerance, 
-				G4double *bestDistance ) = 0;
-		
-	virtual G4ThreeVector Normal( const G4ThreeVector &p,  G4double *bestDistance ) = 0;
+  virtual G4double Distance( const G4ThreeVector &p, G4bool outgoing ) = 0;
+  
+  virtual EInside Inside( const G4ThreeVector &p, G4double tolerance, 
+                          G4double *bestDistance ) = 0;
+    
+  virtual G4ThreeVector Normal( const G4ThreeVector &p,
+                                G4double *bestDistance ) = 0;
 
-	virtual G4double Extent( const G4ThreeVector axis ) = 0;
-	
-	virtual void CalculateExtent( const EAxis axis, 
-				      const G4VoxelLimits &voxelLimit,
-				      const G4AffineTransform &tranform,
-				      G4SolidExtentList &extentList       ) = 0;
+  virtual G4double Extent( const G4ThreeVector axis ) = 0;
+  
+  virtual void CalculateExtent( const EAxis axis, 
+                                const G4VoxelLimits &voxelLimit,
+                                const G4AffineTransform &tranform,
+                                G4SolidExtentList &extentList       ) = 0;
 
-	virtual G4VCSGface* Clone() = 0;
+  virtual G4VCSGface* Clone() = 0;
 };
 
 #endif
-

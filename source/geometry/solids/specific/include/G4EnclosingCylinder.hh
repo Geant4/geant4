@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.hh,v 1.4 2001-07-11 10:00:14 gunter Exp $
+// $Id: G4EnclosingCylinder.hh,v 1.5 2002-10-28 11:47:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -53,35 +53,35 @@ class G4EnclosingCylinder
 {
   public:  // with description
 
-	G4EnclosingCylinder( const G4ReduciblePolygon *rz,
-			     G4bool phiIsOpen, 
-			     G4double startPhi, G4double totalPhi );
-	~G4EnclosingCylinder();
-	
-	G4bool MustBeOutside( const G4ThreeVector &p ) const;
-	  // Decide very rapidly if the point is outside the cylinder.
-	  // If one is not certain, return false.
+  G4EnclosingCylinder( const G4ReduciblePolygon *rz,
+                             G4bool phiIsOpen, 
+                             G4double startPhi, G4double totalPhi );
+  ~G4EnclosingCylinder();
+  
+  G4bool MustBeOutside( const G4ThreeVector &p ) const;
+    // Decide very rapidly if the point is outside the cylinder.
+    // If one is not certain, return false.
 
-	G4bool ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const;
-	  // Decide very rapidly if the trajectory is going to miss the cylinder.
-	  // If one is not sure, return false.
+  G4bool ShouldMiss( const G4ThreeVector &p, const G4ThreeVector &v ) const;
+    // Decide very rapidly if the trajectory is going to miss the cylinder.
+    // If one is not sure, return false.
 
   protected:
 
-	G4double radius; 	// radius of our cylinder
-	G4double zLo, zHi;	// z extent
-	
-	G4bool 	 phiIsOpen;	// true if there is a phi segment
-	G4double startPhi,	// for isPhiOpen==true, starting of phi segment
-		 totalPhi;	// for isPhiOpen==true, size of phi segment
+  G4double radius;    // radius of our cylinder
+  G4double zLo, zHi;  // z extent
+  
+  G4bool    phiIsOpen; // true if there is a phi segment
+  G4double  startPhi,  // for isPhiOpen==true, starting of phi segment
+            totalPhi;  // for isPhiOpen==true, size of phi segment
 
-	G4double rx1, ry1,
-		 dx1, dy1;
-	G4double rx2, ry2,
-		 dx2, dy2;
-		 
-	G4bool	 concave;	// True, if x/y cross section is concave
-		
+  G4double rx1, ry1,
+           dx1, dy1;
+  G4double rx2, ry2,
+           dx2, dy2;
+     
+  G4bool   concave;  // true, if x/y cross section is concave
+    
 };
 
 #endif

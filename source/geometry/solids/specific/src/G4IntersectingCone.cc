@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectingCone.cc,v 1.4 2001-07-11 10:00:16 gunter Exp $
+// $Id: G4IntersectingCone.cc,v 1.5 2002-10-28 11:47:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,45 +40,53 @@
 //
 // Constructor
 //
-G4IntersectingCone::G4IntersectingCone( const G4double r[2], const G4double z[2] )
-{	
-	//
-	// What type of cone are we?
-	//
-	type1 = (fabs(z[1]-z[0]) > fabs(r[1]-r[0]));
-	
-	if (type1) {
-		B = (r[1]-r[0])/(z[1]-z[0]);			// tube like
-		A = 0.5*( r[1]+r[0] - B*(z[1]+z[0]) );
-	}
-	else {
-		B = (z[1]-z[0])/(r[1]-r[0]);			// disk like
-		A = 0.5*( z[1]+z[0] - B*(r[1]+r[0]) );
-	}
+G4IntersectingCone::G4IntersectingCone( const G4double r[2],
+                                        const G4double z[2] )
+{  
+  //
+  // What type of cone are we?
+  //
+  type1 = (fabs(z[1]-z[0]) > fabs(r[1]-r[0]));
+  
+  if (type1)
+  {
+    B = (r[1]-r[0])/(z[1]-z[0]);      // tube like
+    A = 0.5*( r[1]+r[0] - B*(z[1]+z[0]) );
+  }
+  else
+  {
+    B = (z[1]-z[0])/(r[1]-r[0]);      // disk like
+    A = 0.5*( z[1]+z[0] - B*(r[1]+r[0]) );
+  }
 
-	//
-	// Calculate extent
-	//
-	if (r[0] < r[1]) {
-		rLo = r[0]; rHi = r[1];
-	}
-	else {
-		rLo = r[1]; rHi = r[0];
-	}
-	
-	if (z[0] < z[1]) {
-		zLo = z[0]; zHi = z[1];
-	}
-	else {
-		zLo = z[1]; zHi = z[0];
-	}
+  //
+  // Calculate extent
+  //
+  if (r[0] < r[1])
+  {
+    rLo = r[0]; rHi = r[1];
+  }
+  else
+  {
+    rLo = r[1]; rHi = r[0];
+  }
+  
+  if (z[0] < z[1])
+  {
+    zLo = z[0]; zHi = z[1];
+  }
+  else
+  {
+    zLo = z[1]; zHi = z[0];
+  }
 }
 
 //
 // Destructor
 //
 G4IntersectingCone::~G4IntersectingCone()
-{;}
+{
+}
 
 
 //
@@ -87,20 +95,23 @@ G4IntersectingCone::~G4IntersectingCone()
 // Check r or z extent, as appropriate, to see if the point is possibly
 // on the cone.
 //
-G4bool G4IntersectingCone::HitOn( const G4double r, const G4double z )
+G4bool G4IntersectingCone::HitOn( const G4double r,
+                                  const G4double z )
 {
-	//
-	// Be careful! The inequalities cannot be "<=" and ">=" here without
-	// punching a tiny hole in our shape!
-	//
-        if (type1) {
-                if (z < zLo || z > zHi) return false;
-        }
-        else {
-                if (r < rLo || r > rHi) return false;
-        }
+  //
+  // Be careful! The inequalities cannot be "<=" and ">=" here without
+  // punching a tiny hole in our shape!
+  //
+  if (type1)
+  {
+    if (z < zLo || z > zHi) return false;
+  }
+  else
+  {
+    if (r < rLo || r > rHi) return false;
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -110,15 +121,18 @@ G4bool G4IntersectingCone::HitOn( const G4double r, const G4double z )
 // Calculate the intersection of a line with our conical surface, ignoring
 // any phi division
 //
-G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p, const G4ThreeVector &v,
-		 		        G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p,
+                                        const G4ThreeVector &v,
+                                              G4double *s1, G4double *s2 )
 {
-	if (type1) {
-		return LineHitsCone1( p, v, s1, s2 );
-	}
-	else {
-		return LineHitsCone2( p, v, s1, s2 );
-	}
+  if (type1)
+  {
+    return LineHitsCone1( p, v, s1, s2 );
+  }
+  else
+  {
+    return LineHitsCone2( p, v, s1, s2 );
+  }
 }
 
 
@@ -138,15 +152,15 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p, const G4ThreeVec
 //
 // Solution is quadratic:
 //
-//	a*s**2 + b*s + c = 0
+//  a*s**2 + b*s + c = 0
 //
 // where:
 //
-//	a = x0**2 + y0**2 - (A + B*z0)**2
+//  a = x0**2 + y0**2 - (A + B*z0)**2
 //
-//	b = 2*( x0*tx + y0*ty - (A*B - B*B*z0)*tz)
+//  b = 2*( x0*tx + y0*ty - (A*B - B*B*z0)*tz)
 //
-//	c = tx**2 + ty**2 - (B*tz)**2
+//  c = tx**2 + ty**2 - (B*tz)**2
 //
 // Notice, that if a < 0, this indicates that the two solutions (assuming
 // they exist) are in opposite cones (that is, given z0 = -A/B, one z < z0
@@ -181,76 +195,85 @@ G4int G4IntersectingCone::LineHitsCone( const G4ThreeVector &p, const G4ThreeVec
 // where epsilon is small, then:
 //             Delta = epsilon/2/B
 // 
-G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVector &v,
-		 		         G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p,
+                                         const G4ThreeVector &v,
+                                               G4double *s1, G4double *s2 )
 {
-	G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
-	G4double tx = v.x(), ty = v.y(), tz = v.z();
+  G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
+  G4double tx = v.x(), ty = v.y(), tz = v.z();
 
-	G4double a = tx*tx + ty*ty - sqr(B*tz);
-	G4double b = 2*( x0*tx + y0*ty - (A*B + B*B*z0)*tz);
-	G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
-	
-	G4double radical = b*b - 4*a*c;
-	
-	if (radical < -1E-6*fabs(b)) return 0;		// No solution
-	
-	if (radical < 1E-6*fabs(b)) {
-		//
-		// The radical is roughly zero: check for special, very rare, cases
-		//
-		if (fabs(a) > 1/kInfinity) {
-			if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B)) {
-				*s1 = -0.5*b/a;
-				return 1;
-			}
-			return 0;
-		}
-	}
-	else {
-		radical = sqrt(radical);
-	}
-	
-	if (a > 1/kInfinity) {
-		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
-		sa = q/a;
-		sb = c/q;
-		if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-		if (A + B*(z0+(*s1)*tz) < 0) return 0;
-		return 2;
-	}
-	else if (a < -1/kInfinity) {
-		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
-		sa = q/a;
-		sb = c/q;
-		*s1 = (B*tz > 0)^(sa > sb) ? sb : sa;
-		return 1;
-	}
-	else if (fabs(b) < 1/kInfinity) {
-		return 0;
-	}
-	else {
-		*s1 = -c/b;
-		if (A + B*(z0+(*s1)*tz) < 0) return 0;
-		return 1;
-	}
+  G4double a = tx*tx + ty*ty - sqr(B*tz);
+  G4double b = 2*( x0*tx + y0*ty - (A*B + B*B*z0)*tz);
+  G4double c = x0*x0 + y0*y0 - sqr(A + B*z0);
+  
+  G4double radical = b*b - 4*a*c;
+  
+  if (radical < -1E-6*fabs(b)) return 0;    // No solution
+  
+  if (radical < 1E-6*fabs(b))
+  {
+    //
+    // The radical is roughly zero: check for special, very rare, cases
+    //
+    if (fabs(a) > 1/kInfinity)
+    {
+      if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B))
+      {
+        *s1 = -0.5*b/a;
+        return 1;
+      }
+      return 0;
+    }
+  }
+  else
+  {
+    radical = sqrt(radical);
+  }
+  
+  if (a > 1/kInfinity)
+  {
+    G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
+    sa = q/a;
+    sb = c/q;
+    if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
+    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    return 2;
+  }
+  else if (a < -1/kInfinity)
+  {
+    G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
+    sa = q/a;
+    sb = c/q;
+    *s1 = (B*tz > 0)^(sa > sb) ? sb : sa;
+    return 1;
+  }
+  else if (fabs(b) < 1/kInfinity)
+  {
+    return 0;
+  }
+  else
+  {
+    *s1 = -c/b;
+    if (A + B*(z0+(*s1)*tz) < 0) return 0;
+    return 1;
+  }
 }
 
-	
+  
 //
 // LineHitsCone2
 //
 // See comments under LineHitsCone1. In this routine, case2, we have:
 //
-// 	Z = A + B*R
+//   Z = A + B*R
 //
 // The solution is still quadratic:
 //
-//	a = tz**2 - B*B*(tx**2 + ty**2)
+//  a = tz**2 - B*B*(tx**2 + ty**2)
 //
-//	b = 2*( (z0-A)*tz - B*B*(x0*tx+y0*ty) )
+//  b = 2*( (z0-A)*tz - B*B*(x0*tx+y0*ty) )
 //
-//	c = ( (z0-A)**2 - B*B*(x0**2 + y0**2) )
+//  c = ( (z0-A)**2 - B*B*(x0**2 + y0**2) )
 //
 // The rest is much the same, except some details.
 //
@@ -258,73 +281,82 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 //
 // a > 0 ? We only want solution which produces R > 0. 
 // since R = (z0+s*tz-A)/B, for tz/B > 0, this is the largest s
-//			    for tz/B < 0, this is the smallest s
+//          for tz/B < 0, this is the smallest s
 // thus, same as in case 1 ( since sign(tz/B) = sign(tz*B) )
 //
-G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVector &v,
-		 		         G4double *s1, G4double *s2 )
+G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p,
+                                         const G4ThreeVector &v,
+                                               G4double *s1, G4double *s2 )
 {
-	G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
-	G4double tx = v.x(), ty = v.y(), tz = v.z();
-	
-	//
-	// Special case which might not be so rare: B = 0 (precisely)
-	//
-	if (B==0) {
-		if (fabs(tz) < 1/kInfinity) return 0;
-		
-		*s1 = (A-z0)/tz;
-		return 1;
-	}
+  G4double x0 = p.x(), y0 = p.y(), z0 = p.z();
+  G4double tx = v.x(), ty = v.y(), tz = v.z();
+  
+  //
+  // Special case which might not be so rare: B = 0 (precisely)
+  //
+  if (B==0)
+  {
+    if (fabs(tz) < 1/kInfinity) return 0;
+    
+    *s1 = (A-z0)/tz;
+    return 1;
+  }
 
-	G4double B2 = B*B;
+  G4double B2 = B*B;
 
-	G4double a = tz*tz - B2*(tx*tx + ty*ty);
-	G4double b = 2*( (z0-A)*tz - B2*(x0*tx + y0*ty) );
-	G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
-	
-	G4double radical = b*b - 4*a*c;
-	
-	if (radical < -1E-6*fabs(b)) return 0;		// No solution
-	
-	if (radical < 1E-6*fabs(b)) {
-		//
-		// The radical is roughly zero: check for special, very rare, cases
-		//
-		if (fabs(a) > 1/kInfinity) {
-			if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B)) {
-				*s1 = -0.5*b/a;
-				return 1;
-			}
-			return 0;
-		}
-	}
-	else {
-		radical = sqrt(radical);
-	}
-	
-	if (a < -1/kInfinity) {
-		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
-		sa = q/a;
-		sb = c/q;
-		if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
-		if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
-		return 2;
-	}
-	else if (a > 1/kInfinity) {
-		G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
-		sa = q/a;
-		sb = c/q;
-		*s1 = (tz*B > 0)^(sa > sb) ? sb : sa;
-		return 1;
-	}
-	else if (fabs(b) < 1/kInfinity) {
-		return 0;
-	}
-	else {
-		*s1 = -c/b;
-		if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
-		return 1;
-	}
+  G4double a = tz*tz - B2*(tx*tx + ty*ty);
+  G4double b = 2*( (z0-A)*tz - B2*(x0*tx + y0*ty) );
+  G4double c = sqr(z0-A) - B2*( x0*x0 + y0*y0 );
+  
+  G4double radical = b*b - 4*a*c;
+  
+  if (radical < -1E-6*fabs(b)) return 0;    // No solution
+  
+  if (radical < 1E-6*fabs(b))
+  {
+    //
+    // The radical is roughly zero: check for special, very rare, cases
+    //
+    if (fabs(a) > 1/kInfinity)
+    {
+      if ( fabs(x0*ty - y0*tx) < fabs(1E-6/B))
+      {
+        *s1 = -0.5*b/a;
+        return 1;
+      }
+      return 0;
+    }
+  }
+  else
+  {
+    radical = sqrt(radical);
+  }
+  
+  if (a < -1/kInfinity)
+  {
+    G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
+    sa = q/a;
+    sb = c/q;
+    if (sa < sb) { *s1 = sa; *s2 = sb; } else { *s1 = sb; *s2 = sa; }
+    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    return 2;
+  }
+  else if (a > 1/kInfinity)
+  {
+    G4double sa, sb, q = -0.5*( b + (b < 0 ? -radical : +radical) );
+    sa = q/a;
+    sb = c/q;
+    *s1 = (tz*B > 0)^(sa > sb) ? sb : sa;
+    return 1;
+  }
+  else if (fabs(b) < 1/kInfinity)
+  {
+    return 0;
+  }
+  else
+  {
+    *s1 = -c/b;
+    if ((z0 + (*s1)*tz  - A)/B < 0) return 0;
+    return 1;
+  }
 }
-

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.hh,v 1.7 2001-07-11 09:59:54 gunter Exp $
+// $Id: G4Para.hh,v 1.8 2002-10-28 11:43:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,14 +39,14 @@
 //   z-x plane at -dy and +dy.
 //
 //   A G4Para is defined by:
-//	dx,dy,dz	Half-length in x,y,z
-//	alpha		Angle formed by the y axis and by the plane joining
-//			the centre of the faces G4Parallel to the z-x plane
-//			at -dy and +dy
-//	theta		Polar angle of the line joining the centres of the
-//			faces at -dz and +dz in z
-//	phi		Azimuthal angle of the line joining the centres of the
-//			faces at -dz and +dz in z
+//   dx,dy,dz - Half-length in x,y,z
+//   alpha    - Angle formed by the y axis and by the plane joining
+//              the centre of the faces G4Parallel to the z-x plane
+//              at -dy and +dy
+//   theta    - Polar angle of the line joining the centres of the
+//              faces at -dz and +dz in z
+//   phi      - Azimuthal angle of the line joining the centres of the
+//              faces at -dz and +dz in z
 //   Member data:
 //
 //   Note that the angles parameters are not stored - precomputed trig is
@@ -73,49 +73,38 @@
 
 class G4Para : public G4CSGSolid
 {
-  public:
+  public:  // with description
 
     G4Para(const G4String& pName,
-	         G4double pDx, G4double pDy, G4double pDz,
-	         G4double pAlpha, G4double pTheta, G4double pPhi);
-		 
-    G4Para( const G4String& pName,
-	    const G4ThreeVector pt[8]) ;
-
-    virtual ~G4Para() ;
-    
-  // Access functions
-
-    G4double GetZHalfLength() const { return fDz ; }
-    G4ThreeVector GetSymAxis() const
-    {
-       G4double cosTheta = 1.0/sqrt(1+fTthetaCphi*fTthetaCphi +
-                                      fTthetaSphi*fTthetaSphi) ;
+                 G4double pDx, G4double pDy, G4double pDz,
+                 G4double pAlpha, G4double pTheta, G4double pPhi);
      
-       return G4ThreeVector(fTthetaCphi*cosTheta,
-                            fTthetaSphi*cosTheta,
-			    cosTheta) ;
-    }
-    G4double GetYHalfLength() const { return fDy ; }
-    G4double GetXHalfLength() const { return fDx ; }
-    G4double GetTanAlpha()    const { return fTalpha ; }
-    
-  // Set  functions
+    G4Para(const G4String& pName,
+           const G4ThreeVector pt[8]);
 
-    void SetXHalfLength(G4double val) { fDx= val; }
-    void SetYHalfLength(G4double val) { fDy= val; }
-    void SetZHalfLength(G4double val) { fDz= val; }
-    void SetAlpha(G4double alpha)  { fTalpha= tan(alpha); }
-    void SetTanAlpha(G4double val) { fTalpha= val; }
-    void SetThetaAndPhi(double pTheta, double pPhi)    
-    {
-	fTthetaCphi=tan(pTheta)*cos(pPhi);
-	fTthetaSphi=tan(pTheta)*sin(pPhi);
-    }
+    virtual ~G4Para();
+    
+  // Accessors
+
+    inline G4double GetZHalfLength()  const;
+    inline G4ThreeVector GetSymAxis() const;
+    inline G4double GetYHalfLength()  const;
+    inline G4double GetXHalfLength()  const;
+    inline G4double GetTanAlpha()     const;
+    
+  // Modifiers
+
+    inline void SetXHalfLength(G4double val);
+    inline void SetYHalfLength(G4double val);
+    inline void SetZHalfLength(G4double val);
+    inline void SetAlpha(G4double alpha);
+    inline void SetTanAlpha(G4double val);
+    inline void SetThetaAndPhi(double pTheta, double pPhi);
+
     void SetAllParameters(G4double pDx, G4double pDy, G4double pDz, 
                           G4double pAlpha, G4double pTheta, G4double pPhi);
     
-  // Methods
+  // Other methods of solid
     
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
@@ -124,7 +113,7 @@ class G4Para : public G4CSGSolid
     G4bool CalculateExtent(const EAxis pAxis,
                            const G4VoxelLimits& pVoxelLimit,
                            const G4AffineTransform& pTransform,
-                           G4double& pMin, G4double& pMax) const;    
+                                 G4double& pMin, G4double& pMax) const;    
         
     EInside Inside(const G4ThreeVector& p) const;
 
@@ -134,14 +123,14 @@ class G4Para : public G4CSGSolid
                           const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
     
-    G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			   const G4bool calcNorm=G4bool(false),
-			   G4bool *validNorm=0,G4ThreeVector *n=0) const;
+    G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
+                           const G4bool calcNorm=G4bool(false),
+                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-             // Naming method (pseudo-RTTI : run-time type identification
+    G4GeometryType GetEntityType() const;
 
-    G4GeometryType  GetEntityType() const { return G4String("G4Para"); }
+    G4std::ostream& StreamInfo(G4std::ostream& os) const;
 
   // Visualisation functions
 
@@ -149,7 +138,7 @@ class G4Para : public G4CSGSolid
     G4Polyhedron* CreatePolyhedron   () const;
     G4NURBS*      CreateNURBS        () const;
 
-  protected:
+  protected:  // without description
 
     G4ThreeVectorList*
     CreateRotatedVertices(const G4AffineTransform& pTransform) const;
@@ -159,5 +148,7 @@ class G4Para : public G4CSGSolid
     G4double fDx,fDy,fDz;
     G4double fTalpha,fTthetaCphi,fTthetaSphi;
 };
-   	
+
+#include "G4Para.icc"
+
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.6 2001-07-11 09:59:55 gunter Exp $
+// $Id: G4Tubs.hh,v 1.7 2002-10-28 11:43:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,47 +43,23 @@
 //   A delta angle of 2PI signifies a complete, unsegmented
 //   tube/cylinder.
 //
-//   Member functions:
-//
-//   As inherited from G4VSolid+
-//
-//     G4Tubs(const G4String      &pName
-//            G4double      pRMin
-//            G4double      pRMax
-//            G4double      pDz
-//            G4double      pSPhi
-//            G4double      pDPhi )
-//
-//       - Construct a tubs with the given name and dimensions.
-//         The angles are provided is radians.
-//
-//
-//   Protected:
-//
-//     G4ThreeVectorList*
-//     CreateRotatedVertices(const G4AffineTransform& pTransform) const
-//
-//       - Create the List of transformed vertices in the format required
-//         for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-//   
 //   Member Data:
 //
-//	fRMin	Inner radius
-//	fRMax	Outer radius
-//	fDz	half length in z
+//   fRMin  Inner radius
+//   fRMax  Outer radius
+//   fDz  half length in z
 //
-//	fSPhi	The starting phi angle in radians,
-//              adjusted such the fSPhi+fDPhi<=2PI,
-//              fSPhi>-2PI
+//   fSPhi  The starting phi angle in radians,
+//          adjusted such that fSPhi+fDPhi<=2PI, fSPhi>-2PI
 //
-//	fDPhi	Delta angle of the segment in radians
+//   fDPhi  Delta angle of the segment.
 
 // History:
-// 10.8.95 P.Kent General cleanup, use G4VSolid extent helper functions
-//                to CaluclateExtent
-// 23.1.94 P.Kent Converted to `tolerant' geometry
-// 19.07.96 J.Allison G4GraphicsScene - see G4Box.
-// 22.07.96 J.Allison Changed SendPolyhedronTo to CreatePolyhedron.
+// 10.08.95 P.Kent: General cleanup, use G4VSolid extent helper functions
+//                  to CalculateExtent()
+// 23.01.94 P.Kent: Converted to `tolerant' geometry
+// 19.07.96 J.Allison: G4GraphicsScene - see G4Box
+// 22.07.96 J.Allison: Changed SendPolyhedronTo to CreatePolyhedron
 // --------------------------------------------------------------------
 
 #ifndef G4TUBS_HH
@@ -93,78 +69,99 @@
 
 class G4Tubs : public G4CSGSolid
 {
-  public:
+  public:  // with description
 
-    G4Tubs(const G4String &pName,
-	   G4double pRMin,
-	   G4double pRMax,
-	   G4double pDz,
-	   G4double pSPhi,
-	   G4double pDPhi);
+    G4Tubs( const G4String& pName,
+                  G4double pRMin,
+                  G4double pRMax,
+                  G4double pDz,
+                  G4double pSPhi,
+                  G4double pDPhi );
+      //
+      // Constructs a tubs with the given name and dimensions
 
     virtual ~G4Tubs();
+      //
+      // Destructor
+
+    // Accessors
     
-    void ComputeDimensions(G4VPVParameterisation* p,
-                           const G4int n,
-                           const G4VPhysicalVolume* pRep);
+    inline G4double GetInnerRadius   () const;
+    inline G4double GetOuterRadius   () const;
+    inline G4double GetZHalfLength   () const;
+    inline G4double GetStartPhiAngle () const;
+    inline G4double GetDeltaPhiAngle () const;
 
-    G4bool CalculateExtent(const EAxis pAxis,
-			   const G4VoxelLimits& pVoxelLimit,
-			   const G4AffineTransform& pTransform,
-			   G4double& pmin, G4double& pmax) const;
+    // Modifiers
 
-    G4double    GetInnerRadius   () const { return fRMin; }
-    G4double    GetOuterRadius   () const { return fRMax; }
-    G4double    GetZHalfLength   () const { return fDz  ; }
-    G4double    GetStartPhiAngle () const { return fSPhi; }
-    G4double    GetDeltaPhiAngle () const { return fDPhi; }
+    inline void SetInnerRadius   (G4double newRMin);
+    inline void SetOuterRadius   (G4double newRMax);
+    inline void SetZHalfLength   (G4double newDz);
+    inline void SetStartPhiAngle (G4double newSPhi);
+    inline void SetDeltaPhiAngle (G4double newDPhi);
 
-    void        SetInnerRadius  (G4double newRMin)  { fRMin= newRMin; }
-    void        SetOuterRadius  (G4double newRMax)  { fRMax= newRMax; } 
-    void        SetZHalfLength   (G4double newDz)   { fDz=   newDz  ; }
-    void        SetStartPhiAngle (G4double newSPhi) { fSPhi= newSPhi; }
-    void        SetDeltaPhiAngle (G4double newDPhi) { fDPhi= newDPhi; }
+    // Methods for solid
 
-    EInside Inside(const G4ThreeVector& p) const;
+    void ComputeDimensions(       G4VPVParameterisation* p,
+                            const G4int n,
+                            const G4VPhysicalVolume* pRep );
 
-    G4ThreeVector SurfaceNormal( const G4ThreeVector& p) const;
+    G4bool CalculateExtent( const EAxis pAxis,
+                            const G4VoxelLimits& pVoxelLimit,
+                            const G4AffineTransform& pTransform,
+                                  G4double& pmin, G4double& pmax ) const;
 
-    G4double DistanceToIn(const G4ThreeVector& p,const G4ThreeVector& v) const;
+    EInside Inside( const G4ThreeVector& p ) const;
+
+    G4ThreeVector SurfaceNormal( const G4ThreeVector& p ) const;
+
+    G4double DistanceToIn(const G4ThreeVector& p, const G4ThreeVector& v) const;
     G4double DistanceToIn(const G4ThreeVector& p) const;
-    G4double DistanceToOut(const G4ThreeVector& p,const G4ThreeVector& v,
-			   const G4bool calcNorm=G4bool(false),
-			   G4bool *validNorm=0,G4ThreeVector *n=0) const;
+    G4double DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
+                           const G4bool calcNorm=G4bool(false),
+                                 G4bool *validNorm=0, G4ThreeVector *n=0) const;
     G4double DistanceToOut(const G4ThreeVector& p) const;
 
-    G4GeometryType  GetEntityType() const { return G4String("G4Tubs"); }
-      // Naming method (pseudo-RTTI : run-time type identification)
+    G4GeometryType GetEntityType() const;
 
-  // Visualisation functions
+    G4std::ostream& StreamInfo( G4std::ostream& os ) const;
 
-    void                DescribeYourselfTo (G4VGraphicsScene& scene) const;
+    // Visualisation functions
+
+    void                DescribeYourselfTo ( G4VGraphicsScene& scene ) const;
     G4Polyhedron*       CreatePolyhedron   () const;
     G4NURBS*            CreateNURBS        () const;
 
-  //  Older names for access functions
+  public:  // without description
 
-    G4double    GetRMin() const { return GetInnerRadius(); }  // fRMin 
-    G4double    GetRMax() const { return GetOuterRadius(); }  // fRMax 
-    G4double    GetDz  () const { return GetZHalfLength()  ; }  // fDz   
-    G4double    GetSPhi() const { return GetStartPhiAngle(); }  // fSPhi 
-    G4double    GetDPhi() const { return GetDeltaPhiAngle(); }  // fDPhi
+    //  Older names for access functions
+
+    inline G4double GetRMin() const;
+    inline G4double GetRMax() const;
+    inline G4double GetDz  () const;
+    inline G4double GetSPhi() const;
+    inline G4double GetDPhi() const;
 
   protected:
 
     G4ThreeVectorList*
-    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
+    CreateRotatedVertices( const G4AffineTransform& pTransform ) const;
+      //
+      // Creates the List of transformed vertices in the format required
+      // for G4VSolid:: ClipCrossSection and ClipBetweenSections
 
     G4double fRMin,fRMax,fDz,fSPhi,fDPhi;
 
-  // Used by distanceToOut
+    // Used by distanceToOut
+
     enum ESide {kNull,kRMin,kRMax,kSPhi,kEPhi,kPZ,kMZ};
-  // used by normal
+
+    // used by normal
+
     enum ENorm {kNRMin,kNRMax,kNSPhi,kNEPhi,kNZ};
 
 };
-   	
+
+#include "G4Tubs.icc"
+
 #endif
