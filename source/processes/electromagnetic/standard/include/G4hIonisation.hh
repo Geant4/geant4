@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.8 2000-04-25 14:33:06 maire Exp $
+// $Id: G4hIonisation.hh,v 1.9 2000-05-23 14:46:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,6 +97,7 @@ class G4hIonisation : public G4VhEnergyLoss
     const G4double* DeltaCutInKineticEnergy ; 
  
     G4double DeltaCutInKineticEnergyNow ;
+    static G4double Tmincut ;
 
     static G4double LowerBoundLambda ; // bining for lambda table
     static G4double UpperBoundLambda ;
