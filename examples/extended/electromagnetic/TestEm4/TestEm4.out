@@ -45,14 +45,12 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm                       -1 mm             
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-     FluorCarbonate        3.61 keV         429 keV             ----------             
- Cuts in energy have not calculated yet !!
- Enter /run/initialize command to calculate cuts 
+     FluorCarbonate        3.61 keV         429 keV
 ===================================================
-# $Id: TestEm4.out,v 1.6 2000-08-28 13:57:25 stesting Exp $
+# $Id: TestEm4.out,v 1.7 2000-11-24 11:15:45 stesting Exp $
 #
 # Macro file for "TestEm4.cc"
 # 
@@ -88,11 +86,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=96.56s Real=105.98s Sys=9.31s
+  User=98s Real=112.09s Sys=9.04s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2064117093, 708866461
+ Current couple of seeds = 1157306522, 1306681835
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

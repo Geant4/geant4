@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-06-17 12:52:19 stesting Exp $
+$Id: History,v 1.5 2000-11-24 11:15:45 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for Change in energy cut table printout (cuts not calculated) 
+- After 50000 events the seeds are not the same as for Aug 28th.
 
 June 17, 2000  John Allison  (testem4-V01-00-00)
 - Updated TestEm4.out for geant4-01-01-ref-06.
