@@ -59,7 +59,7 @@
 # Set viewing parameters
 /vis/viewer/reset
 /vis/viewer/zoom               0.9 
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 
 # Generate page 1: Absorber
 /vis/drawVolume           Absorber 

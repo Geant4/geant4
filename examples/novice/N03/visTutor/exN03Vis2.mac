@@ -69,7 +69,7 @@
 #  drawing style: surface
 /vis/viewer/reset
 /vis/viewer/set/style surface
-/vis/viewer/viewpointThetaPhi   10  10
+/vis/viewer/set/viewpointThetaPhi   10  10
 
 # Generate one event and visualize it.
 /run/beamOn  1
@@ -109,7 +109,7 @@
 #  drawing style: wireframe
 /vis/viewer/reset
 /vis/viewer/set/style  wireframe
-/vis/viewer/viewpointThetaPhi   45 45
+/vis/viewer/set/viewpointThetaPhi   45 45
 /vis/viewer/zoom        1.5
 /run/beamOn             50
 
@@ -118,7 +118,7 @@
 #  zoom factor: 5 x (full screen size)
 /vis/viewer/reset
 /vis/viewer/set/style  wireframe
-/vis/viewer/viewpointThetaPhi   90 0
+/vis/viewer/set/viewpointThetaPhi   90 0
 /vis/viewer/zoom        5
 /run/beamOn             50
 

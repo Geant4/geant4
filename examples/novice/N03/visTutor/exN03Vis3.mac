@@ -67,7 +67,7 @@
 # Bird-eye view of events with 
 #  the hidden-surface drawing style
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi  45 45 
+/vis/viewer/set/viewpointThetaPhi  45 45 
 /vis/viewer/set/style          surface
 /run/beamOn                    10
 
@@ -99,7 +99,7 @@
 #  wireframe drawing style
 /vis/viewer/reset 
 /vis/viewer/zoom               1.5
-/vis/viewer/viewpointThetaPhi  45 45 
+/vis/viewer/set/viewpointThetaPhi  45 45 
 /vis/viewer/set/style          wireframe
 /run/beamOn                    3
 

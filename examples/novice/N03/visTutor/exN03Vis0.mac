@@ -62,7 +62,7 @@
 
 # Set camera 
 /vis/viewer/reset 
-/vis/viewer/viewpointThetaPhi 70 20
+/vis/viewer/set/viewpointThetaPhi 70 20
 
 # Create an empty scene and add the detector geometry to it
 /vis/drawVolume
@@ -101,7 +101,7 @@
 # Set camera 
 /vis/viewer/reset 
 /vis/viewer/zoom              1.5
-/vis/viewer/viewpointThetaPhi 70 20
+/vis/viewer/set/viewpointThetaPhi 70 20
 
 # Visualize events added to the current scene
 /tracking/storeTrajectory 1

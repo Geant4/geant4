@@ -59,7 +59,7 @@
 # Set camera 
 /vis/viewer/reset
 /vis/viewer/zoom       0.9 
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 
 # Visualize a selected logical volume
 /vis/specify           Absorber 
@@ -81,7 +81,7 @@
 # Set camera 
 /vis/viewer/reset
 /vis/viewer/zoom       0.9 
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 
 # Visualize a selected logical volume (1)
 /vis/specify                  Absorber 

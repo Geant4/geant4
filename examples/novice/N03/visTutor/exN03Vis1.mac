@@ -64,7 +64,7 @@
 #  zoom factor: 0.8 of the full screen size
 #
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi  20 70
+/vis/viewer/set/viewpointThetaPhi  20 70
 /vis/viewer/zoom               0.8 
 /vis/drawVolume
 
@@ -102,7 +102,7 @@
 #
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 /vis/drawVolume           Absorber 
 /vis/scene/add/axes      0 0 0 500 mm
 /vis/scene/add/text      0 0 0 mm  40 -100 -140   Absorber 
@@ -120,7 +120,7 @@
 # Bird's-eye view of a detector component (Gap)
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 /vis/drawVolume                Gap 
 /vis/scene/add/axes  	  0 0 0 500 mm
 /vis/scene/add/text       0 0 0 mm  50 -100 -140   Gap 
@@ -143,7 +143,7 @@
 #     in ExN03DetectorConstruction.cc.)
 /vis/viewer/reset
 /vis/viewer/zoom               1.1
-/vis/viewer/viewpointThetaPhi  35 35
+/vis/viewer/set/viewpointThetaPhi  35 35
 /vis/viewer/set/culling         global false
 /vis/drawVolume 
 /vis/scene/add/axes      0 0 0 500 mm

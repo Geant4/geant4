@@ -51,7 +51,7 @@
 
 # Bird-eye view of events
 /vis/viewer/reset 
-/vis/viewer/viewpointThetaPhi   45 45 
+/vis/viewer/set/viewpointThetaPhi   45 45 
 
 /run/beamOn 1
 
