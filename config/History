@@ -1,4 +1,4 @@
-$Id: History,v 1.53 1999-07-28 09:52:27 gracia Exp $
+$Id: History,v 1.54 1999-09-17 13:49:47 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17th Sep 1999  Youhei Morita
+- architecture.gmk: Defined G4TMPSCHEMA_DIR, G4TMPSCHEMA_BOOT
+                    Added OBJY_LDLIB definition for Objectivity 5.1
+- binmake.gmk: LDLIBS1 += -lG4persistency
+- common.gmk: Changed ooddlx boot file option to G4OODDLX_BOOT
+- globlib.gmk: Changed G4EXAMPLE_BOOT to G4TMPSCHEMA_BOOT
+- G4ODBMS_BUILD.gmk: Defined HEP_ODBMS_EXPORT for HepODBMS 0.3.0.x
 
 27th July 1999  Gonzalo Gracia Abril
 - Changed OSPACELIBS := '-libpath:c:\dev\ospace\lib std-2.1-vc5.0-mt.lib'
