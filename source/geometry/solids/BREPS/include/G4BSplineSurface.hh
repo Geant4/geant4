@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.1 1999-01-07 16:07:26 gunter Exp $
+// $Id: G4BSplineSurface.hh,v 1.2 1999-05-21 18:40:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINESURFACE_H
@@ -54,7 +54,7 @@ public:
     bezier_list.EmptyList();
     projected_list.EmptyList();
     Intersected=0;
-    distance = INFINITY;
+    distance = kInfinity;
   }
 
   // get for controlpoints

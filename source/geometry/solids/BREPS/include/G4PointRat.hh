@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.1 1999-01-07 16:07:34 gunter Exp $
+// $Id: G4PointRat.hh,v 1.2 1999-05-21 18:40:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -17,6 +17,8 @@
 
 #ifndef __G4POINT_RAT
 #define __G4POINT_RAT
+
+#include "geomdefs.hh"              // For kInfinity
 
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
@@ -33,8 +35,8 @@
 #define SMALL                   SQRT_SMALL_FASTF       
 #define ROW 0
 #define COL 1
-const G4double  INFINITY = 9.0e+99;
-const G4Point3D PINFINITY(INFINITY, INFINITY, INFINITY );
+// const G4double  INFINITY = 9.0e+99;
+const G4Point3D PINFINITY(kInfinity, kInfinity, kInfinity);
 
 class G4Plane;
 
