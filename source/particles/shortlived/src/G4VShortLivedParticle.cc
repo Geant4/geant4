@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VShortLivedParticle.cc,v 1.4 2001-07-11 10:02:09 gunter Exp $
+// $Id: G4VShortLivedParticle.cc,v 1.5 2001-10-15 10:00:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,32 +62,52 @@ void            G4VShortLivedParticle::ResetCuts()
 {
   G4cout << "G4VShortLivedParticle::ResetCuts() causes no effect!!" << G4endl;
 }
+
 void            G4VShortLivedParticle::SetCuts(G4double )
 {
   G4cout << "G4VShortLivedParticle::SetCuts() causes no effect!!" << G4endl;
 }
+
+void            G4VShortLivedParticle::SetRangeCut(G4double ,const G4Material*)
+{
+  G4cout << "G4VShortLivedParticle::SetRangeCut() causes no effect!!" << G4endl;
+}
+
+void            G4VShortLivedParticle::SetRangeCutVector(G4std::vector<G4double>
+&)
+{
+  G4cout << "G4VShortLivedParticle::SetRangeCutVector() causes no effect!!" << G4endl;
+}
+
 void            G4VShortLivedParticle::ReCalcCuts()
 {
   G4cout << "G4VShortLivedParticle::ReCalcCuts() causes no effect!!" << G4endl;
 }
 
-G4double      	G4VShortLivedParticle::GetLengthCuts() const
-{
-  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
-  return -1.0;
-}
-
-G4double*	G4VShortLivedParticle::GetEnergyCuts() const
+G4double*       G4VShortLivedParticle::GetLengthCuts() const
 {
   G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
   return 0;
 }
 
-G4double      	G4VShortLivedParticle::GetEnergyThreshold(const G4Material* ) const
+G4double*       G4VShortLivedParticle::GetEnergyCuts() const
+{
+  G4cout << "G4VShortLivedParticle::GetLengthCuts() causes no effect!!" << G4endl;
+  return 0;
+}
+
+G4double        G4VShortLivedParticle::GetRangeThreshold(const G4Material* ) const
+{
+  G4cout << "G4VShortLivedParticle::GetRangeThreshold() causes no effect!!" << G4endl;
+  return -1.0*mm;
+}
+
+G4double        G4VShortLivedParticle::GetEnergyThreshold(const G4Material* ) const
 {
   G4cout << "G4VShortLivedParticle::GetEnergyThreshold() causes no effect!!" << G4endl;
-  return -1.0;
+  return -1.0*eV;
 }
+
 
 const G4VShortLivedParticle & G4VShortLivedParticle::operator=(const G4VShortLivedParticle& right)
 {
