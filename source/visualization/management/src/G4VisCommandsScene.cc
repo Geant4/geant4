@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.37 2003-12-01 11:12:59 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.38 2005-02-23 11:44:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -549,8 +549,9 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand*,
   G4VViewer* pCurrentViewer = fpVisManager -> GetCurrentViewer();
   if (pCurrentSceneHandler) {
     pCurrentSceneHandler -> SetCurrentViewer (pCurrentViewer);
-    if (pCurrentViewer && pCurrentSceneHandler->GetScene())
+    if (pCurrentViewer && pCurrentSceneHandler->GetScene()) {
       pCurrentViewer -> SetView ();
+    }
   }
 }
 
