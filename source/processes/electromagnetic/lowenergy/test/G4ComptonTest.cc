@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4ComptonTest.cc,v 1.9 2001-09-10 18:07:55 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.10 2001-09-14 09:37:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +30,7 @@
 //
 //      File name:     G4ComptonTest
 //
-//      Author:        Maria Grazia Pia
+//      Author:        Maria Grazia Pia 
 // 
 //      Creation date: 2 May 2001
 //
@@ -62,14 +61,12 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
-
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
-
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
-
 #include "G4UnitsTable.hh"
+
 #include "CLHEP/Hist/TupleManager.h"
 #include "CLHEP/Hist/HBookFile.h"
 #include "CLHEP/Hist/Histogram.h"
@@ -81,10 +78,6 @@ int main()
 {
 
   // Setup
-
-  G4int nIterations = 100000;
-  G4int materialId = 3;
-  G4int test = 0;
 
   G4cout.setf( ios::scientific, ios::floatfield );
 
@@ -121,7 +114,7 @@ int main()
   assert (hNSec != 0);  
   
   HepHistogram* hDebug;
-  hDebug = hbookManager->histogram("Debug", 100,0.,200.);
+  hDebug = hbookManager->histogram("Local energy deposit", 100,0.,200.);
   assert (hDebug != 0);  
   
 
@@ -163,30 +156,22 @@ int main()
   Air->AddElement(N,0.7);
   Air->AddElement(O,0.3);
 
-
   // Interactive set-up
 
   G4cout << "How many interactions? " << G4endl;
+  G4int nIterations;
   G4cin >> nIterations;
-
   if (nIterations <= 0) G4Exception("Wrong input");
 
-  G4double initEnergy = 1*MeV; 
-  G4double initX = 0.; 
-  G4double initY = 0.; 
-  G4double initZ = 1.;
-
   G4cout << "Enter the initial particle energy E (MeV)" << G4endl; 
+  G4double initEnergy; 
   G4cin >> initEnergy ;
-
   initEnergy = initEnergy * MeV;
-
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-
- G4int nMaterials = theMaterialTable->length();
-
+  // Dump the material table
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int nMaterials = theMaterialTable->length();
   G4cout << "Available materials are: " << G4endl;
   for (G4int mat = 0; mat < nMaterials; mat++)
     {
@@ -196,6 +181,7 @@ int main()
     }
 
   G4cout << "Which material? " << G4endl;
+  G4int materialId;
   G4cin >> materialId;
 
   G4Material* material = (*theMaterialTable)(materialId) ;
@@ -204,19 +190,21 @@ int main()
 	 << material->GetName()
 	 << G4endl;
 
-  G4double dimX = 1*mm;
-  G4double dimY = 1*mm;
-  G4double dimZ = 1*mm;
+  G4double initX = 0. * mm; 
+  G4double initY = 0. * mm; 
+  G4double initZ = 1. * mm;
+
+  G4double dimX = 1 * mm;
+  G4double dimY = 1 * mm;
+  G4double dimZ = 1 * mm;
   
   // Geometry 
 
   G4Box* theFrame = new G4Box ("Frame",dimX, dimY, dimZ);
-  
   G4LogicalVolume* logicalFrame = new G4LogicalVolume(theFrame,
 						      (*theMaterialTable)(materialId),
 						      "LFrame", 0, 0, 0);
   logicalFrame->SetMaterial(material); 
-  
   G4PVPlacement* physicalFrame = new G4PVPlacement(0,G4ThreeVector(),
 						   "PFrame",logicalFrame,0,false,0);
   
@@ -296,15 +284,12 @@ int main()
 
   // Track 
 
-  G4ThreeVector aPosition(0.,0.,0.);
-  G4ThreeVector newPosition(0.,0.,1.*mm);
-  G4double aTime = 0. ;
+  G4ThreeVector position(0.,0.,0.);
+  G4double time = 0. ;
+  G4Track* gTrack = new G4Track(&dynamicPhoton,time,position);
 
-  G4Track* gTrack = new G4Track(&dynamicPhoton,aTime,aPosition);
-
-  // do I really need this?
-
-  G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, aPosition);   
+  // Do I really need this?
+  G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, position);   
   gTrack->SetTouchable(touche);
  
  // Step 
@@ -312,13 +297,15 @@ int main()
   G4Step* step = new G4Step();  
   step->SetTrack(gTrack);
 
-  G4StepPoint* aPoint = new G4StepPoint();
-  aPoint->SetPosition(aPosition);
-  aPoint->SetMaterial(material);
+  G4StepPoint* point = new G4StepPoint();
+  point->SetPosition(position);
+  point->SetMaterial(material);
   G4double safety = 10000.*cm;
-  aPoint->SetSafety(safety);
-  step->SetPreStepPoint(aPoint);
+  point->SetSafety(safety);
+  step->SetPreStepPoint(point);
+
   G4StepPoint* newPoint = new G4StepPoint();
+  G4ThreeVector newPosition(0.,0.,1.*mm);
   newPoint->SetPosition(newPosition);
   newPoint->SetMaterial(material);
   step->SetPostStepPoint(newPoint);
@@ -340,16 +327,15 @@ int main()
 
       gTrack->SetStep(step); 
  
-      G4cout  <<  "Iteration = "  <<  iter 
+      G4cout  <<  "Iteration = "  
+	      <<  iter 
 	      << "  -  Step Length = " 
-	      << step->GetStepLength()/mm << " mm "
+	      << step->GetStepLength()/mm 
+	      << " mm "
 	      << G4endl;
 
-      G4VParticleChange* dummy;
-      dummy = photonProcess->PostStepDoIt(*gTrack, *step);
-
-      G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
-      
+      G4ParticleChange* particleChange = (G4ParticleChange*) photonProcess->PostStepDoIt(*gTrack,*step);
+     
       // Primary physical quantities 
 
       G4double energyChange = particleChange->GetEnergyChange();
@@ -360,10 +346,10 @@ int main()
 							   (*particleChange->GetMomentumChange()),
 							   particleChange->GetMassChange());
 
-      G4double pxChange  = eChange.x();
-      G4double pyChange  = eChange.y();
-      G4double pzChange  = eChange.z();
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pxChange = eChange.x();
+      G4double pyChange = eChange.y();
+      G4double pzChange = eChange.z();
+      G4double pChange = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -378,7 +364,8 @@ int main()
       //	     << zChange << "   " 
       //	     << G4endl;
 
-      G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
+      G4cout << "---- Energy: " 
+	     << energyChange/MeV << " MeV,  " 
 	     << "(px,py,pz): ("
 	     << pxChange/MeV << ","
 	     << pyChange/MeV << "," 
@@ -386,21 +373,18 @@ int main()
 	     << G4endl;
 
       G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
-      //      G4cout << "Stopping power (dE/dx)=" << dedxNow << G4endl;
       
-      // Secondaries 
+      // Primary
 
       ntuple1->column("eprimary", initEnergy);
       ntuple1->column("energyf", energyChange);
       ntuple1->column("de", dedx);
       ntuple1->column("dedx", dedxNow);
-      ntuple1->column("pxch", xChange);
+      ntuple1->column("pxch", pxChange);
       ntuple1->column("pych", pyChange);
       ntuple1->column("pzch", pzChange);
-      ntuple1->column("pch", zChange);  
+      ntuple1->column("pch", pChange);  
       ntuple1->column("thetach", thetaChange);  
-      
-      // Secondaries physical quantities 
       
       hNSec->accumulate(particleChange->GetNumberOfSecondaries());
       hDebug->accumulate(particleChange->GetLocalEnergyDeposit());
@@ -409,21 +393,20 @@ int main()
       G4int nPositrons = 0;
       G4int nPhotons = 0;
 
+      // Secondaries
+      
       for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) 
-	{
-	  // The following two items should be filled per event, not
-	  // per secondary; filled here just for convenience, to avoid
-	  // complicated logic to dump ntuple when there are no secondaries
-	  
+	{  
 	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
 	  
-	  G4double e    = finalParticle->GetTotalEnergy();
+	  G4double e  = finalParticle->GetTotalEnergy();
 	  G4double eKin = finalParticle->GetKineticEnergy();
-	  G4double px   = (finalParticle->GetMomentum()).x();
-	  G4double py   = (finalParticle->GetMomentum()).y();
-	  G4double pz   = (finalParticle->GetMomentum()).z();
-	  G4double theta   = (finalParticle->GetMomentum()).theta();
-	  G4double p   = sqrt(px*px+py*py+pz*pz);
+	  G4double px = (finalParticle->GetMomentum()).x();
+	  G4double py = (finalParticle->GetMomentum()).y();
+	  G4double pz = (finalParticle->GetMomentum()).z();
+	  G4double theta = (finalParticle->GetMomentum()).theta();
+	  G4double phi = (finalParticle->GetMomentum()).phi();
+	  G4double p = sqrt(px*px+py*py+pz*pz);
 
 	  if (eKin > initEnergy)
 	    {
@@ -432,12 +415,12 @@ int main()
 
 	  G4String particleName = finalParticle->GetDefinition()->GetParticleName();
 	  G4cout  << "==== Final " 
-		  <<  particleName  <<  " "  
-		  << "energy: " <<  e/MeV  <<  " MeV,  " 
-		  << "eKin: " <<  eKin/MeV  <<  " MeV, " 
+		  <<  particleName  << " "  
+		  << "energy: " <<  e/MeV  << " MeV,  " 
+		  << "eKin: " <<  eKin/MeV  << " MeV, " 
 		  << "(px,py,pz): ("
-		  <<  px/MeV  <<  "," 
-		  <<  py/MeV  <<  ","
+		  <<  px/MeV  << "," 
+		  <<  py/MeV  << ","
 		  <<  pz/MeV  << ") MeV "
 		  <<  G4endl;   
 	  
@@ -460,6 +443,7 @@ int main()
 	      partType = 3;
 	      nPhotons++;
 	    }
+	
 	  // Fill the secondaries ntuple
           ntuple2->column("eprimary",initEnergy);
 	  ntuple2->column("px", px);
@@ -467,8 +451,9 @@ int main()
 	  ntuple2->column("pz", pz);
 	  ntuple2->column("p", p);
 	  ntuple2->column("e", e);
-	  ntuple2->column("theta", theta);
 	  ntuple2->column("ekin", eKin);
+	  ntuple2->column("theta", theta);
+	  ntuple2->column("phi", phi);
 	  ntuple2->column("type", partType);
 	  
 	  ntuple2->dumpData(); 
@@ -485,66 +470,15 @@ int main()
       
     } 
   
-  
-  cout  << "End of iteration "  <<  G4endl;
+  G4cout  << "-----------------------------------------------------"  
+	  <<  G4endl;
+
   hbookManager->write();
   delete hbookManager;
-  
-  // delete materials and elements
-  //  delete Be;
-  //  delete Graphite;
-  //  delete Al;
-  //  delete Si;
-  //  delete LAr;
-  //  delete Fe;
-  //  delete Cu;
-  //  delete W;
-  //  delete Pb;
-  //  delete U;
-  //  delete H;
-  //  delete maO;
-  //  delete C;
-  //  delete Cs;
-  //  delete I;
-  //  delete O;
-  //  delete water;
-  //  delete ethane;
-  //  delete csi;
-  //  delete step;
-  //  delete touche;
-  //  delete Be;
-  //  delete Graphite;
-  //  delete Al;
-  //  delete Si;
-  //  delete LAr;
-  //  delete Fe;
-  //  delete Cu;
-  //  delete W;
-  //  delete Pb;
-  //  delete U;
-  //  delete H;
-  //  delete maO;
-  //  delete C;
-  //  delete Cs;
-  //  delete I;
-  //  delete O;
-  //  delete water;
-  //  delete ethane;
-  //  delete csi;
+
+  delete touche;
   delete step;
-  //  delete touche;
+  delete gTrack;
 
-  cout << "END OF THE MAIN PROGRAM" << G4endl;
+  cout << "END OF TEST" << G4endl;
 }
-
-
-
-
-
-
-
-
-
-
-
-
