@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.22 2002-01-16 01:54:20 radoone Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.23 2002-01-16 09:00:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,14 +36,13 @@
 // outer conical surfaces are defined using common Z planes. 
 // ----------------------------------------------------------------------
 
+#include "g4std/strstream"
+
 #include "G4BREPSolidPCone.hh"
 #include "G4FCylindricalSurface.hh"
 #include "G4FConicalSurface.hh"
 #include "G4CircularCurve.hh"
 #include "G4FPlane.hh"
-
-#include <cstdio>
-
 
 G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 				   G4double start_angle,
@@ -75,21 +74,21 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   // when RMIN[0] or RMIN[num_z_planes-1] are = 0
   if(  ((RMIN[0] == 0)              && (RMAX[0] == 0))             || 
        ((RMIN[num_z_planes-1] == 0) && (RMAX[num_z_planes-1] == 0))   )
-    G4Exception("RMIN at the extremities can not be nul when RMAX = 0");  
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMIN at the extremities cannot be 0 when RMAX = 0 !");  
   
   // only RMAX[0] and RMAX[num_z_planes-1] can be = 0
   for(a = 1; a < num_z_planes-1; a++)
     if (RMAX[a] == 0)
-      G4Exception("RMAX inside the solid  can not be nul");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX inside the solid cannot be 0 !");
   
   // RMAX[a] must be greater than RMIN[a] 
   for(a = 1; a < num_z_planes-1; a++)
     if (RMIN[a] >= RMAX[a])
-      G4Exception("RMAX must be greater that RMIN in the middle Z planes.");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX must be greater than RMIN in the middle Z planes !");
   
   if( (RMIN[num_z_planes-1] > RMAX[num_z_planes-1] )
       || (RMIN[0] > RMAX[0]) ) 
-      G4Exception("RMAX must be greater or equal to RMIN at the ends.");
+      G4Exception("G4BREPSolidPCone::G4BREPSolidPCone() - RMAX must be greater or equal than RMIN at the ends !");
 
   // Create surfaces
   for( a = 0; a < sections; a++)
@@ -136,10 +135,10 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         // where i in in interval 0 < i < num_z_planes-1. So:
         if( RMIN[a] > RMAX[a+1] || RMAX[a] < RMIN[a+1] ) {
           char msgbuf[512];
-          sprintf( msgbuf,
-                   "\nThe values of RMIN[%d] & RMAX[%d] or RMAX[%d] & RMIN[%d] \
-                    make invalid configuration of G4BREPSolidPCone %s!\n",
-                   a, a+1, a, a+1, name.c_str() );
+          G4std::ostrstream os(msgbuf,512);
+          os << G4endl << "G4BREPSolidPCone::G4BREPSolidPCone() - The values "
+                       << "of RMIN[" << a << "] & RMAX[" << a+1 << "] or RMAX[" << a << "] & RMIN[" << a+1 << "] "
+                       << "make an invalid configuration of G4BREPSolidPCone " << name.c_str() << "!" << G4endl;
           G4Exception( msgbuf );
         }
         
@@ -354,12 +353,11 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
   /*
   if( z_values[0] != z_start )
   {
-  G4cerr << "ERROR in creating G4BREPSolidPCone: "  
-  << " z_values[0]= " << z_values[0] << " is not equal to " 
-  << " z_start= " , z_start; 
-  // G4Exception(" Error in creating G4BREPSolidPCone: z_values[0] must be equal to z_start" );
-  original_parameters.Z_values[0]= z_start;
-
+    G4cerr << "ERROR in creating G4BREPSolidPCone: "  
+           << " z_values[0]= " << z_values[0] << " is not equal to " 
+           << " z_start= " , z_start; 
+    // G4Exception(" Error in creating G4BREPSolidPCone: z_values[0] must be equal to z_start" );
+    original_parameters.Z_values[0]= z_start;
   }
   */ 
   

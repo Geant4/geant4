@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPCone.hh,v 1.7 2002-01-16 01:51:53 radoone Exp $
+// $Id: G4BREPSolidPCone.hh,v 1.8 2002-01-16 09:00:26 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -123,7 +123,7 @@ private:
   G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
                                    G4ThreeVector origin,
                                    G4ThreeVector planeAxis, G4ThreeVector planeDirection );
-  // For a given radius values compute a planar surface
+    // For a given radius values compute a planar surface
 
   G4BREPSolidPCone(const G4BREPSolidPCone&);
   G4BREPSolidPCone& operator=(const G4BREPSolidPCone&);
