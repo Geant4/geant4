@@ -43,6 +43,7 @@
 
 #include "G4hIonisationSTD.hh"
 #include "G4ionIonisation.hh"
+#include "G4MuonMinusCaptureAtRest.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -97,6 +98,7 @@ void test31ModelEM::ConstructProcess()
       pmanager->AddProcess(new G4MuIonisationSTD,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlungSTD,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);
+      if( particleName == "mu-") pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
 
     } else if( particleName == "GenericIon" ) {
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
