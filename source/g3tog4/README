@@ -40,16 +40,23 @@ following command from the geant4/source directory:
 
 gmake global
 
-To build the converter executable "rztog4" and the "clGeometry" example, 
-simply type:
-
-gmake examples
-
 To compile and build the G3toG4 libraries, simply type
 
 gmake
 
 from the top-level G3toG4 directory. 
+
+To build the converter executable "rztog4", simply type
+
+gmake bin
+
+To build the example executables, simply type:
+
+gmake examples
+
+To make everything, simply type:
+
+gmake all
 
 To remove all G3toG4 libraries, executables and .d files, simply type
 

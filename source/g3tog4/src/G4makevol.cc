@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4makevol.cc,v 1.3 1999-05-01 21:42:03 lockman Exp $
+// $Id: G4makevol.cc,v 1.4 1999-05-02 05:08:32 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ios.hh"
@@ -25,7 +25,6 @@
 #include "G4Polycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Para.hh"
-#include "G4VisAttributes.hh"
 
 G4double G3Bound(const G4String& s, const G4double& low,
 		 const G4double& high, G4double val)
@@ -401,12 +400,6 @@ G4LogicalVolume* G4makevol(G4String vname, G4String shape, G4int nmed,
     // check that the G3toG4 global mother is set
         
     G3Vol.SetMother(lvol);
-        
-    // hardcode the visual attributes
-
-    G4VisAttributes VisAtt(G4Colour(1.0,1.0,1.0));
-    VisAtt.SetVisibility(true);
-    lvol->SetVisAttributes(VisAtt);
   }
   return lvol;
 }

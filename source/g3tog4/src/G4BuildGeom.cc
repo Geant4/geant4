@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.2 1999-05-01 21:42:01 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.3 1999-05-02 05:08:27 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,70 +22,83 @@
 // code from geant 3 geometry and builds the g4 geometry
 // It returns a pointer to the logical volume of the mother of all worlds.
 
-#include "G4ios.hh"
+#include <iostream.h>
+#include <iomanip.h>
 #include <fstream.h>
+#include "G4ios.hh"
 #include "G4GeometryManager.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 #include "G4LogicalVolume.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4VisAttributes.hh"
 #include "globals.hh"
 extern ofstream ofile;
 
 void G3CLRead(G4String &, char *);
 void checkVol(G4LogicalVolume*, G4int);
+void checkVol();
 
 
 G4LogicalVolume* G4BuildGeom(G4String& inFile)
 {
-        // Read the call List and interpret to Generate Geant4 geometry
+  // Read the call List and interpret to Generate Geant4 geometry
 
-    G4cout << "Reading the call List file " << inFile << "..." << endl;
+  G4cout << "Reading the call List file " << inFile << "..." << endl;
 
-    G3CLRead(inFile, NULL);
+  G3CLRead(inFile, NULL);
 
-    G4cout << "Call List file read completed." << endl;
+  G4cout << "Call List file read completed." << endl;
 
         // Retrieve the top-level G3toG4 logical mother volume pointer
 
-    G4LogicalVolume* lG3toG4 = G3Vol.GetLV();
+  G4LogicalVolume* lG3toG4 = G3Vol.GetLV();
 
-        // make the top-level volume invisible
+  // mark as invisible
+
+  lG3toG4->SetVisAttributes(G4VisAttributes::Invisible);
     
-    lG3toG4 -> SetVisAttributes(G4VisAttributes::Invisible);
-    G4cout << "Top-level G3toG4 logical volume " << lG3toG4->GetName() << " "
+  G4cout << "Top-level G3toG4 logical volume " << lG3toG4->GetName() << " "
          << *(lG3toG4 -> GetVisAttributes()) << endl;
         
         // check the geometry here
 
-    G4int debug=1;
+  G4int debug=0;
         
-    if (debug){
-        G4int level=0;
-        checkVol(lG3toG4, level);
-    }
-        
-    return lG3toG4;
+  if (debug){
+    cout << "scan through G4LogicalVolumeStore:" << endl;
+    checkVol();
+  }
+  return lG3toG4;
+}
+
+void checkVol()
+{
+  G4LogicalVolumeStore* theStore = G4LogicalVolumeStore::GetInstance();
+  G4LogicalVolume* ll = (*theStore)[0];
+  G4int level=0;
+  checkVol(ll, level);
 }
 
 void checkVol(G4LogicalVolume* _lvol, G4int level)
 {
-    G4LogicalVolume* _ldvol;
-    G4VPhysicalVolume* _pdvol;
-    level++;
-    
-    G4int ndau = _lvol -> GetNoDaughters();
-    
-    for (int idau=0; idau<ndau; idau++){
-        _pdvol = _lvol-> GetDaughter(idau);
-        
-        G4cout << "logical volume " << _lvol->GetName() << " at level " << level
-             << " contains Physical Daughter volume "
-             << _pdvol -> GetName() << endl;
-	_ldvol = _pdvol -> GetLogicalVolume();
-        checkVol(_ldvol, level);
-    }
-    return;
+  G4LogicalVolume* _ldvol;
+  G4VPhysicalVolume* _pdvol;
+  level++;
+  
+  G4int ndau = _lvol -> GetNoDaughters();
+  
+  G4cout << "G44LogicalVolume " << _lvol->GetName() << " at level " << level
+	 << " contains " << ndau << " daughters." << endl;
+  for (int idau=0; idau<ndau; idau++){
+    _pdvol = _lvol-> GetDaughter(idau);
+    _ldvol = _pdvol -> GetLogicalVolume();
+    cout << "G4VPhysical volume " << setw(5) << _pdvol -> GetName() 
+	 << " (G4LogicalVolume " << setw(5) << _ldvol->GetName() << ")" 
+	 << endl;
+    checkVol(_ldvol, level);
+  }
+  return;
 }
 
 

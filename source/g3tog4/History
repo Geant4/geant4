@@ -1,14 +1,17 @@
-$Id: History,v 1.3 1999-05-01 21:41:58 lockman Exp $
+$Id: History,v 1.4 1999-05-02 05:07:59 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 g3tog4-01-00-02 24-Apr-1999 Lockman
+- clGeometry.cc: cleaned up and added some default commands
+- added G3toG4EventAction and EventActionMessenger classes to draw tracks
 - GNUmakefile: clean now cleans g3tog4 and all subdirectories
 - GNUmakefile: cleanf: $(RM) now runs quietly
+- GNUmakefile: re-enabled libF target
 - README: updated instructions on how to configure environment and make
 - G4BuildGeom.cc: replace checkLogVol with checkVol which prints out logical
   volumes and their physical daughters
-- G4makevol: use G4LogicalVolume(solid, material, name) constructor
+- G4makevol: use G4LogicalVolume(solid, material, name) constructor.
 - test/GNUmakefile: define INCFLAGS
 - test/README: modified and shortened
 - test/src/G3toG4DetectorConstruction.cc: add SimpleConstruct() method 

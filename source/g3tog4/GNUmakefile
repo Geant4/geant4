@@ -96,7 +96,6 @@ cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 .PHONY: global all lib bin libC libF
 
 ###--------------------- section to define explicit rules --------------------
-##first: lib bin
 
 first: lib
 
@@ -114,7 +113,7 @@ cltog4:
 clGeometry:
 	cd test; $(MAKE) "G4TARGET=clGeometry"
 
-lib: libc #libF
+lib: libc libF
 	@echo $@ stage done in $(curdir)
 
 libc : $(G4LIBDIR)/lib$(name).a
