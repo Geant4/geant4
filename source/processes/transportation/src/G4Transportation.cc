@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.30 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4Transportation.cc,v 1.31 2002-11-08 23:52:34 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -434,6 +434,10 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   }
   // Another (sometimes better way) is to use a user-limit maximum Step size
   //  to alleviate this problem .. 
+
+  // Introducing smooth curved trajectories (jacek 31/10/2002)
+  fParticleChange.SetPointerToVectorOfAuxiliaryPoints
+    (fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
 
   return &fParticleChange ;
 
