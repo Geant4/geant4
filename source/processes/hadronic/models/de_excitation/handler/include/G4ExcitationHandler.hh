@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitationHandler.hh,v 1.3 2003-08-29 10:02:20 lara Exp $
+// $Id: G4ExcitationHandler.hh,v 1.4 2003-10-07 12:54:01 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -129,14 +129,14 @@ private:
   G4bool MyOwnFermiBreakUpClass;
   G4bool MyOwnPhotonEvaporationClass;
 
-    struct DeleteFragment 
+  struct DeleteFragment 
+  {
+    template<typename T>
+    void operator()(const T* ptr) const
     {
-	template<typename T>
-	void operator()(const T* ptr) const
-	    {
-		delete ptr;
-	    }
-    };
+      delete ptr;
+    }
+  };
 
 
 };
