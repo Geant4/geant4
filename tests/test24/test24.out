@@ -93,7 +93,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -110,7 +111,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -140,7 +142,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=65s Real=66s Sys=0.35s
+  User=64s Real=66s Sys=0.2s
 #
 # neutron at 10 GeV in U
 #
@@ -169,7 +171,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=33s Real=34s Sys=0.12s
+  User=54s Real=56s Sys=0.16s
 #
 # pi+ at 10 GeV in U
 #
@@ -198,7 +200,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=60s Real=61s Sys=0.08s
+  User=63s Real=66s Sys=0.18s
 #
 # pi- at 10 GeV in U
 #
@@ -227,7 +229,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=58s Real=59s Sys=0.11s
+  User=61s Real=62s Sys=0.1s
 #
 # proton at 10 GeV in Cu
 #
@@ -298,7 +300,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -315,7 +318,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -345,7 +349,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=32s Real=34s Sys=0.32s
+  User=30s Real=32s Sys=0.29s
 #
 # neutron at 10 GeV in Cu
 #
@@ -379,7 +383,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=30s Real=30s Sys=0.11s
+  User=30s Real=32s Sys=0.09s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -413,7 +417,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=31s Real=32s Sys=0.11s
+  User=30s Real=30s Sys=0.11s
 #
 # pi- at 10 GeV in Cu
 #
@@ -447,7 +451,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=28s Real=28s Sys=0.06s
+  User=34s Real=34s Sys=0.11s
 #
 # proton at 10 GeV in Si
 #
@@ -518,7 +522,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -535,7 +540,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -570,7 +576,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=16s Real=17s Sys=0.03s
+  User=18s Real=21s Sys=0.04s
 #
 # neutron at 10 GeV in Si
 #
@@ -609,7 +615,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=18s Real=18s Sys=0.03s
+  User=19s Real=19s Sys=0.03s
 #
 # pi+ at 10 GeV in Si
 #
@@ -648,7 +654,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=22s Real=22s Sys=0.02s
+  User=22s Real=22s Sys=0.01s
 #
 # pi- at 10 GeV in Si
 #
@@ -687,7 +693,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=20s Real=20s Sys=0.02s
+  User=18s Real=18s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -755,7 +761,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -772,7 +779,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -812,7 +820,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.95s Real=0.97s Sys=0.02s
+  User=0.01s Real=0.01s Sys=0s
 #
 # neutron at 10 GeV in H
 #
@@ -856,7 +864,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.86s Real=0.86s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # pi+ at 10 GeV in H
 #
@@ -944,7 +952,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

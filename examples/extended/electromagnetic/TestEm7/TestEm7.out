@@ -140,7 +140,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -157,7 +158,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -230,20 +232,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=374.83s Real=527.64s Sys=75.42s
+  User=351.71s Real=532.4s Sys=78.13s
 
 ---------------------------------------------------------
  Cumulated Doses : 	Edep      	Edep/Ebeam 	Dose
-tally 0: 	 	10.3705 GeV	0.648158 % 	0.000207693 Gy
-tally 1: 	 	7.55399 GeV	0.472124 % 	0.000151285 Gy
-tally 2: 	 	3.239 GeV	0.202437 % 	6.48681e-05 Gy
-tally 3: 	 	1.58052 GeV	0.0987827 % 	3.16535e-05 Gy
+tally 0: 	 	10.399 GeV	0.649937 % 	0.000208263 Gy
+tally 1: 	 	7.59729 GeV	0.47483 % 	0.000152152 Gy
+tally 2: 	 	3.22967 GeV	0.201855 % 	6.46814e-05 Gy
+tally 3: 	 	1.62853 GeV	0.101783 % 	3.26149e-05 Gy
 
 ---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1367517923, 1632000272
+ Current couple of seeds = 1070143990, 1826306137
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

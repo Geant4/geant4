@@ -91,7 +91,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -108,7 +109,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 Region DefaultRegionForTheWorld
  Materials : Iron 
@@ -162,7 +164,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m   -65.2 mum -53.1 mum   257 GeV  29.5 TeV  4.75 km   4.75 km   OutOfWorld  Transportation
+    1    250 m   -65.2 mum -53.1 mum   257 GeV  29.5 TeV  4.76 km   4.76 km   OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -170,7 +172,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m    27.6 mum  22.6 mum     0 eV   70.2 TeV  11.2 km   11.2 km   OutOfWorld  Transportation
+    1    250 m    27.6 mum  22.6 mum     0 eV   70.2 TeV  11.2 km   11.2 km         Iron  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -202,7 +204,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -84.8 m       0 fm      0 fm     92 TeV     0 eV      0 fm      0 fm         Iron    initStep
-    1    250 m     623 mum -1.81 mm      0 eV     92 TeV   335 m     335 m    OutOfWorld  Transportation
+    1    250 m     623 mum -1.81 mm      0 eV     92 TeV   548 m     548 m          Iron  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -214,7 +216,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.02s Real=4.8s Sys=0.02s
+  User=0.01s Real=3.1s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

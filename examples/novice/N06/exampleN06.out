@@ -86,7 +86,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -103,7 +104,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -1104,6 +1106,6 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1      5 m    -2.5 m    1.72 m    3.21 eV      0 eV   5.85 m    5.85 m          Tank  Transportation
     2     10 m   -6.58 m    4.52 m    3.21 eV      0 eV   7.03 m    12.9 m    OutOfWorld  Transportation
 Number of optical photons produces in this event : 57
-number of event = 1 User=0.21s Real=0.35s Sys=0.14s
+number of event = 1 User=0.2s Real=0.36s Sys=0.16s
 Graphics systems deleted.
 Visualization Manager deleting...

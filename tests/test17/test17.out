@@ -82,8 +82,6 @@ Ionic processes for deuteron
 phot:  Total cross sections from Sandia parametrisation. 
 Hadronic processes for kaon+
 Hadronic processes for kaon-
-MuonMinusCaptureAtRest is created 
-MuonMinusCaptureAtRest is created 
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
@@ -197,7 +195,8 @@ MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -214,7 +213,8 @@ MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
-      Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+      Bether-Bloch model for E > 0.2 MeV, parametrisation of Bragg peak below, 
+      radiative corrections for E > 1 GeV
 
 msc:  Model variant of multiple scattering for pi-
       Lambda tables from 100 eV  to 100 TeV in 120 bins.
@@ -243,7 +243,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.46s Real=7.67s Sys=1.87s
+  User=5.43s Real=7.56s Sys=1.91s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -286,7 +286,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.67s Real=7.27s Sys=1.6s
+  User=5.6s Real=7.62s Sys=1.71s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -326,7 +326,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=8.86s Real=11.4s Sys=2.31s
+  User=8.77s Real=11.11s Sys=2.23s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -368,7 +368,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.71s Real=38.26s Sys=0.19s
+  User=37.34s Real=37.64s Sys=0.17s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
@@ -412,7 +412,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.7s Real=39.94s Sys=0.2s
+  User=37.96s Real=38.18s Sys=0.21s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 100 for proton with Ekin = 0.5 MeV
