@@ -1,0 +1,91 @@
+#######################################################################
+#  MACRO FILE NAME: RichTbVis0.mac                                    #
+#                                                                     #
+#  AUTHOR(S): Satoshi Tanaka                                          #
+#  Mod SE 20-3-01                                                     #
+#  DATE: November 10, 1999                                            #
+#        May      20, 2000                                            # 
+#        June     06, 2000                                            # 
+#                                                                     #
+#  CONTENTS: A simplest macro to demonstrate visualization of         #
+#            detector geometry and events                             #
+#                                                                     #
+#  USAGE:                                                             #
+#          Idle> /control/execute RichTbVis0.mac                      #
+#                                                                     #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
+#                                  DAWN (version 3.80 or after)       #
+#                                  gv (Ghostview), Tcl/Tk             #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv OGLHOME     ... (e.g. /usr/local)                       #
+#    % setenv G4VIS_BUILD_OPENGLX_DRIVER   1                          # 
+#    % setenv G4VIS_BUILD_DAWNFILE_DRIVER  1                          #
+#                                                                     #
+#  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
+#  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
+#    % setenv G4VIS_USE_OPENGLX            1                          #
+#    % setenv G4VIS_USE_DAWNFILE           1                          #
+#                                                                     #
+#  Addional Notes:                                                    #
+#    The compound command "/vis/open <graphics-system-name>"          #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/sceneHandler/create $1                                    #
+#      /vis/viewer/create                                             #
+#                                                                     #
+#    The compound command "/vis/drawVolume <physical-volume-name>"    #
+#    is equivalent to the following set of commands:                  #
+#                                                                     #
+#      /vis/scene/create                                              #
+#      /vis/scene/add/volume $1                                       #
+#      /vis/sceneHandler/attach                                       #
+#      /vis/viewer/refresh                                            #
+#      /vis/viewer/update                                             #
+#                                                                     #
+#######################################################################
+
+##############################################
+# Visualization of detector geometry 
+#  with the OGLIX (OpenGL Immediate X) driver
+##############################################
+
+# Invoke the OGLIX driver
+#/vis/open OGLIX
+
+# Set camera 
+#  Note: Camera setting should be done
+#        for each scene handler.
+/vis/camera/reset 
+/vis/scene/create
+#/vis/sceneHandler/create OGLIX
+#/vis/sceneHandler/create DAWNFILE
+#/vis/sceneHandler/create OGLSXm
+/vis/open DAWNFILE
+/vis/open OGLIX
+/vis/viewer/create
+/vis/scene/add/volume
+#/vis/camera/viewpoint 0 0
+
+/vis/camera/viewpoint -90 -90
+#/vis/camera/viewpoint 270 0
+/vis/camera/zoom 0.8
+#/vis/camera/spin 20 10
+
+# Visualize of the whole detector geometry
+/vis/drawVolume
+/vis/viewer/update
+
+
+
+
+
+
+
+
+
+
+

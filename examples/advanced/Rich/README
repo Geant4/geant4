@@ -1,0 +1,68 @@
+
+1:To get the explanations about compiling and running, please see
+  cmt/How_to_compile_and_run
+
+2:  The two  input files needed to run the program are in 
+  inputData and the outputData file produced is in outputData.
+  This histograms are produced in the form of .vop files which are
+  in the directory HistoOutputVop. A set of vop files for 500 events is
+  now available in the HistoOutputVop in my public area.
+  To run Lizard on this,
+  cd  HistoOutputVop
+  source ../python/Lizard_setup.csh
+  startLizard.sh
+  exe("../python/mirrorref.py")
+  Similarly one can use the other .py files in the
+  python aera. 
+
+  To create a ps file, 
+  pl.psPrint("myPsfile.ps")
+  Example of the ps files I made are available in 
+  histops directory.
+
+3: The output data is in  5/outputData directory. The format is
+   number of hits,
+   for each hit,
+   hpdnumber,sector number, pixel number, the xyz of the corresponding 
+   hit coordinate on the photocathode.
+   The example output in my public area has three events.
+   I still use the silicon pixels as the sensitive detector,
+   since this meant fewer modifications to the existing program.
+   But I do store the corresponding hit coordinate on the photocathode,
+   in the hit class. Hence just from the hits, 
+   one can directly get the Cherenkov ring.
+4: Example of the ps files of the graphics output of the program 
+   using opengl are in picture directory. 
+   Instructions for using opengl are in cmt/How_to_compile_and_run.
+   I used the xv program to grab the graphics window to a ps file.
+ 
+5: The program uses the Geant4.3.2 which had the G4AnalysisManager.
+   To use a recent version of the Geant4, one needs to modify the
+   files include/RichTbAnalysisManager.hh and RichTbAnalysisManager.cc
+   to use the current way of getting the AIDA to book histograms.
+   With the Geant4.3.2, I had to compile G4LizardSystem.cc in my area
+   to make it work. When using a recent version, one can remove the file
+   src/srcg4/srcg4src/Lizard/G4LizardSystem.cc and modify the 
+   cmt/requirements file to avoid the compiler looking in this area.
+   In case you may know how to do this quicky, please go ahed.
+   I shall try to do in the same way as is done in one of the G4advanced
+   examples, but I am not sure what version of the AIDA libraries I should use.
+   
+6: The old version of the geant4 that I used had a 
+   bug in G4VReadOutGeometry.cc. After my bug report it was fixed in 
+   recent versions. Hence when using the recent version of Geant4, 
+   one can remove the file src/srcg4/srcg4src/misc/G4VReadOutGeometry.cc
+   and modify the cmt/requirements files to avoid the compiler looking in this
+   area.
+
+
+In case you have a problem in using this, please let me know. 
+It is better to as many tests before releasing it than have the
+users encounter the same problems.
+regards,
+Sajan
+
+ 
+
+
+
