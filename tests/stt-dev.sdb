@@ -1,4 +1,4 @@
-# $Id: stt-dev.sdb,v 1.9 1999-10-08 10:33:01 stesting Exp $
+# $Id: stt-dev.sdb,v 1.10 1999-10-12 12:18:09 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -25,9 +25,9 @@ geant4/source/geometry/volumes       geant4-00-01-ref-03
 geant4/source/global           global-V00-01-01
 geant4/source/graphics_reps    geant4-00-01-ref-03
 geant4/source/intercoms        intercoms-V00-01-00
-geant4/source/interfaces       geant4-00-01-ref-03
+geant4/source/interfaces       interfaces-V00-01-00a
 geant4/source/materials        geant4-00-01-ref-03
-geant4/source/particles        geant4-00-01-ref-03
+geant4/source/particles        particles-V00-01-00a
 geant4/source/persistency      geant4-00-01-ref-03
 geant4/source/processes/GNUmakefile         geant4-00-01-ref-03
 geant4/source/processes/History             geant4-00-01-ref-03
@@ -41,6 +41,6 @@ geant4/source/processes/photolepton_hadron  geant4-00-01-ref-03
 geant4/source/processes/transportation      geant4-00-01-ref-03
 geant4/source/readout          geant4-00-01-ref-03
 geant4/source/run              run-V00-01-01
-geant4/source/track            geant4-00-01-ref-03
+geant4/source/track            track-V00-01-00
 geant4/source/tracking         geant4-00-01-ref-03
 geant4/source/visualization    vis-V00-01-05
