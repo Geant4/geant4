@@ -5,10 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1RunAction.cc,v 1.8 2001-02-21 14:00:35 maire Exp $
+// $Id: Em1RunAction.cc,v 1.9 2001-03-08 14:57:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 // 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// 08.03.01 Hisaya: adapted for STL   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,10 +104,10 @@ void Em1RunAction::BeginOfRunAction(const G4Run* aRun)
 void Em1RunAction::CountProcesses(G4String procName)
 {
    //does the process  already encounted ?
-   size_t nbProc = ProcCounter->entries();
+   size_t nbProc = ProcCounter->size();
    size_t i = 0;
    while ((i<nbProc)&&((*ProcCounter)[i]->GetName()!=procName)) i++;
-   if (i == nbProc) ProcCounter->insert( new OneProcessCount(procName));
+   if (i == nbProc) ProcCounter->push_back( new OneProcessCount(procName));
 
    (*ProcCounter)[i]->Count();
 }
@@ -132,11 +134,11 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       
       //frequency of processes call       
       G4cout << "\n nb of process calls per event: \n   ";       
-      for (G4int i=0; i< ProcCounter->entries();i++)
+      for (G4int i=0; i< ProcCounter->size();i++)
            G4cout << G4std::setw(9) << (*ProcCounter)[i]->GetName();
            
       G4cout << "\n   ";       
-      for (G4int j=0; j< ProcCounter->entries();j++)
+      for (G4int j=0; j< ProcCounter->size();j++)
            G4cout << G4std::setw(9) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
       G4cout << G4endl;    
                          
@@ -144,8 +146,13 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
       G4cout.precision(oldprec);       
     }         
 
-   ProcCounter->clearAndDestroy();
-   delete ProcCounter;
+  // delete and remove all contents in ProcCounter 
+  while (ProcCounter->size()>0){
+    OneProcessCount* aProcCount=ProcCounter->back();
+    ProcCounter->pop_back();
+    delete aProcCount;
+  }
+  delete ProcCounter;
                              
   //draw the events
   if (G4VVisManager::GetConcreteInstance()) 
