@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.24 2000-06-06 16:54:47 stesting Exp $
+# $Id: GNUmakefile,v 1.25 2000-06-13 14:10:34 johna Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -53,6 +53,7 @@ SUBDIRS += test14 ## LowEnergy em (photons and electrons).  (Derived from
 SUBDIRS += test15 ## Isotope Production
 SUBDIRS += test16 ## n and p Cross-Sections
 SUBDIRS += test17 ## LowEnergy em (protons, antiprotons and ions). 
+SUBDIRS += test18 ## Radioactive decay.
 
 # Tests with hadronic exercisers.
 HADEXERDIRS = test02 test11 test12 test13 test15 test16
