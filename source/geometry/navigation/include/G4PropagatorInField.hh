@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.5 2003-11-08 00:40:31 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.6 2003-11-13 18:34:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -49,8 +49,8 @@
 #include <vector>
 
 #include "G4FieldTrack.hh"
-#include "G4ChordFinder.hh"
 #include "G4FieldManager.hh"
+class G4ChordFinder; 
 
 class G4Navigator;
 class G4VPhysicalVolume;
