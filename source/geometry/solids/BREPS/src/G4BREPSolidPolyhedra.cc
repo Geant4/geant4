@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.13 2000-08-28 15:00:37 gcosmo Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.14 2000-11-08 20:26:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -85,7 +85,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     // See G4FPlane 
     
     // Create sides
-    for(int b=0;b<sides;b++)
+    for(G4int b=0;b<sides;b++)
     {
       G4Point3DVector PointList(4);
       // Create inner side
@@ -137,7 +137,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     TmpAxis.rotateZ(phi1);	
     TmpAxis.rotateZ(dphi);
     
-    for(int c=0;c<sides;c++)
+    for(G4int c=0;c<sides;c++)
     {
       // outer polyline for origin end
       EndPointList[c] = Origin + (RMAX[0] * TmpAxis);
@@ -166,7 +166,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     G4Point3DVector EndPointList ((sides+1)*2);
     G4Point3DVector EndPointList2((sides+1)*2);	      
     
-    for(int c=0;c<sides+1;c++)
+    for(G4int c=0;c<sides+1;c++)
     {
       // outer polylines for origin end and opposite side
       EndPointList[c]  = Origin + (RMAX[0] * TmpAxis);
@@ -184,12 +184,12 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
     TmpAxis2.rotateZ(dphi);	
     
     LocalOrigin=Origin;
-    int points = sections*2+2;
+    G4int points = sections*2+2;
     G4Point3DVector GapPointList(points);
     G4Point3DVector GapPointList2(points);
     Count=0;
     
-    for(int d=0;d<sections+1;d++)
+    for(G4int d=0;d<sections+1;d++)
     {
       GapPointList[Count] = LocalOrigin + (RMAX[d]*TmpAxis);
       GapPointList[points-1-Count] = LocalOrigin + (RMIN[d]*TmpAxis);	    
@@ -240,7 +240,7 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(const G4String& name,
   
   G4double rFactor = 1.;
 
-  for(int is=0;is<num_z_planes;is++)
+  for(G4int is=0;is<num_z_planes;is++)
   {
     original_parameters.Z_values[is]= z_values[is]; 
     original_parameters.Rmin[is]= RMIN[is]/rFactor;
@@ -314,7 +314,7 @@ void G4BREPSolidPolyhedra::Reset() const
   Active(1);
   ((G4BREPSolidPolyhedra*)this)->intersectionDistance=kInfinity;
   StartInside(0);
-  for(register int a=0;a<nb_of_surfaces;a++)
+  for(register G4int a=0;a<nb_of_surfaces;a++)
     SurfaceVec[a]->Reset();
   ShortestDistance = kInfinity;
 }
@@ -354,14 +354,14 @@ EInside G4BREPSolidPolyhedra::Inside(register const G4ThreeVector& Pt) const
       // inside the volume bounded by the surfaces, so 
       // increment the number of intersection by 1 if the 
       // point is not on the surface and if this intersection 
-      // was not founded before
+      // was not found before
       if( (SurfaceVec[a]->Intersect(r)) & 1 )
       {
 	// test if the point is on the surface
 	if(SurfaceVec[a]->GetDistance() <= kCarTolerance*kCarTolerance)
 	  return kSurface;
 	
-	// test if this intersection was founded before
+	// test if this intersection was found before
 	for(G4int i=0; i<a; i++)
 	  if(SurfaceVec[a]->GetDistance() == SurfaceVec[i]->GetDistance())
 	  {
@@ -428,8 +428,8 @@ G4double G4BREPSolidPolyhedra::DistanceToIn(const G4ThreeVector& Pt) const
   // Set the surfaces to active again
   Reset();
   
-  // calcul of the shortest distance of the point to each surfaces
-  // Be carreful : it's a signed value
+  // compute the shortest distance of the point to each surfaces
+  // Be careful : it's a signed value
   for(a=0; a< nb_of_surfaces; a++)  
     dists[a] = SurfaceVec[a]->HowNear(Pt);
      

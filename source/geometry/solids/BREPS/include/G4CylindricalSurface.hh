@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.hh,v 1.6 2000-08-28 15:00:32 gcosmo Exp $
+// $Id: G4CylindricalSurface.hh,v 1.7 2000-11-08 20:26:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -115,9 +115,6 @@ class G4CylindricalSurface : public G4Surface
  public:  // without description
 
 /*
-  G4CylindricalSurface( const G4CylindricalSurface& c );
-    // Copy constructor.
-
   virtual G4double distanceAlongRay( G4int which_way, const G4Ray* ry,
                                      G4Vector3D& p ) const;
     // Returns the distance along a Ray to enter or leave a
@@ -168,6 +165,10 @@ class G4CylindricalSurface : public G4Surface
 
  private:
 
+  G4CylindricalSurface(const G4CylindricalSurface&);
+  G4CylindricalSurface& operator=(const G4CylindricalSurface&);
+    // Private copy constructor and assignment operator.
+
 /*
   virtual G4double gropeAlongHelix( const Helix* hx ) const;
     // Private function to use a crude technique to find the intersection
@@ -182,5 +183,4 @@ class G4CylindricalSurface : public G4Surface
 #include "G4CylindricalSurface.icc"
 
 #endif
-
 
