@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.hh,v 1.3 1999-02-24 13:43:25 urban Exp $
+// $Id: G4eEnergyLoss.hh,v 1.4 1999-11-05 10:10:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -18,16 +18,6 @@
 //      2nd December 1995, G.Cosmo
 //      ---------- G4eEnergyLoss physics process -----------
 //                by Laszlo Urban, 20 March 1997 
-// ************************************************************             
-// It is the first implementation of the new unified Energy Loss process.
-// It calculates the continuous energy loss for e+/e-.
-// Processes giving contribution to the continuous loss :
-//   ionisation (= cont.ion.loss + delta ray production)
-//   bremsstrahlung (= cont.loss due to sooft brems+discrete bremsstrahlung)
-//   can be added more easily ..........
-// This class creates static dE/dx and range tables for e+ and e-,
-// which tables can be used by other processes.
-// ------------------------------------------------------------
 //
 //  27.05.98 OldGetRange removed + other corrs , L.Urban
 //  10.09.98 cleanup
@@ -54,8 +44,21 @@
 #include "G4PhysicsLinearVector.hh"
 #include "G4EnergyLossTables.hh"
 
+// Class description:
+// This class is the implementation of the unified Energy Loss process.
+// It calculates the continuous energy loss for e+/e-.
+// The following processes give contributions to the continuous 
+// energy loss (by default) :
+//  ---  ionisation (= cont.ion.loss + delta ray production)
+//  --- bremsstrahlung (= cont.loss due to soft brems+discrete bremsstrahlung)
+//   more can be added   ..........
+// This class creates static dE/dx and range tables for e+ and e-,
+// which tables can be used by other processes , too.
+// G4eEnergyLoss is the base class for the processes giving contribution
+// to the (continuous) energy loss of e+/e- .
+// Class description - end
+
 class G4EnergyLossMessenger;
- 
  
 class G4eEnergyLoss : public G4VContinuousDiscreteProcess
  
@@ -66,27 +69,36 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
 
    ~G4eEnergyLoss();
 
+  public: // With description
+
     G4bool IsApplicable(const G4ParticleDefinition&);
-
-
-  public:
+    //  true for e+/e- , false otherwise
   
     void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
+    //  It builds dE/dx and range tables for aParticleType and
+    //  for every material contained in the materialtable.
 
     G4double GetContinuousStepLimit(const G4Track& track,
                                     G4double previousStepSize,
                                     G4double currentMinimumStep,
                                     G4double& currentSafety);
+    // Computes the steplimit due to the energy loss process.
 
     G4VParticleChange* AlongStepDoIt(const G4Track& track,
                                      const G4Step& Step) ;
+    // Performs the computation of the (continuous) energy loss
+    // after the step (with fluctuation).
 
     virtual G4double GetMeanFreePath(const G4Track& track,
                                      G4double previousStepSize,
                                      G4ForceCondition* condition) = 0;
+    // Virtual function to be overridden in the derived classes
+    // ( ionisation and bremsstrahlung) .
 
     virtual G4VParticleChange* PostStepDoIt(const G4Track& track,
                                             const G4Step& Step) = 0;
+    // Virtual function to be overridden in the derived classes
+    // ( ionisation and bremsstrahlung) .
                                             
                                             
   private:
@@ -134,9 +146,11 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4PhysicsTable* theLossTable;
      
-    G4double ParticleMass;               // heavily used
+    G4double ParticleMass;          // heavily used
 
-    G4double MinKineticEnergy ;           // 
+    G4double MinKineticEnergy ;     // particle with kinetic energy
+                                    // smaller than MinKineticEnergy
+                                    // is stopped in  AlongStepDoIt
 
     G4double Charge,lastCharge ;
 
@@ -160,7 +174,7 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     G4double fdEdx;                       // computed in GetConstraints
     G4double fRangeNow;                   // computed in GetConstraints
 
-    G4double linLossLimit ;               //
+    G4double linLossLimit ;               // used in AlongStepDoIt
 
     G4int TotBin;                         // number of bins in table, 
                                           // calculated in BuildPhysicTable
@@ -184,6 +198,7 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     
     //New ParticleChange
     G4ParticleChangeForLoss fParticleChange ;
+
  //  
  // static part of the class
  //
@@ -236,21 +251,38 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     
     static G4EnergyLossMessenger* eLossMessenger;
          
-  public:
+  public:  // With description
      
     static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    // Sets number of processes giving contribution to the energy loss
+
     static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    // Increases number of processes giving contribution to the energy loss
+
     static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};                                      
+    // Decreases number of processes giving contribution to the energy loss
+
     static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 2)
     
     static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
+    // use / do not use randomisation in energy loss steplimit
+    // ( default = no randomisation)
+
     static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
+    // compute energy loss with/without fluctuation
+    // ( default : with fluctuation)
+
     static void SetStepFunction (G4double c1, G4double c2) 
                                {dRoverRange = c1; finalRange = c2;  
                                 c1lim=dRoverRange ;
                                 c2lim=2.*(1-dRoverRange)*finalRange;
                                 c3lim=-(1.-dRoverRange)*finalRange*finalRange;
                                }
+    // sets values for data members used to compute the step limit:
+    //   dRoverRange : max. relative range change in one step,
+    //   finalRange  : if range <= finalRange --> last step for the particle.
                                        
 };
  
