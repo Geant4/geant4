@@ -1,0 +1,13 @@
+$Id: README,v 1.1 2002-11-04 13:25:59 jwellisc Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test24
+                            ------
+
+Testing the kinetic model in a simple setup
+Materials include H, Si, Cu, U
+
