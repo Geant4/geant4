@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-02-27 18:06:48 japost Exp $
+$Id: History,v 1.7 2001-02-27 18:19:38 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ Feb  27, 2001   J. Apostolakis  (transport-V03-00-00)
   *   Modified calculation of energy at the end of field step
        to make it more accurate at low velocities,
        (while remaining correct at high gammas). 
+
+  This improves the energy determination. 
+  Together with electromagnetic/standard tag  "stand-V03-00-03"
+  this addresses the main problem in propagating in an electric field
+   (Problem report # 108 )
 
 Sep  22, 2000   V. Grichine	(transport-V02-00-00)  [recorded by G.Cosmo]
 ---------------------------
