@@ -204,7 +204,7 @@ void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4V
   physVol->SetTranslation(origin);
 }
 
-void DicomPatientParameterisation::ComputeDimensions(G4Box& voxels, const G4int, const G4VPhysicalVolume*) const
+void DicomPatientParameterisation::ComputeDimension(G4Box& voxels, const G4int, const G4VPhysicalVolume*) const
 {
   voxels.SetXHalfLength((pixelSpacingX * compression/2.0) * mm);
   voxels.SetYHalfLength((pixelSpacingY * compression/2.0) * mm);
