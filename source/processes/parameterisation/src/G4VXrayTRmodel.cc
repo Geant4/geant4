@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXrayTRmodel.cc,v 1.1 2000-05-16 13:45:00 grichine Exp $
+// $Id: G4VXrayTRmodel.cc,v 1.2 2000-06-13 15:29:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -547,8 +547,8 @@ G4double G4VXrayTRmodel::GetPlateZmuProduct( G4double omega ,
 
 void G4VXrayTRmodel::GetPlateZmuProduct() 
 {
-  ofstream outPlate("plateZmu.dat", ios::out ) ;
-  outPlate.setf( ios::scientific, ios::floatfield );
+  G4std::ofstream outPlate("plateZmu.dat", G4std::ios::out ) ;
+  outPlate.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   G4int i ;
   G4double omega, varAngle, gamma, result ;
@@ -582,8 +582,8 @@ G4double G4VXrayTRmodel::GetGasZmuProduct( G4double omega ,
 
 void G4VXrayTRmodel::GetGasZmuProduct() 
 {
-  ofstream outGas("gasZmu.dat", ios::out ) ;
-  outGas.setf( ios::scientific, ios::floatfield );
+  G4std::ofstream outGas("gasZmu.dat", G4std::ios::out ) ;
+  outGas.setf( G4std::ios::scientific, G4std::ios::floatfield );
   G4int i ;
   G4double omega, varAngle, gamma, result ;
   gamma = 10000. ;
@@ -786,11 +786,11 @@ void G4VXrayTRmodel::GetNumberOfPhotons()
   G4int iTkin ;
   G4double gamma, numberE, numberA ;
 
-  ofstream outEn("numberE.dat", ios::out ) ;
-  outEn.setf( ios::scientific, ios::floatfield );
+  G4std::ofstream outEn("numberE.dat", G4std::ios::out ) ;
+  outEn.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
-  ofstream outAng("numberAng.dat", ios::out ) ;
-  outAng.setf( ios::scientific, ios::floatfield );
+  G4std::ofstream outAng("numberAng.dat", G4std::ios::out ) ;
+  outAng.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
   for(iTkin=0;iTkin<fTotBin;iTkin++)      // Lorentz factor loop
   {
