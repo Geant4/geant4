@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.2 2000-03-22 13:34:18 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.3 2000-03-24 08:12:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -456,8 +456,10 @@
       tau = truestep/range ;
       if(tau < taulim)
         prob = exp(-(alpha1-1.)*tau)*(1.+scatteringparameter*tau) ;
-      else  
+      else if(tau < 1.) 
         prob = exp((alpha1-1.)*log(1.-tau))*(1.+scatteringparameter*tau) ;
+      else
+        prob = 0. ;
     }
 
     if(G4UniformRand()<prob)
