@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.13 2003-11-13 10:10:32 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.14 2004-02-06 10:03:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -122,9 +122,13 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
     siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length 
                               * electronDensity * chargeSquare ;
     siga = sqrt(siga);
-    do {
-     loss = G4RandGauss::shoot(meanLoss,siga);
-    } while (loss < 0. || loss > 2.*meanLoss);
+    if(meanLoss < siga*minNumberInteractionsBohr) {
+      loss = 2.0*meanLoss*G4UniformRand(); 
+    } else {
+      do {
+       loss = G4RandGauss::shoot(meanLoss,siga);
+      } while (loss < 0. || loss > 2.*meanLoss);
+    }
     //    G4cout << "de= " << meanLoss << "  fluc= " << loss-meanLoss << " sig= " << siga << G4endl; 
 
     return loss;
@@ -292,21 +296,5 @@ G4double G4UniversalFluctuation::Dispersion(
 
   return siga;
 }
-
-
-/*
-    // High velocity or negatively charged particle
-    zeff         = electronDensity/(material->GetTotNbOfAtomsPerVolume());
-    if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
-      siga = sqrt( siga * chargeSquare ) ;
-
-    // Low velocity - additional ion charge fluctuations according to
-    // Q.Yang et al., NIM B61(1991)149-155.
-    } else {
-      G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
-      G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
-      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
-    }
-*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
