@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.hh,v 1.1 2005-03-18 15:36:19 link Exp $
+// $Id: G4TwistedTrd.hh,v 1.2 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,39 +60,30 @@ class G4TwistedTrd : public G4VTwistedFaceted
 {
 public:  // with description
 
-  G4TwistedTrd(const G4String& pName,
-	       G4double pDx1,
-	       G4double pDx2,
-	       G4double pDy1, 
-	       G4double pDy2,
-	       G4double pDz,
-	       G4double pPhiTwist
-	       );
+  G4TwistedTrd( const G4String& pName,
+                      G4double  pDx1,
+                      G4double  pDx2,
+                      G4double  pDy1, 
+                      G4double  pDy2,
+                      G4double  pDz,
+                      G4double  pPhiTwist );
 
-
-  
   virtual ~G4TwistedTrd();
-
 
   // accessors
 
-  inline G4double GetX1HalfLength() const { return GetDx1() ; } ;
-  inline G4double GetX2HalfLength() const { return GetDx3() ; } ;
-  inline G4double GetY1HalfLength() const { return GetDy1() ; } ;
-  inline G4double GetY2HalfLength() const { return GetDy2() ; } ;
-  inline G4double GetZHalfLength()  const { return GetDz() ; } ;
-  inline G4double GetPhiTwist()  const { return GetTwistAngle() ; } ;
+  inline G4double GetX1HalfLength() const { return GetDx1() ; }
+  inline G4double GetX2HalfLength() const { return GetDx3() ; }
+  inline G4double GetY1HalfLength() const { return GetDy1() ; }
+  inline G4double GetY2HalfLength() const { return GetDy2() ; }
+  inline G4double GetZHalfLength()  const { return GetDz()  ; }
+  inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
 
+  G4GeometryType GetEntityType() const;
+  G4Polyhedron*  CreatePolyhedron   () const;
 
-  G4GeometryType  GetEntityType() const;
-  G4Polyhedron   *CreatePolyhedron   () const;
-
-
-  std::ostream &StreamInfo(std::ostream& os) const;
-
+  std::ostream&  StreamInfo(std::ostream& os) const;
 
 } ;
-
-
 
 #endif

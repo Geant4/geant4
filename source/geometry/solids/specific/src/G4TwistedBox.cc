@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.cc,v 1.6 2005-03-18 15:35:50 link Exp $
+// $Id: G4TwistedBox.cc,v 1.7 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,22 +37,26 @@
 //
 // History:
 //
+//   10/11/2004 - Created.
+//
 // --------------------------------------------------------------------
 
 #include "G4TwistedBox.hh"
+#include "G4Polyhedron.hh"
 
 G4TwistedBox::G4TwistedBox( const G4String& pName,
-			    G4double pPhiTwist,
-			    G4double pDx, 
-			    G4double pDy, 
-			    G4double pDz
-			    ) :
-  G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0., pDy, pDx, pDx, pDy, pDx, pDx,0.)
+                                  G4double  pPhiTwist,
+                                  G4double  pDx, 
+                                  G4double  pDy, 
+                                  G4double  pDz )
+  : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
+                       pDy, pDx, pDx, pDy, pDx, pDx,0. )
 {
-
 }
 
-G4TwistedBox::~G4TwistedBox() {} ;
+G4TwistedBox::~G4TwistedBox()
+{
+}
 
 std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 {
@@ -78,7 +82,9 @@ std::ostream& G4TwistedBox::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4TwistedBox::CreatePolyhedron () const 
 {
-   return 0;
+  // Normal box for now!!
+  //
+  return new G4PolyhedronBox (GetDx1(), GetDy1(), GetDz());
 }
 
 //=====================================================================

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.hh,v 1.4 2005-03-18 15:35:49 link Exp $
+// $Id: G4TwistedTrap.hh,v 1.5 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,52 +71,48 @@ class G4TwistedTrap : public G4VTwistedFaceted
 public:  // with description
 
   G4TwistedTrap(const G4String &pName,
-		G4double  pPhiTwist,
-		G4double  pDx1,  // half x length at -pDz,-pDy
-		G4double  pDx2,  // half x length at -pDz,+pDy
-		G4double  pDy,
-		G4double  pDz) ;
+                      G4double  pPhiTwist,
+                      G4double  pDx1,  // half x length at -pDz,-pDy
+                      G4double  pDx2,  // half x length at -pDz,+pDy
+                      G4double  pDy,
+                      G4double  pDz);
 
 
-  G4TwistedTrap(const G4String &pName,         // Name of instance
-		G4double      pPhiTwist,   // twist angle
-		G4double      pDz,         // half z length
-		G4double      pTheta,      // direction between end planes
-		G4double      pPhi,        // defined by polar and azimuthal angles.
-		G4double      pDy1,        // half y length at -pDz
-		G4double      pDx1,        // half x length at -pDz,-pDy
-		G4double      pDx2,        // half x length at -pDz,+pDy
-		G4double      pDy2,        // half y length at +pDz
-		G4double      pDx3,        // half x length at +pDz,-pDy
-		G4double      pDx4,        // half x length at +pDz,+pDy
-		G4double      pAlph        // tilt angle
-		);
+  G4TwistedTrap(const G4String &pName,       // Name of instance
+                      G4double  pPhiTwist,   // twist angle
+                      G4double  pDz,     // half z length
+                      G4double  pTheta,  // direction between end planes
+                      G4double  pPhi,    // defined by polar and azim. angles
+                      G4double  pDy1,    // half y length at -pDz
+                      G4double  pDx1,    // half x length at -pDz,-pDy
+                      G4double  pDx2,    // half x length at -pDz,+pDy
+                      G4double  pDy2,    // half y length at +pDz
+                      G4double  pDx3,    // half x length at +pDz,-pDy
+                      G4double  pDx4,    // half x length at +pDz,+pDy
+                      G4double  pAlph    // tilt angle
+                );
  
   virtual ~G4TwistedTrap();
 
-
   // accessors
-  inline G4double GetY1HalfLength() const { return GetDy1() ; } ;
-  inline G4double GetX1HalfLength() const { return GetDx1() ; } ;
-  inline G4double GetX2HalfLength() const { return GetDx2() ; } ;
-  inline G4double GetY2HalfLength() const { return GetDy2() ; } ;
-  inline G4double GetX3HalfLength() const { return GetDx3() ; } ;
-  inline G4double GetX4HalfLength() const { return GetDx4() ; } ;
-  inline G4double GetZHalfLength() const { return GetDz()  ; } ;
-  inline G4double GetPhiTwist()  const { return GetTwistAngle() ; } ;
-  inline G4double GetTiltAngleAlpha() const { return GetAlpha() ; } ;
-  inline G4double GetPolarAngleTheta() const { return GetTheta() ; } ;
-  inline G4double GetAzimuthalAnglePhi() const { return GetPhi() ; } ;
 
-  G4GeometryType  GetEntityType() const;
-  G4Polyhedron   *CreatePolyhedron   () const;
+  inline G4double GetY1HalfLength() const { return GetDy1() ; }
+  inline G4double GetX1HalfLength() const { return GetDx1() ; }
+  inline G4double GetX2HalfLength() const { return GetDx2() ; }
+  inline G4double GetY2HalfLength() const { return GetDy2() ; }
+  inline G4double GetX3HalfLength() const { return GetDx3() ; }
+  inline G4double GetX4HalfLength() const { return GetDx4() ; }
+  inline G4double GetZHalfLength()  const { return GetDz()  ; }
+  inline G4double GetPhiTwist()     const { return GetTwistAngle() ; }
+  inline G4double GetTiltAngleAlpha()    const { return GetAlpha() ; }
+  inline G4double GetPolarAngleTheta()   const { return GetTheta() ; }
+  inline G4double GetAzimuthalAnglePhi() const { return GetPhi()   ; }
 
+  G4GeometryType GetEntityType() const;
+  G4Polyhedron*  CreatePolyhedron() const;
 
   std::ostream &StreamInfo(std::ostream& os) const;
 
-
 } ;
-
-
 
 #endif

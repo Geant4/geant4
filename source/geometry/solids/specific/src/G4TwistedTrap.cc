@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrap.cc,v 1.8 2005-03-18 15:35:51 link Exp $
+// $Id: G4TwistedTrap.cc,v 1.9 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,38 +37,46 @@
 //
 // History:
 //
+//   10/11/2004 - Created.
+//
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrap.hh"
+#include "G4Polyhedron.hh"
 
 G4TwistedTrap::G4TwistedTrap( const G4String &pName,
-			      G4double  pPhiTwist,
-			      G4double  pDx1,
-			      G4double  pDx2,
-			      G4double  pDy,
-			      G4double  pDz) :
-  G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0., pDy, pDx1, pDx2, pDy, pDx1, pDx2,0.)
+                                    G4double  pPhiTwist,
+                                    G4double  pDx1,
+                                    G4double  pDx2,
+                                    G4double  pDy,
+                                    G4double  pDz)
+  : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
+                       pDy, pDx1, pDx2, pDy, pDx1, pDx2,0. )
 {
 }
 
-G4TwistedTrap::G4TwistedTrap(const G4String &pName,         // Name of instance
-			     G4double      pPhiTwist,    // twist angle
-			     G4double      pDz,         // half z length
-			     G4double      pTheta,      // direction between end planes
-			     G4double      pPhi,        // defined by polar and azimuthal angles.
-			     G4double      pDy1,        // half y length at -pDz
-			     G4double      pDx1,        // half x length at -pDz,-pDy
-			     G4double      pDx2,        // half x length at -pDz,+pDy
-			     G4double      pDy2,        // half y length at +pDz
-			     G4double      pDx3,        // half x length at +pDz,-pDy
-			     G4double      pDx4,        // half x length at +pDz,+pDy
-			     G4double      pAlph        // tilt angle
-			     ) :
-  G4VTwistedFaceted( pName, pPhiTwist, pDz, pTheta, pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4, pAlph )
+G4TwistedTrap::
+G4TwistedTrap(const G4String &pName,      // Name of instance
+                    G4double  pPhiTwist,  // twist angle
+                    G4double  pDz,        // half z length
+                    G4double  pTheta,  // direction between end planes
+                    G4double  pPhi,    // defined by polar and azimuthal angles
+                    G4double  pDy1,    // half y length at -pDz
+                    G4double  pDx1,    // half x length at -pDz,-pDy
+                    G4double  pDx2,    // half x length at -pDz,+pDy
+                    G4double  pDy2,    // half y length at +pDz
+                    G4double  pDx3,    // half x length at +pDz,-pDy
+                    G4double  pDx4,    // half x length at +pDz,+pDy
+                    G4double  pAlph    // tilt angle
+              )
+  : G4VTwistedFaceted( pName, pPhiTwist, pDz, pTheta,
+                       pPhi, pDy1, pDx1, pDx2, pDy2, pDx3, pDx4, pAlph )
 {
 }
 
-G4TwistedTrap::~G4TwistedTrap() {} ;
+G4TwistedTrap::~G4TwistedTrap()
+{
+}
 
 std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 {
@@ -80,9 +88,12 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4TwistedTrap\n"
      << " Parameters: \n"
-     << "    Twist angle         = " << GetPhiTwist()/degree << " deg" << G4endl 
-     << "    Polar Angle Theta   = " << GetPolarAngleTheta()/degree << " deg" << G4endl 
-     << "    Azimuthal Angle Phi = " << GetAzimuthalAnglePhi()/degree << " deg" << G4endl 
+     << "    Twist angle         = " << GetPhiTwist()/degree << " deg"
+     << G4endl 
+     << "    Polar Angle Theta   = " << GetPolarAngleTheta()/degree << " deg"
+     << G4endl 
+     << "    Azimuthal Angle Phi = " << GetAzimuthalAnglePhi()/degree << " deg"
+     << G4endl 
      << "    pDy1 = " << GetY1HalfLength()/cm << " cm" << G4endl
      << "    pDx1 = " << GetX1HalfLength()/cm << " cm" << G4endl
      << "    pDx2 = " << GetX2HalfLength()/cm << " cm" << G4endl
@@ -90,7 +101,8 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
      << "    pDx3 = " << GetX3HalfLength()/cm << " cm" << G4endl
      << "    pDx4 = " << GetX4HalfLength()/cm << " cm" << G4endl
      << "    pDz = "  << GetZHalfLength()/cm << " cm" << G4endl
-     << "    Tilt Angle Alpha    = " << GetTiltAngleAlpha()/degree << " deg" << G4endl 
+     << "    Tilt Angle Alpha    = " << GetTiltAngleAlpha()/degree << " deg"
+     << G4endl 
      << "-----------------------------------------------------------\n";
 
   return os;
@@ -101,7 +113,11 @@ std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4TwistedTrap::CreatePolyhedron () const 
 {
-   return 0;
+  // Returns simple trap for now!!
+  //
+  return new G4PolyhedronTrap(GetDz(), GetTheta(), GetPhi(),
+                              GetDy1(), GetDx1(), GetDx2(), GetAlpha(),
+                              GetDy2(), GetDx3(), GetDx4(), GetAlpha());
 }
 
 //=====================================================================

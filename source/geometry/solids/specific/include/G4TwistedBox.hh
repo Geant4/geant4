@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedBox.hh,v 1.4 2005-03-18 15:35:49 link Exp $
+// $Id: G4TwistedBox.hh,v 1.5 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,34 +59,25 @@ class G4TwistedBox : public G4VTwistedFaceted
 public:  // with description
 
   G4TwistedBox(const G4String& pName,
-	       G4double pPhiTwist,
-	       G4double pDx,
-	       G4double pDy, 
-	       G4double pDz
-	       );
+                     G4double  pPhiTwist,
+                     G4double  pDx,
+                     G4double  pDy, 
+                     G4double  pDz );
 
-
-  
   virtual ~G4TwistedBox();
-
 
   // accessors
 
-  inline G4double GetXHalfLength() const { return GetDx1() ; } ;
-  inline G4double GetYHalfLength() const { return GetDy1() ; } ;
-  inline G4double GetZHalfLength() const { return GetDz()  ; } ;
-  inline G4double GetPhiTwist()  const { return GetTwistAngle() ; } ;
+  inline G4double GetXHalfLength() const { return GetDx1() ; }
+  inline G4double GetYHalfLength() const { return GetDy1() ; }
+  inline G4double GetZHalfLength() const { return GetDz()  ; }
+  inline G4double GetPhiTwist()    const { return GetTwistAngle() ; }
 
+  G4GeometryType GetEntityType()    const;
+  G4Polyhedron*  CreatePolyhedron() const;
 
-  G4GeometryType  GetEntityType() const;
-  G4Polyhedron   *CreatePolyhedron   () const;
+  std::ostream& StreamInfo(std::ostream& os) const;
 
-
-  std::ostream &StreamInfo(std::ostream& os) const;
-
-
-} ;
-
-
+};
 
 #endif

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VTwistedFaceted.cc,v 1.1 2005-03-18 15:36:21 link Exp $
+// $Id: G4VTwistedFaceted.cc,v 1.2 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,22 +56,24 @@
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4VTwistedFaceted::G4VTwistedFaceted(const G4String &pname,         // Name of instance
-				   G4double      PhiTwist,    // twist angle
-				   G4double      pDz,         // half z length
-				   G4double      pTheta,      // direction between end planes
-				   G4double      pPhi,        // defined by polar and azimuthal angles.
-				   G4double      pDy1,        // half y length at -pDz
-				   G4double      pDx1,        // half x length at -pDz,-pDy
-				   G4double      pDx2,        // half x length at -pDz,+pDy
-				   G4double      pDy2,        // half y length at +pDz
-				   G4double      pDx3,        // half x length at +pDz,-pDy
-				   G4double      pDx4,        // half x length at +pDz,+pDy
-				   G4double      pAlph        // tilt angle 
-				   )
+G4VTwistedFaceted::
+G4VTwistedFaceted( const G4String &pname,     // Name of instance
+                         G4double  PhiTwist,  // twist angle
+                         G4double  pDz,       // half z length
+                         G4double  pTheta, // direction between end planes
+                         G4double  pPhi,   // defined by polar and azim. angles
+                         G4double  pDy1,   // half y length at -pDz
+                         G4double  pDx1,   // half x length at -pDz,-pDy
+                         G4double  pDx2,   // half x length at -pDz,+pDy
+                         G4double  pDy2,   // half y length at +pDz
+                         G4double  pDx3,   // half x length at +pDz,-pDy
+                         G4double  pDx4,   // half x length at +pDz,+pDy
+                         G4double  pAlph   // tilt angle 
+                 )
   : G4VSolid(pname), 
-     fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0)
+    fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
+    fSide90(0), fSide180(0), fSide270(0),
+    fpPolyhedron(0)
 {
 
   G4double pDytmp ;
@@ -82,99 +84,107 @@ G4VTwistedFaceted::G4VTwistedFaceted(const G4String &pname,         // Name of i
   fDx2 = pDx2 ;
   fDx3 = pDx3 ;
   fDx4 = pDx4 ;
-
   fDy1 = pDy1 ;
   fDy2 = pDy2 ;
-
-
-  fDz   = pDz ;
+  fDz  = pDz  ;
 
   // maximum values
+  //
   fDxDown = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
   fDxUp   = ( fDx3 > fDx4 ? fDx3 : fDx4 ) ;
   fDx     = ( fDxUp > fDxDown ? fDxUp : fDxDown ) ;
-
   fDy     = ( fDy1 > fDy2 ? fDy1 : fDy2 ) ;
   
-  // planarity check 
-  if ( fDx1 != fDx2 && fDx3 != fDx4 ) {
+  // planarity check
+  //
+  if ( fDx1 != fDx2 && fDx3 != fDx4 )
+  {
     pDytmp = fDy1 * ( fDx3 - fDx4 ) / ( fDx1 - fDx2 ) ;
-    if ( std::fabs(pDytmp - fDy2) > kCarTolerance ) {
-      G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): " << GetName() << G4endl
+    if ( std::fabs(pDytmp - fDy2) > kCarTolerance )
+    {
+      G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): "
+             << GetName() << G4endl
              << "        Not planar ! - " << G4endl 
-             << "fDy2 is " << fDy2 << " but should be " << pDytmp << "." << G4endl ;
-      
+             << "fDy2 is " << fDy2 << " but should be "
+             << pDytmp << "." << G4endl ;
       G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "InvalidSetup",
                   FatalException, "Not planar surface in untwisted Trapezoid.");
     }
   }
 
 #ifdef G4SPECSDEBUG
-  if ( fDx1 == fDx2 && fDx3 == fDx4 ) { 
+  if ( fDx1 == fDx2 && fDx3 == fDx4 )
+  { 
       G4cout << "Trapezoid is a box" << G4endl ;
   }
   
 #endif
 
-  if ( (  fDx1 == fDx2 && fDx3 != fDx4 ) || ( fDx1 != fDx2 && fDx3 == fDx4 ) ) {
-    
-    G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): " << GetName() << G4endl
-	   << "        Not planar ! - " << G4endl 
-	   << "One endcap is rectengular, the other is a trapezoid. " << G4endl 
-	   << "For planarity reasons they have to be rectangles or trapezoids " << G4endl
-	   << "on both sides." << G4endl ;
-    
+  if ( (  fDx1 == fDx2 && fDx3 != fDx4 ) || ( fDx1 != fDx2 && fDx3 == fDx4 ) )
+  {
+    G4cerr << "ERROR - G4VTwistedFaceted::G4VTwistedFaceted(): "
+           << GetName() << G4endl
+           << "        Not planar ! - " << G4endl 
+           << "One endcap is rectengular, the other is a trapezoid." << G4endl
+           << "For planarity reasons they have to be rectangles or trapezoids "
+           << G4endl
+           << "on both sides."
+           << G4endl ;
     G4Exception("G4VTwistedFaceted::G4VTwistedFaceted()", "InvalidSetup",
-		FatalException, "Not planar surface in untwisted Trapezoid.");
+                FatalException, "Not planar surface in untwisted Trapezoid.");
   }
 
-
   // twist angle
+  //
   fPhiTwist = PhiTwist ;
 
-  // tilt angle  
-  fAlph = - pAlph ;  // important: definition of angle alpha is different in equations !!!
+  // tilt angle
+  //
+  fAlph = - pAlph ;  // important: definition of angle alpha
+                     //            is different in equations !!!
   fTAlph = std::tan(fAlph) ;
   
   fTheta = pTheta ;
   fPhi   = pPhi ;
 
-  fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;  // dx in surface equation
-  fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;  // dy in surface equation
+  // dx in surface equation
+  //
+  fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;
 
-  if  (  ! ( ( fDx1  > 2*kCarTolerance)
-       && ( fDx2  > 2*kCarTolerance)
-       && ( fDx3  > 2*kCarTolerance)
-       && ( fDx4  > 2*kCarTolerance)
-       && ( fDy1   > 2*kCarTolerance)
-       && ( fDy2   > 2*kCarTolerance)
-       && ( fDz   > 2*kCarTolerance) 
-       && ( std::fabs(fPhiTwist) > 2*kAngTolerance )
-       && ( std::fabs(fPhiTwist) < pi/2 )
-       && ( std::fabs(fAlph) < pi/2 )
-	     && ( fTheta < pi/2 && fTheta >= 0 ) )
-	 )
-    {
-      
-      G4cerr << "ERROR - G4VTwistedFaceted()::G4VTwistedFaceted(): " << GetName() << G4endl
-             << "        Dimensions too small or too big! - " << G4endl 
-             << "fDx 1-4 = " << fDx1/cm << ", " << fDx2/cm << ", "  << fDx3/cm << ", " << fDx4/cm << " cm" << G4endl 
-	     << "fDy 1-2 = " << fDy1/cm << ", " << fDy2/cm << ", "  << " cm" << G4endl 
-	     << "fDz = " << fDz/cm << " cm" << G4endl 
-             << " twistangle " << fPhiTwist/deg << " deg" << G4endl 
-	     << " phi,theta = " << fPhi/deg << ", "  << fTheta/deg << " deg" << G4endl ;
- 
-      G4Exception("G4TwistedTrap::G4VTwistedFaceted()", "InvalidSetup",
-                  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
-    }
+  // dy in surface equation
+  //
+  fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;
 
-
-
-
+  if  ( ! ( ( fDx1  > 2*kCarTolerance)
+         && ( fDx2  > 2*kCarTolerance)
+         && ( fDx3  > 2*kCarTolerance)
+         && ( fDx4  > 2*kCarTolerance)
+         && ( fDy1   > 2*kCarTolerance)
+         && ( fDy2   > 2*kCarTolerance)
+         && ( fDz   > 2*kCarTolerance) 
+         && ( std::fabs(fPhiTwist) > 2*kAngTolerance )
+         && ( std::fabs(fPhiTwist) < pi/2 )
+         && ( std::fabs(fAlph) < pi/2 )
+         && ( fTheta < pi/2 && fTheta >= 0 ) )
+      )
+  {
+    G4cerr << "ERROR - G4VTwistedFaceted()::G4VTwistedFaceted(): "
+           << GetName() << G4endl
+           << "        Dimensions too small or too big! - " << G4endl 
+           << "fDx 1-4 = " << fDx1/cm << ", " << fDx2/cm << ", "
+           << fDx3/cm << ", " << fDx4/cm << " cm" << G4endl 
+           << "fDy 1-2 = " << fDy1/cm << ", " << fDy2/cm << ", "
+           << " cm" << G4endl 
+           << "fDz = " << fDz/cm << " cm" << G4endl 
+           << " twistangle " << fPhiTwist/deg << " deg" << G4endl 
+           << " phi,theta = " << fPhi/deg << ", "  << fTheta/deg
+           << " deg" << G4endl ;
+    G4Exception("G4TwistedTrap::G4VTwistedFaceted()",
+                "InvalidSetup", FatalException,
+                "Invalid dimensions. Too small, or twist angle too big.");
+  }
   CreateSurfaces();
-  fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  )   ;
-
-
+  fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2 );
 }
 
 
@@ -183,41 +193,38 @@ G4VTwistedFaceted::G4VTwistedFaceted(const G4String &pname,         // Name of i
 
 G4VTwistedFaceted::~G4VTwistedFaceted()
 {
-
   if (fLowerEndcap) delete fLowerEndcap ;
   if (fUpperEndcap) delete fUpperEndcap ;
 
-  if (fSide0)      delete  fSide0 ;
-  if (fSide90)     delete  fSide90 ;
-  if (fSide180)    delete  fSide180 ;
-  if (fSide270)    delete  fSide270 ;
-
-
+  if (fSide0)       delete fSide0 ;
+  if (fSide90)      delete fSide90 ;
+  if (fSide180)     delete fSide180 ;
+  if (fSide270)     delete fSide270 ;
+  if (fpPolyhedron) delete fpPolyhedron;
 }
 
 //=====================================================================
 //* ComputeDimensions -------------------------------------------------
 
 void G4VTwistedFaceted::ComputeDimensions(G4VPVParameterisation* ,
-                              const G4int ,
-                              const G4VPhysicalVolume* )
+                                          const G4int ,
+                                          const G4VPhysicalVolume* )
 {
   G4Exception("G4VTwistedFaceted::ComputeDimensions()",
               "NotSupported", FatalException,
               "G4VTwistedFaceted does not support Parameterisation.");
-
 }
 
 //=====================================================================
 //* CalculateExtent ---------------------------------------------------
 
-G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
-                                       const G4VoxelLimits     &pVoxelLimit,
-                                       const G4AffineTransform &pTransform,
-                                             G4double          &pMin,
-                                             G4double          &pMax ) const
+G4bool
+G4VTwistedFaceted::CalculateExtent( const EAxis              pAxis,
+                                    const G4VoxelLimits     &pVoxelLimit,
+                                    const G4AffineTransform &pTransform,
+                                          G4double          &pMin,
+                                          G4double          &pMax ) const
 {
-
   G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   if (!pTransform.IsRotated())
@@ -237,7 +244,7 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
       if (pVoxelLimit.IsXLimited())
         {
           if ( xMin > pVoxelLimit.GetMaxXExtent()+kCarTolerance || 
-               xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance  ) return false ;
+               xMax < pVoxelLimit.GetMinXExtent()-kCarTolerance  ) return false;
           else
             {
               if (xMin < pVoxelLimit.GetMinXExtent())
@@ -257,7 +264,7 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
       if (pVoxelLimit.IsYLimited())
         {
           if ( yMin > pVoxelLimit.GetMaxYExtent()+kCarTolerance ||
-               yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance   ) return false ;
+               yMax < pVoxelLimit.GetMinYExtent()-kCarTolerance  ) return false;
           else
             {
               if (yMin < pVoxelLimit.GetMinYExtent())
@@ -277,7 +284,7 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
       if (pVoxelLimit.IsZLimited())
         {
           if ( zMin > pVoxelLimit.GetMaxZExtent()+kCarTolerance ||
-               zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance   ) return false ;
+               zMax < pVoxelLimit.GetMinZExtent()-kCarTolerance  ) return false;
           else
             {
               if (zMin < pVoxelLimit.GetMinZExtent())
@@ -286,7 +293,7 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
                 }
               if (zMax > pVoxelLimit.GetMaxZExtent())
                 {
-          zMax = pVoxelLimit.GetMaxZExtent() ;
+                  zMax = pVoxelLimit.GetMaxZExtent() ;
                 }
             }
         }
@@ -342,20 +349,20 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
       else
         {
           G4ThreeVector clipCentre(
-                                   ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-                                   ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-       ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+            ( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+            ( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+            ( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5 );
           
       if ( pMin != kInfinity || pMax != -kInfinity )
         {
           existsAfterClip = true ;
           
-
           // Check to see if endpoints are in the solid
           
           clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
           
-          if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+          if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
+              != kOutside)
             {
               pMin = pVoxelLimit.GetMinExtent(pAxis);
             }
@@ -365,7 +372,8 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
             }
           clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
           
-          if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+          if (Inside(pTransform.Inverse().TransformPoint(clipCentre))
+              != kOutside)
             {
               pMax = pVoxelLimit.GetMaxExtent(pAxis);
             }
@@ -395,8 +403,8 @@ G4bool G4VTwistedFaceted::CalculateExtent( const EAxis        pAxis,
   
 }
 
-G4ThreeVectorList*
-G4VTwistedFaceted::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+G4ThreeVectorList* G4VTwistedFaceted::
+CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
 
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
@@ -497,21 +505,26 @@ EInside G4VTwistedFaceted::Inside(const G4ThreeVector& p) const
 #endif 
 
 
-  if ( posx <= xMax - kCarTolerance*0.5 && posx >= xMin + kCarTolerance*0.5  )
+  if ( posx <= xMax - kCarTolerance*0.5
+    && posx >= xMin + kCarTolerance*0.5 )
   {
-    if ( posy  <= yMax - kCarTolerance*0.5 && posy >= yMin + kCarTolerance*0.5 )
+    if ( posy <= yMax - kCarTolerance*0.5
+      && posy >= yMin + kCarTolerance*0.5 )
     {
       if      (std::fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
       else if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
-    else if ( posy <= yMax + kCarTolerance*0.5 && posy >= yMin - kCarTolerance*0.5 )
+    else if ( posy <= yMax + kCarTolerance*0.5
+           && posy >= yMin - kCarTolerance*0.5 )
     {
       if (std::fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
   }
-  else if ( posx <= xMax + kCarTolerance*0.5 && posx >= xMin - kCarTolerance*0.5 )
+  else if ( posx <= xMax + kCarTolerance*0.5
+         && posx >= xMin - kCarTolerance*0.5 )
   {
-    if ( posy <= yMax + kCarTolerance*0.5 && posy >= yMin - kCarTolerance*0.5 )
+    if ( posy <= yMax + kCarTolerance*0.5
+      && posy >= yMin - kCarTolerance*0.5 )
     {
       if (std::fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
     }
@@ -537,9 +550,8 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
    // Which of the three or four surfaces are we closest to?
    //
 
-
-   if (fLastNormal.p == p) {
-
+   if (fLastNormal.p == p)
+   {
      return fLastNormal.vec;
    } 
    
@@ -563,9 +575,11 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i< 6; i++) {
+   for (i=0; i< 6; i++)
+   {
       G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx;
          besti = i; 
@@ -582,7 +596,7 @@ G4ThreeVector G4VTwistedFaceted::SurfaceNormal(const G4ThreeVector& p) const
 //* DistanceToIn (p, v) -----------------------------------------------
 
 G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
-                                      const G4ThreeVector& v ) const
+                                          const G4ThreeVector& v ) const
 {
 
    // DistanceToIn (p, v):
@@ -598,11 +612,12 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector *tmpp;
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
-   if (fLastDistanceToInWithV.p == p && fLastDistanceToInWithV.vec == v) {
-
-
-     return fLastDistanceToIn.value;
-   } else {
+   if (fLastDistanceToInWithV.p == p && fLastDistanceToInWithV.vec == v)
+   {
+      return fLastDistanceToIn.value;
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToInWithV.p));
       tmpv    = const_cast<G4ThreeVector*>(&(fLastDistanceToInWithV.vec));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToInWithV.value));
@@ -616,25 +631,30 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == kInside) {
-
-   } else if (currentside == kSurface) {
-      // particle is just on a boundary.
-      // if the particle is entering to the volume, return 0.
-      G4ThreeVector normal = SurfaceNormal(p);
-      if (normal*v < 0) {
-
-         *tmpdist = 0;
-         return fLastDistanceToInWithV.value;
-      } 
+   if (currentside == kInside)
+   {
+   }
+   else if (currentside == kSurface)
+   {
+     // particle is just on a boundary.
+     // if the particle is entering to the volume, return 0
+     //
+     G4ThreeVector normal = SurfaceNormal(p);
+     if (normal*v < 0)
+     {
+       *tmpdist = 0;
+       return fLastDistanceToInWithV.value;
+     } 
    }
       
    // now, we can take smallest positive distance.
    
    // Initialize
+   //
    G4double      distance = kInfinity;   
 
-   // find intersections and choose nearest one.
+   // Find intersections and choose nearest one
+   //
    G4VSurface *surfaces[6];
 
    surfaces[0] = fSide0;
@@ -648,7 +668,8 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
    G4ThreeVector bestxx;
    G4int i;
    G4int besti = -1;
-   for (i=0; i < 6 ; i++) {
+   for (i=0; i < 6 ; i++)
+   {
 
 #ifdef G4SPECSDEBUG
       G4cout << G4endl << "surface " << i << ": " << G4endl << G4endl ;
@@ -658,7 +679,8 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p,
       G4cout << "Solid DistanceToIn : distance = " << tmpdistance << G4endl ; 
       G4cout << "intersection point = " << xx << G4endl ;
 #endif 
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx;
          besti = i;
@@ -688,10 +710,12 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
    
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
-   if (fLastDistanceToIn.p == p) {
-
-     return fLastDistanceToIn.value;
-   } else {
+   if (fLastDistanceToIn.p == p)
+   {
+      return fLastDistanceToIn.value;
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToIn.p));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToIn.value));
       tmpp->set(p.x(), p.y(), p.z());
@@ -703,22 +727,26 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
    
    EInside currentside = Inside(p);
 
-   switch (currentside) {
-
-      case (kInside) : {
-
+   switch (currentside)
+   {
+      case (kInside) :
+      {
       }
 
-      case (kSurface) : {
+      case (kSurface) :
+      {
          *tmpdist = 0.;
          return fLastDistanceToIn.value;
       }
 
-      case (kOutside) : {
+      case (kOutside) :
+      {
          // Initialize
+         //
          G4double      distance = kInfinity;   
 
-         // find intersections and choose nearest one.
+         // Find intersections and choose nearest one
+         //
          G4VSurface *surfaces[6];
 
          surfaces[0] = fSide0;
@@ -732,24 +760,27 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++) {
+         for (i=0; i< 6; i++)
+         {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance)  {
+            if (tmpdistance < distance)
+            {
                distance = tmpdistance;
                bestxx = xx;
                besti = i;
             }
          }
-      
          *tmpdist = distance;
          return fLastDistanceToIn.value;
       }
 
-      default : {
+      default :
+      {
          G4Exception("G4VTwistedFaceted::DistanceToIn(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
+
    return kInfinity;
 }
 
@@ -757,18 +788,18 @@ G4double G4VTwistedFaceted::DistanceToIn (const G4ThreeVector& p) const
 //=====================================================================
 //* DistanceToOut (p, v) ----------------------------------------------
 
-G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
-                                       const G4ThreeVector& v,
-                                       const G4bool calcNorm,
-                                       G4bool *validNorm, G4ThreeVector *norm ) const
+G4double
+G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
+                                  const G4ThreeVector& v,
+                                  const G4bool calcNorm,
+                                        G4bool *validNorm,
+                                        G4ThreeVector *norm ) const
 {
    // DistanceToOut (p, v):
    // Calculate distance to surface of shape from `inside'
    // along with the v, allowing for tolerance.
    // The function returns kInfinity if no intersection or
    // just grazing within tolerance.
-   //
-   
 
    //
    // checking last value
@@ -777,9 +808,12 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    G4ThreeVector *tmpp;
    G4ThreeVector *tmpv;
    G4double      *tmpdist;
-   if (fLastDistanceToOutWithV.p == p && fLastDistanceToOutWithV.vec == v  ) {
+   if (fLastDistanceToOutWithV.p == p && fLastDistanceToOutWithV.vec == v  )
+   {
       return fLastDistanceToOutWithV.value;
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToOutWithV.p));
       tmpv    = const_cast<G4ThreeVector*>(&(fLastDistanceToOutWithV.vec));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToOutWithV.value));
@@ -793,15 +827,20 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    
    EInside currentside = Inside(p);
 
-   if (currentside == kOutside) {
-
-   } else if (currentside == kSurface) {
+   if (currentside == kOutside)
+   {
+   }
+   else if (currentside == kSurface)
+   {
       // particle is just on a boundary.
-      // if the particle is exiting from the volume, return 0.
+      // if the particle is exiting from the volume, return 0
+      //
       G4ThreeVector normal = SurfaceNormal(p);
       G4VSurface *blockedsurface = fLastNormal.surface[0];
-      if (normal*v > 0) {
-            if (calcNorm) {
+      if (normal*v > 0)
+      {
+            if (calcNorm)
+            {
                *norm = (blockedsurface->GetNormal(p, true));
                *validNorm = blockedsurface->IsValidNorm();
             }
@@ -832,15 +871,18 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p,
    G4ThreeVector bestxx;
    for (i=0; i< 6 ; i++) {
       G4double tmpdistance = surfaces[i]->DistanceToOut(p, v, xx);
-      if (tmpdistance < distance) {
+      if (tmpdistance < distance)
+      {
          distance = tmpdistance;
          bestxx = xx; 
          besti = i;
       }
    }
 
-   if (calcNorm) {
-      if (besti != -1) {
+   if (calcNorm)
+   {
+      if (besti != -1)
+      {
          *norm = (surfaces[besti]->GetNormal(p, true));
          *validNorm = surfaces[besti]->IsValidNorm();
       }
@@ -857,8 +899,6 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    // DistanceToOut(p):
    // Calculate distance to surface of shape from `inside', 
    // allowing for tolerance
-   //
-
 
    //
    // checking last value
@@ -867,9 +907,12 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    
    G4ThreeVector *tmpp;
    G4double      *tmpdist;
-   if (fLastDistanceToOut.p == p) {
+   if (fLastDistanceToOut.p == p)
+   {
       return fLastDistanceToOut.value;
-   } else {
+   }
+   else
+   {
       tmpp    = const_cast<G4ThreeVector*>(&(fLastDistanceToOut.p));
       tmpdist = const_cast<G4double*>(&(fLastDistanceToOut.value));
       tmpp->set(p.x(), p.y(), p.z());
@@ -881,20 +924,25 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
    
    EInside currentside = Inside(p);
 
-   switch (currentside) {
-      case (kOutside) : {
-
+   switch (currentside)
+   {
+      case (kOutside) :
+      {
       }
-      case (kSurface) : {
+      case (kSurface) :
+      {
         *tmpdist = 0.;
          return fLastDistanceToOut.value;
       }
       
-      case (kInside) : {
+      case (kInside) :
+      {
          // Initialize
+         //
          G4double      distance = kInfinity;
    
-         // find intersections and choose nearest one.
+         // find intersections and choose nearest one
+         //
          G4VSurface *surfaces[6];
 
          surfaces[0] = fSide0;
@@ -908,26 +956,28 @@ G4double G4VTwistedFaceted::DistanceToOut( const G4ThreeVector& p ) const
          G4int besti = -1;
          G4ThreeVector xx;
          G4ThreeVector bestxx;
-         for (i=0; i< 6; i++) {
+         for (i=0; i< 6; i++)
+         {
             G4double tmpdistance = surfaces[i]->DistanceTo(p, xx);
-            if (tmpdistance < distance) {
+            if (tmpdistance < distance)
+            {
                distance = tmpdistance;
                bestxx = xx;
                besti = i;
             }
          }
-
-
          *tmpdist = distance;
    
          return fLastDistanceToOut.value;
       }
       
-      default : {
+      default :
+      {
          G4Exception("G4VTwistedFaceted::DistanceToOut(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
+
    return 0;
 }
 
@@ -945,16 +995,22 @@ std::ostream& G4VTwistedFaceted::StreamInfo(std::ostream& os) const
      << "    ===================================================\n"
      << " Solid type: G4VTwistedFaceted\n"
      << " Parameters: \n"
-     << "  polar angle theta = "   <<  fTheta/degree        << " deg" << G4endl    
-     << "  azimuthal angle phi = "  << fPhi/degree           << " deg" << G4endl  
-     << "  tilt angle  alpha = "   << fAlph/degree          << " deg" << G4endl  
-     << "  TWIST angle = "         << fPhiTwist/degree      << " deg" << G4endl  
-     << "  Half length along y (lower endcap) = "           << fDy1/cm << " cm" << G4endl 
-     << "  Half length along x (lower endcap, bottom) = "   << fDx1/cm << " cm" << G4endl 
-     << "  Half length along x (lower endcap, top) = "      << fDx2/cm << " cm" << G4endl 
-     << "  Half length along y (upper endcap) = "           << fDy2/cm << " cm" << G4endl 
-     << "  Half length along x (upper endcap, bottom) = "   << fDx3/cm << " cm" << G4endl 
-     << "  Half length along x (upper endcap, top) = "      << fDx4/cm << " cm" << G4endl 
+     << "  polar angle theta = "   <<  fTheta/degree      << " deg" << G4endl
+     << "  azimuthal angle phi = "  << fPhi/degree        << " deg" << G4endl  
+     << "  tilt angle  alpha = "   << fAlph/degree        << " deg" << G4endl  
+     << "  TWIST angle = "         << fPhiTwist/degree    << " deg" << G4endl  
+     << "  Half length along y (lower endcap) = "         << fDy1/cm << " cm"
+     << G4endl 
+     << "  Half length along x (lower endcap, bottom) = " << fDx1/cm << " cm"
+     << G4endl 
+     << "  Half length along x (lower endcap, top) = "    << fDx2/cm << " cm"
+     << G4endl 
+     << "  Half length along y (upper endcap) = "         << fDy2/cm << " cm"
+     << G4endl 
+     << "  Half length along x (upper endcap, bottom) = " << fDx3/cm << " cm"
+     << G4endl 
+     << "  Half length along x (upper endcap, top) = "    << fDx4/cm << " cm"
+     << G4endl 
      << "-----------------------------------------------------------\n";
 
   return os;
@@ -974,7 +1030,6 @@ void G4VTwistedFaceted::DescribeYourselfTo (G4VGraphicsScene& scene) const
 
 G4VisExtent G4VTwistedFaceted::GetExtent() const 
 {
-
   G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
@@ -988,13 +1043,12 @@ G4VisExtent G4VTwistedFaceted::GetExtent() const
 
 G4NURBS* G4VTwistedFaceted::CreateNURBS () const 
 {
-
-
   G4double maxRad = std::sqrt( fDx*fDx + fDy*fDy);
 
   return new G4NURBStube(maxRad, maxRad, fDz); 
    // Tube for now!!!
 }
+
 
 //=====================================================================
 //* CreateSurfaces ----------------------------------------------------
@@ -1004,22 +1058,34 @@ void G4VTwistedFaceted::CreateSurfaces()
    
   // create 6 surfaces of TwistedTub.
 
-  if ( fDx1 == fDx2 && fDx3 == fDx4 ) {    // special case : Box
-    fSide0   = new G4TwistedTrapBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,       fDy1, fDx1, fDy2, fDx3, fAlph, 0.*deg ) ;
-    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi , fDy1, fDx1, fDy2, fDx3, fAlph, 180.*deg) ;
+  if ( fDx1 == fDx2 && fDx3 == fDx4 )    // special case : Box
+  {
+    fSide0   = new G4TwistedTrapBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,
+                                        fDy1, fDx1, fDy2, fDx3, fAlph, 0.*deg);
+    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta,
+                            fPhi+pi , fDy1, fDx1, fDy2, fDx3, fAlph, 180.*deg);
   }
-  else {  // default general case
-    fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,  fPhi    , fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg ) ;
-    fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+  else   // default general case
+  {
+    fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,
+                      fPhi, fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg);
+    fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta,
+                 fPhi+pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg);
   }
 
   // create parallel sides
-  fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta, fPhi,      fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg) ;
-  fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+  //
+  fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta,
+                      fPhi, fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg);
+  fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta,
+                 fPhi+pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg);
 
   // create endcaps
-  fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2, fDz, fAlph, fPhi, fTheta,  1 ) ;
-  fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1, fDz, fAlph, fPhi, fTheta, -1 ) ;
+  //
+  fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2,
+                                    fDz, fAlph, fPhi, fTheta,  1 );
+  fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1,
+                                    fDz, fAlph, fPhi, fTheta, -1 );
  
   // Set neighbour surfaces
   
@@ -1028,8 +1094,7 @@ void G4VTwistedFaceted::CreateSurfaces()
   fSide180->SetNeighbours(fSide90  , fLowerEndcap , fSide270 , fUpperEndcap );
   fSide270->SetNeighbours(fSide180 , fLowerEndcap , fSide0   , fUpperEndcap );
   fUpperEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
-  fLowerEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  ); 
-  
+  fLowerEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
 }
 
 
@@ -1039,4 +1104,20 @@ void G4VTwistedFaceted::CreateSurfaces()
 G4GeometryType G4VTwistedFaceted::GetEntityType() const
 {
   return G4String("G4VTwistedFaceted");
+}
+
+
+//=====================================================================
+//* GetPolyhedron -----------------------------------------------------
+
+G4Polyhedron* G4VTwistedFaceted::GetPolyhedron() const
+{
+  if (!fpPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
+    {
+      delete fpPolyhedron;
+      fpPolyhedron = CreatePolyhedron();
+    }
+  return fpPolyhedron;
 }

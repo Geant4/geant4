@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.18 2005-03-23 17:16:31 allison Exp $
+// $Id: G4Hype.cc,v 1.19 2005-04-04 11:56:59 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -140,7 +140,7 @@ G4Hype::G4Hype(const G4String& pName,
 //
 G4Hype::~G4Hype()
 {
-     delete fpPolyhedron;
+  delete fpPolyhedron;
 }
 
 
@@ -1166,8 +1166,9 @@ G4VisExtent G4Hype::GetExtent() const
 
 G4Polyhedron* G4Hype::CreatePolyhedron () const 
 {
-  //  return new G4PolyhedronHype (fRMin, fRMax, fDz, fSPhi, fDPhi);
-  return 0;
+  // Tube for now!!!
+  //
+  return new G4PolyhedronTube (endInnerRadius, endOuterRadius, halfLenZ);
 }
 
 G4NURBS* G4Hype::CreateNURBS () const 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrd.cc,v 1.1 2005-03-18 15:36:20 link Exp $
+// $Id: G4TwistedTrd.cc,v 1.2 2005-04-04 11:56:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,24 +37,28 @@
 //
 // History:
 //
+//   18/03/2005 - Created.
+//
 // --------------------------------------------------------------------
 
 #include "G4TwistedTrd.hh"
+#include "G4Polyhedron.hh"
 
 G4TwistedTrd::G4TwistedTrd( const G4String& pName,
-			   G4double pDx1, 
-			   G4double pDx2,
-			   G4double pDy1, 
-			   G4double pDy2,
-			   G4double pDz,
-			   G4double pPhiTwist
-			    ) :
-  G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0., pDy1, pDx1, pDx1, pDy2, pDx2, pDx2,0.)
+                                  G4double  pDx1, 
+                                  G4double  pDx2,
+                                  G4double  pDy1, 
+                                  G4double  pDy2,
+                                  G4double  pDz,
+                                  G4double  pPhiTwist )
+  : G4VTwistedFaceted( pName, pPhiTwist,pDz,0.,0.,
+                       pDy1, pDx1, pDx1, pDy2, pDx2, pDx2,0.)
 {
-
 }
 
-G4TwistedTrd::~G4TwistedTrd() {} ;
+G4TwistedTrd::~G4TwistedTrd()
+{
+}
 
 std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 {
@@ -82,7 +86,9 @@ std::ostream& G4TwistedTrd::StreamInfo(std::ostream& os) const
 
 G4Polyhedron* G4TwistedTrd::CreatePolyhedron () const 
 {
-   return 0;
+  // Returns simple Trd for now !!
+  //
+  return new G4PolyhedronTrd2 (GetDx1(),GetDx3(),GetDy1(),GetDy2(),GetDz());
 }
 
 //=====================================================================
