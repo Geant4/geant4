@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.33 2001-10-30 13:40:05 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.34 2001-10-31 11:10:01 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2606,7 +2606,6 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH, G4bool corFlag)
             G4cerr<<"***G4QEnv::EvaRes: tM="<<totMass<<"-> h1M="<<m1<<" + h2M="<<m2<<G4endl;
 		    G4Exception("G4QEnvironment::EvaporateResidual: Chip->h1+h2 DecayIn2 did not succeed");
 	      }
-          delete qH;
           G4QHadron* H2 = new G4QHadron(h2.GetPDGCode(),qe4M);
           theQHadrons.push_back(H2);              // (delete equivalent)
           G4QHadron* H1 = new G4QHadron(h1.GetPDGCode(),fq4M);
