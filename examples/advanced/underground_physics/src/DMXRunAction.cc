@@ -63,6 +63,7 @@ DMXRunAction::DMXRunAction()
   savehitsFile = "hits.out";
   savepmtFile  = "pmt.out";
   savehistFile = "dmx.his";
+  plotevent    = false;
   interactplot = false;
 }
 
@@ -90,7 +91,7 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
   // Book histograms and ntuples
   DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-  analysis->book(savehistFile);
+  analysis->book(savehistFile, plotevent);
   //  analysis->PlotHistosInit();
 #endif
     
@@ -105,7 +106,8 @@ void DMXRunAction::EndOfRunAction(const G4Run* aRun)
 #ifdef G4ANALYSIS_USE
   DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
   analysis->PlotHistos(interactplot);
-  analysis->finish();
+  analysis->PulseTimeFit();
+  analysis->Finish();
 #endif
 
   if (G4VVisManager::GetConcreteInstance()) {

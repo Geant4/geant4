@@ -54,6 +54,7 @@
 #include "AIDA/IHistogram3D.h"
 
 #include "AIDA/IPlotterFactory.h"
+#include "AIDA/IPlotterRegion.h"
 #include "AIDA/IPlotter.h"
 
 #include "AIDA/ITupleFactory.h"
@@ -61,12 +62,35 @@
 
 #include "AIDA/IManagedObject.h"
 
+# include "AIDA/IFitter.h"
+# include "AIDA/IFitResult.h"
+# include "AIDA/IFitData.h"
+# include "AIDA/IRangeSet.h"
+# include "AIDA/IFitParameterSettings.h"
+# include "AIDA/IFunctionFactory.h"
+# include "AIDA/IFunction.h"
+# include "AIDA/IFitFactory.h"
 
-class IAnalysisFactory;
-class ITree;
-class IHistogramFactory;
-class ITupleFactory;
-class ITuple;
+namespace AIDA {
+  class IAnalysisFactory;
+  class ITree;
+  class IHistogramFactory;
+  class ITupleFactory;
+  class ITuple;
+  class IHistogram1D;
+  class IHistogram2D;
+  class IPlotter;
+  class IFitter;
+  class IFitResult;
+  class IFitData;
+  class IRangeSet;
+  class IFitParameterSettings;
+  class IFunctionFactory;
+  class IFunction;
+  class IFitFactory;
+
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -77,9 +101,10 @@ public:
   virtual ~DMXAnalysisManager();
   
   //  void book();
-  void book(G4String);
+  void book(G4String, G4bool);
   
-  void finish();
+  void Init();
+  void Finish();
   
   //fill histograms with SHC (Scint Hits) data from DMXEventAction
   void analyseScintHits(G4int event_id, G4double energy_pri, G4double totEnergy, G4int S_hits, G4double firstLXeHitTime, G4int P_hits, G4double aveTimePmtHits, G4String firstparticleName, G4double firstParticleE, G4bool gamma_ev, G4bool neutron_ev, G4bool positron_ev, G4bool electron_ev, G4bool other_ev, long seed1, long seed2);
@@ -94,15 +119,18 @@ public:
   void analysePrimaryGenerator(G4double);
   
   //fill histograms with data from DMXPrimaryGenerator
-  void HistFirstTime(G4double);
+  void HistTime(G4double);
   
+  //fit exponential decay time of scintillation time:
+  void PulseTimeFit();
+
   //Method to interactively display histograms
   void PlotHistos(G4bool);
   
   //Method to interactively display histograms
   void PlotHistosInit();
   //Method to interactively display histograms
-  void PlotHistosInter();
+  void PlotHistosInter(G4int flag);
   
   //method to call to create an instance of this class
   static DMXAnalysisManager* getInstance();
@@ -135,6 +163,32 @@ private:
   AIDA::ITupleFactory     *tpf;
   AIDA::IPlotterFactory   *pf;
   AIDA::IPlotter          *plotter;
+  AIDA::ITuple            *ntuple1;
+  AIDA::ITuple            *ntuple2;
+  AIDA::ITuple            *ntuple3;
+  AIDA::ITuple            *ntuple4;
+
+  AIDA::IHistogram1D* hEsourcep;
+  AIDA::IHistogram1D* hEdepp;
+  AIDA::IHistogram1D* hEdepRecoil;
+  AIDA::IHistogram1D* hNumPhLow;
+  AIDA::IHistogram1D* hNumPhHigh;
+  AIDA::IHistogram1D* hAvPhArrival;
+  AIDA::IHistogram1D* hPhArrival;
+  AIDA::IHistogram2D* hPMTHits;
+  AIDA::IHistogram2D* h1stPMTHit;
+  AIDA::IHistogram1D* hGammaEdep;
+  AIDA::IHistogram1D* hNeutronEdep;
+  AIDA::IHistogram1D* hElectronEdep;
+  AIDA::IHistogram1D* hPositronEdep;
+  AIDA::IHistogram1D* hOtherEdep;
+
+  AIDA::IFunctionFactory *funFact;
+  AIDA::IFitFactory      *fitFact;
+  AIDA::IFunction        *exponFun;
+  AIDA::IFunction        *gaussFun;
+  AIDA::IFitter          *e_fitter;
+  AIDA::IFitResult       *fitResult;
 
 };
 #endif

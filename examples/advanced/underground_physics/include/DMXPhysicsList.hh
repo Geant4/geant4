@@ -48,7 +48,8 @@ class DMXPhysicsList: public G4VUserPhysicsList
 {
 public:
   DMXPhysicsList();
-  virtual ~DMXPhysicsList();
+  ~DMXPhysicsList();
+  //  virtual ~DMXPhysicsList();
 
 
 public:

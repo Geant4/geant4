@@ -240,24 +240,29 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
     for (G4int i=0; i<P_hits; i++) {
       G4double time = ( (*PHC)[i]->GetTime() - firstLXeHitTime );
       aveTimePmtHits += time / (G4double)P_hits;
-      if (event_id == 0) {
+      ////      if (event_id == 0) {
+      if(P_hits >= 0) {
 #ifdef G4ANALYSIS_USE
 	// pass first event for histogram record:
 	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-	analysis->HistFirstTime(time);
+	analysis->HistTime(time);
 #endif
-      }
     }
+  }
+  
     if (event_id%printModulo == 0 && P_hits > 0) {
       G4cout << "     Average light collection time: "
 	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
       G4cout << "     Number of PMT hits (photoelectron equivalent): " 
 	     << P_hits << G4endl;
-//  #ifdef G4ANALYSIS_USE
-//        // plot histograms, interactively:
-//        DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
-//        analysis->PlotHistosInter();
-//  #endif
+#ifdef G4ANALYSIS_USE
+      // plot histograms, interactively:
+      G4bool plotevent=runAct->Getplotevent();      
+      if(plotevent) {
+	DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
+	analysis->PlotHistosInter(P_hits);
+      }
+#endif
     }
     // write out (x,y,z) of PMT hits
     if (savePmtFlag)

@@ -213,10 +213,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double LN2PosZ            = 0.5*jacketHeight + 0.5*LN2jacketHeight 
                                 + jacketflangeHeight + PosZ;
 
-  //  G4double temp_jackZ = 0.5*labHeight - LN2PosZ - 0.5*LN2jacketHeight;
-  //  G4cout << " Position of LN2 top from ceiling is: " 
-  //	 << G4BestUnit(temp_jackZ,"Length") << G4endl;
-
   G4Tubs* LN2jacket_tube = new G4Tubs("LN2jacket_tube",
      0.*cm, LN2jacketRadius, 0.5*LN2jacketHeight, 0.*deg, 360.*deg);
   LN2jacket_log  = new G4LogicalVolume
@@ -579,7 +575,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   const G4int NUM = 2;
   G4double vessel_PP[NUM]   = { 6.5*eV, 7.50*eV };
-  G4double vessel_REFL[NUM] = { 0.1, 0.1 };
+  G4double vessel_REFL[NUM] = { 0.2, 0.2 };
   G4MaterialPropertiesTable* vessel_mt = new G4MaterialPropertiesTable();
   vessel_mt->AddProperty("REFLECTIVITY", vessel_PP, vessel_REFL, NUM);
   OpVesselSurface->SetMaterialPropertiesTable(vessel_mt);
@@ -629,16 +625,15 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   CuShield_log->SetVisAttributes(CuShield_vat);
 
   // Cu shield surface
+  G4double sigalpha;
   G4OpticalSurface* OpCuShieldSurface = new G4OpticalSurface
-    ("ShieldSurface", unified, ground, dielectric_metal, 0.2);
-  //  ("ShieldSurface", unified, polished, dielectric_metal);
+    ("ShieldSurface", unified, ground, dielectric_metal, sigalpha=30.0*deg);
   G4LogicalBorderSurface* ShieldSurface;
   ShieldSurface = new G4LogicalBorderSurface
     ("Shield", LXe_phys, CuShield_phys, OpCuShieldSurface);
 
   G4double CuShield_PP[NUM]   = { 7.0*eV, 7.50*eV };
-  G4double CuShield_REFL[NUM] = { 0.4, 0.3 };
-  //  G4double CuShield_REFL[NUM] = { 0.271, 0.230 };
+  G4double CuShield_REFL[NUM] = { 0.3, 0.2 };
   G4MaterialPropertiesTable *CuShield_mt = new G4MaterialPropertiesTable();
   CuShield_mt->AddProperty("REFLECTIVITY", CuShield_PP, CuShield_REFL, NUM);
   OpCuShieldSurface->SetMaterialPropertiesTable(CuShield_mt);
@@ -658,13 +653,12 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // optical surface: ring materials table
   G4double ring_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double ring_REFL[NUM] = { 0.45, 0.35 };
+  G4double ring_REFL[NUM] = { 0.7, 0.65 };
   G4MaterialPropertiesTable *ring_mt = new G4MaterialPropertiesTable();
   ring_mt->AddProperty("REFLECTIVITY", ring_PP, ring_REFL, NUM);
 
   G4OpticalSurface* OpRingSurface = new G4OpticalSurface
-    ("RingSurface", unified, ground, dielectric_metal, 0.05);
-  //    ("RingSurface", unified, polished, dielectric_metal);
+    ("RingSurface", unified, ground, dielectric_metal, sigalpha=10.*deg);
   // last argument is surface roughness if it's non-polished - i.e. ground
   OpRingSurface->SetMaterialPropertiesTable(ring_mt);
 
@@ -756,13 +750,13 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // mirror surface
   G4OpticalSurface * OpMirrorSurface = new G4OpticalSurface
-    ("MirrorSurface", unified, polished, dielectric_metal);
+    ("MirrorSurface", unified, ground, dielectric_metal, sigalpha=5.0*deg);
   G4LogicalBorderSurface* MirrorSurface;
   MirrorSurface = new G4LogicalBorderSurface
     ("Mirror", GXe_phys, mirror_phys, OpMirrorSurface);
 
   G4double mirror_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double mirror_REFL[NUM] = { 0.75, 0.7 };
+  G4double mirror_REFL[NUM] = { 0.83, 0.78 };
   G4MaterialPropertiesTable *mirror_mt = new G4MaterialPropertiesTable();
   mirror_mt->AddProperty("REFLECTIVITY", mirror_PP, mirror_REFL, NUM);
   OpMirrorSurface->SetMaterialPropertiesTable(mirror_mt);
@@ -795,16 +789,15 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   
   // alpha source holder ************************************************
   
-  G4double alphaHeight     = 1.230*mm; // total lead thickness = 1.23 mm
-  G4double recessHeight    = 0.20*mm;  // totals lead thickness = 1.23 mm
-  G4double alphaRadius     = 0.75*mm;
-  G4double recessRadius    = 0.65*mm;
+  G4double alphaHeight     = 0.7*mm; // total lead thickness = 1.23 mm
+  G4double recessHeight    = 0.3*mm;  // totals lead thickness = 1.23 mm
+  G4double alphaRadius     = 1.2*mm; // was 0.8
+  G4double recessRadius    = 0.35*mm; // was 0.5 was 0.2
   G4double recessVPosition = 0.5*(alphaHeight - recessHeight);
 
   G4double alphaVOffset    = grid1VOffset-0.5*alphaHeight - gridHeight;
-  G4double americiumHeight = 600.*nanometer; // assumes ~1% Am  
-  G4double extra_offset    = (recessHeight - 0.23*mm + 0.5*americiumHeight); 
-                             // 0.23 = offset for all release macros
+  G4double americiumHeight = 3000.*nanometer; // assumes ~1% Am  
+  G4double extra_offset    = (recessHeight +0.3*mm + 0.5*americiumHeight); 
   G4double alphaVPosition  = 0.5*LXeTubeHeight - alphaVOffset + extra_offset;
 
   G4Tubs* alpha_tube  = new G4Tubs("alpha_tube", 0.*cm, alphaRadius,
@@ -812,12 +805,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4Tubs* recess_tube = new G4Tubs("recess_tube", 0.*cm, recessRadius,
      0.5*recessHeight, 0.*deg, 360.*deg);
 
-  //  G4RotationMatrix rotMatrixAlpha;       // unit rotation matrix
-  // G4double anglealpha_Phys = 0.0*deg;    // rotational angle
-  // rotMatrixAlpha.rotateY(anglealpha_Phys); // rot matrix
-  //    G4SubtractionSolid* alpha_sol = new G4SubtractionSolid
-  //      ("alpha_sol", alpha_tube, recess_tube, G4Transform3D
-  //       (rotMatrixAlpha, G4ThreeVector(0,0,recessVPosition)));
   G4SubtractionSolid* alpha_sol = new G4SubtractionSolid
     ("alpha_sol", alpha_tube, recess_tube, G4Transform3D
      (G4RotationMatrix(), G4ThreeVector(0. ,0. , recessVPosition)));
@@ -832,8 +819,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // alpha source HOLDER surface
   G4OpticalSurface* OpAlphaSurface = new G4OpticalSurface("AlphaSurface", 
-     unified, ground, dielectric_metal, 0.4);
-  //     unified, polished, dielectric_metal);
+  unified, ground, dielectric_metal, sigalpha=20.0*deg);
   G4LogicalBorderSurface* AlphaSurface;
   AlphaSurface = new G4LogicalBorderSurface
     ("Alpha", LXe_phys, alpha_phys, OpAlphaSurface);
@@ -855,9 +841,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   sourceZ = vesselVPos + LXeVPos + alphaVPosition + americiumVPosition + PosZ;
   G4cout << G4endl << "Calibration source centre (X,Y,Z):  0, 0, " 
 	 << sourceZ/mm << " mm" << G4endl;
-//    G4double sourceZ2 = vesselVPos+LXeVPos+alphaVPosition-0.5*recessHeight 
-//      + americiumVPosition+ PosZ+0.5*labHeight;
-//    G4cout << "Height from Floor: Z= " << sourceZ2/mm << " mm" << G4endl;
 
   G4Tubs* americium_tube = new G4Tubs("americium_tube", 0.*cm,
      americiumRadius, 0.5*americiumHeight, 0.*deg, 360.*deg);
@@ -868,14 +851,13 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // americium optical properties:
   G4OpticalSurface* OpAmericiumSurface = new G4OpticalSurface
-    ("AmericiumSurface", unified, ground, dielectric_metal, 0.3);
-    //    ("AmericiumSurface", unified, polished, dielectric_metal);
+    ("AmericiumSurface", unified, ground, dielectric_metal, sigalpha=5.0*deg);
   G4LogicalBorderSurface* AmericiumSurface;
   AmericiumSurface = new G4LogicalBorderSurface
     ("Americium", LXe_phys, americium_phys, OpAmericiumSurface);
 
   G4double americium_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double americium_REFL[NUM] = { 0.47, 0.42 };
+  G4double americium_REFL[NUM] = { 0.7, 0.65 };
   G4MaterialPropertiesTable *americium_mt = new G4MaterialPropertiesTable();
   americium_mt->AddProperty("REFLECTIVITY", americium_PP, americium_REFL, NUM);
   OpAlphaSurface->SetMaterialPropertiesTable(americium_mt);
@@ -908,7 +890,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface* pmt_opsurf = new G4OpticalSurface
     ("pmt_opsurf",unified, polished, dielectric_dielectric);
-  //    ("pmt_opsurf",unified, ground, dielectric_dielectric, 1.0);
   G4LogicalBorderSurface* pmt_surf;
   pmt_surf = new G4LogicalBorderSurface
     ("pmt_surf", LXe_phys, pmt_phys, pmt_opsurf);
