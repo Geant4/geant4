@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2002-02-10 07:12:52 perl Exp $
+$Id: History,v 1.17 2002-11-26 08:05:19 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,14 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+25th Novemeber 2002 Mark Donszelmann
+- Fixed HepRep1 warnings in HepRepFileSceneHandler
+- Fixed HepRep2 radius of markers to be non-zero
+- Fixed HepRep2 attributes some of which had wrong names, especially the markers
+- Fixed HepRep2 filename to have sequence number
+
+13th November 2002 Mark Donszelmann
+- Added HepRep2 Driver
 
 4th February 2002  Joseph Perl  (vis-V04-00-01)
 - Check for missing hierarchy layers in HepRepXMLWriter.

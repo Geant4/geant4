@@ -83,6 +83,7 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
 #endif
     heprepFactory = new XMLHepRepStreamerFactory();
     writer = NULL;
+    fileNo = 0;
 }
 
 G4HepRepSceneHandler::~G4HepRepSceneHandler () {
@@ -101,7 +102,7 @@ void G4HepRepSceneHandler::open() {
 
     char fname [256];
     G4std::ostrstream ost(fname, 256);
-    ost << GetScene()->GetName() << G4std::ends;
+    ost << GetScene()->GetName() << fileNo++ << ".heprep" << G4std::ends;
 
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::open(" << fname << ") " << G4endl;
@@ -220,6 +221,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, trackType);
 
+// FIXME where do we get the linewidth?
+
     instance->addAttValue("DrawAs", G4String("Line"));
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
@@ -241,8 +244,27 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
     instance->addAttValue("DrawAs", G4String("Point"));
 
-    instance->addAttValue("MarkName", G4String("Square"));
-    instance->addAttValue("MarkSize", 4);
+// FIXME, what are we supposed to draw?
+    switch (line.GetMarkerType()) {
+        case line.dots:
+            instance->addAttValue("MarkName", G4String("filled_circle"));
+            break;
+        case line.circles:
+            instance->addAttValue("MarkName", G4String("circle"));
+            break;
+        case line.squares:
+            instance->addAttValue("MarkName", G4String("box"));
+            break;
+        case line.line:
+        default:
+            instance->addAttValue("MarkName", G4String("plus"));
+            break;
+    }
+
+	MarkerSizeType markerType;
+	G4double size = GetMarkerDiameter( line , markerType );
+    instance->addAttValue("MarkSize", size);
+	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
 
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
@@ -255,15 +277,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
 void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
     G4Point3D center = transform * circle.GetPosition();
-    G4double  radius = circle.GetWorldSize();
 
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     SetColour (instance, GetColour(circle));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("MarkName", G4String("Dot"));
-    instance->addAttValue("MarkSize", radius);
+    instance->addAttValue("MarkName", G4String("filled_circle"));
+
+	MarkerSizeType markerType;
+	G4double size = GetMarkerRadius( circle , markerType );
+    instance->addAttValue("MarkSize", size);
+	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;
@@ -274,7 +299,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
         << " x : " << center.x()
         << " y : " << center.y()
         << " z : " << center.z()
-        << " ,radius : " << radius << G4endl;
+        << " ,radius : " << size << G4endl;
 #endif
 }
 
@@ -288,6 +313,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4Normal3D surfaceNormal;
     G4Point3D vertex;
 
+// FIXME where do we get the linewidth?
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, calHitType);
 
@@ -331,15 +357,18 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     G4cout << "G4HepRepSceneHandler::AddPrimitive(G4Square&) " << G4endl;
 #endif
     G4Point3D center = transform * square.GetPosition();
-    G4double size = square.GetWorldSize();
 
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     SetColour (instance, GetColour(square));
     instance->addAttValue("DrawAs", G4String("Point"));
-    instance->addAttValue("MarkName", G4String("Square"));
+    instance->addAttValue("MarkName", G4String("box"));
+
+	MarkerSizeType markerType;
+	G4double size = GetMarkerRadius( square , markerType );
     instance->addAttValue("MarkSize", size);
+	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;

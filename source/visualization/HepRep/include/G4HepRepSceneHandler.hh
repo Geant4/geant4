@@ -109,6 +109,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
     private:
         static G4int sceneCount;      // No. of extanct scenes.
         static G4int sceneIdCount;    // static counter for scenes.
+        G4int fileNo;                   //  file sequence number
         G4int currentDepth;
         G4VPhysicalVolume* currentPV;
         G4LogicalVolume* currentLV;
