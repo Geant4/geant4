@@ -415,7 +415,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv OIVHOME        /lal/SoFree/v3r1
   setenv HEPVISHOME     /lal/HEPVis/v5r1p7
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
-  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx -lHEPVis -L$OIVHOME/Linux-gxx -lSoFree"
+  setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx -lHEPVis ${TTFLIBS} -L$OIVHOME/Linux-gxx -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
   # OPACS :
   setenv G4UI_BUILD_WO_SESSION       1
