@@ -20,6 +20,7 @@
 // It is the extention of the ionisation process for the slow 
 // charged hadrons.
 // ************************************************************
+// 23 May 2000    MG Pia  Clean up for QAO model 
 // 28 July   1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli added ICRU parametrisations for protons  
 // 20 August 1999 G.Mancinelli added ICRU tables for alpha 
@@ -36,12 +37,14 @@
 #include "G4hLowEnergyIonisation.hh"
 #include "G4UnitsTable.hh"
 #include "G4EnergyLossTables.hh"
+#include "G4Material.hh"
+#include "G4DynamicParticle.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
   : G4hLowEnergyLoss(processName),
-    qaoloss(),
     theMeanFreePathTable(NULL),
     ParamLowEnergy(1.*keV),
     ParamHighEnergy(2.*MeV),
@@ -65,6 +68,8 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     TotBin = 200 ;
     MassRatio = 1.0 ;
     DeltaCutInKineticEnergy = 0; 
+
+    qaoLoss = new G4QAOLowEnergyLoss;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -75,6 +80,10 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
     theMeanFreePathTable->clearAndDestroy();
     delete theMeanFreePathTable;
   }
+
+  delete qaoLoss;
+  qaoLoss = 0;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -860,9 +869,22 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
    
   // start with aniproton management with quantum harmonic
   // oscillator loss model
-  if(-0.5>Charge && pbarStop && qaoloss.IsMaterial(material->GetName())){
-  ionloss = qaoloss.EnergyLoss(Charge, material, KinEnergy);
-  ionloss-=GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
+
+  G4ParticleDefinition* pbarDef = G4AntiProton::AntiProtonDefinition();
+  if ( pbarStop && (qaoLoss->IsInCharge(KinEnergy,pbarDef,material) ))
+    {
+      G4DynamicParticle dynamicPart();
+      dynamicPart.SetDefinition(pbarDef);
+      dynamicPart.SetKineticEnergy(KinEnergy);
+      // does it require also the following?
+      // dynamicPart.SetCharge(-1);
+
+      ionloss = qaoloss->EnergyLoss(dynamicPart,material);
+      ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
+    }
+  //  if(-0.5>Charge && pbarStop && qaoloss.IsMaterial(material->GetName())){
+  //  ionloss = qaoloss.EnergyLoss(Charge, material, KinEnergy);
+  //  ionloss-=GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
   return ionloss;
   }
   

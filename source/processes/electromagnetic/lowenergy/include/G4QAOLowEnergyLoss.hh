@@ -15,6 +15,9 @@
 //      ---------- G4QAOLowEnergyLoss physics process -------
 //                  by Stephane Chauvie, 21 May 2000 
 //
+// Modified:
+// 23/05/2000 MGP  Made compliant to design
+//  
 // Class Description:
 // Quantal Harmonic Oscillator Model for energy loss
 // of slow antiprotons 
@@ -30,8 +33,8 @@
 #include "G4VhEnergyLossModel.hh"
 #include "globals.hh"
 
-class G4Material;
 class G4DynamicParticle;
+class G4Material;
 class G4ParticleDefinition;
 
 class G4QAOLowEnergyLoss : public G4VhEnergyLossModel
@@ -44,7 +47,7 @@ public:
   
   virtual G4double LowEnergyLimit() const {return 0;};
   
-  virtual G4double HighEnergyLimit() const {return 0;} ;
+  virtual G4double HighEnergyLimit() const;
   
   virtual G4bool IsInCharge(G4double energy, 
 			    const G4ParticleDefinition* particleDefinition,
@@ -65,16 +68,18 @@ private:
   void SetShellMaterial(G4String materialsymbol) ;
   
   // calculate stopping number for L's term
-  G4double GetL0(G4double _enorm0) ;
-  G4double GetL1(G4double _enorm1) ;
-  G4double GetL2(G4double _enorm2) ;
+  G4double GetL0(G4double _enorm0) const;
+  G4double GetL1(G4double _enorm1) const;
+  G4double GetL2(G4double _enorm2) const;
   
 private:
   
   G4int nbofshell;
   G4double* shellenergy;
   G4double* shellstrength;
-  
+
+  G4int numberOfMaterials;
+
   //  variable for calculation of stopping number of L's term
   static G4double L0[67][2];
   static G4double L1[22][2];

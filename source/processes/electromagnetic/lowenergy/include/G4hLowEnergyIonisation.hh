@@ -23,8 +23,9 @@
 // described in CERN-OPEN-99-121. User have a possibility to define
 // a parametrisation table via its name. 
 // Class Description - End
-
+//
 // ************************************************************
+// 23 May 2000    MG Pia  Clean up for QAO model 
 // 28 July 1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
@@ -37,7 +38,7 @@
 #include "G4ios.hh"
 #include "Randomize.hh"
 #include "G4hLowEnergyLoss.hh"
-#include "G4QAOLowEnergyLoss.hh"
+#include "G4VhEnergyLossModel.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -224,11 +225,12 @@ private:
   
 private:
   //  private data members ...............................
-  
+  G4VEnergyLossModel* qaoLoss;
+
 protected:
   //  protected data members ...............................
   
-  G4QAOLowEnergyLoss qaoloss;
+
   G4PhysicsTable* theMeanFreePathTable;
   
   // interval of parametrisation of electron stopping power 
