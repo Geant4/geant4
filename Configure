@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.24 2002-06-26 16:47:09 stesting Exp $
+# $Id: Configure,v 1.25 2002-06-26 17:12:08 stesting Exp $
 #
-# Generated on Wed Jun 26 18:45:09 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 19:11:34 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3911,8 +3911,8 @@ if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy
 
 g4message=`cat << EOM
 
-  $OGLHOME/include
-  $OGLHOME/lib
+  OGLHOME/include
+  OGLHOME/lib
 
 You are selecting to use OpenGL driver.
 Where is it installed?
