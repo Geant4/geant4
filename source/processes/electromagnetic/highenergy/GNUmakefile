@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2004-11-19 18:40:48 vnivanch Exp $
+# $Id: GNUmakefile,v 1.2 2004-11-22 03:28:08 vnivanch Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # Modified:
@@ -34,8 +34,3 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 
 include $(G4INSTALL)/config/common.gmk
 
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-
-endif
