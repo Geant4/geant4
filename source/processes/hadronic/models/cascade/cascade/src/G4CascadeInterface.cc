@@ -96,7 +96,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 				theNucleus.GetZ());
     target->setEnergy();
 
-    sumBaryon = theNucleusA;
+    sumBaryon += theNucleusA;
 
     if (verboseLevel > 2) {
       G4cout << "Target:  " << G4endl;  
@@ -118,12 +118,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
   if (G4int(theNucleusA) == 1) 
-    {
-      // Get momentum from H model
-      G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
-      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
-      
-      sumBaryon = 1;
+    { 
+      sumBaryon += 1;
 
       if (verboseLevel > 2) {
 	G4cout << "Target:  " << G4endl;  
@@ -132,9 +128,13 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       do
 	{
+	  // Get momentum from H model
+	  G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
+	  targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
+
 	  output = collider->collide(bullet, targetH); 
 	} 
-      while(output.getOutgoingParticles().size()<2.5);
+      while(output.getOutgoingParticles().size() < 2.5);
     } 
   else 
     {
@@ -236,6 +236,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   G4DynamicParticle * aFragment(0);
   G4ParticleDefinition * aIonDef(0);
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
+
   if (!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
 
@@ -252,12 +253,12 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	  G4cout << " Nuclei fragment: " << G4endl;
 	  ifrag->printParticle();
 	}
+
 	G4int A = G4int(ifrag->getA());
 	G4int Z = G4int(ifrag->getZ());
 	aIonDef = theTableOfParticles->FindIon(Z,A,0,Z);
       
 	aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
-
 
 	sumBaryon -= A;
 	sumEnergy -= eKin / GeV;
