@@ -1,6 +1,6 @@
 
 *************************************************************
- Geant4 version $Name: not supported by cvs2svn $   (25-June-2004)
+ Geant4 version $Name: not supported by cvs2svn $   (17-December-2004)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -144,7 +144,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=9.1s Real=9.7s Sys=0.65s
+  User=9s Real=9.7s Sys=0.63s
 #
 # electron 500 MeV in Air
 #
@@ -271,7 +271,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.52s Real=0.59s Sys=0.07s
+  User=0.46s Real=0.49s Sys=0.03s
 #
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
