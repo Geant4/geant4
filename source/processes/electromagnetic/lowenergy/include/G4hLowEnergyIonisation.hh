@@ -78,15 +78,7 @@ protected:
 						  const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
 						  G4double AtomicNumber);
-  
-  //--------------------------------------------------------start
-    virtual G4double ComputeBarkasTerm(
-    				       const G4Material* material,
-  				       const G4double KinEnergy,
-				       const G4double PartMass);
-  //Function to compute the Barkas term						  
-  //---------------------------------------------------------end
-    
+      
 public: // With description
   
   void SetStoppingPowerTableName(const G4String& dedxTable);
@@ -99,12 +91,10 @@ public: // With description
   // This method switch off calculation of the nuclear stopping power.
   
   void SetAntiProtonStoppingOn();
-  // This method switch on calculation of the loss table for antiproton
-  // using antiproron formulation (down to 100 keV).
+  // This method switch on calculation of the Barkas Effect for antiproton
   
   void SetAntiProtonStoppingOff();
-  // This method switch off calculation of the loss table for antiproton
-  // using antiproron formulation (down to 100 keV).
+  // This method switch on calculation of the Barkas Effect for antiproton
   
   G4double GetParametrisedLoss(const G4Material* material,
   			       const G4double KinEnergy,
@@ -112,7 +102,6 @@ public: // With description
 			       const G4double PartMass,
 			       const G4double PartCharge);
   // This method returns parametrised energy loss.
-  // NEW**** modified totake account of the Barkas correction 
   
   G4double GetBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
 			     const G4double DeltaRayCutNow);
@@ -204,6 +193,11 @@ public: // With description
   // J.F.Ziegler, J.P. Biersack, U. Littmark
   // The Stopping and Range of Ions in Matter,
   // Vol.1, Pergamon Press, 1985
+
+  G4double ComputeBarkasTerm(const G4Material* material, const G4double KinEnergy,
+			     const G4double PartMass);
+  //Function to compute the Barkas term						  
+
 
 private:
   

@@ -42,9 +42,9 @@ public: // Without description
 
   G4double GetIonBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
 			     const G4double DeltaRayCutNow);
-
+			     
   G4double GetLowEnergyForParametrisation(const G4Material* material);
-
+  
   void PrintInfoDefinition();
 
 public: // With description
@@ -73,12 +73,8 @@ private:
 
 protected:
   //  protected data members ...............................
-
-
     
 };
-
-//#include "G4ionLowEnergyIonisation.icc"
 
 #endif
  

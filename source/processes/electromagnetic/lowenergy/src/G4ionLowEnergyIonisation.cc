@@ -21,6 +21,7 @@
 // ************************************************************
 //  6 September 1999 V.Ivanchenko create
 // 30 September 1999 V.Ivanchenko minor upgrade
+// 20 January   2000 V.Ivanchenko minor bag fixed
 // ------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -47,10 +48,6 @@ G4ionLowEnergyIonisation::G4ionLowEnergyIonisation(const G4String& processName)
 
 G4ionLowEnergyIonisation::~G4ionLowEnergyIonisation() 
 {
-  if (theMeanFreePathTable) {
-    theMeanFreePathTable->clearAndDestroy();
-    delete theMeanFreePathTable;
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -106,9 +103,9 @@ G4double G4ionLowEnergyIonisation::GetLowEnergyForParametrisation(const G4Materi
   G4double E1 = 3.25 * keV ;
   G4double E2 = 25.0 * keV / pow(Z, 0.667) ;
   E1 = G4std::max (E1, E2) ;
-  return G4std::max(ParamLowEnergy, E1) / MassRatio ; 
+  E1 = G4std::max(ParamLowEnergy, E1) / MassRatio ; 
+  return E1 ; 
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

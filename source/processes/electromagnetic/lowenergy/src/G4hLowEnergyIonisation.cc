@@ -2311,7 +2311,7 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
          << "\n        from " << ParamLowEnergy / keV << " keV "
          << " to " << ParamHighEnergy / MeV << " MeV " << "." << G4endl ;
   if(pbarStop){
-    G4cout << "        Parametrization of Barkas Effect is switched on." << G4endl ;
+    G4cout << "        Parametrization of the Barkas effect is switched on." << G4endl ;
   }
   if(nStopping) {
     G4cout << "        Simulation of nuclear stopping is switched on." << G4endl ; 
