@@ -421,7 +421,7 @@ endif
 # Comments :
 # --------
 #
-if ( `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-03-00-ref-03
   setenv G4WORKDIR $G4INSTALL
