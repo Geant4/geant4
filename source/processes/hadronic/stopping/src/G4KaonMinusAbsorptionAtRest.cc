@@ -215,7 +215,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
   if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->entries();
   
   //Initialize ParticleChange
-  aParticleChange.Initialize(track);
+   aParticleChange.Initialize(track);
   aParticleChange.SetNumberOfSecondaries(G4int(nAbsorptionProducts+nFragmentationProducts) ); 
   
   // update List of alive particles. put energy deposit at the right place ...
