@@ -7,8 +7,8 @@
 !!!! visualization viewers based over Xt. You use it by
 !!!! setting the XENVIRONMENT environment variable to point
 !!!! to this file, for example :
-!!!!    csh> setenv XENVIRONMENT g4.xrm
-!!!!     sh> XENVIRONMENT=g4.xrm;export XENVIRONMENT
+!!!!    csh> setenv XENVIRONMENT g4Xt.xrm
+!!!!     sh> XENVIRONMENT=g4Xt.xrm;export XENVIRONMENT
 !!!! 
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
