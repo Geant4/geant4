@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GlobalFastSimulationManager.hh,v 1.1 1999-01-07 16:14:04 gunter Exp $
+// $Id: G4GlobalFastSimulationManager.hh,v 1.2 1999-04-15 17:17:20 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -31,6 +31,7 @@
 
 #include <rw/tpordvec.h>
 
+#include "G4VGlobalFastSimulationManager.hh"
 #include "G4FastSimulationManager.hh"
 #include "G4FastSimulationManagerProcess.hh"
 #include "G4StateManager.hh"
@@ -45,7 +46,8 @@ enum  listType {
 
 class G4FastSimulationMessenger;
 
-class G4GlobalFastSimulationManager : public G4VStateDependent
+class G4GlobalFastSimulationManager : public G4VStateDependent, 
+				      public G4VGlobalFastSimulationManager
 {
 public:
   // Global access to the GlobalFastSimulationManager
