@@ -200,15 +200,21 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    b = 2*p*p*(m1*cost*cost-etot);
    c = p*p*p*p*sint*sint;
    
-   G4double de = (-b-sqrt(b*b-4.*a*c))/(2.*a);
+   G4double de = (-b-sqrt(G4std::max(0.0,b*b-4.*a*c)))/(2.*a);
    G4double e1 = sqrt(p*p+m1*m1)-de;
-   p1 = sqrt(e1*e1-m1*m1);
+   G4double p12=e1*e1-m1*m1;
+   p1 = sqrt(G4std::max(0.0,p12));
    px = p1*sint*sin(phi);
    py = p1*sint*cos(phi);
    pz = p1*cost;
 
-   //G4cout << "Relevant test "<<p<<" "<<p1<<" "<<cost<<" "<<de<<G4endl;
-   //G4cerr << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
+   if (verboseLevel > 1) 
+   {
+     G4cout << "Relevant test "<<p<<" "<<p1<<" "<<cost<<" "<<de<<G4endl;
+     G4cout << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
+     G4cout << "rest = "<< b*b<<" "<<4.*a*c<<" "<<G4endl;
+     G4cout << "make p1 = "<< p12<<" "<<e1*e1<<" "<<m1*m1<<" "<<G4endl;
+   }
 // Incident particle
    G4double pxinc = p*(aParticle->GetMomentumDirection().x());
    G4double pyinc = p*(aParticle->GetMomentumDirection().y());
@@ -226,9 +232,20 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double pyre=pyinc-pynew;
    G4double pzre=pzinc-pznew;
    G4ThreeVector it0(pxnew*GeV, pynew*GeV, pznew*GeV);
-   pxnew = pxnew/p1;
-   pynew = pynew/p1;
-   pznew = pznew/p1;
+   if(p1>0)
+   {
+     pxnew = pxnew/p1;
+     pynew = pynew/p1;
+     pznew = pznew/p1;
+   }
+   else
+   {
+     G4double pphi = 2*pi*G4UniformRand();
+     G4double ccth = 2*G4UniformRand()-1;
+     pxnew = 0;//sin(acos(ccth))*sin(pphi);
+     pynew = 0;//sin(acos(ccth))*cos(phi);
+     pznew = 1;ccth;
+   }
    if (verboseLevel > 1) {
       G4cout << "DoIt: returning new momentum vector" << G4endl;
       G4cout << pxnew << " " << pynew << " " << pznew << G4endl;
