@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixExplicitEuler.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4HelixExplicitEuler.cc,v 1.3 2000-04-12 18:29:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HelixExplicitEuler.hh"
@@ -25,11 +25,11 @@
 
 void
 G4HelixExplicitEuler::DumbStepper( const G4double  yIn[],
-			      const G4double  dydx[],
-			      const G4double  h,
-			 	    G4double  yOut[])
+				   G4ThreeVector   Bfld,
+				   G4double  h,
+				   G4double  yOut[])
 {
-  AdvanceHelix(yIn, dydx, h, yOut);
+  AdvanceHelix(yIn, Bfld, h, yOut);
 
   // NormaliseTangentVector( yOut );  // this could harm more than it helps 
   return ;

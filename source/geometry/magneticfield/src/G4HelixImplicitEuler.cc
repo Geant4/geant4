@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixImplicitEuler.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4HelixImplicitEuler.cc,v 1.3 2000-04-12 18:29:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HelixImplicitEuler.hh"
@@ -28,24 +28,24 @@
 
 void
 G4HelixImplicitEuler::DumbStepper( const G4double  yIn[],
-				   const G4double  dydx[],
-				   const G4double  h,
-				   G4double  yOut[])
+				   G4ThreeVector   Bfld,
+				   G4double        h,
+				   G4double        yOut[])
 {
   const G4int nvar = 6 ;
-  G4double dydxTemp[6];
   G4double yTemp[6], yTemp2[6];
+  G4ThreeVector Bfld_endpoint;
 
   G4int i;
 
   // Step forward like in the explicit euler case
-  AdvanceHelix( yIn, dydx, h, yTemp);
+  AdvanceHelix( yIn, Bfld, h, yTemp);
 
   // now obtain the new field value at the new point
-  RightHandSide(yTemp,dydxTemp);
+  MagFieldEvaluate(yTemp, Bfld_endpoint);      
 
   // and also advance along a helix for this field value
-  AdvanceHelix( yIn, dydxTemp, h, yTemp2);
+  AdvanceHelix( yIn, Bfld_endpoint, h, yTemp2);
 
   // we take the average 
   for( i = 0; i < nvar; i++ ) 

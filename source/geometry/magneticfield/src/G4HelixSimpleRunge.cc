@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixSimpleRunge.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4HelixSimpleRunge.cc,v 1.3 2000-04-12 18:29:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HelixSimpleRunge.hh"
@@ -26,19 +26,21 @@
 
 void
 G4HelixSimpleRunge::DumbStepper( const G4double  yIn[],
-				 const G4double  dydx[],
-				 const G4double  h,
-				 G4double  yOut[])
+				 G4ThreeVector   Bfld,
+				 G4double        h,
+				 G4double        yOut[])
 {
   const G4int nvar = 6 ;
   G4double dydxTemp[nvar];
   G4double yTemp[nvar];   // , yAdd[nvar];
+  G4ThreeVector Bfld_midpoint;
 
-  AdvanceHelix( yIn, dydx, 0.5 * h, yTemp);
+  AdvanceHelix( yIn, Bfld, 0.5 * h, yTemp);
   
-  RightHandSide(yTemp,dydxTemp);
+  // now obtain the new field value at the new point
+  MagFieldEvaluate(yTemp, Bfld_midpoint);      
 
-  AdvanceHelix( yIn, dydxTemp, h, yOut);
+  AdvanceHelix( yIn, Bfld_midpoint, h, yOut);
   
   // NormaliseTangentVector( yOut );           
   

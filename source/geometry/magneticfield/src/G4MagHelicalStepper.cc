@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.3 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.4 2000-04-12 18:29:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -27,14 +27,14 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
 
 void
 G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
-				 const G4double  Barr[],
-				 const G4double  h,
-				 G4double  yHelix[])
+				   G4ThreeVector   Bfld,    
+				   G4double  h,
+				   G4double  yHelix[])
 {
   // const G4int    nvar = 6;
   const G4double approc_limit = 0.05;
 
-  G4ThreeVector  Bfld, Bnorm, B_x_P, vperp, vpar;
+  G4ThreeVector  Bnorm, B_x_P, vperp, vpar;
   // G4double norm;
   G4double B_d_P;  // B_perp;
   G4double Theta;  // , Theta_1;
@@ -42,8 +42,7 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
   G4double CosT2, SinT2, CosT, SinT;
   G4ThreeVector positionMove, endTangent;
 
-  Bfld= G4ThreeVector( Barr[0], Barr[1], Barr[2]); 
-  G4double Bmag = Bfld.mag();  
+  G4double Bmag = Bfld.mag();
   const G4double *pIn = yIn+3;
   G4ThreeVector initTangent= G4ThreeVector( pIn[0], pIn[1], pIn[2]);  
 
@@ -137,7 +136,8 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
    // correction for Richardson Extrapolation.
    G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
-   G4double yTemp[7], dydxTemp[6], yIn[7] ;
+   G4double      yTemp[7], yIn[7] ;
+   G4ThreeVector Bfld_initial, Bfld_midpoint;
 
    //  Saving yInput because yInput and yOut can be aliases for same array
 
@@ -145,25 +145,34 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
 
    G4double h = hstep * 0.5; 
 
+   MagFieldEvaluate(yIn, Bfld_initial) ;        
+
    // Do two half steps
+   DumbStepper(yIn,   Bfld_initial,  h, yTemp);
+   MagFieldEvaluate(yTemp, Bfld_midpoint) ;     
+   DumbStepper(yTemp, Bfld_midpoint, h, yOut); 
 
-   DumbStepper(yIn,dydx,h,yTemp);
-   MagFieldEvaluate(yTemp,dydxTemp) ;    // Was : RightHandSide(,)
-   DumbStepper(yTemp,dydxTemp,h,yOut); 
-
-   // Store midpoint, chord calculation
-
+   // Store midpoint, to aid distance-from-chord calculation
    yMidPoint = G4ThreeVector( yTemp[0],  yTemp[1],  yTemp[2]); 
 
    // Do a full Step
    h = hstep ;
-   DumbStepper(yIn,dydx,h,yTemp); 
+   DumbStepper(yIn, Bfld_initial, h, yTemp); 
+
+
    for(i=0;i<nvar;i++) {
-      yErr[i] = yOut[i] - yTemp[i] ;
-      yOut[i] += yErr[i]*correction ;    // Provides by 1 increased
-                                         // order of accuracy
-                                         // Richardson Extrapolation  
+     yErr[i] = yOut[i] - yTemp[i] ;
    }
+
+#if G4HELICAL_USE_RICHARDSON_EXTRAPOLATION
+   if( IntegratorOrder() > 1 ) {
+       // It is unclear whether it is possible to 
+       //  use the Richardson Extrapolation to increase accuracey by 1 order
+     for(i=0;i<nvar;i++) {
+       yOut[i] += yErr[i]*correction ;    
+     }
+   }
+#endif
 
    yInitial = G4ThreeVector( yIn[0],   yIn[1],   yIn[2]); 
    yFinal   = G4ThreeVector( yOut[0],  yOut[1],  yOut[2]); 
