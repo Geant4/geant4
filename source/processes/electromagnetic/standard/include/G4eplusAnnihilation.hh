@@ -5,16 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.hh,v 1.3 1999-12-17 18:26:12 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.4 2001-02-22 18:26:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4eplusAnnihilation process ------
-//                   by Michel Maire, 7 july 1996
-//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // 10-01-97, crossection table + meanfreepath table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo() 
-// ------------------------------------------------------------
+// 
 
 // class description
 //

@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2001-02-05 17:53:50 gcosmo Exp $
+$Id: History,v 1.19 2001-02-22 18:26:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+22 feb 01: mma (stand-V03-00-03)
+- G4PhotoElectricEffect.  DoIt: removed protection against low energy gamma,
+    after correction in SandiaTable (materials-V03-00-05)
+- G4EplusAnnihilation. PostStepDoIt: check with fStopButAlive instead of
+   energy == 0. 
 
 05 feb 01: G.Cosmo (stand-V03-00-02)
 - Migration to STL for G4DataVector and G4OrderedTable.

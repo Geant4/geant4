@@ -5,26 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.cc,v 1.2 1999-12-15 14:51:53 gunter Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.3 2001-02-22 18:26:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4eplusAnnihilation process --------
-//                   by Michel Maire, 7 July 1996
-// **************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 // 10-01-97, crossection table + mean free path table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 23-03-97, protection in BuildPhysicsTable, M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo()
-// --------------------------------------------------------------
+// 22-02-01, postStepDoIt: fStopButAlive instead of kineEnergy == 0.  
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4eplusAnnihilation.hh"
 #include "G4UnitsTable.hh"
@@ -182,13 +175,13 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
 
    aParticleChange.Initialize(aTrack);
 
-   // Do not make anything if PositKinEnergy=0. , the annihilation then
+   // Do not make anything if particle is stopped, the annihilation then
    // should be performed by the AtRestDoIt!
-   if (PositKinEnergy == 0.) return &aParticleChange;
+   if (aTrack.GetTrackStatus() == fStopButAlive) return &aParticleChange;
 
-   G4double gama = 1. + PositKinEnergy/electron_mass_c2;
-   G4double gamap1 = gama+1. , gamam1 = gama-1. , sqgrate = sqrt(gamam1/gamap1)/2. ,
-                                                  sqg2m1  = sqrt(gamam1*gamap1);
+   G4double gamam1 = PositKinEnergy/electron_mass_c2;
+   G4double gama   = gamam1+1. , gamap1 = gamam1+2. , sqgrate = sqrt(gamam1/gamap1)/2. ,
+                                                      sqg2m1  = sqrt(gamam1*gamap1);
 
    // limits of the energy sampling
    G4double epsilmin = 0.5 - sqgrate , epsilmax = 0.5 + sqgrate;
