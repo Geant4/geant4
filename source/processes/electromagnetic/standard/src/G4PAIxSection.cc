@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.18 2004-04-02 10:51:13 grichine Exp $
+// $Id: G4PAIxSection.cc,v 1.19 2004-06-07 07:33:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,7 +99,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   {
      fMatSandiaMatrix->push_back(new G4DataVector(5,0.));
   }	         	
-  for (G4int i = 0; i < fSandia->GetMaxInterval()-1; i++)
+  for (i = 0; i < fSandia->GetMaxInterval()-1; i++)
   {
     (*(*fMatSandiaMatrix)[i])[0] = fSandia->GetSandiaMatTable(i,0);
 
