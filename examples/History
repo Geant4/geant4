@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2000-01-14 11:05:44 stesting Exp $
+$Id: History,v 1.39 2000-01-22 13:46:57 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st January 2000  John Allison
+- Added large_N.in files in examples/novice.
+- Temporarily reduced no of events in N04  due to slow 10 Tev muons.
+
+20th January 2000  John Allison
+- Tagged extended/electromagnetic testem-V01-00-00.
+  o implemented G4NOHIST (Michel Maire).
+  o new TestEm6 (low energy): TestEm6.in contains protons, anti_protons,
+    ionC12 (Vladimir Ivanchenko).
 
 13th January 2000  John Allison  (examples-V01-00-00)
 - N02, N03: Introduced ExN0nSteppingVerbose (Michel Maire).
