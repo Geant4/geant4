@@ -1,0 +1,155 @@
+# $Id: common.gmk,v 1.1 2002-12-04 02:44:27 morita Exp $
+# =====================================================================
+# common.gmk: GNUmakefile variables for building the library files.
+#
+#   Author: Youhei Morita <youhei.morita@kek.jp>
+# =====================================================================
+ifndef TARGET
+ TARGET := $(name)
+endif
+
+ifdef G4DEBUG
+  CXXFLAGS += -g
+endif
+
+GPPFLAGS := "-MM"
+
+CPPFLAGS += -Iinclude \
+            -I$(G4INSTALL)/include \
+            -I$(CLHEP_BASE_DIR)/include
+
+sources       := $(wildcard src/*.cc)
+
+objects       := $(patsubst src/%.cc,$(G4PEX_TMP)/%.o,$(sources))
+
+dependencies  := $(patsubst src/%.cc,$(G4PEX_TMP)/%.d,$(sources))
+
+ifneq ($(G4LIB_BUILD_SHARED),)
+   library_name := lib$(TARGET).so
+endif
+ifneq ($(G4LIB_BUILD_STATIC),)
+   library_name := lib$(TARGET).a
+endif
+
+libraries_to_build  := $(G4PEX_LIB)/$(library_name)
+
+.PHONY: all lib includes clean_lib clean
+
+all: lib
+
+lib: $(libraries_to_build) 
+
+# ---------------------------------------------------------------------
+# make ROOT I/O files
+#include $(G4PEX_DIR)/config/rootio.gmk
+# ---------------------------------------------------------------------
+
+CPPFLAGS += $(shell root-config --cflags)
+
+# ROOTCINT LinkDef.h and Dict.cc files
+
+root_def    := include/$(name)LinkDef.h
+root_dict   := $(G4PEX_TMP)/$(name)Dict.cc
+root_dict_o := $(root_dict:.cc=.o)
+
+objects       += $(root_dict_o)
+
+# rootio files
+rootio_file := $(wildcard rootio/*.rootio)
+rootio_hh   := $(patsubst rootio/%.rootio, include/%Root.hh, $(rootio_file))
+rootio_hh   += $(patsubst rootio/%.rootio, include/%sRoot.hh, $(rootio_file))
+rootio_hh   += $(patsubst rootio/%.rootio, include/%RootIO.hh, $(rootio_file))
+rootio_cc   := $(patsubst rootio/%.rootio, src/%Root.cc, $(rootio_file))
+rootio_cc   += $(patsubst rootio/%.rootio, src/%sRoot.cc, $(rootio_file))
+rootio_cc   += $(patsubst rootio/%.rootio, src/%RootIO.cc, $(rootio_file))
+
+# search for TObject inheritance with a regexp 'public.*TObject'
+
+root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
+ifneq ($(rootio_file),)
+root_hh   += $(patsubst rootio/%.rootio, include/%Root.hh, $(rootio_file))
+root_hh   += $(patsubst rootio/%.rootio, include/%sRoot.hh, $(rootio_file))
+endif
+root_tmp  := $(patsubst include/%,%,$(root_hh))
+root_tmp  += $(patsubst include/%,%,$(root_def))
+root_name := $(patsubst include/%.hh,%,$(root_hh))
+
+.PRECIOUS: $(dependencies) $(rootio_hh) $(rootio_cc)
+
+ifneq ($(rootio_file),)
+
+objects += $(patsubst rootio/%.rootio,$(G4PEX_TMP)/%Root.o, $(rootio_file))
+objects += $(patsubst rootio/%.rootio,$(G4PEX_TMP)/%sRoot.o, $(rootio_file))
+objects += $(patsubst rootio/%.rootio,$(G4PEX_TMP)/%RootIO.o, $(rootio_file))
+objects += $(root_dict_o)
+
+cleanup_target := $(rootio_hh) $(rootio_cc) $(root_def)
+
+endif
+
+ifneq ($(root_hh),)
+
+include/%Root.hh include/%sRoot.hh include/%RootIO.hh src/%Root.cc src/%sRoot.cc src/%RootIO.cc: rootio/%.rootio
+	$(G4ROOTIO) $<
+
+$(root_dict): $(root_hh) $(root_def)
+ifdef CPPVERBOSE
+	cp -f $^ $(G4PEX_TMP)/
+	( cd $(G4PEX_TMP); \
+	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
+	( cd $(G4PEX_TMP); rm -f $(root_tmp) )
+else
+	@echo "Generating dictionary $(root_dict) ..."
+	@cp -f $^ $(G4PEX_TMP)/
+	@( cd $(G4PEX_TMP); \
+	        $(PROG_ROOTCINT) -f $@ -c $(CINT_INCLUDES) -p $(root_tmp) )
+	@( cd $(G4PEX_TMP); rm -f $(root_tmp) )
+endif
+
+$(root_def): $(root_hh)
+	$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
+
+endif
+
+$(root_dict_o): $(root_dict)
+	@echo "Compiling $< with $(CXX) ..."
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+# ---------------------------------------------------------------------
+
+$(libraries_to_build): $(objects)
+ifneq ($(G4LIB_BUILD_SHARED),)
+	@echo Creating shared library $@
+	@rm -f $(G4PEX_LIB)/lib$(TARGET).so
+	@cd $(G4PEX_TMP); \
+	$(CXX) -Wl,-soname,lib$(TARGET).so \
+	  -shared -o $(G4PEX_LIB)/lib$(TARGET).so *.o \
+	  $(EXTLDFLAGS) $(EXTLIBS)
+endif
+ifneq ($(G4LIB_BUILD_STATIC),)
+	@echo Creating static library $@
+	@rm -f $(G4PEX_LIB)/lib$(TARGET).a
+	$(AR) $(G4PEX_LIB)/lib$(TARGET).a $(G4PEX_TMP)/*.o
+	@if [ -f /usr/bin/ranlib -o -f /bin/ranlib ] ; then \
+	ranlib $(G4PEX_LIB)/lib$(TARGET).a ;fi
+endif
+
+$(G4PEX_TMP)/%.o: src/%.cc $(G4PEX_TMP)/%.d
+	@echo "Compiling $< with $(CXX) ..."
+	@$(CXX) $(CXXFLAGS) $(CPPFLAGS) -c $< -o $@
+
+$(G4PEX_TMP)/%.d: src/%.cc
+	@echo "Making dependency file for $< ..."
+	@($(ECHO) $(G4PEX_TMP)/\\c ; \
+	g++ $(GPPFLAGS) $(CPPFLAGS) $< ) | sed 's!$(G4PEX_TMP)/$*.o!& $@!' >$@
+
+clean:
+ifneq ($(cleanup_target),)
+	@rm -f $(cleanup_target)
+endif
+	@rm -f -r $(G4PEX_DIR)/lib/$(G4SYSTEM)/$(libraries_to_build)
+	@rm -f -r $(G4PEX_DIR)/tmp/$(G4SYSTEM)/$(TARGET)
+
+test:
+	@echo "objects = $(objects)"
+

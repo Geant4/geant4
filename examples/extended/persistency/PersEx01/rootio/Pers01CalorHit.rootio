@@ -1,0 +1,51 @@
+#
+# File: Pers01CalorHit.rootio
+#
+#  Author: <youhei.morita@kek.jp>
+#
+#  Usage:
+#    Use fadsrootio.pl to generate ROOT I/O adapter classes:
+#      % fadsrootio.pl Pers01CalorHit.rootio
+#    This will generate the following files:
+#      Pers01CalorHitRoot.hh/cc, Pers01CalorHitsRoot.hh/cc, 
+#      Pers01CalorHitRootIs.hh/cc
+#
+set class_name Pers01CalorHit
+set collection_class Pers01CalorHitsCollection
+set collection_class_header no
+set collection_class_method_entries  entries()
+set collection_class_method_add      insert(hit)
+set collection_class_method_get      [i]
+set collection_base_class G4VHitsCollection
+set array_io_base G4VPHitsCollectionIO
+set catalog G4HCIOentryT
+set sdet_name Pers01CalorHit
+set add_header
+  @class_name@.hh
+..
+set member
+  @float@ EdepAbs;
+  @float@ EdepGap;     
+  @float@ TrackLengthAbs;
+  @float@ TrackLengthGap;     
+..
+
+set constructor
+  @class_root@(@class_name@* hit)
+  {
+    EdepAbs = hit->GetEdepAbs();
+    EdepGap = hit->GetEdepGap();
+    TrackLengthAbs = hit->GetTrakAbs();
+    TrackLengthGap = hit->GetTrakGap();
+  }
+..
+
+set method
+  @class_name@* @make_transient@()
+  {
+    @class_name@* hit = new @class_name@();
+    hit->AddAbs(EdepAbs, TrackLengthAbs);
+    hit->AddGap(EdepGap, TrackLengthGap);
+    return hit;
+  }
+..

@@ -1,0 +1,37 @@
+# $Id: rootio.gmk,v 1.1 2002-12-04 02:44:27 morita Exp $
+# =====================================================================
+# rootio.gmk: GNUmakefile variables for building the ROOT I/O  files.
+#
+#   Author: Youhei Morita <youhei.morita@kek.jp>
+# =====================================================================
+
+CPPFLAGS += $(shell root-config --cflags)
+
+CINT_INCLUDES := \
+        -Iinclude  \
+        -I$(G4INSTALL)/include \
+        -I$(ROOTSYS)/include
+
+# ROOTCINT LinkDef.h and Dict.cc files
+
+root_def    := include/$(name)LinkDef.h
+root_dict   := $(G4PEX_TMP)/$(name)Dict.cc
+root_dict_o := $(patsubst %.cc,%.o,$(root_dict))
+
+# search for TObject inheritance with a regexp 'public.*TObject'
+
+root_hh   := $(shell grep 'public.*TObject' include/*.hh|awk -F: '{print $$1}'|sort|uniq)
+root_tmp  := $(patsubst include/%,%,$(root_hh))
+root_tmp  += $(patsubst include/%,%,$(root_def))
+root_name := $(patsubst include/%.hh,%,$(root_hh))
+
+$(root_dict): $(root_hh) $(root_def)
+	@echo "Generating dictionary $(root_dict) ..."
+	@(cp $^ $(G4PEX_TMP)/ ; \
+	  cd $(G4PEX_TMP)     ; \
+	  rootcint -f $@ -c $(CINT_INCLUDES) $(root_tmp) ; \
+	  rm -f $(root_tmp) )
+
+$(root_def): $(root_hh)
+	@$(G4PEX_DIR)/config/rootdict.sh "$(root_name)" $(root_def)
+

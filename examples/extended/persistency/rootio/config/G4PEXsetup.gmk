@@ -1,0 +1,32 @@
+# $Id: G4PEXsetup.gmk,v 1.1 2002-12-04 02:44:27 morita Exp $
+# =====================================================================
+# FADSsetup.gmk: GNUmakefile variables for FADS
+#
+#   Author: Youhei Morita <youhei.morita@kek.jp>
+# =====================================================================
+#
+ifndef G4PEX_WORKDIR 
+  G4PEX_WORKDIR := $(G4PEX_DIR)
+endif
+
+ifndef G4PEX_LIB
+  G4PEX_LIB     := $(G4PEX_WORKDIR)/lib/$(G4SYSTEM)
+endif
+ifndef G4PEX_BIN
+  G4PEX_BIN     := $(G4PEX_WORKDIR)/bin/$(G4SYSTEM)
+endif
+ifndef G4PEX_TMP
+  G4PEX_TMP     := $(G4PEX_WORKDIR)/tmp/$(G4SYSTEM)/$(name)
+endif
+
+DUMMY := $(shell if [ ! -d $(G4PEX_LIB) ] ; then mkdir -p $(G4PEX_LIB) ;fi)
+DUMMY := $(shell if [ ! -d $(G4PEX_BIN) ] ; then mkdir -p $(G4PEX_BIN) ;fi)
+DUMMY := $(shell if [ ! -d $(G4PEX_TMP) ] ; then mkdir -p $(G4PEX_TMP) ;fi)
+
+include $(G4INSTALL)/config/architecture.gmk
+
+G4ROOTIO := $(G4PEX_DIR)/config/g4rootio.pl
+
+PROG_ROOTCONFIG = $(ROOTSYS)/bin/root-config
+PROG_ROOTCINT   = $(ROOTSYS)/bin/rootcint
+

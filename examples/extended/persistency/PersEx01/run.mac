@@ -1,0 +1,27 @@
+# $Id: run.mac,v 1.1 2002-12-04 02:44:24 morita Exp $
+#
+# Macro file for "G4PersEx01.cc"
+# 
+# can be run in batch, without graphic
+# or interactively: Idle> /control/execute run.mac
+#
+/control/verbose 2
+/control/saveHistory
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+#
+/persistency/verbose 1
+/persistency/select ROOT
+#/persistency/store/using/hitIO CalorSD     Pers01CalorHit
+/persistency/store/using/hitIO Pers01CalorHit Pers01CalorHit
+#                              <IOmanager> <collectionName>
+/persistency/printall
+# 
+# e+  30 MeV to the direction (1.,0.,0.)
+# 3 events
+#
+/gun/particle e+
+/gun/energy 30 MeV
+/run/beamOn 3
