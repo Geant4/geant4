@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2004-01-22 10:58:30 vnivanch Exp $
+$Id: History,v 1.132 2004-01-26 08:59:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26 Jan 04: V.Ivant (utils-V06-00-02)
+- Fix a bug responsibile for mess in cross section of delta-electron 
+  production by muons
 
 22 Jan 04: V.Ivant (utils-V06-00-01)
 - Migrade to G4ParticleChangeForLoss
