@@ -107,7 +107,7 @@
       return theCrossSectionDataStore;
    }
    
-   void AddDataSet(
+   void AddDataSet(G4VCrossSectionDataSet * aDataSet)
    {
       theCrossSectionDataStore->AddDataSet(aDataSet);
    }
