@@ -272,19 +272,19 @@ G4PAIonisation::BuildPAIonisationTable()
    }
 
    theLossTable = new G4PhysicsTable(1);
-   
-   if( fPAItransferBank )    
+
+   if( fPAItransferBank )
 
    {
      fPAItransferBank->clearAndDestroy() ;
      delete fPAItransferBank ;
    }
    fPAItransferBank = new G4PhysicsTable(TotBin);
-     
+
    //create physics dE/dx vector then fill it ....
-   
+
    if(fdEdxVector) delete fdEdxVector ;
-   fdEdxVector = new G4PhysicsLogVector( LowestKineticEnergy, 
+   fdEdxVector = new G4PhysicsLogVector( LowestKineticEnergy,
 					 HighestKineticEnergy,
 					 TotBin               ) ;
 
@@ -376,8 +376,8 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition&)
         G4ProductionCutsTable::GetProductionCutsTable();
 
   //  size_t numOfCouples = theCoupleTable->GetTableSize();
-  
-  if (theMeanFreePathTable) 
+
+  if (theMeanFreePathTable)
   {
     theMeanFreePathTable->clearAndDestroy();
     delete theMeanFreePathTable;
@@ -388,29 +388,31 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition&)
 
   if (fLambdaVector)   delete fLambdaVector;
   if (fdNdxCutVector)  delete fdNdxCutVector;
-  
-  fLambdaVector = new G4PhysicsLogVector( LowestKineticEnergy, 
+
+  fLambdaVector = new G4PhysicsLogVector( LowestKineticEnergy,
 					  HighestKineticEnergy,
 					  TotBin                ) ;
-  fdNdxCutVector = new G4PhysicsLogVector( LowestKineticEnergy, 
+  fdNdxCutVector = new G4PhysicsLogVector( LowestKineticEnergy,
 					  HighestKineticEnergy,
 					  TotBin                ) ;
 
   // DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatIndex] ;
-  DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatCutsIndex] ;
+  //  DeltaCutInKineticEnergyNow = (*DeltaCutInKineticEnergy)[fMatCutsIndex] ;
+  DeltaCutInKineticEnergyNow = fSandiaPhotoAbsCof[0][0] ;      // low energy Sandia interval
+
 
   G4cout<<"PAI DeltaCutInKineticEnergyNow = "
         <<DeltaCutInKineticEnergyNow/keV<<" keV"<<G4endl;
 
   for ( i = 0 ; i < TotBin ; i++ )
   {
-    dNdxCut = GetdNdxCut(i,DeltaCutInKineticEnergyNow) ;  
-    lambda = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut ;     
-    if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance ; // Mmm ??? 
+    dNdxCut = GetdNdxCut(i,DeltaCutInKineticEnergyNow) ;
+    lambda = dNdxCut <= DBL_MIN ? DBL_MAX: 1.0/dNdxCut ;
+    if (lambda <= 1000*kCarTolerance) lambda = 1000*kCarTolerance ; // Mmm ???
     fLambdaVector->PutValue(i, lambda) ;
     fdNdxCutVector->PutValue(i, dNdxCut) ;
   }
-  theMeanFreePathTable->insert(fLambdaVector);    
+  theMeanFreePathTable->insert(fLambdaVector);
 }
 
 ////////////////////////////////////////////////////////////////////////////
