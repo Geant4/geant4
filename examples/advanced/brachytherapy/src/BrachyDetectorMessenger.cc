@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: BrachyDetectorMessenger.cc,v 1.5 2002-12-06 16:32:03 gcosmo Exp $
+// $Id: BrachyDetectorMessenger.cc,v 1.6 2003-05-09 07:19:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   AbsMaterCmd->SetGuidance("Select Material of the detector.");
   AbsMaterCmd->SetParameterName("choice",false);
   AbsMaterCmd->AvailableForStates(G4State_Idle);
-   selDetCmd = new G4UIcmdWithAString("/geom/select",this);
+  selDetCmd = new G4UIcmdWithAString("/geom/select",this);
   
   mydetDir = new G4UIdirectory("/geom/");
   mydetDir->SetGuidance("Geometry setup commands.");
@@ -70,7 +70,7 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
   selDetCmd->SetGuidance(" Iodium:  Iodium Source ");
   selDetCmd->SetGuidance("  Iridium: Iridium  Source  "  );
   selDetCmd->SetGuidance("  Leipzig: Leipzig Source  "  );
-   selDetCmd->SetParameterName("choice",true);
+  selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("Iridium");
   selDetCmd->SetCandidates("Iridium / Iodium / Leipzig");
   selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
@@ -91,9 +91,10 @@ BrachyDetectorMessenger::BrachyDetectorMessenger( BrachyDetectorConstruction* De
 
 BrachyDetectorMessenger::~BrachyDetectorMessenger()
 {
- 
+  delete switchCmd;
+  delete mydetDir;
+  delete selDetCmd;
   delete AbsMaterCmd; 
-  delete   mydetDir;
   delete detDir;
 }
 

@@ -36,7 +36,7 @@
 //    *                                      *
 //    ****************************************
 //
-// $Id: BrachyDetectorConstruction.cc,v 1.13 2002-12-12 19:16:18 gunter Exp $
+// $Id: BrachyDetectorConstruction.cc,v 1.14 2003-05-09 07:19:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhantomROGeometry.hh"
@@ -78,19 +78,17 @@
 #include "BrachyFactoryIr.hh"
 #include "BrachyFactoryI.hh"
 
-BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName):
-NumVoxelX(0),NumVoxelZ(0),m_BoxDimX(0), m_BoxDimY(0), m_BoxDimZ(0),
-ExpHall(0),ExpHallLog(0),ExpHallPhys(0),
-Phantom(0), PhantomLog  (0), PhantomPhys  (0),
-detectorChoice(0)
-
+BrachyDetectorConstruction::BrachyDetectorConstruction(G4String &SDName)
+: detectorChoice(0), pPhantomSD(0), pPhantomROGeometry(0),
+  ExpHall(0), ExpHallLog(0), ExpHallPhys(0),
+  Phantom(0), PhantomLog(0), PhantomPhys(0)
 {
-NumVoxelX=300;
-NumVoxelZ=300;
-
 m_BoxDimX=30*cm ;
 m_BoxDimY=30*cm;
 m_BoxDimZ=30*cm;
+
+NumVoxelX=300;
+NumVoxelZ=300;
 
 ComputeDimVoxel();
 
@@ -123,12 +121,12 @@ pMat= new BrachyMaterial();
 BrachyDetectorConstruction::~BrachyDetectorConstruction()
 { 
 
-delete  detectorMessenger;
 delete pMat;
+delete factoryIr;
+delete detectorMessenger;
 
 if (factoryLeipzig) delete factoryLeipzig;
 if (factoryI) delete factoryI;
-delete factoryIr;
 }
 
 //....
