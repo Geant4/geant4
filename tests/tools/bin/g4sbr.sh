@@ -72,7 +72,6 @@ cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
 
 env | grep G4
 echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
-ulimit -a
 echo "STT:SETUPEnvironment Complete"
 
 ##########################
@@ -105,6 +104,7 @@ then
   NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
   mv gmake.log gmake.log.${NEXT_NUMBER}
   echo "STT:UPDATE stt.${REFTAG} and RETAIN stt symbolic link."
+  echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
 else
   cd ${G4WORKDIR}
   if [ -d stt.${REFTAG} ]
@@ -113,8 +113,10 @@ else
     exit
   fi
   echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
+  echo "STT:WORKDIR ${G4WORKDIR}/stt.${REFTAG}/${G4SYSTEM}"
   mkdir stt.${REFTAG}
-  rm -rf stt
+  #  rm -rf stt  # no uniform test for a softlink exists ?
+  [ -a stt ] && rm -rf stt
   ln -s stt.${REFTAG} stt
   # To enable G4TMP to be in local/nfs disk and lib/bin in afs
   # (this is for public machines where geant4 does not own local disk space)
@@ -156,6 +158,7 @@ if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
   ${G4STTDIR}/bin/geant4-unix.pl --start-test tests
   echo "STT:RUN Started"
+  . ${G4STTDIR}/bin/runlimit.sh
   ${G4STTDIR}/bin/run.sh $ACTARG3
   echo "STT:RUN Finished"
   ${G4STTDIR}/bin/geant4-unix.pl --end-test tests

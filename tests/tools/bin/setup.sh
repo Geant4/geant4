@@ -65,10 +65,12 @@ fi
 #
 # Other G4 environment variables.
 #
+#export NeutronHPCrossSections=/afs/cern.ch/user/s/stesting/stt/dev2/src/G4NDL0.2
+#export NeutronHPCrossSections=$G4INSTALL/../G4NDL3.1
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.2
 #export NeutronHPCrossSections=$G4INSTALL/../G4NDL3.1
-export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
-#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
+#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.4
+export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 export G4RADIOACTIVEDATA=$G4INSTALL/data/RadiativeDecay
 export G4LEDATA=$G4INSTALL/../G4EMLOW0.3

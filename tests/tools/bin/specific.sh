@@ -8,8 +8,9 @@
 ####################################################
 #
 # Specfy CLHEP 1.5 as new, run persistance tests 401,402
-# Use /tmp for G4TMP on dxplus01,02,03,04,
-# Use /tmp for G4TMP on all dxplus, retain dev1/dev2/prod identity
+# Use /tmp for G4TMP on all dxplus,
+# retain dev1/dev2/prod and debug/optim oso/noniso identity
+# but n.b. there is only enought space for 1 stream comfortably
 #
 
 REF=undefined
@@ -129,13 +130,13 @@ if [ `uname -n | grep sundev` ]; then
        export G4EXAMPLE_FDID=207
     fi
   else
-    export G4SYSTEM=SUN-CC5
+    export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_ISO
     unset G4USE_OSPACE
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # No Persistency tonight ...
     unset G4USE_HEPODBMS
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -148,7 +149,6 @@ if [ `uname -n | grep sundev` ]; then
   export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
   #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
-
 
 
 if [ `uname -n | grep suncmsb` ]; then
@@ -193,7 +193,14 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # No Persistency...
-    unset G4USE_HEPODBMS
+    # unset G4USE_HEPODBMS
+    # Persistency...
+#   if [ X$G4USE_HEPODBMS = Xaaa ]; then
+#   is this intended to stop the setup from being run twice ?
+    if [ X$G4USE_HEPODBMS = Xaaa ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
     export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
@@ -259,7 +266,7 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
-  export G4TMP=/tmp/g4stt$REF
+  export G4TMP=/tmp/g4stt$REF-$DEBOPT
   if [ ! -d $G4TMP ]; then
     mkdir $G4TMP
   fi
