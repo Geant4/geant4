@@ -8,6 +8,9 @@
 extern const char *
 ReadStdKeyword(G4std::istream& in, SCLstring &buf, int skipInitWS);
 
+#ifdef WIN32
+  typedef SDAI::Application_instance StepApplicationInstanceType;
+#endif
 
 STEPcomplex::STEPcomplex(Registry *registry, int fileid)
 : SCLP23(Application_instance)(fileid, 1),  sc(0), _registry(registry), visited(0)
@@ -347,9 +350,15 @@ STEPcomplex::STEPread(int id, int addFileId, class InstMgr * instance_set,
 
 	    stepc = EntityPart(typeNm.chars(), currSch);
 	    if(stepc)
+#ifndef WIN32
 		stepc->SCLP23(Application_instance)::STEPread(id, addFileId, 
 							      instance_set, in,
 							      currSch);
+#else
+		stepc->StepApplicationInstanceType::STEPread(id, addFileId, 
+							     instance_set, in,
+							     currSch);
+#endif
 	    else
 	    {
 		G4cout << "ERROR: complex entity part \"" << typeNm.chars()
@@ -717,7 +726,11 @@ STEPcomplex::CopyAs (SCLP23(Application_instance) *se)
 	STEPcomplex * scpartCpyFrom = ((STEPcomplex *)se)->head;
 	while(scpartCpyTo && scpartCpyFrom)
 	{
+#ifndef WIN32
 	    scpartCpyTo->SCLP23(Application_instance)::CopyAs (scpartCpyFrom);
+#else
+	    scpartCpyTo->StepApplicationInstanceType::CopyAs (scpartCpyFrom);
+#endif
 	    scpartCpyTo = scpartCpyTo->sc;
 	    scpartCpyFrom = scpartCpyFrom->sc;
 	}
@@ -730,7 +743,11 @@ STEPcomplex::Replicate()
 {
     if(!IsComplex())
     {
+#ifndef WIN32
 	return SCLP23(Application_instance)::Replicate();
+#else
+        return StepApplicationInstanceType::Replicate();
+#endif
     }
     else if (!_registry) { return S_ENTITY_NULL; }
     else
