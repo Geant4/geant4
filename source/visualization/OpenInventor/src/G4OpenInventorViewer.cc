@@ -195,7 +195,8 @@ void G4OpenInventorViewer::SetView () {
 	       (float)up.y(),
 	       (float)up.z());
   sbUp.normalize();
-  fSoCamera->pointAt(sbTarget,sbUp);
+  //SGI : not in the API :  fSoCamera->pointAt(sbTarget,sbUp);
+  fSoCamera->pointAt(sbTarget);
 
   //fSoCamera->height.setValue(10);
   //fSoCamera->nearDistance.setValue((float)pnear);
