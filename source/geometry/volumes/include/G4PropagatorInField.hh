@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.31 2003-05-26 16:31:13 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.32 2003-06-03 15:31:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -235,8 +235,6 @@ class G4PropagatorInField
 
    G4double  fCharge, fInitialMomentumModulus, fMass;
 
-
-public:
    // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
    G4double       fPreviousSafety; 
@@ -244,10 +242,9 @@ public:
 private:
   // The filter encapsulates the algorithm which selects which
   // intermediate points should be stored in a trajectory. 
-  //   If it is not NULL, then PIF should submit all the intermediate
-  //   points it calculates, to the filter. 
-  //   The pointer should be set to NULL when no intermediate points 
-  //   need to be stored.     (jacek 04/11/2002)
+  //   When it is NULL, no intermediate points will be stored.
+  //   Else PIF::ComputeStep must submit (all) intermediate
+  //   points it calculates, to this filter.  (jacek 04/11/2002)
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
 };
 
