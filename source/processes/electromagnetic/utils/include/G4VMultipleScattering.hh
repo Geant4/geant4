@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.11 2003-07-23 11:36:25 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.12 2003-07-23 17:23:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -333,7 +333,6 @@ inline G4VParticleChange* G4VMultipleScattering::AlongStepDoIt(
 
 inline void G4VMultipleScattering::SelectModel(G4double& kinEnergy)
 {
-//  currentModel = dynamic_cast<G4VMscModel*>
   currentModel = modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
