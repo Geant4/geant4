@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.icc,v 1.1 2001-10-11 14:04:05 gcosmo Exp $
+// $Id: G4String.icc,v 1.2 2001-11-29 14:45:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -253,9 +253,9 @@ G4int G4String::strcasecompare(const char* s1, const char* s2) const
   char* buf2 = new char[strlen(s2)+1];
 
   for (str_size i=0; i<=strlen(s1); i++)
-    buf1[i] = tolower(s1[i]);
+    buf1[i] = tolower(char(s1[i]));
   for (str_size j=0; j<=strlen(s2); j++)
-    buf2[j] = tolower(s2[j]);
+    buf2[j] = tolower(char(s2[j]));
 
   G4int res = strcmp(buf1, buf2);
   delete [] buf1;
@@ -402,7 +402,7 @@ void G4String::toLower ( void )
   for (str_size i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
-    std_string::operator[](i) = tolower(std_string::operator[](i));
+    std_string::operator[](i) = tolower(char(std_string::operator[](i)));
     //at(i) = tolower(at(i)); 
   } 
 }
@@ -412,7 +412,7 @@ void G4String::toUpper ( void )
   for (str_size i=0; i<size();i++)
   {
     //GB:HP-UX-aCC,Linux-KCC 
-    std_string::operator[](i) = toupper(std_string::operator[](i));
+    std_string::operator[](i) = toupper(char(std_string::operator[](i)));
     //at(i) = toupper(at(i)); 
   }
 }

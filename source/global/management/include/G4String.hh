@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4String.hh,v 1.1 2001-10-11 14:04:05 gcosmo Exp $
+// $Id: G4String.hh,v 1.2 2001-11-29 14:45:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,11 @@
   #define strcasecmp _stricmp
 #endif
 
-typedef G4std::string::size_type str_size;
+#ifdef G4USE_STD_NAMESPACE
+  typedef G4std::string::size_type str_size;
+#else
+  typedef size_t str_size;
+#endif
 
 class G4String;
 
