@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSteppingVerbose.cc,v 1.3 1999-12-15 14:54:00 gunter Exp $
+// $Id: G4VSteppingVerbose.cc,v 1.4 2000-06-14 08:21:00 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -35,7 +35,7 @@ void G4VSteppingVerbose::SetManager(G4SteppingManager* const fMan)
 //////////////////////////////////////////////////////////////////
 {
   fManager=fMan;
-};
+}
 
 
 
