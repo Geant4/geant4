@@ -1,0 +1,7 @@
+export HEPREP=$FREEHEP/hep/graphics/heprep
+cp $FREEHEP/org/freehep/jni/FreeHepTypes.h include
+cp $HEPREP/geant4/*.h include
+cp $HEPREP/geant4/*.hh include
+cp $HEPREP/include/HEPREP/*.h include/HEPREP
+cp $HEPREP/geant4/*.cc src
+
