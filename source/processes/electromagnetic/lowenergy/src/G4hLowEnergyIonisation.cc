@@ -39,7 +39,7 @@
 #include "G4EnergyLossTables.hh"
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
-
+#include "G4QAOLowEnergyLoss.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -81,7 +81,7 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
     delete theMeanFreePathTable;
   }
 
-  //delete qaoLoss;
+  delete qaoLoss;
   qaoLoss = 0;
 
 }
