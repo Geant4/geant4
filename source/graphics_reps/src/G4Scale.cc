@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scale.cc,v 1.3 2001-07-24 21:41:43 johna Exp $
+// $Id: G4Scale.cc,v 1.4 2001-09-10 10:28:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,3 +65,21 @@ G4Scale & G4Scale::operator = (const G4Scale &from) {
   fZmid = from.fZmid;
   return *this;
 }
+
+G4String G4Scale::GuidanceString
+(
+ "An annotated line in the specified direction with tick marks at the"
+ "\nend.  If autoPlacing is true it is required to be centred at the"
+ "\nfront, right, bottom corner of the world space, comfortably outside"
+ "\nthe existing bounding box/sphere so that existing objects do not"
+ "\nobscure it.  Otherwise it is required to be drawn with mid-point at"
+ "\n(xmid, ymid, zmid)."
+ "\n"
+ "\nThe auto placing algorithm might be:"
+ "\n  x = xmin + (1 + comfort) * (xmax - xmin)"
+ "\n  y = ymin - comfort * (ymax - ymin)"
+ "\n  z = zmin + (1 + comfort) * (zmax - zmin)"
+ "\n  if direction == x then (x - length,y,z) to (x,y,z)"
+ "\n  if direction == y then (x,y,z) to (x,y + length,z)"
+ "\n  if direction == z then (x,y,z - length) to (x,y,z)"
+);
