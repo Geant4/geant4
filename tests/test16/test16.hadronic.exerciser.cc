@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test16.hadronic.exerciser.cc,v 1.6 2000-01-12 11:06:24 stesting Exp $
+// $Id: test16.hadronic.exerciser.cc,v 1.7 2000-01-22 13:21:35 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -14,7 +14,8 @@
 #include "g4rw/tvordvec.h"
 
 static void OutputCases
-(const G4RWTValOrderedVector <G4String> & particleNameList,
+(G4int N,  // Number of events per case.
+ const G4RWTValOrderedVector <G4String> & particleNameList,
  const G4RWTValOrderedVector <G4double> & energyList,
  const G4RWTValOrderedVector <G4String> & materialNameList) {
 
@@ -38,7 +39,7 @@ static void OutputCases
 	  << "\n/gun/particle " << particleNameList [iParticle]
 	  << "\n/gun/energy " <<  G4BestUnit (energyList [iEnergy], "Energy")
 	  << "\n/mydet/SelectMaterial " << materialNameList [iMaterial]
-	  << "\n/run/beamOn 10";
+	  << "\n/run/beamOn " << N;
 
       }
     }
@@ -47,6 +48,13 @@ static void OutputCases
 
 
 int main (int argc, char** argv) {
+
+  G4int N = 10;
+  if (argc > 1) {
+    if (strcmp (argv[1], "large_N") == 0) {
+      N = 200;
+    }
+  }
 
   G4UnitDefinition::BuildUnitsTable();
 
@@ -73,7 +81,7 @@ int main (int argc, char** argv) {
   materialNameList.append ("Al");
   materialNameList.append ("Air");
 
-  OutputCases (particleNameList, energyList, materialNameList);
+  OutputCases (N, particleNameList, energyList, materialNameList);
 
   G4cout << G4endl;
 }
