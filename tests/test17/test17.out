@@ -1,12 +1,9 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                  (07-Dec-99)
+                                (10-Mar-2000)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Constructing Visualization Manager....
-Initialising Visualization Manager....
-Registering graphics systems....
 
 ***** Table : Nb of materials = 13 *****
 
@@ -60,12 +57,8 @@ Registering graphics systems....
 G4VUserPhysicsList::Construct()
 Construct particles 
 Construct processes 
-Ionic processes for IonAr40
-New ion with Q = 18; MassR = 0.025
 Ionic processes for IonC12
 New ion with Q = 6; MassR = 0.084
-Ionic processes for IonFe56
-New ion with Q = 26; MassR = 0.018
 Ionic processes for alpha
 New ion with Q = 2; MassR = 0.25
 Hadronic processes for anti_proton
@@ -73,6 +66,8 @@ Ionic processes for deuteron
 New ion with Q = 1; MassR = 0.5
 Hadronic processes for kaon+
 Hadronic processes for kaon-
+MuonMinusCaptureAtRest is created 
+MuonMinusCaptureAtRest is created 
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
@@ -101,10 +96,28 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.1  mm.
+
+           material       min.delta energy(keV) 
+
+           Beryllium         104.76
+            Aluminum         125.07
+              Carbon         113.96
+             Silicon         116.08
+         liquidArgon         78.381
+                Iron         224.11
+              Copper          238.3
+                Gold         334.58
+                Lead         229.65
+               Water         81.518
+             Methane        0.11903
+            Graphite         122.95
+                 Air        0.18052
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 Set cuts for e-
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
@@ -116,31 +129,31 @@ Set cuts for mu-
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 Set cuts for mu+
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 hLowEIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 1e+02 TeV  in 150 bins.
+        PhysicsTables from 10 eV  to 100 TeV  in 150 bins.
         Low energy losses approximation is taken from  ICRU_R49p
         from 1 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
@@ -150,9 +163,7 @@ Set cuts for proton
 Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
 Set cuts for He3
-Set cuts for IonAr40
 Set cuts for IonC12
-Set cuts for IonFe56
 Set cuts for alpha
 Set cuts for anti_nu_e
 Set cuts for anti_nu_mu
@@ -295,5 +306,3 @@ Cut in energy
  vertex Z  distribution 
 #entries=0    #underflows=0    #overflows=0
 
-Graphics systems deleted.
-VisManager deleting.
