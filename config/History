@@ -1,4 +1,4 @@
-$Id: History,v 1.48 1999-07-03 17:55:17 stesting Exp $
+$Id: History,v 1.49 1999-07-06 15:23:54 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+6th July 1999  Gunter Folger
+- Adapt architecture.gmk for use of STL with WIN32-VC
+  Remove NICE from G4SYSTEM name WIN32-VC in architecture, globlib and 
+  binmake.gmk
 
 3rd July 1999  John Allison (config-01-00-08a)
 - Added full-stop after i.e in binmake.gmk.
