@@ -317,6 +317,13 @@ echo "On this machine the G4VIS_USE_VRML=\$G4VIS_USE_VRML"
 fi 
 
 #+
+if [ X$g4vis_oglhome != X ] ; then
+OGLHOME="$g4vis_oglhome"
+export OGLHOME
+echo "On this machine the OGLHOME=\$OGLHOME"
+fi 
+
+#+
 #
 # g4shared
 #
