@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01FieldSetup.cc,v 1.3 2004-03-23 11:21:52 japost Exp $
+// $Id: F01FieldSetup.cc,v 1.4 2004-03-23 14:29:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   User Field setup class implementation.
@@ -48,6 +48,8 @@
 #include "G4HelixSimpleRunge.hh"
 #include "G4CashKarpRKF45.hh"
 #include "G4RKG3_Stepper.hh"
+
+// #include "G4SIunits.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -180,20 +182,39 @@ void F01FieldSetup::SetStepper()
 // Set the value of the Global Field to fieldValue along Z
 //
 
-void F01FieldSetup::SetFieldValue(G4double fieldValue)
+void F01FieldSetup::SetFieldValue(G4double fieldStrength)
 {
-  G4cout << "Setting Field Value to " << fieldValue << G4endl;
-  G4cout << " fMagneticField was    " << fMagneticField << G4endl; 
+#ifdef G4VERBOSE
+  G4cout << "Setting Field strength to " 
+	 << fieldStrength / gauss  << " Gauss."; // << G4endl;
+  G4double fieldValue[6],  position[4]; 
+  position[0] = position[1] = position[2] = position[3] = 0.0; 
+  G4ThreeVector fieldVec(0.0,0.0,0.0);
+#endif
+  // fMagneticField->GetFieldValue( position, fieldValue);
+  // fieldVec= G4ThreeVector(fieldValue[0], fieldValue[1], fieldValue[2]); 
+  // G4cout << " fMagneticField was    " << fMagneticField 
+  //        << " with value " << fieldVec / gauss << " G " << G4endl; 
 
   if(fMagneticField) delete fMagneticField;
-  fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldValue));
-  G4cout << " fMagneticField is now " << fMagneticField << G4endl; 
+  fMagneticField = new  G4UniformMagField(G4ThreeVector(0,0,fieldStrength));
+
+#ifdef G4VERBOSE
+  fMagneticField->GetFieldValue( position, fieldValue);
+  fieldVec= G4ThreeVector(fieldValue[0], fieldValue[1], fieldValue[2]); 
+  // G4cout << " fMagneticField is now " << fMagneticField 
+  G4cout << " Magnetic field vector is " 
+	 << fieldVec / gauss << " G " << G4endl; 
+#endif
+
+  //  Set this as the field of the global Field Manager
+  GetGlobalFieldManager()->SetDetectorField(fMagneticField);
 
   // Must now notify equation of new field
   fEquation->SetFieldObj( fMagneticField ); 
 
   //  CreateStepperAndChordFinder();
-  G4cout << " --> set done. " << G4endl;
+  // G4cout << " --> set done. " << G4endl;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -218,9 +239,11 @@ void F01FieldSetup::SetFieldValue(G4ThreeVector fieldVector)
   }
 
   //  Set this as the field of the global Field Manager
-  G4FieldManager* fieldMgr= GetGlobalFieldManager();
+  GetGlobalFieldManager()->SetDetectorField(fMagneticField);
 
-  fieldMgr->SetDetectorField(fMagneticField);
+  // Now notify equation of new field
+  fEquation->SetFieldObj( fMagneticField ); 
+
 }
 
 ////////////////////////////////////////////////////////////////////////////////
