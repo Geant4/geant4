@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.5 2002-02-04 01:49:08 tsasaki Exp $
+// $Id: G4SteppingManager2.cc,v 1.6 2002-11-01 00:06:02 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -70,6 +70,13 @@ void G4SteppingManager::GetProcessNumber()
    MAXofPostStepLoops = pm->GetPostStepProcessVector()->entries();
    fPostStepDoItVector = pm->GetPostStepProcessVector(typeDoIt);
    fPostStepGetPhysIntVector = pm->GetPostStepProcessVector(typeGPIL);
+
+   if (SizeOfSelectedDoItVector<MAXofAtRestLoops ||
+       SizeOfSelectedDoItVector<MAXofAlongStepLoops  ||
+       SizeOfSelectedDoItVector<MAXofPostStepLoops  ) {
+     G4Exception("G4SteppingManager::GetProcessNumber : The array size is small than the actutal number of processes. Chnage G4SteppingManager.hh and recompile is needed. " );
+
+   }
 }
 
 
@@ -119,7 +126,7 @@ void G4SteppingManager::GetProcessNumber()
    for(size_t np=0; np < MAXofPostStepLoops; np++){
      fCurrentProcess = (*fPostStepGetPhysIntVector)(np);
      if (fCurrentProcess== NULL) {
-       (*fSelectedPostStepDoItVector)[np] = 0;
+       (*fSelectedPostStepDoItVector)[np] = InActivated;
        continue;
      }   // NULL means the process is inactivated by a user on fly.
 
@@ -134,19 +141,22 @@ void G4SteppingManager::GetProcessNumber()
 
      switch (fCondition) {
      case ExclusivelyForced:
-       (*fSelectedPostStepDoItVector)[np] = 4;
+       (*fSelectedPostStepDoItVector)[np] = ExclusivelyForced;
        fStepStatus = fExclusivelyForcedProc;
 	   fStep->GetPostStepPoint()
 				 ->SetProcessDefinedStep(fCurrentProcess);
        break;
      case Conditionally:
-       (*fSelectedPostStepDoItVector)[np] = 3;
+       (*fSelectedPostStepDoItVector)[np] = Conditionally;
        break;
      case Forced:
-       (*fSelectedPostStepDoItVector)[np] = 2;
+       (*fSelectedPostStepDoItVector)[np] = Forced;
+       break;
+     case StronglyForced:
+       (*fSelectedPostStepDoItVector)[np] = StronglyForced;
        break;
      default:
-       (*fSelectedPostStepDoItVector)[np] = 0;
+       (*fSelectedPostStepDoItVector)[np] = InActivated;
        if(physIntLength < PhysicalStep ){
          PhysicalStep = physIntLength;
 	 fStepStatus = fPostStepDoItProc;
@@ -159,7 +169,7 @@ void G4SteppingManager::GetProcessNumber()
    }
 
    if(fPostStepDoItProcTriggered<MAXofPostStepLoops)
-     (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = 1;
+     (*fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = NotForced;
 
 
 // GPIL for AlongStep
@@ -227,7 +237,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    for( size_t ri=0 ; ri < MAXofAtRestLoops ; ri++ ){
      fCurrentProcess = (*fAtRestGetPhysIntVector)[ri];
      if (fCurrentProcess== NULL) {
-       (*fSelectedAtRestDoItVector)[ri] = 0;
+       (*fSelectedAtRestDoItVector)[ri] = InActivated;
        NofInactiveProc++;
        continue;
      }   // NULL means the process is inactivated by a user on fly.
@@ -237,11 +247,11 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
                                                      *fTrack,
                                                 &fCondition );
      if(fCondition==Forced){
-       (*fSelectedAtRestDoItVector)[ri] = 2;
+       (*fSelectedAtRestDoItVector)[ri] = Forced;
      }
      else{
-       (*fSelectedAtRestDoItVector)[ri] = 0;
-       if(lifeTime < shortestLifeTime ){
+       (*fSelectedAtRestDoItVector)[ri] = InActivated;
+      if(lifeTime < shortestLifeTime ){
          shortestLifeTime = lifeTime;
 	 fAtRestDoItProcTriggered =  G4int(int(ri)); 
        }
@@ -254,7 +264,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
      G4Exception("G4SteppingManager::InvokeAtRestDoItProcs: No AtRestDoIt process is active. " );
    }
 
-   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = 1;
+   (*fSelectedAtRestDoItVector)[fAtRestDoItProcTriggered] = NotForced;
 
    fStep->SetStepLength( 0. );  //the particle has stopped
    fTrack->SetStepLength( 0. );
@@ -265,7 +275,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    // Note: DoItVector has inverse order against GetPhysIntVector
    //       and SelectedAtRestDoItVector.
    //
-     if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != 0){
+     if( (*fSelectedAtRestDoItVector)[MAXofAtRestLoops-np-1] != InActivated){
 
 
        fCurrentProcess = (*fAtRestDoItVector)[np];
@@ -354,7 +364,7 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        // clear ParticleChange
        fParticleChange->Clear();
 
-     } //if(fSelectedAtRestDoItVector[np] != 0){
+     } //if(fSelectedAtRestDoItVector[np] != InActivated){
    } //for(size_t np=0; np < MAXofAtRestLoops; np++){
 
    fStep->UpdateTrack();
@@ -477,29 +487,48 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 {
 
 // Invoke the specified discrete processes
-   fN2ndariesPostStepDoIt = 0;
+  fN2ndariesPostStepDoIt = 0;
+  
+  if(fTrack->GetTrackStatus() != fStopAndKill){
+    for(size_t np=0; np < MAXofPostStepLoops; np++){
+      InvokePSDIP(np);
+    }
+  } else { 
+    for(size_t np1=0; np1 < MAXofPostStepLoops; np1++){
+      size_t np1GPIL = MAXofPostStepLoops-np1-1;
+      // a magic on process ordering
+      if( np1==0 || (*fSelectedPostStepDoItVector)[np1GPIL] == StronglyForced){
+	InvokePSDIP(np1);
+      }
+      return;
+    }
+  }
 
-   for(size_t np=0; np < MAXofPostStepLoops; np++){
+}
+
+void G4SteppingManager::InvokePSDIP(size_t np)
+{
+     
    //
    // Note: DoItVector has inverse order against GetPhysIntVector
    //       and SelectedPostStepDoItVector.
-   //
-     size_t npGPIL = MAXofPostStepLoops-np-1;
-     
-     G4int tmp= (*fSelectedPostStepDoItVector)[npGPIL];
-     if(tmp != 0){
+ 
+   G4int Stat = (*fSelectedPostStepDoItVector)[MAXofPostStepLoops-np-1];
+    if(Stat != InActivated){
 
-       if ( ((tmp == 1) && (fStepStatus == fPostStepDoItProc)) ||
-            ((tmp == 2) && (fStepStatus != fExclusivelyForcedProc)) ||
-            ((tmp == 3) && (fStepStatus == fAlongStepDoItProc)) ||
-	    ((tmp == 4) && (fStepStatus == fExclusivelyForcedProc)) ) {
-
-         fCurrentProcess = (*fPostStepDoItVector)[np];
-         fParticleChange 
-            = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
+      if( ((Stat == NotForced) && (fStepStatus == fPostStepDoItProc)) ||
+	  ((Stat == Forced) && (fStepStatus != fExclusivelyForcedProc)) ||
+	  ((Stat == Conditionally) && (fStepStatus == fAlongStepDoItProc)) ||
+	  ((Stat == ExclusivelyForced) && (fStepStatus == fExclusivelyForcedProc)) || 
+	  ((Stat == StronglyForced) && (fStepStatus == fPostStepDoItProc)) 
+	  ) {
+	
+	fCurrentProcess = (*fPostStepDoItVector)[np];
+	fParticleChange 
+	  = fCurrentProcess->PostStepDoIt( *fTrack, *fStep);
 
          // Update PostStepPoint of Step according to ParticleChange
-	 fParticleChange->UpdateStepForPostStep(fStep);
+	fParticleChange->UpdateStepForPostStep(fStep);
 #ifdef G4VERBOSE
                  // !!!!! Verbose
            if(verboseLevel>0) fVerbose->PostStepDoItOneByOne();
@@ -586,12 +615,7 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 
          // clear ParticleChange
          fParticleChange->Clear();
-       }
-     } //if(*fSelectedPostStepDoItVector(np) != 0){
+      }
 
-   // Exit from PostStepLoop if the track has been killed
-   if(fTrack->GetTrackStatus() == fStopAndKill) break;
-
-   } //for(size_t np=0; np < MAXofPostStepLoops; np++){
+    } //if(*fSelectedPostStepDoItVector(np) != 0){
 }
-

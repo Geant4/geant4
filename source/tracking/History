@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2002-10-29 15:41:55 johna Exp $
+$Id: History,v 1.42 2002-11-01 00:06:00 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 31, 02 T. Sasaki (tracking-V04-01-02)
+- G4SteppingManager.hh/cc
+ o new ForceCondition flag StronglyForced was implemented
 
 Oct 28, 2002, J.Allison  (traj03)
 - Changed GetAttDefs return signature to map.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.20 2002-02-04 07:58:47 gcosmo Exp $
+// $Id: G4SteppingManager.hh,v 1.21 2002-11-01 00:06:01 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -195,6 +195,7 @@ public: //without description
    void InvokeAtRestDoItProcs();
    void InvokeAlongStepDoItProcs();
    void InvokePostStepDoItProcs();
+   void InvokePSDIP(size_t); // 
    void SetNavigator(G4Navigator* value);
    G4double CalculateSafety();
       // Return the estimated safety value at the PostStepPoint
