@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8DetectorConstruction.cc,v 1.14 2004-11-10 07:39:39 grichine Exp $
+// $Id: Em8DetectorConstruction.cc,v 1.15 2004-12-03 09:45:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -297,7 +297,7 @@ H2O->AddElement(elO, natoms=1);
   density = 2.330*g/cm3;
   a = 28.09*g/mole;
   G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
-
+  if(Si);
   // Krypton as detector gas, STP
 
   density = 3.700*mg/cm3 ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8CalorimeterSD.cc,v 1.5 2004-11-10 07:39:39 grichine Exp $
+// $Id: Em8CalorimeterSD.cc,v 1.6 2004-12-03 09:45:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ Em8CalorimeterSD::~Em8CalorimeterSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em8CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
+void Em8CalorimeterSD::Initialize(G4HCofThisEvent*)
 {
   CalCollection = new Em8CalorHitsCollection
                       (SensitiveDetectorName,collectionName[0]); 
@@ -74,7 +74,7 @@ void Em8CalorimeterSD::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool Em8CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
+G4bool Em8CalorimeterSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
    
