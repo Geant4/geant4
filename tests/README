@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2003-10-01 16:03:15 gcosmo Exp $
+$Id: README,v 1.6 2003-11-28 16:08:08 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -47,6 +47,7 @@ test22 ## Gamma and electro-nuclear physics.
 test24 ## Binary cascade hadronic model.
 test25 ## Classical cascade hadronic model.
 test26 ## Cuts by region modelling.
+test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 test33 ## Importance biasing and scoring.
 test50 ## Statistical test suite for EM processes:
