@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.icc,v 1.12 2004-12-02 07:46:00 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.13 2005-03-25 00:40:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -246,8 +246,26 @@ G4int G4DynamicParticle::GetVerboseLevel() const
    return verboseLevel;
 }
 
+inline 
+void G4DynamicParticle::SetPrimaryParticle(G4PrimaryParticle* p) 
+{
+   primaryParticle=p;
+}
 
+inline
+G4PrimaryParticle* G4DynamicParticle::GetPrimaryParticle() const 
+{
+   return primaryParticle;
+}
 
+inline 
+G4int G4DynamicParticle::GetPDGcode() const
+{
+  G4int code = theParticleDefinition->GetPDGEncoding();
+  if(code==0)
+  { if(primaryParticle) code = primaryParticle->GetPDGcode(); }
+  return code;
+}
 
 
 
