@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPropagateMagField.cc,v 1.6 2001-05-23 19:25:51 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.7 2001-05-23 19:26:50 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -247,7 +247,7 @@ G4PropagatorInField*  SetupPropagator( G4int type)
        GetPropagatorInField ();
 
     // Let us test the new Minimum Epsilon Step functionality
-    thePropagator -> SetMinimumEpsilonStep( 1.0e-5 ) ; 
+    thePropagator -> SetMinimumEpsilonStep( 1.0e-4 ) ; 
 
     return thePropagator;
 }
