@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EquationOfMotion.icc,v 1.6 2002-06-10 17:24:28 japost Exp $
+// $Id: G4EquationOfMotion.icc,v 1.7 2002-06-11 08:39:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,7 +46,7 @@ void G4EquationOfMotion::SetFieldObj(G4Field* pField)
 }
 
 inline
-void G4EquationOfMotion::GetFieldValue( const  G4double Point[3],
+void G4EquationOfMotion::GetFieldValue( const  G4double Point[4],
 			                       G4double Field[] ) const
 {
   itsField-> GetFieldValue( Point, Field );
