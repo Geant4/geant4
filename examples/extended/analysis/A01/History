@@ -1,0 +1,17 @@
+$Id: History,v 1.1 2002-11-26 18:32:24 duns Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     A01 History File
+     =========================================================
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+---------------------------------------------------------------------------
+26th November 2002 Mark Donszelmann
+- Fixed DrifChamberHit to have a reasonable screensize (2) rather than 0.1
+
+14th November 2002 Mark Donszelmann
+- Added A01 example to repository

@@ -1,4 +1,4 @@
-// $Id: A01DriftChamberHit.cc,v 1.1 2002-11-13 07:22:57 duns Exp $
+// $Id: A01DriftChamberHit.cc,v 1.2 2002-11-26 18:32:24 duns Exp $
 // --------------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
@@ -60,7 +60,7 @@ void A01DriftChamberHit::Draw()
   if(pVVisManager)
   {
     G4Circle circle(worldPos);
-    circle.SetScreenSize(0.1);
+    circle.SetScreenSize(2);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,1.,0.);
     G4VisAttributes attribs(colour);
