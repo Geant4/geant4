@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.10 2003-12-04 16:27:28 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.11 2003-12-10 17:33:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -224,16 +224,11 @@ G4PropagatorInField::ComputeStep(
       fNavigator->LocateGlobalPointWithinVolume( SubStartPoint );
     }
 
-    //   First figure out how far to evolve the particle !
-    //   -------------------------------------------------
-    //   and (later) with what accuracy to calculate this path.
+    // How far to attempt to move the particle !
     //
     h_TrialStepSize = CurrentProposedStepLength - StepTaken;
 
-    //   Next evolve it as far as this allows.
-    //   ---------------------------------------
-    //
-    //   B <- Integrator - limited by the "chord miss" rule.
+    // Integrate as far as "chord miss" rule allows.
     //
     s_length_taken = GetChordFinder()->AdvanceChordLimited( 
                              CurrentState,    // Position & velocity
@@ -242,19 +237,18 @@ G4PropagatorInField::ComputeStep(
                              fPreviousSftOrigin,
                              fPreviousSafety
                              );
+    //  CurrentState is now updated with the final position and velocity. 
 
     fFull_CurveLen_of_LastAttempt = s_length_taken;
 
-    //  On Exit:
-    //  CurrentState is updated with the final position and velocity. 
-    //
     G4ThreeVector  EndPointB = CurrentState.GetPosition(); 
     G4ThreeVector  InterSectionPointE;
     G4double       LinearStepLength;
  
     // Intersect chord AB with geometry
-    intersects= IntersectChord( SubStartPoint, EndPointB, NewSafety,
-                                LinearStepLength, InterSectionPointE );
+    intersects= IntersectChord( SubStartPoint, EndPointB, 
+				NewSafety,     LinearStepLength, 
+				InterSectionPointE );
     // E <- Intersection Point of chord AB and either volume A's surface 
     //                                  or a daughter volume's surface ..
 
@@ -303,6 +297,14 @@ G4PropagatorInField::ComputeStep(
                    NewSafety,     do_loop_count,  pPhysVol );
     }
 #endif
+    if( (fVerboseLevel > 0) && (iteration_co > fMax_loop_count-10 )) {
+      if( iteration_co == fMax_loop_count-9 ){
+	G4cout << "G4PropagatorInField::ComputeStep "
+	       << " Difficult track - taking many sub steps." << G4endl;
+      }
+      printStatus( SubStepStartState, CurrentState, CurrentProposedStepLength, 
+		   NewSafety, iteration_co, pPhysVol );
+    }
 
     do_loop_count++;
 
@@ -380,15 +382,23 @@ G4PropagatorInField::ComputeStep(
     fNoZeroStep = 0;
 
   if( fNoZeroStep > fAbandonThreshold_NoZeroSteps ) { 
+     fParticleIsLooping = true;
      G4cout << " WARNING - G4PropagatorInField::ComputeStep():" << G4endl
             << " Zero progress for "  << fNoZeroStep << " attempted steps." 
             << G4endl;
 #ifdef G4VERBOSE
-     G4cout << " Particle that is stuck will be killed." << G4endl;
+     if ( fVerboseLevel > 0 )
+       G4cout << " Particle that is stuck will be killed." << G4endl;
 #endif
      fNoZeroStep = 0; 
-     fParticleIsLooping = true;
   }
+
+#ifdef G4VERBOSE
+  if ( fVerboseLevel > 1 ){
+     G4cout << "G4PropagatorInField returns " << TruePathLength << G4endl;
+  }
+#endif
+
   return TruePathLength;
 }
 
@@ -570,6 +580,18 @@ G4PropagatorInField::LocateIntersectionPoint(
 	     CurrentA_PointVelocity= CurrentB_PointVelocity;  // We have got to B
 	     CurrentB_PointVelocity= CurveEndPointVelocity;
 	     final_section= true;
+ 	     if( recalculatedEndPoint ) {
+	        // Since we have moved the endpoint, what must we do about this ???
+	        G4cout << "G4PiF::LI> Restoring full end point"
+		       << "  Yet previous endpoint was recalculated "
+		       << "  Reseting recalculatedEndPoint to false " << G4endl;
+	        //  Two scenarios:
+	        //   - we leave it as it was, since the move is likely small (CHOSEN)
+	        recalculatedEndPoint= false;
+		//   - we recalculate the final endpoint again (leaving it true)
+
+	        // If we did nothing, the midpoint would be used as an endpoint
+	     }
 
 #ifdef G4VERBOSE
 	     if( fVerboseLevel > 2 ){
