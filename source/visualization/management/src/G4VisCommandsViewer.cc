@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.6 1999-05-10 14:04:18 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.7 1999-11-05 16:31:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -59,6 +59,11 @@ void G4VVisCommandViewer::UpdateCandidateLists () {
 
   if (fpCommandViewerSelect) {
     fpCommandViewerSelect -> GetParameter (0) ->
+      SetParameterCandidates (fViewerNameList);
+  }
+
+  if (fpCommandViewerUpdate) {
+    fpCommandViewerUpdate -> GetParameter (0) ->
       SetParameterCandidates (fViewerNameList);
   }
 }
@@ -467,4 +472,79 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
       "\n  to see possibilities."
 	   << endl;
   }
+}
+
+////////////// /vis/viewer/update ///////////////////////////////////////
+
+G4VisCommandViewerUpdate::G4VisCommandViewerUpdate () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/update", this);
+  fpCommand -> SetGuidance ("/vis/viewer/update [<viewer-name>]");
+  fpCommand -> SetGuidance
+    ("Updates viewer (necessary for graphical database post-processing.");
+  fpCommand -> SetGuidance ("Viewer becomes current.");
+  fpCommand -> SetGuidance
+    ("Specify viewer by name (\"/vis/viewer/list\""
+     "\n  to see possibilities).");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+  fpCommandViewerUpdate = fpCommand;
+}
+
+G4VisCommandViewerUpdate::~G4VisCommandViewerUpdate () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerUpdate::GetCurrentValue 
+(G4UIcommand* command) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (viewer) {
+    return viewer -> GetName ();
+  }
+  else {
+    return "none";
+  }
+}
+
+void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+  G4String& updateName = newValue;
+  G4String updateShortName = ShortName (updateName);
+
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  G4bool found = true;
+  if (updateShortName != ShortName (viewer -> GetName ())) {
+    found = false;
+    const G4SceneHandlerList& sceneHandlerList =
+      fpVisManager -> GetAvailableSceneHandlers ();
+    G4int nHandlers = sceneHandlerList.entries ();
+    for (G4int iHandler = 0; iHandler < nHandlers; iHandler++) {
+      G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
+      const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
+      for (G4int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
+	viewer = viewerList [iViewer];
+	if (updateShortName == ShortName (viewer -> GetName ())) {
+	  found = true;
+	  fpVisManager -> SetCurrentViewer (viewer);
+	  fpVisManager -> SetCurrentSceneHandler (sceneHandler);
+	  fpVisManager -> SetCurrentGraphicsSystem
+	    (sceneHandler -> GetGraphicsSystem ());
+	  break;
+	}
+      }
+      if (found) break;
+    }
+  }
+
+  G4cout << "Viewer \"" << updateName << "\"";
+  if (found) {
+    viewer -> ShowView ();
+    G4cout << " updated.";
+  }
+  else {
+    G4cout << " not found - \"/vis/viewer/list\""
+      "\n  to see possibilities.";
+  }
+  G4cout << endl;
 }
