@@ -1,4 +1,4 @@
-?RCS: $Id: n.U,v 1.1 2001-05-17 10:12:24 sadilov Exp $
+?RCS: $Id: n.U,v 1.2 2002-12-12 22:57:17 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.1  2001/05/17 10:12:24  sadilov
+?RCS: Import 'config'.
+?RCS:
 ?RCS: Revision 1.1  2000/12/12 23:31:33  sadilov
 ?RCS: Was added due to Gabriele's modification of Configure...
 ?RCS:
@@ -28,7 +31,7 @@
 ?S:	    $echo $n "prompt for a question: $c".
 ?S:.
 : first determine how to suppress newline on echo command
-echo " "
+#echo " "
 #echo "Checking echo to see how to suppress newlines..."
 (echo "hi there\c" ; echo " ") >.echotmp
 if $contains c .echotmp >/dev/null 2>&1 ; then
