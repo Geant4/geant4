@@ -20,47 +20,47 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.hh,v 1.3 2004-05-14 12:29:33 guatelli Exp $
+// $Id: RemSimDecay.cc,v 1.1 2004-05-14 12:29:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author: Maria.Grazia.Pia@cern.ch
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Created
+// 22 Feb 2003 MGP          Designed for modular Physics List
 //
 // -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, particles for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
-#ifndef REMSIMPARTICLES_HH
-#define REMSIMPARTICLES_HH 1
-
+#include "RemSimDecay.hh"
+#include "G4ProcessManager.hh"
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4ios.hh"
 
-class RemSimParticles : public G4VPhysicsConstructor {
-public: 
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
-  RemSimParticles(const G4String& name = "particles");
-  
-  virtual ~RemSimParticles();
-  
-  virtual void ConstructParticle();
-  
-  // This method is dummy
-  virtual void ConstructProcess() {};  
-};
-#endif
+RemSimDecay::RemSimDecay(const G4String& name): G4VPhysicsConstructor(name)
+{ }
 
+RemSimDecay::~RemSimDecay()
+{ }
 
-
-
-
-
-
-
+void RemSimDecay::ConstructProcess()
+{
+  // Add Decay Process
+  G4Decay* theDecayProcess = new G4Decay();
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() )
+    {
+      G4ParticleDefinition* particle = theParticleIterator->value();
+      G4ProcessManager* pmanager = particle->GetProcessManager();
+      
+      if (theDecayProcess->IsApplicable(*particle)) 
+	{ 
+	  pmanager ->AddProcess(theDecayProcess);
+	  // set ordering for PostStepDoIt and AtRestDoIt
+	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
+	  pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+	}
+    }
+}

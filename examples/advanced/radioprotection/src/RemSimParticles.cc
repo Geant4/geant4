@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimParticles.cc,v 1.3 2004-05-14 12:29:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -37,9 +37,27 @@
 #include "G4Positron.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
+#include "G4IonO16.hh"
+#include "G4IonC12.hh"
+#include "G4IonSi28.hh"
+#include "G4IonFe52.hh"
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
 #include "G4ShortLivedConstructor.hh"
+#include "G4IonConstructor.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4TauMinus.hh"
+#include "G4TauPlus.hh"
+#include "G4NeutrinoTau.hh"
+#include "G4AntiNeutrinoTau.hh"
+#include "G4NeutrinoMu.hh"
+#include "G4AntiNeutrinoMu.hh"
+#include "G4NeutrinoE.hh"
+#include "G4AntiNeutrinoE.hh"
+#include "G4ChargedGeantino.hh"
+#include "G4Geantino.hh"
+
 RemSimParticles::RemSimParticles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
@@ -54,8 +72,29 @@ void RemSimParticles::ConstructParticle()
   G4Positron::PositronDefinition();
   G4Proton :: ProtonDefinition();
   G4Alpha :: AlphaDefinition();
+  G4IonO16::IonO16Definition();  
+  G4IonC12::IonC12Definition();
+  G4IonSi28::IonSi28Definition();
+  G4IonFe52::IonFe52Definition();
 
-  // For hadronic physics - taken from HadronPhysicsQGSP by. Wellish 
+// Mu
+  G4MuonPlus::MuonPlusDefinition();
+  G4MuonMinus::MuonMinusDefinition();
+  G4NeutrinoMu::NeutrinoMuDefinition();
+  G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+
+// Tau
+  G4TauMinus::TauMinusDefinition();
+  G4TauPlus::TauPlusDefinition();
+  G4NeutrinoTau::NeutrinoTauDefinition();
+  G4AntiNeutrinoTau::AntiNeutrinoTauDefinition(); 
+
+  G4NeutrinoE::NeutrinoEDefinition();
+  G4AntiNeutrinoE::AntiNeutrinoEDefinition();
+ 
+  G4Geantino::GeantinoDefinition();
+  G4ChargedGeantino::ChargedGeantinoDefinition(); 
+ 
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();
 
@@ -65,4 +104,6 @@ void RemSimParticles::ConstructParticle()
   G4ShortLivedConstructor pShortLivedConstructor;
   pShortLivedConstructor.ConstructParticle();  
 
+  G4IonConstructor pConstructor;
+  pConstructor.ConstructParticle(); 
 }

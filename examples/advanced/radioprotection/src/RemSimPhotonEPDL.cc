@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhotonEPDL.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimPhotonEPDL.cc,v 1.3 2004-05-14 12:29:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -41,7 +41,8 @@
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyRayleigh.hh"
 
-RemSimPhotonEPDL::RemSimPhotonEPDL(const G4String& name): G4VPhysicsConstructor(name)
+RemSimPhotonEPDL::RemSimPhotonEPDL(const G4String& name):
+ G4VPhysicsConstructor(name)
 { }
 
 RemSimPhotonEPDL::~RemSimPhotonEPDL()

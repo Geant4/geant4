@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.4 2004-05-13 13:27:07 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.5 2004-05-14 12:29:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli
@@ -32,6 +32,9 @@
 #include "RemSimElectronEEDL.hh"
 #include "RemSimPositronStandard.hh"
 #include "RemSimIonICRU.hh"
+#include "RemSimMuonStandard.hh"
+#include "RemSimDecay.hh"
+#include "RemSimHadronicPhysics.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
@@ -41,9 +44,10 @@ RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
 					electronIsRegistered(false), 
 					positronIsRegistered(false),
 					photonIsRegistered(false), 
-					protonIsRegistered(false),
                                         ionIsRegistered(false),
                                         hadronicIsRegistered(false),
+                                        decayIsRegistered(false),
+                                        muonIsRegistered(false)
 {
   defaultCutValue = 1.* mm;
   SetVerboseLevel(1);
@@ -65,63 +69,36 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 
   G4cout << "Adding PhysicsList chunk " << name << G4endl;
 
-  // Register standard processes for photons
-  if (name == "photon-standard") 
-    {
-      if (photonIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimPhotonStandard(name) );
-	  photonIsRegistered = true;
-	}
-    }
-  // Register LowE-EPDL processes for photons
+   // Register LowE-EPDL processes for photons
   if (name == "photon-epdl") 
     {
       if (photonIsRegistered) 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
+		 << " cannot be registered ---- photon List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new RemSimPhotonEPDL(name) );
 	  photonIsRegistered = true;
 	}
     } 
 
-  // Register standard processes for electrons
-  if (name == "electron-standard") 
-    {
-      if (electronIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimElectronStandard(name) );	  
-	  electronIsRegistered = true;
-	}
-    }
   // Register LowE-EEDL processes for electrons
   if (name == "electron-eedl") 
     {
       if (electronIsRegistered) 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- electron List already existing" << G4endl;
+		 << " cannot be registered ---- electron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new RemSimElectronEEDL(name) );
 	  electronIsRegistered = true;
 	}
@@ -133,118 +110,97 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
       if (positronIsRegistered) 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- positron List already existing" << G4endl;
+		 << " cannot be registered ---- positron List already existing"                  << G4endl;
 	} 
       else 
 	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name
+                 << " is registered" << G4endl;
 	  RegisterPhysics( new RemSimPositronStandard(name) );
 	  positronIsRegistered = true;
 	}
     }
 
-  if (name == "proton-eedl") 
+  // Register LowEnergy processes - ICRU Model - for p, alpha, ions. 
+  if (name == "ion-ICRU") 
     {
-      if (protonIsRegistered) 
+      if (ionIsRegistered) 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimProtonEEDL(name) );
-	  protonIsRegistered = true;
-	}
-    }
-
-  if (name == "proton-eedl-ziegler") 
-    {
-      if (protonIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimProtonEEDLziegler(name) );
-	  protonIsRegistered = true;
-	}
-    }
-
-  if (name == "proton-standard") 
-    {
-      if (protonIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- proton e.m. List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimProtonStandard(name) );
-	  protonIsRegistered = true;
-	}
-    }
-
-  if (name == "alpha-eedl") 
-    {
-      if (alphaIsRegistered) 
-	{
-	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- alpha List already existing" << G4endl;
+		 << " cannot be registered ----ion e.m. List already existing" 
+                 << G4endl;
 	} 
       else 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
-	  RegisterPhysics( new RemSimAlphaEEDL(name) );
-	  alphaIsRegistered = true;
+	  RegisterPhysics( new RemSimIonICRU(name) );
+	  ionIsRegistered = true;
 	}
     }
 
-  if (name == "charged-eedl") 
+  // Register hadronic process for p and alpha particle
+  if (name == "hadronic") 
     {
-      if (chargedIsRegistered) 
+      if (hadronicIsRegistered) 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- generic charged particle physics List already existing" << G4endl;
+		 << " cannot be registered ---- hadronic physics List already existing" << G4endl;
 	} 
       else 
 	{
 	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
                  << " is registered" << G4endl;
-	  RegisterPhysics(new RemSimChargedEEDL(name));
-	  chargedIsRegistered = true;
+	  RegisterPhysics( new RemSimHadronicPhysics(name) );
+	  hadronicIsRegistered = true;
 	}
     }
 
+if (name == "muon-standard") 
+    {
+      if (muonIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered -- muon e.m. List already existing" 
+                 << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimMuonStandard(name) );
+	  muonIsRegistered = true;
+	}
+    }
+
+if (name == "decay") 
+    {
+    if (decayIsRegistered) 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name  
+		 << " cannot be registered ---- decay  physics  List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "RemSimPhysicsList::AddPhysicsList: " << name 
+                 << " is registered" << G4endl;
+	  RegisterPhysics( new RemSimDecay(name) );
+	  decayIsRegistered = true;
+	}
+    }
 
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered && 
-      alphaIsRegistered && chargedIsRegistered)
+      ionIsRegistered)
     {
-      G4cout << "PhysicsList for electron, positron, photon,alpha and generic ion is registered" << G4endl;
+      G4cout << "The electromagnetic processes are registered" << G4endl;
+    
+  
+  if (muonIsRegistered && decayIsRegistered && hadronicIsRegistered) 
+    {
+      G4cout << "The hadronic physics is registered for p and alpha (up to 100 GeV), the e.m. physics for muons is registered, the decay is registered" 
+             << G4endl;
     }
-
-}
-
-void RemSimPhysicsList::SetGammaCut(G4double value)
-{
-  ResetCuts();
-  cutForGamma = value;
-}
-
-
-void RemSimPhysicsList::SetElectronCut(G4double value)
-{
-  ResetCuts();
-  cutForElectron = value;
-}
-
-void RemSimPhysicsList::SetParticleCut(G4double value)
-{
-  defaultCutValue = value; 
+    }
 }
 
 void RemSimPhysicsList::SetCuts()

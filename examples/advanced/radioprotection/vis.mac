@@ -1,11 +1,11 @@
 #Activate e.m. physics
-/physics/addPhysics photon-eedl
+/physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
-/physics/addPhysics proton-eedl
-/physics/addPhysics alpha-eedl
-/physics/addPhysics charged-eedl
-/process/list
+/physics/addPhysics ion-ICRU
+/physics/addPhysics hadronic
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
 # Sets some default verbose
 #
 /control/verbose 1
@@ -16,12 +16,12 @@
 #
 # create empty scene
 #
-/vis/scene/create
+#/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-/vis/open OGLIX
+#/vis/open OGLIX
 #
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
@@ -32,5 +32,5 @@
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 2
 /tracking/storeTrajectory 1
-/gun/particle alpha
-/gun/energy 100. MeV
+/gun/particle IonO16
+/gun/energy 500. MeV

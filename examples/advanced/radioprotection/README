@@ -1,6 +1,3 @@
--------------------------------------------------------------------
-$Id: README,v 1.4 2004-03-12 10:48:18 guatelli Exp $
--------------------------------------------------------------------
 
      =========================================================
  		      Geant4 - Radioprotection example
@@ -11,10 +8,39 @@ $Id: README,v 1.4 2004-03-12 10:48:18 guatelli Exp $
 
 0. Introduction.
 
-The Radioprotection example simulates the energy deposit in a phantom.
-This application is important in the radioprotection domain.
+The Radioprotection example derives from a Geant4 application whose scope 
+is to evaluate the dose absorbed in Astronauts, in vehicle concepts 
+and Moon surface habitat configurations, given by the interplanetary 
+space radiation environment. 
 
-A monochromatic particle beam impinges on a slab of water and then
+1. SET-UP
+
+
+1.1 Physics List
+
+The user can select the physics processes to activate interactively as 
+shown in the macro vis.mac.
+The example is provided of:
+- Low Energy electromagnetic processes for photons, e- 
+- Standard electromagnetic processes for e+
+- Low Energy with ICRU parameterisation for p, alpha and ions
+- Muon electromagnetic processes
+- Decay
+- Hadronic physics for p and alpha up to 100. GeV
+
+1.2 Primary particles
+
+
+
+1.3 Geometry
+
+
+1.4 Energy Deposit 
+
+
+1.5 Analysis
+
+A  particle beam impinges on a multilayer  of water and then
 on a phantom filled with water.
        |s| /  |  |
 -----> |l|/   |  |  

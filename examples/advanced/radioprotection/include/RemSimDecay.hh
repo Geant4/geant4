@@ -20,47 +20,25 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.hh,v 1.3 2004-05-14 12:29:33 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+#ifndef REMSIMDECAY_HH
+#define REMSIMDECAY_HH 1
 
-// Class description:
-// System test for e/gamma, particles for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
-#ifndef REMSIMPARTICLES_HH
-#define REMSIMPARTICLES_HH 1
-
-#include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
+#include "G4Decay.hh"
 
-class RemSimParticles : public G4VPhysicsConstructor {
+class RemSimDecay : public G4VPhysicsConstructor {
+
 public: 
 
-  RemSimParticles(const G4String& name = "particles");
+  RemSimDecay(const G4String& name = "decay");
   
-  virtual ~RemSimParticles();
+  virtual ~RemSimDecay();
   
-  virtual void ConstructParticle();
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
   
-  // This method is dummy
-  virtual void ConstructProcess() {};  
+  virtual void ConstructProcess();  
 };
 #endif
-
-
-
-
-
-
-
 

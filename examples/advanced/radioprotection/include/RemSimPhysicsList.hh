@@ -20,22 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimPhysicsList.hh,v 1.4 2004-05-14 12:29:33 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
+// Author: Susanna Guatelli
 
 #ifndef REMSIMPHYSICSLIST_HH
 #define REMSIMPHYSICSLIST_HH 1
@@ -52,27 +40,21 @@ public:
 
   virtual ~RemSimPhysicsList();
 
+  //register the threshold of production of secondaries
   virtual void SetCuts();
   
   // Register PhysicsList chunks
   void AddPhysicsList(const G4String& name);
 
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-  void SetParticleCut(G4double value);
-  
 private:
 
   G4bool electronIsRegistered;
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;
-  G4bool protonIsRegistered;
-  G4bool alphaIsRegistered;
-  G4double cutForGamma;
-  G4double cutForElectron;
+  G4bool ionIsRegistered;
   G4bool hadronicIsRegistered; 
-  G4bool chargedIsRegistered;
+  G4bool decayIsRegistered;
+  G4bool muonIsRegistered;
   RemSimPhysicsListMessenger* messenger;
 };
 #endif

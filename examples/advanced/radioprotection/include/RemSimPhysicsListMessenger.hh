@@ -20,19 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RemSimPhysicsListMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V04-01-03
-//
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//
-// History:
-// -----------
-//  28 Nov 2001  Elena Guardincerri   Created
-//
-// -------------------------------------------------------------------
-
-
 #ifndef RemSimPhysicsListMessenger_h
 #define RemSimPhysicsListMessenger_h 1
 
@@ -58,10 +45,9 @@ public:
   
 private:
 
-  RemSimPhysicsList*          RemSimList;
+  RemSimPhysicsList* RemSimList;
   G4UIdirectory* EnDir;
-   G4UIcmdWithAString*  physicsListCmd;
-  G4UIcmdWithADoubleAndUnit* cutECmd;
+  G4UIcmdWithAString*  physicsListCmd;
 };
 
 #endif

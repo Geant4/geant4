@@ -20,17 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: XrayFluoPhysicsListMessenger.cc
-// GEANT4 tag $Name: xray_fluo-V04-01-03
-//
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//
-// History:
-// -----------
-// 28 Nov 2001 Elena Guardincerri     Created
-//
-// -------------------------------------------------------------------
 
 #include "RemSimPhysicsListMessenger.hh"
 #include "RemSimPhysicsList.hh"
@@ -52,19 +41,10 @@ RemSimPhysicsListMessenger::RemSimPhysicsListMessenger(RemSimPhysicsList * List)
   physicsListCmd->SetGuidance("Add chunks of PhysicsList");
   physicsListCmd->SetParameterName("choice",false);
   physicsListCmd->AvailableForStates(G4State_PreInit);  
-
-  
-  cutECmd = new G4UIcmdWithADoubleAndUnit("/physics/cutE",this);
-  cutECmd->SetGuidance("Set cut values.");
-  cutECmd->SetParameterName("range",true);
-  cutECmd->SetDefaultValue(1.);
-  cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(G4State_PreInit);
 }
 
 RemSimPhysicsListMessenger::~RemSimPhysicsListMessenger()
 {  
-  delete cutECmd;
   delete physicsListCmd;
   delete EnDir;
 }
@@ -73,9 +53,6 @@ void RemSimPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String newVa
 {
   if (command == physicsListCmd)
    { RemSimList->AddPhysicsList(newValue); }
-
- if (command == cutECmd)
-   {RemSimList->SetParticleCut(cutECmd->GetNewDoubleValue(newValue)); }
 }
 
 

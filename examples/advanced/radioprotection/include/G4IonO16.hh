@@ -20,47 +20,40 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.hh,v 1.3 2004-05-14 12:29:33 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
 
-// Class description:
-// System test for e/gamma, particles for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
-#ifndef REMSIMPARTICLES_HH
-#define REMSIMPARTICLES_HH 1
+#ifndef G4IonO16_h
+#define G4IonO16_h 1
 
 #include "globals.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4ios.hh"
+#include "G4VIon.hh"
 
-class RemSimParticles : public G4VPhysicsConstructor {
+// ######################################################################
+// ###                          IonO16                                 ###
+// ######################################################################
+
+class G4IonO16 : public G4VIon
+{
+ private:
+   static G4IonO16  theIonO16;
+
 public: 
 
-  RemSimParticles(const G4String& name = "particles");
+  G4IonO16(
+       const G4String&     aName,        G4double            mass,
+       G4double            width,        G4double            charge,   
+       G4int               iSpin,        G4int               iParity,    
+       G4int               iConjugation, G4int               iIsospin,   
+       G4int               iIsospin3,    G4int               gParity,
+       const G4String&     pType,        G4int               lepton,      
+       G4int               baryon,       G4int               encoding,
+       G4bool              stable,       G4double            lifetime,
+       G4DecayTable        *decaytable
+   );
+   virtual ~G4IonO16();
   
-  virtual ~RemSimParticles();
-  
-  virtual void ConstructParticle();
-  
-  // This method is dummy
-  virtual void ConstructProcess() {};  
+   static G4IonO16*    IonO16Definition();
+   static G4IonO16*    IonO16();
 };
+
 #endif
-
-
-
-
-
-
-
-
