@@ -448,7 +448,9 @@ void G4hLowEnergyIonisationVI::BuildDataForFluorescence(const G4ParticleDefiniti
   G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
-  G4double bindingEnergy, x, y;
+  G4double bindingEnergy;
+  //  G4double x;
+  //  G4double y;
 
   //  loop for materials  
   for (G4int j=0; j<numOfMaterials; j++) {
@@ -920,13 +922,13 @@ G4VParticleChange* G4hLowEnergyIonisationVI::AlongStepDoIt(
 
   // Deexcitation of ionised atoms
   edep = G4std::min(edep, eloss);  
-  G4double hMass = particle->GetMass();
-  G4double hMomentum = particle->GetTotalMomentum();
+  //  G4double hMass = particle->GetMass();
+  //  G4double hMomentum = particle->GetTotalMomentum();
   G4std::vector<G4DynamicParticle*>* newpart = 0;
 
   //  newpart = DeexciteAtom(material, kineticEnergy, edep, hMass, hMomentum);
 
-  if(newpart) {
+  if(newpart != 0) {
 
     size_t nSecondaries = newpart->size();
     aParticleChange.SetNumberOfSecondaries(nSecondaries);
@@ -1436,7 +1438,7 @@ G4int G4hLowEnergyIonisationVI::SelectRandomAtom(const G4Material* material,
 
   G4double q = norm*G4UniformRand();
 
-  for (size_t i=0; i<nElements; i++) {
+  for (G4int i=0; i<nElements; i++) {
 
     if(p[i] > q) {
        Z = (G4int)((*theElementVector)[i]->GetZ());
