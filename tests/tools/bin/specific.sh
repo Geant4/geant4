@@ -157,7 +157,12 @@ if [ `uname -n | grep axcnsi` ]; then
 fi
 
 if [ `uname -n | grep dxplus` ]; then
-###############  export G4USE_OSPACE=1  ### Now using native STL.
+  if [ $G4STTNONISO ]; then
+    export DEBOPT=${DEBOPT}_NONISO
+    export G4USE_OSPACE=1
+  else
+    export DEBOPT=${DEBOPT}_ISO
+  fi
   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx

@@ -1,12 +1,14 @@
-dxplus01 dev	deb	geant4-01-00-ref-01	all all all all 1
-dxplus02 dev	opt	geant4-01-00-ref-01	all all all all 1
-hpplus01 dev	deb	geant4-01-00-ref-01	all all all all 1
-hpplus02 dev	opt	geant4-01-00-ref-01	all all all all 1
-# rsplus05 dev	deb	geant4-01-00-ref-01	all all all all 1
-# rsplus06 dev	opt	geant4-01-00-ref-01	all all all all 1
-# sgmedia dev	deb	geant4-01-00-ref-01	all all all all 1
-# sgmedia dev	opt	geant4-01-00-ref-01	all all all all 1
-sungeant dev	deb	geant4-01-00-ref-01	all all all all 1
-sungeant dev 	opt	geant4-01-00-ref-01	all all all all 1
-pcg4speed dev	deb	geant4-01-00-ref-01	all all all all 1
-pcg4speed dev	opt	geant4-01-00-ref-01	all all all all 1
+dxplus01 dev   deb_ISO    geant4-01-00-ref-01  all all all all  1
+dxplus02 dev   opt_ISO    geant4-01-00-ref-01  all all all all  1
+dxplus03 dev   deb_NONISO geant4-01-00-ref-01  all all all all  1
+dxplus04 dev   opt_NONISO geant4-01-00-ref-01  all all all all  1
+hpplus01 dev   deb        geant4-01-00-ref-01  all all all all  1
+hpplus02 dev   opt        geant4-01-00-ref-01  all all all all  1
+# rsplus05 dev deb        geant4-01-00-ref-01  all all all all  1
+# rsplus06 dev opt        geant4-01-00-ref-01  all all all all  1
+# sgmedia dev  deb        geant4-01-00-ref-01  all all all all  1
+# sgmedia dev  opt        geant4-01-00-ref-01  all all all all  1
+sungeant dev   deb        geant4-01-00-ref-01  all all all all  1
+sungeant dev   opt        geant4-01-00-ref-01  all all all all  1
+pcg4speed dev  deb        geant4-01-00-ref-01  all all all all  1
+pcg4speed dev  opt        geant4-01-00-ref-01  all all all all  1

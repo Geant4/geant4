@@ -7,6 +7,7 @@
 
 TREE=`echo $1|cut -c 1`
 DEBOPT=`echo $2|cut -c 1`
+NONISO=`echo $2 | grep NONISO`
 REFTAG=$3
 ACTION=$4
 ACTARG1=$5
@@ -21,7 +22,7 @@ THISTAG=`echo $REFTAG|cut -d + -f1`
 if [ X$TREE = X -o X$DEBOPT = X -o X$REFTAG = X ]
 then
   echo
-  echo "Usage: g4sbr.sh dev|prod debug|opt TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
+  echo "Usage: g4sbr.sh dev|prod debug[_ISO]|opt[_ISO] TAG_NAME Act arg1 arg2 arg3 NonIncrementalFlag"
   echo
   exit
 fi
@@ -49,6 +50,13 @@ else
   echo
   echo "Usage: 2nd argument is debug or opt."
   exit
+fi
+
+if [ $NONISO ]
+then
+  export G4STTNONISO=1
+else
+  unset G4STTNONISO
 fi
 
 ####################################################################
