@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectingCone.cc,v 1.1 2000-04-07 11:01:12 gcosmo Exp $
+// $Id: G4IntersectingCone.cc,v 1.2 2000-10-20 16:02:30 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,7 +179,7 @@ G4int G4IntersectingCone::LineHitsCone1( const G4ThreeVector &p, const G4ThreeVe
 	
 	if (radical < -1E-6) return 0;		// No solution
 	
-	if (radical < 1E-6) {
+	if (radical < 1E-6*fabs(b)) {
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
@@ -271,7 +271,7 @@ G4int G4IntersectingCone::LineHitsCone2( const G4ThreeVector &p, const G4ThreeVe
 	
 	if (radical < -1E-6) return 0;		// No solution
 	
-	if (radical < 1E-6) {
+	if (radical < 1E-6*fabs(b)) {
 		//
 		// The radical is roughly zero: check for special, very rare, cases
 		//
