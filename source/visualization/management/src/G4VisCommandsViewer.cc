@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.33 2001-08-24 20:49:37 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.34 2001-11-06 12:56:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -399,6 +399,72 @@ void G4VisCommandViewerDolly::SetNewValue (G4UIcommand* command,
   SetViewParameters(currentViewer, vp);
 }
 
+////////////// /vis/viewer/flush ///////////////////////////////////////
+
+G4VisCommandViewerFlush::G4VisCommandViewerFlush () {
+  G4bool omitable, currentAsDefault;
+  fpCommand = new G4UIcmdWithAString ("/vis/viewer/flush", this);
+  fpCommand -> SetGuidance ("/vis/viewer/flush [<viewer-name>]");
+  fpCommand -> SetGuidance
+    ("Compound command: /vis/viewer/refresh + /vis/viewer/update.");
+  fpCommand -> SetGuidance
+    ("Useful for refreshing and initiating post-processing for graphics"
+     "\n  systems which need post-processing.  Viewer becomes current.");
+  fpCommand -> SetGuidance
+    ("Specify viewer by name (\"/vis/viewer/list\""
+     "\n  to see possibilities).");
+  fpCommand -> SetParameterName ("viewer-name",
+				 omitable = true,
+				 currentAsDefault = true);
+  viewerNameCommands.push_back (fpCommand);
+}
+
+G4VisCommandViewerFlush::~G4VisCommandViewerFlush () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandViewerFlush::GetCurrentValue 
+(G4UIcommand* command) {
+  G4VViewer* viewer = fpVisManager -> GetCurrentViewer ();
+  if (viewer) {
+    return viewer -> GetName ();
+  }
+  else {
+    return "none";
+  }
+}
+
+void G4VisCommandViewerFlush::SetNewValue (G4UIcommand* command,
+					   G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+
+  G4String& flushName = newValue;
+  G4VViewer* viewer = fpVisManager -> GetViewer (flushName);
+  if (!viewer) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout << "ERROR: Viewer \"" << flushName << "\"" <<
+	" not found - \"/vis/viewer/list\"\n  to see possibilities."
+	     << G4endl;
+    }
+    return;
+  }
+
+  G4UImanager* ui = G4UImanager::GetUIpointer();
+  G4int keepVerbose = ui->GetVerboseLevel();
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 || verbosity >= G4VisManager::confirmations)
+    newVerbose = 2;
+  ui->SetVerboseLevel(newVerbose);
+  ui->ApplyCommand("/vis/viewer/refresh " + flushName);
+  ui->ApplyCommand("/vis/viewer/update " + flushName);
+  ui->SetVerboseLevel(keepVerbose);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Viewer \"" << viewer -> GetName () << "\""
+	   << " flushed." << G4endl;
+  }
+}
+
 //////// /vis/viewer/lightsThetaPhi and lightsVector /////////////
 
 G4VisCommandViewerLights::G4VisCommandViewerLights ():
@@ -459,40 +525,25 @@ G4String G4VisCommandViewerLights::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandViewerLights::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
-
-
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
-
-  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
-  if (!currentViewer) {
-    if (verbosity >= G4VisManager::errors) {
+  if (command == fpCommandLightsThetaPhi) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"ERROR: G4VisCommandsViewerLights::SetNewValue: no current viewer."
+	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsThetaPhi\"."
 	     << G4endl;
     }
-    return;
-  }
-
-  G4ViewParameters vp = currentViewer->GetViewParameters();
-
-  if (command == fpCommandLightsThetaPhi) {
-    G4double theta, phi;
-    GetNewDoublePairValue(newValue, theta, phi);
-    G4double x = sin (theta) * cos (phi);
-    G4double y = sin (theta) * sin (phi);
-    G4double z = cos (theta);
-    fLightsVector = G4Vector3D (x, y, z);
+    G4UImanager::GetUIpointer()->ApplyCommand
+      ("/vis/viewer/set/LightsThetaPhi " + newValue);
   }
   else if (command == fpCommandLightsVector) {
-    fLightsVector = GetNew3VectorValue(newValue);
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: DEPRECATED: use \"/vis/viewer/set/LightsVector\"."
+	     << G4endl;
+    }
+    G4UImanager::GetUIpointer()->ApplyCommand
+      ("/vis/viewer/set/LightsVector " + newValue);
   }
-  vp.SetLightpointDirection(fLightsVector);
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Lights direction set to " << fLightsVector << G4endl;
-  }
-
-  SetViewParameters(currentViewer, vp);
 }
 
 ////////////// /vis/viewer/list ///////////////////////////////////////
@@ -1111,43 +1162,26 @@ G4String G4VisCommandViewerViewpoint::GetCurrentValue (G4UIcommand* command) {
 void G4VisCommandViewerViewpoint::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
 
-
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
-  G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
-  if (!currentViewer) {
-    if (verbosity >= G4VisManager::errors) {
+  if (command == fpCommandViewpointThetaPhi) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"ERROR: G4VisCommandsViewerViewpoint::SetNewValue: no current viewer."
+	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointThetaPhi\"."
 	     << G4endl;
     }
-    return;
-  }
-
-  G4ViewParameters viewParams = currentViewer->GetViewParameters();
-
-  if (command == fpCommandViewpointThetaPhi) {
-    G4double theta, phi;
-    GetNewDoublePairValue(newValue, theta, phi);
-    G4double x = sin (theta) * cos (phi);
-    G4double y = sin (theta) * sin (phi);
-    G4double z = cos (theta);
-    fViewpointVector = G4Vector3D (x, y, z);
+    G4UImanager::GetUIpointer()->ApplyCommand
+      ("/vis/viewer/set/viewpointThetaPhi " + newValue);
   }
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = GetNew3VectorValue(newValue);
-  }
-  viewParams.SetViewAndLights(fViewpointVector);
-
-  if (verbosity >= G4VisManager::confirmations) {
-    G4cout << "Viewpoint direction set to " << fViewpointVector << G4endl;
-    if (viewParams.GetLightsMoveWithCamera ()) {
-      G4cout << "Lightpoint direction set to "
-	     << viewParams.GetActualLightpointDirection () << G4endl;
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"WARNING: DEPRECATED: use \"/vis/viewer/set/viewpointVector\"."
+	     << G4endl;
     }
+    G4UImanager::GetUIpointer()->ApplyCommand
+      ("/vis/viewer/set/viewpointVector " + newValue);
   }
-
-  SetViewParameters(currentViewer, viewParams);
 }
 
 ////////////// /vis/viewer/zoom and zoomTo ////////////////////////////
