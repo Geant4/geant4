@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.27 2002-01-23 15:21:40 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.28 2002-02-07 04:00:22 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -258,22 +258,8 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
 // If the primary track has 'zero' kinetic energy, set the track
 // state to 'StopButAlive'.
-   //   if(fTrack->GetKineticEnergy() <= 0.0){
-   //     fTrack->SetTrackStatus( fStopButAlive );
-   //   }
-   if(fTrack->GetKineticEnergy() <= DBL_MIN){
-     if( !(fTrack->IsGoodForTracking()) ){
-       size_t nAtRestProc = fTrack->GetDefinition()->GetProcessManager()->GetAtRestProcessVector()->entries();
-       if( nAtRestProc == 0 ){
-	 fTrack->SetTrackStatus( fStopAndKill );
-       }
-       else{
-	 fTrack->SetTrackStatus( fStopButAlive );
-       }
-     }
-     else {
-       fTrack->SetTrackStatus( fStopButAlive );
-     }
+   if(fTrack->GetKineticEnergy() <= 0.0){
+      fTrack->SetTrackStatus( fStopButAlive );
    }
 
 
