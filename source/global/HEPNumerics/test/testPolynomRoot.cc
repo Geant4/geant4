@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// Test program for G4PolynomRoot class. 
+// Test program for G4JTPolynomialSolver class. 
 //
 
 #include "G4ios.hh"
 #include "globals.hh"
-#include "G4PolynomRoot.hh"
+#include "G4JTPolynomialSolver.hh"
 
 int main()
 {
@@ -48,7 +48,7 @@ int main()
   G4int num ;       // number of roots 
 
   // solve the polynom analytically
-  G4PolynomRoot trapEq ;
+  G4JTPolynomialSolver trapEq ;
   num = trapEq.FindRoots(c, degree, sr, si) ;
   
 
