@@ -66,7 +66,7 @@ setenv ULTRA_GROUND_USE 1 : A diffusive reflecting surface is used.
 
 setup for analysis with PI 1.2.1 for user with account on lxplus:
 setenv PI_VERSION 1_2_1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/lcg/app/releases/PI/PI_1_2_1/rh73_gcc32/bin"
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/PI/Linux-g++/bin"
 eval `aida-config -r csh`                                                        |
 
 the following keywords can be used in order to produce HBOOK, AIDA or ROOT histograms
