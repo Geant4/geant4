@@ -836,7 +836,6 @@ G4double G4hLowEnergyIonisation::GetConstraints(
     G4double x = dx*paramStepLimit;
     if (stepLimit > x) stepLimit = x;
   }
-
   return stepLimit ;
 }
 
