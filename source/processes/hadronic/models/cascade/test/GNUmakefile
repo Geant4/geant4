@@ -53,7 +53,7 @@ LDLIBS   +=  \
 LOADLIBS := $(G4BIN)/$(G4SYSTEM)/hbfinit.o -l$(CLHEP_LIB)
 LOADLIBS +=    `cernlib packlib` $(FCLIBS)
 
-# 	  ::: Parameter list for cascade : nEvents, particleType, bulletE [MeV], N, and Z.
+# 	  ::: Parameter list for cascade : nEvents, particleType, bulletE [MeV], A = Z + N, and Z.
 
 #t1:	# ::: problem 1  (Al)  evaporation missing, SOLVED
 #	rm -r cascade.out; cascade 10000 1 256 27 13 > cascade.out; gmake a; 
@@ -83,12 +83,12 @@ h:	# ::: compare h2 h1
 	make h2; make h1
 
 h1:	# ::: (H) A = 1 protiun
-	rm -f cascade.out; cascade 2 1 585 1 1 > cascade.out; cat cascade.out
-#	rm -f cascade.out; cascade 1000 1 585 1 1 > cascade.out; make a;
+	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
+#	make t; rm -f cascade.out; cascade  1000 1 585 1 1 > cascade.out; cat cascade.out
 
 h2:	# ::: (H) A = 2 deuterium
-	make t; rm -f cascade.out; cascade 2 1 585 2 1 > cascade.out; cat cascade.out
-#	rm -f cascade.out; cascade 1000 1 585 2 1 > cascade.out; make a;
+	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
+#	make t; rm -f cascade.out; cascade 2 1 585 2 1 > cascade.out; cat cascade.out
 
 h3:	# ::: (H) A = 3 tritium
 	rm -f cascade.out; cascade 1000 1 585 3 1 > cascade.out; make a;
@@ -118,8 +118,14 @@ b: 	# ::: b(enchmark) testing
 t:	# ::: make test cascade
 	rm cascade; make cascade
 
-eps: 	# ::: generate eps-files for documentation
-	cp *.eps $(RELD)/pictures/
+eps: 	# ::: generate eps-files for documentation. Naming h1p585k10.eps 
+#         ::: general naming skeme for plots: (subject in plots to be defined, sofar jus general collection)
+#	  ::: h:::z:::n:::p:::e::::::c::::::.eps A with Z, N, particle type, E in MeV, collisions in (1000x) histype
+#	  ::: Example: z001n002p001e000585c010h000.eps
+#	  ::: most general plot listing all describing target A with Z = 1, N= 2 
+#         ::: collided with bullet type 1 (proton) at 585 MeV 10 thousandtimes 
+#
+	cp *.eps $(RELD)/pictures/ 
 
 clean:  # ::: clean
 	rm -f \#*.*\# \#*\# \#* .*~ .#* *.*~ *~ *.o; rm -f core cascade ; rm benchmarks; rm *.eps *.root
