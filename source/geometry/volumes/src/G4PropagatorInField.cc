@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.35 2002-07-29 10:27:58 gcosmo Exp $
+// $Id: G4PropagatorInField.cc,v 1.36 2002-07-29 14:36:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -56,10 +56,8 @@ G4PropagatorInField::G4PropagatorInField( G4Navigator    *theNavigator,
     fEpsilonMinDefault(5.0e-7),
     fEpsilonMaxDefault(0.05),
     fmax_loop_count(10000),
-    fNoZeroStep(0), 
-    fCharge(0.0),
-    fInitialMomentumModulus(0.0),
-    fMass(0.0)
+    fNoZeroStep(0)
+//    fCharge(0.0), fInitialMomentumModulus(0.0), fMass(0.0)
 {
   fEpsilonMin = fEpsilonMinDefault;
   fEpsilonMax = fEpsilonMaxDefault;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.25 2002-07-29 10:27:55 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.26 2002-07-29 14:36:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -206,7 +206,7 @@ class G4PropagatorInField
    G4double  fLast_ProposedStepLength; 
    G4double  fLargestAcceptableStep;
 
-   G4double  fCharge, fInitialMomentumModulus, fMass;
+//   G4double  fCharge, fInitialMomentumModulus, fMass;
 };
 
 // ********************************************************************

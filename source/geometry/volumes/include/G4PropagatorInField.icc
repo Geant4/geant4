@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.29 2002-07-23 08:50:36 gcosmo Exp $
+// $Id: G4PropagatorInField.icc,v 1.30 2002-07-29 14:36:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,10 @@ void G4PropagatorInField::SetChargeMomentumMass(
             G4double Momentum,          // in GeV/c 
             G4double Mass)              // in ? units
 {
-   fCharge= Charge;
-   fInitialMomentumModulus= Momentum;
-   fMass = Mass; 
+  GetChordFinder()->SetChargeMomentumMass(Charge, Momentum, Mass);
+//   fCharge = Charge;
+//   fInitialMomentumModulus = Momentum;
+//   fMass = Mass; 
 }
 
 //  Obtain the final space-point and velocity (normal) at the end of the Step
