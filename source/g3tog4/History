@@ -1,7 +1,12 @@
-$Id: History,v 1.40 2001-02-14 13:25:57 gcosmo Exp $
+$Id: History,v 1.41 2001-03-12 09:49:43 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-00-02 12-Mar-2001 G.Cosmo
+- G3toG4MakeSolid.cc: fixed bug in construction of G4Sphere where theta and
+  phi parameters were reversed according to G4Sphere constructor.
+  Fixes problem report #230.
 
 g3tog4-V03-00-01 14-Feb-2001 G.Cosmo
 - Added support for replicated "PARA" shapes in G3Division::CreateSolid(...)
