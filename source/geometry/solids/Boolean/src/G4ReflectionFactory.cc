@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.10 2003-10-28 14:41:47 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.11 2003-11-03 17:48:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -49,7 +49,7 @@
 //        = TV * R * TD * x(inD)
 //        = TV * R*TD*R-1 * R*x(inD)
 //        = TV * ReflTD * x(inReflD)
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
 #include "G4ReflectedSolid.hh"  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.12 2003-10-28 14:41:47 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.13 2003-11-03 17:48:46 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -30,22 +30,20 @@
 //
 // Author: Vladimir Grichine, 23.07.01  (Vladimir.Grichine@cern.ch)
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4ReflectedSolid.hh"
 #include "G4Point3D.hh"
 #include "G4Normal3D.hh"
-#include "G4VSolid.hh"
 
 #include "G4VoxelLimits.hh"
-#include "G4AffineTransform.hh"
 
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
+// #include "G4NURBSbox.hh"
 
 
 /////////////////////////////////////////////////////////////////

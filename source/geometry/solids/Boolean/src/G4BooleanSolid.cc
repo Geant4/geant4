@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.10 2003-10-28 14:41:47 gcosmo Exp $
+// $Id: G4BooleanSolid.cc,v 1.11 2003-11-03 17:48:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -31,15 +31,10 @@
 //
 // 10.09.98 V.Grichine, created
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4BooleanSolid.hh"
-#include "G4DisplacedSolid.hh"
-
-#include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
-#include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
+#include "G4VSolid.hh"
 
 //////////////////////////////////////////////////////////////////
 //

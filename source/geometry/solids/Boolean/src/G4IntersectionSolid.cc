@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.20 2003-10-09 10:44:57 grichine Exp $
+// $Id: G4IntersectionSolid.cc,v 1.21 2003-11-03 17:48:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -33,14 +33,9 @@
 // 16.03.01 V.Grichine: modifications in CalculateExtent() and Inside()
 // 29.05.01 V.Grichine: bug was fixed in DistanceToIn(p,v)
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4IntersectionSolid.hh"
-
-#include "G4RotationMatrix.hh"
-#include "G4ThreeVector.hh"
-#include "G4Transform3D.hh"
-#include "G4AffineTransform.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4VPVParameterisation.hh"
@@ -48,7 +43,7 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
-#include "G4NURBSbox.hh"
+// #include "G4NURBSbox.hh"
 
 /////////////////////////////////////////////////////////////////////
 //
@@ -509,7 +504,7 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p ) const
 #endif
 
   return std::min(fPtrSolidA->DistanceToOut(p),
-                    fPtrSolidB->DistanceToOut(p) ) ; 
+                  fPtrSolidB->DistanceToOut(p) ) ; 
 
 }
 

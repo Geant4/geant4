@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SubtractionSolid.hh,v 1.6 2002-10-28 11:36:28 gcosmo Exp $
+// $Id: G4SubtractionSolid.hh,v 1.7 2003-11-03 17:48:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,8 +35,7 @@
 //
 // 14.10.98 V.Grichine: first implementation
 //
-// ********************************************************************
-
+// --------------------------------------------------------------------
 #ifndef G4SUBTRACTIONSOLID_HH
 #define G4SUBTRACTIONSOLID_HH
 
