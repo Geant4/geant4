@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2004-03-16 16:21:51 gcosmo Exp $
+$Id: History,v 1.37 2004-03-21 12:28:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st March 2004  Gabriele Cosmo
+- Revision of GNUmakefiles on all tests. Removed obsolete setup for
+  old unsupported platforms and cut&paste mistakes ...
 
 tests-V06-00-02 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
