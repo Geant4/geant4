@@ -21,40 +21,36 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceSampler.cc,v 1.2 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4VImportanceSplitExaminer.hh,v 1.1 2002-05-31 08:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// GEANT 4 class source file
+// Class G4VImportanceSplitExaminer
 //
-// G4ImportanceSampler.cc
+// Class description:
 //
+// This interface is used internally by importance sampling. 
+// It delivers G4Nsplit_Weight according to a track weight. 
+// An implementation of the interface decides how to obtain 
+// remaining necessary information about the ratio of importances
+// in the pre and post "cell". 
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
+#ifndef G4VImportanceSplitExaminer_hh
+#define G4VImportanceSplitExaminer_hh G4VImportanceSplitExaminer_hh
 
-#include "G4ImportanceSampler.hh"
-#include "G4ImportanceFinder.hh"
-#include "G4VParallelStepper.hh"
-#include "G4VImportanceAlgorithm.hh"
+#include "globals.hh"
+#include "G4Nsplit_Weight.hh"
 
-G4ImportanceSampler::
-G4ImportanceSampler(const G4VImportanceAlgorithm &aIalg,
-		    const G4VParallelStepper &astepper,
-		    const G4VIStore &istore)
- : fIalgorithm(aIalg),
-   fPStepper(astepper),
-   fIfinder(*(new G4ImportanceFinder(istore)))
-{}
-
-G4ImportanceSampler::~G4ImportanceSampler()
+class G4VImportanceSplitExaminer
 {
-  delete &fIfinder;
-}
-  
-G4Nsplit_Weight G4ImportanceSampler::Sample(G4double w) const
-{
-  G4PStep pstep = fPStepper.GetPStep();
-  return fIalgorithm.
-    Calculate(fIfinder.GetIPre_over_IPost(pstep.fPreTouchableKey,
-					  pstep.fPostTouchableKey), 
-	      w);
-}
+
+public:  // with description
+
+  virtual ~G4VImportanceSplitExaminer(){}
+  virtual G4Nsplit_Weight Examine(G4double w) const = 0; 
+    // Get  G4Nsplit_Weight for a given mother track weight.
+};
+
+#endif

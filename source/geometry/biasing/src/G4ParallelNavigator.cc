@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.4 2002-04-09 16:23:50 gcosmo Exp $
+// $Id: G4ParallelNavigator.cc,v 1.5 2002-05-31 08:07:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -96,7 +96,7 @@ ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition,
   }
 
   // if the track is on boundary the location was done
-  // in the DOIT of the ImportanceSampler
+  // in the DOIT of the ImportanceSplitExaminer
 
   G4double newSafety;    
   G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,

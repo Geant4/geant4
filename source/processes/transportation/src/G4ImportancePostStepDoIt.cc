@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.4 2002-04-09 17:40:15 gcosmo Exp $
+// $Id: G4ImportancePostStepDoIt.cc,v 1.5 2002-05-31 08:06:34 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4ImportancePostStepDoIt.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
-#include "G4VImportanceSampler.hh"
+#include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
 
 G4ImportancePostStepDoIt::G4ImportancePostStepDoIt(){}

@@ -21,51 +21,40 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.hh,v 1.4 2002-05-31 08:06:34 dressel Exp $
+// $Id: G4ImportanceSplitExaminer.cc,v 1.1 2002-05-31 08:07:47 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ImportancePostStepDoIt
+// GEANT 4 class source file
 //
-// Class description:
+// G4ImportanceSplitExaminer.cc
 //
-// Used internally by importance sampling.
-// It is responsible for the common part of importance sampling
-// for the "mass" and "parallel" geometry.
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ImportancePostStepDoIt_hh
-#define G4ImportancePostStepDoIt_hh G4ImportancePostStepDoIt_hh
 
-class G4VImportanceSplitExaminer;
-class G4ParticleChange;
-class G4Track;
-class G4Step;
-class G4Nsplit_Weight;
+#include "G4ImportanceSplitExaminer.hh"
+#include "G4ImportanceFinder.hh"
+#include "G4VParallelStepper.hh"
+#include "G4VImportanceAlgorithm.hh"
 
-class G4ImportancePostStepDoIt
+G4ImportanceSplitExaminer::
+G4ImportanceSplitExaminer(const G4VImportanceAlgorithm &aIalg,
+		    const G4VParallelStepper &astepper,
+		    const G4VIStore &istore)
+ : fIalgorithm(aIalg),
+   fPStepper(astepper),
+   fIfinder(*(new G4ImportanceFinder(istore)))
+{}
+
+G4ImportanceSplitExaminer::~G4ImportanceSplitExaminer()
 {
-
-public:  // with description
-
-  G4ImportancePostStepDoIt();
-    // simply construct
-
-  ~G4ImportancePostStepDoIt();
-    // simple destruct
+  delete &fIfinder;
+}
   
-  void DoIt(const G4Track& aTrack, 
-	    G4ParticleChange *aParticleChange, 
-	    const G4Nsplit_Weight nw);
-    // Do the PostStepDoIt part common to importance sampling in the 
-    // "mass" and "parallel" geometry.
-  
-private:
-
-  void Split(const G4Track &aTrack,
-	     const G4Nsplit_Weight &nw,
-	     G4ParticleChange *aParticleChange);
-};
-
-#endif
+G4Nsplit_Weight G4ImportanceSplitExaminer::Examine(G4double w) const
+{
+  G4PStep pstep = fPStepper.GetPStep();
+  return fIalgorithm.
+    Calculate(fIfinder.GetIPre_over_IPost(pstep.fPreTouchableKey,
+					  pstep.fPostTouchableKey), 
+	      w);
+}

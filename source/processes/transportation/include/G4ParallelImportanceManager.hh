@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.hh,v 1.8 2002-05-30 15:57:26 dressel Exp $
+// $Id: G4ParallelImportanceManager.hh,v 1.9 2002-05-31 08:06:34 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 class G4ParallelManager;
 class G4VIStore;
 class G4VImportanceAlgorithm;
-class G4VImportanceSampler;
+class G4VImportanceSplitExaminer;
 class G4ParallelImportanceProcess;
 
 class G4ParallelImportanceManager : public G4VSampler
@@ -59,17 +59,17 @@ public:  // with description
     // if *ialg = 0: use the G4ImportanceAlgorithm 
     // use a customised  importance algorithm derived from
     // G4VImportanceAlgorithm  
-    // create G4ParallelManager andG4ImportanceSampler
+    // create G4ParallelManager andG4ImportanceSplitExaminer
 
 public: // used internally by importance sampling 
 
   G4ParallelImportanceManager(G4VIStore &is, 
 			      G4ParallelManager &pmanager,
 			      const G4VImportanceAlgorithm *ialg = 0);
-    // create G4ParallelManager and G4ImportanceSampler
+    // create G4ParallelManager and G4ImportanceSplitExaminer
   
   ~G4ParallelImportanceManager();
-    // delete G4ParallelManager and G4ImportanceSampler
+    // delete G4ParallelManager and G4ImportanceSplitExaminer
     // and G4ImportanceAgorithm and G4ParallelImportanceProcess
     // if created
 
@@ -96,7 +96,7 @@ private:
   G4bool fDeleteAlg;
   const G4VImportanceAlgorithm *fIalgorithm;
 
-  G4VImportanceSampler *fSampler;
+  G4VImportanceSplitExaminer *fExaminer;
   G4ParallelImportanceProcess *fParallelImportanceProcess;
 };
 

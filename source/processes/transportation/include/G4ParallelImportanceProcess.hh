@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.3 2002-04-10 13:14:17 dressel Exp $
+// $Id: G4ParallelImportanceProcess.hh,v 1.4 2002-05-31 08:06:34 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -41,7 +41,7 @@
 #include "G4ParallelTransport.hh"
 #include "G4ImportancePostStepDoIt.hh"
 
-class G4VImportanceSampler;
+class G4VImportanceSplitExaminer;
 class G4Nsplit_Weight;
 
 class G4ParallelImportanceProcess : public G4ParallelTransport
@@ -49,7 +49,7 @@ class G4ParallelImportanceProcess : public G4ParallelTransport
 
 public:  // with description
 
-  G4ParallelImportanceProcess(const G4VImportanceSampler &aImportanceSampler,
+  G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
 			      G4VPGeoDriver &pgeodriver, 
 			      G4VParallelStepper &aStepper,
 			      const G4String &aName = "ParallelImportanceProcess");  
@@ -69,7 +69,7 @@ private:
 private:
 
   G4ParticleChange *fParticleChange;
-  const G4VImportanceSampler &fImportanceSampler;  
+  const G4VImportanceSplitExaminer &fImportanceSplitExaminer;  
   G4ImportancePostStepDoIt fImportancePostStepDoIt;
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.2 2002-04-09 17:40:16 gcosmo Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.3 2002-05-31 08:06:34 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,17 +32,17 @@
 // ----------------------------------------------------------------------
 
 #include "G4ParallelImportanceProcess.hh"
-#include "G4VImportanceSampler.hh"
+#include "G4VImportanceSplitExaminer.hh"
 #include "g4std/strstream"
 
 G4ParallelImportanceProcess::
-G4ParallelImportanceProcess(const G4VImportanceSampler &aImportanceSampler,
+G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
 		    G4VPGeoDriver &pgeodriver,
 		    G4VParallelStepper &aStepper, 
 		    const G4String &aName)
  : G4ParallelTransport(pgeodriver, aStepper, aName),
    fParticleChange(G4ParallelTransport::fParticleChange),
-   fImportanceSampler(aImportanceSampler)
+   fImportanceSplitExaminer(aImportanceSplitExaminer)
 {}
 
 
@@ -55,7 +55,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   G4ParallelTransport::PostStepDoIt(aTrack, aStep);
 
   // get new weight and number of clones
-  G4Nsplit_Weight nw(fImportanceSampler.Sample(aTrack.GetWeight()));
+  G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
   fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;

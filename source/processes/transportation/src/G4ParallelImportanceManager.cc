@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceManager.cc,v 1.6 2002-05-30 12:55:42 dressel Exp $
+// $Id: G4ParallelImportanceManager.cc,v 1.7 2002-05-31 08:06:34 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@
 #include "G4ParallelManager.hh"
 #include "G4ParallelWorld.hh"
 #include "G4IStore.hh"
-#include "G4ImportanceSampler.hh"
+#include "G4ImportanceSplitExaminer.hh"
 #include "G4ParallelImportanceProcess.hh"
 #include "G4ProcessPlacer.hh"
 #include "G4ImportanceAlgorithm.hh"
@@ -49,7 +49,7 @@ G4ParallelImportanceManager(G4VIStore &is,
    fDeleteAlg( ( ! ialg) ),
    fIalgorithm(( (fDeleteAlg) ? 
 		 new G4ImportanceAlgorithm : ialg)),
-   fSampler(new G4ImportanceSampler(*fIalgorithm, 
+   fExaminer(new G4ImportanceSplitExaminer(*fIalgorithm, 
                                     fParallelManager.
                                     GetParallelWorld().GetParallelStepper(),  
                                     is)),
@@ -65,7 +65,7 @@ G4ParallelImportanceManager(G4VIStore &is,
    fDeleteAlg( ( ! ialg) ),
    fIalgorithm(( (fDeleteAlg) ? 
 		 new G4ImportanceAlgorithm : ialg)),
-   fSampler(new G4ImportanceSampler(*fIalgorithm, 
+   fExaminer(new G4ImportanceSplitExaminer(*fIalgorithm, 
                                     fParallelManager.
                                     GetParallelWorld().GetParallelStepper(),  
                                     is)),
@@ -79,7 +79,7 @@ G4ParallelImportanceManager::CreateParallelImportanceProcess()
 {
   if (!fParallelImportanceProcess) {
     fParallelImportanceProcess = 
-      new G4ParallelImportanceProcess(*fSampler, 
+      new G4ParallelImportanceProcess(*fExaminer, 
 				      fParallelManager.
 				      GetParallelWorld().
 				      GetGeoDriver(), 
@@ -105,5 +105,5 @@ G4ParallelImportanceManager::~G4ParallelImportanceManager()
   }
   if (fCreatedPM) delete &fParallelManager;
   if (fDeleteAlg) delete fIalgorithm;
-  delete fSampler;
+  delete fExaminer;
 }
