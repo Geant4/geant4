@@ -1,4 +1,4 @@
-$Id: History,v 1.123 2001-05-24 13:40:20 johna Exp $
+$Id: History,v 1.124 2001-05-25 10:38:12 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+25th May 2001  John Allison
+- Bug fix in G4ASCIITree.cc: initialise fVerbosity(0).
 
 24th May 2001  John Allison  (vis-V03-01-03)
 - Added missing files G4ASCIITreeMessenger.hh/cc.
