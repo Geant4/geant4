@@ -1,0 +1,13 @@
+You select Sphere detector
+PreInit> #
+PreInit> # Macro file of "test10.cc"
+PreInit> # for Optical photons geometry test
+PreInit> #
+PreInit> You select Sphere detector
+Tst10PhysicsList::SetCuts:CutLength : 1 (mm)
+Idle> #/tracking/verbose 1
+Idle> You select Cone detector
+Idle>   A 10000 optical photons vertex has been generated at (-690.585,174.228,404.117)
+>>> Start Event 0
+>>> End Event 0
+Idle> 

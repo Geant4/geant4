@@ -12,7 +12,6 @@ PreInit> # 10 events
 PreInit> #
 PreInit> /mydet/SwitchDetector SimpleBox
 Now Detector is SimpleBox
-/run/geometryModified
 PreInit> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 PreInit> /gun/particle geantino
@@ -95,7 +94,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.0166667s Real=0s Sys=0s
+  User=0s Real=0.05s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
@@ -125,14 +124,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.0166667s Sys=0.0166667s
+  User=0s Real=0s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> #
 Idle> # SimpleBox geometry made by Air
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -170,11 +169,9 @@ Idle> # 10 events
 Idle> #
 Idle> /mydet/SwitchDetector Honeycomb
 Now Detector is Honeycomb
-/run/geometryModified
 Idle> /gun/direction 1 0 0
 Idle> /tracking/verbose 1
 Idle> /run/beamOn 1
-Start closing geometry.
 Start Run processing.
 
 *********************************************************************************************************
@@ -182,19 +179,48 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       SPhys initStep
-    1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+    0        0        0        0     1e+05        0        0         0      TPhys1 initStep
+    1      150        0        0     1e+05        0      150       150      TPhys1 Transportation
+    2      600        0        0     1e+05        0      450       600      TPhys1 Transportation
+    3 1.05e+03        0        0     1e+05        0      450  1.05e+03      TPhys1 Transportation
+    4  1.5e+03        0        0     1e+05        0      450   1.5e+03      TPhys1 Transportation
+    5 1.95e+03        0        0     1e+05        0      450  1.95e+03      TPhys1 Transportation
+    6  2.4e+03        0        0     1e+05        0      450   2.4e+03      TPhys1 Transportation
+    7 2.85e+03        0        0     1e+05        0      450  2.85e+03      TPhys1 Transportation
+    8  3.3e+03        0        0     1e+05        0      450   3.3e+03      TPhys1 Transportation
+    9 3.75e+03        0        0     1e+05        0      450  3.75e+03      TPhys1 Transportation
+   10  4.2e+03        0        0     1e+05        0      450   4.2e+03      TPhys1 Transportation
+   11 4.65e+03        0        0     1e+05        0      450  4.65e+03      TPhys1 Transportation
+   12  5.1e+03        0        0     1e+05        0      450   5.1e+03      TPhys1 Transportation
+   13 5.55e+03        0        0     1e+05        0      450  5.55e+03      TPhys1 Transportation
+   14    6e+03        0        0     1e+05        0      450     6e+03      TPhys1 Transportation
+   15 6.45e+03        0        0     1e+05        0      450  6.45e+03      TPhys1 Transportation
+   16  6.9e+03        0        0     1e+05        0      450   6.9e+03      TPhys1 Transportation
+   17 7.35e+03        0        0     1e+05        0      450  7.35e+03      TPhys1 Transportation
+   18  7.8e+03        0        0     1e+05        0      450   7.8e+03      TPhys1 Transportation
+   19 8.25e+03        0        0     1e+05        0      450  8.25e+03      TPhys1 Transportation
+   20  8.7e+03        0        0     1e+05        0      450   8.7e+03      TPhys1 Transportation
+   21 9.15e+03        0        0     1e+05        0      450  9.15e+03      TPhys1 Transportation
+   22  9.6e+03        0        0     1e+05        0      450   9.6e+03      TPhys1 Transportation
+   23    1e+04        0        0     1e+05        0      450     1e+04      TPhys1 Transportation
+   24 1.05e+04        0        0     1e+05        0      450  1.05e+04      TPhys1 Transportation
+   25  1.1e+04        0        0     1e+05        0      450   1.1e+04      TPhys1 Transportation
+   26 1.14e+04        0        0     1e+05        0      450  1.14e+04      TPhys1 Transportation
+   27 1.18e+04        0        0     1e+05        0      450  1.18e+04      TPhys1 Transportation
+   28 1.23e+04        0        0     1e+05        0      450  1.23e+04     CalPhys Transportation
+   29  1.5e+04        0        0     1e+05        0  2.7e+03   1.5e+04       WPhys Transportation
+   30    2e+04        0        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.06s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -210,19 +236,71 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       SPhys initStep
-    1        0    2e+04        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
+    0        0        0        0     1e+05        0        0         0      TPhys1 initStep
+    1        0      212        0     1e+05        0      212       212     CalPhys Transportation
+    2        0      232        0     1e+05        0     20.2       232      TPhys1 Transportation
+    3        0      568        0     1e+05        0      335       568     CalPhys Transportation
+    4        0      588        0     1e+05        0     20.2       588      TPhys1 Transportation
+    5        0 1.01e+03        0     1e+05        0      424  1.01e+03     CalPhys Transportation
+    6        0 1.03e+03        0     1e+05        0     20.2  1.03e+03      TPhys1 Transportation
+    7        0 1.37e+03        0     1e+05        0      335  1.37e+03     CalPhys Transportation
+    8        0 1.39e+03        0     1e+05        0     20.2  1.39e+03      TPhys1 Transportation
+    9        0 1.81e+03        0     1e+05        0      424  1.81e+03     CalPhys Transportation
+   10        0 1.83e+03        0     1e+05        0     20.2  1.83e+03      TPhys1 Transportation
+   11        0 2.17e+03        0     1e+05        0      335  2.17e+03     CalPhys Transportation
+   12        0 2.19e+03        0     1e+05        0     20.2  2.19e+03      TPhys1 Transportation
+   13        0 2.61e+03        0     1e+05        0      424  2.61e+03     CalPhys Transportation
+   14        0 2.63e+03        0     1e+05        0     20.2  2.63e+03      TPhys1 Transportation
+   15        0 2.97e+03        0     1e+05        0      335  2.97e+03     CalPhys Transportation
+   16        0 2.99e+03        0     1e+05        0     20.2  2.99e+03      TPhys1 Transportation
+   17        0 3.41e+03        0     1e+05        0      424  3.41e+03     CalPhys Transportation
+   18        0 3.43e+03        0     1e+05        0     20.2  3.43e+03      TPhys1 Transportation
+   19        0 3.77e+03        0     1e+05        0      335  3.77e+03     CalPhys Transportation
+   20        0 3.79e+03        0     1e+05        0     20.2  3.79e+03      TPhys1 Transportation
+   21        0 4.21e+03        0     1e+05        0      424  4.21e+03     CalPhys Transportation
+   22        0 4.23e+03        0     1e+05        0     20.2  4.23e+03      TPhys1 Transportation
+   23        0 4.57e+03        0     1e+05        0      335  4.57e+03     CalPhys Transportation
+   24        0 4.59e+03        0     1e+05        0     20.2  4.59e+03      TPhys1 Transportation
+   25        0 5.01e+03        0     1e+05        0      424  5.01e+03     CalPhys Transportation
+   26        0 5.03e+03        0     1e+05        0     20.2  5.03e+03      TPhys1 Transportation
+   27        0 5.37e+03        0     1e+05        0      335  5.37e+03     CalPhys Transportation
+   28        0 5.39e+03        0     1e+05        0     20.2  5.39e+03      TPhys1 Transportation
+   29        0 5.81e+03        0     1e+05        0      424  5.81e+03     CalPhys Transportation
+   30        0 5.83e+03        0     1e+05        0     20.2  5.83e+03      TPhys1 Transportation
+   31        0 6.17e+03        0     1e+05        0      335  6.17e+03     CalPhys Transportation
+   32        0 6.19e+03        0     1e+05        0     20.2  6.19e+03      TPhys1 Transportation
+   33        0 6.61e+03        0     1e+05        0      424  6.61e+03     CalPhys Transportation
+   34        0 6.63e+03        0     1e+05        0     20.2  6.63e+03      TPhys1 Transportation
+   35        0 6.97e+03        0     1e+05        0      335  6.97e+03     CalPhys Transportation
+   36        0 6.99e+03        0     1e+05        0     20.2  6.99e+03      TPhys1 Transportation
+   37        0 7.41e+03        0     1e+05        0      424  7.41e+03     CalPhys Transportation
+   38        0 7.43e+03        0     1e+05        0     20.2  7.43e+03      TPhys1 Transportation
+   39        0 7.77e+03        0     1e+05        0      335  7.77e+03     CalPhys Transportation
+   40        0 7.79e+03        0     1e+05        0     20.2  7.79e+03      TPhys1 Transportation
+   41        0 8.21e+03        0     1e+05        0      424  8.21e+03     CalPhys Transportation
+   42        0 8.23e+03        0     1e+05        0     20.2  8.23e+03      TPhys1 Transportation
+   43        0 8.57e+03        0     1e+05        0      335  8.57e+03     CalPhys Transportation
+   44        0 8.59e+03        0     1e+05        0     20.2  8.59e+03      TPhys1 Transportation
+   45        0 9.01e+03        0     1e+05        0      424  9.01e+03     CalPhys Transportation
+   46        0 9.03e+03        0     1e+05        0     20.2  9.03e+03      TPhys1 Transportation
+   47        0 9.37e+03        0     1e+05        0      335  9.37e+03     CalPhys Transportation
+   48        0 9.39e+03        0     1e+05        0     20.2  9.39e+03      TPhys1 Transportation
+   49        0 9.81e+03        0     1e+05        0      424  9.81e+03     CalPhys Transportation
+   50        0 9.83e+03        0     1e+05        0     20.2  9.83e+03      TPhys1 Transportation
+   51        0 1.02e+04        0     1e+05        0      335  1.02e+04     CalPhys Transportation
+   52        0  1.5e+04        0     1e+05        0 4.83e+03   1.5e+04       WPhys Transportation
+   53        0    2e+04        0     1e+05        0    5e+03     2e+04  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.1s Real=0.1s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -238,19 +316,89 @@ Start Run processing.
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       SPhys initStep
-    1    2e+04    2e+04        0     1e+05        0 2.83e+04  2.83e+04  OutOfWorld Transportation
+    0        0        0        0     1e+05        0        0         0      TPhys1 initStep
+    1      117      117        0     1e+05        0      166       166     CalPhys Transportation
+    2      177      177        0     1e+05        0     84.1       250      TPhys1 Transportation
+    3      373      373        0     1e+05        0      278       528     CalPhys Transportation
+    4      376      376        0     1e+05        0        4       532      TPhys1 Transportation
+    5      624      624        0     1e+05        0      350       882     CalPhys Transportation
+    6      654      654        0     1e+05        0     42.6       925      TPhys1 Transportation
+    7      971      971        0     1e+05        0      449  1.37e+03     CalPhys Transportation
+    8      985      985        0     1e+05        0     19.2  1.39e+03      TPhys1 Transportation
+    9 1.27e+03 1.27e+03        0     1e+05        0      397  1.79e+03     CalPhys Transportation
+   10  1.3e+03  1.3e+03        0     1e+05        0     44.8  1.83e+03      TPhys1 Transportation
+   11  1.4e+03  1.4e+03        0     1e+05        0      150  1.98e+03     CalPhys Transportation
+   12 1.52e+03 1.52e+03        0     1e+05        0      160  2.14e+03      TPhys1 Transportation
+   13 1.81e+03 1.81e+03        0     1e+05        0      414  2.56e+03     CalPhys Transportation
+   14 1.82e+03 1.82e+03        0     1e+05        0     12.8  2.57e+03      TPhys1 Transportation
+   15 2.13e+03 2.13e+03        0     1e+05        0      444  3.02e+03     CalPhys Transportation
+   16 2.18e+03 2.18e+03        0     1e+05        0     60.6  3.08e+03      TPhys1 Transportation
+   17  2.4e+03  2.4e+03        0     1e+05        0      318  3.39e+03      TPhys1 Transportation
+   18 2.62e+03 2.62e+03        0     1e+05        0      318  3.71e+03     CalPhys Transportation
+   19 2.67e+03 2.67e+03        0     1e+05        0     60.6  3.77e+03      TPhys1 Transportation
+   20 2.98e+03 2.98e+03        0     1e+05        0      444  4.22e+03     CalPhys Transportation
+   21 2.99e+03 2.99e+03        0     1e+05        0     12.8  4.23e+03      TPhys1 Transportation
+   22 3.28e+03 3.28e+03        0     1e+05        0      414  4.64e+03     CalPhys Transportation
+   23  3.4e+03  3.4e+03        0     1e+05        0      160   4.8e+03      TPhys1 Transportation
+   24  3.5e+03  3.5e+03        0     1e+05        0      150  4.95e+03     CalPhys Transportation
+   25 3.53e+03 3.53e+03        0     1e+05        0     44.8     5e+03      TPhys1 Transportation
+   26 3.82e+03 3.82e+03        0     1e+05        0      397   5.4e+03     CalPhys Transportation
+   27 3.83e+03 3.83e+03        0     1e+05        0     19.2  5.41e+03      TPhys1 Transportation
+   28 4.15e+03 4.15e+03        0     1e+05        0      449  5.86e+03     CalPhys Transportation
+   29 4.18e+03 4.18e+03        0     1e+05        0     42.6  5.91e+03      TPhys1 Transportation
+   30 4.42e+03 4.42e+03        0     1e+05        0      350  6.26e+03     CalPhys Transportation
+   31 4.43e+03 4.43e+03        0     1e+05        0        4  6.26e+03      TPhys1 Transportation
+   32 4.62e+03 4.62e+03        0     1e+05        0      278  6.54e+03     CalPhys Transportation
+   33 4.68e+03 4.68e+03        0     1e+05        0     84.1  6.62e+03      TPhys1 Transportation
+   34 4.99e+03 4.99e+03        0     1e+05        0      437  7.06e+03     CalPhys Transportation
+   35    5e+03    5e+03        0     1e+05        0     9.68  7.07e+03      TPhys1 Transportation
+   36  5.3e+03  5.3e+03        0     1e+05        0      427   7.5e+03     CalPhys Transportation
+   37 5.38e+03 5.38e+03        0     1e+05        0      115  7.61e+03      TPhys1 Transportation
+   38 5.54e+03 5.54e+03        0     1e+05        0      226  7.84e+03     CalPhys Transportation
+   39 5.55e+03 5.55e+03        0     1e+05        0     17.1  7.86e+03      TPhys1 Transportation
+   40 5.82e+03 5.82e+03        0     1e+05        0      376  8.23e+03     CalPhys Transportation
+   41 5.84e+03 5.84e+03        0     1e+05        0       29  8.26e+03      TPhys1 Transportation
+   42 6.16e+03 6.16e+03        0     1e+05        0      450  8.71e+03     CalPhys Transportation
+   43 6.18e+03 6.18e+03        0     1e+05        0       29  8.74e+03      TPhys1 Transportation
+   44 6.45e+03 6.45e+03        0     1e+05        0      376  9.12e+03     CalPhys Transportation
+   45 6.46e+03 6.46e+03        0     1e+05        0     17.1  9.13e+03      TPhys1 Transportation
+   46 6.62e+03 6.62e+03        0     1e+05        0      226  9.36e+03     CalPhys Transportation
+   47  6.7e+03  6.7e+03        0     1e+05        0      115  9.47e+03      TPhys1 Transportation
+   48    7e+03    7e+03        0     1e+05        0      427   9.9e+03     CalPhys Transportation
+   49 7.01e+03 7.01e+03        0     1e+05        0     9.68  9.91e+03      TPhys1 Transportation
+   50 7.32e+03 7.32e+03        0     1e+05        0      437  1.03e+04     CalPhys Transportation
+   51 7.38e+03 7.38e+03        0     1e+05        0     84.1  1.04e+04      TPhys1 Transportation
+   52 7.57e+03 7.57e+03        0     1e+05        0      278  1.07e+04     CalPhys Transportation
+   53 7.58e+03 7.58e+03        0     1e+05        0        4  1.07e+04      TPhys1 Transportation
+   54 7.82e+03 7.82e+03        0     1e+05        0      350  1.11e+04     CalPhys Transportation
+   55 7.85e+03 7.85e+03        0     1e+05        0     42.6  1.11e+04      TPhys1 Transportation
+   56 8.17e+03 8.17e+03        0     1e+05        0      449  1.16e+04     CalPhys Transportation
+   57 8.18e+03 8.18e+03        0     1e+05        0     19.2  1.16e+04      TPhys1 Transportation
+   58 8.47e+03 8.47e+03        0     1e+05        0      397   1.2e+04     CalPhys Transportation
+   59  8.5e+03  8.5e+03        0     1e+05        0     44.8   1.2e+04      TPhys1 Transportation
+   60  8.6e+03  8.6e+03        0     1e+05        0      150  1.22e+04     CalPhys Transportation
+   61 8.72e+03 8.72e+03        0     1e+05        0      160  1.23e+04      TPhys1 Transportation
+   62 9.01e+03 9.01e+03        0     1e+05        0      414  1.27e+04     CalPhys Transportation
+   63 9.02e+03 9.02e+03        0     1e+05        0     12.8  1.28e+04      TPhys1 Transportation
+   64 9.33e+03 9.33e+03        0     1e+05        0      444  1.32e+04     CalPhys Transportation
+   65 9.38e+03 9.38e+03        0     1e+05        0     60.6  1.33e+04      TPhys1 Transportation
+   66  9.6e+03  9.6e+03        0     1e+05        0      318  1.36e+04      TPhys1 Transportation
+   67 9.82e+03 9.82e+03        0     1e+05        0      318  1.39e+04     CalPhys Transportation
+   68 9.87e+03 9.87e+03        0     1e+05        0     60.6   1.4e+04      TPhys1 Transportation
+   69 1.02e+04 1.02e+04        0     1e+05        0      444  1.44e+04     CalPhys Transportation
+   70  1.5e+04  1.5e+04        0     1e+05        0 6.81e+03  2.12e+04       WPhys Transportation
+   71    2e+04    2e+04        0     1e+05        0 7.07e+03  2.83e+04  OutOfWorld Transportation
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.06s Sys=0.02s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
