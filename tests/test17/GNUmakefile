@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-10-30 22:12:22 vnivanch Exp $
+# $Id: GNUmakefile,v 1.6 2002-12-09 11:25:10 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,24 +11,9 @@ ifndef G4INSTALL
   G4INSTALL = ../../
 endif
 
-.PHONY: all tools
+.PHONY: all
  
-#tools:
-#	cd ../tools/lib; $(MAKE)
-#	$(MAKE) all
-
 all: lib bin
-
-include $(G4INSTALL)/config/architecture.gmk
-
-
-# ifeq ($(G4SYSTEM),Linux-g++)
-# LDFLAGS  += -L/afs/cern.ch/asis/i386_redhat51/cern/pro/lib
-# LOADLIBS += -lpacklib $(FCLIBS)
-# else
-# LDFLAGS  += -L/cern/pro/lib
-# LOADLIBS += -lpacklib $(FCLIBS)
-# endif
 
 include $(G4INSTALL)/config/binmake.gmk
 

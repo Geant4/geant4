@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-11-04 10:47:09 vnivanch Exp $
+# $Id: GNUmakefile,v 1.5 2002-12-09 11:25:09 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -12,8 +12,7 @@ ifndef G4INSTALL
   G4INSTALL = ../..
 endif
 
-.PHONY: all tools
- 
+.PHONY: all
 
 all: lib bin
 

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2001-11-29 16:50:58 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2002-12-09 11:25:09 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -24,12 +24,8 @@ ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
   CPPFLAGS := $(NCPP) -w
 endif
 
-.PHONY: all tools
+.PHONY: all
  
-tools:
-	cd ../tools/lib; $(MAKE)
-	$(MAKE) all
-
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
