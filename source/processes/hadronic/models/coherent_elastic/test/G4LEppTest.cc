@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEppTest.cc,v 1.7 2001-11-15 17:28:35 hpw Exp $
+// $Id: G4LEppTest.cc,v 1.8 2001-11-17 01:48:12 fjones Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4ios.hh"
@@ -137,7 +137,7 @@ int main()
    G4HadronElasticProcess theProcess; 
    G4LEnp theModel;
 
-   //   theModel.SetCoulombSuppression(0);
+   //   theModel.SetCoulombEffects(1);
 
    G4cout << "Model instanciated!!!" << G4endl;
    //   theModel.SetVerboseLevel(2);

@@ -1,8 +1,8 @@
-Histo/File 0 g4lepptest.hbook 0 -X
-Exec G4LEppTest.style
+*Histo/File 0 g4lepptest.hbook 0 -X
+*Exec G4LEppTest.style
 Cdir //LUN1
 zone 2 2
 histo/plot '7'
 histo/plot '8'
 histo/plot '9'
-picture/print theta.ps
+*picture/print theta.ps

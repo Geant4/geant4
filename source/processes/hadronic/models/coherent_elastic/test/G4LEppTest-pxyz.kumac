@@ -1,5 +1,5 @@
-Histo/File 0 g4lepptest.hbook 0 -X
-Exec G4LEppTest.style
+*Histo/File 0 g4lepptest.hbook 0 -X
+*Exec G4LEppTest.style
 Cdir //LUN1
 zone 2 3
 histo/plot '1'
@@ -8,4 +8,4 @@ histo/plot '2'
 histo/plot '5'
 histo/plot '3'
 histo/plot '6'
-picture/print pxyz.ps
+*picture/print pxyz.ps
