@@ -1,7 +1,11 @@
-$Id: History,v 1.11 2001-05-29 13:56:58 johna Exp $
+$Id: History,v 1.12 2001-08-17 22:57:51 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+17th August 2001  John Allison  (vis-V03-02-12)
+- test19.cc registers graphics system XXX.
+- MySteppingAction draws a scale.
 
 29th May 2001  John Allison
 - Cleaned up Linux pedantic warnings (unused variables, comparisons, etc.)

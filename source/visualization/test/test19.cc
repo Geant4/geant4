@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.13 2001-08-05 19:02:31 johna Exp $
+// $Id: test19.cc,v 1.14 2001-08-17 22:56:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@
 
 #ifdef G4VIS_USE
 #include "MyVisManager.cc"
+#include "G4XXX.hh"
 #endif
 
 #ifdef G4UI_USE_WIN32
@@ -129,6 +130,7 @@ int main (int argc, char** argv) {
   // Instantiate and initialise Visualization Manager.
   G4VisManager* visManager = new MyVisManager;
   visManager -> SetVerboseLevel (verbosityString);
+  visManager -> RegisterGraphicsSystem(new G4XXX);
   visManager -> Initialize ();
 #endif
 
