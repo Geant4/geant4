@@ -102,6 +102,7 @@ void G4hNuclearStoppingModel::InitializeMe()
   }
 
   // Default is nuclear stopping fluctuations On
+  //  nStopingPowerTable->SetNuclearStoppingFluctuationsOn();  
   nStopingPowerTable->SetNuclearStoppingFluctuationsOff();  
 }
 

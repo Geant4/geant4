@@ -94,6 +94,7 @@
 #include "G4Gamma.hh"
 #include "G4LogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
+#include "G4ProcessManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -377,10 +378,13 @@ void G4hLowEnergyIonisation::BuildLossTable(
     ionlossBB = theBetheBlochModel->TheValue(&aParticleType,material,highE) ;
     ionlossBB -= DeltaRaysEnergy(material,highE,proton_mass_c2) ;
 
+    /*
     if(theBarkas) {
       ionlossBB += BarkasTerm(material,highE)*charge ;
       ionlossBB += BlochTerm(material,highE,1.0) ;
     }
+    */
+    
     paramB =  ionloss/ionlossBB - 1.0 ; 
 
     // now comes the loop for the kinetic energy values      
@@ -404,10 +408,12 @@ void G4hLowEnergyIonisation::BuildLossTable(
 
         ionloss -= DeltaRaysEnergy(material,lowEdgeEnergy,proton_mass_c2) ;
 
+	/*
         if(theBarkas) {
           ionloss += BarkasTerm(material,lowEdgeEnergy)*charge ;
           ionloss += BlochTerm(material,lowEdgeEnergy,1.0) ;
         }
+	*/
 	ionloss *= (1.0 + paramB*highEnergy/lowEdgeEnergy) ;
       }      
 	  
@@ -567,6 +573,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
+  initialMass = aParticleType.GetPDGMass();
     
   //create table
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
@@ -605,14 +612,9 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-      /*
-      chargeSquare = theIonEffChargeModel->
-                     TheValue(&aParticleType,material,lowEdgeEnergy) ;
-		     */  
       G4double sigma = 0.0 ;  
       for (G4int iel=0; iel<NumberOfElements; iel++ ) {
 	sigma += theAtomicNumDensityVector[iel]*
-	  //                 chargeSquare*
 		 ComputeMicroscopicCrossSection(
                         aParticleType,
 			lowEdgeEnergy,
@@ -651,7 +653,7 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   G4double energy, beta2, tmax, var ;
   G4double totalCrossSection = 0.0 ;
   
-  G4double particleMass = aParticleType.GetPDGMass() ;
+  G4double particleMass = initialMass;
   
   // get particle data ...................................
   
@@ -701,7 +703,7 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
  
    *condition = NotForced ;
 
-   G4double kineticEnergy = aParticle->GetKineticEnergy() ;
+   G4double kineticEnergy = (aParticle->GetKineticEnergy())*initialMass/(aParticle->GetMass());
    chargeSquare = theIonEffChargeModel->TheValue(aParticle, aMaterial);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
@@ -732,7 +734,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4double stepLimit = 0.0 ;
   G4double dx, highEnergy;
   
-  G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
+  G4double massRatio = initialMass/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
   
   // Scale the kinetic energy
@@ -852,7 +854,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   const G4DynamicParticle* particle = trackData.GetDynamicParticle() ;
   
   G4double kineticEnergy = particle->GetKineticEnergy() ;
-  G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
+  G4double massRatio = initialMass/(particle->GetMass()) ;
   G4double tscaled= kineticEnergy*massRatio ; 
   G4double eloss = 0.0 ;
   G4double nloss = 0.0 ;
@@ -870,8 +872,10 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     // proton parametrisation model  
   } else if(tscaled < protonHighEnergy && charge > 0.0) {
     
-    if(nStopping) nloss = 
-      (theNuclearStoppingModel->TheValue(particle, material))*step ;
+    if(nStopping) {
+      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step 
+	* sqrt(chargeSquare) / (particle->GetCharge());
+    }
     
     G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
     
@@ -880,12 +884,6 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
       G4double ts = eFinal*massRatio;
       G4double fdEdx1 = ProtonParametrisedDEDX(material,ts)*chargeSquare;
 
-      // Correction for positive ions
-      //if(theBarkas && 1.0 < charge) {
-      //  fdEdx1 += BarkasTerm(material,ts)*(charge -1.0) * chargeSquare ;
-      //  fdEdx1 += BlochTerm(material,ts,chargeSquare) ; 
-      //  fdEdx1 -= BlochTerm(material,ts,1.0) ; 
-      // }
       eloss = (fdEdx + fdEdx1) * step * 0.5 ;
     } else {
       eloss = kineticEnergy - nloss ;
@@ -894,9 +892,10 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     // antiproton parametrisation model
   } else if(tscaled < antiProtonHighEnergy && charge < 0.0) {
     
-    if(nStopping) nloss = 
-      (theNuclearStoppingModel->TheValue(particle, material))*step ;
-    
+    if(nStopping) {
+      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
+    }
+              
     G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
     
     if(0.0 < eFinal) {
@@ -937,6 +936,13 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
     // step shorter than linear step limit       
     } else {
       eloss = step*fdEdx ;
+    }
+    // Correction for positive ions
+    if(theBarkas && 1.0 < charge) {
+      G4double ts = tscaled - eloss*0.5*massRatio;
+      if(ts < protonHighEnergy) ts = protonHighEnergy;
+      eloss += BarkasTerm(material,ts)*charge*chargeSquare*step;
+      eloss += BlochTerm(material,ts,chargeSquare)*step; 
     }
   }
 
@@ -1322,7 +1328,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalKineticEnergy = 0.;
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
-      if (aParticle->GetDefinition()->GetParticleName() == "proton")
+      if (!aParticle->GetDefinition()->GetProcessManager()->GetAtRestProcessVector())
 	aParticleChange.SetStatusChange(fStopAndKill);
       else  aParticleChange.SetStatusChange(fStopButAlive);
     }
@@ -1339,7 +1345,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
     for (size_t l = 0; l < nSecondaries; l++) {
 
       aSecondary = (*secondaryVector)[l];
-      if(aSecondary) aParticleChange.AddSecondary(aSecondary); 
+      if(aSecondary) {
+        aParticleChange.AddSecondary(aSecondary);
+      } 
     }
     delete secondaryVector;
   }

@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2001-11-30 01:31:40 pia Exp $
+$Id: History,v 1.132 2002-02-26 17:59:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+26.02.2002 - MGP, tag 
+             V.Ivanchenko bug fix for GenericIons 
 
 30.11.2001 - MGP, tag emlowen-V03-02-49
              Major physics improvement in electron processes by V.I.
