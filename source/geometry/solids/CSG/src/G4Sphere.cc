@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.15 2002-01-30 14:44:12 grichine Exp $
+// $Id: G4Sphere.cc,v 1.16 2002-06-19 10:00:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -37,6 +37,7 @@
 // 18.11.99 V.Grichine, side = kNull in Distance ToOut(p,v,...)
 // 06.03.00 V.Grichine, modifications in Distance ToOut(p,v,...)
 // 30.01.02 V.Grichine, bug fixed in Inside(p), && -> || at l.451
+// 19.06.02 V.Grichine, bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
 //
 
 #include <assert.h>
@@ -473,7 +474,7 @@ EInside G4Sphere::Inside(const G4ThreeVector& p) const
   // Theta bondaries
   // (in!=kOutside)
   
-  if ( rho2 || p.z() )
+  if ( (rho2 || p.z()) && fDTheta < M_PI - kAngTolerance*0.5)
   {
     rho    = sqrt(rho2);
     pTheta = atan2(rho,p.z());
