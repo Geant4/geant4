@@ -150,6 +150,7 @@ private:
   Lizard::Quantity<float> ntZ;
   
 #endif
+
   
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 

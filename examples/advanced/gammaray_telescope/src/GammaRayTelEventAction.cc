@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.12 2001-12-04 11:40:28 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.13 2001-12-04 13:23:52 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -162,8 +162,10 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	    G4endl;	  
 	  
 #ifdef G4ANALYSIS_USE
+
 	  // Here we fill the histograms of the Analysis manager
 	  GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
+
 	  if(IsX) 
 	    {
 	      if (analysis->GetHisto2DMode()=="position")
@@ -185,7 +187,6 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	  
 #ifdef G4ANALYSIS_USE_NTUPLE
 	  
-	  G4cout << "SONO qui EVENT " << G4endl;
 	  analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
 			       (*THC)[i]->GetPos().y()/mm,
 			       (*THC)[i]->GetPos().z()/mm);

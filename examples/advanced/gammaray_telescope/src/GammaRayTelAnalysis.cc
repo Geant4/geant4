@@ -68,11 +68,13 @@ void GammaRayTelAnalysis::Init()
 
   analysisMessenger = new GammaRayTelAnalysisMessenger(this);
   histoManager = createIHistoManager();
-
+  
 #ifdef G4ANALYSIS_USE_NTUPLE
   ntFactory = Lizard::createNTupleFactory();
 #endif
+  
   vectorFactory = createIVectorFactory();
+
   plotter = createIPlotter();
 }                       
 
@@ -216,14 +218,13 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
   else
     plotter->zone(1,1,0,0);
 
-  sprintf(name,"gammaraytel%d.hbook::1", n);
-  
 
 #ifdef G4ANALYSIS_USE_NTUPLE
   
   // Book ntuples
+  sprintf(name,"gammaraytel%d.hbook::1", n);
   ntuple = ntFactory->createC(name);
-  
+
   //  Add and bind the attributes to the ntuple
   if ( !( ntuple->addAndBind( "energy", ntEnergy) &&
 	  ntuple->addAndBind( "plane" , ntPlane) &&
@@ -379,7 +380,6 @@ void GammaRayTelAnalysis::plot2D(IHistogram2D* histo)
 #ifdef G4ANALYSIS_USE_NTUPLE
 void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 {
-  G4cout << "USO NTUPLA" << G4endl;
   ntEnergy = E;
   ntPlane = p;
   ntX = x;

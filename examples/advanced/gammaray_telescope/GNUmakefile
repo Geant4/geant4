@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2001-12-04 11:40:27 flongo Exp $
+# $Id: GNUmakefile,v 1.8 2001-12-04 13:23:51 flongo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -24,6 +24,11 @@ include $(G4INSTALL)/config/architecture.gmk
 ifdef G4ANALYSIS_USE
 
    CPPFLAGS  += -I$(LHCXX_REL_DIR)/include
+
+ifdef G4ANALYSIS_USE_NTUPLE
+  CPPFLAGS += -DG4ANALYSIS_USE_NTUPLE
+endif
+
 #   C_FLAGS 	 += -I$(LHCXX_REL_DIR)/include
    LDFLAGS  += -L$(LHCXX_REL_DIR)/lib
 # general stuff:	
@@ -40,6 +45,9 @@ ifdef G4ANALYSIS_USE
    LOADLIBS += -lCHBook -ldl -lg2c 
 # Xm Xt
    LDFLAGS  += -L$/usr/local/lib -lXm -L/usr/X11R6/lib -lXt
+
+
+
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

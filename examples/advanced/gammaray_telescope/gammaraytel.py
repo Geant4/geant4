@@ -1,4 +1,4 @@
-# tell HistoManger where to find the histograms:
+# tell HistoManager where to find the histograms:
 # change the name to access hbook files different from the first run
 hm.selectStore("gammaraytel0.hbook")
 
