@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2002-06-10 11:59:45 radoone Exp $
+# $Id: GNUmakefile,v 1.3 2002-06-11 15:48:17 radoone Exp $
 # --------------------------------------------------------------
 # GNUmakefile for GDML sample module. Radovan Chytracek, 30/05/2002.
 # --------------------------------------------------------------
@@ -37,13 +37,13 @@ EXTRALIBSSOURCEDIRS += \
                        $(GDMLLIBROOT)/management \
                        $(GDMLLIBROOT)/subscribers
                        
-EXTRA_LINK_DEPENDENCIES := \
-                         $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libgogdml.a \
-                         $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLmanagement.a \
-                         $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLprocesses.a \
-                         $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLsaxana.a \
-                         $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLschema.a \
-                         $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLsubscribers.a
+# EXTRA_LINK_DEPENDENCIES := \
+#                          $(G4WORKDIR)/tmp/$(G4SYSTEM)/$(name)/libgogdml.a \
+#                          $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLmanagement.a \
+#                          $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLprocesses.a \
+#                          $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLsaxana.a \
+#                          $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLschema.a \
+#                          $(G4WORKDIR)/lib/$(G4SYSTEM)/libGDMLsubscribers.a
 
 
 .PHONY: all
