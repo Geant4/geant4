@@ -22,17 +22,17 @@ DefaultHepRepFactory::DefaultHepRepFactory() {
 DefaultHepRepFactory::~DefaultHepRepFactory() {
 }
 
-HepRepReader* DefaultHepRepFactory::createHepRepReader (istream* in) {
+HepRepReader* DefaultHepRepFactory::createHepRepReader (istream*) {
     cerr << "DefaultHepRepFactory::createHepRepReader not implemented" << endl;
     return NULL;
 }
 
-HepRepReader* DefaultHepRepFactory::createHepRepReader (std::string filename) {
+HepRepReader* DefaultHepRepFactory::createHepRepReader (std::string) {
     cerr << "DefaultHepRepFactory::createHepRepReader not implemented" << endl;
     return NULL;
 }
 
-HepRepWriter* DefaultHepRepFactory::createHepRepWriter(ostream* out, bool randomAccess, bool compress) {
+HepRepWriter* DefaultHepRepFactory::createHepRepWriter(ostream*, bool, bool) {
     cerr << "DefaultHepRepFactory::createHepRepWriter not implemented" << endl;
     return NULL;
 }

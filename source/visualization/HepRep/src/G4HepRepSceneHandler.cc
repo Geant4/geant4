@@ -295,7 +295,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
 
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
-        HepRepPoint* point = factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
+        factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
     }
 }
 
@@ -331,7 +331,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
-        HepRepPoint* point = factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
+        factory->createHepRepPoint(instance, vertex.x(), vertex.y(), vertex.z());
     }
 }
 
@@ -349,7 +349,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 
     SetMarker(instance, circle);
 
-    HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
+    factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
 
@@ -392,11 +392,10 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         do {
 	        notLastEdge = polyhedron.GetNextVertex (vertex, edgeFlag);
             vertex = transform * vertex;
-	        HepRepPoint* point;
 	        if (IsEventData()) {
-	            point = factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
+	            factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
 	        } else {
-	            point = factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
+	            factory->createHepRepPoint(face, vertex.x(), vertex.y(), vertex.z());
 	        }
         } while (notLastEdge);
     } while (notLastFace);
@@ -426,7 +425,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 
     instance->addAttValue("MarkName", G4String("Box"));
 
-    HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
+    factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
 }
 
 
@@ -466,7 +465,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
     for (i = 0; i < traj.GetPointEntries(); i++) {
         G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
         G4Point3D vertex = aTrajectoryPoint->GetPosition();
-        HepRepPoint* point = factory->createHepRepPoint(trajInstance, vertex.x(), vertex.y(), vertex.z());
+        factory->createHepRepPoint(trajInstance, vertex.x(), vertex.y(), vertex.z());
     }
 
     for (i = 0; i < traj.GetPointEntries(); i++) {
@@ -479,7 +478,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& traj) {
 
         // Specify the position of the trajectory point.
         G4Point3D vertex = aTrajectoryPoint->GetPosition();
-        HepRepPoint* point = factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
+        factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
     }
 }
 
@@ -570,8 +569,8 @@ void G4HepRepSceneHandler::SetMarker (HepRepInstance *instance, const G4VMarker&
 
 HepRepInstance* G4HepRepSceneHandler::CreateGeometryInstance(G4String typeName, G4int depth) {
 
-//    cout << "typeName " << typeName << endl;
-//    cout << "depth " << depth << endl;
+    cout << "typeName " << typeName << endl;
+    cout << "depth " << depth << endl;
 
     return factory->createHepRepInstance(geometryInstanceTree, detectorType);
 /*
@@ -656,8 +655,8 @@ HepRepInstance* G4HepRepSceneHandler::CreateEventInstance(G4String typeName, G4i
                                                           const map<G4String,G4AttDef>* attDefs,
                                                           vector<G4AttValue>* attValues) {
 
-//    cout << "typeName " << typeName << endl;
-//    cout << "depth " << depth << endl;
+    cout << "typeName " << typeName << endl;
+    cout << "depth " << depth << endl;
 
     return factory->createHepRepInstance(eventInstanceTree, eventType);
 /*

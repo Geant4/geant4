@@ -17,7 +17,7 @@ DefaultHepRepInstanceTree::~DefaultHepRepInstanceTree() {
     }
 }
 
-void DefaultHepRepInstanceTree::overlay(HepRepInstanceTree * instanceTree) {
+void DefaultHepRepInstanceTree::overlay(HepRepInstanceTree *) {
     cerr << "DefaultHepRepInstanceTree::overlay(HepRepInstanceTree * instanceTree) not implemented." << endl;
 }
 

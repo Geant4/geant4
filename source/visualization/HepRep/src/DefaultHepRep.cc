@@ -66,12 +66,12 @@ void DefaultHepRep::removeInstanceTree(HepRepInstanceTree*) {
     cerr << "DefaultHepRep::removeInstanceTree(HepRepInstanceTree*) not implemented." << endl;
 }
 
-HepRepInstanceTree* DefaultHepRep::getInstanceTreeTop(string name, string version) {
+HepRepInstanceTree* DefaultHepRep::getInstanceTreeTop(string, string) {
     cerr << "DefaultHepRep::getInstanceTreeTop(string, string) not implemented." << endl;
     return NULL;
 }
 
-HepRepInstanceTree* DefaultHepRep::getInstances(string name, string version,
+HepRepInstanceTree* DefaultHepRep::getInstances(string, strings,
                                                 vector<string>) {
     cerr << "DefaultHepRep::getInstances(string, string, vector<string>) not implemented." << endl;
     return NULL;

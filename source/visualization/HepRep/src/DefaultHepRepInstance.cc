@@ -29,7 +29,7 @@ DefaultHepRepInstance::~DefaultHepRepInstance() {
     }
 }
 
-void DefaultHepRepInstance::overlay(HepRepInstance * instance) {
+void DefaultHepRepInstance::overlay(HepRepInstance *) {
     cerr << "DefaultHepRepInstance::overlay(HepRepInstance * instance) not implemented." << endl;
 }
 
