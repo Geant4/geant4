@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.7 2003-01-27 13:47:44 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.8 2003-01-28 08:57:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,8 +107,7 @@ G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
   G4cout<<numberCo<< " processi Compton"<< G4endl;
   G4cout<<numberPair<< " processi di produzione di coppie"<< G4endl;}
  
-  G4cout<<"particelle trasmesse"<<number<<G4endl;
-  G4cout<<"particelle bacscatterate"<<numberB<<G4endl;
+ 
  
 }
 

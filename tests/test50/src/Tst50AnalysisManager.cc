@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.5 2003-01-16 09:53:04 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.6 2003-01-28 08:57:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifdef  G4ANALYSIS_USE
@@ -78,15 +78,14 @@ Tst50AnalysisManager::Tst50AnalysisManager() :
   histFact = aFact->createHistogramFactory( *theTree );
   tupFact  = aFact->createTupleFactory    ( *theTree );
 
-  p_Primary= new Tst50PrimaryGeneratorAction();
-  initial_energy= p_Primary->GetInitialEnergy();
+
 }
 
 
 
 Tst50AnalysisManager::~Tst50AnalysisManager() 
 { 
-  delete  p_Primary;
+
   delete tupFact;
   tupFact=0;
 
@@ -114,13 +113,18 @@ void Tst50AnalysisManager::book()
  
 
 
- h1= histFact->createHistogram1D("10","Energy Deposit",initial_energy*50. ,0.,initial_energy);
+  // h1= histFact->createHistogram1D("10","Energy Deposit",200. ,0.,2.);
 
- h2=histFact->createHistogram1D("20","Primary transmittes particle energy",initial_energy*50. ,0.,initial_energy);
+ h2=histFact->createHistogram1D("20","Primary transmitted particle energy/initial_energy",1000. ,0.,1.);
+ h3=histFact->createHistogram1D("30","Primary backscattered  particle energy/initial_energy",1000. ,0.,1.);
+ 
+h4=histFact->createHistogram1D("40","angle of backscattered particles",80.*2, 80.,190.);
+
+ h5=histFact->createHistogram1D("50","angle of transmitted  particles",100.*2,0.,100.);
 
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
 
- std::string columnNames = "float energy, float range";
+ std::string columnNames = "double initial_energy; double energy; double angle";
  std::string options = "";
  if (tupFact) ntuple = tupFact->create("1","1",columnNames, options);
  // check for non-zero ...
@@ -134,13 +138,32 @@ void Tst50AnalysisManager::book()
 
 void Tst50AnalysisManager::energy_deposit(G4double En)
 {
-  h1->fill(En);
+  //  h1->fill(En);
 }
 void Tst50AnalysisManager::energy_transmitted(G4double En2)
 {
   h2->fill(En2);
 }
-void Tst50AnalysisManager::fill_range(G4double en,G4double range)
+
+void Tst50AnalysisManager::energy_backscatter(G4double En_back)
+{
+
+  h3->fill(En_back);
+}
+void Tst50AnalysisManager::angleB(G4double angle)
+{
+
+  h4->fill(angle);
+}
+void Tst50AnalysisManager::angleT(G4double angle)
+{
+
+  h5->fill(angle);
+}
+
+
+
+void Tst50AnalysisManager::fill_data(G4double initial_en, G4double en, G4double angle)
 {
 
   //ntuple = dynamic_cast<ITuple *> ( theTree->find("1") );
@@ -151,9 +174,13 @@ void Tst50AnalysisManager::fill_range(G4double en,G4double range)
   }
   if (ntuple)
     {
-  ntuple->fill(1, en);// fill ( int column, double value )
-  ntuple->fill(2, range);
- 
+
+  G4int ien = ntuple->findColumn("initial_energy" );
+  G4int ien2 = ntuple->findColumn( "energy" );
+  G4int iangle = ntuple->findColumn( "angle" );
+  ntuple->fill(ien, initial_en);// fill ( int column, double value )
+  ntuple->fill(ien2,en);
+  ntuple->fill(iangle,angle);
 
   ntuple->addRow();
     }

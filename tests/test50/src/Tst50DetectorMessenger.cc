@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.cc,v 1.5 2003-01-16 14:11:51 guatelli Exp $
+// $Id: Tst50DetectorMessenger.cc,v 1.6 2003-01-28 08:57:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
   AbsMaterCmd = new G4UIcmdWithAString("/target/setTargetMat",this);
   AbsMaterCmd->SetGuidance("Select Material of the Target.");
   AbsMaterCmd->SetParameterName("choice",false);
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
   
      
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetThick",this);
@@ -58,34 +58,34 @@ Tst50DetectorMessenger::Tst50DetectorMessenger(
   AbsThickCmd->SetParameterName("Size",false);
   AbsThickCmd->SetRange("Size>=0.");
   AbsThickCmd->SetUnitCategory("Length");
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(G4State_Idle);
   
   XThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetX",this);
   XThickCmd->SetGuidance("Set X dimension of the target");
   XThickCmd->SetParameterName("Size",false);
   XThickCmd->SetRange("Size>=0.");
   XThickCmd->SetUnitCategory("Length");
-  XThickCmd->AvailableForStates(Idle);
+  XThickCmd->AvailableForStates(G4State_Idle);
   
   YThickCmd = new G4UIcmdWithADoubleAndUnit("/target/setTargetY",this);
   YThickCmd->SetGuidance("Set Y dimension of the target");
   YThickCmd->SetParameterName("Size",false);
   YThickCmd->SetRange("Size>=0.");
   YThickCmd->SetUnitCategory("Length");
-  YThickCmd->AvailableForStates(Idle);
+  YThickCmd->AvailableForStates(G4State_Idle);
  
  SetStepCmd = new G4UIcmdWithADoubleAndUnit("/target/setMaxStep",this);
  SetStepCmd->SetGuidance("Set the particle Max Step in the target ");
  SetStepCmd->SetParameterName("Size",false);
  SetStepCmd->SetRange("Size>=0.");
  SetStepCmd->SetUnitCategory("Length");
- SetStepCmd->AvailableForStates(Idle);
+ SetStepCmd->AvailableForStates(G4State_Idle);
   
 UpdateCmd = new G4UIcmdWithoutParameter("/target/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
  }
 

@@ -56,14 +56,14 @@ Tst50PhysicsListMessenger::Tst50PhysicsListMessenger(Tst50PhysicsList * List)
   RangeDir->SetParameterName("choice",true);
   RangeDir->SetDefaultValue("on");
   RangeDir->SetCandidates("on off");
-  RangeDir->AvailableForStates(PreInit,Idle); 
+  RangeDir->AvailableForStates(G4State_PreInit,G4State_Idle); 
 
  cutECmd = new G4UIcmdWithADoubleAndUnit("/le/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(G4State_Idle);
 
 
 

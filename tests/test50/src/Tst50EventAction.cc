@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.7 2003-01-17 17:14:14 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.8 2003-01-28 08:57:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,18 +91,19 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
   
   if (HCE) hit_HC = (Tst50TrackerHitsCollection*)(HCE->GetHC(hit_CollID));
   if(hit_HC)
-    {
+    { 
       n_hit = hit_HC->entries();
       for (G4int i=0;i<n_hit;i++)
 	{ 
 	   energyDep= (((*hit_HC)[i]->GetEdep()))/MeV; 
-	   //  G4cout<<"energia depositata per ogni evento:"<<energyDep<<G4endl; 
-         
+	
+/********         
 #ifdef G4ANALYSIS_USE
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    if(energyDep!=0)
-	        analysis-> energy_deposit(energyDep);
+	        analysis->energy_deposit(energyDep);
 #endif
+*/
 	}
     }
   /*

@@ -48,7 +48,7 @@ Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGener
   RndmDir->SetParameterName("choice",true);
   RndmDir->SetDefaultValue("off");
   RndmDir->SetCandidates("on off");
-  RndmDir->AvailableForStates(PreInit,Idle);
+  RndmDir->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   spectrum = new G4UIcmdWithAString("/gun/spectrum",this);
   spectrum->SetGuidance("Shoot the incident particle with a certain energy spectrum.");
@@ -56,7 +56,7 @@ Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGener
   spectrum->SetParameterName("choice",true);
   spectrum->SetDefaultValue("on");
   spectrum->SetCandidates("on off");
-  spectrum->AvailableForStates(PreInit,Idle);
+  spectrum->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   isoDir = new G4UIcmdWithAString("/gun/isoDir",this);
   isoDir->SetGuidance("Shoot the incident particle from an isotrofic direction.");
@@ -64,7 +64,7 @@ Tst50PrimaryGeneratorMessenger::Tst50PrimaryGeneratorMessenger(Tst50PrimaryGener
   isoDir->SetParameterName("choice",true);
   isoDir->SetDefaultValue("on");
   isoDir->SetCandidates("on off");
-  isoDir->AvailableForStates(PreInit,Idle);
+  isoDir->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.14 2003-01-27 13:47:44 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.15 2003-01-28 08:57:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,8 +104,7 @@ IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
     G4double MMoD;
     G4double MIMD;
 
-    G4double Theta;
-
+ 
 
     PTyp = Step->GetTrack()->GetDefinition()->GetParticleType();    
   
@@ -132,7 +131,7 @@ if(0 == Step->GetTrack()->GetParentID() )
   {
     if(StoppingPower==false && Range==false && RadiationY==false)
       {
-    if(particle_name=="e-")
+    if(particle_name=="e-"|| particle_name=="e+")
       {  
 if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
  
@@ -140,17 +139,38 @@ if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
     if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
 
    //volume in cui si esce e' il target 
- G4cout<<XMoD<<YMoD<<ZMoD<<G4endl;   
+ 
     MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
     MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
    
    
-    G4cout<<(XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD)<<G4endl;
-    G4cout<<ZMoD<<G4endl;
-    
-    if (ZMoD>0)runaction->Trans_number();
-    if(ZMoD<0) runaction->Back_number();
+    // G4cout<<(XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD)<<G4endl;
+     G4double energy=(KinE/initial_energy);
 
+     G4double angle=(acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))/deg);
+    if (ZMoD>0)
+     {
+
+#ifdef G4ANALYSIS_USE
+       analysis ->energy_transmitted(energy);
+       analysis ->angleT(angle);
+#endif
+
+}
+    if(ZMoD<0) 
+  {
+
+#ifdef G4ANALYSIS_USE
+       analysis ->energy_backscatter(energy); 
+       analysis ->angleB(angle);
+#endif
+  }
+
+    G4double initial=initial_energy/MeV;
+
+#ifdef G4ANALYSIS_USE
+    analysis ->fill_data(initial,energy,angle);
+#endif
     }}}}}
    
 /*
