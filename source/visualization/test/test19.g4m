@@ -325,8 +325,11 @@ help /vis/sceneHandler/create
 /vis/viewer/refresh
 /vis/viewer/update
 #
-/vis/viewer/set/projection perspective  30
+# Bug?  It seems to fail to pick up a new viewer's viewing parameters...
 /vis/rayTracer/column 400
 /vis/rayTracer/row 400
+/vis/viewer/create
+/vis/viewer/reset
+/vis/viewer/set/projection perspective  30
 /vis/viewer/refresh
 /vis/viewer/update
