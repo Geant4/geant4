@@ -1,5 +1,9 @@
 Correct pion potential.
+
+check that Weisskopf-Ewing model is ok (gives neutrons) for pn_be_256
+
 Viele print-outs - warning particle may be looping
+
 Check : gehen short-lived in den end-zustand?
 
 SampleResonanceMass: mass range negative (minMass>maxMass)
@@ -31,7 +35,61 @@ creating quasi-loops
 4-th secondary  neutron   Ekin(MeV)= 4.083272e+00   p(MeV)= (-1.361760e-02,8.769081e+01,7.094648e-03)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.436489e+02   pt(MeV)= 8.769081e+01
 1-th secondary  neutron   Ekin(MeV)= 1.526455e+01   p(MeV)= (-2.224871e-03,1.488845e+02,-8.216155e+01)   m(MeV)= 9.395656e+02   Etot(MeV)= 9.548302e+02   pt(MeV)= 1.488845e+02
 
+Fix this:
+pn_c_590  - 
+ Reaction number ends 2489
+ Reaction number starts 2489
+ G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel
+  Probabilities: G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment
+ while trying to de-excite
+ Fragment: A = 11, Z = 8, U = 4.886e+01 MeV
+           P = (5.116e+01,-4.546e+02,1.370e+02) MeV   E = 1.037e+04 MeV
+           #Particles = 3, #Holes = 4, #Charged = 2
 
+
+pn_c_800 - 
+Reaction number starts 437
+G4PreCompoundFragmentVector::ChooseFragment: I can't determine a channel
+Probabilities: G4PreCompoundEmission::PerformEmission : I couldn't choose a fragment
+while trying to de-excite
+Fragment: A = 11, Z = 8, U = 1.063e+02 MeV
+          P = (-3.876e+02,1.401e+02,1.395e+02) MeV   E = 1.043e+04 MeV
+          #Particles = 4, #Holes = 5, #Charged = 3
+
+
+Fix this:
+pn_fe_065 - hangs right away.
+pn_pb_065 - ==> looping right away ????
+pn_pb_120 - ==> semi-infinite loop.
+
+Hans-Peter:
+pn_pb_800 - re-run ????
+
+Hans-Peter:
+pn_zr_050 - seems ok, but needs more stats to say anything.
+
+
+ppi_d_585
+ G4HadronKineticModel::CorrectFinalPandE() : error!
+ Boost Vector supplied to set HepLorentzRotation represents speed >= c.
+ at line 33 in file LorentzRotation.cc
+ Segmentation fault
+
+ppi_h_585
+G4MagIntegratorDriver::OneGoodStep: Stepsize underflow in Stepper
+  Step's start x=0 and end x= 0 are equal !!
+  Due to step-size= 0 . Note that input step was 1
+
+
+
+
+
+
+
+
+
+
+logs for kc_beta_baseline_0:
 pn_al_022 - evaporation neutrons missing.
 pn_al_039 - norm uncertain.
 pn_al_090 - test is wrong -- Vladimir to check
@@ -42,7 +100,7 @@ pn_al_585 - warning particle may be looping, and negative excitation energies
           - do we decay short-lived particles at the end?
 	  - pions look glorious -- why ? do higher statistics.
 pn_al_800 - seems ok.
-pn_be_113 - ! no evaporation neutrons below 5 Mev !
+pn_be_113 - ! no evaporation neutrons below 5 Mev ! ==> change excitationHandler
 pn_be_256 - no evap, but quasi-elastic peak looks marvelous
 pn_be_585 - perfect, but ! pion normalization is off !
 pn_be_800 - ????? crash ??????
