@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.5 2000-04-12 13:09:08 johna Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.6 2000-05-02 10:09:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	char* frot_Name = new char [rot_len];
 	G4std::ostrstream rot_ost (frot_Name, rot_len);
 	rot_ost.seekp (G4std::ios::beg);
-	rot_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
+	rot_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fprotation_top = new G4OpenGLXmTopLevelShell (pView, 
 							     frot_Name);
@@ -147,7 +147,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	char* fpan_Name = new char [pan_len];
 	G4std::ostrstream pan_ost (fpan_Name, pan_len);
 	pan_ost.seekp (G4std::ios::beg);
-	pan_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
+	pan_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fppanning_top = new G4OpenGLXmTopLevelShell (pView, 
 							    fpan_Name);
@@ -190,8 +190,8 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							   pan_slider_list,
 							   True,
 							   2,
-							   pView->pan_sens = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
-							   pView->pan_sens_limit = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius(),
+							   pView->pan_sens = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
+							   pView->pan_sens_limit = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius(),
 							   0);
 	pView->fppanning_box->AddChild (pView->fppanning_slider);
 	
@@ -227,8 +227,8 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							 True,
 							 2,
 							 pView->fVP.GetDolly(),
-							 pView->dolly_high = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius(),
-							 pView->dolly_low = -(pView->GetScene()->GetScene()->GetExtent().GetExtentRadius()));
+							 pView->dolly_high = pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius(),
+							 pView->dolly_low = -(pView->GetSceneHandler()->GetScene()->GetExtent().GetExtentRadius()));
 	//							 pView->dolly_high,
 	//							 pView->dolly_low);
 	pView->fpdolly_box->AddChild (pView->fpdolly_slider);
@@ -247,7 +247,7 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 	char* fset_Name = new char [set_len];
 	G4std::ostrstream set_ost (fset_Name, set_len);
 	set_ost.seekp (G4std::ios::beg);
-	set_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
+	set_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpsetting_top = new G4OpenGLXmTopLevelShell(pView,
 							   fset_Name);
@@ -328,7 +328,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	char* fmisc_Name = new char [misc_len];
 	G4std::ostrstream misc_ost (fmisc_Name, misc_len);
 	misc_ost.seekp (G4std::ios::beg);
-	misc_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
+	misc_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpmiscellany_top = new G4OpenGLXmTopLevelShell (pView, 
 							       fmisc_Name);
@@ -423,7 +423,7 @@ void G4OpenGLXmViewer::misc_callback (Widget w,
 	char* fprint_Name = new char [print_len];
 	G4std::ostrstream print_ost (fprint_Name, print_len);
 	print_ost.seekp (G4std::ios::beg);
-	print_ost << pView->GetScene()->GetSceneId() << '-' << pView->fViewId << G4std::ends;
+	print_ost << pView->GetSceneHandler()->GetSceneHandlerId() << '-' << pView->fViewId << G4std::ends;
 	
 	pView->fpprint_top = new G4OpenGLXmTopLevelShell (pView, 
 							  fprint_Name);
