@@ -182,7 +182,7 @@ void Tst01DetectorConstruction::SwitchCSG()
   // G4VPhysicalVolume* worldPhysVol =    G4TransportationManager::
   // GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
 
-  if( fTestCSG ) fTestCSG = NULL ;
+  if( fTestCSG ) fTestCSG = 0 ;
   
   switch(fChoiceCSG)
   { 
@@ -208,10 +208,10 @@ void Tst01DetectorConstruction::SwitchCSG()
       fTestCSG = new G4Box("testCSG", 20*cm, 50*cm, 50*cm ) ;
     }
   }
-  if( fTestLog ) fTestLog = NULL ;
+  if( fTestLog ) fTestLog = 0 ;
   fTestLog = new G4LogicalVolume(fTestCSG,selectedMaterial,
                                                 "testLog",0,0,0) ;
-  if( fTestVol ) fTestVol = NULL ;
+  if( fTestVol ) fTestVol = 0 ;
   fTestVol = new G4PVPlacement(0,G4ThreeVector(),
 				   "testVol",fTestLog, 
                                     fWorldPhysVol,
