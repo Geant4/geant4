@@ -1,4 +1,4 @@
-$Id: History,v 1.62 2001-12-11 16:06:33 japost Exp $
+$Id: History,v 1.63 2001-12-11 17:56:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,31 +16,37 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-Dec 11th, 2001       J. Apostolakis - geomvol-V03-02-07
 
+Dec 11th, 2001       G. Cosmo - geomvol-V03-02-08
 - G4Navigator:
-    Undoing the fix in geomvol-V03-02-05 -- because of problems in 
-     several tests (mostly large N tests). 
-     ----> Must resolve these !! <-----------------------
+  o Added kNormal and Copy Number to NewLevel (Navigation Level) for
+    Normal Navigation
+    Now all TouchableHistory objects should have a valid entry in ReplicaNumber:
+    - in the case of a placement volume it will be the copy number
+    - in replicated volumes it will be the replica number
+  o Commented out fix introduced in geomvol-V03-02-05.
+
+Dec 11th, 2001       J. Apostolakis - geomvol-V03-02-07
+- G4Navigator:
+  o Undoing the fix in geomvol-V03-02-05 -- because of problems in 
+    several tests (mostly large N tests). 
+    ----> Must resolve these !! <----
 
 Dec  8th, 2001       J. Apostolakis - geomvol-V03-02-06
-- G4PropagatorInField
-  * Interface: additional thresholds for No of steps, + get/Set methods
-
-  * Implementations
-     Modified choice of subsequent step size in case of Zero steps
-     - decrease quickly at first to try to ensure that the first/second
-         "re-steps" are enough in most cases.
-
-     - utilise addition threshold parameters (for # of steps)
-         to slow down the rate of decrease of the step size
-         for the 'difficult' cases which do not converse after
-         a few steps.                           
+- G4PropagatorInField:
+  o additional thresholds for No of steps, + get/Set methods
+  o Modified choice of subsequent step size in case of Zero step
+    - decrease quickly at first to try to ensure that the first/second
+      "re-steps" are enough in most cases.
+    - utilise addition threshold parameters (for # of steps)
+      to slow down the rate of decrease of the step size
+      for the 'difficult' cases which do not converse after
+      a few steps.                           
 
 Dec  6th, 2001       J. Apostolakis - geomvol-V03-02-05
-- G4Navigator
-  Fix for Locate Global Point Within Volume:
-     Clear state variables (that had erroneously been forgotten).
+- G4Navigator:
+  Fix for Locate Global Point Within Volume: clear state
+  variables (that had erroneously been forgotten).
 
 Dec  6th, 2001       R. Chytracek - geomvol-V03-02-04
 - G4Navigator:
