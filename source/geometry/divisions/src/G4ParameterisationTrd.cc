@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationTrd.cc,v 1.5 2003-10-30 10:19:36 arce Exp $
+// $Id: G4ParameterisationTrd.cc,v 1.6 2003-11-04 17:00:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationTrd Implementation file
@@ -141,7 +141,6 @@ ComputeDimensions( G4Trd& trd, const G4int copyNo,
 //--------------------------------------------------------------------------
 void G4ParameterisationTrdX::CheckAxisIsValid()
 {
-  G4cout << " G4ParameterisationTrdX::CheckAxisIsValid() " << G4endl;
   G4Trd* msol = (G4Trd*)(fmotherSolid);
 
   G4double mpDx1 = msol->GetXHalfLength1();
@@ -149,9 +148,14 @@ void G4ParameterisationTrdX::CheckAxisIsValid()
 
   if( fabs(mpDx1 - mpDx2) > kCarTolerance )
   {
+    G4cerr << "ERROR - G4ParameterisationTrdX::CheckAxisIsValid()" << G4endl
+           << "        Making a division of a TRD along axis X," << G4endl
+           << "        while the X half lengths are not equal," << G4endl
+           << "        is not (yet) supported. It will result" << G4endl
+           << "        in non-equal division solids." << G4endl;
     G4Exception("G4ParameterisationTrdX::CheckAxisIsValid()",
                 "IllegalConstruct", FatalException,
-                "Making a division of a TRD along axis X while the X half lengths are not equal is not (yet) supported. It will result in non-equal division solids");
+                "Invalid solid specification. NOT supported.");
   }
 }
 
@@ -263,9 +267,14 @@ void G4ParameterisationTrdY::CheckAxisIsValid()
 
   if( fabs(mpDy1 - mpDy2) > kCarTolerance )
   {
+    G4cerr << "ERROR - G4ParameterisationTrdY::CheckAxisIsValid()" << G4endl
+           << "        Making a division of a TRD along axis Y while" << G4endl
+           << "        the Y half lengths are not equal is not (yet)" << G4endl
+           << "        supported. It will result in non-equal" << G4endl
+           << "        division solids." << G4endl;
     G4Exception("G4ParameterisationTrdY::CheckAxisIsValid()",
                 "IllegalConstruct", FatalException,
-                "Making a division of a TRD along axis Y while the Y half lengths are not equal is not (yet) supported. It will result in non-equal division solids");
+                "Invalid solid specification. NOT supported.");
   }
 }
 

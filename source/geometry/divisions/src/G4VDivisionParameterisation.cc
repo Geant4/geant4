@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.5 2003-10-30 10:19:36 arce Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.6 2003-11-04 17:01:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -52,9 +52,6 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
            << " step " << fwidth << " = " << step << G4endl;
   }
   theVoluFirstCopyNo = 1;
-
-  G4cout << " call check axis is valid " << G4endl;
-
 }
 
 //--------------------------------------------------------------------------
