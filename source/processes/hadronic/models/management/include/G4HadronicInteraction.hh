@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.4 2004-05-26 09:38:53 hpw Exp $
+// $Id: G4HadronicInteraction.hh,v 1.5 2004-05-26 09:56:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -159,8 +159,8 @@ public: // Without description
 
     virtual G4bool IsBlocked( const G4Element *anElement) const;
     
-    virtual G4bool IsApplicable(const G4HadProjectile &aTrack, 
-                               G4Nucleus & targetNucleus){  return true;}
+    virtual G4bool IsApplicable(const G4HadProjectile &/*aTrack*/, 
+                               G4Nucleus & /*targetNucleus*/){  return true;}
  protected:
     
     G4HadFinalState theParticleChange;
