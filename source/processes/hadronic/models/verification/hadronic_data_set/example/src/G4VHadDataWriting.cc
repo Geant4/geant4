@@ -32,8 +32,8 @@
 #include "G4Isotope.hh"
 #include "G4ElementVector.hh"
 
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "globals.hh"
 
 #include <stdio.h>
@@ -67,8 +67,8 @@ G4VHadDataWriting::G4VHadDataWriting()
 
   fAngleTable        = new G4PhysicsTable();
   fMomentumCTable    = new G4PhysicsTable();
-  fDoubleDiffXscBank = new G4std::vector<G4PhysicsTable*>;
-  fCommentVector     = new G4std::vector<G4String>;
+  fDoubleDiffXscBank = new std::vector<G4PhysicsTable*>;
+  fCommentVector     = new std::vector<G4String>;
 }
 
 
@@ -107,8 +107,8 @@ void G4VHadDataWriting::FillIntegralXSC( G4String& fileName)
 {
   G4cout<<"G4VHadDataWriting::FillIntegralXSC(fN),\n"<<" fN = "<<fileName<<G4endl;
 
-  G4std::ifstream fin(fInputFileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fInputFileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -193,8 +193,8 @@ void G4VHadDataWriting::FillMultiplicity( G4String& fileName)
 {
   G4cout<<"G4VHadDataWriting::FillIntegralXSC(fN),\n"<<" fN = "<<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -279,8 +279,8 @@ void G4VHadDataWriting::FillDifferentialXSC( G4String& fileName, G4bool momORang
   G4cout<<"G4VHadDataWriting::FillDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -407,8 +407,8 @@ void G4VHadDataWriting::FillDoubleDiffXSC( G4String& fileName)
   G4cout<<"G4VHadDataWriting::FillDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
 
-  G4std::ifstream fin(fInputFileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fInputFileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -598,19 +598,20 @@ void G4VHadDataWriting::FillDoubleDiffXSC( G4String& fileName)
 	G4cout<<"I found you"<< G4endl;
       }
   
-  G4std::ofstream fout(fileName, G4std::ios::out | G4std::ios::app );
+  std::ofstream fout(fileName, std::ios::out | std::ios::app );
 
   // sim end
 
-  fout.setf( G4std::ios::scientific, G4std::ios::floatfield );
+  fout.setf( std::ios::scientific, std::ios::floatfield );
 
 
-  G4std::vector<size_t> deltaAngleVector;
+  std::vector<size_t> deltaAngleVector;
   position = 0;
 
   angle = (*fAngleVector)[0];
 
-  for(size_t i = 0; i < fAngleVector->size(); ++i)
+  size_t i = 0;
+  for(i = 0; i < fAngleVector->size(); ++i)
   {
     if( angle != (*fAngleVector)[i] )
     {

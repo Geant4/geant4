@@ -30,9 +30,9 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "g4std/fstream"
-#include "g4std/strstream"
-#include "g4std/iostream"
+#include <fstream>
+#include <strstream>
+#include <iostream>
 #include "G4ios.hh"
 #include "globals.hh"
 
@@ -81,7 +81,7 @@ G4String G4HadFileSpec::G4HDSFilename()
       G4int Zi = fisotope->GetZ();
       G4int Ni = fisotope->GetN();
   
-      G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+      std::ostrstream ost(nameChar, 100, std::ios::out);
 
       if( Zi != 0 ) ost <<fprocess<< "Z"<< Zi <<".000N"<<Ni<<".000"<<"iso";  
       else         ost <<fprocess<< "N"<<Ni<<".000"<<"iso"; 
@@ -91,7 +91,7 @@ G4String G4HadFileSpec::G4HDSFilename()
       G4int Ze    = (G4int)felement->GetZ();
       G4double Ae = felement->GetN();     // A should be in xxx.xxx format 
       
-      G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+      std::ostrstream ost(nameChar, 100, std::ios::out);
       ost.setf(std::ios::fixed);
       ost.precision(3);  
       
@@ -112,7 +112,7 @@ G4String G4HadFileSpec::G4HDSFilename()
        }
      // Z, A should be in xxx.xxx format  
      
-     G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+     std::ostrstream ost(nameChar, 100, std::ios::out);
      ost.setf(std::ios::fixed);
      ost.precision(3);  
 

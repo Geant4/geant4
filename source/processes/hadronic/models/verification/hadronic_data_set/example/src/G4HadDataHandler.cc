@@ -26,8 +26,8 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "globals.hh"
 
 #include <stdio.h>

@@ -28,8 +28,8 @@
 #define G4HadDataReading_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map> 
 
 class G4PhysicsTable;
 class G4PhysicsVector;
@@ -61,7 +61,7 @@ public:
   G4PhysicsTable*  GetAngleTable() const {return fAngleTable;}
   G4PhysicsTable*  GetMomentumCTable() const {return fMomentumCTable;}
 
-  G4std::vector<G4PhysicsTable*>* GetDoubleDiffXscBank() const 
+  std::vector<G4PhysicsTable*>* GetDoubleDiffXscBank() const 
   {return fDoubleDiffXscBank;};
 
 
@@ -101,17 +101,17 @@ private:
   G4PhysicsTable*  fAngleTable;
   G4PhysicsTable*  fMomentumCTable;
 
-  G4std::vector<G4PhysicsTable*>* fDoubleDiffXscBank;
+  std::vector<G4PhysicsTable*>* fDoubleDiffXscBank;
 
 
   /*
-  typedef G4std::map<G4int,G4std::
-                 vector<G4double>,G4std::less<G4int> > xsc_Table;
+  typedef std::map<G4int,std::
+                 vector<G4double>,std::less<G4int> > xsc_Table;
 
   xsc_Table xscTable;
 
-  G4std::vector<G4int> nXSC;
-  G4std::vector<G4int> numberOfSecondaries;
+  std::vector<G4int> nXSC;
+  std::vector<G4int> numberOfSecondaries;
   */  
 };
 

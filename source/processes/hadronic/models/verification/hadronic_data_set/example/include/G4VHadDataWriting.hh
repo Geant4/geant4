@@ -29,8 +29,8 @@
 
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 #include "G4HadFileSpec.hh"
 
@@ -65,10 +65,10 @@ public:
   G4PhysicsTable*  GetAngleTable() const {return fAngleTable;}
   G4PhysicsTable*  GetMomentumCTable() const {return fMomentumCTable;}
 
-  G4std::vector<G4PhysicsTable*>* GetDoubleDiffXscBank() const 
+  std::vector<G4PhysicsTable*>* GetDoubleDiffXscBank() const 
   {return fDoubleDiffXscBank;}
 
-  G4std::vector<G4String>* GetCommentVector() const {return fCommentVector;}
+  std::vector<G4String>* GetCommentVector() const {return fCommentVector;}
  
 protected:
 
@@ -111,8 +111,8 @@ private:
   G4PhysicsTable*  fAngleTable;
   G4PhysicsTable*  fMomentumCTable;
 
-  G4std::vector<G4PhysicsTable*>* fDoubleDiffXscBank;
-  G4std::vector<G4String>* fCommentVector;
+  std::vector<G4PhysicsTable*>* fDoubleDiffXscBank;
+  std::vector<G4String>* fCommentVector;
 };
  
 #endif

@@ -32,8 +32,8 @@
 #include "G4Isotope.hh"
 #include "G4ElementVector.hh"
 
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "globals.hh"
 
 #include <stdio.h>
@@ -64,7 +64,7 @@ G4HadDataReading::G4HadDataReading()
 
   fAngleTable        = new G4PhysicsTable();
   fMomentumCTable    = new G4PhysicsTable();
-  fDoubleDiffXscBank = new G4std::vector<G4PhysicsTable*>;
+  fDoubleDiffXscBank = new std::vector<G4PhysicsTable*>;
 }
 
 
@@ -102,8 +102,8 @@ void G4HadDataReading::LoadIntegralXSC( G4String& fileName)
 {
   G4cout<<"G4HadDataReading::LoadIntegralXSC(fN),\n"<<" fN = "<<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -188,8 +188,8 @@ void G4HadDataReading::LoadMultiplicity( G4String& fileName)
 {
   G4cout<<"G4HadDataReading::LoadIntegralXSC(fN),\n"<<" fN = "<<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -274,8 +274,8 @@ void G4HadDataReading::LoadDifferentialXSC( G4String& fileName, G4bool momORangl
   G4cout<<"G4HadDataReading::LoadDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {
@@ -402,8 +402,8 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
   G4cout<<"G4HadDataReading::LoadDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
 
-  G4std::ifstream fin(fileName);
-  G4std::filebuf* finbuf = fin.rdbuf();
+  std::ifstream fin(fileName);
+  std::filebuf* finbuf = fin.rdbuf();
   
   if ( !( finbuf->is_open() ) )
   {

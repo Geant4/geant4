@@ -18,7 +18,7 @@ of three environmental variables:
 	G4HADATASET=$G4HADWORKING/../HadronicDataSet 
 	               (the database location, including the name 
 		        of the database)
-	G4HADWRITTINGRIGHTS=0 (0=read, 1=write)
+	G4HADWRITTINGRIGHTS=0 (0=read, 1=write) 
 
 G4HADWORKING tells to the G4HDS where the program is located
 G4HADATASET tells to the program where the data sets is located

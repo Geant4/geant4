@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-11-04 14:20:19 hpw Exp $
+# $Id: GNUmakefile,v 1.3 2003-11-04 14:20:33 hpw Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,7 +11,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../../../../../..
 endif
 
-.PHONY: all
+.PHONY: all 
 all: lib bin 
 
 include $(G4INSTALL)/config/architecture.gmk

@@ -27,8 +27,8 @@
 #define G4HadDataHandler_HH 1
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 #include "G4AugerTransition.hh"
 
 class G4DataVector;
@@ -43,13 +43,13 @@ public:
 
 private:
 
-  typedef G4std::map<G4int,G4std::
-                 vector<G4AugerTransition>,G4std::less<G4int> > trans_Table;
+  typedef std::map<G4int,std::
+                 vector<G4AugerTransition>,std::less<G4int> > trans_Table;
 
   trans_Table augerTransitionTable;
 
-  G4std::vector<G4int> nXSC;
-  G4std::vector<G4int> numberOfSecondaries;
+  std::vector<G4int> nXSC;
+  std::vector<G4int> numberOfSecondaries;
   
 };
 

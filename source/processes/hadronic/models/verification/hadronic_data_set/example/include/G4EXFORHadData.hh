@@ -30,8 +30,8 @@
 
 #include "G4VHadDataWriting.hh"
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 #include "G4HadFileSpec.hh"
 
 class G4PhysicsTable;

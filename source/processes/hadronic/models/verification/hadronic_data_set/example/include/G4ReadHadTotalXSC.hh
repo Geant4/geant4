@@ -31,8 +31,8 @@
 #include "G4HadFileSpec.hh"
 
 #include "globals.hh"
-#include "g4std/vector"
-#include "g4std/map"
+#include <vector>
+#include <map>
 
 
 class G4DataVector;

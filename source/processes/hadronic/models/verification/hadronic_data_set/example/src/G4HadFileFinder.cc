@@ -30,9 +30,9 @@
 #include <unistd.h>
 #include <string.h>
 
-#include "g4std/fstream"
-#include "g4std/strstream"
-#include "g4std/iostream"
+#include <fstream>
+#include <strstream>
+#include <iostream>
 #include <iostream>
 #include <sstream>
 #include "globals.hh"
@@ -56,7 +56,7 @@ G4HadFileFinder::G4HadFileFinder(G4String& currdir, G4String& G4filetofind)
 
   char nameChar[100] = {""};
 
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   ost << G4filetofind ;
 
   pfiletofindone=nameChar;
@@ -64,7 +64,7 @@ G4HadFileFinder::G4HadFileFinder(G4String& currdir, G4String& G4filetofind)
 
   char nameDir[100] = {""};
 
-  G4std::ostrstream ostdir(nameDir, 100, G4std::ios::out);
+  std::ostrstream ostdir(nameDir, 100, std::ios::out);
   ostdir << currdir;
 
   pdirectory=nameDir;
@@ -141,8 +141,8 @@ void G4HadFileFinder::crawldir(char* currdir, char* filetofind)
 
 	 int errnum=chdir(workingpath);
 
-	G4std::ifstream fin("G4HDSFileFinderREADME.txt");
-	G4std::filebuf* finbuf = fin.rdbuf();
+	std::ifstream fin("G4HDSFileFinderREADME.txt");
+	std::filebuf* finbuf = fin.rdbuf();
 	
 	if ( !( finbuf->is_open() ) )
 	  {

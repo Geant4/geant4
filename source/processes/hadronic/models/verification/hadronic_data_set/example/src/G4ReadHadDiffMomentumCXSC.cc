@@ -28,8 +28,8 @@
 #include "G4Isotope.hh"
 #include "G4ElementVector.hh"
 
-#include "g4std/fstream"
-#include "g4std/strstream"
+#include <fstream>
+#include <strstream>
 #include "globals.hh"
 
 #include <stdio.h>
@@ -85,7 +85,7 @@ void G4ReadHadDiffMomentumCXSC::ReadDiffMomentumCXSC( G4String&  primary,
   G4int N = isotope->GetN();
     
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
 
   if( Z != 0 ) ost << "momZ"<< Z <<"N"<<N<< ".dat";  
   else         ost << "momN"<<N<<".dat"; 
@@ -121,7 +121,7 @@ void G4ReadHadDiffMomentumCXSC::ReadDiffMomentumCXSC( G4String&  primary,
   G4double A = element->GetN();     // A should be in xxx.xxx format 
 
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   ost.setf(std::ios::fixed);
   ost.precision(3);  
 
@@ -168,7 +168,7 @@ void G4ReadHadDiffMomentumCXSC::ReadDiffMomentumCXSC( G4String&  primary,
   // Z, A should be in xxx.xxx format  
 
   char nameChar[100] = {""};
-  G4std::ostrstream ost(nameChar, 100, G4std::ios::out);
+  std::ostrstream ost(nameChar, 100, std::ios::out);
   ost.setf(std::ios::fixed);
   ost.precision(3);  
 
