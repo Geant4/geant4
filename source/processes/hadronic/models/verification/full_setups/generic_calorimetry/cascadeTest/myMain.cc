@@ -1,7 +1,8 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "MyDetectorConstruction.hh"
-#include "MyPhysicsList.hh"
+#include "QGSP_BERT.hh"
+#include "QGSP_BIC.hh"
 #include "MyPrimaryGeneratorAction.hh"
 
 #include "MyEventAction.hh"
@@ -45,7 +46,11 @@ int main(int argc,char** argv) {
 
   // Set mandatory initialization classes.
   runManager->SetUserInitialization( new MyDetectorConstruction );
-  runManager->SetUserInitialization( new MyPhysicsList );
+
+  //***LOOKHERE***
+  // runManager->SetUserInitialization( new QGSP_BERT );
+  runManager->SetUserInitialization( new QGSP_BIC );
+  //***endLOOKHERE***
 
   // Set mandatory user action class.
   runManager->SetUserAction( new MyPrimaryGeneratorAction );

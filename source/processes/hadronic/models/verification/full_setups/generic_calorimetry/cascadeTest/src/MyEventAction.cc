@@ -57,6 +57,10 @@ void MyEventAction::EndOfEventAction(const G4Event* evt){
     }
   }
 
+  if ( numCalorimeterHits > 1 ) {
+    G4cout << " numCalorimeterHits = " << numCalorimeterHits << std::endl; //***DEBUG***
+  }
+
   // Get the information about the total release of energy in all the calorimeter
   // (not only in the sensitive parts) and the Id and kinetic energy of the 
   // incident (primary) particle from the Stepping Action.

@@ -210,7 +210,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
 
   // --- experimental hall (world volume)
   //     beam line along x axis
-
   G4double expHall_x = 2.0*m;  // half dimension along x 
   G4double expHall_y = 2.0*m;  // half dimension along y
   G4double expHall_z = 2.0*m;  // half dimension along z
@@ -234,18 +233,17 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                             0);                    // copy number
   
   // --- Detector
-
   // The idea is to use Replica placement. 
   // To do that, we have to define two extra volumes: the "calorimeter" volume 
   // and the "module". The former, which has the world as its mother volume, 
   // is the mother of the module volume. The calorimeter volume is completely 
   // filled by 50 replicas of the module volume. A module volume, in its turn, 
-  // is the mother  volume of the absorber layer + active layer. 
+  // is the mother volume of the absorber layer + active layer. 
   // We have chosen the following dimension of the sampling calorimeter:
   //   transversal dimensions:  2m x 2m   very large to have full lateral containment;  
   //   absorber thickness: 4 cm   similar to ATLAS and CMS tile hadronic calorimeters;
   //   active layer:       4 mm     "      "   "    "   "    "     "         "
-  //   number of modules:  50  very large to have full longitudinal containment:
+  //   number of modules:  50  very large to have full longitudinal containement:
   //                           it corresponds to more than 10 interaction lengths
   //                           for: tungsten (20.9), uranium (19), 
   //                                copper (13), iron (12.5), lead (11.8), 
@@ -255,7 +253,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
   //                                entirely of PbWO4).
 
   //            --- absorber layer : logical
-
   G4double xAbsorber =   2.0*cm;  // half dimension along x 
   G4double yAbsorber = 100.0*cm;  // half dimension along y
   G4double zAbsorber = 100.0*cm;  // half dimension along z
@@ -270,7 +267,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                       0);                  // user limits
 
   //            --- active layer : logical
-
   G4double xActive = 0.2*cm;     // half dimension along x 
   G4double yActive = yAbsorber;  // half dimension along y 
   G4double zActive = zAbsorber;  // half dimension along z 
@@ -285,7 +281,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                     0);                    // user limits
 
   //        --- module : logical
- 
   G4double xModule = (xAbsorber+xActive);  // half dimension along x 
   G4double yModule = yAbsorber;            // half dimension along y
   G4double zModule = zAbsorber;            // half dimension along z
@@ -300,7 +295,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                     0);             // user limits
 
   //    --- calorimeter : logical
-
   G4int numberOfModules = 50;
   G4double xCalo = numberOfModules*xModule;  // half dimension along x 
   G4double yCalo = yModule;                  // half dimension along y
@@ -316,7 +310,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                   0);               // user limits
 
   //            --- absorber layer : physical
-
   G4double xpos = - xActive;
   physiAbsorber = new G4PVPlacement(0,                       // rotation
                                     G4ThreeVector(xpos,0,0), // translation
@@ -324,10 +317,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                     "physiAbsorber",         // name
                                     logicModule,             // mother logical volume
                                     false,                   // boolean operation
-                                    0);                      // copy number
+                                    1000);                   // copy number
 
   //            --- active layer : physical
-
   xpos += xAbsorber + xActive;
   physiActive = new G4PVPlacement(0,                       // rotation
                                   G4ThreeVector(xpos,0,0), // translation
@@ -335,29 +327,26 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
                                   "physiActive",           // name
                                   logicModule,             // mother logical volume
                                   false,                   // boolean operation
-                                  0);                      // copy number
+                                  2000);                   // copy number
 
   //        --- module : physical (using replica)
-
   physiModule = new G4PVReplica("Calo",                  // name
                                 logicModule,             // logical volume
-                                logicCalo,               // mother (logical or physical) volume
+                                logicCalo,               // mother logical volume
                                 kXAxis,                  // axis of replication
                                 numberOfModules,         // number of replica
                                 2*(xAbsorber+xActive) ); // (full) width of replica
 
   //    --- calorimeter : physical
-
   physiCalo = new G4PVPlacement(0,                     // rotation
                                 G4ThreeVector(),       // translation
                                 "physiCalo",           // its name
                                 logicCalo,             // logical volume
                                 experimentalHall_phys, // mother physical volume
                                 false,                 // boolean operation
-                                0);                    // copy number
+                                100);                  // copy number
 
   // --- Sensitive detectors
-       
   G4String sensitiveCalorimeterName = "My/SensitiveCalorimeter";
   MySensitiveCalorimeter* aSensitiveCalorimeter = 
     new MySensitiveCalorimeter( sensitiveCalorimeterName );
@@ -365,7 +354,6 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct() {
   logicActive->SetSensitiveDetector( aSensitiveCalorimeter );
   
   // --- Visualization attributes
-
   experimentalHall_log->SetVisAttributes( G4VisAttributes::Invisible );
   // The World is not visualized.
 
