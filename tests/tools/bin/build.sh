@@ -57,7 +57,7 @@ fi
 #
 # Make $G4WORKDIR/stt/$G4SYSTEM directory :
 dir=$G4WORKDIR/stt/$G4SYSTEM
-if [ ! -d $dir ] ; then
+if [ ! -d $dir -a G4SYSTEM != WIN32-VC ] ; then
  mkdir $dir
  echo "$dir created."
 fi
