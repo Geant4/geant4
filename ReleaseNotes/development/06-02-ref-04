@@ -74,12 +74,13 @@ processes/electromagnetic/xrays                  xrays-V06-02-03
 -------------------------------
 - Migrated processes to new interface for G4VParticleChange.
 
-processes/optical                                op-V06-02-03
+processes/optical                                op-V06-02-04
 -----------------
 - Fixed bug in G4PlaneVectorRand and resampled theFacetNormal for
   LobeReflection in DielectricMetal.
 - Fixed bug in DielectricMetal only GetFacetNormal() for LobeReflection.
 - Migrated processes to new interface for G4VParticleChange.
+- Added G4OPTICAL_DEBUG flag to control debug printouts and checks.
 
 processes/transportation                         transport-V06-02-02
 ------------------------
