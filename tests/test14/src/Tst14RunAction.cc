@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst14RunAction.cc,v 1.1 1999-05-29 14:12:12 stesting Exp $
+// $Id: Tst14RunAction.cc,v 1.2 1999-06-02 14:07:20 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,7 +21,7 @@
 #include "G4ios.hh"
 #include <iomanip.h>
 
-#include "CLHEP/Hist/HBookFile.h"
+//#include "CLHEP/Hist/HBookFile.h"
 #include <assert.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -38,6 +38,7 @@ Tst14RunAction::Tst14RunAction()
 Tst14RunAction::~Tst14RunAction()
 {
   delete runMessenger;
+  /*******************
   if(histo1) delete histo1 ;
   if(histo2) delete histo2 ;
   if(histo3) delete histo3 ;
@@ -49,12 +50,14 @@ Tst14RunAction::~Tst14RunAction()
   if(histo9) delete histo9 ;
   if(histo10) delete histo10 ;
   delete hbookManager;
+  *********************/
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void Tst14RunAction::bookHisto()
 {
+  /***********************
   // init hbook
   hbookManager = new HBookFile(histName, 68);
   assert (hbookManager != 0);
@@ -121,6 +124,7 @@ void Tst14RunAction::bookHisto()
                                 ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
     assert (histo10 != 0);
   }
+  **********************/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -690,9 +694,10 @@ void Tst14RunAction::EndOfRunAction(const G4Run* aRun)
    }
   }
 
+  /******************
    // Write histogram file
    hbookManager->write();
-
+  *************************/
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -749,7 +754,7 @@ void Tst14RunAction::FillNbOfSteps(G4double ns)
       ibin= bin ;
       distStep[ibin] += 1. ;
     }
-   histo1->accumulate(ns) ;
+    //   histo1->accumulate(ns) ;
   }
 }
 void Tst14RunAction::FillEn(G4double En)
@@ -771,7 +776,7 @@ void Tst14RunAction::FillEn(G4double En)
       ibin= bin ;
       distEn[ibin] += 1. ;
     }
-  histo2->accumulate(En/MeV) ;
+    //  histo2->accumulate(En/MeV) ;
   }
 }
 
@@ -796,7 +801,7 @@ void Tst14RunAction::FillTt(G4double En)
       ibin= bin ;
       distTt[ibin] += 1. ;
     }
-  histo5->accumulate(En/MeV) ;
+    //  histo5->accumulate(En/MeV) ;
   }
 }
 void Tst14RunAction::FillTb(G4double En)
@@ -820,7 +825,7 @@ void Tst14RunAction::FillTb(G4double En)
       ibin= bin ;
       distTb[ibin] += 1. ;
     }
-  histo7->accumulate(En/MeV) ;
+    //  histo7->accumulate(En/MeV) ;
   }
 }
 void Tst14RunAction::FillTsec(G4double En)
@@ -842,7 +847,7 @@ void Tst14RunAction::FillTsec(G4double En)
       ibin= bin ;
       distTsec[ibin] += 1. ;
     }
-  histo8->accumulate(En/MeV) ;
+    //  histo8->accumulate(En/MeV) ;
   }
 }
 
@@ -865,7 +870,7 @@ void Tst14RunAction::FillGammaSpectrum(G4double En)
       ibin= bin ;
       distGamma[ibin] += 1. ;
     }
-  histo10->accumulate(log10(En/MeV)) ;
+    //  histo10->accumulate(log10(En/MeV)) ;
   }
 }
 
@@ -905,7 +910,7 @@ void Tst14RunAction::FillTh(G4double Th)
       distTh[ibin] += wg  ;
     }
 
-  histo3->accumulate(Th/deg, wg) ;
+    //  histo3->accumulate(Th/deg, wg) ;
   }
 }
 
@@ -942,7 +947,7 @@ void Tst14RunAction::FillThBack(G4double Th)
       }
       distThback[ibin] += wg  ;
     }
-  histo6->accumulate(Th/deg, wg) ;
+    //  histo6->accumulate(Th/deg, wg) ;
   }
 
 }
@@ -968,7 +973,7 @@ void Tst14RunAction::FillR(G4double R )
       ibin= bin ;
       distR[ibin] += 1. ;
     }
-  histo4->accumulate(R/mm) ;
+    //  histo4->accumulate(R/mm) ;
   }
 }
 
@@ -991,7 +996,7 @@ void Tst14RunAction::Fillvertexz(G4double z )
       ibin= bin ;
       distvertexz[ibin] += 1. ;
     }
-  histo9->accumulate(z/mm) ;
+    //  histo9->accumulate(z/mm) ;
   }
 }
 
