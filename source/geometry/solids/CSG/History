@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2002-05-15 09:38:06 gcosmo Exp $
+$Id: History,v 1.50 2002-06-19 10:22:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 19, 2002   V.Grichine                geom-csg-V04-00-05
+- G4Sphere.cc: bug fixed in Inside() for treatment of point p on z-axis.
+  Added new condition [(rho2 || p.z()) && fDTheta < M_PI - kAngTolerance*0.5)]
+  for treating special case. Fixes problem report #378.
 
 May 15, 2002   G.Cosmo                   geom-csg-V04-00-04
 - G4Trap.cc, G4Tubs.cc: changed local enum 'kUndefined' to 'kUndef',
