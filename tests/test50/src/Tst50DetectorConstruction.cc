@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.12 2003-02-04 14:02:49 parlati Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.13 2003-02-04 17:21:32 parlati Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -347,6 +347,18 @@ a =127.60*g/mole;
 density =4.93*g/cm3;
 a =126.90447*g/mole;
  G4Material* IMat = new G4Material(name="Iodine"  , z=53., a, density);
+
+density =7.46*g/cm3;
+a =150.36*g/mole;
+ G4Material* SmMat = new G4Material(name="Samarium"  , z=62., a, density);
+
+density =6.73*g/cm3;
+a =173.04*g/mole;
+ G4Material* YbMat = new G4Material(name="Ytterbium"  , z=70., a, density);
+
+density =19.3*g/cm3;
+a =183.84*g/mole;
+ G4Material* WMat = new G4Material(name="Tungsten"  , z=74., a, density);
 
 density = 19.32*g/cm3;
 a = 196.966*g/mole;
