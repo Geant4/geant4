@@ -1,4 +1,4 @@
-.$Id: History,v 1.75 2004-06-17 06:50:35 duns Exp $
+.$Id: History,v 1.76 2004-08-23 04:56:48 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 --------------------------------------------------
+22 August 2004 Mark Donszelmann (vis-HepRep-V06-02-01)
+- Fixed a compilation problem in zlib for AMD64, reported by Peter Niessen.
+
 17 June 2004 Mark Donszelmann (vis-HepRep-V06-01-05 against geant4-06-02-cand-02)
 - Fixed GEANT-50:
   - Renamed zlib prefix from z_ to heprep_z_
