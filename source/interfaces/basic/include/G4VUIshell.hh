@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUIshell.hh,v 1.2 2000-07-22 10:52:28 asaim Exp $
+// $Id: G4VUIshell.hh,v 1.3 2000-11-27 11:01:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -61,7 +61,7 @@ protected:
 
 public:
   G4VUIshell(const G4String& prompt="> ");
-  ~G4VUIshell();
+  virtual ~G4VUIshell();
 
   void SetNColumn(G4int ncol);
   void SetPrompt(const G4String& prompt);
