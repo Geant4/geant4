@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.13 2001-11-07 00:32:06 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.14 2001-11-07 09:35:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,13 +55,13 @@
 
 #include "G4Allocator.hh"
 
-template <class X> class CountedObject;
+template <class X> class G4CountedObject;
 
 template <class X>
 class G4ReferenceCountedHandle
 {
 
-public: // with description
+public:  // with description
 
   inline G4ReferenceCountedHandle( X* rep = 0 );
     // Constructor.
@@ -106,32 +106,36 @@ public: // with description
   
   inline void operator delete( void *pObj );
     // Operator delete defined for G4Allocator.
-  
+
+public:
+
+#ifdef G4RF_DEBUG
   void* operator new( size_t, void *pObj );
-    // This is required when this class is used in the context of STL container.
-    // On Windows/VC++ and Digital's cxx it will compile with
-    // a warning saying something about not existing correspondent delete...
+    // This is required on some compilers (Windows/VC++, Linux/g++) when this
+    // class is used in the context of STL container. It generates a warning
+    // saying something about not existing correspondent delete...
+#endif
 
 private:
 
-  CountedObject<X>*     fObj;
+  G4CountedObject<X>*     fObj;
     // The object subject to reference counting.
 
   static G4Allocator<G4ReferenceCountedHandle<X> > aRCHAllocator;
 };
 
 template <class X>
-class CountedObject
+class G4CountedObject
 {
 
   friend class G4ReferenceCountedHandle<X>;
 
 public:  // with description
 
-  CountedObject( X* pObj = 0 );
+  G4CountedObject( X* pObj = 0 );
     // Constructor.
 
-  ~CountedObject();
+  ~G4CountedObject();
     // Destructor.
 
   inline void AddRef();
@@ -157,14 +161,14 @@ private:
   X* fRep;
     // The counted object.
 
-  static G4Allocator<CountedObject<X> > aCountedObjectAllocator;
+  static G4Allocator<G4CountedObject<X> > aCountedObjectAllocator;
 };
 
 
-// --------- CountedObject<X> Inline function definitions ---------
+// --------- G4CountedObject<X> Inline function definitions ---------
 
 template <class X>
-CountedObject<X>::CountedObject( X* pObj )
+G4CountedObject<X>::G4CountedObject( X* pObj )
  : fCount(0), fRep( pObj )
 {
     if( pObj != 0 ) {
@@ -173,35 +177,34 @@ CountedObject<X>::CountedObject( X* pObj )
 }
 
 template <class X>
-CountedObject<X>::~CountedObject()
+G4CountedObject<X>::~G4CountedObject()
 {
     delete fRep;
 }
     
 template <class X>
-void CountedObject<X>::AddRef()
+void G4CountedObject<X>::AddRef()
 {
     ++fCount;
 }
     
 template <class X>
-void CountedObject<X>::Release()
+void G4CountedObject<X>::Release()
 {
     if( --fCount == 0 ) delete this;
 }
 
 template <class X>
-void* CountedObject<X>::operator new( size_t )
+void* G4CountedObject<X>::operator new( size_t )
 {
     return( (void *)aCountedObjectAllocator.MallocSingle() );
 }
     
 template <class X>
-void CountedObject<X>::operator delete( void *pObj )
+void G4CountedObject<X>::operator delete( void *pObj )
 {
-    aCountedObjectAllocator.FreeSingle( (CountedObject<X>*)pObj );
+    aCountedObjectAllocator.FreeSingle( (G4CountedObject<X>*)pObj );
 }
-
 
 // --------- G4ReferenceCountedHandle<X> Inline function definitions ---------
 
@@ -211,7 +214,7 @@ G4ReferenceCountedHandle<X>::
  : fObj( 0 )
 {
   if( rep != 0 ) {
-      fObj = new CountedObject<X>( rep );
+      fObj = new G4CountedObject<X>( rep );
   }
 }
 
@@ -248,7 +251,7 @@ G4ReferenceCountedHandle<X>& G4ReferenceCountedHandle<X>::
 {
     if( fObj )
       fObj->Release();
-    this->fObj = new  CountedObject<X>( objPtr );
+    this->fObj = new  G4CountedObject<X>( objPtr );
     return *this;
 }
   
@@ -294,20 +297,19 @@ void G4ReferenceCountedHandle<X>::operator delete( void *pObj )
     aRCHAllocator.FreeSingle( (G4ReferenceCountedHandle<X>*)pObj );
 }
 
+#ifdef G4RF_DEBUG
 template <class X>
 void* G4ReferenceCountedHandle<X>::operator new( size_t, void *pObj )
 {
     return pObj;
 }
+#endif
 
-// ------------------------------------------------------------------
-
-// In order to save the human's typing and brain the macro is provided
-// for definition of the allocators for generic type of counted objects.
+// ------------------ Static allocators definitions -----------------
 
 template <class X>
-G4Allocator<CountedObject<X> >
-  CountedObject<X>::aCountedObjectAllocator;
+G4Allocator<G4CountedObject<X> >
+  G4CountedObject<X>::aCountedObjectAllocator;
 
 template <class X>
 G4Allocator<G4ReferenceCountedHandle<X> >
