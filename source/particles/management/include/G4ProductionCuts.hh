@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.2 2002-12-16 11:15:43 gcosmo Exp $
+// $Id: G4ProductionCuts.hh,v 1.3 2003-03-10 03:56:12 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/vector"
+#include "G4ParticleDefinition.hh"
 
 enum G4ProductionCutsIndex
 {
@@ -78,6 +79,7 @@ class G4ProductionCuts
   public: // with description
   // Set Cuts methods
   void              SetProductionCut(G4double cut, G4int index = -1);
+  void              SetProductionCut(G4double cut, G4ParticleDefinition* ptcl = 0);
   // Set the productionCut in range with an index to particle type
   // if index is omitted, the value is applied to all particles
 
