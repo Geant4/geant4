@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPVParameterisation.hh,v 1.4 2001-07-11 09:59:18 gunter Exp $
+// $Id: G4VPVParameterisation.hh,v 1.5 2003-08-21 08:59:05 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
@@ -53,6 +53,7 @@ class G4Trd;
 class G4Trap;
 class G4Cons;
 class G4Sphere;
+class G4Orb;
 class G4Torus;
 class G4Para;
 class G4Hype;
@@ -91,6 +92,10 @@ class G4VPVParameterisation
                                    const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Sphere &,
+                                   const G4int,
+                                   const G4VPhysicalVolume *) const {}
+
+    virtual void ComputeDimensions(G4Orb &,
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
