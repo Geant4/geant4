@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.11 1999-06-28 15:45:59 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.12 1999-07-05 14:27:33 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,10 +50,10 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName
     BTable(0),
     ZNumVec(0),
     LowestKineticEnergy (250.*eV),
-    HighestKineticEnergy(100.*TeV),
+    HighestKineticEnergy(100.*GeV),
     lowEnergyCut(0.1*eV),
     CutForLowEnergySecondaryPhotons(0.),
-    TotBin(100)
+    TotBin(200)
 { 
 
 
@@ -262,8 +262,8 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
      const G4int NumberOfElements = material->GetNumberOfElements();
 
        //  loop for the kinetic energy values
-       for (G4int i=0; i<TotBin; i++)
-         {
+       for (G4int i=0; i<TotBin; i++){
+
           KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
           TotalEnergy = KineticEnergy+ParticleMass ;
 
@@ -528,26 +528,30 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 // Build  mean free path tables for the gamma emission by e- or e+.
 // tables are Build for MATERIALS. 
 {
-   G4double LowEdgeEnergy , Value;
    G4double FixedEnergy = (LowestKineticEnergy + HighestKineticEnergy)/2.;
-
-   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    //create table
    if (theMeanFreePathTable) {theMeanFreePathTable->clearAndDestroy();
                               delete theMeanFreePathTable;
                              }
-   theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
-   
-   PartialSumSigma.resize(G4Material::GetNumberOfMaterials());
+
+   G4double NumbOfMaterials = G4Material::GetNumberOfMaterials();
+   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+   G4Material* material;
+
+   PartialSumSigma.resize(NumbOfMaterials);
+
+   G4double LowEdgeEnergy , Value;
+   theMeanFreePathTable = new G4PhysicsTable(NumbOfMaterials);
    G4PhysicsLogVector* ptrVector;
-   for ( G4int J=0 ; J < G4Material::GetNumberOfMaterials(); J++ ){ 
+
+   for ( G4int J=0 ; J < NumbOfMaterials; J++ ){ 
      
      //create physics vector then fill it ....
      ptrVector = new G4PhysicsLogVector(LowestKineticEnergy, HighestKineticEnergy,
 					TotBin ) ;
      
-     const G4Material* material= (*theMaterialTable)[J];
+     material= (*theMaterialTable)(J);
      const G4ElementVector* theElementVector = material->GetElementVector();
      const G4double* theAtomNumDensityVector = material->GetAtomicNumDensityVector();   
      
@@ -559,7 +563,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        
        for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	 
-	 G4double AtomIndex = (*theElementVector)(k)->GetZ();
+	 G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	 const G4FirstLevel* oneAtomCS
 	   = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 	 
@@ -572,6 +576,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        
        Value = SIGMA<=0.0 ? BigPath : 1./SIGMA ;
        ptrVector->PutValue( i , Value ) ;
+
      }
      
      theMeanFreePathTable->insert( ptrVector );
@@ -705,8 +710,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
   }
   
-  // now comes the supression due to the LPM effect I leave it because the way 
-  // eedl cross sections are calculated is exactly the same as geant4
+  // now comes the supression due to the LPM effect I leave it
   
   if(GammaEnergy < LPMGammaEnergyLimit){
     
@@ -752,13 +756,6 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     
     GammaDirection.rotateUz(ElectDirection);   
   
-    // create G4DynamicParticle object for the Gamma 
-    G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
-						      GammaDirection, GammaEnergy);
-    
-    aParticleChange.SetNumberOfSecondaries(1);
-    aParticleChange.AddSecondary(aGamma); 
-    
     //
     // Update the incident particle 
     //
@@ -769,7 +766,21 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
       
       aParticleChange.SetMomentumChange( ElectDirection );
       aParticleChange.SetEnergyChange( NewKinEnergy );
-      aParticleChange.SetLocalEnergyDeposit (0.); 
+
+      if(GammaEnergy <  GammaEnergyCut){
+
+	 aParticleChange.SetLocalEnergyDeposit (GammaEnergy); 
+      }
+      else{
+
+	// create G4DynamicParticle object for the Gamma 
+	G4DynamicParticle* aGamma= new G4DynamicParticle (G4Gamma::Gamma(),
+							  GammaDirection, GammaEnergy);
+	
+	aParticleChange.SetNumberOfSecondaries(1);
+	aParticleChange.AddSecondary(aGamma); 
+	aParticleChange.SetLocalEnergyDeposit (0);
+      }
     } 
     else{
       

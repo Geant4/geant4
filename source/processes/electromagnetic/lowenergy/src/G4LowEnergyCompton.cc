@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.10 1999-06-28 15:46:00 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.11 1999-07-05 14:27:33 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -335,7 +335,6 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
 	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
 							 (*(*oneAtomCS)[0]), 
 							 (*(*oneAtomCS)[1]))*barn;
-
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
       }       
       

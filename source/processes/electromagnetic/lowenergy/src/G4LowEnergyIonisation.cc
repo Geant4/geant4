@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.18 1999-07-01 17:37:35 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.19 1999-07-05 14:27:34 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -479,6 +479,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   } 
 
+  //  G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
   G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy - BindingEn;
     
   if(thePrimShVec.length() != 0){
