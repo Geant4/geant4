@@ -41,9 +41,9 @@ G4Allocator<HadrontherapyHit> HadrontherapyHitAllocator;
 
 // -----------------------------------------------------------------
 HadrontherapyHit::HadrontherapyHit(G4int j)
-:slice(j)
+  :slice(j)
 {
-  m_Edep=0;
+  m_Edep = 0;
 }
 
 // ----------------------------------------------------------------
@@ -54,15 +54,15 @@ HadrontherapyHit::~HadrontherapyHit()
 // ----------------------------------------------------------------
 HadrontherapyHit::HadrontherapyHit(const HadrontherapyHit &right):G4VHit()
 {
-slice=  right.slice;
-m_Edep = right.m_Edep;
+  slice =  right.slice;
+  m_Edep = right.m_Edep;
 }
 
 // -----------------------------------------------------------------
 const HadrontherapyHit& HadrontherapyHit::operator=(const HadrontherapyHit &right)
 {
-m_Edep = right.m_Edep;
-slice=  right.slice;
+  m_Edep = right.m_Edep;
+  slice =  right.slice;
   return *this;
 }
 

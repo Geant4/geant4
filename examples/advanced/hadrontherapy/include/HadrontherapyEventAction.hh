@@ -48,7 +48,7 @@ public:
 
 public:
   void BeginOfEventAction(const G4Event*);
-  void   EndOfEventAction(const G4Event*);
+  void EndOfEventAction(const G4Event*);
   void setEventVerbose(G4int level);
   void CountStepsCharged() ;
   void CountStepsNeutral() ;
@@ -59,19 +59,16 @@ public:
   void SetTr();
   void SetRef();
   
-G4int GetEventno();
-G4int Trasporto();
-
+  G4int GetEventno();
+  G4int Trasporto();
 
 private:
-G4int event_id;
-G4int    calorimeterCollID;
-HadrontherapyEventActionMessenger*  eventMessenger;
-HadrontherapyRunAction* p_Run;
-G4int verboselevel;
-G4double nstep;
-G4double energyDep[50000];
-
+  G4int event_id;
+  G4int    calorimeterCollID;
+  HadrontherapyEventActionMessenger*  eventMessenger;
+  HadrontherapyRunAction* p_Run;
+  G4int verboselevel;
+  G4double nstep;
+  G4double energyDep[50000];
 };
-
 #endif

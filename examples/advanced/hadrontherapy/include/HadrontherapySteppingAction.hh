@@ -54,26 +54,18 @@ class HadrontherapySteppingMessenger;
 class HadrontherapySteppingAction : public G4UserSteppingAction
 {
 public:
-HadrontherapySteppingAction( HadrontherapyEventAction* );
-~HadrontherapySteppingAction();
+  HadrontherapySteppingAction( HadrontherapyEventAction* );
+  ~HadrontherapySteppingAction();
   
-void UserSteppingAction(const G4Step*);
+  void UserSteppingAction(const G4Step*);
 
-G4int event_id;
-G4int Controllo;
+  G4int event_id;
+  G4int Controllo;
 
-  private:
-HadrontherapyDetectorConstruction* detector;
-HadrontherapyEventAction*          eventaction;
-HadrontherapyRunAction*            runaction;
-HadrontherapySteppingMessenger*    steppingMessenger;
-
-  // G4int IDnow,IDold;
-  // G4int evnoold ;
- 
-   
+private:
+  HadrontherapyDetectorConstruction* detector;
+  HadrontherapyEventAction*          eventaction;
+  HadrontherapyRunAction*            runaction;
+  HadrontherapySteppingMessenger*    steppingMessenger;   
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif

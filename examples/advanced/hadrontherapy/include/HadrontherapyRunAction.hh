@@ -44,28 +44,24 @@ class G4Run;
 // -------------------------------------------------------------
 class HadrontherapyRunAction : public G4UserRunAction
 {
-  public:
-    HadrontherapyRunAction();
-   ~HadrontherapyRunAction();
+public:
+  HadrontherapyRunAction();
+  ~HadrontherapyRunAction();
   
-G4double energy[50000];
+  G4double energy[50000];
   
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
-G4int GetProva();
+  G4int GetProva();
 
   void  EnergyTotSlice(G4int, G4double); 
   void  EnergyTotMarkus();
 
-
- private:
-G4int NbOfLayer; 
-G4int slice;
-
 private:
-G4double energy_dep;
+  G4int NbOfLayer; 
+  G4int slice;
+  G4double energy_dep;
 };
-
 #endif
 

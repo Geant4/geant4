@@ -58,16 +58,16 @@ HadrontherapySteppingAction::~HadrontherapySteppingAction()
 // -----------------------------------------------------------------
 void HadrontherapySteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
-  event_id = eventaction->Trasporto();
+  event_id = eventaction -> Trasporto();
   //the function Trasporto takes the event's number from EventAction Class
  
-G4double x  = aStep->GetPostStepPoint()->GetPosition().x();
-G4double y  = aStep->GetPostStepPoint()->GetPosition().y();
-G4double z  = aStep->GetPostStepPoint()->GetPosition().z();
+G4double x  = aStep -> GetPostStepPoint() -> GetPosition().x();
+G4double y  = aStep -> GetPostStepPoint() -> GetPosition().y();
+G4double z  = aStep -> GetPostStepPoint() -> GetPosition().z();
   
-G4Track * theTrack = aStep->GetTrack();
-G4double TrackID = theTrack->GetTrackID();
-G4double KEnergy = theTrack->GetKineticEnergy();
+G4Track * theTrack = aStep -> GetTrack();
+G4double TrackID = theTrack -> GetTrackID();
+G4double KEnergy = theTrack -> GetKineticEnergy();
   
 G4double thicknessPlane = 1 *mm;
 G4double xPlane = 1048.59 *mm;

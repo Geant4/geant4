@@ -26,9 +26,6 @@
 //
 // John Allison 24th January 1998.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifdef G4VIS_USE
 
 #include "HadrontherapyVisManager.hh"
@@ -84,11 +81,7 @@
 #include "G4VRML2.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 HadrontherapyVisManager::HadrontherapyVisManager () {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HadrontherapyVisManager::RegisterGraphicsSystems () {
 
@@ -136,10 +129,10 @@ void HadrontherapyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
-  //#ifdef G4VIS_USE_VRML
-  //RegisterGraphicsSystem (new G4VRML1);
-  //RegisterGraphicsSystem (new G4VRML2);
-  //#endif
+#ifdef G4VIS_USE_VRML
+  RegisterGraphicsSystem (new G4VRML1);
+  RegisterGraphicsSystem (new G4VRML2);
+#endif
 
   if (fVerbose > 0) {
     G4cout <<
@@ -148,7 +141,4 @@ void HadrontherapyVisManager::RegisterGraphicsSystems () {
     PrintAvailableGraphicsSystems ();
   }
 }
-
 #endif
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

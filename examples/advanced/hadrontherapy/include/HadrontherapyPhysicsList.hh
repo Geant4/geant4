@@ -43,8 +43,8 @@ class HadrontherapyPhysicsListMessenger;
 class HadrontherapyPhysicsList: public G4VUserPhysicsList
 {
 public:
-HadrontherapyPhysicsList( HadrontherapyDetectorConstruction*);
-~HadrontherapyPhysicsList();
+  HadrontherapyPhysicsList( HadrontherapyDetectorConstruction*);
+  ~HadrontherapyPhysicsList();
   
 protected:
   // Construct particle and physics
@@ -59,14 +59,15 @@ protected:
   void ConstructMesons();
   void ConstructBarions();
   void ConstructIons();
+
 protected:
   // these methods Construct physics processes and register them
   void ConstructGeneral();
   void ConstructEM();
   void ConstructHad();
   void ConstructOp();
-public:
-  
+
+public:  
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
   void SetProtonCut(G4double);

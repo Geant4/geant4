@@ -48,26 +48,26 @@ class HadrontherapyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 // ---------------------------------------------------------------------------
 {
 public:
-HadrontherapyPrimaryGeneratorAction(HadrontherapyDetectorConstruction*);    
-~HadrontherapyPrimaryGeneratorAction();
+  HadrontherapyPrimaryGeneratorAction(HadrontherapyDetectorConstruction*);    
+  ~HadrontherapyPrimaryGeneratorAction();
   
 public:
   void SetDefaultKinematic();
   void GeneratePrimaries(G4Event*);
 
 private:
-G4ParticleGun*                particleGun;
-HadrontherapyDetectorConstruction*      HadrontherapyDetector;
+  G4ParticleGun*                particleGun;
+  HadrontherapyDetectorConstruction*      HadrontherapyDetector;
   
-G4double X0;
-G4double Y0;
-G4double Z0;
+  G4double X0;
+  G4double Y0;
+  G4double Z0;
 
-G4double sigmaX;
-G4double sigmaY;
-G4double sigmaZ;
+  G4double sigmaX;
+  G4double sigmaY;
+  G4double sigmaZ;
 
-HadrontherapyPrimaryGeneratorMessenger* gunMessenger;     
+  HadrontherapyPrimaryGeneratorMessenger* gunMessenger;     
 };
 
 #endif

@@ -40,8 +40,8 @@
 
 // -----------------------------------------------------------------------------
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
-                                           HadrontherapyDetectorConstruction* HadrontherapyDet)
-:HadrontherapyDetector(HadrontherapyDet)
+							       HadrontherapyDetectorConstruction* HadrontherapyDet)
+  :HadrontherapyDetector(HadrontherapyDet)
 { 
   HadronDir = new G4UIdirectory("/modulator/");
   HadronDir->SetGuidance("Command to rotate the modulator wheel");
@@ -49,14 +49,13 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(
   detDir = new G4UIdirectory("/modulator/angle/");
   detDir->SetGuidance("Modulator angle control");
 
-    ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle/modAngle",this);
-    ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
-    ModulatorAngleCmd->SetParameterName("Size",false);
-    ModulatorAngleCmd->SetRange("Size>=0.");
-    ModulatorAngleCmd->SetUnitCategory("Angle");  
-    ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  }
+  ModulatorAngleCmd = new G4UIcmdWithADoubleAndUnit("/modulator/angle/modAngle",this);
+  ModulatorAngleCmd->SetGuidance("Set Modulator Angle");
+  ModulatorAngleCmd->SetParameterName("Size",false);
+  ModulatorAngleCmd->SetRange("Size>=0.");
+  ModulatorAngleCmd->SetUnitCategory("Angle");  
+  ModulatorAngleCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 // -------------------------------------------------------------------------------
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
@@ -71,7 +70,7 @@ void HadrontherapyDetectorMessenger::SetNewValue(G4UIcommand* command,G4String n
 { 
 
   if( command == ModulatorAngleCmd )
-  { HadrontherapyDetector->SetModulatorAngle(ModulatorAngleCmd->GetNewDoubleValue(newValue));}
+    { HadrontherapyDetector->SetModulatorAngle(ModulatorAngleCmd->GetNewDoubleValue(newValue));}
 
 }
 // ------------------------------------------------------------------------------------

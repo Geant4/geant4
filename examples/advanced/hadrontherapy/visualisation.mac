@@ -23,6 +23,10 @@
 /vis/scene/add/trajectories
 
 /vis/viewer/zoom 1.1
-/run/beamOn 1000
+##### Rotation of the modulator
+#/modulator/angle/modAngle 45 deg
+#/vis/viewer/refresh
+#######
+/run/beamOn 50
 
 

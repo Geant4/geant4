@@ -48,7 +48,6 @@ HadrontherapyRunAction::HadrontherapyRunAction()
 // ---------------------------------------------------------------
 HadrontherapyRunAction::~HadrontherapyRunAction()
 {
-  //  delete runMessenger;
 }
 
 // ---------------------------------------------------------------
@@ -63,7 +62,7 @@ void HadrontherapyRunAction::BeginOfRunAction(const G4Run* aRun)
 G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
 // save Rndm status
-G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+G4RunManager::GetRunManager() -> SetRandomNumberStore(true);
 HepRandom::showEngineStatus();
 }
 
@@ -96,6 +95,5 @@ depth = i*0.002; //the number represents the thickness of the ionization chamber
 // -----------------------------------------------------------------------------
 void HadrontherapyRunAction::EnergyTotSlice(G4int slice, G4double energy_dep) 
 {
-  energy[ slice ] = energy [ slice ] + energy_dep; 
- 
+  energy[ slice ] = energy [ slice ] + energy_dep;  
 }

@@ -45,11 +45,6 @@
 #include "HadrontherapyRunAction.hh"  
 #include "G4ios.hh"
 
-#ifdef G4ANALYSIS_USE
-#include "HadrontherapyAnalysisManager.hh"
-#endif
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 HadrontherapyCalorimeterSD::HadrontherapyCalorimeterSD(G4String name, 
 						       HadrontherapyDetectorConstruction* det)
 :G4VSensitiveDetector(name),Detector(det),
@@ -204,13 +199,8 @@ G4double etot = 0.0;
 void HadrontherapyCalorimeterSD::clear()
 {} 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
 void HadrontherapyCalorimeterSD::PrintAll()
 {} 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

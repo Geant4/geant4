@@ -47,7 +47,7 @@ class HadrontherapyHit;
 // -------------------------------------------------------------
 class HadrontherapyCalorimeterSD : public G4VSensitiveDetector
 {
-  public:
+public:
  
   HadrontherapyCalorimeterSD(G4String, HadrontherapyDetectorConstruction*);
   ~HadrontherapyCalorimeterSD();
@@ -59,28 +59,26 @@ class HadrontherapyCalorimeterSD : public G4VSensitiveDetector
   void PrintAll();
 
 private:
-G4String filename;
-G4int sliceID[50000];
-G4double energy[50000];
-G4double depth;
+  G4String filename;
+  G4int sliceID[50000];
+  G4double energy[50000];
+  G4double depth;
   
   HadrontherapyDetectorConstruction* Detector;
 
-G4double backEnergy;
-G4double leakEnergy;
-G4double delta;
-G4double depthMax;
-G4double tkinold;
-G4bool   part_is_out;
-G4int evno;
-G4int evnOld;
-G4int trIDold;
-G4int NbOfLayer;
-HadrontherapyRunAction* p_Run;
-HadrontherapyHitsCollection* CalCollection;
-  
+  G4double backEnergy;
+  G4double leakEnergy;
+  G4double delta;
+  G4double depthMax;
+  G4double tkinold;
+  G4bool   part_is_out;
+  G4int evno;
+  G4int evnOld;
+  G4int trIDold;
+  G4int NbOfLayer;
+  HadrontherapyRunAction* p_Run;
+  HadrontherapyHitsCollection* CalCollection;  
 };
-
 #endif
 
 

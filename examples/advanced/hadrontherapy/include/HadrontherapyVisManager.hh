@@ -40,12 +40,9 @@
 class HadrontherapyVisManager: public G4VisManager {
 
 public:
-
   HadrontherapyVisManager ();
 
 private:
-
   void RegisterGraphicsSystems ();
-
 };
 #endif

@@ -79,7 +79,6 @@ inline void HadrontherapyCalorHit::operator delete(void* aHit)
 {
   HadrontherapyCalorHitAllocator.FreeSingle((HadrontherapyCalorHit*) aHit);
 }
-
 #endif
 
 

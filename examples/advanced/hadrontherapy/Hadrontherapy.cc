@@ -67,79 +67,78 @@
 // -----------------------------------------------------------------------
 int main(int argc,char** argv) {
 
-//***************************
-// choose the Random engine
-//***************************
+  //***************************
+  // choose the Random engine
+  //***************************
 
-HepRandom::setTheEngine(new RanecuEngine);
-G4int seed=time(NULL);
-HepRandom ::setTheSeed(seed);
-
+  HepRandom::setTheEngine(new RanecuEngine);
+  G4int seed = time(NULL);
+  HepRandom::setTheSeed(seed);
     
-//***********************************
-// Construct the default run manager
-//***********************************
+  //***********************************
+  // Construct the default run manager
+  //***********************************
   
-G4RunManager * runManager = new G4RunManager;
+  G4RunManager * runManager = new G4RunManager;
   
-//***************************************
-// set mandatory initialization classes
-//***************************************
+  //***************************************
+  // set mandatory initialization classes
+  //***************************************
 
-HadrontherapyDetectorConstruction* detector;
-detector = new HadrontherapyDetectorConstruction;
-runManager->SetUserInitialization(detector);
-runManager->SetUserInitialization(new HadrontherapyPhysicsList(detector));
+  HadrontherapyDetectorConstruction* detector;
+  detector = new HadrontherapyDetectorConstruction;
+  runManager -> SetUserInitialization(detector);
+  runManager -> SetUserInitialization(new HadrontherapyPhysicsList(detector));
 
-//***********************************************
-// Set the visualization if you chose to have it!
-//***********************************************
+  //***********************************************
+  // Set the visualization if you chose to have it!
+  //***********************************************
 
 #ifdef G4VIS_USE
-G4VisManager* visManager = new HadrontherapyVisManager;
-visManager->Initialize();
+  G4VisManager* visManager = new HadrontherapyVisManager;
+  visManager -> Initialize();
 #endif 
 
-//**********************************
-// set mandatory user action class
-//********************************
+  //**********************************
+  // set mandatory user action class
+  //********************************
 
-runManager->SetUserAction(new HadrontherapyPrimaryGeneratorAction( detector ));
+  runManager -> SetUserAction(new HadrontherapyPrimaryGeneratorAction( detector ));
  
-//****************************************
-// set the optional user action classes
-//***************************************
+  //****************************************
+  // set the optional user action classes
+  //***************************************
 
-HadrontherapyRunAction* runaction = new HadrontherapyRunAction;
-runManager->SetUserAction(runaction);
+  HadrontherapyRunAction* runaction = new HadrontherapyRunAction;
+  runManager -> SetUserAction(runaction);
  
-HadrontherapyEventAction* eventaction = new HadrontherapyEventAction( runaction );
-runManager->SetUserAction(eventaction);
+  HadrontherapyEventAction* eventaction = new HadrontherapyEventAction( runaction );
+  runManager -> SetUserAction(eventaction);
   
-HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction( eventaction );
-runManager->SetUserAction(steppingaction);    
+  HadrontherapySteppingAction* steppingaction = new HadrontherapySteppingAction( eventaction );
+  runManager -> SetUserAction(steppingaction);    
  
-//*********************
-// Initialize G4 kernel
-//*********************
+  //*********************
+  // Initialize G4 kernel
+  //*********************
 
-runManager->Initialize();
+  runManager -> Initialize();
 
-//***********************************************
-// get the pointer to the User Interface manager 
-//***********************************************
+  //***********************************************
+  // get the pointer to the User Interface manager 
+  //***********************************************
 
-G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
 
-//*******************************************************************
-//Define  UI terminal for interactive mode (wait command from keyboard
-//or for batch mode but reading a macro file
-//********************************************************************
+  //*******************************************************************
+  //Define  UI terminal for interactive mode (wait command from keyboard
+  //or for batch mode but reading a macro file
+  //********************************************************************
 
-G4UIsession* session=0;
+  G4UIsession* session = 0;
   
-if (argc==1)   // Define UI session for interactive mode.
-  {
+  if (argc==1)   // Define UI session for interactive mode.
+    {
                         
 #ifdef G4UI_USE_XM
       session = new G4UIXm(argc,argv);
@@ -151,33 +150,34 @@ if (argc==1)   // Define UI session for interactive mode.
       session = new G4UIterminal();
 #endif
 #endif
-  }
+    }
 
 
-if (session)   // Define UI session for interactive mode.
-  {
+  if (session)   // Define UI session for interactive mode.
+    {
       
-    UI->ApplyCommand("/control/execute defaultMacro.mac");    
-    session->SessionStart();
-    delete session;
-  }
+      UI->ApplyCommand("/control/execute defaultMacro.mac");    
+      session -> SessionStart();
+      delete session;
+    }
 
- else           // Batch mode
+  else           // Batch mode
 
-   { 
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
  
-//******************* 
-// job termination
-//*******************
+  //******************* 
+  // job termination
+  //*******************
 
 #ifdef G4VIS_USE
-delete visManager;
+  delete visManager;
 #endif  
- delete runManager;
+
+  delete runManager;
 
   return 0;
 }

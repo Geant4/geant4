@@ -44,7 +44,7 @@
 // ------------------------------------------------------------------
 class HadrontherapyHit : public G4VHit
 {
- public:
+public:
   HadrontherapyHit(G4int);
   ~HadrontherapyHit();
   HadrontherapyHit(const HadrontherapyHit &right);
@@ -59,10 +59,10 @@ class HadrontherapyHit : public G4VHit
   
 private:
      
-G4int slice;
-G4double m_Edep;
+  G4int slice;
+  G4double m_Edep;
 
- public: 
+public: 
   inline G4int GetSliceID() {return slice;}
   inline void SetSliceID(G4int sliceID)
   {slice= sliceID;}
@@ -87,7 +87,6 @@ inline void HadrontherapyHit::operator delete(void *aHit)
 {
   HadrontherapyHitAllocator.FreeSingle((HadrontherapyHit*) aHit);
 }
-
 #endif
 
 

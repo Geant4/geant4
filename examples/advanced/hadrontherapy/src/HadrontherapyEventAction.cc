@@ -48,9 +48,8 @@
 
 // -------------------------------------------------------------------
 HadrontherapyEventAction::HadrontherapyEventAction(HadrontherapyRunAction* runAction)
-  :calorimeterCollID(-1),eventMessenger(NULL),
- verboselevel(0)
- {
+  :calorimeterCollID(-1), eventMessenger(NULL), verboselevel(0)
+{
   p_Run = runAction;
 }
 
@@ -62,18 +61,18 @@ HadrontherapyEventAction::~HadrontherapyEventAction()
 // --------------------------------------------------------------------
 void HadrontherapyEventAction::BeginOfEventAction(const G4Event* evt)
 {
-event_id = evt->GetEventID();
- if (calorimeterCollID==-1)
-   {
-     G4SDManager * SDman = G4SDManager::GetSDMpointer();
-     calorimeterCollID = SDman->GetCollectionID("CalCollection");
-   } 
+  event_id = evt->GetEventID();
+  if (calorimeterCollID==-1)
+    {
+      G4SDManager * SDman = G4SDManager::GetSDMpointer();
+      calorimeterCollID = SDman->GetCollectionID("CalCollection");
+    } 
  
-nstep = 0. ;
- for (G4int slice = 0; slice < 20000; slice ++)      //slice dependence
-   {
-     energyDep[slice]=0;
-   }
+  nstep = 0. ;
+  for (G4int slice = 0; slice < 20000; slice ++)      //slice dependence
+    {
+      energyDep[slice]=0;
+    }
 }
 
 // ---------------------------------------------------------------------
@@ -92,11 +91,9 @@ void HadrontherapyEventAction::EndOfEventAction(const G4Event* evt)
       
       for (G4int h=0; h < HitCount; h++)
 	{
-	  
 	  G4int  j=((*CHC)[h])->GetSliceID();  
 	  energyDep[j]+=((*CHC)[h]->GetEdep());
-	  p_Run->EnergyTotSlice(j,energyDep[j]);
-	  
+	  p_Run->EnergyTotSlice(j,energyDep[j]);	  
 	}
     }  
 }
