@@ -37,7 +37,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
   return NULL;
 };
 
-// #define debug_G4CascadeInterface
+ #define debug_G4CascadeInterface
 
 G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, 
 						     G4Nucleus& theNucleus) {
@@ -171,7 +171,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       case proton: 
 #ifdef debug_G4CascadeInterface
-	G4cerr << "proton "<< counter<<G4endl;
+	G4cerr << "proton "<< counter<<" "<<aMom<<" "<< ekin<<G4endl;
 #endif
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Proton::ProtonDefinition(), aMom, ekin);
@@ -179,7 +179,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
       case neutron: 
 #ifdef debug_G4CascadeInterface
-	G4cerr << "neutron "<< counter<<G4endl;
+	G4cerr << "neutron "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Neutron::NeutronDefinition(), aMom, ekin);
@@ -189,7 +189,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionPlus::PionPlusDefinition(), aMom, ekin);
 #ifdef debug_G4CascadeInterface
-	G4cerr << "pionPlus "<< counter<<G4endl;
+	G4cerr << "pionPlus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
 
@@ -197,7 +197,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionMinus::PionMinusDefinition(), aMom, ekin);
 #ifdef debug_G4CascadeInterface
-	G4cerr << "pionMinus "<< counter<<G4endl;
+	G4cerr << "pionMinus "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
 
@@ -205,7 +205,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	cascadeParticle = 
 	  new G4DynamicParticle(G4PionZero::PionZeroDefinition(), aMom, ekin);
 #ifdef debug_G4CascadeInterface
-	G4cerr << "pionZero "<< counter<<G4endl;
+	G4cerr << "pionZero "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
 
@@ -213,7 +213,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 	cascadeParticle = 
 	  new G4DynamicParticle(G4Gamma::Gamma(), aMom, ekin);
 #ifdef debug_G4CascadeInterface
-	G4cerr << "photon "<< counter<<G4endl;
+	G4cerr << "photon "<< counter<<" "<<aMom<<" "<<  ekin<<G4endl;
 #endif
 	break;
 
