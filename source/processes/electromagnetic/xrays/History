@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2004-12-02 08:31:07 vnivanch Exp $
+$Id: History,v 1.33 2004-12-10 18:50:14 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 Dec 04: G.Cosmo (xrays-V06-02-05)
+- Replaced M_PI with CLHEP's pi.
 
 02 Dec 04: V.Ivant (xrays-V06-02-04)
 - Migration to cmath
