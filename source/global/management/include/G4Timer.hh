@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.2 1999-05-17 14:39:16 stesting Exp $
+// $Id: G4Timer.hh,v 1.3 1999-05-21 14:11:01 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,8 +83,18 @@
    };
 #endif  /* WIN32 */
 
+//Avoid STL clash
+#ifdef G4USE_OSPACE
+#undef G4USE_OSPACE
+#define G4USED_OSPACE
+#endif
+#ifdef G4USE_STL
+#undef G4USE_STL
+#define G4USED_STL
+#endif
+
 #include "globals.hh"
-#undef os_times
+
 
 class ostream;
 
@@ -125,5 +135,15 @@ inline G4bool G4Timer::IsValid() const
 {
     return fValidTimes;
 }
+
+//Restart STL
+#ifdef G4USED_OSPACE
+#undef G4USED_OSPACE
+#define G4USE_OSPACE 1
+#endif
+#ifdef G4USED_STL
+#undef G4USED_STL
+#define G4USE_STL 1
+#endif
 
 #endif
