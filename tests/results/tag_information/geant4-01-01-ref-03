@@ -1,4 +1,125 @@
-                geant4-01-01-ref-03
-                ===================
+                       geant4-01-01-ref-03
+                       ===================
 
-               (Under construction.)
+The reference tag "geant4-01-01-ref-03" is now available.
+This is the tag recommended as most up-to-date for Geant4 members. 
+It includes all tested fixes, and those developments that have
+been tested and have passed our testing procedure.
+Libraries and all examples and tests have been built successfully on
+the supported platforms as part of the testing cycle.
+In addition, validation tests have been built and run successfully
+on DEC-cxx (non ISO setup) and HP-aCC (with native STL).
+
+Please see below for details of the most relevant fixes
+included in this 'development-release'.
+
+The next recommended reference tag is scheduled for May 26th.
+
+Some of the improvements and fixes included since the last
+recommended reference tag are:
+    - major restructure of geometry/solids/CSG module.
+      Created new module solids/specific for generic shapes.
+    - new developments in low-energy electromagnetic processes.
+    - ability to visualise Boolean solids through G4Polyhedron
+      objects.
+A more complete list is available below.
+
+
+How to update a development tree
+--------------------------------
+
+Access to the Geant4 CVS repository is required in order to update
+a source code directory of Geant4. If you maintain such a development
+tree to update it you should do the following:
+
+ cd $G4INSTALL
+ cvs update -r geant4-01-01-ref-03 -d -P
+
+For developers only:
+ |    You will need an extract step in order to update the tree of
+ |  the category that you develop.  Assuming that your developments
+ |  are in the head of CVS, you should do the following:
+ |
+ |      cd <your-(sub)category>
+ |      cvs update -d -P -A
+ |
+ |  Then you'll need to resolve any clashes you may get.
+
+Please, note that due to a directory reorganisation in the geometry
+module, it is recommended to remove the old installations completely
+before triggering the compilation, i.e.:
+
+  cd $G4INSTALL/source
+  gmake clean_all  <-- removes lib bin tmp directories from $G4INSTALL/
+  gmake
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the full list of changes is the following:
+
+config
+------
+- Added path to new geometry modue geometry/solids/specific.
+- Updated filtering script for STEP files g4step_correct.pl.
+
+hadronics
+---------
+- hadronic/models/neutron_hp: bug-fixes and improvements concerning
+  Q-values on Lithium-6, gamma production on Iron56, and triton
+  production on B-10.
+
+electromagnetic processes
+-------------------------
+- Low-energies processes:
+  o modifications for integration of cross sections, corrections of
+    fluorescence transition probabilities to take into account
+    non-radiative transitions.
+  o fixes in G4LowEnergyBremsstrahlung for continuous energy loss.
+  o updated system test test14 and extended-example testem6.
+
+geometry
+--------
+- magneticfield:
+  o corrected signature to function DumbStepper() in classes:
+    G4HelixExplicitEuler, G4HelixHeum, G4HelixImplicitEuler,
+    G4HelixSimpleRunge and G4MagHelicalStepper.
+  o corrected signature and implementation of function
+    MagFieldEvaluate() in G4MagHelicalStepper, to use Field (as
+    ThreeVector) in place of dydx.
+  o made Richardson extrapolation optional in G4MagHelicalStepper.
+  o updated unit test testPropagateMagField and reference output.
+  o fix in G4LineSection to prevent divisions by 0 and sqrt(<0).
+- management:
+  o design change in G4VSolid, changed pure virtual method
+    G4VSolid::GetExtent() to virtual. Added default implementation
+    based on CalculateExtent().
+- solids:
+  o fixes to G4Tubes and G4Hype.
+  o removed implementations of GetExtent() in most sub-classes
+    of G4VSolid.
+  o fixed implementations of visualization utility method
+    DescribeYourselfTo().
+  o restructured CSG directory and created new module solids/specific.
+  o added new shape in solids/specific: G4EllipticalTube.
+  o created new directory solids/test and moved test suites "SBT"
+    and "Fred" therein.
+- solids/Boolean:
+  o CreatePolyhedron implemented for BooleanSolids.
+  o G4DisplacedSolid: reversed implementation of GetFrameRotation and
+    GetObjectRotation, removing inappropriate invertion.
+  o G4DisplacedSolid::GetConstituentMovedSolid() made const.
+
+visualization
+-------------
+- Added ability to visualise boolean solids through G4Polyhedron
+  objects:
+  o Made G4PhysicalVolumeModel::DescribeSolid() virtual. No longer
+    deals with composite solids - now programmed into
+    CompositeSolid::CreatePolyhedron().
+  o G4PhysicalVolumeModel::DescribeSolid() no longer deals with
+    displaced solids - now programmed into
+    G4DisplacedSolid::CreatePolyhedron().
+  o Added G4LogicalVolumeModel::DescribeSolid(), which explicitly adds
+    components of composite solids as white forced-wireframe objects.
+  o Removed unnecessary #includes from G4VSceneHandler.hh.
