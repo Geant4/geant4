@@ -1,12 +1,127 @@
-In order to compile this test with analysis you must:
-1) setenv G4ANALYSIS_USE 1
-2) cd include; mkdir Interfaces ; cd Interfaces
-ln -s $LHCXX_REL_DIR/include/Interfaces/*.h .
-ln -s . Interfaces
-cd ..
-3)mkdir NtupleTag
-cd  NtupleTag
-ln -s $LHCXX_REL_DIR/include/NtupleTag/*.* .
-ln -s . NtupleTag
-cd ..
-gmake
+$Id: README,v 1.2 2001-11-28 09:39:39 elena Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            xray_fluorescence
+                            --------------
+XrayFluo is an advanced Geant4 example based on a realistic simulation of 
+a test beam. 
+The aim of the test beam was to characterize the response function of an
+HPGe detector used to measure fluorescence emissions from samples composed
+of different materials irradiated with a monochromatic beam of photons.
+In this example the geometry of the detector is simplified:
+one single pixel is used instead of an array of pixels.
+The response function is tabulated for ten different values of incident 
+energy and stored in the file response.dat.
+The sample, a simple box whose material can be selected, can be irradiated
+with different particles, with different spectra for the incident energy and
+with different shapes of the primary generator. 
+A part from the sample and the detector there are two diaphragm reproducing 
+those used to collimate the incident beam during the test beam.
+
+The aim of this advanced example is to illustrate the use of particle 
+generation and analysis schemes available in Geant4:
+
+- the generation of particles is done via the G4ParticleGun: the example
+  shows how to use it in order to obtain a beam of circular section or
+  a particle source isotropic in space
+
+_ the example includes the possibility to shoot particles according to a 
+  given energy spectrum: the files B_flare.dat, C_Flare.dat and M_flare.dat
+  store the spectra of photons during solar flares, the files 
+  mercury2_flx_solmax.dat and mercury_flx_solmin.dat contain the spectra of
+  protons respectively during solar maximum and solar minimumconditions, and 
+  merc2_flx_alp_max.dat merc_flx_alp_min.dat contain  the spectra of alpha
+  particles again respectively during solar maximum and solar minimum
+  conditions.
+
+- histograming facilities are provided for the Linux environment only
+  with the Lizard system.
+
+
+In order to be able to use any of these packages, prior installation is 
+necessary and a number of environment variables will have to be set.
+
+
+#set up VRMLview
+setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv G4VRMLFILE_MAX_FILE_NUM     100
+setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
+setenv G4VIS_USE_VRML               1
+setenv G4VIS_USE_VRMLFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
+
+#set up OpenGL or Mesa 
+setenv G4VIS_BUILD_OPENGLX_DRIVER   1
+setenv G4VIS_USE_OPENGLX            1
+setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
+
+#set up DAWN
+setenv G4VIS_BUILD_DAWN_DRIVER      1
+setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
+setenv G4VIS_USE_DAWN               1
+setenv G4VIS_USE_DAWNFILE           1
+setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
+
+#set up Lizard and Anaphe
+
+setenv LHCXX_REL_DIR /afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.4-sec
+setenv PATH ${PATH}:${LHCXX_REL_DIR}/bin
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4-sec/install/sharedstart.csh
+
+setenv G4ANALYSIS_USE 1
+(this flag is required if you want to compile and run the example with the
+analysis facilities)
+
+#path to the lowEnergy data base
+
+setenv G4LEDATA /afs/cern.ch/sw/geant4/stt/dev1/src/G4EMLOW0.4
+
+1. Run
+To execute a sample simulation with visualisation of tracks
+reaching the detector run:
+
+XrayFluo 
+
+execute command "/control/execute xxxxx.mac"
+
+
+If the Lizard analysis options are set, histograming windows will
+automatically stored in the corresponding files
+
+2. Detector description
+
+The telescope and detector geometry is defined in 
+XrayFluoDetectorConstruction.cc
+
+3. Physics processes
+
+The physics processes are in XrayFluoPhysicsList.cc
+The main process in this example is fluorescence emission from the sample.
+
+4. Event generation
+
+This is done using the G4ParticleGun with some modifications. See 
+XrayFluoParticleGeneratorAction.cc
+
+5. Analysis
+
+At present the analysis package implemented is Lizard. As this is still
+under development only simple histograming and a dummy ntuple are used. 
+
+Lizard is not currently implemented on platforms other than Linux. 
+To build and execute the example on other platforms the analysis 
+environment variables must not be set.
+
+The example provides also two Phyton files used to display and fit the 
+histograms.
+
+
+
+
+

@@ -22,18 +22,16 @@
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   : DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
-    solidSi(0),logicSi(0),physiSi(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
     solidSample (0),logicSample(0),physiSample (0),
     solidDia1(0),logicDia1(0),physiDia1(0),
-    solidDia2(0),logicDia2(0),physiDia2(0),
     solidDia3(0),logicDia3(0),physiDia3(0),
     solidOhmicPos(0),logicOhmicPos(0), physiOhmicPos(0),
     solidOhmicNeg(0),logicOhmicNeg(0), physiOhmicNeg(0),
     solidPixel(0),logicPixel(0), physiPixel(0),
     OhmicPosMaterial(0), OhmicNegMaterial(0),
-    SiMaterial(0),pixelMaterial(0),sampleMaterial(0),
-    Dia1Material(0),Dia2Material(0),Dia3Material(0),
+    pixelMaterial(0),sampleMaterial(0),
+    Dia1Material(0),Dia3Material(0),
     defaultMaterial(0)
   ,HPGeSD(0)
   
@@ -41,45 +39,30 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   NbOfPixelRows     =  1;
   NbOfPixelColumns  =  1;
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-  SiSizeXY = 1. * cm;
-  SiThickness = 1.01* mm;
-    PixelSizeXY       = 0.7 * cm; 
-  //PixelSizeXY       = 2. * cm; 
+    PixelSizeXY       = 0.7 * cm;
   PixelThickness =  1. * mm;
   ContactSizeXY     = 0.005*mm;
-  //ContactSizeXY = 0.5 * cm;
   SampleThickness = 0.25 * mm;
-  //SampleThickness = 0.25 * cm;
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
-  Dia2Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
   Dia1SizeXY = 3. *cm;
-  Dia2SizeXY = 3. *cm;
   Dia3SizeXY = 3. *cm;
-  //DiaInnerSize = 1.8 * cm;
   DiaInnerSize = 1.4 * mm;
   OhmicNegThickness = 0.005*mm;
   OhmicPosThickness = 0.005*mm;
   ThetaHPGe = 135. * deg;
-  ThetaSi = 210. * deg;
   Dia3Dist =  66.5 * mm;
   Dia3InnerSize = 1. * mm;
   PhiHPGe = 225. * deg;
-  PhiSi = 150. * deg;
   ThetaDia1 = 135. * deg;
-  ThetaDia2 = 210. * deg;
   ThetaDia3 = 180. * deg;
   PhiDia3 = 90. * deg;
   DistDia = 66.5 * mm;
-  //DistDia = 26.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ;
- DistSi = DistDia + SiThickness/2;
   PhiDia1 = 90. * deg;
-  PhiDia2 = 90. * deg;
   AlphaDia1 = 225. * deg;
-  AlphaDia2 = 150. * deg;
   AlphaDia3 = 180. * deg;
   PixelCopyNb=0;
   ComputeApparateParameters();
@@ -219,13 +202,10 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //default materials of the apparate
   
-  SiMaterial = Si;
   sampleMaterial = Ti;
   Dia1Material = Pb;
-  Dia2Material = Pb;
   Dia3Material = Pb;
   pixelMaterial = HPGe;
-  //pixelMaterial =Al;
   OhmicPosMaterial = Cu;
   OhmicNegMaterial = Pb;
   defaultMaterial = Vacuum;
@@ -255,33 +235,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				 0,			//its mother  volume
 				 false,			//no boolean operation
 				 0);			//copy number
-  /*
-  //SiDetector
-  
-  solidSi = 0;  physiSi = 0;  logicSi=0;
-  
-  if (SiThickness > 0.)  
-    {
-      solidSi = new G4Box("SiDetector",		//its name
-			  SiSizeXY/2,SiSizeXY/2,SiThickness/2);//size
-      
-      
-      logicSi = new G4LogicalVolume(solidSi,	//its solid
-				    SiMaterial,	//its material
-				    "SiDetector");	//its name
-      
-      zRotPhiSi.rotateX(PhiSi);
-      G4double x,y,z;
-      z = DistSi * cos(ThetaSi);
-      y =DistSi * sin(ThetaSi);
-      x = 0.*cm;
-      physiSi = new G4PVPlacement(G4Transform3D(zRotPhiSi,G4ThreeVector(x,y,z)),                                           "SiDetector",	//its name
-				  logicSi,	//its logical volume
-				  physiWorld,	//its mother  volume
-				  false,		//no boolean operation
-				  0);		//copy number
-    }
-  */
+ 
   //HPGeDetector
   
   solidHPGe = 0;  physiHPGe = 0;  logicHPGe=0;
@@ -309,7 +263,6 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				    0);		//copy number
     }
   // Pixel   
-  //solidPixel=0; logicPixel=0;   physiPixel=0;
   
   for ( G4int j=0; j < NbOfPixelColumns ; j++ )
     { for ( G4int i=0; i < NbOfPixelRows ; i++ )
@@ -328,10 +281,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	y =DistDe * sin(ThetaHPGe);
 	x = 0.*cm; 
 	
-	physiPixel = new G4PVPlacement(
-				       // G4Transform3D(zRotPhiHPGe,
-				       //    G4ThreeVector(x,y+(i*PixelSizeXY),z+(j*PixelSizeXY))),
-				       0,	       
+	physiPixel = new G4PVPlacement(0,	       
 				       G4ThreeVector(0,
 						     i*PixelSizeXY,
 						     j*PixelSizeXY ),
@@ -443,37 +393,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				    false,		//no boolean operation
                                    0);		//copy number
     }  
-  /*   
-  //Diaphragm2
-  
-  solidDia2 = 0;  physiDia2 = 0;  logicDia2=0;
-  
-  if (Dia2Thickness > 0.)  
-    {
-      solidDia2 = new G4Tubs("Diaphragm2",
-			     DiaInnerSize/2,
-			     Dia2SizeXY/2,
-			     Dia2Thickness/2,
-			     0,
-			     360);
-      
-      
-      logicDia2 = new G4LogicalVolume(solidDia2,	//its solid
-				      Dia2Material,	//its material
-				      "Diaphragm2");	//its name
-      
-      zRotPhiDia2.rotateX(AlphaDia2);
-      G4double x,y,z;
-      z = DistDia * cos(ThetaDia2);
-      y =DistDia * sin(ThetaDia2);
-      x = 0.*cm;
-      physiDia2 = new G4PVPlacement(G4Transform3D(zRotPhiDia2,G4ThreeVector(x,y,z)),                                           "Diaphragm2",	//its name
-				logicDia2,	//its logical volume
-				    physiWorld,	//its mother  volume
-				    false,		//no boolean operation
-				    0);		//copy number
-    } 
-  */
+ 
   //Diaphragm3
   
   solidDia3 = 0;  physiDia3 = 0;  logicDia3 =0;
@@ -526,15 +446,12 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
   simpleBoxVisAtt->SetVisibility(true);
-  //logicSi->SetVisAttributes(simpleBoxVisAtt);
  
   logicPixel->SetVisAttributes(simpleBoxVisAtt);
   logicHPGe->SetVisAttributes(G4VisAttributes::Invisible );
   logicSample->SetVisAttributes(simpleBoxVisAtt);
   
   logicDia1->SetVisAttributes(simpleBoxVisAtt);
-  
-  // logicDia2->SetVisAttributes(simpleBoxVisAtt);
   logicDia3->SetVisAttributes(simpleBoxVisAtt);
   
   logicOhmicNeg->SetVisAttributes(yellow);

@@ -99,7 +99,7 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/diffuseFluo/XrayFluo";
+  char* path = getenv("G4INSTALL");
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;

@@ -1,12 +1,12 @@
 
+
 /lowenergy/lowlimGE 250 eV
 
 /lowenergy/cutEnergy 250 eV
 
-/gun/randomVert on
+# B-flare spectrum
+/gun/spectrum on
 
 /gun/particle gamma
-
-/gun/energy 6 keV
 
 /run/beamOn 100

@@ -26,16 +26,17 @@ XrayFluoRunAction::XrayFluoRunAction()
   data = new G4DataVector;
   
   
-    ReadData(MeV,  "mercury_flx_solmin");
-    ReadResponse("response");
+    ReadData(MeV,  "/examples/advanced/xray_fluorescence/mercury_flx_solmin");
+    ReadResponse("/examples/advanced/xray_fluorescence/response");
    
     G4double minGamma = 0.*keV;
     G4double maxGamma = 10. *keV;
     G4int nBinsGamma = 100;
  
-  dataGammaSet = normalization->Normalize(minGamma, maxGamma, nBinsGamma,"B_flare");
+  dataGammaSet = normalization->Normalize(minGamma, maxGamma, nBinsGamma,
+"/examples/advanced/xray_fluorescence/B_flare");
  
-  G4String fileName = "efficienza";
+  G4String fileName = "/examples/advanced/xray_fluorescence/efficienza";
   G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
   efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);
   
@@ -240,8 +241,8 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/simpleFluo2/XrayFluo";
- 
+  char* path = getenv("G4INSTALL");
+
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
   G4std::ifstream file(dirFile);
@@ -303,7 +304,7 @@ void XrayFluoRunAction::ReadResponse(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = "/mnt/home/guardi/workdir/simpleFluo2/XrayFluo";
+  char* path = getenv("G4INSTALL");
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;

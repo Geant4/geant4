@@ -44,15 +44,15 @@ void XrayFluoAnalysisManager::book()
   histoManager->selectStore("XrayFluo.his");
 
   // Book histograms
-  histoManager->create1D("1","Energy Deposit", 20,0.,10.);
- histoManager->create1D("2","Gamma born in the sample", 20,0.,10.);
- histoManager->create1D("3","Electrons  born in the sample", 20,0.,10.);
- histoManager->create1D("4","Gammas leaving the sample", 20,0.,10.);
- histoManager->create1D("5","Electrons leaving the sample ", 20,0.,10.);
- histoManager->create1D("6","Gammas reaching the detector", 20,0.,10.);
- histoManager->create1D("7","Spectrum of the incident particles", 20,0.,10.);
- histoManager->create1D("8","Protons reaching the detector", 20,0.,10.);
- histoManager->create1D("9","Protons leaving the sample", 20,0.,10.);
+  histoManager->create1D("1","Energy Deposit", 100,0.,10.);
+ histoManager->create1D("2","Gamma born in the sample", 100,0.,10.);
+ histoManager->create1D("3","Electrons  born in the sample", 100,0.,10.);
+ histoManager->create1D("4","Gammas leaving the sample", 100,0.,10.);
+ histoManager->create1D("5","Electrons leaving the sample ", 100,0.,10.);
+ histoManager->create1D("6","Gammas reaching the detector", 100,0.,10.);
+ histoManager->create1D("7","Spectrum of the incident particles", 100,0.,10.);
+ histoManager->create1D("8","Protons reaching the detector", 100,0.,10.);
+ histoManager->create1D("9","Protons leaving the sample", 100,0.,10.);
 
  // Book ntuples
   ntuple = factory->createC("XrayFluo.his::1");
