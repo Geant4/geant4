@@ -504,6 +504,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv G4LIB $G4WORKDIR/lib
   setenv G4DEBUG 1
   setenv CPPVERBOSE 1
+  setenv G4LIB_BUILD_SHARED 1
   setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.1.0
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
