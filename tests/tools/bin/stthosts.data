@@ -17,12 +17,12 @@ prod dxplus02 DEC-cxx    optim_ISO      all all all all 1
 dev1 dxplus04 DEC-cxx    optim_ISO      all all all all 1
 dev2 dxplus05 DEC-cxx    optim_ISO      all all all all 1
 % sleep 5
-prod hpplus03 HP-aCC     debug          all all all all 1
+prod hpplus05 HP-aCC     debug          all all all all 1
 dev1 hpplus01 HP-aCC     debug          all all all all 1
-dev2 hpplus03 HP-aCC     debug          all all all all 1
+dev2 hpplus05 HP-aCC     debug          all all all all 1
 % sleep 5
 prod hpplus04 HP-aCC     optim          all all all all 1
-dev1 hpplus02 HP-aCC     optim          all all all all 1
+dev1 hpplus05 HP-aCC     optim          all all all all 1
 dev2 hpplus04 HP-aCC     optim          all all all all 1
 % sleep 5
 prod pcgeant  Linux-egcs  optim          all all all all 1
