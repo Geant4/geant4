@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-06-16 16:39:13 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2003-11-19 11:51:44 gcosmo Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for geometry/divisions library.  Gabriele Cosmo, 16/06/03.
 # ----------------------------------------------------------------------
@@ -17,5 +17,9 @@ CPPFLAGS += \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/geometry/solids/specific/include \
             -I$(G4BASE)/geometry/management/include
+
+ifdef G4DIVDEBUG
+  CPPFLAGS += -DG4DIVDEBUG
+endif
 
 include  $(G4INSTALL)/config/common.gmk
