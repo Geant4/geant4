@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2002-02-24 01:36:24 johna Exp $
+$Id: History,v 1.181 2002-03-01 00:46:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+28th February 2002  John Allison (vis-V04-00-03)
+- Updated OpenGL to compile (but not run) on Windows (opengl-V04-00-01).
+- Removed redundant code in GNUmakefiles in OPACS, OpenGL, OpenInventor, VRML.
+- Improved README.adding_graphics_system.
 
 23rd February 2002  John Allison (vis-V04-00-02)
 - Bug fix in modeling, which was causing nested calls to Begin/EndPrimitives.
