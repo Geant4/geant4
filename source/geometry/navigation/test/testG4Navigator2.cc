@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator2.cc,v 1.1 2003-10-29 10:58:43 japost Exp $
+// $Id: testG4Navigator2.cc,v 1.2 2003-12-05 17:07:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,7 +135,7 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
 //
 G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     G4double Step,physStep,safety;
     G4ThreeVector pos,dir,origin,xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
@@ -197,7 +197,3 @@ int main()
       }
     return 0;
 }
-
-
-
-

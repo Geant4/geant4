@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator5.cc,v 1.2 2003-11-10 15:25:05 gcosmo Exp $
+// $Id: testG4Navigator5.cc,v 1.3 2003-12-05 17:07:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,7 +186,7 @@ G4VPhysicalVolume* BuildGeometry()
 //
 G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     myNav.SetWorldVolume(pTopNode);
 
@@ -195,21 +195,21 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
     assert(located->GetName()=="World");
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,35),0,false);
     assert(located->GetName()=="TubeSlice");
-//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-//		       G4ThreeVector(0,0,0)));
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(0,0,0)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,0,-35),0,false);
     assert(located->GetName()=="World");
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(4,0,-35),0,false);
     assert(located->GetName()=="HollowTubeSlice");
-//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-//		       G4ThreeVector(4,0,0)));
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(4,0,0)));
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(37,0.5,0),0,false);
     assert(located->GetName()=="hphiTubeSlice");
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(3,35,0),0,false);
     assert(located->GetName()=="allTubeZRPSlice");
-//    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-//		       G4ThreeVector(3,0,0)));
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+		       G4ThreeVector(3,0,0)));
     
     return true;
 }
@@ -219,7 +219,7 @@ G4bool testG4NavigatorLocate(G4VPhysicalVolume *pTopNode)
 //
 G4bool testG4NavigatorSteps(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     G4double Step,physStep,safety;
     G4ThreeVector pos,dir,origin,xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
@@ -496,7 +496,3 @@ int main()
     G4GeometryManager::GetInstance()->OpenGeometry();
     return 0;
 }
-
-
-
-

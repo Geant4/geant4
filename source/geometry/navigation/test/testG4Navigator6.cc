@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Navigator6.cc,v 1.1 2003-10-29 10:58:44 japost Exp $
+// $Id: testG4Navigator6.cc,v 1.2 2003-12-05 17:07:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,7 +144,7 @@ G4bool printShoot(G4VPhysicalVolume *pTopNode,
     G4double Step=0,safety=0;
     const G4double physStep=kInfinity;
     G4VPhysicalVolume *located=0;
-    G4Navigator myNav;
+    MyNavigator myNav;
     myNav.SetWorldVolume(pTopNode);
 
     G4ThreeVector partLoc(pLoc);
@@ -172,7 +172,7 @@ G4bool runLocate(G4VPhysicalVolume *pTopNode)
     const G4double dyStep=kBoxDy*2.0/numLocPerAxis;
     const G4double dzStep=kBoxDz*2.0/numLocPerAxis;
 
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4ThreeVector worldPoint;
     myNav.SetWorldVolume(pTopNode);
     for (G4double x=-kBoxDx;x<kBoxDx;x+=dxStep)
@@ -266,8 +266,3 @@ int main(int argc, char* argv[])
     G4GeometryManager::GetInstance()->OpenGeometry();
     return EXIT_SUCCESS;
 }
-
-
-
-
-
