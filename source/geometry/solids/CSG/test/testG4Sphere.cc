@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.11 2003-10-30 19:35:33 japost Exp $
+// $Id: testG4Sphere.cc,v 1.12 2003-10-31 16:37:33 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -91,7 +91,7 @@ int main(void)
 {
     G4double Dist;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
-    G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
+    G4ThreeVector pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
 
@@ -132,6 +132,8 @@ int main(void)
     G4Sphere s34("Band (theta segment)",4,50,0,twopi,pi/4,halfpi);
     G4Sphere s4("Band (phi segment)",45,50,-pi/4,halfpi,0,twopi);
     //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<G4endl;
+    G4Sphere s41("Band (phi segment)",5,50,-pi,3.*pi/2.,0,twopi);
+    G4Sphere s42("Band (phi segment)",5,50,-pi/2,3.*pi/2.,0,twopi);
     G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4,halfpi,pi/4,halfpi);
     G4Sphere s6("John example",300,500,0,5.76,0,pi) ; 
     G4Sphere s7("sphere7",1400.,1550.,0.022321428571428572,0.014642857142857141,
@@ -167,9 +169,55 @@ G4ThreeVector s9v(-0.6542770611918751,
 		   -0.0695116921641141,
 		   -0.7530535517814154);
 
+ G4Sphere s10("s10",0*mm,0.018*mm,0*degree,360*degree,0*degree,180*degree);
+
+ G4ThreeVector s10p(0.01160957408065766*mm,
+0.01308205826682229*mm,0.004293345210644617*mm);
+
+ G4Sphere s11("s11",5000000.*mm,
+                    3700000000.*mm,
+                   0*degree,360*degree,0*degree,180*degree);
+
+ // G4ThreeVector ps11(-1184000000.*mm,-3477212676.843337059*mm,-444000000.*mm);
+
+ // G4ThreeVector ps11( -3339032195.112830162*mm, -1480000000*mm, -592000000*mm );
+
+ G4ThreeVector ps11( -3072559844.81995153427124*mm, -1924000000*mm, -740000000*mm );
+
+ G4Sphere sAlex("sAlex",500.*mm,
+                    501.*mm,
+                   0*degree,360*degree,0*degree,180*degree);
+
+G4ThreeVector psAlex(-360.4617031263808*mm,
+                     -158.1198807105035*mm,308.326878333183*mm);
+
+G4ThreeVector vsAlex(-0.7360912456240805,-0.4955800202572754,0.4610532741813497 );
+
+
+ G4Sphere sLHCB("sLHCB",8600*mm, 8606*mm, 
+    -1.699135525184141*degree,
+3.398271050368263*degree,88.52855940538514*degree,2.942881189229715*degree );
+
+ G4ThreeVector pLHCB(8600.242072535835,-255.1193517702246,-69.0010277128286);
+
+
+ G4Sphere spAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 
+                                                     2.0*degree, 
+                                        0.*degree, 180.0*degree );
+
+ G4double  radOne = 100.0*mm;
+ G4double  angle = -1.0*degree - 0.25*kAngTolerance;
+ G4ThreeVector  ptPhiMinus= G4ThreeVector( radOne*cos(angle) ,
+                                           radOne*sin(angle),
+                                           0.0 );
+
+
+
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
+
+   G4cout.precision(20);
 
     //////////////// Check name /////////////////////////
 
@@ -237,7 +285,28 @@ G4ThreeVector s9v(-0.6542770611918751,
     G4cout<<"p402.Inside(p402) = "
           <<OutputInside(inside)<<G4endl ;
 
-
+    inside = s10.Inside(s10p);
+    G4cout<<"s10.Inside(s10p) = "
+          <<OutputInside(inside)<<G4endl ;
+    G4cout<<"p radius = "
+          <<s10p.mag()<<G4endl ;
+    
+    inside = s11.Inside(ps11);
+    G4cout<<"s11.Inside(ps11) = "
+          <<OutputInside(inside)<<G4endl ;
+    G4cout<<"ps11.mag() = "
+          <<ps11.mag()<<G4endl ;
+    
+    inside = sLHCB.Inside(pLHCB);
+    G4cout<<"sLHCB.Inside(pLHCB) = "
+          <<OutputInside(inside)<<G4endl ;
+    G4cout<<"pLHCB.mag() = "
+          <<pLHCB.mag()<<G4endl ;
+    
+    inside = spAroundX.Inside(ptPhiMinus);
+    G4cout<<"spAroundX.Inside(ptPhiMinus) = "
+          <<OutputInside(inside)<<G4endl ;
+ 
     assert(s1.Inside(pzero)==kInside);
     // assert(s1.Inside(pz)==kInside);
     assert(s2.Inside(pzero)==kOutside);
@@ -250,6 +319,9 @@ G4ThreeVector s9v(-0.6542770611918751,
     assert(s4.Inside(pOverPhi)==kOutside);
     assert(s4.Inside(pInPhi)==kInside);
     assert(s5.Inside(pbigz)==kOutside);
+
+    assert(s41.Inside(pmx)==kSurface);
+    assert(s42.Inside(pmx)==kSurface);
 
 // Checking G4Sphere::SurfaceNormal
     norm=s1.SurfaceNormal(ponrmax1);
@@ -328,6 +400,11 @@ G4ThreeVector s9v(-0.6542770611918751,
 
     Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
     G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
+
+    // call from outside
+    //    Dist=sAlex.DistanceToOut(psAlex,vsAlex,calcNorm,pgoodNorm,pNorm);
+    // G4cout<<"sAlex.DistanceToOut(psAlex,vsAlex,... = "<<Dist<<G4endl;
+
 
     // Dist=s9.DistanceToIn(s9p,s9v);
     // G4cout<<"s9.DistanceToIn(s9p,s9v,... = "<<Dist<<G4endl;
@@ -602,7 +679,7 @@ G4ThreeVector s9v(-0.6542770611918751,
         G4Sphere SpAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 2.0*degree, 0.*degree, 180.0*degree );
 
 	G4double  sinOneDeg = sin( 1.0 * degree );
-	G4double  radOne = 100.0 * mm;
+	  radOne = 100.0 * mm;
 
 	G4ThreeVector  ptPhiSurfExct= G4ThreeVector( radOne * cos( -1.0 * degree ) , 
 			             - radOne *  sinOneDeg, 
