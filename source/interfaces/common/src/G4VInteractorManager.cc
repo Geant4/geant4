@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.4 1999-05-11 12:33:54 barrand Exp $
+// $Id: G4VInteractorManager.cc,v 1.5 1999-05-31 20:47:42 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -219,6 +219,9 @@ void G4VInteractorManager::SecondaryLoop (
   if(secondaryLoopEnabled==FALSE) return;
   
   if (alreadyInSecondaryLoop==FALSE) {
+    G4cout << "------------------------------------------" << endl;
+    G4cout << "You have entered a viewer secondary X event loop." << endl;
+    G4cout << "Quit it with an 'Escape' viewer button" << endl;
     alreadyInSecondaryLoop   = TRUE;
     exitSecondaryLoop        = 0;
     SecondaryLoopPreActions  ();
