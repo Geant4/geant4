@@ -1,4 +1,4 @@
-$Id: History,v 1.198 2002-10-30 14:58:59 gcosmo Exp $
+$Id: History,v 1.199 2002-10-30 16:04:46 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-30th October 2002  Gabriele Cosmo
+30th October 2002  Gabriele Cosmo (config-V04-01-03)
 - architecture.gmk:
   o Issue an error if G4SYSTEM is not defined in the environment or not valid.
   o Define G4LIB_BUILD_G3TOG4 and G4USE_G3TOG4 for optional installation and
@@ -26,6 +26,9 @@ committal in the CVS repository !
 - binmake.gmk:
   o Include path and library for g3tog4 module only if G4USE_G3TOG4 is defined.
     Implies proper handling of G4USE_G3TOG4 in source/GNUmakefile.
+- Removed obsolete OSPACE setup for WIN32-VC, HP-aCC, DEC-cxx. Still kept for
+  platforms with ODBMS setup.
+- SUN-CC.gmk: removed -L/usr/lib path specification from LOADLIBS definition.
 
 10th September 2002  Gabriele Cosmo (config-V04-01-02)
 - Linux-g++.gmk: added assignment 'CC := gcc' for default 'cc' compiler.
