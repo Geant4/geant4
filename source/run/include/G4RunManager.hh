@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.9 2000-04-25 13:12:34 asaim Exp $
+// $Id: G4RunManager.hh,v 1.10 2000-04-25 14:27:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,9 +129,9 @@ class G4RunManager
     // G4VUserPhysicsList class will be accessed from other two methods.
 
     virtual G4bool ConfirmBeamOnCondition();
-    virtual void RunInitialization();
+    virtual void RunInitialization(G4Run* aRun=NULL);
     virtual void DoEventLoop(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
-    virtual void RunTermination();
+    virtual void RunTermination(G4bool runToBeDeleted=true);
     //  These four protected methods are invoked from BeamOn() method. These four methods
     // are invoked in this order.
     //  ConfirmBeamOnCondition() method checks if all the necessary initializations have
