@@ -35,20 +35,20 @@ set NDVY 010205
  ve/create Y(11) R 2.13 1.72 1.44 1.12 .916 0.763 0.642 0.651 0.535 0.478 0.36
  gr/h/symb X Y 11 21 0.2
 
- ve/create X1(10) R 41.2 44.4 48. 52. 56.5 61.6 67.3 73.9 81.4 90.2
+ ve/create X1(8) R 41.2 44.4 48. 52. 56.5 61.6 67.3 73.9 
    
- ve/create Y1(10) R 0.47 0.469 0.416 0.345 0.31 0.255 0.206 0.142 5.16 0.793
+ ve/create Y1(8) R 0.47 0.469 0.416 0.345 0.31 0.255 0.206 0.142 
  
- gr/h/symb X1 Y1 10 25 0.2
+ gr/h/symb X1 Y1 8 25 0.2
 
 
  exe ../prf n_a2 eps
  
- null 0 120 0.001 100
+ null 0 100 0.001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 45 deg'
  
 gr/h/symb X Y 11 21 0.2
- gr/h/symb X1 Y1 10 25 0.2
+ gr/h/symb X1 Y1 8 25 0.2
 
   hi/file 1 par.paw
  set dmod 3

@@ -111,6 +111,7 @@ int main(int argc, char** argv)
   G4bool    inclusive= true;
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
+  G4double  sigmae   = 0.0;
   G4double  elim     = 30.*MeV;
   G4double  dangl    = 5.0*degree;
   G4int     nevt     = 1000;
@@ -228,6 +229,7 @@ int main(int argc, char** argv)
   G4cout << "#dangle" << G4endl;
   G4cout << "#particle" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
+  G4cout << "#sigmae(MeV)" << G4endl;
   G4cout << "#emax(MeV)" << G4endl;
   G4cout << "#emaxpi(MeV)" << G4endl;
   G4cout << "#elim(MeV)" << G4endl;
@@ -257,6 +259,9 @@ int main(int argc, char** argv)
         (*fin) >> energy;
         energy *= MeV;
         emax    = energy;
+      } else if(line == "#sigmae(MeV)") {
+        (*fin) >> sigmae;
+        sigmae *= MeV;
       } else if(line == "#emax(MeV)") {
         (*fin) >> emax;
         emax *= MeV;
@@ -615,6 +620,14 @@ int main(int argc, char** argv)
       if(verbose>1) {
         G4cout << "### " << iter << "-th event start " << G4endl;
       }
+
+      G4double e0 = energy;
+      do {
+        if(sigmae > 0.0) e0 = G4RandGauss::shoot(energy,sigmae);
+      } while (e0 < 0.0);
+
+      dParticle.SetKineticEnergy(e0);
+
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(energy); 
 

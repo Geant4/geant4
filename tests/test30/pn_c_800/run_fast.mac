@@ -16,6 +16,8 @@ proton
 C
 #energy(MeV)
 800.
+#sigmae(MeV)
+1.5
 #elim(MeV)
 2.
 #nbinse

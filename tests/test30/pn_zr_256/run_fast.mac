@@ -16,6 +16,10 @@ proton
 Zr
 #energy(MeV)
 256.
+#sigmae(MeV)
+1.5
+#emax(MeV)
+280.
 #elim(MeV)
 20.
 #nangle

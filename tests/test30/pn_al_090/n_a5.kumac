@@ -35,7 +35,7 @@ set NDVY 010205
    
  ve/create Y1(4) R 2.6 1.4 0.577 0.224   
  
- gr/h/symb X1 Y1 4 25 0.2
+* gr/h/symb X1 Y1 4 25 0.2
 
 
  exe ../prf n_a5 eps
@@ -43,7 +43,7 @@ set NDVY 010205
  null 0 120 0.001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 105 deg'
  
- gr/h/symb X1 Y1 4 25 0.2
+* gr/h/symb X1 Y1 4 25 0.2
 
   hi/file 1 par.paw
  set dmod 3

@@ -15,7 +15,9 @@ proton
 #material
 C
 #energy(MeV)
-585.
+597.
+#sigmae(MeV)
+1.5
 #elim(MeV)
 2.
 #emaxpi(MeV)

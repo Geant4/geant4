@@ -16,6 +16,8 @@ proton
 Zr
 #energy(MeV)
 800.
+#sigmae(MeV)
+1.5
 #elim(MeV)
 30.
 #nbinse

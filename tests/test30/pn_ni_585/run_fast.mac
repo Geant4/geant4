@@ -16,6 +16,8 @@ proton
 Ni
 #energy(MeV)
 585.
+#sigmae(MeV)
+2.
 #elim(MeV)
 2.
 #emaxpi(MeV)

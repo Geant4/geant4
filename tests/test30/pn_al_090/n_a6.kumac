@@ -30,16 +30,16 @@ set NDVY 010205
  itx 115 15 'KIN'
  close 1
  
- ve/create X(11) R 4.9 5.8 7. 8.4 10.2 12.6 15.8 20.1 26.3 35.7 51.2
+ ve/create X(8) R 4.9 5.8 7. 8.4 10.2 12.6 15.8 20.1 
    
- ve/create Y(11) R 1.38 1.05 0.794 0.57 0.417 0.272 0.186 0.111 6.71 2.64 4.07
- gr/h/symb X Y 11 21 0.2
+ ve/create Y(8) R 1.38 1.05 0.794 0.57 0.417 0.272 0.186 0.111 
+ gr/h/symb X Y 8 21 0.2
 
  ve/create X1(4) R 39.8 46.4 54.5 64.9
    
  ve/create Y1(4) R 1.8 0.841 0.289 0.0631  
  
- gr/h/symb X1 Y1 4 25 0.2
+* gr/h/symb X1 Y1 4 25 0.2
 
 
  exe ../prf n_a6 eps
@@ -47,8 +47,8 @@ set NDVY 010205
  null 0 120 0.001 100
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 120 deg'
  
-gr/h/symb X Y 11 21 0.2
- gr/h/symb X1 Y1 4 25 0.2
+gr/h/symb X Y 8 21 0.2
+* gr/h/symb X1 Y1 4 25 0.2
 
   hi/file 1 par.paw
  set dmod 3
