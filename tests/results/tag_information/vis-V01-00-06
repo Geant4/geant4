@@ -1,0 +1,16 @@
+29th February 2000  John Allison  vis-V01-00-06
+- Changed `char*' to `const char*' in G4FRClientServer::Err(...).
+
+28th February 2000  John Allison
+- Cosmetic improvements to G4RayTracerSceneHandler.hh and G4RayTracerViewer.hh.
+
+24th February 2000  John Allison
+- Minor inmprovement of messages from /vis/viewer/refresh.
+- Cosmetic tidying in G4OpenGLViewer.cc.
+- Added protection for null viewer in G4RTSteppingAction.cc and
+  G4RayTrajectory.cc.
+- Corrected for zoom, etc., in G4RayTracerViewer.cc.
+
+23rd February 2000  John Allison
+- Added G4RayTracerSceneHandler and Viewer.
+- Some modifications to other RayTracer routines for vis compliance.
