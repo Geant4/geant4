@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.1 1999-01-07 15:58:32 gunter Exp $
+# $Id: common.gmk,v 1.2 1999-09-17 13:26:26 morita Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -73,11 +73,15 @@ endif
 
 ifdef G4ODBMS
 $(G4TMPDIR)/%_ddl.cc $(G4TMPDIR)/%.hh $(G4TMPDIR)/%_ref.hh: include/%.ddl
+ifndef G4OODDLX_BOOT
+	@echo G4OODDLX_BOOT is not defined.  Stop.
+	exit 1
+endif
 	@if [ ! -d $(G4TMP)/$(G4SYSTEM) ] ; then mkdir $(G4TMP)/$(G4SYSTEM) ;fi
 	@if [ ! -d $(G4TMPDIR) ] ; then mkdir $(G4TMPDIR) ;fi
 	ooddlx -notitle -header_suffix .hh -ref_suffix _ref.hh -c++_suffix _ddl.cc \
 	-DRW_NO_CONST_OVERLOAD  -DRW_NO_STL -DTEMPLATEP_HIDES_FNCD \
-	$(CPPFLAGS) $< $(G4EXAMPLE_BOOT)
+	$(CPPFLAGS) $< $(G4OODDLX_BOOT)
 	mv -f $*.hh $(G4TMPDIR)/
 	mv -f $*_ref.hh $(G4TMPDIR)/
 	mv -f $*_ddl.cc $(G4TMPDIR)/
