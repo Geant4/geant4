@@ -1,0 +1,91 @@
+Please enter material number
+Active Material = Hydrogen
+Done with all the particles
+Starting process definitions
+Inelastic instanciated!!!
+Done with all the process definitions
+Entering the DoIt loops!!!!!
+Test the DoIt: please enter the number of events
+Please enter the anti-proton energy
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 22
+Particle code produced = 22
+Particle code produced = 22
+Particle code produced = 111
+Particle code produced = 111
+NUMBER OF SECONDARIES=5FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info6.569848e+02(-1.358073e+02,2.732692e+02,-5.818156e+02)5
+SECONDARIES info5.847294e+01(-1.807601e+01,5.204090e+01,1.959815e+01)0
+SECONDARIES info4.982970e+02(-3.242975e+01,1.528938e+02,4.731508e+02)-5
+SECONDARIES info4.506367e+02(2.174443e+02,-3.697342e+02,-2.948509e+01)-10
+SECONDARIES info2.121508e+02(-3.113129e+01,-1.084698e+02,1.185517e+02)-15
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = 211
+Particle code produced = 111
+NUMBER OF SECONDARIES=4FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info3.703652e+02(-2.940547e+02,-1.763486e+02,-1.111793e+01)4
+SECONDARIES info2.937694e+02(1.192206e+02,-1.994774e+02,1.186467e+02)0
+SECONDARIES info5.408225e+02(-4.638736e+02,2.386226e+02,-2.982967e+01)-4
+SECONDARIES info6.715861e+02(6.387076e+02,1.372033e+02,-7.769907e+01)-8
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = 211
+Particle code produced = 111
+NUMBER OF SECONDARIES=4FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info2.330314e+02(-1.112793e+02,-9.768738e+00,1.494836e+02)4
+SECONDARIES info6.855699e+02(-1.915754e+02,-4.942463e+02,-4.132880e+02)0
+SECONDARIES info4.969656e+02(2.148697e+01,2.075968e+02,4.288786e+02)-4
+SECONDARIES info4.609769e+02(2.813677e+02,2.964183e+02,-1.650742e+02)-8
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 211
+Particle code produced = -211
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = 111
+Particle code produced = 211
+NUMBER OF SECONDARIES=6FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info4.044832e+02(-1.179568e+02,-2.864403e+02,-2.194654e+02)6
+SECONDARIES info5.420553e+02(4.733843e+02,-1.694977e+02,1.467036e+02)0
+SECONDARIES info3.334214e+02(-2.321263e+02,1.587132e+02,-1.123280e+02)-6
+SECONDARIES info1.616185e+02(-3.995260e+01,6.677280e+01,4.297799e+01)-12
+SECONDARIES info2.039975e+02(-1.345556e+01,1.520985e+02,-9.018626e+00)-18
+SECONDARIES info2.309643e+02(-6.989314e+01,7.835346e+01,1.511304e+02)-24
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = 211
+Particle code produced = 311
+Particle code produced = -211
+Particle code produced = -311
+NUMBER OF SECONDARIES=4FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info2.662734e+02(-2.327986e+01,2.100015e+02,8.233572e+01)4
+SECONDARIES info5.667265e+02(-1.554500e+01,-1.553268e+02,-2.216607e+02)0
+SECONDARIES info4.270478e+02(1.189021e+02,-3.855328e+02,1.080698e+01)-4
+SECONDARIES info6.165012e+02(-8.007721e+01,3.308581e+02,1.285180e+02)-8
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = -211
+Particle code produced = 111
+Particle code produced = 111
+Particle code produced = 211
+NUMBER OF SECONDARIES=4FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info2.241392e+02(7.782822e+01,1.242179e+02,-9.628754e+01)4
+SECONDARIES info7.279373e+02(7.912959e+01,4.960157e+02,5.092946e+02)0
+SECONDARIES info2.168313e+02(-1.607971e+02,-3.378326e+01,-4.242823e+01)-4
+SECONDARIES info7.076349e+02(3.839319e+00,-5.864503e+02,-3.705788e+02)-8
+Last chance before DoIt call: 
+NEW EVENT
+Particle code produced = -321
+Particle code produced = 311
+Particle code produced = 211
+NUMBER OF SECONDARIES=3FINAL STATE = 0.000000e+00 (0.000000e+00,0.000000e+00,1.000000e+00)
+SECONDARIES info8.069693e+02(-6.228755e+02,-1.372605e+02,-2.584813e+01)3
+SECONDARIES info8.388412e+02(5.941194e+02,3.175673e+02,4.637073e+01)0
+SECONDARIES info2.307345e+02(2.875604e+01,-1.803068e+02,-2.052260e+01)-3
+Last chance before DoIt call: 

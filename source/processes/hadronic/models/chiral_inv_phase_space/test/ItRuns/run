@@ -1,0 +1,3 @@
+cd scripts
+./doitall | tee ../logs/ItRuns.log
+

@@ -1,0 +1,2 @@
+./doit CHIPS_p_pBar_Integration
+./doit CHIPS_gamma_nucleus_Integration
