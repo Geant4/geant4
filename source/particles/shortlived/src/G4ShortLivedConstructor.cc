@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ShortLivedConstructor.cc,v 1.7 2000-03-02 00:52:18 kurasige Exp $
+// $Id: G4ShortLivedConstructor.cc,v 1.8 2001-04-06 03:04:30 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,6 +13,8 @@
 //	GEANT 4 class implementation file 
 //
 //      Add "rho0"                         25  Feb. 2000 H.Kurashige
+//      Fix spin/isospin number for quarks 06  Apr. 2001 H.Kurashige
+
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4ParticleDefinition.hh"
@@ -106,18 +108,18 @@ void G4ShortLivedConstructor::ConstructQuarks()
                     0,               0,             0,             
              "quarks",               0,             0,           6,
 		 true,            -1.0,          NULL);
-  // u-quark
+  // anti u-quark
   particle = new G4Quarks(            
        "anti_u_quark",         8.0*MeV,       0.0*MeV,   -2./3.*eplus, 
                     1,              +1,             0,          
-                    1,              +1,             0,             
+                    1,              -1,             0,             
              "quarks",               0,             0,          -2,
 		 true,            -1.0,          NULL);
-  // d-quark
+  // anti d-quark
   particle = new G4Quarks(            
        "anti_d_quark",        15.0*MeV,       0.0*MeV,   1./3.*eplus, 
                     1,              +1,             0,          
-                    1,              -1,             0,             
+                    1,              +1,             0,             
              "quarks",               0,             0,          -1,
 		 true,            -1.0,          NULL);
   // s-quark
@@ -167,7 +169,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
   particle = new G4DiQuarks(            
 	"dd1_diquark",        30.0*MeV,       0.0*MeV,   -2./3.*eplus, 
                     2,              +1,             0,          
-                    2,              -1,             0,             
+                    2,              -2,             0,             
            "diquarks",               0,             0,         1103,
 		 true,            -1.0,          NULL);
    
@@ -182,7 +184,7 @@ void G4ShortLivedConstructor::ConstructQuarks()
    // sd1-Diquark
   particle = new G4DiQuarks(            
 	"sd1_diquark",       315.0*MeV,       0.0*MeV,   -2./3.*eplus, 
-                    1,              +1,             0,          
+                    2,              +1,             0,          
                     1,              -1,             0,             
            "diquarks",               0,             0,         3103,
 		 true,            -1.0,          NULL);
@@ -190,50 +192,50 @@ void G4ShortLivedConstructor::ConstructQuarks()
   // su1-Diquark
   particle = new G4DiQuarks(            
 	"su1_diquark",       308.0*MeV,       0.0*MeV,   1./3.*eplus, 
-                    1,              +1,             0,          
+                    2,              +1,             0,          
                     1,              +1,             0,             
            "diquarks",               0,             0,         3203,
 		 true,            -1.0,          NULL);
 
-    // sd1-Diquark
+    // sd0-Diquark
   particle = new G4DiQuarks(            
 	"sd0_diquark",       315.0*MeV,       0.0*MeV,   -2./3.*eplus, 
-                    1,              +1,             0,          
+                    0,              +1,             0,          
                     1,              -1,             0,             
            "diquarks",               0,             0,         3101,
 		 true,            -1.0,          NULL);
    
-  // su1-Diquark
+  // su0-Diquark
   particle = new G4DiQuarks(            
 	"su0_diquark",       308.0*MeV,       0.0*MeV,   1./3.*eplus, 
-                    1,              +1,             0,          
+                    0,              +1,             0,          
                     1,              +1,             0,             
            "diquarks",               0,             0,         3201,
 		 true,            -1.0,          NULL);
 
-   // uu1-Diquark
+   // anti uu1-Diquark
   particle = new G4DiQuarks(            
    "anti_uu1_diquark",        16.0*MeV,       0.0*MeV,  -4./3.*eplus, 
                     2,              +1,             0,          
-                    2,              +2,             0,             
+                    2,              -2,             0,             
            "diquarks",               0,             0,       -2203,
 		 true,            -1.0,          NULL);
-    // ud1-Diquark
+    // anti ud1-Diquark
   particle = new G4DiQuarks(            
    "anti_ud1_diquark",        23.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     2,              +1,             0,          
                     2,              +0,             0,             
            "diquarks",               0,             0,        -2103,
 		 true,            -1.0,          NULL);
-    // dd1-Diquark
+    // anti dd1-Diquark
   particle = new G4DiQuarks(            
    "anti_dd1_diquark",        30.0*MeV,       0.0*MeV,    2./3.*eplus, 
                     2,              +1,             0,          
-                    2,              -1,             0,             
+                    2,              +2,             0,             
            "diquarks",               0,             0,        -1103,
 		 true,            -1.0,          NULL);
    
-   // ud0-Diquark
+   // anti ud0-Diquark
   particle = new G4DiQuarks(            
    "anti_ud0_diquark",        23.0*MeV,       0.0*MeV,  -1./3.*eplus, 
                     0,              +1,             0,          
@@ -241,50 +243,50 @@ void G4ShortLivedConstructor::ConstructQuarks()
            "diquarks",               0,             0,        -2101,
 		 true,            -1.0,          NULL);
    
-   // sd1-Diquark
+   // anti  sd1-Diquark
   particle = new G4DiQuarks(            
    "anti_sd1_diquark",       315.0*MeV,       0.0*MeV,    2./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              -1,             0,             
+                    2,              +1,             0,          
+                    1,              +1,             0,             
            "diquarks",               0,             0,        -3103,
 		 true,            -1.0,          NULL);
    
-  // su1-Diquark
+  // anti su1-Diquark
   particle = new G4DiQuarks(            
    "anti_su1_diquark",       308.0*MeV,       0.0*MeV,  -1./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              +1,             0,             
+                    2,              +1,             0,          
+                    1,              -1,             0,             
            "diquarks",               0,             0,        -3203,
 		 true,            -1.0,          NULL);
 
-    // sd0-Diquark
+    // anti sd0-Diquark
   particle = new G4DiQuarks(            
    "anti_sd0_diquark",       315.0*MeV,       0.0*MeV,    2./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              -1,             0,             
+                    0,              +1,             0,          
+                    1,              +1,             0,             
            "diquarks",               0,             0,        -3101,
 		 true,            -1.0,          NULL);
    
-  // su1-Diquark
+  // anti su0-Diquark
   particle = new G4DiQuarks(            
    "anti_su0_diquark",       308.0*MeV,       0.0*MeV,  -1./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              +1,             0,             
+                    0,              +1,             0,          
+                    1,              -1,             0,             
            "diquarks",               0,             0,        -3201,
 		 true,            -1.0,          NULL);
-    // ss1-Diquark
+    // anti ss1-Diquark
   particle = new G4DiQuarks(            
 	"ss1_diquark",       600.0*MeV,       0.0*MeV,   -2./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              -1,             0,             
+                    2,              +1,             0,          
+                    0,               0,             0,             
            "diquarks",               0,             0,         3303,
 		 true,            -1.0,          NULL);
    
-    // ss1-Diquark
+    // anti ss1-Diquark
   particle = new G4DiQuarks(            
 	"anti_ss1_diquark",  600.0*MeV,       0.0*MeV,    2./3.*eplus, 
-                    1,              +1,             0,          
-                    1,              -1,             0,             
+                    2,              +1,             0,          
+                    0,               0,             0,             
            "diquarks",               0,             0,        -3303,
 		 true,            -1.0,          NULL);
 
@@ -653,6 +655,106 @@ void G4ShortLivedConstructor::ConstructMesons()
   // add decay table
   decayTable->Insert(mode);
   particle->SetDecayTable(decayTable);
+
+  // a0(980)+
+  particle = new G4ExcitedMesons(            
+	   "a0(980)+",       984.8*MeV,      60.0*MeV,    +1.0*eplus, 
+                    0,              +1,            +1,          
+                    2,              +2,            -1,             
+              "meson",               0,             0,       9000211,
+		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("a0(980)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of a0(980)+ -> eta + pi+
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("a0(980)+",1.000, 2,
+				                    "pi+","eta");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+  // a0(980)-
+  particle = new G4ExcitedMesons(            
+	   "a0(980)-",       984.8*MeV,      60.0*MeV,    -1.0*eplus, 
+                    0,              +1,            +1,          
+                    2,              -2,            -1,             
+              "meson",               0,             0,      -9000211,
+		false,             0.0,          NULL);
+  // set sub type
+  particle->SetMultipletName("a0(980)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of a0(980)- -> eta + pi-
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("a0(980)-",1.000, 2,
+				                    "pi-","eta");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+  // a0(980)0
+  particle = new G4ExcitedMesons(            
+	   "a0(980)0",       984.8*MeV,      60.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    2,               0,            -1,             
+              "meson",               0,             0,       9000111,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(9000111);
+  // set sub type
+  particle->SetMultipletName("a0(980)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of a0(980)0 -> eta + pi0
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("a0(980)0",1.000, 2,
+				                    "pi0","eta");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+  // f0(400-1200)
+  particle = new G4ExcitedMesons(            
+       "f0(400-1200)",       470.0*MeV,     400.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    0,               0,            +1,             
+              "meson",               0,             0,       9000221,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(9000221);
+  // set sub type
+  particle->SetMultipletName("f0(400-1200)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of f0(400-1200) -> pi + pi
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(400-1200)",1.000, 2,
+				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
+
+  // f0(980)
+  particle = new G4ExcitedMesons(            
+            "f0(980)",       980.0*MeV,      40.0*MeV,           0.0,
+                    0,              +1,            +1,          
+                    0,               0,            +1,             
+              "meson",               0,             0,       9010221,
+		false,             0.0,          NULL);
+  particle->SetAntiPDGEncoding(9010221);
+  // set sub type
+  particle->SetMultipletName("f0(980)");
+  // create decay table
+  decayTable =  new G4DecayTable();
+  // create decay channel of f0(980) -> pi + pi
+  //                                   parent    BR     #daughters
+  mode  = new G4PhaseSpaceDecayChannel("f0(980)",1.000, 2,
+				                    "pi+","pi-");
+  // add decay table
+  decayTable->Insert(mode);
+  particle->SetDecayTable(decayTable);
+
 
   // k_star+
   particle = new G4ExcitedMesons(            
