@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AssemblyVolume.cc,v 1.10 2002-06-24 07:15:27 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.11 2002-09-10 10:49:18 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -253,6 +253,8 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
   // We start from the first available index
   numberOfDaughters++;
 
+  ImprintsCountPlus();
+  
   for( unsigned int   i = 0; i < fTriplets.size(); i++ )
   {
     // Generate the unique name for the next PV instance
