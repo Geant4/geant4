@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.8 2003-01-28 08:57:50 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.9 2003-02-06 14:42:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -39,7 +39,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif
-Tst50RunAction::Tst50RunAction()
+Tst50RunAction::Tst50RunAction(G4bool foil):
+  Foil(foil)
 {
  
 }
@@ -68,6 +69,8 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       G4UImanager* UI = G4UImanager::GetUIpointer();
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
+ 
+  numberEvents=0;
   number=0;
   numberB=0;
   numberTransp=0;
@@ -82,7 +85,7 @@ G4int Tst50RunAction::GetRun_ID()
 {
   return runID;
 }
-void Tst50RunAction::EndOfRunAction(const G4Run*)
+void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
 {
 #ifdef G4ANALYSIS_USE
  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
@@ -93,9 +96,26 @@ void Tst50RunAction::EndOfRunAction(const G4Run*)
     {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     }
-  
-  //G4cout<<"---------- Particelle primarie trasmesse -------------- "<<number<<G4endl;
-  if (numberTransp==0 && numberRay==0 && numberPh==0 && numberCo==0 &&numberPair==0){;}
+  numberEvents=aRun->GetNumberOfEvent();
+  if (Foil)
+    {  
+      G4double ft=(number/numberEvents) ;
+      G4double fb=(numberB/numberEvents);
+      G4double fa=(((numberEvents-(numberB+number)))/numberEvents);
+G4std::ofstream pmtfile("Transmission.txt", G4std::ios::app);
+if(pmtfile.is_open()){
+			
+  pmtfile<<"Transmitted primary particles: "<<number <<G4endl;
+   pmtfile<<"Backscattered primary particles: "<<numberB<<'\t'<<G4endl;
+  pmtfile<<"Absorbed particles: "<<(numberEvents-(numberB+number))<<'\t'<<G4endl;
+   pmtfile<<"BeamOn events: "<<numberEvents<<G4endl;
+pmtfile<<"fraction Transmitted/n.events:"<<ft <<G4endl;
+   pmtfile<<"fraction Backscattered/n.events: "<<fb<<G4endl;
+  pmtfile<<"fraction Absorbed/n.events: "<<fa<<G4endl;
+}
+    }
+  /* 
+ if (numberTransp==0 && numberRay==0 && numberPh==0 && numberCo==0 &&numberPair==0){;}
 else
     { 
 G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
@@ -106,13 +126,11 @@ G4cout<<"---------- Particelle primarie gamma -------------- "<<number<<G4endl;
   G4cout<<numberPh<< " processi fotoelettrici"<<G4endl;
   G4cout<<numberCo<< " processi Compton"<< G4endl;
   G4cout<<numberPair<< " processi di produzione di coppie"<< G4endl;}
- 
+  */
  
  
 }
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void  Tst50RunAction::Trans_number()
 {

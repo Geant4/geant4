@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.10 2003-02-05 16:23:38 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.11 2003-02-06 14:42:37 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,6 +32,7 @@
 #include "Tst50AnalysisManager.hh"
 #endif
 #include "Tst50PrimaryGeneratorAction.hh"
+#include "Tst50RunAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4TrajectoryContainer.hh"
@@ -47,9 +48,10 @@
 #include "G4UnitsTable.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary,G4bool RY,G4String file):
-  hit_CollID(-1),p_Primary(Primary),RadiationY(RY),filename(file)
+Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary,G4bool RY,G4String file, G4bool foil):
+  hit_CollID(-1),p_Primary(Primary),RadiationY(RY),filename(file),Foil(foil)
 {
+ 
  
 }
 
@@ -64,6 +66,7 @@ Tst50EventAction::~Tst50EventAction()
  
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 { 
+ 
  energyDep=0.;
  energy=0.; 
  energyDepPrimary=0.;
@@ -78,7 +81,8 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 
 	  
 	
-
+ if (Foil)
+   {
 #ifdef G4ANALYSIS_USE
 	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    if(energyDep!=0)
@@ -89,6 +93,7 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 	        analysis->energy_depositSecondary(energyDepSecondary);
 #endif
 	
+   }
 
 /*
 G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;

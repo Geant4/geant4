@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.6 2003-02-05 16:23:37 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.7 2003-02-06 14:42:36 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,12 +36,13 @@ class Tst50TrackerHit;
 class Tst50AnalysisManager;
 class G4Event;
 class Tst50PrimaryGeneratorAction;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50EventAction : public G4UserEventAction
 {
   public:
-    Tst50EventAction(Tst50PrimaryGeneratorAction*,G4bool,G4String);
+    Tst50EventAction(Tst50PrimaryGeneratorAction*,G4bool,G4String, G4bool);
    ~Tst50EventAction();
 
   public:
@@ -61,6 +62,8 @@ class Tst50EventAction : public G4UserEventAction
   G4bool RadiationY; 
   G4double energyDepPrimary;
  G4double energyDepSecondary;
+  G4bool Foil;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

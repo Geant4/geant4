@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.12 2003-01-27 13:47:43 guatelli Exp $
+// $Id: test50.cc,v 1.13 2003-02-06 14:42:35 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool RY=false;
  G4bool end=true;
  G4bool SP=false;
+ G4bool Foil= false;
  G4String filename="test50.txt";
  G4cout<<argc<<":argc"<<G4endl;
  G4cout.setf(ios::scientific, ios::floatfield);
@@ -82,6 +83,7 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  G4cout<<"#setMaxStep (on/off)"<<G4endl;
  G4cout<<"#StoppingPower(on/off)"<<G4endl; 
  G4cout<<"#RadiationYield(on/off)"<<G4endl; 
+ G4cout<<"#Foil(on/off)"<<G4endl; 
  G4String line, line1, line2;
  
    do
@@ -109,7 +111,10 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  if (line=="#RadiationYield"){line1="";(*fin)>>line1;
 
        if(line1=="on"){RY=true; G4cout<<RY<<"RadiationYield"<<G4endl;}} 
-   
+ 
+ if (line=="#Foil"){line1="";(*fin)>>line1;
+
+       if(line1=="on"){Foil=true; G4cout<<Foil<<" :Foil configuration set"<<G4endl;}}    
 
 if (line=="end"){end=false;}
 
@@ -119,7 +124,8 @@ if (line=="end"){end=false;}
      
    if (RangeOn==true) filename="Range.txt";
    if (SP==true) filename="StoppingPower.txt"; 
-   if (RY==true) filename="RadiationYeld.txt";   
+   if (RY==true) filename="RadiationYeld.txt";
+   if (Foil==true) filename="Transmission.txt";      
  G4int seed=time(NULL);
    HepRandom ::setTheSeed(seed);
   //my Verbose output class
@@ -144,14 +150,14 @@ if (line=="end"){end=false;}
   // UserAction classes
   Tst50PrimaryGeneratorAction* p_Primary=new Tst50PrimaryGeneratorAction(); 
   runManager->SetUserAction(p_Primary);
-  Tst50RunAction* p_run=new Tst50RunAction(); 
+  Tst50RunAction* p_run=new Tst50RunAction(Foil); 
   runManager->SetUserAction(p_run);  
 
-  Tst50EventAction *pEventAction=new Tst50EventAction(p_Primary,RY,filename);
+  Tst50EventAction *pEventAction=new Tst50EventAction(p_Primary,RY,filename, Foil);
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector, filename,SP,RangeOn,RY);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector, filename,SP,RangeOn,RY,Foil);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
@@ -189,11 +195,25 @@ G4std::ofstream ofs;
 		{
 
 		  ofs<<"RadiationYield"<<'\t'<<"e- energy (MeV)(x)"<<'\t'<<G4endl;}
+
+
 	       
        ofs.close();                     
 		
     }
 
+ if(Foil)
+    {
+G4std::ofstream ofs;
+
+	ofs.open(filename);
+		{
+
+		  ofs<<"Global information about primary particles (e+ or e-)"<<G4endl;}
+	       
+       ofs.close();                     
+		
+    }
    
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
