@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.33 2003-03-11 03:46:57 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.34 2003-03-11 04:29:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -387,6 +387,17 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
 ///////////////////////////////////////////////////////////////
 void G4VUserPhysicsList::BuildPhysicsTable()
 {
+  if (fRetrievePhysicsTable) {
+    if (!fIsRestoredCutValues) {
+#ifdef G4VERBOSE  
+      if (verboseLevel>2){
+	G4cout << "G4VUserPhysicsList::SetParticleCuts  ";
+	G4cout << " Retrieve Cut Values for ";
+      }
+#endif
+      fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
+    }
+  }
   // Sets a value to particle 
   // set cut values for gamma at first and for e- and e+
   G4String particleName;
@@ -417,16 +428,6 @@ void G4VUserPhysicsList::BuildPhysicsTable()
 void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
 {
   if (fRetrievePhysicsTable) {
-    if (!fIsRestoredCutValues) {
-#ifdef G4VERBOSE  
-      if (verboseLevel>2){
-	G4cout << "G4VUserPhysicsList::SetParticleCuts  ";
-	G4cout << " Retrieve Cut Values for ";
-	G4cout << particle->GetParticleName() << G4endl;
-      }
-#endif
-      fIsRestoredCutValues = fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
-    }
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
