@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.17 2001-09-27 10:11:48 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.18 2002-05-08 13:24:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 #include "G4Tubs.hh"
 #include "G4Sphere.hh"
 #include "G4Trap.hh"
+#include "G4EllipticalTube.hh"
 #include "G4IntersectionSolid.hh"
 #include "G4SubtractionSolid.hh"
 #include "G4UnionSolid.hh"
@@ -435,6 +436,13 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
     (G4Transform3D(rm,G4ThreeVector(-200.*cm,400.*cm,-200.*cm)),
      "trap2_phys", trap2_log,
      experimentalHall_phys,false,0);
+
+  //-------------------------------------------- Elliptical Tube
+  G4VSolid* eTube = new G4EllipticalTube("e-tube",100.*cm,50.*cm,100.*cm);
+  G4LogicalVolume* eTubeLog = new G4LogicalVolume(eTube,Ar,"e-tube-log");
+  new G4PVPlacement(G4Translate3D(G4ThreeVector(-200.*cm,-200.*cm,0)),
+		    "e-tube-phys", eTubeLog,
+		    experimentalHall_phys,false,0);
 
   //-------------------------------------------- visualization attributes
 
