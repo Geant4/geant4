@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedMesonConstructor.cc,v 1.12 2003-05-19 17:11:21 kurasige Exp $
+// $Id: G4ExcitedMesonConstructor.cc,v 1.13 2003-05-20 10:05:37 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 #include "G4DecayTable.hh"
 
 
-G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int nStates,
+G4ExcitedMesonConstructor::G4ExcitedMesonConstructor(G4int ,
 						       G4int )
     :   type("meson"), leptonNumber(0), baryonNumber(0)
 {

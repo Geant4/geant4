@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExcitedLambdaConstructor.cc,v 1.6 2003-05-19 17:11:21 kurasige Exp $
+// $Id: G4ExcitedLambdaConstructor.cc,v 1.7 2003-05-20 10:05:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -293,7 +293,7 @@ G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaPiMode(
 
 G4DecayTable*  G4ExcitedLambdaConstructor::AddSigmaStarPiMode( 
 				    G4DecayTable* decayTable, const G4String& nameParent,
-				    G4double br, G4int iIso3, G4bool fAnti)
+				    G4double br, G4int , G4bool fAnti)
 {
   G4VDecayChannel* mode;
 
