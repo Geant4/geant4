@@ -21,36 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWin32.cc,v 1.5 2001-07-11 10:09:01 gunter Exp $
+// $Id: G4OpenInventorWin.cc,v 1.3 2004-04-08 10:14:36 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // OpenInventor graphics system factory.
 
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
 
-#include <Inventor/Xt/SoXt.h>
+// this :
+#include "G4OpenInventorWin.hh"
 
-#include "G4OpenInventorWin32.hh"
+#include <Inventor/Win/SoWin.h>
 
 #include "G4OpenInventorSceneHandler.hh"
-#include "G4OpenInventorViewer.hh"
-
+#include "G4OpenInventorWinViewer.hh"
 #include "G4Win32.hh"
 
-G4OpenInventorWin32::G4OpenInventorWin32 ()
-:G4OpenInventor("OpenInventorWin32","OIWIN32",G4VGraphicsSystem::threeD)
+G4OpenInventorWin::G4OpenInventorWin ()
+:G4OpenInventor("OpenInventorWin","OIWIN32",G4VGraphicsSystem::threeD)
 {
   SetInteractorManager (G4Win32::getInstance());
   GetInteractorManager () -> RemoveDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);  
-  GetInteractorManager () -> AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
+  GetInteractorManager () -> AddDispatcher((G4DispatchFunction)SoWin::dispatchEvent);
 
-  Widget toplevel = (Widget)GetInteractorManager()->GetMainInteractor();
+  HWND toplevel = (HWND)GetInteractorManager()->GetMainInteractor();
 
-  SoXt::init(toplevel);
+  SoWin::init(toplevel);
 
-  InitHEPVis();
+  InitNodes();
 }
 
-G4OpenInventorWin32::~G4OpenInventorWin32 () {}
+G4OpenInventorWin::~G4OpenInventorWin () {}
+G4VViewer* G4OpenInventorWin::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
+{
+  G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
+  return new G4OpenInventorWinViewer (*pScene, name);
+}
+
 
 #endif
