@@ -30,19 +30,8 @@
 #include "globals.hh"
 #include <vector>
 #include <iostream>
-#if __GNUC__ < 3
-#if __GNUC_MINOR__ < 96
-#if __GNUC_PATCHLEVEL__ < 3
-#define G4HEPREP_SSTREAM 1
-#endif
-#endif
-#endif
-
-#ifdef G4HEPREP_SSTREAM
-#include "../include/g++iostream/sstream"
-#else
-#include <sstream>
-#endif
+// NOTE not available on Solaris 5.2 and Linux g++ 2.95.2
+// #include <sstream>
 #include <iomanip>
 #include <fstream>
 
@@ -314,15 +303,28 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         }
     
         if (writeMultipleFiles) {
-            stringstream fileName;
-            fileName << baseName << eventNumberPrefix << setw(eventNumberWidth) << setfill('0') << eventNumber << eventNumberSuffix << extension;
-            openFile(fileName.str());
+// NOTE: does not work on Solaris 5.2 and Linux 2.95.2
+//            stringstream fileName;
+//            fileName << baseName << eventNumberPrefix << setw(eventNumberWidth) << setfill('0') << eventNumber << eventNumberSuffix << extension;
+//            openFile(fileName.str());
+// Use instead:
+            char fileName[128];
+            G4String fileFormat = G4String("%s%s%0")+G4String(eventNumberWidth)+G4String("d%s%s");
+            sprintf(fileName, fileFormat.c_str(), baseName.c_str(), eventNumberPrefix.c_str(), eventNumber, eventNumberSuffix.c_str(), extension.c_str());
+            openFile(G4String(fileName));
         }
             
         // write out the heprep
-        stringstream eventName;
-        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
-        writer->write(_heprep, eventName.str());
+// NOTE: does not work on Solaris 5.2 and Linux 2.95.2
+//        stringstream eventName;
+//        eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
+//        writer->write(_heprep, eventName.str());
+// Use instead:
+        char eventName[128];
+        G4String eventFormat = G4String("event-%0")+G4String(eventNumberWidth)+".heprep";
+        sprintf(eventName, eventFormat.c_str(), eventNumber);
+        writer->write(_heprep, G4String(eventName));
+
         eventNumber++;
     }
     

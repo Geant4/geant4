@@ -1,6 +1,5 @@
 set HEPREP=%FREEHEP%\hep\graphics\heprep
 copy "%FREEHEP%\org\freehep\jni\FreeHepTypes.h"     "include\ref"
-copy "%FREEHEP%\org\freehep\zip\g++iostream\*"      "include\g++iostream"
 copy "%FREEHEP%\org\freehep\zip\zipios++\*.h"       "include\zipios++"
 copy "%FREEHEP%\org\freehep\zip\*.h"                "include\zipios++"
 copy "%FREEHEP%\org\freehep\zip\*.cpp"              "src\*.cc"

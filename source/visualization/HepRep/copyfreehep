@@ -1,6 +1,5 @@
 export HEPREP=$FREEHEP/hep/graphics/heprep
 cp $FREEHEP/org/freehep/jni/FreeHepTypes.h          include/ref
-cp $FREEHEP/org/freehep/zip/g++iostream/sstream     include/g++iostream
 cp $FREEHEP/org/freehep/zip/zipios++/*.h            include/zipios++
 cp $FREEHEP/org/freehep/zip/*.h                     include/zipios++
 cp $FREEHEP/org/freehep/zip/*.cpp                   src

@@ -8,7 +8,8 @@
 #include "zipios_common.h"
 #include "zipios++/zipheadio.h"
 
-#include "outputstringstream.h"
+// MD Removed
+//#include "outputstringstream.h"
 
 namespace zipios {
 

@@ -34,7 +34,10 @@
 #define HAVE_STD 1
 
 /* define if the compiler has std compliant iostream library */
+// MD defined for Geant4, Solaris and Linux 2.95.2 do not have this...
+#if defined (WIN32) || __GNUC__ > 2
 #define HAVE_STD_IOSTREAM 1
+#endif
 
 //#undef  S_ISSOCK
 //#define S_ISSOCK(mode)	0

@@ -14,8 +14,8 @@ typedef std::ostringstream OutputStringStream ;
 
 #else
 
-// MD added include
-#include <strstream>
+// MD added include strstream.h (not strstream, since it does not exist on Solaris)
+#include <strstream.h>
 
 /** OutputStringStream is typedefed to ostringstream if sstream is
     part of the standard library (unless Zipios++ has been explicitly
