@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.cc,v 1.9 2001-07-11 09:57:45 gunter Exp $
+// $Id: Em4RunAction.cc,v 1.10 2001-10-17 14:04:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4RunAction.hh"
 #include "Em4RunActionMessenger.hh"
@@ -43,7 +43,7 @@
  #include "CLHEP/Hist/HBookFile.h"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunAction::Em4RunAction()
 {
@@ -53,7 +53,7 @@ Em4RunAction::Em4RunAction()
   saveRndm = 1;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunAction::~Em4RunAction()
 {
@@ -69,7 +69,7 @@ Em4RunAction::~Em4RunAction()
   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::bookHisto()
 {
@@ -83,7 +83,7 @@ void Em4RunAction::bookHisto()
 #endif      
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
@@ -105,7 +105,7 @@ void Em4RunAction::BeginOfRunAction(const G4Run* aRun)
   } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunAction::EndOfRunAction(const G4Run* aRun)
 {  
@@ -119,4 +119,4 @@ void Em4RunAction::EndOfRunAction(const G4Run* aRun)
     }                
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PhysicsList.cc,v 1.4 2001-07-11 09:57:45 gunter Exp $
+// $Id: Em4PhysicsList.cc,v 1.5 2001-10-17 14:04:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4PhysicsList.hh"
 
@@ -38,7 +38,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4PhysicsList::Em4PhysicsList()
 : G4VUserPhysicsList()
@@ -47,12 +47,12 @@ Em4PhysicsList::Em4PhysicsList()
   SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4PhysicsList::~Em4PhysicsList()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::ConstructParticle()
 {
@@ -65,7 +65,7 @@ void Em4PhysicsList::ConstructParticle()
   ConstructLeptons();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::ConstructBosons()
 {
@@ -73,7 +73,8 @@ void Em4PhysicsList::ConstructBosons()
   G4Gamma::GammaDefinition();
 
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::ConstructLeptons()
 {
@@ -82,7 +83,7 @@ void Em4PhysicsList::ConstructLeptons()
   G4Positron::PositronDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::ConstructProcess()
 {
@@ -90,7 +91,7 @@ void Em4PhysicsList::ConstructProcess()
   ConstructEM();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -103,7 +104,7 @@ void Em4PhysicsList::ConstructProcess()
 #include "G4eplusAnnihilation.hh"
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::ConstructEM()
 {
@@ -123,22 +124,22 @@ void Em4PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
     //electron
 
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
 
     } else if (particleName == "e+") {
     //positron
 
-      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);      
     }
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4PhysicsList::SetCuts()
 {
@@ -163,7 +164,7 @@ void Em4PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

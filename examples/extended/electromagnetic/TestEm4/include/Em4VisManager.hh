@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4VisManager.hh,v 1.3 2001-07-11 09:57:44 gunter Exp $
+// $Id: Em4VisManager.hh,v 1.4 2001-10-17 14:04:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // Example Visualization Manager implementing virtual function
 //   RegisterGraphicsSystems.  Exploits C-pre-processor variables
@@ -42,14 +42,14 @@
 //   G4VisManager* myVisManager = new MyVisManager;
 //   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4VisManager_h
 #define Em4VisManager_h 1
 
 #include "G4VisManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em4VisManager: public G4VisManager {
 
@@ -62,5 +62,7 @@ private:
   void RegisterGraphicsSystems ();
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

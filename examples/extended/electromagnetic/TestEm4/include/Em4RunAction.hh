@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.6 2001-07-11 09:57:44 gunter Exp $
+// $Id: Em4RunAction.hh,v 1.7 2001-10-17 14:04:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4RunAction_h
 #define Em4RunAction_h 1
@@ -35,7 +35,7 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 class Em4RunActionMessenger;
@@ -74,6 +74,8 @@ class Em4RunAction : public G4UserRunAction
     HepHistogram* histo[1];
 #endif         
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

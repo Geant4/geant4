@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PrimaryGeneratorAction.hh,v 1.3 2001-07-11 09:57:44 gunter Exp $
+// $Id: Em4PrimaryGeneratorAction.hh,v 1.4 2001-10-17 14:04:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4PrimaryGeneratorAction_h
 #define Em4PrimaryGeneratorAction_h 1
@@ -38,8 +38,7 @@
 class G4ParticleGun;
 class G4Event;
 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em4PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
@@ -53,6 +52,8 @@ class Em4PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   private:
     G4ParticleGun*  particleGun;	//pointer a to G4 service class
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventActionMessenger.cc,v 1.3 2001-07-11 09:57:45 gunter Exp $
+// $Id: Em4EventActionMessenger.cc,v 1.4 2001-10-17 14:04:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4EventActionMessenger.hh"
 
@@ -36,7 +36,7 @@
 #include "G4UIcmdWithAnInteger.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4EventActionMessenger::Em4EventActionMessenger(Em4EventAction* EvAct)
 :eventAction(EvAct)
@@ -56,7 +56,7 @@ Em4EventActionMessenger::Em4EventActionMessenger(Em4EventAction* EvAct)
   PrintCmd->AvailableForStates(Idle);    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4EventActionMessenger::~Em4EventActionMessenger()
 {
@@ -64,9 +64,10 @@ Em4EventActionMessenger::~Em4EventActionMessenger()
   delete PrintCmd;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em4EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em4EventActionMessenger::SetNewValue(G4UIcommand* command,
+                                          G4String newValue)
 { 
   if(command == DrawCmd)
     {eventAction->SetDrawFlag(newValue);}
@@ -75,4 +76,4 @@ void Em4EventActionMessenger::SetNewValue(G4UIcommand * command,G4String newValu
     {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}       
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4PhysicsList.hh,v 1.3 2001-07-11 09:57:44 gunter Exp $
+// $Id: Em4PhysicsList.hh,v 1.4 2001-10-17 14:04:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em4PhysicsList_h
 #define Em4PhysicsList_h 1
@@ -35,7 +35,7 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em4PhysicsList: public G4VUserPhysicsList
 {
@@ -61,6 +61,8 @@ class Em4PhysicsList: public G4VUserPhysicsList
     void ConstructEM();
     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunActionMessenger.cc,v 1.5 2001-07-11 09:57:46 gunter Exp $
+// $Id: Em4RunActionMessenger.cc,v 1.6 2001-10-17 14:04:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4RunActionMessenger.hh"
 #include "Em4RunAction.hh"
@@ -39,7 +39,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunActionMessenger::Em4RunActionMessenger(Em4RunAction* run)
 :Em4Run(run)
@@ -48,7 +48,7 @@ Em4RunActionMessenger::Em4RunActionMessenger(Em4RunAction* run)
   RndmDir->SetGuidance("Rndm status control.");
   
   RndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
-  RndmSaveCmd->SetGuidance("set frequency to save rndm status on external files.");
+  RndmSaveCmd->SetGuidance("set frequency to save rndm on external files.");
   RndmSaveCmd->SetGuidance("freq = 0 not saved");
   RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
   RndmSaveCmd->SetGuidance("freq > 0 saved on:   endOfRun.rndm");
@@ -64,14 +64,14 @@ Em4RunActionMessenger::Em4RunActionMessenger(Em4RunAction* run)
   RndmReadCmd->AvailableForStates(PreInit,Idle);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4RunActionMessenger::~Em4RunActionMessenger()
 {  
   delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
@@ -85,4 +85,4 @@ void Em4RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     }   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

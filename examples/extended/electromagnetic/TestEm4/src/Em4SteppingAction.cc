@@ -21,30 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: Em4SteppingAction.cc,v 1.3 2001-07-11 09:57:46 gunter Exp $
+// $Id: Em4SteppingAction.cc,v 1.4 2001-10-17 14:04:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em4SteppingAction.hh"
 #include "Em4EventAction.hh"
 #include "G4SteppingManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4SteppingAction::Em4SteppingAction(Em4EventAction* EvAct)
 :eventAction(EvAct),myVerbose(NULL)
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em4SteppingAction::~Em4SteppingAction()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em4SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
@@ -52,6 +52,6 @@ void Em4SteppingAction::UserSteppingAction(const G4Step* aStep)
  if (EdepStep > 0.) eventAction->addEdep(EdepStep);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
