@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.4 2001-11-07 13:14:45 radoone Exp $
+// $Id: G4SteppingManager2.cc,v 1.5 2002-02-04 01:49:08 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -301,15 +301,16 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
                              -> GetEnergyThreshold(tMaterial);
 
             if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-              G4double currentRange
-                    = G4EnergyLossTables::GetRange(
-                                tempSecondaryTrack->GetDefinition(),
-				tempSecondaryTrack->GetKineticEnergy(),
-				tMaterial
-			);	
-              if (currentRange < CalculateSafety() ){
-                 tBelowCutEnergyAndSafety = true;
-              }
+	       tBelowCutEnergyAndSafety = true;
+	       if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
+		G4double currentRange
+		  = G4EnergyLossTables::GetRange(
+						 tempSecondaryTrack->GetDefinition(),
+						 tempSecondaryTrack->GetKineticEnergy(),
+						 tMaterial
+						 );	
+		tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
+	       }
             }
 
             if( tBelowCutEnergyAndSafety ){
@@ -328,20 +329,27 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
             }
          }
 
-         // If this 2ndry particle has 'zero' kinetic energy, make sure
-         // it invokes a rest process at the beginning of the tracking
-         if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
-	    tempSecondaryTrack->SetTrackStatus( fStopButAlive );
-         }
-
          // Set parentID 
          tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
 
 	 // Set the process pointer which created this track 
 	 tempSecondaryTrack->SetCreatorProcess( fCurrentProcess );
+	 
+	 // If this 2ndry particle has 'zero' kinetic energy, make sure
+	 // it invokes a rest process at the beginning of the tracking
+	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	   if (pm->GetAtRestProcessVector()->entries()>0){
+	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
+	     fSecondary->push_back( tempSecondaryTrack );
+	   } else {
+	     delete tempSecondaryTrack;
+	   }
+	 } else {
+	   fSecondary->push_back( tempSecondaryTrack );
+	 }	
+       } //end of loop on secondary 
 
-	 fSecondary->push_back ( tempSecondaryTrack );
-       }
 
        // clear ParticleChange
        fParticleChange->Clear();
@@ -405,16 +413,17 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
             tProdThreshold = tempSecondaryTrack->GetDefinition()
                              -> GetEnergyThreshold(tMaterial);
 
-            if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-              G4double currentRange
-                    = G4EnergyLossTables::GetRange(
-                                tempSecondaryTrack->GetDefinition(),
-				tempSecondaryTrack->GetKineticEnergy(),
-				tMaterial
-			);	
-              if (currentRange < CalculateSafety() ){
-                   tBelowCutEnergyAndSafety = true;
-              }
+           if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
+	       tBelowCutEnergyAndSafety = true;
+	       if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
+		G4double currentRange
+		  = G4EnergyLossTables::GetRange(
+						 tempSecondaryTrack->GetDefinition(),
+						 tempSecondaryTrack->GetKineticEnergy(),
+						 tMaterial
+						 );	
+		tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
+	       }
             }
 
             if( tBelowCutEnergyAndSafety ){
@@ -433,21 +442,27 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
             }
          }
 
-         // If this 2ndry particle has 'zero' kinetic energy, make sure
-         // it invokes a rest process at the beginning of the tracking
-            if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
-              tempSecondaryTrack->SetTrackStatus( fStopButAlive );
-            }
-
          // Set parentID
          tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
 
 	 // Set the process pointer which created this track 
 	 tempSecondaryTrack->SetCreatorProcess( fCurrentProcess );
 
-	 fSecondary->push_back(  tempSecondaryTrack );
-     }
-
+	 // If this 2ndry particle has 'zero' kinetic energy, make sure
+	 // it invokes a rest process at the beginning of the tracking
+	 if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	   G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	   if (pm->GetAtRestProcessVector()->entries()>0){
+	     tempSecondaryTrack->SetTrackStatus( fStopButAlive );
+	     fSecondary->push_back( tempSecondaryTrack );
+	   } else {
+	     delete tempSecondaryTrack;
+	   }
+	 } else {
+	   fSecondary->push_back( tempSecondaryTrack );
+	 }
+     } //end of loop on secondary 
+     
      // Set the track status according to what the process defined
      fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
 
@@ -511,53 +526,60 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 
             // Check if the particle should be passed without coherent cut
             if(tApplyCutFlag){
-               tBelowCutEnergyAndSafety = false;            
-               tMaterial = fPostStepPoint->GetMaterial();
-               tProdThreshold = tempSecondaryTrack->GetDefinition()
-                                -> GetEnergyThreshold(tMaterial);
-
-               if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
-                 G4double currentRange
-                    = G4EnergyLossTables::GetRange(
-                                tempSecondaryTrack->GetDefinition(),
-				tempSecondaryTrack->GetKineticEnergy(),
-				tMaterial
-			);	
-                 if (currentRange < CalculateSafety() ){
-                   tBelowCutEnergyAndSafety = true;
-                 }
-               }
-
-               if( tBelowCutEnergyAndSafety ){
-                   if( !(tempSecondaryTrack->IsGoodForTracking()) ){
-
+	      tBelowCutEnergyAndSafety = false;            
+	      tMaterial = fPostStepPoint->GetMaterial();
+	      tProdThreshold = tempSecondaryTrack->GetDefinition()
+		-> GetEnergyThreshold(tMaterial);
+	      
+	      if( tempSecondaryTrack->GetKineticEnergy()<tProdThreshold ){
+		tBelowCutEnergyAndSafety = true;
+		if (tempSecondaryTrack-> GetDynamicParticle()->GetCharge() !=0.0) {
+		  G4double currentRange
+		    = G4EnergyLossTables::GetRange(
+			      tempSecondaryTrack->GetDefinition(),
+			      tempSecondaryTrack->GetKineticEnergy(),
+			      tMaterial
+			      );	
+		  tBelowCutEnergyAndSafety = (currentRange < CalculateSafety() );
+		}
+	      }
+	      
+	      if( tBelowCutEnergyAndSafety ){
+		if( !(tempSecondaryTrack->IsGoodForTracking()) ){
+		  
 ////                      G4cout << "!! Warning - G4SteppingManager:" << G4endl; 
 ////                           << " This physics process generated a secondary"
 ////                           << " of which energy is below cut but" 
 ////                           << " GoodForTracking is off !!!!!" << G4endl;
 
-                      // Add kinetic energy to the total energy deposit
-                      fStep->AddTotalEnergyDeposit(
-                             tempSecondaryTrack->GetKineticEnergy() );
-                      tempSecondaryTrack->SetKineticEnergy(0.0);
-                   } 
-               }
+		  // Add kinetic energy to the total energy deposit
+		  fStep->AddTotalEnergyDeposit(
+			    tempSecondaryTrack->GetKineticEnergy() );
+		  tempSecondaryTrack->SetKineticEnergy(0.0);
+		} 
+	      }
             }
-
-            // If this 2ndry particle has 'zero' kinetic energy, make sure
-            // it invokes a rest process at the beginning of the tracking
-            if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
-   	      tempSecondaryTrack->SetTrackStatus( fStopButAlive );
-            }
-
+    
             // Set parentID 
             tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
 	    
 	    // Set the process pointer which created this track 
 	    tempSecondaryTrack->SetCreatorProcess( fCurrentProcess );
 
-	    fSecondary->push_back( tempSecondaryTrack );
-         }
+            // If this 2ndry particle has 'zero' kinetic energy, make sure
+            // it invokes a rest process at the beginning of the tracking
+	    if(tempSecondaryTrack->GetKineticEnergy() <= 0.){
+	      G4ProcessManager* pm = tempSecondaryTrack->GetDefinition()->GetProcessManager();
+	      if (pm->GetAtRestProcessVector()->entries()>0){
+		tempSecondaryTrack->SetTrackStatus( fStopButAlive );
+		fSecondary->push_back( tempSecondaryTrack );
+ 	      } else {
+		delete tempSecondaryTrack;
+	      }
+	    } else {
+	      fSecondary->push_back( tempSecondaryTrack );
+	    }
+         } //end of loop on secondary 
 
          // Set the track status according to what the process defined
          fTrack->SetTrackStatus( fParticleChange->GetStatusChange() );
