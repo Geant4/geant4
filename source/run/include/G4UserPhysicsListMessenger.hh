@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.2 1999-04-14 10:45:55 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.3 1999-04-15 04:13:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,13 +52,17 @@ class G4UIcmdWithAString;
 
 class G4UserPhysicsListMessenger: public G4UImessenger
 {
+  private:
+  // hide default constructor
+    G4UserPhysicsListMessenger(){}
+
   public:
     G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList);
     virtual ~G4UserPhysicsListMessenger();
     
   public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+    virtual  void SetNewValue(G4UIcommand * command,G4String newValues);
+    virtual  G4String GetCurrentValue(G4UIcommand * command);
 
   protected:
     G4VUserPhysicsList* thePhysicsList;
