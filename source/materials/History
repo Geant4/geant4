@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2000-11-09 09:38:45 grichine Exp $
+$Id: History,v 1.8 2001-01-08 13:44:52 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+November 27, 00 V.Ivanchenko - materials-?
+               ionisation potential is tabulated according to 
+               ICRU Report #37.
 
 November 09, 00 V.Grichine - materials-V02-00-01
                included test/ directory which was not tagged.
