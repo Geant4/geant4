@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.3 1999-05-25 09:14:06 johna Exp $
+// $Id: G4Scene.hh,v 1.4 1999-11-05 16:02:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,18 +67,21 @@ public:
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
-  void AddRunDurationModel (G4VModel*);
+  G4bool AddRunDurationModel (G4VModel*);
   // Adds models of type which are expected to last for the duration
   // of the run, for example geometry volumes.
+  // Returns false if model is already in the list.
 
-  void AddWorldIfEmpty ();
+  G4bool AddWorldIfEmpty ();
   // In some situations, if the user asks for a drawing and has not
   // yet set any run duration models it makes sense to put the "world"
   // in there by default.
+  // Returns false if model is already in the list.
 
-  void AddEndOfEventModel (G4VModel*);
+  G4bool AddEndOfEventModel (G4VModel*);
   // Adds models of type which are described at the end of event when
   // the scene is current.
+  // Returns false if model is already in the list.
 
   RWTPtrOrderedVector <G4VModel>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.cc,v 1.3 1999-05-25 09:14:15 johna Exp $
+// $Id: G4Scene.cc,v 1.4 1999-11-05 16:02:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,29 +25,39 @@ G4Scene::G4Scene (const G4String& name):
 
 G4Scene::~G4Scene () {}
 
-void G4Scene::AddRunDurationModel (G4VModel* pModel) {
+G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
+  G4int i, nModels = fRunDurationModelList.entries ();
+  for (i = 0; i < nModels; i++) {
+    if (pModel -> GetGlobalDescription () ==
+	fRunDurationModelList [i] -> GetGlobalDescription ()) break;
+  }
+  if (i < nModels) {
+    G4cout << "G4Scene::AddRunDurationModel: model \""
+	   << pModel -> GetGlobalDescription ()
+	   << "\"\n  is already in the run-duration list of scene \""
+	   << fName
+	   << "\"."
+	   << endl;
+    return false;
+  }
   fRunDurationModelList.append (pModel);
-  G4int nModels = fRunDurationModelList.entries ();
+  nModels = fRunDurationModelList.entries ();  // ...has increased by 1...
   G4BoundingSphereScene boundingSphereScene;
-  for (int i = 0; i < nModels; i++) {
+  for (i = 0; i < nModels; i++) {
     const G4VisExtent& thisExtent =
       fRunDurationModelList[i] -> GetExtent ();
     G4Point3D thisCentre = thisExtent.GetExtentCentre ();
     G4double thisRadius = thisExtent.GetExtentRadius ();
-
-    //thisCentre.transform (fRunDurationModelList[i] -> GetTransformation ());
-    // To by-pass temporary CLHEP non-const problem...
-    G4Transform3D modelTransformation =
-      fRunDurationModelList[i] -> GetTransformation ();
-    thisCentre.transform (modelTransformation);
-
+    thisCentre.transform (fRunDurationModelList[i] -> GetTransformation ());
     boundingSphereScene.AccrueBoundingSphere (thisCentre, thisRadius);
   }
   fExtent = boundingSphereScene.GetBoundingSphereExtent ();
   fStandardTargetPoint = fExtent.GetExtentCentre ();
+  return true;
 }
-  
-void G4Scene::AddWorldIfEmpty () {
+
+G4bool G4Scene::AddWorldIfEmpty () {
+  G4bool successful = false;
   if (IsEmpty ()) {
     G4VPhysicalVolume* pWorld =
       G4TransportationManager::GetTransportationManager ()
@@ -64,14 +74,36 @@ void G4Scene::AddWorldIfEmpty () {
 	  " SetVisAttributes (G4VisAttributes::Invisible);"
 	       << endl;
       }
-      AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
+      successful = AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
       // Note: default depth and no modeling parameters.
-      G4cout <<
-	"G4Scene::AddWorldIfEmpty: The scene was empty,"
-	"\n   \"world\" has been added.";
-      G4cout << endl;
+      if (successful) {
+	G4cout <<
+	  "G4Scene::AddWorldIfEmpty: The scene was empty,"
+	  "\n   \"world\" has been added.";
+	G4cout << endl;
+      }
     }
   }
+  return successful;
+}
+
+G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
+  G4int i, nModels = fEndOfEventModelList.entries ();
+  for (i = 0; i < nModels; i++) {
+    if (pModel -> GetGlobalDescription () ==
+	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
+  }
+  if (i < nModels) {
+    G4cout << "G4Scene::AddEndOfEventModel: model \""
+	   << pModel -> GetGlobalDescription ()
+	   << "\"\n  is already in the run-duration list of scene \""
+	   << fName
+	   << "\"."
+	   << endl;
+    return false;
+  }
+  fEndOfEventModelList.append (pModel);
+  return true;
 }
 
 void G4Scene::Clear () {
