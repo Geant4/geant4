@@ -107,8 +107,8 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
 
     factory = new XMLHepRepFactory();
     writer = NULL;
-
-    open(GetScene() == NULL ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+    
+    // opening of file deferred to closeHepRep();
     openHepRep();
 }
 
@@ -164,7 +164,7 @@ void G4HepRepSceneHandler::open(G4String name) {
         writeMultipleFiles = (digit < baseName.length()-1);
 
         if (writeMultipleFiles) {
-            // defer opening file to closeHepRep
+            // defer opening "multiple" file to closeHepRep
             
             eventNumber = atoi(baseName.substr(digit+1).c_str());
             eventNumberWidth = baseName.length() - 1 - digit;
@@ -233,6 +233,13 @@ bool G4HepRepSceneHandler::closeHepRep() {
     if (_trajectoryPointType != NULL) _heprep->addLayer(trajectoryPointLayer);
     if (_hitType             != NULL) _heprep->addLayer(hitLayer);
 
+    // open heprep file
+    if (writer == NULL) {
+//        cout << "'" << ((GetScene() == NULL) ? "NULL" : "non-null") << "'" << endl;
+//        cout << "'" << ((GetScene()->GetName() == NULL) ? "NULL" : GetScene()->GetName()) << "'" << endl;
+        open(GetScene() == NULL ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+    }
+    
     if (writeMultipleFiles) {
         stringstream fileName;
         fileName << baseName << setw(eventNumberWidth) << setfill('0') << eventNumber << extension;
