@@ -1,4 +1,4 @@
-$Id: History,v 1.54 1999-09-17 13:49:47 morita Exp $
+$Id: History,v 1.55 1999-10-07 13:50:02 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+7th October 1999  John Allison
+- Removed WARNINGs about granular libraries.  Now standard usage.  Simple
+  using messages printed.
 
 17th Sep 1999  Youhei Morita
 - architecture.gmk: Defined G4TMPSCHEMA_DIR, G4TMPSCHEMA_BOOT
