@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventAction.cc,v 1.9 2001-11-28 15:07:22 maire Exp $
+// $Id: Em4EventAction.cc,v 1.10 2002-05-29 15:32:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 #include "Randomize.hh"
 
 #ifndef G4NOHIST
-  #include "CLHEP/Hist/HBookFile.h"
+  #include "AIDA/IHistogram1D.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,7 +85,7 @@ void Em4EventAction::EndOfEventAction( const G4Event* evt)
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
 	   
 #ifndef G4NOHIST
-  Em4Run->GetHisto(0)->accumulate(TotalEnergyDeposit/MeV);
+  Em4Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
 #endif
 
   if(G4VVisManager::GetConcreteInstance())

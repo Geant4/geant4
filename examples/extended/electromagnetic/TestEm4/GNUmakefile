@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2001-02-21 10:14:37 maire Exp $
+# $Id: GNUmakefile,v 1.6 2002-05-29 15:32:26 maire Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,12 +16,13 @@ all: lib bin
 
 include $(G4INSTALL)/config/architecture.gmk
 
-G4NOHIST := true
+###G4NOHIST := true
 ifdef G4NOHIST
   CPPFLAGS += -DG4NOHIST
 else
-  LDFLAGS  += -L$(CERN)/pro/lib
-  LOADLIBS += -lpacklib $(FCLIBS)
+  # for the aida-config command see the README file
+  CPPFLAGS += `aida-config --useHBook --include`
+  LDFLAGS  += `aida-config --useHBook --lib`
 endif
 
 include $(G4INSTALL)/config/binmake.gmk

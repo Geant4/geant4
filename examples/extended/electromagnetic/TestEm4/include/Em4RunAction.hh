@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.8 2001-11-28 15:07:22 maire Exp $
+// $Id: Em4RunAction.hh,v 1.9 2002-05-29 15:32:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,8 @@
 class G4Run;
 
 #ifndef G4NOHIST
-  class HepTupleManager;
-  class HepHistogram;
+  class ITree;
+  class IHistogram1D;
 #endif
 
 class Em4RunAction : public G4UserRunAction
@@ -55,17 +55,16 @@ class Em4RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
 
 #ifndef G4NOHIST    
-    HepHistogram* GetHisto(G4int id) {return histo[id];}
+    IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
         
   private:
     void bookHisto();
     
-  private:  
-    
+  private:      
 #ifndef G4NOHIST         
-    HepTupleManager* hbookManager;    
-    HepHistogram* histo[1];
+    ITree* tree;               // the tree should only be deleted at the end
+    IHistogram1D* histo[1];    // (after writing the histos to file)
 #endif         
 };
 
