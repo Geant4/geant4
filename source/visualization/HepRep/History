@@ -1,4 +1,4 @@
-$Id: History,v 1.24 2002-12-11 16:05:16 johna Exp $
+$Id: History,v 1.25 2003-01-24 21:18:48 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+24th January 2003  Joseph Perl
+- Modified G4HepRepFileSceneHandler:AddThis (const G4VTrajectory& traj)
+  to incorporate G4Attributes into the HepRep1 file.
+- Moved some of HepRepXMLWriter's warning messages into ifdef debug blocks.
 
 11th December 2002  John Allison  (vis-V04-01-10)
 - Fixed default view parameters (global culling false).

@@ -44,7 +44,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.9 2002-12-13 11:18:00 gunter Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.10 2003-01-24 21:18:48 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -60,6 +60,8 @@
 //------------------------------------------------------------------------
 #ifndef HepRepXMLWriter_hh
 #define HepRepXMLWriter_hh
+
+//#define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
 
 #include "globals.hh"
 #include "g4std/fstream"

@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.10 2002-12-13 11:18:03 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.11 2003-01-24 21:18:48 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -68,7 +68,10 @@
 #include "G4Polyhedron.hh"
 #include "G4NURBS.hh"
 #include "G4VTrajectory.hh"
+#include "G4VTrajectoryPoint.hh"
 #include "G4VHit.hh"
+#include "G4AttDef.hh"
+#include "G4AttValue.hh"
 
 //HepRep
 #include "HepRepXMLWriter.hh"
@@ -252,7 +255,185 @@ void G4HepRepFileSceneHandler::AddThis (const G4VTrajectory& traj) {
 #ifdef G4HEPREPFILEDEBUG
     G4cout << "G4HepRepFileSceneHandler::AddThis(G4VTrajectory&) " << G4endl;
 #endif
-    G4VSceneHandler::AddThis (traj);
+
+  G4std::vector<G4AttValue>* attValues = traj.CreateAttValues();
+  G4std::vector<G4AttValue>::iterator iAttVal;
+  const G4std::map<G4String,G4AttDef>* attDefs = traj.GetAttDefs();
+  G4std::map<G4String,G4AttDef>::const_iterator iAttDef;
+  G4int i;
+
+  // Open the HepRep output file if it is not already open.
+  CheckFileOpen();
+
+  // Add the Event Data Type if it hasn't already been added.
+  // If this is the first trajectory, add the Event Data type and define attributes.
+  if (strcmp("Event Data",hepRepXMLWriter->prevTypeName[0])!=0) {
+    hepRepXMLWriter->addType("Event Data",0);
+    hepRepXMLWriter->addInstance();
+  }
+
+  // Add the Trajectories Type.
+  G4String previousName = hepRepXMLWriter->prevTypeName[1];
+  hepRepXMLWriter->addType("Trajectories",1);
+
+  // If this is the first trajectory of this event...
+  if (strcmp("Trajectories",previousName)!=0) {
+    // Specify attribute values common to all trajectories.
+    hepRepXMLWriter->addAttValue("DrawAs","Line");
+    hepRepXMLWriter->addAttValue("Layer",100);
+
+    // Specify additional attribute definitions for trajectories.
+    // Take all Trajectory attDefs from first trajectory.
+    // Would rather be able to get these attDefs without needing a reference from any
+    // particular trajectory, but don't know how to do that.
+    if (attValues && attDefs) {
+      for (iAttVal = attValues->begin();
+	   iAttVal != attValues->end(); ++iAttVal) {
+	iAttDef = attDefs->find(iAttVal->GetName());
+	if (iAttDef != attDefs->end()) {
+	  // Protect against incorrect use of Category.  Anything value other than the
+	  // standard ones will be considered to be in the physics category.
+	  G4String category = iAttDef->second.GetCategory();
+	  if (strcmp(category,"Draw")!=0 &&
+	      strcmp(category,"Physics")!=0 &&
+	      strcmp(category,"Association")!=0 &&
+	      strcmp(category,"PickAction")!=0)
+	    category = "Physics";
+	  hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+				     category, iAttDef->second.GetExtra());
+	}
+      }
+    }
+
+    // Specify additional attribute definitions for trajectory points.
+    // Take all TrajectoryPoint attDefs from first point of first trajectory.
+    // Would rather be able to get these attDefs without needing a reference from any
+    // particular point, but don't know how to do that.
+    // Note also that until we get the good separation of Types and Instances that comes
+    // in HepRep2, the user must be careful not to use the same AttName for two
+    // different Types.
+    if (traj.GetPointEntries()>0) {
+      G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(0);
+      G4std::vector<G4AttValue>* pointAttValues
+	= aTrajectoryPoint->CreateAttValues();
+      const G4std::map<G4String,G4AttDef>* pointAttDefs
+	= aTrajectoryPoint->GetAttDefs();
+      if (pointAttValues && pointAttDefs) {
+	for (iAttVal = pointAttValues->begin();
+	     iAttVal != pointAttValues->end(); ++iAttVal) {
+	  iAttDef =
+	    pointAttDefs->find(iAttVal->GetName());
+	  if (iAttDef != pointAttDefs->end()) {
+	    // Protect against incorrect use of Category.  Anything value other than the
+	    // standard ones will be considered to be in the physics category.
+	    G4String category = iAttDef->second.GetCategory();
+	    if (strcmp(category,"Draw")!=0 &&
+		strcmp(category,"Physics")!=0 &&
+		strcmp(category,"Association")!=0 &&
+		strcmp(category,"PickAction")!=0)
+	      category = "Physics";
+	    hepRepXMLWriter->addAttDef(iAttVal->GetName(), iAttDef->second.GetDesc(),
+				       category, iAttDef->second.GetExtra());
+	  }
+	}
+      }
+    }
+  }
+
+  // For every trajectory, add an instance of Type Trajectory.
+  hepRepXMLWriter->addInstance();
+
+  // Set the LineColor attribute according to the particle charge.
+  float redness = 0.;
+  float greenness = 0.;
+  float blueness = 0.;
+  const G4double charge = traj.GetCharge();
+  if(charge>0.)      blueness =  1.; // Blue = positive.
+  else if(charge<0.) redness  =  1.; // Red = negative.
+  else               greenness = 1.; // Green = neutral.
+  hepRepXMLWriter->addAttValue("LineColor",redness,greenness,blueness);
+
+  // Copy the current trajectory's G4AttValues to HepRepAttValues.
+  if (attValues && attDefs) {
+    for (iAttVal = attValues->begin();
+	 iAttVal != attValues->end(); ++iAttVal) {
+      G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	attDefs->find(iAttVal->GetName());
+      if (iAttDef == attDefs->end()) {
+	G4cout << "G4HepRepFileSceneHandler::AddThis(traj):"
+	  "\n  WARNING: no matching definition for attribute \""
+	       << iAttVal->GetName() << "\", value: "
+	       << iAttVal->GetValue();
+      }
+      else {
+	// Use GetDesc rather than GetName once WIRED can handle names with spaces in them.
+	//hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
+	hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+      }
+    }    
+    delete attValues;  // AttValues must be deleted after use.
+  }
+
+  // Each trajectory is made of a single primitive, a polyline.
+  hepRepXMLWriter->addPrimitive();
+
+  // Specify the polyline by using the trajectory points.
+  for (i = 0; i < traj.GetPointEntries(); i++) {
+    G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+    G4Point3D vertex = aTrajectoryPoint->GetPosition();
+    hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
+  }
+
+  // Create Trajectory Points as a subType of Trajectories.
+  previousName = hepRepXMLWriter->prevTypeName[2];
+  hepRepXMLWriter->addType("Trajectory Points",2);
+
+  // Specify attributes common to all trajectory points.
+  if (strcmp("Trajectory Points",previousName)!=0) {
+    hepRepXMLWriter->addAttValue("DrawAs","Point");
+    hepRepXMLWriter->addAttValue("Layer",110);
+    // Change to False once related problem is fixed in WIRED.
+    hepRepXMLWriter->addAttValue("Visibility","True");
+  }
+
+  for (i = 0; i < traj.GetPointEntries(); i++) {
+    G4VTrajectoryPoint* aTrajectoryPoint = traj.GetPoint(i);
+
+    // Each point is a separate instance of the type Trajectory Points.
+    hepRepXMLWriter->addInstance();
+
+  // Copy the current trajectory point's G4AttValues to HepRepAttValues.
+    G4std::vector<G4AttValue>* pointAttValues
+      = aTrajectoryPoint->CreateAttValues();
+    const G4std::map<G4String,G4AttDef>* pointAttDefs
+      = aTrajectoryPoint->GetAttDefs();
+
+    if (pointAttValues && pointAttDefs) {
+      G4std::vector<G4AttValue>::iterator iAttVal;
+      for (iAttVal = pointAttValues->begin();
+	   iAttVal != pointAttValues->end(); ++iAttVal) {
+	G4std::map<G4String,G4AttDef>::const_iterator iAttDef =
+	  pointAttDefs->find(iAttVal->GetName());
+	if (iAttDef == pointAttDefs->end()) {
+	  G4cout << "\nG4VTrajectory::ShowTrajectory:"
+	    "\n  WARNING: no matching definition for trajectory"
+	    " point attribute \""
+		 << iAttVal->GetName() << "\", value: "
+		 << iAttVal->GetValue();
+	}
+	else {
+	  //hepRepXMLWriter->addAttValue(iAttDef->second.GetDesc(), iAttVal->GetValue());
+	  hepRepXMLWriter->addAttValue(iAttVal->GetName(), iAttVal->GetValue());
+	}
+      }
+      delete pointAttValues;  // AttValues must be deleted after use.
+    }
+
+  // Each trajectory point is made of a single primitive, a point.
+    hepRepXMLWriter->addPrimitive();
+    G4Point3D vertex = aTrajectoryPoint->GetPosition();
+    hepRepXMLWriter->addPoint(vertex.x(), vertex.y(), vertex.z());
+  }
 }
 
 void G4HepRepFileSceneHandler::AddThis (const G4VHit& hit) {
@@ -406,22 +587,8 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
 	 << G4endl;
 #endif
 
-  if (!hepRepXMLWriter->isOpen) {
-    char* newFileSpec;
-    newFileSpec = new char [100];
-    int length;
-    length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
-    hepRepXMLWriter->open(newFileSpec);
-    fileCounter++;
-
-    hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
-    hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
-    hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
-    hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
-    hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
-    hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
-    hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
-  }
+  // Open the HepRep output file if it is not already open.
+  CheckFileOpen();
 
   // Handle Type declaration for Event Data.
   // Should be able to just test on fReadyForTransients, but this seems to
@@ -502,4 +669,34 @@ void G4HepRepFileSceneHandler::AddHepRepInstance(const char* primName,
     hepRepXMLWriter->addAttValue("Visibility",false);
   else
     hepRepXMLWriter->addAttValue("Visibility",true);
+}
+
+void G4HepRepFileSceneHandler::CheckFileOpen() {
+#ifdef G4HEPREPFILEDEBUG
+  G4cout <<
+    "G4HepRepFileSceneHandler::CheckFileOpen called."
+	 << G4endl;
+#endif
+
+  if (!hepRepXMLWriter->isOpen) {
+    char* newFileSpec;
+    newFileSpec = new char [100];
+    int length;
+    length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
+    hepRepXMLWriter->open(newFileSpec);
+#ifdef G4HEPREPFILEDEBUG
+    G4cout <<
+      "G4HepRepFileSceneHandler::CheckFileOpen opened file " << fileCounter
+	   << G4endl;
+#endif
+    fileCounter++;
+
+    hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
+    hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
+    hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
+    hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
+    hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
+    hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
+    hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
+  }
 }

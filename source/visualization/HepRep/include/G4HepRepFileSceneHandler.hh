@@ -43,7 +43,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.10 2002-12-13 11:17:59 gunter Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.11 2003-01-24 21:18:48 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,7 +54,7 @@
 #ifndef G4HepRepFileSCENEHANDLER_HH
 #define G4HepRepFileSCENEHANDLER_HH
 
-// #define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
+//#define G4HEPREPFILEDEBUG  // Comment this out to suppress debug code.
 
 #include "G4VSceneHandler.hh"
 #include "G4Box.hh"
@@ -151,6 +151,7 @@ private:
   HepRepXMLWriter *hepRepXMLWriter;
   void AddHepRepInstance(const char* primName,
 			 const G4Visible visible);
+  void CheckFileOpen();
   int fileCounter;
 
 #ifdef G4HEPREPFILEDEBUG

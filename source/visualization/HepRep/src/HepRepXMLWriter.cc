@@ -44,7 +44,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.9 2002-12-13 11:18:03 gunter Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.10 2003-01-24 21:18:48 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -129,7 +129,9 @@ void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
       typeDepth = newTypeDepth;
     }
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addType No file is currently open." << G4endl;
+#endif
   }
 }
 
@@ -144,13 +146,14 @@ void HepRepXMLWriter::addInstance()
       indent();
       fout << "<heprep:instance>" << G4endl;
     } else {
-      G4cout <<
-	"HepRepXMLWriter:addInstance No HepRep Type is currently open"
-	     << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+      G4cout << "HepRepXMLWriter:addInstance No HepRep Type is currently open" << G4endl;
+#endif
     }
   } else {
-    G4cout << "HepRepXMLWriter:addInstance No file is currently open"
-	   << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+    G4cout << "HepRepXMLWriter:addInstance No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -165,13 +168,14 @@ void HepRepXMLWriter::addPrimitive()
       indent();
       fout << "<heprep:primitive>" << G4endl;
     } else {
-      G4cout <<
-	"HepRepXMLWriter:addPrimitive No HepRep Instance is currently open"
-	     << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+      G4cout << "HepRepXMLWriter:addPrimitive No HepRep Instance is currently open" << G4endl;
+#endif
     }
   } else {
-    G4cout << "HepRepXMLWriter:addPrimitive No file is currently open"
-	   << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+    G4cout << "HepRepXMLWriter:addPrimitive No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -186,12 +190,14 @@ void HepRepXMLWriter::addPoint(double x, double y, double z)
       indent();
       fout << "<heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
     } else {
-      G4cout <<
-	"HepRepXMLWriter:addPoint No HepRep Primitive is currently open"
-	     << G4endl;
+#ifdef G4HEPREPFILEDEBUG
+      G4cout <<	"HepRepXMLWriter:addPoint No HepRep Primitive is currently open" << G4endl;
+#endif
     }
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addPoint No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -203,11 +209,13 @@ void HepRepXMLWriter::addAttDef(const char* name,
   if (fout.good())
   {
     indent();
-    fout << "<heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << G4endl;
+    fout << "  <heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << G4endl;
     indent();
     fout << "  desc=\"" << desc << "\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttDef No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -222,7 +230,9 @@ void HepRepXMLWriter::addAttValue (const char* name,
     indent();
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -236,7 +246,9 @@ void HepRepXMLWriter::addAttValue (const char* name,
     indent();
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -250,7 +262,9 @@ void HepRepXMLWriter::addAttValue (const char* name,
     indent();
     fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -267,7 +281,9 @@ void HepRepXMLWriter::addAttValue (const char* name,
     else
       fout << "    value=\"False\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+#endif
   }
 }
 
@@ -286,7 +302,9 @@ void HepRepXMLWriter::addAttValue (const char* name,
     indent();
     fout << "    value=\"" << redness << "," << greenness << "," << blueness << "\"/>" << G4endl;
   } else {
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
+#endif
   }
 }
 
