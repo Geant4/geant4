@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBetheBlochModel.cc,v 1.11 2004-02-15 17:46:49 vnivanch Exp $
+// $Id: G4MuBetheBlochModel.cc,v 1.12 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -282,7 +282,7 @@ G4DynamicParticle* G4MuBetheBlochModel::SampleSecondary(
   G4double totEnergy     = kineticEnergy + mass;
   G4double etot2         = totEnergy*totEnergy;
   G4double beta2         = kineticEnergy*(kineticEnergy + 2.0*mass)/etot2;
-
+ 
   G4double grej  = 1.;
   if(tmax > limitKinEnergy) {
     G4double a0    = log(2.*totEnergy/mass);

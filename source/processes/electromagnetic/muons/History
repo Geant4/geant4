@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2004-05-27 16:43:08 vnivanch Exp $
+$Id: History,v 1.69 2004-08-17 18:19:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Aug 04: V.Ivant (muons-V06-02-00)
+- Provide the common use of tables for mu+ and mu- to save 
+  initialisation time;
+- rename processes "Mu" -> "mu"
+- substitute obsolete interface to particles
 
 27 May 04: V.Ivant (muons-V06-01-01)
 - Set default regime of MuIonisation integral 

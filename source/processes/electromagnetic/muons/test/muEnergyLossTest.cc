@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: muEnergyLossTest.cc,v 1.4 2003-06-16 17:01:53 gunter Exp $
+// $Id: muEnergyLossTest.cc,v 1.5 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -172,12 +172,12 @@ int main()
   G4double mloss,sloss,dEdxdelta,dEdxbrems ;
 //--------- Particle definition ---------
 
-  G4Gamma* theGamma = G4Gamma::GammaDefinition();
-  G4Electron* theElectron = G4Electron::ElectronDefinition();
-  G4Positron* thePositron = G4Positron::PositronDefinition();
-  G4MuonPlus* theMuonPlus = G4MuonPlus::MuonPlusDefinition();
-  G4MuonMinus* theMuonMinus = G4MuonMinus::MuonMinusDefinition();
-  G4PionZero* thePionZero = G4PionZero::PionZeroDefinition();
+  G4ParticleDefinition* theGamma = G4Gamma::GammaDefinition();
+  G4ParticleDefinition* theElectron = G4Electron::ElectronDefinition();
+  G4ParticleDefinition* thePositron = G4Positron::PositronDefinition();
+  G4ParticleDefinition* theMuonPlus = G4MuonPlus::MuonPlusDefinition();
+  G4ParticleDefinition* theMuonMinus = G4MuonMinus::MuonMinusDefinition();
+  G4ParticleDefinition* thePionZero = G4PionZero::PionZeroDefinition();
 
   G4double* GammaKineticEnergyCuts ;
   G4double* ElectronKineticEnergyCuts ;
@@ -188,7 +188,7 @@ int main()
 
   G4double cutinrange,CutInRangeele,CutInRangepos ;
 
-  G4ParticleWithCuts* theParticle ;
+  G4ParticleDefinition* theParticle ;
   G4GPILSelection selection;
    
   G4double energy, momentum, mass;

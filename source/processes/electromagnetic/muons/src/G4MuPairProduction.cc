@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.41 2004-02-10 18:07:26 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.42 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,7 @@
 // 27-09-03 e+ set to be a secondary particle (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
+// 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -79,7 +80,8 @@ G4MuPairProduction::G4MuPairProduction(const G4String& name)
     theParticle(0),
     theBaseParticle(0),
     lowestKinEnergy(1.*GeV),
-    subCutoff(false)
+    subCutoff(false),
+    isInitialised(false)
 {
   InitialiseProcess();
 }
@@ -93,6 +95,8 @@ G4MuPairProduction::~G4MuPairProduction()
 
 void G4MuPairProduction::InitialiseProcess()
 {
+  isInitialised = true;
+
   SetSecondaryParticle(G4Positron::Positron());
 
   SetDEDXBinning(120);
@@ -113,7 +117,14 @@ void G4MuPairProduction::InitialiseProcess()
 const G4ParticleDefinition* G4MuPairProduction::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(!theParticle) theParticle = p;
+  if (p != theParticle) {
+    theParticle = p;
+
+    if(p == G4MuonPlus::MuonPlus()) theBaseParticle = BaseParticle();
+    else       theBaseParticle = G4MuonPlus::MuonPlus();
+
+    if(!isInitialised) InitialiseProcess();
+  }
   return theBaseParticle;
 }
 

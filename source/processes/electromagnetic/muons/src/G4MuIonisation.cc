@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.cc,v 1.42 2004-05-27 17:29:35 vnivanch Exp $
+// $Id: G4MuIonisation.cc,v 1.43 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Calculation of radiative corrections using R.Kokoulin model (V.Ivanchenko)
 // 27-05-04 Set integral to be a default regime (V.Ivanchenko) 
+// 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -102,7 +103,6 @@ G4MuIonisation::~G4MuIonisation()
 
 void G4MuIonisation::InitialiseProcess()
 {
-  if(isInitialised) return;
   mass = theParticle->GetPDGMass();
   SetSecondaryParticle(G4Electron::Electron());
 
@@ -132,9 +132,14 @@ void G4MuIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4MuIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(p) theParticle = p;
-  theBaseParticle = BaseParticle();
-  if(theParticle && !isInitialised) InitialiseProcess();
+  if (p != theParticle) {
+    theParticle = p;
+
+    if(p == G4MuonPlus::MuonPlus()) theBaseParticle = BaseParticle();
+    else       theBaseParticle = G4MuonPlus::MuonPlus();
+
+    if(!isInitialised) InitialiseProcess();
+  }
   return theBaseParticle;
 }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.31 2004-02-10 18:07:26 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.32 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
+// 17-08-04 Utilise mu+ tables for mu- (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -71,7 +72,8 @@ G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
   : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
-    lowestKinEnergy(1.*GeV)
+    lowestKinEnergy(1.*GeV),
+    isInitialised(false)
 {
   InitialiseProcess();
 }
@@ -84,7 +86,9 @@ G4MuBremsstrahlung::~G4MuBremsstrahlung()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuBremsstrahlung::InitialiseProcess()
-{
+{  
+  isInitialised = true;
+
   SetSecondaryParticle(G4Gamma::Gamma());
 
   SetDEDXBinning(120);
@@ -106,7 +110,14 @@ void G4MuBremsstrahlung::InitialiseProcess()
 const G4ParticleDefinition* G4MuBremsstrahlung::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(!theParticle) theParticle = p;
+  if (p != theParticle) {
+    theParticle = p;
+
+    if(p == G4MuonPlus::MuonPlus()) theBaseParticle = BaseParticle();
+    else       theBaseParticle = G4MuonPlus::MuonPlus();
+
+    if(!isInitialised) InitialiseProcess();
+  }
   return theBaseParticle;
 }
 

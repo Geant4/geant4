@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.21 2004-05-07 16:47:15 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.22 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,6 +47,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
+// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -72,7 +73,7 @@ class G4MuBremsstrahlung : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuBremsstrahlung(const G4String& processName = "MuBrems");
+  G4MuBremsstrahlung(const G4String& processName = "muBrems");
 
   ~G4MuBremsstrahlung();
 
@@ -116,6 +117,7 @@ private:
   const G4ParticleDefinition* theBaseParticle;
 
   G4double  lowestKinEnergy;
+  G4bool    isInitialised;
 
 };
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.21 2004-05-07 16:47:15 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.22 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -82,7 +83,7 @@ class G4MuIonisation : public G4VEnergyLossProcess
 
 public:
 
-  G4MuIonisation(const G4String& name = "MuIoni");
+  G4MuIonisation(const G4String& name = "muIoni");
 
   ~G4MuIonisation();
 

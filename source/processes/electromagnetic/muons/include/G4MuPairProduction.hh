@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.21 2004-05-07 16:47:16 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.22 2004-08-17 18:19:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,6 +48,7 @@
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
 // 28-04-04 Fix minor bug in energy balance (V.Ivanchenko)
+// 17-08-04 Rename the process "Mu" -> "mu" (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -73,7 +74,7 @@ class G4MuPairProduction : public G4VEnergyLossProcess
 {
 public:
 
-  G4MuPairProduction(const G4String& processName = "MuPairProd");
+  G4MuPairProduction(const G4String& processName = "muPairProd");
 
   ~G4MuPairProduction();
 
@@ -120,6 +121,7 @@ private:
 
   G4double                    lowestKinEnergy;
   G4bool                      subCutoff;
+  G4bool                      isInitialised;
 
 };
 
