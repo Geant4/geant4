@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003-02-19 08:30:14 gcosmo Exp $
+$Id: History,v 1.11 2003-03-12 14:00:58 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 12, 2003  John Allison
+- Added HepRep to vis manager.
 
 Feb 19, 2003  Gabriele Cosmo (test18-V05-00-00)
 - Removed redundant inclusion of PhysicalConstants.h.

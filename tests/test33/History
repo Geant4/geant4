@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2003-03-11 14:24:45 dressel Exp $
+$Id: History,v 1.18 2003-03-12 14:07:50 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 12, 2003  John Allison
+- Added HepRep to vis manager.
 
 Mar 11th, 2003  M. Dressel - test33-V05-00-01
   - change the replicanumber of the world volume from -1 to 0

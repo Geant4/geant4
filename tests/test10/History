@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2003-01-30 10:59:07 gcosmo Exp $
+$Id: History,v 1.5 2003-03-12 14:05:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 12, 2003  John Allison
+- Added HepRep to vis manager.
 
 Jan 30, 2003  Gabriele Cosmo (test10-V05-00-00)
 - Corrected technique to switch detector geometry, according to recent

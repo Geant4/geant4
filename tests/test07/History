@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2002-12-09 10:57:10 gcosmo Exp $
+$Id: History,v 1.9 2003-03-12 14:04:05 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Mar 12, 2003  John Allison
+- Added HepRep to vis manager.
 
 09th Dec 2002 Gabriele Cosmo (test07-V04-01-00)
 - Removed obsolete histogramming and cleaned warnings...
