@@ -108,9 +108,9 @@ static const G4double u_m_in[35];
 static const G4double u_p_t[30];
 static const G4double u_p_in[30];
 
-vector<G4int> theZ;
-vector<G4PiData *> thePipData;
-vector<G4PiData *> thePimData;
+G4std::vector<G4int> theZ;
+G4std::vector<G4PiData *> thePipData;
+G4std::vector<G4PiData *> thePimData;
 
 };
 

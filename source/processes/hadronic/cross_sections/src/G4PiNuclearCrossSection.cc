@@ -141,7 +141,7 @@ G4PiNuclearCrossSection::
 G4double G4PiNuclearCrossSection::
 GetCrossSection(const G4DynamicParticle* aParticle, 
                 const G4Element* anElement,
-                G4double T=0.)
+                G4double T)
 {
   // precondition
   G4bool ok = false;
@@ -181,7 +181,7 @@ GetCrossSection(const G4DynamicParticle* aParticle,
   {
     if(theZ[it]==Z)
     {
-      vector<G4PiData *> * theData = &thePimData;
+      G4std::vector<G4PiData *> * theData = &thePimData;
       if(thePipData[it]->AppliesTo(kineticEnergy))
       {
         theData = &thePipData;
@@ -190,12 +190,12 @@ GetCrossSection(const G4DynamicParticle* aParticle,
     }
     else
     {
-      vector<G4PiData *> * theLData = &thePimData;
+      G4std::vector<G4PiData *> * theLData = &thePimData;
       if(thePipData[it-1]->AppliesTo(kineticEnergy))
       {
         theLData = &thePipData;
       }
-      vector<G4PiData *> * theHData = &thePimData;
+      G4std::vector<G4PiData *> * theHData = &thePimData;
       if(thePipData[it]->AppliesTo(kineticEnergy))
       {
         theHData = &thePipData;

@@ -7,10 +7,10 @@ G4PiData(const G4double * aT, const G4double * aIn, const G4double * anE, G4int 
   G4int i=0;
   for(i=0; i<nP; i++)
   {
-    pair<G4double, G4double> x;
+    G4std::pair<G4double, G4double> x;
     x.first=aT[i]*millibarn;
     x.second=aIn[i]*millibarn;
-    pair<G4double, pair<G4double, G4double > > aP;
+    G4std::pair<G4double, G4std::pair<G4double, G4double > > aP;
     aP.first=anE[i]*GeV;
     aP.second=x;
     push_back(aP);
@@ -38,7 +38,7 @@ ReactionXSection(G4double kineticEnergy)
   x1=(*(it-1)).second.second;
   e2=(*(it)).first;
   x2=(*(it)).second.second;
-  result = max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
+  result = G4std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
   return result;
 }
 
@@ -55,6 +55,6 @@ ElasticXSection(G4double kineticEnergy)
   x1=(*(it-1)).second.first - (*(it-1)).second.second;
   e2=(*(it)).first;
   x2=(*(it)).second.first - (*(it)).second.second;
-  result = max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
+  result = G4std::max(0., x1 + (kineticEnergy-e1)*(x2-x1)/(e2-e1));
   return result;
 }
