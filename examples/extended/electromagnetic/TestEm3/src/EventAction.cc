@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.1 2003-09-22 14:06:19 maire Exp $
+// $Id: EventAction.cc,v 1.2 2003-11-03 16:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,7 +70,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
     
  //initialize EnergyDeposit per event
  for (G4int k=0; k<detector->GetNbOfAbsor(); k++)
-    energyDeposit[k] = trackLengthCh[k] = 0.;   
+    energyDeposit[k] = energyLeaving[k] = trackLengthCh[k] = 0.;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,7 +78,8 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 void EventAction::EndOfEventAction(const G4Event* evt)
 {
   for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
-      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k]);
+     runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k],
+                            energyLeaving[k]/(detector->GetNbOfLayers()));
 #ifdef G4ANALYSIS_USE
       if (runAct->GetHisto(k)) {
 	G4double unit = runAct->GetHistoUnit(k); 

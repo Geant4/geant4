@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.1 2003-09-22 14:06:43 maire Exp $
+// $Id: RunAction.hh,v 1.2 2003-11-03 16:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-    void fillPerEvent(G4int,G4double,G4double);
+    void fillPerEvent(G4int,G4double,G4double,G4double);
 
 #ifdef G4ANALYSIS_USE
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
@@ -73,8 +73,9 @@ class RunAction : public G4UserRunAction
     
   private:
     
-    G4double sumEAbs[MaxAbsor], sum2EAbs[MaxAbsor];
-    G4double sumLAbs[MaxAbsor], sum2LAbs[MaxAbsor];
+    G4double sumEAbs [MaxAbsor], sum2EAbs [MaxAbsor]; 
+    G4double sumLAbs [MaxAbsor], sum2LAbs [MaxAbsor];
+    G4double sumEleav[MaxAbsor], sum2Eleav[MaxAbsor];       
 
     DetectorConstruction* Detector;    
     RunActionMessenger*   runMessenger;        

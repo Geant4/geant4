@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
+// $Id: SteppingAction.cc,v 1.2 2003-11-03 16:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "EventAction.hh"
 
 #include "G4Track.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -63,7 +64,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     stepl = aStep->GetStepLength();
     
   // sum up per event
-  eventAct->SumEnergy(absorNo,edep,stepl);  
+  eventAct->SumEnergy(absorNo,edep,stepl);
+  
+  // energy leaving each volume
+  if (track->GetNextVolume() != volume) {
+    G4double EnLeaving = track->GetKineticEnergy();
+    if (track->GetDefinition() == G4Positron::Positron())
+       EnLeaving += 2*electron_mass_c2;
+    eventAct->SumEnLeaving(absorNo,EnLeaving);
+  }       
     
 ////  example of Birk attenuation
 ////  G4double destep   = aStep->GetTotalEnergyDeposit();

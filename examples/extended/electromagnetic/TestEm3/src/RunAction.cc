@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
+// $Id: RunAction.cc,v 1.2 2003-11-03 16:42:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -121,8 +121,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
   //initialize cumulative quantities
   //
-  for (G4int k=0; k<MaxAbsor; k++)
-      sumEAbs[k]=sum2EAbs[k]=sumLAbs[k]=sum2LAbs[k]=0.;
+  for (G4int k=0; k<MaxAbsor; k++) 
+      sumEAbs[k] = sum2EAbs[k]  = sumLAbs[k] = sum2LAbs[k] = 
+      sumEleav[k]= sum2Eleav[k] = 0.;
 
   //drawing
   //
@@ -137,12 +138,14 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
+void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs,
+                                         G4double Eleav)
 {      
   //accumulate statistic
   //
-  sumEAbs[kAbs] += EAbs; sum2EAbs[kAbs] += EAbs*EAbs;
-  sumLAbs[kAbs] += LAbs; sum2LAbs[kAbs] += LAbs*LAbs;
+  sumEAbs[kAbs]  += EAbs;  sum2EAbs[kAbs]  += EAbs*EAbs;
+  sumLAbs[kAbs]  += LAbs;  sum2LAbs[kAbs]  += LAbs*LAbs;
+  sumEleav[kAbs] += Eleav; sum2Eleav[kAbs] += Eleav*Eleav;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -158,7 +161,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   G4double norme = 1./NbOfEvents;
 
-  G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
+  G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs,MeanEleav,rmsEleav;
 
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
@@ -166,7 +169,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   G4cout << "\n-------------------------------------------------------------\n"
          << std::setw(51) << "total energy dep"
-	 << std::setw(30) << "total tracklen \n \n";
+	 << std::setw(30) << "total tracklen"
+	 << std::setw(40) << "mean energy leaving per layer \n \n";	 
 
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
@@ -175,6 +179,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
      MeanLAbs = norme*sumLAbs[k];
       rmsLAbs = norme*sqrt(abs(NbOfEvents*sum2LAbs[k] - sumLAbs[k]*sumLAbs[k]));
+      
+     MeanEleav = norme*sumEleav[k];
+      rmsEleav=norme*sqrt(abs(NbOfEvents*sum2Eleav[k]-sumEleav[k]*sumEleav[k]));
 
      //print
      //
@@ -186,6 +193,8 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      << std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
      << std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
      << std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
+     << std::setw(22) << G4BestUnit(MeanEleav,"Energy") << " +- "
+     << std::setw( 5) << G4BestUnit( rmsEleav,"Energy")     
      << G4endl;
     }
 
