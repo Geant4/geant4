@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.4 1999-10-25 10:40:57 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.5 1999-11-05 15:50:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,6 +107,8 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
 }
 
 void G4OpenGLStoredSceneHandler::ClearStore () {
+
+  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
 
   int i;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.4 1999-10-25 10:41:38 johna Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.5 1999-11-05 15:50:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -484,6 +484,7 @@ void G4OpenInventorSceneHandler::EndModeling () {
 }
 
 void G4OpenInventorSceneHandler::ClearStore () {
+  G4VSceneHandler::ClearStore();
   staticRoot->removeAllChildren();
   transientRoot->removeAllChildren();
 }
