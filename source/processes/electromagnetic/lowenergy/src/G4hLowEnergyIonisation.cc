@@ -932,7 +932,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   }
 
   //  stop particle if the kinetic energy <= MinKineticEnergy
-  if (finalT <= MinKineticEnergy ) {
+  if (finalT*massRatio <= MinKineticEnergy ) {
 
      finalT = 0.0;
       if(!particle->GetDefinition()->GetProcessManager()->
