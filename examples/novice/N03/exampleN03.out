@@ -183,8 +183,8 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  278.67 MeV       total track length:  17.078 cm 
-        Gap: total energy:  12.938 MeV       total track length:  6.3775 cm 
+   Absorber: total energy:   276.7 MeV       total track length:  16.059 cm 
+        Gap: total energy:  13.032 MeV       total track length:  6.4658 cm 
 
      9 hits are stored in ExN03CalorHitsCollection.
 #
@@ -201,13 +201,13 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1105568778, 682814057
+ Current couple of seeds = 1172410809, 1764791393
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  276.15 MeV       total track length:   15.41 cm 
-        Gap: total energy:  21.932 MeV       total track length:  11.454 cm 
+   Absorber: total energy:  281.72 MeV       total track length:  16.266 cm 
+        Gap: total energy:  18.296 MeV       total track length:  9.1862 cm 
 
-     10 hits are stored in ExN03CalorHitsCollection.
+     9 hits are stored in ExN03CalorHitsCollection.
 #
 # switch on MultipleScattering
 #
@@ -230,10 +230,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 656008347, 35818481
+ Current couple of seeds = 1053364411, 448625474
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  347.62 MeV       total track length:  78.847 cm 
-        Gap: total energy:  79.849 MeV       total track length:  2.2713 m  
+   Absorber: total energy:  405.84 MeV       total track length:  91.666 cm 
+        Gap: total energy:  92.138 MeV       total track length:  2.5631 m  
 
-     28 hits are stored in ExN03CalorHitsCollection.
+     30 hits are stored in ExN03CalorHitsCollection.
