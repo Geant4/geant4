@@ -1,4 +1,4 @@
-$Id: History,v 1.75 2004-11-15 14:12:16 gcosmo Exp $
+$Id: History,v 1.76 2004-11-16 13:38:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 16, 2004  M.Asai                       geommng-V06-02-06
+- Fix in G4LogicalVolume::UpdateMaterial() for checking the existance of
+  root-region pointer for logical-volume. Fixes report #684.
 
 Nov 13, 2004  G.Cosmo                      geommng-V06-02-05
 - Added method TotalVolumeEntities() to G4LogicalVolume, returning the
