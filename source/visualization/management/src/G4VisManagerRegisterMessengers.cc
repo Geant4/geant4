@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.28 2001-04-10 14:56:44 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.29 2001-05-03 11:14:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,8 +115,11 @@ NI                      [<copy-no>] [<depth>]
   Adds logical volume to current scene.
 
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
-  default:                     world                0         -1
+  default:                     world                -1         -1
   Adds physical volume to current scene.
+  If copy-no is negative, first occurrence of physical-volume-name is
+    selected.
+  If depth is negative, search is made to all depths.
 
 /vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
@@ -407,6 +410,12 @@ default:          error                600
   /vis/viewer/create ! ! $2
 
 NI /vis/draw <physical-volume-name> clashes with old /vis~/draw/, so...
+
+/vis/drawTree [<physical-volume-name>] [<system>]
+default:           world                ATree
+  /vis/open $2
+  /vis/drawVolume $1
+
 /vis/drawVolume [<physical-volume-name>]
 default:             world
   /vis/scene/create
@@ -496,6 +505,7 @@ default: 0 0 0 0 cm 1 0 cm
   fMessengerList.push_back (new G4VisCommandsViewerSet);
 
   // Compound commands...
+  fMessengerList.push_back (new G4VisCommandDrawTree);
   fMessengerList.push_back (new G4VisCommandDrawVolume);
   fMessengerList.push_back (new G4VisCommandDrawView);
   fMessengerList.push_back (new G4VisCommandOpen);

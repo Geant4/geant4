@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.10 2001-02-23 15:43:26 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.11 2001-05-03 11:14:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -15,6 +15,46 @@
 #include "G4VisManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIcmdWithAString.hh"
+
+////////////// /vis/drawTree ///////////////////////////////////////
+
+G4VisCommandDrawTree::G4VisCommandDrawTree() {
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/drawTree", this);
+  fpCommand->SetGuidance("/vis/drawTree [<physical-volume-name>] [<system>]");
+  fpCommand->SetGuidance("Default: world ATree");
+  fpCommand->SetGuidance
+    ("(DTREE) Creates a scene consisting of this physical volume and"
+     "\n  produces a represntation of the geometry hieracrhy.");
+  fpCommand->SetGuidance("The scene becomes current.");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter("PVname", 's', omitable = true);
+  parameter -> SetDefaultValue("world");
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter("system", 's', omitable = true);
+  parameter -> SetDefaultValue("ATree");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandDrawTree::~G4VisCommandDrawTree() {
+  delete fpCommand;
+}
+
+void G4VisCommandDrawTree::SetNewValue
+(G4UIcommand* command, G4String newValue) {
+
+  G4String pvname, system;
+  const char* t = newValue;
+  G4std::istrstream is((char*)t);
+  is >> pvname >> system;
+
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  UImanager->SetVerboseLevel(2);
+  UImanager->ApplyCommand("/vis/open " + system);
+  UImanager->ApplyCommand("/vis/drawVolume " + pvname);
+  UImanager->SetVerboseLevel(keepVerbose);
+}
 
 ////////////// /vis/drawView ///////////////////////////////////////
 
