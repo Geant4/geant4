@@ -1415,17 +1415,17 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 
   for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_outside,G4KineticTrack::outside));
-  PrintKTVector(kt_outside, G4std::string("DoTimeStep - found outside"));	  
+//  PrintKTVector(kt_outside, G4std::string("DoTimeStep - found outside"));	  
   G4KineticTrackVector * kt_inside = new G4KineticTrackVector;
 
   for_each( theSecondaryList.begin(),theSecondaryList.end(),
            SelectFromKTV(kt_inside, G4KineticTrack::inside));
-  PrintKTVector(kt_inside, G4std::string("DoTimeStep - found inside"));	  
+//  PrintKTVector(kt_inside, G4std::string("DoTimeStep - found inside"));	  
   for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
   {
      if ( (*iter)->GetPosition().mag() < nucleusSize )
      {
-       G4cout << " inside: " << *iter << G4endl;
+//       G4cout << " inside: " << *iter << G4endl;
 //   reduce counters, after step they'll be increased to find difference...
 	//G4cout << " Baryon number "<<(*iter)->GetDefinition()->GetParticleName()<<" "<<(*iter)->GetDefinition()->GetBaryonNumber()<<G4endl;
 	if((*iter)->GetDefinition()->GetBaryonNumber()!=0) secondaryCharge -= G4int((*iter)->GetDefinition()->GetPDGCharge() + 0.1);
@@ -1433,8 +1433,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 	secondaryMass -= (*iter)->GetDefinition()->GetBaryonNumber() == 1 ?
 							(*iter)->GetDefinition()->GetPDGMass() : 0;
      }
-     else
-     { G4cout << " not inside: " << *iter << G4endl; }
+//     else  { G4cout << " not inside: " << *iter << G4endl; }
   }
   debug.push_back("======> DoTimeStep 1.1"); debug.dump();
 
@@ -1462,7 +1461,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   G4KineticTrackVector * kt_gone_in = new G4KineticTrackVector;
   for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_in,G4KineticTrack::inside));
-  PrintKTVector(kt_gone_in, G4std::string("DoTimeStep - gone in"));	  
+//  PrintKTVector(kt_gone_in, G4std::string("DoTimeStep - gone in"));	  
 
    //PrintKTVector(&theSecondaryList,G4std::string("aft trsprt....."));
   for ( iter =kt_gone_in->begin(); iter != kt_gone_in->end(); ++iter)
@@ -1480,7 +1479,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   G4KineticTrackVector * kt_gone_out = new G4KineticTrackVector;
   for_each( kt_inside->begin(),kt_inside->end(),
            SelectFromKTV(kt_gone_out, G4KineticTrack::gone_out));
-  PrintKTVector(kt_gone_out, G4std::string("DoTimeStep - gone out"));	  
+//  PrintKTVector(kt_gone_out, G4std::string("DoTimeStep - gone out"));	  
   for ( iter =kt_gone_out->begin(); iter != kt_gone_out->end(); ++iter)
   {
 	if (  ((*iter)->GetPosition().mag() < nucleusSize ) ) G4cout << " DoTimeStep Error: gone out is in " << *iter << G4endl;
