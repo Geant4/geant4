@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.2 2004-07-05 13:36:31 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.3 2004-07-22 14:44:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -256,7 +256,7 @@ void G4EmCalculator::UpdateParticle(const G4ParticleDefinition* p, G4double kinE
     if(baseParticle) massRatio = baseParticle->GetPDGMass()/p->GetPDGMass();
   }
   if(isIon)
-    chargeSquare = ionEffCharge->EffectiveChargeSquare(p, currentMaterial, kinEnergy);
+    chargeSquare = ionEffCharge->EffectiveChargeSquareRatio(p, currentMaterial, kinEnergy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

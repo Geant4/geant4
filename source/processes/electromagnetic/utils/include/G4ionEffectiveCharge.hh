@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.1 2004-07-05 13:37:06 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.hh,v 1.2 2004-07-22 14:44:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -65,7 +65,7 @@ public:
 
   ~G4ionEffectiveCharge();
 
-  G4double EffectiveChargeSquare(
+  G4double EffectiveChargeSquareRatio(
                            const G4ParticleDefinition* p,
                            const G4Material* material,
 			         G4double kineticEnergy);
@@ -89,7 +89,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4ionEffectiveCharge::EffectiveChargeSquare(
+inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4ParticleDefinition* p,
                            const G4Material* material,
 			         G4double kineticEnergy)

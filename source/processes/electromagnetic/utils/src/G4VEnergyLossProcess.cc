@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.24 2004-07-21 13:22:21 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.25 2004-07-22 14:44:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -244,7 +244,7 @@ void G4VEnergyLossProcess::Initialise()
   G4ProcessManager* pm = particle->GetProcessManager();
   G4int np = pm->GetAtRestProcessVector()->size();
   for(G4int j=0; j<np; j++) {
-    if(pm->GetProcessActivtion(j)) {
+    if(pm->GetProcessActivation(j)) {
       hasRestProcess = true;
       break;
     }
