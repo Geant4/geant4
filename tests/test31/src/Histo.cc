@@ -73,6 +73,7 @@ Histo::Histo()
   m_tuplePath.clear();
   m_tupleColumns.clear();
   m_ntup.clear();
+  m_tree       = 0;
 #ifdef G4ANALYSIS_USE
   m_messenger = new HistoMessenger(this);
 #endif
@@ -101,7 +102,8 @@ void Histo::clear()
   for(G4int j=0; j<nt; j++) {
     m_ntup[j] = 0;
   }
-  delete m_tree;
+  if(m_tree) delete m_tree;
+  m_tree = 0;
 #endif
 }
 
@@ -234,7 +236,7 @@ void Histo::fill(G4int i, G4double x, G4double w)
 {
   if(m_verbose > 1) {
     G4cout << "Histo:fill histogram ID= " << i << " at x= " << x 
-           << "  weight= " << w 
+           << "  weight= " << w   
            << G4endl;   
   }
 #ifdef G4ANALYSIS_USE  

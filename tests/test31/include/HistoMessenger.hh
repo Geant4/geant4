@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: HistoMessenger.hh,v 1.2 2004-09-21 10:41:49 vnivanch Exp $
+// $Id: HistoMessenger.hh,v 1.3 2004-09-22 08:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

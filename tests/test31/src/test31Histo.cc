@@ -356,8 +356,9 @@ void test31Histo::TableControl()
 
 void test31Histo::CountProcess(const G4String& name)
 {
+  //  G4cout << "### " << name << G4endl;
   if(name == "AnnihiToMuPair") n_mumu++;  
-  if(name == "ee2hadr") n_pipi++;  
+  else if(name == "ee2hadr") n_pipi++;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

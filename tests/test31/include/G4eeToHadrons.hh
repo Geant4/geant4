@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.2 2004-09-16 14:28:11 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.3 2004-09-22 08:40:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,6 +84,9 @@ public:
 
   virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 
+  void SetCrossSecFactor(G4double fac);
+  // Set the factor to artificially increase the crossSection (default 1)
+
 protected:
 
   G4double GetMeanFreePath(const G4Track&,G4double,G4ForceCondition*);
@@ -120,6 +123,7 @@ private:
   G4double                         preStepMFP;
   G4double                         preStepCS;
   G4double                         lambdaFactor;
+  G4double                         csFactor;
 
   const G4MaterialCutsCouple*      currentCouple;
   
@@ -181,7 +185,7 @@ inline G4double G4eeToHadrons::CrossSection(G4double kineticEnergy,
   if (kineticEnergy > thKineticEnergy) {
     for(G4int i=0; i<nModels; i++) {
       if(kineticEnergy >= ekinMin[i] && kineticEnergy <= ekinMax[i]) 
-        cross += (models[i])->CrossSection(couple,0,kineticEnergy,0.0,0.0);
+        cross += csFactor*(models[i])->CrossSection(couple,0,kineticEnergy,0.0,0.0);
       cumSum[i] = cross;
     } 
   }
@@ -205,7 +209,6 @@ inline void G4eeToHadrons::ResetNumberOfInteractionLengthLeft()
   preStepCS     = 0.0;
   G4VProcess::ResetNumberOfInteractionLengthLeft();
 }
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -67,7 +67,7 @@ EmAnalysis::~EmAnalysis()
 
 void EmAnalysis::clear()
 {
-  histo->clear();
+  //  histo->clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

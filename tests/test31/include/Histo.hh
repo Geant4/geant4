@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Histo.hh,v 1.5 2004-09-21 10:41:49 vnivanch Exp $
+// $Id: Histo.hh,v 1.6 2004-09-22 08:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef Histo_h
@@ -68,8 +68,6 @@ private:
   Histo();
 
 public:
-  void clear();
-  // delete histogramms 
 
   void book();
   // Book predefined histogramms 
@@ -123,6 +121,8 @@ public:
 private:
 
   static Histo* m_instance;
+
+  void clear();
 
   G4String      m_histName;
   G4String      m_histType;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmHighEnergyBuilder.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
+// $Id: G4EmHighEnergyBuilder.cc,v 1.2 2004-09-22 08:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -83,6 +83,7 @@ void G4EmHighEnergyBuilder::ConstructParticle()
 
 void G4EmHighEnergyBuilder::ConstructProcess()
 {
+  G4double factor = 1000.0;
   // Add standard EM Processes for gamma
   G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
@@ -91,8 +92,12 @@ void G4EmHighEnergyBuilder::ConstructProcess()
   // Add standard EM Processes for e+
   particle = G4Positron::Positron();
   pmanager = particle->GetProcessManager();
-  pmanager->AddDiscreteProcess( new G4AnnihiToMuPair() );
-  pmanager->AddDiscreteProcess( new G4eeToHadrons() );
+  G4AnnihiToMuPair* amup = new G4AnnihiToMuPair();
+  amup->SetCrossSecFactor(factor);
+  G4eeToHadrons* eehad = new G4eeToHadrons();
+  eehad->SetCrossSecFactor(factor);
+  pmanager->AddDiscreteProcess(amup);
+  pmanager->AddDiscreteProcess(eehad);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

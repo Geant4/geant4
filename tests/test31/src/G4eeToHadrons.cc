@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.3 2004-09-16 14:28:14 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.4 2004-09-22 08:40:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,6 +57,7 @@
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
   : G4VEmProcess(name),
     lambdaFactor(0.1),
+    csFactor(1.0),
     nModels(0),
     isInitialised(false)
 {}
@@ -84,6 +85,7 @@ void G4eeToHadrons::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4int ver = 0;
 
     SetBuildTableFlag(false);
+    SetIntegral(false);
 
     SetSecondaryParticle(G4Gamma::Gamma());
     SetParticle(G4Positron::Positron());
@@ -184,11 +186,23 @@ std::vector<G4DynamicParticle*>* G4eeToHadrons::GenerateSecondaries(
     for(G4int i=0; i<nModels; i++) {
       if(q < cumSum[i]) {
         newp = (models[i])->SampleSecondaries(currentCouple,dp,0.0,0.0);
+        fParticleChange.ProposeTrackStatus(fStopAndKill);
         break;
       }
     }
   }
   return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4eeToHadrons::SetCrossSecFactor(G4double fac)
+{
+  if(fac > 1.0) {
+    csFactor = fac;
+    G4cout << "### G4eeToHadrons: The cross section for G4eeToHadrons is  "
+           << "increased by the Factor= " << csFactor << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
