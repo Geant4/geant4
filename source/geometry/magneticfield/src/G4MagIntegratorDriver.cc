@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.18 2001-11-09 19:27:16 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.19 2001-11-13 16:39:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,9 +90,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4int nstp, i; 
   G4double x, hnext, hdid, h ;
 
-  static G4int dbg=0;
   G4int  no_warnings=0;
 #ifdef G4DEBUG
+  static G4int dbg=0;
   dbg=1;
   fVerboseLevel=2;
 #endif
@@ -141,7 +141,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
                           //   could otherwise force lots of small last steps.
      }
 
-     static G4int nStpPr=50;   // For debug printing of integrations with many steps
+//     static G4int nStpPr=50;   // For debug printing of integrations with many steps
 
      // Perform the Integration
      //      
@@ -161,7 +161,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         G4double dchord_step, dyerr, dyerr_len;  //  Must figure what to do with these
 	yFldTrk.LoadFromArray(y); 
         yFldTrk.SetCurveLength( x );
-        G4double s_start = yFldTrk.GetCurveLength();
+//        G4double s_start = yFldTrk.GetCurveLength();
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
 #         ifdef  G4DEBUG_FIELD
 	  if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;

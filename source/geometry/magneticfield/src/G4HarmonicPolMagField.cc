@@ -47,7 +47,6 @@ void
 {
    G4int i ;
    G4double a = 1.00 ;   // mm -> m 
-   G4double a2 = a*a, a3 = a2*a;
    G4double x = a*yTrack[0], y = a*yTrack[1], z = a*yTrack[2] ;
    G4double x2 = x*x, y2 = y*y, z2 = z*z ;
    G4double x3 = x2*x, y3 = y2*y, z3 = z2*z ;
