@@ -5,11 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.hh,v 1.4 1999-12-15 14:49:38 gunter Exp $
+// $Id: G4EventManager.hh,v 1.5 2000-01-12 01:29:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//  Last Modification : 10/Dec/96 M.Asai
 //
 
 
@@ -41,6 +39,12 @@ class G4SDManager;
 
 class G4EventManager 
 {
+  public: // with description
+      static G4EventManager* GetEventManager();
+      //  This method returns the singleton pointer of G4EventManager.
+
+  private:
+      static G4EventManager* fpEventManager;
 
   public:
       G4EventManager();
@@ -67,16 +71,24 @@ class G4EventManager
       int verboseLevel;
       G4SDManager* sdManager;
       G4PrimaryTransformer* transformer;
-      G4UserEventAction* userEventAction;
       G4bool tracking;
 
       G4EvManMessenger* theMessenger;
 
-  public:
+      G4UserEventAction*    userEventAction;
+      G4UserStackingAction* userStackingAction;
+      G4UserTrackingAction* userTrackingAction;
+      G4UserSteppingAction* userSteppingAction;
+
+  public: // with description
       inline const G4Event* GetConstCurrentEvent()
       { return currentEvent; }
       inline G4Event* GetNonconstCurrentEvent()
       { return currentEvent; }
+      //  These methods returns the pointers of const G4Event*
+      // and G4Event*, respectively. Null will be returned when
+      // an event is not processing.
+
   public: // with description
       inline void AbortCurrentEvent()
       { 
@@ -87,14 +99,25 @@ class G4EventManager
       // tracks are deleted. The contents of G4Event object is not completed,
       // but trajectories, hits, and/or digits which are created before the
       // moment of abortion can be used.
-  public:
+
+  public: // with description
       void SetUserAction(G4UserEventAction* userAction);
-      inline void SetUserAction(G4UserStackingAction* userAction)
-      { trackContainer->SetUserStackingAction(userAction); }
-      inline void SetUserAction(G4UserTrackingAction* userAction)
-      { trackManager->SetUserAction(userAction); }
-      inline void SetUserAction(G4UserSteppingAction* userAction)
-      { trackManager->SetUserAction(userAction); }
+      void SetUserAction(G4UserStackingAction* userAction);
+      void SetUserAction(G4UserTrackingAction* userAction);
+      void SetUserAction(G4UserSteppingAction* userAction);
+      inline G4UserEventAction* GetUserEventAction()
+      { return userEventAction; }
+      inline G4UserStackingAction* GetUserStackingAction()
+      { return userStackingAction; }
+      inline G4UserTrackingAction* GetUserTrackingAction()
+      { return userTrackingAction; }
+      inline G4UserSteppingAction* GetUserSteppingAction()
+      { return userSteppingAction; }
+      // Set and get methods for user action classes. User action classes
+      // which should belong to the other managers will be sent to the 
+      // corresponding managers.
+
+  public: // with description
       inline G4int GetVerboseLevel()
       { return verboseLevel; }
       inline void SetVerboseLevel( G4int value )
@@ -103,6 +126,7 @@ class G4EventManager
         trackContainer->SetVerboseLevel( value );
         transformer->SetVerboseLevel( value );
       }
+      // Set and get method of the verbose level
 
 };
 

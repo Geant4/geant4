@@ -5,11 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.hh,v 1.3 1999-12-15 14:49:39 gunter Exp $
+// $Id: G4StackManager.hh,v 1.4 2000-01-12 01:29:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
-//  Last Modification : 09/Dec/96 M.Asai
 //
 
 
@@ -103,9 +101,8 @@ class G4StackManager
       { verboseLevel = value; }
       inline void SetUserStackingAction(G4UserStackingAction* value)
       { 
-        if (userStackingAction) delete userStackingAction;
 	userStackingAction = value;
-	userStackingAction->SetStackManager(this);
+        if(userStackingAction) userStackingAction->SetStackManager(this);
       }
 
   private:

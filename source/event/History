@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-11-09 00:57:22 asaim Exp $
+$Id: History,v 1.8 2000-01-12 01:29:46 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jan 12, 00, M.Asai (tag event-V01-00-00)
+- G4EventManager becomes a singleton.
+- G4EventManager keeps the pointers of all user action classes except
+ run action.
+- Null pointer protections are added for SetUserAction methods in
+ G4EventManager and G4StackManager.
 
 Nov 4, 99, M.Asai (tag event-V00-01-01)
 - Comments are enriched for the software reference manual

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 1.3 1999-12-15 14:49:40 gunter Exp $
+// $Id: G4EventManager.cc,v 1.4 2000-01-12 01:29:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,15 +19,31 @@
 #include "G4UserStackingAction.hh"
 #include "G4SDManager.hh"
 
+G4EventManager* G4EventManager::fpEventManager = 0;
+G4EventManager* G4EventManager::GetEventManager()
+{ return fpEventManager; }
+
 G4EventManager::G4EventManager()
-:verboseLevel(0),trajectoryContainer(NULL),userEventAction(NULL),
+:verboseLevel(0),trajectoryContainer(NULL),
  tracking(false),currentEvent(NULL)
 {
+ if(fpEventManager)
+ {
+  G4Exception("G4EventManager::G4EventManager() has already been made.");
+ }
+ else
+ {
   trackManager = new G4TrackingManager;
   transformer = new G4PrimaryTransformer;
   trackContainer = new G4StackManager;
   theMessenger = new G4EvManMessenger(this);
   sdManager = G4SDManager::GetSDMpointerIfExist();
+  fpEventManager = this;
+  userEventAction = 0;
+  userStackingAction = 0;
+  userTrackingAction = 0;
+  userSteppingAction = 0;
+ }
 }
 
 // private -> never called
@@ -43,7 +59,8 @@ G4EventManager::~G4EventManager()
    delete transformer;
    delete trackManager;
    delete theMessenger;
-   if (userEventAction) delete userEventAction;
+   if(userEventAction) delete userEventAction;
+   fpEventManager = 0;
 }
 
 /*
@@ -212,8 +229,26 @@ void G4EventManager::StackTracks(G4TrackVector *trackVector)
 
 void G4EventManager::SetUserAction(G4UserEventAction* userAction)
 {
-  if (userEventAction) delete userEventAction;
   userEventAction = userAction;
-  userEventAction->SetEventManager(this);
+  if(userEventAction) userEventAction->SetEventManager(this);
 }
+
+void G4EventManager::SetUserAction(G4UserStackingAction* userAction)
+{
+  userStackingAction = userAction;
+  trackContainer->SetUserStackingAction(userAction);
+}
+
+void G4EventManager::SetUserAction(G4UserTrackingAction* userAction)
+{
+  userTrackingAction = userAction;
+  trackManager->SetUserAction(userAction);
+}
+
+void G4EventManager::SetUserAction(G4UserSteppingAction* userAction)
+{
+  userSteppingAction = userAction;
+  trackManager->SetUserAction(userAction);
+}
+
 
