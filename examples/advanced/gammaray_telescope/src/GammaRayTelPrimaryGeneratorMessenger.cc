@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.5 2002-12-08 13:03:58 griccard Exp $
+// $Id: GammaRayTelPrimaryGeneratorMessenger.cc,v 1.6 2002-12-11 17:13:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -55,27 +55,27 @@ GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   SourceTypeCmd = new G4UIcmdWithAnInteger("/gun/sourceType",this);
   SourceTypeCmd->SetGuidance("Select the type of incident flux.");
   SourceTypeCmd->SetGuidance("  Choice : 0(default), 1(isotropic), 2(wide parallel beam)");
   SourceTypeCmd->SetParameterName("choice",true);
   SourceTypeCmd->SetDefaultValue((G4int)0);
-  SourceTypeCmd->AvailableForStates(PreInit,Idle);
+  SourceTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   VertexRadiusCmd = new G4UIcmdWithADoubleAndUnit("/gun/vertexRadius",this);
   VertexRadiusCmd->SetGuidance("Radius (and unit) of sphere for vertices of incident flux.");
   VertexRadiusCmd->SetParameterName("choice",true);
   VertexRadiusCmd->SetDefaultValue((G4double)1.*cm);
-  VertexRadiusCmd->AvailableForStates(PreInit,Idle);
+  VertexRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   SpectrumTypeCmd = new G4UIcmdWithAnInteger("/gun/spectrumType",this);
   SpectrumTypeCmd->SetGuidance("Select the type of incident spectrum.");
   SpectrumTypeCmd->SetGuidance("  Choice : 0(default), 1(), 2(E^{-gamma}), 3()");
   SpectrumTypeCmd->SetParameterName("choice",true);
   SpectrumTypeCmd->SetDefaultValue((G4int)0);
-  SpectrumTypeCmd->AvailableForStates(PreInit,Idle);
+  SpectrumTypeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

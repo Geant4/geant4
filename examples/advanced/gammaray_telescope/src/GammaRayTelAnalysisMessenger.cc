@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysisMessenger.cc,v 1.7 2002-12-08 18:59:50 flongo Exp $
+// $Id: GammaRayTelAnalysisMessenger.cc,v 1.8 2002-12-11 17:13:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -67,7 +67,7 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   Histo1DDrawCmd->SetParameterName("choice",true);
   Histo1DDrawCmd->SetDefaultValue("ebable");
   Histo1DDrawCmd->SetCandidates("disable enable");
-  Histo1DDrawCmd->AvailableForStates(Idle);
+  Histo1DDrawCmd->AvailableForStates(G4State_Idle);
 
   Histo1DSaveCmd = new G4UIcmdWithAString("/analysis/histo1dSave",this);
   Histo1DSaveCmd->SetGuidance("Enable the saving of the 1d histograms every run.");
@@ -75,7 +75,7 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   Histo1DSaveCmd->SetParameterName("choice",true);
   Histo1DSaveCmd->SetDefaultValue("enable");
   Histo1DSaveCmd->SetCandidates("disable enable");
-  Histo1DSaveCmd->AvailableForStates(Idle);
+  Histo1DSaveCmd->AvailableForStates(G4State_Idle);
 
   /* 
      Commands for the 2D histograms (hits positions along the TKR)
@@ -100,7 +100,7 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   Histo2DDrawCmd->SetParameterName("choice",true);
   Histo2DDrawCmd->SetDefaultValue("enable");
   Histo2DDrawCmd->SetCandidates("disable enable");
-  Histo2DDrawCmd->AvailableForStates(Idle);
+  Histo2DDrawCmd->AvailableForStates(G4State_Idle);
 
   Histo2DSaveCmd = new G4UIcmdWithAString("/analysis/histo2dSave",this);
   Histo2DSaveCmd->SetGuidance("Enable the saving of the 2d histograms every run.");
@@ -108,7 +108,7 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   Histo2DSaveCmd->SetParameterName("choice",true);
   Histo2DSaveCmd->SetDefaultValue("enable");
   Histo2DSaveCmd->SetCandidates("disable enable");
-  Histo2DSaveCmd->AvailableForStates(Idle);
+  Histo2DSaveCmd->AvailableForStates(G4State_Idle);
 
   Histo2DModeCmd = new G4UIcmdWithAString("/analysis/histo2dMode",this);
   Histo2DModeCmd->SetGuidance("Select the mode for the 2d histograms.");
@@ -118,7 +118,7 @@ GammaRayTelAnalysisMessenger::GammaRayTelAnalysisMessenger(GammaRayTelAnalysis* 
   Histo2DModeCmd->SetParameterName("choice",true);
   Histo2DModeCmd->SetDefaultValue("strip");
   Histo2DModeCmd->SetCandidates("position strip");
-  Histo2DModeCmd->AvailableForStates(Idle);
+  Histo2DModeCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
