@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2002-10-29 16:37:09 dressel Exp $
+$Id: History,v 1.4 2002-10-31 14:40:19 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 29, 2002 - M.Dressel  (test33-V04-01-00)
+- first implementation
+
 Oct 25, 2002 - G.Cosmo
 - Created.
 
-Oct 29, 2002 - M.Dressel
-- first implementation
-
-Oct 29, 2002 - M.Dressel
-- added DISCLAIMERs
