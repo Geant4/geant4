@@ -1,4 +1,4 @@
-$Id: History,v 1.172 2001-11-29 16:44:32 gcosmo Exp $
+$Id: History,v 1.173 2001-12-03 08:12:20 barrand Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03th December 2001 Guy Barrand (config-V03-02-14)
+- G4VIS_USE.gmk : -lG4HepRep replaced by -lG4visHepRep.
 
 29th November 2001 Gabriele Cosmo (config-V03-02-13)
 - Removed SUN-CC5.gmk configuration file. Now replaced by SUN-CC architecture
