@@ -7,7 +7,7 @@ Set FIT 101
 Option NFIT 
 Set STAT 0111111
 Option STAT 
-Zone 1 1
+Zone 2 2
 Angle 30.000000 30.000000
 Set NDVX 10510.00
 Set NDVY 10510.00
@@ -44,7 +44,7 @@ Set CSIZ  0.28
 Set HMAX  0.90
 Set ERRX  0.50
 Set YVAL  0.20
-Set HCOL 1
+Set HCOL 0
 Set BCOL 1
 Set PCOL 1
 Set FCOL 1
@@ -63,10 +63,6 @@ Set TFON 2
 Set LFON 2
 Set VFON 2
 Set GFON 2
-Title ''
-Option Utit
-Title '' U
-atit '' ''
 Set BWID 1
 Set HWID 1
 Set FWID 1

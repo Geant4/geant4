@@ -1,5 +1,5 @@
-Histo/File 0 /local/geant4/paw/g4lepptest.hbook 0 -X
-Exec /local/geant4/paw/G4LEppTest.style
+Histo/File 0 g4lepptest.hbook 0 -X
+Exec G4LEppTest.style
 Cdir //LUN1
 zone 2 2
 histo/plot '7'
