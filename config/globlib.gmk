@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.3 1999-09-17 13:28:04 morita Exp $
+# $Id: globlib.gmk,v 1.4 1999-10-28 17:20:15 gcosmo Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -72,7 +72,7 @@ $(G4LIBDIR)/lib$(name).a: \
 ifneq ($(G4MAKESHLIB),)
 	@for lib in $(SUBLIBS); do (cp $(G4TMP)/$(G4SYSTEM)/$$lib/*.o $(G4LIBDIR)/.); done
 	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
-	$(RM) $(G4LIBDIR)/*.o
+	@$(RM) $(G4LIBDIR)/*.o
 endif
 
 ifdef G4ODBMS

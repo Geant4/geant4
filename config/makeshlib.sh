@@ -1,6 +1,6 @@
 #!/bin/sh -f
 ############################################
-#### To build GEANT4 sheared libraries #####
+##### To build GEANT4 shared libraries #####
 ############# G.Barrand ####################
 ############################################
 if test $# -eq 2 ; then
@@ -59,6 +59,15 @@ cd ..
 echo "$libso built."
 fi
 
+if test `uname` = "Linux" ; then
+cd $g4system
+# For path same remarks as for OSF1.
+libso=lib$name.so
+/bin/rm -f $libso
+g++ -Wl,-soname,$libso -shared *.o -o $libso
+echo "$libso built."
+fi
+
 if test `uname` = "AIX" ; then
 # Not yet ready.
 exit
@@ -72,8 +81,8 @@ libso=lib$name'.so'
 objs=`ls *.o`
 # Determine how to invoke nm depending on AIX version
 AIXVERSION=`uname -v`
-case ${AIXVERSION}
-{
+case ${AIXVERSION} in
+#{
         3*)
                 NM=/usr/ucb/nm
                 ;;
@@ -84,7 +93,8 @@ case ${AIXVERSION}
                 echo "Error in g4makeshlib.sh!"
                 exit 1
                 ;;
-}
+#}
+esac
 # Build export file (from Mesa mklib.aix).
 echo "#! lib$name.so " > lib$name.exp
 echo "noentry" >> lib$name.exp

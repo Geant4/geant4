@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.3 1999-10-19 13:07:01 morita Exp $
+# $Id: common.gmk,v 1.4 1999-10-28 17:20:14 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -35,9 +35,13 @@ endif
 ifneq ($(G4MAKESHLIB),)
 # Make shared library.
 $(G4LIBDIR)/lib$(name).$(SHEXT): $(G4LIBDIR)/lib$(name).a
-	@cp $(objects) $(G4LIBDIR)/.
-	sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
-	$(RM) $(G4LIBDIR)/*.o
+ifneq ($(G4TMPDIR),$(G4LIBDIR))
+	@cp $(G4TMPDIR)/*.o $(G4LIBDIR)/.
+	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
+	@$(RM) $(G4LIBDIR)/*.o
+else
+	@sh $(G4MAKESHLIB) $(G4LIBDIR) $(name)
+endif
 endif
 
 # Make library.

@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.44 1999-10-28 06:41:24 gcosmo Exp $
+# $Id: architecture.gmk,v 1.45 1999-10-28 17:20:14 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -599,10 +599,17 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXXFLAGS  := -pipe -fno-for-scope -DGNU_GCC
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
+    FCFLAGS   := -O
+    CCFLAGS   := -O
   else
     CXXFLAGS  += -g
     FCFLAGS   := -g
     CCFLAGS   := -g
+  endif
+  ifdef G4MAKESHLIB
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
   endif
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
