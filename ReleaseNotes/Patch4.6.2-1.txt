@@ -11,9 +11,6 @@ List of fixes included in this public patch since release 6.2:
     + Configure script:
       o Corrected behavior for setting of CLHEP_BASE_DIR in case the path
         is set to '/usr' or '/usr/local'. Fixes problem report #638.
-    + source/GNUmakefile:
-      o Fixed search path from absolute to relative. Addresses problem
-        report #644.
 
   o Digits_hits, Event
     ------------------
