@@ -1297,8 +1297,10 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
   }    
   
   // Save delta-electrons
+ 
+  G4double edep = 0.0;
 
-  if (finalKineticEnergy > 0.0)
+  if (finalKineticEnergy > MinKineticEnergy)
     {
       finalPx = TotalMomentum*ParticleDirection.x()
 	- DeltaTotalMomentum*DeltaDirection.x();
@@ -1316,14 +1318,17 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
     }
   else
     {
+      edep = finalKineticEnergy;
       finalKineticEnergy = 0.;
+      aParticleChange.SetMomentumChange(ParticleDirection.x(),
+                      ParticleDirection.y(),ParticleDirection.z());
       if (aParticle->GetDefinition()->GetParticleName() == "proton")
 	aParticleChange.SetStatusChange(fStopAndKill);
       else  aParticleChange.SetStatusChange(fStopButAlive);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
-  aParticleChange.SetLocalEnergyDeposit (0.0);
+  aParticleChange.SetLocalEnergyDeposit (edep);
   aParticleChange.SetNumberOfSecondaries(totalNumber);
   aParticleChange.AddSecondary(theDeltaRay);
 
