@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.2 1999-02-15 10:31:26 japost Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.3 1999-02-15 10:54:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,8 @@
 // Define G4GEOMETRY_VOXELDEBUG for debugging information on G4cout
 //
 // History:
+// 12.02.99 Introduction of new quality/smartless: max for (slices/candid) S.G.
+// 11.02.99 Voxels at lower levels are now built for collapsed slices      S.G.
 // 21.07.95 Full implementation, supporting non divided physical volumes
 // 14.07.95 Initial version - stubb definitions only
 
@@ -779,10 +781,23 @@ G4ProxyVector* G4SmartVoxelHeader::BuildNodes(G4LogicalVolume* pVolume,
 //
 //   mother width/half min daughter width +1
     G4double noNodesExactD=((motherMaxExtent-motherMinExtent)*2.0/minWidth)+1.0;
-    G4int noNodesExactI=G4int (noNodesExactD);
 
-    G4int noNodes=((noNodesExactD-noNodesExactI)>=0.5) ? noNodesExactI+1 : noNodesExactI;
+// Compare with "smartless quality", i.e. the average number of slices used per
+// contained volume:
 
+G4double smartlessComputed = noNodesExactD / nCandidates;
+
+G4double smartlessUser = pVolume->GetSmartless();
+
+G4double smartless = (smartlessComputed <= smartlessUser) ? 
+                      smartlessComputed :  smartlessUser  ;
+
+G4double noNodesSmart = smartless * nCandidates;
+
+G4int    noNodesExactI = G4int(noNodesSmart);
+
+G4int    noNodes = ((noNodesSmart-noNodesExactI)>=0.5) ?
+                     noNodesExactI + 1 : noNodesExactI ; 
 //
 //
 
