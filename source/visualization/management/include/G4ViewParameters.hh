@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.10 2001-02-04 20:22:45 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.11 2001-02-23 15:43:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,14 +56,14 @@
 #ifndef G4VIEWPARAMETERS_HH
 #define G4VIEWPARAMETERS_HH
 
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 #include "G4Vector3D.hh"
 #include "G4Point3D.hh"
 #include "G4Plane3D.hh"
 #include "G4VisAttributes.hh"
 #include "G4VMarker.hh"
 
-typedef G4RWTValOrderedVector<G4Plane3D> G4Planes;
+typedef vector<G4Plane3D> G4Planes;
 
 class G4ViewParameters {
 

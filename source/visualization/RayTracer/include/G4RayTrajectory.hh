@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.hh,v 1.6 2001-02-10 02:37:13 asaim Exp $
+// $Id: G4RayTrajectory.hh,v 1.7 2001-02-23 15:43:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,8 +30,7 @@ class G4Step;
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
 #include <stdlib.h>
-//#include <g4rw/tpordvec.h>
-#include "G4std/vector"
+#include "g4std/vector"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4RayTrajectoryPoint.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.7 1999-12-15 14:54:17 gunter Exp $
+// $Id: G4Scene.hh,v 1.8 2001-02-23 15:43:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@ class G4VPhysicalVolume;
 #include "G4VisExtent.hh"
 #include "G4Point3D.hh"
 #include "G4VModel.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Scene {
 
@@ -52,11 +52,11 @@ public: // With description
 
   G4bool IsEmpty () const;
 
-  const G4RWTPtrOrderedVector <G4VModel>& GetRunDurationModelList () const;
+  const G4std::vector<G4VModel*>& GetRunDurationModelList () const;
   // Contains models which are expected to last for the duration of
   // the run, for example geometry volumes.
 
-  const G4RWTPtrOrderedVector <G4VModel>& GetEndOfEventModelList () const;
+  const G4std::vector<G4VModel*>& GetEndOfEventModelList () const;
   // Contains models which are described at the end of event when the
   // scene is current.
 
@@ -85,10 +85,10 @@ public: // With description
   // the scene is current.
   // Returns false if model is already in the list.
 
-  G4RWTPtrOrderedVector <G4VModel>& SetRunDurationModelList ();
+  G4std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!
 
-  G4RWTPtrOrderedVector <G4VModel>& SetEndOfEventModelList ();
+  G4std::vector<G4VModel*>& SetEndOfEventModelList ();
   // Allows you to change the model list - do with care!
 
   void Clear ();
@@ -96,8 +96,8 @@ public: // With description
 
 private:
   G4String fName;
-  G4RWTPtrOrderedVector <G4VModel> fRunDurationModelList;
-  G4RWTPtrOrderedVector <G4VModel> fEndOfEventModelList;
+  G4std::vector<G4VModel*> fRunDurationModelList;
+  G4std::vector<G4VModel*> fEndOfEventModelList;
   G4VisExtent fExtent;
   G4Point3D   fStandardTargetPoint;
 };

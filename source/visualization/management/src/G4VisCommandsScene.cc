@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.15 2000-05-29 09:21:40 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.16 2001-02-23 15:43:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -36,7 +36,7 @@ G4String G4VVisCommandScene::CurrentSceneName () {
 void G4VVisCommandScene::UpdateCandidateLists () {
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   G4String nameList;
   for (iScene = 0; iScene < nScenes; iScene++) {
     nameList += sceneList [iScene] -> GetName () + " ";
@@ -51,7 +51,7 @@ void G4VVisCommandScene::UpdateCandidateLists () {
 void G4VVisCommandScene::UpdateVisManagerScene
 (const G4String& sceneName) {
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == sceneName) break;
   }
@@ -101,7 +101,7 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
   if (newName == nextName) fId++;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == newName) break;
   }
@@ -110,7 +110,7 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
   }
   else {
 
-    sceneList.append (new G4Scene (newName));
+    sceneList.push_back (new G4Scene (newName));
     // Adds empty scene data object to list.
 
     UpdateVisManagerScene (newName);
@@ -149,7 +149,7 @@ void G4VisCommandSceneEdit::SetNewValue (G4UIcommand* command,
   is >> sceneName;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   G4Scene* pScene;
   for (iScene = 0; iScene < nScenes; iScene++) {
     pScene = sceneList [iScene];
@@ -216,7 +216,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
   is >> name >> verbosity;
 
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   G4bool found = false;
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* pScene = sceneList [iScene];
@@ -229,7 +229,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
     if (verbosity == 1) {
       G4int i;
       G4cout << "\n  Run-duration models:";
-      G4int nRunModels = pScene -> GetRunDurationModelList ().entries ();
+      G4int nRunModels = pScene -> GetRunDurationModelList ().size ();
       if (nRunModels == 0) {
 	G4cout << " none.";
       }
@@ -238,7 +238,7 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
 	G4cout << "\n    " << pModel -> GetGlobalDescription ();
       }
       G4cout << "\n  End-of-event models:";
-      G4int nEOEModels = pScene -> GetEndOfEventModelList ().entries ();
+      G4int nEOEModels = pScene -> GetEndOfEventModelList ().size ();
       if (nEOEModels == 0) {
 	G4cout << " none.";
       }
@@ -295,7 +295,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     fpVisManager -> SetAvailableSceneHandlers ();
 
   // Check scene name.
-  const G4int nScenes = sceneList.entries ();
+  const G4int nScenes = sceneList.size ();
   G4int iScene;
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* scene = sceneList [iScene];
@@ -314,7 +314,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   // For each scene handler, if it contains the scene, clear and
   // rebuild the graphical database, then for each viewer set (make
   // current), clear, (re)draw, and show.
-  const G4int nSceneHandlers = sceneHandlerList.entries ();
+  const G4int nSceneHandlers = sceneHandlerList.size ();
   for (G4int iSH = 0; iSH < nSceneHandlers; iSH++) {
     G4VSceneHandler* aSceneHandler = sceneHandlerList [iSH];
     G4Scene* aScene = aSceneHandler -> GetScene ();
@@ -324,7 +324,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	aSceneHandler -> ClearStore ();
 	aSceneHandler -> ClearTransientStore ();
 	G4ViewerList& viewerList = aSceneHandler -> SetViewerList ();
-	const G4int nViewers = viewerList.entries ();
+	const G4int nViewers = viewerList.size ();
 	for (G4int iV = 0; iV < nViewers; iV++) {
 	  G4VViewer* aViewer = viewerList [iV];
 	  aViewer -> ClearView ();
@@ -378,16 +378,16 @@ void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
   const G4String& currentSceneName =
     fpVisManager -> GetCurrentScene () -> GetName ();
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
-  for (iScene = 0; iScene < nScenes; iScene++) {
-    if (sceneList [iScene] -> GetName () == removeName) break;
+  G4SceneListIterator iScene;
+  for (iScene = sceneList.begin(); iScene != sceneList.end(); ++iScene) {
+    if ((*iScene) -> GetName () == removeName) break;
   }
-  if (iScene < nScenes) {
-    delete sceneList [iScene];
-    sceneList.removeAt (iScene);
+  if (iScene != sceneList.end()) {
+    delete *iScene;
+    sceneList.erase (iScene);
     G4cout << "Scene \"" << removeName << "\" removed." << G4endl;
     UpdateCandidateLists ();
-    if (sceneList.isEmpty ()) {
+    if (sceneList.empty ()) {
       UpdateVisManagerScene ();
       G4cout << "No scenes left.  Please create a new one." << G4endl;
     }
@@ -437,7 +437,7 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& selectName = newValue;
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
-  G4int iScene, nScenes = sceneList.entries ();
+  G4int iScene, nScenes = sceneList.size ();
   for (iScene = 0; iScene < nScenes; iScene++) {
     if (sceneList [iScene] -> GetName () == selectName) break;
   }

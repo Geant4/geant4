@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewer.hh,v 1.6 1999-12-15 14:54:11 gunter Exp $
+// $Id: G4OpenInventorViewer.hh,v 1.7 2001-02-23 15:43:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,8 +16,6 @@
 #define G4OPENINVENTORVIEWER_HH
 
 #ifdef G4VIS_BUILD_OI_DRIVER
-
-#include "g4rw/tvordvec.h"
 
 #include <Inventor/Xt/SoXt.h>
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.9 2001-02-04 20:23:07 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.10 2001-02-23 15:43:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,8 +117,8 @@ G4double G4ViewParameters::GetFrontHalfHeight (G4double nearDistance,
 
 void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
   fCutaway = true;
-  if (fCutawayPlanes.entries () < 3 ) {
-    fCutawayPlanes.insert (cutawayPlane);
+  if (fCutawayPlanes.size () < 3 ) {
+    fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
     G4cerr << "A maximum of 3 cutaway planes supported." << G4endl;
@@ -237,12 +237,12 @@ void G4ViewParameters::PrintDifferences (const G4ViewParameters& v) const {
   }
 
   if (fCutaway) {
-    if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ()) {
+    if (fCutawayPlanes.size () != v.fCutawayPlanes.size ()) {
       G4cout << "Difference in no of cutaway planes." << G4endl;
     }
     else {
-      for (int i = 0; i < fCutawayPlanes.entries (); i++) {
-	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i)))
+      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i]))
 	  G4cout << "Difference in cutaway plane no. " << i << G4endl;
       }
     }
@@ -309,7 +309,7 @@ G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
   os << "\n  Cutaway flag: ";
   if (v.fCutaway) {
     os << "true, cutaway planes: ";
-    for (int i = 0; i < v.fCutawayPlanes.entries (); i++) {
+    for (int i = 0; i < v.fCutawayPlanes.size (); i++) {
       os << ' ' << v.fCutawayPlanes[i];
     }
   }
@@ -442,11 +442,11 @@ G4bool G4ViewParameters::operator != (const G4ViewParameters& v) const {
       (!(fSectionPlane == v.fSectionPlane))) return true;
 
   if (fCutaway) {
-    if (fCutawayPlanes.entries () != v.fCutawayPlanes.entries ())
+    if (fCutawayPlanes.size () != v.fCutawayPlanes.size ())
       return true;
     else {
-      for (int i = 0; i < fCutawayPlanes.entries (); i++) {
-	if (!(fCutawayPlanes (i) == v.fCutawayPlanes (i))) return true;
+      for (int i = 0; i < fCutawayPlanes.size (); i++) {
+	if (!(fCutawayPlanes[i] == v.fCutawayPlanes[i])) return true;
       }
     }
   }

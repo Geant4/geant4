@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.cc,v 1.5 2001-02-10 02:37:44 asaim Exp $
+// $Id: G4RayTrajectory.cc,v 1.6 2001-02-23 15:43:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -106,7 +106,7 @@ void G4RayTrajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
   G4RayTrajectory* seco = (G4RayTrajectory*)secondTrajectory;
   G4int ent = seco->GetPointEntries();
   for(G4int i=0;i<ent;i++)
-  { positionRecord->push_back(seco->GetPoint(i)); }
+  { positionRecord->push_back((G4RayTrajectoryPoint*)seco->GetPoint(i)); }
   seco->positionRecord->clear();
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessExpert.cc,v 1.5 2001-02-05 02:34:35 johna Exp $
+// $Id: G4VisManMessExpert.cc,v 1.6 2001-02-23 15:43:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "...menu of expert commands."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_circle  ////
   //expert \hline
@@ -69,7 +69,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_line  ////
   //expert \hline
@@ -95,7 +95,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("z1", 'd', true);
   param   -> SetDefaultValue (0.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////  /vis~/expert/draw_marks_and_show  ////
   //expert \hline
@@ -115,7 +115,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   /***************************************
   ////////////////////////////////////  /vis~/expert/draw_physical_volume  ////
@@ -128,7 +128,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "A test of G4VisManager::Draw (const G4VPhysicalVolume&,..."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
   **************************************/
 
   ////////////////////////////////////////  /vis~/expert/draw_polymarkers  ////
@@ -144,7 +144,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   -> SetGuidance ("0/1/2/3 = line/dots/circles/squares");
   param   -> SetDefaultValue (0);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_spiral  ////
   //expert \hline
@@ -155,7 +155,7 @@ void G4VisManMessenger::AddCommandExpert () {
     (
      "Draws a G4Polyline in the form of a spiral."
      );
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_spirals  ////
   //expert \hline
@@ -169,7 +169,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("no. of spirals", 'i', true);
   param   -> SetDefaultValue (1);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/expert/draw_square  ////
   //expert \hline
@@ -189,7 +189,7 @@ void G4VisManMessenger::AddCommandExpert () {
   param   =  new G4UIparameter ("size", 'd', true);
   param   -> SetDefaultValue (10.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 }
 

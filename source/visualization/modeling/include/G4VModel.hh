@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VModel.hh,v 1.6 2001-02-03 18:40:00 johna Exp $
+// $Id: G4VModel.hh,v 1.7 2001-02-23 15:43:33 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,13 +39,6 @@ public: // With description
    const G4ModelingParameters* = 0);
    
   virtual ~G4VModel ();
-
-public: // Without description
-
-  G4bool operator == (const G4VModel&) const;
-  // For G4RWTPtrOrderedVector...
-
-public: // With description
 
   virtual void DescribeYourselfTo (G4VGraphicsScene&) = 0;
   // The main task of a model is to describe itself to the scene.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXmViewer.hh,v 1.4 2001-02-03 18:39:02 johna Exp $
+// $Id: G4OpenGLImmediateXmViewer.hh,v 1.5 2001-02-23 15:43:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,7 +23,6 @@
 #include "G4OpenGLXmViewer.hh"
 
 #include "globals.hh"
-#include "g4rw/tvordvec.h"
 
 class G4OpenGLImmediateSceneHandler;
 

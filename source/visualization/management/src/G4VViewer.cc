@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.10 2001-02-03 18:39:54 johna Exp $
+// $Id: G4VViewer.cc,v 1.11 2001-02-23 15:43:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,9 +63,10 @@ const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 
 void G4VViewer::NeedKernelVisit () {
   // Notify all views that a kernel visit is required.
-  const G4ViewerList& viewList = fSceneHandler.GetViewerList ();
-  for (int i = 0; i < viewList.entries (); i++) {
-    viewList [i] -> SetNeedKernelVisit ();
+  const G4ViewerList& viewerList = fSceneHandler.GetViewerList ();
+  G4ViewerListConstIterator i;
+  for (i = viewerList.begin(); i != viewerList.end(); i++) {
+    (*i) -> SetNeedKernelVisit ();
   }
 }
 

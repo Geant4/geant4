@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.11 2000-05-22 08:27:29 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.12 2001-02-23 15:43:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,10 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 }
 
 G4VSceneHandler::~G4VSceneHandler () {
-  fViewerList.clearAndDestroy ();
+  G4ViewerListIterator i;
+  for (i = fViewerList.begin(); i != fViewerList.end(); ++i) {
+    delete *i;
+  }
 }
 
 void G4VSceneHandler::EndModeling () {}
@@ -154,7 +157,7 @@ void G4VSceneHandler::AddThis (const G4VSolid& solid) {
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
-  fViewerList.append (pViewer);
+  fViewerList.push_back (pViewer);
 }
 
 void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
@@ -220,14 +223,15 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 }
 
 void G4VSceneHandler::RemoveViewerFromList (G4VViewer* pViewer) {
-  fViewerList.remove (pViewer);
+  fViewerList.remove(pViewer);
 }
 
 void G4VSceneHandler::SetScene (G4Scene* pScene) {
   fpScene = pScene;
   // Notify all viewers that a kernel visit is required.
-  for (int i = 0; i < fViewerList.entries (); i++) {
-    fViewerList [i] -> SetNeedKernelVisit ();
+  G4ViewerListIterator i;
+  for (i = fViewerList.begin(); i != fViewerList.end(); i++) {
+    (*i) -> SetNeedKernelVisit ();
   }
 }
 
@@ -288,13 +292,13 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
 
   // Traverse geometry tree and send drawing primitives to window(s).
 
-  const G4RWTPtrOrderedVector <G4VModel>& runDurationModelList =
+  const G4std::vector<G4VModel*>& runDurationModelList =
     fpScene -> GetRunDurationModelList ();
 
-  if (runDurationModelList.entries ()) {
+  if (runDurationModelList.size ()) {
     G4cout << "Traversing scene data..." << G4endl;
     G4ModelingParameters* pMP = CreateModelingParameters ();
-    for (int i = 0; i < runDurationModelList.entries (); i++) {
+    for (int i = 0; i < runDurationModelList.size (); i++) {
       G4VModel* pModel = runDurationModelList[i];
       const G4ModelingParameters* tempMP =
 	pModel -> GetModelingParameters ();
@@ -471,8 +475,8 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 G4std::ostream& operator << (G4std::ostream& os, const G4VSceneHandler& s) {
 
   os << "Scene " << s.fName << " has "
-     << s.fViewerList.entries () << " viewers:";
-  for (int i = 0; i < s.fViewerList.entries (); i++) {
+     << s.fViewerList.size () << " viewers:";
+  for (int i = 0; i < s.fViewerList.size (); i++) {
     os << "\n  " << *(s.fViewerList [i]);
   }
 

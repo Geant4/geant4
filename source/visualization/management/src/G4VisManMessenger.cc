@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.cc,v 1.3 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManMessenger.cc,v 1.4 2001-02-23 15:43:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@ fpVMan (pVMan)
   /////////////////////////////////////////////////  /vis~/...  ////
   command = new G4UIcommand ("/vis~/", this);
   command -> SetGuidance ("Deprecated visualization commands.");
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   //////////////////////////////////////////////  /vis~/*/...  ////
   AddCommandCamera ();      // Define the /vis~/camera/ sub-commands.
@@ -47,7 +47,12 @@ fpVMan (pVMan)
 }
 
 G4VisManMessenger::~G4VisManMessenger () {
-  fCommandList.clearAndDestroy ();
+  G4std::vector<G4UIcommand*>::iterator i;
+  for (i = fCommandList.begin();
+       i != fCommandList.end();
+       ++i) {
+    delete *i;
+  }
 }
 
 void G4VisManMessenger::SetNewValue (G4UIcommand* command, G4String newValues)

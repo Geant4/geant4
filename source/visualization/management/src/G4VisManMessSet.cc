@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.10 2001-02-06 23:36:59 johna Exp $
+// $Id: G4VisManMessSet.cc,v 1.11 2001-02-23 15:43:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("density", 'd', true);
   param   -> SetDefaultValue  (0.01);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/drawing_style  ////
   //set \hline
@@ -57,7 +57,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/marker_choices  ////
   //set \hline
@@ -71,7 +71,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/rep_style  ////
   //set \hline
@@ -87,7 +87,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Style selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/scene  ////
   //set \hline
@@ -103,7 +103,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("Selector", 'i', true);
   param   -> SetDefaultValue  (-1);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/section_plane   ////
   //set \hline
@@ -149,7 +149,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   -> SetDefaultValue  (0);
   param   -> SetGuidance      ("Component of plane normal.");
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/sides  ////
   //set \hline
@@ -163,7 +163,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("No. of sides", 'i', true);
   param   -> SetDefaultValue  (24);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/verbose  //////
   //set \hline
@@ -178,7 +178,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   -> SetDefaultValue (-1);
   param   -> SetGuidance ("0: quiet, >0: verbose");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////////  /vis~/set/view  /////////
   //set  \hline
@@ -192,7 +192,7 @@ void G4VisManMessenger::AddCommandSet () {
   param   =  new G4UIparameter ("View selector", 'i', true);
   param   -> SetDefaultValue (-1);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 }
 
 void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
@@ -643,16 +643,16 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/view") {
     G4VisManager::PrintCommandDeprecation("Use \"/vis/viewer/select\".");
     // Make List of available views.
-    G4RWTPtrOrderedVector<G4VViewer> vList;
+    G4ViewerList vList;  // Keep temporary list of viewers.
     const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();
     G4int nViewTotal = 0;
-    G4int iGM, nScenes = gml.entries ();
+    G4int iGM, nScenes = gml.size ();
     for (iGM = 0; iGM < nScenes; iGM++) {
       const G4ViewerList& views = gml [iGM] -> GetViewerList ();
-      int nViews = views.entries ();
+      int nViews = views.size ();
       for (int iView = 0; iView < nViews; iView++) {
 	G4VViewer* pView = views [iView];
-	vList.append (pView);
+	vList.push_back (pView);
 	nViewTotal++;
       }
     }

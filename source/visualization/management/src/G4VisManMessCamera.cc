@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.7 2001-02-05 02:34:30 johna Exp $
+// $Id: G4VisManMessCamera.cc,v 1.8 2001-02-23 15:43:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (0.);
   param   -> SetGuidance ("world coordinates");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/orbit  ////
   //camera \hline
@@ -62,7 +62,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (1.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/pan  ////
   //camera \hline
@@ -83,7 +83,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (0.);
   param   -> SetGuidance ("world coordinates");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   /////////////////////////////////////  /vis~/camera/projection_style  ////
   //camera \hline
@@ -100,7 +100,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   =  new G4UIparameter ("Perspective view half angle.", 'd', true);
   param   -> SetDefaultValue  (0.);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/spin  ////
   //camera \hline
@@ -122,7 +122,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (1.);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////////  /vis~/camera/viewpoint  ////
   //camera \hline
@@ -145,7 +145,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetGuidance ("degrees");
   param   -> SetDefaultValue (0.0);
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/window_size_hint  ////
   //camera \hline
@@ -161,7 +161,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   =  new G4UIparameter ("Window size hint in pixels", 'i', true);
   param   -> SetDefaultValue  (600);
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ///////////////////////////////////////  /vis~/camera/zoom  ////
   //camera \hline
@@ -178,7 +178,7 @@ void G4VisManMessenger::AddCommandCamera () {
   param   -> SetDefaultValue (1.);
   param   -> SetGuidance ("magnifies by this");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.cc,v 1.5 1999-12-15 14:54:24 gunter Exp $
+// $Id: G4Scene.cc,v 1.6 2001-02-23 15:43:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@ G4Scene::G4Scene (const G4String& name):
 G4Scene::~G4Scene () {}
 
 G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
-  G4int i, nModels = fRunDurationModelList.entries ();
+  G4int i, nModels = fRunDurationModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
 	fRunDurationModelList [i] -> GetGlobalDescription ()) break;
@@ -40,8 +40,8 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel) {
 	   << G4endl;
     return false;
   }
-  fRunDurationModelList.append (pModel);
-  nModels = fRunDurationModelList.entries ();  // ...has increased by 1...
+  fRunDurationModelList.push_back (pModel);
+  nModels = fRunDurationModelList.size ();  // ...has increased by 1...
   G4BoundingSphereScene boundingSphereScene;
   for (i = 0; i < nModels; i++) {
     const G4VisExtent& thisExtent =
@@ -88,7 +88,7 @@ G4bool G4Scene::AddWorldIfEmpty () {
 }
 
 G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
-  G4int i, nModels = fEndOfEventModelList.entries ();
+  G4int i, nModels = fEndOfEventModelList.size ();
   for (i = 0; i < nModels; i++) {
     if (pModel -> GetGlobalDescription () ==
 	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
@@ -102,13 +102,18 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel) {
 	   << G4endl;
     return false;
   }
-  fEndOfEventModelList.append (pModel);
+  fEndOfEventModelList.push_back (pModel);
   return true;
 }
 
 void G4Scene::Clear () {
-  fRunDurationModelList.clearAndDestroy ();
-  fEndOfEventModelList.clearAndDestroy ();
+  int i;
+  for (i = 0; i < fRunDurationModelList.size(); ++i) {
+    delete fRunDurationModelList[i];
+  }
+  for (i = 0; i < fEndOfEventModelList.size(); ++i) {
+    delete fEndOfEventModelList[i];
+  }
 }
 
 G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
@@ -116,12 +121,12 @@ G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
   os << "Scene data:";
 
   os << "\n  Run-duration model list:";
-  for (int i = 0; i < d.fRunDurationModelList.entries (); i++) {
+  for (int i = 0; i < d.fRunDurationModelList.size (); i++) {
     os << "\n  " << *(d.fRunDurationModelList[i]);
   }
 
   os << "\n  End-of-event model list:";
-  for (int ii = 0; ii < d.fEndOfEventModelList.entries (); ii++) {
+  for (int ii = 0; ii < d.fEndOfEventModelList.size (); ii++) {
     os << "\n  " << *(d.fEndOfEventModelList[ii]);
   }
 
@@ -134,13 +139,13 @@ G4std::ostream& operator << (G4std::ostream& os, const G4Scene& d) {
 
 G4bool G4Scene::operator != (const G4Scene& s) const {
   if (
-      (fRunDurationModelList.entries () !=
-       s.fRunDurationModelList.entries ())              ||
+      (fRunDurationModelList.size () !=
+       s.fRunDurationModelList.size ())              ||
       (fExtent               != s.fExtent)              ||
       !(fStandardTargetPoint == s.fStandardTargetPoint)
       ) return true;
 
-  for (int i = 0; i < fRunDurationModelList.entries (); i++) {
+  for (int i = 0; i < fRunDurationModelList.size (); i++) {
     if (fRunDurationModelList[i] != s.fRunDurationModelList[i])
       return true;
   }

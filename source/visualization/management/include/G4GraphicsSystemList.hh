@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GraphicsSystemList.hh,v 1.4 1999-12-15 14:54:17 gunter Exp $
+// $Id: G4GraphicsSystemList.hh,v 1.5 2001-02-23 15:43:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,10 +14,17 @@
 #ifndef G4GRAPHICSSYSTEMLIST_HH
 #define G4GRAPHICSSYSTEMLIST_HH
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4VGraphicsSystem.hh"
 
-class G4GraphicsSystemList: public G4RWTPtrOrderedVector<G4VGraphicsSystem> {
+class G4GraphicsSystemList: public G4std::vector<G4VGraphicsSystem*> {
+public:
+  remove(G4VGraphicsSystem*);
 };
+
+typedef G4std::vector<G4VGraphicsSystem*>::iterator
+        G4GraphicsSystemListIterator;
+typedef G4std::vector<G4VGraphicsSystem*>::const_iterator
+        G4GraphicsSystemListConstIterator;
 
 #endif

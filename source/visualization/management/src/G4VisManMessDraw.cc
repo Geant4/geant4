@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.6 2001-02-05 02:34:34 johna Exp $
+// $Id: G4VisManMessDraw.cc,v 1.7 2001-02-23 15:43:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ void G4VisManMessenger::AddCommandDraw () {
   param   -> SetDefaultValue  ("mm");
   param   -> SetGuidance      ("mm, cm, or m.");
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   ////////////////////////////////////  /vis~/draw/text  /////
   //draw \hline
@@ -98,7 +98,7 @@ void G4VisManMessenger::AddCommandDraw () {
   param   =  new G4UIparameter ("text", 's', true);
   param   -> SetDefaultValue ("text");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
   //
   ////////////////////////////////////  /vis~/draw/ghosts  /////
@@ -110,7 +110,7 @@ void G4VisManMessenger::AddCommandDraw () {
   param   =  new G4UIparameter ("ParticleName", 's', true);
   param   -> SetDefaultValue ("all");
   command -> SetParameter (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
 
 
   /********************************  UNDER DEVELOPMENT ?????????????
@@ -132,7 +132,7 @@ void G4VisManMessenger::AddCommandDraw () {
   param   =  new G4UIparameter ("Physical volume name", 's', true);
   param   -> SetDefaultValue  ("__none__");
   command -> SetParameter     (param);
-  fCommandList.append (command);
+  fCommandList.push_back (command);
   **************************************************************/
 
 }

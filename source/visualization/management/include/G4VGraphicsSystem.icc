@@ -5,17 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.icc,v 1.4 1999-12-15 14:54:18 gunter Exp $
+// $Id: G4VGraphicsSystem.icc,v 1.5 2001-02-23 15:43:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  27th March 1996
 // Abstract interface class for graphics systems.
-
-inline G4bool
-G4VGraphicsSystem::operator == (const G4VGraphicsSystem& system) const {
-  return this == &system;
-}
 
 inline const G4String& G4VGraphicsSystem::GetName () const {
   return fName;

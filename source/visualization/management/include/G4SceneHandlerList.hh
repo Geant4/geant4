@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SceneHandlerList.hh,v 1.3 1999-12-15 14:54:17 gunter Exp $
+// $Id: G4SceneHandlerList.hh,v 1.4 2001-02-23 15:43:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,10 +14,16 @@
 #ifndef G4SCENEHANDLERLIST_HH
 #define G4SCENEHANDLERLIST_HH
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4VSceneHandler.hh"
 
-class G4SceneHandlerList: public G4RWTPtrOrderedVector<G4VSceneHandler> {
+class G4SceneHandlerList: public G4std::vector<G4VSceneHandler*> {
+public:
+  remove(G4VSceneHandler*);
 };
+
+typedef G4std::vector<G4VSceneHandler*>::iterator G4SceneHandlerListIterator;
+typedef G4std::vector<G4VSceneHandler*>::const_iterator
+        G4SceneHandlerListConstIterator;
 
 #endif

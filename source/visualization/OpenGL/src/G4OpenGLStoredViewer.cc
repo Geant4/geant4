@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.4 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.5 2001-02-23 15:43:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,8 +54,8 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
       (lastVP.IsSection ()          != fVP.IsSection ())          ||
       // No need if section plane changes.
       (lastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (lastVP.GetCutawayPlanes ().entries () !=
-                              fVP.GetCutawayPlanes ().entries ()) ||
+      (lastVP.GetCutawayPlanes ().size () !=
+                                 fVP.GetCutawayPlanes ().size ()) ||
       // No need if cutaway planes change.
       (lastVP.IsExplode ()          != fVP.IsExplode ())          ||
       (lastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
@@ -81,12 +81,12 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
   
   if (fSceneHandler.fTopPODL) glCallList (fSceneHandler.fTopPODL);
   
-  G4int nTODLs = fSceneHandler.fTODLList.entries ();
+  G4int nTODLs = fSceneHandler.fTODLList.size ();
   for (int i = 0; i < nTODLs; i++) {
     glPushMatrix();
-    G4OpenGLTransform3D oglt (fSceneHandler.fTODLTransformList (i));
+    G4OpenGLTransform3D oglt (fSceneHandler.fTODLTransformList [i]);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glCallList (fSceneHandler.fTODLList(i));
+    glCallList (fSceneHandler.fTODLList[i]);
     glPopMatrix();
   }
 }

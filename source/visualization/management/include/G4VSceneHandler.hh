@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.12 2001-02-03 18:39:39 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.13 2001-02-23 15:43:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,9 +49,6 @@ public: // With description
 		   const G4String& name = "");
 
   virtual ~G4VSceneHandler ();
-
-  // For G4RWTPtrOrderedVector...
-  G4bool operator == (const G4VSceneHandler& scene) const;
 
   //////////////////////////////////////////////////////////////
   // Functions for adding raw GEANT4 objects, if the graphics system

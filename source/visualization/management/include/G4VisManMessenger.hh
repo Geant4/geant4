@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessenger.hh,v 1.5 2001-02-03 18:39:50 johna Exp $
+// $Id: G4VisManMessenger.hh,v 1.6 2001-02-23 15:43:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,8 +16,7 @@
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
-
-#include "g4rw/tpordvec.h"
+#include "g4std//vector"
 
 class G4VisManager;
 class G4UIcommand;
@@ -58,7 +57,7 @@ private:
   G4bool ViewValid ();
   void RotateViewpointAboutUpVectorBy (G4double dbeta);
   G4VisManager* fpVMan;
-  G4RWTPtrOrderedVector <G4UIcommand> fCommandList;
+  G4std::vector<G4UIcommand*> fCommandList;
 };
 
 #endif

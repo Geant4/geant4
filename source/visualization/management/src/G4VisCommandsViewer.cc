@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.23 2001-02-06 23:36:56 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.24 2001-02-23 15:43:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -45,13 +45,13 @@ void G4VVisCommandViewer::UpdateCandidateLists () {
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.entries ();
+  G4int nHandlers = sceneHandlerList.size ();
 
   G4String viewerNameList;
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
+    for (int iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       viewerNameList += viewerList [iViewer] -> GetShortName () + " ";
     }
   }
@@ -210,7 +210,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
 
   const G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.entries ();
+  G4int nHandlers = sceneHandlerList.size ();
   if (nHandlers <= 0) {
     G4cout << "G4VisCommandViewerCreate::SetNewValue: no scene handlers."
       "\n  Create a scene handler with \"/vis/sceneHandler/create\""
@@ -250,7 +250,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand* command,
   for (iHandler = 0; iHandler < nHandlers; iHandler++) {
     G4VSceneHandler* sceneHandler = sceneHandlerList [iHandler];
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
-    for (int iViewer = 0; iViewer < viewerList.entries (); iViewer++) {
+    for (int iViewer = 0; iViewer < viewerList.size (); iViewer++) {
       if (viewerList [iViewer] -> GetShortName () == newShortName ) {
 	G4cout << "Viewer \"" << newShortName << "\" already exists."
 	       << G4endl;
@@ -484,7 +484,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
   }
 
   const G4SceneHandlerList& sceneHandlerList = fpVisManager -> GetAvailableSceneHandlers ();
-  G4int nHandlers = sceneHandlerList.entries ();
+  G4int nHandlers = sceneHandlerList.size ();
   G4bool found = false;
   G4bool foundCurrent = false;
   for (int iHandler = 0; iHandler < nHandlers; iHandler++) {
@@ -493,7 +493,7 @@ void G4VisCommandViewerList::SetNewValue (G4UIcommand* command,
     const G4ViewerList& viewerList = sceneHandler -> GetViewerList ();
     G4cout << "Scene handler \"" << sceneHandler -> GetName ()
 	   << "\", scene \"" << pScene -> GetName () << "\":";
-    G4int nViewers = viewerList.entries ();
+    G4int nViewers = viewerList.size ();
     if (nViewers == 0) {
       G4cout << "\n            No viewers for this scene handler." << G4endl;
     }
@@ -570,7 +570,7 @@ G4VisCommandViewerPan::G4VisCommandViewerPan ():
     ("/vis/viewer/panTo [<right>] [<up>] [<unit>]");
   fpCommandPanTo -> SetGuidance
     ("Moves the camera to this position right and up relative to standard"
-     "target point.");
+     "target point (as seen from viewpoint direction).");
   parameter = new G4UIparameter("right", 'd', omitable = true);
   parameter -> SetCurrentAsDefault (true);
   fpCommandPanTo -> SetParameter (parameter);
@@ -753,7 +753,8 @@ void G4VisCommandViewerRemove::SetNewValue (G4UIcommand* command,
   }
   else {
     G4VSceneHandler* sceneHandler = viewer -> GetSceneHandler ();
-    sceneHandler -> SetViewerList ().remove (viewer);
+    G4ViewerList& viewerList = sceneHandler -> SetViewerList ();
+    viewerList.remove (viewer);
     G4cout << "Current viewer is unchanged (\""
 	   << currentViewer -> GetName () << "\")." << G4endl;
   }
