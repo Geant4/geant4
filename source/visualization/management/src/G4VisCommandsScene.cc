@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.6 1999-04-15 15:26:28 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.7 1999-05-10 14:04:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -27,6 +27,8 @@
 #endif
 
 G4VVisCommandScene::G4VVisCommandScene () {}
+
+G4VVisCommandScene::~G4VVisCommandScene () {}
 
 void G4VVisCommandScene::UpdateCandidateLists () {
 

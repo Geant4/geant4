@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.hh,v 1.2 1999-02-07 17:12:48 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.3 1999-05-10 14:03:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@ class G4OpenGLXViewer: virtual public G4OpenGLViewer {
 
 public:
   G4OpenGLXViewer (G4OpenGLSceneHandler& scene);
-  ~G4OpenGLXViewer ();
+  virtual ~G4OpenGLXViewer ();
   void SetView ();
   void ShowView ();
   void FinishView ();

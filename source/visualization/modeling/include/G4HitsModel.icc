@@ -5,10 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HitsModel.icc,v 1.2 1999-01-11 00:48:43 allison Exp $
+// $Id: G4HitsModel.icc,v 1.3 1999-05-10 14:04:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-
-inline G4HitsModel::~G4HitsModel () {}
 
 inline G4String G4HitsModel::GetCurrentTag () const {
   return fGlobalTag;

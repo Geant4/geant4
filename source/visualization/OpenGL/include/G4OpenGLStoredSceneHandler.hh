@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.1 1999-01-09 16:22:44 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.2 1999-05-10 14:03:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@ class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
 public:
   typedef unsigned long G4VSolidPointer;
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
-  ~G4OpenGLStoredSceneHandler ();
+  virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void BeginModeling ();

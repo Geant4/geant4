@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.2 1999-01-09 16:31:05 allison Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.3 1999-05-10 14:04:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -22,6 +22,7 @@ class G4VVisCommandViewer: public G4VVisCommand {
 public:
   // Uses compiler defaults for destructor, copy constructor and assignment.
   G4VVisCommandViewer ();
+  ~G4VVisCommandViewer ();
 protected:
   G4String ShortName (const G4String &);
   void UpdateCandidateLists ();

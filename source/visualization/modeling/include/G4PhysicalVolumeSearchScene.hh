@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.3 1999-02-07 17:23:55 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.4 1999-05-10 14:04:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@ class G4PhysicalVolumeSearchScene: public G4VGraphicsScene {
 public:
   G4PhysicalVolumeSearchScene
   (const G4String& requiredPhysicalVolumeName, G4int requiredCopyNo);
-  ~G4PhysicalVolumeSearchScene ();
+  virtual ~G4PhysicalVolumeSearchScene ();
   void AddThis (const G4Box& s) {FindVolume (s);}
   void AddThis (const G4Cons & s) {FindVolume (s);}
   void AddThis (const G4Tubs& s) {FindVolume (s);}

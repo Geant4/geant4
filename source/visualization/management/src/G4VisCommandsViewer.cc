@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.5 1999-02-07 17:34:25 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.6 1999-05-10 14:04:18 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -26,10 +26,12 @@
 
 G4VVisCommandViewer::G4VVisCommandViewer () {}
 
+G4VVisCommandViewer::~G4VVisCommandViewer () {}
+
 G4String G4VVisCommandViewer::ShortName (const G4String& name) {
-  G4String shortName = name;
-  if (name.contains (' ')) {
-    shortName = name (0, name.first (' '));
+  G4String shortName (name);
+  if (shortName.contains (' ')) {
+    shortName = shortName (0, shortName.first (' '));
   }
   return shortName;
 }

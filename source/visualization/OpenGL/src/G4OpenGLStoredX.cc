@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredX.cc,v 1.3 1999-01-11 00:47:47 allison Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.4 1999-05-10 14:03:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,8 @@ G4OpenGLStoredX::G4OpenGLStoredX ():
 		     "OGLSX",
 		     G4VisFeaturesOfOpenGLSX (),
 		     G4VGraphicsSystem::threeD) {}
+
+G4OpenGLStoredX::~G4OpenGLStoredX () {}
 
 G4VSceneHandler* G4OpenGLStoredX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.hh,v 1.2 1999-01-09 16:31:02 allison Exp $
+// $Id: G4VisCommandsSceneHandler.hh,v 1.3 1999-05-10 14:04:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -20,8 +20,9 @@ class G4UIcmdWithAString;
 
 class G4VVisCommandSceneHandler: public G4VVisCommand {
 public:
-  // Uses compiler defaults for destructor, copy constructor and assignment.
+  // Uses compiler defaults for copy constructor and assignment.
   G4VVisCommandSceneHandler ();
+  ~G4VVisCommandSceneHandler ();
 protected:
   void UpdateCandidateLists ();
   static G4String fSceneHandlerNameList;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.1 1999-01-09 16:22:35 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.2 1999-05-10 14:03:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@ class G4OpenGLImmediateSceneHandler: public G4OpenGLSceneHandler {
 
 public:
   G4OpenGLImmediateSceneHandler (G4VGraphicsSystem& system, const G4String& name);
-  ~G4OpenGLImmediateSceneHandler ();
+  virtual ~G4OpenGLImmediateSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
   void EndPrimitives ();
   void BeginModeling ();

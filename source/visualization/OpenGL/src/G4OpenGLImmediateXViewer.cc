@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.1 1999-01-09 16:23:13 allison Exp $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.2 1999-05-10 14:03:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,8 @@ G4VViewer (scene, scene.IncrementViewCount (), name) {
   glDepthMask (GL_TRUE);
   
 }
+
+G4OpenGLImmediateXViewer::~G4OpenGLImmediateXViewer () {}
 
 void G4OpenGLImmediateXViewer::DrawView () {
 

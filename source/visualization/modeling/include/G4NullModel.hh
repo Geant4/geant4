@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NullModel.hh,v 1.2 1999-01-11 00:48:44 allison Exp $
+// $Id: G4NullModel.hh,v 1.3 1999-05-10 14:04:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,12 +24,12 @@ public:
 
   G4NullModel (const G4ModelingParameters* = 0);
 
-  ~G4NullModel ();
+  virtual ~G4NullModel ();
 
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
+  void DescribeYourselfTo (G4VGraphicsScene&);
   // An exception is thrown if this is called!!!!!!!!!!!!!!!!!!!!
 
-  virtual G4bool Validate ();
+  G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).
 
   /////////////////////////////////////////////////

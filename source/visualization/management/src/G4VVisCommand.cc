@@ -5,13 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.cc,v 1.2 1999-01-09 16:31:17 allison Exp $
+// $Id: G4VVisCommand.cc,v 1.3 1999-05-10 14:04:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
 // It is really a messenger - we have one command per messenger.
 
 #include "G4VVisCommand.hh"
+
+G4VVisCommand::~G4VVisCommand () {}
 
 G4VisManager* G4VVisCommand::fpVisManager = 0;
 

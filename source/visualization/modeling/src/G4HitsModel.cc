@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HitsModel.cc,v 1.2 1999-01-10 13:25:49 allison Exp $
+// $Id: G4HitsModel.cc,v 1.3 1999-05-10 14:04:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,8 @@
 #include "G4RunManager.hh"
 #include "G4Event.hh"
 #include "G4HCofThisEvent.hh"
+
+G4HitsModel::~G4HitsModel () {}
 
 G4HitsModel::G4HitsModel () {
   fGlobalTag = "G4HitsModel for all hits.";

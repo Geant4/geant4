@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.3 1999-01-11 00:48:30 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.4 1999-05-10 14:04:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,61 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 
 G4VSceneHandler::~G4VSceneHandler () {
   fViewerList.clearAndDestroy ();
+}
+
+void G4VSceneHandler::AddThis (const G4Box& box) {
+  RequestPrimitives (box);
+// If your graphics system is sophisticated enough to handle a
+//  particular solid shape as a primitive, in your derived class write a
+//  function to override this.  (Note: some compilers warn that your
+//  function "hides" this one.  That's OK.)
+// Your function might look like this...
+// void G4MyScene::AddThis (const G4Box& box) {
+// Get parameters of appropriate object, e.g.:
+//   G4double dx = box.GetXHalfLength ();
+//   G4double dy = box.GetYHalfLength ();
+//   G4double dz = box.GetZHalfLength ();
+// and Draw or Store in your display List.
+}
+
+void G4VSceneHandler::AddThis (const G4Tubs& tubs) {
+  RequestPrimitives (tubs);
+}
+
+void G4VSceneHandler::AddThis (const G4Cons& cons) {
+  RequestPrimitives (cons);
+}
+
+void G4VSceneHandler::AddThis (const G4Trd& trd) {
+  RequestPrimitives (trd);
+}
+
+void G4VSceneHandler::AddThis (const G4Trap& trap) {
+  RequestPrimitives (trap);
+}
+
+void G4VSceneHandler::AddThis (const G4Sphere& sphere) {
+  RequestPrimitives (sphere );
+}
+
+void G4VSceneHandler::AddThis (const G4Para& para) {
+  RequestPrimitives (para);
+}
+
+void G4VSceneHandler::AddThis (const G4Torus& torus) {
+  RequestPrimitives (torus);
+}
+
+void G4VSceneHandler::AddThis (const G4Polycone& polycone) {
+  RequestPrimitives (polycone);
+}
+
+void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
+  RequestPrimitives (polyhedra);
+}
+
+void G4VSceneHandler::AddThis (const G4VSolid& solid) {
+  RequestPrimitives (solid);
 }
 
 void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {

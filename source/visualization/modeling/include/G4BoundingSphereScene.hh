@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.hh,v 1.3 1999-02-07 17:23:54 johna Exp $
+// $Id: G4BoundingSphereScene.hh,v 1.4 1999-05-10 14:04:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,17 +33,17 @@ class G4BoundingSphereScene: public G4VGraphicsScene {
 public:
   G4BoundingSphereScene ();
   ~G4BoundingSphereScene ();
-  virtual void AddThis (const G4Box& s) {Accrue (s);}
-  virtual void AddThis (const G4Cons& s) {Accrue (s);}
-  virtual void AddThis (const G4Tubs& s) {Accrue (s);}
-  virtual void AddThis (const G4Trd& s) {Accrue (s);}
-  virtual void AddThis (const G4Trap& s) {Accrue (s);}
-  virtual void AddThis (const G4Sphere& s) {Accrue (s);}
-  virtual void AddThis (const G4Para& s) {Accrue (s);}
-  virtual void AddThis (const G4Torus& s) {Accrue (s);}
-  virtual void AddThis (const G4Polycone& s) {Accrue (s);}
-  virtual void AddThis (const G4Polyhedra& s) {Accrue (s);}
-  virtual void AddThis (const G4VSolid& s) {Accrue (s);}
+  void AddThis (const G4Box& s) {Accrue (s);}
+  void AddThis (const G4Cons& s) {Accrue (s);}
+  void AddThis (const G4Tubs& s) {Accrue (s);}
+  void AddThis (const G4Trd& s) {Accrue (s);}
+  void AddThis (const G4Trap& s) {Accrue (s);}
+  void AddThis (const G4Sphere& s) {Accrue (s);}
+  void AddThis (const G4Para& s) {Accrue (s);}
+  void AddThis (const G4Torus& s) {Accrue (s);}
+  void AddThis (const G4Polycone& s) {Accrue (s);}
+  void AddThis (const G4Polyhedra& s) {Accrue (s);}
+  void AddThis (const G4VSolid& s) {Accrue (s);}
   void PreAddThis (const G4Transform3D& objectTransformation,
 		   const G4VisAttributes&) {
     fpObjectTransformation = &objectTransformation;

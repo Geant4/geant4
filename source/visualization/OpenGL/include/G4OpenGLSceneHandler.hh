@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.1 1999-01-09 16:22:42 allison Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.2 1999-05-10 14:03:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ protected:
   G4OpenGLSceneHandler (G4VGraphicsSystem& system,
 		 G4int id,
 		 const G4String& name = "");
-  ~G4OpenGLSceneHandler ();
+  virtual ~G4OpenGLSceneHandler ();
   G4bool initialize_hlr;
 
 private:

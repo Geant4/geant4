@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.icc,v 1.3 1999-02-07 17:28:02 johna Exp $
+// $Id: G4VSceneHandler.icc,v 1.4 1999-05-10 14:04:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,61 +16,6 @@ inline G4bool G4VSceneHandler::operator == (const G4VSceneHandler& scene) const 
 }
 
 inline void G4VSceneHandler::EndModeling () {}
-
-inline void G4VSceneHandler::AddThis (const G4Box& box) {
-  RequestPrimitives (box);
-// If your graphics system is sophisticated enough to handle a
-//  particular solid shape as a primitive, in your derived class write a
-//  function to override this.  (Note: some compilers warn that your
-//  function "hides" this one.  That's OK.)
-// Your function might look like this...
-// void G4MyScene::AddThis (const G4Box& box) {
-// Get parameters of appropriate object, e.g.:
-//   G4double dx = box.GetXHalfLength ();
-//   G4double dy = box.GetYHalfLength ();
-//   G4double dz = box.GetZHalfLength ();
-// and Draw or Store in your display List.
-}
-
-inline void G4VSceneHandler::AddThis (const G4Tubs& tubs) {
-  RequestPrimitives (tubs);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Cons& cons) {
-  RequestPrimitives (cons);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Trd& trd) {
-  RequestPrimitives (trd);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Trap& trap) {
-  RequestPrimitives (trap);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Sphere& sphere) {
-  RequestPrimitives (sphere );
-}
-
-inline void G4VSceneHandler::AddThis (const G4Para& para) {
-  RequestPrimitives (para);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Torus& torus) {
-  RequestPrimitives (torus);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Polycone& polycone) {
-  RequestPrimitives (polycone);
-}
-
-inline void G4VSceneHandler::AddThis (const G4Polyhedra& polyhedra) {
-  RequestPrimitives (polyhedra);
-}
-
-inline void G4VSceneHandler::AddThis (const G4VSolid& solid) {
-  RequestPrimitives (solid);
-}
 
 inline void G4VSceneHandler::PreAddThis (const G4Transform3D& objectTransformation,
                                   const G4VisAttributes& visAttribs) {

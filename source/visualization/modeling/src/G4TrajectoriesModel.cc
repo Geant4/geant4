@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrajectoriesModel.cc,v 1.2 1999-01-11 00:48:53 allison Exp $
+// $Id: G4TrajectoriesModel.cc,v 1.3 1999-05-10 14:04:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,8 @@
 
 #include "G4RunManager.hh"
 #include "G4Event.hh"
+
+G4TrajectoriesModel::~G4TrajectoriesModel () {}
 
 G4TrajectoriesModel::G4TrajectoriesModel () {
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
