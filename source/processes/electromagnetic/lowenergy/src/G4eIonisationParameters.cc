@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.6 2001-10-10 16:46:06 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.7 2001-10-11 13:11:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -61,7 +61,7 @@ G4eIonisationParameters::~G4eIonisationParameters()
 
   for (pos = param.begin(); pos != param.end(); pos++)
     {
-      G4VEMDataSet* dataSet = pos->second;
+      G4VEMDataSet* dataSet = (*pos).second;
       param.erase(pos);
       delete dataSet;
     }
