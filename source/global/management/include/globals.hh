@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.1 1999-01-07 16:09:04 gunter Exp $
+// $Id: globals.hh,v 1.2 1999-03-18 15:06:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,14 +44,16 @@
 #undef abs
 #endif
 
+#ifdef G4USE_STL
+#include <algorithm>
+#define CLHEP_MAX_MIN_DEFINED
+#endif
+// min, max, abs and sqr are in TemplateFunctions.h.
 // Includes also CLHEP.h with typedef for numeric types and
 // implicit inclusions of <stdlib.h>, <limits.h>, <math.h>.
 #include <CLHEP/config/TemplateFunctions.h>
 
 // Typedefs to decouple from library classes
-#include <rw/cstring.h>
-typedef RWCString G4String;
-
 // Typedefs for numeric types
 // [NOTE: Will in future need to be made more sophisticated]
 typedef HepDouble G4double;
@@ -63,6 +65,10 @@ typedef HepInt G4int;
   typedef HepBoolean G4bool;
 #endif
 typedef long G4long;
+
+// Other typedefs
+#include <rw/cstring.h>
+typedef RWCString G4String;
 
 // Includes some additional definitions
 #include "templates.hh"
@@ -80,8 +86,3 @@ static double cbrt(double x) { return pow(x,1./3.); }
 void G4Exception(const char* s=0);
 
 #endif /* GLOBALS_HH */
-
-
-
-
-
