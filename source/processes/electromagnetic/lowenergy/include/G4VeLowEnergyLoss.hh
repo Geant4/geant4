@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.7 2001-11-23 11:45:20 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.hh,v 1.8 2003-01-22 18:42:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 3.4.2000 Veronique Lefebure:
@@ -45,12 +45,13 @@
 //  class.
 //
 //  -----------------------------------------------------------
-//  created  on 28 January 2000  by L. Urban               
+//  created  on 28 January 2000  by L. Urban
 //  -----------------------------------------------------------
 //
 //  Modifications:
-// 20/09/00 V.Ivanchenko update fluctuations 
+// 20/09/00 V.Ivanchenko update fluctuations
 // 23/11/01 V.Ivanchenko Move static member-functions from header to source
+// 22/01/03 V.Ivanchenko Cut per range
 //
 // Class description:
 // Abstract class for Low Energy Electromagnetic electron energy loss
@@ -69,11 +70,11 @@
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4MaterialCutsCouple.hh"
 
-
-class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess 
+class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
 {
-  public:     
+  public:
 
       G4VeLowEnergyLoss(const G4String& ,
 				   G4ProcessType   aType = fNotDefined );
@@ -103,28 +104,28 @@ class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
     // code for the energy loss fluctuation
 
     G4double GetLossWithFluct(const G4DynamicParticle* aParticle,
-                              G4Material* aMaterial,
+                              const G4MaterialCutsCouple* couple,
                               G4double	MeanLoss,
                               G4double  step);
 
 
    private:
 
-  // hide default constructor and assignment operator as private 
+  // hide default constructor and assignment operator as private
       G4VeLowEnergyLoss();
       G4VeLowEnergyLoss & operator=(const G4VeLowEnergyLoss &right);
 
   protected:
 
     // data members to speed up the fluctuation calculation
-    G4Material* lastMaterial;
+    const G4Material* lastMaterial;
     G4int imat;
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
 
     const G4int nmaxCont1,nmaxCont2 ;
 
-  // static part of the class 
+  // static part of the class
 
   public:  // With description
 

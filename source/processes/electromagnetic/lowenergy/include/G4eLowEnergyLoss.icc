@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.icc,v 1.4 2002-03-28 11:48:58 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.icc,v 1.5 2003-01-22 18:42:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -32,18 +32,19 @@
 //      ------------ G4eLowEnergyLoss physics process ------------
 //                  by Laszlo Urban, 20 March 1997
 // ***************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
+// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
 // It calculates the energy loss of e+/e-.
 // -------------------------------------------------------------
 //
-// 08-09-98: cleanup
+// 08-09-98  cleanup
 // 28-03-02  V.Ivanchenko add fluorescence flag
+// 21-01-03  V.Ivanchenko cut per region
 //
 // ---------------------------------------------------------------
 
 inline G4double G4eLowEnergyLoss::GetConstraints(
                                       const G4DynamicParticle* aParticle,
-                                            G4Material* aMaterial)
+                                      const G4MaterialCutsCouple* couple)
 {
   G4double StepLimit;
   // returns the Step limit
@@ -61,9 +62,9 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
 
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
-  fdEdx = G4EnergyLossTables::GetDEDX(ParticleType,KineticEnergy,aMaterial);
+  fdEdx = G4EnergyLossTables::GetDEDX(ParticleType,KineticEnergy,couple);
   fRangeNow =
-           G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,aMaterial);
+           G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,couple);
 
   // compute the (random) Step limit
   if (fRangeNow>finalRange)
@@ -79,7 +80,7 @@ inline G4double G4eLowEnergyLoss::GetConstraints(
   return StepLimit;
 }
 
-//    
+//
 
 inline G4double G4eLowEnergyLoss::GetContinuousStepLimit(
                                                const G4Track& track,
@@ -87,16 +88,16 @@ inline G4double G4eLowEnergyLoss::GetContinuousStepLimit(
                                                G4double currentMinimumStep,
                                                G4double&)
 {
- 
+
   G4double Step =
-    GetConstraints(track.GetDynamicParticle(),track.GetMaterial());
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterialCutsCouple());
 
   if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
 
   return Step ;
 }
 
-//    
+//
 inline G4bool G4eLowEnergyLoss::IsApplicable(const G4ParticleDefinition&
                                                      particle)
 {

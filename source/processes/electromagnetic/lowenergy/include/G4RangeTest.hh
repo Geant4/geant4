@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4RangeTest.hh,v 1.2 2002-05-28 09:15:26 pia Exp $
+// $Id: G4RangeTest.hh,v 1.3 2003-01-22 18:42:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 5 Oct 2001   MGP        Created
+// 5 Oct  2001   MGP        Created
+// 21 Jan 2003   VI         Cuts per region
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -48,16 +49,16 @@ class G4ParticleDefinition;
 class G4Material;
 
 class G4RangeTest : public G4VRangeTest {
- 
+
 public:
 
   G4RangeTest() { }
 
   virtual ~G4RangeTest();
- 
-  virtual G4bool Escape(const G4ParticleDefinition* particle, 
-			const G4Material* material,
-			G4double energy, 
+
+  virtual G4bool Escape(const G4ParticleDefinition* particle,
+			const G4MaterialCutsCouple* couple,
+			G4double energy,
 			G4double safety) const;
 
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.13 2001-11-23 11:45:20 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.14 2003-01-22 18:42:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -50,16 +50,17 @@
 // 31/03/00 V.Ivanchenko rename to lowenergy as G4hLowEnergyLoss.hh 
 // 09/08/00 V.Ivanchenko remove GetContinuousStepLimit and IsApplicable
 // 23/11/01 V.Ivanchenko Move static member-functions from header to source
+// 22/01/03 V.Ivanchenko Cuts per region
 //
 // Class description:
-// Class for Low Energy electromagnetic energy loss of hadrons 
+// Class for Low Energy electromagnetic energy loss of hadrons
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // ****************************************************************************
 
 #ifndef G4hLowEnergyLoss_h
 #define G4hLowEnergyLoss_h 1
- 
+
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
@@ -74,11 +75,11 @@
 #include "G4Step.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
- 
+
 class G4EnergyLossMessenger;
- 
+
 class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
- 
+
 {
   public:
 
@@ -98,9 +99,11 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 
   protected:
 
+    G4bool CutsWhereModified();
+
   private:
 
-  // hide  assignment operator 
+  // hide  assignment operator
 
     G4hLowEnergyLoss(G4hLowEnergyLoss &);
     G4hLowEnergyLoss & operator=(const G4hLowEnergyLoss &right);
@@ -116,18 +119,18 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
   protected:
-  G4Material *lastMaterial ;
+//  G4Material *lastMaterial ;
   const G4double MaxExcitationNumber ;
   const G4double probLimFluct ;
   const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
 // ====================================================================
 //  static part of the class
- 
+
   public:
 
     //  get the number of processes contributing to the cont.energy loss
-    static G4int GetNumberOfProcesses(); 
+    static G4int GetNumberOfProcesses();
 
     //  set the number of processes contributing to the cont.energy loss
     static void SetNumberOfProcesses(G4int number);
@@ -209,7 +212,7 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* theProperTimepTable ;
     static G4PhysicsTable* theProperTimepbarTable ;
 
-    //  processes inherited from G4hLowEnergyLoss 
+    //  processes inherited from G4hLowEnergyLoss
     //   register themselves  in the static array Recorder
     static G4PhysicsTable** RecorderOfpProcess;
     static G4PhysicsTable** RecorderOfpbarProcess;
@@ -230,7 +233,7 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4double HighestKineticEnergy;
     static G4int TotBin; // number of bins in table,
                          // calculated in BuildPhysicsTable
-                                   
+
     static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
                                       //          /LowestKineticEnergy)/TotBin
                                       //   RTable = exp(LOGRTable)
@@ -260,13 +263,13 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static G4int NumberOfProcesses ;
 
     static G4double dRoverRange ; // maximum allowed deltarange/range
-                                  //  in one step  
+                                  //  in one step
   protected:
 
     G4PhysicsTable* theLossTable ;
 
     G4double linLossLimit ;
-   
+
     G4double MinKineticEnergy ;
 
     static G4double finalRange ;  // last step before stop
@@ -278,6 +281,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
 };
 
 #endif
- 
+
 
 

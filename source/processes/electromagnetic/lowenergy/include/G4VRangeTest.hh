@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeTest.hh,v 1.1 2001-10-08 07:51:42 pia Exp $
+// $Id: G4VRangeTest.hh,v 1.2 2003-01-22 18:42:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 5 Oct 2001   MGP        Created
+// 5  Oct 2001   MGP        Created
+// 22 Jan 2003 V.Ivanchenko Cut per region
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -43,27 +44,27 @@
 
 #include "globals.hh"
 class G4ParticleDefinition;
-class G4Material;
+class G4MaterialCutsCouple;
 
 class G4VRangeTest {
- 
+
 public:
 
   G4VRangeTest() { }
 
   virtual ~G4VRangeTest() { }
- 
-  virtual G4bool Escape(const G4ParticleDefinition* particle, 
-			const G4Material* material,
-			G4double energy, 
+
+  virtual G4bool Escape(const G4ParticleDefinition* particle,
+			const G4MaterialCutsCouple* couple,
+			G4double energy,
 			G4double safety) const = 0;
 
 private:
 
 };
- 
+
 #endif
- 
+
 
 
 

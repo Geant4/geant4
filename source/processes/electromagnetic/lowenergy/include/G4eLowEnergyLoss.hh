@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.8 2002-03-28 11:48:56 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.hh,v 1.9 2003-01-22 18:42:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,11 +57,12 @@
 //  18.10.01 Revision to improve code quality and consistency with design
 //  23.11.01 V.Ivanchenko Move static member-functions from header to source
 //  28.03.02 V.Ivanchenko add fluorescence flag
+//  21.01.03 V.Ivanchenko cut per region
 // ------------------------------------------------------------
- 
+
 #ifndef G4eLowEnergyLoss_h
 #define G4eLowEnergyLoss_h 1
- 
+
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Randomize.hh"
@@ -79,19 +80,19 @@
 #include "G4EnergyLossTables.hh"
 
 class G4EnergyLossMessenger;
- 
+
 class G4eLowEnergyLoss : public G4VeLowEnergyLoss
- 
+
 {
   public:
- 
+
     G4eLowEnergyLoss(const G4String& );
 
    ~G4eLowEnergyLoss();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
     //  true for e+/e- , false otherwise
-  
+
     void BuildDEDXTable(const G4ParticleDefinition& aParticleType);
     //  It builds dE/dx and range tables for aParticleType and
     //  for every material contained in the materialtable.
@@ -117,42 +118,42 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
                                             const G4Step& step) = 0;
     // Virtual function to be overridden in the derived classes
     // ( ionisation and bremsstrahlung) .
-                                            
+
     static void  SetNbOfProcesses(G4int nb);
     // Sets number of processes giving contribution to the energy loss
 
     static void  PlusNbOfProcesses();
     // Increases number of processes giving contribution to the energy loss
 
-    static void  MinusNbOfProcesses();                                      
+    static void  MinusNbOfProcesses();
     // Decreases number of processes giving contribution to the energy loss
 
     static G4int GetNbOfProcesses();
     // Gets number of processes giving contribution to the energy loss
     // ( default value = 2)
-    
-    static void SetLowerBoundEloss(G4double val); 
-    static void SetUpperBoundEloss(G4double val); 
+
+    static void SetLowerBoundEloss(G4double val);
+    static void SetUpperBoundEloss(G4double val);
     static void SetNbinEloss(G4int nb);
- 
-    static G4double GetLowerBoundEloss(); 
-    static G4double GetUpperBoundEloss(); 
-    static G4int    GetNbinEloss(); 
+
+    static G4double GetLowerBoundEloss();
+    static G4double GetUpperBoundEloss();
+    static G4int    GetNbinEloss();
 
     void ActivateFluorescence(G4bool val);
     // Set fluorescence flag on/off
 
     G4bool Fluorescence() const;
-    // Get flurescence flag 
-                                            
+    // Get flurescence flag
+
   protected:
 
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4MaterialCutsCouple* couple,
 							  G4double incidentEnergy,
 							  G4double eLoss) { return 0; }
 
     G4PhysicsTable* theLossTable;
-     
+
     G4double MinKineticEnergy ;     // particle with kinetic energy
                                     // smaller than MinKineticEnergy
                                     // is stopped in  AlongStepDoIt
@@ -168,31 +169,31 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     //inverse tables of the range tables
     static G4PhysicsTable* theInverseRangeElectronTable;
     static G4PhysicsTable* theInverseRangePositronTable;
-   
+
     // lab and proper time tables
     static G4PhysicsTable* theLabTimeElectronTable ;
     static G4PhysicsTable* theLabTimePositronTable ;
     static G4PhysicsTable* theProperTimeElectronTable ;
     static G4PhysicsTable* theProperTimePositronTable ;
 
-    //processes inherited from G4eLowEnergyLoss 
+    //processes inherited from G4eLowEnergyLoss
     //register themselves  in the static array Recorder
     //for electrons/positrons separately
     //nb of contributing processes = NbOfProcesses
     static G4int NbOfProcesses;
     static G4int CounterOfElectronProcess;
-    static G4int CounterOfPositronProcess ;          
+    static G4int CounterOfPositronProcess ;
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
-    
-    
+
+
   private:
 
     G4double GetConstraints(const G4DynamicParticle* aParticle,
-                            G4Material* aMaterial); 
-                                                                  
+                            const G4MaterialCutsCouple* couple);
+
     // hide  assignment operator
-    G4eLowEnergyLoss (G4eLowEnergyLoss &); 
+    G4eLowEnergyLoss (G4eLowEnergyLoss &);
     G4eLowEnergyLoss & operator=(const G4eLowEnergyLoss &right);
 
 
@@ -200,21 +201,21 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
 
     G4int            CounterOfProcess;
     G4PhysicsTable** RecorderOfProcess;
-                                            
+
     G4double fdEdx;                       // computed in GetConstraints
     G4double fRangeNow;                   // computed in GetConstraints
 
     G4double linLossLimit ;               // used in AlongStepDoIt
 
-    
+
     //New ParticleChange
     G4ParticleChangeForLoss fParticleChange ;
 
- //  
+ //
  // static part of the class
  //
-     
-    static G4int NbinEloss;               // number of bins in table, 
+
+    static G4int NbinEloss;               // number of bins in table,
                                           // calculated in BuildPhysicTable
     static G4double LowerBoundEloss;
     static G4double UpperBoundEloss;
@@ -229,14 +230,14 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
     static G4PhysicsTable* thepRangeCoeffATable;
     static G4PhysicsTable* thepRangeCoeffBTable;
     static G4PhysicsTable* thepRangeCoeffCTable;
-    
+
     static G4EnergyLossMessenger* eLossMessenger;
 
-    G4bool theFluo;                     // Fluorescence flag 
-         
+    G4bool theFluo;                     // Fluorescence flag
+
 };
- 
+
 #include "G4eLowEnergyLoss.icc"
 
 #endif
- 
+
