@@ -1,0 +1,25 @@
+opt zfl
+opt nsta
+ zone
+set dmod 1
+
+close 1
+*hi/file 1 h2o_52_1000.paw
+
+*hi/pl 10 hist
+
+close 2
+hi/file 2 h2o2_st_1.paw
+
+*set dmod 3
+hi/pl 10 hist
+itx 30 30000 '- 5.2p02'
+itx 30 25000 '* 6.1'
+itx 30 55000 '200 MeV protons in Water G4 5.2p02/6.1'
+
+exe prf h2o_52_61 eps
+
+opt liny
+
+zone
+

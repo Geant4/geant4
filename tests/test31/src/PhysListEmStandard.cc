@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.1 2004-01-07 11:30:02 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.2 2004-04-03 15:07:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -36,6 +36,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
+#include "G4MultipleScattering52.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -46,6 +47,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4hLowEnergyIonisation.hh"
 #include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,6 +111,7 @@ void PhysListEmStandard::ConstructProcess()
 
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
       pmanager->AddProcess(new G4hIonisation,       -1,2,2);
+      //      pmanager->AddProcess(new G4hLowEnergyIonisation,       -1,2,2);
     }
   }
 }
