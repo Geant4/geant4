@@ -144,20 +144,13 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
     G4std::vector<G4double>  bulletMomentum(4, 0.0);
-
-    //    bulletMomentum[3] = momZ;
-    if ( G4int(A) == 1 ) {
-
-
-      //   bulletMomentum[3] = sqrt(momZ*momZ+2*momZ*0.93827);
-    } else {
-      bulletMomentum[3] = 2*momZ;
-    }
+    bulletMomentum[3] = sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
+    bulletMomentum[2] = sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
+    bulletMomentum[1] = sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
 
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
    
- 
-    if (verboseLevel > 2) {
+    if (verboseLevel > -1) {
       G4cout << "Bullet:  " << G4endl;  
       bull->printParticle();
     }
@@ -475,36 +468,69 @@ G4int test() {
   if (verboseLevel > 2) {
     G4std::vector<G4double>  m(4, 0.0);
     G4InuclParticle* b;
-    G4double momZ = 1.5;
+
+    G4double mZ = 0.585;
+    G4double mY = 0.0;
+    G4double mX = 0.1;
     G4double mass = 0.93827;
 
-    m[3] = momZ;
+    G4double e = sqrt(mZ * mZ + mY * mY + mX * mX + mass * mass);
+
+    cout << ">>>>>>>> e" << e;
+    m[3] = mZ;
 
     //      G4double ekin = ipart->getKineticEnergy() * GeV;
     //G4ThreeVector aMom(mom[1], mom[2], mom[3]);
     //aMom = aMom.unit();
-
+  
+    cout << endl << ">>> previous bug in kin e" << endl;
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
 
+    cout << endl << ">>> kinetic energy ok in z-dir" << endl;
     m[3] = sqrt(momZ * momZ + 2 * momZ * mass);
     bull = new G4InuclElementaryParticle(m, 1);
     bull->printParticle();
 
-    cout << ">>>" << endl;
+    cout << endl << ">>> hole vectos set" << endl;
 
 
-    m[3] = momZ;
+    m[3] = mZ;
     m[2] = 0;
     m[1] = 0;
     m[0] = sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3] + mass * mass);
 
+    // fix m so that  ekin with the mass gets ok.
+
+    m[3] = mZ;
+    m[2] = mY;
+    m[1] = mX;
+    m[0] = e;
+
+    cout << endl << ">>> inciming:" << endl;
+    bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
+    bull->printParticle();
+
+    G4double pLength = sqrt(m[0] * m[0] - mass * mass); cout << " pLength " << pLength  << endl;
+    G4double mLength = sqrt(m[1] * m[1] + m[2] * m[2] + m[3] * m[3]); cout << " mLength " << mLength << endl;
+
+    G4double scale = 1;
+    m[3] = m[3] * scale;
+    m[2] = m[2] * scale;
+    m[1] = m[1] * scale;
+
+    m[3] = sqrt(m[3] * m[3] + 2 * m[3] * mass);
+    m[2] = sqrt(m[2] * m[2] + 2 * m[2] * mass);
+    m[1] = sqrt(m[1] * m[1] + 2 * m[1] * mass); 
+
     //    bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
     //    bull = new G4InuclParticle(bulletMomentum); // expects full mom[0]-mom[3] with correct E tot
 
-    b = new G4InuclParticle(m); // expects full mom[0]-mom[3] with correct E tot
-    b->printParticle();
+    cout << endl << ">>> outgoing:" << endl;
+    bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
+    bull->printParticle();
+
   }
 
   return 0;
