@@ -121,10 +121,10 @@ int main()
     G4ThreeVector pRmaxPlus(50,1,0) ;
    
     dist = passRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
+    G4cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
     dist = actiRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
+    G4cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
 // Check Inside
 
@@ -214,7 +214,7 @@ int main()
                                  calcNorm,pgoodNorm,pNorm);
     assert(ApproxEqual(dist,50)&&ApproxEqual(norm,vmz)&&*pgoodNorm);
 
-//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
+//  G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
 

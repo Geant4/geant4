@@ -159,15 +159,15 @@ int main()
 
   //Sample changer (carbon-fiber cross)
 
-  G4double minRadiusTUV = 3.9*cm;   // Vertical carbon fiber tube
-  G4double maxRadiusTUV = 4.1*cm;
-  G4double halfLengthTUV = 47.5*cm;
+  //G4double minRadiusTUV = 3.9*cm;   // Vertical carbon fiber tube
+  //G4double maxRadiusTUV = 4.1*cm;
+  //G4double halfLengthTUV = 47.5*cm;
   G4double maxRadiusVACTUV = 3.9*cm;
   G4double halfLengthVACTUV = 47.5*cm;
 
-  G4double minRadiusTUH = 2.5*cm;  // ???  Horizontal carbon fiber tube
-  G4double maxRadiusTUH = 2.7*cm;
-  G4double halfLengthTUH = 44.0*cm;
+  //G4double minRadiusTUH = 2.5*cm;  // ???  Horizontal carbon fiber tube
+  //G4double maxRadiusTUH = 2.7*cm;
+  //G4double halfLengthTUH = 44.0*cm;
   G4double maxRadiusVACTUH = 2.5*cm;
   G4double halfLengthVACTUH = 44.0*cm;
 
