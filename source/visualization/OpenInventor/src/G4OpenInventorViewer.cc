@@ -88,8 +88,8 @@ G4OpenInventorViewer::G4OpenInventorViewer(
   fSoCamera->focalDistance.setValue(10);
   fSoSelection->addChild(fSoCamera);
 
-  //fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
-  //fSoCameraSensor->attach(fSoCamera);
+  fSoCameraSensor = new SoNodeSensor(CameraSensorCB,this);
+  fSoCameraSensor->attach(fSoCamera);
 
   fSoSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
@@ -166,18 +166,9 @@ void G4OpenInventorViewer::SetView () {
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
   const G4Vector3D& direction = fVP.GetViewpointDirection().unit();
   const G4Point3D cameraPosition = target + cameraDistance * direction;
-  const G4double pnear = fVP.GetNearDistance (cameraDistance, radius);
-  const G4double pfar  = fVP.GetFarDistance  (cameraDistance, pnear, radius);
-  //const G4Normal3D& up = fVP.GetUpVector ();  
-
-  /*FIXME : G4OpenGLView::SetView does the below. Do we need that with IV ?
-  G4Point3D gltarget;
-  if (cameraDistance > 1.e-6 * radius) {
-    gltarget = target;
-  } else {
-    gltarget = target - radius * fVP.GetViewpointDirection().unit();
-  }
-  */  
+  //const G4double pnear = fVP.GetNearDistance (cameraDistance, radius);
+  //const G4double pfar  = fVP.GetFarDistance  (cameraDistance, pnear, radius);
+  const G4Normal3D& up = fVP.GetUpVector ();  
 
 /*
   printf("debug : target : %g %g %g\n",target.x(),
@@ -197,19 +188,18 @@ void G4OpenInventorViewer::SetView () {
                                (float)cameraPosition.y(),
                                (float)cameraPosition.z());
 
-  //SbVec3f upFrom(0,1,0);
-  //SbVec3f upTo((float)up.x(),(float)up.y(),(float)up.z());
-  //fSoCamera->orientation.setValue(SbRotation(upFrom,upTo));
   SbVec3f sbTarget((float)target.x(),
                    (float)target.y(),
                    (float)target.z());
-  sbTarget.normalize();
-  // PointAt by keeping a up along y.
-  fSoCamera->pointAt(sbTarget);
+  SbVec3f sbUp((float)up.x(),
+	       (float)up.y(),
+	       (float)up.z());
+  sbUp.normalize();
+  fSoCamera->pointAt(sbTarget,sbUp);
 
   //fSoCamera->height.setValue(10);
-  fSoCamera->nearDistance.setValue((float)pnear);
-  fSoCamera->farDistance.setValue((float)pfar);
+  //fSoCamera->nearDistance.setValue((float)pnear);
+  //fSoCamera->farDistance.setValue((float)pfar);
   //fSoCamera->focalDistance.setValue((float)cameraDistance);
 }
 
@@ -224,7 +214,6 @@ void G4OpenInventorViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
 
-/*
 void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) { 
   G4OpenInventorViewer* This = (G4OpenInventorViewer*)aThis;
 
@@ -238,7 +227,6 @@ void G4OpenInventorViewer::CameraSensorCB(void* aThis,SoSensor*) {
 
   This->fVP.SetCurrentTargetPoint(G4Point3D(target[0],target[1],target[2]));
 }
-*/
 
 void G4OpenInventorViewer::SelectionCB(
  void* aThis
