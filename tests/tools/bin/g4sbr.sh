@@ -63,7 +63,8 @@ export G4NOHIST=1
 # Setup environment in $REFTREE
 ####################################################################
 # (why ?) cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
-. ${G4STTDIR}/bin/setup.sh
+# . ${G4STTDIR}/bin/setup.sh (but this defines G4STTDIR).
+. /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
 echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
