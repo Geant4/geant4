@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test31IonSpecialProcess.cc,v 1.2 2003-06-19 14:46:07 gunter Exp $
+// $Id: test31IonSpecialProcess.cc,v 1.3 2003-07-02 14:14:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,13 +78,13 @@ void test31IonSpecialProcess::BuildPhysicsTable(const G4ParticleDefinition&)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double test31IonSpecialProcess::GetMeanFreePath(const G4Track& aTrack,
-                              G4double previousStepSize,
+G4double test31IonSpecialProcess::GetMeanFreePath(const G4Track&,
+                              G4double,
                               G4ForceCondition* condition)
 {
   *condition = NotForced;
-   
-   
+
+
    /*
    const G4ElementTable* theElementTable = G4Element::GetElementTable();
    G4double AtomicNumber;

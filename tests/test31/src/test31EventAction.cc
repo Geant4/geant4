@@ -62,8 +62,8 @@ test31EventAction::~test31EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void test31EventAction::BeginOfEventAction(const G4Event* evt)
-{  
+void test31EventAction::BeginOfEventAction(const G4Event*)
+{
   // New event
   nEvt++;
   (test31Histo::GetPointer())->AddEvent();
@@ -71,7 +71,7 @@ void test31EventAction::BeginOfEventAction(const G4Event* evt)
   // Switch on verbose mode
   if(theDet->GetFirstEventToDebug() == nEvt) {
     verbose = 2;
-    (test31Histo::GetPointer())->SetVerbose(2);    
+    (test31Histo::GetPointer())->SetVerbose(2);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
     /*
     const G4ProcessManager* pm = G4Gamma::Gamma()->GetProcessManager();
@@ -82,17 +82,17 @@ void test31EventAction::BeginOfEventAction(const G4Event* evt)
     }
     */
   }
-    
+
   // Switch off verbose mode
   if(theDet->GetLastEventToDebug() == nEvt-1) {
     verbose = 0;
-    (test31Histo::GetPointer())->SetVerbose(0);    
+    (test31Histo::GetPointer())->SetVerbose(0);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
   }
 
   // Initialize user actions
   if(verbose > 0) {
-    G4cout << "test31EventAction: Event # " 
+    G4cout << "test31EventAction: Event # "
            << nEvt << " started" << G4endl;
   }
 
