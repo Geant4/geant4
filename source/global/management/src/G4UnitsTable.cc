@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.13 2001-03-06 15:56:52 gcosmo Exp $
+// $Id: G4UnitsTable.cc,v 1.14 2001-04-02 14:29:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -404,10 +404,17 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
   
   for (G4int j=0; j<a.nbOfVals; j++) 
      {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
-  G4long oldform = G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
+
+  #ifdef G4USE_STD_NAMESPACE
+    std::ios::fmtflags oldform = G4cout.flags();
+  #else
+    G4long oldform = G4cout.flags();
+  #endif
+
+  G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
   flux << G4std::setw(len) << List[index]->GetSymbol();       
-  G4cout.setf(oldform,G4std::ios::adjustfield);     
-  
+  G4cout.flags(oldform);
+
   return flux;
 }       
 
