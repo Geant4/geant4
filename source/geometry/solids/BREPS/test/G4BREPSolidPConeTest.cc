@@ -66,6 +66,7 @@ int main(int argc, char **argv)
 						    RMAXVec   );
   
   G4cout << "\n\nPCone created ! "<<endl;
+  G4cout << "Variety is G4BREPSolidPolycone"<<endl;
   // -> Check methods :
   //  - Inside
   //  - DistanceToIn
@@ -76,7 +77,8 @@ int main(int argc, char **argv)
   
   G4cout<<"\n\n==================================================";
   G4Point3D  pt(0, -100, 24);
-  for (G4int y = -100; y<=100; y+=10)
+  G4double y; 
+  for (y = -100; y<=100; y+=10)
   {
     pt.setY(y);
     in = MyPCone->Inside(pt);
@@ -100,7 +102,8 @@ int main(int argc, char **argv)
   G4cout<<"\nPdep is (0, 0, z)";
   G4cout<<"\nDir is (1, 1, 0)\n";
 
-  for(G4double z=-30; z<=50; z+=5)
+  G4double z;
+  for(z=-30; z<=50; z+=5)
   {
     start.setZ(z);
 
