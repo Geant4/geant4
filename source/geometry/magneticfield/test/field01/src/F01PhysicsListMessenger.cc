@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsListMessenger.cc,v 1.1 2001-10-11 07:12:57 grichine Exp $
+// $Id: F01PhysicsListMessenger.cc,v 1.2 2002-12-04 19:09:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,35 +46,35 @@ F01PhysicsListMessenger::F01PhysicsListMessenger(F01PhysicsList * List)
   cutGCmd->SetParameterName("range",true);
   cutGCmd->SetDefaultValue(1.);
   cutGCmd->SetDefaultUnit("mm");
-  cutGCmd->AvailableForStates(Idle);
+  cutGCmd->AvailableForStates(G4State_Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
   cutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
   cutECmd->SetParameterName("range",true);
   cutECmd->SetDefaultValue(1.);
   cutECmd->SetDefaultUnit("mm");
-  cutECmd->AvailableForStates(Idle);
+  cutECmd->AvailableForStates(G4State_Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutP",this);
   cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
   cutPCmd->SetParameterName("range",true);
   cutPCmd->SetDefaultValue(1.);
   cutPCmd->SetDefaultUnit("mm");
-  cutPCmd->AvailableForStates(Idle);
+  cutPCmd->AvailableForStates(G4State_Idle);
 
   eCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutEnergy",this);
   eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
   eCmd->SetParameterName("energy",true);
   eCmd->SetDefaultValue(10.);
   eCmd->SetDefaultUnit("keV");
-  eCmd->AvailableForStates(Idle);
+  eCmd->AvailableForStates(G4State_Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/calor/range",this);
   rCmd->SetGuidance("Display the RANGE of Electron for the current material.");
   rCmd->SetParameterName("energy",true);
   rCmd->SetDefaultValue(10.);
   rCmd->SetDefaultUnit("keV");
-  rCmd->AvailableForStates(Idle);
+  rCmd->AvailableForStates(G4State_Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");

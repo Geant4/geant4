@@ -44,7 +44,7 @@ TstDrawVox01DetectorMessenger::TstDrawVox01DetectorMessenger(TstDrawVox01Detecto
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("SimpleBox");
   selDetCmd->SetCandidates("SimpleBox Honeycomb");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/mydet/SwitchDetector",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -53,7 +53,7 @@ TstDrawVox01DetectorMessenger::TstDrawVox01DetectorMessenger(TstDrawVox01Detecto
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("SimpleBox Honeycomb \" \"");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
@@ -61,7 +61,7 @@ TstDrawVox01DetectorMessenger::TstDrawVox01DetectorMessenger(TstDrawVox01Detecto
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
   selMatCmd->SetCandidates("Air Al Pb");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="SimpleBox");
   myDetector->SelectMaterial(defParam="Pb");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVAEventActionMessenger.cc,v 1.4 2001-07-11 09:59:25 gunter Exp $
+// $Id: TstVAEventActionMessenger.cc,v 1.5 2002-12-04 19:09:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -43,13 +43,13 @@ TstVAEventActionMessenger::TstVAEventActionMessenger(TstVAEventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged neutral all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);     
+  PrintCmd->AvailableForStates(G4State_Idle);     
 }
 
 TstVAEventActionMessenger::~TstVAEventActionMessenger()

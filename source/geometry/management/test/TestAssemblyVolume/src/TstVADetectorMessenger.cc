@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: TstVADetectorMessenger.cc,v 1.4 2001-07-11 09:59:25 gunter Exp $
+// $Id: TstVADetectorMessenger.cc,v 1.5 2002-12-04 19:09:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -50,7 +50,7 @@ TstVADetectorMessenger::TstVADetectorMessenger(TstVADetectorConstruction * myDC)
   selDetCmd->SetParameterName("choice",true);
   selDetCmd->SetDefaultValue("classic");
   selDetCmd->SetCandidates("classic assembly");
-  selDetCmd->AvailableForStates(PreInit,Idle);
+  selDetCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   switchCmd = new G4UIcmdWithAString("/geom/switch",this);
   switchCmd->SetGuidance("Assign the selected geometry to G4RunManager.");
@@ -59,7 +59,7 @@ TstVADetectorMessenger::TstVADetectorMessenger(TstVADetectorConstruction * myDC)
   switchCmd->SetParameterName("choice",true);
   switchCmd->SetDefaultValue(" ");
   switchCmd->SetCandidates("classic assembly \" \"");
-  switchCmd->AvailableForStates(PreInit,Idle);
+  switchCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   selMatCmd = new G4UIcmdWithAString("/geom/material",this);
   selMatCmd->SetGuidance("UNUSED IN THIS VERSION...\n\n");
@@ -68,7 +68,7 @@ TstVADetectorMessenger::TstVADetectorMessenger(TstVADetectorConstruction * myDC)
   selMatCmd->SetParameterName("choice",true);
   selMatCmd->SetDefaultValue("Pb");
   selMatCmd->SetCandidates("Air Al Pb");
-  selMatCmd->AvailableForStates(PreInit,Idle);
+  selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   myDetector->SelectDetector(defParam="classic");
   myDetector->SelectMaterial(defParam="Pb");

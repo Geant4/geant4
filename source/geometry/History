@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2002-04-19 08:31:18 gcosmo Exp $
+$Id: History,v 1.28 2002-12-04 19:14:18 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 04, 2002   Makoto Asai                  geometry-V04-01-00
+--------------------------
+- Migration to new G4ApplicationState
 
 Apr 19, 2002   Gabriele Cosmo               geometry-V04-00-03
 -----------------------------

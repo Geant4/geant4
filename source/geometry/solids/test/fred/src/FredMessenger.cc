@@ -127,7 +127,7 @@ FredMessenger::FredMessenger( )
 			 + volumeNames[VOXEL];
 	volumeTypeNameCmd->SetCandidates( choices );
 	
-	volumeTypeNameCmd->AvailableForStates( PreInit, Idle );
+	volumeTypeNameCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
 	
 	//
 	// gun command
@@ -158,7 +158,7 @@ FredMessenger::FredMessenger( )
 	startPhiCmd = new G4UIcmdWithADouble( "/fred/startPhi", this );
 	startPhiCmd->SetGuidance( "Starting phi value (degrees) for test volume" );
 	startPhiCmd->SetParameterName( "StartPhi", true );
-	startPhiCmd->AvailableForStates( PreInit, Idle );
+	startPhiCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
 	
 	//
 	// Delta Phi Command
@@ -166,7 +166,7 @@ FredMessenger::FredMessenger( )
 	deltaPhiCmd = new G4UIcmdWithADouble( "/fred/deltaPhi", this );
 	deltaPhiCmd->SetGuidance( "Delta phi value (degrees) for test volume" );
 	deltaPhiCmd->SetParameterName( "DeltaPhi", true );
-	deltaPhiCmd->AvailableForStates( PreInit, Idle );
+	deltaPhiCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
 	
 	//
 	// Number sides command
@@ -174,14 +174,14 @@ FredMessenger::FredMessenger( )
 	numSideCmd = new G4UIcmdWithAnInteger( "/fred/numSide", this );
 	numSideCmd->SetGuidance( "Number phi segments for test volume" );
 	numSideCmd->SetParameterName( "NumberSide", true );
-	numSideCmd->AvailableForStates( PreInit, Idle );
+	numSideCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
 
 	//
 	// Pause command
 	//
 	pauseCmd = new G4UIcmdWithoutParameter( "/fred/pause", this );
 	pauseCmd->SetGuidance( "Prompts for return" );
-	pauseCmd->AvailableForStates( PreInit, Idle );
+	pauseCmd->AvailableForStates( G4State_PreInit, G4State_Idle );
 	
 	//
 	// Declare test3 messenger
