@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,6 +13,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -2484,56 +2485,126 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     4  -3.36 mum  11.5 mum -2.29 m   1e+03 GeV  20.2 keV  10.8 cm   61.8 cm    Tracker      MuIoni
     5  -25.7 mum  85.8 mum  -1.6 m   1e+03 GeV   166 keV  69.2 cm   1.31 m     Tracker  Transportation
     6  -32.1 mum   107 mum  -1.4 m   1e+03 GeV   187 keV    20 cm   1.51 m     Chamber  Transportation
-    7  -51.6 mum   172 mum   -80 cm  1e+03 GeV   133 keV    60 cm   2.11 m     Tracker  Transportation
-    8    -58 mum   193 mum   -60 cm  1e+03 GeV   140 keV    20 cm   2.31 m     Chamber  Transportation
-    9  -77.1 mum   257 mum     0 fm  1e+03 GeV   136 keV    60 cm   2.91 m     Tracker  Transportation
-   10  -83.4 mum   278 mum    20 cm  1e+03 GeV   123 keV    20 cm   3.11 m     Chamber  Transportation
-   11   -102 mum   339 mum  76.7 cm  1e+03 GeV   141 keV  56.8 cm   3.68 m     Tracker      MuIoni
-   12   -103 mum   343 mum    80 cm  1e+03 GeV  7.42 keV  3.25 cm   3.71 m     Tracker  Transportation
-   13   -110 mum   364 mum     1 m   1e+03 GeV   179 keV    20 cm   3.91 m     Chamber  Transportation
-   14   -121 mum   399 mum  1.33 m   1e+03 GeV    91 keV  32.5 cm   4.24 m     Tracker      MuIoni
-   15   -130 mum   428 mum   1.6 m   1e+03 GeV  61.8 keV  27.5 cm   4.51 m     Tracker  Transportation
-   16   -137 mum   449 mum   1.8 m   1e+03 GeV   144 keV    20 cm   4.71 m     Chamber  Transportation
-   17   -153 mum   501 mum  2.28 m   1e+03 GeV   111 keV  48.2 cm   5.19 m     Tracker      MuIoni
-   18   -157 mum   513 mum   2.4 m   1e+03 GeV  29.8 keV  11.8 cm   5.31 m     Tracker  Transportation
-   19   -174 mum   568 mum  2.91 m   1e+03 GeV   122 keV    51 cm   5.82 m  OutOfWorld  Transportation
+    7  -51.6 mum   172 mum   -80 cm  1e+03 GeV   135 keV    60 cm   2.11 m     Tracker  Transportation
+    8  -58.1 mum   193 mum   -60 cm  1e+03 GeV   184 keV    20 cm   2.31 m     Chamber  Transportation
+    9  -78.1 mum   258 mum     0 fm  1e+03 GeV   139 keV    60 cm   2.91 m     Tracker  Transportation
+   10  -84.7 mum   280 mum    20 cm  1e+03 GeV   184 keV    20 cm   3.11 m     Chamber  Transportation
+   11   -104 mum   342 mum  76.8 cm  1e+03 GeV   127 keV  56.8 cm   3.68 m     Tracker      MuIoni
+   12   -105 mum   346 mum    80 cm  1e+03 GeV  8.99 keV  3.24 cm   3.71 m     Tracker  Transportation
+   13   -112 mum   368 mum     1 m   1e+03 GeV   112 keV    20 cm   3.91 m     Chamber  Transportation
+   14   -123 mum   400 mum   1.3 m   1e+03 GeV  72.9 keV  29.7 cm   4.21 m     Tracker      MuIoni
+   15   -131 mum   426 mum  1.53 m   1e+03 GeV  61.7 keV  23.8 cm   4.44 m     Tracker      MuIoni
+   16   -133 mum   433 mum   1.6 m   1e+03 GeV  11.7 keV  6.54 cm   4.51 m     Tracker  Transportation
+   17   -140 mum   455 mum   1.8 m   1e+03 GeV   158 keV    20 cm   4.71 m     Chamber  Transportation
+   18   -159 mum   511 mum  2.31 m   1e+03 GeV   124 keV  51.4 cm   5.22 m     Tracker      MuIoni
+   19   -162 mum   520 mum   2.4 m   1e+03 GeV  16.3 keV  8.57 cm   5.31 m     Tracker  Transportation
+   20   -180 mum   575 mum  2.91 m   1e+03 GeV   115 keV    51 cm   5.82 m  OutOfWorld  Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 7,   Parent ID = 1
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   -159 mum   511 mum  2.31 m      32 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1  -1.32 mm    4.5 mm   2.32 m    27.3 keV  4.73 keV  5.11 mm   5.11 mm    Tracker       eIoni
+    2  -1.35 mm   7.34 mm   2.32 m      22 keV  5.23 keV   4.2 mm   9.31 mm    Tracker       eIoni
+    3  -1.59 mm   1.04 cm   2.32 m    17.9 keV  4.16 keV  3.33 mm   1.26 cm    Tracker       eIoni
+    4  -3.38 mm   1.14 cm   2.32 m    13.5 keV  4.39 keV  2.72 mm   1.54 cm    Tracker       eIoni
+    5  -4.39 mm   1.23 cm   2.32 m    8.02 keV  5.46 keV  2.15 mm   1.75 cm    Tracker       eIoni
+    6  -3.63 mm   1.21 cm   2.32 m       0 eV   8.02 keV  1.39 mm   1.89 cm    Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -153 mum   501 mum  2.28 m    49.8 keV     0 eV      0 fm      0 fm    Tracker    initStep
-    1  -8.46 mm  -2.13 mm   2.28 m    41.8 keV  7.95 keV  9.47 mm   9.47 mm    Tracker       eIoni
-    2  -9.23 mm  -6.41 mm   2.29 m    37.2 keV  4.63 keV  7.34 mm   1.68 cm    Tracker       eIoni
-    3  -6.99 mm  -9.98 mm   2.29 m    33.8 keV  3.44 keV  6.22 mm    2.3 cm    Tracker       eIoni
-    4  -5.19 mm  -1.31 cm    2.3 m    28.3 keV  5.46 keV  5.48 mm   2.85 cm    Tracker       eIoni
-    5  -1.58 mm  -1.27 cm    2.3 m      25 keV  3.29 keV  4.39 mm   3.29 cm    Tracker       eIoni
-    6  -1.26 mm  -1.25 cm    2.3 m    20.4 keV  4.59 keV   3.8 mm   3.67 cm    Tracker       eIoni
-    7    513 mum -1.42 cm    2.3 m    12.4 keV  8.03 keV  3.08 mm   3.98 cm    Tracker       eIoni
-    8   1.84 mm  -1.38 cm   2.31 m    8.57 keV  3.83 keV  2.01 mm   4.18 cm    Tracker       eIoni
-    9   2.24 mm   -1.3 cm   2.31 m     2.9 keV  5.67 keV  1.48 mm   4.33 cm    Tracker       eIoni
-   10   2.13 mm  -1.28 cm   2.31 m  4.34e-13 eV    2.9 keV   280 mum  4.36 cm    Tracker       eIoni
+    0   -131 mum   426 mum  1.53 m    8.21 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1   -138 mum  -545 mum  1.54 m    4.72 keV   3.5 keV  1.42 mm   1.42 mm    Tracker       eIoni
+    2   55.5 mum  -401 mum  1.54 m       0 eV   4.72 keV   621 mum  2.04 mm    Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -121 mum   399 mum  1.33 m    9.11 keV     0 eV      0 fm      0 fm    Tracker    initStep
-    1    641 mum  -181 mum  1.33 m    4.73 keV  4.38 keV  1.57 mm   1.57 mm    Tracker       eIoni
-    2    877 mum  -285 mum  1.33 m       0 eV   4.73 keV   624 mum  2.19 mm    Tracker       eIoni
+    0   -123 mum   400 mum   1.3 m     284 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1   9.53 mm   -2.6 cm   1.31 m     253 keV  11.5 keV  3.04 cm   3.04 cm    Tracker       eIoni
+    2   1.61 cm  -13.3 cm   1.36 m     222 keV  31.3 keV  13.2 cm   16.2 cm    Tracker       eIoni
+    3   4.27 cm  -20.8 cm   1.43 m     193 keV  28.8 keV  10.7 cm   26.9 cm    Tracker       eIoni
+    4    2.8 cm  -27.9 cm   1.46 m     155 keV  38.3 keV  8.52 cm   35.4 cm    Tracker       eIoni
+    5   7.84 mm  -31.5 cm   1.49 m     138 keV  16.2 keV  5.94 cm   41.3 cm    Tracker       eIoni
+    6  -2.75 cm  -34.3 cm    1.5 m     125 keV  13.3 keV  4.95 cm   46.3 cm    Tracker       eIoni
+    7  -6.31 cm  -36.2 cm   1.51 m     110 keV  15.5 keV  4.19 cm   50.5 cm    Tracker       eIoni
+    8  -7.95 cm  -38.9 cm   1.51 m     101 keV   9.1 keV  3.35 cm   53.8 cm    Tracker       eIoni
+    9  -8.55 cm  -41.7 cm   1.51 m    91.7 keV  8.89 keV  2.92 cm   56.8 cm    Tracker       eIoni
+   10  -8.32 cm  -43.9 cm    1.5 m      83 keV  8.62 keV  2.49 cm   59.3 cm    Tracker       eIoni
+   11  -6.79 cm  -42.7 cm   1.51 m    72.4 keV  10.6 keV  2.13 cm   61.4 cm    Tracker       eIoni
+   12  -5.23 cm  -42.3 cm   1.51 m    52.7 keV  19.7 keV   1.7 cm   63.1 cm    Tracker       eIoni
+   13  -4.74 cm  -41.4 cm   1.51 m    46.2 keV  6.52 keV  1.03 cm   64.1 cm    Tracker       eIoni
+   14  -4.54 cm  -40.7 cm   1.51 m    38.2 keV  7.98 keV  8.48 mm     65 cm    Tracker       eIoni
+   15  -4.37 cm    -41 cm    1.5 m    33.6 keV  4.67 keV  6.47 mm   65.6 cm    Tracker       eIoni
+   16  -4.11 cm  -40.7 cm    1.5 m    30.5 keV   3.1 keV  5.43 mm   66.2 cm    Tracker       eIoni
+   17  -3.92 cm  -40.9 cm    1.5 m    25.4 keV   5.1 keV  4.79 mm   66.6 cm    Tracker       eIoni
+   18  -3.58 cm    -41 cm    1.5 m    19.9 keV  5.48 keV  3.86 mm     67 cm    Tracker       eIoni
+   19   -3.8 cm  -41.1 cm    1.5 m      12 keV  7.83 keV     3 mm   67.3 cm    Tracker       eIoni
+   20  -3.92 cm  -41.2 cm    1.5 m    4.44 keV  7.61 keV  1.96 mm   67.5 cm    Tracker       eIoni
+   21  -3.97 cm  -41.2 cm    1.5 m       0 eV   4.44 keV   563 mum  67.6 cm    Tracker       eIoni
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 8,   Parent ID = 5
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   9.53 mm   -2.6 cm   1.31 m    19.5 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1   1.13 cm  -2.69 cm   1.31 m    13.6 keV  5.93 keV  2.95 mm   2.95 mm    Tracker       eIoni
+    2   1.26 cm  -2.69 cm    1.3 m    8.81 keV  4.78 keV  2.16 mm   5.12 mm    Tracker       eIoni
+    3   1.38 cm  -2.75 cm    1.3 m    1.88 keV  6.93 keV  1.52 mm   6.64 mm    Tracker       eIoni
+    4   1.39 cm  -2.75 cm    1.3 m  4.34e-13 eV   1.88 keV   142 mum  6.78 mm    Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -102 mum   339 mum  76.7 cm   21.8 keV     0 eV      0 fm      0 fm    Tracker    initStep
-    1   -2.7 mm   1.63 mm   76.8 cm   16.8 keV  5.03 keV  3.29 mm   3.29 mm    Tracker       eIoni
-    2  -3.12 mm   3.49 mm   76.7 cm   11.8 keV  4.97 keV  2.57 mm   5.86 mm    Tracker       eIoni
-    3   -4.1 mm    3.3 mm   76.8 cm   5.99 keV   5.8 keV  1.93 mm   7.79 mm    Tracker       eIoni
-    4  -3.89 mm   3.46 mm   76.8 cm      0 eV   5.99 keV   933 mum  8.72 mm    Tracker       eIoni
+    0   -104 mum   342 mum  76.8 cm    163 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1   1.06 cm  -5.46 cm   78.8 cm    144 keV  19.5 keV  6.49 cm   6.49 cm    Tracker       eIoni
+    2   2.41 cm  -10.1 cm   78.6 cm    132 keV  12.1 keV  5.27 cm   11.8 cm    Tracker       eIoni
+    3   2.19 cm  -11.2 cm   77.8 cm   78.3 keV  9.14 keV  1.39 cm   13.2 cm    Tracker       eIoni
+    4   2.08 cm  -12.9 cm   78.1 cm   69.5 keV  8.82 keV  1.93 cm   15.1 cm    Tracker       eIoni
+    5   2.31 cm  -14.4 cm   78.1 cm   62.5 keV  6.99 keV  1.59 cm   16.7 cm    Tracker       eIoni
+    6   1.65 cm  -15.5 cm   77.9 cm   54.8 keV  7.69 keV  1.34 cm     18 cm    Tracker       eIoni
+    7    2.3 cm  -15.7 cm   78.7 cm   46.5 keV   8.3 keV  1.09 cm   19.1 cm    Tracker       eIoni
+    8   2.32 cm  -16.1 cm   79.3 cm   37.5 keV  8.97 keV  8.55 mm     20 cm    Tracker       eIoni
+    9   2.52 cm  -16.4 cm   79.8 cm   31.7 keV   5.8 keV  6.29 mm   20.6 cm    Tracker       eIoni
+   10   2.68 cm  -16.7 cm     80 cm   29.1 keV  2.63 keV  4.61 mm   21.1 cm    Tracker  Transportation
+   11   2.71 cm  -16.8 cm     80 cm   25.8 keV  3.26 keV  1.25 mm   21.2 cm    Chamber         msc
+   12   2.74 cm  -16.8 cm     80 cm   24.7 keV  1.15 keV   553 mum  21.2 cm    Chamber  Transportation
+   13   2.74 cm  -16.8 cm     80 cm   24.7 keV     0 eV      0 fm   21.2 cm    Tracker  Transportation
+   14   2.77 cm  -16.8 cm     80 cm   23.9 keV   797 eV    948 mum  21.3 cm    Chamber         msc
+   15   2.73 cm  -16.9 cm     80 cm     22 keV  1.87 keV   949 mum  21.4 cm    Chamber         msc
+   16   2.72 cm  -16.9 cm     80 cm   21.3 keV   662 eV    579 mum  21.5 cm    Chamber  Transportation
+   17   2.72 cm  -16.9 cm     80 cm   21.3 keV     0 eV      0 fm   21.5 cm    Tracker  Transportation
+   18   2.73 cm    -17 cm     80 cm   19.5 keV  1.83 keV   746 mum  21.6 cm    Chamber         msc
+   19   2.73 cm    -17 cm     80 cm   19.5 keV  24.7 eV   21.6 mum  21.6 cm    Chamber  Transportation
+   20   2.75 cm  -17.1 cm   79.9 cm   17.5 keV  1.94 keV  1.45 mm   21.7 cm    Tracker         msc
+   21   2.84 cm  -17.1 cm   79.8 cm     15 keV  2.53 keV  1.45 mm   21.9 cm    Tracker         msc
+   22   2.94 cm  -17.1 cm   79.7 cm   11.2 keV  3.82 keV  1.45 mm     22 cm    Tracker         msc
+   23   2.91 cm  -17.1 cm   79.6 cm      0 eV   11.2 keV  1.45 mm   22.1 cm    Tracker         msc
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 9,   Parent ID = 4
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0   2.19 cm  -11.2 cm   77.8 cm   44.3 keV     0 eV      0 fm      0 fm    Tracker    initStep
+    1   1.94 cm  -11.6 cm   77.2 cm   35.2 keV  9.02 keV  7.94 mm   7.94 mm    Tracker       eIoni
+    2      2 cm  -11.5 cm   76.7 cm   29.7 keV  5.55 keV  5.78 mm   1.37 cm    Tracker       eIoni
+    3   2.06 cm  -11.7 cm   76.3 cm   25.8 keV  3.89 keV  4.64 mm   1.84 cm    Tracker       eIoni
+    4    1.8 cm    -12 cm   76.3 cm     22 keV  3.77 keV  3.94 mm   2.23 cm    Tracker       eIoni
+    5   1.49 cm  -11.9 cm   76.3 cm   17.5 keV  4.55 keV  3.33 mm   2.56 cm    Tracker       eIoni
+    6   1.28 cm  -11.8 cm   76.4 cm   10.9 keV  6.59 keV  2.66 mm   2.83 cm    Tracker       eIoni
+    7   1.17 cm  -11.7 cm   76.3 cm   5.78 keV   5.1 keV  1.82 mm   3.01 cm    Tracker       eIoni
+    8   1.19 cm  -11.7 cm   76.3 cm      0 eV   5.78 keV   875 mum   3.1 cm    Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -2541,17 +2612,14 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0  -3.36 mum  11.5 mum -2.29 m    59.9 keV     0 eV      0 fm      0 fm    Tracker    initStep
-    1   1.47 mm  -1.19 cm  -2.29 m    49.3 keV  10.5 keV  1.26 cm   1.26 cm    Tracker       eIoni
-    2   2.78 mm  -1.97 cm  -2.29 m    44.5 keV   4.8 keV  9.35 mm   2.19 cm    Tracker       eIoni
-    3   4.02 mm  -2.45 cm  -2.28 m    37.3 keV  7.27 keV  8.02 mm   2.99 cm    Tracker       eIoni
-    4   4.25 mm  -2.81 cm  -2.28 m    32.1 keV  5.19 keV  6.24 mm   3.62 cm    Tracker       eIoni
-    5   6.59 mm  -2.86 cm  -2.28 m    29.2 keV  2.92 keV  5.13 mm   4.13 cm    Tracker       eIoni
-    6      1 cm  -2.64 cm  -2.27 m    23.3 keV  5.84 keV  4.55 mm   4.59 cm    Tracker       eIoni
-    7    1.3 cm  -2.53 cm  -2.27 m    19.6 keV  3.75 keV  3.53 mm   4.94 cm    Tracker       eIoni
-    8   1.55 cm  -2.58 cm  -2.27 m    15.8 keV  3.81 keV  2.96 mm   5.24 cm    Tracker       eIoni
-    9   1.59 cm   -2.4 cm  -2.27 m    11.4 keV  4.38 keV  2.44 mm   5.48 cm    Tracker       eIoni
-   10   1.67 cm  -2.33 cm  -2.27 m    4.92 keV  6.47 keV  1.88 mm   5.67 cm    Tracker       eIoni
-   11   1.68 cm  -2.32 cm  -2.27 m       0 eV   4.92 keV   667 mum  5.73 cm    Tracker       eIoni
+    1  -1.25 mm   -9.6 mm  -2.29 m    52.6 keV  7.24 keV  1.26 cm   1.26 cm    Tracker       eIoni
+    2  -9.15 mm  -1.24 cm  -2.29 m    46.1 keV  6.55 keV  1.03 cm   2.28 cm    Tracker       eIoni
+    3   -1.4 cm  -1.89 cm  -2.29 m    28.6 keV  17.5 keV  8.45 mm   3.13 cm    Tracker       eIoni
+    4  -1.77 cm  -2.01 cm  -2.29 m    24.9 keV  3.62 keV  4.44 mm   3.57 cm    Tracker       eIoni
+    5  -1.56 cm  -1.82 cm  -2.29 m    21.8 keV  3.15 keV  3.79 mm   3.95 cm    Tracker       eIoni
+    6  -1.84 cm  -1.73 cm  -2.29 m    18.1 keV   3.7 keV  3.29 mm   4.28 cm    Tracker       eIoni
+    7  -2.01 cm  -1.56 cm  -2.29 m    4.34 keV  13.8 keV  2.75 mm   4.56 cm    Tracker       eIoni
+    8  -2.01 cm  -1.55 cm  -2.29 m  8.67e-13 eV   4.34 keV   543 mum  4.61 cm    Tracker       eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2559,8 +2627,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   20.4 nm  -11.3 nm  -2.81 m    9.82 keV     0 eV      0 fm      0 fm      World    initStep
-    1   -972 mum   755 mum -2.81 m    4.41 keV  5.41 keV  1.67 mm   1.67 mm      World       eIoni
-    2  -1.06 mm    659 mum -2.81 m       0 eV   4.41 keV   558 mum  2.23 mm      World       eIoni
+    1   -932 mum   740 mum -2.81 m    5.26 keV  4.56 keV  1.67 mm   1.67 mm      World       eIoni
+    2   -466 mum   849 mum -2.81 m       0 eV   5.26 keV   749 mum  2.42 mm      World       eIoni
 >>> Event 0
     0 trajectories stored in this event.
 ### Run 2 start.

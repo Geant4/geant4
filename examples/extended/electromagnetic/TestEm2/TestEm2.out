@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,11 +13,18 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+/run/verbose 1
 #
-/run/particle/setCut 5.0 mm
+#  select EM PhysicsList 
+#
+#/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+#
+/testem/phys/setCuts 5.0 mm
 /run/initialize
 
 ***** Table : Nb of materials = 9 *****
@@ -59,7 +66,7 @@ Current available graphics systems are:
 Absorber is 17.848 cm  of PbWO4
 
 phot:  Total cross sections from Sandia parametrisation. 
-Em2PhysicsList::SetCuts:CutLength : 5 mm 
+Em2PhysicsList::SetCuts:CutLength : 1 mm 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
        Scattered gamma energy according Klein-Nishina.
@@ -139,14 +146,13 @@ Cut in energy
                Lead         204 keV        6.83 MeV
 ===================================================
 #
-/calor/setMat Water
-/calor/setLbin 9 1.11
-/calor/setRbin 6 0.111
-/calor/update
+/testem/det/setMat Water
+/testem/det/setLbin 9 1.11
+/testem/det/setRbin 6 0.111
+/testem/det/update
 Absorber is 3.60564 m   of Water
 #
-/run/verbose 1
-/event/printModulo 20
+/testem/event/printModulo 20
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -171,20 +177,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=24.01s Real=31.79s Sys=3.07s
+  User=23.55s Real=29.75s Sys=3.06s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.80%       6.18%             0-> 1.11 radl:   14.80%     6.18% 
-    1.11-> 2.22 radl:   25.60%      11.49%             0-> 2.22 radl:   40.40%    14.66% 
-    2.22-> 3.33 radl:   20.82%       9.42%             0-> 3.33 radl:   61.22%    17.89% 
-    3.33-> 4.44 radl:   13.43%       7.31%             0-> 4.44 radl:   74.65%    16.53% 
-    4.44-> 5.55 radl:    8.63%       7.10%             0-> 5.55 radl:   83.28%    12.98% 
-    5.55-> 6.66 radl:    6.15%       6.90%             0-> 6.66 radl:   89.43%     9.07% 
-    6.66-> 7.77 radl:    3.12%       4.40%             0-> 7.77 radl:   92.54%     6.04% 
-    7.77-> 8.88 radl:    1.41%       2.83%             0-> 8.88 radl:   93.95%     4.44% 
-    8.88-> 9.99 radl:    0.69%       1.66%             0-> 9.99 radl:   94.64%     3.71% 
+    0.00-> 1.11 radl:   14.75%       6.29%             0-> 1.11 radl:   14.75%     6.29% 
+    1.11-> 2.22 radl:   22.10%       9.69%             0-> 2.22 radl:   36.84%    12.22% 
+    2.22-> 3.33 radl:   20.44%       8.15%             0-> 3.33 radl:   57.28%    13.93% 
+    3.33-> 4.44 radl:   14.74%       8.52%             0-> 4.44 radl:   72.02%    13.31% 
+    4.44-> 5.55 radl:    9.78%       6.96%             0-> 5.55 radl:   81.79%    11.49% 
+    5.55-> 6.66 radl:    6.76%       5.80%             0-> 6.66 radl:   88.55%     8.07% 
+    6.66-> 7.77 radl:    2.97%       4.08%             0-> 7.77 radl:   91.52%     5.98% 
+    7.77-> 8.88 radl:    1.92%       3.10%             0-> 8.88 radl:   93.44%     4.74% 
+    8.88-> 9.99 radl:    0.81%       1.68%             0-> 9.99 radl:   94.25%     4.23% 
 
 
 
@@ -192,21 +198,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   65.90%      10.46%             0-> 0.11 radl:   65.90%    10.46% 
-    0.11-> 0.22 radl:   16.41%       8.31%             0-> 0.22 radl:   82.31%     6.35% 
-    0.22-> 0.33 radl:    6.26%       3.51%             0-> 0.33 radl:   88.57%     4.66% 
-    0.33-> 0.44 radl:    3.11%       2.13%             0-> 0.44 radl:   91.68%     4.12% 
-    0.44-> 0.56 radl:    1.75%       1.36%             0-> 0.56 radl:   93.43%     3.92% 
-    0.56-> 0.67 radl:    1.22%       1.16%             0-> 0.67 radl:   94.64%     3.71% 
+    0.00-> 0.11 radl:   66.75%       9.25%             0-> 0.11 radl:   66.75%     9.25% 
+    0.11-> 0.22 radl:   15.01%       5.71%             0-> 0.22 radl:   81.76%     6.91% 
+    0.22-> 0.33 radl:    5.87%       3.76%             0-> 0.33 radl:   87.63%     5.52% 
+    0.33-> 0.44 radl:    3.22%       2.53%             0-> 0.44 radl:   90.85%     4.86% 
+    0.44-> 0.56 radl:    2.09%       1.82%             0-> 0.56 radl:   92.94%     4.39% 
+    0.56-> 0.67 radl:    1.32%       1.29%             0-> 0.67 radl:   94.25%     4.23% 
 
                               SUMMARY
-                         energy deposit :   94.64 % E0 +-    3.71 % E0
-                         charged traklen:   13.76 radl +-    0.55 radl
-                         neutral traklen:  201.43 radl +-   18.31 radl
+                         energy deposit :   94.25 % E0 +-    4.23 % E0
+                         charged traklen:   13.70 radl +-    0.61 radl
+                         neutral traklen:  200.64 radl +-   19.55 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1113908824, 763183294
+ Current couple of seeds = 1371468372, 1731317846
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

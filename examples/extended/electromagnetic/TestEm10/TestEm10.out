@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,6 +13,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -224,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 4.344
 49	fGamma = 9.283e+04	sumE = 4.343
 
-total time for build X-ray TR energy loss tables = 74.64 s
+total time for build X-ray TR energy loss tables = 74.56 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -252,7 +253,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=29.25 s 
+total time(SetCuts)=16.35 s 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       
@@ -332,25 +333,25 @@ Cut in energy
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=25.8577 +- 1.28391  mm  
+    mean charged track length   in absorber=23.1038 +- 0.910528  mm  
 
-            mean energy deposit in absorber=0.00669298 +- 0.000219375  MeV 
+            mean energy deposit in absorber=0.00657321 +- 0.000200772  MeV 
 
- mean number of steps in absorber (charged) =1.254 +- 0.01793      
- mean number of steps in absorber (neutral) =1.962 +- 0.0442104      
+ mean number of steps in absorber (charged) =1.229 +- 0.0161418      
+ mean number of steps in absorber (neutral) =2.028 +- 0.0442856      
 
-   mean number of charged secondaries = 0.219 +- 0.0143888
+   mean number of charged secondaries = 0.208 +- 0.0141681
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.219  and e+s =0
+   mean number of e-s =0.208  and e+s =0
 
-(number) transmission coeff=0.171  reflection coeff=0.008
+(number) transmission coeff=0.171  reflection coeff=0.003
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1644288743, 2058894331
+ Current couple of seeds = 1473754610, 1307634574
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

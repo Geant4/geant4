@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,12 +13,13 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 #
-/run/particle/setGCut 2.20 mm
-/run/particle/setECut 6.05 mum
+/testem/phys/setGCut 2.20 mm
+/testem/phys/setECut 6.05 mum
 # 
 /run/initialize
 
@@ -172,18 +173,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=14s Real=18s Sys=2.5s
+  User=15s Real=19s Sys=2.4s
 
- nb tracks/event   neutral:    27.7900   charged:   693.1400
- nb  steps/event   neutral:   149.1800   charged:  1327.8800
+ nb tracks/event   neutral:    27.8100   charged:   700.3100
+ nb  steps/event   neutral:   151.8700   charged:  1338.0800
 
  nb of process calls per event: 
           eIoni       eBrem       compt        phot        conv     annihil
-      1301.6500     24.6300    121.3900     26.1900      1.6000      1.6000
+      1311.6600     25.0000    124.0600     26.3900      1.4200      1.4200
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 233978172, 992537049
+ Current couple of seeds = 1272479250, 468362791
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

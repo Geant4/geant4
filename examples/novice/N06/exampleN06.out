@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 /run/initialize
@@ -21927,4 +21927,4 @@ Number of optical photons produces in this event : 2222
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=5.07s Real=56.24s Sys=3.51s
+number of event = 1 User=2.6s Real=5.84s Sys=3.17s

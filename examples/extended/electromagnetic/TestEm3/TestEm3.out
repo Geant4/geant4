@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,13 +13,14 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 #
 /run/initialize
 
-***** Table : Nb of materials = 20 *****
+***** Table : Nb of materials = 21 *****
 
  Material: liquidH2     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.905 m  
    --->  Element: liquidH2      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -70,6 +71,10 @@ Current available graphics systems are:
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.05 %  Abundance  33.33 %
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material:    Air20     density:  1.205 mg/cm3  temperature: 293.00 K  pressure:   1.00 atm  RadLength: 305.277 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
 
@@ -177,6 +182,7 @@ Cut in range
              quartz         500 mum         500 mum
             NemaG10         500 mum         500 mum
                 Air         500 mum         500 mum
+              Air20         500 mum         500 mum
             Aerogel         500 mum         500 mum
         CarbonicGas         500 mum         500 mum
          WaterSteam         500 mum         500 mum
@@ -198,6 +204,7 @@ Cut in energy
              quartz        4.01 keV         330 keV
             NemaG10        3.07 keV         292 keV
                 Air         990 eV          990 eV 
+              Air20         990 eV          990 eV 
             Aerogel        1.27 keV        79.2 keV
         CarbonicGas         990 eV         8.52 keV
          WaterSteam         990 eV          990 eV 
@@ -206,7 +213,7 @@ Cut in energy
 ===================================================
 #
 /run/verbose 2
-/event/printModulo 50
+/testem/event/printModulo 50
 #
 /gun/particle e-
 /gun/energy 1 GeV
@@ -221,19 +228,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
+     100.00         0.01         0.01            0k Layer
        0.00         0.00         0.00            2k Calorimeter
-       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.00    Layer
+       8.30          0k         1        3          4         0.01    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -242,19 +249,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=40.75s Real=50.61s Sys=8.6s
+  User=42.38s Real=52.44s Sys=8.28s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 810.16 MeV +- 13.69 MeV       56.93 cm  +-  1.09 cm 
- Absorber1 ( liquidArgon) : 178.51 MeV +- 12.54 MeV       89.15 cm  +-  6.35 cm 
+ Absorber0 (        Lead) : 815.39 MeV +- 16.99 MeV       57.36 cm  +-  1.32 cm 
+ Absorber1 ( liquidArgon) : 172.19 MeV +- 14.85 MeV       85.98 cm  +-  7.64 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 45283990, 1083181284
+ Current couple of seeds = 666545083, 1319593894
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

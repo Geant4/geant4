@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Feb-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -13,6 +13,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   GAGTree (GAGTree)
   G4HepRepFile (HepRepFile)
+  G4HepRep (HepRepXML)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -107,9 +108,9 @@ Cut in energy
                Iron   2.88e+295 J     2.88e+295 J  
 ===================================================
 #
-/calor/setMat Iron
-/calor/setSize 500 m
-/calor/update
+/testem/det/setMat Iron
+/testem/det/setSize 500 m
+/testem/det/update
 
  The Box is 500 m   of Iron
 #
@@ -158,7 +159,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   29.8 TeV     0 eV      0 fm      0 fm  Container    initStep
     1    191 m    9.23 mm  -4.03 mm   12.1 TeV  17.7 TeV   159 m     159 m   Container      MuIoni
-    2    250 m       7 mm  -1.96 mm   8.65 TeV  3.43 TeV  59.2 m     218 m  OutOfWorld  Transportation
+    2    250 m    7.26 mm   -2.2 mm   8.65 TeV  3.43 TeV  59.2 m     218 m  OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
@@ -166,8 +167,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   31.9 m       0 fm      0 fm   70.2 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    218 m    5.74 mm  -2.22 mm   21.6 TeV  48.6 TeV   186 m     186 m   Container      MuIoni
-    2    250 m    5.43 mm  -1.77 mm   17.7 TeV  3.98 TeV  31.7 m     218 m  OutOfWorld  Transportation
+    1    218 m    6.03 mm   1.31 mm   21.6 TeV  48.6 TeV   186 m     186 m   Container      MuIoni
+    2    250 m     9.1 mm    112 mum  17.7 TeV  3.96 TeV  31.7 m     218 m  OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -175,28 +176,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1   -123 m       0 fm      0 fm      0 eV      0 eV    127 m     127 m   Container  GammaToMuPair
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -123 m       0 fm      0 fm   73.1 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1   65.1 m    5.93 mm   -921 mum  26.4 TeV  46.7 TeV   188 m     188 m   Container      MuIoni
-    2    220 m    3.38 mm   1.29 mm   11.2 TeV  15.3 TeV   155 m     343 m   Container      MuIoni
-    3    250 m    4.86 mm  -1.65 mm   9.07 TeV  2.08 TeV  29.9 m     373 m  OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0   -123 m       0 fm      0 fm   26.9 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1     33 m     1.9 cm  -8.21 mm   3.37 TeV  23.5 TeV   156 m     156 m   Container      MuIoni
-    2    123 m    2.13 cm  -2.27 cm   2.04 TeV  1.33 TeV  89.8 m     245 m   Container      MuIoni
-    3    197 m    4.15 cm   3.83 cm   1.31 TeV   729 GeV  74.5 m     320 m   Container      MuIoni
-    4    250 m     7.4 cm   8.19 cm    920 GeV   387 GeV  52.7 m     373 m  OutOfWorld  Transportation
+    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m  OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -204,23 +184,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    245 m       0 fm      0 fm      0 eV      0 eV    495 m     495 m   Container  GammaToMuPair
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    245 m       0 fm      0 fm    7.8 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    250 m     -39 mum  30.5 mum  7.55 TeV   248 GeV  5.06 m    5.06 m  OutOfWorld  Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
-*********************************************************************************************************
-
-Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0    245 m       0 fm      0 fm   92.2 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    250 m    3.28 mum -2.58 mum  89.5 TeV  2.66 TeV  5.06 m    5.06 m  OutOfWorld  Transportation
+    1    250 m       0 fm      0 fm    100 TeV     0 eV    500 m     500 m  OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
@@ -228,34 +192,37 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1  -49.3 m       0 fm      0 fm      0 eV      0 eV    201 m     201 m   Container  GammaToMuPair
+    1   -240 m       0 fm      0 fm      0 eV      0 eV   10.4 m    10.4 m   Container  GammaToMuPair
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -49.3 m       0 fm      0 fm     76 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    140 m    -3.6 mm   4.96 mm   24.5 TeV  51.5 TeV   189 m     189 m   Container      MuIoni
-    2    250 m   -1.06 cm   4.16 mm   13.4 TeV  11.1 TeV   110 m     299 m  OutOfWorld  Transportation
+    0   -240 m       0 fm      0 fm   57.6 TeV     0 eV      0 fm      0 fm  Container    initStep
+    1  -59.6 m    5.87 mm   2.83 mm   21.3 TeV  36.4 TeV   180 m     180 m   Container      MuIoni
+    2   88.5 m    9.72 mm   2.44 cm   7.68 TeV  13.6 TeV   148 m     328 m   Container      MuIoni
+    3    204 m    3.18 cm  -2.12 mm    3.6 TeV  4.08 TeV   116 m     444 m   Container      MuIoni
+    4    250 m    3.73 cm  -3.33 mm   2.83 TeV   768 GeV  45.9 m     490 m  OutOfWorld  Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = mu+,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
-    0  -49.3 m       0 fm      0 fm     24 TeV     0 eV      0 fm      0 fm  Container    initStep
-    1    103 m   -2.48 mm   1.08 cm   8.65 TeV  15.4 TeV   152 m     152 m   Container      MuIoni
-    2    222 m   -9.29 mm   3.52 cm   4.15 TeV   4.5 TeV   119 m     271 m   Container      MuIoni
-    3    250 m    -9.6 mm   3.82 cm    3.6 TeV   552 GeV  27.8 m     299 m  OutOfWorld  Transportation
+    0   -240 m       0 fm      0 fm   42.4 TeV     0 eV      0 fm      0 fm  Container    initStep
+    1  -69.5 m   -2.27 mm  -7.57 mm   17.9 TeV  24.5 TeV   170 m     170 m   Container      MuIoni
+    2   73.1 m    -5.9 mm  -3.61 cm   7.59 TeV  10.3 TeV   143 m     313 m   Container      MuIoni
+    3    188 m    2.15 cm  -4.54 cm   4.08 TeV   3.5 TeV   115 m     428 m   Container      MuIoni
+    4    250 m    2.49 cm  -5.49 cm   2.85 TeV  1.23 TeV  61.6 m     490 m  OutOfWorld  Transportation
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0.01s Real=0.69s Sys=0.01s
+  User=0.01s Real=0.89s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2101172336, 598439791
+ Current couple of seeds = 1083370621, 1385159183
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev2/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
@@ -45,9 +45,13 @@ G3toG4 top level volume is HALL
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
   linestyle: solid, line width: 1
   drawing style unforced
+  vector<G4AttValue> pointer is zero
+  vector<G4AttDef> pointer is zero
 Top-level G3toG4 logical volume HALL G4VisAttributes: invisible, daughters visible, colour: (1,1,1,1)
   linestyle: solid, line width: 1
   drawing style unforced
+  vector<G4AttValue> pointer is zero
+  vector<G4AttDef> pointer is zero
 
 phot:  Total cross sections from Sandia parametrisation. 
 G3toG4PhysicsList::SetCuts:CutLength : 2 mm 

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (31-Jul-2002)
+                                (13-Dec-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Start Run processing.
@@ -15,6 +15,8 @@ Start Run processing.
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03        0        0     1e+03        0        0         0     expHall initStep
     1 -1.6e+03        0        0     1e+03        0      400       400     tracker Transportation
     2     -400        0        0     1e+03        0  1.2e+03   1.6e+03     expHall Transportation
     3        0        0        0     1e+03        0      400     2e+03   caloBlock Transportation
@@ -191,5 +193,5 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 3
-  User=0.07s Real=0.26s Sys=0.08s
+  User=0.02s Real=0.05s Sys=0.03s
 G4 kernel has come to Quit state.
