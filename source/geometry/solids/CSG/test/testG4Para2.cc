@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Para2.cc,v 1.3 2001-07-11 10:00:01 gunter Exp $
+// $Id: testG4Para2.cc,v 1.4 2002-01-08 16:16:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Test of G4Para
@@ -69,7 +69,7 @@ G4bool OutRange(G4ThreeVector actual,G4ThreeVector wanted)
 
 int main(void)
 {
-    G4double Dist,low,high;
+    G4double Dist;
     G4ThreeVector pzero(0,0,0),px(10,0,0),py(0,10,0),pz(0,0,10);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
@@ -87,20 +87,20 @@ int main(void)
     pNorm=&norm;
     pgoodNorm=&goodNorm;
 
-    r90X.rotateX(M_PI_2);
-    r90Y.rotateY(M_PI_2);
-    r90Z.rotateZ(M_PI_2);
-    r45X.rotateX(M_PI_4);
-    r30Y.rotateY(M_PI/6);
+    r90X.rotateX(halfpi);
+    r90Y.rotateY(halfpi);
+    r90Z.rotateZ(halfpi);
+    r45X.rotateX(pi/4);
+    r30Y.rotateY(pi/6);
 
     vxy=vxy.unit();
 
     G4Para p1("Box",20,30,40,0,0,0),
-	p2("2",50,50,50,M_PI/6,0,0),
-	p3("3",50,50,50,0,M_PI/6,0),
-	p4("4",50,50,50,0,0,M_PI/6),
-	p5("5",50,50,50,0,M_PI/6,M_PI/6),	
-	p6("6",50,50,50,M_PI/6,M_PI/6,M_PI/6);	
+	p2("2",50,50,50,pi/6,0,0),
+	p3("3",50,50,50,0,pi/6,0),
+	p4("4",50,50,50,0,0,pi/6),
+	p5("5",50,50,50,0,pi/6,pi/6),	
+	p6("6",50,50,50,pi/6,pi/6,pi/6);	
 
     G4cout << "Name:"<< p1.GetName()
 	 << " ID=" <<G4endl;
@@ -151,10 +151,10 @@ int main(void)
     if (OutRange(Dist,20))
 	G4cout << "Error A1 " << Dist << G4endl;
     Dist=p2.DistanceToOut(pzero);
-    if (OutRange(Dist,50*cos(M_PI/6)))
+    if (OutRange(Dist,50*cos(pi/6)))
 	G4cout << "Error A2 " << Dist << G4endl;
      Dist=p3.DistanceToOut(pzero);
-    if (OutRange(Dist,50*cos(M_PI/6)))
+    if (OutRange(Dist,50*cos(pi/6)))
 	G4cout << "Error A3 " << Dist << G4endl;
     Dist=p5.DistanceToOut(pzero);
     if (OutRange(Dist,2*50/sqrt(5.)))
@@ -237,7 +237,7 @@ int main(void)
  	G4cout << "Error F " << Dist << G4endl;
 
     Dist=p3.DistanceToIn(pbigx);
-    if (OutRange(Dist,50*cos(M_PI/6)))
+    if (OutRange(Dist,50*cos(pi/6)))
 	G4cout << "Error G1 " << Dist <<G4endl;
     Dist=p3.DistanceToIn(pbigy);
     if (OutRange(Dist,50))

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.7 2001-07-11 10:00:01 gunter Exp $
+// $Id: testG4Cons2.cc,v 1.8 2002-01-08 16:16:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -63,7 +63,7 @@ G4bool OutRange(G4ThreeVector actual,G4ThreeVector wanted)
 
 int main(void)
 {
-	double dist,low,high;
+	G4double dist;
 
 	G4ThreeVector   pzero(0,0,0);
 	
@@ -75,8 +75,8 @@ int main(void)
 	
 	G4ThreeVector	ponr1(sqrt(50*50/2.0),sqrt(50*50/2.0),0),
 	                ponr2(sqrt(100*100/2.0),sqrt(100*100/2.0),0),
-	        	ponphi1(60*cos(M_PI/6),-60*sin(M_PI/6),0),
-		        ponphi2(60*cos(M_PI/6),60*sin(M_PI/6),0),
+	        	ponphi1(60*cos(pi/6),-60*sin(pi/6),0),
+		        ponphi2(60*cos(pi/6),60*sin(pi/6),0),
 	                ponr2b(150,0,0);
 	
 	G4ThreeVector pnearplz(45,45,45),pnearmiz(45,45,-45);
@@ -88,8 +88,8 @@ int main(void)
 	G4ThreeVector pparr2(0,75,-50),pparr3(0,125,50);
 	G4ThreeVector vparr(0,1./sqrt(5.),2./sqrt(5.)); 
 
-	G4ThreeVector vnphi1(-sin(M_PI/6),-cos(M_PI/6),0),
-	              vnphi2(-sin(M_PI/6),cos(M_PI/6),0);
+	G4ThreeVector vnphi1(-sin(pi/6),-cos(pi/6),0),
+	              vnphi2(-sin(pi/6),cos(pi/6),0);
 
   G4ThreeVector vx(1,0,0),vy(0,1,0),vz(0,0,1),
 	        vmx(-1,0,0),vmy(0,-1,0),vmz(0,0,-1),
@@ -102,19 +102,19 @@ int main(void)
 	
 	G4RotationMatrix r90X,r90Y,r90Z,r180X,r45X,r30Y;
 	
-  G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,2*M_PI),
-	 c2("Hollow Full Cone",50,100,50,200,50,-1,2*M_PI),
-	 c3("Hollow Cut Tube",50,100,50,100,50,-M_PI/6,M_PI/3),
-	 c4("Hollow Cut Cone",50,100,50,200,50,-M_PI/6,M_PI/3),
-	 c5("Hollow Cut Cone",25,50,75,150,50,0,3*M_PI/2),
- 	 c6("Solid Full Tube",0,150,0,150,50,0,2*M_PI),
-	 c7("Thin Tube",95,100,95,100,50,0,2*M_PI),
-	 c8a("Solid Full Cone2",0,100,0,150,50,0,2*M_PI),
-	 c8b("Hollow Full Cone2",50,100,100,150,50,0,2*M_PI),
-	 c8c("Hollow Full Cone2inv",100,150,50,100,50,0,2*M_PI),
+  G4Cons c1("Hollow Full Tube",50,100,50,100,50,0,twopi),
+	 c2("Hollow Full Cone",50,100,50,200,50,-1,twopi),
+	 c3("Hollow Cut Tube",50,100,50,100,50,-pi/6,pi/3),
+	 c4("Hollow Cut Cone",50,100,50,200,50,-pi/6,pi/3),
+	 c5("Hollow Cut Cone",25,50,75,150,50,0,3*halfpi),
+ 	 c6("Solid Full Tube",0,150,0,150,50,0,twopi),
+	 c7("Thin Tube",95,100,95,100,50,0,twopi),
+	 c8a("Solid Full Cone2",0,100,0,150,50,0,twopi),
+	 c8b("Hollow Full Cone2",50,100,100,150,50,0,twopi),
+	 c8c("Hollow Full Cone2inv",100,150,50,100,50,0,twopi),
 	 c9("Excotic Cone",50,60,
 	    0,           // 1.0e-7,   500*kRadTolerance,
-                           10,50,0,2*M_PI), 
+                           10,50,0,twopi), 
 	 cms("cms cone",0.0,70.0,0.0,157.8,2949.0,0.0,6.2831853071796);
 
   G4Cons cms2("RearAirCone",401.0,1450.0,
@@ -126,11 +126,11 @@ int main(void)
 	pNorm=&norm;
 	pgoodNorm=&goodNorm;
 
-	r90X.rotateX(M_PI/2);
-	r90Y.rotateY(M_PI/2);
-	r90Z.rotateZ(M_PI/2);
-	r45X.rotateX(M_PI/4);
-	r30Y.rotateY(M_PI/6);
+	r90X.rotateX(halfpi);
+	r90Y.rotateY(halfpi);
+	r90Z.rotateZ(halfpi);
+	r45X.rotateX(pi/4);
+	r30Y.rotateY(pi/6);
 	//	G4cout << "G4Cons:"<< c4.GetName()
 	//   << " ID=" << c4.GetIdentifier() << "\n";
 
@@ -267,7 +267,7 @@ int main(void)
 	    G4cout << "Error PhiS 1" << dist << G4endl;
 	dist=c3.DistanceToOut(ponphi1,vy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,2*60*sin(M_PI/6))||
+	if (OutRange(dist,2*60*sin(pi/6))||
 	    OutRange(*pNorm,vnphi2)||
 	    !*pgoodNorm)
 	    G4cout << "Error PhiS 2" << dist << G4endl;
@@ -280,7 +280,7 @@ int main(void)
 	    G4cout << "Error PhiE 1" << dist << G4endl;
 	dist=c3.DistanceToOut(ponphi2,vmy,calcNorm,pgoodNorm,pNorm);
 	*pNorm=pNorm->unit();
-	if (OutRange(dist,2*60*sin(M_PI/6))||
+	if (OutRange(dist,2*60*sin(pi/6))||
 	    OutRange(*pNorm,vnphi1)||
 	    !*pgoodNorm)
 	    G4cout << "Error PhiS 2" << dist << G4endl;
@@ -500,11 +500,11 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	  G4cout << "Error C " << dist << G4endl;
 
 	dist=c4.DistanceToIn(pply);
-	if (OutRange(dist,120*sin(M_PI/3)))
+	if (OutRange(dist,120*sin(pi/3)))
 	  G4cout << "Error D " << dist << G4endl;
 
 	dist=c4.DistanceToIn(pmiy);
-	if (OutRange(dist,120*sin(M_PI/3)))
+	if (OutRange(dist,120*sin(pi/3)))
 	  G4cout << "Error D " << dist << G4endl;
 
 	dist=c1.DistanceToIn(pplz);
@@ -630,7 +630,7 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	if (OutRange(dist,70))
 	  G4cout << "Error E " << dist << G4endl;
 	dist=c3.DistanceToIn(pydx,vmy);
-	if (OutRange(dist,150-60*tan(M_PI/6)))
+	if (OutRange(dist,150-60*tan(pi/6)))
 	  G4cout << "Error F " << dist << G4endl;
 
 	dist=c1.DistanceToIn(pplx,vmx);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons1.cc,v 1.3 2001-07-11 10:00:00 gunter Exp $
+// $Id: testG4Cons1.cc,v 1.4 2002-01-08 16:16:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -155,7 +155,7 @@ G4bool testG4Cons()
     assert(min<=-170&&max>=-70);
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
     assert(t1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
     assert(min<=-50&&max>=50);
@@ -175,9 +175,9 @@ G4bool testG4Cons()
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
     assert(t1.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);
@@ -248,7 +248,7 @@ G4bool testG4Cons()
     return true;
 }
 
-G4int main()
+int main()
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.4 2001-07-11 10:00:01 gunter Exp $
+// $Id: testG4Torus.cc,v 1.5 2002-01-08 16:16:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@
 
 G4bool testG4Torus()
 {
-   G4int num, i ;
+   G4int i ;
    G4double Rtor = 100 ;
    G4double Rmax = Rtor*0.9 ;
    G4double Rmin = Rtor*0.1 ;
@@ -103,22 +103,15 @@ G4bool testG4Torus()
 
 // Check torus roots
    
-   G4Torus t1("Solid Torus #1",0,Rmax,Rtor,0,2*M_PI);
-   G4Torus t2("Hole cutted Torus #2",Rmin,Rmax,Rtor,M_PI/4,M_PI/2);
-   G4Torus t3("Hole cutted Torus #3",4*Rmin,Rmax,Rtor,M_PI/2-M_PI/24,M_PI/12);
-   G4Torus t4("Solid Torus #4",0,Rtor-3*kCarTolerance,Rtor,0,2*M_PI);
-   G4Torus t5("Solid cutted Torus #5",0,Rtor-3*kCarTolerance,Rtor,M_PI/4,M_PI/2);
+   G4Torus t1("Solid Torus #1",0,Rmax,Rtor,0,twopi);
+   G4Torus t2("Hole cutted Torus #2",Rmin,Rmax,Rtor,pi/4,halfpi);
+   G4Torus t3("Hole cutted Torus #3",4*Rmin,Rmax,Rtor,halfpi-pi/24,pi/12);
+   G4Torus t4("Solid Torus #4",0,Rtor-3*kCarTolerance,Rtor,0,twopi);
+   G4Torus t5("Solid cutted Torus #5",0,Rtor-3*kCarTolerance,Rtor,pi/4,halfpi);
    
    G4Torus * aTub = new G4Torus("Ring1", 0*cm, 10*cm, 
                                          1*m, 0*deg, 360*deg ); 
    
-  
-   G4double Ri = t1.GetRmax() ;
-
- 
-
-
-
 //   num = t1.TorusRoots(Ri,pstart,vdirect) ;
 //   num = t1.TorusRoots(Ri,pother,vx) ;
     
@@ -323,7 +316,7 @@ G4bool testG4Torus()
     assert(min<=-210&&max>=-30);
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
     assert(t1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
     assert(min<=-50&&max>=50);
@@ -343,9 +336,9 @@ G4bool testG4Torus()
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
     assert(t4.CalculateExtent(kXAxis,allClip,tGen,min,max));
 //    G4cout<<"min = "<<min<<"    max = "<<max<<G4endl;
@@ -388,7 +381,7 @@ G4bool testG4Torus()
     return true;
 }
 
-G4int main()
+int main()
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");

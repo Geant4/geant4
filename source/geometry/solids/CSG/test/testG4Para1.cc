@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Para1.cc,v 1.3 2001-07-11 10:00:01 gunter Exp $
+// $Id: testG4Para1.cc,v 1.4 2002-01-08 16:16:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -119,9 +119,9 @@ G4bool testG4Para()
     assert(ApproxEqual(normal,G4ThreeVector(0,0,1)));
     normal=trap1.SurfaceNormal(ponmzsidey);
     assert(ApproxEqual(normal,G4ThreeVector(0,0,-1)));
-
-    double cosa = 4./sqrt(17.), sina = 1./sqrt(17.), tanga = 1.0/4.0 ;
-/*    
+/*
+    G4double cosa = 4./sqrt(17.), sina = 1./sqrt(17.), tanga = 1.0/4.0 ;
+    
     normal=trap2.SurfaceNormal(ponxside);
     assert(ApproxEqual(normal,G4ThreeVector(cosa,0,-sina)));
     normal=trap2.SurfaceNormal(ponmxside);
@@ -328,7 +328,7 @@ G4bool testG4Para()
 */
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
 
     assert(trap1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
@@ -364,9 +364,9 @@ G4bool testG4Para()
     allClip.AddLimit(kZAxis,-5,+5);
     
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     
     G4AffineTransform tGen(genRot,vx);
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.10 2001-07-11 10:00:02 gunter Exp $
+// $Id: testG4Tubs.cc,v 1.11 2002-01-08 16:16:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -93,11 +93,11 @@ G4bool testG4Tubs()
 
     G4Tubs t1("Solid Tube #1",0,50*mm,50*mm,0,2*pi);
 
-    G4Tubs t2("Hole Tube #2",45*mm,50*mm,50*mm,0,2*M_PI);
+    G4Tubs t2("Hole Tube #2",45*mm,50*mm,50*mm,0,2*pi);
 
-    G4Tubs t3("Solid Sector #3",0,50*mm,50*mm,pi/2,pi/2);
+    G4Tubs t3("Solid Sector #3",0,50*mm,50*mm,halfpi,halfpi);
 
-    G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,pi/2,pi/2);
+    G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,halfpi,halfpi);
 
   G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
 
@@ -389,7 +389,7 @@ G4bool testG4Tubs()
     assert(min<=-170&&max>=-70);
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
     assert(t1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
     assert(min<=-50&&max>=50);
@@ -409,9 +409,9 @@ G4bool testG4Tubs()
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
     assert(t1.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);
@@ -453,8 +453,8 @@ G4bool testG4Tubs()
 	    {
 		   assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
-		   G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
-	 //  assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
+		   // G4double testMax=(xTest<0) ? sqrt(50*50-xTest*xTest) : 50;
+	           // assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
 		}
 	}
 
@@ -471,7 +471,7 @@ G4bool testG4Tubs()
 	    {
 	      assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
-	      G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
+	      //  G4double testMax=(yTest<0) ? sqrt(50*50-yTest*yTest) : 50;
 	      //  assert (ApproxEqual(min,-testMax)&&ApproxEqual(max,testMax));
 		}
 	}
@@ -480,7 +480,7 @@ G4bool testG4Tubs()
     return true;
 }
 
-G4int main()
+int main()
 {
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Sphere.cc,v 1.4 2001-11-21 16:02:21 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.5 2002-01-08 16:16:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -89,7 +89,7 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-    G4double Dist,low,high;
+    G4double Dist;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
     G4ThreeVector Pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -103,8 +103,8 @@ int main(void)
 	          ponphi2(48/sqrt(2.),48/sqrt(2.),0),
 	          pInPhi(48*0.866,-24,0),
 	          pOverPhi(-48/sqrt(2.),48/sqrt(2.),0);
-    G4ThreeVector pontheta1(0,48*sin(M_PI/4),48*cos(M_PI/4)),
-	    pontheta2(0,48*sin(M_PI/4),-48*cos(M_PI/4));
+    G4ThreeVector pontheta1(0,48*sin(pi/4),48*cos(pi/4)),
+	    pontheta2(0,48*sin(pi/4),-48*cos(pi/4));
 
     G4ThreeVector ptestphi1(-100,-45/sqrt(2.),0),
 	    ptestphi2(-100,45/sqrt(2.),0);
@@ -124,16 +124,16 @@ int main(void)
     pNorm=&norm;
     pgoodNorm=&goodNorm;
 
-    G4Sphere s1("Solid G4Sphere",0,50,0,2*M_PI,0,M_PI);
-     G4Sphere s2("Spherical Shell",45,50,0,2*M_PI,0,M_PI);
-    G4Sphere s3("Band (theta segment)",45,50,0,2*M_PI,M_PI/4,M_PI/2);
-    G4Sphere s32("Band (theta segment2)",45,50,0,2*M_PI,0,M_PI/4);
-    G4Sphere s33("Band (theta segment1)",45,50,0,2*M_PI,M_PI*3/4,M_PI/4);
-    G4Sphere s34("Band (theta segment)",4,50,0,2*M_PI,M_PI/4,M_PI/2);
-    G4Sphere s4("Band (phi segment)",45,50,-M_PI/4,M_PI/2,0,2*M_PI);
+    G4Sphere s1("Solid G4Sphere",0,50,0,twopi,0,pi);
+     G4Sphere s2("Spherical Shell",45,50,0,twopi,0,pi);
+    G4Sphere s3("Band (theta segment)",45,50,0,twopi,pi/4,halfpi);
+    G4Sphere s32("Band (theta segment2)",45,50,0,twopi,0,pi/4);
+    G4Sphere s33("Band (theta segment1)",45,50,0,twopi,pi*3/4,pi/4);
+    G4Sphere s34("Band (theta segment)",4,50,0,twopi,pi/4,halfpi);
+    G4Sphere s4("Band (phi segment)",45,50,-pi/4,halfpi,0,twopi);
     //    G4cout<<"s4.fSPhi = "<<s4.GetSPhi()<<G4endl;
-    G4Sphere s5("Patch (phi/theta seg)",45,50,-M_PI/4,M_PI/2,M_PI/4,M_PI/2);
-    G4Sphere s6("John example",300,500,0,5.76,0,M_PI) ; 
+    G4Sphere s5("Patch (phi/theta seg)",45,50,-pi/4,halfpi,pi/4,halfpi);
+    G4Sphere s6("John example",300,500,0,5.76,0,pi) ; 
     G4Sphere s7("sphere7",1400.,1550.,0.022321428571428572,0.014642857142857141,
 	                  1.5631177553663251,0.014642857142857141    );
     G4Sphere s8("sphere",278.746*mm, 280.0*mm, 0.0*degree, 360.0*degree,
@@ -407,7 +407,7 @@ int main(void)
     assert(min<=-170+50/sqrt(2.)&&max>=-70-50/sqrt(2.));
     
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
     assert(s1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
     assert(min<=-50&&max>=50);
@@ -441,9 +441,9 @@ int main(void)
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
     assert(s1.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(min<=-5&&max>=5);

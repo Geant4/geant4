@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trd.cc,v 1.5 2001-07-11 10:00:02 gunter Exp $
+// $Id: testG4Trd.cc,v 1.6 2002-01-08 16:16:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -384,7 +384,7 @@ G4bool testG4Trd()
 
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
 
     assert(trd1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
@@ -420,9 +420,9 @@ G4bool testG4Trd()
     allClip.AddLimit(kZAxis,-5,+5);
     
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     
     G4AffineTransform tGen(genRot,vx);
 

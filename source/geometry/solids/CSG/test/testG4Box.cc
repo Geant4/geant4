@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Box.cc,v 1.4 2001-07-11 10:00:00 gunter Exp $
+// $Id: testG4Box.cc,v 1.5 2002-01-08 16:16:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -182,21 +182,21 @@ G4bool testG4Box()
 
     G4ThreeVector pJohnXZ(9,0,12);
     Dist = b2.DistanceToIn(pJohnXZ,vxmz) ;
-    //    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<endl ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXZ,vxmz) = "<<Dist<<G4endl ;
     assert(ApproxEqual(Dist,kInfinity));
 
     G4ThreeVector pJohnXY(12,9,0);
     Dist = b2.DistanceToIn(pJohnXY,vmxy) ;
-    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<endl ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmxy) = "<<Dist<<G4endl ;
     assert(ApproxEqual(Dist,kInfinity));
 
     Dist = b2.DistanceToIn(pJohnXY,vmx) ;
-    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<endl ;
+    //    G4cout<<"b2.DistanceToIn(pJohnXY,vmx) = "<<Dist<<G4endl ;
     assert(ApproxEqual(Dist,2));
 
     G4ThreeVector pMyXY(32,-11,0);
     Dist = b2.DistanceToIn(pMyXY,vmxy) ;
-    //   G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<endl ;
+    //   G4cout<<"b2.DistanceToIn(pMyXY,vmxy) = "<<Dist<<G4endl ;
     assert(ApproxEqual(Dist,kInfinity));
 
     Dist = b1.DistanceToIn(G4ThreeVector(-25,-35,0),vx) ;
@@ -246,7 +246,7 @@ G4bool testG4Box()
     assert(ApproxEqual(min,-160)&&ApproxEqual(max,-80));
 
     G4RotationMatrix r90Z;
-    r90Z.rotateZ(M_PI/2);
+    r90Z.rotateZ(halfpi);
     G4AffineTransform tRotZ(r90Z,pzero);
     assert(b1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
     assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
@@ -266,9 +266,9 @@ G4bool testG4Box()
     allClip.AddLimit(kYAxis,-5,+5);
     allClip.AddLimit(kZAxis,-5,+5);
     G4RotationMatrix genRot;
-    genRot.rotateX(M_PI/6);
-    genRot.rotateY(M_PI/6);
-    genRot.rotateZ(M_PI/6);
+    genRot.rotateX(pi/6);
+    genRot.rotateY(pi/6);
+    genRot.rotateZ(pi/6);
     G4AffineTransform tGen(genRot,vx);
     assert(b1.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
