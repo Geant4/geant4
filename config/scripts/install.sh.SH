@@ -16,7 +16,7 @@ esac
 case "$0" in
 */*) cd `expr X$0 : 'X\(.*\)/'` ;;
 esac
-echo "Extracting install.sh (with variable substitutions)"
+#echo "Extracting install.sh (with variable substitutions)"
 : This section of the file will have variable substitutions done on it.
 : Move anything that needs config subs from !NO!SUBS! section to !GROK!THIS!.
 : Protect any dollar signs and backticks that you do not want interpreted
@@ -31,6 +31,7 @@ g4system="$g4system"
 # g4dirs.U
 #
 g4install="$g4install"
+g4includes_flag="$g4includes_flag"
 g4include="$g4include"
 g4base="$g4base"
 g4workdir="$g4workdir"
@@ -109,10 +110,10 @@ G4BIN="$g4bin"
 G4DATA="$g4data"
 G4LEVELGAMMADATA="$g4levelgammadata"
 
-G4CLHEP_BASE_DIR="$g4clhep_base_dir"
-G4CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
-G4CLHEP_LIB_DIR="$g4clhep_lib_dir"
-G4CLHEP_LIB="$g4clhep_lib"
+CLHEP_BASE_DIR="$g4clhep_base_dir"
+CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
+CLHEP_LIB_DIR="$g4clhep_lib_dir"
+CLHEP_LIB="$g4clhep_lib"
 
 G4USE_OSPACE="$g4use_ospace"
 G4OSPACE_BASE_DIR="$g4ospace_base_dir"
@@ -139,10 +140,10 @@ export G4BIN
 export G4DATA
 export G4LEVELGAMMADATA
 
-export G4CLHEP_BASE_DIR
-export G4CLHEP_INCLUDE_DIR
-export G4CLHEP_LIB_DIR
-export G4CLHEP_LIB
+export CLHEP_BASE_DIR
+export CLHEP_INCLUDE_DIR
+export CLHEP_LIB_DIR
+export CLHEP_LIB
 
 export G4USE_OSPACE
 export G4OSPACE_BASE_DIR
@@ -169,10 +170,10 @@ echo "On this machine the G4BIN=$g4bin"
 echo "On this machine the G4DATA=$g4data"
 echo "On this machine the G4LEVELGAMMADATA=$g4levelgammadata"
 
-echo "On this machine the G4CLHEP_BASE_DIR=$g4clhep_base_dir"
-echo "On this machine the G4CLHEP_INCLUDE_DIR=$g4clhep_include_dir"
-echo "On this machine the G4CLHEP_LIB_DIR=$g4clhep_lib_dir"
-echo "On this machine the G4CLHEP_LIB=$g4clhep_lib"
+echo "On this machine the CLHEP_BASE_DIR=$g4clhep_base_dir"
+echo "On this machine the CLHEP_INCLUDE_DIR=$g4clhep_include_dir"
+echo "On this machine the CLHEP_LIB_DIR=$g4clhep_lib_dir"
+echo "On this machine the CLHEP_LIB=$g4clhep_lib"
 
 echo "On this machine the G4USE_OSPACE=$g4use_ospace"
 echo "On this machine the G4OSPACE_BASE_DIR=$g4ospace_base_dir"
@@ -200,7 +201,7 @@ fi
 else
 gmake
 fi
-if [ X$g4include = X1 ] ; then
+if [ X$g4includes_flag = Xy ] ; then
 gmake includes
 fi
 !NO!SUBS!

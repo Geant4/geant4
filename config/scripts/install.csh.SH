@@ -16,7 +16,7 @@ esac
 case "$0" in
 */*) cd `expr X$0 : 'X\(.*\)/'` ;;
 esac
-echo "Extracting install.csh (with variable substitutions)"
+#echo "Extracting install.csh (with variable substitutions)"
 : This section of the file will have variable substitutions done on it.
 : Move anything that needs config subs from !NO!SUBS! section to !GROK!THIS!.
 : Protect any dollar signs and backticks that you do not want interpreted
