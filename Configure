@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.45 2003-12-10 18:03:31 stesting Exp $
+# $Id: Configure,v 1.46 2003-12-11 09:38:33 stesting Exp $
 #
-# Generated on Wed Dec 10 19:02:56 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Thu Dec 11 10:37:07 CET 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2709,7 +2709,6 @@ if test "X$clhep_dirs" != "X" ; then
 
 g4message=`cat << EOM
 
-Could not find CLHEP installed on this system!
 Please, specify where CLHEP is installed. It was found in:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
@@ -2727,6 +2726,7 @@ else
 
 g4message=`cat << EOM
 
+Could not find CLHEP installed on this system!
 Please, specify where CLHEP is installed (set by default):
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
