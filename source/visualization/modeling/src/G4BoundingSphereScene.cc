@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BoundingSphereScene.cc,v 1.3 1999-12-15 14:54:31 gunter Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.4 2000-05-15 11:09:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,12 @@ G4BoundingSphereScene::G4BoundingSphereScene ():
 {}
 
 G4BoundingSphereScene::~G4BoundingSphereScene () {}
+
+void G4BoundingSphereScene::PreAddThis
+(const G4Transform3D& objectTransformation,
+ const G4VisAttributes&) {
+  fpObjectTransformation = &objectTransformation;
+}
 
 G4VisExtent G4BoundingSphereScene::GetBoundingSphereExtent () {
   return G4VisExtent (fCentre, fRadius);
@@ -73,3 +79,4 @@ void G4BoundingSphereScene::AccrueBoundingSphere
     }
   }
 }
+
