@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5RunAction.hh,v 1.3 2000-01-20 15:34:39 maire Exp $
+// $Id: Em5RunAction.hh,v 1.4 2000-12-07 13:32:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,11 +24,6 @@
 
 class Em5RunMessenger;
 class G4Run;
-
-#ifndef G4NOHIST
- class HepTupleManager;
- class HepHistogram;
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -115,13 +110,6 @@ class Em5RunAction : public G4UserRunAction
   private:
 
     G4String histName ;
-    
-#ifndef G4NOHIST    
-    HepTupleManager* hbookManager;
-    HepHistogram *histo1, *histo2, *histo3, *histo4, *histo5 ;
-    HepHistogram *histo6, *histo7, *histo8, *histo9, *histo10;
-    HepHistogram          *hi2bis;
-#endif
     
     G4double EnergySumAbs,EnergySquareSumAbs;
     G4double tlSumAbs,tlsquareSumAbs;

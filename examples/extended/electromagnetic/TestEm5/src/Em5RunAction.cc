@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em5RunAction.cc,v 1.4 2000-01-20 15:34:40 maire Exp $
+// $Id: Em5RunAction.cc,v 1.5 2000-12-07 13:32:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,11 +24,6 @@
 
 #include "Randomize.hh"
 
-#ifndef G4NOHIST
-#include "CLHEP/Hist/HBookFile.h"
-#include <assert.h>
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em5RunAction::Em5RunAction()
@@ -36,12 +31,7 @@ Em5RunAction::Em5RunAction()
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),nbinvertexz(0)
 {
   runMessenger = new Em5RunMessenger(this);
-  saveRndm = 1;
-  
-#ifndef G4NOHIST
-  histo1=0; histo2=0; histo3=0; histo4=0; histo5=0; histo6=0; histo7=0;
-  histo8=0; histo9=0; histo10=0;hi2bis=0;
-#endif      
+  saveRndm = 1;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -49,98 +39,12 @@ Em5RunAction::Em5RunAction()
 Em5RunAction::~Em5RunAction()
 {
   delete runMessenger;
-#ifndef G4NOHIST  
-  if(histo1)  delete histo1 ;
-  if(histo2) {delete histo2 ; delete hi2bis;}
-  if(histo3)  delete histo3 ;
-  if(histo4)  delete histo4 ;
-  if(histo5)  delete histo5 ;
-  if(histo6)  delete histo6 ;
-  if(histo7)  delete histo7 ;
-  if(histo8)  delete histo8 ;
-  if(histo9)  delete histo9 ;
-  if(histo10) delete histo10;
-  delete hbookManager;
-#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Em5RunAction::bookHisto()
-{
-#ifndef G4NOHIST
-  // init hbook
-  hbookManager = new HBookFile(histName, 68);
-  assert (hbookManager != 0);
-
-  // book histograms
-  if(nbinStep>0)
-  {
-    histo1 = hbookManager->histogram("number of steps/event"
-                                   ,nbinStep,Steplow,Stephigh) ;
-    assert (histo1 != 0);
-  }
-  if(nbinEn>0)
-  {
-    histo2 = hbookManager->histogram("energy deposit in absorber(in MeV)"
-                                     ,nbinEn,Enlow,Enhigh) ;
-    assert (histo2 != 0);
-    				     
-    hi2bis = hbookManager->histogram("energy deposit: normalized distribution"
-                                     ,nbinEn,Enlow,Enhigh) ;				     
-    assert (hi2bis != 0);
-  }
-  if(nbinTh>0)
-  {
-    histo3 = hbookManager->histogram("angle distribution at exit(deg)"
-                                     ,nbinTh,Thlow/deg,Thhigh/deg) ;
-    assert (histo3 != 0);
-  }
-  if(nbinR>0)
-  {
-    histo4 = hbookManager->histogram("lateral distribution at exit(mm)"
-                                     ,nbinR ,Rlow,Rhigh)  ;
-    assert (histo4 != 0);
-  }
-  if(nbinTt>0)
-  {
-    histo5 = hbookManager->histogram("kinetic energy of the primary at exit(MeV)"
-                                     ,nbinTt,Ttlow,Tthigh)  ;
-    assert (histo5 != 0);
-  }
-  if(nbinThback>0)
-  {
-    histo6 = hbookManager->histogram("angle distribution of backscattered primaries(deg)"
-                                     ,nbinThback,Thlowback/deg,Thhighback/deg) ;
-    assert (histo6 != 0);
-  }
-  if(nbinTb>0)
-  {
-    histo7 = hbookManager->histogram("kinetic energy of the backscattered primaries (MeV)"
-                                     ,nbinTb,Tblow,Tbhigh)  ;
-    assert (histo7 != 0);
-  }
-  if(nbinTsec>0)
-  {
-    histo8 = hbookManager->histogram("kinetic energy of the charged secondaries (MeV)"
-                                     ,nbinTsec,Tseclow,Tsechigh)  ;
-    assert (histo8 != 0);
-  }
-  if(nbinvertexz>0)
-  {
-    histo9 = hbookManager->histogram("z of secondary charged vertices(mm)"
-                                     ,nbinvertexz ,zlow,zhigh)  ;
-    assert (histo9 != 0);
-  }
-  if(nbinGamma>0)
-  {
-    histo10= hbookManager->histogram("kinetic energy of gammas escaping the absorber (MeV)"
-                                //     ,nbinGamma,ElowGamma,EhighGamma)  ;
-                                ,nbinGamma,log10(ElowGamma),log10(EhighGamma))  ;
-    assert (histo10 != 0);
-  }
-#endif  
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -433,9 +337,7 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
      for(G4int ien=0; ien<nbinEn; ien++)
      {
       E += dEn ;
-#ifndef G4NOHIST      
-      hi2bis->accumulate(E+0.5*dEn,distEn[ien]/TotNbofEvents);
-#endif      
+     
       if(distEn[ien]>fmax)
       {
         fmax=distEn[ien];
@@ -727,11 +629,6 @@ void Em5RunAction::EndOfRunAction(const G4Run* aRun)
   
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
-#ifndef G4NOHIST    
-   // Write histogram file
-   hbookManager->write();
-#endif
    
   // save Rndm status
   if (saveRndm == 1)
@@ -810,9 +707,6 @@ void Em5RunAction::FillNbOfSteps(G4double ns)
       ibin= bin ;
       distStep[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-   histo1->accumulate(ns);
-#endif   
   }
 }
 
@@ -837,9 +731,6 @@ void Em5RunAction::FillEn(G4double En)
       ibin= bin ;
       distEn[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo2->accumulate(En/MeV);
-#endif  
   }
 }
 
@@ -866,9 +757,6 @@ void Em5RunAction::FillTt(G4double En)
       ibin= bin ;
       distTt[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo5->accumulate(En/MeV);
-#endif  
   }
 }
 
@@ -895,9 +783,6 @@ void Em5RunAction::FillTb(G4double En)
       ibin= bin ;
       distTb[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo7->accumulate(En/MeV) ;
-#endif  
   }
 }
 
@@ -922,9 +807,6 @@ void Em5RunAction::FillTsec(G4double En)
       ibin= bin ;
       distTsec[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo8->accumulate(En/MeV) ;
-#endif  
   }
 }
 
@@ -949,9 +831,6 @@ void Em5RunAction::FillGammaSpectrum(G4double En)
       ibin= bin ;
       distGamma[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo10->accumulate(log10(En/MeV)) ;
-#endif  
   }
 }
 
@@ -990,10 +869,7 @@ void Em5RunAction::FillTh(G4double Th)
         wg=0. ; 
       }
       distTh[ibin] += wg  ;
-    }
-#ifndef G4NOHIST
-  histo3->accumulate(Th/deg, wg) ;
-#endif  
+    } 
   }
 }
 
@@ -1031,11 +907,7 @@ void Em5RunAction::FillThBack(G4double Th)
       }
       distThback[ibin] += wg  ;
     }
-#ifndef G4NOHIST
-  histo6->accumulate(Th/deg, wg) ;
-#endif  
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -1060,10 +932,7 @@ void Em5RunAction::FillR(G4double R )
       bin = (R -Rlow)/dR  ;
       ibin= bin ;
       distR[ibin] += 1. ;
-    }
-#ifndef G4NOHIST    
-  histo4->accumulate(R/mm) ;
-#endif  
+    } 
   }
 }
 
@@ -1088,9 +957,6 @@ void Em5RunAction::Fillvertexz(G4double z )
       ibin= bin ;
       distvertexz[ibin] += 1. ;
     }
-#ifndef G4NOHIST    
-  histo9->accumulate(z/mm) ;
-#endif  
   }
 }
 
