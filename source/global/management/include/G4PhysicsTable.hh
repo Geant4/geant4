@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.hh,v 1.8 2001-03-09 03:39:26 kurasige Exp $
+// $Id: G4PhysicsTable.hh,v 1.9 2001-03-09 12:08:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 //   2nd December 1995. G.Cosmo
 // - 1st March 1996, modified. K.Amako
 // - 24th February 2001, migration to STL vectors. H.Kurashige
-// - 9th  March 2001, add Store/RetrievePhysicsTable H.Kurashige
+// - 9th March 2001, added Store/RetrievePhysicsTable. H.Kurashige
 //-------------------------------------
 
 #ifndef G4PhysicsTable_h
@@ -44,10 +44,11 @@ class G4PhysicsVector;
 
 class G4PhysicsTable : public G4std::vector<G4PhysicsVector*> 
 {
+
  public: // with description
 
   G4PhysicsTable();
-    // Deafult constructor.
+    // Default constructor.
 
   G4PhysicsTable(size_t capacity);
     // Constructor with capacity. Reserves memory for the
@@ -77,23 +78,20 @@ class G4PhysicsTable : public G4std::vector<G4PhysicsVector*>
   G4bool isEmpty() const;
     // Flags if collection is empty or not.
 
- public : 
-  G4bool StorePhysicsTable(const G4String& filename,
-			   G4bool          ascii=false);
-  // Store PhysicsTable in a file. 
-  // (return false in case of failure at I/O ) 
+  G4bool StorePhysicsTable(const G4String& filename, G4bool ascii=false);
+    // Stores PhysicsTable in a file (returns false in case of failure).
   
-  G4bool RetrievePhysicsTable(const G4String& filename,
-			      G4bool       ascii=false);
-  // Retrieve Physics from a file. 
-  // (return true if the Physics Table can be build by using file)
+  G4bool RetrievePhysicsTable(const G4String& filename, G4bool ascii=false);
+    // Retrieves Physics from a file (returns false in case of failure).
 
   friend G4std::ostream& operator<<(G4std::ostream& out, G4PhysicsTable& table);
 
  protected:
+
   G4PhysicsVector* CreatePhysicsVector(G4int type);  
 
  private:
+
   G4PhysicsTable(const G4PhysicsTable&);
   G4PhysicsTable& operator=(const G4PhysicsTable&);
     // Private copy constructor and assignment operator.
@@ -106,10 +104,3 @@ typedef G4PhysicsTable::iterator G4PhysicsTableIterator;
 #include "G4PhysicsTable.icc"
 
 #endif
-
-
-
-
-
-
-

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.6 2001-03-09 03:39:26 kurasige Exp $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.7 2001-03-09 12:08:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -48,7 +48,8 @@
 
 class G4PhysicsOrderedFreeVector : public G4PhysicsVector 
 {
-public:// with description
+
+  public: // with description
 	
         ////////////////////////////////
         // Constructors and Destructor
@@ -81,7 +82,7 @@ public:// with description
 
 	void DumpValues();
 
-private:
+  private:
 
 	size_t FindBinLocation(G4double theEnergy) const;
 

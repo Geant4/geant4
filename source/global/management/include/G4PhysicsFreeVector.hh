@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.6 2001-03-09 03:39:25 kurasige Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.7 2001-03-09 12:08:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,23 +43,22 @@
 
 class G4PhysicsFreeVector : public G4PhysicsVector  
 {
-  public:// with description
+  public: // with description
 
-    // Constructors
     G4PhysicsFreeVector();
     G4PhysicsFreeVector(size_t theNbin);
     G4PhysicsFreeVector(const G4DataVector& binVector, 
                         const G4DataVector& dataVector);
+         // Constructors:
          // 'binVector' has the low edge value of each scale bin. 
          // 'dataVector' has the cross-section/energy-loss/etc at 
          // the energy/momenturm of the corresponding a bin of 
          // 'binVector'. 'binVector' and 'dataVector' need to have 
          // the same vector length.
   
-    // Destructor
     ~G4PhysicsFreeVector();
+         // Destructor
 
-    // Special PutValue function for PhysicsFreeVector
     void PutValue( size_t binNumber, G4double binValue, 
                                      G4double dataValue );   
          // To use this method to fill a PhysicsFreeVector, you have

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLnVector.hh,v 1.6 2001-03-09 03:39:26 kurasige Exp $
+// $Id: G4PhysicsLnVector.hh,v 1.7 2001-03-09 12:08:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,26 +36,27 @@
 class G4PhysicsLnVector : public G4PhysicsVector  
 {
   public:
-    // Constructors
+
     G4PhysicsLnVector();
     G4PhysicsLnVector(size_t theNbin);
+      // Constructors
 
   public: // with description
 
-    // Constructor
     G4PhysicsLnVector(G4double theEmin, G4double theEmax, size_t theNbin);
-         // Because of logarithmic scale, note that 'theEmin' has to be 
-         // greater than zero. No protection exists against this error.
+      // Because of logarithmic scale, note that 'theEmin' has to be 
+      // greater than zero. No protection exists against this error.
 
-    // Destructor
     ~G4PhysicsLnVector();
+      // Destructor.
 
-    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+      // To retrieve persistent data from file stream.
 
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - pure virtual function
+      // Find bin# in which theEnergy belongs - pure virtual function.
 
   private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.5 2001-03-09 03:39:25 kurasige Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.6 2001-03-09 12:08:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,23 +40,25 @@
 class G4PhysicsLinearVector : public G4PhysicsVector  
 {
   public:
-    // Constructors
+
     G4PhysicsLinearVector();
     G4PhysicsLinearVector(size_t theNbin);
+      // Constructors
 
   public: // with description
-    // Constructor
+
     G4PhysicsLinearVector(G4double theEmin, G4double theEmax, size_t theNbin);
+      // Constructor
 
-    // Destructor
     ~G4PhysicsLinearVector();
+      // Destructor
 
-    virtual G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
+    G4bool Retrieve(G4std::ifstream& fIn, G4bool ascii);
 
   protected:
 
     size_t FindBinLocation(G4double theEnergy) const;
-         // Find bin# in which theEnergy belongs - pure virtual function
+      // Find bin# in which theEnergy belongs - pure virtual function
 
   private:
 

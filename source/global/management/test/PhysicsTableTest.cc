@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PhysicsTableTest.cc,v 1.1 2001-03-09 03:39:33 kurasige Exp $
+// $Id: PhysicsTableTest.cc,v 1.2 2001-03-09 12:08:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ int main()
   G4PhysicsVector* pVector;
   G4double e_min = 0.0;
   G4double e_max = 1.0;
-  G4int    n_bin = PhysicsVectorSize;
+  size_t   n_bin = PhysicsVectorSize;
   for (size_t i=0; i<PhysicsTableSize; i++){
     pVector = new G4PhysicsLinearVector(e_min, e_max, n_bin);
     pVector->PutComment("PhysicsLinearVector");

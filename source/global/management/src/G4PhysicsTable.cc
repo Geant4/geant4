@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsTable.cc,v 1.3 2001-03-09 03:39:31 kurasige Exp $
+// $Id: G4PhysicsTable.cc,v 1.4 2001-03-09 12:08:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,11 +63,13 @@ G4bool G4PhysicsTable::StorePhysicsTable(const G4String& fileName,
   G4std::ofstream fOut;  
   
   // open output file //
-  if (!ascii){
+#ifdef G4USE_STD_NAMESPACE
+  if (!ascii)
     fOut.open(fileName, G4std::ios::out|G4std::ios::binary);
-  }else{
+  else
+#endif
     fOut.open(fileName, G4std::ios::out);
-  }
+
   // check if the file has been opened successfully 
   if (!fOut) {
 #ifdef G4VERBOSE  
@@ -108,11 +110,13 @@ G4bool G4PhysicsTable::RetrievePhysicsTable(const G4String& fileName,
 {
   G4std::ifstream fIn;  
   // open input file //
-  if (ascii) {
+#ifdef G4USE_STD_NAMESPACE
+  if (ascii)
     fIn.open(fileName,G4std::ios::in|G4std::ios::binary);
-  } else {
+  else
+#endif
     fIn.open(fileName,G4std::ios::in);
-  }
+
   // check if the file has been opened successfully 
   if (!fIn) {
 #ifdef G4VERBOSE  
@@ -179,7 +183,7 @@ G4std::ostream& operator<<(G4std::ostream& out,
   size_t i=0;
   for (itr=right.begin(); itr!=right.end(); ++itr) {
     out << G4std::setw(8) << i << "-th Vector   ";
-    out << ": Type    " << (*itr)->GetType() << G4endl;
+    out << ": Type    " << G4int((*itr)->GetType()) << G4endl;
     out << *(*itr);
     i +=1;
   }

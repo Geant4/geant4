@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.9 2001-03-09 03:39:31 kurasige Exp $
+// $Id: G4PhysicsVector.cc,v 1.10 2001-03-09 12:08:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,8 +20,8 @@
 //    01 Jul. 1996, K.Amako : Hidden bin from the user introduced
 //    12 Nov. 1998, K.Amako : A bug in GetVectorLength() fixed
 //    11 Nov. 2000, H.Kurashige : use STL vector for dataVector and binVector
-//    18 Jan. 2001, H.Kurashige : remove ptrNextTable
-//    9  Mar. 2001, H.Kurashige : add PhysicsVector type 
+//    18 Jan. 2001, H.Kurashige : removed ptrNextTable
+//    09 Mar. 2001, H.Kurashige : added G4PhysicsVector type 
 // --------------------------------------------------------------
 
 #include "G4PhysicsVector.hh"
@@ -73,7 +73,6 @@ G4int G4PhysicsVector::operator!=(const G4PhysicsVector &right) const
 {
   return (this != &right);
 }
-
 
 G4double G4PhysicsVector::GetLowEdgeEnergy(size_t binNumber) const
 {
@@ -143,7 +142,6 @@ G4bool G4PhysicsVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
 
   // retrieve in binary mode
   // binning
-  G4double temp;
   fIn.read((char*)(&edgeMin), sizeof edgeMin);
   fIn.read((char*)(&edgeMax), sizeof edgeMax);
   fIn.read((char*)(&numberOfBin), sizeof numberOfBin ); 
@@ -169,7 +167,6 @@ G4bool G4PhysicsVector::Retrieve(G4std::ifstream& fIn, G4bool ascii)
   return true;
 }
     
-
 G4std::ostream& operator<<(G4std::ostream& out, const G4PhysicsVector& pv)
 {
   // binning
@@ -185,9 +182,3 @@ G4std::ostream& operator<<(G4std::ostream& out, const G4PhysicsVector& pv)
 
   return out;
 }
-
-
-
-
-
-
