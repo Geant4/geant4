@@ -1,0 +1,15 @@
+/run/verbose 2
+/vis/scene/create
+/vis/open OGLIX
+/vis/sceneHandler/create OGLIX
+/vis/sceneHandler/attach
+/vis/viewer/create ! ! 600
+/vis/drawVolume
+/vis/scene/create
+/vis/scene/add/volume world
+/vis/sceneHandler/attach
+/vis/viewer/refresh
+/vis/viewer/update
+/tracking/storeTrajectory 1
+/run/beamOn 10000
+/vis/scene/notifyHandlers
