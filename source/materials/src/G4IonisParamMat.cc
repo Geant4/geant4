@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.cc,v 1.3 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4IonisParamMat.cc,v 1.4 2001-01-11 10:37:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,6 @@ void G4IonisParamMat::ComputeMeanParameters()
 
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
   fMeanExcitationEnergy = exp(fLogMeanExcEnergy);
-
   fShellCorrectionVector = new G4double[3];
 
   for (G4int j=0; j<=2; j++)
@@ -84,12 +83,12 @@ void G4IonisParamMat::ComputeDensityEffect()
   
   if ((State == kStateSolid)||(State == kStateLiquid)) {
 
-      const G4double E100keV  = 100.*keV; 
+      const G4double E100eV  = 100.*eV; 
       const G4double ClimiS[] = {3.681 , 5.215 };
       const G4double X0valS[] = {1.0   , 1.5   };
       const G4double X1valS[] = {2.0   , 3.0   };
                                 
-      if(fMeanExcitationEnergy < E100keV) icase = 0 ;
+      if(fMeanExcitationEnergy < E100eV) icase = 0 ;
          else                             icase = 1 ;
 
       if(fCdensity < ClimiS[icase]) fX0density = 0.2;
