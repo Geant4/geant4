@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.21 2004-11-15 14:11:59 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.22 2004-11-15 14:15:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -275,11 +275,9 @@ G4int G4LogicalVolume::TotalVolumeEntities() const
 //
 G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
 {
-  static G4double volMass = fMass;
-
   // Return the cached non-zero value, if not forced
   //
-  if ( (volMass) && (!forced) ) return volMass;
+  if ( (fMass) && (!forced) ) return fMass;
 
   // Global density and computed mass associated to the logical
   // volume without considering its daughters
@@ -302,7 +300,7 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
 		"No solid associated to the logical volume !");
   }
   G4double globalDensity = logMaterial->GetDensity();
-  volMass = fSolid->GetCubicVolume() * globalDensity;
+  fMass = fSolid->GetCubicVolume() * globalDensity;
 
   // For each daughter in the tree, subtract the mass occupied
   // and add the real daughter's one computed recursively
@@ -340,10 +338,9 @@ G4double G4LogicalVolume::GetMass(G4bool forced, G4Material* parMaterial)
       // Subtract the daughter's portion for the mass and add the real
       // daughter's mass computed recursively
       //
-      volMass = volMass-subMass+logDaughter->GetMass(true, daughterMaterial);
+      fMass = fMass - subMass + logDaughter->GetMass(true, daughterMaterial);
     }
   }
-  fMass = volMass;
 
   return fMass;
 }
