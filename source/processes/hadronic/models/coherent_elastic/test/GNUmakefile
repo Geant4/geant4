@@ -17,7 +17,7 @@ include $(G4INSTALL)/config/architecture.gmk
 # Override some variables for binmake.gmk.
 #
 INCFLAGS := \
-            -I$(G4BASE)/myexample/include \
+            -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
             -I$(G4BASE)/digits+hits/include \
             -I$(G4BASE)/events+tracks/include \
             -I$(G4BASE)/geometry/management/include \
@@ -27,7 +27,6 @@ INCFLAGS := \
 	    -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/global/HEPNumerics/include \
 	    -I$(G4BASE)/graphics_reps/include \
 	    -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/materials/include \
@@ -42,6 +41,7 @@ INCFLAGS := \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/management/include \
             -I$(G4BASE)/processes/hadronic/models/low_energy/include \
+            -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/generator/de_excitation/include \
             -I$(G4BASE)/processes/hadronic/models/generator/util/include \
@@ -52,15 +52,5 @@ INCFLAGS := \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include 
 
-#LDLIBS   := \
-#	    -lG4hadronic_starkov \
-#	    -lG4processes \
-#	    -lG4particles \
-#	    -lG4processes \
-#	    -lG4materials \
-#	    -lG4intercoms \
-#	    -lG4global \
-#            -l$(RWLIB)
-#
 include $(G4INSTALL)/config/binmake.gmk
 
