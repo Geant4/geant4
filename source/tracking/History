@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2004-12-07 09:17:47 gcosmo Exp $
+$Id: History,v 1.85 2005-03-22 14:40:51 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22 March 2005 John Allison (tracking-V07-00-00)
+- Simplified creation of G4AttValues using G4BestUnit::operator
+  G4String and G4UIcommand::ConvertToString.
 
 07 December 2004 Gabriele Cosmo (tracking-V06-02-09)
 - Implemented migration to <cmath>.
