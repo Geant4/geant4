@@ -21,16 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.hh,v 1.5 2001-10-22 10:58:47 maire Exp $
+// $Id: DetectorConstruction.hh,v 1.1 2003-09-22 14:06:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em3DetectorConstruction_h
-#define Em3DetectorConstruction_h 1
+#ifndef DetectorConstruction_h
+#define DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
@@ -42,28 +41,28 @@ class G4Material;
 class G4UniformMagField;
 class G4UserLimits;
 
-class Em3DetectorMessenger;
-class Em3CalorimeterSD;
+class DetectorMessenger;
 
      const G4int MaxAbsor = 10;
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em3DetectorConstruction : public G4VUserDetectorConstruction
+class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
   
-    Em3DetectorConstruction();
-   ~Em3DetectorConstruction();
+    DetectorConstruction();
+   ~DetectorConstruction();
 
   public:
   
      void SetNbOfAbsor     (G4int);      
      void SetAbsorMaterial (G4int,G4String);     
-     void SetAbsorThickness(G4int,G4double);     
-     
-     void SetCalorSizeYZ(G4double);          
-     void SetNbOfLayers (G4int);   
+     void SetAbsorThickness(G4int,G4double);
+          
+     void SetWorldMaterial (G4String);          
+     void SetCalorSizeYZ   (G4double);          
+     void SetNbOfLayers    (G4int);   
       
      void SetMagField   (G4double);
      void SetMaxStepSize(G4double);
@@ -107,27 +106,26 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4double           WorldSizeYZ;
      G4double           WorldSizeX;
             
-     G4Box*             solidWorld;       //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;       //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;       //pointer to the physical World
+     G4Box*             solidWorld;
+     G4LogicalVolume*   logicWorld;
+     G4VPhysicalVolume* physiWorld;
 
-     G4Box*             solidCalor;       //pointer to the solid Calor 
-     G4LogicalVolume*   logicCalor;       //pointer to the logical Calor
-     G4VPhysicalVolume* physiCalor;       //pointer to the physical Calor
+     G4Box*             solidCalor;
+     G4LogicalVolume*   logicCalor;
+     G4VPhysicalVolume* physiCalor;
      
-     G4Box*             solidLayer;       //pointer to the solid Layer 
-     G4LogicalVolume*   logicLayer;       //pointer to the logical Layer
-     G4VPhysicalVolume* physiLayer;       //pointer to the physical Layer
+     G4Box*             solidLayer;
+     G4LogicalVolume*   logicLayer;
+     G4VPhysicalVolume* physiLayer;
          
-     G4Box*             solidAbsor[MaxAbsor]; //pointer to solid Absorbers
-     G4LogicalVolume*   logicAbsor[MaxAbsor]; //pointer to logical Absorbers
-     G4VPhysicalVolume* physiAbsor[MaxAbsor]; //pointer to physical Absorbers
+     G4Box*             solidAbsor[MaxAbsor];
+     G4LogicalVolume*   logicAbsor[MaxAbsor];
+     G4VPhysicalVolume* physiAbsor[MaxAbsor];
      
-     G4UniformMagField* magField;         //pointer to the magnetic field
-     G4UserLimits*      userLimits;       //pointer to the userLimits class
+     G4UniformMagField* magField;
+     G4UserLimits*      userLimits;
      
-     Em3DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     Em3CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
+     DetectorMessenger* detectorMessenger;
       
   private:
     
@@ -135,19 +133,6 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      void ComputeCalorParameters();
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline void Em3DetectorConstruction::ComputeCalorParameters()
-{
-  // Compute derived parameters of the calorimeter
-     LayerThickness = 0.;
-     for (G4int iAbs=0; iAbs<NbOfAbsor; iAbs++)
-     LayerThickness += AbsorThickness[iAbs];
-     CalorThickness = NbOfLayers*LayerThickness;
-     
-     WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

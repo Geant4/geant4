@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsListMessenger.cc,v 1.6 2003-02-20 15:52:02 vnivanch Exp $
+// $Id: PhysicsListMessenger.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,15 +29,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3PhysicsListMessenger.hh"
+#include "PhysicsListMessenger.hh"
 
-#include "Em3PhysicsList.hh"
+#include "PhysicsList.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysicsListMessenger::Em3PhysicsListMessenger(Em3PhysicsList* pPhys)
+PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {   
   gammaCutCmd = new G4UIcmdWithADoubleAndUnit("/testem/phys/setGCut",this);  
@@ -76,7 +76,7 @@ Em3PhysicsListMessenger::Em3PhysicsListMessenger(Em3PhysicsList* pPhys)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysicsListMessenger::~Em3PhysicsListMessenger()
+PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete gammaCutCmd;
   delete electCutCmd;
@@ -87,7 +87,7 @@ Em3PhysicsListMessenger::~Em3PhysicsListMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsListMessenger::SetNewValue(G4UIcommand* command,
+void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 {       
   if( command == gammaCutCmd )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorMessenger.hh,v 1.5 2001-10-22 10:58:50 maire Exp $
+// $Id: DetectorMessenger.hh,v 1.1 2003-09-22 14:06:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,30 +29,41 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em3PrimaryGeneratorMessenger_h
-#define Em3PrimaryGeneratorMessenger_h 1
+#ifndef DetectorMessenger_h
+#define DetectorMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class Em3PrimaryGeneratorAction;
+class DetectorConstruction;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAnInteger;
+class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em3PrimaryGeneratorMessenger: public G4UImessenger
+class DetectorMessenger: public G4UImessenger
 {
   public:
-    Em3PrimaryGeneratorMessenger(Em3PrimaryGeneratorAction*);
-   ~Em3PrimaryGeneratorMessenger();
+    DetectorMessenger(DetectorConstruction* );
+   ~DetectorMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Em3PrimaryGeneratorAction* Em3Action; 
-    G4UIcmdWithoutParameter*   DefaultCmd;
-    G4UIcmdWithADouble*        RndmCmd;
+    DetectorConstruction* Detector;
+    
+    G4UIdirectory*             testemDir;
+
+    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
+    G4UIcmdWithAnInteger*      NbLayersCmd;
+    G4UIcmdWithAnInteger*      NbAbsorCmd;
+    G4UIcommand*               AbsorCmd;        
+    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* MaxStepCmd;
+    G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

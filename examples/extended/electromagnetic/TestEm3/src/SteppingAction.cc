@@ -21,56 +21,79 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorMessenger.cc,v 1.7 2002-12-12 11:19:38 maire Exp $
+// $Id: SteppingAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3PrimaryGeneratorMessenger.hh"
+#include "SteppingAction.hh"
 
-#include "Em3PrimaryGeneratorAction.hh"
-#include "G4UIcmdWithoutParameter.hh"
-#include "G4UIcmdWithADouble.hh"
+#include "DetectorConstruction.hh"
+#include "EventAction.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Em3PrimaryGeneratorMessenger::Em3PrimaryGeneratorMessenger(
-                                             Em3PrimaryGeneratorAction* Em3Gun)
-:Em3Action(Em3Gun)
-{ 
-  DefaultCmd = new G4UIcmdWithoutParameter("/testem/gun/setDefault",this);
-  DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
-  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
-  RndmCmd->SetGuidance("random lateral extension on the beam");
-  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
-  RndmCmd->SetParameterName("rBeam",false);
-  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
-  RndmCmd->AvailableForStates(G4State_Idle);  
-}
+#include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PrimaryGeneratorMessenger::~Em3PrimaryGeneratorMessenger()
+SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
+:detector(det),eventAct(evt) 
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+SteppingAction::~SteppingAction()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  delete DefaultCmd;
-  delete RndmCmd;
+  const G4Track* track = aStep->GetTrack();
+  G4VPhysicalVolume* volume = track->GetVolume();
+  if (volume == detector->GetphysiWorld()) return;
+  
+  G4int absorNo = volume->GetCopyNo();
+  
+  // collect energy and track length step by step
+  G4double edep = aStep->GetTotalEnergyDeposit();
+  
+  G4double stepl = 0.;
+  if (track->GetDefinition()->GetPDGCharge() != 0.)
+    stepl = aStep->GetStepLength();
+    
+  // sum up per event
+  eventAct->SumEnergy(absorNo,edep,stepl);  
+    
+////  example of Birk attenuation
+////  G4double destep   = aStep->GetTotalEnergyDeposit();
+////  G4double response = BirkAttenuation(aStep);
+////  G4cout << " Destep: " << destep/keV << " keV"
+////         << " response after Birk: "  << response/keV << " keV" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{ 
-  if( command == DefaultCmd )
-   { Em3Action->SetDefaultKinematic();}
-   
-  if( command == RndmCmd )
-   { Em3Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
+G4double SteppingAction::BirkAttenuation(const G4Step* aStep)
+{
+ //Example of Birk attenuation law in organic scintillators.
+ //adapted from Geant3 PHYS337. See MIN 80 (1970) 239-244
+ //
+ const G4String myMaterial = "Scintillator";
+ const G4double birk1 = 0.013*g/(MeV*cm2);
+ //
+ G4double destep      = aStep->GetTotalEnergyDeposit();
+ G4Material* material = aStep->GetTrack()->GetMaterial();
+ G4double charge      = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
+ //
+ G4double response = destep;
+ if ((material->GetName()==myMaterial)&&(charge!=0.))
+   {
+     G4double correction =
+     birk1*destep/((material->GetDensity())*(aStep->GetStepLength()));
+     response = destep/(1. + correction);
+   }
+ return response;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

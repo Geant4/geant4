@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.12 2003-06-16 16:47:45 gunter Exp $
+// $Id: RunActionMessenger.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,23 +29,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3RunActionMessenger.hh"
+#include "RunActionMessenger.hh"
 
-#include "Em3RunAction.hh"
+#include "RunAction.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
-#include "G4ios.hh"
-#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
-:Em3Run(run)
+RunActionMessenger::RunActionMessenger(RunAction* run)
+:Run(run)
 {    
   HistoCmd = new G4UIcommand("/testem/run/setHisto",this);
-  HistoCmd->SetGuidance("Set histo Edep/Ebeam in absorber k");
+  HistoCmd->SetGuidance("Set histo Edep in absorber k");
   HistoCmd->SetGuidance("  histo=absor number : from 0 to NbOfAbsor-1");
-  HistoCmd->SetGuidance("  number of bins; Emin/Ebeam; Emax/Ebeam");
+  HistoCmd->SetGuidance("  nb bins; Emin; Emax; unit (of Emin and Emax");
   //
   G4UIparameter* AbsNbPrm = new G4UIparameter("AbsorNb",'i',false);
   AbsNbPrm->SetGuidance("histo=absor number : from 0 to NbOfAbsor-1");
@@ -58,35 +56,36 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   HistoCmd->SetParameter(NbinPrm);  
   //    
   G4UIparameter* VminPrm = new G4UIparameter("Vmin",'d',false);
-  VminPrm->SetGuidance("Vmin=Emin/Ebeam");
-  VminPrm->SetParameterRange("Vmin>=0.&&Vmin<=1.1");
+  VminPrm->SetGuidance("Emin, expressed in unit");
   HistoCmd->SetParameter(VminPrm);
   //    
   G4UIparameter* VmaxPrm = new G4UIparameter("Vmax",'d',false);
-  VmaxPrm->SetGuidance("Vmax=Emax/Ebeam");
-  VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.1");
-  HistoCmd->SetParameter(VmaxPrm);  
+  VmaxPrm->SetGuidance("Emax, expressed in unit");
+  HistoCmd->SetParameter(VmaxPrm);
   //
-  HistoCmd->AvailableForStates(G4State_Idle);    
+  G4UIparameter* UnitPrm = new G4UIparameter("unit",'s',false);
+  HistoCmd->SetParameter(UnitPrm);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3RunActionMessenger::~Em3RunActionMessenger()
+RunActionMessenger::~RunActionMessenger()
 {
   delete HistoCmd;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {   
   if (command == HistoCmd)
-   { G4int idh,nbins; G4double vmin,vmax;
+   { G4int idh,nbins; G4double vmin,vmax; char unts[30];
      const char* t = newValue;
      std::istrstream is((char*)t);
-     is >> idh >> nbins >> vmin >> vmax;
-     Em3Run->SetHisto (idh,nbins,vmin,vmax);
+     is >> idh >> nbins >> vmin >> vmax >> unts;
+     G4String unit  = unts;
+     G4double vUnit = G4UIcommand::ValueOf(unit);
+     Run->SetHisto (idh,nbins,vmin*vUnit,vmax*vUnit,unit);
    }         
 }
 

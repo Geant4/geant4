@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysListParticles.cc,v 1.3 2003-03-10 18:16:49 maire Exp $
+// $Id: PhysListParticles.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3PhysListParticles.hh"
+#include "PhysListParticles.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -77,18 +77,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysListParticles::Em3PhysListParticles(const G4String& name)
+PhysListParticles::PhysListParticles(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysListParticles::~Em3PhysListParticles()
+PhysListParticles::~PhysListParticles()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysListParticles::ConstructParticle()
+void PhysListParticles::ConstructParticle()
 {
 
 // pseudo-particles

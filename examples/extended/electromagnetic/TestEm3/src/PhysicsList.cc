@@ -25,23 +25,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3PhysicsList.hh"
-#include "Em3PhysicsListMessenger.hh"
+#include "PhysicsList.hh"
+#include "PhysicsListMessenger.hh"
 
-#include "G4UnitsTable.hh"
-#include "Em3PhysListParticles.hh"
-#include "Em3PhysListGeneral.hh"
-#include "Em3PhysListEmStandard.hh"
-#include "Em3PhysListEmModel.hh"
+#include "PhysListParticles.hh"
+#include "PhysListGeneral.hh"
+#include "PhysListEmStandard.hh"
+#include "PhysListEmModel.hh"
+
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4LossTableManager.hh"
 
+#include "G4LossTableManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysicsList::Em3PhysicsList() : G4VModularPhysicsList()
+PhysicsList::PhysicsList() : G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   currentDefaultCut   = 1.0*mm;
@@ -49,39 +50,39 @@ Em3PhysicsList::Em3PhysicsList() : G4VModularPhysicsList()
   cutForElectron      = currentDefaultCut;
   cutForPositron      = currentDefaultCut;
 
-  pMessenger = new Em3PhysicsListMessenger(this);
+  pMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
    // Particles
-  particleList = new Em3PhysListParticles("particles");
+  particleList = new PhysListParticles("particles");
 
   // General Physics
-  generalPhysicsList = new Em3PhysListGeneral("general");
+  generalPhysicsList = new PhysListGeneral("general");
 
   // EM physics
   emName = G4String("standard");
-  emPhysicsList = new Em3PhysListEmStandard(emName);
+  emPhysicsList = new PhysListEmStandard(emName);
 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysicsList::~Em3PhysicsList()
+PhysicsList::~PhysicsList()
 {
   delete pMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::ConstructParticle()
+void PhysicsList::ConstructParticle()
 {
   particleList->ConstructParticle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::ConstructProcess()
+void PhysicsList::ConstructProcess()
 {
   AddTransportation();
   generalPhysicsList->ConstructProcess();
@@ -90,10 +91,10 @@ void Em3PhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::AddPhysicsList(const G4String& name)
+void PhysicsList::AddPhysicsList(const G4String& name)
 {
   if (verboseLevel>1) {
-    G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
   if (name == emName) return;
@@ -102,17 +103,17 @@ void Em3PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new Em3PhysListEmStandard(name);
+    emPhysicsList = new PhysListEmStandard(name);
 
   } else if (name == "model") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new Em3PhysListEmModel(name);
+    emPhysicsList = new PhysListEmModel(name);
 
   } else {
 
-    G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">"
+    G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
@@ -120,11 +121,11 @@ void Em3PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::SetCuts()
+void PhysicsList::SetCuts()
 {
      
   if (verboseLevel >0){
-    G4cout << "Em3PhysicsList::SetCuts:";
+    G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
@@ -139,7 +140,7 @@ void Em3PhysicsList::SetCuts()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::SetCutForGamma(G4double cut)
+void PhysicsList::SetCutForGamma(G4double cut)
 {
   cutForGamma = cut;
   SetParticleCuts(cutForGamma, G4Gamma::Gamma());
@@ -147,7 +148,7 @@ void Em3PhysicsList::SetCutForGamma(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::SetCutForElectron(G4double cut)
+void PhysicsList::SetCutForElectron(G4double cut)
 {
   cutForElectron = cut;
   SetParticleCuts(cutForElectron, G4Electron::Electron());
@@ -155,7 +156,7 @@ void Em3PhysicsList::SetCutForElectron(G4double cut)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PhysicsList::SetCutForPositron(G4double cut)
+void PhysicsList::SetCutForPositron(G4double cut)
 {
   cutForPositron = cut;
   SetParticleCuts(cutForPositron, G4Positron::Positron());

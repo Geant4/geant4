@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.25 2003-06-18 09:36:56 gcosmo Exp $
+// $Id: RunAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,33 +29,30 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3RunAction.hh"
-#include "Em3RunActionMessenger.hh"
+#include "RunAction.hh"
+#include "RunActionMessenger.hh"
 
 #include "G4Run.hh"
-#include "G4Material.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
-#include "G4ProductionCutsTable.hh"
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
  #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
+RunAction::RunAction(DetectorConstruction* det)
 :Detector(det)
 {
-  runMessenger = new Em3RunActionMessenger(this);   
+  runMessenger = new RunActionMessenger(this);   
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
    // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
  
@@ -70,7 +67,7 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
  // Creating a histogram factory, whose histograms will be handled by the tree
  hf   = af->createHistogramFactory(*tree);
  
- for (G4int k=0; k<MaxAbsor; k++) histo[k] = 0;
+ for (G4int k=0; k<MaxAbsor; k++) {histo[k] = 0; histoUnit[k] = 1.;}
    
  delete tf;
  delete af;
@@ -79,11 +76,11 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3RunAction::~Em3RunAction()
+RunAction::~RunAction()
 {
   delete runMessenger;
 
-#ifndef G4NOHIST
+#ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
 
@@ -94,7 +91,26 @@ Em3RunAction::~Em3RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::SetHisto(G4int k,
+               G4int nbins, G4double valmin, G4double valmax, G4String unit)
+{
+  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
+  G4String title = "Edep in absorber " + id[k] + " (" + unit + ")";
+  G4double valunit = G4UnitDefinition::GetValueOf(unit);
+  valmin /= valunit; valmax /= valunit;
+  
+  G4cout << "---->SetHisto: " << title << " ; " << nbins << " bins from "
+         << valmin << " " << unit << " to " << valmax << unit  << G4endl;
+	   
+#ifdef G4ANALYSIS_USE  
+  histoUnit[k] = valunit;
+  histo[k] = hf->createHistogram1D(id[k+1],title,nbins,valmin,valmax);
+#endif
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
@@ -113,9 +129,6 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 
-  //histograms
-  //
-  bookHisto();
 
   //example of print dEdx tables
   //
@@ -124,43 +137,18 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunAction::bookHisto()
-{
-#ifndef G4NOHIST
-  // book histograms
-  const G4String title  = "Edep/Ebeam in absorber ";
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
-  G4int nbins=100; G4double vmin=0., vmax=1.;
-  G4int NbOfAbsor = Detector->GetNbOfAbsor();
-  for (G4int k=0; k<NbOfAbsor; ++k)
-     {
-      if (histo[k]==0)
-        { histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
-          G4cout << "bookHisto: " << k << " " << histo[k] << G4endl;
-	}
-     }
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em3RunAction::SetHisto(G4int k,G4int nbins,G4double vmin,G4double vmax)
-{
-  G4cout << "SetHisto: #" << k << "  nbins" << nbins 
-         << " min= " << vmin << " max= " << vmax << G4endl;
-#ifndef G4NOHIST
-  // (re)book histograms
-  const G4String title  = "Edep/Ebeam in absorber ";
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
-  histo[k] = hf->createHistogram1D(id[k+1],title+id[k],nbins,vmin,vmax);
-  G4cout << "SetHisto: " << k << " " << histo[k] << G4endl;
-#endif
+void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
+{      
+  //accumulate statistic
+  //
+  sumEAbs[kAbs] += EAbs; sum2EAbs[kAbs] += EAbs*EAbs;
+  sumLAbs[kAbs] += LAbs; sum2LAbs[kAbs] += LAbs*LAbs;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void Em3RunAction::EndOfRunAction(const G4Run* aRun)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   if (G4VVisManager::GetConcreteInstance())
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
@@ -216,11 +204,12 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4EnergyLossTables.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunAction::PrintDedxTables()
+void RunAction::PrintDedxTables()
 {
   //Print dE/dx tables with binning identical to the Geant3 JMATE bank.
   //The printout is readable as Geant3 ffread data cards (by the program g4mat).

@@ -21,48 +21,57 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.hh,v 1.2 2003-08-08 08:26:02 vnivanch Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Each class inheriting from G4VIon
-// corresponds to a particle type; one and only one
-// instance for each class is guaranteed.
-//
+// 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef IonC12_h
-#define IonC12_h 1
+#include "PrimaryGeneratorMessenger.hh"
 
-#include "globals.hh"
-#include "G4ios.hh"
-#include "G4VIon.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "G4UIcmdWithADouble.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class IonC12 : public G4VIon
+PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
+                                             PrimaryGeneratorAction* Gun)
+:Action(Gun)
+{ 
+  DefaultCmd = new G4UIcmdWithoutParameter("/testem/gun/setDefault",this);
+  DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
+  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  
+  RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
+  RndmCmd->SetGuidance("random lateral extension on the beam");
+  RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
+  RndmCmd->SetParameterName("rBeam",false);
+  RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
+  RndmCmd->AvailableForStates(G4State_Idle);  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
 {
- private:
-   static IonC12 theIonC12;
+  delete DefaultCmd;
+  delete RndmCmd;
+}
 
- public:
-   IonC12(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,
-       G4int               iSpin,        G4int               iParity,
-       G4int               iConjugation, G4int               iIsospin,
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable
-   );
-   virtual ~IonC12();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-   static IonC12*    IonDefinition();
-   static IonC12*    Ion();
-};
+void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
+{ 
+  if( command == DefaultCmd )
+   { Action->SetDefaultKinematic();}
+   
+  if( command == RndmCmd )
+   { Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
+}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif

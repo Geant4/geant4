@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.hh,v 1.6 2002-12-12 11:19:37 maire Exp $
+// $Id: EventAction.hh,v 1.1 2003-09-22 14:06:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,44 +29,46 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef Em3DetectorMessenger_h
-#define Em3DetectorMessenger_h 1
+#ifndef EventAction_h
+#define EventAction_h 1
 
+#include "G4UserEventAction.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
+#include "DetectorConstruction.hh"
 
-class Em3DetectorConstruction;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class RunAction;
+class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Em3DetectorMessenger: public G4UImessenger
+class EventAction : public G4UserEventAction
 {
-  public:
-    Em3DetectorMessenger(Em3DetectorConstruction* );
-   ~Em3DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    Em3DetectorConstruction* Em3Detector;
-    
-    G4UIdirectory*             testemDir;
+  public:  
+    EventAction(DetectorConstruction*, RunAction*);
+   ~EventAction();
 
-    G4UIcmdWithADoubleAndUnit* SizeYZCmd;
-    G4UIcmdWithAnInteger*      NbLayersCmd;
-    G4UIcmdWithAnInteger*      NbAbsorCmd;
-    G4UIcommand*               AbsorCmd;        
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithADoubleAndUnit* MaxStepCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
+    
+    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
+    void SetPrintModulo(G4int    val)  {printModulo = val;};
+    
+    void SumEnergy(G4int k, G4double de, G4double dl)
+        {energyDeposit[k] += de; trackLengthCh[k] += dl;};
+        
+  private:  
+    DetectorConstruction* detector;
+    RunAction*            runAct;
+    
+    G4double              energyDeposit[MaxAbsor];
+    G4double              trackLengthCh[MaxAbsor];    
+    G4String              drawFlag;           // draw the event
+    G4int                 printModulo;         
+    EventActionMessenger* eventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

@@ -21,63 +21,87 @@
 // ********************************************************************
 //
 //
-// $Id: IonC12.cc,v 1.4 2003-08-08 08:26:02 vnivanch Exp $
+// $Id: EventAction.cc,v 1.1 2003-09-22 14:06:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include <fstream>
-#include <iomanip>
-
-#include "IonC12.hh"
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonC12::IonC12(
-       const G4String&     aName,        G4double            mass,
-       G4double            width,        G4double            charge,
-       G4int               iSpin,        G4int               iParity,
-       G4int               iConjugation, G4int               iIsospin,
-       G4int               iIsospin3,    G4int               gParity,
-       const G4String&     pType,        G4int               lepton,
-       G4int               baryon,       G4int               encoding,
-       G4bool              stable,       G4double            lifetime,
-       G4DecayTable        *decaytable )
- : G4VIon( aName,mass,width,charge,iSpin,iParity,
-           iConjugation,iIsospin,iIsospin3,gParity,pType,
-           lepton,baryon,encoding,stable,lifetime,decaytable )
+#include "EventAction.hh"
+
+#include "RunAction.hh"
+#include "EventActionMessenger.hh"
+
+#include "G4Event.hh"
+#include "G4TrajectoryContainer.hh"
+#include "G4Trajectory.hh"
+#include "G4VVisManager.hh"
+
+#ifdef G4ANALYSIS_USE
+ #include "AIDA/IHistogram1D.h"
+#endif
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+EventAction::EventAction(DetectorConstruction* det, RunAction* run)
+:detector(det),runAct(run),drawFlag("none"),printModulo(10000),eventMessenger(0)
 {
-  SetParticleSubType("static");
+  eventMessenger = new EventActionMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonC12::~IonC12() { }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// static member definition
-//
-//    Arguments for constructor are as follows
-//               name             mass          width         charge
-//             2*spin           parity  C-conjugation
-//          2*Isospin       2*Isospin3       G-parity
-//               type    lepton number  baryon number   PDG encoding
-//             stable         lifetime    decay table
-
-IonC12 IonC12::theIonC12(
-             "ionC12",    11.17793*GeV,       0.0*MeV,  +6.0*eplus,
-		    0,              +1,             0,
-		    0,               0,             0,
-     "static_nucleus",               0,           +12,           0,
-		 true,            -1.0,             0
-);
+EventAction::~EventAction()
+{
+  delete eventMessenger;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonC12* IonC12::IonDefinition() {return &theIonC12;}
+void EventAction::BeginOfEventAction(const G4Event* evt)
+{   
+ G4int evtNb = evt->GetEventID();
 
-IonC12* IonC12::Ion()           {return &theIonC12;}
+ //survey printing
+ if (evtNb%printModulo == 0)
+    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
+    
+ //initialize EnergyDeposit per event
+ for (G4int k=0; k<detector->GetNbOfAbsor(); k++)
+    energyDeposit[k] = trackLengthCh[k] = 0.;   
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event* evt)
+{
+  for (G4int k=0; k<detector->GetNbOfAbsor(); k++) {
+      runAct->fillPerEvent(k,energyDeposit[k],trackLengthCh[k]);
+#ifdef G4ANALYSIS_USE
+      if (runAct->GetHisto(k)) {
+	G4double unit = runAct->GetHistoUnit(k); 
+	runAct->GetHisto(k)->fill(energyDeposit[k]/unit);
+      }  
+#endif
+  }
+
+  if (G4VVisManager::GetConcreteInstance())
+    {
+     G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
+     G4int n_trajectories = 0;
+     if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+     for (G4int i=0; i<n_trajectories; i++) 
+        { G4Trajectory* trj = (G4Trajectory*)
+	                             ((*(evt->GetTrajectoryContainer()))[i]);
+          if (drawFlag == "all") trj->DrawTrajectory(50);
+          else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
+                                  trj->DrawTrajectory(50); 
+        }
+    }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+

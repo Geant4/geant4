@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.10 2003-06-16 16:47:43 gunter Exp $
+// $Id: DetectorMessenger.cc,v 1.1 2003-09-22 14:06:16 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,9 +29,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3DetectorMessenger.hh"
+#include "DetectorMessenger.hh"
 
-#include "Em3DetectorConstruction.hh"
+#include "DetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -41,8 +41,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
-:Em3Detector(Em3Det)
+DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
+:Detector(Det)
 { 
   testemDir = new G4UIdirectory("/testem/");
   testemDir->SetGuidance("UI commands specific to this example");
@@ -99,7 +99,7 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_Idle);
+  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
      
   UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -112,12 +112,12 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   MaxStepCmd->SetParameterName("Size",false);
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(G4State_Idle); 
+  MaxStepCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3DetectorMessenger::~Em3DetectorMessenger()
+DetectorMessenger::~DetectorMessenger()
 {
   delete SizeYZCmd;
   delete NbLayersCmd;
@@ -131,16 +131,16 @@ Em3DetectorMessenger::~Em3DetectorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {    
   if( command == SizeYZCmd )
-   { Em3Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetCalorSizeYZ(SizeYZCmd->GetNewDoubleValue(newValue));}
    
   if( command == NbLayersCmd )
-   { Em3Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
+   { Detector->SetNbOfLayers(NbLayersCmd->GetNewIntValue(newValue));}
    
   if( command == NbAbsorCmd )
-   { Em3Detector->SetNbOfAbsor(NbAbsorCmd->GetNewIntValue(newValue));}
+   { Detector->SetNbOfAbsor(NbAbsorCmd->GetNewIntValue(newValue));}
    
   if (command == AbsorCmd)
    {
@@ -151,18 +151,18 @@ void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
      is >> num >> mat >> tick >> unts;
      G4String material=mat, unt=unts;
      tick *= G4UIcommand::ValueOf(unt);
-     Em3Detector->SetAbsorMaterial (num,material);
-     Em3Detector->SetAbsorThickness(num,tick);
+     Detector->SetAbsorMaterial (num,material);
+     Detector->SetAbsorThickness(num,tick);
    }
    
   if( command == MagFieldCmd )
-   { Em3Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
+   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
            
   if( command == UpdateCmd )
-   { Em3Detector->UpdateGeometry();}
+   { Detector->UpdateGeometry();}
    
   if( command == MaxStepCmd )
-   { Em3Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
+   { Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

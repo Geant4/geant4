@@ -21,59 +21,83 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorHit.cc,v 1.5 2003-06-03 10:36:34 vnivanch Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Em3CalorHit.hh"
+#include "PrimaryGeneratorAction.hh"
 
-G4Allocator<Em3CalorHit> Em3CalorHitAllocator;
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorMessenger.hh"
+
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3CalorHit::Em3CalorHit():G4VHit()
+PrimaryGeneratorAction::PrimaryGeneratorAction(
+                                               DetectorConstruction* DC)
+:Detector(DC)
 {
-   for (G4int i=0; i<MaxAbsor; i++)
-      { EdepAbs[i] = TrackLengthAbs[i] = 0.;}
+  G4int n_particle = 1;
+  particleGun  = new G4ParticleGun(n_particle);
+  SetDefaultKinematic();
+  rndmBeam = 0.;
+  
+  //create a messenger for this class
+  gunMessenger = new PrimaryGeneratorMessenger(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3CalorHit::~Em3CalorHit()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Em3CalorHit::Em3CalorHit(const Em3CalorHit& right):G4VHit()
+PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  for (G4int i=0; i<MaxAbsor; i++)
-     { EdepAbs[i]        = right.EdepAbs[i];
-       TrackLengthAbs[i] = right.TrackLengthAbs[i];}
+  delete particleGun;
+  delete gunMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const Em3CalorHit& Em3CalorHit::operator=(const Em3CalorHit& right)
+void PrimaryGeneratorAction::SetDefaultKinematic()
 {
-  for (G4int i=0; i<MaxAbsor; i++)
-     { EdepAbs[i]        = right.EdepAbs[i];
-       TrackLengthAbs[i] = right.TrackLengthAbs[i];}
-  return *this;
+  G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
+  G4String particleName;
+  G4ParticleDefinition* particle
+                    = particleTable->FindParticle(particleName="e-");
+  particleGun->SetParticleDefinition(particle);
+  particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
+  particleGun->SetParticleEnergy(1.*GeV);
+  G4double position = -0.5*(Detector->GetWorldSizeX());
+  particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3CalorHit::Draw()
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em3CalorHit::Print()
-{ }
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  //this function is called at the begining of event
+  //
+  //randomize the beam, if requested.
+  if (rndmBeam > 0.) 
+    {
+      G4ThreeVector oldPosition = particleGun->GetParticlePosition();    
+      G4double rbeam = 0.5*(Detector->GetCalorSizeYZ())*rndmBeam;
+      G4double x0 = oldPosition.x();
+      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
+      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
+      particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+      particleGun->GeneratePrimaryVertex(anEvent);
+      particleGun->SetParticlePosition(oldPosition);      
+    }
+  else  particleGun->GeneratePrimaryVertex(anEvent);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
