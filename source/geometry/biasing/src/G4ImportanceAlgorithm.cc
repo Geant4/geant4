@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.8 2002-10-16 14:29:06 dressel Exp $
+// $Id: G4ImportanceAlgorithm.cc,v 1.9 2002-11-04 10:43:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,9 +42,9 @@ G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false)
 G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
 {
   if(fWorned) {
-    G4std::G4cout << G4endl;
+    G4cout << G4endl;
     Warning("~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen");
-    G4std::G4cout << G4endl;
+    G4cout << G4endl;
   }
 }
 
@@ -56,7 +56,7 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
   G4Nsplit_Weight nw = {0,0};
   if (ipost>0.){
     if (!(ipre>0.)){
-      G4std::G4Exception("Error: G4ImportanceAlgorithm::Calculate: ipre==0.");
+      G4Exception("Error: G4ImportanceAlgorithm::Calculate: ipre==0.");
     }
     G4double ipre_over_ipost = ipre/ipost;
     if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
@@ -115,11 +115,11 @@ G4ImportanceAlgorithm::Calculate(G4double ipre,
 
 void G4ImportanceAlgorithm::Error(const G4String &m) const
 {
-  G4std::G4cout << "ERROR - G4ImportanceAlgorithm::" << m << G4endl;
-  G4std::G4Exception("Program aborted.");
+  G4cout << "ERROR - G4ImportanceAlgorithm::" << m << G4endl;
+  G4Exception("Program aborted.");
 }
 
 void G4ImportanceAlgorithm::Warning(const G4String &m) const
 {
-  G4std::G4cout << "WARNING - G4ImportanceAlgorithm::" << m << G4endl;
+  G4cout << "WARNING - G4ImportanceAlgorithm::" << m << G4endl;
 }

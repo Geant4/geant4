@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.13 2002-10-16 14:29:07 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.14 2002-11-04 10:43:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -33,9 +33,9 @@
 
 #include "G4ParallelNavigator.hh"
 
-#include "G4GeometryCell.hh"
+#include "g4std/strstream"
 #include "G4VParallelStepper.hh"
-#include "G4StringConversion.hh"
+
 
 G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   : 
@@ -65,8 +65,8 @@ LocateOnBoundary(const G4ThreeVector &aPosition,
   fNlocated++;
  */
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "LOB: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "LOB: " << aPosition << ", " << aDirection << G4endl;
   }
   fNavigator.SetGeometricallyLimitedStep();
   Locate(aPosition, aDirection, true, false);
@@ -82,8 +82,8 @@ ComputeStepLengthInit(const G4ThreeVector &aPosition,
   // initialization
   fNlocated = 0;
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "CSInit: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "CSInit: " << aPosition << ", " << aDirection << G4endl;
   }
   Locate(aPosition, aDirection, false, false);
   return GetStepLength("ComputeStepLengthInit",
@@ -99,8 +99,8 @@ ComputeStepLengthCrossBoundary(const G4ThreeVector &aPosition,
 	  aPosition, aDirection);
   }
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "CSCB: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "CSCB: " << aPosition << ", " << aDirection << G4endl;
   }
   // if the track is on boundary the LocateOnBoundary was called
   // in the DOIT of the ParalleTransport
@@ -121,8 +121,8 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
 	  aPosition, aDirection);
   }
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "CSinV: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "CSinV: " << aPosition << ", " << aDirection << G4endl;
   }
   // if the track is not on the boundary and it's
   // not the first step, the location must be inside the 
@@ -142,8 +142,8 @@ void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition,
 				 G4bool useDirection)
 {
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "Locate: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "Locate: " << aPosition << ", " << aDirection << G4endl;
   }
   fNavigator.LocateGlobalPointAndSetup( aPosition, 
 					&aDirection, 
@@ -162,16 +162,16 @@ GetStepLength(const G4String &methodname,
 	      const G4ThreeVector &aPosition, 
 	      const G4ThreeVector &aDirection) {
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "GetSL: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "GetSL: " << aPosition << ", " << aDirection << G4endl;
   }
   G4double newSafety = 0.;    
   G4double stepLength = fNavigator.ComputeStep( aPosition, 
 						aDirection,
-						G4std::kInfinity, 
+						kInfinity, 
 						newSafety);
   // if stepLength = 0 try shifting
-  if (stepLength<=2*G4std::kCarTolerance) {
+  if (stepLength<=2*kCarTolerance) {
     stepLength  = 
       ComputeStepLengthShifted(methodname,
 			       aPosition, aDirection);
@@ -184,14 +184,14 @@ GetStepLengthUseLocate(const G4String &methodname,
 	      const G4ThreeVector &aPosition, 
 	      const G4ThreeVector &aDirection) {
   if (fVerbose>=2) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "GetSLuseLocate: " << aPosition << ", " << aDirection << G4endl;
+    G4cout.precision(12);
+    G4cout << "GetSLuseLocate: " << aPosition << ", " << aDirection << G4endl;
   }
   G4double newSafety = 0;    
   G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-						G4std::kInfinity, newSafety);
+						kInfinity, newSafety);
   // if stepLength = 0 try locate
-  if (stepLength<=2*G4std::kCarTolerance) {
+  if (stepLength<=2*kCarTolerance) {
     Locate(aPosition, aDirection, true, true);    
     stepLength  = GetStepLength(methodname + 
 				"form GetStepLengthUseLocate",
@@ -209,8 +209,8 @@ ComputeStepLengthShifted(const G4String &m,
 			 const G4ThreeVector &aDirection)
 {
   if (fVerbose>=1) {
-    G4std::G4cout.precision(12);
-    G4std::G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
+    G4cout.precision(12);
+    G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: invoked by: "
 	   << m << G4endl;
   }
   G4ThreeVector shift_pos(aPosition);
@@ -219,23 +219,27 @@ ComputeStepLengthShifted(const G4String &m,
 			   Shift(aDirection.z()));
   G4double stepLength = 0.;
   G4int trys = 0;
-  while (stepLength<=2*G4std::kCarTolerance && trys < fMaxShiftedTrys) {
+  while (stepLength<=2*kCarTolerance && trys < fMaxShiftedTrys) {
     if (fVerbose>=1) {
-      G4std::G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
+      G4cout << "G4ParallelNavigator::ComputeStepLengthShifted: trys = "
 	     << ++trys << G4endl;
-      G4std::G4cout << "shifted position: " << shift_pos 
+      G4cout << "shifted position: " << shift_pos 
 	     << ", direction: " << aDirection << G4endl;
     }
     Locate(shift_pos, aDirection, true, true); // to get into the correct volume
     G4double newSafety = 0;
     fNavigator.LocateGlobalPointWithinVolume(aPosition);    // to place at the correct position
     stepLength = fNavigator.ComputeStep( aPosition, aDirection,
-					 G4std::kInfinity, newSafety);
+					 kInfinity, newSafety);
   }
-  if (stepLength<=G4std::kCarTolerance) {
-    G4String m("still got stepLength<=G4std::kCarTolerance: ");
-    m += G4std::str(shift_pos);
-    m += "\n";
+  if (stepLength<=kCarTolerance) {
+    char st[200];
+    G4std::ostrstream os(st,200);
+    os << "still got stepLength<=kCarTolerance: "
+       << shift_pos
+       << "\n"
+       << '\0';
+    G4String m(st);
     Error(m, aPosition, aDirection);
   } 
   return stepLength;
@@ -256,20 +260,20 @@ void G4ParallelNavigator::Error(const G4String &m,
                                 const G4ThreeVector &pos,
                                 const G4ThreeVector &dir)
 {
-  G4std::G4cout << "ERROR - G4ParallelNavigator::" << m << G4endl;
-  G4std::G4cout << "aPosition: " << pos << G4endl;
-  G4std::G4cout << "dir: " << dir << G4endl;
-  G4std::G4Exception("Program aborted.");
+  G4cout << "ERROR - G4ParallelNavigator::" << m << G4endl;
+  G4cout << "aPosition: " << pos << G4endl;
+  G4cout << "dir: " << dir << G4endl;
+  G4Exception("Program aborted.");
 }
 
 G4double G4ParallelNavigator::Shift(G4double d)
 {
   G4double s=0;
   if (d>0){
-    s = 2 * G4std::kCarTolerance;
+    s = 2 * kCarTolerance;
   }
   else if (d<0) {
-    s = -2 * G4std::kCarTolerance;
+    s = -2 * kCarTolerance;
   }
   return s;
 }

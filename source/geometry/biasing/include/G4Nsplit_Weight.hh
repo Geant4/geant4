@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.hh,v 1.7 2002-10-16 14:29:06 dressel Exp $
+// $Id: G4Nsplit_Weight.hh,v 1.8 2002-11-04 10:43:05 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,6 +48,10 @@ struct G4Nsplit_Weight
   G4double fW;
     // the weight to be given to the tracks
 };
+
+G4std::ostream& operator<<(G4std::ostream &out, 
+			   const G4Nsplit_Weight &nw);
+
 
 #endif
 

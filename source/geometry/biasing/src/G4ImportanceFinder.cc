@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.8 2002-10-22 13:18:47 dressel Exp $
+// $Id: G4ImportanceFinder.cc,v 1.9 2002-11-04 10:43:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -59,6 +59,6 @@ G4ImportanceFinder::GetImportance(const G4GeometryCell &gCell) const
 
 void G4ImportanceFinder::Error(const G4String &m) const
 {
-   G4std::G4cout << "ERROR - G4ImportanceFinder::" << m << G4endl;
-   G4std::G4Exception("Program aborted.");
+   G4cout << "ERROR - G4ImportanceFinder::" << m << G4endl;
+   G4Exception("Program aborted.");
 }

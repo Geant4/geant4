@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.7 2002-10-22 13:18:48 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.8 2002-11-04 10:43:07 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -107,6 +107,6 @@ void G4ParallelStepper::UnSetCrossBoundary()
 
 void G4ParallelStepper::Error(const G4String &m)
 {
-  G4std::G4cout << "ERROR: in G4ParallelStepper::" << m << G4endl;
-  G4std::G4Exception("Program aborted.");
+  G4cout << "ERROR: in G4ParallelStepper::" << m << G4endl;
+  G4Exception("Program aborted.");
 }
