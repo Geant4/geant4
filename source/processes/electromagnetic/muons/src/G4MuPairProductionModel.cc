@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.16 2004-02-15 17:46:55 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.17 2004-03-02 17:45:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -77,7 +77,7 @@ G4double G4MuPairProductionModel::tdat[]={1.e3,1.e4,1.e5,1.e6,1.e7,1.e8,1.e9,1.e
 G4double G4MuPairProductionModel::xgi[]={ 0.0199,0.1017,0.2372,0.4083,0.5917,0.7628,0.8983,0.9801 };
 G4double G4MuPairProductionModel::wgi[]={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
 
-
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
@@ -91,6 +91,7 @@ G4MuPairProductionModel::G4MuPairProductionModel(const G4ParticleDefinition*,
                    *classic_electr_radius*classic_electr_radius/(3.*pi)),
   sqrte(sqrt(exp(1.))),
   particleMass(G4MuonPlus::MuonPlus()->GetPDGMass()),
+  currentZ(0),
   particle(G4MuonPlus::MuonPlus()),
   nzdat(5),
   ntdat(8),
