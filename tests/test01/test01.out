@@ -94,7 +94,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.05s Sys=0s
+  User=0s Real=0.08s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
@@ -124,14 +124,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # SimpleBox geometry made by Air
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -154,7 +154,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
@@ -213,14 +213,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.06s Sys=0s
+  User=0s Real=0.04s Sys=0.01s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.05s Real=0.05s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (0.,1.,0.)
@@ -293,14 +293,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.05s Sys=0s
+  User=0.01s Real=0.18s Sys=0.04s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.1s Real=0.1s Sys=0s
+  User=0.01s Real=0.03s Sys=0s
 Idle> #
 Idle> # Honeycomb geometry
 Idle> # Geantino 100 GeV to the direction (1.,1.,0.)
@@ -391,14 +391,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.06s Sys=0.02s
+  User=0.02s Real=0.14s Sys=0.01s
 Idle> /tracking/verbose 0
 Idle> /run/beamOn 10
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.15s Real=0.15s Sys=0s
+  User=0.03s Real=0.07s Sys=0s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

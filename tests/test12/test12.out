@@ -84,7 +84,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=58.12s Real=63.85s Sys=5.42s
+  User=19.86s Real=21.18s Sys=0.1s
 Idle> # neutron at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle neutron
@@ -93,11 +93,12 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
-/run/particle/addProcManager Tl203-0/2[81]
+/run/particle/addProcManager Tl207-0/2[81]
+/run/particle/addProcManager Tl202-0/2[81]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=49.32s Real=53.69s Sys=4.28s
+  User=22.01s Real=21.97s Sys=0.02s
 Idle> # pi+ at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle pi+
@@ -106,11 +107,12 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
-/run/particle/addProcManager Au203-0/2[79]
+/run/particle/addProcManager Hg203-0/2[80]
+/run/particle/addProcManager Pb205-0/2[82]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=62.02s Real=67.81s Sys=5.75s
+  User=17.09s Real=21.97s Sys=0.06s
 Idle> # pi- at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle pi-
@@ -119,11 +121,10 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
-/run/particle/addProcManager Tl204-0/2[81]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=58.05s Real=64.28s Sys=6.17s
+  User=18.25s Real=19.45s Sys=0.13s
 Idle> # kaon+ at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon+
@@ -132,12 +133,13 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Pb206-0/2[82]
+/run/particle/addProcManager Hg204-0/2[80]
 /run/particle/addProcManager Tl206-0/2[81]
-/run/particle/addProcManager Tl205-0/2[81]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=69.36s Real=75.26s Sys=5.83s
+  User=20.06s Real=24.81s Sys=0.02s
 Idle> # kaon- at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon-
@@ -146,12 +148,10 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
-/run/particle/addProcManager Pb206-0/2[82]
-/run/particle/addProcManager Pb205-0/2[82]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=55.83s Real=60.14s Sys=4.25s
+  User=16.09s Real=20.17s Sys=0.01s
 Idle> # kaon0S at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon0S
@@ -160,10 +160,11 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Hg205-0/2[80]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=62.36s Real=67.71s Sys=5.24s
+  User=18.12s Real=19.68s Sys=0.03s
 Idle> # kaon0L at 100 GeV in Pb
 Idle> #
 Idle> /gun/particle kaon0L
@@ -172,10 +173,11 @@ Idle> /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Hg202-0/2[80]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=71.82s Real=79.43s Sys=7.55s
+  User=19.2s Real=19.3s Sys=0.05s
 Idle> # proton at 100 GeV in Al
 Idle> #
 Idle> /gun/particle proton
@@ -184,54 +186,15 @@ Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Mg24-0/2[12]
 /run/particle/addProcManager Na25-0/2[11]
-/run/particle/addProcManager Al26-0/2[13]
-/run/particle/addProcManager Mg25-0/2[12]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=72.61s Real=79.67s Sys=6.99s
+  User=20.95s Real=24.32s Sys=0.03s
 Idle> # neutron at 100 GeV in Al
 Idle> #
 Idle> /gun/particle neutron
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Start Run processing.
-/run/particle/addProcManager Mg24-0/2[12]
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=50.01s Real=55.34s Sys=5.28s
-Idle> # pi+ at 100 GeV in Al
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Start Run processing.
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=0.21s Real=0.27s Sys=0.06s
-Idle> # pi- at 100 GeV in Al
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 100 GeV
-Idle> /mydet/SelectMaterial Al
-SimpleBox is now made of Al
-Idle> /run/beamOn 1
-Start Run processing.
-/run/particle/addProcManager Na23-0/2[11]
-Run terminated.
-Run Summary
-  Number of events processed : 1
-  User=63.53s Real=69.94s Sys=6.36s
-Idle> # kaon+ at 100 GeV in Al
-Idle> #
-Idle> /gun/particle kaon+
 Idle> /gun/energy 100 GeV
 Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
@@ -241,7 +204,45 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=53.41s Real=59.09s Sys=5.65s
+  User=27.47s Real=35.26s Sys=0.06s
+Idle> # pi+ at 100 GeV in Al
+Idle> #
+Idle> /gun/particle pi+
+Idle> /gun/energy 100 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 1
+Start Run processing.
+/run/particle/addProcManager Mg25-0/2[12]
+/run/particle/addProcManager Ne20-0/2[10]
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=23.16s Real=23.34s Sys=0.22s
+Idle> # pi- at 100 GeV in Al
+Idle> #
+Idle> /gun/particle pi-
+Idle> /gun/energy 100 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 1
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=21.59s Real=25.52s Sys=0.12s
+Idle> # kaon+ at 100 GeV in Al
+Idle> #
+Idle> /gun/particle kaon+
+Idle> /gun/energy 100 GeV
+Idle> /mydet/SelectMaterial Al
+SimpleBox is now made of Al
+Idle> /run/beamOn 1
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=22.25s Real=26.31s Sys=0.03s
 Idle> # kaon- at 100 GeV in Al
 Idle> #
 Idle> /gun/particle kaon-
@@ -254,7 +255,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=36.33s Real=39.89s Sys=3.53s
+  User=17.83s Real=21.49s Sys=0s
 Idle> # kaon0S at 100 GeV in Al
 Idle> #
 Idle> /gun/particle kaon0S
@@ -263,10 +264,11 @@ Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Al26-0/2[13]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=71.61s Real=79.06s Sys=7.41s
+  User=9.46s Real=9.47s Sys=0s
 Idle> # kaon0L at 100 GeV in Al
 Idle> #
 Idle> /gun/particle kaon0L
@@ -275,10 +277,11 @@ Idle> /mydet/SelectMaterial Al
 SimpleBox is now made of Al
 Idle> /run/beamOn 1
 Start Run processing.
+/run/particle/addProcManager Na23-0/2[11]
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=70.41s Real=78.07s Sys=7.55s
+  User=19.45s Real=24.28s Sys=0.02s
 Idle> # proton at 100 GeV in Air
 Idle> #
 Idle> /gun/particle proton
@@ -290,7 +293,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.04s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 Idle> # neutron at 100 GeV in Air
 Idle> #
 Idle> /gun/particle neutron
@@ -314,7 +317,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 Idle> # pi- at 100 GeV in Air
 Idle> #
 Idle> /gun/particle pi-
@@ -326,7 +329,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.03s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> # kaon+ at 100 GeV in Air
 Idle> #
 Idle> /gun/particle kaon+
@@ -338,7 +341,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.03s Real=0.05s Sys=0.02s
+  User=0.01s Real=0.01s Sys=0s
 Idle> # kaon- at 100 GeV in Air
 Idle> #
 Idle> /gun/particle kaon-
@@ -350,7 +353,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.06s Real=0.06s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> # kaon0S at 100 GeV in Air
 Idle> #
 Idle> /gun/particle kaon0S
@@ -386,7 +389,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.37s Real=0.39s Sys=0.02s
+  User=0s Real=0s Sys=0s
 Idle> # neutron at 500 MeV in Pb
 Idle> #
 Idle> /gun/particle neutron
@@ -398,7 +401,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.49s Real=0.52s Sys=0.03s
+  User=0.07s Real=0.07s Sys=0s
 Idle> # proton at 500 MeV in Al
 Idle> #
 Idle> /gun/particle proton
@@ -410,7 +413,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.13s Real=0.15s Sys=0.02s
+  User=0.1s Real=0.09s Sys=0s
 Idle> # neutron at 500 MeV in Al
 Idle> #
 Idle> /gun/particle neutron
@@ -422,7 +425,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.17s Real=0.18s Sys=0.01s
+  User=0.11s Real=0.11s Sys=0s
 Idle> # proton at 500 MeV in Air
 Idle> #
 Idle> /gun/particle proton
@@ -434,7 +437,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.05s Real=0.06s Sys=0.01s
+  User=0.04s Real=0.03s Sys=0s
 Idle> # neutron at 500 MeV in Air
 Idle> #
 Idle> /gun/particle neutron
@@ -446,7 +449,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> # neutron at 100 MeV in Pb
 Idle> #
 Idle> /gun/particle neutron
@@ -458,7 +461,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.56s Real=0.57s Sys=0.01s
+  User=0s Real=0.01s Sys=0s
 Idle> # triton at 100 MeV in Pb
 Idle> #
 Idle> /gun/particle triton
@@ -482,7 +485,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 Idle> # alpha at 100 MeV in Pb
 Idle> #
 Idle> /gun/particle alpha
@@ -494,7 +497,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 Idle> # neutron at 100 MeV in Al
 Idle> #
 Idle> /gun/particle neutron
@@ -506,7 +509,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 Idle> # triton at 100 MeV in Al
 Idle> #
 Idle> /gun/particle triton
@@ -518,7 +521,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 Idle> # deuteron at 100 MeV in Al
 Idle> #
 Idle> /gun/particle deuteron
@@ -530,7 +533,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 Idle> # alpha at 100 MeV in Al
 Idle> #
 Idle> /gun/particle alpha
@@ -566,7 +569,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.51s Real=0.6s Sys=0.09s
+  User=0.14s Real=0.15s Sys=0.01s
 Idle> # deuteron at 100 MeV in Air
 Idle> #
 Idle> /gun/particle deuteron
@@ -578,7 +581,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.32s Real=0.39s Sys=0.07s
+  User=0.11s Real=0.12s Sys=0s
 Idle> # alpha at 100 MeV in Air
 Idle> #
 Idle> /gun/particle alpha
@@ -590,7 +593,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.62s Real=0.71s Sys=0.09s
+  User=0.22s Real=0.22s Sys=0s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.

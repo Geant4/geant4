@@ -84,7 +84,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.4s Real=0.53s Sys=0.07s
+  User=0.16s Real=0.95s Sys=0s
 Idle> #
 Idle> # electron 500 MeV in Air
 Idle> #
@@ -97,7 +97,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.04s Real=0.04s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 Idle> #
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
