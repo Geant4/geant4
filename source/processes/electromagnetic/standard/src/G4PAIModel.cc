@@ -79,6 +79,20 @@ G4PAIModel::G4PAIModel(const G4ParticleDefinition* p, const G4String& nam)
 
 G4PAIModel::~G4PAIModel()
 {
+      // delete member used ???
+      if(fdEdxVector)      delete fdEdxVector ;
+      if ( fLambdaVector)  delete fLambdaVector;
+      if ( fdNdxCutVector) delete fdNdxCutVector;
+      if( fPAItransferBank )    
+      {
+        fPAItransferBank->clearAndDestroy();
+        delete fPAItransferBank ;
+      }
+      for(G4int i=0;i<fSandiaIntervalNumber;i++)
+      {
+        delete[] fSandiaPhotoAbsCof[i];
+      }
+      delete[] fSandiaPhotoAbsCof;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -174,20 +188,6 @@ void G4PAIModel::Initialise(const G4ParticleDefinition* p,
       fdNdxCutTable.push_back(fdNdxCutVector);
       fLambdaTable.push_back(fLambdaVector);
 
-      // delete member used ???
-      if(fdEdxVector)      delete fdEdxVector ;
-      if ( fLambdaVector)  delete fLambdaVector;
-      if ( fdNdxCutVector) delete fdNdxCutVector;
-      if( fPAItransferBank )    
-      {
-        fPAItransferBank->clearAndDestroy();
-        delete fPAItransferBank ;
-      }
-      for(G4int i=0;i<fSandiaIntervalNumber;i++)
-      {
-        delete[] fSandiaPhotoAbsCof[i];
-      }
-      delete[] fSandiaPhotoAbsCof;
 
       matIter++;
     }
@@ -246,15 +246,24 @@ G4PAIModel::BuildPAIonisationTable()
 {
   G4double LowEdgeEnergy , ionloss ;
   G4double massRatio, tau, Tmax, Tmin, Tkin, deltaLow, gamma, bg2 ;
-   
+  /*   
   if( fPAItransferBank )    
   {
      fPAItransferBank->clearAndDestroy() ;
      delete fPAItransferBank ;
   }
+  */
   fPAItransferBank = new G4PhysicsTable(fTotBin);
-        
-  if(fdEdxVector) delete fdEdxVector ;
+  /*
+  if( fPAIdEdxTable )    
+  {
+     fPAIdEdxTable->clearAndDestroy() ;
+     delete fPAIdEdxTable ;
+  }
+  */
+  fPAIdEdxTable = new G4PhysicsTable(fTotBin);
+       
+  //  if(fdEdxVector) delete fdEdxVector ;
   fdEdxVector = new G4PhysicsLogVector( fLowestKineticEnergy, 
 					 fHighestKineticEnergy,
 					 fTotBin               ) ;   

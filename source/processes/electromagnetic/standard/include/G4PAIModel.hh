@@ -127,7 +127,7 @@ public:
   G4double GetdNdxCut( G4int iPlace, G4double transferCut);
   G4double GetdEdxCut( G4int iPlace, G4double transferCut);
   G4double GetPostStepTransfer( G4double scaledTkin );
-  G4double G4PAIModel::GetEnergyTransfer( G4int iPlace, 
+  G4double GetEnergyTransfer( G4int iPlace, 
                                           G4double position, 
 					  G4int iTransfer );
 
