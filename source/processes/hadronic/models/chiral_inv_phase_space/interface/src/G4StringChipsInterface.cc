@@ -4,10 +4,14 @@
 #include "g4std/list"
 #include "G4KineticTrackVector.hh"
 #include "G4Nucleon.hh"
+#include "G4LorentzRotation.hh"
 
 G4StringChipsInterface::G4StringChipsInterface()
 {
-  theEnergyLossPerFermi = 1.*GeV;
+  G4cout << "Please enter the energy loss per fermi in GeV"<<G4endl;
+  G4cin >> theEnergyLossPerFermi;
+  theEnergyLossPerFermi *= GeV;
+  // theEnergyLossPerFermi = 1.*GeV;
 }
 
 G4VParticleChange* G4StringChipsInterface::
@@ -32,7 +36,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   
   G4double radius2 = theNucleus->GetNuclearRadius(5*perCent);
   radius2 *= radius2;
-  G4double pathlength = 2.*sqrt(radius2 - inpactPar2);
+  G4double pathlength = 0;
+  if(radius2 - inpactPar2>0) pathlength = 2.*sqrt(radius2 - inpactPar2);
   G4double theEnergyLostInFragmentation = theEnergyLossPerFermi*pathlength/fermi;
   
   // now select all particles in range
@@ -70,15 +75,22 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int nAS = 0;
   G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
+  G4int particleCount = 0;
+  G4LorentzVector theLow = theSorted.begin()->second->Get4Momentum();
+  G4LorentzVector theHigh;
+  G4cout << "CHIPS ENERGY LOST "<<theEnergyLostInFragmentation<<G4endl;
+  G4cout << "sorted rapidities event start"<<G4endl;
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
     firstEscaping = current;
     runningEnergy += current->second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
-     // projectile 4-momentum needed in constructor of quasmon
-     //proj4Mom += current->second->Get4Momentum().t(); // HPW
-    proj4Mom += current->second->Get4Momentum(); // M.K. 23.8.00
+    // projectile 4-momentum needed in constructor of quasmon
+    particleCount++;
+    theHigh = current->second->Get4Momentum(); 
+    proj4Mom += current->second->Get4Momentum(); 
+    G4cout << "sorted rapidities "<<current->second->Get4Momentum().rapidity()<<G4endl;
     
      // projectile quark contects needed for G4QContent construction
     nD += current->second->GetDefinition()->GetQuarkContent(1);
@@ -102,6 +114,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int resZ = 0;
   G4ThreeVector hitMomentum(0,0,0);
   G4double hitMass = 0;
+  G4int hitCount = 0;
   while(aNucleon = theNucleus->GetNextNucleon())
   {
     if(!aNucleon->AreYouHit())
@@ -113,6 +126,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       hitMomentum += aNucleon->GetMomentum().vect();
       hitMass += aNucleon->GetMomentum().m();
+      hitCount ++;
     }
   }
   G4int targetPDGCode = 90000000 + 1000*resZ + (resA-resZ);
@@ -144,15 +158,25 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
   G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
   G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
-  // Necessary change___________________________________________
+
+  
+  // Chips expects all in target rest frame, along z.
   G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
   G4QHadronVector projHV;
+  // target rest frame
+  proj4Mom.boost(-1.*targ4Mom.boostVector());
+  // now go along z
+  G4LorentzRotation toZ;
+  toZ.rotateZ(-1*proj4Mom.phi());
+  toZ.rotateY(-1*proj4Mom.theta());
+  proj4Mom = toZ*proj4Mom;
+  G4LorentzRotation toLab(toZ.inverse());
+  G4cout << "a Boosted projectile vector along z"<<proj4Mom<<" "<<proj4Mom.mag()<<G4endl;
+  
   G4QHadron* iH = new G4QHadron(theProjectiles, 1./MeV*proj4Mom);
   projHV.insert(iH);
   G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
   projHV.clearAndDestroy();
-  //G4Quasmon* pan= new G4Quasmon(theProjectiles, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
-  // End of necessary change ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
   // now call chips with this info in place
   G4QHadronVector * output = 0;
@@ -186,6 +210,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     {
       theSec = new G4ReactionProduct(aResult->GetDefinition());
       G4LorentzVector current4Mom = aResult->Get4Momentum();
+      current4Mom = toLab*current4Mom;
+      current4Mom.boost(targ4Mom.boostVector());
       theSec->SetTotalEnergy(current4Mom.t());
       theSec->SetMomentum(current4Mom.vect());
       theResult->insert(theSec);
@@ -196,6 +222,8 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       {
         theSec = new G4ReactionProduct(secondaries->at(aSecondary)->GetDefinition());
         G4LorentzVector current4Mom = secondaries->at(aSecondary)->Get4Momentum();
+        current4Mom = toLab*current4Mom;
+        current4Mom.boost(targ4Mom.boostVector());
         theSec->SetTotalEnergy(current4Mom.t());
         theSec->SetMomentum(current4Mom.vect());
         theResult->insert(theSec);
@@ -231,22 +259,46 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       if (aZ>1000) aZ=aZ%1000;  // patch for strange nuclei, to be repaired @@@@
       G4int anN = pdgCode-90000000-1000*aZ;
       if(anN>1000) anN=anN%1000; // patch for strange nuclei, to be repaired @@@@
-      theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
-      if(aZ == 0 && anN == 1) theDefinition = G4Neutron::Neutron();
-    }
+      if(pdgCode==91000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==92000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==93000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==94000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==95000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==96000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==97000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(pdgCode==98000000) theDefinition = G4Lambda::LambdaDefinition();
+      else if(aZ == 0 && anN == 1) theDefinition = G4Neutron::Neutron();
+      else theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
+    }    
     else
     {
       theDefinition = G4ParticleTable::GetParticleTable()->FindParticle(output->at(particle)->GetPDGCode());
     }
-    G4cout << "Particle code produced = "<< pdgCode <<endl;
+    G4cout << "Particle code produced = "<< pdgCode <<G4endl;
     theSec = new G4ReactionProduct(theDefinition);
-    theSec->SetTotalEnergy(output->at(particle)->Get4Momentum().t());
-    theSec->SetMomentum(output->at(particle)->Get4Momentum().vect());
+    G4LorentzVector current4Mom = output->at(particle)->Get4Momentum();
+    current4Mom = toLab*current4Mom;
+    current4Mom.boost(targ4Mom.boostVector());
+    theSec->SetTotalEnergy(current4Mom.t());
+    theSec->SetMomentum(current4Mom.vect());
     theResult->insert(theSec);
+    
+    G4cout <<"CHIPS particles "<<theDefinition->GetPDGCharge()<<" "
+           << theDefinition->GetPDGEncoding()<<" "
+	   << current4Mom <<G4endl; 
     delete output->at(particle);
   }
   delete output;
   G4cout << "Number of particles"<<theResult->length()<<G4endl;
   G4cout << G4endl;
+  G4cout << "QUASMON preparation info "
+         << 1./MeV*proj4Mom<<" "
+	 << 1./MeV*targ4Mom<<" "
+	 << nD<<" "<<nU<<" "<<nS<<" "<<nAD<<" "<<nAU<<" "<<nAS<<" "
+	 << hitCount<<" "
+	 << particleCount<<" "
+	 << theLow<<" "
+	 << theHigh<<" "
+	 << G4endl;
   return theResult;
 } 
