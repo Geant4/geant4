@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-06-08 08:31:50 johna Exp $
+$Id: History,v 1.6 2000-06-09 10:09:21 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+envs-V01-01-01  09 June 2000 John Allison
+- Only OPACS and History tagged.
+
+09 June 2000 Guy Barrand
+- Some correction to be able to compile 
+  with 01-01-ref-04
 
 envs-V01-01-00  7th June 2000  Guy Barrand
 
