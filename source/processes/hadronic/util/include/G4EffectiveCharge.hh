@@ -171,7 +171,7 @@ inline G4double G4EffectiveCharge::GetCharge(const G4Material* material, G4doubl
     G4double qeff   = ionCharge * s *
       ( q + 0.5*(1.0-q) * log(1.0 + lambda*lambda) / (vF*vF) ) ;
     if( 1.0 > qeff ) qeff = 1.0 ; 
-    return qeff*qeff ;    
+    return qeff ;    
   }
 }
 
