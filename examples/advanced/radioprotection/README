@@ -97,6 +97,13 @@ The user can not switch between these two configurations interactively.
 /configuration/AddRoof Off  -> destroy the pyramid log
 /roof/thickness 1. m        -> set the height (x) of the pyramid log
 
+
+- The user can select the format of the output file if the analysis
+is active
+
+/analysis/formatFile hbook
+/analysis/formatFile xml
+
 2. PHYSICS LIST
 
 The user can select the physics processes to activate interactively as 

@@ -35,18 +35,18 @@
 ################
 # Generation of primary particles
 /gun/generator Basic
-/tracking/verbose 1
+#/tracking/verbose 1
 /gun/particleType proton
-#/run/data gcrZ=26.txt
 /gun/energy 400. MeV
 # Geometrical configuration
 /configuration/choose vehicle
 /configuration/AddShielding On
 #/configuration/AddSPE On
 /shielding/thickness 10. cm
+#/analysis/formatFile hbook
+#/analysis/formatFile xml
 # Number of events
 /run/beamOn 5
-
 
 
 

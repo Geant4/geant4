@@ -26,7 +26,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: RemSimAnalysisManager.hh,v 1.6 2004-11-22 17:11:59 guatelli Exp $
+// $Id: RemSimAnalysisManager.hh,v 1.7 2004-11-23 11:43:21 guatelli Exp $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -39,6 +39,7 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 # include <AIDA/AIDA.h>
+#include "RemSimAnalysisMessenger.hh"
 
 namespace AIDA 
 {
@@ -51,6 +52,7 @@ namespace AIDA
   class ITreeFactory;
 };
 
+class RemSimAnalysisMessenger;
 class RemSimAnalysisManager { 
 
 public:
@@ -84,6 +86,8 @@ public:
 
   void energyDepShape(G4double, G4double, G4double);
 
+  void SetFormat(G4String);
+
   void finish();
 
 private:
@@ -108,6 +112,9 @@ private:
   AIDA::IHistogram1D* initialEout;
   AIDA::IHistogram2D* shape;
   AIDA::IHistogram2D* energyShape;
+  
+  RemSimAnalysisMessenger* messenger;
+  G4String fileFormat; 
 };
 #endif
 #endif

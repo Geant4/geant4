@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.7 2004-05-27 08:36:50 guatelli Exp $
+// $Id: remsim.cc,v 1.8 2004-11-23 11:43:21 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RunManager.hh"
@@ -75,13 +75,12 @@ int main(int argc,char** argv)
   G4VisManager* visManager = new RemSimVisManager;
   visManager -> Initialize();
 #endif
- 
-  // Analysis
+
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  analysis -> book();
-#endif   
-
+  analysis -> SetFormat("hbook");
+#endif
+ 
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UI = G4UImanager::GetUIpointer();
    
@@ -107,11 +106,11 @@ int main(int argc,char** argv)
       G4String fileName = argv[1];
       UI -> ApplyCommand(command+fileName);
     }
- 
+
 #ifdef G4ANALYSIS_USE
   analysis -> finish();
-#endif   
-
+#endif  
+ 
 #ifdef G4VIS_USE
   delete visManager;
 #endif

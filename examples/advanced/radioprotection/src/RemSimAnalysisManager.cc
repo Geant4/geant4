@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimAnalysisManager.cc,v 1.6 2004-11-22 17:11:59 guatelli Exp $
+// $Id: RemSimAnalysisManager.cc,v 1.7 2004-11-23 11:43:21 guatelli Exp $
 //
 // Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <fstream>
 #include "RemSimAnalysisManager.hh"
-
+#include "RemSimAnalysisMessenger.hh"
 #include "G4ios.hh"
 #include <AIDA/AIDA.h>
 #include "G4RunManager.hh"
@@ -47,14 +47,18 @@ RemSimAnalysisManager::RemSimAnalysisManager()
      histogramFactory(0), dataPoint(0), energyDeposit(0),
      primary(0), secondaryDeposit(0), primaryInitialE(0), 
      primaryInitialEout(0), initialE(0), 
-     initialEout(0), shape(0),energyShape(0)
+     initialEout(0), shape(0), energyShape(0)
 { 
+  
   aFact = AIDA_createAnalysisFactory();
-  treeFact = aFact -> createTreeFactory();
+  messenger = new  RemSimAnalysisMessenger(this); 
+  fileFormat = "hbook";
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
 { 
+  delete messenger;
+
   delete energyShape;
   energyShape = 0;
 
@@ -108,15 +112,23 @@ RemSimAnalysisManager* RemSimAnalysisManager::getInstance()
 }
 
 void RemSimAnalysisManager::book() 
-{
-  // Define the hbook file
-  theTree = treeFact -> create("remsim.hbk","hbook",false, true);
+{ 
+ treeFact = aFact -> createTreeFactory();
   
-  // Create histogram factory
+  if (fileFormat == "hbook")
+    { 
+     theTree = treeFact -> create("remsim.hbk", "hbook", false, true);
+     G4cout << "The format of the output file is hbook" << G4endl;
+    }
+
+  else if (fileFormat == "xml")
+    {
+     theTree = treeFact -> create("remsim.xml","xml",false, true,
+                                  "uncompress");
+     G4cout<< "The format of the output file is xml" << G4endl;
+    }
+
   histogramFactory = aFact -> createHistogramFactory(*theTree);
-
-  // Histograms
-
   energyDeposit = histogramFactory -> createHistogram1D("10",
                                                         "Energy Deposit",
                                                         30,// number of bins
@@ -206,6 +218,13 @@ void RemSimAnalysisManager::energyDepShape(G4double x, G4double y, G4double ener
   energyShape -> fill(x,y, energyDep); 
 }
 
+void RemSimAnalysisManager:: SetFormat(G4String format)
+{ 
+  fileFormat = format;
+ 
+  if (fileFormat != "hbook" && fileFormat != "xml")
+  G4cout << fileFormat << "is not available" << G4endl; 
+}
 
 void RemSimAnalysisManager::finish() 
 {  

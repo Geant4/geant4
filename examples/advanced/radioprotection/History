@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.5 2004-11-22 17:11:59 guatelli Exp $
+$Id: History,v 1.6 2004-11-23 11:43:20 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,7 @@ $Id: History,v 1.5 2004-11-22 17:11:59 guatelli Exp $
 
                       Category History file
                       ---------------------
+11.2004 - Option to define the format of the output file hbook or xml
 
 11.2004 - Add histograms 
  

@@ -29,7 +29,7 @@
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
-// $Id: RemSimRunAction.cc,v 1.9 2004-06-18 09:18:09 gunter Exp $
+// $Id: RemSimRunAction.cc,v 1.10 2004-11-23 11:43:21 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -63,9 +63,17 @@ RemSimRunAction::~RemSimRunAction()
   delete data;  
  }
 
-void RemSimRunAction::BeginOfRunAction(const G4Run*)
-{ 
- 
+void RemSimRunAction::BeginOfRunAction(const G4Run* aRun)
+{
+  G4cout << "### Run " << aRun -> GetRunID() << " start." << G4endl;
+#ifdef G4ANALYSIS_USE
+  G4int runNb = aRun -> GetRunID();
+  if (runNb == 0) 
+    {
+     RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+     analysis -> book();
+    }
+#endif
 }
 
 void RemSimRunAction::EndOfRunAction(const G4Run* aRun)
