@@ -52,8 +52,6 @@ Large N Problems
   HP: optim: T09: As debug.
              T13: Crash with 400 GeV proton in Al.
 
-  Linux: debug: T02.hadron: crash with kaon0S at 100 GeV in Al.
-
   SUN: debug: NONISO: T09: G4VParticleChange::SetNumberOfSecondaries() Warning
                            theListOfSecondaries is not empty -
                            but it runs to completion.
