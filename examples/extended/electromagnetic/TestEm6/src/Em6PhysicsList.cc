@@ -239,7 +239,7 @@ void Em6PhysicsList::ConstructEM()
        //hIon->SetStoppingPowerTableName("ICRU_R49He") ;
        //hIon->SetStoppingPowerTableName("ICRU_R49PowersHe") ;
 
-      if( particleName == "anti_proton" ) hIon->SetAntiProtonStoppingOn(); 
+      hIon->SetAntiProtonStoppingOn(); 
 
       pmanager->AddProcess(hIon,-1,2,2);
       
@@ -278,7 +278,6 @@ void Em6PhysicsList::ConstructEM()
       Em6StepCut* theIonStepCut = new Em6StepCut();
       theIonStepCut->SetMaxStep(MaxChargedStep);          		       
       pmanager->AddProcess( theIonStepCut,       -1,-1,3);
-
     }
   }
 }
@@ -337,7 +336,7 @@ void Em6PhysicsList::SetCuts()
 
   SetCutValueForOthers(defaultCutValue);
 
-  G4cout << "Dump the table!" << G4endl;
+  //  G4cout << "Dump the table!" << G4endl;
               
   if (verboseLevel>0) DumpCutValuesTable();
 

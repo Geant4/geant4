@@ -26,7 +26,6 @@
 # Gun with Protons 10 MeV
 #
 /gun/particle proton
-#/gun/particle IonC12
 /gun/energy 10.0 MeV
 #
 /run/beamOn 1000
@@ -44,9 +43,9 @@
 #/plots/sethistName ionc12.plot 
 /run/initialize
 /gun/particle IonC12
-/gun/energy 100.0 MeV
+/gun/energy 50.0 MeV
 /run/beamOn 1000
-
+#
 
 
 
