@@ -1,0 +1,130 @@
+Simulation of the TIARA experiment using importance sampling
+============================================================
+
+This description assumes the example will be used on a CERN RH 7.3
+system. It has been tested with the compiler gcc-3.2. Several 
+
+
+
+Building the example
+====================
+
+Quick building:
+---------------
+If the following conditions:
+- system = CERN RH 7.3 
+- compiler = gcc3.2 
+- access to afs exists 
+- shell = tcsh
+- Geant4 is compiled using G4LIB_BUILD_SHARED 1
+are fullfilled the example may be build as follows:
+
+1) setup the environment by typing: source simEnviron.csh 
+2) type gmake
+
+
+In more detail
+--------------
+
+Geant4 should be compiled into granular shared libraries.
+Therefore before compiling Geant4 set G4LIB_BUILD_SHARED to 1.
+
+External packages used in this example are Anaphe, SWIG and Python.
+The Anaphe package comes with SWIG and Python versions used to build
+Anaphe itself. These Swig and Python versions should also be used with 
+this example.
+
+The file simEnviron.csh provides an example for ho to set the 
+environment which works under the above listed conditions. 
+
+Cleaning up
+-----------
+To remove the directories related to this example under 
+$G4WORKDIR/tmp/$G4SYSTEM/ use "gmake tiaraClean".
+To remove the files created by swig ( *_wrap.cc, the coresponding 
+.py files) use "gmake swigClean.
+
+
+Runniong the example:
+=====================
+
+Change to the sub directory "run" and execute "runSim.py".
+"runSim.py" runs an example configuration which nay be
+changed by the user. The results of the simulation are stored in 
+the directory "simData". 
+The script "runSim.py" periodicaly prints scoring information to the 
+screeen. 
+It also prints out the relative path of a ".shelve" file.
+This file can be used to access results of the simulation.
+
+Results may be viewed e.g. using lizard and the script:
+1) Start python2.2 or lizard
+2) type: import dataAcess
+3) type: p = dataAcess.ExpMcPlot (shelveFileName,"00")
+         where shelveFileName is the name (enclosed in quotes) of the
+         shelve file created during the execution of anaSim.py. 
+         The name is printed on the screen during execution of runSim.py.
+4) type: p.display ()
+
+Since the simulation time used by "runSim.py" is only 5 minutes the
+calculated results have large errors. If you want to see a better result
+do the following changes in "naSim.py".
+Extend the total run time to 30 minutes by setting:
+"totalTime = 30 * myUtils.min", 
+set the print out periode to 10 minutes by setting:
+"timeForOneRun = 10 * myUtils.min".
+
+
+
+
+
+
+
+
+
+Content of the directory:
+=========================
+
+simEnviron.csh - file to be sourced for setting upthe 
+                 environment specific for this example
+
+buildit.csh - file to be executed to build the example
+
+
+data / - directory containing expeimental data
+
+      expDataOrig - experimental data taken from 
+                    http://idsun1.kek.jp/nakao/research/tiara/tiara.htm
+
+      expDataConverted  - some of the experimental data and the source
+                    spectra converted into Anaphes DataPointSet
+                    and stored in Anaphes xml format 
+
+
+source / - directory containing the source code
+
+        tiara - C++ source code 
+
+        tiaraPhysicsLists - C++ source code of physics lists
+
+        tiaraPhysicsPackaging - C++ source cod with common 
+                                classes for the physics l;ists
+
+        CLHEPWrapper - wrapper classes for usage in python
+                     \include\CLHEP.i - specification file for swig
+                     \src\CLHEP_wrap.cc - wrapper created with swig
+
+	G4KernelWrapper - wrapper classes for usage in python
+
+        TiaraWrapper - wrapper classes for usage in python
+
+        py_modules - python modules for running and aanalysing
+
+	swig.gmk - makefile rules for using swig  
+
+run / - directory for running the example
+       runSim.py - executable example script
+
+
+
+

@@ -1,0 +1,52 @@
+stat64
+=======
+
+stat64 is defined in  /usr/lib/libc.a
+so:
+/usr/local/gcc-alt-2.95.2/lib/gcc-lib/i686-pc-linux-gnu/2.95.2/ld -shared Modules/*.o Python/*.o Parser/*.o Objects/*.o /usr/lib/libc.a -o libpython2.2.so
+
+ld -shared -o libpython2.2.so --whole-archive libpython2.2.a 
+
+
+
+some message from swig
+-----------------------
+Libraries have been installed in:
+   /usr/local/lib
+
+If you ever happen to want to link against installed libraries
+in a given directory, LIBDIR, you must either use libtool, and
+specify the full pathname of the library, or use the `-LLIBDIR'
+flag during linking and do at least one of the following:
+   - add LIBDIR to the `LD_LIBRARY_PATH' environment variable
+     during execution
+   - add LIBDIR to the `LD_RUN_PATH' environment variable
+     during linking
+   - use the `-Wl,--rpath -Wl,LIBDIR' linker flag
+   - have your system administrator add LIBDIR to `/etc/ld.so.conf'
+
+See any operating system documentation about shared libraries for
+more information, such as the ld(1) and ld.so(8) manual pages.
+
+
+
+/afs/cern.ch/sw/lhcxx/specific/rh72_gcc2952/PublicDomainPackages/2.0.0/bin/swig-1.3.15 -python -c++ -shadow -no_default TiaraDimensions.i
+
+/afs/cern.ch/sw/lhcxx/specific/rh72_gcc2952/PublicDomainPackages/bin/python2.2 
+
+
+[pcitapi03] /afs/cern.ch/user/d/dressel/Tiara/sim > echo $PYTHONPATH 
+/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.1/lib:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/sw/lhcxx/specific/redhat72//gcc-2.95.2/5.0.1/lib:/home/dressel/G4/geant4-04-01-ref-00/lib/Linux-g++:/home/dressel/G4/geant4-04-01-ref-00/tmp/Linux-g++/tiara
+
+
+
+[pcitapi03] /afs/cern.ch/user/d/dressel/Tiara/sim > echo $PYTHON_DIR 
+/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0
+
+[pcitapi03] /afs/cern.ch/user/d/dressel/Tiara/sim > echo $PYTHON_DIR 
+/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0
+
+[pcitapi03] /afs/cern.ch/user/d/dressel/Tiara/sim > echo $LD_LIBRARY_PATH 
+/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.1/lib:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/PublicDomainPackages/2.0.0/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/usr/local/gcc-alt-2.95.2/lib::/usr/local/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/project/oracle/@sys/prod/lib:/afs/cern.ch/sw/lhcxx/specific/redhat72//gcc-2.95.2/5.0.1/lib:/home/dressel/G4/geant4-04-01-ref-00/lib/Linux-g++:/home/dressel/G4/geant4-04-01-ref-00/tmp/Linux-g++/tiara
+
+/afs/cern.ch/sw/lhcxx/specific/rh73_gcc32/PublicDomainPackages/2.0.0/bin/swig-1.3.15 -python -c++ -shadow -no_default <dot i file>

@@ -1,0 +1,52 @@
+Experimental neutron spectra measured by BC501A at TIARA1995/2  [43c50-40a]
+ Proton Energy : 43 MeV
+ Shielding Material : 50.0cm thick Concrete    
+ Iron collimator (10.9cm diam.) : 40cm thick
+ Distance from Li target to the shield surface(0cm thickness) = 443 cm
+ Number of monoenergetic peak neutrons of p-7Li neutron source
+    (case-b) =3.45E+09 [sr/micro-Coulomb]
+              1.76E+04 [cm^2/micro-Coulomb] at 443 cm
+ Measured position :  40cm from beam line
+ Reference :Nucl. Sci. Eng. 124(1996)p228     , JAERI-Data/Code97-020(1997)
+
+Graph
+ Neutron Energy [eV]
+ Neutron Flux [n/cm^2/micro-Coulomb/lethargy]
+ Absolute Error [n/cm^2/micro-Coulomb/lethargy]
+  4.350E+07  1.148E+01  2.295E+00
+  4.250E+07  2.235E+01  4.648E+00
+  4.150E+07  3.336E+01  4.966E+00
+  4.050E+07  4.007E+01  2.185E+00
+  3.950E+07  4.012E+01  2.536E+00
+  3.850E+07  3.390E+01  4.569E+00
+  3.750E+07  2.466E+01  3.745E+00
+  3.650E+07  1.692E+01  1.653E+00
+  3.550E+07  1.283E+01  5.953E-01
+  3.450E+07  1.140E+01  7.710E-01
+  3.350E+07  1.095E+01  7.247E-01
+  3.250E+07  1.064E+01  6.112E-01
+  3.150E+07  1.027E+01  5.526E-01
+  3.050E+07  9.846E+00  5.641E-01
+  2.950E+07  9.362E+00  6.351E-01
+  2.850E+07  8.812E+00  7.602E-01
+  2.750E+07  8.207E+00  9.271E-01
+  2.650E+07  7.606E+00  1.101E+00
+  2.550E+07  7.097E+00  1.227E+00
+  2.449E+07  6.766E+00  1.249E+00
+  2.349E+07  6.657E+00  1.131E+00
+  2.249E+07  6.765E+00  8.699E-01
+  2.149E+07  7.027E+00  5.021E-01
+  2.049E+07  7.326E+00  1.347E-01
+  1.949E+07  7.502E+00  2.975E-01
+  1.849E+07  7.403E+00  4.675E-01
+  1.749E+07  6.978E+00  4.435E-01
+  1.649E+07  6.344E+00  2.858E-01
+  1.549E+07  5.747E+00  1.404E-01
+  1.449E+07  5.398E+00  1.006E-01
+  1.349E+07  5.338E+00  1.737E-01
+  1.249E+07  5.433E+00  3.142E-01
+  1.149E+07  5.513E+00  4.122E-01
+  1.049E+07  5.508E+00  4.231E-01
+  9.487E+06  5.412E+00  3.316E-01
+  8.485E+06  5.059E+00  5.120E-02
+  7.483E+06  4.087E+00  5.762E-01
