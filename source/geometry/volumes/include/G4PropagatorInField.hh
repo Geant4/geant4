@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.20 2001-12-08 00:07:23 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.21 2002-02-26 17:31:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -137,6 +137,9 @@ class G4PropagatorInField
      // Minimum for Relative accuracy of any Step 
    inline G4double  GetMinimumEpsilonStep() const;
    inline void      SetMinimumEpsilonStep(G4double newEpsMin);
+
+   inline G4double  GetMaximumEpsilonStep() const;
+   inline void      SetMaximumEpsilonStep(G4double newEpsMax);
 
    inline void      SetLargestAcceptableStep(G4double newBigDist);
    inline G4double  GetLargestAcceptableStep();
