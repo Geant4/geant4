@@ -1,4 +1,4 @@
-$Id: History,v 1.150 2002-07-22 14:20:55 pia Exp $
+$Id: History,v 1.151 2002-07-30 14:50:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+30.07-2002   CG,VI, tag emlowen-V04-01-01
+             CG fix to G4VCrossSectionHandler.cc, to fix compilation problems
+                on DEC-cxx non-ISO.
+             VI fix to G4AugerData.cc, to clean warnings on gcc-3.1 and optimise
+                load of data in memory.
 
 15.06-2002   MGP, tag emlowen-V04-01-00
              VI Bug fix in G4eEnergySpectrum 
