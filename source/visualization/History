@@ -1,4 +1,4 @@
-$Id: History,v 1.185 2002-04-22 14:28:13 johna Exp $
+$Id: History,v 1.186 2002-04-22 14:47:55 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,6 +25,7 @@ History file for visualization category
 ---------------------------------------
 
 22nd April 2002  John Allison
+- Prevent copying of autoRefresh status with /vis/viewer/set/all command.
 - Corrected out of date advice about /vis/set/culling, etc.
 - Workaround for pseudo-parallel/orthogonal projection in Ray Tracer.
 

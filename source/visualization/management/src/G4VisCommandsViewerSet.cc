@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.17 2001-11-12 18:22:12 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.18 2002-04-22 14:47:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -46,7 +46,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandAll = new G4UIcmdWithAString ("/vis/viewer/set/all",this);
   fpCommandAll->SetGuidance
     ("/vis/viewer/set/all <from-viewer-name>"
-     "\nCopies view parameters from from-viewer to current viewer.");
+     "\nCopies view parameters (except the autoRefresh status) from"
+     "\n  from-viewer to current viewer.");
   fpCommandAll->SetParameterName ("from-viewer-name",omitable = false);
   viewerNameCommands.push_back (fpCommandAll);
 
@@ -363,7 +364,11 @@ void G4VisCommandsViewerSet::SetNewValue
       }
       return;
     }
+    // Copy view parameters except for autoRefresh...
+    G4bool currentAutoRefresh =
+      currentViewer->GetViewParameters().IsAutoRefresh();
     vp = fromViewer->GetViewParameters();
+    vp.SetAutoRefresh(currentAutoRefresh);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "View parameters of viewer \"" << currentViewer->GetName()
 	     << "\"\n  set to those of viewer \"" << fromViewer->GetName()

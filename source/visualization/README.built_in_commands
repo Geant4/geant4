@@ -281,7 +281,8 @@ NI /vis/viewer/clone
   Magnifies by this factor relative to standard view.
 
 /vis/viewer/set/all <from-viewer-name>
-  Copies view parameters from from-viewer to current viewer.
+  Copies view parameters (except the autoRefresh status) from from-viewer
+  to current viewer.
 
 /vis/viewer/set/autoRefresh [true|false]
   default:                    false
