@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2002-03-28 18:03:44 japost Exp $
+$Id: History,v 1.53 2002-03-28 18:08:30 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Mar 28th, 2001  J. Apostolakis - field-V04-00-01
+Mar 28th, 2002  J. Apostolakis - field-V04-00-01
 -----------------------
 - Fixed LinearStep in G4MagHelicalStepper, 
     which assumed that components 3-5 of vector were normalised 
@@ -25,6 +25,15 @@ Mar 28th, 2001  J. Apostolakis - field-V04-00-01
 
 - Changed maximum number of steps in driver, 
     halving from 500/order to 250/order.
+
+- Committed directory "OtherField" with examples of fields,
+    Delphi, Quadropole etc.
+
+Feb  2nd, 2002   V. Grichine
+------------------------
+Update of test/field02 to utilise new features 
+  - for Electric Field, to signal that a field modifies the energy;
+  - updating of time by integration, for time dependent fields.
 
 Jan 10th, 2002  G. Cosmo - field-V04-00-00
 ------------------------
