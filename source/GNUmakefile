@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.22 2000-11-14 17:51:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.23 2000-11-21 15:10:41 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -12,7 +12,7 @@ MAKEFLAGS= --no-print-directory
 
 SUBDIR1 = global particles processes geometry digits+hits
 SUBDIR2 = event tracking track materials run graphics_reps intercoms parameterisations readout
-SUBDIR3 = g3tog4 interfaces visualization
+SUBDIR3 = analysis g3tog4 interfaces visualization
 SUBDIR4 = persistency
 
 ifndef G4INSTALL
