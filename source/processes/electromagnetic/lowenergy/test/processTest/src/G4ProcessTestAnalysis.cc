@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.2 2001-11-06 21:54:15 pia Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.3 2001-11-08 23:31:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -53,12 +53,12 @@ G4ProcessTestAnalysis::~G4ProcessTestAnalysis()
   delete ntFactory;
   ntFactory = 0;
 
-  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
-  for (pos1 = histo1D.begin(); pos1 != histo1D.end(); ++pos1)
-    {
-      IHistogram* h = pos1->second;
-      delete h;
-    }
+  //  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+  //  for (pos1 = histo1D.begin(); pos1 != histo1D.end(); ++pos1)
+  //    {
+  //    IHistogram* h = pos1->second;
+  //   delete h;
+  //  }
 
   delete histoManager;
   histoManager = 0;
@@ -72,23 +72,24 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
   // Book histograms
 
   IHistogram1D* hNSec = histoManager->create1D("1","Number of secondaries", 10,0.,10.);
-  histo1D["nSec"] = hNSec;
+  //histo1D["nSec"] = hNSec;
 
   IHistogram1D* hDeposit = histoManager->create1D("2","Local energy deposit", 100,0.,10.);
-  histo1D["eDeposit"] = hDeposit;
+  //histo1D["eDeposit"] = hDeposit;
 
   IHistogram1D* hEKin = histoManager->create1D("3","Kinetic Energy", 100,0.,10.);
-  histo1D["eKin"] = hEKin;
+  //histo1D["eKin"] = hEKin;
 
   IHistogram1D* hTheta = histoManager->create1D("4","Theta", 100,0.,pi);
-  histo1D["theta"] = hTheta;
+  //histo1D["theta"] = hTheta;
 
   IHistogram1D* hPhi = histoManager->create1D("5","Phi", 100,-pi,pi);
-  histo1D["phi"] = hPhi;
+  //histo1D["phi"] = hPhi;
 
  // Book ntuples
 
-  G4String ntFileName = storeName + "1" + ".hbook::1";
+  //  G4String ntFileName = storeName + "1" + ".hbook::1";
+  G4String ntFileName = storeName + ".hbook::1";
   const char* name = ntFileName.c_str();
   Lizard::NTuple* ntuple1 = ntFactory->createC(name);
 
@@ -112,12 +113,14 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
     }
   ntuples["primary"] = ntuple1;
 
-  ntFileName = storeName + "2" + ".hbook::2";
+  //  ntFileName = storeName + "2" + ".hbook::2";
+  ntFileName = storeName + ".hbook::2";
   name = ntFileName.c_str();
   Lizard::NTuple* ntuple2 = ntFactory->createC(name);
 
   //  Add and bind the attributes to the secondary nTuple
-  if ( !( ntuple2->addAndBind( "px"	 , px        ) &&
+  if ( !( ntuple2->addAndBind( "e0"      , initialEnergy) &&
+	  ntuple2->addAndBind( "px"	 , px        ) &&
 	  ntuple2->addAndBind( "py"	 , py        ) &&
 	  ntuple2->addAndBind( "pz"	 , pz        ) &&
 	  ntuple2->addAndBind( "p" 	 , p         ) &&
@@ -198,8 +201,17 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
 	}
             
       // Fill histograms
-      G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
       
+      IHistogram1D* h = histoManager->retrieveHisto1D("3");
+      h->fill(eKin);
+      h = histoManager->retrieveHisto1D("4");
+      h->fill(theta);
+      h = histoManager->retrieveHisto1D("5");
+      h->fill(phi);
+
+      /*      
+      G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+
       pos1 = histo1D.find("eKin");
       if (pos1 != histo1D.end()) 
 	{
@@ -220,7 +232,8 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
 	  IHistogram1D* h = pos1->second;
 	  h->fill(phi);
 	}
-      
+      */ 
+    
       G4cout  << "==== Final " 
 	      <<  particleName  <<  " "  
 	      << "energy: " <<  e/MeV  <<  " MeV,  " 
@@ -277,9 +290,13 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
     }
 
   // Fill histograms
-  
-  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
+  IHistogram1D* h = histoManager->retrieveHisto1D("1");
+  h ->fill(float(nSecondaries));
+  h = histoManager->retrieveHisto1D("2");
+  h->fill(eDeposit);
 
+  /*
+  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
   pos1 = histo1D.find("nSec");
   if (pos1 != histo1D.end()) 
     {
@@ -293,6 +310,7 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
       IHistogram1D* h2 = pos1->second; 
       h2->fill(eDeposit);
     }
+  */
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.hh,v 1.2 2001-11-06 21:54:14 pia Exp $
+// $Id: G4ProcessTestAnalysis.hh,v 1.3 2001-11-08 23:31:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -29,7 +29,8 @@
 //
 // History:
 // -----------
-//  5 Nov 2001   MGP        Created file according to A. Pfeiffer's class
+//  5 Nov 2001   MGP        Implemented according to A. Pfeiffer's design 
+//                          and suggestions
 //
 // -------------------------------------------------------------------
 // Class description:
@@ -44,13 +45,14 @@
 #include "globals.hh"
 #include "g4std/map"
 
-// Histogramming (from AIDA and Anaphe):
-#include "Interfaces/IHistoManager.h"
-//#include "Interfaces/IHistogramFactory.h"
+// Histogramming (from AIDA)
 #include "Interfaces/IHistogram1D.h"
 #include "Interfaces/IHistogram2D.h"
 
-// For NtupleTag from Anaphe
+// Histogramming (from Anaphe)
+#include "Interfaces/IHistoManager.h"
+
+// Ntuples (from Anaphe)
 #include "NtupleTag/LizardNTupleFactory.h"
 
 class G4ParticleChange;
@@ -84,9 +86,9 @@ private:
   // ---- NOTE ----
   // Histograms are compliant to AIDA interfaces, ntuples are Lizard specific
 
-  G4std::map< G4String, IHistogram1D*, G4std::less<G4String> > histo1D;
-  //G4std::map< G4String, IHistogram2D*, G4std::less<G4String> > histo2D;
-  //G4std::map< G4String, IHistogram3D*, G4std::less<G4String> > histo3D;
+  // G4std::map< G4String, IHistogram1D*, G4std::less<G4String> > histo1D;
+  // G4std::map< G4String, IHistogram2D*, G4std::less<G4String> > histo2D;
+  // G4std::map< G4String, IHistogram3D*, G4std::less<G4String> > histo3D;
   G4std::map< G4String, Lizard::NTuple*, G4std::less<G4String> > ntuples;
 
   // Quantities for the general ntuple
@@ -103,6 +105,7 @@ private:
   Lizard::Quantity<float> nPhotons;
 
   // Quantities for the secondary ntuple 
+  //  Lizard::Quantity<float> initialEnergy;
   Lizard::Quantity<float> px;
   Lizard::Quantity<float> py;
   Lizard::Quantity<float> pz;
