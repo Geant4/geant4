@@ -43,29 +43,14 @@ column)</li>
 </blockquote>
 
 <li>
-If <b>testing </b>is in progress, look to see if any <a href="test_platforms.html">platforms</a>
-have still to be checked, and take one or more if possible.&nbsp; Enter
-your name (make a new row if necessary), etc., and indicate by letter which
-<a href="test_platforms.html">platforms</a>
-you have taken (some <a href="test_platforms.html">platform/compiler
-</a>combinations
-are available in more than location - no need to duplicate).</li>
-
-<li>
-If <b>testing </b>is in progress, and all <a href="test_platforms.html">platforms
-</a>are
-being covered, simply wait until the process is complete - please inform
-the tagger of a possible delay and check this page tomorrow.</li>
-
-<li>
-For an <b>awaiting </b>tag or set of tags, take the lowest order number
-(<b>#</b>) (take tags of the same order number together) and mark the status
-as <b>testing </b>and indicate the <a href="test_platforms.html">platform
-or platforms </a>on which you propose to run the tests.</li>
-
-<li>
+If no <b>testing </b>is in progress, take the lowest order number (<b>#</b>)
+(take tags of the same order number together) and mark the status as <b>testing</b>.&nbsp;
 Commit this file back to the repository and proceed with testing (go back
 to <a href="procedures.html">procedures </a>page).</li>
+
+<li>
+When <b>testing </b>is finished, mark as <b>accepted </b>or <b>rejected
+</b>and commit this file back to the repository</li>
 </blockquote>
 
 <h1>
@@ -73,7 +58,7 @@ to <a href="procedures.html">procedures </a>page).</li>
 Note that a later global tag <i>includes</i> all earlier global tags.
 <br>Tags up to and including geant4-00 are <a href="tags_database_geant4-00.html">archived.</a>
 <table BORDER WIDTH="100%" NOSAVE >
-<caption><b><font size=+2></font></b>&nbsp;
+<caption>&nbsp;
 <br><b><font size=+2>Essential Bug Fix Tags For geant4-00</font></b></caption>
 
 <tr>
@@ -278,11 +263,32 @@ out some troublesome printing.</td>
 
 <td>accepted</td>
 </tr>
+
+<tr>
+<td>geommng-01-00-02 geomsolids-01-00-01 geomvol-01-00-03a</td>
+
+<td>geant4-00-patch4a</td>
+
+<td></td>
+
+<td>See similar trio of tags in Development Tags Table.
+<br>geomvol-01-00-03a is tag geomvol-01-00-03 modified simply not to include
+G4PropagatorInField which is included in the magneticfield directory in
+geant4-00.</td>
+
+<td>John Apostolakis</td>
+
+<td>990401</td>
+
+<td>4a</td>
+
+<td>accepted</td>
+</tr>
 </table>
 
 <table BORDER WIDTH="100%" NOSAVE >
-<caption><b><font size=+2></font></b>&nbsp;
-<br><b><font size=+2>Other Tags After geant4-00</font></b></caption>
+<caption>&nbsp;
+<br><b><font size=+2>Development Tags After geant4-00</font></b></caption>
 
 <tr>
 <td><b>Tag</b></td>
@@ -611,7 +617,7 @@ of Verbose class.
 </table>
 
 <table BORDER WIDTH="100%" NOSAVE >
-<caption><b><font size=+2></font></b>&nbsp;
+<caption>&nbsp;
 <br><b><font size=+2>Blank for future tags</font></b></caption>
 
 <tr>
@@ -635,7 +641,7 @@ of Verbose class.
 
 <p>
 <hr WIDTH="100%">
-<br><i><a href="mailto:John.Allison@man.ac.uk">John Allison&nbsp;</a> 12th
+<br><i><a href="mailto:John.Allison@man.ac.uk">John Allison&nbsp;</a> 14th
 April 1999</i>
 </body>
 </html>
