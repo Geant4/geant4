@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.6 2000-06-29 07:42:05 gcosmo Exp $
+// $Id: exampleN05.cc,v 1.7 2001-04-27 11:07:08 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "ExN05PhysicsList.hh"
 
 #ifdef GNU_GCC
+  #include "g4rw/tvvector.h"
   #include "ExN05CalorimeterHit.hh"
   template class G4RWTValVector<ExN05CalorimeterHit>;
   template class G4Allocator<ExN05CalorimeterHit>;
