@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.hh,v 1.5 2003-03-10 01:50:21 asaim Exp $
+// $Id: G4Run.hh,v 1.6 2003-04-09 23:06:09 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -73,7 +73,7 @@ class G4Run
   public:
     inline void SetRunID(G4int id)
     { runID = id; }
-    virtual void RecordEvent(G4Event*) 
+    virtual void RecordEvent(const G4Event*) 
     { numberOfEvent++; }
     inline void SetHCtable(G4HCtable* HCtbl)
     { HCtable = HCtbl; }
