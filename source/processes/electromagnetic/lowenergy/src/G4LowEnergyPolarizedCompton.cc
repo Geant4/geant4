@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.12 2002-05-31 18:08:35 flongo Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.13 2002-06-02 21:27:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -162,8 +162,9 @@ G4VParticleChange* G4LowEnergyPolarizedCompton::PostStepDoIt(const G4Track& aTra
   // in that case find a random polarization
   
   G4ThreeVector gammaDirection0 = incidentPhoton->GetMomentumDirection();
-  G4double scalarproduct = gammaPolarization0.dot(gammaDirection0);
-  G4double angle = gammaPolarization0.angle(gammaDirection0);
+  // ---- MGP ---- Next two lines commented out to remove compilation warnings
+  // G4double scalarproduct = gammaPolarization0.dot(gammaDirection0);
+  // G4double angle = gammaPolarization0.angle(gammaDirection0);
 
   // Make sure that the polarization vector is perpendicular to the 
   // gamma direction. If not 
