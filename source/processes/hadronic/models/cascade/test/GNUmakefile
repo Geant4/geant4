@@ -55,28 +55,28 @@ LOADLIBS +=    `cernlib packlib` $(FCLIBS)
 # 	  ::: Parameter list for cascade : nEvents, particleType, bulletE [MeV], N, and Z.
 
 #t1:	# ::: problem 1  (Al)  evaporation missing, SOLVED
-#	rm -r cascade.out; cascade 10000 1 256 27 13 > cascade.out; gmake a; #cat cascade.out
+#	rm -r cascade.out; cascade 10000 1 256 27 13 > cascade.out; gmake a; 
 
 p2:	# ::: p(roblem) 2 (Al) strong energy tail ::: general feature, study particle history, MAKE NOTE
-	rm -r cascade.out; cascade 10000 1 160 27 13 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out; cascade 10000 1 160 27 13 > cascade.out; gmake a; 
 
 p3:	# ::: problem 3 (Zr) weak medium energy ::: unknown reason POSTPONED
-	rm -r cascade.out; cascade 10000 1 256 91 40 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out; cascade 10000 1 256 91 40 > cascade.out; gmake a; 
 
 p4:	# ::: problem 4 (Be) too few pi+'s ::: general feature, POSTPONED
-	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out; cascade 10000 1 585 9 4 > cascade.out; gmake a; 
 
 p5:	# ::: problem 5 (Al) too many n's in medium energy ::: hunt using history data, POSTPONED
-	rm -r cascade.out; cascade 10000 1 585 27 13 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out; cascade 10000 1 585 27 13 > cascade.out; gmake a;
 
 #t6:	# ::: problem 6 () too few neutrons, SOLVED
-#	rm -r cascade.out; cascade 10000 1 800 207 82 > cascade.out; gmake a; #cat cascade.out
+#	rm -r cascade.out; cascade 10000 1 800 207 82 > cascade.out; gmake a;
 
-p7:	# ::: problem 7 (H)  missing pions ::: critical, TO BE DONE
-	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; gmake a; #cat cascade.out
+p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
+	rm -r cascade.out; cascade 10000 1 585 1 1 > cascade.out; make a; 
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
-	rm -r cascade.out cascade.ps; cascade 1000 2 800 91 40 > cascade.out; gmake a; #cat cascade.out
+	rm -r cascade.out cascade.ps; cascade 1000 2 800 91 40 > cascade.out; make a;
 
 time: 	# :: timing for target t
 	time -v gmake t
@@ -85,10 +85,10 @@ a: 	# ::: a(nalysis) of data in  cascade.dat with batch run of Root
 	rm cascade.ps; root -b -q cascade.C; gv cascade.ps; 
 
 b: 	# ::: b(enchmark) testing
-	rm -r benchmarks; rm -r benchmark.out; gmake benchmarks; benchmarks > benchmarks.out; diff benchmarks.out benchmarks.data
+	rm -r benchmarks benchmark.out; make benchmarks; benchmarks > benchmarks.out; diff benchmarks.out benchmarks.data
 
 t:	# ::: make test cascade
 	gmake cascade
 
 eps: 	# ::: generate eps-files for documentation
-	convert cascade.ps cascade.eps; cp cascade.eps $(RELD)/pictures/cascade.eps;
+	cp *.eps $(RELD)/pictures/
