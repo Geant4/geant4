@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.27 2003-07-21 13:59:02 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.28 2003-07-21 14:18:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -491,7 +491,7 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
       if (fRange > r) {
 
         x = dRoverRange*fRange + r*(1.0 - dRoverRange)*(2.0 - r/fRange);
-        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
+//        if(rndmStepFlag) x = r + (x-r)*G4UniformRand();
         if(x > fRange) x = fRange;
       }
     }
