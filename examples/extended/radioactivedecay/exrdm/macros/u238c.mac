@@ -1,0 +1,46 @@
+#################################################################################
+#                                                                              	#
+# 									      	#
+# THIS EXAMPLE SHOWS THE DECAYS OF THE U238 CHAIN IN ANALOGUE MC MODE           #
+#                                                                              	#
+#                                                                              	#
+#################################################################################
+#
+#
+/histo/fileName u238c.aida
+/histo/setHisto 0 50 0 5 MeV
+/histo/setHisto 1 50 0 20 MeV
+/histo/setHisto 2 50 0 25 MeV
+/histo/setHisto 3 50 0 25 MeV
+/histo/setHisto 4 50 0 5 MeV
+/histo/setHisto 5 50 0 20 MeV
+/histo/setHisto 6 50 0 10 MeV
+#
+# set the target/detector geometry
+/exrdm/det/setTargetRadius 0.01 mm
+/exrdm/det/setTargetLength 0.01 mm
+/exrdm/det/setDetectorThickness 20 cm
+/exrdm/det/setDetectorLength 40 cm
+#
+# must initialize
+/run/initialize
+#
+# change the cutoffs
+/run/setCutForRegion Target 10 cm
+/run/setCutForRegion Detector 50 cm
+#
+/run/verbose 0
+/event/verbose 0
+/tracking/verbose 0
+/grdm/verbose 0
+#
+# rdm is only applied to the target volume
+/grdm/noVolumes
+/grdm/selectVolume Target
+#
+# place the isotopes in the middle of the target(source) 
+/gps/position 0 0 0	
+/gps/energy 0 keV	
+/gps/particle ion
+/gps/ion 92 238 0 0
+/run/beamOn 1000
