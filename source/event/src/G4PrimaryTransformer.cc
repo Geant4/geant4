@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.cc,v 1.18 2003-10-01 13:17:34 asaim Exp $
+// $Id: G4PrimaryTransformer.cc,v 1.19 2004-07-07 15:01:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,6 +40,11 @@ G4PrimaryTransformer::G4PrimaryTransformer()
 :verboseLevel(0),trackID(0)
 {
   particleTable = G4ParticleTable::GetParticleTable();
+  unknown = particleTable->FindParticle("unknown");
+  if(unknown) 
+  { unknownParticleDefined = true; }
+  else
+  { unknownParticleDefined = false; }
 }
 
 G4PrimaryTransformer::~G4PrimaryTransformer()
@@ -92,7 +97,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
       G4double x0,G4double y0,G4double z0,G4double t0,G4double wv)
 {
   G4ParticleDefinition* partDef = GetDefinition(primaryParticle);
-  if((!partDef)||partDef->IsShortLived())
+  if(!unknownParticleDefined && ((!partDef)||partDef->IsShortLived()))
   // The particle is not defined in GEANT4, check daughters
   {
 #ifdef G4VERBOSE
@@ -113,6 +118,7 @@ void G4PrimaryTransformer::GenerateSingleTrack
   // The particle is defined in GEANT4
   else
   {
+    if((!partDef)||partDef->IsShortLived()) partDef = unknown;
     // Create G4DynamicParticle object
 #ifdef G4VERBOSE
     if(verboseLevel>1)
@@ -133,6 +139,8 @@ void G4PrimaryTransformer::GenerateSingleTrack
     if (primaryParticle->GetCharge()<DBL_MAX) {
       DP->SetCharge(primaryParticle->GetCharge());
     } 
+    if(partDef==unknown)
+    { DP->SetMass(primaryParticle->GetMass()); }
     // Set decay products to the DynamicParticle
     SetDecayProducts( primaryParticle, DP );
     // Set primary particle
@@ -166,7 +174,7 @@ void G4PrimaryTransformer::SetDecayProducts
   while(daughter)
   {
     G4ParticleDefinition* partDef = GetDefinition(daughter);
-    if(!partDef) 
+    if(!unknownParticleDefined && ((!partDef)||partDef->IsShortLived()))
     { 
 #ifdef G4VERBOSE
       if(verboseLevel>2)
@@ -179,6 +187,7 @@ void G4PrimaryTransformer::SetDecayProducts
     }
     else
     {
+      if((!partDef)||partDef->IsShortLived()) partDef = unknown;
 #ifdef G4VERBOSE
       if(verboseLevel>1)
       {
@@ -193,6 +202,12 @@ void G4PrimaryTransformer::SetDecayProducts
       // Decay proper time for daughter
       if(daughter->GetProperTime()>0.0)
       { DP->SetPreAssignedDecayProperTime(daughter->GetProperTime()); }
+      // Set Charge is specified
+      if (daughter->GetCharge()<DBL_MAX) {
+        DP->SetCharge(daughter->GetCharge());
+      } 
+      if(partDef==unknown)
+      { DP->SetMass(daughter->GetMass()); }
       decayProducts->PushProducts(DP);
       SetDecayProducts(daughter,DP);
     }

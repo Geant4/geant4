@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryTransformer.hh,v 1.6 2001-07-18 01:25:44 asaim Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.7 2004-07-07 15:01:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,6 +54,9 @@ class G4PrimaryTransformer
     G4ParticleTable* particleTable;
     G4int verboseLevel;
     G4int trackID;
+
+    G4bool unknownParticleDefined;
+    G4ParticleDefinition* unknown;
 
   public:
     inline void SetVerboseLevel(G4int vl)
