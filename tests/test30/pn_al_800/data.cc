@@ -91,7 +91,8 @@ int main(int argc, char** argv)
   double bin0 = 2.0*MeV;
   double bin = 10.0*MeV;
   double elim= 20.0*MeV;
-  double x, an, e1, e2, e0, y1, y2, ct1, ct2, xs, de;
+  double x, an, e1, e2, y1, y2, ct1, ct2, xs, de;
+  double e0 = 0.0;
 
   x = 0.0;
 
