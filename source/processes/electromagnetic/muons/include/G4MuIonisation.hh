@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuIonisation.hh,v 1.18 2004-01-21 18:05:30 vnivanch Exp $
+// $Id: G4MuIonisation.hh,v 1.19 2004-02-10 18:07:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,18 +143,17 @@ inline G4double G4MuIonisation::MinPrimaryEnergy(const G4ParticleDefinition*,
                                                           G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double y = electron_mass_c2/mass;
-  G4double g = x*y + sqrt((1. + x)*(1. + x*y*y));
-  return mass*(g - 1.0); 
+  G4double g = x*ratio + sqrt((1. + x)*(1. + x*ratio*ratio));
+  return mass*(g - 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
-  G4double gamma= dynParticle->GetKineticEnergy()/mass + 1.0;
-  G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
-                  (1. + 2.0*gamma*ratio + ratio*ratio);
+  G4double tau  = dynParticle->GetKineticEnergy()/mass;
+  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.0)/
+                  (1. + 2.0*(tau + 1.0)*ratio + ratio*ratio);
 
   return tmax;
 }

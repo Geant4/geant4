@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.18 2004-01-21 18:05:30 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.19 2004-02-10 18:07:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 // 21-01-04 Migrade to G4ParticleChangeForLoss (V.Ivanchenko)
+// 10-02-04 Add lowestKinEnergy (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -114,16 +115,18 @@ private:
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
 
+  G4double  lowestKinEnergy;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuBremsstrahlung::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                        const G4Material*,
-                                                              G4double cut)
+                                                     const G4Material*,
+                                                           G4double)
 {
-  return cut;
+  return lowestKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -145,11 +148,9 @@ inline void G4MuBremsstrahlung::SecondariesPostStep(
                                                        G4double& kinEnergy)
 {
   G4DynamicParticle* gamma = model->SampleSecondary(couple, dp, tcut, kinEnergy);
-  if(gamma) {
-    fParticleChange.SetNumberOfSecondaries(1);
-    fParticleChange.AddSecondary(gamma);
-    kinEnergy -= gamma->GetKineticEnergy();
-  }
+  fParticleChange.SetNumberOfSecondaries(1);
+  fParticleChange.AddSecondary(gamma);
+  kinEnergy -= gamma->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,67 +1,26 @@
-# $Id: GNUmakefile,v 1.3 2003-10-03 15:35:57 gcosmo Exp $
-# ----------------------------------------------------------------
-# Makes test program in environment variable G4TARGET.
-# ----------------------------------------------------------------
+# $Id: GNUmakefile,v 1.4 2004-02-10 18:07:27 vnivanch Exp $
+# --------------------------------------------------------------
+# GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
+# --------------------------------------------------------------
 
 ifndef G4TARGET
-  G4TARGET := $(TESTTARGET)
+  G4TARGET := CrossSectionTest
 endif
 
-ifndef G4INSTALL
-  G4INSTALL = ../../../../..
-endif
+G4EXEC_BUILD := true
 
-G4EXEC_BUILD = true
+
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += -DG4ANALYSIS_USE
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-# Override some variables for binmake.gmk.
-#
-INCFLAGS := \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/navigation/include \
-            -I$(G4BASE)/geometry/magneticfield/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/event/include \
-            -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/track/include \
-            -I$(G4BASE)/tracking/include \
-            -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/digits_hits/detector/include \
-            -I$(G4BASE)/digits_hits/digits/include \
-            -I$(G4BASE)/digits_hits/hits/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/materials/include \
-            -I$(G4BASE)/particles/management/include \
-            -I$(G4BASE)/particles/bosons/include \
-            -I$(G4BASE)/particles/leptons/include \
-            -I$(G4BASE)/particles/hadrons/mesons/include \
-            -I$(G4BASE)/particles/hadrons/barions/include \
-            -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/processes/management/include \
-            -I$(G4BASE)/processes/general/include \
-            -I$(G4BASE)/processes/electromagnetic/standard/include \
-            -I$(G4BASE)/processes/electromagnetic/muons/include \
-            -I$(G4BASE)/processes/electromagnetic/utils/include \
-            -I$(G4BASE)/processes/electromagnetic/xrays/include
-
-LDLIBS   := \
-            -lG4event \
-            -lG4tracking \
-            -lG4electromagnetic \
-            -lG4track \
-            -lG4particles \
-            -lG4decay \
-            -lG4procman \
-            -lG4materials \
-            -lG4digits_hits \
-            -lG4geometry \
-            -lG4graphics_reps \
-            -lG4intercoms \
-            -lG4global
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config --include`
+  LDFLAGS  += `aida-config --lib`
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
+
+

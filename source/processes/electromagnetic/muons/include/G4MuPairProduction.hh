@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.17 2004-01-21 18:05:30 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.18 2004-02-10 18:07:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,6 +117,7 @@ private:
   const G4ParticleDefinition* theParticle;
   const G4ParticleDefinition* theBaseParticle;
 
+  G4double                    lowestKinEnergy;
   G4bool                      subCutoff;
 
 };
@@ -125,10 +126,10 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4MuPairProduction::MinPrimaryEnergy(const G4ParticleDefinition*,
-                                                        const G4Material*,
-                                                              G4double cut)
+                                                     const G4Material*,
+                                                           G4double)
 {
-  return std::max(cut, 2.0*electron_mass_c2);
+  return lowestKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -172,16 +173,15 @@ inline void G4MuPairProduction::SecondariesPostStep(
 {
   std::vector<G4DynamicParticle*>* newp =
          model->SampleSecondaries(couple, dp, tcut, kinEnergy);
-  if(newp) {
-    fParticleChange.SetNumberOfSecondaries(2);
-    G4DynamicParticle* elpos = (*newp)[0];
-    fParticleChange.AddSecondary(elpos);
-    kinEnergy -= elpos->GetKineticEnergy();
-    elpos = (*newp)[1];
-    fParticleChange.AddSecondary(elpos);
-    kinEnergy -= elpos->GetKineticEnergy();
-    delete newp;
-  }
+
+  fParticleChange.SetNumberOfSecondaries(2);
+  G4DynamicParticle* elpos = (*newp)[0];
+  fParticleChange.AddSecondary(elpos);
+  kinEnergy -= elpos->GetKineticEnergy();
+  elpos = (*newp)[1];
+  fParticleChange.AddSecondary(elpos);
+  kinEnergy -= elpos->GetKineticEnergy();
+  delete newp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
