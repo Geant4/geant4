@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.17 2003-02-05 15:31:12 gcosmo Exp $
+// $Id: testPropagateMagField.cc,v 1.18 2003-06-05 10:07:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -110,7 +110,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4Box *mySmallBox= new G4Box("smaller cube",2.5*m,2.5*m,2.5*m);
     G4Box *myTinyBox=  new G4Box("tiny  cube",.25*m,.25*m,.25*m);
 
-    G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
+    // G4Box *myVariableBox=
+    new G4Box("Variable Box",10,5,5);
 
     //  World Volume
     //
