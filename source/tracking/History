@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2004-12-01 17:08:25 gcosmo Exp $
+$Id: History,v 1.84 2004-12-07 09:17:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 December 2004 Gabriele Cosmo (tracking-V06-02-09)
+- Implemented migration to <cmath>.
 
 01 December 2004 Gabriele Cosmo (tracking-V06-02-08)
 - Fix in G4SteppingManager::InvokePSDIP() for completing migration
