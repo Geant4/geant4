@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.hh,v 1.2 2004-03-18 08:02:37 mkossov Exp $
+// $Id: G4QCaptureAtRest.hh,v 1.3 2004-12-08 14:45:57 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest header ----------------
@@ -94,6 +94,7 @@
 // CHIPS Headers
 #include "G4QEnvironment.hh"
 #include "G4QIsotope.hh"
+#include "G4QPDGToG4Particle.hh"
 //<vector> is included in G4QIsotope.hh
 //#include <vector>
 
