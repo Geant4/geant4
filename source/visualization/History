@@ -1,4 +1,4 @@
-$Id: History,v 1.248 2004-07-01 16:00:20 johna Exp $
+$Id: History,v 1.249 2004-07-01 16:09:09 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -29,6 +29,8 @@ History file for visualization category
 - Small improvement to README of /vis/scene/add/axes.
 - vistest-V06-02-00.
 - opengl-V06-02-00.
+- visman-V06-02-00: Fix for porting on gcc-3.4.0: made ProcessView()
+  public, since used as private friend (Gabriele Cosmo).
 
 9th June 2004  Gabriele Cosmo  (vis-V06-01-03)
 - Adopt G4DLLIMPORT/G4DLLEXPORT technique to handle extern simbols for
