@@ -71,6 +71,6 @@ GetCrossSection(const G4DynamicParticle* aPart, const G4Element*anEle)
 	         pow(projectileAtomicNumber, 1./3.) + deltaE),2.) * (1-B/E_cm);
   
   if(result < 0) result = 0;
-  return result*1.E6/millibarn;
+  return result*m2;
   
 }

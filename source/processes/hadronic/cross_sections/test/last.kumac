@@ -1,10 +1,3 @@
-*** Begin of history file: Sat Apr  8 13:07:03 2000
-opt pto
-exec doall
-ed doit
-shell ls
-exec doit input_c_al.liste c-al.data
-ed doit
-exec doit input_c_al.liste c-al.data
+*** Begin of history file: Sat Apr  8 13:20:19 2000
 exit
-*** End   of history file: Sat Apr  8 13:14:19 2000
+*** End   of history file: Sat Apr  8 13:20:20 2000

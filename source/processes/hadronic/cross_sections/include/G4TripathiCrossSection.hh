@@ -17,7 +17,7 @@ class G4TripathiCrossSection : public G4VCrossSectionDataSet
    {
      G4bool result = false;
      if(( aPart->GetDefinition()->GetBaryonNumber()>2.5) &&
-        ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<5*GeV) ) result = true;
+        ( aPart->GetKineticEnergy()/aPart->GetDefinition()->GetBaryonNumber()<1*GeV) ) result = true;
      return result;
    }
 
