@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.9 2003-04-02 16:59:18 dressel Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.10 2003-06-04 15:45:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,9 +31,10 @@
 //
 // ----------------------------------------------------------------------
 
+#include "G4Types.hh"
+#include "g4std/strstream"
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
-#include "g4std/strstream"
 #include "G4VTrackTerminator.hh"
 
 G4ParallelImportanceProcess::

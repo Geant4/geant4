@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.9 2003-04-02 16:59:18 dressel Exp $
+// $Id: G4ParallelTransport.cc,v 1.10 2003-06-04 15:45:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,10 +31,11 @@
 //
 // ----------------------------------------------------------------------
 
+#include "G4Types.hh"
+#include "g4std/strstream"
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
-#include "g4std/strstream"
 
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
