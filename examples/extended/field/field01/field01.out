@@ -1,0 +1,1160 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (14-Dec-2001)
+             Copyright : Geant4 Collaboration
+**********************************************
+G4ClassicalRK4 (default) is called
+The minimal step is equal to 1 mm
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  DAWNFILE (DAWNFILE)
+  VRML1FILE (VRML1FILE)
+
+***** Table : Nb of materials = 11 *****
+
+ Material:    Mylar     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  19.770 cm 
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  48.42 %  Abundance  18.18 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  45.47 %  Abundance  45.45 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   6.11 %  Abundance  36.36 %
+
+ Material: Polypropelene     density: 910.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  28.167 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  25.16 %  Abundance  66.67 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  74.84 %  Abundance  33.33 %
+
+ Material:       Kr     density:  3.700 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  30.736 m  
+   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Argon     density:  1.784 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 109.604 m  
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       N2     density:  1.251 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 303.846 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:       O2     density:  1.429 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 239.621 m  
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      Air     density:  0.000 mg/cm3  temperature: 273.15 K  pressure:   0.00 atm  RadLength: 28329272.015 km 
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  75.57 %  Abundance  78.48 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  23.15 %  Abundance  21.05 %
+   --->  Element:    Argon Ar   Z = 18.0   N =  39.9   A =  39.95 g/mole  fractionMass:   1.28 %  Abundance   0.47 %
+
+ Material:    Xenon     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:      CO2     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 158.123 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:  15.81 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  84.19 %  Abundance  66.67 %
+
+ Material:  Xe20CO2     density:  5.082 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  17.695 m  
+   --->  Element:    Xenon      Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  92.20 %  Abundance  53.29 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.23 %  Abundance  15.57 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   6.57 %  Abundance  31.14 %
+
+ Material:  Kr20CO2     density:  3.601 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  33.957 m  
+   --->  Element:       Kr      Z = 36.0   N =  83.8   A =  83.80 g/mole  fractionMass:  89.00 %  Abundance  55.02 %
+   --->  Element:   Carbon  C   Z =  6.0   N =   6.0   A =   6.01 g/mole  fractionMass:   1.74 %  Abundance  14.99 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:   9.26 %  Abundance  29.99 %
+
+
+
+ The  WORLD   is made of 44000mm of Air, the transverse size (R) of the world is 22000 mm. 
+ The ABSORBER is made of 1mm of Air, the transverse size (R) is 20000 mm. 
+ Z position of the (middle of the) absorber 21990  mm.
+
+F01PhysicsList::SetCuts:CutLength : 1 mm 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+total time(SetCuts)=18.34 s 
+G4ClassicalRK4 (default) is called
+The minimal step is equal to 1 mm
+============= The cut Energy ==============================
+                            gamma              e-    
+Cut in range       
+              Mylar           1 mm            1 mm 
+      Polypropelene           1 mm            1 mm 
+                 Kr           1 mm            1 mm 
+              Argon           1 mm            1 mm 
+                 N2           1 mm            1 mm 
+                 O2           1 mm            1 mm 
+                Air           1 mm            1 mm 
+              Xenon           1 mm            1 mm 
+                CO2           1 mm            1 mm 
+            Xe20CO2           1 mm            1 mm 
+            Kr20CO2           1 mm            1 mm 
+Cut in energy
+              Mylar        3.48 keV         541 keV
+      Polypropelene        2.75 keV         502 keV
+                 Kr         990 eV         1.07 keV
+              Argon         990 eV          990 eV 
+                 N2         990 eV          990 eV 
+                 O2         990 eV          990 eV 
+                Air         990 eV          990 eV 
+              Xenon         990 eV         1.95 keV
+                CO2         990 eV          990 eV 
+            Xe20CO2         990 eV         1.67 keV
+            Kr20CO2         990 eV         1.09 keV
+===================================================
+### Run 0 start.
+Start Run processing.
+
+---> Begin of Event: 0
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+
+*********************************************************************************************************
+* G4Track Information:   Particle = e-,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0      0 fm      0 fm     22 m     500 MeV     0 eV      0 fm      0 fm      World    initStep
+    1          0 fm  1.0118317 m     21.9895 m         500 MeV0.0077449158 eV  1.5893832 m   1.5893832 m       World  Transportation           0 fm    70845.381 fm         1000 mum
+    2          0 fm  1.0118307 m     21.9905 m         500 MeV4.888534e-06 eV  1.0000007 mm  1.5903832 m    Absorber  Transportation           0 fm   -1.9765403 mum   999.99805 mum
+    3          0 fm   1.011722 m          22 m         500 MeV4.6270543e-05 eV  9.5007638 mm   1.599884 m  OutOfWorld  Transportation           0 fm   -20.754367 mum    999.7846 mum
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.3s Real=0.46s Sys=0.16s
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -11,11 +11,18 @@ You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+#
+/run/initialize
 
-***** Table : Nb of materials = 19 *****
+***** Table : Nb of materials = 20 *****
+
+ Material: liquidH2     density: 70.800 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.905 m  
+   --->  Element: liquidH2      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
    --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -41,13 +48,13 @@ Current available graphics systems are:
  Material:  Uranium     density: 18.950 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.166 mm 
    --->  Element:  Uranium      Z = 92.0   N = 238.0   A = 238.03 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
- Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.084 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
 
- Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm 
-   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+ Material: Scintillator     density:  1.032 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.542 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.47 %  Abundance  47.37 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.53 %  Abundance  52.63 %
 
  Material: Silicium     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
@@ -56,11 +63,11 @@ Current available graphics systems are:
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  46.75 %  Abundance  33.33 %
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  53.25 %  Abundance  66.67 %
 
- Material:  NemaG10     density:  1.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.733 cm 
+ Material:  NemaG10     density:  1.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  18.732 cm 
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  28.33 %  Abundance  11.11 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.27 %  Abundance  22.22 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  32.28 %  Abundance  22.22 %
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  36.34 %  Abundance  33.33 %
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.06 %  Abundance  33.33 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   3.05 %  Abundance  33.33 %
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -68,7 +75,7 @@ Current available graphics systems are:
 
  Material:  Aerogel     density: 200.000 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.493 m  
    --->  Element:  Silicon Si   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass:  29.22 %  Abundance  11.12 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.49 %  Abundance  44.42 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  66.50 %  Abundance  44.42 %
    --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   4.19 %  Abundance  44.37 %
    --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   0.10 %  Abundance   0.09 %
 
@@ -77,10 +84,10 @@ Current available graphics systems are:
    --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
 
  Material: WaterSteam     density:  0.300 mg/cm3  temperature: 500.00 K  pressure:   2.00 atm  RadLength:   1.203 km 
-   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
-   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.19 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.81 %  Abundance  33.33 %
 
- Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc 
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204322175.595 pc 
    --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
  Material:     Beam     density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.786 km 
@@ -156,8 +163,29 @@ MuPairProd:  theoretical cross sections
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range                500 mum         500 mum
+Cut in range       
+           liquidH2         500 mum         500 mum
+          Aluminium         500 mum         500 mum
+        liquidArgon         500 mum         500 mum
+               Iron         500 mum         500 mum
+             Copper         500 mum         500 mum
+           Tungsten         500 mum         500 mum
+               Gold         500 mum         500 mum
+               Lead         500 mum         500 mum
+            Uranium         500 mum         500 mum
+              Water         500 mum         500 mum
+       Scintillator         500 mum         500 mum
+           Silicium         500 mum         500 mum
+             quartz         500 mum         500 mum
+            NemaG10         500 mum         500 mum
+                Air         500 mum         500 mum
+            Aerogel         500 mum         500 mum
+        CarbonicGas         500 mum         500 mum
+         WaterSteam         500 mum         500 mum
+           Galactic         500 mum         500 mum
+               Beam         500 mum         500 mum
 Cut in energy
+           liquidH2         990 eV         72.7 keV
           Aluminium        4.96 keV         365 keV
         liquidArgon         4.4 keV         217 keV
                Iron        14.3 keV         727 keV
@@ -179,11 +207,7 @@ Cut in energy
                Beam         990 eV          990 eV 
 ===================================================
 #
-#/run/particle/setCut 0.5 mm
-#/run/initialize
-#
 /run/verbose 2
-/event/drawTracks none
 /event/printModulo 50
 #
 /gun/particle e-
@@ -196,6 +220,22 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   1 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+       0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      91.70          1k         1       50         50         0.00    Calorimeter
+       8.30          0k         1        3          4         0.00    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -204,19 +244,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=166.96s Real=182.11s Sys=15.05s
+  User=68.54s Real=86.85s Sys=14.82s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 801.64 MeV +- 14.60 MeV       57.76 cm  +-  1.12 cm 
- Absorber1 ( liquidArgon) : 187.31 MeV +- 13.66 MeV       94.56 cm  +-  7.08 cm 
+ Absorber0 (        Lead) : 799.29 MeV +- 14.74 MeV       56.53 cm  +-  1.13 cm 
+ Absorber1 ( liquidArgon) : 189.35 MeV +- 13.64 MeV       95.42 cm  +-  7.01 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 484266419, 184123950
+ Current couple of seeds = 2004252829, 470324736
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

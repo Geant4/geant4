@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 MuonMinusCaptureAtRest is created 
@@ -70,21 +70,21 @@ msc:   Tables of transport mean free paths.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     26 hits are stored in ExN04TrackerHitsCollection.
-     5 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.324893 (GeV)
+     11 hits are stored in ExN04TrackerHitsCollection.
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.337948 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
      24 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 6.72231 (GeV)
+     21 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 20.4442 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     46 hits are stored in ExN04TrackerHitsCollection.
-     20 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 2.82926 (GeV)
+     24 hits are stored in ExN04TrackerHitsCollection.
+     34 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 9.76921 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -11,9 +11,17 @@ You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
+/run/verbose 2
+#
+/calor/cutG 2.13 mm    
+/calor/cutE 7.0  mum
+/run/initialize
+userDetector->Construct() start.
 
 ***** Table : Nb of materials = 18 *****
 
@@ -87,120 +95,7 @@ Current available graphics systems are:
  The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
  The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
  X position of the middle of the absorber 0 fm 
-Em5PhysicsList::SetCuts:CutLength : 1 mm 
-
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-============= The cut Energy ==============================
-                            gamma              e-    
-Cut in range                  1 mm            1 mm 
-Cut in energy
-          Beryllium        1.99 keV         468 keV
-          Aluminium        6.91 keV         595 keV
-            Silicon        6.88 keV         546 keV
-        liquidArgon        6.15 keV         347 keV
-               Iron        20.7 keV        1.29 MeV
-             Copper        24.8 keV        1.39 MeV
-           Tungsten         106 keV        2.29 MeV
-               Gold         112 keV        2.29 MeV
-               Lead         101 keV        1.36 MeV
-              Water        2.93 keV         351 keV
-                Air         250 eV          275 eV 
-           XenonGas         250 eV         1.75 keV
-        CarbonicGas         250 eV          542 eV 
-           ArgonCO2         250 eV          419 eV 
-        NewArgonCO2         250 eV          419 eV 
-           ArgonCH4         250 eV          369 eV 
- XenonMethanePropane         250 eV         1.55 keV
-           Galactic         250 eV          250 eV 
-===================================================
-/run/verbose 2
-#
-/calor/setAbsMat Silicon   
-
- The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
- The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
- X position of the middle of the absorber 0 fm 
-/calor/setAbsThick 20.5 mum  
-/calor/setAbsYZ    10 cm
-/calor/update
-
- The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
- X position of the middle of the absorber 0 fm 
-/gun/setDefault
-#
-#
-#  hist file name
-/plots/sethistName run19.paw
- hist file = run19.paw
-#  PLOT: energy deposit distribution in absorber
-/plots/setnbinEn 65
- Nb of bins in Edep plot = 65
-/plots/setEnlow   0. keV
- Elow  in the  Edep plot = 0
-/plots/setEnhigh 13. keV  
- Ehigh in the  Edep plot = 0.013
-#
-/calor/cutG 2.13 mm    
-/calor/cutE 7.0  mum
-/run/initialize
+physicsList->Construct() start.
 physicsList->setCut() start.
 Em5PhysicsList::SetCuts:CutLength : 1 mm 
 
@@ -264,7 +159,25 @@ hIoni:    Knock-on electron cross sections .
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range               2.13 mm            7 mum
+Cut in range       
+          Beryllium        2.13 mm            7 mum
+          Aluminium        2.13 mm            7 mum
+            Silicon        2.13 mm            7 mum
+        liquidArgon        2.13 mm            7 mum
+               Iron        2.13 mm            7 mum
+             Copper        2.13 mm            7 mum
+           Tungsten        2.13 mm            7 mum
+               Gold        2.13 mm            7 mum
+               Lead        2.13 mm            7 mum
+              Water        2.13 mm            7 mum
+                Air        2.13 mm            7 mum
+           XenonGas        2.13 mm            7 mum
+        CarbonicGas        2.13 mm            7 mum
+           ArgonCO2        2.13 mm            7 mum
+        NewArgonCO2        2.13 mm            7 mum
+           ArgonCH4        2.13 mm            7 mum
+ XenonMethanePropane        2.13 mm            7 mum
+           Galactic        2.13 mm            7 mum
 Cut in energy
           Beryllium        2.47 keV        8.08 keV
           Aluminium        9.83 keV        11.9 keV
@@ -286,6 +199,32 @@ Cut in energy
            Galactic         250 eV          250 eV 
 ===================================================
 #
+/calor/setAbsMat Silicon   
+
+ The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
+ The ABSORBER is made of 1 cm  of Silicon. The transverse size (YZ) is 2 cm 
+ X position of the middle of the absorber 0 fm 
+/calor/setAbsThick 20.5 mum  
+/calor/setAbsYZ    10 cm
+/calor/update
+
+ The  WORLD   is made of 30.75 mum of Galactic. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 20.5 mum of Silicon. The transverse size (YZ) is 10 cm 
+ X position of the middle of the absorber 0 fm 
+#
+/gun/setDefault
+#
+#  hist file name
+/plots/sethistName run19.paw
+ hist file = run19.paw
+#  PLOT: energy deposit distribution in absorber
+/plots/setnbinEn 65
+ Nb of bins in Edep plot = 65
+/plots/setEnlow   0. keV
+ Elow  in the  Edep plot = 0
+/plots/setEnhigh 13. keV  
+ Ehigh in the  Edep plot = 0.013
+#
 /gun/particle pi+ 
 /gun/energy 5. GeV
 /event/printModulo 10000
@@ -298,6 +237,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 Start Run processing.
 
 ---> Begin of Event: 0
@@ -322,26 +265,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=103.23s Real=110.77s Sys=7.5s
+  User=69s Real=3.4e+03s Sys=5e+02s
  ================== run summary =====================
  end of Run TotNbofEvents = 100000
-    mean charged track length   in absorber=0.0209597 +- 1.45396e-05  mm  
+    mean charged track length   in absorber=0.0209662 +- 1.5147e-05  mm  
 
-            mean energy deposit in absorber=0.00668563 +- 2.06508e-05  MeV 
+            mean energy deposit in absorber=0.00668476 +- 2.09e-05  MeV 
 
- mean number of steps in absorber (charged) =0.08731 +- 0.00240954      
- mean number of steps in absorber (neutral) =5e-05 +- 2.23601e-05      
+ mean number of steps in absorber (charged) =0.10345 +- 0.00245985      
+ mean number of steps in absorber (neutral) =3e-05 +- 1.73202e-05      
 
-   mean number of charged secondaries = 0.04523 +- 0.000925874
+   mean number of charged secondaries = 0.01866 +- 0.000447569
 
-   mean number of neutral secondaries = 5e-05 +- 2.23601e-05
+   mean number of neutral secondaries = 3e-05 +- 1.73202e-05
 
-   mean number of e-s =0.04523  and e+s =0
+   mean number of e-s =0.01866  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
  energy deposit distribution 
-#entries=100000    #underflows=0    #overflows=5711
+#entries=100000    #underflows=0    #overflows=5729
  bin nb      Elow      entries     normalized 
     0         0           0           0
     1    0.0002           0           0
@@ -349,72 +292,72 @@ Run Summary
     3    0.0006           0           0
     4    0.0008           0           0
     5     0.001           2         0.1
-    6    0.0012           3        0.15
-    7    0.0014          10         0.5
-    8    0.0016          32         1.6
-    9    0.0018         100           5
-   10     0.002         206        10.3
-   11    0.0022         422        21.1
-   12    0.0024         780          39
-   13    0.0026        1263       63.15
-   14    0.0028        1846        92.3
-   15     0.003        2614       130.7
-   16    0.0032        3336       166.8
-   17    0.0034        4118       205.9
-   18    0.0036        4673      233.65
-   19    0.0038        4806       240.3
-   20     0.004        4747      237.35
-   21    0.0042        4903      245.15
-   22    0.0044        4694       234.7
-   23    0.0046        4447      222.35
-   24    0.0048        4139      206.95
-   25     0.005        3758       187.9
-   26    0.0052        3410       170.5
-   27    0.0054        3144       157.2
-   28    0.0056        2860         143
-   29    0.0058        2760         138
-   30     0.006        2408       120.4
-   31    0.0062        2266       113.3
-   32    0.0064        2034       101.7
-   33    0.0066        1973       98.65
-   34    0.0068        1834        91.7
-   35     0.007        1685       84.25
-   36    0.0072        1593       79.65
-   37    0.0074        1524        76.2
-   38    0.0076        1343       67.15
-   39    0.0078        1287       64.35
-   40     0.008        1213       60.65
-   41    0.0082        1063       53.15
-   42    0.0084         945       47.25
-   43    0.0086         931       46.55
-   44    0.0088         830        41.5
-   45     0.009         779       38.95
-   46    0.0092         750        37.5
-   47    0.0094         653       32.65
-   48    0.0096         610        30.5
-   49    0.0098         552        27.6
-   50      0.01         492        24.6
-   51    0.0102         495       24.75
-   52    0.0104         467       23.35
-   53    0.0106         399       19.95
-   54    0.0108         393       19.65
-   55     0.011         379       18.95
-   56    0.0112         346        17.3
+    6    0.0012           2         0.1
+    7    0.0014          11        0.55
+    8    0.0016          33        1.65
+    9    0.0018          93        4.65
+   10     0.002         217       10.85
+   11    0.0022         440          22
+   12    0.0024         772        38.6
+   13    0.0026        1255       62.75
+   14    0.0028        1830        91.5
+   15     0.003        2621      131.05
+   16    0.0032        3371      168.55
+   17    0.0034        4058       202.9
+   18    0.0036        4589      229.45
+   19    0.0038        4737      236.85
+   20     0.004        4838       241.9
+   21    0.0042        4969      248.45
+   22    0.0044        4696       234.8
+   23    0.0046        4452       222.6
+   24    0.0048        4103      205.15
+   25     0.005        3751      187.55
+   26    0.0052        3468       173.4
+   27    0.0054        3172       158.6
+   28    0.0056        2838       141.9
+   29    0.0058        2723      136.15
+   30     0.006        2422       121.1
+   31    0.0062        2208       110.4
+   32    0.0064        2011      100.55
+   33    0.0066        1965       98.25
+   34    0.0068        1891       94.55
+   35     0.007        1722        86.1
+   36    0.0072        1607       80.35
+   37    0.0074        1518        75.9
+   38    0.0076        1334        66.7
+   39    0.0078        1245       62.25
+   40     0.008        1227       61.35
+   41    0.0082        1100          55
+   42    0.0084         967       48.35
+   43    0.0086         910        45.5
+   44    0.0088         826        41.3
+   45     0.009         798        39.9
+   46    0.0092         716        35.8
+   47    0.0094         660          33
+   48    0.0096         619       30.95
+   49    0.0098         558        27.9
+   50      0.01         518        25.9
+   51    0.0102         474        23.7
+   52    0.0104         450        22.5
+   53    0.0106         395       19.75
+   54    0.0108         395       19.75
+   55     0.011         347       17.35
+   56    0.0112         321       16.05
    57    0.0114         288        14.4
-   58    0.0116         269       13.45
-   59    0.0118         253       12.65
-   60     0.012         262        13.1
-   61    0.0122         254        12.7
-   62    0.0124         237       11.85
-   63    0.0126         199        9.95
-   64    0.0128         210        10.5
+   58    0.0116         280          14
+   59    0.0118         267       13.35
+   60     0.012         253       12.65
+   61    0.0122         276        13.8
+   62    0.0124         260          13
+   63    0.0126         184         9.2
+   64    0.0128         218        10.9
 
  Emp =          0.0042   width=         0.0028  MeV 
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 772116847, 1675844465
+ Current couple of seeds = 115961453, 1292148745
 ----------------------------------------
 #
 Graphics systems deleted.

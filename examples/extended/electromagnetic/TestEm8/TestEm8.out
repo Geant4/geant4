@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (29-Jun-2001)
+                                (14-Dec-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -11,6 +11,8 @@ You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
@@ -131,7 +133,7 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 8.377
 49	fGamma = 9.283e+04	sumE = 8.504
 
-total time for build X-ray TR tables = 11.91 s
+total time for build X-ray TR tables = 6.36 s
 Em8PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -161,7 +163,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=12.17 s 
+total time(SetCuts)=6.63 s 
 #
 #control/saveHistory
 #
@@ -195,7 +197,19 @@ total time(SetCuts)=12.17 s
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================
                             gamma              e-    
-Cut in range                  1 mm            1 mm 
+Cut in range       
+          Aluminium           1 mm            1 mm 
+              Mylar           1 mm            1 mm 
+      Polypropelene           1 mm            1 mm 
+                 Kr           1 mm            1 mm 
+              Argon           1 mm            1 mm 
+                 N2           1 mm            1 mm 
+                 O2           1 mm            1 mm 
+                Air           1 mm            1 mm 
+              Xenon           1 mm            1 mm 
+                CO2           1 mm            1 mm 
+            Xe20CO2           1 mm            1 mm 
+            Kr20CO2           1 mm            1 mm 
 Cut in energy
           Aluminium        6.89 keV         597 keV
               Mylar        3.48 keV         541 keV
@@ -227,34 +241,50 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   11 kByte
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+
+    Voxelisation: top CPU users:
+    Percent   Total CPU    System CPU       Memory  Volume
+    -------   ----------   ----------     --------  ----------
+427218800.00     42721.88         0.57           11k Radiator
+427218700.00     42721.87         0.57            0k World
+
+    Voxelisation: top memory users:
+    Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
+    -------   --------     ------   ------   --------   ----------    ----------
+      96.00         11k         1      305        376     42721.88    Radiator
+       4.00          0k         3        7         20     42721.87    World
 Start Run processing.
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=419.92s Real=421.55s Sys=1.43s
+  User=89.43s Real=91.56s Sys=1.14s
  ================== run summary =====================
- end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=73.5071 +- 0.990166  mm  
+ end of Run TotNbofEvents = 1000.000000
+    mean charged track length   in absorber=71.821217 +- 1.034940  mm  
 
-            mean energy deposit in absorber=0.0999611 +- 0.00102342  MeV 
+            mean energy deposit in absorber=0.098855 +- 0.001018  MeV 
 
- mean number of steps in absorber (charged) =429.812 +- 1.5025      
- mean number of steps in absorber (neutral) =5.157 +- 0.0716404      
+ mean number of steps in absorber (charged) =429.514000 +- 1.262516      
+ mean number of steps in absorber (neutral) =4.755000 +- 0.077518      
 
-   mean number of charged secondaries = 1.423 +- 0.0363603
+   mean number of charged secondaries = 1.349000 +- 0.038252
 
-   mean number of neutral secondaries = 0.02 +- 0.00442719
+   mean number of neutral secondaries = 0.024000 +- 0.005042
 
-   mean number of e-s =1.423  and e+s =0
+   mean number of e-s =1.349000  and e+s =0.000000
 
-(number) transmission coeff=0.776  reflection coeff=0
+(number) transmission coeff=0.843000  reflection coeff=0.001000
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 991446077, 561025836
+ Current couple of seeds = 1872357293, 1413261945
 ----------------------------------------
 #
 #
