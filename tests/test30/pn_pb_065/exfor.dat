@@ -1,13 +1,3 @@
-                EXFOR: Experimental Nuclear Reaction Data Retrievals
-                                         HELP
-               Other Databases: EVA, CINDA, Program abstracts
-
-  ------------------------------------------------------------------------
-
-------------------------------------------------------------------------
-ENTRY            13522     960709
-SUBENT        13522001     960709
-BIB                 13         22
 INSTITUTE  (1USADAV)
 REFERENCE  (J,PR/C,53,237,9601)
 AUTHOR     (E.L.HJORT,F.P.BRADY,J.R.DRUMMOND,B.MC EACHERN,
