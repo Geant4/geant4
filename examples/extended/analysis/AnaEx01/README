@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2000-10-31 13:49:11 barrand Exp $
+$Id: README,v 1.5 2000-11-07 14:39:17 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,26 +14,26 @@ $Id: README,v 1.4 2000-10-31 13:49:11 barrand Exp $
   To use the G4AnalysisManager the source/analysis category
  must have been reconstructed with one of the environment
  variable setted :
-    G4ANALYSIS_BUILD_OPEN_SCIENTIST
+    G4ANALYSIS_BUILD_LAB
     G4ANALYSIS_BUILD_JAS
 
   To use an analysis system with this example, the coresponding
  environment variable must be setted :
-    G4ANALYSIS_USE_OPEN_SCIENTIST
+    G4ANALYSIS_USE_LAB
     G4ANALYSIS_USE_JAS
 
   Then to cosntruct this example :
     csh> cd $G4INSTALL/examples/extended/analysis/AnaEx01
-    csh> setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
+    csh> setenv G4ANALYSIS_USE_LAB 1
     csh> setenv G4ANALYSIS_USE_JAS 1
     csh> gmake
  
- Working with OpenScientist :
- --------------------------
-  If working with OpenScientist run the program
- from the analysis/OpenScientist directory :
-   csh> cd analyis/OpenScientist
-   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 OpenScientist
+ Working with the Lab package :
+ ----------------------------
+  If working with the Lab package run the program
+ from the analysis/Lab directory :
+   csh> cd analyis/Lab
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01 Lab
   It must produce a g4osc.root file that contains
  some histograms. You can visualize them with :
    csh> source <path>/Lab/<version>/cmt/setup.csh

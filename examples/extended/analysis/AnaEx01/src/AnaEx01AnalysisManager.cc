@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.4 2000-11-02 08:35:40 barrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.5 2000-11-07 14:39:18 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,10 +20,9 @@
 #include "G4HCofThisEvent.hh"
 
 #include <IHistogramFactory.h>
-#include <IHistogram1D.h>
 
-#ifdef G4ANALYSIS_USE_OPEN_SCIENTIST
-#include "G4OpenScientistSystem.hh"
+#ifdef G4ANALYSIS_USE_LAB
+#include "G4LabSystem.hh"
 #endif
 #ifdef G4ANALYSIS_USE_JAS
 #include "G4JasSystem.hh"
@@ -41,8 +40,8 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(
 ,fEGap(0)
 ,fLGap(0)
 {
-#ifdef G4ANALYSIS_USE_OPEN_SCIENTIST
-  RegisterAnalysisSystem(new G4OpenScientistSystem);
+#ifdef G4ANALYSIS_USE_LAB
+  RegisterAnalysisSystem(new G4LabSystem);
 #endif
 #ifdef G4ANALYSIS_USE_JAS
   RegisterAnalysisSystem(new G4JasSystem);

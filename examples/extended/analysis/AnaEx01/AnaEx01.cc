@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01.cc,v 1.3 2000-10-31 13:09:59 barrand Exp $
+// $Id: AnaEx01.cc,v 1.4 2000-11-07 14:39:17 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,7 @@ int main(int argc,char** argv) {
   
   AnaEx01AnalysisManager* analysisManager = 
 #ifdef G4ANALYSIS_USE
-    new AnaEx01AnalysisManager(argc==1?"OpenScientist":argv[1]);
+    new AnaEx01AnalysisManager(argc==1?"Lab":argv[1]);
 #else
     0;
 #endif
