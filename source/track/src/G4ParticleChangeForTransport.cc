@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.13 2002-12-16 11:59:12 gcosmo Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.14 2003-01-22 17:54:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,6 +200,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
   pPostStepPoint->SetTouchableHandle( theTouchableHandle );
 
   pPostStepPoint->SetMaterial( theMaterialChange );
+  pPostStepPoint->SetMaterialCutsCouple( theMaterialCutsCoupleChange );
 
   // It used to call base class's method 
   //   - but this would copy uninitialised data members
