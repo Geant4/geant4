@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.3 2001-11-09 17:48:26 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.4 2001-11-12 08:06:20 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -102,6 +102,7 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
     G4double A=targN+targZ;
     if(targN!=lastN || targZ!=lastZ)       // This nucleus was not the last in use
 	{
+      lastLE   = 0.;
       lastN    = targN;                    // The last N of calculated nucleus
       lastZ    = targZ;                    // The last Z of calculated nucleus
       G4int n=colN.size();
