@@ -1,0 +1,7 @@
+Dist=t2.DistanceToOut(pzero,vxy) = 50
+Dist=t2.DistanceToOut(ponxside,vmx) = 5
+Dist=t2.DistanceToOut(ponxside,vmxmy) = 7.51652
+Dist=t2.DistanceToOut(ponxside,vz) = 50
+Dist=t2.DistanceToOut(pbigx,vx) = 0
+Dist=t2.DistanceToOut(pbigx,vxy) = 0
+Dist=t2.DistanceToOut(pbigx,vz) = 50
