@@ -14,9 +14,10 @@ case "$g4vis_build_dawn_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_dawnfile_driver" in
 '')
-	g4vis_build_dawnfile_driver=n
+	g4vis_build_dawnfile_driver=y
 	;;
 esac
 
@@ -44,9 +45,10 @@ case "$g4vis_build_oix_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_raytracer_driver" in
 '')
-	g4vis_build_raytracer_driver=n
+	g4vis_build_raytracer_driver=y
 	;;
 esac
 
@@ -56,9 +58,10 @@ case "$g4vis_build_vrml_driver" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_build_vrmlfile_driver" in
 '')
-	g4vis_build_vrmlfile_driver=n
+	g4vis_build_vrmlfile_driver=y
 	;;
 esac
 
@@ -75,9 +78,10 @@ case "$g4vis_use_dawn" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_dawnfile" in
 '')
-	g4vis_use_dawnfile=n
+	g4vis_use_dawnfile=y
 	;;
 esac
 
@@ -105,9 +109,10 @@ case "$g4vis_use_oix" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_raytracer" in
 '')
-	g4vis_use_raytracer=n
+	g4vis_use_raytracer=y
 	;;
 esac
 
@@ -117,9 +122,10 @@ case "$g4vis_use_vrml" in
 	;;
 esac
 
+# Set by default!
 case "$g4vis_use_vrmlfile" in
 '')
-	g4vis_use_vrmlfile=n
+	g4vis_use_vrmlfile=y
 	;;
 esac
 
@@ -178,8 +184,9 @@ EOM`
 
 dflt=$g4vis_use_dawnfile
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -318,8 +325,9 @@ EOM`
 
 dflt=$g4vis_use_raytracer
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
@@ -376,8 +384,9 @@ EOM`
 
 dflt=$g4vis_use_vrmlfile
 rp=$g4message
-. ./myread
-gans=$ans
+#. ./myread
+#gans=$ans
+gans=y
 
 	case $gans in
 	
