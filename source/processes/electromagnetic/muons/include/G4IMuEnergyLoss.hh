@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IMuEnergyLoss.hh,v 1.1 1999-01-07 16:11:02 gunter Exp $
+// $Id: G4IMuEnergyLoss.hh,v 1.2 1999-04-30 08:04:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -43,6 +43,7 @@
 #include "G4IVContinuousDiscreteProcess.hh"
 #include "G4Material.hh"
 #include "G4Element.hh"
+#include "G4EnergyLossTables.hh"
 #include "G4VParticleChange.hh"
 #include "globals.hh"
 #include "G4Track.hh"
