@@ -61,7 +61,7 @@ void exGPSEventAction::EndOfEventAction(const G4Event* evt)
       G4double P=direction.mag();
       G4double E=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetMass();
       G4double E0=evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetPDGMass();
-      E=sqrt(P*P+E0*E0);   
+      E=std::sqrt(P*P+E0*E0);   
       E -= E0;
       G4String pname = evt->GetPrimaryVertex(j)->GetPrimary(i)->GetG4code()->GetParticleName();
       //

@@ -141,7 +141,7 @@ void exGPSAnalysisManager::BeginOfRun()
 					    ,100,minpos/cm,maxpos/cm);
     posiYZ = hFactory->createHistogram2D("Source Y-Z distribution",100,minpos/cm,maxpos/cm
 					    ,100,minpos/cm,maxpos/cm);
-    anglCTP = hFactory->createHistogram2D("Source phi-cos(theta) distribution",360,0,360
+    anglCTP = hFactory->createHistogram2D("Source phi-std::cos(theta) distribution",360,0,360
 						   , 100, -1, 1);
     anglTP = hFactory->createHistogram2D("Source phi-theta distribution",360,0,360
 						  ,180,0,180);

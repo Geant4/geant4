@@ -12,5 +12,8 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03/12/2004, G.Cosmo,  (exgps-V06-02-01)
+- Implemented migration to <cmath>.
+
 28/10/2004, F.Lei,  (exgps-V06-02-00)
-	- Created.
+- Created.
