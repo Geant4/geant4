@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.30 2003-05-21 10:52:30 gcosmo Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.31 2003-06-04 15:58:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // outer conical surfaces are defined using common Z planes. 
 // ----------------------------------------------------------------------
 
+#include "G4Types.hh"
 #include "g4std/strstream"
 
 #include "G4BREPSolidPCone.hh"

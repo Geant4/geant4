@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtInterface.cc,v 1.7 2001-11-20 23:21:41 asaim Exp $
+// $Id: G4HEPEvtInterface.cc,v 1.8 2003-06-04 16:03:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------------
 
+#include "G4Types.hh"
 #include "g4std/strstream"
 
 #include "G4ios.hh"
