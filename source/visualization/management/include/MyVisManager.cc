@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyVisManager.cc,v 1.6 2001-04-10 14:56:09 johna Exp $
+// $Id: MyVisManager.cc,v 1.7 2001-05-24 13:39:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,16 +15,16 @@
 
 // Supported drivers...
 
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
+
 #ifdef G4VIS_USE_DAWN
 #include "G4FukuiRenderer.hh"
 #endif
 
 #ifdef G4VIS_USE_DAWNFILE
 #include "G4DAWNFILE.hh"
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-#include "G4RayTracer.hh"
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -55,6 +55,10 @@
 #include "G4OpenInventorWin32.hh"
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+#include "G4RayTracer.hh"
+#endif
+
 #ifdef G4VIS_USE_VRML
 #include "G4VRML1.hh"
 #include "G4VRML2.hh"
@@ -65,13 +69,13 @@
 #include "G4VRML2File.hh"
 #endif
 
-#ifdef G4VIS_USE_ASCIITREE
-#include "G4ASCIITree.hh"
-#endif
-
 MyVisManager::MyVisManager () {}
 
 void MyVisManager::RegisterGraphicsSystems () {
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
+#endif
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);
@@ -79,10 +83,6 @@ void MyVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWNFILE
   RegisterGraphicsSystem (new G4DAWNFILE);
-#endif
-
-#ifdef G4VIS_USE_RAYTRACER
-  RegisterGraphicsSystem (new G4RayTracer);
 #endif
 
 #ifdef G4VIS_USE_OPACS
@@ -113,6 +113,10 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
 
+#ifdef G4VIS_USE_RAYTRACER
+  RegisterGraphicsSystem (new G4RayTracer);
+#endif
+
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
@@ -121,10 +125,6 @@ void MyVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
-#endif
-
-#ifdef G4VIS_USE_ASCIITREE
-  RegisterGraphicsSystem (new G4ASCIITree);
 #endif
 
   if (fVerbose > 0) {
