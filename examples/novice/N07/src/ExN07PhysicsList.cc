@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07PhysicsList.cc,v 1.1 2003-03-10 01:43:36 asaim Exp $
+// $Id: ExN07PhysicsList.cc,v 1.2 2003-04-09 23:20:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -267,11 +267,7 @@ void ExN07PhysicsList::SetCuts()
 
   // These values are used as the default production thresholds
   // for the world volume.
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
-  //SetCutValue(defaultCutValue, "proton");
-  //SetCutValue(defaultCutValue, "anti_proton");
+  SetCutsWithDefault();
 
  
   // Production thresholds for detector regions
@@ -282,9 +278,6 @@ void ExN07PhysicsList::SetCuts()
     G4Region* reg = G4RegionStore::GetInstance()->GetRegion(regName[i]);
     G4ProductionCuts* cuts = new G4ProductionCuts;
     cuts->SetProductionCut(defaultCutValue*fuc);
-    //cuts->SetProductionCut(defaultCutValue*fuc,idxG4GammaCut);
-    //cuts->SetProductionCut(defaultCutValue*fuc,idxG4ElectronCut);
-    //cuts->SetProductionCut(defaultCutValue*fuc,idxG4PositronCut);
     reg->SetProductionCuts(cuts);
     fuc *= 10.;
   }

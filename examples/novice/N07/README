@@ -1,4 +1,4 @@
-$Id: README,v 1.1 2003-04-09 23:04:42 asaim Exp $
+$Id: README,v 1.2 2003-04-09 23:20:58 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -110,7 +110,21 @@ $Id: README,v 1.1 2003-04-09 23:04:42 asaim Exp $
     particular region. Please note that some EM processes still generate
     such secondary below threshold.
 
- 6- UI commands defined in this example
+ 6- Macro files
+
+  exampleN07.in
+    To be used for batch mode. The reference output file is made by this
+    macro file.
+
+  sample.mac
+    To be used for interactive mode. Issue "/control/execute sample.mac"
+    when "Idle>" prompt appears.
+
+  vis.mac
+    Setting visualization parameters. This macro file will be called 
+    automatically when interactive execution starts.
+
+ 7- UI commands defined in this example
  
 Command /N07/setAbsMat
 Guidance :

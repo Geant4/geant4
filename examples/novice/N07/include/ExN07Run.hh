@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.hh,v 1.2 2003-04-08 15:47:00 asaim Exp $
+// $Id: ExN07Run.hh,v 1.3 2003-04-09 23:20:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -45,7 +45,7 @@ class ExN07Run : public G4Run
     inline void operator delete(void* aRun);
 
   public:
-    virtual void RecordEvent(G4Event*);
+    virtual void RecordEvent(const G4Event*);
 
   private:
     G4double totE[6];

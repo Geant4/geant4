@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN07Run.cc,v 1.2 2003-04-08 15:47:01 asaim Exp $
+// $Id: ExN07Run.cc,v 1.3 2003-04-09 23:20:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,9 +53,11 @@ ExN07Run::ExN07Run()
 ExN07Run::~ExN07Run()
 {;}
 
-void ExN07Run::RecordEvent(G4Event* evt)
+void ExN07Run::RecordEvent(const G4Event* evt)
 {
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
+  if(!HCE) return;
+  numberOfEvent++;
   for(int j=0;j<6;j++)
   {
     nGamma[j] += ExN07StackingAction::GetNGamma(j);
@@ -68,8 +70,6 @@ void ExN07Run::RecordEvent(G4Event* evt)
     if(eMinPositron[j]>ExN07StackingAction::GetEMinPositron(j))
     { eMinPositron[j] = ExN07StackingAction::GetEMinPositron(j); }
   }
-  if(!HCE) return;
-  numberOfEvent++;
   ExN07CalorHitsCollection* CHC = 0;
   for(size_t i=0;i<6;i++)
   {
