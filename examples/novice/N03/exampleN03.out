@@ -100,7 +100,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -110,15 +110,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
@@ -149,8 +149,8 @@ Cut in energy
 >>> Event 0
     0 trajectories stored in this event.
      10 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 2.8e+02 MeV       total track length:      16 cm 
-        Gap: total energy:     3.7 MeV       total track length:     1.5 cm 
+   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
+        Gap: total energy:      13 MeV       total track length:     6.2 cm 
 #
 # list the existing physics processes
      Transportation,                msc,              hIoni,              eIoni
@@ -165,13 +165,13 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1081085135, 235076861
+ Current couple of seeds = 903484076, 2048332864
 ----------------------------------------
 >>> Event 0
     0 trajectories stored in this event.
      9 hits are stored in ExN03CalorHitsCollection.
    Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
-        Gap: total energy:      20 MeV       total track length:     9.8 cm 
+        Gap: total energy:      22 MeV       total track length:      10 cm 
 #
 # switch on MultipleScattering
 #
@@ -194,10 +194,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1062777741, 543200454
+ Current couple of seeds = 397522826, 1167906642
 ----------------------------------------
 >>> Event 0
     0 trajectories stored in this event.
      30 hits are stored in ExN03CalorHitsCollection.
-   Absorber: total energy: 3.9e+02 MeV       total track length:      91 cm 
-        Gap: total energy:      81 MeV       total track length:     2.2 m  
+   Absorber: total energy: 3.4e+02 MeV       total track length:      79 cm 
+        Gap: total energy:      72 MeV       total track length:       2 m  

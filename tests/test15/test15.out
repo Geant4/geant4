@@ -81,7 +81,7 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -91,7 +91,7 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -100,11 +100,11 @@ msc:   Tables of transport mean free paths.
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 /gun/direction 1 0 0
 #
 # proton at 10 GeV in Pb

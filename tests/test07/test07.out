@@ -98,7 +98,7 @@ msc:   Tables of transport mean free paths.
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -108,15 +108,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 /control/saveHistory
 # /run/verbose 2
 #

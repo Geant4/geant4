@@ -64,15 +64,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
+    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
 /gun/direction 1 0 0
 #
 # gamma 500 MeV in Al
@@ -87,7 +87,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=38.34s Real=39.64s Sys=1.17s
+  User=35.39s Real=37.34s Sys=1.1s
 #
 # electron 500 MeV in Air
 #
@@ -100,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=3.41s Real=3.42s Sys=0.01s
+  User=2.87s Real=2.89s Sys=0.02s
 #
 exit
 G4 kernel has come to Quit state.
