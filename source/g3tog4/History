@@ -1,7 +1,14 @@
-$Id: History,v 1.53 2003-10-03 14:31:40 gcosmo Exp $
+$Id: History,v 1.54 2004-03-26 14:59:32 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V06-01-00 26-Mar-2004 G.Cosmo
+- Removed hardwired gSeparator constant (a character which is used
+  during generation of volume names) to '_'. Now gSeparator is made non
+  constant and so can be changed in case a user wants to use '_' in his
+  code (I.Hrivnacova).
+  Modified files: G3toG4.hh, clparse.cc.
 
 g3tog4-V05-02-00 03-Oct-2003 G.Cosmo
 - GNUmakefile:
