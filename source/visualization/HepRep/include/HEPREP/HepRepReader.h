@@ -10,6 +10,7 @@
 // Copyright 2002-2003, Freehep.
 
 #include <string>
+#include <vector>
 
 namespace HEPREP {
 
@@ -25,6 +26,14 @@ class HepRepReader {
 public: 
     /// Destructor.
     virtual ~HepRepReader() { /* nop */; }
+
+    /**
+     * Returns a property (if set in the heprep.properties file).
+     *
+     * @param key property name
+     * @param defaultValue value if property not found
+     */
+    virtual std::string getProperty(std::string key, std::string defaultValue) = 0;
 
     /**
      * Closes the reader and its underlying stream.
@@ -49,6 +58,22 @@ public:
     virtual HepRep * read(std::string name) = 0;
 
     /**
+     * Returns the current entry name (random acces only).
+     *
+     * @return name of the current entry or null if not supported.
+     */
+    virtual std::string entryName() = 0;
+
+    /**
+     * Returns a list of names of available entries (random rccess only). 
+     * Zip files may contain instructions to skip a number of files. These files 
+     * will not be included in the entries.
+     *
+     * @return list of entrynames or null if not supported.
+     */
+    virtual std::vector<std::string>  entryNames() = 0;
+
+    /**
      * Allows for sequential access.
      *
      * @return true if sequential access is possible.
@@ -61,6 +86,25 @@ public:
      * @return false in case of a stream problem.
      */
     virtual bool reset() = 0;
+
+    /**
+     * Returns the (estimated) number of HepReps in the reader.
+     * Zip files may contain instructions to skip a number of files. These files 
+     * will not be included in the estimate.
+     *
+     * @return number of HepReps, or -1 if cannot be calculated.
+     */
+    virtual int size() = 0;
+
+    /**
+     * Skips a number of HepReps in the reader.
+     * Zip files may contain instructions to skip a number of files. These files 
+     * will not be included in the count to be skipped.
+     *
+     * @param n number of HepReps to be skipped.
+     * @return number of HepReps skipped.
+     */
+    virtual int skip(int n) = 0;
 
     /**
      * Is there a next heprep.

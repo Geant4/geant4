@@ -24,7 +24,7 @@ DefaultHepRepType::DefaultHepRepType(HepRepTypeTree* parentTypeTree, string type
 }
 
 DefaultHepRepType::~DefaultHepRepType() {
-    for (set<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
+    for (vector<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
         delete (*i1);
     }
 }
@@ -94,10 +94,11 @@ void DefaultHepRepType::setInfoURL(string info) {
 }
 
 void DefaultHepRepType::addType(HepRepType* type) {
-    types.insert(type);
+    // FIXME should check if type already exists
+    types.push_back(type);
 }
 
-set<HepRepType*> DefaultHepRepType::getTypes() {
+vector<HepRepType*> DefaultHepRepType::getTypeList() {
     return types;
 }
 

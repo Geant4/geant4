@@ -9,8 +9,8 @@
 
 // Copyright 2000-2002, FreeHEP.
 
-#include <set>
 #include <string>
+#include <vector>
 
 #include "HEPREP/HepRepTreeID.h"
 
@@ -41,7 +41,7 @@ public:
      *
      * @return collection of HepRepTypes.
      */
-    virtual std::set<HepRepType *>  getTypes() = 0;
+    virtual std::vector<HepRepType *>  getTypeList() = 0;
 
     /**
      * Returns type

@@ -22,7 +22,7 @@
 class DefaultHepRepTypeTree : public DefaultHepRepTreeID, public virtual HEPREP::HepRepTypeTree {
 
     private:
-        std::set<HEPREP::HepRepType*> types;
+        std::vector<HEPREP::HepRepType*> types;
 
     public:
         DefaultHepRepTypeTree(HEPREP::HepRepTreeID* typeTree);
@@ -30,7 +30,7 @@ class DefaultHepRepTypeTree : public DefaultHepRepTreeID, public virtual HEPREP:
 
         HEPREP::HepRepTypeTree* copy();
         void addType(HEPREP::HepRepType* type);
-        std::set<HEPREP::HepRepType* > getTypes();
+        std::vector<HEPREP::HepRepType* > getTypeList();
         HEPREP::HepRepType* getType(std::string name);
 };
 

@@ -12,7 +12,7 @@ DefaultHepRepTypeTree::DefaultHepRepTypeTree(HepRepTreeID* typeTree)
 }
 
 DefaultHepRepTypeTree::~DefaultHepRepTypeTree() {
-    for (set<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
+    for (vector<HepRepType*>::iterator i1 = types.begin(); i1 != types.end(); i1++) {
         delete (*i1);
     }
 }
@@ -23,10 +23,11 @@ HepRepTypeTree* DefaultHepRepTypeTree::copy() {
 }
 
 void DefaultHepRepTypeTree::addType(HepRepType* type) {
-    types.insert(type);
+    // FIXME should check if type already exists
+    types.push_back(type);
 }
 
-set<HepRepType*> DefaultHepRepTypeTree::getTypes() {
+vector<HepRepType*> DefaultHepRepTypeTree::getTypeList() {
     return types;
 }
 

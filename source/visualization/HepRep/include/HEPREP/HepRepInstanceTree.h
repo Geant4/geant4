@@ -9,7 +9,6 @@
 
 // Copyright 2000-2004, FreeHEP.
 
-#include <set>
 #include <vector>
 
 #include "HEPREP/HepRepTreeID.h"
@@ -72,7 +71,7 @@ public:
      *
      * @return collection of HepRepTreeIDs.
      */
-    virtual std::set<HepRepTreeID *>  getInstanceTrees() = 0;
+    virtual std::vector<HepRepTreeID *>  getInstanceTreeList() = 0;
 
     /**
      * Returns the associated typetree.

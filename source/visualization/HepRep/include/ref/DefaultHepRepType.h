@@ -23,7 +23,7 @@ class DefaultHepRepType : public DefaultHepRepDefinition, public virtual HEPREP:
 
     private:
         HEPREP::HepRepType* parent;
-        std::set<HEPREP::HepRepType*> types;
+        std::vector<HEPREP::HepRepType*> types;
         std::string name;
         std::string description;
         std::string infoURL;
@@ -44,7 +44,7 @@ class DefaultHepRepType : public DefaultHepRepDefinition, public virtual HEPREP:
         std::string getInfoURL();
         void setInfoURL(std::string infoURL);
         void addType(HEPREP::HepRepType* type);
-        std::set<HEPREP::HepRepType*> getTypes();
+        std::vector<HEPREP::HepRepType*> getTypeList();
 };
 
 #endif

@@ -9,7 +9,6 @@
 
 // Copyright 2000-2004, FreeHEP.
 
-#include <set>
 #include <string>
 #include <vector>
 
@@ -90,7 +89,7 @@ public:
      *
      * @return collection of HepRepTypeTrees.
      */
-    virtual std::set<HepRepTypeTree *>  getTypeTrees() = 0;
+    virtual std::vector<HepRepTypeTree *>  getTypeTreeList() = 0;
 
     /**
      * Returns a named and versioned typetree.
@@ -135,7 +134,7 @@ public:
      *
      * @return collection of HepRepInstanceTrees.
      */
-    virtual std::set<HepRepInstanceTree *>  getInstanceTrees() = 0;
+    virtual std::vector<HepRepInstanceTree *>  getInstanceTreeList() = 0;
 
     /**
      * Returns a named and versioned instancetree.

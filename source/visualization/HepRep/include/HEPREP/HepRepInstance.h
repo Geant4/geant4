@@ -98,6 +98,16 @@ public:
      * ONLY in JAVA
      */
     /**
+     * Returns true if this instance has a frame. Speedy access for iterator.
+     *
+     * ONLY in JAVA
+     */
+    /**
+     * Returns String layername. Speedy access for iterator.
+     *
+     * ONLY in JAVA
+     */
+    /**
      * Returns the parent of this instance.
      *
      * @return parent of instance, or null if top-level.
