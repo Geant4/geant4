@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.9 2005-02-18 01:12:25 asaim Exp $
+// $Id: G4Region.icc,v 1.10 2005-03-02 08:24:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -167,6 +167,26 @@ G4VUserRegionInformation* G4Region::GetUserInformation() const
 }
 
 // ********************************************************************
+// SetUserLimits
+// ********************************************************************
+//
+inline
+void G4Region::SetUserLimits(G4UserLimits* ul)
+{
+  fUserLimits = ul;
+}
+
+// ********************************************************************
+// GetUserLimits
+// ********************************************************************
+//
+inline
+G4UserLimits* G4Region::GetUserLimits() const
+{
+  return fUserLimits;
+}
+
+// ********************************************************************
 // ClearMap
 // ********************************************************************
 //
@@ -204,19 +224,3 @@ G4MaterialCutsCouple* G4Region::FindCouple(G4Material* mat)
   if(c!=fMaterialCoupleMap.end()) couple = (*c).second;
   return couple;
 }
-
-// ********************************************************************
-// Set/GetUserLimits
-// ********************************************************************
-inline
-G4UserLimits* G4Region::GetUserLimits() const
-{
-  return fUserLimits;
-}
-inline
-void G4Region::SetUserLimits(G4UserLimits* ul)
-{
-  fUserLimits = ul;
-}
-
-

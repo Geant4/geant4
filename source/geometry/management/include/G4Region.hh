@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.10 2005-02-18 01:12:25 asaim Exp $
+// $Id: G4Region.hh,v 1.11 2005-03-02 08:24:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -109,24 +109,25 @@ class G4Region
       // Scans recursively the 'lv' logical volume tree, retrieves
       // and places all materials in the list if becoming a region.
 
-    void SetUserInformation(G4VUserRegionInformation* ui);
-    G4VUserRegionInformation* GetUserInformation() const;
+    inline void SetUserInformation(G4VUserRegionInformation* ui);
+    inline G4VUserRegionInformation* GetUserInformation() const;
       // Set and Get methods for user information.
 
-    void ClearMap();
+    inline void SetUserLimits(G4UserLimits* ul);
+    inline G4UserLimits* GetUserLimits() const;
+      // Set and Get methodf for userL-limits associated to a region.
+      // Once user-limits are set, it will propagate to daughter volumes.
+
+    inline void ClearMap();
       // Reset G4MaterialCoupleMap
 
-    void RegisterMaterialCouplePair(G4Material* mat, G4MaterialCutsCouple*);
+    inline void RegisterMaterialCouplePair(G4Material* mat,
+                                           G4MaterialCutsCouple* couple);
       // Method invoked by G4ProductionCutsTable to register the pair.
 
-    G4MaterialCutsCouple* FindCouple(G4Material* mat);
+    inline G4MaterialCutsCouple* FindCouple(G4Material* mat);
       // Find a G4MaterialCutsCouple which corresponds to the material
       // in this region.
-
-    G4UserLimits* GetUserLimits() const;
-    void SetUserLimits(G4UserLimits*);
-      // Set/Get method of G4UserLimits class object. Once this object is set,
-      // it affects to all daughter volumes.
 
   private:
 
