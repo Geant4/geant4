@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.20 2001-09-19 11:22:34 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.21 2001-09-20 02:00:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -733,8 +733,9 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     
     if (theKineticEnergyCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
+      size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
       G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
-      for (size_t idx=0; idx<materialTable->size(); idx++){
+      for (size_t idx=0; idx<numberOfMaterials; idx++){
 	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
 	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
 	G4cout << G4endl;
@@ -796,7 +797,8 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 
  // line 6 ..
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  for (size_t J=0; J<materialTable->size(); J++) {
+  size_t numberOfMaterials = G4Material::GetNumberOfMaterials();
+  for (size_t J=0; J<numberOfMaterials; J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size_display; idx++) {
       if (particle[idx] == 0) {
@@ -829,7 +831,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 {
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->size();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   G4bool   ascii = fStoredInAscii;
   G4String dir   = directory;
@@ -901,7 +903,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
   
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   // number of materials in the table
-  numberOfMaterial = matTable->size();
+  numberOfMaterial =  G4Material::GetNumberOfMaterials();
 
   if (ascii) {
     /////////////// ASCII mode  /////////////////
@@ -914,7 +916,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.setf(G4std::ios::scientific);
   
     // material name and density
-    for (size_t idx=0; idx<matTable->size(); ++idx){
+    for (size_t idx=0; idx<numberOfMaterial; ++idx){
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetName();
       fOut << G4std::setw(FixedStringLengthForStore) << ((*matTable)[idx])->GetDensity()/(g/cm3) << G4endl;
     }
@@ -935,7 +937,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     fOut.write( (char*)(&numberOfMaterial), sizeof (G4int));
     
     // material name and density
-    for (size_t imat=0; imat<matTable->size(); ++imat){
+    for (size_t imat=0; imat<numberOfMaterial; ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
       G4double density = ((*matTable)[imat])->GetDensity()/(g/cm3);
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
@@ -1120,7 +1122,7 @@ G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directo
 							 G4bool          ascii)
 {
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->size();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   if (!fIsCheckedForRetrievePhysicsTable) {
     if (CheckMaterialInfo(directory, ascii)) {
@@ -1177,7 +1179,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
 
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->size();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
   // number of materials in the table
   G4int nmat;
   if (ascii) {
@@ -1196,7 +1198,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   // list of material
-  for (size_t idx=0; idx<matTable->size(); ++idx){
+  for (size_t idx=0; idx<numberOfMaterial; ++idx){
     // check eof
     if(fIn.eof()) {
 #ifdef G4VERBOSE  
@@ -1486,7 +1488,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
 
   // number of materials in the table
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
-  numberOfMaterial = matTable->size();
+  numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   // loop over all particles 
   while(!fIn.eof()){
