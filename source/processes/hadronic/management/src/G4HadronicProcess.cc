@@ -547,6 +547,8 @@ XBiasSecondaryWeight()
   return result;
 }
 
+struct G4Nancheck{ bool operator()(G4double aV){return (!(aV<1))&&(!(aV>-1));}};
+
 void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT)
 {
 //          G4cout << "############# Entry debug "
@@ -556,6 +558,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
  //                <<aScaleFactor<<" "
 //		 <<aT.GetWeight()<<" "
 //		 <<G4endl;
+      G4Nancheck go_wild;
       theTotalResult->Clear();
       theTotalResult->SetLocalEnergyDeposit(0.);
       theTotalResult->Initialize(aT);
@@ -600,6 +603,18 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	{
  	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
+	  if(go_wild(aR->GetEnergyChange()))
+	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "surviving track received NaN energy.");  
+	  }
+	  if(go_wild(aR->GetMomentumChange().x()) || 
+	     go_wild(aR->GetMomentumChange().y()) || 
+	     go_wild(aR->GetMomentumChange().z()))
+	  {
+            G4Exception("G4HadronicProcess", "007", FatalException,
+	                "survivine track received NaN momentum.");  
+	  }
           G4DynamicParticle * aNew = new G4DynamicParticle(aT.GetDefinition(),
 	                                                   aR->GetEnergyChange(),
 							   aR->GetMomentumChange());
@@ -610,7 +625,15 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	{
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
 	  theTotalResult->SetWeightChange(newWeight); // This is multiplicative
-	  if(aR->GetEnergyChange()>-.5) theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	  if(aR->GetEnergyChange()>-.5) 
+	  {
+  	    if(go_wild(aR->GetEnergyChange()))
+	    {
+              G4Exception("G4HadronicProcess", "007", FatalException,
+	                  "track received NaN energy.");  
+	    }
+	    theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	  }
 	  G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
 	  newDirection*=aR->GetTrafoToLab();
 	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
@@ -631,6 +654,18 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         G4LorentzVector theM = aR->GetSecondary(i)->GetParticle()->Get4Momentum();
         theM.rotate(rotation, it);
 	theM*=aR->GetTrafoToLab();
+	if(go_wild(theM.e()))
+	{
+          G4Exception("G4HadronicProcess", "007", FatalException,
+	              "secondary track received NaN energy.");  
+	}
+	if(go_wild(theM.x()) || 
+	   go_wild(theM.y()) || 
+	   go_wild(theM.z()))
+	{
+          G4Exception("G4HadronicProcess", "007", FatalException,
+	              "secondary track received NaN momentum.");  
+	}
 	aR->GetSecondary(i)->GetParticle()->Set4Momentum(theM);
 	G4double time = aR->GetSecondary(i)->GetTime();
 	if(time<0) time = aT.GetGlobalTime();
