@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-50000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -28,13 +28,13 @@ Pb
 2.
 #nangle
 5
-#angles 
+#angles
 7.5 30. 60. 120. 150.
 #dangle
 5.
 //--------
-#kBound
-0.2
+//#kBound
+//0.2
 #generator
 binary
 #paw

@@ -382,11 +382,12 @@ int main(int argc, char** argv)
       theDeExcitation->SetEvaporation(evp);
     }
     G4double amass = phys->GetNucleusMass();
+    /*
     if(nameGen == "binary") {
       phys->setCutOnP(eBound);
       phys->setCutOnPPP(kBound);
     }
-
+*/
     const G4ParticleDefinition* proton = G4Proton::Proton();
     const G4ParticleDefinition* neutron = G4Neutron::Neutron();
     const G4ParticleDefinition* pin = G4PionMinus::PionMinus();

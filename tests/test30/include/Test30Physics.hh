@@ -57,8 +57,8 @@ class Test30Physics
     G4double GetNucleusMass() {return theProcess->GetMass();};
     G4ExcitationHandler* GetDeExcitation() {return theDeExcitation;};
     G4PreCompoundModel* GetPreCompound() {return thePreCompound;};
-    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
-    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
+//    void setCutOnP(G4double val) {if(hkmod) hkmod->setCutOnP(val);};
+//    void setCutOnPPP(G4double val) {if(hkmod) hkmod->setCutOnPPP(val);};
 
   private:
 

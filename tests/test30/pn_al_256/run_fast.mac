@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-50000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -33,8 +33,8 @@ Al
 #dangle
 5.
 //--------
-#kBound
-0.1
+//#kBound
+//0.1
 //#HETCEmission
 //#GNASHTransition
 //#GEMEvaporation
@@ -44,12 +44,12 @@ binary
 //binary
 #paw
 kin.paw
-#run 
+#run
 //--------
-#generator
-bertini
-#paw
-ber.paw
+//#generator
+//bertini
+//#paw
+//ber.paw
 //#run
 //--------Exit
 #exit

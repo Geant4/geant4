@@ -62,35 +62,33 @@ class Test30HadronProduction : public G4VDiscreteProcess
 
      void SetSecondaryGenerator(Test30VSecondaryGenerator*);
 
-     G4double PostStepGetPhysicalInteractionLength(
-                             const G4Track& track,
-                        			     G4double   previousStepSize,
-			                             G4ForceCondition* condition);
+     G4double PostStepGetPhysicalInteractionLength(const G4Track& track,
+                        			         G4double   previousStepSize,
+			                                 G4ForceCondition* condition);
 
      G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
 
      G4bool IsApplicable(const G4ParticleDefinition&) {return true;};
-		 
-		 G4double GetMass() {return theGenerator->GetMass();};
+
+     G4double GetMass() {return theGenerator->GetMass();};
 
 
 //  protected:
 
-    
-     G4double GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition) {return DBL_MAX;};
-			    
+
+     G4double GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+                                                        {return DBL_MAX;};
+
   private:
-  
-     // hide assignment operator as private 
+
+     // hide assignment operator as private
      Test30HadronProduction(const Test30HadronProduction&);
      Test30HadronProduction& operator = (const Test30HadronProduction &right);
 
      void InitializeMe();
 
      Test30VSecondaryGenerator* theGenerator;
-     G4VParticleChange theChange;
+     G4VParticleChange          theChange;
 };
 
 

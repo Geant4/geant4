@@ -42,7 +42,7 @@ Pb
 22.5 45. 60. 90. 135.
 //--------
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run

@@ -72,7 +72,7 @@ Test30HadronProduction::~Test30HadronProduction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double Test30HadronProduction::PostStepGetPhysicalInteractionLength(
-                       const G4Track& aTrack,
+                       const G4Track&,
                              G4double,
                              G4ForceCondition* condition)
 {
@@ -82,7 +82,7 @@ G4double Test30HadronProduction::PostStepGetPhysicalInteractionLength(
 
   return z;
 }
-    
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test30HadronProduction::SetSecondaryGenerator(Test30VSecondaryGenerator* gen)
@@ -94,8 +94,8 @@ void Test30HadronProduction::SetSecondaryGenerator(Test30VSecondaryGenerator* ge
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* Test30HadronProduction::PostStepDoIt(
-                    const G4Track& track, 
-                    const G4Step& step)
+                    const G4Track& track,
+                    const G4Step&)
 {
   pParticleChange = theGenerator->Secondaries(track);
   ClearNumberOfInteractionLengthLeft();
