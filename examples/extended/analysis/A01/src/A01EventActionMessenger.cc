@@ -20,10 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventActionMessenger.cc,v 1.4 2003-08-14 23:27:26 duns Exp $
+// $Id: A01EventActionMessenger.cc,v 1.5 2003-10-13 17:57:49 duns Exp $
 // --------------------------------------------------------------
 //
-#ifdef G4ANALYSIS_USE
 
 #include "A01EventActionMessenger.hh"
 #include "A01EventAction.hh"
@@ -60,5 +59,3 @@ G4String A01EventActionMessenger::GetCurrentValue(G4UIcommand * command)
 
   return cv;
 }
-
-#endif // G4ANALYSIS_USE

@@ -20,13 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01EventActionMessenger.hh,v 1.4 2003-08-14 23:27:26 duns Exp $
+// $Id: A01EventActionMessenger.hh,v 1.5 2003-10-13 17:57:49 duns Exp $
 // --------------------------------------------------------------
 //
 #ifndef A01EventActionMessenger_h
 #define A01EventActionMessenger_h 1
-
-#ifdef G4ANALYSIS_USE
 
 class A01EventAction;
 class G4UIcmdWithAnInteger;
@@ -51,7 +49,6 @@ class A01EventActionMessenger: public G4UImessenger
     G4UIcmdWithAnInteger*  verboseCmd;
 
 };
-#endif // G4ANALYSIS_USE
 
 #endif
 
