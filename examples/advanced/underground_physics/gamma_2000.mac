@@ -45,10 +45,11 @@
 /dmx/gun/radius 650 mum
 /dmx/gun/halfz 300.0 nm
 #/dmx/gun/centre 0 0 82.750 mm
-/dmx/gun/centre 0 0 -311.75 mm
+/dmx/gun/centre 0 0 -302.65 mm
 /dmx/gun/confine americium_phys
 #
 /dmx/hitsfile gamma_2000.out
 /dmx/histogramfile gamma_2000.his
+/dmx/pmtfile gamma_pmt_2000.out
 
 /run/beamOn 2000
