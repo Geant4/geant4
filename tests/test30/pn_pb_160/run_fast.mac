@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-50000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -31,8 +31,6 @@ Pb
 #dangle
 5.
 //--------
-#kBound 
-0.1
 #generator
 binary
 #paw

@@ -58,6 +58,8 @@ int main(int argc, char** argv)
   if(argc < 2) {
     G4cout << "Input file is not specified! Exit" << G4endl;
     exit(1);
+  } else if(argc > 2) {
+    verbose = 2;
   }
 
   ifstream* fin = new ifstream();
@@ -84,6 +86,9 @@ int main(int argc, char** argv)
   char line[nmax];
   std::string line1, line2, word1, word2, word3;
   G4bool end = true;
+  int counter = 0;
+  G4DataVector* energy = new G4DataVector();
+  G4DataVector* cross = new G4DataVector();
 
   // main loop
 
@@ -96,7 +101,7 @@ int main(int argc, char** argv)
     fin->getline( line, nmax);
     line1 = std::string("");
     line1 = std::string(line, nmax);
-    if(2 < verbose) {
+    if(1 < verbose) {
       cout << "Next line # " << counter << ": " << line1 << endl;
       cout << "First symbols= " << line[0] << line[1] << line[2] << endl;
     }
@@ -118,109 +123,39 @@ int main(int argc, char** argv)
           cout << "e0= " << e0 << " e= " << e << " cross= " << s << endl;
         }
 	if(ebeam != e0) {
+          if(1 < verbose) {
+            cout << "New beam energy " << e0 << endl;
+          }
 	  if(ebeam > 0.0) {
-	    int nbin = cross.size();
+	    int nbin = cross->size();
             (*fout_b) << "#####..Ebeam(MeV) = " << ebeam/MeV << G4endl;
             (*fout_b) << "ve/create X(" << nbin << ") R ";
             (*fout_c) << "#####..Ebeam(MeV) = " << ebeam/MeV << G4endl;
 
 	    int j;
 	    for(j=0; j<nbin; j++) {
-              (*fout_b) << (*energy)[i] << " ";
-              (*fout_c) << "e(MeV)= " << (*energy)[i]
-                        << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
+              (*fout_b) << (*energy)[j] << " ";
+              (*fout_c) << "e(MeV)= " << (*energy)[j]
+                        << " cross(mb/MeV/sr)= " << (*cross)[j] << endl;
 	    }
             (*fout_b) << endl;
             (*fout_b) << "ve/create Y(" << nbin << ") R ";
 	    for(j=0; j<nbin; j++) {
-              (*fout_b) << (*cross)[i] << " ";
+              (*fout_b) << (*cross)[j] << " ";
 	    }
             (*fout_b) << endl;
           }
 	  if(e0 == 0.0) break;
 	  ebeam = e0;
-          G4DataVector* energy = new G4DataVector();
-          G4DataVector* cross = new G4DataVector();
+          energy->clear();
+          cross->clear();
 	}
 	energy->push_back(e);
 	cross->push_back(s);
       }
     }
-  }
-}
-
-
-    }
   } while (end);
   (*fout_c) << "#####..End..#####" << G4endl;
-
-  angle->push_back(pi);
-  int na = angle->size();
-  G4DataVector* f1;
-  G4DataVector* f2;
-  
-  if(0 < verbose) {
-     (*fout_a) << "#####..Result.of.integration..#####.."
-               << G4endl;
-     (*fout_b) << "#####..Result.of.integration..#####.." 
-               << " Elim(MeV)= " << elim
-               << G4endl;
-     for(i=0; i<nbin; i++) {
-        
-       x = 0.0;
-       for(int j=0; j<na-1; j++) {
-         f1  = cs[j];  
-         y1  = (*f1)[i];  
-         ct1 = cos((*angle)[j]);
-            if(j == 0) {
-              f2  = cs[j+1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
-              ct1 = 1.0;
-              if(y1 < 0.0) y1 = 0.0;
-	    } else if (j == na-2) {
-              f2  = cs[j-1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j-1]);
-              y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
-              ct2 = -1.0;
-              if(y2 < 0.0) y2 = 0.0;
-            } else {
-              f2  = cs[j+1]; 
-              y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-	    }
-	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
-         x  += 0.5*(y1 + y2)*(ct1 - ct2);  
-       }        
-       x *= twopi;
-       (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
-            << " cross(mb/MeV)= " << x << endl;
-     }
-     (*fout_a) << "#####..End..#####" << G4endl;
-     for(int j=0; j<na-1; j++) {
-       f1  = cs[j];  
-       an  = cos((*angle)[j]);
-       x   = 0.0;
-       for(i=0; i<nbin; i++) {
-         y1  = (*f1)[i];
-         e1  = (*energy)[i];
-         e2  = (*energy)[i+1];
-         if(e2 < elim) {
-           y1 = 0.0;
-         } else if (e1 < elim) {
-           y1 *= (e2 - elim)/(e2 - e1);
-	 }
-         x += y1*(e2 - e1);
-       }
-       (*fout_b) << "cos(theta)= " << an 
-                 << " cross(mb/sr)= " << x << endl;
-     }
-     (*fout_b) << "#####..End..#####" << G4endl;
-  }  
 }
 
 

@@ -5,11 +5,10 @@
 //      Created: 13.03.2002 V.Ivanchenko
 //---------------------------------------
 #verbose
-0
+2
 #events
-100000
+50000
 //--------Proton_processes
-#exclusive
 #particle
 proton
 //--------
@@ -33,7 +32,7 @@ Li
 binary
 #paw
 kin070.paw
-//#run
+#run
 //--------
 #energy(MeV)
 80.
@@ -43,7 +42,7 @@ kin070.paw
 90
 #paw
 kin080.paw
-//#run
+#run
 //--------
 #energy(MeV)
 90.
@@ -53,7 +52,7 @@ kin080.paw
 100
 #paw
 kin090.paw
-//#run
+#run
 //--------
 #energy(MeV)
 100.
@@ -73,7 +72,7 @@ kin100.paw
 120
 #paw
 kin110.paw
-#run
+//#run
 //--------
 #energy(MeV)
 120.
@@ -93,7 +92,7 @@ kin120.paw
 145
 #paw
 kin135.paw
-#run
+//#run
 //--------
 #energy(MeV)
 150.
