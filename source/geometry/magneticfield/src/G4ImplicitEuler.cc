@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.cc,v 1.4 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4ImplicitEuler.cc,v 1.5 2002-11-29 13:45:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,9 +47,11 @@
 
 G4ImplicitEuler::G4ImplicitEuler(G4Mag_EqRhs *EqRhs, 
                                  G4int numberOfVariables): 
-G4MagErrorStepper(EqRhs, numberOfVariables),
-  fNumberOfVariables(numberOfVariables)
+G4MagErrorStepper(EqRhs, numberOfVariables)
 {
+  unsigned int noVariables= G4std::max(numberOfVariables,8); // For Time .. 7+1
+  dydxTemp = new G4double[noVariables] ;
+  yTemp    = new G4double[noVariables] ;
 }
 
 
@@ -59,6 +61,8 @@ G4MagErrorStepper(EqRhs, numberOfVariables),
 
 G4ImplicitEuler::~G4ImplicitEuler()
 {
+  delete[] dydxTemp;
+  delete[] yTemp;
 }
 
 //////////////////////////////////////////////////////////////////////
@@ -71,25 +75,23 @@ G4ImplicitEuler::DumbStepper( const G4double  yIn[],
 			            G4double  h,
 			 	    G4double  yOut[])
 {
-  //  const G4int nvar = 6 ;
-  G4double* dydxTemp = new G4double[fNumberOfVariables] ;
-  G4double* yTemp    = new G4double[fNumberOfVariables] ;
-
   G4int i;
+  const G4int numberOfVariables= GetNumberOfVariables();
 
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  // Initialise time to t0, needed when it is not updated by the integration.
+  yTemp[7] = yOut[7] = yIn[7];   //  Better to set it to NaN;  // TODO
+
+  for( i = 0; i < numberOfVariables; i++ ) 
   {
     yTemp[i] = yIn[i] + h*dydx[i] ;          
   }
   
   RightHandSide(yTemp,dydxTemp);
   
-  for( i = 0; i < fNumberOfVariables; i++ ) 
+  for( i = 0; i < numberOfVariables; i++ ) 
   {
     yOut[i] = yIn[i] + 0.5 * h * ( dydx[i] + dydxTemp[i] );
   }
 
-  // NormaliseTangentVector( yOut );           
-  
   return ;
 }  
