@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2001-07-22 00:49:32 johna Exp $
+$Id: History,v 1.34 2001-07-24 21:44:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24th July May 2001  John Allison  (greps-V03-02-01)
+- Improvements to comments and layout in G4VisExtent.
+- Cosmetic improvements to G4Scale, small change of interface.
 
 21st July May 2001  John Allison  (greps-V03-02-00)
 - Added G4Scale.
