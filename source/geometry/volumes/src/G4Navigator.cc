@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.26 2002-04-02 12:54:03 japost Exp $
+// $Id: G4Navigator.cc,v 1.27 2002-05-15 10:23:01 gcosmo Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -697,12 +697,13 @@ G4ThreeVector  G4Navigator::GetLocalExitNormal(G4bool* valid)
 {
   G4ThreeVector ExitNormal(0.,0.,0.);
 
-  if (EnteredDaughterVolume()) {
+  if( fExitedMother ){
+     ExitNormal=fExitNormal;
+     *valid = true;
+     
+  }else if (EnteredDaughterVolume()) {
      ExitNormal= -(fHistory.GetTopVolume()->GetLogicalVolume()
 			 ->GetSolid()->SurfaceNormal(fLastLocatedPointLocal));
-     *valid = true;
-  }else if( fExitedMother ){
-     ExitNormal=fExitNormal;
      *valid = true;
   }else{
      // We are not at a boundary.
@@ -896,7 +897,7 @@ void G4Navigator::LocateGlobalPointWithinVolume(const  G4ThreeVector& pGlobalpoi
 
 	 case kParameterised:
 	   // Resets state & returns voxel node 
-	   fparamNav.VoxelLocate( pVoxelHeader, localPoint );
+	   fparamNav.ParamVoxelLocate( pVoxelHeader, localPoint );
 	   break;
 
 	 case kReplica:
