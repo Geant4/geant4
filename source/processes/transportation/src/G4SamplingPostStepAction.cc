@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4SplittingAndRussianRouletePostStepDoIt.cc,v 1.1 2003-08-19 16:37:23 dressel Exp $
+// $Id: G4SamplingPostStepAction.cc,v 1.1 2003-11-26 14:51:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4SplittingAndRussianRouletePostStepDoIt.cc
+// G4SamplingPostStepAction.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
+#include "G4SamplingPostStepAction.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
@@ -39,62 +39,71 @@
 #include "G4VTrackTerminator.hh"
 #include <strstream>
 
+G4SamplingPostStepAction::
+G4SamplingPostStepAction(const G4VTrackTerminator &TrackTerminator)
+  : fTrackTerminator(TrackTerminator)
+{
+}
 
-G4SplittingAndRussianRouletePostStepDoIt::
-G4SplittingAndRussianRouletePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
-  :
-  fTrackTerminator(TrackTerminator)
-{}
-G4SplittingAndRussianRouletePostStepDoIt::~G4SplittingAndRussianRouletePostStepDoIt(){}
+G4SamplingPostStepAction::~G4SamplingPostStepAction()
+{
+}
 
-void G4SplittingAndRussianRouletePostStepDoIt::DoIt(const G4Track& aTrack, 
-				    G4ParticleChange *aParticleChange,
-				    const G4Nsplit_Weight &nw)
+void G4SamplingPostStepAction::DoIt(const G4Track& aTrack, 
+                                          G4ParticleChange *aParticleChange,
+                                    const G4Nsplit_Weight &nw)
 {  
   // evaluate results from sampler
-  if (nw.fN>1) {
+  if (nw.fN>1)
+  {
     // split track 
     Split(aTrack, nw, aParticleChange);
   }
-  else if (nw.fN==1) {
+  else if (nw.fN==1)
+  {
     // don't split, but weight may be changed ! 
     aParticleChange->SetWeightChange(nw.fW);
   }
-  else if (nw.fN==0) {
+  else if (nw.fN==0)
+  {
     // kill track
     fTrackTerminator.KillTrack();
   }
-  else {
+  else
+  {
     // wrong answer
     char st[200];
     std::ostrstream os(st,200);
-    os << "G4SplittingAndRussianRouletePostStepDoIt::DoIt: sampler returned nw = "
+    os << "Sampler returned nw = "
        << nw
        << "\n"
        << '\0';
     G4String m(st);
     
-    G4Exception(m);
+    G4Exception("G4SamplingPostStepAction::DoIt()",
+                "InvalidCondition", FatalException, m);
   }
 }
 
-void G4SplittingAndRussianRouletePostStepDoIt::Split(const G4Track &aTrack,
-				     const G4Nsplit_Weight &nw,
-				     G4ParticleChange *aParticleChange)
+void G4SamplingPostStepAction::Split(const G4Track &aTrack,
+                                     const G4Nsplit_Weight &nw,
+                                           G4ParticleChange *aParticleChange)
 {
   aParticleChange->SetWeightChange(nw.fW);
   aParticleChange->SetNumberOfSecondaries(nw.fN-1);
   
-  for (G4int i=1;i<nw.fN;i++) {
+  for (G4int i=1;i<nw.fN;i++)
+  {
     G4Track *ptrack = new G4Track(aTrack);
     
     //    ptrack->SetCreatorProcess(aTrack.GetCreatorProcess());
     ptrack->SetWeight(nw.fW);
     
-    if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()) {
-      G4Exception("ERROR - G4SplittingAndRussianRouletePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
+    if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection())
+    {
+      G4Exception("G4SamplingPostStepAction::Split()", "InvalidCondition",
+                  FatalException, "Track with same momentum !");
     }
-    
     aParticleChange->AddSecondary(ptrack);
   }
   return;

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4SplittingAndRussianRouletePostStepDoIt.hh,v 1.1 2003-08-19 16:37:23 dressel Exp $
+// $Id: G4SamplingPostStepAction.hh,v 1.1 2003-11-26 14:51:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4SplittingAndRussianRouletePostStepDoIt
+// Class G4SamplingPostStepAction
 //
 // Class description:
 //
@@ -34,8 +34,8 @@
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4SplittingAndRussianRouletePostStepDoIt_hh
-#define G4SplittingAndRussianRouletePostStepDoIt_hh G4SplittingAndRussianRouletePostStepDoIt_hh
+#ifndef G4SamplingPostStepAction_hh
+#define G4SamplingPostStepAction_hh G4SamplingPostStepAction_hh
 
 class G4VImportanceSplitExaminer;
 class G4ParticleChange;
@@ -44,33 +44,31 @@ class G4Step;
 class G4Nsplit_Weight;
 class G4VTrackTerminator;
 
-
-class G4SplittingAndRussianRouletePostStepDoIt
+class G4SamplingPostStepAction
 {
 
 public:  // with description
 
-  explicit G4SplittingAndRussianRouletePostStepDoIt(const G4VTrackTerminator &
-				    TrackTerminator);
-    // simply construct
+  explicit G4SamplingPostStepAction(const G4VTrackTerminator &TrackTerminator);
+    // Constructor
 
-  ~G4SplittingAndRussianRouletePostStepDoIt();
-    // simple destruct
+  ~G4SamplingPostStepAction();
+    // Destructor
   
   void DoIt(const G4Track& aTrack, 
-	    G4ParticleChange *aParticleChange, 
-	    const G4Nsplit_Weight &nw);
+            G4ParticleChange *aParticleChange, 
+            const G4Nsplit_Weight &nw);
     // Do the PostStepDoIt part common to importance and weight window
     // sampling in the 
     // "mass" and "parallel" geometry.
   
 private:
+
   void Split(const G4Track &aTrack,
-	     const G4Nsplit_Weight &nw,
-	     G4ParticleChange *aParticleChange);
+             const G4Nsplit_Weight &nw,
+             G4ParticleChange *aParticleChange);
 
   const G4VTrackTerminator &fTrackTerminator;
-
 
 };
 
