@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.20 2004-12-07 09:12:31 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.21 2004-12-30 19:37:40 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -120,6 +120,7 @@ G4RunManagerKernel::~G4RunManagerKernel()
   if(verboseLevel>1) G4cout << "StateManager deleted." << G4endl;
   delete defaultExceptionHandler;
   if(verboseLevel>1) G4cout << "RunManagerKernel is deleted." << G4endl;
+  fRunManagerKernel = 0;
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
