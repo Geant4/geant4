@@ -1,6 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
+<!-- Changed by: Serguei SADILOV,  3-Mar-2004 -->
 </head>
 
 <body>
@@ -10,15 +11,19 @@
 </div>
 
 Report on Errors and Warnings arising from system testing on the
+<<<<<<< index.html
+<b>geant4-06-00-ref-02</b> development tag.
+=======
 <blink><b>geant4-06-00-ref-01</b></blink> development tag.
+>>>>>>> 1.30
 <p>
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>					
 
 
-                                  license expired                                               compilation problems
-                                    |         |                                                   |          |
+                                                                                                   collecting
+                                                                                                  |          |
                1        2           3         4        9             10      11         12       13          14         15        16
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
            | SUN-CC  | SUN-CC  | SUN-CC  | SUN-CC  | Linux-g++| Linux-g++|Linux-g++|Linux-g++| Linux-icc| Linux-icc|WIN32-VC7|WIN32-VC7|
@@ -57,7 +62,7 @@ test502    |         |         |         |         |          |          |      
 test505    |         |         |         |         |          |          |         |         |          |          |         |         |
 test506    |         |         |         |         |          |          |         |         |          |          |         |         |
 test508    |         |         |         |         |          |          |         |         |          |          |         | crash   |
-test5010   |  EL2    |         |         |         |          |          |         |         |          |          |         |         |
+test5010   |         |         |         |         |          |          |         |         |          |          |         |         |
 -----------+---------+---------+---------+---------+----------+----------+---------+---------+----------+----------+---------+---------+
        
  abend  - crash without clue				
@@ -74,72 +79,6 @@ WL1
 --------
 *** Error in G4HEInelastic::GenerateNBodyEvent
     total mass (4.69395) >= total energy (4.51751)
-
-
-EL1
-----
-Event number 0
-Event number 1
-
-Program received signal SIGSEGV, Segmentation fault.
-0x0841d4d5 in G4KineticTrack::Decay() ()
-(gdb) where
-#0  0x0841d4d5 in G4KineticTrack::Decay() ()
-#1  0x081dec7e in G4StringChipsParticleLevelInterface::Propagate(G4KineticTrackVector*, G4V3DNucleus*) ()
-#2  0x0838d9b5 in G4TheoFSGenerator::ApplyYourself(G4HadProjectile const&, G4Nucleus&) ()
-#3  0x081ff11e in G4HadronicProcess::GeneralPostStepDoIt(G4Track const&, G4Step const&) ()
-#4  0x081fccbb in G4HadronInelasticProcess::PostStepDoIt(G4Track const&, G4Step const&) ()
-#5  0x0846fe5c in G4SteppingManager::InvokePSDIP(unsigned) ()
-#6  0x0846fdd0 in G4SteppingManager::InvokePostStepDoItProcs() ()
-#7  0x0846d9b5 in G4SteppingManager::Stepping() ()
-#8  0x08461759 in G4TrackingManager::ProcessOneTrack(G4Track*) ()
-#9  0x0842b820 in G4EventManager::DoProcessing(G4Event*) ()
-#10 0x0842bec3 in G4EventManager::ProcessOneEvent(G4Event*) ()
-#11 0x0836fb25 in G4RunManager::DoEventLoop(int, char const*, int) ()
-#12 0x0836f5bb in G4RunManager::BeamOn(int, char const*, int) ()
-#13 0x0837a132 in G4RunMessenger::SetNewValue(G4UIcommand*, G4String) ()
-#14 0x0856fbee in G4UIcommand::DoIt(G4String) ()
-#15 0x0857c185 in G4UImanager::ApplyCommand(char const*) ()
-#16 0x08584f9f in G4UIbatch::SessionStart() ()
-#17 0x08579e62 in G4UImanager::ExecuteMacroFile(char const*) ()
-#18 0x08589a2b in G4UIcontrolMessenger::SetNewValue(G4UIcommand*, G4String) ()
-#19 0x0856fbee in G4UIcommand::DoIt(G4String) ()
-#20 0x0857c185 in G4UImanager::ApplyCommand(char const*) ()
-#21 0x0857b800 in G4UImanager::ApplyCommand(G4String) ()
-#22 0x0804d441 in main ()
-#23 0x42017589 in __libc_start_main () from /lib/i686/libc.so.6
-
-
-EL2
----
-PAI mat name  = Ar7CH4
-PAI mat index = 28
-
-PAI matcuts name  = Ar7CH4
-PAI matcuts index = 3
-
-t@1 (l@1) signal BUS (invalid address alignment) in G4PAIonisation::BuildLambdaTable at 0x199d5c
-0x00199d5c: BuildLambdaTable+0x008c:    ld      [%o0], %o2
-(dbx) where
-current thread: t@1
-=>[1] G4PAIonisation::BuildLambdaTable(0x8baaa8, 0x74baa8, 0x10, 0x813f88, 0x726800, 0x87fb88), at 0x199d5c
-  [2] G4PAIonisation::BuildPhysicsTable(0x8baaa8, 0x74baa8, 0x880840, 0x7bf070, 0xffbee2a0, 0x87f5e8), at 0x199628
-  [3] G4IonisationByLogicalVolume::BuildPhysicsTable(0x8ba110, 0x74baa8, 0x6bc000, 0x885ed0, 0x1994d4, 0x8ba220), at 0x195000
-  [4] G4VUserPhysicsList::BuildPhysicsTable(0x4, 0x74baa8, 0x8858a0, 0x885c08, 0x2, 0x3), at 0x2dd23c
-  [5] G4VUserPhysicsList::BuildPhysicsTable(0x828040, 0x7af62c, 0x74baa8, 0xffbee3d8, 0x74e128, 0xffbee3ec), at 0x2dcfe8
-  [6] G4RunManagerKernel::BuildPhysicsTables(0x7fe138, 0x0, 0x8c0f00, 0x50, 0x5c, 0x4), at 0x2cfe00
-  [7] G4RunManagerKernel::RunInitialization(0x7fe138, 0x1, 0x7fe170, 0x6d3400, 0x6d3400, 0x1), at 0x2cfc4c
-  [8] G4RunManager::RunInitialization(0x7fe0c0, 0x0, 0x0, 0x8c08f8, 0x8c08f8, 0x8c08f8), at 0x2ca788
-  [9] G4RunManager::BeamOn(0x7fe0c0, 0x2710, 0x0, 0xffffffff, 0x8142e4, 0x2ca610), at 0x2ca5b8
-  [10] G4RunMessenger::SetNewValue(0x8142d8, 0x814a88, 0x8142e0, 0x73d0c8, 0x8c0910, 0x814a88), at 0x2d4e44
-  [11] G4UIcommand::DoIt(0x814a88, 0xffbee920, 0x6f315d, 0x6f3169, 0x18f, 0x6f315b), at 0x5545a0
-  [12] G4UImanager::ApplyCommand(0x7fe698, 0xa, 0xb, 0x8be4f0, 0xffbeea38, 0xffbee978), at 0x5643c4
-  [13] G4UIbatch::SessionStart(0x8be558, 0x8be5e0, 0x0, 0xff1c120c, 0x710914, 0x6f491e), at 0x57c9e0
-  [14] G4UImanager::ExecuteMacroFile(0x7fe698, 0x8be538, 0x7b6090, 0x558474, 0x8be558, 0x8be558), at 0x5633fc
-  [15] G4UIcontrolMessenger::SetNewValue(0x7fe820, 0x7fecc0, 0xffbeec78, 0x1, 0x7fe698, 0x7fecc0), at 0x580d78
-  [16] G4UIcommand::DoIt(0x7fecc0, 0x0, 0x6f315d, 0x6f3169, 0x18f, 0x6f315b), at 0x5545a0
-  [17] G4UImanager::ApplyCommand(0x7fe698, 0xf, 0x10, 0x8be2c8, 0x8be1f0, 0xffbeee68), at 0x5643c4
-  [18] main(0x2, 0xffbeefac, 0x710914, 0x7fe0c0, 0x82e758, 0xffbeef40), at 0xa5d4c
 
 
 -------------------------------------------------------------------------------------------------------------------------
