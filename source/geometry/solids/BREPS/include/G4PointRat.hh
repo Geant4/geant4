@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PointRat.hh,v 1.5 2000-01-21 13:47:44 gcosmo Exp $
+// $Id: G4PointRat.hh,v 1.6 2000-02-25 15:59:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,7 +26,6 @@
 // L. Broglia
 // Before included in G4Point.hh
 #include "G4Plane.hh"
-#include "G4UVHit.hh"
 #define SQRT_SMALL_FASTF 1.0e-18
 #define SMALL                   SQRT_SMALL_FASTF       
 #define ROW 0
