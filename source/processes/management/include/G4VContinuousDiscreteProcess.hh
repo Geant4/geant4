@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VContinuousDiscreteProcess.hh,v 1.6 2002-04-15 04:29:57 kurasige Exp $
+// $Id: G4VContinuousDiscreteProcess.hh,v 1.7 2003-03-25 06:22:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,8 +151,8 @@ inline G4double G4VContinuousDiscreteProcess::PostStepGetPhysicalInteractionLeng
   } else {
     // subtract NumberOfInteractionLengthLeft 
     SubtractNumberOfInteractionLengthLeft(previousStepSize);
-    if(theNumberOfInteractionLengthLeft<perMillion)
-       theNumberOfInteractionLengthLeft=0.;        
+    if(theNumberOfInteractionLengthLeft<0.)
+       theNumberOfInteractionLengthLeft=perMillion;        
   }
 
   // condition is set to "Not Forced"
