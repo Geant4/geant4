@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.2 2003-07-31 20:28:21 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.3 2003-08-01 19:30:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -128,6 +128,8 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
                 "DefineWorldVolumeAtIncorrectState",
                 JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
+    if(verboseLevel>1) G4cerr << "Current application state is " 
+      << stateManager->GetStateString(currentState) << G4endl;
     return;
   }
 
@@ -165,7 +167,6 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
 
   // Accept the world volume
   currentWorld = worldVol; 
-  geometryInitialized = true;
 
   // Set the default region to the world
   G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
@@ -183,6 +184,10 @@ void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,
   // Notify the VisManager as well
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager) pVVisManager->GeometryHasChanged();
+
+  geometryInitialized = true;
+  if(physicsInitialized && currentState!=G4State_Idle)
+  { stateManager->SetNewState(G4State_Idle); }
 } 
   
 void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
@@ -195,15 +200,6 @@ void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
                 "InitializePhysicsAtIncorrectState",
                 JustWarning,
                 "Geant4 kernel is not PreInit or Idle state : Method ignored.");
-    return;
-  }
-
-  if(!geometryInitialized) 
-  { 
-    G4Exception("G4RunManagerKernel::InitializePhysics",
-                "GeometryHasNotYetInitialized",
-                JustWarning,
-                "Geometry has not yet initialized : Initialize geometry first.");
     return;
   }
 
@@ -222,22 +218,14 @@ void G4RunManagerKernel::InitializePhysics(G4VUserPhysicsList* uPhys)
   physicsList->SetCuts();
 
   physicsInitialized = true;
-  if(currentState!=G4State_Idle) stateManager->SetNewState(G4State_Idle);
+  if(geometryInitialized && currentState!=G4State_Idle)
+  { stateManager->SetNewState(G4State_Idle); }
 }
 
 G4bool G4RunManagerKernel::RunInitialization()
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
-
-  if( currentState != G4State_Idle )
-  { 
-    G4Exception("G4RunManagerKernel::RunInitialization",
-                "RunInitializationAtIncorrectState",
-                JustWarning,
-                "Geant4 kernel not in Idle state : method ignored.");
-    return false;
-  }
 
   if(!geometryInitialized) 
   { 
@@ -257,6 +245,16 @@ G4bool G4RunManagerKernel::RunInitialization()
     return false;
   }
 
+  if( currentState != G4State_Idle )
+  { 
+    G4Exception("G4RunManagerKernel::RunInitialization",
+                "RunInitializationAtIncorrectState",
+                JustWarning,
+                "Geant4 kernel not in Idle state : method ignored.");
+    return false;
+  }
+
+  UpdateRegion();
   BuildPhysicsTables();
 
   if(geometryNeedsToBeClosed) ResetNavigator();
@@ -288,12 +286,14 @@ void G4RunManagerKernel::ResetNavigator()
   geometryNeedsToBeClosed = false;
 }
 
+void G4RunManagerKernel::UpdateRegion()
+{
+  G4RegionStore::GetInstance()->UpdateMaterialList();
+  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
+}
+
 void G4RunManagerKernel::BuildPhysicsTables()
 { 
-  G4RegionStore::GetInstance()->UpdateMaterialList();
-  
-  G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable();
-
   if(G4ProductionCutsTable::GetProductionCutsTable()->IsModified())
   {
     physicsList->BuildPhysicsTable();

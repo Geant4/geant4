@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.82 2003-07-31 20:17:39 asaim Exp $
+// $Id: G4RunManager.cc,v 1.83 2003-08-01 19:30:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ G4RunManager::G4RunManager()
 :userDetector(0),physicsList(0),
  userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
  userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
- geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
+ geometryInitialized(false),physicsInitialized(false),
  geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
  geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
  currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
@@ -147,14 +147,13 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
     return false;
   }
 
-  if(!geometryInitialized || !physicsInitialized || !cutoffInitialized)
+  if(!geometryInitialized || !physicsInitialized)
   {
     if(verboseLevel>0)
     {
       G4cout << "Start re-initialization because " << G4endl;
       if(!geometryInitialized) G4cout << "  Geometry" << G4endl;
       if(!physicsInitialized)  G4cout << "  Physics processes" << G4endl;
-      if(!cutoffInitialized)  G4cout << "  SetCuts" << G4endl;
       G4cout << "has been modified since last Run." << G4endl;
     }
     Initialize();
@@ -198,8 +197,6 @@ void G4RunManager::RunInitialization()
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)
 {
-  G4StateManager* stateManager = G4StateManager::GetStateManager();
-
   if(verboseLevel>0) 
   { timer->Start(); }
 
@@ -213,19 +210,14 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   else
   { n_select = -1; }
 
+// Event loop
   G4int i_event;
   for( i_event=0; i_event<n_event; i_event++ )
   {
-    stateManager->SetNewState(G4State_EventProc);
-
     currentEvent = GenerateEvent(i_event);
-
     eventManager->ProcessOneEvent(currentEvent);
-
     AnalyzeEvent(currentEvent);
-
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
-    stateManager->SetNewState(G4State_GeomClosed);
     StackPreviousEvent(currentEvent);
     currentEvent = 0;
     if(runAborted) break;
@@ -312,11 +304,8 @@ void G4RunManager::Initialize()
     return;
   }
 
-  stateManager->SetNewState(G4State_Init);
   if(!geometryInitialized) InitializeGeometry();
   if(!physicsInitialized) InitializePhysics();
-  if(!cutoffInitialized) InitializeCutOff();
-  stateManager->SetNewState(G4State_Idle);
   initializedAtLeastOnce = true;
 }
 
@@ -345,11 +334,6 @@ void G4RunManager::InitializePhysics()
     G4Exception("G4VUserPhysicsList is not defined");
   }
   physicsInitialized = true;
-}
-
-void G4RunManager::InitializeCutOff()
-{
-    cutoffInitialized = true;
 }
 
 void G4RunManager::AbortRun(G4bool softAbort)
@@ -453,11 +437,13 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 
 void G4RunManager::DumpRegion(G4String rname) const
 {
+  kernel->UpdateRegion();
   kernel->DumpRegion(rname);
 }
 
 void G4RunManager::DumpRegion(G4Region* region) const
 {
+  kernel->UpdateRegion();
   kernel->DumpRegion(region);
 }
 

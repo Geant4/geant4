@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.18 2003-06-16 17:12:52 gunter Exp $
+// $Id: G4RunMessenger.cc,v 1.19 2003-08-01 19:30:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -136,11 +136,8 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   cutCmd = new G4UIcmdWithoutParameter("/run/cutoffModified",this);
-  cutCmd->SetGuidance("Force closssection tables to be calculated again.");
-  cutCmd->SetGuidance("This command must be applied");
-  cutCmd->SetGuidance(" if cutoff value(s) have been modified after the");
-  cutCmd->SetGuidance(" first initialization (or BeamOn).");
-  cutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  cutCmd->SetGuidance("/run/cutoffModified becomes obsolete.");
+  cutCmd->SetGuidance("It is safe to remove invoking this command.");
   
   randomDirectory = new G4UIdirectory("/random/");
   randomDirectory->SetGuidance("Random number status control commands.");
@@ -248,7 +245,6 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
   else if( command==dumpRegCmd )
   { 
-    runManager->UpdateRegion();
     if(newValue=="**ALL**")
     { runManager->DumpRegion(); }
     else
