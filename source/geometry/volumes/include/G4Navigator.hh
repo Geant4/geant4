@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.11 2001-11-07 00:42:16 radoone Exp $
+// $Id: G4Navigator.hh,v 1.12 2001-11-26 11:18:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -140,8 +140,8 @@ class G4Navigator
     // is returned together with the computed isotropic safety
     // distance. Geometry must be closed.
 
-  G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
-  			                       const G4TouchableHistory &h);
+  inline G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector &p,
+  			                          const G4TouchableHistory &h);
 
   G4VPhysicalVolume* LocateGlobalPointAndSetup(const G4ThreeVector& point,
 					       const G4ThreeVector* direction=0,
@@ -221,20 +221,20 @@ class G4Navigator
     // system of the volume that was found by LocalGlobalPointAndSetup.
     // The Local Coordinates of point in world coordinate system.
 
-  G4ThreeVector NetTranslation() const;
-  G4RotationMatrix NetRotation() const;
+  inline G4ThreeVector NetTranslation() const;
+  inline G4RotationMatrix NetRotation() const;
     // Compute+return the local->global translation/rotation of current volume.
 
   inline G4VPhysicalVolume* GetWorldVolume() const;
     // Return the current  world (`topmost') volume.
 
-  void SetWorldVolume(G4VPhysicalVolume* pWorld);
+  inline void SetWorldVolume(G4VPhysicalVolume* pWorld);
     // Set the world (`topmost') volume. This must be positioned at
     // origin (0,0,0) and unrotated.
 
-  G4GRSVolume* CreateGRSVolume() const;
-  G4GRSSolid* CreateGRSSolid() const; 
-  G4TouchableHistory* CreateTouchableHistory() const;
+  inline G4GRSVolume* CreateGRSVolume() const;
+  inline G4GRSSolid* CreateGRSSolid() const; 
+  inline G4TouchableHistory* CreateTouchableHistory() const;
     // `Touchable' creation methods: caller has deletion responsibility.
 
   // G4GRSVolume* CreateGRSVolume() const;
@@ -266,7 +266,7 @@ class G4Navigator
     // This function takes full care about how to calculate this normal,
     // but if the surfaces are not convex it will return valid=false.
 
-  G4bool EnteredDaughterVolume();
+  inline G4bool EnteredDaughterVolume();
     // The purpose of this function is to inform the caller if the track is
     // entering a daughter volume while exiting from the current volume.
     // This method returns 
@@ -276,10 +276,10 @@ class G4Navigator
     // This function is not guaranteed to work if SetGeometricallyLimitedStep()
     // was not called when it should have been called.
 
-  // G4bool ExitedMotherVolume();
+  // inline G4bool ExitedMotherVolume();
 
-  G4int GetVerboseLevel();
-  void  SetVerboseLevel(G4int level);
+  inline G4int GetVerboseLevel();
+  inline void  SetVerboseLevel(G4int level);
     // Get/Set Verbose(ness) level.
     // [if level>0 && G4VERBOSE, printout can occur]
 
@@ -288,7 +288,7 @@ class G4Navigator
     // The level of detail is according to the verbosity.
 
   inline const G4AffineTransform& GetGlobalToLocalTransform() const;
-  const G4AffineTransform  GetLocalToGlobalTransform() const;
+  inline const G4AffineTransform  GetLocalToGlobalTransform() const;
     // Obtain the transformations Global/Local (and inverse).
     // Clients of these methods must copy the data if they need to keep it.
 

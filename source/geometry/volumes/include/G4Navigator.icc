@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.4 2001-07-11 10:00:30 gunter Exp $
+// $Id: G4Navigator.icc,v 1.5 2001-11-26 11:18:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,26 @@ inline
 G4VPhysicalVolume* G4Navigator::GetWorldVolume() const
 {
     return fTopPhysical;
+}
+
+// Set the world (`topmost') volume
+//
+inline
+void G4Navigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
+{
+// Setup the volume
+  pWorld->Setup(0);	// No mother since world volume
+  if (!(pWorld->GetTranslation()==G4ThreeVector(0,0,0)))
+    {
+      G4Exception ("G4Navigator::SetWorldVolume - Must be centred on origin");
+    }
+  const G4RotationMatrix* rm=pWorld->GetRotation();
+  if (rm&&(!rm->isIdentity()))
+    {
+      G4Exception ("G4Navigator::SetWorldVolume - Must not be rotated");
+    }
+  fTopPhysical=pWorld;
+  fHistory.SetFirstEntry(pWorld);
 }
 
 // Inform the navigator that the previous Step calculated
@@ -165,6 +185,89 @@ const G4AffineTransform& G4Navigator::GetGlobalToLocalTransform() const
   return fHistory.GetTopTransform();
 }
 
+// Return global to local transformation 
+//
+inline
+const G4AffineTransform G4Navigator::GetLocalToGlobalTransform() const
+{
+  G4AffineTransform  tempTransform;
+  tempTransform= fHistory.GetTopTransform().Inverse(); 
+  return  tempTransform;
+}
+
+// Compute+return the local->global translation of current volume.
+//
+inline
+G4ThreeVector G4Navigator::NetTranslation() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return tf.NetTranslation();
+}
+
+// Compute+return the local->global rotation of current volume.
+//
+inline
+G4RotationMatrix G4Navigator::NetRotation() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return tf.NetRotation();
+}
+
+// `Touchable' creation method: caller has deletion responsibility.
+//
+inline
+G4GRSVolume* G4Navigator::CreateGRSVolume() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return new G4GRSVolume(fHistory.GetTopVolume(),
+			 tf.NetRotation(),
+			 tf.NetTranslation());
+}
+
+// `Touchable' creation method: caller has deletion responsibility.
+//
+inline
+G4GRSSolid* G4Navigator::CreateGRSSolid() const
+{
+  G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
+  return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
+			tf.NetRotation(),
+			tf.NetTranslation());
+			
+}
+
+// `Touchable' creation method: caller has deletion responsibility.
+//
+inline
+G4TouchableHistory* G4Navigator::CreateTouchableHistory() const
+{
+  return new G4TouchableHistory(fHistory);
+}
+
+// To inform the caller if the track is entering a daughter volume.
+//
+inline
+G4bool  G4Navigator::EnteredDaughterVolume()
+{
+  return fEnteredDaughter;
+}
+
+// inline
+// G4bool G4Navigator::ExitedVolume()
+// {
+//   return fExitedCurrent;
+// }
+
+inline
+G4VPhysicalVolume*
+G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector &p,
+				       const G4TouchableHistory &h)
+{
+  fHistory=*h.GetHistory();
+  SetupHierarchy();
+  return LocateGlobalPointAndSetup(p, 0);
+}
+
 inline
 void G4Navigator::LocateGlobalPointAndUpdateTouchable(
 			  const G4ThreeVector&       position,
@@ -186,4 +289,54 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchable(
   G4VPhysicalVolume* pPhysVol;
   pPhysVol= LocateGlobalPointAndSetup( position, &direction, RelativeSearch);  
   touchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+}
+
+inline
+void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
+                          const G4ThreeVector&       position,
+                          const G4ThreeVector&       direction,
+                                G4TouchableHandle&   oldTouchableToUpdate,
+                          const G4bool               RelativeSearch )
+{
+  //G4TouchableHandle nextTouchableHandle= oldTouchableToUpdate;
+  G4VPhysicalVolume* pPhysVol;
+  pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);
+
+  //nextTouchableHandle->UpdateYourself( pPhysVol, &fHistory );
+
+  if( fEnteredDaughter | fExitedMother )
+  {
+     //nextTouchableHandle = CreateTouchableHistoryHandle();
+     //nextTouchableHandle = CreateTouchableHistory();
+     oldTouchableToUpdate = CreateTouchableHistory();
+  }
+  // else{
+  //    oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  // }
+  if( pPhysVol == 0 ){
+        // We want to ensure that the touchable is correct in this case.
+              //  The method below should do this and recalculate a lot more ....
+        oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+  }
+
+  return;
+    //return nextTouchableHandle;
+}
+
+inline
+G4TouchableHistoryHandle G4Navigator::CreateTouchableHistoryHandle() const
+{
+  return G4TouchableHistoryHandle( CreateTouchableHistory() );
+}
+
+inline
+G4int G4Navigator::GetVerboseLevel()
+{
+   return fVerbose;
+}
+
+inline
+void  G4Navigator::SetVerboseLevel(G4int level)
+{
+   fVerbose=level;
 }
