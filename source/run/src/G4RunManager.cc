@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.70 2003-04-03 18:56:54 asaim Exp $
+// $Id: G4RunManager.cc,v 1.71 2003-04-04 22:24:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -509,13 +509,15 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   }
 
   currentWorld = worldVol; 
-  geometryNeedsToBeClosed = true;
+  //geometryNeedsToBeClosed = true;
+  GeometryHasBeenModified();
 
   // set the world volume to the Navigator
+  ResetNavigator();
   G4TransportationManager::GetTransportationManager()
     ->GetNavigatorForTracking()
     ->SetWorldVolume(worldVol);
-  ResetNavigator();
+  //ResetNavigator();
 
   // Let VisManager know it
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
