@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.9 2001-04-13 13:17:32 maire Exp $
+// $Id: Em3RunAction.cc,v 1.10 2001-05-11 13:34:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,29 +192,58 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
 
 void Em3RunAction::PrintDedxTables()
 {
-  G4int nt=10;
-  G4double tk[] = {10*keV,100*keV,1*MeV,10*MeV,100*MeV,1*GeV,10*GeV,
-                   20*GeV,100*GeV,200*GeV};
-		    
+  //print dE/dx tables with the same bining as Geant3 JMATE bank
+  //  
+  const G4double tkmin=10*keV, tkmax=10*TeV;
+  const G4int nbin=90, nb1=nbin+1;  
+  G4double tk[nb1];
+    
+  const G4int ncolumn = 5;  
+													      							            
+  //compute the kinetic energies
+  //  
+  const G4double dp = log10(tkmax/tkmin)/nbin;
+  const G4double dt = pow(10.,dp);
+  tk[0] = tkmin;  
+  for (G4int i=1; i<nb1; ++i) tk[i] = tk[i-1]*dt;
+
+  //print the kinetic energies
+  //
+  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+  G4int  oldprec = G4cout.precision(3);
+     
+  G4cout << "\n  kinetic energies \n \n";
+  for (G4int j=0; j<nb1; ++j) {
+    G4cout << " " << G4BestUnit(tk[j],"Energy") << "\t";     
+    if ((j+1)%ncolumn == 0) G4cout << "\n";
+  }
+  G4cout << G4endl; 
+
+  //print the dE/dx tables
+  //
+  G4cout.setf(G4std::ios::scientific,G4std::ios::floatfield);
+  G4cout.precision(6);
+      		    
   G4ParticleDefinition* 
   part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
-  
-  G4int  oldprec = G4cout.precision(6);  
   
   for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
      {
       G4Material* mat = Detector->GetAbsorMaterial(iab);
-      G4cout << "\n   dE/dx for " << part->GetParticleName() << " in "
-                                  << mat ->GetName() << "\n" ;
-      G4cout << "  kinetic energy       dE/dx (MeV/cm)" << G4endl;
-      for (G4int it=0;it<nt;it++)
+      G4cout << "\n  dE/dx (MeV/cm) for " << part->GetParticleName() << " in "
+             << mat ->GetName() << "\n \n";
+
+      for (G4int l=0;l<nb1; ++l)
          {
-           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[it],mat);
-           G4cout << G4std::setw(12) << G4BestUnit(tk[it],"Energy")
-                  << G4std::setw(20) << dedx/(MeV/cm) << G4endl;
+           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[l],mat);
+           G4cout << " " << dedx/(MeV/cm) << "\t";
+	   if ((l+1)%ncolumn == 0) G4cout << "\n";
          }
+      G4cout << G4endl; 
      }
-     G4cout.precision(oldprec);
+     
+  G4cout.precision(oldprec);
+  G4cout.setf(oldform,G4std::ios::floatfield);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
