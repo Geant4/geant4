@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.15 2002-10-28 11:36:28 gcosmo Exp $
+// $Id: G4DisplacedSolid.cc,v 1.16 2002-10-29 14:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -103,16 +103,21 @@ G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
 
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
-  if(fPtrTransform)
-  {
-    delete fPtrTransform ;
-    delete fDirectTransform;
-  }
+  CleanTransformations();
 }
 
 G4GeometryType G4DisplacedSolid::GetEntityType() const 
 {
   return G4String("G4DisplacedSolid");
+}
+
+void G4DisplacedSolid::CleanTransformations()
+{
+  if(fPtrTransform)
+  {
+    delete fPtrTransform;  fPtrTransform=0;
+    delete fDirectTransform;  fDirectTransform=0;
+  }
 }
 
 const G4DisplacedSolid* G4DisplacedSolid::GetDisplacedSolidPtr() const   

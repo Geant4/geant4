@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.hh,v 1.12 2002-10-28 11:36:28 gcosmo Exp $
+// $Id: G4DisplacedSolid.hh,v 1.13 2002-10-29 14:13:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,7 +99,9 @@ class G4DisplacedSolid : public G4VSolid
     void ComputeDimensions( G4VPVParameterisation* p,
 	                    const G4int n,
                             const G4VPhysicalVolume* pRep ) ;
-                                   
+
+    void CleanTransformations();
+
   public:  // with description 
 
     virtual G4GeometryType  GetEntityType() const;
