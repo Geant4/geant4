@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Test17SteppingVerbose.cc,v 1.1 2000-05-26 06:23:54 chauvie Exp $
+// $Id: Test17SteppingVerbose.cc,v 1.2 2001-02-09 02:34:50 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,12 +95,12 @@ void Test17SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
