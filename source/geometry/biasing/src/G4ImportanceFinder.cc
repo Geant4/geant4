@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceFinder.cc,v 1.3 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4ImportanceFinder.cc,v 1.4 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,18 +46,36 @@ G4ImportanceFinder::~G4ImportanceFinder()
 
 G4double
 G4ImportanceFinder::GetIPre_over_IPost(const G4PTouchableKey &prekey,
-		                       const G4PTouchableKey &postkey) const
+		                       const G4PTouchableKey &postkey) 
+  const
 {  
-  G4double  ipre = fIStore.GetImportance(prekey);
-  G4double ipost = fIStore.GetImportance(postkey);
-
-  if (ipre <= 0 || ipost <=0 ) {
-    G4std::ostrstream os;
-    os << "ipre <= 0 || ipost <=0, preTouchableKey = " << prekey 
-       << ", postTouchableKey = " << postkey << '\0';
-    Error(os.str());
+  G4double ratio = 1;
+  // if either the pro or the post ptk is not known
+  // the ratio of pre over post importance is set to 1
+  // so no splitting od RR is done
+  if ( fIStore.IsKnown(prekey) && fIStore.IsKnown(postkey) ) {
+    G4double  ipre = fIStore.GetImportance(prekey);
+    G4double ipost = fIStore.GetImportance(postkey);
+    // importances < 0 are not allowed
+    if (ipre < 0 || ipost < 0 ) {
+      G4std::ostrstream os;
+      os << "ipre < 0 || ipost < 0, preTouchableKey = " << prekey 
+	 << ", postTouchableKey = " << postkey << '\0';
+      Error(os.str());
+    }
+    // importances == 0 mean don't do any biaisng here
+    else if (ipre == 0 || ipost == 0) {
+      ratio = 1;
+    }
+    else {
+      ratio =  ipre/ipost;
+    }
   }
-  return ipre/ipost;
+  else {
+    ratio = 1;
+  }
+
+  return ratio;
 }
 
 void G4ImportanceFinder::Error(const G4String &m) const

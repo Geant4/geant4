@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.3 2002-04-10 13:13:06 dressel Exp $
+// $Id: G4ParallelNavigator.hh,v 1.4 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,7 +42,7 @@
 #include "G4VPGeoDriver.hh"
 #include "geomdefs.hh"
 
-class G4VTouchable;
+#include "G4TouchableHandle.hh"
 class G4Navigator;
 class G4PTouchableKey ;
 class G4VPhysicalVolume;
@@ -94,7 +94,7 @@ private:
 
   void Locate(const G4ThreeVector &aPosition, 
 	      const G4ThreeVector &aDirection,
-	      G4bool histsearch); 
+	      G4bool useDirection= false); 
 			
   void Error(const G4String &m,
              const G4ThreeVector &pos,
@@ -105,7 +105,7 @@ private:
 private:
   
   G4Navigator &fNavigator;
-  G4VTouchable *fCurrentTouchable;
+  G4TouchableHandle fCurrentTouchableH;
   G4int fNlocated;
 };
 

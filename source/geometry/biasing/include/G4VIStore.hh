@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VIStore.hh,v 1.3 2002-04-10 13:13:07 dressel Exp $
+// $Id: G4VIStore.hh,v 1.4 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,6 +71,9 @@ public:  // with description
   virtual G4double GetImportance(const G4PTouchableKey &ptk) const = 0;
     // derive a importance value of a "cell" addresed by a G4PTouchableKey
     // from the store.
+
+  virtual G4bool IsKnown(const G4PTouchableKey &ptk) const = 0;
+    // returns true if the ptk is in the store, else false 
 
   virtual G4VPhysicalVolume &GetWorldVolume() = 0;
 };

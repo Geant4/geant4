@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.5 2002-05-31 08:07:06 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.6 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -35,7 +35,6 @@
 
 #include "G4ParallelNavigator.hh"
 
-#include "G4VTouchable.hh"
 #include "G4Navigator.hh"
 #include "G4PTouchableKey.hh"
 #include "G4VParallelStepper.hh"
@@ -44,12 +43,11 @@ G4ParallelNavigator::G4ParallelNavigator(G4VPhysicalVolume &aWorldVolume)
   : fNavigator(*(new G4Navigator)), fNlocated(0)
 {
   fNavigator.SetWorldVolume(&aWorldVolume);
-  fCurrentTouchable = fNavigator.CreateTouchableHistory();
+  fCurrentTouchableH = fNavigator.CreateTouchableHistory();
 }
 
 G4ParallelNavigator::~G4ParallelNavigator()
 {
-  delete fCurrentTouchable;
   delete &fNavigator;
 }
 
@@ -59,6 +57,7 @@ G4PTouchableKey G4ParallelNavigator::
 LocateOnBoundary(const G4ThreeVector &aPosition, 
 		 const G4ThreeVector &aDirection)
 {
+  fNavigator.SetGeometricallyLimitedStep();
   Locate(aPosition, aDirection, true);
   // since the track crosses a boundary ipdate stepper 
   return GetCurrentTouchableKey();
@@ -75,7 +74,7 @@ ComputeStepLengthInit(const G4ThreeVector &aPosition,
   fNlocated = 0;
   
   // first try
-  Locate(aPosition, aDirection, false);
+  Locate(aPosition, aDirection, true);
   stepLength  = fNavigator.ComputeStep( aPosition, aDirection,
 					kInfinity, newSafety);
   if (stepLength<=0.0) {
@@ -126,7 +125,10 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
   // if the track is not on the boundary and it's
   // not the first step, the location must be inside the 
   // volume 
-  fNavigator.LocateGlobalPointWithinVolume(aPosition);
+
+  //  fNavigator.LocateGlobalPointWithinVolume(aPosition);
+  Locate(aPosition, aDirection, true); // reduces stepLength<=0. calls
+
   G4double newSafety;
   G4double stepLength = fNavigator.ComputeStep( aPosition, aDirection,
 				       kInfinity, newSafety);
@@ -147,12 +149,12 @@ ComputeStepLengthInVolume(const G4ThreeVector &aPosition,
 
 void G4ParallelNavigator::Locate(const G4ThreeVector &aPosition, 
                                  const G4ThreeVector &aDirection,
-                                       G4bool histsearch)
+                                       G4bool useDirection)
 {
-  fNavigator.SetGeometricallyLimitedStep();
-  fNavigator.
-    LocateGlobalPointAndUpdateTouchable( aPosition, aDirection,
-                                         fCurrentTouchable, histsearch);
+
+  fNavigator.LocateGlobalPointAndSetup( aPosition, &aDirection, true, !useDirection);
+  fCurrentTouchableH = fNavigator.CreateTouchableHistory();
+
   fNlocated++;
   
   return;
@@ -167,7 +169,7 @@ G4ParallelNavigator::ComputeStepLengthShifted(const G4String &m,
   shift_pos+=G4ThreeVector(Shift(aDirection.x()), 
 			   Shift(aDirection.y()), 
 			   Shift(aDirection.z()));
-  Locate(shift_pos, aDirection, false);
+  Locate(shift_pos, aDirection, true);
   G4double newSafety;
   G4double stepLength = fNavigator.ComputeStep( shift_pos, aDirection,
                                                 kInfinity, newSafety);
@@ -182,8 +184,8 @@ G4ParallelNavigator::ComputeStepLengthShifted(const G4String &m,
 
 G4PTouchableKey G4ParallelNavigator::GetCurrentTouchableKey() const
 {
-  return G4PTouchableKey(*fCurrentTouchable->GetVolume(),
-			 fCurrentTouchable->GetReplicaNumber());
+  return G4PTouchableKey(*fCurrentTouchableH->GetVolume(),
+			 fCurrentTouchableH->GetReplicaNumber());
 }
 
 void G4ParallelNavigator::Error(const G4String &m,

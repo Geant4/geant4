@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IStore.cc,v 1.3 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4IStore.cc,v 1.4 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -63,7 +63,7 @@ void G4IStore::AddImportanceRegion(G4double importance,
 				   const G4VPhysicalVolume &aVolume,
 				   G4int aRepNum)
 {
-  if (importance <=0 ) {
+  if (importance < 0 ) {
     Error("AddImportanceRegion: invalid importance value given");
   }
   SetInternalIterator(aVolume, aRepNum);
@@ -77,7 +77,7 @@ void G4IStore::ChangeImportance(G4double importance,
 				const G4VPhysicalVolume &aVolume,
 				G4int aRepNum)
 {
-  if (importance <=0 ) {
+  if (importance < 0 ) {
     Error("ChangeImportance: Invalid importance value given");
   }
   SetInternalIterator(aVolume, aRepNum);
@@ -100,7 +100,7 @@ G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
 
 G4double G4IStore::GetImportance(const G4PTouchableKey &ptk) const
 {
-  fCurrentIterator = fPtki.find(ptk);
+  SetInternalIterator(*ptk.fVPhysiclaVolume, ptk.fRepNum);
   if (fCurrentIterator==fPtki.end()) {
     G4cout << "PTouchableKey ptk: " << ptk << G4endl;
     G4cout << "Not found in: " << G4endl;
@@ -109,6 +109,12 @@ G4double G4IStore::GetImportance(const G4PTouchableKey &ptk) const
   }
   return (*fCurrentIterator).second;
 }
+
+G4bool G4IStore::IsKnown(const G4PTouchableKey &ptk) const {
+  SetInternalIterator(*ptk.fVPhysiclaVolume, ptk.fRepNum);
+  return (fCurrentIterator!=fPtki.end());
+}
+
 
 G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const
 {

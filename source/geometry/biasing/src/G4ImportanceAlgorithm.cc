@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportanceAlgorithm.cc,v 1.4 2002-04-09 16:23:49 gcosmo Exp $
+// $Id: G4ImportanceAlgorithm.cc,v 1.5 2002-07-18 14:55:50 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -87,7 +87,7 @@ G4ImportanceAlgorithm::Calculate(G4double ipre_over_ipost,
   }
   // ipre_over_ipost > 1
   //  russian roulett
-  else {
+  else if (ipre_over_ipost>1) {
     // probabiity for killing track
     G4double p = 1-inv;
     // get a random number out of [0,1)
