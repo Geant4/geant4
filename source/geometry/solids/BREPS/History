@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2002-02-12 18:36:13 radoone Exp $
+$Id: History,v 1.37 2002-02-13 17:52:08 radoone Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13/02/2002 : R. Chytracek
+- Bug fix #354:
+  o Added new private method for creation of planar surfaces gained
+    after code refactoring in constructor.
+  o Fixed bug for problem report #354 by adding the code handling the cases
+    where user supplies for the same z-section different RMIN or RMAX values.
+  o This is temporary commit as there is still the problem when user asks for
+    polyhedra phi segment and z[a] > z[a+1]. This leads to a wrong surface.
 
 12/02/2002 : R. Chytracek
 - Bug fixes of G4BREPSolidPolyhedra:
