@@ -1,3 +1,25 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
 // this code implementation is the intellectual property of
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
@@ -7,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.8 2001-05-29 14:13:11 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.9 2001-07-11 10:07:23 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"

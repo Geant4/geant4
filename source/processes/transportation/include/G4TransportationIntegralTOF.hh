@@ -1,11 +1,27 @@
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
-// $Id: G4TransportationIntegralTOF.hh,v 1.2 1999-12-15 14:53:50 gunter Exp $
+//
+// $Id: G4TransportationIntegralTOF.hh,v 1.3 2001-07-11 10:08:30 gunter Exp $
 // Started from  G4Transportation.hh,v 2.4 1998/11/11 20:03:58 japost 
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -13,8 +29,6 @@
 // ------------------------------------------------------------
 //	GEANT 4  include file implementation
 //
-//	For information related to this code contact:
-//	CERN, IT Division (formely CN), ASD group
 // ------------------------------------------------------------
 //
 //   This class' object is a process responsible for the transportation of 
