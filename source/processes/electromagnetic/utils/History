@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2004-09-13 09:19:11 vnivanch Exp $
+$Id: History,v 1.165 2004-09-27 11:42:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27 september 04: L.Urban (utils-V06-02-09)
+- G4Mscmodel.cc: change in the tail of the angular distribution, 
+  contributing to step independance.
 
 13 September 04: V.Ivanchenko (utils-V06-02-08)
 - Extend G4BraggModel below 1 keV
