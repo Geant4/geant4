@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIGAG.cc,v 1.5 1999-10-12 12:02:29 stesting Exp $
+// $Id: G4UIGAG.cc,v 1.6 1999-11-08 04:12:47 masayasu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4UIGAG.cc
@@ -802,12 +802,12 @@ void G4UIGAG::UpdateState(void)
 int G4UIGAG::CommandUpdated(void)
 {
   int added=0, deleted=0;
-  int pEntry= previousTreeCommands.entries();
-  int nEntry= newTreeCommands.entries();
+  int pEntry= previousTreeCommands.size();
+  int nEntry= newTreeCommands.size();
   int i,j;
   for( i=0; i<pEntry; i++) {      // check deleted command(s)
       for( j=0; j<nEntry; j++) {
-         if( previousTreeCommands(i) == newTreeCommands(j)) break;
+         if( previousTreeCommands[i] == newTreeCommands[j]) break;
       }
       if( j==nEntry ) { 
          deleted = 1;
@@ -816,7 +816,7 @@ int G4UIGAG::CommandUpdated(void)
   }
   for( i=0; i<nEntry; i++) {      // check added command(s)
       for( j=0; j<pEntry; j++) {
-         if( newTreeCommands(i) == previousTreeCommands(j)) break;
+         if( newTreeCommands[i] == previousTreeCommands[j]) break;
       }
       if( j==pEntry ) { 
          added = 1;
@@ -842,7 +842,7 @@ void G4UIGAG::GetNewTreeStructure(G4UIcommandTree * tree, int level)
   for(int com=0; com<commandEntry; com++){
       commandPath = tree->GetCommand(com+1)->GetCommandPath();
       title = tree->GetCommand(com+1)->GetTitle();
-      newTreeCommands.insert( commandPath + " " + title );
+      newTreeCommands.push_back( commandPath + " " + title );
   }
 
   if(treeEntry == 0) return; //end recursion
@@ -851,7 +851,7 @@ void G4UIGAG::GetNewTreeStructure(G4UIcommandTree * tree, int level)
     t = tree->GetTree(i+1);
     pathName =  t->GetPathName();   
     title = t->GetTitle();
-    newTreeCommands.insert( pathName + " " + title );
+    newTreeCommands.push_back( pathName + " " + title );
     GetNewTreeStructure(t, level+1);
   }
 }
@@ -861,14 +861,14 @@ void G4UIGAG::UpdateParamVal(void)
   // call NotifyParameterUpdate() if the value of each
   //  command/parameter is updated.
   //  assuming the command structure is not changed.
-  int pEntry= previousTreeParams.entries();
-  int nEntry= newTreeParams.entries();
+  int pEntry= previousTreeParams.size();
+  int nEntry= newTreeParams.size();
   int i;
   G4UIcommand* Comp;
   if (pEntry != nEntry) return; 
   for( i=0; i<nEntry; i++) {
-    if( previousTreeParams(i) != newTreeParams(i)){
-       Comp = newTreePCP(i);
+    if( previousTreeParams[i] != newTreeParams[i]){
+       Comp = newTreePCP[i];
        G4cout << Comp->GetCommandPath()
             << " command is updated." <<endl; 
        NotifyParameterUpdate(Comp);
@@ -935,8 +935,8 @@ void G4UIGAG::GetNewTreeValues( G4UIcommandTree * tree, int level) // recursive
          param += prp->GetParameterRange() +" ";
          param += prp->GetParameterCandidates();
       }
-     newTreeParams.insert( param + "\n"); 
-     newTreePCP.insert( Comp ); 
+     newTreeParams.push_back( param + "\n"); 
+     newTreePCP.push_back( Comp ); 
    }
    if( treeEntry == 0 )  return;     // end recursion
    for( int i=0; i< treeEntry; i++) {
