@@ -4,7 +4,7 @@
 #include "G4ThreeVector.hh"
 #include "G4DynamicParticle.hh"
 #include "globals.hh"
-#include "g4std/vector"
+#include <vector>
 #include "G4HadSecondary.hh"
 #include "G4LorentzRotation.hh"
 
@@ -37,7 +37,7 @@ class G4HadFinalState
   private:
    G4ThreeVector theDirection;
    G4double theEnergy;
-   G4std::vector<G4HadSecondary *> theSecs;
+   std::vector<G4HadSecondary *> theSecs;
    G4HadFinalStateStatus theStat;
    G4LorentzRotation theT;
    G4double theW;
