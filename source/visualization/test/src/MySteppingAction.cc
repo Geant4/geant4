@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingAction.cc,v 1.12 2001-08-24 20:26:01 johna Exp $
+// $Id: MySteppingAction.cc,v 1.13 2003-02-18 16:07:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     coutCount++;
     G4cout << "MySteppingAction::UserSteppingAction called." << G4endl;
   }
+  /*
   if(pVVisManager) {
     G4Polyline pl;
     G4Colour c;
@@ -129,4 +130,5 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     pVVisManager->Draw(circle333);
   }
   // User Action Example - end snippet.
+  */
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.11 2001-08-24 20:47:41 johna Exp $
+// $Id: G4Scene.cc,v 1.12 2003-02-18 16:07:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,12 +122,14 @@ G4bool G4Scene::AddEndOfEventModel (G4VModel* pModel, G4bool warn) {
 	fEndOfEventModelList [i] -> GetGlobalDescription ()) break;
   }
   if (i < nModels) {
+    delete fEndOfEventModelList[i];
+    fEndOfEventModelList[i] = pModel;
     if (warn) {
-      G4cout << "G4Scene::AddEndOfEventModel: model \""
+      G4cout << "G4Scene::AddEndOfEventModel: a model \""
 	     << pModel -> GetGlobalDescription ()
 	     << "\"\n  is already in the run-duration list of scene \""
-	     << fName
-	     << "\"."
+	     << fName <<
+	"\".\n  The old model has been deleted; this new model replaces it."
 	     << G4endl;
     }
     return false;

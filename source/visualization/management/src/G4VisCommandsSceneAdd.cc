@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.34 2002-12-11 16:10:06 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.35 2003-02-18 16:07:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -753,15 +753,14 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand* command,
   is >> drawingMode;
   G4TrajectoriesModel* model = new G4TrajectoriesModel(drawingMode);
   const G4String& currentSceneName = pScene -> GetName ();
-  G4bool successful = pScene -> AddEndOfEventModel (model, warn);
-  if (successful) {
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Trajectories will be drawn in scene \""
-	     << currentSceneName << "\"."
-	     << G4endl;
-    }
+  pScene -> AddEndOfEventModel (model, warn);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "Trajectories will be drawn with mode "
+	   << drawingMode
+	   << " in scene \""
+	   << currentSceneName << "\"."
+	   << G4endl;
   }
-  else G4VisCommandsSceneAddUnsuccessful(verbosity);
 }
 
 ////////////// /vis/scene/add/volume ///////////////////////////////////////

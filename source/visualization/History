@@ -1,4 +1,4 @@
-$Id: History,v 1.218 2003-02-17 07:19:37 stanaka Exp $
+$Id: History,v 1.219 2003-02-18 16:07:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+20th January 2003  John Allison
+- Changed "/vis/scene/add/trajectories [<drawing-mode>]" so that if
+  the command is issued more than once on any given scene, the last
+  command takes effect, i.e., so that the last value of drawing-mode
+  takes effect.
 
 17th February 2003 Satoshi Tanaka (vis-V05-00-01)
 - A Small bug fixing of VRML2 driver 
