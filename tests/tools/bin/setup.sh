@@ -51,8 +51,7 @@ fi
 #
 export NeutronHPCrossSections=$G4INSTALL/../G4NDL0.1
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
-export GENERAL=1                                  ## EM LowEnergy
-export G4LEDATA=$G4INSTALL/../LowEnergyEM/data    ## EM LowEnergy
+export G4LEDATA=$G4INSTALL/../G4EMLOW0.1
 #
 # Some alias -kes :
 alias g4root="cd $G4INSTALL"
