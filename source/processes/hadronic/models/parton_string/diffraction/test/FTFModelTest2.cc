@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: FTFModelTest2.cc,v 1.1 2003-10-08 13:48:52 hpw Exp $
+// $Id: FTFModelTest2.cc,v 1.2 2005-01-14 17:26:17 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,6 +34,7 @@
 // ------------------------------------------------------------
 	   
 //#define USE_FTFmodel
+#define USE_QGSM
 #define USE_DECAY
 
 #if defined(USE_DECAY)
@@ -53,14 +54,17 @@
 #include <strstream> 
   
 #include "G4FTFModel.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4QGSParticipants.hh"
 #include "G4PionPlus.hh"
 #include "G4ReactionProductVector.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "Randomize.hh"
 #include "G4StableIsotopes.hh"
 
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/HBookHistogram.h"
+//#include "CLHEP/Hist/HBookFile.h"
+//#include "CLHEP/Hist/HBookHistogram.h"
 
 #include "G4Neutron.hh"
 #include "G4Proton.hh"
@@ -85,6 +89,16 @@
 // #include "G4ShortLivedConstructor.hh"
 //#include "G4QuarkAnnihilator.hh"
 
+#include "G4Material.hh"
+#include "G4HadronCrossSections.hh"
+#include "G4VCrossSectionDataSet.hh"
+#include "G4ProtonInelasticCrossSection.hh"
+#include "G4NeutronInelasticCrossSection.hh"
+#include "G4HadronInelasticDataSet.hh"
+
+#include <memory> // for the auto_ptr(T>
+#include "AIDA/AIDA.h"
+
 //void ConstructParticle();
 G4double Rapidity(const G4double p, const  G4double E);
 
@@ -97,16 +111,21 @@ int main()
 	G4cin >> maxEvents;
 
 	G4Nucleus lead(207.2, 82.);	// lead
+	G4Material* m_lead = new G4Material("Pb",    82., 207.19*g/mole, 11.35*g/cm3);
 	G4Nucleus Be(9.,4.); 		// Beryllium
+	G4Material* m_Be = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
 	G4Nucleus H(1.,1.);		// Hydrogen (Proton)
+	G4Material* m_H = new G4Material("H",     1.,  1.0*g/mole, 1.*g/cm3);
 	G4Nucleus nuclei[] = { H, H, Be, lead };  // 0 is dummy
 	
+	G4Material * materials[] = {m_H, m_H, m_Be, m_lead };
+		
 	G4StableIsotopes theIso;
 
 	G4int inucleus;
-	cout << G4endl;
-	for ( G4int achoice=1; achoice< sizeof(nuclei)/sizeof(H); achoice++)
-	{   G4cout  << achoice << ": " << theIso.GetName(nuclei[achoice].GetZ()) 
+	G4cout << G4endl;
+	for ( unsigned int achoice=1; achoice< sizeof(nuclei)/sizeof(H); achoice++)
+	{   G4cout  << achoice << ": " << theIso.GetName(int(nuclei[achoice].GetZ())) 
 //	         << "(" << nuclei[achoice].GetN() << "," << nuclei[achoice].GetZ() << ")"
 	         << G4endl;
 	}
@@ -114,7 +133,9 @@ int main()
 	G4cin >> inucleus;
 	
 	G4Nucleus theNucleus = nuclei[inucleus];
-	G4cout <<  " Nucleus : " << theIso.GetName(theNucleus.GetZ()) << G4endl;
+	G4Material * material = materials[inucleus];
+	
+	G4cout <<  " Nucleus : " << theIso.GetName(int(theNucleus.GetZ())) << G4endl;
 	
 	G4double ptparameter;
 	G4cout << G4endl << " sigma pt in GeV "  << std::flush;
@@ -140,24 +161,34 @@ int main()
         G4double proj_momentum;
         G4cin >> proj_momentum;
 	G4cout <<  " proj_momentum = " << proj_momentum << " GeV" << G4endl;
-         		
 	G4cout << G4endl;
-	
-       
-	G4FTFModel model;
+
+	std::ostrstream hbfilename;
+	G4VPartonStringModel * model;
+
+#ifdef USE_QGSM
+	hbfilename << "qgsm-";
+	model= new G4QGSModel<G4QGSParticipants>; //ptparameter*GeV, minExtraMass*MeV,x0Mass*MeV);
+	G4VLongitudinalStringDecay * aStringDecayMethod=
+				new G4QGSMFragmentation();
+//	aStringDecayMethod->Setpspin(pspin);
+	G4VStringFragmentation * stringDecay=new G4ExcitedStringDecay(aStringDecayMethod);
+	model->SetFragmentationModel(stringDecay);
+#else
+	hbfilename << "ftf2-"; 
+	model= new G4FTFModel ;
 //	G4FTFModel model(ptparameter*GeV, minExtraMass*MeV,x0Mass*MeV);
 	G4VLongitudinalStringDecay * aStringDecayMethod=
 //				new G4LundStringFragmentation(ptparameter*GeV);
 				new G4LundStringFragmentation();
 //	aStringDecayMethod->SetVectorMesonProbability(pspin);
 	G4VStringFragmentation * stringDecay=new G4ExcitedStringDecay(aStringDecayMethod);
-	model.SetFragmentationModel(stringDecay);
+	model->SetFragmentationModel(stringDecay);
 
+#endif
 	
 	
-#ifndef __DECCXX
-	std::ostrstream hbfilename;
-	hbfilename << "ftf2-" << theIso.GetName(theNucleus.GetZ()) << "-"
+	hbfilename << theIso.GetName(int(theNucleus.GetZ())) << "-"
 	           << proj_momentum << "-"
 	           << ptparameter << "-"
 	           << minExtraMass <<  "-"
@@ -170,17 +201,30 @@ int main()
 #endif
 	           << ".hbook";
  
- 	HBookFile hbfile(hbfilename.str(), 29);
- 
-// 	char * 	hbfilename[256];
-// 	sprintf(hbfilename,"ftf1-%s-%d-%d.hbook\0", 
-// 			theIso.GetName(theNucleus.GetZ()),
-// 			proj_momentum,
-// 			ptparameter);
+// 	HBookFile hbfile(hbfilename.str(), 29);
 
-#else
-	HBookFile hbfile("ftf-test.hbook", 29);
-#endif	
+     // Creating the analysis factory
+    std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+
+    // Creating the tree factory
+    std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    std::auto_ptr< AIDA::ITree > tree( tf->create( hbfilename.str(),  "hbook", false, true ));
+    std::cout << "Tree store : " << tree->storeName() << std::endl;
+
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    //   std::auto_ptr< AIDA::ITupleFactory > tpf( af->createTupleFactory( *tree ) );
+
+    // Creating a histogram factory, whose histograms will be handled by the tree
+      std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+    const G4int nhisto = 500;
+//    AIDA::IHistogram1D* h[nhisto];
+    //    AIDA::IHistogram2D* h2;
+    //AIDA::ITuple* ntuple1 = 0;
+
+
 		
 	proj_momentum *=GeV;
 
@@ -237,134 +281,170 @@ int main()
 	}
 //------- 
 	   			  
-	HBookTuple Tuple_mom(" momentum",1,"//");
-	HBookTuple Tuple_fxp("protons fx vs p",3,"//"); 
-//	HBookTuple Tuple_rap(" rapidity",2,"//");
+//	HBookTuple Tuple_mom = hf->createHistogram1D(" momentum",1,"//");
+//	HBookTuple Tuple_fxp = hf->createHistogram1D("protons fx vs p",3,"//"); 
+//	HBookTuple Tuple_rap = hf->createHistogram1D(" rapidity",2,"//");
 
-	HBookHistogram numberOfStrings("Number of Strings",100,0.,100.,10);
+ 	AIDA::IHistogram1D* numberOfStrings = hf->createHistogram1D("10","Number of Strings",100,0.,100.);
 
-	HBookHistogram stringMass("String mass(MeV)",500,0.,5000.,20);
-	HBookHistogram projMass("projectile string mass(MeV)",500,0.,5000.,21);
-	HBookHistogram tgtMass("target string mass(MeV)",500,0.,5000.,22);
-	HBookHistogram barionMass("barion mass(MeV)",500,0.,5000.,25);
-	HBookHistogram mesonMass("meson mass(MeV)",500,0.,5000.,26);
+	AIDA::IHistogram1D* stringMass = hf->createHistogram1D("20","String mass(MeV)",500,0.,5000.);
+	AIDA::IHistogram1D* projMass   = hf->createHistogram1D("21","projectile string mass(MeV)",500,0.,5000.);
+	AIDA::IHistogram1D* tgtMass    = hf->createHistogram1D("22","target string mass(MeV)",500,0.,5000.);
+	AIDA::IHistogram1D* barionMass = hf->createHistogram1D("25","barion mass(MeV)",500,0.,5000.);
+	AIDA::IHistogram1D* mesonMass  = hf->createHistogram1D("26","meson mass(MeV)",500,0.,5000.);
 
-	HBookHistogram stringEnergy("string energy(GeV)",500,0.,proj_momentum/GeV,30);
-	HBookHistogram projEnergy("projectile string energy(GeV)",500,0.,proj_momentum/GeV,31);
-	HBookHistogram tgtEnergy("target string energy(GeV)",500,0.,proj_momentum/GeV/10.,32);
+	AIDA::IHistogram1D* stringEnergy = hf->createHistogram1D("30","string energy(GeV)",500,0.,proj_momentum/GeV);
+	AIDA::IHistogram1D* projEnergy   = hf->createHistogram1D("31","projectile string energy(GeV)",500,0.,proj_momentum/GeV);
+	AIDA::IHistogram1D* tgtEnergy    = hf->createHistogram1D("32","target string energy(GeV)",500,0.,proj_momentum/GeV/10.);
 	
-	HBookHistogram stringEt("string transverse energy(GeV)",500,0.,proj_momentum/GeV,40);
-	HBookHistogram projEt("string transverse energy(GeV)",500,0.,proj_momentum/GeV,42);
-	HBookHistogram cutstringEt("string transverse energy(GeV),-0.1@<etarap@<2.9",500,0.,proj_momentum/GeV,45);
-	HBookHistogram cutstringEta("string transverse energy(GeV),-0.1@<etarap@<5.5",500,0.,proj_momentum/GeV,46);
+	AIDA::IHistogram1D* stringEt    = hf->createHistogram1D("40","string transverse energy(GeV)",500,0.,proj_momentum/GeV);
+	AIDA::IHistogram1D* projEt      = hf->createHistogram1D("42","string transverse energy(GeV)",500,0.,proj_momentum/GeV);
+	AIDA::IHistogram1D* cutstringEt = hf->createHistogram1D("45","string transverse energy(GeV),-0.1@<etarap@<2.9",500,0.,proj_momentum/GeV);
+	AIDA::IHistogram1D* cutstringEta= hf->createHistogram1D("46","string transverse energy(GeV),-0.1@<etarap@<5.5",500,0.,proj_momentum/GeV);
 		
-	HBookHistogram stringRap  ("rapidity (all)",       200,-10,10,50);
-	HBookHistogram stringRapHE("rapidity, all@>50MeV)",200,-10,10,51);
-	HBookHistogram projRap    ("projectile rapidity",  200,-10,10,53);
-	HBookHistogram barionRap  ("barion rapidity",      200,-10,10,54);
-	HBookHistogram mesonRap   ("meson rapidity",       200,-10,10,55);
-	HBookHistogram chargedRap ("rapidity charged",     200,-10,10,56);
-	HBookHistogram chposRap   ("rapidity positives",   200,-10,10,57);
-	HBookHistogram chnegRap   ("rapidity negatives",   200,-10,10,58);
-	HBookHistogram neutralRap ("rapidity neutrals",    200,-10,10,59);
+	AIDA::IHistogram1D* stringRap   = hf->createHistogram1D("50","rapidity (all)",	200,-10,10);
+	AIDA::IHistogram1D* stringRapHE = hf->createHistogram1D("51","rapidity, all@>50MeV)",200,-10,10);
+	AIDA::IHistogram1D* projRap     = hf->createHistogram1D("53","projectile rapidity",  200,-10,10);
+	AIDA::IHistogram1D* barionRap   = hf->createHistogram1D("54","barion rapidity",	200,-10,10);
+	AIDA::IHistogram1D* mesonRap    = hf->createHistogram1D("55","meson rapidity",	200,-10,10);
+	AIDA::IHistogram1D* chargedRap  = hf->createHistogram1D("56","rapidity charged",	200,-10,10);
+	AIDA::IHistogram1D* chposRap    = hf->createHistogram1D("57","rapidity positives",	200,-10,10);
+	AIDA::IHistogram1D* chnegRap    = hf->createHistogram1D("58","rapidity negatives",	200,-10,10);
+	AIDA::IHistogram1D* neutralRap  = hf->createHistogram1D("59","rapidity neutrals",	200,-10,10);
 
-	HBookHistogram hfeynmanX("feynman x",220,-1.1,1.1,60);
-	HBookHistogram hfeynmanX_cplus("feynman x, positve",220,-1.1,1.1,61);
-	HBookHistogram hfeynmanX_cminus("feynman x, negative",220,-1.1,1.1,62);
-	HBookHistogram hfeynmanX_neutral("feynman x, neutral",220,-1.1,1.1,63);
-	HBookHistogram hfeynmanX_p("feynman x, protons",220,-1.1,1.1,65);
-	HBookHistogram hfeynmanX_pim("feynman x, pi-",220,-1.1,1.1,66);
-	HBookHistogram hfeynmanX_pip("feynman x, pi+",220,-1.1,1.1,67);
-	HBookHistogram hfeynmanX_Km("feynman x, K-",220,-1.1,1.1,68);
-	HBookHistogram hfeynmanX_Kp("feynman x, K+",220,-1.1,1.1,69);
+	AIDA::IHistogram1D* hfeynmanX         = hf->createHistogram1D("60","feynman x",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_cplus   = hf->createHistogram1D("61","feynman x, positve",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_cminus  = hf->createHistogram1D("63","feynman x, negative",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_neutral = hf->createHistogram1D("64","feynman x, neutral",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_p       = hf->createHistogram1D("65","feynman x, protons",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_pim	 = hf->createHistogram1D("66","feynman x, pi-",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_pip	 = hf->createHistogram1D("67","feynman x, pi+",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_Km	 = hf->createHistogram1D("68","feynman x, K-",220,-1.1,1.1);
+	AIDA::IHistogram1D* hfeynmanX_Kp	 = hf->createHistogram1D("69","feynman x, K+",220,-1.1,1.1);
 
-	HBookHistogram ifeynmanX("feynman x",220,-1.1,1.1,70);
-	HBookHistogram ifeynmanX_cplus("feynman x, positve",220,-1.1,1.1,71);
-	HBookHistogram ifeynmanX_cminus("feynman x, negative",220,-1.1,1.1,72);
-	HBookHistogram ifeynmanX_neutral("feynman x, neutral",220,-1.1,1.1,73);
-	HBookHistogram ifeynmanX_p("feynman x, protons",220,-1.1,1.1,75);
-	HBookHistogram ifeynmanX_pim("feynman x, pi-",220,-1.1,1.1,76);
-	HBookHistogram ifeynmanX_pip("feynman x, pi+",220,-1.1,1.1,77);
-	HBookHistogram ifeynmanX_Km("feynman x, K-",220,-1.1,1.1,78);
-	HBookHistogram ifeynmanX_Kp("feynman x, K+",220,-1.1,1.1,79);
+	AIDA::IHistogram1D* ifeynmanX	 = hf->createHistogram1D("70","feynman x",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_cplus	 = hf->createHistogram1D("71","feynman x, positve",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_cminus	 = hf->createHistogram1D("73","feynman x, negative",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_neutral = hf->createHistogram1D("74","feynman x, neutral",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_p	 = hf->createHistogram1D("75","feynman x, protons",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_pim	 = hf->createHistogram1D("76","feynman x, pi-",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_pip	 = hf->createHistogram1D("77","feynman x, pi+",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_Km	 = hf->createHistogram1D("78","feynman x, K-",220,-1.1,1.1);
+	AIDA::IHistogram1D* ifeynmanX_Kp	 = hf->createHistogram1D("79","feynman x, K+",220,-1.1,1.1);
 
-	HBookHistogram hptSq("ptsquare (GeV**2)",200,0.,10.,80);
-	HBookHistogram hptSq_cplus("ptsquare (GeV**2), positve",200,0.,10.,81);
-	HBookHistogram hptSq_cminus("ptsquare (GeV**2), negative",200,0.,10.,82);
-	HBookHistogram hptSq_neutral("ptsquare (GeV**2), neutral",200,0.,10.,83);
-	HBookHistogram hptSq_p("ptsquare (GeV**2), protons",200,0.,10.,85);
-	HBookHistogram hptSq_pim("ptsquare (GeV**2), pi-",200,0.,10.,86);
-	HBookHistogram hptSq_pip("ptsquare (GeV**2), pi+",200,0.,10.,87);
-	HBookHistogram hptSq_Km("ptsquare (GeV**2), K-",200,0.,10.,88);
-	HBookHistogram hptSq_Kp("ptsquare (GeV**2), K+",200,0.,10.,89);
+	AIDA::IHistogram1D* hptSq	     = hf->createHistogram1D("80","ptsquare (GeV**2)",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_cplus   = hf->createHistogram1D("81","ptsquare (GeV**2), positve",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_cminus  = hf->createHistogram1D("83","ptsquare (GeV**2), negative",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_neutral = hf->createHistogram1D("84","ptsquare (GeV**2), neutral",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_p	     = hf->createHistogram1D("85","ptsquare (GeV**2), protons",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_pim     = hf->createHistogram1D("86","ptsquare (GeV**2), pi-",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_pip     = hf->createHistogram1D("87","ptsquare (GeV**2), pi+",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_Km      = hf->createHistogram1D("88","ptsquare (GeV**2), K-",200,0.,10.);
+	AIDA::IHistogram1D* hptSq_Kp      = hf->createHistogram1D("89","ptsquare (GeV**2), K+",200,0.,10.);
 
-	HBookHistogram iptSq("ptsquare (GeV**2)",200,0.,10.,90);
-	HBookHistogram iptSq_cplus("ptsquare (GeV**2), positve",200,0.,10.,91);
-	HBookHistogram iptSq_cminus("ptsquare (GeV**2), negative",200,0.,10.,92);
-	HBookHistogram iptSq_neutral("ptsquare (GeV**2), neutral",200,0.,10.,93);
-	HBookHistogram iptSq_p("ptsquare (GeV**2), protons",200,0.,10.,95);
-	HBookHistogram iptSq_pim("ptsquare (GeV**2), pi-",200,0.,10.,96);
-	HBookHistogram iptSq_pip("ptsquare (GeV**2), pi+",200,0.,10.,97);
-	HBookHistogram iptSq_Km("ptsquare (GeV**2), K-",200,0.,10.,98);
-	HBookHistogram iptSq_Kp("ptsquare (GeV**2), K+",200,0.,10.,99);
+	AIDA::IHistogram1D* iptSq	     = hf->createHistogram1D("90","ptsquare (GeV**2)",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_cplus   = hf->createHistogram1D("91","ptsquare (GeV**2), positve",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_cminus  = hf->createHistogram1D("93","ptsquare (GeV**2), negative",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_neutral = hf->createHistogram1D("94","ptsquare (GeV**2), neutral",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_p	     = hf->createHistogram1D("95","ptsquare (GeV**2), protons",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_pim     = hf->createHistogram1D("96","ptsquare (GeV**2), pi-",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_pip     = hf->createHistogram1D("97","ptsquare (GeV**2), pi+",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_Km	     = hf->createHistogram1D("98","ptsquare (GeV**2), K-",200,0.,10.);
+	AIDA::IHistogram1D* iptSq_Kp	     = hf->createHistogram1D("99","ptsquare (GeV**2), K+",200,0.,10.);
 
-	HBookHistogram hpt("pt (GeV)",200,0.,4.,180);
-	HBookHistogram hpt_cplus("pt (GeV), positve",200,0.,4.,181);
-	HBookHistogram hpt_cminus("pt (GeV), negative",200,0.,4.,182);
-	HBookHistogram hpt_neutral("pt (GeV), neutral",200,0.,4.,183);
-	HBookHistogram hpt_p("pt (GeV), protons",200,0.,4.,185);
-	HBookHistogram hpt_pim("pt (GeV), pi-",200,0.,4.,186);
-	HBookHistogram hpt_pip("pt (GeV), pi+",200,0.,4.,187);
-	HBookHistogram hpt_Km("pt (GeV), K-",200,0.,4.,188);
-	HBookHistogram hpt_Kp("pt (GeV), K+",200,0.,4.,189);
+	AIDA::IHistogram1D* hpt	   = hf->createHistogram1D("180","pt (GeV)",200,0.,4.);
+	AIDA::IHistogram1D* hpt_cplus   = hf->createHistogram1D("181","pt (GeV), positve",200,0.,4.);
+	AIDA::IHistogram1D* hpt_cminus  = hf->createHistogram1D("183","pt (GeV), negative",200,0.,4.);
+	AIDA::IHistogram1D* hpt_neutral = hf->createHistogram1D("184","pt (GeV), neutral",200,0.,4.);
+	AIDA::IHistogram1D* hpt_p	   = hf->createHistogram1D("185","pt (GeV), protons",200,0.,4.);
+	AIDA::IHistogram1D* hpt_pim	   = hf->createHistogram1D("186","pt (GeV), pi-",200,0.,4.);
+	AIDA::IHistogram1D* hpt_pip	   = hf->createHistogram1D("187","pt (GeV), pi+",200,0.,4.);
+	AIDA::IHistogram1D* hpt_Km	   = hf->createHistogram1D("188","pt (GeV), K-",200,0.,4.);
+	AIDA::IHistogram1D* hpt_Kp	   = hf->createHistogram1D("189","pt (GeV), K+",200,0.,4.);
 
-	HBookHistogram ipt("pt (GeV)",200,0.,4.,190);
-	HBookHistogram ipt_cplus("pt (GeV), positve",200,0.,4.,191);
-	HBookHistogram ipt_cminus("pt (GeV), negative",200,0.,4.,192);
-	HBookHistogram ipt_neutral("pt (GeV), neutral",200,0.,4.,193);
-	HBookHistogram ipt_p("pt (GeV), protons",200,0.,4.,195);
-	HBookHistogram ipt_pim("pt (GeV), pi-",200,0.,4.,196);
-	HBookHistogram ipt_pip("pt (GeV), pi+",200,0.,4.,197);
-	HBookHistogram ipt_Km("pt (GeV), K-",200,0.,4.,198);
-	HBookHistogram ipt_Kp("pt (GeV), K+",200,0.,4.,199);
+	AIDA::IHistogram1D* ipt	   = hf->createHistogram1D("190","pt (GeV)",200,0.,4.);
+	AIDA::IHistogram1D* ipt_cplus   = hf->createHistogram1D("191","pt (GeV), positve",200,0.,4.);
+	AIDA::IHistogram1D* ipt_cminus  = hf->createHistogram1D("193","pt (GeV), negative",200,0.,4.);
+	AIDA::IHistogram1D* ipt_neutral = hf->createHistogram1D("194","pt (GeV), neutral",200,0.,4.);
+	AIDA::IHistogram1D* ipt_p	   = hf->createHistogram1D("195","pt (GeV), protons",200,0.,4.);
+	AIDA::IHistogram1D* ipt_pim	   = hf->createHistogram1D("196","pt (GeV), pi-",200,0.,4.);
+	AIDA::IHistogram1D* ipt_pip	   = hf->createHistogram1D("197","pt (GeV), pi+",200,0.,4.);
+	AIDA::IHistogram1D* ipt_Km	   = hf->createHistogram1D("198","pt (GeV), K-",200,0.,4.);
+	AIDA::IHistogram1D* ipt_Kp	   = hf->createHistogram1D("199","pt (GeV), K+",200,0.,4.);
 
-	HBookHistogram Mpim("pi-",30,-0.25,14.75,100);
-	HBookHistogram Mpip("pi+",30,-0.25,14.75,101);
-	HBookHistogram Mpi0("pi0",30,-0.25,14.75,102);
+	AIDA::IHistogram1D* Mpim = hf->createHistogram1D("100","pi-",30,-0.25,14.75);
+	AIDA::IHistogram1D* Mpip = hf->createHistogram1D("101","pi+",30,-0.25,14.75);
+	AIDA::IHistogram1D* Mpi0 = hf->createHistogram1D("102","pi0",30,-0.25,14.75);
 	
-	HBookHistogram MKm("K-",30,-0.25,14.75,110);
-	HBookHistogram MKp("K+",30,-0.25,14.75,111);
-	HBookHistogram MK0s("K0s",30,-0.25,14.75,112);
-	HBookHistogram MK0l("K0l",30,-0.25,14.75,113);
+	AIDA::IHistogram1D* MKm  = hf->createHistogram1D("110","K-",30,-0.25,14.75);
+	AIDA::IHistogram1D* MKp  = hf->createHistogram1D("112","K+",30,-0.25,14.75);
+	AIDA::IHistogram1D* MK0s = hf->createHistogram1D("113","K0s",30,-0.25,14.75);
+	AIDA::IHistogram1D* MK0l = hf->createHistogram1D("114","K0l",30,-0.25,14.75);
 	
-	HBookHistogram MLambda("Lambda",30,-0.25,14.75,120);
-	HBookHistogram MLambdaBar("LambdaBar",30,-0.25,14.75,121);
+	AIDA::IHistogram1D* MLambda    = hf->createHistogram1D("120","Lambda",30,-0.25,14.75);
+	AIDA::IHistogram1D* MLambdaBar = hf->createHistogram1D("121","LambdaBar",30,-0.25,14.75);
 	
-	HBookHistogram MSigma0("Sigma0",30,-0.25,14.75,130);
-	HBookHistogram MSigma0Bar("Sigma0Bar",30,-0.25,14.75,131);
+	AIDA::IHistogram1D* MSigma0    = hf->createHistogram1D("130","Sigma0",30,-0.25,14.75);
+	AIDA::IHistogram1D* MSigma0Bar = hf->createHistogram1D("131","Sigma0Bar",30,-0.25,14.75);
 	
-	HBookHistogram Mproton("proton",30,-0.25,14.75,140);
-	HBookHistogram MprotonBar("antiproton",30,-0.25,14.75,141);
+	AIDA::IHistogram1D* Mproton    = hf->createHistogram1D("140","proton",30,-0.25,14.75);
+	AIDA::IHistogram1D* MprotonBar = hf->createHistogram1D("141","antiproton",30,-0.25,14.75);
 	
-	HBookHistogram Mneutron("neutron",30,-0.25,14.75,142);
-	HBookHistogram MneutronBar("antineutron",30,-0.25,14.75,143);	
+	AIDA::IHistogram1D* Mneutron    = hf->createHistogram1D("142","neutron",30,-0.25,14.75);
+	AIDA::IHistogram1D* MneutronBar = hf->createHistogram1D("143","antineutron",30,-0.25,14.75);	
+
+
+	AIDA::IHistogram1D* Info = hf->createHistogram1D("1","information",10,.5,10.5);
+
+
+	G4ParticleDefinition * proton = G4Proton::Proton();
+	G4double Ekinetic= sqrt(sqr(proj_momentum) + sqr(proton->GetPDGMass())) - proton->GetPDGMass();
+	         
 	
-	for ( G4int ntimes=0; ntimes< maxEvents; ntimes++) {
+	G4VCrossSectionDataSet* cs = 0;
+	if(proton == G4Proton::Proton() && material->GetElement(0)->GetZ() > 1.5) {
+	  cs = new G4ProtonInelasticCrossSection();
+	} else if(proton == G4Neutron::Neutron() && material->GetElement(0)->GetZ() > 1.5) {
+	  cs = new G4NeutronInelasticCrossSection();
+	} else {
+	  cs = new G4HadronInelasticDataSet();
+	}
+
+
+	G4DynamicParticle dParticle(proton,G4ThreeVector(1., 0.,0.),Ekinetic);
+	G4double cross_sec = 0.0;
+
+	if(cs) {
+	  cs->BuildPhysicsTable(*proton);
+	  cross_sec = cs->GetCrossSection(&dParticle, material->GetElement(0));
+	} else {
+	  cross_sec = (G4HadronCrossSections::Instance())->
+            GetInelasticCrossSection(&dParticle, material->GetElement(0));
+	}
+
+//    G4double factor = cross_sec*MeV*1000.0*(G4double)nbinse/(energy*barn*(G4double)nevt);
+//    G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
+//    G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
+//    G4cout << "### factor  = " << factor
+//           << "### factora = " << factor
+      G4cout << "    cross(b)= " << cross_sec/barn << G4endl;
+
+      Info->fill(1.,double(maxEvents));
+      Info->fill(1.,cross_sec);
+ 
+// =========================event loop ================================================================ 
+ 	for ( G4int ntimes=0; ntimes< maxEvents; ntimes++) {
 	
 	   G4bool debprint=ntimes<5;
 
-	
-	   G4ParticleMomentum direction(0.,0.,1.);
-//	   G4ParticleMomentum direction(G4UniformRand(),G4UniformRand(),G4UniformRand());
-	   direction.setMag(1.);
-	   G4ParticleDefinition * proton = G4Proton::Proton();
-	   G4double Ekinetic=
-	        sqrt(sqr(proj_momentum) + sqr(proton->GetPDGMass())) - proton->GetPDGMass();
-	         
+	G4ParticleMomentum direction(0.,0.,1.);
+//	G4ParticleMomentum direction(G4UniformRand(),G4UniformRand(),G4UniformRand());
+	direction.setMag(1.);
+
 	   G4DynamicParticle primary(proton, 
 				     direction,
 				     Ekinetic);
-
+      
 
 				     
 #if defined(USE_FTFmodel)
@@ -372,8 +452,8 @@ int main()
 	   G4int attempts = 0, maxAttempts=20;
 	   while ( result  == NULL )
 	   {
-		model.Init(theNucleus,primary);
-		result =model.GetStrings();
+		model->Init(theNucleus,primary);
+		result =model->GetStrings();
 		if (attempts++ > maxAttempts ) 
 		{
 			G4cout << "G4VPartonStringModel::Scatter(): fails to generate strings"
@@ -386,11 +466,11 @@ int main()
 #else
 
 	   G4KineticTrackVector * result;			  
-	   result = model.Scatter(theNucleus,primary);
+	   result = model->Scatter(theNucleus,primary);
 
 #endif
 
-	   G4LorentzVector pNucleus(0.,0.,0.,model.GetWoundedNucleus()->GetMass());
+	   G4LorentzVector pNucleus(0.,0.,0.,model->GetWoundedNucleus()->GetMass());
 	   G4LorentzRotation toCMS(-1*(pNucleus + primary.Get4Momentum()).boostVector());
 	   G4double Ecms=(pNucleus + primary.Get4Momentum()).mag();
 
@@ -447,7 +527,7 @@ int main()
  * 			G4endl;
  * 	   }
  */
-	   for (G4int aResult=0; aResult < result1->STL_size(); aResult++)
+	   for (unsigned int aResult=0; aResult < result1->STL_size(); aResult++)
 	   {
 		G4ParticleDefinition * pdef;
 		pdef=Result1[aResult]->GetDefinition();
@@ -492,7 +572,7 @@ int main()
 		} else {
 		   secondaries = Result1[aResult]->Decay();
 		   G4LorentzVector checkP=0;
-		   for ( G4int aSec=0;secondaries!=NULL && aSec<secondaries->STL_size(); aSec++)
+		   for ( unsigned int aSec=0;secondaries!=NULL && aSec<secondaries->STL_size(); aSec++)
 		   {
 		   	debout << " P secondary " << (*secondaries)[aSec]->Get4Momentum() << G4endl;
 		   	checkP += (*secondaries)[aSec]->Get4Momentum();
@@ -504,7 +584,7 @@ int main()
 		   Result.STL_push_back(Result1[aResult]);
 		   		   
 		} else{
-		  for (G4int aSecondary=0; aSecondary<secondaries->STL_size(); aSecondary++)
+		  for (unsigned int aSecondary=0; aSecondary<secondaries->STL_size(); aSecondary++)
 		  {
 		      Result1.STL_push_back((*secondaries)[aSecondary]);
 		  }
@@ -515,26 +595,26 @@ int main()
 
 	   delete result1;
 	   
-	   Mpim.accumulate(Npim);
-	   Mpip.accumulate(Npip);
-	   Mpi0.accumulate(Npi0);
+	   Mpim->fill(Npim);
+	   Mpip->fill(Npip);
+	   Mpi0->fill(Npi0);
 
-	   MKm.accumulate(NKm);
-	   MKp.accumulate(NKp);
-	   MK0s.accumulate(NK0s);
-	   MK0l.accumulate(NK0l);
+	   MKm->fill(NKm);
+	   MKp->fill(NKp);
+	   MK0s->fill(NK0s);
+	   MK0l->fill(NK0l);
 
-	   MLambda.accumulate(NLambda);
-	   MLambdaBar.accumulate(NLambdaBar);
+	   MLambda->fill(NLambda);
+	   MLambdaBar->fill(NLambdaBar);
 
-	   MSigma0.accumulate(NSigma0);
-	   MSigma0Bar.accumulate(NSigma0Bar);
+	   MSigma0->fill(NSigma0);
+	   MSigma0Bar->fill(NSigma0Bar);
 
-	   Mproton.accumulate(Nproton);
-	   MprotonBar.accumulate(NprotonBar);
+	   Mproton->fill(Nproton);
+	   MprotonBar->fill(NprotonBar);
 
-	   Mneutron.accumulate(Nneutron);
-	   MneutronBar.accumulate(NneutronBar);
+	   Mneutron->fill(Nneutron);
+	   MneutronBar->fill(NneutronBar);
 
 	   Spim += Npim;
 	   Spip += Npip;
@@ -562,7 +642,7 @@ int main()
 	   result1=result;
 	   result=new G4KineticTrackVector();
 
-	   for (G4int bResult=0; bResult < result1->STL_size(); bResult++)
+	   for (unsigned int bResult=0; bResult < result1->STL_size(); bResult++)
 	   {
 		G4ParticleDefinition * pdef;
 		pdef=(*result1)[bResult]->GetDefinition();
@@ -587,7 +667,7 @@ int main()
 		{;} else {
 		   secondaries = (*result1)[bResult]->Decay();
 		   G4LorentzVector checkP=0;
-		   for ( G4int aSec=0;secondaries!=NULL && aSec<secondaries->STL_size(); aSec++)
+		   for (unsigned int aSec=0;secondaries!=NULL && aSec<secondaries->STL_size(); aSec++)
 		   {
 		   	debout << " P secondary... " << (*secondaries)[aSec]->Get4Momentum() << G4endl;
 		   	checkP += (*secondaries)[aSec]->Get4Momentum();
@@ -599,7 +679,7 @@ int main()
 		   (*result).STL_push_back((*result1)[bResult]);
 		   		   
 		} else{
-		  for (G4int aSecondary=0; aSecondary<secondaries->STL_size(); aSecondary++)
+		  for (unsigned int aSecondary=0; aSecondary<secondaries->STL_size(); aSecondary++)
 		  {
 		      (*result).STL_push_back((*secondaries)[aSecondary]);
 		  }
@@ -613,7 +693,7 @@ int main()
 
 
 
-	   numberOfStrings.accumulate(float(result->STL_size()));
+	   numberOfStrings->fill(float(result->STL_size()));
 	   	
 	   G4double Et=0., cutEt=0.,cutEta=0.;
 	   G4double Etcurrent;
@@ -621,7 +701,7 @@ int main()
 	   G4double Epartsum=0;
 	   debout << "Final Kinetic tracks  " << result->STL_size() << G4endl;
 	   G4LorentzVector Sum=0;
-	   for (astring=0; astring < result->STL_size(); astring++)
+	   for (astring=0; astring < int(result->STL_size()); astring++)
 	   {
 	   	if( (*result)[astring] == NULL ) G4cout << "got NULL" << G4endl;
 		Etcurrent= (*result)[astring]->Get4Momentum().e() * abs(sin((*result)[astring]->Get4Momentum().theta()));
@@ -633,9 +713,9 @@ int main()
 		cutEt += (rapidity> -0.1 && rapidity<2.9 ) ? Etcurrent : 0.;
 		cutEta += (rapidity> -0.1 && rapidity<5.5 ) ? Etcurrent : 0.;
 
-		stringRap.accumulate(rapidity);
+		stringRap->fill(rapidity);
 		if ( (*result)[astring]->Get4Momentum().e() > 50*MeV ) 
-		   {   stringRapHE.accumulate(rapidity);  
+		   {   stringRapHE->fill(rapidity);  
 		   }
 
 
@@ -673,14 +753,14 @@ int main()
 		G4double feynmanX=2*(toCMS*(*result)[astring]->Get4Momentum()).z()/Ecms;
 		G4LorentzVector px2((*result)[astring]->Get4Momentum().vect(),
 		         sqrt((*result)[astring]->Get4Momentum().vect().mag2()+sqr(938.27)));
-		G4double fx2=2*(toCMS*px2).z()/Ecms;
+//		G4double fx2=2*(toCMS*px2).z()/Ecms;
 
 		G4double ptSquare= (*result)[astring]->Get4Momentum().perp2()/sqr(GeV);
 		G4double pt= sqrt(ptSquare);
 				
-		hfeynmanX.accumulate(feynmanX);
-		hptSq.accumulate(ptSquare);
-		hpt.accumulate(pt);
+		hfeynmanX->fill(feynmanX);
+		hptSq->fill(ptSquare);
+		hpt->fill(pt);
 		
 #ifdef USE_FTFmodel
 		if ( pname == "string" ) 
@@ -701,7 +781,7 @@ int main()
 // 			Tuple_fxp.column("fx",feynmanX);
 // 			Tuple_fxp.dumpData();
 			
-			hfeynmanX_p.accumulate(feynmanX);
+			hfeynmanX_p->fill(feynmanX);
 			if ( feynmanX > 1. ) 
 			{
 			    G4LorentzVector pmom=(*result)[astring]->Get4Momentum();
@@ -711,125 +791,125 @@ int main()
 					     << pmom.e() << G4endl;
 
 			}
-			hptSq_p.accumulate(ptSquare);
-			hpt_p.accumulate(pt);
+			hptSq_p->fill(ptSquare);
+			hpt_p->fill(pt);
 		}
 		if ( pname == "pi-" )
 		{
-			hfeynmanX_pim.accumulate(feynmanX);
-			hptSq_pim.accumulate(ptSquare);
-			hpt_pim.accumulate(pt);
+			hfeynmanX_pim->fill(feynmanX);
+			hptSq_pim->fill(ptSquare);
+			hpt_pim->fill(pt);
 		}
 
 		if ( pname == "pi+" )
 		{
-			hfeynmanX_pip.accumulate(feynmanX);
-			hptSq_pip.accumulate(ptSquare);
-			hpt_pip.accumulate(pt);
+			hfeynmanX_pip->fill(feynmanX);
+			hptSq_pip->fill(ptSquare);
+			hpt_pip->fill(pt);
 		}
 
 		if ( pname == "kaon-" )
 		{
-			hfeynmanX_Km.accumulate(feynmanX);
-			hptSq_Km.accumulate(ptSquare);
-			hpt_Km.accumulate(pt);
+			hfeynmanX_Km->fill(feynmanX);
+			hptSq_Km->fill(ptSquare);
+			hpt_Km->fill(pt);
 		}
 
 		if ( pname == "kaon+" )
 		{
-			hfeynmanX_Kp.accumulate(feynmanX);
-			hptSq_Kp.accumulate(ptSquare);
-			hpt_Kp.accumulate(pt);
+			hfeynmanX_Kp->fill(feynmanX);
+			hptSq_Kp->fill(ptSquare);
+			hpt_Kp->fill(pt);
 		}
 
 		if      ( charge >  0.5 )
 		{
-			hfeynmanX_cplus.accumulate(feynmanX);
-			hptSq_cplus.accumulate(ptSquare);
-			hpt_cplus.accumulate(pt);
+			hfeynmanX_cplus->fill(feynmanX);
+			hptSq_cplus->fill(ptSquare);
+			hpt_cplus->fill(pt);
 		
 		} else if ( charge < -0.5 )
 		{
-			hfeynmanX_cminus.accumulate(feynmanX);
-			hptSq_cminus.accumulate(ptSquare);
-			hpt_cminus.accumulate(pt);
+			hfeynmanX_cminus->fill(feynmanX);
+			hptSq_cminus->fill(ptSquare);
+			hpt_cminus->fill(pt);
 		} else {
- 			hfeynmanX_neutral.accumulate(feynmanX);
-			hptSq_neutral.accumulate(ptSquare);
-			hpt_neutral.accumulate(pt);
+ 			hfeynmanX_neutral->fill(feynmanX);
+			hptSq_neutral->fill(ptSquare);
+			hpt_neutral->fill(pt);
  		}
 		
 		if ( pname != "proton" || (*result)[astring]->Get4Momentum().vect().mag() > 1200. )
 		{
-			ifeynmanX.accumulate(feynmanX);
-			iptSq.accumulate(ptSquare);
-			ipt.accumulate(pt);
+			ifeynmanX->fill(feynmanX);
+			iptSq->fill(ptSquare);
+			ipt->fill(pt);
 			
 			if ( pname == "proton" ) 
 			{
 			
-				ifeynmanX_p.accumulate(feynmanX);
-				iptSq_p.accumulate(ptSquare);
-				ipt_p.accumulate(pt);
+				ifeynmanX_p->fill(feynmanX);
+				iptSq_p->fill(ptSquare);
+				ipt_p->fill(pt);
 			}
 
 			if ( pname == "pi-" )
 			{
-				ifeynmanX_pim.accumulate(feynmanX);
-				iptSq_pim.accumulate(ptSquare);
-				ipt_pim.accumulate(pt);
+				ifeynmanX_pim->fill(feynmanX);
+				iptSq_pim->fill(ptSquare);
+				ipt_pim->fill(pt);
 			}
 			if ( pname == "pi+" )
 			{
-				ifeynmanX_pip.accumulate(feynmanX);
-				iptSq_pip.accumulate(ptSquare);
-				ipt_pip.accumulate(pt);
+				ifeynmanX_pip->fill(feynmanX);
+				iptSq_pip->fill(ptSquare);
+				ipt_pip->fill(pt);
 			}
 
 			if ( pname == "kaon-" )
 			{
-				ifeynmanX_Km.accumulate(feynmanX);
-				iptSq_Km.accumulate(ptSquare);
-				ipt_Km.accumulate(pt);
+				ifeynmanX_Km->fill(feynmanX);
+				iptSq_Km->fill(ptSquare);
+				ipt_Km->fill(pt);
 			}
 			if ( pname == "kaon+" )
 			{
-				ifeynmanX_Kp.accumulate(feynmanX);
-				iptSq_Kp.accumulate(ptSquare);
-				ipt_Kp.accumulate(pt);
+				ifeynmanX_Kp->fill(feynmanX);
+				iptSq_Kp->fill(ptSquare);
+				ipt_Kp->fill(pt);
 			}
 
 			if      ( charge >  0.5 )
 			{
-				ifeynmanX_cplus.accumulate(feynmanX);
-				iptSq_cplus.accumulate(ptSquare);
-				iptSq_cplus.accumulate(pt);
+				ifeynmanX_cplus->fill(feynmanX);
+				iptSq_cplus->fill(ptSquare);
+				iptSq_cplus->fill(pt);
 
 			} else if ( charge < -0.5 )
 			{
-				ifeynmanX_cminus.accumulate(feynmanX);
-				iptSq_cminus.accumulate(ptSquare);
-				iptSq_cminus.accumulate(pt);
+				ifeynmanX_cminus->fill(feynmanX);
+				iptSq_cminus->fill(ptSquare);
+				iptSq_cminus->fill(pt);
 			} else {
- 				ifeynmanX_neutral.accumulate(feynmanX);
-				iptSq_neutral.accumulate(ptSquare);
-				iptSq_neutral.accumulate(pt);
+ 				ifeynmanX_neutral->fill(feynmanX);
+				iptSq_neutral->fill(ptSquare);
+				iptSq_neutral->fill(pt);
  			}
 		}
 				
- 		stringMass.accumulate((*result)[astring]->Get4Momentum().mag());
-		stringEnergy.accumulate((*result)[astring]->Get4Momentum().e()/GeV);
+ 		stringMass->fill((*result)[astring]->Get4Momentum().mag());
+		stringEnergy->fill((*result)[astring]->Get4Momentum().e()/GeV);
 		
 		if (astring == 0 )
 		{
-		    projMass.accumulate((*result)[astring]->Get4Momentum().mag());
-		    projEnergy.accumulate((*result)[astring]->Get4Momentum().e()/GeV);
-		    projEt.accumulate(Et/GeV);
-		    projRap.accumulate(rapidity);
+		    projMass->fill((*result)[astring]->Get4Momentum().mag());
+		    projEnergy->fill((*result)[astring]->Get4Momentum().e()/GeV);
+		    projEt->fill(Et/GeV);
+		    projRap->fill(rapidity);
 		} else
 		{
-		    tgtMass.accumulate((*result)[astring]->Get4Momentum().mag());
-		    tgtEnergy.accumulate((*result)[astring]->Get4Momentum().e()/GeV);
+		    tgtMass->fill((*result)[astring]->Get4Momentum().mag());
+		    tgtEnergy->fill((*result)[astring]->Get4Momentum().e()/GeV);
 		}
 		
 		G4bool isBarion=false;
@@ -842,42 +922,42 @@ int main()
 		{
 		   // Barion
 		   
-		   barionRap.accumulate(rapidity);
-		   barionMass.accumulate((*result)[astring]->Get4Momentum().mag());
+		   barionRap->fill(rapidity);
+		   barionMass->fill((*result)[astring]->Get4Momentum().mag());
 		} else
 		{
 		   // Meson 
-		   mesonRap.accumulate(rapidity);
-		   mesonMass.accumulate((*result)[astring]->Get4Momentum().mag());
+		   mesonRap->fill(rapidity);
+		   mesonMass->fill((*result)[astring]->Get4Momentum().mag());
 		}
 		if ( charge > 0.5 ) 
 		{
-			chposRap.accumulate(rapidity);
-			chargedRap.accumulate(rapidity);
+			chposRap->fill(rapidity);
+			chargedRap->fill(rapidity);
 		} else if ( charge < -0.5 ) 
 		{
-			chnegRap.accumulate(rapidity);
-			chargedRap.accumulate(rapidity);
+			chnegRap->fill(rapidity);
+			chargedRap->fill(rapidity);
 		} else
 		{
-			neutralRap.accumulate(rapidity);
+			neutralRap->fill(rapidity);
 		}
 		
 	   }
 	   
-	   stringEt.accumulate(Et/GeV);
-	   cutstringEta.accumulate(cutEta/GeV);
-	   cutstringEt.accumulate(cutEt/GeV);
+	   stringEt->fill(Et/GeV);
+	   cutstringEta->fill(cutEta/GeV);
+	   cutstringEt->fill(cutEt/GeV);
 
-//	   cout << "Total 4 Momentum: " << Sum << G4endl;
+//	   std::cout << "Total 4 Momentum: " << Sum << G4endl;
 	
-	   Tuple_mom.column("px1",Sum.x());
-	   Tuple_mom.column("py1",Sum.y());
-	   Tuple_mom.column("pz1",Sum.z());
-	   Tuple_mom.column("E1",Sum.e());
+//	   Tuple_mom.column("px1",Sum.x());
+//	   Tuple_mom.column("py1",Sum.y());
+//	   Tuple_mom.column("pz1",Sum.z());
+//	   Tuple_mom.column("E1",Sum.e());
 	   
 // 	   std::for_each(result->begin(),result->end(),DeleteKineticTrack());
-	   for (G4int i1=0;i1<result->STL_size();i1++)
+	   for (unsigned int i1=0;i1<result->STL_size();i1++)
 	   {
 	   	delete (*result)[i1];
 	   }
@@ -885,7 +965,7 @@ int main()
 	   
 	   G4V3DNucleus * hitNucleus;
 	   
-	   hitNucleus= model.GetWoundedNucleus();
+	   hitNucleus= model->GetWoundedNucleus();
 	   
 	   hitNucleus->StartLoop();
 	   G4Nucleon * nucleon;
@@ -896,62 +976,62 @@ int main()
 	   	allnucleons++;
 	   	if (nucleon->AreYouHit())
 	   	{
-//	   		cout << "Nucleon HIT " << nucleon->Get4Momentum() << G4endl;
+//	   		std::cout << "Nucleon HIT " << nucleon->Get4Momentum() << G4endl;
 	   	   hitnucleons++;
 	   	} else {
-//	   		cout << "Nucleon     " << nucleon->Get4Momentum() << G4endl;
+//	   		std::cout << "Nucleon     " << nucleon->Get4Momentum() << G4endl;
 	   	   Sum += nucleon->Get4Momentum();
 	   	}
 	   }
-//	   cout << "Nucleons, hitNucleons " << allnucleons << ", " << hitnucleons << G4endl;
-//	   cout << "Total 4 Momentum: " << Sum << G4endl;
+//	   std::cout << "Nucleons, hitNucleons " << allnucleons << ", " << hitnucleons << G4endl;
+//	   std::cout << "Total 4 Momentum: " << Sum << G4endl;
 
-	   Tuple_mom.column("px",Sum.x());
-	   Tuple_mom.column("py",Sum.y());
-	   Tuple_mom.column("pz",Sum.z());
-	   Tuple_mom.column("E",Sum.e());
+//	   Tuple_mom.column("px",Sum.x());
+//	   Tuple_mom.column("py",Sum.y());
+//	   Tuple_mom.column("pz",Sum.z());
+//	   Tuple_mom.column("E",Sum.e());
 
-	   Tuple_mom.dumpData();
+//	   Tuple_mom.dumpData();
 	   
 	}
 	
-	cout << "  pim : " <<        G4double(Spim) /maxEvents 
+	std::cout << "  pim : " <<        G4double(Spim) /maxEvents 
 			 << " (" << sqrt(G4double(Spim))/maxEvents << ")" << G4endl;
-	cout << "  pip : " <<        G4double(Spip) /maxEvents 		
+	std::cout << "  pip : " <<        G4double(Spip) /maxEvents 		
 			 << " (" << sqrt(G4double(Spip))/maxEvents << ")" << G4endl;
-	cout << "  pi0 : " <<        G4double(Spi0) /maxEvents 		
+	std::cout << "  pi0 : " <<        G4double(Spi0) /maxEvents 		
 			 << " (" << sqrt(G4double(Spi0))/maxEvents << ")" << G4endl;
 
-	cout << "  Kp : " <<  	     G4double(SKp) /maxEvents 		
+	std::cout << "  Kp : " <<  	     G4double(SKp) /maxEvents 		
 			 << " (" << sqrt(G4double(SKp))/maxEvents << ")" << G4endl;
-	cout << "  Km : " <<  	     G4double(SKm) /maxEvents 		
+	std::cout << "  Km : " <<  	     G4double(SKm) /maxEvents 		
 			 << " (" << sqrt(G4double(SKm))/maxEvents << ")" << G4endl;
-	cout << "  K0s : " <<        G4double(SK0s) /maxEvents 		
+	std::cout << "  K0s : " <<        G4double(SK0s) /maxEvents 		
 			 << " (" << sqrt(G4double(SK0s))/maxEvents << ")" << G4endl;
-	cout << "  K0l : " << 	     G4double(SK0l) /maxEvents 		
+	std::cout << "  K0l : " << 	     G4double(SK0l) /maxEvents 		
 			 << " (" << sqrt(G4double(SK0l))/maxEvents << ")" << G4endl;
 	
-	cout << "  Lambda : " <<     G4double(SLambda) /maxEvents 	
+	std::cout << "  Lambda : " <<     G4double(SLambda) /maxEvents 	
 			 << " (" << sqrt(G4double(SLambda))/maxEvents << ")" << G4endl;
-	cout << "  LambdaBar : " <<  G4double(SLambdaBar) /maxEvents 	
+	std::cout << "  LambdaBar : " <<  G4double(SLambdaBar) /maxEvents 	
 			 << " (" << sqrt(G4double(SLambdaBar))/maxEvents << ")" << G4endl;
 	
-	cout << "  Sigma0 : " <<     G4double(SSigma0) /maxEvents 	
+	std::cout << "  Sigma0 : " <<     G4double(SSigma0) /maxEvents 	
 			 << " (" << sqrt(G4double(SSigma0))/maxEvents << ")" << G4endl;
-	cout << "  Sigma0Bar : " <<  G4double(SSigma0Bar) /maxEvents 	
+	std::cout << "  Sigma0Bar : " <<  G4double(SSigma0Bar) /maxEvents 	
 			 << " (" << sqrt(G4double(SSigma0Bar))/maxEvents << ")" << G4endl;
 
-	cout << "  proton : " <<     G4double(Sproton) /maxEvents 			
+	std::cout << "  proton : " <<     G4double(Sproton) /maxEvents 			
 			 << " (" << sqrt(G4double(Sproton))/maxEvents << ")" << G4endl;
-	cout << "  protonBar : " <<  G4double(SprotonBar) /maxEvents 			
+	std::cout << "  protonBar : " <<  G4double(SprotonBar) /maxEvents 			
 			 << " (" << sqrt(G4double(SprotonBar))/maxEvents << ")" << G4endl;
 
-	cout << "  neutron : " <<    G4double(Sneutron) /maxEvents 			
+	std::cout << "  neutron : " <<    G4double(Sneutron) /maxEvents 			
 			 << " (" << sqrt(G4double(Sneutron))/maxEvents << ")" << G4endl;
-	cout << "  neutronBar : " << G4double(SneutronBar) /maxEvents 			
+	std::cout << "  neutronBar : " << G4double(SneutronBar) /maxEvents 			
 			 << " (" << sqrt(G4double(SneutronBar))/maxEvents << ")" << G4endl;
 
-	cout << " "  << G4double(Spim) /maxEvents
+	std::cout << " "  << G4double(Spim) /maxEvents
 	     << " "  << G4double(Spip) /maxEvents
 	     << " "  << G4double(Spi0) /maxEvents
 
@@ -973,7 +1053,10 @@ int main()
 	     << G4endl;
 
 
-	hbfile.write();
+      std::cout << "Committing..." << std::endl;
+      tree->commit();
+      std::cout << "Closing the tree..." << std::endl;
+      tree->close();
 	return 0;
 }
 
