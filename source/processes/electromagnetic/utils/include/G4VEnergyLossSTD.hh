@@ -483,7 +483,7 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
-                                               G4double, G4double currentMinimumStep, G4double& currentSafety)
+                                  G4double, G4double currentMinimumStep, G4double&)
 {
   G4double x = DBL_MAX;
 

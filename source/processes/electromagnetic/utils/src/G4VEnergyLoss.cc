@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.40 2003-04-04 14:33:34 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.41 2003-05-26 17:17:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -170,7 +170,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
-                G4double LowestKineticEnergy,G4double HighestKineticEnergy,G4int TotBin,
+                G4double,G4double HighestKineticEnergy,G4int TotBin,
                                  G4int materialIndex,G4PhysicsLogVector* rangeVector)
 //  create range vector for a material
 {
@@ -439,7 +439,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildProperTimeTable(G4PhysicsTable* theDEDXTable
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
-                                    G4double LowestKineticEnergy,
+                                    G4double,
                                     G4double HighestKineticEnergy,G4int TotBin,
                                     G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create lab time vector for a material
@@ -500,7 +500,7 @@ void G4VEnergyLoss::BuildLabTimeVector(G4PhysicsTable* theDEDXTable,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLoss::BuildProperTimeVector(G4PhysicsTable* theDEDXTable,
-                                    G4double LowestKineticEnergy,
+                                    G4double,
                                     G4double HighestKineticEnergy,G4int TotBin,
                                     G4int materialIndex, G4PhysicsLogVector* timeVector)
 //  create proper time vector for a material

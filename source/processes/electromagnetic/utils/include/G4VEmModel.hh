@@ -108,17 +108,20 @@ public:
                                       G4double tmin,
                                       G4double tmax) = 0;
 
-  virtual G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
-                            const G4MaterialCutsCouple* couple,
-		            const G4ParticleDefinition* particle,
-		                  G4double& kineticEnergy,
-			          G4double lambda,
-			          G4double range,
-			          G4double truePathLength) {return truePathLength;};
+  virtual G4double GeomPathLength(G4PhysicsTable*,
+                            const G4MaterialCutsCouple*,
+		            const G4ParticleDefinition*,
+		                  G4double&,
+			          G4double,
+			          G4double,
+    			          G4double truePathLength) {return truePathLength;};
+  // G4double parameters: kinEnergy, lambda, range, 
+  // G4PhysicsTable: theLambdaTable 
 
   virtual G4double TrueStepLength(G4double geomStepLength) {return geomStepLength;};
 
-  virtual G4double SampleCosineTheta(G4double trueStepLength) {return 1.0;};
+  virtual G4double SampleCosineTheta(G4double ) {return 1.0; };
+  // G4double parrameter trueStepLength
 
   virtual G4double SampleDisplacement() {return 0.0;};
 

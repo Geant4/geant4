@@ -99,16 +99,6 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-  G4double SampleCosineTheta(G4double& kineticEnergy,
-                                     G4double& energyDeposition,
-				     G4double& stepLength,
-				     G4double& lambda) {return 1.0;};
-
-  G4double SampleDisplacement(G4double& kineticEnergy,
-                                     G4double& truePathLength,
-				     G4double& stepLength,
-				     G4double& lambda) {return 0.0;};
-
   G4double MaxSecondaryEnergy(const G4DynamicParticle*);
 
 protected:
@@ -140,7 +130,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4BetheBlochModel::MaxSecondaryEnergy(
-          const G4ParticleDefinition* p,
+          const G4ParticleDefinition*,
                 G4double kinEnergy) 
 {
 

@@ -143,7 +143,7 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsTable* G4LossTableBuilder::BuildInverseRangeTable(
-                      const G4PhysicsTable* dedxTable,
+                      const G4PhysicsTable*,
                       const G4PhysicsTable* rangeTable)
 // Build inverse range table from the energy loss table
 {

@@ -101,7 +101,7 @@ G4double G4BetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
+G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition*,
                                          const G4MaterialCutsCouple* couple)
 {
   return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
@@ -232,7 +232,7 @@ G4double G4BetheBlochModel::CrossSection(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
-                             const G4MaterialCutsCouple* couple,
+                             const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)

@@ -77,8 +77,8 @@ public:
 
   G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
-                             G4double kineticEnergy,
-                             G4double cutEnergy) {return 0.0;};
+                             G4double,
+                             G4double) {return 0.0;};
 
   G4double CrossSection(const G4Material*,
                         const G4ParticleDefinition*,
@@ -89,14 +89,14 @@ public:
   G4DynamicParticle* SampleSecondary(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy) {return 0;};
+                                      G4double,
+                                      G4double) {return 0;};
 
   G4std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4MaterialCutsCouple*,
                                 const G4DynamicParticle*,
-                                      G4double tmin,
-                                      G4double maxEnergy) {return 0;};
+                                      G4double,
+                                      G4double) {return 0;};
 
   G4double GeomPathLength(G4PhysicsTable* theLambdaTable,
                     const G4MaterialCutsCouple* couple,
@@ -117,7 +117,7 @@ public:
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                    G4double kinEnergy) {return 0.0;};
+                                    G4double) {return 0.0;};
 
 private:
 

@@ -233,7 +233,7 @@ inline void G4VMultipleScattering::DefineMaterial(const G4MaterialCutsCouple* co
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track& track,
+inline G4double G4VMultipleScattering::GetMeanFreePath(const G4Track&,
                                                              G4double,
                                                              G4ForceCondition* cond)
 {

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.icc,v 1.9 2003-04-18 12:44:05 vnivanch Exp $
+// $Id: G4MultipleScattering.icc,v 1.10 2003-05-26 17:17:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------ G4MultipleScattering physics process ---------------------------
@@ -67,7 +67,7 @@ inline G4double G4MultipleScattering::AlongStepGetPhysicalInteractionLength(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4MultipleScattering::GetMeanFreePath(
-                                            const G4Track& track,
+                                            const G4Track&,
                                             G4double,
                                             G4ForceCondition* condition)
 
