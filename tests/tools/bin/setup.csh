@@ -45,7 +45,6 @@ setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
 setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
 setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
 setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
-setenv G4ANALYSIS_BUILD 1
 #
 # Some aliases :
 alias g4root   "cd $G4INSTALL"
@@ -64,7 +63,7 @@ alias g4nt      "cd $G4INSTALL/tests/tools/NT"
 alias g4omake   "cd $G4INSTALL/tests/tools/omake"
 alias g4N02     "cd $G4INSTALL/examples/novice/N02"
 alias g4N03     "cd $G4INSTALL/examples/novice/N03"
-alias g4ANA01   "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
+alias g4AnaEx01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
 alias g4XrayTel "cd $G4INSTALL/examples/advanced/xray_telescope"
 #
 # Below aliases assume that $G4WORKDIR/stt/$G4SYSTEM exists !
@@ -77,7 +76,7 @@ alias g4filter  "$G4INSTALL/tests/tools/bin/filter.sh $G4SYSTEM | more"
 #
 alias test201 "$G4WORKDIR/bin/$G4SYSTEM/test201"
 alias N03     "$G4WORKDIR/bin/$G4SYSTEM/exampleN03"
-alias ANA01   "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
+alias AnaEx01 "$G4WORKDIR/bin/$G4SYSTEM/AnaEx01"
 alias XrayTel "$G4WORKDIR/bin/$G4SYSTEM/XrayTel"
 #
 #alias search "$G4INSTALL/tests/search.sh"
