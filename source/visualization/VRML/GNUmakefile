@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-07-27 22:33:05 johna Exp $
+# $Id: GNUmakefile,v 1.5 2002-03-01 00:29:52 johna Exp $
 
 # lib name
 name := G4VRML
@@ -22,11 +22,5 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
-
-ifdef G4VIS_BUILD_VRML_DRIVER
-  CPPFLAGS += -DVRML
-endif
-
-CPPFLAGS += -DVRMLFILE
 
 include $(G4INSTALL)/config/common.gmk

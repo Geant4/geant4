@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-04-07 14:52:50 johna Exp $
+# $Id: GNUmakefile,v 1.4 2002-03-01 00:29:50 johna Exp $
 
 name := G4OpenInventor
 
@@ -23,24 +23,6 @@ CPPFLAGS += -I$(G4BASE)/interfaces/common/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/materials/include
 CPPFLAGS += -I$(G4BASE)/global/HEPRandom/include
-
-
-ifdef G4VIS_BUILD_OPENGL_DRIVER
-  CPPFLAGS += $(OGLFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLXAW_DRIVER
-  CPPFLAGS += $(XAWFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-  CPPFLAGS += $(XMFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLX_DRIVER
-  CPPFLAGS += $(X11FLAGS)
-endif
-
-ifdef G4VIS_BUILD_OI_DRIVER
-  CPPFLAGS += $(OIVFLAGS) $(X11FLAGS)
-endif
 
 include $(G4INSTALL)/config/common.gmk
 

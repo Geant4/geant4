@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-04-07 13:32:41 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2002-03-01 00:29:39 johna Exp $
 
 name := G4OpenGL
 
@@ -21,18 +21,5 @@ CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/intercoms/include
 CPPFLAGS += -I$(G4BASE)/interfaces/common/include
-
-ifdef G4VIS_BUILD_OPENGL_DRIVER
-  CPPFLAGS += $(OGLFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLXAW_DRIVER
-  CPPFLAGS += $(XAWFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLXM_DRIVER
-  CPPFLAGS += $(XMFLAGS)
-endif
-ifdef G4VIS_BUILD_OPENGLX_DRIVER
-  CPPFLAGS += $(X11FLAGS)
-endif
 
 include $(G4INSTALL)/config/common.gmk
