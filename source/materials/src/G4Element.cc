@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.cc,v 1.18 2004-12-07 08:50:02 gcosmo Exp $
+// $Id: G4Element.cc,v 1.19 2005-02-09 16:03:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -359,8 +359,7 @@ std::ostream& operator<<(std::ostream& flux, G4Element* element)
   G4long prec = flux.precision(3);
   
   flux
-    << " Element: " << std::setw(8) << element->fName << std::setw(3)
-                    << element->fSymbol
+    << " Element: " << element->fName   << " (" << element->fSymbol << ")"
     << "   Z = " << std::setw(4) << std::setprecision(1) <<  element->fZeff 
     << "   N = " << std::setw(5) << std::setprecision(1) <<  element->fNeff
     << "   A = " << std::setw(6) << std::setprecision(2)
