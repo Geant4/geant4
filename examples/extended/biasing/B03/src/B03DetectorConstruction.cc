@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: B03DetectorConstruction.cc,v 1.12 2003-06-16 16:47:26 gunter Exp $
+// $Id: B03DetectorConstruction.cc,v 1.13 2003-07-31 11:59:41 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "G4Types.hh"
 #include <strstream>
 #include "globals.hh"
 
