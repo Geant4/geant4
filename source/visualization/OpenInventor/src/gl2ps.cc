@@ -2,7 +2,7 @@
  * GL2PS, an OpenGL to PostScript Printing Library
  * Copyright (C) 1999-2003  Christophe Geuzaine 
  *
- * $Id: gl2ps.cc,v 1.2 2004-11-10 16:34:53 gbarrand Exp $
+ * $Id: gl2ps.cc,v 1.3 2004-11-10 20:16:13 gbarrand Exp $
  *
  * E-mail: geuz@geuz.org
  * URL: http://www.geuz.org/gl2ps/
@@ -1315,14 +1315,15 @@ void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GLsizei width, GLsizei hei
 				GLenum format, GLenum type, GLfloat *pixels,
 				FILE *stream){
   typedef unsigned char Uchar;
-  int status = 1, nbhex, nbyte2, nbyte4, nbyte8;
-  unsigned int row, col, col_max;
+  int status = 1, nbhex, nbyte;
+  unsigned int row, col, ibyte,icase;
   float dr, dg, db, fgrey;
   Uchar red, green, blue, b, grey;
   /* Options */
   int shade = 0;
-  //int nbit = 4;
-  int nbit = 8;
+  //int nbit = 2;
+  int nbit = 4;
+  //int nbit = 8;
 
   if((width <= 0) || (height <= 0)) return;
 
@@ -1352,98 +1353,147 @@ void gl2psPrintPostScriptPixmap(GLfloat x, GLfloat y, GLsizei width, GLsizei hei
     fprintf(stream, "%%%% nbhex digit          :%d\n", nbhex); 
   }
   else if(nbit == 2){ 
-    nbyte2 = (width * 3)/4;
-    nbyte2 /=3;
-    nbyte2 *=3;
-    col_max = (nbyte2 * 4)/3;
+    int nrgb = width  * 3;
+    int nbits = nrgb * nbit;
+    nbyte = nbits/8;
+    if((nbyte*8)!=nbits) nbyte++; 
     /* 2 bit for r and g and b */
     /* rgbs following each other */
-    fprintf(stream, "/rgbstr %d string def\n", nbyte2); 
-    fprintf(stream, "%d %d %d\n", col_max, height, 2); 
-    fprintf(stream, "[ %d 0 0 -%d 0 %d ]\n", col_max, height, height); 
+    fprintf(stream, "/rgbstr %d string def\n", nbyte); 
+    fprintf(stream, "%d %d %d\n", width, height, nbit); 
+    fprintf(stream, "[ %d 0 0 -%d 0 %d ]\n", width, height, height); 
     fprintf(stream, "{ currentfile rgbstr readhexstring pop }\n" );
     fprintf(stream, "false 3\n" );
-    fprintf(stream, "colorimage\n" );
+    fprintf(stream, "colorimage\n" );    
     for(row = 0; row < height; row++){
-      for(col = 0; col < col_max; col+=4){
-	status = gl2psGetRGB(pixels, width, height,
+      icase = 1;
+      col = 0;
+      b = 0;
+      for(ibyte = 0; ibyte < nbyte; ibyte++){
+        if(icase==1) {
+          if(col<width) {
+	    status = gl2psGetRGB(pixels, width, height,
 			     col, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(3. * dr);
-	green = (Uchar)(3. * dg);
-	blue = (Uchar)(3. * db);
-	b = red;
-	b = (b<<2)+green;
-	b = (b<<2)+blue;
-	status = gl2psGetRGB(pixels, width, height,
-			     col+1, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(3. * dr);
-	green = (Uchar)(3. * dg);
-	blue = (Uchar)(3. * db);
-	b = (b<<2)+red;
-	gl2psWriteByte(stream, b);
-	
-	b = green;
-	b = (b<<2)+blue;
-	status = gl2psGetRGB(pixels, width, height,
-			     col+2, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(3. * dr);
-	green = (Uchar)(3. * dg);
-	blue = (Uchar)(3. * db);
-	b = (b<<2)+red;
-	b = (b<<2)+green;
-	gl2psWriteByte(stream, b);
-	
-	b = blue;
-	status = gl2psGetRGB(pixels,width,height,
-			     col+3, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(3. * dr);
-	green = (Uchar)(3. * dg);
-	blue = (Uchar)(3. * db);
-	b = (b<<2)+red;
-	b = (b<<2)+green;
-	b = (b<<2)+blue;
-	gl2psWriteByte(stream, b);
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(3. * dr);
+	  green = (Uchar)(3. * dg);
+	  blue = (Uchar)(3. * db);
+	  b = red;
+	  b = (b<<2)+green;
+	  b = (b<<2)+blue;
+          if(col<width) {
+	    status = gl2psGetRGB(pixels, width, height,
+			     col, row, &dr, &dg, &db) == 0 ? 0 : status;
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(3. * dr);
+	  green = (Uchar)(3. * dg);
+	  blue = (Uchar)(3. * db);
+	  b = (b<<2)+red;
+	  gl2psWriteByte(stream, b);
+          b = 0;
+          icase++;
+	} else if(icase==2) {
+	  b = green;
+	  b = (b<<2)+blue;
+          if(col<width) {
+	    status = gl2psGetRGB(pixels, width, height,
+			     col, row, &dr, &dg, &db) == 0 ? 0 : status;
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(3. * dr);
+	  green = (Uchar)(3. * dg);
+	  blue = (Uchar)(3. * db);
+	  b = (b<<2)+red;
+	  b = (b<<2)+green;
+	  gl2psWriteByte(stream, b);
+          b = 0;
+          icase++;
+	} else if(icase==3) {
+	  b = blue;
+          if(col<width) {
+	    status = gl2psGetRGB(pixels,width,height,
+			     col, row, &dr, &dg, &db) == 0 ? 0 : status;
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(3. * dr);
+	  green = (Uchar)(3. * dg);
+	  blue = (Uchar)(3. * db);
+	  b = (b<<2)+red;
+	  b = (b<<2)+green;
+	  b = (b<<2)+blue;
+	  gl2psWriteByte(stream, b);
+          b = 0;
+          icase = 1;
+        }
       }
       fprintf(stream, "\n");
     }
   }
   else if(nbit == 4){ 
-    nbyte4 = (width  * 3)/2;
-    nbyte4 /=3;
-    nbyte4 *=3;
-    col_max = (nbyte4 * 2)/3;
+    int nrgb = width  * 3;
+    int nbits = nrgb * nbit;
+    nbyte = nbits/8;
+    if((nbyte*8)!=nbits) nbyte++; 
     /* 4 bit for r and g and b */
     /* rgbs following each other */
-    fprintf(stream, "/rgbstr %d string def\n", nbyte4);
-    fprintf(stream, "%d %d %d\n", col_max, height,4);
-    fprintf(stream, "[ %d 0 0 -%d 0 %d ]\n", col_max, height, height);
+    fprintf(stream, "/rgbstr %d string def\n", nbyte);
+    fprintf(stream, "%d %d %d\n", width, height,nbit);
+    fprintf(stream, "[ %d 0 0 -%d 0 %d ]\n", width, height, height);
     fprintf(stream, "{ currentfile rgbstr readhexstring pop }\n");
     fprintf(stream, "false 3\n");
     fprintf(stream, "colorimage\n");
     for(row = 0; row < height; row++){
-      for(col = 0; col < col_max; col+=2){
-	status = gl2psGetRGB(pixels, width, height,
+      col = 0;
+      icase = 1;
+      for(ibyte = 0; ibyte < nbyte; ibyte++){
+        if(icase==1) {
+          if(col<width) {
+            status = gl2psGetRGB(pixels, width, height,
 			     col, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(15. * dr);
-	green = (Uchar)(15. * dg);
-	fprintf(stream, "%x%x", red, green);
-	blue = (Uchar)(15. * db);
-	
-	status = gl2psGetRGB(pixels, width, height,
-			     col+1, row, &dr, &dg, &db) == 0 ? 0 : status;
-	red = (Uchar)(15. * dr);
-	fprintf(stream,"%x%x",blue,red);
-	green = (Uchar)(15. * dg);
-	blue = (Uchar)(15. * db);
-	fprintf(stream, "%x%x", green, blue);
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(15. * dr);
+  	  green = (Uchar)(15. * dg);
+	  fprintf(stream, "%x%x", red, green);
+          icase++;
+        } else if(icase==2) {
+  	  blue = (Uchar)(15. * db);
+	  if(col<width) {
+  	    status = gl2psGetRGB(pixels, width, height,
+		 	     col, row, &dr, &dg, &db) == 0 ? 0 : status;
+          } else {
+            dr = dg = db = 0;
+          }
+          col++;
+	  red = (Uchar)(15. * dr);
+	  fprintf(stream,"%x%x",blue,red);
+          icase++;
+        } else if(icase==3) {
+	  green = (Uchar)(15. * dg);
+	  blue = (Uchar)(15. * db);
+	  fprintf(stream, "%x%x", green, blue);
+          icase = 1;
+        }
       }
       fprintf(stream, "\n");
     }
   }
   else{ 
-    nbyte8 = width * 3;
+    nbyte = width * 3;
     /* 8 bit for r and g and b */
-    fprintf(stream, "/rgbstr %d string def\n", nbyte8);
+    fprintf(stream, "/rgbstr %d string def\n", nbyte);
     fprintf(stream, "%d %d %d\n", width, height, 8);
     fprintf(stream, "[ %d 0 0 -%d 0 %d ]\n", width, height, height); 
     fprintf(stream, "{ currentfile rgbstr readhexstring pop }\n");
