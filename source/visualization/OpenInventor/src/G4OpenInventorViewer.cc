@@ -53,6 +53,9 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
+  fDefaultVP.SetAutoRefresh(true);
+  fVP.SetAutoRefresh(true);
+
   //FIXME : G.Barrand : not convinced that we have to rm culling.
   // For viewing of all objects by default :
   //fDefaultVP.SetCulling(false);

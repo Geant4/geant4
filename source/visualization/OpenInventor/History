@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2004-11-21 14:19:51 gbarrand Exp $
+$Id: History,v 1.44 2004-11-22 10:04:15 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+22th November 2004  Guy Barrand
+- G4OpenInventorViewer : set auto refresh by default.
 
 21th November 2004  Guy Barrand
 - G4OpenInventor[Xt,Win]Viewer, SceneHandler : add a simple picking that
