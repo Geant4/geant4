@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.5 2003-01-16 16:31:15 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.6 2003-01-17 17:14:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,10 +43,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP):  G4VUserPhysicsList()
+Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY):  G4VUserPhysicsList()
 { RangeOn=range;
  Stopping= SP;
   Low=LowEn;
+  RadiationY=RY;
   rangeOn = "off";
   defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
@@ -226,7 +227,7 @@ void Tst50PhysicsList::ConstructEM()
      
       pmanager->AddProcess(loweIon,     -1, 2,2);
       pmanager->AddProcess(loweBrem,    -1,-1,3);      
- if(RangeOn==true || Stopping==true){
+ if(RangeOn==true || Stopping==true || RadiationY==true){
    pmanager->RemoveProcess(multipleScattering);
    G4VeLowEnergyLoss::SetEnlossFluc(false);
   
@@ -241,7 +242,7 @@ void Tst50PhysicsList::ConstructEM()
 	  pmanager->AddProcess(theeminusBremsstrahlung,-1,-1,3);
 pmanager->AddProcess(theeminusMultipleScattering,-1,1,1);
 
- if(RangeOn==true || Stopping==true){pmanager->RemoveProcess(theeminusMultipleScattering);}
+ if(RangeOn==true || Stopping==true|| RadiationY==true){pmanager->RemoveProcess(theeminusMultipleScattering);}
       }
     } else if (particleName == "e+") {
     //positron

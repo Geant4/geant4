@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.6 2003-01-16 09:53:15 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.7 2003-01-17 17:14:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,8 +47,8 @@
 #include "G4UnitsTable.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary):
-  hit_CollID(-1),p_Primary(Primary)
+Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary,G4bool RY,G4String file):
+  hit_CollID(-1),p_Primary(Primary),RadiationY(RY),filename(file)
 {
  
 }
@@ -112,6 +112,15 @@ G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
   G4cout<<"Radiation yield:"<< radiation<<G4endl;
  
   */
+  if (RadiationY)
+    {
+G4std::ofstream pmtfile(filename, G4std::ios::app);
+ G4double radiation=(energy/MeV)/(initialEnergy/MeV);
+ G4cout<<"Radiation yield:"<< radiation<<G4endl;
+if(pmtfile.is_open()){
+  pmtfile<<'\t'<<radiation<<'\t'<<'\t'<<initialEnergy/MeV<<G4endl;
+     }
+    }
  // get number of stored trajectories
   //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();

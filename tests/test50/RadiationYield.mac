@@ -1,0 +1,26 @@
+#cosi' e' possibile calcolare lo StoppingPower degli elettroni in un mezzo.
+#se i processi sono Standard fare
+#/process/eLoss/fluct false
+/control/verbose 0
+/run/verbose 0
+/gun/particle e-
+/gun/position 0. 0. 0.
+/gun/randomDirection on 
+/target/setTargetMat Hydrogen
+/target/setTargetThick 500. m
+/target/setTargetX 500. m
+/target/setTargetY 500. m
+#cut alto sempre per il test con e-
+/le/cutE 1. m
+/target/update
+/gun/energy 1. MeV 
+/run/beamOn 20
+/gun/energy 10. MeV 
+/run/beamOn 20
+/gun/energy 20. MeV
+/run/beamOn 20
+/gun/energy 30. MeV
+/run/beamOn 20
+/gun/energy 40. MeV
+/run/beamOn 20
+

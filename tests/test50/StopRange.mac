@@ -1,0 +1,95 @@
+#cosi' e' possibile mettere la configurazione per il calcolo del CSDA range deg#li elettroni
+#se i processi sono Standard fare
+#/process/eLoss/fluct false
+/control/verbose 0
+/run/verbose 0
+/gun/particle e-
+/gun/position 0. 0. 0.
+/gun/randomDirection on 
+/target/setTargetMat Hydrogen
+/target/setTargetThick 1500. cm
+/target/setTargetX 1500. cm
+/target/setTargetY 1500. cm
+/target/setMaxStep 0.001 cm
+#cut alto sempre per il test in range
+/le/cutE 1. m
+/target/update
+/gun/energy 0.01 MeV 
+/run/beamOn 1
+/gun/energy 0.02 MeV
+/run/beamOn 1
+/gun/energy 0.03 MeV
+/run/beamOn 1
+/gun/energy 0.04 MeV
+/run/beamOn 1
+/gun/energy 0.05 MeV
+/run/beamOn 1
+/gun/energy 0.06 MeV
+/run/beamOn 1
+/gun/energy 0.07 MeV
+/run/beamOn 1
+/gun/energy 0.08 MeV
+/run/beamOn 1
+/gun/energy 0.09 MeV
+/run/beamOn 1
+/target/setMaxStep 0.01 cm
+/gun/energy 0.1 MeV
+/run/beamOn 1
+/gun/energy 0.2 MeV
+/run/beamOn 1
+/gun/energy 0.3 MeV
+/run/beamOn 1
+/gun/energy 0.4 MeV
+/run/beamOn 1
+/gun/energy 0.5 MeV
+/run/beamOn 1
+/gun/energy 0.6 MeV
+/run/beamOn 1
+/gun/energy 0.7 MeV
+/run/beamOn 1
+/gun/energy 0.8 MeV
+/run/beamOn 1
+/gun/energy 0.9 MeV
+/target/setMaxStep 0.1 cm
+/run/beamOn 1
+/gun/energy 1. MeV
+/run/beamOn 1
+/gun/energy 2. MeV
+/run/beamOn 1
+/gun/energy 3. MeV
+/run/beamOn 1
+/gun/energy 4. MeV
+/run/beamOn 1
+/gun/energy 5. MeV
+/run/beamOn 1
+/gun/energy 6. MeV
+/run/beamOn 1
+/gun/energy 7. MeV
+/run/beamOn 1
+/gun/energy 8. MeV
+/run/beamOn 1
+/gun/energy 9. MeV
+/run/beamOn 1
+/target/setMaxStep 1. cm
+/gun/energy 10. MeV
+/run/beamOn 1
+/gun/energy 15. MeV
+/run/beamOn 1
+/gun/energy 20. MeV
+/run/beamOn 1
+/gun/energy 30. MeV
+/run/beamOn 1
+/gun/energy 50. MeV
+/run/beamOn 1
+/target/setMaxStep 5. cm
+/gun/energy 100. MeV
+/run/beamOn 1
+/gun/energy 200. MeV
+/run/beamOn 1
+/target/setMaxStep 10. cm
+/gun/energy 500. MeV
+/run/beamOn 1
+/gun/energy 700. MeV
+/run/beamOn 1
+/gun/energy 1000. MeV
+/run/beamOn 1

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.5 2003-01-16 09:53:17 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.6 2003-01-17 17:14:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   // G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl; 
 
-
+  runID=aRun->GetRunID();
 
 
 #ifdef G4ANALYSIS_USE   
@@ -77,7 +77,10 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+G4int Tst50RunAction::GetRun_ID()
+{
+  return runID;
+}
 void Tst50RunAction::EndOfRunAction(const G4Run*)
 {
 #ifdef G4ANALYSIS_USE

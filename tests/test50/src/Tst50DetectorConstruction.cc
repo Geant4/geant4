@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.7 2003-01-16 09:53:13 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.8 2003-01-17 17:14:14 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -144,6 +144,10 @@ density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
 
+density = 0.178e-3*g/cm3;
+a = 4.0026*g/mole;
+G4Material* HEMat = new G4Material(name="Helium", z=2., a, density);
+
 //
 // define a material from elements.   case 1: chemical molecule
 //
@@ -175,6 +179,9 @@ Air->AddElement(O, fractionmass=0.3);
 //
 // examples of gas in non STP conditions
 //
+
+
+
 
 density     = 27.*mg/cm3;
 pressure    = 50.*atmosphere;
@@ -221,7 +228,7 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   // World
   //
   solidWorld = new G4Box("World",				//its name
-                   20.*m,20.*m,20.*m);	//its size
+                   2000.*m,2000.*m,2000.*m);	//its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    defaultMaterial,	//its material

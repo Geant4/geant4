@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.12 2003-01-16 19:00:52 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.13 2003-01-17 17:14:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,8 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, 
- Tst50DetectorConstruction* DET,G4String file,G4bool SP,G4bool range ):
-  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file), StoppingPower(SP),Range(range) 
+ Tst50DetectorConstruction* DET,G4String file,G4bool SP,G4bool range, G4bool RY ):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file), StoppingPower(SP),Range(range),RadiationY(RY) 
 { 
 
   
@@ -67,11 +67,13 @@ Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 #endif
 G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo 
 
+ G4int run_ID= runaction-> GetRun_ID();
+
 //prendo l'energia iniziale delle particelle primarie
   initial_energy= p_Primary->GetInitialEnergy();
  
    //IDnow identifica univocamente la particella//
-IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
+IDnow = run_ID+1000*evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
  
 
@@ -254,7 +256,7 @@ if(stepLength!=0)
 G4double TotalStoppingPower=(energyLost/stepLength);
 
 if(pmtfile.is_open()){
-  pmtfile<<'\t'<<(TotalStoppingPower/(detector->GetDensity()))/(MeV* (cm2)/g)<<'\t'<<initial_energy/MeV<<G4endl;
+  pmtfile<<'\t'<<(TotalStoppingPower/(detector->GetDensity()))/(MeV* (cm2)/g)<<'\t'<<'\t'<<initial_energy/MeV<<G4endl;
  
 
 }
@@ -285,8 +287,7 @@ if(0 ==Step->GetTrack()->GetParentID() )
 	 
 	      
 		      G4double range2= range*(detector->GetDensity());
-		      G4cout<<"range di e- in g/cm2: "<<range2/(g/cm2)<<" "<<
- initial_energy<<" initialenergy"<<G4endl;
+		   
  
 		      if(pmtfile.is_open()){
 			
@@ -295,22 +296,26 @@ if(0 ==Step->GetTrack()->GetParentID() )
 
 		   }
 }}
- /*
+ 
  //Radiation yield
- G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
+if (RadiationY)
+{ 
+if(particle_name=="e-"){
+if(0 ==Step->GetTrack()->GetParentID() )  
+  {
+G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
 	   ->GetProcessName();
 
 
 if (process=="LowEnBrem") 
-  { G4cout <<Step->GetDeltaEnergy()/MeV<<G4endl;
+  { 
+
  G4double energyLostforBremm=abs(Step->GetDeltaEnergy());
  eventaction->RadiationYield( energyLostforBremm);
-
   }
-
-}}}
-*/
+  }
 }
+}}
 
 
 
