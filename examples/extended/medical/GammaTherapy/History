@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2004-09-13 09:51:44 vnivanch Exp $
+$Id: History,v 1.2 2004-09-13 09:52:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,11 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-13-09-04 V.Ivan. (testem1-V06-02-01)
+13-09-04 V.Ivan. (gtherapy-V06-02-01)
 - fix normalisation of histograms; 
 - change position of plane for scoring radial distribution 
   from 10 cm to 7 cm;  
 
-03-08-04 V.Ivan. (testem1-V06-02-00)
+03-08-04 V.Ivan. (gtherapy-V06-02-00)
 - created;
      

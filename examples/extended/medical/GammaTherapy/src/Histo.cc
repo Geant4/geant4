@@ -155,7 +155,7 @@ void Histo::EndOfHisto()
   G4double xet= x*(G4double)n_e_tar;
   G4double xphe= x*(G4double)n_e_ph;
   G4double xne= x*(G4double)n_neutron;
-  G4cout                         << "Number of events                             " << n_evt <<G4endl;
+  G4cout                    << "Number of events                                  " << n_evt <<G4endl;
   G4cout << std::setprecision(4) << "Average number of e-                         " << xe << G4endl;
   G4cout << std::setprecision(4) << "Average number of gamma                      " << xg << G4endl;
   G4cout << std::setprecision(4) << "Average number of e+                         " << xp << G4endl;
@@ -171,7 +171,7 @@ void Histo::EndOfHisto()
   G4cout<<"========================================================"<<G4endl;
   G4cout<<G4endl;
   G4cout<<G4endl;
- 
+
 #ifdef G4ANALYSIS_USE
   // normalise histograms
   for(G4int i=0; i<nHisto1; i++) {
@@ -185,8 +185,8 @@ void Histo::EndOfHisto()
   if(nr > 0.0) nr = 1./nr;
   histo[1]->scale(nr);
 
-  nr = 1000.*cm/stepZ;
-  histo[2]->scale(nr);
+  histo[3]->scale(1000.0*cm3/(pi*absorberR*absorberR*stepZ));
+  histo[4]->scale(1000.0*cm3*volumeR[0]/stepZ);
 
   // Write histogram file
   if(0 < nHisto) {
@@ -318,7 +318,7 @@ void Histo::AddTargetPhoton(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_gam_tar++;
 #ifdef G4ANALYSIS_USE
-  histo[5]->fill((float)e,1.0);
+  histo[5]->fill(e,1.0);
 #endif
 }
 
@@ -337,7 +337,7 @@ void Histo::AddTargetElectron(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_e_tar++;
 #ifdef G4ANALYSIS_USE
-  histo[8]->fill((float)e,1.0);
+  histo[8]->fill(e,1.0);
 #endif
 }
 
@@ -348,7 +348,7 @@ void Histo::AddPhantomElectron(const G4DynamicParticle* ph)
   G4double e = ph->GetKineticEnergy()/MeV;
   if(e > 0.0) n_e_ph++;
 #ifdef G4ANALYSIS_USE
-  histo[7]->fill((float)e,1.0);
+  histo[7]->fill(e,1.0);
 #endif
 }
 
@@ -430,8 +430,8 @@ void Histo::AddGamma(G4double e, G4double r)
   G4int bin1 = (G4int)(r/stepR);
   if(bin1 >= nBinsR) bin1 = nBinsR-1;
 #ifdef G4ANALYSIS_USE
-  histo[6]->fill((float)e,1.0);
-  histo[9]->fill((float)r,(float)(e*volumeR[bin1]));
+  histo[6]->fill(e,1.0);
+  histo[9]->fill(r,e*volumeR[bin1]);
 #endif
 
 }
