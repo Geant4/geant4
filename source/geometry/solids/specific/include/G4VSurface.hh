@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.4 2004-05-24 12:09:48 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.5 2004-05-25 12:51:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,7 @@
 
 class G4VSurface
 {
- protected:  // without description
+ public:  // without description
 
    enum EValidate      {kDontValidate = 0, kValidateWithTol = 1, 
                         kValidateWithoutTol = 2, kUninitialized = 3};
