@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.hh,v 1.4 2001-09-13 11:00:19 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.5 2001-09-19 13:16:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //------------- G4MultipleScattering physics process --------------------------
@@ -34,6 +34,7 @@
 //          Store,Retrieve methods reactived (mma)
 // 13-09-01 Unused TrueToGeomTransformation method deleted,
 //          class description (L.Urban)
+// 19-09-01 come back to previous process name msc 
 //            
 //------------------------------------------------------------------------------
 
@@ -63,7 +64,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 {
  public:    // with description
 
-   G4MultipleScattering(const G4String& processName="mulscat");
+   G4MultipleScattering(const G4String& processName="msc");
 
   ~G4MultipleScattering();
           
