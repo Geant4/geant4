@@ -14,7 +14,12 @@
     G4NeutronHPDataUsed aFile = theNames.GetName(A, Z, dirName, aFSType, result);
     filename = aFile.GetName();
 //    if(filename=="") return false;
+#ifndef WIN32
     ifstream theChannel(filename);
+#else
+    ifstream theChannel(filename,ios::in|ios::nocreate);
+#endif
+    
     if(!theChannel) return false;
     // accommodating deficiencie of some compilers
     if(theChannel.eof()) return false; 

@@ -28,7 +28,11 @@
       hasXsec = false;
       return; // no data for exactly this isotope.
     }
+#ifndef WIN32
     ifstream theData(filename, ios::in);
+#else
+    ifstream theData(filename, ios::in|ios::nocreate);
+#endif
     G4int dummy;
     G4double dumm;
     if(!(theData))

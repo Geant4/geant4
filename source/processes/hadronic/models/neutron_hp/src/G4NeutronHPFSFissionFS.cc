@@ -26,7 +26,11 @@
       hasXsec = false;
       return;
     }
+#ifndef WIN32
     ifstream theData(filename, ios::in);
+#else
+    ifstream theData(filename, ios::in|ios::nocreate);
+#endif
     // here it comes
     G4int infoType, dataType;
     hasFSData = false; 
