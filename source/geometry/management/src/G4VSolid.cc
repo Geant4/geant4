@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.22 2004-09-22 07:16:34 gcosmo Exp $
+// $Id: G4VSolid.cc,v 1.23 2004-09-22 07:18:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -464,7 +464,7 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
   if(nStat < 100)    nStat   = 100;
   if(epsilon > 0.01) epsilon = 0.01;
 
-  for(size_t i = 0; i < nStat; i++ )
+  for(G4int i = 0; i < nStat; i++ )
   {
     px = minX+(maxX-minX)*G4UniformRand();
     py = minY+(maxY-minY)*G4UniformRand();
