@@ -20,7 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+//
+// $Id: RemSimSensitiveDetector.cc,v 1.6 2004-05-22 12:57:07 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
 #include "RemSimSensitiveDetector.hh"
 #include "RemSimHit.hh"
 #include "G4Step.hh"
@@ -66,9 +71,12 @@ G4bool RemSimSensitiveDetector::ProcessHits(G4Step* aStep,
 
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
+ 
+  // Energy deposit in the phantom
   analysis -> energyDepositStore(i,edep/MeV);
-
-  if(aStep -> GetTrack() -> GetTrackID()!=1)
+ 
+  // Energy deposit of secondary particles in the phantom
+  if(aStep -> GetTrack() -> GetTrackID()!= 1)
     analysis -> SecondaryEnergyDeposit(i,edep/MeV);
 #endif
 

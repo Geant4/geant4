@@ -20,7 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $Name:  $
+//
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
 #include "RemSimVPrimaryGeneratorFactory.hh"
 
 RemSimVPrimaryGeneratorFactory::RemSimVPrimaryGeneratorFactory()

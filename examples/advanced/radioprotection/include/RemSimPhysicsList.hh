@@ -20,10 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.hh,v 1.4 2004-05-14 12:29:33 guatelli Exp $
+// $Id: RemSimPhysicsList.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Susanna Guatelli
+// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #ifndef REMSIMPHYSICSLIST_HH
 #define REMSIMPHYSICSLIST_HH 1
@@ -47,7 +47,6 @@ public:
   void AddPhysicsList(const G4String& name);
 
 private:
-
   G4bool electronIsRegistered;
   G4bool positronIsRegistered;
   G4bool photonIsRegistered;

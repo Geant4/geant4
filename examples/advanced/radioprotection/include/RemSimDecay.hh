@@ -20,6 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//
+//    ************************
+//    *                      *
+//    *    RemSimDecay.hh    *
+//    *                      *           
+//    ************************
+//
+// $Id: RemSimDecay.hh,v 1.2 2004-05-22 12:57:04 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #ifndef REMSIMDECAY_HH
 #define REMSIMDECAY_HH 1
 

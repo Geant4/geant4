@@ -20,7 +20,8 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+//
 #include "CLHEP/Random/RandGeneral.h"
 #include "RemSimInterplanetarySpaceConfiguration.hh"
 #include "RemSimVPrimaryGeneratorFactory.hh"

@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.4 2004-05-17 07:37:28 guatelli Exp $
+// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
 #ifndef RemSimVPrimaryGeneratorFactory_h
 #define RemSimVPrimaryGeneratorFactory_h 1
 

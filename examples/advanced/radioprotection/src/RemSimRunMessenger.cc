@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //    *********************************
 //    *                               *
-//    *    RemSimRunMessenger.cc *
+//    *    RemSimRunMessenger.cc      *
 //    *                               *
 //    *********************************
 //
 //
-// $Id: RemSimRunMessenger.cc,v 1.1 2004-05-17 07:37:28 guatelli Exp $
+// $Id: RemSimRunMessenger.cc,v 1.2 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,9 +40,6 @@
 #include "RemSimRunAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
 
 RemSimRunMessenger::RemSimRunMessenger( RemSimRunAction* arun): run(arun)
 { 

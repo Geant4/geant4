@@ -21,25 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPhotonEPDL.hh,v 1.2 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimPhotonEPDL.hh,v 1.3 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, photon processes based on EPDL for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
-#ifndef TST50PHOTONEPDL_HH
-#define TST50PHOTONEPDL_HH 1
+#ifndef REMSIMPHOTONEPDL_HH
+#define REMSIMPHOTONEPDL_HH 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"

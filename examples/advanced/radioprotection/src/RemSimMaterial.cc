@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimMaterial.cc,v 1.4 2004-05-18 10:23:24 guatelli Exp $
+// $Id: RemSimMaterial.cc,v 1.5 2004-05-22 12:57:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,11 +44,11 @@
 #include "RemSimMaterial.hh"
 
 RemSimMaterial::RemSimMaterial():
-  matW(0),matplexiglass(0),matPb(0),matAir(0),
-  matH2O(0),Ar(0),Al(0),nylon(0),mylar(0), beta(0), nextel(0),kevlar(0),
-  vacuum(0), betaCloth(0),eterogeneousNextel(0), kevlarVacuum(0),
-  polyethylene(0), polyacrylate(0), evoh(0),nomex(0), nomexAir(0), 
-  kevlarAir(0),moon(0)
+  matPb(0), matAir(0), matH2O(0), Al(0), nylon(0), mylar(0), 
+  beta(0), nextel(0), kevlar(0),
+  vacuum(0), betaCloth(0), eterogeneousNextel(0), kevlarVacuum(0),
+  polyethylene(0), polyacrylate(0), evoh(0), nomex(0), nomexAir(0), 
+  kevlarAir(0), moon(0)
 {;}
 
 RemSimMaterial::~RemSimMaterial()
@@ -70,12 +70,9 @@ RemSimMaterial::~RemSimMaterial()
   delete mylar;
   delete nylon;
   delete Al;
-  delete Ar;
   delete matH2O;
   delete matAir;
   delete matPb;
-  delete matplexiglass;
-  delete matW;
 }
 
 void RemSimMaterial::DefineMaterials()
@@ -106,58 +103,23 @@ void RemSimMaterial::DefineMaterials()
 
   A = 12.011*g/mole;
   G4Element* elC = new G4Element("Carbon","C",Z = 6.,A);
- 
-  A = 22.99*g/mole;
-  G4Element* elNa = new G4Element("Sodium","Na",Z = 11.,A);
- 
+  
   A = 24.305*g/mole;
   G4Element* elMg = new G4Element("Magnesium","Mg",Z = 12.,A);
-
-  A = 30.974*g/mole;
-  G4Element* elP = new G4Element("Phosphorus","P",Z = 15.,A);
- 
-  A = 32.06*g/mole;
-  G4Element* elS = new G4Element("Sulfur","S",Z = 16.,A);
  
   A = 35.453*g/mole;
   G4Element* elCl = new G4Element("Chlorine","Cl",Z = 17.,A);
- 
-  A = 39.098*g/mole;
-  G4Element* elK = new G4Element("Potassium","K",Z = 19.,A);
 
   A = 40.08*g/mole;
   G4Element* elCa = new G4Element("Calcium","Ca",Z = 20.,A);
-  
-  A = 65.38*g/mole;
-  G4Element* elZn = new G4Element("Zinc","Zn",Z = 30.,A);
-
-  A  =  54.94*g/mole;
-  G4Element* elMn   =  new G4Element("Manganese","Mn",Z = 25.,A);
  
   A = 28.09*g/mole;
   G4Element* elSi  = new G4Element("Silicon","Si",Z = 14.,A);
 
-  A = 52.00*g/mole;
-  G4Element* elCr  = new G4Element("Chromium","Cr",Z = 24.,A);
-
-  A = 58.70*g/mole;
-  G4Element* elNi  = new G4Element("Nickel","Ni",Z = 28.,A);
-
   A = 55.85*g/mole;
   G4Element* elFe  = new G4Element("Iron","Fe",Z = 26.,A);
- 
-  A = 183.84* g/mole;
-  d = 19.3*g/cm3;
-  matW = new G4Material("Tungsten",Z = 74.,A,d);
 
-   // Perspex, plexiglass, lucite 
-  d = 1.19*g/cm3;
-  matplexiglass = new G4Material("Plexiglass",d,3);
-  matplexiglass->AddElement(elH,0.08);
-  matplexiglass->AddElement(elC,0.60);
-  matplexiglass->AddElement(elO,0.32);
- 
-  // Lead material
+  //Lead material
   A = 207.19*g/mole;
   Z = 82;
   d = 11.35*g/cm3;
@@ -166,34 +128,32 @@ void RemSimMaterial::DefineMaterials()
   // Air material
   G4double airDensity = 1.290*mg/cm3;
   G4Material* matAir = new G4Material("Air",airDensity,2);
-  matAir->AddElement(elN,0.7);
-  matAir->AddElement(elO,0.3);
+  matAir -> AddElement(elN,0.7);
+  matAir -> AddElement(elO,0.3);
 
   // Water
   d = 1.000*g/cm3;
   matH2O = new G4Material("Water",d,2);
-  matH2O->AddElement(elH,2);
-  matH2O->AddElement(elO,1);
-  matH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
-  
-  Ar =  new G4Material("ArgonGas", Z= 18., A= 39.95*g/mole, d = 1.782*mg/cm3);
+  matH2O -> AddElement(elH,2);
+  matH2O -> AddElement(elO,1);
+  matH2O -> GetIonisation() -> SetMeanExcitationEnergy(75.0*eV);
   
   Al = new G4Material("Aluminium", Z= 13., A= 26.98*g/mole, d = 2.7*g/cm3);
 
   //nylon (alenia spazio)
   d = 1.14 *g/cm3;
   nylon = new G4Material("nylon",d,4);
-  nylon ->AddElement(elH,0.108);
-  nylon ->AddElement(elC,0.68);
-  nylon ->AddElement(elN,0.099);
-  nylon ->AddElement(elO,0.113);
+  nylon -> AddElement(elH,0.108);
+  nylon -> AddElement(elC,0.68);
+  nylon -> AddElement(elN,0.099);
+  nylon -> AddElement(elO,0.113);
 
   //mylar (alenia spazio)
   d= 1.4 *g/cm3;
   mylar = new G4Material("mylar",d,3);
-  mylar ->AddElement(elH,0.042);
-  mylar ->AddElement(elC,0.625);
-  mylar ->AddElement(elO,0.333);
+  mylar -> AddElement(elH,0.042);
+  mylar -> AddElement(elC,0.625);
+  mylar -> AddElement(elO,0.333);
 
   //beta cloth
   G4double betaDensity = 2.3 *g/cm3;
@@ -230,8 +190,8 @@ void RemSimMaterial::DefineMaterials()
 
   d = (vacuumDensity*0.73)+ (nextelDensity*0.27); 
   eterogeneousNextel = new G4Material("Nextel312AF62",d,2);
-  eterogeneousNextel-> AddMaterial (vacuum, 0.73);
-  eterogeneousNextel-> AddMaterial (nextel, 0.27);
+  eterogeneousNextel -> AddMaterial (vacuum, 0.73);
+  eterogeneousNextel -> AddMaterial (nextel, 0.27);
 
   d = (vacuumDensity*0.44)+ (kevlarDensity*0.56);
   kevlarVacuum = new G4Material("kevlarVacuum",d,2);

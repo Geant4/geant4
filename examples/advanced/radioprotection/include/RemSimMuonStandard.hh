@@ -20,6 +20,12 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RemSimMuonStandard.hh,v 1.2 2004-05-22 12:57:04 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
+
 #ifndef REMSIMMUONSTANDARD_HH
 #define REMSIMMUONSTANDARD_HH 1
 
@@ -39,6 +45,5 @@ public:
   
   virtual void ConstructProcess();
 };
-
 #endif
 

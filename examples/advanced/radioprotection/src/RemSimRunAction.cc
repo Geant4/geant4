@@ -20,15 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // ********************************************************************
-
-//
-// --------------------------------------------------------------
-//                 GEANT 4 - RemSimtherapy example
-// --------------------------------------------------------------
-//
-// Code developed by:
-//  S.Guatelli
-//
 //
 //    *******************************
 //    *                             *
@@ -36,7 +27,9 @@
 //    *                             *
 //    *******************************
 //
-// $Id: RemSimRunAction.cc,v 1.4 2004-05-17 07:37:28 guatelli Exp $
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
+// $Id: RemSimRunAction.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -70,7 +63,6 @@ RemSimRunAction::~RemSimRunAction()
  }
 void RemSimRunAction::BeginOfRunAction(const G4Run*)
 { 
-
 }
 
 void RemSimRunAction::EndOfRunAction(const G4Run* aRun)
@@ -81,7 +73,7 @@ void RemSimRunAction::EndOfRunAction(const G4Run* aRun)
 void RemSimRunAction::Read(G4String name)
 { 
  ReadData(MeV,name);
- G4cout<< name<<"  is the input file!"<<G4endl;
+ G4cout << name << "  is the input file!" << G4endl;
 }
 void RemSimRunAction::ReadData(G4double unitE, G4String fileName)
 {
@@ -141,7 +133,6 @@ void RemSimRunAction::ReadData(G4double unitE, G4String fileName)
     } while (a != -2); // end of file
   
   file.close();
-
 }
 
 G4DataVector* RemSimRunAction::GetPrimaryParticleEnergy()
@@ -155,8 +146,8 @@ G4DataVector* RemSimRunAction::GetPrimaryParticleEnergyDistribution()
 G4double RemSimRunAction::GetPrimaryParticleEnergyDistributionSum()
 {
   G4double sum = 0;
-  size_t size = data->size();
-  for (size_t i = 0; i <size; i++)
+  size_t size = data -> size();
+  for (size_t i = 0; i < size; i++)
     {
       sum+=(*data)[i];
     }

@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimDetectorMessenger.cc,v 1.8 2004-05-21 14:42:44 guatelli Exp $
+// $Id: RemSimDetectorMessenger.cc,v 1.9 2004-05-22 12:57:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,11 +76,6 @@ RemSimDetectorMessenger::RemSimDetectorMessenger( RemSimDetectorConstruction* De
   shieldingDir = new G4UIdirectory("/shielding/");
   shieldingDir -> SetGuidance("shielding control.");
        
-  materialCmd = new G4UIcmdWithAString("/shielding/material",this);
-  materialCmd -> SetGuidance("Change the material of the shielding."); 
-  materialCmd -> SetParameterName("choice",true);
-  materialCmd -> AvailableForStates(G4State_Idle); 
-
   thicknessCmd =  new G4UIcmdWithADoubleAndUnit("/shielding/thickness",this);
   thicknessCmd -> SetGuidance("Set the thickness of the shielding."); 
   thicknessCmd -> SetParameterName("Size",true);
@@ -103,7 +98,6 @@ RemSimDetectorMessenger::~RemSimDetectorMessenger()
   delete thicknessRoofCmd;
   delete roofDir;
   delete thicknessCmd;
-  delete materialCmd;
   delete shieldingDir;
   delete roofCmd;
   delete SPECmd; 
@@ -125,9 +119,6 @@ void RemSimDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
 
   if(command == roofCmd)
     detector -> AddHabitatRoof(newValue); 
-
-  if(command == materialCmd)
-    detector -> ChangeShieldingMaterial(newValue);
 
   if(command == thicknessCmd)
       detector -> ChangeShieldingThickness

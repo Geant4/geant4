@@ -21,9 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimEventAction.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+//    **********************************
+//    *                                *
+//    *    RemSimEventAction.hh        *
+//    *                                *
+//    **********************************
+//
+// $Id: RemSimEventAction.hh,v 1.4 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
  
 #ifndef RemSimEventAction_h
 #define RemSimEventAction_h 1

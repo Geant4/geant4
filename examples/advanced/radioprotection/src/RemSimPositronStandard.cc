@@ -20,19 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPositronStandard.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimPositronStandard.cc,v 1.3 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
-
+// Author: Susanna Guatelli, guatelli@ge.infn.it
 #include "RemSimPositronStandard.hh"
-
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
 #include "G4ParticleDefinition.hh"
@@ -51,20 +43,20 @@ void RemSimPositronStandard::ConstructProcess()
 {
   // Add standard processes for positrons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "e+") 
 	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
+	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
+	  manager -> AddProcess(new G4eIonisation,        -1, 2,2);
+	  manager -> AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+	  manager -> AddProcess(new G4eplusAnnihilation,   0,-1,4);
 	}   
     }
 }

@@ -19,6 +19,16 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
+//    **********************************
+//    *                                *
+//    *    RemSimBasicGenerator.hh     *
+//    *                                *
+//    **********************************
+//
+// $Id: RemSimBasicGenerator.cc,v 1.5 2004-05-22 12:57:06 guatelli Exp $
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 
 #include "RemSimBasicGenerator.hh"
 #include "RemSimVPrimaryGeneratorFactory.hh"

@@ -21,16 +21,15 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-// S.Guatelli
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
 //    ************************************
 //    *                                  *
-//    *   RemSimROGeometry.cc    *
+//    *      RemSimROGeometry.cc         *
 //    *                                  *
 //    ************************************
 //
-// $Id: RemSimROGeometry.cc,v 1.4 2004-05-21 13:49:23 guatelli Exp $
+// $Id: RemSimROGeometry.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "RemSimROGeometry.hh"
@@ -94,7 +93,7 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
 						     ROWorldLog,
 						     0,false,0);
   
-  // astronaut ROGeometry ... 
+  //  ROGeometry corresponding to the phantom  
   G4Box *ROAstronaut = new G4Box("ROAstronaut", 
 			       astronautDimensionX/2.,
 			       astronautDimensionY/2., 
@@ -132,7 +131,7 @@ G4VPhysicalVolume* RemSimROGeometry::Build()
                                                numberOfVoxelsAlongZ,
                                                voxelSizeZ);
   RemSimDummySD *dummySD = new RemSimDummySD;
-  ROAstronautZDivisionLog->SetSensitiveDetector(dummySD);
+  ROAstronautZDivisionLog -> SetSensitiveDetector(dummySD);
 
   return ROWorldPhys;
 }

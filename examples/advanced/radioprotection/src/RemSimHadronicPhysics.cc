@@ -20,8 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//    **************************************
+//    *                                    *
+//    *    RemSimHadronicPhysics.cc        *
+//    *                                    *
+//    **************************************
 //
-
+// $Id: RemSimHadronicPhysics.cc,v 1.2 2004-05-22 12:57:06 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
 #include "RemSimHadronicPhysics.hh"
 #include "G4BinaryLightIonReaction.hh"
 #include "G4TripathiCrossSection.hh"
@@ -84,12 +93,12 @@ G4VPhysicsConstructor(name)
   theCascade = new G4GeneratorPrecompoundInterface();
   theHandler = new G4ExcitationHandler();
   thePreEquilib = new G4PreCompoundModel(theHandler);
-  theCascade->SetDeExcitation(thePreEquilib);
-  QGSP_model->SetTransport(theCascade);
+  theCascade -> SetDeExcitation(thePreEquilib);
+  QGSP_model -> SetTransport(theCascade);
   theFragmentation = new G4QGSMFragmentation();
   theStringDecay = new G4ExcitedStringDecay(theFragmentation);
   theStringModel.SetFragmentationModel(theStringDecay);
-  QGSP_model->SetHighEnergyGenerator(&theStringModel);
+  QGSP_model -> SetHighEnergyGenerator(&theStringModel);
  
 }
 RemSimHadronicPhysics::~RemSimHadronicPhysics()
@@ -109,57 +118,57 @@ void RemSimHadronicPhysics::ConstructProcess()
   // Set model energy regions
   // 0 - 3.2 GeV: Bertini cascade model for p, n, pi+, pi-
 
-  bertini_model->SetMaxEnergy(3.2*GeV);
+  bertini_model -> SetMaxEnergy(3.2*GeV);
 
   // 80 MeV - 20 GeV for light ions
 
-  binary_ion_model->SetMinEnergy(80*MeV);
-  binary_ion_model->SetMaxEnergy(110.*GeV);
+  binary_ion_model -> SetMinEnergy(80*MeV);
+  binary_ion_model -> SetMaxEnergy(110.*GeV);
  
   // 2.8 - 25 GeV: LEP models for p, n, pi+, pi-
 
-  LEP_proton_model->SetMinEnergy(2.8*GeV);
-  LEP_proton_model->SetMaxEnergy(25*GeV);
-  LEP_neutron_model->SetMinEnergy(2.8*GeV);
-  LEP_neutron_model->SetMaxEnergy(25*GeV);
-  LEP_pip_model->SetMinEnergy(2.8*GeV);
-  LEP_pip_model->SetMaxEnergy(25*GeV);
-  LEP_pim_model->SetMinEnergy(2.8*GeV);
-  LEP_pim_model->SetMaxEnergy(25*GeV);
-  nfission_model->SetMinEnergy(0*TeV);
-  nfission_model->SetMaxEnergy(100*TeV);
-  ncapture_model->SetMinEnergy(0*TeV);
-  ncapture_model->SetMaxEnergy(100*TeV);
+  LEP_proton_model -> SetMinEnergy(2.8*GeV);
+  LEP_proton_model -> SetMaxEnergy(25*GeV);
+  LEP_neutron_model -> SetMinEnergy(2.8*GeV);
+  LEP_neutron_model -> SetMaxEnergy(25*GeV);
+  LEP_pip_model -> SetMinEnergy(2.8*GeV);
+  LEP_pip_model -> SetMaxEnergy(25*GeV);
+  LEP_pim_model -> SetMinEnergy(2.8*GeV);
+  LEP_pim_model -> SetMaxEnergy(25*GeV);
+  nfission_model -> SetMinEnergy(0*TeV);
+  nfission_model -> SetMaxEnergy(100*TeV);
+  ncapture_model -> SetMinEnergy(0*TeV);
+  ncapture_model -> SetMaxEnergy(100*TeV);
 
   // Up to 100 MeV for alphas
-  LEP_alpha_model->SetMaxEnergy(100.*MeV);
+  LEP_alpha_model -> SetMaxEnergy(100.*MeV);
 
   // 15 GeV - 100 TeV: QGSP model for p, n, pi+, pi-
 
-  QGSP_model->SetMinEnergy(15*GeV);
-  QGSP_model->SetMaxEnergy(100*TeV);
+  QGSP_model -> SetMinEnergy(15*GeV);
+  QGSP_model -> SetMaxEnergy(100*TeV);
 
   // ******************************************
   // * register models, processes to proton   *
   // ******************************************
 
   G4ParticleDefinition* proton = G4Proton::ProtonDefinition();
-  G4ProcessManager* protMan = proton->GetProcessManager();
+  G4ProcessManager* protMan = proton -> GetProcessManager();
 
   // Elastic process
 
   G4HadronElasticProcess* protelProc = new G4HadronElasticProcess();
-  protelProc->RegisterMe(elastic_model);
-  protMan->AddDiscreteProcess(protelProc);
+  protelProc -> RegisterMe(elastic_model);
+  protMan -> AddDiscreteProcess(protelProc);
 
   // Inelastic process
 
   G4ProtonInelasticProcess* protinelProc = new G4ProtonInelasticProcess();
-  protinelProc->AddDataSet(proton_XC);
-  protinelProc->RegisterMe(bertini_model);
-  protinelProc->RegisterMe(LEP_proton_model);
-  protinelProc->RegisterMe(QGSP_model);
-  protMan->AddDiscreteProcess(protinelProc);
+  protinelProc -> AddDataSet(proton_XC);
+  protinelProc -> RegisterMe(bertini_model);
+  protinelProc -> RegisterMe(LEP_proton_model);
+  protinelProc -> RegisterMe(QGSP_model);
+  protMan -> AddDiscreteProcess(protinelProc);
 
   // ******************************************
   // * register models, processes to neutron  *
@@ -171,91 +180,91 @@ void RemSimHadronicPhysics::ConstructProcess()
   // Elastic process
 
   G4HadronElasticProcess* neutelProc = new G4HadronElasticProcess();
-  neutelProc->RegisterMe(elastic_model);
-  neutMan->AddDiscreteProcess(neutelProc);
+  neutelProc -> RegisterMe(elastic_model);
+  neutMan -> AddDiscreteProcess(neutelProc);
 
   // Inelastic process
 
   G4NeutronInelasticProcess* neutinelProc = new G4NeutronInelasticProcess();
-  neutinelProc->AddDataSet(neutron_XC);
-  neutinelProc->RegisterMe(bertini_model);
-  neutinelProc->RegisterMe(LEP_neutron_model);
-  neutinelProc->RegisterMe(QGSP_model);
-  neutMan->AddDiscreteProcess(neutinelProc);
+  neutinelProc -> AddDataSet(neutron_XC);
+  neutinelProc -> RegisterMe(bertini_model);
+  neutinelProc -> RegisterMe(LEP_neutron_model);
+  neutinelProc -> RegisterMe(QGSP_model);
+  neutMan -> AddDiscreteProcess(neutinelProc);
 
   G4HadronCaptureProcess* neutcapProc = new G4HadronCaptureProcess();
-  neutcapProc->RegisterMe(ncapture_model);
-  neutMan->AddDiscreteProcess(neutcapProc);
+  neutcapProc -> RegisterMe(ncapture_model);
+  neutMan -> AddDiscreteProcess(neutcapProc);
 
   G4HadronFissionProcess* neutfisProc = new G4HadronFissionProcess();
-  neutfisProc->RegisterMe(nfission_model);
-  neutMan->AddDiscreteProcess(neutfisProc);
+  neutfisProc -> RegisterMe(nfission_model);
+  neutMan -> AddDiscreteProcess(neutfisProc);
 
   // ******************************************
   // * register models, processes to pi+      *
   // ******************************************
 
   G4ParticleDefinition* piplus = G4PionPlus::PionPlusDefinition();
-  G4ProcessManager* pipMan = piplus->GetProcessManager();
+  G4ProcessManager* pipMan = piplus -> GetProcessManager();
 
   // Elastic process
 
   G4HadronElasticProcess* pipelProc = new G4HadronElasticProcess();
-  pipelProc->RegisterMe(elastic_model);
-  pipMan->AddDiscreteProcess(pipelProc);
+  pipelProc -> RegisterMe(elastic_model);
+  pipMan -> AddDiscreteProcess(pipelProc);
 
   // Inelastic process
 
   G4PionPlusInelasticProcess* pipinelProc = new G4PionPlusInelasticProcess();
-  pipinelProc->AddDataSet(pion_XC);
-  pipinelProc->RegisterMe(bertini_model);
-  pipinelProc->RegisterMe(LEP_pip_model);
-  pipinelProc->RegisterMe(QGSP_model);
-  pipMan->AddDiscreteProcess(pipinelProc);
+  pipinelProc -> AddDataSet(pion_XC);
+  pipinelProc -> RegisterMe(bertini_model);
+  pipinelProc -> RegisterMe(LEP_pip_model);
+  pipinelProc -> RegisterMe(QGSP_model);
+  pipMan -> AddDiscreteProcess(pipinelProc);
 
   // ******************************************
   // * register models, processes to pi-      *
   // ******************************************
 
   G4ParticleDefinition* piminus = G4PionMinus::PionMinusDefinition();
-  G4ProcessManager* pimMan = piminus->GetProcessManager();
+  G4ProcessManager* pimMan = piminus -> GetProcessManager();
 
   // Elastic process
 
   G4HadronElasticProcess* pimelProc = new G4HadronElasticProcess();
-  pimelProc->RegisterMe(elastic_model);
-  pimMan->AddDiscreteProcess(pimelProc);
+  pimelProc -> RegisterMe(elastic_model);
+  pimMan -> AddDiscreteProcess(pimelProc);
 
   // Inelastic process
 
   G4PionMinusInelasticProcess* piminelProc = new G4PionMinusInelasticProcess();
-  piminelProc->AddDataSet(pion_XC);
-  piminelProc->RegisterMe(bertini_model);
-  piminelProc->RegisterMe(LEP_pim_model);
-  piminelProc->RegisterMe(QGSP_model);
-  pimMan->AddDiscreteProcess(piminelProc);
+  piminelProc -> AddDataSet(pion_XC);
+  piminelProc -> RegisterMe(bertini_model);
+  piminelProc -> RegisterMe(LEP_pim_model);
+  piminelProc -> RegisterMe(QGSP_model);
+  pimMan -> AddDiscreteProcess(piminelProc);
 
   // ******************************************
   // * register models, processes to alpha    *
   // ******************************************
 
   G4ParticleDefinition* alpha = G4Alpha::AlphaDefinition();
-  G4ProcessManager* alfMan = alpha->GetProcessManager();
+  G4ProcessManager* alfMan = alpha -> GetProcessManager();
 
   // Elastic process
 
   G4HadronElasticProcess* alfelProc = new G4HadronElasticProcess();
-  alfelProc->RegisterMe(elastic_model);
-  alfMan->AddDiscreteProcess(alfelProc);
+  alfelProc -> RegisterMe(elastic_model);
+  alfMan -> AddDiscreteProcess(alfelProc);
 
   // Inelastic process
 
   G4AlphaInelasticProcess* alfinelProc = new G4AlphaInelasticProcess();
-  alfinelProc->AddDataSet(tripathi);
-  alfinelProc->AddDataSet(shen);
-  alfinelProc->RegisterMe(LEP_alpha_model);
-  alfinelProc->RegisterMe(binary_ion_model);
-  alfMan->AddDiscreteProcess(alfinelProc);
+  alfinelProc -> AddDataSet(tripathi);
+  alfinelProc -> AddDataSet(shen);
+  alfinelProc -> RegisterMe(LEP_alpha_model);
+  alfinelProc -> RegisterMe(binary_ion_model);
+  alfMan -> AddDiscreteProcess(alfinelProc);
 }
 
 

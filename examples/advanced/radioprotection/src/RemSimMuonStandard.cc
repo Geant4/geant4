@@ -20,8 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimMuonStandard.cc,v 1.2 2004-05-14 12:29:33 guatelli Exp $
+// $Id: RemSimMuonStandard.cc,v 1.3 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
 #include "RemSimMuonStandard.hh"
 #include "G4ProcessManager.hh"
@@ -44,41 +46,41 @@ void RemSimMuonStandard::ConstructProcess()
 {
   // Add standard processes for muons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
       G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ProcessManager* pmanager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if(( particleName == "mu+")|| (particleName == "mu-" ))
-      {//muon
-      G4VProcess* aMultipleScattering = new G4MultipleScattering();
-      G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
-      G4VProcess* aPairProduction     = new G4MuPairProduction();
-      G4VProcess* anIonisation        = new G4MuIonisation();
-      //
-      // add processes
-      pmanager->AddProcess(anIonisation);
-      pmanager->AddProcess(aMultipleScattering);
-      pmanager->AddProcess(aBremsstrahlung);
-      pmanager->AddProcess(aPairProduction);
-      //
-      // set ordering for AlongStepDoIt
-      pmanager->SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
-      pmanager->SetProcessOrdering(anIonisation,        idxAlongStep,2);
-      pmanager->SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
-      pmanager->SetProcessOrdering(aPairProduction,     idxAlongStep,4);      
-      //
-      // set ordering for PostStepDoIt
-      pmanager->SetProcessOrdering(aMultipleScattering, idxPostStep,1);
-      pmanager->SetProcessOrdering(anIonisation,        idxPostStep,2);
-      pmanager->SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
-      pmanager->SetProcessOrdering(aPairProduction,     idxPostStep,4);
+	{//muon
+	  G4VProcess* aMultipleScattering = new G4MultipleScattering();
+	  G4VProcess* aBremsstrahlung     = new G4MuBremsstrahlung();
+	  G4VProcess* aPairProduction     = new G4MuPairProduction();
+	  G4VProcess* anIonisation        = new G4MuIonisation();
+	  //
+	  // add processes
+	  pmanager -> AddProcess(anIonisation);
+	  pmanager -> AddProcess(aMultipleScattering);
+	  pmanager -> AddProcess(aBremsstrahlung);
+	  pmanager -> AddProcess(aPairProduction);
+	  //
+	  // set ordering for AlongStepDoIt
+	  pmanager -> SetProcessOrdering(aMultipleScattering, idxAlongStep,1);
+	  pmanager -> SetProcessOrdering(anIonisation,        idxAlongStep,2);
+	  pmanager -> SetProcessOrdering(aBremsstrahlung,     idxAlongStep,3);
+	  pmanager -> SetProcessOrdering(aPairProduction,     idxAlongStep,4);      
+	  //
+	  // set ordering for PostStepDoIt
+	  pmanager -> SetProcessOrdering(aMultipleScattering, idxPostStep,1);
+	  pmanager -> SetProcessOrdering(anIonisation,        idxPostStep,2);
+	  pmanager -> SetProcessOrdering(aBremsstrahlung,     idxPostStep,3);
+	  pmanager -> SetProcessOrdering(aPairProduction,     idxPostStep,4);
 
-     	if( particleName == "mu-" )
-	  pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
-      }
+	  if( particleName == "mu-" )
+	    pmanager -> AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
+	}
     }
 }

@@ -20,16 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimDecay.cc,v 1.1 2004-05-14 12:29:33 guatelli Exp $
+//
+//    ***********************
+//    *                     *
+//    *    RemSimDecay.cc   *
+//    *                     *          
+//    ***********************
+//
+// $Id: RemSimDecay.cc,v 1.2 2004-05-22 12:57:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
 
 #include "RemSimDecay.hh"
 #include "G4ProcessManager.hh"
@@ -49,18 +51,18 @@ void RemSimDecay::ConstructProcess()
 {
   // Add Decay Process
   G4Decay* theDecayProcess = new G4Decay();
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* pmanager = particle->GetProcessManager();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* pmanager = particle -> GetProcessManager();
       
-      if (theDecayProcess->IsApplicable(*particle)) 
+      if (theDecayProcess -> IsApplicable(*particle)) 
 	{ 
-	  pmanager ->AddProcess(theDecayProcess);
+	  pmanager -> AddProcess(theDecayProcess);
 	  // set ordering for PostStepDoIt and AtRestDoIt
-	  pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
-	  pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
+	  pmanager -> SetProcessOrdering(theDecayProcess, idxPostStep);
+	  pmanager -> SetProcessOrdering(theDecayProcess, idxAtRest);
 	}
     }
 }

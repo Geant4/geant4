@@ -21,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.4 2004-05-17 10:34:56 guatelli Exp $
+// $Id: RemSimInterplanetarySpaceConfiguration.hh,v 1.5 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
 
 #ifndef RemSimInterplanetarySpaceConfiguration_h
 #define RemSimInterplanetarySpaceConfiguration_h 1

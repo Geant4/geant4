@@ -20,7 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
+// $Id: RemSimSensitiveDetector.hh,v 1.2 2004-05-22 12:57:05 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
 #ifndef RemSimSensitiveDetector_h
 #define RemSimSensitiveDetector_h 1
 

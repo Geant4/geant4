@@ -21,14 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVisManager.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimVisManager.hh,v 1.4 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 // Example Visualization Manager implementing virtual function
 //   RegisterGraphicsSystems.  Exploits C-pre-processor variables
 //   G4VIS_USE_DAWN, etc., which are set by the GNUmakefiles if
@@ -42,16 +38,12 @@
 //   G4VisManager* myVisManager = new MyVisManager;
 //   myVisManager -> RegisterGraphicsSystem (new MyGraphicsSystem);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #ifndef RemSimVisManager_h
 #define RemSimVisManager_h 1
 
 #ifdef G4VIS_USE
 
 #include "G4VisManager.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RemSimVisManager: public G4VisManager {
 
@@ -64,9 +56,5 @@ private:
   void RegisterGraphicsSystems ();
 
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
 #endif

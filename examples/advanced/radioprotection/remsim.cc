@@ -21,18 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.5 2004-05-17 10:34:56 guatelli Exp $
+// $Id: remsim.cc,v 1.6 2004-05-22 12:57:03 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - exampleN01 
-//
-// --------------------------------------------------------------
-// Comments
-//
-// 
-// --------------------------------------------------------------
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -55,68 +45,70 @@ int main(int argc,char** argv)
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
 
-  // set mandatory initialization classes
+  // Set mandatory initialization classes
+  
+  // Geometry
   RemSimDetectorConstruction* detector = new RemSimDetectorConstruction();
-  runManager->SetUserInitialization(detector);
-
+  runManager -> SetUserInitialization(detector);
+  
+  // Physics
   runManager->SetUserInitialization(new RemSimPhysicsList);
 
-  // set mandatory user action class
+  // Set mandatory user action class
+
+  // Primary particles
   RemSimPrimaryGeneratorAction* primary = new RemSimPrimaryGeneratorAction();
-  runManager->SetUserAction(primary);
+  runManager -> SetUserAction(primary);
  
+  // Set optional user action class
   RemSimEventAction* event = new RemSimEventAction();
-  runManager->SetUserAction(event);
+  runManager -> SetUserAction(event);
 
   RemSimRunAction* run = new RemSimRunAction();
-  runManager->SetUserAction(run);
+  runManager -> SetUserAction(run);
 
-  runManager->SetUserAction(new RemSimSteppingAction(primary));
+  runManager -> SetUserAction(new RemSimSteppingAction(primary));
 
 #ifdef G4VIS_USE
-  // Visualization, if you choose to have it!
+  // Visualisation
   G4VisManager* visManager = new RemSimVisManager;
-  visManager->Initialize();
+  visManager -> Initialize();
 #endif
  
+  // Analysis
 #ifdef G4ANALYSIS_USE
   RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  analysis->book();
+  analysis -> book();
 #endif   
-
-  // Initialize G4 kernel
-  // runManager->Initialize();
 
   // get the pointer to the UI manager and set verbosities
   G4UImanager* UI = G4UImanager::GetUIpointer();
    
-if(argc==1)
-  // Define (G)UI terminal for interactive mode  
-  { 
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession * session = 0;
+  if(argc == 1)
+    // Define (G)UI terminal for interactive mode  
+    { 
+      // G4UIterminal is a (dumb) terminal.
+      G4UIsession * session = 0;
 #ifdef G4UI_USE_TCSH
       session = new G4UIterminal(new G4UItcsh);      
 #else
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute vis.mac");    
-    session->SessionStart();
-    delete session;
-  }
+      UI -> ApplyCommand("/control/execute vis.mac");    
+      session -> SessionStart();
+      delete session;
+    }
   else
-  // Batch mode
-  { 
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
-  }
+    // Batch mode
+    { 
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI -> ApplyCommand(command+fileName);
+    }
  
-
 #ifdef G4ANALYSIS_USE
-//  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
-  analysis->finish();
+  analysis -> finish();
 #endif   
 
 #ifdef G4VIS_USE

@@ -25,7 +25,11 @@
 //    *    RemSimAnalysisManager.cc *
 //    *                             *
 //    *******************************
-
+//
+// $Id: RemSimAnalysisManager.cc,v 1.5 2004-05-22 12:57:06 guatelli Exp $
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #ifdef  G4ANALYSIS_USE 
 #include <stdlib.h>
 #include <fstream>
@@ -39,10 +43,9 @@
 RemSimAnalysisManager* RemSimAnalysisManager::instance = 0;
 
 RemSimAnalysisManager::RemSimAnalysisManager() 
-  :  aFact(0), treeFact(0),theTree(0),dataPointFactory(0), histogramFactory(0),
-     dataPoint(0), energyDeposit(0),
-     primary(0), 
-     secondaryDeposit(0), primaryInitialE(0), 
+  :  aFact(0), treeFact(0), theTree(0), dataPointFactory(0),
+     histogramFactory(0), dataPoint(0), energyDeposit(0),
+     primary(0), secondaryDeposit(0), primaryInitialE(0), 
      primaryInitialEout(0), initialE(0), 
      initialEout(0)
 { 
@@ -51,18 +54,18 @@ RemSimAnalysisManager::RemSimAnalysisManager()
 }
 
 RemSimAnalysisManager::~RemSimAnalysisManager() 
-{
-  delete initialE;
-  initialE = 0;
- 
+{ 
   delete initialEout;
   initialEout = 0;
+  
+  delete initialE;
+  initialE = 0;
+  
+  delete primaryInitialEout;
+  primaryInitialEout = 0;
  
   delete primaryInitialE;
   primaryInitialE = 0;
- 
-  delete primaryInitialEout;
-  primaryInitialEout = 0;
  
   delete secondaryDeposit;
   secondaryDeposit = 0;
@@ -79,11 +82,14 @@ RemSimAnalysisManager::~RemSimAnalysisManager()
   delete histogramFactory;
   histogramFactory = 0;
 
-  delete treeFact;
-  treeFact = 0;
+  delete dataPointFactory;
+  dataPointFactory = 0;
 
   delete theTree;
   theTree = 0;
+
+  delete treeFact;
+  treeFact = 0;
 
   delete aFact;
   aFact = 0;
@@ -97,12 +103,13 @@ RemSimAnalysisManager* RemSimAnalysisManager::getInstance()
 
 void RemSimAnalysisManager::book() 
 {
-  // Store in xml format file
-  //theTree = treeFact -> create("remsim.xml","xml",false, true,"uncompress");
- 
+  // Define the hbook file
   theTree = treeFact -> create("remsim.hbk","hbook",false, true);
   
-  histogramFactory = aFact -> createHistogramFactory( *theTree );
+  // Create histogram factory
+  histogramFactory = aFact -> createHistogramFactory(*theTree);
+
+  // Histograms
 
   energyDeposit = histogramFactory -> createHistogram1D("10",
                                                         "Energy Deposit",

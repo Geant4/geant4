@@ -21,10 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.11 2004-05-21 15:01:30 guatelli Exp $
+//    **************************************
+//    *                                    *
+//    *    RemSimDetectorConstruction.cc   *
+//    *                                    *          
+//    **************************************
+//
+// $Id: RemSimDetectorConstruction.cc,v 1.12 2004-05-22 12:57:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #include "RemSimDetectorConstruction.hh"
 #include "RemSimMaterial.hh"
 #include "RemSimDetectorMessenger.hh"
@@ -53,8 +60,8 @@
 #include "RemSimRoofDecorator.hh"
 
 RemSimDetectorConstruction::RemSimDetectorConstruction()
-  :  experimentalHall_log(0),experimentalHall_phys(0),
-     phantomPhys(0),detectorPhys(0)
+  :  experimentalHall_log(0), experimentalHall_phys(0),
+     phantomPhys(0), detectorPhys(0)
 {
  pMaterial = new RemSimMaterial();
 
@@ -65,11 +72,15 @@ RemSimDetectorConstruction::RemSimDetectorConstruction()
  decoratorValue ="Nothing";
  astronautValue ="On";
  decorator = 0;  //pointing to shielding
- decoratorSPE = 0;
- decorator1 = 0; //pointing to astronaut
+ decoratorSPE = 0; //pointing to SPE shelter
+ decorator1 = 0; //pointing to the phantom/astronaut
  decoratorRoof = 0; //pointing to the roof of the Moon Habitat
- moon = false; 
- flag = false;
+ moon = false;  // moon = true: moon configuration selected
+                // moon = false: vehicle configuration selected
+ flag = false;  // flag = true : the geometry configuration (vehicle/moon) 
+                //                has been chosen 
+                // flag = false : the geometry configuration (vehicle/moon) 
+                //                has not been chosen}
 }
 
 RemSimDetectorConstruction::~RemSimDetectorConstruction()
@@ -89,6 +100,8 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
   pMaterial -> DefineMaterials();
   G4Material* vacuum = pMaterial -> GetMaterial("Galactic");
  
+  // World definition
+
   G4double expHall_x = 30.0*m;
   G4double expHall_y = 30.0*m;
   G4double expHall_z = 30.0*m;
@@ -101,28 +114,24 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
   experimentalHall_phys = new G4PVPlacement(0,G4ThreeVector(),"world",
                                       experimentalHall_log,0,
                                       false,0);
-  //ConstructVolume();
-
-  
   return experimentalHall_phys;
 }
 void RemSimDetectorConstruction::ConstructVolume()
 { 
- if (moon == true)
+  if (moon == true)
     { 
       pMoon -> ConstructComponent(experimentalHall_phys);
       decorator1 = new RemSimAstronautDecorator(pMoon);
       G4VPhysicalVolume* shelter = pMoon -> GetShelter();
       decorator1 -> ChangeMother(shelter);
       decorator1 -> ConstructComponent(experimentalHall_phys);
-      }
-
+    }
   else 
     {
-     pVehicle -> ConstructComponent(experimentalHall_phys); 
-     decorator1 = new RemSimAstronautDecorator(pVehicle); 
-     decorator1 -> ConstructComponent(experimentalHall_phys);
-   }
+      pVehicle -> ConstructComponent(experimentalHall_phys); 
+      decorator1 = new RemSimAstronautDecorator(pVehicle); 
+      decorator1 -> ConstructComponent(experimentalHall_phys);
+    }
 }
 
 void RemSimDetectorConstruction::AddShielding(G4String value)
@@ -217,16 +226,6 @@ void RemSimDetectorConstruction::AddHabitatRoof(G4String value)
   else  G4cout<< " It is not possible to select the Roof in the vehicle configuration" << G4endl;
 }
 
-void RemSimDetectorConstruction::ChangeShieldingMaterial(G4String material)
-{
-//   decorator = retrieveDecorator();
-//   if (decorator != 0)
-//     {
-//       decorator = retrieveDecorator();
-//       decorator -> ChangeMaterial(material);
-//     }
-//   else G4cout<<" Define the shielding before!"<< G4endl;
-}
 void RemSimDetectorConstruction::ChangeShieldingThickness(G4double thick)
 {  
   if (moon == false)

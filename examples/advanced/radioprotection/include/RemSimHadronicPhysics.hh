@@ -20,10 +20,16 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//    **************************************
+//    *                                    *
+//    *    RemSimHadronicPhysics.hh        *
+//    *                                    *
+//    **************************************
 //
-// $Id: RemSimHadronicPhysics.hh,v 1.1 2004-05-14 12:29:33 guatelli Exp $
+// $Id: RemSimHadronicPhysics.hh,v 1.2 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Author : Susanna Guatelli, guatelli@ge.infn.it
 // 
 
 #ifndef RemSimHadronicPhysics_h
@@ -99,7 +105,6 @@ class RemSimHadronicPhysics: public G4VPhysicsConstructor
     G4ExcitedStringDecay* theStringDecay;
     G4QGSModel<G4QGSParticipants> theStringModel;
 };
-
 #endif
 
 

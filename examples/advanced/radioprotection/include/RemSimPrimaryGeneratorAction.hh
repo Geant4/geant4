@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.4 2004-05-17 07:37:28 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+//
 #ifndef RemSimPrimaryGeneratorAction_h
 #define RemSimPrimaryGeneratorAction_h 1
 
@@ -42,8 +42,8 @@ public:
   ~RemSimPrimaryGeneratorAction();
 
 public:
-  void GeneratePrimaries(G4Event* anEvent);
   G4double GetInitialEnergy();
+  void GeneratePrimaries(G4Event* anEvent);
   void SelectPrimaries(G4String value);
 
 private: 

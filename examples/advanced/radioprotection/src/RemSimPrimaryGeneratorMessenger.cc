@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// Code developed by:
-//  S.Guatelli
+// Code developed by:  S.Guatelli, guatelli@ge.infn.it
 //
-//    *********************************
-//    *                               *
+//    *****************************************
+//    *                                       *
 //    *    RemSimPrimaryGeneratorMessenger.cc *
-//    *                               *
-//    *********************************
+//    *                                       *
+//    *****************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.4 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.5 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

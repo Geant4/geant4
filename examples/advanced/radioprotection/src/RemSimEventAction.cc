@@ -20,11 +20,18 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//    **********************************
+//    *                                *
+//    *    RemSimEventAction.cc        *
+//    *                                *
+//    **********************************
 //
-// $Id: RemSimEventAction.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
+//
+// $Id: RemSimEventAction.cc,v 1.4 2004-05-22 12:57:06 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
- 
+// Author : Susanna Guatelli, guatelli@ge.infn.it
+// 
 #include "RemSimEventAction.hh"
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -33,34 +40,31 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-
 RemSimEventAction::RemSimEventAction():evtNo(-1)
-{  
- 
-}
+{}
  
 RemSimEventAction::~RemSimEventAction()
 {}
  
 void RemSimEventAction::BeginOfEventAction(const G4Event* evt)
 { 
-  evtNo = evt->GetEventID();
+  evtNo = evt -> GetEventID();
 }
 
 void RemSimEventAction::EndOfEventAction(const G4Event* evt)
 {
-  //get number of stored trajectories
-  
+  G4cout<< evtNo << G4endl;
+
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories =0;
   if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
   
   if (G4VVisManager::GetConcreteInstance())
     {
-     for (G4int i=0; i<n_trajectories; i++) 
+      for (G4int i=0; i<n_trajectories; i++) 
         { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
+	    ((*(evt->GetTrajectoryContainer()))[i]);
+	trj->DrawTrajectory(50);
         }
     }
 }

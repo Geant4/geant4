@@ -25,21 +25,15 @@
 //    *      RemSimAnalysisManager.hh  *
 //    *                                *
 //    **********************************
-// 
 //
-// the class Analysis creates and managed histograms and ntuples
-///
+// $Id: RemSimAnalysisManager.hh,v 1.5 2004-05-22 12:57:04 guatelli Exp $
+//
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
-// History:
-// -----------
-// 17 May  2003   S. Guatelli   1st implementation
-//
-// -------------------------------------------------------------------
  
 #ifdef G4ANALYSIS_USE
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#ifndef REMSIMANALYSISMANAGER_HH
+#define REMSIMANALYSISMANAGER_HH 
 
 #include "globals.hh"
 #include <vector>
@@ -69,7 +63,7 @@ public:
   // Collect the energy deposit in the phantom 
                                            
   void primaryParticleEnergyDistribution(G4double);
-  // Energy of primary particles
+  // Initail energy of primary particles
 
   void SecondaryEnergyDeposit(G4int, G4double);
   // Energy deposit given by secondary particles in the phantom

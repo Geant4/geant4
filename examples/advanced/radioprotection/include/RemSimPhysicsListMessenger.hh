@@ -20,6 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: RemSimPhysicsListMessenger.hh,v 1.3 2004-05-22 12:57:05 guatelli Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+
 #ifndef RemSimPhysicsListMessenger_h
 #define RemSimPhysicsListMessenger_h 1
 
@@ -28,23 +33,16 @@
 
 class RemSimPhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithADouble;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
-class G4UIcmdWithABool;
 
 class RemSimPhysicsListMessenger: public G4UImessenger
-{
-  
+{  
 public:
-
   RemSimPhysicsListMessenger(RemSimPhysicsList*);
   ~RemSimPhysicsListMessenger();
   void SetNewValue(G4UIcommand*, G4String);
   
 private:
-
   RemSimPhysicsList* RemSimList;
   G4UIdirectory* EnDir;
   G4UIcmdWithAString*  physicsListCmd;

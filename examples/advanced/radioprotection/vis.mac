@@ -16,12 +16,12 @@
 #
 # create empty scene
 #
-/vis/scene/create
+#/vis/scene/create
 #
 # Create a scene handler for a specific graphics system
 # (Edit the next line(s) to choose another graphic system)
 #
-/vis/open OGLIX
+#/vis/open OGLIX
 #
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
@@ -31,16 +31,16 @@
 #
 /configuration/choose moon
 #/configuration/choose vehicle
-/configuration/AddShielding On
-/configuration/AddSPE On
-/configuration/AddRoof On
-/roof/thickness 1. m
+#/configuration/AddShielding On
+#/configuration/AddSPE On
+#/configuration/AddRoof On
+#/roof/thickness 1. m
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /vis/viewer/zoom 2.
 /tracking/storeTrajectory 1
 /gun/particle proton
-/gun/energy 300. MeV
+/gun/energy 1. GeV
 /vis/scene/endOfEventAction accumulate
 /step/hadronicVerbose Off
-#/run/beamOn 500
-
+#/tracking/verbose 1
+/run/beamOn 1000

@@ -20,17 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhotonEPDL.cc,v 1.3 2004-05-14 12:29:34 guatelli Exp $
+// $Id: RemSimPhotonEPDL.cc,v 1.4 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
-
 #include "RemSimPhotonEPDL.hh"
 
 #include "G4ProcessManager.hh"
@@ -52,20 +46,20 @@ void RemSimPhotonEPDL::ConstructProcess()
 {
   // Add EPDL processes for photons
   
-  theParticleIterator->reset();
+  theParticleIterator -> reset();
 
   while( (*theParticleIterator)() )
     {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
+      G4ParticleDefinition* particle = theParticleIterator -> value();
+      G4ProcessManager* manager = particle -> GetProcessManager();
+      G4String particleName = particle -> GetParticleName();
      
       if (particleName == "gamma") 
 	{
-	  manager->AddDiscreteProcess(new G4LowEnergyPhotoElectric);
-	  manager->AddDiscreteProcess(new G4LowEnergyCompton);
-	  manager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
-	  manager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+	  manager -> AddDiscreteProcess(new G4LowEnergyPhotoElectric);
+	  manager -> AddDiscreteProcess(new G4LowEnergyCompton);
+	  manager -> AddDiscreteProcess(new G4LowEnergyGammaConversion);
+	  manager -> AddDiscreteProcess(new G4LowEnergyRayleigh);
 	}   
     }
 }

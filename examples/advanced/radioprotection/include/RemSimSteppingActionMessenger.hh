@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimSteppingActionMessenger.hh,v 1.1 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimSteppingActionMessenger.hh,v 1.2 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Author: Susanna Guatelli, guatelli@ge.infn.it
+//
 #ifndef RemSimSteppingActionMessenger_h
 #define RemSimSteppingActionMessenger_h 1
 
@@ -48,6 +49,5 @@ private:
   G4UIdirectory*        stepDirectory;
   G4UIcmdWithAString*   hadronicCmd;
 };
-
 #endif
 

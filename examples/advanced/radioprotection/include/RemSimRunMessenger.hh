@@ -27,9 +27,10 @@
 //    *                                       *
 //    *****************************************
 //
-// $Id: RemSimRunMessenger.hh,v 1.1 2004-05-17 10:34:57 guatelli Exp $
+// $Id: RemSimRunMessenger.hh,v 1.2 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
 // 
 #ifndef RemSimRunMessenger_h
 #define RemSimRunMessenger_h 1
@@ -41,9 +42,6 @@ class RemSimRunAction;
 class RemSimRunAction;
 class G4UIdirectory;
 class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
 
 class RemSimRunMessenger: public G4UImessenger
 {

@@ -21,22 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimElectronEEDL.hh,v 1.2 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimElectronEEDL.hh,v 1.3 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, electron processes based on EEDL for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
+// Author: Susanna Guatelli, guatelli@ge.infn.it
 
 #ifndef REMSIMELECTRONEEDL_HH
 #define REMSIMELECTRONEEDL_HH 1
@@ -49,7 +37,7 @@ class RemSimElectronEEDL : public G4VPhysicsConstructor {
 public: 
 
   RemSimElectronEEDL(const G4String& name = "electron-eedl");
-  
+
   virtual ~RemSimElectronEEDL();
   
   // This method is dummy for physics

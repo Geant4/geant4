@@ -21,10 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimMoonSurfaceConfiguration.hh,v 1.1 2004-05-17 10:34:56 guatelli Exp $
+// $Id: RemSimMoonSurfaceConfiguration.hh,v 1.2 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+//
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #ifndef RemSimMoonSurfaceConfiguration_h
 #define RemSimMoonSurfaceConfiguration_h 1
 

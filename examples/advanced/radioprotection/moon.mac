@@ -1,11 +1,12 @@
+#example of Moon Habitat configuration
 #Activate e.m. physics
 /physics/addPhysics photon-epdl
 /physics/addPhysics electron-eedl
 /physics/addPhysics positron-standard
 /physics/addPhysics ion-ICRU
-/physics/addPhysics hadronic
-/physics/addPhysics muon-standard
-/physics/addPhysics decay
+#/physics/addPhysics hadronic
+#/physics/addPhysics muon-standard
+#/physics/addPhysics decay
 # Sets some default verbose
 #
 /control/verbose 1
@@ -32,4 +33,8 @@
 /gun/generator Moon
 /run/data gcrZ=1.txt
 /run/initialize
+/configuration/choose moon
+#/configuration/AddRoof On
+#/configuration/AddRoof Off
+#/roof/thickness 1. m
 /run/beamOn 500

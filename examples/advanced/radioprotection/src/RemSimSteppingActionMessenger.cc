@@ -21,6 +21,11 @@
 // ********************************************************************
 //
 //
+//$Id: RemSimSteppingActionMessenger.cc,v 1.2 2004-05-22 12:57:07 guatelli Exp $// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
+//
+
 #include "RemSimSteppingActionMessenger.hh"
 #include "RemSimSteppingAction.hh"
 

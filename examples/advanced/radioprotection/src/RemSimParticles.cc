@@ -20,16 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.cc,v 1.3 2004-05-14 12:29:34 guatelli Exp $
+// $Id: RemSimParticles.cc,v 1.4 2004-05-22 12:57:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
 
 #include "RemSimParticles.hh"
 #include "G4Gamma.hh"
@@ -57,7 +52,9 @@
 #include "G4AntiNeutrinoE.hh"
 #include "G4ChargedGeantino.hh"
 #include "G4Geantino.hh"
-
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
+#include "G4PionZero.hh"
 RemSimParticles::RemSimParticles(const G4String& name)
   :  G4VPhysicsConstructor(name)
 { }
@@ -94,6 +91,10 @@ void RemSimParticles::ConstructParticle()
  
   G4Geantino::GeantinoDefinition();
   G4ChargedGeantino::ChargedGeantinoDefinition(); 
+
+  G4PionPlus::PionPlusDefinition();
+  G4PionMinus::PionMinusDefinition();
+  G4PionZero::PionZeroDefinition();
  
   G4MesonConstructor pMesonConstructor;
   pMesonConstructor.ConstructParticle();

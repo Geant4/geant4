@@ -21,17 +21,18 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimROGeometry.hh,v 1.4 2004-05-21 13:49:22 guatelli Exp $
+// $Id: RemSimROGeometry.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    ************************************
 //    *                                  *
-//    *    RemSimROGeometry.hh   *
+//    *            RemSimROGeometry.hh   *
 //    *                                  *
 //    ************************************
 //
-//The phantom is devided in voxels. the dimension of the voxel is 1mm
+// Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
+
 #ifndef RemSimROGeometry_h
 #define RemSimROGeometry_h 
 

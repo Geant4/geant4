@@ -20,11 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+//    **************************************
+//    *                                    *
+//    *    RemSimDetectorConstruction.hh   *
+//    *                                    *          
+//    **************************************
 //
-// $Id: RemSimDetectorConstruction.hh,v 1.9 2004-05-21 15:01:29 guatelli Exp $
+// $Id: RemSimDetectorConstruction.hh,v 1.10 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
+//
 #ifndef RemSimDetectorConstruction_H
 #define RemSimDetectorConstruction_H 1
 
@@ -52,7 +58,6 @@ public:
   void AddShielding(G4String);
   void AddShelterSPE(G4String);
   void AddHabitatRoof(G4String);
-  void ChangeShieldingMaterial(G4String);
   void ChangeShieldingThickness(G4double);
   void ChangeRoofThickness(G4double);
   void ChooseConfiguration(G4String);
@@ -63,9 +68,9 @@ private:
   G4VPhysicalVolume* experimentalHall_phys;
   G4VPhysicalVolume* phantomPhys;
   G4VPhysicalVolume* detectorPhys;
+  RemSimMaterial*  pMaterial;
   RemSimVGeometryComponent* pVehicle;
   RemSimVGeometryComponent* pMoon;
-  RemSimMaterial*  pMaterial;
   RemSimDetectorMessenger* messenger; 
   G4String decoratorValue;
   G4String astronautValue;

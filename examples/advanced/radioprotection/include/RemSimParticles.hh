@@ -20,22 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimParticles.hh,v 1.3 2004-05-14 12:29:33 guatelli Exp $
+// $Id: RemSimParticles.hh,v 1.4 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
+// Author:Susanna Guatelli, guatelli@ge.infn.it 
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
-
-// Class description:
-// System test for e/gamma, particles for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
 
 #ifndef REMSIMPARTICLES_HH
 #define REMSIMPARTICLES_HH 1

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimMaterial.hh,v 1.4 2004-05-18 10:23:23 guatelli Exp $
+// $Id: RemSimMaterial.hh,v 1.5 2004-05-22 12:57:04 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -30,7 +30,7 @@
 //    *                                *
 //    **********************************
 //
-//Code developed by: Susanna Guatelli
+//Code developed by: Susanna Guatelli, guatelli@ge.infn.it
 //
 //This class manages the elements and materials needed by the simulation
 // set-up ...
@@ -51,20 +51,17 @@ public:
   G4Material* GetMaterial(G4String); //returns the material
 
 private:
-  G4Material* matW; 
-  G4Material* matplexiglass;
   G4Material* matPb;
   G4Material* matAir;
   G4Material* matH2O; 
-  G4Material* vacuum; 
-  G4Material* Ar;
   G4Material* Al;
   G4Material* nylon;
   G4Material* mylar;
   G4Material* beta;
-  G4Material* kevlar;
-  G4Material* betaCloth;
   G4Material* nextel;
+  G4Material* kevlar;
+  G4Material* vacuum;
+  G4Material* betaCloth; 
   G4Material* eterogeneousNextel;
   G4Material* kevlarVacuum;
   G4Material* polyethylene;
