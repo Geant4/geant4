@@ -98,20 +98,6 @@ XrayFluoPhysicsListMessenger::XrayFluoPhysicsListMessenger(XrayFluoPhysicsList *
   cutECmd->SetDefaultUnit("mm");
   cutECmd->AvailableForStates(G4State_Idle);
 
-  cutPCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutP",this);
-  cutPCmd->SetGuidance("Set cut values by RANGE for proton and others.");
-  cutPCmd->SetParameterName("cutP",false);
-  cutPCmd->SetRange("cutP>0.");
-  cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(G4State_Idle);
- 
-  eCmd = new G4UIcmdWithADoubleAndUnit("/lowenergy/cutEnergy",this);
-  eCmd->SetGuidance("Set cut values by ENERGY for charged particles.");
-  eCmd->SetParameterName("cutenergy",false);
-  eCmd->SetRange("cutenergy>0.");
-  eCmd->SetUnitCategory("Energy");   
-  eCmd->AvailableForStates(G4State_Idle);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -126,8 +112,6 @@ XrayFluoPhysicsListMessenger::~XrayFluoPhysicsListMessenger()
   delete cutSecPhotCmd;
   delete cutGCmd;
   delete cutECmd;
-  delete cutPCmd;
-  delete eCmd;
 
 }
 
@@ -155,12 +139,6 @@ void XrayFluoPhysicsListMessenger::SetNewValue(G4UIcommand* command,G4String new
 
   if(command == cutECmd)
     { XrayFluoList->SetElectronCut(cutECmd->GetNewDoubleValue(newValue));}
-
- if(command == cutPCmd)
-    { XrayFluoList->SetProtonCut(cutPCmd->GetNewDoubleValue(newValue));}
-
- if(command == eCmd)
-    { XrayFluoList->SetCutsByEnergy(eCmd->GetNewDoubleValue(newValue));}
 
 }
 

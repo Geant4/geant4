@@ -150,7 +150,7 @@ void XrayFluoPhysicsList::ConstructEM()
 
       // gamma         
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
-     
+
       LePeprocess = new G4LowEnergyPhotoElectric();
 
       LePeprocess->ActivateAuger(true);
@@ -235,14 +235,13 @@ void XrayFluoPhysicsList::SetElectronLowLimit(G4double lowcut)
     G4cout << "XrayFluoPhysicsList::SetCuts:";
     G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
 
-  }  
+  }
 
   G4Electron::SetEnergyRange(lowcut,1e5);
 
 }
 void XrayFluoPhysicsList::SetGammaCut(G4double val)
 {
-  ResetCuts();
   cutForGamma = val;
 }
 
@@ -250,7 +249,6 @@ void XrayFluoPhysicsList::SetGammaCut(G4double val)
 
 void XrayFluoPhysicsList::SetElectronCut(G4double val)
 {
-  ResetCuts();
   cutForElectron = val;
 }
 
@@ -259,15 +257,12 @@ void XrayFluoPhysicsList::SetCuts(){
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
-   SetCutValue(cutForProton, "proton");
-   //SetCutValueForOthers(cutForProton);
-   if (verboseLevel>0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoPhysicsList::SetLowEnSecPhotCut(G4double cut){
-  
+
   G4cout<<"Low energy secondary photons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
   G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
   LeBrprocess->SetCutForLowEnSecPhotons(cut);
@@ -276,38 +271,12 @@ void XrayFluoPhysicsList::SetLowEnSecPhotCut(G4double cut){
 }
 
 void XrayFluoPhysicsList::SetLowEnSecElecCut(G4double cut){
-  
+
   G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
- 
+
   G4cout<<"for processes LowEnergyIonisation"<<G4endl;
- 
+
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoPhysicsList::SetProtonCut(G4double val)
-{
-  //  ResetCuts();
-  cutForProton = val;
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-void XrayFluoPhysicsList::SetCutsByEnergy(G4double val)
-{
-  G4ParticleTable* theXrayFluoParticleTable =  G4ParticleTable::GetParticleTable();
-  G4Material* currMat = pDet->GetSampleMaterial();
-  G4ParticleDefinition* part;
-  G4double cut;
-
-  part = theXrayFluoParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "e-");
- 
-  part = theXrayFluoParticleTable->FindParticle("proton");
-  cut = G4EnergyLossTables::GetRange(part,val,currMat);
-  SetCutValue(cut, "proton");
- 
 }
 
 

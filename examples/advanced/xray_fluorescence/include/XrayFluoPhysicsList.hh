@@ -50,16 +50,16 @@ public:
 
   XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
   virtual ~XrayFluoPhysicsList();
-  
+
 protected:
 
   // Construct particle and physics
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-  
+
 protected:
 
-  // these methods Construct particles 
+  // these methods Construct particles
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
   virtual void ConstructBarions();
@@ -71,7 +71,7 @@ protected:
   void ConstructGeneral();
 
 public:
- 
+
   void SetCuts();
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
@@ -81,9 +81,7 @@ public:
   void SetGELowLimit(G4double);
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
-  void SetProtonCut(G4double);
-  void SetCutsByEnergy(G4double);
-  
+
 
 private:
 
