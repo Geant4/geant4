@@ -19,7 +19,8 @@
 // Creation date: 7 May 2000
 //
 // Modifications: 
-//          
+// 22/05/2000  MGP  Version compliant with design
+//
 // Class Description: 
 //
 // Abstract base class for hadron energy loss model
@@ -35,6 +36,8 @@
 #include "globals.hh"
 
 class G4ParticleDefinition;
+class G4DynamicParticle;
+class G4Material;
 
 class G4VhEnergyLossModel 
 {
@@ -45,14 +48,16 @@ public:
 
   virtual ~G4VhEnergyLossModel() {};
 
-  virtual G4double EnergyLoss() const = 0;
+  virtual G4double EnergyLoss(const G4DynamicParticle* particle,
+			      const G4Material* material) const = 0;
 
   virtual G4double LowEnergyLimit() const = 0;
  
   virtual G4double HighEnergyLimit() const = 0;
 
   virtual G4bool IsInCharge(G4double energy, 
-			    const G4ParticleDefinition* partDef) const = 0;
+			    const G4ParticleDefinition* partDef,
+			    const G4Material* material) const = 0;
 
 protected:
 

@@ -28,8 +28,11 @@
 #define G4QAOLowEnergyLoss_hh 1
 
 #include "G4VhEnergyLossModel.hh"
-#include "G4Material.hh"
 #include "globals.hh"
+
+class G4Material;
+class G4DynamicParticle;
+class G4ParticleDefinition;
 
 class G4QAOLowEnergyLoss : public G4VhEnergyLossModel
 {
@@ -40,36 +43,32 @@ public:
   ~G4QAOLowEnergyLoss();
   
   virtual G4double LowEnergyLimit() const {return 0;};
- 
+  
   virtual G4double HighEnergyLimit() const {return 0;} ;
-
+  
   virtual G4bool IsInCharge(G4double energy, 
-	           const G4ParticleDefinition* partDef) const  {return true ;};
+			    const G4ParticleDefinition* particleDefinition,
+			    const G4Material*) const;
+
+  virtual G4double EnergyLoss(const G4DynamicParticle* particle,
+			      const G4Material* material) const;
  
 private:
   
   // hide assignment operator 
   G4QAOLowEnergyLoss & operator=( G4QAOLowEnergyLoss &right);
   G4QAOLowEnergyLoss( G4QAOLowEnergyLoss&);
-
-public:
-
-   G4double EnergyLoss() const {return 0;} ;
-   G4double EnergyLoss( G4int zparticle, 
-                             G4Material* thematerial,
-   			     G4double kinen)  ;
-   G4bool IsMaterial(G4String matname);
-     
+  
 private:
   
   //set shell for defined material
   void SetShellMaterial(G4String materialsymbol) ;
   
   // calculate stopping number for L's term
-   G4double GetL0(G4double _enorm0) ;
-   G4double GetL1(G4double _enorm1) ;
-   G4double GetL2(G4double _enorm2) ;
-
+  G4double GetL0(G4double _enorm0) ;
+  G4double GetL1(G4double _enorm1) ;
+  G4double GetL2(G4double _enorm2) ;
+  
 private:
   
   G4int nbofshell;
@@ -80,7 +79,7 @@ private:
   static G4double L0[67][2];
   static G4double L1[22][2];
   static G4double L2[14][2];
-
+  
   //  material avaliable
   static G4String materialavailable[6];
   
