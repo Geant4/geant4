@@ -53,8 +53,8 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -85,8 +85,8 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 hIoni:   tables are built for  proton
@@ -95,8 +95,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -114,6 +114,7 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -121,15 +122,9 @@ MuIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -162,20 +157,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.79s Real=31.72s Sys=0.88s
+  User=57.64s Real=71.48s Sys=0.88s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   15.16%       5.63%             0-> 1.11 radl:   15.16%     5.63% 
-    1.11-> 2.22 radl:   24.76%       9.87%             0-> 2.22 radl:   39.93%    12.64% 
-    2.22-> 3.33 radl:   21.21%       8.93%             0-> 3.33 radl:   61.13%    15.35% 
-    3.33-> 4.44 radl:   12.63%       8.39%             0-> 4.44 radl:   73.76%    15.66% 
-    4.44-> 5.55 radl:    8.06%       7.16%             0-> 5.55 radl:   81.82%    14.50% 
-    5.55-> 6.66 radl:    5.34%       6.39%             0-> 6.66 radl:   87.16%    12.55% 
-    6.66-> 7.77 radl:    2.81%       4.49%             0-> 7.77 radl:   89.97%    10.75% 
-    7.77-> 8.88 radl:    1.91%       4.18%             0-> 8.88 radl:   91.88%     8.85% 
-    8.88-> 9.99 radl:    0.95%       2.87%             0-> 9.99 radl:   92.83%     7.68% 
+    0.00-> 1.11 radl:   14.07%       5.51%             0-> 1.11 radl:   14.07%     5.51% 
+    1.11-> 2.22 radl:   25.29%       9.82%             0-> 2.22 radl:   39.36%    12.30% 
+    2.22-> 3.33 radl:   21.70%      10.05%             0-> 3.33 radl:   61.05%    15.05% 
+    3.33-> 4.44 radl:   14.16%       6.86%             0-> 4.44 radl:   75.22%    15.02% 
+    4.44-> 5.55 radl:    8.24%       7.16%             0-> 5.55 radl:   83.45%    11.72% 
+    5.55-> 6.66 radl:    4.75%       5.63%             0-> 6.66 radl:   88.20%     9.46% 
+    6.66-> 7.77 radl:    2.83%       4.58%             0-> 7.77 radl:   91.03%     6.97% 
+    7.77-> 8.88 radl:    1.33%       2.76%             0-> 8.88 radl:   92.36%     5.99% 
+    8.88-> 9.99 radl:    0.85%       2.24%             0-> 9.99 radl:   93.21%     4.85% 
 
 
 
@@ -183,21 +178,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   60.20%      12.44%             0-> 0.11 radl:   60.20%    12.44% 
-    0.11-> 0.22 radl:   17.54%       7.16%             0-> 0.22 radl:   77.74%    11.06% 
-    0.22-> 0.33 radl:    7.40%       4.62%             0-> 0.33 radl:   85.14%    10.01% 
-    0.33-> 0.44 radl:    4.07%       3.69%             0-> 0.44 radl:   89.22%     8.67% 
-    0.44-> 0.56 radl:    2.18%       1.68%             0-> 0.56 radl:   91.40%     8.21% 
-    0.56-> 0.67 radl:    1.43%       1.52%             0-> 0.67 radl:   92.83%     7.68% 
+    0.00-> 0.11 radl:   60.49%      10.84%             0-> 0.11 radl:   60.49%    10.84% 
+    0.11-> 0.22 radl:   17.87%       6.53%             0-> 0.22 radl:   78.36%     8.31% 
+    0.22-> 0.33 radl:    7.48%       4.57%             0-> 0.33 radl:   85.84%     6.20% 
+    0.33-> 0.44 radl:    3.84%       3.36%             0-> 0.44 radl:   89.69%     5.28% 
+    0.44-> 0.56 radl:    2.12%       1.82%             0-> 0.56 radl:   91.81%     5.08% 
+    0.56-> 0.67 radl:    1.40%       1.71%             0-> 0.67 radl:   93.21%     4.85% 
 
                               SUMMARY
-                         energy deposit :   92.83 % E0 +-    7.68 % E0
-                         charged traklen:   13.51 radl +-    1.12 radl
-                         neutral traklen:  194.97 radl +-   28.11 radl
+                         energy deposit :   93.21 % E0 +-    4.85 % E0
+                         charged traklen:   13.58 radl +-    0.72 radl
+                         neutral traklen:  195.41 radl +-   19.52 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 499810301, 794978151
+ Current couple of seeds = 127285277, 1208328408
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

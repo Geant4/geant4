@@ -225,7 +225,7 @@ Regular X-ray TR  radiator EM process is called
 48	fGamma = 8.085e+04	sumE = 21.04
 49	fGamma = 9.283e+04	sumE = 21.05
 
-total time for build X-ray TR energy loss tables = 112.93 s
+total time for build X-ray TR energy loss tables = 214.98 s
 
 phot:  Total cross sections from Sandia parametrisation. 
 Em10PhysicsList::SetCuts:CutLength : 1 mm 
@@ -337,8 +337,13 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
+Start Run processing.
 
 ---> Begin of Event: 0
+Run terminated.
+Run Summary
+  Number of events processed : 1000
+  User=215.5s Real=215.79s Sys=0.29s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=68.4534 +- 2.63717  mm  
@@ -361,5 +366,39 @@ Index : 3     used in the geometry : Yes     recalculation needed : No
  Initial seed (index) = 0
  Current couple of seeds = 1230122199, 1902390584
 ----------------------------------------
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : radiatorMat
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 35.598 keV    e+ 35.1625 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Mylar
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 2.97898 keV    e- 417.539 keV    e+ 402.4 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Ar7CH4
+ Range cuts        :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+ Energy thresholds :  gamma 990 eV     e- 990 eV     e+ 990 eV 
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
 Graphics systems deleted.
 Visualization Manager deleting...
+G4 kernel has come to Quit state.

@@ -32,8 +32,8 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -47,6 +47,7 @@ eBrem:   tables are built for  e-
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
+### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -89,11 +90,11 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=15.59s Real=753.05s Sys=36.32s
+  User=30.59s Real=905.55s Sys=40.37s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 830584696, 1826013668
+ Current couple of seeds = 1653480615, 213275717
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

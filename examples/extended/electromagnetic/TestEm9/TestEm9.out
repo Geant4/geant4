@@ -56,11 +56,6 @@ Registering graphics systems...
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
   ASCIITree (ATree)
-  DAWNFILE (DAWNFILE)
-  GAGTree (GAGTree)
-  G4HepRepFile (HepRepFile)
-  G4HepRep (HepRepXML)
-  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
 /run/verbose 1
@@ -81,14 +76,14 @@ PhysicsList::AddPhysicsList: <standard>
 /run/initialize
 Ecal is 36 cm  of CsI
 Absorber is 2 mm  of Al
-Vertex is 10 cm  of 3 layers of Si of 100 mum npads= 3001
+Vertex is 3 cm  of 3 layers of Si of 100 mum npads= 601
 
 phot:  Total cross sections from Sandia parametrisation. 
 world cuts are set
 Vertex cuts are set
 Muon cuts are set
 #
-#/testem/histoName  e_in_01mm.paw
+#/testem/histo/fileName  e_pr.paw
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
@@ -101,8 +96,8 @@ conv:  Total cross sections from a parametrisation. Good description from 1.5 Me
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -133,8 +128,8 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 hIoni:   tables are built for  proton
@@ -143,8 +138,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 1
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -162,6 +157,7 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -169,15 +165,9 @@ MuIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -240,21 +230,20 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 ====================================================================
 
 ### Run 0 start
-### Histo start initialisation nHisto= 10
-Histo: Histograms are booked and run has been started
+HistoManager: Histograms are booked and run has been started
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=32.83s Real=51.21s Sys=3.59s
+  User=82.73s Real=86.48s Sys=3.74s
 RunAction: End of run actions are started
-Histo: End of run actions are started
+HistoManager: End of run actions are started
 ========================================================
 Number of events                     100
-Average number of e-                 1304
-Average number of gamma              687
-Average number of e+                 47.27
-Average number of steps              3844
+Average number of e-                 1294
+Average number of gamma              684.8
+Average number of e+                 47.98
+Average number of steps              3812
 ========================================================
 
 #
