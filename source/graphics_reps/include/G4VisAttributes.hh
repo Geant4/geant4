@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisAttributes.hh,v 1.5 1999-12-15 14:50:34 gunter Exp $
+// $Id: G4VisAttributes.hh,v 1.6 2000-05-13 09:33:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,6 @@ class G4VisAttributes {
 
 public: // With description
 
-  // Constructors, etc. - begin snippet.
   enum LineStyle {unbroken, dashed, dotted};
   enum ForcedDrawingStyle {wireframe, solid};
 
@@ -53,7 +52,6 @@ public: // With description
   G4VisAttributes (G4bool visibility, const G4Colour& colour);
 
   static const G4VisAttributes Invisible;
-  // Constructors - end snippet.
 
   G4bool operator != (const G4VisAttributes& a) const;
   G4bool operator == (const G4VisAttributes& a) const;
@@ -67,7 +65,6 @@ public: // With description
   G4bool          IsForceDrawingStyle            () const;
   ForcedDrawingStyle GetForcedDrawingStyle () const;
 
-  // Set methods - begin snippet.
   void SetVisibility         (G4bool);
   void SetDaughtersInvisible (G4bool);
   void SetColour             (const G4Colour&);
@@ -80,11 +77,9 @@ public: // With description
   void SetLineWidth          (G4double);
   void SetForceWireframe     (G4bool);
   void SetForceSolid         (G4bool);
-  // Set methods - end snippet.
 
 private:
 
-  // Available attributes - begin snippet.
   G4bool      fVisible;            // Visibility flag
   G4bool      fDaughtersInvisible; // Make daughters invsibile.
   G4Colour    fColour;
@@ -93,7 +88,6 @@ private:
                                    // pixels for screen, 0.1 mm for paper.
   G4bool      fForceDrawingStyle;  // To override view parameters.
   ForcedDrawingStyle fForcedStyle;
-  // Available attributes - end snippet.
 };
 
 #include "G4VisAttributes.icc"
