@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.5 2003-01-22 17:55:48 vnivanch Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.6 2003-01-30 11:11:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -351,7 +351,7 @@ G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
 void G4ProductionCutsTable::DumpCouples() const
 {
   G4cout << G4endl;
-  G4cout << "========= Table of registored couples ==============================" << G4endl;
+  G4cout << "========= Table of registered couples ==============================" << G4endl;
   for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
   {
     G4MaterialCutsCouple* aCouple = (*cItr);
@@ -361,7 +361,7 @@ void G4ProductionCutsTable::DumpCouples() const
            << "     used in the geometry : ";
     if(aCouple->IsUsed()) G4cout << "Yes";
     else                  G4cout << "No ";
-    G4cout << "     recalcuration needed : ";
+    G4cout << "     recalculation needed : ";
     if(aCouple->IsRecalcNeeded()) G4cout << "Yes";
     else                          G4cout << "No ";
     G4cout << G4endl;
