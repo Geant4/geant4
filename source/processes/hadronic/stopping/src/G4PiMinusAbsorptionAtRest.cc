@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.1 1999-01-07 16:13:44 gunter Exp $
+// $Id: G4PiMinusAbsorptionAtRest.cc,v 1.2 1999-04-18 11:28:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -130,7 +130,7 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   G4double newN = A - Z - stopAbsorption.NNeutrons();
   G4double newA = newZ + newN;
   G4double pNucleus = (stopAbsorption.RecoilMomentum()).mag();
-  G4DynamicParticleVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,excitation,pNucleus);
 
   G4int nAbsorptionProducts = 0;
   if (absorptionProducts != 0)     
@@ -155,8 +155,19 @@ G4VParticleChange* G4PiMinusAbsorptionAtRest::AtRestDoIt(const G4Track& track, c
   for (i = 0; i<nAbsorptionProducts; i++)
     { aParticleChange.AddSecondary(absorptionProducts->at(i)); }
 
-  for (i = 0; i<nFragmentationProducts; i++)
-    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+//  for (i = 0; i<nFragmentationProducts; i++)
+//    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+  for(i=0; i<nFragmentationProducts; i++)
+  {
+    G4DynamicParticle * aNew = 
+       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
+                             fragmentationProducts->at(i)->GetTotalEnergy(),
+                             fragmentationProducts->at(i)->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+    aParticleChange.AddSecondary(aNew, newTime);
+    delete fragmentationProducts->at(i);
+  }
+
   if (fragmentationProducts != 0)   delete fragmentationProducts;   
 
   if (_indexDeexcitation == 1) aParticleChange.SetLocalEnergyDeposit(excitation);

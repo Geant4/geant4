@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopDummyDeexcitation.cc,v 1.1 1999-01-07 16:13:47 gunter Exp $
+// $Id: G4StopDummyDeexcitation.cc,v 1.2 1999-04-18 11:29:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -48,7 +48,7 @@ G4StopDummyDeexcitation::~G4StopDummyDeexcitation()
 {
 }
 
-G4DynamicParticleVector* G4StopDummyDeexcitation::BreakUp(G4double A, G4double Z, 
+G4ReactionProductVector* G4StopDummyDeexcitation::BreakUp(G4double A, G4double Z, 
 							 G4double excitation, 
 							 const G4ThreeVector& p)
 {

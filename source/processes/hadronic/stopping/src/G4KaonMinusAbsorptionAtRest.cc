@@ -209,7 +209,7 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
 
   delete nucleus;    
 
-  G4DynamicParticleVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);
+  G4ReactionProductVector* fragmentationProducts = stopDeexcitation.DoBreakUp(newA,newZ,energyDeposit,pNucleus);
   
   G4int nFragmentationProducts = 0;
   if (fragmentationProducts != 0) nFragmentationProducts = fragmentationProducts->entries();
@@ -223,8 +223,18 @@ G4VParticleChange* G4KaonMinusAbsorptionAtRest::AtRestDoIt
     {aParticleChange.AddSecondary((*absorptionProducts)[i]); }
   if (absorptionProducts != 0) delete absorptionProducts;
   
-  for (i = 0; i < nFragmentationProducts; i++)
-    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+//  for (i = 0; i < nFragmentationProducts; i++)
+//    { aParticleChange.AddSecondary(fragmentationProducts->at(i)); }
+  for(i=0; i<nFragmentationProducts; i++)
+  {
+    G4DynamicParticle * aNew = 
+       new G4DynamicParticle(fragmentationProducts->at(i)->GetDefinition(),
+                             fragmentationProducts->at(i)->GetTotalEnergy(),
+                             fragmentationProducts->at(i)->GetMomentum());
+    G4double newTime = aParticleChange.GetGlobalTime(fragmentationProducts->at(i)->GetFormationTime());
+    aParticleChange.AddSecondary(aNew, newTime);
+    delete fragmentationProducts->at(i);
+  }
   if (fragmentationProducts != 0) delete fragmentationProducts;
   
   // finally ...

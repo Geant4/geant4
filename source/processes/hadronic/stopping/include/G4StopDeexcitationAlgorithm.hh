@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopDeexcitationAlgorithm.hh,v 1.1 1999-01-07 16:13:41 gunter Exp $
+// $Id: G4StopDeexcitationAlgorithm.hh,v 1.2 1999-04-18 11:28:56 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,8 +28,8 @@
 #define G4STOPDEEXCITATIONALGORITHM_HH
 
 #include "globals.hh"
-#include "G4DynamicParticle.hh"
-#include "G4DynamicParticleVector.hh"
+#include "G4ReactionProduct.hh"
+#include "G4ReactionProductVector.hh"
 #include "G4ThreeVector.hh"
 
 class G4StopDeexcitationAlgorithm 
@@ -52,7 +52,7 @@ public:
   virtual ~G4StopDeexcitationAlgorithm() {};
 
   // Products
-  virtual G4DynamicParticleVector* BreakUp(G4double A, G4double Z, 
+  virtual G4ReactionProductVector* BreakUp(G4double A, G4double Z, 
 					   G4double excitation, const G4ThreeVector& p) =0;
 
 protected:

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StopTheoDeexcitation.cc,v 1.1 1999-01-07 16:13:47 gunter Exp $
+// $Id: G4StopTheoDeexcitation.cc,v 1.2 1999-04-18 11:29:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -51,7 +51,7 @@ G4StopTheoDeexcitation::G4StopTheoDeexcitation()
 G4StopTheoDeexcitation::~G4StopTheoDeexcitation()
 {}
 
-G4DynamicParticleVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z, 
+G4ReactionProductVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z, 
 							 G4double excitation, 
 							 const G4ThreeVector& p)
 {
@@ -86,7 +86,6 @@ G4DynamicParticleVector* G4StopTheoDeexcitation::BreakUp(G4double A, G4double Z,
   //	 << theExcitedNucleus.GetMomentum().mag() << endl;
 
   return theHandler.BreakItUp(theExcitedNucleus);
-
 }
 
 
