@@ -22,11 +22,13 @@
 //
 // File name:     G4PAIPhotonModel.cc
 //
-// Author: Vladimir.Grichine@cern.ch on base of Vladimir Ivanchenko code
+// Author: Vladimir.Grichine@cern.ch based on G4PAIModel class
 //
-// Creation date: 05.10.2003
+// Creation date: 20.05.2004
 //
 // Modifications:
+//
+// 16.08.04 V.Grichine, bug fixed in massRatio for DEDX, CrossSection, SampleSecondary
 //
 
 #include "G4Region.hh"
@@ -640,9 +642,10 @@ G4double G4PAIPhotonModel::ComputeDEDX(const G4MaterialCutsCouple* matCC,
 {
   G4int iTkin,iPlace;
   size_t jMat;
-  G4double scaledTkin = kineticEnergy*p->GetPDGMass()/proton_mass_c2;
-  G4double charge     = p->GetPDGCharge();
-  G4double charge2    = charge*charge, dEdx;
+  G4double particleMass = p->GetPDGMass();
+  G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
+  G4double charge       = p->GetPDGCharge();
+  G4double charge2      = charge*charge, dEdx;
 
   for( jMat = 0 ;jMat < fMaterialCutsCoupleVector.size() ; ++jMat )
   {
@@ -675,9 +678,10 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
   G4int iTkin,iPlace;
   size_t jMat, jMatCC;
   G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
-  G4double scaledTkin = kineticEnergy*p->GetPDGMass()/proton_mass_c2;
-  G4double charge     = p->GetPDGCharge();
-  G4double charge2    = charge*charge, cross, cross1, cross2;
+  G4double particleMass = p->GetPDGMass();
+  G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
+  G4double charge       = p->GetPDGCharge();
+  G4double charge2      = charge*charge, cross, cross1, cross2;
   G4double photon1, photon2, plasmon1, plasmon2;
 
   const G4ProductionCutsTable* theCoupleTable=
@@ -713,6 +717,8 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
   iPlace = iTkin - 1;
   if(iPlace < 0) iPlace = 0;
 
+  // G4cout<<"iPlace = "<<iPlace<<"; tmax = "
+  // <<tmax<<"; cutEnergy = "<<cutEnergy<<G4endl;  
   photon1 = GetdNdxPhotonCut(iPlace,tmax);  
   photon2 = GetdNdxPhotonCut(iPlace,photonCut); 
  
@@ -720,8 +726,11 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
   plasmon2 = GetdNdxPlasmonCut(iPlace,cutEnergy); 
  
   cross1 = photon1 + plasmon1;    
+  // G4cout<<"cross1 = "<<cross1<<G4endl;  
   cross2 = photon2 + plasmon2;    
+  // G4cout<<"cross2 = "<<cross2<<G4endl;  
   cross  = (cross2 - cross1)*charge2;
+  // G4cout<<"cross = "<<cross<<G4endl;  
 
   if( cross < 0. ) cross = 0.;
   return cross;
@@ -760,7 +769,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   G4ThreeVector momentum = dp->GetMomentumDirection();
   G4double particleMass  = dp->GetMass();
   G4double kineticEnergy = dp->GetKineticEnergy();
-  G4double scaledTkin    = kineticEnergy*particleMass/proton_mass_c2;
+  G4double scaledTkin    = kineticEnergy*proton_mass_c2/particleMass;
   G4double totalEnergy   = kineticEnergy + particleMass;
   G4double pSquare       = kineticEnergy*(totalEnergy+particleMass);
 
@@ -785,8 +794,8 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double deltaTkin     = GetPostStepTransfer(fPAIplasmonTable, fdNdxCutPlasmonVector,
                                                  iPlace, scaledTkin);
 
-    //G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
-
+    //  G4cout<<"PAIPhotonModel PlasmonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+ 
     if( deltaTkin <= 0. ) return 0;
 
     G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
@@ -819,7 +828,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     G4double deltaTkin     = GetPostStepTransfer(fPAIphotonTable, fdNdxCutPhotonVector,
                                                  iPlace,scaledTkin);
 
-    //G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
+    //  G4cout<<"PAIPhotonModel PhotonPostStepTransfer = "<<deltaTkin/keV<<" keV"<<G4endl ; 
 
     if( deltaTkin <= 0. ) return 0;
 
@@ -828,8 +837,9 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     //  deltaTkin*(totalEnergy + electron_mass_c2)
     //                        /(deltaTotalMomentum * totalMomentum);
 
-    G4double costheta            = G4UniformRand();
-    if (costheta < 0.)  costheta = 0.;
+    G4double costheta = 0.; // G4UniformRand(); // VG: ??? for start only
+
+    if (costheta < 0.) costheta = 0.;
     if (costheta > 1.) costheta = 1.;
 
     //  direction of the 'Cherenkov' photon
@@ -844,7 +854,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
     // create G4DynamicParticle object for photon ray
  
     G4DynamicParticle* photonRay = new G4DynamicParticle;
-    photonRay->SetDefinition(G4Gamma::Gamma());
+    photonRay->SetDefinition( G4Gamma::Gamma() );
     photonRay->SetKineticEnergy( deltaTkin );
     photonRay->SetMomentumDirection(deltaDirection); 
 
