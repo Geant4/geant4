@@ -1,11 +1,3 @@
-//
-// G4EllipticalTube.cc
-//
-// Implementation of a CSG volume representing a tube with elliptical cross
-// section (geant3 solid 'ELTU')
-//
-// $Id: G4EllipticalTube.cc,v 1.2 2000-03-29 23:23:08 davidw Exp $
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -13,6 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4EllipticalTube.cc,v 1.3 2000-04-07 11:09:08 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4EllipticalTube.cc
+//
+// Implementation of a CSG volume representing a tube with elliptical cross
+// section (geant3 solid 'ELTU')
+//
+// --------------------------------------------------------------------
 
 #include "G4EllipticalTube.hh"
 #include "G4ClippablePolygon.hh"
