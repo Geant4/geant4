@@ -1,4 +1,4 @@
-# $Id: History,v 1.3 2004-12-09 16:18:36 mantero Exp $
+# $Id: History,v 1.4 2004-12-10 13:08:42 gcosmo Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10-12-2004 Alfonso Mantero: XrayFluo-V06-02-01
+- Can now be used in batch mode without histograms.
 
 8-12-2004 Alfonso Mantero: XrayFluo-V06-02-00 
 - General update, including migration to <cmath>.
