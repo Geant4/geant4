@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (28-Jun-2002)
+                                (31-Jul-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -125,10 +125,9 @@ MuPairProd:  theoretical cross sections
 /run/beamOn 
 /gun/direction 1.0 0.0 0.0
        0.001           1           0     F24[0.0]
-    5.21e+03           1     0.05155     e-
-     7.5e+03           1     0.05155     anti_nu_e
-    1.98e+03           1     0.05155     gamma
-        3.56           1     0.05155     Ne24[0.0]
+    5.21e+03           1      0.0436     e-
+     7.5e+03           1      0.0436     anti_nu_e
+        3.56           1      0.0436     Ne24[0.0]
 
 #
 #
