@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.11 2000-05-05 18:15:49 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.12 2000-05-09 11:51:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,8 +25,6 @@
 #include "G4FieldTrack.hh"
 #include "geomdefs.hh"          
                              //  for kCarTolerance
-
-#define G4DEBUG 1
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -52,16 +50,13 @@ G4MagInt_Driver::AccurateAdvance(
 // RightHandSide is the right-hand side of ODE system. 
 // The source is similar to odeint routine from NRC p.721-722 .
 
-// OLD:
-// The value h1 should be set as a guessed first stepsize, Hmin is the
-// minimum allowed stepsize. On output nOK and nBAD are the numbers of
-// good and bad (but retried and fixed) steps taken.
 {
-  // static const G4int maxstp = 5000;
-
   G4int nstp, i; 
-  static G4int dbg=1;
+  static G4int dbg=0;
   G4double x, hnext, hdid, h ;
+#ifdef G4DEBUG
+  dbg=1;
+#endif
 
   // G4double yscal[ncompSVEC];
   G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
@@ -111,7 +106,8 @@ G4MagInt_Driver::AccurateAdvance(
      //--------------------------------------
 
      lastStepSucceeded= (hdid == h);   
-#ifdef G4DEBUG
+
+// #ifdef G4DEBUG
      if(lastStepSucceeded) noFullIntegr++ ; else noSmallIntegr++ ;
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
@@ -128,7 +124,7 @@ G4MagInt_Driver::AccurateAdvance(
         noGoodSteps ++;
      } 
      
-#endif
+// #endif
 
      // Check the proposed next stepsize
      if(fabs(hnext) <= Hmin())
