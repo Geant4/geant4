@@ -16,6 +16,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23rd September 2003 Peter Gumplinger (op-V05-02-00)
+                Add WLS (wavelength shifting) process
 15th March 2003 Peter Gumplinger (op-V05-00-01)
                 Change logic for assigning of Rindex2; bug report #444
 4th February 2003 Peter Gumplinger (op-V05-00-00)
