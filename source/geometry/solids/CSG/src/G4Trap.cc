@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.26 2004-10-10 10:44:41 johna Exp $
+// $Id: G4Trap.cc,v 1.27 2004-11-15 10:24:30 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -29,14 +29,15 @@
 // Implementation for G4Trap class
 //
 // History:
-// 21.03.95 P.Kent: Modified for `tolerant' geometry
-// 09.09.96 V.Grichine: Final modifications before to commit
-// 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
-// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
-// 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
-// 19.11.99 V.Grichine: kUndef was added to Eside enum
+// 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
-// --------------------------------------------------------------------
+// 19.11.99 V.Grichine: kUndef was added to Eside enum
+// 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
+// 08.12.97 J.Allison: Added "nominal" constructor and method SetAllParameters.
+// 01.11.96 V.Grichine: Costructor for Right Angular Wedge from STEP, G4Trd/Para
+// 09.09.96 V.Grichine: Final modifications before to commit
+// 21.03.95 P.Kent: Modified for `tolerant' geometry
+// 
 
 #include "G4Trap.hh"
 #include "globals.hh"
@@ -127,20 +128,25 @@ G4Trap::G4Trap( const G4String& pName,
                 const G4ThreeVector pt[8] )
   : G4CSGSolid(pName)
 {
-  if ( pt[0].z()<0 && pt[0].z()==pt[1].z()
-    && pt[0].z()==pt[2].z() && pt[0].z()==pt[3].z()
-    && pt[4].z()>0 && pt[4].z()==pt[5].z()
-    && pt[4].z()==pt[6].z() && pt[4].z()==pt[7].z()
-    && (pt[0].z()+pt[4].z())== 0
-    && pt[0].y()==pt[1].y() && pt[2].y()==pt[3].y()
-    && pt[4].y()==pt[5].y() && pt[6].y()==pt[7].y()
-    && (pt[0].y()+pt[2].y()+pt[4].y()+pt[6].y())==0 )
+  // Start with check of centering - the center of gravity trap line
+  // should cross the origin of frame
+
+  if (   pt[0].z() < 0 
+      && pt[0].z() == pt[1].z() && pt[0].z() == pt[2].z() && pt[0].z() == pt[3].z()
+      && pt[4].z() > 0 
+      && pt[4].z() == pt[5].z() && pt[4].z() == pt[6].z() && pt[4].z() == pt[7].z()
+      && ( pt[0].z() + pt[4].z() ) == 0
+      && pt[0].y() == pt[1].y() && pt[2].y() == pt[3].y()
+      && pt[4].y() == pt[5].y() && pt[6].y() == pt[7].y()
+      && ( pt[0].y() + pt[2].y() + pt[4].y() + pt[6].y() ) == 0 
+      && ( pt[0].x() + pt[1].x() + pt[4].x() + pt[5].x() ) == 0 )
   {
     G4bool good;
     
     // Bottom side with normal approx. -Y
-    //
-    good=MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+    
+    good = MakePlane(pt[0],pt[4],pt[5],pt[1],fPlanes[0]);
+
     if (!good)
     {
       DumpInfo();
@@ -149,8 +155,9 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Top side with normal approx. +Y
-    //
-    good=MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+    
+    good = MakePlane(pt[2],pt[3],pt[7],pt[6],fPlanes[1]);
+
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
@@ -159,8 +166,9 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Front side with normal approx. -X
-    //
-    good=MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+    
+    good = MakePlane(pt[0],pt[2],pt[6],pt[4],fPlanes[2]);
+
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
@@ -169,29 +177,28 @@ G4Trap::G4Trap( const G4String& pName,
     }
 
     // Back side iwth normal approx. +X
-    //
-    good=MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
+    
+    good = MakePlane(pt[1],pt[5],pt[7],pt[3],fPlanes[3]);
     if (!good)
     {
       G4cerr << "ERROR - G4Trap()::G4Trap(): " << GetName() << G4endl;
       G4Exception("G4Trap::G4Trap()", "InvalidSetup", FatalException,
                   "Face at ~+X not planar.");
     }
-
     fDz = (pt[7]).z() ;
       
-    fDy1 = ((pt[2]).y()-(pt[1]).y())*0.5 ;
-    fDx1 = ((pt[1]).x()-(pt[0]).x())*0.5 ;
-    fDx2 = ((pt[3]).x()-(pt[2]).x())*0.5 ;
-    fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1 ;
+    fDy1     = ((pt[2]).y()-(pt[1]).y())*0.5;
+    fDx1     = ((pt[1]).x()-(pt[0]).x())*0.5;
+    fDx2     = ((pt[3]).x()-(pt[2]).x())*0.5;
+    fTalpha1 = ((pt[2]).x()+(pt[3]).x()-(pt[1]).x()-(pt[0]).x())*0.25/fDy1;
 
-    fDy2 = ((pt[6]).y()-(pt[5]).y())*0.5 ;
-    fDx3 = ((pt[5]).x()-(pt[4]).x())*0.5 ;
-    fDx4 = ((pt[7]).x()-(pt[6]).x())*0.5 ;
-    fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2 ;
+    fDy2     = ((pt[6]).y()-(pt[5]).y())*0.5;
+    fDx3     = ((pt[5]).x()-(pt[4]).x())*0.5;
+    fDx4     = ((pt[7]).x()-(pt[6]).x())*0.5;
+    fTalpha2 = ((pt[6]).x()+(pt[7]).x()-(pt[5]).x()-(pt[4]).x())*0.25/fDy2;
 
-    fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz ;
-    fTthetaSphi = ((pt[4]).y()+fDy2)/fDz ;
+    fTthetaCphi = ((pt[4]).x()+fDy2*fTalpha2+fDx3)/fDz;
+    fTthetaSphi = ((pt[4]).y()+fDy2)/fDz;
   }
   else
   {

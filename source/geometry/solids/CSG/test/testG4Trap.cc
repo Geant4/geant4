@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Trap.cc,v 1.9 2004-09-13 16:26:53 grichine Exp $
+// $Id: testG4Trap.cc,v 1.10 2004-11-15 10:24:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -81,7 +81,7 @@ G4bool testG4Trap()
                                   G4ThreeVector(-30.0,-40.0,+40.0),
                                   G4ThreeVector(+30.0,-40.0,+40.0),
                                   G4ThreeVector(-30.0,+40.0,+40.0),
-                                  G4ThreeVector(+30.0,+40.0,+40.0)   } ;
+                                  G4ThreeVector(+30.0,+40.0,+40.0)  } ;
     
     G4Trap trap1("Test Boxlike #1",40,0,0,30,20,20,0,30,20,20,0);
     
@@ -91,6 +91,44 @@ G4bool testG4Trap()
 
     G4Trap trap3("trap3",50,0,0,50,50,50,pi/4,50,50,50,pi/4) ;
     G4Trap trap4("trap4",50,0,0,50,50,50,-pi/4,50,50,50,-pi/4) ;
+
+    G4ThreeVector Corners[8];
+
+    Corners[0].setX(-3.);
+    Corners[0].setY(-3.);
+    Corners[0].setZ(-3.);
+
+    Corners[1].setX( 3.);
+    Corners[1].setY(-3.);
+    Corners[1].setZ(-3.);
+
+    Corners[2].setX(-3.);
+    Corners[2].setY( 3.);
+    Corners[2].setZ(-3.);
+
+    Corners[3].setX( 3.);
+    Corners[3].setY( 3.);
+    Corners[3].setZ(-3.);
+
+    Corners[4].setX(-3.);
+    Corners[4].setY(-3.);
+    Corners[4].setZ( 3.);
+
+    // Corners[5].setX( 1);
+    Corners[5].setX( 3.);
+    Corners[5].setY(-3.);
+    Corners[5].setZ( 3.);
+
+    Corners[6].setX(-3.);
+    Corners[6].setY( 3.);
+    Corners[6].setZ( 3.);
+
+    // Corners[7].setX( 1);
+    Corners[7].setX( 3);
+    Corners[7].setY( 3);
+    Corners[7].setZ( 3);
+
+    G4Trap tempTrap("temp trap", Corners);
 
 
 // Check name
