@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.48 2002-12-13 08:19:32 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.49 2003-05-30 14:49:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -660,7 +660,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 }
 
 // Calculate a probability to interact with clusters for the givven PDG of the projectile
-void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G4double AP)
+void G4QEnvironment::PrepareInteractionProbabilities(const G4QContent& projQC, G4double /*AP*/)
 //   ===========================================================================Proj.3Mom.=
 {
   G4double sum    = 0.;                            // Sum of probabilities of interaction
