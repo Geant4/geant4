@@ -409,11 +409,14 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
   setenv G4ANALYSIS_USE_JAS            1
   # Specific :
+  # OpenScientist :
+  source /projects/OpenScientist/v6r0/omake/setup.csh
   setenv CLHEP_BASE_DIR /lal/CLHEP/1.5/Linux-gxx
   setenv OGLHOME        /usr/X11R6
-  #  setenv OGLHOME        /lal/Mesa/3.2/Linux
-  setenv OIVHOME        /lal/SoFree/v3r1
-  setenv HEPVISHOME     /lal/HEPVis/v5r1p7
+  #setenv OGLHOME        /lal/Mesa/3.2/Linux
+  #setenv OIVHOME        /lal/SoFree/v3r1
+  #setenv HEPVISHOME     /lal/HEPVis/v5r1p7
+  setenv OIVHOME        $SOFREEHOME
   setenv OIVFLAGS       "-I$OIVHOME/include -I$HEPVISHOME/include"
   setenv OIVLIBS        "-L$HEPVISHOME/Linux-gxx -lHEPVis ${TTFLIBS} -L$OIVHOME/Linux-gxx -lSoFree"
   setenv SOFREEUSER     $OIVHOME/user/
@@ -428,11 +431,9 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
 set jars=/lal/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
-  # OpenScientist :
-  source /projects/OpenScientist/v6r0/omake/setup.csh
   setenv AIDAINCS $HCLHOME/include
   # Else :
-  setenv XENVIRONMENT   g4Xt.xrm
+  #setenv XENVIRONMENT   g4Xt.xrm
   setenv PATH "${PATH}:/lal/DAWN/dawn_3_85a/Linux/bin"
   setenv CPPVERBOSE 1
   alias g4ANA01 "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
