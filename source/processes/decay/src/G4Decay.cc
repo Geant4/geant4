@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Decay.cc,v 1.14 2002-02-12 02:14:04 kurasige Exp $
+// $Id: G4Decay.cc,v 1.15 2002-02-12 08:57:20 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -120,9 +120,6 @@ G4double G4Decay::GetMeanLifeTime(const G4Track&    aTrack,
 
 G4double G4Decay::GetMeanFreePath(const G4Track& aTrack,G4double, G4ForceCondition*)
 {
-   // constants 
-   G4bool isOutRange ;
-   
    // get particle 
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
 
