@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2000-05-19 17:26:27 pia Exp $
+$Id: History,v 1.15 2000-05-21 15:39:51 chauvie Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.05.2000 - Stephane Chauvie added class for energy loss of antiprotons
+             G4QAOLowEnergyloss + modifications in G4hlowEnergyIonisation 
 
 19.05.2000 - MGP, tag emlowen-V01-01-14
 	     Includes typo correction in G4VhEnergyLossModel.hh
