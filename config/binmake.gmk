@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.5 1999-02-19 17:03:49 johna Exp $
+# $Id: binmake.gmk,v 1.6 1999-02-19 17:11:00 stesting Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -140,7 +140,8 @@ else
 # Add - for case of granular libraries - those which are needed
 #   twice because of circular dependencies...
 #
-  LDLIBS3 := -lG4tracking -lG4track -lG4volumes -lG4magneticfield -lG4emutils
+  LDLIBS3 := -lG4track -lG4volumes -lG4magneticfield
+  LDLIBS3 += -lG4emutils -lG4detector
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
