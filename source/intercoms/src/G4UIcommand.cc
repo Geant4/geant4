@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.14 2001-10-11 13:29:17 gcosmo Exp $
+// $Id: G4UIcommand.cc,v 1.15 2001-10-13 17:10:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,16 +151,16 @@ G4int G4UIcommand::DoIt(G4String parameterList)
         { 
           if(parameter[i_thParameter]->GetCurrentAsDefault())
           {
-            G4Tokenizer cvt(messenger->GetCurrentValue(this));
+            G4Tokenizer cvSt(messenger->GetCurrentValue(this));
             G4String parVal;
             for(int ii=0;ii<i_thParameter;ii++)
             {
-	      parVal = cvt();
+	      parVal = cvSt();
 	      if (parVal(0)=='"')
 		{
 		  while( parVal(parVal.length()-1) != '"' )
 		    {
-		      G4String additionalToken = cvt();
+		      G4String additionalToken = cvSt();
 		      if( additionalToken.isNull() )
 			{ return fParameterUnreadable+i_thParameter; }
 		      parVal += " ";
@@ -168,12 +168,12 @@ G4int G4UIcommand::DoIt(G4String parameterList)
 		    }
 		}
 	    }
-	    G4String aCVToken = cvt();
+	    G4String aCVToken = cvSt();
 	    if (aCVToken(0)=='"')
 	    {
 	      while( aCVToken(aCVToken.length()-1) != '"' )
 	      {
-		G4String additionalToken = cvt();
+		G4String additionalToken = cvSt();
 		if( additionalToken.isNull() )
 		{ return fParameterUnreadable+i_thParameter; }
 		aCVToken += " ";

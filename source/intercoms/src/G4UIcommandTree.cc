@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.cc,v 1.8 2001-10-11 01:38:00 asaim Exp $
+// $Id: G4UIcommandTree.cc,v 1.9 2001-10-13 17:10:52 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -258,7 +258,7 @@ G4String G4UIcommandTree::CreateFileName(G4String pName)
   return fn;
 }
 
-G4String G4UIcommandTree::CVT(G4String str)
+G4String G4UIcommandTree::ModStr(G4String str)
 {
   G4String sx;
   for(int i=0;i<int(str.length());i++)
@@ -284,13 +284,13 @@ void G4UIcommandTree::CreateHTML()
   G4String ofileName = CreateFileName(pathName);
   G4std::ofstream oF(ofileName, G4std::ios::out);
 
-  oF << "<html><head><title>Commands in " << CVT(pathName) << "</title></head>" << G4endl;
-  oF << "<body bgcolor=\"#ffffff\"><h2>" << CVT(pathName) << "</h2><p>" << G4endl;
+  oF << "<html><head><title>Commands in " << ModStr(pathName) << "</title></head>" << G4endl;
+  oF << "<body bgcolor=\"#ffffff\"><h2>" << ModStr(pathName) << "</h2><p>" << G4endl;
 
   if( guidance != NULL ) 
   {
     for(int i=0;i<guidance->GetGuidanceEntries();i++)
-    { oF << CVT(guidance->GetGuidanceLine(i)) << "<br>" << G4endl; }
+    { oF << ModStr(guidance->GetGuidanceLine(i)) << "<br>" << G4endl; }
   }
 
   oF << "<p><hr><p>" << G4endl;
@@ -299,8 +299,8 @@ void G4UIcommandTree::CreateHTML()
   for( int i_thTree = 0; i_thTree < int(tree.size()); i_thTree++ )
   {
     oF << "<p><br><p><dt><a href=\"" << CreateFileName(tree[i_thTree]->GetPathName())
-       << "\">" << CVT(tree[i_thTree]->GetPathName()) << "</a>" << G4endl;
-    oF << "<p><dd>" << CVT(tree[i_thTree]->GetTitle()) << G4endl;
+       << "\">" << ModStr(tree[i_thTree]->GetPathName()) << "</a>" << G4endl;
+    oF << "<p><dd>" << ModStr(tree[i_thTree]->GetTitle()) << G4endl;
     tree[i_thTree]->CreateHTML();
   }
 
@@ -310,18 +310,18 @@ void G4UIcommandTree::CreateHTML()
   for( int i_thCommand = 0; i_thCommand < int(command.size()); i_thCommand++ )
   {
     G4UIcommand* cmd = command[i_thCommand];
-    oF << "<p><br><p><dt><b>" << CVT(cmd->GetCommandName());
+    oF << "<p><br><p><dt><b>" << ModStr(cmd->GetCommandName());
     if(cmd->GetParameterEntries()>0)
     {
       for(int i_thParam=0;i_thParam<cmd->GetParameterEntries();i_thParam++)
-      { oF << " [<i>" << CVT(cmd->GetParameter(i_thParam)->GetParameterName()) << "</i>]"; }
+      { oF << " [<i>" << ModStr(cmd->GetParameter(i_thParam)->GetParameterName()) << "</i>]"; }
     }
     oF << "</b>" << G4endl;
     oF << "<p><dd>" << G4endl;
     for(int i=0;i<cmd->GetGuidanceEntries();i++)
-    { oF << CVT(cmd->GetGuidanceLine(i)) << "<br>" << G4endl; }
+    { oF << ModStr(cmd->GetGuidanceLine(i)) << "<br>" << G4endl; }
     if(!(cmd->GetRange()).isNull())
-    { oF << "<p><dd>Range : " << CVT(cmd->GetRange()) << G4endl; }
+    { oF << "<p><dd>Range : " << ModStr(cmd->GetRange()) << G4endl; }
     G4std::vector<G4ApplicationState>* availabelStateList = cmd->GetStateList();
     if(availabelStateList->size()==6)
     { oF << "<p><dd>Available at all Geant4 states." << G4endl; }
@@ -337,7 +337,7 @@ void G4UIcommandTree::CreateHTML()
       for(int i_thParam=0;i_thParam<cmd->GetParameterEntries();i_thParam++)
       {
         G4UIparameter* prm = cmd->GetParameter(i_thParam);
-        oF << "<tr><td>" << CVT(prm->GetParameterName()) << G4endl;
+        oF << "<tr><td>" << ModStr(prm->GetParameterName()) << G4endl;
         oF << "<td>type " << prm->GetParameterType() << G4endl;
         oF << "<td>";
         if(prm->IsOmittable())
@@ -350,9 +350,9 @@ void G4UIcommandTree::CreateHTML()
         }
         oF << "<td>";
         if(!(prm->GetParameterRange()).isNull())
-        { oF << "Parameter range : " << CVT(prm->GetParameterRange()) << G4endl; }
+        { oF << "Parameter range : " << ModStr(prm->GetParameterRange()) << G4endl; }
         else if(!(prm->GetParameterCandidates()).isNull())
-        { oF << "Parameter candidates : " << CVT(prm->GetParameterCandidates()) << G4endl; }
+        { oF << "Parameter candidates : " << ModStr(prm->GetParameterCandidates()) << G4endl; }
       }
       oF << "</table>" << G4endl;
     }

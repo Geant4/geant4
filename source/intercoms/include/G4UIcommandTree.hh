@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommandTree.hh,v 1.10 2001-10-11 13:29:16 gcosmo Exp $
+// $Id: G4UIcommandTree.hh,v 1.11 2001-10-13 17:10:51 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -60,7 +60,7 @@ class G4UIcommandTree
 
   private:
       G4String CreateFileName(G4String pName);
-      G4String CVT(G4String str);
+      G4String ModStr(G4String str);
 
       G4std::vector<G4UIcommand*> command;
       G4std::vector<G4UIcommandTree*> tree;
