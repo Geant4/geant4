@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.25 2000-12-13 08:25:34 gcosmo Exp $
+# $Id: GNUmakefile,v 1.26 2001-02-12 08:17:31 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -138,3 +138,5 @@ clean_all:
 	@rm -rf $(G4LIB)
 	@echo Removing $(G4BIN) ...
 	@rm -rf $(G4BIN)
+	@echo Removing $(G4INCLUDE) ...
+	@rm -rf $(G4INCLUDE)
