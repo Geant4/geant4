@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListGeneral.cc,v 1.1 2003-07-14 17:10:17 vnivanch Exp $
+// $Id: PhysListGeneral.cc,v 1.2 2003-11-20 08:18:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,7 +55,7 @@ void PhysListGeneral::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess->IsApplicable(*particle) && !particle->IsShortLived()) { 
+    if (fDecayProcess->IsApplicable(*particle)) { 
 
       pmanager ->AddProcess(fDecayProcess);
 
