@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.cc,v 1.2 1999-02-09 15:03:03 gum Exp $
+// $Id: G4MagErrorStepper.cc,v 1.3 1999-02-12 12:38:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagErrorStepper.hh"
@@ -19,7 +19,7 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
 		     G4double yOut[],
 		     G4double yErr[]      )
 {  
-   const G4int nvar = theNumberOfVariables ;
+   const G4int nvar = this->GetNumberOfVariables() ;
 
    G4int i;
    // correction for Richardson Extrapolation.
