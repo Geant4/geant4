@@ -29,7 +29,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelastic.cc,v 1.17 2003-11-20 12:58:41 hpw Exp $
+// $Id: G4NeutronHPInelastic.cc,v 1.18 2003-11-20 13:02:28 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPInelastic.hh"
@@ -54,7 +54,7 @@
       do
       {
 	theInelastic[i].Register(&theNFS, "F01"); // has
-	/*theInelastic[i].Register(&theNXFS, "F02");
+	theInelastic[i].Register(&theNXFS, "F02");
 	theInelastic[i].Register(&the2NDFS, "F03");
  	theInelastic[i].Register(&the2NFS, "F04"); // has, E Done
  	theInelastic[i].Register(&the3NFS, "F05"); // has, E Done
@@ -88,7 +88,7 @@
 	theInelastic[i].Register(&theT2AFS, "F33");
 	theInelastic[i].Register(&thePDFS, "F34");
 	theInelastic[i].Register(&thePTFS, "F35");
-	theInelastic[i].Register(&theDAFS, "F36");*/
+	theInelastic[i].Register(&theDAFS, "F36");
 	theInelastic[i].RestartRegistration();
       }
       while(!theInelastic[i].HasDataInAnyFinalState());
