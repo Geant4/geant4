@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01AnalysisManager.cc,v 1.3 2000-09-15 05:38:53 barrand Exp $
+// $Id: AnaEx01AnalysisManager.cc,v 1.4 2000-11-02 08:35:40 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,10 +50,10 @@ AnaEx01AnalysisManager::AnaEx01AnalysisManager(
   // The factory and histograms will be deleted by the analysis manager.
   IHistogramFactory* hfactory = GetHistogramFactory(aSystem);
   if(!hfactory) return;
-  fEAbs = hfactory->createHistogram1D("EAbs",100,0,100);
-  fLAbs = hfactory->createHistogram1D("LAbs",100,0,100);
-  fEGap = hfactory->createHistogram1D("EGap",100,0,10);
-  fLGap = hfactory->createHistogram1D("LGap",100,0,100);
+  fEAbs = hfactory->create1D("EAbs",100,0,100);
+  fLAbs = hfactory->create1D("LAbs",100,0,100);
+  fEGap = hfactory->create1D("EGap",100,0,10);
+  fLGap = hfactory->create1D("LGap",100,0,100);
 }
 void AnaEx01AnalysisManager::BeginOfRun(const G4Run* aRun){
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
