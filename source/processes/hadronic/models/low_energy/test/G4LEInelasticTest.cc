@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.4 2002-06-13 12:19:06 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.5 2002-07-10 07:53:19 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -35,8 +35,15 @@
 #include "G4ProcessManager.hh"
 #include "G4HadronInelasticProcess.hh"
  
-#include "G4PionMinusInelasticProcess.hh"
-#include "G4LEPionMinusInelastic.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4VLongitudinalStringDecay.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QGSMFragmentation.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -50,6 +57,7 @@
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 
+#include "G4ExcitationHandler.hh"
  
  // forward declarations
  
@@ -138,21 +146,36 @@
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
-   G4ParticleDefinition* thePionMinus = G4PionMinus::PionMinusDefinition();
-   theParticles[0]=thePionMinus;
+   G4ParticleDefinition* theProton = G4Proton::ProtonDefinition();
+   theParticles[0]=theProton;
    
    //------ here all the particles are Done ----------
    G4cout << "Done with all the particles" << G4endl;
    G4cout << "Starting process definitions" << G4endl;
    //--------- Processes definitions ---------
-   G4PionMinusInelasticProcess* theProcesses[1];
+   G4ProtonInelasticProcess* theProcesses[1];
       
-   G4ProcessManager* thePionMinusProcessManager = new G4ProcessManager(thePionMinus);
-   thePionMinus->SetProcessManager(thePionMinusProcessManager);
-   G4PionMinusInelasticProcess theInelasticProcess; 
-   G4LEPionMinusInelastic thePionMinusModel;
-   theInelasticProcess.RegisterMe(&thePionMinusModel);
-   thePionMinusProcessManager->AddDiscreteProcess(&theInelasticProcess);
+   G4ProcessManager* theProtonProcessManager = new G4ProcessManager(theProton);
+   theProton->SetProcessManager(theProtonProcessManager);
+   G4ProtonInelasticProcess theInelasticProcess; 
+//    G4ExcitationHandler theHandler;
+//   G4PreCompoundModel theProtonModel(&theHandler);
+    G4TheoFSGenerator * theTheoModel = new G4TheoFSGenerator;
+    G4QGSModel<G4QGSParticipants> * theStringModel = new G4QGSModel<G4QGSParticipants>;
+    G4StringChipsParticleLevelInterface * theCascade = new G4StringChipsParticleLevelInterface;
+    theTheoModel->SetTransport(theCascade);
+    theTheoModel->SetHighEnergyGenerator(theStringModel);
+    theTheoModel->SetMinEnergy(20*GeV);
+    theTheoModel->SetMaxEnergy(100*TeV);
+    G4VLongitudinalStringDecay * theFragmentation;
+    theFragmentation = new G4QGSMFragmentation;
+    G4ExcitedStringDecay theStringDecay(theFragmentation);
+    theStringModel->SetFragmentationModel(&theStringDecay);
+
+
+   theInelasticProcess.RegisterMe(theTheoModel);
+//   theInelasticProcess.RegisterMe(&theProtonModel);
+   theProtonProcessManager->AddDiscreteProcess(&theInelasticProcess);
    theProcesses[0] = &theInelasticProcess;
    
    G4ForceCondition* condition = new G4ForceCondition;
@@ -165,7 +188,7 @@
       
    // ----------- needed to Build a Step, and a track -------------------
    
-   G4ParticleMomentum theDirection(0.,0.,1.);
+   G4ParticleMomentum theDirection(1.,0.,0.);
    G4ThreeVector aPosition(0.,0.,0.);
    G4double aTime = 0.0;
    
@@ -186,7 +209,7 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the PionMinus energy"<<G4endl;
+   G4cout << "Please enter the Proton energy"<<G4endl;
    G4cin >> incomingEnergy;
    G4int errorOne;
    G4cout << "Please enter the problematic event number"<<G4endl;
@@ -229,7 +252,7 @@ int j = 0;
 	      hpw ++;
 	   }
            G4cout << "Last chance before DoIt call: "
-//                << thePionMinusModel.GetNiso()
+//                << theProtonModel.GetNiso()
                 <<G4endl;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
@@ -247,6 +270,7 @@ int j = 0;
 	   if(aFinalState->GetStatusChange() == fAlive)
 	   {
 	     QValue += aFinalState->GetEnergyChange();
+	     if(theParticles[i]->GetBaryonNumber()<0) QValue+= 2.*theParticles[i]->GetPDGMass();
 	   }
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
@@ -255,6 +279,7 @@ int j = 0;
              G4cout << "SECONDARIES info";
              G4cout << aSec->GetTotalEnergy();
              G4cout << aSec->GetMomentum();
+             G4cout << aSec->GetDefinition()->GetPDGEncoding()<<" ";
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
 	     G4cout << G4endl;
 	     if(aSec->GetDefinition()->GetBaryonNumber()>0)
