@@ -71,7 +71,7 @@ void G4NeutronHPInelasticCompFS::Init (G4double A, G4double Z, G4String & dirNam
     theData >> dataType;
     theData >> sfType >> dummy;
     it = 50;
-    if(sfType>600||(sfType<100&&sfType>50)) it = sfType%50;
+    if(sfType>=600||(sfType<100&&sfType>=50)) it = sfType%50;
     if(dataType==3) 
     {
       theData >> dummy >> dummy;
@@ -361,11 +361,44 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
     }
 
 // fill the result
+// Beware - the recoil is not necessarily in the particles...
+// Can be calculated from momentum conservation?
+// The idea is that the particles ar emitted forst, and the gammas only once the
+// recoil is on the residual; assumption is that gammas do not contribute to 
+// the recoil.
+// This needs more design @@@
+
     G4int nSecondaries = 2; // the hadron and the recoil
-    if(theParticles != NULL) nSecondaries = theParticles->length();
+    G4bool needsSeparateRecoil = false;
+    G4int totalBaryonNumber = 0;
+    G4int totalCharge = 0;
+    G4ThreeVector totalMomentum(0);
+    if(theParticles != NULL) 
+    {
+      nSecondaries = theParticles->length();
+      G4ParticleDefinition * aDef;
+      for(i=0; i<theParticles->length(); i++)
+      {
+        aDef = theParticles->at(i)->GetDefinition();
+	totalBaryonNumber+=aDef->GetBaryonNumber();
+	totalCharge+=G4int(aDef->GetPDGCharge()+eps);
+        totalMomentum += theParticles->at(i)->GetMomentum();
+      } 
+      if(totalBaryonNumber!=G4int(theBaseA+eps+incidentParticle->GetDefinition()->GetBaryonNumber())) 
+      {
+        needsSeparateRecoil = true;
+	nSecondaries++;
+	residualA = G4int(theBaseA+eps+incidentParticle->GetDefinition()->GetBaryonNumber()
+	                  -totalBaryonNumber);
+	residualZ = G4int(theBaseZ+eps+incidentParticle->GetDefinition()->GetPDGCharge()
+	                  -totalCharge);
+      }
+    }
+    
     G4int nPhotons = 0;
     if(thePhotons!=NULL) nPhotons = thePhotons->length();
     nSecondaries += nPhotons;
+    
     theResult.SetNumberOfSecondaries(nSecondaries);
     
     G4DynamicParticle * theSec;
@@ -407,6 +440,21 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
         delete theParticles->at(i); 
       } 
       delete theParticles;
+      if(needsSeparateRecoil)
+      {
+        G4ReactionProduct theResidual;   
+        theResidual.SetDefinition(G4ParticleTable::GetParticleTable()->GetIon(residualZ, residualA, 0));  
+        G4double resiualKineticEnergy  = theResidual.GetMass()*theResidual.GetMass();
+                 resiualKineticEnergy += totalMomentum*totalMomentum;
+  	         resiualKineticEnergy  = sqrt(resiualKineticEnergy) - theResidual.GetMass();
+        cout << "Kinetic energy of the residual = "<<resiualKineticEnergy<<endl;
+	theResidual.SetKineticEnergy(resiualKineticEnergy);
+        theResidual.SetMomentum(-1.*totalMomentum);
+        theSec = new G4DynamicParticle;   
+        theSec->SetDefinition(theResidual.GetDefinition());
+        theSec->SetMomentum(theResidual.GetMomentum());
+        theResult.AddSecondary(theSec);  
+      }  
     }
     if(thePhotons!=NULL)
     {
