@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VoxelNavigation.cc,v 1.11 2002-08-06 10:35:57 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.12 2003-03-17 13:43:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ G4VoxelNavigation::G4VoxelNavigation()
 G4VoxelNavigation::~G4VoxelNavigation()
 {
 #ifdef G4DEBUG_NAVIGATION
-  cout << "G4VoxelNavigation::~G4VoxelNavigation() called." << G4endl;
+  G4cout << "G4VoxelNavigation::~G4VoxelNavigation() called." << G4endl;
 #endif
 }
 
