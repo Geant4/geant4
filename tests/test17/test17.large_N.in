@@ -17,6 +17,7 @@
 /gun/particle anti_proton
 /run/beamOn 10000
 
-
+#scaled energy
 /gun/particle IonC12
+/gun/energy 6000 keV
 /run/beamOn 10000

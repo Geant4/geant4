@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2000-08-18 14:35:09 vnivanch Exp $
+$Id: History,v 1.5 2000-08-18 17:03:32 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18th August 2000 - V. Ivanchenko  
+             IonC12 energy is scaled in such a way that the range is
+             about 1/3 of the range of the proton
      
 18th August 2000  Michel Maire  
 - standard G4ionIonisation removed from the PhysicsList
