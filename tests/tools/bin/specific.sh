@@ -72,6 +72,46 @@ if [ `uname -n | grep sunasd1` ]; then
   #######export G4VIS_BUILD_OIX_DRIVER=1
 fi
 
+
+if [ `uname -n | grep refsol7` ]; then
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
+  if [ $G4STTNONISO ]; then
+    echo "refsol7 only supports the ISO compiler"
+    export G4SYSTEM=SUN-CC
+    export DEBOPT=${DEBOPT}_NONISO
+    export G4USE_OSPACE=1
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/pro
+    # Persistency...
+    if [ X$G4USE_HEPODBMS = X ]; then
+       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+       export G4EXAMPLE_FDID=207
+    fi
+  else
+    export G4SYSTEM=SUN-CC5
+    export DEBOPT=${DEBOPT}_ISO
+    unset G4USE_OSPACE
+    export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    # No Persistency tonight ...
+    unset G4USE_HEPODBMS
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro
+  fi
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4LIB=$G4WORKDIR/lib
+  # G4 build flags :
+  #######export G4UI_BUILD_XM_SESSION=1
+  #######export G4VIS_BUILD_OPENGLXM_DRIVER=1
+  export G4VIS_BUILD_OPENGLX_DRIVER=1
+  export OGLHOME=/usr/local
+  export OGLFLAGS="-I$OGLHOME/include"
+  export OGLLIBS="-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+  #######export G4VIS_BUILD_OIX_DRIVER=1
+fi
+
+
+
 if [ `uname -n | grep suncmsb` ]; then
   export G4USE_OSPACE=1
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
