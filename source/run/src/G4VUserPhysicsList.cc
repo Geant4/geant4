@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.40 2003-04-24 15:45:50 vnivanch Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.41 2003-04-25 13:28:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -565,7 +565,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   }
 }
 
-void G4VUserPhysicsList::G4VUserPhysicsList::ResetCuts()
+void G4VUserPhysicsList::ResetCuts()
 {
 #ifdef G4VERBOSE  
   if (verboseLevel>0){
