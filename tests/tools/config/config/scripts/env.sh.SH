@@ -77,7 +77,7 @@ fi
 if [ X$g4ledata != X ] ; then 
 G4LEDATA="$g4ledata"
 export G4LEDATA
-echo "On this machine the G4LEVELGAMMADATA=\$G4LEVELGAMMADATA"
+echo "On this machine the G4LEDATA=\$G4LEDATA"
 fi
 #+
 if [ X$g4neutronhpcrosssections != X ] ; then 
@@ -187,41 +187,6 @@ if [ X$g4ui_use_win32 = Xy ] ; then
 G4UI_USE_WIN32=1
 export G4UI_USE_WIN32
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
-fi 
-
-#+ set by default in U file
-if [ X$g4ui_build_terminal_session = Xy ] ; then
-G4UI_BUILD_TERMINAL_SESSION=1
-export G4UI_BUILD_TERMINAL_SESSION
-echo "On this machine the G4UI_BUILD_TERMINAL_SESSION=\$G4UI_BUILD_TERMINAL_SESSION"
-fi 
-
-#+ set by default in U file
-if [ X$g4ui_use_terminal = Xy ] ; then
-G4UI_USE_TERMINAL=1
-export G4UI_USE_TERMINAL
-echo "On this machine the G4UI_USE_TERMINAL=\$G4UI_USE_TERMINAL"
-fi 
-
-#+ set by default in U file
-if [ X$g4ui_build_gag_session = Xy ] ; then
-G4UI_BUILD_GAG_SESSION=1
-export G4UI_BUILD_GAG_SESSION
-echo "On this machine the G4UI_BUILD_GAG_SESSION=\$G4UI_BUILD_GAG_SESSION"
-fi 
-
-#+ set by default in U file
-if [ X$g4ui_use_gag = Xy ] ; then
-G4UI_USE_GAG=1
-export G4UI_USE_GAG
-echo "On this machine the G4UI_USE_GAG=\$G4UI_USE_GAG"
-fi 
-
-#+ set by default in U file
-if [ X$g4ui_use_tcsh = Xy ] ; then
-G4UI_USE_TCSH=1
-export G4UI_USE_TCSH
-echo "On this machine the G4UI_USE_TCSH=\$G4UI_USE_TCSH"
 fi 
 
 #
