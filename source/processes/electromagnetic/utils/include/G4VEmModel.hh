@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.13 2003-07-23 11:36:25 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.14 2003-10-13 17:57:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,6 +62,7 @@
 #include "G4DataVector.hh"
 
 class G4PhysicsTable;
+class G4Region;
 
 class G4VEmModel
 {
@@ -133,6 +134,7 @@ public:
 
   virtual G4double SampleDisplacement() {return 0.0;};
 
+  virtual void DefineForRegion(const G4Region*) {};
 
 protected:
 

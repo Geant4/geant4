@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.16 2003-07-21 13:59:03 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.17 2003-10-13 17:57:41 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -172,6 +172,7 @@ void G4EmModelManager::AddEmModel(G4int num, G4VEmModel* p,
   flucModels.push_back(fm);
   regions.push_back(r);
   orderOfModels.push_back(num);
+  p->DefineForRegion(r);
   if (nEmModels) {
     G4int idx = nEmModels;
     do {idx--;} while (idx && num < orderOfModels[idx]);
@@ -203,7 +204,7 @@ void G4EmModelManager::UpdateEmModel(const G4String& nam, G4double emin, G4doubl
       }
     }
   }
-  G4cout << "G4EmModelManager::UpdateEmModel WARNING: no model <" 
+  G4cout << "G4EmModelManager::UpdateEmModel WARNING: no model <"
          << nam << "> is found out"
 	 << G4endl;
 }
