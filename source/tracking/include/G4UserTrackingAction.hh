@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserTrackingAction.hh,v 1.6 2000-11-11 06:34:10 tsasaki Exp $
+// $Id: G4UserTrackingAction.hh,v 1.7 2001-01-12 05:55:28 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -14,8 +14,8 @@
 // G4UserTrackingAction.hh
 //
 // class description:
-//   This class represents actions taken place by the user at each
-//   end of stepping. 
+//   This class represents actions taken place by the user at 
+//   the start/end point of processing one track. 
 //
 // Contact:
 //   Questions and comments to this code should be sent to

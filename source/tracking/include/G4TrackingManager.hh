@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.10 2000-11-11 06:34:10 tsasaki Exp $
+// $Id: G4TrackingManager.hh,v 1.11 2001-01-12 05:55:28 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -14,8 +14,8 @@
 // G4TrackingManager.hh
 //
 // class description:
-//  This is an interface class between the event and tracks 
-//  class category and the tracking category. It handles necessary 
+//  This is an interface class among the event,  the track
+//  and the tracking category. It handles necessary 
 //  message passings between the upper hierarchical object, which 
 //  is the event manager (G4EventManager), and lower hierarchical 
 //  objects in the tracking category. It receives one track in an 
