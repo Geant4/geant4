@@ -79,6 +79,7 @@
     maxValue = -DBL_MAX;
     the15percentBorderCash = -DBL_MAX;
     the50percentBorderCash = -DBL_MAX;
+    label = -DBL_MAX;
 
   }
   
