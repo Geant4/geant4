@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.11 2004-03-16 00:08:16 asaim Exp $
+// $Id: G4RunManagerKernel.cc,v 1.12 2004-03-16 17:19:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -79,12 +79,15 @@ G4RunManagerKernel::G4RunManagerKernel()
 
   // version banner
   versionString
-    = " Geant4 version $Name: not supported by cvs2svn $\n                                (11-February-2004)";
-  G4cout
-    << "**********************************************" << G4endl
+    = " Geant4 version $Name: not supported by cvs2svn $   (11-February-2004)";
+  G4cout << G4endl
+    << "*************************************************************" << G4endl
     << versionString << G4endl
-    << "             Copyright : Geant4 Collaboration" << G4endl
-    << "**********************************************" << G4endl;
+    << "                      Copyright : Geant4 Collaboration" << G4endl
+    << "                      Reference : NIM A 506 (2003), 250-303." << G4endl
+    << "                      Home page : http://cern.ch/geant4/" << G4endl
+    << "*************************************************************" << G4endl
+    << G4endl;
 }
 
 G4RunManagerKernel::~G4RunManagerKernel()
