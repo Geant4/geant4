@@ -12,11 +12,11 @@ class Tst05RunAction : public G4UserRunAction
 {
   public:
     Tst05RunAction();
-    ~Tst05RunAction();
+    virtual ~Tst05RunAction();
 
   public:
-    void BeginOfRunAction(G4Run* aRun);
-    void EndOfRunAction(G4Run* aRun);
+    virtual void BeginOfRunAction(const G4Run* aRun);
+    virtual void EndOfRunAction(const G4Run* aRun);
 
   private:
     G4Timer* timer;
@@ -24,11 +24,3 @@ class Tst05RunAction : public G4UserRunAction
 };
 
 #endif
-
-
-
-
-
-
-
-

@@ -64,7 +64,7 @@ G4VPhysicalVolume* Tst05DetectorConstruction::Construct()
 
 
   // STEP assembly creation
-  char * stepfile;
+  const char * stepfile;
 
   switch(detectorChoice)
   { 

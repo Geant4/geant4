@@ -1,4 +1,4 @@
-// $Id: Tst05PhysicsList.hh,v 1.1 1999-01-08 16:34:50 gunter Exp $
+// $Id: Tst05PhysicsList.hh,v 1.2 1999-04-17 05:39:36 kurasige Exp $
 // ------------------------------------------------------------
 #ifndef Tst05PhysicsList_h
 #define Tst05PhysicsList_h 1
@@ -18,7 +18,7 @@ class Tst05PhysicsList: public G4VUserPhysicsList
     virtual void ConstructProcess();
 
     // 
-    virtual void SetCuts(G4double aCut);
+    virtual void SetCuts();
     
   protected:
     // these methods Construct particles 
