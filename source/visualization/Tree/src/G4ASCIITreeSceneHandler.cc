@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.3 2001-05-22 12:16:54 johna Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.4 2001-06-04 09:38:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,10 +33,13 @@ void G4ASCIITreeSceneHandler::BeginModeling () {
   const G4int verbosity = pSystem->GetVerbosity();
   G4cout << "\nG4ASCIITreeSceneHandler::BeginModeling:"
     "\n  set verbosity with \"/vis/ASCIITree/verbose <verbosity>\":"
-    "\n  <= 0: mimimum verbosity:"
-    "\n        - does not print daughters of repeated logical volumes."
-    "\n        - does not repeat replicas."
-    "\n   > 0: prints all physical volumes."
+    "\n  <  10: - does not print daughters of repeated logical volumes."
+    "\n         - does not repeat replicas."
+    "\n  >= 10: prints all physical volumes."
+    "\n  For level of detail add:"
+    "\n  >=  0: prints physical volume name."
+    "\n  >=  1: prints logical volume name."
+    "\n  >=  2: prints solid name and type."
     "\n  Now printing with verbosity " << verbosity << G4endl;
 }
 
@@ -49,8 +52,9 @@ void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
 
   const G4ASCIITree* pSystem = (G4ASCIITree*)GetGraphicsSystem();
   const G4int verbosity = pSystem->GetVerbosity();
+  const G4int detail = verbosity % 10;
 
-  if (verbosity <= 0 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
+  if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
     // Ignore if an already treated replica.  (Assumes that the model
     // which has invoked this function is a G4PhysicalVolumeModel - we
     // check this by testing fpCurrentPV.)
@@ -64,10 +68,20 @@ void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
   for (G4int i = 0; i < fCurrentDepth; i++ ) G4cout << "  ";
   G4cout << "\"" << fpCurrentPV->GetName()
 	 << "\", copy no. " << fpCurrentPV->GetCopyNo();
+  if (detail >= 1) {
+    G4cout << ", belongs to logical volume \""
+	   << fpCurrentLV->GetName() << "\"";
+  }
+  if (detail >= 2) {
+    G4cout << " and is composed of solid \""
+           << fpCurrentLV->GetSolid()->GetName()
+	   << "\" of type \""
+	   << fpCurrentLV->GetSolid()->GetEntityType() << "\"";
+  }
 
   if (fpCurrentPV->IsReplicated()) {
     fReplicaSet.insert(fpCurrentPV);  // Record new replica volume.
-    if (verbosity <= 0) {
+    if (verbosity < 10) {
       // Add printing for replicas (when replicas are ignored)...
       EAxis axis;
       G4int nReplicas;
@@ -87,7 +101,7 @@ void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
   }
   else {
     if (fLVSet.find(fpCurrentLV) != fLVSet.end()) {
-      if (verbosity <= 0) {
+      if (verbosity <  10) {
 	// Add printing for repeated logical volume...
 	G4cout << " (repeated logical volume)";
 	// Ignore if an already treated logical volume.
