@@ -60,14 +60,20 @@ FluoTestEventAction::~FluoTestEventAction()
 void FluoTestEventAction::BeginOfEventAction(const G4Event* evt)
 {
   
-  //G4int evtNb = evt->GetEventID(); 
-  // Returns the event ID
-  /*   if (evtNb%printModulo == 0)
+  G4int evtNb = evt->GetEventID(); 
+  //Returns the event ID
+    if (evtNb%printModulo == 0)
    { 
   G4cout << "\n---> Begin of event: " << evtNb << G4endl;
   HepRandom::showEngineStatus();
+  //  HepRandom::getTheSeed();
+  //  G4cout <<HepRandom::getTheSeed()<<G4endl;
+  long seeds[2];
+  seeds[0] = 545028573;
+  seeds[1] = 2026541798;
+  HepRandom::setTheSeeds(seeds);
       }
-  */
+  
   if (HPGeCollID==-1)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
