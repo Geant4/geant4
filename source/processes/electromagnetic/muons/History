@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2004-01-22 10:57:39 vnivanch Exp $
+$Id: History,v 1.65 2004-02-17 21:15:33 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 Feb 04: V.Ivant (muons-V06-00-01)
+- Update parameterizations in G4MuPairProductionModel
+- Update radiative corrections for G4MuBetheBlochModel
 
 22 Jan 04: V.Ivant (muons-V06-00-00)
 - Migrade to G4ParticleChangeForLoss

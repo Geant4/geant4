@@ -1,4 +1,4 @@
-$Id: History,v 1.135 2004-02-06 17:31:37 vnivanch Exp $
+$Id: History,v 1.136 2004-02-17 21:22:13 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 Feb 04: V.Ivant (utils-V06-00-04)
+- murge the patch and development tag
+- minor cleanup in ionisation models
+
 06 Feb 04: V.Ivant (utils-a-V06-00-00)
 - The tag on top of utils-V06-00-00 for the patch include:
 - Fix problem of destruction of PAI model
 - Fix a bug responsibile for mess in cross section of delta-electron
   production by muons
+- Add protection for small edep in G4UniversalFluctuations
 
 27 Jan 04: V.Ivant (utils-V06-00-03)
 - Fix problem of destruction of PAI model
