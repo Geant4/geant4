@@ -761,39 +761,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
   else if( command==numberCmd )
     { fParticleGun->SetNumberOfParticles(numberCmd->GetNewIntValue(newValues)); }
   else if( command==ionCmd )
-    { 
-      if (fShootIon) {
-	G4Tokenizer next( newValues );
-	// check argument
-	fAtomicNumber = StoI(next());
-	fAtomicMass = StoI(next());
-	G4String sQ = next();
-	if (sQ.isNull()) {
-	  fIonCharge = fAtomicNumber;
-	} else {
-	  fIonCharge = StoI(sQ);
-	  sQ = next();
-	  if (sQ.isNull()) {
-	    fIonExciteEnergy = 0.0;
-	  } else {
-	    fIonExciteEnergy = StoD(sQ) * keV;
-	  }
-	}
-	
-	G4ParticleDefinition* ion;
-	ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
-	if (ion==0) {
-	  G4cout << "Ion with Z=" << fAtomicNumber;
-	  G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
-	} else {
-	  fParticleGun->SetParticleDefinition(ion);
-	  fParticleGun->SetParticleCharge(fIonCharge*eplus);
-	}
-      } else {
-	G4cout << "Set /gps/particle to ion before using /gps/ion command";
-	G4cout << G4endl; 
-      }
-    }
+    { IonCommand(newValues); }
   else if( command==listCmd )
     { particleTable->DumpTable(); }
   else if( command==directionCmd )
@@ -839,7 +807,48 @@ G4String G4GeneralParticleSourceMessenger::GetCurrentValue(G4UIcommand * command
   return cv;
 }
 
-
-
-
-
+void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
+{
+  if (fShootIon)
+  {
+    G4Tokenizer next( newValues );
+    // check argument
+    fAtomicNumber = StoI(next());
+    fAtomicMass = StoI(next());
+    G4String sQ = next();
+    if (sQ.isNull())
+    {
+	fIonCharge = fAtomicNumber;
+    }
+    else
+    {
+	fIonCharge = StoI(sQ);
+	sQ = next();
+	if (sQ.isNull())
+      {
+	  fIonExciteEnergy = 0.0;
+      }
+      else
+      {
+	  fIonExciteEnergy = StoD(sQ) * keV;
+      }
+    }
+    G4ParticleDefinition* ion;
+    ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
+    if (ion==0)
+    {
+      G4cout << "Ion with Z=" << fAtomicNumber;
+      G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
+    }
+    else
+    {
+      fParticleGun->SetParticleDefinition(ion);
+      fParticleGun->SetParticleCharge(fIonCharge*eplus);
+    }
+  }
+  else
+  {
+    G4cout << "Set /gps/particle to ion before using /gps/ion command";
+    G4cout << G4endl; 
+  }
+}

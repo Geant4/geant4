@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.7 2001-10-11 13:34:59 gcosmo Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.8 2002-02-26 16:34:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -180,39 +180,7 @@ void G4ParticleGunMessenger::SetNewValue(G4UIcommand * command,G4String newValue
   else if( command==numberCmd )
   { fParticleGun->SetNumberOfParticles(numberCmd->GetNewIntValue(newValues)); }
   else if( command==ionCmd )
-  { 
-    if (fShootIon) {
-      G4Tokenizer next( newValues );
-      // check argument
-      fAtomicNumber = StoI(next());
-      fAtomicMass = StoI(next());
-      G4String sQ = next();
-      if (sQ.isNull()) {
-	fIonCharge = fAtomicNumber;
-      } else {
-	fIonCharge = StoI(sQ);
-        sQ = next();
-        if (sQ.isNull()) {
-          fIonExciteEnergy = 0.0;
-        } else {
-          fIonExciteEnergy = StoD(sQ) * keV;
-        }
-      }
-
-      G4ParticleDefinition* ion;
-      ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
-      if (ion==0) {
-	G4cout << "Ion with Z=" << fAtomicNumber;
-	G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
-      } else {
-	fParticleGun->SetParticleDefinition(ion);
-        fParticleGun->SetParticleCharge(fIonCharge*eplus);
-      }
-    } else {
-      G4cout << "Set /gun/particle to ion before using /gun/ion command";
-      G4cout << G4endl; 
-    }
-  }
+  { IonCommand(newValues); }
 }
 
 G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -245,4 +213,38 @@ G4String G4ParticleGunMessenger::GetCurrentValue(G4UIcommand * command)
   return cv;
 }
 
+void G4ParticleGunMessenger::IonCommand(G4String newValues)
+{
+  if (fShootIon) {
+    G4Tokenizer next( newValues );
+    // check argument
+    fAtomicNumber = StoI(next());
+    fAtomicMass = StoI(next());
+    G4String sQ = next();
+    if (sQ.isNull()) {
+      fIonCharge = fAtomicNumber;
+    } else {
+	fIonCharge = StoI(sQ);
+      sQ = next();
+      if (sQ.isNull()) {
+        fIonExciteEnergy = 0.0;
+      } else {
+        fIonExciteEnergy = StoD(sQ) * keV;
+      }
+    }
+
+    G4ParticleDefinition* ion;
+    ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
+    if (ion==0) {
+    G4cout << "Ion with Z=" << fAtomicNumber;
+    G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
+    } else {
+      fParticleGun->SetParticleDefinition(ion);
+      fParticleGun->SetParticleCharge(fIonCharge*eplus);
+    }
+  } else {
+    G4cout << "Set /gun/particle to ion before using /gun/ion command";
+    G4cout << G4endl; 
+  }
+}
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.6 2001-07-11 09:58:48 gunter Exp $
+// $Id: G4ParticleGunMessenger.hh,v 1.7 2002-02-26 16:34:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,8 @@ class G4ParticleGunMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
 
+  private:
+    void IonCommand(G4String newValues);
 
   private:
     G4ParticleGun * fParticleGun;
@@ -86,5 +88,4 @@ class G4ParticleGunMessenger: public G4UImessenger
 };
 
 #endif
-
 
