@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyCompton.cc,v 1.26 2001-07-11 10:02:43 gunter Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.27 2001-08-20 16:37:37 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -289,7 +289,14 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   //
   
   G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
-  
+
+  // MGP 
+  G4double range = G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial);
+  G4double eCut = G4Electron::GetCuts();
+  G4double safety = aStep.GetPostStepPoint()->GetSafety();
+  G4double rMin = G4std::min(eCut, safety);
+  // End MGP
+
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElecKineEnergy, aMaterial)
       >= G4std::min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety())){
 
