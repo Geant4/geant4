@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EvManMessenger.cc,v 1.3 2001-07-11 09:58:52 gunter Exp $
+// $Id: G4EvManMessenger.cc,v 1.4 2002-12-04 18:43:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -40,7 +40,7 @@ G4EvManMessenger::G4EvManMessenger(G4EventManager * fEvMan)
 
   abortCmd = new G4UIcmdWithoutParameter("/event/abort",this);
   abortCmd->SetGuidance("Abort current event.");
-  abortCmd->AvailableForStates(EventProc);
+  abortCmd->AvailableForStates(G4State_EventProc);
 
   verboseCmd = new G4UIcmdWithAnInteger("/event/verbose",this);
   verboseCmd->SetGuidance("Set Verbose level of event management category.");
