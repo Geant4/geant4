@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.hh,v 1.9 2003-05-30 13:01:22 johna Exp $
+// $Id: G4VTreeSceneHandler.hh,v 1.10 2004-09-13 20:57:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  5th April 2001
 // A base class for a scene handler to dump geometry hierarchy.
 // In the derived class, override G4VScenehandler::RequestPrimitives
-// to implement dump of the "leaves" of the geometry heirachy.
+// to implement dump of the geometry hierarchy.
 
 #ifndef G4VTREESCENEHANDLER_HH
 #define G4VTREESCENEHANDLER_HH
@@ -74,7 +74,7 @@ public:
 
 protected:
   // In the derived class, override G4VScenehandler::RequestPrimitives
-  // to implement dump of the "leaves" of the geometry heirachy.
+  // to implement dump of the geometry hierarchy.
   static G4int         fSceneIdCount;  // Counter for Tree scene handlers.
   static G4int         fSceneCount;    // No. of extanct scene handlers.
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.

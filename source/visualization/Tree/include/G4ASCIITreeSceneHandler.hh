@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.hh,v 1.11 2003-06-16 17:13:46 gunter Exp $
+// $Id: G4ASCIITreeSceneHandler.hh,v 1.12 2004-09-13 20:57:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,8 @@
 #include "G4VTreeSceneHandler.hh"
 
 #include <set>
+#include <iostream>
+#include <fstream>
 
 class G4VPhysicalVolume;
 
@@ -49,7 +51,14 @@ public:
 protected:
   virtual void RequestPrimitives(const G4VSolid&);
   // Overrides G4VScenehandler::RequestPrimitives and implements dump
-  // of leaves of the geometry heirachy.
+  // of the geometry hierarchy.
+
+  void WriteHeader (std::ostream &);
+
+  G4VPhysicalVolume* fpLastPV;  // Records last physical volume.
+  G4int fPVPCount;              // Counts parameterisations.
+  std::ostream* fpOutFile;      // Pointer to output file.
+  std::ofstream fOutFile;       // Actual output file (if not G4cout)..
   std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> > fLVSet;
   typedef
   std::set<G4LogicalVolume*,std::less<G4LogicalVolume*> >::iterator
