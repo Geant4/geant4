@@ -42,7 +42,8 @@
 // 09 August 2000 V.Ivanchenko Add GetContinuousStepLimit
 // 17 August 2000 V.Ivanchenko Add IonFluctuationModel
 // 23 Oct    2000 V.Ivanchenko Renew comments
-// 30 Oct    2000 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
+// 30 Oct    2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
+// 07 Dec    2001 V.Ivanchenko Add SetFluorescence method
 // ------------------------------------------------------------
  
 // Class Description:
@@ -162,7 +163,10 @@ public: // With description
   
   void SetBarkasOff() {theBarkas = false;};
   // This method switch off calculation of the Barkas and Bloch effects.
-                                       
+
+  void SetFluorescence(const G4bool val) {theFluo = val;};
+  // This method switch on/off simulation of the fluorescence of the media. 
+                                         
   G4VParticleChange* AlongStepDoIt(const G4Track& trackData , 
                                    const G4Step& stepData ) ;
   // Function to determine total energy deposition on the step
@@ -295,6 +299,7 @@ private:
   G4ShellVacancy* shellVacancy;
   G4VhShellCrossSection* shellCS;
   G4std::vector<G4VEMDataSet*> zFluoDataVector;
+  G4bool theFluo;
 
 };
 

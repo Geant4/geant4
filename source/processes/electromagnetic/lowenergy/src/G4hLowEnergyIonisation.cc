@@ -68,6 +68,7 @@
 // 18 June  2001 V.Ivanchenko Cleanup print out
 // 18 Oct.  2001 V.Ivanchenko Add fluorescence
 // 30 Oct.  2001 V.Ivanchenko Add minGammaEnergy and minElectronEnergy
+// 07 Dec   2001 V.Ivanchenko Add SetFluorescence method
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -112,7 +113,8 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theMeanFreePathTable(0),
     paramStepLimit (0.005),
     shellVacancy(0),
-    shellCS(0)
+    shellCS(0),
+    theFluo(true)
 { 
   InitializeMe();
 }
@@ -971,7 +973,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   G4std::vector<G4DynamicParticle*>* newpart = 0;
   G4DynamicParticle* part = 0;
 
-  newpart = DeexciteAtom(material, kineticEnergy, hMass, eloss);
+  if(theFluo) newpart = DeexciteAtom(material, kineticEnergy, hMass, eloss);
 
   if(newpart != 0) {
 
@@ -1261,9 +1263,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
   // Fluorescence data start from element 6
   
-  if (Z > 5 && finalKineticEnergy >= bindingEnergy
-            && (bindingEnergy >= minGammaEnergy 
-            ||  bindingEnergy >= minElectronEnergy) ) {
+  if (theFluo && Z > 5 && finalKineticEnergy >= bindingEnergy
+              && (bindingEnergy >= minGammaEnergy 
+              ||  bindingEnergy >= minElectronEnergy) ) {
 
     G4int shellId = atomicShell->ShellId();
     secondaryVector = deexcitationManager.GenerateParticles(Z, shellId);
