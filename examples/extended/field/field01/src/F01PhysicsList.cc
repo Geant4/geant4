@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01PhysicsList.cc,v 1.9 2004-09-15 18:00:26 vnivanch Exp $
+// $Id: F01PhysicsList.cc,v 1.10 2004-12-03 15:22:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -181,8 +181,6 @@ void F01PhysicsList::ConstructProcess()
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
-#include "G4PAIonisation.hh"
-#include "G4ForwardXrayTR.hh"
 
 #include "F01StepCut.hh"
 
