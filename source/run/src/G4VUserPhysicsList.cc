@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.15 2001-07-11 10:08:34 gunter Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.16 2001-07-13 15:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,12 +61,12 @@
 ////////////////////////////////////////////////////////
 G4VUserPhysicsList::G4VUserPhysicsList()
                    :verboseLevel(1), 
-		    numberOfMaterial(0),
 		    fRetrievePhysicsTable(false),
-                    directoryPhysicsTable("."),
-		    fIsCheckedForRetrievePhysicsTable(false),
 		    fStoredInAscii(true),
-		    fIsRestoredCutValues(false)
+		    fIsCheckedForRetrievePhysicsTable(false),
+		    fIsRestoredCutValues(false),
+                    directoryPhysicsTable("."),
+		    numberOfMaterial(0)
 
 {
   // default cut value  (1.0mm) 
@@ -684,7 +684,7 @@ void G4VUserPhysicsList::DumpCutValues( G4ParticleDefinition* particle) const
     if (theKineticEnergyCuts != 0) {
       const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
       G4cout << "   - Material ---------------- Energy Cut ---" << G4endl;
-      for (G4int idx=0; idx<materialTable->entries(); idx++){
+      for (size_t idx=0; idx<materialTable->entries(); idx++){
 	G4cout << "     " << G4std::setw(19) << (*materialTable)[idx]->GetName(); 
 	G4cout << " : "   << G4std::setw(10) << G4BestUnit(theKineticEnergyCuts[idx],"Energy");
 	G4cout << G4endl;
@@ -746,7 +746,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 
  // line 6 ..
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  for (G4int J=0; J<materialTable->entries(); J++) {
+  for (size_t J=0; J<materialTable->entries(); J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
     for (idx=0; idx <size_display; idx++) {
       if (particle[idx] == 0) {
@@ -803,7 +803,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
     for ( j=0; j < pVector->entries(); ++j) {
-      if (!(*pVector)[j]->StorePhysicsTable(particle,directoryPhysicsTable,ascii)){   
+      if (!(*pVector)[j]->StorePhysicsTable(directoryPhysicsTable,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
 	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
@@ -995,7 +995,7 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
 	/////////////// ASCII mode  /////////////////
 	fOut.setf(G4std::ios::scientific);
 	G4int jj =0;
-	for(size_t idx=0; idx<numberOfMaterial; ++idx, ++jj) {
+	for(G4int idx=0; idx<numberOfMaterial; ++idx, ++jj) {
 	  if (jj==4) {
 	    fOut << G4endl;
 	    jj =0;
@@ -1038,7 +1038,7 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
   for ( j=0; j < pVector->entries(); ++j) {
     success[j] = 
-       (*pVector)[j]->RetrievePhysicsTable(particle,directory,ascii);
+       (*pVector)[j]->RetrievePhysicsTable(directory,ascii);
 
     if (!success[j]) {
 #ifdef G4VERBOSE  
@@ -1100,7 +1100,6 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   G4String keyword;    
@@ -1140,7 +1139,7 @@ G4bool G4VUserPhysicsList::CheckMaterialInfo(const G4String& directory,
   }
   
   // list of material
-  for (G4int idx=0; idx<matTable->entries(); ++idx){
+  for (size_t idx=0; idx<matTable->entries(); ++idx){
     // check eof
     if(fIn.eof()) {
 #ifdef G4VERBOSE  
@@ -1217,7 +1216,6 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory,
   }
 
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   G4String keyword;    
@@ -1320,8 +1318,7 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory,
     // read in energy cut for all materials 
     if (ascii) {
       /////////////// ASCII mode  /////////////////
-      G4int jj; 
-      for(size_t idx=0; idx<numberOfMaterial; ++idx) {
+      for(G4int idx=0; idx<numberOfMaterial; ++idx) {
 	G4double value;
 	fIn >> value;
 	cutArray[idx] = value;
@@ -1371,7 +1368,6 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   }
 
   char temp[FixedStringLengthForStore];
-  size_t i;
 
   // key word
   const G4String key = "CUT_VALUE";
@@ -1481,8 +1477,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
     // read in energy cut for all materials 
     if (ascii) {
       /////////////// ASCII mode  /////////////////
-      G4int jj; 
-      for(size_t idx=0; idx<numberOfMaterial; ++idx) {
+      for(G4int idx=0; idx<numberOfMaterial; ++idx) {
 	G4double value;
 	fIn >> value;
 	cutArray[idx] = value;

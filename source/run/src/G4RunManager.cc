@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.26 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4RunManager.cc,v 1.27 2001-07-13 15:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,20 +56,19 @@
 #include "g4std/strstream"
 
 
-G4RunManager* G4RunManager::fRunManager = NULL;
+G4RunManager* G4RunManager::fRunManager = 0;
 
 G4RunManager* G4RunManager::GetRunManager()
 { return fRunManager; }
 
 G4RunManager::G4RunManager()
-:userDetector(NULL),physicsList(NULL),
- userRunAction(NULL),userPrimaryGeneratorAction(NULL),userEventAction(NULL),
- userStackingAction(NULL),userTrackingAction(NULL),userSteppingAction(NULL),
- currentRun(NULL),currentEvent(NULL),n_perviousEventsToBeStored(0),
+:userDetector(0),physicsList(0),
+ userRunAction(0),userPrimaryGeneratorAction(0),userEventAction(0),
+ userStackingAction(0),userTrackingAction(0),userSteppingAction(0),
  geometryInitialized(false),physicsInitialized(false),cutoffInitialized(false),
- geometryNeedsToBeClosed(true),initializedAtLeastOnce(false),
- runAborted(false),
- geometryToBeOptimized(true),verboseLevel(0),DCtable(NULL),runIDCounter(0),
+ geometryNeedsToBeClosed(true),runAborted(false),initializedAtLeastOnce(false),
+ geometryToBeOptimized(true),runIDCounter(0),verboseLevel(0),DCtable(0),
+ currentRun(0),currentEvent(0),n_perviousEventsToBeStored(0),
  storeRandomNumberStatus(0)
 {
   if(fRunManager)
@@ -213,11 +212,11 @@ void G4RunManager::RunInitialization()
   stateManager->SetNewState(GeomClosed);
 
   //previousEvents->clearAndDestroy();
-  for(G4int itr=0;itr<previousEvents->size();itr++)
+  for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->push_back((G4Event*)NULL); }
+  { previousEvents->push_back((G4Event*)0); }
 
   runAborted = false;
 
@@ -234,7 +233,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
   { timer->Start(); }
 
   G4String msg;
-  if(macroFile!=NULL)
+  if(macroFile!=0)
   { 
     if(n_select<0) n_select = n_event;
     msg = "/control/execute ";
@@ -257,7 +256,7 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     if(i_event<n_select) G4UImanager::GetUIpointer()->ApplyCommand(msg);
     stateManager->SetNewState(GeomClosed);
     StackPreviousEvent(currentEvent);
-    currentEvent = NULL;
+    currentEvent = 0;
     if(runAborted) break;
   }
 
@@ -302,7 +301,7 @@ void G4RunManager::RunTermination()
   G4StateManager* stateManager = G4StateManager::GetStateManager();
 
   //previousEvents->clearAndDestroy();
-  for(G4int itr=0;itr<previousEvents->size();itr++)
+  for(size_t itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
   previousEvents->clear();
 
@@ -311,7 +310,7 @@ void G4RunManager::RunTermination()
   G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
   if(fPersM) fPersM->Store(currentRun);
   delete currentRun;
-  currentRun = NULL;
+  currentRun = 0;
   runIDCounter++;
 
   stateManager->SetNewState(Idle);
@@ -420,7 +419,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 void G4RunManager::StoreRandomNumberStatus(G4int eventID)
 {
   G4String fileN = randomNumberStatusDir+"RandEngine";
-  if(storeRandomNumberStatus>0 && currentRun != NULL)
+  if(storeRandomNumberStatus>0 && currentRun != 0)
   {
     char st[20];
     G4std::ostrstream os(st,20);

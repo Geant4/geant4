@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.16 2001-07-11 10:08:32 gunter Exp $
+// $Id: G4RunManager.hh,v 1.17 2001-07-13 15:57:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ class G4RunManager
     // bottom of the main().
 
   public: // with description
-    virtual void BeamOn(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
+    virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     //  This method starts an event loof of "n_event" events. The condition of Geant4
     // is examined before starting the event loop. This method must be invoked at
     // Idle state. The state will be changed to GeomClosed during the event loop and
@@ -146,7 +146,7 @@ class G4RunManager
 
     virtual G4bool ConfirmBeamOnCondition();
     virtual void RunInitialization();
-    virtual void DoEventLoop(G4int n_event,const char* macroFile=NULL,G4int n_select=-1);
+    virtual void DoEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     virtual void RunTermination();
     //  These four protected methods are invoked from BeamOn() method. These four methods
     // are invoked in this order.
@@ -325,7 +325,7 @@ class G4RunManager
     {
       if(i>=1 && i<=n_perviousEventsToBeStored)
       { return (*previousEvents)[i-1]; }
-      return NULL;
+      return 0;
     }
     //  Returns the pointer to the "i" previous event. This method is availavle for
     // EventProc state. In case the event loop has not yet to reach to the requested

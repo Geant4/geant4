@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.7 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.8 2001-07-13 15:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,13 +161,13 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == NULL) return;
-    if (particle->GetProcessManager() != NULL) return;
+    if (particle == 0) return;
+    if (particle->GetProcessManager() != 0) return;
     thePhysicsList->AddProcessManager(particle);
 
   }  else if( command == buildPTCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
-    if (particle == NULL) return;
+    if (particle == 0) return;
     thePhysicsList->BuildPhysicsTable(particle);
     
   } else if ( command == storeCmd ){

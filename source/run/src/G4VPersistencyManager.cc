@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPersistencyManager.cc,v 1.3 2001-07-11 10:08:34 gunter Exp $
+// $Id: G4VPersistencyManager.cc,v 1.4 2001-07-13 15:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@ G4VPersistencyManager::G4VPersistencyManager()
 
 G4VPersistencyManager::~G4VPersistencyManager()
 {
-  fPersistencyManager = NULL;
+  fPersistencyManager = 0;
 }
 
 

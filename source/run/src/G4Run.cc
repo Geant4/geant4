@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Run.cc,v 1.3 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4Run.cc,v 1.4 2001-07-13 15:57:06 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@
 G4Allocator<G4Run> aRunAllocator;
 
 G4Run::G4Run()
-:runID(0),numberOfEvent(0),HCtable(NULL),DCtable(NULL)
+:runID(0),numberOfEvent(0),HCtable(0),DCtable(0)
 {;}
 
 G4Run::~G4Run()

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.10 2001-07-11 10:08:33 gunter Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.11 2001-07-13 15:57:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -197,15 +197,15 @@ class G4VUserPhysicsList
    // other than particle types specified in arguments
    void SetCutValueForOtherThan(G4double cutValue,
 				G4ParticleDefinition* first,
-				G4ParticleDefinition* second  = NULL,
-				G4ParticleDefinition* third   = NULL,
-				G4ParticleDefinition* fourth  = NULL,
-				G4ParticleDefinition* fifth   = NULL,
-				G4ParticleDefinition* sixth   = NULL,
-				G4ParticleDefinition* seventh = NULL,
-				G4ParticleDefinition* eighth  = NULL,
-				G4ParticleDefinition* nineth  = NULL,
-				G4ParticleDefinition* tenth   = NULL  );
+				G4ParticleDefinition* second  = 0,
+				G4ParticleDefinition* third   = 0,
+				G4ParticleDefinition* fourth  = 0,
+				G4ParticleDefinition* fifth   = 0,
+				G4ParticleDefinition* sixth   = 0,
+				G4ParticleDefinition* seventh = 0,
+				G4ParticleDefinition* eighth  = 0,
+				G4ParticleDefinition* nineth  = 0,
+				G4ParticleDefinition* tenth   = 0  );
 
    //  "reCalcCutsForOthers" method re-calculates a cut value 
    //  to all particle types which have not be called SetCuts() methods yet.
@@ -265,7 +265,7 @@ class G4VUserPhysicsList
   public: // with description
     // add process manager for particles created on-the-fly 
     void AddProcessManager(G4ParticleDefinition* newParticle,
-			   G4ProcessManager*    newManager = NULL );
+			   G4ProcessManager*    newManager = 0 );
  
  
   ////////////////////////////////////////////////////////////////////////
