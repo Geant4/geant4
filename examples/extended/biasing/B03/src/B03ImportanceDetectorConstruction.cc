@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B03ImportanceDetectorConstruction.cc,v 1.1 2002-11-08 17:35:18 dressel Exp $
+// $Id: B03ImportanceDetectorConstruction.cc,v 1.2 2002-11-22 17:47:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,7 +95,7 @@ void B03ImportanceDetectorConstruction::Construct()
   // creating 18 slobs of 10 cm thicknes
 
   G4double innerRadiusShield = 0*cm;
-  G4double outerRadiusShield = 110*cm;
+  G4double outerRadiusShield = 100*cm;
   G4double hightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;

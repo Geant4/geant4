@@ -61,6 +61,7 @@ class B03Application:
         for i in range(1,19):
             self.gCell_list.append(self.pgeom.GetGeometryCell(i))
 
+        
         self.CellRest = self.pgeom.GetGeometryCell(19)
 
     def createIstoreAndScorer(self):
@@ -85,15 +86,21 @@ class B03Application:
         for gCell in self.gCell_list:
             exp += 1
             importance = math.pow(2,exp)
-            self.istore.AddImportanceGeometryCell(importance,gCell)
+            if exp < 18:
+                self.istore.AddImportanceGeometryCell(importance,gCell)
             self.CellScorerList.append(self.cs_store.AddCellScorer(gCell))
 
         # set importance of world volume
         self.istore. \
         AddImportanceGeometryCell(1, G4GeometryCell(self.p_world,-1))
-        imp_cell_18 = self.istore.GetImportance(self.pgeom.GetGeometryCell(18))
+        imp_cell_17 = self.istore.GetImportance(self.pgeom.GetGeometryCell(17))
+        
         self.istore. \
-        AddImportanceGeometryCell(imp_cell_18, self.CellRest)
+        AddImportanceGeometryCell(imp_cell_17,
+                                  self.pgeom.GetGeometryCell(18))
+                                  
+        self.istore. \
+        AddImportanceGeometryCell(imp_cell_17, self.CellRest)
             
         # create G4CellStoreScorer derived from G4VPScorer 
         self.scorer = G4CellStoreScorer(self.cs_store)
@@ -132,7 +139,7 @@ class B03Application:
         # get run manager and run 100 events
         
         r = self.base.GetRunManager()
-        tinold=0
+        tinold=self.CellScorerList[17].GetCellScoreValues().fSumTracksEntering
         # run nruns runs with self.nevents events
         # each and fill a histogram after each run
         for i in range(nruns):

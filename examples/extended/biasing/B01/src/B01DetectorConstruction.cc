@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01DetectorConstruction.cc,v 1.6 2002-11-07 13:48:01 dressel Exp $
+// $Id: B01DetectorConstruction.cc,v 1.7 2002-11-22 17:47:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -141,7 +141,8 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 100*cm;
+  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
+                   // cells coinside eith world volume boundary
   G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;

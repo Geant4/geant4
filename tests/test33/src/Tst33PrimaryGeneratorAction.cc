@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PrimaryGeneratorAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33PrimaryGeneratorAction.cc,v 1.4 2002-11-22 17:48:10 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

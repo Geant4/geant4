@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B03DetectorConstruction.cc,v 1.9 2002-11-08 17:35:18 dressel Exp $
+// $Id: B03DetectorConstruction.cc,v 1.10 2002-11-22 17:47:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -118,7 +118,8 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 100*cm;
+  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
+                   // cells coinside eith world volume boundary
   G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;

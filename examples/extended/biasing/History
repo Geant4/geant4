@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2002-11-19 15:48:07 gcosmo Exp $
+$Id: History,v 1.20 2002-11-22 17:47:56 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 22th M. Dressel 
+  changed geometry for scoring. Cells must not coinside with
+  wolrd boundary since tracks would be killed before
+  scoring is called in the case a track exits a cell into
+  "out of world".
 
 Nov   8th, 2002 M.Dressel - exbiasing-V04-01-00
   reduce and change examples. Only B01 B02 B03 will

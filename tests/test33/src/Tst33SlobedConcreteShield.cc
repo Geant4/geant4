@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.cc,v 1.5 2002-11-20 09:38:26 dressel Exp $
+// $Id: Tst33SlobedConcreteShield.cc,v 1.6 2002-11-22 17:48:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -63,7 +63,7 @@ void Tst33SlobedConcreteShield::Construct(){
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 100*cm;
+  G4double outerRadiusCylinder = 101*cm; // for scoring
   G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
@@ -113,7 +113,7 @@ void Tst33SlobedConcreteShield::Construct(){
     new G4LogicalVolume(aShield, fConcrete, "aShield_log");
 
   G4VisAttributes* pShieldVis = new 
-    G4VisAttributes(G4Colour(0.0,0.0,1.0));
+    G4VisAttributes(G4Colour(0.5,0.5,0.5));
   pShieldVis->SetForceSolid(true);
   aShield_log->SetVisAttributes(pShieldVis);
 

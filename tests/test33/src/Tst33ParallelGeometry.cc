@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.5 2002-11-20 09:38:26 dressel Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.6 2002-11-22 17:48:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -59,7 +59,7 @@ void Tst33ParallelGeometry::Construct(){
   // parallel world solid larger than in the mass geometry
 
   G4double innerRadiusCylinder = 0*cm;
-  G4double outerRadiusCylinder = 110*cm;
+  G4double outerRadiusCylinder = 100*cm;
   G4double hightCylinder       = 110*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
