@@ -37,7 +37,8 @@ FredMessenger::FredMessenger( )
 	volumeNames[BOOL1]  =  "BOOL1";
 	volumeNames[CONE]  =  "CONE";
 	volumeNames[CONE2] = "CONE2";
-	
+	volumeNames[NEW] = "NEW";
+
 	gunNames[SPRAY] = "SPRAY";
 	gunNames[GRID]  = "GRID";
 	gunNames[G4]    = "G4";

@@ -24,7 +24,8 @@ enum VolumeType {
 	BOOL1,
 	PGON4,
 	PGON3,
-	PGON2
+	PGON2,
+	NEW  /* You could add your own here */
 };
 #define FRED_VOLUMETYPE_NUM  (PGON2+1)
 

@@ -57,6 +57,11 @@ simplify the task of debugging.
 
 A example debugging session is included below:
 
+/vis/open VRML1
+/vis~/create_view/new_graphics_system VRML1
+/vis~/camera/zoom 16
+/tracking/storeTrajectory 1	
+/vis/draw/current
 # select test volume BOX
 /fred/volume BOX
 # initialize

@@ -4,3 +4,8 @@ test the implemention of volumes under normal navigation.
 It is ongoing work.
 
 David Williams   Oct 8, 1998
+
+     BEWARE :
+     If World is too small for test then Segmentation Fault !!
+
+Medernach Emmanuel   Ayg 2000
