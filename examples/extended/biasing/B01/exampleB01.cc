@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
   // ======= after running ============================
 
   // print all the numbers calculated from the scorer
-  *myout << "output mScorer, mass world, neutron" << G4endl;
+  *myout << "output mScorer, mass geometry, neutron" << G4endl;
   *myout << mScorer << G4endl;
   *myout << "----------------------------------------------"  << G4endl;
 

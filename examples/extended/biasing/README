@@ -37,7 +37,7 @@ I. Examples for scoring without biasing
 
 I. 1. Example B01
 -----------------
-This example shows the use of scoring in the "tracking" geometry.
+This example shows how to  use scoring in the "tracking" geometry.
 It scores several values for neutrons for every physical volume
 in the tracking geometry. 
 All scored values are printed after the running. In addition a more
@@ -48,7 +48,7 @@ scored values.
 
 I. 2. Example B02
 -----------------
-This example shows the use of scoring in a "parallel" or "scoring" geometry.
+This example shows how to use scoring in a "parallel" or "scoring" geometry.
 In this example a tracking and a scoring geometry is constructed. 
 Gammas are scored in the scoring geometry. The scored values are dumped
 to the screen after the run. How to access the score values more exclusively
@@ -60,13 +60,13 @@ II. Examples for biasing without scoring
 
 II. 1. Example B03
 ------------------
-This example shows the use of biasing in the "tracking" geometry. 
+This example shows how to use biasing in the "tracking" geometry. 
 It does not do scoring. 
 
 II. 2. Example B04
 ------------------
-This example shows the use of biasing according to a "parallel" or "importance"
-geometry.
+This example shows how to use biasing according to a "parallel" 
+or "importance" geometry.
 
 III. Examples for biasing and scoring
 =====================================
@@ -77,3 +77,16 @@ Biasing and Scoring in the "tracking" geometry.
 
 III. 2. Example B06
 -------------------
+Biasing and scoring in a "parallel" geometry.
+
+III. 3. Example B07
+-------------------
+Biasing neutrons and gammas in a "parallel" geometry.
+The physics list used in this example creates only processes for 
+gammas and neutrons. Other particles that my be produce
+will have no processes and can therefore not produce 
+any particles.
+The idea is to have the simulation performing somewhat like a transportation
+Monte Carlo that only knows about neutrons and gammas and is only
+used in limited energy range.
+
