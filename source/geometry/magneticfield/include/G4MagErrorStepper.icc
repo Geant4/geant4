@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.icc,v 1.5 1999-12-15 14:49:47 gunter Exp $
+// $Id: G4MagErrorStepper.icc,v 1.6 2000-03-03 12:09:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,7 +18,7 @@ inline G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
       dydxMid=     new G4double[nvar];
       yInitial=    new G4double[nvar];
       yOneStep= new G4double[nvar];
-  };
+  }
 
 inline G4MagErrorStepper::~G4MagErrorStepper()
   {
