@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicProcess.cc,v 1.5 1999-11-19 17:28:15 hpw Exp $
+// $Id: G4HadronicProcess.cc,v 1.6 1999-11-22 19:14:27 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // HPW to implement the choosing of an element for scattering.
@@ -97,6 +97,7 @@
   {
     // get the PC from iso-production
     if(theOldIsoResult) delete theOldIsoResult;
+    if(theIsoResult) delete theIsoResult;
     theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
     G4IsoResult * anIsoResult = NULL;
