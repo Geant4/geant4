@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN01PhysicsList.cc,v 1.1 1999-01-07 16:05:42 gunter Exp $
+// $Id: ExN01PhysicsList.cc,v 1.2 1999-04-16 10:48:50 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,27 +37,15 @@ void ExN01PhysicsList::ConstructProcess()
   AddTransportation();
 }
 
-void ExN01PhysicsList::SetCuts(G4double cut)
+void ExN01PhysicsList::SetCuts()
 {
   // uppress error messages even in case e/gamma/proton do not exist            
-  G4int temp = GetVerboseLevel();                                               
-  SetVerboseLevel(0);                                                           
-                                                                                
-  // set cut values for gamma at first and for e- second and next for e+,       
-  // because some processes for e+/e- need cut values for gamma                 
-  SetCutValue(cut, "gamma");                                                    
-  SetCutValue(cut, "e-");                                                       
-  SetCutValue(cut, "e+");                                                       
-                                                                                
-  // set cut values for proton and anti_proton before all other hadrons         
-  // because some processes for hadrons need cut values for proton/anti_proton  
-  SetCutValue(cut, "proton");                                                   
-  SetCutValue(cut, "anti_proton");                                              
-                                                                                
-  // set a cut value to all particles
+  G4int temp = GetVerboseLevel();                                                SetVerboseLevel(0);                                                           
+  //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
+  //   the default cut value for all particle types 
+  SetCutsWithDefault();   
 
-  SetCutValueForOthers(cut);
-                          
+  // Retrieve verbose level
   SetVerboseLevel(temp);  
 }
 
