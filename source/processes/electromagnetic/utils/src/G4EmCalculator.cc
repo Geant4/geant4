@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.10 2004-11-17 10:04:45 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.11 2004-11-17 10:11:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -421,9 +421,9 @@ G4double G4EmCalculator::ComputeCrossSectionPerAtom(
       G4double e = kinEnergy;
       if(baseParticle) {
         e *= kinEnergy*massRatio;
-        res = currentModel->CrossSectionPerAtom(baseParticle, e, Z, A, cut)*chargeSquare;
+        res = currentModel->ComputeCrossSectionPerAtom(baseParticle, e, Z, A, cut)*chargeSquare;
       } else {
-        res = currentModel->CrossSectionPerAtom(p, e, Z, A, cut);
+        res = currentModel->ComputeCrossSectionPerAtom(p, e, Z, A, cut);
       }
     }
     if(verbose>0) {

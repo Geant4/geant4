@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmModel.hh,v 1.21 2004-11-17 10:04:45 vnivanch Exp $
+// $Id: G4VEmModel.hh,v 1.22 2004-11-17 10:11:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -102,7 +102,7 @@ public:
                                       G4double cutEnergy,
                                       G4double maxEnergy) = 0;
 
-  virtual G4double CrossSectionPerAtom(
+  virtual G4double ComputeCrossSectionPerAtom(
                                 const G4ParticleDefinition*,
                                       G4double&, G4double&, G4double&, G4double)
                                       {return 0.0;};
