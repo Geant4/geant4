@@ -81,8 +81,8 @@ G4double G4hZiegler1977He::ElectronicStoppingPower(G4double z,
 {
   G4double ionloss ;
   G4int i = G4int(z)-1 ;  // index of atom
-  if(i < 1)  i = 1 ;
-  if(i > 92) i = 92 ;
+  if(i < 0)  i = 0 ;
+  if(i > 91) i = 91 ;
 
   // The He4 data and the fit from: 
   // J.F.Ziegler, Helium Stopping Powers and

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.10 2000-08-17 18:20:46 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.11 2000-08-18 17:05:19 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,6 +22,7 @@
 //            add EnergyLossFluctuation in order to simulate
 //            energy losses of ions
 // 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
+// 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -385,7 +386,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                              Tscaled,aMaterial) ;
      }
      fdEdx     *= ChargeSquare ;
-     fRangeNow /= (ChargeSquare*massratio) ;
+     fRangeNow /= ChargeSquare ;
 
   // compute the (random) Step limit ..............
   if(fRangeNow > finalRange)

@@ -27,13 +27,14 @@
 // 30 Sept.  1999 V.Ivanchenko minor upgrade 
 // 12 Dec.   1999 S. Chauvie added Barkas correction 
 // 19 Jan.   2000 V.Ivanchenko minor changing in Barkas corrections
-// 02 April  2000 S. Chauvie linearization of barkas effect
+// 02 April  2000 S. Chauvie linearization of Barkas effect
 // 03 April  2000 V.Ivanchenko Nuclear Stopping power for antiprotons
 // 23 May    2000 MG Pia  Clean up for QAO model 
 // 24 May    2000 MG Pia  Code properly indented to improve legibility
 // 17 July   2000 V.Ivanchenko Bug in scaling AlongStepDoIt method
 // 25 July   2000 V.Ivanchenko New design iteration
 // 17 August 2000 V.Ivanchenko Add ion fluctuation models
+// 18 August 2000 V.Ivanchenko Bug fixed in GetConstrain
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -490,8 +491,8 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   }
   
   //
-  fRangeNow /= (chargeSquare*massRatio) ;
-  dx        /= (chargeSquare*massRatio) ;
+  fRangeNow /= chargeSquare ;
+  dx        /= chargeSquare ;
   stepLimit  = fRangeNow ;
   
   // compute the (random) Step limit in standard energy range

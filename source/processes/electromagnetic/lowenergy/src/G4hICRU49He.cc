@@ -165,8 +165,8 @@ G4double G4hICRU49He::ElectronicStoppingPower(G4double z,
 {
   G4double ionloss ;
   G4int i = G4int(z)-1 ;  // index of atom
-  if(i < 1)  i = 1 ;
-  if(i > 92) i = 92 ;
+  if(i < 0)  i = 0 ;
+  if(i > 91) i = 91 ;
   
   // The data and the fit from: 
   // ICRU Report 49, 1993. Ziegler's type of parametrisations

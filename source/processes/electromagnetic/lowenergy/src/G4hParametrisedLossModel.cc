@@ -20,6 +20,7 @@
 //
 // Modifications: 
 // 20/07/2000  V.Ivanchenko First implementation
+// 18/08/2000  V.Ivanchenko TRIM85 model is added
 //
 // Class Description: 
 //
@@ -36,6 +37,7 @@
 #include "globals.hh"
 #include "G4hZiegler1977p.hh"
 #include "G4hZiegler1977He.hh"
+#include "G4hZiegler1985p.hh"
 #include "G4hICRU49p.hh"
 #include "G4hICRU49He.hh"
 #include "G4DynamicParticle.hh"
@@ -58,6 +60,11 @@ G4hParametrisedLossModel::G4hParametrisedLossModel(const G4String& name):
       eStopingPowerTable = new G4hZiegler1977He();
       highEnergyLimit = 10.0*MeV/4.0;
       lowEnergyLimit  = 1.0*keV/4.0;
+
+  } else if("Ziegler1985p" == name) {
+      eStopingPowerTable = new G4hZiegler1985p();
+      highEnergyLimit = 100.0*MeV;
+      lowEnergyLimit  = 1.0*eV;
 
   } else if("ICRU_R49p" == name || " " == name) {
       eStopingPowerTable = new G4hICRU49p();
