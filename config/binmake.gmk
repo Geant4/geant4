@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.83 2002-12-02 15:26:59 johna Exp $
+# $Id: binmake.gmk,v 1.84 2002-12-02 18:26:46 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -332,7 +332,7 @@ $(G4TMPDIR)/exe/$(G4TARGET).d: $(G4TARGET).cc
 	@echo Making dependency for file $<...
 	@set -e;\
 	g++ $(GPPFLAGS) $(CPPFLAGS) $< |\
-	sed 's!$*.o!$(G4TMPDIR)/exe/& $@!' >$@\
+	sed 's!$(G4TARGET)\.o!$(G4TMPDIR)/exe/& $@!' >$@;\
 	[ -s $@ ] || rm -f $@
 ifneq ($(dependencies),)
 -include $(dependencies)
