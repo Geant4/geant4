@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-06-15 12:29:04 johna Exp $
+$Id: History,v 1.7 2001-07-25 21:02:21 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+25th July 2001  John Allison  (vis-V03-02-07)
+- Improved use of G4PhysicalVolumeModel::CurtailDescent().
 
 15th June 2001  John Allison (vis-V03-01-06)
 - Changed char* to const char* in G4GAGTreeList.hh".

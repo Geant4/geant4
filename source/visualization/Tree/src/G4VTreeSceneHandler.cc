@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTreeSceneHandler.cc,v 1.5 2001-07-11 10:09:08 gunter Exp $
+// $Id: G4VTreeSceneHandler.cc,v 1.6 2001-07-25 21:02:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,15 +71,14 @@ void G4VTreeSceneHandler::BeginModeling() {
     if (fpOriginalMP) {
       fpNonCullingMP = new G4ModelingParameters(*fpOriginalMP);
       fpNonCullingMP->SetCulling(false);
-      ((G4VModel*)fpModel)->SetModelingParameters(fpNonCullingMP);
-      // Note the deliberate casting away of const.
+      fpModel->SetModelingParameters(fpNonCullingMP);
     }
   }
 }
 
 void G4VTreeSceneHandler::EndModeling() {
   if (fpModel && fpOriginalMP) {
-    ((G4VModel*)fpModel)->SetModelingParameters(fpOriginalMP);
+    fpModel->SetModelingParameters(fpOriginalMP);
     delete fpNonCullingMP;
   }
   G4VSceneHandler::EndModeling();  // Required: see G4VSceneHandler.hh.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ASCIITreeSceneHandler.cc,v 1.9 2001-07-11 10:09:08 gunter Exp $
+// $Id: G4ASCIITreeSceneHandler.cc,v 1.10 2001-07-25 21:02:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,11 +77,10 @@ void G4ASCIITreeSceneHandler::Dump (const G4VSolid& solid) {
   const G4int detail = verbosity % 10;
 
   if (verbosity < 10 && fReplicaSet.find(fpCurrentPV) != fReplicaSet.end()) {
-    // Ignore if an already treated replica.  (Assumes that the model
-    // which has invoked this function is a G4PhysicalVolumeModel - we
-    // check this by testing fpCurrentPV.)
-    if (fpCurrentPV) {
-      ((G4PhysicalVolumeModel*)fpModel)->CurtailDescent();
+    // Ignore if an already treated replica.
+    G4PhysicalVolumeModel* pPVM = fpModel->GetG4PhysicalVolumeModel();
+    if (pPVM) {
+      pPVM->CurtailDescent();
       return;
     }
   }
