@@ -1,7 +1,7 @@
 <html>
 <head>
 <title>System Testing report on large-N tests</title>
-<!-- Changed by: Serguei SADILOV,  4-Dec-2001 -->
+<!-- Changed by: Serguei SADILOV,  8-Dec-2001 -->
 </head>
 
 <body>
@@ -16,7 +16,7 @@ Report on Errors and Warnings arising from system testing on the
 NOTE: the complete set of tests has not been run, with Large_N(umbers of events),
       for all platforms. 
 <pre>
-              +         +         +          +           testing   +          +          +           +       testing    +          +
+              +         +         +          +           testing   +          +          +           +       testing    +          testing
               ^         ^         ^          ^           ^         ^          ^          ^           ^       ^          ^          ^
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
            | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
@@ -34,21 +34,21 @@ test10     |         |         |          |          |          |          |    
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test11     |         |         |          |          |          |          |          |          | abend   | testing | abend   |         |
 test12     |         |         |          |          |          |          |          |          | abend   |         | abend   | W7 W3   |
-test13     | W6      |         |          |          |          | W6       |          |          | abend   | W6      | abend   |         |
+test13     | W6(?)   |         |          |          |          | W6(?)    |          |          | abend   | W6      | abend   |         |
 test14     |         |         |          |          |          |          |          |          |         |         |         |         |
 test15     | link    |         |          |          |          |          |          |          | abend   | testing | abend   |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test16     |         |         |          |          |          |          |          |          | abend   |         | abend   |         |
 test17     |         |         |          |          |          |          |          |          |         |         |         |         |
-test18     |         |         |          |          |          |          |          |          |         |         |         |         |
+test18     |         |         |          |          |          | abend(!) |          |          |         |         |         |         |
 test20     |         |         |          |          |          |          |          |          |         |         |         |         |
-test21     |         |         |          | W4 W5    | testing  |          |          | testing  | abend   | abend   | abend   | abend   |
+test21     |         |         |          | W4 W5(?) |          |          |          | testing  | abend   | abend   | abend   | abend   |
 test22     |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 test103    |........ |         |          |          |          |          |          |          |         |         |         |         |
-test104    |........ |         |          |          |          |          |          |          | abend   | abend   | abend   | abend   |
+test104    |........ |         |          |          |          |          |          |          | OK!     | abend   | OK!     | abend   |
 test104.Em | Perf    | Perf    | Perf     | Perf     |          |          |          |          |         |         |         |         |
-test502    |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |         |         |         |
+test502    | Err8    | Err8    | Err  8   | Err  8   | Err  8   | Err  8   |  Err8    | Err8     |         |         |         |         |
 test508    |         |         |          |          |          |          |          |          |         |         |         |         |
 -----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
@@ -56,6 +56,7 @@ test508    |         |         |          |          |          |          |    
  dis/ch - test was disabled, but is checking now
  abend  - crash without clue
  testing - under testing now
+ ? - last time was!
 
  Errors 2,4 and 5 require some debugging work.
  Error  1         requires changes to the test so it may complete in a reasonable time.
@@ -81,7 +82,7 @@ G4Err  2
 
 G4 Err 8
 --------
-
+To be "permanent"...[under investigation]
 It crashes in unpredictable way in printing stat:
 
 Start closing geometry.
