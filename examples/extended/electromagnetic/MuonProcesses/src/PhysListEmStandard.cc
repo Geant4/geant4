@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.6 2004-12-06 13:45:20 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.7 2004-12-06 16:06:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,25 +54,24 @@ PhysListEmStandard::~PhysListEmStandard()
 void PhysListEmStandard::ConstructProcess()
 {
   // Common processes for mu+ and mu-
-  G4MuIonisation*       muion  = new G4MuIonisation();
+  //
+  G4MuIonisation*       muioni = new G4MuIonisation();
   G4MuBremsstrahlung*   mubrem = new G4MuBremsstrahlung();
   G4MuPairProduction*   mupair = new G4MuPairProduction();
 
-  // Add standard EM Processes for Muon
-  //  
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
-
-  pmanager->AddProcess(muion,     -1, 2,2);
-  pmanager->AddProcess(mubrem,    -1,-1,3);
-  pmanager->AddProcess(mupair,    -1,-1,4);
+  //
+  pmanager->AddProcess(muioni, -1, 2,2);
+  pmanager->AddProcess(mubrem, -1,-1,3);
+  pmanager->AddProcess(mupair, -1,-1,4);
 
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
-
-  pmanager->AddProcess(muion,     -1, 2,2);
-  pmanager->AddProcess(mubrem,    -1,-1,3);
-  pmanager->AddProcess(mupair,    -1,-1,4);
+  //
+  pmanager->AddProcess(muioni, -1, 2,2);
+  pmanager->AddProcess(mubrem, -1,-1,3);
+  pmanager->AddProcess(mupair, -1,-1,4);
     
   //extend binning of PhysicsTables
   //
