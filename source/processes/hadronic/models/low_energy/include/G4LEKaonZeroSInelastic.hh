@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEKaonZeroSInelastic.hh,v 1.8 2003-02-10 09:20:02 jwellisc Exp $
+// $Id: G4LEKaonZeroSInelastic.hh,v 1.9 2003-07-01 15:49:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,7 @@ class G4LEKaonZeroSInelastic : public G4InelasticInteraction
 
     virtual ~G4LEKaonZeroSInelastic(){ }
 
-    G4VParticleChange * ApplyYourself( const G4Track &aTrack, G4Nucleus &targetNucleus )
+    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus &targetNucleus )
     {
       if(G4UniformRand() < 0.50)
       {

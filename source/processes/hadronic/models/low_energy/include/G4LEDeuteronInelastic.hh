@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEDeuteronInelastic.hh,v 1.6 2002-12-12 19:18:04 gunter Exp $
+// $Id: G4LEDeuteronInelastic.hh,v 1.7 2003-07-01 15:49:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Low Energy Deuteron Inelastic Process
@@ -54,7 +54,7 @@
     
     ~G4LEDeuteronInelastic() { }
     
-    G4VParticleChange *ApplyYourself( const G4Track &aTrack,
+    G4HadFinalState * ApplyYourself(const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus );
  };
  

@@ -31,18 +31,17 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
  
- G4VParticleChange *
-  G4LETritonInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LETritonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                       G4Nucleus &targetNucleus )
   {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+    theParticleChange.Clear();
+    const G4HadProjectile *originalIncident = &aTrack;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LETritonInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -78,7 +77,6 @@
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
     delete vec[0];
     //
-    theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
     for( G4int i=1; i<vecLen; ++i )
     {

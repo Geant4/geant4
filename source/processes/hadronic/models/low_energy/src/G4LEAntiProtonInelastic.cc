@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEAntiProtonInelastic.cc,v 1.9 2003-06-16 17:10:10 gunter Exp $
+// $Id: G4LEAntiProtonInelastic.cc,v 1.10 2003-07-01 15:49:04 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: AntiProton Inelastic Process
@@ -33,13 +33,11 @@
 #include "G4LEAntiProtonInelastic.hh"
 #include "Randomize.hh"
 
- G4VParticleChange *
-  G4LEAntiProtonInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LEAntiProtonInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                           G4Nucleus &targetNucleus )
-  {
-    theParticleChange.Initialize( aTrack );
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
+  { 
+    const G4HadProjectile *originalIncident = &aTrack;
     if (originalIncident->GetKineticEnergy()<= 0.1*MeV) return &theParticleChange;
     //
     // create the target particle
@@ -48,7 +46,7 @@
     
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEAntiProtonInelastic::ApplyYourself called" << G4endl;
       G4cout << "kinetic energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << ", ";
@@ -129,7 +127,7 @@
   G4LEAntiProtonInelastic::Cascade(
    G4FastVector<G4ReactionProduct,128> &vec,
    G4int& vecLen,
-   const G4DynamicParticle *originalIncident,
+   const G4HadProjectile *originalIncident,
    G4ReactionProduct &currentParticle,
    G4ReactionProduct &targetParticle,
    G4bool &incidentHasChanged,

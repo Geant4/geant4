@@ -32,27 +32,25 @@
 #include "Randomize.hh"
 #include "G4Electron.hh"
  
- G4VParticleChange *
-  G4LEAlphaInelastic::ApplyYourself( const G4Track &aTrack,
+ G4HadFinalState *
+  G4LEAlphaInelastic::ApplyYourself( const G4HadProjectile &aTrack,
                                      G4Nucleus &targetNucleus )
   {
-    theParticleChange.Initialize( aTrack );
+    theParticleChange.Clear();
     G4double A = targetNucleus.GetN();
     G4double Z = targetNucleus.GetZ();
-    
-    const G4DynamicParticle *originalIncident = aTrack.GetDynamicParticle();
-    
+        
+    G4double kineticEnergy = aTrack.Get4Momentum().e()-aTrack.GetDefinition()->GetPDGMass();
     if( verboseLevel > 1 )
     {
-      G4Material *targetMaterial = aTrack.GetMaterial();
+      const G4Material *targetMaterial = aTrack.GetMaterial();
       G4cout << "G4LEAlphaInelastic::ApplyYourself called" << G4endl;
-      G4cout << "kinetc energy = " << originalIncident->GetKineticEnergy()/MeV << "MeV, ";
+      G4cout << "kinetc energy = " <<kineticEnergy/MeV << "MeV, ";
       G4cout << "target material = " << targetMaterial->GetName() << G4endl;
     }
     
     // Work-around for lack of model above 100 MeV
-    if (originalIncident->GetKineticEnergy()/MeV > 100. ||
-        originalIncident->GetKineticEnergy() <= 0.1*MeV) return &theParticleChange;
+    if (kineticEnergy/MeV > 100. || kineticEnergy <= 0.1*MeV) return &theParticleChange;
 
     G4double theAtomicMass = targetNucleus.AtomicMass( A, Z )-Z*G4Electron::Electron()->GetPDGMass();
     G4double massVec[9];
@@ -70,7 +68,7 @@
     G4int vecLen = 0;
     vec.Initialize( 0 );
     //
-    theReactionDynamics.NuclearReaction( vec, vecLen, originalIncident,
+    theReactionDynamics.NuclearReaction( vec, vecLen, &aTrack,
                                          targetNucleus, theAtomicMass, massVec );
     //
     G4double p = vec[0]->GetMomentum().mag();
@@ -78,7 +76,6 @@
     theParticleChange.SetEnergyChange( vec[0]->GetKineticEnergy() );
     delete vec[0];
     //
-    theParticleChange.SetNumberOfSecondaries( vecLen-1 );
     G4DynamicParticle *pd;
     for( G4int i=1; i<vecLen; ++i )
     {
