@@ -1,11 +1,11 @@
-// This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+
+
 //
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
+
+
+
 //
-// $Id: SdaiCONFIG_CONTROL_DESIGN.cc,v 1.1 1999-01-07 16:08:15 gunter Exp $
+// $Id: SdaiCONFIG_CONTROL_DESIGN.cc,v 1.2 1999-05-21 20:20:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef  SDAICONFIG_CONTROL_DESIGN_CC
