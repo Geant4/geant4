@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.1 1999-01-07 16:14:16 gunter Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.2 1999-04-14 10:45:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,10 +26,13 @@
 //    DumpList * Dump List of particles in G4VUserPhysicsList.
 //    dumpCutValue * Dump cut value information
 //    Verbose * Set the Verbose level of G4VUserPhysicsList.
+//    addProcessManager * add process manager
+//    buildPhysicsTable * build physics table
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        second version                  24 Jan. 1998 by H.Kurashige 
+//        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
@@ -58,7 +61,7 @@ class G4UserPhysicsListMessenger: public G4UImessenger
     G4String GetCurrentValue(G4UIcommand * command);
 
   protected:
-    G4VUserPhysicsList* theParticleList;
+    G4VUserPhysicsList* thePhysicsList;
     
   private: //commands
     G4UIdirectory *             theDirectory;
@@ -67,6 +70,7 @@ class G4UserPhysicsListMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;
     G4UIcmdWithAString *        addProcManCmd;
+    G4UIcmdWithAString *        buildPTCmd;
 };
 
 #endif

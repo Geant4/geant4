@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.1 1999-01-07 16:14:18 gunter Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.2 1999-04-14 10:45:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,7 @@
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
+//        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4UserPhysicsListMessenger.hh"
@@ -27,7 +28,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ios.hh"
 
-G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):theParticleList(pParticleList)
+G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {
   // /run/particle    directory
   theDirectory = new G4UIdirectory("/run/particle/");
@@ -69,10 +70,17 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   // /run/particle/addProcManager command
   addProcManCmd = new G4UIcmdWithAString("/run/particle/addProcManager", this);
-  addProcManCmd->SetGuidance("add process manager");
+  addProcManCmd->SetGuidance("add process manager to specified particle type");
   addProcManCmd->SetParameterName("particleType", true);
   addProcManCmd->SetDefaultValue("");
   addProcManCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
+
+  // /run/particle/buildPhysicsTable command
+  buildPTCmd = new G4UIcmdWithAString("/run/particle/buildPhysicsTable", this);
+  buildPTCmd->SetGuidance("build physics table of specified particle type");
+  buildPTCmd->SetParameterName("particleType", true);
+  buildPTCmd->SetDefaultValue("");
+  buildPTCmd->AvailableForStates(Init,Idle,GeomClosed,EventProc);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -82,6 +90,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete dumpListCmd;
   delete dumpCutValuesCmd;
   delete addProcManCmd;
+  delete buildPTCmd;
   delete theDirectory;
 }
 
@@ -89,40 +98,58 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 {
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
-    theParticleList->SetDefaultCutValue(newCut);
+    thePhysicsList->SetDefaultCutValue(newCut);
+
   } else if( command==verboseCmd ) {
-    theParticleList->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 
+    thePhysicsList->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 
 
   } else if( command==dumpListCmd ){
-    theParticleList->DumpList();
+    thePhysicsList->DumpList();
+
   } else if( command==dumpCutValuesCmd ){ 
     if (newValue == "table") {
-      theParticleList->DumpCutValuesTable();
+      thePhysicsList->DumpCutValuesTable();
     } else {
-      theParticleList->DumpCutValues(newValue);
+      thePhysicsList->DumpCutValues(newValue);
     }
+
   }  else if( command == addProcManCmd ){
     G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
     if (particle == NULL) return;
     if (particle->GetProcessManager() != NULL) return;
-    theParticleList->AddProcessManager(particle);
+    thePhysicsList->AddProcessManager(particle);
+
+  }  else if( command == buildPTCmd ){
+    G4ParticleDefinition* particle = (G4ParticleTable::GetParticleTable())->FindParticle(newValue);
+    if (particle == NULL) return;
+    thePhysicsList->BuildPhysicsTable(particle);
   }
 }
 
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
+  G4String candidates("none");
+  G4ParticleTable::G4PTblDicIterator *piter = (G4ParticleTable::GetParticleTable())->GetIterator();
   
   if( command==setCutCmd ){
-    cv = setCutCmd->ConvertToString( theParticleList->GetDefaultCutValue(), "mm" );
+    cv = setCutCmd->ConvertToString( thePhysicsList->GetDefaultCutValue(), "mm" );
     
   } else if( command==verboseCmd ){
-    cv = verboseCmd->ConvertToString(theParticleList->GetVerboseLevel());
+    cv = verboseCmd->ConvertToString(thePhysicsList->GetVerboseLevel());
 
   }  else if( command== addProcManCmd ){
     // set candidate list
-    G4String candidates("none");
-    G4ParticleTable::G4PTblDicIterator *piter = (G4ParticleTable::GetParticleTable())->GetIterator();
+    piter -> reset();
+    while( (*piter)() ){
+      G4ParticleDefinition *particle = piter->value();
+      candidates += " " + particle->GetParticleName();
+    }
+    addProcManCmd->SetCandidates(candidates);   
+    cv = "";
+
+  }  else if( command== buildPTCmd ){
+    // set candidate list
     piter -> reset();
     while( (*piter)() ){
       G4ParticleDefinition *particle = piter->value();

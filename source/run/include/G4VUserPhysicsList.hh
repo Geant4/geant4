@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.hh,v 1.2 1999-02-09 15:11:29 kurasige Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.3 1999-04-14 10:45:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,6 +37,8 @@
 //          add    AddProcessManager
 //       modified                        05 Dec. 1998 by H.Kurashige
 //          add    ConstructAllParticles()
+//        modified                        14, Apr 1999 by H.Kurashige
+//          change BuildPhysicsTable as public
 // ------------------------------------------------------------
 #ifndef G4VUserPhysicsList_h
 #define G4VUserPhysicsList_h 1
@@ -95,7 +97,7 @@ class G4VUserPhysicsList
    //   cut values for all particle types in the particle table
     void SetCutsWithDefault();   
 
-  protected:
+  public:
     // 
     void BuildPhysicsTable(G4ParticleDefinition* );    
  
@@ -219,8 +221,8 @@ inline void G4VUserPhysicsList::SetVerboseLevel(G4int value)
 {
   verboseLevel = value;
   if (verboseLevel >1){
-    G4cerr << "G4VUserPhysicsList::SetVerboseLevel  :";
-    G4cerr << " Verbose level is set to " << verboseLevel << endl;
+    G4cout << "G4VUserPhysicsList::SetVerboseLevel  :";
+    G4cout << " Verbose level is set to " << verboseLevel << endl;
   }
 }
 

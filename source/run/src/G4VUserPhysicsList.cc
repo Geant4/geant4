@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.2 1999-02-09 15:11:38 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.3 1999-04-14 10:45:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,9 +91,9 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 
 #ifdef G4VERBOSE    
   if (verboseLevel >2){
-    G4cerr << "G4VUserPhysicsList::AddProcessManager: ";
-    G4cerr  << "adds ProcessManager to ";
-    G4cerr  << newParticle->GetParticleName() << endl;
+    G4cout << "G4VUserPhysicsList::AddProcessManager: ";
+    G4cout  << "adds ProcessManager to ";
+    G4cout  << newParticle->GetParticleName() << endl;
     newManager->DumpInfo();
   } 
 #endif
@@ -104,9 +104,9 @@ void G4VUserPhysicsList::AddProcessManager(G4ParticleDefinition* newParticle,
 #ifdef G4VERBOSE    
   } else {
     if (verboseLevel >0){
-      G4cerr << "G4VUserPhysicsList::AddProcessManager: ";
-      G4cerr  << newParticle->GetParticleName();
-      G4cerr << " already has ProcessManager " << endl;
+      G4cout << "G4VUserPhysicsList::AddProcessManager: ";
+      G4cout  << newParticle->GetParticleName();
+      G4cout << " already has ProcessManager " << endl;
     }
 #endif
   }
@@ -137,9 +137,9 @@ void G4VUserPhysicsList::RemoveProcessManager()
     if  (pmanager!=NULL) delete pmanager;
 #ifdef G4VERBOSE    
     if (verboseLevel >2){
-      G4cerr << "G4VUserPhysicsList::RemoveProcessManager: ";
-      G4cerr  << "remove ProcessManager from ";
-      G4cerr  << particle->GetParticleName() << endl;
+      G4cout << "G4VUserPhysicsList::RemoveProcessManager: ";
+      G4cout  << "remove ProcessManager from ";
+      G4cout  << particle->GetParticleName() << endl;
     }
   } 
 #endif
@@ -170,8 +170,8 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
    if (value<=0.0) {
 #ifdef G4VERBOSE    
      if (verboseLevel >0){
-       G4cerr << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values";
-       G4cerr << "  :" << value/mm << "[mm]" << endl;
+       G4cout << "G4VUserPhysicsList::SetDefaultCutValue: negative cut values";
+       G4cout << "  :" << value/mm << "[mm]" << endl;
      }
 #endif
    } else { 
@@ -226,8 +226,8 @@ void G4VUserPhysicsList::SetCutValueForOtherThan(G4double cutValue,
   if (cutValue <= 0.0) {
 #ifdef G4VERBOSE    
     if (verboseLevel >0){
-      G4cerr << "G4VUserPhysicsList::SetCutValueForOtherThan: negative cut values";
-      G4cerr << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "G4VUserPhysicsList::SetCutValueForOtherThan: negative cut values";
+      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
     }
 #endif
     return;
@@ -332,8 +332,8 @@ void G4VUserPhysicsList::SetCutValueForOthers(G4double cutValue)
   if (cutValue <= 0.0) {
 #ifdef G4VERBOSE    
     if (verboseLevel >0){
-      G4cerr << "G4VUserPhysicsList::SetCutValueForOthers: negative cut values";
-      G4cerr << "  :" << cutValue/mm << "[mm]" << endl;
+      G4cout << "G4VUserPhysicsList::SetCutValueForOthers: negative cut values";
+      G4cout << "  :" << cutValue/mm << "[mm]" << endl;
     }
 #endif
     return;
