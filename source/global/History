@@ -1,4 +1,4 @@
-$Id: History,v 1.55 2000-11-01 15:23:10 gcosmo Exp $
+$Id: History,v 1.56 2000-11-03 16:47:26 gunter Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 3, 2000 G.Folger (global-V02-00-04)
+-  Add rules for "includes" target to GNUmakefile and management/GNUmakefile.
+   Add GNUmakefile in STLInterface for the "include" target.
+   
 November 1, 2000 G.Cosmo (global-V02-00-03)
 - Moved geometry constants kHistoryMax, kHistoryStride and 
   kNavigatorVoxelStackMax to geomdefs.hh.
