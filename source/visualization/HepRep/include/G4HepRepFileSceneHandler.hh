@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.3 2001-11-19 15:06:52 johna Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.4 2001-11-21 16:48:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,7 +83,6 @@ public:
   // Required implementation of pure virtual functions...
 
   void AddPrimitive(const G4Polyline&);
-  void AddPrimitive(const G4Polymarker&);
   void AddPrimitive(const G4Text&);
   void AddPrimitive(const G4Circle&);
   void AddPrimitive(const G4Square&);
@@ -91,10 +90,14 @@ public:
   void AddPrimitive(const G4NURBS&);
 
   ////////////////////////////////////////////////////////////////
-  // Further optional AddPrimtive methods...
-
-  // void AddPrimitive(const G4Scale&);
-  // void AddPrimitive(const G4Polymarker&);
+  ////////////////////////////////////////////////////////////////
+  // Further optional AddPrimtive methods.  Explicitly invoke base
+  // class methods if not otherwise defined to avoid warnings about
+  // hiding of base class methods.
+  void AddPrimitive(const G4Polymarker&);
+  void AddPrimitive(const G4Scale& scale) {
+    G4VSceneHandler::AddPrimitive (scale);
+  }
 
   ////////////////////////////////////////////////////////////////
   // Further optional virtual functions...
