@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.1 2004-05-13 14:51:19 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.2 2004-09-07 08:57:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,7 +52,8 @@
 // --------------------------------------------------------------------
 
 #include "G4ReflectionFactory.hh"
-#include "G4ReflectedSolid.hh"  
+#include "G4ReflectedSolid.hh"
+#include "G4Region.hh" 
 #include "G4LogicalVolume.hh"  
 #include "G4PVPlacement.hh"  
 #include "G4PVReplica.hh"  
@@ -376,10 +377,17 @@ G4LogicalVolume* G4ReflectionFactory::ReflectLV(G4LogicalVolume* LV)
     // process daughters  
     //
     ReflectDaughters(LV, refLV);
-  }   
-  
+
+    // check if to be set as root region
+    //
+    if (LV->IsRootRegion())
+    {
+       LV->GetRegion()->AddRootLogicalVolume(refLV);
+    }
+  }
+
   return refLV;
-}               
+}
 
 //_____________________________________________________________________________
 
@@ -413,7 +421,13 @@ G4LogicalVolume* G4ReflectionFactory::CreateReflectedLV(G4LogicalVolume* LV)
                           LV->GetFieldManager(),
                           LV->GetSensitiveDetector(),
                           LV->GetUserLimits());
-        
+  refLV->SetVisAttributes(LV->GetVisAttributes());  // vis-attributes
+  refLV->SetBiasWeight(LV->GetBiasWeight());        // biasing weight
+  if (LV->IsRegion())
+  {
+    refLV->SetRegion(LV->GetRegion());              // set a region in case
+  }
+
   fConstituentLVMap[LV] = refLV;
   fReflectedLVMap[refLV] = LV;
 
