@@ -11,55 +11,55 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 160 0.0001 10
+ null 0 400 0.00001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
- hi/file 1 prec.paw
- set dmod 3
- hi/pl 32 shist
- line 100 0.6 110 0.6
- itx 115 3.5 'PREC'
- close 1
+* hi/file 1 prec.paw
+* set dmod 3
+* hi/pl 32 shist
+* line 100 0.6 110 0.6
+* itx 115 3.5 'PREC'
+* close 1
  
  
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 32 shist
- line 100 0.2 110 0.2
- itx 115 1.5 'KIN'
+ line 200 0.2 210 0.2
+ itx  215 1.5 'KIN'
  close 1
  
-ve/create X(15) R 25 35 45 55 65 75 85 95 105 115 125 135 145 155 165
-ve/create Y(15) R 0.09 0.0626 0.0347 0.0179 0.0103 0.006 0.0037 0.0021 0.0012 0.00068 0.00033 0.00017 0.000072 0.00003 0.0000075
- gr/h/symb X Y 15 21 0.2
+ve/create X(26) R 65 75 85 95 105 115 125 135 145 155 165 175 185 195 205 215 225 235 245 255 265 275 285 295 305 315 
+ve/create Y(26) R 0.044 0.04 0.033 0.027 0.022 0.017 0.014 0.01 0.0076 0.0055 0.0042 0.0029 0.002 0.0015 0.001 0.0007 0.00048 0.00031 0.0002 0.00013 0.00009 0.000066 0.000038 0.000021 0.000013 
+ gr/h/symb X Y 26 21 0.2
  
-      ve/create X1(23) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 25 35 45 55 65 75  
-ve/create Y1(23) R 3.59 3.17 2.2 1.67 1.26 0.94 0.74 0.6 0.52 0.43 0.36 0.31 0.27 0.25 0.22 0.20 0.19 0.17 0.15 0.098 0.049 0.026 0.014 0.0085 0.01 
-gr/h/symb X1 Y1 23 25 0.2
+ ve/create X1(43) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 9.5 10.5 11.5 12.5 13.5 14.5 15.5 16.5 17.5 18.5 19.5 21.5 23.5 25.5 27.5 29.5 35 45 55 65 75 85 95 105 115 125 135 145 155 165 175 185 195 215 235 
+
+ve/create Y1(43) R 5.36 4.76 3.8 2.7 2.27 1.75 1.33 1.11 0.92 0.82 0.68 0.57 0.51 0.46 0.43 0.39 0.36 0.34 0.31 0.27 0.23 0.19 0.17 0.17 0.14 0.1 0.077 0.062 0.049 0.037 0.027 0.02 0.016 0.0094 0.0067 0.0055 0.0038 0.002 0.0015 0.00098 0.00072 0.00031
+gr/h/symb X1 Y1 43 25 0.2
 
  exe ../prf n_a4 eps
 
- null 0 160 0.0001 10
+ null 0 400 0.00001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
+ gr/h/symb X Y 26 21 0.2
+ gr/h/symb X1 Y1 43 25 0.2
+
  hi/file 1 par.paw
  set dmod 4
  hi/pl 32 shist
-* itx 20 200 'proton 256 MeV on Al secondary neutrons at theta=150 degree'
- line 100 0.8 110 0.8
- itx 115 6.0 'LEPAR'
+ line 200 0.8 210 0.8
+ itx  215 6.0 'LEPAR'
  close 1
  
  hi/file 1 chips.paw
  set dmod 1
  hi/pl 32 shist
- line 100 0.4 110 0.4
- itx 115 2.2 'CHIPS'
+ line 200 0.4 210 0.4
+ itx  215 2.2 'CHIPS'
  close 1
  
-  gr/h/symb X Y 15 21 0.2
-gr/h/symb X1 Y1 23 25 0.2
-
  exe ../prf nk_a4 eps
 
  opt liny

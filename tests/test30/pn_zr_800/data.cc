@@ -85,12 +85,12 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 92;
+  int nbin = 100;
   int ibin, inum;
   int counter = 0;
-  double bin0 = 5.0*MeV;
+  double bin0 = 2.0*MeV;
   double bin = 10.0*MeV;
-  double elim= 40.0*MeV;
+  double elim= 30.0*MeV;
   double x, an, e1, e2, y1, y2, ct1, ct2, xs, de;
   double e0 = 0.0;
 
@@ -153,17 +153,26 @@ int main(int argc, char** argv)
     	  }
 
         if((xs == 0.0 && an/degree > 10.) || !enddata) {
+
+          // fill the rest by zero cross section
+          for(int j=ibin; j<nbin; j++) {
+            cross->push_back(0.0);
+          }
+
           cs.push_back(cross);
           if(0 < verbose) {
+            cout      << "Save data vector for  "
+                      << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                      << G4endl;
             (*fout_c) << "#####..Result.of.parcing..####### "
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                       << G4endl;
             for(i=0; i<nbin; i++) {
                (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
-	          }
+	    }
           }  
-	      }
+	}
 
 	// new data
         if(xs == 0.0) {
@@ -175,7 +184,7 @@ int main(int argc, char** argv)
 
         } else if(end) {
 
-          for(int j=ibin; j<nbin; j++) {
+         for(int j=ibin; j<nbin; j++) {
             e0 = (*energy)[j];
             de = bin;
             if (e0 < elim) de = bin0;
@@ -209,24 +218,35 @@ int main(int argc, char** argv)
             f1  = cs[j];  
             y1  = (*f1)[i];  
             ct1 = cos((*angle)[j]);
-            if(j < na-2) {
+            if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j+1]);
-	    } else {
+              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
+              ct1 = 1.0;
+              if(y1 < 0.0) y1 = 0.0;
+	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j-1]);
-              y2 += (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
+              y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
               ct2 = -1.0;
               if(y2 < 0.0) y2 = 0.0;
+            } else {
+              f2  = cs[j+1]; 
+              y2  = (*f2)[i]; 
+              ct2 = cos((*angle)[j+1]);
 	    }
-	 //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	 //         cout << "y1= " << y1 << " y2= " << y2 << endl;
-	 //         cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
+	    //	    cout << "f1= " << f1 << " f2= " << f2 << endl;
+	    //cout << "y1= " << y1 << " y2= " << y2 << endl;
+	    //cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
             x  += 0.5*(y1 + y2)*(ct1 - ct2);  
           }        
           x *= twopi;
+          if(verbose > 1) {
+            cout << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+                 << " cross(mb/MeV)= " << x << endl;
+	  }
           (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
                     << " cross(mb/MeV)= " << x << endl;
         }
