@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.6 1999-12-15 14:53:12 gunter Exp $
+// $Id: G4NeutronHPIsoData.hh,v 1.7 2000-11-09 16:13:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsoData_h
@@ -42,7 +42,7 @@ public:
   
   inline G4double GetXsec(G4double energy)
   {
-    return theChannelData->GetXsec(energy);
+    return G4std::max(0., theChannelData->GetXsec(energy));
   }
   G4bool Init(G4int A, G4int Z, G4double abun, G4String dirName, G4String aFSType);
   

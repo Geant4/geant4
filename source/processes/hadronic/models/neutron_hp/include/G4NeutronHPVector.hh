@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.12 2000-08-14 16:16:25 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.13 2000-11-09 16:13:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -23,6 +23,7 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPHash.hh"
 #include <math.h>
+#include "g4std/vector"
 
 class G4NeutronHPVector
 {
@@ -281,31 +282,8 @@ class G4NeutronHPVector
     return result;
   }
   
-  G4double Sample() // Samples X according to distribution Y
-  {
-    G4double result;
-    if(GetVectorLength()==1)
-    {
-      result = theData[0].GetX();
-    }
-    else
-    {
-      G4int i;
-      G4double value, test, baseline;
-      baseline = theData[GetVectorLength()-1].GetX()-theData[0].GetX();
-      G4double rand;
-      do
-      {
-        value = baseline*G4UniformRand();
-        value += theData[0].GetX();
-        test = GetY(value)/maxValue;
-        rand = G4UniformRand();
-      }
-      while(test<rand);
-      result = value;
-    }
-    return result;
-  }
+  G4double Sample(); // Samples X according to distribution Y
+  
   G4double * Debug()
   {
     return theIntegral;
@@ -442,10 +420,30 @@ class G4NeutronHPVector
     return result;
   }
   
+  void Block(G4double aX)
+  {
+    theBlocked.push_back(aX);
+  }
+  
+  void Buffer(G4double aX)
+  {
+    theBuffered.push_back(aX);
+  }
+  
+  G4std::vector<G4double> GetBlocked() {return theBlocked;}
+  G4std::vector<G4double> GetBuffered() {return theBuffered;}
+  
+  void SetBlocked(const G4std::vector<G4double> &aBlocked) {theBlocked = aBlocked;}
+  void SetBuffered(const G4std::vector<G4double> &aBuffer) {theBuffered = aBuffer;}
+
+  G4double Get15percentBorder();
+  G4double Get50percentBorder();
+  
   private:
   
   void Check(G4int i);
   
+  G4bool IsBlocked(G4double aX);
   
   private:
   
@@ -469,6 +467,12 @@ class G4NeutronHPVector
   
   G4NeutronHPHash theHash;
   G4double maxValue;
+  
+  G4std::vector<G4double> theBlocked;
+  G4std::vector<G4double> theBuffered;
+  G4double the15percentBorderCash;
+  G4double the50percentBorderCash;
+
 };
 
 #endif

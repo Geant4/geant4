@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPChannelList.hh,v 1.2 1999-07-02 09:58:32 johna Exp $
+// $Id: G4NeutronHPChannelList.hh,v 1.3 2000-11-09 16:13:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -51,7 +51,7 @@ class G4NeutronHPChannelList
     G4int i;
     for(i=0; i<nChannels; i++)
     {
-      result+=theChannels[i]->GetXsec(anEnergy);
+      result+=G4std::max(0., theChannels[i]->GetXsec(anEnergy));
     }
     return result;
   }

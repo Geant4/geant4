@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.3 1999-07-02 09:59:11 johna Exp $
+// $Id: G4NeutronHPInelasticBaseFS.hh,v 1.4 2000-11-09 16:13:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPInelasticBaseFS_h
@@ -54,7 +54,7 @@ class G4NeutronHPInelasticBaseFS : public G4NeutronHPFinalState
   
   virtual G4double GetXsec(G4double anEnergy)
   {
-    return theXsection->GetY(anEnergy);
+    return G4std::max(0., theXsection->GetY(anEnergy));
   }
   virtual G4NeutronHPVector * GetXsec() { return theXsection; }
 
