@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.11 2003-10-20 11:06:40 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.12 2003-10-20 13:58:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -390,7 +390,7 @@ G4bool G4Polycone::Reset()
   //
   // Clear old setup
   //
-  DeleteStuff();
+  G4VCSGfaceted::DeleteStuff();
   delete [] corners;
   delete enclosingCylinder;
 

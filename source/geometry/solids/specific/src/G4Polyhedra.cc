@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.9 2003-10-20 11:06:40 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.10 2003-10-20 13:58:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -445,7 +445,7 @@ G4bool G4Polyhedra::Reset()
   //
   // Clear old setup
   //
-  DeleteStuff();
+  G4VCSGfaceted::DeleteStuff();
   delete [] corners;
   delete enclosingCylinder;
 
