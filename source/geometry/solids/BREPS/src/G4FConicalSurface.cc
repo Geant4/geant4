@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.1 1999-01-07 16:07:43 gunter Exp $
+// $Id: G4FConicalSurface.cc,v 1.2 1999-01-14 16:08:39 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -26,6 +26,7 @@
 //	G4FConicalSurface::resize( G4double l, G4double sr, G4double lr )
 //
 //  End ---------------------------------------------------------------
+
 
 #include "G4FConicalSurface.hh"
 #include "G4Sort.hh"
@@ -294,7 +295,6 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   //  Cone angle and axis unit vector.
   G4double ta = tan_angle;
   G4Vector3D ahat = Position.GetAxis();
-  int isoln = 0, maxsoln = 2;
  
   //  array of solutions in distance along the Ray
   G4double s[2];
@@ -302,22 +302,16 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   s[1]=-1.0;
 
   // L. Broglia
-  //  calculate the two solutions (quadratic equation)
-    
+  //  calculate the two solutions (quadratic equation)   
   G4Vector3D gamma =  x - Position.GetLocation();
   
-  G4double T  = 1.0  +  ta * ta;
+  G4double t  = 1  +  ta * ta;
   G4double ga = gamma * ahat;
   G4double da = dhat * ahat;
-  /*
-  G4double A  = 1.0 - T * da * da;
-  G4double B  = 2.0 * ( gamma * dhat - T * ga * da );
-  G4double C  = gamma * gamma - T * ga * ga;
-  */
 
-  G4double A = - 1.0 + T * da * da;
-  G4double B = 2 * ( -gamma * dhat + T * ga * da - large_radius * ta * da);
-  G4double C = ( -gamma * gamma + T * ga * ga 
+  G4double A = - 1 + t * da * da;
+  G4double B = 2 * ( -gamma * dhat + t * ga * da - large_radius * ta * da);
+  G4double C = ( -gamma * gamma + t * ga * ga 
 		 - 2 * large_radius * ta * ga
 		 + large_radius * large_radius );
 
@@ -344,43 +338,42 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
     }
   }
 
+  // Validity of the solutions
+  // the hit point must be into the bounding box of the conical surface
+  G4Point3D p0 = x + s[0]*dhat;
+  G4Point3D p1 = x + s[1]*dhat;
 
+  // replace by BBox.Inside(p0), to be created
 
-  
+  G4Point3D boxmin = GetBBox()->GetBoxMin();
+  G4Point3D boxmax = GetBBox()->GetBoxMax();
 
-  //  order the possible solutions by increasing distance along the Ray
-  //  (G4Sorting routines are in support/G4Sort.h)
-  G4Sort_double( s, isoln, maxsoln-1 );
+  if(  ( p0.x()<boxmin.x() || p0.x()>boxmax.x() ) ||
+       ( p0.y()<boxmin.y() || p0.y()>boxmax.y() ) ||
+       ( p0.z()<boxmin.z() || p0.z()>boxmax.z() )    )
+    s[0] = kInfinity;
 
+  if(  ( p1.x()<boxmin.x() || p1.x()>boxmax.x() ) ||
+       ( p1.y()<boxmin.y() || p1.y()>boxmax.y() ) ||
+       ( p1.z()<boxmin.z() || p1.z()>boxmax.z() )    )
+    s[1] = kInfinity;
+ 
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
   //  and which also has the correct G4Vector3D with respect to the Normal to
   //  the G4ConicalSurface at the intersection point
-  for ( isoln = 0; isoln < maxsoln; isoln++ ) 
+  G4int nbinter = 0;
+  distance = kInfinity;
+
+  for ( G4int isoln = 0; isoln < 2; isoln++ ) 
   {
     if ( s[isoln] >= kCarTolerance*0.5 ) 
-    {
-      if ( s[isoln] >= FLT_MAXX )  // quit if too large
-	return 0;
-      
-      distance = s[isoln];
-      closest_hit = ry.GetPoint( distance );
-      
+    {   
+      if( distance > s[isoln]*s[isoln])
+	distance = s[isoln]*s[isoln];
 
-      //  Following line necessary to select non-reflective solutions.
-      if ((( ahat * ( closest_hit - Position.GetLocation() ) > 0.0 )       && 
-	   ((( dhat * SurfaceNormal( closest_hit ) * which_way ) >= 0.0 )) &&
-	   ( fabs(HowNear( closest_hit )) < 0.1))                             )
-      {
-	if ( WithinBoundary ( closest_hit ) == 1 ) 
-	{
-	  distance =  distance*distance;
-	  return 1;
-	}	
-      }
-      distance =  distance*distance;
-      return 1;
-    }
+      nbinter ++;
+    }    
     else
       if ( s[isoln] >= -kCarTolerance*0.5 ) 
       {
@@ -390,12 +383,13 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
       }   
   }
 
-  //  get here only if there was no solution within the boundary, Reset
-  //  distance and intersection point to large numbers
-  distance = FLT_MAXX;
-  closest_hit = lv;
-  
-  return 0;
+  return nbinter;
+/*
+  if(nbinter&1)
+    return 1;
+  else
+    return 0;
+*/
 }
 
 
@@ -482,7 +476,4 @@ int G4FConicalSurface::Inside ( const G4Vector3D& x ) const
   else
     return 0; 
 }
-
-
-
 

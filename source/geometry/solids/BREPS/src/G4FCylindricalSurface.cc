@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.1 1999-01-07 16:07:43 gunter Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.2 1999-01-14 16:08:40 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -155,9 +155,6 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   //  A negative result means no intersection.
   //  If no valid intersection point is found, set the distance
   //  and intersection point to large numbers.
-
-  // int which_way = -1; 
-  //Originally a parameter.Read explanation above. 
   
   int which_way=1;
   
@@ -175,8 +172,6 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
 
   //  Axis unit vector of the G4CylindricalSurface.
   G4Vector3D ahat = GetAxis();
-  int isoln   = 0, 
-      maxsoln = 2;
   
   //  array of solutions in distance along the Ray
   G4double s[2];
@@ -213,49 +208,59 @@ int G4FCylindricalSurface::Intersect( const G4Ray& ry )
   s[0] = ( - b + root ) / ( 2. * a );
   s[1] = ( - b - root ) / ( 2. * a );
 
-  //  order the possible solutions by increasing distance along the Ray
-  //  (G4Sorting routines are in support/G4Sort.h)
-  G4Sort_double( s, isoln, maxsoln-1 );
+  // Validity of the solutions
+  // the hit point must be into the bounding box of the conical surface
+  G4Point3D p0 = x + s[0]*dhat;
+  G4Point3D p1 = x + s[1]*dhat;
+
+  // replace by BBox.Inside(p0), to be created
+
+  G4Point3D boxmin = GetBBox()->GetBoxMin();
+  G4Point3D boxmax = GetBBox()->GetBoxMax();
+
+  if(  ( p0.x()<boxmin.x() || p0.x()>boxmax.x() ) ||
+       ( p0.y()<boxmin.y() || p0.y()>boxmax.y() ) ||
+       ( p0.z()<boxmin.z() || p0.z()>boxmax.z() )    )
+    s[0] = kInfinity;
+
+  if(  ( p1.x()<boxmin.x() || p1.x()>boxmax.x() ) ||
+       ( p1.y()<boxmin.y() || p1.y()>boxmax.y() ) ||
+       ( p1.z()<boxmin.z() || p1.z()>boxmax.z() )    )
+    s[1] = kInfinity;
 
   //  now loop over each positive solution, keeping the first one (smallest
   //  distance along the Ray) which is within the boundary of the sub-shape
   //  and which also has the correct G4Vector3D with respect to the Normal to
   //  the G4CylindricalSurface at the intersection point
-  for ( isoln = 0; isoln < maxsoln; isoln++ ) 
+  G4int nbinter = 0;
+  distance = kInfinity;
+
+  for ( G4int isoln = 0; isoln < 2; isoln++ ) 
   {
     if ( s[isoln] >= kCarTolerance*0.5 ) 
     {
-      if ( s[isoln] >= FLT_MAXX )  // quit if too large
-	return 0;
-      
-      distance = s[isoln];
-      closest_hit = ry.GetPoint( distance );
-      G4double  tmp =  dhat * (Normal( closest_hit ));
-      
-      // L. Broglia
-      // After this test, somtimes we have the distance, 
-      // sometimes we have the squared distance
-      // For the moment, I delete this test
-      //if ((tmp * which_way) >= 0.0 )
-	//if ( WithinBoundary( closest_hit ) == 1 )
-            distance =  distance*distance;
-      
-      return 1;
-    }
+      if( distance > s[isoln]*s[isoln])
+	distance = s[isoln]*s[isoln];
+
+      nbinter ++;
+    }    
     else
       if ( s[isoln] >= -kCarTolerance*0.5 ) 
       {
 	// the point is on the surface
 	distance = 0;
 	return 1;
-      }          
+      }   
   }
-  
-  //  get here only if there was no solution within the boundary, Reset
-  //  distance and intersection point to large numbers
-  distance = FLT_MAXX;
-  closest_hit = lv;
-  return 0;
+
+  return nbinter;
+
+/*
+  if(nbinter&1)
+    return 1;
+  else
+    return 0;
+*/
 }
 
 
@@ -279,7 +284,6 @@ G4double G4FCylindricalSurface::HowNear( const G4Vector3D& x ) const
  
   return hownear;
 }
-
 
 int G4FCylindricalSurface::WithinBoundary( const G4Vector3D& x ) const
 {

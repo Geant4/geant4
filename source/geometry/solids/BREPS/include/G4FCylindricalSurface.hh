@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.hh,v 1.1 1999-01-07 16:07:31 gunter Exp $
+// $Id: G4FCylindricalSurface.hh,v 1.2 1999-01-14 16:08:35 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __FCYLINDER_H
