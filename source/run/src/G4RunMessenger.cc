@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.cc,v 1.6 2000-07-22 10:37:45 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.7 2000-11-13 01:24:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -129,10 +129,17 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   restoreRandCmd->SetGuidance("Restore the status of the random number engine from a file.");
   restoreRandCmd->SetGuidance("See CLHEP manual for detail.");
   restoreRandCmd->SetGuidance("The engine status must be stored beforehand.");
+  restoreRandCmd->SetGuidance("Directory of the status file should be set by /run/randomNumberStatusDirectory command.");
   restoreRandCmd->SetParameterName("fileName",true);
   restoreRandCmd->SetDefaultValue("RandEngine.stat");
   restoreRandCmd->AvailableForStates(PreInit,Idle,GeomClosed);
 
+  randDirCmd = new G4UIcmdWithAString("/run/randomNumberStatusDirectory",this);
+  randDirCmd->SetGuidance("Define the directory name of the random number status files.");
+  randDirCmd->SetGuidance("Directory must be creates before storing the file.");
+  randDirCmd->SetParameterName("fileName",true);
+  randDirCmd->SetDefaultValue("./");
+  randDirCmd->AvailableForStates(PreInit,Idle,GeomClosed);
 }
 
 G4RunMessenger::~G4RunMessenger()
@@ -148,6 +155,7 @@ G4RunMessenger::~G4RunMessenger()
   delete cutCmd;
   delete storeRandCmd;
   delete restoreRandCmd;
+  delete randDirCmd;
   delete runDirectory;
 }
 
@@ -185,6 +193,8 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   { runManager->SetRandomNumberStore(storeRandCmd->GetNewIntValue(newValue)); }
   else if( command==restoreRandCmd )
   { runManager->RestoreRandomNumberStatus(newValue); }
+  else if( command==randDirCmd )
+  { runManager->SetRandomNumberStoreDir(newValue); }
 }
 
 G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
@@ -195,6 +205,8 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = verboseCmd->ConvertToString(runManager->GetVerboseLevel()); }
   else if( command==storeRandCmd )
   { cv = storeRandCmd->ConvertToString(runManager->GetRandomNumberStore()); }
+  else if( command==randDirCmd )
+  { cv = runManager->GetRandomNumberStoreDir(); }
   
   return cv;
 }

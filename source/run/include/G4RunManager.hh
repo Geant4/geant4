@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.12 2000-07-22 10:37:40 asaim Exp $
+// $Id: G4RunManager.hh,v 1.13 2000-11-13 01:24:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -195,6 +195,7 @@ class G4RunManager
     G4int n_perviousEventsToBeStored;
 
     G4int storeRandomNumberStatus;
+    G4String randomNumberStatusDir;
 
   public:
     virtual void StoreRandomNumberStatus(G4int eventID=-1);
@@ -253,6 +254,14 @@ class G4RunManager
     { storeRandomNumberStatus = i; }
     inline G4int GetRandomNumberStore() const
     { return storeRandomNumberStatus; }
+    inline void SetRandomNumberStoreDir(G4String dir)
+    { 
+      G4String dirStr = dir;
+      if( dirStr(dirStr.length()-1) != '/' ) dirStr += "/";
+      randomNumberStatusDir = dirStr;
+    }
+    inline G4String GetRandomNumberStoreDir() const
+    { return randomNumberStatusDir; }
 
   public: // with description
     inline void GeometryHasBeenModified()

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunMessenger.hh,v 1.5 1999-12-15 14:53:52 gunter Exp $
+// $Id: G4RunMessenger.hh,v 1.6 2000-11-13 01:24:20 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   cutCmd;
     G4UIcmdWithAnInteger *      storeRandCmd;
     G4UIcmdWithAString *        restoreRandCmd;   
+    G4UIcmdWithAString *        randDirCmd;
 };
 
 #endif

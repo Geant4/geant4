@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.16 2000-07-22 10:37:44 asaim Exp $
+// $Id: G4RunManager.cc,v 1.17 2000-11-13 01:24:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@ G4RunManager::G4RunManager()
   previousEvents = new G4RWTPtrOrderedVector<G4Event>;
   G4ParticleTable::GetParticleTable()->CreateMessenger();
   G4ProcessTable::GetProcessTable()->CreateMessenger();
+  randomNumberStatusDir = "./";
   G4cout 
   << "**********************************************" << G4endl
   << " Geant4 version $Name: not supported by cvs2svn $" << G4endl
@@ -395,7 +396,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
 
 void G4RunManager::StoreRandomNumberStatus(G4int eventID)
 {
-  G4String fileN = "RandEngine";
+  G4String fileN = randomNumberStatusDir+"RandEngine";
   if(storeRandomNumberStatus>0 && currentRun != NULL)
   {
     char st[20];
@@ -418,7 +419,12 @@ void G4RunManager::StoreRandomNumberStatus(G4int eventID)
   
 void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
 {
-  HepRandom::restoreEngineStatus(fileN);
+  G4String fileNameWithDirectory;
+  if(fileN.index("/")==G4std::string::npos)
+  { fileNameWithDirectory = randomNumberStatusDir+fileN; }
+  else
+  { fileNameWithDirectory = fileN; }
+  HepRandom::restoreEngineStatus(fileNameWithDirectory);
 }
 
 
