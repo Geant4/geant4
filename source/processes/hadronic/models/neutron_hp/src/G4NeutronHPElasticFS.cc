@@ -212,8 +212,20 @@
     {
       theNeutron.Lorentz(theNeutron, theCMS);
       theTarget.Lorentz(theTarget, theCMS);
-      G4double en = theNeutron.GetTotalMomentum();
-      G4ThreeVector tempVector(en*sinth*cos(phi), en*sinth*sin(phi), en*cos(theta) );
+      G4double en = the3CMS.mag();
+      G4ThreeVector cmsMom=theCMS.GetMomentum();
+      G4double cms_theta=cmsMom.theta();
+      G4double cms_phi=cmsMom.phi();
+      G4ThreeVector tempVector;
+      tempVector.setX(cos(theta)*sin(cms_theta)*cos(cms_phi)
+                      +sin(theta)*cos(phi)*cos(cms_theta)*cos(cms_phi)
+                      -sin(theta)*sin(phi)*sin(vcms_phi)  );
+      tempVector.setY(cos(theta)*sin(cms_theta)*sin(cms_phi)
+                      +sin(theta)*cos(phi)*cos(cms_theta)*sin(cms_phi)
+                      +sin(theta)*sin(phi)*cos(cms_phi)  );
+      tempVector.setZ(cos(theta)*cos(cms_theta)
+                      -sin(theta)*cos(phi)*sin(cms_theta)  );
+      tempVector *= en;
       theNeutron.SetMomentum(tempVector);
       theTarget.SetMomentum(-tempVector);
       G4double tP = theTarget.GetTotalMomentum();
