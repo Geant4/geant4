@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2000-11-09 19:12:52 gcosmo Exp $
+$Id: History,v 1.19 2000-11-10 17:41:28 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10/11/2000 : G. Cosmo            breps-V02-00-02
+- Still minor QA fixes in G4Axis2Placement3D, G4BREPSolid, G4FConicalSurface.
+- Fix in G4Ellipse::Project() for computation of u as function of atan2().
+- Fix unit test STEPTest.cc.
 
 09/11/2000 : G. Cosmo            breps-V02-00-01
 - QA code revision and cleanup (+fixes from CodeWizard filtering):

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.12 2000-11-08 14:22:10 gcosmo Exp $
+// $Id: G4FConicalSurface.cc,v 1.13 2000-11-10 17:41:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -99,13 +99,13 @@ const char* G4FConicalSurface::Name() const
 // Modified by L. Broglia (01/12/98)
 void G4FConicalSurface::CalcBBox()
 {
-  G4Point3D Max   = -PINFINITY;
-  G4Point3D Min   =  PINFINITY;
+  G4Point3D Max   = G4Point3D(-PINFINITY);
+  G4Point3D Min   = G4Point3D( PINFINITY);
   G4Point3D Tmp;
   G4double  delta = small_radius / tan_angle;
 
   G4Point3D Origin    = Position.GetLocation();
-  G4Point3D EndOrigin = Origin + (length * Position.GetAxis());
+  G4Point3D EndOrigin = G4Point3D( Origin + (length * Position.GetAxis()) );
   
   G4double radius = large_radius;
   G4Point3D Radius(radius, radius, 0);
@@ -158,7 +158,7 @@ G4int G4FConicalSurface::WithinBoundary( const G4Vector3D& x ) const
 { 
   //  return 1 if point x is within the boundaries of the G4FConicalSurface
   //  return 0 otherwise (assume it is on the G4ConicalSurface)
-  G4Vector3D q = x - origin;
+  G4Vector3D q = G4Vector3D( x - origin );
   
   G4double qmag = q.mag();
   G4double s    = sin( atan2(large_radius-small_radius, length) );
@@ -272,7 +272,7 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
   s[1]=-1.0;
 
   // calculate the two intersections (quadratic equation)   
-  G4Vector3D gamma =  x - Position.GetLocation();
+  G4Vector3D gamma =  G4Vector3D( x - Position.GetLocation() );
   
   G4double t  = 1  +  ta * ta;
   G4double ga = gamma * ahat;
@@ -298,8 +298,8 @@ G4int G4FConicalSurface::Intersect(const G4Ray& ry )
   
   // validity of the solutions
   // the hit point must be into the bounding box of the conical surface
-  G4Point3D p0 = x + s[0]*dhat;
-  G4Point3D p1 = x + s[1]*dhat;
+  G4Point3D p0 = G4Point3D( x + s[0]*dhat );
+  G4Point3D p1 = G4Point3D( x + s[1]*dhat );
   
   if( !GetBBox()->Inside(p0) )
     s[0] = kInfinity;
@@ -367,7 +367,7 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
-  G4Vector3D s  = p - origin;
+  G4Vector3D s  = G4Vector3D( p - origin );
   G4double   da = s * Position.GetAxis();
   G4double   r  = sqrt( s*s - da*da);
   G4double   z  = tan_angle * r; 

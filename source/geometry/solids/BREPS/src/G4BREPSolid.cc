@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolid.cc,v 1.15 2000-11-08 14:22:08 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.16 2000-11-10 17:41:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -216,7 +216,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 	    N2 = ((ConnectedSrf)->Norm())->GetDir();
 	    
 	    // Check cross product.
-	    G4Vector3D CP1 = N1.cross(N2);
+	    G4Vector3D CP1 = G4Vector3D( N1.cross(N2) );
 	    G4double CrossProd1 = CP1.x()+CP1.y()+CP1.z();
 	    
 	    // Create the other normals
@@ -234,7 +234,7 @@ void G4BREPSolid::CheckSurfaceNormals()
 	    
 	    N4 = (Pt1-Pt4);
 		      
-	    G4Vector3D CP2 = N3.cross(N4);
+	    G4Vector3D CP2 = G4Vector3D( N3.cross(N4) );
 	    G4double CrossProd2 = CP2.x()+CP2.y()+CP2.z();
 	    
 	    G4cout << "\nCroosProd2: " << CrossProd2;
@@ -479,7 +479,7 @@ G4bool G4BREPSolid::IsConvex()
     N1 = Srf->Norm()->GetDir();	    
     N2 = ConnectedSrf->Norm()->GetDir();
     // Check cross product.
-    G4Vector3D CP = N1.cross(N2); 
+    G4Vector3D CP = G4Vector3D( N1.cross(N2) ); 
     G4double CrossProd = CP.x()+CP.y()+CP.z();
     
     if( CrossProd > 0 )	

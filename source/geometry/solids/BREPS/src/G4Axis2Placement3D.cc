@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Axis2Placement3D.cc,v 1.3 2000-11-08 14:22:07 gcosmo Exp $
+// $Id: G4Axis2Placement3D.cc,v 1.4 2000-11-10 17:41:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,7 +37,7 @@ G4Axis2Placement3D::G4Axis2Placement3D(const G4Axis2Placement3D& place)
 G4Axis2Placement3D&
 G4Axis2Placement3D::operator=(const G4Axis2Placement3D& place)
 {
-  if (place==*this) return *this;
+  if (&place == this) return *this;
   
   refDirection             = place.refDirection; 
   axis                     = place.axis;

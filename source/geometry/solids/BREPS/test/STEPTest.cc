@@ -1,5 +1,5 @@
 //////////////////////////////////////////////////////////////////////////
-// $Id: STEPTest.cc,v 1.6 2000-11-08 14:22:13 gcosmo Exp $
+// $Id: STEPTest.cc,v 1.7 2000-11-10 17:41:29 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -69,13 +69,13 @@ G4int main()
   // into G4GeometryCreator.instanceManager (which is a InstMgr)
   MyAC.ReadStepFile();
 
-  G4int Advbrepshapes = MyAC.instanceManager.
+  G4int Advbrepshapes = MyAC.GetInstanceManager()->
     EntityKeywordCount("Advanced_Brep_Shape_Representation");
 
-  G4int Condepshapes = MyAC.instanceManager.
+  G4int Condepshapes = MyAC.GetInstanceManager()->
     EntityKeywordCount("Context_Dependent_Shape_Representation");
   
-  G4int Shapedefreps = MyAC.instanceManager.
+  G4int Shapedefreps = MyAC.GetInstanceManager()->
     EntityKeywordCount("Shape_Definition_Representation");   
 
 
