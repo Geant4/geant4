@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.cc,v 1.10 2004-04-08 12:26:15 gbarrand Exp $
+// $Id: G4OpenGLWin32Viewer.cc,v 1.11 2004-04-08 15:11:26 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,12 +71,12 @@ void G4OpenGLWin32Viewer::FinishView (
 {
   if(!fHDC) return;
   ::SwapBuffers(fHDC);
-  // Empty the Windows message queue ???
-  //MSG event;
-  //while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
-    //::TranslateMessage(&event);
-    //::DispatchMessage (&event);
-  //}
+  // Empty the Windows message queue :
+  MSG event;
+  while ( ::PeekMessage(&event, NULL, 0, 0, PM_REMOVE) ) {
+    ::TranslateMessage(&event);
+    ::DispatchMessage (&event);
+  }
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -205,9 +205,8 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
 {
   switch (aMessage) { 
   case WM_PAINT:{
-    G4OpenGLWin32Viewer* This = 
-      (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
 /*
+    printf("debug : PAINT\n");
     HDC	hDC;
     PAINTSTRUCT	ps;
     hDC = BeginPaint(aWindow,&ps);
@@ -219,15 +218,17 @@ LRESULT CALLBACK G4OpenGLWin32Viewer::WindowProc (
     //FIXME : have to handle WM_RESIZE
     //pView->WinSize_x = (G4int) width;
     //pView->WinSize_y = (G4int) height;
-
-    This->SetView();
-    glViewport(0,0,This->WinSize_x,This->WinSize_y);
-    This->ClearView();
-    This->DrawView();
-    This->FinishView();
-*/
+    G4OpenGLWin32Viewer* This = 
+      (G4OpenGLWin32Viewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This) {
+      This->SetView();
+      glViewport(0,0,This->WinSize_x,This->WinSize_y);
+      This->ClearView();
+      This->DrawView();
+      This->FinishView();
     }
-    return 0;
+*/
+  } return 0;
   default:
     return DefWindowProc(aWindow,aMessage,aWParam,aLParam);
   }
