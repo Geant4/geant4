@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2004-07-01 09:26:08 vnivanch Exp $
+// $Id: RunAction.cc,v 1.3 2004-07-06 16:42:11 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,7 +164,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   sumE2RadialCumul.resize(nRbin);
 
   // save Rndm status
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  // G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
 
   //initialize arrays of cumulative energy deposition
