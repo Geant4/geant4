@@ -126,19 +126,23 @@ void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStr
 
 	  for (G4int PartonCounter=0; PartonCounter < ThePartons->length(); PartonCounter++) {
 
-			G4int flag = StringCounter*1000 + PartonCounter;
+			G4int flag = (StringCounter*1000 + PartonCounter)*10;
 
  		  G4Parton* ThisParton = ThePartons->at(PartonCounter);
 
 			const G4String& parton_type = ThisParton->GetDefinition()->GetParticleType();
 			G4int parton_PDGCode = ThisParton->GetPDGcode();
       G4int parton_Colour = ThisParton->GetColour();
+      G4double parton_Mass = ThisParton->GetDefinition()->GetPDGMass();
       G4double parton_SpinZ = ThisParton->GetSpinZ();
       G4double parton_IsoSpinZ = ThisParton->GetIsoSpinZ();
       const G4ThreeVector  parton_ThreeVector = ThisParton->GetPosition();
       const G4LorentzVector  parton_4Momentum = ThisParton->Get4Momentum(); 
-      Vektor3 parton_momentum = Vektor3(parton_4Momentum.x(),parton_4Momentum.y(),parton_4Momentum.z());
-      Vektor3 parton_position = Vektor3(parton_ThreeVector.x(),parton_ThreeVector.y(),parton_ThreeVector.z());
+
+      Vektor3 parton_momentum =     0.0003*Vektor3(parton_4Momentum.x(),parton_4Momentum.y(),parton_4Momentum.z());
+      Vektor3 parton_position =    1.0e+12*Vektor3(parton_ThreeVector.x(),parton_ThreeVector.y(),parton_ThreeVector.z());
+
+      Vektor3 parton_fudgediff =    Vektor3(0.5,0.5,0);
 
 			G4cerr << " Parton " << flag << " with properties " << G4endl;
       G4cerr << "        Type:  " <<  parton_type << G4endl; 
@@ -183,7 +187,114 @@ void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStr
 	      G4cerr << "gluon - ignored!" << G4endl;
 			}
 			else if (parton_type == "diquarks") {
-	      G4cerr << "Diquark - ignored!" << G4endl;
+				if (abs(parton_PDGCode) < 3000) {
+					G4int isDiquark = sign(parton_PDGCode) ;
+					// 
+					// Isospin from PDG-Code (for u/d-quarks only)
+					// 
+					G4int Quark1_absPDGCode =  abs(parton_PDGCode)/1000;
+					G4int Quark2_absPDGCode =  (abs(parton_PDGCode) - Quark1_absPDGCode*1000)/100 ;
+					G4double Quark1_IsoSpin3 = Quark1_absPDGCode - 1.5;
+					G4double Quark2_IsoSpin3 = Quark2_absPDGCode - 1.5;
+					G4int Quark1_absColour, Quark2_absColour;
+					// 
+					// Colour from colour of diquark
+					// 
+					if (abs(parton_Colour)==1) { 
+						if (G4UniformRand() > 0.5) {
+							Quark1_absColour = 2; 
+							Quark2_absColour = 3; 
+						}
+						else {
+							Quark1_absColour = 3; 
+							Quark2_absColour = 2; 
+						} 
+					}
+					else if (abs(parton_Colour)==2) { 
+						if (G4UniformRand() > 0.5) {
+							Quark1_absColour = 1; 
+							Quark2_absColour = 3; 
+						}
+						else {
+							Quark1_absColour = 3; 
+							Quark2_absColour = 1; 
+						} 
+					}
+					else if (abs(parton_Colour)==3) { 
+						if (G4UniformRand() > 0.5) {
+							Quark1_absColour = 1; 
+							Quark2_absColour = 2; 
+						}
+						else {
+							Quark1_absColour = 2; 
+							Quark2_absColour = 1; 
+						} 
+					}
+					else {
+			      G4cerr << "ERRROR: Colour " << parton_Colour << " is not a valid diquark colour!" << G4endl;
+					}
+					// 
+					// spin-z from spin-z of diquark
+					// 
+					G4double Quark1_Spin3, Quark2_Spin3;
+					if (parton_SpinZ==0.0) { 
+						if (G4UniformRand() > 0.5) {
+							Quark1_Spin3 =  0.5; 
+							Quark2_Spin3 = -0.5;
+						}
+						else {
+							Quark1_Spin3 = -0.5; 
+							Quark2_Spin3 =  0.5;
+						} 
+					}
+					else {
+						if (G4UniformRand() > 0.5) {
+							Quark1_Spin3 =  0.5; 
+							Quark2_Spin3 =  0.5;
+						}
+						else {
+							Quark1_Spin3 =  -0.5; 
+							Quark2_Spin3 =  -0.5;
+						} 
+					}
+//
+// ------ CAUTION: qMD-to-Geant4-fittig --------
+//
+//  Masses are in GeV in qMD, in MeV in Geant4					
+//  Masses of u,d quarks are EQUAL in qMD:             m_u = 5 MeV, m_d =  5 MeV
+//  Masses of u,d quarks are are DIFFERENT in Geant4:  m_u = 8 MeV, m_d = 15 MeV
+//
+//  3momentum-distribution on the two quarks should consider this!
+//
+// ---------------------------------------------
+					G4double Quark1_Mass = 5;
+					G4double Quark2_Mass = 5;
+					Vektor3 Quark1_3momentum = (Quark1_Mass/parton_Mass)* parton_momentum;
+					Vektor3 Quark2_3momentum = (Quark2_Mass/parton_Mass)* parton_momentum;
+
+        	ParticleBase* q1 = makeParticle(q,QuantumProjections(isDiquark,isDiquark*Quark1_absColour,isDiquark*Quark1_IsoSpin3,Quark1_Spin3));  
+  	      q1->SetMomentum(Quark1_3momentum+parton_fudgediff);
+    	    q1->SetCoordinates(parton_position);
+      	  q1->SetFlag(flag);
+	        G4cerr << "u/d-quark created from (anti)-diquark ("  << isDiquark << ")"
+					       << " colour: " << isDiquark*Quark1_absColour
+					       << " isospin-3: " << isDiquark*Quark1_IsoSpin3
+					       << " spin-3: " << Quark1_Spin3
+					       << G4endl;
+
+        	ParticleBase* q2 = makeParticle(q,QuantumProjections(isDiquark,isDiquark*Quark2_absColour,isDiquark*Quark2_IsoSpin3,Quark2_Spin3));  
+  	      q2->SetMomentum(Quark2_3momentum-parton_fudgediff);
+    	    q2->SetCoordinates(parton_position);
+      	  q2->SetFlag(flag+1);
+	        G4cerr << "u/d-quark created from (anti)-diquark ("  << isDiquark << ")"
+					       << " colour: " << isDiquark*Quark2_absColour
+					       << " isospin-3: " << isDiquark*Quark2_IsoSpin3
+					       << " spin-3: " << Quark2_Spin3
+					       << G4endl;
+				}
+	      else {
+					G4cerr << "Diquark with strangeness or heavy flavour - ignored!" << G4endl;
+				}
 			}
   		else {
 	      G4cerr << "ERRROR: Particle with PDGCode " << parton_PDGCode << " is not a vild parton!" << G4endl;
