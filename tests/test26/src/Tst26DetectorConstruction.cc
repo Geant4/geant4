@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.6 2003-03-13 12:00:13 maire Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.7 2003-05-15 09:02:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -402,11 +402,7 @@ void Tst26DetectorConstruction::SetAbsMaterial(const G4String& materialChoice)
   
 void Tst26DetectorConstruction::UpdateGeometry()
 {
-  G4VPhysicalVolume* v = ConstructVolumes();
-  G4RunManager* rm = G4RunManager::GetRunManager();
-  rm->GeometryHasBeenModified();
-  rm->DefineWorldVolume(v);
-  rm->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
