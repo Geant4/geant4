@@ -1,0 +1,68 @@
+
+ Material: FluorCarbonate     density:  1.610 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  22.435 cm 
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  38.74 %  Abundance  50.00 %
+   --->  Element: Fluorine  N   Z =  9.0   N =  19.0   A =  18.99 g/mole  fractionMass:  61.26 %  Abundance  50.00 %
+
+Em4PhysicsList::SetCuts:CutLength : 1 (mm)
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+	
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  1 mm            1 mm                       -1 mm             
+Cut in energy
+     FluorCarbonate        3.61 keV         429 keV             ----------             
+ Cuts in energy have not calculated yet !!
+ Enter /run/initialize command to calculate cuts 
+===================================================
+
+# $Id: 10nov99.out,v 1.1 1999-11-10 12:34:11 maire Exp $
+#
+# Macro file for "TestEm4.cc"
+# 
+# (can be run in batch, without graphic)
+#
+#
+#/run/particle/setCut 1.0 mm
+#/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 1000
+/run/save on
+#
+/run/beamOn 100000
+### Run 0 start.
+Run terminated.
+
+Run Summary
+  Number of events processed : 100000
+  User=34s Real=40s Sys=6.3s  (dxplus02)

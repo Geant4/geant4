@@ -6,7 +6,7 @@ filecase keep
 h/file 1 Eplus.paw
 h/file 2 04jun99.paw
 
-meta 10 -114
+*meta 10 -114
 
 set *fon -40
 set mscf 1.5
