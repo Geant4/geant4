@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.9 2004-09-28 14:16:21 gcosmo Exp $
+// $Id: G4Region.hh,v 1.10 2005-02-18 01:12:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -46,6 +46,7 @@ class G4LogicalVolume;
 class G4Material;
 class G4VUserRegionInformation;
 class G4MaterialCutsCouple;
+class G4UserLimits;
 
 #include <vector>
 #include <map>
@@ -122,6 +123,11 @@ class G4Region
       // Find a G4MaterialCutsCouple which corresponds to the material
       // in this region.
 
+    G4UserLimits* GetUserLimits() const;
+    void SetUserLimits(G4UserLimits*);
+      // Set/Get method of G4UserLimits class object. Once this object is set,
+      // it affects to all daughter volumes.
+
   private:
 
     G4Region(const G4Region&);
@@ -140,6 +146,7 @@ class G4Region
     G4ProductionCuts* fCut;
 
     G4VUserRegionInformation* fUserInfo;
+    G4UserLimits* fUserLimits;
 };
 
 #include "G4Region.icc"

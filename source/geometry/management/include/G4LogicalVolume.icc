@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.19 2004-11-16 13:43:12 gcosmo Exp $
+// $Id: G4LogicalVolume.icc,v 1.20 2005-02-18 01:12:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -288,7 +288,9 @@ void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 inline
 G4UserLimits* G4LogicalVolume::GetUserLimits() const
 {
-  return fUserLimits;
+  if(fUserLimits) return fUserLimits;
+  if(fRegion) return fRegion->GetUserLimits();
+  return 0;
 }
 
 // ********************************************************************

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.cc,v 1.11 2003-11-02 14:01:23 gcosmo Exp $
+// $Id: G4Region.cc,v 1.12 2005-02-18 01:12:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@
 // *******************************************************************
 //
 G4Region::G4Region(const G4String& pName)
-  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0)
+  : fName(pName), fRegionMod(true), fCut(0), fUserInfo(0), fUserLimits(0)
 {
   G4RegionStore* rStore = G4RegionStore::GetInstance();
   if (rStore->GetRegion(pName,false))
