@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.hh,v 1.3 2001-10-29 09:28:53 pia Exp $
+// $Id: G4ProcessTest.hh,v 1.4 2001-11-12 09:14:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -61,7 +61,7 @@ public:
   void postStepTest(const G4Track& track,const G4Step& step) const;
 
   void alongStepTest(const G4Track& track, const G4Step& step) const;
-  
+
   G4ParticleDefinition* getIncidentParticleType() { return def; }
 
   protected:

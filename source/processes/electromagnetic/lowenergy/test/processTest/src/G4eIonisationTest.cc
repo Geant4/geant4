@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationTest.cc,v 1.2 2001-10-29 12:04:36 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.3 2001-11-12 09:14:50 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -63,33 +63,17 @@ G4VProcess* G4eIonisationTest::createElectronIonisation()
 
 G4VProcess* G4eIonisationTest::createBremsstrahlung()
 {
-  G4VProcess* testProcess;
-  if (type == "lowE")
-    {
-      testProcess = new G4LowEnergyBremsstrahlung;
-    }
-  else if (type == "standard")
-    {
-      testProcess = new G4eBremsstrahlung;
-    }
-  else
-    {
-      testProcess = 0;
-    }
+  G4VProcess* testProcess = 0;
+  if (type == "lowE") testProcess = new G4LowEnergyBremsstrahlung;
+  else if (type == "standard") testProcess = new G4eBremsstrahlung;
   return testProcess;  
 }
 
 G4VProcess* G4eIonisationTest::createProcess()
 {
   G4VProcess* testProcess = 0;
-  if (type == "lowE")
-    {
-      testProcess = new G4LowEnergyIonisation;
-    }
-  else if (type == "standard")
-    {
-      testProcess = new G4eIonisation;
-    }
+  if (type == "lowE")  testProcess = new G4LowEnergyIonisation;
+  else if (type == "standard") testProcess = new G4eIonisation;
   return testProcess;
 }
 
