@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.9 2001-08-03 05:59:03 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.10 2001-08-03 06:02:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
 //    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
-//    SetApplyCuts *  Set flag for ApplyCuts 
+//    applyCuts *  Set flag for ApplyCuts 
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -54,7 +54,7 @@
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
 //        add store/retreivePhysicsTable  08 Nov. 2000 by H.Kurashige
 //        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
-//        add SetApplyCuts command         2 Aug. 2001 by H.Kurashige
+//        add applyCuts command         2 Aug. 2001 by H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4UserPhysicsListMessenger_h
