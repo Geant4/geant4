@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-11-26 09:49:00 grichine Exp $
+$Id: History,v 1.4 2000-06-09 10:52:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 9, 2000  John Allison  (test01-V01-01-00)
+- Improved GNUmakefile.
 
 November 25, 99  V.Grichine and J. Apostolakis     -  
 
