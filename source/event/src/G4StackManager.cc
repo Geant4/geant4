@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.cc,v 1.6 2001-07-19 00:14:17 asaim Exp $
+// $Id: G4StackManager.cc,v 1.7 2002-05-29 22:51:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -301,6 +301,7 @@ void G4StackManager::SetNumberOfAdditionalWaitingStacks(G4int iAdd)
 
 void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination)
 {
+  if(origin==destination) return;
   G4TrackStack* originStack = 0;
   switch(origin)
   {
@@ -351,8 +352,68 @@ void G4StackManager::TransferStackedTracks(G4ClassificationOfNewTrack origin, G4
         break;
     }
     if(!targetStack) return;
-    if(originStack==targetStack) return;
     originStack->TransferTo(targetStack);
+  }
+  return;
+}
+
+void G4StackManager::TransferOneStackedTrack(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination)
+{
+  if(origin==destination) return;
+  G4TrackStack* originStack = 0;
+  switch(origin)
+  {
+    case fUrgent:
+      originStack = urgentStack;
+      break;
+    case fWaiting:
+      originStack = waitingStack;
+      break;
+    case fPostpone:
+      originStack = postponeStack;
+      break;
+    case fKill:
+      break;
+    default:
+      int i = origin - 10;
+      if(i<=numberOfAdditionalWaitingStacks) originStack = additionalWaitingStacks[i-1];
+      break;
+  }
+  if(!originStack) return;
+
+  G4StackedTrack * aStackedTrack;
+  if(destination==fKill)
+  {
+    if( (aStackedTrack=originStack->PopFromStack()) != 0 )
+    {
+      delete aStackedTrack->GetTrack();
+      delete aStackedTrack;
+    }
+  } 
+  else
+  {
+    G4TrackStack* targetStack = 0;
+    switch(destination)
+    {
+      case fUrgent:
+        targetStack = urgentStack;
+        break;
+      case fWaiting:
+        targetStack = waitingStack;
+        break;
+      case fPostpone:
+        targetStack = postponeStack;
+        break;
+      default:
+        int i = origin - 10;
+        if(i<=numberOfAdditionalWaitingStacks) targetStack = additionalWaitingStacks[i-1];
+        break;
+    }
+    if(!targetStack) return;
+    if( (aStackedTrack=originStack->PopFromStack()) != 0 )
+    {
+      targetStack->PushToStack(aStackedTrack);
+    }
   }
   return;
 }

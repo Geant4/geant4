@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StackManager.hh,v 1.8 2001-07-19 00:14:16 asaim Exp $
+// $Id: G4StackManager.hh,v 1.9 2002-05-29 22:51:45 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -93,9 +93,16 @@ class G4StackManager
       // method, which invokes this method.
 
       void TransferStackedTracks(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination);
-      //  Transfter stacked track from the origin stack to the destination stack.
+      //  Transfter all stacked tracks from the origin stack to the destination stack.
       // The destination stack needs not be empty.
       // If the destination is fKill, tracks are deleted.
+      // If the origin is fKill, nothing happen.
+
+      void TransferOneStackedTrack(G4ClassificationOfNewTrack origin, G4ClassificationOfNewTrack destination);
+      //  Transfter one stacked track from the origin stack to the destination stack.
+      // The transfered track is the one which came last to the origin stack.
+      // The destination stack needs not be empty.
+      // If the destination is fKill, the track is deleted.
       // If the origin is fKill, nothing happen.
 
   private:
