@@ -1,4 +1,4 @@
-$Id: History,v 1.81 2004-11-18 06:42:18 tsasaki Exp $
+$Id: History,v 1.82 2004-11-18 23:42:28 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18 November 2004 Joseph Perl (tracking-V06-02-07)
+- G4Trajectory add HepRep attribute for magnitude of momentum
+- G4SmoothTrajectory add HepRep attribute for magnitude of momentum
 
 Nov.18,2005 T.Sasaki(tracking-V06-02-06)
 - G4SteppingManager2.cc Fix on interactive on/of for AtRest processes
