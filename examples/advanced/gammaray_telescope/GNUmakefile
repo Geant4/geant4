@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2001-12-10 08:52:09 gcosmo Exp $
+# $Id: GNUmakefile,v 1.18 2002-06-18 15:42:36 griccard Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,23 +13,10 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-# Copy the GammaRayTelAnalysis files according to which version
-# is selected.
-# As the dependency is checked before "all" is reached, we need
-# to do some tricks here ...
-
-ifdef G4ANALYSIS_AIDA_CONFIG_CFLAGS
-# AIDA (version 2.2 for now) selected
-  FOO := $(shell cp -p include/GammaRayTelAnalysis.hh-AIDA include/GammaRayTelAnalysis.hh )
-  FOO := $(shell cp -p src/GammaRayTelAnalysis.cc-AIDA src/GammaRayTelAnalysis.cc )
-else
-# Anaphe selected 
-  include anaphe.gmk
-  FOO := $(shell cp -p include/GammaRayTelAnalysis.hh-Anaphe include/GammaRayTelAnalysis.hh )
-  FOO := $(shell cp -p src/GammaRayTelAnalysis.cc-Anaphe src/GammaRayTelAnalysis.cc )
+ifdef G4ANALYSIS_USE
+  CPPFLAGS += `aida-config --useHBook --include`
+  LDFLAGS += `aida-config --useHBook --lib`
 endif
-
-# End Analysis.
 
 .PHONY: all 
 all:  lib bin
