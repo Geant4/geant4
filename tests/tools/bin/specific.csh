@@ -25,6 +25,9 @@ endif
 
 if ( $?G4_STT_USE_STL ) then
   setenv DEBOPT ${DEBOPT}_STL
+else
+  unsetenv G4USE_STL
+  unsetenv G4USE_OSPACE
 endif
 
 if ( `uname -n | grep rsplus` != "" ) then

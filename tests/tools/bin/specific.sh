@@ -22,6 +22,9 @@ fi
 
 if [ $G4_STT_USE_STL ]; then
   DEBOPT=${DEBOPT}_STL
+else
+  unset G4USE_STL
+  unset G4USE_OPSPACE
 fi
 
 UNAMEN=`uname -n `
