@@ -216,7 +216,7 @@ G4FragmentVector *G4WilsonAblationModel::BreakItUp
   if (AF > 0)
   {
     G4double AFd = (G4double) AF;
-    G4double R = 11.8 / pow(AF,0.45);
+    G4double R = 11.8 / pow(static_cast<double>(AF), 0.45);
     G4int minZ = Z - DAabl;
     if (minZ <= 0) minZ = 1;
 //
