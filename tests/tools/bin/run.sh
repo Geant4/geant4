@@ -33,12 +33,6 @@ if [ -z "${G4STTDIR}" ] ; then
   exit
 fi
 
-##if [ -z "${LD_LIBRARY_PATH}" ] ; then
-#    LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
-#    export LD_LIBARY_PATH
-#    echo $LD_LIBRARY_PATH
-##fi
-
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
@@ -124,9 +118,9 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test601
   nice $G4STTDIR/bin/run.sh test602
 
-#  nice $G4STTDIR/bin/run.sh test701
-#  nice $G4STTDIR/bin/run.sh test702
-#  nice $G4STTDIR/bin/run.sh test703
+  nice $G4STTDIR/bin/run.sh test701
+  nice $G4STTDIR/bin/run.sh test702
+  nice $G4STTDIR/bin/run.sh test703
 else
 
   if [ $1 = "test201" ] ; then 
