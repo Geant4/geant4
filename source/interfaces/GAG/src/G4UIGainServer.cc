@@ -22,9 +22,10 @@
 //
 //
 // 12/06/2002 G4UIGainServer H. MInamimoto and H. Yoshida created
-// $Id: G4UIGainServer.cc,v 1.2 2002-06-12 15:27:24 gcosmo Exp $
+// $Id: G4UIGainServer.cc,v 1.3 2002-06-14 02:18:00 yhajime Exp $
 // $Name: not supported by cvs2svn $
 //
+#ifndef WIN32
 
 #include "G4UIGainServer.hh"
 #include <netdb.h>
@@ -938,6 +939,7 @@ void G4UIGainServer::GetNewTreeValues( G4UIcommandTree * tree, int level){ // re
 }
 
 
+#endif
 
         
 

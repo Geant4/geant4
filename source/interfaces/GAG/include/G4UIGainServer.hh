@@ -21,13 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIGainServer.hh,v 1.2 2002-06-12 15:27:23 gcosmo Exp $
+// $Id: G4UIGainServer.hh,v 1.3 2002-06-14 02:17:58 yhajime Exp $
 // $Name: not supported by cvs2svn $
 //
 
 
 #ifndef G4UIGainServer_h
 #define G4UIGainServer_h 1
+
+#ifndef WIN32
 
 #include <stdio.h>
 #include <sys/types.h>
@@ -165,4 +167,7 @@ private:
 };
 
 #endif
+
+#endif
+
 
