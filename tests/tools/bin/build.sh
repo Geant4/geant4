@@ -54,6 +54,7 @@ else
  echo "$dir does not exist."
  echo "This is now an error.  Create a directory or a symbolic link"
  echo "  to a directory by hand or in a calling script."
+ exit
 fi
 #
 # Make $G4WORKDIR/stt/$G4SYSTEM directory :
