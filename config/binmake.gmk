@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.30 1999-07-20 15:29:16 stesting Exp $
+# $Id: binmake.gmk,v 1.31 1999-09-17 13:24:33 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -131,11 +131,12 @@ ifdef GLOBALLIBS
   LDLIBS1 += $(VISLIBS) $(UILIBS)
 endif
 
-ifdef G4ODBMS
-  LDLIBS1 += -lG4persistency
-endif
-
 ifdef GLOBALLIBS
+
+  ifdef G4ODBMS
+    LDLIBS1 += -lG4persistency
+  endif
+
   LDLIBS2 := -lG4readout \
              -lG4run \
              -lG4event \
