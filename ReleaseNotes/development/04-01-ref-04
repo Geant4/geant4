@@ -6,8 +6,6 @@ Some of the development/fixes included since the last reference tag are:
 
   o Fixed PDG codes for particles k0_star(1430), a0(1450) and f0(1370).
   o Bug fixes to ion ionisation in low-energy electromagnetic processes.
-  o New angular distribution for multiple scattering and fix to the
-    boundary algorithm.
   o Added a cut-off for materials heavier than uranium in neutron
     hadronic model.
   o Implemented DumpInfo() mechanism for solids. Interface change
@@ -84,11 +82,6 @@ processes/electromagnetic/standard      stand-V04-01-01
 ----------------------------------
 - PAIxSection and PAIonisation: synchronised HEAD of repository,
   no functional changes.
-
-processes/electromagnetic/utils         utils-V04-01-02
--------------------------------
-- Multiple scattering: new angular distribution and minor fix in the
-  boundary algorithm. 
 
 processes/hadronic/models/neutron_hp    neu-V04-01-01
 ------------------------------------
