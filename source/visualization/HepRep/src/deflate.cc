@@ -47,7 +47,7 @@
  *
  */
 
-/* @(#) $Id: deflate.cc,v 1.4 2003-07-11 06:30:02 duns Exp $ */
+/* @(#) $Id: deflate.cc,v 1.5 2003-07-11 06:33:52 duns Exp $ */
 
 #include "deflate.h"
 
@@ -937,7 +937,7 @@ local void check_match(deflate_state *s, IPos start, IPos match, int length)
         do {
 	    fprintf(stderr, "%c%c", s->window[match++], s->window[start++]);
 	} while (--length != 0);
-        z_error("invalid match");
+        z_error((char*)"invalid match");
     }
     if (z_verbose > 1) {
         fprintf(stderr,"\\[%d,%d]", start-match, length);
