@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.3 2004-03-10 18:21:19 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.4 2004-03-11 13:09:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -80,9 +80,9 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   verbCmd = new G4UIcmdWithAnInteger( "/geometry/navigator/verbose", this );
   verbCmd->SetGuidance( "Set run-time verbosity for the navigator." );
   verbCmd->SetGuidance(" 0 : Silent (default)");
-  verbCmd->SetGuidance(" 1 : Display positioning and relative states");
+  verbCmd->SetGuidance(" 1 : Display volume positioning and step lengths");
   verbCmd->SetGuidance(" 2 : Display step/safety info on point location");
-  verbCmd->SetGuidance(" 3 : Display state at -every- step!");
+  verbCmd->SetGuidance(" 3 : Display minimal state at -every- step");
   verbCmd->SetGuidance(" 4 : Maximum verbosity (very detailed!)");
   verbCmd->SetGuidance( "NOTE: this command has effect -only- if Geant4 has" );
   verbCmd->SetGuidance( "      been installed with the G4VERBOSE flag set!" );
