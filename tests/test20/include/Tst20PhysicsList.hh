@@ -48,9 +48,9 @@ public:
 
 private:
 
-  G4LowEnergyIonisation*  LeIoprocess;
-  G4LowEnergyPhotoElectric* LePeprocess;
-  G4LowEnergyBremsstrahlung* LeBrprocess;
+  G4LowEnergyIonisation*  lowEIoniProcess;
+  G4LowEnergyPhotoElectric* lowEPhotoelProcess;
+  G4LowEnergyBremsstrahlung* lowEBremProcess;
   Tst20PhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;
