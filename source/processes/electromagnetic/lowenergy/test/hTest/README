@@ -1,0 +1,33 @@
+====================================================================== 
+Energy Electromagnetic Physics: hTest (aka TestEm6, TestP)
+======================================================================
+
+Integration and physics test for hadrons and ions
+
+Authors: Vladimir Ivanchenko and Stephane Chauvie
+
+======================================================================
+
+---- Scope
+
+---- What it does
+
+---- Description of the input
+
+---- Description of the output
+	Text output
+	Histograms
+	Ntuples
+	Other
+
+---- Location of the reference output
+
+---- Macros
+
+---- Other files required
+
+---- How to run it
+
+---- Contactperson
+
+======================================================================
