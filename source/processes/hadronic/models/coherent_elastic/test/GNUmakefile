@@ -52,5 +52,21 @@ INCFLAGS := \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include 
 
+ifeq ($(G4TARGET), G4LEppTest)
+   CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include -DMAKEHBOOK -DMAKEBOOK
+   EXTRALIBS+=-L$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
+   EXTRALIBS+=-L/cern/pro/lib -lpacklib
+endif
+
+ifeq ($(G4SYSTEM),Linux-g++)
+#     EXTRALIBS+=-lf2c -lgcc
+      EXTRALIBS+=-lg2c -lm -lgcc -lc -lgcc
+endif
+
 include $(G4INSTALL)/config/binmake.gmk
+
+
+
+
+
 
