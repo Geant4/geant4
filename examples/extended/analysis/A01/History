@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2003-10-14 18:58:14 perl Exp $
+$Id: History,v 1.16 2003-10-14 20:47:40 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -10,6 +10,12 @@ $Id: History,v 1.15 2003-10-14 18:58:14 perl Exp $
      ----------------------------------------------------------
 
 ---------------------------------------------------------------------------  
+14th October 2003 Mark Donszelmann
+- Added clear statement to GNUmakefile that G4HadronPhysics is compiled
+  without optimization.
+- Made sure G4HadronPhysics is compiled without optimization on Linux-g++,
+  Linux-g++2 and Linux-g++3.
+
 14th October 2003 Joseph Perl
 - Remove SetForceWireFrame(false) from three hit classes since these
   are redundant to the SetForceSolid(true) statements already there.
