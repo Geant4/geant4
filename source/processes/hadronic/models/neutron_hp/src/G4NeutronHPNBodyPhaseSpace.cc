@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.2 1999-07-02 10:01:14 johna Exp $
+// $Id: G4NeutronHPNBodyPhaseSpace.cc,v 1.3 2001-06-06 14:03:00 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4NeutronHPNBodyPhaseSpace.hh"
@@ -26,8 +26,8 @@
 G4ReactionProduct * G4NeutronHPNBodyPhaseSpace::Sample(G4double anEnergy, G4double massCode, G4double mass)
 {
    G4ReactionProduct * result = new G4ReactionProduct;
-   G4int Z = massCode/1000;
-   G4int A = massCode-1000*Z;
+   G4int Z = static_cast<G4int>(massCode/1000);
+   G4int A = static_cast<G4int>(massCode-1000*Z);
 
    if(massCode==0)
    {
