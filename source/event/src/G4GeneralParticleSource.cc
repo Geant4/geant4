@@ -30,7 +30,7 @@
 // Organisation: University of Southampton / DERA
 // Customer:     ESA/ESTEC
 //
-// Documentation available at http://www.space.dera.gov.uk/space_env/gspm.html
+// Documentation avaialable at http://www.space.dera.gov.uk/space_env/gspm.html
 //   These include:
 //       User Requirement Document (URD)
 //       Software Specification Documents (SSD)
@@ -38,12 +38,16 @@
 //       Technical Note (TN) on the physics and algorithms
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.cc,v 1.12 2001-07-13 15:01:52 gcosmo Exp $
+// $Id: G4GeneralParticleSource.cc,v 1.13 2001-07-19 12:39:14 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
 // --------------
+//  Further changes is recorded in the CVS HIstory file
+//
+// 9-May-2001 F. Lei
+//   added all the g4pariclegun commands
 //
 // 26-01-2001, F. Lei
 // replace: 
@@ -51,10 +55,10 @@
 // 
 // with:
 //          if (posthe != 0. && posthe != pi) 
-//           { posphi = acos(tx/sin(posthe)); }
+//             posphi = acos(tx/sin(posthe)); 
 //          else 
-//           { posphi = 0.0;}
-//          endif
+//             posphi = 0.0;
+//          
 //
 // 10-Nov-2000, F. Lei
 //    some bug fixing:
@@ -94,10 +98,10 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   // Position distribution Variables
 
   NumberOfParticlesToBeGenerated = 1;
-  particle_definition = 0;
+  particle_definition = NULL;
   G4ThreeVector zero;
-  particle_momentum_direction = (G4ParticleMomentum)zero;
-  particle_energy = 0.0;
+  particle_momentum_direction = G4ParticleMomentum(1,0,0);
+  particle_energy = 1.0*MeV;
   particle_position = zero;
   particle_time = 0.0;
   particle_polarization = zero;
@@ -113,7 +117,7 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   ParAlpha = 0.;
   ParTheta = 0.;
   ParPhi = 0.;
-  CentreCoords = G4ThreeVector(0.,0.,0.);
+  CentreCoords = (0.,0.,0.);
   Rotx = HepXHat;
   Roty = HepYHat;
   Rotz = HepZHat;
@@ -122,14 +126,12 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   SideRefVec1 = HepXHat; // x-axis
   SideRefVec2 = HepYHat; // y-axis
   SideRefVec3 = HepZHat; // z-axis
-  UserWRTSurface = false; // Any user-defined distribution is wrt co-ordinate
-  // axes.
 
   // Angular distribution variables.
-  AngDistType = "iso"; 
-  AngRef1 = G4ThreeVector(1.,0.,0.);
-  AngRef2 = G4ThreeVector(0.,1.,0.);
-  AngRef3 = G4ThreeVector(0.,0.,1.);
+  AngDistType = "planar"; 
+  AngRef1 = HepXHat;
+  AngRef2 = HepYHat;
+  AngRef3 = HepZHat;
   MinTheta = 0.;
   MaxTheta = pi;
   MinPhi = 0.;
@@ -151,6 +153,8 @@ G4GeneralParticleSource::G4GeneralParticleSource()
   EnergySpec = true; // true - energy spectra, false - momentum spectra
   DiffSpec = true;  // true - differential spec, false integral spec
   IntType = "NULL"; // Interpolation type
+  UserWRTSurface = false; // Any user-defined distribution is wrt co-ordinate 
+  UserAngRef = false; // angular distribution is to mother or surface-normal co-or.
   IPDFEnergyExist = false;
   IPDFArbExist = false;
 
@@ -283,11 +287,11 @@ void G4GeneralParticleSource::ConfineSourceToVolume(G4String Vname)
   VolName = Vname;
   if(verbosityLevel == 2)
     G4cout << VolName << G4endl;
-  G4VPhysicalVolume *tempPV      = 0;
+  G4VPhysicalVolume *tempPV      = NULL;
   G4PhysicalVolumeStore *PVStore = 0;
   G4String theRequiredVolumeName = VolName;
   PVStore      = G4PhysicalVolumeStore::GetInstance();
-  size_t     i = 0;
+  G4int      i = 0;
   G4bool found = false;
   if(verbosityLevel == 2)
     G4cout << PVStore->size() << G4endl;
@@ -328,10 +332,11 @@ void G4GeneralParticleSource::GeneratePointSource()
 
 void G4GeneralParticleSource::GeneratePointsInPlane()
 {
-  G4double x=0.; G4double y=0.; G4double z=0.;
+  G4double x, y, z;
   G4double expression;
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
+  z = 0.;
 
   if(SourcePosType != "Plane" && verbosityLevel >= 1)
     G4cout << "Error: SourcePosType is not Plane" << G4endl;
@@ -446,19 +451,22 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
 {
   //Private method to create points on a surface
   G4double theta, phi;
-  G4double x=0; G4double y=0.; G4double z=0.;
+  G4double x, y, z;
   G4ThreeVector RandPos;
+  G4double tempx, tempy, tempz;
 
   if(SourcePosType != "Surface" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Surface" << G4endl;
 
   if(Shape == "Sphere")
     {
+      G4double tantheta, tanphi;
       theta = GenRandTheta();
       phi = GenRandPhi();
 
       theta = acos(1. - 2.*theta); // theta isotropic
       phi = phi * 2. * pi;
+      tantheta = tan(theta);
       
       x = Radius * sin(theta) * cos(phi);
       y = Radius * sin(theta) * sin(phi);
@@ -479,7 +487,7 @@ void G4GeneralParticleSource::GeneratePointsOnSurface()
     }
   else if(Shape == "Ellipsoid")
     {
-      G4double theta, phi, minphi, maxphi, middlephi;
+      G4double testrand, theta, phi, minphi, maxphi, middlephi;
       G4double answer, constant;
 
       constant = pi/(halfx*halfx) + pi/(halfy*halfy) + 
@@ -849,7 +857,7 @@ void G4GeneralParticleSource::GeneratePointsInVolume()
 {
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
-  G4double x=0.; G4double y=0.; G4double z=0.;
+  G4double x, y, z;
 
   if(SourcePosType != "Volume" && verbosityLevel >= 1)
     G4cout << "Error SourcePosType not Volume" << G4endl;
@@ -986,19 +994,26 @@ G4bool G4GeneralParticleSource::IsSourceConfined()
 
 void G4GeneralParticleSource::SetAngDistType(G4String atype)
 {
-  if(atype != "iso" && atype != "cos" && atype != "user")
-    G4cout << "Error, distribution must be iso, cos or user" << G4endl;
+  if(atype != "iso" && atype != "cos" && atype != "user" && atype != "planar")
+    G4cout << "Error, distribution must be iso, cos, planar or user" << G4endl;
   else
     AngDistType = atype;
+  if (AngDistType == "cos") MaxTheta = pi/2. ;
+  if (AngDistType == "user") {
+    UDefThetaH = IPDFThetaH = ZeroPhysVector ;
+    IPDFThetaExist = false ;
+    UDefPhiH = IPDFPhiH = ZeroPhysVector ;
+    IPDFPhiExist = false ;
+  }
 }
 
 void G4GeneralParticleSource::DefineAngRefAxes(G4String refname, G4ThreeVector ref)
 {
 
   if(refname == "angref1")
-    AngRef1 = ref; // x'
+    AngRef1 = ref.unit(); // x'
   else if(refname == "angref2")
-    AngRef2 = ref; // vector in x'y' plane
+    AngRef2 = ref.unit(); // vector in x'y' plane
 
   // User defines x' (AngRef1) and a vector in the x'y'
   // plane (AngRef2). Then, AngRef1 x AngRef2 = AngRef3
@@ -1007,6 +1022,7 @@ void G4GeneralParticleSource::DefineAngRefAxes(G4String refname, G4ThreeVector r
 
   AngRef3 = AngRef1.cross(AngRef2); // z'
   AngRef2 = AngRef3.cross(AngRef1); // y'
+  UserAngRef = true ;
   if(verbosityLevel == 2)
     {
       G4cout << "Angular distribution rotation axes " << AngRef1 << " " << AngRef2 << " " << AngRef3 << G4endl;
@@ -1066,6 +1082,13 @@ void G4GeneralParticleSource::SetUserWRTSurface(G4bool wrtSurf)
   UserWRTSurface = wrtSurf;
 }
 
+void G4GeneralParticleSource::SetUseUserAngAxis(G4bool userang)
+{
+  // if UserAngRef = true  the angular distribution is defined wrt 
+  // the user defined co-ordinates
+  UserAngRef = userang;
+}
+
 void G4GeneralParticleSource::GenerateIsotropicFlux()
 {
   // generates isotropic flux.
@@ -1107,21 +1130,23 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   sinphi = sin(Phi);
   cosphi = cos(Phi);
 
-  px = sintheta * cosphi;
-  py = sintheta * sinphi;
-  pz = costheta;
+  px = -sintheta * cosphi;
+  py = -sintheta * sinphi;
+  pz = -costheta;
 
   // end of F.Lei implementation
 
-  px = -px;
-  py = -py;
-  pz = -pz;
+  //  px = -px;
+  //py = -py;
+  //pz = -pz;
 
-  pmag = sqrt((px*px) + (py*py) + (pz*pz));
+  //  pmag = sqrt((px*px) + (py*py) + (pz*pz));
 
-  px = px/pmag;
-  py = py/pmag;
-  pz = pz/pmag;
+  //px = px/pmag;
+  //py = py/pmag;
+  //pz = pz/pmag;
+
+  /* this implmentation  is commented out by f.lei  
 
   //Need to rotate the particle_momentum_direction round such that the 
   //start position is at the north pole, so that all particles go into
@@ -1140,17 +1165,60 @@ void G4GeneralParticleSource::GenerateIsotropicFlux()
   ty = ty/tt;
   tz = tz/tt;
   //  G4cout << "unit position " << tx << " " << ty << " " << tz << G4endl;
-  posthe = acos(tz);
-  if (posthe != 0. && posthe != pi) 
-  { posphi = acos(tx/sin(posthe)); }
-  else 
-  { posphi = 0.0;}
+  if (tt != 0.) {
+    posthe = acos(tz);
+  }
+  else {
+    posthe = 0.;
+  }
+  if (posthe != 0. && posthe != pi){ 
+    posphi = acos(tx/sin(posthe)); 
+  }
+  else{ 
+    posphi = 0.0;
+  }
   //  G4cout << "Posthe and posphi " << posthe << " " << posphi << G4endl;
   G4double finx, finy, finz;
   finx = (px*cos(posthe)*cos(posphi)) - (py*sin(posphi)) + (pz*sin(posthe)*cos(posphi));
   finy = (px*cos(posthe)*sin(posphi)) + (py*cos(posphi)) + (pz*sin(posthe)*sin(posphi));
   finz = (-px*sin(posthe)) + (pz*cos(posthe));
-  //  G4cout << "finx... " << finx << " " << finy << " " << finz << G4endl;
+  // G4cout << "finx... " << finx << " " << finy << " " << finz << G4endl;
+  */
+
+  // New implementation 
+  // for volume and ponit source use mother or user defined co-ordinates
+  // for plane and surface source user surface-normal or userdefined co-ordinates
+  //
+  G4double finx, finy, finz;
+  if (SourcePosType == "Point" || SourcePosType == "Volume") {
+    if (UserAngRef){
+      // Apply Rotation Matrix
+      // x * AngRef1, y * AngRef2 and z * AngRef3
+      finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+      finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+      finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+    } else {
+      finx = px;
+      finy = py;
+      finz = pz;
+    }
+  } else {    // for plane and surface source   
+    if (UserAngRef){
+      // Apply Rotation Matrix
+      // x * AngRef1, y * AngRef2 and z * AngRef3
+      finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+      finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+      finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+    } else {
+      finx = (px*SideRefVec1.x()) + (py*SideRefVec2.x()) + (pz*SideRefVec3.x());
+      finy = (px*SideRefVec1.y()) + (py*SideRefVec2.y()) + (pz*SideRefVec3.y());
+      finz = (px*SideRefVec1.z()) + (py*SideRefVec2.z()) + (pz*SideRefVec3.z());
+    }
+  }
+  G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+  finx = finx/ResMag;
+  finy = finy/ResMag;
+  finz = finz/ResMag;
 
   particle_momentum_direction.setX(finx);
   particle_momentum_direction.setY(finy);
@@ -1194,7 +1262,8 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   //
   G4double sintheta, sinphi,costheta,cosphi;
   rndm = GenRandTheta();
-  sintheta = sqrt( rndm * (sin(MaxTheta)*sin(MaxTheta) - sin(MinTheta)*sin(MinTheta) ) );
+  sintheta = sqrt( rndm * (sin(MaxTheta)*sin(MaxTheta) - sin(MinTheta)*sin(MinTheta) ) 
+		   +sin(MinTheta)*sin(MinTheta) );
   costheta = sqrt(1. -sintheta*sintheta);
   
   rndm2 = GenRandPhi();
@@ -1202,20 +1271,21 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   sinphi = sin(Phi);
   cosphi = cos(Phi);
 
-  px = sintheta * cosphi;
-  py = sintheta * sinphi;
-  pz = costheta;
+  px = -sintheta * cosphi;
+  py = -sintheta * sinphi;
+  pz = -costheta;
 
   // end of F.Lei implementation
 
-  px = -px;
-  py = -py;
-  pz = -pz;
-  pmag = sqrt((px*px) + (py*py) + (pz*pz));
-  G4double pxh = px/pmag;
-  G4double pyh = py/pmag;
-  G4double pzh = pz/pmag;
+  //  px = -px;
+  //py = -py;
+  //pz = -pz;
+  //pmag = sqrt((px*px) + (py*py) + (pz*pz));
+  //G4double pxh = px/pmag;
+  //G4double pyh = py/pmag;
+  //G4double pzh = pz/pmag;
 
+  /*  commented out by F. Lei
   if(verbosityLevel == 2)
     {
       G4cout <<"SideRefVecs " <<SideRefVec1<<SideRefVec2<<SideRefVec3<<G4endl;
@@ -1239,10 +1309,61 @@ void G4GeneralParticleSource::GenerateCosineLawFlux()
   particle_momentum_direction.setY(resulty);
   particle_momentum_direction.setZ(resultz);
 
+  */
+  // New implementation 
+  // for volume and ponit source use mother or user defined co-ordinates
+  // for plane and surface source user surface-normal or userdefined co-ordinates
+  //
+  G4double finx, finy, finz;
+  if (SourcePosType == "Point" || SourcePosType == "Volume") {
+    if (UserAngRef){
+      // Apply Rotation Matrix
+      // x * AngRef1, y * AngRef2 and z * AngRef3
+      finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+      finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+      finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+    } else {
+      finx = px;
+      finy = py;
+      finz = pz;
+    }
+  } else {    // for plane and surface source   
+    if (UserAngRef){
+      // Apply Rotation Matrix
+      // x * AngRef1, y * AngRef2 and z * AngRef3
+      finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+      finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+      finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+    } else {
+      finx = (px*SideRefVec1.x()) + (py*SideRefVec2.x()) + (pz*SideRefVec3.x());
+      finy = (px*SideRefVec1.y()) + (py*SideRefVec2.y()) + (pz*SideRefVec3.y());
+      finz = (px*SideRefVec1.z()) + (py*SideRefVec2.z()) + (pz*SideRefVec3.z());
+    }
+  }
+  G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+  finx = finx/ResMag;
+  finy = finy/ResMag;
+  finz = finz/ResMag;
+
+  particle_momentum_direction.setX(finx);
+  particle_momentum_direction.setY(finy);
+  particle_momentum_direction.setZ(finz);
+
   // particle_momentum_direction now contains unit momentum vector.
   if(verbosityLevel >= 1)
     {
       G4cout << "Resultant cosine-law unit momentum vector " << particle_momentum_direction << G4endl;
+    }
+}
+
+void G4GeneralParticleSource::GeneratePlanarFlux()
+{
+  // particle_momentum_direction now contains unit momentum vector.
+  // nothing need be done here as the m-directions have been set directly
+  // under this option
+  if(verbosityLevel >= 1)
+    {
+      G4cout << "Resultant Planar wave  momentum vector " << particle_momentum_direction << G4endl;
     }
 }
 
@@ -1286,9 +1407,26 @@ void G4GeneralParticleSource::GenerateUserDefFlux()
 
   if(UserWRTSurface == false)
     {
-      particle_momentum_direction.setX(px/pmag);
-      particle_momentum_direction.setY(py/pmag);
-      particle_momentum_direction.setZ(pz/pmag);
+      G4double finx, finy, finz;      
+      if (UserAngRef) {
+	// Apply Rotation Matrix
+	// x * AngRef1, y * AngRef2 and z * AngRef3
+	finx = (px * AngRef1.x()) + (py * AngRef2.x()) + (pz * AngRef3.x());
+	finy = (px * AngRef1.y()) + (py * AngRef2.y()) + (pz * AngRef3.y());
+	finz = (px * AngRef1.z()) + (py * AngRef2.z()) + (pz * AngRef3.z());
+      } else {  // use mother co-ordinates
+	finx = px;
+	finy = py;
+	finz = pz;
+      }
+      G4double ResMag = sqrt((finx*finx) + (finy*finy) + (finz*finz));
+      finx = finx/ResMag;
+      finy = finy/ResMag;
+      finz = finz/ResMag;
+      
+      particle_momentum_direction.setX(finx);
+      particle_momentum_direction.setY(finy);
+      particle_momentum_direction.setZ(finz);     
     }
   else if(UserWRTSurface == true)
     {
@@ -1319,7 +1457,7 @@ void G4GeneralParticleSource::GenerateUserDefFlux()
       particle_momentum_direction.setY(resulty);
       particle_momentum_direction.setZ(resultz);
     }
-
+  
   // particle_momentum_direction now contains unit momentum vector.
   if(verbosityLevel >= 1)
     {
@@ -1423,6 +1561,17 @@ G4double G4GeneralParticleSource::GenerateUserDefPhi()
 void G4GeneralParticleSource::SetEnergyDisType(G4String DisType)
 {
   EnergyDisType = DisType;
+  if (EnergyDisType == "User"){
+    UDefEnergyH = IPDFEnergyH = ZeroPhysVector ;
+    IPDFEnergyExist = false ;
+  } else if ( EnergyDisType == "Arb"){
+    ArbEnergyH =IPDFArbEnergyH = ZeroPhysVector ;
+    IPDFArbExist = false;
+  } else if (EnergyDisType == "Epn"){
+    UDefEnergyH = IPDFEnergyH = ZeroPhysVector ;
+    IPDFEnergyExist = false ;
+    EpnEnergyH = ZeroPhysVector ;
+  }
 }
 
 void G4GeneralParticleSource::SetEmin(G4double emi)
@@ -1492,7 +1641,7 @@ void G4GeneralParticleSource::ArbEnergyHisto(G4ThreeVector input)
 
 void G4GeneralParticleSource::EpnEnergyHisto(G4ThreeVector input)
 {
-  G4double ehi, val;
+  G4double elo, ehi, val;
   ehi = input.x();
   val = input.y();
   if(verbosityLevel == 2)
@@ -1621,6 +1770,7 @@ void G4GeneralParticleSource::ArbInterpolate(G4String IType)
   if(EnergyDisType != "Arb")
     G4cout << "Error: this is for arbitrary distributions" << G4endl;
   IntType = IType;
+  G4int i=0;
 
   // Calcuate Emin and Emax, mainly for use in debugging
   G4int len = G4int(ArbEnergyH.GetVectorLength());
@@ -1660,7 +1810,7 @@ void G4GeneralParticleSource::LinearInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == 0)
+      if(particle_definition == NULL)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -1778,7 +1928,7 @@ void G4GeneralParticleSource::LogInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == 0)
+      if(particle_definition == NULL)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -1891,7 +2041,7 @@ void G4GeneralParticleSource::ExpInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == 0)
+      if(particle_definition == NULL)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -1995,7 +2145,7 @@ void G4GeneralParticleSource::SplineInterpolation()
     {
       // change currently stored values (emin etc) which are actually momenta
       // to energies.
-      if(particle_definition == 0)
+      if(particle_definition == NULL)
 	G4cout << "Error: particle not defined" << G4endl;
       else
 	{
@@ -2096,7 +2246,7 @@ void G4GeneralParticleSource::GenerateMonoEnergetic()
 
 void G4GeneralParticleSource::GenerateLinearEnergies()
 {
-  G4double rndm;
+  G4double energy, rndm;
   G4double emaxsq = pow(Emax,2.); //Emax squared
   G4double eminsq = pow(Emin,2.); //Emin squared
   G4double intersq = pow(cept,2.); //cept squared
@@ -2331,13 +2481,12 @@ void G4GeneralParticleSource::GenUserHistEnergies()
     {
       G4int ii;
       G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
-      G4double bins[256], vals[256];
-      G4double sum=0.;
+      G4double bins[256], vals[256], sum;
       //      UDefEnergyH.DumpValues();
       G4double mass = particle_definition->GetPDGMass();
       //      G4cout << mass << G4endl;
       //      G4cout << EnergySpec << " " << DiffSpec << G4endl;
-      if((EnergySpec == false) && (particle_definition == 0))
+      if((EnergySpec == false) && (particle_definition == NULL))
 	G4cout << "Error: particle definition is NULL" << G4endl;
       
       if(maxbin > 256)
@@ -2526,7 +2675,7 @@ void G4GeneralParticleSource::ConvertEPNToEnergy()
   // currently stored histogram from energy/nucleon 
   // to energy.
   //  G4cout << "In ConvertEpntoEnergy " << G4endl;
-  if(particle_definition==0)
+  if(particle_definition==NULL)
     G4cout << "Error: particle not defined" << G4endl;
   else
     {
@@ -2626,6 +2775,56 @@ void G4GeneralParticleSource::SetEnergyBias(G4ThreeVector input)
   EnergyBiasH.InsertValues(ehi, val);
   EnergyBias = true;
 }
+
+
+void G4GeneralParticleSource::ReSetHist(G4String atype)
+{
+  if (atype == "theta") {
+    UDefThetaH = IPDFThetaH = ZeroPhysVector ;
+    IPDFThetaExist = false ;}
+  else if (atype == "phi"){    
+    UDefPhiH = IPDFPhiH = ZeroPhysVector ;
+    IPDFPhiExist = false ;} 
+  else if (atype == "energy"){
+    UDefEnergyH = IPDFEnergyH = ZeroPhysVector ;
+    IPDFEnergyExist = false ;} 
+  else if ( atype == "arb"){
+    ArbEnergyH =IPDFArbEnergyH = ZeroPhysVector ;
+    IPDFArbExist = false;} 
+  else if ( atype == "epn"){
+    UDefEnergyH = IPDFEnergyH = ZeroPhysVector ;
+    IPDFEnergyExist = false ;
+    EpnEnergyH = ZeroPhysVector ;}
+  else if ( atype == "biasx") {
+    XBias = false ;
+    IPDFXBias = false;
+    XBiasH = IPDFXBiasH = ZeroPhysVector ;}
+  else if ( atype == "biasy") {
+    YBias = false ;
+    IPDFYBias = false;
+    YBiasH = IPDFYBiasH = ZeroPhysVector ;} 
+  else if ( atype == "biasz") {
+    ZBias = false ;
+    IPDFZBias = false;
+    ZBiasH = IPDFZBiasH = ZeroPhysVector ;}
+  else if ( atype == "biast") {
+    ThetaBias = false ;
+    IPDFThetaBias = false;
+    ThetaBiasH = IPDFThetaBiasH = ZeroPhysVector ;}
+  else if ( atype == "biasp") {
+    PhiBias = false ;
+    IPDFPhiBias = false;
+    PhiBiasH = IPDFPhiBiasH = ZeroPhysVector ;}
+  else if ( atype == "biase") {
+    EnergyBias = false ;
+    IPDFEnergyBias = false;
+    EnergyBiasH = IPDFEnergyBiasH = ZeroPhysVector ;}
+  else {
+    G4cout << "Error, histtype not accepted " << G4endl;
+  }
+}
+
+
 
 G4double G4GeneralParticleSource::GenRandX()
 {
@@ -3009,7 +3208,7 @@ G4double G4GeneralParticleSource::GenRandEnergy()
 }
 
 // Verbosity
-void G4GeneralParticleSource::SetVerbosity(G4int vL)
+void G4GeneralParticleSource::SetVerbosity(int vL)
 {
   verbosityLevel = vL;
   G4cout << "Verbosity Set to: " << verbosityLevel << G4endl;
@@ -3028,7 +3227,7 @@ void G4GeneralParticleSource::SetParticleDefinition
 //  theIon = theIon1;
 
 //  G4IonTable *theIonTable = (G4IonTable *)(G4ParticleTable::GetParticleTable()->GetIonTable());
-//  G4ParticleDefinition *aIon = 0;
+//  G4ParticleDefinition *aIon = NULL;
 
 //  G4int A = theIon.GetA();
 //  G4int Z = theIon.GetZ();
@@ -3042,7 +3241,7 @@ void G4GeneralParticleSource::SetParticleDefinition
 
 void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
 {
-  if(particle_definition==0) return;
+  if(particle_definition==NULL) return;
 
   // Position stuff
   G4bool srcconf = false;
@@ -3092,6 +3291,8 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
     GenerateIsotropicFlux();
   else if(AngDistType == "cos")
     GenerateCosineLawFlux();
+  else if(AngDistType == "planar")
+    GeneratePlanarFlux();
   else if(AngDistType == "user")
     GenerateUserDefFlux();
   else
@@ -3134,6 +3335,13 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
   G4double py = pmom*particle_momentum_direction.y();
   G4double pz = pmom*particle_momentum_direction.z();
 
+  if(verbosityLevel > 1){
+    G4cout << "Particle name: "<<particle_definition->GetParticleName() << G4endl; 
+    G4cout << "       Energy: "<<particle_energy << G4endl;
+    G4cout << "     Position: "<<particle_position<< G4endl; 
+    G4cout << "    Direction: "<<particle_momentum_direction << G4endl;
+    G4cout << " NumberOfParticlesToBeGenerated: "<<NumberOfParticlesToBeGenerated << G4endl;
+  }
   for( G4int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
     G4PrimaryParticle* particle =
@@ -3146,19 +3354,22 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event *evt)
     vertex->SetPrimary( particle );
 
     // Set bweight equal to the multiple of all non-zero weights
-    bweight = 0.;
-    for(G4int bib=0; bib<6; bib++)
+    bweight = 1.;
+    for(int bib=0; bib<6; bib++)
       {
-	if(bweights[bib] > 0. && bweight == 0.)
-	  bweight = bweight + bweights[bib];
-	else if(bweights[bib] > 0.)
-	  bweight = bweight * bweights[bib];
+	if(bweights[bib] > 0.) bweight = bweight * bweights[bib];
       }
     // bweight will now contain the events final weighting.
     // now pass it to the primary vertex
     vertex->SetWeight(bweight);
   }
-
   evt->AddPrimaryVertex( vertex );
+  if(verbosityLevel > 1)
+    G4cout << " Primary Vetex generated "<< G4endl;   
 }
+
+
+
+
+
 

@@ -31,7 +31,7 @@
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSourceMessenger.hh,v 1.5 2001-07-13 11:50:56 gcosmo Exp $
+// $Id: G4GeneralParticleSourceMessenger.hh,v 1.6 2001-07-19 12:39:14 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -60,7 +60,7 @@
 // G4String GetCurrentValue(G4UIcommand *command)
 //     Allows the user to retrieve the current values of parameters.
 //     Not implemented yet.
-
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 // CHANGE HISTORY
@@ -137,6 +137,7 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *maxthetaCmd;
   G4UIcmdWithADoubleAndUnit  *minphiCmd;
   G4UIcmdWithADoubleAndUnit  *maxphiCmd;
+  G4UIcmdWithABool           *useuserangaxisCmd;
   G4UIcmdWithABool           *surfnormCmd;
 
   G4UIcmdWithAString         *energytypeCmd;
@@ -156,7 +157,11 @@ private: //commands
   G4UIcmdWithAString         *histnameCmd;
   G4UIcmdWithAString         *arbintCmd;
 
+  G4UIcmdWithAString         *resethistCmd;
+
   G4UIcmdWithAnInteger       *verbosityCmd;
+
+  // below are commands from G4ParticleGun
 
   G4UIcommand                *ionCmd;
 
@@ -164,6 +169,12 @@ private: //commands
   G4UIcmdWithADoubleAndUnit  *timeCmd;
   G4UIcmdWith3Vector         *polCmd;
   G4UIcmdWithAnInteger       *numberCmd;
+
+  G4UIcmdWith3VectorAndUnit  *positionCmd;
+  G4UIcmdWith3Vector         *directionCmd;
+  G4UIcmdWithADoubleAndUnit  *energyCmd;
+  G4UIcmdWithoutParameter    *listCmd;
+
 
   private: // for ion shooting
     G4bool   fShootIon; 
@@ -175,3 +186,7 @@ private: //commands
 };
 
 #endif
+
+
+
+

@@ -31,7 +31,7 @@
 // Customer:      ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
-// $Id: G4GeneralParticleSource.hh,v 1.5 2001-07-13 11:50:56 gcosmo Exp $
+// $Id: G4GeneralParticleSource.hh,v 1.6 2001-07-19 12:39:14 flei Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -336,7 +336,7 @@
 //
 // void SetVerbosity(G4int)
 //    Sets the verbosity level.
-
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -418,12 +418,17 @@ public:
   void SetMaxPhi(G4double);
   void UserDefAngTheta(G4ThreeVector);
   void UserDefAngPhi(G4ThreeVector);
+  inline void SetParticleMomentumDirection
+  (G4ParticleMomentum aMomentumDirection)
+  { particle_momentum_direction =  aMomentumDirection.unit(); }
   // These methods generate the momentum vectors for the particles.
   void GenerateIsotropicFlux();
   void GenerateCosineLawFlux();
+  void GeneratePlanarFlux();
   void GenerateUserDefFlux();
   G4double GenerateUserDefTheta();
   G4double GenerateUserDefPhi();
+  void SetUseUserAngAxis(G4bool);
   void SetUserWRTSurface(G4bool);
 
   // Energy Distribution methods
@@ -489,6 +494,9 @@ public:
   G4double GenRandTheta();
   G4double GenRandPhi();
   G4double GenRandEnergy();
+
+  // method to re-set the histograms
+  void ReSetHist(G4String);
 
   // Set the verbosity level.
   void SetVerbosity(G4int);
@@ -565,6 +573,7 @@ private:
   G4String UserDistType; //String to hold user distributions
   G4bool UserWRTSurface; // G4bool to tell whether user wants distribution wrt
                        // surface normals or co-ordinate system
+  G4bool UserAngRef; // Set to true when user defines aaa new coordinates
 
   // Energy Distribution variables
   G4String EnergyDisType; // energy dis type Variable  - Mono,Lin,Exp,etc
@@ -626,6 +635,8 @@ private:
   G4int verbosityLevel;
 
 private:
+  
+  G4PhysicsOrderedFreeVector ZeroPhysVector ; // for re-set only 
 
   G4DataInterpolation *SplineInt; // holds Spline stuff
 
@@ -636,4 +647,6 @@ private:
   
 };
 
+
 #endif
+
