@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002-03-22 15:09:06 grichine Exp $
+$Id: History,v 1.11 2002-03-22 15:37:57 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-22 march 02: V. Grichine: new classes (G4VXTRenergyLoss,G4GammaXTRadiator and 
-                          G4RegularXTRadiator) were added for the description of
-                          X-ray transition radiation as continuous process.
+22 march 02: V. Grichine (xrays-V04-00-00)
+- new classes (G4VXTRenergyLoss,G4GammaXTRadiator and G4RegularXTRadiator) were
+  added for the description of X-ray transition radiation as continuous process.
      
 12 nov 01: mma (xrays-V03-02-02)
 - merge of 00a and 01

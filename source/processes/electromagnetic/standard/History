@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2002-03-22 15:11:18 grichine Exp $
+$Id: History,v 1.51 2002-03-22 15:42:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,9 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
-22 march 02, V. Grichine: modifications in G4PAIxSection allowing to get additional
-                          information on transverse and longitudinal excitations 
-                          at atomic friquences.
+22 mar 02: V. Grichine (stand-V04-00-04)
+- modifications in G4PAIxSection allowing to get additional information on
+  transverse and longitudinal excitations at atomic frequences.
      
 21 mar 02: mma (stand-V04-00-03)
 - G4GammaConversion::DoIt() correction of e+e- angular distribution (bug 363)
