@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.4 2002-01-29 01:25:19 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.5 2002-01-29 21:03:58 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,13 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
 }
 
 G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
+
+void G4HepRepFileSceneHandler::EstablishSpecials
+(G4PhysicalVolumeModel& pvModel) {
+  pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
+					&fpCurrentPV,
+					&fpCurrentLV);
+}
 
 void G4HepRepFileSceneHandler::BeginModeling() {
   G4VSceneHandler::BeginModeling();  // Required: see G4VSceneHandler.hh.
@@ -465,13 +472,6 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
   PrintThings();
 #endif
     G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
-}
-
-void G4HepRepFileSceneHandler::EstablishSpecials
-(G4PhysicalVolumeModel& pvModel) {
-  pvModel.DefinePointersToWorkingSpace(&fCurrentDepth,
-				       &fpCurrentPV,
-				       &fpCurrentLV);
 }
 
 HepRepXMLWriter *G4HepRepFileSceneHandler::GetHepRepXMLWriter() {

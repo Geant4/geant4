@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.hh,v 1.5 2002-01-29 01:25:03 perl Exp $
+// $Id: G4HepRepFileSceneHandler.hh,v 1.6 2002-01-29 21:03:44 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

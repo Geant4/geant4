@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2002-01-29 01:24:50 perl Exp $
+$Id: History,v 1.175 2002-01-29 21:04:27 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+29th January 2002  Joseph Perl
+- Relocate HepRep file-opening logic to constructor and ShowView
+  (had been in SetView).
 
 28th January 2002  vis-V03-02-23 Joseph Perl
 - Improvements to HepRep:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.4 2002-01-29 01:25:22 perl Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.5 2002-01-29 21:04:01 perl Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -39,37 +39,17 @@
 G4HepRepFileViewer::G4HepRepFileViewer
 (G4VSceneHandler& sceneHandler, const G4String& name):
   G4VViewer(sceneHandler, sceneHandler.IncrementViewCount(), name) {
-  fileCounter = 0;
-  isOpen = false;
   hepRepXMLWriter = ((G4HepRepFileSceneHandler*)(&sceneHandler))->GetHepRepXMLWriter();
+  fileCounter = 0;
+  OpenHepRep();
 }
 
 G4HepRepFileViewer::~G4HepRepFileViewer() {}
 
 void G4HepRepFileViewer::SetView() {
 #ifdef G4HEPREPFILEDEBUG
-  G4cout << "G4HepRepFileViewer::SetView() called with isOpen=" << isOpen << G4endl;
+  G4cout << "G4HepRepFileViewer::SetView() called.=" << G4endl;
 #endif
-  
-  if (isOpen) {    
-    hepRepXMLWriter->endTypes();
-  } else {
-    isOpen = true;
-    char* newFileSpec;
-    newFileSpec = new char [100];
-    int length;
-    length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
-    hepRepXMLWriter->open(newFileSpec);
-    fileCounter++;
-
-    hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
-    hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
-    hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
-    hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
-    hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
-    hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
-    hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
-  }
 }
 
 void G4HepRepFileViewer::ClearView() {
@@ -92,6 +72,31 @@ void G4HepRepFileViewer::ShowView () {
 #endif
   G4VViewer::ShowView();
   
-  hepRepXMLWriter->close();
-  isOpen = false;
+  // If any HepRepTypes were actually written into the HepRep file,
+  // close it and open a fresh one.
+  if (hepRepXMLWriter->hasTypes) {
+    hepRepXMLWriter->close();
+    OpenHepRep();
+  }
+}
+
+void G4HepRepFileViewer::OpenHepRep() {
+#ifdef G4HEPREPFILEDEBUG
+  G4cout << "G4HepRepFileViewer::OpenHepRep() called." << G4endl;
+#endif
+
+  char* newFileSpec;
+  newFileSpec = new char [100];
+  int length;
+  length = sprintf (newFileSpec, "%s%d%s","G4Data",fileCounter,".heprep");
+  hepRepXMLWriter->open(newFileSpec);
+  fileCounter++;
+  
+  hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
+  hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
+  hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
+  hepRepXMLWriter->addAttDef("Material", "Material Name", "Physics","");
+  hepRepXMLWriter->addAttDef("Density", "Material Density", "Physics","");
+  hepRepXMLWriter->addAttDef("State", "Material State", "Physics","");
+  hepRepXMLWriter->addAttDef("Radlen", "Material Radiation Length", "Physics","");
 }

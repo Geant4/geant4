@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.5 2002-01-29 01:25:25 perl Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.6 2002-01-29 21:04:04 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -63,12 +63,15 @@ void HepRepXMLWriter::init()
 
   inPrimitive = false;
   inPoint = false;
+  hasTypes = false;
 }
 
 void HepRepXMLWriter::addType(const char* name,int newTypeDepth)
 {
   if (fout.good())
   {
+    hasTypes = true;
+
     // Flatten structure if it exceeds maximum allowed typeDepth of 49.
     if (newTypeDepth > 49)
       newTypeDepth = 49;

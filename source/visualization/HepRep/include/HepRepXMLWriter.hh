@@ -22,7 +22,7 @@
 //
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.hh,v 1.6 2002-01-29 01:25:09 perl Exp $
+// 	$Id: HepRepXMLWriter.hh,v 1.7 2002-01-29 21:03:51 perl Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -78,6 +78,8 @@ public:
   void close();
 
   void endTypes();
+
+  bool hasTypes;
 
   int typeDepth;
   bool inType[50];
