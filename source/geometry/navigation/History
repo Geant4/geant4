@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2003-12-10 18:28:40 japost Exp $
+$Id: History,v 1.17 2003-12-10 18:31:00 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-14)
+------------------------------
+- G4PropagatorInField.cc on top of latest (not 1.7):
+  o Fix for the case where two previous corrections are 'operational'
+     Problem if the current endpoint is not the final one, and it has been
+     recalculated, and we need to go beyond the current section to the
+     final one -- the recalcuted endpoint no longer valid!
 
 Dec 10th, 2003 - J.Apostolakis  (geomnav-V05-02-13)
 ------------------------------
