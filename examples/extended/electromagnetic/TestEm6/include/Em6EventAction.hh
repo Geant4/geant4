@@ -40,7 +40,7 @@ public: // Without description
     void CountStepsNeutral() ;
     void AddCharged() ;
     void AddNeutral() ;
-    void AddE();
+    void AddE(G4double En);
     void AddP();   
     void SetTr();
     void SetRef();
@@ -56,7 +56,8 @@ public: // Without description
     G4double Nch,Nne;
     G4double NE,NP;
     G4double Transmitted,Reflected ;
-    
+    G4double EnergyDeposition ;
+
     G4String drawFlag;
 };
 

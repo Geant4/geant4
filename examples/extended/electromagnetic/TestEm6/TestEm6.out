@@ -51,8 +51,8 @@ G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
 
 
 
- The  WORLD   is made of 50 cm  of Air. The transverse size (YZ) of the world is 12 cm 
- The ABSORBER is made of 250 items of 1 mm  of Water. The transverse size (YZ) is 10 cm 
+ The  WORLD   is made of 21 cm  of Air. The transverse size (YZ) of the world is 12 cm 
+ The ABSORBER is made of 1 items of 10 cm  of Silicon. The transverse size (YZ) is 10 cm 
  X position of the middle of the absorber 0 fm 
 G4VUserPhysicsList::Construct()
 Construct particles 
@@ -73,7 +73,7 @@ Hadronic processes for kaon-
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
-Em6PhysicsList::SetCuts:CutLength : 1 mm 
+Em6PhysicsList::SetCuts:CutLength : 1e+02 mum
 Set cuts for all particles! 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
@@ -118,15 +118,15 @@ msc:   Tables of transport mean free paths.
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
 Set cuts for mu+
 
 msc:   Tables of transport mean free paths.
@@ -137,10 +137,11 @@ msc:   Tables of transport mean free paths.
 hLowEIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 1e+02 TeV  in 200 bins.
+        PhysicsTables from 10 eV  to 1e+02 TeV  in 150 bins.
         Low energy losses approximation is taken from  ICRU_R49p
         from 1 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
+        Simulation of nuclear stopping is switched on.
 Set cuts for proton
 Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
@@ -164,19 +165,19 @@ Set cuts for pi0
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm             
 Cut in energy
-          Beryllium        1.99 keV         466 keV        4.28 MeV        11.5 MeV            
-           Aluminum        6.89 keV         597 keV        5.02 MeV        13.1 MeV            
-             Carbon        3.14 keV         521 keV        4.63 MeV        12.3 MeV            
-            Silicon        6.89 keV         541 keV        4.72 MeV        12.2 MeV            
-        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV            
-               Iron        20.8 keV        1.28 MeV        8.52 MeV          22 MeV            
-             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV            
-               Gold         111 keV        2.28 MeV        11.7 MeV        29.2 MeV            
-               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV            
-              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV            
-            Methane         990 eV          990 eV         39.8 keV        82.2 keV            
-           Graphite        3.29 keV         568 keV        4.96 MeV        13.1 MeV            
-                Air         990 eV          990 eV         39.8 keV          59 keV            
+          Beryllium        2.01 keV         468 keV        4.29 MeV        11.5 MeV            
+           Aluminum         6.9 keV         599 keV        5.03 MeV        13.1 MeV            
+             Carbon        3.16 keV         523 keV        4.67 MeV        12.4 MeV            
+            Silicon         6.9 keV         542 keV        4.73 MeV        12.2 MeV            
+        liquidArgon        6.14 keV         344 keV        3.25 MeV        8.33 MeV            
+               Iron        20.6 keV        1.28 MeV        8.54 MeV          22 MeV            
+             Copper        24.7 keV         1.4 MeV        8.97 MeV        23.1 MeV            
+               Gold         112 keV        2.29 MeV        11.8 MeV        29.2 MeV            
+               Lead         100 keV        1.37 MeV        8.54 MeV          21 MeV            
+              Water        2.89 keV         353 keV        3.39 MeV        8.97 MeV            
+            Methane           1 eV          119 eV         39.4 keV        82.5 keV            
+           Graphite        3.33 keV         570 keV        4.97 MeV        13.1 MeV            
+                Air           1 eV          181 eV         39.4 keV        58.5 keV            
 ===================================================
 #
 # Macro file for the initialization phase of "TestEm6.cc"
@@ -197,8 +198,6 @@ Cut in energy
 #/calor/cutG 100.0 micrometer
 #/calor/cutE 100.0 micrometer
 /calor/cutP 100.0 micrometer
-G4VUserPhysicsList::ResetCuts()
-  cut values in energy will be calculated later
 /step/setMaxStep 1 mm
  MaxChargedStep=1
 
@@ -214,139 +213,41 @@ G4VUserPhysicsList::ResetCuts()
 /gun/energy 10.0 MeV
 #
 /run/beamOn 1000
-Start re-initialization because 
-  Cutoff
-has been modified since last Run.
-physicsList->setCut() start.
-Em6PhysicsList::SetCuts:CutLength : 1 mm 
-Set cuts for all particles! 
-
-phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
-        Sandia crossSection below 50 KeV
-       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
-Set cuts for gamma
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
-
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
-
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
-Set cuts for e-
-
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-Set cuts for e+
-Set cuts for mu-
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
-
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
-Set cuts for mu+
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
-
-hLowEIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 10 eV  to 1e+02 TeV  in 200 bins.
-        Low energy losses approximation is taken from  ICRU_R49p
-        from 1 keV  to 2 MeV .
-        Parametrization of the Barkas effect is switched on.
-Set cuts for proton
-Set cuts for anti_proton
-G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
-Set cuts for IonAr40
-Set cuts for IonC12
-Set cuts for IonFe56
-Set cuts for alpha
-Set cuts for anti_nu_e
-Set cuts for anti_nu_mu
-Set cuts for chargedgeantino
-Set cuts for deuteron
-Set cuts for geantino
-Set cuts for kaon+
-Set cuts for kaon-
-Set cuts for nu_e
-Set cuts for nu_mu
-Set cuts for pi+
-Set cuts for pi-
-Set cuts for pi0
-============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm          100 mum         100 mum            
-Cut in energy
-          Beryllium        1.99 keV         466 keV         1.2 MeV        3.03 MeV            
-           Aluminum        6.89 keV         597 keV        1.38 MeV        3.39 MeV            
-             Carbon        3.14 keV         521 keV         1.3 MeV        3.26 MeV            
-            Silicon        6.89 keV         541 keV        1.28 MeV        3.14 MeV            
-        liquidArgon        6.18 keV         343 keV         869 keV        2.02 MeV            
-               Iron        20.8 keV        1.28 MeV         2.3 MeV        5.68 MeV            
-             Copper        24.6 keV         1.4 MeV        2.41 MeV        5.96 MeV            
-               Gold         111 keV        2.28 MeV        3.07 MeV        7.17 MeV            
-               Lead         101 keV        1.38 MeV         2.2 MeV        5.02 MeV            
-              Water         2.9 keV         347 keV         941 keV        2.28 MeV            
-            Methane         990 eV          990 eV         2.78 keV        2.07 keV            
-           Graphite        3.29 keV         568 keV        1.38 MeV        3.51 MeV            
-                Air         990 eV          990 eV         2.78 keV           1 keV            
-===================================================
 ### Run 0 start.
 Start closing geometry.
 Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=6s Real=6.9s Sys=0.91s
+  User=1.7s Real=3s Sys=0.5s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=1.16645 +- 0.001451  mm  
+    Range in absorber = 0.711286 +- 0.000287532  mm  
 
-            mean energy deposit in absorber=9.99632 +- 6.09495e-05  MeV 
-
- mean number of steps in absorber (charged) =4.663 +- 0.0733037      
- mean number of steps in absorber (neutral) =0 +- 0      
-
-   mean number of charged secondaries = 0 +- 0
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0  and e+s =0
+    Energy deposit in absorber = 10 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
+   step number/event distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy deposit distribution 
+#entries=0    #underflows=0    #overflows=0
+ transmitted energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattered energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy distribution of charged secondaries 
+#entries=0    #underflows=0    #overflows=0
+  R  distribution 
+#entries=0    #underflows=0    #overflows=0
+      angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattering angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ gamma energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ vertex Z  distribution 
+#entries=0    #underflows=0    #overflows=0
 #
 # Gun with antiProtons 10 MeV
 #
@@ -360,24 +261,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.8s Real=7.2s Sys=1s
+  User=2.8s Real=11s Sys=0.65s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=1.29668 +- 0.00241072  mm  
+    Range in absorber = 0.727748 +- 0.000311739  mm  
 
-            mean energy deposit in absorber=9.99648 +- 5.5265e-05  MeV 
-
- mean number of steps in absorber (charged) =5.67 +- 0.0770526      
- mean number of steps in absorber (neutral) =0 +- 0      
-
-   mean number of charged secondaries = 0 +- 0
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0  and e+s =0
+    Energy deposit in absorber = 10 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
+   step number/event distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy deposit distribution 
+#entries=0    #underflows=0    #overflows=0
+ transmitted energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattered energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy distribution of charged secondaries 
+#entries=0    #underflows=0    #overflows=0
+  R  distribution 
+#entries=0    #underflows=0    #overflows=0
+      angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattering angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ gamma energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ vertex Z  distribution 
+#entries=0    #underflows=0    #overflows=0
 #
 # Gun with IonC12 100 MeV
 #
@@ -391,24 +303,35 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.9e+02s Real=2.5e+02s Sys=54s
+  User=1.3s Real=3.3s Sys=0.2s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=0.0201562 +- 0.000122966  mm  
+    Range in absorber = 0.0100573 +- 1.18127e-05  mm  
 
-            mean energy deposit in absorber=9.4176 +- 0.00170486  MeV 
-
- mean number of steps in absorber (charged) =9.267 +- 0.0529123      
- mean number of steps in absorber (neutral) =0 +- 0      
-
-   mean number of charged secondaries = 0 +- 0
-
-   mean number of neutral secondaries = 0 +- 0
-
-   mean number of e-s =0  and e+s =0
+    Energy deposit in absorber = 10 +- 0  MeV 
 
 (number) transmission coeff=0  reflection coeff=0
 
+   step number/event distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy deposit distribution 
+#entries=0    #underflows=0    #overflows=0
+ transmitted energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattered energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ energy distribution of charged secondaries 
+#entries=0    #underflows=0    #overflows=0
+  R  distribution 
+#entries=0    #underflows=0    #overflows=0
+      angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ backscattering angle   distribution 
+#entries=0    #underflows=0    #overflows=0
+ gamma energy distribution 
+#entries=0    #underflows=0    #overflows=0
+ vertex Z  distribution 
+#entries=0    #underflows=0    #overflows=0
 
 
 

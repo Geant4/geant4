@@ -229,10 +229,9 @@ void Em6PhysicsList::ConstructEM()
 
       // Standard ionisation with low energy extantion
       // G4ionLowEnergyIonisation* hIon = new G4ionLowEnergyIonisation() ;
-      //    hIon->SetNuclearStoppingOff() ;
       G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
-      hIon->SetNuclearStoppingOff() ;
-       //hIon->SetNuclearStoppingOn() ;
+      //hIon->SetNuclearStoppingOff() ;
+      hIon->SetNuclearStoppingOn() ;
 
        //hIon->SetStoppingPowerTableName("Ziegler1977He") ;
        //hIon->SetStoppingPowerTableName("Ziegler1977H") ;
@@ -265,8 +264,8 @@ void Em6PhysicsList::ConstructEM()
       // Standard ionisation with low energy extantion
       //  G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
       G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
-      iIon->SetNuclearStoppingOff() ;
-      //  iIon->SetNuclearStoppingOn() ;
+      //      iIon->SetNuclearStoppingOff() ;
+        iIon->SetNuclearStoppingOn() ;
       iIon->SetIonDefinition(particle) ;
 
       //iIon->SetStoppingPowerTableName("Ziegler1977He") ;

@@ -204,6 +204,7 @@ public: // Without description
     G4int nbinvertexz;
  
     Em6RunMessenger* runMessenger ;
+
 };
 
 #endif

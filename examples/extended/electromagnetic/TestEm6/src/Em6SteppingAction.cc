@@ -61,6 +61,8 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
   Tsec = Tkin - Edep ;
   Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
 
+  eventaction->AddE(abs(Edep)) ;
+
   // new particle
   if(IDnow != IDold) {
     IDold=IDnow ;
@@ -83,7 +85,6 @@ void Em6SteppingAction::UserSteppingAction(const G4Step* aStep)
 
             runaction->Fillvertexz(aStep->GetTrack()->GetVertexPosition().x());
             eventaction->AddCharged() ;
-            eventaction->AddE() ;
             runaction->FillTsec(Tsec) ;
 
       } else {

@@ -653,8 +653,8 @@ void Em6RunAction::EndOfRunAction(const G4Run* aRun)
       if(distEn[i2] >= 0.5*fmax)
         E2=E ;
      }
-     G4cout << " Emp = " << G4std::setw(15) << Emp/MeV << "   width="
-            << G4std::setw(15) << (E2-E1)/MeV <<   "  MeV " << G4endl;
+     //     G4cout << " Emp = " << G4std::setw(15) << Emp/MeV << "   width="
+     //            << G4std::setw(15) << (E2-E1)/MeV <<   "  MeV " << G4endl;
      G4cout << G4endl ;
    }     
   }

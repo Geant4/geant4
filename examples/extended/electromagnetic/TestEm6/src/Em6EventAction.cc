@@ -60,6 +60,8 @@ void Em6EventAction::BeginOfEventAction(const G4Event* evt)
     calorimeterCollID = SDman->GetCollectionID("CalCollection");
   } 
 
+  EnergyDeposition = 0.0;
+
   if(verboselevel>1)
     G4cout << "<<< Event  " << evt->GetEventID() << " started." << G4endl;
   nstep = 0. ;
@@ -77,7 +79,6 @@ void Em6EventAction::BeginOfEventAction(const G4Event* evt)
 
 void Em6EventAction::EndOfEventAction(const G4Event* evt)
 {
-  runaction->SaveEvent();
 
   G4HCofThisEvent* HCE = evt->GetHCofThisEvent();
   Em6CalorHitsCollection* CHC = NULL;
@@ -118,6 +119,9 @@ void Em6EventAction::EndOfEventAction(const G4Event* evt)
 
     nstep=nstepCharged+nstepNeutral ;
     runaction->FillNbOfSteps(nstep);
+    runaction->SaveToTuple("EDEP",EnergyDeposition);      
+
+    runaction->SaveEvent();
   }
   
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -184,8 +188,9 @@ void Em6EventAction::AddNeutral()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em6EventAction::AddE() 
+void Em6EventAction::AddE(G4double En) 
 {
+  EnergyDeposition += En;
   NE += 1.;
 }
 
