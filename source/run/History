@@ -1,4 +1,4 @@
-$Id: History,v 1.105 2003-11-12 17:54:51 asaim Exp $
+$Id: History,v 1.106 2003-12-09 09:14:48 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 09, 2003, G.Cosmo (run-V05-02-10)
+- Changed date for release 6.0.
+
 November 12, 2003, M.Asai (run-V05-02-09)
 - Remove dedicated treatment of anti-proton, neutron and anti-neutron 
-from BuildPhysicsTable of UserPhysicsList.
+  from BuildPhysicsTable of UserPhysicsList.
 
 November 04, 2003, M.Asai (run-V05-02-08)
 - Cosmetic changes of messages for storing/retreiving physics table
