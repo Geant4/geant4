@@ -33,42 +33,61 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double 
 {
   FILE* lecturePref = G4std::fopen("Data.dat","r");
 
+  char compressionBuf[300];
   G4std::fscanf(lecturePref,"%s",compressionBuf);
+  G4int compression;
   compression = atoi(compressionBuf);
 
+  char  maxBuf[300];
   G4std::fscanf(lecturePref,"%s",maxBuf);
   G4int max = atoi(maxBuf);    
   G4int copy_counter = 0;
 
   for (G4int i=1;i<=max;i++)
     {
+      char fullname[300];
+      char name[300];
       G4std::fscanf(lecturePref,"%s",name);
       G4std::sprintf(fullname,"%s.g4",name);
       FILE* readData;
       readData = G4std::fopen(fullname,"r");
- 
+
+      char rowsBuf[300];
+      char columnsBuf[300];
       G4std::fscanf(readData,"%s %s",rowsBuf,columnsBuf);
       G4int rows = atoi(rowsBuf);
       G4int columns = atoi(columnsBuf);
 
+      char pixelSpacingXBuf[300];
+      char pixelSpacingYBuf[300];
       G4std::fscanf(readData,"%s %s",pixelSpacingXBuf,pixelSpacingYBuf);
+      G4double pixelSpacingX;
+      G4double pixelSpacingY;
       pixelSpacingX = atof(pixelSpacingXBuf);
       pixelSpacingY = atof(pixelSpacingYBuf);
 
+      char sliceTicknessBuf[300];
       G4std::fscanf(readData,"%s",sliceTicknessBuf);
+      G4double sliceTickness;
       sliceTickness = atoi(sliceTicknessBuf);
-
+ 
+      char sliceLocationBuf[300];
       G4std::fscanf(readData,"%s",sliceLocationBuf);
+      G4double sliceLocation;
       sliceLocation = atof(sliceLocationBuf);
 
       G4std::fscanf(readData,"%s",compressionBuf);
       compression = atoi(compressionBuf);
-      lenr = abs(rows/compression);
-      lenc = abs(columns/compression);
+
+      G4int lengthRow = abs(rows/compression);
+      G4int lengthColumn = abs(columns/compression);
  
-      for (G4int j=1;j<=lenr;j++)
+      char densityBuf[300];
+      G4std::vector<G4double> density;
+
+      for (G4int j=1;j<=lengthRow;j++)
         {
-	  for (G4int w=1;w<=lenc;w++)
+	  for (G4int w=1;w<=lengthColumn;w++)
             {
 	      if ( G4std::fscanf(readData,"%s",densityBuf) != -1 )
                 {
@@ -84,11 +103,12 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double 
     }
   return copy_counter;
 }
+
+void DicomPatientConstructor::readContour()
+{
 // This function reads the Contour information included in Plan.roi
 // (this file is a set of region of interest for each dicom images made on ADAC pinnacle treatment planning software)
 // This code is still under construction...
-void DicomPatientConstructor::readContour()
-{
 
   char ROIplanLine[2000];
   char Word_1[300],Word_2[300],Word_3[300],Word_4[300],Word_5[300];
@@ -104,14 +124,17 @@ void DicomPatientConstructor::readContour()
   lenPoints = 0;
 
   readingContours = G4std::fopen("Plan.roi","r");
+
+  G4int flagContours;
+
   if ( (G4int *)readingContours == 0 )
     {
       G4std::printf("### No contours file ('Plan.roi')\n");
-      flag_contours = 0;
+      flagContours = 0;
     }
   else if ( (G4int *)readingContours != 0 )
     {
-      flag_contours = 1;
+      flagContours = 1;
       G4std::printf("### There is a contour file ('Plan.roi')\n");
       while( G4std::fgets(ROIplanLine,2000,readingContours) )
         {
@@ -206,9 +229,11 @@ G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 // This function tell if the coordinates (X,Y,Z) is within one of the curves from plan.roi
 
   G4int x,i,j;
-  G4int state = 0;  // This variable = 0 if the point is outside curve
+
+  G4bool state = 0;  // This variable = 0 if the point is outside curve
+
   G4int lenPoints = -1;  // Number of points avaible in a curve, to be initialised each time!
-  for(x=1;x<=maxCurve;x++)
+  for(x = 1; x <= maxCurve; x++)
     {
       lenPoints = (G4int)(contoursX[x][0]);  // The number of points in the curve in the
       // first element of the array
@@ -216,8 +241,9 @@ G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
         {
 	  for (i = 1, j = lenPoints; i <= lenPoints; j = i++)
             {
-	      if (	( ( (contoursY[x][i]<=Y) && (Y<contoursY[x][j]) ) || ( (contoursY[x][j]<=Y) && (Y<contoursY[x][i]) ) )	&&
-                        (X < (contoursX[x][j] - contoursX[x][i])*(Y - contoursY[x][i]) / (contoursY[x][j] - contoursY[x][i]) + contoursX[x][i])	)  // If this is true we've just pass a limit of the curve
+	      if ( ( ( (contoursY[x][i]<=Y) && (Y<contoursY[x][j]) ) || 
+		     ( (contoursY[x][j]<=Y) && (Y<contoursY[x][i]) ) )	&&
+		   (X < (contoursX[x][j] - contoursX[x][i]) * (Y - contoursY[x][i]) / (contoursY[x][j] - contoursY[x][i]) + contoursX[x][i]))  // If this is true we've just pass a limit of the curve
                 {
 		  state=!state;  // the state changes
                 }
@@ -226,6 +252,6 @@ G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 
     }
 
-  return (G4bool)state;  // current state false=out, true=inside
+  return state;  // current state false=out, true=inside
 }
 
