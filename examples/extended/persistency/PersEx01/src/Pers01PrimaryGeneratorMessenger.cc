@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Pers01PrimaryGeneratorMessenger.cc,v 1.1 2002-12-04 02:44:26 morita Exp $
+// $Id: Pers01PrimaryGeneratorMessenger.cc,v 1.2 2002-12-06 16:59:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ Pers01PrimaryGeneratorMessenger::Pers01PrimaryGeneratorMessenger(
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("on");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
