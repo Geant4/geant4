@@ -1,9 +1,3 @@
-//
-// G4PolyhedraSide.cc
-//
-// Implemenation of the face representing one segmented side of a Polyhedra
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -11,6 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PolyhedraSide.cc,v 1.1 2000-04-07 11:02:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4PolyhedraSide.cc
+//
+// Implemenation of the face representing one segmented side of a Polyhedra
+//
+// --------------------------------------------------------------------
 
 #include "G4PolyhedraSide.hh"
 #include "G4IntersectingCone.hh"

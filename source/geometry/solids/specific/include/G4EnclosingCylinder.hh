@@ -1,11 +1,3 @@
-//
-// G4EnclosingCylinder.hh
-//
-// Definition of a utility class for quickly deciding if a point
-// is clearly outside a polyhedra or ploycone or deciding if
-// a trajectory is clearly going to miss said shapes.
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -13,6 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4EnclosingCylinder.hh,v 1.1 2000-04-07 10:55:42 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+// G4EnclosingCylinder
+//
+// Class description:
+//
+//   Definition of a utility class for quickly deciding if a point
+//   is clearly outside a polyhedra or polycone or deciding if
+//   a trajectory is clearly going to miss those shapes.
+
+// --------------------------------------------------------------------
+
 #ifndef G4EnclosingCylinder_hh
 #define G4EnclosingCylinder_hh
 

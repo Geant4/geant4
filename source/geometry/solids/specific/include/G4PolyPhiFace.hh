@@ -1,14 +1,3 @@
-//
-// G4PolyPhiFace.hh
-//
-// Definition of a face that bounds a polycone or polyhedra when it has a phi
-// opening.
-//
-// Specifically: a face that lies on a plane that passes through
-// the z axis. It has boundaries that are straight lines of arbitrary length
-// and direction, but with corners aways on the same side of the z axis.
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -16,6 +5,28 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PolyPhiFace.hh,v 1.1 2000-04-07 10:56:52 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4PolyPhiFace
+//
+// Class description:
+//
+//   Definition of a face that bounds a polycone or polyhedra when
+//   it has a phi opening.
+//
+//   Specifically: a face that lies on a plane that passes through
+//   the z axis. It has boundaries that are straight lines of arbitrary
+//   length and direction, but with corners aways on the same side of
+//   the z axis.
+
+// --------------------------------------------------------------------
+
 #ifndef G4PolyPhiFace_hh
 #define G4PolyPhiFace_hh
 

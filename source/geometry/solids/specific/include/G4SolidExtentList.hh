@@ -1,13 +1,3 @@
-//
-// G4SolidExtentList.hh
-//
-// Declaration of a list of (voxel) extents along one axis
-//
-// This utility class is designed for one specific purpose: to
-// calculate the extent of a CSG solid for a voxel
-// (G4VSolid::CalculateExtent). 
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -15,6 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4SolidExtentList.hh,v 1.1 2000-04-07 10:58:50 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4SolidExtentList
+//
+// Class description:
+//
+//   Defines a list of (voxel) extents along one axis.
+//
+//   This utility class is designed for one specific purpose:
+//   to calculate the extent of a CSG solid for a voxel
+//   (G4VSolid::CalculateExtent). 
+
+// --------------------------------------------------------------------
 
 #ifndef G4SolidExtentList_hh
 #define G4SolidExtentList_hh

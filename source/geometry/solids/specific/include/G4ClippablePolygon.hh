@@ -1,10 +1,3 @@
-//
-// G4ClippablePolygon.hh
-//
-// Declaration of a utility class of a polycon that can be clipped
-// by a voxel
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -12,8 +5,24 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-#ifndef G4ClippablePolycon_hh
-#define G4ClippablePolycon_hh
+// $Id: G4ClippablePolygon.hh,v 1.1 2000-04-07 10:55:04 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+// G4ClippablePolygon
+//
+// Class description:
+//
+//   Declaration of a utility class of a polygon that can be
+//   clipped by a voxel.
+
+// --------------------------------------------------------------------
+
+#ifndef G4ClippablePolygon_hh
+#define G4ClippablePolygon_hh
 
 #include "globals.hh"
 #include "geomdefs.hh"

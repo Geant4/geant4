@@ -1,10 +1,3 @@
-//
-// G4IntersectingCone.cc
-//
-// Implementation of a utility class which calculates the intersection
-// of an arbitrary line with a fixed cone
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -12,6 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4IntersectingCone.cc,v 1.1 2000-04-07 11:01:12 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4IntersectingCone.cc
+//
+// Implementation of a utility class which calculates the intersection
+// of an arbitrary line with a fixed cone
+// --------------------------------------------------------------------
+
 #include "G4IntersectingCone.hh"
 
 //

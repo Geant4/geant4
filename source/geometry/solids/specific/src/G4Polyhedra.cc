@@ -1,3 +1,17 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4Polyhedra.cc,v 1.1 2000-04-07 11:02:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
 //
 // G4Polyhedra.cc
 //
@@ -20,14 +34,8 @@
 // Both these classes are implemented outside this file because they are
 // shared with G4Polycone.
 //
-// ----------------------------------------------------------
-// This code implementation is the intellectual property of
-// the GEANT4 collaboration.
-//
-// By copying, distributing or modifying the Program (or any work
-// based on the Program) you indicate your acceptance of this statement,
-// and all its terms.
-//
+// --------------------------------------------------------------------
+
 #include "G4Polyhedra.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyPhiFace.hh"

@@ -1,9 +1,3 @@
-//
-// G4ClippablePolygon.cc
-//
-// Includes code from G4VSolid (P. Kent, V. Grichine, J. Allison)
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -11,6 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4ClippablePolygon.cc,v 1.1 2000-04-07 11:00:16 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4ClippablePolygon.cc
+//
+// Includes code from G4VSolid (P. Kent, V. Grichine, J. Allison)
+//
+// --------------------------------------------------------------------
 
 #include "G4ClippablePolygon.hh"
 

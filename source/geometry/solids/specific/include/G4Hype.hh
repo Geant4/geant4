@@ -1,64 +1,70 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.hh,v 1.4 2000-03-30 20:02:57 davidw Exp $
+// $Id: G4Hype.hh,v 1.1 2000-04-07 10:56:06 gcosmo Exp $
+// $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
 //
-// class G4Hype: this class implements in G4 the volume equivalent 
-//               to the HYPE volume in Geant 3, i.e. a tube with 
-//               hyperbolic profile.
 //
-//  Authors: 
-//      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
-//      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
-//      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
-//  Updated Feb 2000 D.C. Williams
+// G4Hype
 //
-// $ Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
+// Class description:
 //
-// For further informations, please read G4Hype.history and G4Hype.doc.
+//   This class implements in G4 the volume equivalent to the
+//   HYPE volume in Geant 3.21, i.e. a tube with hyperbolic profile.
 //
-// An hyperbolic volume  with curved sides parallel to
-// the z-axis. The Hype has a specified half-length along
-// the z axis, about which it is centred, and a given
-// minimum and maximum radius. A minimum radius of 0
-// signifies a filled Hype (with hyperbolical inner surface).
-// To have a filled Hype the user must specify 
-// inner radius = 0 AND inner stereo angle = 0.
+//   For further informations, please read G4Hype.history and G4Hype.doc.
+//
+//   An hyperbolic volume  with curved sides parallel to the z-axis.
+//   The Hype has a specified half-length along the z axis, about which
+//   it is centred, and a given minimum and maximum radius.
+//   A minimum radius of 0 signifies a filled Hype (with hyperbolical
+//   inner surface). To have a filled Hype the user must specify 
+//   inner radius = 0 AND inner stereo angle = 0.
 // 
-// The inner and outer hyperbolical surfaces can have different
-// stereo angles.
-// A stereo angle of 0 gives a cylindrical surface.
+//   The inner and outer hyperbolical surfaces can have different
+//   stereo angles. A stereo angle of 0 gives a cylindrical surface.
 //
 // Member functions:
 //
-// As inherited from G4VSolid,
+//   As inherited from G4VSolid,
 //
-// G4Hype(const G4String      &pName
-//        const G4double      innerRadius
-//        const G4double      outerRadius
-//        const G4double      innerStereo
-//        const G4double      outerStereo
-//        const G4double      halfLenZ )
+//   G4Hype(const G4String      &pName
+//          const G4double      innerRadius
+//          const G4double      outerRadius
+//          const G4double      innerStereo
+//          const G4double      outerStereo
+//          const G4double      halfLenZ )
 //
 //   Construct an hype with the given name and dimensions.
 //   The provided angles are in radians.
 //
 //
-// Protected:
+//   Protected:
 //
-// G4ThreeVectorList*
-// CreateRotatedVertices(const G4AffineTransform& pTransform) const
+//   G4ThreeVectorList*
+//   CreateRotatedVertices(const G4AffineTransform& pTransform) const
 //
 //   Create the List of transformed vertices in the format required
 //   for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+
+// Authors: 
+//      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
+//      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
+//      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
 //
+// History:
+//      Updated Feb 2000 D.C. Williams
+//
+// --------------------------------------------------------------------
 
 #ifndef G4HYPE_HH
 #define G4HYPE_HH

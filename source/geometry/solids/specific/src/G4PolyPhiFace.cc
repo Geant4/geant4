@@ -1,10 +1,3 @@
-//
-// G4PolyPhiFace.cc
-//
-// Implementation of the face that bounds a polycone or polyhedra at
-// its phi opening.
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -12,6 +5,20 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PolyPhiFace.cc,v 1.1 2000-04-07 11:01:31 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4PolyPhiFace.cc
+//
+// Implementation of the face that bounds a polycone or polyhedra at
+// its phi opening.
+//
+// --------------------------------------------------------------------
 
 #include "G4PolyPhiFace.hh"
 #include "G4ClippablePolygon.hh"

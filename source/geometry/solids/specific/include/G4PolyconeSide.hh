@@ -1,8 +1,27 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4PolyconeSide.hh,v 1.1 2000-04-07 10:57:41 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
 //
 // G4PolyconeSide
 //
-// Declaration of a face that represents one conical side of a polycone
+// Class description:
 //
+//   Class implmenting a face that represents one conical side
+//   of a polycone.
+
+// --------------------------------------------------------------------
+
 #ifndef G4PolyconeSide_hh
 #define G4PolyconeSide_hh
 

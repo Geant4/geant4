@@ -1,9 +1,3 @@
-//
-// G4SolidExtentList.cc
-//
-// Implementation of a list of (voxel) extents along one axis
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -11,6 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4SolidExtentList.cc,v 1.1 2000-04-07 11:03:23 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
+//
+//
+// G4SolidExtentList.cc
+//
+// Implementation of a list of (voxel) extents along one axis
+//
+// --------------------------------------------------------------------
 
 #include "G4SolidExtentList.hh"
 #include "G4VoxelLimits.hh"

@@ -1,10 +1,3 @@
-//
-// G4Polyhedra.hh
-//
-// Declaration of a CSG type "PCON" geant volume, inherited from 
-// class G4CSGSolid
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -12,6 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4Polyhedra.hh,v 1.1 2000-04-07 10:57:57 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4Polyhedra.hh
+//
+// Class description:
+//
+//   Class implementing a CSG type "PGON" Geant 3.21 volume,
+//   inherited from class G4CSGSolid.
+
+// --------------------------------------------------------------------
 
 #ifndef G4Polyhedra_hh
 #define G4Polyhedra_hh

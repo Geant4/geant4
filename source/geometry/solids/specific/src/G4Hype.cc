@@ -1,31 +1,37 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Hype.cc,v 1.5 2000-03-30 20:02:35 davidw Exp $
+// $Id: G4Hype.cc,v 1.1 2000-04-07 11:00:51 gcosmo Exp $
+// $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// class G4Hype: this class implements in G4 the volume equivalent 
-//               to the HYPE volume in Geant 3, i.e. a tube with 
-//               hyperbolic profile.
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class source file
 //
-//  Authors: 
+//
+// G4Hype.cc
+//
+// This class implements in G4 the volume equivalent to the HYPE volume
+// in Geant 3.21, i.e. a tube with hyperbolic profile.
+// For further informations, please read G4Hype.history and G4Hype.doc,
+// and the G4Hype.hh header.
+//
+// --------------------------------------------------------------------
+//
+// Authors: 
 //      Ernesto Lamanna (Ernesto.Lamanna@roma1.infn.it) &
 //      Francesco Safai Tehrani (Francesco.SafaiTehrani@roma1.infn.it)
 //      Rome, INFN & University of Rome "La Sapienza",  9 June 1998.
-//  Updated Feb 2000 D.C. Williams
 //
-// $ Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
+// History: 
+//      Updated Feb 2000 D.C. Williams
 //
-// class G4Hype: this class implements in G4 the volume equivalent 
-//               to the HYPE volume in Geant 3, i.e. a tube with 
-//               hyperbolic profile.
-//
-// For further informations, please read G4Hype.history and G4Hype.doc,
-// and the G4Hype.hh header.
+// --------------------------------------------------------------------
 
 #include "G4Hype.hh"
 

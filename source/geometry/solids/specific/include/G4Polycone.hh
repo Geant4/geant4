@@ -1,10 +1,3 @@
-//
-// G4Polycone.hh
-//
-// Declaration of a CSG type "PCON" geant volume, inherited from 
-// class G4VCSGSolid
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -12,6 +5,22 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4Polycone.hh,v 1.1 2000-04-07 10:57:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4Polycone
+//
+// Class description:
+//
+//   Class implementing a CSG type "PCON" Geant 3.21 volume,
+//   inherited from  class G4VCSGSolid.
+
+// --------------------------------------------------------------------
 
 #ifndef G4Polycone_hh
 #define G4Polycone_hh

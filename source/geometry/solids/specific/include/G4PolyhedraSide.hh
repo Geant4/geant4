@@ -1,9 +1,3 @@
-//
-// G4PolyhedraSide
-//
-// Declaration of a face that represents one segmented side of a polyhedra
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -11,6 +5,23 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4PolyhedraSide.hh,v 1.1 2000-04-07 10:58:14 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4PolyhedraSide
+//
+// Class description:
+//
+//   Class implementing a face that represents one segmented side
+//   of a polyhedra.
+
+// --------------------------------------------------------------------
+
 #ifndef G4PolyhedraSide_hh
 #define G4PolyhedraSide_hh
 

@@ -1,8 +1,26 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
 //
-// G4VCSGfaceted.hh
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
 //
-// Declaration of a virtual class CSG type shape that is built entire of G4CSGface faces.
+// $Id: G4VCSGfaceted.hh,v 1.1 2000-04-07 10:59:38 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4VCSGfaceted
+//
+// Class description:
+//
+//   Virtual class defining CSG type shape that is built entire
+//   of G4CSGface faces.
+
+// --------------------------------------------------------------------
 
 #ifndef G4VCSGfaceted_hh
 #define G4VCSGfaceted_hh

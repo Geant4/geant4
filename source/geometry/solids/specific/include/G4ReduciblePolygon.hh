@@ -1,22 +1,3 @@
-//
-// G4ReduciblePolygon.hh
-//
-// Declaration of a utility class used to specify, test, reduce,
-// and/or otherwise manipulate a 2D polygon.
-//
-// For this class, a polygon consists of n > 2 points in 2D
-// space (a,b). The polygon is always closed by connecting the
-// last point to the first. A G4ReduciblePolygon is guaranteed
-// to fulfill this definition in all instances. 
-//
-// Illegal manipulations (such that a valid polygon would be
-// produced) result in an error return if possible and 
-// otherwise a G4Exception.
-//
-// The set of manipulations is limited currently to what
-// is needed for G4Polycone and G4Polyhedra.
-//
-// ----------------------------------------------------------
 // This code implementation is the intellectual property of
 // the GEANT4 collaboration.
 //
@@ -24,6 +5,34 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4ReduciblePolygon.hh,v 1.1 2000-04-07 10:58:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
+// --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+//
+// G4ReduciblePolygon.hh
+//
+// Class description:
+//
+//   Utility class used to specify, test, reduce, and/or otherwise
+//   manipulate a 2D polygon.
+//
+//   For this class, a polygon consists of n > 2 points in 2D
+//   space (a,b). The polygon is always closed by connecting the
+//   last point to the first. A G4ReduciblePolygon is guaranteed
+//   to fulfill this definition in all instances. 
+//
+//   Illegal manipulations (such that a valid polygon would be
+//   produced) result in an error return if possible and 
+//   otherwise a G4Exception.
+//
+//   The set of manipulations is limited currently to what
+//   is needed for G4Polycone and G4Polyhedra.
+
+// --------------------------------------------------------------------
 
 #ifndef G4ReduciblePolygon_hh
 #define G4ReduciblePolygon_hh
