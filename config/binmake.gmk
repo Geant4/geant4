@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.90 2003-10-01 15:52:37 gcosmo Exp $
+# $Id: binmake.gmk,v 1.91 2003-10-03 10:36:04 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -103,9 +103,9 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/biasing/include \
               -I$(G4BASE)/track/include \
               -I$(G4BASE)/tracking/include \
-              -I$(G4BASE)/digits+hits/detector/include \
-              -I$(G4BASE)/digits+hits/hits/include \
-              -I$(G4BASE)/digits+hits/digits/include \
+              -I$(G4BASE)/digits_hits/detector/include \
+              -I$(G4BASE)/digits_hits/hits/include \
+              -I$(G4BASE)/digits_hits/digits/include \
               -I$(G4BASE)/persistency/include \
               -I$(G4BASE)/readout/include \
               -I$(G4BASE)/event/include \
@@ -168,7 +168,7 @@ ifdef GLOBALLIBS
              -lG4tracking \
 	     -lG4parmodels \
              -lG4processes \
-             -lG4digits+hits \
+             -lG4digits_hits \
              -lG4track \
              -lG4particles \
              -lG4geometry \
