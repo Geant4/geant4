@@ -234,7 +234,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
   idxOfRegionModels.resize(numOfCouples);
-  upperEkin.resize(numOfCouples);
+  upperEkin.resize(nEmModels);
 
   // Order models for regions
   for (G4int reg=0; reg<nRegions; reg++) {
@@ -260,7 +260,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
         G4double tmin = model->LowEnergyLimit(particle);
         G4double tmax = model->HighEnergyLimit(particle);
 
-        if(0 < verboseLevel) {
+        if(1 < verboseLevel) {
           G4cout << "Model # " << ii << " for region <"
 	         << region->GetName() << ">  "
 	         << " tmin(MeV)= " << tmin/MeV
@@ -280,7 +280,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       }
     }
 
-    if(0 < verboseLevel) {
+    if(1 < verboseLevel) {
       G4cout << "New G4RegionModels set with " << n << " models for region <"
 	     << region->GetName() << ">  " << G4endl;
     }
@@ -296,7 +296,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     const G4Material* material = couple->GetMaterial();
     const G4ProductionCuts* pcuts = couple->GetProductionCuts();
     G4int reg = nRegions;
-    do {reg--;} while (reg && pcuts != (set[reg]->GetProductionCuts()));
+    do {reg--;} while (reg>0 && pcuts != (set[reg]->GetProductionCuts()));
     idxOfRegionModels[i] = reg;
 
     if(1 < verboseLevel) {
@@ -323,7 +323,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
       cut = G4std::max(cut, tcutmin);
       G4double x = G4std::max(cut*minSubRange, tcutmin);
       subcut = G4std::max(subcut, x);
-      if(0 < verboseLevel) {
+      if(1 < verboseLevel) {
             G4cout << "The model # " << j
                    << "; tcutmin(MeV)= " << tcutmin/MeV
                    << "; tcut(MeV)= " << cut/MeV
@@ -453,12 +453,6 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
                                   const G4MaterialCutsCouple* couple)
 {
 
-  if(0 < verboseLevel) {
-    G4cout << "G4EmModelManager::FillLambdaVector() for particle "
-           << particle->GetParticleName() << G4endl;
-  }
-
-
   // vectors to provide continues dE/dx
   G4DataVector factor;
   G4DataVector sigmaLow;
@@ -467,6 +461,15 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   G4double e;
 
   const G4Material* material = couple->GetMaterial();
+
+  if(0 < verboseLevel) {
+    G4cout << "G4EmModelManager::FillLambdaVector() for particle "
+           << particle->GetParticleName()
+           << " in " << material->GetName() 
+           << G4endl;
+  }
+
+
   size_t i = couple->GetIndex();
   G4double cut = theCuts[i];
 
@@ -477,7 +480,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
   sigmaLow.resize(nmod);
   sigmaHigh.resize(nmod);
 
-  if(0 < verboseLevel) {
+  if(1 < verboseLevel) {
       G4cout << "There are " << nmod << " models for "
              << material->GetName() << G4endl;
   }
@@ -540,7 +543,7 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     }
 
     if(1 < verboseLevel) {
-      G4cout << "BuildLambdaTable: " << j << ".   e(MeV)= " << e/MeV
+      G4cout << "FillLambdaVector: " << j << ".   e(MeV)= " << e/MeV
                << "  cross(1/mm)= " << cross*mm
                << " fac= " << fac
                << G4endl;

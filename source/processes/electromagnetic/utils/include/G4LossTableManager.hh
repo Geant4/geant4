@@ -126,7 +126,7 @@ private:
 
   G4LossTableManager();
 
-  void Initialise();
+  void Initialise(const G4ParticleDefinition*);
 
   G4VEnergyLossSTD* BuildTables(const G4ParticleDefinition* aParticle);
 
@@ -156,7 +156,7 @@ private:
   G4int n_loss;
 
   G4bool all_tables_are_built;
-  G4bool all_particles_are_mapped;
+  G4bool first_entry;
   G4bool electron_table_are_built;
   G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
@@ -172,6 +172,7 @@ private:
   G4VEnergyLossSTD*         eIonisation;
   G4LossTableBuilder*       tableBuilder;
   G4EnergyLossMessengerSTD* theMessenger;
+  const G4ParticleDefinition* firstParticle;
   G4int verbose;
 
 };

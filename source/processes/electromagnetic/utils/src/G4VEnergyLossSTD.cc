@@ -153,6 +153,7 @@ void G4VEnergyLossSTD::Clear()
   theInverseRangeTable = 0;
   theSecondaryRangeTable = 0;
   modelManager->Clear();
+  tablesAreBuilt = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -233,8 +234,6 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4cout << "G4VEnergyLossSTD::BuildPhysicsTable() for "
            << GetProcessName() << G4endl;
   }
-
-  tablesAreBuilt = false;
 
   // Are particle defined?
   if(!particle || particle->GetParticleType() == "nucleus") {
