@@ -117,9 +117,9 @@ void test31Histo::EndOfHisto()
     G4double sig = 0.0;
     if(zend2 > 0.) sig = sqrt(zend2);
     zend2 = sig / sqrt(zEvt);
-    G4cout << setprecision(5) << "Range(mm)= " << zend/mm 
+    G4cout << std::setprecision(5) << "Range(mm)= " << zend/mm 
            << "; Stragling(mm)= " << sig/mm 
-           << setprecision(2) << " +- " << zend2/mm 
+           << std::setprecision(2) << " +- " << zend2/mm 
            << "    " << zEvt << " events for range" << G4endl;
   }  
   G4double x = (G4double)n_evt;
@@ -134,15 +134,15 @@ void test31Histo::EndOfHisto()
   G4double xcb = x*(G4double)n_charged_back;
   G4double xgb = x*(G4double)n_gam_back;
   G4cout                    << "Number of events               " << n_evt <<G4endl; 
-  G4cout << setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl; 
-  G4cout << setprecision(4) << "Average number of e-           " << xe << G4endl; 
-  G4cout << setprecision(4) << "Average number of gamma        " << xg << G4endl; 
-  G4cout << setprecision(4) << "Average number of e+           " << xp << G4endl; 
-  G4cout << setprecision(4) << "Average number of steps        " << xs << G4endl; 
-  G4cout << setprecision(4) << "Average number of leak changed " << xcl << G4endl; 
-  G4cout << setprecision(4) << "Average number of leak gamma   " << xgl << G4endl; 
-  G4cout << setprecision(4) << "Average number of back changed " << xcb << G4endl; 
-  G4cout << setprecision(4) << "Average number of back gamma   " << xgb << G4endl; 
+  G4cout << std::setprecision(4) << "Average energy deposit         " << etot/MeV << " MeV" << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of e-           " << xe << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of gamma        " << xg << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of e+           " << xp << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of steps        " << xs << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of leak changed " << xcl << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of leak gamma   " << xgl << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of back changed " << xcb << G4endl; 
+  G4cout << std::setprecision(4) << "Average number of back gamma   " << xgb << G4endl; 
   G4cout<<"===================================================================="<<G4endl;
 
 

@@ -161,7 +161,7 @@ void test31PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	   << uy
 	   << " uz= "
 	   << uz 
-	   << endl;
+	   << G4endl;
     }
 
   particleGun->GeneratePrimaryVertex(anEvent);
