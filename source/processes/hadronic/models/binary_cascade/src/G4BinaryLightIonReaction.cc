@@ -14,6 +14,9 @@
   G4HadFinalState *G4BinaryLightIonReaction::
   ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
   {    
+  static G4int eventcounter=0;
+  if(getenv("KCDEBUG") ) G4cerr << " ######### Reaction number starts ######### "<<eventcounter<<G4endl;
+  eventcounter++;
     G4ping debug("debug_G4BinaryLightIonReaction");
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
