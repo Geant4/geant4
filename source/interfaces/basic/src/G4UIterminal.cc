@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIterminal.cc,v 1.11 2000-06-14 07:50:13 asaim Exp $
+// $Id: G4UIterminal.cc,v 1.12 2000-06-15 07:54:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -186,7 +186,7 @@ G4String G4UIterminal::GetCommand()
     G4String ss= nC(1, nC.length()-1);
     G4int vl;
     const char* tt= ss;
-    istrstream is((char*)tt);
+    G4std::istrstream is((char*)tt);
     is >> vl;
     G4int nh= UI-> GetNumberOfHistory();
     if(vl>=0 && vl<nh) { 
