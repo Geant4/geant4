@@ -110,6 +110,7 @@ int main(int argc, char** argv)
   int counter = 0;
   double elim = 18.0*MeV;
   double elim0= 20.0*MeV;
+  double elim1= 260.0*MeV;
   double x, an, e1, e2, x1, xs1, y1, y2, ct1, ct2, xs, p1;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
@@ -189,7 +190,7 @@ int main(int argc, char** argv)
           cross = new G4DataVector();
           ibin = 0;
 
-        } else if(end && e1 > elim) {
+        } else if(end && e1 > elim && e2 < elim1) {
 
           (*fin) >> xs1 >> e1 >> e2 >> x1 >> xs1;
          
@@ -203,17 +204,19 @@ int main(int argc, char** argv)
           e2 -= m3;
 	  */
 
-	  
+	  /*	  
           p1 = sqrt(e1*(e1 + 2.*m3))*ct1;
           e1 += m3; 
           e2 = gam*(e1 - p1*bet);
           x *= sqrt((e1*e1 - m3*m3)/(e2*e2 - m3*m3));
           e2 = e1 - m3;
+	  */
 
           ibin++;
+          if(x <= 0.0) x = 1.e-9;
           cross->push_back(x);
           if(an < 10.*degree) {
-            energy->push_back(e2);
+            energy->push_back(e1);
             nbin++;
 	  }
         }      
@@ -231,7 +234,7 @@ int main(int argc, char** argv)
         (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV
                   << G4endl;
-        (*fout_a1) << "#####..Result.of.integration..Energy points"
+        (*fout_a1) << "#####..Result.of.integration..Energy points Nbins= " << nbin
                    << G4endl;
         (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV

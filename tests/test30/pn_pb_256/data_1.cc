@@ -199,7 +199,7 @@ int main(int argc, char** argv)
         (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV
                   << G4endl;
-        (*fout_a1) << "#####..Result.of.integration..Energy points"
+        (*fout_a1) << "#####..Result.of.integration..Energy points Nbins= " << nbin
                    << G4endl;
         (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV

@@ -87,6 +87,9 @@ int main(int argc, char** argv)
   ofstream* fout_c1 = new ofstream();
   string fname6 = "dsdedtet.out";
   fout_c1->open(fname6.c_str(), std::ios::out|std::ios::trunc);
+  fout_a1->precision(5);
+  fout_b1->precision(5);
+  fout_c1->precision(5);
 
   //there can't be lines longer than nmax characters
   const int nmax = 200;
@@ -195,7 +198,7 @@ int main(int argc, char** argv)
     (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
               << elim0/MeV
               << G4endl;
-    (*fout_a1) << "#####..Result.of.integration..Energy points"
+    (*fout_a1) << "#####..Result.of.integration..Energy points Nbin= " << nbin
                << G4endl;
     (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                << elim0/MeV
