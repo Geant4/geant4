@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.2 1999-02-16 13:34:49 urban Exp $
+// $Id: G4hEnergyLoss.hh,v 1.3 1999-07-20 17:54:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -299,3 +299,5 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
 
 #endif
  
+
+

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.2 1999-02-16 13:34:50 urban Exp $
+// $Id: G4hIonisation.hh,v 1.3 1999-07-20 17:54:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,11 +58,11 @@ class G4hIonisation : public G4hEnergyLoss
 
     void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
-    void BuildLossTable(const G4ParticleDefinition& aParticleType);
+    virtual void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
     void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
 
-    void PrintInfoDefinition();
+    virtual void PrintInfoDefinition();
 
     G4double GetMeanFreePath(
                              const G4Track& track,
