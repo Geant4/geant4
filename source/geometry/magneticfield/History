@@ -1,4 +1,4 @@
-$Id: History,v 1.9 1999-04-19 18:12:14 japost Exp $
+$Id: History,v 1.10 1999-06-29 19:43:11 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June     29th, 1999   J. Apostolakis - field-01-00-06
+
+  I re-instated a check on whether the input distance along the curve between
+the two input curve points is truly greater than their linear distance.
+( in G4ChordFinder::ApproxCurvePointV )
+
+The condition that prints out a warning message has been altered to
+take into account the case of a very small final interval. 
+( in G4MagInt_Driver::AccurateAdvance )
+
+June     ??th, 1999   J. Apostolakis - field-01-00-05
+
+The condition that prints out a warning message was changed to delete 
+an incorrect comparison. 
+( in G4MagInt_Driver::AccurateAdvance )
 
 April    19th, 1999   J. Apostolakis - field-01-00-04
 
