@@ -253,13 +253,15 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
   // Set return value if in material available from Aahrus
   for(G4int i=0; i<numberOfMaterials; i++) {
 
-    if(materialAvailable[i] == Z){
+    if(materialAvailable[i] == Z) {
     	nShell = nbofShellForMaterial[i];
-	break;}
-    else nShell = fNumberOfShells[Z];
+	break;
+    }
   }
+
+  if(0 == nShell) nShell = fNumberOfShells[Z];
   
-   return nShell;
+  return nShell;
 }
 
 
