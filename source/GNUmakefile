@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.55 2004-06-03 07:47:48 gcosmo Exp $
+# $Id: GNUmakefile,v 1.56 2004-06-03 12:35:15 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -29,25 +29,28 @@ G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 G4TMPDIR := $(G4TMP)/$(G4SYSTEM)
 unique := $(shell echo $$$$)
 
-.PHONY: all glob global libmap dll win32def includes clean_libs clean clean_lists clean_all
+.PHONY: all glob global kernel_global kernel libmap dll win32def includes clean_libs clean clean_lists clean_all
 
-all:
-	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
+all: kernel
 ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 	$(MAKE) libmap
 
-glob global:
-	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) global); done;:
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
+glob global: kernel_global
 ifdef G4USE_G3TOG4
 	@for dir in $(SUBDIR4); do (cd $$dir && $(MAKE)); done;:
 endif
 
+kernel_global:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) global); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global); done;:
+
+kernel:
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE)); done;:
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE)); done;:
 
 libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
@@ -95,13 +98,12 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 dll: win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Verifying existence of global libraries ..."
-	@$(MAKE) global
+	@$(MAKE) kernel_global
 	@echo "Building Windows DLL libraries ..."
-	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) global G4LIB_BUILD_SHARED=1 $@); done
-	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) global G4LIB_BUILD_SHARED=1 $@); done
-	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) global G4LIB_BUILD_SHARED=1 $@); done
+	@$(MAKE) kernel_global G4LIB_BUILD_SHARED=1
 else
-	@echo ""
+	@echo "Build of DLLs is only supported on Windows platforms !"
+	@echo "The system you have currently selected is $(G4SYSTEM)."
 endif
 
 win32def: $(G4INSTALL)/config/win32def.c
@@ -110,7 +112,8 @@ ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/win32def $(G4INSTALL)/config/win32def.c
 else
-	@echo ""
+	@echo "Build of DLLs is only supported on Windows platforms !"
+	@echo "The system you have currently selected is $(G4SYSTEM)."
 endif
 
 includes:
