@@ -18,6 +18,7 @@
 #include "G4V3DNucleus.hh"
 #include "G4Track.hh"
 #include "G4Nucleus.hh"
+#include "G4NucleiModel.hh"
 
 #include "G4FragmentVector.hh"
 
@@ -86,9 +87,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   G4double theNucleusA = theNucleus.GetN() + theNucleus.GetZ();
 
-  if ( theNucleusA == 1 ) {
-    targetH = new G4InuclElementaryParticle(targetMomentum, 1); // Special treatment for hydrogen
-  } else {
+  if ( !(theNucleusA == 1) ) {
     target  = new G4InuclNuclei(targetMomentum, 
 				theNucleusA, 
 				theNucleus.GetZ());
@@ -125,7 +124,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     G4InuclCollider*             collider = new G4InuclCollider(colep, inc, noneq, eqil, fiss, bigb);
 
 
+
     if ( theNucleusA == 1 ) {
+     G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
+      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
       output = collider->collide(bullet, targetH); 
     } else {
       output = collider->collide(bullet, target ); 
