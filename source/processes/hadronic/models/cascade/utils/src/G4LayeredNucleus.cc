@@ -45,7 +45,7 @@ G4ThreeVector G4LayeredNucleus::GetMomentum()
 }
 
 
-void G4LayeredNucleus::SetMomentum( const G4ThreeVector mom )
+void G4LayeredNucleus::SetMomentum( const G4ThreeVector& mom )
   {
     momentumVector = mom;
   }

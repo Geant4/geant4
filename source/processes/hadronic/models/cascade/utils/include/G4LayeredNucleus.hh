@@ -52,7 +52,7 @@ public:
   }
 
   G4ThreeVector GetMomentum();
-  void SetMomentum( G4ThreeVector mom);
+  void SetMomentum(const G4ThreeVector& mom);
 
 private:
     
