@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-04-16 10:48:47 kurasige Exp $
+$Id: History,v 1.3 2000-06-17 12:21:24 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 17, 2000  John Allison  (exampleN01-V01-01-00)
+- Updated exampleN01.out for geant4-01-01-ref-06.
+
 16th April 1999 H.Kurashige
 - modify ExN01PhysicsList::SetCuts
 
