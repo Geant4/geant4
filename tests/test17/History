@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2000-11-24 08:36:12 stesting Exp $
+$Id: History,v 1.9 2000-12-06 10:15:09 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th December  2000 Steve O'Neale (tagset221) large_N reference outputs
+              tag results to match tagged code 
 
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut in Gold and Graphite
