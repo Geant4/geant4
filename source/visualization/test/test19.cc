@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: test19.cc,v 1.6 2000-05-22 07:43:37 johna Exp $
+// $Id: test19.cc,v 1.7 2000-05-22 08:21:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,18 +89,11 @@ int main (int argc, char** argv) {
 #ifdef G4UI_USE_GAG
     else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
 #endif
-#ifdef G4UI_USE_GAG
-    else                                 session = new G4UIGAG;
-#else
-    else                                 session = new G4UIterminal;
-#endif
-  } else {
-#ifdef G4UI_USE_GAG
-    session = new G4UIGAG;
-#else
-    session = new G4UIterminal;
-#endif
+    else                                 session =
+					   new G4UIterminal(new G4UItcsh);
   }
+  else                                   session =
+					   new G4UIterminal(new G4UItcsh);
 #endif
   G4UImanager::GetUIpointer()->SetSession(session);  //So that Pause works..
 
