@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:09:50 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-10-07 14:10:23 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for barions library.  Gabriele Cosmo, 18/9/96.
 # --------------------------------------------------------------
 
-name := G4barions
+name := G4baryons
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..

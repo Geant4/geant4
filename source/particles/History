@@ -1,4 +1,4 @@
-$Id: History,v 1.24 1999-10-06 08:35:01 kurasige Exp $
+$Id: History,v 1.25 1999-10-07 14:10:24 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Oct 7, 99 J.Allison
+- Changed name of library G4barions to G4baryons.
+
 - Oct 6, 99 H.Kurashige (particles-V00-01-00)
 ----- shortlived-V00-01-01 tag
 - Change 'static const  G4String' array to  'static const char*' array (Hisaya)
