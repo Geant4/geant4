@@ -19,12 +19,21 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+////
+// The code was written by :
+//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Luc Beaulieu beaulieu@phy.ulaval.ca
+//      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
 //
-// $Id: DicomPrimaryGeneratorAction.hh,v 1.3 2003-06-04 22:24:07 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
+// *Centre Hospitalier Universitaire de Quebec (CHUQ),
+// Hotel-Dieu de Quebec, departement de Radio-oncologie
+// 11 cote du palais. Quebec, QC, Canada, G1R 2J6
+// tel (418) 525-4444 #6720
+// fax (418) 691 5268
 //
-//
+// + Université Laval, Québec (QC) Canada
+//*******************************************************
 
 #ifndef DicomPrimaryGeneratorAction_h
 #define DicomPrimaryGeneratorAction_h 1

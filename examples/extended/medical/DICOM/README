@@ -5,8 +5,20 @@
 +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 
 The DICOM application has been developed by the Geant4 users:
-Louis Archambault,Vincent Hubert-Tremblay.
-The example is a preliminary version of Geant4DicomInterface.
+Louis Archambault,*Luc Beaulieu, +Vincent Hubert-Tremblay.
+
+*Centre Hospitalier Universitaire de Quebec (CHUQ),
+Hotel-Dieu de Quebec, departement de Radio-oncologie
+11 cote du palais. Quebec, QC, Canada, G1R 2J6
+tel (418) 525-4444 #6720
+fax (418) 691 5268
+web : thomson.phy.ulaval.ca/phys_med 
+
++ Université Laval, Québec (QC) Canada
+
+This example illustrates a preliminary version of a Geant4 interface
+to the DICOM image format.
+The example consists in creating an image from dicom files.
 
 --->1) Introduction
 
@@ -15,8 +27,11 @@ DICOM images are read and used as Geometry for simulation.
 Three file .dcm give the experimental set-up 
 (in terms of tissues and  tissue geometry position) are read. 
 It is possible to visualise the reproduced experimental  
-set-up thanks to the use visualisation packages.
-
+set-up thanks to the use of visualisation packages.
+ 
+You can find the phantom reproduced in the image PhantomCT.jpg.
+In the application  the phantom is placed on a table.
+ 
 ---> 2) Installation:
 
  -example enviroment with the compiler 3.2                              
@@ -66,9 +81,6 @@ in the table below.
 Data taken from the International Commission on Radiation Units and measurements (ICRU)
 report 46 was used to build the materials (lung, liver, breast, bones, ...)
 
-For the example included, this is the correspondences used :
-(see the image PhantomCT.jpg for a visual example)
-
 5) Contacts
 
 If you have any questions or wish to notify of updates and/or modification
@@ -77,7 +89,6 @@ please contact:
 *Louis Archambault at louis.archambault@phy.ulaval.ca
  
 *Luc Beaulieu at beaulieu@phy.ulaval.ca
-
 
 + Vincent Hubert-Tremblay
    <tigre.2@sympatico.ca> or <vihut@phy.ulaval.ca>
@@ -89,4 +100,4 @@ tel (418) 525-4444 #6720
 fax (418) 691 5268
 web : thomson.phy.ulaval.ca/phys_med 
 
-+  3rd year  Physical Engineering student
++ Université Laval, Québec (QC) Canada

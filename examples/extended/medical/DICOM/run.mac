@@ -4,6 +4,7 @@
 /vis/scene/create
 /vis/open OGLIX
 /vis/viewer/zoom 3
+/vis/viewer/set/viewpointThetaPhi 90 0
 #/vis/viewer/update
 #beamOn
 /run/beamOn 3

@@ -1,36 +1,39 @@
-//*******************************************************
-// G4 routine to build a geometry based on DICOM
-// images for medical purpose.  Material are extracted
-// from CT (Hounsfield) numbers and built using ICRU
-// report 46.
 //
-// Note:-DicomGeometry (DetectorConstruction), DicomHandler,
-//   	 DicomPatientParametrisation .cc and .hh files are
-//	 the ones necessary for the correct construction of
-//	 a geometry based on .dcm files
-//	-The PrimaryGeneratorAction is designed to send
-//	 irradiation in a way similar to medical irradiation
-//	 but it can be replaced without any problems
-//	-The PhysicsList is designed for the low energy
-//
-// WARNING : this version of the code is slow :
-//	     1 minute for 100 initial photons, this will
-//	     be corrected in the future
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
 //
 // The code was written by :
-//	Vincent Hubert-Tremblay at tigre.2@sympatico.ca
+//	*Louis Archambault louis.archambault@phy.ulaval.ca,
+//      *Luc Beaulieu beaulieu@phy.ulaval.ca
+//      +Vincent Hubert-Tremblay at tigre.2@sympatico.ca
 //
-// For more information contact :
-//	Louis Archambault louis.archambault@phy.ulaval.ca
-// or
-//	Luc Beaulieu beaulieu@phy.ulaval.ca
 //
-// Centre Hospitalier Universitaire de Quebec (CHUQ),
+// *Centre Hospitalier Universitaire de Quebec (CHUQ),
 // Hotel-Dieu de Quebec, departement de Radio-oncologie
 // 11 cote du palais. Quebec, QC, Canada, G1R 2J6
 // tel (418) 525-4444 #6720
 // fax (418) 691 5268
-//*******************************************************
+//
+// + Université Laval, Québec (QC) Canada
+//*******************************************************//
 
 #include "globals.hh"
 #include "G4UImanager.hh"
