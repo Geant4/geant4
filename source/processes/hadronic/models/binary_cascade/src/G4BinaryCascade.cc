@@ -1795,7 +1795,7 @@ G4Fragment * G4BinaryCascade::FindFragments()
   fragment->SetNumberOfParticles(excitons);
   fragment->SetNumberOfCharged(zCaptured);
   G4ParticleDefinition * aIonDefinition =
-       G4ParticleTable::GetParticleTable()->FindIon(a,z,0.0,z);
+       G4ParticleTable::GetParticleTable()->FindIon(a,z,0,z);
   fragment->SetParticleDefinition(aIonDefinition);
 #ifdef debug_G4BinaryCascade
    G4cout << "Fragment: a= " << a
@@ -1819,7 +1819,6 @@ G4LorentzVector G4BinaryCascade::GetFinal4Momentum()
 {
 // the initial 3-momentum will differ from 0, if nucleus created by string model.
   G4LorentzVector final4Momentum = theInitial4Mom;
-  G4double mass=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(the3DNucleus->GetCharge(), the3DNucleus->GetMassNumber());
   G4KineticTrackVector::iterator i;
   for(i = theProjectileList.begin() ; i != theProjectileList.end(); ++i)
   {

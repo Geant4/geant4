@@ -29,7 +29,7 @@ class G4RKFieldIntegrator : public G4FieldPropagation
 {
 public:
    G4RKFieldIntegrator() {}
-   G4RKFieldIntegrator(const G4RKFieldIntegrator &right) {}
+   G4RKFieldIntegrator(const G4RKFieldIntegrator &):G4FieldPropagation() {}
 
    ~G4RKFieldIntegrator() {}
 

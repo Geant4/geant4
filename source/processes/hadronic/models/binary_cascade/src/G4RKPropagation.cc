@@ -78,7 +78,8 @@ G4RKPropagation::G4RKPropagation() : theNucleus(0),
 { }
 
 
-G4RKPropagation::G4RKPropagation(const  G4RKPropagation &right)
+G4RKPropagation::G4RKPropagation(const  G4RKPropagation &) :
+G4VFieldPropagation()
 { }
 
 
@@ -95,19 +96,19 @@ G4RKPropagation::~G4RKPropagation()
 
 
 
-const G4RKPropagation & G4RKPropagation::operator=(const G4RKPropagation & right)
+const G4RKPropagation & G4RKPropagation::operator=(const G4RKPropagation &)
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator= meant not to be accessible");
   return *this;
 }
 
-G4int G4RKPropagation::operator==(const G4RKPropagation & right) const
+G4int G4RKPropagation::operator==(const G4RKPropagation &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator== meant not to be accessible");
   return 0;
 }
 
-G4int G4RKPropagation::operator!=(const G4RKPropagation & right) const
+G4int G4RKPropagation::operator!=(const G4RKPropagation &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4RKPropagation::operator!= meant not to be accessible");
   return 1;
@@ -243,7 +244,7 @@ void G4RKPropagation::Init(G4V3DNucleus * nucleus)
 //----------------------------------------------------------------------------
 void G4RKPropagation::Transport(G4KineticTrackVector & active,
 //----------------------------------------------------------------------------
-				const G4KineticTrackVector & spectators,
+				const G4KineticTrackVector &,
 				G4double timeStep)
 {
 //  reset momentum transfer to field

@@ -9,6 +9,7 @@
 #include "G4Neutron.hh"
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
+#include "G4HadTmpUtil.hh"
  
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
@@ -23,11 +24,9 @@
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
-//    G4int a2=static_cast<G4int>(targetNucleus.GetN()+.1);
-//    G4int z2=static_cast<G4int>(targetNucleus.GetZ());
     G4double a2=targetNucleus.GetN();
     G4double z2=targetNucleus.GetZ();
-    G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2, a2);
+    G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z2),G4lrint(a2));
     debug.push_back(a1);
     debug.push_back(z1);
     debug.push_back(m1);
@@ -141,7 +140,7 @@
       if(!aNuc->AreYouHit())
       {
         resA++;
-	resZ+=aNuc->GetDefinition()->GetPDGCharge();
+	resZ+=G4lrint(aNuc->GetDefinition()->GetPDGCharge());
       }
       else
       {
@@ -160,7 +159,7 @@
     iState.setT(iState.getT()+m2);
 
     G4LorentzVector fState(0,0,0,0);
-    G4int i(0);
+    unsigned int i(0);
     for(i=0; i<result->size(); i++)
     {
       if( (*result)[i]->GetNewlyAdded() ) 
@@ -190,7 +189,7 @@
     aProRes.SetZ(resZ);
     aProRes.SetNumberOfParticles(0);
     aProRes.SetNumberOfCharged(0);
-    aProRes.SetNumberOfHoles(a1-resA);
+    aProRes.SetNumberOfHoles(G4lrint(a1)-resA);
     aProRes.SetMomentum(momentum);
     G4ParticleDefinition * resDef(0);
 //    G4cout << "G4BinaryLiightIonReaction: spectator particles A Z : " 
@@ -200,7 +199,7 @@
     G4ReactionProductVector * proFrag(0);
     if(resZ>0 && resA>1) 
     {
-      resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0.0,resZ);  
+      resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0,resZ);  
       aProRes.SetParticleDefinition(resDef);
       proFrag = theProjectileFragmentation.DeExcite(aProRes);
     }

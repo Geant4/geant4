@@ -37,6 +37,7 @@
 #include "G4VNuclearDensity.hh"
 #include "G4FermiMomentum.hh"
 #include "G4KaonZero.hh"
+#include "G4HadTmpUtil.hh"
 
 G4KaonZeroField::G4KaonZeroField(G4V3DNucleus * nucleus, G4double coeff)
   : G4VNuclearField(nucleus)
@@ -49,21 +50,21 @@ G4KaonZeroField::~G4KaonZeroField()
 { }
 
 
-const G4KaonZeroField & G4KaonZeroField::operator=(const G4KaonZeroField & right)
+const G4KaonZeroField & G4KaonZeroField::operator=(const G4KaonZeroField &)
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator= meant not to be accessible");
   return *this;
 }
 
 
-G4int G4KaonZeroField::operator==(const G4KaonZeroField & right) const
+G4int G4KaonZeroField::operator==(const G4KaonZeroField &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator== meant not to be accessible");
   return 0;
 }
 
 
-G4int G4KaonZeroField::operator!=(const G4KaonZeroField & right) const
+G4int G4KaonZeroField::operator!=(const G4KaonZeroField &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4KaonZeroField::operator!= meant not to be accessible");
   return 1;
@@ -80,7 +81,7 @@ G4double G4KaonZeroField::GetField(const G4ThreeVector & aPosition)
 
   G4double A = theNucleus->GetMassNumber();
   G4double Z = theNucleus->GetCharge();
-  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(Z, A);
+  G4double bindingEnergy = G4NucleiPropertiesTable::GetBindingEnergy(G4lrint(Z), G4lrint(A));
   G4double nucleusMass = Z*proton_mass_c2+(A-Z)*neutron_mass_c2+bindingEnergy;
   G4double reducedMass = kaonMass*nucleusMass/(kaonMass+nucleusMass);
 

@@ -174,7 +174,7 @@ G4double G4RKFieldIntegrator::GetExcitationEnergy(const G4KineticTrackVector &th
 //*************************************************************************************************************************************
 //This is a simplified method to get excitation energy of a residual 
 // nucleus with nHitNucleons.
-G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4KineticTrackVector &theParticles)
+G4double G4RKFieldIntegrator::GetExcitationEnergy(G4int nHitNucleons, const G4KineticTrackVector &)
 {
    const G4double MeanE = 50;
    G4double Sum = 0;
@@ -228,7 +228,7 @@ const G4double G4RKFieldIntegrator::a_antiproton = 1.53;
 
 // methods for calculating potentials for different types of particles
 // aPosition is relative to the nucleus center
-G4double G4RKFieldIntegrator::GetNeutronPotential(G4double radius)
+G4double G4RKFieldIntegrator::GetNeutronPotential(G4double )
 {
    /*
    const G4double Mn  = 939.56563 * MeV; // mass of nuetron
@@ -255,7 +255,7 @@ G4double G4RKFieldIntegrator::GetNeutronPotential(G4double radius)
    return 0.0;
 }
 
-G4double G4RKFieldIntegrator::GetProtonPotential(G4double radius)
+G4double G4RKFieldIntegrator::GetProtonPotential(G4double )
 {
    /*
    // calculate Coulomb barrier value
@@ -285,7 +285,7 @@ G4double G4RKFieldIntegrator::GetProtonPotential(G4double radius)
    return 0.0;
 }
 
-G4double G4RKFieldIntegrator::GetAntiprotonPotential(G4double radius)
+G4double G4RKFieldIntegrator::GetAntiprotonPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);
@@ -315,7 +315,7 @@ G4double G4RKFieldIntegrator::GetAntiprotonPotential(G4double radius)
    return 0.0;
 }
 
-G4double G4RKFieldIntegrator::GetKaonPotential(G4double radius)
+G4double G4RKFieldIntegrator::GetKaonPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);
@@ -345,7 +345,7 @@ G4double G4RKFieldIntegrator::GetKaonPotential(G4double radius)
    return 0.0;
 }
 
-G4double G4RKFieldIntegrator::GetPionPotential(G4double radius)
+G4double G4RKFieldIntegrator::GetPionPotential(G4double )
 {
    /*
    //G4double theM = G4NucleiProperties::GetAtomicMass(theA, theZ);

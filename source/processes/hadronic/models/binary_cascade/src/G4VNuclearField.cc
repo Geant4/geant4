@@ -51,19 +51,19 @@ G4VNuclearField::~G4VNuclearField()
 {
 }
 
-const G4VNuclearField & G4VNuclearField::operator=(const G4VNuclearField & right)
+const G4VNuclearField & G4VNuclearField::operator=(const G4VNuclearField &)
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator= meant not to be accessible");
   return *this;
 }
 
-G4int G4VNuclearField::operator==(const G4VNuclearField & right) const
+G4int G4VNuclearField::operator==(const G4VNuclearField &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator== meant not to be accessible");
   return 0;
 }
 
-G4int G4VNuclearField::operator!=(const G4VNuclearField & right) const
+G4int G4VNuclearField::operator!=(const G4VNuclearField &) const
 {
   throw G4HadronicException(__FILE__, __LINE__, "G4VNuclearField::operator!= meant not to be accessible");
   return 1;
