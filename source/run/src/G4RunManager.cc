@@ -5,10 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.4 1999-04-22 21:51:12 asaim Exp $
+// $Id: G4RunManager.cc,v 1.5 1999-05-17 16:17:44 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
+
+// On Sun, to prevent conflict with ObjectSpace, G4Timer.hh has to be
+// loaded *before* globals.hh...
+#include "G4Timer.hh"
 
 #include "G4RunManager.hh"
 
@@ -28,7 +32,6 @@
 #include "G4UImanager.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessTable.hh"
-#include "G4Timer.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
 
