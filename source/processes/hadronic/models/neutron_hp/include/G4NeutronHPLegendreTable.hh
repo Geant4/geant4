@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPLegendreTable.hh,v 1.7 2002-12-12 19:18:14 gunter Exp $
+// $Id: G4NeutronHPLegendreTable.hh,v 1.8 2003-02-12 12:37:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPLegendreTable_h
@@ -76,10 +76,11 @@ class G4NeutronHPLegendreTable
   
   inline void Init(G4double e, G4int n)
   {
-    theCoeff = new G4double[n+1];
+    nCoeff = n+1;
+    theCoeff = new G4double[nCoeff];
+    for(G4int i=0; i<nCoeff; i++) theCoeff[i] = 0;
     theCoeff[0]=1.;
     theEnergy = e;
-    nCoeff = n+1;
 //    G4cout << "G4NeutronHPLegendreTable::Init called "<<e<<" "<<n<<G4endl;
   }
   inline void SetEnergy(G4double energy){ theEnergy = energy; }
