@@ -282,8 +282,8 @@ void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mind
     {
       dicomConfiguration->ReadG4File( dicomConfiguration->GetListOfFile()[z] );
       G4int compressionValue = dicomConfiguration->GetCompressionValue(); 
-      G4int lenRows = abs(rows/compressionValue);
-      G4int lenColumns=abs(columns/compressionValue);
+      G4int lenRows = std::abs(rows/compressionValue);
+      G4int lenColumns=std::abs(columns/compressionValue);
 
       G4int i = 0;
       for ( G4int j = 1; j <= lenRows; j++ )

@@ -92,8 +92,8 @@ G4int DicomPatientConstructor::FindingNbOfVoxels(G4double maxDensity , G4double 
 
       std::fscanf(readData,"%s",compressionBuffer);
       compression = atoi(compressionBuffer);
-      lenr = abs(rows/compression);
-      lenc = abs(columns/compression);
+      lenr = std::abs(rows/compression);
+      lenc = std::abs(columns/compression);
       char densityBuffer[300];
       std::vector<G4double> density;
       for ( G4int j = 1;j <= lenr;j++ )
