@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.hh,v 1.3 2000-11-03 10:29:51 pia Exp $
+// $Id: G4VeLowEnergyLoss.hh,v 1.4 2001-05-18 17:44:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 3.4.2000 Veronique Lefebure:
@@ -179,6 +179,9 @@ class G4VeLowEnergyLoss : public G4VContinuousDiscreteProcess
     static void BuildRangeVector(G4PhysicsTable* theDEDXTable,
                         G4double Tmin,G4double Tmax,G4int nbin,
                         G4int materialIndex,G4PhysicsLogVector* rangeVector);
+
+    static void BuildRangeVectorNew(const G4PhysicsTable*,G4int,
+                                          G4int,G4PhysicsLogVector*);
 
     static G4double RangeIntLin(G4PhysicsVector* physicsVector
                                                         ,G4int nbin);

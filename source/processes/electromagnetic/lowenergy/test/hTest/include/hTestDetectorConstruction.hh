@@ -78,6 +78,8 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
     inline G4int GetFirstEventToDebug() const {return nFirstEvtToDebug;};
     inline void SetLastEventToDebug(G4int val) {nLastEvtToDebug = val;};
     inline G4int GetLastEventToDebug() const {return nLastEvtToDebug;};
+    inline G4double  GetMaxDeltaEnergy() const {return maxDelta;};
+    inline void SetMaxDeltaEnergy(G4double val) {maxDelta = val;};            
 
     inline const G4VPhysicalVolume* GetPhysWorld() const {return physWorld;};
     inline const G4LogicalVolume*   GetAbsorber()  const {return logicAbs;};
@@ -136,6 +138,7 @@ class hTestDetectorConstruction : public G4VUserDetectorConstruction
      G4int nHisto;
      G4int nFirstEvtToDebug;
      G4int nLastEvtToDebug;
+     G4double maxDelta;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

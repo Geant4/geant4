@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.8 2001-05-10 17:03:17 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.9 2001-05-18 17:44:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,13 +103,49 @@ G4PhysicsTable* G4VeLowEnergyLoss::BuildRangeTable(
      G4PhysicsLogVector* aVector;
      aVector = new G4PhysicsLogVector(LowestKineticEnergy,
                               HighestKineticEnergy,TotBin);
-
+     /*
      BuildRangeVector(theDEDXTable,LowestKineticEnergy,HighestKineticEnergy,
                       TotBin,J,aVector);
+		      */
+     BuildRangeVectorNew(theDEDXTable,TotBin,J,aVector);
      theRangeTable->insert(aVector);
    }
    return theRangeTable ;
 }   
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VeLowEnergyLoss::BuildRangeVectorNew(const G4PhysicsTable* theDEDXTable,
+                                            G4int TotBin, G4int materialIndex,
+                                            G4PhysicsLogVector* rangeVector)
+//  create range vector for a material
+{
+  G4bool isOut;
+  G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
+  G4double energy1 = rangeVector->GetLowEdgeEnergy(0);
+  G4double dedx    = physicsVector->GetValue(energy1,isOut);
+  G4double range   = 0.5*energy1/dedx;
+  rangeVector->PutValue(0,range);
+  G4int n = 100;
+  G4double del = 1.0/(G4double)n ;
+
+  for (G4int j=1; j<TotBin; j++) {
+
+    G4double energy2 = rangeVector->GetLowEdgeEnergy(j);
+    G4double de = (energy2 - energy1) * del ;
+    G4double dedx1 = dedx ;
+
+    for (G4int i=1; i<n; i++) {
+      G4double energy = energy1 + i*de ;
+      G4double dedx2  = physicsVector->GetValue(energy,isOut);
+      range  += 0.5*de*(1.0/dedx1 + 1.0/dedx2);
+      dedx1   = dedx2;
+    }
+    rangeVector->PutValue(j,range);
+    dedx = dedx1 ;
+    energy1 = energy2 ;
+  }
+}    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.18 2001-05-07 23:32:07 pia Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.19 2001-05-18 17:44:12 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,12 +83,16 @@ public:
                                      const G4int subshellindex,
                                      const G4double KineticEnergy,
                                      const G4double Tcut) ;
+  void SetLowEnergyLimit(G4double val) {if(val > 0.0) lEnergyLimit = val;};
   
   private:
   
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,
 				       const G4double IncEnergy);
   G4double ComputeCrossSectionWithCut(const G4double AtomIndex,
+				      const G4double IncEnergy,
+		   	 	      const G4double CutEnergy);
+  G4double ComputeMicroscopicCrossSection(const G4double AtomIndex,
 				      const G4double IncEnergy,
 		   	 	      const G4double CutEnergy);
   
@@ -145,6 +149,7 @@ private:
   G4LowEnergyUtilities util;
 
   G4DataVector thePrimShVec;
+  G4double lEnergyLimit;
 };
  
 #include "G4LowEnergyIonisation.icc"

@@ -72,6 +72,7 @@ public: // Without description
     G4UIcmdWithAnInteger*      nhistCmd;
     G4UIcmdWithAnInteger*      nDebugSCmd;
     G4UIcmdWithAnInteger*      nDebugECmd;
+    G4UIcmdWithADoubleAndUnit* DeltaECmd;
 
 };
 

@@ -21,6 +21,8 @@
 #include "G4DynamicParticle.hh"
 #include "G4Track.hh"
 #include "G4ThreeVector.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -38,22 +40,21 @@ hTestTrackingAction::~hTestTrackingAction()
 void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 {
 
-  if(1 < theHisto->GetVerbose()) {
-    G4cout << "hTestTrackingAction: Next track #" 
-           << aTrack->GetTrackID() << G4endl;
-  }
+  G4ParticleDefinition* particle = aTrack->GetDefinition();
+  G4String name = particle->GetParticleName();
 
-  G4bool primary = false;
-  if(0 == aTrack->GetParentID()) primary = true;
+  if(0 < theHisto->GetVerbose()) {
+    G4cout << "hTestTrackingAction: Next track #" 
+           << aTrack->GetTrackID() << " of " << name 
+           << " with kinetic energy " << aTrack->GetKineticEnergy()/MeV << " MeV" << G4endl;
+  }
 
   //Save primary parameters
 
-  if(primary) {
+  if(0 == aTrack->GetParentID()) {
 
     G4double kinE = aTrack->GetKineticEnergy();
     theHisto->SaveToTuple("TKIN", kinE/MeV);      
-
-    G4ParticleDefinition* particle = aTrack->GetDefinition();
 
     G4double mass = 0.0;
     if(particle) {
@@ -68,12 +69,25 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     theHisto->SaveToTuple("Y0",(pos.y())/mm);
     theHisto->SaveToTuple("Z0",(pos.z())/mm);
   
-
     if(1 < theHisto->GetVerbose()) {
-      G4cout << "hTestTrackingAction: kinE(MeV)= " << kinE/MeV
+      G4cout << "hTestTrackingAction: Primary kinE(MeV)= " << kinE/MeV
            << "; m(MeV)= " << mass/MeV   
            << "; pos= " << pos << ";  dir= " << dir << G4endl;
     }
+
+    // delta-electron
+  } else if ("e-" == name) {
+    if(1 < theHisto->GetVerbose()) {
+      G4cout << "hTestTrackingAction: Secondary electron " << G4endl;
+    }
+    theHisto->AddDeltaElectron(aTrack->GetDynamicParticle());
+
+  } else if ("gamma" == name) {
+    if(1 < theHisto->GetVerbose()) {
+      G4cout << "hTestTrackingAction: Secondary gamma " << G4endl;
+    }
+    theHisto->AddPhoton(aTrack->GetDynamicParticle());
+ 
   }
 }
 

@@ -144,6 +144,12 @@ hTestDetectorMessenger::hTestDetectorMessenger(hTestDetectorConstruction* h):
   nDebugECmd->SetGuidance("Set number of the last event to debug"); 
   nDebugECmd->SetParameterName("nLastEventToDebug",false);
   nDebugECmd->AvailableForStates(PreInit,Idle);
+
+  DeltaECmd = new G4UIcmdWithADoubleAndUnit("/hTest/maxDeltaEnergy",this);  
+  DeltaECmd->SetGuidance("Define scale of delta-Energy histogram");
+  DeltaECmd->SetParameterName("DeltaE",false);
+  DeltaECmd->SetUnitCategory("Energy");
+  DeltaECmd->AvailableForStates(PreInit,Idle);  
   
 }
 
@@ -171,6 +177,7 @@ hTestDetectorMessenger::~hTestDetectorMessenger()
   delete hTestdetDir;
   delete hTestdetDir1;
   delete hTestdetDir2;
+  delete DeltaECmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -231,6 +238,9 @@ void hTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == nDebugECmd )
    { hDet->SetLastEventToDebug(nDebugECmd->GetNewIntValue(newValue));}
+
+  if( command == DeltaECmd )
+   { hDet->SetMaxDeltaEnergy(DeltaECmd->GetNewDoubleValue(newValue));}
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

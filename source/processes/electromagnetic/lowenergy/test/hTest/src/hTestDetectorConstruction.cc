@@ -74,6 +74,7 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   nameMatWorld      = G4String("Air");
   WorldSizeZ        = 400.0*mm;
   histoName         = G4String("histo.paw");
+  maxDelta          = 10.0*MeV;
 
   ComputeGeomParameters();
 
@@ -108,11 +109,9 @@ void hTestDetectorConstruction::DefineMaterials()
 
   G4String name, symbol;             //a=mass of a mole;
   G4double a, z, density;            //z=mean number of protons;  
-  G4int iz, n;                       //iz=number of protons  in an isotope; 
-                                     // n=number of nucleons in an isotope;
 
   G4int    ncomponents, natoms;
-  G4double abundance, fractionmass;
+  G4double fractionmass;
   G4double temperature, pressure;
 
 //
@@ -415,6 +414,8 @@ void hTestDetectorConstruction::ComputeGeomParameters()
   (hTestHisto::GetPointer())->SetAbsorberThickness(AbsorberThickness);
   (hTestHisto::GetPointer())->SetNumAbsorbersSaved(nAbsSaved);
   (hTestHisto::GetPointer())->SetHistoName(histoName);
+  (hTestHisto::GetPointer())->SetHistoNumber(nHisto);
+  (hTestHisto::GetPointer())->SetMaxEnergy(maxDelta);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
