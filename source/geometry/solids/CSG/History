@@ -1,4 +1,4 @@
-$Id: History,v 1.57 2003-10-29 16:52:53 japost Exp $
+$Id: History,v 1.58 2003-10-31 09:03:25 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,14 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
 Oct 29, 2003   J.Apostolakis             geom-csg-V05-02-03
-- G4Sphere.cc : Fix for Phi_start - 0.5 kAngTol < phi < Phi_start 
+- G4Sphere.cc: fix for Phi_start in Inside() (0.5 kAngTol < phi < Phi_start) 
 
 Oct 28, 2003   G.Cosmo                   geom-csg-V05-02-02
 - Migrated to new G4Exception scheme.
 
-Oct  9, 2003   V.Grichine                geom-csg-V05-02-01
-- Fixes to default safety to zero in DistIn/Out(p) methods.
+Oct 09, 2003   V.Grichine                geom-csg-V05-02-01
+- Initialise safe=0.0 in DistanceToIn/Out(p) in all solids.
+- Introduced G4Orb solid: a simple sphere with only outer radius.
 
 Sep 30, 2003   G.Cosmo                   geom-csg-V05-02-00
 - Updated GNUmakefile for unit tests, according to new structure
