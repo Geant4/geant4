@@ -92,7 +92,7 @@ void test31StanMAPhysicsList::ConstructProcess()
       //      pmanager->AddProcess(new G4MultipleScatteringSTD, -1, 1,1);
       G4eIonisationSTD* eion = new G4eIonisationSTD();
       eion->SetLossFluctuations(false);
-      eion->SetVerboseLevel(1);
+      // eion->SetVerboseLevel(1);
       //      eion->SetParticle(particle);
       //      eion->SetSubCutoff(false);
       pmanager->AddProcess(eion,   -1, 2,2);

@@ -87,8 +87,9 @@ void test31StanPhysicsList::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4GammaConversion);    
       
     } else if (particleName == "e-") {
-      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+      // pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       G4eIonisation* eion = new G4eIonisation();
+      eion->SetEnlossFluc(false);
       eion->SetSubSec(false);
       pmanager->AddProcess(eion,   -1, 2,2);
       G4eBremsstrahlung* ebr = new G4eBremsstrahlung();
