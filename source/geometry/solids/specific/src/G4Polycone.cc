@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.cc,v 1.8 2003-03-28 09:52:50 gcosmo Exp $
+// $Id: G4Polycone.cc,v 1.9 2003-06-16 13:09:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -527,15 +527,13 @@ G4NURBS *G4Polycone::CreateNURBS() const
 
 
 //
-// G4Polycone:G4PolyconeHistorical stuff
+// G4PolyconeHistorical stuff
 //
 
-G4Polycone::
 G4PolyconeHistorical::G4PolyconeHistorical()
 {
 }
 
-G4Polycone::
 G4PolyconeHistorical::~G4PolyconeHistorical()
 {
   delete [] Z_values;
@@ -543,8 +541,8 @@ G4PolyconeHistorical::~G4PolyconeHistorical()
   delete [] Rmax;
 }
 
-G4Polycone::
-G4PolyconeHistorical::G4PolyconeHistorical( const G4PolyconeHistorical &source )
+G4PolyconeHistorical::
+G4PolyconeHistorical( const G4PolyconeHistorical &source )
 {
   Start_angle   = source.Start_angle;
   Opening_angle  = source.Opening_angle;

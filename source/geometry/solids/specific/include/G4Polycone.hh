@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polycone.hh,v 1.7 2002-10-28 11:47:50 gcosmo Exp $
+// $Id: G4Polycone.hh,v 1.8 2003-06-16 13:09:01 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,19 @@
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
 class G4VCSGface;
+class G4PolyconeHistorical
+{
+  public:
+    G4PolyconeHistorical();
+    ~G4PolyconeHistorical();
+    G4PolyconeHistorical( const G4PolyconeHistorical &source );
+    G4double Start_angle;
+    G4double Opening_angle;
+    G4int   Num_z_planes;
+    G4double *Z_values;
+    G4double *Rmin;
+    G4double *Rmax;
+};
 
 class G4Polycone : public G4VCSGfaceted 
 {
@@ -114,6 +127,7 @@ class G4Polycone : public G4VCSGfaceted
   inline G4bool IsOpen()         const;
   inline G4int  GetNumRZCorner() const;
   inline G4PolyconeSideRZ GetCorner(G4int index) const;
+  inline G4PolyconeHistorical* GetOriginalParameters() const;
   
   protected:  // without description
 
@@ -124,25 +138,7 @@ class G4Polycone : public G4VCSGfaceted
   G4bool   phiIsOpen;   // true if there is a phi segment
   G4int   numCorner;    // number RZ points
   G4PolyconeSideRZ *corners;  // corner r,z points
-  
-  // The following is temporary until graphics_reps is brought up
-  // to this design
-
-  class G4PolyconeHistorical
-  {
-    public:
-    G4PolyconeHistorical();
-    ~G4PolyconeHistorical();
-    G4PolyconeHistorical( const G4PolyconeHistorical &source );
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-  };
-  
-  G4PolyconeHistorical  *original_parameters;
+  G4PolyconeHistorical  *original_parameters;  // original input parameters
 
   // Our quick test
 

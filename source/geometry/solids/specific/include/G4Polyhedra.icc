@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.icc,v 1.1 2002-10-28 11:47:50 gcosmo Exp $
+// $Id: G4Polyhedra.icc,v 1.2 2003-06-16 13:09:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -66,4 +66,10 @@ inline
 G4PolyhedraSideRZ G4Polyhedra::GetCorner( const G4int index ) const
 {
   return corners[index];
+}
+
+inline
+G4PolyhedraHistorical* G4Polyhedra::GetOriginalParameters() const
+{
+  return original_parameters;
 }

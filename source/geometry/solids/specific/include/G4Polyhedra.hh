@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.hh,v 1.6 2002-10-28 11:47:50 gcosmo Exp $
+// $Id: G4Polyhedra.hh,v 1.7 2003-06-16 13:09:02 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,22 @@
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
+class G4PolyhedraHistorical
+{
+  public:
+
+    G4PolyhedraHistorical();
+    ~G4PolyhedraHistorical();
+    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
+  
+    G4double Start_angle;
+    G4double Opening_angle;
+    G4int   numSide;
+    G4int   Num_z_planes;
+    G4double *Z_values;
+    G4double *Rmin;
+    G4double *Rmax;
+};
 
 class G4Polyhedra : public G4VCSGfaceted
 {
@@ -118,6 +134,7 @@ class G4Polyhedra : public G4VCSGfaceted
   inline G4bool IsOpen()        const;
   inline G4int GetNumRZCorner() const;
   inline G4PolyhedraSideRZ GetCorner( const G4int index ) const;
+  inline G4PolyhedraHistorical* GetOriginalParameters() const;
   
   protected:  // without description
 
@@ -129,26 +146,7 @@ class G4Polyhedra : public G4VCSGfaceted
   G4bool   phiIsOpen;   // true if there is a phi segment
   G4int   numCorner;    // number RZ points
   G4PolyhedraSideRZ *corners;  // our corners
-
-  // The following is temporary until graphics_reps is brought up
-  // to this design
-
-  struct G4PolyhedraHistorical
-  {
-    G4PolyhedraHistorical();
-    ~G4PolyhedraHistorical();
-    G4PolyhedraHistorical( const G4PolyhedraHistorical &source );
-  
-    G4double Start_angle;
-    G4double Opening_angle;
-    G4int   numSide;
-    G4int   Num_z_planes;
-    G4double *Z_values;
-    G4double *Rmin;
-    G4double *Rmax;
-  };
-  
-  G4PolyhedraHistorical  *original_parameters;
+  G4PolyhedraHistorical  *original_parameters;  // original input parameters
 
   // Our quick test
 

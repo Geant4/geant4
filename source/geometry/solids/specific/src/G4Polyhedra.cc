@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Polyhedra.cc,v 1.6 2003-03-28 09:52:50 gcosmo Exp $
+// $Id: G4Polyhedra.cc,v 1.7 2003-06-16 13:09:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -582,14 +582,12 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 
 
 //
-// G4Polyhedra::G4PolyhedraHistorical stuff
+// G4PolyhedraHistorical stuff
 //
-G4Polyhedra::
 G4PolyhedraHistorical::G4PolyhedraHistorical()
 {
 }
 
-G4Polyhedra::
 G4PolyhedraHistorical::~G4PolyhedraHistorical()
 {
   delete [] Z_values;
@@ -597,7 +595,6 @@ G4PolyhedraHistorical::~G4PolyhedraHistorical()
   delete [] Rmax;
 }
 
-G4Polyhedra::
 G4PolyhedraHistorical::
 G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
 {
