@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPElasticTest.cc,v 1.5 2001-08-01 17:11:24 hpw Exp $
+// $Id: G4NeutronHPElasticTest.cc,v 1.6 2002-10-24 12:15:11 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
 #include "G4ios.hh"
 #include "g4std/fstream"
 #include "g4std/iomanip"
+#include "G4TouchableHandle.hh"
  
 #include "G4Material.hh"
  
@@ -112,7 +113,7 @@
      theMaterials[2] =theLi ;
      
      // Init runs
-     G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1);
+     G4Material *theB = new G4Material(name="Boron", density=0.9*g/cm3, nEl=1, kStateSolid, 0.*kelvin);
      G4Element *elB = new G4Element(name="Boron", symbol="B", iz=5, a=10.811*g/mole);
      theB->AddElement( elB, 1);
      theMaterials[3] = theB;
@@ -273,14 +274,15 @@
     G4Box* theFrame = new G4Box ("Frame",10*m, 10*m, 10*m);
     
     G4LogicalVolume* LogicalFrame = new G4LogicalVolume(theFrame,
-                                                        (*theMaterialTable)(imat),
+                                                        (*theMaterialTable)[imat],
                                                         "LFrame", 0, 0, 0);
     
     G4PVPlacement* PhysicalFrame = new G4PVPlacement(0,G4ThreeVector(),
                                                      "PFrame",LogicalFrame,0,false,0);
     G4RotationMatrix theNull;
     G4ThreeVector theCenter(0,0,0);
-    G4GRSVolume * theTouchable = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4GRSVolume * theTouchableIt = new G4GRSVolume(PhysicalFrame, &theNull, theCenter);
+    G4TouchableHandle theTouchable(theTouchableIt);
     // ----------- now get all particles of interest ---------
    G4int numberOfParticles = 1;
    G4ParticleDefinition* theParticles[1];
@@ -356,9 +358,9 @@ int j = 0;
            G4DynamicParticle* aParticle =
              new G4DynamicParticle( theParticles[i], theDirection, incomingEnergy );
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
-           aTrack->SetTouchable(theTouchable);
+           aTrack->SetTouchableHandle(theTouchable);
            aStep.SetTrack( aTrack );
-           aStepPoint.SetTouchable(theTouchable);
+           aStepPoint.SetTouchableHandle(theTouchable);
 	   aStepPoint.SetMaterial(theMaterials[0]);
            aStep.SetPreStepPoint(&aStepPoint);
 	   aStep.SetPostStepPoint(&aStepPoint);
@@ -379,7 +381,7 @@ int j = 0;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
-           G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
+           const G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
            G4cout << "FINAL STATE = "<<theFSEnergy<<" ";
            G4cout <<*theFSMomentum<<G4endl;
            G4Track * second;
@@ -389,7 +391,7 @@ int j = 0;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
-             aSec = second->GetDynamicParticle();
+             aSec = const_cast<G4DynamicParticle *>(second->GetDynamicParticle());
              G4cout << aSec->GetTotalEnergy();
              G4cout << aSec->GetMomentum();
              delete second;
