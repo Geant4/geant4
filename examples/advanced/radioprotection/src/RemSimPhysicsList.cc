@@ -20,48 +20,32 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RemSimPhysicsList.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimPhysicsList.cc,v 1.4 2004-05-13 13:27:07 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Re-designed for modular Physics List
-//
-// -------------------------------------------------------------------
+// Author: Susanna Guatelli
 
 #include "RemSimPhysicsList.hh"
 #include "RemSimPhysicsListMessenger.hh"
 #include "RemSimParticles.hh"
-#include "RemSimPhotonStandard.hh"
 #include "RemSimPhotonEPDL.hh"
-#include "RemSimElectronStandard.hh"
 #include "RemSimElectronEEDL.hh"
 #include "RemSimPositronStandard.hh"
-#include "RemSimProtonStandard.hh"
-#include "RemSimProtonEEDL.hh"
-#include "RemSimAlphaEEDL.hh"
-#include "RemSimProtonEEDLziegler.hh"
-#include "RemSimChargedEEDL.hh"
+#include "RemSimIonICRU.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
 #include "G4ProcessManager.hh"
 #include "G4ProcessVector.hh"
 #include "G4VProcess.hh"
 
 RemSimPhysicsList::RemSimPhysicsList(): G4VModularPhysicsList(),
-				      electronIsRegistered(false), 
-				      positronIsRegistered(false),
-				      photonIsRegistered(false), 
+					electronIsRegistered(false), 
+					positronIsRegistered(false),
+					photonIsRegistered(false), 
 					protonIsRegistered(false),
-                                        alphaIsRegistered(false),
+                                        ionIsRegistered(false),
                                         hadronicIsRegistered(false),
-                                        chargedIsRegistered(false)
 {
-  defaultCutValue = 1. * mm;
+  defaultCutValue = 1.* mm;
   SetVerboseLevel(1);
 
   messenger = new RemSimPhysicsListMessenger(this);
@@ -141,7 +125,7 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	  RegisterPhysics( new RemSimElectronEEDL(name) );
 	  electronIsRegistered = true;
 	}
-   } 
+    } 
 
   // Register standard processes for positrons
   if (name == "positron-standard") 
@@ -159,7 +143,7 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
- if (name == "proton-eedl") 
+  if (name == "proton-eedl") 
     {
       if (protonIsRegistered) 
 	{
@@ -174,7 +158,7 @@ void RemSimPhysicsList::AddPhysicsList(const G4String& name)
 	}
     }
 
-if (name == "proton-eedl-ziegler") 
+  if (name == "proton-eedl-ziegler") 
     {
       if (protonIsRegistered) 
 	{
@@ -189,7 +173,7 @@ if (name == "proton-eedl-ziegler")
 	}
     }
 
-if (name == "proton-standard") 
+  if (name == "proton-standard") 
     {
       if (protonIsRegistered) 
 	{
@@ -204,7 +188,7 @@ if (name == "proton-standard")
 	}
     }
 
- if (name == "alpha-eedl") 
+  if (name == "alpha-eedl") 
     {
       if (alphaIsRegistered) 
 	{
@@ -220,7 +204,7 @@ if (name == "proton-standard")
 	}
     }
 
- if (name == "charged-eedl") 
+  if (name == "charged-eedl") 
     {
       if (chargedIsRegistered) 
 	{
@@ -238,7 +222,7 @@ if (name == "proton-standard")
 
 
   if (electronIsRegistered && positronIsRegistered && photonIsRegistered && 
-  alphaIsRegistered && chargedIsRegistered)
+      alphaIsRegistered && chargedIsRegistered)
     {
       G4cout << "PhysicsList for electron, positron, photon,alpha and generic ion is registered" << G4endl;
     }
@@ -265,8 +249,8 @@ void RemSimPhysicsList::SetParticleCut(G4double value)
 
 void RemSimPhysicsList::SetCuts()
 {
- G4VUserPhysicsList::SetCutsWithDefault();
- if (verboseLevel>0) DumpCutValuesTable();
+  G4VUserPhysicsList::SetCutsWithDefault();
+  if (verboseLevel>0) DumpCutValuesTable();
 }
 
 
