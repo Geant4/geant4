@@ -59,7 +59,7 @@ use Text::ParseWords;
 
 #$author_name       = "enter_your_name";
 $author_name        = "";
-$package_name       = "FADS/Goofy";
+$package_name       = "Geant4";
 $script_name        = basename($0,".pl");
 $header_ext_default = ".hh";
 $src_ext_default    = ".cc";
@@ -2072,6 +2072,12 @@ sub fads_create_io_source_file{
   print(OUT "\n");
   print(OUT "bool ${class_io}::Store(const ${collection_base_class}* hc)\n");
   print(OUT "{\n");
+  print(OUT "  // cast the transient collection for this detector type.\n");
+  print(OUT "  ${collection_class}* ahc = (${collection_class}*) hc;\n");
+  print(OUT "  if ( ahc->$collection_class_method_entries <= 0 ) {\n");
+  print(OUT "    return true;\n");
+  print(OUT "  }\n");
+  print(OUT "\n");
   print(OUT "  f_transMan->LastWriteFile()->cd();\n");
   print(OUT "\n");
   print(OUT "  int bufsize = f_transMan->BufferSize();\n");
@@ -2099,9 +2105,6 @@ sub fads_create_io_source_file{
   print(OUT "  }\n");
   print(OUT "  assert(branch != 0);\n");
   print(OUT "  branch->SetAutoDelete(kFALSE);\n");
-  print(OUT "\n");
-  print(OUT "  // cast the transient collection for this detector type.\n");
-  print(OUT "  ${collection_class}* ahc = (${collection_class}*) hc;\n");
   print(OUT "\n");
   print(OUT "  if ( m_verbose > 2 ) {\n");
   print(OUT "    std::cout << \"${class_io}: Storing ${class_name} collectoin \"\n");
@@ -2134,10 +2137,10 @@ sub fads_create_io_source_file{
   print(OUT "{\n");
   print(OUT "  hc = 0;\n");
   print(OUT "\n");
-  print(OUT "  // Get the ROOT tree \"FADS\"\n");
+  print(OUT "  // Get the ROOT tree \"Geant4\"\n");
   print(OUT "  TTree* tree = f_transMan->LastReadTree();\n");
   print(OUT "  if ( tree == 0 ) {\n");
-  print(OUT "    std::cerr << \"${class_io}::Retrieve: error getting the ROOT file tree \\\"FADS\\\".\" << std::endl;\n");
+  print(OUT "    std::cerr << \"${class_io}::Retrieve: error getting the ROOT file tree \\\"Geant4\\\".\" << std::endl;\n");
   print(OUT "    return false;\n");
   print(OUT "  }\n");
   print(OUT "\n");
