@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.7 2002-04-16 10:14:22 grichine Exp $
+// $Id: G4ReflectedSolid.cc,v 1.8 2002-05-11 14:10:38 grichine Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -252,43 +252,154 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
                                          G4double& pMax           ) const 
 {
 
-  G4AffineTransform sumTransform ;
-  G4Transform3D sumT, pt3d ;
+  G4VoxelLimits unLimit;
+  G4AffineTransform unTransform;
 
-  G4ReflectX3D tX ;
-  G4ReflectY3D tY ;
-  G4ReflectZ3D tZ ;
+  G4double x1 = -kInfinity, x2 = kInfinity,
+           y1 = -kInfinity, y2 = kInfinity,
+           z1 = -kInfinity, z2 = kInfinity;
 
-  G4bool extentR ;
-  G4double minR, maxR ;
+  G4bool existsAfterClip = false ;
+  existsAfterClip = fPtrSolid->CalculateExtent(kXAxis,unLimit,unTransform,x1,x2);
+  existsAfterClip = fPtrSolid->CalculateExtent(kYAxis,unLimit,unTransform,y1,y2);
+  existsAfterClip = fPtrSolid->CalculateExtent(kZAxis,unLimit,unTransform,z1,z2);
 
-  pt3d = G4Transform3D(pTransform.NetRotation().inverse(),
-                      pTransform.NetTranslation()          );
-  sumT = pt3d * (*fDirectTransform3D) ;
-  sumT = ((sumT*tX)*tY)*tZ;
-  sumTransform = G4AffineTransform( sumT.getRotation(),
-                                    // sumT.getRotation().inverse(),
-                                    sumT.getTranslation()         );
+  existsAfterClip = false;
+  pMin = +kInfinity ;
+  pMax = -kInfinity ;
+
+  G4Transform3D pTransform3D = G4Transform3D(pTransform.NetRotation().inverse(),
+                                             pTransform.NetTranslation());
+ 
+  G4Transform3D transform3D  = pTransform3D*(*fDirectTransform3D);
+
+  G4Point3D tmpPoint;
+
+// Calculate rotated vertex coordinates
+
+  G4ThreeVectorList* vertices = new G4ThreeVectorList();
+  vertices->reserve(8);
+
+  if (vertices)
+  {
+    G4ThreeVector vertex0(x1,y1,z1) ;
+    tmpPoint    = transform3D*G4Point3D(vertex0);
+    vertex0     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex0);
+
+    G4ThreeVector vertex1(x2,y1,z1) ;
+    tmpPoint    = transform3D*G4Point3D(vertex1);
+    vertex1     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex1);
+
+    G4ThreeVector vertex2(x2,y2,z1) ;
+    tmpPoint    = transform3D*G4Point3D(vertex2);
+    vertex2     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex2);
+
+    G4ThreeVector vertex3(x1,y2,z1) ;
+    tmpPoint    = transform3D*G4Point3D(vertex3);
+    vertex3     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex3);
+
+    G4ThreeVector vertex4(x1,y1,z2) ;
+    tmpPoint    = transform3D*G4Point3D(vertex4);
+    vertex4     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex4);
+
+    G4ThreeVector vertex5(x2,y1,z2) ;
+    tmpPoint    = transform3D*G4Point3D(vertex5);
+    vertex5     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex5);
+
+    G4ThreeVector vertex6(x2,y2,z2) ;
+    tmpPoint    = transform3D*G4Point3D(vertex6);
+    vertex6     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex6);
+
+    G4ThreeVector vertex7(x1,y2,z2) ;
+    tmpPoint    = transform3D*G4Point3D(vertex7);
+    vertex7     = G4ThreeVector(tmpPoint.x(),tmpPoint.y(),tmpPoint.z());
+    vertices->push_back(vertex7);
+  }
+  else
+  {
+    G4Exception("G4ReflectedSolid::CalculateExtent - Out of memory !");
+  }
+  
 
 
-  //  sumTransform.Product(*fDirectTransform,pTransform) ;
-  //  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,min,max) ;
-  extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
-                                       minR,maxR) ;
 
-  // Additional extension, just in case:
-  /*  
-  if( maxR > 0 ) pMax = 2.0*maxR ;
-  else           pMax = 0.5*maxR ;
-  if( minR > 0 ) pMin = 0.5*minR ;
-  else           pMin = 2.0*minR ;
-  maxR =  pMax;
-  minR =  pMin;
-  */
-  // and John's trick:
-  pMin = -maxR ;  // minR ; 
-  pMax = -minR ;  // maxR ; 
-  return extentR ;
+  ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
+  ClipCrossSection(vertices,4,pVoxelLimit,pAxis,pMin,pMax) ;
+  ClipBetweenSections(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
+
+    if (pVoxelLimit.IsLimited(pAxis) == false) 
+    {	
+      if ( pMin != kInfinity || pMax != -kInfinity ) 
+      {
+          existsAfterClip = true ;
+
+// Add 2*tolerance to avoid precision troubles
+
+          pMin           -= kCarTolerance;
+	  pMax           += kCarTolerance;
+      }
+    }	    
+    else
+    {
+      G4ThreeVector clipCentre(
+		( pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
+		( pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
+		( pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
+
+      if ( pMin != kInfinity || pMax != -kInfinity )
+      {
+        existsAfterClip = true ;
+	
+
+        // Check to see if endpoints are in the solid
+
+	clipCentre(pAxis) = pVoxelLimit.GetMinExtent(pAxis);
+
+        if (Inside(transform3D.inverse()*G4Point3D(clipCentre)) != kOutside)
+      // if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+        {
+      	  pMin = pVoxelLimit.GetMinExtent(pAxis);
+        }
+	else
+        {
+      	  pMin -= kCarTolerance;
+        }
+	clipCentre(pAxis) = pVoxelLimit.GetMaxExtent(pAxis);
+
+        if (Inside(transform3D.inverse()*G4Point3D(clipCentre)) != kOutside)
+	// if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+        {
+	  pMax = pVoxelLimit.GetMaxExtent(pAxis);
+        }
+	else
+        {
+          pMax += kCarTolerance;
+        }
+      }
+// Check for case where completely enveloping clipping volume
+// If point inside then we are confident that the solid completely
+// envelopes the clipping volume. Hence set min/max extents according
+// to clipping volume extents along the specified axis.
+		    
+    else if (Inside(transform3D.inverse()*G4Point3D(clipCentre)) != kOutside)
+      // else if (Inside(pTransform.Inverse().TransformPoint(clipCentre)) != kOutside)
+    {
+         existsAfterClip = true ;
+         pMin            = pVoxelLimit.GetMinExtent(pAxis) ;
+         pMax            = pVoxelLimit.GetMaxExtent(pAxis) ;
+    }
+  } 
+  delete vertices;
+  return existsAfterClip;
+
+
 
   /* ******************************************
 
@@ -363,6 +474,48 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   delete tmpVertices;
 
   return existsAfterClip;
+
+/////////////////
+
+  G4AffineTransform sumTransform ;
+  G4Transform3D sumT, pt3d ;
+
+  G4ReflectX3D tX ;
+  G4ReflectY3D tY ;
+  G4ReflectZ3D tZ ;
+
+  G4bool extentR ;
+  G4double minR, maxR ;
+
+  pt3d = G4Transform3D(pTransform.NetRotation().inverse(),
+                      pTransform.NetTranslation()          );
+  sumT = pt3d * (*fDirectTransform3D) ;
+  sumT = ((sumT*tX)*tY)*tZ;
+  sumTransform = G4AffineTransform( sumT.getRotation(),
+                                    // sumT.getRotation().inverse(),
+                                    sumT.getTranslation()         );
+
+
+  //  sumTransform.Product(*fDirectTransform,pTransform) ;
+  //  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,min,max) ;
+  extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
+                                       minR,maxR) ;
+
+  // Additional extension, just in case:
+   
+ // if( maxR > 0 ) pMax = 2.0*maxR ;
+ // else           pMax = 0.5*maxR ;
+ // if( minR > 0 ) pMin = 0.5*minR ;
+ // else           pMin = 2.0*minR ;
+ // maxR =  pMax;
+ // minR =  pMin;
+  
+  // and John's trick:
+
+  pMin = -maxR ;  // minR ; 
+  pMax = -minR ;  // maxR ; 
+  return extentR ;
+
 
   ****************************************** */
 }
