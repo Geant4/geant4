@@ -55,6 +55,10 @@ LOADLIBS +=    `cernlib packlib` $(FCLIBS)
 
 # 	  ::: Parameter list for cascade : nEvents, particleType, bulletE [MeV], A = Z + N, and Z.
 
+c:	# ::: Compare with experimental data 12C(p, xp) at 62 MeV
+#	rm -r cascade.out; cascade 10 1 62 12 6 
+	rm -r cascade.out; cascade 3210 1 62 12 6 > cascade.out; gmake a; 
+
 #t1:	# ::: problem 1  (Al)  evaporation missing, SOLVED
 #	rm -r cascade.out; cascade 10000 1 256 27 13 > cascade.out; gmake a; 
 
@@ -90,8 +94,8 @@ h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
 #	make t; rm -f cascade.out; cascade  1 1 585 1 1 > cascade.out; cat cascade.out
 #	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
 #	make t; rm -f cascade.out; cascade  100 1 585 1 1 > cascade.out; cat cascade.out
-#	make t; rm -f cascade.out; cascade  2 1 585 1 1
-	cascade  10000 1 30000 1 1; # tested upperlimit
+	make t; rm -f cascade.out; cascade  2 1 585 1 1
+#	cascade  10000 1 30000 1 1; # tested upperlimit
 #	cascade  10000 1 30000 1 1; # tested upperlimit
 #	cascade  10000 1 25000 1 1; # tested upperlimit
 #	cascade  10000 1 20000 1 1; # tested upperlimit
