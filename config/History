@@ -1,4 +1,4 @@
-$Id: History,v 1.187 2002-03-28 14:37:58 gcosmo Exp $
+$Id: History,v 1.188 2002-05-03 13:01:35 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3rd May 2002  Gabriele Cosmo (config-V04-00-06)
+- liblist.c: added patch to port code on MacOS-X.
+  Defined buffer[BUFSIZE] as "char static".
+- Added Darwin-g++.gmk configuration file for MacOS-X systems running
+  with GNU g++ compiler.
+- Removed SUN-CC4.gmk configuration file, no longer supported.
+- Updated description header to system configuration files.
 
 27th March 2002  Gabriele Cosmo (config-V04-00-05)
 - binmake.gmk: added include path to new module geometry/biasing.
