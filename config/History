@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2002-02-07 10:18:32 gcosmo Exp $
+$Id: History,v 1.181 2002-03-09 03:13:05 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+9th March 2002  John Allison (config-V04-00-02)
+- Fixed bug in G4VIS_USE.gmk for G4VIS_USE_OPENGLWIN32.
 
 07th February 2002 Gabriele Cosmo (config-V04-00-01)
 - liblist.c: added flags __CYGWIN__ and __CYGWIN32__ for triggering proper
