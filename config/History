@@ -1,4 +1,4 @@
-$Id: History,v 1.170 2001-11-19 14:03:24 barrand Exp $
+$Id: History,v 1.171 2001-11-21 09:20:54 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+21st Novemver 2001 Gabriele Cosmo (config-V03-02-12)
+- On top of "config-V03-02-11", added paths in binmake.gmk including
+  new hadronic models for cascade, CHIPS and coherent_elastic.
+  Does not include changes to analysis.gmk.
 
 19th November 2001 Guy Barrand
 - analysis.gmk : then remove all system specifc flags, have
