@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2001-07-11 16:07:31 gcosmo Exp $
+$Id: History,v 1.20 2001-10-17 13:01:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 17, 2001   Gabriele Cosmo
+-----------------------------
+- Introduced new module "verification" for geometry debugging.
 
 Jul 11, 2001   Gabriele Cosmo               geometry-V03-02-00
 -----------------------------
