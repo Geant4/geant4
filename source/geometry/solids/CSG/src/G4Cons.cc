@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.10 2000-07-27 10:36:15 grichine Exp $
+// $Id: G4Cons.cc,v 1.11 2000-08-08 15:20:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 08.08.00 V.Grichine, more stable roots of 2-equation in DistanceToOut(p,v,...) 
 // 06.03.00 V.Grichine, modifications in DistanceToOut(p,v,...) 
 // 18.11.99 V.Grichine side = kNull initialisation in DistanceToOut(p,v,...)
 // 28.04.99 V. Grichine bugs fixed in  Distance ToOut(p,v,...) and  
@@ -1261,7 +1262,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
   G4double sinSPhi, cosSPhi, ePhi, sinEPhi, cosEPhi ;
   G4double cPhi, sinCPhi, cosCPhi ;
   G4double pDistS, compS, pDistE, compE, sphi2, xi, yi, risec, vphi ;
-  G4double zi, ri ;
+  G4double zi, ri, deltaRoi2 ;
 
 // Z plane intersection
 
@@ -1281,7 +1282,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 	*n         = G4ThreeVector(0,0,1) ;
 	*validNorm = true ;
       }
-      return snxt=0 ;
+      return snxt = 0.0 ;
     }
   }
   else if ( v.z() < 0.0 )
@@ -1300,7 +1301,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 	*n         = G4ThreeVector(0,0,-1) ;
 	*validNorm = true ;
       }
-      return snxt=0 ;
+      return snxt = 0.0 ;
     }
   }
   else     // Travel perpendicular to z axis
@@ -1340,8 +1341,20 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
   nt2 = t2 - tanRMax*v.z()*rout ;
   nt3 = t3 - rout*rout ;
 
-  if (nt1)  // Equation quadratic => 2 roots : second root must be leaving
+  if (v.z() > 0.0)
   {
+    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax2*(fRmax2 + kRadTolerance);
+  }
+  else if ( v.z() < 0.0 )
+  {
+    deltaRoi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 - fRmax1*(fRmax1 + kRadTolerance);
+  }
+  else deltaRoi2 = 1.0 ;
+
+  if ( nt1 && deltaRoi2 > 0.0 )  
+  {
+// Equation quadratic => 2 roots : second root must be leaving
+
     b = nt2/nt1 ;
     c = nt3/nt1 ;
     d = b*b - c ;
@@ -1416,7 +1429,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
       return snxt = 0.0 ;
     }
   }
-  else if ( nt2 )
+  else if ( nt2 && deltaRoi2 > 0.0 )
   {
 // Linear case (only one intersection) => point outside outer cone
 
