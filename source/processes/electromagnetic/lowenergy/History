@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2000-11-21 17:49:17 vnivanch Exp $
+$Id: History,v 1.52 2000-11-21 21:29:44 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.11.2000 - MGP, tag emlowen-V02-00-20
+	     Same as emlowen-V02-00-18, Vladimir's fix to energy fluctuations
+             (All this duplication of emlowen tags is due to the fact that the 
+             electromagnetic/utils tag with the interface updates contains
+             also bug fixes and new features, and such tag has not passed
+             system testing yet)
+
+21.11.2000 - MGP, tag emlowen-V02-00-19
+	     Same as emlowen-V02-00-17, Vladimir's fix to energy fluctuations
 
 21.11.2000 - Bug fixed in energy fluctuations
              V.Ivanchenko
