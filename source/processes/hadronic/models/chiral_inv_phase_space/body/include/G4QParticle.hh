@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.hh,v 1.20 2003-12-09 15:38:12 gunter Exp $
+// $Id: G4QParticle.hh,v 1.21 2004-02-13 16:59:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -40,12 +40,13 @@ class G4QParticle
 {
 public:
   // Constructors
-  G4QParticle();                                // Default Constructor
-  G4QParticle(G4int thePDG);                    // PDGCode Constructor
-  G4QParticle(const G4QParticle& right);        // Copy Constructor by value
-  G4QParticle(G4QParticle* right);              // Copy Constructor by pointer
+  G4QParticle();                             // Default Constructor
+  G4QParticle(G4bool f, G4int theQCode);     // QCode Constructor, f-verbose
+  G4QParticle(G4int thePDG);                 // PDGCode Constructor
+  G4QParticle(const G4QParticle& right);     // Copy Constructor by value
+  G4QParticle(G4QParticle* right);           // Copy Constructor by pointer
 
-  ~G4QParticle();                               // Public Destructor
+  ~G4QParticle();                            // Public Destructor
 
   // Operators
   const G4QParticle& operator=(const G4QParticle& right);

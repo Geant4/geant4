@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QContent.hh,v 1.24 2003-12-09 15:38:00 gunter Exp $
+// $Id: G4QContent.hh,v 1.25 2004-02-13 16:59:12 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -63,7 +63,7 @@ public:
   G4int             GetStrangeness() const;
   G4int             GetSPDGCode() const;
   G4int             GetZNSPDGCode() const;
-  G4int             NOfCombinations(const G4QContent& rhs) const; //@@ can be an "operator/"
+  G4int             NOfCombinations(const G4QContent& rhs) const;//@@ can be an "operator/"
   G4int             GetQ() const;
   G4int             GetAQ() const;
   G4int             GetTot() const; 
@@ -160,14 +160,15 @@ G4QContent operator*(const G4int&      lhs, const G4QContent& rhs);
 // Not member functions
 //----------------------------------------------------------------------------------------
 
-inline G4bool     G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}	
+inline G4bool     G4QContent::operator==(const G4QContent& rhs) const {return this==&rhs;}
 inline G4bool     G4QContent::operator!=(const G4QContent& rhs) const {return this!=&rhs;}
 inline G4int      G4QContent::GetQ() const {return nU+nD+nS;}
 inline G4int      G4QContent::GetAQ() const {return nAU+nAD+nAS;}
 inline G4int      G4QContent::GetTot() const {return nU+nD+nS+nAU+nAD+nAS;}
 inline G4int      G4QContent::GetStrangeness() const {return nS-nAS;}
 // @@ Temporary for tests
-inline G4bool G4QContent::CheckNegative() const{return nU<0||nD<0||nS<0||nAU<0||nAD<0||nAS<0;}
+inline G4bool G4QContent::CheckNegative() const
+                                            {return nU<0||nD<0||nS<0||nAU<0||nAD<0||nAS<0;}
 
 inline G4int G4QContent::GetU() const{return nU;}
 inline G4int G4QContent::GetD() const{return nD;}

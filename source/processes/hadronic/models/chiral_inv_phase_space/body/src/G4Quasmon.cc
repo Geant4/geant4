@@ -14,29 +14,28 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-//
 //       1         2         3         4         5         6         7         8         9
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4Quasmon.cc,v 1.69 2003-12-18 08:49:41 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.70 2004-02-13 16:59:22 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
 //             by Mikhail Kossov, July 1999.
 //  class for an excited hadronic state used by the CHIPS Model
 // ------------------------------------------------------------
-
 //#define debug
 //#define pdebug
 //#define psdebug
 //#define rdebug
 //#define ppdebug
+//#define chdebug
 //#define tdebug
 //#define sdebug
 #include "G4Quasmon.hh"
@@ -61,7 +60,8 @@ G4Quasmon::G4Quasmon(G4QContent qQCont, G4LorentzVector q4M, G4LorentzVector ph4
   else if(nP<49) nBaryons = 36;
   else if(nP<66) nBaryons = 52;
   //G4int          nClusters= nP-72;
-  G4int          nClusters= nP-80;       // "IsoNuclei"
+  //G4int          nClusters= nP-80;       // "IsoNuclei"
+  G4int          nClusters= nP-90;       // "Lepton/Hyperon"
   InitCandidateVector(nMesons,nBaryons,nClusters);
 #ifdef debug
   G4cout<<"G4Quasmon:Constructor: Candidates are initialized: nMesons="<<nMesons
@@ -266,7 +266,8 @@ void G4Quasmon::InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust)
   if(maxClust>=0) for (i=0; i<maxClust; i++) 
   {
     //G4int clustQCode = i+72;   //OLD: Q-code of the cluster in the CHIPS world
-    G4int clustQCode = i+80;   //NEW: Q-code of the cluster in the CHIPS world "IsoNuclei"
+    //G4int clustQCode = i+80;   //NEW: Q-code of the cluster in the CHIPS world "IsoNucl"
+    G4int clustQCode = i+90;   //NEW: Q-code of the cluster in the CHIPS world "Lept/Hyper"
     G4QPDGCode clustQPDG;
     clustQPDG.InitByQCode(clustQCode);
     G4int clusterPDG=clustQPDG.GetPDGCode();
@@ -393,9 +394,33 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
   G4LorentzVector kp4Mom=zeroLV;            // 4-mom prototype for kappa (recoil q)
   G4LorentzVector check=-theEnvironment.Get4Momentum()-q4Mom;//4Mom sum to check
   G4int ccheck=-theEnvironment.GetZ()-valQ.GetCharge();//To check charge conservation
+#ifdef chdebug
+  G4int cSum=-ccheck;                       // To check charge conservation with print
+  G4QNucleus oldEnv(theEnvironment);        // To compare on the fragmentation step
+  G4QContent oldCQC(valQ);                  // To compare on the fragmentation step
+  G4int oldNH=theQHadrons.size();           // To compare on the fragmentation step
+#endif
   G4bool start=true;
   while(theEnvironment.GetPDG()==NUCPDG || start)// **=TheMainLOOP(LOOP only forVacuum)=**
   {
+#ifdef chdebug
+    G4int ccSum=theEnvironment.GetZ()+valQ.GetCharge(); // To compare with initial charge
+    G4int nHd=theQHadrons.size();
+    if(nHd) for(int ih=0; ih<nHd; ih++) ccSum+=theQHadrons[ih]->GetCharge();
+    if(ccSum!=cSum)
+	{
+      G4cerr<<"*G4Q::HQ:C"<<cSum<<",c="<<ccSum<<",E="<<theEnvironment<<",Q="<<valQ<<G4endl;
+      G4cerr<<":G4Q::HQ:oldE="<<oldEnv<<"oldQ="<<oldCQC<<",oN="<<oldNH<<",N="<<nHd<<G4endl;
+      if(nHd) for(int h=0; h<nHd; h++)
+      {
+        G4QHadron* cH = theQHadrons[h];
+        G4cerr<<"::G4Q::HQ:#h"<<h<<",C="<<cH->GetCharge()<<",P="<<cH->GetPDGCode()<<G4endl;
+      }
+    }
+    oldEnv=G4QNucleus(theEnvironment);       // To compare on the fragmentation step
+    oldCQC=G4QContent(valQ);                  // To compare on the fragmentation step
+    oldNH=nHd;
+#endif
     start=false;
     G4bool   quexf=false;                          // Flag of successful quark exchange
     G4double qM2  = q4Mom.m2();                    // Current squared mass of Quasmon
@@ -417,7 +442,11 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     G4double quasM= sqrt(qM2);                     // Current mass of Quasmon
     G4double tmpEq=q4Mom.e();                      // Energy of Quasmon
     G4double tmpPq=q4Mom.rho();                    // Momentum of Quasmon
-	if(tmpEq<tmpPq) G4cerr<<"G4Q::HQ:Boost,4M="<<q4Mom<<",P="<<tmpPq<<">E="<<tmpEq<<G4endl;
+	if(tmpEq<tmpPq)
+    {
+      G4cerr<<"G4Q::HQ:Boost,4M="<<q4Mom<<",P="<<tmpPq<<">E="<<tmpEq<<G4endl;
+      throw G4QException("G4Q::HQ:*TMP EXCEPTION - Tachionic boost");
+    }
     G4double qurF=quasM/(tmpEq-tmpPq);       // Factor for k Lor.Trans. to LS
     G4ThreeVector qltb = q4Mom.boostVector();// Boost vector for backward Lor.Trans. in LS
     //////////G4double b2=qltb.mag2();                       // beta^2 of Quasmon
@@ -483,7 +512,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     totMass=tot4M.m();
 #ifdef debug
     G4int    totPDG=totN.GetPDG();         // Total PDG Code for the Current compound
-	G4cout<<"G4Q::HQ: tPDG="<<totPDG<<",tM="<<totMass<<",rPDG="<<resNPDG<<G4endl;
+	G4cout<<"G4Q::HQ: totPDG="<<totPDG<<",totM="<<totMass<<",rPDG="<<resNPDG<<G4endl;
 #endif
 	if(tot4M.e()<tot4M.rho()) G4cerr<<"---Worning---G4Q::HQ:*Boost* tot4M="<<tot4M<<G4endl;
     G4ThreeVector totBoost = tot4M.boostVector(); // BoostVector for TotalSystem (backward)
@@ -3029,7 +3058,22 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
     if(!curPDG) G4cout<<"***G4Q::HQ: Quasmon-Tripolino QC="<<valQ<<G4endl;
     G4cout<<"G4Q::HQ:=======> ResidualQ 4M="<<q4Mom<<", QC="<<valQ<<G4endl;
 #endif
+  } // End of the main while loop
+#ifdef chdebug
+  G4int ecSum=theEnvironment.GetZ()+valQ.GetCharge(); // To compare with initial charge
+  G4int nHe=theQHadrons.size();
+  if(nHe) for(int ih=0; ih<nHe; ih++) ecSum+=theQHadrons[ih]->GetCharge();
+  if(ecSum!=cSum)
+  {
+    G4cerr<<"***G4Q::HQ:C"<<cSum<<",c="<<ecSum<<",E="<<theEnvironment<<",Q="<<valQ<<G4endl;
+    G4cerr<<":G4Q::HQ:*END*,oE="<<oldEnv<<"oQ="<<oldCQC<<",oN="<<oldNH<<",N="<<nHe<<G4endl;
+    if(nHe) for(int h=0; h<nHe; h++)
+    {
+      G4QHadron* cH = theQHadrons[h];
+      G4cerr<<"::G4Q::HQ:#h"<<h<<",C="<<cH->GetCharge()<<",P="<<cH->GetPDGCode()<<G4endl;
+    }
   }
+#endif
 #ifdef debug
   G4cout<<"G4Q::HQ: Q="<<q4Mom<<valQ<<",E="<<theEnvironment<<", status="<<status<<G4endl;
 #endif
@@ -3079,13 +3123,17 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   static const G4double mAlph = G4QPDGCode(2112).GetNuclMass(2,2,0);
   static const G4QContent neutQC(2,1,0,0,0,0);
   static const G4QContent protQC(1,2,0,0,0,0);
+  static const G4QContent sigmQC(2,0,1,0,0,0);
   static const G4QContent lambQC(1,1,1,0,0,0);
+  static const G4QContent sigpQC(0,2,1,0,0,0);
   static const G4QContent PiQC(0,1,0,1,0,0);
   static const G4QContent K0QC(1,0,0,0,0,1);
   static const G4QContent KpQC(0,1,0,0,0,1);
   static const G4double mNeut= G4QPDGCode(2112).GetMass();
   static const G4double mProt= G4QPDGCode(2212).GetMass();
+  static const G4double mSigM= G4QPDGCode(3112).GetMass();
   static const G4double mLamb= G4QPDGCode(3122).GetMass();
+  static const G4double mSigP= G4QPDGCode(3222).GetMass();
   static const G4double mPi  = G4QPDGCode(211).GetMass();
   static const G4double mPi0 = G4QPDGCode(111).GetMass();
   static const G4double mK   = G4QPDGCode(321).GetMass();
@@ -3191,13 +3239,6 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
       if(newS>0) newNpm=G4QNucleus(totQC+PiQC+newS*K0QC);
       G4int  PDG2=newNpm.GetPDG();
       G4double m2=newNpm.GetMZNS();
-      if(nN<0)
-	  {
-        PDG1       =211;
-        G4QNucleus  newNpp(totQC-PiQC);
-        PDG2       =newNpp.GetPDG();
-        m2         =newNpp.GetMZNS();
-	  }
       if(nS<0)
       {
         m1         =mK;         
@@ -3214,6 +3255,32 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
           m2  =m3;
           PDG2=newN0.GetPDG();
         }
+	  }
+      else if(nS>0&&nZ+nN>0)
+      {
+        if(nN<0)
+        {
+          m1         =mSigP;         
+          PDG1       =3222;
+          G4QNucleus  newNp(totQC-sigpQC);
+          PDG2       =newNp.GetPDG();
+          m2         =newNp.GetMZNS();
+        }
+        else
+        {
+          m1         =mSigM;         
+          PDG1       =3112;
+          G4QNucleus  newNp(totQC-sigmQC);
+          PDG2       =newNp.GetPDG();
+          m2         =newNp.GetMZNS();
+        }
+	  }
+      else if(nN<0)
+	  {
+        PDG1       =211;
+        G4QNucleus  newNpp(totQC-PiQC);
+        PDG2       =newNpp.GetPDG();
+        m2         =newNpp.GetMZNS();
 	  }
       if(fragMas>m1+m2)                      // => "can decay" case
       {

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.hh,v 1.23 2003-12-18 08:49:36 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.24 2004-02-13 16:59:13 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -215,7 +215,7 @@ inline G4int G4QNucleus::HadrToNucPDG(G4int hPDG)
   G4int  nPDG=hPDG;
   if     (hPDG==2212) nPDG=90001000; // p
   else if(hPDG==2112) nPDG=90000001; // n
-  else if(hPDG==3122) nPDG=91000000; // Lambda
+  else if(hPDG==3122||hPDG==3212) nPDG=91000000; // Lambda
   else if(hPDG== 211) nPDG=90000999; // pi+
   else if(hPDG==-211) nPDG=89999001; // pi-
   else if(hPDG== 213) nPDG=89001000; // K0 (anti-strange)

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.hh,v 1.20 2003-12-09 15:38:08 gunter Exp $
+// $Id: G4QPDGCode.hh,v 1.21 2004-02-13 16:59:14 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -44,6 +44,7 @@ class G4QPDGCode
 public:
   // Constructors
   G4QPDGCode(G4int PDGCode = 0);                     // Construction by PDGCode
+  G4QPDGCode(G4bool f, G4int QCode);                 // Construction by QCode, f-verb
   G4QPDGCode(G4QContent QCont);                      // Construction by Quark Content
   G4QPDGCode(const G4QPDGCode& rhs);                 // Copy Constructor by value
   G4QPDGCode(G4QPDGCode* rhs);                       // Copy Constructor by pointer
@@ -88,6 +89,7 @@ public:
   // General
   G4bool     TestRealNeutral();
   void       NegPDGCode();
+  void       ConvertPDGToZNS(G4int PDG, G4int& z, G4int& n, G4int& s);
 
 private:
   // Encapsulated functions

@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
+// * authors in the GEANT4 collaboration.                             *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.32 2003-12-09 15:38:14 gunter Exp $
+// $Id: G4Quasmon.hh,v 1.33 2004-02-13 16:59:15 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -67,13 +67,16 @@ public:
   static void SetEtaSup(G4double etaetap);
 
   //Selectors
-  G4double          GetTemper()    const;
-  G4double          GetSOverU()    const;
-  G4double          GetEtaSup()    const;
-  G4LorentzVector   Get4Momentum() const;
-  G4QContent        GetQC()        const;
-  G4QPDGCode        GetQPDG()      const;
-  G4int             GetStatus()    const;
+  G4double          GetTemper()       const;
+  G4double          GetSOverU()       const;
+  G4double          GetEtaSup()       const;
+  G4LorentzVector   Get4Momentum()    const;
+  G4QContent        GetQC()           const;
+  G4QPDGCode        GetQPDG()         const;
+  G4int             GetStatus()       const;
+  G4int             GetCharge()       const;
+  G4int             GetBaryonNumber() const;
+  G4int             GetStrangeness()  const;
 
   //Modifiers
   // Public wrapper for HadronizeQuasmon(,)
@@ -139,6 +142,9 @@ inline G4double        G4Quasmon::GetSOverU()    const {return SSin2Gluons;}
 inline G4double        G4Quasmon::GetEtaSup()    const {return EtaEtaprime;}
 inline G4LorentzVector G4Quasmon::Get4Momentum() const {return q4Mom;}
 inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
+inline G4int           G4Quasmon::GetCharge()       const{return valQ.GetCharge();}
+inline G4int           G4Quasmon::GetBaryonNumber() const{return valQ.GetBaryonNumber();}
+inline G4int           G4Quasmon::GetStrangeness()  const{return valQ.GetStrangeness();}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
 inline void            G4Quasmon::ClearOutput()        
