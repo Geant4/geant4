@@ -21,356 +21,353 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.15 2001-08-10 15:49:02 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.16 2001-08-29 16:38:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
+//      ---------- G4MuIonisation physics process -----------
+//                 by Laszlo Urban, September 1997 
+//  --------------------------------------------------------------
 //
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4MuIonisation physics process -------------
-//                by Laszlo Urban, September 1997
-// ------------------------------------------------------------------
-// It is the implementation of the NEW IONISATION PROCESS.
-// It calculates the ionisation of muons.
-// **************************************************************
-// 08-04-98: remove 'tracking cut' of the ionizing particle, MMa
-// 26/10/98: new stuff from R.Kokoulin + cleanup , L.Urban
-// 10/02/00  modifications , new e.m. structure, L.Urban
-// 23/03/01: R.Kokoulin's correction is commented out, L.Urban
-// 29.05.01  V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 10-08-01  new methods Store/Retrieve PhysicsTable (mma) 
+// 08-04-98 remove 'tracking cut' of the ionizing particle (mma)
+// 26-10-98 new stuff from R.Kokoulin + cleanup , L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 23-03-01 R.Kokoulin's correction is commented out, L.Urban
+// 29-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma) 
+// 28-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma) 
+//
 // --------------------------------------------------------------
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
 #include "G4MuIonisation.hh"
 #include "G4UnitsTable.hh"
 
-#include "G4ios.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4MuIonisation::LowerBoundLambda = 1.*keV;
+G4double G4MuIonisation::UpperBoundLambda = 1000000.*TeV;
+G4int	 G4MuIonisation::NbinLambda = 150;
 
-G4double G4MuIonisation::LowerBoundLambda = 1.*keV ;
-G4double G4MuIonisation::UpperBoundLambda = 1000000.*TeV ;
-G4int	 G4MuIonisation::NbinLambda = 150 ;
-
-
-// constructor and destructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4MuIonisation::G4MuIonisation(const G4String& processName)
    : G4VMuEnergyLoss(processName),
-     theMeanFreePathTable(NULL)
-{  }
+     theMeanFreePathTable(0)
+{ }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+     
 G4MuIonisation::~G4MuIonisation() 
 {
-     if (theMeanFreePathTable) {
-        theMeanFreePathTable->clearAndDestroy();
-        delete theMeanFreePathTable;
-     }
-
+  if (theMeanFreePathTable) {
+      theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
-//  just call BuildLossTable+BuildLambdaTable
+// just call BuildLossTable+BuildLambdaTable
 {
-    // get bining from EnergyLoss
-    LowestKineticEnergy  = GetLowerBoundEloss() ;
-    HighestKineticEnergy = GetUpperBoundEloss() ;
-    TotBin               = GetNbinEloss() ;
+  // get bining from EnergyLoss
+  LowestKineticEnergy  = GetLowerBoundEloss();
+  HighestKineticEnergy = GetUpperBoundEloss();
+  TotBin               = GetNbinEloss();
 
-  BuildLossTable(aParticleType) ;
-  G4double Charge = aParticleType.GetPDGCharge();     
+  BuildLossTable(aParticleType);
 
-  if(Charge>0.)
-  {
-    RecorderOfmuplusProcess[CounterOfmuplusProcess] = (*this).theLossTable ;
-    CounterOfmuplusProcess++;
-  }
+  if (aParticleType.GetPDGCharge() > 0.)
+    {
+      RecorderOfmuplusProcess[CounterOfmuplusProcess]   = (*this).theLossTable;
+      CounterOfmuplusProcess++;
+    }
   else
-  {
-    RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable ;
-    CounterOfmuminusProcess++;
-  }
+    {
+      RecorderOfmuminusProcess[CounterOfmuminusProcess] = (*this).theLossTable;
+      CounterOfmuminusProcess++;
+    }
  
-  G4double electronCutInRange = G4Electron::Electron()->GetCuts();  
-  if(electronCutInRange != lastelectronCutInRange)
-    BuildLambdaTable(aParticleType) ;
+  if (G4Electron::Electron()->GetCuts() != lastelectronCutInRange)
+     BuildLambdaTable(aParticleType);
  
-   G4VMuEnergyLoss::BuildDEDXTable(aParticleType) ;
+  G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
 
-  if(&aParticleType == theMuonPlus)  
-     PrintInfoDefinition() ;
+  if(&aParticleType == G4MuonPlus::MuonPlus())  PrintInfoDefinition();
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
 {
-  DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+ // Build tables of dE/dx due to  the ionization process
+ // the tables are built for *MATERIALS*
 
-  G4double LowEdgeEnergy , ionloss ;
-  G4double deltaloss ;
-  G4double RateMass ;
-  //G4bool isOutRange ;
-  static const G4MaterialTable* theMaterialTable=
-                                   G4Material::GetMaterialTable();
-  const G4double twoln10 = 2.*log(10.) ;
-  const G4double Factor = twopi_mc2_rcl2 ;
-  const G4double bg2lim = 0.0169 , taulim = 8.4146e-3 ;
+ // create table
+ //
+ const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+ G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-  ParticleMass = aParticleType.GetPDGMass() ;
-  RateMass = electron_mass_c2/ParticleMass ;
-
-  G4int numOfMaterials = theMaterialTable->length();
-
-  if ( theLossTable) {
-     theLossTable->clearAndDestroy();
-     delete theLossTable;
-  }
-  theLossTable = new G4PhysicsTable(numOfMaterials);
-
-  for (G4int J=0; J<numOfMaterials; J++)
-  {
-    G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                    LowestKineticEnergy, HighestKineticEnergy, TotBin);
+ if (theLossTable) {theLossTable->clearAndDestroy(); delete theLossTable;}
+ theLossTable = new G4PhysicsTable(numOfMaterials);
   
-    G4double ElectronDensity,Eexc,Eexc2,Cden,Mden,Aden,X0den,X1den,taul ;
-    G4double* ShellCorrectionVector;
-   
-    const G4Material* material= (*theMaterialTable)[J];
+ // get delta cut in energy 
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+  
+ //  loop for materials
+ //
+ for (G4int J=0; J<numOfMaterials; J++)
+  {
+   // create physics vector and fill it
+   G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
+                       LowestKineticEnergy, HighestKineticEnergy, TotBin);
+ 
+   const G4Material* material= (*theMaterialTable)[J];
+ 
+  // get  electron cut in kinetic energy for the material
+  G4double DeltaThreshold = DeltaCutInKineticEnergy[J];
 
-    ElectronDensity = material->GetElectronDensity();
-    Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
-    Eexc2 = Eexc*Eexc ;
-    Cden = material->GetIonisation()->GetCdensity();
-    Mden = material->GetIonisation()->GetMdensity();
-    Aden = material->GetIonisation()->GetAdensity();
-    X0den = material->GetIonisation()->GetX0density();
-    X1den = material->GetIonisation()->GetX1density();
-    taul = material->GetIonisation()->GetTaul() ;
-    ShellCorrectionVector = material->GetIonisation()
-                                    ->GetShellCorrectionVector();
-
-    const G4ElementVector* theElementVector=
-                   material->GetElementVector() ;
-    const G4double* theAtomicNumDensityVector=
-                   material->GetAtomicNumDensityVector() ;
-    const G4int NumberOfElements=
-                   material->GetNumberOfElements() ;
-    DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
-
-    G4double tau,Tmax,gamma,bg2,beta2,rcut,delta,x,sh ;
-    for (G4int i = 0 ; i < TotBin ; i++)
+  // now comes the loop for the kinetic energy values
+  //
+  for (G4int i = 0 ; i < TotBin ; i++)
     {
-      LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-      tau = LowEdgeEnergy/ParticleMass ;
-      gamma = tau +1. ;
-      bg2 = tau*(tau+2.) ;
-      beta2 = bg2/(gamma*gamma) ;
-      Tmax = 2.*electron_mass_c2*bg2
-             /(1.+2.*gamma*RateMass+RateMass*RateMass) ;
-
-      if ( tau < taul )
-      //  low energy part , parametrized energy loss formulae
-      {
-        ionloss = 0. ;
-        deltaloss = 0. ;
-
-        for (G4int iel=0; iel<NumberOfElements; iel++)
-        {
-          const G4Element* element = (*theElementVector)(iel);
-          
-          if ( tau < element->GetIonisation()->GetTau0())  
-            ionloss += theAtomicNumDensityVector[iel]
-                       *( element->GetIonisation()->GetAlow()*sqrt(tau)
-                       +element->GetIonisation()->GetBlow()*tau) ;
-          else
-            ionloss += theAtomicNumDensityVector[iel]
-                       *  element->GetIonisation()->GetClow()/sqrt(tau) ;
-        }
-        if ( DeltaCutInKineticEnergyNow < Tmax)
-        {
-          deltaloss = log(Tmax/DeltaCutInKineticEnergyNow)-
-                      beta2*(1.-DeltaCutInKineticEnergyNow/Tmax) ;
-          if(aParticleType.GetPDGSpin() == 0.5)
-            deltaloss += 0.25*(Tmax-DeltaCutInKineticEnergyNow)*
-                              (Tmax-DeltaCutInKineticEnergyNow)/
-                        (LowEdgeEnergy*LowEdgeEnergy+proton_mass_c2*proton_mass_c2) ;
-            deltaloss *= Factor*ElectronDensity/beta2 ;
-        }
-        ionloss -= deltaloss ;
-      }
-      else
-      // high energy part , Bethe-Bloch formula 
-      {
-
-        if ( DeltaCutInKineticEnergyNow < Tmax)
-          rcut = DeltaCutInKineticEnergyNow/Tmax ;
-        else
-          rcut = 1.;
-
-        ionloss = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
-                  +log(rcut)-(1.+rcut)*beta2 ;
-
-        // density correction 
-        x = log(bg2)/twoln10 ;
-        if ( x < X0den )
-          delta = 0. ;
-        else 
-        {
-          delta = twoln10*x - Cden ;
-          if ( x < X1den )
-            delta += Aden*pow((X1den-x),Mden) ;
-        } 
-
-        // shell correction 
-        if ( bg2 > bg2lim ) {
-          sh = 0. ;      
-          x = 1. ;
-          for (G4int k=0; k<=2; k++) {
-            x *= bg2 ;
-            sh += ShellCorrectionVector[k]/x;
-          }
-        }
-        else {
-          sh = 0. ;      
-          x = 1. ;
-          for (G4int k=0; k<=2; k++) {
-             x *= bg2lim ;
-             sh += ShellCorrectionVector[k]/x;
-          }
-          sh *= log(tau/taul)/log(taulim/taul) ;     
-        }
-
-        ionloss -= delta + sh ;
-        ionloss /= beta2 ;
-         
-      // correction of R. Kokoulin  // has been taken out *************** 
-      //  G4double E = LowEdgeEnergy+ParticleMass ;
-      //  G4double epmax = RateMass*E*E/(RateMass*E+ParticleMass) ;
-      //  G4double apar = log(2.*epmax/electron_mass_c2) ;
-      //  ionloss += fine_structure_const*(log(2.*E/ParticleMass)-apar/3.)*
-      //                                  apar*apar/twopi ; 
-
-        ionloss *= Factor*ElectronDensity ;
-      }
-      if ( ionloss <= 0.)
-        ionloss = 0. ;
-      aVector->PutValue(i,ionloss) ;
+      G4double dEdx = ComputeRestrictedMeandEdx(aParticleType,
+	                                        aVector->GetLowEdgeEnergy(i),
+	                                        material,
+	                                        DeltaThreshold);
+      aVector->PutValue(i,dEdx);
     }
-    theLossTable->insert(aVector);
+   theLossTable->insert(aVector);
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 {
-  // Build mean free path tables for the delta ray production process
-  G4double LowEdgeEnergy, Value ,sigma ;
-  //G4bool isOutRange ;
-  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
+ // Build mean free path tables for the delta ray production process
+ //     tables are built for MATERIALS 
 
-  G4int numOfMaterials = theMaterialTable->length();
+ //create table
+ //
+ 
+ const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+ G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
-  if (theMeanFreePathTable) {
-      theMeanFreePathTable->clearAndDestroy();
-      delete theMeanFreePathTable;
-     }
+ if (theMeanFreePathTable)
+   {theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 
-  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
+ theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
-  // get electron and particle cuts in kinetic energy
-  DeltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+ // get electron cut in kinetic energy
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ 
+ // loop for materials 
 
-  for (G4int J=0 ; J < numOfMaterials; J++)
-  { 
-    G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
+ for (G4int J=0 ; J < numOfMaterials; J++)
+    { 
+     //create physics vector then fill it ....
+     G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
                LowerBoundLambda,UpperBoundLambda,NbinLambda);
 
-    const G4Material* material= (*theMaterialTable)[J];
-    const G4ElementVector* theElementVector=
-                         material->GetElementVector() ;
-    const G4double* theAtomicNumDensityVector =
-                         material->GetAtomicNumDensityVector();
-    const G4int NumberOfElements=
-                         material->GetNumberOfElements() ;
-    DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[J] ;
+     // compute the (macroscopic) cross section first
+ 
+     const G4Material* material= (*theMaterialTable)[J];       
+     const G4ElementVector* theElementVector = material->GetElementVector();
+     const G4double* NbOfAtomsPerVolume = material->GetVecNbOfAtomsPerVolume();
+     G4int NumberOfElements = material->GetNumberOfElements();
+ 
+     // get the electron kinetic energy cut for the actual material,
+     //  it will be used in ComputeCrossSectionPerAtom
+     // ( --> it will be the same for all the elements in this material)
+     G4double DeltaThreshold =DeltaCutInKineticEnergy[J];
 
-    for ( G4int i = 0 ; i < NbinLambda ; i++ )
-    {
-      LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-      sigma = 0. ;
-
-      // check threshold here !
-      G4double Tmax = 2.*electron_mass_c2*LowEdgeEnergy*
-                     (LowEdgeEnergy+2.*ParticleMass)/
-                     (ParticleMass*ParticleMass+2.*electron_mass_c2*
-                     (LowEdgeEnergy+ParticleMass)+
-                       electron_mass_c2*electron_mass_c2) ;
-
-      if(Tmax > DeltaCutInKineticEnergyNow)
-      {
-        for (G4int iel=0; iel<NumberOfElements; iel++ )
+     for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
-          sigma +=  theAtomicNumDensityVector[iel]*
-                      ComputeCrossSectionPerAtom(aParticleType,
-                          LowEdgeEnergy,
-                          (*theElementVector)(iel)->GetZ() ) ;
+          G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);
+          G4double sigma = 0.;          
+          for (G4int iel=0; iel<NumberOfElements; iel++ )
+            {
+             sigma +=  NbOfAtomsPerVolume[iel]*
+                       ComputeCrossSectionPerAtom(aParticleType,
+                                                  LowEdgeEnergy,
+		               (*theElementVector)(iel)->GetZ(),
+		                               DeltaThreshold);
+            }
+
+          // mean free path = 1./macroscopic cross section
+          G4double Value = sigma > DBL_MIN ? 1./sigma : DBL_MAX;     
+          aVector->PutValue(i, Value);
         }
-      }
-
-      Value = sigma<=0 ? DBL_MAX : 1./sigma ;     
-
-      aVector->PutValue(i, Value) ;
+     theMeanFreePathTable->insert(aVector);
     }
-
-    theMeanFreePathTable->insert(aVector);
-  }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4MuIonisation::ComputeRestrictedMeandEdx (
+                                 const G4ParticleDefinition& aParticleType,
+                                 G4double KineticEnergy,
+				 const G4Material* material,
+				 G4double DeltaThreshold)
+{
+ // calculate the dE/dx due to the ionization process (Geant4 internal units)
+ // Bethe-Bloch formula
+ //
+ ParticleMass = aParticleType.GetPDGMass();     
+ 
+ G4double ElectronDensity = material->GetElectronDensity();
+ G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
+ G4double Eexc2 = Eexc*Eexc;
+ 
+ G4double tau = KineticEnergy/ParticleMass;
+ G4double gamma = tau + 1., bg2 = tau*(tau+2.), beta2 = bg2/(gamma*gamma);
+ G4double RateMass = electron_mass_c2/ParticleMass;
+ G4double Tmax=2.*electron_mass_c2*bg2/(1.+2.*gamma*RateMass+RateMass*RateMass);
+
+ G4double taul = material->GetIonisation()->GetTaul();
+
+ G4double dEdx;
+ //
+ // high energy part , Bethe-Bloch formula 
+ // 
+ if (tau > taul)
+   {
+     G4double rcut = G4std::min(DeltaThreshold/Tmax, 1.);
+     dEdx = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
+            +log(rcut)-(1.+rcut)*beta2;
+	    
+     //density correction 
+     G4double Cden   = material->GetIonisation()->GetCdensity();
+     G4double Mden   = material->GetIonisation()->GetMdensity();
+     G4double Aden   = material->GetIonisation()->GetAdensity();
+     G4double X0den  = material->GetIonisation()->GetX0density();
+     G4double X1den  = material->GetIonisation()->GetX1density();
+  
+     const G4double twoln10 = 2.*log(10.); 
+     G4double  x = log(bg2)/twoln10;
+     G4double delta;
+     if (x < X0den) delta = 0.;
+     else          {delta = twoln10*x - Cden;
+                    if (x < X1den) delta += Aden*pow((X1den-x),Mden);
+                   } 
+
+     // shell correction 
+     G4double* ShellCorrectionVector = material->GetIonisation()->
+                                       GetShellCorrectionVector();				                
+     const G4double bg2lim = 0.0169, taulim = 8.4146e-3;
+     G4double sh = 0., xs = 1.;
+     if (bg2 > bg2lim) for (G4int k=0; k<3; k++)
+                          {xs *= bg2; sh += ShellCorrectionVector[k]/xs;}
+     else { for (G4int k=0; k<3; k++)
+                       {xs *= bg2lim; sh += ShellCorrectionVector[k]/xs;}
+            sh *= log(tau/taul)/log(taulim/taul);     
+          }
+
+     // now you can compute the total ionization loss
+     dEdx -= (delta + sh); dEdx /= beta2;
+     
+     // correction of R. Kokoulin  // has been taken out *************** 
+     //  G4double E = KineticEnergy+ParticleMass;
+     //  G4double epmax = RateMass*E*E/(RateMass*E+ParticleMass);
+     //  G4double apar = log(2.*epmax/electron_mass_c2);
+     //  dEdx += fine_structure_const*(log(2.*E/ParticleMass)-apar/3.)*
+     //                                  apar*apar/twopi; 
+     
+     dEdx *= twopi_mc2_rcl2*ElectronDensity;
+     if (dEdx < 0.) dEdx = 0.;
+   }
+ //   
+ //  low energy part , parametrized energy loss formulae
+ //         
+ if (tau <= taul)
+   {   
+     // get elements in the actual material, 
+     const G4ElementVector* theElementVector = material->GetElementVector();
+     const G4double* NbOfAtomsPerVolume=material->GetVecNbOfAtomsPerVolume();
+     G4int NumberOfElements = material->GetNumberOfElements();
+     
+     //  loop for the elements in the material
+     dEdx = 0.;
+     for (G4int iel=0; iel<NumberOfElements; iel++)
+        {
+          const G4Element* element = (*theElementVector)(iel);         
+          if (tau < element->GetIonisation()->GetTau0())  
+            dEdx += NbOfAtomsPerVolume[iel]
+                       *(element->GetIonisation()->GetAlow()*sqrt(tau)
+                       + element->GetIonisation()->GetBlow()*tau);
+          else
+            dEdx += NbOfAtomsPerVolume[iel]
+                       * element->GetIonisation()->GetClow()/sqrt(tau);
+        }
+     G4double deltaloss = 0.;
+     if (DeltaThreshold < Tmax)
+       {
+         deltaloss = log(Tmax/DeltaThreshold)-
+                      beta2*(1.-DeltaThreshold/Tmax) ; 
+         if (aParticleType.GetPDGSpin() == 0.5)
+            deltaloss += 0.25*(Tmax-DeltaThreshold)*(Tmax-DeltaThreshold)/
+                 (KineticEnergy*KineticEnergy+proton_mass_c2*proton_mass_c2);
+            deltaloss *= twopi_mc2_rcl2*ElectronDensity/beta2;
+       }
+     dEdx -= deltaloss;
+     if (dEdx < 0.) dEdx = 0.;
+   }
+ return dEdx;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuIonisation::ComputeCrossSectionPerAtom(
                                  const G4ParticleDefinition& aParticleType,
                                  G4double KineticEnergy,
-                                 G4double AtomicNumber)
+                                 G4double AtomicNumber,
+				 G4double DeltaThreshold)
 {
-  const G4double xgi[] = {0.06943,0.33001,0.66999,0.93057} ;
-  const G4double wgi[] = {0.17393,0.32607,0.32607,0.17393} ;
-  const G4double ak1 = 4.6 ;
-  const G4int k2 = 2 ;
-  const G4double masspar = 0.5*ParticleMass*ParticleMass/electron_mass_c2 ;
-  G4double TotalEnergy=KineticEnergy + ParticleMass;
-  G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy) ; 
+ // calculates the totalcross section per atom in GEANT4 internal units
+ //    ( it is called for elements , AtomicNumber = Z )
+ //
+     
+ ParticleMass = aParticleType.GetPDGMass();     
+ G4double TotalEnergy = KineticEnergy + ParticleMass;
+ G4double masspar = 0.5*ParticleMass*ParticleMass/electron_mass_c2;
+ G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy);
 
-  G4double TotalCrossSection= 0. ; 
+ G4double TotalCrossSection = 0.;
+ if (KnockonMaxEnergy <= DeltaThreshold) return TotalCrossSection;
+    
+ const G4double xgi[] = {0.06943,0.33001,0.66999,0.93057};
+ const G4double wgi[] = {0.17393,0.32607,0.32607,0.17393};
+ const G4double ak1 = 4.6;
+ const G4int k2 = 2;
 
-  if( KnockonMaxEnergy > DeltaCutInKineticEnergyNow )
-  {
-    G4double aaa = log(DeltaCutInKineticEnergyNow);
-    G4double bbb = log(KnockonMaxEnergy) ;
-    G4int kkk = int((bbb-aaa)/ak1)+k2 ;
-    G4double hhh = (bbb-aaa)/kkk ;
-    G4double step = exp(hhh) ;
-    G4double ymax = 1./KnockonMaxEnergy ;
+ G4double aaa = log(DeltaThreshold);
+ G4double bbb = log(KnockonMaxEnergy);
+ G4int    kkk = int((bbb-aaa)/ak1)+k2;
+ G4double hhh = (bbb-aaa)/kkk;
+ G4double step = exp(hhh);
+ G4double ymax = 1./KnockonMaxEnergy;
       
-    for (G4int k=0; k<kkk; k++)
+ for (G4int k=0; k<kkk; k++)
     {
-      G4double ymin = ymax ;
-      ymax = ymin*step ;
-      G4double hhy = ymax-ymin ;
+      G4double ymin = ymax;
+      ymax = ymin*step;
+      G4double hhy = ymax-ymin;
       for (G4int i=0; i<4; i++)
-      {
-        G4double y = ymin+hhy*xgi[i];
-        G4double ep = 1./y ;
-        TotalCrossSection += ep*ep*wgi[i]*hhy*
-                             ComputeDifCrossSectionPerAtom(
-                             aParticleType,KineticEnergy,
-                             AtomicNumber,ep) ;
-      }
+         {
+           G4double y = ymin+hhy*xgi[i];
+           G4double ep = 1./y ;
+           TotalCrossSection += ep*ep*wgi[i]*hhy*
+                                ComputeDifCrossSectionPerAtom(
+                                aParticleType,KineticEnergy,
+                                AtomicNumber,ep);
+         }
     }
-  }
-  return TotalCrossSection ;
+ return TotalCrossSection;
 }
- 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
                                  const G4ParticleDefinition& ParticleType,
                                  G4double KineticEnergy, G4double AtomicNumber,
@@ -378,25 +375,139 @@ G4double G4MuIonisation::ComputeDifCrossSectionPerAtom(
  // Calculates the differential cross section per atom
  //   using the cross section formula of R.P. Kokoulin (10/98)
 {
-  const G4double masspar=0.5*ParticleMass*ParticleMass/electron_mass_c2 ;
-  const G4double alphaprime = fine_structure_const/twopi ;
-  G4double TotalEnergy = KineticEnergy + ParticleMass ;
-  G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy) ;
+  const G4double masspar=0.5*ParticleMass*ParticleMass/electron_mass_c2;
+  const G4double alphaprime = fine_structure_const/twopi;
+  G4double TotalEnergy = KineticEnergy + ParticleMass;
+  G4double KnockonMaxEnergy = TotalEnergy/(1.+masspar/TotalEnergy);
 
-  G4double DifCrossSection = 0. ;
+  G4double DifCrossSection = 0.;
+  if(KnockonEnergy >=  KnockonMaxEnergy)  return DifCrossSection;
 
-  if(KnockonEnergy >=  KnockonMaxEnergy)  return DifCrossSection ;
-
-  G4double v = KnockonEnergy/TotalEnergy ;
+  G4double v = KnockonEnergy/TotalEnergy;
   DifCrossSection = twopi_mc2_rcl2*AtomicNumber*
-                 (1.-KnockonEnergy/KnockonMaxEnergy+0.5*v*v)/
-                 (KnockonEnergy*KnockonEnergy) ;
-  G4double a1 = log(1.+2.*KnockonEnergy/electron_mass_c2) ;
+                   (1.-KnockonEnergy/KnockonMaxEnergy+0.5*v*v)/
+                   (KnockonEnergy*KnockonEnergy);
+  G4double a1 = log(1.+2.*KnockonEnergy/electron_mass_c2);
   G4double a3 = log(4.*TotalEnergy*(TotalEnergy-KnockonEnergy)/
-                    (ParticleMass*ParticleMass)) ;
-   DifCrossSection *= (1.+alphaprime*a1*(a3-a1)) ; 
+                    (ParticleMass*ParticleMass));
+  DifCrossSection *= (1.+alphaprime*a1*(a3-a1)); 
 
-  return DifCrossSection ;
+  return DifCrossSection;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,   
+                                               const G4Step&  stepData)         
+{
+ aParticleChange.Initialize(trackData);
+  
+ G4Material* aMaterial = trackData.GetMaterial();
+ const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
+
+ ParticleMass = aParticle->GetDefinition()->GetPDGMass();
+ G4double KineticEnergy = aParticle->GetKineticEnergy();
+ G4double TotalEnergy = KineticEnergy + ParticleMass;
+ G4double Psquare = KineticEnergy*(TotalEnergy+ParticleMass);
+ G4double Esquare = TotalEnergy*TotalEnergy;
+ G4double betasquare=Psquare/Esquare; 
+ G4double summass = ParticleMass + electron_mass_c2;
+ G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
+                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);      
+ G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+ 
+ // get electron cut in kinetic energy
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
+
+ // sampling kinetic energy of the delta ray 
+ //
+  if (MaxKineticEnergyTransfer <= DeltaThreshold)
+    // pathological case (it should not happen, there is no change at all)
+    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+ // normal case 
+ G4double xc = DeltaThreshold/MaxKineticEnergyTransfer;
+ G4double rate = MaxKineticEnergyTransfer/TotalEnergy;
+ G4double te2 = 0.5*rate*rate;
+ 
+ // sampling follows ...
+ G4double x,twoep,grej;
+ const G4double alphaprime = fine_structure_const/twopi; 
+ G4double a0=log(2.*TotalEnergy/ParticleMass); 
+ G4double grejc=(1.-betasquare*xc+te2*xc*xc)*(1.+ alphaprime*a0*a0);
+ do { x=xc/(1.-(1.-xc)*G4UniformRand());
+      twoep = 2.*x*MaxKineticEnergyTransfer;
+      grej=(1.-x*(betasquare-x*te2))*
+           (1.+alphaprime*log(1.+twoep/electron_mass_c2)*
+           (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-
+            log(1.+twoep/electron_mass_c2)))      
+           /grejc;
+    } while(G4UniformRand() > grej);
+    
+ G4double  DeltaKineticEnergy = x * MaxKineticEnergyTransfer;
+
+ if (DeltaKineticEnergy <= 0.)
+   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
+
+ G4double DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
+                                               2. * electron_mass_c2 ));
+ G4double TotalMomentum = sqrt(Psquare);
+ G4double costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
+            /(DeltaTotalMomentum * TotalMomentum);
+
+ if (costheta < -1.) costheta = -1.;
+ if (costheta > +1.) costheta = +1.;
+
+ //  direction of the delta electron
+ //  
+ G4double phi = twopi * G4UniformRand(); 
+ G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
+ G4double dirx = sintheta*cos(phi), diry = sintheta*sin(phi), dirz = costheta;
+
+ G4ThreeVector DeltaDirection(dirx,diry,dirz);
+ DeltaDirection.rotateUz(ParticleDirection);
+
+ // create G4DynamicParticle object for delta ray
+ //
+ G4DynamicParticle *theDeltaRay = new G4DynamicParticle;
+ theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
+ theDeltaRay->SetMomentumDirection(
+                   DeltaDirection.x(),DeltaDirection.y(),DeltaDirection.z()); 
+ theDeltaRay->SetDefinition(G4Electron::Electron());
+
+ // fill aParticleChange
+ // 
+ G4double finalKineticEnergy = KineticEnergy - DeltaKineticEnergy;
+
+ if (finalKineticEnergy > 0.)
+   {
+    G4double finalPx = TotalMomentum*ParticleDirection.x()
+                       - DeltaTotalMomentum*DeltaDirection.x();
+    G4double finalPy = TotalMomentum*ParticleDirection.y()
+                       - DeltaTotalMomentum*DeltaDirection.y();
+    G4double finalPz = TotalMomentum*ParticleDirection.z()
+                       - DeltaTotalMomentum*DeltaDirection.z();
+    G4double finalMomentum =
+              sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz);
+    finalPx /= finalMomentum;
+    finalPy /= finalMomentum;
+    finalPz /= finalMomentum;
+    aParticleChange.SetMomentumChange(finalPx,finalPy,finalPz);
+   }
+ else
+   {
+    finalKineticEnergy = 0.;
+    aParticleChange.SetStatusChange(fStopButAlive);
+   }
+
+ aParticleChange.SetEnergyChange( finalKineticEnergy );
+ aParticleChange.SetNumberOfSecondaries(1);   
+ aParticleChange.AddSecondary(theDeltaRay);
+ aParticleChange.SetLocalEnergyDeposit (0.);
+      
+ //ResetNumberOfInteractionLengthLeft();
+return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -468,142 +579,19 @@ G4bool G4MuIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   return true;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
- 
-G4VParticleChange* G4MuIonisation::PostStepDoIt(
-                                              const G4Track& trackData,   
-                                              const G4Step& stepData)         
-{
-  const G4DynamicParticle* aParticle ;
-  const G4double alphaprime = fine_structure_const/twopi ;
-  G4Material* aMaterial;
-  G4double KineticEnergy,TotalEnergy,TotalMomentum,
-           betasquare,MaxKineticEnergyTransfer,
-           DeltaKineticEnergy,DeltaTotalMomentum,costheta,sintheta,phi,
-           dirx,diry,dirz,finalKineticEnergy,finalPx,finalPy,finalPz,
-           x,xc,te2,grej,Psquare,Esquare,summass,rate,grejc,finalMomentum ;
-  G4double Charge ;
-
-  aParticleChange.Initialize(trackData) ;
-  aMaterial = trackData.GetMaterial() ;
-  aParticle = trackData.GetDynamicParticle() ;
-  Charge=aParticle->GetDefinition()->GetPDGCharge();
-  KineticEnergy=aParticle->GetKineticEnergy();
-  TotalEnergy=KineticEnergy + ParticleMass ;
-  Psquare=KineticEnergy*(TotalEnergy+ParticleMass) ;
-  Esquare=TotalEnergy*TotalEnergy ;
-  summass = ParticleMass + electron_mass_c2 ;    
-  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection() ;
-
-  DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
-
-  // some kinematics......................
-  betasquare=Psquare/Esquare ;
-  MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
-                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);
-
-  // sampling kinetic energy of the delta ray 
-  if( MaxKineticEnergyTransfer <= DeltaCutInKineticEnergyNow )
-  {
-    // pathological case (it should not happen ,
-    return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-  }
-  else
-  {
-   // normal case ......................................
-    xc=DeltaCutInKineticEnergyNow/MaxKineticEnergyTransfer ;
-    rate=MaxKineticEnergyTransfer/TotalEnergy ;
-    te2=0.5*rate*rate ;
-
-   // sampling follows ...
-    G4double a0=log(2.*TotalEnergy/ParticleMass) ;
-    grejc=(1.-betasquare*xc+te2*xc*xc)*
-            (1.+ alphaprime*a0*a0) ;
-    do {
-        x=xc/(1.-(1.-xc)*G4UniformRand());
-        G4double twoep = 2.*x*MaxKineticEnergyTransfer ;
-        grej=(1.-x*(betasquare-x*te2))*
-             (1.+alphaprime*log(1.+twoep/electron_mass_c2)*
-             (a0+log((2.*TotalEnergy-twoep)/ParticleMass)-
-              log(1.+twoep/electron_mass_c2)))
-              /grejc ;
-       
-      } while( G4UniformRand()>grej );
-   }
-  
-   DeltaKineticEnergy = x * MaxKineticEnergyTransfer ;
-
-   if(DeltaKineticEnergy <= 0.)
-     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-
-   DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
-                                               2. * electron_mass_c2 )) ;
-   TotalMomentum = sqrt(Psquare) ;
-   costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
-            /(DeltaTotalMomentum * TotalMomentum) ;
-
-   //  protection against costheta > 1 or < -1   ---------------
-   if ( costheta < -1. ) 
-          costheta = -1. ;
-   if ( costheta > +1. ) 
-          costheta = +1. ;
-
-   //  direction of the delta electron  ........
-   phi = twopi * G4UniformRand() ; 
-   sintheta = sqrt((1.+costheta)*(1.-costheta));
-   dirx = sintheta * cos(phi) ;
-   diry = sintheta * sin(phi) ;
-   dirz = costheta ;
-   G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
-   DeltaDirection.rotateUz(ParticleDirection) ;
-
-   // create G4DynamicParticle object for delta ray
-   G4DynamicParticle *theDeltaRay = new G4DynamicParticle;
-   theDeltaRay->SetKineticEnergy( DeltaKineticEnergy );
-   theDeltaRay->SetMomentumDirection(
-                   DeltaDirection.x(),DeltaDirection.y(),DeltaDirection.z());
-   theDeltaRay->SetDefinition(G4Electron::Electron());
-   finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ;
-   if (finalKineticEnergy > 0. )
-     {
-      finalPx = TotalMomentum*ParticleDirection.x()
-                        - DeltaTotalMomentum*DeltaDirection.x();
-      finalPy = TotalMomentum*ParticleDirection.y()
-                        - DeltaTotalMomentum*DeltaDirection.y();
-      finalPz = TotalMomentum*ParticleDirection.z()
-                        - DeltaTotalMomentum*DeltaDirection.z();
-      finalMomentum =
-                sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
-      finalPx /= finalMomentum ;
-      finalPy /= finalMomentum ;
-      finalPz /= finalMomentum ;
-
-      aParticleChange.SetMomentumChange( finalPx,finalPy,finalPz );
-     }
-   else
-     {
-       finalKineticEnergy = 0. ;
-       aParticleChange.SetStatusChange(fStopButAlive);
-     }
-
-   aParticleChange.SetEnergyChange( finalKineticEnergy );
-   aParticleChange.SetNumberOfSecondaries(1);
-   aParticleChange.AddSecondary( theDeltaRay );
-   aParticleChange.SetLocalEnergyDeposit (0.);
-      
-   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisation::PrintInfoDefinition()
 {
-  G4String comments = "knock-on electron cross sections .\n ";
-           comments += "         Good description above the mean excitation energy.\n";
-           comments += "         delta ray energy sampled from  differential Xsection." ;
+  G4String comments = "  Knock-on electron cross sections . ";
+           comments += "\n         Good description above the mean excitation energy.\n";
+           comments += "         delta ray energy sampled from  differential Xsection.";
 
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n      PhysicsTables from " << G4BestUnit(LowerBoundLambda,
-                                               "Energy")
+         << "\n        PhysicsTables from " << G4BestUnit(LowerBoundLambda,
+                                                  "Energy")
          << " to " << G4BestUnit(UpperBoundLambda,"Energy")
-         << " in " << NbinLambda << " bins. \n";
+         << " in " << TotBin << " bins. \n";
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
