@@ -89,20 +89,29 @@
 #include "G4Step.hh"
 #include "G4GRSVolume.hh"
 
-#include "G4UnitsTable.hh"
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
+// New Histogramming (from AIDA and Anaphe):
+#include <memory> // for the auto_ptr(T>
 
+#include "AIDA/IAnalysisFactory.h"
+
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
+
+#include "G4UnitsTable.hh"
 
 int main(int argc,char** argv)
 {
 
   // -------------------------------------------------------------------
   // Setup
-
-  HepTupleManager* hbookManager;
 
   G4int  nEvt        = 100;
   G4int  nPart       =-1;
@@ -145,16 +154,17 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* Be = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
-  G4Material* Graphite = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
-  G4Material* Al  = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
-  G4Material* Si  = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
-  G4Material* LAr = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
-  G4Material* Fe  = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
-  G4Material* Cu  = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
-  G4Material*  W  = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
-  G4Material* Pb  = new G4Material("Pb",      82., 207.19*g/mole, 11.35*g/cm3);
-  G4Material*  U  = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
+  G4Material* ma[15];
+  ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
+  ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
+  ma[3] = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
+  ma[4] = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
+  ma[5] = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
+  ma[6] = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
+  ma[7] = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
+  ma[8] = new G4Material("Pb",      82., 207.19*g/mole, 11.35*g/cm3);
+  ma[9] = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
 
   G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
   G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
@@ -162,20 +172,20 @@ int main(int argc,char** argv)
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
-  G4Material*  maO = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-  G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
-  water->AddElement(H,2);
-  water->AddElement(O,1);
+  ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
+  ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
+  ma[11]->AddElement(H,2);
+  ma[11]->AddElement(O,1);
 
-  G4Material* ethane = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
-  ethane->AddElement(H,6);
-  ethane->AddElement(C,2);
+  ma[12] = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
+  ma[12]->AddElement(H,6);
+  ma[12]->AddElement(C,2);
   
-  G4Material* csi = new G4Material ("CsI" , 4.53*g/cm3, 2);
-  csi->AddElement(Cs,1);
-  csi->AddElement(I,1);
+  ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
+  ma[13]->AddElement(Cs,1);
+  ma[13]->AddElement(I,1);
  
-  static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   G4int nMaterials = G4Material::GetNumberOfMaterials();
   G4cout << "Available materials are: " << G4endl;
@@ -224,6 +234,7 @@ int main(int argc,char** argv)
   G4Box* sFrame = new G4Box ("Box",dimX, dimY, dimZ);
   G4LogicalVolume* lFrame = new G4LogicalVolume(sFrame,material,"Box", 0, 0, 0);
   G4PVPlacement* pFrame = new G4PVPlacement(0,G4ThreeVector(),"Box",lFrame,0,false,0);
+  if(pFrame) G4cout << "Geometry: " << pFrame->GetName() << G4endl;
 
   // -------------------------------------------------------------------
   // ---- Read input file
@@ -262,7 +273,7 @@ int main(int argc,char** argv)
   aprotManager = new G4ProcessManager(antiproton);
   antiproton->SetProcessManager(aprotManager);
 
-  G4bool ionis = true;
+  //  G4bool ionis = true;
 
   string line, line1;
   G4bool end = true;
@@ -354,29 +365,48 @@ int main(int argc,char** argv)
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
-    hbookManager = new HBookFile(hFile, 58);
-    //  assert (hbookManager != 0);
+    // Creating the analysis factory
+    G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
+
+    // Creating the tree factory
+    G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
+
+    // Creating a tree mapped to a new hbook file.
+    G4std::auto_ptr< ITree > tree( tf->create( hFile, false, true, "hbook" ) );
+    G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+ 
+    // Creating a tuple factory, whose tuples will be handled by the tree
+    //  G4std::auto_ptr< ITupleFactory > tpf(af->createTupleFactory( *tree ));
+
+    IHistogram1D* hist[6];
+
   
     // ---- Book a histogram and ntuples
-    G4cout << "Hbook file name: <" 
-           << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
+    G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
     G4double bin = (emax - emin) / (G4double)nbin;
 
-    HepHistogram* hist[6];
-    hist[0] = hbookManager->histogram("Ionisation (E in MeV)", 
+    // Creating a histogram factory, whose histograms will be 
+    // handled by the tree
+
+    if(usepaw) {
+
+      G4std::auto_ptr< IHistogramFactory > hf(af->createHistogramFactory(*tree));
+
+      // Creating an 1-dimensional histogram in the root directory of the tree
+
+      hist[0] = hf->create1D("1","Ionisation (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    hist[1] = hbookManager->histogram("Bremsstrahlung (E in MeV)", 
+      hist[1] = hf->create1D("2","Bremsstrahlung (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    hist[2] = hbookManager->histogram("Compton (E in MeV)", 
+      hist[2] = hf->create1D("3","Compton (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    hist[3] = hbookManager->histogram("GammaConversion (E in MeV)", 
+      hist[3] = hf->create1D("4","GammaConversion (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    hist[4] = hbookManager->histogram("PhotoElectric (E in MeV)", 
+      hist[4] = hf->create1D("5","PhotoElectric (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    hist[5] = hbookManager->histogram("Raylaigh (E in MeV)", 
+      hist[5] = hf->create1D("6","Raylaigh (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
-    //    assert (hDebug != 0);  
-    G4cout<< "Histograms is initialised x= " << DBL_MAX << G4endl;
+    }
 
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
@@ -481,10 +511,10 @@ int main(int argc,char** argv)
       G4double x = 0.0;
 
       if(lowE) {
-	/*
+	
           if(nProcess == 0) x = eionle->GetMeanFreePath(*gTrack,theStep,&a);
           if(nProcess == 1) x = ebrle->GetMeanFreePath(*gTrack,theStep,&a);
-	*/
+	
 	  /*
 	  if(nProcess == 2) x = comple->GetMeanFreePath(*gTrack,theStep,&a);
 	  if(nProcess == 3) x = convle->GetMeanFreePath(*gTrack,theStep,&a);
@@ -508,12 +538,14 @@ int main(int argc,char** argv)
 
       if(x > 1000.0*meter) x = 1000.0*meter;      
 
-      hist[nProcess]->accumulate(e/MeV,x/mm);
+      if(usepaw) hist[nProcess]->fill(e/MeV,x/mm);
     }
-    if(usepaw)hbookManager->write();
-    G4cout << "# hbook is writed" << G4endl;
-    delete hbookManager;    
-    G4cout << "# hbook is deleted" << G4endl;
+    if(usepaw) {
+      tree->commit();
+      G4std::cout << "Closing the tree..." << G4std::endl;
+      tree->close();
+      G4cout << "# hbook is writed" << G4endl;
+    }
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
     
 
