@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.17 2001-02-20 18:16:41 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.18 2001-03-23 18:50:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,16 +34,16 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
 {
   //  Construct the Chord Finder
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
-  // G4Mag_EqRhs *
-  fEquation = new G4Mag_UsualEqRhs(theMagField); // Should move q, p to 
-  fLastStepEstimate_Unconstrained = DBL_MAX;
-                                                     //G4FieldTrack ??
+  G4Mag_EqRhs *pEquation = new G4Mag_UsualEqRhs(theMagField);
+  fEquation = pEquation;                            
+  fLastStepEstimate_Unconstrained = DBL_MAX;          // Should move q, p to
+                                                      //    G4FieldTrack ??
   // --->>  Charge    Q = 0 
   // --->>  Momentum  P = 1       NOMINAL VALUES !!!!!!!!!!!!!!!!!!
 
   if( pItsStepper == 0 )
   { 
-     pItsStepper = fDriversStepper = new G4ClassicalRK4(fEquation);
+     pItsStepper = fDriversStepper = new G4ClassicalRK4(pEquation);
      fAllocatedStepper= true;
   }
   else

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.hh,v 1.5 2001-03-23 16:20:27 grichine Exp $
+// $Id: G4CashKarpRKF45.hh,v 1.6 2001-03-23 18:50:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // with description
 
-    G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4CashKarpRKF45(G4EquationOfMotion *EqRhs, G4int numberOfVariables = 6, G4bool primary= true) ;
    ~G4CashKarpRKF45() ;
 
     void Stepper( const G4double y[],
@@ -53,7 +53,7 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
 
   public:  // without description
 
-   G4double  DistChord() ; 
+   G4double  DistChord() const; 
                                  
    G4int IntegratorOrder() const { return 4; }
 
@@ -71,9 +71,8 @@ class G4CashKarpRKF45 : public G4MagIntegratorStepper
   // for DistChord calculations
 
   G4double fLastStepLength;
-  G4double fLastInitialVector[6], fLastFinalVector[6], 
-           fLastDyDx[6], fMidVector[6], fMidError[6];
-    
+  G4double *fLastInitialVector, *fLastFinalVector, *fLastDyDx, *fMidVector, *fMidError;
+  G4CashKarpRKF45* fAuxStepper; 
 };
 
 #endif /* G4CashKARP_RKF45 */

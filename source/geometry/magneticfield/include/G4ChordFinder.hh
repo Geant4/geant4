@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.hh,v 1.5 2000-11-01 15:15:48 gcosmo Exp $
+// $Id: G4ChordFinder.hh,v 1.6 2001-03-23 18:50:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ class G4ChordFinder
 
       //  Variables used in construction/destruction
       G4bool fAllocatedStepper;
-      G4Mag_EqRhs* fEquation; 
+      G4EquationOfMotion* fEquation; 
       G4MagIntegratorStepper* fDriversStepper; 
 };
 
