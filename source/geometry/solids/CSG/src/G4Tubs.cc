@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.14 2000-04-11 16:04:30 johna Exp $
+// $Id: G4Tubs.cc,v 1.15 2000-05-17 16:13:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 // 13.10.99 V.Grichine, bugs fixed in DistanceToIn(p,v) 
 // 19.11.99 V. Grichine, side = kNull in Distance ToOut(p,v,...)
 // 31.03.00 V.Grichine, bug fixed in Inside(p)
+// 17.05.00 V.Grichine, bugs (#76,#91) fixed in  Distance ToOut(p,v,...)
 
 
 #include "G4Tubs.hh"
@@ -1199,24 +1200,28 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	   if ( compS < 0 )
 	   {
 	     sphi=pDistS/compS;
-	     xi=p.x()+sphi*v.x();
-	     yi=p.y()+sphi*v.y();
+             if (sphi >= -0.5*kCarTolerance)
+	     {
+	       xi=p.x()+sphi*v.x();
+	       yi=p.y()+sphi*v.y();
 
 // Check intersecting with correct half-plane (if not -> no intersect)
 
-	     if ((yi*cosCPhi-xi*sinCPhi)>=0)
-	     {
-	       sphi = kInfinity ;
-	     }
-	     else
-	     {
-	       sidephi = kSPhi ;
-
-	       if ( pDistS > -kCarTolerance*0.5 )
+	       if ((yi*cosCPhi-xi*sinCPhi)>=0)
 	       {
+	       sphi = kInfinity ;
+	       }
+	       else
+	       {
+	         sidephi = kSPhi ;
+
+	         if ( pDistS > -kCarTolerance*0.5 )
+	         {
 			 sphi = 0 ; // Leave by sphi immediately
-	       }		
-	     }
+	         }		
+	       }	     
+             }
+             else sphi = kInfinity ;
 	   }
 	   else sphi = kInfinity ;
 
@@ -1250,7 +1255,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 		   }
 		}
 	    }
-            else sphi = kInfinity ;
+	    else sphi = kInfinity ;
 
 	     /* *******************************************
 
@@ -1507,6 +1512,25 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 		    break;
 
 		default:
+        G4cout.precision(16);
+        G4cout << G4endl;
+        G4cout << "Tubs parameters:" << G4endl << G4endl;
+        G4cout << "fRMin = "   << fRMin/mm << " mm" << G4endl;
+        G4cout << "fRMax = "   << fRMax/mm << " mm" << G4endl;
+        G4cout << "fDz = "   << fDz/mm << " mm" << G4endl;
+        G4cout << "fSPhi = "   << fSPhi/degree << " degree" << G4endl;
+        G4cout << "fDPhi = "   << fDPhi/degree << " degree" << G4endl<<G4endl;
+        G4cout << "Position:"  << G4endl << G4endl;
+        G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
+        G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
+        G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl;
+        G4cout << "Direction:" << G4endl << G4endl;
+        G4cout << "v.x() = "   << v.x() << G4endl;
+        G4cout << "v.y() = "   << v.y() << G4endl;
+        G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
+        G4cout << "Proposed distance :" << G4endl << G4endl;
+        G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
+
 		    G4Exception("Invalid enum in G4Tubs::DistanceToOut");
 		    break;
     }
