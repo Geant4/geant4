@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.6 2000-12-18 22:34:47 sadilov Exp $
+# $Id: Configure,v 1.7 2000-12-19 07:24:45 sadilov Exp $
 #
-# Generated on Tue Dec 19 01:27:04 MSK 2000 [metaconfig 3.0 PL70]
+# Generated on Tue Dec 19 10:17:35 MSK 2000 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -814,7 +814,7 @@ for file in $*; do
 			dir=`expr X$file : 'X\(.*\)/'`
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
 			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
-			(cd $dir && . ./$file_SH && mkdir -p $abssrc/bin/$g4system && mv $file_EX $abssrc/bin/$g4system)
+			(cd $dir && . ./$file_SH && mkdir -p $abssrc/.config/bin/$g4system && mv $file_EX $abssrc/.config/bin/$g4system)
 #			echo Sergei_1
 #			echo "file_SH=$file_SH"
 #			echo "file_EX=$file_EX"
@@ -827,7 +827,7 @@ for file in $*; do
 		*)
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
 			file_EX=`expr X$file : 'X.*/\(.*\).SH'`
-			(. ./$file && mkdir -p $abssrc/bin/$g4system && mv file-SH $abssrc/bin/$g4system)
+			(. ./$file && mkdir -p $abssrc/.config/bin/$g4system && mv file-SH $abssrc/.config/bin/$g4system)
 #			echo Sergei_2
 #			echo "file_SH=$file_SH"
 #			echo "file_EX=$file_EX"
@@ -847,7 +847,7 @@ for file in $*; do
 			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
 			(set x $dir; shift; eval $mkdir_p)
 
-			(sh <$src/$dir/$file_SH && mkdir -p $src/bin/$g4system && mv $file_EX $src/bin/$g4system)
+			(sh <$src/$dir/$file_SH && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
 
 #			echo Sergei_3
 #			echo "dir=$dir"
@@ -858,7 +858,7 @@ for file in $*; do
 		*)
 			file_SH=`expr X$file : 'X.*/\(.*\)'`
 			file_EX=`expr X$file : 'X.*/\(.*\)\.SH'`
-			(sh <$src/$file && mkdir -p $src/bin/$g4system && mv $file_EX $src/bin/$g4system)
+			(sh <$src/$file && mkdir -p $src/.config/bin/$g4system && mv $file_EX $src/.config/bin/$g4system)
 			echo Sergei_4
 			;;
 		esac
@@ -1746,16 +1746,16 @@ dflt=n
 
 cd ..
 if [ X$install = X ] ; then
-	if test -f $src/bin/$g4system/env.sh; then
+	if test -f $src/.config/bin/$g4system/env.sh; then
 	cat >&2 <<EOM
 ---------------------------------------------------
 For setting Geant4 environments you should make:
 
-source $src/bin/$g4system/env.csh
+source $src/.config/bin/$g4system/env.csh
 
 or
 
-. $src/bin/$g4system/env.sh
+. $src/.config/bin/$g4system/env.sh
 ---------------------------------------------------
 EOM
 	$rm -rf UU
@@ -1776,9 +1776,9 @@ cd UU
 case "$knowitall" in
 '')
 	cd ..
-	if test -f $src/bin/$g4system/config.sh; then
-		if $contains myuname= $src/bin/$g4system/config.sh >/dev/null 2>&1; then
-			eval "`grep myuname= $src/bin/$g4system/config.sh`"
+	if test -f $src/.config/bin/$g4system/config.sh; then
+		if $contains myuname= $src/.config/bin/$g4system/config.sh >/dev/null 2>&1; then
+			eval "`grep myuname= $src/.config/bin/$g4system/config.sh`"
 		fi
 		if test "X$myuname" = "X$newmyuname"; then
 			dflt=y
@@ -1791,18 +1791,18 @@ esac
 
 cd ..
 
-if test -f $src/bin/$g4system/config.sh; then
+if test -f $src/.config/bin/$g4system/config.sh; then
 	echo " "
 	rp="There exists a config.sh file. Shall I use it to set the defaults?"
 	. UU/myread
 	case "$ans" in
-	n*|N*) echo "OK, I'll ignore it."; mv $src/bin/$g4system/config.sh $src/bin/$g4system/config.sh.old;;
+	n*|N*) echo "OK, I'll ignore it."; mv $src/.config/bin/$g4system/config.sh $src/.config/bin/$g4system/config.sh.old;;
 	*)  echo "Fetching default answers from your old config.sh file..." >&4
 		tmp_n="$n"
 		tmp_c="$c"
 		tmp_sh="$sh"
-		. $src/bin/$g4system/config.sh
-		cp $src/bin/$g4system/config.sh UU
+		. $src/.config/bin/$g4system/config.sh
+		cp $src/.config/bin/$g4system/config.sh UU
 		n="$tmp_n"
 		c="$tmp_c"
 		: Older versions did not always set $sh.  Catch re-use of such
@@ -2299,7 +2299,7 @@ fi
 
 case "$g4conf" in
 '')
-	g4conf=$abssrc/bin/$g4system
+	g4conf=$abssrc/.config/bin/$g4system
 	;;
 esac
 
@@ -3511,12 +3511,12 @@ Hmm...You had some extra variables I don't know about...
       I'll try to keep 'em...
 
 EOM
-		echo "# Variables propagated from previous config.sh file." >>bin/$g4system/config.sh
+		echo "# Variables propagated from previous config.sh file." >>.config/bin/$g4system/config.sh
 		for sym in `cat UU/oldsyms`; do
 			echo "    Propagating $hint variable "'$'"$sym..."
 			eval 'tmp="$'"${sym}"'"'
 			echo "$tmp" | \
-				sed -e "s/'/'\"'\"'/g" -e "s/^/$sym='/" -e "s/$/'/" >>bin/$g4system/config.sh
+				sed -e "s/'/'\"'\"'/g" -e "s/^/$sym='/" -e "s/$/'/" >>.config/bin/$g4system/config.sh
 		done
 		;;
 	esac
