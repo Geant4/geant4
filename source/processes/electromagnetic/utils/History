@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2002-04-17 16:10:54 urban Exp $
+$Id: History,v 1.44 2002-04-18 10:21:38 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-17 apr 02: G4MultipleScattering.hh,.cc have been committed
-- NEW angle distribution 
-- boundary algorithm has been modified + some other (minor) changes
+17 apr 02: Laszlo (utils-V04-00-03)
+- G4MultipleScattering.hh,.cc have been committed:
+  new parametrisation for angle distribution. 
+  boundary algorithm has been modified + some other (minor) changes.
 
 26 feb 02: mma (utils-V04-00-02)
 - initial value of data member of G4VEnergyLoss finalRange = 1 mm
