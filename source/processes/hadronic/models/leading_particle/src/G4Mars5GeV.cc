@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.9 2004-03-14 14:14:05 hpw Exp $
+// $Id: G4Mars5GeV.cc,v 1.10 2004-11-21 22:54:57 tkoi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 //
 //   History:
 //   modified as hadronic model 28 Oct 2001 N.Kanaya
+//   Remodified T. Koi 18 Nov T. Koi
 // ------------------------------------------------------------
 //  This is a Event Biasing mechanism based on MARS code
 //   This model is applicable to 
@@ -68,6 +69,12 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
   std::cout << " INCLUSIVE HADRON(photon)-NUCLEUS VERTEX AT E < 5 GEV !!! "<<std::endl;
   std::cout << " THREE WEIGHTED HADRONS IN FINAL STATE:     !!!"<<std::endl;
   std::cout << " IP+A -> N/P(CASC)+ PI+/PI-(K+/K-) + PI0 "<<std::endl;
+  std::cout << " *********************************************************"<<std::endl;
+   std::cout << " Important notice! "<< std::endl; 
+   std::cout << " Since 1998, MARS codes used CEM (Cascade-Exciton Model) " << std::endl; 
+   std::cout << " for nuclear interactions below 5 GeV " << std::endl;
+   std::cout << " and do NOT use this inclusive model. " << std::endl;
+
   std::cout << std::endl;
 
   SetMinEnergy( 1.0*MeV );
@@ -83,7 +90,7 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
 }
 
 G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
-                                             G4Nucleus& 
+                                             G4Nucleus& aTarget
                                             )
 {
   theParticleChange.Clear();
@@ -95,12 +102,13 @@ G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
 
   // get the incident particle type
   incidentParticle = &aTrack;
-
   // get the incident particle energy/momentum
   incidentMarsEncoding = GetMarsEncoding(incidentParticle->GetDefinition());
 
   // Atomic and charge number 
-  GetTargetNuclei( aTrack.GetMaterial() );
+  //GetTargetNuclei( aTrack.GetMaterial() );
+   fANucl = aTarget.GetN(); 
+   fZNucl = aTarget.GetZ();
 
   // initialize secondary information 
   numberOfSecondaries = 0;
@@ -171,14 +179,14 @@ void G4Mars5GeV::GetTargetNuclei(const G4Material* material)
     fANucl +=
       theAtomicNumDensityVector[iel]*((*theElementVector)[iel]->GetN());
 
-#ifdef G4VERBOSE
-    if (GetVerboseLevel() > 2) {
+//#ifdef G4VERBOSE
+//    if (GetVerboseLevel() > 2) {
       G4cout << iel << ": " << theAtomicNumDensityVector[iel];
       G4cout << "  Z=" << (*theElementVector)[iel]->GetZ() << "  A=" <<
 	(*theElementVector)[iel]->GetN();
       G4cout << G4endl; 
-    }
-#endif 
+//    }
+//#endif 
   }
   fANucl /= totNumAtoms;
   fZNucl /= totNumAtoms;
@@ -300,7 +308,8 @@ void G4Mars5GeV::CreateNucleon(G4int ib, G4int pType, G4double  )
     selec1.V10 = 2.0;
   }
 
-  if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondary();
+  //if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondary();
+  if ( SelBS(pType, fANucl, fZNucl) >0.0 ) AddSecondaryToMarsList();
 
 }
 
@@ -352,7 +361,8 @@ void G4Mars5GeV::CreatePion(G4int ib, G4int pType, G4double  pE)
 	}
       }
     }
-    AddSecondary();
+    //AddSecondary();
+    AddSecondaryToMarsList();
   }
 }
 
@@ -388,11 +398,12 @@ void G4Mars5GeV::CreatePionZero(G4int ib, G4int pType, G4double  pE)
   selec1.V10 = 1.0;
   if ( SelBS(pType, fANucl, fZNucl) >0.0 ) {
     selec1.Tprod = MarsPI0;
-    AddSecondary();
+    AddSecondaryToMarsList();
   }
 }
 
-void G4Mars5GeV::AddSecondary()
+//void G4Mars5GeV::AddSecondary()
+void G4Mars5GeV::AddSecondaryToMarsList()
 {
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
