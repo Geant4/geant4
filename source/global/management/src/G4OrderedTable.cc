@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.cc,v 1.1 2001-09-17 08:17:58 kurasige Exp $
+// $Id: G4OrderedTable.cc,v 1.2 2002-04-19 07:10:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,6 +38,20 @@
 #include "g4std/fstream"
 #include "g4std/iomanip"
 
+
+G4OrderedTable::G4OrderedTable()
+  : G4std::vector<G4DataVector*>()
+{
+}
+
+G4OrderedTable::G4OrderedTable(size_t capacity)
+  : G4std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
+{
+}
+
+G4OrderedTable::~G4OrderedTable()
+{
+}
 
 G4bool G4OrderedTable::Store(const G4String& fileName,
 			     G4bool          ascii)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.cc,v 1.3 2001-11-29 18:59:35 gcosmo Exp $
+// $Id: G4DataVector.cc,v 1.4 2002-04-19 07:10:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,25 @@
 
 #include "G4DataVector.hh"
 #include "g4std/iomanip"
+
+G4DataVector::G4DataVector()
+  : G4std::vector<G4double>()
+{
+}
+
+G4DataVector::G4DataVector(size_t capacity)
+  : G4std::vector<G4double>(capacity)
+{
+}
+
+G4DataVector::G4DataVector(size_t capacity, G4double value)
+  : G4std::vector<G4double>(capacity, value)
+{
+}
+
+G4DataVector::~G4DataVector()
+{
+}
 
 G4bool G4DataVector::Store(G4std::ofstream& fOut, G4bool ascii)
 {

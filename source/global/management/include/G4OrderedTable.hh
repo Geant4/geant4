@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OrderedTable.hh,v 1.9 2001-09-17 08:17:57 kurasige Exp $
+// $Id: G4OrderedTable.hh,v 1.10 2002-04-19 07:10:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,7 +64,7 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
     // Constructor given a 'capacity' defining the initial
     // number of elements (NULL pointers are filled up)
 
-  virtual ~G4OrderedTable(){;}
+  virtual ~G4OrderedTable();
     // Empty Destructor
 
   inline void clearAndDestroy();
@@ -83,18 +83,6 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
 typedef G4OrderedTable::iterator G4OrderedTableIterator;
 
 #include "G4DataVector.hh"
-
-inline
-G4OrderedTable::G4OrderedTable()
-  : G4std::vector<G4DataVector*>()
-{
-}
-
-inline
-G4OrderedTable::G4OrderedTable(size_t capacity)
-  : G4std::vector<G4DataVector*>(capacity, (G4DataVector*)(0) )
-{
-}
 
 inline 
 void G4OrderedTable::clearAndDestroy() 

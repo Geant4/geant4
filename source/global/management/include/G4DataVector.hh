@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DataVector.hh,v 1.10 2001-09-17 08:17:56 kurasige Exp $
+// $Id: G4DataVector.hh,v 1.11 2002-04-19 07:10:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,7 @@ class G4DataVector : public G4std::vector<G4double>
    // Constructor given a 'capacity' defining the initial number of elements
    // and initialising them to 'value'.
 
-  virtual ~G4DataVector(){;}
+  virtual ~G4DataVector();
    // Empty destructor
 
   inline void insertAt(size_t, const G4double&);
@@ -86,24 +86,6 @@ class G4DataVector : public G4std::vector<G4double>
 
   friend G4std::ostream& operator<<(G4std::ostream&, const G4DataVector&);
 };
-
-inline
-G4DataVector::G4DataVector()
-  : G4std::vector<G4double>()
-{
-}
-
-inline
-G4DataVector::G4DataVector(size_t capacity)
-  : G4std::vector<G4double>(capacity)
-{
-}
-
-inline
-G4DataVector::G4DataVector(size_t capacity, G4double value)
-  : G4std::vector<G4double>(capacity, value)
-{
-}
 
 inline
 void G4DataVector::insertAt(size_t pos, const G4double& a) 
