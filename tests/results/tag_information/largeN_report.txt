@@ -9,37 +9,37 @@ Report on Errors and Warnings arising from system testing on the geant4-04-00-ca
 The complete set of tests has not been run, with Large_N(umbers of events), for all platforms. 
 It is hoped to extend the coverage and speed up the problem reporting in the next reference tag.
  
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-        | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
-        |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test01  | No-diff |         |          |          |          |          |          |          |         |         |         |         |
-test02  | Warn 1.1| Warn1.1 |          |          |          |          | OK       |          |         |         |         |         |
-test02.h| OK      | Warn 3  | Warn 2&3 |          | Err 4    | Warn 3   |          | Warn 3   |  Err 5  | Warn 3  | Err 5   |         |
-test05  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test06  |Warn 1.2 |         |          |          |          |          | Warn 1   | Warn 1   |         |         |         |         |
-test07  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
-test09  |(anno)   |Err 3.1  |          |          |          |          | Warn 5+1 | Warn 5   |         |         |         |         |
-test10  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-
-test11  |Err 1.1  |         | abend    | abend    | abend    | abend    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
-test12  |(anno)   |         |          | Warn 2   | Err 4    | Warn 2   |          | Warn 2   | abend   |         | abend   |         |
-test13  |Warn 2.1 |         |          |          | Err 4    | Err  6   | loop     | loop     | abend   |         | abend   |         |
-test14  |anno+2nds|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
-test15  |         |         | abend    | abend    | abend    | abend    |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test16  |Warn 3.1 |OK + anno| Warn 3   | Warn 2   | Err 4    | Warn 2   | Warn 3   | Warn 3   | abend   | Warn 3  | abend   |         |
-test17  | OK      |         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
-test18  |OK (anno)|         |          |          |          |          |          |          |         |
-test20  |OK (anno)|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
-test103 |........ |Warn 4.1 | Warn 1   |          |          |          |          | Warn 1   |         |
-test104 |........ |Warn 4.1 |          |          |          | Warn 3   |          | Warn 4   | abend   | abend   | abend   | abend
-test502 |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |
-test508 |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |          |          |         |
---------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+           | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
+           |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test01     | No-diff |         |          |          |          |          |          |          |         |         |         |         |
+test02     | Warn 1.1| Warn1.1 |          |          |          |          | OK       |          |         |         |         |         |
+test02.h   | OK      | Warn 3  | Warn 2&3 |          | Err 4    | Warn 3   |          | Warn 3   |  Err 5  | Warn 3  | Err 5   |         |
+test05     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test06     |Warn 1.2 |         |          |          |          |          | Warn 1   | Warn 1   |         |         |         |         |
+test07     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+test09     |(anno)   |Err 3.1  |          |          |          |          | Warn 5+1 | Warn 5   |         |         |         |         |
+test10     |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test11     |Err 1.1  |         | abend    | abend    | abend    | abend    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
+test12     |(anno)   |         |          | Warn 2   | Err 4    | Warn 2   |          | Warn 2   | abend   |         | abend   |         |
+test13     |Warn 2.1 | Perf    |          |          | Err 4    | Err  6   | loop     | loop     | abend   |         | abend   |         |
+test14     |anno+2nds|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+test15     |         |         | abend    | abend    | abend    | abend    |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test16     |Warn 3.1 |OK + anno| Warn 3   | Warn 2   | Err 4    | Warn 2   | Warn 3   | Warn 3   | abend   | Warn 3  | abend   |         |
+test17     | OK      |         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+test18     |OK (anno)|         |          |          |          |          |          |          |         |
+test20     |OK (anno)|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test103    |........ |Warn 4.1 | Warn 1   |          |          |          |          | Warn 1   |         |         |         |         |
+test104    |........ |Warn 4.1 |          |          |          | Warn 3   |          | Warn 4   | abend   | abend   | abend   | abend   |
+test104.Em | Perf    |Perf     | Perf     | Perf     |          |          |          |          |         |         |         |         |
+test502    |         |         | Err  8   | Err  8   | Err  8   | Err  8   |          |          |         |         |         |         |
+test508    |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |          |          |         |         |         |         |
+-----------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
 
  (anno) change in annotation, layout and formatting.
 
@@ -347,3 +347,14 @@ G4Warn 5 HP-aCC.optim test09
 (stderr)
 G4VParticleChange::SetNumberOfSecondaries() Warning  theListOfSecondaries is not empty G4VParticleChange::SetNumberOfSecondaries() Warning  ...
 
+
+Perf
+----
+                                exampleN04.EM                   test13
+                        Linux-egcs      SUN-CC          HP-aCC          SUN-CC
+                        d       o       d       o       d       o       d    o
+
+w/o (touch+cut_per_mat) 120     161     240     120     240     240     60   30
+touch                   289     -       600     240     240     240     240 120
+cut                     293     93      600     240     >3600   >3600   240 120
+(touch+cut_per_mat)     3000    87      720     240     >3600   >3600   240 120
