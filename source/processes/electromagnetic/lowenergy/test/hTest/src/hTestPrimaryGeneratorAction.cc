@@ -110,11 +110,11 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   // Beam particles are uniformly distributed over phi, cosTheta 
   if(1.0 > minCosTheta) {
     uz = minCosTheta + (1.0 - minCosTheta)*G4UniformRand() ;
-    ux = sqrt(1.0 - uz*uz) ;
+    ux = std::sqrt(1.0 - uz*uz) ;
     uy = ux ;
     G4double phi = 360.0*deg*G4UniformRand() ;
-    ux *= cos(phi) ;
-    uy *= sin(phi) ;
+    ux *= std::cos(phi) ;
+    uy *= std::sin(phi) ;
     direction = G4ThreeVector(ux,uy,uz) ;
   }
 
@@ -130,7 +130,7 @@ void hTestPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   else if(m_gauss == "flatBeta") {
          G4double beta = minBeta + (maxBeta-minBeta)*G4UniformRand();
-         kinEnergy = mass*(1./sqrt(1. - beta*beta) - 1.);
+         kinEnergy = mass*(1./std::sqrt(1. - beta*beta) - 1.);
   }
   else if(0.0 < sigmaE) kinEnergy += G4RandGauss::shoot(0.0,sigmaE);
    
@@ -174,7 +174,7 @@ void hTestPrimaryGeneratorAction::SetBeamBeta(G4double val)
 {
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
-  if(val > 0. && val < 1.) energy = mass*(1./sqrt(1.-val*val) - 1.);
+  if(val > 0. && val < 1.) energy = mass*(1./std::sqrt(1.-val*val) - 1.);
   G4cout << "hTestPrimaryGeneratorAction: KinEnergy(MeV)= " 
          << energy/MeV << G4endl;
   minE = energy;
@@ -190,17 +190,17 @@ void hTestPrimaryGeneratorAction::SetSigmaBeta(G4double val)
   G4ParticleDefinition* particle = particleGun->GetParticleDefinition();
   G4double mass = particle->GetPDGMass();
   if(val > 0. && val < 1.) {
-    sigmaE = mass*(1./sqrt(1.-val*val) - 1.);
+    sigmaE = mass*(1./std::sqrt(1.-val*val) - 1.);
     G4double gamma = energy/mass + 1.;
-    G4double beta0 = sqrt(1. - 1./(gamma*gamma));
+    G4double beta0 = std::sqrt(1. - 1./(gamma*gamma));
     G4double beta  = beta0 + val;
     if (beta >= 1.) beta = 0.9999;
     maxBeta = beta;
-    maxE = mass*(1./sqrt(1.-beta*beta) - 1.);
+    maxE = mass*(1./std::sqrt(1.-beta*beta) - 1.);
     beta  = beta0 - val;
     if (beta <= 0.) beta = 0.0001;
     minBeta = beta;
-    minE = mass*(1./sqrt(1.-beta*beta) - 1.);
+    minE = mass*(1./std::sqrt(1.-beta*beta) - 1.);
   }
 }
 
@@ -213,10 +213,10 @@ void hTestPrimaryGeneratorAction::SetBeamSigmaE(G4double val)
   sigmaE = val; 
   minE = energy - sigmaE;
   G4double gamma = minE/mass + 1.;
-  minBeta = sqrt(1. - 1./(gamma*gamma));
+  minBeta = std::sqrt(1. - 1./(gamma*gamma));
   maxE = energy + sigmaE;
   gamma = maxE/mass + 1.;
-  maxBeta = sqrt(1. - 1./(gamma*gamma));
+  maxBeta = std::sqrt(1. - 1./(gamma*gamma));
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -227,10 +227,10 @@ void hTestPrimaryGeneratorAction::SetBeamEnergy(G4double val)
   energy = val;
   minE = energy - sigmaE;
   G4double gamma = minE/mass + 1.;
-  minBeta = sqrt(1. - 1./(gamma*gamma));
+  minBeta = std::sqrt(1. - 1./(gamma*gamma));
   maxE = energy + sigmaE;
   gamma = maxE/mass + 1.;
-  maxBeta = sqrt(1. - 1./(gamma*gamma));
+  maxBeta = std::sqrt(1. - 1./(gamma*gamma));
   if(energy < (hTestHisto::GetPointer())->GetMaxEnergy())
               (hTestHisto::GetPointer())->SetMaxEnergy(energy);
 }

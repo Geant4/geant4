@@ -58,9 +58,9 @@ G4double G4LinLogInterpolation::Calculate(G4double x, G4int bin,
     {
       G4double e1 = points[bin];
       G4double e2 = points[bin+1];
-      G4double d1 = log(data[bin]);
-      G4double d2 = log(data[bin+1]);
-      value = exp(d1 + (d2 - d1)*(x - e1)/ (e2 - e1));
+      G4double d1 = std::log(data[bin]);
+      G4double d2 = std::log(data[bin+1]);
+      value = std::exp(d1 + (d2 - d1)*(x - e1)/ (e2 - e1));
     }
   else
     {

@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.34 2004-11-18 12:08:53 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.35 2004-12-02 14:01:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -156,22 +156,22 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
       fcostheta = ( 1. + cosTheta*cosTheta)/2.;
       } while (fcostheta < G4UniformRand());
 
-      G4double sinThetaHalf = sqrt((1. - cosTheta) / 2.);
+      G4double sinThetaHalf = std::sqrt((1. - cosTheta) / 2.);
       x = sinThetaHalf / (wlPhoton/cm);
       if (x > 1.e+005)
          dataFormFactor = formFactorData->FindValue(x,Z-1);
       else
          dataFormFactor = formFactorData->FindValue(0.,Z-1);
       randomFormFactor = G4UniformRand() * Z * Z;
-      sinTheta = sqrt(1. - cosTheta*cosTheta);
+      sinTheta = std::sqrt(1. - cosTheta*cosTheta);
       gReject = dataFormFactor * dataFormFactor;
 
     } while( gReject < randomFormFactor);
 
   // Scattered photon angles. ( Z - axis along the parent photon)
   G4double phi = twopi * G4UniformRand() ;
-  G4double dirX = sinTheta*cos(phi);
-  G4double dirY = sinTheta*sin(phi);
+  G4double dirX = sinTheta*std::cos(phi);
+  G4double dirY = sinTheta*std::sin(phi);
   G4double dirZ = cosTheta;
 
   // Update G4VParticleChange for the scattered photon

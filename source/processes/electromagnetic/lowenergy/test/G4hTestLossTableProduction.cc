@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestLossTableProduction.cc,v 1.5 2001-10-12 13:10:56 pia Exp $
+// $Id: G4hTestLossTableProduction.cc,v 1.6 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -171,9 +171,9 @@ main()
   G4double minArg = 1*eV, maxArg = 200*MeV, argStp;
   const G4int pntNum = 1000;
   G4double Tkin[pntNum+1];
-  argStp = (log10(maxArg)-log10(minArg))/pntNum;
+  argStp = (std::log10(maxArg)-std::log10(minArg))/pntNum;
   for(G4int d = 0; d < pntNum+1; d++){ 
-    Tkin[d] = pow(10,(log10(minArg) + d*argStp));
+    Tkin[d] = std::pow(10,(std::log10(minArg) + d*argStp));
   }
   
   //____________________LOSS TABLE TEST________________________________________________

@@ -105,8 +105,8 @@ void hTestHisto::EndOfHisto()
     zend2 /= zEvt;
     zend2 -= zend*zend;
     G4double sig = 0.0;
-    if(zend2 > 0.) sig = sqrt(zend2);
-    zend2 = sig / sqrt(zEvt);
+    if(zend2 > 0.) sig = std::sqrt(zend2);
+    zend2 = sig / std::sqrt(zEvt);
     G4cout<<"========================================================"<<G4endl;
     G4cout << setprecision(4) << "Range(mm)= " << zend/mm 
            << "; Stragling(mm)= " << sig/mm 

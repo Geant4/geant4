@@ -157,7 +157,7 @@ G4double G4hParametrisedLossModel::TheValue(const G4DynamicParticle* particle,
                         * proton_mass_c2/(particle->GetMass());
   G4double factor = theZieglerFactor;
   if (scaledEnergy < lowEnergyLimit) {
-    if (modelName != "QAO") factor *= sqrt(scaledEnergy/lowEnergyLimit);
+    if (modelName != "QAO") factor *= std::sqrt(scaledEnergy/lowEnergyLimit);
     scaledEnergy = lowEnergyLimit;
   }
   G4double eloss = StoppingPower(material,scaledEnergy) * factor;
@@ -176,7 +176,7 @@ G4double G4hParametrisedLossModel::TheValue(const G4ParticleDefinition* aParticl
 
   G4double factor = theZieglerFactor;
   if (scaledEnergy < lowEnergyLimit) {
-    if (modelName != "QAO") factor *= sqrt(scaledEnergy/lowEnergyLimit);
+    if (modelName != "QAO") factor *= std::sqrt(scaledEnergy/lowEnergyLimit);
     scaledEnergy = lowEnergyLimit;
   }
   G4double eloss = StoppingPower(material,scaledEnergy) * factor;
@@ -415,13 +415,13 @@ G4double G4hParametrisedLossModel::ChemicalFactor(
   G4double gamma    = 1.0 + kineticEnergy/proton_mass_c2 ;    
   G4double gamma25  = 1.0 + 25.0*keV /proton_mass_c2 ;
   G4double gamma125 = 1.0 + 125.0*keV/proton_mass_c2 ;
-  G4double beta     = sqrt(1.0 - 1.0/(gamma*gamma)) ;
-  G4double beta25   = sqrt(1.0 - 1.0/(gamma25*gamma25)) ;
-  G4double beta125  = sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
+  G4double beta     = std::sqrt(1.0 - 1.0/(gamma*gamma)) ;
+  G4double beta25   = std::sqrt(1.0 - 1.0/(gamma25*gamma25)) ;
+  G4double beta125  = std::sqrt(1.0 - 1.0/(gamma125*gamma125)) ;
   
   G4double factor = 1.0 + (expStopPower125/eloss125 - 1.0) *
-                   (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
-                   (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
+                   (1.0 + std::exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
+                   (1.0 + std::exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
   
   return factor ;
 }

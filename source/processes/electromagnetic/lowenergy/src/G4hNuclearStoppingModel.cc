@@ -120,7 +120,7 @@ G4double G4hNuclearStoppingModel::TheValue(
 {
   // Projectile nucleus
   G4double energy = particle->GetKineticEnergy() ;
-  G4double z1 = abs((particle->GetCharge())/eplus) ;
+  G4double z1 = std::abs((particle->GetCharge())/eplus) ;
   G4double m1 = (particle->GetMass())*factorPDG2AMU ;
 
   G4double nloss = StoppingPower(material, energy, z1, m1) * theZieglerFactor; 
@@ -136,7 +136,7 @@ G4double G4hNuclearStoppingModel::TheValue(
                                 G4double kineticEnergy)  
 {
   // Projectile nucleus
-  G4double z1 = abs((aParticle->GetPDGCharge())/eplus) ;
+  G4double z1 = std::abs((aParticle->GetPDGCharge())/eplus) ;
   G4double m1 = (aParticle->GetPDGMass())*factorPDG2AMU ;
 
   G4double nloss = StoppingPower(material, kineticEnergy, z1, m1)

@@ -139,11 +139,11 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
       
 
     if ( T < 10.0 ) {
-      ionloss = a[iMolecula][0] * sqrt(T) ;
+      ionloss = a[iMolecula][0] * std::sqrt(T) ;
     
     } else if ( T < 10000.0 ) {
-      G4double slow  = a[iMolecula][1] * pow(T, 0.45) ;
-      G4double shigh = log( 1.0 + a[iMolecula][3]/T  
+      G4double slow  = a[iMolecula][1] * std::pow(T, 0.45) ;
+      G4double shigh = std::log( 1.0 + a[iMolecula][3]/T  
                      + a[iMolecula][4]*T ) * a[iMolecula][2]/T ;
       ionloss = slow*shigh / (slow + shigh) ;     
     } 
@@ -152,20 +152,20 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
      /////////////////////////////////////////////////////////////////
     // Graphite may be implemented in a very approximate way (scaling 
     // amorphous results according to rough fits to ICRU tables of results:
-    // 1-100 keV: *(1+0.023+0.0066*log10(E))
-    // 100-700 keV: *(1+0.089-0.0248*log10(E-99.))
-    // 700-10000 keV: *(1+0.089-0.0248*log10(700.-99.))
+    // 1-100 keV: *(1+0.023+0.0066*std::log10(E))
+    // 100-700 keV: *(1+0.089-0.0248*std::log10(E-99.))
+    // 700-10000 keV: *(1+0.089-0.0248*std::log10(700.-99.))
     // continuity is (should!) be garanteed, but not continuity of the
     // first derivative. A better fit is in order!       
     if ( 10 == iMolecula ) { 
       if (T < 100.0) {    
-	ionloss *= (1.0+0.023+0.0066*log10(T));  
+	ionloss *= (1.0+0.023+0.0066*std::log10(T));  
       }
       else if (T < 700.0) {   
-	ionloss *=(1.0+0.089-0.0248*log10(T-99.));
+	ionloss *=(1.0+0.089-0.0248*std::log10(T-99.));
       } 
       else if (T < 10000.0) {    
-	ionloss *=(1.0+0.089-0.0248*log10(700.-99.));
+	ionloss *=(1.0+0.089-0.0248*std::log10(700.-99.));
       }
     }
   }
@@ -288,18 +288,18 @@ G4double G4hICRU49p::ElectronicStoppingPower(G4double z,
 
     // Carbon specific case for E < 40 keV
   if ( T < 40.0 && 5 == i) {
-    fac = sqrt(T/40.0) ;
+    fac = std::sqrt(T/40.0) ;
     T = 40.0 ;  
 
     // Free electron gas model
   } else if ( T < 10.0 ) { 
-    fac = sqrt(T*0.1) ;
+    fac = std::sqrt(T*0.1) ;
     T =10.0 ;  
   }
 
   // Main parametrisation
-  G4double slow  = a[i][1] * pow(T, 0.45) ;
-  G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+  G4double slow  = a[i][1] * std::pow(T, 0.45) ;
+  G4double shigh = std::log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
   ionloss = slow*shigh*fac / (slow + shigh) ;     
   
   if ( ionloss < 0.0) ionloss = 0.0 ;

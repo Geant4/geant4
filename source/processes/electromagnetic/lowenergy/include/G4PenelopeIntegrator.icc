@@ -105,7 +105,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
     s2=d*a;
     icall=icall+4*npoints;
     s12=s1+s2;
-    if (abs(s12-si)<std::max(Ptol*abs(s12),1e-35)){
+    if (std::abs(s12-si)<std::max(Ptol*std::abs(s12),1e-35)){
       sumga=sumga+s12;
     }
     else
@@ -128,7 +128,7 @@ G4double G4PenelopeIntegrator<T,F>::Calculate(T& typeT, F f,
 	return sumga;
 	  }
    }
-   Err=abs(sumr)/std::max(abs(sumr+sumga),1e-35);
+   Err=std::abs(sumr)/std::max(std::abs(sumr+sumga),1e-35);
    if (Err < Ctol || LHN == 0) return sumga; //end of cycle
    LH=LHN;
    for (G4int i=0;i<LH;i++){

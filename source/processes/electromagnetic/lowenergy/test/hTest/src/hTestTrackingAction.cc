@@ -98,7 +98,7 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       G4double beta = 1.;
 	if(mass > 0.) {
           G4double gamma = kinE/mass + 1.;
-          beta = sqrt(1. - 1./(gamma*gamma));
+          beta = std::sqrt(1. - 1./(gamma*gamma));
 	}
       theHisto->SaveToTuple("BETA", beta);            
     }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyTest.cc,v 1.8 2003-06-16 17:01:06 gunter Exp $
+// $Id: G4hLowEnergyTest.cc,v 1.9 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -301,7 +301,7 @@ main()
     pxChange  = aParticleChange->GetMomentumChange()->x();
     pyChange  = aParticleChange->GetMomentumChange()->y();
     pzChange  = aParticleChange->GetMomentumChange()->z();
-    pChange   = sqrt(pxChange*pxChange+pyChange*pyChange+pzChange*pzChange);
+    pChange   = std::sqrt(pxChange*pxChange+pyChange*pyChange+pzChange*pzChange);
 
     // ---- secondaries histos ----    
     G4cout<<"E and p of the primary particle: "<<pEnChange<<"  "<<pxChange<<"  "
@@ -334,7 +334,7 @@ main()
       Px   = (aFinalParticle->GetMomentum()).x();
       Py   = (aFinalParticle->GetMomentum()).y();
       Pz   = (aFinalParticle->GetMomentum()).z();
-      P    = sqrt(Px*Px+Py*Py+Pz*Pz);
+      P    = std::sqrt(Px*Px+Py*Py+Pz*Pz);
 
       aParticleName = aFinalParticle->GetDefinition()->GetParticleName();
       G4cout << aParticleName << ": "
@@ -345,7 +345,7 @@ main()
 	     << Pz << " ***" << G4endl;   
    
       hEKin->accumulate(eKin);
-      hP->accumulate(sqrt(Px*Px+Py*Py+Pz*Pz));
+      hP->accumulate(std::sqrt(Px*Px+Py*Py+Pz*Pz));
 
       G4int ptype;
       if(aParticleName == "proton") ptype = 0;

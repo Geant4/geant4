@@ -69,8 +69,8 @@ G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection
 
   G4double costeta = 1.;
   G4double Phi     = twopi * G4UniformRand();
-  G4double cosphi = cos(Phi);
-  G4double sinphi = sin(Phi);
+  G4double cosphi = std::cos(Phi);
+  G4double sinphi = std::sin(Phi);
   G4double sinteta = 0;
   G4double gamma   = 1. + eKineticEnergy/electron_mass_c2;
 
@@ -79,7 +79,7 @@ G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection
     return costeta;
   }
 
-  G4double beta  = sqrt(gamma*gamma-1.)/gamma;
+  G4double beta  = std::sqrt(gamma*gamma-1.)/gamma;
   G4double b     = 0.5*gamma*(gamma-1.)*(gamma-2);
     
   G4double rndm,term,greject,grejsup;
@@ -93,7 +93,7 @@ G4ThreeVector G4PhotoElectricAngularGeneratorStandard::GetPhotoElectronDirection
   } while(greject < G4UniformRand()*grejsup);
        
 
-  sinteta = sqrt(1.-costeta*costeta);
+  sinteta = std::sqrt(1.-costeta*costeta);
   G4ThreeVector photoelectrondirection (sinteta*cosphi, sinteta*sinphi, costeta);
   photoelectrondirection.rotateUz(direction);
   return photoelectrondirection;

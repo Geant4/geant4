@@ -96,7 +96,7 @@ std::vector<G4double> G4hShellCrossSection::GetCrossSection(G4int Z,
 //      G4double x = electron_mass_c2/dele;
 //
 //      G4double aCrossSection = (dele/(xEnergy*(1. + 1./y)) 
-//                             + 4.*log(2.7 + sqrt(y))/3.) * x*x*x;    
+//                             + 4.*std::log(2.7 + std::sqrt(y))/3.) * x*x*x;    
 //
 //       // Fill the vector of cross sections with the value just calculated
 //      crossSections.push_back(aCrossSection);

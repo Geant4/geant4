@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyTest.cc,v 1.7 2003-06-16 17:00:53 gunter Exp $
+// $Id: G4LowEnergyTest.cc,v 1.8 2004-12-02 14:02:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // KaonMinusAtRestTest.cc 
@@ -413,11 +413,11 @@ main()
   G4double Tkin[pntNum+1];
   G4double meanFreePath ;
 
-  argStp = (log10(maxArg)-log10(minArg))/pntNum;
+  argStp = (std::log10(maxArg)-std::log10(minArg))/pntNum;
   
   for(G4int d = 0; d < pntNum+1; d++){ 
     
-    Tkin[d] = pow(10,(log10(minArg) + d*argStp));
+    Tkin[d] = std::pow(10,(std::log10(minArg) + d*argStp));
   }
   
   for ( G4int J = 0 ; J < G4Material::GetNumberOfMaterials() ; J++ ){
@@ -545,7 +545,7 @@ main()
     pxChange  = aParticleChange->GetMomentumChange()->x();
     pyChange  = aParticleChange->GetMomentumChange()->y();
     pzChange  = aParticleChange->GetMomentumChange()->z();
-    PChange   = sqrt(pxChange*pxChange+pyChange*pyChange+pzChange*pzChange);
+    PChange   = std::sqrt(pxChange*pxChange+pyChange*pyChange+pzChange*pzChange);
 
     // ---- secondaries histos ----    
     G4cout<<"E and p of the primary particle: "<<pEnChange<<"  "<<pxChange<<"  "
@@ -585,7 +585,7 @@ main()
       Px   = (aFinalParticle->GetMomentum()).x();
       Py   = (aFinalParticle->GetMomentum()).y();
       Pz   = (aFinalParticle->GetMomentum()).z();
-      P    = sqrt(Px*Px+Py*Py+Pz*Pz);
+      P    = std::sqrt(Px*Px+Py*Py+Pz*Pz);
       if(processID == 1){
 
 	ShID = PhotoElectricProcess.GetTransitionShell(i);
@@ -599,7 +599,7 @@ main()
       G4cout<<aParticleName<<": "
 	  <<" "<<e<<"  "<<eKin<<"  "<<Px<<"  "<<Py<<"  "<<Pz<<" ***"<<G4endl;      
       hEKin->accumulate(eKin);
-      hP->accumulate(sqrt(Px*Px+Py*Py+Pz*Pz));
+      hP->accumulate(std::sqrt(Px*Px+Py*Py+Pz*Pz));
 
       G4int ptype;
       if(aParticleName == "gamma") ptype = 0;
@@ -621,7 +621,7 @@ main()
       // Print secondaries on a file
       //      outFile2<<std::setw(3)<<aParticleChange->GetNumberOfSecondaries()<<std::setw(14)
       //	      <<aParticleChange->GetLocalEnergyDeposit()<<std::setw(14)<<e<<std::setw(14)
-      //	      <<eKin<<std::setw(14)<<sqrt(Px*Px+Py*Py+Pz*Pz)<<std::setw(14)<<Px<<std::setw(14)
+      //	      <<eKin<<std::setw(14)<<std::sqrt(Px*Px+Py*Py+Pz*Pz)<<std::setw(14)<<Px<<std::setw(14)
       //	      <<Py<<std::setw(14)<<Pz<<std::setw(3)<<ptype<<G4endl;
 
       delete aParticleChange->GetSecondary(i);

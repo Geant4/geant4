@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeAnnihilationTest.cc,v 1.2 2004-06-04 06:27:18 pandola Exp $
+// $Id: G4PenelopeAnnihilationTest.cc,v 1.3 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -343,11 +343,11 @@ G4int main()
   G4double Tkin[pntNum+1];
   G4double meanFreePath=0. ;
 
-  argStp = (log10(maxArg)-log10(minArg))/pntNum;
+  argStp = (std::log10(maxArg)-std::log10(minArg))/pntNum;
   
   for(G4int d = 0; d < pntNum+1; d++)
     { 
-      Tkin[d] = pow(10,(log10(minArg) + d*argStp));
+      Tkin[d] = std::pow(10,(std::log10(minArg) + d*argStp));
     }
  
   G4double sti = 1.*mm;

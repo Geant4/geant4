@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hTestStoppingPower.cc,v 1.16 2003-06-16 17:01:07 gunter Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.17 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -281,7 +281,7 @@ int main()
   G4double minE = 1.0*eV, maxE = 10000.0*MeV, s;
   const G4int num = 200;
   G4double tkin = 0.0;
-  s = (log10(maxE)-log10(minE))/num;
+  s = (std::log10(maxE)-std::log10(minE))/num;
 
   AIDA::IHistogram1D* h[71] ;
        
@@ -348,60 +348,60 @@ int main()
                                                   ,92,0.5,92.5) ;
 
  h[28]= hf->createHistogram1D("28","p   in C (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[29]= hf->createHistogram1D("29","p   in Al (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[30]= hf->createHistogram1D("30","p   in Si (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[31]= hf->createHistogram1D("31","p   in Cu (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[32]= hf->createHistogram1D("32","p   in Fe (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[33]= hf->createHistogram1D("33","p   in Pb (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[34]= hf->createHistogram1D("34","p   in C2H6 (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[35]= hf->createHistogram1D("35","p   in H2O (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[36]= hf->createHistogram1D("36","p   in lAr (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[37]= hf->createHistogram1D("37","p   in CsI (MeV/mm) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
 
 
  h[38]= hf->createHistogram1D("38","p   in C (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[39]= hf->createHistogram1D("39","p   in Al (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[40]= hf->createHistogram1D("40","p   in Si (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[41]= hf->createHistogram1D("41","p   in Cu (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[42]= hf->createHistogram1D("42","p   in Fe (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[43]= hf->createHistogram1D("43","p   in Pb (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[44]= hf->createHistogram1D("44","p   in C2H6 (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[45]= hf->createHistogram1D("45","p   in H2O (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[46]= hf->createHistogram1D("46","p   in lAr (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[47]= hf->createHistogram1D("47","p   in CsI (MeV/mm)Ziegler1985p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
 
 
  h[48]= hf->createHistogram1D("48","He effective charge for Cu"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[49]= hf->createHistogram1D("49","C12 effective charge in Cu"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
 
  h[50]= hf->createHistogram1D("50","He in Al (MeV/(mg/cm2)) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[51]= hf->createHistogram1D("51","C12 in Al (MeV/(mg/cm2)) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[52]= hf->createHistogram1D("52","Ar40 in Al (MeV/(mg/cm2)) ICRU49p"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
 
  // Table with the data
  h[53] = hf->createHistogram1D("53","Data p 40 keV (keV*cm2/10^15!atoms) Ziegler1977p"
@@ -422,25 +422,25 @@ int main()
 // Histo for Antiproton
  
  h[60]= hf->createHistogram1D("60","pbar   in C (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[61]= hf->createHistogram1D("61","pbar   in Al (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[62]= hf->createHistogram1D("62","pbar   in Si (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[63]= hf->createHistogram1D("63","pbar   in Cu (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[64]= hf->createHistogram1D("64","pbar   in Fe (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[65]= hf->createHistogram1D("65","pbar   in Pb (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[66]= hf->createHistogram1D("66","pbar   in C2H6 (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[67]= hf->createHistogram1D("67","pbar   in H2O (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[68]= hf->createHistogram1D("68","pbar   in lAr (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
  h[69]= hf->createHistogram1D("69","pbar   in CsI (MeV/mm) QAOLoss"
-                                   ,num,log10(minE),log10(maxE)) ;
+                                   ,num,std::log10(minE),std::log10(maxE)) ;
 
  h[70] = hf->createHistogram1D("70","p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
                                                   ,92,0.5,92.5) ;
@@ -602,58 +602,58 @@ int main()
 
   // dedx
   for (j = 0 ; j < num-1 ; j++) {
-    tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
+    tkin = std::pow(10.0,(std::log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[0]->ComputeDEDX(part[0],Graphite,tkin) ;
-    h[28]->fill(log10(tkin),de) ;
+    h[28]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Al,tkin) ;
-    h[29]->fill(log10(tkin),de) ;
+    h[29]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Si,tkin) ;
-    h[30]->fill(log10(tkin),de) ;
+    h[30]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Cu,tkin) ;
-    h[31]->fill(log10(tkin),de) ;
+    h[31]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Fe,tkin) ;
-    h[32]->fill(log10(tkin),de) ;
+    h[32]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],Pb,tkin) ;
-    h[33]->fill(log10(tkin),de) ;
+    h[33]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[34]->fill(log10(tkin),de) ;
+    h[34]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],water,tkin) ;
     //    de += theNuclearStoppingModel->TheValue(part[1],water,tkin) ;
     //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
-    h[35]->fill(log10(tkin),de) ;
+    h[35]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],LAr,tkin) ;
-    h[36]->fill(log10(tkin),de) ;
+    h[36]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],csi,tkin) ;
-    h[37]->fill(log10(tkin),de) ;
+    h[37]->fill(std::log10(tkin),de) ;
   }
 
   G4cout << "Proton's dEdx histograms are filled!" << G4endl;
   
   for (j = 0 ; j < num-1 ; j++) {
-    tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
+    tkin = std::pow(10.0,(std::log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[0]->ComputeDEDX(part[1],Graphite,tkin) ;
-    h[60]->fill(log10(tkin),de) ;
+    h[60]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Al,tkin) ;
-    h[61]->fill(log10(tkin),de) ;
+    h[61]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Si,tkin) ;
-    h[62]->fill(log10(tkin),de) ;
+    h[62]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Cu,tkin) ;
-    h[63]->fill(log10(tkin),de) ;
+    h[63]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Fe,tkin) ;
-    h[64]->fill(log10(tkin),de) ;
+    h[64]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],Pb,tkin) ;
-    h[65]->fill(log10(tkin),de) ;
+    h[65]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[66]->fill(log10(tkin),de) ;
+    h[66]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],water,tkin) ;
     // G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
-    h[67]->fill(log10(tkin),de) ;
+    h[67]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],LAr,tkin) ;
-    h[68]->fill(log10(tkin),de) ;
+    h[68]->fill(std::log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],csi,tkin) ;
-    h[69]->fill(log10(tkin),de) ;
+    h[69]->fill(std::log10(tkin),de) ;
   }
 
   G4cout << "AntiProton's dEdx histograms are filled!" << G4endl;
@@ -662,24 +662,24 @@ int main()
   G4double fact  = cm/(2700.0*MeV) ;      // to MeV/mg/cm^2
 
   for (j = 0 ; j < num-1 ; j++) {
-    tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
+    tkin = std::pow(10.0,(std::log10(minE) + (G4double(j)+0.5)*s));
     de = theIonEffChargeModel->TheValue(part[3],Cu,tkin) ;
     //  G4cout << "E = " << tkin << "; dedx = " << de << G4endl;
-    h[48]->fill(log10(tkin),de) ;
+    h[48]->fill(std::log10(tkin),de) ;
     de = theIonEffChargeModel->TheValue(part[4],Cu,tkin) ;
-    h[49]->fill(log10(tkin),de) ;
+    h[49]->fill(std::log10(tkin),de) ;
     G4double tRed = tkin * (part[3]->GetPDGMass())/mProt ;
     de = hIon[3]->ComputeDEDX(part[3],Al,tRed) ;
     de += theNuclearStoppingModel->TheValue(part[3],Al,tRed) ;
-    h[50]->fill(log10(tkin),de*fact) ;
+    h[50]->fill(std::log10(tkin),de*fact) ;
     tRed = tkin * (part[4]->GetPDGMass())/mProt ;
     de = hIon[4]->ComputeDEDX(part[4],Al,tRed) ;
     //de += theNuclearStoppingModel->TheValue(part[4],Al,tRed) ;
-    h[51]->fill(log10(tkin),de*fact) ;
+    h[51]->fill(std::log10(tkin),de*fact) ;
     tRed = tkin * (part[5]->GetPDGMass())/mProt ;
     de = hIon[5]->ComputeDEDX(part[5],Al,tRed) ;
     //de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
-    h[52]->fill(log10(tkin),de*fact) ;
+    h[52]->fill(std::log10(tkin),de*fact) ;
   } 
 
   G4cout << "Ions's dEdx histograms are filled!" << G4endl;
@@ -697,29 +697,29 @@ int main()
   G4cout << "Ziegler's dEdx histograms will be filled" << G4endl;
 
   for (j = 0 ; j < num-1 ; j++) {
-    tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
+    tkin = std::pow(10.0,(std::log10(minE) + (G4double(j)+0.5)*s));
     de = hIon[7]->ComputeDEDX(part[0],Graphite,tkin) ;
-    h[38]->fill(log10(tkin),de) ;
+    h[38]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Al,tkin) ;
-    h[39]->fill(log10(tkin),de) ;
+    h[39]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Si,tkin) ;
-    h[40]->fill(log10(tkin),de) ;
+    h[40]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Cu,tkin) ;
-    h[41]->fill(log10(tkin),de) ;
+    h[41]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Fe,tkin) ;
-    h[42]->fill(log10(tkin),de) ;
+    h[42]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],Pb,tkin) ;
-    h[43]->fill(log10(tkin),de) ;
+    h[43]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],ethane,tkin) ;
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
-    h[44]->fill(log10(tkin),de) ;
+    h[44]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],water,tkin) ;
     //    G4cout << "water:  E = " << tkin << "; dedx = " << de << G4endl;
-    h[45]->fill(log10(tkin),de) ;
+    h[45]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],LAr,tkin) ;
-    h[46]->fill(log10(tkin),de) ;
+    h[46]->fill(std::log10(tkin),de) ;
     de = hIon[7]->ComputeDEDX(part[0],csi,tkin) ;
-    h[47]->fill(log10(tkin),de) ;
+    h[47]->fill(std::log10(tkin),de) ;
   }
  
   //---------------------- Fill Ntuple ------------------------
@@ -731,7 +731,7 @@ int main()
   assert (ntuple != 0);
   
   for( i = 0; i < num; i++) { 
-    tkin = pow(10,(log10(minE) + i*s));
+    tkin = std::pow(10,(std::log10(minE) + i*s));
     
     for ( G4int j = 0 ; j < numOfMaterials; j++ ) {
 

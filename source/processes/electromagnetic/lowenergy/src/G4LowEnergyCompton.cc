@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyCompton.cc,v 1.38 2004-11-18 12:08:52 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.39 2004-12-02 14:01:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -156,7 +156,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   G4double epsilon0 = 1. / (1. + 2. * e0m);
   G4double epsilon0Sq = epsilon0 * epsilon0;
-  G4double alpha1 = -log(epsilon0);
+  G4double alpha1 = -std::log(epsilon0);
   G4double alpha2 = 0.5 * (1. - epsilon0Sq);
 
   G4double wlPhoton = h_Planck*c_light/photonEnergy0;
@@ -171,28 +171,28 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
     {
       if ( alpha1/(alpha1+alpha2) > G4UniformRand())
 	{
-	  epsilon = exp(-alpha1 * G4UniformRand());  // pow(epsilon0,G4UniformRand())
+	  epsilon = std::exp(-alpha1 * G4UniformRand());  // std::pow(epsilon0,G4UniformRand())
 	  epsilonSq = epsilon * epsilon;
 	}
       else
 	{
 	  epsilonSq = epsilon0Sq + (1. - epsilon0Sq) * G4UniformRand();
-	  epsilon = sqrt(epsilonSq);
+	  epsilon = std::sqrt(epsilonSq);
 	}
 
       oneCosT = (1. - epsilon) / ( epsilon * e0m);
       sinT2 = oneCosT * (2. - oneCosT);
-      G4double x = sqrt(oneCosT/2.) / (wlPhoton/cm);
+      G4double x = std::sqrt(oneCosT/2.) / (wlPhoton/cm);
       G4double scatteringFunction = scatterFunctionData->FindValue(x,Z-1);
       gReject = (1. - epsilon * sinT2 / (1. + epsilonSq)) * scatteringFunction;
 
     }  while(gReject < G4UniformRand()*Z);
 
   G4double cosTheta = 1. - oneCosT;
-  G4double sinTheta = sqrt (sinT2);
+  G4double sinTheta = std::sqrt (sinT2);
   G4double phi = twopi * G4UniformRand() ;
-  G4double dirx = sinTheta * cos(phi);
-  G4double diry = sinTheta * sin(phi);
+  G4double dirx = sinTheta * std::cos(phi);
+  G4double diry = sinTheta * std::sin(phi);
   G4double dirz = cosTheta ;
 
   // Update G4VParticleChange for the scattered photon
@@ -221,7 +221,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack,
 
   if (rangeTest->Escape(G4Electron::Electron(),couple,eKineticEnergy,safety))
     {
-      G4double eMomentum = sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
+      G4double eMomentum = std::sqrt(eKineticEnergy*(eKineticEnergy+2.*electron_mass_c2));
       G4ThreeVector eDirection((photonEnergy0 * photonDirection0 -
 				photonEnergy1 * photonDirection1) * (1./eMomentum));
       G4DynamicParticle* electron = new G4DynamicParticle (G4Electron::Electron(),

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.8 2003-06-16 17:01:34 gunter Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.9 2004-12-02 14:05:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -182,7 +182,7 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
       px    = (finalParticle->GetMomentum()).x();
       py    = (finalParticle->GetMomentum()).y();
       pz    = (finalParticle->GetMomentum()).z();
-      p     = sqrt(px*px + py*py + pz*pz);
+      p     = std::sqrt(px*px + py*py + pz*pz);
       e     = finalParticle->GetTotalEnergy();
       eKin  = finalParticle->GetKineticEnergy();
       theta = (finalParticle->GetMomentum()).theta();

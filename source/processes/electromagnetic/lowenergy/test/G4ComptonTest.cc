@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.22 2003-06-16 17:00:47 gunter Exp $
+// $Id: G4ComptonTest.cc,v 1.23 2004-12-02 14:02:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -400,7 +400,7 @@ int main()
       G4double pxChange = eChange.x();
       G4double pyChange = eChange.y();
       G4double pzChange = eChange.z();
-      G4double pChange = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pChange = std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
 
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -447,7 +447,7 @@ int main()
 	  G4double pz = (finalParticle->GetMomentum()).z();
 	  G4double theta = (finalParticle->GetMomentum()).theta();
 	  G4double phi = (finalParticle->GetMomentum()).phi();
-	  G4double p = sqrt(px*px+py*py+pz*pz);
+	  G4double p = std::sqrt(px*px+py*py+pz*pz);
 
 	  if (eKin > initEnergy)
 	    {

@@ -182,11 +182,11 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 
   //isotropic angular distribution for the outcoming photon
   G4double newcosTh = 1.-2.*G4UniformRand();
-  G4double  newsinTh = sqrt(1.-newcosTh*newcosTh);
+  G4double  newsinTh = std::sqrt(1.-newcosTh*newcosTh);
   G4double newPhi = twopi*G4UniformRand();
   
-  G4double xDir =  newsinTh*sin(newPhi);
-  G4double yDir = newsinTh*cos(newPhi);
+  G4double xDir =  newsinTh*std::sin(newPhi);
+  G4double yDir = newsinTh*std::cos(newPhi);
   G4double zDir = newcosTh;
   
   G4ThreeVector newGammaDirection(xDir,yDir,zDir);
@@ -378,11 +378,11 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 
       // Isotropic angular distribution for the outcoming e-
       G4double newcosTh = 1.-2.*G4UniformRand();
-      G4double  newsinTh = sqrt(1.-newcosTh*newcosTh);
+      G4double  newsinTh = std::sqrt(1.-newcosTh*newcosTh);
      G4double newPhi = twopi*G4UniformRand();
   
-     G4double xDir =  newsinTh*sin(newPhi);
-     G4double yDir = newsinTh*cos(newPhi);
+     G4double xDir =  newsinTh*std::sin(newPhi);
+     G4double yDir = newsinTh*std::cos(newPhi);
      G4double zDir = newcosTh;
   
      G4ThreeVector newElectronDirection(xDir,yDir,zDir);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.19 2003-06-16 17:00:46 gunter Exp $
+// $Id: G4ComplexTest.cc,v 1.20 2004-12-02 14:02:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -667,7 +667,7 @@ int main(int argc,char** argv)
         G4double py   = (finalParticle->GetMomentum()).y();
         G4double pz   = (finalParticle->GetMomentum()).z();
         //G4double theta= (finalParticle->GetMomentum()).theta();
-        G4double p    = sqrt(px*px + py*py + pz*pz);
+        G4double p    = std::sqrt(px*px + py*py + pz*pz);
 
         if (eKin > gEnergy) {
 	    G4cout << "WARNING: eFinal > eInit in event #" << iter << G4endl;
@@ -736,7 +736,7 @@ int main(int argc,char** argv)
            << (G4double)nPhotons/(G4double)nEvt << G4endl;
     G4double x = de/(G4double)nEvt;
     G4double y = de2/(G4double)nEvt - x*x;
-    if(0.0 < y) y = sqrt(y);
+    if(0.0 < y) y = std::sqrt(y);
     G4cout << "Average energy deposition(MeV)= "
            << x/MeV << " +- " << y/MeV << G4endl;
 

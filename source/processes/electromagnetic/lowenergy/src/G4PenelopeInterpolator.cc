@@ -28,7 +28,7 @@
 // -----------
 // 17 Feb 2003   LP        Created
 // 17 Dec 2003   LP        Removed memory leak
-// 17 Mar 2004   LP        Removed unnecessary calls to pow(a,b)
+// 17 Mar 2004   LP        Removed unnecessary calls to std::pow(a,b)
 //
 // -------------------------------------------------------------------
 
@@ -200,23 +200,23 @@ G4double G4PenelopeInterpolator::CalculateMomentum(G4double UpperLimit,
       }
     dx=x2-x1;
     dy=y2-y1;
-    if (abs(dx) > (1e-14*abs(dy))) 
+    if (std::abs(dx) > (1e-14*std::abs(dy))) 
       {
 	b1=dy/dx;
 	a1=y1-b1*x1;
 	if (MomentumOrder == -1) 
 	  {
-	    ds=a1*log(xtc/x1)+b1*(xtc-x1);
+	    ds=a1*std::log(xtc/x1)+b1*(xtc-x1);
 	  }
 	else
 	  {
-	    ds=a1*(pow(xtc,MomentumOrder+1)-pow(x1,MomentumOrder+1))/ ((G4double) (MomentumOrder+1))+
-	      b1*(pow(xtc,MomentumOrder+2)-pow(x1,MomentumOrder+2))/((G4double) (MomentumOrder+2));
+	    ds=a1*(std::pow(xtc,MomentumOrder+1)-std::pow(x1,MomentumOrder+1))/ ((G4double) (MomentumOrder+1))+
+	      b1*(std::pow(xtc,MomentumOrder+2)-std::pow(x1,MomentumOrder+2))/((G4double) (MomentumOrder+2));
 	  }
       }
     else
       {
-	ds=0.5*(y1+y2)*pow((xtc-x1),MomentumOrder);
+	ds=0.5*(y1+y2)*std::pow((xtc-x1),MomentumOrder);
       }
     RMom += ds;
     if (iend != 0) return RMom;

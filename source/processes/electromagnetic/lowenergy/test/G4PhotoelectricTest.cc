@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoelectricTest.cc,v 1.9 2003-06-16 17:01:00 gunter Exp $
+// $Id: G4PhotoelectricTest.cc,v 1.10 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -350,7 +350,7 @@ int main()
       G4double pxChange  = eChange.x();
       G4double pyChange  = eChange.y();
       G4double pzChange  = eChange.z();
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pChange   = std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -410,7 +410,7 @@ int main()
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
 	  G4double theta   = (finalParticle->GetMomentum()).theta();
-	  G4double p   = sqrt(px*px+py*py+pz*pz);
+	  G4double p   = std::sqrt(px*px+py*py+pz*pz);
 
 	  if (e > initEnergy)
 	    {

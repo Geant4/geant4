@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedComptonTest.cc,v 1.6 2003-06-16 17:00:52 gunter Exp $
+// $Id: G4LowEnergyPolarizedComptonTest.cc,v 1.7 2004-12-02 14:02:32 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -456,11 +456,11 @@ G4int main()
   G4double Tkin[pntNum+1];
   G4double meanFreePath=0. ;
 
-  argStp = (log10(maxArg)-log10(minArg))/pntNum;
+  argStp = (std::log10(maxArg)-std::log10(minArg))/pntNum;
   
   for(G4int d = 0; d < pntNum+1; d++)
     { 
-      Tkin[d] = pow(10,(log10(minArg) + d*argStp));
+      Tkin[d] = std::pow(10,(std::log10(minArg) + d*argStp));
     }
  
   G4double sti = 1.*mm;
@@ -562,7 +562,7 @@ G4int main()
       G4double pyChange  = eChange.y();
       G4double pzChange  = eChange.z();
       G4double pChange   = 
-	sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+	std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       G4double thetaChange = eChange.theta();
 
 
@@ -603,7 +603,7 @@ G4int main()
       G4double electronMass = 511.22*keV; // da inserire la definizione
 
       G4double Ratio = energyChange/ 
-	(initEnergy/(1 + (initEnergy*(1-cos(thetaChange))/electronMass))); 
+	(initEnergy/(1 + (initEnergy*(1-std::cos(thetaChange))/electronMass))); 
       // testenergy
 
       //G4cout << Ratio << "RATIO" << G4endl;
@@ -682,7 +682,7 @@ G4int main()
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
 	  G4double theta   = (finalParticle->GetMomentum()).theta();
-	  G4double p   = sqrt(px*px+py*py+pz*pz);
+	  G4double p   = std::sqrt(px*px+py*py+pz*pz);
 	  
 	  if (eKin > initEnergy)
 	    {

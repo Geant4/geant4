@@ -183,7 +183,7 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
   */
   G4double dedx=0;
 
-  G4double v = c_light * sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  G4double v = c_light * std::sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
   G4double coeff = twopi * proton_mass_c2 * 
                   (material-> GetTotNbOfElectPerVolume()) / 
                    electron_mass_c2 ;
@@ -191,8 +191,8 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
   coeff *= fine_structure_const * fine_structure_const * hbarc_squared / 
            kineticEnergy ;
 
-  //G4double beta = sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
-  //G4double fBetheVelocity = sqrt( 2.0 * 25.0 * keV / proton_mass_c2 )/beta;
+  //G4double beta = std::sqrt( 2.0 * kineticEnergy / proton_mass_c2 );
+  //G4double fBetheVelocity = std::sqrt( 2.0 * 25.0 * keV / proton_mass_c2 )/beta;
   //G4double coeff= twopi_mc2_rcl2*(material->GetElectronDensity())/(beta*beta);
 
   
@@ -306,11 +306,11 @@ G4double squaredPlasmonEnergy = 28.816 * 28.816  * 1e-6
   G4double plasmonTerm = 0.66667 * GetOccupationNumber(Z,nbOfTheShell)  
                        * squaredPlasmonEnergy / (Z*Z) ; 
   
-  G4double ionTerm = exp(0.5) * (element->GetAtomicShell(nbOfTheShell)) ;
+  G4double ionTerm = std::exp(0.5) * (element->GetAtomicShell(nbOfTheShell)) ;
 
   ionTerm = ionTerm*ionTerm ;
    
-  G4double oscShellEnergy = sqrt( ionTerm + plasmonTerm );
+  G4double oscShellEnergy = std::sqrt( ionTerm + plasmonTerm );
  
 /*  if(material->GetName()=="Graphite"){
     G4cout << "\t" << Z 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationTest.cc,v 1.14 2003-06-16 17:01:05 gunter Exp $
+// $Id: G4eIonisationTest.cc,v 1.15 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -405,7 +405,7 @@ int main()
       pxChange  = eChange.x();
       pyChange  = eChange.y();
       pzChange  = eChange.z();
-      pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      pChange   = std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
 
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -454,7 +454,7 @@ int main()
 	  px   = (finalParticle->GetMomentum()).x();
 	  py   = (finalParticle->GetMomentum()).y();
 	  pz   = (finalParticle->GetMomentum()).z();
-	  p   = sqrt(px*px+py*py+pz*pz);
+	  p   = std::sqrt(px*px+py*py+pz*pz);
           theta = (finalParticle->GetMomentum()).theta();
 	  phi = (finalParticle->GetMomentum()).phi();
 

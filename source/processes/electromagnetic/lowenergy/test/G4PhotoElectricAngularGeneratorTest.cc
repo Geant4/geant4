@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricAngularGeneratorTest.cc,v 1.1 2004-05-12 09:24:53 silvarod Exp $
+// $Id: G4PhotoElectricAngularGeneratorTest.cc,v 1.2 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,8 +123,8 @@ int main()
   for(G4int i = 0; i < nIterations; i++){
     G4ThreeVector photondirection = angularDistribution->GetPhotoElectronDirection(direction, initEnergy);
     histo->Fill((photondirection.getZ()));
-    G4double h = sqrt(1-photondirection.getZ()*photondirection.getZ());
-    if(h != 0) histo2->Fill(acos(photondirection.getX()/h));
+    G4double h = std::sqrt(1-photondirection.getZ()*photondirection.getZ());
+    if(h != 0) histo2->Fill(std::acos(photondirection.getX()/h));
 
     G4cout << "Committing.............." << G4endl;
     tree->commit();

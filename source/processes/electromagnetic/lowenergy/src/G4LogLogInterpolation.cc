@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogLogInterpolation.cc,v 1.5 2003-06-25 14:24:12 gcosmo Exp $
+// $Id: G4LogLogInterpolation.cc,v 1.6 2004-12-02 14:01:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -64,8 +64,8 @@ G4double G4LogLogInterpolation::Calculate(G4double x, G4int bin,
       G4double e2 = points[bin+1];
       G4double d1 = data[bin];
       G4double d2 = data[bin+1];
-      value = (log10(d1)*log10(e2/x) + log10(d2)*log10(x/e1)) / log10(e2/e1);
-      value = pow(10.,value);
+      value = (std::log10(d1)*std::log10(e2/x) + std::log10(d2)*std::log10(x/e1)) / std::log10(e2/e1);
+      value = std::pow(10.,value);
     }
   else
     {

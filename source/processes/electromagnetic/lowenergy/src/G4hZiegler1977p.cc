@@ -202,18 +202,18 @@ G4double G4hZiegler1977p::ElectronicStoppingPower(G4double z,
   };
   
   if ( T < 10.0 ) {
-    ionloss = a[i][0] * sqrt(T) ;
+    ionloss = a[i][0] * std::sqrt(T) ;
     
   } else if ( T < 1000.0 ) {
-    G4double slow  = a[i][1] * pow(T, 0.45) ;
-    G4double shigh = log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
+    G4double slow  = a[i][1] * std::pow(T, 0.45) ;
+    G4double shigh = std::log( 1.0 + a[i][3]/T + a[i][4]*T ) * a[i][2]/T ;
     ionloss = slow*shigh / (slow + shigh) ; 
     
   } else {
-    G4double le = log(T) ;
+    G4double le = std::log(T) ;
     G4double gam = 1.0 + kineticEnergy / proton_mass_c2 ;
     G4double beta2 = 1.0 - 1.0/ (gam*gam) ;
-    ionloss = ( log(a[i][6]*beta2/(1.0 - beta2)) - beta2 -
+    ionloss = ( std::log(a[i][6]*beta2/(1.0 - beta2)) - beta2 -
 		a[i][7] - a[i][8]*le - a[i][9]*le*le - a[i][10]*le*le*le -
 		a[i][11]*le*le*le*le ) * a[i][5]/beta2 ;
   }

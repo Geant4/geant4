@@ -216,8 +216,8 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
   if ( T < 25.0 ) e = 25.0 ;
   
   // universal approximation  
-  G4double slow  = a[i][0] * pow(e, a[i][1]) + a[i][2] * pow(e, a[i][3])  ;
-  G4double shigh = log( a[i][6]/e + a[i][7]*e ) * a[i][4] / pow(e, a[i][5]) ;
+  G4double slow  = a[i][0] * std::pow(e, a[i][1]) + a[i][2] * std::pow(e, a[i][3])  ;
+  G4double shigh = std::log( a[i][6]/e + a[i][7]*e ) * a[i][4] / std::pow(e, a[i][5]) ;
   ionloss = slow*shigh / (slow + shigh) ; 
     
   // low energy region
@@ -229,7 +229,7 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
     // semiconductors
     if(5 == i || 13 == i || 31 == i) s = 0.375 ;
     
-    ionloss *= pow(T/25.0, s) ;
+    ionloss *= std::pow(T/25.0, s) ;
   }
   
   if ( ionloss < 0.0) ionloss = 0.0 ;

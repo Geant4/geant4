@@ -58,7 +58,7 @@ G4hBetheBlochModel::G4hBetheBlochModel(const G4String& name)
   : G4VLowEnergyModel(name), 
     lowEnergyLimit(1.*MeV),
     highEnergyLimit(100.*GeV),
-    twoln10(2.*log(10.)),
+    twoln10(2.*std::log(10.)),
     bg2lim(0.0169), 
     taulim(8.4146e-3)
 {;}
@@ -183,16 +183,16 @@ G4double G4hBetheBlochModel::BetheBlochFormula(
   beta2 = bg2/(gamma*gamma) ;
   tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*rateMass+rateMass*rateMass) ;
         
-  ionloss = log(2.0*electron_mass_c2*bg2*tmax/eexc2)-2.0*beta2 ;
+  ionloss = std::log(2.0*electron_mass_c2*bg2*tmax/eexc2)-2.0*beta2 ;
     
   // density correction     
-  x = log(bg2)/twoln10 ;
+  x = std::log(bg2)/twoln10 ;
   if ( x < x0den ) {
     delta = 0.0 ;
 
   } else { 
     delta = twoln10*x - cden ;
-    if ( x < x1den ) delta += aden*pow((x1den-x),mden) ;
+    if ( x < x1den ) delta += aden*std::pow((x1den-x),mden) ;
   }
     
   // shell correction 
@@ -210,7 +210,7 @@ G4double G4hBetheBlochModel::BetheBlochFormula(
 	x *= bg2lim ;
 	sh += shellCorrectionVector[k]/x;
     }
-    sh *= log(tau/taul)/log(taulim/taul) ;     
+    sh *= std::log(tau/taul)/std::log(taulim/taul) ;     
   }
     
   // now compute the total ionization loss

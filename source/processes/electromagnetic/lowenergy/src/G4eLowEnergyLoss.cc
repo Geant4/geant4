@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.33 2004-11-18 12:10:07 pia Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.34 2004-12-02 14:01:36 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -209,9 +209,9 @@ void G4eLowEnergyLoss::BuildDEDXTable(
 
   //  calculate data members LOGRTable,RTable first
 
-  G4double lrate = log(UpperBoundEloss/LowerBoundEloss);
+  G4double lrate = std::log(UpperBoundEloss/LowerBoundEloss);
   LOGRTable=lrate/NbinEloss;
-  RTable   =exp(LOGRTable);
+  RTable   =std::exp(LOGRTable);
   // Build energy loss table as a sum of the energy loss due to the
   // different processes.
   //
@@ -418,7 +418,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   {
     if (Step >= fRangeNow)  finalT = 0.;
    //  else finalT = E*(1.-Step/fRangeNow) ;
-    else finalT = E*(1.-sqrt(Step/fRangeNow)) ;
+    else finalT = E*(1.-std::sqrt(Step/fRangeNow)) ;
   }
 
   else if (E>=UpperBoundEloss) finalT = E - Step*fdEdx;

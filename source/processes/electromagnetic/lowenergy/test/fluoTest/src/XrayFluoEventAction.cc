@@ -165,7 +165,7 @@ G4double XrayFluoEventAction::RandomCut(G4double energy)
 
     if ( Random<efficiency )
       {
-	G4double sigma = sqrt(F*epsilon*energy+pow(deltaE/2355,2));
+	G4double sigma = std::sqrt(F*epsilon*energy+std::pow(deltaE/2355,2));
 
 	EdepDetect = G4RandGauss::shoot(energy, sigma );
 
@@ -198,10 +198,10 @@ G4double XrayFluoEventAction::ResponseFunction(G4double energy)
       
       G4double supData = runManager->GetSupData(energy,random);
       
-      value = (log10(infData)*log10(supEnergy/energy) +
-	       log10(supData)*log10(energy/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
+      value = (std::log10(infData)*std::log10(supEnergy/energy) +
+	       std::log10(supData)*std::log10(energy/infEnergy)) / 
+	std::log10(supEnergy/infEnergy);
+      value = std::pow(10,value);
     }
   else if (energy<eMin)
     { 
@@ -210,10 +210,10 @@ G4double XrayFluoEventAction::ResponseFunction(G4double energy)
  
       G4double infData = runManager->GetInfData(eMin, random);
       G4double supData = runManager->GetSupData(eMin,random);
-      value = (log10(infData)*log10(supEnergy/eMin) +
-	       log10(supData)*log10(eMin/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
+      value = (std::log10(infData)*std::log10(supEnergy/eMin) +
+	       std::log10(supData)*std::log10(eMin/infEnergy)) / 
+	std::log10(supEnergy/infEnergy);
+      value = std::pow(10,value);
       value = value-eMin+ energy;
 
 
@@ -225,10 +225,10 @@ G4double XrayFluoEventAction::ResponseFunction(G4double energy)
  
       G4double infData = runManager->GetInfData(eMax, random);
       G4double supData = runManager->GetSupData(eMax,random);
-      value = (log10(infData)*log10(supEnergy/eMax) +
-	       log10(supData)*log10(eMax/infEnergy)) / 
-	log10(supEnergy/infEnergy);
-      value = pow(10,value);
+      value = (std::log10(infData)*std::log10(supEnergy/eMax) +
+	       std::log10(supData)*std::log10(eMax/infEnergy)) / 
+	std::log10(supEnergy/infEnergy);
+      value = std::pow(10,value);
       value = value+energy- eMax;
     }
   G4double  RandomNum = G4UniformRand(); 

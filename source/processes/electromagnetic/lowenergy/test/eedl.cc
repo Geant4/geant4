@@ -532,8 +532,8 @@ int main(int argc,char** argv)
 	  G4double dx1 = (xmax - x1)/range1;
 
 	  // log
-          G4double dx2 = log(x3/xmax)/range2;
-          x4 = x3*exp(dx2);
+          G4double dx2 = std::log(x3/xmax)/range2;
+          x4 = x3*std::exp(dx2);
 	
           G4DataVector* eee = new G4DataVector();
           G4DataVector* ppp = new G4DataVector();
@@ -562,7 +562,7 @@ int main(int argc,char** argv)
  
             } else {
           
-	      x = xmax*exp(dx2 * (G4double)(i - jmax1));
+	      x = xmax*std::exp(dx2 * (G4double)(i - jmax1));
 	    }
 
             eeee->push_back(x);
@@ -626,7 +626,7 @@ int main(int argc,char** argv)
                    << " x3= " << x3
                    << endl;
 	    }
-            dy = abs(dy);
+            dy = std::abs(dy);
             if(dy > zdelm) {
               zdelm = dy;
               xdelmax0 = x;
@@ -639,7 +639,7 @@ int main(int argc,char** argv)
               G4double xsq = x*x;
               G4double xsq0= x0*x0;
               sum += (y/xsq + y0/xsq0)*(x0 - x)*0.5;
-              dsum += abs((y/xsq + y0/xsq0) - (yy/xsq + yy0/xsq0))*(x0 - x)*0.5;
+              dsum += std::abs((y/xsq + y0/xsq0) - (yy/xsq + yy0/xsq0))*(x0 - x)*0.5;
 	    }
             yy0 = yy;
             y0  = y;
@@ -697,10 +697,10 @@ int main(int argc,char** argv)
               if(edu > dv2[0] && edu < dv3[0]){
 
                 HepMatrix* m = new HepMatrix(3,3);
-                G4double u  = log10(edu);
-                G4double u1 = log10(dv1[0]);
-                G4double u2 = log10(dv2[0]);
-                G4double u3 = log10(dv3[0]);
+                G4double u  = std::log10(edu);
+                G4double u1 = std::log10(dv1[0]);
+                G4double u2 = std::log10(dv2[0]);
+                G4double u3 = std::log10(dv3[0]);
                 dv4[0]      = edu; 
 
                 (*m)(1,1) = 1.0;

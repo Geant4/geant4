@@ -38,7 +38,7 @@
 // ------------------
 // Test of second implementation of the Empiric Model for shell cross sections in proton ionisation
 // --------------------------------------------------------------------
-// $Id: testDoubleExp.cc,v 1.1 2004-09-29 08:34:38 saliceti Exp $
+// $Id: testDoubleExp.cc,v 1.2 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -73,7 +73,7 @@ int main()
    //Energy from 0.005 MeV to 500 MeV
    for (G4double i=-5.5; i<6.5; i=i+0.25)
      {
-       energies.push_back(exp(i));
+       energies.push_back(std::exp(i));
      } 
 
    G4cout << "Enter shell number: " << G4endl;

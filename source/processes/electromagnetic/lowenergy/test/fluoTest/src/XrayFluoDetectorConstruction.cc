@@ -285,8 +285,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiHPGe.rotateX(PhiHPGe);
       G4double x,y,z;
-      z = DistDe * cos(ThetaHPGe);
-      y =DistDe * sin(ThetaHPGe);
+      z = DistDe * std::cos(ThetaHPGe);
+      y =DistDe * std::sin(ThetaHPGe);
       x = 0.*cm;
       physiHPGe = new G4PVPlacement(G4Transform3D(zRotPhiHPGe,G4ThreeVector(x,y,z)),                                           "HPGeDetector",	//its name
 				    logicHPGe,	//its logical volume
@@ -309,8 +309,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 					 "Pixel");	        //its name 
 	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
-	z = DistDe * cos(ThetaHPGe);
-	y =DistDe * sin(ThetaHPGe);
+	z = DistDe * std::cos(ThetaHPGe);
+	y =DistDe * std::sin(ThetaHPGe);
 	x = 0.*cm; 
 	
 	physiPixel = new G4PVPlacement(0,	       
@@ -416,8 +416,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiDia1.rotateX(AlphaDia1);
       G4double x,y,z;
-      z = DistDia * cos(ThetaDia1);
-      y =DistDia * sin(ThetaDia1);
+      z = DistDia * std::cos(ThetaDia1);
+      y =DistDia * std::sin(ThetaDia1);
       x = 0.*cm;
       physiDia1 = new G4PVPlacement(G4Transform3D(zRotPhiDia1,G4ThreeVector(x,y,z)),                                           "Diaphragm1",	//its name
 				    logicDia1,	//its logical volume
@@ -446,8 +446,8 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       zRotPhiDia3.rotateX(AlphaDia3);
       G4double x,y,z;
-      z = Dia3Dist * cos(ThetaDia3);
-      y =Dia3Dist * sin(ThetaDia3);
+      z = Dia3Dist * std::cos(ThetaDia3);
+      y =Dia3Dist * std::sin(ThetaDia3);
       x = 0.*cm;
       physiDia3 = new G4PVPlacement(G4Transform3D(zRotPhiDia3,G4ThreeVector(x,y,z)),                                           "Diaphragm3",	//its name
 				    logicDia3,	//its logical volume

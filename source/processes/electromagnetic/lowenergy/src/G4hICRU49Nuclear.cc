@@ -74,7 +74,7 @@ G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
   G4double energy = kineticEnergy/keV ;  // energy in keV
   G4double ionloss = 0.0;
   
-  G4double rm = (m1 + m2) * sqrt( pow(z1, .23) + pow(z2, .23) ) ;
+  G4double rm = (m1 + m2) * std::sqrt( std::pow(z1, .23) + std::pow(z2, .23) ) ;
   
   G4double er = 32.536 * m2 * energy / ( z1 * z2 * rm ) ;  // reduced energy
   
@@ -209,7 +209,7 @@ G4double G4hICRU49Nuclear::NuclearStoppingPower(G4double kineticEnergy,
   // Stragling
   if(lossFlucFlag) {
     G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
-                  (4.0 + 0.197*pow(er,-1.6991)+6.584*pow(er,-1.0494))) ;
+                  (4.0 + 0.197*std::pow(er,-1.6991)+6.584*std::pow(er,-1.0494))) ;
 
     ionloss *= G4RandGauss::shoot(1.0,sig) ;
   } 

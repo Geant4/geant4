@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.69 2004-11-18 12:08:52 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.70 2004-12-02 14:01:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -322,10 +322,10 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
   }
 
   G4double phi   = twopi * G4UniformRand();
-  G4double dirZ  = cos(theta);
-  G4double sinTheta  = sqrt(1. - dirZ*dirZ);
-  G4double dirX  = sinTheta*cos(phi);
-  G4double dirY  = sinTheta*sin(phi);
+  G4double dirZ  = std::cos(theta);
+  G4double sinTheta  = std::sqrt(1. - dirZ*dirZ);
+  G4double dirX  = sinTheta*std::cos(phi);
+  G4double dirY  = sinTheta*std::sin(phi);
 
   G4ThreeVector gammaDirection (dirX, dirY, dirZ);
   G4ThreeVector electronDirection = track.GetMomentumDirection();
@@ -341,14 +341,14 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& track,
     finalEnergy = 0.0;
   }
 
-  G4double momentum = sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
+  G4double momentum = std::sqrt((totalEnergy + electron_mass_c2)*kineticEnergy);
 
   G4double finalX = momentum*electronDirection.x() - tGamma*gammaDirection.x();
   G4double finalY = momentum*electronDirection.y() - tGamma*gammaDirection.y();
   G4double finalZ = momentum*electronDirection.z() - tGamma*gammaDirection.z();
       
   aParticleChange.SetNumberOfSecondaries(1);
-  G4double norm = 1./sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ);
+  G4double norm = 1./std::sqrt(finalX*finalX + finalY*finalY + finalZ*finalZ);
   aParticleChange.ProposeMomentumDirection(finalX*norm, finalY*norm, finalZ*norm);
   aParticleChange.ProposeEnergy( finalEnergy );
 

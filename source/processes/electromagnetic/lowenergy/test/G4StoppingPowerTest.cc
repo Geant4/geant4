@@ -380,8 +380,8 @@ int main(int argc,char** argv)
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
-    G4double emin10 = log10(emin/MeV);
-    G4double emax10 = log10(emax/MeV);
+    G4double emin10 = std::log10(emin/MeV);
+    G4double emax10 = std::log10(emax/MeV);
     G4double bin = (emax10 - emin10) / (G4double)(nbin-1);
 
     // Creating the analysis factory
@@ -644,7 +644,7 @@ int main(int argc,char** argv)
     for (G4int iter=0; iter<nbin; iter++) {
 
       le += bin;
-      G4double  e = pow(10.0,le) * MeV;
+      G4double  e = std::pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
       gTrack->SetKineticEnergy(e);
 

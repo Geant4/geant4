@@ -567,12 +567,12 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
 
           bindingEnergy = transitionManager->Shell(Z, n)->BindingEnergy();
           if (tmin > bindingEnergy) {
-            rel = log(tmin/bindingEnergy);
+            rel = std::log(tmin/bindingEnergy);
             eAverage   += rel - beta2*(tmin - bindingEnergy)/tmax;
             cross      += 1.0/bindingEnergy - 1.0/tmin - beta2*rel/tmax;
 	  }
           if (tmax > tmin) {
-	    cross1     += 1.0/tmin - 1.0/tmax - beta2*log(tmax/tmin)/tmax;
+	    cross1     += 1.0/tmin - 1.0/tmax - beta2*std::log(tmax/tmin)/tmax;
 	  }
 	}
 
@@ -734,7 +734,7 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   if( tmax > deltaCutInEnergy ) {
 
     var=deltaCutInEnergy/tmax;
-    totalCrossSection = (1.0 - var*(1.0 - beta2*log(var))) / deltaCutInEnergy ;
+    totalCrossSection = (1.0 - var*(1.0 - beta2*std::log(var))) / deltaCutInEnergy ;
     G4double spin = aParticleType.GetPDGSpin() ;
 
     // +term for spin=1/2 particle
@@ -743,7 +743,7 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
 
     // +term for spin=1 particle
     else if( 0.9 < spin )
-      totalCrossSection += -log(var)/(3.0*deltaCutInEnergy) +
+      totalCrossSection += -std::log(var)/(3.0*deltaCutInEnergy) +
 	(tmax - deltaCutInEnergy) * ( (5.0+ 1.0/var)*0.25 / (energy*energy) -
 	 beta2 / (tmax * deltaCutInEnergy) ) / 3.0 ;
 
@@ -819,7 +819,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
 
         // Correction for positive ions
     if(theBarkas && tscaled > highEnergy) { 
-        fBarkas = BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare
+        fBarkas = BarkasTerm(material,tscaled)*std::sqrt(chargeSquare)*chargeSquare
                 + BlochTerm(material,tscaled,chargeSquare);
     }
     // Antiprotons and negative hadrons
@@ -832,7 +832,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
           * chargeSquare ;
 
     if(theBarkas && tscaled > highEnergy) { 
-        fBarkas = -BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare;
+        fBarkas = -BarkasTerm(material,tscaled)*std::sqrt(chargeSquare)*chargeSquare;
                 + BlochTerm(material,tscaled,chargeSquare);
     }
   }
@@ -1043,7 +1043,7 @@ G4double G4hLowEnergyIonisation::ProtonParametrisedDEDX(
     // Free Electron Gas Model
   if(kineticEnergy < protonLowEnergy) {
     eloss = (theProtonModel->TheValue(theProton, material, protonLowEnergy))
-          * sqrt(kineticEnergy/protonLowEnergy) ;
+          * std::sqrt(kineticEnergy/protonLowEnergy) ;
 
     // Parametrisation
   } else {
@@ -1079,7 +1079,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   if(theAntiProtonModel->IsInCharge(theAntiProton,material)) {
     if(kineticEnergy < antiProtonLowEnergy) {
       eloss = theAntiProtonModel->TheValue(theAntiProton,material,antiProtonLowEnergy)
-            * sqrt(kineticEnergy/antiProtonLowEnergy) ;
+            * std::sqrt(kineticEnergy/antiProtonLowEnergy) ;
 
     // Parametrisation
     } else {
@@ -1091,7 +1091,7 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   } else {
     if(kineticEnergy < protonLowEnergy) {
       eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy)
-          * sqrt(kineticEnergy/protonLowEnergy) ;
+          * std::sqrt(kineticEnergy/protonLowEnergy) ;
 
     // Parametrisation
     } else {
@@ -1147,7 +1147,7 @@ G4double G4hLowEnergyIonisation::DeltaRaysEnergy(
 
   if ( deltaCut < tmax) {
     x = deltaCut / tmax ;
-    dloss = ( beta2 * (x - 1.0) - log(x) ) * twopi_mc2_rcl2
+    dloss = ( beta2 * (x - 1.0) - std::log(x) ) * twopi_mc2_rcl2
           * electronDensity / beta2 ;
   }
   return dloss ;
@@ -1218,9 +1218,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
   DeltaKineticEnergy = x * tmax;
 
-  DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
+  DeltaTotalMomentum = std::sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
 						  2. * electron_mass_c2 )) ;
-  TotalMomentum = sqrt(Psquare) ;
+  TotalMomentum = std::sqrt(Psquare) ;
   costheta = DeltaKineticEnergy * (TotalEnergy + electron_mass_c2)
     /(DeltaTotalMomentum * TotalMomentum) ;
 
@@ -1232,9 +1232,9 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
 
   //  direction of the delta electron  ........
   phi = twopi * G4UniformRand() ;
-  sintheta = sqrt(1. - costheta*costheta);
-  dirx = sintheta * cos(phi) ;
-  diry = sintheta * sin(phi) ;
+  sintheta = std::sqrt(1. - costheta*costheta);
+  dirx = sintheta * std::cos(phi) ;
+  diry = sintheta * std::sin(phi) ;
   dirz = costheta ;
 
   G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
@@ -1337,7 +1337,7 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalPz = TotalMomentum*ParticleDirection.z()
 	- DeltaTotalMomentum*DeltaDirection.z();
       finalMomentum =
-	sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
+	std::sqrt(finalPx*finalPx+finalPy*finalPy+finalPz*finalPz) ;
       finalPx /= finalMomentum ;
       finalPy /= finalMomentum ;
       finalPz /= finalMomentum ;
@@ -1668,8 +1668,8 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
 
     // Variables to compute L_1
     G4double Eta0Chi = 0.8;
-    G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*pow( ZMaterial,-1.19 ) );
-    G4double W = ( EtaChi * pow( ZMaterial,1.0/6.0 ) ) / sqrt(X);
+    G4double EtaChi = Eta0Chi * ( 1.0 + 6.02*std::pow( ZMaterial,-1.19 ) );
+    G4double W = ( EtaChi * std::pow( ZMaterial,1.0/6.0 ) ) / std::sqrt(X);
     G4double FunctionOfW = FTable[46][1]*FTable[46][0]/W ;
 
     for(G4int j=0; j<47; j++) {
@@ -1690,7 +1690,7 @@ G4double G4hLowEnergyIonisation::BarkasTerm(const G4Material* material,
 
     }
 
-    BarkasTerm += FunctionOfW /( sqrt(ZMaterial * X) * X);
+    BarkasTerm += FunctionOfW /( std::sqrt(ZMaterial * X) * X);
   }
 
   BarkasTerm *= twopi_mc2_rcl2 * (material->GetElectronDensity()) / beta2 ;
@@ -1789,14 +1789,14 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
     // High velocity or negatively charged particle
     if( beta2 > 3.0*theBohrBeta2*zeff || charge < 0.0) {
-      siga = sqrt( siga * chargeSquare ) ;
+      siga = std::sqrt( siga * chargeSquare ) ;
 
     // Low velocity - additional ion charge fluctuations according to
     // Q.Yang et al., NIM B61(1991)149-155.
     } else {
       G4double chu = theIonChuFluctuationModel->TheValue(particle, material);
       G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
-      siga = sqrt( siga * (chargeSquare * chu + yang)) ;
+      siga = std::sqrt( siga * (chargeSquare * chu + yang)) ;
     }
 
     do {
@@ -1807,7 +1807,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
   // Non Gaussian fluctuation
   static const G4double probLim = 0.01 ;
-  static const G4double sumaLim = -log(probLim) ;
+  static const G4double sumaLim = -std::log(probLim) ;
   static const G4double alim = 10.;
 
   G4double suma,w1,w2,C,e0,lossc,w;
@@ -1827,13 +1827,13 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double ipotLogFluct= material->GetIonisation()->GetLogMeanExcEnergy();
 
   w1 = tmax/ipotFluct;
-  w2 = log(2.*electron_mass_c2*tau2);
+  w2 = std::log(2.*electron_mass_c2*tau2);
 
   C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  a3 = rateFluct*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  a3 = rateFluct*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*std::log(w1));
   if(a1 < 0.0) a1 = 0.0;
   if(a2 < 0.0) a2 = 0.0;
   if(a3 < 0.0) a3 = 0.0;
@@ -1853,7 +1853,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
         if(a3>alim)
         {
-          siga=sqrt(a3) ;
+          siga=std::sqrt(a3) ;
           p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
@@ -1868,11 +1868,11 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       else
       {
         tmax = tmax-ipotFluct+e0 ;
-        a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+        a3 = meanLoss*(tmax-e0)/(tmax*e0*std::log(tmax/e0));
 
         if(a3>alim)
         {
-          siga=sqrt(a3) ;
+          siga=std::sqrt(a3) ;
           p3 = std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
@@ -1901,7 +1901,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       // excitation type 1
       if(a1>alim)
       {
-        siga=sqrt(a1) ;
+        siga=std::sqrt(a1) ;
         p1 = std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
@@ -1910,7 +1910,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       // excitation type 2
       if(a2>alim)
       {
-        siga=sqrt(a2) ;
+        siga=std::sqrt(a2) ;
         p2 = std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
@@ -1929,7 +1929,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
      {
       if(a3>alim)
       {
-        siga=sqrt(a3) ;
+        siga=std::sqrt(a3) ;
         p3 = std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
@@ -1951,9 +1951,9 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
           {
             alfa   = w1*G4float(nmaxCont2+p3)/
                     (w1*G4float(nmaxCont2)+G4float(p3));
-            alfa1  = alfa*log(alfa)/(alfa-1.);
+            alfa1  = alfa*std::log(alfa)/(alfa-1.);
             ea     = na*ipotFluct*alfa1;
-            sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+            sea    = ipotFluct*std::sqrt(na*(alfa-alfa1*alfa1));
             lossc += G4RandGauss::shoot(ea,sea);
           }
         }

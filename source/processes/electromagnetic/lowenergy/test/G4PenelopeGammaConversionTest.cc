@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeGammaConversionTest.cc,v 1.5 2004-06-04 06:28:26 pandola Exp $
+// $Id: G4PenelopeGammaConversionTest.cc,v 1.6 2004-12-02 14:02:33 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -451,11 +451,11 @@ G4int main()
   G4double Tkin[pntNum+1];
   G4double meanFreePath=0. ;
 
-  argStp = (log10(maxArg)-log10(minArg))/pntNum;
+  argStp = (std::log10(maxArg)-std::log10(minArg))/pntNum;
   
   for(G4int d = 0; d < pntNum+1; d++)
     { 
-      Tkin[d] = pow(10,(log10(minArg) + d*argStp));
+      Tkin[d] = std::pow(10,(std::log10(minArg) + d*argStp));
     }
  
   G4double sti = 1.*mm;
@@ -496,8 +496,8 @@ G4int main()
 	    ->GetMeanFreePath(*gTrack, sti, condition);
 	}
 
-      ntuple3->fill(ntuple3->findColumn("kinen"),log10(Tkin[i]));
-      ntuple3->fill(ntuple3->findColumn("mfp"),log10(meanFreePath/cm));
+      ntuple3->fill(ntuple3->findColumn("kinen"),std::log10(Tkin[i]));
+      ntuple3->fill(ntuple3->findColumn("mfp"),std::log10(meanFreePath/cm));
       ntuple3->addRow();
 
     
@@ -558,7 +558,7 @@ G4int main()
       G4double pyChange  = eChange.y();
       G4double pzChange  = eChange.z();
       G4double pChange   = 
-	sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+	std::sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
       
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
@@ -619,7 +619,7 @@ G4int main()
 	  G4double py   = (finalParticle->GetMomentum()).y();
 	  G4double pz   = (finalParticle->GetMomentum()).z();
 	  G4double theta   = (finalParticle->GetMomentum()).theta();
-	  G4double p   = sqrt(px*px+py*py+pz*pz);
+	  G4double p   = std::sqrt(px*px+py*py+pz*pz);
 	  theta = theta/deg; //conversion in degrees
 	  if (e > initEnergy)
 	    {

@@ -37,7 +37,7 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.5 2004-12-01 00:39:59 mantero Exp $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.6 2004-12-02 14:01:37 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -117,7 +117,7 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
     {
       if(Z<26)
 	{
-	  crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*(incidentEnergyInMeV))); 	 
+	  crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*std::exp((b1)-((c1)*(incidentEnergyInMeV))); 	 
 	}          
       else if(Z>=26)
 	{
@@ -132,17 +132,17 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
 	}
       else if(Z>=26 && Z<36)
 	{
-	  crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3));
+	  crossSectionsInBarn = a2+b2*(std::log(incidentEnergyInMeV))+c2*(std::pow(std::log(incidentEnergyInMeV),2))+d2*(std::pow(std::log(incidentEnergyInMeV),3));
  	} 
       else if(Z>65 && Z<=92)
 	{
-	  crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3))+e2*(std::pow(log(incidentEnergyInMeV),4));
+	  crossSectionsInBarn = a2+b2*(std::log(incidentEnergyInMeV))+c2*(std::pow(std::log(incidentEnergyInMeV),2))+d2*(std::pow(std::log(incidentEnergyInMeV),3))+e2*(std::pow(std::log(incidentEnergyInMeV),4));
  	}
     }
 
   //   if(Z<26 && incidentEnergyInMeV <= energy)
   //     {
-  // 	 crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*exp((b1)-((c1)*incidentEnergyInMeV)); 	 
+  // 	 crossSectionsInBarn = (std::pow(incidentEnergyInMeV,(a1)))*std::exp((b1)-((c1)*incidentEnergyInMeV)); 	 
   //     }          
   //   else if(Z>=26 && incidentEnergyInMeV <= energy)
   //     {
@@ -154,11 +154,11 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
   //     }
   //   else if(Z>=26 && Z<=35 && incidentEnergyInMeV > energy)
   //     {
-  //       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3));
+  //       crossSectionsInBarn = a2+b2*(std::log(incidentEnergyInMeV))+c2*(std::pow(std::log(incidentEnergyInMeV),2))+d2*(std::pow(std::log(incidentEnergyInMeV),3));
   //     } 
   //   else if(Z>=67 && Z<=92 && incidentEnergyInMeV > energy)
   //     {
-  //       crossSectionsInBarn = a2+b2*(log(incidentEnergyInMeV))+c2*(std::pow(log(incidentEnergyInMeV),2))+d2*(std::pow(log(incidentEnergyInMeV),3))+e2*(std::pow(log(incidentEnergyInMeV),4));
+  //       crossSectionsInBarn = a2+b2*(std::log(incidentEnergyInMeV))+c2*(std::pow(std::log(incidentEnergyInMeV),2))+d2*(std::pow(std::log(incidentEnergyInMeV),3))+e2*(std::pow(std::log(incidentEnergyInMeV),4));
   //     }
 
   crossSections = crossSectionsInBarn*barn;
