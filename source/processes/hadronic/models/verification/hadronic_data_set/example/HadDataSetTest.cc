@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadDataSetTest.cc,v 1.4 2004-02-12 16:35:11 grichine Exp $
+// $Id: HadDataSetTest.cc,v 1.5 2004-02-13 15:12:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,7 +179,7 @@ int main(int argc, char** argv)
     G4HadFileSpec fileIwant(proton,Pb,neutron,process);
     G4MSUHadData* pea87 = new G4MSUHadData(fn,fileIwant);
   }
-  else if (whatIdo=="2") 
+  else if (whatIdo=="helpme") 
   {
        char* path = getenv("G4HADATASET");
        G4String pathstarttwo(path);
@@ -191,7 +191,7 @@ int main(int argc, char** argv)
    
        G4HadFileFinder* findit=new G4HadFileFinder(pathstarttwo,temp);
   } 
-  else if (whatIdo=="3")
+  else if (whatIdo=="searchfile")
   {
        char* pathstart = getenv("G4HADATASET");
      
@@ -215,17 +215,14 @@ int main(int argc, char** argv)
 
        G4HadFileFinder* findit=new G4HadFileFinder(pathstarttwo,temp);    
   }  
-  else if (whatIdo=="4") 
+  else if (whatIdo=="readfile") 
   {
        char* pathstart = getenv("G4HADATASET");
        G4String temp;
-       G4String pathstarttwo(pathstart);
-
-       G4String neutron("neutron");
-       
+       G4String pathstarttwo(pathstart);      
        G4String process2="dd";
        
-       G4HadFileSpec fileIwant(proton,C,neutron,process2);
+       G4HadFileSpec fileIwant(proton,U,proton,process2);
        
        //G4cout << fileIwant.G4HDSFilename()<< G4endl;
        //G4cout << fileIwant.G4HDSFilepath()<< G4endl;

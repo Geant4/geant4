@@ -41,30 +41,38 @@
 #include <math.h>
 #include <string.h>
 
+static const G4String G4HadDataReading::fAnyNumber = "1234567890.+-";
+static const G4String G4HadDataReading::fAnyEmptySpace = " \t";
+static const G4String G4HadDataReading::fAnyHidden = " \t\n\r";
+
 
 G4HadDataReading::G4HadDataReading()
 {
-  fEnergyUnit     = GeV; 
+  fEnergyUnit     = MeV; 
   fAngleUnit      = degree; 
   fXscUnit        = millibarn;
   fXscPeAngleUnit = millibarn/degree; 
   fXscPerMomCUnit = millibarn/GeV;
-  fDdXscUnit      = millibarn/degree/GeV;
+  fDdXscUnit      = millibarn/sr/MeV;
 
   fTkinBin = -1.;
-  fNo = -1;
+  fNo = 0;
   fTkinVector          = new G4DataVector();  
   fTkinBinVector       = new G4DataVector();  
   fXscVector           = new G4DataVector();  
+  fDeltaXscVector      = new G4DataVector();  
   fMultiplicityVector  = new G4DataVector();  
   fMomentumCVector     = new G4DataVector;
+  fDeltaMomCVector     = new G4DataVector;
   fMomentumCBinVector  = new G4DataVector;
   fAngleVector         = new G4DataVector();
   fAngleBinVector      = new G4DataVector();
 
-  fAngleTable        = new G4PhysicsTable();
-  fMomentumCTable    = new G4PhysicsTable();
-  fDoubleDiffXscBank = new std::vector<G4PhysicsTable*>;
+  fAngleTable             = new G4PhysicsTable();
+  fMomentumCTable         = new G4PhysicsTable();
+  fDoubleDiffXscBank      = new std::vector<G4PhysicsTable*>;
+  fDoubleDiffXscErrorBank = new std::vector<G4PhysicsTable*>;
+  fCommentVector          = new std::vector<G4String>;
 }
 
 
@@ -75,9 +83,11 @@ G4HadDataReading::~G4HadDataReading()
   delete fTkinBinVector;
 
   delete fXscVector;
+  delete fDeltaXscVector;
   delete fMultiplicityVector;
 
   delete fMomentumCVector;
+  delete fDeltaMomCVector;
   delete fMomentumCBinVector;
 
   delete fAngleVector;
@@ -399,6 +409,16 @@ void G4HadDataReading::LoadDifferentialXSC( G4String& fileName, G4bool momORangl
 
 void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
 {
+  G4String tmpString, tmpSs1,tmpSs2,tmpSs3, tmpSs4;
+  size_t posValue, pos1, pos2, pos3, pos4, pos5, pos6, pos7; 
+  size_t position = 0;
+  G4double Tkin, xsc, angle, energy, deltaE, deltaXsc;
+  G4int angleNo, omegaNo=0;
+  G4PhysicsFreeVector* dataVector = NULL;
+  G4PhysicsFreeVector* errorVector = NULL;
+  G4PhysicsTable*  dataTable = NULL;
+  G4PhysicsTable*  errorTable = NULL;
+
   G4cout<<"G4HadDataReading::LoadDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
 
@@ -410,153 +430,242 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
     G4String excep = "G4HadDataSet - data file: " + fileName + " not found";
     G4Exception(excep);
   }
-  G4String tmpString, tmpSs1, tmpSs2;
-  size_t posValue, position = 0;
-  G4double Tkin, variable, xsc, angleBin, angle;
-  G4int kTable, jVector, angleNo;
-  G4PhysicsFreeVector* dataVector = NULL;
-  G4PhysicsTable*  dataTable = NULL;
-
+  fNo=0;
   while( !fin.eof() )
   {
     getline(fin,tmpString);
-    G4cout<<tmpString<<G4endl;
-    
+    //  G4cout<<tmpString<<G4endl;
     if( position == tmpString.find('#') ||
         position == tmpString.find('*') ) 
     {
-      G4cout<<tmpString<<G4endl;  // print comment lines
+      fCommentVector->push_back(tmpString);
+      //  G4cout<<tmpString<<G4endl;  // print comment lines
+    }
+    else if ( tmpString.empty() ) continue;
+    //  else if ( position == tmpString.find_first_of(fAnyHidden)) continue;
+
+    /*    else if ( position == tmpString.find_first_of(fAnyEmptySpace) || 
+               position == tmpString.find("\n")     || 
+               position == tmpString.find("\r")        )
+    {
+      //  G4cout<<"tmpString is empty "<<G4endl;
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,position);
+      //  G4cout<<"posValue = "<<posValue<<G4endl;
+      if(posValue+1 >= tmpString.size() ) continue;      
+      else if( posValue != 0) G4cout<<"Warning: file line starts with delims ?!"<<G4endl;
+    }
+    */
+    else if ( position == tmpString.find("energyUnit") )
+    {
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      //  G4cout<<"energyUnit   "<<tmpSs1<<G4endl;
+      SetEnergyUnit(tmpSs1);
+      fEnergyUnitVector.push_back(fEnergyUnit);
     }
     else if ( position == tmpString.find("angleUnit") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      // G4cout<<"angleUnit   "<<tmpSs1<<G4endl;
       SetAngleUnit(tmpSs1);
-    }
-    else if ( position == tmpString.find("energyUnit") )
-    {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      SetEnergyUnit(tmpSs1);
+      fAngleUnitVector.push_back(fAngleUnit);
     }
     else if ( position == tmpString.find("ddXscUnit") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      //  G4cout<<"ddXscUnit   "<<tmpSs1<<G4endl;
       SetDdXscUnit(tmpSs1);
+      fDdXscUnitVector.push_back(fDdXscUnit);
     }
-    else if ( position == tmpString.find("bin") )
+    else if ( position == tmpString.find("energyNo") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      fTkinBin = atof(tmpSs1)*fEnergyUnit;
-      G4cout<<"fTkinBin = "<<fTkinBin/GeV<<G4endl;
-    }
-    else if ( position == tmpString.find("no") ) // number of Tkin
-    {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      fNo = atoi(tmpSs1);
-      kTable = 0;
-      dataTable = new G4PhysicsTable(fNo);
-      G4cout<<"fNo = "<<fNo<<G4endl;
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      fNo      += atoi(tmpSs1);
+      fEnergyNoVector.push_back(fNo);
+      //  G4cout<<"energyNo = fNo = "<<fNo<<G4endl;
     }
     else if ( position == tmpString.find("Tkin") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      Tkin = atof(tmpSs1)*fEnergyUnit;
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      Tkin = G4double(atof(tmpSs1))*fEnergyUnit;  
       fTkinVector->push_back(Tkin);
-      G4cout<<"Tkin = "<<Tkin/fEnergyUnit<<G4endl;
+      //  G4cout<<"Tkin = "<<Tkin<<G4endl;
     }
-    // Treatment of different angles at a given energy
-
-    else if ( position == tmpString.find("angleBin") )
+    else if ( position == tmpString.find("angleNo") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      angleBin = atof(tmpSs1)*fAngleUnit;
-      fAngleBinVector->push_back(angleBin);
-      G4cout<<"angleBin = "<<angleBin/fAngleUnit<<G4endl;
-    }
-    else if ( position == tmpString.find("angleNo") ) // number of Tkin
-    {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      angleNo = atoi(tmpSs1);
-      jVector = 0;
-      dataVector = new G4PhysicsFreeVector(angleNo);
-      G4cout<<"angleNo = "<<angleNo<<G4endl;
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      angleNo      = atoi(tmpSs1);
+      fAngleNoVector.push_back(angleNo);
+      //  G4cout<<"angleNo = "<<angleNo<<G4endl;
     }
     else if ( position == tmpString.find("angle") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(posValue+1);
-      angle = atof(tmpSs1)*fAngleUnit;
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      angle = G4double(atof(tmpSs1))*fAngleUnit;  
       fAngleVector->push_back(angle);
-      G4cout<<"angle = "<<angle/degree<<G4endl;
+      //  fOmegaNoVector.push_back(omegaNo);
+      omegaNo = 0;
+      //  G4cout<<"angle = "<<angle<<G4endl;
     }
-    else if ( tmpString.empty() ) // just skip empty lines
+    else if ( position == tmpString.find("omegaNo") )
     {
-      //     G4cout<<"tmpString is empty "<<G4endl;
-      continue;
+      pos1     = tmpString.find_first_of(fAnyEmptySpace);
+      posValue = tmpString.find_first_not_of(fAnyEmptySpace,pos1);
+      tmpSs1   = tmpString.substr(posValue);
+      omegaNo      = atoi(tmpSs1);
+      fOmegaNoVector.push_back(omegaNo);
+      // G4cout<<"omegaNo = "<<omegaNo<<G4endl;
     }
-    else // Tkin, xsc loading to class field vectors
+ 
+    /*
+    else if ( position == tmpString.find("enddata") )
     {
-      posValue = tmpString.find("\t");
-      tmpSs1   = tmpString.substr(0,posValue);
-      tmpSs2   = tmpString.substr(posValue+1);
-
-        variable     = atof(tmpSs1)*fEnergyUnit;
-        xsc      = atof(tmpSs2)*fDdXscUnit;
-        dataVector->PutValue(jVector,variable,xsc);
-        jVector++;
-        if(jVector == angleNo)
-	{
-          dataTable->push_back(dataVector);
-	  //  delete dataVector;
-          jVector = 0;
-          kTable++;
-
-	  //  if( kTable == fNo )
-          if( (G4int)dataTable->size() == fNo )
-	  {
-            fDoubleDiffXscBank->push_back(dataTable);
-	    //  dataTable->clearAndDestroy();
-            kTable = 0;
-	  }
-	} 
-	//  G4cout<<"variable = "<<variable<<"\t xsc = "<<xsc/millibarn<<G4endl;
-        
+      fOmegaNoVector.push_back(omegaNo);
+      // G4cout<<"last omegaNo = "<<omegaNo<<G4endl;
     }
+    */
+
+    else // Tkin, ddXsc filling to class field vectors, errors=0
+    { 
+      // omegaNo++;
+
+      pos1 = tmpString.find_first_of(fAnyNumber);
+      pos2 = tmpString.find_first_of(fAnyEmptySpace,pos1);
+      pos3 = tmpString.find_first_of(fAnyNumber,pos2);
+      pos4 = tmpString.find_first_of(fAnyEmptySpace,pos3);
+      pos5 = tmpString.find_first_of(fAnyNumber,pos4);
+      pos6 = tmpString.find_first_of(fAnyEmptySpace,pos5);
+      pos7 = tmpString.find_first_of(fAnyNumber,pos6);
+
+      // G4cout<<pos1<<"  "<<pos2<<"  "<<pos3<<"  "
+      //       <<pos4<<"  "<<pos5<<"  "<<pos6<<"  "
+      //       <<pos7<<G4endl; 
+  
+      tmpSs1 = tmpString.substr(pos1,pos2-pos1);
+      tmpSs2 = tmpString.substr(pos3,pos4-pos3);
+      tmpSs3 = tmpString.substr(pos5,pos6-pos5);
+      tmpSs4 = tmpString.substr(pos7);
+         
+
+      energy   = G4double(atof(tmpSs1))*fEnergyUnit;  
+      deltaE   = G4double(atof(tmpSs2))*fEnergyUnit;
+      xsc      = G4double(atof(tmpSs3))*fDdXscUnit;
+      deltaXsc = G4double(atof(tmpSs4))*fDdXscUnit;        
+
+      fMomentumCVector->push_back(energy);
+      fXscVector      ->push_back(xsc);       
+      fDeltaMomCVector->push_back(deltaE);
+      fDeltaXscVector ->push_back(deltaXsc);       
+
+      // G4cout<<energy/fEnergyUnit<<"\t"<<deltaE/fEnergyUnit<<"\t"
+      //       <<xsc/fDdXscUnit<<"\t"<<deltaXsc/fDdXscUnit<<G4endl;
+   
+    }
+    
   }
   fin.close();
 
-  G4cout<<"Output of fDoubleDiffXscBank data"<<G4endl;
-  G4cout<<"fDoubleDiffXscBank->size() = "<<fDoubleDiffXscBank->size()<<G4endl;
+  size_t iComment, iEnergy, jAngle, kOmega; 
+  size_t k = 0, j = 0; 
+
+  for( iComment = 0; iComment < fCommentVector->size(); ++iComment)
+  {
+    // G4cout<<(*fCommentVector)[iComment]<<G4endl;
+  }
+  G4cout<<G4endl<<"total energyNo in file "<<"\t"<<fNo<<G4endl;
  
+
+  for(iEnergy = 0; iEnergy < fNo; ++iEnergy)
+  {
+    G4cout<<G4endl<<"Tkin"<<"\t"<<(*fTkinVector)[iEnergy]/fEnergyUnit<<G4endl;
+
+    G4cout<<G4endl<<"energyUnit"<<"\t"<<fEnergyUnitVector[iEnergy]<<G4endl;
+    G4cout<<G4endl<<"angleUnit"<<"\t"<<fAngleUnitVector[iEnergy]<<G4endl;
+    G4cout<<G4endl<<"ddXscUnit"<<"\t"<<fDdXscUnitVector[iEnergy]<<G4endl;
+    
+    G4cout<<G4endl<<"angleNo"<<"\t"<<fAngleNoVector[iEnergy]<<G4endl<<G4endl;
+
+    dataTable  = new G4PhysicsTable(fAngleNoVector[iEnergy]);
+    errorTable = new G4PhysicsTable(fAngleNoVector[iEnergy]);
+
+    for(jAngle = 0; jAngle < fAngleNoVector[iEnergy]; ++jAngle)
+    {
+      G4cout<<G4endl<<"angle"<<"\t"<<(*fAngleVector)[j]/fAngleUnitVector[iEnergy]
+            <<G4endl<<G4endl;
+      G4cout<<G4endl<<"omegaNo"<<"\t"<<fOmegaNoVector[j]<<G4endl<<G4endl;
+
+      dataVector  =  new G4PhysicsFreeVector(fOmegaNoVector[j]);
+      errorVector =  new G4PhysicsFreeVector(fOmegaNoVector[j]);
+
+      for(kOmega = 0; kOmega < fOmegaNoVector[j]; ++kOmega)
+      {
+        G4cout<<(*fMomentumCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
+              <<(*fDeltaMomCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
+              <<(*fXscVector)[k]/fDdXscUnitVector[iEnergy]<<"\t"
+	      <<(*fDeltaXscVector)[k]/fDdXscUnitVector[iEnergy]<<G4endl;
+
+        dataVector ->PutValue(kOmega,(*fMomentumCVector)[k],(*fXscVector)[k]);
+        errorVector->PutValue(kOmega,(*fDeltaMomCVector)[k],(*fDeltaXscVector)[k]);
+
+        k++;
+      }
+      dataTable ->push_back(dataVector);
+      errorTable->push_back(errorVector);
+      j++;
+    }
+    fDoubleDiffXscBank->push_back(dataTable); 
+    fDoubleDiffXscErrorBank->push_back(errorTable); 
+  }
+
+
+
+  G4cout<<G4endl<<"Output of fDoubleDiffXscBank data"<<G4endl;
+  G4cout<<"fDoubleDiffXscBank->size() = "<<fDoubleDiffXscBank->size()<<G4endl<<G4endl;
+  jAngle=0; 
   for(size_t i = 0; i < fDoubleDiffXscBank->size(); ++i)
   {
-    G4cout<<"(*fDoubleDiffXscBank)["<<i<<"]->size() = "
+    G4cout<<G4endl<<"(*fDoubleDiffXscBank)["<<i<<"]->size() = "
         <<(*fDoubleDiffXscBank)[i]->size()<<G4endl;
 
     for(  size_t j = 0; j < (*fDoubleDiffXscBank)[i]->size(); ++j )
     {
-      G4cout<<"(*(*fDoubleDiffXscBank)["<<i<<"])("<<j<<")->GetVectorLength() = "
+      G4cout<<G4endl<<"(*(*fDoubleDiffXscBank)["<<i<<"])("<<j<<")->GetVectorLength() = "
         <<(*(*fDoubleDiffXscBank)[i])(j)->GetVectorLength()<<G4endl;
+      G4cout<<G4endl<<"Tkin"<<"\t"<<"angle"<<"\t"
+            <<"omega"<<"\t"<<"ddXsc"<<G4endl<<G4endl;
 
       for(size_t k = 0; k < (*(*fDoubleDiffXscBank)[i])(j)->GetVectorLength(); ++k)
       {
-        G4cout<<(*fAngleVector)[j]/fAngleUnit<<"\t"
-              <<(*(*fDoubleDiffXscBank)[i])(j)->GetLowEdgeEnergy(k)/fEnergyUnit
+        G4cout<<(*fTkinVector)[i]/fEnergyUnitVector[i]<<"\t"
+              <<(*fAngleVector)[jAngle]/fAngleUnitVector[i]<<"\t"
+              <<(*(*fDoubleDiffXscBank)[i])(j)->GetLowEdgeEnergy(k)/fEnergyUnitVector[i]
               <<"\t"
-	      <<(*(*(*fDoubleDiffXscBank)[i])(j))(k)/fDdXscUnit<<G4endl;
+	      <<(*(*(*fDoubleDiffXscBank)[i])(j))(k)/fDdXscUnitVector[i]<<G4endl;
       }
+      jAngle++;
     } 
   }
+
+
+
 }
 
 //////////////////////////////////////////////////////////
+//
+// Check exact unit string !!!
 
 void G4HadDataReading::SetEnergyUnit(G4String& unitString)
 {
@@ -568,13 +677,17 @@ void G4HadDataReading::SetEnergyUnit(G4String& unitString)
 }
 
 //////////////////////////////////////////////////////////
+//
+// Check units first. It is sensitive to exact unit string !
 
 void G4HadDataReading::SetAngleUnit(G4String& unitString)
 {
-  if      ( unitString == "rad" )  fAngleUnit = rad;
+  if      ( unitString == "radian" ||
+            unitString == "rad"  )  fAngleUnit = rad;
   else if ( unitString == "mrad" ) fAngleUnit = mrad;
   else if ( unitString == "sr" )   fAngleUnit = sr;
-  else if ( unitString == "deg" )  fAngleUnit = degree;
+  else if ( unitString == "deg" ||
+            unitString == "degree")  fAngleUnit = degree;
 }
 
 //////////////////////////////////////////////////////////
@@ -585,16 +698,32 @@ void G4HadDataReading::SetXscUnit(G4String& unitString)
   else if ( unitString == "microbarn" ) fXscUnit = microbarn;
   else if ( unitString == "nanobarn" )  fXscUnit = nanobarn;
   else if ( unitString == "picobarn" )  fXscUnit = picobarn;
+  else if ( unitString == "millibarn" ||
+            unitString == "mb")  fXscUnit = millibarn;
 }
 
 //////////////////////////////////////////////////////////
+//
+// Check exact unit string !!!
 
 void G4HadDataReading::SetDdXscUnit(G4String& unitString)
 {
-  if      ( unitString == "barn/MeV/sr" )      fXscUnit = barn/MeV/sr;
-  else if ( unitString == "microbarn/MeV/sr" ) fXscUnit = microbarn/MeV/sr;
-  else if ( unitString == "nanobarn/MeV/sr" )  fXscUnit = nanobarn/MeV/sr;
-  else if ( unitString == "picobarn/MeV/sr" )  fXscUnit = picobarn/MeV/sr;
+  if      ( unitString == "barn/MeV/sr" ||
+            unitString == "barn/sr/MeV"  )       fDdXscUnit = barn/MeV/sr;
+
+  else if ( unitString == "microbarn/MeV/sr" ||
+            unitString == "microbarn/sr/MeV"   ) fDdXscUnit = microbarn/MeV/sr;
+
+  else if ( unitString == "nanobarn/MeV/sr" ||
+            unitString == "nanobarn/sr/MeV"    ) fDdXscUnit = nanobarn/MeV/sr;
+
+  else if ( unitString == "picobarn/MeV/sr" ||
+            unitString == "picobarn/sr/MeV"    ) fDdXscUnit = picobarn/MeV/sr;
+
+  else if ( unitString == "millibarn/MeV/sr" ||
+            unitString == "millibarn/sr/MeV" ||
+            unitString == "mb/sr/MeV"        ||
+            unitString == "mb/MeV/sr"          ) fDdXscUnit = millibarn/MeV/sr;
 }
 
 

@@ -30,7 +30,7 @@
 #include "globals.hh"
 #include <vector>
 #include <map> 
-
+#include "G4DataVector.hh"
 class G4PhysicsTable;
 class G4PhysicsVector;
 class G4DataVector;
@@ -82,17 +82,31 @@ private:
 
   G4double fEnergyUnit, fAngleUnit, fXscUnit;
   G4double fXscPeAngleUnit, fXscPerMomCUnit, fDdXscUnit;
+ 
+  G4DataVector fEnergyUnitVector, fAngleUnitVector, fXscUnitVector;
+  G4DataVector fXscPeAngleUnitVector, fXscPerMomCUnitVector, fDdXscUnitVector;
+ 
 
   G4double fTkinBin;
   G4int    fNo;
+
+  static const G4String fAnyNumber;
+  static const G4String fAnyEmptySpace;
+  static const G4String fAnyHidden;
+
+  std::vector<G4int> fEnergyNoVector;
+  std::vector<G4int> fAngleNoVector;
+  std::vector<G4int> fOmegaNoVector;
 
   G4DataVector*  fTkinVector;
   G4DataVector*  fTkinBinVector;
 
   G4DataVector*  fXscVector;
+  G4DataVector*  fDeltaXscVector;
   G4DataVector*  fMultiplicityVector;
 
   G4DataVector*  fMomentumCVector;
+  G4DataVector*  fDeltaMomCVector;
   G4DataVector*  fMomentumCBinVector;
 
   G4DataVector*  fAngleVector;
@@ -102,17 +116,9 @@ private:
   G4PhysicsTable*  fMomentumCTable;
 
   std::vector<G4PhysicsTable*>* fDoubleDiffXscBank;
+  std::vector<G4PhysicsTable*>* fDoubleDiffXscErrorBank;
+  std::vector<G4String>* fCommentVector;
 
-
-  /*
-  typedef std::map<G4int,std::
-                 vector<G4double>,std::less<G4int> > xsc_Table;
-
-  xsc_Table xscTable;
-
-  std::vector<G4int> nXSC;
-  std::vector<G4int> numberOfSecondaries;
-  */  
 };
 
 #endif
