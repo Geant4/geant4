@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.6 2002-09-04 02:09:38 asaim Exp $
+// $Id: G4VTrajectoryPoint.hh,v 1.7 2002-09-16 13:36:21 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -60,12 +60,19 @@ class G4VTrajectoryPoint
    virtual const G4ThreeVector GetPosition() const = 0;
 
  // Get method for a vector of auxiliary points
-   virtual const G4std::vector<G4ThreeVector*>* GetAuxiliaryPoints() const
+   virtual const G4std::vector<G4ThreeVector>* GetAuxiliaryPoints() const
    { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of auxiliary points, e.g., intermediate points used during the
+   // calculation of the step that can be used for drawing a smoother
+   // trajectory.  The user must test the validity of this pointer.
 
  // Get method for HEPRep style attributes
    virtual const G4AttValueList* GetAttValues() const
    { return 0; }
+   // If implemented by a derived class, returns a pointer to a list
+   // of attribute values suitable, e.g., for picking.  The user must
+   // test the validity of this pointer and delete the list after use.
 };
 
 #endif
