@@ -30,6 +30,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4LorentzRotation.hh"
+#include "G4HadronicException.hh"
 // #define CHIPSdebug
 // #define CHIPSdebug_1
 
@@ -349,10 +350,27 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   {
     G4QCHIPSWorld aWorld(nop);              // Create CHIPS World of nop particles
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
+    try
+    {
+      output = pan->Fragment();
+    }
+    catch(G4HadronicException & aR)
+    {
+      G4cerr << "Exception thrown passing through G4StringChipsParticleLevelInterface "<<G4endl;
+      G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+      G4cerr << " The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
+      G4cerr << " The target momentum = "<<1./MeV*targ4Mom<<G4endl<<G4endl;
+      G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+      for(size_t i=0; i< projHV.size(); i++)
+      {
+        G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+	       <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+      }
+      throw;
+    }
     // clean up particles
     std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
-    output = pan->Fragment();
     delete pan;
   }
   else 

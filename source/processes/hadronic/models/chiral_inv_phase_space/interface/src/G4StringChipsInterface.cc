@@ -283,7 +283,22 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   if (particleCount!=0)
   {
     G4QEnvironment* pan= new G4QEnvironment(projHV, targetPDGCode);
-    output = pan->Fragment();
+    try
+    {
+      output = pan->Fragment();
+    }
+    catch(G4HadronicException & aR)
+    {
+      G4cerr << "Exception thrown passing through G4ChiralInvariantPhaseSpace "<<G4endl;
+      G4cerr << " targetPDGCode = "<< targetPDGCode <<G4endl;
+      G4cerr << " Dumping the information in the pojectile list"<<G4endl;
+      for(size_t i=0; i< projHV.size(); i++)
+      {
+	G4cerr <<"  Incoming 4-momentum and PDG code of "<<i<<"'th hadron: "
+               <<" "<< projHV[i]->Get4Momentum()<<" "<<projHV[i]->GetPDGCode()<<G4endl;
+      }
+      throw;
+    }
     std::for_each(projHV.begin(), projHV.end(), DeleteQHadron());
     projHV.clear();
     delete pan;
