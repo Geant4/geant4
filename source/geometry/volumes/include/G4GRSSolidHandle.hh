@@ -21,21 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolidHandle.hh,v 1.2 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4GRSSolidHandle.hh,v 1.3 2001-11-06 17:08:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // Class G4TouchableHandle
 //
 // Class description:
 //
-// A class to provide reference counting mechanism for any kind of touchable
+// Type providing reference counting mechanism for any kind of touchable
 // objects.
-// The basic rule for the use of this class is that it is passed always by
-// reference and is not constructed by calling new.
+// The basic rule for the use of this type is that this handle must always
+// be exchanged by reference never dinamically allocated (i.e. never
+// instantiated using 'new').
 //
-// For more details see G4ReferenceCountedHandle.hh file.
-//
-// Author:      Radovan Chytracek
+// For more details see G4ReferenceCountedHandle.
+
+// Author:      Radovan Chytracek, CERN  (Radovan.Chytracek@cern.ch)
 // Version:     1.0
 // Date:        March 2001
 // ----------------------------------------------------------------------

@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHandle.cc,v 1.1 2001-11-05 22:28:45 radoone Exp $
+// $Id: G4TouchableHandle.cc,v 1.2 2001-11-06 17:06:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4TouchableHandle.hh"
 
-#ifdef RCH_USING_G4ALLOCATOR
-DEFINE_RCHALLOCATOR(G4VTouchable)
-#endif // RCH_USING_G4ALLOCATOR
+DEFINE_RCHALLOCATOR(G4VTouchable);
