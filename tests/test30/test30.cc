@@ -115,20 +115,27 @@ int main(int argc, char** argv)
   G4int     verbose  = 0;
   G4double  energy   = 100.*MeV;
   G4double  elim     = 30.*MeV;
+  G4double  dangl    = 5.0*degree;
   G4int     nevt     = 1000;
   G4int     nbins    = 100;
   G4int     nbinsa   = 40;
   G4int     nbinse   = 80;
   G4int     nbinsd   = 20;
+  G4int     nangl    = 0;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
   G4double  emax     = 160.*MeV;
   G4Material* material = 0; 
 
+  G4double ang[20] = {0.0};
+  G4double bng1[20] = {0.0};
+  G4double bng2[20] = {0.0};
+  G4double cng[20] = {0.0};
+
   //  G4double ang[13] = {0.,11.,24.,35.,45.,56.,69.,82.,95.,106.,121.,134.,145.};
-  G4double bng[14] = {0.,6.,18.,30.,40.,50.,62.,75.,88.,100.,114.,127.,140.,180.};
-  G4double cng[13];
+  //G4double bng[14] = {0.,6.,18.,30.,40.,50.,62.,75.,88.,100.,114.,127.,140.,180.};
+  //G4double cng[13];
 
 
   // Track 
@@ -183,9 +190,13 @@ int main(int argc, char** argv)
   G4cout << "#nbins" << G4endl;
   G4cout << "#nbinsa" << G4endl;
   G4cout << "#nbinse" << G4endl;
+  G4cout << "#nangle" << G4endl;
+  G4cout << "#angles" << G4endl;
+  G4cout << "#dangle" << G4endl;
   G4cout << "#particle" << G4endl;
   G4cout << "#energy(MeV)" << G4endl;
   G4cout << "#emax(MeV)" << G4endl;
+  G4cout << "#elim(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
   G4cout << "#step(mm)" << G4endl;
   G4cout << "#material" << G4endl;
@@ -211,9 +222,13 @@ int main(int argc, char** argv)
       } else if(line == "#energy(MeV)") {
         (*fin) >> energy;
         energy *= MeV;
+        emax    = energy;
       } else if(line == "#emax(MeV)") {
         (*fin) >> emax;
         emax *= MeV;
+      } else if(line == "#elim(MeV)") {
+        (*fin) >> elim;
+        elim *= MeV;
       } else if(line == "#events") {
         (*fin) >> nevt;
       } else if(line == "#nbins") {
@@ -222,6 +237,12 @@ int main(int argc, char** argv)
         (*fin) >> nbinse;
       } else if(line == "#nbinsa") {
         (*fin) >> nbinsa;
+      } else if(line == "#nangle") {
+        (*fin) >> nangl;
+      } else if(line == "#dangle") {
+        (*fin) >> dangl;
+      } else if(line == "#angles") {
+        for(int k=0; k<nangl; k++) {(*fin) >> ang[k];}
       } else if(line == "#range(mm)") {
         (*fin) >> range;
         range *= mm;
@@ -408,10 +429,22 @@ int main(int argc, char** argv)
     G4cout << "### factor  = " << factor
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
-    G4double dtet = pi/(G4int)nbinsa;
-    for(G4int k=0; k<13; k++) {
+    bng1[0] = 0.0;
+  
+    for(G4int k=0; k<nangl; k++) {
+   
+      if(k == 0) {
+        bng2[0] = G4std::min(0.5*(ang[0] + ang[1]), ang[0] + dangl);
+      } else if(k < nangl-1) {
+        bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
+        bng2[k] = G4std::min(0.5*(ang[k] + ang[k+1]), ang[k] + dangl);
+      } else {
+        bng1[k] = G4std::max(bng2[k-1], ang[k]-dangl);
+        bng2[k] = G4std::min(180., ang[k] + dangl);
+      }
+
       cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
-         (twopi*(cos(degree*bng[k]) - cos(degree*bng[k+1]))*barn*emax*(G4double)nevt);
+         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*barn*emax*(G4double)nevt);
     }
 
     G4Track* gTrack;
@@ -452,7 +485,7 @@ int main(int argc, char** argv)
     G4ParticleDefinition* pd;
     G4ThreeVector  mom;
     G4LorentzVector labv, fm;
-    G4double e, p, m, px, py, pz, pt, theta, sint;
+    G4double e, p, m, px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
 			
     for (G4int iter=0; iter<nevt; iter++) {
@@ -509,8 +542,6 @@ int main(int argc, char** argv)
         pt = sqrt(px*px +py*py);
 
         theta = mom.theta();
-        G4int itet = (G4int)(theta/dtet);
-        sint  = sin(dtet*(0.5 + (G4double)itet));
 				
 	if(usepaw && e > 0.0 && pt > 0.0) {
           h[2]->fill(mom.phi()/degree,1.0);
@@ -542,7 +573,7 @@ int main(int argc, char** argv)
             h[11]->fill(e/MeV, 1.0);
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
-	    h[24]->fill(cos(theta), factora/sint);
+	    h[24]->fill(cos(theta), factora);
 		
           } else if(pd == pin) {
     
@@ -572,13 +603,15 @@ int main(int argc, char** argv)
             h[10]->fill(pt/MeV, 1.0);
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
-	    if(e >= elim) h[25]->fill(cos(theta), factora/sint);
+	    if(e >= elim) h[25]->fill(cos(theta), factora);
             theta /= degree;
 	    G4int kk=0;
             for(kk=0; kk<13; kk++) {
-              if(theta <= bng[kk+1]) break;
+              if(bng1[kk] <= theta && theta <= bng2[kk]) {
+                h[27+kk]->fill(e/MeV, cng[kk]); 
+                break;
+	      }
 	    }
-            h[27+kk]->fill(e/MeV, cng[kk]); 
 
 	  } else if(pd == deu) {
 	    h[1]->fill(6.0, 1.0);	
@@ -610,7 +643,6 @@ int main(int argc, char** argv)
 	h[16]->fill(pz/GeV, 1.0);
 	h[17]->fill(pt/GeV, 1.0);
       }	
-      //      delete aChange;
       aChange->Clear();
 	
     }

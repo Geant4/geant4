@@ -16,6 +16,10 @@ proton
 Zr
 #energy(MeV)
 160.3
+#nangle
+13
+#angles
+0. 11. 24. 35. 45. 56. 69. 82. 95. 106. 121. 134. 145.
 //--------
 #generator
 LEparametrisation
