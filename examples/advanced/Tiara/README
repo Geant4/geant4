@@ -1,4 +1,4 @@
-# $Id: README,v 1.10 2003-06-18 11:56:46 dressel Exp $
+# $Id: README,v 1.11 2003-06-18 12:27:46 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -8,16 +8,16 @@ Simulation of the TIARA experiment using importance sampling
 
 This example is a simulation of the neutron shielding experiment TIARA
 see http://idsun1.kek.jp/nakao/research/tiara/tiara.htm.
-The example is ment to provide a realistic example for
+The example is meant to provide a realistic example for
 applying geometrical importance sampling (geometrical splitting and 
 Russian roulette).
 In the TIARA experiment neutrons of two different energy distributions 
 created by 43 MeV and 68 MeV protons bombarding a 7Li target are measured
-behind several shields. In this example the interactions of the 
-neutrons with the (concrete) shields are simulated and 
-energy dependent neutron fluxes are measured behind the shields. 
-Users may chose to run the simulation for different shielding
-configuration with or without importance sampling.
+behind several shields. The simulation starts from the neutron spectra.
+In this example the interactions of the neutrons with the (concrete) 
+shields are simulated and energy dependent neutron fluxes are measured 
+behind the shields. Users may chose to run the simulation for different 
+shielding configuration with or without importance sampling.
 The simulated neutron fluxes are compared to the published 
 experimental data. The efficiency of applying importance sampling
 depends strongly on the shied thickness and importance configuration.
@@ -30,9 +30,9 @@ Section  "Event Biasing Techniques" and references there.
 
 
 The example has been tested on CERN RH 7.3 with the
-gcc-3.2 compiler.
+gcc-3.2 and gcc-2.95.2 compilers.
 
-Note for system testing: see points 1, 1.3 and 3.2.
+Note for system testing without analysis: see points 1, 1.3 and 3.2.
 
 
 
@@ -49,7 +49,7 @@ You need to set:
 Three examples are given of how to set environment variables
 in the three cases:
 
-1.1) Anaphe via AFS:
+1.1) Anaphe via AFS (most simple):
 --------------------
    You have access to afs and you want to use Anaphe for the
    analysis: 
@@ -87,7 +87,7 @@ in the three cases:
 
    Note: python must be built against a "libc". 
          You may do this by creating a shared library by a command
-         simular to this 
+         similar to this 
          "ld -shared -o libpython2.2.so --whole-archive libpython2.2.a /usr/lib/libc.so"
 
    Set the following environment variables:
@@ -146,7 +146,7 @@ screen.
 It also prints out the relative path of a ".shelve" file.
 This file can be used to access results of the simulation.
 
-In case the example eas build using analysis
+In case the example was build using analysis
 results may be viewed e.g. using lizard and scripts:
 1) Start python2.2 or lizard
 2) type: import dataAcess
@@ -155,11 +155,11 @@ results may be viewed e.g. using lizard and scripts:
          shelve file created during the execution of anaSim.py. 
          The name is printed on the screen during execution of runSim.py.
          "detectorposition" may be "00, "20" or "40" and stand for the 
-         dtectors 00, 20, 40 cm off beam axis respectively. 
+         detectors 00, 20, 40 cm off beam axis respectively. 
 4) type: p.display ()
 5) type: import extractShelve
 6) type: extractShelve.getFluxes (p.she)
-         p.she is the shelve object containg simulation results.
+         p.she is the shelve object containing simulation results.
          This prints the FOM values for the used detectors
          for two energy regions below and in the peak region.
          The FOM are should be compared to unbiased simulations. To run 
@@ -232,7 +232,7 @@ source / - directory containing the source code
 
         TiaraWrapper - wrapper classes for usage in python
 
-        py_modules - python modules for running and aanalysing
+        py_modules - python modules for running and analysing
 
 	swig.gmk - makefile rules for using swig  
 
@@ -243,7 +243,7 @@ run / - directory for running the example
 
 
 
-5) Techicalities about this example
+5) Technicalities about this example
 ===================================
 
  This example is composed out of a layer of classes written in C++
