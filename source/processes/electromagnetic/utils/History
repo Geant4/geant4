@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2001-03-27 14:34:05 maire Exp $
+$Id: History,v 1.16 2001-05-15 10:34:38 urban Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,23 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+    
+15 may 01: L.Urban
+- NEW multiple scattering version committed under the class name
+  **************************************************************
+  G4MultipleScatteringx .It gives better msc angle distribution
+  *********************
+  than the standard G4MultipleScattering. It uses a distribution
+  to simulate the geom./true pathlengths (standard : mean values
+  only) and has a framework implemented in it to perform special
+  stepping near to a boundary (this algorithm works , but some
+  further development/tuning needed - this algorith is disabled
+  by default) .
+   This new version can be used after the change
+ 
+    G4MultipleScattering  --> G4MultipleScatteringx 
+
+  in the PhysicsList. 
      
 27 mar 01: L.Urban (utils-V03-00-06)
 - another bug fixed in G4VEnergyLoss.cc , in the fluct code.
