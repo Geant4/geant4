@@ -1,5 +1,5 @@
 //
-// $Id: G4VNestedParameterisation.cc,v 1.1 2005-02-15 17:17:26 japost Exp $
+// $Id: G4VNestedParameterisation.cc,v 1.2 2005-02-15 17:34:30 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParamterisation
@@ -28,35 +28,34 @@ G4VSolid*
 G4VNestedParameterisation::ComputeSolid(const G4int no, G4VPhysicalVolume *thisVol)
 {
   G4PhysicalTouchable* pPhysTouchable;
-  pPhysTouchable=  cross_cast<G4PhysicalTouchable*> thisVol; 
+  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable*> thisVol; 
   
   if( ! pPhysTouchable ) 
     G4Exception(" ") ; // FATAL error -- 
   // ParameterisedNavigator must provide a G4PhysicalTouchable
   
-  G4VPhysicalVolume pCurrentVol; 
+  // G4VPhysicalVolume* pCurrentVol= thisVol->GetPhysVol; 
   const G4VTouchable* pTouchableParent; 
   // currentVol= 
-  this->ComputeSolid( no, pCurrentVol, pTouchableParent); 
+  this->ComputeSolid( no, thisVol, pTouchableParent); 
 }
 
 
 void G4VNestedParameterisation::ComputeTransformation(const G4int no,
-                                       G4VPhysicalVolume *currPhysTouch )
+                                       G4VPhysicalVolume *currVolPlus )
 {
   const G4String method("G4VNestedParameterisation::Transformation(int, pv)");
 
   G4PhysicalTouchable* pPhysTouchable;
-  pPhysTouchable=  cross_cast<G4PhysicalTouchable*> thisVol; 
+  pPhysTouchable=  dynamic_cast<G4PhysicalTouchable*> currVolPlus; 
   
   if( ! pPhysTouchable ) 
     ReportErrorInTouchable(method); 
   // ParameterisedNavigator must provide a G4PhysicalTouchable
   
-  G4VPhysicalVolume pCurrentVol; 
   const G4VTouchable* pTouchableParent; 
   // currentVol= 
-  this->ComputeTransformation( no, pCurrentVol, pTouchableParent);   
+  this->ComputeTransformation( no, currVolPlus, pTouchableParent);   
 }
 
 G4Material* G4VNestedParameterisation::ComputeMaterial(const G4int, G4VPhysicalVolume *)
