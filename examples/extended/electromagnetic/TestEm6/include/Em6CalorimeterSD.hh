@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The sensitive detector is defined
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -25,7 +28,7 @@ class G4Step;
 
 class Em6CalorimeterSD : public G4VSensitiveDetector
 {
-  public:
+public: // Without description
   
       Em6CalorimeterSD(G4String, Em6DetectorConstruction* );
      ~Em6CalorimeterSD();

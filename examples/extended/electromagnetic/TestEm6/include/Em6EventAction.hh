@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Event action definition.
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -23,11 +26,11 @@ class Em6EventActionMessenger;
 
 class Em6EventAction : public G4UserEventAction
 {
-  public:
+public: // Without description
+
     Em6EventAction(Em6RunAction* Em6RA);
    ~Em6EventAction();
 
-  public:
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     G4int GetEventno();

@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Actions on each step are defined
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -28,7 +31,8 @@ class Em6SteppingMessenger;
 
 class Em6SteppingAction : public G4UserSteppingAction
 {
-  public:
+public: // Without description
+
     Em6SteppingAction(Em6DetectorConstruction*, Em6EventAction*,
                       Em6RunAction* );
    ~Em6SteppingAction();

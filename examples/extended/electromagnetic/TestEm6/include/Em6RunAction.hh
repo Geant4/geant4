@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The user has a possibility to define and to fill his histograms in this class.
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -36,13 +39,20 @@ class G4Run;
 
 class Em6RunAction : public G4UserRunAction
 {
-  public:
+public: // Without description
+
     Em6RunAction();
    ~Em6RunAction();
 
-  public:
+public: // With description
+ 
     void BeginOfRunAction(const G4Run*);
+  // In this method histogramms are booked
+
     void   EndOfRunAction(const G4Run*);
+  // In this method bookHisto method is called in which histogramms are filled
+
+public: // Without description
 
     void CountEvent();
     void CountParticles(G4double,G4double);

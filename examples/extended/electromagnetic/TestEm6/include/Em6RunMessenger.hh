@@ -6,6 +6,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The run messenger is defined
+// Class Description - end
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -31,14 +34,14 @@ class G4UIcmdWithAString;
 
 class Em6RunMessenger: public G4UImessenger
 {
-  public:
+public: // Without description
 
    Em6RunMessenger(Em6RunAction* );
   ~Em6RunMessenger();
 
    void SetNewValue(G4UIcommand* ,G4String );
 
-  private:
+private:
 
    Em6RunAction*              runAction;
    

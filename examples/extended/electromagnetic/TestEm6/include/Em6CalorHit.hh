@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The set of hits is defined
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -21,7 +24,7 @@
 
 class Em6CalorHit : public G4VHit
 {
-  public:
+public: // Without description
 
       Em6CalorHit();
      ~Em6CalorHit();

@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Inicialisation of particle gun.
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -24,11 +27,11 @@ class Em6DetectorConstruction;
 
 class Em6PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
-  public:
+  public: // Without description
+
     Em6PrimaryGeneratorAction(Em6DetectorConstruction*);    
    ~Em6PrimaryGeneratorAction();
 
-  public:
     void GeneratePrimaries(G4Event*);
     static G4String GetPrimaryName() ;                
 

@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Event action messenger.
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -25,7 +28,8 @@ class G4UIcmdWithADoubleAndUnit;
 
 class Em6EventActionMessenger: public G4UImessenger
 {
-  public:
+public: // Without  description
+ 
     Em6EventActionMessenger(Em6EventAction*);
    ~Em6EventActionMessenger();
     

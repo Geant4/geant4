@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The list of particles and processes are defined in this class.
+// Class Description - end
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -23,7 +26,8 @@ class Em6PhysicsListMessenger;
 
 class Em6PhysicsList: public G4VUserPhysicsList
 {
-  public:
+public: // Without description
+
     Em6PhysicsList( Em6DetectorConstruction*);
    ~Em6PhysicsList();
 
@@ -47,14 +51,13 @@ class Em6PhysicsList: public G4VUserPhysicsList
     void ConstructGeneral();
     void ConstructEM();
     
-  public:
+  public: // Without description
 
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);
     void SetCutsByEnergy(G4double);
     void GetRange(G4double);
-
     void SetMaxStep(G4double);
 
   private:

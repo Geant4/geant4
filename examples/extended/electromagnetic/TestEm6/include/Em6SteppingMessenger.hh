@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The stepping messenger is defined
+// Class Description - end
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -26,7 +29,7 @@ class G4UIdirectory;
 
 class Em6SteppingMessenger: public G4UImessenger
 {
-  public:
+public: // Without description
 
    Em6SteppingMessenger(Em6SteppingAction* );
   ~Em6SteppingMessenger();

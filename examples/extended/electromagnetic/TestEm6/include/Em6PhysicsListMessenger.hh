@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// The messenger for physics list class.
+// Class Description - end
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -23,7 +26,7 @@ class G4UIcmdWithADoubleAndUnit;
 
 class Em6PhysicsListMessenger: public G4UImessenger
 {
-  public:
+  public: // Without description
   
     Em6PhysicsListMessenger(Em6PhysicsList*);
    ~Em6PhysicsListMessenger();

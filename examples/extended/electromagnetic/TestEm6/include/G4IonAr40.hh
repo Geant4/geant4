@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.hh,v 1.1 1999-10-22 00:46:28 vnivanch Exp $
+// $Id: G4IonAr40.hh,v 1.2 1999-10-28 02:15:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,9 +22,12 @@
 //  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
+// Class Description:
+// The new ion Ar40+ is defined as G4VIon.
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
+// Class Description - end
 
 #ifndef G4IonAr40_h
 #define G4IonAr40_h 1
@@ -44,7 +47,8 @@ class G4IonAr40 : public G4VIon
    static G4double  theIonAr40LengthCut;
    static G4double* theIonAr40KineticEnergyCuts;
 
- public:
+public: // Without description
+
    G4IonAr40(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   

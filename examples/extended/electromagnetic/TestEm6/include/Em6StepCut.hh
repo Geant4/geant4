@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Step cut is defined
+// Class Description - end
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -22,7 +25,7 @@
 
 class Em6StepCut : public G4VDiscreteProcess
 {
-  public:     
+public: // Without description   
 
      Em6StepCut(const G4String& processName ="UserStepCut" );
      Em6StepCut(Em6StepCut &);

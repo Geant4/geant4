@@ -5,6 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// Class Description:
+// Detector mesenger is defined.
+// Class Description - end
 //
 // 
 
@@ -28,7 +31,8 @@ class G4UIcmdWithoutParameter;
 
 class Em6DetectorMessenger: public G4UImessenger
 {
-  public:
+public: // Without description
+
     Em6DetectorMessenger(Em6DetectorConstruction* );
    ~Em6DetectorMessenger();
     

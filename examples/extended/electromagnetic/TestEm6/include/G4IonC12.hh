@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonC12.hh,v 1.1 1999-10-22 00:46:29 vnivanch Exp $
+// $Id: G4IonC12.hh,v 1.2 1999-10-28 02:15:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,9 +22,13 @@
 //  Added not static GetEnergyCuts() and GetLengthCuts(), G.Cosmo, 11 July 1996
 // ----------------------------------------------------------------
 
+// Class Description:
+// The new ion C12+ is defined as G4VIon.
 // Each class inheriting from G4VIon
 // corresponds to a particle type; one and only one
 // instance for each class is guaranteed.
+// Class Description - end
+
 
 #ifndef G4IonC12_h
 #define G4IonC12_h 1
@@ -44,7 +48,8 @@ class G4IonC12 : public G4VIon
    static G4double  theIonC12LengthCut;
    static G4double* theIonC12KineticEnergyCuts;
 
- public:
+public: // Without description
+
    G4IonC12(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
