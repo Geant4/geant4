@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.hh,v 1.9 1999-12-15 14:50:47 gunter Exp $
+// $Id: G4UIXm.hh,v 1.10 2000-05-26 14:58:30 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -32,10 +32,10 @@ class G4UIsession;
 //  Note that there are corresponding Geant4 commands to add a 
 // menus in the menubar and add buttons in a menu.
 //  Ex : 
-//    /interactor/addMenu   test Test
-//    /interactor/addButton test Init /run/initialize
-//    /interactor/addButton test "Set gun" "/control/execute gun.g4m"
-//    /interactor/addButton test "Run one event" "/run/beamOn 1"
+//    /gui/addMenu   test Test
+//    /gui/addButton test Init /run/initialize
+//    /gui/addButton test "Set gun" "/control/execute gun.g4m"
+//    /gui/addButton test "Run one event" "/run/beamOn 1"
 //
 //  Command completion, by typing "tab" key, is available on the 
 // command line.
