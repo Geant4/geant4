@@ -37,7 +37,7 @@ void ExN04Field::GetFieldValue(const double Point[3],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[1] = 0.;
-  if(abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq)
+  if(std::abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq)
   { Bfield[2] = Bz; }
   else
   { Bfield[2] = 0.; }
