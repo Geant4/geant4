@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.9 2001-01-11 10:42:01 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.10 2001-01-23 11:54:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -16,6 +16,7 @@
 // 02/02/99  important correction in AlongStepDoIt , L.Urban
 // 28/04/99  bug fixed (unit independece now),L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 23/01/01  bug fixed in AlongStepDoIt , L.Urban
 // --------------------------------------------------------------
 
  
@@ -474,7 +475,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
            N = Ndeltamax ;
         G4double Px,Py,Pz ;
         G4ThreeVector ParticleDirection ;
-        ParticleDirection=stepData.GetPostStepPoint()->
+        ParticleDirection=stepData.GetPreStepPoint()->
                                    GetMomentumDirection() ;
         Px =ParticleDirection.x() ;
         Py =ParticleDirection.y() ;
@@ -532,8 +533,6 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
                zd=z1+frperstep*dz*urandom ;
                G4ThreeVector DeltaPosition(xd,yd,zd) ;
                DeltaTime=time0+frperstep*dTime*urandom ;
-               ParticleDirection=stepData.GetPostStepPoint()->
-                                     GetMomentumDirection() ;    
                     
                G4ThreeVector DeltaDirection(dirx,diry,dirz) ;
                DeltaDirection.rotateUz(ParticleDirection);

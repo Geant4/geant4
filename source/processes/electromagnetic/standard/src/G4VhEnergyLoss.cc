@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.14 2001-01-11 10:42:01 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.15 2001-01-23 11:54:13 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -23,6 +23,7 @@
 //            energy losses of ions
 // 17/08/00 : V.Ivanchenko change EnergyLossFluctuation 
 // 18/08/00 : V.Ivanchenko bug fixed in GetConstrained 
+// 23/01/01 : bug fixed in AlongStepDoIt , L.Urban
 // --------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -578,12 +579,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 
         G4double Px,Py,Pz ;
         G4ThreeVector ParticleDirection ;
-        ParticleDirection=stepData.GetPostStepPoint()->
+        ParticleDirection=aParticle->
                                    GetMomentumDirection() ;
         Px =ParticleDirection.x() ;
         Py =ParticleDirection.y() ;
         Pz =ParticleDirection.z() ;
-     
+
         G4int subdelta = 0;
 
         if(N > 0)
