@@ -1,4 +1,4 @@
-$Id: History,v 1.22 1999-10-03 10:14:29 kurasige Exp $
+$Id: History,v 1.23 1999-10-07 10:30:57 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th September 1999  John Allison (examples-V00-01-04)
+- Updated .out files for geant4-00-01-ref-03.
+
 3rd October 1999 Hisaya Kurashige
 - Updated  all PhysicsList for renaming 'Barion' to 'Baryon'
 

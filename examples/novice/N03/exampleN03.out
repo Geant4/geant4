@@ -53,6 +53,7 @@
 
 
  The calorimeter is made of 10 layers of: [ 10mm of Lead + 5mm of liquidArgon ] 
+ExN03PhysicsList::SetCuts:CutLength : 2 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all ZSandia crossSection below 50 KeV
         PhysicsTables from 50 keV to 50 MeV in 100 bins. 
@@ -110,6 +111,24 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  2 mm            2 mm            2 mm            2 mm            2 mm 
+Cut in energy
+          Aluminium        9.56 keV        1.03 MeV        7.44 MeV        19.4 MeV         990 eV 
+        liquidArgon        8.59 keV         561 keV        4.78 MeV        12.3 MeV         990 eV 
+             Copper        35.7 keV        2.68 MeV        13.3 MeV        34.3 MeV         990 eV 
+               Lead         121 keV        2.61 MeV        12.6 MeV        31.8 MeV         990 eV 
+              Water        3.89 keV         568 keV        4.96 MeV        13.1 MeV         990 eV 
+       Scintillator        3.07 keV         575 keV        5.02 MeV        13.4 MeV         990 eV 
+             quartz        7.59 keV         907 keV        6.91 MeV        18.1 MeV         990 eV 
+                Air         990 eV          990 eV         82.2 keV         174 keV         990 eV 
+            Aerogel        2.32 keV         181 keV         1.9 MeV        4.84 MeV         990 eV 
+        CarbonicGas         990 eV         54.1 keV         597 keV        1.34 MeV         990 eV 
+         WaterSteam         990 eV          990 eV         29.6 keV          45 keV         990 eV 
+           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
+               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+===================================================
 #
 # Macro file for the initialization phase of "exampleN03.cc"
 #
@@ -182,7 +201,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.46s Real=0.52s Sys=0.03s
+  User=0.41s Real=0.47s Sys=0.04s
 Idle> #
 Idle> # list the existing physics processes
 Idle> /process/list
@@ -211,7 +230,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.42s Real=0.46s Sys=0.04s
+  User=0.41s Real=0.42s Sys=0.01s
 Idle> #
 Idle> # switch on MultipleScattering
 Idle> /process/activate msc
@@ -251,7 +270,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=1s Real=1.1s Sys=0.08s
+  User=0.92s Real=1s Sys=0.1s
 Idle> G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
 UserDetectorConstruction deleted.
