@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Hype.cc,v 1.1 2000-04-07 11:04:10 gcosmo Exp $
+// $Id: testG4Hype.cc,v 1.2 2000-04-19 17:57:20 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,19 +82,19 @@ G4bool testG4Hype()
 
 // DistanceToOut(P,V)
     Dist=t1.DistanceToOut(pzero,vx,calcNorm,pgoodNorm,pNorm);
-   assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vx)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vx)&&(!*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vmx,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vmx)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vmx)&&(!*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vy)&&(!*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vmy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vmy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vmy)&&(!*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vz,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vz)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vz)&&(*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vmz,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vmz)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vmz)&&(*pgoodNorm));
     Dist=t1.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(Dist,50.00005)&&ApproxEqual(pNorm->unit(),vxy)&&*pgoodNorm);
+    assert(ApproxEqual(Dist,50)&&ApproxEqual(pNorm->unit(),vxy)&&(!*pgoodNorm));
 
     Dist=t2.DistanceToOut(pzero,vxy,calcNorm,pgoodNorm,pNorm);
     G4cout<<"Dist=t2.DistanceToOut(pzero,vxy) = "<<Dist<<G4endl;
@@ -106,27 +106,20 @@ G4bool testG4Hype()
     Dist=t2.DistanceToOut(ponxside,vz,calcNorm,pgoodNorm,pNorm);
     G4cout<<"Dist=t2.DistanceToOut(ponxside,vz) = "<<Dist<<G4endl;
 
-    Dist=t2.DistanceToOut(pbigx,vx,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vx) = "<<Dist<<G4endl;
-    Dist=t2.DistanceToOut(pbigx,vxy,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vxy) = "<<Dist<<G4endl;
-    Dist=t2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
-    G4cout<<"Dist=t2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
-
 
 //DistanceToIn(P)
     Dist=t1.DistanceToIn(pbigx);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
     Dist=t1.DistanceToIn(pbigmx);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
     Dist=t1.DistanceToIn(pbigy);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
     Dist=t1.DistanceToIn(pbigmy);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
     Dist=t1.DistanceToIn(pbigz);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
     Dist=t1.DistanceToIn(pbigmz);
-    assert(ApproxEqual(Dist,50));
+    assert(Dist <= 50*(1.0+DBL_EPSILON));
 
 // DistanceToIn(P,V)
     Dist=t1.DistanceToIn(pbigx,vmx);
@@ -235,8 +228,7 @@ G4bool testG4Hype()
 		   assert(t1.CalculateExtent(kYAxis,xTestClip,origin,min,max));
 // Calc max y coordinate
 		   G4double testMax=(xTest<0) ? sqrt(eOR*eOR-xTest*xTest) : eOR;
-		   assert (ApproxEqual(min,-testMax)
-			   &&ApproxEqual(max,testMax));
+		   assert ((min < -testMax) && (max > testMax));
 		}
 	}
 
@@ -254,8 +246,7 @@ G4bool testG4Hype()
 		   assert(t1.CalculateExtent(kXAxis,yTestClip,origin,min,max));
 // Calc max y coordinate
 		   G4double testMax=(yTest<0) ? sqrt(eOR*eOR-yTest*yTest) : eOR;
-		   assert (ApproxEqual(min,-testMax)
-			   &&ApproxEqual(max,testMax));
+		   assert ((min < -testMax) && (max > testMax));
 		}
 	}
 
