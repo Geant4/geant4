@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.33 2004-11-17 11:18:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.34 2004-12-01 18:01:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -446,7 +446,7 @@ inline G4double G4VEnergyLossProcess::GetDEDXForScaledEnergy(G4double e)
 {
   G4bool b;
   G4double x = ((*theDEDXTable)[currentMaterialIndex]->GetValue(e, b))*chargeSqRatio;
-  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
 
@@ -473,7 +473,7 @@ inline G4double G4VEnergyLossProcess::GetLimitScaledRangeForScaledEnergy(G4doubl
 
   if (e < maxKinEnergyForRange) {
     x = ((*thePreciseRangeTable)[currentMaterialIndex])->GetValue(e, b);
-    if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+    if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
 
   } else {
     x = theRangeAtMaxEnergy[currentMaterialIndex] +
@@ -499,7 +499,7 @@ inline G4double G4VEnergyLossProcess::GetScaledRangeForScaledEnergy(G4double e)
 {
   G4bool b;
   G4double x = ((*theRangeTableForLoss)[currentMaterialIndex])->GetValue(e, b);
-  if(e < minKinEnergy) x *= sqrt(e/minKinEnergy);
+  if(e < minKinEnergy) x *= std::sqrt(e/minKinEnergy);
   return x;
 }
 

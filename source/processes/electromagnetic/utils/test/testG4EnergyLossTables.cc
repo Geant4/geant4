@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4EnergyLossTables.cc,v 1.5 2004-08-11 14:19:16 vnivanch Exp $
+// $Id: testG4EnergyLossTables.cc,v 1.6 2004-12-01 18:01:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-------------------------------------------------------------------
@@ -430,7 +430,7 @@ int main()
 
     mass = theParticle->GetPDGMass() ;  
     energy = 1.*GeV + mass ;
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
     G4ParticleMomentum theMomentum(momentum,0.,0.);
     G4double pModule = theMomentum.mag();
     G4DynamicParticle aParticle(theParticle,energy,theMomentum);

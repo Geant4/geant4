@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.49 2004-11-29 14:44:06 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.50 2004-12-01 18:01:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -289,7 +289,7 @@ void G4LossTableManager::EnergyLossProcessIsInitialised(
       	base_part_vector[j] = p->BaseParticle();
       }
       if(maxEnergyForMuonsActive) {
-        G4double dm = abs(particle->GetPDGMass() - 105.7*MeV);
+        G4double dm = std::fabs(particle->GetPDGMass() - 105.7*MeV);
 	if(dm < 5.*MeV) p->SetMaxKinEnergy(maxKinEnergyForMuons);
       }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.29 2004-12-01 17:41:58 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.30 2004-12-01 18:01:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -207,10 +207,10 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
   if (kineticEnergy > 0.0) {
     G4double cth  = currentModel->SampleCosineTheta(truestep,kineticEnergy);
-    G4double sth  = sqrt(1.-cth*cth);
+    G4double sth  = std::sqrt(1.-cth*cth);
     G4double phi  = twopi*G4UniformRand();
-    G4double dirx = sth*cos(phi);
-    G4double diry = sth*sin(phi);
+    G4double dirx = sth*std::cos(phi);
+    G4double diry = sth*std::sin(phi);
 
     G4ThreeVector oldDirection = track.GetMomentumDirection();
     G4ThreeVector newDirection(dirx,diry,cth);
@@ -236,8 +236,8 @@ G4VParticleChange* G4VMultipleScattering::PostStepDoIt(const G4Track& track,
 
         // sample direction of lateral displacement
         G4double phi  = twopi*G4UniformRand();
-        G4double dirx = cos(phi);
-        G4double diry = sin(phi);
+        G4double dirx = std::cos(phi);
+        G4double diry = std::sin(phi);
 
         G4ThreeVector latDirection(dirx,diry,0.0);
         latDirection.rotateUz(oldDirection);
@@ -284,7 +284,7 @@ G4PhysicsVector* G4VMultipleScattering::PhysicsVector(const G4MaterialCutsCouple
   G4int nbins = 3;
   //G4int nbins =  nDEDXBins;
   if( couple->IsUsed() ) nbins = nBins;
-  //  G4double xmax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
+  //  G4double xmax = maxKinEnergy*std::exp( std::log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   return v;
 }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableBuilder.cc,v 1.12 2004-11-10 08:54:59 vnivanch Exp $
+// $Id: G4LossTableBuilder.cc,v 1.13 2004-12-01 18:01:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -139,11 +139,11 @@ void G4LossTableBuilder::BuildRangeTable(const G4PhysicsTable* dedxTable,
         G4double dedx2   = pv->GetValue(energy2, b);
         G4double de = (energy2 - energy1) * del;
         G4double energy = energy1 - de*0.5;
-        G4double fac = log(dedx2/dedx1)/log(energy2/energy1);
+        G4double fac = std::log(dedx2/dedx1)/std::log(energy2/energy1);
 
         for (size_t k=0; k<n; k++) {
           energy += de;
-          G4double f = dedx1*exp(fac*log(energy/energy1));
+          G4double f = dedx1*std::exp(fac*std::log(energy/energy1));
           range  += de/f;
         }
         v->PutValue(j,range);
@@ -175,7 +175,7 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
       G4double rlow  = pv->GetValue(elow, b);
       G4double rhigh = pv->GetValue(ehigh, b);
 
-      rhigh *= exp(log(rhigh/rlow)/((G4double)(nbins-1)));
+      rhigh *= std::exp(std::log(rhigh/rlow)/((G4double)(nbins-1)));
 
       G4PhysicsLogVector* v = new G4PhysicsLogVector(rlow, rhigh, nbins);
 
@@ -202,9 +202,10 @@ void G4LossTableBuilder::BuildInverseRangeTable(const G4PhysicsTable* rangeTable
 	  }
         }
 
-        G4double e = log(energy1) + log(energy2/energy1)*log(range/range1)/log(range2/range1);
+        G4double e = std::log(energy1) + 
+                     std::log(energy2/energy1)*std::log(range/range1)/std::log(range2/range1);
 
-        v->PutValue(j,exp(e));
+        v->PutValue(j,std::exp(e));
       }
       G4PhysicsTableHelper::SetPhysicsVector(invRangeTable, i, v);
     }
