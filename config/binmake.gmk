@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.32 1999-10-07 13:50:04 johna Exp $
+# $Id: binmake.gmk,v 1.33 1999-10-26 07:54:16 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -177,10 +177,10 @@ ifdef G4ODBMS
   LDFLAGS  += -L$(OBJY_DIR)/lib \
               -L$(HEP_ODBMS_DIR)/lib
 
-#  Note: -l$(OBJY_LDLIB) and -lHepODBMS should be placed
+#  Note: $(G4ODBMS_LIBS) should be placed
 #        _before_ -l$(CLHEP_LIB) -l$(RWLIB)
 
-  LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
+  LDLIBS4 += $(G4ODBMS_LIBS)
 endif
 ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
