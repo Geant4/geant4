@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.4 1999-08-26 02:55:18 stanaka Exp $
+// $Id: G4FRSceneFunc.icc,v 1.5 1999-11-01 02:40:47 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -19,7 +19,7 @@ void G4FRSCENE::AddPrimitive (const G4Polyline& polyline)
       G4cerr << "***** AddPrimitive\n";
 #endif 
 		//----- Initialize Fukui Renderer IF NECESSARY
-     InitializeFR();
+     FRBeginModeling();
 
           //----- local working variables
      G4int            nPoints = polyline.entries ();
@@ -80,7 +80,7 @@ void G4FRSCENE::AddPrimitive ( const G4Text& text )
 	G4cerr << "***** AddPrimitive( G4Text )\n";
 #endif
 		//----- Initialize DAWN IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- send color
         const G4Color&	color     = GetTextColor (text) ;
@@ -153,7 +153,7 @@ void G4FRSCENE::AddPrimitive ( const G4Circle& mark_circle )
 	G4cerr << "***** AddPrimitive( G4Circle )\n";
 #endif
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- send color
         const G4Color&	color     = GetColor (mark_circle) ;
@@ -196,7 +196,7 @@ void G4FRSCENE::AddPrimitive (const G4Square& mark_square )
 	G4cerr << "***** AddPrimitive( G4Square )\n";
 #endif
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- send color
         const G4Color&	color     = GetColor (mark_square) ;
@@ -240,7 +240,7 @@ void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron )
 #endif
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Attributes
 	if(!SendVisAttributes( fpViewer->GetApplicableVisAttributes
@@ -293,48 +293,75 @@ void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron )
 } // G4FRSCENE::AddPrimitive (polyhedron) 
 
 
-
-	//----- G4FRSCENE::BeginModeling ()
-void G4FRSCENE::BeginModeling ()
+	//----- G4FRSCENE::SendNdiv ()
+void G4FRSCENE::SendNdiv ( void )
 {
-  if( !IsInModeling() )  	// if( !flag_in_modeling ) 
-  {
-        G4VSceneHandler::BeginModeling ();
+//////////////////////////////////////////////////
+//#if defined DEBUG_FR_SCENE
+//	G4cerr << "***** SendNdiv() (/Ndiv)" << endl;
+//#endif
+//////////////////////////////////////////////////
 
-		//----- 
-#if defined DEBUG_FR_SCENE
-	G4cerr << "***** BeginModeling\n";
-#endif
 		//----- local
-	G4int	num_division ;
-
-		//----- open device
-	SendStr( FR_OPEN_DEVICE      );
-
-		//----- begin sending primitives
-	SendStr( FR_BEGIN_MODELING );  flag_in_modeling = true ;
+	G4int	num_division = FR_DEFALUT_NDIV_VALUE ;
 
 		//-----  number used for dividing a curved surface, Ndiv
-	num_division = GetModel()->GetModelingParameters()->GetNoOfSides () ;
+	if ( GetModel() ) {
+	   num_division = GetModel()->GetModelingParameters()->GetNoOfSides();
+	} else {
+#if defined DEBUG_FR_SCENE
+	   G4cerr << "WARNING: GetNoOfSides() failed. " ;
+	   G4cerr << "The default value " << num_division ;
+	   G4cerr << " is assigned." << endl;
+#endif
+	}
 
 		//---------- Error recovery for too small Ndiv
 	num_division = ( num_division < 3 ? 3 : num_division ); 
 
+//////////////////////////////////////////////////
+//#if defined DEBUG_FR_SCENE
+//	G4cerr << "Ndiv = " << num_division << endl;
+//#endif
+//////////////////////////////////////////////////
+
 		//----- Send resultant Ndiv
 	this->SendStrInt( FR_NDIV, num_division );
 
-  }
-} // G4FRSCENE::BeginModeling ()
 
+}
 
 	//----- G4FRSCENE::FREndModeling ()
 void G4FRSCENE::FREndModeling ()
 {
 		//----- 		
 #if defined DEBUG_FR_SCENE
-	G4cerr << "***** FREndModeling \n";
+	G4cerr << "***** FREndModeling (called)" << endl;
 #endif
-	SendStr( FR_END_MODELING );	flag_in_modeling = false ;
+	if( FRIsInModeling() ) {
+
+#if defined DEBUG_FR_SCENE
+		G4cerr << "***** FREndModeling (started) " ; 
+		G4cerr << "(/EndModeling, /DrawAll, /CloseDevice)" << endl;
+#endif
+
+		SendStr( "#--------------------" );	
+
+			//----- !EndModeling
+		SendStr( FR_END_MODELING );
+
+			//----- !DrawAll
+		SendStr( FR_DRAW_ALL );
+
+			//----- !CloseDevice
+		SendStr( FR_CLOSE_DEVICE );
+
+			//----- End saving data to g4.prim
+		EndSavingG4Prim() ;
+
+			//------ Reset flag 
+		FRflag_in_modeling = false ;
+	}
 }
 
 	//----- G4FRSCENE::BeginPrimitives (const G4Transform3D&)
@@ -344,12 +371,10 @@ void G4FRSCENE::BeginPrimitives (const G4Transform3D& objectTransformation)
 	G4cerr << "***** BeginPrimitives \n";
 #endif
 
+  FRBeginModeling();
+
   G4VSceneHandler::BeginPrimitives (objectTransformation);
   fpObjectTransformation = &objectTransformation;
-
-#if defined DEBUG_FR_SCENE
-	G4cerr << "***** BeginPrimitives \n";
-#endif
 
 }
 
@@ -380,10 +405,13 @@ void G4FRSCENE::AddThis( const G4Box& box )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	// SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -416,10 +444,13 @@ G4FRSCENE::AddThis( const G4Tubs& tubes )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -455,10 +486,13 @@ G4FRSCENE::AddThis( const G4Cons& cons )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -495,10 +529,13 @@ void G4FRSCENE::AddThis ( const G4Trd& trd )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	// SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -532,10 +569,13 @@ void G4FRSCENE::AddThis ( const G4Sphere& sphere )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -590,10 +630,13 @@ void G4FRSCENE::AddThis (const G4Para& para)
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	// SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -643,10 +686,13 @@ void G4FRSCENE::AddThis (const G4Trap& trap)
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	// SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -714,10 +760,13 @@ G4FRSCENE::AddThis( const G4Torus& torus )
 	if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-	InitializeFR();
+	FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName();
+
+		//----- Send Ndiv
+	SendNdiv();
 
 		//----- Attributes
 	if(!SendVisAttributes
@@ -749,11 +798,13 @@ void G4FRSCENE::AddThis ( const G4VSolid& solid  )
         if( !IsVisible() ) { return ; }
 
 		//----- Initialize Fukui Renderer IF NECESSARY
-        InitializeFR();
+        FRBeginModeling();
 
 		//----- Send Name 
 	SendPhysVolName() ; 
 
+		//----- Send Ndiv
+	// SendNdiv();
 
 		//----- Send a primitive
 	G4VSceneHandler::AddThis( solid ) ; 
@@ -802,12 +853,14 @@ G4FRSCENE::SendVisAttributes ( const G4VisAttributes*  pAV )
 	//----- G4FRSCENE::IsVisible()
 G4bool G4FRSCENE::IsVisible()
 {
+	//----- 
 	G4bool  visibility  = true ;
 
+	//----- 
 	const G4VisAttributes* pVisAttribs =
 	  fpViewer->GetApplicableVisAttributes( fpVisAttribs );
 
-		//----- 
+	//----- 
 	if( ( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ) != NULL      )   && \
 	    ( strcmp( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ),"0"  ) ) && \
 	    ( pVisAttribs )                                             ) 
@@ -815,6 +868,7 @@ G4bool G4FRSCENE::IsVisible()
 		visibility = pVisAttribs->IsVisible();
 	} 
 
+	//----- 
 	return visibility ;
 
 } // G4FRSCENE::IsVisible()
@@ -823,6 +877,10 @@ G4bool G4FRSCENE::IsVisible()
 	//----- G4FRSCENE::SendBoundingBox()
 void G4FRSCENE::SendBoundingBox( void )
 {
+#if defined DEBUG_FR_SCENE
+	G4cerr << "***** SendBoundingBox ()  (/BoundingBox)" << endl;
+#endif
+
 		//----- (1A) CALC bounding box of the bounding sphere
 	const  G4VisExtent&  extent = GetScene()->GetExtent();
 	const  G4Point3D&    center = extent.GetExtentCenter(); 
@@ -851,34 +909,6 @@ void G4FRSCENE::SendBoundingBox( void )
 			xmax, ymax, zmax ); 
 
 } // G4FRSCENE::SendBoundingBox()
-
-
-
-	//----- G4FRSCENE::InitializeFR()
-G4bool
-G4FRSCENE::InitializeFR( void )
-{
-	if( !IsInModeling() )  	// if( !flag_in_modeling ) 
-	{
-			//----- Send saving command and heading comment
-		BeginSavingG4Prim();
-
-			//----- Send bounding box command
-		SendBoundingBox();
-
-			//----- sen SET_CAMERA command 
-		SendStr( FR_SET_CAMERA );
-
-			//----- send begin modeling
-			//..... (1) FR_OPEN_DEVICE 
-			//..... (2) FR_BEGIN_MODELING
-			//..... (3) FR_NDIV
-		BeginModeling ();
-	}
-
-	return flag_in_modeling ;
-
-} // G4FRSCENE::InitializeFR( void )
 
 
 	//----- G4FRSCENE::SendTransformedCoordinates()

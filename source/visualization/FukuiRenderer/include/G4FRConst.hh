@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRConst.hh,v 1.2 1999-01-09 16:11:41 allison Exp $
+// $Id: G4FRConst.hh,v 1.3 1999-11-01 02:40:33 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA, Tue Jul  2 15:30:49 JST 1996
@@ -51,6 +51,8 @@ const	char  FR_BOUNDING_BOX   [] = "/BoundingBox"    ;
 const	char  FR_BOUNDING_BOX_UNIT [] = "/BoundingBox -0.5 -0.5 -0.5  0.5 0.5 0.5" ;
 
 	//----- Number of divising curved surface
+const	int   FR_DEFALUT_NDIV_VALUE = 24 ;
+
 const	char  FR_NDIV           [] = "/Ndiv"           ;
 const	char  FR_NDIV_DEFAULT [] = "/Ndiv  24" ;
 const	char  FR_NDIV_3  [] = "/Ndiv   3"      ;

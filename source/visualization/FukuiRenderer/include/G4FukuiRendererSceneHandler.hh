@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.2 1999-05-10 15:38:31 johna Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.3 1999-11-01 02:40:33 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,73 +30,6 @@
 class G4VisAttributes ;
 class G4FukuiRenderer;
 
-
-////////////////////////////////////////////////////////////////////////
-//
-// ===== About AddPrimitive() functions =====
-//
-// Any graphics driver should prepare AddPrimitive() functions 
-// for the following visualizable primitives:    
-//
-//  G4Polyline, 
-//  G4NURBS (not supported by DAWN), 
-//  G4Text, G4Circle, G4Square, 
-//  G4Polyhedron 
-//
-// A drawing function G4VisManager::Draw(...) is prepared for each 
-// of these primitives.
-// 
-// These primitives have visualization attributes by themselves.
-// AddPrimitive() functions use these assinged visualization attributes
-// for visualization.
-//
-// Local coordinates to locate these primitives are set to the current in
-// BeginPrimitive() functions.  
-// See G4VisManager::Draw( const G4Polyline&), for example.
-//
-//////////////////////////////////////////////////////////////////////////
-
-
-/////////////////////////////////////////////////////////////////////////
-//
-// ========== About AddThis() functions ======= 
-//
-// AddThis() functions are usually used to visualize a physical volume.
-// The are called when G4VisManager::Draw( void ) is used.
-//
-// Current local coordinates and current visualization attributes
-// are set to the current in the inherited PreAddThis() function.
-// PreAddThis() is called in  G4PhysicalVolumeModel::DescribeAndDescend():
-//
-//    // Make decision to Draw.
-//    G4bool thisToBeDrawn = !IsThisCulled (pLV);
-//    if (thisToBeDrawn) {
-//      scene.PreAddThis (theNewAT, *(pLV -> GetVisAttributes ()));
-//      pSol -> DescribeYourselfTo (scene);
-//      scene.PostAddThis ();
-//    }
-//
-// where G4VSolid::DescribeYourselfTo ( G4VSceneHandler& ) calls 
-// a proper AddThis() function. See G4Box.cc, for example. 
-//
-// For shapes for which AddThis() functions are not prepered explicitly,  
-// AddThis (const G4VSolid& ) is called automatically.  
-// Then the following chain of calling is Done:
-//
-//     AddThis ( const G4VSolid& ) 
-// ==> G4VSceneHandler::AddThis ( const G4VSolid& ) 
-// ==> G4VSceneHandler::RequestPrimitives( const G4VSolid& )
-// ==> AddPrimitive ( const G4Polyhedron& ) 
-//
-// Therefore, AddPrimitive( const G4Polyhedron& ) is used for 
-// visualization finally.  Note that G4Polyhedron is automatically 
-// created in G4VSceneHandler::RequestPrimitives( const G4VSolid& ) and 
-// current visualization attributes are assigned there.
-//
-///////////////////////////////////////////////////////////////////////
-
-
-
 	//-----
 class G4FukuiRendererSceneHandler: public G4VSceneHandler {
 
@@ -116,11 +49,12 @@ public:
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
 
-  virtual void BeginModeling () ; 
-  virtual void EndModeling   () { G4VSceneHandler::EndModeling ();}
+  virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
+  virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
+
   void AddThis ( const G4Box&    box    );
   void AddThis ( const G4Cons&   cons   );
   void AddThis ( const G4Tubs&   tubs   );
@@ -134,9 +68,10 @@ public:
   void ClearStore (){}
 
 	//----- methods inherent to this class
-  static G4int GetSceneCount ();
-  void         FREndModeling () ;
-  G4bool       IsInModeling () { return flag_in_modeling ; }
+  static G4int GetSceneCount   ();
+  void         FRBeginModeling () ;
+  void         FREndModeling   () ;
+  G4bool       FRIsInModeling    () { return FRflag_in_modeling ; }
 
   G4bool IsSavingG4Prim   ( void ) { return flag_saving_g4_prim ;	}
   void   BeginSavingG4Prim( void ) 
@@ -160,9 +95,9 @@ private:
 	//----- Utilities etc
   G4bool    SendVisAttributes ( const G4VisAttributes*  pAV );
   G4bool    IsVisible     ( void ) ;
-  G4bool    InitializeFR  ( void ) ;
   void	    SendTransformedCoordinates( void ) ;
   void	    SendPhysVolName           ( void ) ;
+  void	    SendNdiv                  ( void ) ;
 
 public:
 
@@ -265,15 +200,14 @@ private:
   static G4int	fSceneCount;    // No. of existing scenes.
 
   G4FRClientServer&	fPrimDest    ;  // defined in G4FukuiRenderer
-  G4bool		flag_in_modeling ;	
+  G4bool		FRflag_in_modeling ;	
 		// true:  FR_BEGIN_MODELING has sent to DAWN, and
 		//        FR_END_MODELING   has not sent yet.
 		// false:  otherwise
 		// 
-		// The flag flag_in_modeling is set to "true"
-		// in BeginModeling(), and to "false" 
+		// FRflag_in_modeling is set to "true"
+		// in FRBeginModeling(), and to "false" 
 		// in FREndModeling().
-		// ( EndModeling() is not used.)
 
   G4bool		flag_saving_g4_prim ;	
 

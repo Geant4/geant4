@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererViewer.hh,v 1.3 1999-05-10 15:38:32 johna Exp $
+// $Id: G4FukuiRendererViewer.hh,v 1.4 1999-11-01 02:40:34 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,11 +25,13 @@
 
 class G4FukuiRendererSceneHandler ;
 
+
 class G4FukuiRendererViewer: public G4VViewer {
+
+public:
 
 	enum FRDEV {FRDEV_PS=1, FRDEV_XWIN=2, FRDEV_PS2=3, FRDEV_XWIN2=4, FRDEV_OPEN_GL=5, FRDEV_DEVICE_END=6} ;
 
-public:
 	//----- constructor and destructor
   G4FukuiRendererViewer  (G4FukuiRendererSceneHandler& scene, const G4String& name);
   virtual ~G4FukuiRendererViewer ();
@@ -39,15 +41,16 @@ public:
   void ClearView ();
   void DrawView  ();
   void ShowView  ();
-  void FlushView (); // ShowView() without calling Wait()
 
 	//---- methods inherent to this class
   void Wait() ;
   void SendViewParameters ()  ;
 
-private:
   void  SendDevice( FRDEV dev );
   void  SendDrawingStyle() ; 
+
+private:
+
   G4FukuiRendererSceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.
 };
 

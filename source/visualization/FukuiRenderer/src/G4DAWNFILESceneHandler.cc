@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.cc,v 1.1 1999-01-09 16:11:47 allison Exp $
+// $Id: G4DAWNFILESceneHandler.cc,v 1.2 1999-11-01 02:40:47 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -19,7 +19,7 @@
 
 #define __G_ANSI_C__
 
-//#define DEBUG_FR_SCENE
+// #define DEBUG_FR_SCENE
 
      //----- header files
 #include <fstream.h>
@@ -61,7 +61,7 @@ G4DAWNFILESceneHandler::G4DAWNFILESceneHandler (G4DAWNFILE& system, const G4Stri
 fSystem   (system)                        ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
 fPrimDest ()                              ,
-flag_in_modeling       (false)            ,
+FRflag_in_modeling     (false)            ,
 flag_saving_g4_prim    (false)            ,
 COMMAND_BUF_SIZE       (G4FRofstream::SEND_BUFMAX)
 {
@@ -102,6 +102,7 @@ G4DAWNFILESceneHandler::~G4DAWNFILESceneHandler ()
 
 }
 
+//-----
 void	G4DAWNFILESceneHandler::SetG4PrimFileName() 
 {
 	// g4.prim, g4_1.prim, ..., g4_MAX_FILE_INDEX.prim
@@ -155,10 +156,19 @@ void	G4DAWNFILESceneHandler::SetG4PrimFileName()
 } // G4DAWNFILESceneHandler::SetG4PrimFileName()
 
 
+//-----
 void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void ) 
 {
+#if defined DEBUG_FR_SCENE
+	G4cerr << "***** BeginSavingG4Prim (called)\n";
+#endif
+
 	if( !IsSavingG4Prim() ) 
 	{ 
+#if defined DEBUG_FR_SCENE
+	        G4cerr << "*****                   (started) " ;
+	        G4cerr << "(open g4.prim, ##)"  << endl;
+#endif
 		SetG4PrimFileName() ; // returned to fG4PrimFileName
 		fPrimDest.Open(fG4PrimFileName)   ;
 
@@ -169,12 +179,57 @@ void	G4DAWNFILESceneHandler::BeginSavingG4Prim( void )
 
 void	G4DAWNFILESceneHandler::EndSavingG4Prim  ( void ) 
 {
+#if defined DEBUG_FR_SCENE
+	G4cerr << "***** EndSavingG4Prim (called)\n";
+#endif
+
 	if(  IsSavingG4Prim() )
 	{
+#if defined DEBUG_FR_SCENE
+          G4cerr << "*****                 (started) (close g4.prim)" << endl;
+#endif
 		fPrimDest.Close()               ;
 		flag_saving_g4_prim = false ; 
 	} 
 }
+
+
+//----- 
+void G4DAWNFILESceneHandler::FRBeginModeling( void )
+{
+	if( !FRIsInModeling() )  	
+	{
+#if defined DEBUG_FR_SCENE
+	  G4cerr << "***** G4DAWNFILESceneHandler::FRBeginModeling (called & started)" << endl;
+#endif
+
+			//----- Send saving command and heading comment
+		BeginSavingG4Prim();
+
+			//----- Send bounding box command
+		SendBoundingBox();
+
+			//----- send SET_CAMERA command 
+#if defined DEBUG_FR_SCENE
+		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << endl;
+#endif
+		SendStr( FR_SET_CAMERA );
+
+		//----- open device
+#if defined DEBUG_FR_SCENE
+		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << endl;
+#endif
+		SendStr( FR_OPEN_DEVICE      );
+
+		//----- begin sending primitives
+#if defined DEBUG_FR_SCENE
+		G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << endl;
+#endif
+		SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
+
+	} // if
+
+} 
 
 
 /////////////////////////////////////////

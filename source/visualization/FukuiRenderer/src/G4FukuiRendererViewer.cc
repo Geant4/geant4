@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.2 1999-01-11 00:47:24 allison Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.3 1999-11-01 02:40:48 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,159 +39,82 @@
 #include "G4FukuiRendererViewer.hh"
 
 
-	//----- constants
-const char  FR_ENV_MULTI_WINDOW[] = "G4DAWN_MULTI_WINDOW" ;
-
-	//----- G4FukuiRendererViewer, constructor
+//----- Constructor
 G4FukuiRendererViewer::G4FukuiRendererViewer (G4FukuiRendererSceneHandler& scene,
 					  const G4String& name): 
   G4VViewer (scene, scene.IncrementViewCount (), name), fSceneHandler (scene)
 {}
 
-	//----- G4FukuiRendererViewer, destructor
+//----- Destructor
 G4FukuiRendererViewer::~G4FukuiRendererViewer () 
 {}
 
-	//----- G4FukuiRendererViewer::SetView () 
+//----- 
 void G4FukuiRendererViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4FukuiRendererViewer::SetView()\n";
+  G4cerr << "***** G4FukuiRendererViewer::SetView(): No effects" << endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
 }
 
-
-
-
-	//----- G4FukuiRendererViewer::ClearView()
+//----- 
 void
 G4FukuiRendererViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::ClearView () " << endl;
+  G4cerr << "***** G4FukuiRendererViewer::ClearView (): No effects " << endl;
 #endif
-
-		//----- Begin saving data to g4.prim
-	fSceneHandler.BeginSavingG4Prim();
-
-		//----- Clear old data
-	fSceneHandler.SendStr( FR_CLEAR_DATA );
 
 }
 
 
-	//----- G4FukuiRendererViewer::DrawView () 
+//----- 
 void G4FukuiRendererViewer::DrawView () 
 {
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4FukuiRendererViewer::DrawView () " << endl;
 #endif
-		//----- Error recovery
-	if( fSceneHandler.IsInModeling() )  {
-	   G4cerr << "WARNING from FukuiRenderer (DAWN) driver:" << endl;
-	   G4cerr << "  You've invoked a drawing command before " << endl;
-	   G4cerr << "  completing your previous visualization." << endl;
-//	   G4cerr << "  You should have invoked command, /vis~/show/view," << endl;
-//	   G4cerr << "  to complete it."   << endl;
 
-	   FlushView();
-	}
+	//----- Begin modeling 3D 
+	fSceneHandler.FRBeginModeling();	
 
-		//----- Begin Saving g4.prim file
-	fSceneHandler.BeginSavingG4Prim();
-
-		//----- drawing device
-	if( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL      )   && \
-	    ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  )      )  )
-	{
-		SendDevice( FRDEV_XWIN ) ; 
-	} else {
-		SendDevice( FRDEV_PS ) ; 
-	}
-
-		//----- drawing style
-	SendDrawingStyle() ; 
-
-		//----- set view if necessary
-	SendViewParameters(); 
-		// Camera data should be sent at every time, even if
-		// the setting is unchanged at GEANT 4 side.
-
-		//----- Always visit G4 kernel 
+	//----- Always visit G4 kernel 
 	NeedKernelVisit ();
 	                           
-		//----- Draw
+	//----- Draw
 	ProcessView () ;
 
-} // G4FukuiRendererViewer::DrawView () 
+} 
 
 
-
-	//----- G4FukuiRendererViewer::ShowView()
+//----- 
 void G4FukuiRendererViewer::ShowView( void )
 {
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4FukuiRendererViewer::ShowView () " << endl;
 #endif
 
-	if( fSceneHandler.IsInModeling() ) // if( fSceneHandler.flag_in_modeling ) 
+	if( fSceneHandler.FRIsInModeling() ) 
 	{
-
-			//----- End of Data		
+			//----- End of modeling
+			// !EndModeling, !DrawAll, !CloseDevice,
+			// close g4.prim
 		fSceneHandler.FREndModeling();
-
-			//----- Draw all
-		fSceneHandler.SendStr( FR_DRAW_ALL );
-
-			//----- Close device
-		fSceneHandler.SendStr( FR_CLOSE_DEVICE );
-
-			//----- End saving data to g4.prim
-		fSceneHandler.EndSavingG4Prim()              ;
 
 			//----- Wait user clicks drawing Area
 		this->Wait();
 	}
 
-} // G4FukuiRendererViewer::ShowView()
+} 
 
 
-	//----- G4FukuiRendererViewer::FlushView()
-void G4FukuiRendererViewer::FlushView( void )
+//----- 
+void  G4FukuiRendererViewer::Wait()
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::Flush () " << endl;
-#endif
-
-	if( fSceneHandler.IsInModeling() ) // if( fSceneHandler.flag_in_modeling ) 
-	{
-
-			//----- End of Data		
-		fSceneHandler.FREndModeling();
-
-			//----- Draw all
-		fSceneHandler.SendStr( FR_DRAW_ALL );
-
-			//----- Close device
-		fSceneHandler.SendStr( FR_CLOSE_DEVICE );
-
-			//----- End saving data to g4.prim
-		fSceneHandler.EndSavingG4Prim()              ;
-
-	}
-
-} // G4FukuiRendererViewer::FlushView()
-
-
-
-	//----- G4FukuiRendererViewer::Wait()
-void
-G4FukuiRendererViewer::Wait()
-{
-#if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4FukuiRendererViewer::Wait () " << endl;
+	G4cerr << "***** G4FukuiRendererViewer::Wait () : Begin" << endl;
 #endif
   fSceneHandler.SendStr    ( FR_WAIT );
   fSceneHandler.GetPrimDest().WaitSendBack( FR_WAIT );
@@ -202,14 +125,13 @@ G4FukuiRendererViewer::Wait()
 }
 
 
-	//----- G4FukuiRendererViewer::SendDevice()
+//----- 
 void
 G4FukuiRendererViewer::SendDevice( FRDEV dev )
 {
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4FukuiRendererViewer::SendDevice() " << endl;
 #endif
-
 
   //	enum {PS=1, XWIN=2, PS2=3, XWIN2=4, OPEN_GL=5, DEVICE_END=6};
   
@@ -219,7 +141,7 @@ G4FukuiRendererViewer::SendDevice( FRDEV dev )
 }
 
 
-	//----- G4FukuiRendererViewer::SendDrawingStyle()  
+//----- 
 void  G4FukuiRendererViewer::SendDrawingStyle() 
 {
 #if defined DEBUG_FR_VIEW
@@ -245,11 +167,10 @@ void  G4FukuiRendererViewer::SendDrawingStyle()
 		break;
 	}
 
-} // G4FukuiRendererViewer::SendDrawingStyle()  
+} 
 
 
-
-	//----- G4FukuiRendererViewer::SendViewParameters () 
+//----- 
 void G4FukuiRendererViewer::SendViewParameters () 
 {
   // Calculates view representation based on extent of object being
@@ -257,16 +178,13 @@ void G4FukuiRendererViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4FukuiRendererViewer::SendViewParameters()\n";
+  G4cerr << "***** G4FukuiRendererViewer::SendViewParameters()" << endl;
 #endif 
 
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
 	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
-
-		//----- Send Bounding Box
-	fSceneHandler.SendBoundingBox();
 
 		//----- (2A) CALC camera distance
 		//..... Note: Camera cannot enter inside object
@@ -351,9 +269,8 @@ void G4FukuiRendererViewer::SendViewParameters ()
 		fSceneHandler.GetPrimDest().WaitSendBack( FR_GUI );
 	}
 
-		//----- SET CAMERA
-	fSceneHandler.SendStr( FR_SET_CAMERA );
-
-} // G4FukuiRendererViewer::SendViewParameters () 
+} 
 
 #endif // G4VIS_BUILD_DAWN_DRIVER
+
+

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.2 1999-05-10 15:38:27 johna Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.3 1999-11-01 02:40:33 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -50,11 +50,12 @@ public:
   void AddPrimitive (const G4Polymarker& polymarker) 
        { G4VSceneHandler::AddPrimitive (polymarker); }
 
-  virtual void BeginModeling () ; 
-  virtual void EndModeling   () { G4VSceneHandler::EndModeling ();}
+  virtual void BeginModeling () { G4VSceneHandler::BeginModeling ();} 
+  virtual void EndModeling   () { G4VSceneHandler::EndModeling   ();}
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   virtual void EndPrimitives ();
+
   void AddThis ( const G4Box&    box    );
   void AddThis ( const G4Cons&   cons   );
   void AddThis ( const G4Tubs&   tubs   );
@@ -68,9 +69,10 @@ public:
   void ClearStore (){}
 
 	//----- public methods inherent to this class
-  static G4int GetSceneCount ();
-  void         FREndModeling () ;
-  G4bool       IsInModeling () { return flag_in_modeling ; }
+  static G4int GetSceneCount   ();
+  void         FRBeginModeling () ;
+  void         FREndModeling   () ;
+  G4bool       FRIsInModeling  () { return FRflag_in_modeling ; }
 
   G4bool IsSavingG4Prim   ( void ) { return flag_saving_g4_prim ;	}
   void	BeginSavingG4Prim( void ); 
@@ -87,13 +89,12 @@ private:
 	//----- Utilities etc (common to DAWN and DAWNFILE drivers )
   G4bool    SendVisAttributes ( const G4VisAttributes*  pAV );
   G4bool    IsVisible     ( void ) ;
-  G4bool    InitializeFR  ( void ) ;
   void	    SendTransformedCoordinates( void ) ;
   void	    SendPhysVolName           ( void ) ;
+  void	    SendNdiv                  ( void ) ;
 
 	//----- public methods common to DAWN and DAWNFILE drivers
 public:
-
   void	 SendStr   (	const char*	char_string ) ;
   void	 SendStrInt(	const char*	char_string ,
 			G4int		ival    );
@@ -191,15 +192,14 @@ private:
   static G4int	fSceneCount;    // No. of existing scenes.
 
   G4FRofstream	fPrimDest    ;  // defined here
-  G4bool	flag_in_modeling ;	
+  G4bool	FRflag_in_modeling ;	
 		// true:  FR_BEGIN_MODELING has sent to DAWN, and
 		//        FR_END_MODELING   has not sent yet.
 		// false:  otherwise
 		// 
-		// The flag flag_in_modeling is set to "true"
-		// in BeginModeling(), and to "false" 
+		// FRflag_in_modeling is set to "true"
+		// in FRBeginModeling(), and to "false" 
 		// in FREndModeling().
-		// ( EndModeling() is not used.)
 
   G4bool	flag_saving_g4_prim ;	
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.1 1999-01-09 16:11:52 allison Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.2 1999-11-01 02:40:48 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 
 #define __G_ANSI_C__
 
-//#define DEBUG_FR_SCENE
+// #define DEBUG_FR_SCENE
 
      //----- header files
 #include <fstream.h>
@@ -47,8 +47,8 @@
 #include "G4VPhysicalVolume.hh"
 
 //----- constants
-const char FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
-
+const char  FR_ENV_CULL_INVISIBLE_OBJECTS [] = "G4DAWN_CULL_INVISIBLE_OBJECTS";
+const char  FR_ENV_MULTI_WINDOW[]            = "G4DAWN_MULTI_WINDOW" ;
 
 ///////////////////////////
 // Driver-dependent part //
@@ -61,7 +61,7 @@ G4FukuiRendererSceneHandler::G4FukuiRendererSceneHandler (G4FukuiRenderer& syste
 fSystem   (system)                  ,
 G4VSceneHandler  (system, fSceneIdCount++, name) ,
 fPrimDest (system.GetPrimDest() )   ,
-flag_in_modeling       (false)      ,
+FRflag_in_modeling     (false)      ,
 flag_saving_g4_prim    (false)      ,
 COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX)
 {
@@ -103,6 +103,69 @@ G4FukuiRendererSceneHandler::~G4FukuiRendererSceneHandler ()
 
 }
 
+//-----
+void G4FukuiRendererSceneHandler::FRBeginModeling( void )
+{
+	if( !FRIsInModeling() )  	
+	{
+#if defined DEBUG_FR_SCENE
+	  G4cerr << "***** G4FukuiRendererSceneHandler::FRBeginModeling (called & started)" << endl;
+#endif
+
+	  //----- Begin Saving g4.prim file
+	  // open g4.prim, ##
+	  BeginSavingG4Prim();
+
+	  //----- Send Bounding Box
+	  // /BoundingBox
+	  SendBoundingBox();
+
+	  //----- drawing device
+	  // !Device 
+	  // (Note: Not saved in g4.prim) 
+	  if( ( getenv( FR_ENV_MULTI_WINDOW ) != NULL      )   && \
+	      ( strcmp( getenv( FR_ENV_MULTI_WINDOW ),"0"  )      )  )
+	    {
+	      ((G4FukuiRendererViewer*)fpViewer)->SendDevice( G4FukuiRendererViewer::FRDEV_XWIN ) ; 
+	    } else {
+	      ((G4FukuiRendererViewer*)fpViewer)->SendDevice( G4FukuiRendererViewer::FRDEV_PS ) ; 
+	    }
+
+	  //----- drawing style
+	  // /WireFrame, /Surface etc
+	  // (Note: Not saved in g4.prim) 
+	  ((G4FukuiRendererViewer*)fpViewer)->SendDrawingStyle() ; 
+
+	  //----- set view parameters
+	  //   /CameraPosition, /TargetPoint, 
+	  //   /ZoomFactor, /FocalDistance, 
+	  //   !GraphicalUserInterface
+	  ((G4FukuiRendererViewer*)fpViewer)->SendViewParameters(); 
+
+	  //----- send SET_CAMERA command 
+	  //   !SetCamera
+#if defined DEBUG_FR_SCENE
+		G4cerr << "*****   (!SetCamera in FRBeginModeling())" << endl;
+#endif
+	  SendStr( FR_SET_CAMERA );
+
+	  //----- open device
+	  //   !OpenDevice
+#if defined DEBUG_FR_SCENE
+		G4cerr << "*****   (!OpenDevice in FRBeginModeling())" << endl;
+#endif
+	  SendStr( FR_OPEN_DEVICE      );
+
+	  //----- begin sending primitives
+	  //   !BeginModeling
+#if defined DEBUG_FR_SCENE
+	  G4cerr << "*****   (!BeginModeling in FRBeginModeling())" << endl;
+#endif
+	  SendStr( FR_BEGIN_MODELING );  FRflag_in_modeling = true ;
+
+	} // if
+
+}
 
 /////////////////////////////////////////
 // Common to DAWN and DAWNFILE drivers //

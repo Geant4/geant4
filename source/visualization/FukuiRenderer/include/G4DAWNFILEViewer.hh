@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.3 1999-05-10 15:38:28 johna Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.4 1999-11-01 02:40:33 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -38,7 +38,6 @@ public:
   void ClearView ();
   void DrawView  ();
   void ShowView  ();
-  void FlushView (); // ShowView() without calling Wait()
 
 	//---- methods inherent to this class
   void SendViewParameters ()  ;

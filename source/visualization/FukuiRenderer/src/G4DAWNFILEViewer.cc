@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.3 1999-08-26 02:55:17 stanaka Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.4 1999-11-01 02:40:47 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -80,7 +80,7 @@ G4DAWNFILEViewer::~G4DAWNFILEViewer ()
 void G4DAWNFILEViewer::SetView () 
 {
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4DAWNFILEViewer::SetView()\n";
+  G4cerr << "***** G4DAWNFILEViewer::SetView(): No effects" << endl;
 #endif 
 // Do nothing, since DAWN is running as a different process.
 // SendViewParameters () will do this job instead.
@@ -92,14 +92,8 @@ void
 G4DAWNFILEViewer::ClearView( void )
 {
 #if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::ClearView () " << endl;
+	G4cerr << "***** G4DAWNFILEViewer::ClearView (): No effects " << endl;
 #endif
-
-		//----- Begin saving data to g4.prim
-	fSceneHandler.BeginSavingG4Prim();
-
-		//----- Clear old data
-	fSceneHandler.SendStr( FR_CLEAR_DATA );
 
 }
 
@@ -110,24 +104,8 @@ void G4DAWNFILEViewer::DrawView ()
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << endl;
 #endif
-		//----- Error recovery
-	if( fSceneHandler.IsInModeling() )  {
-	   G4cerr << "WARNING from DAWNFILE driver:" << endl;
-	   G4cerr << "  You've invoked a drawing command before " << endl;
-	   G4cerr << "  completing your previous visualization." << endl;
-//	   G4cerr << "  You should have invoked command, /vis~/show/view," << endl;
-//	   G4cerr << "  to complete it."   << endl;
-
-	   FlushView();
-	}
-
-		//----- Begin Saving g4.prim file
-	fSceneHandler.BeginSavingG4Prim();
-
-		//----- set view if necessary
-	SendViewParameters(); 
-		// Camera data should be sent at every time, even if
-		// the setting is unchanged at GEANT 4 side.
+		//----- 
+	fSceneHandler.FRBeginModeling() ;
 
 		//----- Always visit G4 kernel 
 	NeedKernelVisit ();
@@ -146,21 +124,15 @@ void G4DAWNFILEViewer::ShowView( void )
 	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << endl;
 #endif
 
-	if( fSceneHandler.IsInModeling() ) // if( fSceneHandler.flag_in_modeling ) 
+	if( fSceneHandler.FRIsInModeling() ) 
 	{
-
-			//----- End of Data		
+			//----- End of modeling
+			// !EndModeling, !DrawAll, !CloseDevice,
+			// close g4.prim
 		fSceneHandler.FREndModeling();
 
-			//----- Draw all
-		fSceneHandler.SendStr( FR_DRAW_ALL );
-
-			//----- Close device
-		fSceneHandler.SendStr( FR_CLOSE_DEVICE );
-
-			//----- End saving data to g4.prim
-		fSceneHandler.EndSavingG4Prim()              ;
-
+			//----- Output DAWN GUI file 
+		SendViewParameters(); 
 
 			//----- string for viewer invocation
 		if ( !strcmp( fG4PrimViewer, "NONE" ) ) {
@@ -198,24 +170,14 @@ void G4DAWNFILEViewer::ShowView( void )
 } // G4DAWNFILEViewer::ShowView()
 
 
-	//----- G4DAWNFILEViewer::FlushView()
-void G4DAWNFILEViewer::FlushView( void )
-{
-#if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::Flush () " << endl;
-#endif
-
-	ShowView();
-} 
-
-
-
 	//----- G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
 void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out ) 
 {
-#if defined DEBUG_FR_VIEW
-	G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyle() " << endl;
-#endif
+///////////////////////
+//#if defined DEBUG_FR_VIEW
+//  G4cerr << "***** G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI()" << endl;
+//#endif
+//////////////////////
 
 	G4int  style = fVP.GetDrawingStyle();
 
@@ -243,7 +205,7 @@ void  G4DAWNFILEViewer::SendDrawingStyleToDAWNGUI( ostream& out )
 
 
 
-	//----- G4DAWNFILEViewer::SendViewParameters () 
+//----- 
 void G4DAWNFILEViewer::SendViewParameters () 
 {
   // Calculates view representation based on extent of object being
@@ -251,16 +213,14 @@ void G4DAWNFILEViewer::SendViewParameters ()
   // later due to user interaction via visualization system's GUI.)
 
 #if defined DEBUG_FR_VIEW
-      G4cerr << "***** G4DAWNFILEViewer::SendViewParameters()\n";
+  G4cerr << "***** G4DAWNFILEViewer::SendViewParameters()  "; 
+  G4cerr << "(GUI parameters)" << endl;
 #endif 
 
 		//----- Magic number to decide camera distance automatically
 	const    G4double        HOW_FAR            = 1000.0       ; // to define "infinity"
 	const    G4double        MIN_HALF_ANGLE     = 0.01         ;
 	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
-
-		//----- Send Bounding Box
-	fSceneHandler.SendBoundingBox();
 
 		//----- CALC camera distance
 		//..... Note: Camera cannot enter inside object
@@ -370,11 +330,8 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	//########### end of generating file .DAWN.history 
 
 
-		//----- SET CAMERA
-	fSceneHandler.SendStr( FR_SET_CAMERA );
-
-
-} // G4DAWNFILEViewer::SendViewParameters () 
+} 
 
 
 #endif // G4VIS_BUILD_DAWNFILE_DRIVER
+
