@@ -78,6 +78,8 @@
 //                            AtomicDeexcitation
 // 03 Jun   2002 MGP          Restore fStopAndKill
 // 10 Jun   2002 V.Ivanchenko Restore fStopButAlive
+// 12 Jun   2002 V.Ivanchenko Fix in fluctuations - if tmax<2*Ipot Gaussian
+//                            fluctuations enables
 
 // -----------------------------------------------------------------------
 
@@ -796,32 +798,16 @@ G4double G4hLowEnergyIonisation::GetConstraints(
     
     highEnergy = protonHighEnergy ;
 
-    //Very low energy dE/dx assumed to be according to Free Electron Gas Model
-    if(tscaled < MinKineticEnergy) {
-      fdEdx     = 0.5 * ProtonParametrisedDEDX(material, MinKineticEnergy) 
-                * sqrt(tscaled/MinKineticEnergy) ;
-      fRangeNow = tscaled/fdEdx ;
-      fdEdx    *= chargeSquare ;
-      dx        = fRangeNow/paramStepLimit ;
+    fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material);
+    dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material);
+    fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
+          * chargeSquare ;
 
-      // Normal energy
-    } else {
-
-      fRangeNow = G4EnergyLossTables::GetRange(theProton, tscaled, material) ;
-      dx = G4EnergyLossTables::GetRange(theProton, highEnergy, material) ;
-
-      if(tscaled > highEnergy) {
-        fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
-              * chargeSquare ;
+    if(tscaled > highEnergy) {
         // Correction for positive ions
-        if(theBarkas) {
-          fdEdx += BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
-          fdEdx += BlochTerm(material,tscaled,chargeSquare); 
-	}
-
-	// Parametrisation - recalculate dE/dx
-      } else {    
-        fdEdx = ProtonParametrisedDEDX(material, tscaled) * chargeSquare ;
+      if(theBarkas) {
+        fdEdx += BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+        fdEdx += BlochTerm(material,tscaled,chargeSquare); 
       }
     }
     
@@ -829,35 +815,17 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   } else {
 
     highEnergy = antiProtonHighEnergy ;
+    fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, material);
+    dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material);
+    fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
+          * chargeSquare ;
 
-    //Very low energy dE/dx assumed to be constant
-    if(tscaled < MinKineticEnergy) {
-      fdEdx     = AntiProtonParametrisedDEDX(material, MinKineticEnergy)
-                * sqrt(tscaled/MinKineticEnergy) ;
-      fRangeNow = tscaled/fdEdx ;
-      fdEdx    *= chargeSquare ;
-      dx        = fRangeNow/paramStepLimit ;
+    if(tscaled > highEnergy) {
 
-      // Normal energy
-    } else {
-
-      fRangeNow = G4EnergyLossTables::GetRange(theAntiProton, tscaled, 
-                                               material);
-      dx = G4EnergyLossTables::GetRange(theAntiProton, highEnergy, material);
-
-      if(tscaled > highEnergy) {
-        fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
-              * chargeSquare ;
-
-        // Correction for positive ions
-        if(theBarkas) {
-          fdEdx -= BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
-          fdEdx += BlochTerm(material,tscaled,chargeSquare); 
-	}
-    
-      // For Bragg's peak dE/dx is recalculated
-      } else {
-        fdEdx = AntiProtonParametrisedDEDX(material, tscaled) * chargeSquare;
+      // Correction for positive ions
+      if(theBarkas) {
+        fdEdx -= BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+        fdEdx += BlochTerm(material,tscaled,chargeSquare); 
       }
     }
   }
@@ -923,43 +891,6 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   } else if( kineticEnergy > HighestKineticEnergy) { 
     eloss = step*fdEdx ; 
  
-    // proton parametrisation model  
-  } else if(tscaled < protonHighEnergy && charge > 0.0) {
-    
-    if(nStopping) {
-      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
-      //      	* sqrt(chargeSquare) / charge;
-    }
-    
-    G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
-    
-    if(0.0 < eFinal) {
-
-      G4double ts = eFinal*massRatio;
-      G4double fdEdx1 = ProtonParametrisedDEDX(material,ts)*chargeSquare;
-
-      eloss = (fdEdx + fdEdx1) * step * 0.5 ;
-    } else {
-      eloss = kineticEnergy - nloss ;
-    }
-
-    // antiproton parametrisation model
-  } else if(tscaled < antiProtonHighEnergy && charge < 0.0) {
-    
-    if(nStopping) {
-      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
-    }
-              
-    G4double eFinal = kineticEnergy - step*fdEdx - nloss ;
-    
-    if(0.0 < eFinal) {
-      eloss = (fdEdx + 
-            AntiProtonParametrisedDEDX(material,eFinal*massRatio)*chargeSquare)
-            *  step * 0.5 ;
-    } else {
-      eloss = kineticEnergy - nloss ;
-    }
-
     // big step
   } else if(step >= fRangeNow ) {
     eloss = kineticEnergy ;
@@ -998,13 +929,16 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
       eloss += BarkasTerm(material,ts)*charge*chargeSquare*step;
       eloss += BlochTerm(material,ts,chargeSquare)*step; 
     }
+    if(nStopping && tscaled < protonHighEnergy) {
+      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
+    }
   }
 
   if(eloss < 0.0) eloss = 0.0;
   
   finalT = kineticEnergy - eloss - nloss;
 
-  if( EnlossFlucFlag && 0.0 < eloss ) {
+  if( EnlossFlucFlag && 0.0 < eloss && finalT > MinKineticEnergy) {
     
     //  now the electron loss with fluctuation
     eloss = ElectronicLossFluctuation(particle, material, eloss, step) ;
@@ -1807,13 +1741,12 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   G4double tau2 = tau*(tau+2.);
   G4double tmax    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
-  if (tmax <= ipotFluct) tmax = ipotFluct ;
   
   if(tmax > threshold) tmax = threshold;
   G4double beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation 
-  if(meanLoss > kappa*tmax)
+  if(meanLoss > kappa*tmax || tmax < kappa*ipotFluct )
   {
     siga = tmax * (1.0-0.5*beta2) * step * twopi_mc2_rcl2 
          * electronDensity / beta2 ;
@@ -1829,14 +1762,14 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       G4double yang = theIonYangFluctuationModel->TheValue(particle, material);
       siga = sqrt( siga * (chargeSquare * chu + yang)) ;
     }
-
-    loss = G4RandGauss::shoot(meanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
-    return loss ;
+    
+    do {
+        loss = G4RandGauss::shoot(meanLoss,siga);
+    } while (loss < 0. || loss > 2.0*meanLoss);
+    return loss;
   }
 
   // Non Gaussian fluctuation 
-  G4double mLoss = meanLoss/chargeSquare;
   static const G4double probLim = 0.01 ;
   static const G4double sumaLim = -log(probLim) ;
   static const G4double alim = 10.;
@@ -1860,22 +1793,19 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   w1 = tmax/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
 
-  C = mLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
+  C = meanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(tmax > ipotFluct)
-    a3 = rateFluct*mLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
-  else
-  {
-     a1 /= 1.-rateFluct ;
-     a2 /= 1.-rateFluct ;
-     a3  = 0. ;
-  } 
+  a3 = rateFluct*meanLoss*(tmax-ipotFluct)/(ipotFluct*tmax*log(w1));
+  if(a1 < 0.0) a1 = 0.0;
+  if(a2 < 0.0) a2 = 0.0;
+  if(a3 < 0.0) a3 = 0.0;
 
   suma = a1+a2+a3;
 
-  loss = 0. ;
+  loss = 0.;
+
 
   if(suma < sumaLim)             // very small Step
     {
@@ -1883,12 +1813,12 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 
       if(tmax == ipotFluct)
       {
-        a3 = mLoss/e0;
+        a3 = meanLoss/e0;
 
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+          p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
         }
         else
           p3 = G4Poisson(a3);
@@ -1902,7 +1832,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       else
       {
         tmax = tmax-ipotFluct+e0 ;
-        a3 = mLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
+        a3 = meanLoss*(tmax-e0)/(tmax*e0*log(tmax/e0));
 
         if(a3>alim)
         {
@@ -1936,7 +1866,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a1>alim)
       {
         siga=sqrt(a1) ;
-        p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
+        p1 = G4std::max(0,G4int(G4RandGauss::shoot(a1,siga)+0.5));
       }
       else
        p1 = G4Poisson(a1);
@@ -1945,7 +1875,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a2>alim)
       {
         siga=sqrt(a2) ;
-        p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
+        p2 = G4std::max(0,G4int(G4RandGauss::shoot(a2,siga)+0.5));
       }
       else
         p2 = G4Poisson(a2);
@@ -1964,7 +1894,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       if(a3>alim)
       {
         siga=sqrt(a3) ;
-        p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+        p3 = G4std::max(0,G4int(G4RandGauss::shoot(a3,siga)+0.5));
       }
       else
         p3 = G4Poisson(a3);
@@ -2003,7 +1933,6 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
       loss += lossc;  
      }
     } 
-  loss *= chargeSquare;
 
   return loss ;
 }
