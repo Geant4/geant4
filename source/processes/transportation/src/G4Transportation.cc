@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.40 2003-07-17 18:39:05 japost Exp $
+// $Id: G4Transportation.cc,v 1.41 2003-07-31 00:19:47 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -416,6 +416,8 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
 G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
                                                     const G4Step&  stepData )
+#include "G4ParticleTable.hh"
+
 {
   fParticleChange.Initialize(track) ;
 
@@ -440,24 +442,31 @@ G4VParticleChange* G4Transportation::AlongStepDoIt( const G4Track& track,
   {
      // The time was not integrated .. make the best estimate possible
      //
-     G4double finalVelocity   = 0.0; 
+     G4double finalVelocity   = track.GetVelocity() ;
      G4double initialVelocity = stepData.GetPreStepPoint()->GetVelocity() ;
      G4double stepLength      = track.GetStepLength() ;
-     G4double restMass = track.GetDynamicParticle()->GetDefinition()->GetPDGMass();
 
-     if( (restMass>0.0) && ((finalVelocity=track.GetVelocity()) > 0.0) )
-     { 
-        G4double meanInverseVelocity = 0.5
+     const G4ParticleDefinition* fOpticalPhoton = G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
+     const G4DynamicParticle* fpDynamicParticle = track.GetDynamicParticle();
+     if (fpDynamicParticle->GetDefinition()== fOpticalPhoton)
+     {
+        //  A photon is in the medium of the final point
+        //  during the step, so it has the final velocity.
+        deltaTime = stepLength/finalVelocity ;
+     }
+     else if (finalVelocity > 0.0)
+     {
+        G4double meanInverseVelocity ;
+        // deltaTime = stepLength/finalVelocity ;
+        meanInverseVelocity = 0.5
                             * ( 1.0 / initialVelocity + 1.0 / finalVelocity ) ;
-        deltaTime = stepLength * meanInverseVelocity ; 
+        deltaTime = stepLength * meanInverseVelocity ;
      }
      else
      {
-        //  A photon will remain in the medium of the initial point
-        //   during the step, so it has the initial velocity.
-        deltaTime = stepLength/initialVelocity ;     
+        deltaTime = stepLength/initialVelocity ;
      }
-     fCandidateEndGlobalTime   = startTime + deltaTime ; 
+     fCandidateEndGlobalTime   = startTime + deltaTime ;
   }
   else
   {
