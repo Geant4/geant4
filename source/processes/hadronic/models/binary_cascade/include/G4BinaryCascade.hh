@@ -140,6 +140,7 @@ private:
   G4LorentzVector theInitial4Mom;
   G4int currentA, currentZ;
   G4double massInNucleus;
+  G4double currentInitialEnergy;   // for debugging
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;
   G4bool thePrimaryEscape;

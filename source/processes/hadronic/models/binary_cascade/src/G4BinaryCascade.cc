@@ -57,8 +57,18 @@
 #include "G4ShortLivedConstructor.hh"
 #include <typeinfo>
 
-// #define debug_1_BinaryCascade 1
-// #define debug_G4BinaryCascade 1
+//   turn on general debuggung info, and consistency checks
+#define debug_G4BinaryCascade 1
+
+//  more detailed debugging -- deprecated  
+//#define debug_1_BinaryCascade 1
+
+//  specific debuuging info per method or functionality
+//#define debug_BIC_ApplyCollision
+//#define debug_BIC_CheckPauli
+//#define debug_BIC_CorrectFinalPandE
+#define debug_BIC_Propagate_Excitation
+
 //
 //  C O N S T R U C T O R S   A N D   D E S T R U C T O R S
 //
@@ -421,7 +431,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
       theCollisionMgr->RemoveCollision(theCollisionMgr->GetNextCollision());
   }
 
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_Propagate_Excitation
 
   PrintKTVector(&theProjectileList,std::string(" theProjectileList"));
   PrintKTVector(&theSecondaryList,std::string(" theSecondaryList"));
@@ -437,21 +447,18 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 //
 
 
-
-
-
-  CorrectFinalPandE();
+  G4double ExcitationEnergy=GetExcitationEnergy();
+  if (ExcitationEnergy < 0 ) 
+  { 
+     G4int maxtry=5, ntry=0;
+     do {
+       CorrectFinalPandE();
+       ExcitationEnergy=GetExcitationEnergy();
+     } while ( ++ntry < maxtry && ExcitationEnergy < 0 );
+  }
 
 #ifdef debug_G4BinaryCascade
   PrintKTVector(&theFinalState,std::string(" FinalState corrected"));
-  G4cout << " ExcitE aft Correct : " <<GetExcitationEnergy() << G4endl;
-#endif
-
-//  G4cerr <<"mon - all pushed to limit 1"<<G4endl;
-   G4double ExcitationEnergy=GetExcitationEnergy();
-//  G4cerr <<"mon - all pushed to limit 2"<<G4endl;
-
-#ifdef debug_G4BinaryCascade
   G4cout << " Excitation Energy final,  #collisions:, out, captured  "
   << ExcitationEnergy << " "
   << collisionCount << " "
@@ -483,10 +490,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 // find a fragment and call the precompound model.
   G4Fragment * fragment = 0;
   G4ReactionProductVector * precompoundProducts = 0;
-//  G4cerr <<"mon - entering deexcitat "<<G4endl;
-   if ( ExcitationEnergy >= 0 ) // FixMe: GF temporary should we better re-start?
+ 
+   if ( ExcitationEnergy >= 0 ) 
    {
-//       G4Fragment *
        fragment = FindFragments();
 
     //  theDeExcitation =0;
@@ -553,11 +559,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
        }
 
    } 
-#ifdef debug_G4BinaryCascade
-   else {
-       G4cerr << "Binary Cascade Error: negative Excitation Energy "<< G4endl;
-   }
-#endif
+
   {
 // fill in products the outgoing particles
      G4double Ekinout=0;
@@ -592,7 +594,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	 //G4cout << " Particle Ekin " << aNew->GetKineticEnergy() << G4endl;
 	 products->push_back(aNew);
 
-	 #ifdef debug_1_BinaryCascade
+	 #ifdef debug_BinaryCascade
 	 if (! kt->GetDefinition()->GetPDGStable() )
 	 {
              if (kt->GetDefinition()->IsShortLived())
@@ -684,7 +686,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   } 
   else
   {
-     #ifdef debug_1_BinaryCascade
+     #ifdef debug_BinaryCascade
      G4cout << "G4BinaryCascade::GetExcitationEnergy(): Warning - invalid nucleus (A,Z)=("
 	    << currentA << "," << currentZ << ")" << G4endl;
      #endif
@@ -795,16 +797,25 @@ void G4BinaryCascade::BuildTargetList()
   if(currentZ>.5)
   {
      massInNucleus = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA);
-  } else if (currentZ==0 && currentA==1 )
+  } else if (currentZ==0 && currentA>=1 )
   {
-     massInNucleus = G4Neutron::Neutron()->GetPDGMass();
+     massInNucleus = currentA * G4Neutron::Neutron()->GetPDGMass();
   } else
   {
      //G4cout << "G4BinaryCascade::BuildTargetList(): Warning - invalid nucleus (A,Z)=("
 	//	<< currentA << "," << currentZ << ")" << G4endl;
   }
-//     G4cout << "G4BinaryCascade::BuildTargetList():  nucleus (A,Z)=("
-//		<< currentA << "," << currentZ << ")" << G4endl;
+     G4cout << "G4BinaryCascade::BuildTargetList():  nucleus (A,Z)=("
+		<< currentA << "," << currentZ << ") mass: " << massInNucleus <<
+		", theInitial4Mom " << theInitial4Mom << G4endl;
+		
+  currentInitialEnergy=	theInitial4Mom.e();
+  G4KineticTrackVector::iterator i;
+  for(i = theProjectileList.begin() ; i != theProjectileList.end(); ++i)
+  {
+    currentInitialEnergy+= (*i)->GetTrackingMomentum().e();
+  }
+	
 
 }
 
@@ -834,6 +845,8 @@ for(std::vector<G4BCAction *>::iterator j = theImR.begin();
 }
 
 
+//#define debug_BIC_ApplyCollision
+
 //----------------------------------------------------------------------------
 G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 //----------------------------------------------------------------------------
@@ -854,7 +867,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 #endif
   }
  
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_ApplyCollision
       G4cout << "ApplyCollisions : projte 4mom " << primary->GetTrackingMomentum()<< G4endl;
 //   if (target != 0 )
 //   {
@@ -873,7 +886,7 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   
   if(!products || products->size()==0 || !CheckPauliPrinciple(products))
   {
-   #ifdef debug_G4BinaryCascade
+   #ifdef debug_BIC_ApplyCollision
      if (products) G4cout << " ======Failed Pauli =====" << G4endl;
      G4cerr << "G4BinaryCascade::ApplyCollision blocked"<<G4endl;
    #endif
@@ -883,13 +896,76 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   }
 
 // debug block
-  #ifdef debug_1_BinaryCascade
+#ifdef debug_BIC_ApplyCollision
      G4KineticTrackVector debug1;
      debug1.push_back(collision->GetPrimary());
      PrintKTVector(&debug1,std::string(" Primary particle"));
      PrintKTVector(&collision->GetTargetCollection(),std::string(" Target particles"));
   PrintKTVector(products,std::string(" Scatterer products"));
-  #endif
+  
+  G4double thisExcitation(0);
+  G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
+//  excitation energy from this collision
+//  initial state:
+  G4double initial(0);
+  G4KineticTrack * kt=collision->GetPrimary();
+  initial +=  kt->Get4Momentum().e();
+  
+  initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+  initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+  G4cout << "prim. E/field/Barr/Sum " << kt->Get4Momentum().e()
+          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	  << " " << initial << G4endl;;
+  
+  G4KineticTrackVector ktv=collision->GetTargetCollection();
+  for ( unsigned int it=0; it < ktv.size(); it++)
+  {
+     kt=ktv[it];
+     initial +=  kt->Get4Momentum().e();
+     thisExcitation += kt->GetDefinition()->GetPDGMass() - kt->Get4Momentum().e() - RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+//     initial +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+//     initial -=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+  G4cout << "Nprim E/field/Barr/Sum " << kt->Get4Momentum().e()
+          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	  << " " << initial <<" Excit " << thisExcitation << G4endl;;
+  }
+  
+  G4double final(0);
+  G4double mass_out(0);
+  G4int product_barions(0);
+  for ( unsigned int it=0; it < products->size(); it++)
+  {
+     kt=(*products)[it];
+     final +=  kt->Get4Momentum().e();
+     final +=  RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition());
+     final +=  RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
+     if ( kt->GetDefinition()->GetBaryonNumber()==1 ) product_barions++;
+     mass_out += kt->GetDefinition()->GetPDGMass();
+  G4cout << "sec. E/field/Barr/Sum " << kt->Get4Momentum().e()
+          << " " << RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
+          << " " << RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding()) 
+	  << " " << final << G4endl;;
+  }
+
+
+  G4int finalA = currentA - product_barions;
+  G4int finalZ = currentZ - GetTotalCharge(*products);
+  G4double delta = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(currentZ,currentA) 
+                   - (G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA) 
+		       + mass_out); 
+  G4cout << " current/final a,z" << currentA << " " << currentZ << " "<< finalA<< " "<< finalZ 
+        <<  " delta " << delta<<G4endl;
+  final+=delta;
+    mass_out  = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(finalZ,finalA);
+  G4cout << " initE/ E_out/ Mfinal/ Excit " << currentInitialEnergy
+         << " " <<   final << " "
+	 <<  mass_out<<" " 
+	 <<  currentInitialEnergy - final - mass_out
+	 << G4endl;
+   currentInitialEnergy-=final;	 
+#endif
 
   G4int finalBaryon(0);
   G4int finalCharge(0);
@@ -1135,7 +1211,7 @@ G4bool G4BinaryCascade::CheckPauliPrinciple(G4KineticTrackVector * products)
        }
      }
   }
-  #ifdef debug_G4BinaryCascade
+  #ifdef debug_BIC_CheckPauli
   if ( myflag  )
   {
 	for(i = products->begin(); i != products->end(); ++i)
@@ -1284,25 +1360,30 @@ void G4BinaryCascade::StepParticlesOut()
 
 
 }
-
+#define debug_BIC_CorrectFinalPandE
 //----------------------------------------------------------------------------
 void G4BinaryCascade::CorrectFinalPandE()
 //----------------------------------------------------------------------------
+//
+//  Modify momenta of outgoing particles. 
+//   Assume two body decay, nucleus(@nominal mass) + sum of final state particles(SFSP). 
+//   momentum of SFSP shall be less than momentum for two body decay. 
+//
 {
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_CorrectFinalPandE
   G4cerr << " -CorrectFinalPandE 1" << G4endl;
 #endif
 
  if ( theFinalState.size() == 0 ) return;
 
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_CorrectFinalPandE
   G4cerr << " -CorrectFinalPandE 2" << G4endl;
 #endif
 
   G4KineticTrackVector::iterator i;
   G4LorentzVector pNucleus=GetFinal4Momentum();
   if ( pNucleus.e() == 0 ) return;    // check against explicit 0 from GetNucleus4Momentum()
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_CorrectFinalPandE
   G4cerr << " -CorrectFinalPandE 3" << G4endl;
 #endif
   G4LorentzVector pFinals(0);
@@ -1311,20 +1392,20 @@ void G4BinaryCascade::CorrectFinalPandE()
   {
     pFinals += (*i)->Get4Momentum();
     ++nFinals;
-#ifdef debug_G4BinaryCascade
-    G4cout <<"CorrectFinalPandE a final " << (*i)->GetDefinition()->GetParticleName()
+    #ifdef debug_BIC_CorrectFinalPandE
+      G4cout <<"CorrectFinalPandE a final " << (*i)->GetDefinition()->GetParticleName()
            << " 4mom " << (*i)->Get4Momentum()<< G4endl;
-#endif
+    #endif
   }
-#ifdef debug_G4BinaryCascade
-  G4cout << "CorrectFinalPandE pN pF: " <<pNucleus << " " <<pFinals << G4endl;
-#endif
+  #ifdef debug_BIC_CorrectFinalPandE
+    G4cout << "CorrectFinalPandE pN pF: " <<pNucleus << " " <<pFinals << G4endl;
+  #endif
   G4LorentzVector pCM=pNucleus + pFinals;
 
   G4LorentzRotation toCMS(-pCM.boostVector());
   pFinals *=toCMS;
 
-#ifdef debug_G4BinaryCascade
+#ifdef debug_BIC_CorrectFinalPandE
   G4cout << "CorrectFinalPandE pCM, CMS pCM " << pCM << " " <<toCMS*pCM<< G4endl;
   G4cout << "CorrectFinal CMS pN pF " <<toCMS*pNucleus << " "
          <<pFinals << G4endl
@@ -1341,37 +1422,33 @@ void G4BinaryCascade::CorrectFinalPandE()
   G4double m20 = pFinals.mag();
   if( s-(m10+m20)*(m10+m20) < 0 )
   {
-#ifdef debug_G4BinaryCascade
-     G4cout << "G4BinaryCascade::CorrectFinalPandE() : error! " << G4endl;
+       #ifdef debug_BIC_CorrectFinalPandE
+	G4cout << "G4BinaryCascade::CorrectFinalPandE() : error! " << G4endl;
 
-     G4cout << "not enough mass to correct: mass, A,Z, mass(nucl), mass(finals) " 
-           << sqrt(-s+(m10+m20)*(m10+m20)) << " " 
-	   << currentA << " " << currentZ << " "
-	   << m10 << " " << m20 
-	   << G4endl;
-     G4cerr << " -CorrectFinalPandE 4" << G4endl;
-     
-     PrintKTVector(&theFinalState," mass problem");
-     
-#endif
+	G4cout << "not enough mass to correct: mass, A,Z, mass(nucl), mass(finals) " 
+              << sqrt(-s+(m10+m20)*(m10+m20)) << " " 
+	      << currentA << " " << currentZ << " "
+	      << m10 << " " << m20 
+	      << G4endl;
+	G4cerr << " -CorrectFinalPandE 4" << G4endl;
+
+	PrintKTVector(&theFinalState," mass problem");
+       #endif
       return;
   }
 
   // Three momentum in cm system
   G4double pInCM = sqrt((s-(m10+m20)*(m10+m20))*(s-(m10-m20)*(m10-m20))/(4.*s));
-#ifdef debug_G4BinaryCascade
-  G4cout <<" CorrectFinalPandE pInCM  new, CURRENT, ratio : " << pInCM 
+    #ifdef debug_BIC_CorrectFinalPandE
+    G4cout <<" CorrectFinalPandE pInCM  new, CURRENT, ratio : " << pInCM 
   	   << " " << (pFinals).vect().mag()<< " " <<  pInCM/(pFinals).vect().mag() << G4endl;
-#endif
+    #endif
   if ( pFinals.vect().mag() > pInCM )
   {
-#ifdef debug_G4BinaryCascade
-G4cerr << " -CorrectFinalPandE 5" << G4endl;  
-#endif
     G4ThreeVector p3finals=pInCM*pFinals.vect().unit();
 
 //    G4ThreeVector deltap=(p3finals - pFinals.vect() ) / nFinals;
-    G4double factor=pInCM/pFinals.vect().mag();
+   G4double factor=std::max(0.98,pInCM/pFinals.vect().mag());   // small correction
     G4LorentzVector qFinals(0);
     for(i = theFinalState.begin(); i != theFinalState.end(); ++i)
     {
@@ -1380,20 +1457,21 @@ G4cerr << " -CorrectFinalPandE 5" << G4endl;
       G4LorentzVector p(p3,sqrt((*i)->Get4Momentum().mag2() + p3.mag2()));
       qFinals += p;
       p *= toLab;
-#ifdef debug_G4BinaryCascade
-      G4cout << " final p corrected: " << p << G4endl;
-#endif
+        #ifdef debug_BIC_CorrectFinalPandE
+        G4cout << " final p corrected: " << p << G4endl;
+        #endif
       (*i)->Set4Momentum(p);
     }
-#ifdef debug_G4BinaryCascade
-    G4cout << "CorrectFinalPandE nucleus corrected mass : " << GetFinal4Momentum() << " "
+      #ifdef debug_BIC_CorrectFinalPandE
+       G4cout << "CorrectFinalPandE nucleus corrected mass : " << GetFinal4Momentum() << " "
     		<<GetFinal4Momentum().mag() << G4endl
 		<< " CMS pFinals , mag, 3.mag : " << qFinals << " " << qFinals.mag() << " " << qFinals.vect().mag()<< G4endl;
-#endif
-   }
-#ifdef debug_G4BinaryCascade
-    else { G4cerr << " -CorrectFinalPandE 6" << G4endl; }
-#endif
+       G4cerr << " -CorrectFinalPandE 5 " << factor <<  G4endl;  
+      #endif
+  }
+  #ifdef debug_BIC_CorrectFinalPandE
+   else { G4cerr << " -CorrectFinalPandE 6 - no correction done" << G4endl; }
+  #endif
  
 }
 
@@ -1928,18 +2006,19 @@ G4LorentzVector G4BinaryCascade::GetFinal4Momentum()
   for(i = theProjectileList.begin() ; i != theProjectileList.end(); ++i)
   {
     final4Momentum += (*i)->GetTrackingMomentum();
-    //G4cerr << "Initial state: "<<(*i)->Get4Momentum()<<G4endl;
+    //G4cout << "Initial state: "<<(*i)->Get4Momentum()<<G4endl;
   }
-
+   //G4cout << " GetFinal4Mom projectiles : " << final4Momentum << G4endl;
   for(i = theFinalState.begin(); i != theFinalState.end(); ++i)
   {
     final4Momentum -= (*i)->Get4Momentum();
-    // G4cerr <<"Final state: "<<(*i)->Get4Momentum()<<G4endl;
+    //G4cout <<"Final state: "<<(*i)->Get4Momentum()<<G4endl;
   }
+  //G4cout << " - final state momenta    : " << final4Momentum << G4endl;
 
   if((final4Momentum.vect()/final4Momentum.e()).mag()>1.0 && currentA > 0)
   {
-#  ifdef debug_G4BinaryCascade
+#  ifdef debug_BIC_Final4Momentum
      G4cerr << G4endl;
      G4cerr << "G4BinaryCascade::GetFinal4Momentum - Fatal"<<G4endl;
      G4KineticTrackVector::iterator i;
@@ -1989,7 +2068,7 @@ G4LorentzVector G4BinaryCascade::GetFinalNucleusMomentum()
       G4ThreeVector boost= (NucleusMomentum.vect() -CapturedMomentum.vect())/NucleusMomentum.e();
       if(boost.mag2()>1.0)
       {
-#     ifdef debug_G4BinaryCascade
+#     ifdef debug_BIC_FinalNucleusMomentum
 	G4cerr << "G4BinaryCascade::GetFinalNucleusMomentum - Fatal"<<G4endl;
 	G4cerr << "it 0"<<boost <<G4endl;
 	G4cerr << "it 01"<<NucleusMomentum<<" "<<CapturedMomentum<<" "<<G4endl;
@@ -2000,11 +2079,11 @@ G4LorentzVector G4BinaryCascade::GetFinalNucleusMomentum()
       }
       G4LorentzRotation  nucleusBoost( -boost );
       precompoundLorentzboost.set( boost );
-    #ifdef debug_G4BinaryCascade
+    #ifdef debug_debug_BIC_FinalNucleusMomentum
       G4cout << "GetFinalNucleusMomentum be4 boostNucleusMomentum, CapturedMomentum"<<NucleusMomentum<<" "<<CapturedMomentum<<" "<<G4endl;
      #endif
      NucleusMomentum *= nucleusBoost;
-    #ifdef debug_G4BinaryCascade
+    #ifdef debug_BIC_FinalNucleusMomentum
       G4cout << "GetFinalNucleusMomentum aft boost GetFinal4Momentum= " <<NucleusMomentum <<G4endl;
     #endif
   }
@@ -2182,7 +2261,7 @@ void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, std::string comm
 	   << 1/fermi*pos << " R: " << 1/fermi*pos.mag() << " 4mom: "
 	   << 1/MeV*mom <<"Tr_mom" <<  1/MeV*tmom << " P: " << 1/MeV*mom.vect().mag() 
 	   << " M: " << 1/MeV*mom.mag() << G4endl;
-    G4cout <<"trackstatus: "<<kt->GetState()<<G4endl;
+    G4cout <<"    trackstatus: "<<kt->GetState()<<G4endl;
   }
 }
 
