@@ -1,0 +1,7 @@
+- STLInterface: cstring.h: changed (*this)[i] to
+                std_string::operator[](i).
+- STLInterface: removed G4USE_EXPLICIT_TYPES_IN_TEMPLATES; introduced
+                typename keyword where needed for HP aCC.
+                Files modified: cstring.h, tpordvec.h, tpsrtvec.h,
+                tpvector.h, tvhdict.h, tvordvec.h and tvvector.h
+                (J.Allison)
