@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0EventAction.cc,v 1.2 1999-05-10 16:15:13 japost Exp $
+// $Id: Em0EventAction.cc,v 1.3 1999-05-10 16:44:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,12 +42,12 @@ Em0EventAction::~Em0EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0EventAction::BeginOfEventAction()
+void Em0EventAction::BeginOfEventAction(const G4Event* evt)
 { TotalEnergyDeposit = 0.;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Em0EventAction::EndOfEventAction()
+void Em0EventAction::EndOfEventAction(const G4Event* evt)
 {
   if (drawFlag != "none") G4cout << " Energy deposit: " 
                                  << G4BestUnit(TotalEnergyDeposit,"Energy")
@@ -57,7 +57,6 @@ void Em0EventAction::EndOfEventAction()
 
   if(pVVisManager)
   {
-   const G4Event* evt = fpEventManager->GetConstCurrentEvent(); 
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
    G4int n_trajectories = 0;
    if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();  

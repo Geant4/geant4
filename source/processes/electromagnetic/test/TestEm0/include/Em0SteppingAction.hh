@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0SteppingAction.hh,v 1.2 1999-05-10 16:15:11 japost Exp $
+// $Id: Em0SteppingAction.hh,v 1.3 1999-05-10 16:44:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,7 +28,7 @@ class Em0SteppingAction : public G4UserSteppingAction
     Em0SteppingAction(Em0EventAction*);
    ~Em0SteppingAction();
 
-    void UserSteppingAction(const G4Step *);
+    void UserSteppingAction(const G4Step*);
     
   private:
     Em0EventAction* eventAction;    

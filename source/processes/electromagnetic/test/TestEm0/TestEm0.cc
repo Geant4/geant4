@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: TestEm0.cc,v 1.2 1999-04-23 17:49:25 japost Exp $
+// $Id: TestEm0.cc,v 1.3 1999-05-10 16:44:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,7 +20,7 @@
 // 
 // --------------------------------------------------------------
 
-//#define Em0NoOptimize 1
+///#define Em0NoOptimize 1
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0RunAction.cc,v 1.2 1999-05-10 16:15:14 japost Exp $
+// $Id: Em0RunAction.cc,v 1.3 1999-05-10 16:44:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,9 +24,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em0RunAction::Em0RunAction()
-{
-  runIDcounter = 0;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -37,8 +35,6 @@ Em0RunAction::~Em0RunAction()
 
 void Em0RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  // aRun->SetRunID(runIDcounter++);
-   
   G4cout << "### Run " << aRun->GetRunID() << " start." << endl;
   
   NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;   

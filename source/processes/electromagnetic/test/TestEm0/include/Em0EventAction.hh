@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em0EventAction.hh,v 1.1 1999-01-08 16:32:34 gunter Exp $
+// $Id: Em0EventAction.hh,v 1.2 1999-05-10 16:44:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,8 +30,8 @@ class Em0EventAction : public G4UserEventAction
    ~Em0EventAction();
 
   public:
-    void BeginOfEventAction();
-    void EndOfEventAction();
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
     
     void addEdep(G4double Edep)    {TotalEnergyDeposit += Edep;};      
     G4double GetEnergyDeposit()    {return TotalEnergyDeposit;};    
