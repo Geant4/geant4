@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVReplica.cc,v 1.7 2002-10-16 12:51:48 gcosmo Exp $
+// $Id: G4PVReplica.cc,v 1.8 2002-10-23 16:11:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,8 +52,9 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   if (pMother->GetLogicalVolume()->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
-           << "        the only daughter of a given mother volume !"
-           << G4endl;
+           << "        the only daughter of a given mother volume !" << G4endl
+           << "           Mother physical volume: " << pMother->GetName() << G4endl
+           << "           Replicated volume: " << pName << G4endl;
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup !");
   }
   CheckAndSetParameters (pAxis, nReplicas, width, offset);
@@ -77,8 +78,9 @@ G4PVReplica::G4PVReplica( const G4String& pName,
   if (pMotherLogical->GetNoDaughters() != 1)
   {
     G4cout << "ERROR - A replica or parameterised volume must be" << G4endl
-           << "        the only daughter of a given mother volume !"
-           << G4endl;
+           << "        the only daughter of a given mother volume !" << G4endl
+           << "           Mother logical volume: " << pMotherLogical->GetName() << G4endl
+           << "           Replicated volume: " << pName << G4endl;
     G4Exception("G4PVReplica::G4PVReplica() - Not a valid geometry setup");
   }
   if (pMotherLogical) pMotherLogical->AddDaughter(this);

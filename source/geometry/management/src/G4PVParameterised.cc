@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.6 2002-10-14 16:16:39 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.7 2002-10-23 16:11:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,9 @@ G4PVParameterised::G4PVParameterised( const G4String& pName,
            << "          To make sure that no overlaps are generated," << G4endl
            << "          you should verify the mother replicated shapes" << G4endl
            << "          are of the same type and dimensions." << G4endl
-           << "  (To switch this warning off, compile with G4_NO_VERBOSE)"
-           << G4endl;
+           << "             Mother physical volume: " << pMother->GetName() << G4endl
+           << "             Parameterised volume: " << pName << G4endl
+           << "  (To switch this warning off, compile with G4_NO_VERBOSE)" << G4endl;
   }
 #endif
 }
