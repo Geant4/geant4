@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BoundingSphereScene.cc,v 1.6 2001-07-22 00:59:40 johna Exp $
+// $Id: G4BoundingSphereScene.cc,v 1.7 2001-07-24 21:50:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,27 +71,27 @@ void G4BoundingSphereScene::ResetBoundingSphere () {
 }
 
 void G4BoundingSphereScene::AccrueBoundingSphere
-(const G4Point3D& thisCentre,
- G4double thisRadius) {
+(const G4Point3D& newCentre,
+ G4double newRadius) {
 
   if (fRadius < 0 ) {  // First time.
-    fCentre = thisCentre;
-    fRadius = thisRadius;
+    fCentre = newCentre;
+    fRadius = newRadius;
   }
   else {
-    G4Vector3D join = thisCentre - fCentre;
+    G4Vector3D join = newCentre - fCentre;
     if (join == G4Vector3D (0., 0., 0.)) {             // Centres coincide.
-      if (fRadius < thisRadius) fRadius = thisRadius;
+      if (fRadius < newRadius) fRadius = newRadius;
     }
-    else if (join.mag () + thisRadius <= fRadius) {  // Inside accrued sphere.
+    else if (join.mag () + newRadius <= fRadius) {  // Inside accrued sphere.
       // Do nothing.
     }
     else {
       G4Vector3D unitJoin = join.unit ();
       G4Point3D oldExtremity1 = fCentre - fRadius * unitJoin;
-      G4Point3D newExtremity1 = thisCentre - thisRadius * unitJoin;
+      G4Point3D newExtremity1 = newCentre - newRadius * unitJoin;
       G4Point3D oldExtremity2 = fCentre + fRadius * unitJoin;
-      G4Point3D newExtremity2 = thisCentre + thisRadius * unitJoin;
+      G4Point3D newExtremity2 = newCentre + newRadius * unitJoin;
       G4Point3D extremity1;
       if (oldExtremity1 * unitJoin < newExtremity1 * unitJoin) {
 	extremity1 = oldExtremity1;
@@ -111,4 +111,3 @@ void G4BoundingSphereScene::AccrueBoundingSphere
     }
   }
 }
-
