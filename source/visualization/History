@@ -1,4 +1,4 @@
-$Id: History,v 1.21 1999-06-19 16:30:01 johna Exp $
+$Id: History,v 1.22 1999-06-29 18:06:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-15  29th June 1999  John Allison
+- Moved #include <rw/tvhdict.h> from G4OpenGLSceneHandler.hh to .cc.
+- Corrected #ifdef G4VIS_BUILD_OPENGL_DRIVER in G4OpenGLXViewer.hh.
 
 vis-01-00-14  19th June 1999  John Allison
 - Removed references to G4Ray from GNUmakefile.

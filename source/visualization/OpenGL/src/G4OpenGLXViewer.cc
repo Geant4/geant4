@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXViewer.cc,v 1.2 1999-02-07 17:12:49 johna Exp $
+// $Id: G4OpenGLXViewer.cc,v 1.3 1999-06-29 18:07:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -13,7 +13,7 @@
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                 functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGLX_DRIVER
+#ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include "G4OpenGLXViewer.hh"
 

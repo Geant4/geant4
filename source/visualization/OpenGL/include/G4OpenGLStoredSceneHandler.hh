@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.2 1999-05-10 14:03:45 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.3 1999-06-29 18:06:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,7 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
+#include <rw/tvhdict.h>
 
 class G4OpenGLStored;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.2 1999-05-10 14:03:43 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.3 1999-06-29 18:06:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,8 +17,6 @@
 
 #ifndef G4OPENGLSCENEHANDLER_HH
 #define G4OPENGLSCENEHANDLER_HH
-
-#include <rw/tvhdict.h>
 
 #include "G4VSceneHandler.hh"
 #include "G4OpenGLViewer.hh"
