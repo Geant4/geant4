@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.5 2000-11-08 12:40:05 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.6 2001-03-12 06:25:24 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,7 @@
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
 //        add buildPhysicsTable command   13 Apr. 1999 by H.Kurashige
+//        add setStoredInAscii command    12 Mar. 2001 by H.Kurashige
 // ------------------------------------------------------------
 
 #include "G4UserPhysicsListMessenger.hh"
@@ -97,6 +98,16 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   retrieveCmd->SetParameterName("dirName",true);
   retrieveCmd->SetDefaultValue("");
   retrieveCmd->AvailableForStates(PreInit,Idle);
+
+  //  /run/particle/setStoredInAscii command
+  asciiCmd = new G4UIcmdWithAnInteger("/run/particle/setStoredInAscii",this);
+  asciiCmd->SetGuidance("Switch on/off ascii mode in store/retreive Physics Table");
+  asciiCmd->SetGuidance("  Enter 0(binary) or 1(ascii)");
+  asciiCmd->SetParameterName("ascii",true);
+  asciiCmd->SetDefaultValue(0);
+  asciiCmd->AvailableForStates(PreInit,Idle);
+  asciiCmd->SetRange("ascii ==0 || ascii ==1");
+
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -109,7 +120,8 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete buildPTCmd;
   delete storeCmd;  
   delete retrieveCmd;
-  delete theDirectory;  
+  delete theDirectory;
+  delete asciiCmd;  
 }
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -151,7 +163,16 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
     } else {
       thePhysicsList->SetPhysicsTableRetrieved(newValue);
     }
+
+  } else if( command == asciiCmd ) {
+    if (asciiCmd->GetNewIntValue(newValue) == 0) {
+      thePhysicsList->ResetStoredInAscii();
+    } else {
+      thePhysicsList->SetStoredInAscii();
+    }
+
   }
+
 } 
 
 G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
@@ -195,6 +216,14 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
     } else {
       cv = "OFF";
     }
+
+  } else if( command==asciiCmd ){
+    if (thePhysicsList->IsStoredInAscii()){
+      cv = "1";
+    } else {
+      cv = "0";
+    }
+
   }
    
   return cv;
