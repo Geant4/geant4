@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.32 2000-07-31 17:10:16 stesting Exp $
+# $Id: GNUmakefile,v 1.33 2000-08-01 14:44:14 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -71,14 +71,17 @@ all:
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn && $(MAKE)); \
 	done;:
+	@$(ECHO) Making EM Tests...
 	@for nn in $(ELECTROMAGNETIC); do \
 	  (cd test50$$nn && $(MAKE)); \
 	done;:
 ifdef G4USE_HEPODBMS
+	@$(ECHO) Making Persistency Tests...
 	@for nn in $(PERSISTENCY); do \
 	  (cd test4$$nn && $(MAKE)); \
 	done;:
 endif
+	@$(ECHO) Making G3toG4 Tests...
 	@for nn in $(G3TOG4); do \
 	  (cd test6$$nn && $(MAKE)); \
 	done;:
