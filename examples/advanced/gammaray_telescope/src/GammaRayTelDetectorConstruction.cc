@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelDetectorConstruction.cc,v 1.7 2001-11-28 10:07:01 griccard Exp $
+// $Id: GammaRayTelDetectorConstruction.cc,v 1.8 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -70,16 +70,14 @@ GammaRayTelDetectorConstruction::GammaRayTelDetectorConstruction()
    solidACT(0),logicACT(0),physiACT(0),
    solidACL1(0),logicACL1(0),physiACL1(0),
    solidACL2(0),logicACL2(0),physiACL2(0),
-   solidConverter(0),logicConverter(0),physiConverter(0),
-   solidTKRDetectorX(0),logicTKRDetectorX(0),
-   solidTKRDetectorY(0),logicTKRDetectorY(0),
-   physiTKRDetectorX(0),physiTKRDetectorY(0),
-   solidCALDetectorX(0),logicCALDetectorX(0),physiCALDetectorX(0),
-   solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
+   solidTKRDetectorX(0),logicTKRDetectorX(0),physiTKRDetectorX(0),
+   solidTKRDetectorY(0),logicTKRDetectorY(0),physiTKRDetectorY(0),
    solidCALLayerX(0),logicCALLayerX(0),physiCALLayerX(0),
    solidCALLayerY(0),logicCALLayerY(0),physiCALLayerY(0),
-   solidPlane(0),logicPlane(0),physiPlane(0)
-
+   solidCALDetectorX(0),logicCALDetectorX(0),physiCALDetectorX(0),
+   solidCALDetectorY(0),logicCALDetectorY(0),physiCALDetectorY(0),
+   solidPlane(0),logicPlane(0),physiPlane(0),
+   solidConverter(0),logicConverter(0),physiConverter(0)
 {
   // default parameter values of the payload
   
@@ -132,7 +130,7 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   G4double a, z, density;            
   
   G4int ncomponents, natoms;
-  G4double abundance, fractionmass;
+  G4double fractionmass;
   G4double temperature, pressure;
 
   //
@@ -151,36 +149,33 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   a = 15.99*g/mole;
   G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 
+  a = 26.98*g/mole;
+  G4Element* Alumin = new G4Element(name="Aluminum"  ,symbol="Al" , z= 13., a);
+
+  a = 28.09*g/mole;
+  G4Element* Silicon = new G4Element(name="Silicon", symbol="Si", z=14., a);
+  
+  a= 55.845*g/mole;
+  G4Element* Iron = new G4Element(name="Iron", symbol="Fe", z=26.,a);
+
   a = 126.904*g/mole;
   G4Element* I  = new G4Element(name="Iodine"  ,symbol="I" , z= 53., a);
-
+  
   a = 132.905*g/mole;
   G4Element* Cs  = new G4Element(name="Cesium"  ,symbol="Cs" , z= 55., a);
 
-//
-// define simple materials
-//
+  a = 207.19*g/mole;
+  G4Element* Lead = new G4Element(name="Lead", symbol="Pb", z=82., a);
 
-  density = 2.700*g/cm3;
-  a = 26.98*g/mole;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
+  //
+  // define simple materials
+  //
 
-  density = 2.333*g/cm3;
-  a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon",z=14., a,density);
-  
   density = 19.3*g/cm3;
   a = 183.84*g/mole;
   G4Material* W = new G4Material(name="Tungsten", z=74., a, density);
-
-  density = 11.35*g/cm3;
-  a = 207.19*g/mole;
-  G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
   
-  density = 7.87*g/cm3;
-  a= 55.845*g/mole;
-  G4Material* Fe = new G4Material(name="Iron", z=26.,a,density);
-  
+      
   //
   // define a material from elements.   case 1: chemical molecule
   //
@@ -192,8 +187,8 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   
   density = 4.53*g/cm3;
   G4Material* CsI = new G4Material(name="CesiumIodide", density, ncomponents=2);
-  CsI->AddElement(C, natoms=5);
-  CsI->AddElement(H, natoms=5);
+  CsI->AddElement(Cs, natoms=5);
+  CsI->AddElement(I, natoms=5);
   
   //
   // define a material from elements.   case 2: mixture by fractional mass
@@ -203,11 +198,27 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
   Air->AddElement(N, fractionmass=0.7);
   Air->AddElement(O, fractionmass=0.3);
-  
-//
-// examples of vacuum
-//
 
+  density = 2.700*g/cm3;
+  G4Material* Al = new G4Material(name="Aluminum", density, ncomponents=1);
+  Al->AddElement(Alumin, fractionmass=1.);
+
+  density = 2.333*g/cm3;  
+  G4Material* Si = new G4Material(name="Silicon", density, ncomponents=1);
+  Si->AddElement(Silicon, fractionmass=1.);
+  
+  density = 7.87*g/cm3;
+  G4Material* Fe = new G4Material(name="Iron", density, ncomponents=1);
+  Fe->AddElement(Iron, fractionmass=1.);
+  
+  density = 11.35*g/cm3;
+  G4Material* Pb = new G4Material(name="Lead", density, ncomponents=1);
+  Pb->AddElement(Lead, fractionmass=1.);
+
+  //
+  // examples of vacuum
+  //
+  
   density     = universe_mean_density;    //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
   temperature = 2.73*kelvin;
@@ -224,7 +235,7 @@ void GammaRayTelDetectorConstruction::DefineMaterials()
   
   //default materials of the payload
 
-  ConverterMaterial = Pb;
+  ConverterMaterial = W;
   defaultMaterial  = vacuum;
   ACDMaterial = Sci;
   CALMaterial = CsI;
@@ -482,22 +493,22 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			  false,	
 			  i);
 
-      /*      
-
+            
+      
       physiPlane =
 	new G4PVPlacement(0,G4ThreeVector(0.,0.,
 					  -TKRSizeZ/2+
 					  2*TKRSiliconThickness +
 					  TKRViewsDistance+
 					  ConverterThickness+
-					  TKRSupportThickness/2),
+					  TKRSupportThickness/2+
+					  (i)*TKRLayerDistance),
 			  "Plane",		
 			  logicPlane,
 			  physiTKR,
 			  false,	
 			  i);	
       
-      */      
     }
   
   

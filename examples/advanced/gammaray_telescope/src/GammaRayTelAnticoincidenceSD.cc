@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.2 2001-07-11 09:56:57 gunter Exp $
+// $Id: GammaRayTelAnticoincidenceSD.cc,v 1.3 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -105,7 +105,7 @@ G4bool GammaRayTelAnticoincidenceSD::ProcessHits(G4Step* aStep,G4TouchableHistor
   G4int ACDTileNumber=acd_tile->GetCopyNo();
   G4String ACDTileName = acd_tile->GetName();
   
-  G4cout << ACDTileName << " " << edep/keV << G4endl;
+  //  G4cout << ACDTileName << " " << edep/keV << G4endl;
 
   if (ACDTileName == "ACT" )
     // The hit is on an top ACD tile (ACDType 0)

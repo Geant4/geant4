@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.hh,v 1.7 2001-11-23 17:44:54 santin Exp $
+// $Id: GammaRayTelEventAction.hh,v 1.8 2001-11-28 14:31:46 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -61,6 +61,7 @@ public:
   void SetDrawFlag   (G4String val)  {drawFlag = val;};
   
 private:
+
   G4int       trackerCollID;                
   G4int       calorimeterCollID;                
   G4int       anticoincidenceCollID;                

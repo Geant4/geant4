@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerROGeometry.cc,v 1.3 2001-11-28 10:07:02 griccard Exp $
+// $Id: GammaRayTelTrackerROGeometry.cc,v 1.4 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@ GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry()
 {
 }
 GammaRayTelTrackerROGeometry::GammaRayTelTrackerROGeometry(G4String aString,GammaRayTelDetectorConstruction* GammaRayTelDC)
-  :GammaRayTelDetector(GammaRayTelDC), G4VReadOutGeometry(aString)
+  :G4VReadOutGeometry(aString), GammaRayTelDetector(GammaRayTelDC)
 {
 }
 

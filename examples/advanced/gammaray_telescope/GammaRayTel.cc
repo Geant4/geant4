@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.5 2001-11-23 17:35:02 santin Exp $
+// $Id: GammaRayTel.cc,v 1.6 2001-11-28 14:31:45 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
@@ -98,8 +99,12 @@ int main(int argc, char** argv)
   // Create a XMotif user interface
   session = new G4UIXm(argc,argv);
 #else
+#ifdef G4UI_USE_TCSH
+  session = new G4UIterminal(new G4UItcsh);      
+#else
   // Create the standard user interface
-  session = new G4UIterminal;
+  session = new G4UIterminal();
+#endif
 #endif
 #ifdef G4VIS_USE
   // Visualization manager

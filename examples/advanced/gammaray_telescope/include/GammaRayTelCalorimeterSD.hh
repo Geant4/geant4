@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelCalorimeterSD.hh,v 1.2 2001-07-11 09:56:56 gunter Exp $
+// $Id: GammaRayTelCalorimeterSD.hh,v 1.3 2001-11-28 14:31:45 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -64,10 +64,14 @@ private:
   
   GammaRayTelCalorimeterHitsCollection*  CalorimeterCollection;      
   GammaRayTelDetectorConstruction* Detector;
-  G4int (*ChitXID)[12];
-  G4int (*ChitYID)[12];
+
+  G4int (*ChitXID);
+  G4int (*ChitYID);
+
   G4int NbOfCALLayers;
   G4int NbOfCALBars; 
+  G4int NbOfCALChannels; 
+
 };
 
 #endif

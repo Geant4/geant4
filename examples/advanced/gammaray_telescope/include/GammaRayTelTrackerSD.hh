@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.hh,v 1.2 2001-07-11 09:56:57 gunter Exp $
+// $Id: GammaRayTelTrackerSD.hh,v 1.3 2001-11-28 14:31:46 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -64,10 +64,14 @@ private:
   
   GammaRayTelTrackerHitsCollection*  TrackerCollection;      
   GammaRayTelDetectorConstruction* Detector;
-  G4int (*ThitXID)[30];
-  G4int (*ThitYID)[30];
+
+  G4int (*ThitXID);
+  G4int (*ThitYID);
+  
   G4int NbOfTKRLayers;
   G4int NbOfTKRStrips;
+  G4int NbOfTKRChannels;
+
 
 };
 

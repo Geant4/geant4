@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.3 2001-11-28 10:07:02 griccard Exp $
+// $Id: GammaRayTelTrackerSD.cc,v 1.4 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -58,8 +58,10 @@ GammaRayTelTrackerSD::GammaRayTelTrackerSD(G4String name,
   NbOfTKRLayers  = Detector->GetNbOfTKRLayers();  
   NbOfTKRStrips = NbOfTKRStrips*NbOfTKRTiles;  
   
-  ThitXID = new G4int[NbOfTKRStrips][30];
-  ThitYID = new G4int[NbOfTKRStrips][30];
+  NbOfTKRChannels = NbOfTKRStrips* NbOfTKRTiles * NbOfTKRLayers;
+  
+  ThitXID = new G4int[NbOfTKRChannels];
+  ThitYID = new G4int[NbOfTKRChannels];
   collectionName.insert("TrackerCollection");
 }
 
@@ -78,12 +80,11 @@ void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*HCE)
   TrackerCollection = new GammaRayTelTrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]);
 
- for (G4int i=0;i<NbOfTKRStrips;i++)
-    for (G4int j=0;j<NbOfTKRLayers;j++) 
-      {
-	ThitXID[i][j] = -1;
-	ThitYID[i][j] = -1;
-      };
+ for (G4int i=0;i<NbOfTKRChannels;i++)
+   {
+     ThitXID[i] = -1;
+     ThitYID[i] = -1;
+   };
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -101,7 +102,7 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   // of the hit
   G4TouchableHistory* theTouchable
     = (G4TouchableHistory*)(aStep->GetPreStepPoint()->GetTouchable());
- 
+  
   G4VPhysicalVolume* phys_tile = theTouchable->GetVolume();  
   G4VPhysicalVolume* plane = phys_tile->GetMother();  
   
@@ -125,26 +126,28 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
   
   G4int NTile = (TileNumber%TileTotal);  
   G4int j=0;
-      
+  
+  G4int NChannel = 0;
+  
   for (j=0;j<TileTotal;j++)
-    { 
+    {
+
+      G4cout << j << " " << NTile << " " << StripNumber << G4endl;
       if(NTile==j) StripNumber += StripTotal*NTile;
     }  
   
-  // G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName << G4endl;
-  // G4cout << StripName << " " << StripNumber << G4endl;       
+  NChannel = PlaneNumber*TileTotal*StripTotal + StripNumber;
+
+  G4cout << NChannel << " Channel Number" << G4endl;
+
+  G4cout << " Plane Number = " << PlaneNumber << " " << PlaneName << G4endl;
+  G4cout << StripName << " " << StripNumber << G4endl;       
   
-  ROhist->MoveUpHistory();
-  
-  G4VPhysicalVolume* ROPlane = ROhist->GetVolume(); 
-  G4int ROPlaneNumber = ROPlane->GetCopyNo();
-  G4String ROPlaneName = ROPlane->GetName();   
-    
   if (PlaneName == "TKRDetectorX" )
     // The hit is on an X silicon plane
     {
       // This is a new hit
-      if (ThitXID[StripNumber][PlaneNumber]==-1)
+      if (ThitXID[NChannel]==-1)
 	{       
 	  GammaRayTelTrackerHit* TrackerHit = new GammaRayTelTrackerHit;
 	  TrackerHit->SetPlaneType(1);
@@ -152,21 +155,21 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 	  TrackerHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
 	  TrackerHit->SetNSilPlane(PlaneNumber);
 	  TrackerHit->SetNStrip(StripNumber);
-	  ThitXID[StripNumber][PlaneNumber] = 
+	  ThitXID[NChannel] = 
 	    TrackerCollection->insert(TrackerHit) -1;
 	}
       else // This is not new
 	{
-	  (*TrackerCollection)[ThitXID[StripNumber][PlaneNumber]]->AddSil(edep);
+	  (*TrackerCollection)[ThitXID[NChannel]]->AddSil(edep);
           // G4cout << "X" << PlaneNumber << " " << StripNumber << G4endl;
 	}
     }
- 
+  
   if (PlaneName == "TKRDetectorY")
     // The hit is on an Y silicon plane    
     {   
       // This is a new hit
-      if (ThitYID[StripNumber][PlaneNumber]==-1)
+      if (ThitYID[NChannel]==-1)
 	{       
 	  GammaRayTelTrackerHit* TrackerHit = new GammaRayTelTrackerHit;
 	  TrackerHit->SetPlaneType(0);
@@ -174,12 +177,12 @@ G4bool GammaRayTelTrackerSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhis
 	  TrackerHit->SetPos(aStep->GetPreStepPoint()->GetPosition());
 	  TrackerHit->SetNSilPlane(PlaneNumber);
 	  TrackerHit->SetNStrip(StripNumber);
-	  ThitYID[StripNumber][PlaneNumber] = 
+	  ThitYID[NChannel] = 
 	    TrackerCollection->insert(TrackerHit)-1;
 	}
       else // This is not new
 	{
-	  (*TrackerCollection)[ThitYID[StripNumber][PlaneNumber]]->AddSil(edep);
+	  (*TrackerCollection)[ThitYID[NChannel]]->AddSil(edep);
           // G4cout << "Y" << PlaneNumber << " " << StripNumber << G4endl;
 	}
     }
@@ -199,12 +202,11 @@ void GammaRayTelTrackerSD::EndOfEvent(G4HCofThisEvent* HCE)
   HCE->AddHitsCollection(HCID,TrackerCollection);
 
 
-  for (G4int i=0;i<NbOfTKRStrips;i++) 
-    for (G4int j=0;j<NbOfTKRLayers;j++)
-      {
-	ThitXID[i][j] = -1;
-	ThitYID[i][j] = -1;
-      };
+  for (G4int i=0;i<NbOfTKRChannels;i++) 
+    {
+      ThitXID[i] = -1;
+      ThitYID[i] = -1;
+    };
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.10 2001-11-28 10:07:01 griccard Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.11 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -71,8 +71,8 @@ extern G4std::ofstream outFile;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelEventAction::GammaRayTelEventAction()
-  :drawFlag("all"), trackerCollID(-1),calorimeterCollID(-1),                
-  anticoincidenceCollID(-1)
+  :trackerCollID(-1),calorimeterCollID(-1),                
+  anticoincidenceCollID(-1), drawFlag("all")
 { 
   G4DigiManager * fDM = G4DigiManager::GetDMpointer();
   GammaRayTelDigitizer * myDM = new GammaRayTelDigitizer( "TrackerDigitizer" );
@@ -164,7 +164,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       if(IsX) 
 	{
 	  if (analysis->GetHisto2DMode()=="position")
-	    analysis->InsertPositionXZ((*CHC)[i]->GetPos().x()/mm,(*CHC)[i]->GetPos().z()/mm);
+	    analysis->InsertPositionXZ((*THC)[i]->GetPos().x()/mm,(*THC)[i]->GetPos().z()/mm);
 	  else
 	    analysis->InsertPositionXZ(NStrip, NPlane);  	      
 	  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
@@ -173,15 +173,15 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
       else 
 	{
 	  if (analysis->GetHisto2DMode()=="position")
-	    analysis->InsertPositionYZ((*CHC)[i]->GetPos().y()/mm,(*CHC)[i]->GetPos().z()/mm);  
+	    analysis->InsertPositionYZ((*THC)[i]->GetPos().y()/mm,(*THC)[i]->GetPos().z()/mm);  
 	  else 
 	    analysis->InsertPositionYZ(NStrip, NPlane);  	      
 	  if (NPlane == 0) analysis->InsertEnergy(ESil/keV);
 	  analysis->InsertHits(NPlane);
 	}
-      analysis->setNtuple( ESil/keV, NPlane, (*CHC)[i]->GetPos().x()/mm,
-			   (*CHC)[i]->GetPos().y()/mm,
-			   (*CHC)[i]->GetPos().z()/mm);
+      analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
+			   (*THC)[i]->GetPos().y()/mm,
+			   (*THC)[i]->GetPos().z()/mm);
 #endif
       
     }
@@ -197,11 +197,9 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
     (GammaRayTelDigitizer*)fDM->FindDigitizerModule( "TrackerDigitizer" );
   myDM->Digitize();
   
-  G4int myHitsCollID = fDM->GetHitsCollectionID("TrackerCollection" );
   G4int myDigiCollID = fDM->GetDigiCollectionID("DigitsCollection");
 
-  // G4cout << "Collezione dei digi " << myDigiCollID << G4endl;
-  // G4cout << "Collezione dei hits " << myHitsCollID << G4endl;
+  // G4cout << "digi collecion" << myDigiCollID << G4endl;
   
   GammaRayTelDigitsCollection * DC = (GammaRayTelDigitsCollection*)fDM->GetDigiCollection( myDigiCollID );
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.4 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelPrimaryGeneratorAction.cc,v 1.5 2001-11-28 14:31:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -98,7 +98,8 @@ void GammaRayTelPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   dir0 = G4ThreeVector(0.,0.,-1.);
 
   G4double theta, phi, y, f;
-  G4double theta0,phi0;
+  G4double theta0=0.;
+  G4double phi0=0.;
   
   switch(nSourceType) {
   case 0:
