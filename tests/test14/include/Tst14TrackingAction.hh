@@ -20,16 +20,13 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: Tst14TrackingAction.hh,v 1.4 2001-10-25 14:16:27 pia Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//-----------------------------------------------------------------------------
+
 
 #ifndef Tst14TrackingAction_h
 #define Tst14TrackingAction_h 1
 
 #include "G4UserTrackingAction.hh"
+
 
 class Tst14TrackingAction : public G4UserTrackingAction {
 
