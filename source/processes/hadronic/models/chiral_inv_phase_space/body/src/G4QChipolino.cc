@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QChipolino.cc,v 1.28 2004-03-25 10:44:53 gunter Exp $
+// $Id: G4QChipolino.cc,v 1.29 2004-11-09 11:11:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QChipolino ----------------
@@ -33,6 +33,8 @@
 //#define pdebug
 
 #include "G4QChipolino.hh"
+#include <cstdlib>
+using namespace std;
 
 G4QChipolino::G4QChipolino(G4QContent& QCont)
 {
@@ -498,7 +500,7 @@ const G4QChipolino& G4QChipolino::operator=(const G4QChipolino &right)
 G4QChipolino::~G4QChipolino() {}
 
 // Standard output for G4QChipolino
-std::ostream& operator<<(std::ostream& lhs, G4QChipolino& rhs)
+ostream& operator<<(ostream& lhs, G4QChipolino& rhs)
 {//      ===========================================
   lhs<<"{1="<<rhs.GetQPDG1()<<",2="<<rhs.GetQPDG2()<< "}";
   return lhs;

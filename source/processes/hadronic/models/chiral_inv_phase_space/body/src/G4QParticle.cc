@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QParticle.cc,v 1.28 2004-03-25 10:45:03 gunter Exp $
+// $Id: G4QParticle.cc,v 1.29 2004-11-09 11:11:17 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QParticle ----------------
@@ -759,7 +759,7 @@ G4QDecayChanVector G4QParticle::InitDecayVector(G4int nQ)
 #endif
   }
   //if(!nQ)G4cout<<"G4QParticle::InitDecayVector:Q=0,nD="<<DecayDB[abs(nQ)].size()<<G4endl;
-  return DecayDB[abs(nQ)];
+  return DecayDB[std::abs(nQ)];
 }
 
 // Initialize the Particle by a Q Code

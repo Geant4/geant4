@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QNucleus.cc,v 1.46 2004-07-20 10:35:55 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.47 2004-11-09 11:11:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QNucleus ----------------
@@ -35,6 +35,9 @@
 //#define ppdebug
 
 #include "G4QNucleus.hh"
+#include <cmath>
+//#include <cstdlib>
+using namespace std;
 
 G4QNucleus::G4QNucleus() : G4QHadron(),Z(0),N(0),S(0),maxClust(0) {probVect[0]=mediRatio;}
 
@@ -229,14 +232,14 @@ const G4QNucleus& G4QNucleus::operator=(const G4QNucleus& right)
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-std::ostream& operator<<(std::ostream& lhs, G4QNucleus& rhs)
+ostream& operator<<(ostream& lhs, G4QNucleus& rhs)
 {//      =========================================
  lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<<",M="<<rhs.GetGSMass()<<"}";
  return lhs;
 }
 
 // Standard output for QNucleus {Z - a#of protons, N - a#of neutrons, S - a#of lambdas}
-std::ostream& operator<<(std::ostream& lhs, const G4QNucleus& rhs)
+ostream& operator<<(ostream& lhs, const G4QNucleus& rhs)
 {//      ===============================================
   lhs<<"{Z="<<rhs.GetZ()<<",N="<<rhs.GetN()<<",S="<<rhs.GetS()<< "}";
   return lhs;
