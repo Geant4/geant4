@@ -451,11 +451,11 @@ if ( `uname -n` == "papou1" ) then
   set prompt='g4-papou1> ' 
 endif
 
-if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
   set prompt='g4-pc-gbp> ' 
 # Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
-  setenv G4INSTALL /geant4/geant4-03-02-ref-07
+  setenv G4INSTALL /geant4/geant4-05-00-ref-01
   setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
@@ -463,7 +463,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv G4DEBUG 1
   setenv G4LIB_BUILD_SHARED 1
   setenv CPPVERBOSE 1
-  setenv CLHEP_BASE_DIR /lal/CLHEP/1.7.0.0/Linux-gxx
+  setenv CLHEP_BASE_DIR /usr/local/CLHEP/1.8.0.0
   setenv LD_LIBRARY_PATH ${G4INSTALL}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$CLHEP_BASE_DIR/lib
   setenv NeutronHPCrossSections $G4WORKDIR/data/G4NDL3.5
@@ -471,7 +471,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
 # CMT :
-  source /lal/CMT/v1r10/mgr/setup.csh
+#  source /projects/CMT/v1r12/mgr/setup.csh
 # OpenGL driver :
 #  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 #  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
@@ -491,14 +491,15 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
 # setenv G4UI_USE_XM 1
 #  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
 # AIDA :
-  setenv G4ANALYSIS_USE 1
+#  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
-#  source /projects/Falsetto/v1/cmt/setup.csh
+#  source /projects/Falsetto/v1r1/cmt/setup.csh
 # Lab implementation :
-  source /projects/Lab/v6/cmt/cleanup.csh
-  source /projects/Lab/v6/cmt/setup.csh
-  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
-  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+#  # The upper CMT setup must be executed first !
+#  source /projects/Lab/v9r0/cmt/cleanup.csh
+#  source /projects/Lab/v9r0/cmt/setup.csh
+#  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
+#  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
 # Else :
 #  setenv G4VIS_BUILD_DAWN_DRIVER     1
 #  setenv G4VIS_BUILD_VRML_DRIVER     1
@@ -523,6 +524,7 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100"
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
+  setenv PYTHONPATH ${PYTHONPATH}:.
 endif
 
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
