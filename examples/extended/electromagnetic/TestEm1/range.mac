@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.1 2004-07-23 15:39:15 maire Exp $
+# $Id: range.mac,v 1.2 2004-08-02 13:27:05 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -11,16 +11,17 @@
 /testem/det/setSize 10 cm
 #
 /testem/phys/addPhysics  standard
+/testem/phys/setCuts 1 km
 #
 /run/initialize
 #
-/testem/phys/setCuts 10 km
-/process/eLoss/fluct 0
 /process/inactivate msc
+/process/eLoss/fluct false
 #
 /testem/gun/setDefault 1
 /gun/particle proton
 /gun/energy 100 MeV
 #
 /testem/event/printModulo 1000
+#
 /run/beamOn 1000
