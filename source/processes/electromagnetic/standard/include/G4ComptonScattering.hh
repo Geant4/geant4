@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.10 2004-03-10 16:48:44 vnivanch Exp $
+// $Id: G4ComptonScattering.hh,v 1.11 2004-08-13 13:44:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4ComptonScattering physics process -----------------------
@@ -38,7 +38,8 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 19-09-01, come back to previous ProcessName "compt"
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
-// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)     
+// 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
+// 13-08-04, suppress icc file; make public ComputeCrossSectionPerAtom()   (mma)
 // -----------------------------------------------------------------------------
 
 // class description
@@ -112,7 +113,7 @@ class G4ComptonScattering : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.		      
        // It is invoked by the ProcessManager of the Particle.
        
-     G4double GetMicroscopicCrossSection(G4DynamicParticle* aDynamicGamma,
+     G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicGamma,
                                          G4Element*         anElement);
        // It returns the total CrossSectionPerAtom of the process, 
        // for the current DynamicGamma (energy), in anElement.					 
@@ -123,14 +124,12 @@ class G4ComptonScattering : public G4VDiscreteProcess
        // returned as a ParticleChange object.			    
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
-               
-  protected:
 
-     virtual G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
-                                                 G4double AtomicNumber);
+     G4double ComputeCrossSectionPerAtom(G4double GammaEnergy, 
+                                         G4double AtomicNumber);
 
-     virtual G4double ComputeMeanFreePath(G4double GammaEnergy, 
-                                          G4Material* aMaterial);
+     G4double ComputeMeanFreePath(G4double GammaEnergy, 
+                                  G4Material* aMaterial);
   private:
   
      // hide assignment operator as private 
@@ -152,8 +151,6 @@ class G4ComptonScattering : public G4VDiscreteProcess
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4ComptonScattering.icc"
   
 #endif
  
