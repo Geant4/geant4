@@ -1,23 +1,26 @@
-# tell HistoManager where to find the histograms:
-# change the name to access hbook files different from the first run
-hm.selectStore("gammaraytel0.hbook")
+global tree, hm
+
+tree = tf.create("gammaraytel0.hbook",1,1,"hbook")
+tree.thisown=1
+hm = af.createHistogramFactory(tree)
 
 # ... and load them into memory:
-hE    = hm.load1D(1)
-hPl   = hm.load1D(2)
-hXZ   = hm.load2D(3)
-hYZ   = hm.load2D(4)
+hE    = tree.findH1D("10")
+hPl   = tree.findH1D("20")
+hXZ   = tree.findH2D("30")
+hYZ   = tree.findH2D("40")
 
-# set plotter to 3*2 zones
-pl.zone(2,2)
+# set plotter to 2*2 zones
+pl.createRegions(2,2)
+
 # ... and plot the histograms
-hplot(hE)
-hplot(hPl)
-hplot(hXZ)
-hplot(hYZ)
+pl.plot(hE      ) ; pl.show() ; pl.next()
+pl.plot(hPl      ) ; pl.show() ; pl.next()
+pl.plot(hXZ   ) ; pl.show() ; pl.next()
+pl.plot(hYZ  ) ; pl.show() ; pl.next()
 
 # get the primary ntuple from the NtupleManager
-nt1 = ntm.findNtuple("gammaraytel0.hbook::1" )
+nt1 = tree.findTuple("1")
 
 # see which attributes there are:
 nt1.listAttributes()

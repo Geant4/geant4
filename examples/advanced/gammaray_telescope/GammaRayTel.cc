@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.8 2001-12-04 11:40:27 flongo Exp $
+// $Id: GammaRayTel.cc,v 1.9 2002-06-18 18:45:39 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,6 @@
 #ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
 #endif
-
-//using namespace Lizard;
 
 
 /* This global file is used to store relevant data for

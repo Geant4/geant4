@@ -1,4 +1,4 @@
-$Id: README,v 1.12 2002-06-18 15:42:36 griccard Exp $
+$Id: README,v 1.13 2002-06-18 18:45:39 griccard Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -89,7 +89,6 @@ The main features of this example are
   set the following variables 
 
   setenv G4ANALYSIS_USE               1 # Use the analysis tools
-  setenv G4ANALYSIS_USE_NTUPLE        1 # To store Ntuples 
 
   (IMPORTANT: Do not set G4UI_USE_XM when using Ntuples!)
 
@@ -99,11 +98,11 @@ The main features of this example are
  (on a CERN machine with the gcc-2.95 compiler)
 
   setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.3/bin
-  source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1/install/sharedstart.csh
+  source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.3/install/sharedstart.csh
 
  (on a CERN machine with the egcs-2.91.66 compiler (G4SYSTEM Linux-egcs)
 
-  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
+  setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.3-sec/bin
   source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.3-sec/install/sharedstart.csh
 
 
