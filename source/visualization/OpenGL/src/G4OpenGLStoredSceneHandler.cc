@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.3 1999-09-15 12:22:03 barrand Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.4 1999-10-25 10:40:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,10 +21,6 @@
 // other OpenGL's, as far as I'm aware.   John Allison 18/9/96.
 #define CENTERLINE_CLPP  /* CenterLine C++ workaround: */
 // Also seems to be required for HP's CC and AIX xlC, at least.
-
-// GB : put this include before the GL ones. It avoid a clash with stl includes
-// on Linux.
-#include <rw/tvhdict.h>
 
 #include <GL/gl.h>
 #include <GL/glx.h>
@@ -47,17 +43,11 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 
-inline static unsigned pSolidHashFun
-(const G4OpenGLStoredSceneHandler::G4VSolidPointer& pSolid) {
-  return (unsigned)pSolid;
-}
-
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
 G4OpenGLSceneHandler (system, fSceneIdCount++, name),
 fMemoryForDisplayLists (true),
-fTopPODL (0),
-fSolidDictionary (pSolidHashFun)
+fTopPODL (0)
 {
   fSceneCount++;
 }
@@ -146,7 +136,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
   fTODLList.clear ();
   fPODLTransformList.clear ();
   fTODLTransformList.clear ();
-  fSolidDictionary.clear ();
+  fSolidMap.clear ();
 }
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
@@ -191,15 +181,16 @@ void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   else {
     // Stop-gap solution for display List re-use.  A proper
     // implementation would use geometry hierarchy.
-    G4VSolidPointer pSolid = (G4VSolidPointer) &solid;
+    const G4VSolid* pSolid = &solid;
     if (!(fpCurrentPV -> IsReplicated ()) &&
-	fSolidDictionary.findValue (pSolid, fDisplayListId)) {
+	(fSolidMap.find (pSolid) != fSolidMap.end ())) {
+      fDisplayListId = fSolidMap [pSolid];
       fPODLList.append (fDisplayListId);
       fPODLTransformList.append (*fpObjectTransformation);
     }
     else {
       G4VSceneHandler::RequestPrimitives (solid);
-      fSolidDictionary.insertKeyAndValue (pSolid, fDisplayListId);
+      fSolidMap [pSolid] = fDisplayListId;
     }
   }
 }
@@ -209,4 +200,3 @@ G4int G4OpenGLStoredSceneHandler::fSceneIdCount = 0;
 G4int G4OpenGLStoredSceneHandler::fSceneCount = 0;
 
 #endif
-

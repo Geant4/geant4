@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.3 1999-06-29 18:06:54 johna Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.4 1999-10-25 10:40:54 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,14 +23,13 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4OpenGLSceneHandler.hh"
-#include <rw/tvhdict.h>
+#include "g4std/map"
 
 class G4OpenGLStored;
 
 class G4OpenGLStoredSceneHandler: public G4OpenGLSceneHandler {
     
 public:
-  typedef unsigned long G4VSolidPointer;
   G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system, const G4String& name = "");
   virtual ~G4OpenGLStoredSceneHandler ();
   void BeginPrimitives (const G4Transform3D& objectTransformation);
@@ -60,7 +59,7 @@ friend class G4OpenGLStoredViewer;
   
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
-  RWTValHashDictionary<G4VSolidPointer, G4int> fSolidDictionary;
+  G4std::map<const G4VSolid*, G4int> fSolidMap;
 };
 
 inline G4int G4OpenGLStoredSceneHandler::GetSceneCount () {
