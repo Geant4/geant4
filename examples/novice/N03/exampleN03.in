@@ -22,7 +22,6 @@
 /calor/setNbOfLayers 30
 /calor/setSizeYZ   1.5 m
 /calor/update
-/vis/clear/scene
 /gun/particle gamma
 /gun/energy 500 MeV
 /run/beamOn 1
