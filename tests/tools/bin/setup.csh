@@ -41,10 +41,22 @@ endif
 #
 # Other G4 environment variables.
 #
-setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
-setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
-setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
-setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
+if ( $?NeutronHPCrossSections ) then
+else
+ setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
+endif
+if ( $?G4LEVELGAMMADATA ) then
+else
+ setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
+endif
+if ( $?G4RADIOACTIVEDATA ) then
+else
+ setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
+endif
+if ( $?G4LEDATA ) then
+else
+ setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
+endif
 #
 # Some aliases :
 alias g4root   "cd $G4INSTALL"
