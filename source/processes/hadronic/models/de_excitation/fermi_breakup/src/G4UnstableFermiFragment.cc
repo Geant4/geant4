@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnstableFermiFragment.cc,v 1.4 2003-11-10 12:10:26 lara Exp $
+// $Id: G4UnstableFermiFragment.cc,v 1.5 2003-11-10 12:21:18 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear De-excitations
@@ -78,8 +78,8 @@ G4FragmentVector * G4UnstableFermiFragment::GetFragment(const G4LorentzVector& a
 
   for (std::vector<G4LorentzVector*>::iterator i = P_i->begin(); i != P_i->end(); i++)
     {
-#ifndef G4NO_ISO_VECDIST
-    std:vector<G4LorentzVector*>::difference_type tmp_n = 0;
+#ifdef G4NO_ISO_VECDIST
+      std::vector<G4LorentzVector*>::difference_type tmp_n = 0;
       std::distance(P_i->begin(),i,tmp_n);
       n = tmp_n;
 #else
