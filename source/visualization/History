@@ -1,4 +1,4 @@
-$Id: History,v 1.190 2002-05-08 13:29:48 johna Exp $
+$Id: History,v 1.191 2002-06-19 15:48:48 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,18 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19th June 2002  John Allison  (vis-V04-00-08)
+- Cosmetic changes in G4VRML2FileSceneHandler.cc and G4VRML2SceneHandler.cc
+  (Gabriele)
+
+10th June 2002  John Allison
+- Cosmetic changes for SUN-CC in G4OpenGLXmConvenienceRoutines.cc
+  (opengl-V04-00-03).
+- Improvement to /vis/scene/add/logicalVolume guidance.
+
+6th June 2002  John Allison
+- Cosmetic changes for GNU compiler in G4OpenGLXViewer.cc (opengl-V04-00-02).
 
 8th May 2002  John Allison (vis-V04-00-07)
 - Minor changes to warning messages and README.built_in_commands.
