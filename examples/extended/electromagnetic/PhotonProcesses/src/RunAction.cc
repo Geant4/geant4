@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.2 2004-06-10 15:55:38 maire Exp $
+// $Id: RunAction.cc,v 1.3 2004-06-30 11:13:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,9 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   totalCount = 0;
   sumTrack = sumTrack2 = 0.;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SetFactory();
-#endif  
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,9 +151,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
-#ifdef G4ANALYSIS_USE
-  histoManager->SaveFactory();
-#endif  
+  histoManager->save();
 
   // show Rndm status
   HepRandom::showEngineStatus();

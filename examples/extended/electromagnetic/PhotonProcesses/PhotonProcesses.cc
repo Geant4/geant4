@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhotonProcesses.cc,v 1.2 2004-06-10 15:55:35 maire Exp $
+// $Id: PhotonProcesses.cc,v 1.3 2004-06-30 11:13:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,10 +73,7 @@ int main(int argc,char** argv) {
    visManager->Initialize();
   #endif
   
-  HistoManager* histo = 0;
-#ifdef G4ANALYSIS_USE
-  histo = new HistoManager();
-#endif
+  HistoManager*  histo = new HistoManager();
       
   // set user action classes
   RunAction* run;  
