@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.4 1999-12-15 14:51:28 gunter Exp $
+// $Id: G4Decay.cc,v 1.5 2000-03-01 02:06:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,8 @@
 //   modified IsApplicable in order to protect the decay from registered 
 //   to resonances    12 Dec. 1998   H.Kurashige 
 //   remove G4ParticleMomentum  6 Feb. 99 H.Kurashige
-
+//   modified  IsApplicable to activate G4Decay for resonances  1 Mar. 00 H.Kurashige 
+//
 #include "G4Decay.hh"
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -61,9 +62,6 @@ G4Decay::~G4Decay()
 
 G4bool G4Decay::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
-   // return false if resonances 
-   if (aParticleType.IsShortLived()) return false;
-
    // check if the particle is stable?
    if (aParticleType.GetPDGLifeTime() <0.0) {
      return false;
