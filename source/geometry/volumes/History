@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2001-11-08 08:15:29 gcosmo Exp $
+$Id: History,v 1.54 2001-11-08 08:17:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,8 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
- - Added a new 'maximum' epsilon value in G4PropagatorInField,
-    as some ill-conditions appear to be due to large proposed relative errors.
+- Added a new 'maximum' epsilon value in G4PropagatorInField,
+  as some ill-conditions appear to be due to large proposed relative errors.
+  NOTE: does NOT include changes in "geomvol-V03-02-00a/b/c".
 
 Nov 8th, 2001        G. Cosmo - geomvol-V03-02-00c
 - Added handles for reference counting: G4GRSSolidHandle, G4GRSVolumeHandle,
