@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.3 1999-11-05 21:13:17 gum Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.4 1999-11-05 21:28:59 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,9 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class descriptors
+// Updated:     1999-11-05 Migration from RWTPtrHashDictionary to STL
+//                         by John Allison
+//              1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
 //              > cosmetics (only)
 // mail:        gum@triumf.ca
