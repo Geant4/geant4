@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.16 2005-03-11 12:28:46 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.17 2005-03-14 18:36:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -81,11 +81,6 @@ public:
   virtual ~G4VEmProcess();
 
   virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
-
-  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
-                                   G4VEmModel*,
-                             const G4MaterialCutsCouple*,
-                             const G4DynamicParticle*) = 0;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
@@ -169,6 +164,12 @@ protected:
   virtual G4double GetMeanFreePath(const G4Track& track,
                                          G4double previousStepSize,
                                          G4ForceCondition* condition);
+
+  virtual std::vector<G4DynamicParticle*>* SecondariesPostStep(
+                                   G4VEmModel*,
+                             const G4MaterialCutsCouple*,
+			     const G4DynamicParticle*,
+                                   G4double& edep) = 0;
 
   virtual G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.18 2005-03-11 12:28:46 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.19 2005-03-14 18:36:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,8 +37,9 @@
 // Modifications:
 // 30-06-04 make it to be pure discrete process (V.Ivanchenko)
 // 30-09-08 optimise integral option (V.Ivanchenko)
-// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivantchenko)
-// 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivantchenko)
+// 08-11-04 Migration to new interface of Store/Retrieve tables (V.Ivanchenko)
+// 11-03-05 Shift verbose level by 1, add applyCuts and killPrimary flags (V.Ivanchenko)
+// 14-03-05 Update logic PostStepDoIt (V.Ivanchenko)
 //
 //
 // Class Description:
@@ -84,7 +85,7 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   meanFreePath(true),
   aboveCSmax(true),
   buildLambdaTable(true),
-  killPrimary(false),
+  killPrimary(true),
   applyCuts(false),
   nRegions(0)
 {
@@ -141,6 +142,7 @@ void G4VEmProcess::Clear()
 {
   if(theEnergyOfCrossSectionMax) delete [] theEnergyOfCrossSectionMax;
   if(theCrossSectionMax) delete [] theCrossSectionMax;
+  if(theLambdaTable) theLambdaTable->clearAndDestroy();
   theEnergyOfCrossSectionMax = 0;
   theCrossSectionMax = 0;
   modelManager->Clear();
@@ -285,19 +287,23 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
   }
   */
 
+  G4double edep = fParticleChange.GetLocalEnergyDeposit();
   std::vector<G4DynamicParticle*>* newp = SecondariesPostStep(currentModel,
                                                               currentCouple,
-		                                              dynParticle);
-  G4double edep = fParticleChange.GetLocalEnergyDeposit();
-  G4double esec = 0.0;
+		                                              dynParticle,
+                                                              edep);
   if (newp) {
     G4int num = newp->size();
-    if(num > 0) {
+    G4int n1  = 0;
+    if( !killPrimary ) n1 = 1;
+
+    if(num > n1) {
       fParticleChange.SetNumberOfSecondaries(num);
       G4double gcut = (*theCutsGamma)[currentMaterialIndex];
       G4double ecut = (*theCutsElectron)[currentMaterialIndex];
       G4double pcut = (*theCutsPositron)[currentMaterialIndex];
-      for (G4int i=0; i<num; i++) {
+     
+      for (G4int i=n1; i<num; i++) {
         G4DynamicParticle* dp = (*newp)[i];
         const G4ParticleDefinition* p = dp->GetDefinition();
         G4double e = dp->GetKineticEnergy();
@@ -309,13 +315,14 @@ G4VParticleChange* G4VEmProcess::PostStepDoIt(const G4Track& track,
 	   if (e < ecut) good = false;
 
 	} else if (p == G4Positron::Positron()) {
-	   if (e < pcut) good = false;
-           e += electron_mass_c2;
+	   if (e < pcut) {
+             good = false;
+             e += 2.0*electron_mass_c2;
+	   }
         }
 
         if (good || !applyCuts) {
           fParticleChange.AddSecondary(dp);
-          esec += e;
 
 	} else {
           delete dp;
