@@ -20,14 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.8 2004-05-24 07:01:43 vnivanch Exp $
+// $Id: RunAction.cc,v 1.9 2004-06-18 15:43:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: Adapted MyVector for STL
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -35,26 +30,28 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "RunActionMessenger.hh"
+#include "EmAcceptance.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "EmAcceptance.hh"
 
 #include <iomanip>
 
 #include "Randomize.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 #include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction*   det,
-                           PrimaryGeneratorAction* kin)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 :Det(det),Kin(kin)
 {
+  runMessenger = new RunActionMessenger(this);
+  
   nLbin = Det->GetnLtot();
   dEdL.resize(nLbin, 0.0);
   sumELongit.resize(nLbin, 0.0);
@@ -72,6 +69,13 @@ RunAction::RunAction(DetectorConstruction*   det,
   sumERadialCumul.resize(nRbin, 0.0);
   sumE2Radial.resize(nRbin, 0.0);
   sumE2RadialCumul.resize(nRbin, 0.0);
+    
+  edeptrue = 1.;
+  rmstrue  = 1.;
+  limittrue = DBL_MAX;
+  
+  histoName = "testem2.paw";
+  histoType = "hbook";  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -79,13 +83,14 @@ RunAction::RunAction(DetectorConstruction*   det,
 RunAction::~RunAction()
 {
   cleanHisto();
+  delete runMessenger;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::bookHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   // Creating the analysis factory
   AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
 
@@ -95,7 +100,7 @@ void RunAction::bookHisto()
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create(Det->HistoName(), Det->HistoType(), readOnly, createNew);
+  tree = tf->create(histoName, histoType, readOnly, createNew);
 
   // Creating a histogram factory, whose histograms will be handled by the tree
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
@@ -150,7 +155,7 @@ void RunAction::bookHisto()
 
 void RunAction::cleanHisto()
 {
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   delete tree;
@@ -242,7 +247,7 @@ void RunAction::fillPerEvent()
   sumNeutrTrLength  += NeutrTrLength;
   sum2NeutrTrLength += NeutrTrLength*NeutrTrLength;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   //fill histograms
   //
   G4double Ekin=Kin->GetParticleGun()->GetParticleEnergy();
@@ -290,7 +295,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     electronFlux[i] /= NbOfEvents;
     positronFlux[i] /= NbOfEvents;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
     G4double bin = i*dLradl;
     histo[3]->fill(bin,MeanELongit[i]/dLradl);
     bin = (i+1)*dLradl;
@@ -320,7 +325,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i]
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
     G4double bin = i*dRradl;
     histo[ 9]->fill(bin,MeanERadial[i]/dRradl);
     bin = (i+1)*dRradl;
@@ -407,18 +412,24 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   HepRandom::showEngineStatus();
 
   // Acceptance
-  G4double ltrue = Det->GetLimitEdep();
-  if(ltrue < DBL_MAX) {
+  if(limittrue < DBL_MAX) {
     EmAcceptance acc;
     acc.BeginOfAcceptance("Total Energy in Absorber",NbOfEvents);
-    G4double etrue = Det->GetAverageEdep();
-    G4double rtrue = Det->GetRMSEdep();
     G4double e = MeanELongitCumul[nLbin-1]/100.;
     G4double r = rmsELongitCumul[nLbin-1]/100.;
-    acc.EmAcceptanceGauss("Edep",NbOfEvents,e,etrue,rtrue,ltrue);
-    acc.EmAcceptanceGauss("Erms",NbOfEvents,r,rtrue,rtrue,2.0*ltrue);
+    acc.EmAcceptanceGauss("Edep",NbOfEvents,e,edeptrue,rmstrue,limittrue);
+    acc.EmAcceptanceGauss("Erms",NbOfEvents,r,rmstrue,rmstrue,2.0*limittrue);
     acc.EndOfAcceptance();
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::SetEdepAndRMS(G4ThreeVector Value)
+{
+  edeptrue = Value(0);
+  rmstrue  = Value(1);
+  limittrue= Value(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

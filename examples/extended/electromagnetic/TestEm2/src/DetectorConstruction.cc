@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.6 2004-05-21 18:21:49 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.7 2004-06-18 15:43:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,11 +57,6 @@ DetectorConstruction::DetectorConstruction()
   DefineMaterials();
   SetMaterial("PbWO4");
   detectorMessenger = new DetectorMessenger(this);
-  edeptrue = 0.9425;
-  rmstrue = 0.0355;
-  limittrue = DBL_MAX;
-  histoName = "testem2.paw";
-  histoType = "hbook";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -232,15 +227,6 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0);
   dRradl = Value(1);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetEdepAndRMS(G4ThreeVector Value)
-{
-  edeptrue = Value(0);
-  rmstrue  = Value(1);
-  limittrue= Value(2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

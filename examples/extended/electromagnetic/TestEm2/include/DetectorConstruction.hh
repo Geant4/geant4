@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.4 2004-05-21 18:21:49 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.5 2004-06-18 15:43:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,18 +75,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4double GetfullLength()     {return EcalLength;};
      G4double GetfullRadius()     {return EcalRadius;};
 
-     // Acceptance parameters
-     void     SetEdepAndRMS(G4ThreeVector);
-     G4double GetAverageEdep() const    {return edeptrue;};
-     G4double GetRMSEdep() const        {return rmstrue;};
-     G4double GetLimitEdep() const      {return limittrue;};
-
-     // Histogram name and type
-     void SetHistoName(G4String& val)   {histoName = val;};
-     void SetHistoType(G4String& val)   {histoType = val;};
-     const G4String& HistoName() const  {return histoName;};
-     const G4String& HistoType() const  {return histoType;};
-
   private:
 
      void DefineMaterials();
@@ -115,11 +103,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      DetectorMessenger* detectorMessenger;  //pointer to the Messenger
 
-     G4double           edeptrue;
-     G4double           rmstrue;
-     G4double           limittrue;
-     G4String           histoName;
-     G4String           histoType;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

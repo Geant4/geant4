@@ -20,48 +20,58 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.4 2004-06-18 15:43:39 maire Exp $
+// $Id: RunActionMessenger.cc,v 1.1 2004-06-18 15:43:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#include "RunActionMessenger.hh"
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWith3Vector;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "RunAction.hh"
+#include "G4UIcmdWith3Vector.hh"
+#include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+RunActionMessenger::RunActionMessenger(RunAction* run)
+:Run(run)
+{    
+  accCmd = new G4UIcmdWith3Vector("/testem/run/acceptance",this);
+  accCmd->SetGuidance("set Edep and RMS");
+  accCmd->SetGuidance("acceptance values for first layer");
+  accCmd->SetParameterName("edep","rms","limit",true);
+  accCmd->SetRange("edep>0 && edep<1 && rms>0");
+  accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
+  factoryCmd->SetGuidance("set name for the histograms file");
+
+  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
+  fileCmd->SetGuidance("set type (hbook, root, XML) for the histograms file");         
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+RunActionMessenger::~RunActionMessenger()
 {
-public:
-  DetectorMessenger(DetectorConstruction* );
- ~DetectorMessenger();
-
-  void SetNewValue(G4UIcommand*, G4String);
-
-private:
-  DetectorConstruction* Detector;
-
-  G4UIdirectory*             testemDir;
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWith3Vector*        LBinCmd;
-  G4UIcmdWith3Vector*        RBinCmd;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
-};
+  delete accCmd;
+  delete factoryCmd;
+  delete fileCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{      
+  if (command == accCmd )
+   { Run->SetEdepAndRMS(accCmd->GetNew3VectorValue(newValue));}
+   
+  if (command == factoryCmd)
+   { Run->SetHistoName(newValue);}
 
+  if (command == fileCmd)
+   { Run->SetHistoType(newValue);}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

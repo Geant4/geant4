@@ -20,14 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.hh,v 1.4 2004-05-04 08:31:19 vnivanch Exp $
+// $Id: RunAction.hh,v 1.5 2004-06-18 15:43:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: Adapted MyVector for STL   
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,6 +32,7 @@
 #include "G4UserRunAction.hh"
 
 #include "G4ParticleDefinition.hh"
+#include "G4ThreeVector.hh"
 #include "globals.hh"
 
 #include <vector>
@@ -47,13 +43,16 @@ typedef  std::vector<G4double> MyVector;
 
 class DetectorConstruction;
 class PrimaryGeneratorAction;
+class RunActionMessenger;
 
 class G4Run;
 
+#ifdef USE_AIDA
 namespace AIDA {
   class ITree;
   class IHistogram1D;
 }
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -72,7 +71,21 @@ class RunAction : public G4UserRunAction
     inline void fillPerTrack(G4double,G4double);
     inline void fillPerStep (G4double,G4int,G4int);
     inline void particleFlux(G4ParticleDefinition*,G4int);
+    
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4ThreeVector);
+     
+     G4double GetAverageEdep() const    {return edeptrue;};
+     G4double GetRMSEdep() const        {return rmstrue;};
+     G4double GetLimitEdep() const      {return limittrue;};
 
+     // Histogram name and type
+     void SetHistoName(G4String& val)   {histoName = val;};
+     void SetHistoType(G4String& val)   {histoType = val;};
+     
+     const G4String& HistoName() const  {return histoName;};
+     const G4String& HistoType() const  {return histoType;};
+     
   private:
 
     void bookHisto();
@@ -82,7 +95,8 @@ class RunAction : public G4UserRunAction
 
     DetectorConstruction*   Det;
     PrimaryGeneratorAction* Kin;
-
+    RunActionMessenger*     runMessenger;
+    
     G4int nLbin;
     MyVector dEdL;
     MyVector sumELongit;
@@ -109,8 +123,16 @@ class RunAction : public G4UserRunAction
     G4double sumNeutrTrLength;
     G4double sum2NeutrTrLength;
 
+    G4double           edeptrue;
+    G4double           rmstrue;
+    G4double           limittrue;
+    
+    G4String           histoName;
+    G4String           histoType;
+#ifdef USE_AIDA
     AIDA::ITree* tree;             // the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[12];   // (after writing the histos to file)
+#endif            
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

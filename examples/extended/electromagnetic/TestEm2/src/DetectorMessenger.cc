@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.5 2004-05-21 18:21:49 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.6 2004-06-18 15:43:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,13 +65,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   RBinCmd->SetRange("nRtot>=1 && dRradl>0");
   RBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  accCmd = new G4UIcmdWith3Vector("/testem/det/acceptance",this);
-  accCmd->SetGuidance("set Edep and RMS");
-  accCmd->SetGuidance("acceptance values");
-  accCmd->SetParameterName("edep","rms","limit",true);
-  accCmd->SetRange("edep>0 && edep<1 && rms>0");
-  accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   FieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);
   FieldCmd->SetGuidance("Define magnetic field.");
   FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
@@ -84,12 +77,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
-
-  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
-  factoryCmd->SetGuidance("set name for the histograms file");
-
-  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
-  fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -99,12 +86,9 @@ DetectorMessenger::~DetectorMessenger()
   delete MaterCmd;
   delete LBinCmd;
   delete RBinCmd;
-  delete accCmd;
   delete FieldCmd;
   delete UpdateCmd;
   delete testemDir;
-  delete factoryCmd;
-  delete fileCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -120,19 +104,11 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if( command == RBinCmd )
    { Detector->SetRBining(RBinCmd->GetNew3VectorValue(newValue));}
 
-  if( command == accCmd )
-   { Detector->SetEdepAndRMS(accCmd->GetNew3VectorValue(newValue));}
-
   if( command == FieldCmd )
    { Detector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
 
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
-
-  if (command == factoryCmd) Detector->SetHistoName(newValue);
-
-  if (command == fileCmd) Detector->SetHistoType(newValue);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

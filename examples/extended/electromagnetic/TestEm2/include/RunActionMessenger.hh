@@ -20,48 +20,39 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorMessenger.hh,v 1.4 2004-06-18 15:43:39 maire Exp $
+// $Id: RunActionMessenger.hh,v 1.1 2004-06-18 15:43:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef RunActionMessenger_h
+#define RunActionMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class DetectorConstruction;
-class G4UIdirectory;
+class RunAction;
 class G4UIcmdWithAString;
 class G4UIcmdWith3Vector;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class RunActionMessenger: public G4UImessenger
 {
-public:
-  DetectorMessenger(DetectorConstruction* );
- ~DetectorMessenger();
-
-  void SetNewValue(G4UIcommand*, G4String);
-
-private:
-  DetectorConstruction* Detector;
-
-  G4UIdirectory*             testemDir;
-  G4UIcmdWithAString*        MaterCmd;
-  G4UIcmdWith3Vector*        LBinCmd;
-  G4UIcmdWith3Vector*        RBinCmd;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
+  public:
+    RunActionMessenger(RunAction*);
+   ~RunActionMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    RunAction*          Run;
+    G4UIcmdWith3Vector* accCmd;    
+    G4UIcmdWithAString* factoryCmd;
+    G4UIcmdWithAString* fileCmd;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

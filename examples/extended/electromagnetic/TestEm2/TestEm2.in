@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.13 2004-05-24 07:22:49 vnivanch Exp $
+# $Id: TestEm2.in,v 1.14 2004-06-18 15:43:35 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -16,14 +16,13 @@
 /testem/det/setRbin 6 0.111
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.9425 0.0355 3.0
+/testem/run/acceptance  0.9425 0.0355 3.0
 #
 /testem/phys/addPhysics  standard
 ### /testem/phys/addPhysics  g4v52
 #
 /testem/phys/setCuts 5.0 mm
 #
-#/process/eLoss/preciseRange  true
 /run/initialize
 #
 /gun/particle e-
