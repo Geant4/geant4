@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.9 2003-01-28 10:31:47 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.10 2003-01-28 11:13:52 parlati Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -136,6 +136,51 @@ a = 1.01*g/mole;
  density=8.3748e-5 *g/cm3; 
 G4Material* HMat = new G4Material(name="Hydrogen", z=1., a, density);
 
+density = 0.178e-3*g/cm3;
+a = 4.0026*g/mole;
+G4Material* HEMat = new G4Material(name="Helium", z=2., a, density);
+
+a = 6.941*g/mole;
+density=5.3400e-1*g/cm3; 
+G4Material* LiMat = new G4Material(name="Lithium", z=3., a, density);
+
+a = 9.012*g/mole;
+density= 1.848*g/cm3; 
+G4Material* BeMat = new G4Material(name="Beryllium", z=4., a, density);
+
+a = 10.811*g/mole;
+density= 2.37*g/cm3; 
+G4Material* BMat = new G4Material(name="Boron", z=5., a, density);
+
+
+a = 12.01*g/mole;
+density= 2.00*g/cm3; 
+G4Material* ACMat = new G4Material(name="AmorphousCarbon", z=6., a, density);
+
+a = 12.01*g/mole;
+density= 1.7*g/cm3; 
+G4Material* GraphMat = new G4Material(name="Graphite", z=6., a, density);
+
+a = 14.008*g/mole;
+density= 1.165e-3*g/cm3; 
+G4Material* NMat = new G4Material(name="Nitrogen", z=7., a, density);
+
+a = 15.998*g/mole;
+density= 1.331e-3*g/cm3; 
+G4Material* OMat = new G4Material(name="Oxygen", z=8., a, density);
+
+a = 18.998*g/mole;
+density= 1.580e-3*g/cm3; 
+G4Material* FMat = new G4Material(name="Fluorine", z=9., a, density);
+
+a = 20.179*g/mole;
+density= 8.385e-4*g/cm3; 
+G4Material* NeMat = new G4Material(name="Neon", z=10., a, density);
+
+a = 22.989*g/mole;
+density= 9.71e-1*g/cm3; 
+G4Material* NaMat = new G4Material(name="Sodium", z=11., a, density);
+
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
@@ -144,9 +189,7 @@ density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
 
-density = 0.178e-3*g/cm3;
-a = 4.0026*g/mole;
-G4Material* HEMat = new G4Material(name="Helium", z=2., a, density);
+
 
 //
 // define a material from elements.   case 1: chemical molecule
