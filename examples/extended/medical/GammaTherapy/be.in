@@ -9,6 +9,8 @@
 /testem/verbose 0
 #
 /testem/phys/setCuts         0.1 mm
+/testem/stepMax              0.5 mm
+/process/eLoss/StepFunction  0.2 1. mm
 #
 /testem/phys/addPhysics       standard
 #/testem/phys/addPhysics        g4v52
@@ -20,17 +22,11 @@
 /testem/target1Z              3 mm
 /testem/target2Z              0.1 mm
 #
-/testem/histoName             results_paw/762sepbe_st.paw
-#/testem/histoName            results_paw/62sepbe_52.paw
-#/testem/histoName            results_paw/be_le.paw
+#/testem/histoName            be_st.paw
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
 #
-#/process/eLoss/preciseRange  false
-#/process/eLoss/integral      false
-/process/eLoss/StepFunction 0.2 1. mm
 /run/initialize
-/testem/stepMax               0.5 mm
-/run/beamOn 10000000
+/run/beamOn 1000000
 #

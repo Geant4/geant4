@@ -31,6 +31,7 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
+#include "PhysListEmStandardX.hh"
 #include "PhysListEm52.hh"
 #include "PhysListEmPenelope.hh"
 #include "PhysListEmLowenergy.hh"
@@ -119,6 +120,12 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
+
+  } else if (name == "standardX") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardX(name);
 
   } else if (name == "g4v52") {
 
