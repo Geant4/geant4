@@ -64,19 +64,18 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   denseBoneTissue = denseBone;
   trabecularBoneTissue = trabecularBone;
  
-  DicomConfiguration* dicomConfiguration = new DicomConfiguration;
-  dicomConfiguration->ReadDataFile();					
+  DicomConfiguration dicomConfiguration;
+  dicomConfiguration.ReadDataFile();	
+				
   // images must have the same dimension
-  G4int totalNumberOfFile = dicomConfiguration -> GetTotalNumberOfFile();
+  G4int totalNumberOfFile = dicomConfiguration.GetTotalNumberOfFile();
  
   for ( G4int i = 0; i < totalNumberOfFile; i++)
     {
-      dicomConfiguration->ReadG4File( dicomConfiguration->GetListOfFile()[i] );
-      G4double sliceLocation = dicomConfiguration->GetSliceLocation();
+      dicomConfiguration.ReadG4File( dicomConfiguration.GetListOfFile()[i] );
+      G4double sliceLocation = dicomConfiguration.GetSliceLocation();
       middleLocationValue = middleLocationValue + sliceLocation;
     }
-  
-  delete dicomConfiguration;
 
   middleLocationValue = middleLocationValue/totalNumberOfFile;   
   
@@ -109,7 +108,6 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   attributeMuscle->SetColour(red=1.061/2,green=1.061/2,blue=1.061/2,alpha=1.);
   attributeMuscle->SetForceSolid(true);
 
-
   attributeLiver = new G4VisAttributes;
   attributeLiver->SetColour(red=1.071/2,green=1.071/2,blue=1.071/2,alpha=1.);
   attributeLiver->SetForceSolid(true);
@@ -136,11 +134,13 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int, // NoVoxels,
   char sliceLocationBuf[300];
   char compressionBuf[300];
   char fullFileName[300];
+
+  FILE* readData; 
   readData = G4std::fopen("Data.dat","r");
   G4std::fscanf(readData,"%s",compressionBuf);
   compression = atoi(compressionBuf);
   G4std::fscanf(readData,"%s",maxBuf);
-  max = atoi(maxBuf);
+  //  G4int max = atoi(maxBuf);
   G4std::fscanf(readData,"%s",name);
   G4std::fclose(readData);
 
@@ -193,9 +193,9 @@ DicomPatientParameterisation::~DicomPatientParameterisation()
 
 void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-  G4double originZ = patientPlacementZ[copyNo]*mm-middleLocationValue*mm-sliceThickness/2;
-  G4ThreeVector origin( patientPlacementX[copyNo]*mm, 
-                        patientPlacementY[copyNo]*mm, 
+  G4double originZ = patientPlacementZ[copyNo] * mm - middleLocationValue * mm - sliceThickness/2.0;
+  G4ThreeVector origin( patientPlacementX[copyNo] * mm, 
+                        patientPlacementY[copyNo] * mm, 
                         originZ*mm );
 
   physVol->SetTranslation(origin);

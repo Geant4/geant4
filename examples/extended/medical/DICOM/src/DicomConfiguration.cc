@@ -46,12 +46,12 @@ G4int DicomConfiguration::ReadDataFile()
   return 0;
 }
 
-G4int DicomConfiguration::ReadG4File( G4String g4File )
+G4int DicomConfiguration::ReadG4File( const G4String& g4File )
 {
   densityValue.clear();
 	
-  g4File = g4File + ".g4";
-  G4std::ifstream readingG4FileHeader( g4File.c_str() );
+  G4String file = g4File + ".g4";
+  G4std::ifstream readingG4FileHeader( file.c_str() );
 
   if ( readingG4FileHeader.good() != 1 )
     return 1;

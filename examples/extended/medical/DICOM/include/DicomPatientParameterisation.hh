@@ -15,7 +15,7 @@ class DicomPatientParameterisation : public G4VPVParameterisation
 {
 public:
 
-  DicomPatientParameterisation(G4int NoVoxels, 
+  DicomPatientParameterisation(G4int nVoxels, 
 			       G4double maxDensity, 
 			       G4double minDensity ,
 			       G4Material* lunginhale,
@@ -98,10 +98,8 @@ private:
   G4VisAttributes* attributeTrabecularBone;
   G4VisAttributes* attributeDenseBone;
 
-  G4int max;
   G4int compression;
   
-  FILE* readData; 
   G4int columns,rows;
   G4double pixelSpacingX;
   G4double pixelSpacingY;
