@@ -135,7 +135,6 @@ private:
   G4double protonMassAMU;
   G4double theZieglerFactor;
   G4double expStopPower125;        // Experimental Stopping power at 125keV
-  G4double kineticEnergy;
 
 };
 
@@ -157,9 +156,7 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
 
 inline G4double G4BraggModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
-
-  kineticEnergy = dp->GetKineticEnergy();
-  G4double gamma= kineticEnergy/mass + 1.0;
+  G4double gamma= dp->GetKineticEnergy()/mass + 1.0;
   G4double tmax = 2.0*electron_mass_c2*(gamma*gamma - 1.) /
                   (1. + 2.0*gamma*ratio + ratio*ratio);
   

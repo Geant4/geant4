@@ -130,11 +130,11 @@ inline G4double G4ionIonisation::GetMeanFreePath(const G4Track& track,
                                                        G4ForceCondition* cond)
 {
   const G4DynamicParticle* dp = track.GetDynamicParticle();
-  G4double massRatio = proton_mass_c2/dp->GetMass();
+  G4double mRatio    = proton_mass_c2/dp->GetMass();
   G4double q         = dp->GetCharge()/eplus;
   G4double q_2       = q*q;
-  SetMassRatio(massRatio);
-  SetReduceFactor(1.0/(q_2*massRatio)); 
+  SetMassRatio(mRatio);
+  SetReduceFactor(1.0/(q_2*mRatio)); 
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 

@@ -93,7 +93,12 @@ public:
   void   SetLPMflag(G4bool val) {theLPMflag = val;};
   G4bool LPMflag() const {return theLPMflag;};
 
+  virtual G4double MaxSecondaryEnergy(
+				const G4DynamicParticle* dynParticle); 
 protected:
+
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+    				            G4double kineticEnergy); 
 
 private:
 
@@ -156,7 +161,8 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction1(G4double ScreenVariable)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
+inline 
+G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
 // compute the value of the screening function 1.5*PHI1 - 0.5*PHI2
 
@@ -170,6 +176,25 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
 
    return screenVal;
 } 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
+				 const G4DynamicParticle* dynParticle)
+{
+  return dynParticle->GetKineticEnergy();
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4double G4eBremsstrahlungModel::MaxSecondaryEnergy(
+                                 const G4ParticleDefinition*,
+    				       G4double kineticEnergy)
+{
+  return kineticEnergy;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -125,6 +125,7 @@ G4double G4BraggModel::ComputeDEDX(const G4Material* material,
                                          G4double cutEnergy) 
 {
   if(!particle) SetParticle(p);
+
   G4double tmax  = MaxSecondaryEnergy(p, kineticEnergy);
   G4double dedx  = DEDX(material, kineticEnergy/massRate);
 
@@ -187,6 +188,7 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   G4double xmax = G4std::min(tmax, maxEnergy)/tmax;
   if(xmin >= xmax) return 0;
 
+  G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy = kineticEnergy + mass;
   G4double beta2 = 1. - mass*mass/(energy*energy);
   G4double grej = 1.0 - beta2*xmin;

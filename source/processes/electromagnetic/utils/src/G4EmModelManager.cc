@@ -60,12 +60,13 @@
   
 G4EmModelManager::G4EmModelManager():
   nEmModels(0),
+  nmax(4),
   orderIsChanged(false),
   minSubRange(0.1),
   particle(0)
 {
   verboseLevel = 0;
-  for(size_t i = 0; i<5; i++) {
+  for(G4int i = 0; i<nmax; i++) {
     emModels[i] = 0;
     order[i] = 0;
     upperEkin[i] = 0.0;
@@ -77,7 +78,7 @@ G4EmModelManager::G4EmModelManager():
 G4EmModelManager::~G4EmModelManager()
 {
   Clear();
-  for(size_t i = 0; i<5; i++) {
+  for(G4int i = 0; i<nmax; i++) {
     if(emModels[i]) delete emModels[i];
   }
 }
@@ -120,29 +121,27 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
   if(orderIsChanged) {  
     G4int oldOrder[5]; 
     G4VEmModel* oldEmModels[5];
-    for(G4int k = 0; k<5; k++) {
+    for(G4int k = 0; k<nmax; k++) {
       oldEmModels[k] = emModels[k];
       oldOrder[k] = order[k];
     }
 
 
-    for(k=0; k<nEmModels; k++) {
+    for(G4int ik=0; ik<nEmModels; ik++) {
 
-      G4bool circle = true;
-      G4int low = 0;
+      G4int low = INT_MAX;
       G4int index = 0;
       for(G4int kk=0; kk<nEmModels; kk++) {
         if(oldEmModels[kk]) {
-          if(circle || order[kk] < low) {
-            low = order[kk];
+          if(oldOrder[kk] < low) {
+            low = oldOrder[kk];
             index = kk;
-            circle = false;
 	  }
 	}
       }
-      emModels[k] = oldEmModels[index];
+      emModels[ik] = oldEmModels[index];
+      order[ik] = ik;
       oldEmModels[index] = 0;
-      order[k] = k;
     }
     orderIsChanged = false;
   }
@@ -260,11 +259,26 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
 void G4EmModelManager::AddEmModel(G4VEmModel* p, G4int num)
 {
-  emModels[nEmModels] = p;
-  if(num != nEmModels) orderIsChanged = true;
-  order[nEmModels] = num;
-  currentModel = p;
-  nEmModels++;
+  if(nEmModels) {
+    for(G4int i=0; i<nEmModels; i++) {
+      if(num < order[i]) orderIsChanged = true;
+    }
+  }
+
+  if(nEmModels == nmax) {
+
+    G4cout << "G4EmModelManager::AddEmModel WARNING: cannot accept model #"
+           << nEmModels << " - the list is closed"
+           << G4endl;
+
+  } else {
+
+    emModels[nEmModels] = p;
+    order[nEmModels] = num;
+    currentModel = p;
+    nEmModels++;
+
+  }
 }
 
 

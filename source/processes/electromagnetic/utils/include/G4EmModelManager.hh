@@ -108,6 +108,7 @@ private:
 
   G4VEmModel*                 emModels[5];
   G4int                       nEmModels;
+  G4int                       nmax;
 
   G4int                       order[5];
   G4double                    upperEkin[5];
@@ -129,10 +130,14 @@ private:
 
 inline G4VEmModel* G4EmModelManager::SelectModel(G4double energy)
 {
-  if(nEmModels == 3 && energy > upperEkin[1]) {
+  if(nEmModels == 4 && energy > upperEkin[2]) {
+    currentModel = emModels[3];
+  } else if(nEmModels == 3 && energy > upperEkin[1]) {
     currentModel = emModels[2];
   } else if(nEmModels == 2 && energy > upperEkin[0]) {
     currentModel = emModels[1];
+  } else {    
+    currentModel = emModels[0];
   }  
   return currentModel;
 }

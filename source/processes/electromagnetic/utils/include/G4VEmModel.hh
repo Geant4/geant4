@@ -94,26 +94,19 @@ public:
                                       G4double tmin,
                                       G4double tmax) = 0;
 
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteMedium(
-                                const G4Material*,
-                                const G4DynamicParticle*,
-                                      G4double energyLoss,
-                                      G4double cutEnergy) {return 0;};
-
-  virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle) 
-                                {return dynParticle->GetKineticEnergy();};
+  virtual G4double MaxSecondaryEnergy(
+				const G4DynamicParticle* dynParticle) = 0; 
 
 protected:
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
-                                            G4double kineticEnergy) 
-                                {return kineticEnergy;};
+    				            G4double kineticEnergy) = 0; 
 
 private:
 
   // hide assignment operator 
-     G4VEmModel & operator=(const  G4VEmModel &right);
-     G4VEmModel(const  G4VEmModel&);
+  //     G4VEmModel & operator=(const  G4VEmModel &right);
+  //     G4VEmModel(const  G4VEmModel&);
 
 };
 

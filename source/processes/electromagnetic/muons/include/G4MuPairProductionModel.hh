@@ -90,8 +90,12 @@ public:
                                       G4double tmin,
                                       G4double maxEnergy);
 
-
+  virtual G4double MaxSecondaryEnergy(
+				const G4DynamicParticle* dynParticle); 
 protected:
+
+  virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
+    				            G4double kineticEnergy); 
 
 private:
 
@@ -138,5 +142,23 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+inline 
+G4double G4MuPairProductionModel::MaxSecondaryEnergy(
+				 const G4DynamicParticle* dynParticle)
+{
+  return dynParticle->GetKineticEnergy();
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline 
+G4double G4MuPairProductionModel::MaxSecondaryEnergy(
+                                 const G4ParticleDefinition*,
+    				       G4double kineticEnergy)
+{
+  return kineticEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

@@ -401,7 +401,7 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   G4PhysicsTable* dedx = list[0];
   if(1 < n_dedx) {
     dedx = tableBuilder->BuildDEDXTable(list);
-    for(i=0; i<n_dedx; i++) {
+    for(G4int i=0; i<n_dedx; i++) {
       list[i]->clearAndDestroy();
     }
   }
@@ -415,9 +415,9 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   inv_range_vector[iem] = invrange;
 
   loss_map[aParticle] = em;
-  for(i=0; i<n_dedx; i++) {
-    if(loss_list[i]->SecondaryParticle() == theElectron) {
-      loss_list[i]->SetSecondaryRangeTable(eIonisation->RangeTable());
+  for(G4int j=0; j<n_dedx; j++) {
+    if(loss_list[j]->SecondaryParticle() == theElectron) {
+      loss_list[j]->SetSecondaryRangeTable(eIonisation->RangeTable());
     }
   }
   if(1 < verbose) {
@@ -517,8 +517,8 @@ G4bool G4LossTableManager::StorePhysicsTable(G4VEnergyLossSTD* el,
 			   	       const G4String& inv_range_file, 
 				             G4bool ascii)
 {
-  
-  for(G4int i=0; i<n_loss; i++) {
+  G4int i=0;
+  for(i=0; i<n_loss; i++) {
     if(el == loss_vector[i]) break;
   }
 
