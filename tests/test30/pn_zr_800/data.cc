@@ -88,9 +88,9 @@ int main(int argc, char** argv)
   int nbin = 92;
   int ibin, inum;
   int counter = 0;
-  double bin0 = 2.0*MeV;
+  double bin0 = 5.0*MeV;
   double bin = 10.0*MeV;
-  double elim= 20.0*MeV;
+  double elim= 40.0*MeV;
   double x, an, e1, e2, y1, y2, ct1, ct2, xs, de;
   double e0 = 0.0;
 

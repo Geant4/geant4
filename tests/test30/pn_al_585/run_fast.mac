@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 proton
@@ -37,21 +37,6 @@ Al
 #anglespi
 22.5 45. 60. 90. 135.
 //--------
-#generator
-LEparametrisation
-#paw
-par.paw
-#run
-//#generator
-//preCompound
-//#paw
-//prec.paw
-//#run
-#generator
-CHIPS
-#paw
-chips.paw
-#run
 #generator
 kinetic
 #paw

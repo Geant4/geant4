@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+10000
 //--------Proton_processes
 #particle
 proton
@@ -15,43 +15,16 @@ proton
 #material
 Al
 #energy(MeV)
-585.
+256.
 #elim(MeV)
 20.
-#emaxpi(MeV)
-250.
-#emax(MeV)
-500.
-#nbinsd
-50
-#nbinspi
-25
 #nangle
 5
 #angles
-30. 60. 90. 120. 150.
+7.5 30. 60. 120. 150.
 #dangle
 10.
-#nanglepi
-5
-#anglespi
-22.5 45. 60. 90. 135.
 //--------
-#generator
-LEparametrisation
-#paw
-par.paw
-#run
-//#generator
-//preCompound
-//#paw
-//prec.paw
-//#run
-#generator
-CHIPS
-#paw
-chips.paw
-#run
 #generator
 kinetic
 #paw

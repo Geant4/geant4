@@ -77,10 +77,6 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
-//#include "CLHEP/Hist/TupleManager.h"
-//#include "CLHEP/Hist/HBookFile.h"
-//#include "CLHEP/Hist/Histogram.h"
-//#include "CLHEP/Hist/Tuple.h"
 
 // New Histogramming (from AIDA and Anaphe):
 #include <memory> // for the auto_ptr(T>
@@ -93,7 +89,6 @@
 #include "AIDA/IHistogramFactory.h"
 #include "AIDA/IHistogram1D.h"
 #include "AIDA/IHistogram2D.h"
-//#include "AIDA/IHistogram3D.h"
 
 #include "AIDA/ITupleFactory.h"
 #include "AIDA/ITuple.h"
@@ -139,6 +134,33 @@ int main(int argc, char** argv)
   G4double bngpi1[10] = {0.0};
   G4double bngpi2[10] = {0.0};
   G4double cngpi[10] = {0.0};
+  float bestZ[250] = {
+    0.0, 1.0, 1.0, 2.0, 2.0, 0.0, 0.0, 4.0, 0.0, 0.0,   //0 
+    4.0, 0.0, 0.0, 0.0, 6.0, 0.0, 0.0, 0.0, 9.0, 0.0,   //10 
+    10.0, 10.0, 11.0, 0.0, 11.0, 0.0, 13.0, 0.0, 0.0, 0.0,   //20 
+    0.0, 0.0, 15.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //30 
+    0.0, 0.0, 0.0, 0.0, 21.0, 0.0, 21.0, 21.0, 23.0, 0.0,   //40 
+    0.0, 24.0, 25.0, 0.0, 25.0, 0.0, 27.0, 27.0, 27.0, 26.0,   //50 
+    27.0, 0.0, 0.0, 0.0, 0.0, 30.0, 31.0, 31.0, 32.0, 32.0,   //60 
+    33.0, 33.0, 33.0, 34.0, 33.0, 34.0, 35.0, 35.0, 0.0, 36.0,   //70 
+    36.0, 37.0, 36.0, 37.0, 37.0, 38.0, 39.0, 39.0, 41.0, 40.0,   //80 
+    41.0, 39.0, 41.0, 38.0, 39.0, 40.0, 40.0, 39.0, 40.0, 0.0,   //90 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //100 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //110 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //120 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //130 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //140 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //150 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,   //160 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //170 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //180 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //190 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //200 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //210 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //220 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0,          //230 
+    0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };        //240 
+  
 
 
   // Track 
@@ -332,7 +354,8 @@ int main(int argc, char** argv)
 	     exit(1);
     }
 
-    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 2; 
+    G4int maxn = (G4int)((*(material->GetElementVector()))[0]->GetN()) + 1; 
+    G4int maxz = (G4int)((*(material->GetElementVector()))[0]->GetZ()) + 1; 
 		
     G4cout << "The particle:  " << part->GetParticleName() << G4endl;
     G4cout << "The material:  " << material->GetName() << "  Amax= " << maxn << G4endl;
@@ -359,6 +382,7 @@ int main(int argc, char** argv)
 
     const G4int nhisto = 50; 
     IHistogram1D* h[nhisto];
+    IHistogram2D* h2;
     //ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
@@ -632,7 +656,12 @@ int main(int argc, char** argv)
 
 	if(usepaw) {
 
-          if(pd) h[26]->fill((G4double)pd->GetBaryonNumber(), factorb);
+          if(pd) {
+            float N = pd->GetBaryonNumber();
+            float Z = pd->GetPDGCharge()/eplus;
+            float Z0= bestZ[(int)N];
+            if(abs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
+	  }
 
           if(pd == proton) { 
 						

@@ -13,29 +13,21 @@
 proton
 //--------
 #material
-Al
+Zr
 #energy(MeV)
-585.
+800.
 #elim(MeV)
-20.
-#emaxpi(MeV)
-250.
-#emax(MeV)
-500.
+40.
+#nbinse
+200
 #nbinsd
-50
-#nbinspi
-25
+80
 #nangle
 5
 #angles
-30. 60. 90. 120. 150.
+7.5 30. 60. 120. 150.
 #dangle
 10.
-#nanglepi
-5
-#anglespi
-22.5 45. 60. 90. 135.
 //--------
 #generator
 LEparametrisation
@@ -57,5 +49,7 @@ kinetic
 #paw
 kin.paw
 #run
-//--------Exit
+//---------Exit
 #exit
+
+
