@@ -324,6 +324,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
         face->addAttValue("DrawAs", G4String("Polygon"));
         face->addAttValue("HasFrame", G4String("True"));
         SetColour(face, GetColour(polyhedron));
+        face->addAttValue("Fill", G4String("True"));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
 
