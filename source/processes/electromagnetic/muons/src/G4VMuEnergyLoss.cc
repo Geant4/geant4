@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.3 2000-05-25 12:34:32 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.4 2000-05-25 12:54:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -433,7 +433,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
 
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
-    if (finalT < 0.) finalT = E-MeanLoss;
+    if (finalT < 0.) finalT = 0. ;
   }
 
   // kill the particle if the kinetic energy <= 0
