@@ -38,21 +38,6 @@
 #include "G4ThreeVector.hh"
 #include "G4Box.hh"
 
-
-DicomPatientParameterisation::~DicomPatientParameterisation()
-{
-  delete Attributes_Adipose;
-  delete Attributes_LungEXhale;
-  delete Attributes_Breast;
-  delete Attributes_Phantom;
-  delete Attributes_Muscle;
-  delete Attributes_Liver;
-  delete Attributes_TrabecularBone;
-  delete Attributes_LungINhale;
-  delete Attributes_DenseBone;
-  delete Attributes_air;
-}
-
 DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels, 
 							   G4double max_density, 
 							   G4double min_density ,
@@ -74,10 +59,7 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels,
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
       MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
     }
-  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
- 
-
-    
+  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;   
 
   Attributes_LungINhale	= new G4VisAttributes;
   Attributes_LungINhale->SetColour(red=0.217/2,green=0.217/2,blue=0.217/2,alpha=1.);
@@ -157,9 +139,22 @@ DicomPatientParameterisation::DicomPatientParameterisation(G4int NoVoxels,
   P_trabecular_bone=trabecular_bone;
 }
 
+DicomPatientParameterisation::~DicomPatientParameterisation()
+{
+  delete Attributes_Adipose;
+  delete Attributes_LungEXhale;
+  delete Attributes_Breast;
+  delete Attributes_Phantom;
+  delete Attributes_Muscle;
+  delete Attributes_Liver;
+  delete Attributes_TrabecularBone;
+  delete Attributes_LungINhale;
+  delete Attributes_DenseBone;
+  delete Attributes_air;
+}
+
 void DicomPatientParameterisation::ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
-
   G4ThreeVector origin(PatientPlacementX[copyNo]*mm, PatientPlacementY[copyNo]*mm, PatientPlacementZ[copyNo]*mm-MiddleLocationValue*mm-SliceTickness/2*mm );
   physVol->SetTranslation(origin);
 }
@@ -263,11 +258,11 @@ void DicomPatientParameterisation::GetDensity(G4double maxdensity, G4double mind
 	  for (int w=1;w<=lenc;w++)//lenc
             {
 	      i++;
-	      if ( ReadConfiguration->DensityValue[i] != -1 )
+	      if ( ReadConfiguration->GetDensityValue(i) != -1 )
                 {
-		  if ( ReadConfiguration->DensityValue[i] >= mindensity && ReadConfiguration->DensityValue[i] <= maxdensity )
+		  if ( ReadConfiguration->GetDensityValue(i) >= mindensity && ReadConfiguration->GetDensityValue(i) <= maxdensity )
                     {
-		      Density.push_back( ReadConfiguration->DensityValue[i] );
+		      Density.push_back( ReadConfiguration->GetDensityValue(i) );
 		      copy_counter++;
 		      PatientPlacementX.push_back( (ReadConfiguration->IsCompressionUsed()*( ((lenc*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(w-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );
 		      PatientPlacementY.push_back( (ReadConfiguration->IsCompressionUsed()*( ((lenr*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(j-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );

@@ -30,47 +30,47 @@
 
 G4int DicomConfiguration::ReadDataFile()
 {
-	G4std::ifstream DataFile( "Data.dat" );
+  G4std::ifstream dataFile( "Data.dat" );
 
-	if ( DataFile.good() != 1 )
-		return 1;
+  if ( DataFile.good() != 1 )
+    return 1;
 
-	DataFile >> CompressionValue;
-	DataFile >> TotalNumberOfFile;
+  dataFile >> compressionValue;
+  dataFile >> totalNumberOfFile;
 
-	for(G4int i=1;i<=TotalNumberOfFile;i++)
-	{
-		DataFile >> NameOfFileBuffer;
-		ListOfFile.push_back( NameOfFileBuffer );
-	}
+  for (G4int i=1;i<=totalNumberOfFile;i++)
+    {
+      dataFile >> nameOfFileBuffer;
+      listOfFile.push_back( nameOfFileBuffer );
+    }
 			
-	DataFile.close();
-	return 0;
+  dataFile.close();
+  return 0;
 }
 
 G4int DicomConfiguration::ReadG4File( G4String g4File )
 {
 
-	DensityValue.clear();
+  DensityValue.clear();
 	
-	g4File=g4File + ".g4";
-	G4std::ifstream Reading_g4FileHeader( g4File.c_str() );
+  g4File = g4File + ".g4";
+  G4std::ifstream readingG4FileHeader( g4File.c_str() );
 
-	if ( Reading_g4FileHeader.good() != 1 )
-		return 1;
+  if ( readingG4FileHeader.good() != 1 )
+    return 1;
 		
-	Reading_g4FileHeader >> TotalRows >> TotalColumns;
-	Reading_g4FileHeader >> X_PixelSpacing >> Y_PixelSpacing; // X is horizontal, Y is vertical
-	Reading_g4FileHeader >> SliceTickness;
-	Reading_g4FileHeader >> SliceLocation;
-	Reading_g4FileHeader >> CompressionUsed;
+  readingG4FileHeader >> totalRows >> totalColumns;
+  readingG4FileHeader >> xPixelSpacing >> yPixelSpacing; // X is horizontal, Y is vertical
+  readingG4FileHeader >> sliceTickness;
+  readingG4FileHeader >> sliceLocation;
+  readingG4FileHeader >> compressionUsed;
 
-	double DensityValueBuffer=0;
-	while ( Reading_g4FileHeader >> DensityValueBuffer )
-	{
-		DensityValue.push_back( DensityValueBuffer );
-	}
+  double DensityValueBuffer=0;
+  while ( readingG4FileHeader >> densityValueBuffer )
+    {
+      densityValue.push_back( densityValueBuffer );
+    }
 	
-	Reading_g4FileHeader.close();
-	return 0;
+  readingG4FileHeader.close();
+  return 0;
 }

@@ -44,42 +44,43 @@ public:
 
   G4int ReadG4File(G4String g4File);
 
-  G4int GetCompressionValue() {return CompressionValue;}
+  G4int GetCompressionValue() {return compressionValue;}
 
-  G4int GetTotalNumberOfFile() {return TotalNumberOfFile;}
+  G4int GetTotalNumberOfFile() {return totalNumberOfFile;}
 
-  G4std::vector<G4String> GetListOfFile() {return ListOfFile;}
+  G4std::vector<G4String> GetListOfFile() {return listOfFile;}
 
-  G4int GetTotalRows() {return TotalRows;}
+  G4int GetTotalRows() {return totalRows;}
 
-  G4int GetTotalColumns() {return TotalColumns;}  
+  G4int GetTotalColumns() {return totalColumns;}  
 
-  G4double GetXPixelSpacing() {return  X_PixelSpacing;}
+  G4double GetXPixelSpacing() {return  xPixelSpacing;}
 
-  G4double GetYPixelSpacing() {return  Y_PixelSpacing;}
+  G4double GetYPixelSpacing() {return  yPixelSpacing;}
 
-  G4double GetSliceThickness() {return SliceTickness;} 
+  G4double GetSliceThickness() {return sliceTickness;} 
 
-  G4double GetSliceLocation() {return  SliceLocation;} 
+  G4double GetSliceLocation() {return  sliceLocation;} 
 
-  G4int IsCompressionUsed() {return CompressionUsed;}
+  G4int IsCompressionUsed() {return compressionUsed;}
+
+  G4double GetDensityValue(G4int i) { return densityValue[i];}
  
 private:
 	
-  G4int CompressionValue;
-  G4int TotalNumberOfFile;
-  G4std::vector<G4String> ListOfFile;
-  G4int TotalRows;
-  G4int TotalColumns;
-  G4double X_PixelSpacing;
-  G4double Y_PixelSpacing;
-  G4double SliceTickness;
-  G4double SliceLocation; 
-  G4int CompressionUsed;
-  G4String NameOfFileBuffer;
-	
-public:
-  G4std::vector<G4double> DensityValue;	
+  G4int compressionValue;
+  G4int totalNumberOfFile;
+  G4std::vector<G4String> listOfFile;
+  G4int totalRows;
+  G4int totalColumns;
+  G4double xPixelSpacing;
+  G4double yPixelSpacing;
+  G4double sliceTickness;
+  G4double sliceLocation; 
+  G4int compressionUsed;
+  G4String nameOfFileBuffer;	
+  G4std::vector<G4double> densityValue;	
+
 };
 
 #endif
