@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.68 2001-11-21 09:17:54 gcosmo Exp $
+# $Id: binmake.gmk,v 1.69 2001-12-11 14:40:16 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -10,20 +10,35 @@ endif
 
 G4LIBDIR := $(G4LIB)/$(G4SYSTEM)
 
-# Define variable checking for existence of centrally installed headers.
-# If check will be true, avoid explicit definition of paths to INCFLAGS.
-#
-# G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
-
 include $(G4INSTALL)/config/G4UI_USE.gmk
 include $(G4INSTALL)/config/G4VIS_USE.gmk
 include $(G4INSTALL)/config/interactivity.gmk
 include $(G4INSTALL)/config/analysis.gmk
 
+ifndef G4LIB_USE_GRANULAR
+    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
+  ifndef GLOBALLIBS
+    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
+    SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
+  endif
+endif
+
+ifndef SHAREDLIBS
+  SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4globman.$(SHEXT) && echo yes)
+endif
+  
+# Define variable checking for existence of centrally installed headers,
+# and global compound libraries installed (in future, the mechanism will
+# be extended to the granular libraries as well. The liblist application
+# must be re-engineered for that).
+# If check will be true, avoid explicit definition of paths to INCFLAGS.
+#
+G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && $(GLOBALLIBS) && echo yes)
+
 ifndef INCFLAGS
-# ifeq ($(G4INCLUDE_EXEC),1)
-#   INCFLAGS := -I$(G4INCLUDE)
-# else
+ ifeq ($(G4INCLUDE_EXEC),1)
+  INCFLAGS := -I$(G4INCLUDE)
+ else
   INCFLAGS := \
               -I$(G4BASE)/global/management/include \
               -I$(G4BASE)/global/HEPRandom/include \
@@ -96,11 +111,11 @@ ifndef INCFLAGS
               -I$(G4BASE)/graphics_reps/include \
               -I$(G4BASE)/intercoms/include \
               -I$(G4BASE)/g3tog4/include
-# endif
+ endif
 endif
 
 ifdef G4ODBMS
-# ifneq ($(G4INCLUDE_EXEC),1)
+ ifneq ($(G4INCLUDE_EXEC),1)
   INCFLAGS += \
               -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
@@ -111,25 +126,13 @@ ifdef G4ODBMS
               -I$(G4BASE)/persistency/geometry/solids/Boolean/include \
               -I$(G4BASE)/persistency/geometry/management/include \
               -I$(G4BASE)/persistency/management/include
-# endif
+ endif
   INCFLAGS += -I$(G4SCHEMA_INCLUDE) \
               -I$(OBJY_DIR)/include \
               -I$(HEP_ODBMS_DIR)/include \
               -DHep_HAS_BUILDIN_BOOL_CONSTANTS
 endif
 
-ifndef G4LIB_USE_GRANULAR
-    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.a && echo yes)
-  ifndef GLOBALLIBS
-    GLOBALLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
-    SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4global.$(SHEXT) && echo yes)
-  endif
-endif
-
-ifndef SHAREDLIBS
-  SHAREDLIBS := $(shell test -f $(G4LIB)/$(G4SYSTEM)/libG4globman.$(SHEXT) && echo yes)
-endif
-  
 CPPFLAGS += $(INCFLAGS)
 LDFLAGS += -L$(G4LIBDIR)
 
