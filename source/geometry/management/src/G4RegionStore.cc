@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.7 2004-09-02 07:49:39 gcosmo Exp $
+// $Id: G4RegionStore.cc,v 1.8 2004-09-03 08:17:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -97,6 +97,7 @@ void G4RegionStore::Clean()
 
   for(pos=store->begin()+1; pos!=store->end(); pos++)
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     if (*pos) delete *pos; i++;   // Do NOT delete world region !
   }
 
@@ -117,6 +118,7 @@ void G4RegionStore::Clean()
 //
 void G4RegionStore::SetNotifier(G4VStoreNotifier* pNotifier)
 {
+  GetInstance();
   fgNotifier = pNotifier;
 }
 

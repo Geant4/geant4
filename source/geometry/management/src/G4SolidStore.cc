@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SolidStore.cc,v 1.12 2004-09-02 07:49:59 gcosmo Exp $
+// $Id: G4SolidStore.cc,v 1.13 2004-09-03 08:17:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4SolidStore
@@ -97,6 +97,7 @@ void G4SolidStore::Clean()
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     if (*pos) delete *pos; i++;
   }
 
@@ -117,6 +118,7 @@ void G4SolidStore::Clean()
 //
 void G4SolidStore::SetNotifier(G4VStoreNotifier* pNotifier)
 {
+  GetInstance();
   fgNotifier = pNotifier;
 }
 

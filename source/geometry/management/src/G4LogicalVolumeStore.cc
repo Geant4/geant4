@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolumeStore.cc,v 1.13 2004-09-02 07:49:59 gcosmo Exp $
+// $Id: G4LogicalVolumeStore.cc,v 1.14 2004-09-03 08:17:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4LogicalVolumeStore
@@ -95,6 +95,7 @@ void G4LogicalVolumeStore::Clean()
 
   for(pos=store->begin(); pos!=store->end(); pos++)
   {
+    if (fgNotifier) fgNotifier->NotifyDeRegistration();
     if (*pos) delete *pos; i++;
   }
 
@@ -115,6 +116,7 @@ void G4LogicalVolumeStore::Clean()
 //
 void G4LogicalVolumeStore::SetNotifier(G4VStoreNotifier* pNotifier)
 {
+  GetInstance();
   fgNotifier = pNotifier;
 }
 
