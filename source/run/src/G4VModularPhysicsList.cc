@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VModularPhysicsList.hh,v 1.3 2002-05-29 03:48:04 kurasige Exp $
+// $Id: G4VModularPhysicsList.cc,v 1.1 2002-05-29 03:48:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,80 +43,45 @@
 //	History
 //        first version                   12 Nov. 2000 by H.Kurashige 
 // ------------------------------------------------------------
-#ifndef G4VModularPhysicsList_h
-#define G4VModularPhysicsList_h 1
-
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/vector"
 
-#include "G4VUserPhysicsList.hh"
-#include "G4VPhysicsConstructor.hh"
+#include "G4VModularPhysicsList.hh"
 
-class G4VModularPhysicsList: public virtual G4VUserPhysicsList
+
+G4VModularPhysicsList::G4VModularPhysicsList()
+                  : G4VUserPhysicsList()
 {
-  public: 
-    G4VModularPhysicsList();
-    virtual ~G4VModularPhysicsList();
-
-  public:  // with description
-    //  "SetCuts" method sets a cut value for all particle types 
-    //   in the particle table
-    virtual void SetCuts() = 0; 
-
-  protected: // with description
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    virtual void ConstructParticle();
- 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
-  
-  public: // with description
-    void RegisterPhysics(G4VPhysicsConstructor* );
-
-    const G4VPhysicsConstructor* GetPhysics(G4int index) const;
-    const G4VPhysicsConstructor* GetPhysics(const G4String& name) const;
-
-    
-  /////////////////////////////////////
-  protected: // with description
-   // vector of pointers to G4VPhysicsConstructor
-   typedef G4std::vector<G4VPhysicsConstructor*> G4PhysConstVector;
-   G4PhysConstVector* physicsVector;
-};
-   
-
-inline 
- void G4VModularPhysicsList::RegisterPhysics(G4VPhysicsConstructor* fPhysics)
-{
-  physicsVector->push_back(fPhysics);
-}    
-
-inline  
- const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(G4int idx) const
-{
-  G4int i;
-  G4PhysConstVector::iterator itr= physicsVector->begin();
-  for (i=0; i<idx && itr!= physicsVector->end() ; ++i) ++itr;
-  if (itr!= physicsVector->end()) return (*itr);
-  else return 0;
+   physicsVector = new G4PhysConstVector();
 }
 
-inline  
- const G4VPhysicsConstructor* G4VModularPhysicsList::GetPhysics(const G4String& name) const
+G4VModularPhysicsList::~G4VModularPhysicsList()
 {
   G4PhysConstVector::iterator itr;
   for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
-    if ( name == (*itr)->GetPhysicsName()) break;
+    delete (*itr);
   }
-  if (itr!= physicsVector->end()) return (*itr);
-  else return 0;
+  physicsVector->clear();
 }
 
-   
-    
+void G4VModularPhysicsList::ConstructParticle()
+{
+  // create particles
+  G4PhysConstVector::iterator itr;
+  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+    (*itr)->ConstructParticle();;
+  }
+}
 
-#endif
+
+void G4VModularPhysicsList::ConstructProcess()
+{
+  AddTransportation();
+
+  G4PhysConstVector::iterator itr;
+  for (itr = physicsVector->begin(); itr!= physicsVector->end(); ++itr) {
+    (*itr)->ConstructProcess();
+  }
+}
+
