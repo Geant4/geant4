@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.17 2001-07-18 18:32:43 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.18 2001-07-25 21:12:55 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
     fExtent = fpTopPV -> GetLogicalVolume () -> GetSolid () -> GetExtent ();
   }
   else {
-    G4BoundingSphereScene bsScene;
+    G4BoundingSphereScene bsScene(this);
     const G4ModelingParameters* tempMP = fpMP;
     G4ModelingParameters mParams
       (0,      // No default vis attributes.
