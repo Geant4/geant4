@@ -81,7 +81,8 @@ G4BinaryCascade::G4BinaryCascade() : G4VIntraNuclearTransportModel()
 }
 
 
-G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& right)
+G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
+: G4VIntraNuclearTransportModel()
 {
 }
 
@@ -105,7 +106,7 @@ G4BinaryCascade::~G4BinaryCascade()
 
 
 //----------------------------------------------------------------------------
-G4VParticleChange * G4BinaryCascade::ApplyYourself(const G4Track & aTrack,
+G4HadFinalState * G4BinaryCascade::ApplyYourself(const G4HadProjectile & aTrack,
 //----------------------------------------------------------------------------
 							G4Nucleus & aNucleus)
 {
@@ -113,13 +114,13 @@ G4VParticleChange * G4BinaryCascade::ApplyYourself(const G4Track & aTrack,
   //if(eventcounter == 100*(eventcounter/100) )
   if(getenv("KCDEBUG") ) G4cerr << " ######### Reaction number starts ######### "<<eventcounter<<G4endl;
   eventcounter++;
-  G4LorentzVector initial4Momentum = aTrack.GetDynamicParticle()->Get4Momentum();
+  G4LorentzVector initial4Momentum = aTrack.Get4Momentum();
   if(initial4Momentum.e()-initial4Momentum.m()<theCutOnP/2.)
   {
     return theDeExcitation->ApplyYourself(aTrack, aNucleus);
   }
 
-  theParticleChange.Initialize(aTrack);
+  theParticleChange.Clear();
 // initialize the G4V3DNucleus from G4Nucleus
   the3DNucleus = new G4Fancy3DNucleus;
   the3DNucleus->Init(aNucleus.GetN(), aNucleus.GetZ());
@@ -128,7 +129,7 @@ G4VParticleChange * G4BinaryCascade::ApplyYourself(const G4Track & aTrack,
 
 // Build a KineticTrackVector with the G4Track
   G4KineticTrackVector * secondaries = new G4KineticTrackVector;
-  G4ParticleDefinition * definition = aTrack.GetDefinition();
+  G4ParticleDefinition * definition = const_cast<G4ParticleDefinition *>(aTrack.GetDefinition());
   G4ThreeVector initialPosition(0., 0., 0.); // will be set later
 
   if(!getenv("I_Am_G4BinaryCascade_Developer") )
@@ -186,9 +187,7 @@ G4VParticleChange * G4BinaryCascade::ApplyYourself(const G4Track & aTrack,
 //  G4cout << "HKM Applyyourself: number of products " << products->size() << G4endl;
 
 // Fill the G4ParticleChange * with products
-  G4int nProducts = products->size();
-  theParticleChange.SetStatusChange(fStopAndKill);
-  theParticleChange.SetNumberOfSecondaries(nProducts);
+  theParticleChange.SetStatusChange(stopAndKill);
   G4ReactionProductVector::iterator iter;
   G4double Efinal=0;
   for(iter = products->begin(); iter != products->end(); ++iter)

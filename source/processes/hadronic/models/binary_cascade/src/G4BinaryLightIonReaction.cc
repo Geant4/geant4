@@ -11,15 +11,15 @@
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
   
-  G4VParticleChange *G4BinaryLightIonReaction::
-  ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
+  G4HadFinalState *G4BinaryLightIonReaction::
+  ApplyYourself(const G4HadProjectile &aTrack, G4Nucleus & targetNucleus )
   {    
     G4ping debug("debug_G4BinaryLightIonReaction");
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
-    G4double a2=targetNucleus.GetN();
-    G4double z2=targetNucleus.GetZ();
+    G4int a2=static_cast<G4int>(targetNucleus.GetN()+.1);
+    G4int z2=static_cast<G4int>(targetNucleus.GetZ());
     G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(z2, a2);
     debug.push_back(a1);
     debug.push_back(z1);
@@ -27,7 +27,7 @@
     debug.push_back(a2);
     debug.push_back(z2);
     debug.push_back(m2);
-    G4LorentzVector mom(aTrack.GetDynamicParticle()->Get4Momentum());
+    G4LorentzVector mom(aTrack.Get4Momentum());
     debug.push_back(mom);
     debug.dump();
     G4LorentzRotation toBreit(mom.boostVector());
@@ -36,7 +36,7 @@
     if(a2<a1)
     {
       swapped = true;
-      G4double tmp(0);
+      G4int tmp(0);
       tmp = a2; a2=a1; a1=tmp;
       tmp = z2; z2=z1; z1=tmp;
       tmp = m2; m2=m1; m1=tmp;
@@ -220,10 +220,8 @@
   
     // Fill the particle change, while rotating. Boost from projectile breit-frame in case we swapped.  
     // theResult.Clear();
-    theResult.Initialize(aTrack);
-    theResult.SetStatusChange(fStopAndKill);
-    G4int nProducts = result->size();
-    theResult.SetNumberOfSecondaries(nProducts);
+    theResult.Clear();
+    theResult.SetStatusChange(stopAndKill);
     for(i=0; i<result->size(); i++)
     {
       if((*result)[i]->GetNewlyAdded())
