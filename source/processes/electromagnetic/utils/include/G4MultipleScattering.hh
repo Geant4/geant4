@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.hh,v 1.5 2001-09-19 13:16:06 maire Exp $
+// $Id: G4MultipleScattering.hh,v 1.6 2002-04-17 16:04:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //------------- G4MultipleScattering physics process --------------------------
@@ -35,6 +35,7 @@
 // 13-09-01 Unused TrueToGeomTransformation method deleted,
 //          class description (L.Urban)
 // 19-09-01 come back to previous process name msc 
+// 17-04-02 NEW angle distribution + boundary algorithm modified, L.Urban
 //            
 //------------------------------------------------------------------------------
 
@@ -138,15 +139,6 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-     // Set functions for the different model parameters:
-   void Setpalfa(G4double value)                {palfa = value;};
-   void Setpbeta(G4double value)                {pbeta = value;};
-   void Setpgamma(G4double value)               {pgamma = value;};
-   void Setpq0(G4double value)                  {pq0 = value;};
-   void Setpq1(G4double value)                  {pq1 = value;};
-   void Setpc0(G4double value)                  {pc0 =  value;};
-     // angle distribution parameters
-
    void Setpcz(G4double value)                  {pcz = value;};
      // geom. step length distribution
 
@@ -155,10 +147,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    void SetBoundary(G4bool value)               {boundary = value;};
    void SetFactlim(G4double val)                {factlim=val;};
+   void SetFacrange(G4double val)               {facrange=val;};
      // parameters needed near to boundary
 
    void SetTuning(G4double value)               {tuning = value;};
    void SetCparm (G4double value)               {cparm  = value;};
+   void SetTlim  (G4double value)               {Tlim   = value;};
      // tuning of the transport mean free path
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
@@ -188,16 +182,14 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4PhysicsTable* theTransportMeanFreePathTable;
 
-   G4double fTransportMeanFreePath;
+   G4double fTransportMeanFreePath,kappa;
 
-   G4double biglambda,taubig,tausmall,taulim;
+   G4double taubig,tausmall,taulim;
 
    G4double LowestKineticEnergy;
    G4double HighestKineticEnergy;
    G4int    TotBin;
 
-   G4Material* lastMaterial;
-   G4double    lastKineticEnergy;
    G4int       materialIndex;
   
    G4double tLast;
@@ -205,20 +197,20 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    // model parameters
    G4bool   boundary;                         // spec. handling near boundaries
-   G4double factlim;
+   G4double factlim,facrange;
+   G4int stepno,stepnolastmsc ;
+   G4bool msclim ;
    G4GPILSelection  valueGPILSelectionMSC;
 
    G4double pcz,zmean;                        // z(geom.step length)
                                               //  distribution 
-
-   G4double palfa,pbeta,pgamma,pq0,pq1,pc0;   // parameters of angle
-                                              // disrtibution
 
    G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
                                               // (or step length) dependence
 
    G4double tuning;                            //  param. for lambda tuning
    G4double cparm;                             //          "
+   G4double Tlim ;                             //          "
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
