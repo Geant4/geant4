@@ -1,4 +1,4 @@
-$Id: README,v 1.1 1999-10-11 13:07:24 maire Exp $
+$Id: README,v 1.2 2001-03-27 08:34:07 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -90,7 +90,7 @@ $Id: README,v 1.1 1999-10-11 13:07:24 maire Exp $
  	
  7- HISTOGRAMS
  
-     Testem1 produces several histo which are saved as testem1.histo
+     Testem1 produces several histo which are saved as testem1.paw
      
      Content of these histo:
   
@@ -98,5 +98,8 @@ $Id: README,v 1.1 1999-10-11 13:07:24 maire Exp $
       2 : number of steps per track (charged particle)
       3 : step length (charged particle)
  	
- 	  
+ 	   
+ Note that, for time being (on 26.03.2001), the histograms in G4
+ are disabled  wia the cpp flag g4nohist := true in the gnumakefile 
+ 	
  	

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em1RunAction.cc,v 1.9 2001-03-08 14:57:43 maire Exp $
+// $Id: Em1RunAction.cc,v 1.10 2001-03-27 08:34:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,7 +54,7 @@ Em1RunAction::~Em1RunAction()
 void Em1RunAction::bookHisto()
 {
 #ifndef G4NOHIST
-  hbookManager = new HBookFile("testem1.histo", 68);
+  hbookManager = new HBookFile("testem1.paw", 68);
 
   // booking histograms
   histo[0] = hbookManager->histogram("track length (mm) of a charged particle",100,0.,50*cm);
@@ -68,6 +68,8 @@ void Em1RunAction::bookHisto()
 void Em1RunAction::cleanHisto()
 {
 #ifndef G4NOHIST
+  // writing histogram file
+  hbookManager->write();
   delete [] histo;
   delete hbookManager;
 #endif   
@@ -163,11 +165,6 @@ void Em1RunAction::EndOfRunAction(const G4Run* aRun)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }
-    
-#ifndef G4NOHIST     
-  // writing histogram file
-  hbookManager->write();
-#endif               
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
