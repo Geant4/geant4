@@ -3,28 +3,26 @@
 #include "G4VUppAnalyzer.hh"
 
 
-G4UppActionAnalyze::G4UppActionAnalyze(const G4double time,
-				       const G4VUppAnalyzer* aPtr, 
-				       const G4UppTrackVector* sPtr)
+G4UppActionAnalyze::G4UppActionAnalyze(const G4double analyzeTime,
+				       const G4VUppAnalyzer& anAnalyzer)
 {
-  AnalyzerPtr = aPtr;
-  allTracksPtr = sPtr;
-  setActionTime(time);
+  analyzerPtr = &anAnalyzer;
+  setActionTime(analyzeTime);
 }
 
 
-G4int G4UppActionAnalyze::Perform(const G4UppTrackVector& t) const
+G4UppTrackChange* G4UppActionAnalyze::perform(const G4UppTrackVector& allTracks) const
 {
-  G4cout << "Starting Analyzer" << G4endl; 
-  AnalyzerPtr->Analyze(*allTracksPtr);
-  return 0;
+  // G4cout << "Starting Analyzer" << G4endl; 
+  analyzerPtr->analyze(allTracks);
+  return NULL;
 }
 
 
 void G4UppActionAnalyze::dump() const
 {
-  G4cout << "Action: Call of " << AnalyzerPtr->getName();
-  G4cout << " at " << getActionTime()/fermi << G4endl;
+  G4cout << "Action: ANALYSE (" << analyzerPtr->getName();
+  G4cout << ") at " << getActionTime()/fermi << " fm/c" << G4endl;
 }
 
 

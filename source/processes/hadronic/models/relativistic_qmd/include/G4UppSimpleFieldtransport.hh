@@ -11,7 +11,7 @@ class G4UppSimpleFieldtransport : public G4VUppFieldtransport
 {
 public:
 
-  void Propagate(G4UppTrackVector& a, const G4double dTime) const;
+  void propagate(G4UppTrackVector& allTracks, const G4double dTime) const;
 
 };
 

@@ -16,16 +16,24 @@ class G4UppTrackVector : public G4std::vector<G4UppTrack*>
 {
 public:
 
-  void add(const G4KineticTrackVector& v);
-  void add(const G4RWTPtrOrderedVector<G4Nucleon>& v, const G4int g=0); 
-  G4int getIndex(const G4UppTrack* tPtr) const;
-  G4UppTrackChange Update(const G4UppTrackChange& aChange);
+  void add(const G4KineticTrackVector& aTrackVector);
+  void add(const G4RWTPtrOrderedVector<G4Nucleon>& aNucleonVector, 
+	   const G4int nonInteractionGroup=0); 
+
+  G4int getIndex(const G4UppTrack* trackPtr) const;
+
+  G4UppTrackChange update(const G4UppTrackChange& aTrackChange);
+
+  void setGlobalTime(const G4double newGlobalTime) 
+    { globalTime = newGlobalTime; }
   G4double getGlobalTime() const 
     { return globalTime; }
-  void setGlobalTime(const G4double t) { globalTime=t; }
-  G4bool isPauliBlocked(const G4UppTrackVector& t) const;
-  G4bool isPauliBlocked(const G4UppTrack* t) const;
-  void resetChanged();
+
+  G4bool isPauliBlocked(const G4UppTrackVector& particlesToCheck) const;
+  G4bool isPauliBlocked(const G4UppTrack* particleToCheck) const;
+
+  void resetChangedFlags();
+
   void dump() const;
 
 private:

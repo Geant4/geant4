@@ -6,78 +6,79 @@
 #include "G4UppTrackChange.hh"
 #include "G4VUppFieldtransport.hh"
 #include "G4Fancy3DNucleus.hh"
+#include "G4UppGlobal.hh"
 
 
-void G4UppModel::Initialize (G4Fancy3DNucleus& projectile, 
-			     G4Fancy3DNucleus& target)
+void G4UppModel::initialize (G4Fancy3DNucleus& aProjectile, 
+			     G4Fancy3DNucleus& aTarget)
 {
   allTracks.clear();
-  allTracks.add(projectile.GetNucleons(),1);
-  allTracks.add(target.GetNucleons(),2);
+  allTracks.add(aProjectile.GetNucleons(),1);
+  allTracks.add(aTarget.GetNucleons(),2);
   allTracks.setGlobalTime(0.0);
-  //  allTracks.dump();
+  // allTracks.dump();
 }
 
 
-void G4UppModel::Initialize (const G4KineticTrackVector& t)
+void G4UppModel::initialize (const G4KineticTrackVector& tracks)
 {
   allTracks.clear();
-  for (G4int i=0; i<t.length(); i++) {
-    G4UppTrack* aPtr = new G4UppTrack(*(t[i]));
-    allTracks.push_back(aPtr);
+  for (G4int i=0; i<tracks.length(); i++) {
+    G4UppTrack* aTrackPtr = new G4UppTrack( *(tracks[i]) );
+    allTracks.push_back(aTrackPtr);
   }
   allTracks.setGlobalTime(0.0);
-  allTracks.dump();
+  // allTracks.dump();
 }
 
 
-G4int G4UppModel::Propagate(const G4VUppFieldtransport& aTransportPtr)
+G4int G4UppModel::propagate(const G4VUppFieldtransport& aTransport)
 {
-  G4UppInteraction actualInteraction;
   const G4VUppAction* actualActionPtr;
-  G4UppTrackChange aTrackChange;
+  G4UppTrackChange* aTrackChangePtr;
 
   // Fill Collision Array
-  myHandler.UpdateActions(allTracks);
-  allTracks.resetChanged();
-  myHandler.dump(allTracks);
+  myHandler.updateActions();
+  allTracks.resetChangedFlags();
+  // myHandler.dump(allTracks);
+
   do {
     // get the first action to be done
-    actualActionPtr = &(myHandler.getFirstAction());
-    cout << "next action:" << endl;
+    actualActionPtr = myHandler.getFirstAction();
+    cout << "(debug) get action:";
     actualActionPtr->dump();
-    cout << "GlobalTime: " << allTracks.getGlobalTime()/fermi << endl;
-    if (actualActionPtr->getActionTime() < allTracks.getGlobalTime()) {
-      cout << "WARNING action already gone!" << endl;
-      cout << "removing action..." << endl;
+
+    G4double dTime = actualActionPtr->getActionTime() - allTracks.getGlobalTime();
+    if (dTime < 0) {
+      cout << "(warning) action already gone!" << endl;
+      cout << "(warning)  GlobalTime: " << allTracks.getGlobalTime()/fermi << endl;
+      cout << "(warning)  removing action..." << endl;
     } else {
       // propagate the whole system to the time of the action
-      G4double dTime = actualActionPtr->getActionTime() - allTracks.getGlobalTime();
-      aTransportPtr.Propagate(allTracks,dTime);
+      aTransport.propagate(allTracks,dTime);
     
-      // perform the action
-      if (actualActionPtr->Perform(allTracks)) {
-	actualActionPtr->Perform(allTracks, actualInteraction);
-	aTrackChange = actualInteraction.Perform();
-	G4UppTrackChange Save = allTracks.Update(aTrackChange);
-	if (allTracks.isPauliBlocked(*(actualInteraction.getOutgoingParticles())))
-	  allTracks.Update(Save);
+      // now perform the action
+      if (aTrackChangePtr = actualActionPtr->perform(allTracks)) {
+	G4UppTrackChange undoBackupChange = allTracks.update(*aTrackChangePtr);
+	if (allTracks.isPauliBlocked(aTrackChangePtr->newParticles))
+	  allTracks.update(undoBackupChange);
       }
     }
     myHandler.deleteFirstAction();
-    myHandler.CleanUp();
-    myHandler.UpdateActions(allTracks);
-    allTracks.resetChanged();
+    myHandler.cleanUp();
+    myHandler.updateActions();
+    allTracks.resetChangedFlags();
     
-  } while ((allTracks.getGlobalTime() < PropagationTime) && !myHandler.empty());
+  } while ((allTracks.getGlobalTime() < propagationTime) && !myHandler.empty());
 
-  return 1;
+  return 0;
 }
 
 
-void G4UppModel::addAnalyzer (const G4VUppAnalyzer* aPtr, const G4double time)
+void G4UppModel::addAnalyzer (const G4VUppAnalyzer& anAnalyzer, 
+			      const G4double analyzeTime)
 {
-  G4VUppAction* actionPtr = new G4UppActionAnalyze(time, aPtr, &allTracks);
+  G4VUppAction* actionPtr = new G4UppActionAnalyze(analyzeTime, anAnalyzer);
   myHandler.addAction(actionPtr);
 }
 

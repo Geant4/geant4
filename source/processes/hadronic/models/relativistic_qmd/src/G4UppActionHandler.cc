@@ -5,72 +5,82 @@
 #include "G4UppActionCollision.hh"
 
 
-bool CmpAction::operator() (const G4VUppAction* a, const G4VUppAction* b) const
+G4UppActionHandler::G4UppActionHandler(const G4UppTrackVector& allTracks)
+{
+  allTracksPtr = &allTracks;
+}
+
+
+bool G4UppActionHandler::CmpAction::operator() (const G4VUppAction* a, const G4VUppAction* b) const
 { 
   // G4cout << "less: " << a->getActionTime() << " vs. " << b->getActionTime() << G4endl;
   return (a->getActionTime() < b->getActionTime()); 
 }
 
 
-void G4UppActionHandler::CleanUp()
+void G4UppActionHandler::cleanUp()
 {
-  G4cout << "cleanup: " << q.size() << " elements" << endl;
-  G4int c=0;
+  // G4cout << "cleanup: " << q.size() << " elements" << endl;
+  G4int count=0;
   for (queuetype::iterator i=q.begin(); i!=q.end(); i++) {
-    (*i)->dump();
-    if (!((*i)->isValid())) {
-      cout << "remove: ";
+    // (*i)->dump();
+    if (!( (*i)->isValid() )) {
+      G4cout << "(debug) removing: ";
       (*i)->dump();
       delete *i;
       q.erase(i--);
-      c++;
+      count++;
     }
   }
-  G4cout << "(debug) cleanup: " << c << "   " << q.size() << " left." << endl;
+  G4cout << "(debug) cleanup: " << count << " actions removed" << endl;
 }
 
   
 
-void G4UppActionHandler::UpdateActions(const G4UppTrackVector& v)
+void G4UppActionHandler::updateActions()
 {
-  const G4double CutOff = 8.0*fermi;
-  G4int c=0;
-  cout << "(debug) update..." << endl;
-  for (int i=0; i<v.size()-1; i++) {
-    for (int j=i+1; j<v.size(); j++) {
+  const G4double cutOff = 8.0*fermi;
+  G4int count=0;
+  G4cout << "(debug) update..." << G4endl;
+  for (int i=0; i<allTracksPtr->size()-1; i++) {
+    for (int j=i+1; j<allTracksPtr->size(); j++) {
+      G4UppTrack* trk1 = (*allTracksPtr)[i];
+      G4UppTrack* trk2 = (*allTracksPtr)[j];
       // cout << i << "  " << j << endl;
-      if ( (v[i]->hasChanged()) || (v[j]->hasChanged())) {
-	c++;
-	// cout << c << endl;
+      if ( (trk1->hasChanged()) || (trk2->hasChanged()) ) {
 	if ( (i!=j) 
-	     && (!lastPartners(*v[i],*v[j])) 
-	     && (!sameGroup(*v[i],*v[j])) ) {
-	  G4double minDist = MinimumDistance(*v[i],*v[j]);
-	  if ( (minDist > 0.0) && (minDist < CutOff) ) {
-	    G4double collTime = CollisionTime(*v[i],*v[j]);
+	     && ( !lastPartners(*trk1,*trk2) ) 
+	     && ( !sameGroup(*trk1,*trk2) ) ) {
+	  G4double minDist = minimumDistance(*trk1,*trk2);
+	  if ( (minDist > 0.0) && (minDist < cutOff) ) {
+	    G4double collTime = collisionTime(*trk1,*trk2);
 	    if (collTime>0.0) {
-	      G4UppTrackVector inParts;
-	      inParts.push_back(v[i]);
-	      inParts.push_back(v[j]);
-	      q.push_back(new G4UppActionCollision(collTime + v.getGlobalTime(),inParts));
-	      cout << "update!!" << i << " hits " << j << endl;
+	      G4UppTrackVector collidingParticles;
+	      collidingParticles.push_back(trk1);
+	      collidingParticles.push_back(trk2);
+	      G4VUppAction* actionPtr = new G4UppActionCollision(collTime + allTracksPtr->getGlobalTime(),
+								 *allTracksPtr,
+								 collidingParticles,
+								 aScatterer);
+	      G4cout << "(debug)  new ";
+	      actionPtr->dump();
+	      q.push_back(actionPtr);
+	      count++;
 	    }
 	  }
 	}
       }
     }
   }
-  // cout << "vor sort" << endl;
-  // cout << "actions: " << q.size() << endl;
   sort(q.begin(),q.end(),CmpAction());
-  cout << "(debug) " << c << "pairs checked" << endl;
+  cout << "(debug) " << count << " collision(s) updated" << endl;
 }
 
 
 G4bool G4UppActionHandler::lastPartners(const G4UppTrack& i, const G4UppTrack& j) const
 {
-  if (i.isLastPartner(&j)) return true;
-  if (j.isLastPartner(&i)) return true;
+  if (i.isLastInteractionPartner(&j)) return true;
+  if (j.isLastInteractionPartner(&i)) return true;
   return false;
 }
 
@@ -93,19 +103,18 @@ void G4UppActionHandler::addAction(G4VUppAction* a)
 }
 
 
-void G4UppActionHandler::dump(const G4UppTrackVector& t) const
+void G4UppActionHandler::dump() const
 {
-  G4cout << "actionhandler: " << q.size() << " elements" << endl;
+  G4cout << "actionhandler with " << q.size() << " elements" << G4endl;
   for (queuetype::iterator i=q.begin(); i!=q.end(); i++) {
-    (*i)->dump(t);
+    (*i)->dump();
   }
 }
 
 
-const G4VUppAction& G4UppActionHandler::getFirstAction() const
+const G4VUppAction* G4UppActionHandler::getFirstAction() const
 {
-  cout << "getAction..." << endl;
-  return *q.front();
+  return q.front();
 }
 
 
@@ -116,7 +125,7 @@ void G4UppActionHandler::deleteFirstAction()
 }
 
 
-G4double G4UppActionHandler::MinimumDistance(const G4UppTrack& i, 
+G4double G4UppActionHandler::minimumDistance(const G4UppTrack& i, 
 					     const G4UppTrack& j) const
 {
   G4LorentzVector pi = i.Get4Momentum();
@@ -139,7 +148,7 @@ G4double G4UppActionHandler::MinimumDistance(const G4UppTrack& i,
 }
 
 
-G4double G4UppActionHandler::CollisionTime(const G4UppTrack& i, 
+G4double G4UppActionHandler::collisionTime(const G4UppTrack& i, 
 					   const G4UppTrack& j) const
 {
   G4LorentzVector pi = i.Get4Momentum();

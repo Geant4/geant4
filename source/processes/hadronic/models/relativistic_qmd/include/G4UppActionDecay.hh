@@ -10,15 +10,16 @@ class G4UppActionDecay : public G4VUppAction
 {
 public:
 
-  G4UppActionDecay(const G4double time, 
-		   G4UppTrack* pPtr);
+  G4UppActionDecay(const G4double decayTime, 
+		   const G4UppTrack& decayingParticle);
+
   G4bool isValid() const;
-  G4int Perform(const G4UppTrackVector& t) const { return 1; }
-  G4int Perform(const G4UppTrackVector& t, G4UppInteraction& i) const;
+
+  G4UppTrackChange* perform(const G4UppTrackVector& allTracks) const;
 
 private:
 
-  G4UppTrack* particlePtr;
+  const G4UppTrack* particlePtr;
 
 };
 

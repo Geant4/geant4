@@ -4,23 +4,29 @@
 
 
 #include "G4VUppAction.hh"
+#include "G4VScatterer.hh"
 
 
 class G4UppActionCollision : public G4VUppAction
 {
 public:
 
-  G4UppActionCollision(const G4double time, 
-		       const G4UppTrackVector& inPart);
+  G4UppActionCollision(const G4double collisionTime, 
+		       const G4UppTrackVector& allTracks,
+		       const G4UppTrackVector& collidingParticles,
+		       const G4VScatterer& aScatterer);
+
   G4bool isValid() const;
-  G4int Perform(const G4UppTrackVector& t) const { return 1; }
-  G4int Perform(const G4UppTrackVector& t, G4UppInteraction& i) const;
+
+  G4UppTrackChange* perform(const G4UppTrackVector& allTracks) const;
+
   void dump() const;
-  void dump(const G4UppTrackVector& t) const;
 
 private:
 
-  G4UppTrackVector incomingPart;
+  const G4UppTrackVector* allTracksPtr;
+  G4UppTrackVector collPart;
+  const G4VScatterer* scattererPtr;
 
 };
 

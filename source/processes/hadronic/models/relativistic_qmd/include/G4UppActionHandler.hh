@@ -5,39 +5,54 @@
 
 #include "G4UppInteraction.hh"
 #include "G4VUppAction.hh"
+#include "G4Scatterer.hh"
 #include <g4std/vector>
 
-
-struct CmpAction {
-  bool operator() (const G4VUppAction* a,const G4VUppAction* b) const;
-};
 
 
 class G4UppActionHandler
 {
 public:
 
-  const G4VUppAction& getFirstAction() const;
+  G4UppActionHandler(const G4UppTrackVector& allTracks);
+
+  void addAction(G4VUppAction* anActionPtr);
+
+  const G4VUppAction* getFirstAction() const;
   void deleteFirstAction();
-  void UpdateActions(const G4UppTrackVector& v);
-  void CleanUp();
-  void addAction(G4VUppAction* a);
-  G4bool empty() const { return q.empty(); }
-  void dump(const G4UppTrackVector& t) const;
+
+  void updateActions();
+
+  void cleanUp();
+
+  G4bool empty() const 
+    { return q.empty(); }
+
+  void dump() const;
 
 private:
 
   typedef G4VUppAction* valuetype;
   typedef vector<valuetype> queuetype;
 
-  queuetype q;
+  struct CmpAction {
+    bool operator() (const G4VUppAction* a,const G4VUppAction* b) const;
+  };
 
-  G4double CollisionTime(const G4UppTrack& i, 
+  queuetype q;
+  const G4UppTrackVector* allTracksPtr;
+  const G4Scatterer aScatterer;
+
+
+  G4double collisionTime(const G4UppTrack& i, 
 			 const G4UppTrack& j) const;
-  G4double MinimumDistance(const G4UppTrack& i, 
+
+  G4double minimumDistance(const G4UppTrack& i, 
 			   const G4UppTrack& j) const;
+
   G4bool lastPartners(const G4UppTrack& i, 
 		      const G4UppTrack& j) const;
+
   G4bool sameGroup(const G4UppTrack& i, 
 		   const G4UppTrack& j) const;
 };

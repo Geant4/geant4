@@ -5,13 +5,14 @@
 void G4UppTrack::dump() const
 {
   G4cout << GetDefinition()->GetParticleName();
-  G4cout << "  #Coll:" << NumberOfCollisions << G4endl;
+  G4cout << "  nColl=" << numberOfCollisions << G4endl;
 }
 
-G4bool G4UppTrack::isLastPartner(const G4UppTrack* PartPtr) const
+
+G4bool G4UppTrack::isLastInteractionPartner(const G4UppTrack* PartPtr) const
 {
-  for (G4int i=0; i<lastPartners.size(); i++) {
-    if (PartPtr==lastPartners[i]) return true;
+  for (G4int i=0; i<lastInteractionPartners.size(); i++) {
+    if (PartPtr==lastInteractionPartners[i]) return true;
   }
   return false;
 }

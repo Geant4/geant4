@@ -16,29 +16,33 @@ class G4UppModel
 {
 public:
 
-  G4UppModel() : PropagationTime(80) {}
+  G4UppModel() 
+    : propagationTime(80),myHandler(allTracks) {}
 
-  void Initialize (const G4UppEvent& event);
-  void Initialize (const G4KineticTrackVector& aState);
-  void Initialize (const G4KineticTrackVector& projectile, 
-		   const G4KineticTrackVector& target);
-  void Initialize (G4Fancy3DNucleus& projectile, 
-		   G4Fancy3DNucleus& target);
+  void initialize(const G4KineticTrackVector& aState);
+  void initialize(const G4KineticTrackVector& aProjectile, 
+		  const G4KineticTrackVector& aTarget);
+  void initialize(G4Fancy3DNucleus& aProjectile, 
+		  G4Fancy3DNucleus& aTarget);
 
-  void SetModelOptions (const G4double PropTime) 
-    { PropagationTime=PropTime; }
-  void addAnalyzer (const G4VUppAnalyzer* aPtr, const G4double time);
-  void addAnalyzer (const G4VUppAnalyzer* aPtr, const G4double begin,
-		    const G4double end, const G4int nSteps);
+  void setModelOptions(const G4double newPropTime) 
+    { propagationTime=newPropTime; }
 
-  G4int Propagate(const G4VUppFieldtransport& aTransport);
+  void addAnalyzer(const G4VUppAnalyzer& anAnalyzer, 
+		   const G4double analyzeTime);
+  void addAnalyzer(const G4VUppAnalyzer& anAnalyzer, 
+		   const G4double beginTime,
+		   const G4double endTime, 
+		   const G4int nSteps);
 
-  G4KineticTrackVector* GetFinalState();
+  G4int propagate(const G4VUppFieldtransport& aTransport);
+
+  G4KineticTrackVector* getFinalState();
 
 private:
 
   G4UppTrackVector allTracks;
-  G4double PropagationTime;
+  G4double propagationTime;
   G4UppActionHandler myHandler;
 
 };

@@ -13,20 +13,19 @@ class G4UppActionAnalyze : public G4VUppAction
 {
 public:
 
-  G4UppActionAnalyze(const G4double time,
-		     const G4VUppAnalyzer* aPtr,
-		     const G4UppTrackVector* sPtr);
-  G4bool isValid() const { return true; }
-  G4int Perform(const G4UppTrackVector& t) const;
-  G4int Perform(const G4UppTrackVector& t, G4UppInteraction& i) const 
-     { return 0; }
+  G4UppActionAnalyze(const G4double analyzeTime,
+		     const G4VUppAnalyzer& anAnalzer);
+
+  G4bool isValid() const 
+    { return true; }
+
+  G4UppTrackChange* perform(const G4UppTrackVector& allTracks) const;
+
   void dump() const;
-  void dump(const G4UppTrackVector& t) const { dump(); }
 
 private:
 
-  const G4VUppAnalyzer* AnalyzerPtr;
-  const G4UppTrackVector* allTracksPtr;
+  const G4VUppAnalyzer* analyzerPtr;
 
 };
 

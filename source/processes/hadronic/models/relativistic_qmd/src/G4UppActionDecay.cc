@@ -2,19 +2,20 @@
 #include "G4UppActionDecay.hh"
 
 
-G4UppActionDecay::G4UppActionDecay(const G4double time,
-				   G4UppTrack* pPtr)
+G4UppActionDecay::G4UppActionDecay(const G4double decayTime,
+				   const G4UppTrack& decayingParticle)
 {
-  particlePtr = pPtr;
-  setActionTime(time);
+  particlePtr = &decayingParticle;
+  setActionTime(decayTime);
 }
 
 
-G4int G4UppActionDecay::Perform(const G4UppTrackVector& t, G4UppInteraction& i) const
+G4UppTrackChange* G4UppActionDecay::perform(const G4UppTrackVector& allTracks) const
 {
-  G4cout << "Decay of Particle " << particlePtr->GetDefinition()->GetParticleName();
-  G4cout << G4endl;
-  return 0;
+  G4cout << "(debug) performing decay of ";
+  G4cout << particlePtr->GetDefinition()->GetParticleName() << G4endl;
+  // insert code here
+  return NULL;
 }
 
 

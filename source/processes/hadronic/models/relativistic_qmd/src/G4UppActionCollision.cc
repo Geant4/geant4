@@ -2,49 +2,53 @@
 #include "G4UppActionCollision.hh"
 
 
-G4UppActionCollision::G4UppActionCollision(const G4double time,
-					   const G4UppTrackVector& inParts)
+G4UppActionCollision::G4UppActionCollision(const G4double collisionTime,
+					   const G4UppTrackVector& allTracks,
+					   const G4UppTrackVector& collidingParticles,
+					   const G4VScatterer& aScatterer)
+  : collPart(collidingParticles)
 {
-  incomingPart = inParts;
-  setActionTime(time);
+  setActionTime(collisionTime);
+  allTracksPtr = &allTracks;
+  // collPart = collidingParticles;
+  scattererPtr = &aScatterer;
 }
 
 
-G4int G4UppActionCollision::Perform(const G4UppTrackVector& t, 
-				    G4UppInteraction& ia) const
+G4UppTrackChange* G4UppActionCollision::perform(const G4UppTrackVector& allTracks) const
 {
-  G4cout << "Collison of Particles " << G4endl;
-  G4int arraySize = incomingPart.size();
-  for (G4int i=0; i<arraySize; i++) {
-    incomingPart[i]->clearLastPartner();
-    incomingPart[i]->setChanged(true);
-    for (G4int j=0; j<arraySize; j++) 
-      incomingPart[i]->addLastPartner(incomingPart[j]);
+  G4cout << "(debug) performing collison (";
+  for (G4int j=0; j<collPart.size(); j++) {
+    G4cout << collPart[j]->GetDefinition()->GetParticleName() << " ";
   }
-  cout << "collok" << endl;
-  return 0;
+  G4cout << ")" << G4endl;
+
+  G4int arraySize = collPart.size();
+  for (G4int i=0; i<arraySize; i++) {
+    collPart[i]->clearLastInteractionPartners();
+    collPart[i]->setChanged(true);
+    for (G4int j=0; j<arraySize; j++) 
+      collPart[i]->addLastInteractionPartner(collPart[j]);
+  }
+  // call scatterer here!
+  return NULL;
 }
 
 
 G4bool G4UppActionCollision::isValid() const
 {
-  for (int i=0; i<incomingPart.size(); i++) 
-    if (incomingPart[i]->hasChanged()) return false;
+  for (G4int i=0; i<collPart.size(); i++) 
+    if (collPart[i]->hasChanged()) return false;
   return true;
 }
 
 
+
 void G4UppActionCollision::dump() const
 {
-  G4cout << "Action: COLL at " << getActionTime()/fermi << G4endl;
+  G4cout << "Action: COLL ( ";
+  for (G4int i=0; i<collPart.size(); i++) {
+    G4cout << allTracksPtr->getIndex(collPart[i]) << " ";
+  }
+  G4cout << ") at " << getActionTime()/fermi << G4endl;
 }
-
-
-void G4UppActionCollision::dump(const G4UppTrackVector& v) const
-{
-  G4cout << "Action: COLL from ";
-  G4cout << v.getIndex(incomingPart[0]) << " and ";
-  G4cout << v.getIndex(incomingPart[1]);
-  G4cout << " at " << getActionTime()/fermi << G4endl;
-}
-

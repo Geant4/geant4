@@ -11,9 +11,12 @@ class G4VUppAnalyzer
 {
 public:
 
-  virtual void Analyze(const G4UppTrackVector& s) const = 0;
-  virtual void Analyze(const G4UppTrackVector& s, const G4UppInteraction& i) const = 0;
-  virtual string getName() const { return "Unknown Analyzer"; }
+  virtual void analyze(const G4UppTrackVector& allTracks) const = 0;
+  virtual void analyze(const G4UppTrackVector& allTracks, 
+		       const G4UppTrackChange& aTrackChange) const = 0;
+
+  virtual string getName() const 
+    { return "Unknown Analyzer"; }
 
 };
 

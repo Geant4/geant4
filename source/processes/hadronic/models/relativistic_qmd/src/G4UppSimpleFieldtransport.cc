@@ -5,22 +5,22 @@
 #include "G4UppGlobal.hh"
 
 
-void G4UppSimpleFieldtransport::Propagate(G4UppTrackVector& a, const G4double dTime) const
+void G4UppSimpleFieldtransport::propagate(G4UppTrackVector& allTracks, 
+					  const G4double dTime) const
 {
-  if (uppdebug) cout << "(debug) fieldtransport dt=" << dTime/fermi << endl;
+  if (uppdebug) G4cout << "(debug) fieldtransport dt=" << dTime/fermi << endl;
   if (uppdebug) {
-    cout << "(debug) from " << a.getGlobalTime()/fermi;
-    cout << " to " << (a.getGlobalTime()+dTime)/fermi << endl;
+    cout << "(debug)   from " << allTracks.getGlobalTime()/fermi;
+    cout << " to " << (allTracks.getGlobalTime()+dTime)/fermi << endl;
   }
-  for (G4int i=0; i<a.size(); i++) {
-    G4LorentzVector aMomentum = a[i]->Get4Momentum();
+  for (G4int i=0; i<allTracks.size(); i++) {
+    G4LorentzVector aMomentum = allTracks[i]->Get4Momentum();
     G4double E = aMomentum.e();
-    // sqrt(px(j)**2+py(j)**2+pz(j)**2+fmass(j)**2)    
-    G4LorentzVector aPosition = a[i]->Get4Position();
+    G4LorentzVector aPosition = allTracks[i]->Get4Position();
     aPosition.setT(aPosition.t() + dTime);
     aPosition.setVect(aPosition.vect() + aMomentum.vect() * (dTime / E));
-    a[i]->Set4Momentum(aMomentum);
-    a[i]->Set4Position(aPosition);
+    allTracks[i]->Set4Momentum(aMomentum);
+    allTracks[i]->Set4Position(aPosition);
   }
-  a.setGlobalTime(a.getGlobalTime() + dTime);
+  allTracks.setGlobalTime(allTracks.getGlobalTime() + dTime);
 } 

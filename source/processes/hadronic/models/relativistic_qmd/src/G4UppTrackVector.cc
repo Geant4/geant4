@@ -42,7 +42,7 @@ void G4UppTrackVector::dump() const
 }
 
 
-G4UppTrackChange G4UppTrackVector::Update(const G4UppTrackChange& aChange)
+G4UppTrackChange G4UppTrackVector::update(const G4UppTrackChange& aChange)
 {
   G4UppTrackChange backup;
 
@@ -69,7 +69,7 @@ G4bool G4UppTrackVector::isPauliBlocked(const G4UppTrackVector& t) const
 }
 
 
-void G4UppTrackVector::resetChanged()
+void G4UppTrackVector::resetChangedFlags()
 {
   for (G4int i=0; i<this->size(); i++) {
     (*this)[i]->setChanged(false);

@@ -10,7 +10,11 @@ class G4VUppFieldtransport
 {
 public:
 
-  virtual void Propagate(G4UppTrackVector& a, const G4double dTime) const = 0;
+  virtual void propagate(G4UppTrackVector& allTracks, 
+			 const G4double dTime) const = 0;
+
+  virtual string getName() const 
+    { return "Unknown Fieldtransport"; }
 
 };
 
