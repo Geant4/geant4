@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.5 2003-01-27 10:43:41 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.6 2003-03-25 17:03:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -456,7 +456,7 @@ void G4ReflectionFactory::ReflectPVReplica(G4VPhysicalVolume* dPV,
 //_____________________________________________________________________________
 
 void G4ReflectionFactory::ReflectPVParameterised(G4VPhysicalVolume* dPV, 
-                                                 G4LogicalVolume* refLV)
+                                                 G4LogicalVolume*)
 {
   // Not implemented.
   // Should copy and transform daughter of PVReplica type of
