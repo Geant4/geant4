@@ -1,0 +1,3943 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+***** Table : Nb of materials = 10 *****
+
+ Material: Tungsten            density: 19.300 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm
+   --->  Element: Tungsten    Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Scintillator            density:  1.032 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  42.549 cm
+   --->  Element: CarbonC   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  91.45 %  Abundance  47.37 %
+   --->  Element: HydrogenH   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   8.55 %  Abundance  52.63 %
+
+ Material: CesiumIodide            density:  4.530 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.852 cm
+   --->  Element: CesiumCs   Z = 55.0   N = 132.9   A = 132.91 g/mole  fractionMass:  51.15 %  Abundance  50.00 %
+   --->  Element: IodineI   Z = 53.0   N = 126.9   A = 126.90 g/mole  fractionMass:  48.85 %  Abundance  50.00 %
+
+ Material: Air            density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.049 m
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  15.99 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: Aluminum            density:  2.700 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm
+   --->  Element: AluminumAl   Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Silicon            density:  2.333 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.356 cm
+   --->  Element: SiliconSi   Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Iron            density:  7.870 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.758 cm
+   --->  Element: IronFe   Z = 26.0   N =  55.8   A =  55.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Lead            density: 11.350 g/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm
+   --->  Element: LeadPb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Galactic            density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 204727576.737 pc
+   --->  Element: Galactic    Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Beam            density:  0.010 mg/cm3  temperature: 273.15 K  pressure:   0.02 atm  RadLength:  36.771 km
+   --->  Element: NitrogenN   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element: OxygenO   Z =  8.0   N =  16.0   A =  15.99 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+
+2 LAT 
+1 TOP 
+
+------------------------------------------------------------
+---> The Tracker is 15 layers of:  0.3mm of Tungsten
+------------------------------------------------------------
+
+phot:  Total cross sections from Sandia parametrisation. 
+GammaRayTelPhysicsList::SetCuts:CutLength : 100 mum
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+============= The cut Energy ==============================
+                      gamma            e-           
+Cut in range       
+ Tungsten                          100 mum           100 mum
+   Scintillator                          100 mum           100 mum
+   CesiumIodide                          100 mum           100 mum
+   Air                          100 mum           100 mum
+   Aluminum                          100 mum           100 mum
+   Silicon                          100 mum           100 mum
+   Iron                          100 mum           100 mum
+   Lead                          100 mum           100 mum
+   Galactic                          100 mum           100 mum
+   Beam                          100 mum           100 mum
+   dummyMat                          100 mum           100 mum
+Cut in energy
+ Tungsten                           36 keV           351 keV
+   Scintillator                          995 eV          85.3 keV
+   CesiumIodide                         9.28 keV           143 keV
+   Air                          990 eV           990 eV
+   Aluminum                         2.31 keV           130 keV
+   Silicon                          2.3 keV           120 keV
+   Iron                         6.26 keV           234 keV
+   Lead                         29.3 keV           240 keV
+   Galactic                          990 eV           990 eV
+   Beam                          990 eV           990 eV
+   dummyMat                          990 eV           133 keV
+===================================================
+/control/saveHistory
+/run/verbose 1
+/gun/particle proton
+/gun/energy 1 GeV
+/gun/sourceType 2
+/run/beamOn 100
+Start Run processing.
+Event: 0
+Number of tracker hits in this event =  1
+      0 30.0091 896 1 0 0.25 -0.417602 -175.897 
+Number of tracker digits in this event =  0
+Event: 1
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 2
+Number of tracker hits in this event =  4
+      2 140.003 896 1 1 -0.289757 0.985271 -174.45 
+      2 178.027 901 1 0 -0.293456 0.995756 -175.85 
+      2 132.263 896 0 1 -0.365953 1.22138 -204.45 
+      2 143.39 902 0 0 -0.373218 1.23923 -205.85 
+Number of tracker digits in this event =  4
+Event: 3
+Number of tracker hits in this event =  2
+      3 86.6958 853 3 0 -0.680176 -8.95913 -115.85 
+      3 319.644 852 3 0 -0.697024 -9.16369 -115.857 
+Number of tracker digits in this event =  1
+Event: 4
+Number of tracker hits in this event =  8
+      4 244.295 894 3 0 -0.425991 -0.76508 -115.85 
+      4 271.498 893 3 0 -0.647779 -0.960238 -116.045 
+      4 40.3872 892 3 0 -0.637087 -1.07814 -116.236 
+      4 125.63 895 5 0 -0.300286 -0.583451 -55.85 
+      4 40.3133 894 5 0 -0.331907 -0.802453 -56.1559 
+      4 280.318 858 5 0 3.6125 -7.96846 -56.25 
+      4 93.0461 859 5 0 3.74719 -7.75907 -56.1827 
+      4 4.0079 860 5 0 3.63772 -7.62083 -56.2432 
+Number of tracker digits in this event =  4
+Event: 5
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 6
+Number of tracker hits in this event =  1
+      6 112.009 896 1 0 0.261313 -0.254664 -175.85 
+Number of tracker digits in this event =  0
+Event: 7
+Number of tracker hits in this event =  2
+      7 142.189 902 1 0 -0.537318 1.16109 -175.85 
+      7 55.953 903 1 0 -0.591404 1.2765 -175.886 
+Number of tracker digits in this event =  1
+Event: 8
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 9
+Number of tracker hits in this event =  6
+      9 148.249 898 2 1 0.338074 -0.6201 -144.45 
+      9 102.671 895 2 0 0.34366 -0.640511 -145.85 
+      9 151.584 899 1 1 0.462609 -1.06257 -174.45 
+      9 274.018 892 1 0 0.461107 -1.0839 -175.85 
+      9 276.538 898 0 1 0.440788 -1.53507 -204.45 
+      9 270.783 890 0 0 0.437885 -1.56032 -205.85 
+Number of tracker digits in this event =  5
+Event: 10
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 11
+Number of tracker hits in this event =  6
+     11 119.182 895 2 1 -0.515368 -0.265807 -144.45 
+     11 129.274 896 2 0 -0.528098 -0.2702 -145.85 
+     11 127.645 894 1 1 -0.77121 -0.355909 -174.45 
+     11 118.987 896 1 0 -0.78008 -0.360188 -175.85 
+     11 131.35 893 0 1 -0.955219 -0.431377 -204.45 
+     11 106.088 896 0 0 -0.962749 -0.435514 -205.85 
+Number of tracker digits in this event =  3
+Event: 12
+Number of tracker hits in this event =  6
+     12 150.189 895 1 1 -0.457216 -0.53032 -174.45 
+     12 109.657 895 1 0 -0.470506 -0.53682 -175.85 
+     12 178.133 894 0 1 -0.732411 -0.663245 -204.45 
+     12 126.349 894 0 0 -0.745912 -0.670281 -205.85 
+     12 393.32 941 3 0 5.86507 8.9146 -115.85 
+     12 97.9584 942 3 0 6.03459 9.14376 -115.93 
+Number of tracker digits in this event =  4
+Event: 13
+Number of tracker hits in this event =  8
+     13 192.193 896 3 1 -0.399796 0.454459 -114.45 
+     13 116.473 899 3 0 -0.408605 0.467586 -115.85 
+     13 276.618 895 2 1 -0.623805 0.777391 -144.45 
+     13 339.628 900 2 0 -0.633369 0.797155 -145.85 
+     13 166.383 894 1 1 -0.802962 1.18971 -174.45 
+     13 135.295 902 1 0 -0.804277 1.20782 -175.85 
+     13 118.515 894 0 1 -0.829782 1.57266 -204.45 
+     13 179.663 904 0 0 -0.829927 1.58381 -205.85 
+Number of tracker digits in this event =  6
+Event: 14
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 15
+Number of tracker hits in this event =  3
+     15 291.193 896 1 0 -0.709019 -0.252618 -175.85 
+     15 125.742 893 0 1 -0.872854 -0.348888 -204.45 
+     15 119.236 896 0 0 -0.883028 -0.348345 -205.85 
+Number of tracker digits in this event =  2
+Event: 16
+Number of tracker hits in this event =  10
+     16 219.044 898 4 1 0.295614 0.50625 -84.45 
+     16 97.7439 899 4 0 0.303038 0.519476 -85.85 
+     16 174.517 899 3 1 0.456073 0.779324 -114.45 
+     16 146.891 900 3 0 0.463375 0.793411 -115.85 
+     16 127.358 899 2 1 0.612313 1.08199 -144.45 
+     16 105.31 902 2 0 0.619992 1.09671 -145.85 
+     16 207.32 900 1 1 0.767273 1.40282 -174.45 
+     16 129.911 903 1 0 0.775445 1.41969 -175.85 
+     16 133.822 901 0 1 0.947455 1.76492 -204.45 
+     16 125.534 905 0 0 0.95825 1.78178 -205.85 
+Number of tracker digits in this event =  8
+Event: 17
+Number of tracker hits in this event =  2
+     17 133.782 896 0 1 -0.291018 0.335191 -204.45 
+     17 178.697 898 0 0 -0.289682 0.341757 -205.85 
+Number of tracker digits in this event =  2
+Event: 18
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 19
+Number of tracker hits in this event =  2
+     19 238.047 898 0 1 0.393826 0.493239 -204.45 
+     19 116.076 899 0 0 0.403087 0.499119 -205.85 
+Number of tracker digits in this event =  1
+Event: 20
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 21
+Number of tracker hits in this event =  2
+     21 134.138 896 0 1 -0.276425 0.612162 -204.45 
+     21 127.996 899 0 0 -0.2803 0.615855 -205.85 
+Number of tracker digits in this event =  2
+Event: 22
+Number of tracker hits in this event =  6
+     22 176.453 898 2 1 0.293409 -0.577377 -144.45 
+     22 122.51 895 2 0 0.297217 -0.592178 -145.85 
+     22 130.225 898 1 1 0.375738 -0.895419 -174.45 
+     22 124.797 893 1 0 0.383784 -0.919846 -175.85 
+     22 137.124 899 0 1 0.534972 -1.43357 -204.45 
+     22 165.839 890 0 0 0.545308 -1.45562 -205.85 
+Number of tracker digits in this event =  6
+Event: 23
+Number of tracker hits in this event =  4
+     23 234.845 926 0 0 4.66911 5.85102 -205.85 
+     23 24.0561 927 0 0 4.99543 6.20717 -205.913 
+     23 5.76164 929 0 1 6.64813 7.47553 -204.85 
+     23 248.821 930 0 1 6.65737 7.48613 -204.84 
+Number of tracker digits in this event =  2
+Event: 24
+Number of tracker hits in this event =  2
+     24 136.509 896 0 1 -0.380211 0.290075 -204.45 
+     24 201.234 898 0 0 -0.386077 0.288163 -205.85 
+Number of tracker digits in this event =  2
+Event: 25
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 26
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 27
+Number of tracker hits in this event =  6
+     27 130.143 899 2 1 0.452645 0.585871 -144.45 
+     27 162.191 899 2 0 0.461019 0.604961 -145.85 
+     27 140.035 899 1 1 0.569832 0.996312 -174.45 
+     27 117.285 901 1 0 0.570219 1.01206 -175.85 
+     27 154.111 899 0 1 0.58518 1.3501 -204.45 
+     27 117.018 903 0 0 0.582699 1.3677 -205.85 
+Number of tracker digits in this event =  4
+Event: 28
+Number of tracker hits in this event =  3
+     28 109.924 937 1 0 -40.6175 8.22133 -176.25 
+     28 212.506 938 1 0 -40.6315 8.29103 -175.981 
+     28 185.025 939 1 0 -40.5038 8.53886 -176.135 
+Number of tracker digits in this event =  2
+Event: 29
+Number of tracker hits in this event =  2
+     29 113.746 898 0 1 0.304117 -0.61044 -204.45 
+     29 112.72 895 0 0 0.307069 -0.613696 -205.85 
+Number of tracker digits in this event =  0
+Event: 30
+Number of tracker hits in this event =  2
+     30 145.2 896 0 1 -0.328476 -0.355444 -204.45 
+     30 117.691 896 0 0 -0.334502 -0.35369 -205.85 
+Number of tracker digits in this event =  1
+Event: 31
+Number of tracker hits in this event =  2
+     31 135.458 896 3 1 -0.315548 0.300529 -114.45 
+     31 130.386 898 3 0 -0.311053 0.313586 -115.85 
+Number of tracker digits in this event =  2
+Event: 32
+Number of tracker hits in this event =  7
+     32 131.339 895 2 1 -0.626028 -0.258072 -144.45 
+     32 146.545 896 2 0 -0.637105 -0.269221 -145.85 
+     32 276.706 894 1 1 -0.817046 -0.527015 -174.45 
+     32 122.063 895 1 0 -0.827287 -0.538721 -175.85 
+     32 158.244 893 0 1 -1.03556 -0.77484 -204.45 
+     32 133.709 894 0 0 -1.03527 -0.782787 -205.85 
+     32 236.328 894 3 0 0.985356 -0.786088 -115.85 
+Number of tracker digits in this event =  7
+Event: 33
+Number of tracker hits in this event =  10
+     33 124.562 896 3 1 -0.322801 -0.524431 -114.45 
+     33 161.793 895 3 0 -0.325163 -0.534283 -115.85 
+     33 171.806 896 2 1 -0.368818 -0.740599 -144.45 
+     33 157.37 894 2 0 -0.372684 -0.750768 -145.85 
+     33 148.957 895 1 1 -0.465421 -0.927914 -174.45 
+     33 119.668 893 1 0 -0.471118 -0.938122 -175.85 
+     33 178.098 895 0 1 -0.582739 -1.14163 -204.45 
+     33 172.258 892 0 0 -0.584889 -1.14909 -205.85 
+     33 12.4963 897 6 1 -0.25 -0.286369 -24.72 
+     33 253.334 896 6 1 -0.267384 -0.311845 -24.726 
+Number of tracker digits in this event =  8
+Event: 34
+Number of tracker hits in this event =  2
+     34 128.286 890 0 1 -1.46704 -0.256764 -204.45 
+     34 143.272 896 0 0 -1.4899 -0.254533 -205.85 
+Number of tracker digits in this event =  2
+Event: 35
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 36
+Number of tracker hits in this event =  4
+     36 120.892 900 1 1 0.658754 0.574993 -174.45 
+     36 155.017 899 1 0 0.665696 0.598073 -175.85 
+     36 126.895 900 0 1 0.814802 1.05822 -204.45 
+     36 145.905 902 0 0 0.820235 1.07828 -205.85 
+Number of tracker digits in this event =  4
+Event: 37
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 38
+Number of tracker hits in this event =  3
+     38 103.358 894 4 0 -0.787373 -0.777816 -85.85 
+     38 148.832 893 4 0 -0.957483 -0.964417 -85.9815 
+     38 11.6939 892 4 0 -1.09216 -1.10066 -86.2258 
+Number of tracker digits in this event =  1
+Event: 39
+Number of tracker hits in this event =  3
+     39 25.8568 1208 3 0 -10.1174 62.2518 -116.25 
+     39 91.9094 1207 3 0 -10.126 62.2179 -116.221 
+     39 215.416 1011 3 0 -89.3845 22.8706 -116.25 
+Number of tracker digits in this event =  1
+Event: 40
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 41
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 42
+Number of tracker hits in this event =  4
+     42 118.899 896 1 1 -0.333407 0.32078 -174.45 
+     42 134.76 898 1 0 -0.335476 0.330172 -175.85 
+     42 124.848 896 0 1 -0.395899 0.519465 -204.45 
+     42 94.9942 899 0 0 -0.404711 0.527994 -205.85 
+Number of tracker digits in this event =  2
+Event: 43
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 44
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 45
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 46
+Number of tracker hits in this event =  2
+     46 226.095 898 0 1 0.386313 -1.1999 -204.45 
+     46 137.995 892 0 0 0.391487 -1.21515 -205.85 
+Number of tracker digits in this event =  2
+Event: 47
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 48
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 49
+Number of tracker hits in this event =  6
+     49 139.142 896 2 1 -0.302729 -0.526935 -144.45 
+     49 119.485 895 2 0 -0.306115 -0.543311 -145.85 
+     49 124.898 896 1 1 -0.335926 -0.865809 -174.45 
+     49 121.184 893 1 0 -0.335703 -0.880482 -175.85 
+     49 177.396 896 0 1 -0.346035 -1.19689 -204.45 
+     49 142.224 892 0 0 -0.350004 -1.21356 -205.85 
+Number of tracker digits in this event =  5
+Event: 50
+Number of tracker hits in this event =  7
+     50 143.254 899 2 1 0.470342 0.37227 -144.45 
+     50 109.686 898 2 0 0.477586 0.375232 -145.85 
+     50 204.194 899 1 1 0.613145 0.439229 -174.45 
+     50 107.679 898 1 0 0.621506 0.44396 -175.85 
+     50 113.384 900 0 1 0.790765 0.544853 -204.45 
+     50 207.341 899 0 0 0.799684 0.545169 -205.85 
+     50 153.32 901 6 0 -0.745799 0.871201 -25.85 
+Number of tracker digits in this event =  4
+Event: 51
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 52
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 53
+Number of tracker hits in this event =  4
+     53 119.361 895 1 1 -0.463986 0.260723 -174.45 
+     53 135.635 898 1 0 -0.470619 0.26195 -175.85 
+     53 138.014 895 0 1 -0.606901 0.28323 -204.45 
+     53 143.7 898 0 0 -0.622225 0.278626 -205.85 
+Number of tracker digits in this event =  3
+Event: 54
+Number of tracker hits in this event =  2
+     54 108.943 898 0 1 0.319002 0.537998 -204.45 
+     54 131.28 899 0 0 0.322521 0.552146 -205.85 
+Number of tracker digits in this event =  1
+Event: 55
+Number of tracker hits in this event =  4
+     55 152.558 896 1 1 -0.396062 0.518379 -174.45 
+     55 139.032 899 1 0 -0.4044 0.519278 -175.85 
+     55 134.919 895 0 1 -0.568716 0.544619 -204.45 
+     55 132.109 899 0 0 -0.575131 0.548709 -205.85 
+Number of tracker digits in this event =  4
+Event: 56
+Number of tracker hits in this event =  2
+     56 108.902 895 0 1 -0.528492 0.252043 -204.45 
+     56 164.501 898 0 0 -0.543402 0.259775 -205.85 
+Number of tracker digits in this event =  1
+Event: 57
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 58
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 59
+Number of tracker hits in this event =  2
+     59 2.16968 897 0 0 -0.283716 -0.25 -206.103 
+     59 98.7584 896 0 0 -0.28505 -0.252802 -206.105 
+Number of tracker digits in this event =  0
+Event: 60
+Number of tracker hits in this event =  1
+     60 306.465 898 0 0 2.11784 0.25 -206.067 
+Number of tracker digits in this event =  1
+Event: 61
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 62
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 63
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 64
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 65
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 66
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 67
+Number of tracker hits in this event =  6
+     67 139.24 898 2 1 0.29648 0.270031 -144.45 
+     67 133.043 898 2 0 0.303367 0.273678 -145.85 
+     67 152.539 898 1 1 0.43457 0.38378 -174.45 
+     67 127.716 898 1 0 0.4351 0.39026 -175.85 
+     67 121.923 898 0 1 0.416507 0.478875 -204.45 
+     67 120.695 899 0 0 0.411746 0.482024 -205.85 
+Number of tracker digits in this event =  6
+Event: 68
+Number of tracker hits in this event =  4
+     68 109.67 896 1 1 -0.284978 -0.274317 -174.45 
+     68 149.975 896 1 0 -0.29037 -0.277271 -175.85 
+     68 229.127 896 0 1 -0.390383 -0.339754 -204.45 
+     68 109.553 896 0 0 -0.394999 -0.333862 -205.85 
+Number of tracker digits in this event =  2
+Event: 69
+Number of tracker hits in this event =  2
+     69 237.229 896 0 1 -0.364466 1.07533 -204.45 
+     69 152.075 902 0 0 -0.370601 1.09521 -205.85 
+Number of tracker digits in this event =  2
+Event: 70
+Number of tracker hits in this event =  3
+     70 103.325 895 1 0 -0.2551 -0.467944 -175.85 
+     70 257.012 896 0 1 -0.435667 -0.664463 -204.45 
+     70 148.336 894 0 0 -0.441278 -0.678729 -205.85 
+Number of tracker digits in this event =  2
+Event: 71
+Number of tracker hits in this event =  4
+     71 130.142 899 1 1 0.45671 0.375652 -174.45 
+     71 140.249 898 1 0 0.466465 0.382931 -175.85 
+     71 159.559 900 0 1 0.689092 0.522488 -204.45 
+     71 171.678 899 0 0 0.699557 0.527313 -205.85 
+Number of tracker digits in this event =  4
+Event: 72
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 73
+Number of tracker hits in this event =  7
+     73 109.492 898 1 1 0.449044 0.337446 -174.45 
+     73 157.558 899 1 1 0.451268 0.337851 -174.726 
+     73 183.347 898 1 0 0.462381 0.339684 -175.85 
+     73 128.414 900 0 1 0.742155 0.39472 -204.45 
+     73 131.598 898 0 0 0.754225 0.397283 -205.85 
+     73 9.06977 920 1 0 -1.02132 4.71141 -175.85 
+     73 145.331 886 1 1 -2.26342 7.94835 -174.85 
+Number of tracker digits in this event =  5
+Event: 74
+Number of tracker hits in this event =  8
+     74 129.691 896 2 1 -0.317947 -0.848862 -144.45 
+     74 118.73 893 2 0 -0.320551 -0.860446 -145.85 
+     74 127.612 896 1 1 -0.379926 -1.10136 -174.45 
+     74 143.661 892 1 0 -0.382918 -1.11568 -175.85 
+     74 124.955 896 0 1 -0.445772 -1.4165 -204.45 
+     74 173.938 891 0 0 -0.46204 -1.42863 -205.85 
+     74 1.844 880 6 0 -1.81785 -3.5642 -25.85 
+     74 22.8354 877 6 0 -2.08312 -4.0938 -26.063 
+Number of tracker digits in this event =  5
+Event: 75
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 76
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 77
+Number of tracker hits in this event =  8
+     77 125.79 896 3 1 -0.256444 -0.321478 -114.45 
+     77 119.639 896 3 0 -0.263404 -0.330548 -115.85 
+     77 113.617 896 2 1 -0.414592 -0.526243 -144.45 
+     77 139.27 895 2 0 -0.419348 -0.537289 -145.85 
+     77 123.778 895 1 1 -0.523175 -0.774335 -174.45 
+     77 128.987 894 1 0 -0.529262 -0.782996 -175.85 
+     77 128.503 895 0 1 -0.642048 -0.961452 -204.45 
+     77 200.383 893 0 0 -0.643605 -0.971546 -205.85 
+Number of tracker digits in this event =  6
+Event: 78
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 79
+Number of tracker hits in this event =  8
+     79 116.102 898 3 1 0.296991 -0.318502 -114.45 
+     79 166.066 896 3 0 0.305774 -0.319065 -115.85 
+     79 151.294 899 2 1 0.484399 -0.32571 -144.45 
+     79 221.259 896 2 0 0.482867 -0.325338 -145.85 
+     79 176.578 898 1 1 0.439948 -0.302251 -174.45 
+     79 105.208 896 1 0 0.436525 -0.300664 -175.85 
+     79 103.38 898 0 1 0.356193 -0.278797 -204.45 
+     79 119.056 896 0 0 0.353147 -0.276815 -205.85 
+Number of tracker digits in this event =  4
+Event: 80
+Number of tracker hits in this event =  4
+     80 33.7068 898 1 1 0.251528 -0.25 -174.779 
+     80 229.18 894 1 0 -0.581419 -0.792742 -175.85 
+     80 232.393 893 1 0 -0.613901 -0.859315 -175.949 
+     80 21.3366 895 1 0 -0.85817 -0.620044 -176.151 
+Number of tracker digits in this event =  2
+Event: 81
+Number of tracker hits in this event =  6
+     81 113.764 898 2 1 0.334933 0.569147 -144.45 
+     81 140.897 899 2 0 0.339282 0.578974 -145.85 
+     81 419.573 898 1 1 0.44284 0.785778 -174.45 
+     81 138.199 900 1 0 0.44855 0.794346 -175.85 
+     81 122.59 899 0 1 0.556185 0.96233 -204.45 
+     81 151.366 901 0 0 0.565255 0.972088 -205.85 
+Number of tracker digits in this event =  5
+Event: 82
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 83
+Number of tracker hits in this event =  10
+     83 127.13 898 2 1 0.412305 -0.286301 -144.45 
+     83 162.575 896 2 0 0.419477 -0.286883 -145.85 
+     83 124.916 899 1 1 0.567987 -0.271087 -174.45 
+     83 149.194 896 1 0 0.568535 -0.26926 -175.85 
+     83 132.954 1244 4 0 -56.5698 69.4564 -86.25 
+     83 35.7243 1243 4 0 -56.5649 69.4457 -86.1882 
+     83 35.4344 613 4 1 -57.0288 69.0931 -84.85 
+     83 272.999 612 4 1 -57.0764 69.0784 -84.7471 
+     83 1.82803 611 4 1 -57.3478 69.0379 -84.4526 
+     83 31.6857 393 4 0 33.7694 -101.249 -86.25 
+Number of tracker digits in this event =  6
+Event: 84
+Number of tracker hits in this event =  2
+     84 34.9388 896 2 0 0.25 -0.421552 -146.162 
+     84 1.11575 856 2 0 66.4266 -8.38543 -146.25 
+Number of tracker digits in this event =  0
+Event: 85
+Number of tracker hits in this event =  5
+     85 151.138 897 1 0 1.31413 -0.25 -175.879 
+     85 229.201 904 0 1 1.60057 -0.446062 -204.45 
+     85 119.852 895 0 0 1.61943 -0.45793 -205.85 
+     85 349.965 905 3 0 2.2311 1.71301 -115.85 
+     85 90.1584 906 3 0 2.3733 1.85996 -115.993 
+Number of tracker digits in this event =  3
+Event: 86
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 87
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 88
+Number of tracker hits in this event =  6
+     88 133.381 896 3 1 -0.255595 0.274724 -114.45 
+     88 140.166 898 3 0 -0.258877 0.277693 -115.85 
+     88 125.1 896 2 1 -0.322702 0.347162 -144.45 
+     88 144.44 898 2 0 -0.32167 0.347356 -145.85 
+     88 140.134 896 1 1 -0.308027 0.33835 -174.45 
+     88 216.145 898 1 0 -0.304723 0.336153 -175.85 
+Number of tracker digits in this event =  6
+Event: 89
+Number of tracker hits in this event =  6
+     89 141.716 898 2 1 0.300427 0.280927 -144.45 
+     89 149.419 898 2 0 0.306228 0.282102 -145.85 
+     89 149.101 898 1 1 0.418111 0.305356 -174.45 
+     89 216.117 898 1 0 0.424339 0.306897 -175.85 
+     89 145.964 899 0 1 0.558708 0.341981 -204.45 
+     89 197.688 898 0 0 0.566061 0.346208 -205.85 
+Number of tracker digits in this event =  6
+Event: 90
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 91
+Number of tracker hits in this event =  6
+     91 180.466 899 2 1 0.472896 -0.299021 -144.45 
+     91 136.153 896 2 0 0.474522 -0.301994 -145.85 
+     91 132.764 899 1 1 0.520531 -0.352178 -174.45 
+     91 126.979 896 1 0 0.525175 -0.35527 -175.85 
+     91 136.009 899 0 1 0.605884 -0.382989 -204.45 
+     91 234.776 896 0 0 0.613322 -0.387109 -205.85 
+Number of tracker digits in this event =  6
+Event: 92
+Number of tracker hits in this event =  8
+     92 111.288 899 3 1 0.621204 -0.413278 -114.45 
+     92 114.381 896 3 0 0.635413 -0.421755 -115.85 
+     92 120.969 901 2 1 0.928911 -0.587801 -144.45 
+     92 136.726 895 2 0 0.939159 -0.597476 -145.85 
+     92 176.101 902 1 1 1.14488 -0.793402 -174.45 
+     92 118.44 894 1 0 1.156 -0.801401 -175.85 
+     92 125.408 903 0 1 1.36502 -0.969252 -204.45 
+     92 111.55 893 0 0 1.37311 -0.976198 -205.85 
+Number of tracker digits in this event =  4
+Event: 93
+Number of tracker hits in this event =  4
+     93 64.4653 895 2 1 -0.473428 1.65122 -144.85 
+     93 75.9225 896 2 1 -0.435464 1.65644 -144.784 
+     93 190.254 901 5 0 -1.65491 0.869173 -55.85 
+     93 82.7535 885 5 1 -2.57247 0.460478 -54.85 
+Number of tracker digits in this event =  1
+Event: 94
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 95
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 96
+Number of tracker hits in this event =  8
+     96 130.373 899 3 1 0.607371 -0.38472 -114.45 
+     96 109.446 896 3 0 0.613924 -0.395777 -115.85 
+     96 174.94 900 2 1 0.736242 -0.629105 -144.45 
+     96 121.754 895 2 0 0.745883 -0.635864 -145.85 
+     96 119.875 901 1 1 0.979466 -0.779646 -174.45 
+     96 157.397 894 1 0 1.00171 -0.788967 -175.85 
+     96 171.583 903 0 1 1.44498 -0.946153 -204.45 
+     96 246.568 893 0 0 1.46705 -0.950984 -205.85 
+Number of tracker digits in this event =  6
+Event: 97
+Number of tracker hits in this event =  4
+     97 125.339 898 1 1 0.317422 -0.672306 -174.45 
+     97 113.441 894 1 0 0.321475 -0.678455 -175.85 
+     97 120.947 898 0 1 0.398042 -0.815691 -204.45 
+     97 183.65 894 0 0 0.405806 -0.825383 -205.85 
+Number of tracker digits in this event =  3
+Event: 98
+Number of tracker hits in this event =  2
+     98 137.626 898 2 1 0.266829 -0.361964 -144.45 
+     98 131.473 896 2 0 0.262964 -0.368785 -145.85 
+Number of tracker digits in this event =  2
+Event: 99
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.82s Real=0.82s Sys=0s
+/gun/particle gamma
+/gun/energy 1 GeV
+/gun/sourceType 2
+/run/beamOn 100
+Start Run processing.
+Event: 0
+Number of tracker hits in this event =  9
+      0 103.192 893 0 1 -1.02506 -0.415622 -204.45 
+      0 122.281 896 0 0 -1.02141 -0.418566 -205.85 
+      0 120.624 896 3 1 -0.265583 -0.857187 -114.45 
+      0 174.778 887 1 1 -2.21864 2.89272 -174.45 
+      0 119.843 911 1 0 -2.34667 3.02674 -175.85 
+      0 98.7894 875 0 1 -4.52888 5.57525 -204.45 
+      0 104.82 925 0 0 -4.5496 5.66223 -205.85 
+      0 2.75827 629 1 0 -73.5652 -53.7966 -176.183 
+      0 56.3771 648 1 0 -78.1845 -49.9498 -176.067 
+Number of tracker digits in this event =  3
+Event: 1
+Number of tracker hits in this event =  21
+      1 112.441 887 4 1 -2.14562 -0.358688 -84.45 
+      1 126.171 896 4 0 -2.17787 -0.343082 -85.85 
+      1 167.674 870 1 1 -5.57122 0.41738 -174.45 
+      1 162.849 899 1 0 -5.66083 0.517518 -175.85 
+      1 108.042 861 0 1 -7.37696 2.53998 -204.45 
+      1 136.537 909 0 0 -7.46723 2.61898 -205.85 
+      1 17.414 897 5 0 -0.438487 -0.25 -56.1753 
+      1 6.13449 896 5 0 -0.394538 -0.277544 -56.2272 
+      1 114.309 710 4 1 -37.5008 16.6601 -84.4855 
+      1 162.343 893 3 1 -1.04423 0.348458 -114.45 
+      1 240.942 898 3 0 -1.06813 0.354938 -115.85 
+      1 118.115 890 2 1 -1.54278 0.473762 -144.45 
+      1 175.456 899 2 0 -1.5619 0.463529 -145.85 
+      1 101.891 888 1 1 -1.96018 0.261033 -174.45 
+      1 143.949 751 8 0 167.137 -29.2882 33.75 
+      1 293.865 1597 8 1 140.435 -93.2894 35.3569 
+      1 57.7639 234 4 0 -40.8599 -133.044 -86.2231 
+      1 23.6786 887 3 0 -0.881925 -2.17609 -115.85 
+      1 166.634 886 3 0 -0.90058 -2.25029 -115.884 
+      1 350.99 885 3 0 -0.71226 -2.4538 -116.116 
+      1 223.02 884 3 0 -0.659428 -2.66742 -116.127 
+Number of tracker digits in this event =  12
+Event: 2
+Number of tracker hits in this event =  6
+      2 139.193 891 0 1 -1.33993 0.867204 -204.45 
+      2 107.613 901 0 0 -1.39145 0.904774 -205.85 
+      2 100.562 898 0 0 -0.287033 0.38959 -205.85 
+      2 24.9881 899 0 0 -0.371832 0.470215 -206.178 
+      2 360.565 884 0 0 -0.875813 -2.65362 -205.85 
+      2 396.437 883 0 0 -0.895994 -2.86759 -205.96 
+Number of tracker digits in this event =  3
+Event: 3
+Number of tracker hits in this event =  16
+      3 109.763 898 2 1 0.25 0.310196 -144.622 
+      3 142.838 898 2 0 0.27002 0.326731 -145.85 
+      3 286.83 900 1 1 0.745634 0.700617 -174.45 
+      3 121.342 900 1 0 0.772325 0.719157 -175.85 
+      3 147.151 903 0 1 1.35349 1.1096 -204.45 
+      3 104.528 902 0 0 1.39166 1.12336 -205.85 
+      3 46.3764 898 1 0 0.626874 0.286006 -175.85 
+      3 50.5842 900 3 1 0.736961 -0.25988 -114.45 
+      3 196.519 899 2 1 0.517767 1.66929 -144.45 
+      3 124.496 905 2 0 0.536942 1.66774 -145.85 
+      3 136.9 899 1 1 0.640419 0.512253 -174.45 
+      3 139.617 914 0 1 3.49526 -8.35984 -204.45 
+      3 149.59 854 0 0 3.85786 -8.80108 -205.85 
+      3 44.6727 1094 1 0 17.0795 39.5042 -176.214 
+      3 98.2499 1022 0 1 25.2475 96.9049 -204.511 
+      3 228.035 1023 0 1 25.3312 97.0857 -204.504 
+Number of tracker digits in this event =  10
+Event: 4
+Number of tracker hits in this event =  2
+      4 2.20009 720 4 0 -135.268 -35.4768 -85.8509 
+      4 99.9726 229 4 1 -134.143 -34.6201 -84.85 
+Number of tracker digits in this event =  0
+Event: 5
+Number of tracker hits in this event =  9
+      5 151.535 898 1 1 0.250947 1.57916 -174.45 
+      5 150.878 905 1 0 0.506436 1.76405 -175.85 
+      5 105.268 921 0 1 4.87197 6.08426 -204.45 
+      5 139.295 928 0 0 5.14869 6.35831 -205.85 
+      5 116.274 900 0 1 0.733457 1.73719 -204.45 
+      5 278.692 908 0 0 0.5412 2.25237 -205.85 
+      5 134.871 877 0 1 -4.14689 3.98987 -204.45 
+      5 169.309 917 0 0 -5.00202 4.19248 -205.85 
+      5 137.31 882 0 1 -3.21846 8.66665 -204.525 
+Number of tracker digits in this event =  7
+Event: 6
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 7
+Number of tracker hits in this event =  1
+      7 17.6182 892 2 1 -1.22068 -57.0467 -144.827 
+Number of tracker digits in this event =  0
+Event: 8
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 9
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 10
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 11
+Number of tracker hits in this event =  32
+     11 120.026 895 4 1 -0.523012 0.746783 -84.45 
+     11 115.265 900 4 0 -0.535614 0.794026 -85.85 
+     11 101.317 894 3 1 -0.820861 1.75869 -114.45 
+     11 145.142 905 3 0 -0.848416 1.81189 -115.85 
+     11 115.388 892 2 1 -1.17939 2.98549 -144.45 
+     11 101.523 911 2 0 -1.18195 3.03041 -145.85 
+     11 92.3166 892 1 1 -1.19349 3.93417 -174.45 
+     11 117.051 916 1 0 -1.17952 3.98973 -175.85 
+     11 125.436 893 0 1 -0.872394 5.08092 -204.45 
+     11 192.793 922 0 0 -0.84968 5.13319 -205.85 
+     11 30.5561 897 0 0 54.1238 -0.25 -205.88 
+     11 2.10828 896 0 0 54.1312 -0.341101 -205.852 
+     11 76.5769 1173 0 1 55.436 -3.74661 -204.85 
+     11 60.7421 1174 0 1 55.4536 -3.8376 -204.837 
+     11 66.3229 869 0 0 57.9821 -5.73426 -205.85 
+     11 115.965 868 0 0 58.1258 -5.89091 -205.887 
+     11 115.403 867 0 0 58.191 -6.1452 -205.949 
+     11 179.422 866 0 0 58.2396 -6.39989 -205.99 
+     11 99.6319 865 0 0 58.5102 -6.5428 -205.878 
+     11 2.65627 1178 0 1 56.4095 19.6716 -204.85 
+     11 60.5186 1019 0 0 58.2855 24.6158 -205.85 
+     11 53.6596 1020 0 0 58.2789 24.6594 -205.854 
+     11 161.359 840 2 1 -11.5642 -3.5168 -144.45 
+     11 83.4631 872 2 0 -11.9706 -5.15012 -145.85 
+     11 190.949 871 2 0 -12.029 -5.40094 -146.069 
+     11 117.403 900 2 1 0.737934 -0.56117 -144.45 
+     11 131.276 895 2 0 0.767553 -0.586307 -145.85 
+     11 143.736 903 1 1 1.3632 -1.09725 -174.45 
+     11 117.965 892 1 0 1.38897 -1.13045 -175.85 
+     11 118.593 906 0 1 1.89844 -1.76517 -204.45 
+     11 112.114 889 0 0 1.93431 -1.79328 -205.85 
+     11 61.1181 899 3 1 0.619501 -0.25 -114.457 
+Number of tracker digits in this event =  9
+Event: 12
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 13
+Number of tracker hits in this event =  3
+     13 260.487 691 9 0 44.5647 -41.3542 63.75 
+     13 27.7878 1118 9 1 44.253 -42.5262 65.15 
+     13 262.2 1117 9 1 44.2075 -42.6127 65.2207 
+Number of tracker digits in this event =  2
+Event: 14
+Number of tracker hits in this event =  1
+     14 114.956 139 8 1 -151.983 120.015 35.4531 
+Number of tracker digits in this event =  0
+Event: 15
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 16
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 17
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 18
+Number of tracker hits in this event =  3
+     18 38.8221 912 1 0 -35.4154 3.06665 -176.185 
+     18 118.722 892 0 1 -1.23241 -0.274381 -204.45 
+     18 151.975 896 0 0 -1.25784 -0.258423 -205.85 
+Number of tracker digits in this event =  1
+Event: 19
+Number of tracker hits in this event =  11
+     19 193.061 895 3 1 -0.513187 -2.69165 -114.45 
+     19 98.1663 884 3 0 -0.514597 -2.77876 -115.85 
+     19 102.488 896 2 1 -0.449195 -4.60994 -144.45 
+     19 168.03 874 2 0 -0.43963 -4.71762 -145.85 
+     19 126.169 898 0 1 0.434413 0.663195 -204.45 
+     19 117.098 900 0 0 0.474983 0.669998 -205.85 
+     19 153.033 895 0 1 -0.491107 -0.793602 -204.45 
+     19 114.317 894 0 0 -0.541494 -0.76183 -205.85 
+     19 147.965 880 0 1 -3.54983 -0.532029 -204.45 
+     19 94.2939 896 0 0 -3.93404 -0.297519 -205.85 
+     19 311.015 786 0 1 -22.2573 -23.4764 -204.524 
+Number of tracker digits in this event =  6
+Event: 20
+Number of tracker hits in this event =  1
+     20 196.334 1614 6 1 143.792 48.2946 -24.7177 
+Number of tracker digits in this event =  1
+Event: 21
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 22
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 23
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 24
+Number of tracker hits in this event =  2
+     24 163.239 896 0 1 -0.423154 0.507613 -204.45 
+     24 108.118 899 0 0 -0.418496 0.520754 -205.85 
+Number of tracker digits in this event =  1
+Event: 25
+Number of tracker hits in this event =  20
+     25 104.587 899 3 1 0.489137 -0.633818 -114.45 
+     25 110.421 895 3 0 0.548177 -0.582044 -115.85 
+     25 263.839 901 2 1 1.0463 0.514879 -144.45 
+     25 269.749 899 2 0 1.02648 0.559377 -145.85 
+     25 119.683 900 1 1 0.69831 1.49384 -174.45 
+     25 100.046 904 1 0 0.696742 1.57253 -175.85 
+     25 105.387 896 0 1 -0.423175 3.44497 -204.45 
+     25 100.053 914 0 0 -0.44361 3.4948 -205.85 
+     25 169.4 894 1 1 -0.675356 8.18477 -174.45 
+     25 143.911 934 1 0 -1.53168 7.4695 -175.85 
+     25 197.074 810 0 1 -17.4867 -2.12947 -204.45 
+     25 154.414 879 0 0 -17.6166 -3.65093 -205.85 
+     25 104.383 901 0 1 0.925872 -0.355664 -204.45 
+     25 123.479 896 0 0 0.929272 -0.372334 -205.85 
+     25 274.669 972 9 0 5.17696 15.106 63.8289 
+     25 102.412 971 9 0 5.10196 15.0478 64.0182 
+     25 169.401 1031 7 0 23.103 26.8837 3.77322 
+     25 113.793 895 1 0 0.856462 -0.497719 -175.85 
+     25 133.453 916 0 1 4.04264 -9.71089 -204.45 
+     25 114.27 849 0 0 4.09458 -9.67546 -205.85 
+Number of tracker digits in this event =  10
+Event: 26
+Number of tracker hits in this event =  1
+     26 17.7648 1144 1 1 49.6112 -126.345 -174.519 
+Number of tracker digits in this event =  0
+Event: 27
+Number of tracker hits in this event =  4
+     27 141.027 884 0 0 -74.8465 -2.82456 -206.25 
+     27 137.108 525 0 1 -74.5992 -1.98206 -204.85 
+     27 92.2355 1542 2 0 159.943 129.505 -146.161 
+     27 64.14 1543 2 0 159.968 129.56 -146.128 
+Number of tracker digits in this event =  2
+Event: 28
+Number of tracker hits in this event =  3
+     28 37.8387 1091 0 0 115.09 38.8709 -206.25 
+     28 300.385 1090 0 0 115.118 38.7829 -206.171 
+     28 7.26907 1088 0 0 115.134 38.437 -206.237 
+Number of tracker digits in this event =  1
+Event: 29
+Number of tracker hits in this event =  9
+     29 115.202 896 1 1 -0.274359 0.307903 -174.45 
+     29 117.859 898 1 0 -0.317583 0.338299 -175.85 
+     29 107.709 892 0 1 -1.19817 0.972309 -204.45 
+     29 98.5961 901 0 0 -1.24106 1.00846 -205.85 
+     29 23.839 633 1 1 -52.8972 44.3125 -174.577 
+     29 131.026 893 1 1 -0.918791 -0.644185 -174.45 
+     29 145.031 894 1 0 -0.942934 -0.677856 -175.85 
+     29 124.458 891 0 1 -1.26704 -1.43744 -204.45 
+     29 305.893 890 0 0 -1.2916 -1.48998 -205.85 
+Number of tracker digits in this event =  4
+Event: 30
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 31
+Number of tracker hits in this event =  12
+     31 113.697 895 2 1 -0.622908 -0.256458 -144.45 
+     31 158.156 896 2 0 -0.646383 -0.27908 -145.85 
+     31 101.836 893 1 1 -1.04399 -0.901309 -174.45 
+     31 122.236 893 1 0 -1.10707 -0.860647 -175.85 
+     31 115.598 898 0 1 0.351534 0.328679 -204.45 
+     31 253.45 898 0 0 0.354407 0.336733 -205.85 
+     31 119.567 896 1 0 -3.34504 -0.367483 -175.85 
+     31 321.084 895 1 0 -3.77068 -0.499085 -175.934 
+     31 141.643 898 1 0 -5.03879 0.25 -176.117 
+     31 320.909 899 1 0 -5.31522 0.45827 -176.045 
+     31 144.656 866 1 1 -6.30356 0.875363 -174.85 
+     31 55.958 864 1 1 -6.67185 0.880318 -174.562 
+Number of tracker digits in this event =  7
+Event: 32
+Number of tracker hits in this event =  10
+     32 48.6513 479 0 0 58.7786 -83.7619 -206.25 
+     32 112.038 478 0 0 58.9044 -83.9031 -206.224 
+     32 225.168 477 0 0 58.9862 -84.2138 -206.017 
+     32 68.1351 474 0 0 59.2772 -84.6944 -205.918 
+     32 105.002 1293 0 1 79.2976 -93.5145 -204.85 
+     32 215.112 1294 0 1 79.5954 -93.707 -204.803 
+     32 94.4313 1296 0 1 79.8736 -93.9997 -204.844 
+     32 101.158 1297 0 1 80.0985 -94.075 -204.83 
+     32 289.559 1298 0 1 80.2807 -94.0398 -204.85 
+     32 127.255 1299 0 1 80.5237 -94.0807 -204.679 
+Number of tracker digits in this event =  4
+Event: 33
+Number of tracker hits in this event =  7
+     33 128.429 520 3 1 -75.516 1.77991 -114.614 
+     33 163.324 519 3 1 -75.7634 1.67501 -114.588 
+     33 54.37 895 3 0 -76.4866 -0.579985 -115.85 
+     33 319.192 894 3 0 -76.5487 -0.685319 -115.94 
+     33 185.549 893 3 0 -76.499 -0.980069 -115.915 
+     33 199.952 90 12 0 170.149 -161.887 153.845 
+     33 100.696 89 12 0 170.083 -162.005 154.035 
+Number of tracker digits in this event =  5
+Event: 34
+Number of tracker hits in this event =  22
+     34 122.782 899 3 1 0.514798 -0.316493 -114.45 
+     34 115.294 896 3 0 0.522876 -0.329378 -115.85 
+     34 106.044 900 2 1 0.703387 -0.57684 -144.45 
+     34 96.25 895 2 0 0.710594 -0.596152 -145.85 
+     34 145.76 901 1 1 0.908114 -1.00724 -174.45 
+     34 108.794 893 1 0 0.919208 -1.03192 -175.85 
+     34 130.878 902 0 1 1.12604 -1.50074 -204.45 
+     34 305.852 890 0 0 1.15867 -1.52808 -205.85 
+     34 107.9 900 3 1 0.810368 -0.461793 -114.45 
+     34 130.012 895 3 0 0.82625 -0.462921 -115.85 
+     34 122.022 902 2 1 1.14816 -0.374731 -144.45 
+     34 99.4528 896 2 0 1.17547 -0.37494 -145.85 
+     34 181.553 905 1 1 1.72074 -0.385754 -174.45 
+     34 586.468 896 1 0 1.76426 -0.380611 -175.85 
+     34 108.516 910 0 1 2.68027 -0.325941 -204.45 
+     34 116.189 896 0 0 2.73009 -0.28986 -205.85 
+     34 308.64 947 0 0 -71.2612 10.0576 -206.25 
+     34 182.646 1123 0 0 -92.7664 45.2513 -206.25 
+     34 32.2838 1124 0 0 -92.7414 45.5492 -206.208 
+     34 28.4917 898 0 0 -1.35587 0.25 -206.158 
+     34 108.279 887 0 1 -2.16469 -1.79687 -204.45 
+     34 172.369 895 1 0 1.47257 -0.483183 -176.101 
+Number of tracker digits in this event =  11
+Event: 35
+Number of tracker hits in this event =  6
+     35 65.6444 1226 2 1 66.0104 -11.3708 -144.718 
+     35 182.394 840 2 0 67.5932 -11.5746 -145.85 
+     35 45.9343 1059 2 0 46.7721 32.645 -146.25 
+     35 119.931 1060 2 0 46.6895 32.7589 -146.17 
+     35 117.254 1061 2 0 46.41 32.92 -146.132 
+     35 145.298 1130 2 1 46.6671 33.3706 -144.85 
+Number of tracker digits in this event =  2
+Event: 36
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 37
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 38
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 39
+Number of tracker hits in this event =  9
+     39 146.009 900 1 1 0.796336 -0.962794 -174.45 
+     39 199.672 892 1 0 0.778845 -1.06842 -175.85 
+     39 128.969 898 0 1 0.398388 -3.39616 -204.45 
+     39 115.479 881 0 0 0.493135 -3.40722 -205.85 
+     39 100.963 898 1 1 0.288727 0.903308 -174.45 
+     39 116.971 901 1 0 0.815422 1.04815 -175.85 
+     39 123.076 953 0 1 11.2983 3.44275 -204.45 
+     39 129.902 913 0 0 11.968 3.41639 -205.85 
+     39 111.733 755 1 1 -28.6285 -36.9402 -174.536 
+Number of tracker digits in this event =  5
+Event: 40
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 41
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 42
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 43
+Number of tracker hits in this event =  4
+     43 131.607 696 2 1 -40.3346 -85.7189 -144.847 
+     43 185.405 697 2 1 -40.2306 -85.9102 -144.613 
+     43 142.032 698 2 1 -40.0497 -85.9749 -144.775 
+     43 120.631 466 2 0 -36.6765 -86.2974 -145.85 
+Number of tracker digits in this event =  4
+Event: 44
+Number of tracker hits in this event =  8
+     44 238.949 933 0 0 -6.70296 7.40956 -206.25 
+     44 62.9961 900 1 0 -0.25 0.822954 -175.957 
+     44 297.198 892 1 1 -1.05071 1.51629 -174.85 
+     44 251.579 891 1 1 -1.27943 1.92469 -174.779 
+     44 218.738 895 1 1 -0.630442 0.837035 -174.45 
+     44 438.606 901 1 0 -0.669097 0.904427 -175.85 
+     44 133.236 888 0 1 -1.88318 1.48291 -204.45 
+     44 180.705 904 0 0 -2.00261 1.48948 -205.85 
+Number of tracker digits in this event =  7
+Event: 45
+Number of tracker hits in this event =  2
+     45 26.2072 1736 5 1 168.244 15.513 -54.6871 
+     45 62.5461 1124 1 0 60.5888 45.5718 -176.099 
+Number of tracker digits in this event =  0
+Event: 46
+Number of tracker hits in this event =  3
+     46 116.806 100 2 0 -118.361 -159.821 -145.978 
+     46 179.147 99 2 0 -118.551 -159.987 -146.105 
+     46 193.992 98 2 0 -118.607 -160.191 -145.967 
+Number of tracker digits in this event =  2
+Event: 47
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 48
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 49
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 50
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 51
+Number of tracker hits in this event =  24
+     51 156.244 893 2 1 -1.04949 1.45099 -144.45 
+     51 261.37 904 2 0 -1.07784 1.52951 -145.85 
+     51 187.534 890 1 1 -1.63094 3.13527 -174.45 
+     51 130.13 912 1 0 -1.66901 3.19867 -175.85 
+     51 119.028 885 0 1 -2.58409 4.58616 -204.45 
+     51 166.163 919 0 0 -2.65674 4.62746 -205.85 
+     51 140.262 492 1 1 -81.1037 17.7307 -174.587 
+     51 120.052 896 5 0 0.61487 -0.298259 -55.85 
+     51 42.9855 892 5 1 -1.24367 0.25 -54.7305 
+     51 99.8646 891 5 1 -1.3884 0.32076 -54.6866 
+     51 95.7046 890 5 1 -1.63623 0.516866 -54.5929 
+     51 273.403 888 5 1 -1.89854 0.673922 -54.45 
+     51 191.319 889 5 1 -1.78887 0.657675 -54.4944 
+     51 123.629 896 3 1 -0.26013 -0.60477 -114.45 
+     51 117.455 895 3 0 -0.262856 -0.630871 -115.85 
+     51 131.178 896 2 1 -0.262574 -1.09694 -144.45 
+     51 108.045 892 2 0 -0.277196 -1.11287 -145.85 
+     51 102.802 895 1 1 -0.572461 -1.45571 -174.45 
+     51 135.08 890 1 0 -0.595757 -1.48089 -175.85 
+     51 329.144 893 0 1 -0.999069 -1.99438 -204.45 
+     51 127.735 888 0 0 -1.02765 -2.01456 -205.85 
+     51 73.7708 886 0 1 -2.26827 -25.9762 -204.622 
+     51 134.608 1705 5 1 162.091 -103.388 -54.8251 
+     51 196.317 1706 5 1 162.184 -103.411 -54.8304 
+Number of tracker digits in this event =  16
+Event: 52
+Number of tracker hits in this event =  4
+     52 142.878 894 0 1 -0.691697 -0.958458 -204.45 
+     52 215.984 893 0 0 -0.695192 -0.958014 -205.85 
+     52 54.77 1263 5 1 73.3798 52.6966 -54.5558 
+     52 14.1679 678 5 0 142.715 -43.9128 -56.1492 
+Number of tracker digits in this event =  2
+Event: 53
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 54
+Number of tracker hits in this event =  3
+     54 70.1945 1293 1 0 -8.79804 79.3566 -176.25 
+     54 256.083 1294 1 0 -8.908 79.4605 -176.227 
+     54 101.039 1534 0 1 127.879 50.0635 -204.577 
+Number of tracker digits in this event =  1
+Event: 55
+Number of tracker hits in this event =  5
+     55 166.938 894 1 1 -0.701804 0.535757 -174.45 
+     55 108.403 899 1 0 -0.813986 0.493045 -175.85 
+     55 127.232 883 0 1 -3.00558 -0.396468 -204.45 
+     55 285.428 896 0 0 -3.11864 -0.400061 -205.85 
+     55 94.8766 310 2 1 -117.862 125.424 -144.501 
+Number of tracker digits in this event =  3
+Event: 56
+Number of tracker hits in this event =  3
+     56 115.958 895 0 1 -0.463659 0.275658 -204.45 
+     56 122.187 898 0 0 -0.477803 0.284608 -205.85 
+     56 68.1967 287 1 0 97.2984 -122.396 -176.167 
+Number of tracker digits in this event =  1
+Event: 57
+Number of tracker hits in this event =  39
+     57 141.639 913 1 1 3.25562 0.396444 -174.45 
+     57 148.927 898 1 0 3.29139 0.403034 -175.85 
+     57 142.519 917 0 1 4.08418 0.564875 -204.45 
+     57 109.881 899 0 0 4.13854 0.560045 -205.85 
+     57 104.98 1393 10 0 61.8749 99.6948 93.9532 
+     57 250.472 902 2 1 1.21738 -2.96142 -144.45 
+     57 120.041 882 2 0 1.24604 -3.052 -145.85 
+     57 116.211 906 1 1 1.93899 -4.97096 -174.45 
+     57 140.265 873 1 0 2.03791 -5.03954 -175.85 
+     57 115.569 916 0 1 3.85921 -6.76156 -204.45 
+     57 105.583 864 0 0 4.01124 -6.79268 -205.85 
+     57 533.915 903 2 1 1.4403 -2.97235 -144.85 
+     57 73.9413 904 2 1 1.47407 -3.03149 -144.798 
+     57 91.8561 904 0 1 1.62864 -1.41788 -204.45 
+     57 241.295 903 0 1 1.44371 -1.46556 -204.621 
+     57 314.447 901 0 1 1.00372 -1.6411 -204.61 
+     57 138.124 900 0 1 0.796633 -1.92586 -204.835 
+     57 259.143 895 2 1 -0.634028 1.0004 -144.45 
+     57 161.229 901 2 0 -0.669501 1.04234 -145.85 
+     57 113.145 890 1 1 -1.45372 1.84708 -174.45 
+     57 222.18 906 1 0 -1.45597 1.87577 -175.85 
+     57 116.393 890 0 1 -1.51183 2.23311 -204.45 
+     57 107.618 907 0 0 -1.44994 2.213 -205.85 
+     57 132.678 184 3 1 -143.095 114.385 -114.7 
+     57 57.5541 183 3 1 -143.178 114.438 -114.694 
+     57 390.841 896 4 1 -0.28621 -0.25 -84.7903 
+     57 68.361 895 4 1 -0.505363 -0.792434 -84.7691 
+     57 228.806 898 3 1 0.25 -0.350282 -114.664 
+     57 134.021 899 2 1 0.481714 -1.30235 -144.45 
+     57 135.556 889 2 0 0.842179 -1.72653 -145.85 
+     57 127.186 941 1 1 9.02689 -17.0208 -174.45 
+     57 110.332 812 1 0 8.85123 -17.22 -175.85 
+     57 165.297 933 0 1 7.26165 -20.3496 -204.45 
+     57 67.9075 793 0 0 8.22693 -21.0185 -205.85 
+     57 134.263 792 0 0 8.43056 -21.0752 -206.019 
+     57 153.872 790 0 0 8.72882 -21.5143 -206.021 
+     57 176.103 905 2 0 1.31039 1.75907 -145.85 
+     57 115.301 908 1 1 2.26094 1.17211 -174.45 
+     57 134.849 902 1 0 2.25662 1.13552 -175.85 
+Number of tracker digits in this event =  24
+Event: 58
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 59
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 60
+Number of tracker hits in this event =  2
+     60 147.811 899 0 1 0.453228 -0.772489 -204.45 
+     60 104.867 894 0 0 0.462761 -0.79069 -205.85 
+Number of tracker digits in this event =  1
+Event: 61
+Number of tracker hits in this event =  2
+     61 137.611 67 4 0 -34.2457 -166.395 -86.1161 
+     61 415.908 679 4 1 -43.7408 -154.523 -84.85 
+Number of tracker digits in this event =  2
+Event: 62
+Number of tracker hits in this event =  15
+     62 106.736 899 2 1 0.524494 -0.504514 -144.45 
+     62 139.642 895 2 0 0.555972 -0.512144 -145.85 
+     62 132.207 902 1 1 1.21456 -0.652415 -174.45 
+     62 120.632 894 1 0 1.2538 -0.668871 -175.85 
+     62 130.396 907 0 1 2.06374 -1.00013 -204.45 
+     62 100.78 893 0 0 2.10866 -1.01341 -205.85 
+     62 124.271 900 3 1 0.803773 -1.04323 -114.45 
+     62 154.948 892 3 0 0.904217 -1.11284 -115.85 
+     62 131.263 910 2 1 2.78351 -2.54098 -144.45 
+     62 115.882 885 2 0 2.88745 -2.59232 -145.85 
+     62 125.565 922 1 1 5.10108 -3.65951 -174.45 
+     62 99.8193 879 1 0 5.17131 -3.65539 -175.85 
+     62 115.804 929 0 1 6.60046 -3.48017 -204.45 
+     62 230.031 881 0 0 6.68158 -3.44839 -205.85 
+     62 75.1441 880 0 0 6.74754 -3.50364 -206.206 
+Number of tracker digits in this event =  9
+Event: 63
+Number of tracker hits in this event =  28
+     63 110.466 893 5 1 -0.980226 0.374275 -54.45 
+     63 159.454 898 5 0 -0.891208 0.298637 -55.85 
+     63 106.372 900 4 1 0.76412 -1.55873 -84.45 
+     63 123.219 890 4 0 0.838088 -1.61631 -85.85 
+     63 257.319 910 3 1 2.79456 -2.94294 -114.45 
+     63 115.108 883 3 0 2.93998 -2.92631 -115.85 
+     63 94.512 930 2 1 6.82255 -3.03393 -144.45 
+     63 112.341 882 2 0 6.82751 -3.10442 -145.85 
+     63 130.639 931 1 1 6.95899 -4.23345 -174.45 
+     63 231.414 877 1 0 7.32337 -4.16465 -175.85 
+     63 134.917 972 0 1 15.063 -2.90202 -204.45 
+     63 116.872 884 0 0 15.2966 -2.76062 -205.85 
+     63 401.337 888 0 0 15.468 -1.93906 -205.85 
+     63 202.82 889 0 0 15.585 -1.7774 -205.935 
+     63 106.35 890 0 0 15.617 -1.48606 -206.004 
+     63 47.1385 887 0 0 15.2773 -2.07018 -205.965 
+     63 199.458 876 3 0 2.02932 -4.37452 -115.85 
+     63 50.5621 875 3 0 1.79934 -4.61538 -116.163 
+     63 45.5357 748 3 0 12.6367 -29.9565 -116.25 
+     63 123.607 902 2 1 1.14158 0.495614 -144.45 
+     63 154.765 899 2 0 1.16749 0.530503 -145.85 
+     63 289.13 905 1 1 1.69246 1.23688 -174.45 
+     63 135.126 903 1 0 1.72843 1.28588 -175.85 
+     63 175.62 908 0 1 2.41518 2.21084 -204.45 
+     63 123.815 908 0 0 2.44874 2.25324 -205.85 
+     63 93.0738 1084 0 0 6.19821 37.4982 -206.25 
+     63 142.935 1085 0 0 6.24129 37.7783 -206.112 
+     63 11.8701 1087 0 0 6.18355 38.1082 -206.206 
+Number of tracker digits in this event =  16
+Event: 64
+Number of tracker hits in this event =  1
+     64 175.869 1219 2 0 -113.947 64.5335 -145.994 
+Number of tracker digits in this event =  1
+Event: 65
+Number of tracker hits in this event =  24
+     65 308.721 898 2 1 0.326595 0.985576 -144.45 
+     65 121.969 901 2 0 0.329241 1.00935 -145.85 
+     65 109.603 898 1 1 0.425419 1.49749 -174.45 
+     65 102.487 904 1 0 0.436806 1.52128 -175.85 
+     65 424.364 900 0 1 0.673123 1.91195 -204.45 
+     65 119.145 906 0 0 0.682723 1.93395 -205.85 
+     65 277.47 899 0 1 0.539515 1.95627 -204.45 
+     65 189.889 1340 0 1 88.6956 -40.2103 -204.845 
+     65 136.903 1341 0 1 88.881 -40.3326 -204.783 
+     65 135.168 904 0 0 0.511559 1.56216 -205.85 
+     65 359.652 883 1 1 -2.85549 -0.902741 -174.45 
+     65 428.291 892 1 0 -2.83945 -1.14523 -175.85 
+     65 192.827 882 0 1 -3.08152 -7.47789 -204.45 
+     65 166.337 860 0 0 -3.08505 -7.63377 -205.85 
+     65 117.645 891 1 0 -3.30295 -1.31627 -175.85 
+     65 109.583 868 0 0 0.961644 -6.00387 -205.85 
+     65 57.53 893 1 0 -2.61177 -1.00192 -176.23 
+     65 36.0883 898 4 1 0.293886 0.25 -84.7978 
+     65 426.602 888 1 1 -1.94578 -1.52201 -174.45 
+     65 311.463 890 1 0 -1.96932 -1.53703 -175.85 
+     65 142.845 884 0 1 -2.69472 -1.81203 -204.45 
+     65 110.266 889 0 0 -2.7388 -1.84112 -205.85 
+     65 121.081 894 0 1 -0.798671 -0.983674 -204.45 
+     65 109.301 893 0 0 -0.580912 -0.892983 -205.85 
+Number of tracker digits in this event =  15
+Event: 66
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 67
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 68
+Number of tracker hits in this event =  4
+     68 140.109 902 0 1 1.091 -0.536052 -204.45 
+     68 107.54 895 0 0 1.18404 -0.572632 -205.85 
+     68 182.882 901 0 1 1.02904 -0.496502 -204.505 
+     68 127.261 902 1 0 1.60131 1.20371 -175.85 
+Number of tracker digits in this event =  3
+Event: 69
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 70
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 71
+Number of tracker hits in this event =  51
+     71 234.504 898 4 1 0.265191 -0.372463 -84.45 
+     71 105.025 896 4 0 0.27454 -0.391093 -85.85 
+     71 117.172 898 3 1 0.4178 -0.80512 -114.45 
+     71 126.23 894 3 0 0.428615 -0.814542 -115.85 
+     71 120.65 900 2 1 0.669623 -0.975336 -144.45 
+     71 136.105 893 2 0 0.679003 -0.982995 -145.85 
+     71 109.617 900 1 1 0.817028 -1.14064 -174.45 
+     71 119.327 892 1 0 0.827046 -1.15523 -175.85 
+     71 113.871 901 0 1 1.00578 -1.37784 -204.45 
+     71 157.268 891 0 0 1.01371 -1.38435 -205.85 
+     71 116.188 893 4 0 0.383916 -0.99672 -85.85 
+     71 120.071 903 3 1 1.27811 -2.43724 -114.45 
+     71 133.612 885 3 0 1.29614 -2.47865 -115.85 
+     71 122.1 904 2 1 1.54401 -3.22826 -144.45 
+     71 249.101 881 2 0 1.52312 -3.27182 -145.85 
+     71 158.396 901 1 1 1.03451 -4.14443 -174.45 
+     71 110.998 877 1 0 1.03976 -4.12256 -175.85 
+     71 132.007 903 0 1 1.29092 -3.6256 -204.45 
+     71 142.182 880 0 0 1.35561 -3.62586 -205.85 
+     71 158.972 891 2 1 -1.32036 2.29234 -144.45 
+     71 134.745 908 2 0 -1.45631 2.38972 -145.85 
+     71 194.739 878 1 1 -3.97655 4.06507 -174.45 
+     71 189.642 918 1 0 -4.01284 4.26349 -175.85 
+     71 132.113 878 0 1 -4.01842 7.85717 -204.45 
+     71 148.317 936 0 0 -4.08842 8.01017 -205.85 
+     71 130.058 939 0 0 -0.508948 8.64211 -206.25 
+     71 133.375 894 0 1 -0.792378 9.24123 -204.85 
+     71 288.495 1065 1 0 8.85583 33.7696 -176.25 
+     71 115.426 942 1 1 9.15595 34.7871 -174.85 
+     71 127.62 1162 2 0 8.0889 53.228 -146.25 
+     71 125.504 937 2 1 8.13938 54.2087 -144.85 
+     71 86.4608 1347 3 0 17.5634 90.35 -116.09 
+     71 155.188 986 3 1 17.9356 91.2901 -114.85 
+     71 1274.96 1327 4 0 -32.6858 86.1915 -86.25 
+     71 143.666 1326 4 0 -35.7602 85.9874 -86.25 
+     71 162.848 718 4 1 -35.9125 88.3427 -84.85 
+     71 96.3611 719 4 1 -35.771 88.8192 -84.6063 
+     71 6.37564 1328 4 0 -35.905 86.4093 -85.8581 
+     71 43.8405 1067 1 0 8.87374 34.0516 -176.188 
+     71 220.478 993 2 1 19.3907 59.5587 -144.488 
+     71 116.616 881 2 1 -3.44666 -3.16921 -144.45 
+     71 372.384 851 1 1 -9.26884 -7.77564 -174.45 
+     71 95.9951 858 1 0 -9.50068 -8.04968 -175.85 
+     71 24.5249 857 1 0 -9.56907 -8.11315 -176.206 
+     71 178.011 827 0 1 -14.0967 -14.1464 -204.45 
+     71 110.183 826 0 0 -14.5002 -14.2794 -205.85 
+     71 362.375 839 1 0 -18.0106 -11.6709 -175.85 
+     71 7.75139 1192 1 0 -4.59437 59.0711 -176.25 
+     71 118.084 1353 1 0 28.2121 91.6332 -176.25 
+     71 226.568 852 1 0 -9.15992 -9.05246 -175.85 
+     71 218.711 851 1 0 -9.13037 -9.31533 -176.062 
+Number of tracker digits in this event =  33
+Event: 72
+Number of tracker hits in this event =  10
+     72 141.706 894 1 1 -0.729961 -0.260167 -174.45 
+     72 103.522 896 1 0 -0.758732 -0.27369 -175.85 
+     72 95.2415 891 0 1 -1.33351 -0.51959 -204.45 
+     72 124.716 895 0 0 -1.34366 -0.544855 -205.85 
+     72 302.23 905 3 1 1.82198 -2.05359 -114.45 
+     72 104.344 888 3 0 1.83052 -1.94481 -115.85 
+     72 113.086 914 2 1 3.6209 0.756337 -144.45 
+     72 122.926 903 2 0 3.42509 1.32291 -145.85 
+     72 205.298 891 1 1 -1.2505 11.7708 -174.45 
+     72 102.931 955 1 0 -1.28206 11.8404 -175.85 
+Number of tracker digits in this event =  5
+Event: 73
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 74
+Number of tracker hits in this event =  1
+     74 194.119 1129 0 0 -12.8561 46.4644 -206.131 
+Number of tracker digits in this event =  1
+Event: 75
+Number of tracker hits in this event =  10
+     75 121.788 901 1 1 0.889849 -1.00403 -174.45 
+     75 232.674 893 1 0 0.942444 -0.969278 -175.85 
+     75 105.674 906 0 1 1.89405 -0.287077 -204.45 
+     75 126.266 900 1 1 0.658372 -1.21825 -174.461 
+     75 165.611 899 1 1 0.64474 -1.12523 -174.797 
+     75 227.794 892 1 0 0.586785 -1.13392 -175.85 
+     75 215.71 898 0 1 0.294163 -1.00894 -204.45 
+     75 152.297 892 0 0 0.283623 -1.06149 -205.85 
+     75 40.0501 719 11 0 -16.3165 -35.7354 124.052 
+     75 266.197 815 11 1 -16.5752 -36.2024 125.15 
+Number of tracker digits in this event =  8
+Event: 76
+Number of tracker hits in this event =  1
+     76 39.6768 247 4 0 170.119 -130.545 -86.1697 
+Number of tracker digits in this event =  0
+Event: 77
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 78
+Number of tracker hits in this event =  2
+     78 115.253 1576 7 0 -141.445 136.261 3.75 
+     78 117.57 190 7 1 -141.889 136.384 5.15 
+Number of tracker digits in this event =  0
+Event: 79
+Number of tracker hits in this event =  12
+     79 52.2457 904 3 0 -0.320041 1.54117 -115.85 
+     79 195.944 896 4 1 -0.268091 -0.25 -84.5025 
+     79 138.054 895 0 1 -0.533577 0.559931 -204.45 
+     79 100.349 899 0 0 -0.567021 0.618835 -205.85 
+     79 44.7909 898 4 1 0.399137 -0.25 -84.5043 
+     79 120.056 899 4 1 0.488256 -0.338923 -84.5369 
+     79 163.75 900 4 1 0.678324 -0.499979 -84.595 
+     79 7.40141 901 4 1 0.960952 -0.725414 -84.8298 
+     79 325.938 891 4 0 1.57692 -1.30496 -85.85 
+     79 115.505 892 4 0 1.95401 -1.13912 -85.9509 
+     79 91.2037 893 4 0 2.10275 -0.984174 -86.0653 
+     79 208.304 894 4 0 2.07569 -0.843649 -86.0779 
+Number of tracker digits in this event =  6
+Event: 80
+Number of tracker hits in this event =  4
+     80 134.46 898 0 1 0.439877 -1.66115 -204.45 
+     80 120.981 889 0 0 0.522984 -1.68244 -205.85 
+     80 199.784 499 5 1 -79.7001 143.171 -54.8192 
+     80 11.5387 500 5 1 -79.6174 143.293 -54.4687 
+Number of tracker digits in this event =  3
+Event: 81
+Number of tracker hits in this event =  4
+     81 47.4188 1353 5 0 168.439 91.6322 -56.0543 
+     81 9.57736 851 4 0 -58.6097 -9.27363 -85.8709 
+     81 222.181 604 4 1 -58.8443 -9.81062 -84.85 
+     81 190.249 603 4 1 -58.8588 -9.82682 -84.8222 
+Number of tracker digits in this event =  2
+Event: 82
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 83
+Number of tracker hits in this event =  2
+     83 139.664 564 1 0 86.5713 -66.7035 -175.912 
+     83 188.317 973 11 0 111.131 15.3725 123.923 
+Number of tracker digits in this event =  2
+Event: 84
+Number of tracker hits in this event =  4
+     84 276.308 799 0 0 -111.583 -19.7498 -205.997 
+     84 210.061 800 0 0 -111.952 -19.6377 -206.029 
+     84 1.844 1207 6 0 -165.506 62.1551 -25.85 
+     84 54.2231 1206 6 0 -165.491 62.0291 -25.9223 
+Number of tracker digits in this event =  2
+Event: 85
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 86
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 87
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 88
+Number of tracker hits in this event =  1
+     88 179.572 1130 13 0 -171.828 46.7822 183.828 
+Number of tracker digits in this event =  1
+Event: 89
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 90
+Number of tracker hits in this event =  40
+     90 124.598 898 3 1 0.417167 -0.254268 -114.45 
+     90 238.592 896 3 0 0.414755 -0.254086 -115.85 
+     90 106.439 898 2 1 0.316423 -0.258184 -144.45 
+     90 161.036 896 2 0 0.307239 -0.252673 -145.85 
+     90 113.254 770 1 0 57.5165 -25.5967 -176.25 
+     90 319.862 769 1 0 57.6799 -25.7406 -176.125 
+     90 41.5424 988 1 0 -58.6416 18.2593 -176.25 
+     90 86.1743 899 1 1 0.501685 -0.25 -174.584 
+     90 130.476 892 1 0 -0.60749 -1.14117 -175.85 
+     90 76.4396 891 1 0 -0.896924 -1.44732 -176.108 
+     90 18.3526 684 1 0 -1.00596 -42.841 -176.25 
+     90 133.031 683 1 0 -0.987986 -42.8637 -176.192 
+     90 301.182 891 1 1 -1.30726 -42.1587 -174.85 
+     90 162.094 842 1 0 -28.3293 -11.1399 -176.25 
+     90 805.384 758 1 1 -28.0062 -9.49715 -174.85 
+     90 185.292 759 1 1 -27.7537 -8.80594 -174.669 
+     90 80.8079 757 1 1 -28.1076 -8.83838 -174.598 
+     90 23.474 898 1 0 0.923012 0.25 -176.166 
+     90 307.941 900 1 1 0.65335 -0.25 -174.553 
+     90 104.256 895 4 0 -0.25 -0.459344 -85.8525 
+     90 203.936 871 3 1 -5.34241 -0.510489 -114.45 
+     90 156.984 892 3 0 -5.2482 -1.22276 -115.85 
+     90 66.4576 559 3 0 -13.4857 -67.6947 -116.25 
+     90 130.358 558 3 0 -13.5309 -67.9003 -116.107 
+     90 466.606 556 3 0 -13.6871 -68.3124 -115.93 
+     90 543.883 552 3 0 -14.0612 -69.1225 -115.931 
+     90 141.624 550 3 0 -14.4311 -69.5289 -116.128 
+     90 230.214 551 3 0 -14.7091 -69.4256 -115.994 
+     90 222.786 826 3 1 -14.4201 -72.4082 -114.85 
+     90 63.3028 555 3 0 -13.8755 -68.4859 -115.992 
+     90 202.026 891 2 1 -1.27382 -1.31735 -144.45 
+     90 387.251 891 2 0 -1.35984 -1.36267 -145.85 
+     90 106.265 880 1 1 -3.50373 -2.09141 -174.45 
+     90 144.643 887 1 0 -3.5592 -2.10714 -175.85 
+     90 142.964 874 0 1 -4.80116 -1.90748 -204.45 
+     90 191.635 889 0 0 -4.90516 -1.71332 -205.85 
+     90 113.401 886 1 1 -2.4233 -3.138 -174.45 
+     90 118.625 881 1 0 -2.3414 -3.35515 -175.85 
+     90 117.333 899 0 1 0.639305 -6.81823 -204.45 
+     90 145.691 863 0 0 0.783017 -7.00127 -205.85 
+Number of tracker digits in this event =  25
+Event: 91
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 92
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 93
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 94
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 95
+Number of tracker hits in this event =  3
+     95 207.576 425 0 1 -94.8544 -2.36336 -204.576 
+     95 82.8641 887 0 0 -95.5398 -2.13786 -205.85 
+     95 64.3279 888 0 0 -95.5816 -1.98493 -206.043 
+Number of tracker digits in this event =  1
+Event: 96
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 97
+Number of tracker hits in this event =  16
+     97 195.115 900 2 1 0.651979 -0.332982 -144.45 
+     97 282.345 896 2 0 0.674182 -0.333597 -145.85 
+     97 107.978 902 1 1 1.13158 -0.347779 -174.45 
+     97 127.693 896 1 0 1.15777 -0.349703 -175.85 
+     97 103.851 905 0 1 1.71112 -0.39388 -204.45 
+     97 98.976 896 0 0 1.74526 -0.359473 -205.85 
+     97 104.524 896 3 1 -0.346069 -0.36357 -114.45 
+     97 105.807 896 3 0 -0.361704 -0.374619 -115.85 
+     97 222.199 894 2 1 -0.669347 -0.588668 -144.45 
+     97 108.06 895 2 0 -0.696082 -0.607573 -145.85 
+     97 131.428 891 1 1 -1.27481 -1.03898 -174.45 
+     97 103.568 892 1 0 -1.30147 -1.05801 -175.85 
+     97 313.052 888 0 1 -1.87868 -1.40597 -204.45 
+     97 181.024 891 0 0 -1.87881 -1.42887 -205.85 
+     97 62.0973 893 0 0 -2.73659 -0.8672 -205.85 
+     97 69.6203 894 0 0 -2.85928 -0.79873 -206.086 
+Number of tracker digits in this event =  7
+Event: 98
+Number of tracker hits in this event =  15
+     98 19.2392 895 0 1 -0.510369 4.19111 -204.818 
+     98 190.687 898 3 1 0.337699 0.435541 -114.45 
+     98 116.614 899 3 0 0.368432 0.453324 -115.85 
+     98 340.16 899 2 1 0.636513 0.416298 -144.45 
+     98 125.443 898 2 0 0.526325 0.410739 -145.85 
+     98 137.429 880 0 1 -3.52227 0.545888 -204.45 
+     98 112.061 899 0 0 -3.56655 0.637588 -205.85 
+     98 116.592 902 1 1 1.1329 1.36083 -174.45 
+     98 157.155 905 1 0 1.14337 1.65037 -175.85 
+     98 157.103 931 0 1 6.94229 10.6559 -204.45 
+     98 104.298 945 0 0 7.0795 9.7855 -205.85 
+     98 26.3067 944 0 0 7.17885 9.60484 -206.151 
+     98 108.602 462 5 1 -87.1249 -177.734 -54.5192 
+     98 159.555 948 2 0 -0.480901 10.2527 -146.25 
+     98 451.021 898 2 1 0.25 9.71108 -144.599 
+Number of tracker digits in this event =  8
+Event: 99
+Number of tracker hits in this event =  2
+     99 117.154 899 0 0 -0.86496 0.483162 -205.85 
+     99 112.853 900 0 0 -0.917534 0.677712 -206.061 
+Number of tracker digits in this event =  0
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=12.37s Real=12.38s Sys=0.01s
+/gun/particle e-
+/gun/energy 1 GeV
+/gun/sourceType 2
+/run/beamOn 100
+Start Run processing.
+Event: 0
+Number of tracker hits in this event =  1
+      0 7.07574 964 3 0 -23.674 13.6297 -116.211 
+Number of tracker digits in this event =  0
+Event: 1
+Number of tracker hits in this event =  25
+      1 162.119 899 3 1 0.517477 -0.361123 -114.45 
+      1 130.855 896 3 0 0.536223 -0.37503 -115.85 
+      1 122.817 901 2 1 0.876497 -0.66613 -144.45 
+      1 123.725 894 2 0 0.889966 -0.684256 -145.85 
+      1 343.893 902 1 1 1.21861 -1.07001 -174.45 
+      1 476.179 892 1 0 1.23192 -1.1278 -175.85 
+      1 256.22 904 0 1 1.5207 -2.3578 -204.45 
+      1 113.507 886 0 0 1.52674 -2.41332 -205.85 
+      1 36.9294 1446 14 0 -14.3785 110.184 214.018 
+      1 36.8141 826 14 1 -14.2649 110.553 215.15 
+      1 129.716 827 14 1 -14.2326 110.59 215.237 
+      1 130.373 885 0 0 0.718516 -2.54928 -205.85 
+      1 598.148 817 0 0 3.1774 -16.1473 -206.25 
+      1 158.494 816 0 1 -16.3686 -7.5978 -204.45 
+      1 161.055 867 0 0 -16.5415 -6.09829 -205.85 
+      1 41.3962 869 0 0 -16.6453 -5.69761 -206.179 
+      1 150.548 899 0 1 0.577466 -1.64521 -204.45 
+      1 229.262 888 0 0 -1.11934 -2.04614 -205.85 
+      1 22.9561 887 0 0 -1.52977 -2.2114 -206.2 
+      1 164.56 452 2 1 -89.1713 97.8432 -144.45 
+      1 115.51 454 2 1 -88.7409 97.7647 -144.577 
+      1 227.521 1382 2 0 -87.7332 97.4763 -145.85 
+      1 68.7011 1549 2 0 -58.2221 130.912 -146.036 
+      1 99.1219 606 2 1 -58.3419 132.04 -144.85 
+      1 235.278 605 2 1 -58.4697 132.238 -144.67 
+Number of tracker digits in this event =  17
+Event: 2
+Number of tracker hits in this event =  40
+      2 110.553 898 4 0 0.433849 0.282308 -85.85 
+      2 218.54 944 3 1 9.61824 6.30012 -114.45 
+      2 292.401 930 3 0 10.2216 6.65018 -115.85 
+      2 121.435 999 2 1 20.5604 13.9425 -144.45 
+      2 295.042 966 2 0 21.22 14.0001 -145.85 
+      2 840.99 965 2 0 21.808 13.7059 -146.179 
+      2 415.014 1026 2 1 25.9435 11.064 -144.85 
+      2 10.8384 1031 2 1 26.8949 10.5387 -144.464 
+      2 223.857 1079 3 0 71.7145 36.6221 -116.25 
+      2 15.7895 1081 3 0 72.317 36.9882 -115.886 
+      2 230.523 1268 3 1 74.3158 37.7035 -114.85 
+      2 84.6983 1271 3 1 74.947 37.8346 -114.564 
+      2 150.54 1273 3 1 75.4433 38.0674 -114.45 
+      2 266.982 1274 3 1 75.538 38.5288 -114.581 
+      2 141.788 1116 3 0 79.5313 43.9149 -115.85 
+      2 258.25 1117 3 0 79.8427 44.2023 -115.882 
+      2 502.599 1120 3 0 80.3179 44.8474 -115.922 
+      2 117.669 1124 3 0 81.4314 45.5448 -116.233 
+      2 156.36 1125 3 0 81.6361 45.8346 -116.235 
+      2 294.854 1127 3 0 82.0177 46.1832 -116.077 
+      2 25.0535 1131 3 0 82.6252 46.8805 -115.85 
+      2 189.912 1343 3 1 89.2899 54.948 -114.85 
+      2 29.587 1345 3 1 89.7212 55.2009 -114.679 
+      2 97.3069 1347 3 1 90.35 55.3195 -114.721 
+      2 59.1981 1130 3 0 96.6532 46.7692 -115.87 
+      2 30.7924 1129 3 0 96.7731 46.6035 -115.851 
+      2 28.4992 1582 3 1 137.475 32.7507 -114.85 
+      2 0.0489101 1583 3 1 137.56 32.7227 -114.85 
+      2 234.343 1046 3 0 143.678 29.9938 -115.85 
+      2 126.843 1620 3 1 145.008 29.1439 -114.85 
+      2 86.0797 1621 3 1 145.177 28.9841 -114.721 
+      2 253.245 1622 3 1 145.384 29.0734 -114.736 
+      2 93.3008 1045 3 0 143.822 29.7806 -115.894 
+      2 130.247 907 3 1 2.20166 6.51877 -114.45 
+      2 111.043 925 2 1 5.68134 10.202 -144.45 
+      2 171.451 945 2 0 6.09257 9.8488 -145.85 
+      2 118.393 965 1 1 13.8255 3.34099 -174.45 
+      2 126.629 911 1 0 14.0185 2.86965 -175.85 
+      2 128.439 978 0 1 16.4188 -6.64334 -204.45 
+      2 186.978 862 0 0 16.2984 -7.13091 -205.85 
+Number of tracker digits in this event =  24
+Event: 3
+Number of tracker hits in this event =  38
+      3 115.94 893 3 1 -1.03508 -0.411869 -114.45 
+      3 357.41 896 3 0 -1.04565 -0.428501 -115.85 
+      3 106.563 892 2 1 -1.18105 -0.854989 -144.45 
+      3 132.93 893 2 0 -1.19881 -0.87673 -145.85 
+      3 109.761 890 1 1 -1.5836 -1.3057 -174.45 
+      3 230.942 891 1 0 -1.55118 -1.3302 -175.85 
+      3 118.027 893 0 1 -0.897091 -1.83709 -204.45 
+      3 109.985 888 0 0 -0.869602 -1.85346 -205.85 
+      3 100.875 1528 3 0 -170.147 126.727 -115.901 
+      3 23.6025 1530 3 0 -169.893 126.985 -115.909 
+      3 62.6466 44 3 1 -171.107 129.118 -114.85 
+      3 233.41 43 3 1 -171.163 129.31 -114.812 
+      3 5.54044 42 3 1 -171.357 129.598 -114.459 
+      3 258.093 892 3 1 -1.08294 -0.385773 -114.45 
+      3 134.017 905 1 1 1.70178 -1.27217 -174.45 
+      3 141.61 911 0 1 3.0375 -0.819853 -204.45 
+      3 93.7752 894 0 0 3.09279 -0.744302 -205.85 
+      3 95.5208 893 2 1 -1.04225 -0.526121 -144.45 
+      3 250.085 895 2 0 -1.05443 -0.512744 -145.85 
+      3 517.91 888 1 1 -1.90644 -0.778278 -174.45 
+      3 253.176 895 1 0 -1.9744 -0.528183 -175.85 
+      3 595.273 878 0 1 -4.03302 4.20658 -204.45 
+      3 787.335 877 0 1 -4.09288 3.89802 -204.85 
+      3 110.832 882 0 1 -3.05713 -0.25 -204.508 
+      3 150.175 912 0 0 -3.67208 3.2159 -205.85 
+      3 149.537 860 2 1 -7.49608 3.08461 -144.85 
+      3 356.454 859 2 1 -7.74385 3.01664 -144.758 
+      3 117.087 889 1 1 -1.78062 -0.562478 -174.45 
+      3 112.505 886 0 1 -2.33591 2.49254 -204.45 
+      3 114.716 910 0 0 -2.35131 2.73387 -205.85 
+      3 57.8331 886 1 1 -2.43111 -1.5871 -174.815 
+      3 401.905 866 1 0 -3.8711 -6.33977 -175.85 
+      3 44.1533 861 1 0 -4.21145 -7.35391 -176.224 
+      3 158.312 858 0 1 -8.01002 -141.494 -204.45 
+      3 206.577 195 0 0 -9.0294 -140.868 -205.85 
+      3 208.232 257 0 0 -31.7889 -128.505 -206.25 
+      3 166.325 741 0 1 -31.348 -128.873 -204.85 
+      3 128.254 742 0 1 -31.1979 -128.982 -204.728 
+Number of tracker digits in this event =  21
+Event: 4
+Number of tracker hits in this event =  38
+      4 107.048 896 3 1 -0.325041 -0.3029 -114.45 
+      4 125.774 896 3 0 -0.336824 -0.310154 -115.85 
+      4 482.199 895 2 1 -0.603675 -0.423456 -144.45 
+      4 147.511 896 2 0 -0.638763 -0.425277 -145.85 
+      4 106.813 891 1 1 -1.33145 -0.455876 -174.45 
+      4 142.262 895 1 0 -1.35927 -0.463837 -175.85 
+      4 111.306 888 0 1 -1.93054 -0.613189 -204.45 
+      4 121.622 895 0 0 -1.95852 -0.621999 -205.85 
+      4 125.799 895 2 0 -0.48501 -0.508063 -145.85 
+      4 120.121 900 1 1 0.683287 -1.03589 -174.45 
+      4 147.046 892 1 0 0.779346 -1.05104 -175.85 
+      4 146.524 911 0 1 2.8958 -1.51888 -204.45 
+      4 113.529 890 0 0 3.20151 -1.64001 -205.85 
+      4 134.236 922 1 1 5.22286 -2.85312 -174.45 
+      4 104.454 885 1 0 5.26393 -2.60176 -175.85 
+      4 184.805 924 0 1 5.46298 1.5013 -204.45 
+      4 44.0027 923 0 1 5.4134 1.75533 -204.811 
+      4 203.806 912 0 0 5.0538 3.06973 -205.85 
+      4 72.4381 1102 0 0 7.42307 41.1812 -206.25 
+      4 90.137 1103 0 0 7.52396 41.3401 -206.068 
+      4 35.1545 1104 0 0 7.76332 41.5084 -205.948 
+      4 147.5 937 0 1 8.13193 42.8735 -204.85 
+      4 161.442 938 0 1 8.29487 43.0768 -204.577 
+      4 191.991 887 3 1 -2.08224 -1.49197 -114.45 
+      4 110.406 891 3 0 -2.4951 -1.36009 -115.85 
+      4 114.573 838 2 1 -11.8569 0.557274 -144.45 
+      4 92.2923 898 2 0 -12.1726 0.395239 -145.85 
+      4 144.019 802 1 1 -19.1281 -1.86535 -174.45 
+      4 103.906 887 1 0 -19.5293 -2.08684 -175.85 
+      4 175.449 759 0 1 -27.6697 -7.68027 -204.45 
+      4 137.57 855 0 0 -28.3951 -8.45389 -205.85 
+      4 220.744 910 3 1 2.66505 2.84655 -114.45 
+      4 162.964 917 3 0 1.83944 4.13477 -115.85 
+      4 312.933 819 2 1 -15.8421 28.6427 -144.45 
+      4 390.427 1050 2 0 -18.9732 30.6856 -145.85 
+      4 128.704 1283 1 0 -114.533 77.2993 -176.25 
+      4 115.776 1282 1 0 -114.703 77.1001 -176.088 
+      4 191.503 327 1 1 -114.423 75.5165 -174.85 
+Number of tracker digits in this event =  24
+Event: 5
+Number of tracker hits in this event =  8
+      5 180.724 896 2 1 -0.359354 0.428633 -144.45 
+      5 131.295 898 2 0 -0.359876 0.43701 -145.85 
+      5 407.385 896 1 1 -0.339643 0.551441 -174.45 
+      5 297.703 899 1 0 -0.329179 0.552599 -175.85 
+      5 111.448 902 0 1 1.15641 2.88598 -204.45 
+      5 135.487 912 0 0 1.19244 3.07875 -205.85 
+      5 90.6905 896 0 1 -0.389528 0.943985 -204.45 
+      5 127.473 901 0 0 -0.370051 0.967734 -205.85 
+Number of tracker digits in this event =  6
+Event: 6
+Number of tracker hits in this event =  6
+      6 103.79 890 2 1 -1.49298 -0.26512 -144.45 
+      6 110.605 896 2 0 -1.51479 -0.270329 -145.85 
+      6 131.289 888 1 1 -1.98162 -0.362323 -174.45 
+      6 105.364 896 1 0 -2.00607 -0.367479 -175.85 
+      6 122.353 885 0 1 -2.49626 -0.493755 -204.45 
+      6 103.873 895 0 0 -2.51675 -0.497799 -205.85 
+Number of tracker digits in this event =  2
+Event: 7
+Number of tracker hits in this event =  9
+      7 162.392 896 3 1 -0.267738 0.818223 -114.45 
+      7 129.291 900 3 0 -0.268259 0.839782 -115.85 
+      7 175.842 896 2 1 -0.256651 1.39947 -144.45 
+      7 115.518 904 2 0 -0.287992 1.45419 -145.85 
+      7 255.289 893 1 1 -0.939334 2.66113 -174.45 
+      7 94.0002 910 1 0 -0.966105 2.72563 -175.85 
+      7 130.372 890 0 1 -1.51267 3.97986 -204.45 
+      7 24.4017 916 0 0 -1.53201 4.04706 -205.85 
+      7 72.1199 917 0 0 -1.53335 4.0516 -205.948 
+Number of tracker digits in this event =  5
+Event: 8
+Number of tracker hits in this event =  13
+      8 86.7274 938 1 0 -57.0863 8.38144 -176.25 
+      8 282.26 939 1 0 -57.3055 8.49799 -176.08 
+      8 123.976 940 1 0 -57.6615 8.66554 -176.121 
+      8 29.7215 941 1 0 -57.8102 8.86147 -175.931 
+      8 31.7019 607 1 1 -58.0557 8.59558 -174.85 
+      8 388.71 608 1 1 -58.0456 8.52059 -174.784 
+      8 73.961 898 0 1 0.363804 -0.25 -204.826 
+      8 86.9042 884 0 0 0.47923 -2.74591 -205.85 
+      8 203.542 883 0 0 0.473914 -3.02706 -205.911 
+      8 356.506 880 0 0 0.691476 -3.51178 -206.08 
+      8 208.897 878 0 0 1.12134 -4.0312 -206.223 
+      8 7.4904 876 0 0 0.900109 -4.42029 -205.876 
+      8 297.012 899 0 1 0.581061 -5.31266 -204.85 
+Number of tracker digits in this event =  7
+Event: 9
+Number of tracker hits in this event =  19
+      9 240.101 898 2 1 0.315778 -0.266848 -144.45 
+      9 119.375 896 2 0 0.345467 -0.284485 -145.85 
+      9 164.482 896 1 0 0.964813 -0.257973 -175.85 
+      9 174.531 902 0 1 1.13197 -0.507127 -204.45 
+      9 233.636 895 0 0 1.09399 -0.541571 -205.85 
+      9 118.746 899 0 1 0.475268 -0.44509 -204.45 
+      9 139.039 894 0 1 -0.658019 -2.32792 -204.45 
+      9 129.188 885 0 0 -0.91805 -2.50049 -205.85 
+      9 98.9538 883 2 0 0.45764 -2.94393 -145.85 
+      9 117.84 911 1 1 2.9802 -4.00752 -174.45 
+      9 148.539 877 1 0 3.28603 -4.10128 -175.85 
+      9 115.329 943 0 1 9.41921 -5.72966 -204.45 
+      9 131.511 868 0 0 9.86371 -5.95172 -205.85 
+      9 226.266 891 2 1 -1.32687 1.38768 -144.45 
+      9 133.385 904 2 0 -1.46172 1.45077 -145.85 
+      9 108.979 878 1 1 -3.94908 2.96559 -174.45 
+      9 129.06 911 1 0 -4.11298 3.02485 -175.85 
+      9 144.553 860 0 1 -7.51392 4.24994 -204.45 
+      9 128.218 918 0 0 -7.66939 4.29208 -205.85 
+Number of tracker digits in this event =  13
+Event: 10
+Number of tracker hits in this event =  8
+     10 49.9362 894 4 0 0.25 -0.650326 -86.0304 
+     10 140.021 899 3 1 0.566565 -0.879856 -114.45 
+     10 142.287 893 3 0 0.578483 -0.887088 -115.85 
+     10 130.606 900 2 1 0.800418 -1.0156 -144.45 
+     10 134.866 893 2 0 0.77239 -1.01482 -145.85 
+     10 393.596 896 0 1 -0.345165 -0.893963 -204.45 
+     10 143.117 893 0 0 -0.374276 -0.882063 -205.85 
+     10 127.666 1101 3 1 41.0064 36.8915 -114.732 
+Number of tracker digits in this event =  7
+Event: 11
+Number of tracker hits in this event =  16
+     11 148.228 898 3 1 0.338022 -0.276024 -114.45 
+     11 128.99 896 3 0 0.339566 -0.302836 -115.85 
+     11 133.255 898 2 1 0.340186 -0.872271 -144.45 
+     11 221.483 893 2 0 0.350639 -0.914601 -145.85 
+     11 192.642 899 1 1 0.572074 -1.76847 -174.45 
+     11 123.959 889 1 0 0.579488 -1.82574 -175.85 
+     11 290.647 900 0 1 0.71807 -2.92277 -204.45 
+     11 96.4126 883 0 0 0.729637 -2.98162 -205.85 
+     11 154.936 1184 3 1 57.489 154.536 -114.691 
+     11 180.896 758 0 1 -27.9864 117.828 -204.736 
+     11 13.5323 1484 0 0 -28.967 117.816 -205.85 
+     11 17.8719 484 7 0 -93.7672 -82.6669 3.98045 
+     11 5.67718 565 8 0 -5.97634 -66.4629 34.1354 
+     11 15.27 945 8 1 9.82979 -61.8499 35.5156 
+     11 175.806 837 1 1 -12.1923 -3.17573 -174.716 
+     11 112.521 895 0 0 0.748413 -0.561992 -205.85 
+Number of tracker digits in this event =  10
+Event: 12
+Number of tracker hits in this event =  26
+     12 164.259 896 4 1 -0.422332 -0.463723 -84.45 
+     12 167.323 895 4 0 -0.426902 -0.476368 -85.85 
+     12 163.139 895 3 1 -0.531512 -0.694221 -114.45 
+     12 159.852 894 3 0 -0.544632 -0.712562 -115.85 
+     12 525.696 894 2 1 -0.83706 -1.10085 -144.45 
+     12 107.855 892 2 0 -0.846675 -1.14235 -145.85 
+     12 100.759 892 1 1 -1.0579 -2.03138 -174.45 
+     12 237.854 887 1 0 -1.05193 -2.0865 -175.85 
+     12 108.625 893 0 1 -0.924974 -3.25457 -204.45 
+     12 136.11 881 0 0 -0.927969 -3.29364 -205.85 
+     12 48.1932 895 2 1 -0.605422 -0.860216 -144.785 
+     12 115.855 893 3 1 -0.981994 -0.443317 -114.45 
+     12 98.5476 895 3 0 -0.947264 -0.494241 -115.85 
+     12 98.8277 904 1 1 1.5585 -3.17533 -174.45 
+     12 320.794 881 1 0 1.71485 -3.33511 -175.85 
+     12 133.638 922 0 1 5.11152 -6.43704 -204.45 
+     12 96.886 865 0 0 5.28756 -6.54702 -205.85 
+     12 79.5237 1087 7 1 38.2365 112.563 5.53963 
+     12 122.303 899 3 1 0.591035 -1.17441 -114.45 
+     12 163.293 891 3 0 0.614034 -1.38417 -115.85 
+     12 118.95 906 2 1 1.86425 -5.79041 -144.45 
+     12 120.977 866 2 0 1.99227 -6.26922 -145.85 
+     12 119.495 917 1 1 4.15885 -16.0822 -174.45 
+     12 122.971 813 1 0 4.16765 -16.9215 -175.85 
+     12 144.351 914 0 1 3.50247 -32.5709 -204.45 
+     12 169.134 729 0 0 3.75793 -33.7321 -205.85 
+Number of tracker digits in this event =  15
+Event: 13
+Number of tracker hits in this event =  32
+     13 136.571 899 3 1 0.579272 -0.415506 -114.45 
+     13 128.033 896 3 0 0.592238 -0.42971 -115.85 
+     13 134.866 901 2 1 0.913837 -0.728749 -144.45 
+     13 151.564 894 2 0 0.928741 -0.751034 -145.85 
+     13 401.103 902 1 1 1.17446 -1.28982 -174.45 
+     13 165.245 891 1 0 1.18257 -1.30234 -175.85 
+     13 393.175 903 0 1 1.34383 -1.50769 -204.45 
+     13 121.254 890 0 0 1.33719 -1.52075 -205.85 
+     13 17.0833 142 8 1 -151.447 5.90096 35.2009 
+     13 147.524 1374 3 0 -52.5321 95.7973 -116.25 
+     13 279.024 1372 3 0 -52.1802 95.5477 -116.225 
+     13 394.518 1370 3 0 -51.4372 95.1431 -116.232 
+     13 378.254 1369 3 0 -50.3194 94.8946 -116.093 
+     13 33.6066 1371 3 0 -49.1412 95.2904 -115.924 
+     13 191.39 658 3 1 -48.0425 95.598 -114.85 
+     13 136.101 1301 5 1 81.014 172.248 -54.8445 
+     13 101.967 1302 5 1 81.0897 172.257 -54.8355 
+     13 104.564 893 1 0 1.21996 -0.865442 -175.85 
+     13 257.69 893 0 0 1.31467 -0.91013 -205.85 
+     13 157.89 894 1 0 1.23571 -0.847924 -175.85 
+     13 357.574 902 0 1 1.23051 -0.721057 -204.45 
+     13 132.688 894 0 0 1.26281 -0.746237 -205.85 
+     13 104.859 892 0 0 1.31445 -1.10165 -205.85 
+     13 6.71989 899 6 0 0.25 0.483403 -26.2197 
+     13 134.638 913 5 1 3.30332 5.72441 -54.45 
+     13 122.455 928 5 0 2.99554 6.34124 -55.85 
+     13 181.803 864 4 1 -6.83189 17.3286 -84.45 
+     13 142.318 981 4 0 -6.91454 17.002 -85.85 
+     13 165.228 848 3 1 -9.96332 8.40796 -114.45 
+     13 140.185 933 3 0 -10.625 7.40363 -115.85 
+     13 369.569 795 2 1 -20.527 -19.6831 -144.45 
+     13 130.621 797 2 0 -20.8624 -20.1028 -145.85 
+Number of tracker digits in this event =  26
+Event: 14
+Number of tracker hits in this event =  12
+     14 133.327 901 2 1 0.925609 -0.376672 -144.45 
+     14 104.343 896 2 0 0.929527 -0.399669 -145.85 
+     14 156.196 902 1 1 1.06022 -0.879118 -174.45 
+     14 157.617 893 1 0 1.06568 -0.904057 -175.85 
+     14 155.172 902 0 1 1.15656 -1.35848 -204.45 
+     14 113.465 891 0 0 1.15418 -1.38857 -205.85 
+     14 124.51 917 4 1 4.18741 -0.904285 -84.45 
+     14 293.954 894 4 0 4.78036 -0.723617 -85.85 
+     14 154.44 987 3 1 18.0795 3.68624 -114.45 
+     14 187.297 917 3 0 18.6832 4.05796 -115.85 
+     14 177.41 1058 2 1 32.2608 10.5352 -144.45 
+     14 189.513 956 2 0 32.981 11.8938 -145.85 
+Number of tracker digits in this event =  10
+Event: 15
+Number of tracker hits in this event =  25
+     15 99.1751 899 5 0 -0.2641 0.610437 -55.85 
+     15 112.735 895 4 1 -0.616723 1.25573 -84.45 
+     15 124.28 903 4 0 -0.6239 1.32969 -85.85 
+     15 159.284 895 3 1 -0.603246 3.2086 -114.45 
+     15 127.792 913 3 0 -0.54847 3.29184 -115.85 
+     15 172.715 899 2 1 0.462982 4.76606 -144.45 
+     15 111.476 921 2 0 0.493964 4.8636 -145.85 
+     15 309.411 901 1 1 0.904724 7.00676 -174.45 
+     15 128.017 932 1 0 1.0092 7.18618 -175.85 
+     15 97.8127 910 0 1 2.79557 10.721 -204.45 
+     15 117.336 951 0 0 2.94275 10.9088 -205.85 
+     15 1.36725 994 1 1 19.6221 -30.8165 -174.451 
+     15 205.665 892 3 1 -1.12283 1.48886 -114.624 
+     15 257.357 904 3 0 -1.15637 1.49637 -115.85 
+     15 204.465 888 2 1 -2.03149 1.52007 -144.45 
+     15 223.861 904 2 0 -1.97236 1.56154 -145.85 
+     15 120.011 893 1 1 -1.04583 2.19316 -174.45 
+     15 128.007 907 1 0 -0.98852 2.19085 -175.85 
+     15 50.1357 911 0 0 -0.25 2.88548 -206.123 
+     15 290.245 905 2 0 -1.92863 1.66498 -146.118 
+     15 97.3107 882 1 1 -3.23548 2.15457 -174.615 
+     15 180.911 889 2 1 -1.79606 2.05003 -144.45 
+     15 137.604 882 1 0 0.612577 -3.24281 -175.85 
+     15 109.542 877 0 1 -4.06505 -13.4194 -204.45 
+     15 236.41 828 0 0 -4.34479 -13.9692 -205.85 
+Number of tracker digits in this event =  16
+Event: 16
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 17
+Number of tracker hits in this event =  35
+     17 114.168 914 3 1 3.58559 -2.60291 -114.45 
+     17 127.529 884 3 0 3.6939 -2.70263 -115.85 
+     17 108.748 927 2 1 6.05247 -4.8324 -144.45 
+     17 110.581 873 2 0 6.28784 -4.89359 -145.85 
+     17 107.661 953 1 1 11.3112 -6.42923 -174.45 
+     17 94.0526 865 1 0 11.7227 -6.6028 -175.85 
+     17 39.2184 864 1 0 11.8207 -6.65099 -176.198 
+     17 312.802 997 0 1 20.1746 -10.8782 -204.45 
+     17 149.962 842 0 0 20.6138 -11.0952 -205.85 
+     17 87.6645 839 0 0 20.9094 -11.7954 -205.85 
+     17 102.748 838 0 0 21.0699 -12.0362 -206.089 
+     17 91.0779 692 0 0 55.8516 -41.2414 -206.25 
+     17 266.122 691 0 0 56.0149 -41.4321 -206.148 
+     17 279.201 689 0 0 56.4261 -41.7199 -206.02 
+     17 57.6032 686 0 0 57.0694 -42.3021 -205.899 
+     17 49.5247 1207 0 1 62.1484 -43.3768 -204.85 
+     17 60.4383 1208 0 1 62.305 -43.3859 -204.838 
+     17 119.014 662 0 0 69.7755 -47.0853 -205.85 
+     17 169.41 661 0 0 70.1446 -47.2771 -205.865 
+     17 79.77 660 0 0 70.5522 -47.5793 -205.894 
+     17 137.561 659 0 0 70.7474 -47.7475 -205.85 
+     17 329.586 658 0 0 70.9095 -47.9084 -205.967 
+     17 285.423 618 0 0 65.6403 -55.9669 -206.25 
+     17 103.236 894 0 1 -0.658637 2.73339 -204.497 
+     17 110.735 910 0 0 -0.852568 2.78425 -205.85 
+     17 90.1948 928 0 0 -8.21687 6.28343 -205.941 
+     17 200.653 898 2 1 0.25 0.561445 -144.643 
+     17 59.8364 900 2 0 2.21428 0.678506 -145.85 
+     17 126.29 899 2 0 2.39787 0.592373 -145.987 
+     17 53.7183 896 2 1 -0.294052 9.08241 -144.45 
+     17 160.147 911 1 1 3.02803 18.033 -174.45 
+     17 129.066 990 1 0 2.96883 18.6874 -175.85 
+     17 110.834 913 0 1 3.38527 28.9857 -204.45 
+     17 117.318 1042 0 0 3.41374 29.2073 -205.85 
+     17 118.398 898 3 0 0.541085 0.25 -116.082 
+Number of tracker digits in this event =  13
+Event: 18
+Number of tracker hits in this event =  9
+     18 168.977 901 3 1 0.89619 -0.350402 -114.45 
+     18 108.254 896 3 0 0.910109 -0.354315 -115.85 
+     18 329.72 903 2 1 1.28288 -0.425837 -144.45 
+     18 121.549 896 2 0 1.31058 -0.429711 -145.85 
+     18 129.134 906 1 1 1.93486 -0.544995 -174.45 
+     18 151.688 895 1 0 1.95809 -0.553119 -175.85 
+     18 122.269 909 0 1 2.52793 -0.752667 -204.45 
+     18 113.339 894 0 0 2.54843 -0.767976 -205.85 
+     18 22.1194 902 2 1 1.24243 -0.298611 -144.492 
+Number of tracker digits in this event =  6
+Event: 19
+Number of tracker hits in this event =  39
+     19 129.744 890 2 1 -1.59823 -0.924292 -144.45 
+     19 184.07 893 2 0 -1.6159 -0.999893 -145.85 
+     19 150.054 888 1 1 -2.00178 -2.83348 -174.45 
+     19 110.871 883 1 0 -2.00581 -2.9389 -175.85 
+     19 141.29 887 0 1 -2.16458 -5.07489 -204.45 
+     19 129.582 872 0 0 -2.21665 -5.15266 -205.85 
+     19 111.443 899 3 1 0.554555 1.28963 -114.45 
+     19 270.161 903 3 0 0.597934 1.39391 -115.85 
+     19 175.139 905 2 1 1.69468 4.84347 -144.45 
+     19 103.707 922 2 0 1.70933 5.07473 -145.85 
+     19 114.836 906 1 1 1.93241 9.68762 -174.45 
+     19 140.683 946 1 0 1.97833 9.86568 -175.85 
+     19 156.018 910 0 1 2.65671 13.5883 -204.45 
+     19 138.389 965 0 0 2.70238 13.7619 -205.85 
+     19 311.448 909 1 1 2.50823 4.08623 -174.45 
+     19 132.049 916 1 0 3.09426 4.01215 -175.85 
+     19 98.915 978 0 1 16.4413 -2.88395 -204.45 
+     19 161.442 980 0 1 16.7259 -3.00567 -204.599 
+     19 1.94045 983 0 1 17.3293 -3.13856 -204.847 
+     19 274.091 875 0 0 22.7946 -4.5518 -205.85 
+     19 165.732 874 0 0 23.5626 -4.69298 -206.191 
+     19 67.417 924 1 0 3.04561 5.58053 -175.85 
+     19 102.325 925 1 0 3.07396 5.73578 -176.025 
+     19 58.1801 1096 1 0 12.3226 40.023 -176.25 
+     19 128.653 1097 1 0 12.2516 40.1101 -176.154 
+     19 151.729 954 1 1 11.6116 39.8915 -174.85 
+     19 114.424 908 2 1 2.34423 0.918667 -144.45 
+     19 115.777 901 2 0 2.44272 0.954506 -145.85 
+     19 135.097 920 1 1 4.68948 1.75842 -174.45 
+     19 136.343 901 1 0 4.19159 1.02751 -175.85 
+     19 168.411 848 0 1 -9.92937 -11.2793 -204.45 
+     19 267.858 847 0 1 -10.1739 -11.6684 -204.547 
+     19 371.315 843 0 1 -10.8789 -12.2463 -204.657 
+     19 139.597 774 0 0 -21.1773 -24.7226 -205.85 
+     19 196.401 773 0 0 -21.3905 -24.9834 -205.894 
+     19 468.371 771 0 0 -21.939 -25.3607 -205.87 
+     19 329.392 767 0 0 -22.8987 -26.107 -205.89 
+     19 279.915 765 0 0 -23.6629 -26.5101 -205.872 
+     19 156.28 766 0 0 -24.312 -26.3257 -206.143 
+Number of tracker digits in this event =  28
+Event: 20
+Number of tracker hits in this event =  7
+     20 91.947 899 2 1 0.572481 -0.384387 -144.45 
+     20 127.972 896 2 0 0.588741 -0.396245 -145.85 
+     20 125.557 901 1 1 0.907868 -0.642465 -174.45 
+     20 128.155 894 1 0 0.927383 -0.655511 -175.85 
+     20 257.212 903 0 1 1.3542 -0.8991 -204.45 
+     20 139.256 893 0 0 1.36784 -0.902031 -205.85 
+     20 106.918 889 0 0 1.76118 -1.65496 -205.85 
+Number of tracker digits in this event =  5
+Event: 21
+Number of tracker hits in this event =  15
+     21 98.3182 891 2 1 -1.38883 0.417921 -144.45 
+     21 263.726 898 2 0 -1.41741 0.434313 -145.85 
+     21 180.523 888 1 1 -1.91376 0.741224 -174.45 
+     21 175.495 900 1 0 -1.94519 0.7531 -175.85 
+     21 106.8 885 0 1 -2.55159 0.980861 -204.45 
+     21 168.943 901 0 0 -2.57555 1.01266 -205.85 
+     21 258.154 895 2 1 -0.62975 0.453094 -144.45 
+     21 129.437 909 0 1 2.55538 1.18508 -204.45 
+     21 112.163 903 0 0 2.65755 1.3798 -205.85 
+     21 206.077 718 0 1 -35.8604 -1.99171 -204.55 
+     21 134.555 899 2 0 -0.633359 0.468787 -145.85 
+     21 106.431 895 1 1 -0.627493 0.878693 -174.45 
+     21 147.495 901 1 0 -0.670016 0.910464 -175.85 
+     21 19.3419 897 0 0 -4.2037 -0.25 -206.135 
+     21 248.371 896 0 0 -4.21759 -0.255231 -206.198 
+Number of tracker digits in this event =  10
+Event: 22
+Number of tracker hits in this event =  4
+     22 130.607 901 0 1 1.00125 -0.425093 -204.45 
+     22 144.446 896 0 0 1.02197 -0.434571 -205.85 
+     22 72.2372 860 1 1 -7.54981 35.5573 -174.602 
+     22 239.598 1019 3 0 -55.9706 24.5647 -116.022 
+Number of tracker digits in this event =  3
+Event: 23
+Number of tracker hits in this event =  17
+     23 107.469 900 3 1 0.834707 -0.358557 -114.45 
+     23 126.827 896 3 0 0.827712 -0.379193 -115.85 
+     23 198.095 899 2 1 0.648663 -0.804499 -144.45 
+     23 135.238 894 2 0 0.662728 -0.815911 -145.85 
+     23 122.583 901 1 1 0.995402 -0.986782 -174.45 
+     23 126.856 893 1 0 1.02323 -0.984151 -175.85 
+     23 133.638 904 0 1 1.63571 -0.895836 -204.45 
+     23 217.775 893 0 0 1.67247 -0.887487 -205.85 
+     23 150.735 194 4 1 -140.994 -86.0789 -84.5447 
+     23 208.996 899 4 1 0.587058 -0.25 -84.6278 
+     23 304.404 888 4 0 0.329709 -1.87274 -85.85 
+     23 132.728 887 4 0 0.397482 -2.13125 -86.0159 
+     23 287.82 902 0 1 1.12101 -0.5409 -204.45 
+     23 278.858 895 0 0 1.18164 -0.560268 -205.85 
+     23 221.962 892 0 0 -34.6626 -1.15995 -206.25 
+     23 15.1437 723 0 1 -35.0439 -0.768399 -204.85 
+     23 166.06 722 0 1 -35.0565 -0.760841 -204.803 
+Number of tracker digits in this event =  15
+Event: 24
+Number of tracker hits in this event =  10
+     24 109.722 895 3 1 -0.452071 0.524431 -114.45 
+     24 116.856 899 3 0 -0.458264 0.554 -115.85 
+     24 190.975 895 2 1 -0.596072 1.1328 -144.45 
+     24 182.475 902 2 0 -0.595323 1.16114 -145.85 
+     24 139.275 895 1 1 -0.5522 1.72305 -174.45 
+     24 134.082 905 1 0 -0.559174 1.75164 -175.85 
+     24 125.428 894 0 1 -0.741017 2.23 -204.45 
+     24 115.275 908 0 0 -0.758466 2.25213 -205.85 
+     24 4.51443 897 6 0 0.33612 -0.25 -26.113 
+     24 357.263 896 6 0 0.341042 -0.261029 -26.105 
+Number of tracker digits in this event =  6
+Event: 25
+Number of tracker hits in this event =  24
+     25 169.358 895 2 1 -0.491723 -0.612645 -144.45 
+     25 161.233 894 2 0 -0.515126 -0.65214 -145.85 
+     25 329.725 893 1 1 -0.972768 -1.40339 -174.45 
+     25 127.605 891 1 0 -0.992552 -1.41655 -175.85 
+     25 397.37 891 0 1 -1.38106 -1.59535 -204.45 
+     25 118.553 890 0 0 -1.40858 -1.61448 -205.85 
+     25 144.59 887 0 0 -1.76245 -2.13083 -205.85 
+     25 212.161 888 0 0 -1.78092 -1.9763 -205.984 
+     25 130.034 896 2 1 -0.326327 2.14358 -144.45 
+     25 97.4832 907 2 0 -0.354741 2.17414 -145.85 
+     25 120.538 910 1 0 -0.961081 2.80799 -175.85 
+     25 99.3875 888 0 1 -1.98279 3.40548 -204.45 
+     25 135.619 913 0 0 -2.02195 3.43938 -205.85 
+     25 125.404 902 4 1 1.07417 -1.30564 -84.45 
+     25 108.349 891 4 0 1.08872 -1.39253 -85.85 
+     25 180.571 903 3 1 1.39663 -3.29634 -114.45 
+     25 105.599 881 3 0 1.36478 -3.37273 -115.85 
+     25 136.347 901 2 1 0.890582 -4.95107 -144.45 
+     25 118.921 871 2 0 1.06877 -5.2686 -145.85 
+     25 109.4 923 1 1 5.41938 -12.7133 -174.45 
+     25 140.994 834 1 0 5.21902 -12.7628 -175.85 
+     25 125.837 902 0 1 1.06786 -16.4239 -204.45 
+     25 168.755 810 0 0 0.882212 -17.5586 -205.85 
+     25 103.158 703 11 0 106.421 -38.9297 123.842 
+Number of tracker digits in this event =  16
+Event: 26
+Number of tracker hits in this event =  10
+     26 114.934 898 4 1 0.25399 0.443505 -84.45 
+     26 188.226 899 4 0 0.265146 0.463921 -85.85 
+     26 118.263 899 3 1 0.48825 0.860141 -114.45 
+     26 102.489 901 3 0 0.496352 0.870495 -115.85 
+     26 180.239 899 2 1 0.46757 0.952562 -144.45 
+     26 135.666 901 2 0 0.463725 0.964907 -145.85 
+     26 101.775 898 1 1 0.442509 1.16663 -174.45 
+     26 170.344 902 1 0 0.441545 1.1818 -175.85 
+     26 116.066 899 0 1 0.460906 1.54081 -204.45 
+     26 133.985 904 0 0 0.45426 1.5526 -205.85 
+Number of tracker digits in this event =  5
+Event: 27
+Number of tracker hits in this event =  16
+     27 106.287 898 4 1 0.366275 -0.425711 -84.45 
+     27 101.241 896 4 0 0.385455 -0.435328 -85.85 
+     27 132.705 900 3 1 0.790947 -0.625381 -114.45 
+     27 129.528 895 3 0 0.805156 -0.644045 -115.85 
+     27 113.708 902 2 1 1.08949 -0.977043 -144.45 
+     27 112.816 893 2 0 1.10373 -0.985481 -145.85 
+     27 115.741 903 1 1 1.3625 -1.14537 -174.45 
+     27 104.74 892 1 0 1.39 -1.15619 -175.85 
+     27 108.231 906 0 1 1.92107 -1.43006 -204.45 
+     27 616.153 890 0 0 2.02943 -1.53867 -205.85 
+     27 372.746 889 0 0 1.91801 -1.71882 -206.111 
+     27 118.098 904 0 1 1.51736 -1.66543 -204.45 
+     27 143.394 888 0 0 1.33005 -1.98687 -205.85 
+     27 220.023 887 0 0 1.2048 -2.06956 -206.167 
+     27 1241.09 898 0 1 0.28947 2.60883 -204.85 
+     27 286.926 359 5 1 -108.083 84.817 -54.8433 
+Number of tracker digits in this event =  8
+Event: 28
+Number of tracker hits in this event =  21
+     28 107.629 898 1 1 0.427458 0.314235 -174.45 
+     28 114.007 898 1 0 0.436717 0.307478 -175.85 
+     28 159.936 852 2 1 -9.0737 2.78833 -144.45 
+     28 167.27 910 2 0 -7.61932 2.80055 -145.85 
+     28 134.052 951 1 1 10.857 -2.37128 -174.45 
+     28 263.305 953 1 1 11.2564 -2.51112 -174.68 
+     28 71.7259 879 1 0 13.0578 -3.76239 -175.85 
+     28 159.327 878 1 0 13.2179 -3.89293 -176.028 
+     28 157.769 955 1 1 11.7526 -2.57753 -174.714 
+     28 78.7127 898 2 0 0.407913 0.25 -145.974 
+     28 102.826 904 1 1 1.46604 4.55733 -174.45 
+     28 118.206 919 1 0 1.50403 4.63266 -175.85 
+     28 127.433 904 0 1 1.56312 5.17101 -204.45 
+     28 113.772 924 0 0 1.71885 5.61896 -205.85 
+     28 141.24 1034 0 0 -19.186 27.6046 -205.868 
+     28 177.128 814 0 1 -16.7712 24.9889 -204.787 
+     28 110.004 899 2 0 2.00566 0.479931 -145.85 
+     28 102.008 907 1 1 2.18208 6.20124 -174.45 
+     28 113.19 927 1 0 2.21245 6.09337 -175.85 
+     28 114.538 908 0 1 2.43239 4.67305 -204.45 
+     28 141.205 918 0 0 2.12138 4.29326 -205.85 
+Number of tracker digits in this event =  10
+Event: 29
+Number of tracker hits in this event =  8
+     29 203.177 898 2 1 0.40981 -0.447974 -144.45 
+     29 113.09 896 2 0 0.411665 -0.446329 -145.85 
+     29 156.234 898 1 1 0.4423 -0.416722 -174.45 
+     29 111.636 896 1 0 0.451435 -0.412536 -175.85 
+     29 295.864 899 0 1 0.462695 -0.593126 -204.45 
+     29 114.912 895 0 0 0.64437 -0.490752 -205.85 
+     29 115.913 894 4 0 -0.439906 -0.713943 -85.85 
+     29 11.053 893 4 0 -0.579561 -0.85783 -86.2125 
+Number of tracker digits in this event =  3
+Event: 30
+Number of tracker hits in this event =  12
+     30 123.387 899 2 1 0.642968 1.15749 -144.45 
+     30 114.363 902 2 0 0.677578 1.17481 -145.85 
+     30 129.759 903 1 1 1.4041 1.5474 -174.45 
+     30 145.704 904 1 0 1.4344 1.56366 -175.85 
+     30 181.449 907 0 1 2.13052 1.96399 -204.45 
+     30 120.099 906 0 0 2.17563 1.99717 -205.85 
+     30 27.0949 1617 4 1 144.413 25.6195 -84.5233 
+     30 161.89 899 0 1 0.631232 1.08175 -204.45 
+     30 243.177 898 0 1 0.32254 1.17623 -204.45 
+     30 211.269 902 0 0 0.317967 1.19349 -205.85 
+     30 178.285 1777 2 0 -14.1606 176.351 -146.25 
+     30 116.413 922 0 1 5.09564 18.368 -204.575 
+Number of tracker digits in this event =  9
+Event: 31
+Number of tracker hits in this event =  12
+     31 96.9257 896 3 1 -0.432928 0.373085 -114.45 
+     31 105.207 898 3 0 -0.438343 0.374461 -115.85 
+     31 102.618 895 2 1 -0.480965 0.436904 -144.45 
+     31 189.337 898 2 0 -0.468138 0.397119 -145.85 
+     31 103.015 899 0 1 0.5644 -1.57248 -204.45 
+     31 119.699 890 0 0 0.565239 -1.61767 -205.85 
+     31 383.968 896 0 1 -0.43028 0.723824 -204.45 
+     31 110.536 900 0 0 -0.420054 0.739354 -205.85 
+     31 62.6251 445 11 0 -124.438 -90.8443 123.75 
+     31 105.832 444 11 0 -124.473 -90.9627 123.918 
+     31 506.092 277 11 1 -124.527 -90.7118 125.15 
+     31 116.586 899 0 0 -0.569592 0.620644 -205.85 
+Number of tracker digits in this event =  3
+Event: 32
+Number of tracker hits in this event =  8
+     32 125.308 898 2 1 0.296178 0.667192 -144.45 
+     32 219.007 900 2 0 0.302604 0.679051 -145.85 
+     32 110.192 899 1 1 0.459479 0.911665 -174.45 
+     32 133.335 901 1 0 0.45821 0.917615 -175.85 
+     32 185.597 898 0 1 0.411271 1.02326 -204.45 
+     32 150.015 901 0 0 0.412119 1.02382 -205.85 
+     32 45.4527 88 1 1 -162.209 -48.7165 -174.499 
+     32 70.2232 899 2 0 0.258835 0.64014 -146.228 
+Number of tracker digits in this event =  5
+Event: 33
+Number of tracker hits in this event =  8
+     33 127.109 898 3 1 0.312314 0.435134 -114.45 
+     33 160.531 898 3 0 0.325541 0.443696 -115.85 
+     33 110.132 899 2 1 0.557401 0.593153 -144.45 
+     33 147.472 899 2 0 0.564057 0.602023 -145.85 
+     33 119.239 900 1 1 0.668201 0.811845 -174.45 
+     33 118.87 900 1 0 0.700541 0.830009 -175.85 
+     33 186.811 903 0 1 1.35516 1.24171 -204.45 
+     33 111.408 903 0 0 1.36984 1.27872 -205.85 
+Number of tracker digits in this event =  4
+Event: 34
+Number of tracker hits in this event =  29
+     34 260.033 894 2 1 -0.670271 -0.95359 -144.45 
+     34 109.801 893 2 0 -0.703349 -0.97028 -145.85 
+     34 109.083 890 1 1 -1.62114 -1.40367 -174.45 
+     34 120.753 891 1 0 -1.64961 -1.4213 -175.85 
+     34 141.641 887 0 1 -2.21112 -1.89228 -204.45 
+     34 218.696 889 0 0 -2.29624 -1.84695 -205.85 
+     34 241.526 972 0 0 -14.8185 15.2117 -206.25 
+     34 108.1 973 0 0 -14.6864 15.2885 -205.985 
+     34 8.12631 895 2 1 -0.539611 -1.03137 -144.85 
+     34 308.305 896 2 1 -0.363229 -0.36783 -144.45 
+     34 174.967 896 2 0 -0.403726 -0.257456 -145.85 
+     34 172.348 885 1 1 -2.45537 1.42331 -174.45 
+     34 185.599 905 1 0 -2.81803 1.78882 -175.85 
+     34 153.333 854 0 1 -8.82669 6.41515 -204.45 
+     34 143.625 929 0 0 -9.46586 6.56113 -205.85 
+     34 121.568 893 1 0 0.27608 -0.913024 -175.85 
+     34 102.84 909 0 1 2.55026 -1.90199 -204.45 
+     34 121.195 895 1 1 -0.593669 -0.355187 -174.45 
+     34 111.106 896 1 0 -0.611772 -0.34143 -175.85 
+     34 156.866 412 0 0 20.3582 -97.4748 -206.038 
+     34 237.782 1536 0 0 50.485 128.267 -206.25 
+     34 54.1219 1539 0 0 50.8942 128.814 -205.955 
+     34 492.025 1156 0 1 51.9342 129.963 -204.85 
+     34 136.761 1157 0 1 52.1626 130.674 -204.45 
+     34 101.228 1153 0 1 51.301 130.258 -204.799 
+     34 80.2296 1542 0 0 46.4275 129.361 -205.85 
+     34 496.241 1541 0 0 46.157 129.347 -205.866 
+     34 21.2091 1334 0 0 -8.87081 87.4581 -206.25 
+     34 17.5998 1333 0 0 -8.90831 87.4101 -206.229 
+Number of tracker digits in this event =  18
+Event: 35
+Number of tracker hits in this event =  6
+     35 108.323 899 3 1 0.604962 0.274326 -114.45 
+     35 160.466 898 3 0 0.614049 0.277273 -115.85 
+     35 116.941 900 2 1 0.816773 0.320817 -144.45 
+     35 120.317 898 2 0 0.823316 0.318934 -145.85 
+     35 185.318 901 1 1 0.931249 0.273152 -174.45 
+     35 111.948 898 1 0 0.939634 0.265794 -175.85 
+Number of tracker digits in this event =  3
+Event: 36
+Number of tracker hits in this event =  23
+     36 112.159 886 4 1 -2.28134 0.395788 -84.45 
+     36 144.284 898 4 0 -2.3791 0.406274 -85.85 
+     36 113.344 876 3 1 -4.31854 0.615723 -114.45 
+     36 207.516 899 3 0 -4.48028 0.636048 -115.85 
+     36 130.953 860 2 1 -7.53926 1.23022 -144.45 
+     36 120.85 903 2 0 -7.69103 1.26676 -145.85 
+     36 117.186 844 1 1 -10.7104 2.25558 -174.45 
+     36 100.756 908 1 0 -10.8686 2.27213 -175.85 
+     36 221.338 827 0 1 -14.1196 2.53793 -204.45 
+     36 282.729 909 0 0 -14.2475 2.59695 -205.85 
+     36 27.0912 910 0 0 -14.254 2.6789 -206.014 
+     36 187.325 293 2 1 -121.297 -68.1901 -144.606 
+     36 129.97 292 2 1 -121.4 -68.2221 -144.474 
+     36 12.7384 1006 0 0 -96.1208 22.0489 -206.049 
+     36 349.181 900 3 0 -4.67285 0.712376 -116.01 
+     36 215.681 896 0 1 -0.426686 -1.03167 -204.45 
+     36 249.101 893 0 0 -0.479761 -1.04257 -205.85 
+     36 120.687 874 0 1 -4.78864 -3.83118 -204.45 
+     36 118.282 877 0 0 -4.88016 -4.18258 -205.85 
+     36 177.341 894 1 0 -0.36191 -0.847858 -175.85 
+     36 199.019 828 0 1 -13.903 4.75093 -204.45 
+     36 151.059 920 0 0 -14.1818 4.65929 -205.85 
+     36 174.722 829 0 1 -13.8462 4.73453 -204.746 
+Number of tracker digits in this event =  16
+Event: 37
+Number of tracker hits in this event =  19
+     37 221.822 898 3 1 0.331107 0.305212 -114.45 
+     37 128.558 898 3 0 0.357389 0.320356 -115.85 
+     37 104.256 901 2 1 0.945657 0.650411 -144.45 
+     37 122.496 900 2 0 0.959669 0.656088 -145.85 
+     37 228.503 902 1 1 1.236 0.73917 -174.45 
+     37 100.2 900 1 0 1.24152 0.732648 -175.85 
+     37 111.135 903 0 1 1.36098 0.887217 -204.45 
+     37 122.837 901 0 0 1.35788 0.950366 -205.85 
+     37 97.9814 904 0 1 1.56823 0.562106 -204.45 
+     37 601.429 899 0 0 1.57855 0.572997 -205.85 
+     37 160.499 900 2 1 0.794811 0.565673 -144.45 
+     37 124.674 902 2 0 1.0141 1.12988 -145.85 
+     37 161.653 840 2 0 -21.6978 -11.515 -145.918 
+     37 40.2938 786 2 1 -22.2516 -9.58468 -144.85 
+     37 37.8525 787 2 1 -22.2457 -9.56497 -144.84 
+     37 265.744 899 0 1 0.553778 0.496692 -204.45 
+     37 20.0902 468 0 1 -85.8989 7.03098 -204.85 
+     37 50.1003 596 1 1 -60.3879 42.4991 -174.503 
+     37 151.773 1106 5 0 -63.052 41.8726 -56.25 
+Number of tracker digits in this event =  11
+Event: 38
+Number of tracker hits in this event =  7
+     38 145.894 898 1 0 -0.658564 0.412388 -175.85 
+     38 572.401 886 0 1 -2.29873 11.2302 -204.45 
+     38 587.023 887 0 1 -2.17799 11.2607 -204.604 
+     38 184.57 888 0 1 -1.94378 12.7601 -204.755 
+     38 131.46 889 0 1 -1.78426 12.6939 -204.744 
+     38 3.90532 897 3 0 -0.467078 -0.25 -115.969 
+     38 39.7519 896 3 0 -0.453908 -0.254759 -115.967 
+Number of tracker digits in this event =  5
+Event: 39
+Number of tracker hits in this event =  12
+     39 108.825 896 3 1 -0.329683 -0.333127 -114.45 
+     39 122.756 896 3 0 -0.334291 -0.348651 -115.85 
+     39 147.148 896 2 1 -0.4336 -0.634542 -144.45 
+     39 112.095 894 2 0 -0.438196 -0.65265 -145.85 
+     39 188.322 895 1 1 -0.477246 -1.00656 -174.45 
+     39 117.391 893 1 0 -0.48578 -1.03357 -175.85 
+     39 151.203 895 0 1 -0.630904 -1.54695 -204.45 
+     39 104.431 890 0 0 -0.640687 -1.57409 -205.85 
+     39 77.328 844 0 1 -10.7693 136.078 -204.722 
+     39 226.43 843 0 1 -10.9318 136.047 -204.674 
+     39 308.638 893 0 0 0.371678 -0.987028 -205.85 
+     39 139.857 892 0 0 0.511526 -1.07149 -206.001 
+Number of tracker digits in this event =  7
+Event: 40
+Number of tracker hits in this event =  8
+     40 125.157 898 2 1 0.357725 -0.324267 -144.45 
+     40 154.026 896 2 0 0.371387 -0.333228 -145.85 
+     40 183.399 899 1 1 0.643682 -0.514752 -174.45 
+     40 90.9672 895 1 0 0.656657 -0.517807 -175.85 
+     40 132.338 901 0 1 0.954981 -0.559514 -204.45 
+     40 160.223 895 0 0 0.970135 -0.563408 -205.85 
+     40 134.235 1405 6 1 101.969 130.09 -24.5986 
+     40 69.3942 1406 6 1 102.151 130.115 -24.4722 
+Number of tracker digits in this event =  6
+Event: 41
+Number of tracker hits in this event =  20
+     41 117.451 895 4 1 -0.548482 0.324384 -84.45 
+     41 110.305 898 4 0 -0.573869 0.339112 -85.85 
+     41 139.237 892 3 1 -1.0732 0.65292 -114.45 
+     41 120.265 900 3 0 -1.09022 0.667589 -115.85 
+     41 242.543 891 2 1 -1.42873 0.958598 -144.45 
+     41 116.673 901 2 0 -1.44516 0.972715 -145.85 
+     41 108.559 889 1 1 -1.75939 1.27338 -174.45 
+     41 235.121 903 1 0 -1.7729 1.28512 -175.85 
+     41 100.884 888 0 1 -2.03866 1.58679 -204.45 
+     41 114.187 904 0 0 -2.01982 1.62341 -205.85 
+     41 117.868 976 1 1 15.9123 -60.9102 -174.52 
+     41 354.699 890 2 1 -1.6095 0.753127 -144.566 
+     41 1.84682 1151 0 1 50.9319 82.8942 -204.453 
+     41 238.166 895 1 1 -0.57791 0.829606 -174.45 
+     41 110.634 901 1 0 -0.744106 1.01256 -175.85 
+     41 146.677 881 0 1 -3.40911 3.63657 -204.45 
+     41 122.258 914 0 0 -3.74899 3.57194 -205.85 
+     41 130.532 900 1 0 -0.58658 0.838175 -175.85 
+     41 147.186 893 0 1 -0.921414 0.788613 -204.45 
+     41 126.986 900 0 0 -0.907768 0.773699 -205.85 
+Number of tracker digits in this event =  11
+Event: 42
+Number of tracker hits in this event =  6
+     42 144.551 898 4 1 0.324145 0.27604 -84.45 
+     42 121.61 898 4 0 0.330673 0.282159 -85.85 
+     42 124.975 899 3 1 0.467915 0.359271 -114.45 
+     42 108.663 898 3 0 0.459927 0.367771 -115.85 
+     42 125.621 898 2 1 0.274261 0.556434 -144.45 
+     42 109.877 899 2 0 0.263256 0.55762 -145.85 
+Number of tracker digits in this event =  4
+Event: 43
+Number of tracker hits in this event =  28
+     43 165.867 898 0 1 0.272696 0.612115 -204.45 
+     43 129.043 899 0 0 0.282642 0.609745 -205.85 
+     43 184.875 1042 0 0 13.2911 29.0982 -206.244 
+     43 110.126 1043 0 0 13.3141 29.305 -206.176 
+     43 109.86 937 5 1 8.11202 -4.80394 -54.45 
+     43 140.601 874 5 0 8.81046 -4.66463 -55.85 
+     43 134.347 1031 4 1 26.8588 -2.13569 -84.45 
+     43 196.616 885 4 0 27.8232 -2.55631 -85.85 
+     43 169.959 1132 3 1 47.2414 -11.177 -114.45 
+     43 263.032 831 3 0 47.9157 -13.3806 -115.85 
+     43 367.773 366 3 0 126.364 -106.694 -116.25 
+     43 366.041 1206 2 1 61.9735 -60.948 -144.45 
+     43 479.694 1207 2 1 62.0536 -61.4712 -144.562 
+     43 132.422 579 2 0 62.2684 -63.6906 -145.85 
+     43 24.7221 578 2 0 62.2475 -63.9042 -146.101 
+     43 117.302 890 5 1 -1.49298 0.924939 -54.45 
+     43 116.716 900 5 0 -1.78212 0.849426 -55.85 
+     43 245.21 830 3 1 -13.5041 1.48626 -114.45 
+     43 108.849 904 3 0 -13.7029 1.53794 -115.85 
+     43 121.015 809 2 1 -17.6643 3.01148 -144.45 
+     43 218.419 911 2 0 -17.9861 2.87471 -145.85 
+     43 218.645 910 2 0 -18.0636 2.84329 -146.175 
+     43 209.711 728 0 1 -33.9539 -3.00964 -204.45 
+     43 119.323 883 0 0 -34.4187 -2.90421 -205.85 
+     43 126.12 848 1 0 -66.8117 -9.93415 -176.25 
+     43 103.233 849 1 0 -66.7709 -9.79706 -176.043 
+     43 226.374 564 1 1 -66.7167 -8.65912 -174.85 
+     43 137.575 829 3 1 -13.6888 1.48925 -114.546 
+Number of tracker digits in this event =  20
+Event: 44
+Number of tracker hits in this event =  10
+     44 129.325 895 4 1 -0.526523 0.36807 -84.45 
+     44 138.323 898 4 0 -0.541391 0.376042 -85.85 
+     44 148.06 893 3 1 -0.903686 0.580873 -114.45 
+     44 206.212 899 3 0 -0.929764 0.596763 -115.85 
+     44 230.655 890 2 1 -1.49568 0.900853 -144.45 
+     44 164.367 901 2 0 -1.53204 0.91172 -145.85 
+     44 121.805 887 1 1 -2.2416 1.13573 -174.45 
+     44 101.424 902 1 0 -2.25173 1.14148 -175.85 
+     44 113.186 886 0 1 -2.30295 1.26652 -204.45 
+     44 105.573 903 0 0 -2.31207 1.29873 -205.85 
+Number of tracker digits in this event =  7
+Event: 45
+Number of tracker hits in this event =  24
+     45 130.536 906 5 1 1.91967 -0.800113 -54.45 
+     45 172.101 893 5 0 2.05658 -0.912439 -55.85 
+     45 275.916 920 4 1 4.75863 -2.95173 -84.45 
+     45 179.373 883 4 0 4.75909 -3.00932 -85.85 
+     45 174.024 920 3 1 4.81332 -5.13039 -114.45 
+     45 101.135 871 3 0 4.83686 -5.30927 -115.85 
+     45 208.431 925 2 1 5.7284 -9.13635 -144.45 
+     45 142.598 851 2 0 5.85953 -9.29777 -145.85 
+     45 144.414 939 1 1 8.48066 -12.463 -174.45 
+     45 128.427 835 1 0 8.60626 -12.6222 -175.85 
+     45 130.207 952 0 1 11.0753 -16.0776 -204.45 
+     45 122.868 817 0 0 11.119 -16.1125 -205.85 
+     45 119.707 1626 1 0 68.3962 146.253 -176.223 
+     45 11.5506 1627 1 0 68.4264 146.357 -176.245 
+     45 46.1164 1526 1 0 94.3197 126.322 -176.25 
+     45 131.378 881 4 0 5.03679 -3.32803 -85.85 
+     45 126.202 946 3 1 9.97218 -11.5213 -114.45 
+     45 131.204 838 3 0 10.4408 -11.8986 -115.85 
+     45 172.182 1000 2 1 20.6971 -19.8571 -144.45 
+     45 172.499 796 2 0 21.5872 -20.4024 -145.85 
+     45 296.216 1092 1 1 39.1358 -31.7236 -174.45 
+     45 184.705 736 1 0 41.1111 -32.3056 -175.85 
+     45 167.958 1272 0 1 75.196 -39.441 -204.45 
+     45 163.742 702 0 0 76.2951 -39.1792 -205.85 
+Number of tracker digits in this event =  20
+Event: 46
+Number of tracker hits in this event =  2
+     46 115.159 22 2 1 -175.529 -100.563 -144.704 
+     46 157.574 21 2 1 -175.579 -100.578 -144.615 
+Number of tracker digits in this event =  1
+Event: 47
+Number of tracker hits in this event =  4
+     47 108.436 898 1 1 0.341428 -0.282261 -174.45 
+     47 101.443 896 1 0 0.352969 -0.309477 -175.85 
+     47 150.669 899 0 1 0.586065 -0.852191 -204.45 
+     47 124.643 893 0 0 0.594211 -0.878582 -205.85 
+Number of tracker digits in this event =  2
+Event: 48
+Number of tracker hits in this event =  6
+     48 201.176 889 2 1 -1.71355 -0.311765 -144.45 
+     48 194.289 896 2 0 -1.74579 -0.334513 -145.85 
+     48 124.099 885 1 1 -2.4922 -0.811701 -174.45 
+     48 117.988 894 1 0 -2.51506 -0.821369 -175.85 
+     48 112.242 883 0 1 -2.96273 -1.1091 -204.45 
+     48 201.107 892 0 0 -2.98346 -1.1451 -205.85 
+Number of tracker digits in this event =  4
+Event: 49
+Number of tracker hits in this event =  17
+     49 106.561 898 0 1 0.334856 -0.377144 -204.45 
+     49 147.956 896 0 0 0.317739 -0.428583 -205.85 
+     49 119.655 897 4 0 0.403347 -0.25 -85.9871 
+     49 116.966 926 3 1 6.01645 -5.00333 -114.45 
+     49 118.537 873 3 0 5.46809 -4.98536 -115.85 
+     49 173.871 872 2 1 -5.21529 -4.71578 -144.45 
+     49 133.145 875 2 0 -5.82633 -4.53382 -145.85 
+     49 171.536 1125 2 0 -81.4179 45.847 -146.25 
+     49 208.615 482 2 1 -83.1105 46.3152 -144.85 
+     49 1.22951 480 2 1 -83.586 46.3843 -144.461 
+     49 120.599 898 4 0 -0.415973 0.38313 -85.85 
+     49 199.322 823 3 1 -15.0182 4.56143 -114.45 
+     49 59.566 825 3 1 -14.5565 4.12528 -114.753 
+     49 72.4047 911 3 0 -13.0437 2.85431 -115.85 
+     49 129.633 910 3 0 -12.9191 2.76671 -115.979 
+     49 14.9286 909 3 0 -12.6421 2.57609 -116.182 
+     49 19.3866 1472 2 1 115.432 -26.3976 -144.758 
+Number of tracker digits in this event =  8
+Event: 50
+Number of tracker hits in this event =  2
+     50 122.316 899 0 1 0.483334 -0.256537 -204.45 
+     50 114.522 896 0 0 0.48743 -0.257305 -205.85 
+Number of tracker digits in this event =  1
+Event: 51
+Number of tracker hits in this event =  6
+     51 111.006 898 2 1 0.268689 0.372589 -144.45 
+     51 171.038 898 2 0 0.272936 0.376936 -145.85 
+     51 105.287 898 1 1 0.338306 0.481416 -174.45 
+     51 117.537 899 1 0 0.341417 0.485852 -175.85 
+     51 172.997 898 0 1 0.376354 0.587971 -204.45 
+     51 180.207 899 0 0 0.368229 0.576019 -205.85 
+Number of tracker digits in this event =  3
+Event: 52
+Number of tracker hits in this event =  14
+     52 105.042 896 4 1 -0.272965 0.346342 -84.45 
+     52 134.827 898 4 0 -0.317421 0.411086 -85.85 
+     52 159.4 893 3 1 -0.90587 1.93647 -114.45 
+     52 165.556 907 3 0 -0.886034 2.05375 -115.85 
+     52 114.227 894 2 1 -0.805943 4.07229 -144.45 
+     52 127.153 917 2 0 -0.741445 4.23245 -145.85 
+     52 94.1285 904 1 1 1.47026 7.19246 -174.45 
+     52 90.7502 933 1 0 1.40652 7.29738 -175.85 
+     52 159.042 893 0 1 -1.00614 10.0014 -204.45 
+     52 308.217 948 0 0 -0.961059 10.3214 -205.85 
+     52 36.3697 654 1 1 -48.8065 23.6914 -174.719 
+     52 88.1593 642 0 1 -51.0919 22.9924 -204.481 
+     52 61.0466 1035 2 1 27.8206 146.446 -144.66 
+     52 34.3173 1036 2 1 27.8712 146.519 -144.503 
+Number of tracker digits in this event =  6
+Event: 53
+Number of tracker hits in this event =  8
+     53 331.552 898 1 1 0.382477 0.317374 -174.45 
+     53 396.558 898 1 0 0.393382 0.3075 -175.85 
+     53 148.932 923 0 1 5.37612 2.45031 -204.45 
+     53 156.29 910 0 0 6.14511 2.78385 -205.85 
+     53 165.774 900 0 1 0.699129 0.619697 -204.45 
+     53 106.181 899 0 0 0.755319 0.630902 -205.85 
+     53 4.02526 896 0 0 -0.950416 -0.318707 -205.85 
+     53 105.901 883 0 1 -2.88832 -1.82358 -204.85 
+Number of tracker digits in this event =  5
+Event: 54
+Number of tracker hits in this event =  22
+     54 102.786 898 3 1 0.254934 -1.27347 -114.45 
+     54 114.215 891 3 0 0.261847 -1.28833 -115.85 
+     54 200.775 898 2 1 0.37838 -1.55693 -144.45 
+     54 122.186 890 2 0 0.381368 -1.57317 -145.85 
+     54 140.704 899 1 1 0.479049 -1.86553 -174.45 
+     54 108.349 888 1 0 0.484528 -1.88226 -175.85 
+     54 107.664 899 0 1 0.615269 -1.95873 -204.45 
+     54 117.112 888 0 0 0.692661 -1.9528 -205.85 
+     54 78.4949 991 13 0 35.766 18.8933 183.75 
+     54 275.05 990 13 0 35.8204 18.8126 183.922 
+     54 22.115 1083 13 1 37.3041 19.4495 185.15 
+     54 102.985 893 2 0 0.348915 -0.978279 -145.85 
+     54 162.422 920 1 1 4.70384 8.10106 -174.45 
+     54 116.545 934 1 0 5.00407 7.64382 -175.85 
+     54 144.864 869 1 0 -12.5883 -5.73142 -176.25 
+     54 214.754 830 1 1 -13.494 -5.98162 -174.85 
+     54 110.796 828 1 1 -14.0192 -6.20758 -174.596 
+     54 101.287 860 1 0 -15.0731 -7.55942 -175.85 
+     54 112.502 859 1 0 -15.1384 -7.70576 -175.961 
+     54 121.795 857 1 0 -15.2417 -8.07385 -176.003 
+     54 29.3224 480 1 1 -83.5666 -146.058 -174.671 
+     54 285.988 894 4 0 0.25 -0.791775 -86.0086 
+Number of tracker digits in this event =  9
+Event: 55
+Number of tracker hits in this event =  3
+     55 120.014 896 1 0 -0.403631 -0.251272 -175.85 
+     55 101.441 892 0 1 -1.24358 -0.757354 -204.45 
+     55 102.943 894 0 0 -1.27861 -0.778251 -205.85 
+Number of tracker digits in this event =  1
+Event: 56
+Number of tracker hits in this event =  23
+     56 148.956 898 3 1 0.320671 -1.28754 -114.45 
+     56 101.931 891 3 0 0.329363 -1.31577 -115.85 
+     56 314.193 899 2 1 0.546626 -1.91907 -144.45 
+     56 121.943 888 2 0 0.55744 -1.94524 -145.85 
+     56 143.43 900 1 1 0.771641 -2.45854 -174.45 
+     56 237.975 885 1 0 0.781662 -2.48167 -175.85 
+     56 96.606 901 0 1 0.992178 -2.88256 -204.45 
+     56 288.013 883 0 0 1.00973 -2.90132 -205.85 
+     56 186.608 885 0 0 0.926161 -2.59881 -205.954 
+     56 194.117 886 0 0 0.762812 -2.31891 -206.082 
+     56 193.806 892 2 0 0.722286 -1.17167 -145.85 
+     56 143.288 893 2 0 0.772895 -0.857195 -146.179 
+     56 131.634 895 2 0 0.955306 -0.492155 -146.25 
+     56 36.4761 896 2 0 1.03536 -0.354474 -145.983 
+     56 229.725 903 2 1 1.3424 -0.438722 -144.85 
+     56 70.3317 894 6 0 0.739216 -0.722679 -25.85 
+     56 88.9949 893 6 0 0.805716 -0.871381 -26.0729 
+     56 33.2235 696 6 0 23.8756 -40.3944 -26.25 
+     56 29.1551 695 6 0 23.9217 -40.4926 -26.1851 
+     56 81.1796 960 6 0 -6.39644 12.6905 -26.25 
+     56 147.541 961 6 0 -6.5398 12.909 -26.0992 
+     56 260.598 850 6 1 -9.50145 11.8954 -24.85 
+     56 398.252 849 6 1 -9.65195 11.7745 -24.6356 
+Number of tracker digits in this event =  15
+Event: 57
+Number of tracker hits in this event =  25
+     57 66.7255 900 4 1 0.673691 -0.25 -84.6254 
+     57 140.585 896 4 0 0.684127 -0.260906 -85.85 
+     57 134.532 901 3 1 0.913987 -0.50987 -114.45 
+     57 113.71 895 3 0 0.920408 -0.522492 -115.85 
+     57 257.735 901 2 1 0.987698 -0.757904 -144.45 
+     57 140.032 894 2 0 0.989239 -0.767138 -145.85 
+     57 130.307 901 1 1 1.04029 -0.922513 -174.45 
+     57 151.973 893 1 0 1.05032 -0.930956 -175.85 
+     57 110.485 902 0 1 1.20327 -1.04984 -204.45 
+     57 156.315 892 0 0 1.21118 -1.05652 -205.85 
+     57 131.988 940 0 0 -46.514 8.83048 -205.881 
+     57 149.877 654 0 1 -48.6723 9.03724 -204.85 
+     57 120.442 653 0 1 -48.9917 9.1759 -204.641 
+     57 300.167 651 0 1 -49.2647 9.12408 -204.684 
+     57 35.7141 652 0 1 -49.2065 9.04538 -204.664 
+     57 144.509 901 2 0 -1.59478 0.910903 -145.85 
+     57 135.745 896 3 0 -1.23985 -0.381294 -115.85 
+     57 88.3531 904 0 1 1.58316 -1.02219 -204.45 
+     57 29.1098 905 0 1 1.68543 -0.951441 -204.75 
+     57 133.934 895 0 0 2.22744 -0.638997 -205.85 
+     57 233.061 899 5 1 0.62249 0.25 -54.5934 
+     57 397.949 901 5 1 1.02826 0.872907 -54.6875 
+     57 1042.2 905 5 1 1.72782 2.1435 -54.7389 
+     57 256.611 911 5 1 2.95792 4.16036 -54.6382 
+     57 6.85571 912 5 1 3.23014 4.84064 -54.6148 
+Number of tracker digits in this event =  18
+Event: 58
+Number of tracker hits in this event =  4
+     58 99.6108 896 1 1 -0.345438 -0.849505 -174.45 
+     58 153.46 893 1 0 -0.353165 -0.867577 -175.85 
+     58 148.531 895 0 1 -0.500902 -1.41606 -204.45 
+     58 117.721 891 0 0 -0.511789 -1.44152 -205.85 
+Number of tracker digits in this event =  2
+Event: 59
+Number of tracker hits in this event =  8
+     59 116.419 896 3 1 -0.384846 0.318923 -114.45 
+     59 131.267 898 3 0 -0.390064 0.328067 -115.85 
+     59 125.768 895 2 1 -0.458788 0.515567 -144.45 
+     59 137.139 899 2 0 -0.458256 0.522775 -145.85 
+     59 109.992 895 1 1 -0.454151 0.684427 -174.45 
+     59 110.008 900 1 0 -0.459716 0.694807 -175.85 
+     59 387.411 895 0 1 -0.577534 0.912299 -204.45 
+     59 377.089 901 0 0 -0.596475 0.921144 -205.85 
+Number of tracker digits in this event =  5
+Event: 60
+Number of tracker hits in this event =  19
+     60 124.047 896 3 1 -0.282364 1.18609 -114.45 
+     60 145.333 902 3 0 -0.284955 1.19516 -115.85 
+     60 120.638 896 2 1 -0.30595 1.35892 -144.45 
+     60 126.826 903 2 0 -0.307968 1.36557 -145.85 
+     60 294.061 896 1 1 -0.317537 1.52449 -174.45 
+     60 100.426 904 1 0 -0.314442 1.53894 -175.85 
+     60 250.203 896 0 1 -0.300522 1.88353 -204.45 
+     60 119.518 906 0 0 -0.308246 1.89875 -205.85 
+     60 627.188 819 0 0 40.8041 -15.8137 -206.25 
+     60 278.327 821 0 0 42.5397 -15.3531 -205.904 
+     60 420.804 895 0 1 -0.458281 1.73256 -204.45 
+     60 236.73 904 0 0 -0.559936 1.5985 -205.85 
+     60 128.76 908 0 0 -1.12968 2.38366 -205.85 
+     60 40.2574 849 4 0 -3.22209 -9.79762 -86.25 
+     60 120.365 848 4 0 -3.26591 -9.85111 -86.1095 
+     60 97.9058 880 4 1 -3.51907 -9.53614 -84.85 
+     60 27.5017 879 4 1 -3.65468 -9.42589 -84.5189 
+     60 84.5281 1296 6 1 80.0361 24.3681 -24.5499 
+     60 78.7515 1297 6 1 80.0747 24.43 -24.5346 
+Number of tracker digits in this event =  12
+Event: 61
+Number of tracker hits in this event =  18
+     61 253.197 900 1 1 0.747417 -0.3127 -174.45 
+     61 118.334 896 1 0 0.767871 -0.316701 -175.85 
+     61 295.273 902 0 1 1.17358 -0.434925 -204.45 
+     61 241.875 895 0 0 1.18385 -0.452051 -205.85 
+     61 4.7586 1670 5 1 155.022 -59.4367 -54.4637 
+     61 208.32 550 3 1 -69.535 146.285 -114.812 
+     61 396.459 549 3 1 -69.7368 146.773 -114.467 
+     61 99.0109 903 0 1 1.31466 -0.706213 -204.756 
+     61 133.636 876 0 0 1.28014 -4.28454 -205.85 
+     61 93.7639 875 0 0 1.30483 -4.61227 -205.877 
+     61 6.01961 874 0 0 1.44343 -4.81106 -205.856 
+     61 318.074 914 0 1 3.49955 -2.10855 -204.85 
+     61 251.602 899 0 1 0.529397 -0.550061 -204.45 
+     61 166.564 894 0 0 1.07781 -0.660016 -205.85 
+     61 226.886 878 0 0 14.3113 -4.01072 -206.25 
+     61 190.657 972 0 1 15.1783 -3.49586 -204.85 
+     61 47.6214 973 0 1 15.448 -3.36976 -204.569 
+     61 28.1774 768 0 0 64.6836 -25.9492 -205.946 
+Number of tracker digits in this event =  11
+Event: 62
+Number of tracker hits in this event =  8
+     62 114.163 894 3 1 -0.699362 0.755978 -114.45 
+     62 113.292 900 3 0 -0.71751 0.785005 -115.85 
+     62 264.305 892 2 1 -1.09491 1.37507 -144.45 
+     62 130.702 903 2 0 -1.11974 1.40951 -145.85 
+     62 161.748 889 1 1 -1.70437 2.07913 -174.45 
+     62 489.3 907 1 0 -1.73428 2.1132 -175.85 
+     62 139.429 886 0 1 -2.33939 2.7951 -204.45 
+     62 204.233 910 0 0 -2.36338 2.83367 -205.85 
+Number of tracker digits in this event =  6
+Event: 63
+Number of tracker hits in this event =  18
+     63 192.861 898 4 1 0.421172 0.571447 -84.45 
+     63 134.527 899 4 0 0.448277 0.591801 -85.85 
+     63 283.888 902 3 1 1.07031 0.983844 -114.45 
+     63 120.586 901 3 0 1.11162 0.993298 -115.85 
+     63 130.165 906 2 1 1.97508 1.18204 -144.45 
+     63 116.685 902 2 0 2.00248 1.19995 -145.85 
+     63 102.587 909 1 1 2.54295 1.49708 -174.45 
+     63 113.941 904 1 0 2.56141 1.49823 -175.85 
+     63 91.7719 911 0 1 2.95529 1.53532 -204.45 
+     63 108.064 904 0 0 2.93324 1.55501 -205.85 
+     63 114.018 902 3 0 0.83373 1.0644 -115.866 
+     63 126.351 883 2 1 -2.853 -5.80581 -144.45 
+     63 129.177 874 2 0 -3.23941 -4.70437 -145.85 
+     63 137.092 876 2 0 -3.3218 -4.42472 -146.083 
+     63 269.861 1347 2 0 -13.5932 90.35 -146.141 
+     63 46.0875 1349 2 0 -14.1812 90.8513 -146.172 
+     63 94.0312 1470 2 0 -52.6579 115.101 -146.25 
+     63 176.53 1152 2 0 -44.5489 51.1939 -146.25 
+Number of tracker digits in this event =  10
+Event: 64
+Number of tracker hits in this event =  14
+     64 110.826 896 2 1 -0.291905 -0.672867 -144.45 
+     64 167.105 894 2 0 -0.295407 -0.666724 -145.85 
+     64 183.404 896 1 1 -0.416109 -0.517405 -174.45 
+     64 114.215 895 1 0 -0.433923 -0.508618 -175.85 
+     64 131.073 894 0 1 -0.780302 -0.329116 -204.45 
+     64 125.48 896 0 0 -0.786211 -0.323042 -205.85 
+     64 225.312 912 2 1 3.2177 4.28127 -144.45 
+     64 127.875 917 2 0 3.46594 4.2132 -145.85 
+     64 139.384 939 1 1 8.5578 3.0102 -174.45 
+     64 115.517 912 1 0 9.41062 3.15817 -175.85 
+     64 178.911 913 2 1 3.30967 4.14001 -144.463 
+     64 126.162 930 2 1 6.76967 5.85671 -144.45 
+     64 217.897 932 2 1 7.16982 6.01157 -144.642 
+     64 172.282 931 2 0 8.81133 6.87412 -145.85 
+Number of tracker digits in this event =  11
+Event: 65
+Number of tracker hits in this event =  11
+     65 158.975 890 4 1 -1.61859 -1.10922 -84.45 
+     65 109.389 892 4 0 -1.64096 -1.11982 -85.85 
+     65 126.73 887 3 1 -2.23261 -1.34236 -114.45 
+     65 104.851 891 3 0 -2.27729 -1.34778 -115.85 
+     65 119.835 882 2 1 -3.08579 -1.64176 -144.45 
+     65 112.833 889 2 0 -3.13852 -1.66843 -145.85 
+     65 124.055 876 1 1 -4.28571 -2.21755 -174.45 
+     65 226.314 887 1 0 -4.34928 -2.18628 -175.85 
+     65 389.47 871 0 1 -5.36704 -1.41831 -204.45 
+     65 160.264 890 0 0 -5.4684 -1.45449 -205.85 
+     65 209.589 881 0 0 -5.47743 -3.41494 -205.85 
+Number of tracker digits in this event =  7
+Event: 66
+Number of tracker hits in this event =  14
+     66 93.3936 894 4 1 -0.836688 1.01755 -84.45 
+     66 131.749 902 4 0 -0.866055 1.06146 -85.85 
+     66 107.33 889 3 1 -1.77699 1.7181 -114.45 
+     66 101.634 905 3 0 -1.84599 1.73254 -115.85 
+     66 129.226 882 2 1 -3.15418 2.237 -144.45 
+     66 138.91 908 2 0 -3.22267 2.27133 -145.85 
+     66 237.375 875 1 1 -4.49609 2.90929 -174.45 
+     66 378.279 911 1 0 -4.55556 2.87804 -175.85 
+     66 111.509 870 0 1 -5.45236 1.91559 -204.45 
+     66 86.8423 906 0 0 -5.54498 1.86048 -205.85 
+     66 24.3657 905 0 0 -5.5657 1.84953 -206.158 
+     66 112.51 912 1 0 -4.77971 3.11201 -176.218 
+     66 84.8243 913 1 0 -4.92503 3.29005 -176.179 
+     66 52.0408 914 1 0 -4.95781 3.51152 -176.199 
+Number of tracker digits in this event =  5
+Event: 67
+Number of tracker hits in this event =  12
+     67 128.7 895 3 1 -0.477711 -1.91658 -114.45 
+     67 105.12 888 3 0 -0.506145 -1.96132 -115.85 
+     67 120.741 894 2 1 -0.845604 -2.87862 -144.45 
+     67 106.068 883 2 0 -0.858395 -2.95261 -145.85 
+     67 111.795 891 1 1 -1.31484 -4.50882 -174.45 
+     67 124.689 875 1 0 -1.32948 -4.59267 -175.85 
+     67 111.81 890 0 1 -1.6002 -6.78785 -204.45 
+     67 128.866 863 0 0 -1.60299 -6.86622 -205.85 
+     67 39.3161 1332 4 1 87.1999 -98.4323 -84.5554 
+     67 0.278158 401 4 0 93.0059 -99.7331 -86.0845 
+     67 1.844 1035 1 0 -20.816 27.8168 -175.85 
+     67 182.319 1033 1 0 -19.5671 27.3787 -175.948 
+Number of tracker digits in this event =  5
+Event: 68
+Number of tracker hits in this event =  14
+     68 121.373 893 2 1 -0.951004 -0.567555 -144.45 
+     68 266.401 895 2 0 -0.968276 -0.584633 -145.85 
+     68 100.185 892 1 1 -1.23215 -0.952695 -174.45 
+     68 137.9 893 1 0 -1.24623 -0.966431 -175.85 
+     68 132.238 890 0 1 -1.55705 -1.26589 -204.45 
+     68 119.849 891 0 0 -1.56938 -1.27647 -205.85 
+     68 126.882 1047 7 0 -134.663 30.0952 3.75 
+     68 166.293 1093 0 0 30.2376 39.3636 -206.241 
+     68 209.302 1050 0 1 30.8372 40.1425 -204.85 
+     68 84.9609 1051 0 1 30.9635 40.2864 -204.479 
+     68 129.507 1052 0 1 31.1119 40.2457 -204.45 
+     68 157.408 1053 0 1 31.2747 40.2025 -204.819 
+     68 137.022 1097 0 0 31.8247 40.2159 -205.85 
+     68 59.733 1098 0 0 31.2086 40.2542 -205.85 
+Number of tracker digits in this event =  10
+Event: 69
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 70
+Number of tracker hits in this event =  32
+     70 484.173 900 1 1 0.807403 0.279852 -174.45 
+     70 364.455 898 1 0 0.860244 0.295353 -175.85 
+     70 255.97 906 0 1 1.941 0.886498 -204.45 
+     70 344.359 901 0 0 1.98461 0.919666 -205.85 
+     70 89.1851 905 6 0 -115.519 1.79261 -26.2248 
+     70 148.272 906 6 0 -115.471 1.87506 -26.0985 
+     70 181.926 1378 10 1 96.7446 -9.7359 95.4475 
+     70 92.0678 1379 10 1 96.7611 -9.74701 95.527 
+     70 294.919 902 0 1 1.21278 0.795962 -204.45 
+     70 106.304 596 8 0 -70.132 -60.3757 33.9724 
+     70 121.137 899 0 0 1.26107 0.541674 -205.85 
+     70 294.757 903 0 1 1.25603 0.822334 -204.45 
+     70 148.829 903 0 0 0.886549 1.28702 -205.85 
+     70 239.181 902 1 1 1.13773 -0.253954 -174.45 
+     70 251.213 896 1 0 0.955981 -0.309265 -175.85 
+     70 118.973 884 0 1 -2.79105 -1.43219 -204.45 
+     70 112.709 890 0 0 -3.03068 -1.47283 -205.85 
+     70 71.7135 544 1 0 -13.5762 -70.7536 -175.943 
+     70 236.924 472 1 0 -11.7886 -85.1253 -176.066 
+     70 43.9084 471 1 0 -11.7548 -85.2828 -176.034 
+     70 137.643 894 0 0 1.46508 -0.703452 -205.85 
+     70 100.002 902 1 0 -0.25 1.16432 -175.93 
+     70 301.862 859 0 1 -7.7724 19.117 -204.45 
+     70 534.98 860 0 1 -7.56085 18.3283 -204.538 
+     70 53.12 982 0 0 -5.8709 17.1421 -205.85 
+     70 146.77 981 0 0 -5.74742 17.0139 -205.956 
+     70 48.4418 980 0 0 -5.55576 16.7277 -206.166 
+     70 205.532 861 0 1 -7.42848 17.6605 -204.557 
+     70 111.329 972 0 0 -8.09627 15.2021 -205.85 
+     70 23.8477 971 0 0 -8.22422 14.9356 -205.867 
+     70 182.689 857 0 1 -8.21089 13.748 -204.85 
+     70 0.721027 858 0 1 -7.99211 13.4906 -204.452 
+Number of tracker digits in this event =  19
+Event: 71
+Number of tracker hits in this event =  6
+     71 120.554 895 2 1 -0.516934 0.279293 -144.45 
+     71 113.829 898 2 0 -0.525898 0.278301 -145.85 
+     71 149.138 892 0 1 -1.12974 0.28882 -204.45 
+     71 117.006 898 0 0 -1.1469 0.288659 -205.85 
+     71 220.421 894 0 1 -0.801106 0.413218 -204.45 
+     71 141.11 894 0 0 -0.568441 -0.65454 -205.85 
+Number of tracker digits in this event =  4
+Event: 72
+Number of tracker hits in this event =  12
+     72 126.025 898 2 1 0.365795 -0.624704 -144.45 
+     72 120.444 895 2 0 0.376263 -0.643143 -145.85 
+     72 117.843 899 1 1 0.592365 -1.02111 -174.45 
+     72 147.091 893 1 0 0.6018 -1.04917 -175.85 
+     72 102.792 900 0 1 0.722782 -1.60396 -204.45 
+     72 128.183 890 0 0 0.746062 -1.64212 -205.85 
+     72 124.855 793 0 0 16.5866 -21.0041 -205.916 
+     72 5.07103 898 4 1 0.257613 -0.25 -84.5843 
+     72 557.72 898 0 1 0.4383 -1.12048 -204.45 
+     72 108.383 892 0 0 0.446875 -1.12415 -205.85 
+     72 129.404 893 0 0 0.398062 -0.97991 -205.85 
+     72 273.143 1453 4 1 111.641 135.237 -84.6344 
+Number of tracker digits in this event =  8
+Event: 73
+Number of tracker hits in this event =  14
+     73 402.129 906 1 1 1.88242 -0.339137 -174.45 
+     73 204.608 896 1 0 1.91936 -0.366719 -175.85 
+     73 145.356 909 0 1 2.57571 -0.869461 -204.45 
+     73 127.043 893 0 0 2.61021 -0.887929 -205.85 
+     73 171.088 1071 3 0 106.201 34.9937 -115.975 
+     73 126.3 898 1 0 1.91348 0.261812 -175.85 
+     73 112.591 929 0 1 6.51651 2.78308 -204.45 
+     73 120.765 909 0 0 7.02904 2.52241 -205.85 
+     73 190.464 521 4 0 -63.4833 -75.3942 -86.25 
+     73 186.08 902 1 0 3.14172 1.11208 -175.85 
+     73 127.53 1174 1 0 62.4066 55.5389 -176.25 
+     73 51.0801 1175 1 0 62.6961 55.7209 -175.98 
+     73 134.368 1214 1 1 63.5114 56.5181 -174.85 
+     73 45.7152 1215 1 1 63.6924 56.7745 -174.593 
+Number of tracker digits in this event =  11
+Event: 74
+Number of tracker hits in this event =  18
+     74 168.307 895 2 1 -0.477817 0.954475 -144.45 
+     74 169.196 901 2 0 -0.490674 0.962094 -145.85 
+     74 97.7787 894 1 1 -0.727556 1.11924 -174.45 
+     74 119.142 902 1 0 -0.752488 1.13251 -175.85 
+     74 127.56 891 0 1 -1.40236 1.40814 -204.45 
+     74 131.732 903 0 0 -1.44637 1.40135 -205.85 
+     74 53.3912 1281 10 1 76.8655 -114.273 95.2245 
+     74 81.7517 900 4 0 0.461324 0.800696 -85.85 
+     74 44.5343 901 4 0 0.520215 0.870636 -86.1687 
+     74 92.0891 847 4 0 44.9802 -10.2074 -86.25 
+     74 195.991 846 4 0 45.1225 -10.3432 -86.0625 
+     74 71.6124 1129 4 1 46.5545 -10.7398 -84.85 
+     74 158.578 1130 4 1 46.7479 -10.783 -84.7391 
+     74 128.029 895 6 0 0.25 -0.56296 -26.028 
+     74 174.174 939 5 1 8.62647 -14.3963 -54.45 
+     74 126.226 825 5 0 8.16563 -14.486 -55.85 
+     74 30.2159 897 6 1 -0.25 -0.362091 -24.7411 
+     74 224.129 891 6 0 -0.77188 -1.35472 -25.85 
+Number of tracker digits in this event =  10
+Event: 75
+Number of tracker hits in this event =  11
+     75 130.941 1205 1 1 61.7059 -89.4524 -174.71 
+     75 33.5858 1206 1 1 61.9591 -89.7524 -174.45 
+     75 98.1697 1208 1 1 62.334 -90.35 -174.697 
+     75 5.10506 1207 1 1 62.2185 -90.3574 -174.753 
+     75 199.45 466 1 0 58.9751 -86.3903 -175.85 
+     75 200.273 467 1 0 58.9435 -86.2354 -175.99 
+     75 84.2777 612 1 0 35.3646 -57.1355 -176.25 
+     75 136.307 613 1 0 35.2927 -57.0033 -176.17 
+     75 130.414 1520 6 0 132.737 125.095 -26.0691 
+     75 180.947 1521 6 0 132.812 125.214 -25.9263 
+     75 19.8454 1404 9 1 101.882 16.0651 65.4159 
+Number of tracker digits in this event =  6
+Event: 76
+Number of tracker hits in this event =  6
+     76 119.27 896 1 1 -0.314765 -1.2732 -174.45 
+     76 256.176 891 1 0 -0.329537 -1.30328 -175.85 
+     76 191.178 895 0 1 -0.624921 -1.94284 -204.45 
+     76 398.975 888 0 0 -0.643934 -1.96856 -205.85 
+     76 27.6163 924 0 1 5.60214 -8.97554 -204.508 
+     76 30.8225 889 0 0 0.616723 -1.83796 -205.85 
+Number of tracker digits in this event =  3
+Event: 77
+Number of tracker hits in this event =  1
+     77 242.116 879 0 1 -3.82547 -10.0733 -204.5 
+Number of tracker digits in this event =  1
+Event: 78
+Number of tracker hits in this event =  5
+     78 116.204 899 3 1 0.459584 -0.351247 -114.45 
+     78 196.509 896 3 0 0.472808 -0.351303 -115.85 
+     78 132.226 900 2 1 0.747511 -0.351219 -144.45 
+     78 119.77 896 2 0 0.753357 -0.337145 -145.85 
+     78 16.2277 1117 0 0 59.903 44.2057 -205.951 
+Number of tracker digits in this event =  2
+Event: 79
+Number of tracker hits in this event =  16
+     79 151.114 894 4 1 -0.702968 -0.734996 -84.45 
+     79 301.871 894 4 0 -0.718766 -0.781603 -85.85 
+     79 130.795 894 3 1 -0.847961 -1.62465 -114.45 
+     79 127.447 889 3 0 -0.875777 -1.68324 -115.85 
+     79 108.511 890 2 1 -1.55768 -2.88896 -144.45 
+     79 114.128 883 2 0 -1.58392 -2.95993 -145.85 
+     79 117.768 887 1 1 -2.12431 -4.39977 -174.45 
+     79 107.818 875 1 0 -2.14572 -4.46954 -175.85 
+     79 129.477 884 0 1 -2.69816 -5.86967 -204.45 
+     79 98.2998 868 0 0 -2.65563 -5.96457 -205.85 
+     79 185.856 959 3 1 12.4782 74.024 -114.702 
+     79 12.3164 937 0 1 8.09632 11.7626 -204.595 
+     79 303.176 893 0 1 -0.989648 -0.417387 -204.45 
+     79 284.474 896 0 0 -1.011 -0.407628 -205.85 
+     79 210.692 729 5 0 29.5191 -33.7822 -55.9582 
+     79 165.372 1356 3 0 -177.832 92.3078 -115.998 
+Number of tracker digits in this event =  10
+Event: 80
+Number of tracker hits in this event =  10
+     80 13.815 895 2 1 -0.492719 0.25 -144.796 
+     80 110.619 898 2 0 -0.495281 0.260928 -145.85 
+     80 102.526 895 1 1 -0.519328 0.505896 -174.45 
+     80 195.356 899 1 0 -0.52121 0.524921 -175.85 
+     80 271.498 895 0 1 -0.567066 0.897057 -204.45 
+     80 99.5429 901 0 0 -0.551873 0.907587 -205.85 
+     80 218.358 458 5 1 -87.9055 28.4267 -54.5886 
+     80 39.7641 459 5 1 -87.8149 28.4804 -54.4959 
+     80 117.389 898 5 0 0.846872 0.288628 -55.85 
+     80 259.943 728 0 1 -33.8673 25.8839 -204.45 
+Number of tracker digits in this event =  4
+Event: 81
+Number of tracker hits in this event =  55
+     81 7.52914 851 0 0 71.8145 -9.44859 -205.862 
+     81 5.7979 1245 0 1 69.6525 -9.44289 -204.85 
+     81 8.49644 1244 0 1 69.6413 -9.43998 -204.843 
+     81 10.2287 841 0 0 73.3071 -11.4415 -205.85 
+     81 5.5346 1290 0 1 78.844 -12.8975 -204.85 
+     81 0.285098 1291 0 1 78.8543 -12.9014 -204.85 
+     81 188.308 831 0 0 81.4356 -13.2832 -205.85 
+     81 120.106 1121 1 1 45.02 -21.6708 -174.801 
+     81 26.391 1122 1 1 45.0546 -21.6642 -174.517 
+     81 167.699 1435 2 0 87.443 107.976 -146.182 
+     81 12.8744 897 1 0 -0.38725 -0.25 -176.079 
+     81 77.8951 896 1 0 -0.408317 -0.283544 -176.101 
+     81 42.4614 899 3 0 2.57364 0.63147 -115.85 
+     81 146.511 900 3 0 2.61176 0.656199 -115.892 
+     81 36.7569 896 2 0 0.348551 -0.419847 -145.85 
+     81 102.556 895 2 0 0.358561 -0.472456 -145.942 
+     81 116.11 919 1 1 4.5339 -17.6326 -174.45 
+     81 211.278 803 1 0 4.62292 -18.8691 -175.85 
+     81 212.3 929 0 1 6.63973 -42.7711 -204.45 
+     81 167.034 680 0 0 7.08374 -43.5827 -205.85 
+     81 41.6889 536 0 0 -103.867 -72.362 -205.887 
+     81 32.9681 377 0 1 -104.369 -69.5425 -204.85 
+     81 95.2913 548 0 0 -104.629 -69.9248 -205.85 
+     81 136.29 381 0 1 -103.603 -70.5817 -204.85 
+     81 7.98487 727 3 0 -46.9022 -34.1277 -116.179 
+     81 131.861 896 1 1 -0.316883 11.5078 -174.45 
+     81 104.423 957 1 0 -0.49102 12.144 -175.85 
+     81 30.7152 958 1 0 -0.551847 12.323 -176.232 
+     81 210.45 866 0 1 -6.3911 24.831 -204.45 
+     81 164.519 1025 0 0 -6.81978 25.709 -205.85 
+     81 270.305 896 5 1 -0.270215 0.45327 -54.45 
+     81 171.391 896 2 1 -0.370996 5.49912 -144.45 
+     81 311.437 925 2 0 -0.437893 5.67772 -145.85 
+     81 214.771 890 1 1 -1.6013 9.57555 -174.45 
+     81 180.311 945 1 0 -1.6783 9.76566 -175.85 
+     81 124.074 884 0 1 -2.79111 14.2411 -204.45 
+     81 218.797 969 0 0 -3.05156 14.6089 -205.85 
+     81 124.321 924 2 0 -0.550605 5.50377 -146.033 
+     81 133.767 923 2 0 -0.413777 5.41393 -146.069 
+     81 105.788 894 5 0 -0.324467 -0.807294 -55.85 
+     81 119.136 900 4 1 0.797222 -2.99555 -84.45 
+     81 126.706 881 4 0 0.988049 -3.44394 -85.85 
+     81 112.339 921 3 1 4.86195 -13.0413 -114.45 
+     81 119.041 830 3 0 4.89207 -13.4853 -115.85 
+     81 134.234 922 2 1 5.10924 -22.4985 -144.45 
+     81 122.286 783 2 0 5.15299 -22.9711 -145.85 
+     81 117.7 927 1 1 6.07697 -32.4772 -174.45 
+     81 137.623 733 1 0 6.11084 -32.9946 -175.85 
+     81 225.864 930 0 1 6.81643 -43.3667 -204.45 
+     81 140.41 678 0 0 6.88852 -43.8636 -205.85 
+     81 408.213 4 5 0 -12.7262 -178.951 -56.25 
+     81 45.0015 5 5 0 -12.7568 -178.948 -56.2139 
+     81 51.5742 838 5 1 -12.0141 -177.049 -54.85 
+     81 32.3237 357 8 1 -108.49 -72.3554 35.3978 
+     81 100.203 355 8 1 -108.869 -71.185 35.5455 
+Number of tracker digits in this event =  27
+Event: 82
+Number of tracker hits in this event =  5
+     82 263.687 903 1 1 1.34147 0.447201 -174.45 
+     82 195.8 899 1 0 1.37443 0.465978 -175.85 
+     82 153.313 906 0 1 2.0314 0.938799 -204.45 
+     82 204.461 901 0 0 2.06008 0.953448 -205.85 
+     82 56.254 784 3 1 -22.7276 160.413 -114.704 
+Number of tracker digits in this event =  4
+Event: 83
+Number of tracker hits in this event =  17
+     83 117.797 896 3 1 -0.333132 0.342755 -114.45 
+     83 135.439 898 3 0 -0.339427 0.349883 -115.85 
+     83 158.266 895 2 1 -0.491753 0.508416 -144.45 
+     83 99.9647 899 2 0 -0.502079 0.513073 -145.85 
+     83 326.031 894 1 1 -0.699662 0.595455 -174.45 
+     83 183.059 899 1 0 -0.713264 0.596682 -175.85 
+     83 99.5012 893 0 1 -0.95442 0.599552 -204.45 
+     83 167.17 899 0 0 -0.964247 0.596352 -205.85 
+     83 146.768 900 1 0 0.337786 0.672189 -175.85 
+     83 106.808 946 0 1 9.95125 17.8791 -204.45 
+     83 209.393 948 0 1 10.3347 17.8838 -204.515 
+     83 168.066 951 0 1 11.0032 18.1715 -204.706 
+     83 76.6978 986 0 0 12.7664 18.0209 -205.85 
+     83 163.927 987 0 0 13.0092 18.0536 -206.04 
+     83 234.743 943 0 0 67.0738 9.38174 -206.25 
+     83 188.814 1238 0 1 68.2764 9.39813 -204.85 
+     83 64.6006 1243 0 1 69.2727 9.43976 -204.524 
+Number of tracker digits in this event =  11
+Event: 84
+Number of tracker hits in this event =  8
+     84 100.124 895 1 1 -0.501568 0.772849 -174.45 
+     84 130.426 900 1 0 -0.541696 0.746855 -175.85 
+     84 128.11 891 0 1 -1.32709 0.270523 -204.45 
+     84 53.141 949 7 1 10.5676 22.0155 5.42901 
+     84 182.531 1016 4 1 23.8544 -91.2006 -84.6841 
+     84 28.7909 1015 4 1 23.7937 -91.2581 -84.45 
+     84 197.264 1017 4 1 24.0897 -91.1288 -84.5092 
+     84 205.898 1018 4 1 24.317 -90.8871 -84.45 
+Number of tracker digits in this event =  5
+Event: 85
+Number of tracker hits in this event =  9
+     85 115.961 893 4 0 -0.250046 -0.901187 -85.85 
+     85 111.711 896 3 1 -0.306527 -1.50904 -114.45 
+     85 154.129 890 3 0 -0.301878 -1.53921 -115.85 
+     85 31.0614 900 5 0 0.408711 0.847948 -55.85 
+     85 47.4131 901 5 0 0.413228 0.927016 -55.9106 
+     85 77.5005 902 5 0 0.303444 1.06425 -55.9968 
+     85 60.8664 826 5 0 32.525 -14.4014 -56.25 
+     85 291.721 825 5 0 32.5702 -14.4686 -56.1357 
+     85 171.919 824 5 0 32.3713 -14.7129 -56.0888 
+Number of tracker digits in this event =  3
+Event: 86
+Number of tracker hits in this event =  13
+     86 103.93 898 4 1 0.379491 -0.297704 -84.45 
+     86 248.661 896 4 0 0.393068 -0.309755 -85.85 
+     86 167.907 900 3 1 0.692285 -0.481128 -114.45 
+     86 93.0569 895 3 0 0.730018 -0.487947 -115.85 
+     86 119.05 904 2 1 1.63489 -0.6054 -144.45 
+     86 116.388 894 2 0 1.6379 -0.697886 -145.85 
+     86 235.579 905 1 1 1.66439 -2.50596 -174.45 
+     86 225.693 885 1 0 1.66223 -2.61797 -175.85 
+     86 137.447 905 0 1 1.71854 -4.87875 -204.45 
+     86 107.92 873 0 0 1.70376 -4.98229 -205.85 
+     86 66.869 899 3 1 0.619504 -0.412892 -114.666 
+     86 43.6352 546 3 0 -105.183 -70.3753 -116.25 
+     86 134.015 545 3 0 -105.281 -70.4686 -116.201 
+Number of tracker digits in this event =  6
+Event: 87
+Number of tracker hits in this event =  7
+     87 133.488 895 3 1 -0.590239 7.32092 -114.45 
+     87 115.127 933 3 0 -0.568037 7.41561 -115.85 
+     87 110.636 896 2 1 -0.304716 9.14466 -144.45 
+     87 107.476 942 2 0 -0.295526 9.22356 -145.85 
+     87 143.434 892 0 1 -1.18366 12.5034 -204.45 
+     87 113.129 959 0 0 -1.21722 12.5809 -205.85 
+     87 131.417 1344 11 1 89.5572 170.085 125.266 
+Number of tracker digits in this event =  3
+Event: 88
+Number of tracker hits in this event =  20
+     88 141.689 895 0 1 -0.618854 -0.311684 -204.45 
+     88 139.128 896 0 0 -0.623603 -0.322662 -205.85 
+     88 125.878 892 1 1 -1.2471 3.35245 -174.45 
+     88 100.3 914 1 0 -1.18471 3.52712 -175.85 
+     88 264.188 896 0 1 -0.305319 7.10165 -204.45 
+     88 358.303 896 2 0 -0.329712 -0.251079 -145.85 
+     88 109.252 885 1 1 -2.51046 -1.8034 -174.45 
+     88 132.749 889 1 0 -2.63335 -1.77768 -175.85 
+     88 300.54 873 0 1 -4.92545 -0.835312 -204.45 
+     88 103.271 894 0 0 -5.08172 -0.668837 -205.85 
+     88 42.8318 934 0 0 22.6644 7.63502 -206.25 
+     88 106.462 935 0 0 22.8078 7.71913 -206.181 
+     88 37.3036 936 0 0 22.934 7.90601 -205.918 
+     88 37.1325 1020 0 1 24.7231 8.99685 -204.85 
+     88 86.7676 1021 0 1 24.8538 9.04102 -204.795 
+     88 175.024 1022 0 1 25.1424 8.99685 -204.763 
+     88 274.017 1024 0 1 25.5383 8.7444 -204.85 
+     88 1.844 1006 0 1 21.901 7.98975 -204.85 
+     88 14.8764 1005 0 1 21.6934 8.00207 -204.642 
+     88 148.529 892 0 0 -5.89262 -1.15459 -205.85 
+Number of tracker digits in this event =  10
+Event: 89
+Number of tracker hits in this event =  4
+     89 102.516 901 4 1 1.02975 0.305021 -84.45 
+     89 115.728 898 4 0 1.04327 0.300562 -85.85 
+     89 387.476 908 1 1 2.25353 0.80183 -174.452 
+     89 152.803 907 1 1 2.15146 0.908788 -174.731 
+Number of tracker digits in this event =  2
+Event: 90
+Number of tracker hits in this event =  10
+     90 98.7802 889 2 1 -1.67694 0.906423 -144.45 
+     90 123.434 901 2 0 -1.78458 0.960275 -145.85 
+     90 151.314 878 1 1 -3.9055 2.26267 -174.45 
+     90 124.503 908 1 0 -4.00791 2.39672 -175.85 
+     90 116.313 867 0 1 -6.10851 5.26592 -204.45 
+     90 233.78 923 0 0 -6.22109 5.41477 -205.85 
+     90 110.34 901 0 1 0.990485 0.879881 -204.45 
+     90 125.018 901 0 0 1.02481 0.879551 -205.85 
+     90 118.75 891 1 1 -1.3351 0.306509 -174.45 
+     90 407.605 898 1 0 -1.34574 0.294371 -175.85 
+Number of tracker digits in this event =  6
+Event: 91
+Number of tracker hits in this event =  16
+     91 143.665 898 2 0 0.256223 0.30371 -145.85 
+     91 416.361 900 1 1 0.703399 0.586089 -174.45 
+     91 118.632 899 1 0 0.73029 0.604769 -175.85 
+     91 132.117 903 0 1 1.31064 0.958185 -204.45 
+     91 200.066 901 0 0 1.34533 0.985293 -205.85 
+     91 102.192 864 1 0 3.40626 -6.73909 -176.002 
+     91 226.668 863 1 0 3.44436 -6.86527 -176.048 
+     91 126.554 903 1 0 0.617166 1.35531 -175.85 
+     91 113.762 1213 1 0 10.1361 63.4221 -176.25 
+     91 112.163 1215 1 0 10.3038 63.742 -176.087 
+     91 241.606 948 1 1 10.3233 66.0147 -174.85 
+     91 7.98176 926 1 0 -15.4126 6.02239 -176.25 
+     91 290.185 899 1 1 0.613254 0.51908 -174.831 
+     91 226.681 905 1 0 2.16683 1.78706 -175.85 
+     91 172.744 1187 0 1 58.0967 77.9404 -204.672 
+     91 22.7089 509 0 1 -77.7938 -65.3739 -204.712 
+Number of tracker digits in this event =  10
+Event: 92
+Number of tracker hits in this event =  15
+     92 125.575 896 0 1 -0.271938 -1.11972 -204.45 
+     92 131.823 892 0 0 -0.285412 -1.12177 -205.85 
+     92 0.279076 898 4 1 0.316589 -0.490484 -84.8481 
+     92 332.377 895 4 0 0.304654 -0.472355 -85.85 
+     92 122.914 908 3 1 2.40101 -3.20094 -114.45 
+     92 137.5 882 3 0 2.24525 -3.20889 -115.85 
+     92 472.037 899 2 1 0.563656 2.09899 -144.45 
+     92 104.843 909 2 0 0.854956 2.61489 -145.85 
+     92 155.264 956 1 1 12.006 14.8287 -174.45 
+     92 187.268 974 1 0 13.4588 15.5752 -175.85 
+     92 117.647 1119 0 1 44.6417 31.7274 -204.45 
+     92 161.17 1058 0 0 45.721 32.3695 -205.85 
+     92 249.025 900 2 1 0.652873 2.22771 -144.726 
+     92 27.6678 910 2 0 0.600646 2.8025 -146.027 
+     92 121.429 896 4 0 0.308795 -0.388963 -86.0052 
+Number of tracker digits in this event =  11
+Event: 93
+Number of tracker hits in this event =  7
+     93 101.948 896 3 1 -0.333879 -0.413497 -114.45 
+     93 150.169 896 3 0 -0.331187 -0.410292 -115.85 
+     93 30.9897 896 2 0 -0.25 -0.297486 -146.115 
+     93 102.071 1313 2 1 83.4131 -8.54796 -144.564 
+     93 60.8438 1314 2 1 83.487 -8.56525 -144.542 
+     93 147.324 564 5 0 32.3881 -66.6608 -56.25 
+     93 305.573 563 5 0 32.3936 -66.9084 -56.2487 
+Number of tracker digits in this event =  3
+Event: 94
+Number of tracker hits in this event =  4
+     94 124.789 899 3 1 0.51237 -0.294008 -114.45 
+     94 124.014 896 3 0 0.525747 -0.293085 -115.85 
+     94 4.4199 362 10 0 178.236 -107.441 93.7504 
+     94 100.266 1515 14 0 -79.1031 123.983 213.777 
+Number of tracker digits in this event =  2
+Event: 95
+Number of tracker hits in this event =  3
+     95 81.3012 767 0 0 34.7945 -26.175 -206.151 
+     95 19.0989 13 5 0 -167.049 -177.257 -55.8614 
+     95 166.784 62 5 1 -167.488 -179.717 -54.85 
+Number of tracker digits in this event =  1
+Event: 96
+Number of tracker hits in this event =  9
+     96 146.617 899 3 1 0.453335 0.473613 -114.45 
+     96 297.666 898 3 0 0.444171 0.436306 -115.85 
+     96 225.197 905 1 1 1.84963 -0.352854 -174.45 
+     96 135.035 896 1 0 1.93489 -0.394996 -175.85 
+     96 165.394 914 0 1 3.46255 -1.20412 -204.45 
+     96 120.588 891 0 0 3.5635 -1.25029 -205.85 
+     96 101.734 899 3 0 0.283238 0.462588 -116.01 
+     96 148.868 647 0 0 22.061 -50.0646 -206.25 
+     96 93.3678 645 0 0 21.8817 -50.4846 -206.045 
+Number of tracker digits in this event =  7
+Event: 97
+Number of tracker hits in this event =  8
+     97 180.335 898 3 1 0.280314 -0.627969 -114.45 
+     97 121.739 895 3 0 0.289811 -0.643322 -115.85 
+     97 111.161 899 2 1 0.473619 -0.905576 -144.45 
+     97 128.064 893 2 0 0.487302 -0.929158 -145.85 
+     97 183.244 900 1 1 0.756473 -1.45976 -174.45 
+     97 117.745 890 1 0 0.76475 -1.4797 -175.85 
+     97 114.894 901 0 1 0.975367 -1.88244 -204.45 
+     97 122.898 888 0 0 0.983799 -1.89976 -205.85 
+Number of tracker digits in this event =  5
+Event: 98
+Number of tracker hits in this event =  25
+     98 181.262 900 3 1 0.689911 0.456327 -114.45 
+     98 117.974 899 3 0 0.701957 0.454138 -115.85 
+     98 112.779 901 2 1 0.894542 0.353596 -144.45 
+     98 155.657 898 2 0 0.910957 0.359329 -145.85 
+     98 111.137 903 1 1 1.28171 0.430339 -174.45 
+     98 123.829 898 1 0 1.29621 0.433676 -175.85 
+     98 311.908 904 0 1 1.55889 0.489218 -204.45 
+     98 167.921 899 0 0 1.56119 0.497121 -205.85 
+     98 57.0329 905 0 1 1.68005 0.504884 -204.77 
+     98 180.437 888 3 1 -2.02189 1.23208 -114.45 
+     98 208.089 907 3 0 -0.701151 2.16021 -115.85 
+     98 213.918 1012 2 1 23.1508 18.9578 -144.45 
+     98 214.385 996 2 0 24.8468 19.9521 -145.85 
+     98 260.682 1204 1 1 61.6444 46.3888 -174.45 
+     98 203.257 1133 1 0 63.9401 47.3197 -175.85 
+     98 126.201 1407 0 1 102.35 60.7049 -204.45 
+     98 132.189 1201 0 0 103.38 60.8508 -205.85 
+     98 353.02 898 3 0 -0.262929 0.385656 -115.85 
+     98 165.313 893 2 1 -0.916022 0.728667 -144.45 
+     98 228.437 900 2 0 -0.856962 0.794793 -145.85 
+     98 115.322 899 1 1 0.460479 2.03544 -174.45 
+     98 147.697 907 1 0 0.589422 2.06732 -175.85 
+     98 95.5692 912 0 1 3.10649 2.51323 -204.45 
+     98 110.396 908 0 0 3.15648 2.41434 -205.85 
+     98 73.491 1330 4 0 -10.2604 86.7108 -86.25 
+Number of tracker digits in this event =  17
+Event: 99
+Number of tracker hits in this event =  8
+     99 224.641 867 1 1 -6.11457 0.764054 -174.45 
+     99 126.623 900 1 0 -6.20589 0.816127 -175.85 
+     99 107.731 854 0 1 -8.71916 1.81326 -204.45 
+     99 127.369 904 0 0 -8.64185 1.60248 -205.85 
+     99 234.57 865 1 1 -6.45337 0.57422 -174.544 
+     99 722.231 889 1 0 -66.1666 -1.77133 -175.85 
+     99 198.157 898 2 1 0.262641 0.25 -144.483 
+     99 127.807 1175 0 0 31.1657 55.8151 -206.123 
+Number of tracker digits in this event =  7
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=13.84s Real=13.87s Sys=0.01s
+/gun/particle proton
+/gun/energy 1 GeV
+/gun/sourceType 2
+/run/beamOn 100
+Start Run processing.
+Event: 0
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 1
+Number of tracker hits in this event =  6
+      1 122.41 895 2 1 -0.488004 -0.301103 -144.45 
+      1 165.978 896 2 0 -0.496096 -0.301143 -145.85 
+      1 198.808 894 1 1 -0.659216 -0.308873 -174.45 
+      1 184.345 896 1 0 -0.667245 -0.308732 -175.85 
+      1 164.146 894 0 1 -0.836595 -0.304648 -204.45 
+      1 121.782 896 0 0 -0.847231 -0.30173 -205.85 
+Number of tracker digits in this event =  6
+Event: 2
+Number of tracker hits in this event =  6
+      2 135.941 898 2 1 0.353813 0.79202 -144.45 
+      2 131.18 900 2 0 0.367833 0.802273 -145.85 
+      2 140.219 899 1 1 0.648932 1.02627 -174.45 
+      2 115.022 901 1 0 0.658975 1.03963 -175.85 
+      2 120.842 900 0 1 0.84627 1.28162 -204.45 
+      2 140.328 903 0 0 0.853297 1.30095 -205.85 
+Number of tracker digits in this event =  5
+Event: 3
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 4
+Number of tracker hits in this event =  4
+      4 157.491 896 1 1 -0.319506 -0.288723 -174.45 
+      4 125.142 896 1 0 -0.320331 -0.292515 -175.85 
+      4 246.638 896 0 1 -0.342081 -0.36992 -204.45 
+      4 122.121 896 0 0 -0.340081 -0.373965 -205.85 
+Number of tracker digits in this event =  4
+Event: 5
+Number of tracker hits in this event =  4
+      5 150.958 898 1 1 0.410856 0.274791 -174.45 
+      5 146.076 898 1 0 0.412696 0.27744 -175.85 
+      5 128.898 898 0 1 0.441612 0.328358 -204.45 
+      5 142.19 898 0 0 0.443729 0.337352 -205.85 
+Number of tracker digits in this event =  4
+Event: 6
+Number of tracker hits in this event =  4
+      6 111.119 895 1 1 -0.540464 -0.294142 -174.45 
+      6 127.33 896 1 0 -0.558793 -0.308733 -175.85 
+      6 123.505 893 0 1 -0.943255 -0.643881 -204.45 
+      6 128.278 894 0 0 -0.95783 -0.656524 -205.85 
+Number of tracker digits in this event =  3
+Event: 7
+Number of tracker hits in this event =  2
+      7 140.258 894 0 1 -0.675428 0.367037 -204.45 
+      7 235.182 898 0 0 -0.692687 0.373498 -205.85 
+Number of tracker digits in this event =  2
+Event: 8
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 9
+Number of tracker hits in this event =  2
+      9 169.155 896 0 1 -0.350674 -0.32031 -204.45 
+      9 216.484 896 0 0 -0.358257 -0.326453 -205.85 
+Number of tracker digits in this event =  2
+Event: 10
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 11
+Number of tracker hits in this event =  8
+     11 46.0117 898 2 0 0.467878 0.25 -146.135 
+     11 182.793 899 1 1 0.611207 0.313448 -174.45 
+     11 127.808 898 1 0 0.613279 0.313486 -175.85 
+     11 151.098 899 0 1 0.646012 0.32402 -204.45 
+     11 226.493 898 0 0 0.64603 0.32368 -205.85 
+     11 37.2023 893 0 0 27.4636 -1.03024 -206.25 
+     11 388.906 892 0 0 27.5062 -1.05496 -206.238 
+     11 103.766 891 0 0 27.7446 -1.31486 -206.103 
+Number of tracker digits in this event =  5
+Event: 12
+Number of tracker hits in this event =  8
+     12 113.799 896 3 0 -0.520359 -0.251464 -115.85 
+     12 141.19 894 2 1 -0.684619 -0.344576 -144.45 
+     12 120.212 896 2 0 -0.692213 -0.348848 -145.85 
+     12 127.264 894 1 1 -0.831483 -0.449965 -174.45 
+     12 233.317 895 1 0 -0.83881 -0.455722 -175.85 
+     12 117.997 893 0 1 -1.00246 -0.57656 -204.45 
+     12 119.486 895 0 0 -1.01351 -0.583235 -205.85 
+     12 243.367 896 1 0 -0.715839 -0.431266 -176.238 
+Number of tracker digits in this event =  5
+Event: 13
+Number of tracker hits in this event =  2
+     13 147.259 896 0 1 -0.309051 0.420699 -204.45 
+     13 121.709 898 0 0 -0.317289 0.427677 -205.85 
+Number of tracker digits in this event =  2
+Event: 14
+Number of tracker hits in this event =  11
+     14 109.78 895 4 1 -0.63494 -0.467706 -84.45 
+     14 141.196 895 4 0 -0.673656 -0.48169 -85.85 
+     14 118.554 890 3 1 -1.46974 -0.756537 -114.45 
+     14 112.702 894 3 0 -1.50713 -0.774353 -115.85 
+     14 135.159 886 2 1 -2.27093 -1.14552 -144.45 
+     14 251.972 892 2 0 -2.30708 -1.16407 -145.85 
+     14 128.197 882 1 1 -3.05127 -1.53657 -174.45 
+     14 121.137 890 1 0 -3.09042 -1.55573 -175.85 
+     14 117.198 878 0 1 -3.91666 -1.99612 -204.45 
+     14 181.259 888 0 0 -3.95727 -2.01937 -205.85 
+     14 155.771 398 0 0 -164.154 -100.172 -206.25 
+Number of tracker digits in this event =  7
+Event: 15
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 16
+Number of tracker hits in this event =  6
+     16 173.46 899 2 1 0.649977 0.316793 -144.45 
+     16 195.684 898 2 0 0.651752 0.323101 -145.85 
+     16 120.77 900 1 1 0.680175 0.446969 -174.45 
+     16 180.693 899 1 0 0.683357 0.456912 -175.85 
+     16 170.439 900 0 1 0.75344 0.645933 -204.45 
+     16 120.673 900 0 0 0.762968 0.657267 -205.85 
+Number of tracker digits in this event =  6
+Event: 17
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 18
+Number of tracker hits in this event =  12
+     18 110.765 892 5 1 -1.16735 -0.660341 -54.45 
+     18 217.028 894 5 0 -1.22307 -0.692392 -55.85 
+     18 137.987 886 4 1 -2.37826 -1.35108 -84.45 
+     18 144.56 891 4 0 -2.43651 -1.38332 -85.85 
+     18 157.971 880 3 1 -3.63952 -2.02244 -114.45 
+     18 140.806 887 3 0 -3.70044 -2.05212 -115.85 
+     18 138.909 873 2 1 -4.95673 -2.66439 -144.45 
+     18 121.152 884 2 0 -5.01803 -2.69292 -145.85 
+     18 135.238 866 1 1 -6.26828 -3.27199 -174.45 
+     18 117.22 881 1 0 -6.32674 -3.29876 -175.85 
+     18 131.347 860 0 1 -7.53076 -3.85676 -204.45 
+     18 115.896 878 0 0 -7.59347 -3.88608 -205.85 
+Number of tracker digits in this event =  9
+Event: 19
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 20
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 21
+Number of tracker hits in this event =  6
+     21 150.504 898 2 1 0.281466 -0.276221 -144.45 
+     21 143.678 896 2 0 0.296135 -0.290266 -145.85 
+     21 161.657 899 1 1 0.597796 -0.573561 -174.45 
+     21 128.883 895 1 0 0.614739 -0.584758 -175.85 
+     21 151.83 901 0 1 0.949851 -0.787389 -204.45 
+     21 124.015 894 0 0 0.961339 -0.795769 -205.85 
+Number of tracker digits in this event =  6
+Event: 22
+Number of tracker hits in this event =  8
+     22 118.16 895 3 1 -0.478137 -0.47974 -114.45 
+     22 119.291 895 3 0 -0.50827 -0.492392 -115.85 
+     22 142.959 892 2 1 -1.12787 -0.739126 -144.45 
+     22 145.844 894 2 0 -1.16077 -0.752752 -145.85 
+     22 121.484 889 1 1 -1.82275 -1.0283 -174.45 
+     22 165.493 893 1 0 -1.9181 -1.03 -175.85 
+     22 140.697 878 0 1 -3.88445 -1.05548 -204.45 
+     22 185.237 892 0 0 -3.98644 -1.05136 -205.85 
+Number of tracker digits in this event =  6
+Event: 23
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 24
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 25
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 26
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 27
+Number of tracker hits in this event =  2
+     27 129.26 900 0 1 0.816568 -0.315219 -204.45 
+     27 147.487 896 0 0 0.818558 -0.323309 -205.85 
+Number of tracker digits in this event =  2
+Event: 28
+Number of tracker hits in this event =  2
+     28 163.759 896 0 1 -0.374435 0.277087 -204.45 
+     28 120.839 898 0 0 -0.369322 0.276996 -205.85 
+Number of tracker digits in this event =  2
+Event: 29
+Number of tracker hits in this event =  2
+     29 115.119 903 1 1 1.38452 -0.318003 -174.45 
+     29 135.221 896 1 0 1.40149 -0.310979 -175.85 
+Number of tracker digits in this event =  1
+Event: 30
+Number of tracker hits in this event =  9
+     30 145.207 895 1 1 -0.460506 -0.3538 -174.45 
+     30 143.529 896 1 0 -0.463175 -0.363558 -175.85 
+     30 308.025 895 0 1 -0.519919 -0.573266 -204.45 
+     30 167.042 895 0 0 -0.524925 -0.584794 -205.85 
+     30 38.9779 843 0 0 43.9229 -10.9052 -206.25 
+     30 75.3828 895 5 1 -0.644064 -0.25 -54.7389 
+     30 151.871 893 5 1 -0.855726 -0.384133 -54.7184 
+     30 90.447 885 5 0 -3.09425 -2.53969 -55.85 
+     30 209.313 884 5 0 -3.22906 -2.66198 -55.9629 
+Number of tracker digits in this event =  6
+Event: 31
+Number of tracker hits in this event =  6
+     31 121.473 896 2 1 -0.286333 0.4744 -144.45 
+     31 111.333 899 2 0 -0.286333 0.478105 -145.85 
+     31 111.951 896 1 1 -0.276707 0.552374 -174.45 
+     31 123.603 899 1 0 -0.276394 0.554715 -175.85 
+     31 176.832 896 0 1 -0.253775 0.605695 -204.45 
+     31 132.59 899 0 0 -0.252895 0.60509 -205.85 
+Number of tracker digits in this event =  4
+Event: 32
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 33
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 34
+Number of tracker hits in this event =  5
+     34 170.891 896 4 1 -0.278132 -0.25 -84.6017 
+     34 7.17668 894 4 1 -0.661319 -0.468809 -84.8254 
+     34 182.333 893 4 0 -0.950238 -0.940447 -85.85 
+     34 748.937 892 4 0 -1.06488 -1.17985 -86.1564 
+     34 228.496 891 4 0 -1.20264 -1.26263 -86.1715 
+Number of tracker digits in this event =  4
+Event: 35
+Number of tracker hits in this event =  6
+     35 123.276 898 2 1 0.379841 0.413692 -144.45 
+     35 288.557 898 2 0 0.386968 0.41588 -145.85 
+     35 119.363 899 1 1 0.537565 0.471299 -174.45 
+     35 164.257 899 1 0 0.547855 0.473703 -175.85 
+     35 124.442 900 0 1 0.759458 0.50744 -204.45 
+     35 114.144 899 0 0 0.771504 0.511946 -205.85 
+Number of tracker digits in this event =  4
+Event: 36
+Number of tracker hits in this event =  8
+     36 171.907 896 3 1 -0.424634 0.323507 -114.45 
+     36 140.069 898 3 0 -0.429775 0.329368 -115.85 
+     36 130.672 895 2 1 -0.53154 0.431581 -144.45 
+     36 120.559 898 2 0 -0.53716 0.435546 -145.85 
+     36 130.696 894 1 1 -0.662484 0.520168 -174.45 
+     36 123.129 899 1 0 -0.666683 0.524555 -175.85 
+     36 130.942 894 0 1 -0.760328 0.619748 -204.45 
+     36 186.911 899 0 0 -0.764636 0.62934 -205.85 
+Number of tracker digits in this event =  8
+Event: 37
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 38
+Number of tracker hits in this event =  11
+     38 125.415 896 4 1 -0.355037 0.319456 -84.45 
+     38 181.437 898 4 0 -0.363046 0.32672 -85.85 
+     38 123.006 895 3 1 -0.514383 0.482204 -114.45 
+     38 126.951 899 3 0 -0.521788 0.486049 -115.85 
+     38 212.775 894 2 1 -0.674058 0.553012 -144.45 
+     38 187.079 899 2 0 -0.680875 0.554824 -145.85 
+     38 248.594 894 1 1 -0.809598 0.595334 -174.45 
+     38 139.724 899 1 0 -0.817324 0.59816 -175.85 
+     38 138.268 893 0 1 -0.971198 0.655814 -204.45 
+     38 148.105 900 0 0 -0.979844 0.656907 -205.85 
+     38 20.189 893 1 1 -0.864084 0.448743 -174.478 
+Number of tracker digits in this event =  10
+Event: 39
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 40
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 41
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 42
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 43
+Number of tracker hits in this event =  2
+     43 140.322 896 0 1 -0.295242 0.549218 -204.45 
+     43 104.988 899 0 0 -0.300993 0.554475 -205.85 
+Number of tracker digits in this event =  1
+Event: 44
+Number of tracker hits in this event =  8
+     44 176.698 896 3 1 -0.443845 0.308898 -114.45 
+     44 120.616 898 3 0 -0.451552 0.308743 -115.85 
+     44 191.974 895 2 1 -0.609417 0.30023 -144.45 
+     44 138.669 898 2 0 -0.619253 0.301187 -145.85 
+     44 131.787 894 1 1 -0.811029 0.326264 -174.45 
+     44 164.799 898 1 0 -0.824529 0.330527 -175.85 
+     44 173.834 892 0 1 -1.1319 0.401057 -204.45 
+     44 123.051 898 0 0 -1.14223 0.402934 -205.85 
+Number of tracker digits in this event =  8
+Event: 45
+Number of tracker hits in this event =  2
+     45 120.001 896 0 1 -0.424813 -0.291671 -204.45 
+     45 146.449 896 0 0 -0.427469 -0.293883 -205.85 
+Number of tracker digits in this event =  2
+Event: 46
+Number of tracker hits in this event =  6
+     46 129.965 898 2 1 0.31969 -0.262744 -144.45 
+     46 134.706 896 2 0 0.321214 -0.274151 -145.85 
+     46 166.09 898 1 1 0.339107 -0.521047 -174.45 
+     46 154.38 895 1 0 0.343424 -0.534638 -175.85 
+     46 145.078 898 0 1 0.4208 -0.824481 -204.45 
+     46 159.541 894 0 0 0.421451 -0.837504 -205.85 
+Number of tracker digits in this event =  6
+Event: 47
+Number of tracker hits in this event =  1
+     47 44.4552 891 6 0 0.563773 -1.30727 -25.85 
+Number of tracker digits in this event =  0
+Event: 48
+Number of tracker hits in this event =  8
+     48 130.656 895 2 1 -0.467194 0.388561 -144.45 
+     48 119.544 898 2 0 -0.477878 0.402808 -145.85 
+     48 263.81 894 1 1 -0.662668 0.681367 -174.45 
+     48 109.23 900 1 0 -0.672063 0.695558 -175.85 
+     48 353.913 893 0 1 -0.865162 0.986923 -204.45 
+     48 177.42 901 0 0 -0.872752 1.00292 -205.85 
+     48 246.087 894 0 1 -0.734644 1.15041 -204.539 
+     48 105.797 895 1 0 -0.72253 -0.452722 -175.85 
+Number of tracker digits in this event =  5
+Event: 49
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 50
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 51
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 52
+Number of tracker hits in this event =  1
+     52 124.661 900 3 0 -0.25 0.786169 -116.187 
+Number of tracker digits in this event =  1
+Event: 53
+Number of tracker hits in this event =  3
+     53 49.5437 898 1 0 0.48637 0.25 -176.088 
+     53 175.076 899 0 1 0.609648 0.484606 -204.45 
+     53 137.267 899 0 0 0.614108 0.494846 -205.85 
+Number of tracker digits in this event =  2
+Event: 54
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 55
+Number of tracker hits in this event =  6
+     55 111.191 896 1 1 -0.412205 0.298883 -174.45 
+     55 139.96 898 1 0 -0.411337 0.302554 -175.85 
+     55 161.874 896 0 1 -0.389684 0.410457 -204.45 
+     55 194.173 898 0 0 -0.391086 0.412297 -205.85 
+     55 186.053 1015 4 0 -113.064 23.6801 -86.25 
+     55 5.50963 1014 4 0 -113.429 23.6269 -86.2449 
+Number of tracker digits in this event =  4
+Event: 56
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 57
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 58
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 59
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 60
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 61
+Number of tracker hits in this event =  2
+     61 130.212 898 0 1 0.310723 1.07407 -204.45 
+     61 151.045 902 0 0 0.325073 1.09348 -205.85 
+Number of tracker digits in this event =  2
+Event: 62
+Number of tracker hits in this event =  6
+     62 121.809 895 2 1 -0.467862 -0.278038 -144.45 
+     62 109.367 896 2 0 -0.477668 -0.281484 -145.85 
+     62 175.496 894 1 1 -0.707899 -0.343914 -174.45 
+     62 206.545 896 1 0 -0.716762 -0.345649 -175.85 
+     62 137.798 893 0 1 -0.892134 -0.383037 -204.45 
+     62 242.263 896 0 0 -0.899204 -0.381883 -205.85 
+Number of tracker digits in this event =  5
+Event: 63
+Number of tracker hits in this event =  2
+     63 155.151 899 0 1 0.477157 0.315265 -204.45 
+     63 136.65 898 0 0 0.479263 0.327748 -205.85 
+Number of tracker digits in this event =  2
+Event: 64
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 65
+Number of tracker hits in this event =  2
+     65 144.91 896 0 1 -0.293847 1.49714 -204.45 
+     65 127.948 904 0 0 -0.299271 1.51469 -205.85 
+Number of tracker digits in this event =  2
+Event: 66
+Number of tracker hits in this event =  2
+     66 136.055 896 0 1 -0.263672 1.1127 -204.45 
+     66 184.638 902 0 0 -0.270711 1.12582 -205.85 
+Number of tracker digits in this event =  2
+Event: 67
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 68
+Number of tracker hits in this event =  2
+     68 192.988 898 0 1 0.321905 -1.16118 -204.45 
+     68 222.769 892 0 0 0.322386 -1.18044 -205.85 
+Number of tracker digits in this event =  2
+Event: 69
+Number of tracker hits in this event =  2
+     69 121.771 896 0 1 -0.268358 -0.687731 -204.45 
+     69 126.6 894 0 0 -0.266186 -0.693378 -205.85 
+Number of tracker digits in this event =  2
+Event: 70
+Number of tracker hits in this event =  4
+     70 133.831 895 1 1 -0.507156 -0.264535 -174.45 
+     70 148.913 896 1 0 -0.511962 -0.275315 -175.85 
+     70 277.764 895 0 1 -0.586693 -0.496897 -204.45 
+     70 124.702 895 0 0 -0.587502 -0.507144 -205.85 
+Number of tracker digits in this event =  4
+Event: 71
+Number of tracker hits in this event =  2
+     71 404.578 900 0 1 0.700988 2.91527 -204.85 
+     71 200.325 902 6 0 -0.25 1.13879 -25.8669 
+Number of tracker digits in this event =  2
+Event: 72
+Number of tracker hits in this event =  4
+     72 149.699 896 1 1 -0.401792 0.308958 -174.45 
+     72 159.692 898 1 0 -0.408602 0.316005 -175.85 
+     72 137.568 895 0 1 -0.537054 0.470406 -204.45 
+     72 166.196 899 0 0 -0.54522 0.482178 -205.85 
+Number of tracker digits in this event =  4
+Event: 73
+Number of tracker hits in this event =  1
+     73 205.628 898 2 0 -1.00995 0.344757 -145.85 
+Number of tracker digits in this event =  1
+Event: 74
+Number of tracker hits in this event =  4
+     74 116.978 898 2 1 0.290282 -0.29772 -144.45 
+     74 292.437 896 2 0 0.290656 -0.300822 -145.85 
+     74 136.353 898 1 1 0.374419 -0.363333 -174.45 
+     74 128.061 896 1 0 0.376195 -0.357203 -175.85 
+Number of tracker digits in this event =  3
+Event: 75
+Number of tracker hits in this event =  4
+     75 141.769 896 1 1 -0.375844 0.645867 -174.45 
+     75 165.392 900 1 0 -0.386102 0.659821 -175.85 
+     75 153.766 895 0 1 -0.59794 0.94094 -204.45 
+     75 159.019 901 0 0 -0.615751 0.953168 -205.85 
+Number of tracker digits in this event =  4
+Event: 76
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 77
+Number of tracker hits in this event =  2
+     77 118.015 896 0 1 -0.278143 -0.427058 -204.45 
+     77 154.276 896 0 0 -0.286905 -0.426801 -205.85 
+Number of tracker digits in this event =  1
+Event: 78
+Number of tracker hits in this event =  6
+     78 110.693 898 2 1 0.283262 0.528515 -144.45 
+     78 150.52 899 2 0 0.287123 0.532698 -145.85 
+     78 197.515 898 1 1 0.3719 0.631892 -174.45 
+     78 114.712 899 1 0 0.383143 0.636693 -175.85 
+     78 120.758 899 0 1 0.606854 0.73632 -204.45 
+     78 185.467 900 0 0 0.619225 0.746461 -205.85 
+Number of tracker digits in this event =  4
+Event: 79
+Number of tracker hits in this event =  7
+     79 158.995 898 2 1 0.258984 -0.359544 -144.45 
+     79 147.594 896 2 0 0.268311 -0.361794 -145.85 
+     79 181.111 899 1 1 0.460243 -0.411567 -174.45 
+     79 158.046 896 1 0 0.473167 -0.409328 -175.85 
+     79 153.644 900 0 1 0.713288 -0.363223 -204.45 
+     79 131.644 896 0 0 0.719843 -0.365166 -205.85 
+     79 45.5041 898 3 0 -0.309792 0.25 -116.109 
+Number of tracker digits in this event =  6
+Event: 80
+Number of tracker hits in this event =  6
+     80 125.837 901 2 1 1.00403 -0.271374 -144.45 
+     80 109.316 896 2 0 1.01441 -0.276597 -145.85 
+     80 143.792 902 1 1 1.21007 -0.401627 -174.45 
+     80 181.776 896 1 0 1.21647 -0.400369 -175.85 
+     80 112.499 903 0 1 1.37018 -0.386942 -204.45 
+     80 156.707 896 0 0 1.37741 -0.39096 -205.85 
+Number of tracker digits in this event =  4
+Event: 81
+Number of tracker hits in this event =  6
+     81 155.858 899 2 1 0.635476 -0.317044 -144.45 
+     81 217.707 896 2 0 0.642902 -0.31943 -145.85 
+     81 219.618 900 1 1 0.801123 -0.361692 -174.45 
+     81 160.615 896 1 0 0.810028 -0.363356 -175.85 
+     81 121.857 901 0 1 0.986836 -0.414739 -204.45 
+     81 169.666 896 0 0 0.993904 -0.421014 -205.85 
+Number of tracker digits in this event =  6
+Event: 82
+Number of tracker hits in this event =  6
+     82 188.815 896 2 1 -0.250954 -0.412511 -144.45 
+     82 122.365 896 2 0 -0.255949 -0.418027 -145.85 
+     82 144.656 896 1 1 -0.345465 -0.510838 -174.45 
+     82 120.527 895 1 0 -0.351159 -0.51676 -175.85 
+     82 136.143 895 0 1 -0.454811 -0.637739 -204.45 
+     82 131.754 895 0 0 -0.460045 -0.645274 -205.85 
+Number of tracker digits in this event =  6
+Event: 83
+Number of tracker hits in this event =  4
+     83 126.859 900 1 1 0.757367 0.304742 -174.45 
+     83 119.545 898 1 0 0.763269 0.31178 -175.85 
+     83 380.044 901 0 1 0.880147 0.470944 -204.45 
+     83 122.816 899 0 0 0.886187 0.479906 -205.85 
+Number of tracker digits in this event =  3
+Event: 84
+Number of tracker hits in this event =  4
+     84 135.307 895 1 1 -0.627593 -0.287941 -174.45 
+     84 176.666 896 1 0 -0.641308 -0.286977 -175.85 
+     84 131.568 893 0 1 -0.928181 -0.26817 -204.45 
+     84 317.442 896 0 0 -0.94066 -0.26956 -205.85 
+Number of tracker digits in this event =  4
+Event: 85
+Number of tracker hits in this event =  6
+     85 131.765 894 2 1 -0.718671 0.25 -144.455 
+     85 121.079 898 2 0 -0.722805 0.255931 -145.85 
+     85 136.385 894 1 1 -0.809418 0.382708 -174.45 
+     85 115.115 898 1 0 -0.811191 0.385835 -175.85 
+     85 116.324 894 0 1 -0.847802 0.442741 -204.45 
+     85 146.612 898 0 0 -0.849521 0.444347 -205.85 
+Number of tracker digits in this event =  4
+Event: 86
+Number of tracker hits in this event =  7
+     86 270.552 896 3 0 0.253036 -0.384182 -115.85 
+     86 125.132 899 2 1 0.51068 -0.477975 -144.45 
+     86 116.709 895 2 0 0.530469 -0.486547 -145.85 
+     86 123.123 901 1 1 0.929466 -0.656364 -174.45 
+     86 166.995 894 1 0 0.948982 -0.663646 -175.85 
+     86 149.318 903 0 1 1.35381 -0.842527 -204.45 
+     86 123.943 893 0 0 1.3745 -0.856456 -205.85 
+Number of tracker digits in this event =  6
+Event: 87
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 88
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 89
+Number of tracker hits in this event =  2
+     89 69.5657 890 0 1 -1.61876 0.25 -204.726 
+     89 154.282 898 0 0 -1.63268 0.25192 -205.85 
+Number of tracker digits in this event =  1
+Event: 90
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 91
+Number of tracker hits in this event =  2
+     91 114.615 898 0 1 0.333364 -0.435091 -204.45 
+     91 297.788 896 0 0 0.342693 -0.443997 -205.85 
+Number of tracker digits in this event =  1
+Event: 92
+Number of tracker hits in this event =  2
+     92 205.675 903 2 0 -2.19764 1.28081 -145.85 
+     92 191.013 904 2 0 -2.34361 1.50025 -146.14 
+Number of tracker digits in this event =  2
+Event: 93
+Number of tracker hits in this event =  2
+     93 198.662 895 0 1 -0.458594 0.285684 -204.45 
+     93 140.451 898 0 0 -0.458088 0.286581 -205.85 
+Number of tracker digits in this event =  2
+Event: 94
+Number of tracker hits in this event =  4
+     94 116.433 898 1 1 0.338544 0.366333 -174.45 
+     94 113.879 898 1 0 0.349122 0.369522 -175.85 
+     94 115.83 899 0 1 0.549367 0.444772 -204.45 
+     94 160.384 899 0 0 0.549698 0.45444 -205.85 
+Number of tracker digits in this event =  1
+Event: 95
+Number of tracker hits in this event =  8
+     95 141.787 898 3 1 0.291606 -0.299213 -114.45 
+     95 165.953 896 3 0 0.298104 -0.309282 -115.85 
+     95 150.877 898 2 1 0.420579 -0.504743 -144.45 
+     95 122.759 895 2 0 0.425194 -0.518016 -145.85 
+     95 117.172 899 1 1 0.524221 -0.788232 -174.45 
+     95 157.251 894 1 0 0.526144 -0.801261 -175.85 
+     95 120.933 899 0 1 0.558334 -1.07026 -204.45 
+     95 123.731 892 0 0 0.560594 -1.08397 -205.85 
+Number of tracker digits in this event =  7
+Event: 96
+Number of tracker hits in this event =  4
+     96 371.82 896 1 1 -0.260751 0.5008 -174.45 
+     96 218.895 899 1 0 -0.26639 0.512061 -175.85 
+     96 121.903 896 0 1 -0.36042 0.733356 -204.45 
+     96 186.899 900 0 0 -0.364496 0.743726 -205.85 
+Number of tracker digits in this event =  4
+Event: 97
+Number of tracker hits in this event =  10
+     97 256.591 896 3 1 -0.413682 -0.737759 -114.45 
+     97 255.998 894 3 0 -0.426339 -0.745526 -115.85 
+     97 132.198 894 2 1 -0.689035 -0.911662 -144.45 
+     97 118.602 893 2 0 -0.695098 -0.91671 -145.85 
+     97 135.407 894 1 1 -0.816918 -1.00332 -174.45 
+     97 119.472 893 1 0 -0.824215 -1.00315 -175.85 
+     97 114.593 893 0 1 -0.962991 -0.969914 -204.45 
+     97 142.032 893 0 0 -0.969907 -0.966612 -205.85 
+     97 96.3784 895 4 0 -0.25 -0.453647 -86.0351 
+     97 55.5479 896 4 0 -0.255789 -0.449054 -86.0364 
+Number of tracker digits in this event =  5
+Event: 98
+Number of tracker hits in this event =  0
+Number of tracker digits in this event =  0
+Event: 99
+Number of tracker hits in this event =  2
+     99 110.785 898 0 1 0.2791 0.274497 -204.45 
+     99 160.008 898 0 0 0.276065 0.274515 -205.85 
+Number of tracker digits in this event =  1
+Run terminated.
+Run Summary
+  Number of events processed : 100
+  User=0.81s Real=0.83s Sys=0.02s
+Graphics systems deleted.
+Visualization Manager deleting...
+G4 kernel has come to Quit state.
