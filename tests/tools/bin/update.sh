@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.9 2000-05-03 13:14:37 stesting Exp $
+# $Id: update.sh,v 1.10 2000-05-30 17:18:43 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n]
 
@@ -14,6 +14,10 @@ if [ -z "${G4SYSTEM}" ] ; then
 fi
 if [ -z "${G4WORKDIR}" ] ; then
   echo "G4WORKDIR not set. Execute setup file first !"
+  exit
+fi
+if [ -z "${G4STTDIR}" ] ; then
+  echo "G4STTDIR not set. Execute setup file first !"
   exit
 fi
 
@@ -61,4 +65,4 @@ cd $G4INSTALL
 echo "RUNNING updt.sh IN $G4INSTALL"
 echo "REDIRECT Bonsai sdb FILE INTO INPUT, E.G., update.sh [-n] < bonsai.sdb"
 echo "REDIRECT OUTPUT TO WHERE YOU LIKE, E.G., update.sh [-n] < bonsai.sdb >& update.log"
-tests/tools/bin/updt.sh
+${G4STTDIR}/bin/updt.sh

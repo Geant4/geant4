@@ -1,4 +1,5 @@
 # Prevent any core dumps.  (You have to run indepently to get one.)
+# This could be tidies up.
 ###if [ `uname -n | grep pcgeant` ]; then
 limit coredumpsize 0
 ###else

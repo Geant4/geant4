@@ -44,6 +44,7 @@ if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=AIX-xlC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
@@ -59,6 +60,7 @@ if [ `uname -n | grep sunasd1` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SUN-CC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
@@ -73,6 +75,7 @@ if [ `uname -n | grep suncmsb` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SUN-CC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 #
@@ -89,6 +92,7 @@ fi
 if [ `uname -n | grep sungeant` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   if [ $G4STTNONISO ]; then
     export G4SYSTEM=SUN-CC
     export DEBOPT=${DEBOPT}_NONISO
@@ -108,7 +112,7 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro/SUNWspro50/`
     # No Persistency...
     unset G4USE_HEPODBMS
-    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro 
+    export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC5/pro
   fi
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
@@ -128,6 +132,7 @@ if [ `uname -n | grep hp` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=HP-aCC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/HP-aCC/pro
@@ -143,6 +148,7 @@ if [ `uname -n | grep axcnsi` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
@@ -168,6 +174,7 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
@@ -182,6 +189,7 @@ if [ `uname -n | grep pcitasd04` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
@@ -197,6 +205,7 @@ if [ $UNAMEN = pcgeant -o $UNAMEN = pcg4speed ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/dev/CLHEP/Linux-g++/pro
@@ -215,6 +224,7 @@ if [ `uname -n | grep sgmedia` ]; then
   export G4SYSTEM=SGI-CC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1

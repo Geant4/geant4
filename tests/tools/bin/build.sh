@@ -1,13 +1,14 @@
 #!/bin/sh -f
 #
 #  This script spawn the reconstruction of libraries or tests
-# from $G4INSTALL/tests/tools/bin directory. The output of the job
+# from $G4STTDIR/bin directory. The output of the job
 # is put in $G4WORKDIR/stt/$G4SYSTEM directory and is gmake.log.
 #  Aliases g4tail, g4filter, defined by the setup.csh(.sh) file
 # permits to follow the job, and to filter output.
+# aliases are not yet implemented from G4STTDIR
 #
 #  Usage :
-#     UNIX> cd <g4install>/tests/tools/bin
+#     UNIX> cd <g4sttdir>/bin
 #     UNIX> chmod u+x build.sh
 #     UNIX> ./build.sh all         - builds all libraries and builds all
 #                                    test executables.
@@ -38,6 +39,10 @@ if [ -z "${G4SYSTEM}" ] ; then
 fi
 if [ -z "${G4WORKDIR}" ] ; then
   echo "G4WORKDIR not set. Execute setup file first !"
+  exit
+fi
+if [ -z "${G4STTDIR}" ] ; then
+  echo "G4STTDIR not set. Execute setup file first !"
   exit
 fi
 #

@@ -1,7 +1,7 @@
 ####################################################
 # Works for bash, ksh and zsh
 # Usage :
-#    [ba,k,z]sh> cd <g4install>/tests/tools/bin
+#    [ba,k,z]sh> cd <g4sttdir>/bin
 #    [ba,k,z]sh> . setup.sh
 ####################################################
 #
@@ -11,15 +11,15 @@
 # Execute stt members specifc setup first :
 found=no
 if [ `pwd | grep /stt/dev1/` ]; then
-  . /afs/cern.ch/sw/geant4/stt/dev1/src/geant4/tests/tools/bin/specific.sh
+  . /afs/cern.ch/sw/geant4/stt/dev1/testtools/geant4/tests/tools/bin/specific.sh
   found=yes
 fi
 if [ `pwd | grep /stt/dev2/` ]; then
-  . /afs/cern.ch/sw/geant4/stt/dev2/src/geant4/tests/tools/bin/specific.sh
+  . /afs/cern.ch/sw/geant4/stt/dev2/testtools/geant4/tests/tools/bin/specific.sh
   found=yes
 fi
 if [ `pwd | grep /stt/prod/` ]; then
-  . /afs/cern.ch/sw/geant4/stt/prod/src/geant4/tests/tools/bin/specific.sh
+  . /afs/cern.ch/sw/geant4/stt/prod/testtools/geant4/tests/tools/bin/specific.sh
   found=yes
 fi
 if [ $found = no ]; then
@@ -32,7 +32,7 @@ if [ -z "$G4SYSTEM" ]; then
   exit
 else
   echo "You are working on a $G4SYSTEM system"
-#...
+fi
 
 # Some checks :
 if [ -z "$G4INSTALL" ]; then
@@ -40,7 +40,7 @@ if [ -z "$G4INSTALL" ]; then
  exit
 else
  echo "You use for the source $G4INSTALL"
-#...
+fi
 
 if [ -z "$G4WORKDIR" ]; then
  echo "You have first to set environment variable G4WORKDIR !"
@@ -54,6 +54,12 @@ if [ -z "$G4LIB" ]; then
  exit
 else
  echo "You are using as a library directory $G4LIB "
+fi
+if [ -z "$G4STTDIR" ]; then
+ echo "You have first to set environment variable G4STTDIR !"
+ exit
+else
+ echo "You are using the system testing tools directory $G4STTDIR "
 fi
 #
 # Other G4 environment variables.
@@ -86,18 +92,16 @@ alias g4tail="tail -f $G4WORKDIR/stt/$G4SYSTEM/gmake.log"
 alias g4filter="$G4INSTALL/tests/tools/bin/filter.sh $G4SYSTEM | more"
 #
 #alias search="$G4INSTALL/tests/search.sh"
+# Running this now will be an absolute disaster, you might
+# even fail to notice you are no longet in the G4STTDIR directory.
 # Make sure the test tool lib exists
-if [ ! -d $G4INSTALL/tests/tools/lib/$G4SYSTEM ];then
- mkdir $G4INSTALL/tests/tools/lib/$G4SYSTEM
- cd  $G4INSTALL/tests/tools/lib; gmake
- cd  $G4INSTALL/tests/tools/bin
-else
- if [ -n `ls $G4INSTALL/tests/tools/lib/$G4SYSTEM/lib* ` ];then 
-  cd  $G4INSTALL/tests/tools/lib; gmake
-  cd  $G4INSTALL/tests/tools/bin
- fi
-fi
-
-fi # if [ -z "$G4INSTALL" ]
-
-fi # if [ -z "$G4SYSTEM" ]
+#-- if [ ! -d $G4INSTALL/tests/tools/lib/$G4SYSTEM ];then
+#--  mkdir $G4INSTALL/tests/tools/lib/$G4SYSTEM
+#--  cd  $G4INSTALL/tests/tools/lib; gmake
+#--  cd  $G4INSTALL/tests/tools/bin
+#-- else
+#--  if [ -n `ls $G4INSTALL/tests/tools/lib/$G4SYSTEM/lib* ` ];then 
+#--   cd  $G4INSTALL/tests/tools/lib; gmake
+#--   cd  $G4INSTALL/tests/tools/bin
+#--  fi
+#-- fi

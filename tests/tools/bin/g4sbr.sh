@@ -62,8 +62,8 @@ export G4NOHIST=1
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
-cd /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin
-. /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin/setup.sh
+# (why ?) cd /afs/cern.ch/sw/geant4/stt/$REFTREE/testtools/geant4/tests/tools/bin
+. ${G4STTDIR}/bin/setup.sh
 
 env | grep G4
 echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
@@ -120,13 +120,13 @@ cd ${G4WORKDIR}
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
-  . ${G4INSTALL}/tests/tools/bin/tmpenv.sh
-  ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
+  . ${G4STTDIR}/tmpenv.sh
+  ${G4STTDIR}/bin/build.sh $ACTARG1 $ACTARG2
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
-  ${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
+  ${G4STTDIR}/bin/run.sh $ACTARG3
 fi
 ####################################################################
 

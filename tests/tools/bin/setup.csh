@@ -9,6 +9,12 @@
 source specific.csh
 #
 # Some checks :
+if ( $?G4STTDIR ) then
+else
+  echo "You have first to set environment variable G4STTDIR !"
+  exit
+endif
+#
 if ( $?G4INSTALL ) then
 else
   echo "You have first to set environment variable G4INSTALL !"

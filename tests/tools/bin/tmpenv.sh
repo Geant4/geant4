@@ -15,6 +15,9 @@ fi
 
 if [ `uname -n | grep hpplus` ]; then
 echo "Nothing set for limit!"
+# there is a pretty useless looking file from april in
+# the directory below - I bet we are screwed if anything goes there
+# with concurrent tests.
 if [ X$REFTREE = Xprod ]; then
 export TMPDIR=/afs/cern.ch/sw/geant4/stt/tmpdir
 else

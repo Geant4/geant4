@@ -44,6 +44,7 @@ if ( `uname -n | grep rsplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM AIX-xlC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # Other G4 build flags :
@@ -60,7 +61,7 @@ if ( `uname -n | grep dxplus` != "" || \
   if ( $?G4STTNONISO ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
-     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
+    setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/pro
   else
     setenv DEBOPT ${DEBOPT}_ISO
     setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/DEC-cxx/iso
@@ -71,6 +72,7 @@ if ( `uname -n | grep dxplus` != "" || \
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
@@ -87,6 +89,7 @@ if ( `uname -n | grep pcgeant`   != "" || \
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM Linux-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
@@ -104,6 +107,7 @@ if ( `uname -n | grep sgmedia` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM SGI-CC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   # G4 build flags :
@@ -116,6 +120,7 @@ endif
 if ( `uname -n | grep sun` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   if ( $?G4STTNONISO ) then
     setenv G4SYSTEM SUN-CC
     setenv DEBOPT ${DEBOPT}_NONISO
@@ -152,6 +157,7 @@ if ( `uname -n | grep hp` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM HP-aCC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4STTDIR  /afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/pro
