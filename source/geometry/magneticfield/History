@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2001-03-23 18:53:14 japost Exp $
+$Id: History,v 1.31 2001-03-27 16:26:32 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 23rd, 2001  J. Apostolakis - field-V03-00-04
+------------------------------
+- Fixed src/G4UniformElectricField.cc to set correct field components
+                                      (compatible with Equation of Motion
+                                       G4EqMagElectricField )
+
+- Tidied G4FieldTrack
+   * deleted obsolete methods Set/Get MomentumModulus() and its data member.
+   * in constructor to set the value of the spin to (0.0, 0.0, 0.0) 
+          if pSpin is null.  (It was undefined.)
+
 Mar 23rd, 2001  J. Apostolakis - field-V03-00-03
 ------------------------------
 - Fixed (hacked) CashKarp to work using Auxiliary Stepper.   
