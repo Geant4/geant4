@@ -181,19 +181,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.01            0k Layer
        0.00         0.00         0.00            2k Calorimeter
+       0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
       91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.01    Layer
+       8.30          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -208,19 +208,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=39.63s Real=47.23s Sys=5.94s
+  User=40.35s Real=55.6s Sys=6.39s
 
 -------------------------------------------------------------
-                                   total energy dep             total tracklen                  energy leakage from secondaries 
- 
- Absorber0 (        Lead) : 812.17 MeV +- 15.15 MeV       56.23 cm  +-  1.18 cm                 224.53 MeV +- 47.32 MeV
- Absorber1 ( liquidArgon) : 177.59 MeV +- 14.43 MeV       87.84 cm  +-  7.40 cm                 222.28 MeV +- 47.30 MeV
+			 total energy dep 	sqrt(E0(GeV))*rmsE/Emean	total tracklen 		Eleak from second. 
+
+ Absorber0 (Lead) :	810.29 MeV +- 15.56 MeV	1.92 %			56.09 cm  +- 1.22 cm 	227.24 MeV +- 53.84 MeV	
+ Absorber1 (liquidArgon) :	179.93 MeV +- 14.46 MeV	8.04 %			88.85 cm  +- 7.75 cm 	225.00 MeV +- 53.44 MeV	
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1328573088, 1492087479
+ Current couple of seeds = 405591755, 816799671
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
