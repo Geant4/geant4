@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2000-10-31 21:45:15 barrand Exp $
+$Id: History,v 1.116 2000-11-03 16:54:07 gunter Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3 November 2000: Gunter Folger
+- Add rules for "includes" target. New user settable variable G4INCLUDE
 
 First November 2000 : Guy Barrand
 - ananlysis.gmk : declare Lizard.
