@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.6 2002-05-03 10:26:47 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.7 2002-05-15 10:23:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,139 +30,52 @@
 // ********************************************************************
 
 // ********************************************************************
-// VoxelLocate
+// ParamVoxelLocate
 // ********************************************************************
 //
 inline
 G4SmartVoxelNode*
-G4ParameterisedNavigation::VoxelLocate( G4SmartVoxelHeader *pHead,
-                                        const G4ThreeVector &localPoint )
+G4ParameterisedNavigation::ParamVoxelLocate( G4SmartVoxelHeader* pHead,
+                                       const G4ThreeVector& localPoint )
 {
-  EAxis targetHeaderAxis;
-  G4double targetHeaderMin, targetHeaderNodeWidth;
-  G4int targetHeaderNoSlices, targetNodeNo;
+  // If no parameterisation axis is specified, adopt default
+  // location strategy as for placements
+  //  
+  if ( pHead->GetParamAxis()==kUndefined )
+  {
+    fVoxelNode = G4VoxelNavigation::VoxelLocate(pHead,localPoint);
+  }
+  else
+  {
+    G4double targetHeaderMin, targetHeaderNodeWidth;
+    G4int targetHeaderNoSlices, targetNodeNo;
+    EAxis targetHeaderAxis;
 
-  targetHeaderAxis = pHead->GetAxis();
-  targetHeaderNoSlices = pHead->GetNoSlices();
-  targetHeaderMin = pHead->GetMinExtent();
-  targetHeaderNodeWidth = (pHead->GetMaxExtent()-targetHeaderMin)
+    targetHeaderAxis = pHead->GetAxis();
+    targetHeaderNoSlices = pHead->GetNoSlices();
+    targetHeaderMin = pHead->GetMinExtent();
+    targetHeaderNodeWidth = (pHead->GetMaxExtent()-targetHeaderMin)
                           / targetHeaderNoSlices;
-  targetNodeNo = G4int((localPoint(targetHeaderAxis)-targetHeaderMin)
-                       / targetHeaderNodeWidth);
-
-  // Rounding protection
-  //
-  if ( targetNodeNo<0 )
-  {
-    targetNodeNo=0;
-  }
-  else
-    if ( targetNodeNo>=targetHeaderNoSlices )
+    targetNodeNo = G4int ( (localPoint(targetHeaderAxis)-targetHeaderMin)
+                           / targetHeaderNodeWidth );
+    // Rounding protection
+    //
+    if ( targetNodeNo<0 )
     {
-      targetNodeNo=targetHeaderNoSlices-1;
+      targetNodeNo = 0;
     }
-  fVoxelAxis = targetHeaderAxis;
-  fVoxelNoSlices = targetHeaderNoSlices;
-  fVoxelSliceWidth = targetHeaderNodeWidth;
-  fVoxelNodeNo = targetNodeNo;
-  fVoxelHeader = pHead;    
-  fVoxelNode = pHead->GetSlice(targetNodeNo)->GetNode();
-
+    else if ( targetNodeNo>=targetHeaderNoSlices )
+         {
+           targetNodeNo = targetHeaderNoSlices-1;
+         }
+    fVoxelAxis = targetHeaderAxis;
+    fVoxelNoSlices = targetHeaderNoSlices;
+    fVoxelSliceWidth = targetHeaderNodeWidth;
+    fVoxelNodeNo = targetNodeNo;
+    fVoxelHeader = pHead;    
+    fVoxelNode = pHead->GetSlice(targetNodeNo)->GetNode();
+  }
   return fVoxelNode;
-}
-
-// ********************************************************************
-// ComputeVoxelSafety
-//
-// Computes safety from specified point to collected voxel boundaries
-// using already located point.
-// ********************************************************************
-//
-inline
-G4double G4ParameterisedNavigation::
-  ComputeVoxelSafety(const G4ThreeVector&localPoint) const
-{
-  G4double voxelSafety, plusVoxelSafety, minusVoxelSafety;
-  G4double curNodeOffset, minCurCommonDelta, maxCurCommonDelta;
-  G4int minCurNodeNoDelta, maxCurNodeNoDelta;
-  
-  // Compute linear intersection distance to boundaries of max/min
-  // to collected nodes at current level
-  //
-  curNodeOffset = fVoxelNodeNo*fVoxelSliceWidth;
-  minCurCommonDelta =
-      localPoint(fVoxelAxis)-fVoxelHeader->GetMinExtent()-curNodeOffset;
-  maxCurNodeNoDelta = fVoxelNode->GetMaxEquivalentSliceNo()-fVoxelNodeNo;
-  minCurNodeNoDelta = fVoxelNodeNo-fVoxelNode->GetMinEquivalentSliceNo();
-  maxCurCommonDelta = fVoxelSliceWidth-minCurCommonDelta;
-  plusVoxelSafety = minCurNodeNoDelta*fVoxelSliceWidth+minCurCommonDelta;
-  minusVoxelSafety = maxCurNodeNoDelta*fVoxelSliceWidth+maxCurCommonDelta;
-
-  voxelSafety = G4std::min(plusVoxelSafety, minusVoxelSafety);
-
-  if (voxelSafety<0)
-  {
-    voxelSafety=0;
-  }
-  return voxelSafety;
-}
-
-// ********************************************************************
-// LocateNextVoxel
-//
-// Finds the next voxel from the current voxel and points in the
-// specified direction
-// Returns false if all voxels considered
-//         true  otherwise
-// NOTE: current Step ends inside same voxel or leaves all voxels.
-// ********************************************************************
-//
-inline
-G4bool G4ParameterisedNavigation::
-  LocateNextVoxel(const G4ThreeVector& localPoint,
-                  const G4ThreeVector& localDirection,
-                  const G4double currentStep)
-{
-  G4bool isNewVoxel;
-  G4int newNodeNo;
-  G4double minVal, maxVal, curMinExtent, curCoord;
-
-  curMinExtent = fVoxelHeader->GetMinExtent();
-  curCoord = localPoint(fVoxelAxis)+currentStep*localDirection(fVoxelAxis);
-  minVal = curMinExtent+fVoxelNode->GetMinEquivalentSliceNo()*fVoxelSliceWidth;
-
-  isNewVoxel = false;
-
-  if ( minVal<=curCoord )
-  {
-    maxVal = curMinExtent
-             + (fVoxelNode->GetMaxEquivalentSliceNo()+1) * fVoxelSliceWidth;
-    if ( maxVal<curCoord )
-    {
-      newNodeNo = fVoxelNode->GetMaxEquivalentSliceNo()+1;
-      if ( newNodeNo<fVoxelHeader->GetNoSlices() )
-      {
-        fVoxelNodeNo = newNodeNo;
-        fVoxelNode = fVoxelHeader->GetSlice(newNodeNo)->GetNode();
-        isNewVoxel = true;
-      }
-    }
-  }
-  else
-  {
-    newNodeNo=fVoxelNode->GetMinEquivalentSliceNo()-1;
-    //
-    // Must locate from newNodeNo no and down to setup stack and fVoxelNode
-    // Repeat or earlier code...
-    //
-    if ( newNodeNo>=0 )
-    {
-      fVoxelNodeNo = newNodeNo;
-      fVoxelNode = fVoxelHeader->GetSlice(newNodeNo)->GetNode();
-      isNewVoxel = true;
-    }
-  }
-  return isNewVoxel;
 }
 
 // ********************************************************************
@@ -170,13 +83,14 @@ G4bool G4ParameterisedNavigation::
 // ********************************************************************
 //
 inline
-G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
-                                        const G4VPhysicalVolume *blockedVol,
-                                        const G4int blockedNum,
-                                        const G4ThreeVector &globalPoint,
-                                        const G4ThreeVector* globalDirection,
-                                        const G4bool pLocatedOnEdge, 
-                                              G4ThreeVector &localPoint)
+G4bool
+G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
+                                  const G4VPhysicalVolume* blockedVol,
+                                  const G4int blockedNum,
+                                  const G4ThreeVector& globalPoint,
+                                  const G4ThreeVector* globalDirection,
+                                  const G4bool pLocatedOnEdge, 
+                                        G4ThreeVector& localPoint )
 {
   G4SmartVoxelHeader *motherVoxelHeader;
   G4SmartVoxelNode *motherVoxelNode;
@@ -185,7 +99,7 @@ G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
   G4LogicalVolume *motherLogical;
   G4VSolid *pSolid;
   G4ThreeVector samplePoint;
-  G4int voxelNoDaughters, sampleNo, replicaNo;
+  G4int voxelNoDaughters, replicaNo;
   
   motherPhysical = history.GetTopVolume();
   motherLogical = motherPhysical->GetLogicalVolume();
@@ -193,7 +107,7 @@ G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
 
   // Find the voxel containing the point
   //
-  motherVoxelNode = VoxelLocate(motherVoxelHeader,localPoint);
+  motherVoxelNode = ParamVoxelLocate(motherVoxelHeader,localPoint);
   
   voxelNoDaughters = motherVoxelNode->GetNoContained();
   if ( voxelNoDaughters==0 )  return false;
@@ -203,7 +117,7 @@ G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
 
   // Search replicated daughter volume
   //
-  for ( sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     replicaNo = motherVoxelNode->GetVolume(sampleNo);
     if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
@@ -231,11 +145,11 @@ G4bool G4ParameterisedNavigation::LevelLocate(G4NavigationHistory& history,
         //
         localPoint = samplePoint;
         
-	// Set the correct copy number in physical
+  // Set the correct copy number in physical
         //
         pPhysical->SetCopyNo(replicaNo);
         
-	// Set the correct solid and material in Logical Volume
+  // Set the correct solid and material in Logical Volume
         //
         G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
         pLogical->SetSolid(pSolid);

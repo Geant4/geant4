@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.cc,v 1.5 2002-04-29 14:22:08 gcosmo Exp $
+// $Id: G4ParameterisedNavigation.cc,v 1.6 2002-05-15 10:23:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@
 // ********************************************************************
 //
 G4ParameterisedNavigation::G4ParameterisedNavigation()
-  : fVoxelHeader(0), fVoxelNode(0)
+  : fVoxelHeader(0)
 {
 }
 
@@ -57,17 +57,17 @@ G4ParameterisedNavigation::~G4ParameterisedNavigation()
 // ***************************************************************************
 //
 G4double G4ParameterisedNavigation::
-                    ComputeStep(const G4ThreeVector &localPoint,
-                                const G4ThreeVector &localDirection,
+                    ComputeStep(const G4ThreeVector& localPoint,
+                                const G4ThreeVector& localDirection,
                                 const G4double currentProposedStepLength,
-                                      G4double &newSafety,
-                                      G4NavigationHistory &history,
-                                      G4bool &validExitNormal,
-                                      G4ThreeVector &exitNormal,
-                                      G4bool &exiting,
-                                      G4bool &entering,
+                                      G4double& newSafety,
+                                      G4NavigationHistory& history,
+                                      G4bool& validExitNormal,
+                                      G4ThreeVector& exitNormal,
+                                      G4bool& exiting,
+                                      G4bool& entering,
                                       G4VPhysicalVolume *(*pBlockedPhysical),
-                                      G4int &blockedReplicaNo)
+                                      G4int& blockedReplicaNo)
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
   G4VPVParameterisation *sampleParam;
@@ -77,16 +77,16 @@ G4double G4ParameterisedNavigation::
   G4double ourStep=currentProposedStepLength, motherSafety, ourSafety;
   G4int sampleNo;
 
-  G4bool initialNode,noStep;
+  G4bool initialNode, noStep;
   G4SmartVoxelNode *curVoxelNode;
-  G4int curNoVolumes,contentNo;
+  G4int curNoVolumes, contentNo;
   G4double voxelSafety;
 
   // Replication data
   //
   EAxis axis;
   G4int nReplicas;
-  G4double width,offset;
+  G4double width, offset;
   G4bool consuming;
 
   motherPhysical = history.GetTopVolume();
@@ -178,7 +178,7 @@ G4double G4ParameterisedNavigation::
     if ( initialNode )
     {
       initialNode = false;
-      voxelSafety = ComputeVoxelSafety(localPoint);
+      voxelSafety = ComputeVoxelSafety(localPoint,axis);
       if ( voxelSafety<ourSafety )
       {
         ourSafety = voxelSafety;
@@ -228,7 +228,7 @@ G4double G4ParameterisedNavigation::
     }
     if (noStep)
     {
-      noStep = LocateNextVoxel(localPoint, localDirection, ourStep);
+      noStep = LocateNextVoxel(localPoint, localDirection, ourStep, axis);
     }
   } while (noStep);
 
@@ -240,8 +240,8 @@ G4double G4ParameterisedNavigation::
 // ***************************************************************************
 //
 G4double
-G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector &localPoint,
-                                         const G4NavigationHistory &history,
+G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector& localPoint,
+                                         const G4NavigationHistory& history,
                                          const G4double pProposedMaxLength )
 {
   G4VPhysicalVolume *motherPhysical, *samplePhysical;
@@ -250,7 +250,7 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector &localPoint,
   G4VSolid *motherSolid, *sampleSolid;
   G4double motherSafety, ourSafety;
   G4int sampleNo, curVoxelNodeNo;
-  
+
   G4SmartVoxelNode *curVoxelNode;
   G4int curNoVolumes, contentNo;
   G4double voxelSafety;
@@ -284,11 +284,20 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector &localPoint,
   samplePhysical->GetReplicationData(axis, nReplicas, width, offset, consuming);
   sampleParam = samplePhysical->GetParameterisation();
 
-  // Calculate new VoxelNode of current point
+  // Look inside the current Voxel only at the current point
   //
-  curVoxelNodeNo = G4int( (localPoint(fVoxelAxis)-fVoxelHeader->GetMinExtent())
+  if ( axis==kUndefined )      // 3D case: current voxel node is retrieved
+  {                            //          from G4VoxelNavigation.
+    curVoxelNode = fVoxelNode;
+  }
+  else                         // 1D case: current voxel node is computed here.
+  {
+    curVoxelNodeNo = G4int((localPoint(fVoxelAxis)-fVoxelHeader->GetMinExtent())
                            / fVoxelSliceWidth );
-  curVoxelNode = fVoxelHeader->GetSlice(curVoxelNodeNo)->GetNode();
+    curVoxelNode = fVoxelHeader->GetSlice(curVoxelNodeNo)->GetNode();
+    fVoxelNodeNo = curVoxelNodeNo;
+    fVoxelNode = curVoxelNode;
+  }
   curNoVolumes = curVoxelNode->GetNoContained();
 
   for ( contentNo=curNoVolumes-1; contentNo>=0; contentNo-- )
@@ -304,18 +313,121 @@ G4ParameterisedNavigation::ComputeSafety(const G4ThreeVector &localPoint,
     G4double sampleSafety = sampleSolid->DistanceToIn(samplePoint);
     if ( sampleSafety<ourSafety )
     {
-      ourSafety=sampleSafety;
+      ourSafety = sampleSafety;
     }
   }
-  // These must be current for ComputeVoxelSafety
-  //
-  fVoxelNodeNo = curVoxelNodeNo;
-  fVoxelNode =  curVoxelNode;
 
-  voxelSafety = ComputeVoxelSafety(localPoint);
+  voxelSafety = ComputeVoxelSafety(localPoint,axis);
   if ( voxelSafety<ourSafety )
   {
     ourSafety=voxelSafety;
   }
   return ourSafety;
+}
+
+// ********************************************************************
+// ComputeVoxelSafety
+//
+// Computes safety from specified point to collected voxel boundaries
+// using already located point.
+// ********************************************************************
+//
+G4double G4ParameterisedNavigation::
+ComputeVoxelSafety(const G4ThreeVector& localPoint,
+                   const EAxis pAxis) const
+{
+  // If no best axis is specified, adopt default
+  // strategy as for placements
+  //  
+  if ( pAxis==kUndefined )
+    return G4VoxelNavigation::ComputeVoxelSafety(localPoint);
+
+  G4double voxelSafety, plusVoxelSafety, minusVoxelSafety;
+  G4double curNodeOffset, minCurCommonDelta, maxCurCommonDelta;
+  G4int minCurNodeNoDelta, maxCurNodeNoDelta;
+  
+  // Compute linear intersection distance to boundaries of max/min
+  // to collected nodes at current level
+  //
+  curNodeOffset = fVoxelNodeNo*fVoxelSliceWidth;
+  minCurCommonDelta = localPoint(fVoxelAxis)
+                    - fVoxelHeader->GetMinExtent()-curNodeOffset;
+  maxCurNodeNoDelta = fVoxelNode->GetMaxEquivalentSliceNo()-fVoxelNodeNo;
+  minCurNodeNoDelta = fVoxelNodeNo-fVoxelNode->GetMinEquivalentSliceNo();
+  maxCurCommonDelta = fVoxelSliceWidth-minCurCommonDelta;
+  plusVoxelSafety   = minCurNodeNoDelta*fVoxelSliceWidth+minCurCommonDelta;
+  minusVoxelSafety  = maxCurNodeNoDelta*fVoxelSliceWidth+maxCurCommonDelta;
+  voxelSafety = G4std::min(plusVoxelSafety,minusVoxelSafety);
+
+  if ( voxelSafety<0 )
+  {
+    voxelSafety = 0;
+  }
+
+  return voxelSafety;
+}
+
+// ********************************************************************
+// LocateNextVoxel
+//
+// Finds the next voxel from the current voxel and point
+// in the specified direction.
+//
+// Returns false if all voxels considered
+//         true  otherwise
+// [current Step ends inside same voxel or leaves all voxels]
+// ********************************************************************
+//
+G4bool G4ParameterisedNavigation::
+LocateNextVoxel( const G4ThreeVector& localPoint,
+                 const G4ThreeVector& localDirection,
+                 const G4double currentStep,
+                 const EAxis pAxis)
+{
+  // If no best axis is specified, adopt default
+  // location strategy as for placements
+  //  
+  if ( pAxis==kUndefined )
+    return G4VoxelNavigation::LocateNextVoxel(localPoint,
+                                              localDirection,
+                                              currentStep);
+  G4bool isNewVoxel;
+  G4int newNodeNo;
+  G4double minVal, maxVal, curMinExtent, curCoord;
+
+  curMinExtent = fVoxelHeader->GetMinExtent();
+  curCoord = localPoint(fVoxelAxis)+currentStep*localDirection(fVoxelAxis);
+  minVal = curMinExtent+fVoxelNode->GetMinEquivalentSliceNo()*fVoxelSliceWidth;
+  isNewVoxel = false;
+
+  if ( minVal<=curCoord )
+  {
+    maxVal = curMinExtent
+           + (fVoxelNode->GetMaxEquivalentSliceNo()+1)*fVoxelSliceWidth;
+    if ( maxVal<curCoord )
+    {
+      newNodeNo = fVoxelNode->GetMaxEquivalentSliceNo()+1;
+      if ( newNodeNo<fVoxelHeader->GetNoSlices() )
+      {
+        fVoxelNodeNo = newNodeNo;
+        fVoxelNode = fVoxelHeader->GetSlice(newNodeNo)->GetNode();
+        isNewVoxel = true;
+      }
+    }
+  }
+  else
+  {
+    newNodeNo = fVoxelNode->GetMinEquivalentSliceNo()-1;
+
+    // Must locate from newNodeNo no and down to setup stack and fVoxelNode
+    // Repeat or earlier code...
+    //
+    if ( newNodeNo>=0 )
+    {
+      fVoxelNodeNo = newNodeNo;
+      fVoxelNode = fVoxelHeader->GetSlice(newNodeNo)->GetNode();
+      isNewVoxel = true;
+    }
+  }
+  return isNewVoxel;
 }
