@@ -1,4 +1,4 @@
-$Id: History,v 1.238 2004-02-24 09:49:45 gcosmo Exp $
+$Id: History,v 1.239 2004-04-05 12:17:23 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+5th April 2004  Gabriele Cosmo (config-V06-01-00)
+- architecture.gmk: added check for definition of LDFLAGS.
+  Fixes bug report #603.
 
 24th February 2004  Gabriele Cosmo (config-V06-00-03)
 - Fixed link rpath definition in Linux-icc.gmk.
