@@ -1,0 +1,71 @@
+# This procgroup file is designed for the lxplus cluster at CERN.
+# It assumes that 50 slaves, lxplus002 to lxplus051, are all available via
+#   rsh without a password (assuming the master process is on lxplus001.
+# The 50 slave files are placed in your home directory
+#  (and in the next version, in your current directory).
+# Make sure that your run-time files are all in afs directories
+#  so that the files are also visible to slaves.
+# Remember that other users may be using this cluster.
+# Use this only for a short demonstration.
+
+# When running, consider adding --TOPC-num-slaves=10
+#   or something similarly moderate at first.
+# There can be long delays in starting many slaves at once.
+
+local 0
+lxplus001 1 - > slave001.out
+lxplus002 1 - > slave002.out
+lxplus003 1 - > slave003.out
+lxplus004 1 - > slave004.out
+lxplus005 1 - > slave005.out
+lxplus006 1 - > slave006.out
+lxplus007 1 - > slave007.out
+lxplus008 1 - > slave008.out
+lxplus009 1 - > slave009.out
+lxplus011 1 - > slave011.out
+lxplus012 1 - > slave012.out
+lxplus013 1 - > slave013.out
+lxplus014 1 - > slave014.out
+lxplus015 1 - > slave015.out
+lxplus016 1 - > slave016.out
+lxplus017 1 - > slave017.out
+lxplus018 1 - > slave018.out
+lxplus019 1 - > slave019.out
+lxplus021 1 - > slave021.out
+lxplus022 1 - > slave022.out
+lxplus023 1 - > slave023.out
+lxplus024 1 - > slave024.out
+lxplus025 1 - > slave025.out
+lxplus026 1 - > slave026.out
+lxplus027 1 - > slave027.out
+lxplus028 1 - > slave028.out
+lxplus029 1 - > slave029.out
+lxplus031 1 - > slave031.out
+lxplus032 1 - > slave032.out
+lxplus033 1 - > slave033.out
+lxplus034 1 - > slave034.out
+lxplus035 1 - > slave035.out
+lxplus036 1 - > slave036.out
+lxplus037 1 - > slave037.out
+lxplus038 1 - > slave038.out
+lxplus039 1 - > slave039.out
+lxplus041 1 - > slave041.out
+lxplus042 1 - > slave042.out
+lxplus043 1 - > slave043.out
+lxplus044 1 - > slave044.out
+lxplus045 1 - > slave045.out
+lxplus046 1 - > slave046.out
+lxplus047 1 - > slave047.out
+lxplus048 1 - > slave048.out
+lxplus049 1 - > slave049.out
+lxplus041 1 - > slave041.out
+lxplus042 1 - > slave042.out
+lxplus043 1 - > slave043.out
+lxplus044 1 - > slave044.out
+lxplus045 1 - > slave045.out
+lxplus046 1 - > slave046.out
+lxplus047 1 - > slave047.out
+lxplus048 1 - > slave048.out
+lxplus049 1 - > slave049.out
+lxplus050 1 - > slave050.out
+lxplus051 1 - > slave051.out

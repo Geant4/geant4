@@ -1,0 +1,28 @@
+$Id: BUG.userStackingAction,v 1.1 2002-03-05 15:22:07 gcosmo Exp $
+-------------------------------------------------------------------
+When Geant4 4.0 sees empty event, it still calls userStackingAction.
+
+In the function:
+  G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
+
+in Geant4 4.0, one has:
+
+145     if(userStackingAction) userStackingAction->NewStage();
+146 #ifdef G4VERBOSE
+147     if( verboseLevel > 0 ) G4cout << "     " << GetNUrgentTrack()
+148                       << " urgent tracks and " << GetNWaitingTrack()
+149                       << " waiting tracks." << G4endl;
+150 #endif
+151     if( ( GetNUrgentTrack()==0 ) && ( GetNWaitingTrack()==0 ) ) return 0;
+
+It seems to me that the call, `return 0' (line 151), should occur before
+the call to `NewStage()' (line 145).  If there are no tracks to
+be stacked (neither GetNUrgentTrack() nor GetNWaitingTrack()),
+then there is no new stage.  So, it's a mistake to call
+  userStackingAction->NewStage().
+
+This affects my parallelization of Geant4, in which I need to purposely
+create a trivial event on the master, and call
+G4EventManager()::ProcessOneEvent() on it to initialize the event on the
+master.  I am doing this in order to copy the hits from the slave into
+an event on the master.
