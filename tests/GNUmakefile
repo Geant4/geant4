@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.14 1999-12-16 14:01:19 stesting Exp $
+# $Id: GNUmakefile,v 1.15 2000-01-14 11:24:23 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -55,11 +55,11 @@ HADEXERDIRS = test02 test11 test12 test13 test15 test16
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
 all:
-# Making links can be a problem if more than one jobs try to do it at the
-# same time.  So disable and always do by hand with:
-#   gmake examples_links
-#	@$(ECHO) Making links to examples...
-#	@$(MAKE) examples_links
+# Making links in the source tree can be a problem if more than one
+# jobs try to do it at the same time.  So disable and always do by
+# hand with: gmake examples_links_source
+	@$(ECHO) Making links to examples binaries...
+	@$(MAKE) examples_links_binaries
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE)); \
@@ -81,18 +81,16 @@ clean:
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nndir; $(MAKE) clean); \
 	done;:
-	@$(MAKE) clean_examples_links
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done;:
 
 clean_libs:
 	@for nn in $(EXAMPLES); do \
 	  (cd test1$$nn; $(MAKE) clean_libs); \
 	done;:
-	@$(MAKE) clean_examples_links
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done;:
 
-examples_links:
-	@$(MAKE) clean_examples_links
+examples_links_source:
+	@$(MAKE) clean_examples_links_source
 	@for nn in $(EXAMPLES); do \
 	  testdir=test1$$nn; \
 	  testin=test1$$nn.in; \
@@ -101,15 +99,11 @@ examples_links:
 	  exin=exampleN$$nn.in; \
 	  exout=exampleN$$nn.out; \
 	  ln -s $$exdir $$testdir; \
-	  ln -s $$exdir/$$exin $$testdir/$$testin; \
-	  ln -s $$exdir/$$exout $$testdir/$$testout; \
-	  ln -s $(G4WORKDIR)/bin/$(G4SYSTEM)/exampleN$$nn \
-	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
+	  ln -s $$exin $$testdir/$$testin; \
+	  ln -s $$exout $$testdir/$$testout; \
 	done;:
-	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.in \
-          test104/test104.EMtest.in
-	@ln -s $(G4INSTALL)/examples/novice/N04/exampleN04.EMtest.out \
-          test104/test104.EMtest.out
+	@ln -s exampleN04.EMtest.in test104/test104.EMtest.in
+	@ln -s exampleN04.EMtest.out test104/test104.EMtest.out
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
 	  testin=test4$$nn.in; \
@@ -118,13 +112,22 @@ examples_links:
 	  exin=PersistentEx$$nn.in; \
 	  exout=PersistentEx$$nn.out; \
 	  ln -s $$exdir $$testdir; \
-	  ln -s $$exdir/$$exin $$testdir/$$testin; \
-	  ln -s $$exdir/$$exout $$testdir/$$testout; \
+	  ln -s $$exin $$testdir/$$testin; \
+	  ln -s $$exout $$testdir/$$testout; \
+	done;:
+
+examples_links_binaries:
+	@$(MAKE) clean_examples_links_binaries
+	@for nn in $(EXAMPLES); do \
+	  ln -s exampleN$$nn $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
+	done;:
+	@for nn in $(PERSISTENCY); do \
+	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
 	  ln -s $$exdir/PersistentEx$${nn}run \
 	    $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
 
-clean_examples_links:
+clean_examples_links_source:
 	@rm -f test104/test104.EMtest.in
 	@rm -f test104/test104.EMtest.out
 	@for nn in $(EXAMPLES); do \
@@ -135,7 +138,6 @@ clean_examples_links:
 	  rm -f $$testdir/$$testin; \
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
-	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
 	done;:
 	@for nn in $(PERSISTENCY); do \
 	  testdir=test4$$nn; \
@@ -145,5 +147,12 @@ clean_examples_links:
 	  rm -f $$testdir/$$testin; \
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
+	done;:
+
+clean_examples_links_binaries:
+	@for nn in $(EXAMPLES); do \
+	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1$$nn; \
+	done;:
+	@for nn in $(PERSISTENCY); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
