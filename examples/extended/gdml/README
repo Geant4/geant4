@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2004-12-06 18:24:29 gcosmo Exp $
+$Id: README,v 1.7 2004-12-07 08:17:44 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,15 +9,15 @@ $Id: README,v 1.6 2004-12-06 18:24:29 gcosmo Exp $
                           ---------------
 
 This example demonstrates the usage of the GDML reader and writer. It allows
-the users to export their geometry descriptions in an application independent
-format (GDML, Geometry Description Markup Language).
+to export geometry descriptions in an application independent format (GDML,
+Geometry Description Markup Language).
 The GDML files can be then used to interchange geometries between different
 applications and users.
 
 The detector construction consists of a call to GDMLProcessor which parses the
 GDML file (test.gdml) and returns the pointer to the world volume. The user
-can also write his own GDML files and use it as the primary input format for
-his Geant4 application.
+can also write his/her own GDML file and use it as the primary input format for
+his/her Geant4 application.
 
 Once the Geant4 geometry is loaded in the memory, the G4GDMLWriter class is
 instantiated (in the 'main') to demonstrate the exporting of the GDML file.
@@ -44,3 +44,4 @@ HOW TO BUILD THE EXAMPLE ?
  		
 - Execute the application:
  	      % g4_gdml_read_write
+
