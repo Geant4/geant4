@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProElectroMagField.cc,v 1.12 2003-11-02 16:17:21 gcosmo Exp $
+// $Id: testProElectroMagField.cc,v 1.13 2004-02-09 12:07:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -101,12 +101,8 @@ class G4LinScale : public G4VPVParameterisation
   virtual void ComputeDimensions(G4Para &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Polycone &,
-				 const G4int ,
-				 const G4VPhysicalVolume*) const {}
-  virtual void ComputeDimensions(G4Polyhedra &,
-				 const G4int ,
-				 const G4VPhysicalVolume*) const {}
+  //  virtual void ComputeDimensions(G4Polycone &, const G4int , const G4VPhysicalVolume*) const {}
+  //  virtual void ComputeDimensions(G4Polyhedra &, const G4int , const G4VPhysicalVolume*) const {}
 };
 G4LinScale myParam;
 
@@ -120,7 +116,8 @@ G4VPhysicalVolume* BuildGeometry()
     G4Box *mySmallBox= new G4Box("smaller cube",2.5*m,2.5*m,2.5*m);
     G4Box *myTinyBox=  new G4Box("tiny  cube",.25*m,.25*m,.25*m);
 
-    // G4Box *myVariableBox=new G4Box("Variable Box",10,5,5);
+    // G4Box *myVariableBox=
+    new G4Box("Variable Box",10,5,5);
 
     //  World Volume
     //
@@ -151,22 +148,25 @@ G4VPhysicalVolume* BuildGeometry()
 //  1) Two big boxes in the world volume
 //
     // G4PVPlacement *BigTg1Phys=
-        new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
+    new G4PVPlacement(0,G4ThreeVector(0,0,-15*m),
 						"Big Target 1",BigBoxLog,
 						worldPhys,false,0);
     // G4PVPlacement *BigTg2Phys=
-                               new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
+    new G4PVPlacement(0,G4ThreeVector(0,0, 15*m),
 						"Big Target 2",BigBoxLog,
 						worldPhys,false,0);
 
 //  2) Four (medium) boxes in X & Y near the origin of the world volume
 //
+    // G4PVPlacement *MedTg3a_Phys=
     new G4PVPlacement(0,G4ThreeVector(0, 7.5*m,0),
 					      "Target 3a",smallBoxLog,
 					      worldPhys,false,0);
+    // G4PVPlacement *MedTg3b_Phys=
     new G4PVPlacement(0,G4ThreeVector(0,-7.5*m,0),
 					      "Target 3b",smallBoxLog,
 					      worldPhys,false,0);
+    // G4PVPlacement *MedTg3c_Phys=
     new G4PVPlacement(0,G4ThreeVector(-7.5*m,0,0),
 					      "Target 3c",smallBoxLog,
 					      worldPhys,false,0);
@@ -251,7 +251,7 @@ G4FieldManager* SetupField(G4int type)
       case 3: pStepper = new G4SimpleHeum( fEquation, nvar  ); break;
       case 4: pStepper = new G4ClassicalRK4( fEquation, nvar  ); break;
       case 8: pStepper = new G4CashKarpRKF45( fEquation, nvar  );    break;
-	// case 9: pStepper = new G4RKG3_Stepper( fEquation, nvar  );    break;
+	// --- case 9: pStepper = new G4RKG3_Stepper( fEquation, nvar  );    break;
       default: pStepper = 0;
     }
     
@@ -260,9 +260,10 @@ G4FieldManager* SetupField(G4int type)
 
     pFieldMgr->SetDetectorField( &myElectricField );
 
-    pChordFinder = new G4ChordFinder( &myElectricField,
-				      1.0e-2 * mm,
-				      pStepper);
+    G4double stepMinimum=  1.0e-2 * mm;  // hmin 
+    G4MagInt_Driver* pIntgrDriver = new G4MagInt_Driver(stepMinimum, pStepper, 
+                                     pStepper->GetNumberOfVariables() );
+    pChordFinder = new G4ChordFinder( pIntgrDriver ); 
 
     pFieldMgr->SetChordFinder( pChordFinder );
 
