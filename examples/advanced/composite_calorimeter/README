@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.4 2002-10-25 06:09:22 ribon Exp $
+$Id: README,v 1.5 2002-10-30 20:00:16 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -55,10 +55,9 @@ $Id: README,v 1.4 2002-10-25 06:09:22 ribon Exp $
  or
      >  . envExample.sh            in the case of bash-shell
  
- Notice that this setup, as it is, works only when running at CERN,
- with Linux redhat 7.2, and with gcc compiler version 2.95.2: for
- different situations, the above setup file should be modified 
- accordingly: please take a look to the Anaphe/Lizard web page
+ The analysis part is based on:
+        ***  AIDA version 3.0  &  Anaphe version 5.0.1  *** 
+ Please take a look to the Anaphe/Lizard web page
  	http://anaphe.web.cern.ch/anaphe
  
 
@@ -349,7 +348,8 @@ No Noise and Digitization
 ----------------------------
 
  The analysis part of CompositeCalorimeter is kept in class CCalAnalysis,
- and is based on the AIDA interfaces and their implementation in Anaphe; 
+ and is based on the AIDA interfaces and their implementation in Anaphe:   
+        ***  AIDA version 3.0  &  Anaphe version 5.0.1  *** 
  please look at their documentation for more details:
  	http://anaphe.web.cern.ch/anaphe
  Both the histograms and the ntuple are saved at the end of the run in the 
@@ -415,12 +415,6 @@ No Noise and Digitization
   and the results are sensible. We suggest to plot the ntuple's variables,
   rather than the histograms, when the same information is available
   from the ntuple.
-
-  WARNING: due to a bug in Anaphe, still to be fixed, if an histogram
-           has entries in only one bin, then it will appear as an
-           empty histogram. We have tried to bypass part of this 
-           problem by simply increasing the number of bins, but this
-           does not eliminate the problem completely.
 
 
 9. Visualization / GUI

@@ -10,13 +10,16 @@
 #include "g4std/vector"
 #include "G4ThreeVector.hh"
 
-class IAnalysisFactory;
-class IHistogramFactory;
-class ITree;
-class IHistogram1D;
-class IHistogram2D;
-class ITuple;
-class IPlotter;
+namespace AIDA {
+  class IAnalysisFactory;
+  class IHistogramFactory;
+  class ITree;
+  class IHistogram1D;
+  class IHistogram2D;
+  class ITuple;
+  class IPlotter;
+}
+
 
 class CCalAnalysis {
 public:
@@ -48,17 +51,17 @@ private:
 private:
   static CCalAnalysis* instance;
 
-  IAnalysisFactory* analysisFactory;
-  ITree* tree;
-  ITuple* tuple;
+  AIDA::IAnalysisFactory* analysisFactory;
+  AIDA::ITree* tree;
+  AIDA::ITuple* tuple;
 
   enum {numberOfTimeSlices = 40}; 
 
-  IHistogram1D* energy;
-  IHistogram1D* hcalE[28];           // 28 hadronic modules
-  IHistogram1D* ecalE[49];           // 49 crystal towers
-  IHistogram1D* timeHist[40];        // 40 nanoseconds time window
-  IHistogram1D* lateralProfile[70];  // 70 centimeters lateral window
+  AIDA::IHistogram1D* energy;
+  AIDA::IHistogram1D* hcalE[28];           // 28 hadronic modules
+  AIDA::IHistogram1D* ecalE[49];           // 49 crystal towers
+  AIDA::IHistogram1D* timeHist[40];        // 40 nanoseconds time window
+  AIDA::IHistogram1D* lateralProfile[70];  // 70 centimeters lateral window
                                      // (indeed 64 should be enough)
 };
 

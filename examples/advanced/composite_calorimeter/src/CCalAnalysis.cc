@@ -8,17 +8,7 @@
 #include "CCalAnalysis.hh"
 #include "CCalutils.hh"
 
-#include <AIDA/IAnalysisFactory.h>
-#include <AIDA/ITreeFactory.h>
-#include <AIDA/ITree.h>
-#include <AIDA/IHistogramFactory.h>
-#include <AIDA/IHistogram1D.h>
-#include <AIDA/IHistogram2D.h>
-#include <AIDA/IPlotterFactory.h>
-#include <AIDA/IPlotter.h>
-#include <AIDA/ITupleFactory.h>
-#include <AIDA/ITuple.h>
-#include <AIDA/IManagedObject.h>
+#include <AIDA/AIDA.h>
 
 //#define debug
 
@@ -39,7 +29,7 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
   analysisFactory = AIDA_createAnalysisFactory();
   if (analysisFactory) {
 
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
+    AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     if (treeFactory) {
       // Tree in memory :
       // Create a "tree" associated to an hbook
@@ -49,10 +39,12 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
       cout << "********************************************" << endl
 	   << "* o/p file on " << opFilestr << endl
 	   << "********************************************" << endl << endl;
-      tree = treeFactory->create(opFilestr, false, false,"hbook");
+      bool readOnly = false; // we want to write.
+      bool createNew = true; // create file if it doesn't exist.
+      tree = treeFactory->create(opFilestr, "hbook", readOnly,createNew);
       if (tree) {
 	// Get a tuple factory :
-	ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
+	AIDA::ITupleFactory* tupleFactory = analysisFactory->createTupleFactory(*tree);
 	if (tupleFactory) {
 	  // Create a tuple :
 	  G4String tag2, tag = "float";
@@ -67,14 +59,15 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	  tag2 = tag  + " ELAB, XPOS, YPOS, ZPOS";
 	  tag  = tag2 + ", EDEP, EDEC, EDHC";
 
-	  tuple = tupleFactory->create("tuple","Event info", tag);
+	  //tuple = tupleFactory->create("1","Event info", tag); // Column wise (default)
+	  tuple = tupleFactory->create("1","Event info", tag, "--preferRWN"); // Row wise
 	  
 	  assert(tuple);
 	  
 	  delete tupleFactory;
 	}
 
-	IHistogramFactory* histoFactory	= 
+	AIDA::IHistogramFactory* histoFactory	= 
 	  analysisFactory->createHistogramFactory(*tree);  
 	if (histoFactory) {
 	  // Create histos :
@@ -83,30 +76,30 @@ CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), energy(0) {
 	  for (int i = 0; i<28; i++) {
 	    sprintf(id, "%d",i+100);
 	    sprintf(ntupletag, "Energy Deposit in Hcal Layer%d   in GeV",i);
-	    hcalE[i] = histoFactory->create1D(id, ntupletag, 1000, 0., 1.0);
+	    hcalE[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 1.0);
 	  }
 	  // Energy deposits in Ecal towers
 	  for (i = 0; i<49; i++) {
 	    sprintf(id, "%d",i+200);
 	    sprintf(ntupletag, "Energy Deposit in Ecal Tower%d   in GeV",i);
-	    ecalE[i] = histoFactory->create1D(id, ntupletag, 1000, 0., 100.0);
+	    ecalE[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 100.0);
 	  }
 	  // Total energy deposit
- 	  energy  =  histoFactory->create1D("4000", "Total energy deposited   in GeV", 
-					    1000, 0., 100.0);
+ 	  energy  =  histoFactory->createHistogram1D("4000", "Total energy deposited   in GeV", 
+					    100, 0., 100.0);
 
 	  // Time slices	  
 	  for (i=0; i<numberOfTimeSlices; i++){
 	    sprintf(id, "%d",i+300);
 	    sprintf(ntupletag, "Time slice %d nsec energy profile   in GeV",i);
-	    timeHist[i] =  histoFactory->create1D(id, ntupletag, 1000, 0., 100.0);
+	    timeHist[i] =  histoFactory->createHistogram1D(id, ntupletag, 100, 0., 100.0);
 	  }
 
 	  // Profile of lateral energy deposit in Hcal
 	  for (i = 0; i<70; i++) {
 	    sprintf(id, "%d",i+400);
 	    sprintf(ntupletag, "Lateral energy profile at %d cm  in GeV",i);
-	    lateralProfile[i] = histoFactory->create1D(id, ntupletag, 1000, 0., 10.0);
+	    lateralProfile[i] = histoFactory->createHistogram1D(id, ntupletag, 100, 0., 10.0);
 	  }
 
 	  delete histoFactory;
@@ -238,7 +231,7 @@ void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab,
 			     float x, float y, float z, float edep, 
 			     float edec, float edhc) {
 
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
   if (ntuple) {
     char tag[10];
     int i=0;
@@ -366,4 +359,5 @@ void CCalAnalysis::EndOfEvent(G4int flag) {
   // hits in the event
   if (!flag) return;
 }
+
 

@@ -3,8 +3,6 @@
 // Description: Main function for Geant4 application HCAL Test-BEAM H2-96
 ///////////////////////////////////////////////////////////////////////////////
 
-//#define VIS_USE
-
 #include "CCalDetectorConstruction.hh"
 #include "CCalEndOfEventAction.hh"
 #include "CCalRunAction.hh"
