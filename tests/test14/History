@@ -1,4 +1,4 @@
--n $Id: History,v 1.27 2003-11-06 12:56:06 pia Exp $
+-n $Id: History,v 1.28 2003-11-06 19:01:55 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 Nov 2003 - MGP, tag test14-V05-02-02
+              Activate Penelope processes for electrons
+    
 06 Nov 2003 - MGP, tag test14-V05-02-01
               Introduced test of Bremsstrahlung angular distributions
               Goes together with emlowen-V05-02-05

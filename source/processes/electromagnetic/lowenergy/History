@@ -1,4 +1,4 @@
-$Id: History,v 1.188 2003-11-06 12:30:54 pia Exp $
+$Id: History,v 1.189 2003-11-06 19:06:21 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06.11.2003   MGP, tag emlowen-V05-02-06
+             New processes for electrons and positrons according to 
+             Penelope models
 
 06.11.2003   MGP, tag emlowen-V05-02-05
              Improved user interface to select Bremsstrahlung angular
