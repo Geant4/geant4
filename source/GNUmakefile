@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.50 2004-06-02 07:34:08 gcosmo Exp $
+# $Id: GNUmakefile,v 1.51 2004-06-02 07:49:01 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -13,10 +13,10 @@
 #
 # (The .o files(s) are made by implicit rules.)
 
-SUBDIR1 =  global particles processes geometry digits_hits
-SUBDIR2 =  event tracking track materials run graphics_reps intercoms
-SUBDIR2 += parameterisations persistency readout
-SUBDIR3 =  interfaces visualization
+SUBDIR1 =  global intercoms graphics_reps materials
+SUBDIR2 =  geometry particles track digits_hits processes
+SUBDIR2 += parameterisations tracking event run readout
+SUBDIR3 =  persistency interfaces visualization
 SUBDIR4 =  g3tog4
 
 ifndef G4INSTALL
