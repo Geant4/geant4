@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.4 2001-10-28 18:00:33 pia Exp $
+// $Id: processTest.cc,v 1.5 2001-10-29 10:44:11 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,33 +47,47 @@
 
 #include "G4ProcessTest.hh"
 #include "G4TestSetup.hh"
+#include "G4MaterialSetup.hh"
+#include "G4Material.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4TestFactory.hh"
 
-
+#include "G4TestUI.hh"
 
 int main()
 {
   // Setup
 
+  G4MaterialSetup materialSetup;
+  materialSetup.makeMaterials();
+
   G4TestUI ui;
+  ui.configure();
 
-  G4TestSetup setup;
-  setup.init();
+  G4Material* material = ui.getSelectedMaterial();
+  G4ParticleDefinition* definition = ui.getParticleDefinition();
+  G4double eMin = ui.getMinEnergy();
+  G4double eMax = ui.getMaxEnergy();
+  G4TestSetup setup(material,definition,eMin,eMax);
+  setup.makeGeometry();
 
-  // Process to be tested
-  G4VProcess* process = setup.createTestProcess();
-
-  G4ProcessTest* test = physicsSetup.createTest();
-  tes
-
+  G4TestFactory testSelector;
+  G4String type = ui.getProcessType();
+  G4String category = ui.getProcessCategory();
+  G4bool polarised = ui.getPolarisationSelection();
+  G4ProcessTest* test = testSelector.createTestProcess(type,category,polarised);
+  test->buildTables(category,polarised);
   // DoIt test
+
+  G4int nIterations = ui.getNumberOfIterations();
   for (G4int iter=0; iter<nIterations; iter++)
     {
       G4cout << "---- Iteration " << iter << G4endl;
       G4Track* track = setup.makeTrack();
       G4Step* step = setup.makeStep();
-      test.postStepTest(process,*track,*step);
+      test->postStepTest(*track,*step);
     }
-  
+
   cout << "End of the test" << G4endl;
 }
 
