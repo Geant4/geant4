@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXViewer.hh,v 1.15 2002-06-25 13:18:57 johna Exp $
+// $Id: G4OpenGLXViewer.hh,v 1.16 2002-11-11 18:12:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // G4OpenGLXViewer : Class to provide XWindows specific
 //                   functionality for OpenGL in GEANT4
 
-#ifdef G4VIS_BUILD_OPENGL_DRIVER
+#ifdef G4VIS_BUILD_OPENGLX_DRIVER
 
 #ifndef G4OPENGLXVIEWER_HH
 #define G4OPENGLXVIEWER_HH
