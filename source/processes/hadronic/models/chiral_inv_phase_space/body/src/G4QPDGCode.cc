@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.26 2002-02-25 16:03:58 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.27 2002-06-13 09:12:22 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -445,7 +445,7 @@ G4int G4QPDGCode::MakeQCode(const G4int& PDGCode)
 #ifdef pdebug
   G4cout<<"***G4QPDGCode::MakeQCode: () Unknown in Q-System code: "<<PDGCode<<G4endl;
 #endif
-  return -2;
+// return -2; not reachable statement  
 }
 
 // Get the mean mass value for the PDG

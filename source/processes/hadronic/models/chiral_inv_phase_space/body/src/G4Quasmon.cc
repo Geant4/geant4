@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.38 2002-02-25 16:03:59 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.39 2002-06-13 09:12:22 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -3064,7 +3064,6 @@ G4double G4Quasmon::GetQPartonMomentum(G4double kMax, G4double mC2)
     if(kCand<=kMin)kCand=kMin+.001;
     return kCand;
   }
-  return 0.;
 } // End of "GetQPartonMomentum"
 
 // For the given quasmon mass calculate a number of quark-partons in the system
