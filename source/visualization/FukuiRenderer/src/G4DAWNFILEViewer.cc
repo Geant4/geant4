@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.8 2000-05-13 10:58:23 johna Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.9 2000-05-15 07:48:27 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -149,6 +149,7 @@ void G4DAWNFILEViewer::ShowView( void )
 
 
 		//----- Invoke DAWN
+		G4cout << G4endl ;
 		if( false == G4FRofstream::DoesFileExist( fSceneHandler.GetG4PrimFileName() ) )   
 		{
 			G4cout << "ERROR: Failed to generate file  ";
