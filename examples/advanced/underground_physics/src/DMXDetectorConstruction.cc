@@ -84,6 +84,8 @@ DMXDetectorConstruction::DMXDetectorConstruction()
   theUserLimits  = NULL; 
   fUseUserLimits = false;
   //  theMaxTimeCuts = 1000000. * s;
+  // default time cut = infinite
+  //  - note also number of steps cut in stepping action = MaxNoSteps
   theMaxTimeCuts = DBL_MAX;
   theMaxStepSize = DBL_MAX;
 }
@@ -322,7 +324,6 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // make colours
   G4Colour  white   (1.0, 1.0, 1.0) ;
   G4Colour  grey    (0.5, 0.5, 0.5) ;
-  G4Colour  lgray   (.75, .75, .75) ;
   G4Colour  lgrey   (.75, .75, .75) ;
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  blue    (0.0, 0.0, 1.0) ;
@@ -330,10 +331,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  yellow  (1.0, 1.0, 0.0) ;
   G4Colour  lblue   (0.0, 0.0, .75) ;
-  // un-used colours:
+  //  un-used colours:
   //  G4Colour  black   (0.0, 0.0, 0.0) ;
   //  G4Colour  green   (0.0, 1.0, 0.0) ;
-  // G4Colour  lgreen  (0.0, .75, 0.0) ;
+  //  G4Colour  lgreen  (0.0, .75, 0.0) ;
 
 
 
@@ -489,12 +490,11 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   CuShield_log->SetVisAttributes(CuShield_vat);
 
   // Cu shield surface
-  G4OpticalSurface* OpCuShieldSurface = new G4OpticalSurface("ShieldSurface");
-  G4LogicalBorderSurface* ShieldSurface = new G4LogicalBorderSurface
+  G4OpticalSurface* OpCuShieldSurface = new G4OpticalSurface
+    ("ShieldSurface", unified, polished, dielectric_metal);
+  G4LogicalBorderSurface* ShieldSurface;
+  ShieldSurface = new G4LogicalBorderSurface
     ("Shield", liqPhase_phys, CuShield_phys, OpCuShieldSurface);
-  OpCuShieldSurface->SetType(dielectric_metal);
-  OpCuShieldSurface->SetFinish(polished);
-  OpCuShieldSurface->SetModel(unified);
 
   const G4int NUM = 2;
   G4double CuShield_PP[NUM]   = { 7.0*eV, 7.50*eV };
@@ -513,7 +513,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double ringVPosition   =  0.5*detectorHeight-ringVOffset;
 
   G4Tubs* ring_tube=new G4Tubs("ring_tube", CuShieldOuterRadius,
-     detectorRadius, 0.5*ringHeight, 0.*deg, 360.*deg);
+     ringOuterRadius, 0.5*ringHeight, 0.*deg, 360.*deg);
   ring_log = new G4LogicalVolume(ring_tube, ring_mat, "ring_log");
 
   // optical surface: ring materials table
@@ -523,7 +523,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   ring_mt->AddProperty("REFLECTIVITY", ring_PP, ring_REFL, NUM);
 
   G4OpticalSurface* OpRingSurface = new G4OpticalSurface("RingSurface", 
-     unified, polished, dielectric_metal, 0.0);
+     unified, polished, dielectric_metal);
   // last argument is surface roughness if it's non-polished.
   OpRingSurface->SetMaterialPropertiesTable(ring_mt);
 
@@ -531,13 +531,15 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   ring_phys_gas[0]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition),
      "ring_phys0",ring_log,detector_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_gas0 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_gas0;
+  RingSurface_gas0 = new G4LogicalBorderSurface
     ("Ring", detector_phys, ring_phys_gas[0], OpRingSurface);
 
   ring_phys_gas[1]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.0*mm),
      "ring_phys1",ring_log, detector_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_gas1 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_gas1;
+  RingSurface_gas1 = new G4LogicalBorderSurface
     ("Ring", detector_phys, ring_phys_gas[1], OpRingSurface);
 
 
@@ -547,41 +549,47 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   ring_phys_liq[0]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
      "ring_phys2",ring_log,liqPhase_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq0 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq0;
+  RingSurface_liq0 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[0], OpRingSurface);
 
   ring_phys_liq[1]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys3",ring_log, liqPhase_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq1 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq1;
+  RingSurface_liq1 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[1], OpRingSurface);
 
   ring_phys_liq[2]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
      "ring_phys4",ring_log, liqPhase_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq2 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq2;
+  RingSurface_liq2 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[2], OpRingSurface);
 
   ring_phys_liq[3]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
      "ring_phys5",ring_log, liqPhase_phys, false, 0);
-  G4LogicalBorderSurface* RingSurface_liq3 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq3;
+  RingSurface_liq3 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[3], OpRingSurface);
 
   ring_phys_liq[4]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys6",ring_log, liqPhase_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_liq4 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq4;
+  RingSurface_liq4 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[4], OpRingSurface);
 
   ring_phys_liq[5]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
      "ring_phys7",ring_log, liqPhase_phys,false, 0);
-  G4LogicalBorderSurface* RingSurface_liq5 = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* RingSurface_liq5;
+  RingSurface_liq5 = new G4LogicalBorderSurface
     ("Ring", liqPhase_phys, ring_phys_liq[5], OpRingSurface);
 
 
-  G4VisAttributes* ring_vat= new G4VisAttributes(lgray);
+  G4VisAttributes* ring_vat= new G4VisAttributes(lgrey);
   ring_vat->SetVisibility(true);
   ring_log->SetVisAttributes(ring_vat);
 
@@ -608,12 +616,11 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
 
   // mirror surface
-  G4OpticalSurface * OpMirrorSurface = new G4OpticalSurface("MirrorSurface");
-  G4LogicalBorderSurface* MirrorSurface = new G4LogicalBorderSurface
+  G4OpticalSurface * OpMirrorSurface = new G4OpticalSurface
+    ("MirrorSurface", unified, polished, dielectric_metal);
+  G4LogicalBorderSurface* MirrorSurface;
+  MirrorSurface = new G4LogicalBorderSurface
     ("Mirror", detector_phys, mirror_phys, OpMirrorSurface);
-  OpMirrorSurface->SetType(dielectric_metal);
-  OpMirrorSurface->SetFinish(polished);
-  OpMirrorSurface->SetModel(unified);
 
   G4double mirror_PP[NUM]   = { 7.00*eV, 7.50*eV };
   G4double mirror_REFL[NUM] = { 0.70, 0.70 };
@@ -688,7 +695,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface* OpAlphaSurface = new G4OpticalSurface("AlphaSurface", 
      unified, polished, dielectric_metal);
-  G4LogicalBorderSurface* AlphaSurface = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* AlphaSurface;
+  AlphaSurface = new G4LogicalBorderSurface
     ("Alpha", liqPhase_phys, alpha_phys, OpAlphaSurface);
 
 
@@ -723,7 +731,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double pmtVOffset   = 5.0*cm;
   G4double pmtVPosition = -0.5*(liqPhaseHeight-pmtHeight)+pmtVOffset;
 
-  G4double windowVOffset   = 0.5*pmtHeight - 2.*pmtRadius*cos(30.0*deg);
+  //  G4double windowVOffset   = 0.5*pmtHeight - 2.*pmtRadius*cos(30.0*deg);
   //  G4double windowVPosition = pmtVPosition + windowVOffset;
 
   G4Sphere* pmt_window = new G4Sphere("pmt_sphere", 0.*cm, 2.*pmtRadius, 
@@ -745,7 +753,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface* pmt_opsurf = new G4OpticalSurface("pmt_opsurf",
      unified, polished, dielectric_dielectric);
-  G4LogicalBorderSurface* pmt_surf = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* pmt_surf;
+  pmt_surf = new G4LogicalBorderSurface
     ("pmt_surf", liqPhase_phys, pmt_phys, pmt_opsurf);
 
   G4VisAttributes* pmt_vat= new G4VisAttributes(blue);
@@ -755,8 +764,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // photocathode *******************************************************
 
-  G4double phcathRadius      = 22.5*mm;
-  G4double phcathVOffset     = 2.*pmtRadius*cos(30.*deg);
+  //  G4double phcathRadius      = 22.5*mm;
+  //  G4double phcathVOffset     = 2.*pmtRadius*cos(30.*deg);
   G4double phcathVPosition   = 0.*cm;
 
   G4Sphere* phcath_sol = new G4Sphere("phcath_sphere",
@@ -769,7 +778,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4OpticalSurface*  phcath_opsurf = new G4OpticalSurface("phcath_opsurf",
      unified, polished, dielectric_dielectric);
-  G4LogicalBorderSurface* phcath_surf = new G4LogicalBorderSurface
+  G4LogicalBorderSurface* phcath_surf;
+  phcath_surf = new G4LogicalBorderSurface
     ("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
 
   G4double phcath_PP[NUM]   = { 7.00*eV, 7.50*eV };
@@ -787,16 +797,18 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // ......................................................................
   // attach user limits ...................................................
 
+  G4double RoomTimeCut = 10000. * s;
+
   world_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
   lab_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
   jacket_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
   vacuum_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
   vessel_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+    (new G4UserLimits(theMaxStepSize,DBL_MAX,RoomTimeCut));
   detector_log->SetUserLimits
     (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
   liqPhase_log->SetUserLimits
