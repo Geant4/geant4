@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Integrator.icc,v 1.5 2000-05-31 09:07:11 grichine Exp $
+// $Id: G4Integrator.icc,v 1.6 2000-06-15 17:31:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4Integrator methods. 
@@ -21,11 +21,11 @@
 // Integration of class member functions T::f by Simpson method. 
 
 template <class T, class F> 
-G4double G4Integrator::Simpson( T&       typeT, 
-                                F        f,
-                                G4double xInitial,
-                                G4double xFinal,
-			        G4int    iterationNumber ) 
+G4double G4Integrator<T,F>::Simpson( T&       typeT, 
+                                     F        f,
+                                     G4double xInitial,
+                                     G4double xFinal,
+			             G4int    iterationNumber ) 
 {
    G4int    i ;
    G4double step = (xFinal - xInitial)/iterationNumber ;
@@ -52,7 +52,7 @@ G4double G4Integrator::Simpson( T&       typeT,
 // Convenient to use with 'this' pointer
 
 template <class T, class F> 
-G4double G4Integrator::Simpson( T*       ptrT, 
+G4double G4Integrator<T,F>::Simpson( T*       ptrT, 
                                 F        f,
                                 G4double xInitial,
                                 G4double xFinal,
@@ -83,7 +83,8 @@ G4double G4Integrator::Simpson( T*       ptrT,
 // Convenient to use, when function f is defined in global scope, i.e. in main()
 // program
 
-G4double G4Integrator::Simpson( G4double (*f)(G4double),
+template <class T, class F> 
+G4double G4Integrator<T,F>::Simpson( G4double (*f)(G4double),
                                 G4double xInitial,
                                 G4double xFinal,
 			        G4int    iterationNumber ) 
@@ -116,7 +117,7 @@ G4double G4Integrator::Simpson( G4double (*f)(G4double),
 //
 
 template <class T, class F> 
-G4double G4Integrator::Gauss( T& typeT, F f,
+G4double G4Integrator<T,F>::Gauss( T& typeT, F f,
                               G4double xInitial, G4double xFinal   ) 
 {
    static G4double root = 1.0/sqrt(3.0) ;
@@ -135,7 +136,7 @@ G4double G4Integrator::Gauss( T& typeT, F f,
 //
 
 template <class T, class F> G4double 
-G4Integrator::Gauss( T* ptrT, F f, G4double a, G4double b )
+G4Integrator<T,F>::Gauss( T* ptrT, F f, G4double a, G4double b )
 {
   return Gauss(*ptrT,f,a,b) ;
 }
@@ -144,7 +145,8 @@ G4Integrator::Gauss( T* ptrT, F f, G4double a, G4double b )
 //
 //
 
-G4double G4Integrator::Gauss( G4double (*f)(G4double), 
+template <class T, class F>
+G4double G4Integrator<T,F>::Gauss( G4double (*f)(G4double), 
                               G4double xInitial, G4double xFinal) 
 {
    static G4double root = 1.0/sqrt(3.0) ;
@@ -162,14 +164,14 @@ G4double G4Integrator::Gauss( G4double (*f)(G4double),
 //
 
 template <class T, class F>  
-void G4Integrator::AdaptGauss( T& typeT, F f, G4double  xInitial,
+void G4Integrator<T,F>::AdaptGauss( T& typeT, F f, G4double  xInitial,
                                G4double  xFinal, G4double fTolerance,
 			       G4double& sum,
 			       G4int&    depth      ) 
 {
    if(depth > 100)
    {
-     G4cout<<"G4Integrator::AdaptGauss: WARNING !!!"<<G4endl  ;
+     G4cout<<"G4Integrator<T,F>::AdaptGauss: WARNING !!!"<<G4endl  ;
 G4cout
 <<"Function varies too rapidly to get stated accuracy in 100 steps "<<G4endl ;
 
@@ -192,7 +194,7 @@ G4cout
 }
 
 template <class T, class F>  
-void G4Integrator::AdaptGauss( T* ptrT, F f, G4double  xInitial,
+void G4Integrator<T,F>::AdaptGauss( T* ptrT, F f, G4double  xInitial,
                                G4double  xFinal, G4double fTolerance,
 			       G4double& sum,
 			       G4int&    depth      ) 
@@ -203,8 +205,8 @@ void G4Integrator::AdaptGauss( T* ptrT, F f, G4double  xInitial,
 /////////////////////////////////////////////////////////////////////////
 //
 //
-
-void G4Integrator::AdaptGauss( G4double (*f)(G4double), 
+template <class T, class F>
+void G4Integrator<T,F>::AdaptGauss( G4double (*f)(G4double), 
                                G4double xInitial, G4double xFinal, 
                                G4double fTolerance, G4double& sum, 
                                G4int& depth ) 
@@ -242,7 +244,7 @@ void G4Integrator::AdaptGauss( G4double (*f)(G4double),
 // Convenient for using with class object typeT
        
 template<class T, class F> G4double 
-G4Integrator::AdaptiveGauss(  T& typeT, F f, G4double xInitial,
+G4Integrator<T,F>::AdaptiveGauss(  T& typeT, F f, G4double xInitial,
                                              G4double xFinal, G4double e   ) 
 {
    G4int depth = 0 ;
@@ -257,7 +259,7 @@ G4Integrator::AdaptiveGauss(  T& typeT, F f, G4double xInitial,
 // Convenient for using with 'this' pointer
        
 template<class T, class F> G4double 
-G4Integrator::AdaptiveGauss(  T* ptrT, F f, G4double xInitial,
+G4Integrator<T,F>::AdaptiveGauss(  T* ptrT, F f, G4double xInitial,
                                              G4double xFinal, G4double e   ) 
 {
   return AdaptiveGauss(*ptrT,f,xInitial,xFinal,e) ;
@@ -268,8 +270,8 @@ G4Integrator::AdaptiveGauss(  T* ptrT, F f, G4double xInitial,
 // Adaptive Gauss integration with accuracy 'e'
 // Convenient for using with global scope function f
        
-G4double 
-G4Integrator::AdaptiveGauss( G4double (*f)(G4double), 
+template <class T, class F> G4double 
+G4Integrator<T,F>::AdaptiveGauss( G4double (*f)(G4double), 
                              G4double xInitial, G4double xFinal, G4double e ) 
 {
    G4int depth = 0 ;
@@ -301,7 +303,7 @@ G4Integrator::AdaptiveGauss( G4double (*f)(G4double),
 // Convenient for using with some class object dataT
 
 template <class T, class F> G4double 
-G4Integrator::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegendre)
+G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegendre)
 {
    G4double newton, newton1, temp1, temp2, temp3, temp ;
    G4double xDiff, xMean, dx, integral ;
@@ -312,7 +314,7 @@ G4Integrator::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegendre)
 
    if(2*fNumber != k)
    {
-      G4Exception("Invalid (odd) n Legendre in G4Integrator::Legendre") ;
+      G4Exception("Invalid (odd) n Legendre in G4Integrator<T,F>::Legendre") ;
    }
 
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -362,7 +364,7 @@ G4Integrator::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegendre)
 // Convenient for using with the pointer 'this'
 
 template <class T, class F> G4double 
-G4Integrator::Legendre( T* ptrT, F f, G4double a, G4double b, G4int nLegendre) 
+G4Integrator<T,F>::Legendre( T* ptrT, F f, G4double a, G4double b, G4int nLegendre) 
 {
   return Legendre(*ptrT,f,a,b,nLegendre) ;
 }
@@ -371,8 +373,8 @@ G4Integrator::Legendre( T* ptrT, F f, G4double a, G4double b, G4int nLegendre)
 //
 // Convenient for using with global scope function f
 
-
-G4double G4Integrator::
+template <class T, class F>
+G4double G4Integrator<T,F>::
 Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre) 
 {
    G4double newton, newton1, temp1, temp2, temp3, temp ;
@@ -384,7 +386,7 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
 
    if(2*fNumber != k)
    {
-      G4Exception("Invalid (odd) n Legendre in G4Integrator::Legendre") ;
+      G4Exception("Invalid (odd) n Legendre in G4Integrator<T,F>::Legendre") ;
    }
 
    G4double* fAbscissa = new G4double[fNumber] ;
@@ -438,7 +440,7 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
 // Convenient for using with class object typeT
 
  template <class T, class F>  
- G4double G4Integrator::Legendre10( T& typeT, F f,G4double a, G4double b) 
+ G4double G4Integrator<T,F>::Legendre10( T& typeT, F f,G4double a, G4double b) 
 {
    G4int i ;
    G4double xDiff, xMean, dx, integral ;
@@ -468,7 +470,7 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
 // Convenient for using with the pointer 'this'
 
 template <class T, class F>  
-G4double G4Integrator::Legendre10( T* ptrT, F f,G4double a, G4double b)
+G4double G4Integrator<T,F>::Legendre10( T* ptrT, F f,G4double a, G4double b)
 {
   return Legendre10(*ptrT,f,a,b) ;
 } 
@@ -477,8 +479,8 @@ G4double G4Integrator::Legendre10( T* ptrT, F f,G4double a, G4double b)
 //
 // Convenient for using with global scope functions
 
-G4double 
-G4Integrator::Legendre10( G4double (*f)(G4double), G4double a, G4double b) 
+template <class T, class F> G4double 
+G4Integrator<T,F>::Legendre10( G4double (*f)(G4double), G4double a, G4double b) 
 {
    G4int i ;
    G4double xDiff, xMean, dx, integral ;
@@ -513,7 +515,7 @@ G4Integrator::Legendre10( G4double (*f)(G4double), G4double a, G4double b)
 // Convenient for using with some class object typeT
 
 template <class T, class F>  
-G4double G4Integrator::Legendre96( T& typeT, F f,G4double a, G4double b) 
+G4double G4Integrator<T,F>::Legendre96( T& typeT, F f,G4double a, G4double b) 
 {
    G4int i ;
    G4double xDiff, xMean, dx, integral ;
@@ -605,7 +607,7 @@ G4double G4Integrator::Legendre96( T& typeT, F f,G4double a, G4double b)
 // Convenient for using with the pointer 'this'
 
 template <class T, class F>  
-G4double G4Integrator::Legendre96( T* ptrT, F f,G4double a, G4double b)
+G4double G4Integrator<T,F>::Legendre96( T* ptrT, F f,G4double a, G4double b)
 {
   return Legendre96(*ptrT,f,a,b) ;
 } 
@@ -614,8 +616,8 @@ G4double G4Integrator::Legendre96( T* ptrT, F f,G4double a, G4double b)
 //
 // Convenient for using with global scope function f 
 
-G4double 
-G4Integrator::Legendre96( G4double (*f)(G4double), G4double a, G4double b) 
+template <class T, class F> G4double 
+G4Integrator<T,F>::Legendre96( G4double (*f)(G4double), G4double a, G4double b) 
 {
    G4int i ;
    G4double xDiff, xMean, dx, integral ;
@@ -713,7 +715,7 @@ G4Integrator::Legendre96( G4double (*f)(G4double), G4double a, G4double b)
 // Convenient for using with class object typeT
 
 template <class T, class F> G4double 
-G4Integrator::Chebyshev( T& typeT, F f, G4double a, 
+G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a, 
                          G4double b, G4int nChebyshev ) 
 {
    G4int i ;
@@ -746,7 +748,7 @@ G4Integrator::Chebyshev( T& typeT, F f, G4double a,
 // Convenient for using with 'this' pointer
 
 template <class T, class F> G4double 
-G4Integrator::Chebyshev( T* ptrT, F f, G4double a, G4double b, G4int n)
+G4Integrator<T,F>::Chebyshev( T* ptrT, F f, G4double a, G4double b, G4int n)
 {
   return Chebyshev(*ptrT,f,a,b,n) ;
 } 
@@ -755,8 +757,8 @@ G4Integrator::Chebyshev( T* ptrT, F f, G4double a, G4double b, G4int n)
 //
 // For use with global scope functions f 
 
-G4double 
-G4Integrator::Chebyshev( G4double (*f)(G4double), 
+template <class T, class F> G4double 
+G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double), 
                          G4double a, G4double b, G4int nChebyshev) 
 {
    G4int i ;
@@ -798,7 +800,7 @@ G4Integrator::Chebyshev( G4double (*f)(G4double),
 // (T::f)
 
 template <class T, class F> G4double 
-G4Integrator::Laguerre( T& typeT, F f, G4double alpha, G4int nLaguerre ) 
+G4Integrator<T,F>::Laguerre( T& typeT, F f, G4double alpha, G4int nLaguerre ) 
 {
    const G4double tolerance = 1.0e-10 ;
    const G4int maxNumber = 12 ;
@@ -872,7 +874,7 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
 //
 
 template <class T, class F> G4double 
-G4Integrator::Laguerre( T* ptrT, F f, G4double alpha, G4int nLaguerre ) 
+G4Integrator<T,F>::Laguerre( T* ptrT, F f, G4double alpha, G4int nLaguerre ) 
 {
   return Laguerre(*ptrT,f,alpha,nLaguerre) ;
 }
@@ -881,8 +883,8 @@ G4Integrator::Laguerre( T* ptrT, F f, G4double alpha, G4int nLaguerre )
 //
 // For use with global scope functions f 
 
-G4double 
-G4Integrator::Laguerre( G4double (*f)(G4double), 
+template <class T, class F> G4double 
+G4Integrator<T,F>::Laguerre( G4double (*f)(G4double), 
                          G4double alpha, G4int nLaguerre) 
 {
    const G4double tolerance = 1.0e-10 ;
@@ -958,7 +960,8 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
 // (Adapted from Numerical Recipes in C)
 //
 
-G4double G4Integrator::GammaLogarithm(G4double xx)
+template <class T, class F>
+G4double G4Integrator<T,F>::GammaLogarithm(G4double xx)
 {
   static G4double cof[6] = { 76.18009172947146,     -86.50532032941677,
                              24.01409824083091,      -1.231739572450155,
@@ -989,7 +992,7 @@ G4double G4Integrator::GammaLogarithm(G4double xx)
 //
 
 template <class T, class F>    
-G4double G4Integrator::Hermite( T& typeT, F f, G4int nHermite) 
+G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite) 
 {
    const G4double tolerance = 1.0e-12 ;
    const G4int maxNumber = 12 ;
@@ -1050,7 +1053,7 @@ G4double G4Integrator::Hermite( T& typeT, F f, G4int nHermite)
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integrator::Hermite") ;
+	 G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
       }
       fAbscissa[i-1] =  newton ;
       fWeight[i-1] = 2.0/(temp*temp) ;
@@ -1072,7 +1075,7 @@ G4double G4Integrator::Hermite( T& typeT, F f, G4int nHermite)
 // For use with 'this' pointer
 
 template <class T, class F>    
-G4double G4Integrator::Hermite( T* ptrT, F f, G4int n)
+G4double G4Integrator<T,F>::Hermite( T* ptrT, F f, G4int n)
 {
   return Hermite(*ptrT,f,n) ;
 } 
@@ -1081,7 +1084,8 @@ G4double G4Integrator::Hermite( T* ptrT, F f, G4int n)
 //
 // For use with global scope f
 
-G4double G4Integrator::Hermite( G4double (*f)(G4double), G4int nHermite) 
+template <class T, class F>
+G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite) 
 {
    const G4double tolerance = 1.0e-12 ;
    const G4int maxNumber = 12 ;
@@ -1142,7 +1146,7 @@ G4double G4Integrator::Hermite( G4double (*f)(G4double), G4int nHermite)
       }
       if(k > maxNumber)
       {
-	 G4Exception("Too many (>12) iterations in G4Integrator::Hermite") ;
+	 G4Exception("Too many (>12) iterations in G4Integrator<T,F>::Hermite") ;
       }
       fAbscissa[i-1] =  newton ;
       fWeight[i-1] = 2.0/(temp*temp) ;
@@ -1168,7 +1172,7 @@ G4double G4Integrator::Hermite( G4double (*f)(G4double), G4int nHermite)
 //
 
 template <class T, class F> 
-G4double G4Integrator::Jacobi( T& typeT, F f, G4double alpha, 
+G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha, 
                                               G4double beta, G4int nJacobi) 
 {
   const G4double tolerance = 1.0e-12 ;
@@ -1254,7 +1258,7 @@ G4double G4Integrator::Jacobi( T& typeT, F f, G4double alpha,
      }
      if (k > maxNumber) 
      {
-        G4Exception("Too many iterations (>12) in G4Integrator::Jacobi") ;
+        G4Exception("Too many iterations (>12) in G4Integrator<T,F>::Jacobi") ;
      }
      fAbscissa[i-1] = root ;
      fWeight[i-1] = exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
@@ -1280,7 +1284,7 @@ G4double G4Integrator::Jacobi( T& typeT, F f, G4double alpha,
 // For use with 'this' pointer
 
 template <class T, class F>    
-G4double G4Integrator::Jacobi( T* ptrT, F f, G4double alpha, 
+G4double G4Integrator<T,F>::Jacobi( T* ptrT, F f, G4double alpha, 
                                              G4double beta, G4int n)
 {
   return Jacobi(*ptrT,f,alpha,beta,n) ;
@@ -1290,7 +1294,8 @@ G4double G4Integrator::Jacobi( T* ptrT, F f, G4double alpha,
 //
 // For use with global scope f 
 
-G4double G4Integrator::Jacobi( G4double (*f)(G4double), G4double alpha, 
+template <class T, class F>
+G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha, 
                                            G4double beta, G4int nJacobi) 
 {
   const G4double tolerance = 1.0e-12 ;
@@ -1376,7 +1381,7 @@ G4double G4Integrator::Jacobi( G4double (*f)(G4double), G4double alpha,
      }
      if (k > maxNumber) 
      {
-        G4Exception("Too many iterations (>12) in G4Integrator::Jacobi") ;
+        G4Exception("Too many iterations (>12) in G4Integrator<T,F>::Jacobi") ;
      }
      fAbscissa[i-1] = root ;
      fWeight[i-1] = exp(GammaLogarithm((G4double)(alpha+nJacobi)) + 
