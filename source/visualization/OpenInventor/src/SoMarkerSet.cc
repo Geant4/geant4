@@ -9,7 +9,7 @@
 #include <Inventor/elements/SoCoordinateElement.h>
 #include <Inventor/elements/SoLazyElement.h>
 
-//#include <HEPVis/SbGL.h>
+#include <HEPVis/SbGL.h>
 //#include <HEPVis/actions/SoGL2PSAction.h>
 
 static void drawMarker(SoAction*,int);
