@@ -6,7 +6,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.hh,v 1.1 1999-01-07 16:09:03 gunter Exp $
+// $Id: G4UnitsTable.hh,v 1.2 1999-03-30 13:09:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,7 @@ public:
     
 private:
     G4UnitDefinition(G4UnitDefinition&);
-    const G4UnitDefinition & operator=(const G4UnitDefinition&);
+    G4UnitDefinition& operator=(const G4UnitDefinition&);
    
 public:
     G4String      GetName()       {return Name;};
@@ -59,7 +59,7 @@ public:
     static void BuildUnitsTable();    
     static void PrintUnitsTable();
     
-    static 
+    static  
     G4UnitsTable&   GetUnitsTable() {return theUnitsTable;};
         
     static G4double GetValueOf (G4String);
@@ -91,7 +91,7 @@ public:
     
 private:
     G4UnitsCategory(G4UnitsCategory&);
-    const G4UnitsCategory & operator=(const G4UnitsCategory&);
+    G4UnitsCategory& operator=(const G4UnitsCategory&);
    
 public:
     G4String          GetName()      {return Name;};

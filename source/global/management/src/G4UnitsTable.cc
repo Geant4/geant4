@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnitsTable.cc,v 1.3 1999-03-08 18:28:39 maire Exp $
+// $Id: G4UnitsTable.cc,v 1.4 1999-03-30 13:09:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,10 +35,8 @@ G4UnitsTable      G4UnitDefinition::theUnitsTable;
  
 G4UnitDefinition::G4UnitDefinition(G4String name, G4String symbol,
                                    G4String category, G4double value)
+:Name(name),SymbolName(symbol),Value(value)				   
 {
-    Name       = name;
-    SymbolName = symbol;
-    Value      = value;
     //
     //does the Category objet already exist ?
     size_t nbCat = theUnitsTable.entries();
@@ -70,9 +68,14 @@ G4UnitDefinition::G4UnitDefinition(G4UnitDefinition& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-const G4UnitDefinition & G4UnitDefinition::operator=(const G4UnitDefinition& right)
+G4UnitDefinition& G4UnitDefinition::operator=(const G4UnitDefinition& right)
 {
-  return right;
+  if (this == &right) return *this;
+  Name          = right.Name;
+  SymbolName    = right.SymbolName;
+  Value         = right.Value;
+  CategoryIndex = right.CategoryIndex;
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -125,8 +128,9 @@ G4String G4UnitDefinition::GetCategory(G4String string)
      }
   G4cout << "Warning from G4UnitDefinition::GetCategory(" << string << ")."
        << " The unit " << string << " does not exist in UnitsTable."
-       << " Return category = None" << endl;     
-  return "None";             
+       << " Return category = None" << endl;
+  name = "None";     
+  return name;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -266,11 +270,9 @@ void G4UnitDefinition::PrintUnitsTable()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
    
 G4UnitsCategory::G4UnitsCategory(G4String name)
+:Name(name),NameMxLen(0),SymbMxLen(0)
 {
-    Name = name;
     UnitsList = *(new G4UnitsContainer);
-    NameMxLen = 0;
-    SymbMxLen = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -287,9 +289,14 @@ G4UnitsCategory::G4UnitsCategory(G4UnitsCategory& right)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
-const G4UnitsCategory & G4UnitsCategory::operator=(const G4UnitsCategory& right)
+G4UnitsCategory& G4UnitsCategory::operator=(const G4UnitsCategory& right)
 {
-  return right;
+  if (this == &right) return *this;
+  Name      = right.Name;
+  UnitsList = right.UnitsList;
+  NameMxLen = right.NameMxLen;
+  SymbMxLen = right.SymbMxLen;
+  return *this;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
