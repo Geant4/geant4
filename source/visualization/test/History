@@ -1,7 +1,17 @@
-$Id: History,v 1.9 2001-02-01 17:25:32 johna Exp $
+$Id: History,v 1.10 2001-03-15 12:31:50 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+15th March 2001  John Allison  (vis-V03-00-08)
+- Major re-work of replica instantiation in MyDetectorConstruction.cc
+  to ensure correspondence with rule that phi=0 bisects the replicated
+  sub-volume.  Note: replicas still cause crash on Linux in Ray Tracer.
+- Suppressed multiple scattereing lateral displacement in MyPhysicsList.cc
+  (can't remember why!).
+
+21st February 2001  John Allison
+- Changed test14.g4m to new commands.
 
 1st February 2001  John Allison (vis-V03-00-01)
 - Added /vis/set/sides 100 to test19.g4m and changed rayTracer to 400x400.
