@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2001-11-27 11:10:31 maire Exp $
+$Id: README,v 1.9 2003-01-28 17:14:19 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -117,7 +117,15 @@ $Id: README,v 1.8 2001-11-27 11:10:31 maire Exp $
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
 	
- 6- USER INTERFACES
+ 6- RANDOM NUMBERS HANDLING
+ 
+ 	CLHEP provides several random number engines. In this example the Ranecu
+	engine is choosen at beginning of the main (exampleN03.cc).
+	
+	The macro rndmSeed.mac shows how to save and reset the random number
+	seed between runs.	
+	
+ 7- USER INTERFACES
   
         The default command interface, called G4UIterminal, is done via
 	standart cin/G4cout.
@@ -129,7 +137,7 @@ $Id: README,v 1.8 2001-11-27 11:10:31 maire Exp $
 	  2- exampleN03.cc has been compiled with G4UI_USE_XM. 
  
       	
- 7- HOW TO START ?
+ 8- HOW TO START ?
  
  	- compile and link to generate an executable
  		% cd N03
