@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.11 2002-06-13 09:13:28 jwellisc Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.12 2002-06-18 09:00:19 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,13 +52,18 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
 {
   public: 
     virtual ~G4ElectroNuclearReaction(){}
+    G4ElectroNuclearReaction()
+    {
+      theHEModel = new G4TheoFSGenerator;
+      theCascade = new G4StringChipsInterface;
+    }
     
     G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
 
   private:
     G4ChiralInvariantPhaseSpace theLEModel;
-    G4TheoFSGenerator theHEModel;
-    G4StringChipsInterface theCascade;
+    G4TheoFSGenerator * theHEModel;
+    G4StringChipsInterface * theCascade;
     G4QGSModel< G4GammaParticipants > theStringModel;
     G4QGSMFragmentation theFragmentation;
     G4ExcitedStringDecay * theStringDecay;
@@ -158,14 +163,14 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   } 
   else 
   {
-    theHEModel.SetTransport(&theCascade);
-    theHEModel.SetHighEnergyGenerator(&theStringModel);
+    theHEModel->SetTransport(theCascade);
+    theHEModel->SetHighEnergyGenerator(&theStringModel);
     theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
     theStringModel.SetFragmentationModel(theStringDecay);
-    theHEModel.SetMinEnergy(2.5*GeV);
-    theHEModel.SetMaxEnergy(100*TeV);
+    theHEModel->SetMinEnergy(2.5*GeV);
+    theHEModel->SetMaxEnergy(100*TeV);
 
-    G4VParticleChange * aResult = theHEModel.ApplyYourself(localTrack, aTargetNucleus);
+    G4VParticleChange * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
     theResult.SetNumberOfSecondaries(aResult->GetNumberOfSecondaries());
     for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
     {
