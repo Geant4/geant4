@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2001-12-07 16:47:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2001-12-07 16:48:16 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,8 +13,8 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-# Copy the GammaRayTelAnalysis files according to which version
-# is selected. For this the target tmpana has been created.
+# Copy the XrayFluoAnalysisManage files according to which version
+# is selected.
 # As the dependency is checked before "all" is reached, we need
 # to do some tricks here ...
 
