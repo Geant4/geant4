@@ -25,6 +25,27 @@
 //    if(Verbose==1)G4cout <<"Vector: delete theIntegral"<<endl;
   }
   
+  G4NeutronHPVector & G4NeutronHPVector::  
+  operator = (const G4NeutronHPVector & right)
+  {
+    G4int i;
+    
+    totalIntegral = right.totalIntegral;
+    if(right.theIntegral!=NULL) theIntegral = new G4double[nEntries];
+    for(i=0; i<right.nEntries; i++)
+    {
+      SetPoint(i, right.GetPoint(i)); // copy theData
+      if(right.theIntegral!=NULL) theIntegral[i] = right.theIntegral[i];
+    }
+    theManager = right.theManager; 
+    nEntries = right.nEntries;
+    nPoints = right.nPoints;
+    label = right.label;
+  
+    Verbose = right.Verbose;
+    return *this;
+  }
+
   G4double G4NeutronHPVector::GetXsec(G4double e)
   {
     if(nEntries <= 1) 

@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.2 1999-03-29 09:54:14 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.3 1999-05-02 10:05:59 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -31,6 +31,8 @@ class G4NeutronHPVector
   
   ~G4NeutronHPVector();
   
+  G4NeutronHPVector & operator = (const G4NeutronHPVector & right);
+  
   inline void SetVerbose(G4int ff)
   {
     Verbose = ff;
@@ -49,7 +51,7 @@ class G4NeutronHPVector
     }
   }
   
-  inline void SetPoint(G4int i, G4NeutronHPDataPoint & it)
+  inline void SetPoint(G4int i, const G4NeutronHPDataPoint & it)
   {
     G4double x = it.GetX();
     G4double y = it.GetY();
@@ -96,7 +98,7 @@ class G4NeutronHPVector
     if(i>=GetVectorLength()) i=GetVectorLength()-1;
     return theData[i].GetY(); 
   }
-  inline G4NeutronHPDataPoint & GetPoint(G4int i) { return theData[i]; }
+  inline const G4NeutronHPDataPoint & GetPoint(G4int i) const { return theData[i]; }
   
   G4double GetXsec(G4double e);
 
