@@ -1,0 +1,41 @@
+-----------------------------------------------------------
+$Id: History, v 1.6 2004/02/27  G.A.P. Cirrone
+-----------------------------------------------------------
+
+     ====================================================
+            Geant4 - Hadrontherapy
+     ====================================================
+
+                      Category History file
+                      ---------------------
+
+25.02.2005 - G.A.P. Cirrone & M.Piergentili, update of the physiscList
+		class to correct some bugs.
+
+30.11.2004 - S. Guatelli, 
+                correct analysis, tag: hadrontherapy-V06-02-00
+                
+16.07.2004 - G.A.P. Cirrone
+		AIDA classes inserted. Generation of an .hbk file 
+		containing the depth dose distribution.
+
+28.05.2004 - S. Guatelli
+                Update of the README, code review for public release.
+
+29.03.2004 - G. Russo
+		Redefinition of the physics list with hadronic model.
+
+14.03.2004 - G.A.P. Cirrone
+		Attempt to insert AIDA class for .xml file creation.
+
+13.03.2004 - G.A.P. Cirrone
+		Redefinition of the design.
+
+27.02.2004 - G.A.P. Cirrone
+             	Created, first version.
+
+
+
+
+
+
