@@ -9,7 +9,7 @@ detailed list of fixes/additions, please refer to the related History files):
 
   o Electromagnetics:
     - Multiple scattering: fine tuning and fixes for low energy e-;
-       inclusion of nuclear size effect for high energy (e+,e- > 100 Mev,
+       inclusion of nuclear size effect for high energy (e+,e- > 100 MeV,
        hadrons > 1 GeV);
     - IonisationPlus: improved code and testing, for electrons and hadrons.
     - LowEnergy: implemented hadron and ion ionisation; minor fixes in
@@ -141,25 +141,25 @@ The following versions of STL have been tested:
    "Native" STL on: Linux, HP.
 
 This is selected at installation/compile time by the environment variable
-G4USE_OSPACE in case of the former - see documentation.
+G4USE_OSPACE in the case of the former - see documentation.
 
 NOTES:
 - Be aware that by default, the installation scripts will expect to use
   the native STL implementation. You must set the G4USE_OSPACE variable
   in the environment in order to select the ObjectSpace implementation.
 - Platform specific setup:
-  o DEC: ObjectSpace is required for no ISO/ANSI compliant code.
+  o DEC: ObjectSpace is required for non-ISO/ANSI-compliant code.
          Native STL will be used for ISO/ANSI installation (future patch
 	 or minor release).
-  o HP:  either ObjectSpace or native STL can be used for no ISO/ANSI
-         compliant code. The default setup for Native STL will trigger by
+  o HP:  either ObjectSpace or native STL can be used for non-ISO/ANSI-
+         compliant code. The default setup for native STL will trigger by
 	 default the ISO/ANSI installation (set G4NO_STD_NAMESPACE in the
 	 environment to avoid that).
-  o SUN: ObjectSpace is required (no ISO/ANSI installation).
+  o SUN: ObjectSpace is required (non-ISO/ANSI installation).
          Support for CC 5.0 compiler and native STL (ISO/ANSI installation)
 	 will be added soon (future patch or minor release).
-  o Linux: native STL is required (no ISO/ANSI installation).
-  o NT:  ObjectSpace is required (no ISO/ANSI installation).
+  o Linux: native STL is required (non-ISO/ANSI installation).
+  o NT:  ObjectSpace is required (non-ISO/ANSI installation).
          Support for native STL and ISO/ANSI installation will be added
 	 soon (future patch or minor release).
 
@@ -299,7 +299,7 @@ previous Rogue-Wave based versions.
     fault - but see notes on DEC above.
   o In rare cases heavy ions appear not to be properly stopped and killed
     in tracking, therefore Geant4 sticks making many small steps. This
-    behavior has been observed on SUN and it's under investigation.
+    behavior has been observed on SUN and is under investigation.
  
 
 7. Compilation Warnings
