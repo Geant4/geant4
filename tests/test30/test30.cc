@@ -122,7 +122,7 @@ int main(int argc, char** argv)
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
  
 
-  G4cout.setf( ios::scientific, ios::floatfield );
+  G4cout.setf( G4std::ios::scientific, G4std::ios::floatfield );
 
 
   // -------------------------------------------------------------------
@@ -133,8 +133,8 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  ifstream* fin = new ifstream();
-  string fname = argv[1];
+  G4std::ifstream* fin = new G4std::ifstream();
+  G4String fname = argv[1];
   fin->open(fname.c_str());
   if( !fin->is_open()) {
     G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
@@ -184,7 +184,7 @@ int main(int argc, char** argv)
 
 
 
-  string line, line1;
+  G4String line, line1;
   G4bool end = true;
   for(G4int run=0; run<100; run++) {
     do {
@@ -376,7 +376,6 @@ int main(int argc, char** argv)
            << "### factora = " << factor 
            << "    cross(b)= " << cross_sec/barn << G4endl;
     G4double dtet = pi/(G4int)nbinsa;
-
     for(G4int k=0; k<13; k++) {
       cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
          (twopi*(cos(degree*bng[k]) - cos(degree*bng[k+1]))*barn*emax*(G4double)nevt);
@@ -542,10 +541,11 @@ int main(int argc, char** argv)
 	    h[22]->accumulate(e/MeV, factor);
 	    if(e >= elim) h[25]->accumulate(cos(theta), factora/sint);
             theta /= degree;
-            for(k=0; k<13; k++) {
-              if(theta <= bng[k+1]) break;
+	    G4int kk=0;
+            for(kk=0; kk<13; kk++) {
+              if(theta <= bng[kk+1]) break;
 	    }
-            h[27+k]->accumulate(e/MeV, cng[k]); 
+            h[27+kk]->accumulate(e/MeV, cng[kk]); 
 
 	  } else if(pd == deu) {
 	    h[1]->accumulate(6.0, 1.0);	
