@@ -30,7 +30,7 @@
 //    *                                *
 //    **********************************
 //
-// $Id: BrachyPhysicsList.cc,v 1.9 2003-10-20 18:09:18 vnivanch Exp $
+// $Id: BrachyPhysicsList.cc,v 1.10 2004-01-08 17:25:13 silvarod Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPhysicsList.hh"
@@ -126,6 +126,7 @@ void BrachyPhysicsList::ConstructEM()
       //electron
       loweIon  = new G4LowEnergyIonisation("LowEnergyIoni");
       loweBrem = new G4LowEnergyBremsstrahlung("LowEnBrem");
+      loweBrem->SetAngularGenerator("tsai");
     
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(loweIon,     -1, 2,2);
