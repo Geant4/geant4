@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.5 1999-04-12 11:13:44 johna Exp $ */
+/* $Id: liblist.c,v 1.6 1999-06-09 11:43:51 gunter Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -31,6 +31,7 @@ Frank Behner, John Allison 13th February 1999.
 #include <sys/stat.h>
 #include <unistd.h>
 #include <errno.h>
+#include <stdlib.h>
 
 #define BUFSIZE 1000000
 #define TRIGSIZE 1000
@@ -117,6 +118,11 @@ int main (int argc, char** argv) {
   char **rargv;
   int i,optl=0,swapping,c,rargc;
   FILE *fp;
+
+#ifdef _WIN32
+  char *ntg4tmp=0,*ntg4tmp1=0;
+  int nti; 
+#endif
 
   struct libmap_
     {
@@ -239,11 +245,34 @@ int main (int argc, char** argv) {
     }
 
   if(optl)fprintf(stderr,"  Reading dependency files...\n");
+
+#ifdef _WIN32
+      ntg4tmp=getenv("G4TMP");
+      if ( ! ntg4tmp ) 
+        {
+           fprintf(stderr," Cannot find environment variable G4TMP\n");
+           exit(1);
+        }
+      ntg4tmp1=strdup(ntg4tmp);
+#endif
+
   for(i=0;i<rargc;i++)
     {
       fp=fopen(rargv[i],"r");
       fgets(buffer,BUFSIZE,fp);
-      
+
+#ifdef _WIN32
+      ptr=strchr(ntg4tmp1,':');
+      if ( ptr ) *(ptr+1)='\0';
+
+      while ( ptr=strchr(buffer,'\\') ) *ptr='/';
+ 
+      while (ntg4tmp1!=NULL &&  (ptr=strstr(buffer,ntg4tmp1))!=NULL )
+        {
+          for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
+        }
+#endif
+     
       /* Clip target out of dependency file... */
       ptr=strtok(buffer,":");
       
@@ -286,9 +315,23 @@ int main (int argc, char** argv) {
 		}
 	    }
 	  fgets(buffer,BUFSIZE,fp);
+
+#ifdef _WIN32
+      while ( ptr=strchr(buffer,'\\') ) *ptr='/';
+
+      while (ntg4tmp1 &&  (ptr=strstr(buffer,ntg4tmp1)) )
+        {
+          for(nti=0;nti<strlen(ntg4tmp1);nti++) ptr[nti]=' ';
+        }
+#endif
+  
 	} while(!feof(fp));
       fclose(fp);
     }
+
+#ifdef _WIN32
+      free(ntg4tmp1);
+#endif
 
   if(optl) /* This option is used for compiling the file libname.map
 	      from all the dependencies. */
