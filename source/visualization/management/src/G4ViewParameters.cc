@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.cc,v 1.10 2001-02-23 15:43:25 johna Exp $
+// $Id: G4ViewParameters.cc,v 1.11 2001-02-23 15:47:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -267,6 +267,7 @@ G4std::ostream& operator << (G4std::ostream& os,
     os << "hlhsr - hidden line, hidden surface removed"; break;
   default: os << "unrecognised"; break;
   }
+  return os;
 }
 
 G4std::ostream& operator << (G4std::ostream& os, const G4ViewParameters& v) {
