@@ -37,23 +37,22 @@ G4DisplacedSolid( const G4String& pName,
   fDirectTransform = new G4AffineTransform(rotMatrix,transVector) ;
 }
 
-///////////////////////////////////////////////////////////////////
-//
+/////////////////////////////////////////////////////////////////////////////////
+//  Constructor for use with creation of Transient object from Persistent object
 //
 
 G4DisplacedSolid::G4DisplacedSolid( const G4String& pName,
                                     G4VSolid* pSolid ,
-			      const G4Transform3D& transform  ) :
+			      const G4AffineTransform directTransform ) :
   G4VSolid(pName)
 {
   fPtrSolid = pSolid ;
-  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
-
-  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
-  fPtrTransform->Invert() ;
+  fDirectTransform = new G4AffineTransform( directTransform );
+  fPtrTransform    = new G4AffineTransform( directTransform.Inverse() ) ; 
 }
+
+///////////////////////////////////////////////////////////////////
+//
 
 G4DisplacedSolid::~G4DisplacedSolid() 
 {
@@ -91,6 +90,17 @@ G4ThreeVector  G4DisplacedSolid::GetFrameTranslation() const
    return fPtrTransform->NetTranslation();
 }
 
+///////////////////////////////////////////////////////////////
+G4RotationMatrix G4DisplacedSolid::GetObjectRotation() const
+{
+   G4RotationMatrix InvRotation= fPtrTransform->NetRotation();
+   return InvRotation;
+}
+
+G4ThreeVector  G4DisplacedSolid::GetObjectTranslation() const
+{
+   return fPtrTransform->NetTranslation();
+}
 ///////////////////////////////////////////////////////////////
 //
 //
