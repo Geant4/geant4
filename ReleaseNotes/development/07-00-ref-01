@@ -133,7 +133,7 @@ physics_lists/hadronic                           ghad-lists-V07-00-01	  (*)
   Use 'this' pointer to access data-members of base class for
   unqualified names in physics-lists inline definitions.
 
-examples                                         examples-V07-00-00
+examples                                         examples-V07-00-00	  (*)
 --------
 - Updated reference outputs.
 - extended
