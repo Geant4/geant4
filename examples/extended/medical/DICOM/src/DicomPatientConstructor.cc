@@ -59,8 +59,8 @@ void DicomGeometry::patientConstruction()
   ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[0] );		//  open a .g4 file to read some values
 		
   PatientX = (ReadConfiguration->CompressionUsed*(ReadConfiguration->GetXPixelSpacing())/2.0) *mm;
-  PatientY = (ReadConfiguration->CompressionUsed*(ReadConfiguration->Y_PixelSpacing)/2.0) *mm;
-  PatientZ = ((ReadConfiguration->SliceTickness/2.0) *mm);
+  PatientY = (ReadConfiguration->CompressionUsed*(ReadConfiguration->GetYPixelSpacing())/2.0) *mm;
+  PatientZ = ((ReadConfiguration->GetSliceThickness()/2.0) *mm);
 
   // Logical Box to place Parameteristion inside it
   Attributes_param = new G4VisAttributes();
@@ -69,7 +69,7 @@ void DicomGeometry::patientConstruction()
   G4int totalNumberOfFile = ReadConfiguration->GetTotalNumberOfFile(); 
   G4int totalRows = ReadConfiguration->GetTotalRows(); 
   G4int totalColumns = ReadConfiguration->GetTotalColumns();
-  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->GetXPixelSpacing())/2.*mm, totalRows*(ReadConfiguration->Y_PixelSpacing)/2.*mm, totalNumberOfFile*(ReadConfiguration->SliceTickness)/2.*mm);
+  Parameterisation_Box = new G4Box("Parameterisation Mother", totalColumns*(ReadConfiguration->GetXPixelSpacing())/2.*mm, totalRows*(ReadConfiguration->GetYPixelSpacing())/2.*mm, totalNumberOfFile*(ReadConfiguration->GetSliceThickness())/2.*mm);
   logical_param = new G4LogicalVolume(Parameterisation_Box,air,"Parameterisation Mother (logical)");
   logical_param->SetVisAttributes(Attributes_param);
 

@@ -270,9 +270,9 @@ void DicomPatientParameterisation::GetDensity(double maxdensity , double mindens
                     {
 		      Density.push_back( ReadConfiguration->DensityValue[i] );
 		      copy_counter++;
-		      PatientPlacementX.push_back( (ReadConfiguration->CompressionUsed*( ((lenc*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->Y_PixelSpacing/2+(w-1)*ReadConfiguration->Y_PixelSpacing) ) )*mm );
-		      PatientPlacementY.push_back( (ReadConfiguration->CompressionUsed*( ((lenr*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->Y_PixelSpacing/2+(j-1)*ReadConfiguration->Y_PixelSpacing) ) )*mm );
-		      PatientPlacementZ.push_back( (ReadConfiguration->SliceLocation + ReadConfiguration->SliceTickness/2)*mm );
+		      PatientPlacementX.push_back( (ReadConfiguration->CompressionUsed*( ((lenc*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(w-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );
+		      PatientPlacementY.push_back( (ReadConfiguration->CompressionUsed*( ((lenr*ReadConfiguration->GetXPixelSpacing())/2)-(ReadConfiguration->GetYPixelSpacing()/2+(j-1)*ReadConfiguration->GetYPixelSpacing()) ) )*mm );
+		      PatientPlacementZ.push_back( (ReadConfiguration->SliceLocation + ReadConfiguration->GetSliceThickness()/2)*mm );
                     }
                 }
             }
