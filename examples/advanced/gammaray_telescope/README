@@ -1,4 +1,4 @@
-$Id: README,v 1.9 2001-12-07 11:08:41 pfeiffer Exp $
+$Id: README,v 1.10 2001-12-07 11:15:18 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -73,6 +73,18 @@ The main features of this example are
   setenv G4UI_USE_XM  1    
   (IMPORTANT: Do not set G4ANALYSIS_USE_NTUPLE	when using XM!)
 	
+
+ - Set up for analysis using AIDA
+
+  To compile the GammaRayTel example with the analysis tools activated, 
+  set the following variables 
+
+  setenv G4ANALYSIS_USE               1 # Use the analysis tools
+
+  To be sure to have the right compilation and link flags, the 
+  'aida-config' command, provided by an AIDA compliant implementation
+  must be up and running ; in particular 'aida-config --cflags' and
+  'aida-config --libs' must be active.
 
  - Set up for analysis using Lizard 
 
