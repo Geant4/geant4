@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.13 2004-02-05 10:48:49 stesting Exp $ //
+// $Id: G4Scatterer.cc,v 1.14 2004-12-07 14:50:57 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -107,8 +107,8 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 	   
 	   // charged particles special
 	   static const G4double maxChargedCrossSection = 200*millibarn;
-	   if(abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
-	      abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
+	   if(std::abs(trk1.GetDefinition()->GetPDGCharge())>0.1 && 
+	      std::abs(trk2.GetDefinition()->GetPDGCharge())>0.1 &&
 	      pi*distance>maxChargedCrossSection) return time;
 	      
 	   // neutrons special   
@@ -122,7 +122,7 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
  * 	    time = collisionTime;
  * 	  
  * *
- *  * 	     G4cout << "Scatter distance/time: " << sqrt(distance)/fermi <<
+ *  * 	     G4cout << "Scatter distance/time: " << std::sqrt(distance)/fermi <<
  *  * 	         " / "<< time/ns << G4endl;
  *  * 	      G4ThreeVector pos1=trk1.GetPosition(); 
  *  * 	      G4ThreeVector pos2=trk2.GetPosition();
@@ -194,9 +194,9 @@ G4double G4Scatterer::GetTimeToInteraction(const G4KineticTrack& trk1,
 /*
  * 	      if(distance <= sqr(5.*fermi))
  * 	       {
- * 		  G4cout << " distance,xsect, sqrt(xsect/pi) : " << sqrt(distance)/fermi
+ * 		  G4cout << " distance,xsect, std::sqrt(xsect/pi) : " << std::sqrt(distance)/fermi
  * 			 << " " << totalCrossSection/sqr(fermi)
- * 			 << " " << sqrt(totalCrossSection / pi)/fermi << G4endl;
+ * 			 << " " << std::sqrt(totalCrossSection / pi)/fermi << G4endl;
  * 	       }
  */
 
