@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.cc,v 1.10 2001-03-09 12:08:21 gcosmo Exp $
+// $Id: G4PhysicsVector.cc,v 1.11 2001-03-09 13:36:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,6 +52,7 @@ G4PhysicsVector&
   if (&right==this) return *this;
   if (type != right.type) return *this;
 
+  type = right.type;
   edgeMin = right.edgeMin;
   edgeMax = right.edgeMax;
   numberOfBin = right.numberOfBin;
