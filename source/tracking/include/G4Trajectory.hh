@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.3 1999-04-15 08:47:08 asaim Exp $
+// $Id: G4Trajectory.hh,v 1.4 1999-05-21 12:58:55 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,6 +57,7 @@ class G4Trajectory : public G4VTrajectory
 //--------
 
 // Constructor/Destrcutor
+   G4Trajectory() {;}
    G4Trajectory(const G4Track* aTrack);
    G4Trajectory(G4Trajectory &);
    virtual ~G4Trajectory();
