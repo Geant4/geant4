@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.15 2001-12-12 23:06:04 sadilov Exp $
+# $Id: Configure,v 1.16 2001-12-13 22:40:45 sadilov Exp $
 #
-# Generated on Wed Dec 12 23:57:15 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Thu Dec 13 23:12:53 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1838,6 +1838,7 @@ for file in $loclist $trylist; do
 	eval $file="\$_$file"
 done
 
+
 : who configured the system
 cf_time=`$date 2>&1`
 cf_by=`(logname) 2>/dev/null`
@@ -2122,181 +2123,6 @@ rm -f getfile.ok
 EOSC
 
 echo " "
-
-#echo "SSS"
-#echo `pwd`
-#echo "SSS"
-
-if [ X$src = X. ] ; then
-	cd ../..
-	abssrc=`pwd`
-	cd .config/UU
-else
-	abssrc=$src
-fi
-
-case "$g4conf" in
-'')
-	g4conf=$abssrc/.config/bin/$g4system
-	;;
-esac
-
-#echo "g4conf=$g4conf"
-
-case "$g4install" in
-'')
-	g4install=$HOME/geant4
-	;;
-esac
-
-case "$g4base" in
-'')
-	g4base=$g4install/source
-	;;
-esac
-
-case "$g4workdir" in
-'')
-	g4workdir=$g4install
-	;;
-esac
-
-case "$g4includes_flag" in
-'')
-	g4includes_flag=n
-	;;
-esac
-
-case "$g4include" in
-'')
-	g4include=$g4install/include
-	;;
-esac
-
-g4message=`cat << EOM
-
-Where is Geant4 installed?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt=$g4install
-fn='d~'
-rp=$g4message
-. ./getfile
-g4install=$ans
-g4workdir=$g4install
-
-g4message=`cat << EOM
-
-Do you want to copy all Geant4 headers 
-in one directory?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt=$g4includes_flag
-#fn='d~'
-rp=$g4message
-. ./myread
-g4includes_flag=$ans
-
-if [ X$g4includes_flag = Xy ] ; then
-
-g4message=`cat << EOM
-
-Where will be directory to copy all Geant4 headers?
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt=$g4include
-fn='d~+'
-rp=$g4message
-. ./getfile
-g4include=$ans
-
-fi
-
-g4base=$g4install/source
-#if test "X$g4include" = "X[NOT DEFINED]" ; then
-#g4include=""
-#fi
-
-echo " "
-
-case "$g4tmp" in
-'')
-	g4tmp=$g4workdir/tmp
-	;;
-esac
-
-case "$g4lib" in
-'')
-	g4lib=$g4workdir/lib
-	;;
-esac
-
-case "$g4bin" in
-'')
-	g4bin=$g4workdir/bin
-	;;
-esac
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-(OPTIONAL) You can now customise installation directories:
-  G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
-  G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
-
-1) G4TMP:		$g4tmp
-
-2) G4LIB:		$g4lib
-
-Select from list above (e.g. 2) 
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
-#fn='d~'
-rp=$g4message
-. ./myread
-gans=$ans
-
-
-	case $gans in
-
-	1) 
-		dflt=$g4tmp
-		fn='d~+'
-		rp="Where will be your Geant4 tmp directory?"
-		. ./getfile
-		g4tmp=$ans
-		;;
-	2) 
-		dflt=$g4lib
-		fn='d~+'
-		rp="Where will be your Geant4 lib directory?"
-		. ./getfile
-		g4lib=$ans
-		;;
-#	3) 
-#		dflt=$g4bin
-#		fn='d~+'
-#		rp="Where will be your Geant4 bin directory?"
-#		. ./getfile
-#		g4bin=$ans
-#		;;
-
-#	[eE]) 
-#		break
-#		;;
-	*) 
-		break
-#		echo " "
-		;;
-	esac
-done
-echo " "
 case "$g4clhep_base_dir" in
 '')
 	g4clhep_base_dir=/usr/local
@@ -2393,7 +2219,7 @@ g4message=`cat << EOM
 You can customize paths of you CLHEP installation:
 
 1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
-2) CLHEP_LIB_DIR:			$g4clhep_lib_dir
+2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
 3) CLHEP_LIB:			$g4clhep_lib
 
 Select from list above (e.g. 2) 
@@ -2437,6 +2263,8 @@ gans=$ans
 		;;
 	esac
 done
+
+
 echo " "
 
 case "$g4data" in
@@ -2459,13 +2287,13 @@ esac
 
 case "$g4ledata" in
 '')
-	g4ledata=$g4install/../G4EMLOW
+	g4ledata=$g4install/../G4EMLOW0.5
 	;;
 esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL
+	g4neutronhpcrosssections=$g4install/../G4NDL3.5
 	;;
 esac
 
@@ -2515,14 +2343,14 @@ gans=$ans
 	3) 
 		dflt=$g4ledata
 		fn='f~'
-		rp="Where is G4EMLOW0.3 data installed ?"
+		rp="Where is G4EMLOW0.5 data installed ?"
 		. ./getfile
 		g4ledata=$ans
 		;;
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL0.2 installed?"
+		rp="Where is G4NDL3.5 installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
@@ -2535,6 +2363,7 @@ gans=$ans
 		;;
 	esac
 done
+
 
 echo " "
 case "$g4debug" in
@@ -2578,6 +2407,7 @@ gans=$ans
 #		;;
 	esac
 done
+
 
 echo " "
 case "$g4global" in
@@ -2722,6 +2552,173 @@ gans=$ans
 done
 fi
 fi
+
+### End file - without will be problem! Check in others...
+
+echo " "
+
+#echo "SSS"
+#echo `pwd`
+#echo "SSS"
+
+if [ X$src = X. ] ; then
+	cd ../..
+	abssrc=`pwd`
+	cd .config/UU
+else
+	abssrc=$src
+fi
+
+case "$g4conf" in
+'')
+	g4conf=$abssrc/.config/bin/$g4system
+	;;
+esac
+
+#echo "g4conf=$g4conf"
+
+case "$g4install" in
+'')
+	g4install=$HOME/geant4
+	;;
+esac
+
+case "$g4workdir" in
+'')
+	g4workdir=$g4install
+	;;
+esac
+
+case "$g4includes_flag" in
+'')
+	g4includes_flag=n
+	;;
+esac
+
+case "$g4include" in
+'')
+	g4include=$g4install/include
+	;;
+esac
+
+g4message=`cat << EOM
+
+Where is Geant4 installed?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4install
+fn='d~'
+rp=$g4message
+. ./getfile
+g4install=$ans
+g4workdir=$g4install
+
+g4message=`cat << EOM
+
+Do you want to copy all Geant4 headers 
+in one directory?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4includes_flag
+#fn='d~'
+rp=$g4message
+. ./myread
+g4includes_flag=$ans
+
+if [ X$g4includes_flag = Xy ] ; then
+
+g4message=`cat << EOM
+
+Where will be directory to copy all Geant4 headers?
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt=$g4include
+fn='d~+'
+rp=$g4message
+. ./getfile
+g4include=$ans
+
+fi
+
+#if test "X$g4include" = "X[NOT DEFINED]" ; then
+#g4include=""
+#fi
+
+echo " "
+
+case "$g4tmp" in
+'')
+	g4tmp=$g4workdir/tmp
+	;;
+esac
+
+case "$g4lib" in
+'')
+	g4lib=$g4workdir/lib
+	;;
+esac
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+(OPTIONAL) You can now customise installation directories:
+  G4TMP - tmp/ containing temporary dependency (.d) and object (.o) files;
+  G4LIB - lib/ containing final static (.a) or shared (.so) libraries;
+
+1) G4TMP:		$g4tmp
+
+2) G4LIB:		$g4lib
+
+Select from list above (e.g. 2) 
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+
+	case $gans in
+
+	1) 
+		dflt=$g4tmp
+		fn='d~+'
+		rp="Where will be your Geant4 tmp directory?"
+		. ./getfile
+		g4tmp=$ans
+		;;
+	2) 
+		dflt=$g4lib
+		fn='d~+'
+		rp="Where will be your Geant4 lib directory?"
+		. ./getfile
+		g4lib=$ans
+		;;
+#	3) 
+#		dflt=$g4bin
+#		fn='d~+'
+#		rp="Where will be your Geant4 bin directory?"
+#		. ./getfile
+#		g4bin=$ans
+#		;;
+
+#	[eE]) 
+#		break
+#		;;
+	*) 
+		break
+#		echo " "
+		;;
+	esac
+done
+
+
 echo " "
 case "$g4lib_build_shared" in
 '')
@@ -3059,12 +3056,11 @@ gans=y
 g4message=`cat << EOM
 
   G4UI_BUILD_XAW_SESSION
-  Specifies to include in kernel library the XAW
-  Motif-based user interfaces.
-
   G4UI_USE_XAW
-  Specifies to use the XAW interfaces in the
+
+  Specifies to include and use the XAW interfaces in the
   application to be built.
+  The XAW (X11 Athena Widget set) are required to activate these driver.
 EOM`
 
 dflt=$g4ui_use_xaw
@@ -3144,10 +3140,12 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WO_SESSION
-Gabriele, where can I take descriprion? 
 
   G4UI_USE_WO
-Gabriele, where can I take descriprion? 
+
+  Specifies to include in kernel library and use the OPACS WO terminal
+  interface for the OPACS system. The OPACS tool must be installed
+  to activate this driver !
 
 EOM`
 
@@ -3193,6 +3191,8 @@ gans=y
 
 ;;
 esac
+
+
 echo " "
 case "$g4use_hepodbms" in
 '')
@@ -3209,7 +3209,7 @@ ODBMS package. How to store and retrieve Geant4 events, hits and geometry
 objects is explained in documentation.
 
 For setting this you should have an ODMG compliant database
-(Objectivity) installed and running on your system!
+(e.g. Objectivity/DB) installed and running on your system!
 EOM`
 
 dflt=$g4use_hepodbms
@@ -3228,22 +3228,11 @@ gans=$ans
 	esac
 
 
+
 echo " "
 case "$g4vis_none" in
 '')
 	g4vis_none=n
-	;;
-esac
-
-case "$g4vis_build_heprep_driver" in
-'')
-	g4vis_build_heprep_driver=n
-	;;
-esac
-
-case "$g4vis_use_heprep" in
-'')
-	g4vis_use_heprep=n
 	;;
 esac
 
@@ -3372,20 +3361,6 @@ case "$g4vis_use_vrml" in
 esac
 
 # Set by default!
-case "$g4vis_build_vrmlfile_driver" in
-'')
-	g4vis_build_vrmlfile_driver=y
-	;;
-esac
-
-# Set by default!
-case "$g4vis_use_vrmlfile" in
-'')
-	g4vis_use_vrmlfile=y
-	;;
-esac
-
-# Set by default!
 case "$g4vis_build_asciitree_driver" in
 '')
 	g4vis_build_asciitree_driver=y
@@ -3444,14 +3419,16 @@ n)
 
 g4message=`cat << EOM
 
-  G4VIS_BUILD_HEPREP_DRIVER
-  G4VIS_USE_HEPREP
+  G4VIS_BUILD_OPENGLX_DRIVER
+  G4VIS_USE_OPENGLX
 
-DESCRIPTION
-
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries is
+required.
 EOM`
 
-dflt=$g4vis_use_heprep
+dflt=$g4vis_use_openglx
 rp=$g4message
 . ./myread
 gans=$ans
@@ -3459,12 +3436,41 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
-		g4vis_build_heprep_driver=n
-		g4vis_use_heprep=n
+		g4vis_build_openglx_driver=n
+		g4vis_use_openglx=n
 		;;
 	y*|Y*) 
-		g4vis_build_heprep_driver=y
-		g4vis_use_heprep=y
+		g4vis_build_openglx_driver=y
+		g4vis_use_openglx=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OPENGLXM_DRIVER
+  G4VIS_USE_OPENGLXM
+
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The X11 version of the OpenGL libraries and 
+the Motif Xm extension is required.
+
+EOM`
+
+dflt=$g4vis_use_openglxm
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_openglxm_driver=n
+		g4vis_use_openglxm=n
+		;;
+	y*|Y*) 
+		g4vis_build_openglxm_driver=y
+		g4vis_use_openglxm=y
 		;;
 	esac
 
@@ -3473,7 +3479,10 @@ g4message=`cat << EOM
   G4VIS_BUILD_OPENGLWIN32_DRIVER
   G4VIS_USE_OPENGLWIN32
 
-DESCRIPTION
+It is an interface to the de facto standard 3D graphics library,
+OpenGL. It is well suited for real-time fast visualization
+and prototyping. The Windows version of the OpenGL libraries is
+required.
 
 EOM`
 
@@ -3496,10 +3505,69 @@ gans=$ans
 
 g4message=`cat << EOM
 
+  G4VIS_BUILD_DAWN_DRIVER
+  G4VIS_USE_DAWN
+
+DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
+a vectorized 3D PostScript processor suited to prepare technical
+high quality outputs for presentation and/or documentation.
+
+EOM`
+
+dflt=$g4vis_use_dawn
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_dawn_driver=n
+		g4vis_use_dawn=n
+		;;
+	y*|Y*) 
+		g4vis_build_dawn_driver=y
+		g4vis_use_dawn=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4VIS_BUILD_OIX_DRIVER
+  G4VIS_USE_OIX
+
+This driver is based on the "Hepvis" class library.
+The OpenInventor driver and the Hepvis class library are based
+on OpenInventor technology for scientific visualization.
+The X11 version of OpenInventor is required.
+
+EOM`
+
+dflt=$g4vis_use_oix
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4vis_build_oix_driver=n
+		g4vis_use_oix=n
+		;;
+	y*|Y*) 
+		g4vis_build_oix_driver=y
+		g4vis_use_oix=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
   G4VIS_BUILD_OIWIN32_DRIVER
   G4VIS_USE_OIWIN32
 
-DESCRIPTION
+Specifies to build and use the driver for the free X11 version of
+OpenInventor on Windows systems.
+The Windows version of OpenInventor is required.
 
 EOM`
 
@@ -3517,37 +3585,6 @@ gans=$ans
 	y*|Y*) 
 		g4vis_build_oiwin32_driver=y
 		g4vis_use_oiwin32=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_DAWN_DRIVER
-  G4VIS_USE_DAWN
-
-DAWN drivers are interfaces to the Fukui Renderer DAWN. DAWN is
-a vectorized 3D PostScript processor suited to prepare technical
-high quality outputs for presentation and/or documentation.
-
-The DAWNFILE driver sends 3D data to DAWN via an intermediate file, 
-named g4.prim in the current directory. The file g4.prim is able to 
-be re-visualized later without the help of Geant4. 
-EOM`
-
-dflt=$g4vis_use_dawn
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_dawn_driver=n
-		g4vis_use_dawn=n
-		;;
-	y*|Y*) 
-		g4vis_build_dawn_driver=y
-		g4vis_use_dawn=y
 		;;
 	esac
 
@@ -3589,6 +3626,8 @@ g4message=`cat << EOM
 
 OPACS is a visualization environment based on X windows and OpenGL. 
 It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
+The version of OPACS installed is required.
+
 EOM`
 
 dflt=$g4vis_use_opacs
@@ -3605,89 +3644,6 @@ gans=$ans
 	y*|Y*) 
 		g4vis_build_opacs_driver=y
 		g4vis_use_opacs=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OPENGLX_DRIVER
-  G4VIS_USE_OPENGLX
-
-It is an interface to the de facto standard 3D graphics library,
-OpenGL. It is well suited for real-time fast visualization
-and prototyping. The X11 version of the OpenGL libraries is
-required.
-EOM`
-
-dflt=$g4vis_use_openglx
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_openglx_driver=n
-		g4vis_use_openglx=n
-		;;
-	y*|Y*) 
-		g4vis_build_openglx_driver=y
-		g4vis_use_openglx=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OPENGLXM_DRIVER
-  G4VIS_USE_OPENGLXM
-
-It is an interface to the de facto standard 3D graphics library,
-OpenGL. It is well suited for real-time fast visualization
-and prototyping. The X11 version of the OpenGL libraries is
-required.
-EOM`
-
-dflt=$g4vis_use_openglxm
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_openglxm_driver=n
-		g4vis_use_openglxm=n
-		;;
-	y*|Y*) 
-		g4vis_build_openglxm_driver=y
-		g4vis_use_openglxm=y
-		;;
-	esac
-
-g4message=`cat << EOM
-
-  G4VIS_BUILD_OIX_DRIVER
-  G4VIS_USE_OIX
-
-This driver is based on the "Hepvis" class library.
-The OpenInventor driver and the Hepvis class library are based
-on OpenInventor technology for scientific visualization.
-EOM`
-
-dflt=$g4vis_use_oix
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4vis_build_oix_driver=n
-		g4vis_use_oix=n
-		;;
-	y*|Y*) 
-		g4vis_build_oix_driver=y
-		g4vis_use_oix=y
 		;;
 	esac
 
@@ -3725,8 +3681,9 @@ g4message=`cat << EOM
   G4VIS_BUILD_VRML_DRIVER
   G4VIS_USE_VRML
 
-This driver generates VRML files, which describe 3D scenes to be 
-visualized with a proper VRML viewer, at either a local or a remote host. 
+These driver generate VRML files, which describe 3D scenes to be 
+visualized with a proper VRML viewer.
+
 EOM`
 
 dflt=$g4vis_use_vrml
@@ -3837,6 +3794,8 @@ gans=y
 
 ;;
 esac
+
+
 echo " "
 
 case "$g4wanalysis_use" in
@@ -3872,6 +3831,7 @@ gans=$ans
 		g4wanalysis_use=y
 		;;
 	esac
+
 
 : end of configuration questions
 echo " "
