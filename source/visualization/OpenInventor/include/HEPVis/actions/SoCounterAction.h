@@ -6,6 +6,8 @@
 
 #include <Inventor/actions/SoSubAction.h>
 
+#define SoCounterAction Geant4_SoCounterAction
+
 class SoCounterAction : public SoAction {
   SO_ACTION_HEADER(SoCounterAction);
 public:

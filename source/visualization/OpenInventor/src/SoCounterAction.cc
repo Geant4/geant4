@@ -2,11 +2,18 @@
 #include <HEPVis/actions/SoCounterAction.h>
 
 #include <Inventor/nodes/SoNode.h>
+#include <Inventor/nodes/SoGroup.h>
+#include <Inventor/nodes/SoSwitch.h>
+#include <Inventor/nodekits/SoBaseKit.h>
+#include <Inventor/elements/SoSwitchElement.h>
 
 SO_ACTION_SOURCE(SoCounterAction);
 
 void SoCounterAction::initClass(void){
   SO_ACTION_INIT_CLASS(SoCounterAction,SoAction);
+
+  SO_ENABLE(SoCounterAction,SoSwitchElement);
+
   SO_ACTION_ADD_METHOD(SoNode,SoCounterAction::actionMethod);
 }
 SoCounterAction::SoCounterAction()
@@ -19,6 +26,8 @@ void SoCounterAction::beginTraversal(SoNode* node){
   SoAction::beginTraversal(node);
 }
 void SoCounterAction::actionMethod(SoAction* aThis,SoNode* aNode) {
+  //printf("debug : begin : %s %s\n",aNode->getName().getString(),
+    //aNode->getTypeId().getName().getString());
   SoCounterAction* This = (SoCounterAction*)aThis;
   if(This->fLookFor==NODE) {
     This->fCount++;
@@ -30,6 +39,19 @@ void SoCounterAction::actionMethod(SoAction* aThis,SoNode* aNode) {
     }
   } else if(This->fLookFor==NAME) {
     if(This->fName==aNode->getName()) This->fCount++;
+  }
+  if(aNode->isOfType(SoSwitch::getClassTypeId())) {
+    SoSwitch* sw = (SoSwitch*)aNode;
+    SbBool flag = sw->whichChild.enableNotify(FALSE);
+    int old = sw->whichChild.getValue();
+    sw->whichChild.setValue(SO_SWITCH_ALL);
+    aNode->doAction(aThis);
+    sw->whichChild.setValue(old);
+    sw->whichChild.enableNotify(flag);
+  } else if(aNode->isOfType(SoGroup::getClassTypeId())) {
+    aNode->doAction(aThis);
+  } else if(aNode->isOfType(SoBaseKit::getClassTypeId())) {
+    aNode->doAction(aThis);
   }
 }
 void SoCounterAction::setLookFor(LookFor aLookFor) {

@@ -375,11 +375,20 @@ void G4OpenInventorViewer::SceneGraphStatistics() {
   fSoSelection->ref();
   counterAction.apply(fSoSelection);
   fSoSelection->unrefNoDelete();
+  int nodes = counterAction.getCount();
+
+  counterAction.setLookFor(SoCounterAction::TYPE);
+  counterAction.setType(SoShape::getClassTypeId());
+  fSoSelection->ref();
+  counterAction.apply(fSoSelection);
+  fSoSelection->unrefNoDelete();
+  int shapes = counterAction.getCount();
 
   G4cout << "Number of triangles : " << counter.fTriangles << G4endl;
   G4cout << "Number of line segments : " << counter.fLineSegments << G4endl;
   G4cout << "Number of points : " << counter.fPoints << G4endl;
-  G4cout << "Number of nodes : " << counterAction.getCount() << G4endl;
+  G4cout << "Number of nodes : " << nodes << G4endl;
+  G4cout << "Number of shapes : " << shapes << G4endl;
 }
 
 void G4OpenInventorViewer::EraseDetector() {
