@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.27 2001-11-29 19:01:45 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.28 2001-11-29 22:47:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -31,12 +31,16 @@
 // -----------
 // 02 Mar 1999  A. Forti        1st implementation
 // 27 Sep 2001  V. Ivanchenko   Major revision according to a design iteration
-// 10 Oct 2001  M.G. Pia        Revision to improve code quality and consistency with design
+// 10 Oct 2001  M.G. Pia        Revision to improve code quality 
+//                              and consistency with design
+// 29 Nov 2001  V.Ivanchenko    New parametrisation of EEDL data
 //
 // -------------------------------------------------------------------
 
 // Class description:
 // Low Energy electromagnetic process, electron Bremsstrahlung
+// based on the data of the EEDL database. Details are described
+// in the Physics Reference Manual.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // --------------------------------------------------------------
@@ -75,11 +79,11 @@ public:
   
   void PrintInfoDefinition();
         
+protected:
 
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
-protected:
  
 private:
 
