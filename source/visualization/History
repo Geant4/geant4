@@ -1,4 +1,4 @@
-$Id: History,v 1.40 1999-11-04 04:55:38 stanaka Exp $
+$Id: History,v 1.41 1999-11-04 08:31:54 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+VRML-V00-01-01 4th November 1999  Satoshi Tanaka
+- Introduction of VRMLBeginModeling() for new vis commands  
+- Updation and tagging of visualization/VRML/
+  and this History file 
 
 DAWN-V00-01-04  04th November 1999 Satoshi TANAKA  
 - Protection to AddPrimitive( G4NURBS )
