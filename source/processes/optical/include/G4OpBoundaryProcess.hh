@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.1 1999-01-07 16:14:01 gunter Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.2 1999-10-16 00:46:42 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,6 +18,12 @@
 //                                  optical interfaces
 // Version:     1.1
 // Created:     1997-06-18
+// Modified:    1999-10-10 - Fill NewMomentum/NewPolarization in 
+//                           DoAbsorption. These members need to be
+//                           filled since DoIt calls 
+//                           aParticleChange.SetMomentumChange etc.
+//                           upon return (thanks to: Clark McGrew)
+//
 // Author:      Peter Gumplinger
 //              adopted from work by Werner Keil - April 2/96
 // mail:        gum@triumf.ca
@@ -314,6 +320,7 @@ inline
 void G4OpBoundaryProcess::DoAbsorption()
 {
               theStatus = Absorption;
+
               if ( G4BooleanRand(theEfficiency) ) {
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
@@ -322,6 +329,10 @@ void G4OpBoundaryProcess::DoAbsorption()
               else {
                  aParticleChange.SetLocalEnergyDeposit(0.0);
               }
+
+              NewMomentum = OldMomentum;
+              NewPolarization = OldPolarization;
+
 //              aParticleChange.SetEnergyChange(0.0);
               aParticleChange.SetStatusChange(fStopAndKill);
 }
