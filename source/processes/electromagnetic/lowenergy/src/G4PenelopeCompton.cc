@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeCompton.cc,v 1.9 2003-03-10 12:18:34 vnivanch Exp $
+// $Id: G4PenelopeCompton.cc,v 1.10 2003-03-13 16:56:40 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Luciano Pandola
@@ -32,7 +32,8 @@
 // 14 Feb 2003   MG Pia       Corrected compilation errors and warnings
 //                            from SUN
 //                            Modified some variables to lowercase initial 
-// 10 Mar 2003 V.Ivanchenko   Remome CutPerMaterial warning
+// 10 Mar 2003 V.Ivanchenko   Remove CutPerMaterial warning
+// 13 Mar 2003 L.Pandola      Code "cleaned"   
 //
 // -------------------------------------------------------------------
 
@@ -107,7 +108,6 @@ G4PenelopeCompton::~G4PenelopeCompton()
 
 void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 {
-
   G4DataVector energyVector;
   G4double dBin = log10(highEnergyLimit/lowEnergyLimit)/nBins;
   G4int i;
@@ -152,9 +152,7 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	  {
 	    G4double e = energyVector[bin];
 	    energies->push_back(e);
-	    cross = density * CrossSection(e,Z); //sezione d'urto
-	    //G4cout << "Cross: " << cross << G4endl;
-	    //G4cout << "Energy: " << e/MeV << " Material: " << material->GetName() << G4endl;
+	    cross = density * CrossSection(e,Z); 
 	    data->push_back(cross);
 	  }
 
@@ -165,7 +163,6 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
       matCrossSections->push_back(setForMat);
     }
 
-  //sono state calcolate le sezioni d'urto dei vari materiali
   G4double matCS = 0.0;
   G4VEMDataSet* matCrossSet = new G4CompositeEMDataSet(algo,1.,1.);
   G4VEMDataSet* materialSet = new G4CompositeEMDataSet(algo,1.,1.);
@@ -181,9 +178,9 @@ void G4PenelopeCompton::BuildPhysicsTable(const G4ParticleDefinition& photon)
 	{
 	  G4double energy = energyVector[bin];
 	  energies->push_back(energy);
-	  matCrossSet = (*matCrossSections)[m]; //E'un composite!
+	  matCrossSet = (*matCrossSections)[m]; 
 	  matCS = 0.0;
-          G4int nElm = matCrossSet->NumberOfComponents();//una per ogni elemento
+          G4int nElm = matCrossSet->NumberOfComponents();
           for(G4int j=0; j<nElm; j++) {
             matCS += matCrossSet->GetComponent(j)->FindValue(energy);
 	  }
@@ -226,7 +223,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
   const G4MaterialCutsCouple* couple = aTrack.GetMaterialCutsCouple();
   const G4Material* material = couple->GetMaterial();
   G4int Z = SelectRandomAtomForCompton(material,photonEnergy0);
-  //La routine di estrazione funziona
   const G4int nmax = 64;
   G4double rn[nmax],pac[nmax];
   
@@ -272,7 +268,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	    occupNb = (G4int) (*((*occupationNumber)[Z-1]))[j];
 	    S = S + occupNb;
 	    if (S > TST) iosc = j;
-	    if (S > TST) break; //funziona anche dentro l'if??
+	    if (S > TST) break; 
 	  }
 	ionEnergy = (*((*ionizationEnergy)[Z-1]))[iosc];
       }while((epsilon*photonEnergy0-photonEnergy0+ionEnergy) >0);
@@ -361,7 +357,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
 	      iosc=nosc;
 	      for (G4int i=0;i<nosc;i++){
 		if (pac[i]>TST) iosc = i;
-		if (pac[i]>TST) break; //funziona anche nello stesso if?
+		if (pac[i]>TST) break; 
 	      }
 	      A = G4UniformRand()*rn[iosc];
 	      harFunc = (*((*hartreeFunction)[Z-1]))[iosc]/fine_structure_const;
@@ -404,7 +400,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
     }
   
 
-  //G4cout << "Epsilon: " << epsilon << " cosTheta: " << cosTheta << G4endl;
   G4double sinTheta = sqrt(1-pow(cosTheta,2));
   G4double phi = twopi * G4UniformRand() ;
   G4double dirx = sinTheta * cos(phi);
@@ -428,7 +423,6 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       aParticleChange.SetStatusChange(fStopAndKill);
     }
 
-  //In teoria bisognerebbe generare anche la radiazione di fluorescenza
 
   // Kinematics of the scattered electron 
 
@@ -446,6 +440,7 @@ G4VParticleChange* G4PenelopeCompton::PostStepDoIt(const G4Track& aTrack,
       cosThetaE = 1.0;
     }
   G4double sinThetaE = sqrt(1-pow(cosThetaE,2));
+
   // Generate the electron only if with large enough range w.r.t. cuts and safety
 
   G4double safety = aStep.GetPostStepPoint()->GetSafety();
@@ -514,7 +509,8 @@ void G4PenelopeCompton::ReadData()
     }
   file.close();
   
-  //E' un algoritmo inguardabile...vedi se si puo' migliorare
+  //This algorithm is slow and unelegant!
+  //It must be improved.
   G4int k1,k2;
   G4double a1,a2;
   G4int Z=0;
@@ -542,9 +538,8 @@ void G4PenelopeCompton::ReadData()
     hartreeFunction->push_back(j);
     occupationNumber->push_back(f);
   }
-  //ionizationEnergy contiene Z=92 vettori di livelli di ionizzazione 
-  //(*((*ionizationEnergy)[Z-1]))[i] contiene l'energia di ionizzazione dell'i=esimo
-  //livello dell'elemento Z
+  //(*((*ionizationEnergy)[Z-1]))[i] contains the ionization energy of the i-th level of
+  //the element Z
 };
 
 G4double G4PenelopeCompton::CrossSection(G4double energy,G4int Z)
