@@ -1,4 +1,4 @@
-$Id: History,v 1.49 2003-01-15 09:48:38 gcosmo Exp $
+$Id: History,v 1.50 2003-01-30 08:19:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+January 30, 2003  G. Cosmo                 geommng-V05-00-03
+- Allow logical volume store to deregister root regions for logical volumes
+  deleted explicitely.
+  Modified files: G4logicalVolumeStore.cc, G4LogicalVolume[.hh.icc.cc].
+- G4Region.hh: moved ClearMaterialList() to public.
 
 January 15, 2003  G. Cosmo                 geommng-V05-00-02
 - Included fix in G4VSolid.cc introduced in "geommng-V04-01-06".
