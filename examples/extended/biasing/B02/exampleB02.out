@@ -18,7 +18,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
@@ -37,7 +37,7 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -47,7 +47,7 @@ hIoni:    Knock-on electron cross sections .
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 MuIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -64,21 +64,23 @@ MuPairProd:  theoretical cross sections
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
 === G4ProcessPlacer::AddProcessAsSecondDoIt ===
   ProcessName: PScoreProcess
-The initial GPILVec: 
+The initial Vectors: 
+GPIL Vector: 
    Decay
    LCapture
    LFission
    inelastic
    LElastic
    Transportation
-The initial DoItVec: 
+DoIt Vector: 
    Transportation
    LElastic
    inelastic
    LFission
    LCapture
    Decay
-The final GPIL Vec: 
+The final Vectors: 
+GPIL Vector: 
    Decay
    LCapture
    LFission
@@ -86,7 +88,7 @@ The final GPIL Vec:
    LElastic
    PScoreProcess
    Transportation
-The final DoIt Vec: 
+DoIt Vector: 
    Transportation
    PScoreProcess
    LElastic
@@ -98,7 +100,8 @@ The final DoIt Vec:
 +++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
 === G4ProcessPlacer::AddProcessAsSecondDoIt ===
   ProcessName: ParallelTransport
-The initial GPILVec: 
+The initial Vectors: 
+GPIL Vector: 
    Decay
    LCapture
    LFission
@@ -106,7 +109,7 @@ The initial GPILVec:
    LElastic
    PScoreProcess
    Transportation
-The initial DoItVec: 
+DoIt Vector: 
    Transportation
    PScoreProcess
    LElastic
@@ -114,7 +117,8 @@ The initial DoItVec:
    LFission
    LCapture
    Decay
-The final GPIL Vec: 
+The final Vectors: 
+GPIL Vector: 
    Decay
    LCapture
    LFission
@@ -123,7 +127,7 @@ The final GPIL Vec:
    PScoreProcess
    ParallelTransport
    Transportation
-The final DoIt Vec: 
+DoIt Vector: 
    Transportation
    ParallelTransport
    PScoreProcess
@@ -273,3 +277,41 @@ scorecell: M1............ |     9.68112 |      1.1794 |    0.761564 |
 scorecell: D1............ |      9.5689 |     1.40104 |    0.544937 |
 scorecell: M2............ |     9.44107 |     1.50749 |    0.842875 |
 scorecell: D2............ |     9.42146 |     1.41271 |    0.599483 |
++++ G4ProcessPlacer::G4ProcessPlacer: for: neutron
+  ProcessName: PScoreProcess, will be removed!
+The initial Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   PScoreProcess
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   PScoreProcess
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
+The final Vectors: 
+GPIL Vector: 
+   Decay
+   LCapture
+   LFission
+   inelastic
+   LElastic
+   ParallelTransport
+   Transportation
+DoIt Vector: 
+   Transportation
+   ParallelTransport
+   LElastic
+   inelastic
+   LFission
+   LCapture
+   Decay
