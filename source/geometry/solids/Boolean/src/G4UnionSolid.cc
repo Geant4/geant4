@@ -94,7 +94,10 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
  
 /////////////////////////////////////////////////////
 //
-// 
+// Important comment: When solids A and B touch together along flat
+// surface the surface points will be considered as kSurface. To avoid
+// infinite loops it is better to combine solids with intersection/gap
+// thicker than 3 kCarTolerance
 
 EInside G4UnionSolid::Inside(const G4ThreeVector& p) const
 {
@@ -212,8 +215,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
   
     if( positionA != kOutside )
     { 
-    
-      while( Inside(p+dist*v) == kInside )
+      do
       {
         disTmp = fPtrSolidA->DistanceToOut(p+dist*v,v,calcNorm,
                                            validNorm,nTmp)        ;
@@ -229,11 +231,12 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
           break ;
 	}
       }
+      while( Inside(p+dist*v) == kInside ) ;
       *n = *nTmp ; 
     }
     else
     {
-      while( Inside(p+dist*v) == kInside )
+      do
       {
         disTmp = fPtrSolidB->DistanceToOut(p+dist*v,v,calcNorm,
                                            validNorm,nTmp)        ;
@@ -249,6 +252,7 @@ G4UnionSolid::DistanceToOut( const G4ThreeVector& p,
           break ;
 	}
       }
+      while( Inside(p+dist*v) == kInside ) ;
       *n = *nTmp ;   
     }
   }
