@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.20 2001-07-11 10:00:33 gunter Exp $
+// $Id: G4PropagatorInField.cc,v 1.21 2001-10-22 14:49:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,8 @@
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
-const G4double  G4PropagatorInField::fEpsilonMinDefault = 1.0e-10 ;  
+const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
+const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;  
 
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -111,6 +112,7 @@ G4double G4PropagatorInField::
   epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
 
   if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin ;
+  if( epsilon > fEpsilonMax ) epsilon = fEpsilonMax ;
 
   this->SetEpsilonStep( epsilon );
 
