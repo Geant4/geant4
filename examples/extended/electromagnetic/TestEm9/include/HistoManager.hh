@@ -20,6 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: HistoManager.hh,v 1.2 2003-10-13 16:31:50 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+
 #ifndef HistoManager_h
 #define HistoManager_h 1
 
