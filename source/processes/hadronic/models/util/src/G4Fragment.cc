@@ -27,6 +27,7 @@
 
 #include "G4Fragment.hh"
 #include "G4HadronicException.hh"
+#include "G4HadTmpUtil.hh"
 
 
 // Default constructor
@@ -87,9 +88,9 @@ G4Fragment::G4Fragment(const G4int A, const G4int Z, const G4LorentzVector aMome
 {
   theExcitationEnergy = theMomentum.mag() - 
                         G4ParticleTable::GetParticleTable()->GetIonTable()
-			->GetIonMass( static_cast<G4int>(theZ), static_cast<G4int>(theA) );
+			->GetIonMass( G4lrint(theZ), G4lrint(theA) );
   if( theExcitationEnergy < 0.0 )
-    if( theExcitationEnergy > -10.0 * eV || 0==static_cast<G4int>(theA))
+    if( theExcitationEnergy > -10.0 * eV || 0==G4lrint(theA))
       theExcitationEnergy = 0.0;
     else 
     {
@@ -201,7 +202,7 @@ G4double G4Fragment::CalculateExcitationEnergy(const G4LorentzVector value) cons
 	                       (theA-theZ)*G4Neutron::Neutron()->GetPDGMass();
 	G4double U = value.m() - std::min(theMaxGroundStateMass, GetGroundStateMass());
 	if( U < 0.0 )
-		if( U > -10.0 * eV || 0==static_cast<G4int>(theA))
+		if( U > -10.0 * eV || 0==G4lrint(theA))
 			U = 0.0;
 		else 
 		{
