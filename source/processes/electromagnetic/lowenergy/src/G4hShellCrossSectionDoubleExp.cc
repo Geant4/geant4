@@ -37,7 +37,7 @@
 // Class Description: 
 // Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.1 2004-09-29 08:34:37 saliceti Exp $
+// $Id: G4hShellCrossSectionDoubleExp.cc,v 1.2 2004-11-24 00:07:18 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "globals.hh"
@@ -88,9 +88,9 @@ G4double G4hShellCrossSectionDoubleExp::GetCrossSectionDoubleExp(G4int Z,
   G4double  crossSections = 0.0;
 
   std::vector<std::vector<G4double>*> parVec = kShellData->GetParam(Z);
-  std::vector<G4double>*::energyVec = parVec[0];
-  std::vector<G4double>*::par1Vec  = parVec[1];
-  std::vector<G4double>*::par2Vec  = parVec[2];
+  std::vector<G4double>* energyVec = parVec[0];
+  std::vector<G4double>* par1Vec  = parVec[1];
+  std::vector<G4double>* par2Vec  = parVec[2];
   
   std::vector<G4double>::iterator i = (*par1Vec).begin();
   
