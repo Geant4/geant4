@@ -3,11 +3,10 @@
 # for tests of basic low energy e.m. processes (based on test09) 
 #
 /control/verbose 2
-#/run/verbose 2
+/run/verbose 2
 #
 /run/initialize
 
-/tracking/verbose 0
 /calor/setAbsMat Aluminium
 /calor/setAbsThick 10 cm  
 /calor/setAbsRad 12.0 cm
@@ -33,21 +32,26 @@
 #/process/inactivate LowEnPhotoElec
 #/process/inactivate LowEnergyIoni
 #
-/tracking/verbose 0
 /gun/particle gamma
 #
-###/tracking/verbose 2
+/gun/energy 10 keV
+/tracking/verbose 2
+/run/beamOn 1
 # 
 /gun/energy 10 keV
+/tracking/verbose 0
 /run/beamOn 1000
 # 
 /gun/energy 2 keV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 800 eV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 /gun/energy 250 eV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 # electron 500 eV in Al
@@ -55,18 +59,22 @@
 /gun/particle e-
 #
 /gun/energy 10 keV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 #/gun/particle e-
 /gun/energy 2 keV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 #/gun/particle e-
 /gun/energy 800 eV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 #/gun/particle e-
 /gun/energy 500 eV
+/tracking/verbose 0
 /run/beamOn 1000
 #
 exit
