@@ -371,6 +371,12 @@ rm -rf $g4conf/g4make.log
 $g4make 2>&1 | tee $g4conf/g4make.log
 fi
 
+if [ X$g4lib_build_dll = Xy ] ; then
+echo ""
+rm -rf $g4conf/g4make.log
+$g4make dll 2>&1 | tee $g4conf/g4make.log
+fi
+
 # Check for errors in log file
 export err=\$[ \`grep Error $g4conf/g4make.log | wc -w\` ]
 export int=\$[ \`grep Stop\. $g4conf/g4make.log | wc -w\` ]

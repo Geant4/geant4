@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.49 2004-02-09 14:58:45 stesting Exp $
+# $Id: Configure,v 1.50 2004-06-22 13:48:50 stesting Exp $
 #
-# Generated on Mon Feb  9 15:57:09 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Tue Jun 22 15:43:23 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -174,14 +174,14 @@ g4clhep_base_dir=''
 g4clhep_include_dir=''
 g4clhep_lib=''
 g4clhep_lib_dir=''
-g4global=''
-g4granular=''
-g4lib_use_granular=''
-g4debug=''
 g4lib_build_shared=''
 g4lib_build_static=''
 g4lib_use_shared=''
 g4lib_use_static=''
+g4global=''
+g4granular=''
+g4lib_use_granular=''
+g4debug=''
 g4ui_build_gag_session=''
 g4ui_build_terminal_session=''
 g4ui_build_win32_session=''
@@ -1644,7 +1644,16 @@ case  "$g4compiler" in
 				g4compiler=CC
 				;;
 		'WIN32')
-				g4compiler=VC
+				g4compiler=VC7
+	clcompiler=`( cl 1>/dev/null || echo "ERROR: There is no 'cl' compiler.") 2>&1`
+				case $clcompiler in
+				*"Version 12"*) g4compiler=VC
+				;;
+				*"Version 13"*) g4compiler=VC7
+				;;
+				*) g4compiler=VC7
+				;;
+				esac				
 				;;
 		'Darwin')
 				g4compiler=g++
@@ -2585,6 +2594,12 @@ case "$g4neutronhpcrosssections" in
 	;;
 esac
 
+case "$g4elasticdata" in
+'')
+	g4elasticdata=$g4data/Elastic
+	;;
+esac
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -2598,6 +2613,8 @@ Please, specify directories where the Geant4 data is installed:
 3) G4LEDATA:			$g4ledata
 
 4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+5) G4ELASTICDATA:		$g4elasticdata
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -2640,6 +2657,15 @@ gans=$ans
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
+
+	5) 
+		dflt=$g4elasticdata
+		fn='f~'
+		rp="Where is G4ELASTICDATA installed?"
+		. ./getfile
+		g4elasticdata=$ans
+		;;
+
 #	[eE]) 
 #		break
 #		;;
@@ -2852,200 +2878,6 @@ g4clhep_lib_dir=""
 fi
 
 echo " "
-case "$g4global" in
-'')
-	g4global=n
-	;;
-esac
-
-echo " "
-# By default it's 'grabular'!
-case "$g4granular" in
-'')
-	g4granular=y
-	;;
-esac
-
-echo " "
-# Will be set (if needed) in GNUmakefile!
-case "$g4lib_use_granular" in
-'')
-	g4lib_use_granular=y
-	;;
-esac
-
-#
-# Ask about g4global - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to build 'global' compound libraries?
-EOM`
-
-dflt=$g4global
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4global=n
-		g4granular=y
-		g4lib_use_granular=y
-		break
-		;;
-	y*|Y*) 
-		g4global=y
-# Shoud be comment out to keep settings from config.sh - not now to keep as in release
-		g4granular=n
-# Shoud be comment out to keep settings from config.sh - not now to keep as in release
-		g4lib_use_granular=n
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4global = Xy ] ; then
-#
-# Ask about g4granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Granular libraries are used by defaults, you asked to build global
-compound libraries. Do you want to build 'granular' libraries too?
-EOM`
-
-dflt=$g4granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4granular=n
-		break
-		;;
-	y*|Y*) 
-		g4granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4granular = Xy ] ; then
-#
-# Ask about g4lib_use_granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Global libraries are used by defaults, you asked to build global
-compound libraries and granular libraries. 
-Do you want to use 'granular' libraries instead?
-EOM`
-
-dflt=$g4lib_use_granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4lib_use_granular=n
-		break
-		;;
-	y*|Y*) 
-		g4lib_use_granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-fi
-fi
-
-### End file - without will be problem! Check in others...
-
-
-echo " "
-case "$g4debug" in
-'')
-	g4debug=""
-	;;
-esac
-
-#
-# Ask about g4debug - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to compile libraries in DEBUG mode (-g)?
-EOM`
-
-dflt="n"
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-		g4debug=1
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-
-echo " "
 
 case "$g4lib_build_shared" in
 '')
@@ -3077,10 +2909,62 @@ case "$g4lib_use_static" in
 	;;
 esac
 
+case "$g4lib_build_dll" in
+'')
+	g4lib_build_dll=n
+	;;
+esac
+
 #
 # Ask about building of SHARED|STATIC libraries - default STATIC. 
 #
 echo ""
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+By default 'static'  libraries are built.
+
+Do you want to build DLL (.dll) libraries?
+EOM`
+
+dflt=$g4lib_build_shared
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_build_dll=n
+		g4lib_build_shared=n
+		g4lib_build_static=y
+		break
+		;;
+	y*|Y*) 
+		g4lib_build_dll=y
+		g4lib_build_shared=n
+		g4lib_build_static=n
+
+#		g4lib_build_static=""
+#		g4lib_use_shared=1
+#		g4lib_use_static=""
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+fi
 
 if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
@@ -3212,6 +3096,212 @@ done
 fi
 
 fi # if !Win
+echo " "
+case "$g4global" in
+'')
+	g4global=n
+	;;
+esac
+
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=y
+	;;
+esac
+
+if test \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xy"  ; then
+
+	g4global=n
+	g4granular=n
+	g4lib_use_granular=n
+
+fi
+
+if test \( "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7" \) -o \( \( "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7" \) -a "X$g4lib_build_dll" = "Xn" \) ; then
+
+#
+# Ask about g4global - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to build 'global' compound libraries?
+EOM`
+
+dflt=$g4global
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4global=n
+		g4granular=y
+		g4lib_use_granular=y
+		break
+		;;
+	y*|Y*) 
+		g4global=y
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
+		g4granular=n
+# Shoud be comment out to keep settings from config.sh - not now to keep as in release
+		g4lib_use_granular=n
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4global = Xy ] ; then
+#
+# Ask about g4granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Granular libraries are used by defaults, you asked to build global
+compound libraries. Do you want to build 'granular' libraries too?
+EOM`
+
+dflt=$g4granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4granular=n
+		break
+		;;
+	y*|Y*) 
+		g4granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4granular = Xy ] ; then
+#
+# Ask about g4lib_use_granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Global libraries are used by defaults, you asked to build global
+compound libraries and granular libraries. 
+Do you want to use 'granular' libraries instead?
+EOM`
+
+dflt=$g4lib_use_granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4lib_use_granular=n
+		break
+		;;
+	y*|Y*) 
+		g4lib_use_granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+fi
+fi
+
+fi # !Win
+
+### End file - without will be problem! Check in others...
+
+
+echo " "
+case "$g4debug" in
+'')
+	g4debug=""
+	;;
+esac
+
+#
+# Ask about g4debug - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to compile libraries in DEBUG mode (-g)?
+EOM`
+
+dflt="n"
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4debug=1
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+
 echo " "
 
 case "$g4make" in
