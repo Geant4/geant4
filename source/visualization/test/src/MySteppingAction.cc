@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MySteppingAction.cc,v 1.10 2001-07-11 10:09:28 gunter Exp $
+// $Id: MySteppingAction.cc,v 1.11 2001-08-17 22:56:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,7 @@
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
 #include "G4Circle.hh"
+#include "G4Scale.hh"
 #include "G4Square.hh"
 
 void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
@@ -128,7 +129,9 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     circle333.SetVisAttributes(attribs333);
     pVVisManager->Draw(circle333);
 
+    G4Scale scale(1. * m);
+    scale.SetVisAttributes(G4Colour(1.,0.,0.));
+    pVVisManager->Draw(scale);
   }
   // User Action Example - end snippet.
 }
-
