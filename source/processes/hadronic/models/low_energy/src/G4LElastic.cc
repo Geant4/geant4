@@ -417,8 +417,9 @@ G4LElastic::Defs1(G4double p, G4double px, G4double py, G4double pz,
       *pznew =     -sint*px                 +cost*pz;
    }
    else {
-      *pxnew = px;
-      *pynew = py;
-      *pznew = pz;
+       G4double cost=pzinc/p;
+       *pxnew = cost*px;
+       *pynew = py;
+       *pznew = cost*pz;
    }
 }
