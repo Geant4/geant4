@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ASCIITreeMessenger.cc,v 1.1 2001-05-24 13:21:15 johna Exp $
+// $Id: G4ASCIITreeMessenger.cc,v 1.2 2001-05-24 13:38:13 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,14 +23,16 @@
 G4ASCIITreeMessenger::G4ASCIITreeMessenger
 (G4ASCIITree* ASCIITree):
   fpASCIITree(ASCIITree) {
-  G4bool omitable;
+  G4bool omitable, currentAsDefault;
   fpDirectory = new G4UIdirectory ("/vis/ASCIITree/");
   fpDirectory -> SetGuidance ("Commands for ASCIITree control.");
   fpCommandVerbose = new G4UIcmdWithAnInteger ("/vis/ASCIITree/verbose", this);
   fpCommandVerbose -> SetGuidance ("/vis/ASCIITree/verbose [<verbosity>]");
   fpCommandVerbose -> SetGuidance
     ("0 (default) mimimum - 10 maximum printing.");
-  fpCommandVerbose -> SetParameterName ("verbosity", omitable = true);
+  fpCommandVerbose -> SetParameterName ("verbosity",
+					omitable = true,
+					currentAsDefault = true);
 }
 
 G4ASCIITreeMessenger::~G4ASCIITreeMessenger() {

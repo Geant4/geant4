@@ -1,4 +1,4 @@
-$Id: History,v 1.121 2001-05-24 13:24:09 johna Exp $
+$Id: History,v 1.122 2001-05-24 13:38:12 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,8 +24,9 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-24th May 2001  John Allison
+24th May 2001  John Allison  (vis-V03-01-03)
 - Added missing files G4ASCIITreeMessenger.hh/cc.
+- Bug fix in G4ASCIITreeMessenger.cc: currentAsDefault = true.
 
 23rd May 2001  John Allison
 - Eliminated Linux pedantic warnings, except FukuiRenderer, VRML and OPACS.
