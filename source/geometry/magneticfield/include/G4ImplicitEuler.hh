@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.hh,v 1.4 2001-07-11 09:59:08 gunter Exp $
+// $Id: G4ImplicitEuler.hh,v 1.5 2002-11-29 13:48:47 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -45,9 +45,11 @@ class G4ImplicitEuler : public G4MagErrorStepper
 
     G4int IntegratorOrder() const { return 2 ; } ;
 
-private: 
+private: // No description
 
-    G4int fNumberOfVariables ;
+    G4double*  dydxTemp;
+    G4double*  yTemp;    
+    // Temporaries, created to avoid new/delete on every call
 };
 
 #endif /* G4IMPLICITEULER_HH */
