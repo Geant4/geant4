@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.50 2004-12-01 18:01:01 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.51 2004-12-09 10:38:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -444,15 +444,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
   }
 
   G4PhysicsTable* dedx = em->DEDXTable();
-  if (1 < n_dedx) {
-    tableBuilder->BuildDEDXTable(dedx, list);
-    for(G4int i=0; i<n_dedx; i++) {
-      if(list[i] != dedx) {
-        list[i]->clearAndDestroy();
-        loss_list[i]->SetDEDXTable(0);
-      }
-    }
-  }
+  if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedx, list);
 
   dedx_vector[iem] = dedx;
 
@@ -474,13 +466,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(const G4ParticleDefinition
     for (G4int i=0; i<n_dedx; i++) {
       newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
     }
-    if (1 < n_dedx) {
-      tableBuilder->BuildDEDXTable(dedxForRange, newlist);
-      for(G4int j=0; j<n_dedx; j++) {
-        newlist[j]->clearAndDestroy();
-        loss_list[j]->SetDEDXunRestrictedTable(0);
-      }
-    }
+    if (1 < n_dedx) tableBuilder->BuildDEDXTable(dedxForRange, newlist);
 
     em->SetDEDXunRestrictedTable(dedxForRange);
     range = em->PreciseRangeTable();

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.44 2004-12-06 12:19:39 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.45 2004-12-09 10:38:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -265,7 +265,7 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   // Tables preparation
   if (!baseParticle) {
-
+    
     theDEDXTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXTable);
     if (lManager->BuildPreciseRange()) {
       theDEDXunRestrictedTable = G4PhysicsTableHelper::PreparePhysicsTable(theDEDXunRestrictedTable);
@@ -432,6 +432,9 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
   }
 
   for(size_t i=0; i<numOfCouples; i++) {
+
+    if(1 < verboseLevel) 
+      G4cout << "G4VEnergyLossProcess::BuildDEDXVector flag=  " << theDEDXTable->GetFlag(i) << G4endl;
 
     if (theDEDXTable->GetFlag(i)) {
 
