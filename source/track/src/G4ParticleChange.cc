@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.8 1999-12-15 14:53:56 gunter Exp $
+// $Id: G4ParticleChange.cc,v 1.9 2000-01-18 02:54:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -407,11 +407,9 @@ void G4ParticleChange::DumpInfo() const
   G4cout << "        Polarization - z    : " 
        << G4std::setw(20) <<  thePolarizationChange.z()
        << G4endl;
-  if (fUseEB) {
-    G4cout << "        Track Weight      : " 
+  G4cout << "        Track Weight      : " 
          << G4std::setw(20) <<  theWeightChange
          << G4endl;	
-  }
 }
 
 G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
