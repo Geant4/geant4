@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.3 1999-06-29 19:01:39 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.4 1999-07-01 18:02:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -250,20 +250,27 @@ G4FieldTrack G4ChordFinder::ApproxCurvePointV(
 
   if ( ABdist > 0.0 ){
      AE_fraction = ChordAE_Vector.mag() / ABdist;
-     new_st_length= AE_fraction * curve_length; 
   }else{
      G4cerr << " Error in G4ChordFinder::ApproxCurvePoint: A and B are the same point\n" <<
       " Chord AB length = " << ChordAE_Vector.mag()  << endl << endl;
      AE_fraction = 0.5;                         // Guess .. ?; 
-     new_st_length= AE_fraction * curve_length; // Is this correct ??
   }
   
   if( (AE_fraction> 1.0 + perMillion) || (AE_fraction< 0.) ){
-    G4cerr << " Error in ApproxCurvePoint: AE > AB or AE/AB <= 0 " << endl <<
+    G4cerr << " G4ChordFinder::ApproxCurvePointV: Warning: Anomalous condition:AE > AB or AE/AB <= 0 " << endl <<
       "   AE_fraction = " <<  AE_fraction << endl <<
       "   Chord AE length = " << ChordAE_Vector.mag()  << endl << 
       "   Chord AB length = " << ABdist << endl << endl;
+    G4cerr << " If this condition occurs after a recalculation of 'B'" << endl
+	   << " Otherwise it is an error  " << endl ; 
+     // This course can now result if B has been re-evaluated, 
+     //   without E being recomputed   (1 July 99)
+     //  In this case this is not a "real error" - but it undesired
+     //   and we cope with it by a default corrective action ...
+     AE_fraction = 0.5;                         // Default value
   }
+
+  new_st_length= AE_fraction * curve_length; 
 
   if ( AE_fraction > 0.0 ) { 
      G4bool good_advance = 
