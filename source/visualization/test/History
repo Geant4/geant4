@@ -1,7 +1,12 @@
-$Id: History,v 1.1 1999-01-08 16:33:57 gunter Exp $
+$Id: History,v 1.2 1999-12-16 14:22:14 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+16th December 1999  John Allison
+- MyDetectorConstruction.cc: added replica volumes.
+- test19.cc: added more printing to check destruction of managers.
+- test19.g4m: added commands for viewing replicas.
 
 12th August  Guy Barrand
 - introduce the X11 resource file test19.xrm
