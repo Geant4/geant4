@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.42 2002-11-29 16:12:00 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.43 2002-11-29 18:05:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -705,6 +705,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     G4ThreeVector OriginShift = StartPointA - fPreviousSftOrigin ;
     G4double      MagSqShift  = OriginShift.mag2() ;
     G4double      currentSafety;
+    G4bool        doCallNav= false;
 
     if( MagSqShift >= sqr(fPreviousSafety) )
     {
@@ -724,6 +725,7 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
     }
     else
     {
+       doCallNav= true; 
        // Check whether any volumes are encountered by the chord AB
        LinearStepLength = 
         fNavigator->ComputeStep( StartPointA, ChordAB_Dir,
@@ -737,10 +739,24 @@ G4PropagatorInField::IntersectChord( G4ThreeVector  StartPointA,
        fPreviousSftOrigin = StartPointA;
        fPreviousSafety= NewSafety;
 
-       // Intersection Point of chord AB and either volume A's surface 
-       //                                or a daughter volume's surface ..
-       IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+       if( intersects ){
+          // Intersection Point of chord AB and either volume A's surface 
+          //                                or a daughter volume's surface ..
+          IntersectionPoint = StartPointA + LinearStepLength * ChordAB_Dir;
+       }
     }
+
+    // printIntersection( 
+    // StartPointA, EndPointB, LinearStepLength, IntersectionPoint, NewSafety
+
+    G4cout << "Start="  << G4std::setw(12) << StartPointA       << " "
+	   << "End= "   << G4std::setw(8) << EndPointB         << " "
+	   << "StepIn=" << G4std::setw(8) << LinearStepLength  << " "
+	   << "NewSft=" << G4std::setw(8) << NewSafety
+	   << "NavCall" << doCallNav      << "  "
+	   << "In T/F " << intersects     << "  " 
+	   << "IntrPt=" << G4std::setw(8) << IntersectionPoint << " " 
+	   << G4endl;
 
     return intersects;
 }
