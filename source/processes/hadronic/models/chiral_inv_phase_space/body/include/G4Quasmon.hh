@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.4 2000-08-17 13:53:02 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.5 2000-08-22 09:05:13 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,11 +53,12 @@ public:
   //Selectors
   G4LorentzVector Get4Momentum() const;
   //General
-  G4QHadronVector HadronizeQuasmon();
+  G4QHadronVector *  Fragment();
   // Static functions
   static void SetParameters(G4double temperature, G4double ssin2g, G4double etaetap);
 
 private:  
+  G4QHadronVector    HadronizeQuasmon();
   G4QParticleVector* InitQuasmonEnvironment(G4int nOfParts); // nOfParts<0 kills the CHIPS World
   G4QParticle*       GetPDGParticle(G4int PDGCode);
   G4QParticle*       GetQParticle(G4int QCode);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.5 2000-08-22 07:26:16 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.6 2000-08-22 09:05:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -97,7 +97,7 @@ G4Quasmon::G4Quasmon(const G4Quasmon &right) {}
 G4Quasmon::~G4Quasmon()
 {
   theQCandidates.clearAndDestroy();                // @@ This vector can be static ??
-  theQHadrons.clearAndDestroy();
+//  theQHadrons.clearAndDestroy();
 }
 
 G4double G4Quasmon::Temperature=180.;  
@@ -2959,4 +2959,16 @@ G4ThreeVector G4Quasmon::RndmDir()
   }
   G4double r=sqrt(r2);
   return G4ThreeVector(x/r,y/r,z/r);
+}
+
+G4QHadronVector * 
+G4Quasmon::Fragment()
+{
+  HadronizeQuasmon();
+  G4QHadronVector theResult = new G4QHadronVector;
+  for(G4int particle=0; particle<theQHadrons.entries; particle++)
+  {
+    theResult->insert(theQHadrons[particle]);
+  }
+  return theResult;
 }
