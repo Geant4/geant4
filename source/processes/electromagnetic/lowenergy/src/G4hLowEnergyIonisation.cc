@@ -83,6 +83,7 @@
 // 20 Sept  2002 V.Ivanchenko Clean up energy ranges for models
 // 07 Oct   2002 V.Ivanchenko Clean up initialisation of fluorescence
 // 28 Oct   2002 V.Ivanchenko Optimal binning for dE/dx
+// 10 Dec   2002 V.Ivanchenko antiProtonLowEnergy -> 25 keV, QEG model below 
 
 // -----------------------------------------------------------------------
 
@@ -146,7 +147,7 @@ void G4hLowEnergyIonisation::InitializeMe()
   TotBin               = 360 ;
   protonLowEnergy      = 1.*keV ; 
   protonHighEnergy     = 2.*MeV ;
-  antiProtonLowEnergy  = 5.*keV ;
+  antiProtonLowEnergy  = 25.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
   minGammaEnergy       = 25.*keV;
   minElectronEnergy    = 25.*keV;
@@ -1038,8 +1039,8 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
   // Antiproton model is used
   if(theAntiProtonModel->IsInCharge(theAntiProton,material)) {
     if(kineticEnergy < antiProtonLowEnergy) {
-      eloss = theAntiProtonModel->TheValue(theAntiProton,material,
-                                           antiProtonLowEnergy);
+      eloss = theAntiProtonModel->TheValue(theAntiProton,material,antiProtonLowEnergy)
+            * sqrt(kineticEnergy/antiProtonLowEnergy) ;
     
     // Parametrisation 
     } else {

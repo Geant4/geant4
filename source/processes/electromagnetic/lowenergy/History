@@ -1,4 +1,4 @@
-$Id: History,v 1.161 2002-11-28 13:39:04 pia Exp $
+$Id: History,v 1.162 2002-12-10 11:17:55 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10.12-2002   MGP, tag emlowen-V04-01-09
+             VI G4hLowEnergyIonisation.cc - define 25 keV as energy between
+                QOM and QEG models for antiprotons
 
 28.11-2002   MGP, tag emlowen-V04-01-08
              Update of G4ComptonTest and test/GNUmakefile by A. Pfeiffer
