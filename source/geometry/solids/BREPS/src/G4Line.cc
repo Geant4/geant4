@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Line.cc,v 1.1 1999-01-07 16:07:44 gunter Exp $
+// $Id: G4Line.cc,v 1.2 1999-01-14 16:06:46 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4Line.hh"
@@ -25,7 +25,11 @@ G4Curve* G4Line::Project(const G4Transform3D& tr)
   newPnt.setZ(0);
   
   G4Line* r= new G4Line();
-  r->Init(newDir, newPnt);
+
+  // L. Broglia : terrible mistake !!!!
+  //r->Init(newDir, newPnt);
+  r->Init(newPnt, newDir);
+
   r->SetBounds(GetPStart(), GetPEnd());
   
   return r;
