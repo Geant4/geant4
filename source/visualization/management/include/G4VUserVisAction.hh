@@ -21,20 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserVisAction.hh,v 1.1 2005-02-19 22:07:21 allison Exp $
+// $Id: G4VUserVisAction.hh,v 1.2 2005-02-23 11:30:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
 // Class Description:
 //
-// G4VUserVisAction is added to the scene by
-// /vis/scene/add/userAction, which instantiates a G4UserActionModel
-// to add to the RunDurationModels.  Thus the pure virtual Draw()
-// method is invoked whenever the viewer need to "visit the kernel",
-// i.e., to remake its graphical database, if any, or simply to
-// refresh the screen.
-// operator() allows G4CallbackModel<G4VUserVisAction>.
+// G4VUserVisAction is added to the scene by the command
+// /vis/scene/add/userAction, which instantiates a G4CallbackModel to
+// add to the RunDurationModels.  Thus the pure virtual Draw() method
+// is invoked whenever the viewer needs to "visit the kernel", e.g.,
+// to remake its graphical database, if any, or simply to refresh the
+// screen.  operator() is defined to satisfy the template
+// G4CallbackModel<G4VUserVisAction>.
+//
+// See the User Guide for Application Developers, Section 8.8.7 and 8.8.8.
 
 
 #ifndef G4VUSERVISACTION_HH

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CallbackModel.hh,v 1.1 2005-02-19 22:07:21 allison Exp $
+// $Id: G4CallbackModel.hh,v 1.2 2005-02-23 11:30:10 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,32 +29,25 @@
 //
 // Class Description:
 //
-// G4CallbackModel calls a user-defined function containing, for example,
-// calls to the Draw methods of G4VVisManager.  This allows the user to
-// add his own graphical objects to a scene and they will be invoked
-// appropriately to refresh the screen or remake a graphical database.
+// G4CallbackModel calls a user-defined function containing, for
+// example, calls to the Draw methods of G4VVisManager.  This allows
+// the user to add his own graphical objects to a scene.  The idea is
+// that the callback function is invoked by the vis system to refresh
+// the screen or remake a graphical database whenever required.
+//
+// The user instantiates a function object containing, for example,
+// calls to the Draw methods of G4VVisManager.  A base class
+// G4VUserVisAction is provided in the visualisation category.  A
+// G4CallbackModel is made by instantiating this template with a
+// pointer to the function object.  The G4VisManager does this for the
+// user if he/she registers it (SetUserAction) and issues the command
+// /vis/scene/add/userAction.  See the User Guide for Application
+// Developers, Section 8.8.7 and 8.8.8.
 
 #ifndef G4CALLBACKMODEL_HH
 #define G4CALLBACKMODEL_HH
 
-// Doxygen generates separate HTML and LaTeX files for copying to the
-// Geant4 User Guide documentation.
-/**
-   \page G4CallbackModelApplication G4CallbackModel Application Guide
-   Here will be the documentation for the User Guide for
-   Application Developers.
-*/
-
 #include "G4VModel.hh"
-
-// Doxygen documentation...
-/// A model that calls a user-defined function.
-/** The user instantiates a function object containing, for example,
-    calls to the Draw methods of G4VVisManager.  Typically, this would
-    be invoked to remake a graphics database and/or refresh the
-    viewer.  This allows the user to add his own graphical objects to
-    a scene.  See \ref G4CallbackModelApplication for a more complete
-    description and examples of its use. */
 
 template <class F> class G4CallbackModel: public G4VModel {
 
