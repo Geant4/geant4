@@ -79,24 +79,29 @@ p7:	# ::: problem 7 (H)  missing pions ::: CRITICAL, TO BE DONE
 d:	# ::: study cascade model parameters
 	rm data; make data; rm -f data.out; data > data.out; cat data.out ; # make da;
 
+i:	# ::: test interface
+	rm testInterface; make testInterface; testInterface
+
 h:	# ::: compare h2 h1
 	make h2; make h1
 
 h1:	# ::: (H) A = 1 protiun 2 * 585 = 1170
 #	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
-	make t; rm -f cascade.out; cascade  10 1 585 1 1 > cascade.out; cat cascade.out
+	make t; rm -f cascade.out; cascade  100 1 1000 1 1 > cascade.out; cat cascade.out
 #	make t; rm -f cascade.out; cascade  10000 1 585 1 1 > cascade.out; make a;
 
 
 h2:	# ::: (H) A = 2 deuterium 
-	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
-#	make t; rm -f cascade.out; cascade 2 1 585 2 1 > cascade.out; cat cascade.out
+#	rm -f cascade.out; cascade 10000 1 585 2 1 > cascade.out; make a;
+	make t; rm -f cascade.out; cascade 1 1 585 2 1 > cascade.out; cat cascade.out
 
 h3:	# ::: (H) A = 3 tritium
-	rm -f cascade.out; cascade 1000 1 585 3 1 > cascade.out; make a;
+#	rm -f cascade.out; cascade 1000 1 585 3 1 > cascade.out; make a;
+	rm -f cascade.out; cascade 3 1 585 3 1 > cascade.out; cat cascade.out
 
 p8:	# ::: problem 8 (Zr) delta missing ::: general feature in codes, POSTPONED studies
-	rm -f cascade.out; cascade 1000 2 800 91 40 > cascade.out; make a;
+#	rm -f cascade.out; cascade 1000 2 800 91 40 > cascade.out; make a;
+	rm -f cascade.out; cascade 3 2 800 91 40 > cascade.out; cat cascade.out
 
 p9:	# ::: problem 9 (Be) wrong spectrum, maybe too little energy goes to evaporation? (500 MeV ok)
 	rm -r cascade.out; cascade 10000 1 130 9 4 > cascade.out; gmake a; 
