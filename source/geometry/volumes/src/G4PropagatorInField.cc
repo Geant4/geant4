@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.17 2001-05-23 19:09:09 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.18 2001-05-23 19:09:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,34 +33,6 @@
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 const G4double  G4PropagatorInField::fEpsilonMin = 1.0e-10 ;  
-
-// -------------------------------------------------------------------------
-#if OLD_SIGNATURE_IS_INVALID
-G4double 
-G4PropagatorInField::
-  ComputeStep(const  G4ThreeVector &   StartPointA,
-	      const  G4ThreeVector &   Velocity,              // Unit or non 
-	             G4double          CurrentProposedStepLength,
-	             G4double	       &currentSafety,             // In/Out 
-     	             G4VPhysicalVolume *pPhysVol )
-// Compute the next geometric Step for simple magnetic field
-{
-  G4FieldTrack  aFieldTrack = 
-    G4FieldTrack(  StartPointA, 
-		   Velocity, 
-		   0.0,          // length of path
-		   0.0,          // energy
-	      // PROBLEM ---> zero energy will create zero momentum !!
-                   0.0,          // lab tof
-		   0.0,          // proper tof
-		   0 );
-
-  //  Do the Transport in the field (non recti-linear)
-  return this->ComputeStep( aFieldTrack,
-			    CurrentProposedStepLength, 
-			    currentSafety );
-}
-#endif
 
 ///////////////////////////////////////////////////////////////////////////
 //
