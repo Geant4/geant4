@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.12 2002-11-20 14:18:34 gcosmo Exp $
+// $Id: HepPolyhedron.cc,v 1.13 2004-12-07 08:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -132,7 +132,7 @@ HepPolyhedron::FindNeighbour(int iFace, int iNode, int iOrder) const
 {
   int i;
   for (i=0; i<4; i++) {
-    if (iNode == abs(pF[iFace].edge[i].v)) break;
+    if (iNode == std::abs(pF[iFace].edge[i].v)) break;
   }
   if (i == 4) {
     HepStd::cerr
@@ -354,7 +354,7 @@ void HepPolyhedron::SetSideFacets(int ii[4], int vv[4],
 {
   int k1, k2, k3, k4;
   
-  if (abs((double)(dphi-M_PI)) < perMillion) {          // half a circle
+  if (std::abs((double)(dphi-M_PI)) < perMillion) {          // half a circle
     for (int i=0; i<4; i++) {
       k1 = ii[i];
       k2 = (i == 3) ? ii[0] : ii[i+1];
@@ -433,7 +433,7 @@ void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
     
   //   S E T   R O T A T I O N   P A R A M E T E R S
 
-  bool ifWholeCircle = (abs(dphi-wholeCircle) < perMillion) ? true : false;
+  bool ifWholeCircle = (std::abs(dphi-wholeCircle) < perMillion) ? true : false;
   double   delPhi  = ifWholeCircle ? wholeCircle : dphi;  
   int        nSphi    = (nstep > 0) ?
     nstep : int(delPhi*GetNumberOfRotationSteps()/wholeCircle+.5);
@@ -443,8 +443,8 @@ void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
   
   //   C O U N T   V E R T E C E S
 
-  int absNp1 = abs(np1);
-  int absNp2 = abs(np2);
+  int absNp1 = std::abs(np1);
+  int absNp2 = std::abs(np2);
   int i1beg = 0;
   int i1end = absNp1-1;
   int i2beg = absNp1;
@@ -452,7 +452,7 @@ void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
   int i, j, k;
 
   for(i=i1beg; i<=i2end; i++) {
-    if (abs(r[i]) < perMillion) r[i] = 0.;
+    if (std::abs(r[i]) < perMillion) r[i] = 0.;
   }
 
   j = 0;                                                // external nodes
@@ -541,8 +541,8 @@ void HepPolyhedron::RotateAroundZ(int nstep, double phi, double dphi,
   double cosPhi, sinPhi;
 
   for(j=0; j<nVphi; j++) {
-    cosPhi = cos(phi+j*delPhi/nSphi);
-    sinPhi = sin(phi+j*delPhi/nSphi);
+    cosPhi = std::cos(phi+j*delPhi/nSphi);
+    sinPhi = std::sin(phi+j*delPhi/nSphi);
     for(i=i1beg; i<=i2end; i++) {
       if (r[i] != 0.) pV[kk[i]+j] = HepPoint3D(r[i]*cosPhi,r[i]*sinPhi,z[i]);
     }
@@ -691,8 +691,8 @@ void HepPolyhedron::SetReferences()
     for (iedge=0; iedge<nedge; iedge++) {
       i1 = iedge;
       i2 = (iedge < nedge-1) ? iedge+1 : 0;
-      i1 = abs(pF[iface].edge[i1].v);
-      i2 = abs(pF[iface].edge[i2].v);
+      i1 = std::abs(pF[iface].edge[i1].v);
+      i2 = std::abs(pF[iface].edge[i2].v);
       k1 = (i1 < i2) ? i1 : i2;          // k1 = ::min(i1,i2);
       k2 = (i1 > i2) ? i1 : i2;          // k2 = ::max(i1,i2);
       
@@ -849,7 +849,7 @@ bool HepPolyhedron::GetNextVertexIndex(int &index, int &edgeFlag) const
   int vIndex = pF[iFace].edge[iQVertex].v;
 
   edgeFlag = (vIndex > 0) ? 1 : 0;
-  index = abs(vIndex);
+  index = std::abs(vIndex);
 
   if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
     iQVertex = 0;
@@ -953,22 +953,22 @@ bool HepPolyhedron::GetNextEdgeIndeces(int &i1, int &i2, int &edgeFlag,
     k2 = pF[nface].edge[0].v;
     k1 = pF[nface].edge[3].v;
     if (k1 == 0) k1 = pF[nface].edge[2].v;
-    if (abs(k1) > abs(k2)) iOrder = -1;
+    if (std::abs(k1) > std::abs(k2)) iOrder = -1;
   }
 
   do {
     k1     = pF[iFace].edge[iQVertex].v;
     kflag  = k1;
-    k1     = abs(k1);
+    k1     = std::abs(k1);
     kface1 = iFace; 
     kface2 = pF[iFace].edge[iQVertex].f;
     if (iQVertex >= 3 || pF[iFace].edge[iQVertex+1].v == 0) {
       iQVertex = 0;
-      k2 = abs(pF[iFace].edge[iQVertex].v);
+      k2 = std::abs(pF[iFace].edge[iQVertex].v);
       iFace++;
     }else{
       iQVertex++;
-      k2 = abs(pF[iFace].edge[iQVertex].v);
+      k2 = std::abs(pF[iFace].edge[iQVertex].v);
     }
   } while (iOrder*k1 > iOrder*k2);
 
@@ -1144,10 +1144,10 @@ HepNormal3D HepPolyhedron::GetNormal(int iFace) const
     return HepNormal3D();
   }
 
-  int i0  = abs(pF[iFace].edge[0].v);
-  int i1  = abs(pF[iFace].edge[1].v);
-  int i2  = abs(pF[iFace].edge[2].v);
-  int i3  = abs(pF[iFace].edge[3].v);
+  int i0  = std::abs(pF[iFace].edge[0].v);
+  int i1  = std::abs(pF[iFace].edge[1].v);
+  int i2  = std::abs(pF[iFace].edge[2].v);
+  int i3  = std::abs(pF[iFace].edge[3].v);
   if (i3 == 0) i3 = i0;
   return (pV[i2] - pV[i0]).cross(pV[i3] - pV[i1]);
 }
@@ -1169,10 +1169,10 @@ HepNormal3D HepPolyhedron::GetUnitNormal(int iFace) const
     return HepNormal3D();
   }
 
-  int i0  = abs(pF[iFace].edge[0].v);
-  int i1  = abs(pF[iFace].edge[1].v);
-  int i2  = abs(pF[iFace].edge[2].v);
-  int i3  = abs(pF[iFace].edge[3].v);
+  int i0  = std::abs(pF[iFace].edge[0].v);
+  int i1  = std::abs(pF[iFace].edge[1].v);
+  int i2  = std::abs(pF[iFace].edge[2].v);
+  int i3  = std::abs(pF[iFace].edge[3].v);
   if (i3 == 0) i3 = i0;
   return ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).unit();
 }
@@ -1226,10 +1226,10 @@ double HepPolyhedron::GetSurfaceArea() const
 {
   double s = 0.;
   for (int iFace=1; iFace<=nface; iFace++) {
-    int i0 = abs(pF[iFace].edge[0].v);
-    int i1 = abs(pF[iFace].edge[1].v);
-    int i2 = abs(pF[iFace].edge[2].v);
-    int i3 = abs(pF[iFace].edge[3].v);
+    int i0 = std::abs(pF[iFace].edge[0].v);
+    int i1 = std::abs(pF[iFace].edge[1].v);
+    int i2 = std::abs(pF[iFace].edge[2].v);
+    int i3 = std::abs(pF[iFace].edge[3].v);
     if (i3 == 0) i3 = i0;
     s += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).mag();
   }
@@ -1248,10 +1248,10 @@ double HepPolyhedron::GetVolume() const
 {
   double v = 0.;
   for (int iFace=1; iFace<=nface; iFace++) {
-    int i0 = abs(pF[iFace].edge[0].v);
-    int i1 = abs(pF[iFace].edge[1].v);
-    int i2 = abs(pF[iFace].edge[2].v);
-    int i3 = abs(pF[iFace].edge[3].v);
+    int i0 = std::abs(pF[iFace].edge[0].v);
+    int i1 = std::abs(pF[iFace].edge[1].v);
+    int i2 = std::abs(pF[iFace].edge[2].v);
+    int i3 = std::abs(pF[iFace].edge[3].v);
     HepPoint3D g;
     if (i3 == 0) {
       i3 = i0;
@@ -1443,10 +1443,10 @@ HepPolyhedronTrap::HepPolyhedronTrap(double Dz,
  *                                                                     *
  ***********************************************************************/
 {
-  double DzTthetaCphi = Dz*tan(Theta)*cos(Phi);
-  double DzTthetaSphi = Dz*tan(Theta)*sin(Phi);
-  double Dy1Talp1 = Dy1*tan(Alp1);
-  double Dy2Talp2 = Dy2*tan(Alp2);
+  double DzTthetaCphi = Dz*std::tan(Theta)*std::cos(Phi);
+  double DzTthetaSphi = Dz*std::tan(Theta)*std::sin(Phi);
+  double Dy1Talp1 = Dy1*std::tan(Alp1);
+  double Dy2Talp2 = Dy2*std::tan(Alp2);
   
   AllocateMemory(8,6);
 
@@ -1513,7 +1513,7 @@ HepPolyhedronCons::HepPolyhedronCons(double Rmn1,
     phi1 = Phi1; phi2 = phi1 + Dphi;
   }
   dphi  = phi2 - phi1;
-  if (abs(dphi-wholeCircle) < perMillion) dphi = wholeCircle;
+  if (std::abs(dphi-wholeCircle) < perMillion) dphi = wholeCircle;
   if (dphi > wholeCircle) k += 4; 
 
   if (k != 0) {
@@ -1740,8 +1740,8 @@ HepPolyhedronSphere::HepPolyhedronSphere(double rmin, double rmax,
   double a = dthe/(np1-1);
   double cosa, sina;
   for (int i=0; i<np1; i++) {
-    cosa  = cos(the+i*a);
-    sina  = sin(the+i*a);
+    cosa  = std::cos(the+i*a);
+    sina  = std::sin(the+i*a);
     zz[i] = rmax*cosa;
     rr[i] = rmax*sina;
     if (np2 > 1) {
@@ -1814,8 +1814,8 @@ HepPolyhedronTorus::HepPolyhedronTorus(double rmin,
   double a = 2*M_PI/np1;
   double cosa, sina;
   for (int i=0; i<np1; i++) {
-    cosa  = cos(i*a);
-    sina  = sin(i*a);
+    cosa  = std::cos(i*a);
+    sina  = std::sin(i*a);
     zz[i] = rmax*cosa;
     rr[i] = rtor+rmax*sina;
     if (np2 > 1) {

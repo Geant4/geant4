@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStubesector.cc,v 1.7 2003-06-16 16:55:21 gunter Exp $
+// $Id: G4NURBStubesector.cc,v 1.8 2004-12-07 08:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,10 +53,10 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
 
   const G4double mr = (r+R)/2;
 
-  const G4double cp1 = cos(PHI1);
-  const G4double sp1 = sin(PHI1);
-  const G4double cp2 = cos(PHI2);
-  const G4double sp2 = sin(PHI2);
+  const G4double cp1 = std::cos(PHI1);
+  const G4double sp1 = std::sin(PHI1);
+  const G4double cp2 = std::cos(PHI2);
+  const G4double sp2 = std::sin(PHI2);
 
 
   // define control points
@@ -89,9 +89,9 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
     // the first arc CP is already Done
 
     deltaAngleo2 = (destAngle - srcAngle) / 2;
-    const G4double csa = cos(srcAngle);
-    const G4double ssa = sin(srcAngle);
-    const G4double tdao2 = tan(deltaAngleo2); 
+    const G4double csa = std::cos(srcAngle);
+    const G4double ssa = std::sin(srcAngle);
+    const G4double tdao2 = std::tan(deltaAngleo2); 
 
     // to calculate the intermediate CP :
     // rotate by srcAngle the (1, tdao2) point
@@ -99,7 +99,7 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
     const t_Coord y = ssa + csa*tdao2;
 
     // weight of the CP
-    const G4Float weight = (cos(deltaAngleo2));
+    const G4Float weight = (std::cos(deltaAngleo2));
 
     // initialization. postfix ++ because i initialized to 15
     CP(mpCtrlPts[i++], x*r, y*r,  DZ, 1, weight);
@@ -109,8 +109,8 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
     CP(mpCtrlPts[i++], x*r, y*r,  DZ, 1, weight);
 
     // end CP (which is the first CP of the next arc)
-    const G4double cda = cos(destAngle);
-    const G4double sda = sin(destAngle);
+    const G4double cda = std::cos(destAngle);
+    const G4double sda = std::sin(destAngle);
     CP(mpCtrlPts[i++], cda*r, sda*r,  DZ, 1);
     CP(mpCtrlPts[i++], cda*R, sda*R,  DZ, 1);
     CP(mpCtrlPts[i++], cda*R, sda*R, -DZ, 1);
@@ -127,9 +127,9 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
 
   destAngle = PHI2;
   deltaAngleo2 = (destAngle - srcAngle) / 2;
-  const G4double csa = cos(srcAngle);
-  const G4double ssa = sin(srcAngle);
-  const G4double tdao2 = tan(deltaAngleo2); 
+  const G4double csa = std::cos(srcAngle);
+  const G4double ssa = std::sin(srcAngle);
+  const G4double tdao2 = std::tan(deltaAngleo2); 
 
   // to calculate the intermediate CP :
   // rotate by srcAngle the (1, tdao2) point
@@ -137,7 +137,7 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   const t_Coord y = ssa + csa*tdao2;
 
   // weight of the CP
-  const G4Float weight = (cos(deltaAngleo2));
+  const G4Float weight = (std::cos(deltaAngleo2));
 
   // initialization.
   CP(mpCtrlPts[i++], x*r, y*r,  DZ, 1, weight);
@@ -147,8 +147,8 @@ G4NURBStubesector::G4NURBStubesector(G4double r, G4double R,
   CP(mpCtrlPts[i++], x*r, y*r,  DZ, 1, weight);
 
   // end CP
-  const G4double cda = cos(destAngle);
-  const G4double sda = sin(destAngle);
+  const G4double cda = std::cos(destAngle);
+  const G4double sda = std::sin(destAngle);
   CP(mpCtrlPts[i++], cda*r, sda*r,  DZ, 1);
   CP(mpCtrlPts[i++], cda*R, sda*R,  DZ, 1);
   CP(mpCtrlPts[i++], cda*R, sda*R, -DZ, 1);
@@ -215,9 +215,9 @@ G4NURBStubesector::DecideNbrCtrlPts(G4double PHI1, G4double PHI2)
   G4double k = deltaPHI / (M_PI_2);
 
   //    G4cerr << " k " << k << G4endl;
-  //    G4cerr << " fk " << floor(k) << G4endl;
-  //    G4cerr <<  " ifk " << ((int)(floor(k))) << G4endl;
-  //    G4cerr << " n " << (2*((int)(floor(k))) + 7) << G4endl;
+  //    G4cerr << " fk " << std::floor(k) << G4endl;
+  //    G4cerr <<  " ifk " << ((int)(std::floor(k))) << G4endl;
+  //    G4cerr << " n " << (2*((int)(std::floor(k))) + 7) << G4endl;
 
-  return ( 2*((int)(floor(k))) + 7 );     
+  return ( 2*((int)(std::floor(k))) + 7 );     
 }

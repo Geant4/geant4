@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisExtent.cc,v 1.7 2003-06-16 16:55:28 gunter Exp $
+// $Id: G4VisExtent.cc,v 1.8 2004-12-07 08:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ G4VisExtent::G4VisExtent (G4double xmin, G4double xmax,
 
 G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius) {
   // Use exscribed radius ... see comments in header file.
-  G4double halfSide (radius / sqrt (3.));
+  G4double halfSide (radius / std::sqrt (3.));
   fXmin = centre.x () - halfSide;
   fXmax = centre.x () + halfSide;
   fYmin = centre.y () - halfSide;
@@ -59,7 +59,7 @@ G4Point3D G4VisExtent::GetExtentCentre () const {
 }
 
 G4double G4VisExtent::GetExtentRadius () const {
-  return sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
+  return std::sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
 	       ((fYmax - fYmin) * (fYmax - fYmin)) +
 	       ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
 }

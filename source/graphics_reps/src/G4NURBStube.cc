@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NURBStube.cc,v 1.5 2003-04-03 15:31:07 gcosmo Exp $
+// $Id: G4NURBStube.cc,v 1.6 2004-12-07 08:42:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ G4NURBStube::G4NURBStube(G4double r, G4double R, G4double DZ)
 {
   // define control points
 
-  const G4double sr2o2 = sqrt(2.)/2.;
+  const G4double sr2o2 = std::sqrt(2.)/2.;
 
   CP(mpCtrlPts[ 0] ,  r, 0,  DZ, 1 );
   CP(mpCtrlPts[ 1] ,  R, 0,  DZ, 1 );
