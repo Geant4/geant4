@@ -1,4 +1,4 @@
-$Id: History,v 1.61 2001-12-08 01:49:25 japost Exp $
+$Id: History,v 1.62 2001-12-11 16:06:33 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec 11th, 2001       J. Apostolakis - geomvol-V03-02-07
+
+- G4Navigator:
+    Undoing the fix in geomvol-V03-02-05 -- because of problems in 
+     several tests (mostly large N tests). 
+     ----> Must resolve these !! <-----------------------
+
 Dec  8th, 2001       J. Apostolakis - geomvol-V03-02-06
 - G4PropagatorInField
   * Interface: additional thresholds for No of steps, + get/Set methods
