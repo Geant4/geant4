@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisationTest.cc,v 1.5 2001-05-02 11:38:57 pia Exp $
+// $Id: G4eIonisationTest.cc,v 1.6 2001-05-07 18:04:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -264,12 +264,13 @@ G4int main()
   step->SetTrack(eTrack);
 
   G4StepPoint* aPoint = new G4StepPoint();
-  (*aPoint).SetPosition(aPosition);
+  aPoint->SetPosition(aPosition);
   aPoint->SetMaterial(material);
   G4double safety = 10000.*cm;
-  (*aPoint).SetSafety(safety);
-  (*step).SetPreStepPoint(aPoint);
-  
+  aPoint->SetSafety(safety);
+  step->SetPreStepPoint(aPoint);
+  step->SetPostStepPoint(aPoint);
+
   // Check applicability
   
   if (! (ionisationProcess->IsApplicable(*electron))) G4Exception("Not Applicable");

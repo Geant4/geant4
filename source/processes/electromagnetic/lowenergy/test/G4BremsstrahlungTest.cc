@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.6 2001-05-02 11:38:56 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.7 2001-05-07 18:04:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -264,7 +264,8 @@ G4int main()
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
-  
+  step->SetPostStepPoint(aPoint);
+
   // Check applicability
   
   if (! (bremProcess->IsApplicable(*electron)))

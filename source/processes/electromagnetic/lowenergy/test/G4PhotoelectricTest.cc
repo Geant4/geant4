@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoelectricTest.cc,v 1.2 2001-05-02 15:48:50 pia Exp $
+// $Id: G4PhotoelectricTest.cc,v 1.3 2001-05-07 18:04:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -292,6 +292,7 @@ G4int main()
   G4double safety = 10000.*cm;
   aPoint->SetSafety(safety);
   step->SetPreStepPoint(aPoint);
+  step->SetPostStepPoint(aPoint);
   
   // Check applicability
   
