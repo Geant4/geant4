@@ -84,8 +84,8 @@
   
   G4NeutronHPVector::G4NeutronHPVector(G4int n)
   {
-    theData = new G4NeutronHPDataPoint[G4std::max(n, 20)]; 
     nPoints=G4std::max(n, 20);
+    theData = new G4NeutronHPDataPoint[nPoints]; 
     nEntries=0;
     Verbose=0;
     theIntegral=NULL;
