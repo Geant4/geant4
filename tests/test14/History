@@ -1,41 +1,33 @@
-$Id: History,v 1.1 1999-05-29 14:12:01 stesting Exp $
+$Id: History,v 1.2 1999-06-14 15:18:47 aforti Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                    Example N02 History file
-                    ------------------------
-This file should be used by the G4 example coordinator to briefly
+                    Test 09 History file
+                    --------------------
+This file should be used by the test developer to briefly
 summarize all major modifications introduced in the code and keep
 track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
-20th  July 1998  Michel Maire
-storeTrajectory command move to prerun.mac     
 
-16th July 1998  John Allison
-- Changed /vis~/Draw... to /vis~/draw.
+17 Apr., 1999 H.Kurashige 
+- Modify SetCuts() and ConstructParticle() in Tst09PhysicsList
+- Modify BeginOfRunAction() and EndOfRunAction() in Tst09RunAction
+- Modify PreUserTrackingAction() in Tst09TrackingAction
+- Modify UserSteppingAction() in Tst09SteppingAction
 
-9th July 1998  John Allison
-- Added G4VIS_USE_DAWNFILE and G4VIS_USE_OPENGLWIN32 to N02VisManager.cc.
 
-8th July 1998  G.Cosmo
-- Protected visualization code with G4VIS_USE.
+14 Dec. 1998 Hisaya
+- Added Tst09TrackingAction for adding polarization for gammas
 
-6th July 1998  John Allison
-- Simplified N02VisManager.
+30th November 1998  John Allison
+- Copied from test02 with a physics list for polarised Compton,
+  G4PhotoAbsorption and synchrotron radiation.
 
-16th June 1998  Michel Maire
-- Added G4_SOLVE_VIS_TEMPLATES to exampleN02.cc
-
-10th June 1998  John Allison
-- Added template instantiation requests to exampleN02.cc for GNU_GCC.
-
-April 09, 98 G. Cosmo
-
-- Created.
+14 June 99 Alessandra Forti
+- Copied from test09 with a physics list for low energy e.m. processes
