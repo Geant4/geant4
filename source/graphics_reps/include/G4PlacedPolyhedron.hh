@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PlacedPolyhedron.hh,v 1.1 1999-07-21 16:43:48 johna Exp $
+// $Id: G4PlacedPolyhedron.hh,v 1.2 1999-07-22 15:33:30 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4PLACEDPOLYHEDRON_HH
@@ -26,6 +26,11 @@ public:
   G4PlacedPolyhedron (const G4Polyhedron&, const G4Transform3D&);
 
   // Uses default copy constructor, destructor and assignment.
+
+  G4bool G4PlacedPolyhedron::operator ==
+  (const G4PlacedPolyhedron& right) const {
+    return this == &right;
+  }
 
   const G4Polyhedron&  GetPolyhedron () const {return fPolyhedron;}
   const G4Transform3D& GetTransform  () const {return fTransform;}
