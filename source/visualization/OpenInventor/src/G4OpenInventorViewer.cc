@@ -503,9 +503,9 @@ Controls on an Inventor examiner viewer are :\n\
   Shift + pick a volume : see mother.\n\
 - in viewing mode (cursor is the hand)\n\
   Left-button + pointer move : rotate.\n\
-  Ctrl+Left-button + pointer move : pane.\n\
+  Ctrl+Left-button + pointer move : pan.\n\
   Ctrl+Shift+Left-button + pointer move : scale.\n\
-  Middle-button + pointer move : pane.\n\
+  Middle-button + pointer move : pan.\n\
   Right-button : popup menu.\n");
   } else {
     return "";
