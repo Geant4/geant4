@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.11 2004-11-12 11:48:39 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.12 2004-11-15 09:05:58 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -30,7 +30,9 @@
  * gb : on Win32 use an SoXtExaminerViewer.
  * gb : 05 April 2004 : creation.
  * gb : 09 November 2004 : Pulldown menu with the escape menu item.
+ * gb 14 November 2004 : inherit G4OpenInventorViewer.
  */
+
 #ifdef G4VIS_BUILD_OIWIN32_DRIVER
 
 // this :
@@ -41,11 +43,11 @@
 #include <Inventor/Win/SoWin.h>
 #include <Inventor/Win/viewers/SoWinExaminerViewer.h>
 
+#include "HEPVis/actions/SoGL2PSAction.h"
+
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
-
-#include "HEPVis/actions/SoGL2PSAction.h"
 
 #include <windowsx.h>
 
@@ -60,97 +62,26 @@ public:
 };
 
 #define SIZE 400
+// File : 
 #define ID_POSTSCRIPT 1
-#define ID_ESCAPE 2
+#define ID_PIXMAP_POSTSCRIPT 2
+#define ID_INVENTOR 3
+#define ID_ESCAPE 4
+// Etc : 
+#define ID_COUNT_TRIANGLES 101
 
 //static void SecondaryLoopPostAction ();
 
 static const char className[] = "G4OpenInventorShellWindow";
 
-void G4OpenInventorWinViewer::FinishView () {
-  if(!fViewer) return;
-  fViewer->viewAll();
-  fViewer->saveHomePosition();
-}
-
-void G4OpenInventorWinViewer::KernelVisitDecision () {
-  
-  // If there's a significant difference with the last view parameters
-  // of either the scene handler or this viewer, trigger a rebuild.
-
-  if (
-      //??fG4OpenInventorSceneHandler.fPODLList.size() == 0 ||
-      // We need a test for empty scene graph, such as
-      // staticRoot.size() or something??????????  See temporary fix
-      // in contructor.  (John Allison Aug 2001)
-      CompareForKernelVisit(fG4OpenInventorSceneHandler.fLastVP)  ||
-      CompareForKernelVisit(fLastVP)) {
-    NeedKernelVisit ();
-  }      
-  fLastVP = fVP;
-  fG4OpenInventorSceneHandler.fLastVP = fVP;
-}
- 
-G4bool G4OpenInventorWinViewer::CompareForKernelVisit
-(G4ViewParameters&) {
-
-  if (
-      (fLastVP.GetDrawingStyle ()    != fVP.GetDrawingStyle ())    ||
-      (fLastVP.GetRepStyle ()        != fVP.GetRepStyle ())        ||
-      (fLastVP.IsCulling ()          != fVP.IsCulling ())          ||
-      (fLastVP.IsCullingInvisible () != fVP.IsCullingInvisible ()) ||
-      (fLastVP.IsDensityCulling ()   != fVP.IsDensityCulling ())   ||
-      (fLastVP.IsCullingCovered ()   != fVP.IsCullingCovered ())   ||
-      (fLastVP.IsSection ()          != fVP.IsSection ())          ||
-      // No need to visit kernel if section plane changes.
-      (fLastVP.IsCutaway ()          != fVP.IsCutaway ())          ||
-      (fLastVP.GetCutawayPlanes ().size () !=
-                                 fVP.GetCutawayPlanes ().size ()) ||
-      // No need to visit kernel if cutaway planes change.
-      (fLastVP.IsExplode ()          != fVP.IsExplode ())          ||
-      (fLastVP.GetNoOfSides ()       != fVP.GetNoOfSides ())
-      ) {
-      return true;;
-  }
-  if (fLastVP.IsDensityCulling () &&
-      (fLastVP.GetVisibleDensity () != fVP.GetVisibleDensity ()))
-    return true;
-
-  if (fLastVP.IsExplode () &&
-      (fLastVP.GetExplodeFactor () != fVP.GetExplodeFactor ()))
-    return true;
-      
-  return false;
-}
-
-G4OpenInventorWinViewer::G4OpenInventorWinViewer
-(G4OpenInventorSceneHandler& sceneHandler,
- const G4String& name)
-:G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name)
-,fG4OpenInventorSceneHandler(sceneHandler)
+G4OpenInventorWinViewer::G4OpenInventorWinViewer(
+ G4OpenInventorSceneHandler& sceneHandler
+,const G4String& name)
+:G4OpenInventorViewer (sceneHandler, name)
 ,fShell(0)
 ,fViewer(0)
-,fSelection(0)
-,fInteractorManager(0)
 {
-  fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
-
-  fInteractorManager = 
-    ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
-    GetInteractorManager();
-  //Widget toplevel = (Widget)fInteractorManager->GetMainInteractor ();
-
-  //fInteractorManager->
-  //AddSecondaryLoopPostAction((G4SecondaryLoopAction)SecondaryLoopPostAction);
-
   G4cout << "Window name: " << fName << G4endl;
-  // 
-  // Selection
-  //
-  fSelection = new SoSelection;
-  fSelection->policy = SoSelection::SINGLE;
-  fSelection->ref();
-  fSelection->addChild(fG4OpenInventorSceneHandler.fRoot);
 
   G4String wName = fName;
 
@@ -178,10 +109,17 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     }
 
     HMENU menuBar = CreateMenu();
-    HMENU casc = CreatePopupMenu();
+
+   {HMENU casc = CreatePopupMenu();
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"File");
-    ::AppendMenu(casc,MF_STRING,ID_POSTSCRIPT,"PostScript");
-    ::AppendMenu(casc,MF_STRING,ID_ESCAPE,"Escape");
+    ::AppendMenu(casc,MF_STRING,ID_POSTSCRIPT,"PS (gl2ps)");
+    ::AppendMenu(casc,MF_STRING,ID_PIXMAP_POSTSCRIPT,"PS (pixmap)");
+    ::AppendMenu(casc,MF_STRING,ID_INVENTOR,"IV");
+    ::AppendMenu(casc,MF_STRING,ID_ESCAPE,"Escape");}
+
+   {HMENU casc = CreatePopupMenu();
+    ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Etc");
+    ::AppendMenu(casc,MF_STRING,ID_COUNT_TRIANGLES,"Triangles");}
 
     fShell = ::CreateWindow(className, shellName.c_str(), 
                             WS_OVERLAPPEDWINDOW |
@@ -211,11 +149,11 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
 
   // Have a GL2PS render action :
   const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
-  SoGL2PSAction* action = new SoGL2PSAction(vpRegion);
-  fViewer->setGLRenderAction(action);
+  fGL2PSAction = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(fGL2PSAction);
 
   fViewer->setSize(SbVec2s(SIZE,SIZE));
-  fViewer->setSceneGraph(fSelection);
+  fViewer->setSceneGraph(fSoSelection);
   fViewer->viewAll();
   fViewer->saveHomePosition();
   fViewer->setTitle(fName);
@@ -234,37 +172,19 @@ G4OpenInventorWinViewer::~G4OpenInventorWinViewer () {
     ::SetWindowLong((HWND)fShell,GWL_USERDATA,LONG(0));
     ::DestroyWindow((HWND)fShell);
   }
-  if(fSelection) fSelection->unref();
 }
 
-void G4OpenInventorWinViewer::ClearView () {
-}
-
-void G4OpenInventorWinViewer::SetView () {
-}
-
-void G4OpenInventorWinViewer::DrawView () {
-  //G4cout << "debug Iv::DrawViewer " <<G4endl;
-  KernelVisitDecision();
-  ProcessView();
-  FinishView();
-}
-
-void G4OpenInventorWinViewer::ShowView () {
-  fInteractorManager -> SecondaryLoop ();
-}
-
-void G4OpenInventorWinViewer::WritePostScript(const G4String& aFile) {
+void G4OpenInventorWinViewer::FinishView () {
   if(!fViewer) return;
-  SoGLRenderAction* glAction = fViewer->getGLRenderAction();
-  if(glAction->isOfType(SoGL2PSAction::getClassTypeId())==FALSE) return;
-  SoGL2PSAction* action = (SoGL2PSAction*)glAction;
-  action->setFileName(aFile.c_str());
-  G4cout << "Produce " << aFile << "..." << G4endl;
-  action->enableFileWriting();
-  fViewer->render();
-  action->disableFileWriting();
+  fViewer->viewAll();
+  fViewer->saveHomePosition();
 }
+
+void G4OpenInventorWinViewer::ViewerRender () {
+  if(!fViewer) return;
+  fViewer->render();
+}
+
 //////////////////////////////////////////////////////////////////////////////
 LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc ( 
  HWND   aWindow
@@ -304,12 +224,18 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
       (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     if(This) {
       if(aLParam==0) { //From menu.
-        if(aWParam==ID_ESCAPE) {
-          //printf("debug : escape...\n");
-          This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
-        } else if(aWParam==ID_POSTSCRIPT) {
-          //printf("debug : PS...\n");
+        // File :
+        if(aWParam==ID_POSTSCRIPT) {
           This->WritePostScript();
+        } else if(aWParam==ID_PIXMAP_POSTSCRIPT) {
+          This->WritePixmapPostScript();
+        } else if(aWParam==ID_INVENTOR) {
+          This->WriteInventor();
+        } else if(aWParam==ID_ESCAPE) {
+          This->Escape();
+        // Etc :
+        } else if(aWParam==ID_COUNT_TRIANGLES) {
+          This->CountTriangles();
         }
       }
     }
