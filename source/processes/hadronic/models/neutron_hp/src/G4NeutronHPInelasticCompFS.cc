@@ -284,10 +284,13 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
       if(thePhotons!=NULL && thePhotons->entries()!=0) aBaseEnergy-=thePhotons->at(0)->GetTotalEnergy();
       if(theFinalStatePhotons[it]->NeedsCascade())
       {
-        while(abs(aBaseEnergy)>0.01*keV)
+	while(aBaseEnergy>0.01*keV)
         {
           // cascade down the levels
-          for(G4int i=1; i<it; i++)
+	  G4bool foundMatchingLevel = false;
+          G4int closest;
+	  G4double deltaEold = -1;
+	  for(G4int i=1; i<it; i++)
           {
             if(theFinalStatePhotons[i]!=NULL) 
             {
@@ -297,17 +300,33 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
             {
               testEnergy = 0;
             }
-            if(abs(testEnergy-aBaseEnergy)<0.1*keV)
+	    G4double deltaE = abs(testEnergy-aBaseEnergy);
+            if(deltaE<0.1*keV)
             {
               G4ReactionProductVector * theNext = 
         	theFinalStatePhotons[i]->GetPhotons(anEnergy);
               thePhotons->insert(theNext->at(0));
               aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
               delete theNext;
-              break;
+	      foundMatchingLevel = true;
+              break; // ===>
             }
-          }
-        } // <=== the break goes here.
+	    if(deltaE<deltaEold||deltaEold<0.)
+	    {
+	      closest = i;
+	      deltaEold = deltaE;     
+	    }
+          } // <=== the break goes here.
+	  if(!foundMatchingLevel)
+	  {
+            G4ReactionProductVector * theNext = 
+               theFinalStatePhotons[closest]->GetPhotons(anEnergy);
+            thePhotons->insert(theNext->at(0));
+	    testEnergy = theFinalStatePhotons[closest]->GetLevelEnergy();
+            aBaseEnergy = testEnergy-theNext->at(0)->GetTotalEnergy();
+            delete theNext;
+	  }
+        } 
       }
     }
     if(thePhotons!=NULL)
