@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.2 1999-01-11 00:47:21 allison Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.3 1999-08-26 02:55:17 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -296,7 +296,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 	//########### Generation of the file .DAWN.history for DAWN GUI
 		//-----
-	ofstream gui_out (".DAWN.history") ; 
+	ofstream gui_out (".DAWN_1.history") ; 
 
 	// ######### P1 
 
@@ -363,9 +363,8 @@ void G4DAWNFILEViewer::SendViewParameters ()
                 gui_out << 1 << endl; // Invoke PS viewer
         }
 	gui_out << GetPSViewer() << endl; // PS viewer
-	gui_out << 0;         // Add showpage 
-
-	
+	gui_out << 0 << endl            ; // Do not add showpage 
+	gui_out << 0 << endl            ; // Non-append mode
 
 	gui_out.close();
 	//########### end of generating file .DAWN.history 
