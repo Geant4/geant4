@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.24 2002-01-22 22:45:38 radoone Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.25 2002-01-28 16:32:42 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -184,10 +184,12 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         }
             
         SurfaceVec[b]  = ComputePlanarSurface( RMAX[a], RMAX[a+1], LocalOrigin, PlaneAxis, PlaneDir, UpSurfSense );
-        SurfaceVec[b++]->SetSameSense( UpSurfSense );
+        //SurfaceVec[b]->SetSameSense( UpSurfSense );
+        b++;
         
         SurfaceVec[b]  = ComputePlanarSurface( RMIN[a], RMIN[a+1], LocalOrigin, PlaneAxis, PlaneDir, LowSurfSense );
-        SurfaceVec[b++]->SetSameSense( LowSurfSense );
+        //SurfaceVec[b]->SetSameSense( LowSurfSense );
+        b++;
       }
       else
       {
@@ -254,7 +256,8 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
         }
         
         SurfaceVec[b] = ComputePlanarSurface( R1, R2, LocalOrigin, PlaneAxis, PlaneDir, SurfSense );
-        SurfaceVec[b++]->SetSameSense( SurfSense );
+        //SurfaceVec[b]->SetSameSense( SurfSense );
+        b++;
         
         //      SurfaceVec[b]->SetSameSense(1);
         nb_of_surfaces--;
@@ -464,9 +467,9 @@ EInside G4BREPSolidPCone::Inside(register const G4ThreeVector& Pt) const
   // This function find if the point Pt is inside, 
   // outside or on the surface of the solid
 
-  //  G4Vector3D v(1, 0, 0.01);
-  //G4Vector3D v(1, 0, 0);
-  G4Vector3D v(0, 0, 1);
+  G4Vector3D v(1, 0, 0.01);
+  //G4Vector3D v(1, 0, 0); // This will miss the planar surface perp. to Z axis
+  //G4Vector3D v(0, 0, 1); // This works, however considered as hack not a fix
   G4Vector3D Pttmp(Pt);
   G4Vector3D Vtmp(v);
   G4Ray r(Pttmp, Vtmp);
@@ -634,21 +637,25 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
   
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->IsActive())
-    {
+    if(SurfaceVec[a]->IsActive()) {
+      
       // test if the ray intersect the surface
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
-      if( (Norm * Vtmp) < 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
-	return 0;
+      G4double hownear = SurfaceVec[a]->HowNear(Pt);
+      
+      if( (Norm * Vtmp) < 0 && fabs(hownear) < halfTolerance )
+        return 0;
+      
       if( (SurfaceVec[a]->Intersect(r)) ) {
-
-	// if more than 1 surface is intersected,
-	// take the nearest one
-	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
-	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
-	    {
-	      ShortestDistance = SurfaceVec[a]->GetDistance();
-	    }
+        // if more than 1 surface is intersected,
+        // take the nearest one
+        G4double distance = SurfaceVec[a]->GetDistance();
+        
+        if( distance < ShortestDistance ) {
+	        if( distance > halfTolerance ) {
+	            ShortestDistance = distance;
+	        }
+        }
       }
     }
   }
@@ -656,7 +663,7 @@ G4double G4BREPSolidPCone::DistanceToIn(register const G4ThreeVector& Pt,
   // Be careful !
   // SurfaceVec->Distance is in fact the squared distance
   if(ShortestDistance != kInfinity)
-    return sqrt(ShortestDistance);
+    return( sqrt(ShortestDistance) );
   else
     // no intersection, return kInfinity
     return kInfinity; 
@@ -701,21 +708,24 @@ G4double G4BREPSolidPCone::DistanceToOut(register const G4ThreeVector& Pt,
  
   for(a=0; a< nb_of_surfaces; a++)
   {
-    if(SurfaceVec[a]->IsActive())
-    {
+    if(SurfaceVec[a]->IsActive()) {
       G4Vector3D Norm = SurfaceVec[a]->SurfaceNormal(Pttmp);
-      if( (Norm * Vtmp) > 0 && fabs(SurfaceVec[a]->HowNear(Pt)) < halfTolerance )
+      G4double hownear = SurfaceVec[a]->HowNear(Pt);
+      
+      if( (Norm * Vtmp) > 0 && fabs( hownear ) < halfTolerance )
         return 0;
+      
       // test if the ray intersect the surface
-      if( (SurfaceVec[a]->Intersect(r)) )
-      {
-	// if more than 1 surface is intersected,
-	// take the nearest one
-	if( SurfaceVec[a]->GetDistance() < ShortestDistance )
-	  if( SurfaceVec[a]->GetDistance() > halfTolerance )
-	  {
-	    ShortestDistance = SurfaceVec[a]->GetDistance();
-	  }
+      if( (SurfaceVec[a]->Intersect(r)) ) {
+	      // if more than 1 surface is intersected,
+	      // take the nearest one
+        G4double distance = SurfaceVec[a]->GetDistance();
+        
+	      if( distance < ShortestDistance ) {
+	        if( distance > halfTolerance ) {
+	          ShortestDistance = distance;
+	        }
+        }
       }
     }
   }
@@ -826,7 +836,7 @@ G4Surface* G4BREPSolidPCone::ComputePlanarSurface( G4double r1, G4double r2,
 	  cv1.push_back(tmp2);
   }
 
-  planarFace   = new G4FPlane( planeDirection, planeAxis, origin);
+  planarFace   = new G4FPlane( planeDirection, planeAxis, origin, surfSense );
   
   planarFace->SetBoundaries(&cv1);
 
