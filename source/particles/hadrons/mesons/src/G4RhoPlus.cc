@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RhoPlus.cc,v 1.1 1999-01-07 16:10:19 gunter Exp $
+// $Id: G4RhoPlus.cc,v 1.2 1999-10-28 00:49:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ G4RhoPlus::G4RhoPlus(
 //             stable         lifetime    decay table 
 
 G4RhoPlus G4RhoPlus::theRhoPlus(
-	       "rho0",      0.7685*GeV,     150.7*MeV,    +1.0*eplus, 
+	       "rho+",      0.7685*GeV,     150.7*MeV,    +1.0*eplus, 
 		    2,              -1,             0,          
 		    2,              +2,            +1,             
 	      "meson",               0,             0,         213,
