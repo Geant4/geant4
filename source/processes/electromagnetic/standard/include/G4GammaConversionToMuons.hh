@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.5 2004-05-07 16:06:38 vnivanch Exp $
+// $Id: G4GammaConversionToMuons.hh,v 1.6 2004-05-11 18:22:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
@@ -58,7 +58,7 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 {
   public:  // with description
 
-     G4GammaConversionToMuons(const G4String& processName ="gToMuPair",
+     G4GammaConversionToMuons(const G4String& processName ="GammaToMuPair",
                                     G4ProcessType type = fElectromagnetic);
 
     ~G4GammaConversionToMuons();
