@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPFission.hh,v 1.2 1999-07-02 09:59:01 johna Exp $
+// $Id: G4NeutronHPFission.hh,v 1.3 2000-12-14 09:20:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: High Precision low E neutron tracking
@@ -16,6 +16,17 @@
   
 #ifndef G4NeutronHPFission_h
 #define G4NeutronHPFission_h 1
+
+// Class Description
+// Final state production model for a high precision (based on evaluated data
+// libraries) description of neutron induced fission below 20 MeV; 
+// Note that this model (by intent of avoiding the possibility of heating studies) does
+// not provide the nuclear fragments.
+//
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
 
 #include "globals.hh"
 #include "G4NeutronHPChannel.hh"

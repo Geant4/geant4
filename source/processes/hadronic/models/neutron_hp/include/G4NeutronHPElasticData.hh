@@ -7,11 +7,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPElasticData.hh,v 1.2 1999-07-02 09:58:46 johna Exp $
+// $Id: G4NeutronHPElasticData.hh,v 1.3 2000-12-14 09:20:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPElasticData_h
 #define G4NeutronHPElasticData_h 1
+
+// Class Description
+// Cross-section data set for a high precision (based on evaluated data
+// libraries) description of neutron elastic scattering below 20 MeV; 
+// To be used in your physics list in case you need this physics.
+// In this case you want to register an object of this class with 
+// the corresponding process.
+// Class Description - End
 
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
