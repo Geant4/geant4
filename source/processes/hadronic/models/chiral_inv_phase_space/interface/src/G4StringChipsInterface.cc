@@ -41,14 +41,14 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(G4int secondary = 0; secondary<theSecondaries->length(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->at(secondary)->Get4Momentum();
-    G4double kinetic = a4Mom.t()-a4Mom.m();
+    G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
-    it.first = kinetic;
+    it.first = toSort;
     it.second = theSecondaries->at(secondary);
     G4bool inserted = false;
     for(current = theSorted.begin(); current!=theSorted.end(); current++)
     {
-      if(current->first > kinetic)
+      if(current->first > toSort)
       {
 	theSorted.insert(current, it);
 	inserted = true;
@@ -68,7 +68,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4int nAD = 0;
   G4int nAU = 0;
   G4int nAS = 0;
-  G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = 0;
+  G4std::list<G4Pair<G4double, G4KineticTrack *> >::iterator firstEscaping = theSorted.begin();
   G4double runningEnergy = 0;
   for(current = theSorted.begin(); current!=theSorted.end(); current++)
   {
@@ -89,7 +89,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     nAS += current->second->GetDefinition()->GetAntiQuarkContent(3);
   }
   // construct G4QContent
+  G4cout << "Quark content: d="<<nD<<", u="<<nU<< ", s="<< nS << G4endl;
+  G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
   G4QContent theProjectiles(nD, nU, nS, nAD, nAU, nAS);
+  G4cout << "G4QContent is constructed"<<endl;
   
   // target properties needed in constructor of quasmon
   // remove all hit nucleons to get Target code
@@ -133,10 +136,25 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4Quasmon::SetParameters(temperature,
                            halfTheStrangenessOfSee,
 			   etaToEtaPrime);
+  G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
+         << fractionOfPairedQuasiFreeNucleons << " "<< clusteringCoefficient << G4endl;
+  G4cout << "G4Quasmon parameters "<< temperature << " "<< halfTheStrangenessOfSee << " "
+         <<etaToEtaPrime << G4endl;
+  G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
+  G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
+  G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
   G4Quasmon* pan= new G4Quasmon(theProjectiles, targetPDGCode, 1./MeV*proj4Mom, 1./MeV*targ4Mom, nop);
 
   // now call chips with this info in place
-  G4QHadronVector * output = pan->Fragment();
+  G4QHadronVector * output = 0;
+  if (proj4Mom.t()!=0) 
+  {
+    output = pan->Fragment();
+  }
+  else 
+  {
+    output = new G4QHadronVector;
+  }
   delete pan;
    
   // Fill the result.
@@ -144,16 +162,45 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4ReactionProduct * theSec;
   G4cout << "NEXT EVENT"<<endl;
   
-  // first add all escaping particles.
+  // first decay and add all escaping particles.
+  G4KineticTrackVector * secondaries;
   for(current = firstEscaping; current!=theSorted.end(); current++)
   {
-    theSec = new G4ReactionProduct(current->second->GetDefinition());
-    G4LorentzVector current4Mom = current->second->Get4Momentum();
-    theSec->SetTotalEnergy(current4Mom.t());
-    theSec->SetMomentum(current4Mom.vect());
-    theResult->insert(theSec);
+    G4KineticTrack * aResult = current->second;
+    G4ParticleDefinition * pdef=aResult->GetDefinition();
+    secondaries = NULL;
+    if ( pdef->GetPDGWidth() > 0 && pdef->GetPDGLifeTime() < 5E-17*s )
+    {
+      secondaries = aResult->Decay();
+    }
+    if ( secondaries == NULL )
+    {
+      theSec = new G4ReactionProduct(aResult->GetDefinition());
+      G4LorentzVector current4Mom = aResult->Get4Momentum();
+      theSec->SetTotalEnergy(current4Mom.t());
+      theSec->SetMomentum(current4Mom.vect());
+      theResult->insert(theSec);
+    } 
+    else
+    {
+      for (G4int aSecondary=0; aSecondary<secondaries->entries(); aSecondary++)
+      {
+        theSec = new G4ReactionProduct(secondaries->at(aSecondary)->GetDefinition());
+        G4LorentzVector current4Mom = secondaries->at(aSecondary)->Get4Momentum();
+        theSec->SetTotalEnergy(current4Mom.t());
+        theSec->SetMomentum(current4Mom.vect());
+        theResult->insert(theSec);
+      }
+      secondaries->clearAndDestroy();
+      delete secondaries;
+    }
   }
-  // now the quasmon output
+  theSecondaries->clearAndDestroy();
+  delete theSecondaries;
+    
+  // now add the quasmon output
+  G4cout << "Number of particles from string"<<theResult->length()<<G4endl;
+  G4cout << "Number of particles from chips"<<output->length()<<G4endl;
   for(G4int particle = 0; particle < output->length(); particle++)
   {
     if(output->at(particle)->GetNFragments() != 0) 
@@ -172,7 +219,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     if(pdgCode>90000000) 
     {
       G4int aZ = (pdgCode-90000000)/1000;
+      if (aZ>1000) aZ=aZ%1000;  // patch for strange nuclei, to be repaired @@@@
       G4int anN = pdgCode-90000000-1000*aZ;
+      if(anN>1000) anN=anN%1000; // patch for strange nuclei, to be repaired @@@@
       theDefinition = G4ParticleTable::GetParticleTable()->FindIon(aZ,anN+aZ,0,aZ);
       if(aZ == 0 && anN == 1) theDefinition = G4Neutron::Neutron();
     }
@@ -188,5 +237,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     delete output->at(particle);
   }
   delete output;
+  G4cout << "Number of particles"<<theResult->length()<<G4endl;
+  G4cout << G4endl;
   return theResult;
 } 

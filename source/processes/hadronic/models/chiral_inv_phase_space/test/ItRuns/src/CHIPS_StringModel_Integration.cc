@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Integration.cc,v 1.1 2000-08-21 10:45:17 hpw Exp $
+// $Id: CHIPS_StringModel_Integration.cc,v 1.2 2000-08-24 10:13:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -660,62 +660,27 @@
       
 	  // prepare the analysis current quantities
       
-	  G4cout << "Definitions:";
+          G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries()<<G4endl;
 	  G4int istart, ipar;  
-	  double etWithinCuts = 0;      
-	  if( aFinalState->GetStatusChange() == fAlive ) {// current particle is still alive
-	    istart = 0;
-	    G4cout << '1';
-	    currentDefinition = aParticle.GetDefinition();
-	    kineticEnergy = aFinalState->GetEnergyChange()/GeV;
-	    currentMass = currentDefinition->GetPDGMass()/GeV;
-	    totalEnergy = kineticEnergy+currentMass;
-	    const G4ParticleMomentum *mom = aFinalState->GetMomentumChange();
-	    G4double p = sqrt( kineticEnergy*kineticEnergy + 2.0*kineticEnergy*currentMass );
-	    currentPx = mom->x()*p;
-	    currentPy = mom->y()*p;
-	    currentPz = mom->z()*p;
-	    double currentEta = 0.5*log((totalEnergy+currentPz)/(totalEnergy-currentPz));
-	    if(currentEta>-0.1&&currentEta<2.9) 
-	      etWithinCuts += sqrt(currentPx*currentPx + currentPy*currentPy);
-	    ipar = currentDefinition->GetPDGEncoding();     
-	  } else if (nSec !=0) {
-	    istart = 1;
-	    currentTrack = aFinalState->GetSecondary(0);
-	    G4cout << '2';
-	    currentDefinition = currentTrack->GetDefinition();
-	    kineticEnergy = currentTrack->GetKineticEnergy()/GeV;
-	    currentMass = currentDefinition->GetPDGMass()/GeV;
-	    totalEnergy = kineticEnergy+currentMass;
-	    currentPx = currentTrack->GetMomentum().x()/GeV;
-	    currentPy = currentTrack->GetMomentum().y()/GeV;
-	    currentPz = currentTrack->GetMomentum().z()/GeV;
-	    double currentEta = 0.5*log((totalEnergy+currentPz)/(totalEnergy-currentPz));
-	    if(currentEta>-0.1&&currentEta<2.9) 
-	      etWithinCuts += sqrt(currentPx*currentPx + currentPy*currentPy);
-	    ipar = currentDefinition->GetPDGEncoding();     
-	  }
-	  G4cout << "/3:" << nSec - istart << 
-	    " CPU Time(s):" << G4std::setw(5) << (dCPU += timerEvent.GetSystemElapsed()) << '/' << ++nCPU << G4endl;
-	  for( G4int ii=istart; ii<nSec; ++ii ) 
-	  {
-	    G4Track *currentTrack; 
-	    currentTrack = aFinalState->GetSecondary(ii);
-	    currentDefinition = currentTrack->GetDefinition();
-	    kineticEnergy = currentTrack->GetKineticEnergy()/GeV;
-	    currentMass = currentDefinition->GetPDGMass()/GeV;
-	    totalEnergy = kineticEnergy+currentMass;
-	    currentPx = currentTrack->GetMomentum().x();
-	    currentPy = currentTrack->GetMomentum().y();
-	    currentPz = currentTrack->GetMomentum().z();
-	    double currentEta = 0.5*log((totalEnergy+currentPz)/(totalEnergy-currentPz));
-	    if(currentEta>-0.1&&currentEta<2.9) 
-	      etWithinCuts += sqrt(currentPx*currentPx + currentPy*currentPy);
-	    ipar = currentDefinition->GetPDGEncoding();     
-            delete currentTrack;
-	  }
+	  double etWithinCuts = 0;    
+	  G4int ii;  
+          G4Track * second;
+	  G4DynamicParticle * aSec;
+          G4int isec;
+          for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
+          {
+            second = aFinalState->GetSecondary(isec);
+            aSec = second->GetDynamicParticle();
+            G4cout << "SECONDARIES info";
+            G4cout << aSec->GetDefinition()->GetPDGCharge()<<" ";
+            G4cout << aSec->GetTotalEnergy()<<" ";
+            G4cout << aSec->GetMomentum();
+	    G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries();
+	    G4cout << G4endl;
+            delete second;
+          }
+          delete aTrack;
 	  aFinalState->Clear();
-	  delete aTrack;
 	} // end of event loop
       } // end of i loop
     timerTotal.Stop();    
