@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.31 2000-07-27 11:26:17 stesting Exp $
+# $Id: GNUmakefile,v 1.32 2000-07-31 17:10:16 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -79,6 +79,9 @@ ifdef G4USE_HEPODBMS
 	  (cd test4$$nn && $(MAKE)); \
 	done;:
 endif
+	@for nn in $(G3TOG4); do \
+	  (cd test6$$nn && $(MAKE)); \
+	done;:
 	@$(ECHO) Making libG4TestTool.a for System Tests...
 	@cd tools/lib && $(MAKE);:
 	@$(ECHO) Making hadronic exercisers for System Tests...
