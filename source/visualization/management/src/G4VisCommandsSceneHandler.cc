@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.19 2001-08-05 02:29:20 johna Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.20 2001-08-09 20:12:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -98,9 +98,9 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
   G4String& sceneName = newValue;
 
   if (sceneName.length () == 0) {
-    if (verbosity >= G4VisManager::errors) {
+    if (verbosity >= G4VisManager::warnings) {
       G4cout <<
-	"ERROR: Null string specified.  Maybe there are no scenes available"
+	"WARNING: Null string specified.  Maybe there are no scenes available"
 	"\n  yet.  Please create one." << G4endl;
     }
     return;
