@@ -91,6 +91,7 @@ help /vis/sceneHandler/create
 /vis/scene/create
 /vis/scene/add/volume
 /vis/scene/include/trajectories
+#/vis/sceneHandler/create OGLSX
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
 /vis/camera/viewpoint 35 35
@@ -319,3 +320,8 @@ help /vis/sceneHandler/create
 /vis/viewer/create
 /vis/viewer/refresh
 /vis/viewer/show
+#
+#/vis/rayTracer/column 1000
+#/vis/rayTracer/row 1000
+#/vis/viewer/refresh
+#/vis/viewer/show
