@@ -42,23 +42,25 @@ msc:  Model variant of multiple scattering
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-eIoni:  
+eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-eIoni:  
+eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
@@ -72,41 +74,44 @@ msc:  Model variant of multiple scattering
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-hIoni:  
+hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 10, dRoverRange= 0.05, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-MuIoni:  
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 msc:  Model variant of multiple scattering 
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuBrems:  
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:  
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuIoni:  
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  
+MuBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:  
+MuPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
@@ -142,7 +147,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.21s Real=0.39s Sys=0.02s
+  User=0.2s Real=0.23s Sys=0.03s
     1000.000           1           0     Na24[0.0]
          820           1   2.947e+04     e-
          571           1   2.947e+04     anti_nu_e
@@ -188,7 +193,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.28s Real=0.39s Sys=0.02s
+  User=0.31s Real=0.31s Sys=0s
        1e+03           1           0     Ne24[0.0]
     1.01e+03           1       80.09     e-
          989           1       80.09     anti_nu_e
@@ -239,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.1s Real=0.11s Sys=0s
+  User=0.08s Real=0.09s Sys=0.01s
        1e+03           1           0     F24[0.0]
      3.8e+03           1      0.0309     e-
     8.91e+03           1      0.0309     anti_nu_e
@@ -294,7 +299,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.09s Sys=0s
+  User=0.07s Real=0.08s Sys=0.01s
        1e+03           1           0     Al24[0.0]
     1.86e+03           1       18.51     e+
          511           1       18.51     gamma
@@ -391,7 +396,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.35s Real=0.38s Sys=0s
+  User=0.33s Real=0.33s Sys=0s
        1e+03           1           0     Cr46[0.0]
     1.93e+03           1       1.021     e+
          511           1       1.021     gamma
@@ -442,7 +447,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.04s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
        1e+03           1           0     Po215[0.0]
     7.39e+03           1   0.0001246     alpha
          140           1   0.0001246     Pb211[0.0]

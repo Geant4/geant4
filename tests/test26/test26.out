@@ -98,23 +98,25 @@ msc:  Model variant of multiple scattering
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-eIoni:  
+eIoni:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
-eIoni:  
+eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
-eBrem:  
+eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
@@ -128,41 +130,44 @@ msc:  Model variant of multiple scattering
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-hIoni:  
+hIoni:   tables are built for  proton
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering 
       Lambda tables from 100 eV  to 100 TeV in 100 bins.
       Boundary algorithm is active with facrange= 0.199
 
-MuIoni:  
+MuIoni:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  
+MuBrems:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:  
+MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuIoni:  
+MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
+      Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:  
+MuBrems:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
-MuPairProd:  
+MuPairProd:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
@@ -239,7 +244,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.53s Real=22.03s Sys=2.71s
+  User=20.02s Real=39.39s Sys=2.78s
 
 ============   SUMMARY   ============
 
@@ -250,30 +255,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    478.35000        0.38000        0.96000
-  Electrons: 832.98000        3.32000        10.32000
-  Positrons:  55.10000        0.00000        10.32000
+  Gammas:    481.06000        0.51000        0.70000
+  Electrons: 839.73000        3.58000        7.31000
+  Positrons:  55.14000        0.01000        7.31000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.86628 +- 0.00312 RMS(E1) = 0.03120 +- 0.00312
-  E9 = 0.97375 +- 0.00109 RMS(E9) = 0.01090 +- 0.00109
-  E25= 0.98665 +- 0.00086 RMS(E25)= 0.00856 +- 0.00086
+  E1 = 0.86907 +- 0.00319 RMS(E1) = 0.03187 +- 0.00319
+  E9 = 0.97496 +- 0.00111 RMS(E9) = 0.01109 +- 0.00111
+  E25= 0.98786 +- 0.00076 RMS(E25)= 0.00759 +- 0.00076
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.94443 +- 0.03772 RMS(Eabs1)= 0.37720 +- 0.03772
-  Eabs2(MeV)= 0.98918 +- 0.05609 RMS(Eabs2)= 0.56085 +- 0.05609
-  Eabs3(MeV)= 0.10408 +- 0.03846 RMS(Eabs3)= 0.38455 +- 0.03846
-  Eabs4(MeV)= 0.00006 +- 0.00006 RMS(Eabs4)= 0.00059 +- 0.00006
+  Eabs1(MeV)= 0.93393 +- 0.05995 RMS(Eabs1)= 0.59953 +- 0.05995
+  Eabs2(MeV)= 1.02167 +- 0.04993 RMS(Eabs2)= 0.49925 +- 0.04993
+  Eabs3(MeV)= 0.05343 +- 0.03136 RMS(Eabs3)= 0.31359 +- 0.03136
+  Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.13000 +- 0.06108
+  Nhit= 3.28000 +- 0.12496
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1367190211, 988743649
+ Current couple of seeds = 1172613361, 748118139
 ----------------------------------------
 #
 /gun/particle mu-
@@ -344,7 +349,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1367190211, 988743649
+ Current couple of seeds = 1172613361, 748118139
 ----------------------------------------
 Start Run processing.
 
@@ -352,7 +357,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.71000s Real=2.62000s Sys=0.13000s
+  User=0.70000s Real=3.77000s Sys=0.21000s
 
 ============   SUMMARY   ============
 
@@ -363,30 +368,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    5.66000        0.04000        0.45000
-  Electrons: 11.60000        3.88000        2.46000
-  Positrons:  0.29000        0.00000        2.46000
+  Gammas:    4.78000        0.07000        1.04000
+  Electrons: 9.40000        3.99000        3.73000
+  Positrons:  0.22000        0.00000        3.73000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.21825 +- 0.00179 RMS(E1) = 0.01790 +- 0.00179
-  E9 = 0.22041 +- 0.00186 RMS(E9) = 0.01860 +- 0.00186
-  E25= 0.22062 +- 0.00191 RMS(E25)= 0.01910 +- 0.00191
+  E1 = 0.21786 +- 0.00168 RMS(E1) = 0.01676 +- 0.00168
+  E9 = 0.21947 +- 0.00141 RMS(E9) = 0.01405 +- 0.00141
+  E25= 0.21955 +- 0.00143 RMS(E25)= 0.01430 +- 0.00143
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.79939 +- 0.01995 RMS(Eabs1)= 0.19946 +- 0.01995
-  Eabs2(MeV)= 0.81013 +- 0.02155 RMS(Eabs2)= 0.21549 +- 0.02155
-  Eabs3(MeV)= 0.83926 +- 0.03792 RMS(Eabs3)= 0.37925 +- 0.03792
-  Eabs4(MeV)= 0.86348 +- 0.03228 RMS(Eabs4)= 0.32276 +- 0.03228
+  Eabs1(MeV)= 0.80946 +- 0.02323 RMS(Eabs1)= 0.23231 +- 0.02323
+  Eabs2(MeV)= 0.88246 +- 0.03995 RMS(Eabs2)= 0.39953 +- 0.03995
+  Eabs3(MeV)= 0.82861 +- 0.03600 RMS(Eabs3)= 0.36003 +- 0.03600
+  Eabs4(MeV)= 0.85782 +- 0.03259 RMS(Eabs4)= 0.32590 +- 0.03259
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.11000 +- 0.07334
+  Nhit= 3.35000 +- 0.17168
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1883537499, 288787408
+ Current couple of seeds = 459608213, 35519172
 ----------------------------------------
 #
 /testem/phys/VertexCuts 1 mm
@@ -456,7 +461,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1883537499, 288787408
+ Current couple of seeds = 459608213, 35519172
 ----------------------------------------
 Start Run processing.
 
@@ -464,7 +469,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.76000s Real=1.90000s Sys=0.18000s
+  User=0.83000s Real=4.21000s Sys=0.18000s
 
 ============   SUMMARY   ============
 
@@ -475,30 +480,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    6.70000        0.03000        1.10000
-  Electrons: 12.74000        4.80000        4.30000
-  Positrons:  0.36000        0.00000        4.30000
+  Gammas:    5.34000        0.08000        1.32000
+  Electrons: 10.75000        3.71000        5.07000
+  Positrons:  0.30000        0.01000        5.07000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22109 +- 0.00151 RMS(E1) = 0.01511 +- 0.00151
-  E9 = 0.22311 +- 0.00162 RMS(E9) = 0.01620 +- 0.00162
-  E25= 0.22322 +- 0.00164 RMS(E25)= 0.01638 +- 0.00164
+  E1 = 0.21877 +- 0.00161 RMS(E1) = 0.01607 +- 0.00161
+  E9 = 0.22064 +- 0.00156 RMS(E9) = 0.01564 +- 0.00156
+  E25= 0.22080 +- 0.00159 RMS(E25)= 0.01592 +- 0.00159
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.85741 +- 0.03196 RMS(Eabs1)= 0.31956 +- 0.03196
-  Eabs2(MeV)= 0.89043 +- 0.03439 RMS(Eabs2)= 0.34392 +- 0.03439
-  Eabs3(MeV)= 0.80416 +- 0.02143 RMS(Eabs3)= 0.21431 +- 0.02143
-  Eabs4(MeV)= 0.89915 +- 0.05554 RMS(Eabs4)= 0.55538 +- 0.05554
+  Eabs1(MeV)= 0.80198 +- 0.02415 RMS(Eabs1)= 0.24150 +- 0.02415
+  Eabs2(MeV)= 0.81778 +- 0.02576 RMS(Eabs2)= 0.25757 +- 0.02576
+  Eabs3(MeV)= 0.84804 +- 0.02672 RMS(Eabs3)= 0.26718 +- 0.02672
+  Eabs4(MeV)= 0.87413 +- 0.04924 RMS(Eabs4)= 0.49241 +- 0.04924
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.10000 +- 0.04583
+  Nhit= 3.16000 +- 0.10268
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 830673702, 2111767291
+ Current couple of seeds = 1554005067, 1808376390
 ----------------------------------------
 #
 /gun/particle e-
@@ -568,7 +573,7 @@ Index : 7     used in the geometry : Yes     recalculation needed : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 830673702, 2111767291
+ Current couple of seeds = 1554005067, 1808376390
 ----------------------------------------
 Start Run processing.
 
@@ -576,7 +581,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=18.10000s Real=22.20000s Sys=2.98000s
+  User=19.71000s Real=41.03000s Sys=3.06000s
 
 ============   SUMMARY   ============
 
@@ -587,30 +592,30 @@ Run Summary
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    479.85000        0.40000        0.74000
-  Electrons: 834.84000        3.37000        8.09000
-  Positrons:  55.02000        0.00000        8.09000
+  Gammas:    482.20000        0.51000        0.48000
+  Electrons: 841.79000        3.22000        6.31000
+  Positrons:  55.09000        0.00000        6.31000
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.86747 +- 0.00265 RMS(E1) = 0.02655 +- 0.00265
-  E9 = 0.97516 +- 0.00099 RMS(E9) = 0.00987 +- 0.00099
-  E25= 0.98758 +- 0.00081 RMS(E25)= 0.00807 +- 0.00081
+  E1 = 0.86947 +- 0.00283 RMS(E1) = 0.02833 +- 0.00283
+  E9 = 0.97695 +- 0.00090 RMS(E9) = 0.00901 +- 0.00090
+  E25= 0.98824 +- 0.00063 RMS(E25)= 0.00628 +- 0.00063
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.91268 +- 0.03166 RMS(Eabs1)= 0.31665 +- 0.03166
-  Eabs2(MeV)= 0.94334 +- 0.02924 RMS(Eabs2)= 0.29240 +- 0.02924
-  Eabs3(MeV)= 0.01731 +- 0.01070 RMS(Eabs3)= 0.10698 +- 0.01070
-  Eabs4(MeV)= 0.00230 +- 0.00229 RMS(Eabs4)= 0.02287 +- 0.00229
+  Eabs1(MeV)= 0.94943 +- 0.03703 RMS(Eabs1)= 0.37031 +- 0.03703
+  Eabs2(MeV)= 0.97262 +- 0.03760 RMS(Eabs2)= 0.37599 +- 0.03760
+  Eabs3(MeV)= 0.00315 +- 0.00159 RMS(Eabs3)= 0.01591 +- 0.00159
+  Eabs4(MeV)= 0.00000 +- 0.00000 RMS(Eabs4)= 0.00000 +- 0.00000
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.18000 +- 0.07922
+  Nhit= 3.30000 +- 0.12923
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 525590289, 784301141
+ Current couple of seeds = 1743059096, 983148341
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
