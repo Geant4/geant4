@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN02PhysicsList.cc,v 1.8 2000-12-04 16:24:08 maire Exp $
+// $Id: ExN02PhysicsList.cc,v 1.9 2001-01-09 14:34:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -235,20 +235,14 @@ void ExN02PhysicsList::ConstructEM()
 	       (particle->GetParticleName() != "chargedgeantino")) {
      // all others charged particles except geantino
      G4VProcess* aMultipleScattering = new G4MultipleScattering();
-     G4VProcess* anIonisation        = new G4hIonisation();
-     
+     G4VProcess* anIonisation        = new G4hIonisation();     
      ////G4VProcess*  theUserCuts = new G4UserSpecialCuts();
      
      //
      // add processes
      pmanager->AddProcess(anIonisation);
-     pmanager->AddProcess(aMultipleScattering);
-     
-     /// pmanager->AddProcess(theUserCuts);
-     
-     //
-     // set ordering for AtRestDoIt
-     ////pmanager->SetProcessOrderingToFirst(theUserCuts,idxAtRest);
+     pmanager->AddProcess(aMultipleScattering);    
+     ////pmanager->AddProcess(theUserCuts);
      
      //
      // set ordering for AlongStepDoIt
