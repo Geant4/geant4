@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.15 2001-10-25 14:31:21 vnivanch Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.16 2001-10-25 16:47:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -108,8 +108,8 @@ G4LowEnergyIonisationVI::G4LowEnergyIonisationVI(const G4String& nam)
   energySpectrum(0),
   shellVacancy(0)
 {
-  cutForPhotons = 0.;
-  cutForElectrons = 0.;
+  cutForPhotons = 250.0*eV;
+  cutForElectrons = 250.0*eV;
   verboseLevel = 0;
 }
 
@@ -639,9 +639,6 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 		      
 		      aSecondary = (*partVector)[l];
 		      if (aSecondary != 0) {
-
-        G4ThreeVector v = aSecondary->GetMomentumDirection();
-        G4cout << "Fluo AlongStep= " << v << " norm= " << v.mag() << G4endl;
 			
 			e = aSecondary->GetKineticEnergy();
 			type = aSecondary->GetDefinition();
@@ -651,8 +648,7 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 			  
 			  eTot += e;  
 			  
-			} 
-			else {
+			} else {
 			  delete aSecondary;
 			  (*(partVector))[l] =0;
 			  
@@ -662,6 +658,10 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 		  } 
 	      }
 	      
+	 } else {
+
+           delete partVector;
+           partVector = 0;
 	 }
       }
     }

@@ -84,7 +84,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4ShellVacancy.hh"
-#include "G4VhShellCrossSection.hh"
+#include "G4hShellCrossSection.hh"
 #include "G4VEMDataSet.hh"
 #include "G4EMDataSet.hh"
 #include "G4CompositeEMDataSet.hh"
@@ -128,6 +128,7 @@ void G4hLowEnergyIonisationVI::InitializeMe()
   antiProtonLowEnergy  = 1.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
   verboseLevel         = 0;
+  shellCS = new G4hShellCrossSection();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -226,6 +227,28 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
 
   G4double electronCutInRange = theElectron->GetCuts(); 
 
+  // Define cuts
+
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  
+  //  create table
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+
+  cutForDelta.resize(numOfMaterials);
+
+  for (G4int j=0; j<numOfMaterials; j++) {
+      
+    // get material parameters needed for the energy loss calculation  
+    const G4Material* material= (*theMaterialTable)[j];
+    // the cut cannot be below lowest limit
+    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[j];
+    if(tCut > HighestKineticEnergy) tCut = HighestKineticEnergy;
+    G4double excEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
+    tCut = G4std::max(tCut,excEnergy);
+    cutForDelta[j] = tCut;
+  }
+
+
   if(0.0 < charge) 
     {
 
@@ -306,7 +329,6 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
 
   // Clean up the vector of cuts
 
-  cutForDelta.resize(numOfMaterials);
   gammaCutInEnergy = (G4Gamma::Gamma())->GetCutsInEnergy();
 
   if (shellVacancy != 0) delete shellVacancy;
@@ -344,13 +366,7 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     // get material parameters needed for the energy loss calculation  
     const G4Material* material= (*theMaterialTable)[j];
 
-    // the cut cannot be below lowest limit
-    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[j];
-    if(tCut > HighestKineticEnergy) tCut = HighestKineticEnergy;
-    G4double excEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
-    tCut = G4std::max(tCut,excEnergy);
-    cutForDelta[j] = tCut;
-
+    G4double tCut = cutForDelta[j];
 
     // low energy of Bethe-Bloch formula for this material
     G4double highE = G4std::max(highEnergy,theBetheBlochModel->
@@ -475,6 +491,7 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     zFluoDataVector.push_back(xsis1);    
   }
   delete bVector;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -500,8 +517,7 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
   }
   
   theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
-  
-  
+    
   // loop for materials 
   
   for (G4int J=0 ; J < numOfMaterials; J++) { 
@@ -519,6 +535,7 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
     const G4double* theAtomicNumDensityVector = 
                            material->GetAtomicNumDensityVector();
     const G4int NumberOfElements = material->GetNumberOfElements() ;
+    G4cout << "Nel= " << NumberOfElements << G4endl;
       
       // get the electron kinetic energy cut for the actual material,
       //  it will be used in ComputeMicroscopicCrossSection
@@ -526,6 +543,7 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
       //   ------------------------------------------------------
       
     G4double deltaCut = cutForDelta[J];
+    G4cout << "deltaCut= " << deltaCut <<  G4endl;
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
@@ -549,9 +567,10 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
 	  
       aVector->PutValue(i, value) ;
     }
-      
+  
     theMeanFreePathTable->insert(aVector);
   }
+
 }
 
 
@@ -864,9 +883,10 @@ G4VParticleChange* G4hLowEnergyIonisationVI::AlongStepDoIt(
   edep = G4std::min(edep, eloss);  
   G4double hMass = particle->GetMass();
   G4double hMomentum = particle->GetTotalMomentum();
-  G4std::vector<G4DynamicParticle*>* newpart = DeexciteAtom(material,
-                                                            kineticEnergy,
-                                                            edep,hMass,hMomentum);
+  G4std::vector<G4DynamicParticle*>* newpart = 0;
+
+  // newpart = DeexciteAtom(material, kineticEnergy, edep, hMass, hMomentum);
+
   if(newpart) {
 
     size_t nSecondaries = newpart->size();
@@ -1097,7 +1117,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   
   DeltaKineticEnergy = x * MaxKineticEnergyTransfer ;
   
-  if(DeltaKineticEnergy <= 0.)
+  if(DeltaKineticEnergy <= 0. || DeltaKineticEnergy > KineticEnergy)
     return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
   
   DeltaTotalMomentum = sqrt(DeltaKineticEnergy * (DeltaKineticEnergy +
@@ -1132,7 +1152,6 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   
   // fill aParticleChange 
   finalKineticEnergy = KineticEnergy - DeltaKineticEnergy ;
-  G4double theEnergyDeposit = 0.;
 
   // Generation of Fluorescence and Auger
   size_t nSecondaries = 0;
@@ -1151,7 +1170,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   G4double cutForPhotons = gammaCutInEnergy[aMaterial->GetIndex()];
  
   // Fluorescence data start from element 6
-
+  /*
   if (Z > 5 && finalKineticEnergy >= bindingEnergy
             && (bindingEnergy >= cutForPhotons 
             ||  bindingEnergy >= DeltaCut) ) {
@@ -1185,7 +1204,8 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
       }
     }
   }
-      
+  */    
+  
   // Save delta-electrons
 
   if (finalKineticEnergy > 0.0)
@@ -1219,7 +1239,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   aParticleChange.AddSecondary(theDeltaRay);
 
   // Save Fluorescence and Auger
-
+  /*
   if (secondaryVector) {
 
     for (size_t l = 0; l < nSecondaries; l++) {
@@ -1229,7 +1249,8 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
     }
     delete secondaryVector;
   }
-       
+  */    
+   
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
 
