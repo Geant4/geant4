@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.14 1999-10-19 08:35:51 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.15 1999-10-24 09:22:56 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1215,12 +1215,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
       if(safety < rcut)
      {
 
-      if((presafety>=rcut)&&(postsafety>=rcut))
-      {
-        fragment = 0. ;
-      } 
-      else
-      {
         x1=stepData.GetPreStepPoint()->GetPosition().x();
         y1=stepData.GetPreStepPoint()->GetPosition().y();
         z1=stepData.GetPreStepPoint()->GetPosition().z();
@@ -1252,7 +1246,6 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
 
           frperstep=-fragment/Step;
         }
-      }
 
       if(fragment>0.)
       {
@@ -1310,16 +1303,7 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                  dirx=sintheta*cos(phi);
                  diry=sintheta*sin(phi);
                  dirz=costheta;
-               }
-               else
-               {
-                 T=epsil ;
-                 p=sqrt(T*(T+2.*electron_mass_c2)) ;
-                 dirx=0.;
-                 diry=0.;
-                 dirz=1.;
-               } 
-
+                
                urandom = G4UniformRand() ;
                // distribute x,y,z along Pre-Post !
                G4double xd,yd,zd ;
@@ -1362,6 +1346,8 @@ G4VParticleChange* G4hEnergyLossPlus::AlongStepDoIt(
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
 
                aParticleChange.AddSecondary(deltaTrack) ;
+
+               }
 
              } while (subdelta<N) ;
 
