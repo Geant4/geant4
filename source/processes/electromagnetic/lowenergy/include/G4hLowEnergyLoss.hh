@@ -5,6 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
+// $Id: G4hLowEnergyLoss.hh,v 1.2 2000-03-31 15:17:20 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// $Id: 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
