@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2000-06-02 05:36:46 asaim Exp $
+$Id: History,v 1.21 2000-06-02 10:24:58 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 2, 2000 M.Asai
+June 2, 2000 M.Asai  (track-V01-01-02)
 - Add G4VUserTrackInformation class and its pointer data member in G4Track
+- Add "const" to pointer to G4Step in G4Track (Hisaya) 
 
 June 1 2000 H.Kurashige (track-V01-01-01a)
 -  Removed "const" from the return value type of G4StepPoint::GetPhysicalVolume()
