@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.7 2001-06-19 16:04:46 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.8 2001-06-19 17:06:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -648,7 +648,7 @@ main()
     de = hIon[5]->ComputeDEDX(part[5],Al,tRed) ;
     //de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
     h[52]->accumulate(log10(tkin),de*fact) ;
-  }
+  } 
 
   G4cout << "Ions's dEdx histograms are filled!" << G4endl;
 

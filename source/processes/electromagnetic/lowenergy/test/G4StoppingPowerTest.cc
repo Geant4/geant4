@@ -346,7 +346,7 @@ int main(int argc,char** argv)
     G4cout << "The cut on e-:" << cutE/mm << " mm" << G4endl;
     G4cout << "The cut on g: " << cutG/mm << " mm" << G4endl;
     G4cout << "The step:     " << theStep/mm << " mm" << G4endl;
-
+ 
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
