@@ -99,7 +99,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test14
   nice $G4INSTALL/tests/tools/bin/run.sh test15
   nice $G4INSTALL/tests/tools/bin/run.sh test16
-  nice $G4INSTALL/tests/tools/bin/run.sh test17
+#  nice $G4INSTALL/tests/tools/bin/run.sh test17
 
 
 else
