@@ -38,7 +38,7 @@ Fe
 10.
 //--------
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run

@@ -1,7 +1,7 @@
 #================================================
 # Macro file for the Ion test of "test31.cc"
 #         10.04.01 V.Ivanchneko
-#================================================ 
+#================================================
 /control/verbose 2
 /run/verbose 1
 /tracking/verbose 0
@@ -23,7 +23,7 @@
 /test31/gun/beamE            1000.0 MeV
 #
 /process/eLoss/preciseRange  true
-/process/eLoss/integral      false
+/process/eLoss/integral      true
 /run/initialize
 #
 /gun/particle e-
