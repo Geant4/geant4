@@ -30,7 +30,7 @@
 #define G4PhotoNuclearProcess_h 1
  
 // Class Description
-// Process for Ion Inelastic scattering; 
+// Process for photon nuclear inelastic scattering; 
 // to be used in your physics list in case you need this physics.
 // Class Description - End
 
