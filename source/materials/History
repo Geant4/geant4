@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2001-11-28 15:46:39 gcosmo Exp $
+$Id: History,v 1.32 2001-11-29 16:33:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29.11.01 G.Cosmo - materials-V03-02-07
+         Fixed declaration of ostream attributes to use standard 'fmtflags'
+         type for ANSI compilers. Fixes compilation error on gcc-3.0.2.
+         Modified files: G4Isotope.cc, G4Element.cc, G4Material.cc.
 
 28.11.01 G.Cosmo - materials-V03-02-06
          Fixed bug in G4MaterialPropertyVector::RemoveElement() for the
