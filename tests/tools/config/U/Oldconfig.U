@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.2 2001-05-21 13:01:35 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.3 2001-11-06 15:20:01 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.2  2001/05/21 13:01:35  sadilov
+?RCS: Correct path to Configure.
+?RCS:
 ?RCS: Revision 1.1  2001/05/17 10:12:22  sadilov
 ?RCS: Import 'config'.
 ?RCS:
@@ -97,7 +100,7 @@
 ?X: This unit tries to remember what we did last time we ran Configure, mostly
 ?X: for the sake of setting defaults.
 ?X:
-?MAKE:Oldconfig hint myuname osname osvers g4system g4osname g4compiler: Instruct Myread uname \
+?MAKE:Oldconfig hint myuname osname osvers g4system g4osname g4compiler: Instruct Myread uname gcc \
 	sh awk sed test cat rm lns n c contains Loc Options Tr src 
 ?MAKE:	-pick wipe $@ %<
 ?S:myuname:
@@ -145,6 +148,8 @@ case "$config_sh" in
 ?X: on some machines to avoid the error message when uname is not found; e.g.
 ?X: old SUN-OS 3.2 would not execute hostname in (uname -a || hostname). Sigh!
 myuname=`( ($uname -a) 2>/dev/null || hostname) 2>&1`
+
+mygcc=`( ($g++ -v) 2>/dev/null) 2>&1`
 ?X: Special mention for Xenix, whose 'uname -a' gives us output like this:
 ?X:  sysname=XENIX
 ?X:  nodename=whatever
@@ -184,7 +189,7 @@ cd ..
 ?X: First time through, eh?  I have some defaults handy for the following systems:
 ?X:
 ?X: EOM
-	(cd $src/hints; ls -C *.sh) | $sed 's/\.sh/   /g' >&4
+	(cd $src/hints; ls -C *.sh 2> /dev/null) | $sed 's/\.sh/   /g' >&4 
 	dflt=''
 	: Half the following guesses are probably wrong... If you have better
 	: tests or hints, please send them to <MAINTLOC>
@@ -550,7 +555,20 @@ case  "$g4compiler" in
 				g4compiler=aCC
 				;;
 		'Linux')
-				g4compiler=g++
+#				g4compiler=g++
+# Assume if "gcc" is in place then "g++" is here
+	gcccompiler=`( ($gcc -v) 1>/dev/null || echo "ERROR: There is no 'gcc' ('g++'?) compiler.") 2>&1`
+				case $gcccompiler in
+				*egcs*) g4compiler=egcs
+				;;
+				*2.96*) 
+				echo "WARNING: Found version of 'g++' (2.96.XXX) is known to be buggy!"
+				g4compiler="g++"
+				;;
+				*) g4compiler="g++"
+				;;
+				esac				
+
 				;;
 		'SGI')
 				g4compiler=CC
