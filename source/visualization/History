@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-05-25 09:16:01 johna Exp $
+$Id: History,v 1.16 1999-05-25 09:20:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-vis-01-00-12  10th May 1999  John Allison
+vis-01-00-12  25th May 1999  John Allison
 - Moved global operator != to member function.
 
 vis-01-00-11  12th May 1999  Guy Barrand
