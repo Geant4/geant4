@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.6 2001-07-11 10:09:21 gunter Exp $
+// $Id: G4ModelingParameters.hh,v 1.7 2001-08-09 20:06:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,7 @@ public: // With description
   enum RepStyle {
     wireframe,  // Use G4Wireframe.
     polyhedron, // Use G4Polyhedron.
-    nurbs,      // Use G4NURBS.
-    hierarchy   // Draw as geometry hierarchy (DTREE in GEANT3 language!).
+    nurbs       // Use G4NURBS.
   };
   // RepStyle is used to determine which graphics_reps classes to use,
   // if required.
