@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.60 2003-01-31 00:26:57 asaim Exp $
+// $Id: G4RunManager.cc,v 1.61 2003-01-31 08:05:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -484,7 +484,7 @@ void G4RunManager::DefineWorldVolume(G4VPhysicalVolume* worldVol)
   else
   {
   // set the default region to the world
-    G4LogicalVolume* worldLog = currentWorld->GetLogicalVolume();
+    G4LogicalVolume* worldLog = worldVol->GetLogicalVolume();
     worldLog->SetRegion(defaultRegion);
     defaultRegion->AddRootLogicalVolume(worldLog);
   }
