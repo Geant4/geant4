@@ -1,0 +1,23 @@
+$Id: History,v 1.1 2000-06-24 17:59:05 pia Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Test History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+24.06.2000 - MGP, tag test17-V01-01-02
+             Modification to G4Ion... test classes by V. Ivanchenko to 
+	     fix crash on exit on Linux
+
