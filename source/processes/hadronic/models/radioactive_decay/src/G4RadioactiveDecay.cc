@@ -1472,6 +1472,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	    G4Track* secondary = new G4Track
 	      (products->PopProducts(), finalGlobalTime, currentPosition);
 	    secondary->SetGoodForTrackingFlag();
+			secondary->SetTouchableHandle(theTrack.GetTouchableHandle());
 	    fParticleChangeForRadDecay.AddSecondary(secondary);
 	  }
 	delete products;
@@ -1669,6 +1670,7 @@ G4VParticleChange* G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4
 	    G4Track* secondary = new G4Track(
 					     secondaryparticles[index], ptime[index], currentPosition);
 	    secondary->SetGoodForTrackingFlag(); 	   
+			secondary->SetTouchableHandle(theTrack.GetTouchableHandle());
 	    secondary->SetWeight(pw[index]); 	   
             fParticleChangeForRadDecay.AddSecondary(secondary); 
 	  }
