@@ -63,6 +63,10 @@
     //  internal units are GeV
     //
     // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+    
+    // Protection in case no secondary has been created; cascades down to two-body.
+    if(vecLen == 0) return false;
+
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *anAntiProton = G4AntiProton::AntiProton();
     G4ParticleDefinition *anAntiNeutron = G4AntiNeutron::AntiNeutron();
@@ -263,7 +267,7 @@
       {
         if( vec[i]->GetSide() < 0 )
         {
-          if( ++is == iskip )                         // eliminate the i'th particle
+          if( ++is == iskip )        // eliminate the i'th particle
           {
             if( vec[i]->GetSide() == -2 )
             {
