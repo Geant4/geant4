@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.9 2003-01-16 16:31:15 guatelli Exp $
+// $Id: test50.cc,v 1.10 2003-01-16 19:00:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,7 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
-
+       
 HepRandom::setTheEngine(new RanecuEngine);
 
  G4bool lowE=false;
@@ -62,11 +62,12 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool MaxStep=false;
  G4bool end=true;
  G4bool SP=false;
- G4String filename="test50.out";
+ G4String filename="test50.txt";
 
  G4cout.setf(ios::scientific, ios::floatfield);
-   if (argc<2){G4cout <<"Input file is not specified! Exit"<<G4endl;
- exit(1);}
+   
+
+if (argc<1){G4cout <<"Input file is not specified!"<<G4endl;}
  ifstream* fin=new ifstream();
  string fname=argv[1];
  fin->open(fname.c_str());
@@ -111,8 +112,8 @@ HepRandom::setTheEngine(new RanecuEngine);
 
      }while(end);           
      
-   if (RangeOn==true) filename="Range.out";
-   if (SP==true) filename="StoppingPower.out";   
+   if (RangeOn==true) filename="Range.txt";
+   if (SP==true) filename="StoppingPower.txt";   
  G4int seed=time(NULL);
    HepRandom ::setTheSeed(seed);
   //my Verbose output class
@@ -157,7 +158,7 @@ G4std::ofstream ofs;
 	ofs.open(filename);
 		{
 
-		  ofs<<"range(g/cm2)"<<'\t'<<"e- energy (MeV)"<<'\t'<<G4endl;}
+		  ofs<<"range(g/cm2)(y)"<<'\t'<<"e- energy (MeV)(x)"<<'\t'<<G4endl;}
 	       
        ofs.close();                     
 		
@@ -169,7 +170,7 @@ G4std::ofstream ofs;
 	ofs.open(filename);
 		{
 
-		  ofs<<"StoppingPower(MeV*cm2/g)"<<'\t'<<"e- energy (MeV)"<<'\t'<<G4endl;}
+		  ofs<<"StoppingPower(MeV*cm2/g)(y)"<<'\t'<<"e- energy (MeV)(x)"<<'\t'<<G4endl;}
 	       
        ofs.close();                     
 		
@@ -181,7 +182,7 @@ G4std::ofstream ofs;
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
   
-  if(argc< 4)
+  if(argc<1)
   // Define (G)UI terminal for interactive mode  
   { 
     // G4UIterminal is a (dumb) terminal.
@@ -192,19 +193,21 @@ G4std::ofstream ofs;
       session = new G4UIterminal();
 #endif    
 
-      UI->ApplyCommand("/control/execute");
- 
+    UI->ApplyCommand("/control/execute/");
+   
 
     session->SessionStart();
     delete session;
   }
   else
   // Batch mode
-  { 
-    G4String command =("/control/execute");
-    G4String fileName = argv[1];
-    UI->ApplyCommand(command+fileName);
+  {  
+   
+    G4String command =("/control/execute ");
 
+    G4String fileName = argv[2];
+    G4cout<<fileName<<G4endl;
+    UI->ApplyCommand(command+fileName);
   }
 
 #ifdef G4VIS_USE
