@@ -1,0 +1,144 @@
+#
+# Test input file for test25 hadronics.
+#
+# /control/verbose 2
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton at 1 GeV in Cu
+#
+/gun/particle proton
+/mydet/SelectMaterial Cu
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in Cu
+#
+/gun/particle neutron
+/mydet/SelectMaterial Cu
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# proton at 1 GeV in U
+#
+/gun/particle proton
+/mydet/SelectMaterial U
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in U
+#
+/gun/particle neutron
+/mydet/SelectMaterial U
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# proton at 1 GeV in Si
+#
+/gun/particle proton
+/mydet/SelectMaterial Si
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in Si
+#
+/gun/particle neutron
+/mydet/SelectMaterial Si
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# proton at 1 GeV in H
+#
+/gun/particle proton
+/mydet/SelectMaterial H
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in H
+#
+/gun/particle neutron
+/mydet/SelectMaterial H
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
