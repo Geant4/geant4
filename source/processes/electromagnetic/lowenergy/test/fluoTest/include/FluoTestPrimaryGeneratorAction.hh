@@ -24,14 +24,14 @@ class FluoTestPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
   public:
     
     void GeneratePrimaries(G4Event*);
-  // void SetRndmFlag(G4String val) { rndmFlag = val;}
+   void SetRndmFlag(G4String val) { rndmFlag = val;}
   // void SetRandomizePrimary (G4String val){ randomizePrimary = val;}   
   private:
    G4GeneralParticleSource*                particleGun;	  //pointer a to G4 service class
     FluoTestDetectorConstruction*    Detector;  //pointer to the geometry
     
   // FluoTestPrimaryGeneratorMessenger* gunMessenger; //messenger of this class
-  //  G4String                      rndmFlag;	  //flag for a random impact point       
+    G4String                      rndmFlag;	  //flag for a random impact point       
   //G4String                      randomizePrimary; //flag for a random energy of the 
                                                    //particle
    
