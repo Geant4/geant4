@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.41 2001-11-27 10:12:39 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.42 2001-11-28 13:32:07 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -2019,7 +2019,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  {
 		    G4cerr<<"***G4QEnv::HadrQE:M="<<totMass<<"<gsM="<<totM<<",dM="<<dM
                   <<", tPDG="<<totPDG<<", t4M="<<tot4M<<G4endl;
-            //G4Exception("G4QEnvironment::HadronizeQEnvironment: Exhosted but can't decay QEnv");
+            G4Exception("G4QEnvironment::HadronizeQEnvironment: Exhosted but can't decay QEnv");
             G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for Residual Nucleus
             if(totS<0&&totBN>0)DecayAntiStrange(evH);
             else if(dM>0.001&&totBN>2)EvaporateResidual(evH); // Evaporate ResidNucl (del.equiv)

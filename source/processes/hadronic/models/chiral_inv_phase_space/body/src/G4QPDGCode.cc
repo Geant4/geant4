@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.23 2001-11-26 14:11:46 hpw Exp $
+// $Id: G4QPDGCode.cc,v 1.24 2001-11-28 13:32:08 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -738,12 +738,13 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #endif
     return 0.;                        // @@ Temporary
   }
+  A=Z+N;
   if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
   else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
   else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
   else 
   {
-    if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=G4NucleiProperties::GetNuclearMass(A,Z);
+    if(G4NucleiPropertiesTable::IsInTable(Z,A)) m=k+G4NucleiProperties::GetNuclearMass(A,Z);
     else m+=-sh[Z]-sh[N]+b1*D*D*pow(A,b2)+b3*(1.-2./(1.+exp(b4*D)))+Z*Z*(b5*pow(A,b9)+b6/A);
   }
   G4double maxM= k+Z*mP+N*mN+S*mL+.001;       // @@ .001 ?? Wings of the Mass parabola
