@@ -1,4 +1,4 @@
-# $Id: History,v 1.5 2003-06-18 11:37:53 dressel Exp $
+# $Id: History,v 1.6 2003-06-18 11:56:46 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+                     M.Dressel - Tiara-V05-01-02
+- change environment configuration for swig
 
 Jun  17th, 2003 M.Dressel - Tiara-V05-01-02
 - changes for rh73 with gcc-2.95.2 and rh73 with gcc-3.2

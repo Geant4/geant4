@@ -1,4 +1,4 @@
-# $Id: README,v 1.9 2003-06-18 11:37:53 dressel Exp $
+# $Id: README,v 1.10 2003-06-18 11:56:46 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -70,9 +70,12 @@ in the three cases:
    Set the following environment variables:
    "G4ANALYSIS_USE"
  
-   "ANAPHETOP" (e.g. /users/dressel/Anaphe/release)
-   "AIDA_DIR"  (e.g. /users/dressel/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
+   "ANAPHETOP" (e.g. <directory>/Anaphe/release)
+   "AIDA_DIR"  (e.g. <directory>/AIDA/3.0.0/3.0.0/AIDA/3.0/src/cpp)
    "ANAPHE_SCRIPTS" (e.g. ${ANAPHETOP}/share/LHCXX/5.0.5/scripts)
+
+      here <directory> is a place holder for your directory with the
+      respective installations of Anaphe and AIDA
 
    Finally source the script envCommon.csh
 

@@ -1,4 +1,4 @@
-# $Id: envCommon.csh,v 1.5 2003-06-18 11:37:53 dressel Exp $
+# $Id: envCommon.csh,v 1.6 2003-06-18 11:56:46 dressel Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -86,10 +86,11 @@ endif
 else    # environment not completed in case no Anaphe is used
 
 echo "envCommon.csh: ERROR: PYTHONVERSION or PYTHON_BASE_DIR or SWIG_BASE_DIR or SWIG_VERSION or CLHEP_BASE_DIR  not set!"
+exit
 
 endif
 
-endif    # settings for not using Anaphe
+endif    # end settings for not using Anaphe
 
 
 
