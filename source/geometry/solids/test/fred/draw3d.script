@@ -1,7 +1,10 @@
 #
-# VRML mode. A server must be specified before
+# VRML mode. A server must be specified before, for example:
+# export G4VRMLFILE_VIEWER=/afs/cern.ch/sw/contrib/DAWN/bin/Linux/vrmlview
+# export G4VRMLFILE_MAX_FILE_NUM=4
 #
-/vis~/create_view/new_graphics_system VRML1
-/vis~/camera/zoom 16
+/vis/open VRML2FILE
+/vis/viewer/set/style wireframe
+#/vis/open VRML1FILE
+/vis/drawVolume test
 /tracking/storeTrajectory 1
-
