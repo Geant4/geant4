@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2005-02-14 14:04:56 gcosmo Exp $
+$Id: History,v 1.53 2005-03-01 17:16:17 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-Mar-2005, O.Link (geom-specific-V07-00-01)
+- Fixed compilation warnings on WIN32-VC for G4VSurface.cc.
 
 14-Feb-2005, O.Link (geom-specific-V07-00-00)
 - Use new polynom approximations based on new solver based on Jenkins-Traub
