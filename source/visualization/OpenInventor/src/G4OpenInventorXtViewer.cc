@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.12 2004-11-14 14:42:26 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.13 2004-11-15 14:53:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -103,13 +103,15 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
     XtManageChild(menuBar);
 
    {Widget menu = AddMenu(menuBar,"File","File");
-    AddButton(menu,"PS (gl2ps)",PostScriptButtonCbk);
-    AddButton(menu,"PS (pixmap)",PixmapPostScriptButtonCbk);
-    AddButton(menu,"IV",WriteInventorButtonCbk);
-    AddButton(menu,"Escape",EscapeButtonCbk);}
+    AddButton(menu,"PS (gl2ps)",PostScriptCbk);
+    AddButton(menu,"PS (pixmap)",PixmapPostScriptCbk);
+    AddButton(menu,"IV",WriteInventorCbk);
+    AddButton(menu,"Escape",EscapeCbk);}
 
    {Widget menu = AddMenu(menuBar,"Etc","Etc");
-    AddButton(menu,"Triangles",CountTrianglesButtonCbk);}
+    AddButton(menu,"Triangles",CountTrianglesCbk);
+    AddButton(menu,"Erase detector",EraseDetectorCbk);
+    AddButton(menu,"Erase event",EraseEventCbk);}
 
     fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
     
@@ -200,34 +202,46 @@ void G4OpenInventorXtViewer::AddButton (
   XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
 }
 
-void G4OpenInventorXtViewer::EscapeButtonCbk(
+void G4OpenInventorXtViewer::EscapeCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->Escape();
 }
 
-void G4OpenInventorXtViewer::PostScriptButtonCbk(
+void G4OpenInventorXtViewer::PostScriptCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->WritePostScript();
 }
 
-void G4OpenInventorXtViewer::PixmapPostScriptButtonCbk(
+void G4OpenInventorXtViewer::PixmapPostScriptCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->WritePixmapPostScript();
 }
 
-void G4OpenInventorXtViewer::CountTrianglesButtonCbk(
+void G4OpenInventorXtViewer::CountTrianglesCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->CountTriangles();
 }
 
-void G4OpenInventorXtViewer::WriteInventorButtonCbk(
+void G4OpenInventorXtViewer::WriteInventorCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->WriteInventor();
+}
+
+void G4OpenInventorXtViewer::EraseDetectorCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->EraseDetector();
+}
+
+void G4OpenInventorXtViewer::EraseEventCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->EraseEvent();
 }
 
 

@@ -49,6 +49,10 @@ G4OpenInventorViewer::G4OpenInventorViewer(
 {
   fNeedKernelVisit = true;  //?? Temporary, until KernelVisitDecision fixed.
 
+  // For viewing of all objects by default :
+  fDefaultVP.SetCulling(false);
+  fVP.SetCulling(false);
+
   fInteractorManager = 
     ((G4OpenInventor*)fG4OpenInventorSceneHandler.GetGraphicsSystem())->
     GetInteractorManager();
@@ -196,5 +200,11 @@ void G4OpenInventorViewer::CountTriangles() {
   G4cout << "Number of triangles : " << trianglen << G4endl;
 }
 
+void G4OpenInventorViewer::EraseDetector() {
+  fG4OpenInventorSceneHandler.fDetectorRoot->removeAllChildren();
+}
+void G4OpenInventorViewer::EraseEvent() {
+  fG4OpenInventorSceneHandler.fTransientRoot->removeAllChildren();
+}
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.12 2004-11-15 09:05:58 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.13 2004-11-15 14:53:30 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -63,12 +63,14 @@ public:
 
 #define SIZE 400
 // File : 
-#define ID_POSTSCRIPT 1
-#define ID_PIXMAP_POSTSCRIPT 2
-#define ID_INVENTOR 3
-#define ID_ESCAPE 4
+#define ID_FILE_POSTSCRIPT 1
+#define ID_FILE_PIXMAP_POSTSCRIPT 2
+#define ID_FILE_INVENTOR 3
+#define ID_FILE_ESCAPE 4
 // Etc : 
-#define ID_COUNT_TRIANGLES 101
+#define ID_ETC_COUNT_TRIANGLES 101
+#define ID_ETC_ERASE_DETECTOR 102
+#define ID_ETC_ERASE_EVENT 103
 
 //static void SecondaryLoopPostAction ();
 
@@ -112,14 +114,16 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer(
 
    {HMENU casc = CreatePopupMenu();
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"File");
-    ::AppendMenu(casc,MF_STRING,ID_POSTSCRIPT,"PS (gl2ps)");
-    ::AppendMenu(casc,MF_STRING,ID_PIXMAP_POSTSCRIPT,"PS (pixmap)");
-    ::AppendMenu(casc,MF_STRING,ID_INVENTOR,"IV");
-    ::AppendMenu(casc,MF_STRING,ID_ESCAPE,"Escape");}
+    ::AppendMenu(casc,MF_STRING,ID_FILE_POSTSCRIPT,"PS (gl2ps)");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_PIXMAP_POSTSCRIPT,"PS (pixmap)");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_INVENTOR,"IV");
+    ::AppendMenu(casc,MF_STRING,ID_FILE_ESCAPE,"Escape");}
 
    {HMENU casc = CreatePopupMenu();
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"Etc");
-    ::AppendMenu(casc,MF_STRING,ID_COUNT_TRIANGLES,"Triangles");}
+    ::AppendMenu(casc,MF_STRING,ID_ETC_COUNT_TRIANGLES,"Triangles");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_DETECTOR,"Erase detector");
+    ::AppendMenu(casc,MF_STRING,ID_ETC_ERASE_EVENT,"Erase event");}
 
     fShell = ::CreateWindow(className, shellName.c_str(), 
                             WS_OVERLAPPEDWINDOW |
@@ -225,17 +229,21 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     if(This) {
       if(aLParam==0) { //From menu.
         // File :
-        if(aWParam==ID_POSTSCRIPT) {
+        if(aWParam==ID_FILE_POSTSCRIPT) {
           This->WritePostScript();
-        } else if(aWParam==ID_PIXMAP_POSTSCRIPT) {
+        } else if(aWParam==ID_FILE_PIXMAP_POSTSCRIPT) {
           This->WritePixmapPostScript();
-        } else if(aWParam==ID_INVENTOR) {
+        } else if(aWParam==ID_FILE_INVENTOR) {
           This->WriteInventor();
-        } else if(aWParam==ID_ESCAPE) {
+        } else if(aWParam==ID_FILE_ESCAPE) {
           This->Escape();
         // Etc :
-        } else if(aWParam==ID_COUNT_TRIANGLES) {
+        } else if(aWParam==ID_ETC_COUNT_TRIANGLES) {
           This->CountTriangles();
+        } else if(aWParam==ID_ETC_ERASE_DETECTOR) {
+          This->EraseDetector();
+        } else if(aWParam==ID_ETC_ERASE_EVENT) {
+          This->EraseEvent();
         }
       }
     }

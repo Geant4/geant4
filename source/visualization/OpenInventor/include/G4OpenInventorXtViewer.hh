@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.5 2004-11-14 14:42:26 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.6 2004-11-15 14:53:29 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,11 +52,13 @@ private:
   Widget AddMenu(Widget,const G4String&,const G4String&);
   void AddButton(Widget,const G4String&,XtCallbackProc);
 private:
-  static void PostScriptButtonCbk(Widget,XtPointer,XtPointer);
-  static void PixmapPostScriptButtonCbk(Widget,XtPointer,XtPointer);
-  static void WriteInventorButtonCbk(Widget,XtPointer,XtPointer);
-  static void EscapeButtonCbk(Widget,XtPointer,XtPointer);
-  static void CountTrianglesButtonCbk(Widget,XtPointer,XtPointer);
+  static void PostScriptCbk(Widget,XtPointer,XtPointer);
+  static void PixmapPostScriptCbk(Widget,XtPointer,XtPointer);
+  static void WriteInventorCbk(Widget,XtPointer,XtPointer);
+  static void EscapeCbk(Widget,XtPointer,XtPointer);
+  static void CountTrianglesCbk(Widget,XtPointer,XtPointer);
+  static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
+  static void EraseEventCbk(Widget,XtPointer,XtPointer);
 private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;
