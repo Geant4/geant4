@@ -249,6 +249,36 @@ if [ $1 = "all" ] ; then
     nice $G4STTDIR/bin/run.sh test703
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 37
 
+###
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test801 38
+    nice $G4STTDIR/bin/run.sh test801
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test801 38
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test802 39
+    nice $G4STTDIR/bin/run.sh test802
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test802 39
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test803 40
+    nice $G4STTDIR/bin/run.sh test803
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test803 40
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test804 41
+    nice $G4STTDIR/bin/run.sh test804
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test804 41
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test805 42
+    nice $G4STTDIR/bin/run.sh test805
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test805 42
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test806 43
+    nice $G4STTDIR/bin/run.sh test806
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test806 43
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test807 44
+    nice $G4STTDIR/bin/run.sh test807
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test807 44
+
 else
 
 #    echo n=$n
