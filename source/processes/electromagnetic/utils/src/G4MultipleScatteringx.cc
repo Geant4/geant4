@@ -21,19 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScatteringx.cc,v 1.6 2001-07-11 10:03:41 gunter Exp $
+// $Id: G4MultipleScatteringx.cc,v 1.7 2001-08-08 16:09:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 // 16/05/01  value of cparm changed , L.Urban
-// 18/05/01  V.Ivanchenko Clean up againist Linux ANSI compilation 
+// 18/05/01  V.Ivanchenko Clean up against Linux ANSI compilation
+// 07/08/01  new methods Store/Retrieve PhysicsTable (mma) 
 // --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4MultipleScatteringx.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 
-  G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4MultipleScatteringx::G4MultipleScatteringx(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
        theTransportMeanFreePathTable(0),
        fTransportMeanFreePath (1.e12),
@@ -59,118 +65,108 @@
        NuclCorrPar (0.0615),
        FactPar(0.40)
   { }
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  G4MultipleScatteringx::~G4MultipleScatteringx()
-  {
-    if(theTransportMeanFreePathTable)
+G4MultipleScatteringx::~G4MultipleScatteringx()
+{
+  if(theTransportMeanFreePathTable)
     {
-      theTransportMeanFreePathTable->clearAndDestroy() ;
+      theTransportMeanFreePathTable->clearAndDestroy();
       delete theTransportMeanFreePathTable ;
     }
-  }
+}
 
-//  .........methods..............................
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  void G4MultipleScatteringx::BuildPhysicsTable(
+void G4MultipleScatteringx::BuildPhysicsTable(
                               const G4ParticleDefinition& aParticleType)
-
-  //   tables are built for MATERIALS
-  {
+{
+  // tables are built for MATERIALS
     const G4double sigmafactor = twopi*classic_electr_radius*
-                                       classic_electr_radius ;
-    G4double KineticEnergy,AtomicNumber,AtomicWeight,
-             sigma,lambda ;
-    G4double density ;
+                                       classic_electr_radius;
+    G4double KineticEnergy,AtomicNumber,AtomicWeight,sigma,lambda;
+    G4double density;
 
   // destroy old tables if any
     if(theTransportMeanFreePathTable)
-    {
-      theTransportMeanFreePathTable->clearAndDestroy() ;
-      delete theTransportMeanFreePathTable ;
-    }
+      {
+        theTransportMeanFreePathTable->clearAndDestroy();
+        delete theTransportMeanFreePathTable ;
+      }
 
-  //  create table
-    const G4MaterialTable* theMaterialTable=
-                                   G4Material::GetMaterialTable();
-    G4int numOfMaterials = theMaterialTable->length() ;
+  // create table
+    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+    G4int numOfMaterials = theMaterialTable->length();
 
-    theTransportMeanFreePathTable = new G4PhysicsTable(numOfMaterials) ;
+    theTransportMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
-  //  loop for materials
+  // loop for materials
     for (G4int J=0; J<numOfMaterials; J++)
     {
 
-  //  create physics vector and fill it
+      //  create physics vector and fill it
       G4PhysicsLogVector* aVector = new G4PhysicsLogVector(
-                          LowestKineticEnergy,HighestKineticEnergy,TotBin) ;
+                          LowestKineticEnergy,HighestKineticEnergy,TotBin);
 
-  //  get elements in the material
-      const G4Material* material = (*theMaterialTable)(J) ;
-      const G4ElementVector* theElementVector =
-                             material->GetElementVector() ;
+      // get elements in the material
+      const G4Material* material = (*theMaterialTable)(J);
+      const G4ElementVector* theElementVector = material->GetElementVector();
       const G4double* theAtomicNumDensityVector =
-                             material->GetAtomicNumDensityVector() ;       
-      const G4int NumberOfElements =
-                             material->GetNumberOfElements() ;
-      density = material->GetDensity() ;
+                                     material->GetAtomicNumDensityVector();       
+      const G4int NumberOfElements = material->GetNumberOfElements();
+      density = material->GetDensity();
  
-  //  loop for kinetic energy values
+      // loop for kinetic energy values
       for (G4int i=0; i<TotBin; i++)
       {
-          KineticEnergy = aVector->GetLowEdgeEnergy(i) ;
-          sigma = 0. ;
+          KineticEnergy = aVector->GetLowEdgeEnergy(i);
+          sigma = 0.;
 
-  //   loop for element in the material
+          // loop for element in the material
           for (G4int iel=0; iel<NumberOfElements; iel++)
           {
-            AtomicNumber = (*theElementVector)(iel)->GetZ() ;
-            AtomicWeight = (*theElementVector)(iel)->GetA() ;
+            AtomicNumber = (*theElementVector)(iel)->GetZ();
+            AtomicWeight = (*theElementVector)(iel)->GetA();
             sigma += theAtomicNumDensityVector[iel]*
-                     ComputeTransportCrossSection(aParticleType,
-                                     KineticEnergy,
-                                     AtomicNumber,AtomicWeight) ;
+                     ComputeTransportCrossSection(aParticleType,KineticEnergy,
+                                                   AtomicNumber,AtomicWeight);
           }
-          sigma *= sigmafactor ;
- 
-          lambda = 1./sigma ;
-
-        aVector->PutValue(i,lambda) ;
+          sigma *= sigmafactor;
+          lambda = 1./sigma;
+          aVector->PutValue(i,lambda);
       }
 
-     theTransportMeanFreePathTable->insert(aVector) ;
+      theTransportMeanFreePathTable->insert(aVector);
 
     }
 
-    if(   (&aParticleType == G4Electron::Electron())  ||
-          (&aParticleType == G4MuonPlus::MuonPlus())  ||
-          (&aParticleType == G4Proton::Proton())         ) 
-    {
-      PrintInfoDefinition() ;
-    }
-  }
+    if((&aParticleType == G4Electron::Electron()) ||
+       (&aParticleType == G4MuonPlus::MuonPlus()) ||
+       (&aParticleType == G4Proton::Proton())   )   PrintInfoDefinition();
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-  G4double G4MultipleScatteringx::ComputeTransportCrossSection(
+G4double G4MultipleScatteringx::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
                          G4double AtomicNumber,G4double AtomicWeight)
-  {
-    const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
-                               Bohr_radius*Bohr_radius/(hbarc*hbarc) ;
-    const G4double epsmin = 1.e-4 , epsmax = 1.e10 ;
+{
+  const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
+                             Bohr_radius*Bohr_radius/(hbarc*hbarc);
+  const G4double epsmin = 1.e-4 , epsmax = 1.e10 ;
 
+  const G4double Zdat[15] = { 4., 6.,13.,20.,26.,29.,32.,38.,47.,
+                             50.,56.,64.,74.,79.,82. };
 
-    const G4double Zdat[15] = {4.,6.,13.,20.,26.,29.,32.,38.,47.,
-                               50.,56.,64.,74.,79.,82. } ;
+  const G4double Tdat[22] = {0.0001*MeV,0.0002*MeV,0.0004*MeV,0.0007*MeV,
+                             0.001*MeV,0.002*MeV,0.004*MeV,0.007*MeV,
+			     0.01*MeV,0.02*MeV,0.04*MeV,0.07*MeV,
+			     0.1*MeV,0.2*MeV,0.4*MeV,0.7*MeV,
+			     1.*MeV,2.*MeV,4.*MeV,7.*MeV,10.*MeV,20.*MeV};
 
-    const G4double Tdat[22] = 
-                      { 0.0001*MeV,0.0002*MeV,0.0004*MeV,0.0007*MeV,
-                       0.001*MeV,0.002*MeV,0.004*MeV,0.007*MeV,0.01*MeV,
-                       0.02*MeV,0.04*MeV,0.07*MeV,0.1*MeV,0.2*MeV,
-                       0.4*MeV,0.7*MeV,1.*MeV,2.*MeV,4.*MeV,
-                       7.*MeV,10.*MeV,20.*MeV} ;
-
-  // corr. factors for e-/e+ lambda
+ // corr. factors for e-/e+ lambda
 
     const G4double celectron[15][22] =
           {{1.125,1.072,1.051,1.047,1.047,1.050,1.052,1.054,
@@ -267,306 +263,285 @@
             3.752,2.724,2.116,1.817,1.692,1.554,1.499,1.474,
             1.456,1.412,1.364,1.328,1.307,1.282            }};
 
-     G4double Z23,ParticleMass,rat2,Charge,TotalEnergy,beta2,bg2,
-              eps,Z1,Z2,ratZ,T,E,b2small,b2big,ratb2,c1,c2,cc1,cc2,
-              corr,sigma,corrfactor,ChargeSquare ;
-     G4int iZ,iT ;
+   G4double Z23,ParticleMass,rat2,Charge,TotalEnergy,beta2,bg2,
+            eps,Z1,Z2,ratZ,T,E,b2small,b2big,ratb2,c1,c2,cc1,cc2,
+            corr,sigma,corrfactor,ChargeSquare;
+   G4int iZ,iT;
 
-     Z23 = 2.*log(AtomicNumber)/3. ;
-     Z23 = exp(Z23) ;
+   Z23 = 2.*log(AtomicNumber)/3.;
+   Z23 = exp(Z23) ;
 
-     ParticleMass = aParticleType.GetPDGMass() ;
+   ParticleMass = aParticleType.GetPDGMass();
 
-     rat2 = ParticleMass/electron_mass_c2 ;
-     rat2 = rat2*rat2 ;
+   rat2 = ParticleMass/electron_mass_c2; rat2 = rat2*rat2;
 
-     Charge = aParticleType.GetPDGCharge() ;
-     ChargeSquare = Charge*Charge/(eplus*eplus) ;
+   Charge = aParticleType.GetPDGCharge();
+   ChargeSquare = Charge*Charge/(eplus*eplus);
 
-     TotalEnergy = KineticEnergy + ParticleMass ;
+   TotalEnergy = KineticEnergy + ParticleMass ;
+   beta2 = KineticEnergy*(TotalEnergy+ParticleMass)/(TotalEnergy*TotalEnergy);
+   bg2   = KineticEnergy*(TotalEnergy+ParticleMass)/(ParticleMass*ParticleMass);
 
-     beta2 = KineticEnergy*(TotalEnergy+ParticleMass)/
-             (TotalEnergy*TotalEnergy) ;
-     bg2 = KineticEnergy*(TotalEnergy+ParticleMass)/
-           (ParticleMass*ParticleMass) ;
+   eps = rat2*epsfactor*bg2/Z23 ;
 
-     eps = rat2*epsfactor*bg2/Z23 ;
+   if     (eps<epsmin)  sigma = 2.*eps*eps;
+   else if(eps<epsmax)  sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps);
+   else                 sigma = log(2.*eps)-1.+1./eps;
 
-     if(eps<epsmin)
-       sigma = 2.*eps*eps ;
-     else if(eps<epsmax)
-       sigma = log(1.+2.*eps)-2.*eps/(1.+2.*eps) ;
-     else
-       sigma = log(2.*eps)-1.+1./eps ;
-
-     sigma *=ChargeSquare*AtomicNumber*AtomicNumber/rat2 ;
-     sigma /= beta2*bg2 ;
+   sigma *= ChargeSquare*AtomicNumber*AtomicNumber/(rat2*beta2*bg2);
 
   // nuclear size effect correction for high energy
   // ( a simple approximation at present)
-     G4double corrnuclsize,a,x0,w1,w2,w ;
+  G4double corrnuclsize,a,x0,w1,w2,w;
 
-     x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
-               exp(log(AtomicWeight/(g/mole))/3.)) ;
-     if((x0 < -1.) || (KineticEnergy  <= 10.*MeV))
-     {
-       x0=-1. ;
-       corrnuclsize = 1. ;
-     }
-     else
-     {
-     a = 1.+1./eps ;
-     if(eps > epsmax)
-       w1=log(2.*eps)+1./eps-3./(8.*eps*eps) ;
-     else
-       w1=log((a+1.)/(a-1.))-2./(a+1.) ;
+  x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+               exp(log(AtomicWeight/(g/mole))/3.));
+  if ( (x0 < -1.) || (KineticEnergy  <= 10.*MeV))
+      { x0 = -1.; corrnuclsize = 1.;}
+  else
+      { a = 1.+1./eps;
+        if (eps > epsmax) w1=log(2.*eps)+1./eps-3./(8.*eps*eps);
+        else              w1=log((a+1.)/(a-1.))-2./(a+1.);
+        w = 1./((1.-x0)*eps);
+        if (w < epsmin)   w2=-log(w)-1.+2.*w-1.5*w*w;
+        else              w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0);
+        corrnuclsize = w1/w2;
+        corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
+                      (corrnuclsize-1.)+1.;
+      }
 
-     w = 1./((1.-x0)*eps) ;
-     if(w < epsmin)
-       w2=-log(w)-1.+2.*w-1.5*w*w ;
-     else
-       w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0) ;
+  // correct this value using the corrections computed for e+/e-
+  KineticEnergy *= electron_mass_c2/ParticleMass;
+
+  // interpolate in AtomicNumber and beta2
+  // get bin number in Z
+  iZ = 14;
+  while ((iZ>=0)&&(Zdat[iZ]>=AtomicNumber)) iZ -= 1;
+  if (iZ==14)                               iZ = 13;
+  if (iZ==-1)                               iZ = 0 ;
+
+  Z1 = Zdat[iZ];
+  Z2 = Zdat[iZ+1];
+  ratZ = (AtomicNumber-Z1)/(Z2-Z1);
+
+  // get bin number in T (beta2)
+  iT = 21 ;
+  while ((iT>=0)&&(Tdat[iT]>=KineticEnergy)) iT -= 1;
+  if(iT==21)                                 iT = 20;
+  if(iT==-1)                                 iT = 0 ;
+
+  //  calculate betasquare values
+  T = Tdat[iT];   E = T + electron_mass_c2;
+  b2small = T*(E+electron_mass_c2)/(E*E);
+  T = Tdat[iT+1]; E = T + electron_mass_c2;
+  b2big = T*(E+electron_mass_c2)/(E*E);
+  ratb2 = (beta2-b2small)/(b2big-b2small);
  
-     corrnuclsize = w1/w2 ;
+  corrfactor = tuning*(1.+cparm)/(1.+cparm*beta2);
 
-     // ####################################################
-     corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
-                    (corrnuclsize-1.)+1. ;
-     }
+  if (Charge < 0.)
+    { 
+       c1 = celectron[iZ][iT];
+       c2 = celectron[iZ+1][iT];
+       cc1 = c1+ratZ*(c2-c1);
 
-  //  correct this value using the corrections computed for e+/e-
-     KineticEnergy *= electron_mass_c2/ParticleMass ;
+       c1 = celectron[iZ][iT+1];
+       c2 = celectron[iZ+1][iT+1];
+       cc2 = c1+ratZ*(c2-c1);
 
-     //  interpolate in AtomicNumber and beta2
+       corr = cc1+ratb2*(cc2-cc1);
+       sigma /= corr;
+    }
 
-     //  get bin number in Z
-       iZ = 14 ;
+  if (Charge > 0.)
+    {
+       c1 = cpositron[iZ][iT];
+       c2 = cpositron[iZ+1][iT];
+       cc1 = c1+ratZ*(c2-c1);
 
-       while ((iZ>=0)&&(Zdat[iZ]>=AtomicNumber)) iZ -= 1 ;
-       if (iZ==14)                               iZ = 13 ;
-       if (iZ==-1)                               iZ = 0 ;
+       c1 = cpositron[iZ][iT+1];
+       c2 = cpositron[iZ+1][iT+1];
+       cc2 = c1+ratZ*(c2-c1);
 
-       Z1 = Zdat[iZ] ;
-       Z2 = Zdat[iZ+1] ;
-       ratZ = (AtomicNumber-Z1)/(Z2-Z1) ;
+       corr = cc1+ratb2*(cc2-cc1);
+       sigma /= corr;
+    }
 
-     // get bin number in T (beta2)
-       iT = 21 ;
-       while ((iT>=0)&&(Tdat[iT]>=KineticEnergy))
-         iT -= 1 ;
-       if(iT==21)
-         iT = 20 ;
-       if(iT==-1)
-         iT = 0 ;
+     sigma *= corrfactor;
 
-     //  calculate betasquare values
-       T = Tdat[iT] ;
-       E = T + electron_mass_c2 ;
-       b2small = T*(E+electron_mass_c2)/(E*E) ;
-       T = Tdat[iT+1] ;
-       E = T + electron_mass_c2 ;
-       b2big = T*(E+electron_mass_c2)/(E*E) ;
-       ratb2 = (beta2-b2small)/(b2big-b2small) ;
- 
-       corrfactor = tuning*(1.+cparm)/(1.+cparm*beta2) ;
+  //  nucl. size correction for particles other than e+/e- only at present !!!!
+  if((&aParticleType != G4Electron::Electron()) &&
+     (&aParticleType != G4Positron::Positron())  )    
+     sigma /= corrnuclsize;
 
-     if(Charge < 0.)
-     {
-       c1 = celectron[iZ][iT] ;
-       c2 = celectron[iZ+1][iT] ;
-       cc1 = c1+ratZ*(c2-c1) ;
+  return sigma;
+}
+   
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-       c1 = celectron[iZ][iT+1] ;
-       c2 = celectron[iZ+1][iT+1] ;
-       cc2 = c1+ratZ*(c2-c1) ;
+G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(const G4Track& trackData,
+                                                       const G4Step& stepData)
+{
+  static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1.;
+  G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
+           dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
+  G4bool isOut;
 
-       corr = cc1+ratb2*(cc2-cc1) ;
+  fParticleChange.Initialize(trackData);
 
-       sigma /= corr ;
+  truestep = stepData.GetStepLength();
 
-     }
+  const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
+  KineticEnergy = aParticle->GetKineticEnergy() ;
 
-     if(Charge > 0.)
-     {
-       c1 = cpositron[iZ][iT] ;
-       c2 = cpositron[iZ+1][iT] ;
-       cc1 = c1+ratZ*(c2-c1) ;
-
-       c1 = cpositron[iZ][iT+1] ;
-       c2 = cpositron[iZ+1][iT+1] ;
-       cc2 = c1+ratZ*(c2-c1) ;
-
-       corr = cc1+ratb2*(cc2-cc1) ;
-
-       sigma /= corr ;
-     }
-
-     sigma *= corrfactor ;
-
-    //  nucl. size correction for particles other than e+/e- only at present !!!!
-    if((&aParticleType != G4Electron::Electron()) &&
-       (&aParticleType != G4Positron::Positron())  )    
-       sigma /= corrnuclsize ;
-
-     return sigma ;
-  } 
-
-
-  G4VParticleChange* G4MultipleScatteringx::PostStepDoIt(
-                                               const G4Track& trackData,
-                                               const G4Step& stepData)
-  {
-    static G4double kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
-    const G4DynamicParticle* aParticle ;
-    G4double KineticEnergy,truestep,tau,prob,cth,sth,phi,
-             dirx,diry,dirz,w,etau,rmean,safetyminustolerance;
-    G4bool isOut;
-
-    fParticleChange.Initialize(trackData) ;
-
-    truestep = stepData.GetStepLength() ;
-
-    aParticle = trackData.GetDynamicParticle() ;
-
-    KineticEnergy = aParticle->GetKineticEnergy() ;
-
-    fTransportMeanFreePath = (*theTransportMeanFreePathTable)
+  fTransportMeanFreePath = (*theTransportMeanFreePathTable)
                              (materialIndex)->GetValue(KineticEnergy,isOut);
 
-    //  change direction first ( scattering ) ..........................
-    static G4double cq = 0.99985 ;
-    G4double e,alfa,alfamin,a,b,b1,x0,q ;
-    G4double w1,w2 ;
+  //  change direction first ( scattering ) ..........................
+  static G4double cq = 0.99985 ;
+  G4double e,alfa,alfamin,a,b,b1,x0,q ;
+  G4double w1,w2 ;
 
-    prob = 1. ;
-    q = 0. ;
+  prob = 1.;
+  q = 0.;
 
-    tau = truestep/fTransportMeanFreePath ;
+  tau = truestep/fTransportMeanFreePath;
+  if     (tau < tausmall) cth = 1.;
+  else if(tau > taubig)   cth = -1.+2.*G4UniformRand();
+  else {
+         e=exp(-tau);
+         alfamin= 2.*e/(1.-e);
+         alfa = alfamin*scatteringparameter2;
+         a = alfa/(alfa+2.);
+         b=scatteringparameter3/e;
+         prob = (cq*e-1./b)/(a-1./b);
+         x0 = -1.+2.*exp(-1./alfa);
+         q=(1.-cq)*e/((2.+x0)/3.-cq*e);
+         if(G4UniformRand() <= q) cth = x0+(1.-x0)*sqrt(G4UniformRand());
+         else {
+               if (G4UniformRand() <= prob)
+                                cth = -1.+2.*exp(log(G4UniformRand())/alfa);
 
-    if(tau < tausmall)
+               else {
+                      b1=b-1.;
+                      cth = b-b1*(b+1.)/sqrt(b1*b1+4.*b*G4UniformRand());
+                    }
+              } 
+       }
+       
+  sth  = sqrt(1.-cth*cth);
+  phi  = twopi*G4UniformRand();
+  dirx = sth*cos(phi); diry = sth*sin(phi); dirz = cth;
+
+  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
+
+  G4ThreeVector newDirection(dirx,diry,dirz);
+  newDirection.rotateUz(ParticleDirection);
+  fParticleChange.SetMomentumChange(newDirection.x(),
+                                    newDirection.y(),
+                                    newDirection.z());
+
+  if (fLatDisplFlag)
     {
-      cth = 1. ;
-    }
-    else if(tau > taubig)
-    {
-      cth = -1.+2.*G4UniformRand() ;
-    }
-    else 
-    {
-      e=exp(-tau) ;
-      alfamin= 2.*e/(1.-e) ;
-      alfa = alfamin*scatteringparameter2 ;
-      a = alfa/(alfa+2.) ;
-
-      b=scatteringparameter3/e ;
-
-      prob = (cq*e-1./b)/(a-1./b) ;
-
-      x0 = -1.+2.*exp(-1./alfa) ;
-
-      q=(1.-cq)*e/((2.+x0)/3.-cq*e) ;
-
-      if(G4UniformRand() <= q)
-      {
-        cth = x0+(1.-x0)*sqrt(G4UniformRand()) ;
-      }
-      else
-      {
- 
-        if(G4UniformRand() <= prob)
-        {
-          cth = -1.+2.*exp(log(G4UniformRand())/alfa) ;
-        }
-        else
-        {
-          b1=b-1. ;
-          cth = b-b1*(b+1.)/sqrt(b1*b1+4.*b*G4UniformRand()) ;
-        }
-      } 
-    }
-    sth = sqrt(1.-cth*cth) ;
-
-    phi = twopi*G4UniformRand() ;
-
-    dirx = sth*cos(phi) ;
-    diry = sth*sin(phi) ;
-    dirz = cth ;
-
-    G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
-
-    G4ThreeVector newDirection(dirx,diry,dirz) ;
-
-
-    newDirection.rotateUz(ParticleDirection) ;
-    fParticleChange.SetMomentumChange(newDirection.x(),
-                                      newDirection.y(),
-                                      newDirection.z()) ;
-
-    if(fLatDisplFlag)
-    {
-      //  compute mean lateral displacement ...............
-      //  only for safety > tolerance !!!!!!!!!
+      // compute mean lateral displacement ...............
+      // only for safety > tolerance !!!!!!!!!
       safetyminustolerance = stepData.GetPostStepPoint()->GetSafety();
 
-      if(safetyminustolerance > 0.)
+      if (safetyminustolerance > 0.)
       {
-        if(tau < tausmall)
-          rmean = 0. ;
-        else if(tau<taulim)
-          rmean = 5.*tau*tau*tau/12. ;
+        if     (tau < tausmall)  rmean = 0.; 
+        else if(tau<taulim)      rmean = 5.*tau*tau*tau/12.;
         else
         {
-          if(tau<taubig)
-            etau = exp(-tau) ;
-          else
-            etau = 0. ;
-          rmean = -kappa*tau ;
-          rmean = -exp(rmean)/(kappa*kappami1) ;
-          rmean += tau-kappapl1/kappa+kappa*etau/kappami1 ;
+          if(tau<taubig) etau = exp(-tau);
+          else           etau = 0.;
+          rmean = -kappa*tau;
+          rmean = -exp(rmean)/(kappa*kappami1);
+          rmean += tau-kappapl1/kappa+kappa*etau/kappami1;
         }
 
-        if(rmean>0.)
-          rmean = 2.*fTransportMeanFreePath*sqrt(rmean/3.) ;
-        else
-          rmean = 0. ;
+        if (rmean>0.) rmean = 2.*fTransportMeanFreePath*sqrt(rmean/3.);
+        else          rmean = 0.;
 
         // for rmean > 0) only
-        if(rmean>0.)
+        if (rmean>0.)
         {
-          if(rmean>safetyminustolerance)
-            rmean = safetyminustolerance ;
+          if (rmean>safetyminustolerance) rmean = safetyminustolerance;
 
-          //  sample direction of lateral displacement
-          phi = twopi*G4UniformRand() ;
-
-          dirx = cos(phi) ;
-          diry = sin(phi) ;
-          dirz = 0. ;
+          // sample direction of lateral displacement
+          phi = twopi*G4UniformRand();
+          dirx = cos(phi); diry = sin(phi); dirz = 0.;
 
           G4ThreeVector latDirection(dirx,diry,dirz);
-
-          latDirection.rotateUz(ParticleDirection) ;
+          latDirection.rotateUz(ParticleDirection);
 
           // compute new endpoint of the Step
-	  G4ThreeVector newPosition= 
-			 stepData.GetPostStepPoint()->GetPosition()+
-					     rmean*latDirection;
+	  G4ThreeVector newPosition = stepData.GetPostStepPoint()->GetPosition()
+					    + rmean*latDirection;
     
-	  G4Navigator *navigator= 
-	   G4TransportationManager::GetTransportationManager()
-				   ->GetNavigatorForTracking();
-	  navigator->LocateGlobalPointWithinVolume( newPosition );
+	  G4Navigator* navigator =
+	                   G4TransportationManager::GetTransportationManager()
+			   ->GetNavigatorForTracking();
+	  navigator->LocateGlobalPointWithinVolume(newPosition);
 
-	  fParticleChange.SetPositionChange(newPosition) ;
+	  fParticleChange.SetPositionChange(newPosition);
         }
       }
     }
 
+  return &fParticleChange;
+}
 
-    return &fParticleChange ;
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MultipleScatteringx::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String filename;
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if (!theTransportMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+      G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4MultipleScatteringx::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theTransportMeanFreePathTable
+  if (theTransportMeanFreePathTable != 0) {
+    theTransportMeanFreePathTable->clearAndDestroy();
+    delete theTransportMeanFreePathTable;
   }
 
+  G4String filename;
+
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theTransportMeanFreePathTable = 
+                       new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if (!theTransportMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 void G4MultipleScatteringx::PrintInfoDefinition()
 {
@@ -581,3 +556,4 @@ void G4MultipleScatteringx::PrintInfoDefinition()
          << " in " << TotBin << " bins. \n";
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

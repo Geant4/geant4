@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2001-05-18 15:14:11 maire Exp $
+$Id: History,v 1.21 2001-08-08 16:09:31 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+ 8 aug 01: mma
+- G4MultipleScatteringx: methods to store/retrieve PhysicsTable
 
 18 may 01: V.Ivanchenko (utils-V03-01-01)
 - clean up againist Linux ANSI strict compilation mode.
