@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.29 2003-04-26 11:38:12 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.30 2003-05-09 17:49:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
@@ -64,7 +64,9 @@ G4int    G4eIonisation::NbinLambda = 100;
 G4eIonisation::G4eIonisation(const G4String& processName)
    : G4VeEnergyLoss(processName),
      theMeanFreePathTable(NULL)
-{}
+{
+  verboseLevel = -1;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

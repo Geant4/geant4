@@ -135,8 +135,11 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
   G4double Zeff  = electronDensity/material->GetTotNbOfAtomsPerVolume();
   G4double th    = 0.25*sqrt(Zeff)*keV;
   G4double tkin  = kineticEnergy;
-  if (kineticEnergy < th) tkin = th;
-
+  G4bool   lowEnergy = false;
+  if (kineticEnergy < th) {
+    tkin = th;
+    lowEnergy = true;
+  }
   G4double tau   = tkin/electron_mass_c2;
   G4double gam   = tau + 1.0;
   G4double gamma2= gam*gam;
@@ -147,8 +150,8 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
   eexc          /= electron_mass_c2;
   G4double eexc2 = eexc*eexc; 
 
-  G4double dedx;
   G4double d = G4std::min(cutEnergy, MaxSecondaryEnergy(p, tkin))/electron_mass_c2;
+  G4double dedx;
 
   // electron
   if (isElectron) {
@@ -188,10 +191,10 @@ G4double G4MollerBhabhaModel::ComputeDEDX(const G4Material* material,
 
   // lowenergy extrapolation
 
-  if (kineticEnergy < tkin) {
+  if (lowEnergy) {
 
-    if (kineticEnergy >= lowLimit) dedx *= sqrt(kineticEnergy/tkin);
-    else                           dedx *= sqrt(kineticEnergy*tkin)/lowLimit;
+    if (kineticEnergy >= lowLimit) dedx *= sqrt(tkin/kineticEnergy);
+    else                           dedx *= sqrt(tkin*kineticEnergy)/lowLimit;
 
   }
   return dedx;
