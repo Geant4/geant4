@@ -1,4 +1,4 @@
-$Id: History,v 1.68 2000-04-12 13:14:26 johna Exp $
+$Id: History,v 1.69 2000-04-28 14:39:11 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+27th April 2000  John Allison
+- Updated README file.
 
 12th April 2000  John Allison  vis-V01-01-01
 - Made G4PhysicalVolumeModel::DescribeSolid virtual.

@@ -1,32 +1,9 @@
-$Id: README,v 1.6 1999-08-27 07:57:12 johna Exp $
+$Id: README,v 1.7 2000-04-28 14:39:11 johna Exp $
 
-Below are some steps for making GEANT4 with visualization run on
-rsplus.cern.ch.
-
-On other machines, in other locations, you will have to check the
-availability and location of graphics libraries.  Also, you will need
-RogueWave tools.h++ - headers usually in /usr/local/include/rw/,
-library in /usr/local/lib.  Instead of RogueWave tools.h++, 
-you can also use STL.  See global/GNUmakefile.architecture for clues 
-to what is required.
-
-We will assume that you have a checked-out or updated version of
-geant4 with the visualization/ directory and sub-directories.  For
-that you will needed to have done the following.
-
-1) Set the following environment variables:
-
-     setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
-     setenv G4SYSTEM AIX-xlC
-     setenv G4INSTALL <your-geant4-wd>/geant4
-     setenv G4WORKDIR <your-scratch>/geant4_workdir
-     setenv G4LIB $G4WORKDIR
-
-Now, here are the visualization-specific actions.
-
-2) Decide which graphics systems drivers you want.  The choice depends
+1) Decide which graphics systems drivers you want.  The choice depends
    on what graphics libraries you have access to.  Set the appropriate
-   environment variables.  Here are the current possibilities:
+   environment variables.  Here are the current possibilities (see
+   example "rc" script in Appendix A):
 
      setenv G4VIS_BUILD_DAWNFILE_DRIVER     1  # Uses Fukui Renderer DAWN 
                                                #  with file connection 
@@ -42,6 +19,8 @@ Now, here are the visualization-specific actions.
                                                #  libraries
 
      setenv G4VIS_BUILD_OIX_DRIVER          1  # Uses OpenInventor X11
+
+     setenv G4VIS_BUILD_RAYTRACER_DRIVER    1  # Uses G4RayTracer
 
      setenv G4VIS_BUILD_VRMLFILE_DRIVER     1  # Writes VRML ascii files
                                                #  to a local host
@@ -61,8 +40,10 @@ Now, here are the visualization-specific actions.
 
      setenv OPACS_HOME ~/private/GEANT4/OPACS
 
-     setenv OGLHOME /afs/cern.ch/rd44/dev/Mesa/Mesa-1.2.8
-
+     setenv OGLHOME /usr/local
+     setenv OGLFLAGS "-I$(OGLHOME)/include"
+     setenv OGLLIBS "-L$OGLHOME/lib -lMesaGLU -lMesaGL"
+     
    If you are going to use widgets, then you might need to set the
    environment variable:
 
@@ -77,19 +58,29 @@ Now, here are the visualization-specific actions.
    Such setting is not necessary on other machines, where only one version 
    of Tcl/Tk is installed.
 
-3) Compile and build the visualization and interfaces libraries from clean.
+
+2) Compile and build the Geant4 libraries:
+
+     cd $G4INSTALL/source
+     gmake
+
+   If you have already built the Geant4 libraries and only wish to
+   include/change visualization:
+
+     cd $G4INSTALL/source/visualization
+     gmake clean
+     gmake
+     cd $G4INSTALL/source/interfaces
+     gmake clean
+     gmake
 
    *******************************************************************
    NOTE THAT IF YOU CHANGE ANY OF THE ABOVE ENVIRONMENT VARIABLES THEN
-   YOU WILL HAVE TO:
-   a) "gmake clean" IN THE APPROPRIATE SUBDIRECTORY - E.G.,
-      (cd visualization/OpenGL/; gmake clean; gmake)
-   b) TOUCH AND RECOMPILE G4VisManager - E.G.
-      (cd visualization/; touch management/src/G4VisManager.cc; gmake)
+   YOU WILL HAVE TO REPEAT THE ABOVE gmake AND gmake clean OPERATIONS.
    *******************************************************************
 
 
-4) Decide which graphics systems you want to use in your particular
+3) Decide which graphics systems you want to use in your particular
    excutable.  Of course, this has to be chosen from the set you
    installed in (2) above.  Here are the current possibilities:
 
@@ -99,7 +90,7 @@ Now, here are the visualization-specific actions.
      setenv G4VIS_USE_OPENGLX      1
      setenv G4VIS_USE_OPENGLXM     1
      setenv G4VIS_USE_OIX          1
-     setenv G4VIS_USE_VRMLFILE     1
+     setenv G4VIS_USE_RAYTRACER    1
      setenv G4VIS_USE_VRML         1
 
    Setting any of these sets a C-pre-processor flag of the same name.
@@ -114,49 +105,49 @@ Now, here are the visualization-specific actions.
    pVisManager->RegisterGraphicsSystem (new MyGraphicsSystem).
 
 
-5) Compile and link your code.
+4) Compile and link your code.  This assumes, in the current
+   directory, you have a GNUmakefile like
+   $G4INSTALL/examples/novice/N01/GNUmakefile and your main program.
+   Also your header files are in include/ and your source files are in
+   src/ - see, e.g., $G4INSTALL/examples/novice/N01 (this is the
+   "canonical" user code structure).
+
+     gmake clean
+     gmake
 
    *******************************************************************
    NOTE THAT IF YOU CHANGE ANY OF THE ABOVE ENVIRONMENT VARIABLES THEN
-   YOU WILL HAVE TO RECOMPILE YOUR DERIVED VIS MANAGER CLASS, E.G.,
-      touch src/MyVisManager.cc; gmake
+   YOU WILL HAVE TO REPEAT THE ABOVE gmake clean AND gmake COMMANDS, OR
+   AT THE VERY LEAST, RECOMPILE YOUR MAIN PROGRAM AND YOUR DERIVED VIS
+   MANAGER CLASS, E.G.,
+      touch myprog.cc; touch src/MyVisManager.cc; gmake
    *******************************************************************
 
 
-6) To compile and link your program, e.g.:
-
-     cd examples/novice/N03
-     gmake
-
-7) To run:
+5) To run:
 
      setenv DISPLAY <local IP address>:0
-     $G4WORKDIR/bin/$G4SYSTEM/exampleN03
+     $G4WORKDIR/bin/$G4SYSTEM/myprog
 
-On other machines.
-------------------
 
-OpenGL: If you are using Mesa, you might need:
-          ln -s libMesaGL.a libGL.a
-          ln -s libMesaGLU.a libGLU.a
+Appendix A: An "rc" example
+---------------------------
 
-As an example of a setup file on another machine
-------------------------------------------------
+---------------------- g4rc ------------------------------------------ 
+## Must be installed one level above $G4INSTALL and "sourced", i.e.,
+## using '. g4rc'.
 
-export G4SYSTEM=Linux-g++
-export G4INSTALL=~/GEANT4/geant4_my_development/geant4
-export G4WORKDIR=/scratch/geant4_workdir
+if [ -e `pwd`/geant4 ]; then
+
+export G4INSTALL=`pwd`/geant4
+export G4WORKDIR=$G4INSTALL
 export G4LIB=$G4INSTALL/lib
+export G4SYSTEM=Linux-g++
 export G4LEVELGAMMADATA=$G4INSTALL/data/PhotonEvaporation
 
 export CLHEP_BASE_DIR=/usr/local
-export RWBASE=/usr/local
 
-export G4DEBUG=1
-
-#export TCL_LIBRARY=/usr/lib/tcl7.5  # DAWN works OK without...
-#export TK_LIBRARY=/usr/lib/tk4.1    # ...these two lines!
-
+##export CVSROOT=:pserver:allison@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 export CVSROOT=/afs/cern.ch/sw/geant4/cvs
 export CVSEDITOR=emacs
 
@@ -169,16 +160,22 @@ export DAWN_BSD_UNIX_DOMAIN=1
 export DAWN_GUI_ALWAYS=1
 export DAWN_HOME=/home/johna/GEANT4/DAWN
 export G4DAWNFILE_VIEWER=NONE
-#export PATH=$PATH:$DAWN_HOME ###### Moved to .g4profile
+#export PATH=$PATH:$DAWN_HOME ###### Moved to .g4profile ??????????????
+
+############ Ray Tracer
+export G4VIS_BUILD_RAYTRACER_DRIVER=1
+export G4VIS_USE_RAYTRACER=1
 
 ########## OPACS graphics
 export G4VIS_BUILD_OPACS_DRIVER=1
 export G4VIS_USE_OPACS=1
-export OPACS_HOME=/export/data26//OPACS
+export OPACS_HOME=/disc2/OPACS
 export OPACS_VERSION=v3
 export OPACS_SYSTEM=Linux-gxx
 export OCONFIG=Linux
-. /export/data26/OPACS/OPACS/v3/setup.sh
+. /disc2/OPACS/OPACS/$OPACS_VERSION/setup.sh
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/disc2/HEPVis/new/Linux-gxx-SF/
+LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/disc2/SoFree/new/Linux-gxx
 OPATH="$OPATH $G4INSTALL/source/visualization/test/OPACS"
 
 ########### OpenGL
@@ -189,14 +186,12 @@ export G4VIS_USE_OPENGLXM=1
 export XKEYSYMDB=/usr/lib/X11/XKeysymDB
 export OGLHOME=/usr/X11
 
-########### OpenInventor (with SoFree implementation on Linux)
+########### OpenInventor
 export G4VIS_BUILD_OIX_DRIVER=1
 export G4VIS_USE_OIX=1
-export OIVFLAGS="-I/export/data26/HEPVis/v5r0/include -DINVENTOR2_1 -I/export/data26/SoFree/v2r2/include"
-export OIVLIBS="-L/export/data26/HEPVis/v5r0/Linux-gxx-SF -lHEPVis -L/export/data26/SoFree/v2r2/Linux-gxx -lSoFree"
-export SOFREEUSER=/export/data26/SoFree/v2r2/user/
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/HEPVis/v5r0/Linux-gxx-SF
-LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/export/data26/SoFree/v2r2/Linux-gxx
+export OIVFLAGS="-I/disc2/HEPVis/new/include -DINVENTOR2_1 -I/disc2/SoFree/new/include"
+export OIVLIBS="-L/disc2/HEPVis/new/Linux-gxx-SF -lHEPVis -L/disc2/SoFree/new/Linux-gxx -lSoFree"
+export SOFREEUSER=/disc2/SoFree/new/user/
 
 ############ VRML
 export G4VIS_BUILD_VRML_DRIVER=1
@@ -213,12 +208,25 @@ export G4UI_BUILD_XM_SESSION=1
 export G4UI_USE_XM=1
 export G4UI_BUILD_WO_SESSION=1
 export G4UI_USE_WO=1
-export G4UI_BUILD_XAW_SESSION=1
-export G4UI_USE_XAW=1
+#export G4UI_BUILD_XAW_SESSION=1
+#export G4UI_USE_XAW=1
 
---------------------------------------------------------------------
-Here is a sample session (with the Visualization Manager constructed
-with verbosity == 1).
+############ Persistency
+# export G4USE_HEPODBMS=1
+# . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+# export OS=`uname`
+# oocheckls -notitle `hostname` || \
+#            oolockserver -notitle -noauto
+
+else
+ echo No geant4 here.
+fi
+
+
+Appendix B: Sample session
+--------------------------
+
+The Visualization Manager has been constructed with verbosity == 1.
 
 $ test19 dumb 1
 RunManager is constructing....
