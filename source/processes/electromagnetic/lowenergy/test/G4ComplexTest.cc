@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.12 2001-11-02 16:17:56 vnivanch Exp $
+// $Id: G4ComplexTest.cc,v 1.13 2002-05-30 17:42:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -151,16 +151,17 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
 
-  G4Material* Be = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
-  G4Material* Graphite = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
-  G4Material* Al  = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
-  G4Material* Si  = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
-  G4Material* LAr = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
-  G4Material* Fe  = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
-  G4Material* Cu  = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
-  G4Material*  W  = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
-  G4Material* Pb  = new G4Material("Pb",      82., 207.19*g/mole, 11.35*g/cm3);
-  G4Material*  U  = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
+  G4Material* m;
+  m = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
+  m = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
+  m = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
+  m = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
+  m = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
+  m = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
+  m = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
+  m = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
+  m = new G4Material("Pb",      82., 207.19*g/mole, 11.35*g/cm3);
+  m = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
 
   G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
   G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
@@ -168,19 +169,19 @@ int main(int argc,char** argv)
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
-  G4Material*  maO = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
+  m = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
 
-  G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
-  water->AddElement(H,2);
-  water->AddElement(O,1);
+  m = new G4Material ("Water" , 1.*g/cm3, 2);
+  m->AddElement(H,2);
+  m->AddElement(O,1);
 
-  G4Material* ethane = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
-  ethane->AddElement(H,6);
-  ethane->AddElement(C,2);
+  m = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
+  m->AddElement(H,6);
+  m->AddElement(C,2);
   
-  G4Material* csi = new G4Material ("CsI" , 4.53*g/cm3, 2);
-  csi->AddElement(Cs,1);
-  csi->AddElement(I,1);
+  m = new G4Material ("CsI" , 4.53*g/cm3, 2);
+  m->AddElement(Cs,1);
+  m->AddElement(I,1);
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
@@ -238,6 +239,7 @@ int main(int argc,char** argv)
   G4cout << "#verbose" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
+  G4cout << pFrame << G4endl;
 
   G4ProcessManager *elecManager, *positManager, *gammaManager, 
                    *protManager, *aprotManager;
@@ -381,7 +383,7 @@ int main(int argc,char** argv)
     ntuple2 = hbookManager->ntuple("Secondary Ntuple");
     */
     // ---- secondaries histos ----
-    h[0] = hbookManager->histogram("Kinetic Energy (MeV)", 50,0.,gEnergy/MeV);
+    h[0] = hbookManager->histogram("Kinetic Energy", 50,0.,1.0);
   
     h[1] = hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy*0.1/MeV);
   
@@ -391,9 +393,12 @@ int main(int argc,char** argv)
                                      gEnergy*0.1/MeV);
     G4cout<< "Histograms is initialised" << G4endl;
 
+    G4Timer* timer = new G4Timer();
+    timer->Start();
+
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
-    positron->SetCuts(cutE);
+    //    positron->SetCuts(cutE);
   
     // Processes 
 
@@ -402,7 +407,7 @@ int main(int argc,char** argv)
     dProcess = 0;
     cdProcess = 0;
 
-    G4cout  <<  "Process is initialized"  <<  G4endl;; 
+    G4cout  <<  "Start BuildPhysicsTable"  <<  G4endl;; 
 
     if(lowE) {
       if(ionis) {
@@ -482,6 +487,11 @@ int main(int argc,char** argv)
     }
 
     G4cout  <<  "Physics tables are built"  <<  G4endl;; 
+
+    timer->Stop();
+    G4cout << "  "  << *timer << G4endl;
+    delete timer;
+
   
     // Control on processes
     if(postDo && !dProcess && !cdProcess) {
@@ -533,7 +543,7 @@ int main(int argc,char** argv)
     G4double de = 0.0;
     G4double de2 = 0.0;
 
-    G4Timer* timer = new G4Timer();
+    timer = new G4Timer();
     timer->Start();
 
     for (G4int iter=0; iter<nEvt; iter++) {
@@ -552,7 +562,6 @@ int main(int argc,char** argv)
         if(dProcess)  dummy = dProcess->PostStepDoIt(*gTrack, *step);
         if(cdProcess) dummy = cdProcess->PostStepDoIt(*gTrack, *step);
       } else {
-        G4GPILSelection* sel = 0;
         dummy = cdProcess->AlongStepDoIt(*gTrack, *step);
       }
       G4ParticleChange* particleChange = (G4ParticleChange*) dummy;
@@ -570,6 +579,7 @@ int main(int argc,char** argv)
       G4double pxChange  = change.x();
       G4double pyChange  = change.y();
       G4double pzChange  = change.z();
+      /*
       G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange 
                                                   + pzChange*pzChange);
       
@@ -577,7 +587,7 @@ int main(int argc,char** argv)
       G4double yChange = particleChange->GetPositionChange()->y();
       G4double zChange = particleChange->GetPositionChange()->z();
       G4double thetaChange = particleChange->GetPositionChange()->theta();
-
+      */
       if(verbose) {
         G4cout << "---- Primary after the step ---- " << G4endl;
         G4cout << "---- Energy: " << energyChange/MeV << " MeV,  " 
@@ -645,7 +655,7 @@ int main(int argc,char** argv)
 		  <<  G4endl;   
 	}
 	  
-	h[0]->accumulate(eKin/MeV, 1.0);
+	h[0]->accumulate(eKin/gEnergy, 1.0);
         h[1]->accumulate(p/MeV, 1.0);
 	  
         G4int partType = 0;

@@ -257,6 +257,7 @@ int main(int argc,char** argv)
   G4cout << "#exit" << G4endl;
   G4cout << "#barkas" << G4endl;
   G4cout << "#nuclear" << G4endl;
+  G4cout << pFrame << G4endl;
 
   G4ProcessManager *gmanager, *elecManager, *positManager,  
                    *protManager, *aprotManager, *ionManager;
