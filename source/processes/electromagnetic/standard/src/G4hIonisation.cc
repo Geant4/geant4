@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.42 2003-04-26 19:55:04 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.43 2003-04-26 20:04:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -632,6 +632,26 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					         const G4String& directory,
 				                 G4bool          ascii)
 {
+
+  G4String particleName = particle->GetParticleName();
+  if(particle->GetParticleType() == "nucleus" &&
+     particleName != "GenericIon" &&
+     particle->GetParticleSubType() == "generic")
+  {
+
+     G4EnergyLossTables::Register(particle,
+              theDEDXpTable,
+              theRangepTable,
+              theInverseRangepTable,
+              theLabTimepTable,
+              theProperTimepTable,
+              LowestKineticEnergy, HighestKineticEnergy,
+              proton_mass_c2/particle->GetPDGMass(),
+              TotBin);
+
+     return true;
+  }
+
   // delete theLossTable and theMeanFreePathTable
   if (theLossTable != 0) {
     theLossTable->clearAndDestroy();
@@ -647,7 +667,6 @@ G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
   HighestKineticEnergy = GetUpperBoundEloss();
   TotBin               = GetNbinEloss();
 
-  G4String particleName = particle->GetParticleName();
   G4String filename;
 
   const G4ProductionCutsTable* theCoupleTable=
