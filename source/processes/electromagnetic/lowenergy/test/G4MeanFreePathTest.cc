@@ -376,7 +376,7 @@ int main(int argc,char** argv)
     hist[5] = hbookManager->histogram("Raylaigh (E in MeV)", 
                                      nbin,emin/MeV,emax/MeV);
     //    assert (hDebug != 0);  
-    G4cout<< "Histograms is initialised" << G4endl;
+    G4cout<< "Histograms is initialised x= " << DBL_MAX << G4endl;
 
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
@@ -481,9 +481,10 @@ int main(int argc,char** argv)
       G4double x = 0.0;
 
       if(lowE) {
-
+	/*
           if(nProcess == 0) x = eionle->GetMeanFreePath(*gTrack,theStep,&a);
           if(nProcess == 1) x = ebrle->GetMeanFreePath(*gTrack,theStep,&a);
+	*/
 	  /*
 	  if(nProcess == 2) x = comple->GetMeanFreePath(*gTrack,theStep,&a);
 	  if(nProcess == 3) x = convle->GetMeanFreePath(*gTrack,theStep,&a);

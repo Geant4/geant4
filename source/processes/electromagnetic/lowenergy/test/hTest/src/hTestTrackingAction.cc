@@ -45,6 +45,8 @@
 #include "G4ThreeVector.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
+#include "G4EventManager.hh"
+#include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -66,11 +68,16 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
   G4String name = particle->GetParticleName();
   theHisto->ResetTrackLength();
 
-  if(0 < theHisto->GetVerbose()) {
-    G4cout << "hTestTrackingAction: Next track #" 
-           << aTrack->GetTrackID() << " of " << name 
-           << " with kinetic energy " << aTrack->GetKineticEnergy()/MeV 
-           << " MeV" << G4endl;
+  if(0 < theHisto->GetVerbose() ||
+    theHisto->GetMaxEnergy() < aTrack->GetKineticEnergy()) {
+    G4cout << "Track #" 
+           << aTrack->GetTrackID() << " of " << name
+           << " Emax(MeV)= " << theHisto->GetMaxEnergy()/MeV
+           << " Ekin(MeV)= " << aTrack->GetKineticEnergy()/MeV
+           << " ## EventID= " 
+           << (G4EventManager::GetEventManager())->GetConstCurrentEvent()
+              ->GetEventID() 
+           << G4endl;
   }
 
   //Save primary parameters

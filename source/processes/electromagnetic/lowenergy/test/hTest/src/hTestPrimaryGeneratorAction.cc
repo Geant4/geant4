@@ -41,6 +41,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "hTestHisto.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -72,6 +73,8 @@ void hTestPrimaryGeneratorAction::InitializeMe()
   position  = G4ThreeVector(x0,y0,z0);
   direction = G4ThreeVector(0.0,0.0,1.0);
   m_gauss = true;
+  if(energy > (hTestHisto::GetPointer())->GetMaxEnergy())
+              (hTestHisto::GetPointer())->SetMaxEnergy(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -227,6 +230,8 @@ void hTestPrimaryGeneratorAction::SetBeamEnergy(G4double val)
   maxE = energy + sigmaE;
   gamma = maxE/mass + 1.;
   maxBeta = sqrt(1. - 1./(gamma*gamma));
+  if(energy > (hTestHisto::GetPointer())->GetMaxEnergy())
+              (hTestHisto::GetPointer())->SetMaxEnergy(energy);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
