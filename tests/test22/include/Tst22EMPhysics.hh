@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22EMPhysics.hh,v 1.1 2001-11-15 15:10:11 hpw Exp $
+// $Id: Tst22EMPhysics.hh,v 1.2 2001-11-26 16:26:51 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,7 +77,7 @@ class Tst22EMPhysics : public G4VPhysicsConstructor
     G4ComptonScattering theComptonEffect;
     G4GammaConversion thePairProduction;
     G4PhotoNuclearProcess thePhotoNuclearProcess;
-    G4GammaNuclearReaction theGammaReaction;
+    G4GammaNuclearReaction * theGammaReaction;
   
     // Electron physics
     G4MultipleScattering theElectronMultipleScattering;
@@ -93,7 +93,7 @@ class Tst22EMPhysics : public G4VPhysicsConstructor
     G4PositronNuclearProcess thePositronNuclearProcess;
     
     // Electron positron physics
-    G4ElectroNuclearReaction theElectroReaction;
+    G4ElectroNuclearReaction * theElectroReaction;
     
 };
 

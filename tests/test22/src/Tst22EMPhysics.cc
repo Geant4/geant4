@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst22EMPhysics.cc,v 1.1 2001-11-15 15:10:13 hpw Exp $
+// $Id: Tst22EMPhysics.cc,v 1.2 2001-11-26 16:26:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,8 @@
 Tst22EMPhysics::Tst22EMPhysics(const G4String& name)
                :  G4VPhysicsConstructor(name)
 {
+  theGammaReaction = new G4GammaNuclearReaction;
+  theElectroReaction = new G4ElectroNuclearReaction;
 }
 
 Tst22EMPhysics::~Tst22EMPhysics()
@@ -78,7 +80,7 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&thePhotoEffect);
   pManager->AddDiscreteProcess(&theComptonEffect);
   pManager->AddDiscreteProcess(&thePairProduction);
-  thePhotoNuclearProcess.RegisterMe(&theGammaReaction);
+  thePhotoNuclearProcess.RegisterMe(theGammaReaction);
   pManager->AddDiscreteProcess(&thePhotoNuclearProcess);
 
   // Electron Physics
@@ -87,7 +89,7 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&theElectronBremsStrahlung);  
   pManager->AddProcess(&theElectronIonisation, ordInActive,2, 2);
   pManager->AddProcess(&theElectronMultipleScattering);
-  theElectronNuclearProcess.RegisterMe(&theElectroReaction);
+  theElectronNuclearProcess.RegisterMe(theElectroReaction);
   pManager->AddDiscreteProcess(&theElectronNuclearProcess);
   
   pManager->SetProcessOrdering(&theElectronMultipleScattering, idxAlongStep,  1);
@@ -100,7 +102,7 @@ void Tst22EMPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(&theAnnihilation);
   pManager->AddRestProcess(&theAnnihilation);
   pManager->AddProcess(&thePositronIonisation, ordInActive,2, 2);
-  thePositronNuclearProcess.RegisterMe(&theElectroReaction);
+  thePositronNuclearProcess.RegisterMe(theElectroReaction);
   pManager->AddDiscreteProcess(&thePositronNuclearProcess);
   pManager->AddProcess(&thePositronMultipleScattering);
   pManager->SetProcessOrdering(&thePositronMultipleScattering, idxAlongStep,  1);
