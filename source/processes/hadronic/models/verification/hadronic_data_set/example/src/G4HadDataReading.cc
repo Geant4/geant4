@@ -51,7 +51,7 @@ G4HadDataReading::G4HadDataReading()
   fEnergyUnit     = MeV; 
   fAngleUnit      = degree; 
   fXscUnit        = millibarn;
-  fXscPeAngleUnit = millibarn/degree; 
+  fXscPerAngleUnit = millibarn/sr; 
   fXscPerMomCUnit = millibarn/GeV;
   fDdXscUnit      = millibarn/sr/MeV;
 
@@ -69,6 +69,7 @@ G4HadDataReading::G4HadDataReading()
   fAngleBinVector      = new G4DataVector();
 
   fAngleTable             = new G4PhysicsTable();
+  fAngleDdTable             = new std::vector<G4DataVector*>;
   fMomentumCTable         = new G4PhysicsTable();
   fDoubleDiffXscBank      = new std::vector<G4PhysicsTable*>;
   fDoubleDiffXscErrorBank = new std::vector<G4PhysicsTable*>;
@@ -363,7 +364,7 @@ void G4HadDataReading::LoadDifferentialXSC( G4String& fileName, G4bool momORangl
         iVector++;
         if(iVector == fNo)
 	{
-          fAngleTable->push_back(dataVector);
+	  fAngleTable->push_back(dataVector);
           delete dataVector; 
 	}       
       }
@@ -389,8 +390,8 @@ void G4HadDataReading::LoadDifferentialXSC( G4String& fileName, G4bool momORangl
     {
       for(size_t k = 0; k < (*fAngleTable)(i)->GetVectorLength(); ++k)
       {
-        G4cout<<(*fAngleTable)(i)->GetLowEdgeEnergy(k)<<"\t"
-	      <<(*(*fAngleTable)(i))(k)<<G4endl;
+	  G4cout<<(*fAngleTable)(i)->GetLowEdgeEnergy(k)<<"\t"
+	    <<(*(*fAngleTable)(i))(k)<<G4endl;
       }
     } 
   }
@@ -418,6 +419,7 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
   G4PhysicsFreeVector* errorVector = NULL;
   G4PhysicsTable*  dataTable = NULL;
   G4PhysicsTable*  errorTable = NULL;
+  G4DataVector*    angleVector = NULL;
 
   G4cout<<"G4HadDataReading::LoadDifferentialXSC(fN),\n"<<" fN = "
         <<fileName<<G4endl;
@@ -590,33 +592,34 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
 
   for(iEnergy = 0; iEnergy < fNo; ++iEnergy)
   {
-    G4cout<<G4endl<<"Tkin"<<"\t"<<(*fTkinVector)[iEnergy]/fEnergyUnit<<G4endl;
+    //  G4cout<<G4endl<<"Tkin"<<"\t"<<(*fTkinVector)[iEnergy]/fEnergyUnit<<G4endl;
 
-    G4cout<<G4endl<<"energyUnit"<<"\t"<<fEnergyUnitVector[iEnergy]<<G4endl;
-    G4cout<<G4endl<<"angleUnit"<<"\t"<<fAngleUnitVector[iEnergy]<<G4endl;
-    G4cout<<G4endl<<"ddXscUnit"<<"\t"<<fDdXscUnitVector[iEnergy]<<G4endl;
+    //  G4cout<<G4endl<<"energyUnit"<<"\t"<<fEnergyUnitVector[iEnergy]<<G4endl;
+    // G4cout<<G4endl<<"angleUnit"<<"\t"<<fAngleUnitVector[iEnergy]<<G4endl;
+    // G4cout<<G4endl<<"ddXscUnit"<<"\t"<<fDdXscUnitVector[iEnergy]<<G4endl;
     
-    G4cout<<G4endl<<"angleNo"<<"\t"<<fAngleNoVector[iEnergy]<<G4endl<<G4endl;
+    //  G4cout<<G4endl<<"angleNo"<<"\t"<<fAngleNoVector[iEnergy]<<G4endl<<G4endl;
 
-    dataTable  = new G4PhysicsTable(fAngleNoVector[iEnergy]);
-    errorTable = new G4PhysicsTable(fAngleNoVector[iEnergy]);
+    dataTable   = new G4PhysicsTable(fAngleNoVector[iEnergy]);
+    errorTable  = new G4PhysicsTable(fAngleNoVector[iEnergy]);
+    angleVector = new G4DataVector(); 
 
     for(jAngle = 0; jAngle < fAngleNoVector[iEnergy]; ++jAngle)
     {
-      G4cout<<G4endl<<"angle"<<"\t"<<(*fAngleVector)[j]/fAngleUnitVector[iEnergy]
-            <<G4endl<<G4endl;
-      G4cout<<G4endl<<"omegaNo"<<"\t"<<fOmegaNoVector[j]<<G4endl<<G4endl;
+      //  G4cout<<G4endl<<"angle"<<"\t"<<(*fAngleVector)[j]/fAngleUnitVector[iEnergy]
+      //        <<G4endl<<G4endl;
+      //  G4cout<<G4endl<<"omegaNo"<<"\t"<<fOmegaNoVector[j]<<G4endl<<G4endl;
 
       dataVector  =  new G4PhysicsFreeVector(fOmegaNoVector[j]);
       errorVector =  new G4PhysicsFreeVector(fOmegaNoVector[j]);
 
       for(kOmega = 0; kOmega < fOmegaNoVector[j]; ++kOmega)
       {
-        G4cout<<(*fMomentumCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
-              <<(*fDeltaMomCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
-              <<(*fXscVector)[k]/fDdXscUnitVector[iEnergy]<<"\t"
-	      <<(*fDeltaXscVector)[k]/fDdXscUnitVector[iEnergy]<<G4endl;
-
+	//   G4cout<<(*fMomentumCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
+        //      <<(*fDeltaMomCVector)[k]/fEnergyUnitVector[iEnergy]<<"\t"
+	//       <<(*fXscVector)[k]/fDdXscUnitVector[iEnergy]<<"\t"
+	//      <<(*fDeltaXscVector)[k]/fDdXscUnitVector[iEnergy]<<G4endl;
+       
         dataVector ->PutValue(kOmega,(*fMomentumCVector)[k],(*fXscVector)[k]);
         errorVector->PutValue(kOmega,(*fDeltaMomCVector)[k],(*fDeltaXscVector)[k]);
 
@@ -624,14 +627,16 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
       }
       dataTable ->push_back(dataVector);
       errorTable->push_back(errorVector);
+      angleVector->push_back((*fAngleVector)[j]);
       j++;
     }
     fDoubleDiffXscBank->push_back(dataTable); 
     fDoubleDiffXscErrorBank->push_back(errorTable); 
+    fAngleDdTable->push_back(angleVector);
   }
 
 
-
+  /*
   G4cout<<G4endl<<"Output of fDoubleDiffXscBank data"<<G4endl;
   G4cout<<"fDoubleDiffXscBank->size() = "<<fDoubleDiffXscBank->size()<<G4endl<<G4endl;
   jAngle=0; 
@@ -658,8 +663,7 @@ void G4HadDataReading::LoadDoubleDiffXSC( G4String& fileName)
       jAngle++;
     } 
   }
-
-
+  */
 
 }
 
@@ -731,13 +735,6 @@ void G4HadDataReading::SetDdXscUnit(G4String& unitString)
 //
 //
 /////////////////////////////////////////////////////////////
-
-
-
-
-
-
-
 
 
 

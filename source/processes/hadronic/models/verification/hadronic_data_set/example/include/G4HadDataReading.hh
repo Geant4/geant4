@@ -51,18 +51,46 @@ public:
   G4double GetTkinBin() const {return fTkinBin;}
   G4int    GetNumber() const {return fNo;}
 
+  G4String GetAnyNumber() const { return fAnyNumber;}
+  G4String GetAnyEmptySpace() const { return fAnyEmptySpace;}
+  G4String GetAnyHidden() const { return fAnyHidden;}
+
+  std::vector<G4int> GetEnergyNoVector() const { return fEnergyNoVector;}
+  std::vector<G4int> GetAngleNoVector() const { return fAngleNoVector;}
+  std::vector<G4int> GetOmegaNoVector() const { return fOmegaNoVector;}
+
+  G4DataVector GetEnergyUnitVector() const { return fEnergyUnitVector;}
+  G4DataVector GetAngleUnitVector() const { return fAngleUnitVector;}
+  G4DataVector GetXscUnitVector() const { return fXscUnitVector;}
+  G4DataVector GetXscPerAngleUnitVector() const { return fXscPerAngleUnitVector;}
+  G4DataVector GetXscPerMomCUnitVector() const { return fXscPerMomCUnitVector;}
+  G4DataVector GetDdXscUnitVector() const { return fDdXscUnitVector;}
+
   G4DataVector*  GetTkinVector() const {return fTkinVector;}
+  G4DataVector*  GetTkinBinVector() const {return fTkinBinVector;}
+
   G4DataVector*  GetXscVector() const {return fXscVector;}
+  G4DataVector*  GetDeltaXscVector() const {return fDeltaXscVector;}
+
   G4DataVector*  GetMultiplicityVector() const {return fMultiplicityVector;}
 
   G4DataVector*  GetMomentumVector() const {return fMomentumCVector;}
+  G4DataVector*  GetMomentumCBinVector() const {return fMomentumCBinVector;}
+  G4DataVector*  GetDeltaMomCVector() const {return fDeltaMomCVector;}
+
   G4DataVector*  GetAngleVector() const {return fAngleVector;}
+  G4DataVector*  GetAngleBinVector() const {return fAngleBinVector;}
+
+  std::vector<G4DataVector*>* GetAngleDdTable() const {return fAngleDdTable;} 
 
   G4PhysicsTable*  GetAngleTable() const {return fAngleTable;}
   G4PhysicsTable*  GetMomentumCTable() const {return fMomentumCTable;}
 
   std::vector<G4PhysicsTable*>* GetDoubleDiffXscBank() const 
-  {return fDoubleDiffXscBank;};
+  {return fDoubleDiffXscBank;}
+
+  std::vector<G4PhysicsTable*>* GetDoubleDiffXscErrorBank() const 
+  {return fDoubleDiffXscErrorBank;};
 
 
 protected:
@@ -81,10 +109,10 @@ protected:
 private:
 
   G4double fEnergyUnit, fAngleUnit, fXscUnit;
-  G4double fXscPeAngleUnit, fXscPerMomCUnit, fDdXscUnit;
+  G4double fXscPerAngleUnit, fXscPerMomCUnit, fDdXscUnit;
  
   G4DataVector fEnergyUnitVector, fAngleUnitVector, fXscUnitVector;
-  G4DataVector fXscPeAngleUnitVector, fXscPerMomCUnitVector, fDdXscUnitVector;
+  G4DataVector fXscPerAngleUnitVector, fXscPerMomCUnitVector, fDdXscUnitVector;
  
 
   G4double fTkinBin;
@@ -112,6 +140,7 @@ private:
   G4DataVector*  fAngleVector;
   G4DataVector*  fAngleBinVector;
 
+  std::vector<G4DataVector*>* fAngleDdTable; 
   G4PhysicsTable*  fAngleTable;
   G4PhysicsTable*  fMomentumCTable;
 

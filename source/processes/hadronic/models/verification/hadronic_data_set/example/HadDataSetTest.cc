@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadDataSetTest.cc,v 1.5 2004-02-13 15:12:57 grichine Exp $
+// $Id: HadDataSetTest.cc,v 1.6 2004-02-15 16:47:18 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -217,12 +217,12 @@ int main(int argc, char** argv)
   }  
   else if (whatIdo=="readfile") 
   {
-       char* pathstart = getenv("G4HADATASET");
-       G4String temp;
-       G4String pathstarttwo(pathstart);      
-       G4String process2="dd";
+    char* pathstart = getenv("G4HADATASET");
+    G4String temp;
+    G4String pathstarttwo(pathstart);      
+    G4String process2="dd";
        
-       G4HadFileSpec fileIwant(proton,U,proton,process2);
+    G4HadFileSpec fileIwant(proton,Cu,proton,process2);
        
        //G4cout << fileIwant.G4HDSFilename()<< G4endl;
        //G4cout << fileIwant.G4HDSFilepath()<< G4endl;
@@ -232,6 +232,46 @@ int main(int argc, char** argv)
        // G4HadFileFinder* findit=new G4HadFileFinder(pathstart,temp); 
        
        G4ReadHadDoubleDiffXSC* readExforAl = new G4ReadHadDoubleDiffXSC(fileIwant);    
+
+  std::vector<G4PhysicsTable*>* doubleDiffXscBank = readExforAl->GetDoubleDiffXscBank();
+  std::vector<G4DataVector*>* angleDdTable = readExforAl->GetAngleDdTable(); 
+  G4DataVector*  TkinVector = readExforAl->GetTkinVector();
+  G4DataVector*  angleVector = readExforAl->GetAngleVector();
+  G4DataVector   energyUnitVector = readExforAl->GetEnergyUnitVector();
+  G4DataVector   angleUnitVector = readExforAl->GetAngleUnitVector();
+  G4DataVector   ddXscUnitVector = readExforAl->GetDdXscUnitVector();
+
+  G4cout<<G4endl<<"External Output of DoubleDiffXscBank data"<<G4endl;
+  G4cout<<"DoubleDiffXscBank->size() = "<<doubleDiffXscBank->size()<<G4endl<<G4endl;
+  size_t jAngle=0; 
+
+  for(size_t i = 0; i < doubleDiffXscBank->size(); ++i)
+  {
+    G4cout<<G4endl<<"(*doubleDiffXscBank)["<<i<<"]->size() = "
+        <<(*doubleDiffXscBank)[i]->size()<<G4endl;
+
+    for(  size_t j = 0; j < (*doubleDiffXscBank)[i]->size(); ++j )
+    {
+      G4cout<<G4endl<<"(*(*doubleDiffXscBank)["<<i<<"])("<<j<<")->GetVectorLength() = "
+        <<(*(*doubleDiffXscBank)[i])(j)->GetVectorLength()<<G4endl;
+      G4cout<<G4endl<<"Tkin"<<"\t"<<"angle"<<"\t"
+            <<"omega"<<"\t"<<"ddXsc"<<G4endl<<G4endl;
+
+      for(size_t k = 0; k < (*(*doubleDiffXscBank)[i])(j)->GetVectorLength(); ++k)
+      {
+        G4cout<<(*TkinVector)[i]/energyUnitVector[i]<<"\t"
+
+	  //  <<(*angleVector)[jAngle]/angleUnitVector[i]<<"\t"
+              <<(*(*angleDdTable)[i])[j]/angleUnitVector[i]<<"\t"
+
+              <<(*(*doubleDiffXscBank)[i])(j)->GetLowEdgeEnergy(k)/energyUnitVector[i]
+              <<"\t"
+	      <<(*(*(*doubleDiffXscBank)[i])(j))(k)/ddXscUnitVector[i]<<G4endl;
+      }
+      jAngle++;
+    } 
+  }
+
   }
    
    
