@@ -447,7 +447,6 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
     fRange = ((*theRangeTable)[currentMaterialIndex])->
             GetValue(preStepScaledEnergy, b)*reduceFactor;
     x = fRange;
-
     if( !integral ) {
       G4double r = G4std::min(finalRange, currentCouple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));

@@ -55,6 +55,7 @@
 // 26-03-03 Remove finalRange modification (V.Ivanchenko)
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
+// 06-05-03 Set defalt finalRange = 1 mm (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -125,7 +126,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   scoffRegions.clear();
 
   // default dRoverRange and finalRange
-  SetStepLimits(0.2, 200.0*micrometer);
+  SetStepLimits(0.2, 1.0*mm);
 
   //  SetVerboseLevel(0);
 }
@@ -529,16 +530,16 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   }
   */
 
-  static const G4double faclow = 1.5;
+  //  static const G4double faclow = 1.5;
 
     // low energy deposit case
   if (length >= fRange) {
     eloss = preStepKinEnergy;
-
+    /*
   } else if(preStepScaledEnergy < faclow*minKinEnergy) {
 
     eloss = preStepKinEnergy*sqrt(length/fRange);
-
+    */
   // Short step
   } else if( length <= linLossLimit * fRange ) {
     eloss = (((*theDEDXTable)[currentMaterialIndex])->
@@ -550,6 +551,12 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     G4PhysicsVector* v = (*theInverseRangeTable)[currentMaterialIndex];
     G4double postStepScaledEnergy = v->GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
+
+    if (eloss <= 0.0) {
+      eloss = (((*theDEDXTable)[currentMaterialIndex])->
+               GetValue(preStepScaledEnergy, b))*length*chargeSqRatio;
+     // eloss = preStepKinEnergy*sqrt(length/fRange);
+    }
 
     /*
     if(-1 < verboseLevel) {
@@ -563,8 +570,6 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
              << G4endl;
     }
     */
-
-    if(eloss <= 0.0) eloss = preStepKinEnergy*sqrt(length/fRange);
 
   }
 
@@ -725,10 +730,19 @@ void G4VEnergyLossSTD::PrintInfoDefinition() const
          << G4BestUnit(MaxKinEnergy(),"Energy")
          << " in " << LambdaBinning() << " bins."
          << G4endl;
+  /*   
+      G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
+      if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
+      G4cout << "RangeTable address= " << theRangeTable << G4endl;
+      if(theRangeTable) G4cout << (*theRangeTable) << G4endl;
+      G4cout << "InverseRangeTable address= " << theInverseRangeTable << G4endl;
+      if(theInverseRangeTable) G4cout << (*theInverseRangeTable) << G4endl;
+  */
   if(0 < verboseLevel) {
     G4cout << "Tables are built for " << particle->GetParticleName()
            << " IntegralFlag= " <<  integral
            << G4endl;
+ 
     if(2 < verboseLevel) {
       G4cout << "DEDXTable address= " << theDEDXTable << G4endl;
       if(theDEDXTable) G4cout << (*theDEDXTable) << G4endl;
@@ -796,9 +810,8 @@ void G4VEnergyLossSTD::SetSubLambdaTable(G4PhysicsTable* p)
 G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4int nbins = 3;
-  //G4int nbins =  nDEDXBins;
   if( couple->IsUsed() ) nbins = nDEDXBins;
-  //  G4double xmax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
+  //G4double emax = maxKinEnergy*exp( log(maxKinEnergy/minKinEnergy) / ((G4double)(nbins-1)) );
   G4PhysicsVector* v = new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
   return v;
 }
@@ -809,7 +822,6 @@ G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCoupl
 {
   G4double cut  = (*theCuts)[couple->GetIndex()];
   G4int nbins = 3;
-  //G4int nbins = nLambdaBins;
   if( couple->IsUsed() ) nbins = nLambdaBins;
   G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
