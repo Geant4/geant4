@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEProtonInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Low Energy Proton Inelastic Process
 // J.L. Chuma, TRIUMF, 19-Nov-1996
@@ -152,6 +150,7 @@
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      delete vec[i];
     }
   }
  

@@ -5,8 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LEPionMinusInelastic.cc,v 1.2 1999-12-15 14:53:08 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: PionMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 19-Nov-1996

@@ -5,9 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LETritonInelastic.cc,v 1.2 1999-12-15 14:53:09 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
  // Hadronic Process: Triton Inelastic Process
  // J.L. Chuma, TRIUMF, 25-Feb-1997
  // Last modified: 27-Mar-1997
@@ -70,6 +67,7 @@
       pd->SetDefinition( vec[i]->GetDefinition() );
       pd->SetMomentum( vec[i]->GetMomentum() );
       theParticleChange.AddSecondary( pd );
+      delete vec[i];
     }
     
     return &theParticleChange;
