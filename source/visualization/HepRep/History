@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2003-10-30 22:16:12 duns Exp $
+$Id: History,v 1.36 2003-11-05 16:47:58 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+4 November 2003 Mark Donszelmann
+- Fixed GEANT-15
+  see bugs.freehep.org, but you'd have to log in.
+
 30 October 2003 Mark Donszelmann
 - Fixed GEANT-10, WIRED-170
   see bugs.freehep.org, but you'd have to log in.

@@ -93,6 +93,8 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         void openHepRep();
         bool closeHepRep();
+        void openFile(G4String name);
+        void closeFile();
 
     private:
         static G4int sceneCount;
@@ -153,7 +155,11 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         G4String trajectoryLayer, trajectoryPointLayer, hitLayer;
         G4String rootVolumeName;
         
+        G4String baseName;
         G4int eventNumber;
+        G4int eventNumberWidth;
+        G4String extension;
+        G4bool writeMultipleFiles;
 
         G4int currentDepth;
         G4VPhysicalVolume* currentPV;

@@ -31,3 +31,4 @@ rm src/MultiWriteTest.cc
 rm src/HepRepTest.cc
 rm src/HepRepExample.cc
 rm src/test_zipoutputstream.cpp
+rm src/test_gzipoutputstream.cpp

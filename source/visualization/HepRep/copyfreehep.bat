@@ -13,3 +13,4 @@ del src\MultiWriteTest.cc
 del src\HepRepTest.cc
 del src\HepRepExample.cc
 del src\test_zipoutputstream.cc
+del src\test_gzipoutputstream.cc

@@ -39,29 +39,51 @@ If the file contains more than one HepRep it is not strictly XML anymore.
 Files can be written in .heprep.zip or .heprep format. The former is the
 default for file output, the latter is the default for stdout and stderr.
 
-(Optional) To set the filename, where the extension should be .heprep.zip or .heprep (zip will compress), use:
+(Optional) To set the filename, where the extension should be .heprep.zip 
+or .heprep (zip will compress), use:
+
 /vis/scene/create filename.heprep.zip
 
-(Optional) To route the HepRep XML output to stdout (or stderr), by default uncompressed, use:
+
+(Optional) To create separate files for each event, use a filename such as 
+filename-0001.heprep.zip to start writing files from 0001 to 9999 (or up),
+while filename-55.heprep.zip will start writing files from 55 to 99 (or up).
+
+/vis/scene/create filename-0001.heprep.zip
+
+
+(Optional) To route the HepRep XML output to stdout (or stderr), 
+by default uncompressed, use:
+
 /vis/scene/create stdout
 
-To select the driver, where the file if not create by scene is set to G4HepRepOuput.zip, use:
+
+To select the driver, where the file if not create by scene is set to 
+G4HepRepOutput.heprep.zip, use:
+
 /vis/open HepRepXML
 
+
 To write an event, use:
+
 /run/beamOn 1
 
-To write the geometry, use:
-/vis/viewer/flush
 
 (Optional) To close the file, remove the SceneHandler, use:
+
 /vis/sceneHandler/remove scene-handler-0
 
+
 View the file using the WIRED Event Display, available from:
+
 http://wired.freehep.org
 
-Limitations:
-Only one SceneHandler can exist at any time, connected to a single Viewer.
 
-9 October 2003
+Limitations:
+
+Only one SceneHandler can exist at any time, connected to a single Viewer. 
+Since the HepRep format is a model rather than a view this is not a real
+limitation. In WIRED you can create as many views (SceneHandlers) as you like.
+
+4 November 2003
 Mark.Donszelmann@slac.stanford.edu

@@ -85,7 +85,11 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, const G4S
           trajectoryPointLayer  ("TrajectoryPoint"),
           hitLayer              ("Hit"),
           rootVolumeName        ("Geometry"),
+          baseName              (""),
           eventNumber           (1),
+          eventNumberWidth      (10),
+          extension             (""),
+          writeMultipleFiles    (false),
           currentDepth          (0),
           currentPV             (0),
           currentLV             (0),
@@ -141,21 +145,38 @@ void G4HepRepSceneHandler::open(G4String name) {
 #ifdef SDEBUG
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
-        out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
-        bool heprep = name.substr(name.size()-7, 7) == G4String(".heprep");
-        bool heprepxml = name.substr(name.size()-11, 11) == G4String(".heprep.xml");
-        bool heprepzip = name.substr(name.size()-11, 11) == G4String(".heprep.zip");
-        bool heprepgz = name.substr(name.size()-10, 10) == G4String(".heprep.gz");
-        
-        bool zip = name.substr(name.size()-4, 4) == G4String(".zip");
-        bool gz = name.substr(name.size()-3, 3) == G4String(".gz");
-        
-        writer = factory->createHepRepWriter(out, heprepzip || zip, heprepzip || heprepgz || zip || gz);
-        
-        // write warning
-        if (!heprep && !heprepxml && !heprepzip && !heprepgz) {
-            cout << "WARNING HepRep file: '" << name << "' cannot be read by JAS/WIRED, use extensions .heprep, .heprep.xml, .heprep.zip or .heprep.gz" << endl;
+        string ext[] = {".heprep", ".heprep.xml", ".heprep.zip", ".heprep.gz"};
+        for (int i=0; i < ext->length(); i++) {
+            if (name.substr(name.size()-ext[i].size(), ext[i].size()) == ext[i]) break;
         }
+        extension = (i != ext->length()) ? ext[i] : "";
+        baseName = name.substr(0, name.length() - extension.length());
+        
+        // look for 0000 pattern in G4Output-0000.heprep
+        int digit = baseName.length()-1;
+        char c = baseName.at(digit);
+        while (isdigit(c)) {
+            digit--;
+            c = baseName.at(digit);
+        }
+        writeMultipleFiles = (digit < baseName.length()-1);
+
+        if (writeMultipleFiles) {
+            // defer opening file to closeHepRep
+            
+            eventNumber = atoi(baseName.substr(digit+1).c_str());
+            eventNumberWidth = baseName.length() - 1 - digit;
+            baseName = baseName.substr(0, digit+1);
+        } else {
+            // open single file here
+            openFile(name);
+            
+            // use baseName, eventNo and extension for entries in zip if applicable
+            eventNumber = 1;
+            eventNumberWidth = 10;
+            baseName = "event-";
+            extension = ".heprep";
+        }        
     }
 }
 
@@ -210,14 +231,22 @@ bool G4HepRepSceneHandler::closeHepRep() {
     if (_trajectoryPointType != NULL) _heprep->addLayer(trajectoryPointLayer);
     if (_hitType             != NULL) _heprep->addLayer(hitLayer);
 
+    if (writeMultipleFiles) {
+        stringstream fileName;
+        fileName << baseName << setw(eventNumberWidth) << setfill('0') << eventNumber << extension;
+        openFile(fileName.str());
+    }
+        
     // write out the heprep
-    char eventName[255];
-    sprintf(eventName, "event%010d.heprep", eventNumber);
-    writer->write(_heprep, eventName);
+    stringstream eventName;
+    eventName << "event-" << setw(eventNumberWidth) << setfill('0') << eventNumber << ".heprep";
+    writer->write(_heprep, eventName.str());
     eventNumber++;
 
     delete _heprep;
     _heprep = NULL;
+
+    if (writeMultipleFiles) closeFile();
 
 #ifdef SDEBUG
     cout << "G4HepRepSceneHandler::CloseHepRep() end" << endl;
@@ -234,8 +263,18 @@ void G4HepRepSceneHandler::close() {
 
     if (writer == NULL) return;
 
-    closeHepRep();
+    if (!writeMultipleFiles) {
+        closeHepRep();
+        closeFile();
+    }
+}
 
+void G4HepRepSceneHandler::openFile(G4String name) {
+    out = new ofstream(name.c_str(), std::ios::out | std::ios::binary );
+    writer = factory->createHepRepWriter(out, extension == ".heprep.zip", (extension == ".heprep.zip") || (extension == "heprep.gz"));
+}
+
+void G4HepRepSceneHandler::closeFile() {
     writer->close();
     delete writer;
     writer = NULL;
