@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.22 2004-05-17 09:46:57 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.23 2004-07-05 13:36:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -584,7 +584,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
 
-/*
+  /*
   if(-1 < verboseLevel) {
     const G4ParticleDefinition* d = track.GetDefinition();
     G4cout << "AlongStepDoIt for "
@@ -597,7 +597,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " md= " << d->GetPDGMass()
            << G4endl;
   }
-*/
+  */
+
   // stopping
   if (length >= fRange) {
     eloss = preStepKinEnergy;
@@ -614,8 +615,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
     /*
     if(-1 < verboseLevel) {
-      G4bool b;
-      G4cout << "rPre(mm)= " << r/mm
+      G4cout << "Long STEP: rPre(mm)= " << r/mm
              << " rPost(mm)= " << x/mm
              << " ePre(MeV)= " << preStepScaledEnergy/MeV
              << " eloss(MeV)= " << eloss/MeV
@@ -629,19 +629,14 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = MaxSecondaryEnergy(dynParticle);
   tmax = std::min(tmax,(*theCuts)[currentMaterialIndex]);
-
   /*
   G4double eloss0 = eloss;
   if(-1 < verboseLevel) {
-    G4bool b;
-    //G4cout << *theDEDXTable << G4endl;
-    G4cout << "eloss(MeV)= " << eloss/MeV
+    G4cout << "Before fluct: eloss(MeV)= " << eloss/MeV
            << " eloss0(MeV)= " << GetDEDXForLoss(preStepKinEnergy)*length
            << " r0(mm)= " << GetRangeForLoss(preStepKinEnergy)
            << " tmax= " << tmax
            << " e-eloss= " << preStepKinEnergy-eloss
-      //   << " preCouple= " << (step.GetPreStepPoint())->GetMaterialCutsCouple()
-      //   << " postCouple= " << (step.GetPostStepPoint())->GetMaterialCutsCouple()
            << G4endl;
   }
   */
@@ -653,17 +648,15 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                                        tmax, length, eloss, preStepScaledEnergy,
 				       currentMaterialIndex);
   }
-
   /*
   if(-1 < verboseLevel) {
-    G4cout << "eloss(MeV)= " << eloss/MeV
+    G4cout << "After fluct: eloss(MeV)= " << eloss/MeV
            << " fluc= " << (eloss-eloss0)/MeV
            << " currentChargeSquare= " << chargeSquare
            << " massRatio= " << massRatio
            << G4endl;
   }
   */
-
 
   G4double finalT = preStepKinEnergy - eloss;
 
@@ -703,8 +696,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
     }
     delete newp;
   }
-
-/*
+  /*
   if(-1 < verboseLevel) {
     G4cout << "Final value eloss(MeV)= " << eloss/MeV
            << " preStepKinEnergy= " << preStepKinEnergy
@@ -712,8 +704,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
            << " lossFlag= " << lossFluctuationFlag
            << G4endl;
   }
-*/
-
+  */
   fParticleChange.SetLocalEnergyDeposit(eloss);
 
   return &fParticleChange;
@@ -730,7 +721,10 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
 
   // Integral approach
   if (integral) {
-    if(preStepLambda*G4UniformRand() > GetLambda(postStepScaledEnergy))
+    G4double lx = GetLambda(postStepScaledEnergy);
+    //G4cout << "PS: preLambda= " << preStepLambda << " post= " << lx << G4endl;
+    //    if(preStepLambda*G4UniformRand() > GetLambda(postStepScaledEnergy))
+    if(preStepLambda*G4UniformRand() > lx)
       return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
   }
 
@@ -739,8 +733,11 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
   G4double tmax = currentModel->MaxSecondaryEnergy(dynParticle);
 
-  /*
-  if(0 < verboseLevel) {
+  if (tcut < tmax)
+    SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
+
+  /* 
+  if(-1 < verboseLevel) {
     const G4ParticleDefinition* pd = dynParticle->GetDefinition();
     G4cout << "G4VEnergyLossProcess::PostStepDoIt: Sample secondary; E= " << finalT/MeV
            << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
@@ -748,9 +745,6 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-
-  if (tcut < tmax)
-    SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT <= 0.0) {
     fParticleChange.SetProposedKineticEnergy(0.0);
@@ -905,8 +899,11 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
       }
       theEnergyOfCrossSectionMax[i] = emax;
       theCrossSectionMax[i] = smax;
-      // G4cout << "i= " << i << " e2(MeV)= " << emax/MeV
-      //       << " lambda= " << smax << G4endl;
+      /*
+      G4cout << "For " << particle->GetParticleName() 
+             << " Max CS at i= " << i << " emax(MeV)= " << emax/MeV
+             << " lambda= " << smax << G4endl;
+      */
     }
   }
 }

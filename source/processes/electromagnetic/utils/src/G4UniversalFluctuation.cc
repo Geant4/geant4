@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.20 2004-05-11 15:35:07 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.21 2004-07-05 13:36:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -115,7 +115,8 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
   G4double loss, siga;
   // G4cout << "tmax= " << tmax << " kappa= " << minNumberInteractionsBohr << " l= " << length << G4endl;
   // Gaussian fluctuation
-  if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
+  //  if(meanLoss >= minNumberInteractionsBohr*tmax || tmax <= ipotFluct*minNumberInteractionsBohr)
+  if(meanLoss >= minNumberInteractionsBohr*tmax)
   {
     electronDensity = material->GetElectronDensity();
     siga  = (1.0/beta2 - 0.5) * twopi_mc2_rcl2 * tmax * length

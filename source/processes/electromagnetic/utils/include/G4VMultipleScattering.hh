@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.hh,v 1.21 2004-06-30 14:36:51 vnivanch Exp $
+// $Id: G4VMultipleScattering.hh,v 1.22 2004-07-05 13:36:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -157,6 +157,8 @@ public:
                                              G4double currentMinimalStep) = 0;
 
   G4VEmModel* SelectModelForMaterial(G4double kinEnergy, size_t& idxRegion) const;
+
+  const G4ParticleDefinition* Particle() const;
 
 protected:
 
@@ -429,6 +431,13 @@ inline  void G4VMultipleScattering::SetBoundary(G4bool val)
 inline  void G4VMultipleScattering::SetBuildLambdaTable(G4bool val)
 {
   buildLambdaTable = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline  const G4ParticleDefinition* G4VMultipleScattering::Particle() const
+{
+  return currentParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

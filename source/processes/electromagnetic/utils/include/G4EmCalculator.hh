@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.hh,v 1.1 2004-06-30 14:36:50 vnivanch Exp $
+// $Id: G4EmCalculator.hh,v 1.2 2004-07-05 13:36:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -58,6 +58,8 @@ class G4MaterialCutsCouple;
 class G4ParticleDefinition;
 class G4PhysicsTable;
 class G4VEmModel;
+class G4VEnergyLossProcess;
+class G4ionEffectiveCharge;
 
 class G4EmCalculator
 {
@@ -83,6 +85,12 @@ public:
   G4double GetMinFreePath(const G4ParticleDefinition*, const G4Material*,
                            const G4String& processName, G4double kinEnergy);
 
+  void PrintDEDXTable(const G4ParticleDefinition*);
+
+  void PrintRangeTable(const G4ParticleDefinition*);
+
+  void PrintInverseRangeTable(const G4ParticleDefinition*);
+
   // Methods to calculate dE/dx and cross sections "on fly"
   // Existing tables and G4MaterialCutsCouples are not used
 
@@ -104,7 +112,9 @@ public:
 
 private:
 
-  void FindMaterial(const G4Material*, const G4ParticleDefinition*);
+  void UpdateParticle(const G4ParticleDefinition*, G4double kinEnergy);
+ 
+  void FindMaterial(const G4Material*);
 
   void FindCouple(const G4Material*, G4double cut);
 
@@ -113,13 +123,15 @@ private:
   void FindEmModel(const G4ParticleDefinition*, const G4String& processName,
                          G4double kinEnergy, size_t idxRegion);
 
+  const G4VEnergyLossProcess* FindEnergyLossProcess(const G4ParticleDefinition*);
+
   G4EmCalculator & operator=(const  G4EmCalculator &right);
   G4EmCalculator(const  G4EmCalculator&);
 
   std::vector<const G4Material*>            localMaterials;
   std::vector<const G4MaterialCutsCouple*>  localCouples;
 
-  G4LossTableManager*          theManager;
+  G4LossTableManager*          manager;
   G4DataVector                 localCuts;
   G4int                        nLocalMaterials;
 
@@ -132,11 +144,13 @@ private:
   const G4PhysicsTable*        currentLambda;
         G4VEmModel*            currentModel;
 
+  G4ionEffectiveCharge*        ionEffCharge;
+
   G4String                     currentName;
   G4double                     currentCut;
   G4double                     chargeSquare;
   G4double                     massRatio;
-
+  G4bool                       isIon;
 };
 
 //....oooOO0OOooo.......oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
