@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-07 16:05:17 gunter Exp $
+# $Id: GNUmakefile,v 1.2 2000-10-03 17:00:58 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -9,7 +9,7 @@ endif
  
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS = A01 A02 A03 A04 A05 A06
+SUBDIRS = brachytherapy gammaray_telescope xray_telescope
 
 .PHONY : all clean clean_libs
 
