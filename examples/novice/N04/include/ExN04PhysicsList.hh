@@ -20,11 +20,9 @@ protected:
   
 protected:
   // these methods Construct physics processes and register them
-  void AddParameterisation();
   virtual void ConstructGeneral();
   virtual void ConstructEM();
   virtual void ConstructHad();
-  virtual void ConstructLeptHad();
 
   // these methods Construct all particles in each category
   virtual void ConstructAllBosons();

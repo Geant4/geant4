@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ExN04PhysicsList.cc,v 1.3 1999-04-16 11:35:18 kurasige Exp $
+// $Id: ExN04PhysicsList.cc,v 1.4 1999-04-23 05:06:06 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,9 +62,8 @@ void ExN04PhysicsList::ConstructParticle()
 void ExN04PhysicsList::ConstructProcess()
 {
   AddTransportation();
-  AddParameterisation();
+
   ConstructEM();
-  ConstructLeptHad();
   ConstructHad();
   ConstructGeneral();
 }
@@ -621,9 +620,6 @@ void ExN04PhysicsList::ConstructHad()
 }
 
 
-void ExN04PhysicsList::ConstructLeptHad()
-{;}
-
 #include "G4Decay.hh"
 void ExN04PhysicsList::ConstructGeneral()
 {
@@ -639,18 +635,6 @@ void ExN04PhysicsList::ConstructGeneral()
       pmanager ->SetProcessOrdering(theDecayProcess, idxPostStep);
       pmanager ->SetProcessOrdering(theDecayProcess, idxAtRest);
     }
-  }
-}
-void ExN04PhysicsList::AddParameterisation()
-{
-  G4FastSimulationManagerProcess* 
-    theFastSimulationManagerProcess = 
-      new G4FastSimulationManagerProcess();
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-    if (!particle->IsShortLived()) pmanager->AddDiscreteProcess(theFastSimulationManagerProcess);
   }
 }
 
