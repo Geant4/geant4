@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.3 2003-10-20 10:43:32 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.4 2003-10-23 15:11:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -85,7 +85,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
       br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1,-3,3);
+      pmanager->AddProcess(br,                       -1, 3,3);
 	    
     } else if (particleName == "e+") {
       //positron
@@ -93,7 +93,7 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       G4eBremsstrahlungCMS* br = new G4eBremsstrahlungCMS();
       br->SetGammaThreshold(bremThreshold);
-      pmanager->AddProcess(br,                       -1,-3,3);
+      pmanager->AddProcess(br,                       -1, 3,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
       
     } else if( particleName == "mu+" || 
@@ -101,8 +101,8 @@ void PhysListEmStandard::ConstructProcess()
       //muon  
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
-      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
+      pmanager->AddProcess(new G4MuBremsstrahlung,  -1, 3,3);
+      pmanager->AddProcess(new G4MuPairProduction,  -1, 4,4);       
      
     } else if( particleName == "GenericIon" ) { 
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);

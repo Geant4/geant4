@@ -1,0 +1,33 @@
+#
+#  Test particle range
+#
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 2
+/event/verbose 0
+#
+/testem/phys/setGCut    2.2 mm
+/testem/phys/setECut 95 cm
+#
+/testem/phys/addPhysics standard
+#/testem/phys/addPhysics  model
+#
+/gun/particle e-
+/gun/energy     10 MeV
+#/gun/particle proton
+#/gun/particle alpha
+#/gun/particle IonC12
+#
+/run/initialize
+#/run/beamOn 1
+#
+/process/inactivate   phot
+/process/inactivate   compt
+/process/inactivate   conv
+/process/inactivate   eIoni
+#/process/inactivate   msc
+#
+#/process/eLoss/fluct     false
+#/process/eLoss/integral  false
+/run/initialize
+/run/beamOn 1

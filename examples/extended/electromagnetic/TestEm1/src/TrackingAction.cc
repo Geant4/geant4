@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: TrackingAction.cc,v 1.2 2003-10-20 10:43:32 vnivanch Exp $
+// $Id: TrackingAction.cc,v 1.3 2003-10-23 15:11:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
      runAction->CountSteps0(nbSteps);
   
   } else {
+
      runAction->CountTraks1(1); 
      runAction->CountSteps1(nbSteps);
 
