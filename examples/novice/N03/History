@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2001-10-24 11:45:06 maire Exp $
+$Id: History,v 1.41 2001-11-07 04:27:15 stanaka Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07-11-01 Satoshi (exampleN03-V03-02-03)
+- vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced 
+  with their equivalent command /vis/viewer/flush.
      
 24-10-01 mma (exampleN03-V03-02-02)
 - initInter.mac renamed vis.mac : OpenGL and DAWNFILE opened simultaneously. 
