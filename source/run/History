@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2002-01-29 10:54:05 gcosmo Exp $
+$Id: History,v 1.52 2002-02-26 18:50:11 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 26, 2002 G.Cosmo (run-V04-00-01)
+- G4RunManager.cc: fixed new date for the public patch "geant4-04-00-patch-02".
 
 Jan 29, 2002 G.Cosmo (run-V04-00-00)
 - G4RunManager.cc: fixed new date for the public patch "geant4-04-00-patch-01".
