@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2003-02-19 18:06:42 vnivanch Exp $
+$Id: History,v 1.32 2003-06-03 10:58:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 June 2003  V.Ivanchenko (test17-V05-01-00)
+             Remove warnings 
 
 19 Feb 2003  V.Ivanchenko (test17-V05-00-00)
              Remove warnings and update reference output

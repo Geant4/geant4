@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Test17PrimaryGeneratorMessenger.cc,v 1.3 2002-12-05 02:19:06 asaim Exp $
+// $Id: Test17PrimaryGeneratorMessenger.cc,v 1.4 2003-06-03 10:58:54 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,8 +53,8 @@ Test17PrimaryGeneratorMessenger::~Test17PrimaryGeneratorMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
-{ 
+void Test17PrimaryGeneratorMessenger::SetNewValue(G4UIcommand * command,G4String)
+{
   if( command == DefaultCmd )
    { Test17Action->SetDefaultKinematic();}
 }

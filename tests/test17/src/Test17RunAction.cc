@@ -49,7 +49,7 @@ Test17RunAction::~Test17RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
+{
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   run     = aRun;
   edepTot = 0.;
@@ -67,7 +67,7 @@ void Test17RunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::EndOfRunAction(const G4Run* aRun)
+void Test17RunAction::EndOfRunAction(const G4Run*)
 {
   G4double nev = (G4double)nEvents;
   if(nev <= 0.) nev = 1.0;

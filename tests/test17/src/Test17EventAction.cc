@@ -57,7 +57,7 @@ Test17EventAction::~Test17EventAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17EventAction::BeginOfEventAction(const G4Event* evt)
-{  
+{
   evtNo = evt->GetEventID();
   edep = 0.0;
   nCharged = 0;
@@ -67,7 +67,7 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
   if(verbose>0)
     G4cout << "<<< Event  " << evtNo << " started." << G4endl;
 
-  /*  
+  /*
   if(14 == evtNo) {
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 2");
     (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 2");
@@ -81,7 +81,7 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17EventAction::EndOfEventAction(const G4Event* evt)
+void Test17EventAction::EndOfEventAction(const G4Event*)
 {
    // count event, add deposits to the sum ...
   if(good) {

@@ -91,7 +91,7 @@ public: // Without description
 
 inline G4double Test17StepCut::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
-                             G4double   previousStepSize,
+                             G4double ,
                              G4ForceCondition* condition
                             )
 {
@@ -122,10 +122,8 @@ inline G4VParticleChange* Test17StepCut::PostStepDoIt(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double Test17StepCut::GetMeanFreePath(const G4Track& aTrack,
-                             G4double   previousStepSize,
-                             G4ForceCondition* condition
-                            )
+inline G4double Test17StepCut::GetMeanFreePath(const G4Track&,
+                             G4double, G4ForceCondition*)
 {
   return 0.;
 }
