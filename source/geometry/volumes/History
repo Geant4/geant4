@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-03-19 11:48:28 japost Exp $
+$Id: History,v 1.8 1999-03-19 11:56:01 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-March    19, 99      J. Apostolakis        geomvol-01-00-02
+March    19, 99      J. Apostolakis        geomvol-01-00-03
 
    New tag for replica fix.
 
@@ -32,7 +32,7 @@ March    11, 99      J. Apostolakis
 
    G4GRSVolume.icc: corrected G4Exception messages.
 
-February 17, 99      J. Apostolakis
+February 17, 99      J. Apostolakis        geomvol-01-00-02
 
  include/G4VoxelNavigation.hh
  src/G4VoxelNavigation.cc    : overwrote versions 1.2 with production version
@@ -41,7 +41,6 @@ February 17, 99      J. Apostolakis
 February 15, 99      J. Apostolakis        geomvol-01-00-01
 
    Only fixes in G4Navigator's incorporated.
-
    GNUmakefile corrected (for SUN-CC).
 
 January      99,     J. Apostolakis
@@ -51,15 +50,18 @@ Fix for ComputeSafety in Navigator:                              G4Navigator.cc
                 -> it resulted in wrong value of safety
 
 
-December     98 
+December     98                                   geant4-00-RandD
 
  include/G4VoxelNavigation.hh
  src/G4VoxelNavigation.cc    : versions 1.2 are trial versions from beta "head"
 
-December     98
+December     98                                   
 
 Trial fix for navigation in replicas                             G4Navigator.cc
                                                                     v 1.2
          (a problem persists with this version)
 
 
+December     98                                   geant4-00
+
+   Code moved: production tag from beta repository.
