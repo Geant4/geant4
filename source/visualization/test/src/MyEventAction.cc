@@ -21,14 +21,20 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.4 2001-08-24 20:25:59 johna Exp $
+// $Id: MyEventAction.cc,v 1.5 2001-09-27 10:11:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "MyEventAction.hh"
 
-#include "MyTrackerHitsCollection.hh"
-#include "MyCalorimeterHitsCollection.hh"
+//#define DRAWTRAJHIT
+
+#ifdef DRAWTRAJHIT
+
+#include "MyTrackerHit.hh"
+#include "MyCalorimeterHit.hh"
+
+#endif
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -42,8 +48,6 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
-
-//#define DRAWTRAJHIT
 
 MyEventAction::MyEventAction()
 {;}
@@ -64,10 +68,14 @@ void MyEventAction::EndOfEventAction(const G4Event* anEvent)
 
   const G4Event* evt = anEvent;
 
+#ifdef DRAWTRAJHIT
+
   G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
   G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
   G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
+
+#endif
 
   if (coutCount < 10) {
     G4cout << ">>> Event " << evt->GetEventID() << G4endl;

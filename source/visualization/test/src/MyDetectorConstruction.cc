@@ -21,19 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: MyDetectorConstruction.cc,v 1.16 2001-07-11 10:09:27 gunter Exp $
+// $Id: MyDetectorConstruction.cc,v 1.17 2001-09-27 10:11:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 #include "MyDetectorConstruction.hh"
 
 #include "MyDetectorMessenger.hh"
-#include "MyCalorimeterSD.hh"
-#include "MyTrackerSD.hh"
-#include "MyCalorimeterHit.hh"
-#include "MyTrackerHit.hh"
-#include "MyCalorimeterHitsCollection.hh"
-#include "MyTrackerHitsCollection.hh"
+//#include "MyCalorimeterSD.hh"
+//#include "MyTrackerSD.hh"
+//#include "MyCalorimeterHit.hh"
+//#include "MyTrackerHit.hh"
 
 #include "G4Material.hh"
 #include "G4MaterialTable.hh"
@@ -352,7 +350,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
 		    sub_divided_tube_log,false,0);
 
   //------------------------------------------------ sensitive detectors
-
+  /****************
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
 
   G4String calorimeterSDname = "example2/calorimeter";
@@ -364,6 +362,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   MyTrackerSD * myTrackerSD = new MyTrackerSD( trackerSDname );
   SDman->AddNewDetector( myTrackerSD );
   tracker_log->SetSensitiveDetector( myTrackerSD );
+  ******************/
 
   //-------------------------------------------- Sphere
 

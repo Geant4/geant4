@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.14 2001-08-17 22:56:40 johna Exp $
+// $Id: test19.cc,v 1.15 2001-09-27 10:11:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -102,7 +102,7 @@ int main (int argc, char** argv) {
     else if (strcmp (argv[1], "gag")==0) session = new G4UIGAG ;
 #endif
     else                                 session =
-					   new G4UIterminal(new G4UItcsh);
+					   new G4UIterminal();
   }
   else                                   session =
 					   new G4UIterminal(new G4UItcsh);
