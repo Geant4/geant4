@@ -1,4 +1,4 @@
-$Id: History,v 1.89 2003-04-25 13:29:56 gcosmo Exp $
+$Id: History,v 1.90 2003-04-29 08:29:15 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Apr 29, 2003, M.Asai (run-V05-00-17)
+- G4UserPhysicsListMessenger.cc: changed implementation in
+  SetNewValue() for command 'setCutRCmd' to allow porting on
+  gcc-3.2 and WIN32-VC. Use istrstream instead of G4Tokenizer.
 
 Apr 25, 2003, G.Cosmo (run-V05-00-16)
 - G4VUserPhysicsList.cc: fixed typo in definition of ResetCuts().
