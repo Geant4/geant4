@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.2 1999-01-08 11:23:51 gunter Exp $
+// $Id: G4IonTable.cc,v 1.3 1999-02-24 08:29:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -201,7 +201,7 @@ G4double  G4IonTable::GetIonMass(G4int Z, G4int A) const
   }else {
     // This routine returns mass of nuclei (w/o including electron mass) 
     mass =  G4NucleiProperties::GetAtomicMass(G4double(A),G4double(Z));
-    mass - electronMass*G4double(Z);
+    mass -= electronMass*G4double(Z);
   }
   return mass;
 }
