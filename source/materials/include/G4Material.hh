@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.3 1999-07-20 17:32:31 vnivanch Exp $
+// $Id: G4Material.hh,v 1.4 1999-07-28 11:48:18 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -92,6 +92,17 @@ public:
                      G4double  pressure = STP_Pressure);	//pressure
 
     //
+    // Constructor to create a material from a combination of elements
+    // and/or materials subsequently added via AddElement and/or AddMaterial
+    //
+    G4Material(const G4String& name,				//its name
+                     G4double  density, 			//density
+                     G4int     nComponents,			//nb of components 
+                     G4State   state    = kStateUndefined,	//solid,liquid,gas
+                     G4double  temp     = STP_Temperature,	//temperature
+                     G4double  pressure = STP_Pressure);	//pressure
+
+    //
     // Constructor to create a material with chemical formula from scratch.
     //
     G4Material(const G4String& name,				//its name
@@ -110,17 +121,6 @@ public:
     //
     G4Material(const G4String& name,				//its name
 	       const G4String& chFormula,                       //chemical formula
-                     G4double  density, 			//density
-                     G4int     nComponents,			//nb of components 
-                     G4State   state    = kStateUndefined,	//solid,liquid,gas
-                     G4double  temp     = STP_Temperature,	//temperature
-                     G4double  pressure = STP_Pressure);	//pressure
-
-    //
-    // Constructor to create a material from a combination of elements
-    // and/or materials subsequently added via AddElement and/or AddMaterial
-    //
-    G4Material(const G4String& name,				//its name
                      G4double  density, 			//density
                      G4int     nComponents,			//nb of components 
                      G4State   state    = kStateUndefined,	//solid,liquid,gas
@@ -148,9 +148,9 @@ public:
     //
     // retrieval methods
     // 
-    G4String GetName()        const {return fName;};
+    G4String GetName()            const {return fName;};
     G4String GetChemicalFormula() const {return fChemicalFormula;};
-    G4double GetDensity()     const {return fDensity;};
+    G4double GetDensity()         const {return fDensity;};
 
     G4State  GetState()       const {return fState;};
     G4double GetTemperature() const {return fTemp;};

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.4 1999-07-20 17:32:32 vnivanch Exp $
+// $Id: G4Material.cc,v 1.5 1999-07-28 11:48:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -57,7 +57,7 @@ G4Material::G4Material(const G4String& name, G4double z,
     InitializePointers();
     
     if (density < universe_mean_density)
-       { G4cout << "--- Warning from G4Material::G4Material()"
+       { G4cerr << "--- Warning from G4Material::G4Material()"
               << " define a material with density=0 is not allowed. \n"
               << " The material " << name << " will be constructed with the"
               << " default minimal density: " << universe_mean_density/(g/cm3) 
@@ -105,7 +105,7 @@ G4Material::G4Material(const G4String& name, G4double density, G4int nComponents
     InitializePointers();
     
     if (density < universe_mean_density)
-      {G4cout << "--- Warning from G4Material::G4Material()"
+      {G4cerr << "--- Warning from G4Material::G4Material()"
             << " define a material with density=0 is not allowed. \n"
             << " The material " << name << " will be constructed with the"
             << " default minimal density: " << universe_mean_density/(g/cm3) 
@@ -142,7 +142,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
     InitializePointers();
     
     if (density < universe_mean_density)
-       { G4cout << "--- Warning from G4Material::G4Material()"
+       { G4cerr << "--- Warning from G4Material::G4Material()"
               << " define a material with density=0 is not allowed. \n"
               << " The material " << name << " will be constructed with the"
               << " default minimal density: " << universe_mean_density/(g/cm3) 
@@ -191,7 +191,7 @@ G4Material::G4Material(const G4String& name, const G4String& chFormula,
     InitializePointers();
     
     if (density < universe_mean_density)
-      {G4cout << "--- Warning from G4Material::G4Material()"
+      {G4cerr << "--- Warning from G4Material::G4Material()"
             << " define a material with density=0 is not allowed. \n"
             << " The material " << name << " will be constructed with the"
             << " default minimal density: " << universe_mean_density/(g/cm3) 
@@ -395,7 +395,7 @@ void G4Material::ComputeDerivedQuantities()
    if (fState == kStateGas) {
       G4double ratio = TotNbOfAtomsPerVolume*k_Boltzmann*fTemp/fPressure;
       if ((ratio<0.1)||(ratio>10.)) {
-         G4cout << "---warning from G4Material-- The state conditions of the gas: " 
+         G4cerr << "---warning from G4Material-- The state conditions of the gas: " 
               << fName << " are not consistent."
               << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
               << "\t pressure = "    << fPressure/atmosphere  << " atmosphere"
