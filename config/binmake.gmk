@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.2 1999-02-19 01:01:11 johna Exp $
+# $Id: binmake.gmk,v 1.3 1999-02-19 16:52:39 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -329,8 +329,8 @@ $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "            either..."
 	@echo "         a) Make sure your global libraries are all in place."
 	@echo "            or..."
-	@echo "         b) Make granular libraries, i.e., leave of the global"
-	@echo "            target when doing gmake."
+	@echo "         b) Make granular libraries, i.e., do not use the"
+	@echo "            global target when doing gmake."
 	@cc -g -o $(G4WORKDIR)/bin/$(G4SYSTEM)/liblist \
 	  $(G4INSTALL)/config/liblist.c
 
