@@ -1,0 +1,279 @@
+#============================================================
+# Configuration file for CHIPStest
+# Sets up the enviroment for compilation and running.
+# Modify to set up your personal paths.
+# Supported Platforms: SUN and HP with AFS (CERN installation)
+# Author: Mikhail Kossov (Mikhail.Kossov@cern.ch, @itep.ru) 
+#  following  [Isidro Gonzalez (Isidro.Gonzalez@cern.ch)]
+#  CMSExample [Sunanda Banerjee (Sunanda.Banerjee@cern.ch)]
+#============================================================
+# Target file
+if ("$?G4TARGET" == 0) then
+  setenv G4TARGET CHIPStest
+endif
+echo ${G4TARGET} is the target file
+#============================================================
+# ARCHITECTURE
+if (`uname` == "HP-UX" ) then
+  setenv G4SYSTEM    HP-aCC
+  if ("$?SHLIB_PATH" == 0) then
+    setenv SHLIB_PATH  "/usr/lib:/opt/CC/lib:/usr/local/lib:/usr/local/lib/X11:/usr/explorer/lib:/usr/lib/Motif1.2"
+  else
+    setenv SHLIB_PATH  "/${SHLIB_PATH}:usr/lib:/opt/CC/lib:/usr/local/lib:/usr/local/lib/X11:/usr/explorer/lib:/usr/lib/Motif1.2"
+  endif
+else if (`uname` == "SunOS" ) then
+  setenv G4SYSTEM    SUN-CC
+  if ("$?LD_LIBRARY_PATH" == 0) then
+    setenv LD_LIBRARY_PATH "/usr/lib:/usr/local/lib:/usr/local/lib/X11:/usr/explorer/lib:/usr/lib/Motif1.2"
+  else
+    setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:/usr/lib:/usr/local/lib:/usr/local/lib/X11:/usr/explorer/lib:/usr/lib/Motif1.2"
+  endif
+else if (`uname` == "Linux" ) then
+  setenv G4SYSTEM    Linux-g++
+else
+  echo ERROR: Unknown system `uname`! Exiting...
+  exit -1
+endif
+
+echo "========================="
+echo "Setting Geant4 Enviroment"
+echo "========================="
+echo ""
+# Output some information
+echo Target system set to ${G4SYSTEM}
+
+#============================================================
+# Debugging information
+setenv G4DEBUG		1
+if ("$?G4DEBUG" == 1) then
+  echo Debug option set
+endif
+
+#============================================================
+# Verbose information
+setenv CPPVERBOSE	1
+if ("$?CPPVERBOSE" == 0) then
+  echo Quiet compilation mode
+else
+  echo Verbose compilation mode
+endif
+#setenv G4_NO_VERBOSE	1
+if ("$?G4_NO_VERBOSE" == 0) then
+  echo Verbose Run mode
+else
+  echo Quiet Run mode
+endif
+
+
+#============================================================
+# Some GENERAL VARIABLES
+# Where is the geant4 package installed - @@ Put 4.0.1 when _debug appears
+setenv G4INSTALL /afs/cern.ch/cms/geant4cms/geant4.0.0_ref08_debug
+echo Geant4 installation path set to ${G4INSTALL}
+
+# Base directory for CHIPStest
+setenv G4WORKDIR `pwd`
+echo Working code path set to ${G4WORKDIR}
+
+# Set-up a link to the executable that will be built
+if (! -l ${G4TARGET}) then
+  echo Creating ${G4TARGET} link...
+  ln -s ${G4WORKDIR}/bin/${G4SYSTEM}/${G4TARGET} ${G4TARGET}
+endif
+
+# Check for the usual place for CLHEP (geant4 disks)
+setenv CLHEP_BASE_DIR /afs/cern.ch/sw/lhcxx/specific/@sys/CLHEP/new
+if ("$?CLHEP_BASE_DIR" == 1) then
+  echo CLHEP base path set to ${CLHEP_BASE_DIR}
+  setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:${CLHEP_BASE_DIR}/lib"
+endif
+
+# Check for the usual place for RW (geant4 disks)
+if ( ! -d /afs/cern.ch/sw/geant4/dev/rogue/${G4SYSTEM}) then
+  setenv RWBASE /afs/cern.ch/sw/lhcxx/specific/@sys/RW/tools/7.0.2/rogue
+  echo RogeWave base path set to ${RWBASE}
+endif
+
+
+#============================================================
+# Instantiation Repository Paths
+#setenv G4TEMPLATE_REPOSITORY g4.ptrepository/${G4SYSTEM}
+#echo Template repository set to ${G4TEMPLATE_REPOSITORY}
+
+
+#============================================================
+#============================================================
+# VISUALIZATION VARIABLES
+#echo ""
+#echo "VISUALIZATION"
+#echo "============="
+
+#============================================================
+# OpenGL visualization
+#setenv G4VIS_USE_OPENGL 		1
+#setenv G4VIS_USE_OPENGLX		1
+#setenv G4VIS_USE_OPENGLXM		1
+# Maybe this should be moved to the official version
+#setenv OGLHOME /afs/cern.ch/sw/lhcxx/specific/@sys/OpenGL/pro 
+#if ("$?G4VIS_USE_OPENGL" == 1) then
+#  echo OpenGL driver activated
+#endif
+#if ("$?G4VIS_USE_OPENGLX" == 1) then
+#  echo OpenGL and  X11 driver activated
+#endif
+#if ("$?G4VIS_USE_OPENGLXM" == 1) then
+#  echo OpenGL and XM extension driver activated
+#endif
+#if ("$?OGLHOME" == 1) then
+#  echo OpenGL path set to ${OGLHOME}
+#endif
+
+#============================================================
+# Open Inventor. Needs hepvis
+#setenv G4VIS_USE_OPENINVENTOR    	1
+#setenv OIHOME Openinventor path
+#setenv HEPVISDIR HepVis path
+#if ("$?G4VIS_USE_OPENINVENTOR" == 1) then
+#  echo OpenInventor driver activated
+#  echo OpenInventor path is ${OIHOME}
+#  echo HepVis path is ${HEPVISDIR}
+#endif
+
+#============================================================
+# VRML
+#setenv G4VIS_USE_VRML 			1
+#setenv G4VIS_USE_VRMLFILE 		1
+#Set preferred vrml viewer to be invoked in this mode
+#setenv G4VRMLFILE_VIEWER vrweb
+#Set host name for VRML1 visualization.... the g4vrmlview machine!
+#setenv G4VRML_HOST_NAME yourhost
+#Command to run java listener for VRML driver
+#alias javavrml "java -classpath /afs/cern.ch/cms/geant4beta/geant4alpha06/prototype/visualization/VRML/g4vrmlview g4vrmlview vrweb"
+#if ("$?G4VIS_USE_VRML" == 1) then
+#  echo VRML driver activated
+#  echo Host Name for remote visualization is ${G4VRML_HOST_NAME}
+#endif
+#if ("$?G4VIS_USE_VRML" == 1) then
+#  echo VRML file driver activated
+#  echo VRML viewer set to ${G4VRMLFILE_VIEWER}
+#endif
+
+#============================================================
+# DAWN visualization
+#setenv G4VIS_USE_DAWN    		1
+#setenv G4VIS_USE_DAWNFILE    		1
+#setenv G4DAWNFILE_VIEWER 		david
+#setenv DAWN_HOME /afs/cern.ch/cms/geant4rep/tools/bin/${G4SYSTEM}
+#if ("$?G4VIS_USE_DAWN" == 1) then
+#  echo Dawn driver activated
+#endif
+#if ("$?G4VIS_USE_DAWNFILE" == 1) then
+#  echo Dawn file driver activated
+#endif
+#if ("$?G4DAWNFILE_VIEWER" == 1) then
+#  echo Dawn file viewer set to ${G4DAWNFILE_VIEWER}
+#endif
+#if ("$?DAWN_HOME" == 1) then
+#  echo Dawn home path set to ${DAWN_HOME}
+#endif
+
+#============================================================
+# David flags
+# Set colors for overlappings
+#setenv DAVID_RAINBOW_FLAG 1
+##setenv DAVID_HIGHLIGHT_COLOR_R  r 
+##setenv DAVID_HIGHLIGHT_COLOR_G  g
+##setenv DAVID_HIGHLIGHT_COLOR_B  b
+
+# If set volumes names are shown
+#setenv DAVID_DISPLAY_PVNAME   1
+# If set supresses the call to dawn
+##setenv DAVID_NO_VIEW  1
+#setenv DAVID_EPSILON_3D  0.001
+#if ("$?DAVID_RAINBOW_FLAG" == 1) then
+#  echo DAVID Rainbow mode is ON
+#endif
+#if ("$?DAVID_HIGHLIGHT_COLOR_R" == 1) then
+#  echo DAVID Highlight color (Red) set to ${DAVID_HIGHLIGHT_COLOR_R}
+#endif
+#if ("$?DAVID_HIGHLIGHT_COLOR_G" == 1) then
+#  echo DAVID Highlight color (Green) set to ${DAVID_HIGHLIGHT_COLOR_G}
+#endif
+#if ("$?DAVID_HIGHLIGHT_COLOR_B" == 1) then
+#  echo DAVID Highlight color (Blue) set to ${DAVID_HIGHLIGHT_COLOR_B}
+#endif
+#if ("$?DAVID_DISPLAY_PVNAME" == 1) then
+#  echo DAVID will display intersected volumes name
+#endif
+#if ("$?DAVID_DISPLAY_PVNAME" == 1) then
+#  echo Dawn will not be called from DAVID
+#endif
+#if ("$?DAVID_EPSILON_3D" == 1) then
+#  echo DAVID tolerance set to ${DAVID_EPSILON_3D}
+#endif
+
+
+#============================================================
+# OPACS visualization
+## setenv G4VIS_USE_OPACS		1
+## setenv OPACSHOME Opacs path
+#if ("$?G4VIS_USE_OPACS" == 1) then
+#  echo OPACS driver activated
+#  echo Opacs path set to ${OPACSHOME}
+#endif
+
+#============================================================
+# Ray Tracing
+#setenv G4VIS_USE_RAYX			1
+#if ("$?G4VIS_USE_RAYX" == 1) then
+#  echo Ray tracing driver activated
+#endif
+
+#============================================================
+#Other needed enviroments
+#setenv XKEYSYMDB /usr/local/lib/X11/XKeysymDB
+#setenv TCL_LIBRARY /usr/local/lib/tcl7.6
+#setenv TK_LIBRARY /usr/local/lib/tk4.2
+
+
+
+#============================================================
+#============================================================
+#TEST specific enviroments
+echo ""
+echo "CHIPS SPECIFIC"
+echo "=============="
+
+# if TEST_PERSISTENTSTORE==Objy Objectivity/DB is used where possible.
+# Otherwise files are used
+# setenv TEST_PERSISTENTSTORE Objy
+if ("$?TEST_PERSISTENTSTORE" == 1) then
+  if ($TEST_PERSISTENTSTORE == Objy) then
+    echo "Geometry will be read from Objectivity/DB"
+    echo "Do not forget to 'source Persistency/setupDB.csh'"
+  else
+    echo "Geometry will be fully read from .geom files"
+  endif
+endif
+
+#If TEST_NO_OBJY is set. All objy related things are skipped during compilation
+setenv TEST_NO_OBJY 1
+if ("$?TEST_BUILDMAGNETICFIELD" == 1) then
+  echo "No Objectivity related features will be used"
+endif
+
+
+#alias G4CHIPSDemo "java -classpath GUI CHIPSTestDemo \!* $G4WORKDIR"
+#echo ""
+#echo "INSTRUCTIONS"
+#echo "============"
+#echo NEW: Execute \'G4CHIPSDemo [-m macro file] [-o output file]\' to get Geometry Selection GUI
+#echo '  macro_file: Geant4 macro file to be executed for CHIPStest'
+#echo '  output_file: File to wich output will be logged'
+#echo '               By default CHIPStest.log will be used'
+
+
+
+
+
+

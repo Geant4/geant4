@@ -1,0 +1,54 @@
+**************************************************************************
+* CHIPStest temporary Basic Developement Framework, created by M. Kossov *
+* Date: 10-Nov-99, E-mail: kossov@jlab.org, tested for SUN-CC, Linux-g++ *
+************************************************************************** 
+This CHIPStest directory is hopefully prepared for the CERN environment.
+The normal procedure is:
+
+>cd $(ANYROOT)/CHIPStest     // Come to a copy of this directory
+>source ./configure          // All CERN environment is defined 
+... Any modification of CHIPStest.cc or files in subdirectories C* ...
+>make                        // Start GNUmakefile to prepare executable
+>CHIPStest                   // Start executable (existing is for SUN-CC)
+
+Now the chipstest.out file is filled by RhoMass distribution to see it
+one should start resmass.kumac in PAW.
+
+To start the generator it's enough in CHIPStest.cc to put "jr<0" 
+(to switch off the Rho Mass generation) and put "ir<100" to generate
+100 (p-pbar at rest) events.
+
+Compilation time flags "debug" and "pdebug" can be used to regulate
+the output printing of the program. A lot of classes in C* subdirectories
+are not used and are present just for the future development. All classes
+for the present version of the functional prototype are in the CBody
+directory.
+
+This is a functional prototype of the generator. It is not yet tuned and
+tested. With it the following questions should be solved:
+
+1. As one can see all necessary particles are initialized in CHIPStest.cc.
+
+*** How avoid this artificial initialization ? ***
+
+2. We can use an output file, but can not use at JLab the CHbook inteface,
+which one can find in CMSGeometry/CMStools/CHbook.hh ...cc, because we do
+not know which library contains the C hbook subroutine which are used in
+this interface (we can copy it to JLab) and what is the -L name, which
+should indicate to this library.
+
+*** We appreciate any help with CHbook usage at JLab ***
+
+3. I had a lot of problems with G4QResonance inheritance from G4QHadron.
+One can find the trail of my fight in the code, but now the G4QResonance
+class is not used at all instead two constructors are used:
+    G4QHadron(PDG) for a Hadron and
+    G4QHadron(PDG,maxMass) for a Resonance.
+This overloding-of-construction method can be only a temporary solution
+as it is necessary to use the Resonance Vector instead of manual "if's"
+for resonance decays etc.
+
+*** I appreciate any solution with this inheritance ***
+
+There are a lot of @@ points for improvement + any suggestions for a style
+ARE WELCOMED.
