@@ -51,30 +51,36 @@ class G4AtomicTransitionManager {
 public: 
 
   static G4AtomicTransitionManager* Instance();
-  //the only way to get an instance of this class is to call the 
-  //function Instance() 
+  // The only way to get an instance of this class is to call the 
+  // function Instance() 
+
   const G4AtomicShell* Shell(G4int Z, size_t shellIndex);
   //Z is the atomic number of the element, shellIdentifier is the 
   //index (in EADL) of the shell 
+
   const G4AtomicTransition* ReachableShell(G4int Z, size_t shellIndex);
   //Z is the atomic number of the element, shellIdentifier is the 
   //index (in EADL) of the final shell for the transition 
+
   G4int NumberOfShells(G4int Z);
   //this function returns the number of shells of the element
   //whose atomic number is Z
+
   G4int NumberOfReachableShells(G4int Z);
 
   G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex);
   //gives the sum of the probabilities of radiative transition towards the
   //shell whose index is shellId
+ 
   G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex);
- //gives the sum of the probabilities of non radiative transition from the
+  //gives the sum of the probabilities of non radiative transition from the
   //shell whose index is shellId 
 
 
 protected:
 
-  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 99, G4int limitInfTable = 6, G4int limitSupTable=100 );
+  G4AtomicTransitionManager(G4int minZ = 1, G4int maxZ = 99, 
+			    G4int limitInfTable = 6, G4int limitSupTable=100 );
   ~G4AtomicTransitionManager();
 
 private:
@@ -84,6 +90,7 @@ private:
   G4std::map<G4int,G4std::vector<G4AtomicShell*>,std::less<G4int> > shellTable;
   // the first element of the map is the atomic number z.
   //the second element is a vector of shells.
+
   G4std::map<G4int,G4std::vector<G4AtomicTransition*>,std::less<G4int> > transitionTable;
   
   G4int zMin;
