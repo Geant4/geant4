@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.12 2004-08-05 10:33:09 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.13 2004-08-13 12:51:27 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -34,7 +34,8 @@
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
 // 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 01-10-01, come back to BuildPhysicsTable(const G4ParticleDefinition&)
-// 05-08-04, suppress .icc file   
+// 05-08-04, suppress .icc file
+// 13-08-04, public ComputeCrossSectionPerAtom() and ComputeMeanFreePath()   
 // 
 
 // class description
@@ -136,13 +137,12 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
-  protected:
 
-     virtual G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
-                                                 G4double AtomicNumber);
+     G4double ComputeCrossSectionPerAtom(G4double PositKinEnergy,
+                                         G4double AtomicNumber);
 
-     virtual G4double ComputeMeanFreePath(G4double PositKinEnergy, 
-                                          G4Material* aMaterial);
+     G4double ComputeMeanFreePath(G4double PositKinEnergy, 
+                                  G4Material* aMaterial);
 
   private:
   

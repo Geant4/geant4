@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversionToMuons.hh,v 1.7 2004-08-05 11:16:20 maire Exp $
+// $Id: G4GammaConversionToMuons.hh,v 1.8 2004-08-13 12:51:28 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //         ------------ G4GammaConversionToMuons physics process ------
 //         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
 // -----------------------------------------------------------------------------
 //
-// 05-08-04: suppression of .icc file
+// 05-08-04: suppression of .icc file (mma)
+// 13-08-04, public ComputeCrossSectionPerAtom() and ComputeMeanFreePath() (mma) 
 //
 // class description
 //
@@ -104,13 +105,11 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
        // This function overloads a virtual function of the base class.
        // It is invoked by the ProcessManager of the Particle.
 
-  protected:
+     G4double ComputeCrossSectionPerAtom(G4double GammaEnergy,
+                                         G4double AtomicZ,G4double AtomicA);
 
-     virtual G4double ComputeCrossSectionPerAtom(G4double GammaEnergy,
-               G4double AtomicZ,G4double AtomicA);
-
-     virtual G4double ComputeMeanFreePath (G4double GammaEnergy,
-                                           G4Material* aMaterial);
+     G4double ComputeMeanFreePath (G4double GammaEnergy,
+                                   G4Material* aMaterial);
 
   private:
 
