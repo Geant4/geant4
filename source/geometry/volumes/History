@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2001-11-01 18:59:14 gcosmo Exp $
+$Id: History,v 1.53 2001-11-08 08:15:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,13 @@ committal in the CVS repository !
 Oct 18th, 2001       J. Apostolakis - geomvol-V03-02-01
  - Added a new 'maximum' epsilon value in G4PropagatorInField,
     as some ill-conditions appear to be due to large proposed relative errors.
+
+Nov 8th, 2001        G. Cosmo - geomvol-V03-02-00c
+- Added handles for reference counting: G4GRSSolidHandle, G4GRSVolumeHandle,
+  G4TouchableHistoryHandle.
+- Modified G4Navigator for reference counted touchables. Introduced new methods
+  CreateTouchableHistoryHandle() and LocateGlobalPointAndUpdateTouchableHandle(...).
+- New unit tests testG4ParameterisedMaterial.cc and testG4TouchableHandle.cc.
 
 Nov 1st, 2001        G. Cosmo - geomvol-V03-02-00b
 - G4GeometryMessenger.cc: fixed definition of unit category for tolerance.
