@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.23 2002-10-28 15:18:16 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.24 2003-02-03 14:22:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -192,34 +192,39 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
 
         pPhi = atan2(p.y(),p.x()) ;
 
-        if (pPhi < 0 )   pPhi += 2*M_PI ; // 0<=pPhi<2pi
-        if (fSPhi >= 0)
+        if (pPhi < -kAngTolerance*0.5 )   pPhi += 2*M_PI ; // 0<=pPhi<2pi
+        if ( fSPhi >= 0 )
         {
-          if ( pPhi >= fSPhi + kAngTolerance*0.5 &&
-               pPhi <= fSPhi + fDPhi - kAngTolerance*0.5  )
+          if ( (abs(pPhi) < kAngTolerance*0.5)
+            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
+          if ( (pPhi >= fSPhi + kAngTolerance*0.5)
+            && (pPhi <= fSPhi + fDPhi - kAngTolerance*0.5) )
           {
             in = kInside ;
           }
-          else if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
-                    pPhi <= fSPhi + fDPhi + kAngTolerance*0.5 )
+          else if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+                 && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
           {
             in = kSurface ;
           }
         }
-        else
+        else  // fSPhi < 0
         {
-          if ( pPhi < fSPhi + 2*M_PI)  pPhi += 2*M_PI ;
-          if ( pPhi >= fSPhi + 2*M_PI + kAngTolerance*0.5 &&
-               pPhi <= fSPhi + fDPhi + 2*M_PI - kAngTolerance*0.5   )
-          {
-            in = kInside ;
-          }
-          else if ( pPhi >= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
-                    pPhi <= fSPhi + fDPhi + 2*M_PI + kAngTolerance*0.5  )
+          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) ) ;
+          else if ( (pPhi <= fSPhi + 2*M_PI + kAngTolerance*0.5)
+                 && (pPhi >= fSPhi + fDPhi  - kAngTolerance*0.5) )
           {
             in = kSurface ;
           }
-        }        
+          else
+          {
+            in = kInside ;
+          }
+        }                    
       }
     }
     else   // Try generous boundaries
@@ -239,25 +244,31 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
         {
           pPhi = atan2(p.y(),p.x()) ;
 
-          if ( pPhi < 0 )  pPhi += 2*M_PI ;  // 0<=pPhi<2pi
+          if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ; // 0<=pPhi<2pi
           if ( fSPhi >= 0 )
           {
-            if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
-                 pPhi <= fSPhi + fDPhi + kAngTolerance*0.5  )
+            if ( (abs(pPhi) < kAngTolerance*0.5)
+              && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+            { 
+              pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+            }
+            if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+              && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
             {
               in = kSurface ;
             }
           }
-          else
+          else  // fSPhi < 0
           {
-            if ( pPhi < fSPhi + 2*M_PI)  pPhi += 2*M_PI ;
-            if ( pPhi >= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
-                 pPhi <= fSPhi + fDPhi + 2*M_PI + kAngTolerance*0.5  )
+            if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+              && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+            else
             {
               in = kSurface ;
             }
           }
-        }
+
+       }
       }
     }
   }
@@ -289,25 +300,30 @@ EInside G4Cons::Inside(const G4ThreeVector& p) const
       else // Try outer tolerant phi boundaries
       {
         pPhi = atan2(p.y(),p.x()) ;
-
-        if ( pPhi  <  0 )  pPhi += 2*M_PI ;    // 0<=pPhi<2pi
+        if ( pPhi < -kAngTolerance*0.5 ) pPhi += 2*M_PI ;   // 0<=pPhi<2pi
         if ( fSPhi >= 0 )
         {
-          if ( pPhi >= fSPhi - kAngTolerance*0.5 &&
-               pPhi <= fSPhi + fDPhi + kAngTolerance*0.5 )
+          if ( (abs(pPhi) < kAngTolerance*0.5)
+            && (abs(fSPhi + fDPhi - 2*M_PI) < kAngTolerance*0.5) )
+          { 
+            pPhi += 2*M_PI ; // 0 <= pPhi < 2pi
+          }
+          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
+            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
           {
-            in = kSurface ;
+            in = kSurface;
           }
         }
-        else
+        else  // fSPhi < 0
         {
-          if ( pPhi <  fSPhi + 2*M_PI) pPhi += 2*M_PI ;
-          if ( pPhi >= fSPhi + 2*M_PI - kAngTolerance*0.5 &&
-               pPhi <= fSPhi + fDPhi + 2*M_PI + kAngTolerance*0.5 )
+          if ( (pPhi <= fSPhi + 2*M_PI - kAngTolerance*0.5)
+            && (pPhi >= fSPhi + fDPhi  + kAngTolerance*0.5) )  ;
+          else
           {
             in = kSurface ;
           }
-        }    
+        }      
+
       }
     }
   }
@@ -2020,10 +2036,14 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
   {
     G4cout.precision(16) ;
     G4cout << G4endl ;
+    DumpInfo();
     G4cout << "Position:"  << G4endl << G4endl ;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
     G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
+    G4cout << "pho at z = "   << sqrt( p.x()*p.x()+p.y()*p.y() )/mm << " mm" 
+           << G4endl << G4endl ;
+
     G4cout << "G4Cons::DistanceToOut(p) - point p is outside ?!" << G4endl ;
     G4cerr << "G4Cons::DistanceToOut(p) - point p is outside ?!" << G4endl ;
   }
