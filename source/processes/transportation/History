@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2002-11-04 10:47:56 dressel Exp $
+$Id: History,v 1.60 2002-11-04 13:46:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,10 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov,  4th 2002 M.Dressel
+Nov,  4th 2002 M.Dressel transport-V04-01-04
 -----------------------------------------------------
-     - remove G4std:: where it does not belong to
-     - replace str() functions
+- remove G4std:: where it does not belong to
+- replace str() functions
 
 Oct  31st, 2002 M.Dressel transport-V04-01-03
 -----------------------------------------------------
