@@ -22,6 +22,10 @@ if [ `pwd | grep /stt/prod/` ]; then
   . /afs/cern.ch/sw/geant4/stt/prod/testtools/geant4/tests/tools/bin/specific.sh
   found=yes
 fi
+if [ `pwd | grep /tests/tools/bin` ]; then
+  . ./specific.sh
+  found=yes
+fi
 if [ $found = no ]; then
   echo Cannot find sensible tree - pwd should contain /stt/prod/, etc.
   pwd
