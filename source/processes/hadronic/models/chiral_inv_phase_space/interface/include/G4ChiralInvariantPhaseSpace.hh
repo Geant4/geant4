@@ -69,10 +69,11 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4LorentzVector targ4Mom(0.,0.,0.,targetMass);  
   // END OF NOT NECESSARY^^^^^^^^
 
-  G4int nop = 156; // nuclear clusters up to A=21
-  G4double fractionOfSingleQuasiFreeNucleons = 0.15;
-  G4double fractionOfPairedQuasiFreeNucleons = 0.01;
-  G4double clusteringCoefficient = 5.;
+  G4int nop = 164; // nuclear clusters up to A=21
+  G4double fractionOfSingleQuasiFreeNucleons = 0.4;
+  G4double fractionOfPairedQuasiFreeNucleons = 0.0;
+  if(targetA>27) fractionOfPairedQuasiFreeNucleons = 0.04;
+  G4double clusteringCoefficient = 4.;
   G4double temperature = 180.;
   G4double halfTheStrangenessOfSee = 0.1; // = s/d = s/u
   G4double etaToEtaPrime = 0.3;
