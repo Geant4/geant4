@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2003-10-22 15:17:53 gbarrand Exp $
+# $Id: GNUmakefile,v 1.4 2003-11-04 08:24:05 gcosmo Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for interfaces.  John Allison, 5/7/98.
 # -----------------------------------------------------------------------
@@ -26,9 +26,6 @@ ifdef G4UI_BUILD
   SUBLIBS += G4UIbasic
   SUBDIRS += GAG
   SUBLIBS += G4UIGAG
-
-########################### interfaces/XVT - not currently implemented #####
-
-endif #G4UI_BUILD
+endif
 
 include $(G4INSTALL)/config/globlib.gmk
