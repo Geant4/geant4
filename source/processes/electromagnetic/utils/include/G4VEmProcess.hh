@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.hh,v 1.10 2004-08-09 09:03:01 vnivanch Exp $
+// $Id: G4VEmProcess.hh,v 1.11 2004-08-09 09:16:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -296,7 +296,7 @@ inline G4double G4VEmProcess::GetMeanFreePath(const G4Track& track,
   if (meanFreePath) {
     if (integral) ComputeLambda(preStepKinEnergy);
     else          preStepLambda = GetLambda(preStepKinEnergy);
-    if(0.0 < preStepLambda) mfp = 1.0/preStepLambda;
+    if(0.0 < preStepLambda) preStepMFP = 1.0/preStepLambda;
     else                    preStepMFP = DBL_MAX;
   }
   //G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy<< " eCSmax= " <<mfpKinEnergy<< " mfp= "<<preStepMFP<<G4endl;
