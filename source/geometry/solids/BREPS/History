@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2002-02-26 11:17:21 gcosmo Exp $
+$Id: History,v 1.42 2002-04-19 08:29:41 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+19/04/2002 : R. Chytracek      breps-V04-00-05
+- G4BREPSolidPCone.cc: added sanity check of delta phi section value and
+  exception is thrown saying about this unsupported feature if delta phi
+  is less than 2*PI.
 
 26/02/2002 : G. Cosmo          breps-V04-00-04
 - G4ConvexHull.hh: moved initialisation of 'next' to constructor's body.
