@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToNNstar.cc,v 1.1 2003-10-07 12:37:36 hpw Exp $ //
+// $Id: G4CollisionNNToNNstar.cc,v 1.2 2003-12-12 13:34:16 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToNNstar.hh"
@@ -39,119 +39,96 @@
 #include "G4CollisionVector.hh"
 #include "G4CollisionNNToNNstar.hh"
 #include "G4ConcreteNNToNNStar.hh"
+#include "G4HadParticleCodes.hh"
+#include "G4HadParticleCodes.hh"
+#include "G4Pair.hh"
+
+typedef G4ConcreteNNToNNStar channelType;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1400nPC)  theC1;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1400pPC)  theC2;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1400pPC)  theC3;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1400nPC)  theC4;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1520nPC)  theC5;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1520pPC)  theC6;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1520pPC)  theC7;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1520nPC)  theC8;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1535nPC)  theC9;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1535pPC)  theC10;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1535pPC)  theC11;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1535nPC)  theC12;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1650nPC)  theC13;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1650pPC)  theC14;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1650pPC)  theC15;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1650nPC)  theC16;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1675nPC)  theC17;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1675pPC)  theC18;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1675pPC)  theC19;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1675nPC)  theC20;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1680nPC)  theC21;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1680pPC)  theC22;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1680pPC)  theC23;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1680nPC)  theC24;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1700nPC)  theC25;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1700pPC)  theC26;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1700pPC)  theC27;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1700nPC)  theC28;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1710nPC)  theC29;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1710pPC)  theC30;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1710pPC)  theC31;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1710nPC)  theC32;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1720nPC)  theC33;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1720pPC)  theC34;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1720pPC)  theC35;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1720nPC)  theC36;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1900nPC)  theC37;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1900pPC)  theC38;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1900pPC)  theC39;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1900nPC)  theC40;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N1990nPC)  theC41;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N1990pPC)  theC42;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N1990pPC)  theC43;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N1990nPC)  theC44;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N2090nPC)  theC45;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N2090pPC)  theC46;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N2090pPC)  theC47;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N2090nPC)  theC48;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N2190nPC)  theC49;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N2190pPC)  theC50;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N2190pPC)  theC51;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N2190nPC)  theC52;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N2220nPC)  theC53;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N2220pPC)  theC54;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N2220pPC)  theC55;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N2220nPC)  theC56;
+
+typedef INT4(channelType, NeutronPC, NeutronPC, NeutronPC, N2250nPC)  theC57;
+typedef INT4(channelType, ProtonPC,  ProtonPC,  ProtonPC,  N2250pPC)  theC58;
+typedef INT4(channelType, NeutronPC, ProtonPC,  NeutronPC, N2250pPC)  theC59;
+typedef INT4(channelType, NeutronPC, ProtonPC,  ProtonPC,  N2250nPC)  theC60;
+
+
+typedef GROUP60(theC1, theC2, theC3, theC4, theC5, theC6, theC7, theC8, theC9, theC10,
+              theC11, theC12, theC13, theC14, theC15, theC16, theC17, theC18, theC19, theC20,
+              theC21, theC22, theC23, theC24, theC25, theC26, theC27, theC28, theC29, theC30,
+              theC31, theC32, theC33, theC34, theC35, theC36, theC37, theC38, theC39, theC40,
+              theC41, theC42, theC43, theC44, theC45, theC46, theC47, theC48, theC49, theC50,
+              theC51, theC52, theC53, theC54, theC55, theC56, theC57, theC58, theC59, theC60) theChannels;
 
 G4CollisionNNToNNstar::G4CollisionNNToNNstar()
 { 
-  G4ParticleDefinition * aProton = G4Proton::ProtonDefinition();
-  G4ParticleDefinition * aNeutron = G4Neutron::NeutronDefinition();
-  
-  // 1400, 1520,1535, 1650, 1675,1680
-  // 1700, 1710, 1720, 1900, 1990, 2090, 
-  // 2190, 2220, 2250
-
-  G4ParticleDefinition * aN_1400p = G4ParticleTable::GetParticleTable()->FindParticle(12212); 
-  G4ParticleDefinition * aN_1400n = G4ParticleTable::GetParticleTable()->FindParticle(12112); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1400n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1400p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1400p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1400n));
-
-  G4ParticleDefinition * aN_1520p = G4ParticleTable::GetParticleTable()->FindParticle(2124); 
-  G4ParticleDefinition * aN_1520n = G4ParticleTable::GetParticleTable()->FindParticle(1214); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1520n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1520p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1520p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1520n));
-
-  G4ParticleDefinition * aN_1535p = G4ParticleTable::GetParticleTable()->FindParticle(22212); 
-  G4ParticleDefinition * aN_1535n = G4ParticleTable::GetParticleTable()->FindParticle(22112); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1535n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1535p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1535p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1535n));
-
-  G4ParticleDefinition * aN_1650p = G4ParticleTable::GetParticleTable()->FindParticle(32212); 
-  G4ParticleDefinition * aN_1650n = G4ParticleTable::GetParticleTable()->FindParticle(32112); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1650n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1650p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1650p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1650n));
-
-  G4ParticleDefinition * aN_1675p = G4ParticleTable::GetParticleTable()->FindParticle(2216); 
-  G4ParticleDefinition * aN_1675n = G4ParticleTable::GetParticleTable()->FindParticle(2116); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1675n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1675p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1675p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1675n));
-
-  G4ParticleDefinition * aN_1680p = G4ParticleTable::GetParticleTable()->FindParticle(12216); 
-  G4ParticleDefinition * aN_1680n = G4ParticleTable::GetParticleTable()->FindParticle(12116); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1680n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1680p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1680p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1680n));
-
-  G4ParticleDefinition * aN_1700p = G4ParticleTable::GetParticleTable()->FindParticle(22124); 
-  G4ParticleDefinition * aN_1700n = G4ParticleTable::GetParticleTable()->FindParticle(21214); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1700n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1700p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1700p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1700n));
-
-  G4ParticleDefinition * aN_1710p = G4ParticleTable::GetParticleTable()->FindParticle(42212); 
-  G4ParticleDefinition * aN_1710n = G4ParticleTable::GetParticleTable()->FindParticle(42112); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1710n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1710p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1710p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1710n));
-
-  G4ParticleDefinition * aN_1720p = G4ParticleTable::GetParticleTable()->FindParticle(32124); 
-  G4ParticleDefinition * aN_1720n = G4ParticleTable::GetParticleTable()->FindParticle(31214); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1720n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1720p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1720p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1720n));
-
-  G4ParticleDefinition * aN_1900p = G4ParticleTable::GetParticleTable()->FindParticle(42124); 
-  G4ParticleDefinition * aN_1900n = G4ParticleTable::GetParticleTable()->FindParticle(41214); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1900n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1900p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1900p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1900n));
-
-  G4ParticleDefinition * aN_1990p = G4ParticleTable::GetParticleTable()->FindParticle(12218); 
-  G4ParticleDefinition * aN_1990n = G4ParticleTable::GetParticleTable()->FindParticle(12118); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_1990n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_1990p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_1990p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_1990n));
-
-  G4ParticleDefinition * aN_2090p = G4ParticleTable::GetParticleTable()->FindParticle(52214); 
-  G4ParticleDefinition * aN_2090n = G4ParticleTable::GetParticleTable()->FindParticle(52114); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_2090n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_2090p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_2090p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_2090n));
-
-  G4ParticleDefinition * aN_2190p = G4ParticleTable::GetParticleTable()->FindParticle(2128); 
-  G4ParticleDefinition * aN_2190n = G4ParticleTable::GetParticleTable()->FindParticle(1218); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_2190n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_2190p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_2190p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_2190n));
-
-  G4ParticleDefinition * aN_2220p = G4ParticleTable::GetParticleTable()->FindParticle(100002210); 
-  G4ParticleDefinition * aN_2220n = G4ParticleTable::GetParticleTable()->FindParticle(100002110); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_2220n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_2220p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_2220p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_2220n));
-
-  G4ParticleDefinition * aN_2250p = G4ParticleTable::GetParticleTable()->FindParticle(100012210); 
-  G4ParticleDefinition * aN_2250n = G4ParticleTable::GetParticleTable()->FindParticle(100012110); 
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aNeutron, aNeutron, aN_2250n));  
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aProton,  aProton,  aProton,  aN_2250p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aNeutron, aN_2250p));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToNNStar(aNeutron, aProton,  aProton,  aN_2250n));
+  G4ForEach<theChannels, Resolve>::Apply(this);
 }
-
