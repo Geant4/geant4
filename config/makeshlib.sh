@@ -40,7 +40,7 @@ libso=lib$name.sl
 objs=`ls *.o`
 #ld -b -a shared -o $libso $objs
 # CC does more than ld.
-CC -b -o $libso $objs
+aCC -b -o $libso $objs
 cd ..
 echo "$libso built."
 fi
