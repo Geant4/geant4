@@ -7,6 +7,7 @@ set clhep_vers = 1.8.0.0
 setenv CLHEP_BASE_DIR /usr/local/CLHEP/$clhep_vers
 
 # ROOT
-setenv ROOTSYS $HOME/KEK/local/root/3.03.08
+setenv ROOTSYS $HOME/local/root/v3.03.06/root
 setenv PATH $ROOTSYS/bin:$PATH
+setenv LD_LIBRARY_PATH $ROOTSYS/lib:$LD_LIBRARY_PATH
 
