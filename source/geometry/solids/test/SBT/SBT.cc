@@ -27,6 +27,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+#include "G4UItcsh.hh"
 
 #include "G4InteractiveSolid.hh"
 #include "SBTMessenger.hh"
@@ -63,7 +64,13 @@ int main(int argc,char *argv[])
 	SBTvoxelMessenger *voxelMessenger = new SBTvoxelMessenger( "/voxel/", (G4SolidQuery *)interactiveSolid, visManager );
 		
 	// Give control to interactive terminal
-	G4UIsession *session = new G4UIterminal;
+  G4UIsession *session;
+  
+#ifdef G4UI_USE_TCSH
+  session = new G4UIterminal(new G4UItcsh);      
+#else
+	session = new G4UIterminal;
+#endif
 	   
 	if (argc > 1)  // when run with an argument, run each scripts and exit
 	  {
