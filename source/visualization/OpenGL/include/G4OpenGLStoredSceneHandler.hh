@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.hh,v 1.11 2001-07-11 10:08:49 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.hh,v 1.12 2001-08-09 20:16:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,11 +54,11 @@ public:
   void BeginModeling ();
   void EndModeling ();
   static G4int GetSceneCount ();
-  
 private:
 friend class G4OpenGLStoredViewer;
   // ..allows access to P/TODLs.
   void ClearStore ();
+  void ClearTransientStore ();
   void RequestPrimitives (const G4VSolid& solid);
   static G4int    fSceneIdCount;   // static counter for OpenGLStored scenes.
   static G4int    fSceneCount;     // No. of extanct scene handlers.

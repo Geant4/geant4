@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.11 2001-07-11 10:08:54 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.12 2001-08-09 20:17:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,22 +42,9 @@
 #include <GL/glx.h>
 #include <GL/glu.h>
 
-#include "G4OpenGLSceneHandler.hh"
-#include "G4OpenGLViewer.hh"
-#include "G4OpenGLTransform3D.hh"
-#include "G4Point3D.hh"
-#include "G4Normal3D.hh"
-#include "G4Transform3D.hh"
-#include "G4Polyline.hh"
-#include "G4Text.hh"
-#include "G4Circle.hh"
-#include "G4Square.hh"
-#include "G4Polyhedron.hh"
-#include "G4VisAttributes.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4ModelingParameters.hh"
-#include "G4VModel.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
+
+#include "G4VPhysicalVolume.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,
 					  const G4String& name):
@@ -123,47 +110,11 @@ void G4OpenGLStoredSceneHandler::EndPrimitives () {
   G4VSceneHandler::EndPrimitives ();
 }
 
-void G4OpenGLStoredSceneHandler::ClearStore () {
-
-  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
-
-  size_t i;
-
-  // Delete OpenGL display lists.
-  for (i = 0; i < fPODLList.size (); i++) {
-    if (fPODLList [i]) {
-      glDeleteLists (fPODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
-    }
-  }
-  for (i = 0; i < fTODLList.size (); i++) {
-    if (fTODLList [i]) {
-      glDeleteLists (fTODLList [i], 1);
-    } else {
-      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
-    }
-  }
-
-  if (fTopPODL) glDeleteLists (fTopPODL, 1);
-  fTopPODL = 0;
-
-  fMemoryForDisplayLists = glIsList (fTopPODL = glGenLists (1));
-
-  // Clear other lists, dictionary, etc.
-  fPODLList.clear ();
-  fTODLList.clear ();
-  fPODLTransformList.clear ();
-  fTODLTransformList.clear ();
-  fSolidMap.clear ();
-}
-
 void G4OpenGLStoredSceneHandler::BeginModeling () {
-
+  G4VSceneHandler::BeginModeling();
   if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
   }
-  G4VSceneHandler::BeginModeling();
 }
 
 void G4OpenGLStoredSceneHandler::EndModeling () {
@@ -183,18 +134,70 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
     }
   }
   glEndList ();
-  G4VSceneHandler::EndModeling ();
 
   if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = false;
     //    glDisable (GL_POLYGON_OFFSET_FILL);
   }
+
+  G4VSceneHandler::EndModeling ();
+}
+
+void G4OpenGLStoredSceneHandler::ClearStore () {
+
+  G4VSceneHandler::ClearStore ();  // Sets need kernel visit, etc.
+
+  size_t i;
+
+  // Delete OpenGL permanent display lists.
+  for (i = 0; i < fPODLList.size (); i++) {
+    if (fPODLList [i]) {
+      glDeleteLists (fPODLList [i], 1);
+    } else {
+      G4cerr << "Warning : NULL display List in fPODLList." << G4endl;
+    }
+  }
+
+  if (fTopPODL) glDeleteLists (fTopPODL, 1);
+  fTopPODL = 0;
+
+  fMemoryForDisplayLists = glIsList (fTopPODL = glGenLists (1));
+
+  // Clear other lists, dictionary, etc.
+  fPODLList.clear ();
+  fPODLTransformList.clear ();
+  fSolidMap.clear ();
+}
+
+void G4OpenGLStoredSceneHandler::ClearTransientStore () {
+
+  G4VSceneHandler::ClearTransientStore ();
+
+  size_t i;
+
+  // Delete OpenGL transient display lists.
+  for (i = 0; i < fTODLList.size (); i++) {
+    if (fTODLList [i]) {
+      glDeleteLists (fTODLList [i], 1);
+    } else {
+      G4cerr << "Warning : NULL display List in fTODLList." << G4endl;
+    }
+  }
+
+  // Clear other lists, dictionary, etc.
+  fTODLList.clear ();
+  fTODLTransformList.clear ();
+
+  // Make sure screen corresponds to graphical database...
+  if (fpViewer) {
+    fpViewer -> ClearView ();
+    fpViewer -> SetView ();
+    fpViewer -> DrawView ();
+  }
 }
 
 void G4OpenGLStoredSceneHandler::RequestPrimitives (const G4VSolid& solid) {
-  if (fReadyForTransients ||
-      GetModel () -> GetModelingParameters () -> GetRepStyle () ==
-      G4ModelingParameters::hierarchy) {
+  if (fReadyForTransients) {
     G4VSceneHandler::RequestPrimitives (solid);
   }
   else {

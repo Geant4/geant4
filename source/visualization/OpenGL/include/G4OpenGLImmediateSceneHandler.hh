@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.5 2001-07-11 10:08:48 gunter Exp $
+// $Id: G4OpenGLImmediateSceneHandler.hh,v 1.6 2001-08-09 20:16:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,7 @@ public:
   void EndPrimitives ();
   void BeginModeling ();
   void EndModeling ();
+  void ClearTransientStore ();
   static G4int GetSceneCount ();
 
 private:
