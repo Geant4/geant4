@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Field.hh,v 1.7 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4Field.hh,v 1.8 2003-11-05 10:35:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,6 +40,8 @@
 #ifndef G4FIELD_HH
 #define G4FIELD_HH
 
+#include "G4Types.hh"
+
 class G4Field
 {
   public:  // with description
@@ -48,10 +50,22 @@ class G4Field
                                           double *Bfield ) const = 0;
       G4Field(){;}
       virtual ~G4Field(){;}
+      inline G4Field& operator = (const G4Field &p); 
 
      // A field signature function that can be used to insure
      // that the Equation of motion object and the G4Field object
      // have the same "field signature"?
+ 
+      virtual G4bool   DoesFieldChangeEnergy() const= 0 ;
+       //  For electric field this should be true
+       //  For pure magnetic field this should be false
+
 };
+
+inline G4Field& G4Field::operator = (const G4Field &p)
+{
+  if (&p != this) { *this = p; }
+  return *this;
+}
 
 #endif /* G4FIELD_HH */

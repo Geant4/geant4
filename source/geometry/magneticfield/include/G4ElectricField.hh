@@ -21,49 +21,42 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.hh,v 1.8 2003-11-05 10:35:55 japost Exp $
+// $Id: G4ElectricField.hh,v 1.1 2003-11-05 10:35:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// class G4UniformElectricField
+//
+// class G4ElectricField
 //
 // Class description:
 //
-// Class for creation of Uniform electric Magnetic Field.
+// Electric Field abstract class, implements inquiry function interface.
 
 // History:
-// - 30.01.97 V.Grichine, Created.
-// -------------------------------------------------------------------
+// - Created. JA, November 4th, 2003.
 
-#ifndef G4UNIFORMELECTRICFIELD_HH
-#define G4UNIFORMELECTRICFIELD_HH
+#ifndef G4ELECTRIC_FIELD_DEF
+#define G4ELECTRIC_FIELD_DEF
 
 #include "G4Types.hh"
-#include "G4ThreeVector.hh"
-#include "G4ElectricField.hh"
+#include "G4ElectroMagneticField.hh"
 
-class G4UniformElectricField : public G4ElectricField
+class G4ElectricField : public G4ElectroMagneticField
 {
   public:  // with description
 
-    G4UniformElectricField(const G4ThreeVector FieldVector );
-      // A field with value equal to FieldVector.
+     G4ElectricField();
+     virtual ~G4ElectricField();
+       // Constructor and destructor. No actions.
 
-    G4UniformElectricField(G4double vField,
-                           G4double vTheta,
-                           G4double vPhi     ) ;
-       
-    virtual ~G4UniformElectricField() ;
+     G4ElectricField(const G4ElectricField &r);
+     G4ElectricField& operator = (const G4ElectricField &p);
+       // Copy constructor & assignment operator.
 
-    G4UniformElectricField(const G4UniformElectricField &p);
-    G4UniformElectricField& operator = (const G4UniformElectricField &p);
-      // Copy constructor and assignment operator
+     G4bool   DoesFieldChangeEnergy() const { return true; }
+       // Since an electric field can change track energy
 
-    virtual void GetFieldValue(const G4double pos[4], G4double *field) const;
-
-  private:
-  
-    G4double fFieldComponents[6] ;
+     virtual void  GetFieldValue( const G4double Point[4],
+					G4double *Bfield ) const = 0;
 };
 
-#endif
+#endif /* G4ELECTRIC_FIELD_DEF */
