@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.hh,v 1.2 1999-12-15 14:52:07 gunter Exp $
+// $Id: G4HadronInelasticProcess.hh,v 1.3 2000-09-08 08:41:46 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Inelastic Process class
@@ -43,6 +43,7 @@
     {
       theCrossSectionDataStore->AddDataSet(new G4HadronInelasticDataSet);
       theParticle = aParticle;
+      aScaleFactor = 0;
       //      BuildThePhysicsTable();
     }
     
@@ -55,6 +56,8 @@
      G4ForceCondition *condition );
     
     void BuildThePhysicsTable();
+    
+    void BiasCrossSectionByFactor(G4double aScale) {aScaleFactor = aScale;}
     
     G4double GetMicroscopicCrossSection(
      const G4DynamicParticle *aParticle,
@@ -83,6 +86,9 @@
    G4CrossSectionDataStore* theCrossSectionDataStore;
 
     G4ParticleDefinition *theParticle;
+    
+ private:
+   G4double aScaleFactor;
  };
  
 #endif

@@ -59,6 +59,7 @@
         GetMicroscopicCrossSection( aParticle, (*theElementVector)[i] );
       sigma += theAtomicNumDensityVector[i] * xSection;
     }
+    sigma *= aScaleFactor;
     if( sigma > 0.0 )
       return 1.0/sigma;
     else
