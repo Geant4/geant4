@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPVector.hh,v 1.13 2000-11-09 16:13:38 hpw Exp $
+// $Id: G4NeutronHPVector.hh,v 1.14 2000-11-20 10:07:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPVector_h
@@ -117,6 +117,12 @@ class G4NeutronHPVector
 	theHash.SetData(i, x, y);
       }
     }
+  }
+  
+  void ReHash()
+  {
+    theHash.Clear();
+    Hash();
   }
   
   G4double GetXsec(G4double e);

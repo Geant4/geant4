@@ -107,6 +107,7 @@
     Verbose = right.Verbose;
     the15percentBorderCash = right.the15percentBorderCash;
     the50percentBorderCash = right.the50percentBorderCash;
+    theHash = right.theHash;
    return *this;
   }
 
@@ -234,8 +235,13 @@
       }
       p++;
     }
+    // Rebuild the Hash;
+    if(theHash.Prepared()) 
+    {
+      ReHash();
+    }
   }
-  
+    
   void G4NeutronHPVector::ThinOut(G4double precision)
   {
     // anything in there?
@@ -273,6 +279,12 @@
     delete [] theData;
     theData = aBuff;
     nEntries = count+1;
+    
+    // Rebuild the Hash;
+    if(theHash.Prepared()) 
+    {
+      ReHash();
+    }
   }
 
   G4bool G4NeutronHPVector::IsBlocked(G4double aX)

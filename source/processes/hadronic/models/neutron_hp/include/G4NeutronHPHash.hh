@@ -18,6 +18,47 @@ public:
     if(theUpper) delete theUpper;
   }
   
+  G4NeutronHPHash(const G4NeutronHPHash & aHash)
+  {
+    theIndex = aHash.theIndex;
+    theData = aHash.theData;
+    if(aHash.theUpper != 0)
+    {
+      theUpper = new G4NeutronHPHash(*(aHash.theUpper));
+    }
+    else
+    {
+      theUpper = 0;
+    }
+  }
+  
+  G4NeutronHPHash & operator = (const G4NeutronHPHash & aHash)
+  {
+    if(&aHash != this)
+    {
+      theIndex = aHash.theIndex;
+      theData = aHash.theData;
+      if(aHash.theUpper != 0)
+      {
+        theUpper = new G4NeutronHPHash(*(aHash.theUpper));
+      }
+      else
+      {
+        theUpper = 0;
+      }
+    }
+    return *this;
+  }
+  
+  void Clear()
+  {
+    if(theUpper) 
+    {
+      delete theUpper;
+      theUpper = 0;
+    }
+  }
+  
   G4bool Prepared() const {return prepared;}
   inline void SetData(G4int index, G4double x, G4double y) 
   { 
@@ -60,7 +101,6 @@ public:
 private:
 
   G4bool prepared;
-  G4NeutronHPHash * theLower;
   G4NeutronHPHash * theUpper;
   G4std::vector<int> theIndex;
   G4std::vector<G4NeutronHPDataPoint> theData; // the data
