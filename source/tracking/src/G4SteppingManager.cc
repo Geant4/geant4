@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.11 2001-02-08 07:39:52 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.12 2001-02-08 07:48:39 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,11 +62,11 @@ G4SteppingManager::G4SteppingManager()
 		   ->GetNavigatorForTracking());
 
    fSelectedAtRestDoItVector
-      = new G4SelectedAtRestDoItVector(100);
+      = new G4SelectedAtRestDoItVector(SizeOfSelectedDoItVector);
    fSelectedAlongStepDoItVector
-      = new G4SelectedAlongStepDoItVector(100);
+      = new G4SelectedAlongStepDoItVector(SizeOfSelectedDoItVector);
    fSelectedPostStepDoItVector
-      = new G4SelectedPostStepDoItVector(100);
+      = new G4SelectedPostStepDoItVector(SizeOfSelectedDoItVector);
 
    SetNavigator(G4TransportationManager::GetTransportationManager()
      ->GetNavigatorForTracking());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.14 2001-02-08 07:39:51 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.15 2001-02-08 07:48:39 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -195,6 +195,7 @@ public: //without description
 
 
 // Member data
+   static const size_t SizeOfSelectedDoItVector=100;
 
    G4UserSteppingAction* fUserSteppingAction;
 
