@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.9 2001-05-07 23:32:07 pia Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.10 2001-05-24 18:18:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,11 +86,4 @@ private:
 #include "G4LowEnergyCompton.icc"
 
 #endif
-
-
-
-
-
-
-
 

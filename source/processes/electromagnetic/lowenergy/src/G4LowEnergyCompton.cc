@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.23 2001-05-07 23:32:09 pia Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.24 2001-05-24 18:18:35 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -303,6 +303,8 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
+
+
 // used log-log interpolation instead of linear interpolation to build the MFP 
 // as reported in the stepanek paper 
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
