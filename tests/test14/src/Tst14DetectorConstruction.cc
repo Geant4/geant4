@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14DetectorConstruction.cc,v 1.10 2003-01-31 08:06:11 vnivanch Exp $
+// $Id: Tst14DetectorConstruction.cc,v 1.11 2003-01-31 08:18:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -247,12 +247,8 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //
   //always return the physical World
   //
-  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
-	if ( worldchanged )
-	  { 
-      (G4RunManager::GetRunManager())->ResetNavigator();
-			worldchanged = false;
-	  }
+	worldchanged = false;
+	  
   return physiWorld;
 }
 
@@ -383,7 +379,10 @@ void Tst14DetectorConstruction::SetMagField(G4double fieldValue)
 void Tst14DetectorConstruction::UpdateGeometry()
 {
 	G4VPhysicalVolume* v = ConstructCalorimeter();
-  G4RunManager::GetRunManager()->DefineWorldVolume(v);
+  G4RunManager* rm = G4RunManager::GetRunManager();
+	rm->GeometryHasBeenModified();
+	rm->DefineWorldVolume(v);
+  rm->ResetNavigator();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
