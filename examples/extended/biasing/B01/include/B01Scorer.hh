@@ -1,22 +1,49 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: B01Scorer.hh,v 1.3 2002-04-19 10:54:25 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
 #ifndef B01scorer_hh
 #define B01scorer_hh B01scorer_hh
+
+#include "g4std/iostream"
 
 #include "G4VPScorer.hh"
 #include "G4PMapPtkTallys.hh"
 
-#include "g4std/iostream"
-
 class G4Step;
 class G4PStep;
 
-class B01Scorer : public G4VPScorer {
+class B01Scorer : public G4VPScorer
+{
 public:
   B01Scorer();
   ~B01Scorer();
   void Score(const G4Step &aStep, const G4PStep &aPStep);
-  const G4PMapPtkTallys &GetMapPtkTallys() const {
-    return fPtkTallys;
-  }
+  const G4PMapPtkTallys &GetMapPtkTallys() const { return fPtkTallys; }
+
 private:
   G4PMapPtkTallys fPtkTallys;
 };
@@ -24,6 +51,3 @@ private:
 G4std::ostream& operator<<(G4std::ostream &out, const B01Scorer &ps);
 
 #endif
-
-
-

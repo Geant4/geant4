@@ -1,25 +1,53 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: B02ScoringDetectorConstruction.cc,v 1.3 2002-04-19 10:54:27 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#include "globals.hh"
+
 #include "B02ScoringDetectorConstruction.hh"
+
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
-#include "globals.hh"
 #include "PhysicalConstants.h"
 
-
-G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
-  
+G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
+{  
   /////////////////////////////
   // world score cylinder volume
   ////////////////////////////
 
   G4String name;
 
-  double density     = universe_mean_density;   //from PhysicalConstants.h
-  double pressure    = 3.e-18*pascal;
-  double temperature = 2.73*kelvin;
-  double z,A;
+  G4double density     = universe_mean_density;
+  G4double pressure    = 3.e-18*pascal;
+  G4double temperature = 2.73*kelvin;
+  G4double z,A;
   G4Material *Galactic = 
     new G4Material(name="Galactic", z=1., A=1.01*g/mole, density,
                    kStateGas,temperature,pressure);
@@ -27,11 +55,11 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
 
   // world solid
 
-  double innerRadiusCylinder = 0*cm;
-  double outerRadiusCylinder = 101*cm;
-  double hightCylinder       = 16*cm;
-  double startAngleCylinder  = 0*deg;
-  double spanningAngleCylinder    = 360*deg;
+  G4double innerRadiusCylinder = 0*cm;
+  G4double outerRadiusCylinder = 101*cm;
+  G4double hightCylinder       = 16*cm;
+  G4double startAngleCylinder  = 0*deg;
+  G4double spanningAngleCylinder    = 360*deg;
 
 
   G4Tubs *score_worldCylinder = new G4Tubs("score_worldCylinder",
@@ -60,11 +88,11 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
 
   ///////////////////// M1 ///////////////////////
 
-  double innerRadiusShield = 0*cm;
-  double outerRadiusShield = 101*cm;
-  double MhightShield       = 7.5002*cm;
-  double startAngleShield  = 0*deg;
-  double spanningAngleShield    = 360*deg;
+  G4double innerRadiusShield = 0*cm;
+  G4double outerRadiusShield = 101*cm;
+  G4double MhightShield       = 7.5002*cm;
+  G4double startAngleShield  = 0*deg;
+  G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *tube_M = new G4Tubs("tube_M",
 			      innerRadiusShield,
@@ -77,9 +105,9 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
     new G4LogicalVolume(tube_M, Galactic, "M1_log");
   
   name = "scorecell: M1";
-  double pos_x = 0*cm;
-  double pos_y = 0*cm;
-  double pos_z = -1*MhightShield;
+  G4double pos_x = 0*cm;
+  G4double pos_y = 0*cm;
+  G4double pos_z = -1*MhightShield;
   
   G4VPhysicalVolume *pM1 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
@@ -139,5 +167,4 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct(){
   ////////////////////////////////////////////////////////////////////
   
   return score_worldCylinder_phys;
-};
-
+}

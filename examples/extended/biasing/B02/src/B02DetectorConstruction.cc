@@ -1,3 +1,33 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: B02DetectorConstruction.cc,v 1.4 2002-04-19 10:54:27 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#include "globals.hh"
+#include "g4std/strstream"
+
 #include "B02DetectorConstruction.hh"
 
 #include "G4Material.hh"
@@ -8,22 +38,17 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "g4std/strstream"
 #include "PhysicalConstants.h"
 
-#include "globals.hh"
-
-B02DetectorConstruction::
-B02DetectorConstruction():
-  fWorldVolume(0){
-}
+B02DetectorConstruction::B02DetectorConstruction()
+ : fWorldVolume(0)
+{;}
 
 B02DetectorConstruction::~B02DetectorConstruction()
 {;}
 
 G4VPhysicalVolume* B02DetectorConstruction::Construct()
 {
-
   char line[255];
   
   G4double pos_x;
@@ -37,7 +62,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   G4String name, symbol;
   G4double z;
   G4double fractionmass;
-
 
   A = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , Z= 1, A);
@@ -70,16 +94,12 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   A = 55.85*g/mole;
   G4Element* elFe = new G4Element(name="Iron"    ,symbol="Fe", Z=26, A);
 
-
   density     = universe_mean_density;            //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
   temperature = 2.73*kelvin;
   G4Material *Galactic = 
     new G4Material(name="Galactic", z=1., A=1.01*g/mole, density,
                    kStateGas,temperature,pressure);
-
-
-  
 
   density = 2.03*g/cm3;
   G4Material* Concrete = new G4Material("Concrete", density, 10);
@@ -106,9 +126,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   LightConcrete->AddElement(elCa , fractionmass= 0.044);
   LightConcrete->AddElement(elFe , fractionmass= 0.014);
   LightConcrete->AddElement(elC , fractionmass= 0.001);
-
-
-
    
   G4Material *WorldMaterial = Galactic; 
 
@@ -136,12 +153,10 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   G4LogicalVolume *worldCylinder_log = 
     new G4LogicalVolume(worldCylinder, WorldMaterial, "worldCylinder_log");
 
-
   G4VisAttributes * WorldVisAtt
     = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
   WorldVisAtt->SetVisibility(true);
   worldCylinder_log->SetVisAttributes(WorldVisAtt);
-  
 
   // physical world
 
@@ -149,17 +164,6 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   G4VPhysicalVolume* worldCylinder_phys =
     new G4PVPlacement(0, G4ThreeVector(0,0,0), worldCylinder_log,
 		      name, 0, false, 0);
-
-
-
-
-
- 
-
-
-
-
-
 
   ///////////////////////////////////////////////
   // shield cylinder for (cells 1-2)
@@ -193,7 +197,8 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   // physical shields
 
   //        physical shields for cell 2 to 4
-  for(int i=0; i<3; i++) {
+  for(G4int i=0; i<3; i++)
+  {
     if (i+2<10)    sprintf(line,"cell: 0%d, shield",i+2);
     else sprintf(line,"cell: %d, shield",i+2);
     G4String name(line);
@@ -203,11 +208,7 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
 		      aShield_log, name, worldCylinder_log, false, 0);
   }
-
-
   fWorldVolume = worldCylinder_phys;
+
   return worldCylinder_phys;
 }
-
-
-

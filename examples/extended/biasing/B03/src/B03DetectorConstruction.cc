@@ -1,3 +1,33 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: B03DetectorConstruction.cc,v 1.7 2002-04-19 10:54:28 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+
+#include "g4std/strstream"
+#include "globals.hh"
+
 #include "B03DetectorConstruction.hh"
 
 #include "G4Material.hh"
@@ -8,24 +38,25 @@
 #include "G4PVPlacement.hh"
 #include "G4VisAttributes.hh"
 #include "G4Colour.hh"
-#include "g4std/strstream"
 #include "PhysicalConstants.h"
-
-#include "globals.hh"
 
 // for importance biasing
 #include "G4IStore.hh"
 
-
-B03DetectorConstruction::
-B03DetectorConstruction(){}
+B03DetectorConstruction::B03DetectorConstruction()
+{;}
 
 B03DetectorConstruction::~B03DetectorConstruction()
 {;}
 
+G4VIStore* B03DetectorConstruction::GetIStore()
+{
+  if (!fIStore) G4Exception("B03DetectorConstruction::fIStore empty!");
+  return fIStore;
+}
+
 G4VPhysicalVolume* B03DetectorConstruction::Construct()
 {
-
   char line[255];
   
   G4double pos_x;
@@ -39,7 +70,6 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   G4String name, symbol;
   G4double z;
   G4double fractionmass;
-
 
   A = 1.01*g/mole;
   G4Element* elH  = new G4Element(name="Hydrogen",symbol="H" , Z= 1, A);
@@ -72,16 +102,12 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   A = 55.85*g/mole;
   G4Element* elFe = new G4Element(name="Iron"    ,symbol="Fe", Z=26, A);
 
-
   density     = universe_mean_density;            //from PhysicalConstants.h
   pressure    = 3.e-18*pascal;
   temperature = 2.73*kelvin;
   G4Material *Galactic = 
     new G4Material(name="Galactic", z=1., A=1.01*g/mole, density,
                    kStateGas,temperature,pressure);
-
-
-  
 
   density = 2.03*g/cm3;
   G4Material* Concrete = new G4Material("Concrete", density, 10);
@@ -108,12 +134,8 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   LightConcrete->AddElement(elCa , fractionmass= 0.044);
   LightConcrete->AddElement(elFe , fractionmass= 0.014);
   LightConcrete->AddElement(elC , fractionmass= 0.001);
-
-
-
    
   G4Material *WorldMaterial = Galactic; 
-
 
   /////////////////////////////
   // world cylinder volume
@@ -139,13 +161,11 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   G4LogicalVolume *worldCylinder_log = 
     new G4LogicalVolume(worldCylinder, WorldMaterial, "worldCylinder_log");
 
-
   G4VisAttributes * WorldVisAtt
     = new G4VisAttributes(G4Colour(0.0,0.0,1.0));
   WorldVisAtt->SetVisibility(true);
   worldCylinder_log->SetVisAttributes(WorldVisAtt);
   
-
   // physical world
 
   name = "worldCylinder_phys";
@@ -155,16 +175,6 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
   G4std::vector< G4VPhysicalVolume * > physvolumes;
   physvolumes.push_back(worldCylinder_phys);
-
-
-
-
- 
-
-
-
-
-
 
   ///////////////////////////////////////////////
   // shield cylinder for (cells 2-4)
@@ -226,10 +236,5 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
     fIStore->AddImportanceRegion(i, **it);
   }
   
-  
-  
   return worldCylinder_phys;
 }
-
-
-

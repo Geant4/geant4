@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2002-04-12 15:24:30 dressel Exp $
+$Id: History,v 1.7 2002-04-19 10:54:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 12th, 2002 M.Dressel - exbiasing-V04-00-03
+April 19th, 2002 G.Cosmo - exbiasing-V04-00-04
+- Added disclaimer of liability and minor cosmetics...
+
+April 12th, 2002 M.Dressel
 - Change class B06ImportanceDetectorConstruction.hh and exampleB06.cc.
   B06ImportanceDetectorConstruction does not derive from 
   G4UserDetectorConstruction, function Construct made private
