@@ -1,0 +1,20 @@
+$Id: History,v 1.1 2004-04-28 11:09:04 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    PhotonProcesses History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+              
+23.04.04 Michel Maire
+- creation, from TestEm1
+     
