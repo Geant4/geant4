@@ -48,13 +48,15 @@ public:
                                     // before readData
 
   // use ImageMagick to display the image
-  G4int displayImage(char[500]);
+  // ---- MGP ---- Use Geant4 UI to issue the command
+  // G4int displayImage(char[500]);
 
   void checkFileFormat();
 
 private:
+
+  // ---- MGP ---- Verify if data members are really necessary
   G4int compression, max;
-  char name[300], name_in_file[300];
 
   // Variables used for reading the DICOM images
   G4int read_group_id;
@@ -62,16 +64,11 @@ private:
   G4int element_length;
   G4int element_length2;
   G4int element_length3;
-  char value[10000][300];
-  char buffer[196];
-  G4int Int_Buffer[1000000];
-  G4int tab[1000][1000];
 
   // Transform a pixel value to a density
   G4double pixel2density(G4int pixel);
 
-  FILE* data;
-  FILE* fdensity;
+  //  FILE* fdensity;
 
   G4int tag_dictionnary;
   G4int rows;
@@ -80,7 +77,7 @@ private:
   G4int bits_allocated;
   G4int high_bits;
   G4int len;
-  char pixel_spacing[300],pixel_spacing_X[300],pixel_spacing_Y[300];
+  char pixel_spacing_X[300],pixel_spacing_Y[300];
   char slice_tickness[300];
   G4int rescale_slope;
   G4int rescale_intercept;

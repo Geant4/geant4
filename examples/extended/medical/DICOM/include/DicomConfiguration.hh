@@ -38,7 +38,8 @@ public:
   ~DicomConfiguration() { }
 
   // This function reads <Data.dat>, return 0/1 if successfull or not
-  G4int ReadDataFile();
+  // ---- MGP ---- G4bool
+  G4bool ReadDataFile();
 
   G4int ReadG4File(const G4String& g4File);
 
@@ -58,11 +59,11 @@ public:
 
   G4double GetSliceThickness() {return sliceTickness;} 
 
-  G4double GetSliceLocation() {return  sliceLocation;} 
+  G4double GetSliceLocation() {return sliceLocation;} 
 
   G4int IsCompressionUsed() {return compressionUsed;}
 
-  G4double GetDensityValue(G4int i) { return densityValue[i];}
+  G4double GetDensityValue(G4int i);
  
 private:
 	

@@ -3,7 +3,8 @@
 
 
 OctreeNode* TerminalNode::mNull = 0;
-TerminalNode::TerminalNode( OctreeNode* pParent) : OctreeNode( pParent )
+
+TerminalNode::TerminalNode( const OctreeNode* pParent) : OctreeNode( pParent )
 {
 
 }

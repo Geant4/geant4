@@ -14,9 +14,10 @@
 #define OCTREE_HH
 
 #include "globals.hh"
-#include "DicomOctreeNode.hh"
-#include "DicomOctreeMiddleNode.hh"
-#include "DicomOctreeTerminalNode.hh"
+// ---- MGP ---- Unnecessary include, forward declarations are sufficient
+//#include "DicomOctreeNode.hh"
+//#include "DicomOctreeMiddleNode.hh"
+//#include "DicomOctreeTerminalNode.hh"
 
 class DicomOctreeNode;
 class MiddleNode;
@@ -34,19 +35,22 @@ public:
   OctreeNode* operator()( G4double nodeX, G4double nodeY, 
                           G4double nodeZ, G4int level );
   void DeleteTree(); 
-  
+  // ---- MGP ---- Comment to each m.f. to document what it does
+  //               Argument names should be self-explaining
   G4int CountMemory( G4int rMiddle, G4int rTerminal );
   
   OctreeNode* Root()   { return mRoot; } 
   G4double Size()      { return mSize; }
   G4int NoLevels()     { return mNoLevels; }
-  G4int Resolution()   { return ( 1 << mNoLevels ); }
+  // ---- MGP ---- Change int to bool 
+  G4bool Resolution()   { return ( 1 << mNoLevels ); }
   
 private:
 
   void CountRecursive( OctreeNode* pNode, G4int rMiddle, G4int rTerminal );
 
   // Root node of the tree
+  // ---- MGP ---- Class name should coincide with file name (OctreeMiddleNode)
   MiddleNode* mRoot;
   
   // In an octree, size denotes physical size of the cube,

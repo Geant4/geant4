@@ -42,7 +42,11 @@ DicomHandler::DicomHandler()
 G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
 {
   G4int returnvalue = 0;
+  char buffer[196];
+  char pixel_spacing[300];
+  FILE* data;
 
+  // ---- MGP ---- Avoid numbers explicitly in code; use const
   G4std::fread( buffer, 1, 128, dicom ); // The first 128 bytes 
                                          //are not important
   // Reads the "DICOM" letters
@@ -50,12 +54,15 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
 
   // Read information up to the pixel data
   // note: it should be a while instead of a for
+
+  // ---- MGP ---- What is the meaning of explicit number?
   for ( G4int i = 0; i <= 100000000; i++ )
     {
       //Reading groups and elements :
       G4std::fread(&read_group_id,1,2,dicom);
       G4std::fread(&read_element_id,1,2,dicom);
 
+      // ---- MGP ---- Avoid numbers explicitly in code; use const
       if (read_group_id == 0x7FE0) // beginning of the pixels
         {
 	  G4std::fread( buffer, 1, 2,dicom); // Skip 2 reserved bytes
@@ -111,6 +118,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
         }
       if (tag_dictionnary == 0x00280101 )  //  Bits stored ( not used )
         {
+	  // ---- MGP ---- equivalent to value[i]?
 	  bits_stored=*(G4int*)&value[i];
 	  G4std::printf("[0x00280101] Bits stord -> %i\n",bits_stored);
 	  bits_stored=(bits_stored)/8;
@@ -223,6 +231,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
   G4int  max = 0;
   FILE* configuration;
 
+  // ---- MGP ---- File names to be defined through UI or environment variables 
   configuration = G4std::fopen("Data.dat","r");
   if ( configuration != 0 )
     {
@@ -234,6 +243,7 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
     }
   else
     {
+      // ---- MGP ----- G4Exception instead of exit(0)
       G4std::printf("### WARNING, file Data.dat not here !!!\n");
       exit(1);
     }
@@ -274,6 +284,10 @@ G4int DicomHandler::readHeader(FILE *dicom, char filename2[300])
 
 G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
 {
+  G4int intBuffer[1000000];
+  G4int tab[1000][1000];
+  char value[10000][300];
+
   G4int returnvalue=0;
   char compressionbuf[100],maxbuf[100];
   G4int compression=0, max=0;
@@ -295,8 +309,8 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
 	  for (G4int i=1;i<=columns;i++)
             {
 	      w++;
-	      G4std::fread(&Int_Buffer[w],1,2,dicom);
-	      tab[j][i]=Int_Buffer[w];
+	      G4std::fread(&intBuffer[w],1,2,dicom);
+	      tab[j][i]=intBuffer[w];
             }
         }
     }
@@ -311,8 +325,8 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
 	  for (G4int i=1;i<=columns;i++)
             {
 	      w++;
-	      G4std::fread(&Int_Buffer[w],1,2,dicom);
-	      tab[j][i]=Int_Buffer[w];
+	      G4std::fread(&intBuffer[w],1,2,dicom);
+	      tab[j][i]=intBuffer[w];
             }
         }
       returnvalue=1;
@@ -391,8 +405,10 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
   return returnvalue;
 }
 
-G4int DicomHandler::displayImage(char command[300])
+/*
+ G4int DicomHandler::displayImage(char command[300])
 {
+  // ---- MGP ---- To be replaced by Geant4 UI
   //   Display DICOM images using ImageMagick
   char commandName[500];
   G4std::sprintf(commandName,"display  %s",command);
@@ -400,6 +416,7 @@ G4int DicomHandler::displayImage(char command[300])
   G4int i = system(commandName);
   return (G4int )i;
 }
+*/
 
 G4double DicomHandler::pixel2density(G4int pixel)
 {
@@ -465,8 +482,10 @@ G4double DicomHandler::pixel2density(G4int pixel)
 void DicomHandler::checkFileFormat()
 {
   G4std::ifstream checkData("Data.dat");
+  // ---- MGP ---- Create from the stack, not from free store
   char * oneLine = new char[101];
   G4int nbImages;
+  char name[300], name_in_file[300];
 
   if (!(checkData.is_open())) //Check existance of Data.dat
     {
@@ -533,6 +552,7 @@ void DicomHandler::checkFileFormat()
             }
 	  else 
             {
+	      // ---- MGP ----- G4Exception instead of exit(0)
 	      G4cout << "\nError opening file : " << name << G4endl;
 	      exit(0);
             }

@@ -6,11 +6,14 @@ class TerminalNode : public OctreeNode
 {
 public:
 
-  TerminalNode(OctreeNode* pParent );
+  TerminalNode(const OctreeNode* pParent );
   ~TerminalNode();
 
 public:
+
+  // ---- MGP ---- Replace *& with proper design of the operator
   OctreeNode*& operator []( G4int index );
+
   G4int MemSize();
 
   OctreeNodeType Type()                      {return TERMINAL_NODE;}

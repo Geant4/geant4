@@ -72,3 +72,19 @@ G4int DicomConfiguration::ReadG4File( const G4String& g4File )
   readingG4FileHeader.close();
   return 0;
 }
+
+G4double DicomConfiguration::GetDensityValue(G4int i)
+{
+  // ---- MGP ---- Decide logic for dummy or exception
+  G4double value = 0.;
+  if (i < 0 || i >= densityValue.size() )
+    {
+      // Throw exception, return dummy, cerr error message...
+    }
+  else
+    {
+      value = densityValue[i];
+    }
+ 
+  return value;
+}

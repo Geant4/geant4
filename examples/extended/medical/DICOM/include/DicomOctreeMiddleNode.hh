@@ -10,7 +10,6 @@ public:
   MiddleNode();
   ~MiddleNode();
 
-public:
   void ResetFamily();
   MiddleNode( OctreeNode* pParent );
   G4int FindChild( const OctreeNode* pNode );
