@@ -173,7 +173,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
       if (G4int(theNucleusA) == 1) { // special treatment for target H(1,1) (proton)
 	targetH = new G4InuclElementaryParticle(targetMomentum, 1);
 
-	G4float cutElastic[7];
+	G4float cutElastic[8];
 	cutElastic[proton   ] = 1.0; // GeV
 	cutElastic[neutron  ] = 1.0;
 	cutElastic[pionPlus ] = 0.6;
