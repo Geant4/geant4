@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UnionSolid.cc,v 1.15 2001-03-16 16:27:53 grichine Exp $
+// $Id: G4UnionSolid.cc,v 1.16 2001-03-19 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -16,7 +16,7 @@
 // 28.11.98 V.Grichine, J. Apostolakis, while loops in DistToIn/Out 
 // 27.07.99 V.Grichine, modifications in Distance ToOut(p,v,...)
 //                      while -> do-while
-// 16.03.01 V.Grichine, modifications in calculateExtent 
+// 16.03.01 V.Grichine, modifications in CalculateExtent() 
 //                      based on D.Williams proposal
 
 #include "G4UnionSolid.hh"
@@ -95,8 +95,8 @@ G4UnionSolid::CalculateExtent(const EAxis pAxis,
 				     G4double& pMin, G4double& pMax) const 
 {
   G4bool   touchesA, touchesB, out ;
-  G4double minA = + kInfinity, minB = + kInfinity, 
-           maxA = - kInfinity, maxB = - kInfinity; 
+  G4double minA =  kInfinity, minB =  kInfinity, 
+           maxA = -kInfinity, maxB = -kInfinity; 
 
   touchesA = fPtrSolidA->CalculateExtent( pAxis, pVoxelLimit, 
                                           pTransform, minA, maxA);

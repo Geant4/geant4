@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IntersectionSolid.cc,v 1.10 2001-03-16 16:27:53 grichine Exp $
+// $Id: G4IntersectionSolid.cc,v 1.11 2001-03-19 10:30:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -14,7 +14,7 @@
 //
 // 12.09.98 V.Grichine 
 // 29.07.99 V.Grichine, modifications in DistanceToIn(p,v)
-// 16.03.01 V.Grichine, modifications in calculateExtent and Inside 
+// 16.03.01 V.Grichine, modifications in CalculateExtent() and Inside()
 //                      based on D.Williams proposal
 
 #include "G4IntersectionSolid.hh"
