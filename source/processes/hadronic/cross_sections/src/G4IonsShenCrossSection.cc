@@ -25,8 +25,8 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
  
    G4double one_third = 1.0 / 3.0;
 
-   G4double cubicrAt = pow ( At , one_third );  
-   G4double cubicrAp = pow ( Ap , one_third );  
+   G4double cubicrAt = pow ( G4double(At) , G4double(one_third) );  
+   G4double cubicrAp = pow ( G4double(Ap) , G4double(one_third) );  
 
    G4double Rt = 1.12 * cubicrAt - 0.94 * ( 1.0 / cubicrAt );
    G4double Rp = 1.12 * cubicrAp - 0.94 * ( 1.0 / cubicrAp );
@@ -50,7 +50,7 @@ GetCrossSection(const G4DynamicParticle* aParticle, const G4Element* anElement, 
 
    G4double Ecm = calEcmValue ( proj_mass , targ_mass , proj_momentum ); 
 
-   G4double R3 = 0.176 / pow ( Ecm , one_third ) * cubicrAt * cubicrAp / ( cubicrAt + cubicrAp );
+   G4double R3 = 0.176 / pow ( G4double(Ecm) , G4double(one_third) ) * cubicrAt * cubicrAp / ( cubicrAt + cubicrAp );
 
    G4double R = R1 + R2 + R3;
 
@@ -84,11 +84,11 @@ G4double G4IonsShenCrossSection::calCeValue( const G4double ke )
    G4double log10_ke = log10 ( ke );   
    if ( log10_ke > 1.5 ) 
    {
-      Ce = - 10.0 / pow ( log10_ke , 5 ) + 2.0;
+      Ce = - 10.0 / pow ( G4double(log10_ke) , G4double(5) ) + 2.0;
    }
    else
    {
-      Ce = ( - 10.0 / pow ( 1.5 , 5 ) + 2.0 ) / pow ( 1.5 , 3 ) * pow ( log10_ke , 3 );
+      Ce = ( - 10.0 / pow ( G4double(1.5) , G4double(5) ) + 2.0 ) / pow ( G4double(1.5) , G4double(3) ) * pow ( G4double(log10_ke) , G4double(3) );
    }
    return Ce;
 }
