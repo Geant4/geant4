@@ -1,0 +1,68 @@
+
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 1.2
+set NDVX 010206
+set NDVY 010205
+ zone
+ opt logy
+ 
+ null 0 80 1 1000
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ 
+ 
+ hi/file 1 prec.paw
+ set dmod 3
+ hi/pl 28 shist
+ line 10 1.6 11 1.6
+ itx 11.5 35 'PREC'
+ close 1
+ 
+ 
+ hi/file 1 kin.paw
+ set dmod 1
+ hi/pl 28 shist
+ line 10 1.2 11 1.2
+ itx 11.5 15 'KIN'
+ close 1
+ 
+ ve/create X(51) R 15.14 16.25 17.36 18.47 19.58 20.69 21.81 22.92 24.03 25.14 16.25 27.36 28.47 29.58 30.69 31.81 32.92 34.03 35.14 36.25 37.36 38.47 39.58 40.69 41.81 42.92 44.03 45.14 46.25 47.36 48.47 49.58 50.69 51.81 52.92 54.03 55.14 56.25 57.36 58.47 59.58 60.69 61.81 62.92 64.03 65.14 66.25 67.36 68.47 69.58 70.69
+ 
+ ve/create Y(51) R 1.7 6.5 6.2 5.0 5.7 6.3 6.6 7.6 7.7 7.8 8.3 7.9 7.8 8.3 8.6 7.3 8.2 7.5 7.9 8.6 8.3 7.4 6.9 7.6 8.9 6.0 7.2 6.4 7.9 7.2 8.6 6.4 11. 9.0 9.1 10. 11. 11. 12. 14. 18. 26. 38. 74. 170. 310. 310. 150. 41. 12. 4.
+ 
+  ve/create Z(51) R .51 .51 .48 .49 .39 .42 .5 .64 .64 .59 .59 .54 .57 .6 .65 .54 .59 .66 .64 .76 .66 .55 .59 .69 .73 .51 .54 .61 .74 .56 .68 .49 .8 .76 .77 .96 .94 .95 1.1 1.1 1.3 1.8 2.1 3. 4.2 5.9 7.1 5.5 2.8 1.4 1.
+
+ gr/h/error X Y Z 51 21 0.2
+ 
+ exe ../prf n_a0 eps
+
+  null 0 80 1 1000
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ 
+ gr/h/error X Y Z 51 21 0.2
+
+  hi/file 1 par.paw
+ set dmod 3
+ hi/pl 28 shist
+ line 10 1.8 11 1.8
+ itx 11.5 60 'LEPAR'
+ close 1
+ 
+  hi/file 1 chips.paw
+ set dmod 1
+ hi/pl 28 shist
+ line 10 1.4 11 1.4
+ itx 11.5 22 'CHIPS'
+ close 1
+
+ 
+ opt liny
+
+exe ../prf nk_a0 eps
+
+
+

@@ -1,0 +1,6 @@
+ exe bar1
+ exe n_e
+ exe n_a0
+ exe n_a1
+ shell rm *.old
+ shell rm *~

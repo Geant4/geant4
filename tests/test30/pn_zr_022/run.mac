@@ -46,6 +46,6 @@ generator
 kinetic
 #paw
 kin.paw
-//#run
+#run
 //--------Exit
 #exit
