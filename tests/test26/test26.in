@@ -1,4 +1,4 @@
-# $Id: test26.in,v 1.2 2003-02-06 11:53:25 vnivanch Exp $
+# $Id: test26.in,v 1.3 2003-02-07 15:33:02 vnivanch Exp $
 #
 # Macro file for "test26.cc" 
 # V.Ivanchenko
@@ -13,7 +13,7 @@
 #/testem/phys/addPhysics  model
 /testem/phys/addPhysics  standard
 #
-/testem/phys/WorldCuts  2.0 mm
+/testem/phys/WorldCuts  5.0 mm
 /testem/phys/VertexCuts 0.01 mm
 /testem/phys/MuonCuts  10.0 mm
 /run/initialize

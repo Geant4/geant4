@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26DetectorConstruction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26DetectorConstruction.cc,v 1.4 2003-02-07 15:33:02 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@
 Tst26DetectorConstruction::Tst26DetectorConstruction()
 :ecalLength(20.*cm),
  ecalWidth(4.*cm),
- vertexLength(3.*cm),
+ vertexLength(10.*cm),
  padLength(0.1*mm),
  padWidth(0.02*mm),
  absLength(2.*mm),
@@ -327,7 +327,7 @@ G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
   // Define region for the vertex detector
 
   G4RegionStore* rs = G4RegionStore::GetInstance();
-  G4Region* regionV  = rs->GetRegion("VertexDetector");
+  G4Region* regionV  = rs->GetRegion("VertexDetector", false);
   if( !regionV ) {
     regionV = new G4Region("VertexDetector");
     regionV->AddRootLogicalVolume(logicVV);
@@ -336,7 +336,7 @@ G4VPhysicalVolume* Tst26DetectorConstruction::ConstructVolumes()
 
   // Define region for the muon detector
 
-  G4Region* regionM  = rs->GetRegion("MuonDetector");
+  G4Region* regionM  = rs->GetRegion("MuonDetector", false);
   if( !regionM ) {
     regionM = new G4Region("MuonDetector");
     regionM->AddRootLogicalVolume(logicYV);

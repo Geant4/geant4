@@ -245,7 +245,7 @@ Threshold in range            1 cm             1 cm             1 cm
 #
 /gun/particle e-
 /gun/energy 1 GeV
-/run/beamOn 100
+/run/beamOn 1000
 
 ========= Table of registered couples ==============================
 
@@ -381,49 +381,67 @@ Threshold in range            1 cm             1 cm             1 cm
 Start Run processing.
 
 ---> Begin of Event: 0
+
+---> Begin of Event: 100
+
+---> Begin of Event: 200
+
+---> Begin of Event: 300
+
+---> Begin of Event: 400
+
+---> Begin of Event: 500
+
+---> Begin of Event: 600
+
+---> Begin of Event: 700
+
+---> Begin of Event: 800
+
+---> Begin of Event: 900
 Run terminated.
 Run Summary
-  Number of events processed : 100
-  User=18.68s Real=20.65s Sys=0.05s
+  Number of events processed : 1000
+  User=186.38s Real=192.85s Sys=0.31s
 
 ============   SUMMARY   ============
 
-   100 Events were generated
+   1000 Events were generated
    Incident particle e- Ekin(meV) = 1000.00000
 
     Average number of secondaries
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    493.63000        0.48000        0.79000
-  Electrons: 857.84000        0.31000        7.78000
-  Positrons:  55.48000        0.00000        7.78000
+  Gammas:    492.35800        0.39100        0.80900
+  Electrons: 858.45400        0.27600        8.07400
+  Positrons:  55.35600        0.00100        8.07400
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.88689 +- 0.00237 RMS(E1) = 0.02372 +- 0.00237
-  E9 = 0.97680 +- 0.00082 RMS(E9) = 0.00815 +- 0.00082
-  E25= 0.98627 +- 0.00063 RMS(E25)= 0.00630 +- 0.00063
+  E1 = 0.88277 +- 0.00088 RMS(E1) = 0.02796 +- 0.00088
+  E9 = 0.97594 +- 0.00034 RMS(E9) = 0.01078 +- 0.00034
+  E25= 0.98647 +- 0.00027 RMS(E25)= 0.00840 +- 0.00027
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.96796 +- 0.03875 RMS(Eabs1)= 0.38752 +- 0.03875
-  Eabs2(MeV)= 1.08252 +- 0.07417 RMS(Eabs2)= 0.74171 +- 0.07417
-  Eabs3(MeV)= 0.09828 +- 0.04770 RMS(Eabs3)= 0.47699 +- 0.04770
-  Eabs4(MeV)= 0.03224 +- 0.03208 RMS(Eabs4)= 0.32075 +- 0.03208
+  Eabs1(MeV)= 0.97985 +- 0.01466 RMS(Eabs1)= 0.46370 +- 0.01466
+  Eabs2(MeV)= 0.98924 +- 0.01774 RMS(Eabs2)= 0.56105 +- 0.01774
+  Eabs3(MeV)= 0.05034 +- 0.00836 RMS(Eabs3)= 0.26447 +- 0.00836
+  Eabs4(MeV)= 0.00645 +- 0.00378 RMS(Eabs4)= 0.11949 +- 0.00378
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.07000 +- 0.06042
+  Nhit= 3.09200 +- 0.02697
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1974033016, 490589443
+ Current couple of seeds = 412357868, 1452280485
 ----------------------------------------
 #
 /gun/particle mu-
 /gun/energy 1 GeV
-/run/beamOn 100
+/run/beamOn 1000
 
 ========= Table of registered couples ==============================
 
@@ -554,508 +572,67 @@ Threshold in range        1.000 cm         1.000 cm         1.000 cm
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1974033016, 490589443
+ Current couple of seeds = 412357868, 1452280485
 ----------------------------------------
 Start Run processing.
 
 ---> Begin of Event: 0
+
+---> Begin of Event: 100
+
+---> Begin of Event: 200
+
+---> Begin of Event: 300
+
+---> Begin of Event: 400
+
+---> Begin of Event: 500
+
+---> Begin of Event: 600
+
+---> Begin of Event: 700
+
+---> Begin of Event: 800
+
+---> Begin of Event: 900
 Run terminated.
 Run Summary
-  Number of events processed : 100
-  User=0.53000s Real=0.54000s Sys=0.01000s
+  Number of events processed : 1000
+  User=6.12000s Real=6.24000s Sys=0.08000s
 
 ============   SUMMARY   ============
 
-   100 Events were generated
+   1000 Events were generated
    Incident particle mu- Ekin(meV) = 1000.00000
 
     Average number of secondaries
 
              World         Vertex Detector       Muon Detector
 
-  Gammas:    7.43000        0.00000        2.09000
-  Electrons: 14.44000        0.01000        7.22000
-  Positrons:  0.40000        0.00000        7.22000
+  Gammas:    8.40900        0.00800        2.38900
+  Electrons: 16.49200        0.02700        8.66600
+  Positrons:  0.43300        0.00000        8.66600
 
     Normalised energy deposition in the calorimeter
 
-  E1 = 0.22198 +- 0.00153 RMS(E1) = 0.01534 +- 0.00153
-  E9 = 0.22316 +- 0.00164 RMS(E9) = 0.01640 +- 0.00164
-  E25= 0.22334 +- 0.00167 RMS(E25)= 0.01668 +- 0.00167
+  E1 = 0.22461 +- 0.00057 RMS(E1) = 0.01791 +- 0.00057
+  E9 = 0.22622 +- 0.00059 RMS(E9) = 0.01879 +- 0.00059
+  E25= 0.22648 +- 0.00060 RMS(E25)= 0.01912 +- 0.00060
 
     Energy deposition in the absorbers
 
-  Eabs1(MeV)= 0.81422 +- 0.02274 RMS(Eabs1)= 0.22739 +- 0.02274
-  Eabs2(MeV)= 0.82019 +- 0.02113 RMS(Eabs2)= 0.21135 +- 0.02113
-  Eabs3(MeV)= 0.85485 +- 0.03938 RMS(Eabs3)= 0.39379 +- 0.03938
-  Eabs4(MeV)= 0.86176 +- 0.05111 RMS(Eabs4)= 0.51112 +- 0.05111
+  Eabs1(MeV)= 0.82722 +- 0.00942 RMS(Eabs1)= 0.29792 +- 0.00942
+  Eabs2(MeV)= 0.86719 +- 0.01218 RMS(Eabs2)= 0.38507 +- 0.01218
+  Eabs3(MeV)= 0.87647 +- 0.01309 RMS(Eabs3)= 0.41389 +- 0.01309
+  Eabs4(MeV)= 0.86779 +- 0.01352 RMS(Eabs4)= 0.42743 +- 0.01352
 
     Average number of hits in the vertex detector
 
-  Nhit= 3.02000 +- 0.01990
+  Nhit= 3.02100 +- 0.00571
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1268731944, 33480029
+ Current couple of seeds = 1239979704, 1243689318
 ----------------------------------------
 #
-/testem/phys/VertexCuts 1 mm
-/run/beamOn 100
-Tst26PhysicsList::SetCuts
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : Yes
- Material : Water
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 2     used in the geometry : No      recalculation needed : Yes
- Material : lAr
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 3     used in the geometry : Yes     recalculation needed : Yes
- Material : Al
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : No      recalculation needed : Yes
- Material : Si
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 5     used in the geometry : No      recalculation needed : Yes
- Material : Fe
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 6     used in the geometry : No      recalculation needed : Yes
- Material : BGO
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 7     used in the geometry : Yes     recalculation needed : Yes
- Material : PbWO4
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : Yes
- Material : Tungsten
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 9     used in the geometry : No      recalculation needed : Yes
- Material : Lead
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  is not ready to print
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
-
-Index : 11     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 33.88755 keV    e+ 33.47294 keV
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 31.47473 keV    e+ 31.08964 keV
-
-Index : 13     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
-
-Index : 14     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
-
-Index : 15     used in the geometry : Yes     recalculation needed : Yes
- Material : Air
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 16     used in the geometry : Yes     recalculation needed : Yes
- Material : Al
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 17     used in the geometry : Yes     recalculation needed : Yes
- Material : Si
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 18     used in the geometry : Yes     recalculation needed : Yes
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    MuonDetector
-
-Index : 19     used in the geometry : Yes     recalculation needed : Yes
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  is not ready to print
- Region(s) which use this couple : 
-    MuonDetector
-
-====================================================================
-
-
-compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-       Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 1.00000 keV to 100.00000 GeV in 80 bins. 
-
-conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
-        e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.02200 MeV to 100.00000 GeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100.00000 eV to 100.00000 TeV in 100 bins. 
-
-eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1.00000 keV to 100.00000 TeV in 100 bins. 
-
-eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
- Good description from 1 KeV to 100 GeV.
-        log scale extrapolation above 100 GeV 
-        Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1.00000 keV to 100.00000 TeV in 100 bins. 
-
-annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
-        gamma energies sampled according Heitler
-        PhysicsTables from 10.00000 keV to 10.00000 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100.00000 eV to 100.00000 TeV in 100 bins. 
-
-hIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1.00000 keV to 100.00000 TeV in 100 bins. 
-
-msc:   Tables of transport mean free paths.
-          New model of MSC , computes the lateral 
-          displacement of the particle , too.
-        PhysicsTables from 100.00000 eV to 100.00000 TeV in 100 bins. 
-
-MuIoni:    Knock-on electron cross sections . 
-         Good description above the mean excitation energy.
-         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1.00000 keV to 1000.00000 PeV in 150 bins. 
-
-MuBrems:  theoretical cross section 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1.00000 keV to 1000.00000 PeV in 150 bins. 
-
-MuPairProd:  theoretical cross sections 
-          Good description up to 1000 PeV.
-    PhysicsTables from 1.00000 keV to 1000.00000 PeV in 150 bins. 
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        5.000 mm         5.000 mm         5.000 mm
-   Air                       990.000 eV         3.240 keV         3.200 keV
-   PbWO4                       137.419 keV         5.338 MeV         4.958 MeV
-   Al                        14.620 keV         2.311 MeV         2.147 MeV
-
------------------------------------------------------------------------
-Region : VertexDetector
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        1.000 mm         1.000 mm         1.000 mm
-   Air                       990.000 eV       990.000 eV       990.000 eV
-   Al                         6.887 keV       596.680 keV       568.011 keV
-   Si                         6.887 keV       540.718 keV       521.113 keV
-
------------------------------------------------------------------------
-Region : MuonDetector
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        1.000 cm         1.000 cm         1.000 cm
-   Fe                        60.402 keV        12.952 MeV        12.030 MeV
-   Al                        20.495 keV         4.549 MeV         4.277 MeV
-=======================================================================
-
-### Run 2 start  beam E= 1000.00000 MeV
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 1268731944, 33480029
-----------------------------------------
-Start Run processing.
-
----> Begin of Event: 0
-Run terminated.
-Run Summary
-  Number of events processed : 100
-  User=0.61000s Real=0.71000s Sys=0.03000s
-
-============   SUMMARY   ============
-
-   100 Events were generated
-   Incident particle mu- Ekin(meV) = 1000.00000
-
-    Average number of secondaries
-
-             World         Vertex Detector       Muon Detector
-
-  Gammas:    10.15000        0.00000        2.82000
-  Electrons: 18.91000        0.02000        10.20000
-  Positrons:  0.71000        0.00000        10.20000
-
-    Normalised energy deposition in the calorimeter
-
-  E1 = 0.22718 +- 0.00184 RMS(E1) = 0.01837 +- 0.00184
-  E9 = 0.22872 +- 0.00201 RMS(E9) = 0.02011 +- 0.00201
-  E25= 0.22892 +- 0.00204 RMS(E25)= 0.02036 +- 0.00204
-
-    Energy deposition in the absorbers
-
-  Eabs1(MeV)= 0.86188 +- 0.03644 RMS(Eabs1)= 0.36437 +- 0.03644
-  Eabs2(MeV)= 0.76699 +- 0.02094 RMS(Eabs2)= 0.20945 +- 0.02094
-  Eabs3(MeV)= 0.89412 +- 0.05407 RMS(Eabs3)= 0.54068 +- 0.05407
-  Eabs4(MeV)= 0.83480 +- 0.04989 RMS(Eabs4)= 0.49893 +- 0.04989
-
-    Average number of hits in the vertex detector
-
-  Nhit= 3.02000 +- 0.01400
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 251219107, 261074471
-----------------------------------------
-#
-/gun/particle e-
-/run/beamOn 100
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 990.00000 eV    e- 3.23970 keV    e+ 3.20006 keV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : No      recalculation needed : No 
- Material : Water
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 5.78478 keV    e- 1.15997 MeV    e+ 1.10423 MeV
-
-Index : 2     used in the geometry : No      recalculation needed : No 
- Material : lAr
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 13.57765 keV    e- 1.15997 MeV    e+ 1.10423 MeV
-
-Index : 3     used in the geometry : Yes     recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 14.62030 keV    e- 2.31122 MeV    e+ 2.14666 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 4     used in the geometry : No      recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 14.76208 keV    e- 2.04351 MeV    e+ 1.94533 MeV
-
-Index : 5     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 46.44330 keV    e- 6.11229 MeV    e+ 5.74741 MeV
-
-Index : 6     used in the geometry : No      recalculation needed : No 
- Material : BGO
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 125.95632 keV    e- 4.71987 MeV    e+ 4.38381 MeV
-
-Index : 7     used in the geometry : Yes     recalculation needed : No 
- Material : PbWO4
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 137.41922 keV    e- 5.33819 MeV    e+ 4.95810 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 8     used in the geometry : No      recalculation needed : No 
- Material : Tungsten
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 241.10533 keV    e- 12.95184 MeV    e+ 12.02966 MeV
-
-Index : 9     used in the geometry : No      recalculation needed : No 
- Material : Lead
- Range cuts        :  gamma 5.00000 mm    e- 5.00000 mm    e+ 5.00000 mm
- Energy thresholds :  gamma 204.16941 keV    e- 6.82843 MeV    e+ 6.34224 MeV
-
-Index : 10     used in the geometry : No      recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
-
-Index : 11     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 33.88755 keV    e+ 33.47294 keV
-
-Index : 12     used in the geometry : No      recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
- Energy thresholds :  gamma 990.00000 eV    e- 31.47473 keV    e+ 31.08964 keV
-
-Index : 13     used in the geometry : No      recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
-
-Index : 14     used in the geometry : No      recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
-
-Index : 15     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  gamma 990.00000 eV    e- 990.00000 eV    e+ 990.00000 eV
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 16     used in the geometry : Yes     recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  gamma 6.88731 keV    e- 596.68045 keV    e+ 568.01052 keV
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 17     used in the geometry : Yes     recalculation needed : No 
- Material : Si
- Range cuts        :  gamma 1.00000 mm    e- 1.00000 mm    e+ 1.00000 mm
- Energy thresholds :  gamma 6.88731 keV    e- 540.71814 keV    e+ 521.11295 keV
- Region(s) which use this couple : 
-    VertexDetector
-
-Index : 18     used in the geometry : Yes     recalculation needed : No 
- Material : Fe
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
- Region(s) which use this couple : 
-    MuonDetector
-
-Index : 19     used in the geometry : Yes     recalculation needed : No 
- Material : Al
- Range cuts        :  gamma 1.00000 cm    e- 1.00000 cm    e+ 1.00000 cm
- Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
- Region(s) which use this couple : 
-    MuonDetector
-
-====================================================================
-
-
-======== Table of production thresholds in range and energy ===========
-
------------------------------------------------------------------------
-Region : DefaultRegionForTheWorld
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        5.000 mm         5.000 mm         5.000 mm
-   Air                       990.000 eV         3.240 keV         3.200 keV
-   PbWO4                       137.419 keV         5.338 MeV         4.958 MeV
-   Al                        14.620 keV         2.311 MeV         2.147 MeV
-
------------------------------------------------------------------------
-Region : VertexDetector
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        1.000 mm         1.000 mm         1.000 mm
-   Air                       990.000 eV       990.000 eV       990.000 eV
-   Al                         6.887 keV       596.680 keV       568.011 keV
-   Si                         6.887 keV       540.718 keV       521.113 keV
-
------------------------------------------------------------------------
-Region : MuonDetector
------------------------------------------------------------------------
-                              gamma            e-            e+           
-Threshold in range        1.000 cm         1.000 cm         1.000 cm
-   Fe                        60.402 keV        12.952 MeV        12.030 MeV
-   Al                        20.495 keV         4.549 MeV         4.277 MeV
-=======================================================================
-
-### Run 3 start  beam E= 1000.00000 MeV
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 251219107, 261074471
-----------------------------------------
-Start Run processing.
-
----> Begin of Event: 0
-Run terminated.
-Run Summary
-  Number of events processed : 100
-  User=18.53000s Real=18.60000s Sys=0.02000s
-
-============   SUMMARY   ============
-
-   100 Events were generated
-   Incident particle e- Ekin(meV) = 1000.00000
-
-    Average number of secondaries
-
-             World         Vertex Detector       Muon Detector
-
-  Gammas:    491.76000        0.33000        0.78000
-  Electrons: 858.04000        0.22000        8.71000
-  Positrons:  55.55000        0.00000        8.71000
-
-    Normalised energy deposition in the calorimeter
-
-  E1 = 0.88506 +- 0.00210 RMS(E1) = 0.02098 +- 0.00210
-  E9 = 0.97740 +- 0.00096 RMS(E9) = 0.00956 +- 0.00096
-  E25= 0.98771 +- 0.00065 RMS(E25)= 0.00654 +- 0.00065
-
-    Energy deposition in the absorbers
-
-  Eabs1(MeV)= 0.90102 +- 0.02906 RMS(Eabs1)= 0.29062 +- 0.02906
-  Eabs2(MeV)= 0.93173 +- 0.04174 RMS(Eabs2)= 0.41742 +- 0.04174
-  Eabs3(MeV)= 0.07375 +- 0.03778 RMS(Eabs3)= 0.37779 +- 0.03778
-  Eabs4(MeV)= 0.00261 +- 0.00260 RMS(Eabs4)= 0.02598 +- 0.00260
-
-    Average number of hits in the vertex detector
-
-  Nhit= 3.13000 +- 0.09344
-
---------- Ranecu engine status ---------
- Initial seed (index) = 0
- Current couple of seeds = 560994529, 829547652
-----------------------------------------
 G4 kernel has come to Quit state.
