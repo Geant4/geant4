@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test11.hadronic.exerciser.cc,v 1.12 2001-10-23 10:56:05 gcosmo Exp $
+// $Id: test11.hadronic.exerciser.cc,v 1.13 2001-11-26 18:00:37 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -98,7 +98,6 @@ int main (int argc, char** argv) {
   energyList.push_back (10 * GeV);
 
   G4std::vector <G4String> materialNameList;
-  materialNameList.push_back ("U");
   materialNameList.push_back ("Pb");
   materialNameList.push_back ("Al");
   materialNameList.push_back ("Air");
