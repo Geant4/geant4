@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.5 2001-11-15 09:48:11 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.6 2001-11-15 13:57:54 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,12 +90,16 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
   static G4std::vector <G4double*> Phi;    // Vector of pointers to the Phi functions
   static G4std::vector <G4double*> Fun;    // Vector of pointers to the Fun functions
   // *** End of Static Definitions (Associative Memory) ***
-  const G4double Energy = aPart->Get4Momentum().t()/MeV;
+  const G4double Energy = aPart->GetKineticEnergy()/MeV;
   const G4double lE=log(Energy);
   const G4int targetAtomicNumber = static_cast<int>(anEle->GetN()+.499); //@@ Nat mixture
   const G4int targZ = static_cast<int>(anEle->GetZ());
   const G4int targN = targetAtomicNumber-targZ;
-  if (Energy<=ThresholdEnergy(targZ, targN) || Energy<=lEMi) return 0.;
+  if (Energy<=ThresholdEnergy(targZ, targN) || Energy<=lEMi) 
+  {
+    lastLE=lE;
+    return 0.;
+  }
   G4int PDG=aPart->GetDefinition()->GetPDGEncoding();
   if(  PDG == 11 || PDG == -11)
   {
@@ -173,8 +177,13 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
       //      <<",Fm="<<lastFun[mL]<<",Fh="<<lastH*HighEnergyFun(lE)<<",EM="<<lEMa<<G4endl;
 	}
   } // End of "sigma" calculation
-  else return 0.;
+  else 
+  {
+    lastLE=lE;
+    return 0.;
+  }
   if(lastSig<0.) lastSig = 0;
+  lastLE=lE;
   return lastSig*millibarn;
 }
 
