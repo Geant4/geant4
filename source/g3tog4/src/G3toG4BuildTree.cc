@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.cc,v 1.13 2001-01-25 17:41:49 gcosmo Exp $
+// $Id: G3toG4BuildTree.cc,v 1.14 2001-05-15 13:18:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
@@ -21,6 +21,12 @@
 #include "G4PVPlacement.hh"
 
 void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
+{
+  G3toG4BuildLVTree(curVTE, motherVTE);
+  G3toG4BuildPVTree(curVTE);
+}  
+
+void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
 {
   // check existence of the solid
   if (curVTE->GetSolid()) {
@@ -46,75 +52,6 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
       // in case it is sensitive
       if (mte->GetISVOL()) G3SensVol.insert(curLog);
     }  
-  
-    // get mother logical volume
-    G4LogicalVolume* mothLV;
-    if (motherVTE) {
-      G4String motherName = motherVTE->GetName();    
-      if (curVTE->FindMother(motherName)->GetName() != motherName) {
-        // check consistency - tbr
-        G4Exception("G3toG4BuildTree: Inconsistent mother <-> daughter !!");
-      }
-      mothLV = motherVTE->GetLV();
-    }  
-    else {  	    
-       mothLV = 0;
-    }  
-    
-    // positions in motherVTE
-    for (G4int i=0; i<curVTE->NPCopies(); i++){
-
-      G3Pos* theG3Pos = curVTE->GetG3PosCopy(i);
-      if (theG3Pos &&
-          theG3Pos->GetMotherName() == motherVTE->GetMasterClone()->GetName()) {
-
-        // rotation matrix
-        G4int irot = theG3Pos->GetIrot();
-        G4RotationMatrix* theMatrix = 0;
-        if (irot>0) theMatrix = G3Rot.Get(irot);
-
-        // copy number
-        // (in G3 numbering starts from 1 but in G4 from 0)
-        G4int copyNo = theG3Pos->GetCopy() - 1;
-      
-        // position it if not top-level volume
-	if (mothLV != 0) {
-	  new G4PVPlacement(theMatrix,          // rotation matrix
-			    *(theG3Pos->GetPos()),  // its position
-			    curLog,                 // its LogicalVolume 
-			    curVTE->GetName(),      // PV name
-			    mothLV,                 // Mother LV
-			    0,                      // only
-			    copyNo);                // copy
-	
-        // verbose
-	  
-	  #ifdef G3G4DEBUG
-	    G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
-		   << "  in " << motherVTE->GetName() << "  copyNo: " 
-		   << copyNo << "  irot: " << irot << "  pos: " 
-		   << *(theG3Pos->GetPos()) << G4endl;
-	  #endif
-	}
-	
-	// clear this position
-	curVTE->ClearG3PosCopy(i);
-	i--;
-      }
-    }
-
-    // divisions     
-    if (curVTE->GetDivision()) {
-      curVTE->GetDivision()->CreatePVReplica();
-      // verbose
-      #ifdef G3G4DEBUG
-	G4cout << "CreatePVReplica: " << curVTE->GetName() 
-	       << " in "  << motherVTE->GetName() << G4endl;
-      #endif
-
-      // clear this divison
-      curVTE->ClearDivision(); 
-    }
   }
   else {
     if ( !(curVTE->GetDivision() && motherVTE->GetMasterClone() == motherVTE &&
@@ -129,7 +66,96 @@ void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
   // process daughters
   G4int Ndau = curVTE->GetNoDaughters();
   for (int Idau=0; Idau<Ndau; Idau++){
-    G3toG4BuildTree(curVTE->GetDaughter(Idau), curVTE);
+    G3toG4BuildLVTree(curVTE->GetDaughter(Idau), curVTE);
+  }
+}
+
+void G3toG4BuildPVTree(G3VolTableEntry* curVTE)
+{
+  // check existence of the solid
+  if (curVTE->GetSolid()) {
+    G4LogicalVolume* curLog = curVTE->GetLV();
+  
+    // positions in motherVTE
+    for (G4int i=0; i<curVTE->NPCopies(); i++){
+
+      G3Pos* theG3Pos = curVTE->GetG3PosCopy(i);
+      if (theG3Pos) {
+
+        // loop over all mothers 
+        for (G4int im=0; im<curVTE->GetNoMothers(); im++) {
+
+          G3VolTableEntry* motherVTE = curVTE->GetMother(im);
+          if (theG3Pos->GetMotherName() == motherVTE->GetMasterClone()->GetName()) {
+     
+            // get mother logical volume
+            G4LogicalVolume* mothLV;
+            if (motherVTE) {
+              G4String motherName = motherVTE->GetName();    
+              if (!curVTE->FindMother(motherName)) continue;
+              if (curVTE->FindMother(motherName)->GetName() != motherName) {
+                // check consistency - tbr
+                G4Exception("G3toG4BuildTree: Inconsistent mother <-> daughter !!");
+              }
+              mothLV = motherVTE->GetLV();
+            }  
+            else {  	    
+              mothLV = 0;
+            }  
+    
+            // rotation matrix
+            G4int irot = theG3Pos->GetIrot();
+            G4RotationMatrix* theMatrix = 0;
+            if (irot>0) theMatrix = G3Rot.Get(irot);
+
+            // copy number
+            // (in G3 numbering starts from 1 but in G4 from 0)
+            G4int copyNo = theG3Pos->GetCopy() - 1;
+      
+            // position it if not top-level volume
+	    if (mothLV != 0) {
+	      new G4PVPlacement(theMatrix,              // rotation matrix
+	  		        *(theG3Pos->GetPos()),  // its position
+			        curLog,                 // its LogicalVolume 
+			        curVTE->GetName(),      // PV name
+			        mothLV,                 // Mother LV
+			        0,                      // only
+			        copyNo);                // copy
+	
+              // verbose
+  	      #ifdef G3G4DEBUG
+	        G4cout << "PV: " << i << "th copy of " << curVTE->GetName()
+	  	       << "  in " << motherVTE->GetName() << "  copyNo: " 
+		       << copyNo << "  irot: " << irot << "  pos: " 
+		       << *(theG3Pos->GetPos()) << G4endl;
+	      #endif
+            }
+	  }
+        }
+        // clear this position
+        curVTE->ClearG3PosCopy(i);
+        i--;
+      }
+    }
+
+    // divisions     
+    if (curVTE->GetDivision()) {
+      curVTE->GetDivision()->CreatePVReplica();
+      // verbose
+      #ifdef G3G4DEBUG
+	G4cout << "CreatePVReplica: " << curVTE->GetName() 
+	       << " in "  <<  curVTE->GetMother()->GetName() << G4endl;
+      #endif
+
+      // clear this divison
+      curVTE->ClearDivision(); 
+    }
+  }
+  
+  // process daughters
+  G4int Ndau = curVTE->GetNoDaughters();
+  for (int Idau=0; Idau<Ndau; Idau++){
+    G3toG4BuildPVTree(curVTE->GetDaughter(Idau));
   }
 }
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3toG4BuildTree.hh,v 1.5 2000-11-24 09:50:10 gcosmo Exp $
+// $Id: G3toG4BuildTree.hh,v 1.6 2001-05-15 13:18:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -34,5 +34,7 @@
 #include "G3VolTableEntry.hh"
 
 void G3toG4BuildTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE);
+void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE);
+void G3toG4BuildPVTree(G3VolTableEntry* curVTE);
 
 #endif  
