@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2003-03-05 18:08:03 gcosmo Exp $
+$Id: History,v 1.53 2003-03-05 19:06:14 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 05, 2003  M.Asai
+- Fix a bug in G4Region for scanning parameterised materials
 
 March 05, 2003  G. Cosmo                   geommng-V05-00-05
 - G4LogicalVolume.icc: added check for invalid geometry constructions.
