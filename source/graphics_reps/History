@@ -1,4 +1,4 @@
-$Id: History,v 1.30 2001-05-03 11:06:08 johna Exp $
+$Id: History,v 1.31 2001-05-25 11:03:39 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,9 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th May 2001  John Allison  (greps-V03-01-02)
+- Bug fix in BooleanProcessor.src (Guy, Evgeni).
+
 3rd May 2001  John Allison  (greps-V03-01-01)
 - Replaced G4RWTValOrderedVector by G4std::vector in G4PlacedPolyhedron
-  and G4Point3DList.  Forces co-working tags in many categories.
+  and G4Point3DList.  Forces co-working tags in categories:
+    geommng-V03-01-02
+    tracking-V03-01-00
+    vis-V03-01-01
 
 11th April 2001  John Allison  (greps-V03-01-00)
 - Some code has been added to cover unforeseen earlier situation
