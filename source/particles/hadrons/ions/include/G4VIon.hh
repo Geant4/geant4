@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIon.hh,v 1.2 1999-12-15 14:51:02 gunter Exp $
+// $Id: G4VIon.hh,v 1.3 2000-02-25 07:37:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,6 +67,26 @@ class G4VIon : public G4ParticleWithCuts
 
       virtual ~G4VIon() {};
 
+ public:  //With Description
+   G4int    GetAtomicNumber() const;
+   G4int    GetAtomicMass() const;
+
+   G4double GetExcitationEnergy() const {return 0.;} 
+   void     SetExcitationEnergy(G4double ){}
+   // These two methods are dummy because all particles derived from 
+   // G4VIon is "groud state" nuclei  
+
 };
+inline
+ G4int G4VIon::GetAtomicNumber() const 
+{
+  return int(GetPDGCharge()/eplus); 
+}
+
+inline
+ G4int G4VIon::GetAtomicMass() const 
+{
+  return GetBaryonNumber();
+}
 
 #endif

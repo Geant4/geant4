@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Proton.hh,v 1.4 1999-12-15 14:50:55 gunter Exp $
+// $Id: G4Proton.hh,v 1.5 2000-02-25 07:37:11 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,16 @@ class G4Proton : public G4VBaryon
    static G4double* GetCutsInEnergy() {return theProtonKineticEnergyCuts;};
 
    virtual void SetCuts(G4double aCut); 
+
+ public:  //With Description
+   G4int    GetAtomicNumber() const;
+   G4int    GetAtomicMass() const;
+
+   G4double GetExcitationEnergy() const {return 0.;} 
+   void     SetExcitationEnergy(G4double ){}
+   // These two methods are dummy because all particles derived from 
+   // G4Proton is "groud state" nuclei  
+
 };
 
 inline void G4Proton::SetCuts(G4double aCut)
@@ -78,4 +88,16 @@ inline void G4Proton::SetCuts(G4double aCut)
 
 inline G4Proton* G4Proton::Proton()
 {  return &theProton; }
+
+inline
+ G4int G4Proton::GetAtomicNumber() const 
+{
+  return 1; 
+}
+
+inline
+ G4int G4Proton::GetAtomicMass() const 
+{
+  return 1;
+}
 #endif
