@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIparameter.cc,v 1.9 2001-10-16 08:14:32 gcosmo Exp $
+// $Id: G4UIparameter.cc,v 1.10 2001-10-23 07:51:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4UIparameter.hh"
 #include "G4UIcommandStatus.hh"
 
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
 
 #include "G4ios.hh"
 G4UIparameter::G4UIparameter():paramERR(0)

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.17 2001-10-16 08:14:32 gcosmo Exp $
+// $Id: G4UIcommand.cc,v 1.18 2001-10-23 07:51:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 #include "G4UIcommandStatus.hh"
 #include "G4StateManager.hh"
 #include "G4UnitsTable.hh"
-#include "g4rw/ctoken.h"
+#include "G4Tokenizer.hh"
 #include "G4ios.hh"
 
 G4UIcommand::G4UIcommand():paramERR(0) { }
