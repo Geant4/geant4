@@ -38,9 +38,9 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
       // get momentum
       G4double p = projectileMomentum.vect().mag();
 
-      G4double a = m1/m2+2.*pow(sin(th), 2.);
-      G4double b = 2.*p*cth;
-      G4double c =p*p*(1-m1/m2);
+      G4double a = m2/m1+1.;
+      G4double b = -2.*p*cth;
+      G4double c =p*p*(1-m2/m1);
       G4double p1=(-b+sqrt(b*b-4.*a*c))/(2.*a);
       // transform to lab.
       G4ThreeVector it(p1*sin(th)*sin(phi), p1*sin(th)*cos(phi), p1*cos(th));
