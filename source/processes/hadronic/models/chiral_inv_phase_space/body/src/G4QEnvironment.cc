@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.59 2003-11-10 16:54:36 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.60 2003-11-11 10:25:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -3770,10 +3770,10 @@ G4QHadronVector* G4QEnvironment::Fragment()
       G4double hM        = h4m.m();             // Mass of the first fragment
       G4int hB           = curHadr->GetBaryonNumber();
       //////////////////////G4int hC           = curHadr->GetCharge();
+#ifdef pdebug
       if(!hF&&(hPDG>80000000&&hPDG<90000000||hPDG==90000000||
                hPDG>90000000&&(hPDG%1000000>200000||hPDG%1000>300)))
-        G4cerr<<"***G4QEnv::Fragment: PDG("<<hadron<<")="<<hPDG<<", M="<<hM<<G4endl;
-#ifdef pdebug
+        G4cerr<<"**G4QEnv::Fragment: PDG("<<hadron<<")="<<hPDG<<", M="<<hM<<G4endl;
       G4cout<<"G4QE::Fr:>>>h="<<hPDG<<",hS="<<hS<<",hB="<<hB<<",h#"<<hadron<<"<nH="<<nHadr<<G4endl;
 #endif
 	  //if(hadron&&!hF&&hB>0&&!hS&&(nHadr>3||hB<2)) // ThermoBackFusion cond. (VIMP for gamA TotCS)
@@ -4528,6 +4528,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
       else if(hPDG==92000000) hPDG=91000000;
       G4LorentzVector newLV=curHadr->Get4Momentum()/2.;
       curHadr->Set4Momentum(newLV);
+      curHadr->SetQPDG(G4QPDGCode(hPDG));
       G4QHadron* secHadr = new G4QHadron(curHadr);
       theFragments->push_back(secHadr);        // (delete equivalent - user is responsible for that)
     }
