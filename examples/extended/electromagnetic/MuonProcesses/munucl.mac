@@ -1,4 +1,4 @@
-# $Id: munucl.mac,v 1.1 2004-11-03 12:42:50 maire Exp $
+# $Id: munucl.mac,v 1.2 2004-11-10 17:24:26 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -17,14 +17,16 @@
 #
 /run/initialize
 #
+/process/inactivate muIoni
+/process/inactivate muPairProd
+/process/inactivate muBrems
+#
 /gun/particle mu+
 /gun/energy 10 TeV
 #
-/testem/histo/setFileName allproc.paw
-/testem/histo/setHisto 1 100 -10. 0.
-/testem/histo/setHisto 2 100 -10. 0.
-/testem/histo/setHisto 3 100 -10. 0.
+/testem/histo/setFileName munucl.paw
+/testem/histo/setHisto 4 100 -10. 0.
 #
-/testem/event/printModulo 1000
+/testem/event/printModulo 10000
 #
-/run/beamOn 10000
+/run/beamOn 100000
