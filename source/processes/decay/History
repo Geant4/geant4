@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-03-01 02:06:09 kurasige Exp $
+$Id: History,v 1.2 2000-10-20 11:30:59 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Oct 19, 00 H.Kurashige(decay-V02-00-00)
+-  Bug fix in G4Decay to avoid direct modification of G4Track
+   by the Decay Process
 
 - Mar. 1, 00 H.Kurashige (decay-V01-00-00)
 -  Bug fix in G4Decay::IsApplicable()
