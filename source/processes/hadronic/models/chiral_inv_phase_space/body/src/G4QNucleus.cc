@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.cc,v 1.2 2000-08-23 11:29:33 mkossov Exp $
+// $Id: G4QNucleus.cc,v 1.3 2000-09-04 07:44:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -335,11 +335,11 @@ G4bool G4QNucleus::EvaporateBaryon(G4QHadron* h1, G4QHadron* h2)
   static const G4QPDGCode LLQPDG(92000000);       // QPDGCode of LL
   static const G4int      aPDG = 90002002;        // PDGCode of ALPHA
   static const G4QPDGCode aQPDG(aPDG);            // QPDGCode of ALPHA
-  static const G4double   mAlph= G4QPDGCode(2112).GetNuclMass(2,2,0);
-  static const G4double   mNeut= G4QPDGCode(nPDG).GetMass();          // Mass of neutron
-  static const G4double   mProt= G4QPDGCode(pPDG).GetMass();          // Mass of proton
-  static const G4double   mLamb= G4QPDGCode(lPDG).GetMass();          // Mass of Lambda
-  static const G4double   mDeut= G4QPDGCode(pPDG).GetNuclMass(1,1,0); // Mass of Deutron
+  static const G4double   mNeut= G4QPDGCode(nPDG).GetMass(); // Mass of neutron
+  static const G4double   mProt= G4QPDGCode(pPDG).GetMass(); // Mass of proton
+  static const G4double   mLamb= G4QPDGCode(lPDG).GetMass(); // Mass of Lambda
+  static const G4double   mDeut= G4QPDGCode(nPDG).GetNuclMass(1,1,0);// Mass of deutr
+  static const G4double   mAlph= G4QPDGCode(nPDG).GetNuclMass(2,2,0);// Mass of alpha
   static const G4double   mN2  = mNeut*mNeut;     // Mass^2 of neutron
   static const G4double   mP2  = mProt*mProt;     // Mass^2 of proton
   static const G4double   mL2  = mLamb*mLamb;     // Mass^2 of Lambda

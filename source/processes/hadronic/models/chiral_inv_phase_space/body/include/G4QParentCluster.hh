@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QParentCluster.hh,v 1.1 2000-08-17 13:55:07 mkossov Exp $
+// $Id: G4QParentCluster.hh,v 1.2 2000-09-04 07:44:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,9 +25,6 @@
 #include <iostream.h>
 #include "globals.hh"
 #include "G4QContent.hh"
-//@@ Temporary
-//#include "G4ParticleDefinition.hh"
-//#include "G4ParticleTable.hh"
 
 class G4QParentCluster
 {

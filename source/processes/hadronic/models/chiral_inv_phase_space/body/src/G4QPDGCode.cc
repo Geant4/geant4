@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.1 2000-08-17 13:55:49 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.2 2000-09-04 07:44:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -35,7 +35,10 @@ G4QPDGCode::G4QPDGCode(G4int PDGCode): thePDGCode(PDGCode)
   }
 }
 
-G4QPDGCode::G4QPDGCode(G4QContent QCont){InitByQCont(QCont);}
+G4QPDGCode::G4QPDGCode(G4QContent QCont)
+{
+  InitByQCont(QCont);
+}
 
 G4QPDGCode::G4QPDGCode(const G4QPDGCode& rhs)
 {
@@ -162,7 +165,6 @@ G4bool G4QPDGCode::TestRealNeutral(const G4int& PDGCode)
     G4int p=PDGCode/10;
     if(p/10==p%10) return false; // This is a RealNeutral
   }
-
   return true;
 }
 

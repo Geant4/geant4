@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QNucleus.hh,v 1.1 2000-08-17 13:55:07 mkossov Exp $
+// $Id: G4QNucleus.hh,v 1.2 2000-09-04 07:44:01 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -30,7 +30,7 @@ class G4QNucleus : public G4QHadron
 public:
   G4QNucleus();                                            // Default Constructor
   G4QNucleus(G4int nucPDG);                                // At Rest PDG-Constructor
-  G4QNucleus(G4LorentzVector p, G4int nucPDG);              // Full PDG-Constructor
+  G4QNucleus(G4LorentzVector p, G4int nucPDG);             // Full PDG-Constructor
   G4QNucleus(G4QContent nucQC);                            // At Rest QuarkCont-Constructor
   G4QNucleus(G4QContent nucQC, G4LorentzVector p);         // Full QuarkCont-Constructor
   G4QNucleus(G4int z, G4int n, G4int s);                   // At Rest ZNS-Constructor

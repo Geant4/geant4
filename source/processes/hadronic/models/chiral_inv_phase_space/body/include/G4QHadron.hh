@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.3 2000-08-17 13:53:02 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.4 2000-09-04 07:44:00 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -27,7 +27,7 @@
 #include "G4LorentzVector.hh"
 #include "Randomize.hh"
 #include "G4QParticle.hh"
-#include "G4QContent.hh"
+//#include "G4QContent.hh"
 
 
 class G4QHadron
@@ -67,6 +67,7 @@ public:
   void Set4Momentum(const G4LorentzVector& aMom);   // Set 4-mom of the Hadron
   void SetQC(const G4QContent& newQC);              // Set new private quark content
   void SetNFragments(const G4int& nf);              // Set a#of Fragments of this Hadron
+  void MakeAntiHadron();                            // Make AntiHadron of this Hadron
   // General
   G4double RandomizeMass(G4QParticle* pPart, G4double maxM); // Randomize a mass value
   G4bool TestRealNeutral();
@@ -103,7 +104,8 @@ inline G4double        G4QHadron::GetMass2()        const   {return theMomentum.
 inline G4int           G4QHadron::GetCharge()       const   {return valQ.GetCharge();}
 inline G4int           G4QHadron::GetBaryonNumber() const   {return valQ.GetBaryonNumber();}
 
-inline void   G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
+inline void            G4QHadron::MakeAntiHadron()          {if(TestRealNeutral()) NegPDGCode();}
+inline void            G4QHadron::SetQPDG(const G4QPDGCode& newQPDG)
 {
   theQPDG=newQPDG;
   G4int PDG=newQPDG.GetPDGCode();
