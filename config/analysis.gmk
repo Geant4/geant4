@@ -61,7 +61,12 @@ ANALYSISLIBS :=
 #
 ifdef INC_ANALYSIS
   CPPFLAGS += -I$(G4BASE)/analysis/management/include
-  CPPFLAGS += -I$(AIDAINCS)
+# AIDA interfaces :
+ifdef G4ANALYSIS_AIDA
+  CPPFLAGS += -I$(G4ANALYSIS_AIDA)
+else
+  CPPFLAGS += -I$(G4BASE)/analysis/management/AIDA
+endif
 endif
 #
 ifdef LIB_OPEN_SCIENTIST
