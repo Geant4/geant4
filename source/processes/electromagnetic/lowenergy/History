@@ -1,4 +1,4 @@
-$Id: History,v 1.77 2001-06-07 17:45:03 vnivanch Exp $
+$Id: History,v 1.78 2001-06-18 09:55:53 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-07.06.2001 - 
-             Add printout to G4hLowEnergyIonisation + clean up (V.I.)
+18.06.2001 - MGP, tag emlowen-V03-01-18
+             Same as emlowen-V03-01-17, with a bug fix to 
+
+07.06.2001 - Add printout to G4hLowEnergyIonisation + clean up (V.I.)
              Oscillator model is applied only for 6 materials (V.I.)
 
 05.06.2001 - MGP, tag emlowen-V03-01-17
