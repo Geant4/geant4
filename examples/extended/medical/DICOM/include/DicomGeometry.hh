@@ -30,8 +30,6 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-
-//#include <stdio.h>
 #include "g4std/vector"
 
 class DicomConfiguration;

@@ -11,13 +11,7 @@
 #define DicomPatientParameterisation_h 1
 
 #include "globals.hh"
-
-#include "G4ios.hh"
 #include "G4VPVParameterisation.hh"
-
-#include "g4std/fstream"
-#include <stdio.h>
-#include <math.h>
 #include "g4std/vector"
 
 class G4VPhysicalVolume;

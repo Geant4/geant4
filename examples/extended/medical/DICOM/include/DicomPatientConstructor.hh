@@ -3,7 +3,6 @@
 
 #include "globals.hh"
 #include "g4std/vector"
-#include <stdio.h>
 
 class DicomPatientConstructor
 {

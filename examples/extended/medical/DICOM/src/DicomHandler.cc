@@ -377,8 +377,8 @@ G4int DicomHandler::readData(FILE *dicom,	char filename2[300])
 		      mean=mean+tab[ww+sumy][xx+sumx-m];
                     }
                 }
-	      mean=mean/(compSize*compSize);
-	      cpt=1;
+	      mean = mean/(compSize*compSize);
+	      cpt = 1;
 
 	      if (overflow != true)
 		G4std::fprintf(processed,"%f   ",pixel2density( mean) );
@@ -397,17 +397,17 @@ G4int DicomHandler::displayImage(char command[300])
   char commandName[500];
   G4std::sprintf(commandName,"display  %s",command);
   G4std::printf(commandName);
-  G4int i=system(commandName);
+  G4int i = system(commandName);
   return (G4int )i;
 }
 
 G4double DicomHandler::pixel2density(G4int pixel)
 {
-  G4double density=-1;
-  G4int nbrequali=0;
+  G4double density = -1;
+  G4int nbrequali = 0;
   char nbrequalibuf[100];
-  G4double deltaCT=0;
-  G4double deltaDensity=0;
+  G4double deltaCT = 0;
+  G4double deltaDensity = 0;
   char valuedensitybuf[100][100];
   char valueCTbuf[100][100];
   G4double valuedensity[100];
@@ -416,9 +416,9 @@ G4double DicomHandler::pixel2density(G4int pixel)
 
   // CT2Density.dat contains the calibration curve to convert CT (Hounsfield) number to
   // physical density
-  calibration=G4std::fopen("CT2Density.dat","r");
+  calibration = G4std::fopen("CT2Density.dat","r");
   G4std::fscanf(calibration,"%s",nbrequalibuf);
-  nbrequali=atoi(nbrequalibuf);
+  nbrequali = atoi(nbrequalibuf);
 
   if (calibration == 0 )
     {
@@ -430,7 +430,7 @@ G4double DicomHandler::pixel2density(G4int pixel)
       for (G4int i=1;i<=nbrequali;i++) // Loop to store all the pts in CT2Density.dat
         {
 	  G4std::fscanf(calibration,"%s %s",valueCTbuf[i-1],valuedensitybuf[i-1]);
-	  valueCT[i-1]=atof(valueCTbuf[i-1]);
+	  valueCT[i-1] = atof(valueCTbuf[i-1]);
 	  valuedensity[i-1]=atof(valuedensitybuf[i-1]);
         }
     }
@@ -508,17 +508,17 @@ void DicomHandler::checkFileFormat()
 	     << "with .dcm images\n";
 
       FILE* dicom;
-      FILE *lecturepref;
+      FILE *lecturePref;
       char compressionc[300],maxc[300];
-      lecturepref = G4std::fopen("Data.dat","r");
-      G4std::fscanf(lecturepref,"%s",compressionc);
-      compression=atoi(compressionc);
-      G4std::fscanf(lecturepref,"%s",maxc);
-      max=atoi(maxc);
+      lecturePref = G4std::fopen("Data.dat","r");
+      G4std::fscanf(lecturePref,"%s",compressionc);
+      compression = atoi(compressionc);
+      G4std::fscanf(lecturePref,"%s",maxc);
+      max = atoi(maxc);
 
       for ( G4int i = 1; i <= max; i++ ) // Begin loop on filenames
         {
-	  G4std::fscanf(lecturepref,"%s",name_in_file);
+	  G4std::fscanf(lecturePref,"%s",name_in_file);
 	  G4std::sprintf(name,"%s.dcm",name_in_file);
 	  //  Open input file and give it to gestion_dicom :
 	  G4std::printf("### Opening %s and reading :\n",name);
@@ -538,6 +538,6 @@ void DicomHandler::checkFileFormat()
             }
 	  G4std::fclose(dicom);
         }
-      G4std::fclose(lecturepref);
+      G4std::fclose(lecturePref);
     } 
 }
