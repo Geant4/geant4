@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst06PhysicsList.cc,v 1.2 1999-04-08 14:17:09 urban Exp $
+// $Id: Tst06PhysicsList.cc,v 1.3 1999-04-17 06:56:26 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -219,8 +219,10 @@ void Tst06PhysicsList::ConstructGeneral()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Tst06PhysicsList::SetCuts(G4double cut)
+void Tst06PhysicsList::SetCuts()
 {
+  G4double cut = defaultCutValue;
+
   if (verboseLevel >0){
     G4cout << "Tst06PhysicsList::SetCuts:";
     G4cout << "CutLength : " << cut/mm << " (mm)" << endl;

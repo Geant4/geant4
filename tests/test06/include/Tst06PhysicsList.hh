@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst06PhysicsList.hh,v 1.1 1999-01-08 16:35:04 gunter Exp $
+// $Id: Tst06PhysicsList.hh,v 1.2 1999-04-17 06:56:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,25 +26,25 @@ class Tst06PhysicsList: public G4VUserPhysicsList
 {
   public:
     Tst06PhysicsList();
-   ~Tst06PhysicsList();
+    virtual ~Tst06PhysicsList();
 
   protected:
     // Construct particles
-    void ConstructParticle();
+    virtual void ConstructParticle();
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
     void ConstructBarions(); 
      
   public:
-    void SetCuts(G4double);
+    virtual void SetCuts();
     void SetGammaCut(G4double);
     void SetElectronCut(G4double);
     void SetProtonCut(G4double);           
         
   protected:
     // Construct processes and register them
-    void ConstructProcess();  
+    virtual void ConstructProcess();  
     void ConstructGeneral();
     void ConstructEM();
     
