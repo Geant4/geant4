@@ -1,4 +1,4 @@
-$Id: History,v 1.16 1999-08-24 11:59:47 johna Exp $
+$Id: History,v 1.17 1999-09-13 08:05:45 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 13, 1999 ; V. Grichine new class G4Integrator (.hh/.icc) and test file
+                     G4IntegratorTest.cc in HEPNumerics for integration of 
+                     class member functions                     
 
 August 24th J.Allison (global-V00-01-00)
 - Initialised pointer in first constructor of G4DataInterpolation.
