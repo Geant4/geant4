@@ -1,0 +1,167 @@
+?RCS:
+?MAKE:g4wanalysis_build g4wanalysis_use g4wanalysis_build_lab g4wanalysis_use_lab g4wanalysis_build_jas g4wanalysis_use_jas g4wanalysis_build_lizard g4wanalysis_use_lizard:\
+	Myread Getfile cat rm test
+?MAKE:	-pick add $@ %<
+?S:g4osname:
+?S:	This variable contains the value of the 'g4osname' symbol, which
+?S:	used for building G4SYSTEM.
+?S:.
+
+echo " "
+case "$g4wanalysis_build" in
+'')
+	g4wanalysis_build=n
+	;;
+esac
+
+case "$g4wanalysis_build_jas" in
+'')
+	g4wanalysis_build_jas=n
+	;;
+esac
+
+case "$g4wanalysis_build_lab" in
+'')
+	g4wanalysis_build_lab=n
+	;;
+esac
+
+case "$g4wanalysis_build_lizard" in
+'')
+	g4wanalysis_build_lizard=n
+	;;
+esac
+
+case "$g4wanalysis_use" in
+'')
+	g4wanalysis_use=n
+	;;
+esac
+
+case "$g4wanalysis_use_jas" in
+'')
+	g4wanalysis_use_jas=n
+	;;
+esac
+
+case "$g4wanalysis_use_lab" in
+'')
+	g4wanalysis_use_lab=n
+	;;
+esac
+
+case "$g4wanalysis_use_lizard" in
+'')
+	g4wanalysis_use_lizard=n
+	;;
+esac
+
+echo ""
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD
+  G4ANALYSIS_USE
+  Specifies to include building (using) of the abstract G4analysisManager for
+  activating interfaces based on AIDA to analysis drivers.
+  No histogramming capabilities are possible without a specific
+  wanalysis driver activated.
+EOM`
+
+dflt=$g4wanalysis_use
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wanalysis_build=n
+		g4wanalysis_use=n
+		;;
+	y*|Y*) 
+		g4wanalysis_build=y
+		g4wanalysis_use=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_LAB
+  Includes the Open Scientist proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_LAB
+  To use Open Scientist as analysis system in the application
+  to be built.
+EOM`
+
+dflt=$g4wanalysis_use_lab
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wanalysis_build_lab=n
+		g4wanalysis_use_lab=n
+		;;
+	y*|Y*) 
+		g4wanalysis_build_lab=y
+		g4wanalysis_use_lab=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_LIZARD
+  Includes the Lizard proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_LIZARD
+  To use Lizard as analysis system in the application to be built.
+EOM`
+
+dflt=$g4wanalysis_use_lizard
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wanalysis_build_lizard=n
+		g4wanalysis_use_lizard=n
+		;;
+	y*|Y*) 
+		g4wanalysis_build_lizard=y
+		g4wanalysis_use_lizard=y
+		;;
+	esac
+
+g4message=`cat << EOM
+
+  G4ANALYSIS_BUILD_JAS
+  Includes the JAS proxy driver for analysis in the kernel.
+
+  G4ANALYSIS_USE_JAS
+  To use JAS as analysis system in the application to be built.
+EOM`
+
+dflt=$g4wanalysis_use_jas
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4wanalysis_build_jas=n
+		g4wanalysis_use_jas=n
+		;;
+	y*|Y*) 
+		g4wanalysis_build_jas=y
+		g4wanalysis_use_jas=y
+		;;
+	esac
+
+
