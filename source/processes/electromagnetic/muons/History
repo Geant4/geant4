@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2004-11-10 08:50:32 vnivanch Exp $
+$Id: History,v 1.74 2004-11-29 18:57:29 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29 Nov 04: V.Ivant (muons-V06-02-05)
+- Cleanup GNUmakefile
 
 11 Nov 04: V.Ivant (muons-V06-02-04)
 - Migration to new algorithm to Store/Retrieve tables
