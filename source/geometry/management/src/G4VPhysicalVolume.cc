@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.cc,v 1.7 2003-05-13 18:38:36 gcosmo Exp $
+// $Id: G4VPhysicalVolume.cc,v 1.8 2003-10-01 15:03:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,9 +41,9 @@ G4VPhysicalVolume::G4VPhysicalVolume( G4RotationMatrix *pRot,
                                 const G4ThreeVector &tlate,
                                 const G4String& pName,
                                       G4LogicalVolume* pLogical,
-                                      G4VPhysicalVolume* pMother )
+                                      G4VPhysicalVolume* )
   : frot(pRot), ftrans(tlate), flogical(pLogical),
-    fname(pName), fpmother(pMother), flmother(0)
+    fname(pName), flmother(0)
 {
   G4PhysicalVolumeStore::Register(this);
 }

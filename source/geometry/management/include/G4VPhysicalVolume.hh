@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPhysicalVolume.hh,v 1.8 2003-05-13 18:38:33 gcosmo Exp $
+// $Id: G4VPhysicalVolume.hh,v 1.9 2003-10-01 15:03:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,13 +116,8 @@ class G4VPhysicalVolume
     inline void SetLogicalVolume(G4LogicalVolume *pLogical);
       // Set the logical volume. Must not be called when geometry closed.
 
-    inline G4VPhysicalVolume* GetMother() const;
-      // Return the current mother pointer.
-    inline void SetMother(G4VPhysicalVolume *pMother);
-      // Set the mother volume. Must not be called when geometry closed.
-
     inline G4LogicalVolume* GetMotherLogical() const;
-      // Return the current mother lofigal volume pointer.
+      // Return the current mother logical volume pointer.
     inline void SetMotherLogical(G4LogicalVolume *pMother);
       // Set the mother logical volume. Must not be called when geometry closed.
 
@@ -158,10 +153,6 @@ class G4VPhysicalVolume
                                     G4double& offset,
                                     G4bool& consuming) const = 0;
       // Return replication information. No-op for no replicated volumes.
-    virtual void Setup(G4VPhysicalVolume *pMother) = 0;
-      // Perform any initialisation/setup necessary for the given volume.
-      // [Set the current mother pointer to refer to the specified mother,
-      // by calling SetMother]
 
   private:
 
@@ -180,7 +171,6 @@ class G4VPhysicalVolume
                                  // physical and tracking attributes of
                                  // the volume
     G4String fname;              // The name of the volume
-    G4VPhysicalVolume *fpmother; // The current mother physical volume
     G4LogicalVolume   *flmother; // The current mother logical volume
 };
 
