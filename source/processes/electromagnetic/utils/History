@@ -1,4 +1,4 @@
-$Id: History,v 1.148 2004-05-04 16:06:32 vnivanch Exp $
+$Id: History,v 1.149 2004-05-11 15:38:54 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 May 04: V.Ivanchenko (utils-V06-01-05)
+- Add method GetCurrentRange
+- Add additional initialisation to fluctuations
+- Fix in printout format
 
 04 May 04: V.Ivanchenko (utils-V06-01-04)
 - Use dynamic change for simulation of multiple scattering angle
