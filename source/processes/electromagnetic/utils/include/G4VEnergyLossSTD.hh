@@ -37,6 +37,7 @@
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -94,7 +95,7 @@ public:
 			           G4double& eloss,
                                    G4double& kinEnergy) = 0;
 
-  virtual void SecondariesPostStep(G4ParticleChange&,
+  virtual void SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,

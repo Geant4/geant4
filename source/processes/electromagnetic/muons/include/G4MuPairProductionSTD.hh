@@ -36,16 +36,17 @@
 
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 29-10-01 all static functions no more inlined (mma) 
+// 29-10-01 all static functions no more inlined (mma)
 // 10-05-02 V.Ivanchenko update to new design
 // 26-12-02 secondary production moved to derived classes (VI)
 // 27-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
 //
-// Class Description: 
+// Class Description:
 //
 // This class manages the PairProduction process for muons.
 // it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
-// 
+//
 
 // -------------------------------------------------------------------
 //
@@ -81,7 +82,7 @@ public:
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&,
+  virtual void SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
@@ -159,7 +160,6 @@ inline G4std::vector<G4Track*>*  G4MuPairProductionSTD::SecondariesAlongStep(
 #include "G4VEmModel.hh"
 
 inline void G4MuPairProductionSTD::SecondariesPostStep(
-                                   G4ParticleChange& aParticleChange,
                                    G4VEmModel* model,
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,

@@ -36,6 +36,7 @@
 //
 // 26-12-02 Secondary production moved to derived classes (VI)
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -78,7 +79,7 @@ public:
 			           G4double&,
                                    G4double&);
 
-  virtual void SecondariesPostStep(G4ParticleChange&,
+  virtual void SecondariesPostStep(
                                    G4VEmModel*,
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle*,
@@ -185,7 +186,7 @@ inline G4std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
 
 #include "G4VEmModel.hh"
 
-inline void G4ionIonisation::SecondariesPostStep(G4ParticleChange& aParticleChange,
+inline void G4ionIonisation::SecondariesPostStep(
                                                  G4VEmModel* model,
                                            const G4MaterialCutsCouple* couple,
                                            const G4DynamicParticle* dp,

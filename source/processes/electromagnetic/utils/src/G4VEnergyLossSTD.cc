@@ -42,6 +42,7 @@
 // 20-01-03 Migrade to cut per region (V.Ivanchenko)
 // 24-01-03 Temporarily close a control on usage of couples (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
+// 05-02-03 Fix compilation warnings (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -757,8 +758,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   }
   */
 
-  SecondariesPostStep(aParticleChange,currentModel,currentCouple,
-                      dynParticle,tcut,finalT);
+  SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT < minKinEnergy) {
     aParticleChange.SetLocalEnergyDeposit(finalT);
