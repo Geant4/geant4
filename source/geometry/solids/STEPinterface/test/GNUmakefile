@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2000-02-25 16:36:22 gcosmo Exp $
+# $Id: GNUmakefile,v 1.3 2003-03-28 15:49:56 gcosmo Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -37,5 +37,16 @@ LDLIBS   := \
 	    -lG4step \
             -lG4graphics_reps \
             -lG4globman
+
+# To avoid incompatibilities with ANSI standard treatment of strings, the
+# NIST STEP reader on gcc-2.95.X and later must be compiled in non-ANSI mode.
+#
+ifneq (,$(findstring g++,$(G4SYSTEM)))
+  ansi_options = -ansi -pedantic
+  NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
+  NCPP = $(CPPFLAGS)
+  CXXFLAGS := $(NCXX)
+  CPPFLAGS := $(NCPP) -w
+endif
 
 include $(G4INSTALL)/config/binmake.gmk
