@@ -74,7 +74,7 @@
     {
       xSec = new G4double[n];
       G4double sum=0;
-      G4int i, index;
+      G4int i;
       const G4double * NumAtomsPerVolume = theMaterial->GetVecNbOfAtomsPerVolume();
       G4double rWeight;    
       G4NeutronHPThermalBoost aThermalE;
