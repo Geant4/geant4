@@ -59,15 +59,13 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
       particle2->printParticle();
     }
     globalOutput = theElementaryParticleCollider->collide(bullet, target);
-  }
-  else { // needs to call all machinery    	
-
+  
+  } else { // needs to call all machinery    	
     G4LorentzConvertor convertToTargetRestFrame;
     G4InteractionCase interCase = bulletTargetSetter(bullet, target);
     G4int intcase = interCase.getInterCase();
      
     if(intcase > 0) { // ok
-
       G4InuclNuclei* ntarget =
 	dynamic_cast<G4InuclNuclei*>(interCase.getTarget());
 
@@ -81,25 +79,23 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
       G4double zt = ntarget->getZ();
        
       if(intcase == 1) { // particle with nuclei
-
 	G4InuclElementaryParticle* pbullet = 
 	  dynamic_cast<G4InuclElementaryParticle*>(interCase.getBullet());
          
 	if(pbullet->photon()) {
-
 	  G4cout << " InuclCollider -> can not collide with photon " << G4endl;
 
 	  globalOutput.trivialise(bullet, target);
 
 	  return globalOutput;
+
 	} else {
 	  convertToTargetRestFrame.setBullet(pbullet->getMomentum(),
 					     pbullet->getMass());   
 	  btype = pbullet->type();
 	}; 
-      }
-      else { // nuclei with nuclei
 
+      } else { // nuclei with nuclei
 	G4InuclNuclei* nbullet = 
 	  dynamic_cast<G4InuclNuclei*>(interCase.getBullet());
 
@@ -137,19 +133,16 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	G4int itry = 0;
 	 
 	while (bad && itry < itry_max) {
-
 	  G4CollisionOutput TRFoutput;
 	  G4CollisionOutput output;
 
 	  itry++;
 	  if(intcase == 1) {
-
 	    G4InuclElementaryParticle pbullet(bmom, btype);
 
 	    output = theIntraNucleiCascader->collide(&pbullet, &ntarget);
-	  }
-	  else {
 
+	  } else {
 	    G4InuclNuclei nbullet(ab, zb);
 
 	    nbullet.setMomentum(bmom);
@@ -166,8 +159,7 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  // the rest, if any
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
 
-	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after
-	    
+	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after	    
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 
 	    if(explosion(&cascad_rec_nuclei)) {
@@ -178,8 +170,8 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	      output = theBigBanger->collide(0,&cascad_rec_nuclei);
 	      TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
-	    }
-	    else {
+
+	    } else {
 	      output = theNonEquilibriumEvaporator->collide(0, &cascad_rec_nuclei);
 
 	      if (verboseLevel > 3) {
@@ -204,7 +196,6 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
 	    };
 	  };
-
 	 
 	  // convert to the LAB       
 	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
@@ -230,8 +221,10 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 
 	  if(!nucleus.empty()) { 
 	    nucleiIterator inuc;
+
 	    for(inuc = nucleus.begin(); inuc != nucleus.end(); inuc++) {
 	      G4std::vector<G4double> mom = inuc->getMomentum(); 
+
 	      if(withReflection) mom[3] = -mom[3];
 	      mom = convertToTargetRestFrame.rotate(mom);
 	      inuc->setMomentum(mom);
@@ -247,8 +240,8 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	  if(globalOutput.acceptable()) {
 
 	    return globalOutput;
-	  }
-	  else {
+	    
+	  } else {
 	    globalOutput.reset();
 	  }; 
 	};
@@ -261,8 +254,8 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	globalOutput.trivialise(bullet, target);
 
 	return globalOutput;        
-      }
-      else {
+
+      } else {
 
 	if (verboseLevel > 3) {
 	  G4cout << " InuclCollider -> inelastic interaction is impossible " << G4endl
@@ -272,9 +265,9 @@ G4CollisionOutput G4InuclCollider::collide(G4InuclParticle* bullet,
 	globalOutput.trivialise(bullet, target);
 
 	return globalOutput;
-      };	
-    }
-    else {
+      };
+	
+    } else {
 
       if (verboseLevel > 3) {
 	G4cout << " InuclCollider -> inter case " << intcase << G4endl;
