@@ -1,0 +1,10 @@
+--- config-V01-00-01
+- Added control for the Ray-tracer driver. Introduced
+  G4VIS_USE_RAYTRACER in G4VIS_USE.gmk and
+  G4VIS_BUILD_RAYTRACER_DRIVER in G4VIS_BUILD.gmk (M.Asai).
+- binmake.gmk: fixed dependency order for compound libraries.
+  Moved -lG4particles and -lG4materials downstream in the list.
+- architecture.gmk: added G4NO_OPTIMISE for allowing compilation
+  without any level of optimisation or debug. G4DEBUG if defined
+  takes precedence. G4DEBUG and G4OPTIMISE are now defined also as
+  CPPFLAGS.
