@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.11 2004-09-17 10:51:40 maire Exp $
+// $Id: RunAction.cc,v 1.12 2004-09-20 16:22:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,6 +75,11 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   rmstrue  = 1.;
   limittrue = DBL_MAX;
   
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif
+    
   histoName = "testem2.aida";
   histoType = "hbook";  
 }
@@ -83,7 +88,11 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
 
 RunAction::~RunAction()
 {
-  delete runMessenger;  
+  delete runMessenger;
+  
+#ifdef G4ANALYSIS_USE
+  delete af;
+#endif  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,9 +100,6 @@ RunAction::~RunAction()
 void RunAction::bookHisto()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  af = AIDA_createAnalysisFactory();
-
   // Creating the tree factory
   std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
 
@@ -157,7 +163,6 @@ void RunAction::cleanHisto()
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   delete tree;
-  delete af;
 #endif
 }
 
