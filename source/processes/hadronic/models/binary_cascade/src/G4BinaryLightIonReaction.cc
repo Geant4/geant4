@@ -55,11 +55,11 @@
     debug.push_back(mom);
     debug.dump();
 
-    G4ReactionProductVector * result = 0;
-    G4V3DNucleus * fancyNucleus(0);
-    G4V3DNucleus * projectile(0);
-    G4double m1 ,m2;    
-    G4double m_nucl;      // to check energy balance 
+    G4ReactionProductVector * result = NULL;
+    G4V3DNucleus * fancyNucleus = NULL;
+    G4V3DNucleus * projectile = NULL;
+    G4double m1(0) ,m2(0);    
+    G4double m_nucl(0);      // to check energy balance 
     G4LorentzVector it;
     
     G4FermiMomentum theFermi;

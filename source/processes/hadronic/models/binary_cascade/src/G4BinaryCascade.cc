@@ -1588,7 +1588,7 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
                                  G4KineticTrackVector *out)
 //----------------------------------------------------------------------------
 {
-   G4KineticTrackVector * kt_fail(0);
+   G4KineticTrackVector * kt_fail=NULL;
    std::vector<G4KineticTrack *>::iterator iter;
 //  G4cout << "CorrectBarionsOnBoundary,currentZ,currentA," 
 //         << currentZ << " "<< currentA << G4endl;

@@ -47,7 +47,7 @@ public:
   G4KM_DummyField() { }
   ~G4KM_DummyField() { }
 
-  virtual void  GetFieldValue(const G4double *, G4double * ) const { }
+  virtual void  GetFieldValue(const G4double [], G4double * ) const { }
 };
 
 #endif
