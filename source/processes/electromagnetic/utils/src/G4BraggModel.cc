@@ -33,7 +33,9 @@
 // Creation date: 03.01.2002
 //
 // Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
-//
+//                23.12.2002 V.Ivanchenko change interface in order to move 
+//                           to cut per region
+
 // Class Description: 
 //
 // Implementation of energy loss and delta-electron production by 
@@ -85,8 +87,7 @@ void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p) 
 {
   if(!particle) SetParticle(p);
   return highKinEnergy;
@@ -94,8 +95,7 @@ G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4BraggModel::LowEnergyLimit(const G4ParticleDefinition* p) 
 {
   if(!particle) SetParticle(p);
   return lowKinEnergy;
@@ -111,8 +111,7 @@ G4double G4BraggModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p,
-			             const G4Material*) 
+G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
 }
@@ -177,7 +176,7 @@ G4double G4BraggModel::CrossSection(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
+G4DynamicParticle* G4BraggModel::SampleSecondary(
                              const G4Material* material,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -232,7 +231,19 @@ G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondary(
   delta->SetKineticEnergy(deltaKinEnergy);
   delta->SetMomentumDirection(deltaDirection);
 
+  return delta;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
+                             const G4Material* material,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy) 
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* delta = SampleSecondary(material, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 
   return vdp;

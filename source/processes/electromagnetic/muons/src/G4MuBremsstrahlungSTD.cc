@@ -35,9 +35,9 @@
 // Modifications: 
 //
 // 08-04-98 remove 'tracking cut' of muon in oIt, MMa
-// 26/10/98 new cross section of R.Kokoulin,cleanup , L.Urban
-// 10/02/00 modifications , new e.m. structure, L.Urban
-// 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 26-10-98 new cross section of R.Kokoulin,cleanup , L.Urban
+// 10-02-00 modifications , new e.m. structure, L.Urban
+// 29-05-01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 09-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 17-09-01 migration of Materials to pure STL (mma)
 // 26-09-01 completion of store/retrieve PhysicsTable (mma)
@@ -45,6 +45,8 @@
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 particleMass becomes a local variable (mma)  
 // 19-08-02 V.Ivanchenko update to new design
+// 23-12-02 Change interface in order to move to cut per region (VI)
+// 26-12-02 Secondary production moved to derived classes (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -78,7 +80,6 @@ G4MuBremsstrahlungSTD::~G4MuBremsstrahlungSTD()
 void G4MuBremsstrahlungSTD::InitialiseProcess() 
 {
   SetSecondaryParticle(G4Gamma::Gamma());
-  SetSubCutoffIsDesired(false);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -86,8 +87,8 @@ void G4MuBremsstrahlungSTD::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MuBremsstrahlungModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 100.0*TeV);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(em, 0);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   AddEmFluctuationModel(fm);

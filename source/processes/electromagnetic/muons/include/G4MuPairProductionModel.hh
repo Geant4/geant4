@@ -33,6 +33,9 @@
 // Creation date: 18.05.2002
 //
 // Modifications: 
+//
+// 23.12.2002 Change interface in order to move to cut per region (VI)
+//
 
 //
 // Class Description: 
@@ -57,21 +60,18 @@ public:
 
   ~G4MuPairProductionModel();
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* p,
-                           const G4Material*);
+  G4double HighEnergyLimit(const G4ParticleDefinition* p);
  
-  G4double LowEnergyLimit(const G4ParticleDefinition* p,
-                          const G4Material*);
+  G4double LowEnergyLimit(const G4ParticleDefinition* p);
 
-  void SetHighEnergyLimit(const G4Material*, G4double e) {highKinEnergy = e;};
+  void SetHighEnergyLimit(G4double e) {highKinEnergy = e;};
  
-  void SetLowEnergyLimit(const G4Material*, G4double e) {lowKinEnergy = e;};
+  void SetLowEnergyLimit(G4double e) {lowKinEnergy = e;};
 
   G4double MinEnergyCut(const G4ParticleDefinition*,
                         const G4Material*);
  
-  G4bool IsInCharge(const G4ParticleDefinition*,
-	            const G4Material*);
+  G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
@@ -84,7 +84,13 @@ public:
                               G4double cutEnergy,
                               G4double maxEnergy);
 
-  G4std::vector<G4DynamicParticle*>* SampleSecondary(
+  G4DynamicParticle* SampleSecondary(
+                                const G4Material*,
+                                const G4DynamicParticle*,
+                                      G4double tmin,
+                                      G4double maxEnergy);
+
+  G4std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4Material*,
                                 const G4DynamicParticle*,
                                       G4double tmin,

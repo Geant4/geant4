@@ -48,6 +48,8 @@
 // 07-11-01 particleMass and Charge become local variables 
 // 26-03-02 change access to cuts in BuildLossTables (V.Ivanchenko)
 // 30-04-02 V.Ivanchenko update to new design
+// 23-12-02 Change interface in order to move to cut per region (VI)
+// 26-12-02 Secondary production moved to derived classes (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -65,7 +67,8 @@
 G4eIonisationSTD::G4eIonisationSTD(const G4String& name) 
   : G4VEnergyLossSTD(name),
     theElectron(G4Electron::Electron()),
-    isElectron(true)
+    isElectron(true),
+    subCutoffProcessor(0)
 {
   InitialiseProcess();
 }
@@ -73,14 +76,15 @@ G4eIonisationSTD::G4eIonisationSTD(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eIonisationSTD::~G4eIonisationSTD() 
-{}
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eIonisationSTD::InitialiseProcess() 
 {
   SetSecondaryParticle(theElectron);
-  SetSubCutoffIsDesired(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -88,8 +92,8 @@ void G4eIonisationSTD::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4MollerBhabhaModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 100.0*TeV);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(em, 0);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   AddEmFluctuationModel(fm);
@@ -111,6 +115,14 @@ void G4eIonisationSTD::PrintInfoDefinition() const
   G4cout << "      Delta cross sections from Moller+Bhabha, " 
          << "good description from 1 KeV to 100 GeV." 
          << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4eIonisationSTD::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;
+  subCutoffProcessor = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

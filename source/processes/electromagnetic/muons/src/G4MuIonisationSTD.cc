@@ -48,6 +48,8 @@
 // 08-11-01 particleMass becomes a local variable (mma)
 // 10-05-02 V.Ivanchenko update to new design
 // 04-12-02 V.Ivanchenko the low energy limit for Kokoulin model to 10 GeV 
+// 23-12-02 Change interface in order to move to cut per region (VI)
+// 26-12-02 Secondary production moved to derived classes (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -69,7 +71,8 @@
 G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name) 
   : G4VEnergyLossSTD(name),
     theParticle(0),
-    theBaseParticle(0)
+    theBaseParticle(0),
+    subCutoffProcessor(0)
 {
   InitialiseProcess();
 }
@@ -77,14 +80,15 @@ G4MuIonisationSTD::G4MuIonisationSTD(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuIonisationSTD::~G4MuIonisationSTD() 
-{}
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MuIonisationSTD::InitialiseProcess() 
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetSubCutoffIsDesired(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -92,16 +96,16 @@ void G4MuIonisationSTD::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 2.*MeV);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(2.*MeV);
   AddEmModel(em, 0);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(0, 2.*MeV);
-  em1->SetHighEnergyLimit(0, 10.0*GeV);
+  em1->SetLowEnergyLimit(2.*MeV);
+  em1->SetHighEnergyLimit(10.0*GeV);
   AddEmModel(em1, 1);
   G4VEmModel* em2 = new G4MuBetheBlochModel();
-  em2->SetLowEnergyLimit(0, 10.0*GeV);
-  em2->SetHighEnergyLimit(0, 100.0*TeV);
+  em2->SetLowEnergyLimit(10.0*GeV);
+  em2->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(em2, 2);
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
   AddEmFluctuationModel(fm);
@@ -129,6 +133,14 @@ void G4MuIonisationSTD::PrintInfoDefinition() const
   G4cout << "      Bether-Bloch model for E > 0.2 MeV " 
          << "parametrisation of Bragg peak below."
          << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4MuIonisationSTD::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;
+  subCutoffProcessor = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 26-12-02 Secondary production moved to derived classes (VI)
+//
 // Class Description: 
 //
 // Class for simualtion of subCutoff
@@ -61,9 +63,10 @@ public:
 
   ~G4SCProcessorStand();
 
-  virtual G4std::vector<G4Track*>* SampleSecondary(const G4Step& step,
-                                                   const G4DynamicParticle*,
-                                                         G4double meanLoss);
+  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step& step,
+                                                     const G4DynamicParticle*,
+						           G4double tmax,
+                                                           G4double meanLoss);
 
   virtual void Initialise(const G4ParticleDefinition*,
                           const G4ParticleDefinition*, 

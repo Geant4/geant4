@@ -32,7 +32,8 @@
 // 
 // Creation date: 07.05.2002
 //
-// Modifications: 
+// Modifications: 23.12.2002 V.Ivanchenko change interface in order to move 
+//                           to cut per region
 //
 // Class Description: 
 //
@@ -158,10 +159,10 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
     G4VEmModel* model = emModels[j];
     G4bool accepted = false;
 
-    if(model->IsInCharge(particle, 0)) {
+    if(model->IsInCharge(particle)) {
 
-      G4double tmin = model->LowEnergyLimit(particle, 0);
-      G4double tmax = model->HighEnergyLimit(particle, 0);
+      G4double tmin = model->LowEnergyLimit(particle);
+      G4double tmax = model->HighEnergyLimit(particle);
 
       if(1 < verboseLevel) {
           G4cout << "New model for tmin(MeV)= " << tmin/MeV 

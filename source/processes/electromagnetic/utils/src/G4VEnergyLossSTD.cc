@@ -32,8 +32,12 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
-//                04.12.2002 Minor change in PostStepDoIt (VI) 
+// Modifications: 
+//
+// 13.11.2002 Minor fix - use normalised direction (VI)
+// 04.12.2002 Minor change in PostStepDoIt (VI) 
+// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 26.12.2002 Secondary production moved to derived classes (VI)
 //
 // Class Description: 
 //
@@ -70,7 +74,6 @@
   
 G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
                  G4VContinuousDiscreteProcess(name, type),
-  subCutoffProcessor(0),
   emFluctModel(0),
   theDEDXTable(0),
   theRangeTable(0),
@@ -85,8 +88,6 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   theGamma(G4Gamma::Gamma()),
   theElectron(G4Electron::Electron()),
   lossFluctuationFlag(false),
-  subCutoffFlag(false),
-  subCutoffIsDesired(false),  
   rndmStepFlag(false),
   hasRestProcess(true),
   tablesAreBuilt(false),
@@ -109,7 +110,6 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
 {
   Clear();
   if(theLambdaTable) theLambdaTable->clearAndDestroy();
-  if(subCutoffProcessor) delete subCutoffProcessor;  
   delete modelManager;
 
   if(emFluctModel) delete emFluctModel;
@@ -164,21 +164,23 @@ void G4VEnergyLossSTD::Initialise()
 
   if(1 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise(): emFluctModel= " << emFluctModel
-           << " subCutoffFlag= " << subCutoffFlag
            << G4endl;
   }  
 
   if(emFluctModel) emFluctModel->Initialise(particle);
 
-  if (subCutoffFlag) {
+  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
+
+  if (subCutoffProcessor) {
     subCutoffProcessor->Initialise(particle, secondaryParticle, modelManager);
   }
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::Initialise() is done " 
            << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio 
-           << " reduceFactor= " << reduceFactor
-           << G4endl;
+           << " reduceFactor= " << reduceFactor;
+    if(subCutoffProcessor) G4cout << " SubCutoff Regime is ON"; 
+    G4cout << G4endl;
   }
 
 }
@@ -232,7 +234,8 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   theLambdaTable = BuildLambdaTable();
 
-  if (subCutoffFlag) {
+  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
+  if (subCutoffProcessor) {
     subCutoffProcessor->SetLambdaSubTable(BuildLambdaSubTable());
   }
   tablesAreBuilt = true;
@@ -293,6 +296,7 @@ G4bool G4VEnergyLossSTD::StorePhysicsTable(G4ParticleDefinition* part,
   }
 
   G4PhysicsTable*  theLambdaSubTable = 0;
+  G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
   if(subCutoffProcessor) theLambdaSubTable = subCutoffProcessor->LambdaSubTable();
 
   if (theLambdaSubTable) {
@@ -391,6 +395,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
     G4cout << "LambdaSub table for " << particleName << " is retrieved from <"
            << filename << ">"
            << G4endl;  
+    G4VSubCutoffProcessor* subCutoffProcessor = SubCutoffProcessor();
     if(subCutoffProcessor) subCutoffProcessor->SetLambdaSubTable(theLambdaSubTable);
   } else {
     G4cout << "LambdaSub table for " << particleName << " in file <"
@@ -585,14 +590,13 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   G4double length = step.GetStepLength();
   G4double eloss  = 0.0;
   G4bool b;
-  G4double finalT = preStepKinEnergy;
 
   /*
   if(-1 < verboseLevel) {
     G4cout << "AlongStepDoIt for " 
            << GetProcessName() << " and particle " 
            << particle->GetParticleName() 
-           << "  eScaled(MeV)= " << finalT/MeV
+           << "  eScaled(MeV)= " << preStepKinEnergy/MeV
            << "  slim(mm)= " << fRange/mm
            << "  s(mm)= " << length/mm
            << G4endl;
@@ -602,12 +606,12 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
   static const G4double faclow = 1.5;
 
     // low energy deposit case
-  if (finalT < minKinEnergy || length >= fRange) {
-    eloss = finalT;
+  if (length >= fRange) {
+    eloss = preStepKinEnergy;
 
-  } else if(finalT < faclow*minKinEnergy) {
+  } else if(preStepKinEnergy < faclow*minKinEnergy) {
 
-    eloss = finalT*sqrt(length/fRange);
+    eloss = preStepKinEnergy*sqrt(length/fRange);
 
   // Short step
   } else if( length <= linLossLimit * fRange ) {
@@ -634,23 +638,22 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     }
     */
     
-    if(eloss < 0.0) eloss = 0.0; 
   }    
 
   // 
-  if(eloss > finalT) eloss = finalT;
+  if(eloss <= 0.0) {
+    eloss = 0.0; 
 
-  const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  } else {
+    const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+    G4double tmax = MaxSecondaryEnergy(dynParticle);
+    tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
   
-  // Sub cutoff generation
-  if(subCutoffFlag) {
-
-    G4std::vector<G4Track*>* newp = subCutoffProcessor->
-           SampleSecondary(step, dynParticle, eloss);
+    G4std::vector<G4Track*>* newp = 
+           SecondariesAlongStep(step, currentMaterial, dynParticle, tmax, eloss);
 
     if(newp) {
 
-      G4ThreeVector finalP = dynParticle->GetMomentum();
       G4int n = newp->size();
       if(n > 0) {
         aParticleChange.SetNumberOfSecondaries(n);
@@ -662,28 +665,24 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
           const G4ParticleDefinition* pd = t->GetDefinition();
           if (pd != theGamma && pd != theElectron ) e += pd->GetPDGMass();
         
-          finalT -= e;
-          finalP -= t->GetMomentum();
+          preStepKinEnergy -= e;
           aParticleChange.AddSecondary(t);
         }
-        finalP = finalP.unit();
-        aParticleChange.SetMomentumChange(finalP);
       }
       delete newp;
     }
-  }
+  
   
     // Sample fluctuations
 
-  if (lossFluctuationFlag && eloss + minKinEnergy > finalT) {
+    if (lossFluctuationFlag && eloss + minKinEnergy > preStepKinEnergy) {
 
-    G4double tmax = MaxSecondaryEnergy(dynParticle);
-    tmax = G4std::min(tmax,(*theCuts)[currentMaterialIndex]);
-
-    emFluctModel->SampleFluctuations(currentMaterial, dynParticle, 
-                                               tmax, length, eloss);
+      emFluctModel->SampleFluctuations(currentMaterial, dynParticle, 
+                                       tmax, length, eloss);
+      if(eloss < 0.0) eloss = 0.0;
+    }
+    preStepKinEnergy -= eloss;
   }
-
   /*
   if(1 < verboseLevel) {
     G4cout << "eloss(MeV)= " << eloss/MeV 
@@ -691,22 +690,17 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  finalT -= eloss;
 
-  //  G4cout << "finalT= " << finalT << G4endl;
+  if (preStepKinEnergy < minKinEnergy) {
 
-  if (finalT < minKinEnergy) {
-
-    eloss += finalT;
-    finalT = 0.0;
-
-    // !!!! to be checked - problem of Forced processes
+    eloss += preStepKinEnergy;
+    preStepKinEnergy = 0.0;
 
     if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
     else                aParticleChange.SetStatusChange(fStopAndKill); 
   }
 
-  aParticleChange.SetEnergyChange(finalT);
+  aParticleChange.SetEnergyChange(preStepKinEnergy);
   aParticleChange.SetLocalEnergyDeposit(eloss);
 
   return &aParticleChange;
@@ -715,7 +709,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
-                                                 const G4Step& step)
+                                                  const G4Step& step)
 {
   aParticleChange.Initialize(track);
   G4double finalT = track.GetKineticEnergy();
@@ -734,49 +728,30 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
 
+  /*
   if(0 < verboseLevel) {
     const G4ParticleDefinition* pd = dynParticle->GetDefinition();
     G4cout << "G4VEnergyLossSTD::PostStepDoIt: Sample secondary; E= " << finalT/MeV 
-           << " MeV; model= (" << currentModel->LowEnergyLimit(pd, currentMaterial)
-           << ", " <<  currentModel->HighEnergyLimit(pd, currentMaterial) << ")"
+           << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
+           << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
            << G4endl;
   }
+  */
 
-  G4std::vector<G4DynamicParticle*>* newp = 
-    currentModel->SampleSecondary(currentMaterial, dynParticle, tcut, finalT);
+  SecondariesPostStep(aParticleChange,currentModel,currentMaterial, 
+                      dynParticle,tcut,finalT);
 
-  if (newp) {
-    G4int n = newp->size();
-    
-    G4ThreeVector finalP = dynParticle->GetMomentum();
-    G4DynamicParticle* dp;
-    G4double e;
-    aParticleChange.SetNumberOfSecondaries(n);
-    for (G4int i=0; i<n; i++) {
-       dp = (*newp)[i];
-       e = dp->GetKineticEnergy();
-       if (dp->GetDefinition() != theElectron ) e += dp->GetMass();
-       finalT -= e;
-       finalP -= dp->GetMomentum();
-       aParticleChange.AddSecondary(dp); 
-    }
-
-    if (finalT < minKinEnergy) {
-      aParticleChange.SetLocalEnergyDeposit(finalT);
-      finalT = 0.0;
-
-      // !!!! to be checked - problem of Forced processes
+  if (finalT < minKinEnergy) {
+    aParticleChange.SetLocalEnergyDeposit(finalT);
+    aParticleChange.SetEnergyChange(0.0);
  
-      if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
-      else                aParticleChange.SetStatusChange(fStopAndKill); 
-    }
-
-    aParticleChange.SetEnergyChange(finalT);
-    finalP = finalP.unit();
-    aParticleChange.SetMomentumChange(finalP);
-
-    delete newp;
+    if (hasRestProcess) aParticleChange.SetStatusChange(fStopButAlive);
+    else                aParticleChange.SetStatusChange(fStopAndKill); 
+    
+    return pParticleChange;
   }
+
+  aParticleChange.SetEnergyChange(finalT);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
 }
@@ -865,14 +840,6 @@ G4PhysicsVector* G4VEnergyLossSTD::SubLambdaPhysicsVector(const G4Material* mate
     v = new G4PhysicsLogVector(tmin, maxKinEnergy, nLambdaBins);
   }
   return v;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossSTD::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
-{
-  if(subCutoffProcessor) delete subCutoffProcessor;
-  subCutoffProcessor = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

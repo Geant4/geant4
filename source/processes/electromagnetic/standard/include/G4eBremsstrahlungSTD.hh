@@ -43,6 +43,7 @@
 // 19-09-01 come back to previous process name "eBrem"
 // 29-10-01 all static functions no more inlined (mma)  
 // 07-01-02 new design of em processes (V.Ivanchenko)
+// 26-12-02 secondary production moved to derived classes (VI)
 //
 //
 // Class Description: 
@@ -79,6 +80,24 @@ public:
                                     const G4Material*, G4double cut)
   {return cut;};
 
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+			           G4double,
+                                   G4double) {return 0;};
+
+  virtual void SecondariesPostStep(G4ParticleChange&, 
+                                   G4VEmModel*, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  void SetSubCutoffProcessor(G4VSubCutoffProcessor*) {};
+
+  G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
+
   void PrintInfoDefinition() const;
   // Print out of the class parameters
 
@@ -96,6 +115,23 @@ private:
   G4eBremsstrahlungSTD(const G4eBremsstrahlungSTD&);
 
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+#include "G4VEmModel.hh"
+
+inline void G4eBremsstrahlungSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
+                                                      G4VEmModel* model, 
+                                                const G4Material* material, 
+                                                const G4DynamicParticle* dp,
+                                                      G4double& tcut,
+                                                      G4double& kinEnergy)
+{
+  G4DynamicParticle* gamma = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(gamma);
+  kinEnergy -= gamma->GetKineticEnergy();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

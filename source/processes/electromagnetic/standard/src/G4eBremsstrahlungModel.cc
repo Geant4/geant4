@@ -36,6 +36,7 @@
 //
 // 11-11-02  Fix division by 0 (VI)
 // 04-12-02  Change G4DynamicParticle constructor in PostStep (VI)
+// 23-12-02  Change interface in order to move to cut per region (VI)
 //
 // Class Description: 
 //
@@ -96,16 +97,14 @@ void G4eBremsstrahlungModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4eBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p) 
 {
   return highKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4eBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4eBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p) 
 {
   return lowKinEnergy;
 }
@@ -120,8 +119,7 @@ G4double G4eBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4eBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p,
-	      		                  const G4Material*) 
+G4bool G4eBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p == G4Electron::Electron() || p == G4Positron::Positron());
 }
@@ -599,7 +597,7 @@ void G4eBremsstrahlungModel::ComputePartialSumSigma(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondary(
+G4DynamicParticle* G4eBremsstrahlungModel::SampleSecondary(
                              const G4Material* material,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -791,8 +789,19 @@ G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondary(
   g->SetKineticEnergy(gammaEnergy);
   g->SetMomentumDirection(gammaDirection);
 
+  return g;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4eBremsstrahlungModel::SampleSecondaries(
+                             const G4Material* material,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy) 
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* g = SampleSecondary(material,dp,tmin,maxEnergy);
   vdp->push_back(g);
 
   return vdp;

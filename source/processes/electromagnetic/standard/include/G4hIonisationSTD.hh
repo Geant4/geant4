@@ -42,6 +42,8 @@
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
 // 19-09-01 come back to previous process name "hIoni"
 // 29-10-01 all static functions no more inlined  
+// 07-01-02 new design of em processes (V.Ivanchenko)
+// 26-12-02 secondary production moved to derived classes (VI)
 //
 // Class Description: 
 //
@@ -77,6 +79,24 @@ public:
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
 
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+			           G4double,
+                                   G4double);
+
+  virtual void SecondariesPostStep(G4ParticleChange&, 
+                                   G4VEmModel*, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  void SetSubCutoffProcessor(G4VSubCutoffProcessor*);
+
+  G4VSubCutoffProcessor* SubCutoffProcessor() {return subCutoffProcessor;};
+
   void PrintInfoDefinition() const;
   // Print out of the class parameters
 
@@ -98,6 +118,7 @@ private:
   const G4ParticleDefinition* theBaseParticle;
   G4double   mass;
   G4double   ratio;
+  G4VSubCutoffProcessor* subCutoffProcessor;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -122,6 +143,45 @@ inline G4double G4hIonisationSTD::MaxSecondaryEnergy(const G4DynamicParticle* dy
                   (1. + 2.0*gamma*ratio + ratio*ratio);
   
   return tmax;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4VSubCutoffProcessor.hh"
+
+inline G4std::vector<G4Track*>*  G4hIonisationSTD::SecondariesAlongStep(
+                           const G4Step& step, 
+                           const G4Material*, 
+                           const G4DynamicParticle* dp,
+	             	         G4double tmax,
+                                 G4double eloss)
+{
+  G4std::vector<G4Track*>* newp = 0;
+  if(subCutoffProcessor) {
+    newp = subCutoffProcessor->SampleSecondaries(step,dp,tmax,eloss);
+  }
+  return newp;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+#include "G4VEmModel.hh"
+
+inline void G4hIonisationSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
+                                                  G4VEmModel* model, 
+                                            const G4Material* material, 
+                                            const G4DynamicParticle* dp,
+                                                  G4double& tcut,
+                                                  G4double& kinEnergy)
+{
+  G4DynamicParticle* delta = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(delta);
+  G4ThreeVector finalP = dp->GetMomentum();
+  kinEnergy -= delta->GetKineticEnergy();
+  finalP -= delta->GetMomentum();
+  finalP = finalP.unit();
+  aParticleChange.SetMomentumDirectionChange(finalP);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

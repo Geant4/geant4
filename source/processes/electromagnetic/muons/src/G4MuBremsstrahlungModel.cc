@@ -32,7 +32,12 @@
 // 
 // Creation date: 24.06.2002
 //
-// Modifications: 04.12.02 (VI) Change G4DynamicParticle constructor in PostStepDoIt 
+// Modifications: 
+//
+// 04.12.02 Change G4DynamicParticle constructor in PostStepDoIt (VI)
+// 23.12.02 Change interface in order to move to cut per region (VI)
+//
+ 
 //
 // Class Description: 
 //
@@ -90,16 +95,14 @@ G4MuBremsstrahlungModel::~G4MuBremsstrahlungModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4MuBremsstrahlungModel::HighEnergyLimit(const G4ParticleDefinition* p) 
 {
   return highKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p) 
 {
   return lowKinEnergy;
 }
@@ -107,15 +110,14 @@ G4double G4MuBremsstrahlungModel::LowEnergyLimit(const G4ParticleDefinition* p,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuBremsstrahlungModel::MinEnergyCut(const G4ParticleDefinition* p,
-                                              const G4Material*) 
+                                               const G4Material*) 
 {
   return minThreshold;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4MuBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p,
-	      		                  const G4Material*) 
+G4bool G4MuBremsstrahlungModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p == G4MuonMinus::MuonMinus() || p == G4MuonPlus::MuonPlus());
 }
@@ -442,7 +444,7 @@ void G4MuBremsstrahlungModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondary(
+G4DynamicParticle* G4MuBremsstrahlungModel::SampleSecondary(
                              const G4Material* material,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -547,7 +549,19 @@ G4std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondary(
   aGamma->SetKineticEnergy(GammaEnergy);
   aGamma->SetMomentumDirection(GammaDirection);
 
+  return aGamma;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4MuBremsstrahlungModel::SampleSecondaries(
+                             const G4Material* material,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy) 
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* aGamma = SampleSecondary(material,dp,tmin,maxEnergy);
   vdp->push_back(aGamma);
 
   return vdp;

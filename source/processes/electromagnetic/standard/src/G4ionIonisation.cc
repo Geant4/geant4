@@ -34,6 +34,9 @@
 //
 // Modifications: 
 //
+// 23.12.2002 Change interface in order to move to cut per region (VI)
+// 26.12.2002 Secondary production moved to derived classes (VI)
+//
 //
 // -------------------------------------------------------------------
 //
@@ -55,7 +58,8 @@
 G4ionIonisation::G4ionIonisation(const G4String& name) 
   : G4VEnergyLossSTD(name),
     theParticle(0),
-    theBaseParticle(G4Proton::Proton())
+    theBaseParticle(G4Proton::Proton()),
+    subCutoffProcessor(0)
 {
   InitialiseProcess();
 }
@@ -63,14 +67,15 @@ G4ionIonisation::G4ionIonisation(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4ionIonisation::~G4ionIonisation() 
-{}
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;  
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ionIonisation::InitialiseProcess() 
 {
   SetSecondaryParticle(G4Electron::Electron());
-  SetSubCutoffIsDesired(true);
 
   SetDEDXBinning(120);
   SetLambdaBinning(120);
@@ -78,12 +83,12 @@ void G4ionIonisation::InitialiseProcess()
   SetMaxKinEnergy(100.0*TeV);
 
   G4VEmModel* em = new G4BraggModel();
-  em->SetLowEnergyLimit(0, 0.1*keV);
-  em->SetHighEnergyLimit(0, 2.0*MeV);
+  em->SetLowEnergyLimit(0.1*keV);
+  em->SetHighEnergyLimit(2.0*MeV);
   AddEmModel(em, 0);
   G4VEmModel* em1 = new G4BetheBlochModel();
-  em1->SetLowEnergyLimit(0, 2.0*MeV);
-  em1->SetHighEnergyLimit(0, 100.0*TeV);
+  em1->SetLowEnergyLimit(2.0*MeV);
+  em1->SetHighEnergyLimit(100.0*TeV);
   AddEmModel(em1, 1);
 
   G4VEmFluctuationModel* fm = new G4UniversalFluctuation();
@@ -110,6 +115,14 @@ void G4ionIonisation::PrintInfoDefinition() const
          << "      Bether-Bloch model for Escaled > 2 MeV, "
          << "parametrisation of Bragg peak below."
          << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+void G4ionIonisation::SetSubCutoffProcessor(G4VSubCutoffProcessor* p)
+{
+  if(subCutoffProcessor) delete subCutoffProcessor;
+  subCutoffProcessor = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

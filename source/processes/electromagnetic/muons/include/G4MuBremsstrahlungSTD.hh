@@ -38,6 +38,7 @@
 // 10-08-01: new methods Store/Retrieve PhysicsTable (mma)
 // 29-10-01 all static functions no more inlined (mma)   
 // 10-05-02 V.Ivanchenko update to new design
+// 26-12-02 secondary production moved to derived classes (VI)
 //
 // Class Description: 
 //
@@ -72,6 +73,24 @@ public:
 
   virtual G4double MinPrimaryEnergy(const G4ParticleDefinition* p,
                                     const G4Material*, G4double cut);
+
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+			           G4double,
+                                   G4double) {return 0;};
+
+  virtual void SecondariesPostStep(G4ParticleChange&, 
+                                   G4VEmModel*, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&);
+
+  void SetSubCutoffProcessor(G4VSubCutoffProcessor*) {};
+
+  G4VSubCutoffProcessor* SubCutoffProcessor() {return 0;};
 
   void PrintInfoDefinition() const;
   // Print out of the class parameters
@@ -110,6 +129,23 @@ inline G4double G4MuBremsstrahlungSTD::MinPrimaryEnergy(const G4ParticleDefiniti
 inline G4double G4MuBremsstrahlungSTD::MaxSecondaryEnergy(const G4DynamicParticle* dynParticle)
 {
   return dynParticle->GetKineticEnergy();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
+
+#include "G4VEmModel.hh"
+
+inline void G4MuBremsstrahlungSTD::SecondariesPostStep(G4ParticleChange& aParticleChange, 
+                                                       G4VEmModel* model, 
+                                                 const G4Material* material, 
+                                                 const G4DynamicParticle* dp,
+                                                       G4double& tcut,
+                                                       G4double& kinEnergy)
+{
+  G4DynamicParticle* gamma = model->SampleSecondary(material, dp, tcut, kinEnergy);
+  aParticleChange.SetNumberOfSecondaries(1);
+  aParticleChange.AddSecondary(gamma);
+  kinEnergy -= gamma->GetKineticEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

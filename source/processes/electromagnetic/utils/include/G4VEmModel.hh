@@ -32,7 +32,8 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications: 23.12.2002 V.Ivanchenko change interface in order to move 
+//                           to cut per region 
 
 //
 // Class Description: 
@@ -50,7 +51,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Material.hh"
-#include "G4ThreeVector.hh"
 
 class G4VEmModel 
 {
@@ -61,21 +61,18 @@ public:
 
   virtual ~G4VEmModel() {};
 
-  virtual G4double HighEnergyLimit(const G4ParticleDefinition*,
-                                   const G4Material*) = 0;
+  virtual G4double HighEnergyLimit(const G4ParticleDefinition*) = 0;
  
-  virtual G4double LowEnergyLimit(const G4ParticleDefinition*,
-                                  const G4Material*) = 0;
+  virtual G4double LowEnergyLimit(const G4ParticleDefinition*) = 0;
 
-  virtual void SetHighEnergyLimit(const G4Material*, G4double) = 0;
+  virtual void SetHighEnergyLimit(G4double) = 0;
+
+  virtual void SetLowEnergyLimit(G4double) = 0;
  
-  virtual void SetLowEnergyLimit(const G4Material*, G4double) = 0;
-
   virtual G4double MinEnergyCut(const G4ParticleDefinition*,
                                 const G4Material*) = 0;
  
-  virtual G4bool IsInCharge(const G4ParticleDefinition*,
-			    const G4Material*) = 0;
+  virtual G4bool IsInCharge(const G4ParticleDefinition*) = 0;
 
   virtual G4double ComputeDEDX(const G4Material*,
                                const G4ParticleDefinition*,
@@ -88,7 +85,13 @@ public:
                                       G4double cutEnergy,
                                       G4double maxEnergy) = 0;
 
-  virtual G4std::vector<G4DynamicParticle*>* SampleSecondary(
+  virtual G4DynamicParticle* SampleSecondary(
+                                const G4Material*,
+                                const G4DynamicParticle*,
+                                      G4double tmin,
+                                      G4double tmax) = 0;
+
+  virtual G4std::vector<G4DynamicParticle*>* SampleSecondaries(
                                 const G4Material*,
                                 const G4DynamicParticle*,
                                       G4double tmin,
@@ -104,9 +107,9 @@ protected:
 
 private:
 
-  // hide assignment operator 
-  //     G4VEmModel & operator=(const  G4VEmModel &right);
-  //     G4VEmModel(const  G4VEmModel&);
+  //  hide assignment operator 
+  G4VEmModel & operator=(const  G4VEmModel &right);
+  G4VEmModel(const  G4VEmModel&);
 
 };
 

@@ -32,7 +32,10 @@
 // 
 // Creation date: 24.06.2002
 //
-// Modifications: 04.12.2002 Change G4DynamicParticle constructor in PostStep (VI)
+// Modifications: 
+//
+// 04.12.2002 Change G4DynamicParticle constructor in PostStep (VI)
+// 23.12.2002 Change interface in order to move to cut per region (VI)
 //
 // Class Description: 
 //
@@ -91,23 +94,21 @@ G4MuPairProductionModel::~G4MuPairProductionModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuPairProductionModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                                  const G4Material*) 
+G4double G4MuPairProductionModel::HighEnergyLimit(const G4ParticleDefinition*) 
 {
   return highKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4MuPairProductionModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                                 const G4Material*) 
+G4double G4MuPairProductionModel::LowEnergyLimit(const G4ParticleDefinition*) 
 {
   return lowKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition* p,
+G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition*,
                                                const G4Material* material) 
 {
   G4double eCut = (G4Electron::Electron())->GetEnergyThreshold(material);
@@ -123,8 +124,7 @@ G4double G4MuPairProductionModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4MuPairProductionModel::IsInCharge(const G4ParticleDefinition* p,
-	      		                   const G4Material*) 
+G4bool G4MuPairProductionModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p == G4MuonMinus::MuonMinus() || p == G4MuonPlus::MuonPlus());
 }
@@ -608,7 +608,18 @@ void G4MuPairProductionModel::MakeSamplingTables()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondary(
+G4DynamicParticle* G4MuPairProductionModel::SampleSecondary(
+                             const G4Material* aMaterial,
+                             const G4DynamicParticle* aDynamicParticle,
+                                   G4double minEnergy,
+                                   G4double maxEnergy) 
+{
+  return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
                              const G4Material* aMaterial,
                              const G4DynamicParticle* aDynamicParticle,
                                    G4double minEnergy,

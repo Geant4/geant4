@@ -32,7 +32,11 @@
 // 
 // Creation date: 10.05.2002
 //
-// Modifications: 09.12.2002 VI remove warning
+// Modifications: 
+//
+// 09.12.2002 remove warning (VI)
+// 23.12.2002 change interface in order to move to cut per region (VI)
+// 26-12-02 Secondary production moved to derived classes (VI)
 //
 //
 // -------------------------------------------------------------------
@@ -96,9 +100,11 @@ void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step,
-                                                              const G4DynamicParticle* dp,
-                                                                    G4double meanLoss)
+G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
+                    const G4Step& step,
+                    const G4DynamicParticle* dp,
+			  G4double tmax,
+                          G4double meanLoss)
 {
   G4bool b;
   const G4Material* mat = (step.GetTrack())->GetMaterial();
@@ -112,6 +118,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
   }
 
   if(subcut >= cut) return 0;
+  tmax = G4std::min(tmax,subcut);
 
   G4double ekin  = dp->GetKineticEnergy();
   G4double effChargeFactor = 1.0;
@@ -156,7 +163,7 @@ G4std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondary(const G4Step& step
              
     dt += del * inv_v; 
     G4std::vector<G4DynamicParticle*>* newp = 
-           currentModel->SampleSecondary(material, dp, subcut, cut);
+           currentModel->SampleSecondaries(material, dp, subcut, cut);
     if (newp) {
 
       G4DynamicParticle* p;

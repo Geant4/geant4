@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 26-12-02 Secondary production moved to derived classes (VI)
+//
 // Class Description: 
 //
 // Abstract class for interface to simualtion of subCutoff
@@ -64,17 +66,18 @@ public:
 
   virtual ~G4VSubCutoffProcessor() {};
 
-  virtual G4std::vector<G4Track*>* SampleSecondary(const G4Step& step,
-                                                   const G4DynamicParticle*,
-                                                         G4double meanLoss) {return 0;};
+  virtual G4std::vector<G4Track*>* SampleSecondaries(const G4Step&,
+                                                     const G4DynamicParticle*,
+						           G4double tmax,
+                                                           G4double meanLoss) = 0;
 
   virtual void Initialise(const G4ParticleDefinition*, 
                           const G4ParticleDefinition*, 
-                                G4EmModelManager* ) {};
+                                G4EmModelManager* ) = 0;
 
-  virtual void SetLambdaSubTable(G4PhysicsTable*) {};
+  virtual void SetLambdaSubTable(G4PhysicsTable*) = 0;
 
-  virtual G4PhysicsTable* LambdaSubTable() {return 0;};
+  virtual G4PhysicsTable* LambdaSubTable() = 0;
 
 protected:
 

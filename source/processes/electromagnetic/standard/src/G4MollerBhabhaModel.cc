@@ -32,8 +32,11 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 13.11.2002 Minor fix - use normalised direction (VI)
-//                04.12.2002 Change G4DynamicParticle constructor in PostStepDoIt (VI)
+// Modifications: 
+//
+// 13.11.2002 Minor fix - use normalised direction (VI)
+// 04.12.2002 Change G4DynamicParticle constructor in PostStepDoIt (VI)
+// 23.12.2002 Change interface in order to move to cut per region (VI)
 //
 //
 // Class Description: 
@@ -80,16 +83,14 @@ void G4MollerBhabhaModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4MollerBhabhaModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4MollerBhabhaModel::HighEnergyLimit(const G4ParticleDefinition* p) 
 {
   return highKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4MollerBhabhaModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4MollerBhabhaModel::LowEnergyLimit(const G4ParticleDefinition* p) 
 {
   return lowKinEnergy;
 }
@@ -104,8 +105,7 @@ G4double G4MollerBhabhaModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4MollerBhabhaModel::IsInCharge(const G4ParticleDefinition* p,
-			             const G4Material*) 
+G4bool G4MollerBhabhaModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p == theElectron || p == G4Positron::Positron());
 }
@@ -240,7 +240,7 @@ G4double G4MollerBhabhaModel::CrossSection(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondary(
+G4DynamicParticle* G4MollerBhabhaModel::SampleSecondary(
                              const G4Material* material,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -342,8 +342,19 @@ G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondary(
   delta->SetKineticEnergy(deltaKinEnergy);
   delta->SetMomentumDirection(deltaDirection);
 
+  return delta;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4MollerBhabhaModel::SampleSecondaries(
+                             const G4Material* material,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy) 
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* delta = SampleSecondary(material, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 
   return vdp;

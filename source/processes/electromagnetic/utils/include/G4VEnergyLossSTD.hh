@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 26.12.02 Secondary production moved to derived classes (VI)
+//
 // Class Description: 
 //
 // It is the unified energy loss process it calculates the continuous 
@@ -78,9 +80,23 @@ public:
  
   void Initialise();
 
-  virtual G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* AlongStepDoIt(const G4Track&, const G4Step&);
 
-  virtual G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+  G4VParticleChange* PostStepDoIt(const G4Track&, const G4Step&);
+
+  virtual G4std::vector<G4Track*>* SecondariesAlongStep(
+                             const G4Step&, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+			           G4double,
+                                   G4double) = 0;
+
+  virtual void SecondariesPostStep(G4ParticleChange&, 
+                                   G4VEmModel*, 
+                             const G4Material*, 
+                             const G4DynamicParticle*,
+                                   G4double&,
+                                   G4double&) = 0;
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
     // True for all charged particles
@@ -141,7 +157,11 @@ public:
 
   void AddEmFluctuationModel(G4VEmFluctuationModel*);
 
-  void SetSubCutoffProcessor(G4VSubCutoffProcessor*);
+  virtual void SetSubCutoffProcessor(G4VSubCutoffProcessor*) = 0;
+
+  virtual G4VSubCutoffProcessor* SubCutoffProcessor() = 0;
+
+  virtual void SetSubCutoff(G4bool) {};
 
   void SetDEDXTable(G4PhysicsTable* p);
   G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
@@ -171,8 +191,6 @@ public:
   void SetLinearLossLimit(G4double val) {linLossLimit = val;};
 
   void SetLossFluctuations(G4bool val) {lossFluctuationFlag = val;};
-
-  void SetSubCutoff(G4bool val) {if(subCutoffIsDesired) subCutoffFlag = val;};
 
   void SetIntegral(G4bool val) {integral = val;}; 
 
@@ -226,8 +244,6 @@ protected:
 
   void SetChargeSquareRatio(G4double val) {chargeSqRatio = val;};
 
-  void SetSubCutoffIsDesired(G4bool val); 
-
 private:
 
   void Clear();
@@ -248,7 +264,6 @@ private:
 private:
 
   G4EmModelManager*      modelManager;
-  G4VSubCutoffProcessor* subCutoffProcessor;
   G4VEmFluctuationModel* emFluctModel;
 
   // tables and vectors
@@ -277,8 +292,6 @@ private:
   G4double chargeSqRatio;
 
   G4bool lossFluctuationFlag;
-  G4bool subCutoffFlag;
-  G4bool subCutoffIsDesired;
   G4bool rndmStepFlag;
   G4bool hasRestProcess;
   G4bool tablesAreBuilt;
@@ -351,13 +364,6 @@ inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double range,
   G4bool b;
   return ((*theInverseRangeTable)[currentMaterialIndex]->
          GetValue(range/reduceFactor, b))/massRatio;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossSTD::SetSubCutoffIsDesired(G4bool val)
-{
-  subCutoffIsDesired = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 

@@ -32,7 +32,10 @@
 // 
 // Creation date: 03.01.2002
 //
-// Modifications: 04.12.2002 VI Fix problem of G4DynamicParticle constructor
+// Modifications: 
+//
+// 04.12.2002 Fix problem of G4DynamicParticle constructor (VI)
+// 23.12.2002 Change interface in order to move to cut per region (VI)
 //
 // -------------------------------------------------------------------
 //
@@ -80,8 +83,7 @@ void G4BetheBlochModel::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
-                                            const G4Material*) 
+G4double G4BetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p) 
 {
   if(!particle) SetParticle(p);
   return highKinEnergy;
@@ -89,8 +91,7 @@ G4double G4BetheBlochModel::HighEnergyLimit(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4double G4BetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p,
-                                           const G4Material*) 
+G4double G4BetheBlochModel::LowEnergyLimit(const G4ParticleDefinition* p) 
 {
   if(!particle) SetParticle(p);
   return lowKinEnergy;
@@ -106,8 +107,7 @@ G4double G4BetheBlochModel::MinEnergyCut(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 
-G4bool G4BetheBlochModel::IsInCharge(const G4ParticleDefinition* p,
-			             const G4Material*) 
+G4bool G4BetheBlochModel::IsInCharge(const G4ParticleDefinition* p) 
 {
   return (p->GetPDGCharge() != 0.0 && p->GetPDGMass() > 10.*MeV);
 }
@@ -222,7 +222,7 @@ G4double G4BetheBlochModel::CrossSection(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondary(
+G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
                              const G4Material* material,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
@@ -291,10 +291,24 @@ G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondary(
   delta->SetDefinition(G4Electron::Electron());
   delta->SetKineticEnergy(deltaKinEnergy);
   delta->SetMomentumDirection(deltaDirection);
+
+  return delta;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
+                             const G4Material* material,
+                             const G4DynamicParticle* dp,
+                                   G4double tmin,
+                                   G4double maxEnergy) 
+{
   G4std::vector<G4DynamicParticle*>* vdp = new G4std::vector<G4DynamicParticle*>;
+  G4DynamicParticle* delta = SampleSecondary(material, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 
   return vdp;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
