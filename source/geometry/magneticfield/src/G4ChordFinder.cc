@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.34 2003-06-20 22:39:28 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.35 2003-06-24 13:54:20 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -94,13 +94,6 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   G4FieldTrack yEnd( yCurrent);
   G4double  startCurveLen= yCurrent.GetCurveLength();
 
-#ifdef G4DEBUG_FIELD
-  static G4bool dbg= false; 
-  if( dbg ) 
-    G4cerr << "Entered AdvanceChordLimited with:\n yCurrent: " << yCurrent
-           << " and initial Step=stepMax=" <<  stepMax << " mm. " << G4endl;
-#endif
-
   G4double nextStep;
   //            *************
   stepPossible= FindNextChord(yCurrent, stepMax, yEnd, dyErr, epsStep, &nextStep);
@@ -115,12 +108,9 @@ G4ChordFinder::AdvanceChordLimited( G4FieldTrack& yCurrent,
   else
   {
      // Advance more accurately to "end of chord"
+     //                           ***************
      good_advance = fIntgrDriver->AccurateAdvance(yCurrent, stepPossible, epsStep, nextStep);
      //                           ***************
-     #ifdef G4DEBUG_FIELD
-     if (dbg) G4cerr << "Accurate advance to end of chord attemped"
-                     << "with result " << good_advance << G4endl ;
-     #endif
      if ( ! good_advance ){ 
        // In this case the driver could not do the full distance
        stepPossible= yCurrent.GetCurveLength()-startCurveLen;
@@ -163,12 +153,12 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   fIntgrDriver-> GetDerivatives( yCurrent, dydx )  ;
 
   G4int     noTrials=0;
-  const  G4double safetyFactor= (1-perThousand);
+  const  G4double safetyFactor= (1-perThousand);  // TO-DO:  = 0.975 or 0.95;
 
   stepTrial = std::min( stepMax, 
                           safetyFactor * fLastStepEstimate_Unconstrained );
 
-  G4double newStepEst_Uncons; 
+  G4double newStepEst_Uncons= 0.0; 
   do
   { 
      G4double stepForChord;  
@@ -204,7 +194,10 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
   }
   while( ! validEndPoint );   // End of do-while  RKD 
 
-  fLastStepEstimate_Unconstrained= newStepEst_Uncons;
+  if( newStepEst_Uncons > 0.0  ){ 
+     fLastStepEstimate_Unconstrained= newStepEst_Uncons;
+  }
+
   // stepOfLastGoodChord = stepTrial;
 
   if( pStepForAccuracy ){ 
