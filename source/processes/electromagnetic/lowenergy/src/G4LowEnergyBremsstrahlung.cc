@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.19 2000-01-26 09:50:00 lefebure Exp $
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.19 2000-01-26 09:50:00 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.20 2000-02-18 10:26:15 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.20 2000-02-18 10:26:15 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,10 @@
 //                   by Alessandra Forti, March 1999
 //
 // **************************************************************
+// 17.02.2000 Veronique Lefebure
+//  - correct bug : the gamma energy was not deposited when the gamma was 
+//    not produced when its energy was < CutForLowEnergySecondaryPhotons
+//
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti
@@ -833,6 +837,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   else{
 
     aParticleChange.SetNumberOfSecondaries(0);
+    aParticleChange.SetLocalEnergyDeposit(GammaEnergy); 
   }
     
 #ifdef G4VERBOSE
