@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.3 2004-01-30 12:11:20 guatelli Exp $
+$Id: README,v 1.4 2004-03-12 10:48:18 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,4 +11,120 @@ $Id: README,v 1.3 2004-01-30 12:11:20 guatelli Exp $
 
 0. Introduction.
 
-Radioprotection example simulates the energy deposition in a phantom
+The Radioprotection example simulates the energy deposit in a phantom.
+This application is important in the radioprotection domain.
+
+A monochromatic particle beam impinges on a slab of water and then
+on a phantom filled with water.
+       |s| /  |  |
+-----> |l|/   |  |  
+beam   |a|\   |  |
+       |b| \  |  |
+              phantom
+
+The primary particles (of the impinging beam) can be:
+p, alpha, e-, e+,gamma.
+
+The phantom is sliced in 1 cm thick slices.
+The output of the simulation is a hbk file containing information about
+the energy deposit in the phantom.
+
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                                                        |
+ -example enviroment with the compiler 3.2                              
+ -a standard Geant4 example GNUmakefile is provided                     |
+
+setup with:                                                             |
+compiler = gcc-3.2
+G4SYSTEM = linux-g++                                                    |
+
+The following environment variables need to be set:                     |
+
+G4LEDATA: points to low energy data base - G4EMLOW2.3                   |
+
+setup for analysis with AIDA 3.0/Anaphe 5.0.5 for user with account     |
+on lxplus:
+                                                                        |
+setenv G4ANALYSIS_USE  1
+                                                                        |
+source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
+setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/    |
+
+ Please take a look to the Anaphe/Lizard web page                       |
+        http://anaphe.web.cern.ch/anaphe 
+ for more info                                                          |
+
+------------------------------------------------------------------------
+----> 3.How to run the example.                                         |
+
+- batch mode:
+  $G4WORDIR/bin/Linux-g++/remsim proton.mac                             |
+  $G4WORDIR/bin/Linux-g++/Brachy alpha.mac       
+                                                                        |
+- Interative mode:                                                      
+  3) $G4WORDIR/bin/Linux-g++/Brachy
+     The vis.mac is loaded automatically                                |
+
+------------------------------------------------------------------------
+----> 4. Simulation output                                              |
+
+if ANALYSIS_USE = 1 in the set-up, the output is remsim.hbk             | 
+                                 
+ It contains histograms:                                                |
+         10 (1)   Energy Deposit  (energy Deposit in the phantom)
+                  EnergyDep in MeV on y axis, cm on x axis
+         20 (2)   SpatialInfo at slab =0                                |
+                  Spatial distribution of particles when they impinge
+                  on the phantom (x,y in m)
+         30 (2)   SpatialInfo at slab=3
+                  Spatial distribution of particles when they impinge on 
+                  the slab Nb.3 of the phantom (x,y in m)
+         40 (2)   SpatialInfo3 at slab=6                               |
+                  Spatial distribution of particles when they impinge on 
+                  the slab Nb.6 of the phantom (x,y in m)
+         50 (1)   e+,e- impinging on the phantom
+                  Energy Distribution (MeV)of e+ and e- impinging on the 
+                  phantom  
+         60 (1)   hadrons impinging on the phantom                      |
+                  Energy Distribution (MeV)of p and alpha impinging on 
+                  the phantom  
+         70 (1)   photons impinging on the phantom
+                  Energy Distribution (MeV)of photons impinging on 
+                  the phantom  
+         80 (1)   e+,e- impinging in the phantom at 2.cm                |
+                  Energy Distribution (MeV)of photons impinging on 
+                  the phantom at 2.cm 
+         90 (1)   hadrons impinging in the phantom at 2.cm
+                  Energy Distribution (MeV)of p and alpha impinging on 
+                  the phantom at 2.cm 
+        100 (1)   photons impinging in the phantom at 2.cm
+                  Energy Distribution (MeV)of photons impinging on 
+                  the phantom at 2.cm                                   |
+        110 (1)   e+,e- outgoing the phantom  
+                  Energy Distribution (MeV)of electrons outgoing 
+                  the phantom  
+        120 (1)   hadrons outgoing the phantom     
+                  Energy Distribution (MeV)of p and alpha outgoing 
+                  the phantom                                           |
+        130 (1)   photons outgoing the phantom
+                  Energy Distribution (MeV)of photons outgoing 
+                  the phantom  
+        140 (1)   EnergyDistribution of secondary neutrons              |
+                  Initial Energy (MeV)of secondary neutrons (in the case
+                  the user activates hadronic physics)
+        150 (1)   EnergyDistribution of photons 
+                  Initial Energy (MeV)of secondary photons
+        160 (1)   EnergyDistribution of electrons 
+                  Initial Energy (MeV)of secondary electrons            |
+        170 (1)   EnergyDistribution of secondary hadrons (pions, kaons)
+                  Initial Energy (MeV)of secondary hadrons (in the case
+                  the user activates hadronic physics)  
+        180 (1)   Energy of primary particles                           |
+                                                                        
+------------------------------------------------------------------------
+for comments, advices, doubts and questions: guatelli@ge.infn.it
+
+last modified: Susanna Guatelli 12/3/2004
+
+

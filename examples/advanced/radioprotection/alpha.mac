@@ -13,24 +13,6 @@
 /event/verbose 0
 #/tracking/verbose 1
 /run/initialize
-#
-# create empty scene
-#
-/vis/scene/create
-#
-# Create a scene handler for a specific graphics system
-# (Edit the next line(s) to choose another graphic system)
-#
-/vis/open OGLIX
-#
-#/vis/open DAWNFILE
-#/vis/open VRML2FILE
-#/vis/drawVolume
-#
-# draw scene
-#
-/vis/viewer/set/viewpointThetaPhi 90 180 deg
-/vis/viewer/zoom 2
-/tracking/storeTrajectory 1
 /gun/particle alpha
-/gun/energy 10. MeV
+/gun/energy 100. MeV
+/run/beamOn 100
