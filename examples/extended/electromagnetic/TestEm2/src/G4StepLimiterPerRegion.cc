@@ -20,56 +20,66 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2004-11-29 14:49:26 vnivanch Exp $
+// $Id: G4StepLimiterPerRegion.cc,v 1.1 2004-11-29 14:49:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-class PhysicsListMessenger;
+#include "G4StepLimiterPerRegion.hh"
+#include "G4StepLimiterMessenger.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+G4StepLimiterPerRegion::G4StepLimiterPerRegion(const G4String& processName)
+ : G4VDiscreteProcess(processName),
+   MaxChargedStep(DBL_MAX)
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
-
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
-
-private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   heIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
-
-};
+  pMess = new G4StepLimiterMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+G4StepLimiterPerRegion::~G4StepLimiterPerRegion() 
+{ 
+  delete pMess; 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4bool G4StepLimiterPerRegion::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return (particle.GetPDGCharge() != 0. && !(particle.IsShortLived()));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4StepLimiterPerRegion::SetMaxStep(G4double step) 
+{
+  MaxChargedStep = step;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double G4StepLimiterPerRegion::PostStepGetPhysicalInteractionLength(
+                                              const G4Track&,
+                                                    G4double,
+                                                    G4ForceCondition* condition )
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  ProposedStep = MaxChargedStep;
+
+  return ProposedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* G4StepLimiterPerRegion::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

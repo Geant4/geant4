@@ -20,56 +20,44 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.hh,v 1.5 2004-11-29 14:49:26 vnivanch Exp $
+// $Id: G4StepLimiterMessenger.cc,v 1.1 2004-11-29 14:49:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Modified:
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#include "G4StepLimiterMessenger.hh"
 
-#include "G4VModularPhysicsList.hh"
+#include "G4StepLimiterPerRegion.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-class PhysicsListMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+G4StepLimiterMessenger::G4StepLimiterMessenger(G4StepLimiterPerRegion* stepM)
+:stepLimiter(stepM)
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
-
-  void ConstructParticle();
-  void ConstructProcess();
-  void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
-
-private:
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-  G4bool   decayIsRegisted;
-  G4bool   stepLimiterIsRegisted;
-  G4bool   heIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
-
-};
+  stepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  stepMaxCmd->SetGuidance("Set max allowed step length for the default region");
+  stepMaxCmd->SetParameterName("mxStep",false);
+  stepMaxCmd->SetRange("mxStep>0.");
+  stepMaxCmd->SetUnitCategory("Length");
+  stepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+G4StepLimiterMessenger::~G4StepLimiterMessenger()
+{
+  delete stepMaxCmd;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4StepLimiterMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{
+  if (command == stepMaxCmd)
+    { stepLimiter->SetMaxStep(stepMaxCmd->GetNewDoubleValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

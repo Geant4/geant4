@@ -21,17 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4EmMuonBuilder.cc,v 1.3 2004-11-29 14:49:27 vnivanch Exp $
+// $Id: G4EmQEDBuilder70.cc,v 1.1 2004-11-29 14:49:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmMuonBuilder
+// ClassName:   G4EmQEDBuilder70
 //
 // Author:      V.Ivanchenko 03.05.2004
 //
 // Modified:
-// 24-11-2004 V.Ivanchenko Use the same radiation processes for mu+ and mu-
 //
 //----------------------------------------------------------------------------
 //
@@ -39,72 +38,72 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4EmMuonBuilder.hh"
+#include "G4EmQEDBuilder70.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4ComptonScattering.hh"
+#include "G4GammaConversion.hh"
+#include "G4PhotoElectricEffect.hh"
+
 #include "G4MultipleScattering.hh"
 
-#include "G4MuIonisation.hh"
-#include "G4MuBremsstrahlung.hh"
-#include "G4MuPairProduction.hh"
+#include "G4eIonisation.hh"
+#include "G4eBremsstrahlung.hh"
+#include "G4eplusAnnihilation70.hh"
+
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4MuonPlus.hh"
-#include "G4MuonMinus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmMuonBuilder::G4EmMuonBuilder(const G4String& name)
+G4EmQEDBuilder70::G4EmQEDBuilder70(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmMuonBuilder::~G4EmMuonBuilder()
+G4EmQEDBuilder70::~G4EmQEDBuilder70()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmMuonBuilder::ConstructParticle()
+void G4EmQEDBuilder70::ConstructParticle()
 {
-  // Minimal set of particles
   G4Gamma::Gamma();
   G4Electron::Electron();
   G4Positron::Positron();
-  G4MuonPlus::MuonPlus();
-  G4MuonMinus::MuonMinus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmMuonBuilder::ConstructProcess()
+void G4EmQEDBuilder70::ConstructProcess()
 {
-  // Common processes for mu+ and mu-
-  G4MultipleScattering* mumsc  = new G4MultipleScattering();
-  G4MuIonisation*       muion  = new G4MuIonisation();
-  G4MuBremsstrahlung*   mubrem = new G4MuBremsstrahlung();
-  G4MuPairProduction*   mupair = new G4MuPairProduction();
-
-  // Add standard EM Processes for mu+
-  const G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
+  // Add standard EM Processes for gamma
+  G4ParticleDefinition* particle = G4Gamma::Gamma();
   G4ProcessManager* pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(mumsc,     -1, 1,1);
-  pmanager->AddProcess(muion,     -1, 2,2);
-  pmanager->AddProcess(mubrem,    -1,-1,3);
-  pmanager->AddProcess(mupair,    -1,-1,4);
+  pmanager->AddDiscreteProcess( new G4PhotoElectricEffect() );
+  pmanager->AddDiscreteProcess( new G4ComptonScattering() );
+  pmanager->AddDiscreteProcess( new G4GammaConversion() );
 
-
-  // Add standard EM Processes for mu-
-  particle = G4MuonMinus::MuonMinus();
+  // Add standard EM Processes for e-
+  particle = G4Electron::Electron();
   pmanager = particle->GetProcessManager();
 
-  pmanager->AddProcess(mumsc,     -1, 1,1);
-  pmanager->AddProcess(muion,     -1, 2,2);
-  pmanager->AddProcess(mubrem,    -1,-1,3);
-  pmanager->AddProcess(mupair,    -1,-1,4);
+  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+
+  // Add standard EM Processes for e+
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
+
+  pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
+  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
+  pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
+  pmanager->AddProcess(new G4eplusAnnihilation70, 0,-1,4);
 
 }
 

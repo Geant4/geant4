@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysicsList.cc,v 1.4 2004-11-24 13:18:03 vnivanch Exp $
+// $Id: PhysicsList.cc,v 1.5 2004-11-29 14:49:28 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
@@ -64,8 +64,9 @@ PhysicsList::PhysicsList()
   emBuilderIsRegisted = false;
   decayIsRegisted = false;
   stepLimiterIsRegisted = false;
+  heIsRegisted = false;
   verbose = 0;
-  G4LossTableManager::Instance()->SetVerbose(2);
+  //  G4LossTableManager::Instance()->SetVerbose(0);
   defaultCutValue = 1.*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
@@ -86,7 +87,8 @@ PhysicsList::~PhysicsList()
 
 void PhysicsList::ConstructParticle()
 {
-  if(!emBuilderIsRegisted) AddPhysicsList("standard");
+  if(verbose > 0) 
+    G4cout << "Construte Particles" << G4endl;
   G4VModularPhysicsList::ConstructParticle();
 }
 
@@ -94,6 +96,9 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
+  if(verbose > 0) 
+    G4cout << "Construte Processes" << G4endl;
+  if(!emBuilderIsRegisted) AddPhysicsList("standard");
   G4VModularPhysicsList::ConstructProcess();
 
   // Define energy interval for loss processes
@@ -103,12 +108,18 @@ void PhysicsList::ConstructProcess()
   emOptions.SetDEDXBinning(90);
   emOptions.SetLambdaBinning(90);
   emOptions.SetBuildPreciseRange(false);
+  //emOptions.SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::AddPhysicsList(const G4String& name)
 {
+  if(verbose > 0) {
+    G4cout << "Add Physics <" << name 
+           << "> emBuilderIsRegisted= " << emBuilderIsRegisted
+           << G4endl;
+  }
   if ((name == "standard") && !emBuilderIsRegisted) {
     RegisterPhysics(new G4EmQEDBuilder());
     RegisterPhysics(new G4EmMuonBuilder());
@@ -138,13 +149,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     RegisterPhysics(new DecaysBuilder());
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     
-  } else if (name == "high_energy") {
+  } else if (name == "high_energy" && !heIsRegisted) {
     RegisterPhysics(new G4EmHighEnergyBuilder());
     G4cout << "PhysicsList::AddPhysicsList <" << name << ">" << G4endl;
     
   } else {
-    G4cout << "PhysicsList::AddPhysicsList <" << name << ">"
-           << " fail - name is unknown " << G4endl;
+    G4cout << "PhysicsList::AddPhysicsList <" << name << ">" 
+           << " fail - module is already regitered or is unknown " << G4endl;
   }
 }
 

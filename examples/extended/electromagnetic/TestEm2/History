@@ -1,4 +1,4 @@
-$Id: History,v 1.46 2004-11-24 10:46:28 maire Exp $
+$Id: History,v 1.47 2004-11-29 14:49:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29-11-04 V.Ivanchenko (testem2-V06-02-03)
+- Update PhysicsList
+- Add verboseLevel -1 for testing
      
 24-11-04 mma (testem2-V06-02-02)
 - fixe in the logic of PhysicsList::AddPhysicsList().
