@@ -98,6 +98,7 @@ protected:
 
   static const G4String fAnyNumber;
   static const G4String fAnyEmptySpace;
+  static const G4String fAnyHidden;
 
   std::vector<G4int> fEnergyNoVector;
   std::vector<G4int> fAngleNoVector;

@@ -55,6 +55,7 @@ public:
 protected:
 
   void WriteDataFile(G4HadFileSpec&);
+  virtual  void FillDoubleDiffXSC(G4String&);
 
 
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadDataSetTest.cc,v 1.3 2004-01-30 14:58:57 grichine Exp $
+// $Id: HadDataSetTest.cc,v 1.4 2004-02-12 16:35:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ int main(int argc, char** argv)
        G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
        exit(1);
   }  
-  G4String whatIdo;
+  G4String whatIdo, fn;
    
   (*fin) >> whatIdo;
    
@@ -94,38 +94,90 @@ int main(int argc, char** argv)
   /// 
    
   density = 2.700*g/cm3;
-  a = 26.98*g/mole;
+  a       = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
    
   density = 2.265*g/cm3;
-  a = 12.011*g/mole;
+  a       = 12.011*g/mole;
   G4Material* C = new G4Material(name="Carbon", z=6., a, density);
    
   density = 0.534*g/cm3;
-  a = 6.941*g/mole;
+  a       = 6.941*g/mole;
   G4Material* Li = new G4Material(name="Li", z=3., a, density);
    
+  density = 1.848*g/cm3;
+  a       = 9.01*g/mole;
+  G4Material* Be = new G4Material(name="Be",z=4.,a,density);
+ 
+  density = 8.960*g/cm3;
+  a       = 63.55*g/mole;
+  G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+
+  density = 18.95*g/cm3;
+  a       = 238.03*g/mole;
+  G4Material* U = new G4Material(name="Uranium",z=92., a, density);
+
+  density = 7.870*g/cm3;
+  a       = 55.85*g/mole;
+  G4Material* Fe = new G4Material("Iron",        z=26., a,  density);
+
+  density = 11.35*g/cm3;
+  a       = 207.19*g/mole;
+  G4Material* Pb = new G4Material("Lead",        z=82., a, density);
+ 
+  density = 8.908*g/cm3;
+  a       = 58.6934*g/mole;
+  G4Material* Ni = new G4Material("Nickel",        z=28., a, density);
+ 
    
-   
-   
-  if (whatIdo=="1")
+  if (whatIdo == "exfor")
   {
        
-       // File conversion from EXFOR data
+    // File conversion from EXFOR data
        
-       // G4String fn = "Al_n_113MeV";
+    //  fn = "./EXFOR/Al_n_113MeV";
        
-       G4String fn = "C_p_200MeV";
+    // fn = "./EXFOR/C_p_200MeV";
        
-       //G4String fn = "C_n_200MeV";
+    //  fn = "./EXFOR/C_n_200MeV";
        
-       //G4String fn = "Li_n_186MeV";
+    //   fn = "./EXFOR/Li_n_186MeV";
        
-       G4String process="dd";
-       
-       G4HadFileSpec fileIwant(proton,C,neutron,process);
-       
-       G4EXFORHadData* exforAl = new G4EXFORHadData(fn,fileIwant);
+    G4String process="dd";       
+    G4HadFileSpec fileIwant(proton,C,proton,process);      
+    G4EXFORHadData* exforAl = new G4EXFORHadData(fn,fileIwant);
+  }
+  else if (whatIdo == "Azh59") 
+  {
+    fn = "./Azh59/Cp660MeV.txt";
+    G4cout<<      "Azh59 file writing ... "<<fn<<G4endl;
+    G4String process = "dd";      
+    G4HadFileSpec fileIwant(proton,C,proton,process);
+    G4MSUHadData* azh59 = new G4MSUHadData(fn,fileIwant);
+  }
+  else if (whatIdo == "Cie87") 
+  {
+    fn = "./Cie87/Pbp585MeV.txt";
+    G4cout<<      "Cie87 file writing ... "<<fn<<G4endl;
+    G4String process = "dd";      
+    G4HadFileSpec fileIwant(proton,Pb,neutron,process);
+    G4MSUHadData* cie87 = new G4MSUHadData(fn,fileIwant);
+  }
+  else if (whatIdo == "Edg69") 
+  {
+    fn = "./Edg69/Pb32degreep3GeV.prn";
+    G4cout<<      "Edg69 file writing ... "<<fn<<G4endl;
+    G4String process = "dd";      
+    G4HadFileSpec fileIwant(proton,Pb,proton,process);
+    G4MSUHadData* edg69 = new G4MSUHadData(fn,fileIwant);
+  }
+  else if (whatIdo == "Pea87") 
+  {
+    fn = "./Pea87/Pbpea87.txt";
+    G4cout<<      "Pea87 file writing ... "<<fn<<G4endl;
+    G4String process = "dd";      
+    G4HadFileSpec fileIwant(proton,Pb,neutron,process);
+    G4MSUHadData* pea87 = new G4MSUHadData(fn,fileIwant);
   }
   else if (whatIdo=="2") 
   {

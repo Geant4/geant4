@@ -80,6 +80,7 @@ void G4MSUHadData::WriteDataFile( G4HadFileSpec& filetowrite)
   G4String pathString(filetowrite.G4HDSFilepath());
   
   G4String dirFile = pathString + name;   
+  // G4String dirFile = name;   
 
   char* doIhaverights = getenv("G4HADWRITTINGRIGHTS");
 
@@ -293,7 +294,7 @@ void G4MSUHadData::FillDoubleDiffXSC( G4String& fileName)
       fout<<G4endl<<"omegaNo"<<"\t"<<fOmegaNoVector[j]<<G4endl<<G4endl;
       G4cout<<G4endl<<"omegaNo"<<"\t"<<fOmegaNoVector[j]<<G4endl<<G4endl;
 
-      for(kOmega = 0; kOmega < fOmegaNoVector[jAngle]; ++kOmega)
+      for(kOmega = 0; kOmega < fOmegaNoVector[j]; ++kOmega)
       {
         fout<<(*fMomentumCVector)[k]<<"\t"
                     <<(*fDeltaMomCVector)[k]<<"\t"

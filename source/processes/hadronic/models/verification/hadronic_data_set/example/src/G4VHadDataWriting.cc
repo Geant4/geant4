@@ -47,6 +47,7 @@
 
 static const G4String G4VHadDataWriting::fAnyNumber = "1234567890.+-";
 static const G4String G4VHadDataWriting::fAnyEmptySpace = " \t";
+static const G4String G4VHadDataWriting::fAnyHidden = " \t\n\r";
 
 
 
