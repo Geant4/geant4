@@ -7,11 +7,12 @@
 #                                                                     #
 #  CONTENTS: A basic macro for visualization of events                #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis2.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute exN03Vis2.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
 #                                  DAWN (version 3.80 of after)       #
-#                                  Ghostview, Tcl/Tk                  #
+#                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #

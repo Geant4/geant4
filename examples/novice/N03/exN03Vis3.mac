@@ -7,11 +7,12 @@
 #                                                                     #
 #  CONTENTS: A basic macro for demonstrating various drawing styles   #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  exN03Vis3.mac                      #
+#  USAGE:  % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute exN03Vis3.mac                       #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window, OpenGL,            #
 #                                  DAWN (version 3.80 of after)       #
-#                                  Ghostview, Tcl/Tk                  #
+#                                  gv (Ghostview), Tcl/Tk             #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
