@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-05-22 17:32:10 gcosmo Exp $
+$Id: History,v 1.18 2001-07-31 06:08:52 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- July, 31 H.Kurashige (procman-V03-02-00)
+- Modify arguments for Retreive/StorePhysicsTable
 
 - May 22, 01  G.Cosmo (procman-V03-01-00)
 - Cleared pedantic warnings from Linux-g++ ISO/ANSI setup.
