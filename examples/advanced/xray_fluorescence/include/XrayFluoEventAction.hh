@@ -22,7 +22,7 @@
 //
 //
 // $Id: XrayFluoEventAction.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -38,8 +38,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-#include "XrayFluoDetectorConstruction.hh"
-#include "XrayFluoPlaneDetectorConstruction.hh"
+
 class XrayFluoRunAction;
 class XrayFluoEventActionMessenger;
 
@@ -50,8 +49,7 @@ class XrayFluoEventAction : public G4UserEventAction
 {
 public:
   
-  XrayFluoEventAction(XrayFluoDetectorConstruction*);
-  XrayFluoEventAction(XrayFluoPlaneDetectorConstruction*);
+  XrayFluoEventAction();
   
   virtual ~XrayFluoEventAction();
   
@@ -77,19 +75,14 @@ private:
   //the sigma is to be set in the file XrayFluoEventAction.cc 
   G4double RandomCut(G4double);
 
-
-  XrayFluoVDetectorType* detectorType;
-
-  
-  
-  //XrayFluoRunAction* runManager;
-
-
   //this method distributes the energy deposit (which must be given as
   //argument) according to the response function stored in the file 
   //response.dat
-  //public: G4double ResponseFunction(G4double);
+  
+  
+  XrayFluoRunAction* runManager;
 
+public: G4double ResponseFunction(G4double);
   
 
 };

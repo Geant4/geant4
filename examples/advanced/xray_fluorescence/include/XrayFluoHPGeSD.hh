@@ -21,8 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: XrayFluoSteppingAction.hh
-// GEANT4 tag $Name:  xray_fluo-V04-01-03
+// $Id: XrayFluoHPGeSD.hh
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
@@ -32,26 +32,46 @@
 //
 // -------------------------------------------------------------------
 
-#ifndef XrayFluoSteppingAction_h
-#define XrayFluoSteppingAction_h 1
+#ifndef XrayFluoHpGe_h
+#define XrayFluoHPGeSD_h 1
+
+#include "G4VSensitiveDetector.hh"
 #include "globals.hh"
-#include "G4UserSteppingAction.hh"
+#include "XrayFluoSensorHit.hh"
 
 class XrayFluoDetectorConstruction;
+class G4HCofThisEvent;
+class G4Step;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class XrayFluoSteppingAction : public G4UserSteppingAction
+class XrayFluoHPGeSD : public G4VSensitiveDetector
 {
-  public:
-
-  XrayFluoSteppingAction(); 
-   ~XrayFluoSteppingAction();
-
-    void UserSteppingAction(const G4Step*);
+public:
+  
+  XrayFluoHPGeSD(G4String, XrayFluoDetectorConstruction* );
+  ~XrayFluoHPGeSD();
+  
+  void Initialize(G4HCofThisEvent*);
+  void EndOfEvent(G4HCofThisEvent*);
+  void clear();
+  void DrawAll();
+  void PrintAll();
+  
+protected:
+  
+ G4bool ProcessHits(G4Step*,G4TouchableHistory*);
 private:
-
-
+  
+  //hit collection for the detector
+  XrayFluoSensorHitsCollection*  HPGeCollection;   
+  XrayFluoDetectorConstruction* Detector;
+  G4int*                   HitHPGeID;
 };
 
 #endif
+
+
+
+
+

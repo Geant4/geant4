@@ -22,13 +22,14 @@
 //
 //
 // $Id: XrayFluoDetectorMessenger.hh
-// GEANT4 tag $Name: xray_fluo-V03-02-00
+// GEANT4 tag $Name: xray_fluo-V04-01-03
 //
 // Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
 //
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
+// 29 Nov 2002 change of sample material added (Alfonso.mantero@ge.infn.it)
 //
 // -------------------------------------------------------------------
 
@@ -43,29 +44,24 @@ class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
-class G4UIcmdWithABool;
-class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class XrayFluoDetectorMessenger: public G4UImessenger
 {
+  public:
+    XrayFluoDetectorMessenger(XrayFluoDetectorConstruction* );
+   ~XrayFluoDetectorMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
 
-public:
-  XrayFluoDetectorMessenger(XrayFluoDetectorConstruction* );
-  ~XrayFluoDetectorMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  XrayFluoDetectorConstruction*    Detector;
-  G4UIdirectory*             detDir;
-  
-  G4UIcmdWithoutParameter*   UpdateCmd;
-  G4UIcmdWithAString* sampleCmd;
-  G4UIcmdWithAString* detectorCmd;
-  G4UIcmdWithABool* granularityFlagCmd;
-  G4UIcmdWithADoubleAndUnit* grainDiaCmd;
+ private:
+    XrayFluoDetectorConstruction*    Detector;
+    G4UIdirectory*             detDir;
+
+    G4UIcmdWithoutParameter*   UpdateCmd;
+    G4UIcmdWithAString* sampleCmd;
+
 };
 
 #endif
