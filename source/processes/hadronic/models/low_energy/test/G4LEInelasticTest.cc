@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.6 2002-07-13 07:23:56 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.7 2002-07-13 07:48:29 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -287,31 +287,34 @@ int j = 0;
 	     G4cout << G4endl;
 	     if(aSec->GetDefinition()->GetParticleType() == "baryon")
 	     { 
-               G4double ss = 0;
-	       ss +=aSec->GetDefinition()->GetPDGMass();
-	       ss -=G4Proton::Proton()->GetPDGMass();
-	       ss += aSec->GetKineticEnergy();
-	       QValue += ss;
-	       if(isec!=0) QValueM1 += ss;
-	       if(isec>1) QValueM2 += ss;
-	       G4cout << "found a Baryon !!!" <<G4endl;
+	       if(aSec->GetDefinition()->GetBaryonNumber() < 0)
+	       {
+                 QValue += aSec->GetTotalEnergy();
+                 QValue += aSec->GetDefinition()->GetPDGMass();
+ 	         if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
+ 	         if(isec!=0) QValueM1 += aSec->GetDefinition()->GetPDGMass();
+	         if(isec>1) QValueM2 += aSec->GetTotalEnergy();
+	         if(isec>1) QValueM2 += aSec->GetDefinition()->GetPDGMass();
+	         G4cout << "found an anti !!!" <<G4endl;
+	       }
+	       else
+	       {
+                 G4double ss = 0;
+	         ss +=aSec->GetDefinition()->GetPDGMass();
+	         ss -=G4Neutron::Neutron()->GetPDGMass();
+	         ss += aSec->GetKineticEnergy();
+	         QValue += ss;
+	         if(isec!=0) QValueM1 += ss;
+	         if(isec>1) QValueM2 += ss;
+	         G4cout << "found a Baryon !!!" <<G4endl;
+	       }
 	     }
-	     else if(aSec->GetDefinition()->GetBaryonNumber() == 0)
+	     else
 	     {
                QValue += aSec->GetTotalEnergy();
 	       if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
 	       if(isec>1) QValueM2 += aSec->GetKineticEnergy();
 	       G4cout << "found a Meson !!!" <<G4endl;
-	     }
-	     else
-	     {
-               QValue += aSec->GetTotalEnergy();
-               QValue += aSec->GetDefinition()->GetPDGMass();
-	       if(isec!=0) QValueM1 += aSec->GetTotalEnergy();
-	       if(isec!=0) QValueM1 += aSec->GetDefinition()->GetPDGMass();
-	       if(isec>1) QValueM2 += aSec->GetTotalEnergy();
-	       if(isec>1) QValueM2 += aSec->GetDefinition()->GetPDGMass();
-	       G4cout << "found an anti !!!" <<G4endl;
 	     }
 	     delete second;
            }
