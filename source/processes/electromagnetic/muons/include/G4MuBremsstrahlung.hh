@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.hh,v 1.16 2003-08-08 11:28:39 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.hh,v 1.17 2003-11-12 16:18:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,7 +31,7 @@
 // File name:     G4MuBremsstrahlung
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.09.1997
 //
 // Modifications:
@@ -44,11 +44,12 @@
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
 // This class manages the Bremsstrahlung process for muons.
-// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
 //
 
 // -------------------------------------------------------------------
@@ -60,11 +61,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MuBremsstrahlung : public G4VEnergyLossSTD
+class G4MuBremsstrahlung : public G4VEnergyLossProcess
 
 {
 public:

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.hh,v 1.15 2003-08-08 11:28:40 vnivanch Exp $
+// $Id: G4MuPairProduction.hh,v 1.16 2003-11-12 16:18:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -45,11 +45,12 @@
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
 // This class manages the PairProduction process for muons.
-// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossSTD.
+// it inherites from G4VContinuousDiscreteProcess via G4VEnergyLossProcess.
 //
 
 // -------------------------------------------------------------------
@@ -61,11 +62,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "globals.hh"
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4MuPairProduction : public G4VEnergyLossSTD
+class G4MuPairProduction : public G4VEnergyLossProcess
 
 {
 public:

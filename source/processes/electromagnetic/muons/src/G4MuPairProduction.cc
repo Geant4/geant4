@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProduction.cc,v 1.39 2003-11-03 19:22:59 vnivanch Exp $
+// $Id: G4MuPairProduction.cc,v 1.40 2003-11-12 16:18:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,7 @@
 // 13-02-03 SubCutoff regime is assigned to a region (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
 // 27-09-03 e+ set to be a secondary particle (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -73,7 +74,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuPairProduction::G4MuPairProduction(const G4String& name) 
-  : G4VEnergyLossSTD(name),
+  : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0),
     subCutoff(false)
@@ -118,7 +119,7 @@ const G4ParticleDefinition* G4MuPairProduction::DefineBaseParticle(
 
 void G4MuPairProduction::PrintInfoDefinition()
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Parametrised model "
          << G4endl;

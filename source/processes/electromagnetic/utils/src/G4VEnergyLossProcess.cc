@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.62 2003-11-12 10:24:18 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.1 2003-11-12 16:18:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4VEnergyLossSTD
+// File name:     G4VEnergyLossProcess
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -65,6 +65,7 @@
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
 // 03-11-03 Fix initialisation problem in RetrievePhysicsTable (V.Ivanchenko)
 // 04-11-03 Add checks in RetrievePhysicsTable (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -78,7 +79,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4VEnergyLossSTD.hh"
+#include "G4VEnergyLossProcess.hh"
 #include "G4LossTableManager.hh"
 #include "G4Step.hh"
 #include "G4ParticleDefinition.hh"
@@ -102,7 +103,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
+G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType type):
                  G4VContinuousDiscreteProcess(name, type),
   nSCoffRegions(0),
   idxSCoffRegions(0),
@@ -151,7 +152,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VEnergyLossSTD::~G4VEnergyLossSTD()
+G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
   Clear();
 
@@ -173,10 +174,10 @@ G4VEnergyLossSTD::~G4VEnergyLossSTD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::Clear()
+void G4VEnergyLossProcess::Clear()
 {
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::Clear() for " << GetProcessName() << G4endl;
+    G4cout << "G4VEnergyLossProcess::Clear() for " << GetProcessName() << G4endl;
   }
   if ( !baseParticle ) {
     if(theDEDXTable) theDEDXTable->clearAndDestroy();
@@ -201,10 +202,10 @@ void G4VEnergyLossSTD::Clear()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::Initialise()
+void G4VEnergyLossProcess::Initialise()
 {
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::Initialise() for "
+    G4cout << "G4VEnergyLossProcess::Initialise() for "
            << GetProcessName() 
            << " for " << particle->GetParticleName()
            << G4endl;
@@ -257,7 +258,7 @@ void G4VEnergyLossSTD::Initialise()
   }
 
   if (0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::Initialise() is done "
+    G4cout << "G4VEnergyLossProcess::Initialise() is done "
            << " chargeSqRatio= " << chargeSqRatio
            << " massRatio= " << massRatio
            << " reduceFactor= " << reduceFactor << G4endl;
@@ -273,13 +274,13 @@ void G4VEnergyLossSTD::Initialise()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
+void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
   currentCouple = 0;
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
-    G4cout << "### G4VEnergyLossSTD::BuildPhysicsTable() for "
+    G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
            << G4endl;
@@ -314,7 +315,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
     if(!baseParticle) PrintInfoDefinition();
 
     if(0 < verboseLevel) {
-      G4cout << "### G4VEnergyLossSTD::BuildPhysicsTable() done for "
+      G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "
              << GetProcessName()
              << " and particle " << part.GetParticleName()
              << G4endl;
@@ -324,7 +325,7 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
+void G4VEnergyLossProcess::SetParticles(const G4ParticleDefinition* p1,
                                     const G4ParticleDefinition* p2)
 {
   particle = p1;
@@ -336,7 +337,7 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
 
   }
   if(!yes) {
-    G4cout << "Warning in G4VEnergyLossSTD::SetParticle: "
+    G4cout << "Warning in G4VEnergyLossProcess::SetParticle: "
            << particle->GetParticleName()
            << " losses cannot be obtained from "
            << baseParticle->GetParticleName()
@@ -348,7 +349,7 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuationModel* fluc,
+void G4VEnergyLossProcess::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuationModel* fluc,
                                 const G4Region* region)
 {
   modelManager->AddEmModel(order, p, fluc, region);
@@ -356,18 +357,18 @@ void G4VEnergyLossSTD::AddEmModel(G4int order, G4VEmModel* p, G4VEmFluctuationMo
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
+void G4VEnergyLossProcess::UpdateEmModel(const G4String& nam, G4double emin, G4double emax)
 {
   modelManager->UpdateEmModel(nam, emin, emax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
+void G4VEnergyLossProcess::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
                                        const G4Region* r)
 {
   if( !p ) {
-    G4cout << "G4VEnergyLossSTD::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." << G4endl;
+    G4cout << "G4VEnergyLossProcess::AddSubCutoffProcessor WARNING: no SubCutoffProcessor defined." << G4endl;
     return;
   }
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
@@ -388,11 +389,11 @@ void G4VEnergyLossSTD::AddSubCutoffProcessor(G4VSubCutoffProcessor* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTable()
+G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable()
 {
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildDEDXTable() for "
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTable() for "
            << GetProcessName()
            << " and particle " << particle->GetParticleName()
            << G4endl;
@@ -429,7 +430,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTable()
   }
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildDEDXTable(): table is built for "
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTable(): table is built for "
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
@@ -442,11 +443,11 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTableForPreciseRange()
+G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTableForPreciseRange()
 {
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildDEDXTableForPreciseRange() for "
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange() for "
            << GetProcessName()
            << " and particle " << particle->GetParticleName()
            << G4endl;
@@ -483,7 +484,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTableForPreciseRange()
   }
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildDEDXTableForPreciseRange(): table is built for " 
+    G4cout << "G4VEnergyLossProcess::BuildDEDXTableForPreciseRange(): table is built for " 
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
@@ -496,11 +497,11 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTableForPreciseRange()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
+G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable()
 {
 
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildLambdaTable() for process "
+    G4cout << "G4VEnergyLossProcess::BuildLambdaTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName()
            << G4endl;
@@ -538,10 +539,10 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaSubTable()
+G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaSubTable()
 {
   if(0 < verboseLevel) {
-    G4cout << "G4VEnergyLossSTD::BuildLambdaSubTable() for process "
+    G4cout << "G4VEnergyLossProcess::BuildLambdaSubTable() for process "
            << GetProcessName() << " and particle "
            << particle->GetParticleName() << G4endl;
   }
@@ -575,7 +576,7 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaSubTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
+G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
                                                    const G4Step& step)
 {
   aParticleChange.Initialize(track);
@@ -736,7 +737,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
+G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
                                                   const G4Step& step)
 {
   aParticleChange.Initialize(track);
@@ -761,7 +762,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   /*
   if(0 < verboseLevel) {
     const G4ParticleDefinition* pd = dynParticle->GetDefinition();
-    G4cout << "G4VEnergyLossSTD::PostStepDoIt: Sample secondary; E= " << finalT/MeV
+    G4cout << "G4VEnergyLossProcess::PostStepDoIt: Sample secondary; E= " << finalT/MeV
            << " MeV; model= (" << currentModel->LowEnergyLimit(pd)
            << ", " <<  currentModel->HighEnergyLimit(pd) << ")"
            << G4endl;
@@ -787,7 +788,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::PrintInfoDefinition()
+void G4VEnergyLossProcess::PrintInfoDefinition()
 {
   G4cout << G4endl << GetProcessName() << ":   tables are built for  " 
          << particle->GetParticleName()
@@ -836,14 +837,14 @@ void G4VEnergyLossSTD::PrintInfoDefinition()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetDEDXTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p)
 {
   theDEDXTable = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetRangeTable(G4PhysicsTable* p)
 {
   theRangeTable = p;
   size_t n = p->length();
@@ -868,21 +869,21 @@ void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetSecondaryRangeTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetSecondaryRangeTable(G4PhysicsTable* p)
 {
   theSecondaryRangeTable = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetInverseRangeTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetInverseRangeTable(G4PhysicsTable* p)
 {
   theInverseRangeTable = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetLambdaTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
 {
   theLambdaTable = p;
   tablesAreBuilt = true;
@@ -890,7 +891,7 @@ void G4VEnergyLossSTD::SetLambdaTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetSubLambdaTable(G4PhysicsTable* p)
+void G4VEnergyLossProcess::SetSubLambdaTable(G4PhysicsTable* p)
 {
   theSubLambdaTable = p;
   if (nSCoffRegions) {
@@ -902,7 +903,7 @@ void G4VEnergyLossSTD::SetSubLambdaTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
+G4PhysicsVector* G4VEnergyLossProcess::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4int nbins = 3;
   if( couple->IsUsed() ) nbins = nDEDXBins;
@@ -913,7 +914,7 @@ G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple*
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVectorForPreciseRange(
+G4PhysicsVector* G4VEnergyLossProcess::DEDXPhysicsVectorForPreciseRange(
                              const G4MaterialCutsCouple* couple)
 {
   G4int nbins = 3;
@@ -925,7 +926,7 @@ G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVectorForPreciseRange(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
+G4PhysicsVector* G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   G4double cut  = (*theCuts)[couple->GetIndex()];
   G4int nbins = 3;
@@ -940,14 +941,14 @@ G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCoupl
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossSTD::SubLambdaPhysicsVector(const G4MaterialCutsCouple* couple)
+G4PhysicsVector* G4VEnergyLossProcess::SubLambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
   return LambdaPhysicsVector(couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEnergyLossSTD::MicroscopicCrossSection(G4double kineticEnergy,
+G4double G4VEnergyLossProcess::MicroscopicCrossSection(G4double kineticEnergy,
                                              const G4MaterialCutsCouple* couple)
 {
   // Cross section per atom is calculated
@@ -966,7 +967,7 @@ G4double G4VEnergyLossSTD::MicroscopicCrossSection(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEnergyLossSTD::MeanFreePath(const G4Track& track,
+G4double G4VEnergyLossProcess::MeanFreePath(const G4Track& track,
                                               G4double s,
                                               G4ForceCondition* cond)
 {
@@ -975,7 +976,7 @@ G4double G4VEnergyLossSTD::MeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4VEnergyLossSTD::ContinuousStepLimit(const G4Track& track,
+G4double G4VEnergyLossProcess::ContinuousStepLimit(const G4Track& track,
                                                G4double x, G4double y, G4double& z)
 {
   return GetContinuousStepLimit(track, x, y, z);
@@ -983,7 +984,7 @@ G4double G4VEnergyLossSTD::ContinuousStepLimit(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
+void G4VEnergyLossProcess::SetStepLimits(G4double v1, G4double v2)
 {
   dRoverRange = v1;
   finalRange = v2;
@@ -992,7 +993,7 @@ void G4VEnergyLossSTD::SetStepLimits(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetIntegral(G4bool val)
+void G4VEnergyLossProcess::SetIntegral(G4bool val)
 {
   if(integral != val) {
     if(val) dRoverRange = defaultIntegralRange;
@@ -1003,7 +1004,7 @@ void G4VEnergyLossSTD::SetIntegral(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetStepFunction(G4double v1, G4double v2)
+void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
 {
   dRoverRange = v1;
   finalRange = v2;
@@ -1012,7 +1013,7 @@ void G4VEnergyLossSTD::SetStepFunction(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
+void G4VEnergyLossProcess::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   baseParticle = DefineBaseParticle(particle);
@@ -1020,21 +1021,21 @@ void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetBaseParticle(const G4ParticleDefinition* p)
+void G4VEnergyLossProcess::SetBaseParticle(const G4ParticleDefinition* p)
 {
   baseParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetSecondaryParticle(const G4ParticleDefinition* p)
+void G4VEnergyLossProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 {
   secondaryParticle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool G4VEnergyLossSTD::StorePhysicsTable(G4ParticleDefinition* part,
+G4bool G4VEnergyLossProcess::StorePhysicsTable(G4ParticleDefinition* part,
 			 	     const G4String& directory,
 				           G4bool ascii)
 {
@@ -1087,7 +1088,7 @@ G4bool G4VEnergyLossSTD::StorePhysicsTable(G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
+G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
 			  	        const G4String& directory,
 			  	              G4bool ascii)
 {
@@ -1096,7 +1097,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   preStepLambda = 0.0;
   if(0 < verboseLevel) {
     G4cout << "========================================================" << G4endl;
-    G4cout << "G4VEnergyLossSTD::RetrievePhysicsTable() for "
+    G4cout << "G4VEnergyLossProcess::RetrievePhysicsTable() for "
            << part->GetParticleName() << " and process " << GetProcessName() 
            << "; tables_are_built= " << tablesAreBuilt
            << G4endl;

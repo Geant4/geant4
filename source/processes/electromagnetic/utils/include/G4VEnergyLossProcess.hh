@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.33 2003-10-27 17:24:42 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.1 2003-11-12 16:18:09 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -28,7 +28,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4VEnergyLossSTD
+// File name:     G4VEnergyLossProcess
 //
 // Author:        Vladimir Ivanchenko on base of Laszlo Urban code
 //
@@ -47,6 +47,7 @@
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
 // 13-05-03 Add calculation of precise range (V.Ivanchenko)
 // 21-07-03 Add UpdateEmModel method (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -59,8 +60,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4VEnergyLossSTD_h
-#define G4VEnergyLossSTD_h 1
+#ifndef G4VEnergyLossProcess_h
+#define G4VEnergyLossProcess_h 1
 
 #include "G4VContinuousDiscreteProcess.hh"
 #include "globals.hh"
@@ -83,14 +84,14 @@ class G4Region;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4VEnergyLossSTD : public G4VContinuousDiscreteProcess
+class G4VEnergyLossProcess : public G4VContinuousDiscreteProcess
 {
 public:
 
-  G4VEnergyLossSTD(const G4String& name = "EnergyLoss",
+  G4VEnergyLossProcess(const G4String& name = "EnergyLoss",
                          G4ProcessType type = fElectromagnetic);
 
- ~G4VEnergyLossSTD();
+ ~G4VEnergyLossProcess();
 
   void Initialise();
 
@@ -309,8 +310,8 @@ private:
 
   // hide  assignment operator
 
-  G4VEnergyLossSTD(G4VEnergyLossSTD &);
-  G4VEnergyLossSTD & operator=(const G4VEnergyLossSTD &right);
+  G4VEnergyLossProcess(G4VEnergyLossProcess &);
+  G4VEnergyLossProcess & operator=(const G4VEnergyLossProcess &right);
 
 // =====================================================================
 
@@ -382,7 +383,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
+inline void G4VEnergyLossProcess::DefineMaterial(const G4MaterialCutsCouple* couple)
 {
   if(couple != currentCouple) {
     currentCouple   = couple;
@@ -396,7 +397,7 @@ inline void G4VEnergyLossSTD::DefineMaterial(const G4MaterialCutsCouple* couple)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetDEDX(G4double& kineticEnergy,
+inline G4double G4VEnergyLossProcess::GetDEDX(G4double& kineticEnergy,
                                     const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -407,7 +408,7 @@ inline G4double G4VEnergyLossSTD::GetDEDX(G4double& kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
+inline G4double G4VEnergyLossProcess::GetRange(G4double& kineticEnergy,
                                             const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -425,7 +426,7 @@ inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double& range,
+inline G4double G4VEnergyLossProcess::GetKineticEnergy(G4double& range,
                                              const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -436,7 +437,7 @@ inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double& range,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetDEDXDispersion(
+inline G4double G4VEnergyLossProcess::GetDEDXDispersion(
                                   const G4MaterialCutsCouple *couple,
                                   const G4DynamicParticle* dp,
                                         G4double& length)
@@ -450,7 +451,7 @@ inline G4double G4VEnergyLossSTD::GetDEDXDispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
+inline G4double G4VEnergyLossProcess::GetMeanFreePath(const G4Track& track,
                                                         G4double,
                                                         G4ForceCondition* cond)
 {
@@ -473,7 +474,7 @@ inline G4double G4VEnergyLossSTD::GetMeanFreePath(const G4Track& track,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
+inline G4double G4VEnergyLossProcess::GetContinuousStepLimit(const G4Track&,
                                   G4double, G4double currentMinStep, G4double&)
 {
   G4double x = DBL_MAX;
@@ -500,7 +501,7 @@ inline G4double G4VEnergyLossSTD::GetContinuousStepLimit(const G4Track&,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::ResetNumberOfInteractionLengthLeft()
+inline void G4VEnergyLossProcess::ResetNumberOfInteractionLengthLeft()
 {
   meanFreePath = true;
   G4VProcess::ResetNumberOfInteractionLengthLeft();
@@ -509,63 +510,63 @@ inline void G4VEnergyLossSTD::ResetNumberOfInteractionLengthLeft()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VEmModel* G4VEnergyLossSTD::SelectModel(G4double& kinEnergy)
+inline G4VEmModel* G4VEnergyLossProcess::SelectModel(G4double& kinEnergy)
 {
   return modelManager->SelectModel(kinEnergy, currentMaterialIndex);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4ParticleDefinition* G4VEnergyLossSTD::Particle() const
+inline const G4ParticleDefinition* G4VEnergyLossProcess::Particle() const
 {
   return particle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4ParticleDefinition* G4VEnergyLossSTD::BaseParticle() const
+inline const G4ParticleDefinition* G4VEnergyLossProcess::BaseParticle() const
 {
   return baseParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline const G4ParticleDefinition* G4VEnergyLossSTD::SecondaryParticle() const
+inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() const
 {
   return secondaryParticle;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetDEDXBinning(G4int nbins)
+inline void G4VEnergyLossProcess::SetDEDXBinning(G4int nbins)
 {
   nDEDXBins = nbins;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetDEDXBinningForPreciseRange(G4int nbins)
+inline void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
 {
   nDEDXBinsForRange = nbins;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 /*
-inline G4int G4VEnergyLossSTD::DEDXBinning() const
+inline G4int G4VEnergyLossProcess::DEDXBinning() const
 {
   return nDEDXBins;
 }
 */
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetLambdaBinning(G4int nbins)
+inline void G4VEnergyLossProcess::SetLambdaBinning(G4int nbins)
 {
   nLambdaBins = nbins;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 /*
-inline G4int G4VEnergyLossSTD::LambdaBinning() const
+inline G4int G4VEnergyLossProcess::LambdaBinning() const
 {
   return nLambdaBins;
 }
@@ -573,14 +574,14 @@ inline G4int G4VEnergyLossSTD::LambdaBinning() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::MinKinEnergy() const
+inline G4double G4VEnergyLossProcess::MinKinEnergy() const
 {
   return minKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetMinKinEnergy(G4double e)
+inline void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
 {
   minKinEnergy = e;
   lowKinEnergy = minKinEnergy*faclow;
@@ -588,7 +589,7 @@ inline void G4VEnergyLossSTD::SetMinKinEnergy(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetMaxKinEnergy(G4double e)
+inline void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
 {
   maxKinEnergy = e;
   if(e < maxKinEnergyForRange) maxKinEnergyForRange = e;
@@ -596,21 +597,21 @@ inline void G4VEnergyLossSTD::SetMaxKinEnergy(G4double e)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossSTD::SetMaxKinEnergyForPreciseRange(G4double e)
+inline void G4VEnergyLossProcess::SetMaxKinEnergyForPreciseRange(G4double e)
 {
   maxKinEnergyForRange = e;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::MaxKinEnergy() const
+inline G4double G4VEnergyLossProcess::MaxKinEnergy() const
 {
   return maxKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetLambda(G4double kineticEnergy,
+inline G4double G4VEnergyLossProcess::GetLambda(G4double kineticEnergy,
                                       const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -626,7 +627,7 @@ inline G4double G4VEnergyLossSTD::GetLambda(G4double kineticEnergy,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4VSubCutoffProcessor* G4VEnergyLossSTD::SubCutoffProcessor(size_t index)
+inline G4VSubCutoffProcessor* G4VEnergyLossProcess::SubCutoffProcessor(size_t index)
 {
   G4VSubCutoffProcessor* p = 0;
   if( nSCoffRegions ) p = scoffProcessors[idxSCoffRegions[index]];

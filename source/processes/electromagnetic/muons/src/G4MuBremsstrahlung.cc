@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.29 2003-11-03 19:22:59 vnivanch Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.30 2003-11-12 16:18:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,10 +31,10 @@
 // File name:     G4MuBremsstrahlung
 //
 // Author:        Laszlo Urban
-// 
+//
 // Creation date: 30.09.1997
 //
-// Modifications: 
+// Modifications:
 //
 // 08-04-98 remove 'tracking cut' of muon in oIt, MMa
 // 26-10-98 new cross section of R.Kokoulin,cleanup , L.Urban
@@ -50,6 +50,7 @@
 // 23-12-02 Change interface in order to move to cut per region (V.Ivanchenko)
 // 26-12-02 Secondary production moved to derived classes (V.Ivanchenko)
 // 08-08-03 STD substitute standard  (V.Ivanchenko)
+// 12-11-03 G4EnergyLossSTD -> G4EnergyLossProcess (V.Ivanchenko)
 //
 // -------------------------------------------------------------------
 //
@@ -66,7 +67,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4MuBremsstrahlung::G4MuBremsstrahlung(const G4String& name)
-  : G4VEnergyLossSTD(name),
+  : G4VEnergyLossProcess(name),
     theParticle(0),
     theBaseParticle(0)
 {
@@ -109,7 +110,7 @@ const G4ParticleDefinition* G4MuBremsstrahlung::DefineBaseParticle(
 
 void G4MuBremsstrahlung::PrintInfoDefinition() 
 {
-  G4VEnergyLossSTD::PrintInfoDefinition();
+  G4VEnergyLossProcess::PrintInfoDefinition();
 
   G4cout << "      Parametrised model "
          << G4endl;
