@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.80 2002-10-30 16:04:23 gcosmo Exp $
+# $Id: architecture.gmk,v 1.81 2002-10-30 17:15:45 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -339,7 +339,7 @@ GREP := grep
 
 # Include architecture dependent setups...
 #
--include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
+include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk
 
 # If compiler recognises implicit C++ type bool...
 #
@@ -395,7 +395,7 @@ endif
 
 # If G4SYSTEM is not specified or not valid, issue an ERROR !
 #
-$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
-	@echo "ERROR - G4SYSTEM is not defined in the environment"
-	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
-	exit 1
+#$(G4INSTALL)/config/sys/$(G4SYSTEM).gmk:
+#	@echo "ERROR - G4SYSTEM is not defined in the environment"
+#	@echo "        or $(G4SYSTEM) architecture is not a valid one !"
+#	exit 1
