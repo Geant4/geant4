@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 proton
@@ -21,9 +21,9 @@ Pb
 #emax(MeV)
 800.
 #nbinse
-200
+160
 #nbinsd
-200
+80
 #elim(MeV)
 1.0
 #nangle
@@ -31,7 +31,7 @@ Pb
 #angles
 7.5 30. 60. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 kinetic

@@ -19,9 +19,9 @@ Fe
 #emax(MeV)
 800.
 #nbinse
-200
+160
 #nbinsd
-200
+80
 #elim(MeV)
 0.5
 #nangle
@@ -29,7 +29,7 @@ Fe
 #angles
 7.5 30. 60. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 kinetic

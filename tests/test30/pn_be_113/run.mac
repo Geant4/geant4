@@ -23,7 +23,7 @@ Be
 #nbinse
 60
 #nbinsd
-60
+24
 #elim(MeV)
 2.
 #nangle
@@ -31,7 +31,7 @@ Be
 #angles
 7.5 30. 60. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 LEparametrisation

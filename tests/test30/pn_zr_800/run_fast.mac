@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-100000
+20000
 //--------Proton_processes
 #particle
 proton
@@ -21,7 +21,7 @@ Zr
 #elim(MeV)
 30.
 #nbinse
-200
+160
 #nbinsd
 80
 #nangle
@@ -29,7 +29,7 @@ Zr
 #angles
 7.5 30. 60. 120. 150.
 #dangle
-10.
+5.
 //--------
 #generator
 kinetic
