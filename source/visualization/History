@@ -1,4 +1,4 @@
-$Id: History,v 1.133 2001-06-19 11:24:09 stanaka Exp $
+$Id: History,v 1.134 2001-07-10 23:22:25 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,16 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+10th July 2001  John Allison  (vis-V03-02-00)
+- Removed old-style commands.
+- Removed maintenance of G4VisManager's G4ViewParameters object (this
+  will be removed soon).
+- Merged vis-V03-02-patch00 (below) to head.
+
+10th July  John Allison  (vis-V03-02-patch00 in branch geant4-03-02-branch)
+- Corrected mistake which could cause crash if user specified a non-
+  existent scene handler in /vis/sceneHandler/remove.
 
 19th June 2001  Satoshi Tanaka (vis-V03-01-07)
 -OS dependence is removed from the DAWN-network driver.
