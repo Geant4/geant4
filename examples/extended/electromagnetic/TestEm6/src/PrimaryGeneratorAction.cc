@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2002-05-23 13:30:43 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004-09-27 09:35:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

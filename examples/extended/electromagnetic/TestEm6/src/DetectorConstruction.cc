@@ -20,13 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
-//
-// $Id: DetectorConstruction.cc,v 1.8 2003-11-25 15:19:05 gcosmo Exp $
+// $Id: DetectorConstruction.cc,v 1.9 2004-09-27 09:35:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
