@@ -1,4 +1,4 @@
-$Id: History,v 1.39 1999-11-02 03:25:13 stanaka Exp $
+$Id: History,v 1.40 1999-11-04 04:55:38 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+DAWN-V00-01-04  04th November 1999 Satoshi TANAKA  
+- Protection to AddPrimitive( G4NURBS )
+- Updation and tagging of visualization/FukuiRenderer/
+  and this History file
 
 DAWN-V00-01-03  02nd November 1999 Satoshi TANAKA
 - Updation and tagging of visualization/FukuiRenderer/
