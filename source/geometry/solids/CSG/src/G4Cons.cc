@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.6 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Cons.cc,v 1.7 2000-03-06 16:33:14 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -14,6 +14,7 @@
 //
 // History:
 //
+// 06.03.00 V.Grichine, modifications in DistanceToOut(p,v,...) 
 // 18.11.99 V.Grichine side = kNull initialisation in DistanceToOut(p,v,...)
 // 28.04.99 V. Grichine bugs fixed in  Distance ToOut(p,v,...) and  
 //          Distance ToIn(p,v)
@@ -2059,9 +2060,9 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 	}
 
     if (calcNorm)
-	{
-	    switch(side)
-		{
+    {
+      switch(side)
+      {
 		case kRMax:
 					// Note: returned vector not normalised
 					// (divide by frmax for unit vector)
@@ -2104,11 +2105,32 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
 		    *n=G4ThreeVector(0,0,-1);
 		    *validNorm=true;
 		    break;
-		default:
-		    G4Exception("Invalid enum in G4Cons::DistanceToOut");
-		    break;
-		}
-	}
+	default:
+        G4cout.precision(16) ;
+        G4cout<<endl ;
+        G4cout<<"Cons parameters:"<<endl<<endl ;
+        G4cout<<"fRmin1 = "<<fRmin1/mm<<" mm"<<endl ;
+        G4cout<<"fRmax1 = "<<fRmax1/mm<<" mm"<<endl ;
+        G4cout<<"fRmin2 = "<<fRmin2/mm<<" mm"<<endl ;
+        G4cout<<"fRmax2 = "<<fRmax2/mm<<" mm"<<endl ;
+        G4cout<<"fDz = "<<fDz/mm<<" mm"<<endl ;
+        G4cout<<"fSPhi = "<<fSPhi/degree<<" degree"<<endl ;
+        G4cout<<"fDPhi = "<<fDPhi/degree<<" degree"<<endl ;
+        G4cout<<"Position:"<<endl<<endl ;
+        G4cout<<"p.x() = "<<p.x()/mm<<" mm"<<endl ;
+        G4cout<<"p.y() = "<<p.y()/mm<<" mm"<<endl ;
+        G4cout<<"p.z() = "<<p.z()/mm<<" mm"<<endl<<endl ;
+        G4cout<<"Direction:"<<endl<<endl ;
+        G4cout<<"v.x() = "<<v.x()<<endl ;
+        G4cout<<"v.y() = "<<v.y()<<endl ;
+        G4cout<<"v.z() = "<<v.z()<<endl<<endl ;
+        G4cout<<"Proposed distance :"<<endl<<endl ;
+        G4cout<<"snxt = "<<snxt/mm<<" mm"<<endl<<endl ; 
+	 
+          G4Exception("Invalid enum in G4Cons::DistanceToOut");
+	  break;
+      }
+    }
 
     return snxt;
 }

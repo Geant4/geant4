@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Torus.cc,v 1.5 2000-03-06 16:33:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -16,6 +16,9 @@
 // 30.10.96 V. Grichine First implementation with G4Tubs elements in Fs
 // 09.10.98 V. Grichine modifications in Distance ToOut(p,v,...)
 // 19.11.99 V. Grichine side = kNull in Distance ToOut(p,v,...)
+// 06.03.00 V.Grichine, modifications in Distance ToOut(p,v,...)
+//
+
 
 #include "G4Torus.hh"
 
@@ -1670,13 +1673,32 @@ G4double G4Torus::DistanceToOut(const G4ThreeVector& p,
 			    *validNorm=false;
 			}
 		    break;
-		default:
+      default:
+
+        G4cout.precision(16) ;
+        G4cout<<endl ;
+        G4cout<<"Torus parameters:"<<endl<<endl ;
+        G4cout<<"fRmin = "<<fRmin/mm<<" mm"<<endl ;
+        G4cout<<"fRmax = "<<fRmax/mm<<" mm"<<endl ;
+        G4cout<<"fRtor = "<<fRtor/mm<<" mm"<<endl ;
+        G4cout<<"fSPhi = "<<fSPhi/degree<<" degree"<<endl ;
+        G4cout<<"fDPhi = "<<fDPhi/degree<<" degree"<<endl ;
+        G4cout<<"Position:"<<endl<<endl ;
+        G4cout<<"p.x() = "<<p.x()/mm<<" mm"<<endl ;
+        G4cout<<"p.y() = "<<p.y()/mm<<" mm"<<endl ;
+        G4cout<<"p.z() = "<<p.z()/mm<<" mm"<<endl<<endl ;
+        G4cout<<"Direction:"<<endl<<endl ;
+        G4cout<<"v.x() = "<<v.x()<<endl ;
+        G4cout<<"v.y() = "<<v.y()<<endl ;
+        G4cout<<"v.z() = "<<v.z()<<endl<<endl ;
+        G4cout<<"Proposed distance :"<<endl<<endl ;
+        G4cout<<"snxt = "<<snxt/mm<<" mm"<<endl<<endl ; 
+
 		    G4Exception("Invalid enum in G4Torus::DistanceToOut");
 		    break;
-		}
-	}
-
-    return snxt;
+    }
+  }
+  return snxt;
 }
 
 /////////////////////////////////////////////////////////////////////////

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.cc,v 1.4 1999-12-15 14:50:07 gunter Exp $
+// $Id: G4Sphere.cc,v 1.5 2000-03-06 16:33:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -19,6 +19,8 @@
 // 12.11.98 V.Grichine bug fixed in DistanceToIn(p,v), theta intersections
 // 25.11.98 V.Grichine bug fixed in DistanceToIn(p,v), phi intersections
 // 18.11.99 V.Grichine, side = kNull in Distance ToOut(p,v,...)
+// 06.03.00 V.Grichine, modifications in Distance ToOut(p,v,...)
+//
 //
 
 #include <assert.h>
@@ -1772,81 +1774,78 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 			         G4bool *validNorm,
 				 G4ThreeVector *n       ) const
 {
-    G4double snxt = kInfinity;     // snxt is default return value
-    G4double sphi= kInfinity,stheta= kInfinity;
-    ESide side=kNull,sidephi,sidetheta;  
+  G4double snxt = kInfinity;     // snxt is default return value
+  G4double sphi= kInfinity,stheta= kInfinity;
+  ESide side=kNull,sidephi,sidetheta;  
 
-    G4double t1,t2;
-    G4double b,c,d;
-                            // Vars for phi intersection:
-    G4double sinSPhi,cosSPhi,ePhi,sinEPhi,cosEPhi;
-    G4double cPhi,sinCPhi,cosCPhi;
-    G4double pDistS,compS,pDistE,compE,sphi2,vphi;
+  G4double t1,t2;
+  G4double b,c,d;
+
+  // Variables for phi intersection:
+
+  G4double sinSPhi,cosSPhi,ePhi,sinEPhi,cosEPhi;
+  G4double cPhi,sinCPhi,cosCPhi;
+  G4double pDistS,compS,pDistE,compE,sphi2,vphi;
     
-    G4double rho2,rad2,pDotV2d,pDotV3d,pTheta;
+  G4double rho2,rad2,pDotV2d,pDotV3d,pTheta;
 
-    G4double tolSTheta,tolETheta;
-    G4double xi,yi,zi;	    // Intersection point
+  G4double tolSTheta,tolETheta;
+  G4double xi,yi,zi;	    // Intersection point
 
-    // G4double Comp; // Phi intersection
+  // G4double Comp; // Phi intersection
 
-    G4bool segPhi;				// Phi flag and precalcs
-    G4double hDPhi,hDPhiOT,hDPhiIT; 
-    G4double cosHDPhiOT,cosHDPhiIT;
+  G4bool segPhi;				// Phi flag and precalcs
+  G4double hDPhi,hDPhiOT,hDPhiIT; 
+  G4double cosHDPhiOT,cosHDPhiIT;
 
-    G4bool segTheta;                             // Theta flag and precals
-    G4double tanSTheta,tanETheta, rhoSecTheta;
-    G4double tanSTheta2,tanETheta2;
-    G4double dist2STheta,dist2ETheta;
-    G4double d2,s;
+  G4bool segTheta;                             // Theta flag and precals
+  G4double tanSTheta,tanETheta, rhoSecTheta;
+  G4double tanSTheta2,tanETheta2;
+  G4double dist2STheta,dist2ETheta;
+  G4double d2,s;
 
-//
-// General Precalcs
-//
-    rho2=p.x()*p.x()+p.y()*p.y();
-    rad2=rho2+p.z()*p.z();
-    pTheta=atan2(sqrt(rho2),p.z());
+  // General Precalcs
 
-    pDotV2d=p.x()*v.x()+p.y()*v.y();
-    pDotV3d=pDotV2d+p.z()*v.z();
+  rho2=p.x()*p.x()+p.y()*p.y();
+  rad2=rho2+p.z()*p.z();
+  pTheta=atan2(sqrt(rho2),p.z());
 
+  pDotV2d=p.x()*v.x()+p.y()*v.y();
+  pDotV3d=pDotV2d+p.z()*v.z();
 
-//
 // Set phi divided flag and precalcs
-//
-    if (fDPhi<2.0*M_PI)
-	{
-	    segPhi=true;
-	    hDPhi=0.5*fDPhi;		// half delta phi
-	    cPhi=fSPhi+hDPhi;;
-	    hDPhiOT=hDPhi+0.5*kAngTolerance; // Outer Tolerant half delta phi 
-	    hDPhiIT=hDPhi-0.5*kAngTolerance;
-	    sinCPhi=sin(cPhi);
-	    cosCPhi=cos(cPhi);
-	    cosHDPhiOT=cos(hDPhiOT);
-	    cosHDPhiIT=cos(hDPhiIT);
-	}
-    else
-	{
-	    segPhi=false;
-	}
-//
-// Theta precalcs
-//    
-    if (fDTheta<M_PI)
-	{
-	    segTheta=true;
-	    tolSTheta=fSTheta-kAngTolerance/2;
-	    tolETheta=fSTheta+fDTheta+kAngTolerance/2;
-	}
-    else
-	{
-	    segTheta=false;
-	}
 
+  if(fDPhi<2.0*M_PI)
+  {
+    segPhi=true;
+    hDPhi=0.5*fDPhi;		// half delta phi
+    cPhi=fSPhi+hDPhi;;
+    hDPhiOT=hDPhi+0.5*kAngTolerance; // Outer Tolerant half delta phi 
+    hDPhiIT=hDPhi-0.5*kAngTolerance;
+    sinCPhi=sin(cPhi);
+    cosCPhi=cos(cPhi);
+    cosHDPhiOT=cos(hDPhiOT);
+    cosHDPhiIT=cos(hDPhiIT);
+  }
+  else
+  {
+    segPhi=false;
+  }
+
+// Theta precalcs
+    
+  if (fDTheta < M_PI)
+  {
+    segTheta=true;
+    tolSTheta=fSTheta-kAngTolerance/2;
+    tolETheta=fSTheta+fDTheta+kAngTolerance/2;
+  }
+  else
+  {
+    segTheta=false;
+  }
     
 // Radial Intersections from G4Sphere::DistanceToIn
-//
 //
 // Outer spherical shell intersection
 // - Only if outside tolerant fRmax
@@ -1862,13 +1861,16 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 //
 // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
 //
+
   G4double  Rmax_plus=  fRmax+kRadTolerance*0.5;
-  G4double  Rmin_minus= (fRmin>0) ? fRmin-kRadTolerance*0.5 : 0;
-  if(rad2<=Rmax_plus*Rmax_plus && rad2>=Rmin_minus*Rmin_minus)
+  G4double  Rmin_minus= (fRmin>0) ? fRmin-kRadTolerance*0.5 : 0 ;
+
+  if(rad2 <= Rmax_plus*Rmax_plus && rad2 >= Rmin_minus*Rmin_minus)
   {
-      c=rad2-fRmax*fRmax;
-      if (c<kRadTolerance*fRmax) 
-	{
+    c=rad2-fRmax*fRmax ;
+
+    if (c < kRadTolerance*fRmax) 
+    {
         // Within tolerant Outer radius 
         // 
         // The test is
@@ -1878,65 +1880,68 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
         // =>  rad2 < fRmax^2 + 2.*0.5*fRmax*kRadTol + 0.25*kRadTol*kRadTol
         // =>  rad2 - fRmax^2    <~    fRmax*kRadTol 
 
-	   d2=pDotV3d*pDotV3d-c;
-           if( (c>-kRadTolerance*fRmax) &&     // on tolerant surface
-			       ((pDotV3d>=0)   // leaving outside from Rmax 
-			       ||  (d2<0)   )) // not re-entering
-	   {
-	      if(calcNorm)
-	      {
-		 *validNorm = true ;
-		 *n = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax) ;
-	      }
-	      return snxt = 0;
-	   }
-	   else 
-	   {
-	      snxt=-pDotV3d+sqrt(d2);    // second root since inside Rmax
-	      side = kRMax ; 
-	   }
-	}
-// Inner spherical shell intersection
-// - Always first >=0 root, because would have passed from outside
-//   of Rmin surface .
+      d2=pDotV3d*pDotV3d-c ;
 
-      if (fRmin)
+      if( (c >- kRadTolerance*fRmax) &&       // on tolerant surface
+	  ( ( pDotV3d >=0 )  ||  (d2 < 0)) )  // leaving outside from Rmax 
+			                      // not re-entering
+      {
+	if(calcNorm)
 	{
-	    c=rad2-fRmin*fRmin;
-	    if (c>-kRadTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
-		{
-		   if(c<kRadTolerance*fRmin && pDotV3d<0)  // leaving from Rmin
-		   {
-	              if(calcNorm)
-	               {
-     		          *validNorm = false ;   // Rmin surface is concave
-	               }
-	               return snxt = 0 ;
-		   }
-	           else
-	           {  
-		    d2=pDotV3d*pDotV3d-c;
-		    if (d2>=0)
-		       {
-			    s=-pDotV3d-sqrt(d2);
-			    if (s>=0)     // Always intersect Rmin first
-				{
-				   snxt = s ;
-				   side = kRMin ;
-				}
-			}
-		   }
-	        }
+	  *validNorm = true ;
+	  *n         = G4ThreeVector(p.x()/fRmax,p.y()/fRmax,p.z()/fRmax) ;
 	}
-  }
-//
-// Theta segment intersection
-//
-    if (segTheta)
+	return snxt = 0;
+      }
+      else 
+      {
+	snxt=-pDotV3d+sqrt(d2);    // second root since inside Rmax
+	side = kRMax ; 
+      }
+    }
+
+// Inner spherical shell intersection:
+// Always first >=0 root, because would have passed from outside of Rmin surface .
+
+    if (fRmin)
+    {
+      c=rad2-fRmin*fRmin ;
+
+      if (c >- kRadTolerance*fRmin) // 2.0 * (0.5*kRadTolerance) * fRmin
+      {
+	if( c < kRadTolerance*fRmin && pDotV3d < 0 )  // leaving from Rmin
 	{
-//
+	  if(calcNorm)
+	  {
+     		          *validNorm = false ;   // Rmin surface is concave
+	  }
+	  return snxt = 0 ;
+        }
+	else
+	{  
+	  d2=pDotV3d*pDotV3d-c ;
+
+	  if (d2 >= 0)
+	  {
+	    s = -pDotV3d-sqrt(d2) ;
+
+	    if (s>=0)     // Always intersect Rmin first
+	    {
+	      snxt = s ;
+	      side = kRMin ;
+	    }
+	  }
+	}
+      }
+    }
+  }
+
+// Theta segment intersection
+
+  if (segTheta)
+  {
+
 // Intersection with theta surfaces
-//
 //
 // Known failure cases:
 // o  Inside tolerance of stheta surface, skim
@@ -1959,497 +1964,525 @@ G4double G4Sphere::DistanceToOut(const G4ThreeVector& p,
 // => s^2(1-vz^2(1+tan^2(t))+2s(pdotv2d-pzvztan^2(t))+(rho2-pz^2tan^2(t))=0
 //
 
-	    tanSTheta=tan(fSTheta);
-	    tanSTheta2=tanSTheta*tanSTheta;
-	    tanETheta=tan(fSTheta+fDTheta);
-	    tanETheta2=tanETheta*tanETheta;
+    tanSTheta=tan(fSTheta);
+    tanSTheta2=tanSTheta*tanSTheta;
+    tanETheta=tan(fSTheta+fDTheta);
+    tanETheta2=tanETheta*tanETheta;
 	    
-	    if (fSTheta)
-		{
-		    dist2STheta=rho2-p.z()*p.z()*tanSTheta2;
-		}
-	    else
-		{
-		    dist2STheta=kInfinity;
-		}
-	    if (fSTheta+fDTheta < M_PI)
-		{
-		    dist2ETheta=rho2-p.z()*p.z()*tanETheta2;
-		}
-	    else
-		{
-		    dist2ETheta=kInfinity;
-		}
-	    
-	    if (pTheta>tolSTheta && pTheta<tolETheta)   // Inside theta  
-		{
+    if (fSTheta)
+    {
+      dist2STheta=rho2-p.z()*p.z()*tanSTheta2;
+    }
+    else
+    {
+      dist2STheta = kInfinity;
+    }
+    if (fSTheta + fDTheta < M_PI)
+    {
+      dist2ETheta = rho2-p.z()*p.z()*tanETheta2;
+    }
+    else
+    {
+      dist2ETheta = kInfinity ;
+    }
+    if (pTheta > tolSTheta && pTheta < tolETheta)   // Inside theta  
+    {
 // In tolerance of STheta and possible leaving out to small thetas N-
-		   if(pTheta<tolSTheta+kAngTolerance  && fSTheta>kAngTolerance)  
-		    {
-		      t2=pDotV2d-p.z()*v.z()*tanSTheta2; // =(VdotN+)*rhoSecSTheta
-		      if(fSTheta<M_PI*0.5 && t2<0)
-		      {
+
+      if(pTheta < tolSTheta + kAngTolerance  && fSTheta > kAngTolerance)  
+      {
+	t2=pDotV2d-p.z()*v.z()*tanSTheta2 ; // =(VdotN+)*rhoSecSTheta
+
+	if( fSTheta < M_PI*0.5 && t2 < 0)
+	{
 			 if(calcNorm) *validNorm = false ;
 			 return snxt = 0 ;
-		      }
-		     else if(fSTheta>M_PI*0.5 && t2>=0)
-		      {
-			 if(calcNorm)
-			 {
-			    rhoSecTheta = sqrt(rho2*(1+tanSTheta2)) ;
-                            *validNorm = true ;
-			    *n = G4ThreeVector(-p.x()/rhoSecTheta,   // N-
-					       -p.y()/rhoSecTheta,
-					        tanSTheta/sqrt(1+tanSTheta2)) ;
-			 }
-			 return snxt = 0 ;
-		      }
-		      else if(fSTheta==M_PI*0.5 && v.z()>0)
-		      {
-			 if(calcNorm)
-			 {
+	}
+	else if(fSTheta > M_PI*0.5 && t2 >= 0)
+	{
+	  if(calcNorm)
+	  {
+	    rhoSecTheta = sqrt(rho2*(1+tanSTheta2)) ;
+            *validNorm = true ;
+	    *n = G4ThreeVector(-p.x()/rhoSecTheta,   // N-
+			       -p.y()/rhoSecTheta,
+				tanSTheta/sqrt(1+tanSTheta2) ) ;
+	  }
+	  return snxt = 0 ;
+	}
+	else if( fSTheta == M_PI*0.5 && v.z() > 0)
+	{
+	  if(calcNorm)
+	  {
                             *validNorm = true ;
 			    *n = G4ThreeVector(0,0,1) ;
-			 }
-			 return snxt = 0 ;
-		      }
-		    }
-// In tolerance of ETheta and possible leaving out to larger thetas N+
-                    if(    pTheta>tolETheta-kAngTolerance 
-		       && (fSTheta+fDTheta)<M_PI-kAngTolerance)  
-		    {
-		      t2=pDotV2d-p.z()*v.z()*tanETheta2;
-		      if((fSTheta+fDTheta)>M_PI*0.5 && t2<0)
-		      {
-			 if(calcNorm) *validNorm = false ;
-			 return snxt = 0 ;
-		      }
-		     else if((fSTheta+fDTheta)<M_PI*0.5 && t2>=0)
-		      {
-			 if(calcNorm)
-			 {
-			    rhoSecTheta = sqrt(rho2*(1+tanETheta2)) ;
-                            *validNorm = true ;
-			    *n = G4ThreeVector(p.x()/rhoSecTheta,  // N+
-					       p.y()/rhoSecTheta,
-					      -tanETheta/sqrt(1+tanETheta2)) ; 
-			 }
-			 return snxt = 0 ;
-		      }
-		     else if((fSTheta+fDTheta)==M_PI*0.5 && v.z()<0)
-		      {
-			 if(calcNorm)
-			 {
-                            *validNorm = true ;
-			    *n = G4ThreeVector(0,0,-1) ;
-			 }
-			 return snxt = 0 ;
-		      }
-		    }
-        	if(fSTheta>0)
-	          {
-		   
-// First root of fSTheta cone, second if first root -ve
-		    t1=1-v.z()*v.z()*(1+tanSTheta2);
-		    t2=pDotV2d-p.z()*v.z()*tanSTheta2;
-		    
-		    b=t2/t1;
-		    c=dist2STheta/t1;
-		    d2=b*b-c;
-		    if (d2>=0)
-			{
-			    d=sqrt(d2);
-			    s=-b-d;		// First root
-			    if (s<0)
-				{
-				    s=-b+d;    // Second root
-				}
-			    if (s>kRadTolerance*0.5)   // && s<sr)
-				{
-				   stheta = s ;
-				   sidetheta = kSTheta ;
-				}
-			}
-		  }
-// Possible intersection with ETheta cone		    
-	    if (fSTheta+fDTheta < M_PI)
-		{
-		    t1=1-v.z()*v.z()*(1+tanETheta2);
-		    t2=pDotV2d-p.z()*v.z()*tanETheta2;		    
-		    b=t2/t1;
-		    c=dist2ETheta/t1;
-		    d2=b*b-c;
-		    if (d2>=0)
-			{
-			    d=sqrt(d2);
-			    s=-b-d;	        // First root
-			    if (s<0)
-				{
-				    s=-b+d;    // Second root
-				}
-			  if (s>kRadTolerance*0.5 && s<stheta)
-			    {
-				   stheta = s ;
-				   sidetheta = kETheta ;
-			    }
-			}
-	          }
-		}  //
+	  }
+	  return snxt = 0 ;
 	}
+      }
+// In tolerance of ETheta and possible leaving out to larger thetas N+
 
+      if(             pTheta  > tolETheta - kAngTolerance && 
+         ( fSTheta + fDTheta) < M_PI - kAngTolerance           )  
+      {
+	t2=pDotV2d-p.z()*v.z()*tanETheta2 ;
 
-//
-// Phi Intersection
-//
-    
-    if (fDPhi<2.0*M_PI)
+	if((fSTheta+fDTheta)>M_PI*0.5 && t2<0)
 	{
-	    sinSPhi=sin(fSPhi);
-	    cosSPhi=cos(fSPhi);
-	    ePhi=fSPhi+fDPhi;
-	    sinEPhi=sin(ePhi);
-	    cosEPhi=cos(ePhi);
-	    cPhi=fSPhi+fDPhi*0.5;
-	    sinCPhi=sin(cPhi);
-	    cosCPhi=cos(cPhi);
+	  if(calcNorm) *validNorm = false ;
+	  return snxt = 0 ;
+	}
+	else if( (fSTheta+fDTheta) < M_PI*0.5 && t2 >= 0 )
+	{
+	  if(calcNorm)
+	  {
+	    rhoSecTheta = sqrt(rho2*(1+tanETheta2)) ;
+            *validNorm = true ;
+	    *n = G4ThreeVector( p.x()/rhoSecTheta,  // N+
+			        p.y()/rhoSecTheta,
+			       -tanETheta/sqrt(1+tanETheta2)  ) ; 
+	  }
+	  return snxt = 0 ;
+	}
+        else if( ( fSTheta+fDTheta) == M_PI*0.5 && v.z() < 0 )
+	{
+	  if(calcNorm)
+	  {
+            *validNorm = true ;
+	    *n = G4ThreeVector(0,0,-1) ;
+	  }
+	  return snxt = 0 ;
+	}
+      }
+      if( fSTheta > 0 )
+      {		   
+// First root of fSTheta cone, second if first root -ve
 
-// Check if on z axis (rho not needed later)
-	    if (p.x()||p.y())
-		{
-// pDist -ve when inside
-		    pDistS=p.x()*sinSPhi-p.y()*cosSPhi;
-		    pDistE=-p.x()*sinEPhi+p.y()*cosEPhi;
-// Comp -ve when in direction of outwards normal
-		    compS=-sinSPhi*v.x()+cosSPhi*v.y();
-		    compE=sinEPhi*v.x()-cosEPhi*v.y();
-		    sidephi=kNull;
-
-		    if (pDistS<=0&&pDistE<=0)
-			{
-// Inside both phi *full* planes
-			    if (compS<0)
-				{
-				    sphi=pDistS/compS;
-				    xi=p.x()+sphi*v.x();
-				    yi=p.y()+sphi*v.y();
-// Check intersecting with correct half-plane (if not -> no intersect)
-				    if ((yi*cosCPhi-xi*sinCPhi)>=0)
-					{
-					    sphi=kInfinity;
-					}
-				    else
-					{
-					    sidephi=kSPhi;
-					    if (pDistS>-kCarTolerance/2)
-						sphi=0;
-					// Leave by sphi immediately
-					}
-				}
-			    else sphi=kInfinity;
-			    
-			    if (compE<0)
-				{
-				    sphi2=pDistE/compE;
-// Only check further if < starting phi intersection
-				    if (sphi2<sphi)
-					{
-					    xi=p.x()+sphi2*v.x();
-					    yi=p.y()+sphi2*v.y();
-// Check intersecting with correct half-plane 
-					    if ((yi*cosCPhi-xi*sinCPhi)>=0)
-						{
-// Leaving via ending phi
-						    sidephi=kEPhi;
-						    if (pDistE<=-kCarTolerance/2)
-							{
-							    sphi=sphi2;
-							}
-						    else 
-							{
-							    sphi=0;
-							}
-						}
-					}
-				}
-			    
-			}
-		    else if (pDistS>=0&&pDistE>=0)
-			{
-// Outside both *full* phi planes
-                            if (pDistS <= pDistE)
-			    {
-                              sidephi = kSPhi ;
-			    }
-                            else
-			    {
-                              sidephi = kEPhi ;
-			    }
-			    if (fDPhi>M_PI)
-				{
-				    if (compS<0&&compE<0) sphi=0;
-				    else sphi=kInfinity;
-				}
-			    else
-				{
-// if towards both >=0 then once inside (after error) will remain inside
-				    if (compS>=0&&compE>=0)
-					{
-					    sphi=kInfinity;
-					}
-				    else
-					{
-					    sphi=0;
-					}
-				}
-			    
-			}
-		    else if (pDistS>0&&pDistE<0)
-			{
-// Outside full starting plane, inside full ending plane
-			    if (fDPhi>M_PI)
-				{
-				    if (compE<0)
-					{
-					    sphi=pDistE/compE;
-					    xi=p.x()+sphi*v.x();
-					    yi=p.y()+sphi*v.y();
-// Check intersection in correct half-plane (if not -> not leaving phi extent)
-					    if ((yi*cosCPhi-xi*sinCPhi)<=0)
-						{
-						    sphi=kInfinity;
-						}
-					    else
-						{
-// Leaving via Ending phi
-                                                    sidephi = kEPhi ;
-						    if (pDistE>-kCarTolerance/2)
-							sphi=0;
-						}
-					}
-				    else
-					{
-					    sphi=kInfinity;
-					}
-				}
-			    else
-				{
-				    if (compS>=0)
-					{
-					    if (compE<0)
-						{
-						    
-						    sphi=pDistE/compE;
-						    xi=p.x()+sphi*v.x();
-						    yi=p.y()+sphi*v.y();
-// Check intersection in correct half-plane (if not -> remain in extent)
-						    if ((yi*cosCPhi-xi*sinCPhi)<=0)
-							{
-							    sphi=kInfinity;
-							}
-						    else
-							{
-// otherwise leaving via Ending phi
-							    sidephi=kEPhi;
-							}
-						}
-					    else sphi=kInfinity;
-					}
-				    else
-					{
-// leaving immediately by starting phi
-					    sidephi=kSPhi;
-					    sphi=0;
-					}
-				}
-			}
-		    else
-			{
-// Must be pDistS<0&&pDistE>0
-// Inside full starting plane, outside full ending plane
-			    if (fDPhi>M_PI)
-				{
-				    if (compS<0)
-					{
-					    sphi=pDistS/compS;
-					    xi=p.x()+sphi*v.x();
-					    yi=p.y()+sphi*v.y();
-// Check intersection in correct half-plane (if not -> not leaving phi extent)
-					    if ((yi*cosCPhi-xi*sinCPhi)>=0)
-						{
-						    sphi=kInfinity;
-						}
-					    else
-						{
-// Leaving via Starting phi
-                                                    sidephi = kSPhi ;   
-						    if (pDistS>-kCarTolerance/2)
-							sphi=0;
-						}
-					}
-				    else
-					{
-					    sphi=kInfinity;
-					}
-				}
-			    else
-				{
-				    if (compE>=0)
-					{
-					    if (compS<0)
-						{
-						    
-						    sphi=pDistS/compS;
-						    xi=p.x()+sphi*v.x();
-						    yi=p.y()+sphi*v.y();
-// Check intersection in correct half-plane (if not -> remain in extent)
-						    if ((yi*cosCPhi-xi*sinCPhi)>=0)
-							    {
-								sphi=kInfinity;
-							    }
-						    else
-							{
-// otherwise leaving via Starting phi
-							    sidephi=kSPhi;
-							}
-						}
-					    else
-						{
-						    sphi=kInfinity;
-						}
-					}
-				    else
-					{
-// leaving immediately by ending
-					    sidephi=kEPhi;
-					    sphi=0;
-					}
-				}
-			}
+	t1 = 1-v.z()*v.z()*(1+tanSTheta2);
+        t2 = pDotV2d-p.z()*v.z()*tanSTheta2;
 		    
-		}
+	b  = t2/t1;
+	c  = dist2STheta/t1;
+	d2 = b*b - c ;
+
+	if ( d2 >= 0 )
+	{
+	  d = sqrt(d2) ;
+	  s = -b - d ;		// First root
+
+	  if ( s < 0 )
+	  {
+	    s = -b + d ;    // Second root
+	  }
+	  if (s > kRadTolerance*0.5 )   // && s<sr)
+	  {
+	    stheta = s ;
+	    sidetheta = kSTheta ;
+	  }
+	}
+      }
+// Possible intersection with ETheta cone	
+	    
+      if (fSTheta + fDTheta < M_PI)
+      {
+	t1 = 1-v.z()*v.z()*(1+tanETheta2);
+	t2 = pDotV2d-p.z()*v.z()*tanETheta2;		    
+	b  = t2/t1;
+	c  = dist2ETheta/t1;
+	d2 = b*b-c ;
+
+	if ( d2 >= 0 )
+	{
+	  d = sqrt(d2);
+	  s = -b - d ;	        // First root
+
+	  if ( s < 0 )
+	  {
+	    s=-b+d;    // Second root
+	  }
+	  if (s > kRadTolerance*0.5 && s < stheta )
+	  {
+	    stheta = s ;
+	    sidetheta = kETheta ;
+	  }
+	}
+      }
+    }  
+  }
+
+  // Phi Intersection
+    
+  if ( fDPhi < 2.0*M_PI)
+  {
+    sinSPhi=sin(fSPhi);
+    cosSPhi=cos(fSPhi);
+    ePhi=fSPhi+fDPhi;
+    sinEPhi=sin(ePhi);
+    cosEPhi=cos(ePhi);
+    cPhi=fSPhi+fDPhi*0.5;
+    sinCPhi=sin(cPhi);
+    cosCPhi=cos(cPhi);
+
+    if (p.x()||p.y()) // Check if on z axis (rho not needed later)
+    {
+// pDist -ve when inside
+
+      pDistS=p.x()*sinSPhi-p.y()*cosSPhi;
+      pDistE=-p.x()*sinEPhi+p.y()*cosEPhi;
+
+// Comp -ve when in direction of outwards normal
+
+      compS   = -sinSPhi*v.x()+cosSPhi*v.y() ;
+      compE   =  sinEPhi*v.x()-cosEPhi*v.y() ;
+      sidephi = kNull ;
+
+      if ( pDistS <= 0 && pDistE <= 0 )
+      {
+// Inside both phi *full* planes
+
+	if ( compS < 0 )
+	{
+	  sphi = pDistS/compS ;
+	  xi   = p.x()+sphi*v.x() ;
+	  yi   = p.y()+sphi*v.y() ;
+
+// Check intersecting with correct half-plane (if not -> no intersect)
+
+	  if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+	  {
+	    sphi=kInfinity;
+	  }
+	  else
+	  {
+	    sidephi = kSPhi ;
+
+	    if ( pDistS > -0.5*kCarTolerance) sphi =0 ; // Leave by sphi 
+	  }
+	}
+	else sphi = kInfinity ;
+			    
+        if ( compE < 0 )
+	{
+	  sphi2=pDistE/compE ;
+
+	  if (sphi2 < sphi) // Only check further if < starting phi intersection
+	  {
+	    xi = p.x()+sphi2*v.x() ;
+	    yi = p.y()+sphi2*v.y() ;
+
+// Check intersecting with correct half-plane
+ 
+	    if ((yi*cosCPhi-xi*sinCPhi)>=0) // Leaving via ending phi
+	    {
+	      sidephi = kEPhi ;
+
+	      if ( pDistE <= -0.5*kCarTolerance )
+	      {
+		sphi=sphi2;
+	      }
+	      else 
+	      {
+		sphi = 0 ;
+	      }
+	    }
+	  }
+	}		    
+      }
+      else if ( pDistS >= 0 && pDistE >= 0 ) // Outside both *full* phi planes
+      {
+        if ( pDistS <= pDistE )
+	{
+          sidephi = kSPhi ;
+	}
+        else
+	{
+          sidephi = kEPhi ;
+	}
+	if ( fDPhi > M_PI )
+	{
+	  if ( compS < 0 && compE < 0 ) sphi = 0 ;
+	  else                          sphi = kInfinity ;
+	}
+        else
+	{
+// if towards both >=0 then once inside (after error) will remain inside
+
+	  if ( compS >= 0 && compE >= 0 )
+	  {
+	    sphi=kInfinity;
+	  }
+	  else
+	  {
+	    sphi=0;
+	  }
+	}    
+      }
+      else if ( pDistS > 0 && pDistE < 0 )
+      {
+// Outside full starting plane, inside full ending plane
+
+	if ( fDPhi > M_PI )
+	{
+	  if ( compE < 0 )
+	  {
+	    sphi = pDistE/compE ;
+	    xi   = p.x() + sphi*v.x() ;
+	    yi   = p.y() + sphi*v.y() ;
+
+// Check intersection in correct half-plane (if not -> not leaving phi extent)
+
+	    if ( ( yi*cosCPhi - xi*sinCPhi ) <= 0 )
+	    {
+	      sphi = kInfinity ;
+	    }
+	    else // Leaving via Ending phi
+	    {
+              sidephi = kEPhi ;
+
+	      if ( pDistE > -0.5*kCarTolerance ) sphi = 0. ;
+	    }
+	  }
+	  else
+	  {
+	    sphi = kInfinity ;
+	  }
+	}
+	else
+	{
+	  if ( compS >= 0 )
+	  {
+	    if ( compE < 0 )
+	    {				    
+	      sphi = pDistE/compE ;
+	      xi   = p.x() + sphi*v.x() ;
+	      yi   = p.y() + sphi*v.y() ;
+
+// Check intersection in correct half-plane (if not -> remain in extent)
+
+	      if ( ( yi*cosCPhi - xi*sinCPhi) <= 0 )
+	      {
+		sphi=kInfinity;
+	      }
+	      else // otherwise leaving via Ending phi
+	      {
+		sidephi = kEPhi ;
+	      }
+	    }
+	    else sphi=kInfinity;
+	  }
+	  else // leaving immediately by starting phi
+	  {
+	    sidephi = kSPhi ;
+	    sphi    = 0 ;
+	  }
+	}
+      }
+      else
+      {
+// Must be pDistS < 0 && pDistE > 0
+// Inside full starting plane, outside full ending plane
+
+        if ( fDPhi > M_PI )
+	{
+	  if ( compS < 0 )
+	  {
+	    sphi=pDistS/compS;
+	    xi=p.x()+sphi*v.x();
+	    yi=p.y()+sphi*v.y();
+
+// Check intersection in correct half-plane (if not -> not leaving phi extent)
+
+	    if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+	    {
+	      sphi = kInfinity ;
+	    }
+	    else  // Leaving via Starting phi
+	    {
+              sidephi = kSPhi ; 
+  
+	      if ( pDistS > -0.5*kCarTolerance ) sphi = 0 ;
+	    }
+	  }
+	  else
+	  {
+	    sphi = kInfinity ;
+	  }
+	}
+	else
+        {
+	  if ( compE >= 0 )
+	  {
+	    if ( compS < 0 )
+	    {
+						    
+	      sphi = pDistS/compS ;
+	      xi   = p.x()+sphi*v.x() ;
+	      yi   = p.y()+sphi*v.y() ;
+
+// Check intersection in correct half-plane (if not -> remain in extent)
+
+	      if ( ( yi*cosCPhi - xi*sinCPhi ) >= 0 )
+	      {
+		sphi = kInfinity ;
+	      }
+	      else // otherwise leaving via Starting phi
+	      {
+		sidephi = kSPhi ;
+	      }
+	    }
 	    else
-		{
+	    {
+	      sphi = kInfinity ;
+	    }
+	  }
+	  else // leaving immediately by ending
+	  {
+	    sidephi = kEPhi ;
+	    sphi    = 0     ;
+	  }
+	}
+      }	    
+    }
+    else
+    {
 // On z axis + travel not || to z axis -> if phi of vector direction
 // within phi of shape, Step limited by rmax, else Step =0
 
-                   if ( v.x() || v.y() )
-		   {
-		      vphi=atan2(v.y(),v.x());
+      if ( v.x() || v.y() )
+      {
+	vphi = atan2(v.y(),v.x()) ;
 
-		      if ( fSPhi < vphi && vphi < fSPhi+fDPhi )
-		      {
-			 sphi=kInfinity;
-		      }
-		      else
-		      {
-                         sidephi = kSPhi ; // arbitrary 
-			 sphi=0;
-		      }
-		   }
-                   else  // travel along z - no phi intersaction
-		   {
-                      sphi = kInfinity ;
-		   }
-		}
-	    
-// Order intersecttions
-	    if (sphi<snxt)
-		{
-		    snxt=sphi;
-		    side=sidephi;
-		}
-	}
-// Order intersections
-    if (stheta<snxt)
+	if ( fSPhi < vphi && vphi < fSPhi + fDPhi )
 	{
-	    snxt=stheta;
-	    side=sidetheta;
+	  sphi=kInfinity;
 	}
+	else
+	{
+          sidephi = kSPhi ; // arbitrary 
+	  sphi    = 0     ;
+	}
+      }
+      else  // travel along z - no phi intersaction
+      {
+        sphi = kInfinity ;
+      }
+    }
+    if ( sphi < snxt )  // Order intersecttions
+    {
+      snxt = sphi ;
+      side = sidephi ;
+    }
+  }
+  if (stheta < snxt ) // Order intersections
+  {
+    snxt = stheta ;
+    side = sidetheta ;
+  }
 
-    if (calcNorm)    // Output switch operator
+  if (calcNorm)    // Output switch operator
+  {
+    switch( side )
+    {
+      case kRMax:
+
+	xi=p.x()+snxt*v.x();
+	yi=p.y()+snxt*v.y();
+	zi=p.z()+snxt*v.z();
+	*n=G4ThreeVector(xi/fRmax,yi/fRmax,zi/fRmax);
+	*validNorm=true;
+	break;
+
+      case kRMin:
+
+	*validNorm=false;	// Rmin is concave
+	break;
+
+      case kSPhi:
+
+	if (fDPhi<=M_PI)     // Normal to Phi-
 	{
-	    switch(side)
-		{
-		case kRMax:
-		    xi=p.x()+snxt*v.x();
-		    yi=p.y()+snxt*v.y();
-		    zi=p.z()+snxt*v.z();
-		    *n=G4ThreeVector(xi/fRmax,yi/fRmax,zi/fRmax);
-		    *validNorm=true;
-		    break;
-		case kRMin:
-		    *validNorm=false;	// Rmin is concave
-		    break;
-		case kSPhi:
-		    if (fDPhi<=M_PI)     // Normal to Phi-
-			{
-			    *n=G4ThreeVector(sin(fSPhi),-cos(fSPhi),0);
-			    *validNorm=true;
-			}
-		    else
-			{
-			    *validNorm=false;
-			}
-		    break;
-		case kEPhi:
-		    if (fDPhi<=M_PI)      // Normal to Phi+
-			{
-			*n=G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0);
-			*validNorm=true;
-			}
-		    else
-			{
-			    *validNorm=false;
-			}
-		    break;
-		case kSTheta:
-                    if(fSTheta==M_PI*0.5)
-                        {
-		            *n=G4ThreeVector(0,0,1);
-		            *validNorm=true;
-			}
-		    else if (fSTheta>M_PI)
-			{
-		            xi=p.x()+snxt*v.x();
-		            yi=p.y()+snxt*v.y();
-			    rhoSecTheta = sqrt((xi*xi+yi*yi)*(1+tanSTheta2)) ;
-			    *n = G4ThreeVector(-xi/rhoSecTheta,   // N-
-					       -yi/rhoSecTheta,
-					        tanSTheta/sqrt(1+tanSTheta2)) ;
-		            *validNorm=true;
-			}
-		    else
-			{
-			    *validNorm=false;  // Concave STheta cone
-			}
-		    break;
-		case kETheta:
-                    if((fSTheta+fDTheta)==M_PI*0.5)
-                        {
-		            *n=G4ThreeVector(0,0,-1);
-		            *validNorm=true;
-			}
-		    else if ((fSTheta+fDTheta)<M_PI)
-			{
-		            xi=p.x()+snxt*v.x();
-		            yi=p.y()+snxt*v.y();
-			    rhoSecTheta = sqrt((xi*xi+yi*yi)*(1+tanETheta2)) ;
-			    *n = G4ThreeVector(xi/rhoSecTheta,   // N+
-					       yi/rhoSecTheta,
-					      -tanSTheta/sqrt(1+tanSTheta2)) ;
-		            *validNorm=true;
-			}
-		    else
-			{
-			    *validNorm=false;   // Concave ETheta cone
-			}
-				    break;
-		default:
-		    G4Exception("Invalid enum in G4Sphere::DistanceToOut");
-		    break;
-		}
+	  *n=G4ThreeVector(sin(fSPhi),-cos(fSPhi),0);
+	  *validNorm=true;
 	}
-	return snxt;
+	else *validNorm=false;
+	break ;
+
+      case kEPhi:
+
+	if (fDPhi<=M_PI)      // Normal to Phi+
+	{
+	  *n=G4ThreeVector(-sin(fSPhi+fDPhi),cos(fSPhi+fDPhi),0);
+	  *validNorm=true;
+	}
+	else *validNorm=false;
+	break;
+
+      case kSTheta:
+
+        if( fSTheta == M_PI*0.5 )
+        {
+	  *n=G4ThreeVector(0,0,1);
+	  *validNorm=true;
+	}
+	else if ( fSTheta > M_PI )
+        {
+	  xi=p.x()+snxt*v.x();
+	  yi=p.y()+snxt*v.y();
+	  rhoSecTheta = sqrt((xi*xi+yi*yi)*(1+tanSTheta2)) ;
+	  *n = G4ThreeVector(-xi/rhoSecTheta,   // N-
+			     -yi/rhoSecTheta,
+			      tanSTheta/sqrt(1+tanSTheta2)) ;
+	   *validNorm=true;
+	}
+	else *validNorm=false;  // Concave STheta cone
+	break;
+
+      case kETheta:
+
+        if( ( fSTheta + fDTheta ) == M_PI*0.5 )
+        {
+	  *n         = G4ThreeVector(0,0,-1);
+	  *validNorm = true ;
+	}
+	else if ( ( fSTheta + fDTheta ) < M_PI )
+	{
+	  xi=p.x()+snxt*v.x();
+	  yi=p.y()+snxt*v.y();
+	  rhoSecTheta = sqrt((xi*xi+yi*yi)*(1+tanETheta2)) ;
+	  *n = G4ThreeVector( xi/rhoSecTheta,   // N+
+			      yi/rhoSecTheta,
+			     -tanSTheta/sqrt(1+tanSTheta2)) ;
+	  *validNorm=true;
+	}
+	else *validNorm=false;   // Concave ETheta cone
+	break;
+
+      default:
+
+        G4cout.precision(16) ;
+        G4cout<<endl ;
+        G4cout<<"Sphere parameters:"<<endl<<endl ;
+        G4cout<<"fRmin = "<<fRmin/mm<<" mm"<<endl ;
+        G4cout<<"fRmax = "<<fRmax/mm<<" mm"<<endl ;
+        G4cout<<"fSPhi = "<<fSPhi/degree<<" degree"<<endl ;
+        G4cout<<"fDPhi = "<<fDPhi/degree<<" degree"<<endl ;
+        G4cout<<"fSTheta = "<<fSTheta/degree<<" degree"<<endl ;
+        G4cout<<"fDTheta = "<<fDTheta/degree<<" degree"<<endl<<endl ;
+        G4cout<<"Position:"<<endl<<endl ;
+        G4cout<<"p.x() = "<<p.x()/mm<<" mm"<<endl ;
+        G4cout<<"p.y() = "<<p.y()/mm<<" mm"<<endl ;
+        G4cout<<"p.z() = "<<p.z()/mm<<" mm"<<endl<<endl ;
+        G4cout<<"Direction:"<<endl<<endl ;
+        G4cout<<"v.x() = "<<v.x()<<endl ;
+        G4cout<<"v.y() = "<<v.y()<<endl ;
+        G4cout<<"v.z() = "<<v.z()<<endl<<endl ;
+        G4cout<<"Proposed distance :"<<endl<<endl ;
+        G4cout<<"snxt = "<<snxt/mm<<" mm"<<endl<<endl ; 
+	G4Exception("Invalid enum in G4Sphere::DistanceToOut");
+        break;
+    }
+  }
+  return snxt;
 }
 
 /////////////////////////////////////////////////////////////////////////
