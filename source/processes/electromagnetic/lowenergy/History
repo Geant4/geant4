@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2000-11-23 10:17:41 pia Exp $
+$Id: History,v 1.57 2000-12-14 09:46:23 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+14.12.2000 - G.Cosmo, tag emlowen-V02-00-23
+             Removed inclusion of CLHEP/String/Strings.h from G4LowEnergyUtilities.cc.
 
 22.11.2000 - MGP, tag emlowen-V02-00-22
              Yang and Chu fluctuation models applied for positive
