@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectory.cc,v 1.6 2002-11-08 23:44:37 jacek Exp $
+// $Id: G4SmoothTrajectory.cc,v 1.7 2002-11-09 00:05:28 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,11 @@
 #include "G4AttValue.hh"
 #include "G4UnitsTable.hh"
 #include "g4std/strstream"
+#include "G4Polyline.hh"
+#include "G4Circle.hh"
+#include "G4Colour.hh"
+#include "G4VisAttributes.hh"
+#include "G4VVisManager.hh"
 
 G4Allocator<G4SmoothTrajectory> aSmoothTrajectoryAllocator;
 
