@@ -1,0 +1,13 @@
+persistency-V00-01-11
+=====================
+- added G4PPrimaryParticle
+
+PersistentEx01-V00-01-05
+========================
+- LD_LIBRARY_PATH change for Linux
+- readDB: added access to G4PPrimaryParticle.
+
+PersistentEx02-V00-01-03
+========================
+- LD_LIBRARY_PATH change for Linux
+- readDB: added access to G4PPrimaryParticle.

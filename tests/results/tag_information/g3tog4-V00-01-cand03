@@ -1,0 +1,23 @@
+
+The G3toG4 code has been updated with the modifications from Pedro and
+Ivana. Bill has performed the STL map migration and Gabriele has merged
+the code back onto the main CVS trunk and has tagged it as
+g3tog4-V00-01-cand03.
+
+Bill has persomed some preliminary tests. cltog4/clGeometry can be run
+with svtwaf.dat and parity.dat. However, these data files do not test the
+divided volumes/deferred positioning code. The file testmodel.dat
+currently does not work. It is derived from a G3 geometry which tests
+divisions: two tubes are divided radially and in in phi
+deferred positioning and negative volume parameters: a box with negative
+length parameters is placed inside a box whose parameters are deferred
+till positioning time.
+
+Neither of these two tests seems to be working properly at present.
+
+The divsion code 'works' on the first run/beamOn command, but then goes
+into an infinite loop on subsequent beamOn commands.
+
+Regards,
+
+--Bill Lockman
