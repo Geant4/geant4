@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.icc,v 1.3 1999-06-04 14:02:11 aforti Exp $
+// $Id: G4LowEnergyIonisation.icc,v 1.4 1999-06-28 15:47:35 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,82 +34,13 @@ inline G4bool G4LowEnergyIonisation::IsApplicable(
           ||(&particle == G4Positron::Positron()) );
 }
          
-inline G4int G4LowEnergyIonisation::FindBinLocation(const G4double arg, const G4Data& vec){
-
-  G4int numberOfBin = vec.length();
-  G4int lowerBound = 0;
-  G4int upperBound = numberOfBin-1;
-
-  do {
-
-    G4int midBin = (lowerBound + upperBound)/2;
-
-    if( arg < vec[midBin] )
-
-       upperBound = midBin-1;
-    else
-
-       lowerBound = midBin+1;
-
-  } while (lowerBound <= upperBound); 
-
-  return upperBound;
-}
-
-inline G4double G4LowEnergyIonisation::DataLogInterpolation(const G4double Argument, 
-                                                               const G4Data& argVec, 
-                                                               const G4Data& valVec){
-
-  G4int theLoc = FindBinLocation(Argument, argVec); 
-
-  if(theLoc == argVec.length()-1){
-    return valVec[theLoc];
-  }
-
-  G4double val1 = valVec[theLoc], val2 = valVec[theLoc+1];
-  G4double arg1 = argVec[theLoc], arg2 = argVec[theLoc+1];
-
-  G4double theVal = (log10(val1)*log10(arg2/Argument)
-                     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
-  
-  theVal = pow(10,theVal);
-
-  return theVal;
-}
-
-inline G4double G4LowEnergyIonisation::DataSemiLogInterpolation(const G4double Argument, 
-                                                                const G4Data& argVec, 
-                                                                const G4Data& valVec){
-
-  G4int theLoc = FindBinLocation(Argument, argVec); 
-
-  if(theLoc == argVec.length()-1){
-    return valVec[theLoc];
-  }
-
-  G4double val1 = valVec[theLoc], val2 = valVec[theLoc+1];
-  G4double arg1 = argVec[theLoc], arg2 = argVec[theLoc+1];
-
-  G4double theVal = (val1*log10(arg2/Argument)
-                     +val2*log10(Argument/arg1))/log10(arg2/arg1);
-  
-//  cout<<"theLoc: "<<theLoc<<" val1: "<<val1<<" arg1: "<<arg1<<endl;
-//  cout<<"theLoc+1: "<<theLoc+1<<" val2: "<<val2<<" arg2: "<<arg2<<endl;
-//  cout<<"theVal: "<<theVal<<endl;
-
- //  theVal = pow(10,theVal);
-
-//  cout<<"theVal real: "<<theVal<<endl;
-  return theVal;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4LowEnergyIonisation::GetMeanFreePath(
                                                const G4Track& track,
                                                G4double,
-                                               G4ForceCondition*) 
-{
+                                               G4ForceCondition*){
+
    const G4DynamicParticle* aParticle = track.GetDynamicParticle();
    G4double KineticEnergy = aParticle->GetKineticEnergy();
    const G4Material* aMaterial  = track.GetMaterial();
@@ -132,6 +63,7 @@ inline G4double G4LowEnergyIonisation::GetMeanFreePath(
      for(G4int iel=0; iel<NumberOfElements; iel++ ){
 
        G4double Cs = ComputeCrossSection((*theElementVector)(iel)->GetZ(), KineticEnergy)*barn;
+
        SIGMA += theAtomicNumDensityVector[iel]*Cs;
      }	
        

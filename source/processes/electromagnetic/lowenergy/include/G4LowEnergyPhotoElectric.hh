@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.8 1999-06-21 14:00:51 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.9 1999-06-28 15:47:04 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,25 +36,8 @@
 #include "G4VDiscreteProcess.hh"
 
 // Contained Variables Headers
-#include "G4PhysicsTable.hh"
+#include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
-#include "G4ios.hh" 
-#include "globals.hh"
-#include "Randomize.hh" 
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsFreeVector.hh"
-#include "G4ElementTable.hh"
-#include "G4Gamma.hh" 
-#include "G4Electron.hh"
-#include "G4Step.hh" 
-#include "G4Data.hh"
-#include "G4FirstLevel.hh"
-#include "G4SecondLevel.hh"
-#include "G4ThirdLevel.hh"
-// Used Variables Declarations
-class G4Element;
-class G4Step;
-class G4PhysicsVector;
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
@@ -95,41 +78,43 @@ public:
   
 protected:  
 
+  virtual G4double ComputeCrossSection(const G4double AtomicNumber,
+				       const G4double IncEnergy);
+  
   void BuildCrossSectionTable();
+  void BuildShellCrossSectionTable();
   void BuildBindingEnergyTable();
-  void BuildMeanFreePathTable();
   void BuildFluorTransitionTable();
-  void BuildAugerTransitionTable(G4int);
-
+  void BuildMeanFreePathTable();
+  void BuildZVec();
 
 private:
 
-  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
-
+  G4int SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy);
+  
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
 			      G4Material* aMaterial);
 
   G4bool SelectRandomTransition(G4int, G4double*, const oneAtomTable*);
 
-  G4double DataLogInterpolation(const G4double Argument, 
-				const G4double AtomicNumber, 
-				const G4PhysicsTable* Table);
-
-  G4int FindBinLocation(const G4double, const G4PhysicsVector*);
-  
-  G4PhysicsTable* theCrossSectionTable;    
-  G4PhysicsTable* theBindingEnergyTable;   
+  G4SecondLevel* theCrossSectionTable;    
   G4PhysicsTable* theMeanFreePathTable;
 
+  allAtomTable* allAtomShellCrossSec;
   allAtomTable* theFluorTransitionTable;
-  oneAtomTable* theAugerTransitionTable;
+  G4SecondLevel* theBindingEnergyTable;   
   G4DataVector thePrimShVec;
+  G4Data* ZNumVec;
+  G4Data* ZNumVecFluor;
+
+  G4LowEnergyUtilities util;
 
   G4double LowestEnergyLimit;      
   G4double HighestEnergyLimit;     
   G4int NumbBinTable;              
   G4double CutForLowEnergySecondaryPhotons;
   G4double MeanFreePath;           
+
 };
 
 

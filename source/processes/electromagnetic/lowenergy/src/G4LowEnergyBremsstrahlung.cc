@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.10 1999-06-21 13:59:12 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.11 1999-06-28 15:45:59 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,13 +30,13 @@
 // 13-08-98 : new methods SetBining() PrintInfo()
 // --------------------------------------------------------------
 
+// This Class Header
 #include "G4LowEnergyBremsstrahlung.hh"
+
+// Collaborating Class Headers
 #include "G4EnergyLossTables.hh"
-#include "G4Epdl89File.hh"
-#include "G4EpdlTables.hh"
-#include "G4PhysicsFreeVector.hh" 
-#include "G4ios.hh"
 #include "G4UnitsTable.hh"
+#include "G4Gamma.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -44,17 +44,18 @@
  
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName)
   : G4eEnergyLoss(processName),      // initialization
-    theMeanFreePathTable(NULL),
+    theCrossSectionTable(0),
+    theMeanFreePathTable(0),
+    ATable(0),
+    BTable(0),
+    ZNumVec(0),
     LowestKineticEnergy (250.*eV),
     HighestKineticEnergy(100.*TeV),
     lowEnergyCut(0.1*eV),
     CutForLowEnergySecondaryPhotons(0.),
     TotBin(100)
 { 
-   theCrossSectionTable = 0;
-   theMeanFreePathTable = 0;
-   ATable = 0;
-   BTable = 0;
+
 
 }
 
@@ -69,10 +70,16 @@ G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
         delete theMeanFreePathTable;
      }
      if (theCrossSectionTable) {
-        theCrossSectionTable->clearAndDestroy();
+
         delete theCrossSectionTable;
      }
 
+     if(ZNumVec){
+       
+       ZNumVec->clear();
+       delete ZNumVec;
+     }
+   
      if (ATable) {
 
         delete ATable;
@@ -119,6 +126,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     CounterOfPositronProcess++;
    }
 
+    BuildZVec();
     BuildCrossSectionTable() ;
     BuildMeanFreePathTable() ;
     BuildDEDXTable  (aParticleType) ;
@@ -132,6 +140,82 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     //}
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
+ 
+  if (theCrossSectionTable) {
+    
+    delete theCrossSectionTable; 
+  }
+
+  theCrossSectionTable = new G4SecondLevel();
+  G4int dataNum = 2;
+ 
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+    
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+    
+    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "brem/br-cs-");
+    
+    theCrossSectionTable->insert(oneAtomCS);
+    
+  }//end for on atoms
+}
+
+void G4LowEnergyBremsstrahlung::BuildATable(){
+
+  if (ATable) {
+    
+    delete ATable; 
+  }
+  G4int dataNum = 2;
+  ATable = util.BuildSecondLevelTables(0,dataNum,"brem/br-co-a");
+
+}
+
+void G4LowEnergyBremsstrahlung::BuildBTable(){
+
+  if (BTable) {
+    
+    delete BTable; 
+  }
+  G4int dataNum = 2;
+  BTable = util.BuildFirstLevelTables(0, dataNum, "brem/br-co-b");
+
+}
+
+void G4LowEnergyBremsstrahlung::BuildZVec(){
+
+  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+
+  if(ZNumVec){
+
+    ZNumVec->clear();
+    delete ZNumVec;
+  }
+
+  ZNumVec = new G4Data(); 
+  for (G4int J=0 ; J < numOfMaterials; J++){ 
+ 
+    const G4Material* material= (*theMaterialTable)[J];        
+    const G4ElementVector* theElementVector = material->GetElementVector();
+    const G4int NumberOfElements = material->GetNumberOfElements() ;
+
+    for (G4int iel=0; iel<NumberOfElements; iel++ ){
+
+      G4double Zel = (*theElementVector)(iel)->GetZ();
+
+      if(ZNumVec->contains(Zel) == FALSE){
+
+	ZNumVec->insert(Zel);
+      }
+      else{
+	
+	continue;
+      }
+    }
+  }
+}
 
 void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType)
   //  Build table for energy loss due to soft brems
@@ -474,11 +558,15 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        G4double SIGMA = 0 ;
        
        for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
-	 G4double tableIndex = (*theElementVector)(k)->GetZ()-1;
+	 
+	 G4double AtomIndex = (*theElementVector)(k)->GetZ();
+	 const G4FirstLevel* oneAtomCS
+	   = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
+	 
+	 G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
+							  (*(*oneAtomCS)[0]), 
+							  (*(*oneAtomCS)[1]))*barn;
 
-	 G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, 
-						     tableIndex, 
-						     theCrossSectionTable)*barn;
 	 SIGMA += theAtomNumDensityVector[k]*interCrsSec;
        }       
        
@@ -494,134 +582,6 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
- 
-  if (theCrossSectionTable) {
-    
-    theCrossSectionTable->clearAndDestroy(); 
-    delete theCrossSectionTable; 
-  }
-
-  G4int par[4] = {82, 0, 0, 0}; G4String name("eedl.asc");
-  G4Epdl89File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theCrossSectionTable = table.GetFstDataTable();
-}
-
-void G4LowEnergyBremsstrahlung::BuildATable(){
-
-  char* path = getenv("G4LEDATA");
-
-  if(!path){ 
-    
-    G4Exception("G4LEDATA environment variable not set");
-  }
-
-  G4String path_string(path);
-  G4String _filename("bremstr.acoeff");
-  G4String dir_file = path_string + "/" + _filename;
-  ifstream afile;
-  afile.open(dir_file.data(), ios::in | ios::nocreate);
-  filebuf* lsdp = afile.rdbuf();
-
-  if(!lsdp->is_open()){
-
-    G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
-    G4Exception(excep);
-  }
-
-  if (ATable) {
-    
-    delete ATable; 
-  }
-
-  ATable = new G4SecondLevel();
-  
-  G4double a,b;
-  G4int k = 0;
-  G4FirstLevel* OneElementATable = new G4FirstLevel();
-  OneElementATable->insert(new G4Data());
-  OneElementATable->insert(new G4Data());
-
-  for(;;){
-
-    afile>>a>>b;
-
-    if(afile.eof()){
-      delete OneElementATable;
-      afile.close();
-      break;
-    }
-
-    if(a){
-      
-      (*OneElementATable)[0]->append(a);
-      (*OneElementATable)[1]->append(b);
-    }
-
-    else{
-
-      ATable->insert(OneElementATable);
-      OneElementATable = new G4FirstLevel();
-      OneElementATable->insert(new G4Data());
-      OneElementATable->insert(new G4Data());
-      k++;
-    }
-  }
-}
-
-void G4LowEnergyBremsstrahlung::BuildBTable(){
-
-  char* path = getenv("G4LEDATA");
-
-  if(!path){ 
-    
-    G4Exception("G4LEDATA environment variable not set");
-  }
-
-  G4String path_string(path);
-  G4String _filename("bremstr.bcoeff");
-  G4String dir_file = path_string + "/" + _filename;
-  ifstream bfile;
-  bfile.open(dir_file.data(), ios::in | ios::nocreate);
-  filebuf* lsdp = bfile.rdbuf();
-
-  if(!lsdp->is_open()){
-
-    G4String excep = "Error!!!! data file: " + dir_file + " NOT found";
-    G4Exception(excep);
-  }
-
-  if (BTable) {
-    
-    delete BTable; 
-  }
-
-  G4double a,b;
-
-  BTable = new G4FirstLevel();
-
-  BTable->insert(new G4Data());
-  BTable->insert(new G4Data());
-
-  for(;;){
-
-    bfile>>a>>b;
-
-    if(bfile.eof()){
-
-      bfile.close();
-      break;
-    }
-
-    (*BTable)[0]->insert(a);
-    (*BTable)[1]->insert(b);
-    
-  }
-
-}
-
 
 void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 						       const G4Material* aMaterial)
@@ -640,9 +600,13 @@ void G4LowEnergyBremsstrahlung::ComputePartialSumSigma(G4double KineticEnergy,
 
    for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ ){
 
-     G4int tableIndex = (G4int) (*theElementVector)(Ielem)->GetZ()-1;
-     G4double interCrsSec = DataLogInterpolation(KineticEnergy, tableIndex, 
-						 theCrossSectionTable)*barn;
+     G4int AtomIndex = (G4int) (*theElementVector)(Ielem)->GetZ();
+     const G4FirstLevel* oneAtomCS
+       = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
+     
+     G4double interCrsSec = util.DataLogInterpolation(KineticEnergy, 
+						      (*(*oneAtomCS)[0]), 
+						      (*(*oneAtomCS)[1]))*barn;
      
      SIGMA += theAtomNumDensityVector[Ielem]*interCrsSec;
 	 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.hh,v 1.1 1999-03-02 17:16:27 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.hh,v 1.2 1999-06-28 15:47:03 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,18 +32,13 @@
 #ifndef G4LowEnergyGammaConversion_h
 #define G4LowEnergyGammaConversion_h 1
 
-#include "G4ios.hh" 
-#include "globals.hh"
-#include "Randomize.hh" 
+// Base Class Headers
 #include "G4VDiscreteProcess.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsFreeVector.hh"
-#include "G4Element.hh"
-#include "G4Gamma.hh" 
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-#include "G4Step.hh"
- 
+
+// Contained Variables Headers
+#include "G4LowEnergyUtilities.hh"
+#include "G4Gamma.hh"
+
 class G4LowEnergyGammaConversion : public G4VDiscreteProcess
  
 {
@@ -72,29 +67,26 @@ protected:
   
   void BuildCrossSectionTable();
   void BuildMeanFreePathTable();
-  
+  void BuildZVec();
+
 private:
   
   G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
-
-  G4double DataLogInterpolation(G4double Argument, 
-				G4double AtomicNumber, 
-				G4PhysicsTable* Table);
-
-  G4int FindBinLocation(G4double, G4PhysicsVector *);
 
   static G4double ScreenFunction1(G4double ScreenVariable);
   static G4double ScreenFunction2(G4double ScreenVariable);
   
 private:
 
-  G4PhysicsTable* theCrossSectionTable;    
+  G4SecondLevel* theCrossSectionTable;    
   G4PhysicsTable* theMeanFreePathTable;
 
-  G4double LowestEnergyLimit; // low  energy limit of the crossection formula     
-  G4double HighestEnergyLimit;  // high energy limit of the crossection formula 
-  G4int NumbBinTable; // number of bins in the crossection table
+  G4LowEnergyUtilities util;
 
+  G4double LowestEnergyLimit; 
+  G4double HighestEnergyLimit;
+  G4int NumbBinTable; 
+  G4Data* ZNumVec;
   G4double MeanFreePath; // actual Mean Free Path (current medium)
 };
 

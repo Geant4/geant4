@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.8 1999-06-21 14:00:52 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.9 1999-06-28 15:47:35 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,54 +32,6 @@ inline G4bool G4LowEnergyPhotoElectric::IsApplicable(const G4ParticleDefinition&
    return ( &particle == G4Gamma::Gamma() ); 
 }
 
-inline G4int G4LowEnergyPhotoElectric::FindBinLocation(const G4double arg, 
-						       const G4PhysicsVector* vec){
-
-  if(!vec){
-
-    G4Exception("G4LowEnergy: FindBinLocation: Vector Empty "
-        "probably the program hasn't found data files or data files are empty");
-  }
-
-  G4int numberOfBin = vec->GetVectorLength();
-  G4int lowerBound = 0;
-  G4int upperBound = numberOfBin-1;
-  do {
-
-    G4int midBin = (lowerBound + upperBound)/2;
-
-    if( arg < vec->GetLowEdgeEnergy(midBin) )
-
-       upperBound = midBin-1;
-
-    else
-
-       lowerBound = midBin+1;
-
-  } while (lowerBound <= upperBound); 
-
-  return upperBound;
-}
-
-inline G4double G4LowEnergyPhotoElectric::DataLogInterpolation(const G4double Argument, 
-							       const G4double TableIndex, 
-							       const G4PhysicsTable* Table){
-
-  G4PhysicsVector* theVec = 0;
-  theVec = (*Table)(TableIndex);
-
-  G4int theLoc = FindBinLocation(Argument, theVec); 
-
-  G4double val1 = (*theVec)(theLoc), val2 = (*theVec)(theLoc+1);
-  G4double arg1 = theVec->GetLowEdgeEnergy(theLoc), arg2 = theVec->GetLowEdgeEnergy(theLoc+1);
-
-  G4double theVal = (log10(val1)*log10(arg2/Argument)
-		     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
-  
-  theVal = pow(10,theVal);
-  return theVal;
-}
-
 inline G4double 
 G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
 
@@ -97,7 +49,9 @@ G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double, G4For
   }
   else {
 
-    MeanFreePath = DataLogInterpolation(GammaEnergy, aMaterial->GetIndex(), theMeanFreePathTable);
+    MeanFreePath = util.DataLogInterpolation(GammaEnergy, 
+	                                     aMaterial->GetIndex(), 
+					     theMeanFreePathTable);
   }                                     
   
   return MeanFreePath;
@@ -118,7 +72,11 @@ inline G4double G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDy
    else{
 
       G4int elemZ = (G4int) anElement->GetZ();	
-      crossSection = DataLogInterpolation(GammaEnergy, elemZ-1, theCrossSectionTable);
+	const G4FirstLevel* oneAtomCS
+	  = (*theCrossSectionTable)[ZNumVec->index(elemZ)];
+
+      crossSection = util.DataLogInterpolation(GammaEnergy, (*(*oneAtomCS)[0]), (*(*oneAtomCS)[1]));
+
    }
    return crossSection*barn;
 } 

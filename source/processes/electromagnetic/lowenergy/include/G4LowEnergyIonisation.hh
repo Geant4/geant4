@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.5 1999-06-21 14:00:51 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.6 1999-06-28 15:47:04 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,23 +29,15 @@
  
 #ifndef G4LowEnergyIonisation_h
 #define G4LowEnergyIonisation_h 1
- 
-#include "G4ios.hh"
-#include "globals.hh"
-#include "Randomize.hh"
+
+
+// Base Class Headers
 #include "G4eEnergyLoss.hh"
-#include "globals.hh"
-#include "G4Track.hh"
-#include "G4Step.hh"
+
+// Contained Variables Headers
+#include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4Gamma.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4PhysicsLinearVector.hh"
-#include "G4Data.hh"
-#include "G4FirstLevel.hh"
-#include "G4SecondLevel.hh"
-#include "G4ThirdLevel.hh"
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
@@ -78,16 +70,17 @@ public:
   
   void Print();
   
-protected:
+  protected:
   
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,
 				       const G4double IncEnergy);
   
   void BuildLossTable(const G4ParticleDefinition& aParticleType);
   void BuildShellCrossSectionTable();
-  void BuildFluorTransitionTable();
   void BuildBindingEnergyTable();
+  void BuildFluorTransitionTable();
   void BuildSamplingCoeffTable();
+  void BuildZVec();
 
 private:
   
@@ -97,8 +90,6 @@ private:
   
 private:
   
-  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
-
   G4int SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy);
   
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
@@ -106,16 +97,6 @@ private:
   
   G4bool SelectRandomTransition(G4int, G4double*, 
 				const oneAtomTable*);
-  
-  G4double DataLogInterpolation(const G4double, 
-				const G4Data&,
-				const G4Data&);
-
-  G4double DataSemiLogInterpolation(const G4double, 
-				    const G4Data&, 
-				    const G4Data&);
-
-  G4int FindBinLocation(const G4double BinValue, const G4Data& arg);
 
   G4double EnergySampling(const G4int, const G4int,const G4double);
 
@@ -124,13 +105,17 @@ private:
   allAtomTable* theSamplingCoeffTable;
   G4SecondLevel* theBindingEnergyTable;  
   G4DataVector thePrimShVec;
+  G4Data* ZNumVec;
+  G4Data* ZNumVecFluor;
 
-  G4double MeanFreePath;
+  G4LowEnergyUtilities util;
+
   G4double LowestKineticEnergy;
   G4double HighestKineticEnergy;
   G4int TotBin;
   G4double CutForLowEnergySecondaryPhotons;
   G4double CutForLowEnergySecondaryElectrons;
+  G4double MeanFreePath;
 };
  
 #include "G4LowEnergyIonisation.icc"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.9 1999-06-21 13:59:12 aforti Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.10 1999-06-28 15:46:00 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,27 +34,18 @@
 // This Class Header
 #include "G4LowEnergyCompton.hh"
 
-// C Headers
-
-// C++ Headers
-
 // Collaborating Class Headers
 #include "G4EnergyLossTables.hh"
-#include "G4Gamma.hh"
 #include "G4Electron.hh"
-#include "G4Epdl97File.hh"
-#include "G4EpdlTables.hh"
-#include "G4PhysicsFreeVector.hh" 
-#include "G4Step.hh"
-#include "Randomize.hh" 
-
-// RW Headers
-#include <rw/tvordvec.h>
 
 // constructor
  
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
+    theCrossSectionTable(0),
+    theMeanFreePathTable(0),
+    theScatteringFunctionTable(0),
+    ZNumVec(0),
     LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
@@ -64,10 +55,6 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
      G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << endl;
    }
-
-   theCrossSectionTable = 0;
-   theMeanFreePathTable = 0; 
-   theScatteringFunctionTable = 0;
 }
  
 // destructor
@@ -75,8 +62,13 @@ G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
 G4LowEnergyCompton::~G4LowEnergyCompton()
 {
    if (theCrossSectionTable) {
-      theCrossSectionTable->clearAndDestroy();
+
       delete theCrossSectionTable;
+   }
+
+   if (theScatteringFunctionTable) {
+
+      delete theScatteringFunctionTable;
    }
 
    if (theMeanFreePathTable) {
@@ -84,9 +76,10 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
       delete theMeanFreePathTable;
    }
 
-   if (theScatteringFunctionTable) {
-      theScatteringFunctionTable->clearAndDestroy();
-      delete theScatteringFunctionTable;
+   if(ZNumVec){
+     
+     ZNumVec->clear();
+     delete ZNumVec;
    }
 }
  
@@ -97,6 +90,8 @@ G4LowEnergyCompton::~G4LowEnergyCompton()
  
 void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
+  BuildZVec();
+
   // Build microscopic cross section table and mean free path table
   BuildCrossSectionTable();
 
@@ -105,7 +100,85 @@ void G4LowEnergyCompton::BuildPhysicsTable(const G4ParticleDefinition& GammaType
 
   // build the scattering function table
   BuildScatteringFunctionTable();
+
 }
+
+void G4LowEnergyCompton::BuildCrossSectionTable(){
+ 
+  if (theCrossSectionTable) {
+    
+    delete theCrossSectionTable; 
+  }
+  
+  theCrossSectionTable = new G4SecondLevel();
+  G4int dataNum = 2;
+  
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+    
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+    
+    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-cs-");
+    
+    theCrossSectionTable->insert(oneAtomCS);
+    
+  }//end for on atoms
+}
+
+void G4LowEnergyCompton::BuildScatteringFunctionTable(){
+
+  if (theScatteringFunctionTable) {
+    
+    delete theScatteringFunctionTable; 
+  }
+
+  theScatteringFunctionTable = new G4SecondLevel();
+  G4int dataNum = 2;
+ 
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+
+    G4FirstLevel* oneAtomSF = util.BuildFirstLevelTables(AtomInd, dataNum, "comp/ce-sf-");
+     
+     theScatteringFunctionTable->insert(oneAtomSF);
+   
+  }//end for on atoms
+}
+
+void G4LowEnergyCompton::BuildZVec(){
+
+  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+
+  if(ZNumVec){
+
+    ZNumVec->clear();
+    delete ZNumVec;
+  }
+
+  ZNumVec = new G4Data(); 
+  for (G4int J=0 ; J < numOfMaterials; J++){ 
+ 
+    const G4Material* material= (*theMaterialTable)[J];        
+    const G4ElementVector* theElementVector = material->GetElementVector();
+    const G4int NumberOfElements = material->GetNumberOfElements() ;
+
+    for (G4int iel=0; iel<NumberOfElements; iel++ ){
+
+      G4double Zel = (*theElementVector)(iel)->GetZ();
+
+      if(ZNumVec->contains(Zel) == FALSE){
+
+	ZNumVec->insert(Zel);
+      }
+      else{
+	
+	continue;
+      }
+    }
+  }
+}
+
 
 G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
@@ -154,11 +227,16 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
     sint2   = onecost*(2.-onecost);
     
     x = sqrt(onecost/2)/wlGamma;
-    
-    ScatteringFunction = DataLogInterpolation(x, elementZ - 1, theScatteringFunctionTable)/cm;
+
+    const G4FirstLevel* oneAtomSF
+	  = (*theScatteringFunctionTable)[ZNumVec->index(elementZ)];
+
+    ScatteringFunction = util.DataLogInterpolation(x, (*(*oneAtomSF)[0]), 
+						   (*(*oneAtomSF)[1]))/cm;
+
     greject = (1. - epsilon*sint2/(1.+ epsilonsq))*ScatteringFunction;
     
-  }  while(2*greject < elementZ*G4UniformRand());
+  }  while(greject < elementZ*G4UniformRand());
   
   G4double cosTeta = 1. - onecost , sinTeta = sqrt (sint2);
   G4double Phi     = twopi * G4UniformRand() ;
@@ -217,34 +295,6 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }
 
-void G4LowEnergyCompton::BuildCrossSectionTable(){
- 
-  if (theCrossSectionTable) {
-    
-    theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; 
-  }
-
-  G4int par[4] = {72, 0, 0, 0}; G4String name("epdl97");
-  G4Epdl97File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theCrossSectionTable = table.GetFstDataTable();
-}
-
-void G4LowEnergyCompton::BuildScatteringFunctionTable(){
- 
-  if (theScatteringFunctionTable) {
-    
-    theScatteringFunctionTable->clearAndDestroy(); delete theScatteringFunctionTable; 
-  }
-
-  G4int par[4] = {93, 942, 0, 0}; G4String name("epdl97");
-  G4Epdl97File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theScatteringFunctionTable = table.GetFstDataTable();
-}
-
 void G4LowEnergyCompton::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
@@ -277,8 +327,15 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
       const G4double BigPath= DBL_MAX;
       G4double SIGMA = 0 ;
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+
+	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
+	const G4FirstLevel* oneAtomCS
+	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
 	
-	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, (*theElementVector)(k)->GetZ(), theCrossSectionTable)*barn;
+	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
+							 (*(*oneAtomCS)[0]), 
+							 (*(*oneAtomCS)[1]))*barn;
+
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
       }       
       
@@ -316,7 +373,14 @@ G4Element* G4LowEnergyCompton::SelectRandomAtom(const G4DynamicParticle* aDynami
       crossSection = 0. ;
     else {
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
-      crossSection = DataLogInterpolation(GammaEnergy, (*theElementVector)(i)->GetZ(), theCrossSectionTable)*barn;
+      
+      G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
+      const G4FirstLevel* oneAtomCS
+	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
+
+      crossSection =  util.DataLogInterpolation(GammaEnergy, 
+						(*(*oneAtomCS)[0]), 
+						(*(*oneAtomCS)[1]))*barn;
     }
 
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;

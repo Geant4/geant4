@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.5 1999-06-21 14:00:49 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.6 1999-06-28 15:47:02 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,22 +32,9 @@
 #include "G4eEnergyLoss.hh"
 
 // Contained Variables Headers
-#include "G4ios.hh" 
-#include "globals.hh"
-#include "Randomize.hh" 
-
-#include "G4Track.hh"
-#include "G4Step.hh"
-#include "G4Gamma.hh"
+#include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-#include "G4OrderedTable.hh" 
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsLogVector.hh"
-
-#include "G4Data.hh"
-#include "G4FirstLevel.hh"
-#include "G4SecondLevel.hh"
 
 class G4LowEnergyBremsstrahlung : public G4eEnergyLoss
  
@@ -84,14 +71,14 @@ protected:
   
   void BuildCrossSectionTable();
   void BuildMeanFreePathTable();
+  void BuildATable();
+  void BuildBTable();
+  void BuildZVec();
 
   void ComputePartialSumSigma(G4double KineticEnergy, const G4Material* aMaterial);
   
 private:
   
-  void BuildATable();
-  void BuildBTable();
-
   G4double ComputeA(G4int Z, G4double ElectKinEnergy); // interpolation
   G4double ComputeB(G4int Z, G4double ElectKinEnergy); // parametrized formula
   
@@ -112,37 +99,26 @@ private:
   
   G4LowEnergyBremsstrahlung(const G4LowEnergyBremsstrahlung&);
   
-  G4double DataLogInterpolation(G4double Argument, 
-				G4double AtomicNumber, 
-				G4PhysicsTable* Table);
-
-  G4double DataLogInterpolation(G4double Argument, 
-				const G4Data& arg, 
-				const G4Data& val);
-
-  G4int FindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
-  G4int FindBinLocation(G4double BinValue, const G4Data& arg);
-
 private:
   
-  G4PhysicsTable* theCrossSectionTable ;              
+  G4SecondLevel* theCrossSectionTable ;              
   G4PhysicsTable* theMeanFreePathTable ;              
   
   G4SecondLevel* ATable; 
   G4FirstLevel* BTable;
-  
+  G4Data* ZNumVec;
+
+  G4LowEnergyUtilities util;
   // partial sum of total crosssection
   G4OrderedTable PartialSumSigma;
   
-  // low  energy limit of the crossection formula
   G4double LowestKineticEnergy;      
-  
-  // high energy limit of the crossection formula 
   G4double HighestKineticEnergy;     
   
   G4double lowEnergyCut;    // lower limit of the energy sampling formula
   G4int    TotBin;                   // number of bins in the tables 
   G4double CutForLowEnergySecondaryPhotons;
+
 };
 
 #include "G4LowEnergyBremsstrahlung.icc"

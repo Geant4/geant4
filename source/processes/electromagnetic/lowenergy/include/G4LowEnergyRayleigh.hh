@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.2 1999-04-01 06:42:57 aforti Exp $
+// $Id: G4LowEnergyRayleigh.hh,v 1.3 1999-06-28 15:47:04 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,20 +31,12 @@
 #ifndef G4LowEnergyRayleigh_h
 #define G4LowEnergyRayleigh_h 
 
-#include "G4ios.hh" 
-#include "globals.hh"
-#include "Randomize.hh" 
+// Base Class Headers
 #include "G4VDiscreteProcess.hh"
-#include "G4Epdl97File.hh"
-#include "G4EpdlTables.hh"
-#include "G4PhysicsTable.hh"
-#include "G4PhysicsFreeVector.hh" 
-#include "G4Element.hh"
+
+// Contained Variables Headers
+#include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Step.hh"
-#include <iostream.h>
-#include <iomanip.h>
 
 class G4LowEnergyRayleigh : public G4VDiscreteProcess {
 
@@ -75,27 +67,19 @@ protected:
   void BuildFormFactorTable();
   void BuildCrossSectionTable();
   void BuildMeanFreePathTable();
+  void BuildZVec();
 
 private:
   
   G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
 
-  G4double DataLogInterpolation(G4double Argument, 
-				G4double tableIndex, 
-				G4PhysicsTable* Table);
-
-  G4int FindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
-
-  G4double InvDataLogInterpolation(G4double Argument, 
-				   G4double tableIndex, 
-				   G4PhysicsTable* Table);
-
-  G4int InvFindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
-
-  G4PhysicsTable* theCrossSectionTable; 
-  G4PhysicsTable* theFormFactorTable;
+  G4SecondLevel* theCrossSectionTable; 
+  G4SecondLevel* theFormFactorTable;
   G4PhysicsTable* theMeanFreePathTable;  
-  
+  G4Data* ZNumVec;
+
+  G4LowEnergyUtilities util;
+
   G4double LowestEnergyLimit; // low  energy limit of the crosssection formula
   G4double HighestEnergyLimit; // high energy limit of the crosssection formula
   G4int NumbBinTable; // number of bins in the crossection table

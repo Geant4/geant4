@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.8 1999-06-21 13:59:13 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.9 1999-06-28 15:46:00 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,18 +38,22 @@
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
 // --------------------------------------------------------------
 
+// This Class Header
 #include "G4LowEnergyGammaConversion.hh"
+
+// Collaborating Class Headers
 #include "G4EnergyLossTables.hh"
-#include "G4Epdl97File.hh"
-#include "G4EpdlTables.hh"
-#include "CLHEP/String/Strings.h"
-//#include "globals.hh"
-#include <rw/tvordvec.h>
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+
 // constructor
  
 G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processName)
   : G4VDiscreteProcess(processName),   
-    LowestEnergyLimit (2*electron_mass_c2),
+    theCrossSectionTable(0),
+    theMeanFreePathTable(0),
+    ZNumVec(0),
+    LowestEnergyLimit (1.2200),
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
@@ -58,8 +62,6 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
      G4cout << "HighestEnergy: " << HighestEnergyLimit/GeV << "GeV " << endl;
    }
-   theCrossSectionTable = 0;
-   theMeanFreePathTable = 0; 
 }
  
 // destructor
@@ -67,7 +69,7 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
 G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
 {
    if (theCrossSectionTable) {
-      theCrossSectionTable->clearAndDestroy();
+
       delete theCrossSectionTable;
    }
 
@@ -75,12 +77,19 @@ G4LowEnergyGammaConversion::~G4LowEnergyGammaConversion()
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
    }
+
+   if(ZNumVec){
+     
+     ZNumVec->clear();
+     delete ZNumVec;
+   }
 }
  
  
 // methods.............................................................................
- 
 void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
+
+  BuildZVec();
 
   // Build microscopic cross section tables for the Compton Scattering process
   BuildCrossSectionTable();
@@ -88,6 +97,62 @@ void G4LowEnergyGammaConversion::BuildPhysicsTable(const G4ParticleDefinition& G
   // Build mean free path table for the Compton Scattering process
   BuildMeanFreePathTable();
 }
+
+void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
+ 
+  if (theCrossSectionTable) {
+    
+    delete theCrossSectionTable; 
+  }
+
+  theCrossSectionTable = new G4SecondLevel();
+  G4int dataNum = 2;
+ 
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+
+    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "pair/pp-cs-");
+     
+     theCrossSectionTable->insert(oneAtomCS);
+   
+  }//end for on atoms
+}
+
+void G4LowEnergyGammaConversion::BuildZVec(){
+
+  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+
+  if(ZNumVec){
+
+    ZNumVec->clear();
+    delete ZNumVec;
+  }
+  
+  ZNumVec = new G4Data(); 
+  for (G4int J=0 ; J < numOfMaterials; J++){ 
+    
+    const G4Material* material= (*theMaterialTable)[J];        
+    const G4ElementVector* theElementVector = material->GetElementVector();
+    const G4int NumberOfElements = material->GetNumberOfElements() ;
+
+    for (G4int iel=0; iel<NumberOfElements; iel++ ){
+      
+      G4double Zel = (*theElementVector)(iel)->GetZ();
+      
+      if(ZNumVec->contains(Zel) == FALSE){
+	
+	ZNumVec->insert(Zel);
+      }
+      else{
+	
+	continue;
+      }
+    }
+  }
+}
+
 
 G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
@@ -262,20 +327,6 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
 }
 
-void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
- 
-  if (theCrossSectionTable) {
-    
-    theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; 
-  }
-
-  G4int par[4] = {74, 0, 0, 0}; G4String name("epdl97");
-  G4Epdl97File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theCrossSectionTable = table.GetFstDataTable();
-}
-
 void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
 
   if (theMeanFreePathTable) {
@@ -310,8 +361,14 @@ void G4LowEnergyGammaConversion::BuildMeanFreePathTable(){
       
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
-	G4int tableIndex = (G4int) (*theElementVector)(k)->GetZ()-1;
-	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy, tableIndex, theCrossSectionTable)*barn;
+	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
+	const G4FirstLevel* oneAtomCS
+	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
+
+	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
+							 (*(*oneAtomCS)[0]), 
+							 (*(*oneAtomCS)[1]))*barn;
+
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
 
       }       
@@ -345,8 +402,15 @@ G4Element* G4LowEnergyGammaConversion::SelectRandomAtom(const G4DynamicParticle*
       crossSection = 0. ;
     else {
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
-      crossSection = DataLogInterpolation(GammaEnergy, (*theElementVector)(i)->GetZ(), theCrossSectionTable)*barn;
+
+      G4int AtomIndex = (G4int) (*theElementVector)(i)->GetZ();
+      const G4FirstLevel* oneAtomCS
+	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
       
+      crossSection =  util.DataLogInterpolation(GammaEnergy, 
+						(*(*oneAtomCS)[0]), 
+						(*(*oneAtomCS)[1]))*barn;
+
     }
     
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;

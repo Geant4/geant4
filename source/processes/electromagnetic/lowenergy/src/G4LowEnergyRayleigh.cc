@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.8 1999-06-21 13:59:14 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.9 1999-06-28 15:46:05 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,17 +31,21 @@
 // 04-06-98, in DoIt, secondary production condition: range>min(threshold,safety)
 // --------------------------------------------------------------
 
+// This Class Header
 #include "G4LowEnergyRayleigh.hh"
+
+// Collaborating Class Headers
 #include "G4EnergyLossTables.hh"
-#include "G4Epdl97File.hh"
-#include "G4EpdlTables.hh"
-#include "CLHEP/String/Strings.h"
-#include <rw/tvordvec.h>
+#include "G4Electron.hh"
 
 // constructor
  
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
+    theCrossSectionTable(0),
+    theMeanFreePathTable(0),
+    theFormFactorTable(0),
+    ZNumVec(0),
     LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
@@ -51,9 +55,6 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
      G4cout << "HighestEnergy: " << HighestEnergyLimit/TeV << "TeV " << endl;
    }
-   theCrossSectionTable = 0;
-   theMeanFreePathTable = 0; 
-   theFormFactorTable = 0;
 }
  
 // destructor
@@ -61,18 +62,24 @@ G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
 G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
 {
    if (theCrossSectionTable) {
-      theCrossSectionTable->clearAndDestroy();
+
       delete theCrossSectionTable;
    }
 
    if(theFormFactorTable){
-     theFormFactorTable->clearAndDestroy();
+
      delete theFormFactorTable;
    }
 
    if (theMeanFreePathTable) {
       theMeanFreePathTable->clearAndDestroy();
       delete theMeanFreePathTable;
+   }
+
+   if(ZNumVec){
+     
+     ZNumVec->clear();
+     delete ZNumVec;
    }
 }
  
@@ -81,15 +88,92 @@ G4LowEnergyRayleigh::~G4LowEnergyRayleigh()
  
 void G4LowEnergyRayleigh::BuildPhysicsTable(const G4ParticleDefinition& GammaType){
 
-   // Build microscopic cross section tables for the Rayleigh process
-   BuildCrossSectionTable();
+  BuildZVec();
 
-   // Build mean free path table for the Rayleigh Scattering process
-   BuildMeanFreePathTable();
+  // Build microscopic cross section tables for the Rayleigh process
+  BuildCrossSectionTable();
+  
+  // Build mean free path table for the Rayleigh Scattering process
+  BuildMeanFreePathTable();
+  
+  // build the scattering function table
+  BuildFormFactorTable();
+}
 
-   // build the scattering function table
-   BuildFormFactorTable();
-   
+void G4LowEnergyRayleigh::BuildCrossSectionTable(){
+ 
+  if (theCrossSectionTable) {
+    
+    delete theCrossSectionTable; 
+  }
+
+  theCrossSectionTable = new G4SecondLevel();
+  G4int dataNum = 2;
+  
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+    
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+    
+    G4FirstLevel* oneAtomCS = util.BuildFirstLevelTables(AtomInd, dataNum, "rayl/re-cs-");
+    
+    theCrossSectionTable->insert(oneAtomCS);
+    
+  }//end for on atoms
+}
+
+void G4LowEnergyRayleigh::BuildFormFactorTable(){
+ 
+  if (theFormFactorTable) {
+    
+    delete theFormFactorTable; 
+  }
+
+  theFormFactorTable = new G4SecondLevel();
+  G4int dataNum = 2;
+  
+  for(G4int TableInd = 0; TableInd < ZNumVec->entries(); TableInd++){
+    
+    G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
+    
+    G4FirstLevel* oneAtomFF = util.BuildFirstLevelTables(AtomInd, dataNum, "rayl/re-ff-");
+    
+    theFormFactorTable->insert(oneAtomFF);
+    
+  }//end for on atoms
+}
+
+void G4LowEnergyRayleigh::BuildZVec(){
+
+  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
+  G4int numOfMaterials = theMaterialTable->length();
+
+  if(ZNumVec){
+
+    ZNumVec->clear();
+    delete ZNumVec;
+  }
+
+  ZNumVec = new G4Data(); 
+  for (G4int J=0 ; J < numOfMaterials; J++){ 
+ 
+    const G4Material* material= (*theMaterialTable)[J];        
+    const G4ElementVector* theElementVector = material->GetElementVector();
+    const G4int NumberOfElements = material->GetNumberOfElements() ;
+
+    for (G4int iel=0; iel<NumberOfElements; iel++ ){
+
+      G4double Zel = (*theElementVector)(iel)->GetZ();
+
+      if(ZNumVec->contains(Zel) == FALSE){
+
+	ZNumVec->insert(Zel);
+      }
+      else{
+	
+	continue;
+      }
+    }
+  }
 }
 
 G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
@@ -129,8 +213,12 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
     SinThHalf = sin(Theta_Half);
     x = SinThHalf/wlGamma;
     
-    DataFormFactor = DataLogInterpolation(x, tableIndex, theFormFactorTable)/cm;
-    
+    const G4FirstLevel* oneAtomFF
+      = (*theFormFactorTable)[ZNumVec->index(elementZ)];
+
+    DataFormFactor = util.DataLogInterpolation(x, (*(*oneAtomFF)[0]), 
+					       (*(*oneAtomFF)[1]))/cm;
+
     RandomFormFactor = G4UniformRand()*elementZ;
       
     Theta = Theta_Half*2;
@@ -161,34 +249,6 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 #endif
 
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
-}
-
-void G4LowEnergyRayleigh::BuildCrossSectionTable(){
- 
-  if (theCrossSectionTable) {
-    
-    theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; 
-  }
-
-  G4int par[4] = {71, 0, 0, 0}; G4String name("epdl97");
-  G4Epdl97File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theCrossSectionTable = table.GetFstDataTable();
-}
-
-void G4LowEnergyRayleigh::BuildFormFactorTable(){
- 
-  if (theFormFactorTable) {
-    
-    theFormFactorTable->clearAndDestroy(); delete theFormFactorTable; 
-  }
-
-  G4int par[4] = {93, 941, 0, 0}; G4String name("epdl97");
-  G4Epdl97File File(name,par);
-  G4EpdlTables table(File);
-  table.FillDataTable();
-  theFormFactorTable = table.GetFstDataTable();
 }
 
 void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
@@ -226,8 +286,14 @@ void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
 
-	G4double tableIndex = (*theElementVector)(k)->GetZ() - 1;
-	G4double interCrsSec = DataLogInterpolation(LowEdgeEnergy,tableIndex, theCrossSectionTable)*barn;
+	G4double AtomIndex = (*theElementVector)(k)->GetZ();
+
+	const G4FirstLevel* oneAtomCS
+	  = (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
+	
+	G4double interCrsSec = util.DataLogInterpolation(LowEdgeEnergy, 
+							 (*(*oneAtomCS)[0]), 
+							 (*(*oneAtomCS)[1]))*barn;
 
 	SIGMA += theAtomNumDensityVector[k]*interCrsSec;
 
@@ -263,9 +329,14 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
     else {
       if (GammaEnergy > HighestEnergyLimit) GammaEnergy = 0.99*HighestEnergyLimit ;
 
-      G4double tableIndex = (*theElementVector)(i)->GetZ() - 1;
-      crossSection = DataLogInterpolation(GammaEnergy, tableIndex, theCrossSectionTable)*barn;
+      G4double AtomIndex = (*theElementVector)(i)->GetZ();
+
+      const G4FirstLevel* oneAtomCS
+	= (*theCrossSectionTable)[ZNumVec->index(AtomIndex)];
       
+      crossSection =  util.DataLogInterpolation(GammaEnergy, 
+						(*(*oneAtomCS)[0]), 
+						(*(*oneAtomCS)[1]))*barn;
     }
     
     PartialSumSigma += theAtomNumDensityVector[i] * crossSection;
@@ -275,3 +346,11 @@ G4Element* G4LowEnergyRayleigh::SelectRandomAtom(const G4DynamicParticle* aDynam
   //   << "' has no elements" << endl;
   return (*theElementVector)(0);
 }
+
+
+
+
+
+
+
+

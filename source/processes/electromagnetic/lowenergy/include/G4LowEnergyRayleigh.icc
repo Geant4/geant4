@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.icc,v 1.5 1999-06-21 14:00:52 aforti Exp $
+// $Id: G4LowEnergyRayleigh.icc,v 1.6 1999-06-28 15:47:36 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,95 +29,6 @@ inline G4bool G4LowEnergyRayleigh::IsApplicable(const G4ParticleDefinition& part
    return ( &particle == G4Gamma::Gamma() ); 	
 }
 
-inline G4int G4LowEnergyRayleigh::FindBinLocation(G4double arg, G4PhysicsVector* vec)
-{
-
-  G4int numberOfBin = vec->GetVectorLength();
-  G4int lowerBound = 0;
-  G4int upperBound = numberOfBin-1;
-
-  do {
-
-    G4int midBin = (lowerBound + upperBound)/2;
-
-    if( arg < vec->GetLowEdgeEnergy(midBin) )
-
-       upperBound = midBin-1;
-    else
-
-       lowerBound = midBin+1;
-  } while (lowerBound <= upperBound); 
-
-  return upperBound;
-}
-
-inline G4int G4LowEnergyRayleigh::InvFindBinLocation(G4double arg, G4PhysicsVector* vec){
-
-  if(!vec){
-
-    G4Exception("G4LowEnergy: FindBinLocation: Vector Empty "
-        "probably the program hasn't found data files or data files are empty");
-  }
-
-  G4int numberOfBin = vec->GetVectorLength();
-  G4int lowerBound = 0;
-  G4int upperBound = numberOfBin-1;
-
-  do {
-
-    G4int midBin = (lowerBound + upperBound)/2;
-
-    if( arg > (*vec)(midBin))
-
-       upperBound = midBin-1;
-    else
-
-       lowerBound = midBin+1;
-
-  } while (lowerBound <= upperBound); 
-
-  return upperBound;
-}
-
-inline G4double G4LowEnergyRayleigh::DataLogInterpolation(G4double Argument, G4double
- TableIndex, G4PhysicsTable* Table){
-
-
-  G4PhysicsVector* theVec = (*Table)(TableIndex);
-  G4int theLoc = FindBinLocation(Argument, theVec); 
-
-  G4double val1 = (*theVec)(theLoc), val2 = (*theVec)(theLoc+1);
-  G4double arg1 = theVec->GetLowEdgeEnergy(theLoc), arg2 = theVec->GetLowEdgeEnergy(theLoc+1);
-
-  if(arg1 == 0.0) arg1 = 1e-17; if(val1 == 0.0) val1 = 1e-17;
-
-  G4double theVal = (log10(val1)*log10(arg2/Argument)
-                     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
-  
-  theVal = pow(10,theVal);
-
-  return theVal;
-}
-
-inline G4double G4LowEnergyRayleigh::InvDataLogInterpolation(G4double Argument, G4double TableIndex, G4PhysicsTable* Table){
-
-  G4PhysicsVector* theVec = 0;
-  theVec = (*Table)(TableIndex);
-  G4int theLoc = InvFindBinLocation(Argument, theVec); 
-
-  G4double arg1 = (*theVec)(theLoc), arg2 = (*theVec)(theLoc+1);
-  G4double val1 = theVec->GetLowEdgeEnergy(theLoc), val2 = theVec->GetLowEdgeEnergy(theLoc+1);
-
-  if(arg1 == 0.0) arg1 = 1e-17;	if(val1 == 0.0) val1 = 1e-17;
-
-  G4double theVal = (log10(val1)*log10(arg2/Argument)
-		     +log10(val2)*log10(Argument/arg1))/log10(arg2/arg1);
-  
-  theVal = pow(10,theVal);
-
-  return theVal;
-}
-
 inline G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& aTrack, G4double, G4ForceCondition*){
 
 // returns the gamma mean free path in GEANT4 internal units
@@ -132,7 +43,7 @@ inline G4double G4LowEnergyRayleigh::GetMeanFreePath(const G4Track& aTrack, G4do
 }	
    else {
 
-       MeanFreePath = DataLogInterpolation(GammaEnergy, 
+       MeanFreePath = util.DataLogInterpolation(GammaEnergy, 
 	                                   aMaterial->GetIndex(), 
                                            theMeanFreePathTable);	
    }	

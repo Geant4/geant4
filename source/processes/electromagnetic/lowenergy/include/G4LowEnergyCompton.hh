@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.hh,v 1.2 1999-06-04 12:55:03 aforti Exp $
+// $Id: G4LowEnergyCompton.hh,v 1.3 1999-06-28 15:47:03 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,13 +35,8 @@
 #include "G4VDiscreteProcess.hh"
 
 // Contained Variables Headers
-#include "G4PhysicsTable.hh"
+#include "G4LowEnergyUtilities.hh"
 #include "G4Gamma.hh"
-
-// Used Variables Declarations
-class G4Element;
-class G4Step;
-class G4PhysicsVector; 
 
 class G4LowEnergyCompton : public G4VDiscreteProcess{
 
@@ -72,22 +67,18 @@ protected:
   void BuildScatteringFunctionTable();
   void BuildCrossSectionTable();
   void BuildMeanFreePathTable();
-  
+  void BuildZVec();
+
 private:
 
   G4Element* SelectRandomAtom(const G4DynamicParticle*, G4Material*);
-
-
-  G4double DataLogInterpolation(const G4double Argument, 
-				const G4double AtomicNumber, 
-				const G4PhysicsTable* Table);
-
-  G4int FindBinLocation(const G4double BinValue, 
-			const G4PhysicsVector* theVec);
   
-  G4PhysicsTable* theCrossSectionTable;
-  G4PhysicsTable* theScatteringFunctionTable;
+  G4SecondLevel* theCrossSectionTable;
+  G4SecondLevel* theScatteringFunctionTable;
   G4PhysicsTable* theMeanFreePathTable;
+  G4Data* ZNumVec;
+
+  G4LowEnergyUtilities util;
 
   G4double LowestEnergyLimit; // low  energy limit of the crosssection data 
   G4double HighestEnergyLimit; // high energy limit of the crosssection data
