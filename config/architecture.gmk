@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.13 1999-05-07 13:20:10 stesting Exp $
+# $Id: architecture.gmk,v 1.14 1999-05-08 01:24:46 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -160,6 +160,7 @@ ifdef G4USE_STL
   RWINC      := $(G4BASE)/global/STLInterface
   ifdef G4USE_OSPACE
     OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
+    OSPACEINC  := -I$(OSPACEDIR)/ospace/stl -I$(OSPACEDIR)/ospace/std
     OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
   endif
 else
@@ -538,7 +539,7 @@ ifeq ($(G4SYSTEM),DEC-cxx)
   endif
   ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
-    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers -I$(OSPACEDIR) $(OSPACEINC)
   endif
 endif
 
