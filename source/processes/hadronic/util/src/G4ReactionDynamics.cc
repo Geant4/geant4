@@ -2190,7 +2190,7 @@
 //    G4double ekin0 = pseudoParticle[4].GetKineticEnergy()/GeV;
     G4double theoreticalKinetic =
       pseudoParticle[4].GetTotalEnergy()/GeV + pseudoParticle[5].GetTotalEnergy()/GeV;
-    
+// to be done    
     pseudoParticle[6] = pseudoParticle[4] + pseudoParticle[5];
     pseudoParticle[4].Lorentz( pseudoParticle[4], pseudoParticle[6] );
     pseudoParticle[5].Lorentz( pseudoParticle[5], pseudoParticle[6] );
