@@ -94,7 +94,7 @@ cernlibs := $(shell cernlib -v $(cernlibv) geant321 packlib)
 ### .PHONY targets are executed regardless of time-stamp of any file of same 
 ###  name
 
-.PHONY: global all lib bin libC libF ext geom
+.PHONY: global all lib bin libC libF
 
 ###--------------------- section to define explicit rules --------------------
 ##first: lib bin
@@ -103,7 +103,7 @@ first: lib
 
 global: lib
 
-all: ext lib bin examples
+all: lib bin examples
 	@echo $@ stage done in $(curdir)
 
 examples: cltog4 clGeometry
@@ -181,25 +181,6 @@ $(G4TMPDIR)/%.d: src/%.F
 ### --------------------- end of pattern rules --------------------------------
 
 -include $(Fdependencies)
-
-### --------------------- target for external packages-------------------------
-
-ext:
-# global targets
-	@cd $(G4BASE)/global;		$(MAKE) global
-	@cd $(G4BASE)/geometry;		$(MAKE) global
-	@cd $(G4BASE)/run;		$(MAKE)
-	@cd $(G4BASE)/event;	$(MAKE)
-	@cd $(G4BASE)/intercoms;	$(MAKE)
-	@cd $(G4BASE)/interfaces;	$(MAKE)
-	@cd $(G4BASE)/visualization;	$(MAKE)
-	@cd $(G4BASE)/tracking;		$(MAKE)
-	@cd $(G4BASE)/track;		$(MAKE)
-	@cd $(G4BASE)/particles;	$(MAKE) global	
-	@cd $(G4BASE)/processes;	$(MAKE) global
-	@cd $(G4BASE)/materials;	$(MAKE)
-	@cd $(G4BASE)/digits+hits;	$(MAKE) global
-	@cd $(G4BASE)/graphics_reps;	$(MAKE)
 
 cleanf:
 	$(RM) $(Flibobjects)
