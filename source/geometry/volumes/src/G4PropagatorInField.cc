@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.21 2001-10-22 14:49:04 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.22 2001-10-22 14:52:18 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
 const G4double  G4PropagatorInField::fEpsilonMinDefault = 5.0e-7;  
-const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;  
+const G4double  G4PropagatorInField::fEpsilonMaxDefault = 0.05;
 
 ///////////////////////////////////////////////////////////////////////////
 //

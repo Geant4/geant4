@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.21 2001-10-22 14:49:01 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.22 2001-10-22 14:53:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,7 @@ G4PropagatorInField::G4PropagatorInField(G4Navigator    *theNavigator,
     fVerboseLevel(0),
     fmax_loop_count(10000),
     fEpsilonMin(fEpsilonMinDefault),
-    fEpsilonMax(fEpsilonMaxDefault)
+    fEpsilonMax(fEpsilonMaxDefault)  
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 
