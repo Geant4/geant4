@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:35:06 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-06-07 09:31:16 gunter Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -26,7 +26,7 @@ ifeq ($(G4SYSTEM),AIX-AFS)
 endif
 else
 CPPFLAGS+=-I$(G4INSTALL)/tests/tools/include
-EXTRALIBS+=-L$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
+EXTRALIBS+=$(LIB_PATH)$(G4INSTALL)/tests/tools/lib/$(G4SYSTEM) -lG4TestTool
 endif
 
 include $(G4INSTALL)/config/binmake.gmk
