@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.hh,v 1.4 2001-07-11 09:57:39 gunter Exp $
+// $Id: Em3DetectorConstruction.hh,v 1.5 2001-10-22 10:58:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3DetectorConstruction_h
 #define Em3DetectorConstruction_h 1
@@ -47,7 +47,7 @@ class Em3CalorimeterSD;
 
      const G4int MaxAbsor = 10;
      
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -88,7 +88,7 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* GetAbsorMaterial(G4int i)  {return AbsorMaterial[i];};
      G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
      
-     const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};           
+     const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
                  
   private:
@@ -119,12 +119,12 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   logicLayer;       //pointer to the logical Layer
      G4VPhysicalVolume* physiLayer;       //pointer to the physical Layer
          
-     G4Box*             solidAbsor[MaxAbsor]; //pointer to the solid Absorbers
-     G4LogicalVolume*   logicAbsor[MaxAbsor]; //pointer to the logical Absorbers
-     G4VPhysicalVolume* physiAbsor[MaxAbsor]; //pointer to the physical Absorbers
+     G4Box*             solidAbsor[MaxAbsor]; //pointer to solid Absorbers
+     G4LogicalVolume*   logicAbsor[MaxAbsor]; //pointer to logical Absorbers
+     G4VPhysicalVolume* physiAbsor[MaxAbsor]; //pointer to physical Absorbers
      
      G4UniformMagField* magField;         //pointer to the magnetic field
-     G4UserLimits*      userLimits;       //pointer to the userLimits class     
+     G4UserLimits*      userLimits;       //pointer to the userLimits class
      
      Em3DetectorMessenger* detectorMessenger;  //pointer to the Messenger
      Em3CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
@@ -136,7 +136,7 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void Em3DetectorConstruction::ComputeCalorParameters()
 {
@@ -148,6 +148,8 @@ inline void Em3DetectorConstruction::ComputeCalorParameters()
      
      WorldSizeX = 1.2*CalorThickness; WorldSizeYZ = 1.2*CalorSizeYZ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

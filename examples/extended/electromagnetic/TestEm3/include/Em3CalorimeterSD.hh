@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorimeterSD.hh,v 1.3 2001-07-11 09:57:39 gunter Exp $
+// $Id: Em3CalorimeterSD.hh,v 1.4 2001-10-22 10:58:47 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3CalorimeterSD_h
 #define Em3CalorimeterSD_h 1
@@ -40,7 +40,7 @@ class G4HCofThisEvent;
 class G4Step;
 #include "Em3CalorHit.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3CalorimeterSD : public G4VSensitiveDetector
 {
@@ -62,6 +62,8 @@ class Em3CalorimeterSD : public G4VSensitiveDetector
       Em3DetectorConstruction* Detector;
       G4int*                   HitID;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.6 2001-07-11 09:57:42 gunter Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.7 2001-10-22 10:58:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3RunActionMessenger.hh"
 
@@ -41,7 +41,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
 :Em3Run(run)
@@ -50,7 +50,7 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   RndmDir->SetGuidance("Rndm status control.");
   
   RndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
-  RndmSaveCmd->SetGuidance("set frequency to save rndm status on external files.");
+  RndmSaveCmd->SetGuidance("set frequency to save rndm on external files.");
   RndmSaveCmd->SetGuidance("freq = 0 not saved");
   RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
   RndmSaveCmd->SetGuidance("freq > 0 saved on:   endOfRun.rndm");
@@ -93,7 +93,7 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   HistoCmd->AvailableForStates(Idle);    
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3RunActionMessenger::~Em3RunActionMessenger()
 {
@@ -101,9 +101,9 @@ Em3RunActionMessenger::~Em3RunActionMessenger()
   delete HistoCmd;  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3RunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+void Em3RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {   
   if (command == RndmSaveCmd)
       Em3Run->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
@@ -123,4 +123,4 @@ void Em3RunActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
    }         
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2001-04-13 13:17:29 maire Exp $
+$Id: README,v 1.6 2001-10-22 10:58:40 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -70,9 +70,9 @@ $Id: README,v 1.5 2001-04-13 13:17:29 maire Exp $
  4- VISUALIZATION
  
  	The Visualization Manager is set in the main().
- 	The initialisation of the drawing is done via commands
- 	/vis/... in the macro init.mac. This macro is
- 	automatically read from the main in case of interactive running mode.
+ 	The initialisation of the drawing is done via the commands
+ 	/vis/... in the macro vis.mac. In interactive session:
+	PreInit or Idle > /control/execute vis.mac
  	
  	The detector has a default view which is a longitudinal view of the 
  	calorimeter.
@@ -111,7 +111,7 @@ $Id: README,v 1.5 2001-04-13 13:17:29 maire Exp $
  		% TestEm3
  		....
  		Idle> type your commands. For instance:
- 		Idle> /control/execute newgeom.mac
+ 		Idle> /control/execute run01.mac
  		....
  		Idle> exit
  	

@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: TestEm3.cc,v 1.6 2001-07-11 09:57:38 gunter Exp $
+// $Id: TestEm3.cc,v 1.7 2001-10-22 10:58:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -45,7 +45,7 @@
 #include "Em3SteppingAction.hh"
 #include "Em3SteppingVerbose.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
 
@@ -77,10 +77,7 @@ int main(int argc,char** argv) {
   runManager->SetUserAction(RunAct);
   runManager->SetUserAction(new Em3EventAction(RunAct,KinAct,detector));
   runManager->SetUserAction(new Em3SteppingAction);
-  
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+
   // get the pointer to the User Interface manager 
   G4UImanager* UI = G4UImanager::GetUIpointer();  
 
@@ -93,7 +90,6 @@ int main(int argc,char** argv) {
 #else
       session = new G4UIterminal();
 #endif                 
-      UI->ApplyCommand("/control/execute init.mac");    
       session->SessionStart();
       delete session;
     }
@@ -113,5 +109,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorHit.hh,v 1.3 2001-07-11 09:57:39 gunter Exp $
+// $Id: Em3CalorHit.hh,v 1.4 2001-10-22 10:58:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3CalorHit_h
 #define Em3CalorHit_h 1
@@ -37,7 +37,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3CalorHit : public G4VHit
 {
@@ -70,13 +70,13 @@ class Em3CalorHit : public G4VHit
       G4double TrackLengthAbs[MaxAbsor];      
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 typedef G4THitsCollection<Em3CalorHit> Em3CalorHitsCollection;
 
 extern G4Allocator<Em3CalorHit> Em3CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void* Em3CalorHit::operator new(size_t)
 {
@@ -85,12 +85,14 @@ inline void* Em3CalorHit::operator new(size_t)
   return aHit;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline void Em3CalorHit::operator delete(void* aHit)
 {
   Em3CalorHitAllocator.FreeSingle((Em3CalorHit*) aHit);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

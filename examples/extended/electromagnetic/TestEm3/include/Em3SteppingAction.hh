@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3SteppingAction.hh,v 1.4 2001-07-11 09:57:40 gunter Exp $
+// $Id: Em3SteppingAction.hh,v 1.5 2001-10-22 10:58:51 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3SteppingAction_h
 #define Em3SteppingAction_h 1
@@ -35,7 +35,7 @@
 #include "G4UserSteppingAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3SteppingAction : public G4UserSteppingAction
 {
@@ -47,5 +47,7 @@ class Em3SteppingAction : public G4UserSteppingAction
     
     G4double BirkAttenuation(const G4Step*);
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

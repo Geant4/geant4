@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.hh,v 1.4 2001-07-11 09:57:39 gunter Exp $
+// $Id: Em3DetectorMessenger.hh,v 1.5 2001-10-22 10:58:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3DetectorMessenger_h
 #define Em3DetectorMessenger_h 1
@@ -42,7 +42,7 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3DetectorMessenger: public G4UImessenger
 {
@@ -65,6 +65,8 @@ class Em3DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* MaxStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

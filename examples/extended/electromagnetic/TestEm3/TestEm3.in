@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.1 2000-01-21 14:28:44 maire Exp $
+# $Id: TestEm3.in,v 1.2 2001-10-22 10:58:41 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 2
 #
 #/run/particle/setCut 0.5 mm
-#/run/initialize
+/run/initialize
 #
 /run/verbose 2
 /event/drawTracks none

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorMessenger.cc,v 1.4 2001-07-11 09:57:42 gunter Exp $
+// $Id: Em3PrimaryGeneratorMessenger.cc,v 1.5 2001-10-22 10:58:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3PrimaryGeneratorMessenger.hh"
 
@@ -35,13 +35,14 @@
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithADouble.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PrimaryGeneratorMessenger::Em3PrimaryGeneratorMessenger(Em3PrimaryGeneratorAction* Em3Gun)
+Em3PrimaryGeneratorMessenger::Em3PrimaryGeneratorMessenger(
+                                             Em3PrimaryGeneratorAction* Em3Gun)
 :Em3Action(Em3Gun)
 { 
   DefaultCmd = new G4UIcmdWithoutParameter("/gun/setDefault",this);
-  DefaultCmd->SetGuidance("set/reset the kinematic defined in PrimaryGenerator");
+  DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
   DefaultCmd->AvailableForStates(PreInit,Idle);
   
   RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
@@ -52,7 +53,7 @@ Em3PrimaryGeneratorMessenger::Em3PrimaryGeneratorMessenger(Em3PrimaryGeneratorAc
   RndmCmd->AvailableForStates(Idle);  
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3PrimaryGeneratorMessenger::~Em3PrimaryGeneratorMessenger()
 {
@@ -60,9 +61,10 @@ Em3PrimaryGeneratorMessenger::~Em3PrimaryGeneratorMessenger()
   delete RndmCmd;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em3PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void Em3PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
+                                               G4String newValue)
 { 
   if( command == DefaultCmd )
    { Em3Action->SetDefaultKinematic();}
@@ -71,5 +73,5 @@ void Em3PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String new
    { Em3Action->SetRndmBeam(RndmCmd->GetNewDoubleValue(newValue));}   
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

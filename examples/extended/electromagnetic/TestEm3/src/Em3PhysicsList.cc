@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PhysicsList.cc,v 1.6 2001-07-11 09:57:42 gunter Exp $
+// $Id: Em3PhysicsList.cc,v 1.7 2001-10-22 10:58:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3PhysicsList.hh"
 #include "Em3PhysicsListMessenger.hh"
@@ -41,7 +41,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"              
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3PhysicsList::Em3PhysicsList():  G4VUserPhysicsList()
 {
@@ -55,12 +55,12 @@ Em3PhysicsList::Em3PhysicsList():  G4VUserPhysicsList()
   SetVerboseLevel(1);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3PhysicsList::~Em3PhysicsList()
 {delete pMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructParticle()
 {
@@ -75,7 +75,7 @@ void Em3PhysicsList::ConstructParticle()
   ConstructBarions();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructBosons()
 { 
@@ -89,8 +89,9 @@ void Em3PhysicsList::ConstructBosons()
   // optical photon
   G4OpticalPhoton::OpticalPhotonDefinition();
 }
- //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 void Em3PhysicsList::ConstructLeptons()
 {
   // leptons
@@ -105,7 +106,7 @@ void Em3PhysicsList::ConstructLeptons()
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructMesons()
 {
@@ -123,7 +124,7 @@ void Em3PhysicsList::ConstructMesons()
   G4KaonZeroShort::KaonZeroShortDefinition();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructBarions()
 {
@@ -135,7 +136,7 @@ void Em3PhysicsList::ConstructBarions()
 }
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructProcess()
 {
@@ -144,7 +145,7 @@ void Em3PhysicsList::ConstructProcess()
   ConstructGeneral();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -162,7 +163,7 @@ void Em3PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::ConstructEM()
 {
@@ -210,6 +211,8 @@ void Em3PhysicsList::ConstructEM()
 }
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4Decay.hh"
 
 void Em3PhysicsList::ConstructGeneral()
@@ -229,7 +232,7 @@ void Em3PhysicsList::ConstructGeneral()
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::SetCuts()
 {
@@ -263,7 +266,7 @@ void Em3PhysicsList::SetCuts()
   if (verboseLevel>0) DumpCutValuesTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::SetCutForGamma(G4double cut)
 {
@@ -283,7 +286,7 @@ void Em3PhysicsList::SetCutForProton(G4double cut)
   cutForProton = cut;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
 

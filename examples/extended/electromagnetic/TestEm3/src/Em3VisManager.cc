@@ -21,14 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: Em3VisManager.cc,v 1.4 2001-07-11 09:57:43 gunter Exp $
+// $Id: Em3VisManager.cc,v 1.5 2001-10-22 10:58:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison 24th January 1998.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4VIS_USE
 
@@ -90,11 +90,11 @@
 #include "G4VRML2File.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3VisManager::Em3VisManager () {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3VisManager::RegisterGraphicsSystems () {
 
@@ -162,4 +162,4 @@ void Em3VisManager::RegisterGraphicsSystems () {
 
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

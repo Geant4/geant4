@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorMessenger.hh,v 1.4 2001-07-11 09:57:40 gunter Exp $
+// $Id: Em3PrimaryGeneratorMessenger.hh,v 1.5 2001-10-22 10:58:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3PrimaryGeneratorMessenger_h
 #define Em3PrimaryGeneratorMessenger_h 1
@@ -39,7 +39,7 @@ class Em3PrimaryGeneratorAction;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Em3PrimaryGeneratorMessenger: public G4UImessenger
 {
@@ -54,6 +54,8 @@ class Em3PrimaryGeneratorMessenger: public G4UImessenger
     G4UIcmdWithoutParameter*   DefaultCmd;
     G4UIcmdWithADouble*        RndmCmd;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

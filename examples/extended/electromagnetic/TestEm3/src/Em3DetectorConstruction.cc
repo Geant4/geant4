@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorConstruction.cc,v 1.4 2001-07-11 09:57:41 gunter Exp $
+// $Id: Em3DetectorConstruction.cc,v 1.5 2001-10-22 10:58:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3DetectorConstruction.hh"
 #include "Em3DetectorMessenger.hh"
@@ -52,7 +52,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorConstruction::Em3DetectorConstruction()
 :solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
@@ -82,12 +82,12 @@ Em3DetectorConstruction::Em3DetectorConstruction()
   detectorMessenger = new Em3DetectorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3DetectorConstruction::~Em3DetectorConstruction()
 { delete userLimits; delete detectorMessenger;}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* Em3DetectorConstruction::Construct()
 {
@@ -95,7 +95,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::Construct()
   return ConstructCalorimeter();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::DefineMaterials()
 { 
@@ -114,7 +114,7 @@ G4double temperature, pressure;
 // define Elements
 //
 
-a = 1.01*g/mole;
+a = 1.008*g/mole;
 G4Element* H  = new G4Element(name="Hydrogen",symbol="H" , z= 1., a);
 
 a = 12.01*g/mole;
@@ -136,13 +136,17 @@ G4Element* Si = new G4Element(name="Silicon",symbol="Si" , z= 14., a);
 G4Isotope* U5 = new G4Isotope(name="U235", iz=92, n=235, a=235.01*g/mole);
 G4Isotope* U8 = new G4Isotope(name="U238", iz=92, n=238, a=238.03*g/mole);
 
-G4Element* U  = new G4Element(name="enriched Uranium", symbol="U", ncomponents=2);
+G4Element* U  = new G4Element(name="enriched Uranium",symbol="U",ncomponents=2);
 U->AddIsotope(U5, abundance= 90.*perCent);
 U->AddIsotope(U8, abundance= 10.*perCent);
 
 //
 // define simple materials
 //
+
+density = 70.8*mg/cm3;
+a = 1.008*g/mole;
+G4Material* lH2 = new G4Material(name="liquidH2", z=1., a, density);
 
 density = 2.700*g/cm3;
 a = 26.98*g/mole;
@@ -252,8 +256,8 @@ steam->AddMaterial(H2O, fractionmass=1.);
 density     = universe_mean_density;    //from PhysicalConstants.h
 pressure    = 3.e-18*pascal;
 temperature = 2.73*kelvin;
-G4Material* vacuum = new G4Material(name="Galactic", z=1., a=1.01*g/mole, density,
-                   kStateGas,temperature,pressure);
+G4Material* vacuum = new G4Material(name="Galactic",z=1.,a=1.008*g/mole,density,
+                                        kStateGas,temperature,pressure);
 
 density     = 1.e-5*g/cm3;
 pressure    = 2.e-2*bar;
@@ -270,7 +274,7 @@ G4cout << *(G4Material::GetMaterialTable()) << G4endl;
   defaultMaterial  = vacuum;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
 {
@@ -340,7 +344,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
                                    logicLayer,		//its logical volume
                                    physiCalor,		//its mother  volume
                                    false,		//no boolean operation
-                                   0);			//copy number     				       
+                                   0);			//copy number
 
   //                               
   // Absorbers
@@ -357,7 +361,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
       			                  AbsorMaterial[k], //its material
       			                  "Absorber");      //its name
 					  
-      logicAbsor[k]->SetUserLimits(userLimits);					  
+      logicAbsor[k]->SetUserLimits(userLimits);
 
       G4double xcenter = xfront+0.5*AbsorThickness[k];
       xfront += AbsorThickness[k];       			                  
@@ -399,7 +403,7 @@ G4VPhysicalVolume* Em3DetectorConstruction::ConstructCalorimeter()
   return physiWorld;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::PrintCalorParameters()
 {
@@ -407,13 +411,13 @@ void Em3DetectorConstruction::PrintCalorParameters()
          << "\n ---> The calorimeter is " << NbOfLayers << " layers of:";
   for (G4int i=0; i<NbOfAbsor; i++)
      { 
-       G4cout << "\n \t" << G4std::setw(12) << AbsorMaterial[i]->GetName() <<": "
+      G4cout << "\n \t" << G4std::setw(12) << AbsorMaterial[i]->GetName() <<": "
               << G4std::setw(6) << G4BestUnit(AbsorThickness[i],"Length");
      }
   G4cout << "\n-------------------------------------------------------------\n";
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetNbOfAbsor(G4int ival)
 {
@@ -427,7 +431,7 @@ void Em3DetectorConstruction::SetNbOfAbsor(G4int ival)
     }  
   NbOfAbsor = ival;
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
 {
@@ -443,7 +447,7 @@ void Em3DetectorConstruction::SetAbsorMaterial(G4int ival,G4String material)
   if (pttoMaterial) AbsorMaterial[ival] = pttoMaterial;             
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
 {
@@ -462,7 +466,7 @@ void Em3DetectorConstruction::SetAbsorThickness(G4int ival,G4double val)
   AbsorThickness[ival] = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetCalorSizeYZ(G4double val)
 {
@@ -476,7 +480,7 @@ void Em3DetectorConstruction::SetCalorSizeYZ(G4double val)
   CalorSizeYZ = val;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetNbOfLayers(G4int ival)
 {
@@ -490,7 +494,7 @@ void Em3DetectorConstruction::SetNbOfLayers(G4int ival)
   NbOfLayers = ival;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetMagField(G4double fieldValue)
 {
@@ -511,7 +515,7 @@ void Em3DetectorConstruction::SetMagField(G4double fieldValue)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3DetectorConstruction::SetMaxStepSize(G4double val)
 {
@@ -525,11 +529,11 @@ void Em3DetectorConstruction::SetMaxStepSize(G4double val)
   userLimits->SetMaxAllowedStep(val);
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
 void Em3DetectorConstruction::UpdateGeometry()
 {
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3PrimaryGeneratorAction.cc,v 1.4 2001-07-11 09:57:42 gunter Exp $
+// $Id: Em3PrimaryGeneratorAction.cc,v 1.5 2001-10-22 10:58:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3PrimaryGeneratorAction.hh"
 
@@ -40,7 +40,7 @@
 #include "G4ParticleDefinition.hh"
 #include "Randomize.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3PrimaryGeneratorAction::Em3PrimaryGeneratorAction(
                                                Em3DetectorConstruction* Em3DC)
@@ -55,7 +55,7 @@ Em3PrimaryGeneratorAction::Em3PrimaryGeneratorAction(
   gunMessenger = new Em3PrimaryGeneratorMessenger(this);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3PrimaryGeneratorAction::~Em3PrimaryGeneratorAction()
 {
@@ -63,7 +63,7 @@ Em3PrimaryGeneratorAction::~Em3PrimaryGeneratorAction()
   delete gunMessenger;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PrimaryGeneratorAction::SetDefaultKinematic()
 {
@@ -78,7 +78,7 @@ void Em3PrimaryGeneratorAction::SetDefaultKinematic()
   particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
@@ -99,5 +99,5 @@ void Em3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   else  particleGun->GeneratePrimaryVertex(anEvent);
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

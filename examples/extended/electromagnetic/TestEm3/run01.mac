@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.3 2000-12-06 16:43:38 maire Exp $
+# $Id: run01.mac,v 1.4 2001-10-22 10:58:42 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -8,7 +8,7 @@
 /control/verbose 2
 #
 #/run/particle/setCut 0.5 mm
-#/run/initialize
+/run/initialize
 #
 /run/verbose 2
 /event/drawTracks none

@@ -21,19 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: Em3CalorHit.cc,v 1.3 2001-07-11 09:57:40 gunter Exp $
+// $Id: Em3CalorHit.cc,v 1.4 2001-10-22 10:58:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3CalorHit.hh"
 
 G4Allocator<Em3CalorHit> Em3CalorHitAllocator;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3CalorHit::Em3CalorHit()
 {
@@ -41,12 +41,12 @@ Em3CalorHit::Em3CalorHit()
       { EdepAbs[i] = TrackLengthAbs[i] = 0.;}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3CalorHit::~Em3CalorHit()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3CalorHit::Em3CalorHit(const Em3CalorHit& right)
 {
@@ -55,7 +55,7 @@ Em3CalorHit::Em3CalorHit(const Em3CalorHit& right)
        TrackLengthAbs[i] = right.TrackLengthAbs[i];}
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 const Em3CalorHit& Em3CalorHit::operator=(const Em3CalorHit& right)
 {
@@ -65,22 +65,22 @@ const Em3CalorHit& Em3CalorHit::operator=(const Em3CalorHit& right)
   return *this;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int Em3CalorHit::operator==(const Em3CalorHit& right) const
 {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3CalorHit::Draw()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3CalorHit::Print()
-{;}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
