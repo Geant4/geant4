@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.cc,v 1.4 2001-07-11 10:01:44 gunter Exp $
+// $Id: G4Deuteron.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,3 @@ G4Deuteron G4Deuteron::theDeuteron(
 );
 
 G4Deuteron* G4Deuteron::DeuteronDefinition(){return &theDeuteron;}
-// initialization for static cut values
-G4double   G4Deuteron::theDeuteronLengthCut;
-G4double*  G4Deuteron::theDeuteronKineticEnergyCuts;

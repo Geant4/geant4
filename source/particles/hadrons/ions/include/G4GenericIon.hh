@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GenericIon.hh,v 1.5 2001-07-11 10:01:43 gunter Exp $
+// $Id: G4GenericIon.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,8 +52,6 @@ class G4GenericIon : public G4VIon
 {
  private:
    static G4GenericIon theGenericIon;
-   static G4double  theGenericIonLengthCut;
-   static G4double* theGenericIonKineticEnergyCuts;
 
  public:
    G4GenericIon(
@@ -71,28 +69,6 @@ class G4GenericIon : public G4VIon
 
    static G4GenericIon*    GenericIonDefinition();
    static G4GenericIon*    GenericIon(){return &theGenericIon;}
-   static G4double GetCuts() {return theGenericIonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theGenericIonKineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4GenericIon::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theGenericIonLengthCut = theCutInMaxInteractionLength;  
-  theGenericIonKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4GenericIon::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theGenericIonLengthCut = theCutInMaxInteractionLength;  
-  theGenericIonKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 #endif

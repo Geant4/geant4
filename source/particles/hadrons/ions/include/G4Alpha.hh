@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.hh,v 1.5 2001-07-11 10:01:43 gunter Exp $
+// $Id: G4Alpha.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4Alpha : public G4VIon
 {
  private:
    static G4Alpha theAlpha;
-   static G4double  theAlphaLengthCut;
-   static G4double* theAlphaKineticEnergyCuts;
 
  public:
    G4Alpha(
@@ -74,28 +72,6 @@ class G4Alpha : public G4VIon
   
    static G4Alpha*    AlphaDefinition();
    static G4Alpha*    Alpha(){return &theAlpha;}
-   static G4double GetCuts() {return theAlphaLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theAlphaKineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4Alpha::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theAlphaLengthCut = theCutInMaxInteractionLength;  
-  theAlphaKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4Alpha::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theAlphaLengthCut = theCutInMaxInteractionLength;  
-  theAlphaKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Triton.cc,v 1.4 2001-07-11 10:01:44 gunter Exp $
+// $Id: G4Triton.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,3 @@ G4Triton G4Triton::theTriton(
 );
 
 G4Triton* G4Triton::TritonDefinition(){return &theTriton;}
-// initialization for static cut values
-G4double   G4Triton::theTritonLengthCut;
-G4double*  G4Triton::theTritonKineticEnergyCuts;

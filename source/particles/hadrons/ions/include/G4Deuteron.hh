@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Deuteron.hh,v 1.5 2001-07-11 10:01:43 gunter Exp $
+// $Id: G4Deuteron.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,8 +55,6 @@ class G4Deuteron : public G4VIon
 {
  private:
    static G4Deuteron theDeuteron;
-   static G4double  theDeuteronLengthCut;
-   static G4double* theDeuteronKineticEnergyCuts;
 
  public:
    G4Deuteron(
@@ -74,30 +72,8 @@ class G4Deuteron : public G4VIon
 
    static G4Deuteron* DeuteronDefinition();
    static G4Deuteron* Deuteron(){return &theDeuteron;}
-   static G4double GetCuts() {return theDeuteronLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theDeuteronKineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4Deuteron::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theDeuteronLengthCut = theCutInMaxInteractionLength;  
-  theDeuteronKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4Deuteron::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theDeuteronLengthCut = theCutInMaxInteractionLength;  
-  theDeuteronKineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 #endif
 
 

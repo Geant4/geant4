@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Alpha.cc,v 1.4 2001-07-11 10:01:44 gunter Exp $
+// $Id: G4Alpha.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,3 @@ G4Alpha G4Alpha::theAlpha(
 );
 
 G4Alpha* G4Alpha::AlphaDefinition(){return &theAlpha;}
-// initialization for static cut values
-G4double   G4Alpha::theAlphaLengthCut;
-G4double*  G4Alpha::theAlphaKineticEnergyCuts;

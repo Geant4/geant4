@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.hh,v 1.5 2001-07-11 10:01:43 gunter Exp $
+// $Id: G4He3.hh,v 1.6 2001-10-15 10:05:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,8 +51,6 @@ class G4He3 : public G4VIon
 {
  private:
    static G4He3 theHe3;
-   static G4double  theHe3LengthCut;
-   static G4double* theHe3KineticEnergyCuts;
 
  public:
    G4He3(
@@ -70,27 +68,8 @@ class G4He3 : public G4VIon
 
    static G4He3*    He3Definition();
    static G4He3*    He3() {return &theHe3;}
-   static G4double GetCuts() {return theHe3LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theHe3KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-   virtual void RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy );
 };
 
-inline void G4He3::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theHe3LengthCut = theCutInMaxInteractionLength;  
-  theHe3KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-inline void G4He3::RestoreCuts(G4double cutInLength,
-			    const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theHe3LengthCut = theCutInMaxInteractionLength;  
-  theHe3KineticEnergyCuts = theKineticEnergyCuts;
-}
+
 #endif
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4He3.cc,v 1.4 2001-07-11 10:01:44 gunter Exp $
+// $Id: G4He3.cc,v 1.5 2001-10-15 10:05:19 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,6 +82,3 @@ G4He3 G4He3::theHe3(
 );
 
 G4He3* G4He3::He3Definition(){return &theHe3;}
-// initialization for static cut values
-G4double   G4He3::theHe3LengthCut;
-G4double*  G4He3::theHe3KineticEnergyCuts;
