@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamElm.cc,v 1.7 2001-07-11 10:01:27 gunter Exp $
+// $Id: G4IonisParamElm.cc,v 1.8 2002-10-17 09:00:29 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 //
+// 17-10-02, Fix excitation energy interpolation. V.Ivanchenko
 // 08-03-01, correct handling of fShellCorrectionVector. M.Maire
 // 22-11-00, tabulation of ionisation potential from 
 //           the ICRU Report N#37. V.Ivanchenko
@@ -66,11 +67,10 @@ G4IonisParamElm::G4IonisParamElm(G4double Z)
     10.0, 10.0,  9.9,  9.9,  9.7,  9.2,  9.5,  9.4,  9.4,  9.4,
      9.6,  9.7,  9.7,  9.8,  9.8,  9.8,  9.8,  9.9,  9.9,  9.9 };
 
-     G4int iz = (G4int)Z - 1 ;
-     if(0  > iz) iz = 0;
-     if(98 < iz) iz = 98 ;
-     fMeanExcitationEnergy = 
-       fZ * (exc[iz] + (fZ - (G4double)(iz))*(exc[iz+1] - exc[iz])) * eV ;
+    G4int iz = (G4int)Z - 1 ;
+    if(0  > iz) iz = 0;
+    else if(99 < iz) iz = 99 ;
+    fMeanExcitationEnergy = fZ * exc[iz] * eV ;
 
 
     fTau0 = 0.1*fZ3*MeV/proton_mass_c2;
