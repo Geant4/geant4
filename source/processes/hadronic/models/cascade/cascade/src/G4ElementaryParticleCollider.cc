@@ -1658,7 +1658,7 @@ particleSCMmomentumFor2to2(
 
   const G4int itry_max = 100;
   const G4double ct_cut = 0.9999;
-  const G4double huge = 60.0;
+  const G4double huge_num = 60.0;
   G4int k = getElasticCase(is, kw, ekin);
   G4double ae = -1.0;
   G4double ak = 2.0;
@@ -1684,12 +1684,12 @@ particleSCMmomentumFor2to2(
     if(is == 1 || is == 2 || is == 4) ab = 8.7;
     ac = -2.0 * ab * pscm * pscm;
     ad = 2.0 * ac;
-    if(ad < -huge) {
+    if(ad < -huge_num) {
       ad = exp(ad);
 
     } else {
 
-      ad = exp(-huge);
+      ad = exp(-huge_num);
     };   
 
     while(fabs(ct) > ct_cut && itry < itry_max) {

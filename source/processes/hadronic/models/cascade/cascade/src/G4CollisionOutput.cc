@@ -173,7 +173,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
             out_mom = getTotalOutputMomentum();
 	    G4std::sort(outgoingParticles.begin(), outgoingParticles.end(), G4ParticleLargerEkin());
             for(G4int i = 0; i < 4; i++) mon_non_cons[i] = ini_mom[i] - out_mom[i];
-            pnc = G4std::sqrt(mon_non_cons[1] * mon_non_cons[1] + 
+            pnc = sqrt(mon_non_cons[1] * mon_non_cons[1] + 
 		       mon_non_cons[2] * mon_non_cons[2] + 
 		       mon_non_cons[3] * mon_non_cons[3]);
 	    if(verboseLevel > 2){

@@ -212,7 +212,7 @@ void G4Fissioner::potentialMinimization(G4double& VP,
     G4cout << " >>> G4Fissioner::potentialMinimization" << G4endl;
   }
 
-  const G4double huge = 2.0e35;
+  const G4double huge_num = 2.0e35;
   const G4double one_third = 1.0 / 3.0;
   //  const G4double two_thirds = 2.0 / 3.0;
   const G4int itry_max = 2000;
@@ -298,13 +298,13 @@ void G4Fissioner::potentialMinimization(G4double& VP,
 
 	if (fabs(AL1[i]) >= DS1) {
 	  G4double XXX = AL1[i] * AL1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge : exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : exp(XXX);
 	  DX1 = 2.0 * (1.0 + 2.0 * AL1[i] * AL1[i] * DS2) * DEX * DS2;
 	};
 
 	if (fabs(BET1[i]) >= DS1) {
 	  G4double XXX = BET1[i] * BET1[i] * DS2;
-	  G4double DEX = XXX > 100.0 ? huge : exp(XXX);
+	  G4double DEX = XXX > 100.0 ? huge_num : exp(XXX);
 	  DX2 = 2.0 * (1.+2.0 * BET1[i] * BET1[i] * DS2) * DEX * DS2;
 	};
 

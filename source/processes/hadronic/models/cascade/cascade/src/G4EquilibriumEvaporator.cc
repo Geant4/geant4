@@ -20,7 +20,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
   }
 
   // simple implementation of the equilibium evaporation a la Dostrowski
-  const G4double huge = 50.0;
+  const G4double huge_num = 50.0;
   const G4double small = -50.0;
   const G4double one_third = 1.0 / 3.0;
   const G4double two_thirds = 2.0 / 3.0;
@@ -161,8 +161,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 	      W[0] = BE * pow(A1[0], two_thirds) * G[0] * AL;
 	      G4double TM1 = 2.0 * sqrt(u[0] * TM[0]) - ue;
 
-	      if (TM1 > huge) {
-		TM1 = huge;
+	      if (TM1 > huge_num) {
+		TM1 = huge_num;
 
 	      } else if (TM1 < small) {
 		TM1 = small;
@@ -180,8 +180,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		W[i] = BE * pow(A1[i], two_thirds) * G[i] * (1.0 + CPA[i]);
 		G4double TM1 = 2.0 * sqrt(u[i] * TM[i]) - ue;
 
-		if (TM1 > huge) {
-		  TM1 = huge;
+		if (TM1 > huge_num) {
+		  TM1 = huge_num;
 
 		} else if (TM1 < small) {
 		  TM1 = small;
@@ -206,8 +206,8 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 		G4double AF = u1 * getAF(X, A, Z, EEXS);
 		G4double TM1 = 2.0 * sqrt(AF * EF) - ue;
 
-		if (TM1 > huge) {
-		  TM1 = huge;
+		if (TM1 > huge_num) {
+		  TM1 = huge_num;
 
 		} else if (TM1 < small) {
 		  TM1 = small;
@@ -328,7 +328,7 @@ G4CollisionOutput G4EquilibriumEvaporator::collide(G4InuclParticle* bullet,
 
 	      if (icase < 6) { // particle or light nuclei escape
 		G4double uc = 2.0 * sqrt(u[icase] * TM[icase]);
-		G4double ur = (uc > huge ? exp(huge) : exp(uc));
+		G4double ur = (uc > huge_num ? exp(huge_num) : exp(uc));
 		G4double d1 = 1.0 / ur;
 		G4double d2 = 1.0 / (ur - 1.0);	    
 		G4int itry1 = 0;

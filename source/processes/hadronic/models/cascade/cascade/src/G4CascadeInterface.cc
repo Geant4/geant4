@@ -273,8 +273,8 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   }
 
   // Get nuclei fragments
-  G4DynamicParticle * aFragment(0);
-  G4ParticleDefinition * aIonDef(0);
+  G4DynamicParticle * aFragment = 0;
+  G4ParticleDefinition * aIonDef = 0;
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
   if (!nucleiFragments.empty()) { 
