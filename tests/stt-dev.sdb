@@ -1,4 +1,4 @@
-# $Id: stt-dev.sdb,v 1.15 1999-10-21 12:29:07 stesting Exp $
+# $Id: stt-dev.sdb,v 1.16 1999-10-26 12:58:35 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -22,7 +22,7 @@ geant4/source/geometry/management    geant4-00-01-ref-04
 geant4/source/geometry/solids        geant4-00-01-ref-04
 geant4/source/geometry/solids/BREPS  geant4-00-01-ref-04
 geant4/source/geometry/volumes       geant4-00-01-ref-04
-geant4/source/global           geant4-00-01-ref-04
+geant4/source/global           global-V00-01-03
 geant4/source/graphics_reps    geant4-00-01-ref-04
 geant4/source/intercoms        geant4-00-01-ref-04
 geant4/source/interfaces       geant4-00-01-ref-04
@@ -36,12 +36,12 @@ geant4/source/processes/electromagnetic	    geant4-00-01-ref-04
 geant4/source/processes/hadronic            geant4-00-01-ref-04
 geant4/source/processes/hadronic/models/generator/string_fragmentation string_fragmentation-V00-01-00
 geant4/source/processes/management          geant4-00-01-ref-04
-geant4/source/processes/optical	            geant4-00-01-ref-04
+geant4/source/processes/optical	            op-V00-01-01
 geant4/source/processes/parameterisation    geant4-00-01-ref-04
 geant4/source/processes/photolepton_hadron  geant4-00-01-ref-04
 geant4/source/processes/transportation      geant4-00-01-ref-04
 geant4/source/readout          geant4-00-01-ref-04
 geant4/source/run              geant4-00-01-ref-04
 geant4/source/track            geant4-00-01-ref-04
-geant4/source/tracking         geant4-00-01-ref-04
+geant4/source/tracking         tracking-V00-01-01
 geant4/source/visualization    geant4-00-01-ref-04
