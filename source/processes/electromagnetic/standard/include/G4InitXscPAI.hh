@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.hh,v 1.3 2004-04-20 11:04:51 grichine Exp $
+// $Id: G4InitXscPAI.hh,v 1.4 2004-04-26 09:18:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,6 +76,9 @@ public:
 
   G4double RePartDielectricConst(G4double energy) ;
 
+  G4double ModuleSqDielectricConst( G4int intervalNumber,
+	                                  G4double energy        ) ;
+
   G4double DifPAIxSection( G4double omega ) ;
   G4double DifPAIdEdx( G4double omega ) ;
 
@@ -88,6 +91,9 @@ public:
   void     IntegralPlasmon(G4double bg2, G4double Tmax) ;
 
   G4double IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tmax) ;
+
+
+  G4double GetPhotonLambda( G4double omega ) ;
 
 
   G4double GetStepEnergyLoss( G4double step ) ;
@@ -107,6 +113,8 @@ public:
   G4PhysicsLogVector* GetPAIxscVector() const { return fPAIxscVector;}
   G4PhysicsLogVector* GetPAIphotonVector() const { return fPAIphotonVector;}
   G4PhysicsLogVector* GetPAIelectronVector() const { return fPAIelectronVector;}
+  G4PhysicsLogVector* GetChCosSqVector() const { return fChCosSqVector;}
+  G4PhysicsLogVector* GetChWidthVector() const { return fChWidthVector;}
 
 protected :
 
@@ -137,6 +145,8 @@ private :
   G4PhysicsLogVector* fPAIxscVector;
   G4PhysicsLogVector* fPAIphotonVector;
   G4PhysicsLogVector* fPAIelectronVector;
+  G4PhysicsLogVector* fChCosSqVector;
+  G4PhysicsLogVector* fChWidthVector;
   
 };    
 

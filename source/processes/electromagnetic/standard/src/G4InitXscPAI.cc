@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.3 2004-04-20 11:04:52 grichine Exp $
+// $Id: G4InitXscPAI.cc,v 1.4 2004-04-26 09:18:47 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,9 +53,9 @@
 
 // Local class constants
 
-const G4double G4InitXscPAI::fDelta = 0.005 ; // energy shift from interval border
-const G4int G4InitXscPAI::fPAIbin = 400 ;     // size of energy transfer vectors
-const G4double G4InitXscPAI::fSolidDensity = 0.01*g/cm3 ; // ~gas-solid border
+const G4double G4InitXscPAI::fDelta        = 0.005 ; // energy shift from interval border
+const G4int G4InitXscPAI::fPAIbin          = 400 ;     // size of energy transfer vectors
+const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 
 //////////////////////////////////////////////////////////////////
 //
@@ -65,7 +65,9 @@ const G4double G4InitXscPAI::fSolidDensity = 0.01*g/cm3 ; // ~gas-solid border
 G4InitXscPAI::G4InitXscPAI(G4MaterialCutsCouple* matCC)
   : fPAIxscVector(NULL),
     fPAIphotonVector(NULL),
-    fPAIelectronVector(NULL)
+    fPAIelectronVector(NULL),
+    fChCosSqVector(NULL),
+    fChWidthVector(NULL)
 {
   G4int i, j, matIndex;
  
@@ -105,9 +107,11 @@ G4InitXscPAI::G4InitXscPAI(G4MaterialCutsCouple* matCC)
 
 G4InitXscPAI::~G4InitXscPAI()
 {
-  if(fPAIxscVector) delete fPAIxscVector;  
-  if(fPAIphotonVector) delete fPAIphotonVector;  
+  if(fPAIxscVector)      delete fPAIxscVector;  
+  if(fPAIphotonVector)   delete fPAIphotonVector;  
   if(fPAIelectronVector) delete fPAIelectronVector;  
+  if(fChCosSqVector)     delete fChCosSqVector;  
+  if(fChWidthVector)     delete fChWidthVector;  
 }
 
 ////////////////////////////////////////////////////////////////////////
@@ -295,12 +299,33 @@ G4double G4InitXscPAI::ImPartDielectricConst( G4int    k ,
    energy3 = energy2*energy1;
    energy4 = energy3*energy1;
    
-   result = a1/energy1+a2/energy2+a3/energy3+a4/energy4 ;  
-   result *=hbarc/energy1 ;
+   result  = a1/energy1+a2/energy2+a3/energy3+a4/energy4 ;  
+   result *= hbarc/energy1 ;
    
    return result ;
 
 }  // end of ImPartDielectricConst 
+
+////////////////////////////////////////////////////////////////
+//
+// Modulus squared of dielectric constant
+// (G4int k - interval number, G4double omega - energy point)
+
+G4double G4InitXscPAI::ModuleSqDielectricConst( G4int    k ,
+			                       G4double omega )
+{
+   G4double eIm2, eRe2, result;
+
+   result = ImPartDielectricConst(k,omega);
+   eIm2   = result*result;
+
+   result = RePartDielectricConst(omega);
+   eRe2   = result*result;
+
+   result = eIm2 + eRe2;
+  
+   return result ;
+}  
 
 
 //////////////////////////////////////////////////////////////////////////////
@@ -708,15 +733,23 @@ G4double G4InitXscPAI::IntegralPAIdEdx(G4double omega, G4double bg2, G4double Tm
 void G4InitXscPAI::IntegralCherenkov(G4double bg2, G4double Tmax)
 {
   G4int i,k,i1,i2;
-  G4double energy1, energy2, result = 0.;
+  G4double energy1, energy2, beta2, module2, cos2, width, result = 0.;
  
   fBetaGammaSq = bg2;
   fTmax        = Tmax;
+  beta2        = bg2/(1+bg2);
 
   if(fPAIphotonVector) delete fPAIphotonVector;  
+  if(fChCosSqVector)   delete fChCosSqVector;  
+  if(fChWidthVector)   delete fChWidthVector;  
   
   fPAIphotonVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
+  fChCosSqVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
+  fChWidthVector = new G4PhysicsLogVector( (*(*fMatSandiaMatrix)[0])[0], fTmax, fPAIbin);
+
   fPAIphotonVector->PutValue(fPAIbin-1,result);
+  fChCosSqVector->PutValue(fPAIbin-1,1.);
+  fChWidthVector->PutValue(fPAIbin-1,1e-7);
 	         	
   for( i = fIntervalNumber - 1; i >= 0; i-- )
   {
@@ -747,12 +780,20 @@ void G4InitXscPAI::IntegralCherenkov(G4double bg2, G4double Tmax)
     if(i < 0) i = 0;
     i1 = i;
 
+    module2 = ModuleSqDielectricConst(i1,energy1);
+    cos2    = RePartDielectricConst(energy1)/module2/beta2;      
+    width   = ImPartDielectricConst(i1,energy1)/module2/beta2;
+      
+    fChCosSqVector->PutValue(k,cos2);
+    fChWidthVector->PutValue(k,width);
+
     if( i1 == i2 )
     {
       fCurrentInterval = i1;
       result += integral.Legendre10(this,&G4InitXscPAI::PAIdNdxCherenkov,
                                     energy1,energy2);
       fPAIphotonVector->PutValue(k,result);
+
     }
     else
     {
@@ -859,6 +900,43 @@ void G4InitXscPAI::IntegralPlasmon(G4double bg2, G4double Tmax)
   return;
 }   // end of IntegralPlasmon
 
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
+
+G4double G4InitXscPAI::GetPhotonLambda( G4double omega )
+{  
+  G4int i ;
+  G4double omega2, omega3, omega4, a1, a2, a3, a4, lambda ;
+
+  omega2 = omega*omega ;
+  omega3 = omega2*omega ;
+  omega4 = omega2*omega2 ;
+
+  for(i = 0; i < fIntervalNumber;i++)
+  {
+    if( omega < (*(*fMatSandiaMatrix)[i])[0] ) break ;
+  }
+  if( i == 0 )
+  {
+    G4cout<<"Warning: energy in G4InitXscPAI::GetPhotonLambda < I1"<<G4endl;
+  }
+  else i-- ;
+
+  a1 = (*(*fMatSandiaMatrix)[i])[1]; 
+  a2 = (*(*fMatSandiaMatrix)[i])[2]; 
+  a3 = (*(*fMatSandiaMatrix)[i])[3]; 
+  a4 = (*(*fMatSandiaMatrix)[i])[4]; 
+
+  lambda = 1./(a1/omega + a2/omega2 + a3/omega3 + a4/omega4);
+
+  return lambda ;
+}
+
+/////////////////////////////////////////////////////////////////////////
+//
+//
 
 /////////////////////////////////////////////////////////////////////////
 //
