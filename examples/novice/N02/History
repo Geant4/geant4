@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2001-11-19 12:24:05 johna Exp $
+$Id: History,v 1.24 2001-11-27 15:52:53 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+27-11-01 mma (exampleN02-V03-02-04)
+- vis.mac: /vis/viewer/set/viewpointThetaPhi
 
 19-11-01 John (exampleN02-V03-02-03)
 - Updated ExN02VisManager.cc for new graphics systems and defaults.
