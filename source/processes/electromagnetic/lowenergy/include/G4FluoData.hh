@@ -72,17 +72,17 @@ public:
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the identity of the starting one
-  const G4int StartShellId(G4int initIndex,G4int vacancyIndex);
+  G4int StartShellId(G4int initIndex,G4int vacancyIndex);
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the transition energy
-  const G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex);
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the probability of this transition
-  const G4double StartShellProb(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellProb(G4int initIndex,G4int vacancyIndex);
 
-  void LoadData(const G4int& Z);
+  void LoadData( G4int Z);
 
   void PrintData();
 

@@ -100,7 +100,7 @@ size_t G4FluoData::NumberOfTransitions(G4int vacancyIndex) const
   }
  return n;
 }
-const G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex) 
+G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex) 
 {
  G4int n = -1;
 
@@ -123,7 +123,8 @@ const G4int G4FluoData::StartShellId(G4int initIndex,G4int vacancyIndex)
    }
  return n;
 }
-const G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex) 
+ 
+G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex) 
 {
   G4double n = -1;
   
@@ -146,7 +147,8 @@ const G4double G4FluoData::StartShellEnergy(G4int initIndex,G4int vacancyIndex)
    }
   return n;
 }
-const G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex) 
+
+G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex) 
 {
   G4double n = -1;
 
@@ -170,7 +172,7 @@ const G4double G4FluoData::StartShellProb(G4int initIndex,G4int vacancyIndex)
   return n;
 }
 
-void G4FluoData::LoadData(const G4int& Z)
+void G4FluoData::LoadData(G4int Z)
 { 
   // Build the complete string identifying the file with the data set
   
@@ -222,7 +224,7 @@ void G4FluoData::LoadData(const G4int& Z)
 	    idMap[vacId] = initIds;
             energyMap[vacId] = transEnergies;
 	    probabilityMap[vacId] = transProbabilities;
-	    G4double size=transProbabilities->size();
+	    //	    G4double size=transProbabilities->size();
             G4int n = initIds->size();
 	    
 	    nInitShells.push_back(n);
@@ -290,7 +292,7 @@ void G4FluoData::PrintData()
 	     <<" ----- "
 	     <<G4endl;
       
-      for (G4int k = 0; k<=NumberOfTransitions(i); k++)
+      for (size_t k = 0; k<=NumberOfTransitions(i); k++)
 	{ 
 	  G4int id = StartShellId(k,i);
 	  G4double e = StartShellEnergy(k,i) /MeV;
