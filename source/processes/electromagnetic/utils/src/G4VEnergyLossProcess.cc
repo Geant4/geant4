@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.39 2004-11-17 15:01:11 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.40 2004-11-17 15:22:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -148,6 +148,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name, G4ProcessType t
   mfpKinEnergy(0.0),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
+  hasRestProcess(false),
   tablesAreBuilt(false),
   integral(true),
   meanFreePath(false),
@@ -229,7 +230,6 @@ void G4VEnergyLossProcess::Clear()
 
 void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-
   // Are particle defined?
   if( !particle ) {
     if(part.GetParticleType() == "nucleus" && part.GetParticleSubType() == "generic") 
@@ -241,7 +241,6 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
            << GetProcessName()
            << " for " << part.GetParticleName()
-           << " local: " << particle->GetParticleName()
            << G4endl;
   }
 
@@ -289,6 +288,16 @@ void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   chargeSqRatio = 1.0;
   massRatio = 1.0;
   reduceFactor = 1.0;
+
+  hasRestProcess = false;
+  G4ProcessManager* pm = particle->GetProcessManager();
+  G4int np = pm->GetAtRestProcessVector()->size();
+  for(G4int j=0; j<np; j++) {
+    if(pm->GetProcessActivation(j)) {
+      hasRestProcess = true;
+      break;
+    }
+  }
 
   if (baseParticle) {
     massRatio = (baseParticle->GetPDGMass())/initialMass;
@@ -687,7 +696,15 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   */
 
   G4double finalT = preStepKinEnergy - eloss;
-  if (finalT <= lowestKinEnergy) finalT = 0.0;
+
+  if (finalT <= lowestKinEnergy) {
+
+    finalT = 0.0;
+
+    if (hasRestProcess) fParticleChange.ProposeTrackStatus(fStopButAlive);
+    else                fParticleChange.ProposeTrackStatus(fStopAndKill);
+  }
+
   eloss = preStepKinEnergy-finalT;
 
   fParticleChange.SetProposedKineticEnergy(finalT);
@@ -772,13 +789,16 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
            << G4endl;
   }
   */
-  //  if (finalT <= 0.0) finalT = 0.0;
-  
-  if (finalT <= lowestKinEnergy) {
+
+  if (finalT <= 0.0) {
     fParticleChange.SetProposedKineticEnergy(0.0);
+
+    if (hasRestProcess) fParticleChange.ProposeTrackStatus(fStopButAlive);
+    else                fParticleChange.ProposeTrackStatus(fStopAndKill);
+
     return &fParticleChange;
   }
-  
+
   fParticleChange.SetProposedKineticEnergy(finalT);
 
   return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
