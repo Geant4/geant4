@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VVisCommand.hh,v 1.5 1999-12-15 14:54:20 gunter Exp $
+// $Id: G4VVisCommand.hh,v 1.6 1999-12-16 17:19:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Base class for visualization commands - John Allison  9th August 1998
@@ -15,6 +15,7 @@
 #define G4VVISCOMMAND_HH
 
 #include "G4UImessenger.hh"
+#include "g4std/vector"
 
 class G4VisManager;
 class G4UIcommand;
@@ -28,18 +29,13 @@ public:
   static void SetVisManager (G4VisManager*);
 protected:
   static G4VisManager* fpVisManager;
-  // Commands which need to be accessed by other messengers...
-  static G4UIcmdWithAString* fpCommandSceneEdit;
-  static G4UIcmdWithAString* fpCommandSceneNotifyHandlers;
-  static G4UIcmdWithAString* fpCommandSceneRemove;
-  static G4UIcmdWithAString* fpCommandSceneSelect;
-  static G4UIcmdWithAString* fpCommandSceneHandlerAttach;
-  static G4UIcmdWithAString* fpCommandSceneHandlerRemove;
-  static G4UIcmdWithAString* fpCommandSceneHandlerSelect;
-  static G4UIcommand*        fpCommandViewerCreate;
-  static G4UIcmdWithAString* fpCommandViewerRemove;
-  static G4UIcmdWithAString* fpCommandViewerSelect;
-  static G4UIcmdWithAString* fpCommandViewerUpdate;
+  static  G4std::vector<G4UIcommand*> sceneNameCommands;
+  typedef G4std::vector<G4UIcommand*>::iterator sceneNameCommandsIterator; 
+  static  G4std::vector<G4UIcommand*> sceneHandlerNameCommands;
+  typedef G4std::vector<G4UIcommand*>::iterator
+    sceneHandlerNameCommandsIterator;
+  static  G4std::vector<G4UIcommand*> viewerNameCommands;
+  typedef G4std::vector<G4UIcommand*>::iterator viewerNameCommandsIterator; 
 };
 
 #include "G4VVisCommand.icc"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.10 1999-12-15 14:54:26 gunter Exp $
+// $Id: G4VisCommandsScene.cc,v 1.11 1999-12-16 17:19:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -42,30 +42,9 @@ void G4VVisCommandScene::UpdateCandidateLists () {
     nameList += sceneList [iScene] -> GetName () + " ";
   }
   nameList = nameList.strip ();
-
-  if (fpCommandSceneEdit) {
-    fpCommandSceneEdit -> GetParameter (0) ->
-      SetParameterCandidates (nameList);
-  }
-
-  if (fpCommandSceneNotifyHandlers) {
-    fpCommandSceneNotifyHandlers -> GetParameter (0) ->
-      SetParameterCandidates (nameList);
-  }
-
-  if (fpCommandSceneRemove) {
-    fpCommandSceneRemove -> GetParameter (0) ->
-      SetParameterCandidates (nameList);
-  }
-
-  if (fpCommandSceneSelect) {
-    fpCommandSceneSelect -> GetParameter (0) ->
-      SetParameterCandidates (nameList);
-  }
-
-  if (fpCommandSceneHandlerAttach) {
-    fpCommandSceneHandlerAttach -> GetParameter (0) ->
-      SetParameterCandidates (nameList);
+  sceneNameCommandsIterator i;
+  for (i = sceneNameCommands.begin (); i != sceneNameCommands.end (); ++i) {
+    (*i)->GetParameter (0) -> SetParameterCandidates (nameList);
   }
 }
 
@@ -93,7 +72,7 @@ G4VisCommandSceneCreate::G4VisCommandSceneCreate (): fId (0) {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  fpCommandSceneEdit = fpCommand;
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneCreate::~G4VisCommandSceneCreate () {
@@ -152,6 +131,7 @@ G4VisCommandSceneEdit::G4VisCommandSceneEdit () {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneEdit::~G4VisCommandSceneEdit () {
@@ -216,7 +196,7 @@ G4VisCommandSceneList::G4VisCommandSceneList () {
 				 omitable = true);
   parameter -> SetCurrentAsDefault (false);
   parameter -> SetDefaultValue (0);
-  fpCommand -> SetParameter (parameter);
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneList::~G4VisCommandSceneList () {
@@ -294,7 +274,7 @@ G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  fpCommandSceneNotifyHandlers = fpCommand;
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneNotifyHandlers::~G4VisCommandSceneNotifyHandlers () {
@@ -372,7 +352,7 @@ G4VisCommandSceneRemove::G4VisCommandSceneRemove () {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = false,
 				 currentAsDefault = true);
-  fpCommandSceneRemove = fpCommand;
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneRemove::~G4VisCommandSceneRemove () {
@@ -433,7 +413,7 @@ G4VisCommandSceneSelect::G4VisCommandSceneSelect () {
   fpCommand -> SetParameterName ("scene-name",
 				 omitable = true,
 				 currentAsDefault = true);
-  fpCommandSceneSelect = fpCommand;
+  sceneNameCommands.push_back (fpCommand);
 }
 
 G4VisCommandSceneSelect::~G4VisCommandSceneSelect () {

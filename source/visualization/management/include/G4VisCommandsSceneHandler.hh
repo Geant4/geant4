@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.hh,v 1.4 1999-12-15 14:54:22 gunter Exp $
+// $Id: G4VisCommandsSceneHandler.hh,v 1.5 1999-12-16 17:19:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -25,8 +25,6 @@ public:
   ~G4VVisCommandSceneHandler ();
 protected:
   void UpdateCandidateLists ();
-  static G4String fSceneHandlerNameList;
-  // member so that it has long life - static because shared between objects.
 };
 
 class G4VisCommandSceneHandlerAttach: public G4VVisCommandSceneHandler {

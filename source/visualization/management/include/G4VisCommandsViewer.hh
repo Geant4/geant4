@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.hh,v 1.5 1999-12-15 14:54:22 gunter Exp $
+// $Id: G4VisCommandsViewer.hh,v 1.6 1999-12-16 17:19:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -26,8 +26,6 @@ public:
 protected:
   G4String ShortName (const G4String &);
   void UpdateCandidateLists ();
-  static G4String fViewerNameList;
-  // member so that it has long life - static because shared between objects.
 };
 
 class G4VisCommandViewerCreate: public G4VVisCommandViewer {
@@ -52,6 +50,17 @@ public:
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
   G4UIcommand* fpCommand;
+};
+
+class G4VisCommandViewerRefresh: public G4VVisCommandViewer {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandViewerRefresh ();
+  ~G4VisCommandViewerRefresh ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcmdWithAString* fpCommand;
 };
 
 class G4VisCommandViewerRemove: public G4VVisCommandViewer {

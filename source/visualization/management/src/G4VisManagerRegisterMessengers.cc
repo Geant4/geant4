@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.9 1999-12-15 14:54:27 gunter Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.10 1999-12-16 17:19:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,6 +106,7 @@ clicks, spawn other windows, change viewpoint, etc.).
 /vis/viewer/create [<scene-handler>] [<viewer-name>]
 /vis/viewer/list
 /vis/viewer/select [<viewer-name>]
+/vis/viewer/refresh [<viewer-name>]
 /vis/viewer/remove <viewer-name>
 * /vis/viewer/set/style wireframe|surface|logical
 * /vis/viewer/set/viewpoint
@@ -204,8 +205,9 @@ or some such.
   command -> SetGuidance ("Operations on Geant4 viewers.");
   fMessengerList.append (new G4VisCommandViewerCreate);
   fMessengerList.append (new G4VisCommandViewerList);
-  fMessengerList.append (new G4VisCommandViewerSelect);
+  fMessengerList.append (new G4VisCommandViewerRefresh);
   fMessengerList.append (new G4VisCommandViewerRemove);
+  fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerUpdate);
 
   // Camera - OLD STYLE!!
