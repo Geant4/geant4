@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.27 2001-11-08 08:09:58 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.28 2001-11-08 15:56:52 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,7 +35,7 @@
 //  18/05/01 V.Ivanchenko Clean up againist Linux ANSI compilation 
 //  17-09-01 migration of Materials to pure STL (mma)
 //  26-10-01 static inline functions moved from .hh file (mma) 
-    08.11.01 some static methods,data members are not static L.Urban
+//  08.11.01 some static methods,data members are not static L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
