@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.10 2003-01-28 11:13:52 parlati Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.11 2003-02-03 14:28:19 parlati Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,7 +138,7 @@ G4Material* HMat = new G4Material(name="Hydrogen", z=1., a, density);
 
 density = 0.178e-3*g/cm3;
 a = 4.0026*g/mole;
-G4Material* HEMat = new G4Material(name="Helium", z=2., a, density);
+G4Material* HeMat = new G4Material(name="Helium", z=2., a, density);
 
 a = 6.941*g/mole;
 density=5.3400e-1*g/cm3; 
@@ -151,7 +151,6 @@ G4Material* BeMat = new G4Material(name="Beryllium", z=4., a, density);
 a = 10.811*g/mole;
 density= 2.37*g/cm3; 
 G4Material* BMat = new G4Material(name="Boron", z=5., a, density);
-
 
 a = 12.01*g/mole;
 density= 2.00*g/cm3; 
@@ -181,13 +180,85 @@ a = 22.989*g/mole;
 density= 9.71e-1*g/cm3; 
 G4Material* NaMat = new G4Material(name="Sodium", z=11., a, density);
 
+a = 24.312*g/mole;
+density= 1.738*g/cm3; 
+G4Material* MgMat = new G4Material(name="Magnesium", z=12., a, density);
+
+a = 26.981*g/mole;
+density= 2.6989*g/cm3; 
+G4Material* AlMat = new G4Material(name="Aluminium", z=13., a, density);
+
+a = 28.085*g/mole;
+density= 2.336*g/cm3; 
+G4Material* SiMat = new G4Material(name="Silicon", z=14., a, density);
+
+a = 30.974*g/mole;
+density= 2.20*g/cm3; 
+G4Material* PMat = new G4Material(name="Phosphorus", z=15., a, density);
+
+a = 32.065*g/mole;
+density= 2.070*g/cm3; 
+G4Material* SMat = new G4Material(name="Sulphur", z=16., a, density);
+
+a =35.453 *g/mole;
+density= 2.994e-3*g/cm3; 
+G4Material* ClMat = new G4Material(name="Chlorine", z=17., a, density);
+
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
 
+a = 39.098*g/mole;
+density= 8.62e-1*g/cm3;
+G4Material* KMat = new G4Material(name="Potassium", z=19., a, density);
+
+a = 40.078*g/mole;
+density= 1.55*g/cm3;
+G4Material* CaMat = new G4Material(name="Calcium", z=20., a, density);
+
+a = 44.956*g/mole;
+density= 2.989*g/cm3;
+G4Material* ScMat = new G4Material(name="Scandium", z=21., a, density);
+
+a = 47.88*g/mole;
+density= 4.54*g/cm3;
+G4Material* TiMat = new G4Material(name="Titanium", z=22., a, density);
+
+a = 50.9415*g/mole;
+density= 6.11*g/cm3;
+G4Material* VMat = new G4Material(name="Vanadium", z=23., a, density);
+
+a = 51.996*g/mole;
+density= 7.18*g/cm3;
+G4Material* CrMat = new G4Material(name="Chromium", z=24., a, density);
+
+a = 54.9380*g/mole;
+density= 7.44*g/cm3;
+G4Material* MnMat = new G4Material(name="Manganese", z=25., a, density);
+
+a = 55.845*g/mole;
+density= 7.874*g/cm3;
+G4Material* FeMat = new G4Material(name="Iron", z=26., a, density);
+
+a = 58.9332*g/mole;
+density= 8.9*g/cm3;
+G4Material* CoMat = new G4Material(name="Cobalt", z=27., a, density);
+
+a = 58.6934*g/mole;
+density= 8.902*g/cm3;
+G4Material* NiMat = new G4Material(name="Nickel", z=28., a, density);
+
+density = 8.96*g/cm3;
+a = 63.546*g/mole;
+G4Material* CuMat = new G4Material(name="Copper"     , z=29., a, density);
+
+density = 19.32*g/cm3;
+a = 196.966*g/mole;
+G4Material* AuMat = new G4Material(name="Gold"     , z=79., a, density);
+
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
-G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
+G4Material* PbMat = new G4Material(name="Lead"     , z=82., a, density);
 
 
 
