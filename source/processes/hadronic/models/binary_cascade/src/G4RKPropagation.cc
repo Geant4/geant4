@@ -363,10 +363,11 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 
 #ifdef debug_1_RKPropagation
      G4cerr << "RKPropagation is_exiting?, t_leave, curTimeStep " <<is_exiting<<" "<<t_leave << " " <<currTimeStep<<G4endl;
-        G4cout << "RKPropagation Ekin, field, p "
+        G4cout << "RKPropagation Ekin, field, projectile potential, p "
 	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
 	<< kt->GetPosition()<<" "
- 	<< currentField->GetField(kt->GetPosition())<< G4endl
+ 	<< G4endl << currentField->GetField(kt->GetPosition()) << " " 
+	<<  kt->GetProjectilePotential()<< G4endl
  	<< kt->GetTrackingMomentum()
  	<< G4endl;
 #endif
@@ -374,13 +375,15 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
     G4LorentzVector momold=kt->GetTrackingMomentum();
     G4ThreeVector posold=kt->GetPosition();
 
+//    if (currentField->GetField(kt->GetPosition()) > kt->GetProjectilePotential() ||
     if (! FieldTransport(kt, currTimeStep)) {
         FreeTransport(kt,currTimeStep);
     }
+
 #ifdef debug_1_RKPropagation
         G4cout << "RKPropagation Ekin, field, p "
  	<< kt->GetTrackingMomentum().e() - kt->GetTrackingMomentum().mag() << " "
- 	<< currentField->GetField(kt->GetPosition())<< G4endl
+ 	<< G4endl << currentField->GetField(kt->GetPosition())<< G4endl
  	<< kt->GetTrackingMomentum()
  //	<< G4endl;
 	<< "delta p " << momold-kt->GetTrackingMomentum() << G4endl

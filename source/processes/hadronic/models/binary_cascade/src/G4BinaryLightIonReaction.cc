@@ -7,7 +7,9 @@
 #include "G4ping.hh"
 #include "G4Delete.hh"
 #include "G4Neutron.hh"
-  
+#include "G4VNuclearDensity.hh"
+#include "G4FermiMomentum.hh"
+ 
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
   
@@ -81,18 +83,27 @@
       projectile->StartLoop();
       G4Nucleon * aNuc;
       G4LorentzVector tmpV(0,0,0,0);
-      G4LorentzVector nucleonMom(1./a1*mom);
+      G4LorentzVector nucleonMom(1./a1*mom);    // ctor setting only E
       nucleonMom.setZ(nucleonMom.vect().mag());
       nucleonMom.setX(0);
       nucleonMom.setY(0);
+      G4FermiMomentum theFermi;
+      theFermi.Init(a1,z1);
       while( (aNuc=projectile->GetNextNucleon()) )
       {
 	G4LorentzVector p4 = aNuc->GetMomentum();	
 	tmpV+=p4;
-	G4ThreeVector stuff(aNuc->GetPosition());
-	stuff += pos;
-	G4KineticTrack * it = new G4KineticTrack(aNuc, stuff, nucleonMom );
+	G4ThreeVector nucleonPosition(aNuc->GetPosition());
+        G4double density=(projectile->GetNuclearDensity())->GetDensity(nucleonPosition);
+	nucleonPosition += pos;
+	G4KineticTrack * it = new G4KineticTrack(aNuc, nucleonPosition, nucleonMom );
         it->SetState(G4KineticTrack::outside);
+	G4double pfermi= theFermi.GetFermiMomentum(density);
+	G4double mass = aNuc->GetDefinition()->GetPDGMass();
+	G4double Efermi= sqrt( sqr(mass) + sqr(pfermi)) - mass;
+// 	G4cout << "position, dens., Efermi " << nucleonPosition/fermi << " " 
+// 	       << density << " " << Efermi/MeV << G4endl;
+        it->SetProjectilePotential(-Efermi);
 	initalState->push_back(it);
       }
       debug.push_back(tmpV);
