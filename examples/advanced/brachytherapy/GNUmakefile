@@ -1,5 +1,5 @@
 # --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.8 2003-05-09 07:19:30 gcosmo Exp $
+# $Id: GNUmakefile,v 1.9 2003-05-09 08:37:48 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -10,7 +10,7 @@ G4TARGET := $(name)
 G4EXLIB := true
 
 ifndef G4INSTALL
-  G4INSTALL =~/GEANT4/geant4/
+  G4INSTALL = ../../..
 endif
 
 ifdef G4ANALYSIS_USE  
