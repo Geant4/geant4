@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.7 1999-06-04 12:50:35 gunter Exp $
+// $Id: exampleN03.cc,v 1.8 1999-11-10 18:36:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,13 +36,16 @@
 #include "ExN03RunAction.hh"
 #include "ExN03EventAction.hh"
 #include "ExN03SteppingAction.hh"
-#include "Randomize.hh"
+#include "ExN03SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 
   // choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
-   
+  
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new ExN03SteppingVerbose);
+     
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
