@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.4 2001-12-05 22:49:34 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.5 2001-12-12 17:16:48 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.4  2001/12/05 22:49:34  sadilov
+?RCS: Copy env.[c]sh files to User current directory.
+?RCS:
 ?RCS: Revision 1.3  2001/11/06 15:20:01  sadilov
 ?RCS: Add distinguishing for 'egcs' and 'g++' and some 'echo' removing.
 ?RCS:
@@ -192,7 +195,9 @@ cd ..
 ?X: First time through, eh?  I have some defaults handy for the following systems:
 ?X:
 ?X: EOM
+	if $test -d $src/hints ; then
 	(cd $src/hints; ls -C *.sh 2> /dev/null) | $sed 's/\.sh/   /g' >&4 
+	fi
 	dflt=''
 	: Half the following guesses are probably wrong... If you have better
 	: tests or hints, please send them to <MAINTLOC>
