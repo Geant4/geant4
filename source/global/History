@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2004-04-23 15:09:46 gcosmo Exp $
+$Id: History,v 1.123 2004-05-14 17:44:06 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 14, 2004  G.Cosmo (global-V06-01-01)
+- G4Allocator: added utility methods for explicitely deallocate storage
+  and print total allocated pages size:
+  ResetStorage(), GetAllocatedSize().
+- Added unit test for deallocation.
 
 April 23, 2004  G.Cosmo (global-V06-01-00)
 - Fixed bug in HEPNumerics/G4DataInterpolation::PolynomInterpolation()
