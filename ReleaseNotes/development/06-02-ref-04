@@ -101,6 +101,8 @@ examples                                         examples-V06-02-04
 --------
 - Updated reference outputs.
 - extended
+  o electromagnetic/MuonProcesses (muonprocesses-V06-02-05)
+    + Trivial fixes for compilation in gcc-3.2.
   o electromagnetic/PhotonProcesses (photonprocesses-V06-02-02)
     + Avoid deletion of Analysisfactory (for JAIDA).
   o electromagnetic/TestEm3 (testem3-V06-02-02)
