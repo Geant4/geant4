@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.28 2003-01-14 22:46:34 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.29 2003-03-10 08:04:19 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -249,24 +249,8 @@ void G4VUserPhysicsList::SetDefaultCutValue(G4double value)
 #endif
      defaultCutValue = value;
 
-     ResetCuts();
-     
    }
 }
-
-////////////////////////////////////////////////////////
-void G4VUserPhysicsList::ResetCuts()
-{
-  //   set /control/verbose 0
-  G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
-  G4UImanager::GetUIpointer()->SetVerboseLevel(0);
-  //   issue /run/cutoffModified
-  G4UImanager::GetUIpointer()->ApplyCommand("/run/cutoffModified");
-  //   retreive  /control/verbose 
-  G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
-}
-
-
 
 
 ////////////////////////////////////////////////////////
@@ -277,6 +261,20 @@ void G4VUserPhysicsList::SetCutValue(G4double aCut, const G4String& name)
     if (!particle->IsShortLived()) {
       //set cut value
       SetParticleCuts( aCut ,particle );
+    }
+  } 
+}
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetCutValue
+(G4double aCut, const G4String& pname, const G4String& rname)
+{
+  G4ParticleDefinition* particle = theParticleTable->FindParticle(pname);
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
+  if (particle != 0 && region != 0){
+    if (!particle->IsShortLived()) {
+      //set cut value
+      SetParticleCuts( aCut ,particle, region );
     }
   } 
 }
@@ -302,16 +300,26 @@ void G4VUserPhysicsList::SetCutsWithDefault()
   SetCutValue(cut, "e+");
  
   // set cut values for proton and anti_proton
-  SetCutValue(cut, "proton");
-  SetCutValue(cut, "anti_proton");
-  SetCutValue(cut, "neutron");
-  SetCutValue(cut, "anti_neutron");
+  //SetCutValue(cut, "proton");
+  //SetCutValue(cut, "anti_proton");
+  //SetCutValue(cut, "neutron");
+  //SetCutValue(cut, "anti_neutron");
   
 
   //if (verboseLevel>1) {
   //  DumpCutValuesTable();
   //}
 }  
+
+
+////////////////////////////////////////////////////////
+void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
+{
+  // set cut values for gamma at first and for e- and e+
+  SetCutValue(aCut, "gamma", rname);
+  SetCutValue(aCut, "e-", rname);
+  SetCutValue(aCut, "e+", rname);
+}
 
 
 ////////////////////////////////////////////////////////
@@ -369,8 +377,9 @@ G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
 
 ////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////
-void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* particle)
+void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* particle, G4Region* region)
 {
+  if(!region) region = (*(G4RegionStore::GetInstance()))[0];
   if (fRetrievePhysicsTable && !fIsRestoredCutValues) {
 #ifdef G4VERBOSE  
     if (verboseLevel>2){
@@ -382,7 +391,8 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, G4ParticleDefinition* pa
     fCutsTable->RetrieveCutsTable(directoryPhysicsTable, fStoredInAscii);
     fIsRestoredCutValues = true;
   } else {
-    particle->SetCuts(cut);
+    G4ProductionCuts* pcuts = region->GetProductionCuts();
+    pcuts->SetProductionCut(cut,particle);
   } 
 }    
 
@@ -698,7 +708,6 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
   }
   fIsCheckedForRetrievePhysicsTable=false;
   fIsRestoredCutValues = false;
-  ResetCuts();
 }
 
 ///////////////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.17 2003-02-19 08:42:24 gcosmo Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.18 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -205,26 +205,27 @@ class G4VUserPhysicsList
     //  2: More
 
   ///////////////////////////////////////////////////////////////////////////
-  protected: // with description
-   //  "SetCutsWithDefault" method sets a cut value with the default
-   //   cut values for all particle types in the particle table
+  public: // with description
+   //  "SetCutsWithDefault" method sets the default cut value
+   //   for all particles for the default region.
    void SetCutsWithDefault();   
 
-
-   // Following are utility methods for SetCuts/reCalcCuts  
+   // Following are utility methods for SetCuts
   
-   // Reset cut values in energy for all particle types
-   // By calling this methods, the run manager will invoke
-   // SetCuts() just before event loop  
-   void ResetCuts();
+   // SetCutValue sets a cut value for a particle type for the default region
+   void SetCutValue(G4double aCut, const G4String& pname); 
 
-   // SetCutValue sets a cut value for a particle type
-   void SetCutValue(G4double aCut, const G4String& name); 
+   // SetCutValue sets a cut value for a particle type for a region
+   void SetCutValue(G4double aCut, const G4String& pname, const G4String& rname); 
 
-   // Invoke SetCuts for specified particle
+   // Invoke SetCuts for specified particle for a region
+   // If the pointer to the region is NULL, the default region is used
    // In case of "Retrieve" flag is ON, 
    // Cut values will be retrieved from files
-   void SetParticleCuts( G4double cut, G4ParticleDefinition* );    
+   void SetParticleCuts(G4double cut,G4ParticleDefinition* particle,G4Region* region=0);
+
+   // Invoke SetCuts for all particles in a region
+   void SetCutsForRegion(G4double aCut, const G4String& rname);
 
 ///////////////////////////////////////////////////////////////////////////////
   public:   
@@ -306,10 +307,10 @@ class G4VUserPhysicsList
   protected:
    void SetCutValueForOthers(G4double cutValue)
    {
-    G4cout << "WARNING !" << G4endl;
-    G4cout << " SetCutValueForOthers became obsolete." << G4endl;
-    G4cout << " It is harmless to remove this invokation without any side effects." << G4endl;
-    G4cout << " This dummy method implementation will be removed soon." << G4endl;
+    G4cerr << "WARNING !" << G4endl;
+    G4cerr << " SetCutValueForOthers became obsolete." << G4endl;
+    G4cerr << " It is harmless to remove this invokation without any side effects." << G4endl;
+    G4cerr << " This dummy method implementation will be removed soon." << G4endl;
    }
 
 };

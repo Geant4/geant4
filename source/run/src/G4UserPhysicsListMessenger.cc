@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.11 2002-12-04 21:52:40 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.12 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@
 
 G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pParticleList):thePhysicsList(pParticleList)
 {
+  G4UIparameter* param = 0;
   // /run/particle    directory
   theDirectory = new G4UIdirectory("/run/particle/");
   theDirectory->SetGuidance("Commands for G4VUserPhysicsList.");
@@ -63,20 +64,32 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=3");
 
-  // /run/particle/setCut command
-  setCutCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setCut",this);
+  // /run/setCut command
+  setCutCmd = new G4UIcmdWithADoubleAndUnit("/run/setCut",this);
   setCutCmd->SetGuidance("Set default cut value ");
   setCutCmd->SetParameterName("cut",false);
   setCutCmd->SetDefaultValue(1.0);
   setCutCmd->SetRange("cut >0.0");
-  setCutCmd->SetUnitCandidates("m cm mm microm");
   setCutCmd->SetDefaultUnit("mm");
   setCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  // /run/setCutForRegion command
+  setCutRCmd = new G4UIcommand("/run/setCutForRegion",this);
+  setCutRCmd->SetGuidance("Set cut value for a region");
+  param = new G4UIparameter("Region",'s',false);
+  setCutRCmd->SetParameter(param);
+  param = new G4UIparameter("cut",'d',false);
+  setCutRCmd->SetParameter(param);
+  param = new G4UIparameter("Unit",'s',true);
+  param->SetDefaultValue("mm");
+  param->SetParameterCandidates(setCutRCmd->UnitsList(setCutRCmd->CategoryOf("mm")));
+  setCutRCmd->SetParameter(param);
+  setCutRCmd->SetRange("cut >0.0");
+  setCutRCmd->AvailableForStates(G4State_Idle);
 
   // /run/particle/DumpList command
   dumpListCmd = new G4UIcmdWithoutParameter("/run/particle/dumpList",this);
   dumpListCmd->SetGuidance("Dump List of particles in G4VUserPhysicsList. ");
-
 
   // /run/particle/DumpCutValues command
   dumpCutValuesCmd = new G4UIcmdWithAString("/run/particle/dumpCutValues",this);
@@ -132,7 +145,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   applyCutsCmd->SetGuidance("  applyCuts [value] [particle]");
   applyCutsCmd->SetGuidance("  value     : true(default) or false ");
   applyCutsCmd->SetGuidance("  particle  : all(default) or particle name ");
-  G4UIparameter* param = new G4UIparameter("Flag",'s',true);
+  param = new G4UIparameter("Flag",'s',true);
   param->SetDefaultValue("true");
   applyCutsCmd->SetParameter(param);
   param = new G4UIparameter("Particle",'s',true);
@@ -144,6 +157,7 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
 {
   delete setCutCmd; 
+  delete setCutRCmd; 
   delete verboseCmd;
   delete dumpListCmd;
   delete dumpCutValuesCmd;
@@ -161,6 +175,13 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
   if( command==setCutCmd ){
     G4double newCut = setCutCmd->GetNewDoubleValue(newValue); 
     thePhysicsList->SetDefaultCutValue(newCut);
+
+  } else if( command==setCutRCmd ){
+    G4Tokenizer next( newValue );
+    G4String rName = G4String(next());
+    G4String cValue = G4String(next())+" "+G4String(next());
+    G4double newCut = setCutCmd->GetNewDoubleValue(cValue); 
+    thePhysicsList->SetCutsForRegion(newCut,rName);
 
   } else if( command==verboseCmd ) {
     thePhysicsList->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); 

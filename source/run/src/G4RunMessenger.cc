@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.cc,v 1.12 2002-12-04 21:52:40 asaim Exp $
+// $Id: G4RunMessenger.cc,v 1.13 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -82,6 +82,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   verboseCmd->SetParameterName("level",true);
   verboseCmd->SetDefaultValue(0);
   verboseCmd->SetRange("level >=0 && level <=2");
+
+  dumpRegCmd = new G4UIcmdWithAString("/run/dumpRegion",this);
+  dumpRegCmd->SetGuidance("Dump region information.");
+  dumpRegCmd->SetGuidance("In case name of a region is not given, all regions will be displayed.");
+  dumpRegCmd->SetParameterName("regionName", true);
+  dumpRegCmd->SetDefaultValue("**ALL**");
+  dumpRegCmd->AvailableForStates(G4State_Idle);
 
   optCmd = new G4UIcmdWithABool("/run/optimizeGeometry",this);
   optCmd->SetGuidance("Set the optimization flag for geometry.");
@@ -196,6 +203,7 @@ G4RunMessenger::~G4RunMessenger()
   delete beamOnCmd;
   delete verboseCmd;
   delete optCmd;
+  delete dumpRegCmd;
   delete brkBoECmd;
   delete brkEoECmd;
   delete abortCmd;
@@ -230,6 +238,13 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if( command==verboseCmd )
   { runManager->SetVerboseLevel(verboseCmd->GetNewIntValue(newValue)); }
+  else if( command==dumpRegCmd )
+  { 
+    if(newValue=="**ALL**")
+    { runManager->DumpRegion(); }
+    else
+    { runManager->DumpRegion(newValue); }
+  }
   else if( command==optCmd )
   { runManager->SetGeometryToBeOptimized(optCmd->GetNewBoolValue(newValue)); }
   else if( command==brkBoECmd )

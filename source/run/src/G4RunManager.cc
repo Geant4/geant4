@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.62 2003-03-10 01:50:21 asaim Exp $
+// $Id: G4RunManager.cc,v 1.63 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ApplicationState.hh"
 #include "G4StateManager.hh"
@@ -55,6 +56,7 @@
 #include "G4ProcessTable.hh"
 #include "G4UnitsTable.hh"
 #include "G4VVisManager.hh"
+#include "G4Material.hh"
 #include "G4ExceptionHandler.hh"
 #include "G4ios.hh"
 #include "g4std/strstream"
@@ -588,3 +590,40 @@ void G4RunManager::RestoreRandomNumberStatus(G4String fileN)
          << fileNameWithDirectory << G4endl;
   HepRandom::showEngineStatus();	 
 }
+
+void G4RunManager::DumpRegion(G4String rname) const
+{
+  G4Region* region = G4RegionStore::GetInstance()->GetRegion(rname);
+  if(region) DumpRegion(region);
+}
+
+void G4RunManager::DumpRegion(G4Region* region) const
+{
+  if(!region)
+  {
+    for(size_t i=0;i<G4RegionStore::GetInstance()->size();i++)
+    { DumpRegion((*(G4RegionStore::GetInstance()))[i]); }
+  }
+  else
+  {
+    G4cout << "Region <" << region->GetName() << G4endl;
+    G4cout << " Materials : ";
+    G4std::vector<G4Material*>::const_iterator mItr = region->GetMaterialIterator();
+    size_t nMaterial = region->GetNumberOfMaterials();
+    for(size_t iMate=0;iMate<nMaterial;iMate++)
+    {
+      G4cout << (*mItr)->GetName() << " ";
+      mItr++;
+    }
+    G4cout << G4endl;
+    G4ProductionCuts* cuts = region->GetProductionCuts();
+    G4cout << " Production cuts : "
+           << " gamma " << G4BestUnit(cuts->GetProductionCut("gamma"),"Length")
+           << "    e- " << G4BestUnit(cuts->GetProductionCut("e-"),"Length")
+           << "    e+ " << G4BestUnit(cuts->GetProductionCut("e+"),"Length")
+           << G4endl;
+  }
+}
+
+
+

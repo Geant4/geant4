@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.10 2001-08-03 06:02:55 kurasige Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.11 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,6 +68,7 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString; 
+class G4UIcommand;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
@@ -92,6 +93,7 @@ public: // with description
   private: //commands
     G4UIdirectory *             theDirectory;
     G4UIcmdWithADoubleAndUnit * setCutCmd; 
+    G4UIcommand *               setCutRCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
     G4UIcmdWithoutParameter *   dumpListCmd;
     G4UIcmdWithAString *        dumpCutValuesCmd;

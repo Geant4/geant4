@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.hh,v 1.27 2002-12-16 18:26:48 gcosmo Exp $
+// $Id: G4RunManager.hh,v 1.28 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -188,6 +188,14 @@ class G4RunManager
     // method.
     //  AnalyzeEvent() stores an event to a data base if a concrete G4VPersistentManager
     // class is defined.
+
+  public: // with description
+    void DumpRegion(G4String rname) const;
+    // Dump information of a region.
+
+    void DumpRegion(G4Region* region=0) const;
+    // Dump information of a region.
+    // If the pointer is NULL, all regions are shown.
 
   protected:
     void StackPreviousEvent(G4Event* anEvent);

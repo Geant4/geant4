@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunMessenger.hh,v 1.9 2002-08-08 17:29:26 asaim Exp $
+// $Id: G4RunMessenger.hh,v 1.10 2003-03-10 08:04:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,7 @@
 //  Commands : 
 //    BeamOn *              Start a Run.
 //    Verbose *             Set the Verbose level of G4RunManager.
+//    dumpRegion *          Dump information of a region.
 //    optimizeGeometry *    Set the optimization flag of closing geometry.
 //    breakAtBeginOfEvent * Set a break point at the begining of every event.
 //    breakAtEndOfEvent *   Set a break point at the end of every event.
@@ -79,6 +80,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIdirectory *             runDirectory;
     G4UIcommand *               beamOnCmd;
     G4UIcmdWithAnInteger *      verboseCmd;
+    G4UIcmdWithAString *        dumpRegCmd;
     G4UIcmdWithABool *          optCmd;
     G4UIcmdWithABool *          brkBoECmd;
     G4UIcmdWithABool *          brkEoECmd;
