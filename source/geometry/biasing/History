@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2003-08-22 13:17:22 dressel Exp $
+$Id: History,v 1.37 2003-10-01 14:51:38 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep, 30th 2003 G.Cosmo geombias-V05-02-02
+     - updated GNUmakefile, according to new structure introduced
+       in "geometry-V05-02-00".
 
 Aug, 22th 2003 M.Dressel geombias-V05-02-01
      - got rid off G4ImportanceFinder 

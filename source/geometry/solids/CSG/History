@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2003-06-25 13:05:33 gcosmo Exp $
+$Id: History,v 1.55 2003-10-01 14:51:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 30, 2003   G.Cosmo                   geom-csg-V05-02-00
+- Updated GNUmakefile for unit tests, according to new structure
+  introduced in "geometry-V05-02-00".
 
 Jun 25, 2003   G.Folger                  geom-csg-V05-01-00
 - Added disclaimer of liability where needed.

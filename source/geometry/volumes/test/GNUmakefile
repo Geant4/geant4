@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2002-01-11 08:28:31 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2003-10-01 14:51:40 gcosmo Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -19,6 +19,7 @@ include $(G4INSTALL)/config/architecture.gmk
 #
 INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/solids/CSG/include \
             -I$(G4BASE)/geometry/verification/include \
@@ -28,7 +29,7 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/graphics_reps/include \
             -I$(G4BASE)/intercoms/include
 
-LDLIBS   := -lG4csg -lG4volumes -lG4magneticfield \
+LDLIBS   := -lG4csg -lG4geomnav -lG4volumes -lG4magneticfield \
             -lG4geomver -lG4geometrymng \
             -lG4graphics_reps \
             -lG4intercoms -lG4UIbasic -lG4UIcommon \

@@ -1,5 +1,5 @@
 
-$Id: History,v 1.39 2003-06-12 12:47:50 gcosmo Exp $
+$Id: History,v 1.40 2003-10-01 14:51:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Sep 30, 2003   G.Cosmo                   geom-bool-V05-02-00
+  - Updated GNUmakefile for unit tests, according to new structure
+    introduced in "geometry-V05-02-00".
 
  Jun 12, 2003   G.Cosmo                   geom-bool-V05-01-02
   - G4ReflectionFactory:

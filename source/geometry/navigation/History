@@ -1,0 +1,79 @@
+$Id: History,v 1.1 2003-10-01 14:51:38 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Sep 29th, 2003 - G.Cosmo  (geomnav-V05-02-00)
+------------------------
+- Created.
+  Imported classes from "volumes", "management" and "verification" modules:
+    G4AuxiliaryNavServices[.hh.icc]		- from geometry/volumes
+    G4GeometryMessenger[.hh.cc]			-	"	"
+    G4Navigator[.hh.icc.cc]			-	"	"
+    G4NormalNavigation[.hh.icc.cc]		-	"	"
+    G4ParameterisedNavigation[.hh.icc.cc]	-	"	"
+    G4PropagatorInField[.hh.icc.cc]		-	"	"
+    G4ReplicaNavigation[.hh.icc.cc]		-	"	"
+    G4TransportationManager[.hh.icc.cc]		-	"	"
+    G4VoxelNavigation[.hh.icc.cc]		-	"	"
+    G4DrawVoxels[.hh.cc]			- from geometry/management
+    G4GeomTest*[.hh.cc]				- from geometry/verification
+- Cleared call to PV->Setup() according to changes in G4VPhysicalVolume.
+  Affected files: G4Navigator[.icc.cc], G4ParameterisedNavigation[.icc.cc],
+                  G4VoxelNavigation[.icc.cc], G4ReplicaNavigation[.icc.cc],
+                  G4NormalNavigation[.icc.cc].
+- G4DrawVoxels: retrieve top transformation through touchable history in
+  method DrawVoxels(). Removed old method GetAbsoluteTransformation().
+- G4GeomTestErrorList.cc: retrieve top transformation through touchable
+  history in method FindGlobalCoordinateSystem().
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+Imported History file from old geometry/verification module
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+May 20th, 2003          G.Cosmo  (geomver-V05-01-00)
+- G4GeomTestVolume[.hh.cc]:
+  o Added methods TestRecursiveLine() and TestRecursiveCylinder() for
+    allowing recursion on line_test and cylinder_test respectively.
+  o Introduced ability to control depth and starting level of recursion.
+
+Jul 30th, 2002          G.Cosmo  (geomver-V04-01-00)
+- G4GeomTestVolume.cc: fixed recursive call to G4GeomTestVolume passing also
+  'tolerance' as argument in the recursive test algorithm.
+
+Apr 19th, 2002          G.Cosmo  (geomver-V04-00-00)
+- Moved inline constructors and destructors to no inline.
+  Affected files: G4GeomTestStreamLogger[.hh.cc].
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-02)
+- Fixed compilation error and warnings on HP-aCC. Modified files:
+  G4GeomTestVolume.cc, G4GeomTestStreamLogger.cc.
+
+Oct 24th, 2001          G.Cosmo  (geomver-V03-02-01)
+- Moved messenger to geometry/volumes and renamed G4GeometryMessenger.
+- Removed dependencies from intercoms and geometry/volumes.
+
+Oct 22nd, 2001		G.Cosmo  (geomver-V03-02-00)
+- Added "/geomtest/tolerance" command to set custom error tolerance.
+  Added Set/GetTolerance() methods to G4GeomTestVolume class.
+- Introduced additional diagnostics in G4GeomTestStreamLogger to report
+  in case no intersections/overlaps are detected.
+
+Oct 16th, 2001		G.Cosmo
+- Added messenger for geometry overlaps testing.
+- General source code formatting.
+- G4TestGeom* classes implementation by D.C.Williams (UCSC, BaBar).
