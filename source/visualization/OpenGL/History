@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-07-14 21:47:39 johna Exp $
+$Id: History,v 1.8 2001-07-24 22:05:57 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+24th July 2001  John Allison  (vis-V03-02-06)
+- G4OpenGLSceneHandler::AddPrimitive (const G4Text&) handles transformation.
 
 14th July 2001  John Allison (opengl-V03-02-00)
 - Fixed crash in optimised mode: added Initialise() to viewers so

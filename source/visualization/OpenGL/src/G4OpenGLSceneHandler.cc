@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.11 2001-07-11 10:08:54 gunter Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.12 2001-07-24 22:04:47 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,10 +118,11 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 void G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) {
   MarkerSizeType sizeType;
   G4double size = GetMarkerSize (text, sizeType);
+  G4ThreeVector position (*fpObjectTransformation * text.GetPosition ());
   G4cout
     << "G4OpenGLSceneHandler::AddPrimitive (const G4Text& text) not implemented yet."
     << "\n  Called with text \"" << text.GetText ()
-    << "\" at " << text.GetPosition ()
+    << "\" at " << position
     << ", size " << size
     << ", offsets " << text.GetXOffset () << ", " << text.GetYOffset ()
     << ", type " << G4int(sizeType)
