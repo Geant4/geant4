@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.hh,v 1.2 2002-12-16 11:15:43 gcosmo Exp $
+// $Id: G4MaterialCutsCouple.hh,v 1.3 2003-01-14 22:26:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,14 +84,46 @@ class G4MaterialCutsCouple
 
   void             PhysicsTableUpdated();
   // inform end of calculation of PhysicsTable  
+
+  void             SetIndex(G4int idx);
+  G4int            GetIndex() const;
+  // Set/Get the index number in G4ProductionCutsTable
+
+  void             SetUseFlag(G4bool flg=true);
+  G4bool           IsUsed() const;
  
   private:
   G4bool                   isMaterialModified;
   const G4Material*        fMaterial;
   G4ProductionCuts*        fCuts;
+  G4int                    indexNumber;
+  G4bool                   isUsedInGeometry;
 };
 
 #include "G4ProductionCuts.hh"
+inline 
+ void G4MaterialCutsCouple::SetIndex(G4int idx)
+{ indexNumber = idx; }
+
+inline
+ G4int G4MaterialCutsCouple::GetIndex() const
+{ return indexNumber; }
+
+inline 
+ void G4MaterialCutsCouple::SetUseFlag(G4bool flg)
+{ isUsedInGeometry = flg; }
+
+inline
+ G4bool G4MaterialCutsCouple::IsUsed() const
+{ return isUsedInGeometry; }
+
+inline
+ void G4MaterialCutsCouple::SetProductionCuts(G4ProductionCuts* aCut)
+{ fCuts = aCut; }
+
+inline
+ G4ProductionCuts* G4MaterialCutsCouple::GetProductionCuts() const
+{ return fCuts; }
 
 inline
  G4int G4MaterialCutsCouple::operator==(const G4MaterialCutsCouple &right) const
@@ -118,20 +150,20 @@ inline
   return fMaterial;
 }
 
-inline
- G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
-{
-  G4bool isCutModified = false;
-  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
-  return isMaterialModified || isCutModified;
-}
-
-inline
-  void   G4MaterialCutsCouple::PhysicsTableUpdated()
-{
-  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
-  isMaterialModified = true;
-}
+///inline
+/// G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
+///{
+///  G4bool isCutModified = false;
+///  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
+///  return (isMaterialModified || isCutModified) && isUsedInGeometry;
+///}
+///
+///inline
+///  void   G4MaterialCutsCouple::PhysicsTableUpdated()
+///{
+///  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
+///  if(isUsedInGeometry) isMaterialModified = false;
+///}
 
 #endif
 

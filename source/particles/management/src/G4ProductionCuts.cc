@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.cc,v 1.2 2002-12-16 11:15:45 gcosmo Exp $
+// $Id: G4ProductionCuts.cc,v 1.3 2003-01-14 22:26:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,7 +34,7 @@
 #include "g4std/iomanip"
 
 G4ProductionCuts::G4ProductionCuts() :
-  isModified(false)
+  isModified(true)
 {
   for (G4int i=0; i< NumberOfG4CutIndex; i++) {
     fRangeCuts.push_back(0.0);

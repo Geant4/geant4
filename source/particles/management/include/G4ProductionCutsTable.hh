@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.3 2002-12-16 14:20:32 gcosmo Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.4 2003-01-14 22:26:49 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,15 +74,15 @@ class G4ProductionCutsTable
     void UpdateCoupleTable();
     // This method triggers an update of the table of G4ProductionCuts objects.
 
-    void UpdateCutsValues();
-    // This method updates the table of energy thresholds
-
     void SetEnergyRange(G4double lowedge, G4double highedge);
     // This method sets the limits of energy cuts for all particles.
 
     G4double GetLowEdgeEnergy() const;
     G4double GetHighEdgeEnergy() const;
     // These methods get the limits of energy cuts for all particles.
+
+    void DumpCouples() const;
+    // Display a list of registored couples
 
   private:
 
@@ -125,6 +125,12 @@ class G4ProductionCutsTable
      GetMaterialCutsCouple(const G4Material* aMat,
                            const G4ProductionCuts* aCut) const;
     // This method returns the pointer to the couple.
+
+   G4int GetCoupleIndex(const G4MaterialCutsCouple* aCouple) const;
+   G4int GetCoupleIndex(const G4Material* aMat,
+                           const G4ProductionCuts* aCut) const;
+    // These methods return the index of the couple.
+    // -1 is returned if index is not found.
 
    G4bool IsModified() const;
     // This method returns TRUE if at least one production cut value is modified.
@@ -207,10 +213,12 @@ inline
  G4bool G4ProductionCutsTable::IsModified() const
 { 
   if(firstUse) return true;
-  for(G4ProductionCutsTable::CoupleTableIterator
-    itr=G4ProductionCutsTable::CoupleTableIterator(coupleTable.begin());
+  for(G4ProductionCutsTable::CoupleTableIterator itr=coupleTable.begin();
     itr!=coupleTable.end();itr++){ 
-    if((*itr)->IsRecalcNeeded()) return true; 
+    if((*itr)->IsRecalcNeeded())
+    {
+      return true; 
+    }
   }
   return false;
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.3 2003-01-04 18:14:56 asaim Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.4 2003-01-14 22:26:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,8 @@
 #include "G4RToEConvForAntiNeutron.hh"
 #include "G4MaterialTable.hh"
 #include "G4Material.hh"
+#include "G4ios.hh"
+#include "G4UnitsTable.hh"
 
 G4ProductionCutsTable* G4ProductionCutsTable::fG4ProductionCutsTable = 0;
 
@@ -110,14 +112,16 @@ void G4ProductionCutsTable::UpdateCoupleTable()
     firstUse = false;
   }
 
-  if(!(fG4RegionStore->IsModified())) return;
+  // Reset "used" flags of all couples
+  for(CoupleTableIterator CoupleItr=coupleTable.begin();CoupleItr!=coupleTable.end();CoupleItr++)
+  { (*CoupleItr)->SetUseFlag(false); }
 
   // Update Material-Cut-Couple
   typedef G4std::vector<G4Region*>::iterator regionIterator;
   G4Region* theWorldRegion = *(fG4RegionStore->begin());
   for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
   { 
-    if(!((*rItr)->IsModified())) continue;
+    ///////////////////if(!((*rItr)->IsModified())) continue;
     G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
     G4std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
     size_t nMaterial = (*rItr)->GetNumberOfMaterials();
@@ -156,9 +160,30 @@ void G4ProductionCutsTable::UpdateCoupleTable()
       {
         aCouple = new G4MaterialCutsCouple((*mItr),fProductionCut);
         coupleTable.push_back(aCouple);
+        aCouple->SetIndex(coupleTable.size()-1);
       }
 
       //Set the couple to the proper logical volumes in that region
+      aCouple->SetUseFlag();
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // The following part of the code should be removed once all EM processes 
+    // become "Region-aware"
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+      if((*rItr)==theWorldRegion)
+      {
+        aCouple->SetUseFlag(false);
+        G4std::vector<G4Material*>::const_iterator mItr1 = (*rItr)->GetMaterialIterator();
+        size_t nMaterial1 = (*rItr)->GetNumberOfMaterials();
+        for(size_t iMate1=0;iMate1<nMaterial1;iMate1++)
+        {
+          if((*mItr1)==aCouple->GetMaterial()) aCouple->SetUseFlag();
+          mItr1++;
+        }
+      }
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    // The previous part of the code should be removed once all EM processes 
+    // become "Region-aware"
+    //%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
       G4std::vector<G4LogicalVolume*>::iterator rootLVItr
                          = (*rItr)->GetRootLogicalVolumeIterator();
       size_t nRootLV = (*rItr)->GetNumberOfRootVolumes();
@@ -191,76 +216,59 @@ void G4ProductionCutsTable::UpdateCoupleTable()
 
   // Check if sizes of Range/Energy cuts tables are equal to the size of
   // the couple table
+  // If new couples are made during the previous procedure, nCouple becomes
+  // larger then nTable
   size_t nCouple = coupleTable.size();
   size_t nTable = energyCutTable[0]->size();
-  if(nCouple>nTable)
+  G4bool newCoupleAppears = nCouple>nTable;
+  if(newCoupleAppears)
   {
     for(size_t n=nCouple-nTable;n>0;n--)
     {
       for(size_t nn=0;nn< NumberOfG4CutIndex;nn++)
       {
-        rangeCutTable[nn]->push_back(0.);
-        energyCutTable[nn]->push_back(0.);
+        rangeCutTable[nn]->push_back(-1.);
+        energyCutTable[nn]->push_back(-1.);
       }
     }
   }
 
-  // Update Range/Energy cuts tables
+  // Update RangeEnergy cuts tables
   size_t idx = 0;
   for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
   {
-    // const G4Material* aMat = (*cItr)->GetMaterial();
     G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
-    if(((*cItr)->IsRecalcNeeded())||(aCut->IsModified()))
+    const G4Material* aMat = (*cItr)->GetMaterial();
+    if((*cItr)->IsRecalcNeeded())
     {
       for(size_t ptcl=0;ptcl< NumberOfG4CutIndex;ptcl++)
       {
         G4double rCut = aCut->GetProductionCut(ptcl);
         (*(rangeCutTable[ptcl]))[idx] = rCut;
-      }
-    }
-    idx++;  
-  }
-  // Update Range/Energy cuts double vectors
-  for(size_t ix=0;ix<NumberOfG4CutIndex;ix++)
-  {
-    if(rangeDoubleVector[ix]!=0) delete [] rangeDoubleVector[ix];
-    if(energyDoubleVector[ix]!=0) delete [] energyDoubleVector[ix];
-    G4double* rangeV = new G4double[(*(rangeCutTable[ix])).size()];
-    G4double* energyV = new G4double[(*(energyCutTable[ix])).size()];
-    for(size_t ixx=0;ixx<(*(rangeCutTable[ix])).size();ixx++)
-    {
-      rangeV[ixx] = (*(rangeCutTable[ix]))[ixx];
-      energyV[ixx] = -1.;
-    }
-    rangeDoubleVector[ix] = rangeV;
-    energyDoubleVector[ix] = energyV;
-  }
-}
-
-void G4ProductionCutsTable::UpdateCutsValues()
-{
-  // Update Range/Energy cuts tables
-  size_t idx = 0;
-  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
-  {
-    const G4Material* aMat = (*cItr)->GetMaterial();
-    G4ProductionCuts* aCut = (*cItr)->GetProductionCuts();
-    if(((*cItr)->IsRecalcNeeded())||(aCut->IsModified()))
-    {
-      for(size_t ptcl=0;ptcl< NumberOfG4CutIndex;ptcl++)
-      {
+        // if(converters[ptcl] && (*cItr)->IsUsed())
         if(converters[ptcl])
-        {
-          G4double rCut = aCut->GetProductionCut(ptcl);
-          G4double eCut = converters[ptcl]->Convert(rCut,aMat);
-          (*(rangeCutTable[ptcl]))[idx] = rCut;
-          (*(energyCutTable[ptcl]))[idx] = eCut;
-        }
+        { (*(energyCutTable[ptcl]))[idx] = converters[ptcl]->Convert(rCut,aMat); }
+        else
+        { (*(energyCutTable[ptcl]))[idx] = -1.; }
       }
     }
     idx++;  
   }
+
+  // resize Range/Energy cuts double vectors if new couple is made
+  if(newCoupleAppears)
+  {
+    for(size_t ix=0;ix<NumberOfG4CutIndex;ix++)
+    {
+      G4double* rangeVOld = rangeDoubleVector[ix];
+      G4double* energyVOld = energyDoubleVector[ix];
+      if(rangeVOld) delete [] rangeVOld;
+      if(energyVOld) delete [] energyVOld;
+      rangeDoubleVector[ix] = new G4double[(*(rangeCutTable[ix])).size()];
+      energyDoubleVector[ix] = new G4double[(*(energyCutTable[ix])).size()];
+    }
+  }
+
   // Update Range/Energy cuts double vectors
   for(size_t ix=0;ix<NumberOfG4CutIndex;ix++)
   {
@@ -295,10 +303,14 @@ void G4ProductionCutsTable::ScanAndSetCouple(G4LogicalVolume* aLV,G4MaterialCuts
 
   //Check if this particular volume has a material matched to the couple
   if(aLV->GetMaterial()==aCouple->GetMaterial())
-  { aLV->SetMaterialCutsCouple(aCouple); }
+  {
+    aLV->SetMaterialCutsCouple(aCouple);
+  }
+
+  size_t noDaughters = aLV->GetNoDaughters();
+  if(noDaughters==0) return;
 
   //Loop over daughters with same region
-  size_t noDaughters = aLV->GetNoDaughters();
   for(size_t i=0;i<noDaughters;i++)
   {
     G4LogicalVolume* daughterLVol = aLV->GetDaughter(i)->GetLogicalVolume();
@@ -317,6 +329,86 @@ const G4MaterialCutsCouple*
   }
   return 0;
 }
+
+G4int G4ProductionCutsTable::GetCoupleIndex(const G4MaterialCutsCouple* aCouple) const
+{
+  G4int idx = 0;
+  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
+  {
+    if((*cItr)==aCouple) return idx;
+    idx++;
+  }
+  return -1;
+}
+
+G4int G4ProductionCutsTable:: GetCoupleIndex(const G4Material* aMat,
+                           const G4ProductionCuts* aCut) const
+{
+  const G4MaterialCutsCouple* aCouple = GetMaterialCutsCouple(aMat,aCut);
+  return GetCoupleIndex(aCouple);
+}
+
+void G4ProductionCutsTable::DumpCouples() const
+{
+  G4cout << G4endl;
+  G4cout << "========= Table of registored couples ==============================" << G4endl;
+  for(CoupleTableIterator cItr=coupleTable.begin();cItr!=coupleTable.end();cItr++)
+  {
+    G4MaterialCutsCouple* aCouple = (*cItr);
+    G4ProductionCuts* aCut = aCouple->GetProductionCuts();
+    G4cout << G4endl;
+    G4cout << "Index : " << aCouple->GetIndex() 
+           << "     used in the geometry : ";
+    if(aCouple->IsUsed()) G4cout << "Yes";
+    else                  G4cout << "No ";
+    G4cout << "     recalcuration needed : ";
+    if(aCouple->IsRecalcNeeded()) G4cout << "Yes";
+    else                          G4cout << "No ";
+    G4cout << G4endl;
+    G4cout << " Material : " << aCouple->GetMaterial()->GetName() << G4endl;
+    G4cout << " Range cuts        : " 
+           << " gamma " << G4BestUnit(aCut->GetProductionCut("gamma"),"Length")
+           << "    e- " << G4BestUnit(aCut->GetProductionCut("e-"),"Length")
+           << "    e+ " << G4BestUnit(aCut->GetProductionCut("e+"),"Length")
+           << G4endl;
+    G4cout << " Energy thresholds : " ;
+    // if(!(aCouple->IsUsed()) || aCouple->IsRecalcNeeded()) G4cout << " is not ready to print";
+    if(aCouple->IsRecalcNeeded()) G4cout << " is not ready to print";
+    else
+    G4cout << " gamma " << G4BestUnit((*(energyCutTable[0]))[aCouple->GetIndex()],"Energy")
+           << "    e- " << G4BestUnit((*(energyCutTable[1]))[aCouple->GetIndex()],"Energy")
+           << "    e+ " << G4BestUnit((*(energyCutTable[2]))[aCouple->GetIndex()],"Energy");
+    G4cout << G4endl;
+    if(aCouple->IsUsed())
+    {
+      G4cout << " Region(s) which use this couple : " << G4endl;
+      typedef G4std::vector<G4Region*>::iterator regionIterator;
+      for(regionIterator rItr=fG4RegionStore->begin();rItr!=fG4RegionStore->end();rItr++)
+      {
+        G4ProductionCuts* fProductionCut = (*rItr)->GetProductionCuts();
+        G4std::vector<G4Material*>::const_iterator mItr = (*rItr)->GetMaterialIterator();
+        size_t nMaterial = (*rItr)->GetNumberOfMaterials();
+        for(size_t iMate=0;iMate<nMaterial;iMate++)
+        {
+          if(aCouple->GetMaterial()==(*mItr) &&
+             aCouple->GetProductionCuts()==fProductionCut)
+          {
+            G4cout << "    " << (*rItr)->GetName() << G4endl;
+            break;
+          }
+        }
+      }
+    }
+  }
+  G4cout << G4endl;
+  G4cout << "====================================================================" << G4endl;
+  G4cout << G4endl;
+}
+           
+
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+//========================= Below has not yet implemented =====================
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 // Store cuts and material information in files under the specified directory.
 G4bool  G4ProductionCutsTable::StoreCutsTable(const G4String& dir, 

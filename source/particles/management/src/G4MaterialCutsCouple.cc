@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MaterialCutsCouple.cc,v 1.2 2002-12-16 11:15:45 gcosmo Exp $
+// $Id: G4MaterialCutsCouple.cc,v 1.3 2003-01-14 22:26:50 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -39,7 +39,9 @@
 G4MaterialCutsCouple::G4MaterialCutsCouple() :
   isMaterialModified(false),
   fMaterial(0),
-  fCuts(0)
+  fCuts(0),
+  indexNumber(-1),
+  isUsedInGeometry(false)
 {
 }
   
@@ -47,7 +49,9 @@ G4MaterialCutsCouple::G4MaterialCutsCouple(const G4Material* material,
 					   G4ProductionCuts* cut) :
   isMaterialModified(true),
   fMaterial(material),
-  fCuts(cut)
+  fCuts(cut),
+  indexNumber(-1),
+  isUsedInGeometry(false)
 {
 }
 
@@ -68,19 +72,24 @@ G4MaterialCutsCouple & G4MaterialCutsCouple::operator=(const G4MaterialCutsCoupl
   fMaterial = right.fMaterial;
   fCuts     = right.fCuts; 
   isMaterialModified = right.isMaterialModified;
+  indexNumber = right.indexNumber;
+  isUsedInGeometry = right.isUsedInGeometry;
 
   return *this;
 }
 
-void G4MaterialCutsCouple::SetProductionCuts(G4ProductionCuts* aCut)
-{ fCuts = aCut; }
+G4bool  G4MaterialCutsCouple::IsRecalcNeeded() const
+{
+  G4bool isCutModified = false;
+  if (fCuts !=0 ) isCutModified = fCuts->IsModified();
+//  return (isMaterialModified || isCutModified) && isUsedInGeometry;
+  return (isMaterialModified || isCutModified);
+}
 
-G4ProductionCuts* G4MaterialCutsCouple::GetProductionCuts() const
-{ return fCuts; }
-
-
-
-
-
-
+void   G4MaterialCutsCouple::PhysicsTableUpdated()
+{
+  if (fCuts !=0 ) fCuts->PhysicsTableUpdated();
+//  if(isUsedInGeometry) isMaterialModified = false;
+  isMaterialModified = false;
+}
 
