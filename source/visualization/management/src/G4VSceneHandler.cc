@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.35 2005-01-27 20:06:14 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.36 2005-02-23 11:35:58 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -119,10 +119,11 @@ void G4VSceneHandler::PostAddSolid () {
 }
 
 void G4VSceneHandler::ClearStore () {
-  if (fpViewer) fpViewer -> NeedKernelVisit ();
+  // if (fpViewer) fpViewer -> NeedKernelVisit (true);
   // ?? Viewer is supposed to be smart enough to know when to visit
   // kernel, but a problem in OpenGL Stored seems to require a forced
   // kernel visit triggered by the above code.  John Allison Aug 2001
+  // Feb 2005 - commented out.  Let's fix OpenGL if necessary.
 }
 
 void G4VSceneHandler::ClearTransientStore () {
@@ -368,7 +369,7 @@ void G4VSceneHandler::SetScene (G4Scene* pScene) {
   // Notify all viewers that a kernel visit is required.
   G4ViewerListIterator i;
   for (i = fViewerList.begin(); i != fViewerList.end(); i++) {
-    (*i) -> SetNeedKernelVisit ();
+    (*i) -> SetNeedKernelVisit (true);
   }
 }
 
