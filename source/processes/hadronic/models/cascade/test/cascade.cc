@@ -22,6 +22,8 @@
 
 #include "vector"
 #include "G4ThreeVector.hh"
+#include "G4NucleiModel.hh"
+
 
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
@@ -129,9 +131,9 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4InuclNuclei* targ = NULL;
     G4InuclParticle* targIsH = NULL;
 
-    if ( G4int(A) == 1 ) {
-      targIsH = new G4InuclElementaryParticle(targetMomentum, 1); // hydrogen nucleus     
-    } else { 
+    G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
+
+    if ( !(G4int(A) == 1) ) {
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
     };
@@ -144,12 +146,15 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     for (G4int i = 1; i <= nCollisions; i++) {
 
+
+  
       if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
       }
 
       if ( G4int(A) == 1 ) {
-	output = collider->collide(bull, targIsH); 
+    targIsH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); // get momentum from H model
+	output = collider->collide(bull, targIsH);
       } else {
 	output = collider->collide(bull, targ); 
       }
