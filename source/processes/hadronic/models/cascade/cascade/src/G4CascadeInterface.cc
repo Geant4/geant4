@@ -122,6 +122,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   // Set target
   G4InuclNuclei*   target  = NULL;
   G4InuclParticle* targetH = NULL;
+  // and outcoming particles
+  G4DynamicParticle* cascadeParticle = NULL;
 
   std::vector<G4double> targetMomentum(4, 0.0);
 
@@ -252,8 +254,6 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
 
       sumEnergy -= ekin / GeV;
 
-      G4DynamicParticle* cascadeParticle = NULL;
-
       switch(outgoingParticle) {
 
       case proton: 
@@ -320,7 +320,7 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   }
 
   // get nuclei fragments
-  G4DynamicParticle * aFragment = 0;
+  G4DynamicParticle * aFragment = NULL;
   G4ParticleDefinition * aIonDef = 0;
   G4ParticleTable *theTableOfParticles = G4ParticleTable::GetParticleTable();
 
@@ -376,6 +376,20 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
              << sumEnergy * GeV << " MeV" << G4endl;
     }
   }
+
+  delete bullet;
+  delete colep;
+  delete inc;
+  delete noneq; 
+  delete fiss;
+  delete eqil;
+  delete bigb;
+  delete collider;
+
+  if(target != NULL) delete target;
+  if(targetH != NULL) delete targetH;
+  if(cascadeParticle != NULL) delete cascadeParticle;
+  if(aFragment != NULL) delete aFragment;
 
   return &theResult;
 }
