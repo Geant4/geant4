@@ -1,0 +1,16 @@
+vis-01-00-04 11th January 1999  John Allison
+- Completed change of names from scene to sceneHandler, view to viewer.
+- Vis manager and scene handlers now keep pointer to scene, rather than a copy.
+- G4SceneList now a simple RWTPtrOrderedVector.
+- /vis/camera/reset now resets viewpoint direction and up vector.
+
+vis-01-00-03 10th January 1999  John Allison
+- Added flags for viewing geom, hits, digis to G4ModelingParameters.
+
+vis-01-00-02  9th January 1999  John Allison
+- Changed Scene to SceneHandler, View to Viewer.
+
+vis-01-00-01  6th January 1999  John Allison
+- Made G4VisManager::GetInstance() private to prevent inadvertent misuse.
+- Removed #include GNU_GCC - no longer necessary for egcs.
+- Continued developing the new commands.
