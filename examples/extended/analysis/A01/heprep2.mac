@@ -34,8 +34,5 @@
 /mydet/fieldValue 4. tesla
 /mydet/momentum 2. GeV
 /gun/particle e+
-/run/beamOn 2
+/run/beamOn 100
 /vis/viewer/flush
-#/vis/viewer/update
-#/vis/viewer/update
-#/vis/viewer/update
