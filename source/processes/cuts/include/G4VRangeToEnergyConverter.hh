@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRangeToEnergyConverter.hh,v 1.2 2003-11-08 06:10:48 kurasige Exp $
+// $Id: G4VRangeToEnergyConverter.hh,v 1.3 2004-12-02 06:53:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,6 +42,7 @@
 #define G4VRangeToEnergyConverter_h 1
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 #include <vector>
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.4 2004-10-25 13:10:46 kurasige Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.5 2004-12-02 06:53:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@ class G4LogicalVolume;
 class G4ProductionCuts;
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 #include <vector>
 #include "G4MaterialCutsCouple.hh"

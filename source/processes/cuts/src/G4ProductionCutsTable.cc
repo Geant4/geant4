@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.10 2004-11-07 01:38:17 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.11 2004-12-02 06:53:56 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -555,7 +555,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
     G4Material* aMaterial = G4Material::GetMaterial(name);
     if (aMaterial ==0 ) continue;
 
-    G4double ratio = abs(density/aMaterial->GetDensity() );
+    G4double ratio = std::abs(density/aMaterial->GetDensity() );
     if ((0.999>ratio) || (ratio>1.001) ){
 #ifdef G4VERBOSE
       if (verboseLevel >0) {
