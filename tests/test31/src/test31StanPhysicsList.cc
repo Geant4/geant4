@@ -45,7 +45,6 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
-#include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -79,13 +78,13 @@ void test31StanPhysicsList::ConstructProcess()
     G4String particleName = particle->GetParticleName();
     G4String particleType = particle->GetParticleType();
     //    G4double charge = particle->GetPDGCharge();
-     
+
     if (particleName == "gamma") {
 
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
-      pmanager->AddDiscreteProcess(new G4GammaConversion);    
-      
+      pmanager->AddDiscreteProcess(new G4GammaConversion);
+
     } else if (particleName == "e-") {
       // pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       G4eIonisation* eion = new G4eIonisation();
@@ -94,7 +93,7 @@ void test31StanPhysicsList::ConstructProcess()
       pmanager->AddProcess(eion,   -1, 2,2);
       G4eBremsstrahlung* ebr = new G4eBremsstrahlung();
       ebr->SetSubSec(false);
-      pmanager->AddProcess(ebr,    -1,-1,3);       
+      pmanager->AddProcess(ebr,    -1,-1,3);
 
     } else if (particleName == "e+") {
 
@@ -106,19 +105,19 @@ void test31StanPhysicsList::ConstructProcess()
       pbr->SetSubSec(false);
       pmanager->AddProcess(pbr,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-  
-    } else if( particleName == "mu+" || 
+
+    } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
 
-      
+
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
+      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
       pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
-      
+
     } else if (
-                particleName == "proton"  
+                particleName == "proton"
                || particleName == "anti_proton"  
                || particleName == "pi+"  
                || particleName == "pi-"  

@@ -104,7 +104,7 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   WorldXCmd->SetRange("WSizeX>0.");
   WorldXCmd->SetUnitCategory("Length");
   WorldXCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    
+
   UpdateCmd = new G4UIcmdWithoutParameter("/test31/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
@@ -123,22 +123,22 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   YMagFieldCmd->SetGuidance("Magnetic field will be in Y direction.");
   YMagFieldCmd->SetParameterName("By",false);
   YMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  YMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  YMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/test31/FieldZ",this);  
+  ZMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/test31/FieldZ",this);
   ZMagFieldCmd->SetGuidance("Define magnetic field along Z");
   ZMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   ZMagFieldCmd->SetParameterName("Bz",false);
   ZMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  ZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
+  ZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   HistoCmd = new G4UIcmdWithAString("/test31/HistoName",this);
   HistoCmd->SetGuidance("Set the name of the histo file");
   HistoCmd->SetParameterName("histo",false);
   HistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  ntupCmd = new G4UIcmdWithABool("/hTest/ntuple",this);
-  ntupCmd->SetGuidance("Set number ntuple to fill"); 
+  ntupCmd = new G4UIcmdWithABool("/test31/ntuple",this);
+  ntupCmd->SetGuidance("Set number ntuple to fill");
   ntupCmd->SetParameterName("ntuple",false);
   ntupCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -153,32 +153,32 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   verbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   intCmd = new G4UIcmdWithAnInteger("/test31/numberAbsToSave",this);
-  intCmd->SetGuidance("Set number of absorbers for which "); 
+  intCmd->SetGuidance("Set number of absorbers for which ");
   intCmd->SetGuidance("the energy is saved to tuple");
   intCmd->SetParameterName("numberAbsToSave",false);
   intCmd->AvailableForStates(G4State_PreInit);
 
   nhistCmd = new G4UIcmdWithAnInteger("/test31/HistoNumber",this);
-  nhistCmd->SetGuidance("Set number of histograms to fill"); 
+  nhistCmd->SetGuidance("Set number of histograms to fill");
   nhistCmd->SetParameterName("HistoNumber",false);
   nhistCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   nDebugSCmd = new G4UIcmdWithAnInteger("/test31/nFirstEventToDebug",this);
-  nDebugSCmd->SetGuidance("Set number of the first event to debug"); 
+  nDebugSCmd->SetGuidance("Set number of the first event to debug");
   nDebugSCmd->SetParameterName("nFirstEventToDebug",false);
   nDebugSCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   nDebugECmd = new G4UIcmdWithAnInteger("/test31/nLastEventToDebug",this);
-  nDebugECmd->SetGuidance("Set number of the last event to debug"); 
+  nDebugECmd->SetGuidance("Set number of the last event to debug");
   nDebugECmd->SetParameterName("nLastEventToDebug",false);
   nDebugECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  DeltaECmd = new G4UIcmdWithADoubleAndUnit("/test31/maxDeltaEnergy",this);  
+  DeltaECmd = new G4UIcmdWithADoubleAndUnit("/test31/maxDeltaEnergy",this);
   DeltaECmd->SetGuidance("Define scale of delta-Energy histogram");
   DeltaECmd->SetParameterName("DeltaE",false);
   DeltaECmd->SetUnitCategory("Energy");
-  DeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
-  
+  DeltaECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -122,7 +122,7 @@ void test31LowEPhysicsList::ConstructProcess()
       lei->SetCutForLowEnSecElectrons(eCut);
       //lei->SetEnlossFluc(false);
       //lei->ActivateAuger(true);
-      lei->ActivateFluorescence(true);
+//      lei->ActivateFluorescence(true);
       lei->SetVerboseLevel(verbose);
       G4LowEnergyBremsstrahlung* bre = new G4LowEnergyBremsstrahlung();
       bre->SetVerboseLevel(verbose);
