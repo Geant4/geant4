@@ -44,6 +44,7 @@
 #include "G4ProcessManager.hh"
 
 #include "G4HadLeadBias.hh"
+#include "G4HadronicException.hh"
 
 //@@ add model name info, once typeinfo available #include <typeinfo.h>
  
@@ -80,7 +81,14 @@
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
- { GetManagerPointer()->RegisterMe( a ); }
+ { 
+   try{GetManagerPointer()->RegisterMe( a );}   
+   catch(G4HadronicException & aE)
+   {
+     aE.Report(std::cout);
+     G4Exception("Could not register G4HadronicInteraction");
+   }
+ }
 
  G4double G4HadronicProcess::
  GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
@@ -200,14 +208,14 @@
     theInteraction = ChooseHadronicInteraction( kineticEnergy,
                                                 aMaterial, anElement );
     }
-    catch(G4NoModelFound * it)
+    catch(G4HadronicException & aE)
     {
-      delete it;
+      aE.Report(std::cout);
       G4cout << "Unrecoverable error for:"<<G4endl;
       G4cout << " - Particle energy[GeV] = "<< kineticEnergy/GeV<<G4endl;
       G4cout << " - Material = "<<aMaterial->GetName()<<G4endl;
       G4cout << " - Particle type = "<<aParticle->GetDefinition()->GetParticleName()<<G4endl;
-      G4Exception("GetHadronicProcess: No model found for this energy range");
+      G4Exception("GetHadronicProcess: ChooseHadronicInteraction failed.");
     }
     G4HadProjectile thePro(aTrack);
     G4HadFinalState *result =
@@ -456,7 +464,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 				     aT.GetGlobalTime(),
 				     aT.GetPosition());
 	G4double newWeight = aT.GetWeight()*aR->GetSecondary(i)->GetWeight();
-	// static G4double pinelcount=0;
+	//static G4double pinelcount=0;
 	if(xBiasOn) newWeight *= XBiasSecondaryWeight();
         /*  G4cout << "#### ParticleDebug "
 	         <<GetProcessName()<<" "

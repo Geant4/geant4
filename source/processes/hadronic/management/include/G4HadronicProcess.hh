@@ -48,6 +48,7 @@
 #include "G4VLeadingParticleBiasing.hh"
 #include "G4Delete.hh"
 #include "G4CrossSectionDataStore.hh"
+#include "G4HadronicException.hh"
 
 class G4Track;
 class G4Step;
@@ -127,8 +128,10 @@ class G4ParticleChange;
 
     inline G4HadronicInteraction *ChooseHadronicInteraction(
      G4double kineticEnergy, G4Material *aMaterial, G4Element *anElement )
-    { return GetManagerPointer()->
-        GetHadronicInteraction( kineticEnergy, aMaterial, anElement ); }
+    { 
+      return GetManagerPointer()->
+        GetHadronicInteraction( kineticEnergy, aMaterial, anElement );
+    }
 
     inline G4HadronicInteraction *GetHadronicInteraction()
     { return theInteraction; }
