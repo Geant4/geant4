@@ -447,7 +447,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4Track & theTrack, G4Part
         G4double resiualKineticEnergy  = theResidual.GetMass()*theResidual.GetMass();
                  resiualKineticEnergy += totalMomentum*totalMomentum;
   	         resiualKineticEnergy  = sqrt(resiualKineticEnergy) - theResidual.GetMass();
-        cout << "Kinetic energy of the residual = "<<resiualKineticEnergy<<endl;
+//        cout << "Kinetic energy of the residual = "<<resiualKineticEnergy<<endl;
 	theResidual.SetKineticEnergy(resiualKineticEnergy);
         theResidual.SetMomentum(-1.*totalMomentum);
         theSec = new G4DynamicParticle;   
