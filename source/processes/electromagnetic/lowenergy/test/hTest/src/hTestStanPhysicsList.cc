@@ -45,7 +45,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
-#include "G4MultipleScatteringx.hh"
+#include "G4MultipleScattering.hh"
 
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
@@ -86,14 +86,14 @@ void hTestStanPhysicsList::ConstructProcess()
       pmanager->AddDiscreteProcess(new G4GammaConversion);    
       
     } else if (particleName == "e-") {
-      pmanager->AddProcess(new G4MultipleScatteringx, -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
 
       pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
 
     } else if (particleName == "e+") {
 
-      pmanager->AddProcess(new G4MultipleScatteringx, -1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
@@ -101,7 +101,7 @@ void hTestStanPhysicsList::ConstructProcess()
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
 
-      pmanager->AddProcess(new G4MultipleScatteringx,-1, 1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
@@ -116,7 +116,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || particleName == "kaon-"  
               )
     {
-      pmanager->AddProcess(new G4MultipleScatteringx,-1,1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
       if(0 < verbose) {
         G4cout << "Hadronic processes for " << particleName << G4endl; 
       }
@@ -135,7 +135,7 @@ void hTestStanPhysicsList::ConstructProcess()
                || (particleType == "nucleus" && charge != 0) 
               )
     {
-      pmanager->AddProcess(new G4MultipleScatteringx,-1,1,1);
+      pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
 
       if(0 < verbose) {
         G4cout << "Ionic processes for " << particleName << G4endl; 
