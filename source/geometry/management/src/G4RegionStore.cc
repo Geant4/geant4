@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegionStore.cc,v 1.3 2003-02-07 11:32:21 gcosmo Exp $
+// $Id: G4RegionStore.cc,v 1.4 2003-02-07 11:46:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4RegionStore
@@ -202,7 +202,8 @@ G4Region* G4RegionStore::GetRegion(const G4String& name, G4bool verbose) const
   }
   if (verbose)
   {
-    G4cerr << "ERROR - Region " << name << " NOT found in store !" << G4endl;
+    G4cerr << "ERROR - G4RegionStore::GetRegion()" << G4endl
+           << "        Region " << name << " NOT found in store !" << G4endl;
   }
   return 0;
 }
