@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CollisionNNToDeltaDelta1950.cc,v 1.1 2003-10-07 12:37:35 hpw Exp $ //
+// $Id: G4CollisionNNToDeltaDelta1950.cc,v 1.2 2003-11-19 15:35:30 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4CollisionNNToDeltaDelta1950.hh"
@@ -57,7 +57,7 @@ G4CollisionNNToDeltaDelta1950::G4CollisionNNToDeltaDelta1950()
   G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltap, aD0_1950));
   G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDelta0, aDp_1950));
   G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltam, aDpp_1950));
-  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltapp, aD0_1950));
+  G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aNeutron, aProton, aDeltapp, aDm_1950));
   
   G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aProton, aProton, aDelta0, aDpp_1950));
   G4CollisionComposite::AddComponent(new G4ConcreteNNToDeltaDeltastar(aProton, aProton, aDeltap, aDp_1950));

@@ -69,22 +69,27 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
   if (OutputDefinitions[0]->IsShortLived() && OutputDefinitions[1]->IsShortLived())
   {
     if(getenv("G4KCDEBUG")) G4cerr << "two shortlived for Type = "<<typeid(*this).name()<<G4endl;
-//    throw G4HadronicException(__FILE__, __LINE__, "G4VScatteringCollision: can't handle two shortlived particles!"); // @hpw@
+    // throw G4HadronicException(__FILE__, __LINE__, "G4VScatteringCollision: can't handle two shortlived particles!"); // @hpw@
   }
   
   G4double outm1 = OutputDefinitions[0]->GetPDGMass();
   G4double outm2 = OutputDefinitions[1]->GetPDGMass();
 
   if (OutputDefinitions[0]->IsShortLived())
-    outm1 = SampleResonanceMass(outm1, OutputDefinitions[0]->GetPDGWidth(),
-				G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
-				sqrtS-(G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass()));
+  {
+    outm1 = SampleResonanceMass(outm1, 
+                OutputDefinitions[0]->GetPDGWidth(),
+		G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
+		sqrtS-(G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass()));
 
+  }
   if (OutputDefinitions[1]->IsShortLived())
+  {
     outm2 = SampleResonanceMass(outm2, OutputDefinitions[1]->GetPDGWidth(),
-				G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
-				sqrtS-outm1);
-
+			G4Neutron::NeutronDefinition()->GetPDGMass()+G4PionPlus::PionPlus()->GetPDGMass(),
+			sqrtS-outm1);
+  }
+  
   // Angles of outgoing particles
   G4double cosTheta = angDistribution->CosTheta(s,m1,m2);
   G4double phi = angDistribution->Phi();
@@ -121,6 +126,17 @@ G4KineticTrackVector* G4VScatteringCollision::FinalState(const G4KineticTrack& t
 
   // Final tracks are copies of incoming ones, with modified 4-momenta
 
+  G4double chargeBalance = OutputDefinitions[0]->GetPDGCharge()+OutputDefinitions[1]->GetPDGCharge();
+  chargeBalance-= trk1.GetDefinition()->GetPDGCharge();
+  chargeBalance-= trk2.GetDefinition()->GetPDGCharge();
+  if(abs(chargeBalance) >.1)
+  {
+    G4cout << "Charges in "<<typeid(*this).name()<<G4endl;
+    G4cout << OutputDefinitions[0]->GetPDGCharge()<<" "<<OutputDefinitions[0]->GetParticleName()
+           << OutputDefinitions[1]->GetPDGCharge()<<" "<<OutputDefinitions[1]->GetParticleName()
+	   << trk1.GetDefinition()->GetPDGCharge()<<" "<<trk1.GetDefinition()->GetParticleName()
+	   << trk2.GetDefinition()->GetPDGCharge()<<" "<<trk2.GetDefinition()->GetParticleName()<<G4endl;
+  }
   G4KineticTrack* final1 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[0]), 0.0,
 					      trk1.GetPosition(), p4Final1);
   G4KineticTrack* final2 = new G4KineticTrack(const_cast<G4ParticleDefinition *>(OutputDefinitions[1]), 0.0,

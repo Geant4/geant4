@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.9 2003-11-12 10:11:50 gunter Exp $ //
+// $Id: G4Scatterer.cc,v 1.10 2003-11-19 15:35:30 hpw Exp $ //
 //
 
 #include "globals.hh"
@@ -350,6 +350,16 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
 		   <<chargeBalance<<" "
 		   <<baryonBalance<<" "
 		   <<G4endl;
+       if(chargeBalance !=0 )
+       {
+         G4cout << "track 1"<<trk1.GetDefinition()->GetParticleName()<<G4endl;
+         G4cout << "track 2"<<trk2.GetDefinition()->GetParticleName()<<G4endl;
+         for(size_t hpw=0; hpw<products->size(); hpw++)
+         {
+	   G4cout << products->operator[](hpw)->GetDefinition()->GetParticleName()<<G4endl;
+         }
+	 G4Exception("We have the problem");
+       }
        return products;
      } 
    } 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.1 2003-10-07 12:37:36 hpw Exp $ //
+// $Id: G4ConcreteNNToDeltaDeltastar.cc,v 1.2 2003-11-19 15:35:30 hpw Exp $ //
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -37,6 +37,18 @@ G4ConcreteNNToDeltaDeltastar::G4ConcreteNNToDeltaDeltastar(const G4ParticleDefin
   : G4ConcreteNNTwoBodyResonance(aPrimary, bPrimary, aSecondary, bSecondary,
                                  G4DeltaDeltastarBuilder(bSecondary->GetParticleName(), theSigmaTable))
 {
+  G4double chargeBalance = aPrimary->GetPDGCharge()+bPrimary->GetPDGCharge();
+  chargeBalance -= aSecondary->GetPDGCharge();
+  chargeBalance -= bSecondary->GetPDGCharge();
+  if(abs(chargeBalance) >.1)
+  {
+    G4cout << "Initial charges in "<<typeid(*this).name()<<G4endl;
+    G4cout << aPrimary->GetPDGCharge()<<" "<<aPrimary->GetParticleName()
+           << bPrimary->GetPDGCharge()<<" "<<bPrimary->GetParticleName()
+	   << aSecondary->GetPDGCharge()<<" "<<aSecondary->GetParticleName()
+	   << bSecondary->GetPDGCharge()<<" "<<bSecondary->GetParticleName()<<G4endl;
+    exit(0);
+  }
 }
 
 G4ConcreteNNToDeltaDeltastar::~G4ConcreteNNToDeltaDeltastar()
