@@ -88,6 +88,14 @@ HADRONICSDIRS = test02 test11 test12 test13 test15 test16 test21 test22 test23 t
 
 #temp ADV_EXAMPLES += 01 02  03 04 05 06 07
 
+ADV_EXAMPLES += 08
+
+MEDICAL += 01
+
+ELECTRO += 01 02
+
+OPTICAL += 01
+
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
 all:
@@ -95,6 +103,24 @@ all:
 # jobs try to do it at the same time.  So disable and always do by
 # hand with: gmake examples_links_source
 ###################################################################
+
+# OPTICAL
+	@$(ECHO) Making Optical Tests...
+	@for nn in $(OPTICAL); do \
+	  (cd test40$$nn && $(MAKE)); \
+	done;:
+
+# ELECTRO
+	@$(ECHO) Making Photon/Muon Tests...
+	@for nn in $(ELECTRO); do \
+	  (cd test30$$nn && $(MAKE)); \
+	done;:
+
+# MEDICAL
+	@$(ECHO) Making Medical Tests...
+	@for nn in $(MEDICAL); do \
+	  (cd test20$$nn && $(MAKE)); \
+	done;:
 
 # Novice
 	@$(ECHO) Making examples...
@@ -106,6 +132,12 @@ all:
 	@$(ECHO) Making EM Tests...
 	@for nn in $(ELECTROMAGNETIC); do \
 	  (cd test50$$nn && $(MAKE)); \
+	done;:
+
+# MEDICAL
+	@$(ECHO) Making Medical Tests...
+	@for nn in $(MEDICAL); do \
+	  (cd test20$$nn && $(MAKE)); \
 	done;:
 
 # Persistancy
@@ -128,6 +160,13 @@ endif
 	@for nn in $(FIELD); do \
 	  (cd test7$$nn && $(MAKE)); \
 	done;:
+
+
+	@$(ECHO) Making Advanced examples...
+	@for nn in $(ADV_EXAMPLES); do \
+	(cd test10$$nn && $(MAKE)); \
+	done;:
+
 
 #ifneq (,$(findstring 7.3_2.95.2,$(DEBOPT)))
 #
@@ -232,6 +271,41 @@ examples_links_source:
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
 	done;:
+
+# MEDICAL
+	  @testdir=test2001; \
+	  exdir=$(G4INSTALL)/examples/extended/medical/GammaTherapy/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s GammaTherapy.in  $$testdir/test2001.in;  \
+          ln -s GammaTherapy.out $$testdir/test2001.out; :
+
+# OPTICAL
+	  @testdir=test4001; \
+	  exdir=$(G4INSTALL)/examples/extended/optical/LXe/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s LXe.in  $$testdir/test4001.in;  \
+          ln -s LXe.out $$testdir/test4001.out; :
+
+# Cosmic_charging
+	  @testdir=test1008; \
+	  exdir=$(G4INSTALL)/examples/advanced/cosmicray_charging/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s shoot.mac  $$testdir/test1008.in;  \
+          ln -s shoot.out $$testdir/test1008.out; :
+
+# Photon/Muon
+	  @testdir=test3001; \
+	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/MuonProcesses/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s MuonProcesses.in  $$testdir/test3001.in;  \
+          ln -s MuonProcesses.out $$testdir/test3001.out; :
+
+	  @testdir=test3002; \
+	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/PhotonProcesses/; \
+	  ln -s $$exdir $$testdir; \
+	  ln -s PhotonProcesses.in  $$testdir/test3002.in;  \
+          ln -s PhotonProcesses.out $$testdir/test3002.out; :
+
 
 # Persistency
 	@for nn in $(PERSISTENCY); do \
@@ -568,3 +642,13 @@ hadronics:
 	@for dir in $(HADEXERDIRS); \
 	  do (cd $$dir && $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
 
+g3tog4:
+# G3TOG4
+	@$(ECHO) Making G3toG4 Tests...
+	@for nn in $(G3TOG4); do \
+	  (cd test6$$nn && $(MAKE)); \
+	done;:
+# G3TOG4
+	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
+	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+	true
