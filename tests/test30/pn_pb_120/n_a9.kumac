@@ -12,39 +12,38 @@ set NDVX 010206
  zone
  opt logy
  
- null 0 160 0.0001 10
+ null 0 125 0.0001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
  hi/file 1 prec.paw
  set dmod 3
- hi/pl 36 shist
+ hi/pl 37 shist
  line 100 0.6 110 0.6
  itx 115 3.5 'PREC'
  close 1
  
- 
  hi/file 1 kin.paw
  set dmod 1
- hi/pl 36 shist
+ hi/pl 37 shist
  line 100 0.2 110 0.2
  itx 115 1.5 'KIN'
  close 1
  
-ve/create X(27) R 27.5 32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5 122.5 127.5 132.5 137.5 142.5 147.5 152.5 157.5
-ve/create Y(27) R 0.972 0.799 0.679 0.53 0.371 0.278 0.214 0.166 0.125 0.094 0.0674 0.0502 0.0356 0.0248 0.0167 0.0117 0.0077 0.0047 0.003 0.0018 0.0009 0.00047 0.00025 0.000086 0.00002 0.000008 0.00001
-gr/h/symb X Y 27 21 0.2
+ve/create X(19) R 27.5 32.5 37.5 42.5 47.5 52.5 57.5 62.5 67.5 72.5 77.5 82.5 87.5 92.5 97.5 102.5 107.5 112.5 117.5 
+ve/create Y(19) R 0.519 0.404 0.31 0.214 0.135 0.088 0.0593 0.0402 0.0257 0.0164 0.01 0.006 0.0033 0.00147 0.00083 0.0004 0.00019 0.00008 0.00042
+gr/h/symb X Y 19 21 0.2
  
 
-exe ../prf n_a8 eps
+exe ../prf n_a9 eps
  
- null 0 160 0.0001 10
+ null 0 125 0.0001 10
  atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
  
-  gr/h/symb X Y 27 21 0.2
+  gr/h/symb X Y 19 21 0.2
 
   hi/file 1 par.paw
  set dmod 4
- hi/pl 36 shist
+ hi/pl 37 shist
  line 100 0.8 110 0.8
  itx 115 6.0 'LEPAR'
  close 1
@@ -52,13 +51,12 @@ exe ../prf n_a8 eps
 
   hi/file 1 chips.paw
  set dmod 1
- hi/pl 36 shist
+ hi/pl 37 shist
  line 100 0.4 110 0.4
  itx 115 2.2 'CHIPS'
  close 1
  
  opt liny
 
-exe ../prf nk_a8 eps
-
+exe ../prf nk_a9 eps
 
