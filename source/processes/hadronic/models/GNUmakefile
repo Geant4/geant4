@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-05-23 05:41:56 stesting Exp $
+# $Id: GNUmakefile,v 1.4 2000-05-26 07:17:24 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -20,6 +20,7 @@ SUBDIRS += generator/radiative_decay
 SUBDIRS += generator/string_common
 SUBDIRS += generator/string_fragmentation
 SUBDIRS += generator/util
+SUBDIRS += radiative_decay
 
 SUBLIBS  = G4hadronic_HE G4hadronic_LE G4hadronic_neu G4hadronic_iso
 SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
