@@ -49,6 +49,7 @@ processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/util                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/optical                   gum@triumf.ca                   Peter Gumplinger
 "/parameterisation          verderi@polhp6.in2p3.fr         Marc Verderi
+"/photolepton_hadron        Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/transportation            John.Apostolakis@cern.ch        John Apostolakis
 readout                     Makoto.Asai@cern.ch             Makoto Asai
 run                         Makoto.Asai@cern.ch             Makoto Asai
