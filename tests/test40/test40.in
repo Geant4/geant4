@@ -1,4 +1,4 @@
-# $Id: test40.in,v 1.6 2004-06-30 15:34:39 japost Exp $
+# $Id: test40.in,v 1.7 2004-07-01 10:12:51 japost Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -25,6 +25,8 @@
 #
 /gun/particle e-
 /gun/energy 5 GeV
-/run/beamOn 500
+/run/beamOn  500
 
+/testem/det/setField  10 gauss
+/run/beamOn  500
 
