@@ -1,4 +1,4 @@
-$Id: History,v 1.131 2004-10-25 16:08:43 gcosmo Exp $
+$Id: History,v 1.132 2004-10-29 09:15:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct 29, 2004  G.Cosmo (global-V06-02-02)
+- Added global function G4RandomDirection() providing a random 3-vector
+  normalised in 4pi.
+- Cleared obsolete setup for min/max macros required for Windows/VC++6.
 
 Oct 25, 2004  H.Kurashige (global-V06-02-01)
 - Added collection of flags and related methods in G4PhysicsTable.
