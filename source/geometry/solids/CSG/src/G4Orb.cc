@@ -58,8 +58,8 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
   // Check radius
 
-  if (pRmax >= 0 )  fRmax = pRmax;  
-  else              G4Exception("G4Orb::G4Orb() - invalid negative radius");
+  if (pRmax >= 10*kCarTolerance )  fRmax = pRmax;  
+  else  G4Exception("G4Orb::G4Orb() - invalid radius > 10*kCarTolerance");
   
 }
 
@@ -277,34 +277,20 @@ EInside G4Orb::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  ENorm side;
+  ENorm side=kNRMax;
   G4ThreeVector norm;
-  G4double rho,rho2,rad;
-  G4double distRMax,distMin;
-
-  rho2=p.x()*p.x()+p.y()*p.y();
-  rad=sqrt(rho2+p.z()*p.z());
-  rho=sqrt(rho2);
-
-  //
-  // Distance to r shell
-  //
-
-  distRMax=fabs(rad-fRmax);
-
-  distMin=distRMax;
-    side=kNRMax;
+  G4double rad=sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
 
   switch (side)
   {
-    case kNRMax:      // Outer radius
+    case kNRMax: 
       norm=G4ThreeVector(p.x()/rad,p.y()/rad,p.z()/rad);
       break;
    default:
       DumpInfo();
       G4Exception("G4Orb::SurfaceNormal() - Logic error");
       break;    
-  } // end case
+  } 
 
   return norm;
 }
@@ -317,26 +303,6 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
 // -> If point is outside outer radius, compute intersection with rmax
 //        - if no intersection return
 //        - if  valid phi,theta return intersection Dist
-//
-// -> If shell, compute intersection with inner radius, taking largest +ve root
-//        - if valid phi,theta, save intersection
-//
-// -> If phi segmented, compute intersection with phi half planes
-//        - if valid intersection(r,theta), return smallest intersection of
-//          inner shell & phi intersection
-//
-// -> If theta segmented, compute intersection with theta cones
-//        - if valid intersection(r,phi), return smallest intersection of
-//          inner shell & theta intersection
-//
-//
-// NOTE:
-// - `if valid' (above) implies tolerant checking of intersection points
-//
-// OPT:
-// Move tolIO/ORmin/RMax2 precalcs to where they are needed -
-// not required for most cases.
-// Avoid atan2 for non theta cut G4Orb.
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
                                  const G4ThreeVector& v  ) const
@@ -414,8 +380,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
 
 G4double G4Orb::DistanceToIn( const G4ThreeVector& p ) const
 {
-  G4double safe,rad   = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
-                 safe = rad-fRmax;
+  G4double safe, rad  = sqrt(p.x()*p.x()+p.y()*p.y()+p.z()*p.z());
+                 safe = rad - fRmax;
   if( safe < 0 ) safe = 0. ;
   return safe;
 }
@@ -457,9 +423,10 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
   //
   // => s=-pDotV3d+-sqrt(pDotV3d^2-(rad2-R^2))
   
-  const G4double  fractionTolerance   = 1.0e-14;
-  const G4double  flexRadMaxTolerance = std::max(kRadTolerance, 
-                     fractionTolerance * fRmax);
+  //  const G4double  fractionTolerance   = 1.0e-14;
+  const G4double  flexRadMaxTolerance = kRadTolerance;
+    // std::max(kRadTolerance, 
+    //  fractionTolerance * fRmax);
   const G4double  Rmax_plus = fRmax + flexRadMaxTolerance*0.5;
 
   if( rad2 <= Rmax_plus*Rmax_plus )
