@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.25 2002-04-09 17:34:44 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.26 2002-11-11 18:59:21 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -46,6 +46,8 @@
 // 21-09-01 completion of RetrievePhysicsTable() (mma)
 // 29-10-01 all static functions no more inlined (mma)
 // 08-11-01 particleMass becomes a local variable
+// 11-11-02 fix of division by 0 (VI) 
+//
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -496,6 +498,7 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
                                            (*theElementVector)[i]->GetZ(), 
                                            GammaEnergyCut );
      }       
+
            // now compute the correction due to the supression(s)
 
            G4double kmax = KineticEnergy ;
@@ -512,15 +515,15 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
            {
             G4double fsig = 0.;
             G4int nmax = 100 ;
-            G4int nn ;
             G4double vmin=log(kmin);
             G4double vmax=log(kmax) ;
-            nn = int(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin));
+            G4int nn = (G4int)(nmax*(vmax-vmin)/(log(HighestKineticEnergy)-vmin));
             G4double u,fac,c,v,dv,y ;
-            dv = (vmax-vmin)/nn ;
-            v = vmin-dv ;
             if(nn > 0)
             {
+              dv = (vmax-vmin)/nn ;
+              v = vmin-dv ;
+
              for(G4int n=0; n<=nn; n++)
              {
                v += dv;  u = exp(v);              
@@ -989,7 +992,6 @@ G4double G4eBremsstrahlung::SupressionFunction(const G4Material* aMaterial,
   splim = LPMGammaEnergyLimit2/(LPMGammaEnergyLimit2+MigdalConstant*TotalEnergySquare*
                                      (aMaterial->GetElectronDensity())) ;
   w = 1.+1./splim ;
-  Cnorm = 2./(sqrt(w*w+4.)-w) ;
 
   sp = GammaEnergySquare/(GammaEnergySquare+MigdalConstant*TotalEnergySquare*
                                      (aMaterial->GetElectronDensity())) ;
@@ -1000,6 +1002,8 @@ G4double G4eBremsstrahlung::SupressionFunction(const G4Material* aMaterial,
        {
         if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
         else                 w = s2lpm*(1.+1./sp);
+
+        Cnorm = 2./(sqrt(w*w+4.)-w) ;
         supr = Cnorm*(sqrt(w*w+4.*s2lpm)-w)/2. ;
        }
      else supr = sp;

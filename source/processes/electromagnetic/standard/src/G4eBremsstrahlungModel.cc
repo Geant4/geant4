@@ -34,6 +34,8 @@
 //
 // Modifications: 
 //
+// 11-11-02  Fix division by 0
+//
 // Class Description: 
 //
 // 
@@ -396,12 +398,12 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
   G4int nmax = 100;
   G4double vmin=log(kmin);
   G4double vmax=log(kmax) ;
-  G4int nn = int(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin));
+  G4int nn = (G4int)(nmax*(vmax-vmin)/(log(highKinEnergy)-vmin));
   G4double u,fac,c,v,dv,y ;
-  dv = (vmax-vmin)/nn ;
-  v  = vmin-dv ;
   if(nn > 0) {
 
+      dv = (vmax-vmin)/nn ;
+      v  = vmin-dv ;
       for(G4int n=0; n<=nn; n++) {
 
         v += dv;  
@@ -410,8 +412,10 @@ G4double G4eBremsstrahlungModel::CrossSection(const G4Material* material,
         y = u/kmax;
         fac *= (4.-4.*y+3.*y*y)/3.;
         fac *= probsup*(u*u/(u*u+kp2))+1.-probsup;
+
         if ((n==0)||(n==nn)) c=0.5;
         else                 c=1. ;
+
         fac  *= c;
         fsig += fac;
       }
@@ -818,39 +822,43 @@ G4double G4eBremsstrahlungModel::SupressionFunction(const G4Material* material,
   // supression due to the LPM effect+polarisation of the medium/
   // supression due to the polarisation alone
 
-  G4double TotalEnergy,TotalEnergySquare,LPMEnergy,LPMGammaEnergyLimit,
-           LPMGammaEnergyLimit2,GammaEnergySquare,sp,s2lpm,supr,w,splim,Cnorm ;
 
-  TotalEnergy = kineticEnergy+electron_mass_c2 ;
-  TotalEnergySquare = TotalEnergy*TotalEnergy ;
+  G4double totEnergy = kineticEnergy+electron_mass_c2 ;
+  G4double totEnergySquare = totEnergy*totEnergy ;
 
-  LPMEnergy = LPMconstant*(material->GetRadlen()) ;
-  LPMGammaEnergyLimit = TotalEnergySquare/LPMEnergy ;
-  GammaEnergySquare = gammaEnergy*gammaEnergy ;
+  G4double LPMEnergy = LPMconstant*(material->GetRadlen()) ;
 
-  LPMGammaEnergyLimit2 = LPMGammaEnergyLimit*LPMGammaEnergyLimit;
+  G4double gammaEnergySquare = gammaEnergy*gammaEnergy ;
+
   G4double electronDensity = material->GetElectronDensity();
-  splim = LPMGammaEnergyLimit2/(LPMGammaEnergyLimit2+MigdalConstant*TotalEnergySquare*
+
+  G4double sp = gammaEnergySquare/
+   (gammaEnergySquare+MigdalConstant*totEnergySquare*electronDensity);
+
+  G4double supr = 1.0;
+
+  if (theLPMflag) {
+
+    G4double s2lpm = LPMEnergy*gammaEnergy/totEnergySquare;
+
+    if (s2lpm < 1.) {
+
+      G4double LPMgEnergyLimit = totEnergySquare/LPMEnergy ;
+      G4double LPMgEnergyLimit2 = LPMgEnergyLimit*LPMgEnergyLimit;
+      G4double splim = LPMgEnergyLimit2/
+        (LPMgEnergyLimit2+MigdalConstant*totEnergySquare*
                                    electronDensity) ;
-  w = 1.+1./splim ;
-  Cnorm = 2./(sqrt(w*w+4.)-w) ;
+      G4double w = 1.+1./splim ;
+      G4double cnorm = 2./(sqrt(w*w+4.)-w) ;
 
-  sp = GammaEnergySquare/(GammaEnergySquare+MigdalConstant*TotalEnergySquare*
-                                     electronDensity) ;
-  if (theLPMflag)
-    {
-     s2lpm = LPMEnergy*gammaEnergy/TotalEnergySquare;
-     if (s2lpm < 1.)
-       {
-        if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
-        else                 w = s2lpm*(1.+1./sp);
-        supr = Cnorm*(sqrt(w*w+4.*s2lpm)-w)/2. ;
-       }
-     else supr = sp;
-    }
-  else supr = sp;
+      if ((1.-sp) < 1.e-6) w = s2lpm*(3.-sp);
+      else                 w = s2lpm*(1.+1./sp);
 
-  supr /= sp;
+      supr = 0.5*cnorm*(sqrt(w*w+4.*s2lpm)-w)/sp ;
+    
+    } 
+    
+  } 
   return supr;
 }
 
