@@ -1,0 +1,34 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber box )        
+#
+/control/verbose 2
+/run/verbose 2
+#
+/calor/setAbsMat Silicon   
+/calor/setAbsThick 20.5 mum  
+/calor/setAbsYZ    10 cm
+/calor/update
+/gun/setDefault
+#
+#
+#  hist file name
+/plots/sethistName run19.paw
+#  PLOT: energy deposit distribution in absorber
+/plots/setnbinEn 65
+/plots/setEnlow   0. keV
+/plots/setEnhigh 13. keV  
+#
+/calor/cutG 2.13 mm    
+/calor/cutE 7.0  mum
+/run/initialize
+#
+/gun/particle pi+ 
+/gun/energy 5. GeV
+
+/event/printModulo 10000
+#
+/run/beamOn 100000
+#
+
