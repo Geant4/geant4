@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.2
+#!/usr/bin/env python
 #
-# $Id: runVisMode.py,v 1.4 2004-06-09 15:04:35 daquinog Exp $
+# $Id: runVisMode.py,v 1.5 2005-03-17 19:48:27 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------

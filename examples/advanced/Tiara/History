@@ -1,4 +1,4 @@
-# $Id: History,v 1.24 2004-12-14 13:12:55 daquinog Exp $
+# $Id: History,v 1.25 2005-03-17 19:48:27 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -18,6 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 17th, 2005 G.Daquino - Tiara-V07-01-00
+- migration of Tiara (working with PI) from rh73 to slc3
 
 Dec 14th, 2004 G.Daquino - Tiara-V06-02-02
 - update of GNUmakefiles to the new phys_lists structure

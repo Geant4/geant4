@@ -1,6 +1,6 @@
-#!/usr/bin/env python2.2
+#!/usr/bin/env python
 #
-# $Id: runSimNoAnalysis.py,v 1.5 2004-12-08 15:37:14 daquinog Exp $
+# $Id: runSimNoAnalysis.py,v 1.6 2005-03-17 19:48:27 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
