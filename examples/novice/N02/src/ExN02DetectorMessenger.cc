@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN02DetectorMessenger.cc,v 1.4 2001-07-11 09:58:19 gunter Exp $
+// $Id: ExN02DetectorMessenger.cc,v 1.5 2001-07-12 17:05:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -56,8 +56,8 @@ ExN02DetectorMessenger::ExN02DetectorMessenger(ExN02DetectorConstruction * myDet
   
   FieldCmd = new G4UIcmdWithADoubleAndUnit("/mydet/setField",this);  
   FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  FieldCmd->SetParameterName("Bz",false);
+  FieldCmd->SetGuidance("Magnetic field will be in X direction.");
+  FieldCmd->SetParameterName("Bx",false);
   FieldCmd->SetDefaultUnit("tesla");
   FieldCmd->SetUnitCategory("Magnetic flux density");
   FieldCmd->AvailableForStates(PreInit,Idle);  
