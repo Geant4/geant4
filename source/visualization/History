@@ -1,4 +1,4 @@
-$Id: History,v 1.271 2005-02-15 14:08:22 johna Exp $
+$Id: History,v 1.272 2005-02-15 14:20:33 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-12th February 2005  John Allison
+15th February 2005  John Allison  (vis-V07-00-04)
 - Updated READMEs for G4VisExecutive.  Removed references to OPACS.
 
 9th February 2005  John Allison  (vis-V07-00-03)
