@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.5 2004-05-04 08:31:20 vnivanch Exp $
+// $Id: RunAction.cc,v 1.6 2004-05-04 09:10:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -45,7 +45,7 @@
 #include "Randomize.hh"
 
 #ifdef G4ANALYSIS_USE
-  #include "AIDA/AIDA.h"
+#include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,14 +57,14 @@ RunAction::RunAction(DetectorConstruction*   det,
   nLbin = Det->GetnLtot();
   dEdL.resize(nLbin, 0.0);
   sumELongit.resize(nLbin, 0.0);
-  sumELongitCumul.resize(nLbin, 0.0); 
-  sumE2Longit.resize(nLbin, 0.0);     
+  sumELongitCumul.resize(nLbin, 0.0);
+  sumE2Longit.resize(nLbin, 0.0);
   sumE2LongitCumul.resize(nLbin, 0.0);
-  
+
   gammaFlux.resize(nLbin, 0.0);
   electronFlux.resize(nLbin, 0.0);
   positronFlux.resize(nLbin, 0.0);
-    
+
   nRbin = Det->GetnRtot();
   dEdR.resize(nRbin, 0.0);
   sumERadial.resize(nRbin, 0.0);
@@ -77,7 +77,7 @@ RunAction::RunAction(DetectorConstruction*   det,
 
 RunAction::~RunAction()
 {
-  cleanHisto();    
+  cleanHisto();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -94,7 +94,7 @@ void RunAction::bookHisto()
   // Creating a tree mapped to an hbook file.
   G4bool readOnly  = false;
   G4bool createNew = true;
-  tree = tf->create("testem2.paw", "hbook", readOnly, createNew);
+  tree = tf->create(Det->HistoName(), Det->HistoType(), readOnly, createNew);
 
   // Creating a histogram factory, whose histograms will be handled by the tree
   AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: DetectorConstruction.cc,v 1.3 2004-05-04 07:36:40 vnivanch Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2004-05-04 09:10:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,9 +56,11 @@ DetectorConstruction::DetectorConstruction()
 {
   DefineMaterials();
   SetMaterial("PbWO4");
-  detectorMessenger = new DetectorMessenger(this);  
+  detectorMessenger = new DetectorMessenger(this);
   edeptrue = 0.9425;
   rmstrue = 0.0355;
+  histoName = "testem2.paw";
+  histoType = "hbook";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.3 2004-05-04 08:31:19 vnivanch Exp $
+// $Id: DetectorMessenger.cc,v 1.4 2004-05-04 09:10:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,6 +84,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(G4State_Idle);
+
+  factoryCmd = new G4UIcmdWithAString("/testem/histo/fileName",this);
+  factoryCmd->SetGuidance("set name for the histograms file");
+
+  fileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
+  fileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,18 +103,20 @@ DetectorMessenger::~DetectorMessenger()
   delete FieldCmd;
   delete UpdateCmd;
   delete testemDir;
+  delete factoryCmd;
+  delete fileCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 { 
   if( command == MaterCmd )
    { Detector->SetMaterial(newValue);}
    
   if( command == LBinCmd )
    { Detector->SetLBining(LBinCmd->GetNew3VectorValue(newValue));}
-   
+
   if( command == RBinCmd )
    { Detector->SetRBining(RBinCmd->GetNew3VectorValue(newValue));}
 
@@ -117,9 +125,14 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == FieldCmd )
    { Detector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
-     
+
   if( command == UpdateCmd )
    { Detector->UpdateGeometry();}
+
+  if (command == factoryCmd) Detector->SetHistoName(newValue);
+
+  if (command == fileCmd) Detector->SetHistoType(newValue);
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

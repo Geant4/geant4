@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2004-05-04 07:36:38 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2004-05-04 09:10:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,20 +63,28 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void UpdateGeometry();
 
-     void     SetEdepAndRMS(G4ThreeVector);
-     G4double GetAverageEdep() const   {return edeptrue;};
-     G4double GetRMSEdep() const       {return rmstrue;};
-
      const
      G4VPhysicalVolume* GetEcal() {return physiEcal;};
      G4Material*    GetMaterial() {return myMaterial;};
 
+     // Subdivision of absorber
      G4int    GetnLtot()          {return nLtot;};
      G4int    GetnRtot()          {return nRtot;};
      G4double GetdLradl()         {return dLradl;};
      G4double GetdRradl()         {return dRradl;};
      G4double GetfullLength()     {return EcalLength;};
      G4double GetfullRadius()     {return EcalRadius;};
+
+     // Acceptance parameters
+     void     SetEdepAndRMS(G4ThreeVector);
+     G4double GetAverageEdep() const    {return edeptrue;};
+     G4double GetRMSEdep() const        {return rmstrue;};
+
+     // Histogram name and type
+     void SetHistoName(G4String& val)   {histoName = val;};
+     void SetHistoType(G4String& val)   {histoType = val;};
+     const G4String& HistoName() const  {return histoName;};
+     const G4String& HistoType() const  {return histoType;};
 
   private:
 
@@ -108,6 +116,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      G4double           edeptrue;
      G4double           rmstrue;
+     G4String           histoName;
+     G4String           histoType;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

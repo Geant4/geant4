@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.hh,v 1.2 2004-05-04 07:36:38 vnivanch Exp $
+// $Id: DetectorMessenger.hh,v 1.3 2004-05-04 09:10:01 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,22 +46,24 @@ class G4UIcmdWithoutParameter;
 
 class DetectorMessenger: public G4UImessenger
 {
-  public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    DetectorConstruction* Detector;
-    
-    G4UIdirectory*             testemDir;
-    G4UIcmdWithAString*        MaterCmd;
-    G4UIcmdWith3Vector*        LBinCmd;
-    G4UIcmdWith3Vector*        RBinCmd;
-    G4UIcmdWith3Vector*        accCmd;
-    G4UIcmdWithADoubleAndUnit* FieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
+public:
+  DetectorMessenger(DetectorConstruction* );
+  ~DetectorMessenger();
+
+  void SetNewValue(G4UIcommand*, G4String);
+
+private:
+  DetectorConstruction* Detector;
+
+  G4UIdirectory*             testemDir;
+  G4UIcmdWithAString*        MaterCmd;
+  G4UIcmdWithAString*     factoryCmd;
+  G4UIcmdWithAString*     fileCmd;
+  G4UIcmdWith3Vector*        LBinCmd;
+  G4UIcmdWith3Vector*        RBinCmd;
+  G4UIcmdWith3Vector*        accCmd;
+  G4UIcmdWithADoubleAndUnit* FieldCmd;
+  G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
