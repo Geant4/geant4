@@ -11,6 +11,7 @@ Some of the development/fixes included since the last reference tag are:
     reaction conditions. Added a signal-handler to print the reaction 
     conditions.
   o Implemented new debug system for CHIPS hadronic model.
+  o Updated hadronic physics lists to package 4.1.
   o Bug Fixes in model variant of multiple-scattering and simplifications
     of calculation of energy dependence on internal parameters.
   o Extensions to HepRepFile driver to handle duplicate ShowView
@@ -176,6 +177,10 @@ visualization                                    vis-V06-00-01
     + G4VisManager::EndOfRun(): added check on MarkForClearingTransientStore.
     + G4VisCommandsScene: For "/vis/scene/endOf[Event|Run]Action refresh",
       SetMarkForClearingTransientStore(true).
+
+hadronic_lists                                   ghad-lists-V06-00-00
+--------------
+- Updated hadronic physics lists to package 4.1.
 
 examples                                         examples-V06-00-02
 --------
