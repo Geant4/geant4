@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.cc,v 1.18 2001-10-30 08:32:38 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.19 2001-10-30 13:40:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------
@@ -234,12 +234,14 @@ G4bool G4QHadron::DecayIn2(G4LorentzVector& f4Mom, G4LorentzVector& s4Mom)
     s4Mom=sR*theMomentum;
     return true;
   }
+#ifdef pdebug
   else if (iM+.001<fM+sM || iM==0.)
   {
     G4cerr<<"***G4QHadron::DecayIn2*** fM="<<fM<<" + sM="<<sM<<"="<<fM+sM<<" > iM="<<iM<<", d="
           <<iM-fM-sM<<G4endl;
     return false;
   }
+#endif
   G4double d2 = iM2-fM2-sM2;
   G4double p2 = (d2*d2/4.-fM2*sM2)/iM2;    // Decay momentum(^2) in CMS of Quasmon
   if (p2<0.)

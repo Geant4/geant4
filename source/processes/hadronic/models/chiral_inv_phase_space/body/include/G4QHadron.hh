@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QHadron.hh,v 1.12 2001-09-17 14:19:48 mkossov Exp $
+// $Id: G4QHadron.hh,v 1.13 2001-10-30 13:40:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -85,8 +85,8 @@ private:
 
 private:  
   G4QPDGCode            theQPDG;                    // Instance of QPDG for the Hadron
-  G4QContent            valQ;                       // QC ( @@ ?? for Quasmon and Chipolino)
   G4LorentzVector       theMomentum;                // The 4-mom of Hadron
+  G4QContent            valQ;                       // QC ( @@ ?? for Quasmon and Chipolino)
   G4int                 nFragm;                     // =0 - stable, =N - decayed in N particles
 };
 

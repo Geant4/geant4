@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.32 2001-10-30 08:32:37 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.33 2001-10-30 13:40:05 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -921,19 +921,24 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
                   delete curout;                  // >Necessary to delete Vector structure>--^   ^
 				}
 			  }
-              nOfOUT  = theQHadrons.size();    // Update the value of OUTPUT entries          ^
+              nOfOUT  = theQHadrons.size();    // Update the value of OUTPUT entries             ^
 		    }
-		    //if(!nOfOUT&&totQM==0.&&nQuasmons==1)  // TRY TO EVAPORATE THE TOTAL SYSTEM           ^
-			//{
-            //  G4QHadron* evH = new G4QHadron(totPDG,tot4M);// Create a Hadron for ResidualNucl   ^
-            //  EvaporateResidual(evH);             // Try to evaporate residual (delete equiv.)   ^
-            //  output->clearAndDestroy();          // >-------------------------------------------^
-            //  delete output;                      // >===========================================^
-            //  CleanUp();                          //                                             ^
-            //  return theQHadrons;                 //                                             ^
-            //}
-		    //else if(!nOfOUT)                      // Still remain not used Quasmons              ^
-		    if(!nOfOUT)                           // Still remain not used Quasmons              ^
+		    if(!nOfOUT&&nQuasmons==1)             // TRY TO EVAPORATE THE TOTAL SYSTEM           ^
+			{
+              G4int totS=totQC.GetStrangeness();  //                                             ^
+              G4int totPDG=totQC.GetZNSPDGCode(); // Convert QC to PDGCOde for the nucleus       ^
+              if(totS) totPDG-=totS*999999;
+#ifdef pdebug
+		      G4cout<<"G4QE::HQE: totPDG="<<totPDG<<",totM="<<totQM<<G4endl;
+#endif
+              G4QHadron* evH = new G4QHadron(totPDG,tot4M); // Create a Hadron for ResidualNucl  ^
+              EvaporateResidual(evH);             // Try to evaporate residual (delete equiv.)   ^
+              G4std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------^
+              delete output;                      // >===========================================^
+              CleanUp();                          //                                             ^
+              return theQHadrons;                 //                                             ^
+            }
+		    else if(!nOfOUT)                      // Still remain not used Quasmons              ^
 		    {
 		      G4cerr<<"***G4QE::HQE:4M="<<tot4M<<",M="<<totQM<<" < gsM="<<gsM<<",dM="<<dM
                     <<",Env="<<theEnvironment<<G4endl;
@@ -941,7 +946,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 	        }
 		  } // End of PANIC treatment                                                            ^
 		} // End of trouble handling with Quasmon decay in Vacuum                                ^
-        G4std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------------------------------------^
+        G4std::for_each(output->begin(), output->end(), DeleteQHadron());// >--------------------^
         delete output;                           // >============================================^
 	  } // End of check for the already decayed Quasmon
 	} // End of the LOOP over Quasmons
@@ -3098,7 +3103,9 @@ G4QHadronVector* G4QEnvironment::Fragment()
 #endif
         if(dem>0.0001)                                  // Energy or momentum is not conserved
 	    {
-          if(dem>3.)G4cerr<<"***G4QE::Fr:E/Mom conservation="<<tot4Mom<<dem<<".Correction!"<<G4endl;
+#ifdef pdebug
+          if(dem>1.)G4cerr<<"***G4QE::Fr:E/Mom conservation="<<tot4Mom<<dem<<".Correction!"<<G4endl;
+#endif
           G4QHadron* prevHadr = theQHadrons[nHadr-2];   // GetPointer to theHadr previous to theLast
           G4LorentzVector pH4Mom = prevHadr->Get4Momentum(); // 4-mom of the previous hadron
           G4double cHM = curHadr->GetMass();            // Mass of the current hadron
@@ -3118,11 +3125,13 @@ G4QHadronVector* G4QEnvironment::Fragment()
             curHadr->Set4Momentum(cH4Mom);
             prevHadr->Set4Momentum(pH4Mom);
           }
+#ifdef pdebug
           else
           {
             G4cerr<<"*!*G4QE::Fr: Cann't correct "<<cHM<<"+"<<pHM<<"="<<cHM+pHM<<">"<<totRM<<G4endl;
             //G4Exception("***G4QEnvironment::Fragment: TEMPORARY EXCEPTION"); //@@@@@
           }
+#endif
         }
 #ifdef pdebug
         else G4cout<<"G4QE::Fr: Yes, it is. d="<<dem<<G4endl;
