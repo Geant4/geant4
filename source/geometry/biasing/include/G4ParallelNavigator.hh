@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.hh,v 1.5 2002-07-29 15:56:19 dressel Exp $
+// $Id: G4ParallelNavigator.hh,v 1.6 2002-08-13 10:03:29 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -83,6 +83,8 @@ public:  // with description
 				     const G4ThreeVector &aDirection);
     // compute step length when track moves inside a volume.  
   
+  void SetVerboseity(G4int v) {fVerbose = v;}
+
 private:
 
   G4ParallelNavigator(const G4ParallelNavigator &);
@@ -117,7 +119,7 @@ private:
   G4int fNlocated;
   G4int fMaxShiftedTrys;  
   G4TouchableHandle fCurrentTouchableH;
-
+  G4int fVerbose;
 };
 
 #endif

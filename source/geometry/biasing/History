@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2002-07-18 14:55:49 dressel Exp $
+$Id: History,v 1.14 2002-08-13 10:03:29 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug,  13th, 2002 M.Dressel - geombias-V04-01-01
+    added G4VCellScorer.hh and G4VCellScorerStore.hh
 
 July, 18th, 2002 M.Dressel 
    change the strategy for importance sampling:
