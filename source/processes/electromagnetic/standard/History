@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2002-06-04 16:37:26 maire Exp $
+$Id: History,v 1.60 2002-06-10 16:10:32 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 june 02: mma (stand-V04-00-13)
+- bug fixed for stopping hadrons, V.Ivanchenko
      
 04 june 02: mma (stand-V04-00-12) 
 - suppress the G4PAIonisation stuff which crash in TestEm8
