@@ -1,4 +1,4 @@
-$Id: History,v 1.47 2002-02-14 14:35:01 maire Exp $
+$Id: History,v 1.48 2002-03-08 10:48:29 maire Exp $
 --------------------------------------------------
 
      =========================================================
@@ -15,8 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+07-03-02 mma
+- remove cutForGamma, cutForElectron ..etc..
+     
 14-02-02 mma (exampleN03-V04-00-00)
--macros for em exercices
+- macros for em exercices
      
 27-11-01 mma (exampleN03-V03-02-07)
 - DetectorConstruction: Vacuum is the default material.

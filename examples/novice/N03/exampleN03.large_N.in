@@ -22,6 +22,7 @@
 /calor/setNbOfLayers 30
 /calor/setSizeYZ   1.5 m
 /calor/update
+#
 /gun/particle gamma
 /gun/energy 500 MeV
 /event/printModulo 500
