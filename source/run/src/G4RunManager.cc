@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManager.cc,v 1.52 2002-12-04 21:52:40 asaim Exp $
+// $Id: G4RunManager.cc,v 1.53 2002-12-05 16:19:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -417,7 +417,7 @@ void G4RunManager::AbortRun(G4bool softAbort)
   if(currentState==G4State_GeomClosed || currentState==G4State_EventProc)
   {
     runAborted = true;
-    if(currentState==EventProc && !softAbort)
+    if(currentState==G4State_EventProc && !softAbort)
     {
       currentEvent->SetEventAborted();
       eventManager->AbortCurrentEvent();
