@@ -92,6 +92,7 @@ help /vis/sceneHandler/create
 /vis/scene/add/logicalVolume intersection_L
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
+/vis/viewer/reset
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
 /vis/viewer/show
@@ -99,12 +100,16 @@ help /vis/sceneHandler/create
 /vis/scene/create
 /vis/scene/add/logicalVolume subtraction_L
 /vis/sceneHandler/attach
+/vis/viewer/reset
+/vis/camera/viewpoint 35 35
 /vis/viewer/refresh
 /vis/viewer/show
 #
 /vis/scene/create
 /vis/scene/add/logicalVolume union_L
 /vis/sceneHandler/attach
+/vis/viewer/reset
+/vis/camera/viewpoint 35 35
 /vis/viewer/refresh
 /vis/viewer/show
 #
@@ -115,13 +120,14 @@ help /vis/sceneHandler/create
 #/vis/sceneHandler/create OGLSX
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
+/vis/viewer/reset
 /vis/camera/viewpoint 35 35
 /vis/scene/notifyHandlers
 /run/beamOn 1
 /vis/viewer/show
 #
 # G4Trap1
-/vis/camera/reset
+/vis/viewer/reset
 #/vis/viewer/panTo -200 200 cm
 /vis/camera/pan -2750 750
 /vis/camera/zoom 5
@@ -234,7 +240,7 @@ help /vis/sceneHandler/create
 /vis/viewer/show
 #
 # G4Trap2
-/vis/camera/reset
+/vis/viewer/reset
 #/vis/viewer/panTo -200 400 cm
 /vis/camera/pan -2750 2750
 /vis/camera/viewpoint 90 180
@@ -260,7 +266,7 @@ help /vis/sceneHandler/create
 /vis/viewer/show
 #
 # Displaced solid.
-/vis/camera/reset
+/vis/viewer/reset
 #/vis/viewer/panTo 200 -200 cm
 /vis/camera/pan 1250 -3250
 /vis/camera/zoom 5
@@ -271,21 +277,63 @@ help /vis/sceneHandler/create
 /vis/viewer/show
 #
 # Boolean solid.
-/vis/camera/reset
+/vis/viewer/reset
 #/vis/viewer/panTo 250 -50 cm
 /vis/camera/pan 1750 -1750
 /vis/camera/zoom 3
 /vis/viewer/refresh
 /gun/direction 1 0 0
+/gun/position 50 -105 0 cm
+/run/beamOn
+/gun/position 50 -100 0 cm
+/run/beamOn
+/gun/position 50 -95 0 cm
+/run/beamOn
+/gun/position 50 -90 0 cm
+/run/beamOn
+/gun/position 50 -85 0 cm
+/run/beamOn
+/gun/position 50 -80 0 cm
+/run/beamOn
+/gun/position 50 -75 0 cm
+/run/beamOn
+/gun/position 50 -70 0 cm
+/run/beamOn
+/gun/position 50 -65 0 cm
+/run/beamOn
+/gun/position 50 -60 0 cm
+/run/beamOn
+/gun/position 50 -55 0 cm
+/run/beamOn
+/gun/position 50 -50 0 cm
+/run/beamOn
+/gun/position 50 -45 0 cm
+/run/beamOn
 /gun/position 50 -40 0 cm
+/run/beamOn
+/gun/position 50 -35 0 cm
 /run/beamOn
 /gun/position 50 -30 0 cm
 /run/beamOn
+/gun/position 50 -25 0 cm
+/run/beamOn
 /gun/position 50 -20 0 cm
+/run/beamOn
+/gun/position 50 -15 0 cm
 /run/beamOn
 /gun/position 50 -10 0 cm
 /run/beamOn
+/gun/position 50 -5 0 cm
+/run/beamOn
 /gun/position 50 0 0 cm
+/run/beamOn
+/gun/position 50 5 0 cm
+/run/beamOn
+/gun/position 50 10 0 cm
+/run/beamOn
+/gun/position 50 15 0 cm
+/run/beamOn
+/gun/position 50 20 0 cm
 /run/beamOn
 /vis/viewer/show
 #
@@ -293,7 +341,7 @@ help /vis/sceneHandler/create
 # Investigating BaBar problem...
 # G4SmartVoxelHeader::BuildNodes - PANIC! Daughter physical volume
 # name = EB20 is entirely outside mother logical volume name = EBMX
-/vis/camera/reset
+/vis/viewer/reset
 #/vis/viewer/panTo -200 0 cm
 /vis/camera/pan -2750 -1250
 /vis/camera/zoom 7
@@ -339,7 +387,7 @@ help /vis/sceneHandler/create
 #
 /vis/sceneHandler/create RayTracer
 /vis/viewer/create
-/vis/camera/reset
+/vis/viewer/reset
 /vis/camera/viewpoint 30 30
 /vis/viewer/refresh
 /vis/viewer/show
