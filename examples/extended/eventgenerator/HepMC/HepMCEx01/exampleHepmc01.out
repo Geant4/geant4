@@ -1,0 +1,283 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+MuonMinusCaptureAtRest is created 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+current generator type: pythia
+1                                                                              
+ ******************************************************************************
+ ******************************************************************************
+ **                                                                          **
+ **                                                                          **
+ **              *......*                  Welcome to the Lund Monte Carlo!  **
+ **         *:::!!:::::::::::*                                               **
+ **      *::::::!!::::::::::::::*          PPP  Y   Y TTTTT H   H III   A    **
+ **    *::::::::!!::::::::::::::::*        P  P  Y Y    T   H   H  I   A A   **
+ **   *:::::::::!!:::::::::::::::::*       PPP    Y     T   HHHHH  I  AAAAA  **
+ **   *:::::::::!!:::::::::::::::::*       P      Y     T   H   H  I  A   A  **
+ **    *::::::::!!::::::::::::::::*!       P      Y     T   H   H III A   A  **
+ **      *::::::!!::::::::::::::* !!                                         **
+ **      !! *:::!!:::::::::::*    !!       This is PYTHIA version 6.205      **
+ **      !!     !* -><- *         !!       Last date of change:  1 Mar 2002  **
+ **      !!     !!                !!                                         **
+ **      !!     !!                !!       Now is  0 Jan 2000 at  0:00:00    **
+ **      !!                       !!                                         **
+ **      !!        lh             !!       Disclaimer: this program comes    **
+ **      !!                       !!       without any guarantees. Beware    **
+ **      !!                 hh    !!       of errors and use common sense    **
+ **      !!    ll                 !!       when interpreting results.        **
+ **      !!                       !!                                         **
+ **      !!                                Copyright T. Sjostrand (2001)     **
+ **                                                                          **
+ ** An archive of program versions and documentation is found on the web:    **
+ ** http://www.thep.lu.se/~torbjorn/Pythia.html                              **
+ **                                                                          **
+ ** When you cite this program, currently the official reference is          **
+ ** T. Sjostrand, P. Eden, C. Friberg, L. Lonnblad, G. Miu, S. Mrenna and    **
+ ** E. Norrbin, Computer Physics Commun. 135 (2001) 238.                     **
+ ** The large manual is                                                      **
+ ** T. Sjostrand, L. Lonnblad and S. Mrenna, LU TP 01-21 [hep-ph/0108264].   **
+ ** Also remember that the program, to a large extent, represents original   **
+ ** physics research. Other publications of special relevance to your        **
+ ** studies may therefore deserve separate mention.                          **
+ **                                                                          **
+ ** Main author: Torbjorn Sjostrand; Department of Theoretical Physics 2,    **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 48 16; e-mail: torbjorn@thep.lu.se              **
+ ** Author: Leif Lonnblad; Department of Theoretical Physics 2,              **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 77 80; e-mail: leif@thep.lu.se                  **
+ ** Author: Stephen Mrenna; Computing Division, Simulations Group,           **
+ **   Fermi National Accelerator Laboratory, MS 234, Batavia, IL 60510, USA; **
+ **   phone: + 1 - 630 - 840 - 2556; e-mail: mrenna@fnal.gov                 **
+ ** Author: Peter Skands; Department of Theoretical Physics 2,               **
+ **   Lund University, Solvegatan 14A, S-223 62 Lund, Sweden;                **
+ **   phone: + 46 - 46 - 222 31 92; e-mail: zeiler@thep.lu.se                **
+ **                                                                          **
+ **                                                                          **
+ ******************************************************************************
+ ******************************************************************************
+     PMAS(6,1)      changed from      175.00000 to      174.30000
+     PMAS(25,1)     changed from      115.00000 to      200.00000
+     MSEL           changed from              1 to              0
+     MSUB(102)      changed from              0 to              1
+     MSUB(123)      changed from              0 to              1
+     MSUB(124)      changed from              0 to              1
+     MDME(210,1)    changed from              1 to              0
+     MDME(211,1)    changed from              1 to              0
+     MDME(212,1)    changed from              1 to              0
+     MDME(213,1)    changed from              1 to              0
+     MDME(214,1)    changed from              1 to              0
+     MDME(215,1)    changed from              1 to              0
+     MDME(218,1)    changed from              1 to              0
+     MDME(219,1)    changed from              1 to              0
+     MDME(220,1)    changed from              1 to              0
+     MDME(222,1)    changed from              1 to              0
+     MDME(223,1)    changed from              1 to              0
+     MDME(224,1)    changed from              1 to              0
+     MDME(225,1)    changed from              1 to              1
+     MDME(226,1)    changed from              1 to              0
+     MDME(216,1)    changed from             -1 to             -1
+     MDME(217,1)    changed from             -1 to             -1
+     MDME(218,1)    changed from              0 to             -1
+     MDME(174,1)    changed from              1 to              0
+     MDME(175,1)    changed from              1 to              0
+     MDME(176,1)    changed from              1 to              0
+     MDME(177,1)    changed from              1 to              0
+     MDME(178,1)    changed from              1 to              0
+     MDME(179,1)    changed from              1 to              0
+     MDME(182,1)    changed from              1 to              0
+     MDME(183,1)    changed from              1 to              0
+     MDME(184,1)    changed from              1 to              1
+     MDME(185,1)    changed from              1 to              0
+     MDME(186,1)    changed from              1 to              0
+     MDME(187,1)    changed from              1 to              0
+     MDME(180,1)    changed from             -1 to             -1
+     MDME(181,1)    changed from             -1 to             -1
+     MDME(188,1)    changed from             -1 to             -1
+     MDME(189,1)    changed from             -1 to             -1
+     MSTP(61)       changed from              2 to              1
+     MSTP(71)       changed from              1 to              1
+     MSTP(81)       changed from              1 to              1
+     MSTP(111)      changed from              1 to              1
+1****************** PYINIT: initialization of PYTHIA routines *****************
+
+ ==============================================================================
+ I                                                                            I
+ I              PYTHIA will be initialized for a p on p collider              I
+ I                  at  14000.000 GeV center-of-mass energy                   I
+ I                                                                            I
+ ==============================================================================
+
+ ******** PYMAXI: summary of differential cross-section maximum search ********
+
+           ==========================================================
+           I                                      I                 I
+           I  ISUB  Subprocess name               I  Maximum value  I
+           I                                      I                 I
+           ==========================================================
+           I                                      I                 I
+           I   96   Semihard QCD 2 -> 2           I    1.8679E+03   I
+           I  102   g + g -> h0                   I    5.1617E-12   I
+           I  123   f + f' -> f + f' + h0         I    4.0000E-12   I
+           I  124   f + f' -> f" + f"' + h0       I    8.9419E-12   I
+           I                                      I                 I
+           ==========================================================
+
+ ********************** PYINIT: initialization completed **********************
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 0
+     74 hits are stored in ExN04TrackerHitsCollection.
+     57 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.02827 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 1
+     189 hits are stored in ExN04TrackerHitsCollection.
+     81 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.30154 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 2
+     133 hits are stored in ExN04TrackerHitsCollection.
+     86 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.3958 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 3
+     142 hits are stored in ExN04TrackerHitsCollection.
+     70 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.85616 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 4
+     392 hits are stored in ExN04TrackerHitsCollection.
+     139 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.09591 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 5
+     111 hits are stored in ExN04TrackerHitsCollection.
+     58 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.11437 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 6
+     65 hits are stored in ExN04TrackerHitsCollection.
+     47 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.682535 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 7
+     103 hits are stored in ExN04TrackerHitsCollection.
+     53 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.787318 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 1 isolated muon found.
+>>> Event 8
+     254 hits are stored in ExN04TrackerHitsCollection.
+     78 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 1.47311 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+Stage 0->1 : 1 hits found in the muon chamber.
+Stage 1->2 : 0 isolated muon found.
+++++++++ event aborted
+>>> Event 9
+     169 hits are stored in ExN04TrackerHitsCollection.
+     15 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.404608 (GeV)
+     1 hits are stored in ExN04MuonHitsCollection.
+1********* PYSTAT:  Statistics on Number of Events and Cross-sections *********
+
+ ==============================================================================
+ I                                  I                            I            I
+ I            Subprocess            I      Number of points      I    Sigma   I
+ I                                  I                            I            I
+ I----------------------------------I----------------------------I    (mb)    I
+ I                                  I                            I            I
+ I N:o Type                         I    Generated         Tried I            I
+ I                                  I                            I            I
+ ==============================================================================
+ I                                  I                            I            I
+ I   0 All included subprocesses    I           10            43 I  3.988E-12 I
+ I 102 g + g -> h0                  I            7            13 I  2.929E-12 I
+ I 123 f + f' -> f + f' + h0        I            1             9 I  3.282E-13 I
+ I 124 f + f' -> f" + f"' + h0      I            2            21 I  7.305E-13 I
+ I                                  I                            I            I
+ ==============================================================================
+
+ ********* Fraction of events that fail fragmentation cuts =  0.00000 *********
+

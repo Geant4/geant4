@@ -1,0 +1,3 @@
+/generator/select hepmcAscii
+/generator/hepmcAscii/open data/example_MyPythia.dat
+/run/beamOn 11

@@ -1,0 +1,92 @@
+$Id: History,v 1.1 2002-04-29 20:43:19 asaim Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Example N04 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Apr. 15, 2002  K.Murakami
+- Add HepMC interface
+- Resize the world volume
+
+December 18, 2001  Gabriele Cosmo (exampleN04-V04-00-00)
+- ExN04PhysicsList.cc: added call to DumpCutValuesTable().
+  Reference outputs will be modified (V.Ivantchenko)
+- GNUmakefile: removed restriction for egcs compiler
+
+October 19, 2001  Steve O'Neale
+- Updated reference output
+
+March 07 2001 H.Kurashige (exampleN04-V03-00-07)
+-  Add G4MuonMinusCaptureAtRest in G4MuonPhysics 
+
+February 25 2001 S.W.O'Neale (exampleN04-V03-00-06)
+- Add exampleN04.EMtest.large_N.out reference output and remove
+  some empty "reference" .err files
+
+February 20 2001 S.W.O'Neale (exampleN04-V03-00-05)
+- Update reference outputs following materials-V03-00-04  
+
+February 9 2001 S.W.O'Neale (exampleN04-V03-00-04)
+- Update SUN CC reference outouts for test104 and test104.EMtest
+
+February 9 2001 H.Kurashige (exampleN04-V03-00-03)
+- Introduce Modular Physics List
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
+- Update test outputs for small"ish" changes from em tags
+
+August 18, 2000  Michel Maire  
+- standard G4ionIonisation removed from the PhysicsList
+
+June 24, 2000  John Allison  (exampleN04-V01-01-03)
+- Updated exampleN04*.out for stand-V01-01-05 and utils-V01-01-03.
+
+June 19, 2000  John Allison  (exampleN04-V01-01-02)
+- Updated exampleN04.out for geant4-01-01-cand-07.
+
+June 17, 2000  John Allison  (exampleN04-V01-01-01)
+- Updated exampleN04*.out for geant4-01-01-ref-06.
+
+9th June 2000  Makoto Asai  (exampleN04-V01-01-00)
+- ExN04StackingAction.cc: protection against illegal value of an argument.
+
+5th June 1999  John Allison
+- GNUmakefile: Force non-optimised compliation of some files on HP with
+  aCC: HP ANSI C++ B3910B A.01.15.
+
+23th  April 1999 H.Kurashige
+- remove ConstructLeptHad, AddParameterisation inExN04PhysicsList
+
+16th April 1999 H.Kurashige
+- modify ExN04RunAction ExN04StackingAction ExN04SteppingAction ExN04TrackingAction
+- modify ExN04PhysicsList::SetCuts
+- modify ExN04PhysicsList::ConstructParticle
+
+ 
+21st November 1998  John Allison
+- Made ExN04Field compatible with G4Field.
+
+9 Oct, 1998  M.Asai
+- A bug fixed in ExN04DetectorParameterDef.icc.
+
+26th August 1998  John Allison.
+- /vis/Draw/current -> /vis/draw/current in ExN04EventAction.cc.
+
+9th August 1998  John Allison.
+- Changed G4UIterminal to G4UIGAG.
+
+April 09, 98 G. Cosmo
+
+- Created.

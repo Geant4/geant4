@@ -1,0 +1,226 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (28-Feb-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+MuonMinusCaptureAtRest is created 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV to 100 TeV in 100 bins. 
+Visualization Manager instantiating...
+Visualization Manager initialising...
+Registering graphics systems...
+*  Visualizaton Driver: Fukui Renderer
+*  Visualizaton Driver: DAWN
+*  Visualizaton Driver: VRML1/2
+*  Visualizaton Driver: VRML1/2 File
+
+You have successfully chosen to use the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  FukuiRenderer (DAWN)
+  DAWNFILE (DAWNFILE)
+  OpenGLImmediateX (OGLIX)
+  OpenGLStoredX (OGLSX)
+  OpenGLImmediateXm (OGLIXm)
+  OpenGLStoredXm (OGLSXm)
+  VRML1 (VRML1)
+  VRML2 (VRML2)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+
+current generator type: hepmcAscii
+HepMC Ascii inputfile: data/example_MyPythia.dat
+IO_Ascii: unformated ascii file IO for machine reading.
+	File openmode: 1 file state: 0 bad:0 eof:0 fail:0 good:0
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=2)
+E0 :         pi+ : pT=3.22 : TOF=26.6 : x=(-0.174,-1.01,7.9)
+E0 :         mu+ : pT=52.9 : TOF=27.2 : x=(-0.956,1.78,7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=18)
+E1 :         pi+ : pT=0.248 : TOF=26.7 : x=(-0.0352,-1.2,-7.9)
+E1 :         pi+ : pT=3.45 : TOF=26.6 : x=(-0.819,0.587,-7.9)
+E0 :       kaon+ : pT=0.438 : TOF=28.5 : x=(-1.37,1.65,7.9)
+E0 :         pi- : pT=0.174 : TOF=26.9 : x=(0.913,0.799,7.9)
+E0 :         pi+ : pT=0.386 : TOF=26.7 : x=(0.93,0.765,7.9)
+E1 :         pi- : pT=2.42 : TOF=26.6 : x=(-0.886,0.475,-7.9)
+E1 :         mu- : pT=1.75 : TOF=26.6 : x=(-0.885,0.569,-7.9)
+E1 :         pi+ : pT=0.36 : TOF=27 : x=(-0.0649,0.998,-8.02)
+E0 :         pi+ : pT=0.0809 : TOF=27.4 : x=(0.325,-1.05,7.9)
+E0 :         pi- : pT=0.818 : TOF=28.5 : x=(1.08,-1.39,7.9)
+E1 :          e- : pT=0.00234 : TOF=26.8 : x=(0.772,-0.759,-7.9)
+E0 :         mu- : pT=0.249 : TOF=27.9 : x=(-1.49,0.32,7.9)
+E1 :          e- : pT=0.00653 : TOF=27.8 : x=(-0.703,-0.757,-7.9)
+E1 :          e- : pT=0.007 : TOF=29.8 : x=(-0.896,-1.19,-8.1)
+B5 :          e- : pT=0.00606 : TOF=42.6 : x=(-2.14,-3.87,-5.66)
+E0 :          e- : pT=0.000553 : TOF=36.4 : x=(0.266,0.964,7.98)
+E0 :          e- : pT=0.00133 : TOF=27 : x=(0.96,0.708,7.9)
+E1 :         mu+ : pT=0.509 : TOF=27.1 : x=(0.816,-0.99,-7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=7)
+E1 :          e+ : pT=0.0237 : TOF=26.7 : x=(0.615,-0.89,-7.9)
+E1 :         pi- : pT=0.115 : TOF=27 : x=(1.1,0.259,-7.9)
+E1 :         pi+ : pT=0.208 : TOF=26.8 : x=(-1.13,-0.209,-7.9)
+E1 :         mu- : pT=36.4 : TOF=26.6 : x=(0.321,0.958,-7.9)
+E0 :          e- : pT=0.000495 : TOF=31 : x=(-1.73,0.819,7.9)
+E0 :          e- : pT=0.000404 : TOF=33.2 : x=(-1.99,0.729,7.9)
+E0 :          e- : pT=0.00258 : TOF=28 : x=(0.708,0.707,8.09)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=6)
+E0 :         pi+ : pT=0.3 : TOF=26.7 : x=(-0.767,0.642,7.93)
+E1 :       kaon- : pT=0.321 : TOF=27.3 : x=(0.647,0.937,-7.9)
+E0 :         pi- : pT=0.589 : TOF=26.6 : x=(-0.058,-1.14,7.9)
+E0 :         pi- : pT=1.48 : TOF=26.6 : x=(0.813,0.835,7.9)
+E1 :         pi- : pT=0.767 : TOF=26.7 : x=(1.21,0.106,-7.9)
+E0 :         mu- : pT=0.476 : TOF=28.2 : x=(0.791,2.79,7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=10)
+E1 :         pi+ : pT=0.202 : TOF=26.8 : x=(-1.11,0.254,-7.9)
+E0 : anti_proton : pT=0.449 : TOF=27.5 : x=(-1.02,0.000912,7.9)
+E0 : anti_proton : pT=0.2 : TOF=31.3 : x=(-0.142,-1.04,7.9)
+E0 :         pi+ : pT=0.73 : TOF=26.7 : x=(-0.163,-1.17,7.9)
+E1 :         pi+ : pT=2.63 : TOF=26.6 : x=(-0.84,-0.782,-7.9)
+E0 :         pi- : pT=0.837 : TOF=27 : x=(0.131,-0.991,8.02)
+E1 :       kaon- : pT=0.652 : TOF=26.8 : x=(-1.11,0.0432,-7.9)
+E0 :         pi- : pT=1.06 : TOF=26.6 : x=(0.548,-0.962,7.9)
+E0 :          e- : pT=41.5 : TOF=26.6 : x=(-0.876,0.743,7.9)
+E0 :          e- : pT=9.77e-05 : TOF=27.4 : x=(-0.164,-1.2,8.1)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=6)
+E0 :         pi- : pT=0.645 : TOF=26.6 : x=(0.387,-0.98,7.9)
+E0 :         pi- : pT=0.565 : TOF=26.6 : x=(0.824,-0.65,7.9)
+E0 :         pi- : pT=0.42 : TOF=26.6 : x=(0.994,-0.332,7.9)
+E0 :         pi+ : pT=1.18 : TOF=26.6 : x=(0.277,-1.08,7.9)
+E0 :         pi- : pT=0.79 : TOF=26.7 : x=(1.12,-0.572,7.9)
+E1 :         pi+ : pT=0.395 : TOF=26.6 : x=(0.527,0.986,-7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=8)
+E1 :         pi+ : pT=0.235 : TOF=26.7 : x=(1.1,0.496,-7.9)
+E0 :         pi+ : pT=0.265 : TOF=26.6 : x=(1.03,-0.118,7.9)
+E0 :         pi+ : pT=0.0955 : TOF=27.4 : x=(-0.575,-1.08,7.9)
+E1 :         pi+ : pT=0.218 : TOF=26.7 : x=(-0.745,0.758,-7.9)
+E1 :         pi+ : pT=0.523 : TOF=26.6 : x=(0.0182,1,-7.9)
+E0 :         pi+ : pT=0.169 : TOF=27 : x=(0.02,-1,7.99)
+E0 :          e- : pT=0.000388 : TOF=31.4 : x=(-0.137,-0.991,8.03)
+E0 :          e+ : pT=0.0119 : TOF=3.26e+03 : x=(-0.422,1.03,7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=8)
+E0 :         pi- : pT=4.08 : TOF=26.7 : x=(1.12,0.421,7.9)
+E0 :         pi- : pT=0.167 : TOF=26.7 : x=(-0.859,0.596,7.9)
+E0 :         pi+ : pT=0.376 : TOF=26.8 : x=(-0.86,0.98,7.9)
+E1 :       kaon+ : pT=1.23 : TOF=26.7 : x=(1.07,0.266,-7.9)
+E1 :         pi- : pT=0.395 : TOF=26.8 : x=(0.797,-0.604,-7.98)
+E0 :      proton : pT=1.78 : TOF=27.1 : x=(0.385,0.923,8.03)
+E0 : anti_proton : pT=0.543 : TOF=27.2 : x=(0.0601,1,7.9)
+E0 :         mu+ : pT=0.145 : TOF=27.1 : x=(1.64,0.769,7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=4)
+E1 :         pi- : pT=0.323 : TOF=26.7 : x=(1.14,-0.419,-7.9)
+E1 :         mu- : pT=0.0328 : TOF=27.1 : x=(-1.03,1.09,-7.9)
+E0 :          e- : pT=0.00356 : TOF=27.6 : x=(0.065,-1.02,7.9)
+E0 :         mu+ : pT=0.0888 : TOF=29.2 : x=(0.223,1.93,7.9)
+
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=15)
+E0 :         pi+ : pT=0.414 : TOF=26.6 : x=(0.0912,-1.04,7.9)
+E0 :       kaon- : pT=1.43 : TOF=26.6 : x=(-0.452,-0.978,7.9)
+E1 :         pi+ : pT=0.192 : TOF=26.8 : x=(0.406,-1.11,-7.9)
+E1 :         pi+ : pT=0.146 : TOF=26.9 : x=(-1.14,0.036,-7.9)
+E1 :         pi- : pT=1.33 : TOF=26.6 : x=(0.642,-0.907,-7.9)
+E0 :         pi+ : pT=0.207 : TOF=26.8 : x=(0.353,-0.936,7.93)
+E1 :         pi+ : pT=0.262 : TOF=26.7 : x=(-0.138,-1.16,-7.9)
+E1 :         pi+ : pT=1.97 : TOF=26.6 : x=(0.538,-0.915,-7.9)
+E1 :         pi- : pT=0.716 : TOF=26.6 : x=(0.725,-0.872,-7.9)
+E1 :         mu+ : pT=0.221 : TOF=26.9 : x=(0.914,1.2,-7.9)
+E0 :          e- : pT=0.00134 : TOF=31.9 : x=(2.14,-0.937,7.9)
+E0 :          e- : pT=0.00401 : TOF=27.7 : x=(0.329,-1.12,7.9)
+E1 :         mu+ : pT=0.433 : TOF=26.7 : x=(0.946,-0.81,-7.9)
+E1 :          e- : pT=0.00162 : TOF=28.6 : x=(0.685,-1.13,-7.9)
+E1 :          e- : pT=0.000631 : TOF=42 : x=(0.228,-4.32,-8.1)
+
+GeneratorCenter: no generated particles. run terminated...
+ Print out hit information
+------------------------------------------
+*** Muon System Hit (#hits=0)
+
+Graphics systems deleted.
+Visualization Manager deleting...
