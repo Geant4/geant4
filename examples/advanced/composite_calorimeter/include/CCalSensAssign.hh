@@ -6,7 +6,7 @@
 #ifndef CCalSensAssign_h
 #define CCalSensAssign_h
 
-#include "CaloOrganization.hh"
+#include "CCalVOrganization.hh"
 
 #include <map>
 #include "globals.hh"
@@ -19,7 +19,7 @@ public:
   static CCalSensAssign* getInstance();
   bool assign();
   bool stackingAction();
-  bool addCaloSD(G4String name, CaloOrganization* numberingScheme);
+  bool addCaloSD(G4String name, CCalVOrganization* numberingScheme);
 
 private:
   CCalSensAssign();

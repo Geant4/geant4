@@ -1,27 +1,25 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CaloOrganization.hh
-// Date: 29.10.99 
-// Description: Definition of sensitive unit numbering schema
-// Modifications:
+// File: CCalVOrganization.hh
+// Description: Base class for definition of sensitive unit numbering schema
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef CaloOrganization_h
-#define CaloOrganization_h
+#ifndef CCalVOrganization_h
+#define CCalVOrganization_h
 
 #include "G4Step.hh"
-#include "CMSCaloOrganization.hh"
+#include "CCaloOrganization.hh"
 
-class CaloOrganization {
+class CCalVOrganization {
 
 public:
-  CaloOrganization(){};
-  virtual ~CaloOrganization(){};
+  CCalVOrganization(){};
+  virtual ~CCalVOrganization(){};
 	 
   virtual unsigned int GetUnitID(const G4Step* aStep) const = 0;
   virtual int  Levels(const G4Step*) const;
   virtual void DetectorLevel(const G4Step*, int&, int*, G4String*) const;
      
 protected:
-  CMSCaloOrganization theOrg;
+  CCaloOrganization theOrg;
 };
 
 #endif

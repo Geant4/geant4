@@ -1,21 +1,20 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTB96HCalOrganization.cc
-// Date: 08/00 S.Banerjee
-// Modifications:
+// File: CCalHcalOrganization.cc
+// Description: Defines numbering schema for the Hadron Calorimeter
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "HcalTB96HCalOrganization.hh"
+#include "CCalHcalOrganization.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "SystemOfUnits.h"
 
-HcalTB96HCalOrganization::~HcalTB96HCalOrganization() {
-  cout << " Deleting HcalTB96HCalOrganization" << endl;
+CCalHcalOrganization::~CCalHcalOrganization() {
+  cout << " Deleting CCalHcalOrganization" << endl;
 }
 
 
-unsigned int HcalTB96HCalOrganization::GetUnitID(const G4Step* aStep) const {
+unsigned int CCalHcalOrganization::GetUnitID(const G4Step* aStep) const {
 
   G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   if (pv > 0) 

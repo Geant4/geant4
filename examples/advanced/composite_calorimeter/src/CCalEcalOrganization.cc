@@ -1,20 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CrystalMatrixOrganization.cc
-// Date: 08/00 S.Banerjee
-// Modifications:
+// File: CCalEcalOrganization.cc
+// Description: Defines numbering schema for the Electromagnetic Calorimeter
 ///////////////////////////////////////////////////////////////////////////////
-#include "CrystalMatrixOrganization.hh"
+#include "CCalEcalOrganization.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4StepPoint.hh"
 #include "SystemOfUnits.h"
 
-CrystalMatrixOrganization::~CrystalMatrixOrganization(){
-  cout << " Deleting CrystalMatrixOrganization" << endl;
+CCalEcalOrganization::~CCalEcalOrganization(){
+  cout << " Deleting CCalEcalOrganization" << endl;
 }
 
 
-unsigned int CrystalMatrixOrganization::GetUnitID(const G4Step* aStep) const {
+unsigned int CCalEcalOrganization::GetUnitID(const G4Step* aStep) const {
 
   G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   int idx=0, idl=0, idn=0;

@@ -8,7 +8,7 @@
 #include "G4VProcess.hh"
 #include "G4SDManager.hh"
 #include "G4VTouchable.hh"
-#include "CaloOrganization.hh"
+#include "CCalVOrganization.hh"
 #include "SDList.hh"
 
 #include<iostream>
@@ -16,7 +16,7 @@
 //#define debug
 //#define ddebug
  
-G4CaloSD::G4CaloSD(G4String name, CaloOrganization* numberingScheme):
+G4CaloSD::G4CaloSD(G4String name, CCalVOrganization* numberingScheme):
   G4VSensitiveDetector(name), HCID(-1), SDname(name), theHC(0),
   CurrentHit(0), theTrack(0), CurrentPV(0), PreviousPV(0), UnitID(0), 
   PreviousUnitID(0), PreStepPoint(0), PostStepPoint(0), 
@@ -257,7 +257,7 @@ void G4CaloSD::PrintAll() {
 } 
 
 
-void G4CaloSD::SetOrganization(CaloOrganization* org){
+void G4CaloSD::SetOrganization(CCalVOrganization* org){
 
   if (theDescription!=0) 
     delete theDescription;

@@ -10,7 +10,7 @@
 #include "CMSPrimaryGeneratorAction.hh"
 #include "G4CaloHitsCollection.hh"
 #include "G4CaloHit.hh"
-#include "CMSCaloOrganization.hh"
+#include "CCaloOrganization.hh"
 #include "SDList.hh"
 #include "CCalSteppingAction.hh"
 
@@ -38,7 +38,7 @@ HcalTB96EndOfEventAction::HcalTB96EndOfEventAction
   instanciateSteppingAction();
   
   cout << "Get Calorimter organisation" << endl;
-  theOrg = new CMSCaloOrganization;
+  theOrg = new CCaloOrganization;
   cout << "end of instantiation of EndofEventAction" << endl;
 }
 

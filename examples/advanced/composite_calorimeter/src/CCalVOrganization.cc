@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CaloOrganization.cc
-// Date: 29.10.99 V.Lefebure
-// Modifications:
+// File: CCalVOrganization.cc
+// Description: Base class for definition of sensitive unit numbering schema
 ///////////////////////////////////////////////////////////////////////////////
-#include "CaloOrganization.hh"
+#include "CCalVOrganization.hh"
 #include "globals.hh"
 
-int CaloOrganization::Levels(const G4Step* aStep) const {
+int CCalVOrganization::Levels(const G4Step* aStep) const {
 
   //Find number of levels
   G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
@@ -19,7 +18,7 @@ int CaloOrganization::Levels(const G4Step* aStep) const {
 }
 
 
-void CaloOrganization::DetectorLevel(const G4Step* aStep, int& level,
+void CCalVOrganization::DetectorLevel(const G4Step* aStep, int& level,
 				     int* copyno, G4String* name) const {
 
   //Get name and copy numbers

@@ -61,7 +61,7 @@ bool CCalSensAssign::stackingAction() {
 
 
 bool CCalSensAssign::addCaloSD(G4String name, 
-			       CaloOrganization* numberingScheme) {
+			       CCalVOrganization* numberingScheme) {
   sens_[name]         = new G4CaloSD(name, numberingScheme);
   return true;
 

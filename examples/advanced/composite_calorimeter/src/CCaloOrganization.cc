@@ -1,13 +1,14 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSCaloOrganization.cc
-// Date: 29.10.99 V.Lefebure
-// Modifications
+// File: CCaloOrganization.cc
+// Description: Packing, unpacking and other related utilities for 
+//              calorimetric numbering schema
 ///////////////////////////////////////////////////////////////////////////////
-#include "CMSCaloOrganization.hh"
+#include "CCaloOrganization.hh"
 
 //#define debug
 
-unsigned int CMSCaloOrganization::packindex(int det, int z, int eta, int phi) const {
+unsigned int CCaloOrganization::packindex(int det, int z, int eta, 
+					  int phi) const {
   //So this is the actual encoding of the index:
   //top 4 bits encode Detector type
   //
@@ -24,7 +25,8 @@ unsigned int CMSCaloOrganization::packindex(int det, int z, int eta, int phi) co
   return idx;
 }
 
-unsigned int CMSCaloOrganization::packindex(int det, int depth, int z, int eta, int phi) const {
+unsigned int CCaloOrganization::packindex(int det, int depth, int z, int eta, 
+					  int phi) const {
   //So this is the actual encoding of the index:
   //top 4 bits encode Detector type
   //next 4 bits encode depth information
@@ -36,15 +38,15 @@ unsigned int CMSCaloOrganization::packindex(int det, int depth, int z, int eta, 
   idx+=(eta&1023)<<10;            //bits 10-19
   idx+=(phi&1023);                //bits  0-9
 #ifdef debug
-  cout << " HCAL packing " << det << " " << depth << " " << z << " " << eta << " " << phi 
-       << "  into " << idx << endl;
+  cout << " HCAL packing " << det << " " << depth << " " << z << " " << eta 
+       << " " << phi  << "  into " << idx << endl;
 #endif
   return idx;
 }
 
 
-void CMSCaloOrganization::unpackindex(const unsigned int& idx, int& det, int& z, int& eta, 
-				      int& phi) const {
+void CCaloOrganization::unpackindex(const unsigned int& idx, int& det, int& z, 
+				    int& eta, int& phi) const {
   det = (idx>>28)&15;
   z   = (idx>>20)&1;
   z   = 2*z-1;
@@ -53,8 +55,9 @@ void CMSCaloOrganization::unpackindex(const unsigned int& idx, int& det, int& z,
 }
 
 
-void CMSCaloOrganization::unpackindex(const unsigned int& idx, int& det, int& depth, int& z, 
-				      int& eta, int& phi) const {
+void CCaloOrganization::unpackindex(const unsigned int& idx, int& det, 
+				    int& depth, int& z, int& eta, 
+				    int& phi) const {
   det = (idx>>28)&15;
   depth=(idx>>24)&15;
   z   = (idx>>20)&1;
@@ -63,7 +66,7 @@ void CMSCaloOrganization::unpackindex(const unsigned int& idx, int& det, int& de
 }
 
 
-int CMSCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap){
+int CCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap){
 
   //look for max
   int UnitWithMaxEnergy = 0;
@@ -88,9 +91,9 @@ int CMSCaloOrganization::getUnitWithMaxEnergy(map<int,float,less<int> >& themap)
 }
 
 
-float CMSCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
-					  int crystalWithMaxEnergy, 
-					  map<int,float,less<int> >& themap){
+float CCaloOrganization::energyInMatrix(int nCellInEta, int nCellInPhi,
+					int crystalWithMaxEnergy, 
+					map<int,float,less<int> >& themap){
 
   int det,z,eta,phi;
   this->unpackindex(crystalWithMaxEnergy, det, z, eta, phi);

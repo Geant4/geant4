@@ -10,7 +10,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class CMSCaloOrganization;
+class CCaloOrganization;
 class G4HCofThisEvent;
 class CCalSteppingAction;
 class CMSPrimaryGeneratorAction;
@@ -36,7 +36,7 @@ private:
   CCalSteppingAction*        theSteppingAction;
   nameType*                  SDnames;
   G4int                      numberOfSD;
-  CMSCaloOrganization*       theOrg;
+  CCaloOrganization*         theOrg;
 
 };
 

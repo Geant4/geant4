@@ -19,8 +19,8 @@
 #include "utils.hh"
 
 #include "G4CaloSD.hh"
-#include "CrystalMatrixOrganization.hh"
-#include "HcalTB96HCalOrganization.hh"
+#include "CCalEcalOrganization.hh"
+#include "CCalHcalOrganization.hh"
 #include "G4SDManager.hh"
 
 #include "G4FieldManager.hh"
@@ -102,9 +102,9 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
   //Addsenistive detector types 
   bool result;
   result = CCalSensAssign::getInstance()->addCaloSD("HadronCalorimeter",
-						    new HcalTB96HCalOrganization);
+						    new CCalHcalOrganization);
   result = CCalSensAssign::getInstance()->addCaloSD("CrystalMatrix",
-						    new CrystalMatrixOrganization);
+						    new CCalEcalOrganization);
 
   //Assign the sensitive detectors
   result = CCalSensAssign::getInstance()->assign();

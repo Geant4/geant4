@@ -1,20 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSCaloOrganization.hh
-// Date: 29.10.99 
-// Description: Definition of sensitive unit numbering schema
-// Modifications
+// File: CCaloOrganization.hh
+// Description: Packing, unpacking and other related utilities for 
+//              calorimetric numbering schema
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef CMSCaloOrganization_h
-#define CMSCaloOrganization_h
+#ifndef CCaloOrganization_h
+#define CCaloOrganization_h
 
 #include <map>
 
-class CMSCaloOrganization{
+class CCaloOrganization{
 
 public:
-  CMSCaloOrganization(){};
-  virtual ~CMSCaloOrganization(){};
+  CCaloOrganization(){};
+  virtual ~CCaloOrganization(){};
 	 
 public:
   unsigned int packindex(int det, int z, int eta, int phi) const;
