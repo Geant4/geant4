@@ -31,22 +31,22 @@
 #
 /tracking/storeTrajectory 1
 #
-# Execute the visualization via a /vis/viewer/flush contained within
-# the macro eventAction.mac that is called at the end of each event
+# Execute the visualization via the /vis/viewer/flush that comes
+# automatically at the end of each /run.
 #
 /mydet/armAngle 60. deg
 /mydet/fieldValue 2. tesla
-/run/beamOn 1 eventAction.mac
+/run/beamOn 1
 #
 /mydet/armAngle 30. deg
 /mydet/momentum 2. GeV
 /mydet/sigmaMomentum 0. 
 /mydet/sigmaAngle 0.
-/run/beamOn 1 eventAction.mac
+/run/beamOn 1
 #
 # This time, set visualization to accumulate many events into one picture
 #
 /vis/scene/endOfEventAction accumulate
 /mydet/sigmaAngle 2. deg
-/run/beamOn 1 eventAction.mac
+/run/beamOn 4
 #
