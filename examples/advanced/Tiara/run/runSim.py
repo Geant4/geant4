@@ -1,6 +1,6 @@
 #!/usr/bin/env python2.2
 #
-# $Id: runSim.py,v 1.9 2004-12-08 15:37:14 daquinog Exp $
+# $Id: runSim.py,v 1.10 2004-12-08 17:25:34 daquinog Exp $
 # -------------------------------------------------------------------
 # GEANT4 tag $Name: not supported by cvs2svn $
 # -------------------------------------------------------------------
@@ -171,7 +171,7 @@ tApp.config()
 ##physList = Tiara.LHEP()
 ##physList = Tiara.LHEP_PRECO()
 ##physList = Tiara.LHEP_PRECO_HP()
-physList = Tiara.LHEP_LEAD()
+##physList = Tiara.LHEP_LEAD()
 ##tApp.specifyPhysicsList(physList, particleCut)
 ##tApp.setPrimaryGenerator(primGenBuilder.primGen)
 
