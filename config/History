@@ -1,4 +1,4 @@
-$Id: History,v 1.128 2000-12-13 08:31:31 gcosmo Exp $
+$Id: History,v 1.129 2000-12-13 09:19:56 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -20,6 +20,7 @@ committal in the CVS repository !
 13th December 2000 Gunter Folger (config-V02-00-14)
 - common.gmk: fix to rule for building dependencies, parsing is skip
   if $(dependencies) is empty.
+- globlib.gmk: added "includes" to PHONY target list and fixed typo.
 - Added comments to "includes" rules.
 
 8th December 2000 Gabriele Cosmo (config-V02-00-13)
