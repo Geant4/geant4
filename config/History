@@ -1,4 +1,4 @@
-$Id: History,v 1.85 1999-12-01 14:41:26 morita Exp $
+$Id: History,v 1.86 1999-12-01 15:47:44 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,19 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st December 1999  Gabriele Cosmo (config-V00-01-15)
+- architecture.gmk:
+  o added new G4SYSTEM flavor SUN-CC5, used for testing on the new C++
+    compiler v5.0 on SunOS. Requires ISO/ANSI-C++ installation and native
+    STL by default. Compatibility with old no ISO/ANSI code is assured
+    through the -compat compiler option and the usage of ObjectSpace STL
+    (i.e. G4USE_OSPACE set).
+  o added new flag G4NO_STD_NAMESPACE.
+    HP-aCC setup with native STL assumes the ISO-ANSI installation by default,
+    the new flag should be explicitly set in the environment to avoid this.
+  o upgraded SGI-CC setup to IRIX 6.5.5, CC 7.2.1 and ObjectSpace STL.
+    Tests on this configuration has NOT been tested though.
 
 1st December 1999  Youhei Morita
 - architecture.gmk: added G4EXAMPLE_BOOT and G4EXAMPLE_FD
