@@ -283,7 +283,7 @@ G4ReactionProductVector * G4MuonMinusCaptureAtRest::DoMuCapture(G4double aMuKine
   {
     theN.Init(targetAtomicMass, targetCharge); 
     G4ThreeVector fermiMom;
-    G4Nucleon * aNucleon(0);
+    G4Nucleon * aNucleon = 0;
     G4int theProtonCounter = G4lrint( 0.5 + targetCharge * G4UniformRand() );
     G4int counter = 0;
     theN.StartLoop();
