@@ -1,4 +1,4 @@
-$Id: History,v 1.53 2002-03-28 18:08:30 japost Exp $
+$Id: History,v 1.54 2002-03-28 18:10:37 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,8 +26,17 @@ Mar 28th, 2002  J. Apostolakis - field-V04-00-01
 - Changed maximum number of steps in driver, 
     halving from 500/order to 250/order.
 
+Mar 28th, 2002  J. Apostolakis
+-----------------------
 - Committed directory "OtherField" with examples of fields,
     Delphi, Quadropole etc.
+
+- Updated outputs of testPropagateMagField for new version of source,
+    that has 3rd test case.
+
+- Added new runs and outputs for testProElectroMagField, with 
+    several steppers, and modified test script test.sh accordingly.
+
 
 Feb  2nd, 2002   V. Grichine
 ------------------------
