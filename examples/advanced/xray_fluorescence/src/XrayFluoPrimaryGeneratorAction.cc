@@ -48,9 +48,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
-  :XrayFluoDetector(XrayFluoDC),rndmFlag("off"),
-   beam("off"),spectrum("off"),isoVert("off")
+  :rndmFlag("off"),beam("off"),spectrum("off"),isoVert("off")
 {
+
+  XrayFluoDetector = XrayFluoDC;
+
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   

@@ -46,8 +46,8 @@ XrayFluoVDetectorType::~XrayFluoVDetectorType()
 // {;}
 // G4double XrayFluoVDetectorType::GetSupData(G4double,G4double,G4int=0)
 // {;}
-void XrayFluoVDetectorType::LoadResponseData(G4String)
-{;}
-void XrayFluoVDetectorType::LoadEfficiencyData(G4String)
-{;}
+// void XrayFluoVDetectorType::LoadResponseData(G4String)
+// {;}
+// void XrayFluoVDetectorType::LoadEfficiencyData(G4String)
+// {;}
 

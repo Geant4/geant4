@@ -33,7 +33,7 @@
 // -------------------------------------------------------------------
 
 #include "XrayFluoSteppingAction.hh"
-#include "XrayFluoDetectorConstruction.hh"
+//#include "XrayFluoDetectorConstruction.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "G4ios.hh"

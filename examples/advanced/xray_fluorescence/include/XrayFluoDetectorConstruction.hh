@@ -29,6 +29,9 @@
 // History:
 // -----------
 //  28 Nov 2001  Elena Guardincerri   Created
+//     Nov 2002  Alfonso Mantero materials added, Material selection implementation
+//  16 Jul 2003  Alfonso Mantero Detector type selection added + minor fixes
+//  21 Aug 2003  Alfonso Mantero Material Management moved to XrayFluoMaterials 
 //
 // -------------------------------------------------------------------
 
@@ -42,7 +45,7 @@
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 
-
+#include "XrayFluoGeometry.hh"
 
 class G4Box;
 class G4Tubs;
@@ -51,6 +54,7 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoDetectorMessenger;
+class XrayFluoMaterials;
 
 //class XrayFluoSD;
 //class XrayFluoVDetectorType;
@@ -171,8 +175,9 @@ private:
   G4LogicalVolume*   logicGrain;
   G4VPhysicalVolume* physiGrain;
 
+  //materials management
+  XrayFluoMaterials* materials;
 
-  //pointers to the materials used 
   G4Material*        OhmicPosMaterial;
   G4Material*        OhmicNegMaterial; 
   G4Material*        pixelMaterial;
@@ -180,19 +185,8 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
-  
-  G4Material*        dolorite;
-  G4Material*        FeMaterial;
-  G4Material*        Al;
-  G4Material*        Si;
-  G4Material*        Cu;
-  G4Material*        HPGe;
-  G4Material*        materialMg;
-  G4Material*        materialNd;
-  G4Material*        Sn;
-  G4Material*        Ti;
-  G4Material*        mars1;
-  G4Material*        anorthosite;
+
+  //apparate parameters
 
   G4double           OhmicPosThickness;
   
@@ -227,7 +221,7 @@ private:
   G4double           Dia3SizeXY;
   G4double           DiaInnerSize;
   G4double           Dia3InnerSize;
-  G4double           DistSi;
+  //  G4double           DistSi;
 public: 
   
   
@@ -271,7 +265,7 @@ private:
   
 private:
   
-  void DefineMaterials();
+  void DefineDefaultMaterials();
   G4VPhysicalVolume* ConstructApparate();
 
   //calculates some quantities used to construct geometry

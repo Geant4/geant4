@@ -48,8 +48,8 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
-  :outputFileName("xrayfluo.hbk"), visPlotter(false), persistencyType("hbook"), 
-   deletePersistencyFile(true), analysisFactory(0), tree(0),histogramFactory(0)
+  :outputFileName("xrayfluo"), visPlotter(false), persistencyType("hbook"), 
+   deletePersistencyFile(true), analysisFactory(0), tree(0),histogramFactory(0), plotter(0)
 {
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
@@ -188,7 +188,7 @@ void XrayFluoAnalysisManager::InitializePlotter()
       plotter->setParameter("pageTitle","XrayFluo");
     }
 
-  if(plotter) {
+  if(plotter && visPlotter) {
     plotter->show(); // shows plotter window
   }
   

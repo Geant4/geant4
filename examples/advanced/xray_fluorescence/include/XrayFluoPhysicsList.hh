@@ -37,6 +37,9 @@
 
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
+//#include "XrayFluoPlaneDetectorConstruction.hh"
+//#include "XrayFluoDetectorConstruction.hh"
+//#include "XrayFluoMercuryConstruction.hh"
 
 class XrayFluoPhysicsListMessenger;
 class G4LowEnergyIonisation;
@@ -44,22 +47,28 @@ class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
 class G4eIonisation;
 class XrayFluoDetectorConstruction;
+class XrayFluoPlaneDetectorConstruction;
+//class XrayFluoMercuryConstruction;
+
 class XrayFluoPhysicsList: public G4VUserPhysicsList
 {
 public:
 
   XrayFluoPhysicsList(XrayFluoDetectorConstruction*);
-  virtual ~XrayFluoPhysicsList();
+  XrayFluoPhysicsList(XrayFluoPlaneDetectorConstruction*);
+//   XrayFluoPhysicsList(XrayFluoMercuryDetectorConstruction*);
 
+  virtual ~XrayFluoPhysicsList();
+  
 protected:
 
   // Construct particle and physics
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-
+  
 protected:
 
-  // these methods Construct particles
+  // these methods Construct particles 
   virtual void ConstructBosons();
   virtual void ConstructLeptons();
   virtual void ConstructBarions();
@@ -71,7 +80,7 @@ protected:
   void ConstructGeneral();
 
 public:
-
+ 
   void SetCuts();
   void SetGammaCut(G4double);
   void SetElectronCut(G4double);
@@ -81,7 +90,9 @@ public:
   void SetGELowLimit(G4double);
   void SetLowEnSecPhotCut(G4double);
   void SetLowEnSecElecCut(G4double);
-
+  void SetProtonCut(G4double);
+  void SetCutsByEnergy(G4double);
+  
 
 private:
 
@@ -94,7 +105,8 @@ private:
   G4double cutForElectron;
   G4double cutForProton;
   XrayFluoDetectorConstruction* pDet;
-  
+  XrayFluoPlaneDetectorConstruction* planeDet;
+  //XrayFluoMercuryDetectorConstruction* mercuryDet;
 };
 
 #endif

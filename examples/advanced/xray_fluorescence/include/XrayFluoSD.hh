@@ -37,11 +37,16 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
+//#include "XrayFluoDetectorConstruction.hh"
+//#include "XrayFluoPlaneDetectorConstruction.hh"
+//#include "XrayFluoMercuryDetectorConstruction.hh"
 #include "XrayFluoSensorHit.hh"
 
 class XrayFluoDetectorConstruction;
+class XrayFluoPlaneDetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,6 +55,8 @@ class XrayFluoSD : public G4VSensitiveDetector
 public:
   
   XrayFluoSD(G4String, XrayFluoDetectorConstruction* );
+  XrayFluoSD(G4String, XrayFluoPlaneDetectorConstruction* );
+  //  XrayFluoSD(G4String, XrayFluoMercuryDetectorConstruction* );
   ~XrayFluoSD();
   
   void Initialize(G4HCofThisEvent*);
@@ -66,6 +73,8 @@ private:
   //hit collection for the detector
   XrayFluoSensorHitsCollection*  HPGeCollection;   
   XrayFluoDetectorConstruction* Detector;
+  XrayFluoPlaneDetectorConstruction* planeDetector;
+  //  XrayFluoMercuryDetectorConstruction* mercuryDetector;
   G4int*                   HitHPGeID;
 };
 

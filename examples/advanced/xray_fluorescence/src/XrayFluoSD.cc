@@ -31,11 +31,13 @@
 // 28 Nov 2001 Elena Guardincerri     Created
 // 29 Nov 2002 Energy deposition bug fixed (Alfonso.mantero@ge.infn.it)
 // 17 Jul 2003 Name changed to XrayFluoSD
+// 01 Sep 2003 Constructor overload for different geometries handling
 // -------------------------------------------------------------------
 
 #include "XrayFluoSD.hh"
 #include "XrayFluoSensorHit.hh"
 #include "XrayFluoDetectorConstruction.hh"
+#include "XrayFluoPlaneDetectorConstruction.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
@@ -48,8 +50,10 @@
 
 XrayFluoSD::XrayFluoSD(G4String name,
                                    XrayFluoDetectorConstruction* det)
-:G4VSensitiveDetector(name),Detector(det)
+  :G4VSensitiveDetector(name),Detector(0),planeDetector(0)//,mercuryDetector(0)
 {
+
+  Detector = det;
   collectionName.insert("HPGeCollection");
   HitHPGeID = new G4int[500];
   //G4cout << "XrayFluoSD created" << G4endl;
@@ -57,6 +61,34 @@ XrayFluoSD::XrayFluoSD(G4String name,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XrayFluoSD::XrayFluoSD(G4String name,
+                                   XrayFluoPlaneDetectorConstruction* det)
+:G4VSensitiveDetector(name),Detector(0),planeDetector(0)//,mercuryDetector(0)
+{
+  planeDetector = det;
+  collectionName.insert("HPGeCollection");
+  HitHPGeID = new G4int[500];
+  //G4cout << "XrayFluoSD created" << G4endl;
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// XrayFluoSD::XrayFluoSD(G4String name,
+//                                    XrayFluoMercuryDetectorConstruction* det)
+// :G4VSensitiveDetector(name),Detector(0),planeDetector(0),mercuryDetector(0)
+// {
+//   mercuryDetector(det)
+//   collectionName.insert("HPGeCollection");
+//   HitHPGeID = new G4int[500];
+//   //G4cout << "XrayFluoSD created" << G4endl;
+// }
+
+// //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
 
 XrayFluoSD::~XrayFluoSD()
 {
@@ -76,9 +108,16 @@ void XrayFluoSD::Initialize(G4HCofThisEvent*)
   //sensitive detector
 { 
   HPGeCollection = new XrayFluoSensorHitsCollection
-                      (SensitiveDetectorName,collectionName[0]); 
- for (G4int j=0;j<Detector->GetNbOfPixels();j++)
- {HitHPGeID [j]= -1;};
+    (SensitiveDetectorName,collectionName[0]); 
+  
+  G4int nPixel;
+  
+  if (Detector) {nPixel = Detector->GetNbOfPixels();}
+  else if (planeDetector) {nPixel = planeDetector->GetNbOfPixels();}
+  //  else if (mercuryDetector) {nPixel = mercuryDetector->GetNbOfPixels();}
+  
+  for (G4int j=0;j<nPixel;j++)
+    {HitHPGeID [j]= -1;};
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -116,7 +155,13 @@ G4bool XrayFluoSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
   G4VPhysicalVolume* physVol = theTouchable->GetVolume(); 
   //theTouchable->MoveUpHistory();     
   G4int PixelNumber = 0;
-  if (Detector->GetNbOfPixels()>1) PixelNumber= physVol->GetCopyNo() ;
+
+  if (Detector && Detector->GetNbOfPixels()>1) {PixelNumber= physVol->GetCopyNo();}
+  else if (planeDetector && planeDetector->GetNbOfPixels()>1) {PixelNumber= physVol->GetCopyNo();}
+  //  else if (mercuryDetector && mercuryDetector->GetNbOfPixels()>1) {PixelNumber= physVol->GetCopyNo();}
+
+
+  
   if ( HitHPGeID[PixelNumber]==-1)
     { 
       XrayFluoSensorHit* HPGeHit = new XrayFluoSensorHit();

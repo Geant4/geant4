@@ -39,6 +39,7 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 #include "XrayFluoDetectorConstruction.hh"
+#include "XrayFluoPlaneDetectorConstruction.hh"
 class XrayFluoRunAction;
 class XrayFluoEventActionMessenger;
 
@@ -49,7 +50,8 @@ class XrayFluoEventAction : public G4UserEventAction
 {
 public:
   
-  XrayFluoEventAction();
+  XrayFluoEventAction(XrayFluoDetectorConstruction*);
+  XrayFluoEventAction(XrayFluoPlaneDetectorConstruction*);
   
   virtual ~XrayFluoEventAction();
   

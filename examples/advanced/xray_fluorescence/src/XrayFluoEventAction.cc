@@ -56,7 +56,7 @@
 #include <fstream>
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoEventAction::XrayFluoEventAction()
+XrayFluoEventAction::XrayFluoEventAction(XrayFluoDetectorConstruction* det)
   :drawFlag("all"),
    HPGeCollID(-1),
    eventMessenger(0),
@@ -64,7 +64,23 @@ XrayFluoEventAction::XrayFluoEventAction()
    detectorType(0)
 {
   eventMessenger = new XrayFluoEventActionMessenger(this);
-  detectorType = XrayFluoDetectorConstruction::GetInstance()->GetDetectorType();
+  detectorType = det->GetDetectorType();
+
+  //runManager = new XrayFluoRunAction();
+  G4cout << "XrayFluoEventAction created" << G4endl;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XrayFluoEventAction::XrayFluoEventAction(XrayFluoPlaneDetectorConstruction* det)
+  :drawFlag("all"),
+   HPGeCollID(-1),
+   eventMessenger(0),
+   printModulo(1),
+   detectorType(0)
+{
+  eventMessenger = new XrayFluoEventActionMessenger(this);
+  detectorType = det->GetDetectorType();
 
   //runManager = new XrayFluoRunAction();
   G4cout << "XrayFluoEventAction created" << G4endl;  
@@ -96,8 +112,8 @@ void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 
   if ( ((eventNumber) % 1000) == 0 )  {
 
-    if ( eventNumber != 50000 ) G4cout << "#" << std::flush;
-    if ( eventNumber == 50000 ) G4cout << "#"<< G4endl;
+    if ( eventNumber % 50000 != 0 ) G4cout << "#" << std::flush;
+    if ( eventNumber % 50000 == 0 ) G4cout << "#"<< G4endl;
 
     XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
     analysis->PlotCurrentResults();
