@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.6 1999-07-27 20:57:28 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.7 1999-10-29 15:52:05 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -503,13 +503,18 @@ G4PropagatorInField::LocateIntersectionPoint(
 	    ->AccurateAdvance(newEndpoint, curveDist, GetEpsilonStep() );
 	  CurrentB_PointVelocity= newEndpoint;
 #ifdef G4DEBUG
-	  G4cerr << "G4PropagatorInField::LocateIntersectionPoint: " 
-		 << "  Warning: Integration inaccuracy requires an adjustment in the step's endpoint " 
-		 << "   Two mid-points are further apart than their curve length difference" 
-		 << endl 
-		 << "   Dist = "       << sqrt(linDistSq)
-		 << " curve length = " << curveDist
-		 << endl; 
+          static int noInaccuracyWarnings = 0; 
+          const  int maxNoWarnings = 10;
+	  if(   (noInaccuracyWarnings < maxNoWarnings ) 
+             || (Verbose() > 1) ){
+	     G4cerr << "G4PropagatorInField::LocateIntersectionPoint: " 
+		    << "  Warning: Integration inaccuracy requires " << endl
+		    << " an adjustment in the step's endpoint "      << endl
+		    << "   Two mid-points are further apart than their "
+		    <<         "curve length difference"             << endl 
+		    << "   Dist = "       << sqrt(linDistSq)
+		    << " curve length = " << curveDist               << endl; 
+	  }
 #endif
        }
        if( curveDist < 0.0 ) {
