@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusAbsorptionAtRest.hh,v 1.7 2003-05-30 10:50:52 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PionMinusAbsorptionAtRest.cc,v 1.9 2003-06-16 17:12:15 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

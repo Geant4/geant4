@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4PiMinusStopAbsorption.cc,v 1.13 2003-06-16 17:12:03 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //      GEANT 4 class file --- Copyright CERN 1998

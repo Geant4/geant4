@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4KaonMinusAbsorption.cc,v 1.8 2003-06-16 17:12:00 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file --- Copyright CERN 1998

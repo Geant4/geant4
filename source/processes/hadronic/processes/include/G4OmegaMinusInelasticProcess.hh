@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4OmegaMinusInelasticProcess.hh,v 1.6 2002-12-12 19:18:35 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: OmegaMinus Inelastic Process
  // J.L. Chuma, TRIUMF, 05-Nov-1996
