@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.hh,v 1.5 2001-09-28 15:44:20 maire Exp $
+// $Id: G4VMuEnergyLoss.hh,v 1.6 2001-10-24 16:36:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // -------------------------------------------------------------------
 //      GEANT 4 class header file 
@@ -120,8 +120,8 @@ class G4VMuEnergyLoss : public G4VEnergyLoss
 
     G4PhysicsTable* theLossTable ;
    
-    G4double lastgammaCutInRange ;
-    G4double lastelectronCutInRange ;
+    G4double* lastgammaCutInRange ;
+    G4double* lastelectronCutInRange ;
 
   private:
 

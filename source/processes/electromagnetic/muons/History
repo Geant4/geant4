@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2001-09-28 15:44:20 maire Exp $
+$Id: History,v 1.22 2001-10-24 16:36:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+24 oct 01: mma (muons-V03-02-07)
+- cut per material : all classes
 
 28 sep 01: mma (muons-V03-02-06)
 - suppression of theMuonPlus ..etc..data members : all classes

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuIonisation.cc,v 1.18 2001-09-28 15:44:20 maire Exp $
+// $Id: G4MuIonisation.cc,v 1.19 2001-10-24 16:36:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4MuIonisation physics process -----------
@@ -90,7 +90,7 @@ void G4MuIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType
       CounterOfmuminusProcess++;
     }
  
-  if (G4Electron::Electron()->GetCuts() != lastelectronCutInRange)
+  if( !EqualCutVectors(G4Electron::Electron()->GetLengthCuts(), lastelectronCutInRange) )  
      BuildLambdaTable(aParticleType);
  
   G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
@@ -114,7 +114,7 @@ void G4MuIonisation::BuildLossTable(const G4ParticleDefinition& aParticleType)
  theLossTable = new G4PhysicsTable(numOfMaterials);
   
  // get delta cut in energy 
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
   
  //  loop for materials
  //
@@ -162,7 +162,7 @@ void G4MuIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
  theMeanFreePathTable = new G4PhysicsTable(numOfMaterials);
 
  // get electron cut in kinetic energy
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
  
  // loop for materials 
 
@@ -419,7 +419,7 @@ G4VParticleChange* G4MuIonisation::PostStepDoIt(const G4Track& trackData,
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
  
  // get electron cut in kinetic energy
- G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetCutsInEnergy();
+ G4double* DeltaCutInKineticEnergy = (G4Electron::Electron())->GetEnergyCuts() ;
  G4double DeltaThreshold = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
 
  // sampling kinetic energy of the delta ray 

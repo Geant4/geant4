@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.cc,v 1.19 2001-09-28 15:44:20 maire Exp $
+// $Id: G4MuBremsstrahlung.cc,v 1.20 2001-10-24 16:36:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    
@@ -108,9 +108,9 @@ void G4MuBremsstrahlung::BuildPhysicsTable(
    if(theMeanFreePathTable == NULL)
      MakeSamplingTables(&aParticleType) ;
 
-  G4double gammaCutInRange = G4Gamma::Gamma()->GetCuts();
-  if(gammaCutInRange != lastgammaCutInRange)
-    BuildLambdaTable(aParticleType) ;
+ G4double* gammaCutInRange = G4Gamma::Gamma()->GetLengthCuts();
+ if( !EqualCutVectors(gammaCutInRange,lastgammaCutInRange))   
+   BuildLambdaTable(aParticleType) ;
   
   G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
 
@@ -277,7 +277,7 @@ void G4MuBremsstrahlung::ComputePartialSumSigma(
    const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
    const G4double* theAtomNumDensityVector = 
                                     aMaterial->GetAtomicNumDensityVector();
-   G4double GammaEnergyCut = (G4Gamma::Gamma()->GetCutsInEnergy())[Imate];
+   G4double GammaEnergyCut = (G4Gamma::Gamma()->GetEnergyCuts())[Imate];
 
    PartialSumSigma[Imate] = new G4DataVector();
 
@@ -513,7 +513,7 @@ G4VParticleChange* G4MuBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 
   // Gamma cut in this material
   G4double GammaEnergyCut = 
-             (G4Gamma::Gamma()->GetCutsInEnergy())[aMaterial->GetIndex()];
+                G4Gamma::Gamma()->GetEnergyThreshold(aMaterial);
 
   // check against insufficient energy
   if(KineticEnergy < GammaEnergyCut)

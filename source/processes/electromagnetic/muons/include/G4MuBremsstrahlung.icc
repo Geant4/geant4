@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuBremsstrahlung.icc,v 1.7 2001-09-28 15:44:20 maire Exp $
+// $Id: G4MuBremsstrahlung.icc,v 1.8 2001-10-24 16:36:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuBremsstrahlung physics process ------------------
@@ -74,7 +74,7 @@ inline G4double G4MuBremsstrahlung::ComputeMeanFreePath(
   const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
   const G4double* theAtomNumDensityVector = 
                                      aMaterial->GetAtomicNumDensityVector();
-  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+  G4double GammaEnergyCut = (G4Gamma::Gamma())->GetEnergyThreshold(aMaterial);
   G4double SIGMA = 0 ;
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             

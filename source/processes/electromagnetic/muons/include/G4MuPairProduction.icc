@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.icc,v 1.7 2001-09-28 15:44:20 maire Exp $
+// $Id: G4MuPairProduction.icc,v 1.8 2001-10-24 16:36:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ------------------
@@ -75,9 +75,9 @@ inline G4double G4MuPairProduction::ComputeMeanFreePath(
   const G4double* theAtomNumDensityVector = 
                                       aMaterial->GetAtomicNumDensityVector();
   G4double ElectronEnergyCut =
-                       (G4Electron::GetCutsInEnergy())[aMaterial->GetIndex()];  
+                       G4Electron::Electron()->GetEnergyThreshold(aMaterial);
   G4double PositronEnergyCut =
-                       (G4Positron::GetCutsInEnergy())[aMaterial->GetIndex()];  
+                       G4Positron::Positron()->GetEnergyThreshold(aMaterial);
 
   G4double SIGMA = 0;
   for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.23 2001-09-28 15:44:21 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.24 2001-10-24 16:36:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4MuPairProduction physics process ------------------
@@ -112,8 +112,8 @@ void G4MuPairProduction::BuildPhysicsTable(
   if(theMeanFreePathTable == NULL)
      MakeSamplingTables(&aParticleType);
 
-  G4double electronCutInRange = G4Electron::Electron()->GetCuts();
-  if(electronCutInRange != lastelectronCutInRange)
+  G4double* electronCutInRange = G4Electron::Electron()->GetLengthCuts();  
+  if( !EqualCutVectors(electronCutInRange, lastelectronCutInRange))
     BuildLambdaTable(aParticleType) ;
 
   G4VMuEnergyLoss::BuildDEDXTable(aParticleType);
@@ -304,8 +304,8 @@ void G4MuPairProduction::ComputePartialSumSigma(
   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
   const G4double* theAtomNumDensityVector = aMaterial->
                                                 GetAtomicNumDensityVector();
-  G4double ElectronEnergyCut = (G4Electron::GetCutsInEnergy())[Imate];
-  G4double PositronEnergyCut = (G4Positron::GetCutsInEnergy())[Imate];
+  G4double ElectronEnergyCut = (G4Electron::Electron()->GetEnergyCuts())[Imate];
+  G4double PositronEnergyCut = (G4Positron::Positron()->GetEnergyCuts())[Imate];
 
   PartialSumSigma[Imate] = new G4DataVector();
 
@@ -649,9 +649,9 @@ G4VParticleChange* G4MuPairProduction::PostStepDoIt(const G4Track& trackData,
 
    // e-e+ cut in this material
    G4double ElectronEnergyCut = electron_mass_c2+
-      ((*G4Electron::Electron()).GetCutsInEnergy())[aMaterial->GetIndex()];
+                     G4Electron::Electron()->GetEnergyThreshold(aMaterial);
    G4double PositronEnergyCut = electron_mass_c2+
-      ((*G4Positron::Positron()).GetCutsInEnergy())[aMaterial->GetIndex()];
+                     G4Positron::Positron()->GetEnergyThreshold(aMaterial);
    G4double CutInPairEnergy = ElectronEnergyCut + PositronEnergyCut ;
 
    if (CutInPairEnergy < MinPairEnergy) CutInPairEnergy = MinPairEnergy ;

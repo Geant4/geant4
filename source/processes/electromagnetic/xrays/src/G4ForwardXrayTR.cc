@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForwardXrayTR.cc,v 1.6 2001-09-17 17:01:17 maire Exp $
+// $Id: G4ForwardXrayTR.cc,v 1.7 2001-10-24 16:40:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR class -- implementation file
@@ -45,7 +45,6 @@
 
 #include "G4ForwardXrayTR.hh"
 #include "G4Material.hh"
-#include "G4MaterialTable.hh"
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
@@ -101,10 +100,10 @@ G4ForwardXrayTR::G4ForwardXrayTR()
 {
   G4int iMat, jMat, iTkin, iTR, iPlace ;
   static 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-  G4int numOfMat = theMaterialTable->length() ;
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMat = G4Material::GetNumberOfMaterials();
   fGammaCutInKineticEnergy = new G4double[numOfMat] ;
-  fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
+  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts() ;
   fMatIndex1 = -1 ;
   fMatIndex2 = -1 ;
   fAngleDistrTable  = new G4PhysicsTable(numOfMat*(numOfMat - 1)*fTotBin) ;
@@ -292,7 +291,7 @@ void G4ForwardXrayTR::BuildXrayTRtables()
   G4int numOfMat = G4Material::GetNumberOfMaterials() ;
 
   fGammaCutInKineticEnergy = new G4double[numOfMat] ;
-  fGammaCutInKineticEnergy = fPtrGamma->GetCutsInEnergy() ;
+  fGammaCutInKineticEnergy = fPtrGamma->GetEnergyCuts() ;
 
   fAngleDistrTable  = new G4PhysicsTable(2*fTotBin) ;
   fEnergyDistrTable = new G4PhysicsTable(2*fTotBin) ;
