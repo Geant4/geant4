@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: ParRandomState.hh,v 1.1 2002-03-05 15:22:13 gcosmo Exp $
+// $Id: ParRandomState.hh,v 1.2 2003-07-04 15:36:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -55,7 +55,7 @@ class ParMarshaledRandomState : public MarshaledObj
   }
 
   // Called on slave at beginning of new event.
-  inline void SetNextRandomStateForSlave( G4int eventID, void *randomState )
+  inline void SetNextRandomStateForSlave( G4int, void *randomState )
   { HepRandom::setTheSeed( *(long *)randomState );
 #ifdef TOPC_DEBUG
     G4cout << "SET SEED: " << *(long *)randomState << G4endl;
