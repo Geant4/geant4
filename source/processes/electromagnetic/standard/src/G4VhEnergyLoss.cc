@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.11 2000-08-18 17:05:19 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.12 2000-08-18 17:37:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -386,7 +386,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                              Tscaled,aMaterial) ;
      }
      fdEdx     *= ChargeSquare ;
-     fRangeNow /= ChargeSquare ;
+     fRangeNow /= (ChargeSquare*massratio) ;
 
   // compute the (random) Step limit ..............
   if(fRangeNow > finalRange)
