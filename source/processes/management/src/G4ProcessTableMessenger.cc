@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTableMessenger.cc,v 1.7 2000-03-02 01:16:06 kurasige Exp $
+// $Id: G4ProcessTableMessenger.cc,v 1.8 2001-05-22 17:32:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -142,11 +142,9 @@ void G4ProcessTableMessenger::SetNewValue(G4UIcommand * command,G4String newValu
 {
   G4ProcessTable::G4ProcNameVector* procNameVector 
                          = theProcessTable->GetNameList(); 
-  G4ProcessTable::G4ProcTableVector* pTblVector 
-                         = theProcessTable->GetProcTableVector();
   G4int idx;
 
-  G4ProcessVector* tmpVector;
+  G4ProcessVector* tmpVector=0;
   G4int type = -1;
 
   if( command == listCmd ){

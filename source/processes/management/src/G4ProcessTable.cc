@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.cc,v 1.6 2000-11-03 03:44:52 kurasige Exp $
+// $Id: G4ProcessTable.cc,v 1.7 2001-05-22 17:32:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,7 +63,7 @@ G4ProcessTable::~G4ProcessTable()
   }
 
   if ( fProcTblVector != 0) {
-    G4ProcTableVector::iterator idx;
+    // G4ProcTableVector::iterator idx;
     
     // destruction of processes has moved to G4VUserPhysicsList
     // for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
@@ -229,12 +229,12 @@ G4int  G4ProcessTable::Remove( G4VProcess* aProcess,
 
   G4ProcTableVector::iterator itr; 
   G4int idxTbl=0;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   G4bool isFound = false;
   // loop over all elements
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
     anElement = (*itr);
-    G4int idx;
+
     // check if this process is included
     if (aProcess == anElement->GetProcess()) {
       isFound = anElement->Contains(aProcMgr);
@@ -297,7 +297,7 @@ G4VProcess* G4ProcessTable::FindProcess(const G4String& processName,
   G4ProcTableVector::iterator itr;   
   G4int idxTbl = 0;
   G4bool isFound = false;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {
     anElement = (*itr);
     // check name
@@ -485,7 +485,7 @@ void G4ProcessTable::SetProcessActivation( G4ProcessType   processType,
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << " G4ProcessTable::SetProcessActivation:" ;
-    G4cout << " The ProcessType[" << processType << "] "<< G4endl;
+    G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
 
@@ -523,7 +523,7 @@ void G4ProcessTable::SetProcessActivation(
 #ifdef G4VERBOSE
   if (verboseLevel>1){
     G4cout << " G4ProcessTable::SetProcessActivation:" ;
-    G4cout << " The ProcessType[" << processType << "] "<< G4endl;
+    G4cout << " The ProcessType[" << G4int(processType) << "] "<< G4endl;
   }
 #endif
   
@@ -550,9 +550,9 @@ void G4ProcessTable::DumpInfo(G4VProcess* process,
 {
   G4ProcTableVector::iterator itr; 
   G4int idxTbl=0;
-  G4ProcTblElement* anElement;
+  G4ProcTblElement* anElement=0;
   G4bool isFoundInTbl = false;
-  G4ProcessManager* manager;
+  G4ProcessManager* manager=0;
   G4int idx;
   // loop over all elements
   for (itr=fProcTblVector->begin(); itr!=fProcTblVector->end(); ++itr, ++idxTbl) {

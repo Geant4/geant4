@@ -5,15 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 1.5 2000-11-03 07:09:31 kurasige Exp $
+// $Id: G4VProcess.cc,v 1.6 2001-05-22 17:32:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // --------------------------------------------------------------
 //	GEANT 4 class implementation file 
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD Group
 //	History: first implementation, based on object model of
 //	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
@@ -29,11 +27,11 @@
 #include "G4VProcess.hh"
 
 G4VProcess::G4VProcess(const G4String& aName, G4ProcessType   aType )
-                  : theProcessName(aName),
-		    theProcessType(aType),
-		    pParticleChange(0),
+                  : pParticleChange(0),
                     theNumberOfInteractionLengthLeft(-1.0),
                     currentInteractionLength(-1.0),
+                    theProcessName(aName),
+		    theProcessType(aType),
                     thePILfactor(1.0),
                     verboseLevel(0)
 {
@@ -44,13 +42,14 @@ G4VProcess::~G4VProcess()
 {
 }
 
-G4VProcess::G4VProcess(G4VProcess& right):
-	    pParticleChange(0),
+G4VProcess::G4VProcess(G4VProcess& right)
+          : pParticleChange(0),
+            theNumberOfInteractionLengthLeft(-1.0),
+            currentInteractionLength(-1.0),
             theProcessName(right.theProcessName),
             theProcessType(right.theProcessType),
-            theNumberOfInteractionLengthLeft(-1.0),
             thePILfactor(1.0),
-            currentInteractionLength(-1.0)
+            verboseLevel(right.verboseLevel)
 {
 }
 
