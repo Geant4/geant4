@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VNestedParameterisation.hh,v 1.1 2005-02-15 17:17:49 japost Exp $
+// $Id: G4VNestedParameterisation.hh,v 1.2 2005-02-15 17:34:40 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VNestedParamterisation
@@ -73,7 +73,9 @@ class G4VNestedParameterisation: public G4VPVParameterisation
     virtual G4VSolid*   ComputeSolid(const G4int, 
 				     G4VPhysicalVolume  *currentVol, 
 				     const G4VTouchable *parentTouch){}
-    virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *){}
+    virtual G4Material* ComputeMaterial(const G4int, 
+					G4VPhysicalVolume *,
+					const G4VTouchable *parentTouch){}
 
 
     // Implements the following methods, in terms of the above 
