@@ -1,0 +1,35 @@
+====================================================================== 
+test17
+======================================================================
+
+System test for low energy e.m. processes for hadrons, antihadrons and ions
+
+Authors: Vladimir Ivanchenko and Stephane Chauvie
+
+======================================================================
+
+---- Scope
+
+---- What it does
+
+---- Description of the input
+
+---- Description of the output
+	Text output
+	Histograms
+	Ntuples
+	Other
+
+---- Location of the reference output
+
+---- Macros
+     test17.mac
+
+---- Other files required
+
+---- How to run it
+     test17 test17.mac
+
+---- Contactperson
+
+======================================================================
