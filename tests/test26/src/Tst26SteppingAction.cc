@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingAction.cc,v 1.3 2003-02-06 11:53:27 vnivanch Exp $
+// $Id: Tst26SteppingAction.cc,v 1.4 2003-03-26 17:29:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,16 @@ Tst26SteppingAction::~Tst26SteppingAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Tst26SteppingAction::UserSteppingAction(const G4Step* aStep)
-{ 
+{
   G4double edep = aStep->GetTotalEnergyDeposit();
   if(edep == 0.) return;
 
   const G4VPhysicalVolume* pv = aStep->GetPreStepPoint()->GetPhysicalVolume();
   const G4LogicalVolume* lv = pv->GetLogicalVolume();
+//  const G4MaterialCutsCouple* couple = aStep->GetTrack()->GetMaterialCutsCouple();
+//  G4int idx = couple->GetIndex();
+//  const G4Material* mat = couple->GetMaterial();
+//  G4cout << "Step in " << mat->GetName() << "   idx= " << idx << G4endl;
   G4int volumeIndex = -1;
   
   G4int copyNo = pv->GetCopyNo();

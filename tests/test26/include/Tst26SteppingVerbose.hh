@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26SteppingVerbose.hh,v 1.1 2003-03-13 12:00:12 maire Exp $
+// $Id: Tst26SteppingVerbose.hh,v 1.2 2003-03-26 17:29:30 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 
@@ -40,15 +40,18 @@ class Tst26SteppingVerbose;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Tst26SteppingVerbose : public G4SteppingVerbose 
+class Tst26SteppingVerbose : public G4SteppingVerbose
 {
  public:
-   
+
   Tst26SteppingVerbose();
  ~Tst26SteppingVerbose();
 
   void StepInfo();
   void TrackingStarted();
+ 
+ private:
+  void PrintStep(G4bool firstStep); 
 
 };
 

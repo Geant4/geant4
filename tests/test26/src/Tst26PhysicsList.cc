@@ -51,6 +51,7 @@
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
 #include "G4ProductionCuts.hh"
+#include "G4ProductionCutsTable.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
@@ -146,9 +147,9 @@ void Tst26PhysicsList::SetCuts()
   }
 
   // Limit for low energy electromagnetic particles
-  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
-  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
-  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
+//  G4Gamma   ::SetEnergyRange(100.0*eV,100.0*GeV);
+//  G4Electron::SetEnergyRange(100.0*eV,100.0*GeV);
+//  G4Positron::SetEnergyRange(100.0*eV,100.0*GeV);
 
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
@@ -180,7 +181,6 @@ void Tst26PhysicsList::SetCuts()
 
 void Tst26PhysicsList::SetCutForWorld(G4double cut)
 {
-  ResetCuts();
   cutForWorld = cut;
 }
 
@@ -188,7 +188,6 @@ void Tst26PhysicsList::SetCutForWorld(G4double cut)
 
 void Tst26PhysicsList::SetCutForVertexDetector(G4double cut)
 {
-  ResetCuts();
   cutForVertexDetector = cut;
 }
 
@@ -196,7 +195,6 @@ void Tst26PhysicsList::SetCutForVertexDetector(G4double cut)
 
 void Tst26PhysicsList::SetCutForMuonDetector(G4double cut)
 {
-  ResetCuts();
   cutForMuonDetector = cut;
 }
 
