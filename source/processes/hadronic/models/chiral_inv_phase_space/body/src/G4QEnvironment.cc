@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.cc,v 1.55 2003-10-24 08:26:34 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.56 2003-10-27 09:15:27 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -4126,7 +4126,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
         else G4cout<<"G4QE::Fr: Yes, it is. d="<<dem<<G4endl;
 #endif
       }
-    }
+    } // End of the Back fusion LOOP
     // >| 2     | 2  | 2     | 2     | 2      | 2 - old            | 1. If gamma: add to sum4Mom
     //  |>0->sum| 3  | 3     | 3     | 3      | 3 - old            | 2. Compare BN with the Last
     //  | 5     |>5  | 4     | 4     | 4      | 4 - old            | 3. Swap if larger, del the Last
@@ -4134,15 +4134,16 @@ G4QHadronVector* G4QEnvironment::Fragment()
     //  | 4     | 4  | 5     | ex    |        |(0 - possible gamma)| 5. Decay/Eporate the Last
     //  | 3     | ex |                        | 3 - new
     G4LorentzVector sum(0.,0.,0.,0.);
-    //G4int gamCount=0;
-    //G4int decCount=0;
     nHadr=theQHadrons.size();
 #ifdef pdebug
     G4cout<<"G4QE::Fr: ===Before the gamma compression===, nH="<<nHadr<<G4endl;
 #endif
-    //if(nHadr)for(G4int h=nHadr-1; h>=0; h--)//Compress gamma & kill DecayedHadrons
-    //if(nHadr>3)for(G4int h=nHadr-1; h>=0; h--)//Compress gamma & kill DecayedHadrons
-	if(nHadr>2) for(G4int h=nHadr-1; h>=0; h--)   //Collect gammas to sum & kill DecayedHadrons
+    G4bool frag=false;
+    if(nHadr>2)for(unsigned f=0; f<theQHadrons.size()-1; f++) // Check that there is a fragment
+    {
+      if(theQHadrons[f]->GetBaryonNumber()>1) frag=true; // The fragment is found
+    }
+	if(nHadr>2 && frag) for(G4int h=nHadr-1; h>=0; h--)  //Collect gammas & kill DecayedHadrons
     {
       G4QHadron* curHadr = theQHadrons[h];      // Get a pointer to the current Hadron
       G4int   hF = curHadr->GetNFragments();
@@ -4203,143 +4204,145 @@ G4QHadronVector* G4QEnvironment::Fragment()
     }
     nHadr=theQHadrons.size();
     G4QHadron* theLast = theQHadrons[nHadr-1]; // Get a pointer to the Last Hadron
-    G4QHadron* theNew  = new G4QHadron(theLast); // Make a New Hadron of the Last Hadron
+    if(theLast->GetBaryonNumber()>1) // "Absorb photons & try to evaporate/decay" case
+    {
+      G4QHadron* theNew  = new G4QHadron(theLast); // Make a New Hadron of the Last Hadron
 #ifdef pdebug
-    G4cout<<"G4QE::Fr: Before LastSubtract nH="<<nHadr<<", lastPDG="<<theNew->GetPDGCode()<<G4endl;
+      G4cout<<"G4QE::Fr: Before LastSub nH="<<nHadr<<", lastPDG="<<theNew->GetPDGCode()<<G4endl;
 #endif
-    theQHadrons.pop_back();                    // the last QHadron is excluded from OUTPUT
-    delete theLast; //*!! When killing, DON'T forget to delete the last QHadron as an instance !!*
-    nHadr--;                                 // The last hadron is only virtually exists now
-    G4LorentzVector exRes4M=theNew->Get4Momentum()+sum; // Icrease 4Mom of the Last by the "sum"
-    G4QNucleus exResidN(exRes4M,theNew->GetPDGCode());
-    //G4double mGamEva=2700.;                    // Threshold for the evaporation
-    G4double mGamEva=1700.;                    // Threshold for the evaporation
-	if(exResidN.SplitBaryon())
-	//if(2>3)                                    // Close the first priority resN+gamSum Evaporation
-	{
-      theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
-#ifdef pdebug
-      G4cout<<"G4QE::Fr: Before Evap. (1), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
-#endif
-      EvaporateResidual(theNew);               // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
-    }
-    else if(theNew->GetPDGCode()==90002002 && exRes4M.m()>mHe3+mNeut && G4UniformRand()>.5)
-	{
-      theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
-      G4LorentzVector n4M(0.,0.,0.,mNeut);
-      G4LorentzVector h4M(0.,0.,0.,mHe3);
-      if(!theNew->DecayIn2(n4M,h4M))
-      {
-        G4cerr<<"***G4QE::Fr:GammaSuppress, tM="<<exRes4M.m()<<"<n+He3="<<mNeut+mHe3<<G4endl;
-        G4Exception("***G4QEnvironment::Fragment:DecayIn2(n+He3) didn't succeed forGamSUPPRESS");
-      }
-#ifdef pdebug
-      G4cout<<"G4QE::Fr:Gamma Suppression succided, n="<<n4M<<", He3="<<h4M<<G4endl;
-#endif
-      theNew->Set4Momentum(n4M);
-      theNew->SetQPDG(nQPDG);               // convert the alpha to the neutron
-      theQHadrons.push_back(theNew);        // (delete equivalent for theHad=neutron)
-      G4QHadron* theHe3 = new G4QHadron(90002001,h4M);// Make a New Hadr for the He3
-      theQHadrons.push_back(theHe3);        // (delete equivalent for the proton)
-    }
-	//else if(nHadr>1)                         // Get LastHadrBeforeResNuc, absorb gammas and decay
-	else if(nHadr)                         // Get LastHadrBeforeResNuc, absorb gammas and decay
-	//else if(2>3)                           // Close the pair absorbtion of gamma
-	{
-      if(nHadr>1)for(unsigned sh=0; sh<theQHadrons.size()-1; sh++) // Order "theSoftest is theLast"
-      {
-        G4QHadron* curHadr = theQHadrons[sh];   // Get a pointer to the current Hadron
-        G4QHadron* thePrev = theQHadrons[theQHadrons.size()-1]; //Get a pointer to the Last Hadron
-        G4LorentzVector h4M= curHadr->Get4Momentum();
-        G4LorentzVector l4M= thePrev->Get4Momentum();
-#ifdef pdebug
-        G4cout<<"G4QE::Fr:SORD,h="<<sh<<"<"<<nHadr<<",hPDG/LV="<<curHadr->GetPDGCode()<<h4M<<G4endl;
-#endif
-        G4double hM=h4M.m();
-        G4double hT=h4M.e()-hM;
-        G4double lT=l4M.e()-l4M.m();
-#ifdef pdebug
-        G4cout<<"G4QE::Fr:hT="<<hT<<" < lastT="<<lT<<"? lastPDG="<<thePrev->GetPDGCode()<<G4endl;
-#endif
-        if(hM>mGamEva&&lT>hT)                   // Must be swapped as the current is smaller
-	    {
-          G4QPDGCode   hQPDG = curHadr->GetQPDG();
-          curHadr->Set4Momentum(l4M);
-          curHadr->SetQPDG(thePrev->GetQPDG());
-          thePrev->Set4Momentum(h4M);
-          thePrev->SetQPDG(hQPDG);
-	    }
-      }
-      nHadr=theQHadrons.size();
-      G4QHadron* thePrev = theQHadrons[nHadr-1];// Get a pointer to the BeforeResidualNucleusHadron
-      if(thePrev->Get4Momentum().m()>mGamEva)
-      {
-        G4QHadron* theHad  = new G4QHadron(thePrev);// Make a New Hadr of the BeforeResidNuclHadron
-#ifdef pdebug
-        G4cout<<"G4QE::Fr: BeforeResidNucHadr nH="<<nHadr<<", hPDG="<<theHad->GetPDGCode()<<G4endl;
-#endif
-        theQHadrons.pop_back();                    // the last QHadron is excluded from OUTPUT
-        delete thePrev;//*!! When killing, DON'T forget to delete theLastQHadron as an instance !!*
-        G4LorentzVector n4M=theNew->Get4Momentum();// 4Mom of the Last (biggest nucleus)
-        G4LorentzVector h4M=theHad->Get4Momentum();// 4Mom of the previous Hadron in HV
-        G4LorentzVector dh4M=exRes4M+h4M;          // 4Mom of Last+PrevH+sum(gammas) for the decay
-        if(theHad->GetPDGCode()==90001001 && dh4M.m()>n4M.m()+mProt+mNeut && G4UniformRand()>.5)
-		//if(2>3)                                  // Close the possibility to split the deuteron
-        {
-          h4M=G4LorentzVector(0.,0.,0.,mNeut);
-          G4LorentzVector p4M(0.,0.,0.,mProt);
-          if(!G4QHadron(dh4M).DecayIn3(n4M,h4M,p4M))
-          {
-            G4cerr<<"***G4QE::Fr:GamSupByD,M="<<dh4M.m()<<" < A+p+n="<<n4M.m()+mNeut+mProt<<G4endl;
-            G4Exception("***G4QEnvironment::Fragment:DecayIn3 didn't succeed for GamSUPPRESSbyD");
-          }
-#ifdef pdebug
-          G4cout<<"G4QE::Fr:Gamma Suppression by d succided, h="<<h4M<<", A="<<n4M<<G4endl;
-#endif
-          theHad->Set4Momentum(h4M);
-          theHad->SetQPDG(nQPDG);               // convert the deuteron to the neutron
-          theQHadrons.push_back(theHad);        // (delete equivalent for theHad=neutron)
-          G4QHadron* theProt = new G4QHadron(90001000,p4M);// Make a New Hadr for the proton
-          theQHadrons.push_back(theProt);       // (delete equivalent for the proton)
-          theNew->Set4Momentum(n4M);
-          EvaporateResidual(theNew);            // Try to evaporate theResNuc once more (del. eq.)
-        }
-        else
-        {
-          if(!G4QHadron(dh4M).DecayIn2(n4M,h4M))
-          {
-            G4cerr<<"***G4QE::Fr:GammaSuppress, tM="<<dh4M.m()<<" < A+h="<<n4M.m()+h4M.m()<<G4endl;
-            G4Exception("***G4QEnvironment::Fragment:DecayIn2 didn't succeed forGammaSUPPRESSION");
-          }
-#ifdef pdebug
-          G4cout<<"G4QE::Fr:Gamma Suppression succided, h="<<h4M<<", A="<<n4M<<G4endl;
-#endif
-          theHad->Set4Momentum(h4M);
-          theQHadrons.push_back(theHad);          // (delete equivalent for theHad)
-          theNew->Set4Momentum(n4M);
-          EvaporateResidual(theNew);              // Try to evaporate theResNuc once more (del. eq.)
-        }
-	  }
-      else
+      theQHadrons.pop_back();                    // the last QHadron is excluded from OUTPUT
+      delete theLast; //*!! When killing, DON'T forget to delete the last QHadron as an instance !!*
+      nHadr--;                                 // The last hadron is only virtually exists now
+      G4LorentzVector exRes4M=theNew->Get4Momentum()+sum; // Icrease 4Mom of the Last by the "sum"
+      G4QNucleus exResidN(exRes4M,theNew->GetPDGCode());
+      //G4double mGamEva=2700.;                    // Threshold for the evaporation
+      G4double mGamEva=1700.;                    // Threshold for the evaporation
+	  if(exResidN.SplitBaryon())
+	  //if(2>3)                                  // Close the first priority resN+gamSum Evaporation
 	  {
         theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
 #ifdef pdebug
-        G4cout<<"G4QE::Fr: Before Evap (2), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
+        G4cout<<"G4QE::Fr: Before Evap. (1), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
 #endif
-        EvaporateResidual(theNew);             // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
+        EvaporateResidual(theNew);               // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
       }
-    }
-	else                                       // Absorb gammas to theResidNucleus and evaporate it
-	{
-      theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
+      else if(theNew->GetPDGCode()==90002002 && exRes4M.m()>mHe3+mNeut && G4UniformRand()>.5)
+	  {
+        theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
+        G4LorentzVector n4M(0.,0.,0.,mNeut);
+        G4LorentzVector h4M(0.,0.,0.,mHe3);
+        if(!theNew->DecayIn2(n4M,h4M))
+        {
+          G4cerr<<"***G4QE::Fr:GammaSuppress, tM="<<exRes4M.m()<<"<n+He3="<<mNeut+mHe3<<G4endl;
+          G4Exception("***G4QEnvironment::Fragment:DecayIn2(n+He3) didn't succeed forGamSUPPRESS");
+        }
 #ifdef pdebug
-      G4cout<<"G4QE::Fr: Before Evap. (3), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
+        G4cout<<"G4QE::Fr:Gamma Suppression succided, n="<<n4M<<", He3="<<h4M<<G4endl;
 #endif
-      EvaporateResidual(theNew);               // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
-    }
-    //G4int onH=nHadr;
-    nHadr=theQHadrons.size();
-    //if(nHadr>onH) bfAct=true;
+        theNew->Set4Momentum(n4M);
+        theNew->SetQPDG(nQPDG);               // convert the alpha to the neutron
+        theQHadrons.push_back(theNew);        // (delete equivalent for theHad=neutron)
+        G4QHadron* theHe3 = new G4QHadron(90002001,h4M);// Make a New Hadr for the He3
+        theQHadrons.push_back(theHe3);        // (delete equivalent for the proton)
+      }
+	  else if(nHadr)                         // Get LastHadrBeforeResNuc, absorb gammas and decay
+	  //else if(2>3)                           // Close the pair absorbtion of gamma
+	  {
+        if(nHadr>1)for(unsigned sh=0; sh<theQHadrons.size()-1; sh++)//Order:"theSoftest is theLast"
+        {
+          G4QHadron* curHadr = theQHadrons[sh];   // Get a pointer to the current Hadron
+          G4QHadron* thePrev = theQHadrons[theQHadrons.size()-1]; //Get a pointer to the Last Hadron
+          G4LorentzVector h4M= curHadr->Get4Momentum();
+          G4LorentzVector l4M= thePrev->Get4Momentum();
+#ifdef pdebug
+          G4cout<<"G4QE::Fr:SORD,h="<<sh<<"<"<<nHadr<<",hPDG/LV="<<curHadr->GetPDGCode()<<h4M<<G4endl;
+#endif
+          G4double hM=h4M.m();
+          G4double hT=h4M.e()-hM;
+          G4double lT=l4M.e()-l4M.m();
+#ifdef pdebug
+          G4cout<<"G4QE::Fr:hT="<<hT<<" < lastT="<<lT<<"? lastPDG="<<thePrev->GetPDGCode()<<G4endl;
+#endif
+          if(hM>mGamEva&&lT>hT)                   // Must be swapped as the current is smaller
+	      {
+            G4QPDGCode   hQPDG = curHadr->GetQPDG();
+            curHadr->Set4Momentum(l4M);
+            curHadr->SetQPDG(thePrev->GetQPDG());
+            thePrev->Set4Momentum(h4M);
+            thePrev->SetQPDG(hQPDG);
+	      }
+        }
+        nHadr=theQHadrons.size();
+        G4QHadron* thePrev = theQHadrons[nHadr-1];// Get a pointer to the BeforeResidNucleusHadron
+        if(thePrev->Get4Momentum().m()>mGamEva)
+        {
+          G4QHadron* theHad  = new G4QHadron(thePrev);// Make a NewHadr of the BeforeResidNuclHadr
+#ifdef pdebug
+          G4cout<<"G4QE::Fr:BeforeResidNucHadr nH="<<nHadr<<", hPDG="<<theHad->GetPDGCode()<<G4endl;
+#endif
+          theQHadrons.pop_back();                    // the last QHadron is excluded from OUTPUT
+          delete thePrev;//*!! When killing, DON'T forget to delete theLastQHadron as an instance !!*
+          G4LorentzVector n4M=theNew->Get4Momentum();// 4Mom of the Last (biggest nucleus)
+          G4LorentzVector h4M=theHad->Get4Momentum();// 4Mom of the previous Hadron in HV
+          G4LorentzVector dh4M=exRes4M+h4M;          // 4Mom of Last+PrevH+sum(gammas) for the decay
+          if(theHad->GetPDGCode()==90001001 && dh4M.m()>n4M.m()+mProt+mNeut && G4UniformRand()>.5)
+		  //if(2>3)                                  // Close the possibility to split the deuteron
+          {
+            h4M=G4LorentzVector(0.,0.,0.,mNeut);
+            G4LorentzVector p4M(0.,0.,0.,mProt);
+            if(!G4QHadron(dh4M).DecayIn3(n4M,h4M,p4M))
+            {
+              G4cerr<<"***G4QE::Fr:GamSupByD,M="<<dh4M.m()<<" < A+p+n="<<n4M.m()+mNeut+mProt<<G4endl;
+              G4Exception("***G4QEnvironment::Fragment:DecayIn3 didn't succeed for GamSUPPRESSbyD");
+            }
+#ifdef pdebug
+            G4cout<<"G4QE::Fr:Gamma Suppression by d succided, h="<<h4M<<", A="<<n4M<<G4endl;
+#endif
+            theHad->Set4Momentum(h4M);
+            theHad->SetQPDG(nQPDG);               // convert the deuteron to the neutron
+            theQHadrons.push_back(theHad);        // (delete equivalent for theHad=neutron)
+            G4QHadron* theProt = new G4QHadron(90001000,p4M);// Make a New Hadr for the proton
+            theQHadrons.push_back(theProt);       // (delete equivalent for the proton)
+            theNew->Set4Momentum(n4M);
+            EvaporateResidual(theNew);            // Try to evaporate theResNuc once more (del. eq.)
+          }
+          else
+          {
+            if(!G4QHadron(dh4M).DecayIn2(n4M,h4M))
+            {
+              G4cerr<<"***G4QE::Fr:GammaSuppress, tM="<<dh4M.m()<<" < A+h="<<n4M.m()+h4M.m()<<G4endl;
+              G4Exception("***G4QEnvironment::Fragment:DecayIn2 didn't succeed forGammaSUPPRESSION");
+            }
+#ifdef pdebug
+            G4cout<<"G4QE::Fr:Gamma Suppression succided, h="<<h4M<<", A="<<n4M<<G4endl;
+#endif
+            theHad->Set4Momentum(h4M);
+            theQHadrons.push_back(theHad);          // (delete equivalent for theHad)
+            theNew->Set4Momentum(n4M);
+            EvaporateResidual(theNew);              // Try to evaporate theResNuc once more (del. eq.)
+          }
+	    }
+        else
+	    {
+          theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
+#ifdef pdebug
+          G4cout<<"G4QE::Fr: Before Evap (2), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
+#endif
+          EvaporateResidual(theNew);             // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
+        }
+      }
+	  else                                       // Absorb gammas to theResidNucleus and evaporate it
+	  {
+        theNew->Set4Momentum(exRes4M);           // Icrease 4Mom of the Last by the "sum" for Evap
+#ifdef pdebug
+        G4cout<<"G4QE::Fr: Before Evap. (3), nH="<<nHadr<<", nucPDG="<<theNew->GetPDGCode()<<G4endl;
+#endif
+        EvaporateResidual(theNew);               // Try to evaporate the Nucl.(@@DecDib)(delete eq.)
+      }
+      //G4int onH=nHadr;
+      nHadr=theQHadrons.size();
+      //if(nHadr>onH) bfAct=true;
+    } // End of "the last is the nucleus" case
   } // End of the While-LOOOP for the Back Fusion
   // Final attempt to alpha-decay the residual nucleus, suppressing the gamma ==================.
   G4int gamcnt=0; // Counter of the residual gammas at this level

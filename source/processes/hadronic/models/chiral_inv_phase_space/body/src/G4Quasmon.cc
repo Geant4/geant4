@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.52 2003-10-24 08:26:37 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.53 2003-10-27 09:15:28 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -1236,7 +1236,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       G4int rqPDG = curQ.GetSPDGCode();
       G4double rr=G4UniformRand();  // The same procedure as for "rPDG"
       if(rqPDG==111&&sPDG!=111&&rr>.5) rqPDG=221;
-      if(rqPDG==221&&sPDG!=221&&sPDG!=331&&rr<.5) rqPDG=111;
+      //if(rqPDG==221&&sPDG!=221&&sPDG!=331&&rr<.5) rqPDG=111;
       G4int rQQ=G4QPDGCode(curQ).GetQCode();
       if(rqPDG==10)
       {
@@ -1675,7 +1675,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       rPDG        = curQ.GetSPDGCode();              // PDG of lowest ResiduaiQuasm hadronic state
       G4double rrn=G4UniformRand();                  // The same procedure as for "rqPDG"
       if(rPDG==111&&sPDG!=111&&rrn>.5) rPDG=221;
-      if(rPDG==221&&sPDG!=221&&sPDG!=331&&rrn<.5) rPDG=111;
+      //if(rPDG==221&&sPDG!=221&&sPDG!=331&&rrn<.5) rPDG=111;
       G4int aPDG  = abs(rPDG);
       G4int rb    = abs(curQ.GetBaryonNumber());     // BaryNum of residual hadronic state
       G4double rcMass=-BIG;   //@@ just a BIG number // Prototype of minimal mass for residual
@@ -1714,7 +1714,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
           else        refPDG=redPDG-2;               // Subtract 2 for the negative PDG
           if(refPDG>0)regPDG=refPDG+2;               // Make G-state out of F-state
           else        regPDG=refPDG-2;               // Subtract 2 for the negative PDG
-          if((rPDG==221||rPDG==331)&&sPDG==111) rPDG=111; // eta/eta'=>Pi0
+          //if((rPDG==221||rPDG==331)&&sPDG==111) rPDG=111; // eta/eta'=>Pi0
 #ifdef debug
 	      G4cout<<"G4Q::HQ:MQ="<<quasM<<"(QQC="<<valQ<<")->H("<<sPDG<<")+RGS("<<rPDG<<")"<<G4endl;
 #endif
@@ -2807,7 +2807,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     G4Exception("G4Quasmon::FillHadronVector: Zero rho");
   }
 #endif
-#ifdef tdebug
+#ifdef pdebug
   G4cout<<"G4Quasmon::FillHadronVector:Hadron's PDG="<<thePDG<<",4Mom="<<t<<",m="<<t.m()<<G4endl;
 #endif
   if(thePDG>80000000 && (thePDG<90000000 || thePDG%1000>500 || thePDG%1000000>500000)
@@ -2885,7 +2885,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     G4int    nZ     =qNuc.GetZ();              // A#of protons in the Nucleus
     G4int    nS     =qNuc.GetS();              // A#of protons in the Nucleus
     G4int    bA     =qNuc.GetA();              // A#of baryons in the Nucleus
-#ifdef tdebug
+#ifdef pdebug
 	G4cout<<"G4Quasm::FillHadrVect: Nucl="<<qNuc<<",nPDG="<<thePDG<<",GSM="<<GSMass<<G4endl;
 #endif
     if((nN<0||nZ<0||nS<0)&&bA>0)               // => "Anti-strangeness or ISOBAR" case
@@ -2962,7 +2962,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	}
     else if(abs(fragMas-GSMass)<.1)            // the Nucleus is too close the Ground State
     {
-#ifdef tdebug
+#ifdef pdebug
 	  G4cout<<"G4Quasm::FillHadrVect: Ground state"<<G4endl;
 #endif
       G4double nResM  =1000000.;               // Prototype of mass of residual for a neutron
@@ -3001,7 +3001,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
         else if(lResPDG==91000000) lResM=mLamb;
         else lResM  =resN.GetMZNS();           // min mass of the Residual Nucleus
 	  }
-#ifdef tdebug
+#ifdef pdebug
       G4cout<<"G4Quasm::FillHadrVect: rP="<<pResPDG<<",rN="<<nResPDG<<",rL="<<lResPDG<<",nN="
             <<nN<<",nZ="<<nZ<<",nL="<<nS<<",totM="<<fragMas<<",n="<<fragMas-nResM-mNeut<<",p="
             <<fragMas-pResM-mProt<<",l="<<fragMas-lResM-mLamb<<G4endl;
@@ -3068,7 +3068,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	  }
       else
       {
-#ifdef tdebug
+#ifdef pdebug
 	    G4cout<<"G4Quasm::FillHadrVect: Leave as it is"<<G4endl;
 #endif
         theQHadrons.push_back(qH);             // No decay  (delete equivalent)
@@ -3105,7 +3105,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
     }
     else                                        // ===> Evaporation of excited system
 	{
-#ifdef tdebug
+#ifdef pdebug
       G4cout<<"G4Quasm::FillHadrVect:Evaporate "<<thePDG<<",tM="<<fragMas<<" > GS="<<GSMass
             <<qNuc.Get4Momentum()<<", m="<<qNuc.Get4Momentum().m()<<G4endl;
 #endif
@@ -3120,7 +3120,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
 	  }
       else
 	  {
-#ifdef tdebug
+#ifdef pdebug
       G4cout<<"G4Quasm::FillHadrVec:Done b="<<bHadron->GetQPDG()<<",r="<<rHadron->GetQPDG()<<G4endl;
 #endif
         //qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
@@ -3135,7 +3135,7 @@ void G4Quasmon::FillHadronVector(G4QHadron* qH)
   }
   else if(!DecayOutHadron(qH))                  // (delete equivalent)
   {
-#ifdef tdebug
+#ifdef pdebug
     G4cout<<"***G4Quasmon::FillHadronVector: Emergency OUTPUT, PDGcode= "<<thePDG<<G4endl;
 #endif
   }
@@ -4528,7 +4528,7 @@ G4bool G4Quasmon::CheckGroundState(G4bool corFlag) // Correction is forbidden by
   return true;
 } // End of "CheckGroundState"
 
-// Decay of outgoing hadron
+// Decay of the outgoing hadron
 G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
 { //   ==========================================================
   G4QPDGCode theQPDG  = qHadron->GetQPDG();
@@ -4540,7 +4540,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
   // --- Randomize a channel of decay
   G4QDecayChanVector decV = theWorld.GetQParticle(theQPDG)->GetDecayVector();
   G4int nChan = decV.size();
-#ifdef tdebug
+#ifdef pdebug
   G4cout<<"G4Quasmon::DecayOutHadron: PDG="<<thePDG<<", m="<<m<<",("<<nChan<<" channels)"<<G4endl;
 #endif
   if(nChan)
@@ -4552,7 +4552,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
       for(i=0; i<nChan; i++)
 	  {
         G4QDecayChan* dC = decV[i];                   // The i-th Decay Channel
-#ifdef tdebug
+#ifdef pdebug
         G4cout<<"G4Quasmon::DecayOutHadron: i="<<i<<",r="<<rnd<<" < dl="<<dC->GetDecayChanLimit()
               <<", mm="<<dC->GetMinMass()<<G4endl;
 #endif
@@ -4562,7 +4562,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
 	}
     G4QPDGCodeVector cV=decV[i]->GetVecOfSecHadrons();// PDGVector of the selected Decay Channel
     G4int nPart=cV.size();                         // A#of particles to decay in
-#ifdef tdebug
+#ifdef pdebug
 	G4cout<<"G4Quasmon::DecayOutHadron: resi="<<i<<",nP="<<nPart<<":"<<cV[0]->GetPDGCode()
           <<","<<cV[1]->GetPDGCode();
     if(nPart>2) G4cout<<","<<cV[2]->GetPDGCode();
@@ -4573,7 +4573,7 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
       G4cerr<<"***G4Q::DecayOutH: n="<<nPart<<", ch#"<<i<<",PDG="<<thePDG<<G4endl;
       return false;
 	}
-#ifdef tdebug
+#ifdef pdebug
     G4cout<<"G4Quasmon::DecayOutHadron: Fill PDG= "<<thePDG<<t<<m<<"(nP="<<nPart<<")>>>>>"<<G4endl;
 #endif
     if(nPart==2)
@@ -4582,7 +4582,10 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
       G4QHadron* sHadr;
       G4int fPDG=cV[0]->GetPDGCode();
       G4int sPDG=cV[1]->GetPDGCode();
-      if(fPDG!=22 && sPDG!=22 || abs(thePDG)%10>2 || DFlag)
+      // @@ Radiative decays In2 (eta, eta', Sigma0) are closed (!)
+      //if(fPDG!=22 && sPDG!=22 || abs(thePDG)%10>2 || DFlag)
+      // Radiative decays In2 (eta, eta', Sigma0) are open
+      if(3>2 || DFlag)
       {
         if(cV[0]->GetWidth()==0.)
 	    { // Randomize only the second Hardon or none
@@ -4608,12 +4611,12 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
           G4double sdm = m - fm;                          // MaxMassLimit for the Second Hadron
           sHadr = new G4QHadron(sPart,sdm);               // the 2-nd Hadron is initialized *2*
           if(sPDG<0) sHadr->MakeAntiHadron();
-#ifdef tdebug
+#ifdef pdebug
           G4cout<<"G4Q::DOH:M="<<m<<",mi="<<mim<<",fd="<<fdm<<",fm="<<fm<<",sd="<<sdm
                 <<",sm="<<sHadr->GetMass()<<G4endl;
 #endif
         }
-#ifdef tdebug
+#ifdef pdebug
         G4cout<<"G4Q::DOH:(Decay in 2) m1="<<fHadr->GetMass()<<", m2="<<sHadr->GetMass()<<G4endl;
 #endif
         if(pap)
@@ -4659,94 +4662,101 @@ G4bool G4Quasmon::DecayOutHadron(G4QHadron* qHadron, G4int DFlag)
       G4int fPDG=cV[0]->GetPDGCode();
       G4int sPDG=cV[1]->GetPDGCode();
       G4int tPDG=cV[2]->GetPDGCode();
-      if(cV[0]->GetWidth()==0.)                        // Don't randomize the First Hardon
-	  {
-        fHadr = new G4QHadron(fPDG);                   // the First Hadron is created  *1*
-        if(cV[1]->GetWidth()==0.)
-        {
-          sHadr = new G4QHadron(sPDG);                         // the Second Hadron is created *2*
-          if(cV[2]->GetWidth()==0.)tHadr = new G4QHadron(tPDG);//the Third Hadron is created *3*
-          else
+      //@@ The radiative decays of the GS hadrons In3 are closed (!)
+      //if(fPDG!=22&&sPDG!=22&&tPDG!=22 || abs(thePDG)%10>2 || DFlag)
+      //The radiative decays of the GS hadrons In3 are open
+      if(3>2 || DFlag)
+      {
+        if(cV[0]->GetWidth()==0.)                        // Don't randomize the First Hardon
+	    {
+          fHadr = new G4QHadron(fPDG);                   // the First Hadron is created  *1*
+          if(cV[1]->GetWidth()==0.)
+          {
+            sHadr = new G4QHadron(sPDG);                         // the Second Hadron is created *2*
+            if(cV[2]->GetWidth()==0.)tHadr = new G4QHadron(tPDG);//the Third Hadron is created *3*
+            else
+		    {
+              G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the 3-rd Hadron
+              G4double tdm = m-fHadr->GetMass()-sHadr->GetMass();// MaxMassLimit for the 2d Hadron
+              tHadr = new G4QHadron(tPart,tdm);                  // the 3-rd Hadron is created *3*
+              if(tPDG<0) tHadr->MakeAntiHadron();
+		    }
+          }
+          else                                              // Randomize 2nd & 3rd Hadrons
 		  {
-            G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the 3-rd Hadron
-            G4double tdm = m-fHadr->GetMass()-sHadr->GetMass();// MaxMassLimit for the 2d Hadron
-            tHadr = new G4QHadron(tPart,tdm);                  // the 3-rd Hadron is created *3*
+            m-=fHadr->GetMass();                            // Reduce the residual MaxMassLimit
+            G4QParticle* tPart=theWorld.GetQParticle(cV[2]);// Particle for the 3-rd Hadron
+            G4double mim = tPart->MinMassOfFragm();         // MinMassLimit for the 3rd Hadron
+            G4double sdm = m - mim;                         // MaxMassLimit for the 2nd Hadron
+            G4QParticle* sPart=theWorld.GetQParticle(cV[1]);// Particle for the 2-nd Hadron
+            sHadr = new G4QHadron(sPart,sdm);               // the Second Hadron is created *2*
+            if(sPDG<0) sHadr->MakeAntiHadron();
+            G4double tdm = m - sHadr->GetMass();            // MaxMassLimit for the 3-rd Hadron
+            tHadr = new G4QHadron(tPart,tdm);               // the Third Hadron is created *3*
             if(tPDG<0) tHadr->MakeAntiHadron();
-		  }
-        }
-        else                                              // Randomize 2nd & 3rd Hadrons
-		{
-          m-=fHadr->GetMass();                            // Reduce the residual MaxMassLimit
-          G4QParticle* tPart=theWorld.GetQParticle(cV[2]);// Particle for the 3-rd Hadron
-          G4double mim = tPart->MinMassOfFragm();         // MinMassLimit for the 3rd Hadron
-          G4double sdm = m - mim;                         // MaxMassLimit for the 2nd Hadron
-          G4QParticle* sPart=theWorld.GetQParticle(cV[1]);// Particle for the 2-nd Hadron
-          sHadr = new G4QHadron(sPart,sdm);               // the Second Hadron is created *2*
+          }
+	    }
+        else  // Randomize masses of all three Hadrons
+	    {
+          G4QParticle* sPart=theWorld.GetQParticle(cV[1]);   // Particle for the Second Hadron
+          G4double smim = sPart->MinMassOfFragm();           // MinMassLimit for the Second Hadron
+          G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the Third Hadron
+          G4double tmim = tPart->MinMassOfFragm();           // MinMassLimit for the Third Hadron
+          G4double fdm = m - smim - tmim;                    // MaxMassLimit for the First Hadron
+          G4QParticle* fPart=theWorld.GetQParticle(cV[0]);   // Particle for the First Hadron
+          fHadr = new G4QHadron(fPart,fdm);                  // the First Hadron is created *1*
+          if(fPDG<0) fHadr->MakeAntiHadron();
+          m-=fHadr->GetMass();                               // Reduce the residual MaxMassLimit !
+          G4double  sdm = m - tmim;                          // MaxMassLimit for the Second Hadron
+          sHadr = new G4QHadron(sPart,sdm);                  // the Second Hadron is created *2*
           if(sPDG<0) sHadr->MakeAntiHadron();
-          G4double tdm = m - sHadr->GetMass();            // MaxMassLimit for the 3-rd Hadron
-          tHadr = new G4QHadron(tPart,tdm);               // the Third Hadron is created *3*
+          G4double  tdm = m - sHadr->GetMass();              // MaxMassLimit for the Third Hadron
+          tHadr = new G4QHadron(tPart,tdm);                  // the Third Hadron is created *3*
           if(tPDG<0) tHadr->MakeAntiHadron();
-        }
-	  }
-      else  // Randomize masses of all three Hadrons
-	  {
-        G4QParticle* sPart=theWorld.GetQParticle(cV[1]);   // Particle for the Second Hadron
-        G4double smim = sPart->MinMassOfFragm();           // MinMassLimit for the Second Hadron
-        G4QParticle* tPart=theWorld.GetQParticle(cV[2]);   // Particle for the Third Hadron
-        G4double tmim = tPart->MinMassOfFragm();           // MinMassLimit for the Third Hadron
-        G4double fdm = m - smim - tmim;                    // MaxMassLimit for the First Hadron
-        G4QParticle* fPart=theWorld.GetQParticle(cV[0]);   // Particle for the First Hadron
-        fHadr = new G4QHadron(fPart,fdm);                  // the First Hadron is created *1*
-        if(fPDG<0) fHadr->MakeAntiHadron();
-        m-=fHadr->GetMass();                               // Reduce the residual MaxMassLimit !
-        G4double  sdm = m - tmim;                          // MaxMassLimit for the Second Hadron
-        sHadr = new G4QHadron(sPart,sdm);                  // the Second Hadron is created *2*
-        if(sPDG<0) sHadr->MakeAntiHadron();
-        G4double  tdm = m - sHadr->GetMass();              // MaxMassLimit for the Third Hadron
-        tHadr = new G4QHadron(tPart,tdm);                  // the Third Hadron is created *3*
-        if(tPDG<0) tHadr->MakeAntiHadron();
-      }     
-#ifdef tdebug
-      G4cout<<"G4Quasmon::DecayOutHadron:3Dec. m1="<<fHadr->GetMass()<<",m2="<<sHadr->GetMass()
+        }     
+#ifdef pdebug
+        G4cout<<"G4Quasmon::DecayOutHadron:3Dec. m1="<<fHadr->GetMass()<<",m2="<<sHadr->GetMass()
             <<",m3="<<tHadr->GetMass()<<G4endl;
 #endif
-      if(pap)
-      {
-        fHadr->MakeAntiHadron();
-        sHadr->MakeAntiHadron();
-        tHadr->MakeAntiHadron();
-      }
-      G4LorentzVector f4Mom = fHadr->Get4Momentum();   // Get 4-mom of the First Hadron (mass) 
-      G4LorentzVector s4Mom = sHadr->Get4Momentum();   // Get 4-mom of the Second Hadron (mass) 
-      G4LorentzVector t4Mom = tHadr->Get4Momentum();   // Get 4-mom of the Third Hadron (mass) 
-      if(!qHadron->DecayIn3(f4Mom,s4Mom,t4Mom))
-      {
-        delete fHadr;                                  // Delete "new fHadr"
-        delete sHadr;                                  // Delete "new sHadr"
-        delete tHadr;                                  // Delete "new tHadr"
-        G4cerr<<"***G4Q::DecayOutHadron:in3, PDGC="<<thePDG<<", ch#"<<i<<G4endl;
-        theQHadrons.push_back(qHadron);                   // Fill as it is (delete equivalent)
-        return false;
+        if(pap)
+        {
+          fHadr->MakeAntiHadron();
+          sHadr->MakeAntiHadron();
+          tHadr->MakeAntiHadron();
+        }
+        G4LorentzVector f4Mom = fHadr->Get4Momentum();   // Get 4-mom of the First Hadron (mass) 
+        G4LorentzVector s4Mom = sHadr->Get4Momentum();   // Get 4-mom of the Second Hadron (mass) 
+        G4LorentzVector t4Mom = tHadr->Get4Momentum();   // Get 4-mom of the Third Hadron (mass) 
+        if(!qHadron->DecayIn3(f4Mom,s4Mom,t4Mom))
+        {
+          delete fHadr;                                  // Delete "new fHadr"
+          delete sHadr;                                  // Delete "new sHadr"
+          delete tHadr;                                  // Delete "new tHadr"
+          G4cerr<<"***G4Q::DecayOutHadron:in3, PDGC="<<thePDG<<", ch#"<<i<<G4endl;
+          theQHadrons.push_back(qHadron);                   // Fill as it is (delete equivalent)
+          return false;
+	    }
+        else
+        {
+          //qHadron->SetNFragments(3);
+          //theQHadrons.push_back(qHadron);                   // Fill with NFr=3 (delete equivalent)
+          // Instead
+          delete qHadron;
+          //
+          fHadr->Set4Momentum(f4Mom);                    // Put the randomized 4Mom to 1-st Hadron
+          FillHadronVector(fHadr);                       // Fill 1st Hadron (delete equivalent)
+          sHadr->Set4Momentum(s4Mom);                    // Put the randomized 4Mom to 2-nd Hadron
+          FillHadronVector(sHadr);                       // Fill 2nd Hadron (delete equivalent)
+          tHadr->Set4Momentum(t4Mom);                    // Put the randomized 4Mom to 3-rd Hadron
+          FillHadronVector(tHadr);                       // Fill 3rd Hadron (delete equivalent)
+        }
 	  }
-      else
-      {
-        //qHadron->SetNFragments(3);
-        //theQHadrons.push_back(qHadron);                   // Fill with NFr=3 (delete equivalent)
-        // Instead
-        delete qHadron;
-        //
-        fHadr->Set4Momentum(f4Mom);                    // Put the randomized 4Mom to 1-st Hadron
-        FillHadronVector(fHadr);                       // Fill 1st Hadron (delete equivalent)
-        sHadr->Set4Momentum(s4Mom);                    // Put the randomized 4Mom to 2-nd Hadron
-        FillHadronVector(sHadr);                       // Fill 2nd Hadron (delete equivalent)
-        tHadr->Set4Momentum(t4Mom);                    // Put the randomized 4Mom to 3-rd Hadron
-        FillHadronVector(tHadr);                       // Fill 3rd Hadron (delete equivalent)
-      }
-	}
+      else theQHadrons.push_back(qHadron);               // Fill hadron as it is (delete equivalent)
+    }
   }
   else
   {
-#ifdef tdebug
+#ifdef pdebug
     G4cout<<"G4Quasmon::DecayOutHadron: Fill PDG= "<<thePDG<<t<<m<<" as it is ***0***>>>>"<<G4endl;
 #endif
     if(thePDG==89999003||thePDG==90002999) G4cerr<<"***(1)***G4Q::DOH:8999003/90002999"<<G4endl;

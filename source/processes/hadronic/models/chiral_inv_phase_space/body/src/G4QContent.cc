@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QContent.cc,v 1.26 2003-10-24 08:26:34 mkossov Exp $
+// $Id: G4QContent.cc,v 1.27 2003-10-27 09:15:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QContent ----------------
@@ -1281,7 +1281,7 @@ G4int G4QContent::GetSPDGCode() const
     else if (mU>0)                               // Isotopic Mesons
 	{
       p=201;
-      //if      (mU==2 && mD==0) p=221;
+      //if      (mU==2 && mD==0) p=221; // Performance problems
       if      (mU==2 && mD==0) p=111;
       else if (mU==1 && mD==1) p+=10;
       else
