@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-06-24 18:00:50 pia Exp $
+$Id: History,v 1.23 2000-07-11 18:46:47 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+11.07.2000 - MGP, tag emlowen-V02-00-00
+             Improvements in G4BremsstrahlungTest and G4eIonisationTest
 
 24.06.2000 - MGP, tag emlowen-V01-01-22
              Modification to hTest G4Ion... classes by V. Ivanchenko to 

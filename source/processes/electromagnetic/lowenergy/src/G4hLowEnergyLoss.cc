@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.1 2000-03-31 15:15:22 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.2 2000-07-11 18:46:48 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
