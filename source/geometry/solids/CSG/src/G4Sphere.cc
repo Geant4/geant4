@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.25 2003-10-29 16:42:59 japost Exp $
+// $Id: G4Sphere.cc,v 1.26 2003-11-03 09:57:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -29,17 +29,19 @@
 // Implementation for G4Sphere class
 //
 // History:
-// 28.03.94 P.Kent: old C++ code converted to tolerant geometry
-// 17.09.96 V.Grichine: final modifications to commit
-// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
-// 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
-// 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
-// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
-// 30.01.02 V.Grichine: bug fixed in Inside(p), && -> || at l.451
-// 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
+//
+// 30.10.03 J.Apostolakis: new algorithm in Inside for SPhi-sections
 // 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi < SPhi, SPhi<0
-// ********************************************************************
+// 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
+// 30.01.02 V.Grichine: bug fixed in Inside(p), && -> || at l.451
+// 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 18.11.99 V.Grichine: side = kNull in Distance ToOut(p,v,...)
+// 25.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), phi intersections
+// 12.11.98 V.Grichine: bug fixed in DistanceToIn(p,v), theta intersections
+// 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
+// 17.09.96 V.Grichine: final modifications to commit
+// 28.03.94 P.Kent: old C++ code converted to tolerant geometry
+// 
 
 #include <assert.h>
 
@@ -469,63 +471,26 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
   }
 
   // Phi boundaries   : Do not check if it has no phi boundary!
-  // (in != kOutside)
+  // (in != kOutside). It is new J.Apostolakis proposal of 30.10.03
 
   if ( ( fDPhi < 2*M_PI - kAngTolerance ) &&
        ( (p.x() != 0.0 ) || (p.y() != 0.0) ) )
   {
     pPhi = atan2(p.y(),p.x()) ;
-    if ( pPhi < 0.0)  pPhi += 2*M_PI ; // 0<=pPhi<2pi
-    if ( fSPhi >= 0.0 )
-    {
-      if (in == kInside)
-      {
-        if ( (pPhi < fSPhi + kAngTolerance*0.5)
-          || (pPhi > fSPhi + fDPhi - kAngTolerance*0.5) )
-        {
-          // Not `inside' tolerant bounds
-          //
-          if ( (pPhi >= fSPhi - kAngTolerance*0.5)
-            && (pPhi <= fSPhi + fDPhi + kAngTolerance*0.5) )
-          {
-            in = kSurface ;
-          }
-          else
-          {
-            return in = kOutside ;
-          }
-        }
-      }
-      else  // in==kSurface
-      {
-        if ( (pPhi < fSPhi - kAngTolerance*0.5)
-          || (pPhi > fSPhi + fDPhi + kAngTolerance*0.5) )    // && bug216
-        {
-          return in = kOutside ;
-        }
-      }
-    }
-    else
-    {
-      if ( pPhi < fSPhi + 2*M_PI - kAngTolerance*0.5  ) pPhi += 2*M_PI ;
 
-      if ( (pPhi < fSPhi + 2*M_PI + kAngTolerance*0.5)
-        || (pPhi > fSPhi + fDPhi + 2*M_PI - kAngTolerance*0.5) )
-      {
-        // Not `inside' tolerant bounds
-        //
-        if ( (pPhi >= fSPhi + 2*M_PI - kAngTolerance*0.5)
-          && (pPhi <= fSPhi + fDPhi + 2*M_PI + kAngTolerance*0.5) )
-        {
-          in = kSurface ;
-        }
-        else
-        {
-          return in = kOutside ;
-        }
-      }
+    if      ( pPhi < fSPhi - kAngTolerance*0.5  )         pPhi += 2*M_PI ; 
+    else if ( pPhi > fSPhi + fDPhi + kAngTolerance*0.5 )  pPhi -= 2*M_PI; 
+    
+    if ((pPhi < fSPhi - kAngTolerance*0.5) ||  
+        (pPhi > fSPhi + fDPhi + kAngTolerance*0.5) )  return in = kOutside ;
+    
+    else if (in == kInside)  // else it's kSurface anyway already
+    {
+      if ( (pPhi < fSPhi + kAngTolerance*0.5) || 
+           (pPhi > fSPhi + fDPhi - kAngTolerance*0.5) )      in = kSurface ;       
     }
   }
+
   // Theta bondaries
   // (in!=kOutside)
   
