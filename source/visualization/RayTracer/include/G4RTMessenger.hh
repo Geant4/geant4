@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RTMessenger.hh,v 1.4 2001-07-11 10:09:02 gunter Exp $
+// $Id: G4RTMessenger.hh,v 1.5 2003-09-18 11:13:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -72,6 +72,7 @@ class G4RTMessenger : public G4UImessenger
     G4UIcmdWithABool* distCmd;
     G4UIcmdWithABool* transCmd;
     G4UIcmdWithAString* fileCmd;
+    G4UIcmdWith3Vector* bkgColCmd;
 };
 
 #endif
