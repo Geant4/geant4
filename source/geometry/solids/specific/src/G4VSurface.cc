@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.5 2004-05-28 13:13:37 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.6 2004-05-28 16:52:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,10 @@ const G4int  G4VSurface::sOutside        = 0x00000000;
 const G4int  G4VSurface::sInside         = 0x10000000;
 const G4int  G4VSurface::sBoundary       = 0x20000000;
 const G4int  G4VSurface::sCorner         = 0x40000000;
-const G4int  G4VSurface::sCMin1Min = 0x40000101; 
-const G4int  G4VSurface::sCMax1Min = 0x40000201;
-const G4int  G4VSurface::sCMax1Max = 0x40000202; 
-const G4int  G4VSurface::sCMin1Max = 0x40000102; 
+const G4int  G4VSurface::sCMin1Min       = 0x40000101; 
+const G4int  G4VSurface::sCMax1Min       = 0x40000201;
+const G4int  G4VSurface::sCMax1Max       = 0x40000202; 
+const G4int  G4VSurface::sCMin1Max       = 0x40000102; 
 const G4int  G4VSurface::sAxisMin        = 0x00000101; 
 const G4int  G4VSurface::sAxisMax        = 0x00000202; 
 const G4int  G4VSurface::sAxisX          = 0x00000404;
@@ -808,7 +808,7 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
 //=====================================================================
 //* DebugPrint --------------------------------------------------------
 
-void G4VSurface::DebugPrint()
+void G4VSurface::DebugPrint() const
 {
    G4ThreeVector A = fRot * GetCorner(sCMin1Min) + fTrans;
    G4ThreeVector B = fRot * GetCorner(sCMax1Min) + fTrans;
@@ -832,4 +832,190 @@ void G4VSurface::DebugPrint()
    G4cout << "/* Cornar point sCMin1Max = " << D << G4endl;
    G4cout << "/*---------------------------------------------------------"
           << G4endl;
+}
+
+//=====================================================================
+// G4VSurface::CurrentStatus class
+//=====================================================================
+
+//=====================================================================
+//* CurrentStatus::CurrentStatus --------------------------------------
+
+G4VSurface::CurrentStatus::CurrentStatus() 
+{
+  for (size_t i=0; i<2; i++)
+  {
+    fDistance[i] = kInfinity;
+    fAreacode[i] = sOutside;
+    fIsValid[i]  = false;
+    fXX[i].set(kInfinity, kInfinity, kInfinity);
+   }
+   fNXX   = 0;
+   fLastp.set(kInfinity, kInfinity, kInfinity);
+   fLastv.set(kInfinity, kInfinity, kInfinity);
+   fLastValidate = kUninitialized;
+   fDone = false;
+}
+
+//=====================================================================
+//* CurrentStatus::~CurrentStatus -------------------------------------
+
+G4VSurface::CurrentStatus::~CurrentStatus() 
+{
+}
+
+//=====================================================================
+//* CurrentStatus::SetCurrentStatus -----------------------------------
+
+void
+G4VSurface::CurrentStatus::SetCurrentStatus(G4int                i, 
+                                            G4ThreeVector       &xx, 
+                                            G4double            &dist, 
+                                            G4int               &areacode, 
+                                            G4bool              &isvalid,
+                                            G4int                nxx,
+                                            EValidate            validate,
+                                      const G4ThreeVector *p, 
+                                      const G4ThreeVector *v)
+{
+  fDistance[i]  = dist;
+  fAreacode[i]  = areacode;
+  fIsValid[i]   = isvalid;
+  fXX[i]        = xx;
+  fNXX          = nxx;
+  fLastValidate = validate;
+  if (p)
+  {
+    fLastp = *p;
+  }
+  else
+  {
+    G4Exception("G4VSurface::CurrentStatus::CurrentStatus()",
+                "InvalidCondition", FatalException,
+                "SetCurrentStatus: p = 0!");
+  }
+  if (v) 
+  {
+    fLastv = *v;
+  }
+  else
+  {
+    fLastv.set(kInfinity, kInfinity, kInfinity);
+  }
+  fDone = true;
+}
+
+//=====================================================================
+//* CurrentStatus::ResetfDone -----------------------------------------
+
+void
+G4VSurface::CurrentStatus::ResetfDone(EValidate     validate,
+                                const G4ThreeVector *p, 
+                                const G4ThreeVector *v)
+
+{
+  if (validate == fLastValidate && p && *p == fLastp)
+  {
+     if (!v || (v && *v == fLastv)) return;
+  }         
+  G4ThreeVector xx(kInfinity, kInfinity, kInfinity);
+  for (size_t i=0; i<2; i++)
+  {
+    fDistance[i] = kInfinity;
+    fAreacode[i] = sOutside;
+    fIsValid[i]  = false;
+    fXX[i] = xx[i];
+  }
+  fNXX   = 0;
+  fLastp.set(kInfinity, kInfinity, kInfinity);
+  fLastv.set(kInfinity, kInfinity, kInfinity);
+  fLastValidate = kUninitialized;
+  fDone = false;
+}
+
+//=====================================================================
+//* CurrentStatus::DebugPrint -----------------------------------------
+
+void
+G4VSurface::CurrentStatus::DebugPrint() const
+{
+  G4cout << "CurrentStatus::Dist0,1= " << fDistance[0] 
+         << " " << fDistance[1] << " areacode = " << fAreacode[0] 
+         << " " << fAreacode[1] << G4endl;
+}
+
+//=====================================================================
+// G4VSurface::Boundary class
+//=====================================================================
+
+//=====================================================================
+//* Boundary::Boundary ------------------------------------------------
+
+G4VSurface::Boundary::Boundary()
+ : fBoundaryAcode(-1), fBoundaryType(0)
+{
+}
+
+//=====================================================================
+//* Boundary::~Boundary -----------------------------------------------
+
+G4VSurface::Boundary::~Boundary()
+{
+}
+
+//=====================================================================
+//* Boundary::SetFields -----------------------------------------------
+
+void
+G4VSurface::Boundary::SetFields(const G4int         &areacode, 
+                                const G4ThreeVector &d, 
+                                const G4ThreeVector &x0, 
+                                const G4int         &boundarytype)
+{
+  fBoundaryAcode     = areacode;
+  fBoundaryDirection = d;
+  fBoundaryX0        = x0;
+  fBoundaryType      = boundarytype;
+}
+
+//=====================================================================
+//* Boundary::IsEmpty -------------------------------------------------
+
+G4bool G4VSurface::Boundary::IsEmpty() const 
+{
+  if (fBoundaryAcode == -1) return true;
+  return false;
+}
+
+//=====================================================================
+//* Boundary::GetBoundaryParameters -----------------------------------
+
+G4bool
+G4VSurface::Boundary::GetBoundaryParameters(const G4int         &areacode, 
+                                                  G4ThreeVector &d,
+                                                  G4ThreeVector &x0, 
+                                                  G4int  &boundarytype) const 
+{  
+  // areacode must be one of them:
+  // sAxis0 & sAxisMin, sAxis0 & sAxisMax,
+  // sAxis1 & sAxisMin, sAxis1 & sAxisMax
+  if ((areacode & sAxis0) && (areacode & sAxis1))
+  {
+    G4cerr << "ERROR - G4VSurface::Boundary::GetBoundaryParameters()"
+           << G4endl
+           << "        Located in the corner area. This function"
+           << "        returns a direction vector of a boundary line."
+           << "        areacode = " << areacode << G4endl;
+    G4Exception("G4VSurface::Boundary::GetBoundaryParameters()",
+                "InvalidCondition", FatalException,
+                "Located in the corner area.");
+  } 
+  if ((areacode & sSizeMask) != (fBoundaryAcode & sSizeMask))
+  {
+    return false;
+  }
+  d  = fBoundaryDirection;
+  x0 = fBoundaryX0;
+  boundarytype = fBoundaryType;
+  return true;
 }
