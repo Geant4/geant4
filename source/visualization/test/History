@@ -1,7 +1,10 @@
-$Id: History,v 1.6 2000-05-22 07:43:33 johna Exp $
+$Id: History,v 1.7 2000-07-03 10:37:51 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+3rd July 2000  John Allison
+- Switched to replicas in MyDetectorConstruction.
 
 22nd May 2000  John Allison
 - Invoke G4UItcsh in G4UIterminal in test19.cc (needs interfaces-V01-01-00).

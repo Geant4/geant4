@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyDetectorConstruction.cc,v 1.12 2000-05-22 07:24:48 johna Exp $
+// $Id: MyDetectorConstruction.cc,v 1.13 2000-07-03 10:33:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -232,6 +232,9 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
   const G4double alp = 10 * mrad;
   G4int iCopy;
 
+  G4VisAttributes * grey
+    = new G4VisAttributes(G4Colour(0.5,0.5,0.5,0.5));
+
   G4Tubs* tube = new G4Tubs("tube",20*cm,50*cm,30*cm,0,2*M_PI);
   G4LogicalVolume * tube_log
     = new G4LogicalVolume(tube,Ar,"tube_L",0,0,0);
@@ -247,11 +250,10 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
      20*cm,50*cm,30*cm,0,M_PI/3.);
   G4LogicalVolume * divided_tube_log
     = new G4LogicalVolume(divided_tube,Ar,"divided_tube_L",0,0,0);
-  divided_tube_log->SetVisAttributes(G4VisAttributes::Invisible);
-  /************ 
+  divided_tube_log->SetVisAttributes(grey);
   new G4PVReplica("divided_tube_phys",divided_tube_log,tube_log,
   		  kPhi,6,M_PI/3.);
-  *********/
+  /************ 
   for (iCopy = 0; iCopy < 6; iCopy++) {
     new G4PVPlacement
       (G4Transform3D(G4RotationMatrix().rotateZ(iCopy*M_PI/3.),
@@ -259,6 +261,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
        divided_tube_log,"divided_tube_phys",tube_log,
        false,iCopy);
   }
+  *********/
 
   G4Tubs* divided_tube_inset = new G4Tubs
     ("divided_tube_inset",
@@ -277,12 +280,11 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
      20*cm+2.*eps,50*cm-2.*eps,30*cm-2.*eps,0.,M_PI/12.-alp);
   G4LogicalVolume * sub_divided_tube_log
     = new G4LogicalVolume(sub_divided_tube,Ar,"sub_divided_tube_L",0,0,0);
-  sub_divided_tube_log->SetVisAttributes(G4VisAttributes::Invisible);
-  /************ 
+  sub_divided_tube_log->SetVisAttributes(grey);
   new G4PVReplica("sub_divided_tube_phys",
   		  sub_divided_tube_log,divided_tube_inset_log,
 		  kPhi,4,M_PI/12.-alp,2.*alp);
-  ************/
+  /************ 
   for (iCopy = 0; iCopy < 4; iCopy++) {
     new G4PVPlacement
       (G4Transform3D(G4RotationMatrix().rotateZ(iCopy*(M_PI/12.-alp)+2.*alp),
@@ -290,6 +292,7 @@ G4VPhysicalVolume* MyDetectorConstruction::Construct()
        sub_divided_tube_log,"sub_divided_tube_phys",divided_tube_inset_log,
        false,iCopy);
   }
+  ************/
   
   G4Box* daughter_box = new G4Box("daughter_box",4.*cm,3.*cm,25.*cm);
   G4LogicalVolume * daughter_box_log
