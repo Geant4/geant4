@@ -1,0 +1,19 @@
+$Id: History,v 1.1 2000-06-17 12:47:06 stesting Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    TestEm2 History file
+                    --------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+June 17, 2000  John Allison  (testem2-V01-00-00)
+- Updated TestEm2.out for geant4-01-01-ref-06.

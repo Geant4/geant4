@@ -4,7 +4,7 @@
              Copyright : Geant4 Collaboration
 **********************************************
 
-***** Table : Nb of materials = 8 *****
+***** Table : Nb of materials = 9 *****
 
  Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
    --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
@@ -33,12 +33,15 @@
    --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass:  45.53 %  Abundance  16.67 %
    --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass:  40.40 %  Abundance  16.67 %
 
+ Material: Tungsten     density: 19.300 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.504 mm 
+   --->  Element: Tungsten  W   Z = 74.0   N = 183.8   A = 183.84 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
  Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
    --->  Element:     Lead Pb   Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
 
 
 Absorber is 18 cm  of PbWO4
-Em2PhysicsList::SetCuts:CutLength : 1 (mm)
+Em2PhysicsList::SetCuts:CutLength : 1 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -61,10 +64,24 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.1  mm.
+
+           material       min.delta energy(keV) 
+
+                 Air           0.99
+               Water         81.518
+                 lAr         78.381
+                  Al         125.07
+                  Fe         224.12
+                 BGO         187.02
+               PbWO4         200.98
+            Tungsten            337
+                Lead         229.66
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -73,30 +90,44 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=0.1  mm.
+
+           material        min.delta energy(keV) 
+
+                 Air           0.99
+               Water         81.518
+                 lAr         78.381
+                  Al         125.07
+                  Fe         224.12
+                 BGO         187.02
+               PbWO4         200.98
+            Tungsten            337
+                Lead         229.66
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
@@ -108,9 +139,10 @@ Cut in energy
                  Fe        20.8 keV        1.28 MeV        8.52 MeV          22 MeV         990 eV 
                 BGO        77.7 keV        1.03 MeV        7.17 MeV        18.1 MeV         990 eV 
               PbWO4        84.8 keV        1.13 MeV        7.63 MeV        19.2 MeV         990 eV 
+           Tungsten         105 keV        2.31 MeV        11.7 MeV        29.5 MeV         990 eV 
                Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
 ===================================================
-# $Id: TestEm2.out,v 1.3 2000-05-03 12:45:38 stesting Exp $
+# $Id: TestEm2.out,v 1.4 2000-06-17 12:47:06 stesting Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -125,11 +157,11 @@ Cut in energy
 /calor/setLbin 9 1.11
 /calor/setRbin 6 0.111
 /calor/update
-Absorber is 3.6 m   of Water
+Absorber is 3.6056 m   of Water
 #
 /run/particle/setCut 5.0 mm
 /run/initialize
-Em2PhysicsList::SetCuts:CutLength : 5 (mm)
+Em2PhysicsList::SetCuts:CutLength : 5 mm 
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -137,25 +169,39 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+ eIoni   Minimum Delta cut in range=0.5  mm.
+
+           material       min.delta energy(keV) 
+
+                 Air         3.2397
+               Water         215.05
+                 lAr          209.6
+                  Al         349.54
+                  Fe         697.76
+                 BGO         570.46
+               PbWO4         624.12
+            Tungsten         1195.6
+                Lead         745.94
+
+eBrem:  Total cross sections from a parametrisation. Good description from 10 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -164,30 +210,44 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+ hIoni    Minimum Delta cut in range=0.5  mm.
+
+           material        min.delta energy(keV) 
+
+                 Air         3.2397
+               Water         215.05
+                 lAr          209.6
+                  Al         349.54
+                  Fe         697.76
+                 BGO         570.46
+               PbWO4         624.12
+            Tungsten         1195.6
+                Lead         745.94
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
-          Good description up to 1000 TeV.
-    PhysicsTables from 1 keV to 10 PeV in 100 bins. 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-             mu-          proton         neutron    
 Cut in range                  5 mm            5 mm            5 mm            5 mm            5 mm 
@@ -199,6 +259,7 @@ Cut in energy
                  Fe        46.4 keV        6.11 MeV        21.5 MeV        54.7 MeV         990 eV 
                 BGO         126 keV        4.72 MeV        18.1 MeV        45.7 MeV         990 eV 
               PbWO4         137 keV        5.34 MeV        19.4 MeV        48.3 MeV         990 eV 
+           Tungsten         241 keV          13 MeV        30.7 MeV        75.3 MeV         990 eV 
                Lead         204 keV        6.83 MeV          22 MeV          54 MeV         990 eV 
 ===================================================
 #
@@ -230,20 +291,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.2e+02s Real=1.4e+02s Sys=12s
+  User=137.21s Real=149.03s Sys=10.54s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   14.45%       6.54%             0-> 1.11 radl:   14.45%     6.54% 
-    1.11-> 2.22 radl:   24.03%       9.68%             0-> 2.22 radl:   38.48%    13.64% 
-    2.22-> 3.33 radl:   21.21%       9.15%             0-> 3.33 radl:   59.69%    15.17% 
-    3.33-> 4.44 radl:   15.15%       8.26%             0-> 4.44 radl:   74.84%    14.69% 
-    4.44-> 5.55 radl:    9.16%       6.69%             0-> 5.55 radl:   84.00%    12.81% 
-    5.55-> 6.66 radl:    6.03%       6.40%             0-> 6.66 radl:   90.03%    10.42% 
-    6.66-> 7.77 radl:    2.44%       4.02%             0-> 7.77 radl:   92.48%     7.96% 
-    7.77-> 8.88 radl:    1.78%       3.91%             0-> 8.88 radl:   94.26%     5.79% 
-    8.88-> 9.99 radl:    1.04%       2.81%             0-> 9.99 radl:   95.30%     3.69% 
+    0.00-> 1.11 radl:   14.35%       5.15%             0-> 1.11 radl:   14.35%     5.15% 
+    1.11-> 2.22 radl:   25.63%      11.05%             0-> 2.22 radl:   39.99%    13.46% 
+    2.22-> 3.33 radl:   21.53%       9.24%             0-> 3.33 radl:   61.52%    15.74% 
+    3.33-> 4.44 radl:   15.23%       8.29%             0-> 4.44 radl:   76.75%    13.16% 
+    4.44-> 5.55 radl:    8.55%       6.05%             0-> 5.55 radl:   85.30%    11.19% 
+    5.55-> 6.66 radl:    4.68%       4.84%             0-> 6.66 radl:   89.99%     9.50% 
+    6.66-> 7.77 radl:    2.58%       4.24%             0-> 7.77 radl:   92.57%     6.55% 
+    7.77-> 8.88 radl:    1.41%       3.55%             0-> 8.88 radl:   93.97%     4.89% 
+    8.88-> 9.99 radl:    0.85%       1.82%             0-> 9.99 radl:   94.83%     4.38% 
 
 
 
@@ -251,21 +312,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   68.84%       9.11%             0-> 0.11 radl:   68.84%     9.11% 
-    0.11-> 0.22 radl:   15.47%       5.87%             0-> 0.22 radl:   84.31%     6.90% 
-    0.22-> 0.33 radl:    5.45%       3.15%             0-> 0.33 radl:   89.76%     5.86% 
-    0.33-> 0.44 radl:    3.03%       2.87%             0-> 0.44 radl:   92.79%     4.95% 
-    0.44-> 0.56 radl:    1.66%       2.05%             0-> 0.56 radl:   94.45%     3.87% 
-    0.56-> 0.67 radl:    0.84%       0.71%             0-> 0.67 radl:   95.30%     3.69% 
+    0.00-> 0.11 radl:   67.47%       8.87%             0-> 0.11 radl:   67.47%     8.87% 
+    0.11-> 0.22 radl:   16.67%       5.77%             0-> 0.22 radl:   84.14%     6.31% 
+    0.22-> 0.33 radl:    5.49%       3.16%             0-> 0.33 radl:   89.63%     5.11% 
+    0.33-> 0.44 radl:    2.60%       1.94%             0-> 0.44 radl:   92.23%     4.83% 
+    0.44-> 0.56 radl:    1.55%       1.32%             0-> 0.56 radl:   93.78%     4.52% 
+    0.56-> 0.67 radl:    1.05%       1.04%             0-> 0.67 radl:   94.83%     4.38% 
 
                               SUMMARY
-                         energy deposit :   95.30 % E0 +-    3.69 % E0
-                         charged traklen:   13.61 radl +-    0.53 radl
-                         neutral traklen:  190.63 radl +-   17.86 radl
+                         energy deposit :   94.83 % E0 +-    4.38 % E0
+                         charged traklen:   13.61 radl +-    0.63 radl
+                         neutral traklen:  190.76 radl +-   17.17 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 51068954, 1702548602
+ Current couple of seeds = 1815695245, 1058039811
 ----------------------------------------
 
 
