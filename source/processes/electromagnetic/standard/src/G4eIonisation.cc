@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.23 2002-03-26 15:09:04 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.24 2002-03-26 18:16:35 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation physics process --------------------------------
@@ -221,7 +221,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      G4Exception(" Call SetCut for e- first !!");
   }
    
-  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts() ;
+  G4double* DeltaCutInKineticEnergy = G4Electron::Electron()->GetEnergyCuts();
  
   // loop for materials 
 
@@ -243,7 +243,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      // it will be used in ComputeCrossSectionPerAtom
      // (--> it will be the same for all the elements in this material )
      G4double DeltaThreshold = DeltaCutInKineticEnergy[J];
-
+     
      for (G4int i = 0 ; i < NbinLambda ; i++)
         {
 	  G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.25 2002-02-27 14:40:51 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.26 2002-03-26 18:16:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -234,7 +234,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
      //  it will be used in ComputeCrossSectionPerAtom
      // ( --> it will be the same for all the elements in this material)
      G4double DeltaThreshold =G4std::max(DeltaCutInKinEnergy[J],Tmincut);
-
+     
      for ( G4int i = 0 ; i < NbinLambda ; i++ )
         {
           G4double LowEdgeEnergy = aVector->GetLowEdgeEnergy(i);

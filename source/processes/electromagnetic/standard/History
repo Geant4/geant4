@@ -1,4 +1,4 @@
-$Id: History,v 1.51 2002-03-22 15:42:39 maire Exp $
+$Id: History,v 1.52 2002-03-26 18:16:32 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 mar 02: mma (stand-V04-00-05)
+- G4eIonisation: change access to cuts in BuildLossTables (V.Ivanchenko)
 
 22 mar 02: V. Grichine (stand-V04-00-04)
 - modifications in G4PAIxSection allowing to get additional information on
