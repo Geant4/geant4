@@ -66,9 +66,9 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
   ThetaDia1 = 135. * deg;
   ThetaDia2 = 210. * deg;
   ThetaDia3 = 180. * deg;
+  DistDia = 66.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ; 
-  DistDia = 66.5 * mm;
   Dia3Dist =  66.5 * mm; 
   PhiSi = 210. * deg;
   PhiHPGe = 135. * deg; 
@@ -508,8 +508,8 @@ G4VPhysicalVolume* FluoTestDetectorConstruction::ConstructApparate()
   
   // Visualization attributes
   
-  logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
    G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
+   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
    G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
