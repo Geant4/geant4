@@ -104,7 +104,6 @@
     delete theBuffer;
     
 //    G4cout << "ElementWiseData::UpdateData finished"<endl;
-    theIsotopeWiseData[index].ThinOut(precision);
   }
   
   void G4NeutronHPElementData::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
