@@ -21,8 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: test13.cc,v 1.3 2001-07-11 10:09:54 gunter Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "Tst13DetectorConstruction.hh"
@@ -30,6 +28,8 @@
 #include "Tst13PrimaryGeneratorAction.hh"
 #include "Tst13PhysicsList.hh"
 #include "Tst13SteppingAction.hh"
+#include "Tst13StackingAction.hh"
+
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -53,7 +53,7 @@ int main(int argc,char** argv) {
   // UserAction classes
   runManager->SetUserAction(new Tst13RunAction);
   runManager->SetUserAction(new Tst13PrimaryGeneratorAction);
-  //runManager->SetUserAction(new Tst13SteppingAction);
+  runManager->SetUserAction(new Tst13StackingAction);
 
   if(argc==1)
   {
