@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 November, 00  Y.Morita (persistency-V02-00-01)
+- more workaround on G4PGeometryObjectMap for ooddlx
+
 2 November, 00  Y.Morita (persistency-V02-00-00)
 - created global/include/G4Pglobals.hh
 - workaround to protect old ooddlx from new STL syntax.
