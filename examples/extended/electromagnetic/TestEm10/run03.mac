@@ -1,0 +1,36 @@
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber cylinder )        
+#
+/control/verbose 2
+#control/saveHistory
+/run/verbose 2
+#
+/run/initialize
+#
+/calor/setAbsMat Silicon   
+/calor/setAbsThick 50.000e-3 mm  
+/calor/setAbsRad 100.0 mm
+/calor/update
+#
+#  hist file name
+/plots/sethistName geant4.plot03 
+#  PLOT: angle distr. of transmitted particles
+/plots/setnbinTh 60
+/plots/setThlow 0.0 deg
+/plots/setThhigh 6.0 deg
+#
+/calor/cutG 2130.0 micrometer
+/calor/cutE 7.000 micrometer
+/run/initialize
+/run/particle/dumpCutValues
+#
+/gun/particle proton
+/gun/energy 6.56 MeV
+#
+/run/beamOn 100000
+#
+#
+
+
