@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.hh,v 1.1 2001-10-15 12:33:20 pia Exp $
+// $Id: G4ProcessTest.hh,v 1.2 2001-10-28 18:00:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -32,7 +32,7 @@
 //
 // -------------------------------------------------------------------
 // Class description:
-// Test DoIt method of physics processes
+// Test of electromagnetic physics processes
 // Further documentation available from http://www.ge.infn.it/geant4/lowE/index.html
 
 // -------------------------------------------------------------------
@@ -54,13 +54,18 @@ public:
 
   virtual ~G4ProcessTest();
  
-  void postStepTest(G4VProcess* process, 
-		    const G4Track& track,
-		    const G4Step& step) const;
+  void init(const G4String& type, G4bool isPolarised = false);
 
-  void alongStepTest(const G4VProcess* process, 
-		     const G4Track& track,
-		     const G4Step& step) const;
+  void postStepTest(const G4Track& track,const G4Step& step) const;
+
+  void alongStepTest(const G4Track& track, const G4Step& step) const;
+
+  protected:
+
+  virtual G4VProcess* createProcess(const G4String& type, 
+				    G4bool isPolarised = false) = 0;
+  virtual G4VProcess* createBremsstrahlung(const G4String& type) = 0;
+  virtual G4VProcess* createElectronIonisation(const G4String& type) = 0;
 
 private:
   
@@ -68,6 +73,26 @@ private:
   G4ProcessTest(const G4ProcessTest&);
   G4ProcessTest & operator=(const G4ProcessTest &right);
 
+  G4VProcess* process;
+  G4VProcess* ioni;
+  G4VProcess* brem;
+
 };
  
 #endif
+
+//##ModelId=3BDC115A0257
+G4VProcess* G4ProcessTest::createElectronIonisation()
+{
+}
+
+//##ModelId=3BDC1566005B
+G4VProcess* G4ProcessTest::createBremsstrahlung()
+{
+}
+
+//##ModelId=3BDC12450188
+G4VProcess* G4ProcessTest::createProcess(const G4String& type, G4bool polarised)
+{
+}
+

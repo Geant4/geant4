@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TestSetup.cc,v 1.2 2001-10-15 15:27:18 pia Exp $
+// $Id: G4TestSetup.cc,v 1.3 2001-10-28 18:00:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -249,23 +249,6 @@ void G4TestSetup::makeElectronProcesses()
   Air->AddElement(N,0.7);
   Air->AddElement(O,0.3);
 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-
- G4int nMaterials = G4Material::GetNumberOfMaterials();
-
-  G4cout << "Select the material among the available ones: " << G4endl;
-  for (G4int mat = 0; mat < nMaterials; mat++)
-    {
-      G4cout << mat << ") "
-	     << (*theMaterialTable)[mat]->GetName()
-	     << G4endl;
-    }
-  G4int materialId;
-  G4cin >> materialId;
-
-  material = (*theMaterialTable)[materialId] ;
-
-  G4cout << "The selected material is: " << material->GetName() << G4endl;
 }
 
 const G4Track* G4TestSetup::makeTrack()
@@ -326,28 +309,7 @@ return step;
 
 void G4TestSetup::init()
 {
-  G4int processSelection;
-  G4cout << "LowEnergy [1] or Standard [2] or Polarised? [3]" << G4endl;
-  G4cin >> processSelection;
-  if (processSelection < 1 || processSelection > 3) G4Exception("Wrong input");
 
-  selection = processSelection;
-  if (selection == 1) selName = "lowe";
-  if (selection == 2) selName = "std";
-  if (selection == 3) selName = "pol";
-
-  G4cout << "Process to be tested: " << G4endl
-	 << "Compton [1], GammaConversion [2], Photoelectric [3], Rayleigh [4]" << G4endl
-	 << "Bremsstrahlung [5], eIonisation [6]" << G4endl;
-  G4cin >> processType;
-  if (processType < 1 || processType > 6) G4Exception("Wrong input");
-
-  if (processType == 1) pName = "compton";
-  if (processType == 2) pName = "conversion";
-  if (processType == 3) pName = "photoel";
-  if (processType == 4) pName = "rayleigh";
-  if (processType == 5) pName = "brem";
-  if (processType == 6) pName = "ionisation";
 
   if (processType < 5) part = G4Gamma::GammaDefinition();
   else part = G4Electron::ElectronDefinition();

@@ -21,59 +21,71 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.4 2001-10-28 18:00:33 pia Exp $
+// $Id: G4TestUI.hh,v 1.1 2001-10-28 18:00:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
 //
-//      File name:     processTest
+// File name:     G4TestUI
 //
-//      Author:        Maria Grazia Pia
+// Author:        Maria Grazia Pia
 // 
-//      Creation date: 1 May 2001
+// Creation date: 1 October 2001
 //
-//      Modifications: 
+// Modifications: 
 //
 // -------------------------------------------------------------------
 
 #include "globals.hh"
-#include "G4ios.hh"
-#include "g4std/fstream"
-#include "g4std/iomanip"
 
-#include "G4VProcess.hh"
-#include "G4Step.hh"
-#include "G4Track.hh"
+#ifndef G4TESTUI_HH
+#define G4TESTUI_HH
 
-#include "G4ProcessTest.hh"
-#include "G4TestSetup.hh"
+class G4ProcessTest;
 
-
-
-int main()
+class G4TestUI
 {
-  // Setup
+  public:
 
-  G4TestUI ui;
+  G4TestUI();
 
-  G4TestSetup setup;
-  setup.init();
-
-  // Process to be tested
-  G4VProcess* process = setup.createTestProcess();
-
-  G4ProcessTest* test = physicsSetup.createTest();
-  tes
-
-  // DoIt test
-  for (G4int iter=0; iter<nIterations; iter++)
-    {
-      G4cout << "---- Iteration " << iter << G4endl;
-      G4Track* track = setup.makeTrack();
-      G4Step* step = setup.makeStep();
-      test.postStepTest(process,*track,*step);
-    }
+  virtual ~G4TestUI();
   
-  cout << "End of the test" << G4endl;
-}
+  void selectMaterial();
+  
+  void selectProcess();
+  
+  void selectTestTopic();
+  
+  void selectNumberOfIterations();
+  
+  const G4Material* getSelectedMaterial() const;
+  
+  G4ProcessTest* getSelectedProcess() const;
 
+  const G4String& getTestTopic() const;
+  
+  G4int getNIterations() const;
+  
+ private:
+
+  const G4String& GetTestTopic();
+  void operator=(const G4TestUI& right);
+
+  void selectProcessType();
+  void selectProcessCategory();
+  void isPolarised();
+
+  G4int materialId;            
+  G4int type;
+  G4int category;
+  G4bool polarised;
+  G4int nIterations;
+  G4int topic;
+  vector<G4String> types;
+  vector<G4String> topics;
+  vector<G4String> categories;
+
+};
+
+#endif 

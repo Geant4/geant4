@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.1 2001-10-15 12:34:03 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.2 2001-10-28 18:00:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -46,17 +46,30 @@
 #include "G4ParticleChange.hh"
 #include "SystemOfUnits.h"
 
-G4ProcessTest::G4ProcessTest()
-{
-}
-
+G4ProcessTest::G4ProcessTest() : process(0), ioni(0), brem(0)
+{ }
 
 G4ProcessTest:: ~G4ProcessTest()
 {
+  delete process;
+  process = 0;
+  delete ioni;
+  ioni = 0;
+  delete brem;
+  brem = 0;
+ }
+
+void G4ProcessTest::init(const G4String& type, G4bool isPolarised = false)
+{ 
+  process = createProcess(const G4String& type, G4bool isPolarised = false);
+  G4cout << process->GetName() << " created" << G4endl;
+  ioni = createElectronIonisation(const G4String& type);
+  if (ioni != 0)  G4cout << ioni->GetName() << " created" << G4endl;
+  brem = createBremsstrahlung(const G4String& type);
+  if (brem != 0)  G4cout << brem->GetName() << " created" << G4endl;
 }
  
-void G4ProcessTest::postStepTest(G4VProcess* process, 
-				 const G4Track& track,
+void G4ProcessTest::postStepTest(const G4Track& track,
 				 const G4Step& step) const
 {
   G4ParticleChange* particleChange = (G4ParticleChange*) process->PostStepDoIt(track, step);
@@ -163,10 +176,8 @@ void G4ProcessTest::postStepTest(G4VProcess* process,
   particleChange->Clear();
 }
 
-void G4ProcessTest::alongStepTest(const G4VProcess* process, 
-				  const G4Track& track,
+void G4ProcessTest::alongStepTest(const G4Track& track,
 				  const G4Step& step) const 
 {
   // To be implemented
 }
-
