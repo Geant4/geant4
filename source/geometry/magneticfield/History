@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2001-03-19 11:54:49 japost Exp $
+$Id: History,v 1.27 2001-03-23 18:24:39 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 23rd, 2001  J. Apostolakis - field-V03-00-02
+------------------------------
+- Fixed G4MagHelicalStepper::AdvanceHelix for momentum, allowing
+    the possibility of (correct) use of all Helical Steppers. 
+
+
 Mar 19th, 2001  J. Apostolakis - field-V03-00-01
 ------------------------------
 - Tagging the modification of several classes to integrate in momentum*c_light
