@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2004-11-22 11:09:58 gbarrand Exp $
+$Id: History,v 1.46 2004-11-22 14:20:19 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -21,6 +21,11 @@ History file for visualization/OpenInventor
 -------------------------------------------
 
 22th November 2004  Guy Barrand
+- G4OpenInventorSceneHandler : delete the SbMatrix returned 
+  by G4OpenInventorTransform3D::GetSbMatrix. Not done before !
+- G4OpenInventorTransform3D : use SbMatrix instead of SoSFMatrix.
+- G4OpenInventorSceneHandler : cache SoResetTransform.
+- SoStyleCache : destructor protected.
 - G4OpenInventor[Xt,Win]Viewer : Help pulldown menu.
 - G4OpenInventorViewer : in "Scene graph stats", count triangles,lines,points.
 - G4OpenInventorViewer : set auto refresh by default.

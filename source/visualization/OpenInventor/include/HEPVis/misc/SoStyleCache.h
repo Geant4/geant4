@@ -10,6 +10,7 @@
 class SoMaterial;
 class SoDrawStyle;
 class SoLightModel;
+class SoResetTransform;
 class SbColor;
  
 #define SoStyleCache Geant4_SoStyleCache
@@ -26,10 +27,12 @@ public:
   SoDrawStyle* getLineStyle(unsigned short = 0xFFFF,float = 0); 
   SoLightModel* getLightModelPhong(); 
   SoLightModel* getLightModelBaseColor(); 
+  SoResetTransform* getResetTransform();
 private:
   SoGroup* fMaterials;
   SoGroup* fLineStyles;
   SoGroup* fLightModels;
+  SoResetTransform* fResetTransform;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.30 2004-11-21 14:19:51 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.31 2004-11-22 14:20:19 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,9 +51,9 @@
 #include <Inventor/nodes/SoComplexity.h>
 #include <Inventor/nodes/SoNurbsSurface.h>
 #include <Inventor/nodes/SoTranslation.h>
+#include <Inventor/nodes/SoResetTransform.h>
 #include <Inventor/nodes/SoMatrixTransform.h>
 #include <Inventor/nodes/SoTransform.h>
-#include <Inventor/nodes/SoResetTransform.h>
 
 #define USE_SOPOLYHEDRON
 
@@ -466,22 +466,19 @@ void G4OpenInventorSceneHandler::BeginPrimitives
   // following code:
   //  
   if (fReadyForTransients) {
-    //  
+
     // set the destination to "fTransientRoot"
-    //  
     fCurrentSeparator = fTransientRoot;
-    //  
+
     // place the transient object:
-    //  
-    G4OpenInventorTransform3D oiTran (objectTransformation);
-    SoSFMatrix *oiMat = oiTran.GetOIMatrix();
-    SoMatrixTransform *xform = new SoMatrixTransform;
-    xform->matrix.setValue(oiMat->getValue());
-    //  
-    // add a transform.
-    //  
-    fCurrentSeparator->addChild(new SoResetTransform);
-    fCurrentSeparator->addChild(xform);
+    fCurrentSeparator->addChild(fStyleCache->getResetTransform());
+
+    SoMatrixTransform* matrixTransform = new SoMatrixTransform;
+    G4OpenInventorTransform3D oiTran(objectTransformation);
+    SbMatrix* sbMatrix = oiTran.GetSbMatrix();
+    matrixTransform->matrix.setValue(*sbMatrix);
+    delete sbMatrix;
+    fCurrentSeparator->addChild(matrixTransform);
   }
 }
 
@@ -671,13 +668,14 @@ void G4OpenInventorSceneHandler::PreAddThis
   }
 
   // Set up the geometrical transformation for the coming 
+  fCurrentSeparator->addChild(fStyleCache->getResetTransform());
 
-  G4OpenInventorTransform3D oiTran (objectTransformation);
-  SoSFMatrix* oiMat = oiTran.GetOIMatrix();
-  SoMatrixTransform* xform = new SoMatrixTransform;
-  xform->matrix.setValue(oiMat->getValue());
-  fCurrentSeparator->addChild(new SoResetTransform);
-  fCurrentSeparator->addChild(xform);
+  SoMatrixTransform* matrixTransform = new SoMatrixTransform;
+  G4OpenInventorTransform3D oiTran(objectTransformation);
+  SbMatrix* sbMatrix = oiTran.GetSbMatrix();
+  matrixTransform->matrix.setValue(*sbMatrix);
+  delete sbMatrix;
+  fCurrentSeparator->addChild(matrixTransform);
 }
 
 

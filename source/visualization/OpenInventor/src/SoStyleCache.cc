@@ -4,6 +4,7 @@
 #include <Inventor/nodes/SoMaterial.h>
 #include <Inventor/nodes/SoDrawStyle.h>
 #include <Inventor/nodes/SoLightModel.h>
+#include <Inventor/nodes/SoResetTransform.h>
 
 //////////////////////////////////////////////////////////////////////////////
 SoStyleCache::SoStyleCache(
@@ -11,6 +12,7 @@ SoStyleCache::SoStyleCache(
 :fMaterials(0)
 ,fLineStyles(0)
 ,fLightModels(0)
+,fResetTransform(0)
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
@@ -20,6 +22,8 @@ SoStyleCache::SoStyleCache(
   addChild(fLineStyles);
   fLightModels = new SoGroup;
   addChild(fLightModels);
+  fResetTransform = new SoResetTransform;
+  addChild(fResetTransform);
 }
 //////////////////////////////////////////////////////////////////////////////
 SoStyleCache::~SoStyleCache(
@@ -161,4 +165,12 @@ SoLightModel* SoStyleCache::getLightModelBaseColor(
   lightModel->model.setValue(SoLightModel::BASE_COLOR);
   fLightModels->addChild(lightModel);
   return lightModel;
+}
+//////////////////////////////////////////////////////////////////////////////
+SoResetTransform* SoStyleCache::getResetTransform(
+) 
+//////////////////////////////////////////////////////////////////////////////
+//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
+{
+  return fResetTransform;
 }
