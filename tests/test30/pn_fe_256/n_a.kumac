@@ -11,7 +11,7 @@ set NDVY 010205
  zone
  opt logy
  
- null -1.0 1.0 0.1 1000
+ null -1.0 1.0 1 10000
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
  
@@ -30,16 +30,17 @@ set NDVY 010205
  itx 0.15 75 'KIN'
  close 1
  
-ve/create X(4) R 0.991445 0.866025 0.5 -0.866025
-ve/create Y(4) R 198.78 181.22 90.68 37.83
-gr/h/symb X Y 4 21 0.2
  
+ ve/create X1(4) R  0.991445 0.866025 0.5  -0.866025
+ve/create Y1(4) R 262.221 212.582 113.252 53.7582
+gr/h/symb X1 Y1 4 25 0.2
+
  exe ../prf n_a eps
 
-  null -1.0 1.0 0.1 1000
+  null -1.0 1.0 1 10000
  atitle 'cos(theta) secondary neutron' 'ds/do (mb/sr)'
  
- gr/h/symb X Y 4 21 0.2
+ gr/h/symb X1 Y1 4 25 0.2
 
   hi/file 1 par.paw
  set dmod 2
@@ -54,6 +55,7 @@ gr/h/symb X Y 4 21 0.2
  line 0 2.1 0.1 2.1
  itx 0.15 150 'CHIPS'
  close 1
+
  
  opt liny
 

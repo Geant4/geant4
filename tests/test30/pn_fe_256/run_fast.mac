@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-10000
+1000
 //--------Proton_processes
 #particle
 proton
@@ -16,8 +16,14 @@ proton
 Fe
 #energy(MeV)
 256.
+#emax(MeV)
+280.
+#nbinse
+70
+#nbinsd
+70
 #elim(MeV)
-3.
+2.
 #nangle
 5
 #angles

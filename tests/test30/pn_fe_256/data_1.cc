@@ -69,14 +69,24 @@ int main(int argc, char** argv)
   }
 
   ofstream* fout_a = new ofstream();
-  string fname1 = "dsde.dat";
+  string fname1 = "dsde_1.dat";
   fout_a->open(fname1.c_str(), std::ios::out|std::ios::trunc);
   ofstream* fout_b = new ofstream();
-  string fname2 = "dsdtet.dat";
+  string fname2 = "dsdtet_1.dat";
   fout_b->open(fname2.c_str(), std::ios::out|std::ios::trunc);
   ofstream* fout_c = new ofstream();
-  string fname3 = "dsdedtet.dat";
+  string fname3 = "dsdedtet_1.dat";
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
+
+  ofstream* fout_a1 = new ofstream();
+  string fname4 = "dsde_1.out";
+  fout_a1->open(fname4.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_b1 = new ofstream();
+  string fname5 = "dsdtet_1.out";
+  fout_b1->open(fname5.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_c1 = new ofstream();
+  string fname6 = "dsdedtet_1.out";
+  fout_c1->open(fname6.c_str(), std::ios::out|std::ios::trunc);
 
   //there can't be lines longer than nmax characters
   const int nmax = 200;
@@ -85,28 +95,12 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 50;
+  int nbin = 0;
   int ibin, inum;
   int counter = 0;
-  double bin0 = 0.5*MeV;
-  double bin = 10.0*MeV;
-  double elim= 10.0*MeV;
-  double elim0= 3.0*MeV;
-  double x, an, e1, e2, y1, y2, ct1, ct2, xs, de;
-
-  double e0 = 0.0;
-  x = 0.0;
-
-  for(int i=0; i<=nbin; i++) {
-    if(x < elim) {
-      x += bin0;
-      if(abs(x-elim)<0.01) x = elim;
-    } else {
-      x += bin;
-    }
-    energy->push_back(x);
-  }
-
+  double elim = 1.07*MeV;
+  double elim0= 2.0*MeV;
+  double x, an, e1, e2, y1, y2, ct1, ct2, xs;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
 
@@ -140,8 +134,8 @@ int main(int argc, char** argv)
 
       do {
         (*fin) >> an >> e1 >> e2 >> x >> xs;
-        an *= degree;      
-        x  *= 1000.;
+        an *= degree;
+        x *= 1000.0;      
         if(1 < verbose) {
           cout << "an= " << an/degree << " e1= " << e1 
                << " e2= " << e2 << " cross= " << x
@@ -152,58 +146,44 @@ int main(int argc, char** argv)
         if (e1 == 0.0) {
           enddata = false;
           end = false;
-	      }
+	}
 
         if((xs == 0.0 && an/degree > 10.) || !enddata) {
-
           // fill the rest by zero cross section
           for(int j=ibin; j<nbin; j++) {
             cross->push_back(0.0);
           }
           cs.push_back(cross);
-          if(1 < verbose) {
-            cout << "### Start filling data for the angle " 
-                 << (*angle)[angle->size()-1]/degree
-                 << G4endl;
-	  }
           if(0 < verbose) {
-            (*fout_c) << "#####..Result.of.parcing..####### "
+            (*fout_c) << "#####..Result.of.parcing..####### n= " << nbin 
                       << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
                       << G4endl;
-            for(i=0; i<nbin; i++) {
-               (*fout_c) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+            (*fout_c1) << "#####..Result.of.parcing..####### n= " << nbin 
+                      << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                      << G4endl;
+            for(int i=0; i<nbin; i++) {
+               (*fout_c) << "e(MeV)= " << (*energy)[i]  
                          << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
+               (*fout_c1) << (*cross)[i] << " ";
 	    }
+	    (*fout_c1) << " " << endl;
           }  
 	}
 
 	// new data
         if(xs == 0.0) {
-          if(1 < verbose) {
-            cout << "### Start new data set for the angle " 
-                 << an/degree
-                 << G4endl;
-	  }
           angle->push_back(an);
           cross = new G4DataVector();
-          cross->push_back(0.0);
-          ibin= 0;
-          inum= 0;
+          ibin = 0;
 
-        } else if(end) {
+        } else if(end && e1 > elim) {
 
-          for(int j=ibin; j<nbin; j++) {
-            e0 = (*energy)[j];
-            de = bin;
-            if (e0 < elim) de = bin0;
-            if (e1 >= e0 && e1 <= e0 + de) break;
-            if(inum) (*cross)[j] /= (double)inum;
-            inum = 0;
-            cross->push_back(0.0);
-          }
-          (*cross)[j] += x;
-          inum++;
-          ibin = j;
+          ibin++;
+          cross->push_back(x);
+          if(an < 10.*degree) {
+            energy->push_back(e1);
+            nbin++;
+	  }
         }      
 
       } while (enddata);
@@ -219,20 +199,30 @@ int main(int argc, char** argv)
         (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
                   << elim0/MeV
                   << G4endl;
-        for(i=0; i<nbin; i++) {
+        (*fout_a1) << "#####..Result.of.integration..Energy points"
+                   << G4endl;
+        (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
+                  << elim0/MeV
+                  << G4endl;
+
+        for(int ii=0; ii<nbin; ii++) {
+          (*fout_a1) << (*energy)[ii] << " ";
+	}
+        (*fout_a1) << G4endl;
+        (*fout_a1) << "#####..Result.of.integration" << G4endl;
+
+        for(int i=0; i<nbin; i++) {
         
           x = 0.0;
           for(int j=0; j<na-1; j++) {
             f1  = cs[j];  
             y1  = (*f1)[i];  
             ct1 = cos((*angle)[j]);
+            ct2 = cos((*angle)[j+1]);
             if(j == 0) {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
-              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
               ct1 = 1.0;
-              if(y1 < 0.0) y1 = 0.0;
 	    } else if (j == na-2) {
               f2  = cs[j-1]; 
               y2  = (*f2)[i]; 
@@ -243,23 +233,22 @@ int main(int argc, char** argv)
             } else {
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
-              ct2 = cos((*angle)[j+1]);
 	    }
-	    //         cout << "f1= " << f1 << " f2= " << f2 << endl;
-	    //      cout << "y1= " << y1 << " y2= " << y2 << endl;
-	    //      cout << "ct1= " << ct1 << " ct2= " << ct2 << endl;
             x  += 0.5*(y1 + y2)*(ct1 - ct2);  
           }        
           x *= twopi;
-          (*fout_a) << "e(MeV)= " << 0.5*((*energy)[i] + (*energy)[i+1]) 
+          (*fout_a) << "e(MeV)= " << (*energy)[i] 
                     << " cross(mb/MeV)= " << x << endl;
+          (*fout_a1) << x << " ";
         }
+
+        (*fout_a1) << G4endl;
 
         for(int j=0; j<na-1; j++) {
           f1  = cs[j];  
           an  = cos((*angle)[j]);
           x   = 0.0;
-          for(i=0; i<nbin; i++) {
+          for(i=0; i<nbin-1; i++) {
             y1  = (*f1)[i];
             e1  = (*energy)[i];
             e2  = (*energy)[i+1];
@@ -272,7 +261,9 @@ int main(int argc, char** argv)
           }
           (*fout_b) << "cos(theta)= " << an 
                     << " cross(mb/sr)= " << x << endl;
+          (*fout_b1) << x << " ";
         }
+        (*fout_b1) << G4endl ;
       }
     }
   } while (end);

@@ -108,7 +108,8 @@ int main(int argc, char** argv)
   int nbin = 0;
   int ibin, inum;
   int counter = 0;
-  double elim0= 2.0*MeV;
+  double elim = 18.0*MeV;
+  double elim0= 20.0*MeV;
   double x, an, e1, e2, x1, xs1, y1, y2, ct1, ct2, xs, p1;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
@@ -188,12 +189,13 @@ int main(int argc, char** argv)
           cross = new G4DataVector();
           ibin = 0;
 
-        } else if(end && e1 > 18.*MeV) {
+        } else if(end && e1 > elim) {
 
           (*fin) >> xs1 >> e1 >> e2 >> x1 >> xs1;
          
           x = 0.5*(x + x1);
-	  /*
+	  
+          /*
           p1 = sqrt(e1*(e1 + 2.*m3))*ct1;
           e1 += m3; 
           e2 = gam*(e1 + p1*bet);
@@ -201,12 +203,13 @@ int main(int argc, char** argv)
           e2 -= m3;
 	  */
 
+	  
           p1 = sqrt(e1*(e1 + 2.*m3))*ct1;
           e1 += m3; 
           e2 = gam*(e1 - p1*bet);
           x *= sqrt((e1*e1 - m3*m3)/(e2*e2 - m3*m3));
           e2 = e1 - m3;
-          
+
           ibin++;
           cross->push_back(x);
           if(an < 10.*degree) {

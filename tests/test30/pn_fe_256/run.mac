@@ -16,12 +16,18 @@ proton
 Fe
 #energy(MeV)
 256.
+#emax(MeV)
+280.
+#nbinse
+70
+#nbinsd
+70
 #elim(MeV)
-3.
+2.
 #nangle
 5
 #angles
-7.5 30. 60. 90. 150.
+7.5 30. 60. 120. 150.
 #dangle
 10.
 //--------
