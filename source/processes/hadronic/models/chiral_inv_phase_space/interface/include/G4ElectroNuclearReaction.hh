@@ -81,6 +81,10 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     xSec = theData.GetCrossSection(aTrack.GetDynamicParticle(), anElement);
     photonEnergy = theData.GetEffectivePhotonEnergy();
   }
+  if(xSec<=0)
+  {
+    return theResult;
+  }
   if(aTrack.GetDynamicParticle()->GetKineticEnergy() - photonEnergy < 0)
   {
     G4Exception("G4ElectroNuclearReaction: photonEnergy above electron energy");
