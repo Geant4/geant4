@@ -8,9 +8,7 @@
 # see the first lines in G4ComptonTest.cc
 #
 
-ifdef G4ANALYSIS_USE
-
-   CPPFLAGS  += -I$(LHCXX_REL_DIR)/include
+CPPFLAGS  += -I$(LHCXX_REL_DIR)/include
 
 ifdef G4ANALYSIS_USE_NTUPLE
   CPPFLAGS += -DG4ANALYSIS_USE_NTUPLE
@@ -33,6 +31,3 @@ endif
 # Xm Xt
    LDFLAGS  += -L$/usr/local/lib -lXm -L/usr/X11R6/lib -lXt
 
-
-
-endif

@@ -21,195 +21,149 @@
 // ********************************************************************
 //
 //
-// **********************************************************************
-// *                                                                    *
-// *                    GEANT 4 xray_telescope advanced example         *
-// *                                                                    *
-// * MODULE:            XrayTelAnalysisManager.cc                       *     
-// * -------                                                            *
-// *                                                                    *
-// * Version:           0.2                                             *
-// * Date:              30/11/00                                        *
-// * Author:            A. Pfeiffer, G. Barrand, MG Pia, R Nartallo     *
-// * Organisation:      ESA/ESTEC, Noordwijk, THe Netherlands           *
-// *                                                                    *
-// **********************************************************************
+// $Id: XrayTelAnalysis.cc,v 1.3 2001-12-10 16:53:46 pfeiffer Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// CHANGE HISTORY
-// --------------
+// Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
+//         (copied from his UserAnalyser class)
 //
-// 07.12.2001 A.Pfeiffer
-// - merged with Guy Barrand's AIDA 2.2 port
+// History:
+// -----------
+//  7 Nov 2001   MGP        Implementation
 //
-// 22.11.2001 G.Barrand
-// - Adaptation to AIDA
-//
-// 30.11.2000 M.G. Pia, R. Nartallo
-// - Simplification of code: removal of non-Lizard specific code
-// - Inheritance directly from the base class G4VAnalysisManager instead
-//   of the derived class G4AnalysisManager
-//
-// 15.11.2000 A. Pfeiffer
-// - Adaptation to Lizard 
-//
-// 16.10.2000 G. Barrand
-// - First implementation of XrayAnalysisManager
-// - Provision of code for various AIDA and non-AIDA systems
-//
-// **********************************************************************
-
-
-#include "g4std/fstream"
-
-#include "G4ios.hh"
-#include "G4Run.hh"
-#include "G4Event.hh"
-#include "G4Track.hh"
-#include "G4VVisManager.hh"
-#include "G4TrajectoryContainer.hh"
-#include "G4Trajectory.hh"
-
-#ifdef G4ANALYSIS_USE
-#include <AIDA/IAnalysisFactory.h>
-#include <AIDA/ITreeFactory.h>
-#include <AIDA/ITree.h>
-#include <AIDA/IHistogramFactory.h>
-#include <AIDA/IHistogram1D.h>
-#include <AIDA/IHistogram2D.h>
-#include <AIDA/IPlotterFactory.h>
-#include <AIDA/IPlotter.h>
-#endif
+// -------------------------------------------------------------------
 
 #include "XrayTelAnalysis.hh"
+#include "globals.hh"
+#include "G4Track.hh"
+#include "G4SteppingManager.hh"
+#include "G4ThreeVector.hh"
 
 XrayTelAnalysis* XrayTelAnalysis::instance = 0;
 
-XrayTelAnalysis::XrayTelAnalysis(int argc,char** argv)
-:analysisFactory(0)
-,tree(0)
-,enteringEnergyHistogram(0)
-,yzHistogram(0)
+XrayTelAnalysis::XrayTelAnalysis()
 {
-#ifdef G4ANALYSIS_USE
-  // Hooking an AIDA compliant analysis system.
-  analysisFactory = AIDA_createAnalysisFactory();
-  if(analysisFactory) {
-
-    ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
-    if(treeFactory) {
-      // tree = treeFactory->create(); // Tree in memory.
-      tree = treeFactory->create("XrayTel.root",false,false,"ROOT");
-      if(tree) {
-	IHistogramFactory* hFactory = 
-	  analysisFactory->createHistogramFactory(*tree);  
-	if(hFactory) {
-	  // Histogram creation (the below has a name and a label) :
-	  enteringEnergyHistogram = 
-	    hFactory->create1D("ekin.vop","Entering energy",100,0,0.5);
-	  // Book the histogram for the 2D position. 
-	  // Instead of using a scatter plot, just book enough bins ...
-	  yzHistogram = 
-	    hFactory->create2D("position.vop","YZ",200, -50, 50, 200, -50, 50);
-	  delete hFactory;
-	}
-      }
-      delete treeFactory; // Will not delete the ITree.
-    }
-
-
-  /* 
-     The following lines set the plotter that is
-     needed in this example for a multiple histograms
-     visualization. Please see the README for more information 
-  */
-    IPlotterFactory* plotterFactory = 
-      analysisFactory->createPlotterFactory(argc,argv);
-    if(plotterFactory) {
-      plotter = plotterFactory->create();
-      if(plotter) {
-        // Map the plotter on screen :
-	plotter->show();
-        // Set the page title :
-	plotter->setParameter("pageTitle","XrayTel");
-	// Have two plotting regions (one column, two rows).
-	plotter->createRegions(1,2); 
-        // Attach histograms to plotter regions :
-	if(enteringEnergyHistogram) {
-	  plotter->plot(*enteringEnergyHistogram);
-	  plotter->next();
-	}
-	if(yzHistogram) {
-	  plotter->plot(*yzHistogram);
-	}
-      }
-      delete plotterFactory;
-    }
-  }
-
-#endif
+  histoManager = createIHistoManager();
+  ntFactory = Lizard::createNTupleFactory();
+  vectorFactory = createIVectorFactory();
+  plotter = createIPlotter();
 }
 
 XrayTelAnalysis::~XrayTelAnalysis()
-{
-#ifdef G4ANALYSIS_USE
+{ 
+  delete ntFactory;
+  ntFactory = 0;
+
+  delete histoManager;
+  histoManager = 0;
+
+  delete vectorFactory;
+  vectorFactory = 0;
+
   delete plotter;
-  delete enteringEnergyHistogram;
-  delete yzHistogram;
-  delete analysisFactory;
-#endif
+  plotter = 0;
 }
 
-XrayTelAnalysis* XrayTelAnalysis::getInstance(G4int argc, char** argv)
+XrayTelAnalysis* XrayTelAnalysis::getInstance()
 {
-  if (instance == 0) instance = new XrayTelAnalysis(argc, argv);
+  if (instance == 0) instance = new XrayTelAnalysis;
   return instance;
 }
 
 
-void XrayTelAnalysis::book(){
-#ifdef G4ANALYSIS_USE
-  if(enteringEnergyHistogram) enteringEnergyHistogram->reset();
-  if(yzHistogram) yzHistogram->reset();
-#endif
+void XrayTelAnalysis::book()
+{
+  histoManager->selectStore("XrayTel.his");
+
+  // Book histograms
+  histoManager->create1D("1","Energy, all", 20,0.,10.);
+  histoManager->create2D("2","y-z, all", 100,-500.,500.,100,-500.,500.);
+  histoManager->create1D("3","Energy, entering detector", 10,0.,1.);
+  histoManager->create2D("4","y-z, entering detector", 200,-50.,50.,200,-50.,50.);
+
+  // Divide the plot into 4 zones to show the 4 histograms during execution
+  plotter->zone(2,2,0,0);
+
+  // Book ntuples
+  ntuple = ntFactory->createC("XrayTel.his::1");
+  
+  //  Add and bind the attributes to the ntuple
+  if ( !( ntuple->addAndBind( "energy", eKin) &&
+  	  ntuple->addAndBind( "y"     , y   ) &&
+  	  ntuple->addAndBind( "z"     , z   ) &&
+  	  ntuple->addAndBind( "dirx"  , dirX) &&
+  	  ntuple->addAndBind( "diry"  , dirY) &&
+  	  ntuple->addAndBind( "dirz"  , dirZ) ) )    
+    {
+      delete ntuple;
+      G4Exception(" XrayTelAnalysis::book - Could not addAndBind ntuple");
+    }  
 }
 
-void XrayTelAnalysis::finish(){
-#ifdef G4ANALYSIS_USE
-  // the following things cannot be done in Run::EndOfRun()
-  // only now plot the energy of the particles
+void XrayTelAnalysis::finish()
+{
+  // Store histograms
 
-  if(tree) tree->commit(); // Write histos in file.
+  // Because of a Lizard feature, ntuples must be deleted at this stage, 
+  // not in the destructor (otherwise the ntuples are not stored)
 
-  // Give control to the GUI so that someone 
-  // can play with the plotter. The plotter
-  // should be equipped with an "escape" (button) 
-  // to return of the "interact" method.
-  G4cout << "Click the escape button to continue..." << G4endl;
-  if(plotter) plotter->interact();
-#endif
+  histoManager->store("1");
+  histoManager->store("3");
+  histoManager->store("2");
+  histoManager->store("4");
+
+  delete ntuple;
+  ntuple = 0;
+  G4cout << "Deleted ntuple" << G4endl;
 }
 
-void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering) {
-#ifdef G4ANALYSIS_USE
-
+void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
+{
+  eKin = track.GetKineticEnergy();
   G4ThreeVector pos = track.GetPosition();
+  y = pos.y();
+  z = pos.z();
+  G4ThreeVector dir = track.GetMomentumDirection();
+  dirX = dir.x();
+  dirY = dir.y();
+  dirZ = dir.z();
 
-  if(enteringEnergyHistogram) {
-    enteringEnergyHistogram->fill(track.GetKineticEnergy());
-  }
-  if(yzHistogram) {
-    yzHistogram->fill(pos.y(), pos.z());
-  }
-  if(plotter) plotter->refresh();
-#endif
-} 
+  // Fill histograms, all tracks
+  IHistogram1D* h1 = histoManager->retrieveHisto1D("1");
+  h1->fill(eKin);
+  IHistogram2D* h2 = histoManager->retrieveHisto2D("2");
+  h2->fill(y,z);
 
+  // Fill histograms and ntuple, tracks entering the detector
+  if (entering)
+    {
+      // Fill and plot histograms
+      IHistogram1D* h3 = histoManager->retrieveHisto1D("3");
+      h3->fill(eKin);
+      plot1D(h1);
+      plot1D(h3);
+      IHistogram2D* h4 = histoManager->retrieveHisto2D("4");
+      h4->fill(y,z);
+      plot2D(h2);
+      plot2D(h4);
 
+      // Fill ntuple
+      ntuple->addRow();
+    }
+}
 
+void XrayTelAnalysis::plot1D(IHistogram1D* histo)
+{
+  IVector* v = vectorFactory->from1D(histo);
+  plotter->plot(v,0);
+  plotter->refresh();
+  delete v;	
+}
 
-
-
-
-
-
-
+void XrayTelAnalysis::plot2D(IHistogram2D* histo)
+{
+  IVector* v = vectorFactory->from2D(histo);
+  plotter->plot(v,0);
+  plotter->refresh();
+  delete v;	
+}
