@@ -45,6 +45,7 @@ setenv NeutronHPCrossSections $G4INSTALL/../G4NDL0.2
 setenv G4LEVELGAMMADATA $G4INSTALL/data/PhotonEvaporation
 setenv G4RADIOACTIVEDATA $G4INSTALL/data/RadiativeDecay
 setenv G4LEDATA $G4INSTALL/../G4EMLOW0.3
+setenv G4ANALYSIS_BUILD 1
 #
 # Some aliases :
 alias g4root   "cd $G4INSTALL"
