@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.11 2004-04-29 18:40:53 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.12 2004-05-05 10:12:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -188,7 +188,7 @@ public:
   // Add subcutoff processor for the region
 
   void ActivateFluorescence(G4bool val, const G4Region* region = 0) {};
-  void ActivateAugerElectrons(G4bool val, const G4Region* region = 0) {};
+  void ActivateAugerElectronProduction(G4bool val, const G4Region* region = 0) {};
   // Activate deexcitation code
 
   virtual void SetSubCutoff(G4bool) {};
