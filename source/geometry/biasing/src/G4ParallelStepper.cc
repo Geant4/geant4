@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelStepper.cc,v 1.9 2003-04-02 17:01:09 dressel Exp $
+// $Id: G4ParallelStepper.cc,v 1.10 2003-04-03 08:01:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -47,8 +47,7 @@ G4ParallelStepper::~G4ParallelStepper()
 }
 
 G4ParallelStepper::G4ParallelStepper(const G4ParallelStepper &rhs)
-  :
-  fPStep(new G4GeometryCellStep(rhs.GetPStep()))
+  : G4VParallelStepper(), fPStep(new G4GeometryCellStep(rhs.GetPStep()))
 {
   if (!fPStep) {
     Error("G4ParallelStepper:: new failed to create a G4GeometryCellStep!");
