@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonAr40.cc,v 1.3 2001-07-11 10:10:08 gunter Exp $
+// $Id: G4IonAr40.cc,v 1.4 2001-10-29 11:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,4 @@ G4IonAr40 G4IonAr40::theIonAr40(
 );
 
 G4IonAr40* G4IonAr40::IonAr40Definition(){return &theIonAr40;}
-// initialization for static cut values
-G4double   G4IonAr40::theIonAr40LengthCut;
-G4double*  G4IonAr40::theIonAr40KineticEnergyCuts;
+G4IonAr40* G4IonAr40::IonAr40(){return &theIonAr40;}

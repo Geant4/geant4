@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonFe56.hh,v 1.2 2001-07-11 10:10:04 gunter Exp $
+// $Id: G4IonFe56.hh,v 1.3 2001-10-29 11:05:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,8 +58,6 @@ class G4IonFe56 : public G4VIon
 {
  private:
    static G4IonFe56 theIonFe56;
-   static G4double  theIonFe56LengthCut;
-   static G4double* theIonFe56KineticEnergyCuts;
 
 public: // Without description
 
@@ -77,20 +75,8 @@ public: // Without description
    virtual ~G4IonFe56();
   
    static G4IonFe56*    IonFe56Definition();
-   static G4IonFe56*    IonFe56() {return &theIonFe56;}
-   static G4double GetCuts() {return theIonFe56LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonFe56KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
+   static G4IonFe56*    IonFe56();
 };
-
-inline void G4IonFe56::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonFe56LengthCut = theCutInMaxInteractionLength;  
-  theIonFe56KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
 
 #endif
 

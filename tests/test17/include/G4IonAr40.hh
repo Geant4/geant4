@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonAr40.hh,v 1.4 2000-06-21 16:44:49 vnivanch Exp $
+// $Id: G4IonAr40.hh,v 1.5 2001-10-29 11:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,8 +44,6 @@ class G4IonAr40 : public G4VIon
 {
  private:
    static G4IonAr40 theIonAr40;
-   static G4double  theIonAr40LengthCut;
-   static G4double* theIonAr40KineticEnergyCuts;
 
 public: // Without description
 
@@ -64,18 +62,7 @@ public: // Without description
    virtual ~G4IonAr40();
   
    static G4IonAr40*    IonAr40Definition();
-   static G4IonAr40*    IonAr40() {return &theIonAr40;}
-   static G4double GetCuts() {return theIonAr40LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonAr40KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
+   static G4IonAr40*    IonAr40();
 };
-
-inline void G4IonAr40::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonAr40LengthCut = theCutInMaxInteractionLength;  
-  theIonAr40KineticEnergyCuts = theKineticEnergyCuts;
-}
 
 #endif

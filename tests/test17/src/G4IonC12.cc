@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.cc,v 1.5 2001-10-24 17:29:37 vnivanch Exp $
+// $Id: G4IonC12.cc,v 1.6 2001-10-29 11:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,8 +85,6 @@ G4IonC12 G4IonC12::theIonC12(
 );
 
 G4IonC12* G4IonC12::IonC12Definition(){return &theIonC12;}
-// initialization for static cut values
-G4double   G4IonC12::theIonC12LengthCut;
-G4double*  G4IonC12::theIonC12KineticEnergyCuts;
+G4IonC12* G4IonC12::IonC12(){return &theIonC12;}
 
 

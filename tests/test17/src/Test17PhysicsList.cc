@@ -167,6 +167,8 @@ void Test17PhysicsList::ConstructProcess()
 
 #include "G4MultipleScattering.hh"
 
+#include "G4LowEnergyBremsstrahlung.hh"
+#include "G4LowEnergyIonisation.hh"
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
@@ -177,7 +179,7 @@ void Test17PhysicsList::ConstructProcess()
 #include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
-#include "G4hLowEnergyIonisation.hh"
+#include "G4hLowEnergyIonisationVI.hh"
 
 #include "Test17StepCut.hh"
 
@@ -200,8 +202,8 @@ void Test17PhysicsList::ConstructEM()
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+      pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
+      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1,-1,3);       
 
       Test17StepCut* theeminusStepCut = new Test17StepCut();
       theeminusStepCut->SetMaxStep(MaxChargedStep);  
@@ -244,7 +246,7 @@ void Test17PhysicsList::ConstructEM()
       //       G4hIonisation* hIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extention
-      G4hLowEnergyIonisation* hIon = new G4hLowEnergyIonisation() ;
+      G4hLowEnergyIonisationVI* hIon = new G4hLowEnergyIonisationVI() ;
       //      hIon->SetNuclearStoppingOff() ;
       //         hIon->SetBarkasOff() 
       // hIon->SetNuclearStoppingOff() ;
@@ -278,7 +280,7 @@ void Test17PhysicsList::ConstructEM()
       // G4ionIonisation* iIon = new G4ionIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+        G4hLowEnergyIonisationVI* iIon = new G4hLowEnergyIonisationVI() ;
 	//G4ionLowEnergyIonisation* iIon = new G4ionLowEnergyIonisation() ;
       //      iIon->SetNuclearStoppingOff() ;
 	//  iIon->SetNuclearStoppingOn() ;
@@ -354,11 +356,11 @@ void Test17PhysicsList::SetCuts()
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton 
 
-  SetCutValue(cutForProton, "proton");
+     SetCutValue(cutForProton, "proton");
 
-  SetCutValue(cutForProton, "anti_proton");
+     SetCutValue(cutForProton, "anti_proton");
 
-  SetCutValueForOthers(cutForProton);
+     SetCutValueForOthers(cutForProton);
 
   //  G4cout << "Dump the table!" << G4endl;
               
@@ -383,7 +385,7 @@ void Test17PhysicsList::SetGammaCut(G4double val)
 
 void Test17PhysicsList::SetElectronCut(G4double val)
 {
-  //  ResetCuts();
+  ResetCuts();
   cutForElectron = val;
 }
 

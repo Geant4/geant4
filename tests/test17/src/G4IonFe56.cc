@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonFe56.cc,v 1.3 2001-07-11 10:10:08 gunter Exp $
+// $Id: G4IonFe56.cc,v 1.4 2001-10-29 11:05:56 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,6 +85,4 @@ G4IonFe56 G4IonFe56::theIonFe56(
 );
 
 G4IonFe56* G4IonFe56::IonFe56Definition(){return &theIonFe56;}
-// initialization for static cut values
-G4double   G4IonFe56::theIonFe56LengthCut;
-G4double*  G4IonFe56::theIonFe56KineticEnergyCuts;
+G4IonFe56* G4IonFe56::IonFe56(){return &theIonFe56;}

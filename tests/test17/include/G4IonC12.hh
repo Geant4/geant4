@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonC12.hh,v 1.3 2001-10-24 17:29:37 vnivanch Exp $
+// $Id: G4IonC12.hh,v 1.4 2001-10-29 11:05:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,8 +59,6 @@ class G4IonC12 : public G4VIon
 {
  private:
    static G4IonC12  theIonC12;
-   static G4double  theIonC12LengthCut;
-   static G4double* theIonC12KineticEnergyCuts;
 
 public: // Without description
 
@@ -78,33 +76,8 @@ public: // Without description
    virtual ~G4IonC12();
   
    static G4IonC12*    IonC12Definition();
-   static G4IonC12*    IonC12() {return &theIonC12;}
-   static G4double GetCuts() {return theIonC12LengthCut;}   
-   static G4double* GetCutsInEnergy() {return theIonC12KineticEnergyCuts;};
-
-   void SetCuts(G4double aCut); 
-
-   virtual void RestoreCuts(G4double cutInLength,
-                            const G4double* cutInEnergy );
+   static G4IonC12*    IonC12();
 
 };
-
-inline void G4IonC12::SetCuts(G4double aCut)
-{
-  CalcEnergyCuts(aCut);
-  theIonC12LengthCut = theCutInMaxInteractionLength;  
-  theIonC12KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
-inline void G4IonC12::RestoreCuts(G4double cutInLength,
-                            const G4double* cutInEnergy )
-{
-  G4ParticleWithCuts::RestoreCuts(cutInLength, cutInEnergy);
-  theIonC12LengthCut = theCutInMaxInteractionLength;  
-  theIonC12KineticEnergyCuts = theKineticEnergyCuts;
-  
-}
-
 
 #endif
