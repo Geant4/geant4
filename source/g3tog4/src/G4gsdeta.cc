@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdeta.cc,v 1.1 1999-01-07 16:06:48 gunter Exp $
+// $Id: G4gsdeta.cc,v 1.2 1999-05-07 04:16:14 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -29,7 +29,7 @@ void PG4gsdeta(RWCString tokens[])
 void G4gsdeta(G4String chset, G4String chdet, G4String,
               G4int nwhi, G4int nwdi)
 {
-    G4int idtyp = G3Det.GetID(chset);
+    G4int idtyp = G3Det.GetID(chset, chdet);
     // just associate another sensitive detector structure with
     // the volume chdet
     G4gsdetv(chset, chdet, idtyp, nwhi, nwdi);

@@ -44,6 +44,8 @@ CPPFLAGS  += \
              -I$(G4BASE)/processes/decay/include \
              -I$(G4BASE)/track/include \
              -I$(G4BASE)/tracking/include \
+             -I$(G4BASE)/digits+hits/detector/include \
+             -I$(G4BASE)/digits+hits/hits/include \
              -Itest
 ###	kludge for AIX
 

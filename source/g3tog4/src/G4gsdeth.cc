@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsdeth.cc,v 1.1 1999-01-07 16:06:49 gunter Exp $
+// $Id: G4gsdeth.cc,v 1.2 1999-05-07 04:16:20 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G3toG4.hh"
@@ -31,11 +31,11 @@ void PG4gsdeth(RWCString tokens[])
     G4gsdeth(chset,chdet,nh,chnamh,nbitsh,orig,fact);
 }
 
-void G4gsdeth(G4String chset, G4String, G4int nh, G4String chnamh[],
+void G4gsdeth(G4String chset, G4String chdet, G4int nh, G4String chnamh[],
               G4int nbitsh[], G4double orig[], G4double fact[])
 {
     // Get pointer to sensitive detector chset
-    G4VSensitiveDetector* sdet = G3Det.get(chset);
+    G4VSensitiveDetector* sdet = G3Det.getSD(chset, chdet);
     // Add hits to sensitive detector
     for (G4int i=0; i<nh; i++) {
       // $$$        sdet->AddHit(chnamh[i],nbitsh[i],orig[i],fact[i]);
