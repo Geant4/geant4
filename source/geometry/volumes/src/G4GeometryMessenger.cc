@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.cc,v 1.3 2001-11-01 18:59:20 gcosmo Exp $
+// $Id: G4GeometryMessenger.cc,v 1.4 2001-11-01 19:00:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -88,7 +88,7 @@ G4GeometryMessenger::G4GeometryMessenger(G4TransportationManager* tman)
   tolCmd->SetGuidance( "Default: 1E-4*mm." );
   tolCmd->SetParameterName( "Tolerance", true, true );
   tolCmd->SetDefaultUnit( "mm" );
-  tolCmd->SetUnitCategory( "Surface" );
+  tolCmd->SetUnitCategory( "Length" );
 
   posCmd = new G4UIcmdWith3VectorAndUnit( "/geometry/test/position", this );
   posCmd->SetGuidance( "Set starting position." );
