@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2000-05-24 15:29:58 gunter Exp $
+# $Id: GNUmakefile,v 1.18 2000-06-07 12:30:02 johna Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -68,12 +68,13 @@ libmap: $(G4LIBDIR)/liblist
 	@echo "Searching $(G4INSTALL)/source"
 	@echo '  for GNUmakefiles containing "name" and sorting...'
 	@find $(G4INSTALL)/source \
-	  -name GNUmakefile -exec $(GREP) -l 'name :=' {} \; \
+	  -name GNUmakefile -exec $(GREP) -l '^ *name *:=' {} \; \
 	  | sort \
 	  > /tmp/G4_all_lib_makefiles.$(unique);
-	@echo "Weeding out global level GNUmakefiles and non-libraries..."
+	@echo "Weeding out tests, global level GNUmakefiles, etc..."
 	@for i in `cat /tmp/G4_all_lib_makefiles.$(unique)`; \
 	do \
+	  echo $$i | $(GREP) -q test || \
 	  $(GREP) -q SUBDIR $$i || \
 	  $(GREP) -q G4hepgeometry $$i || \
 	  echo $$i >> /tmp/G4_granlib_makefiles.$(unique); \
@@ -82,7 +83,7 @@ libmap: $(G4LIBDIR)/liblist
 	@touch /tmp/G4libname.map.starter.$(unique);
 	@for i in `cat /tmp/G4_granlib_makefiles.$(unique)`; \
 	do \
-	  $(GREP) 'name :=' $$i | cut -d \  -f 3 \
+	  $(GREP) '^ *name *:=' $$i | cut -d \  -f 3 \
 	  >> /tmp/G4libname.map.starter.$(unique); \
 	  echo $$i >> /tmp/G4libname.map.starter.$(unique); \
 	done
