@@ -23,12 +23,12 @@ radial radiation dose distribution.
 GammaTherapy application geometry consists of along z:
 
 1. Generator of electrons directed along z-axis
-2. Target1 (Be)
-3. Target2 (W,Cu)
-4. GasVolume (He)
-5. CheckVolume (Air) it is sensitive for killing of rest electrons
-6. Phantom (H2O)
-7. Absorber in Phantom (H2O) it is sensitive for absorbed energy calculation
+2. Target1 (Be, W)
+3. Target2 (W, Cu)
+4. GasVolume (He)            all charged particles are killed inside 
+5. CheckVolume (Air)         is sensitive for scoring in front of thephantom
+6. Phantom (H2O)             is sensitive for radioactive dose calculation
+7. Absorber in Phantom (H2O) is sensitive for transverse dose calculation
 
 World volume consists of Air.
 
