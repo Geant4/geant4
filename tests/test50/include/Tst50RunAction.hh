@@ -21,19 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.14 2003-05-17 13:42:42 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.15 2003-05-17 14:18:48 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+//
+// $Id: Tst50RunAction.hh,v 1.15 2003-05-17 14:18:48 pia Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Author: Susanna Guatelli (guatelli@ge.infn.it)
+//
+// History:
+// -----------
+// 02 Mar  1999   S. Guatelli   1st implementation
+//
+// -------------------------------------------------------------------
 
 #ifndef Tst50RunAction_h
 #define Tst50RunAction_h 1
 
 #include "G4UserRunAction.hh"
 #include "globals.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 class Tst50RunMessenger;

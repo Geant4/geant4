@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.18 2003-05-17 13:42:42 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.19 2003-05-17 14:18:49 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #include "G4ios.hh"
 #include <math.h>
 #include "G4Run.hh"
@@ -41,15 +39,15 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 Tst50RunAction::Tst50RunAction()
 {
- p_messenger= new Tst50RunMessenger(this);
- flag =false;
+  p_messenger= new Tst50RunMessenger(this);
+  flag =false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Tst50RunAction::~Tst50RunAction()
 {
- delete p_messenger;
+  delete p_messenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -91,17 +89,17 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   G4RunManager* runManager = G4RunManager::GetRunManager();
   p_Primary =
     (Tst50PrimaryGeneratorAction*)(runManager->GetUserPrimaryGeneratorAction());
-  G4double energy= p_Primary->GetInitialEnergy();
+  G4double energy = p_Primary->GetInitialEnergy();
   G4String particle_name= p_Primary->GetParticle();
   p_Detector =
     (Tst50DetectorConstruction*)(runManager->GetUserDetectorConstruction());
-  G4String name=p_Detector->GetMaterialName(); 
-  G4double density =p_Detector->GetDensity();
-  G4double thickness =p_Detector->GetTargetThickness();
+  G4String name = p_Detector->GetMaterialName(); 
+  G4double density = p_Detector->GetDensity();
+  G4double thickness = p_Detector->GetTargetThickness();
 
   if (G4VVisManager::GetConcreteInstance())
     {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
     }
 
   numberEvents=aRun->GetNumberOfEvent();
@@ -116,17 +114,17 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
 
     }
  
-  if(flag)
+  if (flag)
     {
-     if (particle_name =="e-" || particle_name =="e+")
-      {
-       G4double ft=(particle_trans/numberEvents) ;
-       G4double ft_error= (sqrt(particle_trans))/numberEvents;
-       G4double fb=(particle_back/numberEvents);
-       G4double fb_error= (sqrt(particle_back))/numberEvents;
-       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
-       analysis-> trasmission(runID,energy/MeV,ft,fb,ft_error,fb_error);
-      }
+      if (particle_name =="e-" || particle_name =="e+")
+	{
+	  G4double ft=(particle_trans/numberEvents) ;
+	  G4double ft_error= (sqrt(particle_trans))/numberEvents;
+	  G4double fb=(particle_back/numberEvents);
+	  G4double fb_error= (sqrt(particle_back))/numberEvents;
+	  Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+	  analysis-> trasmission(runID,energy/MeV,ft,fb,ft_error,fb_error);
+	}
     }
 }
 
