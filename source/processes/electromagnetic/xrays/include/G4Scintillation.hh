@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.hh,v 1.8 2002-05-16 21:19:39 gum Exp $
+// $Id: G4Scintillation.hh,v 1.9 2002-11-08 01:33:18 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,9 @@
 // Version:     1.0
 // Created:     1998-11-07
 // Author:      Peter Gumplinger
-// Updated:     2002-05-16 changed to inherit from VRestDiscreteProcess
+// Updated:     2002-11-07 allow for fast and slow scintillation
+//              2002-11-05 make use of constant material properties
+//              2002-05-16 changed to inherit from VRestDiscreteProcess
 //              2002-05-09 changed IsApplicable method
 //              1999-10-29 add method and class descriptors
 //
@@ -113,14 +115,14 @@ public: // With description
 				       G4double ,
                                        G4ForceCondition* );
         // Returns infinity; i. e. the process does not limit the step,
-        // but sets the 'Forced' condition for the DoIt to be invoked at 
-        // every step.
+        // but sets the 'StronglyForced' condition for the DoIt to be 
+        // invoked at every step.
 
         G4double GetMeanLifeTime(const G4Track& aTrack,
                                  G4ForceCondition* );
         // Returns infinity; i. e. the process does not limit the time,
-        // but sets the 'Forced' condition for the DoIt to be invoked at
-        // every step.
+        // but sets the 'StronglyForced' condition for the DoIt to be
+        // invoked at every step.
 
 	G4VParticleChange* PostStepDoIt(const G4Track& aTrack, 
 			                const G4Step&  aStep);
@@ -137,34 +139,28 @@ public: // With description
         G4bool GetTrackSecondariesFirst() const;
         // Returns the boolean flag for tracking secondaries first.
 	
-        void SetScintillationYield(const G4double yield);
-        // Called to set the scintillation photon yield per unit of
-        // energy deposition. IMPORTANT: 'yield' has units of 1/energy
-        // and is not a simple number!
-        G4double GetScintillationYield() const;
-        // Returns the photon yield per energy unit.
+        void SetScintillationYieldFactor(const G4double yieldfactor);
+        // Called to set the scintillation photon yield factor, needed when
+        // the yield is different for different types of particles. This
+        // scales the yield obtained from the G4MaterialPropertiesTable.
 
-        void SetResolutionScale(const G4double scale);
-        // Called to set sigma of the Gaussian photon yield distribution.
-        G4double GetResolutionScale() const;
-        // Returns the sigma of the Gaussian photon yield distribution.
+        G4double GetScintillationYieldFactor() const;
+        // Returns the photon yield factor.
 
-        void SetScintillationTime(const G4double time);
-        // Called to set the exponential time constant for the delayed
-        // scintillation photon emission.
-        G4double GetScintillationTime() const;
-        // Returns the exponential time constant for the delayed 
-        // scintillation photon emission.
+        G4PhysicsTable* GetFastIntegralTable() const;
+        // Returns the address of the fast scintillation integral table.
 
-        G4PhysicsTable* GetPhysicsTable() const;
-        // Returns the address of the physics table.
+        G4PhysicsTable* GetSlowIntegralTable() const;
+        // Returns the address of the slow scintillation integral table.
 
         void DumpPhysicsTable() const;
-        // Prints the physics table.
+        // Prints the fast and slow scintillation integral tables.
 
 private:
 
         void BuildThePhysicsTable();
+        // It builds either the fast or slow scintillation integral table; 
+        // or both. 
 
         ///////////////////////
         // Class Data Members
@@ -172,18 +168,14 @@ private:
 
 protected:
 
-        G4PhysicsTable* thePhysicsTable;
-        //  A Physics Table can be either a cross-sections table or
-        //  an energy table (or can be used for other specific
-        //  purposes).
+        G4PhysicsTable* theSlowIntegralTable;
+        G4PhysicsTable* theFastIntegralTable;
 
 private:
 
 	G4bool fTrackSecondariesFirst;
 
-        G4double ScintillationYield;
-        G4double ScintillationTime;
-        G4double ResolutionScale;
+        G4double ScintillationYieldFactor;
 
 };
 
@@ -214,58 +206,53 @@ G4bool G4Scintillation::GetTrackSecondariesFirst() const
 }
 
 inline
-void G4Scintillation::SetScintillationYield(const G4double yield)
+void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
 {
-        ScintillationYield = yield;
+        ScintillationYieldFactor = yieldfactor;
 }
 
 inline
-G4double G4Scintillation::GetScintillationYield() const
+G4double G4Scintillation::GetScintillationYieldFactor() const
 {
-        return ScintillationYield;
+        return ScintillationYieldFactor;
 }
 
 inline
-void G4Scintillation::SetResolutionScale(const G4double scale)
+G4PhysicsTable* G4Scintillation::GetSlowIntegralTable() const
 {
-        ResolutionScale = scale;
+        return theSlowIntegralTable;
 }
 
 inline
-G4double G4Scintillation::GetResolutionScale() const
+G4PhysicsTable* G4Scintillation::GetFastIntegralTable() const
 {
-        return ResolutionScale;
-}
-
-inline
-void G4Scintillation::SetScintillationTime(const G4double time)
-{
-        ScintillationTime = time;
-}
-
-inline
-G4double G4Scintillation::GetScintillationTime() const
-{
-        return ScintillationTime;
-}
-
-inline
-G4PhysicsTable* G4Scintillation::GetPhysicsTable() const
-{
-        return thePhysicsTable;
+        return theFastIntegralTable;
 }
 
 inline
 void G4Scintillation::DumpPhysicsTable() const
 {
-        G4int PhysicsTableSize = thePhysicsTable->entries();
-        G4PhysicsOrderedFreeVector *v;
+        if (theFastIntegralTable) {
+           G4int PhysicsTableSize = theFastIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
 
-        for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
-        {
-        	v = (G4PhysicsOrderedFreeVector*)(*thePhysicsTable)[i];
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+        	v = (G4PhysicsOrderedFreeVector*)(*theFastIntegralTable)[i];
         	v->DumpValues();
-        }
+           }
+         }
+
+        if (theSlowIntegralTable) {
+           G4int PhysicsTableSize = theSlowIntegralTable->entries();
+           G4PhysicsOrderedFreeVector *v;
+
+           for (G4int i = 0 ; i < PhysicsTableSize ; i++ )
+           {
+                v = (G4PhysicsOrderedFreeVector*)(*theSlowIntegralTable)[i];
+                v->DumpValues();
+           }
+         }
 }
 
 #endif /* G4Scintillation_h */
