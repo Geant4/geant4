@@ -1,4 +1,4 @@
-$Id: History,v 1.107 2001-02-23 15:43:05 johna Exp $
+$Id: History,v 1.108 2001-03-07 15:31:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+7th March 2001  John Allison  (vis-V03-00-07)
+- Cosmetic corrections for ISO compliance.
 
 23rd February 2001  John Allison  (vis-V03-00-06)
 - Removed all references to RogueWave.
