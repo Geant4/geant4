@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.10 2001-12-06 10:04:59 gcosmo Exp $
+// $Id: G4SteppingVerbose.cc,v 1.11 2002-11-06 02:24:34 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -393,7 +393,8 @@ void G4SteppingVerbose::TrackingStarted()
 ////////////////////////////////////////////////
 {
 
-  CopyState();
+  //  CopyState();
+
 G4int prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.hh,v 1.21 2002-11-01 00:06:01 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.22 2002-11-06 02:24:34 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -245,9 +245,6 @@ public: //without description
    size_t MAXofAlongStepLoops;
    size_t MAXofPostStepLoops;
 
-   G4double currentMinimumStep;
-   G4double numberOfInteractionLengthLeft;
-
    size_t fAtRestDoItProcTriggered;
    size_t fAlongStepDoItProcTriggered;
    size_t fPostStepDoItProcTriggered;
@@ -394,13 +391,6 @@ public: //without description
   }
   inline size_t G4SteppingManager::GetMAXofPostStepLoops(){
    return MAXofPostStepLoops;
-  }
-
-  inline G4double G4SteppingManager::GetcurrentMinimumStep(){
-   return currentMinimumStep;
-  }
-  inline G4double G4SteppingManager::GetnumberOfInteractionLengthLeft(){
-   return numberOfInteractionLengthLeft;
   }
 
   inline size_t G4SteppingManager::GetfAtRestDoItProcTriggered(){

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager.cc,v 1.28 2002-02-07 04:00:22 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.29 2002-11-06 02:24:34 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,7 +71,7 @@ G4SteppingManager::G4SteppingManager()
    else { 
       fVerbose = G4VSteppingVerbose::GetInstance();
       fVerbose -> SetManager(this);
-	  KillVerbose = false;
+      KillVerbose = false;
    }
 #endif
    SetNavigator(G4TransportationManager::GetTransportationManager()
@@ -247,6 +247,17 @@ void G4SteppingManager::SetInitialStep(G4Track* valueTrack)
 
    fTrack = valueTrack;
    Mass = fTrack->GetDynamicParticle()->GetMass();
+
+   PhysicalStep = 0.;
+   GeometricalStep = 0.;
+   CorrectedStep = 0.;
+   PreStepPointIsGeom = false;
+   FirstStep = false;
+   fStepStatus = fUndefined;
+
+   TempInitVelocity = 0.;
+   TempVelocity = 0.;
+   sumEnergyChange = 0.;
 
 
 // If the primary track has 'Suspend' or 'PostponeToNextEvent' state,
