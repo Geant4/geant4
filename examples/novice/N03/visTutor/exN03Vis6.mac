@@ -1,65 +1,68 @@
 #######################################################################
-#  MACRO FILE NAME: exN03Vis6.mac                                     #
+#  MACRO FILE NAME: exN03Vis7.mac                                     #
 #                                                                     #
-#  AUTHOR(S): Guy Barrand                                             #
+#  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: June 09, 2000                                                #
+#  DATE:                                                              #
+#        Nov      07, 2001                                            #
+#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
+#        June     20, 2001                                            #
+#        November 26, 2000                                            #
+#        October  17, 2000                                            #  
 #                                                                     #
-#  CONTENTS: A basic macro for demonstrating Inventor driver          #
+#  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
 #                                                                     #
-#  USAGE:  % $G4BINDIR/exampleN03  visTutor/exN03Vis6.mac             #
+#  USAGE:  % gmake visclean                                           #
+#          % $G4BINDIR/exampleN03                                     #
+#          Idle> /control/execute visTutor/exN03Vis7.mac              #
 #                                                                     #
-#  REQUIRED PLATFORMS & SOFTWARES: Unix, Motif, X-window, OpenGL,     #
-#                                  HEPVis                             #
-#                                  Inventor (TGS or SoFree)           #
+#  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
+#                                  VRML viewer (e.g. VRMLview)        #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
-#                                                                     #
-#    % setenv G4VIS_BUILD_OIX_DRIVER       1                          # 
+#    * Unnecessary                                                    #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
+#    * Unnecessary                                                    #
 #                                                                     #
-#    % setenv G4VIS_USE_OIX                1                          #
-#                                                                     # 
+#  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
+#                                                                     #
+#    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
+#     ( The default value is "NONE".)                                 #
+#                                                                     #
 #  ADDITIONAL NOTES:                                                  #
-#                                                                     # 
+#   The VRML-file viewer "vrmlview" is obtainable from the following  #
+#   Web site:                                                         #
+#      http://www.sim.no/downloads.html                               #
+#                                                                     #
 #######################################################################
 
-# Create "scene-0" 
-/vis/scene/create
+###################################################
+# Visualization of detector geometry and events  
+# with the VRML2FILE driver.
+###################################################
 
-# Invoke the Xo driver 
-/vis/sceneHandler/create OIX
-/vis/viewer/create
-
-# Add the world volume to the current scene
-/vis/scene/add/volume
-#/vis/scene/add/trajectories
+# Store particle trajactories for visualization
 /tracking/storeTrajectory 1
 
-# Bird-eye view of events
-/vis/viewer/reset
-/vis/viewer/set/viewpointThetaPhi   45 45 
+# Invoke the VRML2FILE driver
+#  Note: The VRML1FILE driver generates VRML 1.0 format files.
+#        The VRML2FILE driver generates VRML 2.0 format files.
+/vis/open VRML2FILE
 
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
-# Attach the just created Go scene graph to the viewer.
-/vis/viewer/update
-/vis/scene/notifyHandlers
+# Create an empty scene and add the detector geometry to it
+/vis/drawVolume
 
-/run/beamOn 1
-
-#######################################################################
-#   Controls on an Inventor examiner viewer are :                     #
-#  - in picking mode (cursor is the upper left arrow)                 #
-#   Ctrl + pick an volume : see daughters.                            #
-#   Shift + pick an volume : see mother.                              #
-#  - in viewing mode (cursor is the hand)                             #
-#   Left-button + pointer move : rotate.                              #
-#   Ctrl+Left-button + pointer move : pane.                           #
-#   Ctrl+Shift+Left-button + pointer move : scale.                    #
-#   Middle-button + pointer move : pane.                              #
-#                                                                     #
-#######################################################################
+# Visualize 3 events in the wireframe mode 
+#  Note: The command /vis/scene/add/trajectories
+#        is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is  
+#        described in the event action.
+#  Note: "/vis/viewer/set/style wireframe" means  
+#       "half-transparent" in the VRML2FILE driver.  
+#       It is a convention only for this driver.
+#/vis/scene/add/trajectories
+/vis/viewer/set/style wireframe
+/run/beamOn 3

@@ -1,68 +1,61 @@
 #######################################################################
-#  MACRO FILE NAME: exN03Vis7.mac                                     #
+#  MACRO FILE NAME: exN03Vis8.mac                                     #
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
 #  DATE:                                                              #
-#        Nov      07, 2001                                            #
-#        Sept     08-09, 2001 (at Hebden Bridge, UK)                  #
-#        June     20, 2001                                            #
-#        November 26, 2000                                            #
-#        October  17, 2000                                            #  
+#        Nov      14, 2001                                            #
 #                                                                     #
-#  CONTENTS: A macro to demonstrate the VRMLFILE driver               #
+#  CONTENTS: A macro to demonstrate batch visualization to generate   #
+#            PostScript file with the DAWNFILE driver                 #
 #                                                                     #
-#  USAGE:  % gmake visclean                                           #
+#          % setenv DAWN_BATCH               1                        #
+#          % make visclean                                            #
 #          % $G4BINDIR/exampleN03                                     #
-#          Idle> /control/execute visTutor/exN03Vis7.mac              #
+#          Idle> /control/execute visTutor/exN03Vis8.mac              #
+#          Idle> exit                                                 #
+#          % gv g4_00.eps &                                           #
+#          % gv g4_01.eps &                                           #
+#          % gv g4_02.eps &                                           #
 #                                                                     #
 #  REQUIRED PLATFORMS & SOFTWARES: Unix, X-window,                    #
-#                                  VRML viewer (e.g. VRMLview)        #
+#                                  DAWN (version 3.85 or after)       #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR INSTALLATION:               #
 #  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
 #    * Unnecessary                                                    #
 #                                                                     #
 #  ENVIRONMENTAL VARIABLES (C-MACROS) FOR COMPILATION:                #
 #  (See geant4/source/visualization/README for details.)              #
+#                                                                     #
 #    * Unnecessary                                                    #
-#                                                                     #
-#  RECOMMENDED ENVIRONMENTAL VARIABLES FOR VISUALIZATION:             #
-#                                                                     #
-#    % setenv G4VRMLFILE_VIEWER        vrmlview                       #
-#     ( The default value is "NONE".)                                 #
-#                                                                     #
+#                                                                     # 
 #  ADDITIONAL NOTES:                                                  #
-#   The VRML-file viewer "vrmlview" is obtainable from the following  #
-#   Web site:                                                         #
-#      http://www.sim.no/downloads.html                               #
-#                                                                     #
+#                                                                     # 
 #######################################################################
 
-###################################################
-# Visualization of detector geometry and events  
-# with the VRML2FILE driver.
-###################################################
+####################################################################
+# Creation of a multi-page PostScript file with the DAWNFILE driver
+####################################################################
 
-# Store particle trajactories for visualization
-/tracking/storeTrajectory 1
+# Invoke the DAWNFILE driver
+/vis/open DAWNFILE
 
-# Invoke the VRML2FILE driver
-#  Note: The VRML1FILE driver generates VRML 1.0 format files.
-#        The VRML2FILE driver generates VRML 2.0 format files.
-/vis/open VRML2FILE
-
-# Create an empty scene and add the detector geometry to it
+# Add the world volume to the current scene
 /vis/drawVolume
 
-# Visualize 3 events in the wireframe mode 
-#  Note: The command /vis/scene/add/trajectories
-#        is not necessary in exampleN03,
-#        since the C++ method DrawTrajectory() is  
+# Add trajectories to the current scene
+#  Note: This command is not necessary in exampleN03,
+#        since the C++ method DrawTrajectory() is 
 #        described in the event action.
-#  Note: "/vis/viewer/set/style wireframe" means  
-#       "half-transparent" in the VRML2FILE driver.  
-#       It is a convention only for this driver.
 #/vis/scene/add/trajectories
-/vis/viewer/set/style wireframe
+
+# Set camera 
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/set/viewpointThetaPhi 70 20
+
+# Visualize events added to the current scene
+/tracking/storeTrajectory 1
 /run/beamOn 3

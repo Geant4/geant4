@@ -26,11 +26,6 @@
 *text.fontList     :*courier*-r-*--14-*
 *text.maxLength    :8000
 !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-!!!! OPACS/Xo/XoCamera widget
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*XoCamera.width:400
-*XoCamera.height:400
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 ! OpenInventor resources, copied from file :
 !  OpenInventor2.4.1/app-defaults/Inventor
 !
