@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCandidate.hh,v 1.2 1999-12-15 14:52:10 gunter Exp $
+// $Id: G4QCandidate.hh,v 1.3 2000-08-16 07:32:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,101 +22,85 @@
 //  class header for Quasmon initiated Candidates used by the CHIPS Model
 // ----------------------------------------------------------------------
 
-#include "g4std/iostream"
-//#include <CLHEP/config/CLHEP.h>
-#include "globals.hh"
-//#include "G4ThreeVector.hh"
-#include "G4Nucleus.hh"
-#include "G4LorentzVector.hh"
-#include "G4ParticleTable.hh"
-#include "G4QContent.hh"
+#include "G4QNucleus.hh"
+#include "G4QParentClusterVector.hh"
 
-class G4QCandidate
+class G4QCandidate : public G4QHadron
 {
 public:
-  G4QCandidate(){PDGencoding=0;}
-  //G4QCandidate(G4int PDGcode, G4Nucleus * aNucleus = NULL);
-  G4QCandidate(G4int PDGcode);
-  G4QCandidate(const G4QCandidate &right);
-
-  ~G4QCandidate();
-
+  G4QCandidate();                                            // Default Constructor
+  G4QCandidate(G4int PDGcode);                               //Constructor
+  G4QCandidate(const G4QCandidate &right);                   // Copy Constructor
+  ~G4QCandidate();                                           // Destructor
+  // Overloaded Operators
   const G4QCandidate & operator=(const G4QCandidate &right);
-
-  int operator==(const G4QCandidate &right) const;
-
-  int operator!=(const G4QCandidate &right) const;
-      
-  G4int GetPDGcode() const;                               // Get PDG code of the Candidate
-      
-  G4ParticleDefinition * GetDefinition();                 // Get Particle Definition pointer 
-
-  virtual const G4LorentzVector & Get4Momentum() const;   // get 4-mom of the candidate
-  virtual void Set4Momentum(const G4LorentzVector& aMom); // set 4-mom of the candidate
-      
-  G4QContent GetQC();                                     // Get private quark content
-  G4double GetMass();                                     // Get a mass of the candidate
-  G4double GetMass2();                                    // Get an m^2 value for the candidate
-  G4double GetMassChange();                               // @@ Mass change (i.r.t. Initialization)
-  void     SetRelProbability(G4double relP);              // Put the relative prob. of hadronization
-  G4double GetRelProbability();                           // Get the relative prob. of hadronization
-  void     SetIntegProbability(G4double intP);            // Set integrated prob. for randomization
-  G4double GetIntegProbability();                         // Get integrated prob. for randomization
-
-  G4int    GetUContent();      
-  G4int    GetDContent();      
-  G4int    GetSContent();      
-  G4int    GetAntiUContent();      
-  G4int    GetAntiDContent();      
-  G4int    GetAntiSContent();      
-
-  void     SetUContent(G4int nU);      
-  void     SetDContent(G4int nD);
-  void     SetSContent(G4int nS);
-  void     SetAntiUContent(G4int nAU);    
-  void     SetAntiDContent(G4int nAD);
-  void     SetAntiSContent(G4int nAS);
-
-private:  
-  G4int PDGencoding;                    // Code in Particle Data Group
-  G4ParticleDefinition * theDefinition; // Pointer to Particle Definition in PDG Table
-  G4LorentzVector theMomentum;          // The 4-mom of candidate. In Vacuum = {(0,0,0),M}
-  G4double theMass;                     // @@for internal check only
-  G4QContent valQ;                      // valence quark content
-
-  G4double relativeProbability;         // relative probability of hadronization
-  G4double integralProbability;         //integrated probability for randomization
+  G4int operator==(const G4QCandidate &right) const;
+  G4int operator!=(const G4QCandidate &right) const;
+  // Specific Selectors
+  G4QParentCluster* TakeParClust(G4int nPC);// Get pointer to Parent Cluster from ParClastVector
+  G4int    GetPClustEntries()    const;     // Get a number of Parent Clusters in ParClastVector
+  G4bool   GetPossibility()      const;     // Get possibility(true)/forbiding(false) to be a hadr./fragm.
+  G4bool   GetParPossibility()   const;     // Get possibility(true)/forbiding(false) to be a parent
+  G4double GetKMin()             const;     // Get k-minimal for the candidate
+  G4double GetDenseProbability() const;     // Get dense-probability for the candidate 
+  G4double GetPreProbability()   const;     // Get pre-probability for the candidate 
+  G4double GetRelProbability()   const;     // Get the relative probility of hadronization
+  G4double GetIntegProbability() const;     // Get integrated probability for randomization
+  G4double GetSecondRelProb()    const;     // Get 2nd relative probility of hadronization
+  G4double GetSecondIntProb()    const;     // Get 2nd integ. probability for randomization
+  // Specific Modifiers
+  void ClearParClustVector();               // Clear the Parent Claster Vector of the Candidate
+  void FillPClustVec(G4QParentCluster* pCl);// Fill pointer to Parent Cluster in ParClastVector
+  void SetPossibility(G4bool choice);       // Set possibility(true)/forbiding(false) to be a hadr./fragm.
+  void SetParPossibility(G4bool choice);    // Set possibility(true)/forbiding(false) to be a parent
+  void SetKMin(G4double kmin);              // Set k-minimal for the candidate
+  void SetDenseProbability(G4double prep);    // Set dense-probability for the candidate 
+  void SetPreProbability(G4double prep);    // Set pre-probability for the candidate 
+  void SetRelProbability(G4double relP);    // Set the relative probility of hadronization
+  void SetIntegProbability(G4double intP);  // Set integrated probability for randomization
+  void SetSecondRelProb(G4double relP);     // Set 2nd relative probility of hadronization
+  void SetSecondIntProb(G4double intP);     // Set 2nd integr. probability for randomization
+  void SetMass(G4double newMass);           // Set 4Momentum at rest with the new Mass
+										   
+private:  								   
+  G4bool   possible;                        // permission/forbiding preFlag to be a hadron/fragment
+  G4bool   parPossible;                     // permission/forbiding preFlag to be a parent
+  G4double kMin;                            // mu^2/2M (Q-case), ~BindingEnergy (Clust.-case)
+  G4double denseProbability;                // a#of clusters of the type in dense region
+  G4double preProbability;                  // a#of clusters of the type or Q-suppression
+  G4double relativeProbability;             // relative probability of hadronization
+  G4double integralProbability;             // integrated probability of randomization
+  G4double secondRelProbability;            // spare relative probability of hadronization
+  G4double secondIntProbability;            // spare integrated probability of randomization
+  G4QParentClusterVector thePClusters;      // vector of parent clusters for candid.-fragment
 };
 
-inline int G4QCandidate::operator==(const G4QCandidate &right) const {return this==&right;}	
-inline int G4QCandidate::operator!=(const G4QCandidate &right) const {return this!=&right;}
+inline G4int G4QCandidate::operator==(const G4QCandidate &right) const  {return this==&right;}
+inline G4int G4QCandidate::operator!=(const G4QCandidate &right) const  {return this!=&right;}
 
-inline G4QContent G4QCandidate::GetQC()                    {return valQ;}
-inline G4int    G4QCandidate::GetPDGcode() const           {return PDGencoding;}
-inline G4ParticleDefinition *G4QCandidate::GetDefinition() {return theDefinition;}
-inline const    G4LorentzVector& G4QCandidate::Get4Momentum()    const {return theMomentum;}
-inline void     G4QCandidate::Set4Momentum(const G4LorentzVector& aMom){theMomentum=aMom;}
-inline void     G4QCandidate::SetRelProbability(G4double relP)   {relativeProbability=relP;}
-inline G4double G4QCandidate::GetRelProbability()          {return relativeProbability;}
-inline void     G4QCandidate::SetIntegProbability(G4double intP) {integralProbability=intP;}
-inline G4double G4QCandidate::GetIntegProbability()        {return integralProbability;}
+inline G4QParentCluster* G4QCandidate::TakeParClust(G4int nPC)  {return thePClusters[nPC];}
+inline G4int    G4QCandidate::GetPClustEntries()          const {return thePClusters.entries();}
+inline G4bool   G4QCandidate::GetPossibility()            const {return possible;}
+inline G4bool   G4QCandidate::GetParPossibility()         const {return parPossible;}
+inline G4double G4QCandidate::GetKMin()                   const {return kMin;}
+inline G4double G4QCandidate::GetDenseProbability()       const {return denseProbability;}
+inline G4double G4QCandidate::GetPreProbability()         const {return preProbability;}
+inline G4double G4QCandidate::GetRelProbability()         const {return relativeProbability;}
+inline G4double G4QCandidate::GetIntegProbability()       const {return integralProbability;}
+inline G4double G4QCandidate::GetSecondRelProb()          const {return secondRelProbability;}
+inline G4double G4QCandidate::GetSecondIntProb()          const {return secondIntProbability;}
 
-inline G4double G4QCandidate::GetMass()          {return theMomentum.m();}
-inline G4double G4QCandidate::GetMass2()         {return theMomentum.m2();}
-inline G4double G4QCandidate::GetMassChange()    {return theMass - theMomentum.m();}
-
-inline G4int    G4QCandidate::GetUContent()      {return valQ.GetU();}
-inline G4int    G4QCandidate::GetDContent()      {return valQ.GetD();}
-inline G4int    G4QCandidate::GetSContent()      {return valQ.GetS();}
-inline G4int    G4QCandidate::GetAntiUContent()  {return valQ.GetAU();}
-inline G4int    G4QCandidate::GetAntiDContent()  {return valQ.GetAD();}
-inline G4int    G4QCandidate::GetAntiSContent()  {return valQ.GetAS();}
-
-inline void     G4QCandidate::SetUContent(G4int nU)     {valQ.SetU(nU);}
-inline void     G4QCandidate::SetDContent(G4int nD)     {valQ.SetD(nD);}
-inline void     G4QCandidate::SetSContent(G4int nS)     {valQ.SetS(nS);}
-inline void     G4QCandidate::SetAntiUContent(G4int nAU){valQ.SetAU(nAU);}
-inline void     G4QCandidate::SetAntiDContent(G4int nAD){valQ.SetAD(nAD);}
-inline void     G4QCandidate::SetAntiSContent(G4int nAS){valQ.SetAS(nAS);}
+inline void G4QCandidate::ClearParClustVector()             {thePClusters.clearAndDestroy();}
+inline void G4QCandidate::FillPClustVec(G4QParentCluster* pCl)    {thePClusters.insert(pCl);}
+inline void G4QCandidate::SetPossibility(G4bool choice)           {possible=choice;}
+inline void G4QCandidate::SetParPossibility(G4bool choice)        {parPossible=choice;}
+inline void G4QCandidate::SetKMin(G4double kmin)                  {kMin=kmin;}
+inline void G4QCandidate::SetDenseProbability(G4double prep)      {denseProbability=prep;}
+inline void G4QCandidate::SetPreProbability(G4double prep)        {preProbability=prep;}
+inline void G4QCandidate::SetRelProbability(G4double relP)        {relativeProbability=relP;}
+inline void G4QCandidate::SetIntegProbability(G4double intP)      {integralProbability=intP;}
+inline void G4QCandidate::SetSecondRelProb(G4double relP)         {secondRelProbability=relP;}
+inline void G4QCandidate::SetSecondIntProb(G4double intP)         {secondIntProbability=intP;}
+inline void G4QCandidate::SetMass(G4double newM)  {Set4Momentum(G4LorentzVector(0,0,0,newM));}
 
 #endif

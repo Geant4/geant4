@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the GEANT4 collaboration.
+// the RD44 GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.2 1999-12-15 14:52:10 gunter Exp $
+// $Id: G4Quasmon.hh,v 1.3 2000-08-16 07:32:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -27,105 +27,103 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
-#include "G4Parton.hh"
-#include "G4PartonVector.hh"
 #include "G4LorentzVector.hh"
 #include "G4LorentzRotation.hh"
-//@@ Temporary
-#include "G4ParticleDefinition.hh"
-#include "G4ParticleTable.hh"
 //CHIPS-headers
-//#include "G4QCandidate.hh"
-#include "G4QCandidateVector.hh"
-#include "G4QResonance.hh"
-//#include "G4QResonanceVector.hh"
-#include "G4QHadron.hh"
+#include "G4QParticleVector.hh"
+#include "G4QChipolino.hh"
 #include "G4QHadronVector.hh"
-#include "G4QContent.hh"
+#include "G4QCandidateVector.hh"
+#include "G4QParentClusterVector.hh"
 
 class G4Quasmon 
 {
 public:
-  G4Quasmon(G4int Z, G4int N, G4int S,
-            G4LorentzVector FourMomentum);                        // Direct Quasmon definition
-  G4Quasmon(G4int projPDG, G4int targPDG,                         // Set Valence Quark Content
-            G4LorentzVector proj4Mom, G4LorentzVector targ4Mom);  // Interaction definition
-  G4Quasmon(const G4Quasmon &right);                              // Quasmon duplication
+  G4Quasmon(const G4QContent projQC, const G4int targPDG, const G4LorentzVector proj4M,
+            const G4LorentzVector targ4Mom, const G4double temp, const G4double ssIn2g,
+            const G4double eep, G4int nOfParts);
+  G4Quasmon(const G4int projPDG, const G4int targPDG, const G4LorentzVector proj4M,
+            const G4LorentzVector targ4Mom, const G4double temp, const G4double ssIn2g,
+            const G4double eep, G4int nOfParts);
+  G4Quasmon(const G4Quasmon &right);                                  // Quasmon duplication
 
   ~G4Quasmon();
+
   int operator==(const G4Quasmon &right) const;
   int operator!=(const G4Quasmon &right) const;
 
-  //@@...Makes sence only for G4NuclearQuasmon (if any)
-  //const G4ThreeVector& GetPosition() const;
-  //void SetPosition(const G4ThreeVector &aPosition);
-
-  //const G4QHadronVector* GetQHadronList() const;
-
-  G4QHadronVector HadronizeQuasmon();
+  //Selectors
   G4LorentzVector Get4Momentum() const;
+  //General
+  G4QHadronVector HadronizeQuasmon();
 
 private:  
-  G4double   GetQPartonMomentum(G4double kMin);
-  void       CalculateContentOfQPartons(G4double qMass);
-  void       CalculateHadronizationProbabilities(G4double kVal);
-  G4double   GetMinSqThresh (const G4QContent& qCon);
-  G4double   GetMidSqThresh (const G4QContent& qCon);
-  G4double   GetMaxLSqThresh(const G4QContent& qCon);
-  G4double   GetMaxHSqThresh(const G4QContent& qCon);
-  G4int      GetNofSqMassSum(const G4QContent& qCon, G4int& sPDG);
-  G4bool     Quasmon2HDecay(const G4int& sPDG, G4LorentzVector& r4Mom);
-  G4bool     Quasmon2HDecay(const G4int& rPDG, const G4int& sPDG);
-  G4bool     Quasmon3HDecay(const G4int& rPDG, const G4int& sPDG, const G4int& tPDG);
-private:
-  void InitCandidateVector();
-  //@@......Make sence only for G4NuclearQuasmon
-  //G4ThreeVector   thePosition;  // Position of the Quasmon
-  G4QCandidateVector theQCandidates;  // Vector of possible secondary hadrons
-  G4QHadronVector    theQResonances;  // Vector of possible residual resonances
-  G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons
-  G4LorentzVector    kQParton;        // 4-momentum of QParton kandidate
+  G4QParticleVector* InitQuasmonEnvironment(G4int nOfParts); // nOfParts<0 kills the CHIPS World
+  G4QParticle*       GetPDGParticle(G4int PDGCode);
+  G4QParticle*       GetQParticle(G4int QCode);
+  G4double           GetRandomMass(G4int PDGCode, G4double maxM);
+  G4double           CoulombBarrier(const G4double& tZ, const G4double& tA, const G4double& cZ,
+                                    const G4double& cA);
+  void               InitQuasmon(const G4QContent projQC,      const G4int targPDG,
+                                 const G4LorentzVector proj4M, const G4LorentzVector targ4Mom,
+                                 G4int nOfParts);
+  void               ModifyInMatterCandidates();
+  void               EvaporateResidual();
+  void               FillNEnvInVector();
+  void               AntyPDG(G4QHadron*);                     // @@ move to G4QHadron !!
+  void               InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
+  void               CalculateNumberOfQPartons(G4double qMass);
+  void               PrepareClusters();
+  void               PrepareCandidates(G4int j);
+  void               PrepareInteractionProbabilities(const G4QContent& projQC);
+  void               CalculateHadronizationProbabilities(G4double kQ, G4double kLS, G4int j);
+  void               FillHadronVector(G4QHadron* qHadron);
+  G4int              RandomPoisson(G4double meanValue);
+  G4double           GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
+  G4bool             DecayOutHadron(G4QHadron* qHadron);
+  G4ThreeVector      RndmDir();
 
-  G4int           qZ;                 // a#of "protons" in the Quasmon
-  G4int           qN;                 // a#of "neutrons" in the Quasmon
-  G4int           qS;                 // a#of "lambdas" in the Quasmon
-  G4LorentzVector q4Mom;              // 4-momentum of the Quasmon
-  G4QContent      valQ;               // valence quark content
-  G4int           nOfQ;               // number of quark-partons just to accelerate @@ ??
+// Body
+private:
+  G4QParticleVector* qWorld;          // Vector of Particles of the CHIPS World 
+  // Parameters
+  G4double           Temperature;     // Quasmon Temperature
+  G4double           SSin2Gluons;     // Percent of ssbar sea in a constituen gluon
+  G4double           EtaEtaprime;     // Part of eta-prime in all etas
+  G4int              nBarClust;       // Maximum barion number of clusters (Calc. @ Interaction)
+  // Hadronic input
+  G4LorentzVector    q4Mom;           // 4-momentum of the Quasmon
+  G4QContent         valQ;            // Quark Content of Quasmon
+  G4double           addPhoton;       // Additional energy of soft photon
+  G4double           momPhoton;       // Additional momentum of virtual/real photon
+  // Output hadrons
+  G4QHadronVector    theQHadrons;     // Vector of generated secondary hadrons
+  // Internal working parameters
+  G4int              qZ;              // a#of "protons" in the Quasmon        (***delete***)
+  G4int              qN;              // a#of "neutrons" in the Quasmon
+  G4int              qS;              // a#of "lambdas" in the Quasmon
+  G4int              nOfQ;            // number of quark-partons just to accelerate @@ ??
+  G4QCandidateVector theQCandidates;  // Vector of possible secondary hadrons (***delete***)
+  G4QNucleus         theEnvironment;  // Initial Nucleus & later Residual Nuclear Environment
+  G4double           f2all;           // Ratio of free nucleons to free+dense nucleons
+  G4double           rEP;             // E+p for the Residual Coloured Quasmon im LS
+  G4double           rMo;             // p for the Residual Coloured Quasmon im LS
 };
 
-inline int G4Quasmon::operator==(const G4Quasmon &right) const
-{
-  return this == &right;
-}
-
-inline int G4Quasmon::operator!=(const G4Quasmon &right) const
-{
-  return this != &right;
-}
-
+inline int G4Quasmon::operator==(const G4Quasmon &right) const {return this == &right;}
+inline int G4Quasmon::operator!=(const G4Quasmon &right) const {return this != &right;}
 inline G4LorentzVector G4Quasmon::Get4Momentum() const {return q4Mom;}
-
-// Member functions for the output Hadrons
-
-//inline const G4QHadronVector* G4Quasmon::GetQHadronList() const
-//{
-//  return &theQHadrons;
-//}
-
-// @@ Make sence only for G4NuclearQuasmon
-//inline const G4ThreeVector& G4Quasmon::GetPosition() const 
-//{
-//  return thePosition;
-//}
-
-// @@ Make sence only for G4NuclearQuasmon
-//inline void G4Quasmon::SetPosition(const G4ThreeVector &aPosition)
-//{
-//  thePosition= aPosition;
-//}
+inline G4QParticle*    G4Quasmon::GetQParticle(G4int QCode) {return (*qWorld)[QCode];}
+inline G4QParticle*    G4Quasmon::GetPDGParticle(G4int PDGCode)
+                                  {return (*qWorld)[G4QPDGCode(PDGCode).GetQCode()];}
+inline G4double        G4Quasmon::GetRandomMass(G4int PDGCode, G4double maxM)
+                                  {return G4QHadron(GetPDGParticle(PDGCode),maxM).GetMass();}
+inline void            G4Quasmon::AntyPDG(G4QHadron* hadr)
+                                  {if(hadr->TestRealNeutral()) hadr->NegPDGCode();}
 
 #endif
+
+
 
 
 
