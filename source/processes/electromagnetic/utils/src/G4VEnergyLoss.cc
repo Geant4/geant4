@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.24 2001-10-24 16:17:05 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.25 2001-10-25 09:13:50 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1091,29 +1091,31 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   return loss ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
    
 G4bool G4VEnergyLoss::EqualCutVectors( G4double* vec1, G4double* vec2 )
 {
   if ( (vec1==0 ) || (vec2==0) ) return false;
   
   G4bool flag = true;
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  
-  for (size_t j=0; flag && j<materialTable->length(); j++){
+   
+  for (size_t j=0; flag && j<G4Material::GetNumberOfMaterials(); j++){
     flag = (vec1[j] == vec2[j]);
   }
   
   return flag;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 G4double* G4VEnergyLoss::CopyCutVectors( G4double* dest, G4double* source )
 {
   if ( dest != 0) delete [] dest;
-  const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
-  dest = new G4double [materialTable->length()];
-  for (size_t j=0; j<materialTable->length(); j++){
+  dest = new G4double [G4Material::GetNumberOfMaterials()];
+  for (size_t j=0; j<G4Material::GetNumberOfMaterials(); j++){
     dest[j] = source[j];
   }
   return dest;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
