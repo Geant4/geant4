@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2000-02-28 15:38:27 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2002-01-28 16:17:55 radoone Exp $
 # ------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ------------------------------------------------------
@@ -17,27 +17,28 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # Override some variables from GNUmakefile.architecture.
 INCFLAGS := \
-            -I$(G4BASE)/graphics_reps/include \
-            -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-	    -I$(G4BASE)/geometry/solids/STEP/include \
-	    -I$(G4BASE)/geometry/solids/Boolean/include \
-	    -I$(G4BASE)/geometry/solids/STEPinterface/include \
-	    -I$(G4BASE)/geometry/solids/BREPS/include \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPGeometry/include
+          -I$(G4BASE)/graphics_reps/include \
+          -I$(G4BASE)/geometry/management/include \
+          -I$(G4BASE)/geometry/volumes/include \
+          -I$(G4BASE)/geometry/solids/CSG/include \
+          -I$(G4BASE)/geometry/solids/STEP/include \
+          -I$(G4BASE)/geometry/solids/Boolean/include \
+          -I$(G4BASE)/geometry/solids/STEPinterface/include \
+          -I$(G4BASE)/geometry/solids/BREPS/include \
+          -I$(G4BASE)/global/management/include \
+          -I$(G4BASE)/global/HEPRandom/include \
+          -I$(G4BASE)/global/HEPGeometry/include
 
 LDLIBS   := \
-	    -lG4stepinterface \
-	    -lG4brep \
-	    -lG4geomBoolean \
-	    -lG4step \
-	    -lG4csg \
-	    -lG4geometrymng \
-            -lG4graphics_reps \
-            -lG4globman
+          -lG4stepinterface \
+          -lG4brep \
+          -lG4geomBoolean \
+          -lG4step \
+          -lG4csg \
+          -lG4geometrymng \
+          -lG4intercoms -lG4UIbasic -lG4UIcommon \
+          -lG4graphics_reps -L /usr/X11R6/lib/ -lX11 -lXt \
+          -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
 
