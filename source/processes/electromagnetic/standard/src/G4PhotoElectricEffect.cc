@@ -5,21 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.11 2000-06-22 08:57:11 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.12 2001-02-22 16:05:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 class implementation file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4PhotoElectricEffect physics process --------
-//                   by Michel Maire, April 1996
-// **************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 // 12-06-96, Added SelectRandomAtom() method, by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
 // 17-09-96, PartialSumSigma(i)
@@ -34,8 +24,11 @@
 // 20-05-99, protection against very low energy photons ,L.Urban
 // 08-06-99, removed this above protection from the DoIt. mma
 // 21-06-00, in DoIt, killing photon: aParticleChange.SetEnergyChange(0.); mma
-// 22-06-00, in DoIt, absorbe very low energy photon (back to 20-05-99); mma  
-// --------------------------------------------------------------
+// 22-06-00, in DoIt, absorbe very low energy photon (back to 20-05-99); mma
+// 22-02-01, back to 08-06-99 after correc in SandiaTable (materials-V03-00-05)  
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4PhotoElectricEffect.hh"
 #include "G4EnergyLossTables.hh"
@@ -244,10 +237,10 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    G4int NbOfShells = anElement->GetNbOfAtomicShells();
    G4int i=0;
    while ((i<NbOfShells)&&(PhotonEnergy<anElement->GetAtomicShell(i))) i++;
-   G4double BindingEnergy = 0.;
-   if (i<NbOfShells) BindingEnergy = anElement->GetAtomicShell(i);
+
+   if (i==NbOfShells) return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
       
-   G4double ElecKineEnergy = PhotonEnergy - BindingEnergy;
+   G4double ElecKineEnergy = PhotonEnergy - anElement->GetAtomicShell(i);
    if ((G4EnergyLossTables::GetRange(G4Electron::Electron(),
         ElecKineEnergy,aMaterial)>aStep.GetPostStepPoint()->GetSafety())
         ||

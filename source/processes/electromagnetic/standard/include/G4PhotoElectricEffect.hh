@@ -5,11 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.5 1999-12-17 18:26:12 maire Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.6 2001-02-22 16:05:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4PhotoElectricEffect physics process ------
-//                   by Michel Maire, April 1996
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 // 12-06-96, Added SelectRandomAtom() method and new data member
 //           for cumulative total cross section, by M.Maire
@@ -21,7 +20,8 @@
 // 13-08-98, new methods SetBining() PrintInfo()
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
-// ------------------------------------------------------------
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // class description
 //

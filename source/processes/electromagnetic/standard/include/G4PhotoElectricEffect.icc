@@ -5,20 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.icc,v 1.3 1999-12-15 14:51:48 gunter Exp $
+// $Id: G4PhotoElectricEffect.icc,v 1.4 2001-02-22 16:05:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file
-//
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4PhotoElectricEffect physics process ---------
-//                   by Michel Maire, April 1996
-// ***************************************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 // 12-06-96, update by M.Maire
 // 17-09-96, PartialSumSigma(i)
 //           split ComputeBinbingEnergy(), M.Maire
@@ -27,8 +18,8 @@
 // 20-11-97, change for lowest energy limit default action
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, use Sandia crossSection, V.Grichine mma
-// ---------------------------------------------------------------
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4PhotoElectricEffect::IsApplicable(const G4ParticleDefinition& particle)
