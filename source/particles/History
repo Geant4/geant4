@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2001-07-31 06:20:04 kurasige Exp $
+$Id: History,v 1.55 2001-09-18 02:29:55 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Sep 18, 2001  H.Kurashige (particles-V03-02-01)
+------- partman-V03-02-01
+- Added G4NeutronBetaDecayChannel
+- Allow MassDifference in case of nucleon decay ()
+------- hadrons-V03-00-01
+- Added G4NeutronBetaDecayChannel to G4Neutron
+
 - July 31, H.Kurashige (particles-V03-02-00)
 - Fixed bugs in copy constructor of G4DecayProduct (partman-V03-02-00)
 
