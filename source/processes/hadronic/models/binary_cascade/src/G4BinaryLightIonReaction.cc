@@ -256,6 +256,7 @@
       G4LorentzVector fState(0,0,0,0);
       G4LorentzVector pspectators(0,0,0,0);
       unsigned int i(0);
+//      G4int spectA(0),spectZ(0);
       for(i=0; i<result->size(); i++)
       {
 	if( (*result)[i]->GetNewlyAdded() ) 
@@ -276,6 +277,8 @@
 	  debug.push_back((*result)[i]->GetDefinition()->GetParticleName());
 	  debug.push_back(G4LorentzVector((*result)[i]->GetMomentum(),(*result)[i]->GetTotalEnergy()));
 	  debug.dump();
+//	  spectA++; 
+//	  spectZ+= G4lrint((*result)[i]->GetDefinition()->GetPDGCharge());
 	}
 
 //       G4cout << (*result)[i]<< " "
@@ -283,6 +286,11 @@
 //   	    << (*result)[i]->GetMomentum()<< " " 
 //   	    << (*result)[i]->GetTotalEnergy() << G4endl;
       }
+//      if ( spectA-resA !=0 || spectZ-resZ !=0)
+//      {
+//          G4cout << "spect Nucl != spectators: nucl a,z; spect a,z" <<
+//	      resA <<" "<< resZ <<" ; " << spectA <<" "<< spectZ << G4endl;
+//      }
       delete result;
       debug.push_back(" iState - (fState+pspectators) ");
       debug.push_back(iState-fState-pspectators);
@@ -432,6 +440,8 @@
       {
 	cascaders->push_back(*ii);
       }
+      if (proFrag) delete proFrag;
+
       if ( ! EnergyIsCorrect )
       {
          if (! EnergyAndMomentumCorrector(cascaders,iState))
