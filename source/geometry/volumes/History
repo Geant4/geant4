@@ -1,4 +1,4 @@
-$Id: History,v 1.119 2004-05-13 14:55:12 gcosmo Exp $
+$Id: History,v 1.120 2004-05-19 08:14:55 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 19th, 2004      G. Cosmo - geomvol-V06-01-01
+- Added CleanSurfaceTable() static methods in G4LogicalBorderSurface and
+  G4LogicalSkinSurface classes for the clearing of the surface tables in
+  case of dynamic geometries (by T.MacPhail).
 
 May 13th, 2004      G. Cosmo - geomvol-V06-01-00
 - Imported G4ReflectionFactory and unit test 'testG4ReflectedSolid' from
