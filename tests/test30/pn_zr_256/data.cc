@@ -85,7 +85,7 @@ int main(int argc, char** argv)
   G4bool end = true;
 
   G4DataVector* energy = new G4DataVector();
-  int nbin = 37;
+  int nbin = 38;
   int ibin, inum;
   int counter = 0;
   double bin0 = 2.0*MeV;
@@ -153,6 +153,11 @@ int main(int argc, char** argv)
 	      }
 
         if((xs == 0.0 && an/degree > 10.) || !enddata) {
+
+          // fill the rest by zero cross section
+          for(int j=ibin; j<nbin; j++) {
+            cross->push_back(0.0);
+          }
           cs.push_back(cross);
           if(1 < verbose) {
             cout << "### Start filling data for the angle " 

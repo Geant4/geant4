@@ -17,7 +17,7 @@ Al
 #energy(MeV)
 800.
 #elim(MeV)
-20.
+30.
 #nbinse
 200
 #nbinsd

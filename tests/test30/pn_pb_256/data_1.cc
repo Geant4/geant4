@@ -50,7 +50,7 @@
 
 int main(int argc, char** argv)
 {
-  int verbose = 2;
+  int verbose = 1;
 
   // -------------------------------------------------------------------
   // Control on input
@@ -154,6 +154,11 @@ int main(int argc, char** argv)
 	}
 
         if((xs == 0.0 && an/degree > 10.) || !enddata) {
+
+          // fill the rest by zero cross section
+          for(int j=ibin; j<nbin; j++) {
+            cross->push_back(0.0);
+          }
           cs.push_back(cross);
           if(1 < verbose) {
             cout << "### Start filling data for the angle " 
