@@ -2,4 +2,7 @@
 /mydet/reqmuon 1
 /mydet/isomuon 1
 /run/beamOn 10
+/gun/particle mu-
+/gun/energy 10 TeV
+/run/beamOn 100
 exit
