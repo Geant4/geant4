@@ -37,6 +37,7 @@
 #include "G4PVParameterised.hh"
 #include "DicomGeometry.hh"
 #include "DicomPatientParameterisation.hh"
+#include "DicomPatientConstructor.hh"
 #include "DicomConfiguration.hh"
 #include <iomanip>
 #include <fstream>
@@ -49,13 +50,14 @@ DicomGeometry *DicomGeometry::theDetector=NULL;
 
 DicomGeometry::DicomGeometry()
 {
+  patientConstructor = new DicomPatientConstructor();
   theDetector=this;
 }
 
 DicomGeometry::~DicomGeometry()
 {
   theDetector=NULL;
-
+  delete patientConstructor;
   delete air;
   delete lunginhale;
   delete lungexhale;
@@ -103,7 +105,9 @@ void DicomGeometry::PatientConstruction()
   LungINhale = new G4Box("LungINhale",PatientX,PatientY,PatientZ);
   Logical_LungINhale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
   //Logical_LungINhale->SetVisAttributes(Attributes_LungINhale);
-  Param_LungINhale = new DicomPatientParameterisation(FindingNbOfVoxels(2.0 , 0.207),  2.0 , 0.207 ,
+  G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
+  Param_LungINhale = new DicomPatientParameterisation(numberOfVoxels,
+                                                       2.0 , 0.207 ,
 						      lunginhale,
 						      lungexhale,
 						      adipose_tissue,
@@ -113,7 +117,7 @@ void DicomGeometry::PatientConstruction()
 						      liver,
 						      dense_bone,
 						      trabecular_bone);
-  Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, FindingNbOfVoxels(2.0 , 0.207), Param_LungINhale );
+  Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()
@@ -130,7 +134,7 @@ G4VPhysicalVolume* DicomGeometry::Construct()
   logicWorld = new G4LogicalVolume( solidWorld, air, "WorldLogical", 0, 0, 0);
   physiWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",logicWorld,0,false,0);
 
-  readContour();  // Contours are not mandatory and are NOT finish yet
+  patientConstructor -> readContour();  // Contours are not mandatory and are NOT finish yet
   PatientConstruction();
 
   return physiWorld;

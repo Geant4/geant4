@@ -41,38 +41,21 @@
 
 using namespace std;
 class DicomConfiguration;
+class DicomPatientConstructor;
 class DicomGeometry : public G4VUserDetectorConstruction
 {
 public:
   DicomGeometry();
   ~DicomGeometry();
   void PatientConstruction();
-  static inline DicomGeometry* GetInstance()
-  {
-    return theDetector;
-  };
-
-  // Construction of the geometry
-  G4VPhysicalVolume* Construct();
+  G4VPhysicalVolume* Construct();// Construction of the geometry
 
 private:
   G4Box *solidWorld;
   G4LogicalVolume *logicWorld;
   G4VPhysicalVolume *physiWorld;
   
-public:
-  
-  int FindingNbOfVoxels(double MaxDensity , double MinDensity);
-
-  // Functions to use ROI (region of interest), contour usually drawn by the
-  // physician to identify tumor volume and organ at risk
-
-  void readContour();
-  bool isWithin(G4double,G4double,G4double);
-  double ContoursX[100][100];
-  double ContoursY[100][100];
-  double ContoursZ[100][100];
-  int MaxCurve;
+  DicomPatientConstructor* patientConstructor;
 
   // Materials
 private:

@@ -39,7 +39,7 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 #include "G4PVParameterised.hh"
-
+#include "DicomPatientConstructor.hh"
 #include "DicomGeometry.hh"
 #include "DicomPatientParameterisation.hh"
 #include "DicomConfiguration.hh"
@@ -52,9 +52,8 @@
 
 using namespace std;
 
-int DicomGeometry::FindingNbOfVoxels(double MaxDensity , double MinDensity)
+G4int DicomPatientConstructor::FindingNbOfVoxels(G4double MaxDensity , G4double MinDensity)
 {
-
   FILE* lecturepref = fopen("Data.dat","r");
   fscanf(lecturepref,"%s",compressionbuf);
   compression=atoi(compressionbuf);
@@ -102,7 +101,7 @@ int DicomGeometry::FindingNbOfVoxels(double MaxDensity , double MinDensity)
 // This function reads the Contour information included in Plan.roi
 // (this file is a set of region of interest for each dicom images made on ADAC pinnacle treatment planning software)
 // This code is still under construction...
-void DicomGeometry::readContour()
+void DicomPatientConstructor::readContour()
 {
 
   char ROIplanLine[2000];
@@ -216,7 +215,7 @@ void DicomGeometry::readContour()
 }
 
 // This function tell if the coordinates (X,Y,Z) is within one of the curves from plan.roi
-bool DicomGeometry::isWithin(double X , double Y , double Z )
+G4bool DicomPatientConstructor::isWithin(G4double X , G4double Y , G4double Z )
 {
   int x,i,j;
   int state=0;  // This variable = 0 if the point is outside curve
