@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.5 2000-08-10 22:13:01 vnivanch Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.6 2000-08-15 09:42:14 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -101,8 +101,9 @@ class G4VhEnergyLoss : public G4VEnergyLoss
 
     G4double EnergyLossFluctuation(const G4DynamicParticle *aParticle,
                                          G4Material *aMaterial,
+                                         G4double ChargeSquare,
                                          G4double MeanLoss,
-                                         G4double ChargeSquare);
+                                         G4double Step);
                                        
 // =====================================================================
 

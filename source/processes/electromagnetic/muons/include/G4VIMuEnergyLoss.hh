@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIMuEnergyLoss.hh,v 1.2 2000-06-07 16:50:21 maire Exp $
+// $Id: G4VIMuEnergyLoss.hh,v 1.3 2000-08-15 09:40:16 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -112,7 +112,10 @@ class G4VIMuEnergyLoss : public G4IVContinuousDiscreteProcess
                             G4Material *aMaterial);
                                        
     G4double GetLossWithFluct(const G4DynamicParticle *aParticle,
-                              G4Material *aMaterial) ;
+                              G4Material *aMaterial,
+                              G4double ChargeSquare,
+                              G4double MeanLoss,
+                              G4double Step ) ; 
 
   protected:
 
@@ -263,6 +266,7 @@ class G4VIMuEnergyLoss : public G4IVContinuousDiscreteProcess
 
     // data members to speed up the fluctuation calculation
     G4Material *lastMaterial ;
+    G4int imat ;
     G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
     G4double e1LogFluct,e2LogFluct,ipotLogFluct;
     const G4double MaxExcitationNumber ;

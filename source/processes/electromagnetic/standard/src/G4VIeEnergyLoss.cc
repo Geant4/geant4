@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VIeEnergyLoss.cc,v 1.2 2000-08-03 08:36:52 gcosmo Exp $
+// $Id: G4VIeEnergyLoss.cc,v 1.3 2000-08-15 09:42:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -1017,7 +1017,7 @@ G4VParticleChange* G4VIeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
        if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowestKineticEnergy))
 
          {
-           finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+           finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
            if (finalT < 0.) finalT = E-MeanLoss;
          }
      }
@@ -1041,141 +1041,224 @@ G4VParticleChange* G4VIeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
 G4double G4VIeEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
-                                               G4double    MeanLoss)
-//  calculate actual loss from the mean loss
-//  The model used to get the fluctuation is the same as in Glandz in Geant3.
+                                               G4double ChargeSquare,
+                                               G4double	   MeanLoss,
+                                               G4double step )
 {
-  static const G4double Tlow=10.*keV ;
+//  calculate actual loss from the mean loss
+//  The model used to get the fluctuation is essentially the same as in Glandz in Geant3.
+
+   static const G4double minLoss = 1.*eV ;
+   static const G4double probLim = 0.01 ;
+   static const G4double sumaLim = -log(probLim) ;
+   static const G4double alim=10.;
+   static const G4double kappa = 10. ;
+   static const G4double factor = twopi_mc2_rcl2 ;
+
 
   // check if the material has changed ( cache mechanism)
 
   if (aMaterial != lastMaterial)
     {
       lastMaterial = aMaterial;
-      imat         = aMaterial->GetIndex(); 
-      f1Fluct      = aMaterial->GetIonisation()->GetF1fluct();
-      f2Fluct      = aMaterial->GetIonisation()->GetF2fluct();
-      e1Fluct      = aMaterial->GetIonisation()->GetEnergy1fluct();
-      e2Fluct      = aMaterial->GetIonisation()->GetEnergy2fluct();
-      e1LogFluct   = aMaterial->GetIonisation()->GetLogEnergy1fluct();
-      e2LogFluct   = aMaterial->GetIonisation()->GetLogEnergy2fluct();
-      rateFluct    = aMaterial->GetIonisation()->GetRateionexcfluct();
-      ipotFluct    = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
-      ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
+	imat	   = aMaterial->GetIndex();
+	f1Fluct	   = aMaterial->GetIonisation()->GetF1fluct();
+	f2Fluct	   = aMaterial->GetIonisation()->GetF2fluct();
+	e1Fluct	   = aMaterial->GetIonisation()->GetEnergy1fluct();
+	e2Fluct	   = aMaterial->GetIonisation()->GetEnergy2fluct();
+	e1LogFluct   = aMaterial->GetIonisation()->GetLogEnergy1fluct();
+	e2LogFluct   = aMaterial->GetIonisation()->GetLogEnergy2fluct();
+	rateFluct	   = aMaterial->GetIonisation()->GetRateionexcfluct();
+	ipotFluct	   = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
+	ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
-
-  G4double threshold,w1,w2,w3,lnw3,C,prob,
-           beta2,suma,e0,Em,loss,lossc ,w;
+  G4double threshold,w1,w2,C,
+		beta2,suma,e0,loss,lossc ,w,electronDensity;
   G4double a1,a2,a3;
-  G4long p1,p2,p3;
+  G4int p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dnmaxDirectFluct,dp3,dnmaxCont2;
+  G4double dp1,dp3;
+  G4double siga ;
+
+  // shortcut for very very small loss
+  if(MeanLoss < minLoss) return MeanLoss ;
 
   // get particle data
-  G4double Tkin   = aParticle->GetKineticEnergy();
-  G4double charge = aParticle->GetDefinition()->GetPDGCharge();
-  if (charge<0.) threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
-  else           threshold =((*G4Positron::Positron()).GetCutsInEnergy())[imat];
+  G4double Tkin	  = aParticle->GetKineticEnergy();
+  ParticleMass = aParticle->GetMass() ;
 
+  threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   G4double rmass = electron_mass_c2/ParticleMass;
-  G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
-  G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass)
-                  -ipotFluct;
-  if (Tm < 0.) Tm = 0.;
-  else if (Tm > threshold) Tm = threshold;
+  G4double tau	 = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
+  G4double Tm	 = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
-  w1 = Tm+ipotFluct;
-  w2 = w1/ipotFluct;
-  w3 = 2.*electron_mass_c2*tau2;
-  lnw3 = log(w3);
+  if (Tm <= ipotFluct) Tm = ipotFluct ;
+
+  if(Tm > threshold) Tm = threshold;
   beta2 = tau2/(tau1*tau1);
 
-  C = (1.-rateFluct)*MeanLoss/(lnw3-ipotLogFluct-beta2);
+  // Gaussian fluctuation ?
+  if(MeanLoss >= kappa*Tm)
+  {
+    electronDensity = aMaterial->GetElectronDensity() ;
+    siga = sqrt(MeanLoss*Tm*(0.5-0.25*beta2)*step*
+       	factor*electronDensity*ChargeSquare/beta2) ;
+    loss = G4RandGauss::shoot(MeanLoss,siga) ;
+    if(loss < 0.) loss = 0. ;
+    return loss ;
+  }
 
-  a1 = C*f1Fluct*(lnw3-e1LogFluct-beta2)/e1Fluct;
-  a2 = C*f2Fluct*(lnw3-e2LogFluct-beta2)/e2Fluct;
-  if (Tm > 0.) a3 = rateFluct*MeanLoss*Tm/(ipotFluct*w1*log(w2));
-  else { a1 /= rateFluct; a2 /= rateFluct; a3 = 0.;}
+  w1 = Tm/ipotFluct;
+  w2 = log(2.*electron_mass_c2*tau2);
+
+  C = MeanLoss*(1.-rateFluct)/(w2-ipotLogFluct-beta2);
+
+  a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
+  a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
+  if(Tm > ipotFluct)
+	a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  else
+  {
+     a1 /= 1.-rateFluct ;
+     a2 /= 1.-rateFluct ;
+     a3	 = 0. ;
+  }
+
   suma = a1+a2+a3;
-  
-  //no fluctuation if the loss is too big
-  if (suma > MaxExcitationNumber) return MeanLoss; 
 
-  suma<50.? prob = exp(-suma) : prob = 0.;
+  loss = 0. ;
 
-  if (prob > probLimFluct)         // very small Step
+  if(suma < sumaLim)		 // very small Step
     {
-      e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
-      if (Tm <= 0.)
-        {
-          a1 = MeanLoss/e0;
-          p1 = G4Poisson(a1);
-          loss = p1*e0 ;
-        }
-     else
-        {
-          Em = Tm+e0;
-          a1 = MeanLoss*(Em-e0)/(Em*e0*log(Em/e0));
-          p1 = G4Poisson(a1);
-          w  = (Em-e0)/Em;
-          // just to save time 
-          if (p1 > nmaxDirectFluct)
-            {
-              dp1 = p1;
-              dnmaxDirectFluct=nmaxDirectFluct;
-              Corrfac = dp1/dnmaxDirectFluct;
-              p1 = nmaxDirectFluct;
-            }
-          else Corrfac = 1.;
+	  e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
 
-          loss = 0.;
-          for (long i=0; i<p1; i++) loss += 1./(1.-w*G4UniformRand());
-          loss *= (e0*Corrfac);
+	if(Tm == ipotFluct)
+      {
+      	a3 = MeanLoss/e0;
 
-        }
+	if(a3>alim)
+	{
+          siga=sqrt(a3) ;
+	  p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+	}
+          p3 = G4Poisson(a3);
+
+	loss = p3*e0 ;
+
+	if(p3 > 0)
+		loss += (1.-2.*G4UniformRand())*e0 ;
+
+	}
+      else
+      {
+      	Tm = Tm-ipotFluct+e0 ;
+	a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
+
+	if(a3>alim)
+	{
+          siga=sqrt(a3) ;
+		p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+	}
+        else
+          p3 = G4Poisson(a3);
+
+	if(p3 > 0)
+	{
+          w = (Tm-e0)/Tm ;
+          if(p3 > nmaxCont2)
+          {
+            dp3 = G4float(p3) ;
+		Corrfac = dp3/G4float(nmaxCont2) ;
+            p3 = nmaxCont2 ;
+          }
+          else
+            Corrfac = 1. ;
+
+	  for(G4int i=0; i<p3; i++) loss += 1./(1.-w*G4UniformRand()) ;
+          loss *= e0*Corrfac ; 
+	}	
+      }
     }
-    
-  else                              // not so small Step
+
+	else  			// not so small Step
     {
-      p1 = G4Poisson(a1);
-      p2 = G4Poisson(a2);
-      loss = p1*e1Fluct+p2*e2Fluct;
-      if (loss>0.) loss += (1.-2.*G4UniformRand())*e1Fluct;   
-      p3 = G4Poisson(a3);
+      // excitation type 1
+      if(a1>alim)
+      {
+      	siga=sqrt(a1) ;
+	p1 = G4std::max(0,int(G4RandGauss::shoot(a1,siga)+0.5));
+      }
+      else
+       p1 = G4Poisson(a1);
 
-      lossc = 0.; na = 0.; alfa = 1.;
-      if (p3 > nmaxCont2)
-        {
-          dp3        = p3;
-          dnmaxCont2 = nmaxCont2;
-          rfac       = dp3/(dnmaxCont2+dp3);
-          namean     = p3*rfac;
-          sa         = nmaxCont1*rfac;
-          na         = G4RandGauss::shoot(namean,sa);
+	// excitation type 2
+      if(a2>alim)
+      {
+      	siga=sqrt(a2) ;
+	p2 = G4std::max(0,int(G4RandGauss::shoot(a2,siga)+0.5));
+      }
+      else
+        p2 = G4Poisson(a2);
+
+	loss = p1*e1Fluct+p2*e2Fluct;
+
+	// smearing to avoid unphysical peaks
+      if(p2 > 0)
+	loss += (1.-2.*G4UniformRand())*e2Fluct;
+      else if (loss>0.)
+	loss += (1.-2.*G4UniformRand())*e1Fluct;
+
+	// ionisation .......................................
+     if(a3 > 0.)
+     {
+      if(a3>alim)
+      {
+      	siga=sqrt(a3) ;
+	p3 = G4std::max(0,int(G4RandGauss::shoot(a3,siga)+0.5));
+      }
+      else
+        p3 = G4Poisson(a3);
+
+	lossc = 0.;
+      if(p3 > 0)
+      {
+      	na = 0.;
+	alfa = 1.;
+	if (p3 > nmaxCont2)
+	{
+          dp3		= G4float(p3);
+		rfac		= dp3/(G4float(nmaxCont2)+dp3);
+          namean	= G4float(p3)*rfac;
+		sa		= G4float(nmaxCont1)*rfac;
+		na		= G4RandGauss::shoot(namean,sa);
           if (na > 0.)
-            {
-              alfa   = w2*(nmaxCont2+p3)/(w2*nmaxCont2+p3);
-              alfa1  = alfa*log(alfa)/(alfa-1.);
-              ea     = na*ipotFluct*alfa1;
-              sea    = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
-              lossc += G4RandGauss::shoot(ea,sea);
-            }
+          {
+		  alfa   = w1*G4float(nmaxCont2+p3)/(w1*G4float(nmaxCont2)+G4float(p3));
+		alfa1  = alfa*log(alfa)/(alfa-1.);
+            ea	   = na*ipotFluct*alfa1;
+		sea	   = ipotFluct*sqrt(na*(alfa-alfa1*alfa1));
+		lossc += G4RandGauss::shoot(ea,sea);
+          }
         }
 
-      nb = G4int(p3-na);
-      if (nb > 0)
-        {
+	nb = G4int(G4float(p3)-na);
+	if (nb > 0)
+	{
           w2 = alfa*ipotFluct;
-          w  = (w1-w2)/w1;      
-          for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
-        }
-         
-      loss += lossc;  
-    } 
+          w  = (Tm-w2)/Tm;	
+		for (G4int k=0; k<nb; k++) lossc += w2/(1.-w*G4UniformRand());
+
+	}
+      }		
+      loss += lossc; 
+     }
+    }
 
   return loss ;
-}
 
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-   
+  
+
+

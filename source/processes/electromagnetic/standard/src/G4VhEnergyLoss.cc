@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.8 2000-08-10 22:13:01 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.9 2000-08-15 09:42:45 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -673,7 +673,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   if((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
   {
     finalT = E -
-        EnergyLossFluctuation(aParticle,aMaterial,MeanLoss,ChargeSquare) ;
+        EnergyLossFluctuation(aParticle,aMaterial,ChargeSquare,MeanLoss,Step) ;
     if (finalT < 0.) finalT = 0.  ;
   }
 
@@ -699,11 +699,12 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
 G4double G4VhEnergyLoss::EnergyLossFluctuation(
                                    const G4DynamicParticle *aParticle,
                                          G4Material *aMaterial,
+                                         G4double ChargeSquare,
                                          G4double MeanLoss,
-                                         G4double ChargeSquare)
+                                         G4double Step)
 {
   G4double loss = MeanLoss/ChargeSquare ;
-  loss = GetLossWithFluct(aParticle,aMaterial,loss)*ChargeSquare ;
+  loss = GetLossWithFluct(aParticle,aMaterial,ChargeSquare,loss,Step)*ChargeSquare ;
   return loss ;
 }
 

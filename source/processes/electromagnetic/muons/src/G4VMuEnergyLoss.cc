@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.5 2000-06-13 16:36:25 maire Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.6 2000-08-15 09:40:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -432,7 +432,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
   if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowerBoundEloss))
 
   {
-    finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
+    finalT = E-GetLossWithFluct(aParticle,aMaterial,1.,MeanLoss,Step);
     if (finalT < 0.) finalT = 0. ;
   }
 
