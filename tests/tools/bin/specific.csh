@@ -132,12 +132,20 @@ if ( `uname -n | grep sun` != "" ) then
     setenv DEBOPT ${DEBOPT}_NONISO
     setenv G4USE_OSPACE 1
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
+    # Persistency...
+    if ( $?G4USE_HEPODBMS ) then  # Protect against double calling.
+    else
+      source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
+      setenv G4EXAMPLE_FDID 207
+    endif
   else
     setenv G4SYSTEM SUN-CC5
     setenv DEBOPT ${DEBOPT}_ISO
     unsetenv G4USE_OSPACE
     setenv PATH `echo $PATH | sed s/SUNWspro50/SUNWspro/`
     setenv PATH `echo $PATH | sed s/SUNWspro/SUNWspro50/`
+    # Persistency...
+    unsetenv G4USE_HEPODBMS
   endif
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
@@ -154,12 +162,6 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
   setenv G4VIS_BUILD_VRML_DRIVER     1
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
-# Persistency...
-  if ( $?G4USE_HEPODBMS ) then
-  else
-    source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
-    setenv G4EXAMPLE_FDID 207
-  endif
 
 if ( `uname -n | grep hp` != "" ) then
   setenv G4USE_OSPACE 1
