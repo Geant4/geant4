@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.20 2000-10-23 11:04:34 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.21 2000-10-31 16:28:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@
 // 17.05.00 V.Grichine, bugs (#76,#91) fixed in  Distance ToOut(p,v,...)
 // 02.08.00 V.Grichine, poin is outside check in   Distance ToOut(p)
 // 08.08.00 V.Grichine, more stable roots of 2-equation in Distance ToOut(p,v,...)
+// 31.10.00 V.Grichine, assign sr, sphi in Distance ToOut(p,v,...)
 
 #include "G4Tubs.hh"
 
@@ -985,7 +986,7 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 {
   ESide side = kNull , sider, sidephi ;
 
-  G4double snxt, sr, sphi, pdist ;
+  G4double snxt, sr = kInfinity, sphi = kInfinity, pdist ;
 
   G4double deltaR, t1, t2, t3, b, c, d2, roMin2 ;
 
@@ -1056,14 +1057,15 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
   t2   = p.x()*v.x() + p.y()*v.y() ;
   t3   = p.x()*p.x() + p.y()*p.y() ;
 
-//  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
+  if ( snxt > 10*(fDz+fRMax) )  roi2 = 2*fRMax*fRMax;
+  else  roi2 = snxt*snxt*t1 + 2*snxt*t2 + t3 ; // radius^2 on +-fDz
 
   if ( t1 > 0 ) // Check not parallel
   {
 // Calculate sr, r exit distance
 	   
-    if ( t2   >= 0.0 ) 
-//         roi2 > fRMax*(fRMax + kRadTolerance) )
+    if ( (t2 >= 0.0) 
+         && (roi2 > fRMax*(fRMax + kRadTolerance)) )
     {
 // Delta r not negative => leaving via rmax
 
@@ -1099,13 +1101,12 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	return snxt = 0 ; // Leaving by rmax immediately
       }
     }             
-    else  // i.e.  t2 < 0; Possible rmin intersection
+    else if ( t2 < 0. ) // i.e.  t2 < 0; Possible rmin intersection
     {
-//    roMin2 = t3 + t2*t2*(1.0 - 2.0/t1) ; // min ro2 of the plane of movement 
-      roMin2 = t3 - t2*t2/t1 ;
+      roMin2 = t3 - t2*t2/t1 ; // min ro2 of the plane of movement 
 
-      if ( fRMin    && 
-           roMin2 < fRMin*(fRMin - kRadTolerance) )
+      if ( fRMin 
+           && (roMin2 < fRMin*(fRMin - kRadTolerance)) )
       {
 	deltaR = t3 - fRMin*fRMin ;
 	b      = t2/t1 ;
@@ -1135,7 +1136,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
 	  sider  = kRMax ;
 	}
       }
-      else   // No rmin intersect -> must be rmax intersect
+      else if ( roi2 > fRMax*(fRMax + kRadTolerance) )
+           // No rmin intersect -> must be rmax intersect
       {
 	deltaR = t3 - fRMax*fRMax ;
 	b      = t2/t1 ;
