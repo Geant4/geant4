@@ -1,0 +1,27 @@
+$Id: History,v 1.1 1999-06-14 14:25:39 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+
+5th June 1999  John Allison
+- standard/GNUmakefile: Force non-optimised compliation of some
+  files on HP with aCC: HP ANSI C++ B3910B A.01.15.
+
+May 29, 1999: John Allison
+- Added electromagnetic/lowenergy to GNUmakefile and
+  electromagnetic/GNUmakefile..
