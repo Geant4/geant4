@@ -128,11 +128,11 @@
                             (*result)[i]->GetTotalEnergy(),
 			    (*result)[i]->GetMomentum() );
       G4LorentzVector tmp = aNew->Get4Momentum();
-      tmp *= toLab;
       if(swapped)
       {
-        tmp.setZ(-tmp.getZ());
+        tmp*=toBreit;
       }    
+      tmp *= toLab.inverse();
       aNew->Set4Momentum(tmp);
       theParticleChange.AddSecondary(aNew);
     }
