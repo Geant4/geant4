@@ -3,7 +3,7 @@
 #include <iomanip.h>
 
 #include "globals.hh"
-//#include "Randomize.hh"
+#include "Randomize.hh"
 
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
@@ -22,11 +22,10 @@
 
 #include "vector"
 
-
 typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
 typedef G4std::vector<G4InuclNuclei>::iterator nucleiIterator;
 
-enum particleType { proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
+enum particleType { nuclei = 0, proton = 1, neutron = 2, pionPlus = 3, pionMinus = 5, pionZero = 7, foton = 10 };
 
 G4int nCollisions = 10;      // collisions to be generated
 G4int  bulletType = proton;    // bullet particle
@@ -50,7 +49,7 @@ int main(int argc, char **argv ) {
     G4cout << " >>> cascade::main " << G4endl;
   }
 
-  // get argumets from command line
+  // Get argumets from command line
   nCollisions =           (argc > 1) ? atoi(argv[1]) : nCollisions;
   bulletType  =           (argc > 2) ? atoi(argv[2]) : proton;
   momZ        = G4double(((argc > 3) ? atoi(argv[3]) : momZ)) / GeV;
@@ -110,18 +109,25 @@ G4int testINC(G4int nCollisions, G4int bulletType, G4double momZ, G4double N, G4
   cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
 
   if (verboseLevel > 1) {
-    G4cout << setw(6)<< "#ev" << setw(6)  << "part" << setw(11) << "Ekin [GeV]" << setw(11) << "momx" << setw(11) << "momy" << setw(11) << "momz" << G4endl;
+    G4cout << 
+      setw(6)  << "#ev"        << 
+      setw(6)  << "part"       << 
+      setw(11) << "Ekin [GeV]" << 
+      setw(11) << "momx"       << 
+      setw(11) << "momy"       << 
+      setw(11) << "momz"       << G4endl;
   }
 
   for (G4int i = 1; i <= nCollisions; i++) {
-    // Make INC
+
     if (verboseLevel > 0) {
       G4cout << "collision " << i << G4endl; 
     }
 
-    output =  cascader->collide(bullet, target); 
+    output =  cascader->collide(bullet, target); // Make INC
     printData(i);
   }
+
   return 0;
 };
 
@@ -140,13 +146,6 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double N,
 
   for(G4int e = 0; e < eBins; e++) { // Scan with different energy
  
-    // Auxiliarly stuff for ugly analysis
-    //    G4Analyser* analyser = new G4Analyser();
-    //G4WatcherGun* gun = new G4WatcherGun;
-    //gun->setWatchers();
-    //analyser->setWatchers(gun->getWatchers());
-    //    analyser->setInelCsec(1760.0, true);
-
     // Colliders initialisation
     G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
     G4IntraNucleiCascader*        cascade = new G4IntraNucleiCascader; // the actual cascade
@@ -200,29 +199,42 @@ G4int printData(G4int i) {
 	  
   // Convert Bertini data to Geant4 format
 
-  G4std::vector<G4InuclNuclei> fragments = output.getNucleiFragments();
+  G4std::vector<G4InuclNuclei> nucleiFragments = output.getNucleiFragments();
 
-  if(!fragments.empty()) { 
+  if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
+    G4std::vector<G4double> mom(4);
 
-    for(ifrag = fragments.begin(); ifrag != fragments.end(); ifrag++) {
-      G4std::vector<G4double> mom = ifrag->getMomentum();
+    for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
+      mom = ifrag->getMomentum();
       G4double ekin = ifrag->getKineticEnergy() * GeV;
-      G4int type = 0;
+      G4int type = 0; // ::: fix
 
-      G4double fEx = 0; // fragments[i].getExitationEnergyInGeV();
-      G4double fA = 0; // fragments[i].getA();
-      G4double fZ = 0; // fragments[i].getZ();
-
+      G4double fEx = ifrag->getExitationEnergyInGeV();
+      G4int fA = G4int(ifrag->getA());
+      G4int fZ = G4int(ifrag->getZ());
 
       if (verboseLevel > 2) {
-	G4cout << " Fragment exitation energy " << fEx << " " << fA << " " << fZ << G4endl;
+
+	G4cout << " Nuclei fragment: " << G4endl;
+	G4cout << " exitation energy " << fEx << " " << fA << " " << fZ << G4endl;
+ 
+        ifrag->printParticle();
       }
 	
       if (verboseLevel > 0) {
 	cout.precision(4);
 
-	G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << setw(13) << fA << setw(13) << fZ << setw(13) << fEx << G4endl;
+	G4cout << 
+	  setw(6)  << i            << 
+	  setw(6)  << type         << 
+	  setw(11) << ekin         << 
+	  setw(11) << mom[1] * GeV << 
+	  setw(11) << mom[2] * GeV << 
+	  setw(11) << mom[3] * GeV << 
+	  setw(13) << fA           << 
+	  setw(13) << fZ           << 
+	  setw(13) << fEx          << G4endl;
       }
     }
   }
@@ -239,10 +251,20 @@ G4int printData(G4int i) {
       if (verboseLevel > 0) {
 	cout.precision(4);
 
-	G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << setw(13) << 0 << setw(13) << 0 << setw(13) << 0 << G4endl;
+	G4cout << 
+	  setw(6)  << i            << 
+	  setw(6)  << type         << 
+	  setw(11) << ekin         << 
+	  setw(11) << mom[1] * GeV << 
+	  setw(11) << mom[2] * GeV << 
+	  setw(11) << mom[3] * GeV << 
+	  setw(13) << 0            << 
+	  setw(13) << 0            << 
+	  setw(13) << 0.0          << G4endl;
       }
     }
   }
+
   return 0;
 };
 
