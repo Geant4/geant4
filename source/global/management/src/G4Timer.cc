@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.cc,v 1.7 2000-01-06 14:27:09 gcosmo Exp $
+// $Id: G4Timer.cc,v 1.8 2000-06-26 16:27:37 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,11 @@
 // Global error function
 void G4Exception(const char* s=0);
 
+#if defined(IRIX6_2)
+#  if defined(_XOPEN_SOURCE) && (_XOPEN_SOURCE_EXTENDED==1)
+#    define __vfork vfork
+#  endif
+#endif
 
 #ifdef WIN32
 #  include <sys/types.h>
