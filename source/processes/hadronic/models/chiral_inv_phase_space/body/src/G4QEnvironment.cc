@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.69 2003-11-25 10:03:38 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.70 2003-11-25 16:09:25 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -5260,7 +5260,9 @@ void G4QEnvironment::DecayDibaryon(G4QHadron* qH)
         G4Quasmon* quasH = new G4Quasmon(qH->GetQC(),qH->Get4Momentum());
 	    if(!CheckGroundState(quasH,true))
         {
-          G4cerr<<"***G4QE::DecDib:GSCorFailed, fillAsItIs,n="<<theQHadrons.size()<<G4endl;
+#ifdef pdebug
+          G4cerr<<"***G4QE::DecDib:GSCorFailed, fillAsItIs, n="<<theQHadrons.size()<<G4endl;
+#endif
           theQHadrons.push_back(qH);        // Correction failed: fill as it is
         }
         else delete qH;  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QHadron.cc,v 1.33 2003-11-24 10:15:13 mkossov Exp $
+// $Id: G4QHadron.cc,v 1.34 2003-11-25 16:09:26 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QHadron ----------------
@@ -498,8 +498,10 @@ G4bool G4QHadron::DecayIn3(G4LorentzVector& f4Mom,G4LorentzVector& s4Mom,G4Loren
     G4double dif=(e1*e1-four12*fM2)*(e2*e2-four12*tM2);
     if(dif<0.)
 	{
-      if(dif<-.01) G4cerr<<"*G4QHadron::DecayIn3: iM="<<iM<<", tM="<<tM<<", sM="<<sM<<", fM="<<fM
-                           <<", m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#ifdef debug
+      if(dif<-.01) G4cerr<<"*G4QHadron::DecayIn3:iM="<<iM<<",tM="<<tM<<",sM="<<sM<<",fM="
+                         <<fM<<",m12(s+f)="<<sqrt(m12s)<<", d="<<iM-fM-sM-tM<<G4endl;
+#endif
     }
     else m13sRange=sqrt(dif)/m12s;
     rR = m13sRange/m13sBase;
