@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationLevel.hh,v 1.9 1999-12-15 14:50:22 gunter Exp $
+// $Id: G4NavigationLevel.hh,v 1.10 1999-12-15 16:40:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -29,8 +29,6 @@
 
 #include "G4NavigationLevelRep.hh"
 #include "G4Allocator.hh"
-
-class G4std::ostream;
 
 class G4NavigationLevel
 {
