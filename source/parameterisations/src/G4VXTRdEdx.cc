@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VXTRdEdx.cc,v 1.3 2001-02-27 15:24:17 grichine Exp $
+// $Id: G4VXTRdEdx.cc,v 1.4 2001-03-28 09:49:08 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -337,7 +337,7 @@ G4double G4VXTRdEdx::SpectralXTRdEdx(G4double energy)
 {
   fEnergy = energy ;
   G4Integrator<G4VXTRdEdx,G4double(G4VXTRdEdx::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4VXTRdEdx::SpectralAngleXTRdEdx,
+  return integral.Legendre10(this,&G4VXTRdEdx::SpectralAngleXTRdEdx,
                              0.0,0.2*fMaxThetaTR) +
          integral.Legendre10(this,&G4VXTRdEdx::SpectralAngleXTRdEdx,
 	                     0.2*fMaxThetaTR,fMaxThetaTR) ;
@@ -363,7 +363,7 @@ G4double G4VXTRdEdx::AngleXTRdEdx(G4double varAngle)
 {
   fVarAngle = varAngle ;
   G4Integrator<G4VXTRdEdx,G4double(G4VXTRdEdx::*)(G4double)> integral ;
-  return integral.Legendre96(this,&G4VXTRdEdx::AngleSpectralXTRdEdx,
+  return integral.Legendre10(this,&G4VXTRdEdx::AngleSpectralXTRdEdx,
 			     fMinEnergyTR,fMaxEnergyTR) ;
 }
 
