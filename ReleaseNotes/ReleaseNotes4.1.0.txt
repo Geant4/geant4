@@ -300,7 +300,11 @@ previous Rogue-Wave based versions.
   o In rare cases heavy ions appear not to be properly stopped and killed
     in tracking, therefore Geant4 sticks making many small steps. This
     behavior has been observed on SUN and is under investigation.
- 
+  o There is a known problem reading the data files specified by
+    environment variable G4LEVELGAMMADATA (usually
+    $G4INSTALL/geant4/data/PhotonEvaporation).  A patch resolving this
+    problem will be issued soon.
+
 
 7. Compilation Warnings
 -----------------------
