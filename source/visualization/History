@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2000-06-07 08:43:27 johna Exp $
+$Id: History,v 1.87 2000-06-07 22:42:13 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+8th June 2000  Guy Barrand
+- OPACS/src/G4GoSceneHandler.cc : correct polyhedron 
+  wire-frame in order to remove some edges. Now the
+  rendering is the same than for OpenGL driver.
+   This was requested for long by ALICE, and had been
+  requested for ATLAS by Gaston Parrour recently.
 
 7th June 2000  John Allison
 - /vis/viewer/update preferred, synonym /vis/viewer/show deprecated.
