@@ -18,12 +18,13 @@
 //  #include "YY.hh"
 //#endif
 
-#include "CHBook.h"
+/////////#include "CHBook.h"
 #include "G4QNucleus.hh"
 #include "G4Quasmon.hh"
-#include "G4QHBook.hh"
-#include "CHBook.cc"
-#include "G4QHBook.cc"
+//#include "G4QHBook.hh"
+// ==>>> a trick for the "test" arrangement
+/////////#include "CHBook.cc"
+//#include "G4QHBook.cc"
 
 #include <iostream.h>
 #include <fstream.h>
@@ -47,13 +48,13 @@ int main()
   //}
 
   // Histograms
-  cout<<"Prepare chips.hbook file for HBOOK histograms"<<endl;
-  CHBookFile chipshist("chips.hbook",1,1);
+  ////////cout<<"Prepare chips.hbook file for HBOOK histograms"<<endl;
+  ////////CHBookFile chipshist("chips.hbook",1,1);
 
   // Book histograms
-  CHBookHisto histPi(3027,"Pion multiplicity",12,0.,12.);
+  ////////CHBookHisto histPi(3027,"Pion multiplicity",12,0.,12.);
   //
-  G4QHBook ntp;
+  ////////G4QHBook ntp;
   //
   //-------- set standard output format-------
    G4cout.setf( ios::scientific, ios::floatfield );
@@ -133,7 +134,7 @@ int main()
     cout << "--->>> Now came out of HadronizeQuasmon hadronization function" << endl;
 #endif
 	//
-    ntp.FillEvt(output);
+    //////////ntp.FillEvt(output);
 	//
 #ifdef debug
     cout << ">>> Here the histograms are filled" << endl;
@@ -202,14 +203,14 @@ int main()
     if (nPhotons) nPions=11;
     if (nKaons==2&&npt==2) nPions=1;
     else if (nKaons) nPions=10;
-    histPi.fill(nPions);
+    //////histPi.fill(nPions);
     delete pan; // Destruct theHadronVector (& theCandidateVector) of the Quasmon
   }
   cout<<"The mean number of pions="<<sumN/fEvt<<", pi+-="<<sumC/fEvt<<", pi0="<<sum0/fEvt
       <<", K="<<sumK/fEvt<<", eta="<<sumE/fEvt<<endl;
   // Save all collected histograms
-  cout<<"Save all collected histograms to the chips.hbook file"<<endl;
-  chipshist.saveAndClose();
+  ///////cout<<"Save all collected histograms to the chips.hbook file"<<endl;
+  ///////chipshist.saveAndClose();
 
   return EXIT_SUCCESS;
 }
