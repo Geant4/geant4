@@ -141,31 +141,31 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName)
                                        xSec, aFileName+G4String(".he3"), bin4); // 1000*Z+A
   thePlots.push_back(aNewPlot);
 // he4
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".he4"), bin1); // 1000*Z+A
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".he4"), bin2); // 1000*Z+A
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".he4"), bin3); // 1000*Z+A
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".he4"), bin4); // 1000*Z+A
-  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".he4"), bin1); // 1000*Z+A
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".he4"), bin2); // 1000*Z+A
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".he4"), bin3); // 1000*Z+A
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(2004, G4Alpha::AlphaDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".he4"), bin4); // 1000*Z+A
+//  thePlots.push_back(aNewPlot);
 // K-
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".kaonminus"), bin1);
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".kaonminus"), bin2);
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".kaonminus"), bin3);
-  thePlots.push_back(aNewPlot);
-  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
-                                       xSec, aFileName+G4String(".kaonminus"), bin4);
-  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".kaonminus"), bin1);
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".kaonminus"), bin2);
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".kaonminus"), bin3);
+//  thePlots.push_back(aNewPlot);
+//  aNewPlot = new ANAPlot<ANADataPoint, TVANAFilter<G4double> >(-321, G4KaonMinus::KaonMinusDefinition()->GetPDGMass(), 
+//                                       xSec, aFileName+G4String(".kaonminus"), bin4);
+//  thePlots.push_back(aNewPlot);
 }
 
 inline

@@ -1,6 +1,6 @@
- ./doit CHIPS_StringModel_Integration
-# ./doit CHIPS_pionMinus_AtRest_Integration
-# ./doit CHIPS_pionMinus_nucleus_Integration 
-# ./doit CHIPS_p_pBar_AtRest_Integration
-# ./doit CHIPS_p_pBar_Integration
-# ./doit CHIPS_gamma_nucleus_Integration
+#./doit CHIPS_StringModel_Analysis Li6
+#./doit CHIPS_StringModel_Analysis Be
+#./doit CHIPS_StringModel_Analysis C
+#./doit CHIPS_StringModel_Analysis Al
+#./doit CHIPS_StringModel_Analysis Cu
+./doit CHIPS_StringModel_Analysis Ta

@@ -31,7 +31,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
       ofstream theOutput(it);
       for(G4int i=0; i<theDataPoints.size(); i++)
       {
-        theDataPoints[i].DumpInfo(aOStream);
+//        theDataPoints[i].DumpInfo(aOStream);
         if(theOutputFile!="") theDataPoints[i].DumpInfo(theOutput);
       }
     }

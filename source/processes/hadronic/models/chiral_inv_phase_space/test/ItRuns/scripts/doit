@@ -1,5 +1,5 @@
 echo ">>>>>>>"
-echo ">>>>>>> STARTING TEST $1 <<<<<<<"
+echo ">>>>>>> STARTING TEST $1 $2 <<<<<<<"
 echo ">>>>>>>"
 echo ""
 cd ../src
@@ -8,17 +8,23 @@ export G4DEBUG=$1
 echo ">>>>>>>"
 echo ">>>>>>> Now building $1 <<<<<<<"
 echo ">>>>>>>"
- rm ./$1
- gmake clean
- gmake
+# rm ./$1
+# gmake clean
+# gmake
 echo ">>>>>>>"
 echo ">>>>>>> Now running $1 <<<<<<<"
 echo ">>>>>>>"
 pwd
-rm ../logs/$1.log
+rm ../logs/$1.$2.log
 ln -s ../../../../../../../../bin/Linux-g++/$1 $1
-./$1 < ../inputs/$1.in > ../logs/$1.log
+./$1 < ../inputs/$1.$2.in > ../logs/$1.$2.log
 echo ">>>>>>>"
-echo ">>>>>>> TEST $1 TERMINATED <<<<<<<"
+echo ">>>>>>> Stripping out the info <<<<<<<"
+echo ">>>>>>>"
+cd ../logs
+./doit $1.$2.log
+../../../../../../../../bin/Linux-g++/analyse
+echo ">>>>>>>"
+echo ">>>>>>> TEST $1 $2 TERMINATED <<<<<<<"
 echo ">>>>>>>"
 echo ""

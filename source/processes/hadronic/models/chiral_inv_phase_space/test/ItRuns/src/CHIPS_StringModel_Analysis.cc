@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: CHIPS_StringModel_Integration.cc,v 1.3 2000-08-28 09:30:31 hpw Exp $
+// $Id: CHIPS_StringModel_Analysis.cc,v 1.1 2000-08-30 07:16:16 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -146,9 +146,20 @@
     theKapton->AddElement( elN, 2 );
     G4Material *theH = new G4Material(name="Hydrogen", density=1.53*g/cm3, nEl=1); 
     theH->AddElement( elH, 1 );
+    G4Material *theC = new G4Material(name="Carbon", density=1.032*g/cm3, nEl=1);
+    theC->AddElement( elC, 1 );
+    G4Material *theLi6 = new G4Material(name="Li6", density=2.70*g/cm3, nEl=1);
+    G4int nIso;
+    G4Element *elLi6  = new G4Element(name="Li6", symbol="Li", nIso = 1);
+    G4Isotope * isoLi6 = new G4Isotope(name="Li6", 3, 6, a=6.*g/mole);
+    elLi6->AddIsotope(isoLi6, 1);
+    theLi6->AddElement(elLi6 , 1 );
+    G4Material *theTa = new G4Material(name="Tantalum", density=1.53*g/cm3, nEl=1); 
+    G4Element *elTa = new G4Element(name="Tantalum", symbol="Ta", iz=73., a=181*g/mole);
+    theTa->AddElement( elTa, 1 );
     
-    G4int numberOfMaterials = 16;
-    G4Material *theMaterials[16];
+    G4int numberOfMaterials = 19;
+    G4Material *theMaterials[19];
     theMaterials[ 0] = theCu;
     theMaterials[ 1] = thePb;
     theMaterials[ 2] = theFe;
@@ -165,7 +176,10 @@
     theMaterials[13] = theCsI;
     theMaterials[14] = theKapton;
     theMaterials[15] = theH;
-    
+    theMaterials[16] = theC;
+    theMaterials[17] = theLi6;
+    theMaterials[18] = theTa;
+   
     // ----------- here all materials have been defined -----------
     
     //G4Element::DumpInfo(); 
@@ -573,12 +587,13 @@
       G4cout << " 4) LArgon      5) PolyStyrene  6) PbWO4     7) Oxygen" << G4endl;
       G4cout << " 8) Beryllium   9) Aluminium   10) Uranium  11) BGO" << G4endl;
       G4cout << "12) NaI        13) CsI         14) Kapton   15) Hydrogen" << G4endl;
+      G4cout << "16) Carbon     17) 6_3_Lithium 18) Tantalum "<< G4endl;
       G4cout << "Please enter the material code" << G4endl;
       G4cout << "\tFrom: " << G4std::flush;
       G4cin >> kl;
       G4cout << "\tTo: " << G4std::flush;
       G4cin >> kr;
-    } while( kl < 0 || kr > 15 || kl > kr );
+    } while( kl < 0 || kr >= numberOfMaterials || kl > kr );
     
     G4int il, ir;
     do {

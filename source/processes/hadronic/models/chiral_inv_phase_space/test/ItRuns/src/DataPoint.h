@@ -17,8 +17,8 @@ class ANADataPoint
     G4bool result = (anEnergy-theMass<highBin);
     if (result)
     {
-      G4cout << "Entering a data point "<< anEnergy << " " << aXsec 
-             << " " << theMass << " " << highBin << G4endl;
+//      G4cout << "Entering a data point "<< anEnergy << " " << aXsec 
+//             << " " << theMass << " " << highBin << G4endl;
       xSec += aXsec;
       meanKinetic = (entries*meanKinetic+(anEnergy-theMass))/G4double(++entries);
     }
@@ -31,7 +31,7 @@ class ANADataPoint
     G4double err=0;
     if(entries) err=xSec/sqrt(G4double(entries));
     aOStream <<meanKinetic/GeV<<" "<< 0.<<" "
-             <<xSec/theWidth<<" "<<err/theWidth<<G4endl;
+             <<xSec/(theWidth*GeV)<<" "<<err/(theWidth*GeV)<<G4endl;
   }
   G4double GetMeanKinetic(){return meanKinetic;}
   G4double GetXSec(){return xSec;}
