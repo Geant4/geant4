@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.8 1999-06-09 09:31:37 sgiani Exp $
+// $Id: G4Tubs.cc,v 1.9 1999-06-09 14:40:13 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -843,7 +843,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 		       {
 // Good inner radius isect - but earlier phi isect still possible
 
-			  snxt=(s > kRadTolerance ? s : 0.);
+			  snxt=(s > kRadTolerance*0.5 ? s : 0.);
 		       }
 		    }
 		 }	      //    end if fabs(zi)
