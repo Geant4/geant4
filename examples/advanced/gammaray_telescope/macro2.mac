@@ -12,6 +12,11 @@
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
+/gun/particle mu-
+/gun/energy 100 MeV
+/gun/vertexRadius 30. cm
+/gun/sourceType 2
+/gun/direction 0 0 -1
 
 # You can modify the geometry of the telescope via a messenger
 /payload/setNbOfTKRLayers 3
@@ -43,7 +48,7 @@
 /vis/viewer/create
 
 # Positioning of the camera
-/vis/camera/viewpoint 30 30 
+/vis/camera/viewpoint 90 0 
 
 # Draw scene
 /vis/scene/notifyHandlers
