@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2000-02-17 16:13:40 gcosmo Exp $
+$Id: History,v 1.44 2000-03-13 11:11:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+March 11, 2000 G.Cosmo (global-V01-01-00)
+- STLInterface: implemented correct behavior for vectors' default constructors,
+  as expected by the RW interface.
+  o for pointer/value ordered/sorted collections, an EMPTY STL vector is
+    created and the vector capacity is set to G4RWDEFAULT_CAPACITY
+    using vector::reserve(capacity). No element initialisation is done.
+  o for pointer/value simple collections, a default constructor creating
+    an EMPTY STL vector is implemented; the constructor taking the capacity
+    as argument, creates an STL vector of the given capacity and explicitly
+    initialises its elements. NB: pointers are initialised to zero.
+- Added "g4std/complex" wrapper file (V.Grichine)
 
 February 16, 2000 H.Kurashige (global-V01-00-04)
 - G4UserLimits[.hh.icc]: added identifier for a concrete instance of the
