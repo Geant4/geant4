@@ -32,33 +32,6 @@
 #/vis/drawVolume
 
 
-#/gps/particle opticalphoton
-#/gps/energy   3.0 eV
-#/gps/centre  0.0 90.0 150. cm
-#/gps/direction 0.0 -1.0 0.0
-#/gps/polarization 1.0 1.0 0.0
-
-
-#/gps/angtype iso
-#/gps/mintheta  0. deg 
-#/gps/maxtheta 30. deg
-
-#/gps/type  Plane
-#/gps/shape Circle
-#/gps/radius 10.0 cm
-#/gps/posrot1 1. 0. 0.
-#/gps/posrot2 0. 0. -1.
-
-#/gps/shape Annulus
-#/gps/radius 22.85 cm
-#/gps/radius0 20.85 cm
-
-#/gps/shape Square
-#/gps/halfx 5.0 mm
-#/gps/halfy 5.0 mm
-
-#/gps/type  Point
-
 /mysetrun/SetRunID 9999
 /run/beamOn 50
 
