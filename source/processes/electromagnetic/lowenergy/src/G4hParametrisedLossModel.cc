@@ -125,13 +125,14 @@ void G4hParametrisedLossModel::InitializeMe()
       lowEnergyLimit  = 5.0*keV;
       */
   } else {
-      modelName = ir49p;
       eStopingPowerTable = new G4hICRU49p();
       highEnergyLimit = 2.0*MeV;
       lowEnergyLimit  = 1.0*keV;
-      G4cout << "G4hParametrisedLossModel Warning: default model <"
-             << modelName << ">" << " is used for Electronic Stopping"
+      G4cout << "G4hParametrisedLossModel Warning: <" << modelName 
+             << "> is unknown - default <"
+             << ir49p << ">" << " is used for Electronic Stopping"
              << G4endl;
+      modelName = ir49p;
   }
       /*
       G4cout << "G4hParametrisedLossModel: the model <"

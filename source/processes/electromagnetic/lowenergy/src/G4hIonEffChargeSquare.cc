@@ -162,6 +162,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
 
   // Fast ions or hadrons
   G4double reducedEnergy = kineticEnergy * proton_mass_c2/particleMass ;
+  if(reducedEnergy < 1.0*keV) reducedEnergy = 1.0*keV;
   if( (reducedEnergy > ionCharge * 10.0 * MeV) || 
       (ionCharge < 1.5) ) return ionCharge*ionCharge ;
 
@@ -275,7 +276,7 @@ G4double G4hIonEffChargeSquare::IonEffChargeSquare(
     G4double lambda = 10.0 * vF * pow(1.0-q, 0.6667) / (z13 * (6.0 + q)) ;
     G4double qeff   = ionCharge * s *
       ( q + 0.5*(1.0-q) * log(1.0 + lambda*lambda) / (vF*vF) ) ;
-    if( 1.0 > qeff ) qeff = 1.0 ; 
+    if( 0.1 > qeff ) qeff = 0.1 ; 
     return qeff*qeff ;    
   }
 }

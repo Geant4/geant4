@@ -84,6 +84,5 @@ G4double G4VhElectronicStoppingPower::HeEffChargeSquare(
   G4double w = 7.6 -  e ;
   w = 1.0 + (0.007 + 0.00005*z) * exp( -w*w ) ;
   w = 4.0 * (1.0 - exp(-x)) * w * w ;
-
   return w;
 }
