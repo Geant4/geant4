@@ -54,8 +54,8 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
 { 
   test31detDir = new G4UIdirectory("/test31/");
   test31detDir->SetGuidance("General test31 commands");
-  test31detDir1= new G4UIdirectory("/test31/physics/");
-  test31detDir1->SetGuidance("test31 commands to define physics");
+  //  test31detDir1= new G4UIdirectory("/test31/physics/");
+  //  test31detDir1->SetGuidance("test31 commands to define physics");
   test31detDir2= new G4UIdirectory("/test31/gun/");
   test31detDir2->SetGuidance("test31 commands to define gun");
   if(hDet->GetVerbose() > 0) {
@@ -131,22 +131,22 @@ test31DetectorMessenger::test31DetectorMessenger(test31DetectorConstruction* h):
   ZMagFieldCmd->SetParameterName("Bz",false);
   ZMagFieldCmd->SetUnitCategory("Magnetic flux density");
   ZMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  /*
   HistoCmd = new G4UIcmdWithAString("/test31/HistoName",this);
   HistoCmd->SetGuidance("Set the name of the histo file");
   HistoCmd->SetParameterName("histo",false);
   HistoCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   ntupCmd = new G4UIcmdWithABool("/test31/ntuple",this);
   ntupCmd->SetGuidance("Set number ntuple to fill");
   ntupCmd->SetParameterName("ntuple",false);
   ntupCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  /*
   NumOfEvt = new G4UIcmdWithAnInteger("/test31/NumberOfEvents",this);
   NumOfEvt->SetGuidance("Set number of event to be simulated");
   NumOfEvt->SetParameterName("Nevt",false);
   NumOfEvt->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   verbCmd = new G4UIcmdWithAnInteger("/test31/verbose",this);
   verbCmd->SetGuidance("Set verbose for test31");
   verbCmd->SetParameterName("verb",false);
@@ -196,15 +196,15 @@ test31DetectorMessenger::~test31DetectorMessenger()
   delete XMagFieldCmd;
   delete YMagFieldCmd;
   delete ZMagFieldCmd;
-  delete HistoCmd;
-  delete NumOfEvt;
+  // delete HistoCmd;
+  // delete NumOfEvt;
   delete verbCmd;
   delete intCmd;
   delete nhistCmd;
   delete nDebugSCmd;
   delete nDebugECmd;
   delete test31detDir;
-  delete test31detDir1;
+  // delete test31detDir1;
   delete test31detDir2;
   delete DeltaECmd;
   delete ntupCmd;
@@ -257,14 +257,14 @@ void test31DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue
   if( command == ZMagFieldCmd )
    { hDet->SetMagField(ZMagFieldCmd->GetNewDoubleValue(newValue),3);}
 
-  if( command == HistoCmd ) 
-   { (test31Histo::GetPointer())->SetHistoName(newValue);}
+  //  if( command == HistoCmd ) 
+  // { (test31Histo::GetPointer())->SetHistoName(newValue);}
 
   if( command == ntupCmd ) 
    { (test31Histo::GetPointer())->SetNtuple(ntupCmd->GetNewBoolValue(newValue));}
 
-  if( command == NumOfEvt )
-   { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
+  // if( command == NumOfEvt )
+  // { hDet->SetNumberOfEvents(NumOfAbsCmd->GetNewIntValue(newValue));}
 
   if( command == verbCmd ){ 
      G4int ver = verbCmd->GetNewIntValue(newValue);

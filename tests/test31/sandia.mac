@@ -21,8 +21,8 @@
 
 #/test31/AbsorberMaterial     Tantalum
 #/test31/AbsorberThick        0.00458 mm
-#/test31/HistoName            ta_st_1.paw
 
+/testem/histo/HistoName       ta_st_1.paw
 /testem/histo/fileType       hbook
 #/testem/histo/fileType       xml
 

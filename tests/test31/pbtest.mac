@@ -17,9 +17,8 @@
 /test31/NumberOfAbsorbers    1
 /test31/maxDeltaEnergy       10.0 MeV
 /test31/WorldMaterial        Vacuum
-/test31/HistoName            mu_st_100.paw
+/testem/histo/fileName       pb.paw
 /test31/HistoNumber          5
-/test31/NumberOfEvents       0
 /test31/gun/beamE            100.0 MeV
 /process/eLoss/verbose  0
 /run/initialize

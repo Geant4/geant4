@@ -17,24 +17,23 @@
 /test31/maxDeltaEnergy       1.0 MeV
 /test31/WorldMaterial        Vacuum
 /test31/HistoNumber          5
-/test31/NumberOfEvents       0
 /test31/gun/beamE            1000.0 MeV
 #/process/eLoss/preciseRange  true
 /run/initialize
 #
-/test31/HistoName            t_e_st.paw
+/testem/histo/fileName            t_e_st.paw
 /gun/particle e-
 /run/beamOn 1000
 #
-/test31/HistoName            t_mu_st.paw
+/testem/histo/fileName            t_mu_st.paw
 /gun/particle mu-
 /run/beamOn 1000
 #
-/test31/HistoName            t_pi_st.paw
+/testem/histo/fileName            t_pi_st.paw
 /gun/particle pi+
 /run/beamOn 1000
 #
-/test31/HistoName            t_p_st.paw
+/testem/histo/fileName            t_p_st.paw
 /gun/particle proton
 /run/beamOn 1000
 #

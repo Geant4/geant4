@@ -64,11 +64,11 @@ test31Histo* test31Histo::GetPointer()
 test31Histo::test31Histo()
 {
   verbose = 0;
-  nHisto = 1;
+  nHisto  = 0;
   maxEnergy = 0.0;
   nTuple = false;
   histo = Histo::GetInstance();
-  ema = new EmAnalysis();
+  //  ema = new EmAnalysis();
   histoID.resize(5);
 }
 
@@ -102,7 +102,7 @@ void test31Histo::BeginOfHisto(G4int num)
   n_pipi = 0;
 
   if(0 < nHisto) {
-    bookHisto();
+    if(num == 0) bookHisto();
     histo->book();
 
     if(verbose > 0) {
@@ -170,7 +170,7 @@ void test31Histo::EndOfHisto()
     histo->save();
   }
 
-  TableControl();
+  if(nHisto == 0) TableControl();
   //  CrossSections();
 }
 
@@ -200,8 +200,7 @@ void test31Histo::SaveToTuple(const G4String& parname,G4double val, G4double)
 void test31Histo::bookHisto()
 {
   G4double zmax = (AbsorberThickness + gap) * NumberOfAbsorbers / mm;
-  G4cout << "test31Histo: Histograms will be saved to the file <" 
-         << histName << ">"
+  G4cout << "test31Histo: "
          << " AbsThick(mm)= " << AbsorberThickness/mm
          << " Nabs= " << NumberOfAbsorbers
          << " zmax= " << zmax
@@ -210,7 +209,7 @@ void test31Histo::bookHisto()
 
 
   // Creating an 1-dimensional histograms in the root directory of the tree
-
+  
   histoID[0] = histo->add1D("10",
     "Energy deposit (MeV) in absorber (mm)",NumberOfAbsorbers,0.0,zmax/mm,mm);
 
