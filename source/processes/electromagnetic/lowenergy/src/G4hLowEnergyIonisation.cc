@@ -1050,9 +1050,8 @@ G4double G4hLowEnergyIonisation::AntiProtonParametrisedDEDX(
 
   // The proton model is used + Barkas correction
   } else { 
-    if(kineticEnergy < antiProtonLowEnergy) {
-      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,
-                                       antiProtonLowEnergy);
+    if(kineticEnergy < protonLowEnergy) {
+      eloss = theProtonModel->TheValue(G4Proton::Proton(),material,protonLowEnergy);
     
     // Parametrisation 
     } else {
