@@ -29,7 +29,7 @@ class G4FieldPropagation
 {
 public:
    G4FieldPropagation() {}
-   G4FieldPropagation(const G4FieldPropagation &right) {}
+   G4FieldPropagation(const G4FieldPropagation &) {}
 
    virtual ~G4FieldPropagation() {}
 

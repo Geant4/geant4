@@ -34,10 +34,10 @@ public:
    ~G4RKFieldIntegrator() {}
 
    //Operators
-   const G4RKFieldIntegrator & operator=(const G4RKFieldIntegrator &right) {return *this;}
+   const G4RKFieldIntegrator & operator=(const G4RKFieldIntegrator &) {return *this;}
    
-   int operator==(const G4RKFieldIntegrator &right) const {return 1;}
-   int operator!=(const G4RKFieldIntegrator &right) const {return 1;}
+   int operator==(const G4RKFieldIntegrator &) const {return 1;}
+   int operator!=(const G4RKFieldIntegrator &) const {return 1;}
 
    // only theActive are propagated, nothing else
    // only theSpectators define the field, nothing else
