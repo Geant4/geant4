@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.39 1999-12-01 14:40:43 morita Exp $
+# $Id: binmake.gmk,v 1.40 1999-12-15 15:06:08 johna Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -228,7 +228,7 @@ bin: $(G4BINDIR)/$(G4TARGET)
 $(G4BINDIR)/$(G4TARGET): $(LINK_DEPENDENCIES)
 ifndef USER_DEFINED_LDLIBS
   ifndef GLOBALLIBS
-	@echo "Using granular libraries."
+	@echo "Using granular libraries ..."
 	@if [ ! \( -f $(G4LIB)/$(G4SYSTEM)/liblist \
 	  -a -f $(G4LIB)/$(G4SYSTEM)/libname.map \) ]; then \
 	  echo "ERROR: No liblist program or library map file."; \

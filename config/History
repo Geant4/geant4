@@ -1,4 +1,4 @@
-$Id: History,v 1.92 1999-12-07 08:51:38 gcosmo Exp $
+$Id: History,v 1.93 1999-12-15 15:06:06 johna Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+16th December 1999  John Allison
+- Cosmetic improvement to echo line in binmake.gmk.
 
 7th December 1999  Gabriele Cosmo (config-V00-01-19)
 - architecture.gmk: minor fix on OSPACELIBS path for Win/NT.
