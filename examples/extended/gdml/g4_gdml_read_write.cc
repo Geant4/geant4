@@ -1,6 +1,6 @@
 //
 // -*- C++ -*-
-// $Id: g4_gdml_read_write.cc,v 1.1 2004-12-06 11:00:15 radoone Exp $
+// $Id: g4_gdml_read_write.cc,v 1.2 2004-12-06 18:13:04 gcosmo Exp $
 //
 // Author: Radovan Chytracek 2000 - 2004
 //         Witek Pokorski
@@ -14,8 +14,11 @@
 #include "G4UIsession.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
-#include "MyVisManager.hh"
 #include "G4TransportationManager.hh"
+
+#ifdef G4VIS_USE
+#include "g4rwVisManager.hh"
+#endif
 
 #include "g4rwDetectorConstruction.hh"
 #include "g4rwPhysicsList.hh"
@@ -30,8 +33,10 @@ int main()
   // Construct the default run manager
   G4RunManager* runManager = new G4RunManager;
   //
-  G4VisManager* visManager = new MyVisManager;
+#ifdef G4VIS_USE
+  G4VisManager* visManager = new gogdmlVisManager;
   visManager->Initialize();
+#endif
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new gogdmlDetectorConstruction);
@@ -40,15 +45,15 @@ int main()
   // set mandatory user action class
   runManager->SetUserAction(new gogdmlPrimaryGeneratorAction);
 
-  // Initialize G4 kernel
+  // initialize G4 kernel
   runManager->Initialize();  
 
-
-  //scaning geometry tree
-  G4VPhysicalVolume* g4wv = G4TransportationManager::GetTransportationManager()->
+  // scanning geometry tree
+  G4VPhysicalVolume* g4wv =
+    G4TransportationManager::GetTransportationManager()->
     GetNavigatorForTracking()->GetWorldVolume();
   
-  G4GDMLWriter g4writer("../../GDMLSchema/gdml_2.0.xsd", "g4writertest.gdml");
+  G4GDMLWriter g4writer("schema/gdml_2.0.xsd", "g4writertest.gdml");
   
   try
   {
@@ -74,15 +79,17 @@ int main()
   UI->ApplyCommand("/tracking/verbose 1");
 
   // start a run
-  int numberOfEvent = 1;
+  int numberOfEvent = 10;
   runManager->BeamOn(numberOfEvent);
 
   session->SessionStart();
 
   // job termination
-  delete runManager;
+#ifdef G4VIS_USE
   delete visManager;
-  
+#endif
+  delete runManager;
+
   return 0;
 }
 

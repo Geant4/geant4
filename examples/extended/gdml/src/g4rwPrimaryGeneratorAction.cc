@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: g4rwPrimaryGeneratorAction.cc,v 1.1 2004-12-06 11:01:14 radoone Exp $
+// $Id: g4rwPrimaryGeneratorAction.cc,v 1.2 2004-12-06 18:13:13 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,8 +39,7 @@ gogdmlPrimaryGeneratorAction::gogdmlPrimaryGeneratorAction()
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   UI->ApplyCommand("/gun/particle geantino");
-  UI->ApplyCommand("/gun/energy 1.0 GeV");
-  UI->ApplyCommand("/gun/position -2.0 0.0 0.0 cm");
+  UI->ApplyCommand("/gun/position 0.0 0.0 0.0 cm");
 }
 
 gogdmlPrimaryGeneratorAction::~gogdmlPrimaryGeneratorAction()
@@ -58,10 +57,10 @@ void gogdmlPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       UI->ApplyCommand("/gun/direction 1.0 0.0 0.0");
       break;
     case 1:
-      UI->ApplyCommand("/gun/direction 1.0 0.1 0.0");
+      UI->ApplyCommand("/gun/direction 1.0 2.0 0.0");
       break;
     case 2:
-      UI->ApplyCommand("/gun/direction 1.0 0.0 0.1");
+      UI->ApplyCommand("/gun/direction 1.0 2.0 3.0");
       break;
   }
 

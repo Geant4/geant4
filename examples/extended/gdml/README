@@ -1,0 +1,15 @@
+The GDML (Geometry Description Markup Language) example demonstrates the usage
+of the GDML reader and writer. It allows the users to export their geometry
+descriptions in an application independent format (GDML).
+The GDML files can be then used to interchange geometries between different
+applications and users.
+
+The detector construction consists of a call to GDMLProcessor which parses the
+GDML file (test.gdml) and returns the pointer to the world volume. The user
+can also write his own GDML files and use it as the primary input format for
+his Geant4 application.
+
+Once the Geant4 geometry is loaded in the memory, the G4GDMLWriter class is
+instantiated (in the 'main') to demonstrate the exporting of the GDML file.
+The call to DumpGeometryInfo method causes the GDML writer to scan the Geant4
+geometry tree and write it out in the form of a GDML file.
