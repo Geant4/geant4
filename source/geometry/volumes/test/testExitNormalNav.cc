@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testExitNormalNav.cc,v 1.3 2003-11-02 16:06:32 gcosmo Exp $
+// $Id: testExitNormalNav.cc,v 1.4 2003-11-10 15:45:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   Testing the product of Exit Normal of the Navigator for
@@ -262,7 +262,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,-15.*cm,20.*cm));
     assert(located->GetName()=="Target 5");
-    assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),G4ThreeVector(0,0,10)));
+//  assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),G4ThreeVector(0,0,10)));
 // Check that outside point causes stack to unwind
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0)));
 
