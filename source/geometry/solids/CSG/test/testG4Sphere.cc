@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Sphere.cc,v 1.7 2002-08-10 13:40:51 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.8 2002-12-05 09:28:55 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -147,16 +147,23 @@ int main(void)
 
     G4Sphere s9("s9",0*mm,410*mm,0*degree,360*degree,90*degree,90*degree);
 
+    G4Sphere b402("b402", 475*mm, 480*mm, 
+               0*degree,360*degree,17.8*degree,144.4*degree);
+   
+G4ThreeVector p402(471.7356120367253*mm, 51.95081450791341*mm, 5.938043020529463*mm);
+G4ThreeVector v402(-0.519985502840818, 0.2521089719986221, 0.8161226274728446);
+
+
 
 G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985), 
               v216(-0.61254821852534425,-0.51164551429243466,-0.60249775741147549);
 
 
- G4ThreeVector s9p(384.8213314370455*mm,
+G4ThreeVector s9p(384.8213314370455*mm,
 	       134.264386151667*mm,
 	       -44.56026800002064*mm);
 
- G4ThreeVector s9v(-0.6542770611918751,
+G4ThreeVector s9v(-0.6542770611918751,
 		   -0.0695116921641141,
 		   -0.7530535517814154);
 
@@ -225,6 +232,12 @@ G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985),
     inside = s9.Inside(s9p);
     G4cout<<"s9.Inside(s9p) = "
           <<OutputInside(inside)<<G4endl ;
+
+    inside = b402.Inside(p402);
+    G4cout<<"p402.Inside(p402) = "
+          <<OutputInside(inside)<<G4endl ;
+
+
     assert(s1.Inside(pzero)==kInside);
     // assert(s1.Inside(pz)==kInside);
     assert(s2.Inside(pzero)==kOutside);
