@@ -47,6 +47,7 @@ public: // Without description
 
     G4int IDnow,IDold;
     G4int evnoold ;
+    G4bool prim;
 
 };
 

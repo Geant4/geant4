@@ -270,378 +270,44 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
   
   EnergySumAbs /= TotNbofEvents ;
   sigAbs = EnergySquareSumAbs/TotNbofEvents-EnergySumAbs*EnergySumAbs;
-  if(sigAbs>0.)
-    sigAbs = sqrt(sigAbs/TotNbofEvents);
-  else
-    sigAbs = 0.;
+  if(sigAbs>0.) sigAbs = sqrt(sigAbs/TotNbofEvents);
+  else          sigAbs = 0.;
 
   nStepSumCharged /= TotNbofEvents ;
   sigstep = nStepSum2Charged/TotNbofEvents-nStepSumCharged*nStepSumCharged;
   if(sigstep>0.) sigstep = sqrt(sigstep/TotNbofEvents);
   else           sigstep = 0.;
   
-  nStepSumNeutral /= TotNbofEvents ;
-
-  sigstep = nStepSum2Neutral/TotNbofEvents-nStepSumNeutral*nStepSumNeutral;
-  if(sigstep>0.) sigstep = sqrt(sigstep/TotNbofEvents);
-  else           sigstep = 0.;
-  
-  SumCharged /= TotNbofEvents;
-  sigcharged = Sum2Charged/TotNbofEvents-SumCharged*SumCharged; 
-  if(sigcharged>0.) sigcharged = sqrt(sigcharged/TotNbofEvents);
-  else              sigcharged = 0. ;
- 
-  SumNeutral /= TotNbofEvents;
-  signeutral = Sum2Neutral/TotNbofEvents-SumNeutral*SumNeutral; 
-  if(signeutral>0.) signeutral = sqrt(signeutral/TotNbofEvents);
-  else              signeutral = 0. ;
- 
-  Selectron /= TotNbofEvents ;
-  Spositron /= TotNbofEvents ;
 
   Transmitted /=TotNbofEvents ;
   Reflected   /=TotNbofEvents ;
- G4cout << " ================== run summary =====================" << G4endl;
- G4int prec = G4cout.precision(6);
+  G4cout << " ================== run summary =====================" << G4endl;
+  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  
            TotNbofEvents << G4endl ;
-  G4cout << "    Range in absorber = " <<
+  G4cout << "    Track Length in absorber = " <<
            tlSumAbs/mm      << " +- " << sAbs/mm    <<
+          "  mm  " << G4endl; 
+  G4cout << "    CSDA  Range  in absorber = " <<
+           nStepSumCharged/mm      << " +- " << sigstep/mm    <<
           "  mm  " << G4endl; 
   G4cout << G4endl;
   G4cout << "    Energy deposit in absorber = " <<
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
           "  MeV " << G4endl ;
+  G4cout << G4endl;
+  /*
+  G4cout << " ### Comparison with the ICRU49 data: " <<
+  G4cout << "    Track Length (G4/ICRU49 - 1) = " <<
+           tlSumAbs/(0.009059*mm) - 1.0 << " % " << G4endl; 
+  G4cout << "    CSDA  Range  (G4/ICRU49 - 1) = " <<
+           nStepSumCharged/(0.008869*mm) - 1.0 << " % " << G4endl;
   G4cout << G4endl ;
-
-  G4cout << "(number) transmission coeff=" << Transmitted <<
-            "  reflection coeff=" << Reflected << G4endl;
+  */
+  //  G4cout << "(number) transmission coeff=" << Transmitted <<
+  //          "  reflection coeff=" << Reflected << G4endl;
   G4cout << G4endl; 
 
-  /*
-  if(nbinStep>0)
-  {G4double E , dnorm, norm ;
-   G4cout << "   step number/event distribution " << G4endl ;
-   G4cout << "#entries=" << entryStep << "    #underflows=" << underStep <<
-             "    #overflows=" << overStep << G4endl ;
-   if( entryStep>0.)
-   {
-     E = Steplow - dStep ;
-     norm = TotNbofEvents ;
-     G4cout << " bin nb   nsteplow     entries     normalized " << G4endl ;
-     for(G4int iss=0; iss<nbinStep; iss++)
-     {
-      E += dStep ;
-      dnorm = distStep[iss]/norm;
-      G4cout << G4std::setw(5) << iss << G4std::setw(10) << E << 
-                G4std::setw(12) << distStep[iss] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }     
-  }
-  if(nbinEn>0)
-  {G4double E , dnorm, norm,fmax,Emp,width ;
-   Emp=-999.999 ;
-   G4cout << " energy deposit distribution " << G4endl ;
-   G4cout << "#entries=" << entryEn << "    #underflows=" << underEn <<
-             "    #overflows=" << overEn << G4endl ;
-   if( entryEn>0.)
-   {
-     E = Enlow - dEn ;
-     norm = TotNbofEvents*dEn ;
-     G4cout << " bin nb      Elow      entries     normalized " << G4endl ;
-     fmax = 0. ;
-     for(G4int ien=0; ien<nbinEn; ien++)
-     {
-      E += dEn ;
-      if(distEn[ien]>fmax)
-      {
-        fmax=distEn[ien];
-        Emp = E ;
-      }
-      dnorm = distEn[ien]/norm;
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << E << 
-                G4std::setw(12) << distEn[ien] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-     G4int ii ;
-     G4double E1,E2 ;
-     E1=-1.e6 ;
-     E2=+1.e6 ;
-     E = Enlow -dEn ;
-     ii = -1;
-     for(G4int i1=0; i1<nbinEn; i1++)
-     {
-      E += dEn ;
-     if(ii<0)
-     {
-      if(distEn[i1] >= 0.5*fmax)
-      {
-        E1=E ;
-        ii=i1 ;
-      }
-     }
-     }
-     E = Enlow -dEn ;
-     for(G4int i2=0; i2<nbinEn; i2++)
-     {
-      E += dEn ;
-      if(distEn[i2] >= 0.5*fmax)
-        E2=E ;
-     }
-     //     G4cout << " Emp = " << G4std::setw(15) << Emp/MeV << "   width="
-     //            << G4std::setw(15) << (E2-E1)/MeV <<   "  MeV " << G4endl;
-     G4cout << G4endl ;
-   }     
-  }
-  if(nbinTt>0)
-  {G4double E , dnorm, norm ,sig;
-   G4cout << " transmitted energy distribution " << G4endl ;
-   G4cout << "#entries=" << entryTt << "    #underflows=" << underTt <<
-             "    #overflows=" << overTt << G4endl ;
-   if( entryTt>0.)
-   {
-     Ttmean /= entryTt;
-     sig=Tt2mean/entryTt-Ttmean*Ttmean ;
-     if(sig<=0.)
-       sig=0.;
-     else
-       sig=sqrt(sig/entryTt) ;
-     G4cout << " mean energy of transmitted particles=" << Ttmean/keV << 
-               " +- " << sig/keV << "  keV." << G4endl;
-     E = Ttlow - dTt ;
-     norm = TotNbofEvents*dTt ;
-     G4cout << " bin nb      Elow      entries     normalized " << G4endl ;
-     for(G4int itt=0; itt<nbinTt; itt++)
-     {
-      E += dTt ;
-      dnorm = distTt[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTt[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }     
-  }
-  if(nbinTb>0)
-  {G4double E , dnorm, norm ,sig;
-   G4cout << " backscattered energy distribution " << G4endl ;
-   G4cout << "#entries=" << entryTb << "    #underflows=" << underTb <<
-             "    #overflows=" << overTb << G4endl ;
-   if( entryTb>0.)
-   {
-     Tbmean /= entryTb;
-     sig=Tb2mean/entryTb-Tbmean*Tbmean ;
-     if(sig<=0.)
-       sig=0.;
-     else
-       sig=sqrt(sig/entryTb) ;
-     G4cout << " mean energy of backscattered particles=" << Tbmean/keV << 
-               " +- " << sig/keV << "  keV." << G4endl;
-     E = Tblow - dTb ;
-     norm = TotNbofEvents*dTb ;
-     G4cout << " bin nb      Elow      entries     normalized " << G4endl ;
-     for(G4int itt=0; itt<nbinTb; itt++)
-     {
-      E += dTb ;
-      dnorm = distTb[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTb[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }     
-  }
-  if(nbinTsec>0)
-  {G4double E , dnorm, norm ;
-   G4cout << " energy distribution of charged secondaries " << G4endl ;
-   G4cout << "#entries=" << entryTsec << "    #underflows=" << underTsec <<
-             "    #overflows=" << overTsec << G4endl ;
-   if( entryTsec>0.)
-   {
-     E = Tseclow - dTsec ;
-     norm = TotNbofEvents*dTsec ;
-     G4cout << " bin nb      Elow      entries     normalized " << G4endl ;
-     for(G4int itt=0; itt<nbinTsec; itt++)
-     {
-      E += dTsec ;
-      dnorm = distTsec[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(10) << E << 
-                G4std::setw(12) << distTsec[itt] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }     
-  }
-
-  if(nbinR >0)
-  {G4double R , dnorm, norm,sig  ;
-   G4cout << "  R  distribution " << G4endl ;
-   G4cout << "#entries=" << entryR  << "    #underflows=" << underR  <<
-             "    #overflows=" << overR  << G4endl ;
-   if( entryR >0.)
-   {
-     Rmean /= entryR;
-     sig = R2mean/entryR - Rmean*Rmean;
-     if(sig<=0.) sig=0. ;
-     else        sig = sqrt(sig/entryR) ;
-     G4cout << " mean lateral displacement at exit=" << Rmean/mm << " +- "
-            << sig/mm << "  mm." << G4endl ; 
-     R = Rlow - dR  ;
-     norm = TotNbofEvents*dR  ;
-     G4cout << " bin nb      Rlow      entries     normalized " << G4endl ;
-     for(G4int ier=0; ier<nbinR ; ier++)
-     {
-      R+= dR  ;
-      dnorm = distR[ier]/norm;
-      G4cout << G4std::setw(5) << ier << G4std::setw(10) << R  <<
-                G4std::setw(12) << distR[ier] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }
-  }
-
-  if(nbinTh>0)
-  {G4double Th,Thdeg, dnorm, norm,fac0,fnorm,pere,Thpere,Thmean,sum;
-   G4cout << "      angle   distribution " << G4endl ;
-   G4cout << "#entries=" << entryTh << "    #underflows=" << underTh <<
-             "    #overflows=" << overTh << G4endl ;
-   if( entryTh>0.)
-   {
-     Th= Thlow - dTh ;
-     norm = TotNbofEvents ;
-     if(distTh[0] == 0.)
-       fac0 = 1. ;
-     else
-       fac0 = 1./distTh[0] ;
-     pere = 1./exp(1.) ;
-
-     G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
-               " entries         normalized " << G4endl ;
-     Thpere = 0. ;
-     sum = 0. ;
-     Thmean = 0. ;
-     for(G4int ien=0; ien<nbinTh; ien++)
-     {
-      Th+= dTh ;
-      Thdeg = Th*180./pi ;
-      sum += distTh[ien] ;
-      Thmean += distTh[ien]*(Th+0.5*dTh) ;
-      dnorm = distTh[ien]/norm;
-      fnorm = fac0*distTh[ien] ;
-      if( fnorm > pere)
-        Thpere = Th ; 
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdeg << "   " <<
-                G4std::setw(10) << Th << "  " <<   
-                G4std::setw(12) << distTh[ien] << "  " <<
-                G4std::setw(12) << dnorm << "  " << G4std::setw(12) << fnorm <<G4endl ;
-     }
-     Thmean /= sum ;
-     G4cout << G4endl;
-     G4cout << " mean = " << Thmean << "  rad  or " << 180.*Thmean/pi <<
-               " deg." << G4endl;
-     G4cout << " theta(1/e)=" << Thpere << " - " << Thpere+dTh << " rad   "
-            << " or " << 180.*Thpere/pi << " - " << 180.*(Thpere+dTh)/pi 
-            << " deg." << G4endl;
-     G4cout << G4endl;
-   }
-  }
-
-  if(nbinThback>0)
-  {G4double Thb,Thdegb, dnormb, normb,fac0b,fnormb,pereb,Thpereb,Thmeanb,sumb;
-   G4cout << " backscattering angle   distribution " << G4endl ;
-   G4cout << "#entries=" << entryThback << "    #underflows=" << underThback <<
-             "    #overflows=" << overThback << G4endl ;
-   if( entryThback>0.)
-   {
-     Thb= Thlowback - dThback ;
-     normb = TotNbofEvents ;
-     if(distThback[0] == 0.)
-       fac0b = 1. ;
-     else
-       fac0b = 1./distThback[0] ;
-     pereb = 1./exp(1.) ;
-
-     G4cout << " bin nb  Thlowdeg      Thlowrad      " <<
-               " entries         normalized " << G4endl ;
-     Thpereb = 0. ;
-     sumb = 0. ;
-     Thmeanb = 0. ;
-     for(G4int ien=0; ien<nbinThback; ien++)
-     {
-      Thb+= dThback ;
-      Thdegb = Thb*180./pi ;
-      sumb += distThback[ien] ;
-      Thmeanb += distThback[ien]*(Thb+0.5*dThback) ;
-      dnormb = distThback[ien]/normb;
-      fnormb = fac0b*distThback[ien] ;
-      if( fnormb > pereb)
-        Thpereb = Thb ;
-      G4cout << G4std::setw(5) << ien << G4std::setw(10) << Thdegb << "   " <<
-                G4std::setw(10) << Thb << "  " <<
-                G4std::setw(12) << distThback[ien] << "  " <<
-                G4std::setw(12) << dnormb << "  " << G4std::setw(12) << fnormb <<G4endl ;
-     }
-     Thmeanb /= sumb ;
-     G4cout << G4endl;
-     G4cout << " mean = " << Thmeanb << "  rad  or " << 180.*Thmeanb/pi <<
-               " deg." << G4endl;
-     G4cout << " theta(1/e)=" << Thpereb << " - " << Thpereb+dThback << " rad   "
-            << " or " << 180.*Thpereb/pi << " - " << 180.*(Thpereb+dThback)/pi
-            << " deg." << G4endl;
-     G4cout << G4endl;
-   }
-  }
-
-  if(nbinGamma>0)
-  {G4double E , fact,dnorm, norm  ;
-   G4cout << " gamma energy distribution " << G4endl ;
-   G4cout << "#entries=" << entryGamma << "    #underflows=" << underGamma <<
-             "    #overflows=" << overGamma << G4endl ;
-   if( entryGamma>0.)
-   {
-     fact=exp(dEGamma) ;
-     E = ElowGamma/fact  ;
-     norm = TotNbofEvents*dEGamma;
-     G4cout << " bin nb         Elow      entries       normalized " << G4endl ;
-     for(G4int itt=0; itt<nbinGamma; itt++)
-     {
-      E *= fact ;
-      dnorm = distGamma[itt]/norm;
-      G4cout << G4std::setw(5) << itt << G4std::setw(13) << E << 
-                G4std::setw(12) << distGamma[itt] <<
-                G4std::setw(15) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }     
-  }
-
-  if(nbinvertexz >0)
-  {G4double z , dnorm, norm  ;
-   G4cout << " vertex Z  distribution " << G4endl ;
-   G4cout << "#entries=" << entryvertexz  << "    #underflows=" << undervertexz  <<
-             "    #overflows=" << oververtexz  << G4endl ;
-   if( entryvertexz >0.)
-   {
-     z =zlow - dz  ;
-     norm = TotNbofEvents*dz  ;
-     G4cout << " bin nb      zlow      entries     normalized " << G4endl ;
-     for(G4int iez=0; iez<nbinvertexz ; iez++)
-     {
-      z+= dz  ;
-      if(abs(z)<1.e-12) z=0.;
-      dnorm = distvertexz[iez]/norm;
-      G4cout << G4std::setw(5) << iez << G4std::setw(10) << z  <<
-                G4std::setw(12) << distvertexz[iez] <<
-                G4std::setw(12) << dnorm << G4endl ;
-     }
-     G4cout << G4endl;
-   }
-  }
-  */  
  G4cout.precision(prec);
       
 }

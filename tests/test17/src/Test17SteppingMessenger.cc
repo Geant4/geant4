@@ -21,8 +21,8 @@
 Test17SteppingMessenger::Test17SteppingMessenger(Test17SteppingAction* SA)
 :steppingAction (SA)
 {
-  steppingDir = new G4UIdirectory("/stepping/");
-  steppingDir->SetGuidance("stepping control");
+  //steppingDir = new G4UIdirectory("/stepping/");
+  //steppingDir->SetGuidance("stepping control");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

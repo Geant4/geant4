@@ -62,18 +62,33 @@ void Test17EventAction::BeginOfEventAction(const G4Event* evt)
   Reflected  =0.;
   totEAbs =0.;
   totLAbs =0.;
+  /*
+  if(994 == evt->GetEventID()) {
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 5");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 5");
+  }
+  if(995 == evt->GetEventID()) {
+    (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
+    (G4UImanager::GetUIpointer())->ApplyCommand("/stepping/verbose 0");
+  }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17EventAction::EndOfEventAction(const G4Event* evt)
 {
+  if(Reflected > 0.0) return;
    // count event, add deposits to the sum ...
     runaction->CountEvent() ;
     runaction->AddTrackLength(totLAbs) ;
     runaction->AddnStepsNeutral(nstepNeutral) ;
-    if(verboselevel==2)
-      G4cout << " Ncharged=" << Nch << "  ,   Nneutral=" << Nne << G4endl;
+    if(verboselevel==2) {
+      G4cout << " Ncharged= " << Nch 
+             << "; Nneutral= " << Nne
+             << "; Length(mm)= " << totLAbs/mm 
+             << G4endl;
+    }
     runaction->CountParticles(Nch,Nne);
     runaction->AddEP(NE,NP);
     runaction->AddTrRef(Transmitted,Reflected) ;
