@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.24 2003-10-28 17:11:24 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.25 2003-10-29 16:42:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -38,7 +38,7 @@
 // 06.03.00 V.Grichine: modifications in Distance ToOut(p,v,...)
 // 30.01.02 V.Grichine: bug fixed in Inside(p), && -> || at l.451
 // 19.06.02 V.Grichine: bug fixed in Inside(p), && -> && fDTheta - kAngTolerance
-//
+// 29.10.03 J.Apostolakis: fix in Inside for SPhi-0.5*kAngTol < phi < SPhi, SPhi<0
 // ********************************************************************
 
 #include <assert.h>
@@ -507,7 +507,7 @@ if(rad2 <= Rmax_minus*Rmax_minus && rad2 >= Rmin_plus*Rmin_plus) in = kInside ;
     }
     else
     {
-      if ( pPhi < fSPhi + 2*M_PI ) pPhi += 2*M_PI ;
+      if ( pPhi < fSPhi + 2*M_PI - kAngTolerance*0.5  ) pPhi += 2*M_PI ;
 
       if ( (pPhi < fSPhi + 2*M_PI + kAngTolerance*0.5)
         || (pPhi > fSPhi + fDPhi + 2*M_PI - kAngTolerance*0.5) )
