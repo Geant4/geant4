@@ -21,7 +21,7 @@ ve/copy v(4,1:003) e
 exec ../analyse ../../logs/liste.p_cu.triton.70degree.p_cu
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125    2.5 'P CU - T X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 003 29 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 003 24 0.2
  text    0.170000    0.343520 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
  ve/de *
 ve/cr q(002)
@@ -36,7 +36,7 @@ ve/copy v(4,1:002) e
 exec ../analyse ../../logs/liste.p_cu.triton.90degree.p_cu
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125    2.5 'P CU - T X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 002 25 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 002 24 0.2
  text    0.125000    0.547440 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
  ve/de *
 ve/cr q(004)
@@ -53,7 +53,7 @@ ve/copy v(4,1:004) e
 exec ../analyse ../../logs/liste.p_cu.triton.118degree.p_cu
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125    2.5 'P CU - T X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 004 21 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
  text    0.120000    0.416176 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
  ve/de *
 ve/cr q(002)
@@ -85,6 +85,6 @@ ve/copy v(4,1:004) e
 exec ../analyse ../../logs/liste.p_cu.triton.160degree.p_cu
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3SIG/D3P,MB/GEV**2'
  text    0.125    2.5 'P CU - T X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 004 20 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 004 24 0.2
  text    0.115000    0.239296 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
 close 66

@@ -1,7 +1,53 @@
-*** Begin of history file: Fri Sep 15 10:51:02 2000
+*** Begin of history file: Wed Sep 20 10:10:35 2000
+exec pAl
 opt pto
+shell vi pAl.kumac
+exec pAl
+exec pAl
+exec pAl
 exec pipAl
 exec pipAl
+exec pipAl
+exec pAl
+exec pipAl
+exec pAl
+exec pAl
+exec pAl
+exec dAl
+exec pAl
+exec pAl
+exec pAl
+shell vi pAl.kumac
+exec pAl
+exec pAl
+exec dAl
+exec tAl
+exec pipAl
+exec pAl
+exec pAl
+exec pAl
+shell vi pAl.kumac
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pipAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec pAl
+exec dAl
+exec tAl
+exec pipAl
+exec pipAl
+exec pAl
 exec pipAl
 exit
-*** End   of history file: Fri Sep 15 10:51:54 2000
+*** End   of history file: Wed Sep 20 11:20:32 2000

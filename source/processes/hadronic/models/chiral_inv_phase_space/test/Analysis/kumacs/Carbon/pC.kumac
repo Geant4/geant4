@@ -25,7 +25,7 @@ ve/copy v(4,1:006) e
 exec ../analyse ../../logs/liste.p_c.proton.70degree.p_c
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P C --> P X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 006 29 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 006 24 0.2
 text    0.315000     35.4813 'THETA(P=3,RF=LAB) IN DEG   70.00' 0.3
  ve/de *
 ve/cr q(009)
@@ -47,7 +47,7 @@ ve/copy v(4,1:009) e
 exec ../analyse ../../logs/liste.p_c.proton.90degree.p_c
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P C --> P X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 009 25 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 009 24 0.2
 text    0.395000     17.7828 'THETA(P=3,RF=LAB) IN DEG   90.00' 0.3
  ve/de *
 ve/cr q(007)
@@ -67,7 +67,7 @@ ve/copy v(4,1:007) e
 exec ../analyse ../../logs/liste.p_c.proton.118degree.p_c
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P C --> P X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 007 21 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 007 24 0.2
 text    0.325000     2.51189 'THETA(P=3,RF=LAB) IN DEG   118.00' 0.3
  ve/de *
 ve/cr q(004)
@@ -106,6 +106,6 @@ ve/copy v(4,1:009) e
 exec ../analyse ../../logs/liste.p_c.proton.160degree.p_c
  atitle 'EKIN(LAB) IN GEV'  '(E/A)*D3(SIG)/D3(P) IN MB/GEV**2'
  text    0.250000     25.0000 'P C --> P X' 0.3
-/GRAPHICS/HPLOT/ERRORS x y q e 009 20 0.2
+/GRAPHICS/HPLOT/ERRORS x y q e 009 24 0.2
 text    0.310000     1.77828 'THETA(P=3,RF=LAB) IN DEG   160.00' 0.3
 close 66

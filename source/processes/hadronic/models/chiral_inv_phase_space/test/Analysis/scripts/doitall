@@ -1,9 +1,9 @@
 #./doit CHIPS_StringModel_Analysis li6
 #./doit CHIPS_StringModel_Analysis be
-#./doit CHIPS_StringModel_Analysis c
-#./doit CHIPS_StringModel_Analysis al
+./doit CHIPS_StringModel_Analysis c
+# ./doit CHIPS_StringModel_Analysis al
 #./doit CHIPS_StringModel_Analysis cu
-./doit CHIPS_StringModel_Analysis ta
+#./doit CHIPS_StringModel_Analysis ta
 echo ">>>>>>>"
 echo ">>>>>>> ANALYSING <<<<<<<"
 echo ">>>>>>>"
