@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.1 1999-02-19 01:01:15 johna Exp $ */
+/* $Id: liblist.c,v 1.2 1999-03-02 15:22:59 fbehner Exp $ */
 /*
 Given libname.map file and a list of .d dependency files liblist produces:
   a) with no options, a library list ordered according to the libname.map,
@@ -16,16 +16,82 @@ Frank Behner, John Allison  13th February 1999.
 
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <dirent.h>
+#include <sys/stat.h>
+#include <unistd.h>
 
 #define BUFSIZE 1000000
 #define TRIGSIZE 1000
 #define NLIBMAX 200
 
+extern char *optarg;
+extern int optind, opterr, optopt;
+
+char** parsedir(char *directory,int *argc)
+{
+  DIR *actualdir;
+  FILE *actualfile;
+  struct dirent *entry; 
+  char buffer[256];
+  struct stat status;
+  char **targv,**ptr,**phelp;
+  int len,targc;
+
+  /*Open the actual directory*/
+  actualdir=opendir(directory);
+
+  /*Loop over all entries */
+  for(entry=readdir(actualdir);entry!=NULL;entry=readdir(actualdir))
+    {
+      /* Obtain the status information of that entry */
+      if(stat(entry->d_name,&status)==0)
+	{
+	  if(S_ISDIR(status.st_mode))
+	    {
+	      /* a directory, so we are going recursive*/
+	      targc=0;
+	      ptr=parsedir(entry->d_name,&targc);
+	      if(targc)
+		{
+		  phelp=targv;
+		  targv=(char**) malloc((*argc+targc)*sizeof(char*));
+		  memcpy(targv,phelp,*argc*sizeof(char*));
+		  memcpy(&targv[*argc],ptr,targc*sizeof(char*));
+		  *argc+=targc;
+		  free(phelp);
+		  free(ptr);
+		}
+	    }
+	  else if(S_ISREG(status.st_mode))
+	    {
+	      /* a regular file is it .d? */
+	      len=strlen(entry->d_name);
+	      if(entry->d_name[len-2]=='.' && entry->d_name[len-1]=='d')
+		{
+		  phelp=targv;
+		  targv=(char**) malloc((*argc+1)*sizeof(char*));
+		  memcpy(targv,phelp,*argc*sizeof(char*));
+		  targv[*argc]=strdup(entry->d_name);
+		  (*argc)++;
+		  free(phelp);
+		}
+	    }
+	}
+    }
+
+  closedir(actualdir);
+
+  return targv;
+}
+		
+ 
 int main (int argc, char** argv) {
 
   char buffer[BUFSIZE],*bufferPtr,buf[256];
-  char *ptr,*p,**pp,**pp1,**pp2;
-  int i,dbegin=1,optl=0,swapping;
+  char *ptr,*p,**pp,**pp1,**pp2,*directory=0;
+  char **rargv;
+  int i,dbegin=1,optl=0,swapping,c,rargc;
   FILE *fp;
 
   struct libmap_
@@ -40,23 +106,49 @@ int main (int argc, char** argv) {
   struct libmap_ *libmap=0,*libmapPtr=0,*libmapPtr1=0,*libmapPtr2=0,
     *prevPtr1,*prevPtr2,*tmpp,*userLibmapPtr;
 
+  /*
   if(argc==1)
     {
       printf("You have not supplied any command line arguments.\n");
       exit(1);
     }
+  */
 
-  if(argv[1][0]=='-')
+  while((c=getopt(argc,argv,"ld:"))!=EOF)
     {
-      if(argv[1][1]=='l')
+      switch(c)
 	{
+	case 'l':
 	  optl=1;
 	  dbegin++;
+	  break;
+	case 'd':
+	  directory=strdup(optarg);
+	  break;
 	}
+    }
+	  
+  /*Adjust parameters after parsing options */
+
+  if(optind<argc)
+    {
+      rargv=&argv[optind];
+      rargc=argc-optind;
+    }
+  else
+    {
+      rargv=0;
+      rargc=0;
+    }
+
+  if(directory)
+    {
+      if(rargc==0)
+	rargv=parsedir(directory,&rargc);
       else
 	{
-	  printf("Unrecognised option %c",argv[1][1]);
-	  exit(1);
+	  fprintf(stderr,"If you specify a directory don't also specify files\n");
+	  exit(-1);
 	}
     }
 
@@ -115,9 +207,9 @@ int main (int argc, char** argv) {
     }
 
   if(optl)fprintf(stderr,"Reading dependency files...\n");
-  for(i=dbegin;i<argc;i++)
+  for(i=dbegin;i<rargc;i++)
     {
-      fp=fopen(argv[i],"r");
+      fp=fopen(rargv[i],"r");
       fgets(buffer,BUFSIZE,fp);
       
       /* Clip target out of dependency file... */
