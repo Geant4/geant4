@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.15 2004-11-10 14:37:25 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.16 2005-03-07 18:09:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,9 +108,17 @@ G4VEmProcess::~G4VEmProcess()
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   if(!particle) particle = &part;
+  if(0 < verboseLevel) {
+    G4cout << "G4VEmProcess::PreparePhysicsTable() for "
+           << GetProcessName()
+           << " and particle " << part.GetParticleName()
+	   << " local particle " << particle->GetParticleName() 
+           << G4endl;
+  }
 
   if(particle == &part) {
     Clear();
+    InitialiseProcess(particle);
     theCutsGamma =
         modelManager->Initialise(particle,secondaryParticle,2.,verboseLevel);
     const G4ProductionCutsTable* theCoupleTable=
