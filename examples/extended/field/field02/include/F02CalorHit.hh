@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02CalorHit.hh,v 1.2 2001-07-11 09:58:01 gunter Exp $
+// $Id: F02CalorHit.hh,v 1.3 2003-06-25 17:33:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ class F02CalorHit : public G4VHit
      ~F02CalorHit();
       F02CalorHit(const F02CalorHit&);
       const F02CalorHit& operator=(const F02CalorHit&);
-      int operator==(const F02CalorHit&) const;
+      G4int operator==(const F02CalorHit&) const;
 
       inline void* operator new(size_t);
       inline void  operator delete(void*);

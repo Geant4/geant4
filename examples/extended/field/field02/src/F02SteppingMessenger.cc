@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02SteppingMessenger.cc,v 1.2 2001-07-11 09:58:04 gunter Exp $
+// $Id: F02SteppingMessenger.cc,v 1.3 2003-06-25 17:33:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,7 @@ F02SteppingMessenger::~F02SteppingMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void F02SteppingMessenger::SetNewValue(G4UIcommand* command,G4String newValues)
+void F02SteppingMessenger::SetNewValue(G4UIcommand*, G4String)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
