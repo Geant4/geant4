@@ -1,5 +1,6 @@
 .		geant4-04-00-cand-00
 ./examples/extended/field/field02		field02-V03-02-00
+./examples/extended/field               fieldex-V03-02-02
 ./source/GNUmakefile		source-gmk-V03-02-01
 ./source/geometry/magneticfield		field-V03-02-04
 ./source/particles		particles-V03-02-09
