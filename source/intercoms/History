@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2001-08-14 18:19:12 johna Exp $
+$Id: History,v 1.23 2001-08-14 18:21:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 Aug 14, 2001, J.Allison (intercoms-V03-02-03)
-- Coworks with vis-V03-02-11
+- Coworks with vis-V03-02-11 and greps-V03-02-02.
 - Moved default value of argument G4Transform3D::Identity from
   G4VSceneHandler::BeginPrimitives to
   G4VGraphicsScene::BeginPrimitives.
