@@ -75,6 +75,8 @@ class G4ReduciblePolygon {
 	G4double Area();
 	G4bool CrossesItself( const G4double tolerance );
 	
+	void Print();	// Debugging only
+	
 	protected:
 	
 	void Create( const G4double a[], const G4double b[], const G4int n );

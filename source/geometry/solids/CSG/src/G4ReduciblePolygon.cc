@@ -195,7 +195,7 @@ G4bool G4ReduciblePolygon::RemoveDuplicateVertices( const G4double tolerance )
 		}
 		else {
 			prev = curr;
-			curr = next->next;
+			curr = curr->next;
 		}
 	}
 	
@@ -268,14 +268,16 @@ G4bool G4ReduciblePolygon::RemoveRedundantVertices( const G4double tolerance )
 			}
 
 			//
-			// Delete vertex pointed to by next. Be careful
-			// if this vertex is actually the head of our
-			// vertex list
+			// Delete vertex pointed to by next. Carefully!
 			//
-			if (curr->next)
-				curr->next = test;
+			if (curr->next) {		// next is not head
+				if (next->next)
+					curr->next = test;	// next is not tail
+				else
+					curr->next = 0;		// New tail
+			}
 			else
-				vertexHead = test;
+				vertexHead = test;	// New head
 				
 			delete next;
 			
@@ -381,6 +383,18 @@ G4double G4ReduciblePolygon::Area()
 	} while( curr = curr->next );
 	
 	return 0.5*answer;
+}
+
+
+//
+// Print
+//
+void G4ReduciblePolygon::Print()
+{
+	ABVertex *curr = vertexHead;
+	do {
+		G4cerr << curr->a << " " << curr->b << endl;
+	} while( curr = curr->next );
 }
 
 
