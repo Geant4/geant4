@@ -36,14 +36,21 @@ PRECOMPOUND_TMP = ${G4TMP}/${G4SYSTEM}/G4PreCompoundTest/Utilities
 
 DUMMY := $(shell [ ! -d $(PRECOMPOUND_TMP) ] && mkdir -p $(PRECOMPOUND_TMP) )
 
+ifdef ROOTSYS
+  ROOTCONFIG = $(ROOTSYS)/bin/root-config
+  ROOTCINT = $(ROOTSYS)/bin/rootcint
+else
+  ROOTCONFIG = root-config
+  ROOTCINT = rootcint 
+endif
 
 # root
-ROOTCFLAGS   := $(shell root-config --cflags)
-ROOTLIBS     := $(shell root-config --libs)
-ROOTGLIBS    := $(shell root-config --glibs)
+ROOTCFLAGS   := $(shell $(ROOTCONFIG) --cflags)
+ROOTLIBS     := $(shell $(ROOTCONFIG) --libs)
+ROOTGLIBS    := $(shell $(ROOTCONFIG) --glibs)
 ROOTLIBS     := $(filter-out -lpthread,$(ROOTLIBS))
 ROOTGLIBS    := $(filter-out -lpthread,$(ROOTGLIBS))
-ROOTINCLUDES := $(shell root-config --cflags)
+ROOTINCLUDES := $(shell $(ROOTCONFIG) --cflags)
 
 
 SRC_PRECO        := src/precoreaction.$(SRCSuf) \
@@ -97,7 +104,7 @@ ifdef CPPVERBOSE
 	ln -s include/precoreaction.h .
 	ln -s include/precofragment.h .
 	ln -s include/precofragment_base.h .
-	rootcint src/precodict.cc -c precofragment_base.h precofragment.h precoreaction.h include/precolinkdef.h
+	$(ROOTCINT) src/precodict.cc -c precofragment_base.h precofragment.h precoreaction.h include/precolinkdef.h
 	rm precoreaction.h precofragment.h precofragment_base.h
 	mv src/precodict.h include/precodict.h
 else 
@@ -106,7 +113,7 @@ else
 	@ln -s include/precoreaction.h .
 	@ln -s include/precofragment.h .
 	@ln -s include/precofragment_base.h .
-	@rootcint src/precodict.cc -c precofragment_base.h precofragment.h precoreaction.h include/precolinkdef.h
+	@$(ROOTCINT) src/precodict.cc -c precofragment_base.h precofragment.h precoreaction.h include/precolinkdef.h
 	@rm precoreaction.h precofragment.h precofragment_base.h
 	@mv src/precodict.h include/precodict.h
 endif
