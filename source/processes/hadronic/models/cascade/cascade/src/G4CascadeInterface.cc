@@ -68,6 +68,8 @@ G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack
   G4cerr << "Reaction number "<< counter << " "<<aTrack.GetDynamicParticle()->GetDefinition()->GetParticleName()<<" "<< aTrack.GetDynamicParticle()->GetKineticEnergy()<<G4endl;
 #endif
 
+  theResult.Clear();
+
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
   };
