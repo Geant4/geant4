@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.12 1999-12-15 14:51:30 gunter Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.13 2000-04-04 13:47:35 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,7 +26,7 @@
 
 
 // Base Class Headers
-#include "G4eEnergyLoss.hh"
+#include "G4eLowEnergyLoss.hh"
 
 // Contained Variables Headers
 #include "G4LowEnergyUtilities.hh"
@@ -37,7 +37,7 @@ typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
 typedef G4ThirdLevel allAtomTable;
 
-class G4LowEnergyIonisation : public G4eEnergyLoss{
+class G4LowEnergyIonisation : public G4eLowEnergyLoss{
 
 public:
   

@@ -5,8 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000-02-18 12:34:30 lefebure Exp $
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.21 2000-02-18 12:34:30 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.22 2000-04-04 13:51:43 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.22 2000-04-04 13:51:43 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@
 // constructor
  
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& processName)
-  : G4eEnergyLoss(processName),      // initialization
+  : G4eLowEnergyLoss(processName),      // initialization
     theCrossSectionTable(0),
     theMeanFreePathTable(0),
     ATable(0),
@@ -117,6 +117,7 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
 
     BuildLossTable(aParticleType) ;
  
+ /*
   if (&aParticleType==G4Electron::Electron()){
 
     RecorderOfElectronProcess[CounterOfElectronProcess] = (*this).theLossTable ;
@@ -127,7 +128,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable ;
     CounterOfPositronProcess++;
    }
-
+ */
+ 
   BuildZVec();
 
   BuildCrossSectionTable() ;
@@ -748,6 +750,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
     GammaEnergy = ElectKinEn - R2*(ElectKinEn - lowEnergyCut);
   }
   
+
   // now comes the supression due to the LPM effect (gamma production suppression
   // due to the multiple scattering of the electron) SEE ABOVE
 

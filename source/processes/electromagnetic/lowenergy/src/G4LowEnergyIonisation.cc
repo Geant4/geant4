@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.30 2000-03-22 09:46:01 lefebure Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.31 2000-04-04 13:51:43 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,7 @@ typedef G4RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 
 // constructor and destructor
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
-   : G4eEnergyLoss(processName),
+   : G4eLowEnergyLoss(processName),
      allAtomShellCrossSec(0),
      theBindingEnergyTable(0),
      theFluorTransitionTable(0),

@@ -1,0 +1,93 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4eLowEnergyLoss.icc,v 1.1 2000-04-04 13:47:36 lefebure Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ---------------------------------------------------------------
+//      GEANT 4 class inlined methods file 
+//
+//      For information related to this code contact:
+//      CERN, IT Division, ASD group
+//      History: based on object model of
+//      2nd December 1995, G.Cosmo
+//      ------------ G4eLowEnergyLoss physics process ------------
+//                  by Laszlo Urban, 20 March 1997
+// ***************************************************************
+// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.               
+// It calculates the energy loss of e+/e-.
+// -------------------------------------------------------------
+//
+// 08-09-98: cleanup
+//
+// ---------------------------------------------------------------
+
+inline G4double G4eLowEnergyLoss::GetConstraints(
+                                      const G4DynamicParticle* aParticle,
+                                            G4Material* aMaterial)
+{
+  G4double StepLimit;
+  // returns the Step limit
+  // dRoverRange is the max. allowed relative range loss in one Step
+  // it calculates dEdx and the range as well....
+
+  const G4ParticleDefinition* ParticleType=aParticle->GetDefinition();
+
+  Charge = aParticle->GetDefinition()->GetPDGCharge();
+  if(Charge != lastCharge)
+  {
+    lastCharge = Charge ;
+
+  }
+
+  G4double KineticEnergy = aParticle->GetKineticEnergy();
+
+  fdEdx = G4EnergyLossTables::GetDEDX(ParticleType,KineticEnergy,aMaterial);
+  fRangeNow =
+           G4EnergyLossTables::GetRange(ParticleType,KineticEnergy,aMaterial);
+
+  // compute the (random) Step limit
+  if (fRangeNow>finalRange)
+  {
+    StepLimit = c1lim*fRangeNow+c2lim+c3lim/fRangeNow;
+    //randomise this value
+    if (rndmStepFlag) StepLimit = finalRange +
+                          (StepLimit-finalRange)*G4UniformRand();
+    if (StepLimit > fRangeNow) StepLimit = fRangeNow;
+  }
+  else StepLimit = fRangeNow;
+
+  return StepLimit;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4eLowEnergyLoss::GetContinuousStepLimit(
+                                               const G4Track& track,
+                                               G4double,
+                                               G4double currentMinimumStep,
+                                               G4double&)
+{
+ 
+  G4double Step =
+    GetConstraints(track.GetDynamicParticle(),track.GetMaterial());
+
+  if ((Step>0.0)&&(Step<currentMinimumStep)) currentMinimumStep = Step;
+
+  return Step ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+inline G4bool G4eLowEnergyLoss::IsApplicable(const G4ParticleDefinition&
+                                                     particle)
+{
+   return(   (&particle == G4Electron::Electron())
+           ||(&particle == G4Positron::Positron()) );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

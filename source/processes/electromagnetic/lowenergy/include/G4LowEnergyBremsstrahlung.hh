@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.9 2000-01-26 09:32:06 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.10 2000-04-04 13:47:34 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,14 +24,14 @@
 
 // Base Class Headers
 //#include "G4VDiscreteProcess.hh"
-#include "G4eEnergyLoss.hh"
+#include "G4eLowEnergyLoss.hh"
 
 // Contained Variables Headers
 #include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-class G4LowEnergyBremsstrahlung : public G4eEnergyLoss{
+class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss{
  
 public:
  
