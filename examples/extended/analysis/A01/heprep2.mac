@@ -1,0 +1,49 @@
+#
+# Macro file for A01app
+#
+#  For initialization of graphics.
+#
+# Create empty scene ("world" is default)
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+/vis/open HepRep
+/vis/viewer/set/culling global false
+#/vis/scene/endOfEventAction accumulate
+#
+# Add volume to scene
+#
+/vis/scene/add/volume
+#
+# Add trajectories to scene
+#
+/vis/scene/add/trajectories
+#
+# Add hits to scene
+#
+/vis/scene/add/hits
+#
+# Do runs
+#/tracking/storeTrajectory 1
+# Run 1 events and store event displays
+/mydet/armAngle 60. deg
+/mydet/fieldValue 4. tesla
+/mydet/momentum 2. GeV
+/gun/particle e+
+/run/beamOn 5
+#
+#/run/beamOn 10
+#
+#/mydet/armAngle 30. deg
+#
+#/mydet/sigmaMomentum 0.
+#/mydet/sigmaAngle 0.
+#/run/beamOn 10
+#
+#/mydet/sigmaAngle 2. deg
+#/run/beamOn 10
+/vis/viewer/flush
+#
