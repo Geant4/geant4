@@ -1,4 +1,4 @@
-$Id: History,v 1.180 2003-04-26 19:06:24 vnivanch Exp $
+$Id: History,v 1.181 2003-05-20 20:55:15 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.05-2003   MGP, tag emlowen-V05-01-02
+             Design iteration in G4LowEnergyBremsstrahlung: abstract class for 
+             angular distribution + implementation in G4ModifiedTsai
+             (physics unchanged)
+
+20.05-2003   MGP, tag emlowen-V05-01-01
+             G4PenelopeCompton triggers atomic relaxation
+
+20.05-2003   MGP, tag emlowen-V05-01-00
+             Removed compilation warnings related to config-V05-01-00
 
 26.04-2003   VI, tag emlowen-V05-00-17
              Fixes of stepLimit 
