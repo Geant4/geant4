@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.8 2001-10-23 13:19:07 gcosmo Exp $
+// $Id: G4eIonisationParameters.cc,v 1.9 2001-10-24 22:02:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -38,6 +38,7 @@
 #include "G4VEMDataSet.hh"
 #include "G4ShellEMDataSet.hh"
 #include "G4EMDataSet.hh"
+#include "G4CompositeEMDataSet.hh"
 #include "G4SemiLogInterpolation.hh"
 #include "G4Material.hh"
 #include "G4DataVector.hh"
@@ -47,8 +48,7 @@
 
 G4eIonisationParameters:: G4eIonisationParameters(G4int minZ, G4int maxZ)
   : zMin(minZ), zMax(maxZ),
-  length(16),
-  interpolation(0)
+  length(16)
 {
   LoadData();
 }
@@ -59,15 +59,15 @@ G4eIonisationParameters::~G4eIonisationParameters()
   // Reset the map of data sets: remove the data sets from the map 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = param.begin(); pos != param.end(); pos++)
+  for (pos = param.begin(); pos != param.end(); ++pos)
     {
       G4VEMDataSet* dataSet = (*pos).second;
-      param.erase(pos);
+      //      param.erase(pos);
       delete dataSet;
+      dataSet = 0;
     }
 
   activeZ.clear();
-  delete interpolation;
 }
 
 
@@ -111,8 +111,6 @@ void G4eIonisationParameters::LoadData()
   // ---------------------------------------
   // Please document what are the parameters 
   // ---------------------------------------
-
-  if(!interpolation)  interpolation  = new G4SemiLogInterpolation();
 
   // define active elements
 
@@ -186,7 +184,8 @@ void G4eIonisationParameters::LoadData()
     } 
     for(size_t k=0; k<length; k++) {
       G4int id = Z*20 + k;
-      p[k] = new G4ShellEMDataSet(id, interpolation, 1., 1.);
+      G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
+      p[k] = new G4CompositeEMDataSet(id, interpolation, 1., 1.);
     }
 
     G4int shell = 0;
@@ -213,6 +212,7 @@ void G4eIonisationParameters::LoadData()
 
         for(size_t k=0; k<length; k++) {
             G4int id = Z*20 + k;
+	    G4VDataSetAlgorithm* interpolation  = new G4SemiLogInterpolation();
             set = new G4EMDataSet(id, e, a[k], interpolation, 1., 1.);
             p[k]->AddComponent(set);
         } 

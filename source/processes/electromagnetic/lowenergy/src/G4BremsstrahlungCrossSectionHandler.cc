@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.3 2001-10-10 11:59:35 pia Exp $
+// $Id: G4BremsstrahlungCrossSectionHandler.cc,v 1.4 2001-10-24 22:02:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -72,7 +72,7 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
 
   G4DataVector* energies;
   G4DataVector* cs;
-  G4int nBins = energyVector.size();
+  G4int nOfBins = energyVector.size();
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
@@ -98,7 +98,7 @@ G4BremsstrahlungCrossSectionHandler::BuildCrossSectionsForMaterials(const G4Data
       cs       = new G4DataVector;
       G4double density = nAtomsPerVolume[i];
 
-      for (G4int bin=0; bin<nBins; bin++) {
+      for (G4int bin=0; bin<nOfBins; bin++) {
 
         G4double e = energyVector[bin];
         energies->push_back(e);

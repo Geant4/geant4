@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.5 2001-10-23 13:19:05 gcosmo Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.6 2001-10-24 22:02:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -45,8 +45,7 @@
 
 
 G4BremsstrahlungParameters:: G4BremsstrahlungParameters(G4int minZ, G4int maxZ)
-  : interpolation(0),
-    zMin(minZ), 
+  : zMin(minZ), 
     zMax(maxZ)
 {
   LoadData();
@@ -66,7 +65,6 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
     }
 
   activeZ.clear();
-  delete interpolation;
   paramB0.clear();
   paramB1.clear();
   paramC.clear();
@@ -108,8 +106,6 @@ G4double G4BremsstrahlungParameters::ParameterB(G4int Z, G4double energy) const
 void G4BremsstrahlungParameters::LoadData()
 {
   // Build the complete string identifying the file with the data set
-
-  if(!interpolation) interpolation = new G4LogLogInterpolation();
 
   // define active elements
 
@@ -183,7 +179,8 @@ void G4BremsstrahlungParameters::LoadData()
       for (size_t i=0; i<nZ; i++) {
     
 	// fill map
-        if(z == (G4int)activeZ[i]) {
+        if (z == (G4int)activeZ[i]) {
+	  G4VDataSetAlgorithm* interpolation  = new G4LogLogInterpolation();
           G4VEMDataSet* dataSet = 
                     new G4EMDataSet(z, energies, data, interpolation, 1., 1.);
           paramA[z] = dataSet;

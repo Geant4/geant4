@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.11 2001-10-24 20:02:19 elena Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.12 2001-10-24 22:02:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -567,77 +567,78 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
       
       G4double eTot = 0.0; 
       G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
-									 incidentEnergy, eLoss);
+									 incidentEnergy,eLoss);
      
-G4std::vector<size_t> counters; 
+      G4std::vector<size_t> counters; 
       size_t totCounters = 0;
       size_t totVacancies = 0;
       for (size_t i=0; i<nElements; i++) {
 	counters.push_back(0);
-	
       }
       for (size_t k = 0; k<n.size();k++)
 	{
 	  totVacancies += n[k];
 	
 	}
-      G4cout<<"totVacancies = "<<totVacancies<<G4endl;
-      while (totCounters<totVacancies){
+      G4cout << "totVacancies = " << totVacancie
+s <<G4endl;
+      while (totCounters < totVacancies){
 	G4double random = G4UniformRand() * nElements;
 
 	size_t intRandom = (size_t) random;
-	if (intRandom==nElements)
+	if (intRandom == nElements)
 	  {
 	    intRandom -= 1;
 	  }
-	G4cout<<"intRandom ="<<intRandom<<G4endl;
+	G4cout << "intRandom =" << intRandom << G4endl;
 	size_t nVacancies = n[intRandom];
-	if (counters[intRandom]<nVacancies)
-	  {G4cout<<" counters[ "<<intRandom<<"]="<<counters[intRandom]<<G4endl;
+	if (counters[intRandom] < nVacancies)
+	  {
+	    G4cout << " counters[ " << intRandom << "]=" << counters[intRandom] << G4endl;
 	    counters[intRandom]++;
-	    G4cout<<"totCounters ="<<totCounters<<G4endl;
-	  totCounters++;
-	  G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
+	    G4cout << "totCounters =" << totCounters << G4endl;
+	    totCounters++;
+	    G4int Z = (G4int)((*theElementVector)[intRandom]->GetZ());
 	 
-	  G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
-	 
-	  if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons)&& nVacancies!=0 ) 
-	    {
-	      for(size_t j=0; j<nVacancies; j++) {
-		
-		shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
-		shellId = transitionManager->Shell(Z, shell)->ShellId();
-		G4double maxEShell = transitionManager->Shell(Z, shell)->BindingEnergy();
-		
-		if (maxEShell>cutForPhotons || maxEShell>cutForElectrons ) {
-		  partVector = deexcitationManager.GenerateParticles(Z, shellId);
-		}
-		if (partVector != 0) {	
+	    G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
+	    
+	    if (Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) && nVacancies!=0 ) 
+	      {
+		for (size_t j=0; j<nVacancies; j++) {
 		  
-		  for (size_t l = 0; l<partVector->size(); l++) {
+		  shell = crossSectionHandler->SelectRandomShell(Z, incidentEnergy);
+		  shellId = transitionManager->Shell(Z, shell)->ShellId();
+		  G4double maxEShell = transitionManager->Shell(Z, shell)->BindingEnergy();
+		  
+		  if (maxEShell>cutForPhotons || maxEShell>cutForElectrons ) {
+		    partVector = deexcitationManager.GenerateParticles(Z, shellId);
+		  }
+		  if (partVector != 0) {	
 		    
-		    aSecondary = (*partVector)[l];
-		    if(aSecondary != 0) {
+		    for (size_t l = 0; l<partVector->size(); l++) {
 		      
-		      e = aSecondary->GetKineticEnergy();
-		      type = aSecondary->GetDefinition();
-		      if ( eTot + e <= eLoss &&
-			   (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
-			   (type == G4Electron::Electron() && e > cutForElectrons) ) {
+		      aSecondary = (*partVector)[l];
+		      if (aSecondary != 0) {
 			
-			eTot += e;  
-			
-		      } 
-		      else {
-			delete aSecondary;
-			(*(partVector))[l] =0;
-			
+			e = aSecondary->GetKineticEnergy();
+			type = aSecondary->GetDefinition();
+			if ( eTot + e <= eLoss &&
+			     (type == G4Gamma::Gamma() && e > cutForPhotons ) || 
+			     (type == G4Electron::Electron() && e > cutForElectrons) ) {
+			  
+			  eTot += e;  
+			  
+			} 
+			else {
+			  delete aSecondary;
+			  (*(partVector))[l] =0;
+			  
+			}
 		      }
 		    }
-		  }
-		} 
+		  } 
+		}
 	      }
-	    }
 	  }
       }
     }
