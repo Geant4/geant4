@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.cc,v 1.19 2001-02-07 09:22:45 asaim Exp $
+// $Id: G4RunManager.cc,v 1.20 2001-02-07 09:34:58 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -199,6 +199,7 @@ void G4RunManager::RunInitialization()
   //previousEvents->clearAndDestroy();
   for(G4int itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
+  previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)NULL); }
 
@@ -287,6 +288,7 @@ void G4RunManager::RunTermination()
   //previousEvents->clearAndDestroy();
   for(G4int itr=0;itr<previousEvents->size();itr++)
   { delete (*previousEvents)[itr]; }
+  previousEvents->clear();
 
   if(userRunAction) userRunAction->EndOfRunAction(currentRun);
 
