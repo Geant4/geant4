@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlungPlus.hh,v 1.2 1999-12-15 14:51:49 gunter Exp $
+// $Id: G4eBremsstrahlungPlus.hh,v 1.3 2000-02-10 08:53:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,8 @@
 // ************************************************************
 // 1-10-96 : new type G4OrderedTable;  ComputePartialSumSigma()
 // 20/03/97: new energy loss+ionisation+brems scheme, L.Urban
-// 01-09-98, new methods SetBining()  and PrintInfo() 
+// 01-09-98, new method  and PrintInfo() 
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
 
 #ifndef G4eBremsstrahlungPlus_h
@@ -51,8 +52,6 @@ class G4eBremsstrahlungPlus : public G4eEnergyLossPlus
     ~G4eBremsstrahlungPlus();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-     
-     void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
      
      void PrintInfoDefinition();
            
@@ -121,9 +120,12 @@ class G4eBremsstrahlungPlus : public G4eEnergyLossPlus
 
      G4OrderedTable PartialSumSigma;    // partial sum of total crosssection
 
-     G4double LowestKineticEnergy;      // low  energy limit of the crossection formula
-     G4double HighestKineticEnergy;     // high energy limit of the crossection formula 
-     G4int    TotBin;                   // number of bins in the tables 
+    G4double LowerBoundLambda ; // bining for lambda table
+    G4double UpperBoundLambda ;
+    G4int    NbinLambda ;
+    G4double LowestKineticEnergy,HighestKineticEnergy ;
+    G4int    TotBin ;
+
 };
 
 #include "G4eBremsstrahlungPlus.icc"

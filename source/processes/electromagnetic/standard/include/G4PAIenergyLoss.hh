@@ -5,10 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIenergyLoss.hh,v 1.4 1999-12-15 14:51:47 gunter Exp $
+// $Id: G4PAIenergyLoss.hh,v 1.5 2000-02-10 08:53:59 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// $Id: 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -33,6 +32,7 @@
 //*******************************************************************************
 // corrected by V. Grichine on 24/11/97 
 // corrected by L. Urban    on 27/05/98  (other corrections come soon!)
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4PAIenergyLoss_h
@@ -45,7 +45,7 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
-#include "G4VContinuousDiscreteProcess.hh"
+#include "G4VEnergyLoss.hh"
 #include "G4MaterialTable.hh"
 #include "G4ElementTable.hh"
 #include "G4ElementVector.hh"
@@ -61,7 +61,7 @@
 #include "G4PhysicsFreeVector.hh"
  
  
-class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
+class G4PAIenergyLoss : public G4VEnergyLoss
  
 {
   public:
@@ -109,19 +109,6 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
 
   //----------------------------------------------
   //  public functions .........................
-  //  get the number of processes contributing to the cont.energy loss
-    static G4int GetNUMBEROFPROCESSES()    { return NUMBEROFPROCESSES; }; 
-  //  set the number of processes contributing to the cont.energy loss
-    static void SetNUMBEROFPROCESSES(G4int number)
-                                { NUMBEROFPROCESSES=number ; }; 
-  //  Increment the number of processes contributing to the cont.energy loss
-    static void PlusNUMBEROFPROCESSES()
-                                { NUMBEROFPROCESSES++  ; }; 
-  //  decrement the number of processes contributing to the cont.energy loss
-    static void MinusNUMBEROFPROCESSES()
-                                { NUMBEROFPROCESSES--  ; }; 
-
-  //*****************************************************************************
   //
      G4double GetcurrentInteractionLength() const { return currentInteractionLength; } ;
 
@@ -136,19 +123,31 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
     G4double GetMeanLoss() const { return fMeanLoss; } ;  
 
 
-  // don't use!
-    G4double OldGetRange(const G4DynamicParticle *aParticle,
-                            G4Material *aMaterial);
-
     G4double GetConstraints(const G4DynamicParticle *aParticle,
                             G4Material *aMaterial);
 
   // static 
     G4PhysicsTable* GetPAItransferBank(){ return fPAItransferBank ; } ;
 
-    static G4double GetMaxKineticEnergy() { return HighestKineticEnergy ; } ;
-    static G4double GetMinKineticEnergy() { return  LowestKineticEnergy ; } ;
-    static G4int    GetBinNumber()        { return               TotBin ; } ; 
+    static G4double GetMaxKineticEnergy() { return UpperBoundEloss ; } ;
+    static G4double GetMinKineticEnergy() { return  LowerBoundEloss ; } ;
+    static G4int    GetBinNumber()        { return               NbinEloss ; } ; 
+
+  public:  // With description
+
+    static void  SetNbOfProcesses(G4int nb) {NbOfProcesses=nb;};
+    // Sets number of processes giving contribution to the energy loss
+
+    static void  PlusNbOfProcesses()        {NbOfProcesses++ ;};
+    // Increases number of processes giving contribution to the energy loss
+
+    static void  MinusNbOfProcesses()       {NbOfProcesses-- ;};
+    // Decreases number of processes giving contribution to the energy loss
+
+    static G4int GetNbOfProcesses()         {return NbOfProcesses;};
+    // Gets number of processes giving contribution to the energy loss
+    // ( default value = 1)
+
 
   protected:
 
@@ -182,9 +181,8 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
 
   //  processes inherited from G4hEnergyLoss 
   //   register themselves  in the static array Recorder
-  //  nb of contributing processes = NUMBEROFPROCESSES
 
-    static G4int NUMBEROFPROCESSES ;  
+    static G4int NbOfProcesses     ;
     static G4PhysicsTable** RecorderOfpProcess;
     static G4PhysicsTable** RecorderOfpbarProcess;
     static G4int CounterOfpProcess ;
@@ -193,30 +191,18 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
   private:
   //  private functions ..................................
 
-    static void BuildRangeTable(const G4ParticleDefinition& aParticleType);
-
-    static void BuildRangeVector(G4int materialIndex,
-                          G4PhysicsLogVector* rangeVector);
-
-    static G4double RangeIntLin(G4PhysicsVector* physicsVector,G4int nbin);
-
-    static G4double RangeIntLog(G4PhysicsVector* physicsVector,G4int nbin);
-
-    static void BuildRangeCoeffATable(const G4ParticleDefinition& aParticleType);
-    static void BuildRangeCoeffBTable(const G4ParticleDefinition& aParticleType);
-    static void BuildRangeCoeffCTable(const G4ParticleDefinition& aParticleType);
-
   private:
 
-  static G4PhysicsTable* theDEDXTable;
-  // G4PhysicsTable* theRangeTable;
- 
   //  private data members ...............................
+
+    static G4PhysicsTable* theDEDXTable ; 
 
     // fdEdx=(-dE/dx)
     // computed in GetConstraints at every call;
     // it can be used by other processes ( Cherenkov, ...)
     G4double fdEdx;
+
+    G4double dToverTini ;
 
 
     // EnergyBinNumber,RangeCoeffA,... are needed to compute range
@@ -231,33 +217,20 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
     static G4PhysicsTable* thepbarRangeCoeffBTable;
     static G4PhysicsTable* thepbarRangeCoeffCTable;
 
-   //................................................................
-  //  G4PhysicsTable* theRangeCoeffATable;
-  //  G4PhysicsTable* theRangeCoeffBTable;
-  //  G4PhysicsTable* theRangeCoeffCTable;
 
-    // dToverTini is the maximum allowed relative energy loss in one Step
-    //  ( set in this class for the moment)
-    const G4double dToverTini; 
-
-    // LowestKineticEnergy = lower limit of particle kinetic energy
-    // HighestKineticEnergy = upper limit of particle kinetic energy 
-    // TotBin = number of bins calculated in BuildPhysicsTable
-    //          from LowestKineticEnergy,HighestKineticEnergy and  
-    //          dToverTini
+    // LowerBoundEloss = lower limit of particle kinetic energy
+    // UpperBoundEloss = upper limit of particle kinetic energy 
+    // NbinEloss = number of bins 
     //  ---------in the energy loss/range tables-------------------
 
-    static const G4double LowestKineticEnergy;
-    static const G4double HighestKineticEnergy;    
-    static G4int TotBin;
+    static G4double LowerBoundEloss;
+    static G4double UpperBoundEloss;    
+    static G4int NbinEloss;
 
-    static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
-                               //          /LowestKineticEnergy)/TotBin
+    static G4double RTable,LOGRTable; // LOGRTable=log(UpperBoundEloss
+                               //          /LowerBoundEloss)/NbinEloss
                                //   RTable = exp(LOGRTable)
 
-
-    // variables for the integration routines
-    static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
 
     // cut in range
     static G4double CutInRange;
@@ -271,13 +244,6 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    // data members to speed up the fluctuation calculation
-    G4Material *lastMaterial ;
-    G4double f1Fluct,f2Fluct,e1Fluct,e2Fluct,rateFluct,ipotFluct;
-    G4double e1LogFluct,e2LogFluct,ipotLogFluct;
-    const G4double MaxExcitationNumber ;
-    const G4double probLimFluct ;
-    const long nmaxDirectFluct,nmaxCont1,nmaxCont2 ;
 
 };
  
@@ -285,10 +251,6 @@ class G4PAIenergyLoss : public G4VContinuousDiscreteProcess
 
 #endif
  
-
-
-
-
 
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisationPlus.hh,v 1.3 1999-12-15 14:51:49 gunter Exp $
+// $Id: G4hIonisationPlus.hh,v 1.4 2000-02-10 08:54:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,7 @@
 // corrected by L.Urban on 24/09/97
 // corrected by L.Urban on 13/01/98
 // bugs fixed by L.Urban on 02/02/99
+// 10/02/00  modifications , new e.m. structure, L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4hIonisationPlus_h
@@ -53,8 +54,6 @@ class G4hIonisationPlus : public G4hEnergyLossPlus
     ~G4hIonisationPlus();
 
     G4bool IsApplicable(const G4ParticleDefinition&);
-
-    void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
 
     void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
 
@@ -98,6 +97,13 @@ class G4hIonisationPlus : public G4hEnergyLossPlus
     const G4double* DeltaCutInKineticEnergy ; 
  
     G4double DeltaCutInKineticEnergyNow ;
+
+    G4double LowerBoundLambda ; // bining for lambda table
+    G4double UpperBoundLambda ;
+    G4int    NbinLambda ;
+    G4double LowestKineticEnergy,HighestKineticEnergy ;
+    G4int    TotBin ;
+
 };
  
 #include "G4hIonisationPlus.icc"
