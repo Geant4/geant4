@@ -20,26 +20,28 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// 
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Em3PhysicsList.hh"
 #include "Em3PhysicsListMessenger.hh"
- 
+
 #include "G4UnitsTable.hh"
 #include "Em3PhysListParticles.hh"
 #include "Em3PhysListGeneral.hh"
 #include "Em3PhysListEmStandard.hh"
 #include "Em3PhysListEmModel.hh"
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em3PhysicsList::Em3PhysicsList() : G4VModularPhysicsList(),
-  emPhysicsListIsRegistered(false)
-{   
+Em3PhysicsList::Em3PhysicsList() : G4VModularPhysicsList()
+{
   currentDefaultCut   = 1.0*mm;
   cutForGamma         = currentDefaultCut;
   cutForElectron      = currentDefaultCut;
@@ -49,11 +51,15 @@ Em3PhysicsList::Em3PhysicsList() : G4VModularPhysicsList(),
 
   SetVerboseLevel(1);
 
-  // Particles
-  RegisterPhysics( new Em3PhysListParticles("particles") );
+   // Particles
+  particleList = new Em3PhysListParticles("particles");
 
   // General Physics
-  RegisterPhysics( new Em3PhysListGeneral("general") );
+  generalPhysicsList = new Em3PhysListGeneral("general");
+
+  // EM physics
+  emName = G4String("standard");
+  emPhysicsList = new Em3PhysListEmStandard(emName);
 
 }
 
@@ -66,41 +72,45 @@ Em3PhysicsList::~Em3PhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Em3PhysicsList::ConstructParticle()
+{
+  particleList->ConstructParticle();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em3PhysicsList::ConstructProcess()
+{
+  AddTransportation();
+  generalPhysicsList->ConstructProcess();
+  emPhysicsList->ConstructProcess();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Em3PhysicsList::AddPhysicsList(const G4String& name)
 {
   if (verboseLevel>1) {
     G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">" << G4endl;
   }
 
-  if(name == "standard") {
+  if (name == emName) return;
 
-    if (emPhysicsListIsRegistered) {
+  if (name == "standard") {
 
-      G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Em3PhysListEmStandard(name);
 
-      RegisterPhysics( new Em3PhysListEmStandard(name) );
-      emPhysicsListIsRegistered = true;
-    }
+  } else if (name == "model") {
 
-  } else if(name == "model") {
-
-    if (emPhysicsListIsRegistered) {
-
-      G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">" 
-             << " cannot be register additionally to existing one"
-             << G4endl;
-    } else {
-
-      RegisterPhysics( new Em3PhysListEmModel(name) );
-      emPhysicsListIsRegistered = true;
-    }
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new Em3PhysListEmModel(name);
 
   } else {
 
-    G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">" 
+    G4cout << "Em3PhysicsList::AddPhysicsList: <" << name << ">"
            << " is not defined"
            << G4endl;
   }
@@ -129,24 +139,24 @@ void Em3PhysicsList::SetCuts()
 
 void Em3PhysicsList::SetCutForGamma(G4double cut)
 {
-  ResetCuts();
   cutForGamma = cut;
+  SetParticleCuts(cutForGamma, G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::SetCutForElectron(G4double cut)
 {
-  ResetCuts();
   cutForElectron = cut;
+  SetParticleCuts(cutForElectron, G4Electron::Electron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em3PhysicsList::SetCutForPositron(G4double cut)
 {
-  ResetCuts();
   cutForPositron = cut;
+  SetParticleCuts(cutForPositron, G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
