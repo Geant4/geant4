@@ -1,4 +1,4 @@
-$Id: History,v 1.54 2002-04-18 10:11:58 maire Exp $
+$Id: History,v 1.55 2002-04-24 14:03:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+18 apr 02: mma (stand-V04-00-08)
+- new process: G4GammaConversionToMuons
      
 18 apr 02: mma (stand-V04-00-07)
 - G4ComptonScattering: LowestEnergyLimit=1*keV
