@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.18 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.19 2003-03-10 08:33:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -230,8 +230,8 @@ class G4VUserPhysicsList
 ///////////////////////////////////////////////////////////////////////////////
   public:   
    // Get/SetApplyCuts gets/sets the flag for ApplyCuts
-   void SetApplyCuts(G4bool value, const G4String& name); 
-   G4bool GetApplyCuts(const G4String& name) const; 
+   // void SetApplyCuts(G4bool value, const G4String& name); 
+   // G4bool GetApplyCuts(const G4String& name) const; 
 
 ///////////////////////////////////////////////////////////////////////////////
   protected:  

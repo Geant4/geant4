@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.hh,v 1.11 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.hh,v 1.12 2003-03-10 08:33:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,6 @@
 //    storePhysicsTable * store physics table into files
 //    retreivePhysicsTable * retreive physics table from files
 //    setStoredInAscii * Switch on/off ascii mode in store/retreive Physics Table
-//    applyCuts *  Set flag for ApplyCuts 
 // ------------------------------------------------------------
 //	History
 //        first version                   09 Jan. 1998 by H.Kurashige 
@@ -102,7 +101,7 @@ public: // with description
     G4UIcmdWithAString *        storeCmd;
     G4UIcmdWithAString *        retrieveCmd;
     G4UIcmdWithAnInteger *      asciiCmd;
-    G4UIcommand          *      applyCutsCmd;
+    // G4UIcommand          *      applyCutsCmd;
 };
 
 #endif

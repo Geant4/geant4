@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.29 2003-03-10 08:04:19 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.30 2003-03-10 08:33:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -323,55 +323,55 @@ void G4VUserPhysicsList::SetCutsForRegion(G4double aCut, const G4String& rname)
 
 
 ////////////////////////////////////////////////////////
-void  G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
-{
-  // Sets a value to particle 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-
-    // check if the cut value has already been set
-    if (name =="all" || name =="ALL" ){
-      particle->SetApplyCutsFlag(value);
-    } else if (name == particle->GetParticleName()){
-      particle->SetApplyCutsFlag(value);
-#ifdef G4VERBOSE    
-      if (verboseLevel >1) {
-	G4cout << "Set ApplyCutsFLag ";
-	if (value) {
-	  G4cout << "TRUE ";
-	} else {
-	  G4cout << "FALSE ";
-	}
-	G4cout << "for " << particle->GetParticleName() << G4endl;
-      }
-#endif
-      break;
-    }
-  }
-}
+//void  G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
+//{
+//  // Sets a value to particle 
+//  theParticleIterator->reset();
+//  while( (*theParticleIterator)() ){
+//    G4ParticleDefinition* particle = theParticleIterator->value();
+//
+//    // check if the cut value has already been set
+//    if (name =="all" || name =="ALL" ){
+//      particle->SetApplyCutsFlag(value);
+//    } else if (name == particle->GetParticleName()){
+//      particle->SetApplyCutsFlag(value);
+//#ifdef G4VERBOSE    
+//      if (verboseLevel >1) {
+//	G4cout << "Set ApplyCutsFLag ";
+//	if (value) {
+//	  G4cout << "TRUE ";
+//	} else {
+//	  G4cout << "FALSE ";
+//	}
+//	G4cout << "for " << particle->GetParticleName() << G4endl;
+//      }
+//#endif
+//      break;
+//    }
+//  }
+//}
 ////////////////////////////////////////////////////////
-G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
-{
-  // Sets a value to particle 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-
-    // check if the cut value has already been set
-    if (name == particle->GetParticleName()){
-      return particle->GetApplyCutsFlag();
-    }
-  }
-#ifdef G4VERBOSE    
-  if (verboseLevel >0){
-    G4cout << "G4VUserPhysicsList::GetApplyCuts: ";
-    G4cout << " particle " <<  name  ;
-    G4cout << " does not exist " << G4endl;
-  }
-#endif
-  return false;
-}
+//G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
+//{
+//  // Sets a value to particle 
+//  theParticleIterator->reset();
+//  while( (*theParticleIterator)() ){
+//    G4ParticleDefinition* particle = theParticleIterator->value();
+//
+//    // check if the cut value has already been set
+//    if (name == particle->GetParticleName()){
+//      return particle->GetApplyCutsFlag();
+//    }
+//  }
+//#ifdef G4VERBOSE    
+//  if (verboseLevel >0){
+//    G4cout << "G4VUserPhysicsList::GetApplyCuts: ";
+//    G4cout << " particle " <<  name  ;
+//    G4cout << " does not exist " << G4endl;
+//  }
+//#endif
+//  return false;
+//}
 
 
 

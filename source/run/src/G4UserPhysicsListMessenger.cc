@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.12 2003-03-10 08:04:18 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.13 2003-03-10 08:33:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,19 +139,19 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   asciiCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   asciiCmd->SetRange("ascii ==0 || ascii ==1");
 
-  //Commnad    /run/particle/applyCuts command
-  applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
-  applyCutsCmd->SetGuidance("Set ApplyCuts flag ");
-  applyCutsCmd->SetGuidance("  applyCuts [value] [particle]");
-  applyCutsCmd->SetGuidance("  value     : true(default) or false ");
-  applyCutsCmd->SetGuidance("  particle  : all(default) or particle name ");
-  param = new G4UIparameter("Flag",'s',true);
-  param->SetDefaultValue("true");
-  applyCutsCmd->SetParameter(param);
-  param = new G4UIparameter("Particle",'s',true);
-  param->SetDefaultValue("all");
-  applyCutsCmd->SetParameter(param);
-  applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+//  //Commnad    /run/particle/applyCuts command
+//  applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
+//  applyCutsCmd->SetGuidance("Set ApplyCuts flag ");
+//  applyCutsCmd->SetGuidance("  applyCuts [value] [particle]");
+//  applyCutsCmd->SetGuidance("  value     : true(default) or false ");
+//  applyCutsCmd->SetGuidance("  particle  : all(default) or particle name ");
+//  param = new G4UIparameter("Flag",'s',true);
+//  param->SetDefaultValue("true");
+//  applyCutsCmd->SetParameter(param);
+//  param = new G4UIparameter("Particle",'s',true);
+//  param->SetDefaultValue("all");
+//  applyCutsCmd->SetParameter(param);
+//  applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -165,9 +165,9 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete buildPTCmd;
   delete storeCmd;  
   delete retrieveCmd;
-  delete theDirectory;
   delete asciiCmd;
-  delete applyCutsCmd;
+//  delete applyCutsCmd;
+  delete theDirectory;
 }
 
 void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
@@ -224,17 +224,17 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
       thePhysicsList->SetStoredInAscii();
     }
 
-  } else if( command == applyCutsCmd ) {
-    G4Tokenizer next( newValue );
-
-    // check 1st argument
-    G4String temp = G4String(next());
-    G4bool flag = (temp =="true" || temp=="TRUE");
-
-    // check 2nd argument
-    G4String name = G4String(next());
-
-    thePhysicsList->SetApplyCuts(flag, name);
+//  } else if( command == applyCutsCmd ) {
+//    G4Tokenizer next( newValue );
+//
+//    // check 1st argument
+//    G4String temp = G4String(next());
+//    G4bool flag = (temp =="true" || temp=="TRUE");
+//
+//    // check 2nd argument
+//    G4String name = G4String(next());
+//
+//    thePhysicsList->SetApplyCuts(flag, name);
  
   }
 
@@ -289,12 +289,12 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
       cv = "0";
     }
 
-  } else if( command == applyCutsCmd ) {
-   if (thePhysicsList->GetApplyCuts("proton")){
-     cv =  "true";
-   } else {
-     cv =  "false";
-   } 
+//  } else if( command == applyCutsCmd ) {
+//   if (thePhysicsList->GetApplyCuts("proton")){
+//     cv =  "true";
+//   } else {
+//     cv =  "false";
+//   } 
   }
    
   return cv;
