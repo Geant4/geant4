@@ -1,0 +1,97 @@
+
+                 Geant4 4.0 - patch-01 Release Notes
+                 -----------------------------------
+
+                                                      31st January 2002
+
+List of fixes included in this public patch to release 4.0:
+
+  o Event:
+    -----
+  - G4PrimaryTransformer: removed check whether the primary vertex is
+    inside the world volume. The check has been moved to G4SteppingManager.
+
+  o Geometry:
+    --------
+  - Magnetic field:
+    o Activated G4DEBUG_FIELD in GNUmakefile.
+    o G4MagHelicalStepper.cc: renamed local variables "*Momentum*"
+      to "*Velocity*". 
+  - Management:
+    o G4AffineTransform.icc: fixed trivial compilation warning for gcc-2.95.2.
+  - Volumes:
+    o G4AuxiliaryNavServices: critical fix, to only consider whether a
+      'ray' (Point,Direction) is on the surface (it was erroneously also
+      checking for those inside volumes). This erroneous condition occurred
+      frequently in the new usage of Locate with Direction to initialise a
+      step.  
+    o G4Navigator: reset blocked volume when locating 'within volume',
+      after ensuring that it does not get called when ComputeSafety() is at
+      a boundary. Fixes cases of longstanding 'Point P is Inside' errors.
+    o Activated mechanism in GNUmakefile for allowing compilation with
+      G4DEBUG_FIELD or G4DEBUG_NAVIGATION flags.
+  - solids/Boolean:
+    o Moved all verbosity mode warnings to G4BOOLDEBUG.
+    o Activated G4BOOLDEBUG mechanism in GNUmakefile.
+  - solids/BREPS:
+    o G4BREPSolidPCone: bugfix for problem report #320.
+      Fixed missing use-case in constructor when RMAX and RMIN have been
+      changed for 2 consecutive equal z-values. Now it creates correctly
+      2 planar surfaces as expected.
+      Added private method ComputePlanarSurface() gained
+      by refactoring of some part of the code in the constructor.
+    o G4FPlane: fixed first constructor adding new argument for setting
+      explicitly the sense of a surface if required.
+      Fixed G4FPlane::Intersect() method which incorrectly ignored a special
+      case of a hit on surface point with ray direction opposite to surface
+      normal.
+  - solids/CSG:
+    o G4Sphere.cc: fixed a problem with tolerances in the case of large Radius.
+    o Moved all verbosity mode warnings to G4CSGDEBUG.
+    o Activated G4CSGDEBUG mechanism in GNUmakefile.
+
+  o Global:
+    ------
+    - G4strstreambuf: plugged memory leak in destructor for buffer deletion.
+      Temporary fix to G4strstream::overflow(c) for GNU gcc-3.X compilers
+      (also problem report #342), which require returning of character 'c' in
+      case of buffer flushing for <CR>.
+    - Replaced 'NULL' with '0' in G4Allocator.hh, G4strstreambuf.icc
+      and G4Timer.cc.
+    - Removed obsolete inline definitions in g4std/wrappers/DEC-cxx/cmath.
+
+  o Track & Tracking:
+    ----------------
+  - track:
+    o G4Track: corrected initialization of fStepLength in constructors.
+      Fixed bug in assignment operator for fStepLength.
+  - tracking:
+    o G4SteppingManager:
+      - fix safe comparison between floating numbers
+      - added check for primary track outside of the world
+      - bug fix for particles below threshold to avoid double steps
+
+  o Visualization:
+    -------------
+  - Corrected handling for already open file in HepRepXMLWriter.
+
+  o Examples:
+    --------
+  - Novice: syncronised files with CVS HEAD. No functional changes to code.
+
+ ----------------------------------------------------------------------------
+
+                             Technical Notes
+                             --------------- 
+
+  o  Technical notes distributed for release 4.0 are also applicable and valid
+     for this patch.
+
+The code and rebuilt binary libraries for release 4.0 are available through
+our "Source Code" Web page:
+- see our <A href="http://cern.ch/geant4">Geant4 Home Page</A>.
+
+Please refer to <A
+href="http://cern.ch/geant4/G4UsersDocuments/Overview/html/index.html">Geant4
+User Documentation</A> for further information about using Geant4.
+
