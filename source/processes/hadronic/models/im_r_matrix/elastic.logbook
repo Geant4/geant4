@@ -1,0 +1,31 @@
+done - G4CollisionNNElastic.hh
+done - G4CollisionnpElastic.hh
+done - G4CollisionNDeltaElastic.hh
+done - G4CollisionMesonBaryonElastic.hh
+not needed G4CollisionNDeltastarElastic.hh
+G4CollisionDeltaDeltaElastic.hh
+G4CollisionDeltaDeltastarElastic.hh
+G4CollisionMesonMesonElastic.hh
+G4CollisionBaryonAntiBaryonElastic.hh
+G4CollisionBaryonBaryonElastic.hh
+G4CollisionDeltaNstarElastic.hh
+G4CollisionNNstarElastic.hh
+G4CollisionStarStarElastic.hh
+
+delta(1600)", "delta(1620)", "delta(1700)", "delta(1900)", "delta(1905)",
+  "delta(1910)", "delta(1920)", "delta(1930)", "delta(1950)"
+  
+   "N(1440)", "N(1520)", "N(1535)", "N(1650)", "N(1675)",
+   "N(1680)", "N(1700)", "N(1710)", "N(1720)", "N(1900)",
+   "N(1990)", "N(2090)", "N(2190)", "N(2220)", "N(2250)"
+ 
+    { "b1(1235)",   "h1(1170)",   "h1(1380)",      "k1(1270)",      "k1(1270)" },
+  { "a0(1450)",   "f0(1370)",           "", "k0_star(1430)", "k0_star(1430)" },
+  { "a1(1260)",   "f1(1285)",   "f1(1420)",      "k1(1400)",      "k1(1400)" },
+  { "a2(1320)",   "f2(1270)","f2_prime(1525)","k2_star(1430)","k2_star(1430)"},
+  {"pi2(1670)", "eta2(1645)", "eta2(1870)",      "k2(1770)",      "k2(1770)" },
+  {"rho(1700)", "omega(1600)",          "",  "k_star(1680)",  "k_star(1680)" },
+ {"rho3(1690)","omega3(1670)","phi3(1850)", "k3_star(1780)", "k3_star(1780)" },
+  { "pi(1300)",  "eta(1295)",  "eta(1440)",       "k(1460)",       "k(1460)" },
+  {"rho(1450)","omega(1420)",  "phi(1680)",  "k_star(1410)",  "k_star(1410)" },
+  {         "",   "f2(1810)",   "f2(2010)", "k2_star(1980)", "k2_star(1980)" }

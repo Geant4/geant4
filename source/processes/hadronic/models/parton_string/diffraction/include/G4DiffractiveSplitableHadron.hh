@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveSplitableHadron.hh,v 1.1 2003-10-07 11:25:16 hpw Exp $
+// $Id: G4DiffractiveSplitableHadron.hh,v 1.2 2003-10-08 13:48:47 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

@@ -21,75 +21,70 @@
 // ********************************************************************
 //
 //
-// $Id: G4FTFParticipants.hh,v 1.2 2003-10-08 13:48:47 hpw Exp $
+// $Id: FTFParticipants.cc,v 1.1 2003-10-08 13:48:52 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-#ifndef G4FTFParticipants_h
-#define G4FTFParticipants_h 1
-
 // ------------------------------------------------------------
-//      GEANT 4 class header file
+//      GEANT 4 file
 //
-//      ---------------- G4FTFParticipants----------------
+//
 //             by Gunter Folger, June 1998.
-//       class finding colliding particles in FTFPartonStringModel
+//       class exercising G4FTFParticipants class.
 // ------------------------------------------------------------
 
-#include "G4VParticipants.hh"
-#include <vector>
-#include "G4Nucleon.hh"
-#include "G4V3DNucleus.hh"
-#include "G4Fancy3DNucleus.hh"
+#include "G4FTFParticipants.hh"
+
+#include "G4StableIsotopes.hh"
 #include "G4ReactionProduct.hh"
+#include "G4PionPlus.hh"
+
+// Solve templates.
+// Code in g4templates.hh controlled by the macro G4_SOLVE_TEMPLATES
+#include "g4templates.hh"
+#ifdef G4_SOLVE_TEMPLATES
 #include "G4InteractionContent.hh"
-
-class G4FTFParticipants : public G4VParticipants
-{
-
-  public:
-      G4FTFParticipants();
-      G4FTFParticipants(const G4FTFParticipants &right);
-      const G4FTFParticipants & operator=(const G4FTFParticipants &right);
-      ~G4FTFParticipants();
-
-      int operator==(const G4FTFParticipants &right) const;
-      int operator!=(const G4FTFParticipants &right) const;
-
-      void BuildInteractions(const G4ReactionProduct  &thePrimary);
-      G4bool Next();
-      const G4InteractionContent & GetInteraction() const;
-
-      void StartLoop();
-      
-  private:
-
-      std::vector<G4InteractionContent *> theInteractions;
-  
-      G4int currentInteraction;
-
-};
-
-
-inline
-void G4FTFParticipants::StartLoop()
-{
-	currentInteraction=-1;
-}
-
-inline
-G4bool G4FTFParticipants::Next()
-{
-	return ++currentInteraction < static_cast<G4int>(theInteractions.size());
-}
-
-
-inline
-const G4InteractionContent & G4FTFParticipants::GetInteraction() const
-{
-	return *theInteractions[currentInteraction];
-}
-
+template class G4RWTPtrOrderedVector<G4InteractionContent>;
+#include "G4VSplitableHadron.hh"
+template class G4RWTPtrOrderedVector<G4VSplitableHadron>;
 #endif
 
+int main()
+{
 
+	G4FTFParticipants participant;
+	
+	G4ReactionProduct projectile(G4PionPlus::PionPlus());
+	G4cout << " pion - mass : " << G4PionPlus::PionPlus()->GetPDGMass() /GeV
+	<< G4endl;
+	G4cout  << " proj - mass : " << projectile.GetMass() / GeV << G4endl;
+	G4ThreeVector momentum(100*GeV,100*GeV,100*GeV);
+	projectile.SetMomentum(momentum);
+	projectile.SetTotalEnergy(sqrt(sqr(projectile.GetMass())+momentum.mag2()));
+	
+	G4cout  << " proj - Etot : " << projectile.GetTotalEnergy() / GeV << G4endl;
+
+	G4StableIsotopes theIso;	
+
+//	for (int Z=1; Z<93; Z++ )
+	for (int Z=18; Z<19; Z++ )
+	{
+	   G4cout <<G4endl<< G4endl<< "new Element " ;
+	   G4cout << theIso.GetName(Z) << G4endl;
+	   G4cout << "         with " << theIso.GetNumberOfIsotopes(Z) ;
+	   G4cout << " Isotopes"<< G4endl;
+	   for (G4int iso=0; iso<theIso.GetNumberOfIsotopes(Z); iso++)
+	   {
+	       G4double massnumber=
+	          theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(Z)+iso);
+	       participant.Init(massnumber,(G4double) Z);
+	       G4cout << "Charge" << Z << G4endl;
+	       G4cout << "Mass number" << massnumber << G4endl;
+	      
+	      participant.BuildInteractions(projectile);
+	   }   
+	}
+	return 0;
+	
+} 
+	
+	

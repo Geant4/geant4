@@ -1,0 +1,11 @@
+scattering-baseline-0:
+
+  nucleon nucleon and pion nucleon scattering included, and technically tested to run.
+  
+  nucleon nucleon:
+   - elastic for pp, np, pn, nn
+   - resonance creation: ND, DD, ND*, DD*, NN*, DN* channels included
+  
+  pion nucleon:
+   - elastic pi+-0 n/p scattering
+   - piN->Resonance: D, D*, N* included.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DiffractiveHHScatterer.hh,v 1.1 2003-10-07 11:25:16 hpw Exp $
+// $Id: G4DiffractiveHHScatterer.hh,v 1.2 2003-10-08 13:48:47 hpw Exp $
 
 #ifndef G4DiffractiveHHScatterer_h
 #define G4DiffractiveHHScatterer_h 1
