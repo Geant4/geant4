@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2003-09-25 05:32:15 kurasige Exp $
+# $Id: GNUmakefile,v 1.8 2003-10-03 15:47:37 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for transportation library.  G.Folger 10-Dec-97.
 # ------------------------------------------------------------
@@ -16,7 +16,8 @@ CPPFLAGS += \
 	    -I$(G4BASE)/global/HEPRandom/include \
 	    -I$(G4BASE)/global/HEPGeometry/include \
 	    -I$(G4BASE)/geometry/management/include \
-	    -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/navigation/include \
 	    -I$(G4BASE)/geometry/magneticfield/include \
             -I$(G4BASE)/geometry/biasing/include \
 	    -I$(G4BASE)/track/include \

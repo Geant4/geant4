@@ -1,4 +1,4 @@
-$Id: History,v 1.86 2003-09-25 08:19:44 gcosmo Exp $
+$Id: History,v 1.87 2003-10-03 15:47:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct. 4th, G.Cosmo transport-V05-02-05
+-----------------
+- Modified GNUmakefile:
+  o added dependency to new module "geometry/navigation".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 Sep. 25th, H.Kurashige transport-V05-02-04
 ----------------------
