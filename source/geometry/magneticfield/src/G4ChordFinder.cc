@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.7 1999-07-19 17:31:44 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.8 1999-07-27 20:26:28 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
   G4double stepPossible;
   G4double dyErr;
   G4FieldTrack yEnd( yCurrent);
-
+  G4double  startCurveLen= yCurrent.GetCurveLength();
   G4bool dbg= false; 
 
 #ifdef G4VERBOSE
@@ -102,7 +102,7 @@ G4ChordFinder::AdvanceChordLimited(   G4FieldTrack& yCurrent,
      #endif
      if ( ! good_advance ){ 
        // In this case the driver could not do the full distance
-       stepPossible= yCurrent.GetCurveLength();
+       stepPossible= yCurrent.GetCurveLength()-startCurveLen;
      }
   }
 
