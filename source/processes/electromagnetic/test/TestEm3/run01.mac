@@ -1,4 +1,4 @@
-# $Id: run01.mac,v 1.3 1999-01-27 17:13:12 maire Exp $
+# $Id: run01.mac,v 1.4 1999-02-03 15:45:21 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -17,4 +17,4 @@
 #
 /gun/particle e-
 /gun/energy 1 GeV
-/run/beamOn 1000
+/run/beamOn 200
