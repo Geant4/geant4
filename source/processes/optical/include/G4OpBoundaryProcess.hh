@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.8 2002-03-29 01:03:53 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.9 2004-02-19 20:41:34 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,7 +83,8 @@ enum G4OpBoundaryProcessStatus {  Undefined,
                                   TotalInternalReflection,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
-                                  Absorption, Detection };
+                                  Absorption, Detection, NotAtBoundary,
+                                  SameMaterial, StepTooSmall, NoRINDEX };
 
 class G4OpBoundaryProcess : public G4VDiscreteProcess 
 {
@@ -364,6 +365,7 @@ void G4OpBoundaryProcess::DoAbsorption()
               theStatus = Absorption;
 
               if ( G4BooleanRand(theEfficiency) ) {
+		
                  // EnergyDeposited =/= 0 means: photon has been detected
                  theStatus = Detection;
                  aParticleChange.SetLocalEnergyDeposit(thePhotonMomentum);
