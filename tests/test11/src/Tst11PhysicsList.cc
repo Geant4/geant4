@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst11PhysicsList.cc,v 1.7 2003-06-16 17:14:55 gunter Exp $
+// $Id: Tst11PhysicsList.cc,v 1.8 2003-10-31 12:36:26 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -368,10 +368,8 @@ void Tst11PhysicsList::ConstructHad()
          theElasticProcess1->RegisterMe(theElasticModel1);
          theElasticModel1->SetMinEnergy(19*MeV);
          theElasticProcess1->RegisterMe(theElasticNeutron);
-         G4CrossSectionDataStore * theStore =
-            ((G4HadronElasticProcess*)theElasticProcess1)->GetCrossSectionDataStore();
          G4NeutronHPElasticData * theNeutronData = new G4NeutronHPElasticData;
-         theStore->AddDataSet(theNeutronData);
+         theElasticProcess1->AddDataSet(theNeutronData);
          pmanager->AddDiscreteProcess(theElasticProcess1);
          
           // inelastic scattering
@@ -382,10 +380,8 @@ void Tst11PhysicsList::ConstructHad()
          theInelasticProcess->RegisterMe(theInelasticModel);
          G4NeutronHPInelastic * theLENeutronInelasticModel = new G4NeutronHPInelastic;
          theInelasticProcess->RegisterMe(theLENeutronInelasticModel);
-         G4CrossSectionDataStore * theStore1 =
-            ((G4HadronInelasticProcess*)theInelasticProcess)->GetCrossSectionDataStore();
          G4NeutronHPInelasticData * theNeutronData1 = new G4NeutronHPInelasticData;
-         theStore1->AddDataSet(theNeutronData1);
+         theInelasticProcess->AddDataSet(theNeutronData1);
          pmanager->AddDiscreteProcess(theInelasticProcess);
          
           // fission
@@ -396,10 +392,8 @@ void Tst11PhysicsList::ConstructHad()
          theFissionProcess->RegisterMe(theFissionModel);
          G4NeutronHPFission * theLENeutronFissionModel = new G4NeutronHPFission;
          theFissionProcess->RegisterMe(theLENeutronFissionModel);
-         G4CrossSectionDataStore * theStore2 =
-            ((G4HadronFissionProcess*)theFissionProcess)->GetCrossSectionDataStore();
          G4NeutronHPFissionData * theNeutronData2 = new G4NeutronHPFissionData;
-         theStore2->AddDataSet(theNeutronData2);
+         theFissionProcess->AddDataSet(theNeutronData2);
          pmanager->AddDiscreteProcess(theFissionProcess);
          
          // capture
@@ -410,10 +404,8 @@ void Tst11PhysicsList::ConstructHad()
          theCaptureProcess->RegisterMe(theCaptureModel);
          G4NeutronHPCapture * theLENeutronCaptureModel = new G4NeutronHPCapture;
          theCaptureProcess->RegisterMe(theLENeutronCaptureModel);
-         G4CrossSectionDataStore * theStore3 =
-            ((G4HadronCaptureProcess*)theCaptureProcess)->GetCrossSectionDataStore();
          G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
-         theStore3->AddDataSet(theNeutronData3);
+         theCaptureProcess->AddDataSet(theNeutronData3);
          pmanager->AddDiscreteProcess(theCaptureProcess);
       }  
       else if (particleName == "anti_neutron") {
