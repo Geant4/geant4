@@ -19,7 +19,7 @@ class G4InteractorMessenger : public G4UImessenger
 {
 public:
   G4InteractorMessenger (G4VInteractiveSession* session);
-  ~G4InteractorMessenger ();
+  virtual ~G4InteractorMessenger ();
   void SetNewValue(G4UIcommand* command,G4String newValue);
 private:
   G4VInteractiveSession* session;

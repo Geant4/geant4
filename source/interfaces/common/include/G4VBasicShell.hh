@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.hh,v 1.2 1999-04-13 01:26:30 yhajime Exp $
+// $Id: G4VBasicShell.hh,v 1.3 1999-04-16 10:06:05 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,10 @@ class G4VBasicShell : public G4UIsession
     // find G4UIcommand object
     // null returned if the target does not exist
 
+    G4String Complete(G4String);
+    // command completion
+    G4String FindMatchingPath(G4UIcommandTree*,G4String);
+
     /////////////////////////////////////////////
     // Methods involving an interactive G4cout //
     /////////////////////////////////////////////
@@ -61,6 +65,7 @@ class G4VBasicShell : public G4UIsession
     void ChangeDirectoryCommand(G4String);
     void ListDirectory(G4String);
     void TerminalHelp(G4String);
+
   private:
     G4String currentDirectory;
 

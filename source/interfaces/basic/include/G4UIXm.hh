@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.hh,v 1.2 1999-04-13 01:26:25 yhajime Exp $
+// $Id: G4UIXm.hh,v 1.3 1999-04-16 10:05:58 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -42,7 +42,8 @@ private:
 private:
   Widget shell,command,menuBar,text;
   RWTValHashDictionary<Widget,G4String> commands;
-  static void commandCallback(Widget,XtPointer,XtPointer);
+  static void commandEnteredCallback(Widget,XtPointer,XtPointer);
+  static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   G4bool fHelp;
   G4int fHelpChoice;
   static void ButtonCallback(Widget,XtPointer,XtPointer);

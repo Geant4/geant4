@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.cc,v 1.2 1999-04-13 01:26:27 yhajime Exp $
+// $Id: G4UIWin32.cc,v 1.3 1999-04-16 10:06:00 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -566,6 +566,21 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
       } else {
 	This->ApplyShellCommand (command,exitSession,exitPause);
       }
+
+      }break;
+    case VK_TAB:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if(This->fHelp==true) break;
+      char buffer[128];
+      Edit_GetText(a_window,buffer,128);
+
+      G4String command(buffer);
+
+      const char* d = This->Complete(command).data();
+      Edit_SetText(a_window,d);
+      int pos = strlen(d);
+      Edit_SetSel(a_window,pos,pos);
 
       }break;
     }

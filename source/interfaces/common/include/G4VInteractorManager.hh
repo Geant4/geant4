@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.hh,v 1.2 1999-04-13 01:26:30 yhajime Exp $
+// $Id: G4VInteractorManager.hh,v 1.3 1999-04-16 10:06:06 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -14,6 +14,7 @@
 #define G4VINTERACTORMANAGER_HH
 
 #include "globals.hh"
+#include <rw/tvordvec.h>
 
 typedef void*  G4Interactor;
 typedef G4bool (*G4DispatchFunction)(void*);
@@ -55,14 +56,10 @@ private:
   int                    argc;
   char**                 argv;
   G4Interactor           mainInteractor;
-  int                    dispatchern;
-  G4DispatchFunction*    dispatchers;
-  int                    preActionn;
-  G4SecondaryLoopAction* preActions;
-  int                    postActionn;
-  G4SecondaryLoopAction* postActions;
-  int                    shelln;
-  G4Interactor*          shells;
+  RWTValOrderedVector<G4DispatchFunction> dispatchers;
+  RWTValOrderedVector<G4SecondaryLoopAction> preActions;
+  RWTValOrderedVector<G4SecondaryLoopAction> postActions;
+  RWTValOrderedVector<G4Interactor> shells;
   G4bool                 secondaryLoopEnabled;
   G4bool                 alreadyInSecondaryLoop;
   int                    exitSecondaryLoop;

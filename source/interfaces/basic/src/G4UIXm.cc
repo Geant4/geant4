@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.cc,v 1.2 1999-04-13 01:26:28 yhajime Exp $
+// $Id: G4UIXm.cc,v 1.3 1999-04-16 10:06:02 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -20,8 +20,11 @@
 #include <strstream.h>
 #endif
 
+#include <string.h>
+
 #include <X11/Intrinsic.h>
 #include <X11/Shell.h>
+#include <X11/keysym.h>
 
 #include <Xm/Xm.h>
 #include <Xm/Command.h>
@@ -74,22 +77,23 @@ G4UIXm::G4UIXm (
 
   Widget top = (Widget)interactorManager->GetMainInteractor();
 
+  Arg args[9];
+  XtSetArg(args[0],XmNkeyboardFocusPolicy,XmPOINTER); // For completion.
   shell = XtAppCreateShell ("G4UIXm","G4UIXm",
 			    topLevelShellWidgetClass,XtDisplay(top),
-			    NULL,0); 
+			    args,1); 
   Widget form = XmCreateForm (shell,"form",NULL,0);
   XtManageChild (form);
 
-  Arg args[9];
   XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
   XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
   XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
   menuBar = XmCreateMenuBar (form,"menuBar",args,3);
 
-  XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_NONE);
-  XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
-  XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
-  XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
+  XtSetArg(args[0],XmNtopAttachment      ,XmATTACH_NONE);
+  XtSetArg(args[1],XmNleftAttachment     ,XmATTACH_FORM);
+  XtSetArg(args[2],XmNrightAttachment    ,XmATTACH_FORM);
+  XtSetArg(args[3],XmNbottomAttachment   ,XmATTACH_FORM);
   command = XmCreateCommand (form,"command",args,4);
   XtManageChild (command);
 
@@ -119,7 +123,10 @@ G4UIXm::G4UIXm (
   XtAddCallback(clearButton,XmNactivateCallback,
 		clearButtonCallback,(XtPointer)text);
   XtAddCallback(command,XmNcommandEnteredCallback,
-		commandCallback,(XtPointer)this);
+		commandEnteredCallback,(XtPointer)this);
+
+  Widget commandText = XmCommandGetChild(command,XmDIALOG_COMMAND_TEXT);
+  XtAddEventHandler(commandText,KeyPressMask,False,keyHandler,(XtPointer)this);
 
   XtRealizeWidget(shell);
   XtMapWidget(shell);
@@ -319,7 +326,7 @@ G4String G4UIXm::GetCommand (
 /***************************************************************************/
 /***************************************************************************/
 /***************************************************************************/
-void G4UIXm::commandCallback (
+void G4UIXm::commandEnteredCallback (
  Widget    a_widget
 ,XtPointer a_tag
 ,XtPointer a_data
@@ -343,6 +350,26 @@ void G4UIXm::commandCallback (
 
   a_widget = NULL;
   a_tag    = NULL;
+}
+/***************************************************************************/
+void G4UIXm::keyHandler (
+ Widget a_widget
+,XtPointer a_tag
+,XEvent* a_event
+,Boolean* a_dispatch
+)
+/***************************************************************************/
+/*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
+{
+  KeySym keySym;
+  XLookupString(&(a_event->xkey),NULL,0,&keySym,NULL);
+  if(keySym!=XK_Tab) return;
+  G4UIXm* This = (G4UIXm*)a_tag;
+  char* s = XmTextGetString(a_widget);
+  G4String ss = This->Complete(s);
+  XmTextSetString(a_widget,(char*)ss.data());
+  XtFree(s);
+  XmTextSetInsertionPosition(a_widget,XmTextGetLastPosition(a_widget));
 }
 /***************************************************************************/
 void clearButtonCallback (

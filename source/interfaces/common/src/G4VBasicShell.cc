@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.cc,v 1.2 1999-04-13 01:26:32 yhajime Exp $
+// $Id: G4VBasicShell.cc,v 1.3 1999-04-16 10:06:08 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -22,8 +22,8 @@
 #endif
 
 G4VBasicShell::G4VBasicShell()
+:currentDirectory("/")
 {
-  currentDirectory = "/";
 }
 
 G4VBasicShell::~G4VBasicShell() 
@@ -31,17 +31,17 @@ G4VBasicShell::~G4VBasicShell()
 
 G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine)
 {
-  G4String rawCommandLine = aCommandLine;
+  G4String rawCommandLine = (G4String)aCommandLine;
   if(rawCommandLine.isNull()||rawCommandLine(0)=='\0') return rawCommandLine;
-  G4String commandLine = rawCommandLine.strip(G4String::both);
+  G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
   G4String parameterString;
   int i = commandLine.index(" ");
   if( i != RW_NPOS )
   {
-    commandString = commandLine(0,i);
+    commandString = (G4String)commandLine(0,i);
     parameterString = " ";
-    parameterString += commandLine(i+1,commandLine.length()-(i+1));
+    parameterString += (G4String)commandLine(i+1,commandLine.length()-(i+1));
   }
   else
   { commandString = commandLine; }
@@ -58,12 +58,12 @@ G4String G4VBasicShell::GetCurrentWorkingDirectory()
 
 G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
 {
-  G4String aNewPrefix = newDir;
-  G4String newPrefix = aNewPrefix.strip(G4String::both);
+  G4String aNewPrefix = (G4String)newDir;
+  G4String newPrefix = (G4String)aNewPrefix.strip(G4String::both);
   G4String newDirectory = ModifyPath( newPrefix );
   if( newDirectory( newDirectory.length() - 1 ) != '/' )
   { newDirectory += "/"; }
-  if( FindDirectory( newDirectory ) == NULL )
+  if( FindDirectory( (const char*)newDirectory ) == NULL )
   { return false; }
   currentDirectory = newDirectory;
   return true;
@@ -71,8 +71,8 @@ G4bool G4VBasicShell::ChangeDirectory(const char* newDir)
 
 G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName)
 {
-  G4String aDirName = dirName;
-  G4String theDir = aDirName.strip(G4String::both);
+  G4String aDirName = (G4String)dirName;
+  G4String theDir = (G4String)aDirName.strip(G4String::both);
   G4String targetDir = ModifyPath( theDir );
   if( targetDir( targetDir.length()-1 ) != '/' )
   { targetDir += "/"; }
@@ -83,7 +83,7 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName)
   while( idx < targetDir.length()-1 )
   {
     int i = targetDir.index("/",idx);
-    comTree = comTree->GetTree(targetDir(0,i+1));
+    comTree = comTree->GetTree((G4String)targetDir(0,i+1));
     if( comTree == NULL ) 
     { return NULL; }
     idx = i+1;
@@ -93,12 +93,12 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName)
 
 G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
 {
-  G4String rawCommandLine = commandName;
-  G4String commandLine = rawCommandLine.strip(G4String::both);
+  G4String rawCommandLine = (G4String)commandName;
+  G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
   int i = commandLine.index(" ");
   if( i != RW_NPOS )
-  { commandString = commandLine(0,i); }
+  { commandString = (G4String)commandLine(0,i); }
   else
   { commandString = commandLine; }
 
@@ -114,7 +114,7 @@ G4String G4VBasicShell::ModifyPath(G4String tempPath)
   else if( tempPath(0) != '.' ) // add current prefix
   { newPath += tempPath; }
   else if( tempPath(0,2) == "./" ) // add current prefix
-  { newPath += tempPath(2,tempPath.length()-2); }
+  { newPath += (G4String)tempPath(2,tempPath.length()-2); }
   else                       // swim up with ".."
   {
     while( 1 )
@@ -123,12 +123,12 @@ G4String G4VBasicShell::ModifyPath(G4String tempPath)
       {
         if( newPath != "/" )
         { 
-	  G4String tmpString = newPath(0,newPath.length()-1);
-          newPath = newPath(0,tmpString.last('/')+1); 
+	  G4String tmpString = (G4String)newPath(0,newPath.length()-1);
+          newPath = (G4String)newPath(0,tmpString.last('/')+1); 
         }
         if( tempPath == ".." || tempPath == "../" )
         { break; }
-        tempPath = tempPath(3,tempPath.length()-3);
+        tempPath = (G4String)tempPath(3,tempPath.length()-3);
       }
       else
       {
@@ -138,6 +138,95 @@ G4String G4VBasicShell::ModifyPath(G4String tempPath)
     }
   }
   return newPath;
+}
+////////////////////////////////////////////
+// Method used for command completion //////
+////////////////////////////////////////////
+G4String G4VBasicShell::Complete(G4String commandName)
+{
+  G4String rawCommandLine = commandName;
+  G4String commandLine = rawCommandLine.strip(G4String::both);
+  int i = commandLine.index(" ");
+  if( i != RW_NPOS ) return rawCommandLine; // Already entering parameters, 
+                                            // assume command path is correct.
+  G4String commandString = commandLine; 
+  G4String targetCom = ModifyPath(commandString);
+  G4UIcommandTree* tree = G4UImanager::GetUIpointer()->GetTree();
+  G4String value = FindMatchingPath(tree,targetCom);
+  if(value=="") return rawCommandLine;
+  return value;
+}
+G4String G4VBasicShell::FindMatchingPath(
+ G4UIcommandTree* aTree
+,G4String aCommandPath
+)
+// From intercoms/src/G4UIcommandTree::FindPath.
+{
+  G4String empty = "";
+  if(aTree==NULL) return empty;
+  G4String pathName = aTree->GetPathName();
+  if( aCommandPath.index( pathName ) == RW_NPOS ) return empty;
+  G4String remainingPath = aCommandPath;
+  remainingPath.remove(0,pathName.length());
+  int i = remainingPath.first('/');
+  if( i == RW_NPOS ) {
+    // Look for number of matching commands :
+    RWTPtrOrderedVector<G4UIcommand> commands;
+    int n_commandEntry = aTree->GetCommandEntry();
+    for( int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
+      G4UIcommand* cmd = aTree->GetCommand(i_thCommand);
+      G4String ss = cmd->GetCommandName();
+      ss.resize(remainingPath.length());
+      if( remainingPath == ss ) commands.insert(cmd);
+    }
+    n_commandEntry = commands.entries();
+    if(n_commandEntry==1) {
+      return (pathName + commands[0]->GetCommandName());
+    } else if (n_commandEntry>=2) {
+      G4cout << "Matching commands :" << endl; 
+      for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ ) {
+	G4UIcommand* cmd = commands[i_thCommand];
+	G4cout << cmd->GetCommandName() << endl; 
+      }
+      return empty;
+    }
+    // Look for sub tree :
+    RWTPtrOrderedVector<G4UIcommandTree> trees;
+    G4String nextPath = pathName;
+    nextPath.append(remainingPath);
+    int n_treeEntry = aTree->GetTreeEntry();
+    for( int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
+      G4UIcommandTree* tree = aTree->GetTree(i_thTree);
+      G4String ss = tree->GetPathName();
+      ss.resize(nextPath.length());
+      if( nextPath == ss ) trees.insert(tree);
+    }
+    n_treeEntry = trees.entries();
+    if(n_treeEntry==1) {
+      return trees[0]->GetPathName();
+    } else if (n_treeEntry>=2) {
+      G4cout << "Matching directories :" << endl; 
+      for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ ) {
+	G4UIcommandTree* tree = trees[i_thTree];
+	G4cout << tree->GetPathName() << endl; 
+      }
+      return empty;
+    } else {
+      return empty; // No match.
+    }
+  } else {
+    // Find path
+    G4String nextPath = pathName;
+    nextPath.append(remainingPath(0,i+1));
+    int n_treeEntry = aTree->GetTreeEntry();
+    for( int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
+      G4UIcommandTree* tree = aTree->GetTree(i_thTree);
+      if( nextPath == tree->GetPathName() ) { 
+	return FindMatchingPath(tree,aCommandPath ); 
+      }
+    }
+  }
+  return empty;
 }
 ////////////////////////////////////////////
 // Method involving an interactive G4cout //
@@ -366,5 +455,15 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   //G4cout << endl;
   ExitHelp();
 }
+
+
+
+
+
+
+
+
+
+
 
 

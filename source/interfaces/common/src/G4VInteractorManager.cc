@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.2 1999-04-13 01:26:32 yhajime Exp $
+// $Id: G4VInteractorManager.cc,v 1.3 1999-04-16 10:06:09 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -24,14 +24,6 @@ G4VInteractorManager::G4VInteractorManager (
 :argc(0)
 ,argv(NULL)
 ,mainInteractor(NULL)
-,dispatchern(0)
-,dispatchers(NULL)
-,preActionn(0)
-,preActions(NULL)
-,postActionn(0)
-,postActions(NULL)
-,shelln(0)
-,shells(NULL)
 ,secondaryLoopEnabled(TRUE)
 ,alreadyInSecondaryLoop(FALSE)
 ,exitSecondaryLoop(0)
@@ -54,24 +46,15 @@ G4VInteractorManager::~G4VInteractorManager (
     }
     free (argv);
   }
-  argv                   = NULL;
-  argc                   = 0;
-  if(dispatchers!=NULL)  free(dispatchers);
-  dispatchers            = NULL;
-  dispatchern            = 0;
-  if(preActions!=NULL)   free(preActions);
-  preActions             = NULL;
-  preActionn             = 0;
-  if(postActions!=NULL)  free(postActions);
-  postActions            = NULL;
-  postActionn            = 0;
-  if(shells!=NULL)       free(shells);
-  shells                 = NULL;
-  shelln                 = 0;
-
-  secondaryLoopEnabled   = TRUE;
+  argv = NULL;
+  argc = 0;
+  dispatchers.clear();
+  preActions.clear();
+  postActions.clear();
+  shells.clear();
+  secondaryLoopEnabled = TRUE;
   alreadyInSecondaryLoop = FALSE;
-  exitSecondaryLoop      = 0;
+  exitSecondaryLoop = 0;
 }
 /***************************************************************************/
 void G4VInteractorManager::SetArguments (
@@ -152,15 +135,8 @@ void G4VInteractorManager::AddDispatcher (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_dispatcher==NULL) return;
-  for(int count=0;count<dispatchern;count++) {
-    if(dispatchers[count]==a_dispatcher) return;  // Done.
-  }
-  if(dispatchern==0) dispatchers = (G4DispatchFunction*)malloc( sizeof(G4DispatchFunction));
-  else               dispatchers = (G4DispatchFunction*)realloc(dispatchers, 
- 				     (dispatchern+1) * sizeof(G4DispatchFunction));
-  if(dispatchers==NULL) return;
-  dispatchers[dispatchern] = a_dispatcher; 
-  dispatchern++;
+  if(dispatchers.contains(a_dispatcher)==TRUE) return;
+  dispatchers.insert(a_dispatcher);
 }
 /***************************************************************************/
 void G4VInteractorManager::RemoveDispatcher (
@@ -169,12 +145,7 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  for(int count=0;count<dispatchern;count++) {
-    if(dispatchers[count]==a_dispatcher) {
-      dispatchers[count] = NULL;
-      return;  // A dispatcher appears once in the List.
-    }
-  }
+  dispatchers.removeAll(a_dispatcher);
 }
 /***************************************************************************/
 void G4VInteractorManager::DispatchEvent (
@@ -183,6 +154,7 @@ void G4VInteractorManager::DispatchEvent (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+  int dispatchern = dispatchers.entries();
   for(int count=0;count<dispatchern;count++) {
     if( 
        (dispatchers[count]!=NULL)          &&
@@ -199,17 +171,8 @@ void G4VInteractorManager::AddSecondaryLoopPreAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_preAction==NULL) return;
-  for(int count=0;count<preActionn;count++) {
-    if(preActions[count]==a_preAction) return;  // Done.
-  }
-  if(preActionn==0) 
-    preActions = (G4SecondaryLoopAction*)malloc( sizeof(G4SecondaryLoopAction));
-  else
-    preActions = (G4SecondaryLoopAction*)realloc(preActions, 
-				(preActionn+1) * sizeof(G4SecondaryLoopAction));
-  if(preActions==NULL) return;
-  preActions[preActionn] = a_preAction; 
-  preActionn++;
+  if(preActions.contains(a_preAction)==TRUE) return;
+  preActions.insert(a_preAction);
 }
 /***************************************************************************/
 void G4VInteractorManager::SecondaryLoopPreActions (
@@ -217,6 +180,7 @@ void G4VInteractorManager::SecondaryLoopPreActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+  int preActionn = preActions.entries();
   for(int count=0;count<preActionn;count++) {
     if(preActions[count]!=NULL) preActions[count]();
   }
@@ -229,17 +193,8 @@ void G4VInteractorManager::AddSecondaryLoopPostAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_postAction==NULL) return;
-  for(int count=0;count<postActionn;count++) {
-    if(postActions[count]==a_postAction) return;  // Done.
-  }
-  if(postActionn==0) 
-    postActions = (G4SecondaryLoopAction*)malloc( sizeof(G4SecondaryLoopAction));
-  else
-    postActions = (G4SecondaryLoopAction*)realloc(postActions, 
-   			         (postActionn+1) * sizeof(G4SecondaryLoopAction));
-  if(postActions==NULL) return;
-  postActions[postActionn] = a_postAction; 
-  postActionn++;
+  if(postActions.contains(a_postAction)==TRUE) return;
+  postActions.insert(a_postAction);
 }
 /***************************************************************************/
 void G4VInteractorManager::SecondaryLoopPostActions (
@@ -247,6 +202,7 @@ void G4VInteractorManager::SecondaryLoopPostActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
+  int postActionn = postActions.entries();
   for(int count=0;count<postActionn;count++) {
     if(postActions[count]!=NULL) postActions[count]();
   }
@@ -265,7 +221,7 @@ void G4VInteractorManager::SecondaryLoop (
     alreadyInSecondaryLoop   = TRUE;
     exitSecondaryLoop        = 0;
     SecondaryLoopPreActions  ();
-    //      for(int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
+    //for(int count=0;count<shelln;count++) XWidgetUniconify(shells[count]);
     void*                    event;
     while(1) {
       event = GetEvent();
@@ -306,14 +262,8 @@ void G4VInteractorManager::AddShell (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_shell==NULL) return;
-  for(int count=0;count<shelln;count++) {
-    if(shells[count]==a_shell) return;  // Done.
-  }
-  if(shelln==0)    shells = (G4Interactor*)malloc( sizeof(G4Interactor));
-  else             shells = (G4Interactor*)realloc(shells, (shelln+1) * sizeof(G4Interactor));
-  if(shells==NULL) return;
-  shells[shelln] = a_shell; 
-  shelln++;
+  if(shells.contains(a_shell)==TRUE) return;
+  shells.insert(a_shell);
 }
 /***************************************************************************/
 void G4VInteractorManager::RemoveShell (
@@ -322,12 +272,7 @@ void G4VInteractorManager::RemoveShell (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  for(int count=0;count<shelln;count++) {
-    if(shells[count]==a_shell) {
-      shells[count] = NULL;
-      return;  // A shell appears once in the List.
-    }
-  }
+  shells.removeAll(a_shell);
 }
 /***************************************************************************/
 void G4VInteractorManager::SetParentInteractor (
