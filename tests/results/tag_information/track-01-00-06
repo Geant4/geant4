@@ -1,0 +1,70 @@
+Dear Paulo and Mark,
+
+ I've committed new G4VParticleChange and derived classes with tag of
+"track-01-00-06".
+
+ The CheckIt methods are revised according to John's proposal (see below).
+ I introduce new G4double constants in G4VParticleChange to satisfy
+requirement of 2). One is "accuracyForWarning" and the other is
+"accuracyForException". Currently they are set to 1.0e-9 and 1.0e-3
+respectively.
+ In addition, corrective actions ( renormalization etc.) are added at the end
+of CheckIt methods.
+
+ Please see my new codes and modify your G4FastStep::CheckIt.
+
+  Best Regards,				
+					Hisaya
+ 
+> John APOSTOLAKIS wrote:
+> >
+> >  Dear Hisaya,
+> >
+> >      We have discussed the question of error messages and exceptions with
+> > Simone, and have decided that our policy of issuing a core dump for small
+> > inaccuracies  ( eg 1e-6 in the magnitude of the momentum direction ) is
+> > too strict.
+> >
+> >  We need to issue warnings in the cases where the error is small, but
+> > noticable.   In particular we made the threshold 10^-6 last December for
+> > that problem,  because 10^-9 was causing problems.   Unfortunately several
+> > people have found the 10^-6 threshold by running several events.   I have
+> > identified the culprit in one case (maybe it is the only one. )
+> >
+> >   My proposal is
+> >
+> >    1) issue warnings in the cases where the error is small, but noticable
+> >
+> >    2) fail only for problems that are not due to significant violations
+> >        not small inaccuracies. In this case maybe (magnitude - 1.0) > 1.0e-3 ?
+> >        After all if in the production version we warn about difference of
+> >        1.0e-6, then failing for 1.0e-3 is reasonable.
+> >
+> >    3) for testing we must set a low threshold (say 10^-9 or 10^-12) and
+> >       try to find and eliminate all the sources of any accuracy problems.
+> >
+> >    4) improve the error message so that it say by how much we differ from
+> >       the expected value.
+> >
+> >   We need to do these things in a hurry.  Can you please make such
+> > corrections in "G4ParticleChange::CheckIt" within 48 hours ?
+> >
+> >   Also are there any other similar "soundness" or
+> > "accuracy-sensitive" checks in this method or any others in tracking ?
+> >
+> >   I will
+> >    1) make similar modification in the geometry
+> >    2) submit the fix that I found in G4MultipleScattering.cc
+> > in order to allow the more severe testing before this weekend.
+> >
+> >    Best Regards,
+> >
+> >         John.
+> >
+> 
+
+--
+  Hisaya Kurashige  [藏重　久弥]
+  Graduate School of Science and Technology, Kobe University
+  e-mail: kurasige@phys.sci.kobe-u.ac.jp
+  TEL:    +81-78-803-5638     FAX:  +81-78-803-5662
