@@ -1,5 +1,3 @@
-#ifndef G4GeneralParticleSourceMessenger_h
-#define G4GeneralParticleSourceMessenger_h 1
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MODULE:       G4GeneralParticleSourceMessenger.hh
@@ -11,24 +9,16 @@
 // Customer:     ESA/ESTEC
 //
 ///////////////////////////////////////////////////////////////////////////////
+// $Id: G4GeneralParticleSourceMessenger.hh,v 1.2 2001-06-28 15:06:33 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+///////////////////////////////////////////////////////////////////////////////
 //
-// DESCRIPTION
-// -----------
+// Class Description:
 //
 // The function of the G4GeneralParticleSourceMessenger is to allow the user to
 // enter commands either in interactive command line mode or through macros to
 // control the G4GeneralParticleSource. The G4GeneralParticleSourceMessenger
 // class is based on G4ParticleGunMessenger.
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// CHANGE HISTORY
-// --------------
-//
-// Version 1.0, 28 February 2000, C Ferguson, Created.
-//
-// Version 1.1, 19 October 2000, Modified to inherit from G4VPrimaryGenerator.
-// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -48,8 +38,22 @@
 // G4String GetCurrentValue(G4UIcommand *command)
 //     Allows the user to retrieve the current values of parameters.
 //     Not implemented yet.
+
+///////////////////////////////////////////////////////////////////////////////
+//
+// CHANGE HISTORY
+// --------------
+//
+// Version 1.0, 28 February 2000, C Ferguson, Created.
+//
+// Version 1.1, 19 October 2000, Modified to inherit from G4VPrimaryGenerator.
+// New name at the request of M. Asai.
 //
 ///////////////////////////////////////////////////////////////////////////////
+//
+#ifndef G4GeneralParticleSourceMessenger_h
+#define G4GeneralParticleSourceMessenger_h 1
+
 #include "G4UImessenger.hh"
 #include "globals.hh"
 //#include "UIcmdWithNucleusAndUnit.hh"
