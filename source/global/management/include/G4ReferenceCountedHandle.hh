@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.4 2001-06-11 15:56:09 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.5 2001-06-12 20:01:02 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,11 @@
 template <class X>
 class G4ReferenceCountedHandle
 {
-private: // with description
-  
+public:
   typedef G4ReferenceCountedHandle RCH;
-  
+
+private: // with description
+    
   class CountedObject {
   public:
     inline CountedObject( X* pObj = 0 )
@@ -64,7 +65,7 @@ private: // with description
     } // Forward to Counter class
 
     inline unsigned int Release() {
-       return( --fCount );
+       return( ( fCount > 0 ) ? --fCount : 0 );
     } // Forward to Counter class
 
     inline unsigned int Count() const {
