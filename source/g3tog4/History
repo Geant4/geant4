@@ -1,7 +1,12 @@
-$Id: History,v 1.48 2001-11-21 14:25:29 gcosmo Exp $
+$Id: History,v 1.49 2002-10-23 17:21:39 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V04-01-00 23-Oct-2002 G.Cosmo
+- G4gsdvn.cc, G4gsposp.cc (I.Hrivnacova):
+  o fix to enable larger number of clone volumes
+  o fix for division defined in a mother with not yet defined parameters.
 
 g3tog4-V03-02-03 21-Nov-2001 G.Cosmo
 - Added G3G4_NO_REFLECTION flag to exclude G4ReflectionFactory if needed.
