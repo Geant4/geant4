@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.5 1999-05-19 14:55:38 kurasige Exp $
+// $Id: G4ParticleTable.cc,v 1.6 1999-05-19 15:07:18 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -136,6 +136,7 @@ void G4ParticleTable::RemoveAllParticles()
   if (fEncodingDictionary)
     {
       fEncodingDictionary->clear();
+      delete fEncodingDictionary;
       fEncodingDictionary = 0;
     }
 
