@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.cc,v 1.11 2000-05-11 13:11:23 japost Exp $
+// $Id: G4ChordFinder.cc,v 1.12 2000-05-11 14:43:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,6 +36,7 @@ G4ChordFinder::G4ChordFinder( G4MagneticField*        theMagField,
   //  by creating in inverse order the  Driver, the Stepper and EqRhs ...
   // G4Mag_EqRhs *
   fEquation = new G4Mag_UsualEqRhs(theMagField); // Should move q, p to 
+  fLastStepEstimate_Unconstrained = DBL_MAX;
                                                      //G4FieldTrack ??
   // --->>  Charge    Q = 0 
   // --->>  Momentum  P = 1       NOMINAL VALUES !!!!!!!!!!!!!!!!!!
@@ -130,7 +131,7 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 {
   // G4int       stepRKnumber=0;
   G4FieldTrack yCurrent=  yStart;  
-  G4double    stepTrial= stepMax;
+  G4double    stepTrial;
   G4double    dydx[G4FieldTrack::ncompSVEC]; 
 
   //  1.)  Try to "leap" to end of interval
@@ -144,8 +145,12 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
   G4int     noTrials=0;
 
+  stepTrial = G4std::min( stepMax, fLastStepEstimate_Unconstrained );
+
   do
   { 
+     G4double stepForChord; // , stepForAccuracy;
+ 
      yCurrent = yStart;    // Always start from initial point
 
      fIntgrDriver->QuickAdvance( yCurrent, dydx, stepTrial, dChordStep, dyErr);
@@ -157,32 +162,29 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
                       //  && (dyErr < eps) ;
 
      oldStepTrial = stepTrial; 
-     if( ! validEndPoint ) {
-         G4double stepForChord, stepForAccuracy;
-         // 
-         // This is needed to decide new step size until QuickAdvance does it
-	 stepForChord = NewStep(stepTrial, dChordStep );
 
+     // This method estimates to step size for a good chord.
+     stepForChord = NewStep(stepTrial, dChordStep, fLastStepEstimate_Unconstrained );
+
+     if( ! validEndPoint ) {
 	 stepTrial = stepForChord;
 #if 0
          // Possible complementary approach:
 	 //  Get the driver to calculate the new step size, if it is needed
-	 stepForAccuracy = fIntgrDriver->ComputeNewStepSize( dyErr/(epsStep*oldStepTrial), stepTrial);
-
+	 stepForAccuracy = fIntgrDriver->ComputeNewStepSize( dyErr/(epsStep*oldStepTrial), 
+							     stepTrial);
 	 stepTrial = G4std::min(stepForChord, stepForAccuracy);
 #endif
 
-#ifdef G4VERBOSE
-	 if( dbg ) 
-	   G4cerr << "Dchord too big. Try new hstep=" << stepTrial << G4endl;
-#endif
+	 // if(dbg) G4cerr<<"Dchord too big. Try new hstep="<<stepTrial<<G4endl;
      }
 #ifdef  TEST_CHORD_PRINT
      G4cout.precision(5);
      G4cout << " ChF/fnc: notrial " << G4std::setw( 3) << noTrials 
             << " this_step= "       << G4std::setw(10) << oldStepTrial 
 	    << " dChordStep=  "     << G4std::setw(10) << dChordStep
-            << " new_step= "        << G4std::setw(10) << stepTrial << endl;
+            << " new_step= "        << G4std::setw(10) << fLastStepEstimate_Unconstrained 
+            << " new_step_constr= " << G4std::setw(10) << stepTrial << endl;
 #endif
      noTrials++; 
   }
@@ -200,30 +202,39 @@ G4ChordFinder::FindNextChord( const  G4FieldTrack  yStart,
 
 // ----------------------------------------------------------------------------
 #if 0          
-                       //    older OPTIONAL code 
-
-     // First debug print
-#ifdef G4VERBOSE
+       // First debug print             //    older OPTIONAL code 
+//   #ifdef G4VERBOSE
      if( dbg ) {
         G4cerr << "Returned from QuickAdvance with: yCur=" << yCurrent <<G4endl;
         G4cerr << " dChordStep= "<< dChordStep <<" dyErr=" << dyErr << G4endl; 
      }
-#endif
-
 #endif
 // ----------------------------------------------------------------------------
 
 // ...........................................................................
 
 G4double G4ChordFinder::NewStep( 
-		      const G4double stepTrialOld, 
-		      const G4double dChordStep  )  // Current dchord achieved.
+		      const G4double  stepTrialOld, 
+		      const G4double  dChordStep,                   // Current dchord achieved.
+                            G4double& stepEstimate_Unconstrained )  
 		   
 {
   G4double stepTrial;
   static G4double lastStepTrial = 1.,  lastDchordStep= 1.;
 
-#if 0 
+#if 1 
+  const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
+
+  stepTrial = stepTrialOld * sqrt( fDeltaChord / dChordStep );
+  stepEstimate_Unconstrained = stepTrial;
+
+  if ( dChordStep < threshold * fDeltaChord ){
+     stepTrial= stepTrialOld *  multiplier;    
+  }
+
+  lastStepTrial = stepTrialOld; 
+  lastDchordStep= dChordStep;
+#else
   if ( dChordStep > 1000. * fDeltaChord ){
         stepTrial= stepTrialOld * 0.03;   
   }else{
@@ -234,18 +245,6 @@ G4double G4ChordFinder::NewStep(
 	stepTrial= stepTrialOld * 0.5;   
      }
   }
-#else
-
-  const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
-
-  if ( dChordStep > threshold * fDeltaChord ){
-     stepTrial = stepTrialOld * sqrt( fDeltaChord / dChordStep );
-  }else{
-     stepTrial= stepTrialOld *  multiplier;    
-  }
-
-  lastStepTrial = stepTrialOld; 
-  lastDchordStep= dChordStep;
 #endif 
 
   // A more sophisticated chord-finder could figure out a better
