@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.19 2004-11-11 16:11:57 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.20 2004-11-11 16:14:51 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -510,7 +510,6 @@ void G4OpenInventorSceneHandler::RequestPrimitives (const G4VSolid& solid) {
 
 void G4OpenInventorSceneHandler::AddThis (const G4Box & box) {
 #ifdef USE_SOPOLYHEDRON
-  printf("debug : ::AddThis(G4Box) %d : %ld : %ld %ld\n",fModelingSolid,fCurrentSeparator,fDetectorRoot,fTransientRoot);
   Geant4_SoPolyhedron* soPolyhedron = 
     new Geant4_SoPolyhedron(box.CreatePolyhedron());
   soPolyhedron->solid.setValue(fModelingSolid?TRUE:FALSE);
