@@ -286,9 +286,9 @@
 *                                                                               
 *     To book the user's histograms                                             
 *
-      CHARACTER*5 chtags(4)
+      CHARACTER*4 chtags(4)
 *
-      DATA chtags /'Edep1','Edep2','Trck1','Trck2'/
+      DATA chtags /'EAbs','EGap','LAbs','LGap'/
 *      
       CALL HBOOKN(1,'sum per event',4,' ',4000,chtags)                                                                                                                                                                                       
 *                                                                               

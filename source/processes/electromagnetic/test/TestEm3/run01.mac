@@ -1,18 +1,20 @@
-# $Id: run01.mac,v 1.2 1999-01-26 16:27:35 maire Exp $
+# $Id: run01.mac,v 1.3 1999-01-27 17:13:12 maire Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
 #
-# Lead-liquidArgon 50 layers; electron 500 MeV
+# Lead-liquidArgon 50 layers; electron 1 GeV
 #
 /control/verbose 2
 #
-#/run/initialize
+/run/particle/setCut 0.5 mm
+/run/initialize
 /run/particle/dumpCutValues
 #
 /run/verbose 2
 /event/drawTracks none
+/run/save on
 #
 /gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 100
+/gun/energy 1 GeV
+/run/beamOn 1000

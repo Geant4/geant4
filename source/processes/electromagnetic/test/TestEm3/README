@@ -1,12 +1,12 @@
-$Id: README,v 1.1 1999-01-08 16:32:49 gunter Exp $
+$Id: README,v 1.2 1999-01-27 17:13:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                            ExampleN03
-                            ----------
+                            TestEm3
+                            -------
 
 	This example simulates a simple Sampling Calorimeter setup.
 	
@@ -75,7 +75,7 @@ $Id: README,v 1.1 1999-01-08 16:32:49 gunter Exp $
  
  	The Visualization Manager is set in the main().
  	The initialisation of the drawing is done via the command
- 	/vis~/create_view in the macro prerunN03.mac. This macro is
+ 	/vis~/create_view in the macro init.mac. This macro is
  	automatically read from the main in case of interactive running mode.
  	
  	The detector has a default view which is a longitudinal view of the 
@@ -101,19 +101,31 @@ $Id: README,v 1.1 1999-01-08 16:32:49 gunter Exp $
  6- HOW TO START ?
  
  	- compile and link to generate an executable
- 		% cd N03
+ 		% cd TestEm3
  		% gmake
  		
- 	- execute N03 in 'batch' mode from macro files
- 		% exampleN03   run1.mac
+ 	- execute TestEm3 in 'batch' mode from macro files
+ 		% TestEm3   run01.mac
  		
- 	- execute N03 in 'interactive mode' with visualization
- 		% exampleN03
+ 	- execute TestEm3 in 'interactive mode' with visualization
+ 		% TestEm3
  		....
  		Idle> type your commands. For instance:
  		Idle> /control/execute newgeom.mac
  		....
  		Idle> exit
  	
- 	  
+ 7- NTUPLE
+ 
+	Testem3 produce an Ntuple which is saved as testem3.histo
+	under the control of the command /run/save on
+ 
+	Content of this Ntuple:
+  
+	EAbs = energy deposit in absorber per event
+	EGap = energy deposit in gap      per event
+	LAbs = charged track length in absorber per event
+	LGap = charged track length in gap      per event
+ 
+	  
  	

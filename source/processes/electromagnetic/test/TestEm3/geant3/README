@@ -20,8 +20,8 @@
  
  Content of this Ntuple:
   
-   Edep1 = energy deposit in absorber per event
-   Edep2 = energy deposit in gap      per event
-   Trck1 = charged track length in absorber per event
-   Trck2 = charged track length in gap      per event
+   EAbs = energy deposit in absorber per event
+   EGap = energy deposit in gap      per event
+   LAbs = charged track length in absorber per event
+   LGap = charged track length in gap      per event
  
