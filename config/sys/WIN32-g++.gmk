@@ -1,7 +1,7 @@
 #
 # ------ GNU/WIN32 CYGNUS ------   !!! not supported !!!
-#                                  Cygnus CygWin - gcc-2.95.3, gcc-3.2
-#                                  Windows 2000/XP
+#                             Cygnus CygWin - gcc-3.2 and higher
+#                                     Windows 2000/XP
 #
 # Stefano Agostinelli (agos001@pn.itnet.it) - IST Group, Genova
 #
@@ -24,10 +24,12 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
+  G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   FCLIBS := -lg2c -lnsl
   ECHO    := echo -e
+  SHEXT   := so
   X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
   X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
   XMFLAGS   := -I/usr/X11R6/include
@@ -39,12 +41,16 @@ ifeq ($(G4SYSTEM),WIN32-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-
   define build-granular-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
-    @echo "Shared Libraries not supported on $(G4SYSTEM)
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) $(INTYLIBS) \
+                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 
 endif
