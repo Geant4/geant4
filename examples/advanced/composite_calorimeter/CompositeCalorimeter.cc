@@ -30,7 +30,9 @@
 #include "CCalRunAction.hh"
 
 #include "CCalPrimaryGeneratorAction.hh"
-#include "CCalPhysicsList.hh"
+#include "LHEP.hh"
+#include "QGSP.hh"
+#include "QGSC.hh"
 
 #include "G4RunManager.hh"
 #include "G4UIterminal.hh"
@@ -53,7 +55,12 @@ int main(int argc,char** argv) {
 
   G4RunManager * runManager = new G4RunManager;
   runManager->SetUserInitialization(new CCalDetectorConstruction);
-  runManager->SetUserInitialization(new CCalPhysicsList);     
+
+  //***LOOKHERE*** CHOOSE THE PHYSICS LIST.
+  // runManager->SetUserInitialization(new LHEP);     // LHEP     
+  // runManager->SetUserInitialization(new QGSP);     // QGSP   
+  runManager->SetUserInitialization(new QGSC);     // QGSC
+  //***endLOOKHERE***
 
   ////////////////////////////
   //  User action classes.  //

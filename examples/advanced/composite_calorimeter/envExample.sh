@@ -8,12 +8,6 @@
 # G4ANALYSIS_USE must be set to 1).
 #------------------------------------------------------------------
 #
-### # --- Aida 2.2 , Anaphe 4.0.5 ---
-### export LHCXXTOP=/afs/cern.ch/sw/lhcxx/
-### export LHCXXVERS=4.0.5
-### export PLATF=redhat72/gcc-2.95.2/
-###  . $LHCXXTOP/share/LHCXX/$LHCXXVERS/install/sharedstart.sh
-# 
 # --- Aida 3.0 , Anaphe 5.0.2 ---
 #. /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/setupAnaphe
 #export PATH=$PATH:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/

@@ -194,9 +194,8 @@ G4RotationMatrix* CCalRotationMatrixFactory::AddMatrix(const G4String& name,
   G4RotationMatrix *rotMat = new G4RotationMatrix();
   rotMat->rotateAxes(xprime, yprime, zprime);
   if (*rotMat == G4RotationMatrix()) {
-    //	G4cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
-    G4cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." 
-	 << G4endl;
+    // G4cerr << "WARNING: Matrix " << name << " will not be created as a rotation matrix." 
+    // G4cerr << "WARNING: Matrix " << name << " is = identity matrix. It will not be created as a rotation matrix." << G4endl;
     delete rotMat;
     rotMat=0;
   } else {

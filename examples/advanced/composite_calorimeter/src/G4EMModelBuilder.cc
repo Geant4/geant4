@@ -1,15 +1,15 @@
-#include "G4EMBuilder.hh"
+#include "G4EMModelBuilder.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-G4EMBuilder::
-G4EMBuilder() {}
+G4EMModelBuilder::
+G4EMModelBuilder() {}
 
-G4EMBuilder::
-~G4EMBuilder() {}
+G4EMModelBuilder::
+~G4EMModelBuilder() {}
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
@@ -19,7 +19,7 @@ G4EMBuilder::
 #include "G4ProcessManager.hh"
 
 
-void G4EMBuilder::Build()
+void G4EMModelBuilder::Build()
 {
   G4ProcessManager * pManager = 0;
   

@@ -1,4 +1,4 @@
-#include "EMPhysics.hh"
+#include "EMModelPhysics.hh"
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
@@ -12,13 +12,13 @@
 #include "G4AntiNeutrinoE.hh"
 
 
-EMPhysics::
-EMPhysics(const G4String& name) : G4VPhysicsConstructor(name) {}
+EMModelPhysics::
+EMModelPhysics(const G4String& name) : G4VPhysicsConstructor(name) {}
 
-EMPhysics::
-~EMPhysics() {}
+EMModelPhysics::
+~EMModelPhysics() {}
 
-void EMPhysics::
+void EMModelPhysics::
 ConstructParticle()
 {
   G4Gamma::GammaDefinition();
@@ -28,10 +28,10 @@ ConstructParticle()
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
 }
 
-void EMPhysics::
+void EMModelPhysics::
 ConstructProcess()
 {
-  theEMPhysics.Build();
+  theEMModelPhysics.Build();
 }
 
 

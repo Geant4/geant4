@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: History,v 1.11 2003-05-23 14:20:33 ribon Exp $
+$Id: History,v 1.12 2003-06-12 15:25:20 ribon Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -8,6 +8,10 @@ $Id: History,v 1.11 2003-05-23 14:20:33 ribon Exp $
 
                       Example History file
                       ---------------------
+
+12.06.2003 - A.Ribon (ccal-V05-01-02)
+- Updated the LHEP, QGSP, and QGSC Physics Lists. 
+  Done also some clean up.
 
 23.05.2003 - A.Ribon (ccal-V05-01-01)
 - Removed some compilation warnings, after the introduction of

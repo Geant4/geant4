@@ -1,4 +1,4 @@
-#include "G4HadronQEDBuilder.hh"
+#include "G4HadronModelQEDBuilder.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
@@ -9,6 +9,8 @@
 #include "G4BaryonConstructor.hh"
 #include "G4ProcessManager.hh"
 
+#include "G4Proton.hh"
+#include "G4AntiProton.hh"
 #include "G4PionPlus.hh"
 #include "G4PionMinus.hh"
 #include "G4KaonPlus.hh"
@@ -22,11 +24,11 @@
 #include "G4OmegaMinus.hh"
 #include "G4AntiOmegaMinus.hh"
 
-G4HadronQEDBuilder::G4HadronQEDBuilder() {}
-G4HadronQEDBuilder::~G4HadronQEDBuilder(){}
+G4HadronModelQEDBuilder::G4HadronModelQEDBuilder() {}
+G4HadronModelQEDBuilder::~G4HadronModelQEDBuilder(){}
 
-void G4HadronQEDBuilder::
-RegisterOne(G4ProcessManager* aP, G4MultipleScattering * aM, G4hIonisation* aI)
+void G4HadronModelQEDBuilder::
+RegisterOne(G4ProcessManager* aP, G4MultipleScatteringSTD * aM, G4hIonisationSTD * aI)
 {
   aP->AddProcess(aI, ordInActive,2, 2);
   aP->AddProcess(aM);
@@ -34,7 +36,7 @@ RegisterOne(G4ProcessManager* aP, G4MultipleScattering * aM, G4hIonisation* aI)
   aP->SetProcessOrdering(aM, idxPostStep, 1);
 }
 
-void G4HadronQEDBuilder::Build()
+void G4HadronModelQEDBuilder::Build()
 {
   // PionPlus
   RegisterOne(G4PionPlus::PionPlus()->GetProcessManager(), &thePionPlusMult, &thePionPlusIonisation);

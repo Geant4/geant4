@@ -1,16 +1,16 @@
-#include "IonPhysics.hh"
+#include "IonModelPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-IonPhysics::IonPhysics(const G4String& name)
+IonModelPhysics::IonModelPhysics(const G4String& name)
                  :  G4VPhysicsConstructor(name)
 {
 }
 
-IonPhysics::~IonPhysics()
+IonModelPhysics::~IonModelPhysics()
 {
 }
 
@@ -20,7 +20,7 @@ IonPhysics::~IonPhysics()
 // Nuclei
 #include "G4IonConstructor.hh"
 
-void IonPhysics::ConstructParticle()
+void IonModelPhysics::ConstructParticle()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;
@@ -31,7 +31,7 @@ void IonPhysics::ConstructParticle()
 #include "G4ProcessManager.hh"
 
 
-void IonPhysics::ConstructProcess()
+void IonModelPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
   

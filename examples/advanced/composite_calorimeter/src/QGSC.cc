@@ -1,10 +1,4 @@
-//---------------------------------------------------
-// This file should be copied as CCalPhysicsList.cc
-// if you want to use the 
-//                        *** QGSP *** 
-// Physics List
-//---------------------------------------------------
-#include "CCalPhysicsList.hh"
+#include "QGSC.hh"
 
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
@@ -22,13 +16,17 @@
 #include "GeneralPhysics.hh"
 #include "EMPhysics.hh"
 #include "MuonPhysics.hh"
-#include "HadronPhysicsQGSP.hh"
+#include "HadronPhysicsQGSC.hh"
 #include "IonPhysics.hh"
+#include "G4DataQuestionaire.hh"
 
-CCalPhysicsList::CCalPhysicsList():  G4VModularPhysicsList()
+QGSC::QGSC():  G4VModularPhysicsList()
 {
   // default cut value  (1.0mm) 
   // defaultCutValue = 1.0*mm;
+  G4DataQuestionaire(photon);
+  G4cout << "You are using the simulation engine: QGSC 2.4"<<G4endl;
+  G4cout <<G4endl<<G4endl;
   defaultCutValue = 0.7*mm;  
   SetVerboseLevel(1);
 
@@ -42,7 +40,7 @@ CCalPhysicsList::CCalPhysicsList():  G4VModularPhysicsList()
   RegisterPhysics(  new MuonPhysics("muon"));
 
    // Hadron Physics
-  RegisterPhysics(  new HadronPhysicsQGSP("hadron"));
+  RegisterPhysics(  new HadronPhysicsQGSC("hadron"));
 
   // Ion Physics
   RegisterPhysics( new IonPhysics("ion"));
@@ -50,14 +48,14 @@ CCalPhysicsList::CCalPhysicsList():  G4VModularPhysicsList()
 
 }
 
-CCalPhysicsList::~CCalPhysicsList()
+QGSC::~QGSC()
 {
 }
 
-void CCalPhysicsList::SetCuts()
+void QGSC::SetCuts()
 {
   if (verboseLevel >1){
-    G4cout << "CCalPhysicsList::SetCuts:";
+    G4cout << "QGSC::SetCuts:";
   }  
   //  " G4VUserPhysicsList::SetCutsWithDefault" method sets 
   //   the default cut value for all particle types 
@@ -71,12 +69,7 @@ void CCalPhysicsList::SetCuts()
   SetCutValue(kNuCut,"anti_nu_tau");
   SetCutValue(kNuCut,"anti_nu_mu");
  
-  DumpCutValues(G4Electron::ElectronDefinition() ); 
-  DumpCutValues(G4Positron::PositronDefinition()); 
-  DumpCutValues(G4MuonPlus::MuonPlusDefinition() ); 
-  DumpCutValues(G4MuonMinus::MuonMinusDefinition()); 
-  DumpCutValues(G4Gamma::GammaDefinition() ) ;
- 
+  G4VUserPhysicsList::DumpCutValuesTable();  
   
 }
 

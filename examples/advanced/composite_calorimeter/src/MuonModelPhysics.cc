@@ -1,16 +1,16 @@
-#include "MuonPhysics.hh"
+#include "MuonModelPhysics.hh"
 
 #include "globals.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"   
 
 
-MuonPhysics::MuonPhysics(const G4String& name)
+MuonModelPhysics::MuonModelPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name)
 {
 }
 
-MuonPhysics::~MuonPhysics()
+MuonModelPhysics::~MuonModelPhysics()
 {
 }
 
@@ -26,7 +26,7 @@ MuonPhysics::~MuonPhysics()
 #include "G4NeutrinoMu.hh"
 #include "G4AntiNeutrinoMu.hh"
 
-void MuonPhysics::ConstructParticle()
+void MuonModelPhysics::ConstructParticle()
 {
   // Mu
   G4MuonPlus::MuonPlusDefinition();
@@ -45,9 +45,10 @@ void MuonPhysics::ConstructParticle()
 
 #include "G4ProcessManager.hh"
 
-void MuonPhysics::ConstructProcess()
+void MuonModelPhysics::ConstructProcess()
 {
   G4ProcessManager * pManager = 0;
+  G4cout << "###################################### muon physics is constructed "<<G4endl;
 
   // Muon Plus Physics
   pManager = G4MuonPlus::MuonPlus()->GetProcessManager();
