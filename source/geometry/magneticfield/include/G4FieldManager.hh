@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FieldManager.hh,v 1.12 2003-11-08 03:27:04 japost Exp $
+// $Id: G4FieldManager.hh,v 1.13 2003-11-08 03:55:16 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -82,7 +82,7 @@ class G4FieldManager
           //   - assumes pure magnetic field (so Energy constant)
      virtual ~G4FieldManager();
 
-     inline G4bool          SetDetectorField(G4Field *detectorField);
+     G4bool          SetDetectorField(G4Field *detectorField);
      inline const G4Field*  GetDetectorField() const;
      inline G4bool          DoesFieldExist() const;
         // Set, get and check the field object
