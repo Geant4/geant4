@@ -99,8 +99,7 @@ GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
   G4double theA = anE->GetN();
   G4double theZ = anE->GetZ();
   G4double eleMass; 
-  eleMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))-
-              theZ*G4Electron::ElectronDefinition()->GetPDGMass() 
+  eleMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theZ+eps), static_cast<G4int>(theA+eps))
 	     ) / G4Neutron::Neutron()->GetPDGMass();
   
   G4ReactionProduct boosted;

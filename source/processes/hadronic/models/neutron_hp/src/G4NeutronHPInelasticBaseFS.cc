@@ -159,8 +159,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 // prepare target
   G4double targetMass;
   G4double eps = 0.0001;
-  targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
-                            theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() ) /
+  targetMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))) /
                G4Neutron::Neutron()->GetPDGMass();
   if(theEnergyAngData!=NULL)
       targetMass = theEnergyAngData->GetTargetMass();
@@ -245,8 +244,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       }
     }
     G4ReactionProduct * aHadron;
-    G4double localMass = ( G4NucleiPropertiesTable::GetAtomicMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps))-
-                            theBaseZ*G4Electron::ElectronDefinition()->GetPDGMass() );
+    G4double localMass = ( G4NucleiPropertiesTable::GetNuclearMass(static_cast<G4int>(theBaseZ+eps), static_cast<G4int>(theBaseA+eps)));
     G4ThreeVector bufferedDirection(0,0,0);
     for(i0=0; i0<nDef; i0++)
     {
@@ -282,7 +280,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	    G4double mn = G4Neutron::Neutron()->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
-	    G4double concreteMass = G4NucleiPropertiesTable::GetAtomicMass(z1, a1)-z1*G4Electron::ElectronDefinition()->GetPDGMass();
+	    G4double concreteMass = G4NucleiPropertiesTable::GetNuclearMass(z1, a1);
 	    G4double availableEnergy = eKinetic+mn+localMass-m1-m2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
 	    G4double emin = availableEnergy+m1+m2 - sqrt((m1+m2)*(m1+m2)+orgMomentum*orgMomentum);
