@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Transportation.cc,v 1.8 1999-12-15 14:53:50 gunter Exp $
+// $Id: G4Transportation.cc,v 1.9 2000-05-12 10:43:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -457,9 +457,12 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
 
        assert( fCurrentTouchable->GetVolume()->GetName() == 
                track.GetVolume()->GetName() );
-       retCurrentTouchable = fCurrentTouchable; 
+       // retCurrentTouchable = fCurrentTouchable; 
+       fParticleChange.SetTouchableChange( fCurrentTouchable );
+       
     }else{
-       retCurrentTouchable = track.GetTouchable();
+       // retCurrentTouchable = track.GetTouchable();
+       fParticleChange.SetTouchableChange( track.GetTouchable() );
     }
     //  This must be done in the above if ( AtSur ) fails
     //  We also do it for if (true) in order to get debug/opt to  
@@ -476,10 +479,14 @@ G4VParticleChange* G4Transportation::PostStepDoIt(
     //      overwrite the (unset) one in particle change)
     //  Although in general this is fCurrentTouchable, at the start of
     //   a step it could be different ... ??
-    retCurrentTouchable = track.GetTouchable();
+    fParticleChange.SetTouchableChange( track.GetTouchable() );
+    // retCurrentTouchable = track.GetTouchable();
 #endif
 
   }                   // endif ( fGeometryLimitedStep ) 
+
+  G4Material *pMaterial = retCurrentTouchable->GetVolume()->GetLogicalVolume()->GetMaterial(); 
+  fParticleChange.SetMaterialChange( pMaterial );
 
   // Set the touchable in ParticleChange
   //   this must always be done because the particle change always
