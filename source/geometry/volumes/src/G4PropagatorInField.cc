@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.18 2001-05-23 19:09:43 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.19 2001-05-23 19:29:06 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,7 @@
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
 
-const G4double  G4PropagatorInField::fEpsilonMin = 1.0e-10 ;  
+const G4double  G4PropagatorInField::fEpsilonMinDefault = 1.0e-10 ;  
 
 ///////////////////////////////////////////////////////////////////////////
 //

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.16 2001-05-23 18:23:33 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.17 2001-05-23 19:28:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -158,3 +158,18 @@ G4FieldTrack G4PropagatorInField::GetEndState() const
 {
   return End_PointAndTangent;
 }
+
+// Minimum for Relative accuracy of any Step 
+inline 
+G4double  G4PropagatorInField::GetMinimumEpsilonStep() const
+{
+  return fEpsilonMin; 
+}
+
+inline 
+void      G4PropagatorInField::SetMinimumEpsilonStep(G4double newEpsMin)
+{
+  if( (newEpsMin > 0.0) && (G4std::fabs(1.0+newEpsMin)>1.0) )
+    fEpsilonMin= newEpsMin;
+}
+

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.hh,v 1.14 2001-05-23 18:22:55 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.15 2001-05-23 19:28:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,6 +118,10 @@ class G4PropagatorInField
 
    inline G4FieldTrack GetEndState() const;
 
+     // Minimum for Relative accuracy of any Step 
+   inline G4double  GetMinimumEpsilonStep() const;
+   inline void      SetMinimumEpsilonStep(G4double newEpsMin);
+
  public:  // without description
 
    // void  SetGlobalFieldMgr( G4FieldManager *detectorFieldMgr );
@@ -166,7 +170,9 @@ class G4PropagatorInField
    //  Values for the small possible relative accuracy of a step
    //       (corresponding to the greatest possible integration accuracy)
 
-   static const G4double  fEpsilonMin ;                     // 1.0e-10 ;  
+     // Minimum for Relative accuracy of any Step 
+   G4double  fEpsilonMin; 
+   static const G4double  fEpsilonMinDefault;               // 1.0e-10 ;  
 
    G4int  fmax_loop_count;
 
