@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.10 2004-11-11 16:11:57 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.11 2004-11-12 11:48:39 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -303,12 +303,14 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     G4OpenInventorWinViewer* This = 
       (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
     if(This) {
-      if(aWParam==ID_ESCAPE) {
-        //printf("debug : escape...\n");
-        This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
-      } else if(aWParam==ID_POSTSCRIPT) {
-        //printf("debug : PS...\n");
-        This->WritePostScript();
+      if(aLParam==0) { //From menu.
+        if(aWParam==ID_ESCAPE) {
+          //printf("debug : escape...\n");
+          This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
+        } else if(aWParam==ID_POSTSCRIPT) {
+          //printf("debug : PS...\n");
+          This->WritePostScript();
+        }
       }
     }
   }return 0;
