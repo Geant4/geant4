@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.38 2004-11-17 11:18:58 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.39 2004-11-17 15:01:11 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -229,13 +229,19 @@ void G4VEnergyLossProcess::Clear()
 
 void G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
+
   // Are particle defined?
-  if( !particle ) particle = &part;
+  if( !particle ) {
+    if(part.GetParticleType() == "nucleus" && part.GetParticleSubType() == "generic") 
+         particle = G4GenericIon::GenericIon();
+    else particle = &part;
+  }
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossProcess::PreparePhysicsTable for "
            << GetProcessName()
            << " for " << part.GetParticleName()
+           << " local: " << particle->GetParticleName()
            << G4endl;
   }
 

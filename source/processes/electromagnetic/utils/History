@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2004-11-17 11:18:58 vnivanch Exp $
+$Id: History,v 1.175 2004-11-17 15:01:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 17 November 04: V.Ivanchenko (utils-V06-02-16)
 - Update signature of G4EmCalculator
 - Add method CrossSectionPerAtom to G4VEmModel
+- Fix bug at initialisation for ion
 
 15 November 04: V.Ivanchenko (utils-V06-02-15)
 - Remove ProposeTrackStatus from AlongStep
