@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Trd.cc,v 1.3 2000-05-05 10:05:12 grichine Exp $
+// $Id: testG4Trd.cc,v 1.4 2000-05-25 08:18:39 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  
@@ -27,12 +27,29 @@
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
 
+///////////////////////////////////////////////////////////////////
+//
+// Dave's auxiliary function
+
+const G4String OutputInside(const EInside a)
+{
+  switch(a) 
+  {
+    case kInside : return "kInside"  ; 
+    case kOutside: return "kOutside" ;
+    case kSurface: return "kSurface" ;
+  }
+  return "????";
+}
+
+
 G4bool testG4Trd()
 {
-    G4ThreeVector pzero(0,0,0);
-    G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40);
-    G4ThreeVector ponmxside(-20,0,0),ponmyside(0,-30,0),ponmzside(0,0,-40);
-    G4ThreeVector ponzsidey(0,25,40),ponmzsidey(0,25,-40);
+  EInside inside ;
+  G4ThreeVector pzero(0,0,0);
+  G4ThreeVector ponxside(20,0,0),ponyside(0,30,0),ponzside(0,0,40);
+  G4ThreeVector ponmxside(-20,0,0),ponmyside(0,-30,0),ponmzside(0,0,-40);
+  G4ThreeVector ponzsidey(0,25,40),ponmzsidey(0,25,-40);
 
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
     G4ThreeVector pbigmx(-100,0,0),pbigmy(0,-100,0),pbigmz(0,0,-100);
@@ -53,7 +70,7 @@ G4bool testG4Trd()
 
     G4Trd trd1("Test Box #1",20,20,30,30,40);
     G4Trd trd2("Test Trd",10,30,20,40,40);
-    G4Trd trd3("BABAR Trd",0.14999999999999999,0.14999999999999999, 
+  G4Trd trd3("BABAR Trd",0.14999999999999999,0.14999999999999999, 
                            24.707000000000001, 24.707000000000001, 
 	                   22.699999999999999) ;
 
@@ -63,11 +80,48 @@ G4bool testG4Trd()
     assert(trd2.GetName()=="Test Trd");
 
 // Check Inside
+
     assert(trd1.Inside(pzero)==kInside);
     assert(trd1.Inside(pbigz)==kOutside);
     assert(trd1.Inside(ponxside)==kSurface);
     assert(trd1.Inside(ponyside)==kSurface);
     assert(trd1.Inside(ponzside)==kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(20,30,40)) ;
+    //  G4cout << "trd1.Inside((20,30,40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(-20,30,40)) ;
+    // G4cout << "trd1.Inside((-20,30,40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(20,-30,40)) ;
+    //  G4cout << "trd1.Inside((20,-30,40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(20,30,-40)) ;
+    // G4cout << "trd1.Inside((20,30,-40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(20,30,0)) ;
+    // G4cout << "trd1.Inside((20,30,0)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(0,30,40)) ;
+    // G4cout << "trd1.Inside((0,30,40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(20,0,40)) ;
+    // G4cout << "trd1.Inside((20,0,40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+    inside = trd1.Inside(G4ThreeVector(-20,-30,-40)) ;
+    // G4cout << "trd1.Inside((-20,-30,-40)) = " << OutputInside(inside) << G4endl ;
+    assert(inside == kSurface);
+
+
+
+
 
     assert(trd2.Inside(pzero)==kInside);
     assert(trd2.Inside(pbigz)==kOutside);
