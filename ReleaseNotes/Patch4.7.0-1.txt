@@ -45,14 +45,16 @@ List of fixes included in this public patch since the public release 7.0:
     -------------------------
     + standard:
       o Fix in UniversalFluctuation: setting proper constants for probLim 
-        and minimum energy-loss.
+        and minimum energy-loss, to improve simulation of energy loss in
+        thin absorbers.
       o Fix in MultipleScattering for function SetSamplez().
-      o Add extra protection to G4PAIModel to fix observed cases of NaN. 
+      o Add extra protection to G4PAIModel to fix cases of NaN observed
+        in production for ALICE. 
     + utils:
       o Bug fix to avoid crash in the inactivation of e- ionisation.
       o Added protection on the value of effective charge to ensure energy
-        loss for low energy ions. Fixing initialisation problem for ion beam
-        observed in CMS.
+        loss for low energy ions.
+      o Fixing initialisation problem for ion beam observed in CMS.
 
   o Hadronic Processes:
     ------------------
