@@ -233,29 +233,49 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	      PropertyPointer = 
 	      aMaterialPropertiesTable->GetProperty("REFLECTIVITY");
-	      if (PropertyPointer) theReflectivity = 
+	      if (PropertyPointer) { 
+                      theReflectivity =
 		      PropertyPointer->GetProperty(thePhotonMomentum);
+              } else {
+                      theReflectivity = 1.0;
+              }
 
 	      PropertyPointer = 
 	      aMaterialPropertiesTable->GetProperty("EFFICIENCY");
-	      if (PropertyPointer) theEfficiency = 
+	      if (PropertyPointer) {
+                      theEfficiency =
 		      PropertyPointer->GetProperty(thePhotonMomentum);
+              } else {
+                      theEfficiency = 0.0;
+              }
 
 	      if ( theModel == unified ) {
 	        PropertyPointer = 
 		aMaterialPropertiesTable->GetProperty("SPECULARLOBECONSTANT");
-	        if (PropertyPointer) prob_sl = 
+	        if (PropertyPointer) {
+                         prob_sl =
 			 PropertyPointer->GetProperty(thePhotonMomentum);
+                } else {
+                         prob_sl = 0.0;
+                }
 
 	        PropertyPointer = 
 		aMaterialPropertiesTable->GetProperty("SPECULARSPIKECONSTANT");
-	        if (PropertyPointer) prob_ss = 
+	        if (PropertyPointer) {
+                         prob_ss =
 			 PropertyPointer->GetProperty(thePhotonMomentum);
+                } else {
+                         prob_ss = 0.0;
+                }
 
 	        PropertyPointer = 
 		aMaterialPropertiesTable->GetProperty("BACKSCATTERCONSTANT");
-	        if (PropertyPointer) prob_bs = 
+	        if (PropertyPointer) {
+                         prob_bs =
 			 PropertyPointer->GetProperty(thePhotonMomentum);
+                } else {
+                         prob_bs = 0.0;
+                }
 	      }
 	   }
            else if (theFinish == polishedbackpainted ||
