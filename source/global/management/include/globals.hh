@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: globals.hh,v 1.21 2003-01-22 17:57:08 gcosmo Exp $
+// $Id: globals.hh,v 1.22 2003-02-05 15:26:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,8 +95,7 @@
 #include "templates.hh"
 
 // System of Units and Physical Constants
-////#include <CLHEP/Units/PhysicalConstants.h>
-#include "PhysicalConstants.h"
+#include <CLHEP/Units/PhysicalConstants.h>
 
 // Global error function
 #include "G4ExceptionSeverity.hh"
