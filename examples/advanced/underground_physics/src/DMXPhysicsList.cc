@@ -407,7 +407,7 @@ void DMXPhysicsList::ConstructOp() {
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessAlpha->SetTrackSecondariesFirst(true);
   theScintProcessAlpha->SetScintillationYield(60000./MeV);
-  theScintProcessAlpha->SetResolutionScale(0./MeV);
+  theScintProcessAlpha->SetResolutionScale(1.);
   theScintProcessAlpha->SetScintillationTime(20.*ns);
   theScintProcessAlpha->SetVerboseLevel(OpVerbLevel);
 
@@ -416,7 +416,7 @@ void DMXPhysicsList::ConstructOp() {
   // theScintProcessNuc->DumpPhysicsTable();
   theScintProcessNuc->SetTrackSecondariesFirst(true);
   theScintProcessNuc->SetScintillationYield(5000./MeV);
-  theScintProcessNuc->SetResolutionScale(0./MeV);
+  theScintProcessNuc->SetResolutionScale(1.);
   theScintProcessNuc->SetScintillationTime(20.*ns);
   theScintProcessNuc->SetVerboseLevel(OpVerbLevel);
 

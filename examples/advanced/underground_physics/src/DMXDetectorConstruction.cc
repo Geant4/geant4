@@ -51,7 +51,6 @@
 #include "G4Sphere.hh"
 #include "G4UnionSolid.hh"
 #include "G4SubtractionSolid.hh"
-#include "G4SphericalSurface.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
