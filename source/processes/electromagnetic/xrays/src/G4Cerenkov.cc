@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cerenkov.cc,v 1.2 1999-10-28 00:03:06 gum Exp $
+// $Id: G4Cerenkov.cc,v 1.3 1999-10-28 01:24:55 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -123,7 +123,6 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4double step_length;
         step_length = aStep.GetStepLength();
-        if(step_length == 0.0)step_length = aStep.GetStepLength();
 
 	MeanNumPhotons = MeanNumPhotons * step_length;
 
@@ -132,7 +131,7 @@ G4Cerenkov::AlongStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
 	G4int NumPhotons = (G4int) RandPoisson::shoot(MeanNumPhotons);
 
-	if (NumPhotons == 0) {
+	if (NumPhotons <= 0) {
 
 		// return unchanged particle and no secondaries  
 
@@ -387,7 +386,7 @@ G4Cerenkov::GetContinuousStepLimit(const G4Track& aTrack,
 	// be generated in a Step, then return the Step length for that 
 	// number of photons. 
  
-	if (fMaxPhotons == 0) return DBL_MAX;
+	if (fMaxPhotons <= 0) return DBL_MAX;
 
         const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
@@ -423,7 +422,7 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 {
 	const G4double Rfact = 369.81/(eV * cm);
 
-        if(aParticle->GetTotalMomentum() == 0.0)return 0.0;
+        if(aParticle->GetTotalMomentum() <= 0.0)return 0.0;
 
 	G4double BetaInverse = aParticle->GetTotalEnergy() /
 			       aParticle->GetTotalMomentum();
