@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.cc,v 1.2 1999-04-13 09:48:06 kurasige Exp $
+// $Id: G4VProcess.cc,v 1.3 1999-04-14 10:50:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -78,7 +78,7 @@ void G4VProcess::StartTracking()
   theNumberOfInteractionLengthLeft = -1.0;
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4VProcess::StartTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::StartTracking() [" << theProcessName << "]" <<endl;
   }
 #endif
 }
@@ -87,7 +87,7 @@ void G4VProcess::EndTracking()
 {
 #ifdef G4VERBOSE
   if (verboseLevel>2) {
-    G4cerr << "G4VProcess::EndTracking() [" << theProcessName << "]" <<endl;
+    G4cout << "G4VProcess::EndTracking() [" << theProcessName << "]" <<endl;
   }
 #endif
   theNumberOfInteractionLengthLeft = -1.0;

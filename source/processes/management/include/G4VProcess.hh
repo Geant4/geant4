@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.2 1999-04-13 09:45:13 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.3 1999-04-14 10:50:42 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -168,14 +168,9 @@ class G4VProcess
       virtual void StartTracking();
       virtual void EndTracking();
       // inform Start/End of tracking for each track to the physics process 
+ 
 
   protected:
-       //--- Removed    ----//
-      //  G4PhysicsTable* thePhysicsTable;
-      //  A Physics Table can be either a cross-sections table or
-      //  an energy table (or can be used for other specific
-      //  purposes).
-
       G4VParticleChange* pParticleChange;
       //  The pointer to G4VParticleChange object 
       //  which is modified and returned by address by the DoIt() method.
@@ -276,3 +271,23 @@ inline void G4VProcess::ClearNumberOfInteractionLengthLeft()
 }
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
