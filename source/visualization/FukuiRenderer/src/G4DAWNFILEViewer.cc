@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.6 1999-12-15 14:54:01 gunter Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.7 2000-05-11 06:49:28 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -66,7 +66,8 @@ G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
 	}
 
 	// Set a PostScript Viewer
-	strcpy( fPSViewer, "ghostview" ); 
+//	strcpy( fPSViewer, "ghostview" ); 
+	strcpy( fPSViewer, "gv" ); 
 	if( getenv( "G4DAWNFILE_PS_VIEWER" ) != NULL ) {
 		strcpy( fPSViewer, getenv( "G4DAWNFILE_PS_VIEWER" ) ) ;			
 	} 
