@@ -61,8 +61,8 @@
     }
   } 
  
- G4IsoParticleChange * G4HadronicProcess::theIsoResult = NULL;
- G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = NULL;
+ G4IsoParticleChange * G4HadronicProcess::theIsoResult = 0;
+ G4IsoParticleChange * G4HadronicProcess::theOldIsoResult = 0;
  G4bool G4HadronicProcess::isoIsEnabled = true;
  
  void G4HadronicProcess::
@@ -94,6 +94,8 @@
 	    G4Delete());
    if(theOldIsoResult) delete theOldIsoResult;
    if(theIsoResult) delete theIsoResult;
+   theOldIsoResult=0;
+   theIsoResult=0;
  }
 
  void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
@@ -463,15 +465,19 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
                     const G4Nucleus & aNucleus)
   {
     // get the PC from iso-production
-    if(theOldIsoResult) delete theOldIsoResult;
+    if(theOldIsoResult) 
+    {
+       delete theOldIsoResult;
+       theOldIsoResult=0;
+    }
     if(theIsoResult) delete theIsoResult;
     theIsoResult = new G4IsoParticleChange;
     G4bool done = false;
-    G4IsoResult * anIsoResult = NULL;
+    G4IsoResult * anIsoResult = 0;
     for(unsigned int i=0; i<theProductionModels.size(); i++)
     {
       anIsoResult = theProductionModels[i]->GetIsotope(aTrack, aNucleus);
-      if(anIsoResult!=NULL)
+      if(anIsoResult!=0)
       {
         done = true;
         break;

@@ -93,7 +93,7 @@ class G4ParticleChange;
     { 
       G4IsoParticleChange * anIsoResult = theIsoResult;
       if(theIsoResult) theOldIsoResult = theIsoResult;
-      theIsoResult = NULL;
+      theIsoResult = 0;
       return anIsoResult;
     }
 
