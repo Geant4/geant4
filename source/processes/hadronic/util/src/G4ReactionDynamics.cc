@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReactionDynamics.cc,v 1.1 1999-01-07 16:13:51 gunter Exp $
+// $Id: G4ReactionDynamics.cc,v 1.2 1999-03-29 09:50:50 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Reaction Dynamics
@@ -35,6 +35,7 @@
 #include "G4ReactionDynamics.hh"
 #include "Randomize.hh"
 #include <iostream.h>
+#include "DumpFrame.hh"
  //#include "../../alpha_test/cxx/NametoGheishNumber.cc"
  
  G4bool G4ReactionDynamics::GenerateXandPt(
@@ -60,6 +61,7 @@
     //
     //  internal units are GeV
     //
+    // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
     G4ParticleDefinition *aProton = G4Proton::Proton();
     G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
@@ -132,6 +134,7 @@
       G4ReactionProduct pTemp = *vec[itemp];
       *vec[itemp] = *vec[i];
       *vec[i] = pTemp;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     for( i=0; i<vecLen; ++i )
     {
@@ -199,6 +202,7 @@
         }
         pVec->SetNewlyAdded( true );                // true is the same as IPA(i)<0
         vec.SetElement( vecLen++, pVec );    
+        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         backwardEnergy -= pVec->GetMass()/GeV;;
         ++backwardCount;
       }
@@ -209,6 +213,7 @@
     G4int is, iskip;
     while( forwardEnergy <= 0.0 )  // must eliminate a particle from the forward side
     {
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       iskip = G4int(G4UniformRand()*forwardCount) + 1; // 1 <= iskip <= forwardCount
       is = 0;
       G4int forwardParticlesLeft = 0;
@@ -229,6 +234,7 @@
           }         //   |
         }           //   |
       }             // break goes down to here
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       if( forwardParticlesLeft == 0 )
       {
         forwardEnergy += currentParticle.GetMass()/GeV;
@@ -243,8 +249,10 @@
         break;
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     while( backwardEnergy <= 0.0 )  // must eliminate a particle from the backward side
     {
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       iskip = G4int(G4UniformRand()*backwardCount) + 1; // 1 <= iskip <= backwardCount
       is = 0;
       G4int backwardParticlesLeft = 0;
@@ -270,6 +278,7 @@
           }
         }
       }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       if( backwardParticlesLeft == 0 )
       {
         backwardEnergy += targetParticle.GetMass()/GeV;
@@ -282,6 +291,7 @@
         break;
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     //
     //  define initial state vectors for Lorentz transformations
     //  the pseudoParticles have non-standard masses, hence the "pseudo"
@@ -566,6 +576,7 @@
         for( G4int j=i; j<(vecLen-1); ++j )*vec[j] = *vec[j+1];    // shift up
         //G4ReactionProduct *temp = vec[vecLen];
         //delete temp;
+        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         if( --vecLen == 0 )return false;  // all the secondaries have been eliminated
         pseudoParticle[6] = pseudoParticle[4] + pseudoParticle[5];
         pseudoParticle[6].SetMomentum( 0.0 );                 // set z-momentum
@@ -888,10 +899,12 @@
         exit( EXIT_FAILURE );
       }
       constantCrossSection = true;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       if( tempLen >= 2 )
       {
         wgt = GenerateNBodyEvent(
          pseudoParticle[6].GetMass(), constantCrossSection, tempV, tempLen );
+         // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         if( targetParticle.GetSide() == -3 )
         {
           targetParticle.Lorentz( targetParticle, pseudoParticle[6] );
@@ -906,12 +919,14 @@
             pseudoParticle[5] = pseudoParticle[5] + (*vec[i]);
           }
         }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
     //
     //  Lorentz transformation in lab system
     //
     if( vecLen == 0 )return false;  // all the secondaries have been eliminated
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     
     G4int numberofFinalStateNucleons = 0;
     if( (currentParticle.GetDefinition() == aProton) ||
@@ -928,6 +943,7 @@
           (vec[i]->GetDefinition() == aNeutron) )++numberofFinalStateNucleons;
       vec[i]->Lorentz( *vec[i], pseudoParticle[1] );
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     numberofFinalStateNucleons = max( 1, numberofFinalStateNucleons );
     //
     // leadFlag will be true
@@ -983,11 +999,13 @@
         {
           targetParticle.SetDefinitionAndUpdateE( leadingStrangeParticle.GetDefinition() );
           targetHasChanged = true;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         }
         else
         {
           currentParticle.SetDefinitionAndUpdateE( leadingStrangeParticle.GetDefinition() );
           incidentHasChanged = false;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         }
       }
     }   // end of if( leadFlag )
@@ -1051,6 +1069,7 @@
         pseudoParticle[6].Lorentz( *tempV[i], pseudoParticle[4] );
         theoreticalKinetic += pseudoParticle[6].GetKineticEnergy()/MeV;
       }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       //delete [] tempR;
     }
     //
@@ -1081,6 +1100,7 @@
       simulatedKinetic += theoreticalKinetic;
       pp = targetParticle.GetTotalMomentum()/MeV;
       pp1 = targetParticle.GetMomentum().mag()/MeV;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       if( pp1 < 1.0e-6*GeV )
       {
         rthnve = pi*G4UniformRand();
@@ -1110,9 +1130,11 @@
           vec[i]->SetMomentum( vec[i]->GetMomentum() * (pp/pp1) );
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     Rotate( numberofFinalStateNucleons, pseudoParticle[3].GetMomentum(),
             modifiedOriginal, originalIncident, targetNucleus,
             currentParticle, targetParticle, vec, vecLen );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     //
     // add black track particles
     // the total number of particles produced is restricted to 198
@@ -1151,9 +1173,11 @@
         ndta = min( ndta, 127-vecLen );
       }
       G4double spall = numberofFinalStateNucleons;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
                               modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     if( centerofmassEnergy <= (4.0+G4UniformRand()) )
       MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
@@ -1165,6 +1189,7 @@
     else
       currentParticle.SetTOF( 1.0 );
     return true;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
   }
  
  void G4ReactionDynamics::SuppressChargedPions(
@@ -1222,6 +1247,7 @@
         targetParticle.SetDefinitionAndUpdateE( aProton );
       targetHasChanged = true;
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     for( G4int i=0; i<vecLen; ++i )
     {
       if( antiTest && (
@@ -1235,8 +1261,10 @@
           vec[i]->SetDefinitionAndUpdateE( aNeutron );
         else
           vec[i]->SetDefinitionAndUpdateE( aProton );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
   }
  
  G4bool G4ReactionDynamics::TwoCluster(
@@ -1252,6 +1280,7 @@
    G4bool leadFlag,
    G4ReactionProduct &leadingStrangeParticle )
   {
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     // derived from original FORTRAN code TWOCLU by H. Fesefeldt (11-Oct-1987)
     //
     //  Generation of X- and PT- values for incident, target, and all secondary particles 
@@ -1376,8 +1405,10 @@
         extraMass += pVec->GetMass()/GeV;
         pVec->SetNewlyAdded( true );
         vec.SetElement( vecLen++, pVec );
+        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     G4double forwardEnergy = centerofmassEnergy/2.0 - forwardMass;
     G4double backwardEnergy = centerofmassEnergy/2.0 - backwardMass;
     G4double eAvailable = centerofmassEnergy - (forwardMass+backwardMass);
@@ -1409,7 +1440,11 @@
           break;
         }
       }           // breaks go down to here
-      if( secondaryDeleted )--vecLen;
+      if( secondaryDeleted )
+      {      
+        --vecLen;
+        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+      }
       else
       {
         if( vecLen == 0 )return false;  // all secondaries have been eliminated
@@ -1433,7 +1468,11 @@
           forwardMass -= pMass;
           secondaryDeleted = true;
         }
-        if( secondaryDeleted )--vecLen;
+        if( secondaryDeleted )
+        {
+          --vecLen;
+          // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+        }
         else
         {
           if( currentParticle.GetSide() == -1 )
@@ -1456,7 +1495,11 @@
             forwardMass -= pMass;
             secondaryDeleted = true;
           }
-          if( secondaryDeleted )--vecLen;
+          if( secondaryDeleted )
+          {
+            --vecLen;
+            // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
+          }
           else break;
         }
       }
@@ -1605,6 +1648,7 @@
           vec[i]->Lorentz( *vec[i], pseudoParticle[0] );
         }
       }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     //
     // fragmentation of forward cluster and backward meson cluster
@@ -1624,6 +1668,7 @@
     pseudoParticle[6].SetTotalEnergy( pseudoParticle[4].GetTotalEnergy() );
     
     G4double wgt;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     if( forwardCount > 1 )     // tempV will contain the forward particles
     {
       G4FastVector<G4ReactionProduct,128> tempV;
@@ -1661,6 +1706,7 @@
         }
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     if( backwardCount > 1 )   //  tempV will contain the backward particles,
     {                         //  but not those created from the intranuclear cascade
       G4FastVector<G4ReactionProduct,128> tempV;
@@ -1700,6 +1746,7 @@
         }
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     //
     // Lorentz transformation in lab system
     //
@@ -1713,6 +1760,7 @@
       if( vec[i]->GetMass() > 0.5*GeV )++numberofFinalStateNucleons;
       vec[i]->Lorentz( *vec[i], pseudoParticle[2] );
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     numberofFinalStateNucleons = max( 1, numberofFinalStateNucleons );
     //
     // sometimes the leading strange particle is lost, set it back
@@ -1827,6 +1875,7 @@
 
       if( tempLen >= 2 )
       {
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
         wgt = GenerateNBodyEvent(
          pseudoParticle[4].GetTotalEnergy()/MeV+pseudoParticle[5].GetTotalEnergy()/MeV,
          constantCrossSection, tempV, tempLen );
@@ -1840,6 +1889,7 @@
           theoreticalKinetic += pseudoParticle[7].GetKineticEnergy()/GeV;
         }
       }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       //delete [] tempR;
     }
     else
@@ -1903,6 +1953,7 @@
           vec[i]->SetMomentum( vec[i]->GetMomentum() * (pp/pp1) );
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     Rotate( numberofFinalStateNucleons, pseudoParticle[4].GetMomentum(),
             modifiedOriginal, originalIncident, targetNucleus,
             currentParticle, targetParticle, vec, vecLen );
@@ -1946,9 +1997,11 @@
         ndta = min( ndta, 127-vecLen );
       }
       G4double spall = numberofFinalStateNucleons;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
                               modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     if( centerofmassEnergy <= (4.0+G4UniformRand()) )
       MomentumCheck( modifiedOriginal, currentParticle, targetParticle, vec, vecLen );
@@ -1960,6 +2013,7 @@
     else
       currentParticle.SetTOF( 1.0 );
     
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     return true;
   }
  
@@ -1993,6 +2047,7 @@
     G4ParticleDefinition *aKaonZeroS = G4KaonZeroShort::KaonZeroShort();
     G4ParticleDefinition *aKaonZeroL = G4KaonZeroLong::KaonZeroLong();
     
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     const G4double kaonMinusMass = aKaonMinus->GetPDGMass()/GeV;
     
     static const G4double expxu =  82.;           // upper bound for arg. of exp
@@ -2174,6 +2229,7 @@
         }
       }
     }
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     if( atomicWeight >= 1.5 )
     {
       // Add black track particles
@@ -2209,9 +2265,11 @@
         ndta = min( ndta, 127-vecLen );
       }
       G4double spall = 0.0;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       AddBlackTrackParticles( epnb, npnb, edta, ndta, sprob, kineticMinimum, kineticFactor,
                               modifiedOriginal, spall, targetNucleus,
                               vec, vecLen );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     }
     //
     //  calculate time delay for nuclear reactions
@@ -2229,6 +2287,7 @@
   G4FastVector<G4ReactionProduct,128> &vec,
   G4int &vecLen )
   {
+//      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     // derived from original FORTRAN code PHASP by H. Fesefeldt (02-Dec-1986)
     // Returns the weight of the event
     //
@@ -2426,6 +2485,7 @@
     //delete [] emm;
     //delete [] sm;
     //delete [] pd;
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
     return weight;
   }
  
@@ -2928,6 +2988,7 @@
         vec[vecLen++]->SetMomentum( pp*sint*sin(phi)*MeV,
                                     pp*sint*cos(phi)*MeV,
                                     pp*cost*MeV );
+        // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
       if( (atomicWeight >= 10.0) && (ekOriginal <= 2.0*GeV) )
       {
@@ -2992,6 +3053,7 @@
         vec[vecLen++]->SetMomentum( pp*sint*sin(phi)*MeV,
                                     pp*sint*cos(phi)*MeV,
                                     pp*cost*MeV );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
     }
   }
@@ -3170,6 +3232,7 @@
           p1->SetDefinition( anAntiProton );
         }
         vec.SetElement( vecLen++, p1 );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
       else
       {                                             // replace two secondaries
@@ -3229,6 +3292,7 @@
            break;
         }
         vec.SetElement( vecLen++, p1 );
+      // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
       }
       else                                        // replace
       {
