@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronInelasticProcess.hh,v 1.3 2000-09-08 08:41:46 hpw Exp $
+// $Id: G4HadronInelasticProcess.hh,v 1.4 2000-09-20 16:52:36 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Inelastic Process class
@@ -43,7 +43,7 @@
     {
       theCrossSectionDataStore->AddDataSet(new G4HadronInelasticDataSet);
       theParticle = aParticle;
-      aScaleFactor = 0;
+      aScaleFactor = 1;
       //      BuildThePhysicsTable();
     }
     
