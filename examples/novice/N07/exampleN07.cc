@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleN07.cc,v 1.2 2003-04-08 15:46:59 asaim Exp $
+// $Id: exampleN07.cc,v 1.3 2003-04-25 17:03:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,11 @@ int main(int argc,char** argv) {
    G4UIsession* session=0;
   
    // G4UIterminal is a (dumb) terminal.
+#ifdef G4UI_USE_TCSH
    session = new G4UIterminal(new G4UItcsh);      
+#else
+   session = new G4UIterminal();
+#endif    
       
    UI->ApplyCommand("/control/execute vis.mac");    
    session->SessionStart();
