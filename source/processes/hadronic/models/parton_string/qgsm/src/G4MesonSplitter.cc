@@ -26,8 +26,8 @@
 G4bool G4MesonSplitter::SplitMeson(G4int PDGcode, G4int* aEnd, G4int* bEnd)
 {
   G4bool result = true;
-  if (absPDGcode >= 1000) return false;
   G4int absPDGcode = abs(PDGcode);
+  if (absPDGcode >= 1000) return false;
   if(absPDGcode == 22)
   {
     G4int it=1;
