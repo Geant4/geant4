@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.15 2003-11-18 11:04:53 hpw Exp $
+# $Id: GNUmakefile,v 1.16 2003-11-24 12:54:22 gcosmo Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic processes library.  G.Folger 10-Dec-97.
 # ----------------------------------------------------------------
@@ -82,7 +82,6 @@ SUBLIBS +=  G4had_string_diff
 SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
 SUBLIBS +=  G4hadronic_qgstring
-SUBLIBS +=  G4hadronic_quark_md_body
 
 ifndef G4INSTALL
   G4INSTALL = ../../..
