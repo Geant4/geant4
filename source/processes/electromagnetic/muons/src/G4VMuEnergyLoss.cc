@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.19 2001-11-08 15:31:06 radoone Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.20 2002-02-06 05:46:25 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -46,6 +46,7 @@
 // 28-09-01 suppression of theMuonPlus ..etc..data members (mma)
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 some small cosmetics , L.Urban
+// 06-02-02 bug fixed at subcutoff definition, L.Urban
 // --------------------------------------------------------------
  
 
@@ -344,15 +345,6 @@ void G4VMuEnergyLoss::BuildDEDXTable(
       LowerBoundEloss, UpperBoundEloss, 1.,NbinEloss);
 
 
-   // create array for the min. delta cuts in kinetic energy
-    if(!setMinDeltaCutInRange) {
-      MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[0];
-      for (size_t idxMate=1; idxMate<G4Material::GetNumberOfMaterials(); idxMate++){
-	if(MinDeltaCutInRange > (G4Electron::Electron()->GetLengthCuts())[idxMate])
-	  MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[idxMate];
-      }
-      MinDeltaCutInRange *= 0.01;
-    }
  // if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
  // {
  //   G4cout << G4endl;
@@ -372,6 +364,10 @@ void G4VMuEnergyLoss::BuildDEDXTable(
     for(G4int mat=0; mat<numOfMaterials; mat++)
     {
       LowerLimitForced[mat] = false ;
+
+     // create array for the min. delta cuts in kinetic energy
+     if(!setMinDeltaCutInRange)
+        MinDeltaCutInRange = (G4Electron::Electron()->GetLengthCuts())[mat]/10.;
 
       MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                             G4Electron::Electron(),MinDeltaCutInRange,
