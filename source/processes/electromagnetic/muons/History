@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-02-05 17:50:28 gcosmo Exp $
+$Id: History,v 1.9 2001-03-05 10:53:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05 mar 01 mma (muons-V03-00-04)
+- new subdirectory: integral
+  migration of all G4I.. processes from muons, standard, utils into integral
 
 05 feb 01: G. Cosmo (muons-V03-00-02)
 - STL migration for G4OrderedTable and G4DataVector.

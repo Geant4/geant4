@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2001-02-02 13:11:02 maire Exp $
+$Id: History,v 1.11 2001-03-05 10:54:08 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+05 mar 01 mma (utils-V03-00-04)
+- new subdirectory: integral
+  migration of all G4I.. processes from muons, standard, utils into integral
      
 01 feb 01: L.Urban (utils-V03-00-01)
 - bug fixed in the fluctuation code , in G4VEnergyLoss.cc
