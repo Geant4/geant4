@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.5 1999-07-28 16:13:53 stesting Exp $
+# $Id: update.sh,v 1.6 1999-12-06 16:38:16 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n] [-d]
 
@@ -49,16 +49,18 @@ echo
 
 if [ X$NOTHING = X ]
 then
-  echo ACTUALLY UPDATING
+  echo ACTUALLY UPDATING...
+  echo DELETING G4RunManager.cc SO IT PICKS UP NEW '$Name: not supported by cvs2svn $'...
+  rm -f $G4INSTALL/source/run/src/G4RunManager.cc
 else
-  echo "DOING NOTHING (cvs -n)"
+  echo "DOING NOTHING (cvs -n)..."
 fi
 
 if [ X$DIRECTORIES = X ]
 then
-  echo NOT GETTING NEW DIRECTORIES
+  echo NOT GETTING NEW DIRECTORIES...
 else
-  echo GETTING NEW DIRECTORIES
+  echo GETTING NEW DIRECTORIES...
 fi
 
 cd $G4INSTALL/..
