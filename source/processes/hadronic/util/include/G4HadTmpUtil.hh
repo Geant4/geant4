@@ -50,7 +50,7 @@ template<class A> void G4PtrSort(std::vector<A *> * aList)
   for(size_t i=0; i<aList->size(); i++) helper.push_back(aList->operator[](i));
   std::sort(helper.begin(), helper.end());
   for(size_t j=0; j<helper.size(); j++) aList->operator[](j)=&(*helper[j]);
-};
+}
 
 struct G4Delete { template<class T> void operator() (T * aT) {delete aT;} };
 
