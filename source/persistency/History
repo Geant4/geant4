@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10, 99  Y.Morita (persistency-V00-01-04)
+- Added Boolean Solid Types
+
 November 9, 99  Y.Morita (persistency-V00-01-03)
 - Bug fix in G4PEvent, G4PHCofThisEvent, G4PVHitsCollection,
   G4PersistencyManager, G4PersistentEventMan
