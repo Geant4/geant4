@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2004-03-21 12:28:11 gcosmo Exp $
+$Id: History,v 1.38 2004-03-21 12:44:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,6 +20,7 @@ committal in the CVS repository !
 21st March 2004  Gabriele Cosmo
 - Revision of GNUmakefiles on all tests. Removed obsolete setup for
   old unsupported platforms and cut&paste mistakes ...
+- Replaced usage of NULL with 0 in remaining classes in test14/17/27/50/201.
 
 tests-V06-00-02 16th March 2004  Gabriele Cosmo
 - Fixed compilation warnings.
