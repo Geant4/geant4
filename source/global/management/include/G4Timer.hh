@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.3 1999-05-21 14:11:01 stesting Exp $
+// $Id: G4Timer.hh,v 1.4 1999-05-24 10:41:46 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,17 +83,20 @@
    };
 #endif  /* WIN32 */
 
-//Avoid STL clash
-#ifdef G4USE_OSPACE
-#undef G4USE_OSPACE
-#define G4USED_OSPACE
+#include "CLHEP/config/CLHEP.h"
+// Typedefs to decouple from library classes
+// Typedefs for numeric types
+// [NOTE: Will in future need to be made more sophisticated]
+typedef HepDouble G4double;
+typedef HepFloat G4float;
+typedef HepInt G4int;
+#ifdef G4_HAVE_BOOL
+  typedef bool G4bool;
+#else
+  typedef HepBoolean G4bool;
 #endif
-#ifdef G4USE_STL
-#undef G4USE_STL
-#define G4USED_STL
-#endif
-
-#include "globals.hh"
+typedef long G4long;
+ 
 
 
 class ostream;
@@ -136,14 +139,20 @@ inline G4bool G4Timer::IsValid() const
     return fValidTimes;
 }
 
-//Restart STL
-#ifdef G4USED_OSPACE
-#undef G4USED_OSPACE
-#define G4USE_OSPACE 1
-#endif
-#ifdef G4USED_STL
-#undef G4USED_STL
-#define G4USE_STL 1
+#ifdef G4USE_STL
+#define times ostimes
 #endif
 
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
