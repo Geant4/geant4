@@ -40,6 +40,12 @@ G4LIB="$g4lib"
 G4BIN="$g4bin"
 G4DATA="$g4data"
 G4LEVELGAMMADATA="$g4levelgammadata"
+#+
+G4RADIOACTIVEDATA="$g4radioactivedata"
+#+
+G4LEDATA="$g4ledata"
+#+
+NeutronHPCrossSections="$g4neutronhpcrosssections"
 
 #
 # g4clhep.U
@@ -114,6 +120,17 @@ if [ X$g4wanalysis_use_lizard = Xy ] ; then
 G4ANALYSIS_USE_LIZARD=1
 else
 G4ANALYSIS_USE_LIZARD=""
+fi 
+
+#+
+#
+# g4persistency
+#
+if [ X$g4use_hepodbms = Xy ] ; then
+G4USE_HEPODBMS=1
+.  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+else
+G4USE_HEPODBMS=""
 fi 
 
 #
@@ -383,6 +400,8 @@ export G4ANALYSIS_USE_LAB
 export G4ANALYSIS_USE_JAS
 export G4ANALYSIS_USE_LIZARD
 
+export G4USE_HEPODBMS
+
 export G4UI_BUILD_TERMINAL_SESSION
 export G4UI_USE_TERMINAL
 export G4UI_BUILD_GAG_SESSION
@@ -469,6 +488,8 @@ echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
 echo "On this machine the G4ANALYSIS_USE_LAB=\$G4ANALYSIS_USE_LAB"
 echo "On this machine the G4ANALYSIS_USE_JAS=\$G4ANALYSIS_USE_JAS"
 echo "On this machine the G4ANALYSIS_USE_LIZARD=\$G4ANALYSIS_USE_LIZARD"
+
+echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
 
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"

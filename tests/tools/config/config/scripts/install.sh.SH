@@ -32,7 +32,9 @@ G4SYSTEM="$g4system"
 #
 # g4dirs.U
 #
+#+
 G4INSTALL="$g4install"
+#+
 G4INCLUDE="$g4include"
 G4BASE="$g4base"
 G4WORKDIR="$g4workdir"
@@ -63,6 +65,8 @@ CLHEP_LIB_DIR="$g4clhep_lib_dir"
 #+
 CLHEP_LIB="$g4clhep_lib"
 
+
+#+
 #
 # g4ospace
 #
@@ -74,6 +78,7 @@ fi
 
 G4OSPACE_BASE_DIR="$g4ospace_base_dir"
 
+#+
 #
 # g4debug
 #
@@ -82,52 +87,71 @@ G4DEBUG="$g4debug"
 #
 # g4analysis
 #
+#+
 if [ X$g4wanalysis_build = Xy ] ; then
 G4ANALYSIS_BUILD=1
 else
 G4ANALYSIS_BUILD=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_lab = Xy ] ; then
 G4ANALYSIS_BUILD_LAB=1
 else
 G4ANALYSIS_BUILD_LAB=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_jas = Xy ] ; then
 G4ANALYSIS_BUILD_JAS=1
 else
 G4ANALYSIS_BUILD_JAS=""
 fi 
 
+#+
 if [ X$g4wanalysis_build_lizard = Xy ] ; then
 G4ANALYSIS_BUILD_LIZARD=1
 else
 G4ANALYSIS_BUILD_LIZARD=""
 fi 
 
+#+
 if [ X$g4wanalysis_use = Xy ] ; then
 G4ANALYSIS_USE=1
 else
 G4ANALYSIS_USE=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_lab = Xy ] ; then
 G4ANALYSIS_USE_LAB=1
 else
 G4ANALYSIS_USE_LAB=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_jas = Xy ] ; then
 G4ANALYSIS_USE_JAS=1
 else
 G4ANALYSIS_USE_JAS=""
 fi 
 
+#+
 if [ X$g4wanalysis_use_lizard = Xy ] ; then
 G4ANALYSIS_USE_LIZARD=1
 else
 G4ANALYSIS_USE_LIZARD=""
+fi 
+
+#+
+#
+# g4persistency
+#
+if [ X$g4use_hepodbms = Xy ] ; then
+G4USE_HEPODBMS=1
+.  \$G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+else
+G4USE_HEPODBMS=""
 fi 
 
 #
@@ -290,60 +314,70 @@ else
 G4VIS_USE_DAWN=""
 fi 
 
+#+
 if [ X$g4vis_use_dawnfile = Xy ] ; then
 G4VIS_USE_DAWNFILE=1
 else
 G4VIS_USE_DAWN=""
 fi 
 
+#+
 if [ X$g4vis_use_opacs = Xy ] ; then
 G4VIS_USE_OPACS=1
 else
 G4VIS_USE_OPACS=""
 fi 
 
+#?
 if [ X$g4vis_use_opengl = Xy ] ; then
 G4VIS_USE_OPENGL=1
 else
 G4VIS_USE_OPENGL=""
 fi 
 
+#+
 if [ X$g4vis_use_OPENGLX = Xy ] ; then
 G4VIS_USE_OPENGLX=1
 else
 G4VIS_USE_OPENGLX=""
 fi 
 
+#+
 if [ X$g4vis_use_oix = Xy ] ; then
 G4VIS_USE_OIX=1
 else
 G4VIS_USE_OIX=""
 fi 
 
+#+
 if [ X$g4vis_use_raytracer = Xy ] ; then
 G4VIS_USE_RAYTRACER=1
 else
 G4VIS_USE_RAYTRACER=""
 fi 
 
+#+
 if [ X$g4vis_use_vrml = Xy ] ; then
 G4VIS_USE_VRML=1
 else
 G4VIS_USE_VRML=""
 fi 
 
+#+
 if [ X$g4vis_use_vrmlfile = Xy ] ; then
 G4VIS_USE_VRMLFILE=1
 else
 G4VIS_USE_VRMLFILE=""
 fi 
 
+#?
 if [ X$g4vis_use_asciitree = Xy ] ; then
 G4VIS_USE_ASCIITREE=1
 else
 G4VIS_USE_ASCIITREE=""
 fi 
 
+#+
 #
 # g4shared
 #
@@ -376,6 +410,7 @@ else
 G4LIB_USE_STATIC=""
 fi 
 
+#+
 #
 # g4granular
 #
@@ -418,6 +453,8 @@ export G4ANALYSIS_USE
 export G4ANALYSIS_USE_LAB
 export G4ANALYSIS_USE_JAS
 export G4ANALYSIS_USE_LIZARD
+
+export G4USE_HEPODBMS
 
 export G4UI_BUILD_TERMINAL_SESSION
 export G4UI_USE_TERMINAL
@@ -505,6 +542,8 @@ echo "On this machine the G4ANALYSIS_USE=\$G4ANALYSIS_USE"
 echo "On this machine the G4ANALYSIS_USE_LAB=\$G4ANALYSIS_USE_LAB"
 echo "On this machine the G4ANALYSIS_USE_JAS=\$G4ANALYSIS_USE_JAS"
 echo "On this machine the G4ANALYSIS_USE_LIZARD=\$G4ANALYSIS_USE_LIZARD"
+
+echo "On this machine the G4USE_HEPODBMS=\$G4USE_HEPODBMS"
 
 echo "On this machine the G4VIS_BUILD_DAWN_DRIVER=\$G4VIS_BUILD_DAWN_DRIVER"
 echo "On this machine the G4VIS_USE_DAWN=\$G4VIS_USE_DAWN"
