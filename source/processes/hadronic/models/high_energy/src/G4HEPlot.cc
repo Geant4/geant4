@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPlot.cc,v 1.6 2001-08-01 17:10:09 hpw Exp $
+// $Id: G4HEPlot.cc,v 1.7 2002-11-14 08:40:08 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -370,7 +370,7 @@ void
 G4HEPlot::GetFromFile(G4int aPlot, G4String aName)
    {
      FILE* fz;
-     G4int ip, nb;
+     long int ip, nb;
      G4double xs,xb,x,y;
      if((fz = fopen(aName, "r")) != NULL)
        {

@@ -3690,7 +3690,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
       }
    targ = Imax( 1, targ );
 
-   G4bool dum;
+   G4bool dum(0);
    if( lead ) 
      {
        for( i=0; i<vecLen; i++ ) 
@@ -3901,7 +3901,7 @@ G4HEInelastic::MediumEnergyCascading(G4bool &successful,
      {
 
        G4double sprob, cost, sint, pp, eka;
-       G4int spall, nbl;
+       G4int spall(0), nbl(0);
                                      //  sprob is the probability of self-absorption in heavy molecules
 
        if( incidentKineticEnergy < 5.0 )
