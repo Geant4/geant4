@@ -33,6 +33,7 @@
 #include <iostream>
 #include <stack>
 #include <map>
+#include <vector>
 
 // HepRep
 #include "HEPREP/HepRep.h"
@@ -95,56 +96,83 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
     private:
         static G4int sceneCount;
-        G4int eventNumber;
-        bool heprepEmpty;
-
-        G4int currentDepth;
-        G4VPhysicalVolume* currentPV;
-        G4LogicalVolume* currentLV;
         const G4ModelingParameters* originalMP;  // Keeps pointer to original.
         G4ModelingParameters* nonCullingMP;      // For temporary non-culling.
 
         G4Transform3D transform;
 
-//        G4int geomParentDepth;
-//        std::map<G4String, HEPREP::HepRepType *> geometryTypeByPath;
-//        std::vector<HEPREP::HepRepType *> geometryTypeByDepth;
-//        std::stack<HEPREP::HepRepInstance *> geomParentInstanceS;
-
-//        G4int eventParentDepth;
-//        std::map<G4String, HEPREP::HepRepType *> eventTypeFullNameMap;
-//        std::stack<G4String> eventParentTypeFullNameS;
-//        std::stack<HEPREP::HepRepInstance *> eventParentInstanceS;
-
         std::ostream* out;
         HEPREP::HepRepFactory* factory;
         HEPREP::HepRepWriter* writer;
-        HEPREP::HepRep* heprep;
-
-        HEPREP::HepRepType* detectorType;
-        HEPREP::HepRepInstanceTree* geometryInstanceTree;
-        HEPREP::HepRepType* eventType;
-        HEPREP::HepRepInstanceTree* eventInstanceTree;
-
-//        char geomTypeFname [256];
-//        char geomInstanceFname [256];
-//        char eventTypeFname [256];
-//        char eventInstanceFname [256];
-
-        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color,
+        
+        // Methods
+        void SetColor (HEPREP::HepRepAttribute *attribute, const G4Color& color,
 			            const G4String& key = G4String("Color"));
-        void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
+        void SetLine   (HEPREP::HepRepInstance *instance, const G4Visible& visible);
         void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
-
-        HEPREP::HepRepInstance* CreateGeometryInstance(G4String typeName, G4int depth);
-        HEPREP::HepRepInstance* CreateEventInstance(G4String typeName, G4int depth,
-					    const std::map<G4String,G4AttDef>* attDefs = NULL,
-					    std::vector<G4AttValue>* attValues = NULL);
 
         bool IsEventData ();
 
         void Open(G4String name);
         void Close();
+
+        void addAttDefs(HEPREP::HepRepType* type, const std::map<G4String,G4AttDef>* attDefs);
+        void addAttVals(HEPREP::HepRepInstance* instance, std::vector<G4AttValue>* attValues);
+
+
+        // Returns the particular instance/type or if not created, creates them and adds them to the HepRep
+        HEPREP::HepRep*             getHepRep();
+        HEPREP::HepRepInstanceTree* getGeometryInstanceTree();
+        HEPREP::HepRepInstance*     getGeometryInstance(G4LogicalVolume* volume, int depth);
+        HEPREP::HepRepInstance*     getGeometryInstance(G4String volumeName, int depth);
+        HEPREP::HepRepInstance*     getGeometryRootInstance();
+        HEPREP::HepRepTypeTree*     getGeometryTypeTree();
+        HEPREP::HepRepType*         getGeometryType(G4String volumeName, int depth);
+        HEPREP::HepRepType*         getGeometryRootType();
+        HEPREP::HepRepInstanceTree* getEventInstanceTree();
+        HEPREP::HepRepInstance*     getEventInstance();
+        HEPREP::HepRepTypeTree*     getEventTypeTree();
+        HEPREP::HepRepType*         getEventType();
+        HEPREP::HepRepType*         getTrajectoryType       (const std::map<G4String,G4AttDef>* attDefs = NULL);
+        HEPREP::HepRepType*         getTrajectoryPointType  (const std::map<G4String,G4AttDef>* attDefs = NULL);
+        HEPREP::HepRepType*         getHitType              (const std::map<G4String,G4AttDef>* attDefs = NULL);
+        HEPREP::HepRepType*         getCalHitType           (const std::map<G4String,G4AttDef>* attDefs = NULL);
+        HEPREP::HepRepType*         getCalHitFaceType       (const std::map<G4String,G4AttDef>* attDefs = NULL);
+
+        G4String getFullTypeName(G4String volumeName, int depth);
+        G4String getParentTypeName(int currentDepth);
+
+        // initialized Member Variables
+        G4String geometryLayer, eventLayer, calHitLayer;
+        G4String trajectoryLayer, trajectoryPointLayer, hitLayer;
+        G4String rootVolumeName;
+        
+        G4int eventNumber;
+
+        G4int currentDepth;
+        G4VPhysicalVolume* currentPV;
+        G4LogicalVolume* currentLV;
+        
+        // DO NOT USE member vars directly, use get methods.
+        HEPREP::HepRep*                         _heprep;
+        HEPREP::HepRepInstanceTree*             _geometryInstanceTree;
+        std::stack<HEPREP::HepRepInstance*>     _geometryInstance;
+        HEPREP::HepRepInstance*                 _geometryRootInstance;
+        HEPREP::HepRepTypeTree*                 _geometryTypeTree;
+        std::vector<G4String>                   _geometryTypeName;
+        std::map<G4String, HEPREP::HepRepType*> _geometryType;
+        HEPREP::HepRepType*                     _geometryRootType;
+        HEPREP::HepRepInstanceTree*             _eventInstanceTree;
+        HEPREP::HepRepInstance*                 _eventInstance;
+        HEPREP::HepRepTypeTree*                 _eventTypeTree;
+        HEPREP::HepRepType*                     _eventType;
+        HEPREP::HepRepType*                     _trajectoryType;
+        HEPREP::HepRepType*                     _trajectoryPointType;
+        HEPREP::HepRepType*                     _hitType;
+        HEPREP::HepRepType*                     _calHitType;
+        HEPREP::HepRepType*                     _calHitFaceType;        
+
+        std::map<int, G4String> materialState;
 };
 
 #endif

@@ -44,8 +44,8 @@ G4HepRep::G4HepRep ()
         : G4VGraphicsSystem ("G4HepRep",
                              "HepRepXML",
         	             "HepRep Generic Driver for XML, RMI and CORBA",
-                             G4VGraphicsSystem::threeD), 
-          sceneHandler(NULL), 
+                             G4VGraphicsSystem::threeD),
+          sceneHandler(NULL),
           viewer(NULL) {
 }
 
@@ -54,7 +54,7 @@ G4HepRep::~G4HepRep () {
 
 G4VSceneHandler* G4HepRep::CreateSceneHandler (const G4String& name) {
     if (sceneHandler != NULL) {
-        cout << "G4HepRep::CreateSceneHandler: Cannot create more than one SceneHandler" << endl;
+        cout << "G4HepRep::CreateSceneHandler: Cannot create more than one G4HepRepSceneHandler" << endl;
         return NULL;
     }
     sceneHandler = new G4HepRepSceneHandler (*this, name);
@@ -68,7 +68,7 @@ void G4HepRep::RemoveSceneHandler() {
 
 G4VViewer* G4HepRep::CreateViewer (G4VSceneHandler& scene, const G4String& name) {
     if (viewer != NULL) {
-        cout << "G4HepRep::CreateViewer: Cannot create more than one Viewer" << endl;
+        cout << "G4HepRep::CreateViewer: Cannot create more than one G4HepRepViewer" << endl;
         return NULL;
     }
     viewer  = new G4HepRepViewer ((G4HepRepSceneHandler&)scene, name);

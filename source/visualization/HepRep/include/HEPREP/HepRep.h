@@ -7,12 +7,13 @@
 #ifndef HEPREP_HEPREP_H
 #define HEPREP_HEPREP_H 1
 
-// Copyright 2000-2002, FreeHEP.
+// Copyright 2000-2003, FreeHEP.
 
 #include <string>
 #include <vector>
 
 // Include all other HepRep header files here for convenience
+#include "HEPREP/HasHepRep.h"
 #include "HEPREP/HepRepAction.h"
 #include "HEPREP/HepRepAttDef.h"
 #include "HEPREP/HepRepAttribute.h"
