@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmoothTrajectoryPoint.cc,v 1.7 2002-11-08 23:44:37 jacek Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.8 2002-12-06 12:16:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,12 +96,14 @@ G4std::vector<G4AttValue>* G4SmoothTrajectoryPoint::CreateAttValues() const
 
   G4std::vector<G4AttValue>* values = new G4std::vector<G4AttValue>;
 
-  G4std::vector<G4ThreeVector>::iterator iAux;
-  for (iAux = fAuxiliaryPointVector->begin();
-       iAux != fAuxiliaryPointVector->end(); ++iAux) {
-    s.seekp(G4std::ios::beg);
-    s << G4BestUnit(*iAux,"Length") << G4std::ends;
-    values->push_back(G4AttValue("Aux",c,""));
+  if (fAuxiliaryPointVector) {
+    G4std::vector<G4ThreeVector>::iterator iAux;
+    for (iAux = fAuxiliaryPointVector->begin();
+	 iAux != fAuxiliaryPointVector->end(); ++iAux) {
+      s.seekp(G4std::ios::beg);
+      s << G4BestUnit(*iAux,"Length") << G4std::ends;
+      values->push_back(G4AttValue("Aux",c,""));
+    }
   }
 
   s.seekp(G4std::ios::beg);
