@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 ///
-// $Id: G4LowEnergyGammaConversion.cc,v 1.26 2001-11-07 21:31:16 pia Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.27 2002-05-31 18:48:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -252,7 +252,7 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
 
   G4double localEnergyDeposit = 0. ;
   
-  aParticleChange.SetNumberOfSecondaries(2.) ; 
+  aParticleChange.SetNumberOfSecondaries(2) ; 
   G4double electronKineEnergy = G4std::max(0.,electronTotEnergy - electron_mass_c2) ;
 
   // Generate the electron only if with large enough range w.r.t. cuts and safety

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.81 2002-05-30 17:53:07 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.82 2002-05-31 18:48:43 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -86,6 +86,8 @@
 // 25.03.02 V.Ivanchneko    Fix in fluorescence
 // 28.03.02 V.Ivanchenko    Add flag of fluorescence
 // 28.05.02 V.Ivanchenko    Remove flag fStopAndKill
+// 31.05.02 V.Ivanchenko    Add path of Fluo + Auger cuts to 
+//                          AtomicDeexcitation
 //
 // --------------------------------------------------------------
 
@@ -683,12 +685,14 @@ G4double G4LowEnergyIonisation::GetMeanFreePath(const G4Track& track,
 void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
   ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
   ActivateFluorescence(true);
 }
 

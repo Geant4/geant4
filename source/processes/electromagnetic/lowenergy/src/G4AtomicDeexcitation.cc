@@ -38,12 +38,13 @@
 #include "Randomize.hh"
 #include "G4Gamma.hh"
 
-G4AtomicDeexcitation::G4AtomicDeexcitation()
-{ }
+G4AtomicDeexcitation::G4AtomicDeexcitation():
+  minGammaEnergy(250.*eV),
+  minElectronEnergy(250.*eV)
+{}
 
 G4AtomicDeexcitation::~G4AtomicDeexcitation()
-
-{ }
+{}
 
 G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int shellId)
 { 
@@ -227,6 +228,18 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)
 {
   return 0;
+}
+
+void G4AtomicDeexcitation::SetCutForSecondaryPhotons(G4double cut)
+{
+  minGammaEnergy = cut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4AtomicDeexcitation::SetCutForAugerElectrons(G4double cut)
+{
+  minElectronEnergy = cut;
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.45 2002-05-28 09:20:21 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.46 2002-05-31 18:48:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -53,6 +53,7 @@
 //                             when binding energy of selected shell > photon energy
 // 18.04.2001 V.Ivanchenko     Fix problem with low energy gammas from fluorescence
 //                             MeanFreePath is calculated by crosSectionHandler directly 
+// 31.05.2002 V.Ivanchenko     Add path of Fluo + Auger cuts to AtomicDeexcitation
 //                                  
 // --------------------------------------------------------------
 
@@ -84,7 +85,8 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName), lowEnergyLimit(250*eV), highEnergyLimit(100*GeV),
     intrinsicLowEnergyLimit(10*eV),
     intrinsicHighEnergyLimit(100*GeV),
-    cutForLowEnergySecondaryPhotons(250.*eV)
+    cutForLowEnergySecondaryPhotons(250.*eV),
+    cutForLowEnergySecondaryElectrons(250.*eV)
 {
   if (lowEnergyLimit < intrinsicLowEnergyLimit || 
       highEnergyLimit > intrinsicHighEnergyLimit)
@@ -313,6 +315,13 @@ G4double G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& track,
 void G4LowEnergyPhotoElectric::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForLowEnergySecondaryPhotons = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
+}
+
+void G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(G4double cut)
+{
+  cutForLowEnergySecondaryElectrons = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
 }
 
 

@@ -74,6 +74,8 @@
 // 28 Mar   2002 V.Ivanchenko Set fluorescence off by default
 // 09 Apr   2002 V.Ivanchenko Fix table problem of GenericIons
 // 28 May   2002 V.Ivanchenko Remove flag fStopAndKill
+// 31 May   2002 V.Ivanchenko Add path of Fluo + Auger cuts to 
+//                            AtomicDeexcitation
 // -----------------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -2000,6 +2002,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
 void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 {
   minGammaEnergy = cut;
+  deexcitationManager.SetCutForSecondaryPhotons(cut);
   theFluo = true;
 }
 
@@ -2008,6 +2011,7 @@ void G4hLowEnergyIonisation::SetCutForSecondaryPhotons(G4double cut)
 void G4hLowEnergyIonisation::SetCutForAugerElectrons(G4double cut)
 {
   minElectronEnergy = cut;
+  deexcitationManager.SetCutForAugerElectrons(cut);
   theFluo = true;
 }
 

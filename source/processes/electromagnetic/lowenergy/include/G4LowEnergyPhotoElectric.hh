@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.23 2001-10-08 07:45:34 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.24 2002-05-31 18:47:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -32,6 +32,7 @@
 // 02 Mar  1999   A. Forti   1st implementation
 // 12 Aug  2001   MGP        Major revision according to a design iteration
 // 16 Sept 2001   E. Guardincerri Added fluorescence generation
+// 31 May  2002   V.Ivanchenko Add cut on Auger electrons
 //
 // -------------------------------------------------------------------
 
@@ -72,6 +73,8 @@ public:
 
   void SetCutForLowEnSecPhotons(G4double);
 
+  void SetCutForLowEnSecElectrons(G4double);
+
   // For testing purpose only
   G4double DumpMeanFreePath(const G4Track& aTrack, 
 			    G4double previousStepSize, 
@@ -104,6 +107,7 @@ private:
   const G4double intrinsicHighEnergyLimit;
 
   G4double cutForLowEnergySecondaryPhotons;
+  G4double cutForLowEnergySecondaryElectrons;
 
   G4AtomicDeexcitation deexcitationManager;
 };
