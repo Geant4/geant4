@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst12PhysicsList.cc,v 1.4 1999-11-18 14:28:43 hpw Exp $
+// $Id: Tst12PhysicsList.cc,v 1.5 1999-11-18 15:37:51 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -247,19 +247,11 @@ void Tst12PhysicsList::ConstructEM()
 #include "G4FermiBreakUp.hh"
 #include "G4StatMF.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
-//#include "G4Annihilator.hh"
-//#include "G4ElasticScatterer.hh"
-//#include "G4InElasticScatterer.hh"
-//#include "G4CrossSectionBase.hh"
-//#include "G4RKFieldIntegrator.hh"
 #include "G4Fancy3DNucleus.hh"
-//#include "G4CrossSectionBase.hh"
 #include "G4LEProtonInelastic.hh"
 #include "G4StringModel.hh"
 #include "G4PreCompoundModel.hh"
-//#include "G4RKFieldIntegrator.hh"
 #include "G4FTFModel.hh"
-//#include "G4QGSModel.hh"
 #include "G4LundStringFragmentation.hh"
 
 
