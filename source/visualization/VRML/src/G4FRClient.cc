@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClient.cc,v 1.3 1999-12-15 14:54:15 gunter Exp $
+// $Id: G4FRClient.cc,v 1.4 1999-12-27 07:49:22 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FRClient.cc
@@ -86,10 +86,11 @@ G4FRClient& G4FRClient::operator << (G4FRClient& (*func)(G4FRClient&))
 	return func(*this);
 }
 
-//manipulator
-G4FRClient& endl(G4FRClient& c)
-{
-	return c << "\n";
-}
-
+////////////////////////////////////////
+////manipulator
+//G4FRClient& endl(G4FRClient& c)
+//{
+//	return c << "\n";
+//}
+///////////////////////////////////////
 #endif

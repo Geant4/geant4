@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2Viewer.cc,v 1.4 1999-12-15 14:54:17 gunter Exp $
+// $Id: G4VRML2Viewer.cc,v 1.5 1999-12-27 07:49:22 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.cc
@@ -110,15 +110,15 @@ void G4VRML2Viewer::SendViewParameters ()
 	G4Point3D		E(0.0, 0.0, E_z );
 
 	// VRML codes are generated below	
-	fDest << G4endl;
-	fDest << "#---------- CAMERA" << G4endl;
-	fDest << "Viewpoint {"         << G4endl;
+	fDest << "\n";
+	fDest << "#---------- CAMERA" << "\n";
+	fDest << "Viewpoint {"         << "\n";
 	fDest << "\t" << "position "           ;
 	fDest                 << E.x() << " "  ;
 	fDest                 << E.y() << " "  ;
-	fDest                 << E.z() << G4endl ;
-	fDest << "}" << G4endl;
-	fDest << G4endl;
+	fDest                 << E.z() << "\n" ;
+	fDest << "}" << "\n";
+	fDest << "\n";
 
 } 
 

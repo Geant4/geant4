@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRClient.hh,v 1.3 1999-12-15 14:54:13 gunter Exp $
+// $Id: G4FRClient.hh,v 1.4 1999-12-27 07:49:11 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4FRClient.hh
@@ -45,7 +45,7 @@ private:
 };
 
 //manipulator
-G4FRClient& endl(G4FRClient&);
+//G4FRClient& endl(G4FRClient&);
 
 #endif //G4_FR_CLIENT_HH
 #endif //G4VIS_BUILD_VRML_DRIVER
