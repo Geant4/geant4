@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIbatch.cc,v 1.6 2001-08-29 18:47:04 asaim Exp $
+// $Id: G4UIbatch.cc,v 1.7 2001-08-29 21:28:59 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -69,8 +69,10 @@ G4UIsession * G4UIbatch::SessionStart()
       commandLine[lineLength] = '\0';
       G4String commandString = commandLine;
       G4String nC= commandString.strip(G4String::both);
-      if( commandLine[0] == '#' || nC.length() == 0 )
+      if( commandLine[0] == '#')
       { G4cout << commandLine << G4endl; }
+      else if( nC.length() == 0 )
+      { continue; }
       else if(nC == "exit")
       { break; }
       else
