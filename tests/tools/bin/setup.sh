@@ -15,12 +15,11 @@ else
 . /afs/cern.ch/sw/geant4/stt/ref/src/geant4/tests/tools/bin/specific.sh
 fi
 
-if [ -n "$G4SYSTEM" ]; then
-    echo "You are working on a $G4SYSTEM system"
-else
+if [ -z "$G4SYSTEM" ]; then
   echo "You have first to set environment variable G4SYSTEM !"
-  exit
-fi
+else
+  echo "You are working on a $G4SYSTEM system"
+#...
 
 # we are working in the stt afs ref area
 if [ "$1" = "sttref" ]; then
@@ -28,15 +27,14 @@ export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
 export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM
 export G4LIB=$G4WORKDIR/lib
 fi
+
 # Some checks :
-if [ -n "$G4INSTALL" ]; then
- echo "You use for the source $G4INSTALL"
+if [ -z "$G4INSTALL" ]; then
+ echo "You have first to set environment variable G4INSTALL !"
 else
-  echo "You have first to set environment variable G4INSTALL !"
-  exit
-fi
-#
-#
+ echo "You use for the source $G4INSTALL"
+#...
+
 if [ -n "$G4WORKDIR" ]; then
     echo "You use as a work directory $G4WORKDIR "
 else
@@ -89,11 +87,6 @@ else
  fi
 fi
 
+fi # if [ -z "$G4INSTALL" ]
 
-
-
-
-
-
-
-
+fi # if [ -z "$G4SYSTEM" ]
