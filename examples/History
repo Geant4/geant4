@@ -1,4 +1,4 @@
-$Id: History,v 1.6 1999-05-19 13:43:37 stesting Exp $
+$Id: History,v 1.7 1999-05-25 10:54:32 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th May 1999  John Allison  (examples-01-00-06)
+- Updated exampleN04.out to correspond to em-01-00-05a.
 
 19th May 1999  John Allison  (examples-01-00-05)
 - Removed #ifdef GNU_GCC in exampleN03.cc.
