@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.4 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.5 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -92,7 +92,7 @@ Tst33AppStarter::~Tst33AppStarter()
 
 void Tst33AppStarter::CreateMassGeometry() {
   if (fMassGeometry) {
-    G4std::G4cout << "Tst33AppStarter::CreateMassGeometry: a geometry already exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CreateMassGeometry: a geometry already exists!" << G4endl;
   } 
   else {
     fMassGeometry = new Tst33SlobedConcreteShield;
@@ -112,7 +112,7 @@ void Tst33AppStarter::CreateMassGeometry() {
 
 void Tst33AppStarter::CreateParallelGeometry() {
   if (fMassGeometry) {
-    G4std::G4cout << "Tst33AppStarter::CreateParallelGeometry: a eometry already exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CreateParallelGeometry: a eometry already exists!" << G4endl;
   } 
   else {
     fMassGeometry = new Tst33ConcreteShield;
@@ -138,11 +138,11 @@ void Tst33AppStarter::CreateParallelGeometry() {
 G4bool Tst33AppStarter::IsGeo_n_App(){
   G4bool geo_n_app = true;
   if (!fMassGeometry) {
-    G4std::G4cout << "Tst33AppStarter::IsGeo_n_App: no geometry!" << G4endl;
+    G4cout << "Tst33AppStarter::IsGeo_n_App: no geometry!" << G4endl;
     geo_n_app = false;
   }
   if (!fApp) {
-    G4std::G4cout << "Tst33AppStarter::IsGeo_n_App: no application!" << G4endl;
+    G4cout << "Tst33AppStarter::IsGeo_n_App: no application!" << G4endl;
     geo_n_app = false;
   }
   return geo_n_app;
@@ -151,11 +151,11 @@ G4bool Tst33AppStarter::IsGeo_n_App(){
 G4bool Tst33AppStarter::CheckCreateScorer() {
   G4bool createscorer = true;
   if (!IsGeo_n_App()) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateScorer: !IsGeo_n_App()!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateScorer: !IsGeo_n_App()!" << G4endl;
     createscorer = false;
   }
   if (fScorer) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateScorer: scorer already exists!" << G4endl;
     createscorer = false;
   }
   return createscorer;
@@ -185,11 +185,11 @@ void Tst33AppStarter::DeleteScorers() {
 G4bool Tst33AppStarter::CheckCreateIStore() {
   G4bool createistore = true;
   if (!IsGeo_n_App()) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateIStore: !IsGeo_n_App()!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateIStore: !IsGeo_n_App()!" << G4endl;
     createistore = false;
   }  
   if (fIStore) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateIStore: an importance store already exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateIStore: an importance store already exists!" << G4endl;
     createistore = false;
   }
   return createistore;
@@ -206,11 +206,11 @@ void Tst33AppStarter::CreateIStore() {
 G4bool Tst33AppStarter::CheckCreateWeightRoulette() {
   G4bool createWR = true;
   if (!IsGeo_n_App()) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateWeightRoulette: !IsGeo_n_App()!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateWeightRoulette: !IsGeo_n_App()!" << G4endl;
     createWR = false;
   }  
   if (fWeightroulette) {
-    G4std::G4cout << "Tst33AppStarter::CheckCreateWeightRoulette: weigyht roulette already exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckCreateWeightRoulette: weigyht roulette already exists!" << G4endl;
     createWR = false;
   }
   return createWR;
@@ -228,11 +228,11 @@ void Tst33AppStarter::CreateWeightRoulette() {
 G4bool Tst33AppStarter::CheckCreateApp() {
   G4bool  createapp(true);
   if (!fMassGeometry) {
-    G4std::G4cout << "Tst33AppStarter::CheckApp: geometry not defined!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckApp: geometry not defined!" << G4endl;
     createapp = false;
   }
   if (fApp) {
-    G4std::G4cout << "Tst33AppStarter::CheckApp: an application alredy exists!" << G4endl;
+    G4cout << "Tst33AppStarter::CheckApp: an application alredy exists!" << G4endl;
     createapp = false;
   }   
   return createapp;
@@ -269,7 +269,7 @@ void Tst33AppStarter::CreateTimedApplication(G4int time) {
 
 void Tst33AppStarter::ClearSampling() {
   if (!fSampler) {
-    G4std::G4cout << "Tst33AppStarter::ClearSampling: no sampler!" << G4endl;
+    G4cout << "Tst33AppStarter::ClearSampling: no sampler!" << G4endl;
   }
   else {
     fSampler->ClearSampling();
@@ -289,7 +289,7 @@ void Tst33AppStarter::ClearSampling() {
 void Tst33AppStarter::ConfigureSampling(){
   if (!fConfigured) {
     if (!IsGeo_n_App()) {
-      G4std::G4cout << "ConfigureSampling no geometry or application given!" << G4endl;
+      G4cout << "ConfigureSampling no geometry or application given!" << G4endl;
     }
     else {
       fConfigured = true;
@@ -297,13 +297,13 @@ void Tst33AppStarter::ConfigureSampling(){
     }
   }
   else {
-    G4std::G4cout << "Tst33AppStarter::ConfigureSampling(): already configured!" << G4endl;
+    G4cout << "Tst33AppStarter::ConfigureSampling(): already configured!" << G4endl;
   }
 }
 
 void Tst33AppStarter::Run(G4int nevents) {
   if (!fConfigured) {
-    G4std::G4cout << "Not configured yet!" << G4endl;
+    G4cout << "Not configured yet!" << G4endl;
   } 
   else {
     G4int n = nevents;
@@ -318,18 +318,18 @@ void Tst33AppStarter::PostRun() {
   if (fConfigured) {
     if (fScorerStore) {
       G4ScoreTable sp(fIStore);
-      sp.Print(fScorerStore->GetMapGeometryCellCellScorer(), &G4std::G4cout);
+      sp.Print(fScorerStore->GetMapGeometryCellCellScorer(), &G4cout);
     }
   }
   else {
-    G4std::G4cout << "Tst33AppStarter::PostRun: not configured!" << G4endl;
+    G4cout << "Tst33AppStarter::PostRun: not configured!" << G4endl;
   }
 }
 
 
 void Tst33AppStarter::NewFailed(const G4String &function, 
 				const G4String &cl){
-  G4std::G4Exception("Tst33AppStarter::" + function + ": new failed to create: " + cl + "!");
+  G4Exception("Tst33AppStarter::" + function + ": new failed to create: " + cl + "!");
 }
 
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PrimaryGeneratorAction.cc,v 1.2 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33PrimaryGeneratorAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,13 +41,13 @@ Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction()
   fParticleGun(new G4ParticleGun(1))
 {
   if (!fParticleGun) {
-    G4std::G4Exception("Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction: new failed to create G4ParticleGun!");
+    G4Exception("Tst33PrimaryGeneratorAction::Tst33PrimaryGeneratorAction: new failed to create G4ParticleGun!");
   }
   fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
   //  fParticleGun->SetParticleDefinition(G4Gamma::GammaDefinition());
   //  fParticleGun->SetParticleDefinition(G4Proton::ProtonDefinition());
-  fParticleGun->SetParticleEnergy(10.0*G4std::MeV);
-  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*G4std::cm));
+  fParticleGun->SetParticleEnergy(10.0*MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisEventAction.cc,v 1.2 2002-10-31 08:32:45 dressel Exp $
+// $Id: Tst33VisEventAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,7 +66,7 @@ void Tst33VisEventAction::Clear() {
 
 
 void Tst33VisEventAction::SetCell_19_Scorer(const G4CellScorer *scorer){
-  G4std::G4cout << "Tst33VisEventAction::SetCell_19_Scorer: no action taken!" << G4endl;
+  G4cout << "Tst33VisEventAction::SetCell_19_Scorer: no action taken!" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -105,7 +105,7 @@ void Tst33VisEventAction::EndOfEventAction(const G4Event* evt)
 	}
       }
       else {
-	G4std::G4cerr << " Tst33VisEventAction::EndOfEventAction: failed to dynamic cast to G4Trajectory!" << G4endl;
+	G4cerr << " Tst33VisEventAction::EndOfEventAction: failed to dynamic cast to G4Trajectory!" << G4endl;
       }
     }
   }

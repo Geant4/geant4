@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.cc,v 1.2 2002-10-29 16:37:10 dressel Exp $
+// $Id: Tst33PVolumeStore.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -32,8 +32,10 @@
 // ----------------------------------------------------------------------
 
 #include "Tst33PVolumeStore.hh"
+#include "g4std/strstream"
+
+
 #include "G4VPhysicalVolume.hh"
-#include "G4StringConversion.hh"
 
 Tst33PVolumeStore::Tst33PVolumeStore(){}
 Tst33PVolumeStore::~Tst33PVolumeStore(){}
@@ -43,7 +45,7 @@ void Tst33PVolumeStore::AddPVolume(const G4GeometryCell &cell){
   Tst33SetGeometryCell::iterator it = 
     fSetGeometryCell.find(cell);
   if (it != fSetGeometryCell.end()) {
-    G4std::G4cout << "Tst33PVolumeStore::AddPVolume: cell already stored" 
+    G4cout << "Tst33PVolumeStore::AddPVolume: cell already stored" 
 	   << G4endl;
     return;
   }
@@ -64,7 +66,7 @@ GetPVolume(const G4String &name) const {
     } 
   }
   if (!pvol) {
-    G4std::G4cout << "Tst33PVolumeStore::GetPVolume: no physical volume named: " 
+    G4cout << "Tst33PVolumeStore::GetPVolume: no physical volume named: " 
 	   << name << ", found" << G4endl;
   }
   return pvol;
@@ -75,10 +77,17 @@ G4String Tst33PVolumeStore::GetPNames() const {
   for (Tst33SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
-    G4String cellname(vol.GetName());
-    cellname += G4String("_");
-    cellname += G4std::str(it->GetReplicaNumber());
-    NameString += cellname + G4String("\n");
+    char st[200];
+    G4std::ostrstream os(st,200);
+    os << vol.GetName() << "_" << it->GetReplicaNumber() 
+       << "\n" << '\0';
+    G4String cellname(st);
+    
+    //    G4String cellname(vol.GetName());
+    //    cellname += G4String("_");
+    //    cellname += G4std::str(it->GetReplicaNumber());
+
+    NameString += cellname;
   }
   return NameString;
 }

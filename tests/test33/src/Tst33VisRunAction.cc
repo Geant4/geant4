@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisRunAction.cc,v 1.1 2002-10-29 15:43:08 dressel Exp $
+// $Id: Tst33VisRunAction.cc,v 1.2 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ Tst33VisRunAction::~Tst33VisRunAction()
 void Tst33VisRunAction::BeginOfRunAction(const G4Run* aRun)
 {
  
-  G4std::G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
+  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
 
   if (G4VVisManager::GetConcreteInstance())
     {

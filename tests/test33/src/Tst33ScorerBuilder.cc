@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScorerBuilder.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33ScorerBuilder.cc,v 1.4 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -50,7 +50,7 @@ CreateScorer(Tst33VGeometry *samplegeo,
   
   G4CellScorerStore *cs_store = new G4CellScorerStore();
   if (!cs_store) {
-    G4std::G4Exception("Tst33ScorerBuilder::CreateScorer: new failed to create G4CellScorerStore!");
+    G4Exception("Tst33ScorerBuilder::CreateScorer: new failed to create G4CellScorerStore!");
   }
   cs_store->AddCellScorer(gWorldCell);
   

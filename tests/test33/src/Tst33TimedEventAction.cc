@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33TimedEventAction.cc,v 1.2 2002-10-31 08:32:45 dressel Exp $
+// $Id: Tst33TimedEventAction.cc,v 1.3 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -103,14 +103,14 @@ void Tst33TimedEventAction::EndOfEventAction(const G4Event* evt)
     fOld_lwe = lwe;
 
     fSig.Xin(lwediff);
-    //    G4std::G4cout << "fSumSLWE= " << v.fSumSLWE 
+    //    G4cout << "fSumSLWE= " << v.fSumSLWE 
     //	   << " fSumSLW= " << v.fSumSLW
     //	   << " pro.time= " << fProcessTime
     //	   << G4endl;
   }
   if (fProcessTime >= fMaxRunTime) {
     G4RunManager::GetRunManager()->AbortRun();
-    G4std::G4cout << "Tst33TimedEventAction::EndOfEventAction: aborted after"
+    G4cout << "Tst33TimedEventAction::EndOfEventAction: aborted after"
 	   << " running for: " << fProcessTime << " (mu)seconds" 
 	   << G4endl;
     CalculateFOM();
@@ -132,9 +132,9 @@ void Tst33TimedEventAction::CalculateFOM(){
     R = sigma/(mean*G4std::sqrt(entries));
     fom = 1./(R*R);
   }
-  G4std::G4cout << "Tst33TimedEventAction::CalculateFOM(): FOM: " 
+  G4cout << "Tst33TimedEventAction::CalculateFOM(): FOM: " 
 		<< G4endl;
-  G4std::G4cout << "    mean= " << mean 
+  G4cout << "    mean= " << mean 
 		<< ", error= " << R 
 		<< ", fom*time= " << fom
 		<< ", time= " << fProcessTime

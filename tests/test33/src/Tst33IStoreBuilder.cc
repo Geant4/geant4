@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.3 2002-10-31 08:32:44 dressel Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.4 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   G4IStore *istore(0);
   istore = new G4IStore(pworld);
   if (!istore) {
-    G4std::G4Exception("Tst33IStoreBuilder::CreateIStore new failed to create G4IStore!");
+    G4Exception("Tst33IStoreBuilder::CreateIStore new failed to create G4IStore!");
     }
   // adding GeometryCell for world volume. ReplicaNumer = -1 !
   G4GeometryCell gWorldCell(pworld, -1);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33VisManager.cc,v 1.1 2002-10-29 15:43:08 dressel Exp $
+// $Id: Tst33VisManager.cc,v 1.2 2002-11-04 10:57:48 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -142,7 +142,7 @@ void Tst33VisManager::RegisterGraphicsSystems () {
 #endif
 
   if (fVerbose > 0) {
-    G4std::G4cout <<
+    G4cout <<
       "\nYou have successfully chosen to use the following graphics systems."
 	 << G4endl;
     PrintAvailableGraphicsSystems ();
