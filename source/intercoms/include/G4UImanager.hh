@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.hh,v 1.12 2001-10-02 00:32:06 asaim Exp $
+// $Id: G4UImanager.hh,v 1.13 2001-10-05 22:44:28 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -77,8 +77,18 @@ class G4UImanager : public G4VStateDependent
       void RemoveCommand(G4UIcommand * aCommand);
       //  This command remove the registered command. After invokation of this
       // command, that particular command cannot be applied.
+      void ExecuteMacroFile(const char * fileName);
       void ExecuteMacroFile(G4String fileName);
       //  A macro file defined by the argument will be read by G4UIbatch object.
+      void Loop(const char * macroFile,const char * variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize=1.0);
+      void Loop(G4String macroFile,G4String variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize=1.0);
+      // Execute a macro file more than once with a loop counter.
+      void Foreach(const char * macroFile,const char * variableName,const char * candidates);
+      void Foreach(G4String macroFile,G4String variableName,G4String candidates);
+      // Execute a macro file more than once with an aliased variable which takes
+      // a value in the candidate list.
       G4int ApplyCommand(const char * aCommand);
       G4int ApplyCommand(G4String aCommand);
       //  These two methods are identical. A command (and parameter(s)) given
@@ -109,12 +119,10 @@ class G4UImanager : public G4VStateDependent
       //  Print all aliases.
 
 
-  public:
-      //void Foreach(G4String macroFile,G4String variableName,
-      //             G4double initialValue,G4double finalValue,G4double stepSize);
-      //void Foreach(G4String macroFile,G4String variableName,
-      //             G4int initialValue,G4int finalValue,G4int stepSize);
-
+  public: 
+      void LoopS(G4String valueList);
+      void ForeachS(G4String valueList);
+      //  These methods are used by G4UIcontrolMessenger to use Loop() and Foreach() methods.
       virtual G4bool Notify(G4ApplicationState requestedState);
       //  This method is exclusively invoked by G4StateManager and the user
       // must not use this method.

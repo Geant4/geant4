@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcommand.cc,v 1.11 2001-10-04 23:15:28 asaim Exp $
+// $Id: G4UIcommand.cc,v 1.12 2001-10-05 22:44:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,8 +121,29 @@ G4int G4UIcommand::DoIt(G4String parameterList)
           aToken += " ";
           aToken += additionalToken;
         }
-        // aToken.strip(G4String::both,'"');
       }
+      else if(i_thParameter==n_parameterEntry-1 && parameter[i_thParameter]->GetParameterType()=='s')
+      {
+        G4String anotherToken;
+        while(!((anotherToken=parameterToken()).isNull()))
+        {
+          int idxs = anotherToken.index("#");
+          if(idxs==int(G4std::string::npos))
+          {
+            aToken += " ";
+            aToken += anotherToken;
+          }
+          else if(idxs>0)
+          {
+            aToken += " ";
+            aToken += anotherToken(0,idxs);
+            break;
+          }
+          else
+          { break; }
+        }
+      }
+
       if( aToken.isNull() || aToken == "!" )
       {
         if(parameter[i_thParameter]->IsOmittable())

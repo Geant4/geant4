@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UImanager.cc,v 1.13 2001-10-04 23:15:29 asaim Exp $
+// $Id: G4UImanager.cc,v 1.14 2001-10-05 22:44:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,6 +40,8 @@
 #include "G4UIaliasList.hh"
 
 #include "g4std/strstream"
+#include "g4rw/ctoken.h"
+
 
 G4UImanager * G4UImanager::fUImanager = 0;
 G4bool G4UImanager::fUImanagerHasBeenKilled = false;
@@ -208,6 +210,12 @@ void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
   treeTop->RemoveCommand( aCommand );
 }
 
+void G4UImanager::ExecuteMacroFile(const char * fileName)
+{
+  G4String fn = fileName;
+  ExecuteMacroFile(fn);
+}
+
 void G4UImanager::ExecuteMacroFile(G4String fileName)
 {
   G4UIsession* batchSession = new G4UIbatch(fileName,session);
@@ -216,6 +224,84 @@ void G4UImanager::ExecuteMacroFile(G4String fileName)
   delete session;
   session = previousSession;
 }
+
+void G4UImanager::LoopS(G4String valueList)
+{
+  G4Tokenizer parameterToken( valueList );
+  G4String mf = parameterToken();
+  G4String vn = parameterToken();
+  G4String c1 = parameterToken();
+  c1 += " ";
+  c1 += parameterToken();
+  c1 += " ";
+  c1 += parameterToken();
+  const char* t1 = c1;
+  G4std::istrstream is((char*)t1);
+  G4double d1;
+  G4double d2;
+  G4double d3;
+  is >> d1 >> d2 >> d3;
+  Loop(mf,vn,d1,d2,d3);
+}
+  
+void G4UImanager::Loop(const char * macroFile,const char * variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize)
+{
+  G4String mf = macroFile;
+  G4String vn = variableName;
+  Loop(mf,vn,initialValue,finalValue,stepSize);
+}
+
+void G4UImanager::Loop(G4String macroFile,G4String variableName,
+                   G4double initialValue,G4double finalValue,G4double stepSize)
+{
+  G4String cd;
+  for(G4double d=initialValue;d<=finalValue;d+=stepSize)
+  {
+    char st[20];
+    G4std::ostrstream os(st,20);
+    os << d << '\0';
+    cd += st;
+    cd += " ";
+  }
+  Foreach(macroFile,variableName,cd);
+}
+
+void G4UImanager::ForeachS(G4String valueList)
+{
+  G4Tokenizer parameterToken( valueList );
+  G4String mf = parameterToken();
+  G4String vn = parameterToken();
+  G4String c1 = parameterToken();
+  G4String ca;
+  while(!((ca=parameterToken()).isNull()))
+  {
+    c1 += " ";
+    c1 += ca;
+  }
+  Foreach(mf,vn,c1);
+}
+
+void G4UImanager::Foreach(const char * macroFile,const char * variableName,
+                   const char * candidates)
+{
+  G4String mf = macroFile;
+  G4String vn = variableName;
+  G4String cd = candidates;
+  Foreach(mf,vn,cd);
+}
+
+void G4UImanager::Foreach(G4String macroFile,G4String variableName,G4String candidates)
+{
+  G4Tokenizer parameterToken( candidates );
+  G4String cd;
+  while(!((cd=parameterToken()).isNull()))
+  {
+    SetAlias(variableName+" "+cd);
+    ExecuteMacroFile(macroFile);
+  }
+}
+
 
 int G4UImanager::ApplyCommand(const char * aCommand)
 {

@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIcontrolMessenger.cc,v 1.6 2001-10-02 00:32:07 asaim Exp $
+// $Id: G4UIcontrolMessenger.cc,v 1.7 2001-10-05 22:44:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include <stdlib.h>
 #include "G4UIcontrolMessenger.hh"
 #include "G4UImanager.hh"
 #include "G4UIdirectory.hh"
@@ -101,6 +102,35 @@ G4UIcontrolMessenger::G4UIcontrolMessenger()
 
   listAliasCommand = new G4UIcmdWithoutParameter("/control/listAlias",this);
   listAliasCommand->SetGuidance("List aliases.");
+
+  shellCommand = new G4UIcmdWithAString("/control/shell",this);
+  shellCommand->SetGuidance("Execute a (Unix) SHELL command.");
+
+  loopCommand = new G4UIcommand("/control/loop",this);
+  loopCommand->SetGuidance("Execute a macro file more than once.");
+  loopCommand->SetGuidance("Loop counter can be used as an aliased variable.");
+  G4UIparameter* param1 = new G4UIparameter("macroFile",'s',false);
+  loopCommand->SetParameter(param1);
+  G4UIparameter* param2 = new G4UIparameter("counterName",'s',false);
+  loopCommand->SetParameter(param2);
+  G4UIparameter* param3 = new G4UIparameter("initialValue",'d',false);
+  loopCommand->SetParameter(param3);
+  G4UIparameter* param4 = new G4UIparameter("finalValue",'d',false);
+  loopCommand->SetParameter(param4);
+  G4UIparameter* param5 = new G4UIparameter("stepSize",'d',true);
+  param5->SetDefaultValue(1.0);
+  loopCommand->SetParameter(param5);
+
+  foreachCommand = new G4UIcommand("/control/foreach",this);
+  foreachCommand->SetGuidance("Execute a macro file more than once.");
+  foreachCommand->SetGuidance("Loop counter can be used as an aliased variable.");
+  foreachCommand->SetGuidance("Values must be separated by a space.");
+  G4UIparameter* param6 = new G4UIparameter("macroFile",'s',false);
+  foreachCommand->SetParameter(param6);
+  G4UIparameter* param7 = new G4UIparameter("counterName",'s',false);
+  foreachCommand->SetParameter(param7);
+  G4UIparameter* param8 = new G4UIparameter("valueList",'s',false);
+  foreachCommand->SetParameter(param8);
 }
 
 G4UIcontrolMessenger::~G4UIcontrolMessenger()
@@ -114,7 +144,9 @@ G4UIcontrolMessenger::~G4UIcontrolMessenger()
   delete aliasCommand;
   delete unaliasCommand;
   delete listAliasCommand;
-  
+  delete shellCommand;
+  delete loopCommand;
+  delete foreachCommand; 
   delete controlDirectory;
 }
 
@@ -157,6 +189,18 @@ void G4UIcontrolMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   if(command==listAliasCommand)
   {
     UI->ListAlias();
+  }
+  if(command==shellCommand)
+  {
+    system(newValue);
+  }
+  if(command==loopCommand)
+  {
+    UI->LoopS(newValue);
+  }
+  if(command==foreachCommand)
+  {
+    UI->ForeachS(newValue);
   }
 
 }
