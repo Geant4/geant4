@@ -1,4 +1,4 @@
-$Id: History,v 1.43 2001-05-23 17:55:25 japost Exp $
+$Id: History,v 1.44 2001-05-23 19:03:49 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,6 +24,14 @@ May 23rd, 2001       J. Apostolakis - geomvol-V03-01-05
 
    This tag requires and co-works with field-V03-01-01. 
 
+   This now ENABLES the use of different Field Managers for different parts of
+    the detector.  First implementation allows a volume that has a field
+    manager to override the global one.  
+
+   Note: All field managers currently must refer to fields in global coordinates
+
+   New ability: to set the delta accuracy parameters differently in different
+     volumes (even while maintaining the same field as the global one!).  
 
 May 23rd, 2001       G. Cosmo - geomvol-V03-01-04
 - Fixes in G4ReplicaNavigation for bug reports #253 and #254:
