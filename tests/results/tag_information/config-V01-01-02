@@ -1,0 +1,3 @@
+nmake.gmk: added include path to the new directory
+  geometry/solids/specific.
+- Updated PERL script g4step_correct.pl for parsing STEP files.

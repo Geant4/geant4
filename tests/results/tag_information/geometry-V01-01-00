@@ -1,0 +1,10 @@
+- Restructured CSG directory:
+  o moved all shapes which are non-pure CSG to solids/specific.
+    See related History files for more details.
+  o moved unit-tests to appropriate test directories.
+  o extracted tests "SBT" and "Fred" and placed one level up in
+    solids/tests (new directory).
+- Fixes to G4Tubes.cc and G4Hype[.hh.cc].
+- Added new shape in solids/specific: G4EllipticalTube.
+- Organised class description comments for the Software Reference Manual
+  in CSG and specific headers. Added CVS headers to files in specific.
