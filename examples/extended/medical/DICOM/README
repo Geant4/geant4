@@ -17,9 +17,12 @@ web : thomson.phy.ulaval.ca/phys_med
 + Université Laval, Québec (QC) Canada
 
 This example illustrates a preliminary version of a Geant4 interface
-to the DICOM image format.
+to the DICOM image format. 
 The example consists in modeling a phantom inside a Geant4 application,
 given the dicom files describing the phantom.
+An improved version of the code, also including fixes to some problems 
+encountered with the current version provided by Akinori Kimura,
+will be released with the next version of the Geant4 Toolkit.
 
 --->1) Introduction
 

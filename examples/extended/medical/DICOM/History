@@ -6,6 +6,10 @@
                       Category History file
                       ---------------------
 
+10.12.2004 - MG Pia, tag DICOM-V06-02-00
+             Update README to announce further improvements and fixes
+             by Akinori Kimura.
+
 3.12.2004 - Gabriele Cosmo (DICOM-V06-02-01)
             Implemented migration to <cmath>.
 
