@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPropagateMagField.cc,v 1.2 1999-12-15 14:49:50 gunter Exp $
+// $Id: testPropagateMagField.cc,v 1.3 2000-04-12 18:30:03 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
