@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BremsstrahlungTest.cc,v 1.4 2000-07-29 13:17:24 pia Exp $
+// $Id: G4BremsstrahlungTest.cc,v 1.5 2000-09-04 18:19:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -384,7 +384,7 @@ G4int main()
 	    {
 	      G4cout << "WARNING: eFinal > eInit " << G4endl;
 		//	     << e
-		//		     << " > " initEnergy 
+    		//		     << " > " initEnergy 
 		 
 	    }
 
