@@ -26,7 +26,7 @@ public:
   };
 
   void addOutgoingParticles(const vector<G4InuclElementaryParticle>& particles) {
-    for(G4int i = 0; i < particles.size(); i++)
+    for(G4int i = 0; i < G4int(particles.size()); i++)
       outgoingParticles.push_back(particles[i]);
   };
 
@@ -35,7 +35,7 @@ public:
   };
 
   void addTargetFragments(const vector<G4InuclNuclei>& nuclea) {
-    for(G4int i = 0; i < nuclea.size(); i++)
+    for(G4int i = 0; i < G4int(nuclea.size()); i++)
       nucleiFragments.push_back(nuclea[i]);
   };
 
@@ -54,11 +54,11 @@ public:
   vector<G4double> getTotalOutputMomentum() const {
     vector<G4double> tot_mom(4, 0.0);
     double eex_r = 0.0;
-    for(G4int i = 0; i < outgoingParticles.size(); i++) {
+    for(G4int i = 0; i < G4int(outgoingParticles.size()); i++) {
       vector<G4double> mom = outgoingParticles[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
     };
-    for(i = 0; i < nucleiFragments.size(); i++) {
+    for(i = 0; i < G4int(nucleiFragments.size()); i++) {
       vector<G4double> mom = nucleiFragments[i].getMomentum();
       for(G4int j = 0; j < 4; j++) tot_mom[j] += mom[j];
       eex_r += 0.001 * nucleiFragments[i].getExitationEnergy();
@@ -70,11 +70,11 @@ public:
   void printCollisionOutput() const {
     G4cout << " Output: " << endl  
 	   << " Outgoing Particles: " << outgoingParticles.size() << G4endl;
-    for(G4int i = 0; i < outgoingParticles.size(); i++) {
+    for(G4int i = 0; i < G4int(outgoingParticles.size()); i++) {
       outgoingParticles[i].printParticle(); 
     };
     G4cout << " Nuclei fragments: " << nucleiFragments.size() << G4endl;      
-    for(i = 0; i < nucleiFragments.size(); i++) {
+    for(i = 0; i < G4int(nucleiFragments.size()); i++) {
       nucleiFragments[i].printParticle(); 
     };
   };
@@ -104,7 +104,7 @@ public:
 
   void setRemainingExitationEnergy() { 
     eex_rest = 0.0;
-    for(G4int i = 0; i < nucleiFragments.size(); i++) 
+    for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) 
       eex_rest += 0.001 * nucleiFragments[i].getExitationEnergy();
   };
 
