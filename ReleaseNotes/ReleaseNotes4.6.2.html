@@ -69,9 +69,15 @@ Official platforms:
 More verified configurations:
 <UL>
 <LI>SUN Solaris 5.8, C++ CC-5.5.</LI>
-<LI>Linux, gcc 2.95.2, gcc 3.3.3.</LI>
+<LI>Linux, gcc 3.3.3.</LI>
 <LI>Linux, Intel-icc 8.0.</LI>
 <LI>MacOS 10.3, gcc-3.3</LI>
+</UL>
+
+More verified configurations which will not supported any longer
+in future releases:
+<UL>
+<LI>Linux, gcc 2.95.2.</LI>
 <LI>Windows/2000 and CygWin Tools, Visual C++ 6.0 Service Pack 5</LI>
 </UL>
 
@@ -94,7 +100,8 @@ Platforms configured but not tested and not supported:
 Geant4 6.2 requires the <A TARGET="ext"
 HREF="http://cern.ch/clhep/INSTALLATION/clhep.html">installation
 of CLHEP</A>.<BR>
-Tests have been performed with <B>CLHEP-1.8.1.0</B>.
+Tests have been performed with <B>CLHEP-1.8.1.0</B><BR>
+Verification has also been performed on <I>Linux</I> with <B>CLHEP-1.9.0.2</B>.
 <P> </P>
 Geant4 6.2 examples with histogramming cowork with AIDA 3.2.1
 implementations. These include:
@@ -167,8 +174,8 @@ that any will lead to incorrect run-time behaviour.
 
 <H2>6. Known Run-Time Warnings</H2>
 
-The following messages can be written to error output while tracking.
-We believe none give rise to incorrect behaviour.
+The following message can be written to error output while tracking.
+We believe it does not give rise to incorrect behaviour.
 <PRE>
     G4PropagateInField: Warning: Particle is looping 
     -  tracking in field will be stopped. 
@@ -188,6 +195,30 @@ We believe none give rise to incorrect behaviour.
 There're not known migrations necessary if upgrading from release 6.1,
 other than recompilation and/or reinstallation of libraries and user
 applications.
+<P> </P>
+<B>Future migration for <TT>G4VParticleChange</TT> class</B>
+<P> </P>
+For the future releases, an interface change to the class
+<TT>G4VParticleChange</TT> is foreseen. The required changes are already
+implemented in this release while still keeping valid the old interface.<BR>
+The following methods will be removed in release 7.0:
+<PRE>
+      void  SetTrueStepLength(G4double truePathLength);
+      void  SetLocalEnergyDeposit(G4double anEnergyPart);
+      G4TrackStatus GetStatusChange() const;
+      void  SetStatusChange(G4TrackStatus status);
+      void  SetSteppingControl(G4SteppingControl StepControlFlag);
+      void  SetParentWeight(G4double);
+</PRE>
+They will have to be replaced by the following methods, respectively:
+<PRE>
+      void ProposeTrueStepLength(G4double truePathLength);
+      void ProposeLocalEnergyDeposit(G4double anEnergyPart);
+      G4TrackStatus GetTrackStatus() const;
+      void ProposeTrackStatus(G4TrackStatus status);
+      void ProposeSteppingControl(G4SteppingControl StepControlFlag);
+      void ProposeParentWeight(G4double);
+</PRE>
 
 <P> </P>
 <A NAME="8."></A>
@@ -208,21 +239,14 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><TT>Configure</TT> script:
     <UL>
-    <LI>Introduced handling of DLLs on Windows systems.</LI>
+    <LI>Added support for global DLL libraries on Windows systems.</LI>
     <LI>Added new data-set for elastic-scattering data.</LI>
     </UL></LI>
 <LI><TT>source/GNUmakefile</TT>:
     <UL>
-    <LI>Redefine installation order of modules according to dependencies.</LI>
-    <LI>Defined <TT>dll</TT> target for building of DLLs global libraries
+    <LI>Revised order of module installation according to dependencies.</LI>
+    <LI>New <TT>dll</TT> target for building of DLLs global libraries
         on Windows systems.</LI>
-    </UL></LI>
-<LI><TT>Darwin-g++.gmk</TT>:
-    <UL>
-    <LI>Corrected options to build shared libraries (.dyn);  use
-        twolevel_namespace and GLOBLIBS for shared-libs build on MacOS.
-        Shared-libs build are possible only global libraries.</LI>
-    <LI>Corrected options to retrieve Motif.</LI>
     </UL></LI>
 <LI><TT>Linux-g++.gmk</TT>:
     <UL>
@@ -231,26 +255,32 @@ please refer to the related History files provided in most packages):
         for using chips-specific floating-point arithmetics based on the
         SSE unit.</LI>
     </UL></LI>
-<LI><TT>WIN32-VC7.gmk</TT>, <TT>WIN32-VC.gmk</TT>:
+<LI><TT>WIN32-VC7.gmk</TT>:
     <UL>
     <LI>Added setup for WIN32-VC7 for building of DLLs.</LI>
+    </UL></LI>
+<LI><TT>Darwin-g++.gmk</TT>:
+    <UL>
+    <LI>Corrected options to build shared libraries (.dyn);  use
+        twolevel_namespace and GLOBLIBS for shared-libs build on MacOS.
+        Shared-libs build are possible only global libraries.</LI>
+    <LI>Corrected options to retrieve Motif.</LI>
     </UL></LI>
 <LI><TT>architecture.gmk</TT>:
     <UL>
     <LI>Added check for definition of LDFLAGS. Fixes bug report #603.</LI>
     <LI>Revisited Inventor default. Removed HEPVis dependencies
-        (Inventor visualization driver does not need these libraries
-        any longer).</LI>
+        (Inventor visualization driver no longer needs these).</LI>
     </UL></LI>
 <LI><TT>binmake.gmk</TT>:
     <UL>
     <LI>Activated shared-libs mechanism for Windows platforms; forced creation
         of static library for examples/applications for the usage with DLLs.</LI>
     <LI>Fixed problem for WIN32 such that also LDLIBS (including EXTRALIBS)
-        will be mangled to replace -L by its WIN32 correspondance libpath.</LI>
-    <LI>Added include paths to new hadronic models for abrasion, em_dissociation,
-        de_excitation/ablation and de_excitation/fission.</LI>
-    <LI>Restored global lib for interfaces which was missing from linking list.</LI>
+        will be mangled to replace -L by its WIN32 corresponding libpath.</LI>
+    <LI>Added include paths to new hadronic models.</LI>
+    <LI>Restored global library for 'interfaces' module which was missing from
+        the linking list.</LI>
     </UL></LI>
 <LI><TT>common.gmk</TT>, <TT>globlib.gmk</TT>:
     <UL>
@@ -265,7 +295,6 @@ please refer to the related History files provided in most packages):
   <I>warning</I> to <TT>FindSensitiveDetector(pathName, warning)</TT>,
   defaulted to <TT>true</TT>, to eventually exclude warning issued by
   <TT>G4SDManager</TT> when sensitive detector is not found.</LI>
-<LI>Use global flag G4DIGI_ALLOC_EXPORT to export extern symbols for DLLs.</LI>
 </UL>
 
 <A NAME="evt-notes">
@@ -273,10 +302,7 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI>Design iteration of the <TT>G4GeneralParticleSource</TT> class:
     <UL>
-    <LI>The following new classes have been added:
-        <TT>G4SingleParticleSource</TT>, <TT>G4SPSEneDistribution</TT>,
-        <TT>G4SPSAngDistribution</TT>, <TT>G4SPSPosDistribution</TT>,
-        <TT>G4SPSRandomGenerator</TT>.<BR>
+    <LI>New classes have been added.<BR>
         See <A HREF="http://reat.space.qinetiq.com/gps">http://reat.space.qinetiq.com/gps</A>
         for more details of the changes.</LI>
     <LI>New formula for converting integral spectrum to differential one.</LI>
@@ -288,7 +314,6 @@ please refer to the related History files provided in most packages):
     <LI>Fixed incorrect behaviour of event abortion requested by
         <TT>BeginOfEventAction()</TT>.</LI>
     </UL></LI>
-<LI>Use global flag G4EVENT_ALLOC_EXPORT to export extern symbols for DLLs.</LI>
 </UL>
 
 <A NAME="emlow-notes">
@@ -330,7 +355,7 @@ please refer to the related History files provided in most packages):
         bigger than energy loss.</LI>
     </UL>
     The purpose of both changes is to provide less step dependent
-    results. For example, for steps down to 0.1 mkm in solid materials
+    results. For example, for steps down to 0.1 mm in solid materials
     energy deposition distribution in thin absorber is not dependent on the
     step limit.</LI>
 <LI>Ionization for muons, hadrons, ions:
@@ -585,7 +610,7 @@ please refer to the related History files provided in most packages):
 <A NAME="part-notes">
 <H3><I>Particles</I></H3></A>
 <UL>
-<LI>Use global flag G4PARTICLES_ALLOC_EXPORT to export extern symbols for DLLs.
+<LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for DLLs.
     Modified granular <TT>GNUmakefile</TT>s and rearranged usage of extern
     symbols in classes in <TT>management</TT> module.</LI>
 </UL>
@@ -635,7 +660,7 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI><B>Tracking</B>
     <UL>
-    <LI>Use global flag G4TRACKING_ALLOC_EXPORT to export extern symbols for
+    <LI>Adopt DLLIMPORT/EXPORT technique to handle extern simbols for
         DLLs. Modified <TT>GNUmakefile</TT> and rearranged usage of extern
         symbols in classes.</LI>
     </UL></LI>
