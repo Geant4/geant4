@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2002-07-10 15:52:58 dressel Exp $
+$Id: History,v 1.43 2002-07-11 16:26:07 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+
+July 11th, 2002 M.Dressel internal-2-transport-V04-01-01
+--------------------------------------------------------
+- moved the standard scoring classes to run because 
+  they need G4EventManager.
 
 July 10th, 2002 M.Dressel internal-1-transport-V04-01-01
 --------------------------------------------------------
