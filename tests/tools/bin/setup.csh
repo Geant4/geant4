@@ -62,7 +62,7 @@ alias g4tools   "cd $G4INSTALL/tests/tools/bin"
 alias g4omake   "cd $G4INSTALL/tests/tools/omake"
 alias g4N02     "cd $G4INSTALL/examples/novice/N02"
 alias g4N03     "cd $G4INSTALL/examples/novice/N03"
-alias g4ANA01   "cd $G4INSTALL/examples/extended/analysis/AnEx01"
+alias g4ANA01   "cd $G4INSTALL/examples/extended/analysis/AnaEx01"
 #
 # Below aliases assume that $G4WORKDIR/stt/$G4SYSTEM exists !
 alias g4make    "gmake global> & $G4WORKDIR/stt/$G4SYSTEM/gmake.log &"
