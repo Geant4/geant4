@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.cc,v 1.1 1999-01-07 16:11:00 gunter Exp $
+// $Id: G4Decay.cc,v 1.2 1999-02-06 08:54:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,7 +25,7 @@
 //   rename thePhysicsTable to aPhyscisTable 2 Aug. 1998 H.Kurashige
 //   modified IsApplicable in order to protect the decay from registered 
 //   to resonances    12 Dec. 1998   H.Kurashige 
-
+//   remove G4ParticleMomentum  6 Feb. 99 H.Kurashige
 
 #include "G4Decay.hh"
 #include "G4DynamicParticle.hh"
@@ -290,7 +290,7 @@ G4VParticleChange* G4Decay::DecayIt(const G4Track& aTrack, const G4Step& )
   
   // get parent particle information ...................................
   G4double   ParentEnergy  = aParticle->GetTotalEnergy();
-  G4ParticleMomentum ParentDirection(aParticle->GetMomentumDirection());
+  G4ThreeVector ParentDirection(aParticle->GetMomentumDirection());
 
   //boost all decay products to laboratory frame
   G4double energyDeposit = 0.0;
