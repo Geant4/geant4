@@ -98,6 +98,14 @@ public: // With description
   void SetNuclearStoppingOff();
   // This method switch off calculation of the nuclear stopping power.
   
+  void SetAntiProtonStoppingOn();
+  // This method switch on calculation of the loss table for antiproton
+  // using antiproron formulation (down to 100 keV).
+  
+  void SetAntiProtonStoppingOff();
+  // This method switch off calculation of the loss table for antiproton
+  // using antiproron formulation (down to 100 keV).
+  
   G4double GetParametrisedLoss(const G4Material* material,
   			       const G4double KinEnergy,
 			       const G4double DeltaRayCutNow,
@@ -218,6 +226,7 @@ protected:
   G4String DEDXtable;
   // flag of parametrisation of nucleus stopping power
   G4bool nStopping;
+  G4bool pbarStop;
   
   // constants needed for the energy loss calculation
   
@@ -242,10 +251,6 @@ protected:
   G4double ZieglerFactor; // Factor to convert the Stopping Power 
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
-
-  G4double LowestKineticEnergy;
-  G4double HighestKineticEnergy;
-  G4double TotBin;
     
 };
 

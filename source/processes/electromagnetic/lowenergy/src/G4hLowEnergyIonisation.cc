@@ -42,6 +42,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     ParamHighEnergy(2.*MeV),
     DEDXtable("Ziegler1977H"),
     nStopping(false),
+    pbarStop(false),
     theProton (G4Proton::Proton()),
     theAntiProton (G4AntiProton::AntiProton()),
     theElectron ( G4Electron::Electron() ),
@@ -129,6 +130,21 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOn()
 void G4hLowEnergyIonisation::SetNuclearStoppingOff()
 {
   nStopping = false ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisation::SetAntiProtonStoppingOn()
+{
+  pbarStop = true ;
+  LowestKineticEnergy = 500.*keV;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisation::SetAntiProtonStoppingOff()
+{
+  pbarStop = false ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -738,13 +754,13 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
     ionloss    -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
   }
   
-    // Correction term for the Barkas effect
+    // Correction term for the Barkas effect applied if pbarStop = true
     
     G4double BarkasTerm=0;
     
-    if(PartCharge == -1) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
+    if(PartCharge == -1 && pbarStop) BarkasTerm = ComputeBarkasTerm( material, KinEnergy, PartMass);
     
-    //if(PartCharge <= -2) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
+    //if(PartCharge <= -2 && pbarStop) BarkasTerm = sqrt( GetIonEffChargeSquare( material, KinEnergy, PartCharge))
 	//		            * ComputeBarkasTerm ( material, KinEnergy, PartMass);
     
     ionloss += BarkasTerm;   
@@ -757,7 +773,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(const G4Material* material,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //Function to compute the Barkas term from:
 //
-//Ref. Z_1^3 effevt in the stopping power of matter for charged particles
+//Ref. Z_1^3 effect in the stopping power of matter for charged particles
 //     J.C Ashley and R.H.Ritchie
 //     Physical review B Vol.5 No.7 1 April 1972 pagg. 2393-2397 
 //
@@ -2281,6 +2297,7 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
   comments += "\n         Good description above the mean excitation energy.\n";
   comments += "         delta ray energy sampled from  differential Xsection.";
   
+  if(pbarStop){
   G4cout << endl << GetProcessName() << ":  " << comments
          << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
          << " to " << HighestKineticEnergy / TeV << " TeV "
@@ -2288,6 +2305,16 @@ void G4hLowEnergyIonisation::PrintInfoDefinition()
          << "\n        Low energy losses approximation is taken from  " << DEDXtable
          << "\n        from " << ParamLowEnergy / keV << " keV "
          << " to " << ParamHighEnergy / MeV << " MeV " << "." << endl ;
+  } else {
+  G4cout << endl << GetProcessName() << ":  " << comments
+         << "\n        PhysicsTables from " << LowestKineticEnergy / eV << " eV " 
+         << " to " << HighestKineticEnergy / TeV << " TeV "
+         << " in " << TotBin << " bins."
+         << "\n        Low energy losses approximation is taken from  " << DEDXtable
+         << "\n        from " << ParamLowEnergy / keV << " keV "
+         << " to " << ParamHighEnergy / MeV << " MeV " << "." << endl
+  	 << "\n Energy loss for antiproton now available only from 100 keV.";
+  }
   if(nStopping) {
     G4cout << "        Simulation of nuclear stopping is switched on.  \n" << endl ; 
   }
