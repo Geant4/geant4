@@ -21,34 +21,45 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.cc,v 1.7 2002-11-27 17:50:56 gcosmo Exp $
+// $Id: G4IdentityTrajectoryFilter.hh,v 1.1 2003-10-01 15:01:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4BlockingList Implementation
+// class GIdentityTrajectoryFilter
 //
-// ********************************************************************
-
-#include "G4BlockingList.hh"
-
-G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
-  : fBlockTagNo(1), fStride(stride), fBlockingList(maxDefault,0)
-{
-}
-
-// Do nothing destructor
+// Class description:
 //
-G4BlockingList::~G4BlockingList()
-{
-}
-
-// Clear List and reset tag
+// Implements a trajectory point filter which accepts all points submitted to it.
 //
-void G4BlockingList::FullyReset()
+// IMPORTANT: The base class heap allocates vectors of auxiliary
+// points, which it does not delete. The vectors must find their way
+// to a subclass of G4VTrajectoryPoint, which must take responsibility
+// for deleting them.
+
+// History
+//
+// - First version: Nov 19, 2002  Jacek Generowicz
+// ------------------------------------------------------------------------
+
+#ifndef G4IdentityTrajectoryFilter_hh
+#define G4IdentityTrajectoryFilter_hh
+
+#include "G4VCurvedTrajectoryFilter.hh"
+
+class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
 {
-  fBlockTagNo = 1;
-  for ( G4int i=fBlockingList.size()-1; i>=0; i-- )
-  {
-    fBlockingList[i] = 0;
-  }  
-}
+
+public:  // with description
+
+  G4IdentityTrajectoryFilter();
+  virtual ~G4IdentityTrajectoryFilter();
+
+    // Probably do not want these objects to be copied,
+    // so make the copy constructor private
+
+  void TakeIntermediatePoint( G4ThreeVector newPoint );
+    // Submit intermediate points for the filter
+    // to consider keeping or rejecting
+};
+
+#endif  /* End of ifndef G4IdentityTrajectoryFilter_hh */

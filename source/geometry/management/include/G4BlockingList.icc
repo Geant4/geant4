@@ -21,45 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: G4IdentityTrajectoryFilter.hh,v 1.2 2003-02-06 18:53:14 gcosmo Exp $
+// $Id: G4BlockingList.icc,v 1.1 2003-10-01 15:01:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class GIdentityTrajectoryFilter
+// class G4BlockingList  Inlined Implementation
 //
-// Class description:
-//
-// Implements a trajectory point filter which accepts all points submitted to it.
-//
-// IMPORTANT: The base class heap allocates vectors of auxiliary
-// points, which it does not delete. The vectors must find their way
-// to a subclass of G4VTrajectoryPoint, which must take responsibility
-// for deleting them.
+// ********************************************************************
 
-// History
-//
-// - First version: Nov 19, 2002  Jacek Generowicz
-// ------------------------------------------------------------------------
-
-#ifndef G4IdentityTrajectoryFilter_hh
-#define G4IdentityTrajectoryFilter_hh
-
-#include "G4VCurvedTrajectoryFilter.hh"
-
-class G4IdentityTrajectoryFilter : public G4VCurvedTrajectoryFilter
+inline G4int G4BlockingList::Length() const
 {
+  return fBlockingList.size();
+}
 
-public:  // with description
+inline void G4BlockingList::BlockVolume(const G4int v)
+{
+  fBlockingList[v] = fBlockTagNo;
+}
 
-  G4IdentityTrajectoryFilter();
-  virtual ~G4IdentityTrajectoryFilter();
+inline G4bool G4BlockingList::IsBlocked(const G4int v) const
+{
+  return ( fBlockingList[v]==fBlockTagNo ) ? true : false;
+}
 
-    // Probably do not want these objects to be copied,
-    // so make the copy constructor private
+inline void G4BlockingList::Reset()
+{
+  if ( fBlockTagNo!=kBlockTagNoMax )
+  {
+    fBlockTagNo += 1;
+  }
+  else
+  {
+    FullyReset();
+  }    
+}
 
-  void TakeIntermediatePoint( G4ThreeVector newPoint );
-    // Submit intermediate points for the filter
-    // to consider keeping or rejecting
-};
-
-#endif  /* End of ifndef G4IdentityTrajectoryFilter_hh */
+inline void G4BlockingList::Enlarge(const G4int nv)
+{
+  G4int len=fBlockingList.size();
+  if ( len<nv )
+  {
+    G4int newlen = (nv/fStride+1)*fStride;
+    fBlockingList.resize(newlen);
+    for (G4int i=len; i<newlen; i++)
+    {
+      fBlockingList[i] = 0;
+    }
+  }
+}

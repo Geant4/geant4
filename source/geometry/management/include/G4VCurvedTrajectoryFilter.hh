@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.hh,v 1.5 2003-06-16 16:54:50 gunter Exp $
+// $Id: G4VCurvedTrajectoryFilter.hh,v 1.1 2003-10-01 15:04:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,6 @@
 
 #include "G4ThreeVector.hh"
 #include <vector>
-#include "G4TransportationManager.hh"
 
 class G4VCurvedTrajectoryFilter
 {

@@ -21,51 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.icc,v 1.7 2002-07-23 08:50:34 gcosmo Exp $
+// $Id: G4BlockingList.cc,v 1.1 2003-10-01 15:00:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-// class G4BlockingList  Inlined Implementation
+// class G4BlockingList Implementation
 //
 // ********************************************************************
 
-inline G4int G4BlockingList::Length() const
+#include "G4BlockingList.hh"
+
+G4BlockingList::G4BlockingList(G4int maxDefault, G4int stride)
+  : fBlockTagNo(1), fStride(stride), fBlockingList(maxDefault,0)
 {
-  return fBlockingList.size();
 }
 
-inline void G4BlockingList::BlockVolume(const G4int v)
+// Do nothing destructor
+//
+G4BlockingList::~G4BlockingList()
 {
-  fBlockingList[v] = fBlockTagNo;
 }
 
-inline G4bool G4BlockingList::IsBlocked(const G4int v) const
+// Clear List and reset tag
+//
+void G4BlockingList::FullyReset()
 {
-  return ( fBlockingList[v]==fBlockTagNo ) ? true : false;
-}
-
-inline void G4BlockingList::Reset()
-{
-  if ( fBlockTagNo!=kBlockTagNoMax )
+  fBlockTagNo = 1;
+  for ( G4int i=fBlockingList.size()-1; i>=0; i-- )
   {
-    fBlockTagNo += 1;
-  }
-  else
-  {
-    FullyReset();
-  }    
-}
-
-inline void G4BlockingList::Enlarge(const G4int nv)
-{
-  G4int len=fBlockingList.size();
-  if ( len<nv )
-  {
-    G4int newlen = (nv/fStride+1)*fStride;
-    fBlockingList.resize(newlen);
-    for (G4int i=len; i<newlen; i++)
-    {
-      fBlockingList[i] = 0;
-    }
-  }
+    fBlockingList[i] = 0;
+  }  
 }

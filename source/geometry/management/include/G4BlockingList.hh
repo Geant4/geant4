@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.hh,v 1.8 2003-06-16 16:54:41 gunter Exp $
+// $Id: G4BlockingList.hh,v 1.1 2003-10-01 15:01:07 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4BlockingList
