@@ -1,4 +1,4 @@
-$Id: History,v 1.42 2002-10-23 16:26:49 gcosmo Exp $
+$Id: History,v 1.43 2002-10-28 11:25:56 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 28, 2002  G. Cosmo                 geommng-V04-01-03
+- G4VSolid[.hh.icc.cc]:
+  o Added pure virtual method StreamInfo() to stream contents of a solid
+    to a generic output stream.
+  o Added method DumpInfo() using StreamInfo() to dump contents to the
+    standard output.
 
 October 23, 2002  G. Cosmo                 geommng-V04-01-02
 - G4PVReplica.cc:
