@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4PenelopeBremsstrahlung.hh,v 1.1 2003-03-13 17:22:23 pandola Exp $
+// $Id: G4PenelopeBremsstrahlung.hh,v 1.2 2003-03-19 10:27:44 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: L.Pandola
@@ -30,8 +30,9 @@
 // History:
 // -----------
 // 03 Feb 2003  L. Pandola       1st implementation
+// 18 Mar 2003  L. Pandola       positrons added
 // Class description:
-// Penelope electromagnetic process, electron Bremsstrahlung
+// Penelope electromagnetic process, electron and positron Bremsstrahlung
 // --------------------------------------------------------------
 
 

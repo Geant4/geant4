@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.1 2003-03-13 17:26:05 pandola Exp $
+// $Id: G4PenelopeBremsstrahlungAngular.cc,v 1.2 2003-03-19 10:29:37 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -31,6 +31,10 @@
 // 
 // Creation date: February 2003
 //
+// History:
+// -----------
+// 04 Feb 2003  L. Pandola       1st implementation
+// 19 Mar 2003  L. Pandola       Bugs fixed
 //----------------------------------------------------------------
 
 #include "G4PenelopeBremsstrahlungAngular.hh"
@@ -128,15 +132,13 @@ void G4PenelopeBremsstrahlungAngular::InterpolationForK()
     betas[i]=sqrt(pE[i]*(pE[i]+2*electron_mass_c2))/(pE[i]+electron_mass_c2);
   }
   
+  
   for (i=0;i<NumberofEPoints;i++){
     for (G4int j=0;j<NumberofKPoints;j++){
       Q1[i][j]=Q1[i][j]/((G4double) Zmat);
     }
   }
 
-
-
-  //Verifica se Q1 viene trattato come scala log(a) o come a
   //Expanded table of distribution parameters
   for (i=0;i<NumberofEPoints;i++){
     for (G4int j=0;j<NumberofKPoints;j++){
@@ -160,11 +162,14 @@ void G4PenelopeBremsstrahlungAngular::InterpolationForK()
 
 G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e2)
 {
+  //e1 = kinetic energy of the electron
+  //e2 = energy of the bremsstrahlung photon
+
   G4double beta = sqrt(e1*(e1+2*electron_mass_c2))/(e1+electron_mass_c2);
- 
   
-  G4double RK=1.0+20*e2/e1;
-  G4int ik=G4std::min((G4int) RK,20);
+  
+  G4double RK=20.0*e2/e1;
+  G4int ik=G4std::min((G4int) RK,19);
   
   G4double P10=0,P11=0,P1=0;
   G4double P20=0,P21=0,P2=0;
@@ -206,19 +211,19 @@ G4double G4PenelopeBremsstrahlungAngular::ExtractCosTheta(G4double e1,G4double e
   
   //Sampling from the Lorenz-trasformed dipole distributions
   P1=G4std::min(exp(P1)/beta,1.0);
-  G4double betap = G4std::min(G4std::max(beta*(1+P2/beta),0.0),0.9999);
+  G4double betap = G4std::min(G4std::max(beta*(1.0+P2/beta),0.0),0.9999);
   
   G4double cdt=0,testf=0;
   
-  if (G4UniformRand() > P1){
+  if (G4UniformRand() < P1){
     do{
-      cdt = 2*G4UniformRand()-1.0;
+      cdt = 2.0*G4UniformRand()-1.0;
       testf=2.0*G4UniformRand()-(1.0+cdt*cdt);
     }while(testf>0);
   }
   else{
     do{
-      cdt = 2*G4UniformRand()-1.0;
+      cdt = 2.0*G4UniformRand()-1.0;
       testf=G4UniformRand()-(1.0-cdt*cdt);
     }while(testf>0);
   }
