@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2001-04-10 15:11:32 johna Exp $
+$Id: History,v 1.113 2001-05-03 11:17:41 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+3rd May 2001 John Allison (vis-V03-01-01)
+- Changes for greps-V03-01-01 (elimination of RW).
+- Improvements in /vis/scene/add/volume.
+- Added /vis/drawTree.
 
 10th April 2001  John Allison (vis-V03-01-00)
 - Added two new commands:
