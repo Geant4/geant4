@@ -168,7 +168,8 @@
       DIMENSION ACO2(2),ZCO2(2),WCO2(2)
       DIMENSION AH2O(2),ZH2O(2),WH2O(2)                                        
 *
-      CHARACTER*4 volnam
+      CHARACTER*4  volnam
+      CHARACTER*20 matnam
 *      
 * *** Air compound parameters          
       DATA Aair/14.01, 16.00/
@@ -259,8 +260,20 @@
       enddo                                      
 *                                                                               
 * *** Close geometry banks. (mandatory system routine)
-      CALL GGCLOS       
+      CALL GGCLOS
 *
+* *** print geometry
+      PRINT 749
+      PRINT 751,NbLayer 
+      do k=1,NbAbsor
+        call GFMATE (materAbs(k),matnam,dua,duz,dud,dur,dui,udu,idu)      
+        PRINT 752,matnam,thickAbs(k)
+      enddo
+      PRINT 749                                                             
+*      
+  749 FORMAT(/ ,60(1H-),/)            
+  751 FORMAT(1X,'The calorimeter is ',I2,' layers of:')
+  752 FORMAT(5X,A10,': ',F8.4,' cm')     
 *
 * *** dessin
       CALL GSATT ('*'   ,'SEEN',1)
