@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.20 2002-02-06 05:46:25 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.21 2002-02-26 18:21:46 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -47,6 +47,7 @@
 // 29-10-01 all static functions no more inlined (mma) 
 // 08-11-01 some small cosmetics , L.Urban
 // 06-02-02 bug fixed at subcutoff definition, L.Urban
+// 26-02-02 bug fixed in TouchebleHandle definition, V.Ivanchenko
 // --------------------------------------------------------------
  
 
@@ -711,7 +712,7 @@ G4VParticleChange* G4VMuEnergyLoss::AlongStepDoIt(
                G4Track* deltaTrack =
                         new G4Track(theDelta,DeltaTime,DeltaPosition);
                deltaTrack->
-                   SetTouchableHandle(stepData.GetPostStepPoint()->GetTouchableHandle()) ;
+                   SetTouchableHandle(stepData.GetPreStepPoint()->GetTouchableHandle()) ;
 
                deltaTrack->SetParentID(trackData.GetTrackID()) ;
                aParticleChange.AddSecondary(deltaTrack) ;
