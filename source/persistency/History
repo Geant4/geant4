@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 99  Y.Morita
+- Introduced G4PersistentSchema.hh to use Geant4 named schema
+
 November 19, 99  Y.Morita (persistency-V00-01-06)
 - bug fixes in G4PersistentEventMan.cc and G4PersistentRunMan.cc
 
