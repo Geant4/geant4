@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.cc,v 1.17 2004-12-07 23:41:01 perl Exp $
+// $Id: G4ViewParameters.cc,v 1.18 2005-03-15 12:52:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -166,15 +166,16 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
   }
 }
 
-void G4ViewParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 3;
+G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
+  const G4int  nSidesMin = 12;
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
       "\nnumber of sides per circle < " << nSidesMin
-	 << "; forced to" << nSides << G4endl;
+	 << "; forced to " << nSides << G4endl;
   }
   fNoOfSides = nSides;
+  return fNoOfSides;
 }
 
 void G4ViewParameters::SetViewAndLights

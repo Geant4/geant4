@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ViewParameters.hh,v 1.15 2004-07-23 15:24:08 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.16 2005-03-15 12:52:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,7 +175,7 @@ public: // With description
   void ClearCutawayPlanes      ();
   void SetExplodeFactor        (G4double explodeFactor);
   void UnsetExplodeFactor      ();
-  void SetNoOfSides            (G4int nSides);
+  G4int SetNoOfSides           (G4int nSides);  // Returns actual number set.
   void SetViewpointDirection   (const G4Vector3D& viewpointDirection);
   // Prefer the following to get lightpoint direction right too.
   void SetViewAndLights        (const G4Vector3D& viewpointDirection);
