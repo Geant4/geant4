@@ -30,7 +30,7 @@ int main() {
   G4double eMax  = 4.0;   // maximum energy for bullet
   G4int    eBins = 1;   // bullet energy bins
   G4double eStep = (eMax-eMin)/eBins;
-  for(G4int e = 0; e < 10; e++) { // Scan with different energy
+   for(G4int e = 0; e < eBins; e++) { // Scan with different energy
  
     // Auxiliarly stuff for ugly analysis
     G4Analyser* analyser = new G4Analyser();
