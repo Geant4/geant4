@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.cc,v 1.4 2001-05-03 13:55:51 maire Exp $
+// $Id: G4Isotope.cc,v 1.5 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -117,7 +117,8 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4IsotopeTable IsotopeTable)
      << "\n***** Table : Nb of isotopes = " << IsotopeTable.length() 
      << " *****\n" << G4endl;
         
-   for (G4int i=0; i<IsotopeTable.length(); i++) flux << IsotopeTable[i] << G4endl;
+   for (size_t i=0; i<IsotopeTable.length(); i++)
+     flux << IsotopeTable[i] << G4endl;
 
    return flux;
 }

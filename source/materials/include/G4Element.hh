@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.hh,v 1.7 2001-03-30 14:43:15 maire Exp $
+// $Id: G4Element.hh,v 1.8 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -200,7 +200,7 @@ inline
 G4Element* G4Element::GetElement(G4String elementName)
 {  
   // search the element by its name 
-  for (G4int J=0 ; J<theElementTable.length() ; J++)
+  for (size_t J=0 ; J<theElementTable.length() ; J++)
    {
     if(theElementTable[J]->GetName() == elementName)
       return theElementTable[J];

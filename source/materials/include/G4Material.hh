@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.hh,v 1.10 2001-03-30 14:43:16 maire Exp $
+// $Id: G4Material.hh,v 1.11 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -302,7 +302,7 @@ inline
 G4Material* G4Material::GetMaterial(G4String materialName)
 {  
   // search the material by its name 
-  for (G4int J=0 ; J<theMaterialTable.length() ; J++)
+  for (size_t J=0 ; J<theMaterialTable.length() ; J++)
    {
     if(theMaterialTable[J]->GetName() == materialName)
       return theMaterialTable[J];

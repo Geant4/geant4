@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonisParamMat.cc,v 1.6 2001-03-12 17:48:48 maire Exp $
+// $Id: G4IonisParamMat.cc,v 1.7 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   fTaul = (*(fMaterial->GetElementVector()))[0]->GetIonisation()->GetTaul();
   fLogMeanExcEnergy = 0.;
 
-  for (G4int i=0; i < fMaterial->GetNumberOfElements(); i++)
+  for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++)
     fLogMeanExcEnergy += (fMaterial->GetVecNbOfAtomsPerVolume())[i]
                    *((*(fMaterial->GetElementVector()))[i]->GetZ())
                    *log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
@@ -54,7 +54,7 @@ void G4IonisParamMat::ComputeMeanParameters()
   {
     fShellCorrectionVector[j] = 0.;
 
-    for (G4int k=0; k<fMaterial->GetNumberOfElements(); k++)
+    for (size_t k=0; k<fMaterial->GetNumberOfElements(); k++)
       fShellCorrectionVector[j] += (fMaterial->GetVecNbOfAtomsPerVolume())[k] 
               *((*(fMaterial->GetElementVector()))[k]->GetIonisation()
                                                      ->GetShellCorrectionVector()[j]);
@@ -157,7 +157,7 @@ void G4IonisParamMat::ComputeFluctModel()
 
   // need an 'effective Z' ?????
   G4double Zeff = 0.;
-  for (G4int i=0;i<fMaterial->GetNumberOfElements();i++) 
+  for (size_t i=0;i<fMaterial->GetNumberOfElements();i++) 
      Zeff += (fMaterial->GetFractionVector())[i]
              *((*(fMaterial->GetElementVector()))[i]->GetZ());
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Element.cc,v 1.6 2001-05-03 13:55:51 maire Exp $
+// $Id: G4Element.cc,v 1.7 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -119,11 +119,10 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
     // filled.
     if ( fNumberOfIsotopes == theIsotopeVector->length() ) {
       // Compute Neff, Aeff
-      G4int i;
       G4double wtSum=0.0;
 
       fNeff = fAeff = 0.0;
-      for (i=0;i<fNumberOfIsotopes;i++) {
+      for (size_t i=0;i<fNumberOfIsotopes;i++) {
         fNeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetN();
         fAeff +=  fRelativeAbundanceVector[i]*(*theIsotopeVector)(i)->GetA();
         wtSum +=  fRelativeAbundanceVector[i];
@@ -133,8 +132,8 @@ void G4Element::AddIsotope(G4Isotope* isotope, G4double abundance)
       
       fNbOfAtomicShells = G4AtomicShells::GetNumberOfShells((G4int)fZeff);
       fAtomicShells     = new G4double[fNbOfAtomicShells];
-      for (i=0;i<fNbOfAtomicShells;i++)
-         fAtomicShells[i] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,i);
+      for (G4int j=0;j<fNbOfAtomicShells;j++)
+         fAtomicShells[j] = G4AtomicShells::GetBindingEnergy((G4int)fZeff,j);
          
       ComputeDerivedQuantities();
 
@@ -262,7 +261,7 @@ const G4Element& G4Element::operator=(const G4Element& right)
         {
 	 theIsotopeVector         = new G4IsotopeVector(fNumberOfIsotopes);
 	 fRelativeAbundanceVector = new G4double[fNumberOfIsotopes];
-	 for (G4int i=0;i<fNumberOfIsotopes;i++)
+	 for (size_t i=0;i<fNumberOfIsotopes;i++)
 	    {
              (*theIsotopeVector)[i]      = (*right.theIsotopeVector)[i];
              fRelativeAbundanceVector[i] = right.fRelativeAbundanceVector[i];
@@ -302,7 +301,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4Element* element)
     << "   A = " << G4std::setw(6) << G4std::setprecision(2) << (element->fAeff)/(g/mole) 
     << " g/mole";
    
-  for (G4int i=0; i<element->fNumberOfIsotopes; i++)
+  for (size_t i=0; i<element->fNumberOfIsotopes; i++)
   flux 
     << "\n   ---> " << (*(element->theIsotopeVector))[i] 
     << "   abundance: " << G4std::setw(6) << G4std::setprecision(2) 
@@ -329,7 +328,7 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4ElementTable ElementTable)
    flux << "\n***** Table : Nb of elements = " << ElementTable.length() 
         << " *****\n" << G4endl;
         
-   for (G4int i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
+   for (size_t i=0; i<ElementTable.length(); i++) flux << ElementTable[i] 
                                                       << G4endl << G4endl;
 
    return flux;

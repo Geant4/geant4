@@ -1,4 +1,4 @@
-$Id: History,v 1.20 2001-05-03 13:55:50 maire Exp $
+$Id: History,v 1.21 2001-05-18 12:35:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.05.01 G.Cosmo - materials-V03-01-00
+         Cleared pedantic warnings detected by Linux-g++ with ISO/ANSI setup.
      
 03.05.01 precision(prec) at begin/end of operator<<  Isotope,Element,Material
      

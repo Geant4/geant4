@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Isotope.hh,v 1.6 2001-03-30 14:43:16 maire Exp $
+// $Id: G4Isotope.hh,v 1.7 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -106,7 +106,7 @@ inline
 G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
 {  
   // search the isotope by its name 
-  for (G4int J=0 ; J<theIsotopeTable.length() ; J++)
+  for (size_t J=0 ; J<theIsotopeTable.length() ; J++)
    {
     if(theIsotopeTable[J]->GetName() == isotopeName)
       return theIsotopeTable[J];

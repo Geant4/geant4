@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalSurface.cc,v 1.4 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4OpticalSurface.cc,v 1.5 2001-05-18 12:35:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -105,9 +105,9 @@ void G4OpticalSurface::DumpInfo() const
 	// Dump info for surface
 
 	G4cout << 
-        "  Surface type   = " << theType   << G4endl <<
-	"  Surface finish = " << theFinish << G4endl <<
-	"  Surface model  = " << theModel  << G4endl;
+        "  Surface type   = " << G4int(theType)   << G4endl <<
+	"  Surface finish = " << G4int(theFinish) << G4endl <<
+	"  Surface model  = " << G4int(theModel)  << G4endl;
 
 	G4cout << G4endl;
 
