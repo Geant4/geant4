@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.12 1999-05-07 00:58:21 gcosmo Exp $
+# $Id: architecture.gmk,v 1.13 1999-05-07 13:20:10 stesting Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -341,6 +341,9 @@ AR := ar r
 # Default echo used with makedepend. Changed for SUN-CC, Linux-g++.
 ECHO:= echo
 
+# Default grep used with source/GNUmakfile.  Changed for SUN-CC.
+GREP := grep
+
 
 #
 # Architecture dependent variables...
@@ -400,6 +403,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   SHEXT  := so
   AR     := $(CXX) -xar -ptr$(G4TREP) -o
   ECHO   := /bin/echo
+  GREP   := /usr/xpg4/bin/grep
   FCLIBS := -lM77 -lF77 -lsunmath
   X11FLAGS  := -I/usr/openwin/include/X11/extensions -I/usr/openwin/include/X11 -I/usr/openwin/include
   X11LIBS   := -L/usr/openwin/lib -L/usr/dt/lib -L/usr/ucblib -R/usr/openwin/lib -lXmu -lX11 -lXext 
