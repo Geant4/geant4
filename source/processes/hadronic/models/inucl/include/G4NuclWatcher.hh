@@ -1,15 +1,16 @@
-#ifndef NUCL_WATCHER_H
-#define NUCL_WATCHER_H
+#ifndef G4NUCL_WATCHER_HH
+#define G4NUCL_WATCHER_HH
+
 #include "pair.h"
 #include "vector"
 #include <math.h>
 
-class NuclWatcher {
+class G4NuclWatcher {
 
 public:
 
-NuclWatcher(double z, vector<double> expa, vector<double> expcs, 
-                     vector<double> experr, bool check, bool nucl) : nuclz(z),  
+G4NuclWatcher(G4double z, vector<G4double> expa, vector<G4double> expcs, 
+                     vector<G4double> experr, G4bool check, G4bool nucl) : nuclz(z),  
 		     checkable(check), nucleable(nucl)  {
   exper_as = expa;
   exper_cs = expcs;
@@ -17,24 +18,24 @@ NuclWatcher(double z, vector<double> expa, vector<double> expcs,
 
 };
 
-void watch(double a, double z) {
+void watch(G4double a, G4double z) {
 
-  const double small = 0.001;
+  const G4double small = 0.001;
   if(fabs(z - nuclz) < small) {
     bool here = false;
     for(int i = 0; i < simulated_as.size(); i++) {
       if(fabs(simulated_as[i] - a) < small) {
-        simulated_cs[i] += 1.;
+        simulated_cs[i] += 1.0;
 	here = true;
         break;
       };
     };
-    if(!here) { simulated_as.push_back(a); simulated_cs.push_back(1.); };
+    if(!here) { simulated_as.push_back(a); simulated_cs.push_back(1.0); };
   };
 };
 
-void setInuclCs(double csec, int nev) { 
-  for(int i = 0; i < simulated_as.size(); i++) {
+void setInuclCs(G4double csec, G4int nev) { 
+  for(G4int i = 0; i < simulated_as.size(); i++) {
     double err = sqrt(simulated_cs[i])/simulated_cs[i];
     simulated_prob.push_back(simulated_cs[i]/nev);
     simulated_cs[i] *= csec/nev;
@@ -42,48 +43,48 @@ void setInuclCs(double csec, int nev) {
   };
 };
 
-double getChsq() const { return izotop_chsq; };
+G4double getChsq() const { return izotop_chsq; };
 
-pair<double,double> getAverageRatio() const { 
- return pair<double,double>(average_ratio,aver_rat_err); };
+pair<G4double, G4double> getAverageRatio() const { 
+ return pair<G4double, G4double>(average_ratio, aver_rat_err); };
 
-pair<double,double> getExpCs() const {
-  double cs = 0.;
-  double err = 0.;
-  for(int iz = 0; iz < exper_as.size(); iz++) {
+pair<G4double, G4double> getExpCs() const {
+  G4double cs = 0.0;
+  G4double err = 0.0;
+  for(G4int iz = 0; iz < exper_as.size(); iz++) {
     cs += exper_cs[iz];
     err += exper_err[iz];
   };
-  return pair<double,double>(cs,err);
+  return pair<G4double, G4double>(cs, err);
 };
 
-bool to_check() const { return checkable; };
+G4bool to_check() const { return checkable; };
 
-bool look_forNuclei() const { return nucleable; };
+G4bool look_forNuclei() const { return nucleable; };
 
-pair<double,double> getInuclCs() const {
-  double cs = 0.;
-  double err = 0.;
-  for(int iz = 0; iz < simulated_as.size(); iz++) {
+pair<G4double, G4double> getInuclCs() const {
+  G4double cs = 0.0;
+  G4double err = 0.0;
+  for(G4int iz = 0; iz < simulated_as.size(); iz++) {
     cs += simulated_cs[iz];
     err += simulated_errors[iz];
   };
-  return pair<double,double>(cs,err);
+  return pair<G4double, G4double>(cs, err);
 };
 
 void print() {
-  const double small = 0.001;
-  cout << endl << " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
-  << endl;
-  cout << " **** izotop Z **** " << nuclz << endl;
-  izotop_chsq = 0.;
-  average_ratio = 0.;
-  aver_rat_err = 0.;
-  double exp_cs = 0.;
-  double exp_cs_err = 0.;
-  double inucl_cs = 0.;
-  double inucl_cs_err = 0.;
-  vector<bool> not_used(simulated_cs.size(),true);
+  const G4double small = 0.001;
+  G4cout << G4endl << " ++++++++++++++++++++++++++++++++++++++++++++++++++++++++ "
+  << G4endl;
+  G4cout << " **** izotop Z **** " << nuclz << G4endl;
+  izotop_chsq = 0.0;
+  average_ratio = 0.0;
+  aver_rat_err = 0.0;
+  G4double exp_cs = 0.0;
+  G4double exp_cs_err = 0.0;
+  G4double inucl_cs = 0.0;
+  G4double inucl_cs_err = 0.0;
+  vector<G4bool> not_used(simulated_cs.size(), true);
   int nmatched = exper_as.size();
   int nused = simulated_cs.size();
   double lhood = 0.;

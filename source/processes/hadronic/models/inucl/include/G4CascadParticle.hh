@@ -34,7 +34,7 @@ void incrementCurrentPath(G4double npath) { current_path += npath; };
 
 void updateZone(G4int izone) { current_zone = izone; };
 
-bool movingInsideNuclei() const { return movingIn; };
+G4bool movingInsideNuclei() const { return movingIn; };
 
 G4double getPathToTheNextZone(G4double rz_in, G4double rz_out);
 
@@ -48,7 +48,7 @@ G4int getCurrentZone() const { return current_zone; };
 
 G4int getNumberOfReflections() const { return reflectionCounter; };
 
-bool young(G4double young_path_cut, G4double cpath) const { 
+G4bool young(G4double young_path_cut, G4double cpath) const { 
 //
  if(current_path < 1000.0) {
    return cpath < young_path_cut;
@@ -60,7 +60,7 @@ bool young(G4double young_path_cut, G4double cpath) const {
 // return current_path + cpath < young_path_cut; 
 };
 
-bool reflectedNow() const { return reflected; };
+G4bool reflectedNow() const { return reflected; };
 
 void propagateAlongThePath(G4double path); 
 
@@ -78,9 +78,9 @@ G4InuclElementaryParticle theParticle;
 vector<G4double> position;
 G4int current_zone;
 G4double current_path;
-bool movingIn;
+G4bool movingIn;
 G4int reflectionCounter;   
-bool reflected;
+G4bool reflected;
  
 };        
 

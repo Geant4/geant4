@@ -40,7 +40,7 @@ G4Analyser() {
  
 };
 
-void setInelCsec(G4double csec, bool withn);
+void setInelCsec(G4double csec, G4bool withn);
  
 void setWatchers(const vector<G4NuclWatcher>& watchers) {
   ana_watchers = watchers;
@@ -218,7 +218,7 @@ G4double averageZ;
 
 vector<G4NuclWatcher> ana_watchers;
 G4double inel_csec;
-bool withNuclei;
+G4bool withNuclei;
 
 };        
 

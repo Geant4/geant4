@@ -105,7 +105,7 @@ void setRemainingExitationEnergy() {
 
 double getRemainingExitationEnergy() const { return eex_rest; };
 
-bool acceptable() const { return on_shell; };
+G4bool acceptable() const { return on_shell; };
 
 private: 
 
@@ -117,7 +117,7 @@ G4double eex_rest;
 
 pair<pair<G4int, G4int>, G4int> selectPairToTune(G4double de) const; 
 
-bool on_shell;
+G4bool on_shell;
 
 };        
 

@@ -31,7 +31,7 @@ vector<G4InuclElementaryParticle> generateSCMfinalState(G4double ekin,
 vector<G4double> 	generateMomModules(const vector<G4int>& kinds, G4int mult,
       G4int is, G4double ekin, G4double etot_cm) const; 
       
-bool reChargering(G4double ekin, G4int is) const;
+G4bool reChargering(G4double ekin, G4int is) const;
 
 vector<G4double> particleSCMmomentumFor2to2(G4int is, G4int kw, G4double ekin,
             G4double pscm) const; 
@@ -44,7 +44,7 @@ vector<G4int> generateOutgoingKindsFor2toMany(
 G4double getMomModuleFor2toMany( 
         G4int is, G4int mult, G4int knd, G4double ekin) const; 
 
-bool satisfyTriangle(const vector<G4double>& modules) const; 
+G4bool satisfyTriangle(const vector<G4double>& modules) const; 
 	
 vector<G4double> particleSCMmomentumFor2to3(
         G4int is, G4int knd, G4double ekin, G4double pmod) const; 

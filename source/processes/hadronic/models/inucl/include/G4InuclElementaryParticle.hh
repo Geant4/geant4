@@ -56,14 +56,14 @@ void setMomentum(const vector<G4double>& mom) {
 
 G4int type() const { return particleType; };
 
-bool photon() const { return particleType == 10; };
+G4bool photon() const { return particleType == 10; };
 
-bool nucleon() const { return particleType <= 2; };
+G4bool nucleon() const { return particleType <= 2; };
 
-bool pion() const { return particleType == 3 || particleType == 5 
+G4bool pion() const { return particleType == 3 || particleType == 5 
        || particleType == 7; };
 
-bool quasi_deutron() const { return particleType > 100; };
+G4bool quasi_deutron() const { return particleType > 100; };
 
 G4double getMass() const { return particleMass; };
 
@@ -185,7 +185,7 @@ G4double getKineticEnergy() const { return momentum[0] - particleMass; };
 
 G4double getEnergy() const { return momentum[0]; };
 
-bool valid() const { return valid_particle; };
+G4bool valid() const { return valid_particle; };
 
 virtual void printParticle() const {
   G4InuclParticle::printParticle();
@@ -199,7 +199,7 @@ G4int particleType;
 
 G4double particleMass;
 
-bool valid_particle;
+G4bool valid_particle;
 
 };        
 
