@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.7 2001-07-11 10:03:30 gunter Exp $
+// $Id: G4PAIxSection.cc,v 1.8 2001-10-17 14:01:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@
 #include <math.h>
 #include "G4PAIxSection.hh"
 #include "globals.hh"
-#include "G4MaterialTable.hh"
+#include "G4Material.hh"
 
 /* ******************************************************************
 
