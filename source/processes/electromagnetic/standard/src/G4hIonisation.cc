@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.33 2003-01-17 18:55:45 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.34 2003-03-10 10:50:57 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation physics process -------------------------------
@@ -50,6 +50,7 @@
 // 09-04-02 Update calculation of tables for GenericIons (V.Ivanchenko)
 // 10-06-02 bug fixed for stopping hadrons (V.Ivanchenko)
 // 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 10-03-03 Use SubType for GenericIons (V.Ivanchenko)
 //
 //------------------------------------------------------------------------------
 
@@ -138,7 +139,8 @@ void G4hIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   if(aParticleType.GetParticleType() == "nucleus" &&
      aParticleType.GetParticleName() != "GenericIon" &&
-     theMeanFreePathTable) {
+     aParticleType.GetParticleSubType() == "generic")
+  {
 
      G4EnergyLossTables::Register(&aParticleType,
               theDEDXpTable,
