@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Navigator.cc,v 1.6 1999-05-17 14:19:09 stesting Exp $
+// $Id: G4Navigator.cc,v 1.7 1999-07-21 10:47:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -420,26 +420,6 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 
         G4double shiftOriginSafSq= (fPreviousSftOrigin-pGlobalpoint).mag2();
 
-#if 0
-        // Reset point before computing safety 
-        LocateGlobalPointWithinVolume(OriginalGlobalpoint); 
-	G4double safety= ComputeSafety(OriginalGlobalpoint);
-	if( moveLenSq >= sqr(safety) ){
-	   G4double moveLen=sqrt(moveLenSq);
-	   if( moveLen > safety + kCarTolerance ){
-	      G4cerr << " ERROR in G4Navigator::ComputeStep: " << endl
-		   << "The Step's starting point has moved " << moveLen 
-		   << " since the last call to one of the Locate methods " << endl
-		   << " which is more than the current safety=" << safety << endl;
-	   }else{
- 	      G4cerr << " Warning in G4Navigator::ComputeStep: " << endl
-		   << "The Step's starting point has moved " << moveLen 
-		   << " which is equal to the current safety. " << endl;
-	   }
-	}
-	G4double safetyPlus = safety + kCarTolerance;
-	assert( moveLenSq <= sqr(safetyPlus) );
-#endif 	
 	//  Check that the starting point of this step is 
 	//   within the isotropic safety sphere of the last point
 	//   to a accuracy/precision  given by 
