@@ -1,13 +1,15 @@
-# $Id: ParGNUmakefile,v 1.1 2002-03-05 15:21:52 gcosmo Exp $
+# $Id: ParGNUmakefile,v 1.2 2002-03-09 08:34:39 cooperma Exp $
 # --------------------------------------------------------------
 #This file should be included in GNUmakefile of local directory.
 
 #Usage:  make     [ to compile parallel version ]
 #        make run [ to compile and run it ]
 #        make run-debug [ to compile and run in gdb ]
+#	 make parclean [ remove intermediate and executable files ]
 # See `run' target for parameters by which executable is called.
 # This assumes Geant4 environment vars have been defined.
-# I'm using SETUP-neu.csh (at Northeastern U.) and SETUP-cern.csh (at CERN)
+# See ../info/NEW_APP_INSTALL (number 10) for an example of setting up
+#   the Geant4 environment variables.
 
 # MEM_MODEL can be --seq, --mpi, or --pthread in current version of TOP-C.
 MEM_MODEL=--seq
@@ -32,8 +34,12 @@ ifndef G4INSTALL
   G4INSTALL = _Environment_variable_G4INSTALL_must_be_defined_
 endif
 
+ifndef G4WORKDIR
+  G4WORKDIR = ${G4INSTALL}
+endif
+
 ifndef G4BIN
-  G4BIN = $$G4INSTALL/bin
+  G4BIN = $$G4WORKDIR/bin
 endif
 ifndef G4BINDIR
   G4BINDIR = ${G4BIN}/$$G4SYSTEM
