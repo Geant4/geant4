@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.15 2000-02-25 07:36:14 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.16 2000-09-22 11:23:27 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,9 @@ class G4IonTable
    virtual ~G4IonTable();
 
  public: // With Description
+   G4int GetNumberOfElements() const;
+   // Get number of elements defined in the IonTable
+
    // Register Isotope table
    void RegisterIsotopeTable(G4VIsotopeTable* table);
    G4VIsotopeTable* GetIsotopeTable() const;
@@ -158,6 +161,10 @@ class G4IonTable
 
 };
 
+inline G4int  G4IonTable::GetNumberOfElements() const
+{
+  return numberOfElements;
+}
 inline G4bool  G4IonTable::Contains(const G4ParticleDefinition* particle) const
 {
   G4IonList::iterator i;
