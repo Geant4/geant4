@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.46 2004-08-12 00:50:11 asaim Exp $
+// $Id: G4Transportation.cc,v 1.47 2004-08-13 23:27:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -701,6 +701,7 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   // ( <const_cast> pNewSensitiveDetector) ;
 
   fParticleChange.SetMaterialChange( (G4Material *) pNewMaterial ) ;
+  fParticleChange.SetSensitiveDetectorChange( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 )
