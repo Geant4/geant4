@@ -16,8 +16,10 @@
 //                by Vladimir Ivanchenko, 6 September 1999 
 //                was made on the base of G4hLowEnergyIonisation class
 // ************************************************************
+// Class Description:
 // It is the extention of the ionisation process for the slow 
-// charged ions.
+// charged ions. Physics model is described in CERN-OPEN-99-XXX.
+// Class Description - End
 // ************************************************************
 //  6 September 1999 V.Ivanchenko create
 // ------------------------------------------------------------
@@ -29,7 +31,7 @@
 
 class G4ionLowEnergyIonisation : public G4hLowEnergyIonisation
 {
-public:
+public: // Without description
   
   G4ionLowEnergyIonisation(const G4String& processName = "ionLowEIoni"); 
   
@@ -43,10 +45,13 @@ public:
 
   G4double GetLowEnergyForParametrisation(const G4Material* material);
 
-  void SetIonDefinition(G4ParticleDefinition* theIonType);
-
   void PrintInfoDefinition();
-  
+
+public: // With description
+
+  void SetIonDefinition(G4ParticleDefinition* theIonType);
+  // This method define the ion type
+
 private:
   
   // hide assignment operator 
