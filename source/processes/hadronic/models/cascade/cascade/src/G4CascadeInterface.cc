@@ -88,7 +88,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   momentumBullet[0] =0.;
   momentumBullet[1] =0;
   momentumBullet[2] =0;
-  momentumBullet[3] =G4std::sqrt(px*px+py*py+pz*pz);
+  momentumBullet[3] =sqrt(px*px+py*py+pz*pz);
 
   G4InuclElementaryParticle *  bullet = new G4InuclElementaryParticle(momentumBullet, bulletType); 
 

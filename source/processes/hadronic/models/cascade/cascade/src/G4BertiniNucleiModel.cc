@@ -385,7 +385,7 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
 
   const G4double pi4by3 = 4.1887903; /// 4 Pi / 3
   const G4double small = 1.0e-10;
-  const G4double huge = 50.0;
+  const G4double huge_num = 50.0;
   const G4double pn_spec = 1.0;
   ///const G4double pn_spec = 0.5;
   ///const G4double young_cut = sqrt(10.0) * 0.1;
@@ -461,7 +461,7 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
       ///    double rat = 1.0;
       G4double pw = -path * dens * csec * rat;
 
-      if (pw < -huge) pw = -huge;
+      if (pw < -huge_num) pw = -huge_num;
       pw = 1.0 - exp(pw);
 
       if(verboseLevel > 2){
@@ -561,7 +561,7 @@ partners G4BertiniNucleiModel::generateInteractionPartners(G4CascadParticle& cpa
      
 	G4double pw = -path * tot_abs_csec;
 
-	if (pw < -huge) pw = -huge;
+	if (pw < -huge_num) pw = -huge_num;
 
 	pw = 1.0 - exp(pw);
 
