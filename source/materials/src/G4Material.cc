@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Material.cc,v 1.1 1999-01-07 16:09:45 gunter Exp $
+// $Id: G4Material.cc,v 1.2 1999-01-19 14:45:38 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,6 +33,7 @@
 // 09-07-98, ionisation parameters removed from the class, M.Maire
 // 05-10-98, change names: NumDensity -> NbOfAtomsPerVolume
 // 18-11-98, new interface to SandiaTable
+// 19-01-99  enlarge tolerance on test of coherence of gas conditions
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -305,7 +306,7 @@ void G4Material::ComputeDerivedQuantities()
    //for gas, check coherence of the state conditions
    if (fState == kStateGas) {
       G4double ratio = TotNbOfAtomsPerVolume*k_Boltzmann*fTemp/fPressure;
-      if ((ratio<0.5)||(ratio>2.)) {
+      if ((ratio<0.1)||(ratio>10.)) {
          G4cout << "---warning from G4Material-- The state conditions of the gas: " 
               << fName << " are not consistent."
               << "\n density  = "    << fDensity/(mg/cm3)     << " mg/cm3"
