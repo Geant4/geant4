@@ -1,4 +1,4 @@
-$Id: History,v 1.144 2001-06-22 06:30:24 morita Exp $
+$Id: History,v 1.145 2001-06-22 15:09:24 gunter Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22nd June Gunter Folger (config-V03-01-07)
+- remove lib_d target (again)
+- restore G4SKIP_DEPEND
 
 22nd June 2001 Youhei Morita (config-V03-01-06)
 - restored lib_d target in common.gmk with a protection of G4ODBMS.
