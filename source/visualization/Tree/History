@@ -1,4 +1,4 @@
-$Id: History,v 1.4 2001-06-15 07:25:57 stanaka Exp $
+$Id: History,v 1.5 2001-06-15 12:04:42 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization/Tree sub-category
 ------------------------------------------------
+
+15th June 2001  John Allison
+- Added 2nd template argument (less) to sets in G4ASCIITreeSceneHandler and
+  G4GAGTreeSceneHandler.
+
 15th June 2001  Satoshi Tanaka (vis-V03-01-05)
 - The  first committing of GAGTree driver.
 - Other files are the same as vis-V03-01-04

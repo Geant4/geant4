@@ -61,10 +61,14 @@ public:
   void EndModeling();
 protected:
   void Dump(const G4VSolid&);
-  G4std::set<G4LogicalVolume*> fLVSet;
-  typedef G4std::set<G4LogicalVolume*>::iterator LVSetIterator;
-  G4std::set<G4VPhysicalVolume*> fReplicaSet;
-  typedef G4std::set<G4VPhysicalVolume*>::iterator ReplicaSetIterator;
+  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> > fLVSet;
+  typedef
+  G4std::set<G4LogicalVolume*,G4std::less<G4LogicalVolume*> >::iterator
+  LVSetIterator;
+  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> > fReplicaSet;
+  typedef
+  G4std::set<G4VPhysicalVolume*,G4std::less<G4VPhysicalVolume*> >::iterator
+  ReplicaSetIterator;
 
 /////////////////////////////
   void ClearPVList(void);
