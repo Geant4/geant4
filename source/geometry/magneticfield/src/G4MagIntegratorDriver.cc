@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.24 2002-04-29 17:21:22 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.25 2002-05-07 17:18:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,6 +149,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
                                //     could force lots of small last steps
 	}
      }
+
      static G4int nStpPr=50;   // For debug printing of integrations with many steps
 
      // Perform the Integration
@@ -174,7 +175,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 #         ifdef  G4DEBUG_FIELD
  	   // if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
 	   // if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
+#         endif
         yFldTrk.DumpToArray(y);    
+#         ifdef  G4DEBUG_FIELD
   	  if(dbg>1) PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
 #         endif	
 	dyerr = dyerr_len / h;    // was dyerr_len / hstep;
