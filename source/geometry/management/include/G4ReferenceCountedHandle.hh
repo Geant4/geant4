@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.1 2001-03-13 15:55:47 radoone Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.2 2001-03-14 07:20:49 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,9 +24,9 @@
 // reference and is not constructed by calling new.
 //
 // Before the use of this smart pointer object one can test its validity
-// using the operator !().
-//  if( !smartPtrObj ) { ... } // OK!
-//  else               { ... } // Problem! We must initialize it first!
+// using the operator !() or operator bool().
+//  if( !smartPtrObj ) { ... } // Problem! We must initialize it first!
+//  else               { ... } // OK!
 //
 // The code which tries to delete this object won't compile, because it is
 // not a pointer it is an object.
@@ -136,6 +136,10 @@ template <class X>
       bool operator !() const {
          return fObj->fRep == 0 ? true : false;
       } // Validity test operator
+      
+      operator bool() const {
+        return fObj->fRep != 0 ? true : false;
+      }
    
       X& operator *() const {
          return *fObj->fRep;
