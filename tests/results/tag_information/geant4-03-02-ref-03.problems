@@ -1,0 +1,328 @@
+          Problems with geant4-03-02-ref-03
+          ===========================================
+
+
+
+
+Report on Errors and Warnings arising from system testing on the geant4-03-02-ref-03 tag.
+
+The complete set of tests has not been run, with Large_N(umbers of events), for all platforms. 
+It is hoped to extend the coverage and speed up the problem reporting in the September reference tag.
+ 
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+        | SUN-CC  | SUN-CC  |Linux-egcs|Linux-egcs|Linux-g++ |Linux-g++ | HP-aCC   | HP-aCC   | DEC-cxx | DEC-cxx | DEC-cxx | DEC-cxx |
+        |optim_ISO|debug_ISO|egcs.optim|egcs.debug|opt.NEWGCC|deb.NEWGCC| optim    | debug    |optim_ISO|debug_ISO|optim_NON|debug_NON|
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test01  | No-diff |         |          |          |          |          |          |          |         |         |         |         |
+test02  |Warn 1.1 |         |          |          | Err 4    |          | Warn 1   | Warn 3   | Err 5   | Warn 3  |         |         |
+test02.h| OK      |         | Warn 2&3 |          |          | Warn 3   |          |          |         |         | Err 5   |         |
+test05  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test06  |Warn 1.2 |         |          |          |          |          | Warn 1   | Warn 1   |         |         |         |         |
+test07  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+test09  |(anno)   |Err 3.1  |          |          |          |          | Warn 5+1 | Warn 5   |         |         |         |         |
+test10  |(anno)   |         |          |          |          |          |          |          |         |         |         |         |
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+
+test11  |Err 1.1  |         | Err 1    | Err 1    | Err 1    | Err 1    | Err 1    | Err 1    | Err 1   | Err 1   | Err 1   | Err 1   |
+test12  |(anno)   |         |          | Warn 2   | Err 4    | Warn 2   |          | Warn 2   | abend   |         | abend   |         |
+test13  |Warn 2.1 |         |          |          | Err 4    | Warn 2   |          |          | abend   |         | abend   |         |
+test14  |anno+2nds|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+test15  |         |         |          |          | Err 4    |          |          |          | Err 1   | Err 1   | Err 1   | Err 1   |
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test16  |Warn 3.1 |OK + anno| Warn 3   | Warn 2   | Err 4    | Warn 2   | Warn 3   | Warn 3   | abend   | Warn 3  | abend   |         |
+test17  | OK      |         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+test18  |OK (anno)|         |          |          |          |          |          |          |         |
+test20  |OK (anno)|         |          |          |          |          |          |          |         |         |cxx fail |cxx fail |
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+test103 |........ |Warn 4.1 | Warn 1   |          |          |          |          | Warn 1   |         |
+test104 |........ |Warn 4.1 |          |          |          |          |          | Warn 4   |         | abend   |
+test508 |Err  2.1 | Err  2  |          | Err  2   |          | Err  2   |          |          |         |
+--------+---------+---------+----------+----------+----------+----------+----------+----------+---------+---------+---------+---------+
+
+ (anno) change in annotation, layout and formatting.
+
+ Errors 2,4 and 5 require some debugging work.
+ Error  1         requires changes to the test so it may complete in a reasonable time.
+ Error  3         has not been reproduced.
+
+ Err  1  Data for test11 (the test is simply too long,
+         removing the data was introduced to inhibit execution). 
+ Err  2  NaN  test508 results
+ Err  3  system problem (?)
+ Err  4  negative currentInteractionLength
+ Err  5  Momentum Change is not unit vector (leading to exception).
+
+
+ It would be really nice to get rid of these warnings, particularly for the Large_N tests.
+
+ Warn 1  Momentum Change is not unit vector
+ Warn 2  Photonevaporation data not exact
+ Warn 3  G4CameronTruranHilfShellCorrections: out of table
+ Warn 4  G4PropagatorInField::LocateIntersectionPoint:   
+         Warning: Integration inaccuracy requires an adjustment in the step's endpoint
+ Warn 5  G4VParticleChange::SetNumberOfSecondaries() Warning  theListOfSecondaries is not empty G4VParticleChange::SetNumberOfSecondaries()
+
+ cxx-fail - 
+
+ The DEC-NONISO suite was run for the reference tag.
+ There were compilation errors such that G4emlowenery could not be built,
+ this has been traced to deficiencies in the ObjectSpace implementation of STL pair
+ and a work-around is now available.
+
+ Compiling G4FluoData.cc ...
+ cxx: Error: src/G4FluoData.cc, line 51: expression must have pointer type
+       G4DataVector* dataSet = pos->second;
+ ------------------------------^
+
+===============================================================================================
+
+G4Err  1  SUN-CC.optim_ISO test11
+---------------------------------
+
+As for "low_N" 
+SimpleBox is now made of Pb
+#
+# Auto-generated test input file for test11 hadronics.
+#
+# /run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+G4NeutronHPNames: Sorry, this material does not come near to any data.
+G4NeutronHPNames: Please make sure NeutronHPCrossSections points to the
+                  directory, the neutron scattering data are located in.
+G4NeutronHPNames: The material was: A=14, Z=7
+
+G4Err  2  SUN-CC.optim_ISO test508
+----------------------------------
+
+ end of Run TotNbofEvents = 10000
+    mean charged track length   in absorber=74.7733 +- 0.326843  mm
+
+            mean energy deposit in absorber=NaN +- 0  MeV
+
+G4Err  3  SUN-CC.debug_ISO test09
+----------------------------------
+[sungeant] ~/stt/testlogs/logs/stt.geant4-03-02-ref-03+tags588/SUN-CC.debug_ISO > cat test09.large_N.err
+signal fault in critical section
+signal number: 11, signal code: 1,                          fault address: 0xff190010, pc: 0xff3b8734, sp: 0xff1a5a40
+libthread panic: fault in libthread critical section : dumping core (PID: 15150 LWP 3)
+stacktrace:
+        ff3b8708
+        ff3b8898
+        ff3b890c
+        ff3c20dc
+        ff3b2a30
+        ff1ece0c
+        ff1d6c1c
+        ff1cbe5c
+        ff1d2668
+        0
+time: command terminated abnormally.
+
+real        8.4
+user        0.0
+sys         0.4
+
+G4 Err 4  Linux-g++.debug_NEWGCC test02.hadron
+----------------------------------------------
+
+signal 6, output on stderr.
+G4VProcess::SubtractNumberOfInteractionLengthLeft()  negative currentInteractionLength
+
+G4 Err 5  DEC-cxx.optim_ISO   test02.hadron
+-------------------------------------------
+#
+# proton at 100 GeV in Pb
+#
+/gun/particle proton
+/gun/energy 100 GeV
+/mydet/SelectMaterial Pb
+SimpleBox is now made of Pb
+/run/beamOn 20
+  G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+  Difference:  1
+ G4ParticleChange::CheckIt
+      -----------------------------------------------
+        G4ParticleChange Information
+      -----------------------------------------------
+        # of 2ndaries       :                   34
+        Pointer to 2ndaries :            140ef49e8
+        (Showed only 1st one)
+      -----------------------------------------------
+        Energy Deposit (MeV):                    0
+        Track Status        :                Alive
+        True Path Length (mm) :                 86.6
+        Stepping Control     :                    0
+        Event Biasing        :  not used
+        Mass (GeV)   :                 0.14
+        Charge (eplus)   :                    1
+        Position - x (mm)   :                  435
+        Position - y (mm)   :                0.381
+        Position - z (mm)   :                 4.08
+        Time (ns)           :                 1.45
+        Proper Time (ns)    :              0.00533
+        Momentum Direct - x :                    0
+        Momentum Direct - y :                    0
+        Momentum Direct - z :                    0
+        Kinetic Energy (MeV):              0.00111
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    1
+
+
+ 
+
+
+G4Warn 1  SUN-CC.optim_ISO test02
+---------------------------------
+(new annotation)
+MuonMinusCaptureAtRest is created.
+
+SimpleBox is now made of Al
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 10000
+  G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+  Difference:  4.1407e-09
+ G4ParticleChange::CheckIt
+      -----------------------------------------------
+        G4ParticleChange Information
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):                    0
+        Track Status        :                Alive
+        True Path Length (mm) :             2.98e-08
+        Stepping Control     :                    0
+        Event Biasing        :  not used
+        Mass (GeV)   :                    0
+        Charge (eplus)   :                    0
+        Position - x (mm)   :                  222
+        Position - y (mm)   :                -39.4
+        Position - z (mm)   :                -2.38
+        Time (ns)           :                 1.32
+        Proper Time (ns)    :             9.97e-07
+        Momentum Direct - x :               -0.885
+        Momentum Direct - y :                0.116
+        Momentum Direct - z :                -0.45
+        Kinetic Energy (MeV):             2.55e-09
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    0
+        Touchable (pointer) :               ccf9d8
+#
+G4Warn 1  SUN-CC.optim_ISO test06
+---------------------------------
+Small step with Gamma ?
+SimpleBox is now made of Al
+/gun/particle gamma
+/gun/energy 500 MeV
+/run/beamOn 10000
+Start closing geometry.
+Start Run processing.
+  G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+  Difference:  1.25491e-09
+ G4ParticleChange::CheckIt 
+      -----------------------------------------------
+        G4ParticleChange Information  
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):                    0
+        Track Status        :                Alive
+        True Path Length (mm) :             2.04e-08
+        Stepping Control     :                    0
+        Event Biasing        :  not used 
+        Mass (GeV)   :                    0
+        Charge (eplus)   :                    0
+        Position - x (mm)   :                  639
+        Position - y (mm)   :                 3.18
+        Position - z (mm)   :                 24.4
+        Time (ns)           :                 2.25
+        Proper Time (ns)    :             1.93e-07
+        Momentum Direct - x :               -0.888
+        Momentum Direct - y :                0.386
+        Momentum Direct - z :               -0.249
+        Kinetic Energy (MeV):             3.17e-08
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    0
+        Touchable (pointer) :               6cd030
+  G4ParticleChange::CheckIt  : the Momentum Change is not unit vector !!
+  Difference:  1.25e-09
+ G4ParticleChange::CheckIt 
+      -----------------------------------------------
+        G4ParticleChange Information  
+      -----------------------------------------------
+        # of 2ndaries       :                    0
+      -----------------------------------------------
+        Energy Deposit (MeV):                    0
+        Track Status        :                Alive
+        True Path Length (mm) :             7.87e-06
+        Stepping Control     :                    0
+        Event Biasing        :  not used 
+        Mass (GeV)   :             0.000511
+        Charge (eplus)   :                   -1
+        Position - x (mm)   :                  639
+        Position - y (mm)   :                 3.18
+        Position - z (mm)   :                 24.4
+        Time (ns)           :                 2.25
+        Proper Time (ns)    :                    0
+        Momentum Direct - x :               -0.888
+        Momentum Direct - y :                0.386
+        Momentum Direct - z :               -0.249
+        Kinetic Energy (MeV):             3.17e-08
+        Polarization - x    :                    0
+        Polarization - y    :                    0
+        Polarization - z    :                    0
+        Track Weight      :                    1
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+
+G4Warn 2  SUN-CC.optim_ISO test13
+---------------------------------
+
+G4ExcitationHandler: Warning: Photonevaporation data not exact.
+G4ExcitationHandler: Warning: Found gamma with energy = 2.04897e-11MeV
+
+G4ExcitationHandler Warnings (Found gamma with energy)
+
+SUN-CC.debug_ISO/test13.large_N.err:        energy = 2.04897e-11MeV
+SUN-CC.optim_ISO/test13.large_N.err:        energy = 2.04897e-11MeV
+SUN-CC.debug_ISO/test12.large_N.err:        energy = 2.51825e-11MeV
+HP-aCC.debug/test12.large_N.err:            energy = 2.51821e-11MeV
+HP-aCC.debug/test12.large_N.err:            energy = 2.51825e-11MeV
+Linux-egcs.debug/test12.large_N.err:        energy = 2.04892e-11MeV
+Linux-egcs.debug/test12.large_N.err:        energy = 2.04897e-11MeV
+Linux-egcs.debug/test16.large_N.err:        energy = 2.04896e-11MeV
+Linux-egcs.optim/test02.hadron.large_N.err: energy = 1.9744e-11MeV
+Linux-g++.debug_NEWGCC/test12.large_N.err:  energy = 2.04892e-11MeV
+Linux-g++.debug_NEWGCC/test12.large_N.err:  energy = 2.04897e-11MeV
+Linux-g++.debug_NEWGCC/test13.large_N.err:  energy = 2.04896e-11MeV
+Linux-g++.debug_NEWGCC/test16.large_N.err:  energy = 2.04896e-11MeV
+
+
+
+G4Warn 3  SUN-CC.optim_ISO test16
+---------------------------------
+G4CameronTruranHilfShellCorrections: out of table for Z = 1
+
+
+G4Warn 4  SUN-CC.debug_ISO test104
+----------------------------------
+(lown)
+G4PropagatorInField::LocateIntersectionPoint:   Warning: Integration inaccuracy requires 
+ an adjustment in the step's endpoint 
+   Two mid-points are further apart than their curve length difference
+   Dist = 45.8267 curve length = 45.8267
+
+
+G4Warn 5 HP-aCC.optim test09
+(stderr)
+G4VParticleChange::SetNumberOfSecondaries() Warning  theListOfSecondaries is not empty G4VParticleChange::SetNumberOfSecondaries() Warning  ...
+
