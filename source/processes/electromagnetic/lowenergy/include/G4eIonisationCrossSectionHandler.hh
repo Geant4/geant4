@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.2 2001-10-10 17:37:27 pia Exp $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.3 2002-04-18 17:18:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -47,7 +47,7 @@
 //
 
 #ifndef G4EIONISATIONCROSSSECTIONHANDLER_HH
-#define GG4EIONISATIONCROSSSECTIONHANDLER_HH 1
+#define G4EIONISATIONCROSSSECTIONHANDLER_HH 1
 
 #include "G4VCrossSectionHandler.hh"
 #include "globals.hh"

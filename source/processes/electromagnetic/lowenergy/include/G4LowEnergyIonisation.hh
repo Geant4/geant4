@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisation.hh,v 1.34 2001-11-29 22:47:27 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.35 2002-04-18 17:18:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -46,7 +46,7 @@
 
 // --------------------------------------------------------------
 
-#ifndef G4lOWENERGYIONISATION_HH
+#ifndef G4LOWENERGYIONISATION_HH
 #define G4LOWENERGYIONISATION_HH 1
 
 #include "G4eLowEnergyLoss.hh"
