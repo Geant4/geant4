@@ -55,7 +55,7 @@ XrayFluoAnalysisMessenger::XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* an
   ouputFileCommand->SetParameterName("choice",true);
   ouputFileCommand->SetDefaultValue("xrayfluo.hbk");
   //DrawCmd->SetCandidates("none charged neutral all");
-  ouputFileCommand->AvailableForStates(Idle);
+  ouputFileCommand->AvailableForStates(G4State_Idle);
   
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
