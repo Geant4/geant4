@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.1 2002-01-15 16:48:52 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.2 2002-01-16 17:02:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ class G4VXTRenergyLoss : public G4VContinuousProcess
 {
 public:
 
-   G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4double,G4double,
+  G4VXTRenergyLoss (G4LogicalVolume *anEnvelope,G4double,G4double,G4int,
                      const G4String & processName = "XTRenergyLoss");
    virtual  ~G4VXTRenergyLoss ();
 
@@ -149,7 +149,7 @@ protected:
 
   G4double* fGammaCutInKineticEnergy ; // TR photon cut in energy array
   G4double  fGammaTkinCut ;            // Tkin cut of TR photon in current mat.
-
+  G4LogicalVolume* fEnvelope ;
   G4PhysicsTable* fAngleDistrTable ;
   G4PhysicsTable* fEnergyDistrTable ;
 
@@ -180,7 +180,7 @@ protected:
   G4int fMatIndex1, fMatIndex2 ;
 
   G4int fPlateNumber ;
-
+  G4double fTotalDist ;
   G4double** fPlatePhotoAbsCof ;
   G4int      fPlateIntervalNumber ;
   G4double   fPlateThick ;
