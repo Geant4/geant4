@@ -1,4 +1,4 @@
-$Id: History,v 1.98 2003-08-08 11:30:00 vnivanch Exp $
+$Id: History,v 1.99 2003-09-20 15:36:22 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Sept 03: V.Ivant (stand-V05-02-03)
+-Update energy intervals for ionisation models
+-Update GNUmakefile
 
 08 August 03: V.Ivant (stand-V05-02-02)
 -Substitute standerd by STD, freezing old standard as 52

@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-06-20 15:58:58 vnivanch Exp $
+$Id: History,v 1.26 2003-09-20 15:34:58 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Sept 03: V.Ivant (xrays-V05-02-00)
+-Update GNUmakefile
 
 20 June 03: V.Ivant (xrays-V05-01-01)
 -modifications in BuildTable: angle range 0-0.3, Legendre96
