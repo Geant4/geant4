@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: globals.hh,v 1.3 1999-05-03 14:16:19 fbehner Exp $
+// $Id: globals.hh,v 1.4 1999-05-03 14:54:51 fbehner Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -86,7 +86,7 @@ static double cbrt(double x) { return pow(x,1./3.); }
 void G4Exception(const char* s=0);
 #ifdef G4USE_STL
 #include <string>
-void G4Exception(string s=string());
+void G4Exception(string s);
 #endif
 #endif /* GLOBALS_HH */
 
