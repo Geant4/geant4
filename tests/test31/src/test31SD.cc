@@ -111,7 +111,7 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
   G4double tkin  = track->GetKineticEnergy(); 
   G4double theta = (track->GetMomentumDirection()).theta();
   G4double zend  = aStep->GetPostStepPoint()->GetPosition().z();
-  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
+  //  G4double zstart= aStep->GetPreStepPoint()->GetPosition().z();
 
   G4bool stop = false;
   G4bool primary = false;
@@ -139,8 +139,8 @@ G4bool test31SD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
       theHisto->SaveToTuple("YEND",yend/mm);      
       theHisto->SaveToTuple("ZEND",zend/mm);      
       theHisto->SaveToTuple("LTRK",(theHisto->GetTrackLength())/mm);      
-      theHisto->SaveToTuple("TEND",0.0);
-      theHisto->SaveToTuple("TETA",0.0);      
+      theHisto->SaveToTuple("TEND",tkin);
+      theHisto->SaveToTuple("TETA",theta);      
       theHisto->SaveToTuple("LOSS",(tkinold-tkin)/MeV);      
       theHisto->SaveToTuple("DEDX",(tkinold-tkin)*mm/(zmax*MeV));      
 

@@ -118,19 +118,19 @@ void test31TrackingAction::PreUserTrackingAction(const G4Track* aTrack)
     }
 
     // delta-electron
-  } else if (1 == pid && "e-" == name) {
+  } else if (0 < pid && "e-" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "test31TrackingAction: Secondary electron " << G4endl;
     }
     theHisto->AddDeltaElectron(aTrack->GetDynamicParticle());
 
-  } else if (1 == pid && "e+" == name) {
+  } else if (0 < pid && "e+" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "test31TrackingAction: Secondary positron " << G4endl;
     }
     theHisto->AddPositron(aTrack->GetDynamicParticle());
 
-  } else if (1 == pid && "gamma" == name) {
+  } else if (0 < pid && "gamma" == name) {
     if(1 < theHisto->GetVerbose()) {
       G4cout << "test31TrackingAction: Secondary gamma " << G4endl;
     }
