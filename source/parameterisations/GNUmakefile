@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2000-11-14 16:15:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.2 2003-09-25 05:12:13 kurasige Exp $
 # ---------------------------------------------------------------
 # GNUmakefile for parameterisations library.  G.Cosmo, 14/11/2000
 # ---------------------------------------------------------------
@@ -20,6 +20,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/processes/parameterisation/include \
             -I$(G4BASE)/processes/electromagnetic/standard/include \
             -I$(G4BASE)/processes/electromagnetic/utils/include \
