@@ -83,7 +83,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 	rNorm = +zS;
 	zNorm = -rS;
 	
-	if (r[0] < 1/DBL_MAX) {
+	if (r[0] < DBL_MIN) {
 		//
 		// This segment begins at R=0 
 		//
@@ -106,7 +106,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
 		zNormEdge[0] /= lAdj;
 	}
 	
-	if (r[1] < 1/DBL_MAX) {
+	if (r[1] < DBL_MIN) {
 		//
 		// This segment ends at R=0
 		//
@@ -415,7 +415,7 @@ G4ThreeVector G4PolyconeSide::Normal( const G4ThreeVector &p,  G4double *bestDis
 //
 G4double G4PolyconeSide::Extent( const G4ThreeVector axis )
 {
-	if (axis.perp2() < 1.0/DBL_MAX) {
+	if (axis.perp2() < DBL_MIN) {
 		//
 		// Special case
 		//
@@ -522,7 +522,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	//
 	G4double r0, r1, r2;
 	
-	if (rNorm < -1/DBL_MAX) {
+	if (rNorm < -DBL_MIN) {
 		//
 		// This side faces *inward*
 		//
@@ -533,9 +533,9 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 		// A transition is required if the previous side
 		// faced outward
 		//
-		r2 = (prevRNorm > 1/DBL_MAX) ? r0*rFudge : -1;
+		r2 = (prevRNorm > DBL_MIN) ? r0*rFudge : -1;
 	}
-	else if (rNorm > 1/DBL_MAX) {
+	else if (rNorm > DBL_MIN) {
 		//
 		// This side faces *outward*
 		//
@@ -546,7 +546,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 		// A transition is required if the previous side
 		// faced inward
 		//
-		r2 = (prevRNorm < -1/DBL_MAX) ? r[0] : -1;
+		r2 = (prevRNorm < -DBL_MIN) ? r[0] : -1;
 	}
 	else {
 		//
@@ -559,8 +559,8 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 		r0 = r[0];
 		r1 = r[1];
 		
-		if (prevRNorm > 1/DBL_MAX) r0 *= rFudge;
-		if (nextRNorm > 1/DBL_MAX) r1 *= rFudge;
+		if (prevRNorm > DBL_MIN) r0 *= rFudge;
+		if (nextRNorm > DBL_MIN) r1 *= rFudge;
 		
 		r2 = -1;
 	}
@@ -661,7 +661,7 @@ void G4PolyconeSide::CalculateExtent( const EAxis axis,
 	// we've done exactly that, if we have a phi segment. 
 	// Add two additional faces if necessary
 	//
-	if (phiIsOpen && rNorm > 1/DBL_MAX) {
+	if (phiIsOpen && rNorm > DBL_MIN) {
 		G4double min, max;
 		
 		G4double cosPhi = cos(startPhi),
@@ -864,7 +864,7 @@ G4bool G4PolyconeSide::PointOnCone( const G4ThreeVector &hit, const G4double nor
 	//
 	if (rx<0) rx = hit.perp();
 	
-	if (rx < 1.0/DBL_MAX) 
+	if (rx < DBL_MIN) 
 		normal = G4ThreeVector( 0, 0, zNorm < 0 ? -1 : 1 );
 	else
 		normal = G4ThreeVector( rNorm*hit.x()/rx, rNorm*hit.y()/rx, zNorm );

@@ -594,7 +594,7 @@ G4ThreeVector G4PolyhedraSide::Normal( const G4ThreeVector &p,  G4double *bestDi
 //
 G4double G4PolyhedraSide::Extent( const G4ThreeVector axis )
 {
-	if (axis.perp2() < 1.0/DBL_MAX) {
+	if (axis.perp2() < DBL_MIN) {
 		//
 		// Special case
 		//

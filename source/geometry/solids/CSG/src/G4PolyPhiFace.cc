@@ -112,7 +112,7 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
                 edge->tr = dr/edge->length;
                 edge->tz = dz/edge->length;
 		
-		if ((here->r < 1/DBL_MAX) && (prev->r < 1/DBL_MAX)) {
+		if ((here->r < DBL_MIN) && (prev->r < DBL_MIN)) {
 			//
 			// Sigh! Always exceptions!
 			// This edge runs at r==0, so its adjoing surface is not a
@@ -149,9 +149,9 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
 
 		G4ThreeVector norm3D = prevEdge->norm3D + edge->norm3D - normal;
 
-		if (edge->v0->r < 1/DBL_MAX &&
-		    edge->v1->r > 1/DBL_MAX &&
-		    prevEdge->v0->r > 1/DBL_MAX ) {
+		if (edge->v0->r < DBL_MIN &&
+		    edge->v1->r > DBL_MIN &&
+		    prevEdge->v0->r > DBL_MIN ) {
 		 	//
 			// Oh boy, it doesn't get any more obscure than this!
 			// What we have is a corner point at r==0, without
