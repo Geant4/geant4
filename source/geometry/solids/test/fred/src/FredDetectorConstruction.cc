@@ -18,6 +18,11 @@
 #include "G4Material.hh"
 #include "G4Box.hh"
 #include "G4Tubs.hh"
+#include "G4Sphere.hh"
+#include "G4Torus.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
+#include "G4Para.hh"
 #include "G4Cons.hh"
 #include "G4Sphere.hh"
 #include "G4BREPSolidPCone.hh"
@@ -38,7 +43,7 @@
 //
 FredDetectorConstruction::FredDetectorConstruction( FredMessenger *ourMessenger ) 
 {
-	messenger = ourMessenger;
+  messenger = ourMessenger;
 }
 
 FredDetectorConstruction::~FredDetectorConstruction()
@@ -71,10 +76,10 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
      If World is too small for test then Segmentation Fault !!  
   */
 
-  G4Box		  *hallBox = new G4Box( "hall_box", 3*m, 3*m, 3*m );
+  G4Box		  *hallBox = new G4Box( "hall_box", 8*m, 8*m, 8*m );
   G4LogicalVolume	  *hallLog = new G4LogicalVolume( hallBox, Vaccuum, "hall_log", 0, 0, 0 );
   G4VPhysicalVolume *hall	   = new G4PVPlacement( 0, G4ThreeVector(), hallLog, 
-							"hall", 0, false, 0 );
+													"hall", 0, false, 0 );
 						       
   //
   // We usually don't care much about the main volume: just
@@ -100,7 +105,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       startPhi = -atan2( 0.5*0.41, 6.42 );
       deltaPhi = -2.0*startPhi;
       testVolume = new G4Polyhedra( "natalia",
-				    startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );
+									startPhi, deltaPhi, 1, 3, z_values, rmin, rmax );
   }
   break;
 		
@@ -108,16 +113,23 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     testVolume = new G4Box( "voxel_test", 1*m, 1*m, 1*m );
     break;
 	
+  case SPHERE:
+    testVolume = new G4Sphere ("sphere_test",0.8*m,1.0*m, startPhi, deltaPhi,0.0, M_PI);
+    fprintf(stderr,"OK defining a Sphere\n");
+    break;
+    
+  case CONE:
+    testVolume = new G4Cons( "cone_test",
+			     1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
+    break;
+ 
+
+
   case CONE2:
     /* try to do a cone with a 'pick' */
 	  
-    testVolume = new G4Cons( "test_cone",
+    testVolume = new G4Cons( "cone2_test",
 			     1*m, 1.2*m, 0.0*m, 0.2*m, 1*m, startPhi, deltaPhi );
-    break;
-		
-  case CONE:
-    testVolume = new G4Cons( "test_cone",
-			     1*m, 1.2*m, 0.4*m, 0.6*m, 1*m, startPhi, deltaPhi );
     break;
 		
   case TUBS:
@@ -132,7 +144,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4Box	*outside = new G4Box( "testboolout", 1*m, 1*m, 1*m );
     G4Tubs 	*inside = new G4Tubs( "testboolin", 0.0, 0.4*m, 1*m, 0, 360*deg );
     G4Transform3D tran = G4Translate3D( 0.4*m, 0.0, 0.0 );
-			
+
     testVolume = new G4SubtractionSolid( "testbool", (G4VSolid *)outside, (G4VSolid *)inside, tran );
   }
   break;
@@ -142,36 +154,60 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double      rmin[2]	  = { 1.0*m, 1.2*m },
       rmax[2]	  = { 1.2*m, 1.4*m };
       testVolume = new G4Polycone( "testpcone", 
-				   startPhi, deltaPhi, 2, z_values, rmin, rmax );
+								   startPhi, deltaPhi, 2, z_values, rmin, rmax );
   }
   break;
 
-  case NEW: {
-    /* New volume */
-    /*
-      You could have:
-      G4Sphere.cc  
-      G4Trap.cc  
-      G4Tubs.cc
-      G4CSGSolid.cc  
-      G4Para.cc  
-      G4Torus.cc   
-      G4Trd.cc
-    */
-    /* OK try a Sphere ..*/
-    testVolume = new G4Sphere("testSphere",
-			      0.8*m, 1.0*m,
-			      startPhi, deltaPhi,
-			      0, 2*M_PI);
+  case TRAP: {
+	G4String Name = "testTrapezoid";
+	testVolume = new G4Trap (Name,
+							 1.0*m,
+							 0.0,M_PI,
+							 2.4*m,1.0*m,2.0*m,
+							 0.0,
+							 2.4*m,1.0*m,2.0*m,
+							 M_PI);
   }
   break;
-
+  
+  case PARA: {
+	testVolume = new G4Para("testParallepiped",
+							1.0*m,1.6*m,2.6*m,
+							0.0,1.0,2.0);
+  }
+  break;
+  
+  case TORUS1: {
+	/* a torus */
+	testVolume = new G4Torus("testTorus",
+				 0.2*m, 0.4*m, 1.2*m,
+				 startPhi, deltaPhi);
+ 	
+  }
+  break;
+  
+  case TORUS2: {
+	/* another torus */
+	testVolume = new G4Torus("testTorus",
+				 0.8*m, 1.4*m, 1.8*m,
+				 startPhi, deltaPhi);
+ 	
+  }
+  break;
+  
+  case TRD: {
+	testVolume = new G4Trd("TestTrapezoid",
+						   0.2*m,0.8*m,
+						   0.8*m,1.2*m,
+						   4*m) ;
+  }
+	
   case PCON2: {
     G4double	z_values[5] = { -1.0*m, 0.0*m, 0.0*m, 0.8*m, 1.0*m };
     G4double	rmin[5]	    = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m },
       rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
       testVolume = new G4Polycone( "testpcone", 
-				   startPhi, deltaPhi, 5, z_values, rmin, rmax );
+								   startPhi, deltaPhi, 5, z_values, rmin, rmax );
   }
   break;
 		
@@ -180,7 +216,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double	rmin[8]     = {  0.6*m,  0.6*m,  0.5*m,  0.5*m,  0.4*m,  0.4*m,  0.4*m,  0.0*m },
       rmax[8]     = {  0.7*m,  0.7*m,  0.8*m,  0.9*m,  1.0*m,  1.0*m,  0.5*m,  0.5*m };
       testVolume = new G4Polycone( "testpcone", 
-				   startPhi, deltaPhi, 8, z_values, rmin, rmax );
+								   startPhi, deltaPhi, 8, z_values, rmin, rmax );
   }
   break;
 		
@@ -216,12 +252,12 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     Z_Values[7] = 40*cm;
 
     testVolume = new G4Polycone ("MyPCone",
-				 startPhi       ,
-				 deltaPhi     ,
-				 8        ,
-				 Z_Values ,
-				 RMINVec  ,
-				 RMAXVec   );
+								 startPhi       ,
+								 deltaPhi     ,
+								 8        ,
+								 Z_Values ,
+								 RMINVec  ,
+								 RMAXVec   );
   }
   break;
 
@@ -232,7 +268,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double	rmin[2]	    = { 0.8*m, 1.0*m },
       rmax[2]     = { 1.0*m, 1.2*m };
       testVolume = new G4Polyhedra( "testpgon",
-				    startPhi, deltaPhi, numSide, 2, z_values, rmin, rmax );
+									startPhi, deltaPhi, numSide, 2, z_values, rmin, rmax );
   }
   break;
 		
@@ -241,7 +277,7 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double	rmin[5]	    = {  0.5*m, 0.4*m, 0.0*m, 0.0*m, 0.9*m },
       rmax[5]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.1*m };
       testVolume = new G4Polyhedra( "testpgon",
-				    startPhi, deltaPhi, numSide, 5, z_values, rmin, rmax );
+									startPhi, deltaPhi, numSide, 5, z_values, rmin, rmax );
   }
   break;
   case PGON4: {
@@ -249,14 +285,14 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4double	rmin[6]	    = {  0.5*m, 0.5*m, 0.4*m, 0.4*m, 0.8*m, 0.8*m },
       rmax[6]     = {  0.6*m, 0.6*m, 1.0*m, 1.0*m, 1.0*m, 1.1*m };
       testVolume = new G4Polyhedra( "testpgon",
-				    startPhi, deltaPhi, numSide, 6, z_values, rmin, rmax );
+									startPhi, deltaPhi, numSide, 6, z_values, rmin, rmax );
   }
   break;
   }
 
   G4LogicalVolume	  *testLog  = new G4LogicalVolume( testVolume, Vaccuum, "test_log", 0, 0, 0 );
   G4VPhysicalVolume *test     = new G4PVPlacement( rot, G4ThreeVector(), testLog, 
-						   "test", hallLog, false, 0 );
+												   "test", hallLog, false, 0 );
 
   //
   // Put some stuff in it, if we want
@@ -267,44 +303,44 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
     G4Box 			*vxBox = new G4Box( "voxel_x", 0.3*mm, 0.6*m, 0.6*m );
     G4LogicalVolume   	*vxLog1 = new G4LogicalVolume( vxBox, Vaccuum, "x1", 0, 0, 0 );
     G4VPhysicalVolume	*vx1 = new G4PVPlacement( noRot, G4ThreeVector( -0.6*m, 0.0*m, 0.0*m ),
-						  vxLog1, "testx1", testLog, false, 0 );
+												  vxLog1, "testx1", testLog, false, 0 );
     G4LogicalVolume   	*vxLog2 = new G4LogicalVolume( vxBox, Vaccuum, "x2", 0, 0, 0 );
     G4VPhysicalVolume	*vx2 = new G4PVPlacement( noRot, G4ThreeVector( -0.2*m, 0.0*m, 0.0*m ),
-						  vxLog2, "testx2", testLog, false, 0 );
+												  vxLog2, "testx2", testLog, false, 0 );
     G4LogicalVolume   	*vxLog3 = new G4LogicalVolume( vxBox, Vaccuum, "x3", 0, 0, 0 );
     G4VPhysicalVolume	*vx3 = new G4PVPlacement( noRot, G4ThreeVector( +0.2*m, 0.0*m, 0.0*m ),
-						  vxLog3, "testx3", testLog, false, 0 );
+												  vxLog3, "testx3", testLog, false, 0 );
     G4LogicalVolume   	*vxLog4 = new G4LogicalVolume( vxBox, Vaccuum, "x4", 0, 0, 0 );
     G4VPhysicalVolume	*vx4 = new G4PVPlacement( noRot, G4ThreeVector( +0.6*m, 0.0*m, 0.0*m ),
-						  vxLog4, "testx4", testLog, false, 0 );
+												  vxLog4, "testx4", testLog, false, 0 );
 
     G4Box 			*vyBox = new G4Box( "voxel_y", 0.8*m, 0.3*mm, 0.6*m );
     G4LogicalVolume   	*vyLog1 = new G4LogicalVolume( vyBox, Vaccuum, "y1", 0, 0, 0 );
     G4VPhysicalVolume	*vy1 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.8*m, 0.0*m ),
-						  vyLog1, "testy1", testLog, false, 0 );
+												  vyLog1, "testy1", testLog, false, 0 );
     G4LogicalVolume   	*vyLog2 = new G4LogicalVolume( vyBox, Vaccuum, "y2", 0, 0, 0 );
     G4VPhysicalVolume	*vy2 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, -0.7*m, 0.0*m ),
-						  vyLog2, "testy2", testLog, false, 0 );
+												  vyLog2, "testy2", testLog, false, 0 );
     G4LogicalVolume   	*vyLog3 = new G4LogicalVolume( vyBox, Vaccuum, "y3", 0, 0, 0 );
     G4VPhysicalVolume	*vy3 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.7*m, 0.0*m ),
-						  vyLog3, "testy3", testLog, false, 0 );
+												  vyLog3, "testy3", testLog, false, 0 );
     G4LogicalVolume   	*vyLog4 = new G4LogicalVolume( vyBox, Vaccuum, "y4", 0, 0, 0 );
     G4VPhysicalVolume	*vy4 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, +0.8*m, 0.0*m ),
-						  vyLog4, "testy4", testLog, false, 0 );
+												  vyLog4, "testy4", testLog, false, 0 );
 
     G4Box 			*vzBox = new G4Box( "voxel_z", 0.8*m, 0.8*m, 0.3*mm );
     G4LogicalVolume   	*vzLog1 = new G4LogicalVolume( vzBox, Vaccuum, "z1", 0, 0, 0 );
     G4VPhysicalVolume	*vz1 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.8*m ),
-						  vzLog1, "testz1", testLog, false, 0 );
+												  vzLog1, "testz1", testLog, false, 0 );
     G4LogicalVolume   	*vzLog2 = new G4LogicalVolume( vzBox, Vaccuum, "z2", 0, 0, 0 );
     G4VPhysicalVolume	*vz2 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, -0.7*m ),
-						  vzLog2, "testz2", testLog, false, 0 );
+												  vzLog2, "testz2", testLog, false, 0 );
     G4LogicalVolume   	*vzLog3 = new G4LogicalVolume( vzBox, Vaccuum, "z3", 0, 0, 0 );
     G4VPhysicalVolume	*vz3 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.7*m ),
-						  vzLog3, "testz3", testLog, false, 0 );
+												  vzLog3, "testz3", testLog, false, 0 );
     G4LogicalVolume   	*vzLog4 = new G4LogicalVolume( vzBox, Vaccuum, "z4", 0, 0, 0 );
     G4VPhysicalVolume	*vz4 = new G4PVPlacement( noRot, G4ThreeVector( 0.0*m, 0.0*m, +0.8*m ),
-						  vzLog4, "testz4", testLog, false, 0 );
+												  vzLog4, "testz4", testLog, false, 0 );
   }
 
   //
@@ -332,6 +368,6 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
   // Tell our "messenger" about this test volume
   //
   messenger->SetTestVolume( testVolume );
-	
+
   return hall;
-}
+  }

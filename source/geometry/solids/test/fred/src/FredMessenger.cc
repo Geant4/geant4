@@ -35,9 +35,19 @@ FredMessenger::FredMessenger( )
 	volumeNames[PGON4] = "PGON4";
 	volumeNames[VOXEL] = "VOXEL";
 	volumeNames[BOOL1]  =  "BOOL1";
+	volumeNames[SPHERE] = "SPHERE";
 	volumeNames[CONE]  =  "CONE";
 	volumeNames[CONE2] = "CONE2";
-	volumeNames[NEW] = "NEW";
+	volumeNames[VOXEL] = "VOXEL";
+	volumeNames[NATALIA] = "NATALIA";
+	volumeNames[BOOL1]  =  "BOOL1";
+	volumeNames[CONE]  =  "CONE";
+	volumeNames[CONE2] = "CONE2";
+	volumeNames[TRAP] = "TRAP";
+ 	volumeNames[PARA] = "PARA";
+ 	volumeNames[TORUS1] = "TORUS1";
+ 	volumeNames[TORUS2] = "TORUS2";
+ 	volumeNames[TRD] = "TRD";
 
 	gunNames[SPRAY] = "SPRAY";
 	gunNames[GRID]  = "GRID";
@@ -85,6 +95,13 @@ FredMessenger::FredMessenger( )
 			 + volumeNames[PGON3] + " "
 			 + volumeNames[PGON4] + " "
 			 + volumeNames[BOOL1] + " "
+			 + volumeNames[SPHERE] + " "
+			 + volumeNames[PGON] + " "
+			 + volumeNames[TRAP] + " "
+			 + volumeNames[PARA] + " "
+			 + volumeNames[TORUS1] + " "
+			 + volumeNames[TORUS2] + " "
+			 + volumeNames[TRD] + " "
 			 + volumeNames[VOXEL];
 	volumeTypeNameCmd->SetCandidates( choices );
 	

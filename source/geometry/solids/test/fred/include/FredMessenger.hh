@@ -11,6 +11,7 @@
 
 enum VolumeType {
 	TUBS,
+	SPHERE,
 	BOX,
 	PCON,
 	PCON2,
@@ -22,25 +23,29 @@ enum VolumeType {
 	VOXEL,
 	NATALIA,
 	BOOL1,
-	PGON4,
-	PGON3,
 	PGON2,
-	NEW  /* You could add your own here */
+	PGON3,
+	PGON4,
+	TRAP,
+	PARA,
+	TORUS1,
+	TORUS2,
+	TRD
 };
-#define FRED_VOLUMETYPE_NUM  (PGON2+1)
+#define FRED_VOLUMETYPE_NUM 21
 
 enum GunType {
 	SPRAY,
 	GRID,
 	G4
 };
-#define FRED_GUNTYPE_NUM  (G4+1)
+#define FRED_GUNTYPE_NUM  3
 
 enum DrawType {
 	NORMAL,
 	SHADOW
 };
-#define FRED_DRAWTYPE_NUM  (SHADOW+1)
+#define FRED_DRAWTYPE_NUM  2
 
 class G4UIdirectory;
 class G4UIcmdWithAString;
