@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-02-17 17:50:23 japost Exp $
+$Id: History,v 1.6 1999-02-17 18:28:57 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,21 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
-February 10th, 1998   J. Apostolakis -  field-01-00-02
+February 17th, 1998   J. Apostolakis -  field-01-00-02
+
+ Moved G4PropagatorInField files to geometry/volumes. 
+ Updated GNUmakefile not to depend on geometry/volumes anymore.
+   -> the known circular dependency is removed
+
+
+February 12th, 1998   J. Apostolakis -  field-spin1-works1     (act Feb17)
+
+  A tag that contains the first version that worked with spin (in Peter G.'s
+directory).   G4PropagateInSpin is still in this version.  A small change
+in a branch of the header file was needed. 
+
+
+February 10th, 1998   J. Apostolakis 
 
 All the following changes are needed for energy integration also:
 
