@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.hh,v 1.5 2001-10-25 08:10:20 grichine Exp $
+// $Id: F01DetectorConstruction.hh,v 1.6 2003-11-25 18:06:22 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@ class G4Material;
 class G4UniformMagField;
 class F01DetectorMessenger;
 class F01CalorimeterSD;
-class F01ElectroMagneticField;
+class F01FieldSetup;
 
 
 class F01DetectorConstruction : public G4VUserDetectorConstruction
@@ -97,8 +97,7 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   logicAbsorber;  // pointer to the logical Absorber
      G4VPhysicalVolume* physiAbsorber;  // pointer to the physical Absorber
      
-     G4UniformMagField* magField;       // pointer to the magnetic field
-     F01ElectroMagneticField* fEmField;     
+     F01FieldSetup*     fEmFieldSetup;     
      F01DetectorMessenger* detectorMessenger;  // pointer to the Messenger
      F01CalorimeterSD* calorimeterSD;   // pointer to the sensitive detector
 
