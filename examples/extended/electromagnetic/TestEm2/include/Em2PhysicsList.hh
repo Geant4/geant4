@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2PhysicsList.hh,v 1.8 2002-12-16 11:29:22 stesting Exp $
+// $Id: Em2PhysicsList.hh,v 1.9 2003-03-17 15:30:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -38,6 +38,7 @@
 #include "globals.hh"
 
 class Em2PhysicsListMessenger;
+class G4VPhysicsConstructor;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -47,21 +48,25 @@ class Em2PhysicsList: public G4VModularPhysicsList
     Em2PhysicsList();
    ~Em2PhysicsList();
 
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
     void AddPhysicsList(const G4String& name);
-    
+
     void SetCuts();
     void SetCutForGamma(G4double);
     void SetCutForElectron(G4double);
     void SetCutForPositron(G4double);
-       
+
   private:
     G4double cutForGamma;
-    G4double cutForElectron; 
+    G4double cutForElectron;
     G4double cutForPositron;
     G4double currentDefaultCut;
+    G4VPhysicsConstructor*  emPhysicsList;
+    G4VPhysicsConstructor*  generalPhysicsList;
+    G4VPhysicsConstructor*  particleList;
+    G4String emName;
 
-    G4bool   emPhysicsListIsRegistered;
-    
     Em2PhysicsListMessenger* pMessenger;         
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.11 2003-02-14 14:21:28 vnivanch Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.12 2003-03-17 15:30:08 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -126,9 +126,9 @@ void Em2DetectorConstruction::DefineMaterials()
     G4Material* H2O = new G4Material(name="Water", density, ncomponents=2);
     H2O->AddElement(H, natoms=2);
     H2O->AddElement(O, natoms=1);
-    //  G4double exc = H2O->GetIonisation()->FindMeanExcitationEnergy("H_2O");
-    //  H2O->GetIonisation()->SetMeanExcitationEnergy(exc);
-    
+    H2O->SetChemicalFormula("H_2O");
+    H2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
   //liquid argon
     a = 39.95*g/mole;
     density = 1.390*g/cm3;
@@ -256,19 +256,19 @@ void Em2DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0); dRradl = Value(1);
 }
- 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 {
   //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
+  G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
+
   if(magField) delete magField;		//delete the existing magn field
-  
+
   if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
+  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
     fieldMgr->SetDetectorField(magField);
     fieldMgr->CreateChordFinder(magField);
   } else {
@@ -278,7 +278,7 @@ void Em2DetectorConstruction::SetMagField(G4double fieldValue)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
+
 void Em2DetectorConstruction::UpdateGeometry()
 {
   G4bool first = true;
