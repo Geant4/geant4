@@ -1,0 +1,461 @@
+
+                       geant4-05-02-ref-06
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o New framework for hadronic models. Reorganisation of classes and
+    modules.
+  o Removed duplicate STD processes in standard EM.
+  o New EM low-energy models of Bremsstrahlung angular distribution.
+  o New EM low-energy processes for electrons and positrons with
+    Penelope models.
+  o First-level abstraction of G4Navigator. Rationalization of the public
+    interface for methods.
+  o Design iteration of field classes and new optimisation tuning for
+    default parameters in G4FieldManager and G4ChordFinder.
+  o Completed implementation for divisions, now supporting also polycones
+    and polyhedras.
+  o New HepRep XML driver for HepRep Version 2.
+  o Archived obsolete OPACS module.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V05-02-05
+------
+- Updated binmake.gmk to include new hadronics modules.
+- Include removal of OPACS setup.
+
+environments                            envs-V05-02-02
+------------
+- Added module MOMO with Java archives for UI tools from Naruto.
+- Removed OPACS module now deprecated.
+
+event                                   event-V05-02-09
+-----
+- G4ParticleGun, G4ParticleGunMessenger:
+  Added protection against shooting shortlived particle.
+
+geometry                                geometry-V05-02-01
+--------
+- Code cleanup and header inclusions review.
+- geometry/divisions                      geomdiv-V05-02-07
+  ------------------
+  o Completed implementation for G4Polyhedra and G4Polycone.
+  o Added divisions in X and Y for G4Para.
+  o Fixed handling of offsets and added more checks.
+  o Moved verbose output between G4DIVDEBUG compilation flag.
+  o Added testing framework for divisions to be used also as base
+    for user's example.
+  o General cleanup.
+- geometry/magneticfield                  field-V05-02-08
+  ----------------------
+  o G4ChordFinder:
+    + Made G4ChordFinder a base class
+      * to enable specialised implementations
+      * virtual methods: FindNextChord(), PrintStatistics()
+      * new method AccumulateStatistics() to aid in this.
+    + Extended arguments of AdvanceChordLimited() and FindNextChord()
+      adding the current safety sphere (origin, radius), for optimisation.
+    + Fixed set functions which had side effect (on first fraction).
+    + Set new default value of Accuracy
+      * Delta Chord  to  0.25 mm    (from 3.00 mm)
+    + Created new class members for parameters used in heuristics:
+      * fFirstFraction            for first step
+      * fFractionLast             fraction of last step, if redoing
+      * fFractionNextEstimate     confidence in step est from chord
+      * fMultipleRadius           for small radii of curve
+    + Added new method to Print Statistics.
+    + Enhanced verbosity to enable optional printing of statistics
+      in destructor.
+    + Moved constructors to .cc file.
+    + Changed fDefaultDeltaChord to a constant member variable.
+    + Fixed compilation problem occuring when G4DEBUG_FIELD was set.
+  o Added new class G4ChordFinderSaf (using G4ChordFinder) for performance
+    optimisation, which adopts safety to create longer chords, so enabling
+    propagation in fewer steps
+  o G4FieldManager:
+    + Changed default accuracy parameters to better values:
+      * Epsilon Min Default  to 5.0e-5  from 5.0e-7
+      * Epsilon Max Default  to 0.001   from 0.05
+    + Increased default accuracy. Changed default values of:
+      * Delta One Step     to  0.010 mm   (from 0.25 mm)
+      * Delta Intersection to  0.001 mm   (from 0.10 mm)
+    + Use field's DoesFieldChangesEnergy() method to set relevant member
+      variables
+    + Added methods Get/Set Min/MaximumEpsilonStep()
+    + Added fEpsilonMin fEpsilonMax & default to member variables.
+      Now these can be tailored for different parts of a detector or setup.
+  o G4Field, G4ElectroMagneticField, G4MagneticField:
+    + Added virtual method DoesFieldChangeEnergy()
+    + G4ElectroMagneticField derives from G4Field and
+      G4MagneticField derives from G4ElectroMagneticField.
+  o G4MagErrorStepper and derived classes (G4ClassicalRK4, G4SimpleRunge,
+    G4ExplicitEuler, G4ImplicitEuler, G4SimpleHeum):
+    + Constructors take G4EquationOfMotion in place of a G4Mag_EqRhs
+      as applicable to all types of equations (not just ones for Magnetic
+      field)
+  o G4EqMagElectricField now derives from G4EquationOfMotion.
+  o Added new unit test NTST.
+- geometry/management                     geommng-V05-02-04
+  -------------------
+  o G4VPVParameterisation: added G4Polycone and G4Polyhedra to list of
+    possible parameterisations by dimension.
+- geometry/navigation                     geomnav-V05-02-07
+  -------------------
+  o G4Navigator - methods review:
+    + Removed obsolete methods: IsExitNormalValid(), GetLocalExitNormal().
+    + Renamed method LocateGlobalPointAndSetup(p,v,history) to
+      ResetHistoryAndLocate(p,v,history).
+    + Moved to protected methods: GetCurrentLocalCoordinate(),
+      ComputeLocalPoint(), ComputeLocalAxis(), NetTranslation(),
+      NetRotation(), EnteredDaughterVolume().
+    + Fixed consistency of inline/not-inline implementations of methods.
+    + Made relevant methods virtual to allow specialization of navigators:
+      ComputeStep(p,v), ResetHierarchyAndLocate(p,v,h), SetupHierarchy()
+      LocateGlobalPointWithinVolume(p), ComputeSafety(p),
+      LocateGlobalPointAndUpdateTouchableHandle(p,v,t), ResetState(),
+      CreateTouchableHistoryHandle(), GetLocalExitNormal().
+  o G4PropagatorInField:
+    + Pass safety sphere information to G4ChordFinder for optimisation.
+    + Implemented move of EpsilonMin/Max to G4FieldManager.
+  o Added build system to unit tests. Cleared compilation warnings.
+- geometry/solids
+  ---------------
+  o CSG (geom-csg-V05-02-05):
+    + G4Sphere, G4Orb: revision of algorithm for Phi sections in
+      method Inside().
+    + G4Orb: introduced relative tolerance accuracy on fRmax surface
+      in all methods.
+  o specific (geom-specific-V05-02-07)
+    + G4Polycone, G4Polyhedra:
+      * Added protections in constructors for invalid constructs with
+        no contiguous segments in Z planes as input.
+      * Added SetOriginalParameters() method.
+- geometry/volumes                        geomvol-V05-02-05
+  ----------------
+  o Added protection to placement and replica constructors for cases
+    where a volume is placed inside itself.
+  o Migrated unit tests to new G4Navigator interface.
+
+global                                  global-V05-02-03
+------
+- Added method ExistPhysicsTable() to G4PhysicsTable.
+- G4UnitsTable: fixed units initialisation and deletion of objects in
+  constructors.
+
+interfaces                              interfaces-V05-02-00
+----------
+- Archived obsolete OPACS module and cleared build setup.
+- G4Xt: removed unused and commented code.
+
+processes/cuts                          procuts-V05-02-03
+--------------
+- Fixed bugs in G4VRangeToEnergyConverter (and derived class).
+- Revised error messages in retreiving ProductionCutsTable
+- Added verboseLevel in G4ProductionCutsTable.
+
+processes/electromagnetic/lowenergy     emlowen-V05-02-09
+-----------------------------------
+- New models of Bremsstrahlung angular distribution (2BN, 2BS).
+- New processes for electrons and positrons according to
+  Penelope models.
+- Improved user interface to select Bremsstrahlung angular
+  distribution models.
+- Fix to Penelope Bremsstrahlung angular distribution.
+- Performance optimization in Bremsstrahlung angular distribution.
+- Performance optimisation in Penelope Bremsstrahlung and fix
+  for local variable hiding a data member in G4PenelopeIonisation.
+- Bug fix in G4hLowEnergyIonisation and G4AtomicDeexcitation.
+
+processes/electromagnetic/muons         muons-V05-02-09
+-------------------------------
+- Removed forced verbose=0 for G4MuIonisation.
+- Removed duplicate STD processes and replaced G4VEnergyLossSTD with
+  G4VEnergyLossProcess.
+- Minor update to defaults for processes.
+
+processes/electromagnetic/standard      stand-V05-02-07
+----------------------------------
+- Removed duplicate STD processes and replaced G4VEnergyLossSTD with
+  G4VEnergyLossProcess.
+- Updated ionisation for ions.
+
+processes/electromagnetic/utils         utils-V05-02-17
+-------------------------------
+- Removed duplicate STD processes and substituted G4VEnergyLossSTD
+  with G4VEnergyLossProcess.
+- Bugfix in G4VMultipleScattering::AlongStepDoIt() and added check
+  truestep <= range in G4MscModel.
+- Fixed wrong deletion and error in SetRangeTable().
+- Fixed crash for case of inactivated ionisation and bremsstrahlung.
+- Fixed cases of negative energy loss.
+- Fixed bug and updated printout in RetrievePhysicsTable().
+- Updated ionisation for ions and multiple scattering.
+- Set highKinEnergy back to 100 TeV for multiple scattering.
+- Set number of table bins to 120 for multiple scattering.
+- Tuning for tail of the angular distribution.
+- Fixed problem of rounding of double in G4UniversalFluctuations.
+- Fixed precision problems for high energy (PeV) particles.
+- Temporarly disactivated precise range feature.
+
+processes/hadronic                         ghad-V05-02-01
+------------------
+- Internal restructuring of modules. Moved "photolepton_hadron" from
+  top-level directory "processes" to "hadronic/models":
+  o Removed modules:
+    models/radiative_decay, models/generator/* 
+  o New modules:
+    models/binary_cascade, models/de_excitation/evaporation,
+    models/de_excitation/fermi_breakup, models/de_excitation/fission,
+    models/de_excitation/gem_evaporation, models/de_excitation/handler,
+    models/de_excitation/management, models/de_excitation/multifragmentation,
+    models/de_excitation/photon_evaporation, models/de_excitation/util,
+    models/im_r_matrix, models/management, models/parton_string/diffraction
+    models/photolepton_hadron/muon_nuclear, models/parton_string/hadronization,
+    models/parton_string/management, models/parton_string/qgsm,
+    models/pre_equilibrium/exciton_model, models/radioactive_decay,
+    models/theo_high_energy, models/util
+  o Updated GNUmakefiles accordingly.
+- cross_sections                           gcross-V05-02-03
+  --------------
+  o Fixed bug in G4ElectroNuclearCrossSection.
+- management                               ghad-man-V05-02-03
+  ----------
+  o Made isotope-wise cross-section default for final state production.
+  o Fixes for compilation on WIN32-VC (VC++ 6.0).
+- models/binary_cascade                    ghad-bin-V05-02-05
+  ---------------------
+  o Fixed a charge conservation problem.
+  o Fix for a sub-threshold production attempt on hydrogen.
+  o Correction to avoid infinite loop detected on SUN-CC.
+  o Fixes for compilation on WIN32-VC (VC++ 6.0).
+- models/cascade/cascade                   ghad-bert-cas-V05-02-02
+  ----------------------
+  o Fixed missing initialization of data.
+- models/chiral_inv_phase_space/body       ghad-chips-body-V05-02-17
+  ----------------------------------
+  o Corrected problem of double deletion.
+  o Corrected problem related to initialisation of data.
+  o Fixed memory leaks detected by Valgrind.
+  o Fixed "En/Mom" bug.
+  o Suppressed debug error messages.
+- models/im_r_matrix                       ghad-Im_R-V05-02-04
+  ------------------
+  o Bug-fix in charge counting.
+  o Fixed a charge non-conservation problem.
+  o Use typeinfo and code-cleanup. 
+- models/chiral_inv_phase_space/interface  ghad-chips-int-V05-02-00
+  ---------------------------------------
+  o Added debug printout in case CHIPS fails to fragment. 
+- models/de_excitation/fermi_breakup       ghad-fermi-breakup-V05-02-03
+  ----------------------------------
+  o Fixed ordering of initialization of static data, making the 
+    dependent static data local to an access method. 
+  o Fixes for compilation on WIN32-VC (VC++ 6.0).
+- models/de_excitation/photon_evaporation  ghad-deex-photo-V05-02-00
+  ---------------------------------------
+  o Added workaround to resolve a potential leak problem in G4NuclearLevel.
+- models/neutron_hp                        ghad-neu-V05-02-02
+  -----------------
+  o Bug fix in scattering.
+  o Fixed missing resizing of a vector. 
+- models/parton_String/qgsm                ghad-qgsm-V05-02-00
+  -------------------------
+  o Fixed trivial compilation warnings.
+- models/pre_equilibrium                   ghad-preeq-V05-02-00
+  ----------------------
+  o Fixed severe bug in light ion code. 
+  o Resolved a problem of multiple deletion.
+  o Memory leak fixes in G4PrecompoundEmission.
+- models/theo_high_energy                  ghad-theo-HE-V05-02-00
+  -----------------------
+  o Fixed GNUmakefile.
+- models/util                              ghad-mod-util-V05-02-03
+  -----------
+  o Removing debug calculation that showed up in Valgrind. 
+- stopping                                 ghad-stop-V05-02-00
+  --------
+  o Fixed Valgrind report for stopping muons.
+- util                                     ghad_util-V05-02-01
+  ----
+  o Fixed anti-proton charge exchange probabilities for
+    scattering off hydrogen. 
+  o Fixes for compilation on WIN32-VC (VC++ 6.0).
+
+processes/management                    procman-V05-02-00
+--------------------
+- Use G4ExceptionSeverity for all G4Exception cases.
+
+processes/parameterisation              param-V05-02-01
+--------------------------
+- G4FastTrack: use G4Navigator::CreateTouchableHistoryHandle() instead of
+  CreateTouchableHistory() in method FRecordsAffineTransformation().
+
+processes/run                           run-V05-02-09
+-------------
+- Introduced PhysicsHasBeenModified() method in G4RunManagerKernel class
+  and related wrapper methods in G4RunManager and G4RunMessenger.
+- Removed dedicated treatment of anti-proton, neutron and anti-neutron
+  from BuildPhysicsTable of UserPhysicsList.
+- G4VUserPhysicsList: cleanup error messages for store/retreiving
+  physics table.
+
+processes/transportation                transport-V05-02-07
+------------------------
+- Replaced mis-typed class name G4SplittingAndRussianRouletePostStepDoIt
+  with G4SamplingPostStepAction and updated classes accordingly.
+- Adopt new G4Exception scheme.
+- Header inclusions and code cleanup.
+
+tracking                                tracking-V05-02-04
+--------
+- G4TrackingManager: move the invocation of PreUserTrackingAction()
+  after SetInitialStep(), so that geometrical infomation is available
+  at PreUserTrackingAction().
+- G4SteppingManager: renamed method LocateGlobalPointAndSetup(p,v,history)
+  to ResetHistoryAndLocate(p,v,history) according to changes in G4Navigator.
+
+visualization                           vis-V05-02-05
+-------------
+- New HepRep XML driver for HepRep Version 2 (vis-HepRep-V05-02-08).
+- Removed obsolete OPACS module.
+- Bug fix in G4VisManager::EndOfEvent.
+- Bug fix in /vis/scene/add/volume:
+  o requestedDepthOfDescent now correctly propagated to "world" volume.
+- G4PhysicalVolumeModel: CalculateExtent() always searches complete hierarchy.
+- Change initialisation of G4VSceneHandler so that there is always a
+  clear on first drawing  - fMarkForClearingTransientStore(true).
+- Removed redundant code from G4VisManager::EndOfRun.
+- management:
+  o G4VisManager: improved handling of auto refresh at end of event and run.
+  o G4VisCommandsScene: improved endOfEventAction and improved guidance.
+- Tree: improved printing.
+- G4VRML2SceneHandlerFunc: changed const char* pv_name to G4String pv_name.
+- G4XXXViewer: improved comments.
+- Rationalised GNUmakefiles.
+
+examples                                              examples-V05-02-05
+--------
+- Updated reference outputs.
+- advanced:
+  o brachytherapy (brachy-V05-02-01)
+    + Updates to geometry and sources.
+    + Removed OPACS driver from vis-manager.
+  o gammaray_telescope (GammaRayTel-V05-02-00)
+    + Updates to sensitive detectors.
+    + Removed OPACS driver from vis-manager.
+  o Tiara (Tiara-V05-02-02)
+    + Use decays for all particles.
+    + Removed OPACS driver from vis-manager.
+  o composite_calorimeter (ccal-V05-02-04)
+    + Updated physics-lists to be compatible with the latest
+      developments in hadronics.
+    + Removed GetCopyNo() and replaced it with GetReplicaNumber()
+      using G4TouchableHistory.
+    + Enables possibility of running the simulation in HCal alone or
+      HCal+ECal mode with the correct B-field + a few small bug corrections.
+      Changed also the default stepper (in magnetic field).
+    + Brought vis-manager up-to-date.
+- extended:
+  o analysis/A01 (exampleA01-V05-02-00)
+    + Renewed test to work with latest developments in AIDA 3.
+  o electromagnetic                                   testem-V05-02-01
+    + Open the geometry before cleaning stores in ConstructCalorimeter()
+      where geometry setup is exchanged.
+    + Removed OPACS driver from vis-manager.
+    + TestEm3
+      * added an estimation of the mean energy leaving each absorber
+    + TestEm7
+      * Updated BinaryCascade; added light ion interactions
+    + TestEm8
+      * Upgraded PAI model, renewed test
+      * Removed obsolete classes
+      * Updated histogramming to work with AIDA
+    + TestEm9
+      * Updated geometry and visualisation
+      * Updated README
+      * Added Histo and HistoMessenger classes: generic analysis modules
+      * Fixed StepMax
+      * Updated decay physics
+      * Updated BinaryCascade; added light ion interactions
+      * Use of the last msc for PhysList52
+  o field                                             fieldex-V05-02-01
+    + Open geometry before clearing stores in DetectorConstruction
+      class.
+    + Removed OPACS driver from vis-manager.
+    + BlineTracer (BlineTracer-V05-02-00)
+      * New plug-in module for visualization of magnetic-field lines
+    + field01 (fieldex01-V05-02-01)
+      * Renamed F01ElectroMagneticField into F01FieldSetup
+        (as it is a creator, not a field) according to latest
+	developments in magnetic-field.
+      * FieldSetup is now called in DetectorConstruction, not in main().
+      * Cleared compilation warnings in F01ElectroMagneticField.
+    + field02
+      * Revised to work with new developments in magnetic-field:
+        creation of chord finder for electric field is now explicit.
+      * Created helper class F02ElectricFieldSetup, using nearly all of
+        F02ElectroMagneticField, but not being a field.
+    + field03
+      * F03ElectroMagneticField: changed minimum step to 0.25 mm,
+        from 1.0 mm.
+  o medical/DICOM (DICOM-V05-02-00)
+    + Updated physics-list.
+    + Removed OPACS driver from vis-manager.
+- novice:
+  o N02 (exampleN02-V05-02-03)
+    + Removed OPACS driver from vis-manager.
+    + Cleared warnings for parameterised detectors.
+  o N03 (exampleN03-V05-02-06)
+    + Open the geometry before cleaning stores in ConstructCalorimeter().
+    + ExN03EventAction: changed drawing mode from 2000 to 1000.
+    + ExN03RunAction: removed ApplyCommand("/vis/...") statements.
+    + ExN03EventAction:
+      o changed to use G4VVisManager::Draw()
+      o increased drawing mode from 50 to 2000
+    + Removed OPACS driver from vis-manager.
+  o N04 (exampleN04-V05-02-06)
+    + ExN04GeneralPhysics: removed protection of assigning decay
+      against short-lived particles.
+    + Revome extra verbose.
+    + Removed OPACS driver from vis-manager.
+    + Cleared warnings for parameterised detectors.
+  o N05 (exampleN05-V05-02-01)
+    + Removed usage of G4ParticleWithCuts in physics-list.
+    + Removed OPACS driver from vis-manager.
+    + Cleared usage of LocateGlobalPointAndUpdateTouchable(). Use
+      LocateGlobalPointAndUpdateTouchableHandle() instead.
+    + Cleared compilation warnings.
+
+tests                                                 tests-V05-02-04
+-----
+- Updated reference outputs.
+- tests/test11 (test11-V05-02-00)
+  o Updated physics-list according to new hadronics framework.
+- tests/test14 (test14-V05-02-01)
+  o Introduced test of Bremsstrahlung angular distributions.
+  o Added tests for Penelope model.
+- tests/test16 (test16-V05-02-00)
+  o Updated physics-list according to new hadronics framework.
+- tests/test24 (test24-V05-02-01)
+  o Updated physics-list according to new hadronics framework.
+  o Added testing for pion induced.
+- tests/test26 (test26-V05-02-00)
+  o Cleared usage of STD processes.
+- tests/test27 (test27-V05-02-00)
+  o New test for binary cascade on light ions (G4BinaryLightIonReaction)
+- tests/test33 (test33-V05-02-04)
+  o Fixed usage of timer to allow porting on Windows.
+    Use G4Timer instead of native system timer.
+  o Fixes for compilation on WIN32-VC (VC++ 6.0).
+  o Removed OPACS driver from vis-manager.
+- tests/test50 (test50-V05-02-04)
+  o Renewed setup.
+  o Updated input files.
+- tests/test201 (test201-V05-02-00)
+  o Removed all references to OPACS driver.
+
