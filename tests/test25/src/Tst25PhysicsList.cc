@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst25PhysicsList.cc,v 1.1 2002-11-18 10:50:58 jwellisc Exp $
+// $Id: Tst25PhysicsList.cc,v 1.2 2002-11-19 08:45:41 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -321,7 +321,8 @@ void Tst25PhysicsList::ConstructHad()
     theTheoModel->SetMaxEnergy(100*TeV);
     
     G4CascadeInterface * theCasc = new G4CascadeInterface;
-//    theCasc->SetMinEnergy(65*MeV);
+    theCasc->SetMinEnergy(65*MeV);
+    thePreEquilib->SetMaxEnergy(70*MeV);
 
       G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
       G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
@@ -407,7 +408,8 @@ void Tst25PhysicsList::ConstructHad()
                                 new G4LEProtonInelastic;
 //         theInelasticModel->SetMaxEnergy(70*MeV);
 //         theInelasticProcess->RegisterMe(theInelasticModel);
-         theInelasticProcess->RegisterMe(theCasc);
+         theInelasticProcess->RegisterMe(thePreEquilib);
+	 theInelasticProcess->RegisterMe(theCasc);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);
       }
@@ -434,6 +436,7 @@ void Tst25PhysicsList::ConstructHad()
                                 new G4LENeutronInelastic;
 //         theInelasticModel->SetMaxEnergy(70*MeV);
 //	 theInelasticProcess->RegisterMe(theInelasticModel);
+         theInelasticProcess->RegisterMe(thePreEquilib);
          theInelasticProcess->RegisterMe(theCasc);
          theInelasticProcess->RegisterMe(theTheoModel);
          pmanager->AddDiscreteProcess(theInelasticProcess);

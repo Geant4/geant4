@@ -7,58 +7,138 @@
 /run/initialize
 /gun/direction 1 0 0
 #
-# proton at 10 GeV in U
+# proton at 1 GeV in Cu
 #
 /gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial U
-/run/beamOn 20
-#
-# neutron at 10 GeV in U
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial U
-/run/beamOn 20
-#
-# proton at 10 GeV in Cu
-#
-/gun/particle proton
-/gun/energy 10 GeV
 /mydet/SelectMaterial Cu
-/run/beamOn 20
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
 #
-# neutron at 10 GeV in Cu
+# neutron at 1 GeV in Cu
 #
 /gun/particle neutron
-/gun/energy 10 GeV
 /mydet/SelectMaterial Cu
-/run/beamOn 20
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
 #
-# proton at 10 GeV in Si
-#
-/gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial Si
-/run/beamOn 20
-#
-# neutron at 10 GeV in Si
-#
-/gun/particle neutron
-/gun/energy 10 GeV
-/mydet/SelectMaterial Si
-/run/beamOn 20
-#
-# proton at 10 GeV in H
+# proton at 1 GeV in U
 #
 /gun/particle proton
-/gun/energy 10 GeV
-/mydet/SelectMaterial H
-/run/beamOn 20
+/mydet/SelectMaterial U
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
 #
-# neutron at 10 GeV in H
+# neutron at 1 GeV in U
 #
 /gun/particle neutron
-/gun/energy 10 GeV
+/mydet/SelectMaterial U
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# proton at 1 GeV in Si
+#
+/gun/particle proton
+/mydet/SelectMaterial Si
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in Si
+#
+/gun/particle neutron
+/mydet/SelectMaterial Si
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# proton at 1 GeV in H
+#
+/gun/particle proton
 /mydet/SelectMaterial H
-/run/beamOn 20
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
+#
+# neutron at 1 GeV in H
+#
+/gun/particle neutron
+/mydet/SelectMaterial H
+/gun/energy 50 MeV
+/run/beamOn 1
+/gun/energy 100 MeV
+/run/beamOn 1
+/gun/energy 500 MeV
+/run/beamOn 1
+/gun/energy 800 MeV
+/run/beamOn 1
+/gun/energy 1500 MeV
+/run/beamOn 1
+/gun/energy 3000 MeV
+/run/beamOn 1
