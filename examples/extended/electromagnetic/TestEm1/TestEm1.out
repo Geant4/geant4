@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -164,7 +164,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=16s Real=19s Sys=2.6s
+  User=32s Real=62s Sys=2.3s
 
  nb tracks/event   neutral:   27.29   charged:  692.97
  nb  steps/event   neutral:  145.49   charged: 1331.63

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -16,11 +16,6 @@ Current available graphics systems are:
   RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
-  FukuiRenderer (DAWN)
-  OpenGLImmediateX (OGLIX)
-  OpenGLStoredX (OGLSX)
-  OpenGLImmediateXm (OGLIXm)
-  OpenGLStoredXm (OGLSXm)
 
 ***** Table : Nb of materials = 28 *****
 
@@ -180,7 +175,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=14.35 s 
+total time(SetCuts)=36.22 s 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range       
@@ -301,7 +296,7 @@ Foam X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.493
 49	fGamma = 9.283e+04	sumE = 1.495
 
-total time for build X-ray TR tables = 26.38 s
+total time for build X-ray TR tables = 53.88 s
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
@@ -312,25 +307,25 @@ total time for build X-ray TR tables = 26.38 s
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    mean charged track length   in absorber=50.6091 +- 0.713142  mm  
+    mean charged track length   in absorber=50.8742 +- 0.675613  mm  
 
             mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =1.945 +- 0.0304627      
- mean number of steps in absorber (neutral) =1.394 +- 0.0379047      
+ mean number of steps in absorber (charged) =1.95 +- 0.0292489      
+ mean number of steps in absorber (neutral) =1.399 +- 0.0369026      
 
-   mean number of charged secondaries = 0.944 +- 0.0304773
+   mean number of charged secondaries = 0.95 +- 0.0292489
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.944  and e+s =0
+   mean number of e-s =0.95  and e+s =0
 
-(number) transmission coeff=0.584  reflection coeff=0
+(number) transmission coeff=0.615  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9378578, 64175451
+ Current couple of seeds = 219697217, 549119428
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 2
@@ -391,36 +386,36 @@ Foam XTR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 1.897
 49	fGamma = 9.283e+04	sumE = 1.899
 
-total time for build X-ray TR dE/dx tables = 58.94 s
+total time for build X-ray TR dE/dx tables = 122.3 s
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 9378578, 64175451
+ Current couple of seeds = 219697217, 549119428
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=71.2799 +- 12.9164  mm  
+    mean charged track length   in absorber=49.2877 +- 4.21389  mm  
 
-            mean energy deposit in absorber=0.0384702 +- 0.0076507  MeV 
+            mean energy deposit in absorber=0.0324723 +- 0.00336462  MeV 
 
- mean number of steps in absorber (charged) =2.6 +- 0.473286      
- mean number of steps in absorber (neutral) =1.7 +- 0.548635      
+ mean number of steps in absorber (charged) =1.8 +- 0.189737      
+ mean number of steps in absorber (neutral) =1.2 +- 0.340588      
 
-   mean number of charged secondaries = 1.6 +- 0.473286
+   mean number of charged secondaries = 0.8 +- 0.189737
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1.6  and e+s =0
+   mean number of e-s =0.8  and e+s =0
 
-(number) transmission coeff=0.7  reflection coeff=0
+(number) transmission coeff=0.6  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1116992281, 882134091
+ Current couple of seeds = 1001576270, 1249128
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 3
@@ -482,36 +477,36 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.293
 49	fGamma = 9.283e+04	sumE = 1.294
 
-total time for build X-ray TR tables = 43.84 s
+total time for build X-ray TR tables = 80.53 s
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1116992281, 882134091
+ Current couple of seeds = 1001576270, 1249128
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=50.5929 +- 7.71991  mm  
+    mean charged track length   in absorber=47.7705 +- 6.60079  mm  
 
-            mean energy deposit in absorber=0.0357231 +- 0.00517527  MeV 
+            mean energy deposit in absorber=0.0305048 +- 0.00390684  MeV 
 
- mean number of steps in absorber (charged) =1.9 +- 0.330151      
- mean number of steps in absorber (neutral) =1.7 +- 0.317805      
+ mean number of steps in absorber (charged) =1.9 +- 0.298329      
+ mean number of steps in absorber (neutral) =1.6 +- 0.451664      
 
-   mean number of charged secondaries = 0.9 +- 0.330151
+   mean number of charged secondaries = 0.9 +- 0.298329
 
    mean number of neutral secondaries = 0 +- 0
 
    mean number of e-s =0.9  and e+s =0
 
-(number) transmission coeff=0.5  reflection coeff=0
+(number) transmission coeff=0.4  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2105126488, 636122787
+ Current couple of seeds = 1755627733, 1262511829
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 4
@@ -573,36 +568,36 @@ fAlphaPlate = 160 ; fAlphaGas = 160
 48	fGamma = 8.085e+04	sumE = 1.746
 49	fGamma = 9.283e+04	sumE = 1.748
 
-total time for build X-ray TR dE/dx tables = 84.27 s
+total time for build X-ray TR dE/dx tables = 159.94 s
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2105126488, 636122787
+ Current couple of seeds = 1755627733, 1262511829
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=52.8517 +- 4.39136  mm  
+    mean charged track length   in absorber=63.4185 +- 10.3326  mm  
 
-            mean energy deposit in absorber=0.0339345 +- 0.00583443  MeV 
+            mean energy deposit in absorber=0.0384603 +- 0.00446597  MeV 
 
- mean number of steps in absorber (charged) =2 +- 0.2      
- mean number of steps in absorber (neutral) =1.3 +- 0.317805      
+ mean number of steps in absorber (charged) =2.5 +- 0.474342      
+ mean number of steps in absorber (neutral) =2 +- 0.447214      
 
-   mean number of charged secondaries = 1 +- 0.2
+   mean number of charged secondaries = 1.4 +- 0.473286
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1  and e+s =0
+   mean number of e-s =1.4  and e+s =0
 
-(number) transmission coeff=0.8  reflection coeff=0
+(number) transmission coeff=0.7  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 758223803, 2021217626
+ Current couple of seeds = 1359598582, 718262973
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 5
@@ -663,36 +658,36 @@ Irregular X-ray TR model is called
 48	fGamma = 8.085e+04	sumE = 19.9
 49	fGamma = 9.283e+04	sumE = 20.41
 
-total time for build X-ray TR tables = 5.52 s
+total time for build X-ray TR tables = 8.96 s
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 758223803, 2021217626
+ Current couple of seeds = 1359598582, 718262973
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=166.358 +- 15.4814  mm  
+    mean charged track length   in absorber=203.832 +- 13.6986  mm  
 
-            mean energy deposit in absorber=0.0991313 +- 0.0185813  MeV 
+            mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =7.3 +- 0.707814      
- mean number of steps in absorber (neutral) =9.9 +- 1.13534      
+ mean number of steps in absorber (charged) =8.6 +- 0.802496      
+ mean number of steps in absorber (neutral) =11.6 +- 1.20996      
 
-   mean number of charged secondaries = 6.3 +- 0.707814
+   mean number of charged secondaries = 7.6 +- 0.802496
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =6.3  and e+s =0
+   mean number of e-s =7.6  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1500585225, 2092176073
+ Current couple of seeds = 838671518, 1370594534
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 6
@@ -753,36 +748,36 @@ Irregular X-ray TR dE/dx model is called
 48	fGamma = 8.085e+04	sumE = 26.03
 49	fGamma = 9.283e+04	sumE = 26.55
 
-total time for build X-ray TR dE/dx tables = 11.22 s
+total time for build X-ray TR dE/dx tables = 27.81 s
 ### Run 5 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1500585225, 2092176073
+ Current couple of seeds = 838671518, 1370594534
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=233.298 +- 26.513  mm  
+    mean charged track length   in absorber=244.023 +- 17.7222  mm  
 
-            mean energy deposit in absorber=NaN +- 0  MeV 
+            mean energy deposit in absorber=0.097581 +- 0.00706635  MeV 
 
- mean number of steps in absorber (charged) =10.3 +- 1.08674      
- mean number of steps in absorber (neutral) =12.3 +- 1.29653      
+ mean number of steps in absorber (charged) =10.3 +- 0.707814      
+ mean number of steps in absorber (neutral) =13.6 +- 0.950789      
 
-   mean number of charged secondaries = 9.1 +- 1.0812
+   mean number of charged secondaries = 9.3 +- 0.707814
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =9.1  and e+s =0
+   mean number of e-s =9.3  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2116519781, 67896379
+ Current couple of seeds = 696428433, 410411023
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 7
@@ -843,36 +838,36 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 15.86
 49	fGamma = 9.283e+04	sumE = 16
 
-total time for build X-ray TR tables = 8.63 s
+total time for build X-ray TR tables = 12.77 s
 ### Run 6 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2116519781, 67896379
+ Current couple of seeds = 696428433, 410411023
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=298.397 +- 20.3467  mm  
+    mean charged track length   in absorber=238.924 +- 16.8324  mm  
 
             mean energy deposit in absorber=NaN +- 0  MeV 
 
- mean number of steps in absorber (charged) =12.3 +- 0.825227      
- mean number of steps in absorber (neutral) =12.5 +- 0.724569      
+ mean number of steps in absorber (charged) =9.5 +- 0.790569      
+ mean number of steps in absorber (neutral) =10.4 +- 0.918695      
 
-   mean number of charged secondaries = 11.3 +- 0.825227
+   mean number of charged secondaries = 8.5 +- 0.790569
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =11.3  and e+s =0
+   mean number of e-s =8.5  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1543401644, 36094137
+ Current couple of seeds = 1084106612, 710015647
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 8
@@ -933,36 +928,36 @@ PlateIrrGas X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 21.91
 49	fGamma = 9.283e+04	sumE = 22.07
 
-total time for build X-ray TR dE/dx tables = 29.01 s
+total time for build X-ray TR dE/dx tables = 44.69 s
 ### Run 7 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1543401644, 36094137
+ Current couple of seeds = 1084106612, 710015647
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=262.695 +- 28.3515  mm  
+    mean charged track length   in absorber=214.366 +- 10.7858  mm  
 
-            mean energy deposit in absorber=NaN +- 0  MeV 
+            mean energy deposit in absorber=0.0872876 +- 0.00623581  MeV 
 
- mean number of steps in absorber (charged) =11.1 +- 1.15282      
- mean number of steps in absorber (neutral) =11.4 +- 1.32061      
+ mean number of steps in absorber (charged) =9 +- 0.6      
+ mean number of steps in absorber (neutral) =9.7 +- 0.860814      
 
-   mean number of charged secondaries = 10.1 +- 1.15282
+   mean number of charged secondaries = 8 +- 0.6
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =10.1  and e+s =0
+   mean number of e-s =8  and e+s =0
 
 (number) transmission coeff=1  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 460240760, 1756416216
+ Current couple of seeds = 330546255, 384169759
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 9
@@ -1023,36 +1018,36 @@ Regular X-ray TR radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.231
 49	fGamma = 9.283e+04	sumE = 1.235
 
-total time for build X-ray TR tables = 41.4 s
+total time for build X-ray TR tables = 65.42 s
 ### Run 8 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 460240760, 1756416216
+ Current couple of seeds = 330546255, 384169759
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=36.4878 +- 3.27466  mm  
+    mean charged track length   in absorber=35.299 +- 2.23713  mm  
 
-            mean energy deposit in absorber=0.0281158 +- 0.00461324  MeV 
+            mean energy deposit in absorber=0.0345081 +- 0.00581537  MeV 
 
- mean number of steps in absorber (charged) =1.3 +- 0.144914      
- mean number of steps in absorber (neutral) =1 +- 0.374166      
+ mean number of steps in absorber (charged) =1.4 +- 0.154919      
+ mean number of steps in absorber (neutral) =0.8 +- 0.309839      
 
-   mean number of charged secondaries = 0.3 +- 0.144914
+   mean number of charged secondaries = 0.4 +- 0.154919
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =0.3  and e+s =0
+   mean number of e-s =0.4  and e+s =0
 
-(number) transmission coeff=0.3  reflection coeff=0
+(number) transmission coeff=0.4  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 525126593, 1884497148
+ Current couple of seeds = 1684770799, 551856656
 ----------------------------------------
 Em10DetectorConstruction::ParametrisationModel() is called
 fModelNumber = 10
@@ -1113,36 +1108,36 @@ Regular X-ray TR dE/dx radiator model is called
 48	fGamma = 8.085e+04	sumE = 1.633
 49	fGamma = 9.283e+04	sumE = 1.634
 
-total time for build X-ray TR dE/dx tables = 72.68 s
+total time for build X-ray TR dE/dx tables = 129.01 s
 ### Run 9 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 525126593, 1884497148
+ Current couple of seeds = 1684770799, 551856656
 ----------------------------------------
 
 ---> Begin of Event: 0
  ================== run summary =====================
  end of Run TotNbofEvents = 10
-    mean charged track length   in absorber=48.8854 +- 6.36796  mm  
+    mean charged track length   in absorber=44.6536 +- 5.86296  mm  
 
-            mean energy deposit in absorber=0.0401224 +- 0.00346123  MeV 
+            mean energy deposit in absorber=0.0307423 +- 0.00429952  MeV 
 
- mean number of steps in absorber (charged) =2.1 +- 0.298329      
- mean number of steps in absorber (neutral) =1.5 +- 0.430116      
+ mean number of steps in absorber (charged) =1.6 +- 0.209762      
+ mean number of steps in absorber (neutral) =1 +- 0.282843      
 
-   mean number of charged secondaries = 1.1 +- 0.298329
+   mean number of charged secondaries = 0.6 +- 0.209762
 
    mean number of neutral secondaries = 0 +- 0
 
-   mean number of e-s =1.1  and e+s =0
+   mean number of e-s =0.6  and e+s =0
 
-(number) transmission coeff=0.7  reflection coeff=0
+(number) transmission coeff=0.5  reflection coeff=0
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1212028514, 1027227261
+ Current couple of seeds = 1626273150, 1514601648
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -173,20 +173,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=37.72s Real=47.63s Sys=8.41s
+  User=86.2s Real=178.95s Sys=7.58s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   18.73%       6.89%             0-> 1.11 radl:   18.73%     6.89% 
-    1.11-> 2.22 radl:   25.86%      10.89%             0-> 2.22 radl:   44.59%    14.75% 
-    2.22-> 3.33 radl:   21.63%       8.64%             0-> 3.33 radl:   66.22%    15.88% 
-    3.33-> 4.44 radl:   13.21%       8.38%             0-> 4.44 radl:   79.43%    12.32% 
-    4.44-> 5.55 radl:    8.11%       6.45%             0-> 5.55 radl:   87.55%     9.59% 
-    5.55-> 6.66 radl:    3.81%       4.04%             0-> 6.66 radl:   91.36%     8.37% 
-    6.66-> 7.77 radl:    2.14%       3.05%             0-> 7.77 radl:   93.49%     7.34% 
-    7.77-> 8.88 radl:    0.82%       1.67%             0-> 8.88 radl:   94.32%     6.46% 
-    8.88-> 9.99 radl:    0.60%       1.51%             0-> 9.99 radl:   94.92%     5.76% 
+    0.00-> 1.11 radl:   14.27%       6.27%             0-> 1.11 radl:   14.27%     6.27% 
+    1.11-> 2.22 radl:   23.60%      10.14%             0-> 2.22 radl:   37.87%    13.98% 
+    2.22-> 3.33 radl:   22.30%       9.32%             0-> 3.33 radl:   60.17%    15.65% 
+    3.33-> 4.44 radl:   15.30%       8.67%             0-> 4.44 radl:   75.46%    15.88% 
+    4.44-> 5.55 radl:    7.87%       5.89%             0-> 5.55 radl:   83.34%    13.57% 
+    5.55-> 6.66 radl:    4.72%       5.59%             0-> 6.66 radl:   88.06%    11.58% 
+    6.66-> 7.77 radl:    3.56%       4.93%             0-> 7.77 radl:   91.62%    10.10% 
+    7.77-> 8.88 radl:    1.56%       2.98%             0-> 8.88 radl:   93.19%     8.24% 
+    8.88-> 9.99 radl:    1.03%       3.45%             0-> 9.99 radl:   94.21%     5.98% 
 
 
 
@@ -194,21 +194,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   69.85%      10.68%             0-> 0.11 radl:   69.85%    10.68% 
-    0.11-> 0.22 radl:   15.02%       6.67%             0-> 0.22 radl:   84.87%     8.03% 
-    0.22-> 0.33 radl:    5.39%       4.26%             0-> 0.33 radl:   90.26%     6.67% 
-    0.33-> 0.44 radl:    2.44%       1.97%             0-> 0.44 radl:   92.70%     5.97% 
-    0.44-> 0.56 radl:    1.34%       1.20%             0-> 0.56 radl:   94.04%     5.85% 
-    0.56-> 0.67 radl:    0.87%       0.76%             0-> 0.67 radl:   94.92%     5.76% 
+    0.00-> 0.11 radl:   66.91%      12.31%             0-> 0.11 radl:   66.91%    12.31% 
+    0.11-> 0.22 radl:   15.43%       7.01%             0-> 0.22 radl:   82.33%     9.08% 
+    0.22-> 0.33 radl:    6.40%       4.94%             0-> 0.33 radl:   88.73%     6.57% 
+    0.33-> 0.44 radl:    2.87%       2.61%             0-> 0.44 radl:   91.61%     6.06% 
+    0.44-> 0.56 radl:    1.80%       2.01%             0-> 0.56 radl:   93.41%     6.00% 
+    0.56-> 0.67 radl:    0.80%       0.68%             0-> 0.67 radl:   94.21%     5.98% 
 
                               SUMMARY
-                         energy deposit :   94.92 % E0 +-    5.76 % E0
-                         charged traklen:   13.88 radl +-    0.85 radl
-                         neutral traklen:  201.27 radl +-   19.31 radl
+                         energy deposit :   94.21 % E0 +-    5.98 % E0
+                         charged traklen:   13.76 radl +-    0.86 radl
+                         neutral traklen:  196.99 radl +-   19.90 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1086208127, 994034357
+ Current couple of seeds = 541530766, 461818989
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Instantiated G3toG4DetectorConstruction using call list file "/afs/cern.ch/sw/geant4/stt/dev1/src/geant4/examples/extended/g3tog4/data/testmodel.dat"
@@ -212,7 +212,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=1.29s Sys=0.01s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 1 start.
@@ -231,7 +231,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /gun/particle e-
 /run/beamOn 1
 ### Run 2 start.
@@ -250,7 +250,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 ### Run 3 start.
@@ -269,7 +269,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /gun/position   0. 1.5 0. mm
 /gun/direction  1.  0.   0.
 /gun/energy 1 GeV
@@ -291,7 +291,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /gun/particle mu+
 /run/beamOn 1
 ### Run 5 start.
@@ -310,7 +310,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/particle e-
 /run/beamOn 1
 ### Run 6 start.
@@ -329,7 +329,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/particle e+
 /run/beamOn 1
 ### Run 7 start.

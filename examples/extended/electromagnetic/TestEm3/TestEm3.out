@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 Visualization Manager instantiating...
@@ -223,19 +223,19 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0 seconds
+    Total CPU time elapsed for geometry optimisation: 0.01 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-       0.00         0.00         0.00            2k Calorimeter
-       0.00         0.00         0.00            0k Layer
+  460200.00        46.02         1.16            2k Calorimeter
+  460200.00        46.02         1.16            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50         0.00    Calorimeter
-       8.30          0k         1        3          4         0.00    Layer
+      91.70          1k         1       50         50        46.02    Calorimeter
+       8.30          0k         1        3          4        46.02    Layer
 Start Run processing.
 
 ---> Begin Of Event: 0
@@ -244,19 +244,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=68.54s Real=86.85s Sys=14.82s
+  User=163.71s Real=323.23s Sys=15.41s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 799.29 MeV +- 14.74 MeV       56.53 cm  +-  1.13 cm 
- Absorber1 ( liquidArgon) : 189.35 MeV +- 13.64 MeV       95.42 cm  +-  7.01 cm 
+ Absorber0 (        Lead) : 800.38 MeV +- 14.76 MeV       56.65 cm  +-  1.26 cm 
+ Absorber1 ( liquidArgon) : 188.95 MeV +- 14.79 MeV       95.23 cm  +-  7.50 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2004252829, 470324736
+ Current couple of seeds = 348203160, 260247388
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

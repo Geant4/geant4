@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (14-Dec-2001)
+                                (31-Jan-2002)
              Copyright : Geant4 Collaboration
 **********************************************
 G4ClassicalRK4 (default) is called
@@ -11,8 +11,13 @@ Registering graphics systems...
 
 You have successfully chosen to use the following graphics systems.
 Current available graphics systems are:
+  ASCIITree (ATree)
   DAWNFILE (DAWNFILE)
+  GAGTree (GAGTree)
+  G4HepRepFile (HepRepFile)
+  RayTracer (RayTracer)
   VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
 
 ***** Table : Nb of materials = 11 *****
 
@@ -117,7 +122,7 @@ hIoni:    Knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-total time(SetCuts)=18.52 s 
+total time(SetCuts)=28.39 s 
 G4ClassicalRK4 (default) is called
 The minimal step is equal to 10 mm
 ============= The cut Energy ==============================
@@ -3346,7 +3351,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.62s Real=1.29s Sys=0.67s
+  User=1.28s Real=1.92s Sys=0.61s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
