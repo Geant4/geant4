@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronicInteraction.hh,v 1.8 2001-11-26 16:28:18 hpw Exp $
+// $Id: G4HadronicInteraction.hh,v 1.9 2002-11-25 13:10:26 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -67,7 +67,9 @@
     }
     
     virtual ~G4HadronicInteraction()
-    { }
+    {
+      G4HadronicInteractionRegistry::RemoveMe(this);
+    }
     
  private:
     

@@ -34,7 +34,7 @@ class G4HadronicInteractionRegistry
   ~G4HadronicInteractionRegistry();
   
   static void RegisterMe(G4HadronicInteraction * aModel);
-  static void RemoveMe(G4HadronicInteraction * aModel){};
+  static void RemoveMe(G4HadronicInteraction * aModel);
   
   protected:
 

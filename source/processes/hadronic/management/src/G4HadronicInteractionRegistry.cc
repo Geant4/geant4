@@ -32,11 +32,18 @@ RegisterMe(G4HadronicInteraction * aModel)
   theRegistry.AddModel(aModel);
 }
 
+void G4HadronicInteractionRegistry::
+RemoveMe(G4HadronicInteraction * aModel)
+{
+  theRegistry.allModels.erase(find(theRegistry.allModels.begin(), theRegistry.allModels.end(), aModel));
+  theRegistry.nModels = theRegistry.allModels.size();
+}
+
 G4HadronicInteractionRegistry::~G4HadronicInteractionRegistry()
 {
-  for(G4int i=0; i<nModels; i++)
+  while(allModels.size()!=0)
   {
-    delete allModels[i];
+    delete allModels.front();
   }
 }
 
