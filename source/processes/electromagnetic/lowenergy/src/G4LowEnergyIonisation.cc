@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.12 1999-06-07 09:59:14 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.13 1999-06-08 10:10:00 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -583,7 +583,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  }
 	  
 	  G4double lastTransEnergy = (*(*theBindEnVec)[1])[k];
-	  newPart = new G4DynamicParticle (G4Gamma::Gamma(), newPartDirection, lastTransEnergy) ;
+	  newPart = new G4DynamicParticle(G4Gamma::Gamma(), newPartDirection, lastTransEnergy);
 	  photvec.insert(newPart);
 	  thePrimaryShell = (G4int) fluorPar[0];
 	  theEnergyDeposit -= lastTransEnergy*MeV;
@@ -626,7 +626,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
     G4double momtot = sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
 
-    if(momdiff-1. > 1e-6){
+    if(momtot-1. > 1e-6){
 
       finalPx /= momtot; finalPy /= momtot; finalPz /= momtot;
     }
@@ -690,7 +690,8 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex, const G4do
 
 
 G4Element*
-G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticle, G4Material* aMaterial){
+G4LowEnergyIonisation::SelectRandomAtom(const G4DynamicParticle* aDynamicParticle, 
+					G4Material* aMaterial){
 
   // select randomly 1 element within the material
   G4double KineticEnergy = aDynamicParticle->GetKineticEnergy();
