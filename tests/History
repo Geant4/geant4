@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2002-06-01 11:17:45 gcosmo Exp $
+$Id: History,v 1.20 2002-12-05 02:22:58 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V04-01-03 4th December 2002  Makoto Asai
+- Migration to new G4AppliationState
 
 1st June 2002  Gabriele Cosmo
 - Added test23 for cut-per-material and physics table persistency test.
