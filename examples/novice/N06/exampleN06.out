@@ -22,7 +22,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
-eBrem:  Total cross sections from a parametrisation(L.Urban). Good description from 1 KeV to 100 GeV.
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
@@ -51,11 +51,11 @@ MuIoni:  knock-on electron cross sections .
          delta ray energy sampled from  differential Xsection.
       PhysicsTables from 1 keV to 1000 PeV in 100 bins. 
 
-MuBrems:  cross sections from R. Kokoulin 
+MuBrems:  theoretical cross section 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 100 bins. 
 
-MuPairProd:  cross sections from R. Kokoulin 
+MuPairProd:  theoretical cross sections 
           Good description up to 1000 TeV.
     PhysicsTables from 1 GeV to 1000 PeV in 50 bins. 
 Idle> /run/beamOn 1
@@ -68,9 +68,80 @@ Idle> /run/beamOn 1
 !!!!!!! Now start processing an event !!!!!!!
 ### pop requested out of 1 stacked tracks.
 
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 31
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 41
 Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 32 stacked tracks.
+### pop requested out of 42 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.747152,-0.600441,0.285016)
+ Old Polarization:       (-0.664653,-0.67497,0.320394)
+ New Momentum Direction: (0.454719,-0.804591,0.381922)
+ New Polarization:       (-0.890635,-0.410788,0.194992)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 42, parentID 1) is processed with stopping code 2
+### pop requested out of 41 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.741618,0.450011,0.497487)
+ Old Polarization:       (-0.670823,0.497503,0.549989)
+ New Momentum Direction: (0.42411,0.607515,0.671607)
+ New Polarization:       (-0.905611,0.284508,0.314523)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 41, parentID 1) is processed with stopping code 2
+### pop requested out of 40 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.75277,-0.294366,0.588801)
+ Old Polarization:       (-0.658284,-0.336617,0.673314)
+ New Momentum Direction: (0.483186,-0.391506,0.783105)
+ New Polarization:       (-0.875518,-0.216067,0.432185)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 40, parentID 1) is processed with stopping code 2
+### pop requested out of 39 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.747152,-0.365554,0.555098)
+ Old Polarization:       (-0.664653,-0.410928,0.623999)
+ New Momentum Direction: (0.454719,-0.489842,0.743832)
+ New Polarization:       (-0.890635,-0.250092,0.379767)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 39, parentID 1) is processed with stopping code 2
+### pop requested out of 38 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.747152,-0.254641,-0.613939)
+ Old Polarization:       (-0.664653,-0.286248,-0.690144)
+ New Momentum Direction: (0.454719,-0.34122,-0.822679)
+ New Polarization:       (-0.890635,-0.174212,-0.420023)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 38, parentID 1) is processed with stopping code 2
+### pop requested out of 37 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.747152,0.289636,0.598226)
+ Old Polarization:       (-0.664653,0.325587,0.67248)
+ New Momentum Direction: (0.454719,0.388113,0.801623)
+ New Polarization:       (-0.890635,0.198153,0.409273)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 37, parentID 1) is processed with stopping code 2
+### pop requested out of 36 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 36, parentID 1) is processed with stopping code 2
+### pop requested out of 35 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.741618,0.550553,-0.383269)
+ Old Polarization:       (-0.670823,0.608655,-0.423716)
+ New Momentum Direction: (0.42411,0.743246,-0.517412)
+ New Polarization:       (-0.905611,0.348072,-0.242311)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 35, parentID 1) is processed with stopping code 2
+### pop requested out of 34 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 34, parentID 1) is processed with stopping code 2
+### pop requested out of 33 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.394141,-0.535179)
  Old Polarization:       (-0.664653,-0.443063,-0.601608)
@@ -78,8 +149,8 @@ Track (trackID 1, parentID 0) is processed with stopping code 4
  New Polarization:       (-0.890635,-0.269649,-0.36614)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 32, parentID 1) is processed with stopping code 2
-### pop requested out of 31 stacked tracks.
+Track (trackID 33, parentID 1) is processed with stopping code 2
+### pop requested out of 32 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.640473,0.177645)
  Old Polarization:       (-0.664653,0.719971,0.199695)
@@ -87,8 +158,8 @@ Track (trackID 32, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.438176,0.121535)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 31, parentID 1) is processed with stopping code 2
-### pop requested out of 30 stacked tracks.
+Track (trackID 32, parentID 1) is processed with stopping code 2
+### pop requested out of 31 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.634378,0.198313)
  Old Polarization:       (-0.664653,-0.713119,0.222929)
@@ -96,8 +167,8 @@ Track (trackID 31, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,-0.434006,0.135675)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 30, parentID 1) is processed with stopping code 2
-### pop requested out of 29 stacked tracks.
+Track (trackID 31, parentID 1) is processed with stopping code 2
+### pop requested out of 30 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.19769,-0.634573)
  Old Polarization:       (-0.664653,-0.222228,-0.713338)
@@ -105,17 +176,33 @@ Track (trackID 30, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,-0.135249,-0.434139)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 30, parentID 1) is processed with stopping code 2
+### pop requested out of 29 stacked tracks.
+Scattering Photon!
+Old Momentum Direction: (0.747152,0.119282,0.653862)
+Old Polarization: (-0.664653,0.134087,0.735022)
+New Polarization: (-0.500318,0.13224,0.777374)
+Polarization Change: (-0.535746,0.141605,0.832421)
+New Momentum Direction: (-0.524564,0.653627,-0.663114)
+Momentum Change: (-0.490844,0.611611,-0.620488)
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.490844,0.611611,-0.620488)
+ Old Polarization:       (-0.535746,0.141605,0.832421)
+ New Momentum Direction: (-0.490844,-0.611611,-0.620488)
+ New Polarization:       (0.535746,0.141605,-0.832421)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.490844,-0.611611,-0.620488)
+ Old Polarization:       (0.535746,0.141605,-0.832421)
+ New Momentum Direction: (-0.490844,-0.611611,0.620488)
+ New Polarization:       (-0.535746,-0.141605,-0.832421)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+
+** Photon Absorbed! **
 Track (trackID 29, parentID 1) is processed with stopping code 2
 ### pop requested out of 28 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747152,0.119282,0.653862)
- Old Polarization:       (-0.664653,0.134087,0.735022)
- New Momentum Direction: (0.454719,0.159837,0.876175)
- New Polarization:       (-0.890635,0.0816058,0.447336)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 28, parentID 1) is processed with stopping code 2
-### pop requested out of 27 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.486905,0.452424)
  Old Polarization:       (-0.664653,0.547342,0.50858)
@@ -123,8 +210,8 @@ Track (trackID 28, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.333113,0.309523)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 27, parentID 1) is processed with stopping code 2
-### pop requested out of 26 stacked tracks.
+Track (trackID 28, parentID 1) is processed with stopping code 2
+### pop requested out of 27 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.0717113,0.660773)
  Old Polarization:       (-0.664653,0.0806124,0.742791)
@@ -132,17 +219,12 @@ Track (trackID 27, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.0490609,0.452064)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 27, parentID 1) is processed with stopping code 2
+### pop requested out of 26 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 26, parentID 1) is processed with stopping code 2
 ### pop requested out of 25 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.741618,-0.652562,0.155455)
- Old Polarization:       (-0.670823,-0.72143,0.171861)
- New Momentum Direction: (0.42411,-0.880959,0.209864)
- New Polarization:       (-0.905611,-0.412565,0.0982822)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 25, parentID 1) is processed with stopping code 2
-### pop requested out of 24 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.565824,0.348722)
  Old Polarization:       (-0.664653,-0.636056,0.392007)
@@ -150,26 +232,16 @@ Track (trackID 25, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,-0.387105,0.238577)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 25, parentID 1) is processed with stopping code 2
+### pop requested out of 24 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 24, parentID 1) is processed with stopping code 2
 ### pop requested out of 23 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.75277,0.192331,0.629561)
- Old Polarization:       (-0.658284,0.219937,0.719924)
- New Momentum Direction: (0.483186,0.2558,0.837316)
- New Polarization:       (-0.875518,0.141173,0.462103)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+
+** Photon Absorbed! **
 Track (trackID 23, parentID 1) is processed with stopping code 2
 ### pop requested out of 22 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.741618,0.279068,-0.61002)
- Old Polarization:       (-0.670823,0.308519,-0.674398)
- New Momentum Direction: (0.42411,0.376742,-0.823527)
- New Polarization:       (-0.905611,0.176433,-0.385669)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 22, parentID 1) is processed with stopping code 2
-### pop requested out of 21 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.741618,-0.642249,0.1937)
  Old Polarization:       (-0.670823,-0.710028,0.214142)
@@ -177,8 +249,8 @@ Track (trackID 22, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.905611,-0.406045,0.122462)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 21, parentID 1) is processed with stopping code 2
-### pop requested out of 20 stacked tracks.
+Track (trackID 22, parentID 1) is processed with stopping code 2
+### pop requested out of 21 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.248735,-0.616356)
  Old Polarization:       (-0.664653,0.279609,-0.69286)
@@ -186,8 +258,8 @@ Track (trackID 21, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.170171,-0.421676)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 20, parentID 1) is processed with stopping code 2
-### pop requested out of 19 stacked tracks.
+Track (trackID 21, parentID 1) is processed with stopping code 2
+### pop requested out of 20 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.638518,0.18455)
  Old Polarization:       (-0.664653,0.717773,0.207457)
@@ -195,12 +267,17 @@ Track (trackID 20, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.436838,0.126259)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 20, parentID 1) is processed with stopping code 2
+### pop requested out of 19 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.741618,-0.491865,0.45615)
+ Old Polarization:       (-0.670823,-0.543773,0.504289)
+ New Momentum Direction: (0.42411,-0.664017,0.615802)
+ New Polarization:       (-0.905611,-0.310968,0.288388)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
 Track (trackID 19, parentID 1) is processed with stopping code 2
 ### pop requested out of 18 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 18, parentID 1) is processed with stopping code 2
-### pop requested out of 17 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.744991,-0.536626,0.396259)
  Old Polarization:       (-0.667075,-0.599305,0.442543)
@@ -208,31 +285,17 @@ Track (trackID 18, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.896473,-0.356449,0.263212)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 17, parentID 1) is processed with stopping code 2
-### pop requested out of 16 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.747152,0.279853,0.602865)
-Old Polarization: (-0.664653,0.31459,0.677694)
-New Polarization: (-0.744522,0.263834,0.457142)
-Polarization Change: (-0.815795,0.289091,0.500904)
-New Momentum Direction: (0.426217,-0.165742,1.00134)
-Momentum Change: (0.38718,-0.150562,0.909628)
-Scattering Photon!
-Old Momentum Direction: (0.38718,-0.150562,0.909628)
-Old Polarization: (-0.815795,0.289091,0.500904)
-New Polarization: (-0.754261,-0.130891,0.42328)
-Polarization Change: (-0.862247,-0.14963,0.483881)
-New Momentum Direction: (-0.208244,0.974591,-0.0976341)
-Momentum Change: (-0.207961,0.973265,-0.0975013)
+Track (trackID 18, parentID 1) is processed with stopping code 2
+### pop requested out of 17 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (-0.207961,0.973265,-0.0975013)
- Old Polarization:       (-0.862247,-0.14963,0.483881)
- New Momentum Direction: (-0.278668,0.951459,-0.130652)
- New Polarization:       (-0.908361,-0.216953,0.357507)
+ Old Momentum Direction: (0.747152,0.279853,0.602865)
+ Old Polarization:       (-0.664653,0.31459,0.677694)
+ New Momentum Direction: (0.454719,0.375003,0.807839)
+ New Polarization:       (-0.890635,0.19146,0.412446)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 16, parentID 1) is processed with stopping code 2
-### pop requested out of 15 stacked tracks.
+Track (trackID 17, parentID 1) is processed with stopping code 2
+### pop requested out of 16 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,0.330971,-0.576387)
  Old Polarization:       (-0.664653,0.372053,-0.64793)
@@ -240,28 +303,33 @@ Track (trackID 16, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,0.226432,-0.394332)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 16, parentID 1) is processed with stopping code 2
+### pop requested out of 15 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.741618,-0.670768,-0.00858648)
+ Old Polarization:       (-0.670823,-0.741557,-0.00949265)
+ New Momentum Direction: (0.42411,-0.905537,-0.0115918)
+ New Polarization:       (-0.905611,-0.424075,-0.00542857)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
 Track (trackID 15, parentID 1) is processed with stopping code 2
 ### pop requested out of 14 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 14, parentID 1) is processed with stopping code 2
-### pop requested out of 13 stacked tracks.
 Scattering Photon!
 Old Momentum Direction: (0.741618,-0.416491,-0.525869)
 Old Polarization: (-0.670823,-0.460445,-0.581366)
-New Polarization: (-0.706281,-0.447562,-0.415897)
-Polarization Change: (-0.756294,-0.479254,-0.445348)
-New Momentum Direction: (0.0381667,0.613614,-0.857788)
-Momentum Change: (0.0361648,0.581428,-0.812794)
+New Polarization: (-0.867913,-0.0277831,-0.0708807)
+Polarization Change: (-0.996175,-0.0318889,-0.0813556)
+New Momentum Direction: (0.0292536,0.690764,-0.829925)
+Momentum Change: (0.0270822,0.63949,-0.768322)
  Photon at Boundary! 
- Old Momentum Direction: (0.0361648,0.581428,-0.812794)
- Old Polarization:       (-0.756294,-0.479254,-0.445348)
- New Momentum Direction: (0.0488224,0.784928,-0.617661)
- New Polarization:       (-0.567566,0.530658,0.629501)
+ Old Momentum Direction: (0.0270822,0.63949,-0.768322)
+ Old Polarization:       (-0.996175,-0.0318889,-0.0813556)
+ New Momentum Direction: (0.036561,0.863312,-0.503345)
+ New Polarization:       (-0.983374,0.120732,0.135645)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 13, parentID 1) is processed with stopping code 2
-### pop requested out of 12 stacked tracks.
+Track (trackID 14, parentID 1) is processed with stopping code 2
+### pop requested out of 13 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.75277,0.658042,0.0178598)
  Old Polarization:       (-0.658284,0.752493,0.0204233)
@@ -269,8 +337,8 @@ Track (trackID 13, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.875518,0.483009,0.0131092)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 12, parentID 1) is processed with stopping code 2
-### pop requested out of 11 stacked tracks.
+Track (trackID 13, parentID 1) is processed with stopping code 2
+### pop requested out of 12 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.482706,-0.456901)
  Old Polarization:       (-0.664653,-0.542621,-0.513613)
@@ -278,8 +346,8 @@ Track (trackID 12, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,-0.330241,-0.312586)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 11, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
+Track (trackID 12, parentID 1) is processed with stopping code 2
+### pop requested out of 11 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.75277,0.652945,0.0836725)
  Old Polarization:       (-0.658284,0.746664,0.0956824)
@@ -287,40 +355,21 @@ Track (trackID 11, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.875518,0.479267,0.0614164)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 11, parentID 1) is processed with stopping code 2
+### pop requested out of 10 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 10, parentID 1) is processed with stopping code 2
 ### pop requested out of 9 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.741618,-0.665708,-0.0826798)
-Old Polarization: (-0.670823,-0.735963,-0.0914054)
-New Polarization: (-0.53722,-0.768491,-0.0133861)
-Polarization Change: (-0.572886,-0.819511,-0.0142748)
-New Momentum Direction: (0.125754,-0.0717472,-1.05517)
-Momentum Change: (0.118073,-0.0673649,-0.990717)
  Photon at Boundary! 
- Old Momentum Direction: (0.118073,-0.0673649,-0.990717)
- Old Polarization:       (-0.572886,-0.819511,-0.0142748)
- New Momentum Direction: (0.159398,-0.0909426,-0.983017)
- New Polarization:       (-0.385215,-0.922543,0.0228844)
+ Old Momentum Direction: (0.741618,-0.67039,-0.0240918)
+ Old Polarization:       (-0.670823,-0.741139,-0.0266344)
+ New Momentum Direction: (0.42411,-0.905027,-0.032524)
+ New Polarization:       (-0.905611,-0.423836,-0.0152314)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 9, parentID 1) is processed with stopping code 2
 ### pop requested out of 8 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.741618,-0.67039,-0.0240918)
-Old Polarization: (-0.670823,-0.741139,-0.0266344)
-New Polarization: (-0.698261,-0.669249,-0.0187442)
-Polarization Change: (-0.721811,-0.691819,-0.0193764)
-New Momentum Direction: (-0.690098,0.721535,-0.058036)
-Momentum Change: (-0.690023,0.721457,-0.0580297)
- Photon at Boundary! 
- Old Momentum Direction: (-0.690023,0.721457,-0.0580297)
- Old Polarization:       (-0.721811,-0.691819,-0.0193764)
- New Momentum Direction: (-0.931531,0.355123,-0.0783401)
- New Polarization:       (-0.35605,-0.934464,-0.00227107)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 8, parentID 1) is processed with stopping code 2
-### pop requested out of 7 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.747152,-0.429808,-0.50698)
  Old Polarization:       (-0.664653,-0.483158,-0.569908)
@@ -328,12 +377,17 @@ Track (trackID 8, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.890635,-0.294051,-0.346847)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 8, parentID 1) is processed with stopping code 2
+### pop requested out of 7 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.741618,-0.639446,-0.202762)
+ Old Polarization:       (-0.670823,-0.706929,-0.22416)
+ New Momentum Direction: (0.42411,-0.863252,-0.273728)
+ New Polarization:       (-0.905611,-0.404273,-0.128191)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
 Track (trackID 7, parentID 1) is processed with stopping code 2
 ### pop requested out of 6 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 6, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.741618,-0.110611,-0.661641)
  Old Polarization:       (-0.670823,-0.122285,-0.731466)
@@ -341,26 +395,16 @@ Track (trackID 6, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.905611,-0.0699311,-0.418305)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 6, parentID 1) is processed with stopping code 2
+### pop requested out of 5 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 5, parentID 1) is processed with stopping code 2
 ### pop requested out of 4 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.741618,-0.521956,-0.421384)
- Old Polarization:       (-0.670823,-0.577041,-0.465855)
- New Momentum Direction: (0.42411,-0.704641,-0.568869)
- New Polarization:       (-0.905611,-0.329993,-0.266409)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+
+** Photon Absorbed! **
 Track (trackID 4, parentID 1) is processed with stopping code 2
 ### pop requested out of 3 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.741618,-0.353855,-0.569903)
- Old Polarization:       (-0.670823,-0.391199,-0.630048)
- New Momentum Direction: (0.42411,-0.477704,-0.76937)
- New Polarization:       (-0.905611,-0.223715,-0.360306)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 3, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
  Photon at Boundary! 
  Old Momentum Direction: (0.741618,-0.498549,0.448835)
  Old Polarization:       (-0.670823,-0.551163,0.496202)
@@ -368,1348 +412,1378 @@ Track (trackID 3, parentID 1) is processed with stopping code 2
  New Polarization:       (-0.905611,-0.315194,0.283764)
  *** FresnelRefraction *** 
 No Absorbtion length specified
+Track (trackID 3, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 2, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 27
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 30
 Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 29 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
-Track (trackID 60, parentID 1) is processed with stopping code 4
 ### pop requested out of 31 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.887532,0.446998,-0.111712)
- Old Polarization:       (0.101695,0.0464304,0.993732)
- New Momentum Direction: (0.790245,0.594507,-0.148577)
- New Polarization:       (-0.179288,0.456157,0.871652)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 62, parentID 60) is processed with stopping code 2
-### pop requested out of 30 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.533514,-0.197683,-0.822365)
- Old Polarization:       (-0.427436,-0.902021,-0.0604705)
- New Momentum Direction: (0.714908,-0.264895,-0.647099)
- New Polarization:       (-0.254686,-0.960536,0.111828)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 61, parentID 60) is processed with stopping code 2
-### pop requested out of 29 stacked tracks.
-Track (trackID 60, parentID 1) is processed with stopping code 2
-### pop requested out of 28 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,-0.616924,-0.24541)
- Old Polarization:       (-0.663944,-0.694825,-0.276399)
- New Momentum Direction: (0.456575,-0.826679,-0.328849)
- New Polarization:       (-0.889685,-0.424241,-0.168761)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 59, parentID 1) is processed with stopping code 2
-### pop requested out of 27 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,-0.615131,0.265874)
- Old Polarization:       (-0.670131,-0.681325,0.294484)
- New Momentum Direction: (0.426099,-0.830427,0.35893)
- New Polarization:       (-0.904677,-0.391128,0.169054)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 58, parentID 1) is processed with stopping code 2
-### pop requested out of 26 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 57, parentID 1) is processed with stopping code 2
-### pop requested out of 25 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,-0.0833641,0.664925)
- Old Polarization:       (-0.670131,-0.0923348,0.736477)
- New Momentum Direction: (0.426099,-0.112542,0.897649)
- New Polarization:       (-0.904677,-0.0530066,0.422789)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 56, parentID 1) is processed with stopping code 2
-### pop requested out of 24 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747424,-0.14159,0.649084)
- Old Polarization:       (-0.664347,-0.159296,0.730251)
- New Momentum Direction: (0.454685,-0.189822,0.870189)
- New Polarization:       (-0.890652,-0.0969055,0.444238)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 55, parentID 1) is processed with stopping code 2
-### pop requested out of 23 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,0.663593,-0.0215824)
- Old Polarization:       (-0.663944,0.747387,-0.0243077)
- New Momentum Direction: (0.456575,0.889215,-0.0289204)
- New Polarization:       (-0.889685,0.456333,-0.0148416)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 54, parentID 1) is processed with stopping code 2
-### pop requested out of 22 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.742243,-0.579156,-0.337126)
-Old Polarization: (-0.670131,-0.641478,-0.373404)
-New Polarization: (-0.576436,-0.67889,-0.351191)
-Polarization Change: (-0.602121,-0.70914,-0.366839)
-New Momentum Direction: (0.260924,-0.595433,0.798848)
-Momentum Change: (0.253338,-0.578123,0.775624)
- Photon at Boundary! 
- Old Momentum Direction: (0.253338,-0.578123,0.775624)
- Old Polarization:       (-0.602121,-0.70914,-0.366839)
- New Momentum Direction: (0.253338,0.578123,0.775624)
- New Polarization:       (0.602121,-0.70914,0.366839)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.253338,0.578123,0.775624)
- Old Polarization:       (0.602121,-0.70914,0.366839)
- New Momentum Direction: (0.342007,0.780466,0.523358)
- New Polarization:       (0.811622,0.0353583,-0.583112)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 53, parentID 1) is processed with stopping code 2
-### pop requested out of 21 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 52, parentID 1) is processed with stopping code 2
-### pop requested out of 20 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.75281,-0.42215,0.505042)
- Old Polarization:       (-0.658238,-0.482801,0.577603)
- New Momentum Direction: (0.482041,-0.561903,0.672237)
- New Polarization:       (-0.876149,-0.309148,0.369852)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 51, parentID 1) is processed with stopping code 2
-### pop requested out of 19 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 50, parentID 1) is processed with stopping code 2
-### pop requested out of 18 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,0.120735,-0.652874)
- Old Polarization:       (-0.663944,0.135981,-0.735315)
- New Momentum Direction: (0.456575,0.161785,-0.874852)
- New Polarization:       (-0.889685,0.083026,-0.448962)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 49, parentID 1) is processed with stopping code 2
-### pop requested out of 17 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,-0.385638,0.54805)
- Old Polarization:       (-0.670131,-0.427137,0.607025)
- New Momentum Direction: (0.426099,-0.520612,0.739867)
- New Polarization:       (-0.904677,-0.245206,0.348474)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 48, parentID 1) is processed with stopping code 2
-### pop requested out of 16 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 47, parentID 1) is processed with stopping code 2
-### pop requested out of 15 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 46, parentID 1) is processed with stopping code 2
-### pop requested out of 14 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.742243,0.649759,0.163976)
-Old Polarization: (-0.670131,0.719679,0.181621)
-New Polarization: (-0.706311,0.628112,0.123652)
-Polarization Change: (-0.740949,0.658915,0.129716)
-New Momentum Direction: (0.469797,0.641919,-0.636211)
-Momentum Change: (0.461222,0.630201,-0.624597)
- Photon at Boundary! 
- Old Momentum Direction: (0.461222,0.630201,-0.624597)
- Old Polarization:       (-0.740949,0.658915,0.129716)
- New Momentum Direction: (0.461222,-0.630201,-0.624597)
- New Polarization:       (0.740949,0.658915,-0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.461222,-0.630201,-0.624597)
- Old Polarization:       (0.740949,0.658915,-0.129716)
- New Momentum Direction: (-0.461222,-0.630201,-0.624597)
- New Polarization:       (0.740949,-0.658915,0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.461222,-0.630201,-0.624597)
- Old Polarization:       (0.740949,-0.658915,0.129716)
- New Momentum Direction: (-0.461222,-0.630201,0.624597)
- New Polarization:       (-0.740949,0.658915,0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.461222,-0.630201,0.624597)
- Old Polarization:       (-0.740949,0.658915,0.129716)
- New Momentum Direction: (-0.461222,0.630201,0.624597)
- New Polarization:       (0.740949,0.658915,-0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.461222,0.630201,0.624597)
- Old Polarization:       (0.740949,0.658915,-0.129716)
- New Momentum Direction: (-0.461222,0.630201,-0.624597)
- New Polarization:       (-0.740949,-0.658915,-0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.461222,0.630201,-0.624597)
- Old Polarization:       (-0.740949,-0.658915,-0.129716)
- New Momentum Direction: (0.461222,0.630201,-0.624597)
- New Polarization:       (-0.740949,0.658915,0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.461222,0.630201,-0.624597)
- Old Polarization:       (-0.740949,0.658915,0.129716)
- New Momentum Direction: (0.461222,-0.630201,-0.624597)
- New Polarization:       (0.740949,0.658915,-0.129716)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
-Track (trackID 45, parentID 1) is processed with stopping code 2
-### pop requested out of 13 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,-0.485972,0.461418)
- Old Polarization:       (-0.670131,-0.538267,0.51107)
- New Momentum Direction: (0.426099,-0.656063,0.622914)
- New Polarization:       (-0.904677,-0.309003,0.29339)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 44, parentID 1) is processed with stopping code 2
-### pop requested out of 12 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,0.452188,0.494572)
- Old Polarization:       (-0.670131,0.500847,0.547793)
- New Momentum Direction: (0.426099,0.610453,0.667672)
- New Polarization:       (-0.904677,0.287521,0.314471)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 43, parentID 1) is processed with stopping code 2
-### pop requested out of 11 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.74315,0.604832,-0.286192)
- Old Polarization:       (-0.669124,0.671745,-0.317853)
- New Momentum Direction: (0.431286,0.815526,-0.385887)
- New Polarization:       (-0.902215,0.389846,-0.184466)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 42, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,-0.411995,-0.520655)
- Old Polarization:       (-0.663944,-0.464019,-0.5864)
- New Momentum Direction: (0.456575,-0.552073,-0.697678)
- New Polarization:       (-0.889685,-0.283317,-0.358039)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 41, parentID 1) is processed with stopping code 2
-### pop requested out of 9 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.753405,-0.100094,-0.649894)
- Old Polarization:       (-0.657557,-0.114684,-0.744625)
- New Momentum Direction: (0.484933,-0.133125,-0.86436)
- New Polarization:       (-0.874551,-0.0738168,-0.479282)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 40, parentID 1) is processed with stopping code 2
-### pop requested out of 8 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,-0.059346,-0.661287)
- Old Polarization:       (-0.663944,-0.0668398,-0.744789)
- New Momentum Direction: (0.456575,-0.0795236,-0.886124)
- New Polarization:       (-0.889685,-0.0408105,-0.454747)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 39, parentID 1) is processed with stopping code 2
-### pop requested out of 7 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 38, parentID 1) is processed with stopping code 2
-### pop requested out of 6 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,0.198884,0.639938)
- Old Polarization:       (-0.670131,0.220286,0.708801)
- New Momentum Direction: (0.426099,0.268494,0.863916)
- New Polarization:       (-0.904677,0.12646,0.406901)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 37, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747782,-0.265017,0.608759)
- Old Polarization:       (-0.663944,-0.298481,0.685629)
- New Momentum Direction: (0.456575,-0.355122,0.815738)
- New Polarization:       (-0.889685,-0.182244,0.418626)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 36, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 35, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.742243,0.0804577,-0.665283)
- Old Polarization:       (-0.670131,0.0891157,-0.736874)
- New Momentum Direction: (0.426099,0.108618,-0.898132)
- New Polarization:       (-0.904677,0.0511586,-0.423017)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 34, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 33, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 19
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 20 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.692636,-0.710778,0.122676)
-Old Polarization: (-0.71326,-0.700252,-0.0301145)
-New Polarization: (-0.0875348,-0.745375,0.466128)
-Polarization Change: (-0.0990805,-0.843689,0.52761)
-New Momentum Direction: (0.992298,-0.0586497,0.128627)
-Momentum Change: (0.990004,-0.0585141,0.12833)
- Photon at Boundary! 
- Old Momentum Direction: (0.990004,-0.0585141,0.12833)
- Old Polarization:       (-0.0990805,-0.843689,0.52761)
- New Momentum Direction: (0.981706,-0.078994,0.173245)
- New Polarization:       (-0.171276,-0.763845,0.622258)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 81, parentID 1) is processed with stopping code 2
-### pop requested out of 19 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 80, parentID 1) is processed with stopping code 2
-### pop requested out of 18 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.746381,-0.596586,-0.294959)
-Old Polarization: (-0.65356,-0.573406,-0.494029)
-New Polarization: (-0.76321,-0.414035,-0.0625629)
-Polarization Change: (-0.876715,-0.475611,-0.0718674)
-New Momentum Direction: (-0.367639,0.582373,0.833392)
-Momentum Change: (-0.340048,0.538667,0.770847)
- Photon at Boundary! 
- Old Momentum Direction: (-0.340048,0.538667,0.770847)
- Old Polarization:       (-0.876715,-0.475611,-0.0718674)
- New Momentum Direction: (-0.459065,0.7272,0.510332)
- New Polarization:       (-0.875275,-0.468602,-0.11961)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 79, parentID 1) is processed with stopping code 2
-### pop requested out of 17 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.818489,-0.0127461,-0.57438)
- Old Polarization:       (-0.571987,0.0757281,-0.816759)
- New Momentum Direction: (0.638214,-0.0170798,-0.76967)
- New Polarization:       (-0.768093,0.0535488,-0.638095)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 78, parentID 1) is processed with stopping code 2
-### pop requested out of 16 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 77, parentID 1) is processed with stopping code 2
-### pop requested out of 15 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.775945,0.623407,0.0962983)
- Old Polarization:       (-0.62072,0.781778,-0.0594154)
- New Momentum Direction: (0.524222,0.8416,0.130003)
- New Polarization:       (-0.844846,0.533143,-0.0446617)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 76, parentID 1) is processed with stopping code 2
-### pop requested out of 14 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.765987,-0.519593,-0.378533)
- Old Polarization:       (-0.631293,-0.496801,-0.595531)
- New Momentum Direction: (0.507882,-0.696254,-0.507234)
- New Polarization:       (-0.853651,-0.327857,-0.404709)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 75, parentID 1) is processed with stopping code 2
-### pop requested out of 13 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.809499,-0.149646,-0.567731)
- Old Polarization:       (-0.582143,-0.0789128,-0.809248)
- New Momentum Direction: (0.61728,-0.200526,-0.760759)
- New Polarization:       (-0.783286,-0.0660924,-0.618138)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 74, parentID 1) is processed with stopping code 2
-### pop requested out of 12 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 73, parentID 1) is processed with stopping code 2
-### pop requested out of 11 stacked tracks.
 
 ** Photon Absorbed! **
 Track (trackID 72, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.678913,-0.659765,0.322161)
-Old Polarization: (-0.729651,-0.655138,0.195966)
-New Polarization: (0.15693,-0.891453,0.0558859)
-Polarization Change: (0.173043,-0.982984,0.0616241)
-New Momentum Direction: (0.516438,0.0423042,-0.943415)
-Momentum Change: (0.479805,0.0393034,-0.876494)
+### pop requested out of 30 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.479805,0.0393034,-0.876494)
- Old Polarization:       (0.173043,-0.982984,0.0616241)
- New Momentum Direction: (-0.479805,0.0393034,-0.876494)
- New Polarization:       (0.173043,0.982984,-0.0616241)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.479805,0.0393034,-0.876494)
- Old Polarization:       (0.173043,0.982984,-0.0616241)
- New Momentum Direction: (-0.642939,0.0526666,-0.764105)
- New Polarization:       (-0.0341362,0.994671,0.0972817)
+ Old Momentum Direction: (0.735717,-0.357446,-0.575285)
+ Old Polarization:       (-0.659031,-0.573706,-0.486353)
+ New Momentum Direction: (0.419906,-0.478977,-0.770882)
+ New Polarization:       (-0.895694,-0.355657,-0.26691)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 71, parentID 1) is processed with stopping code 2
-### pop requested out of 9 stacked tracks.
+### pop requested out of 29 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.72812,-0.68109,-0.0771896)
- Old Polarization:       (-0.67441,-0.691705,-0.258292)
- New Momentum Direction: (0.41097,-0.90585,-0.102662)
- New Polarization:       (-0.90447,-0.391037,-0.170363)
+ Old Momentum Direction: (0.700715,0.670669,0.243313)
+ Old Polarization:       (-0.697795,0.573228,0.429526)
+ New Momentum Direction: (-0.700715,0.670669,0.243313)
+ New Polarization:       (-0.668251,-0.497536,-0.553081)
+ *** FresnelReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.700715,0.670669,0.243313)
+ Old Polarization:       (-0.668251,-0.497536,-0.553081)
+ New Momentum Direction: (-0.700715,-0.670669,0.243313)
+ New Polarization:       (0.668251,-0.497536,0.553081)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.700715,-0.670669,0.243313)
+ Old Polarization:       (0.668251,-0.497536,0.553081)
+ New Momentum Direction: (-0.700715,-0.670669,-0.243313)
+ New Polarization:       (-0.668251,0.497536,0.553081)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.700715,-0.670669,-0.243313)
+ Old Polarization:       (-0.668251,0.497536,0.553081)
+ New Momentum Direction: (-0.268982,-0.905403,-0.328473)
+ New Polarization:       (0.936009,-0.326115,0.13242)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 70, parentID 1) is processed with stopping code 2
-### pop requested out of 8 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.675307,0.126769,0.726561)
- Old Polarization:       (-0.73251,0.230105,0.640688)
- New Momentum Direction: (0.911664,0.171138,0.373605)
- New Polarization:       (0.308736,0.314761,-0.897557)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+### pop requested out of 28 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 69, parentID 1) is processed with stopping code 2
-### pop requested out of 7 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 68, parentID 1) is processed with stopping code 2
-### pop requested out of 6 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 67, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 66, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 65, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
+### pop requested out of 27 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.816887,0.502158,-0.283784)
- Old Polarization:       (-0.573797,0.657359,-0.488504)
- New Momentum Direction: (0.634517,0.672891,-0.380271)
- New Polarization:       (-0.77082,0.514762,-0.375309)
+ Old Momentum Direction: (0.656194,0.16937,-0.735339)
+ Old Polarization:       (-0.74817,0.019162,-0.663231)
+ New Momentum Direction: (0.881084,0.227416,-0.414696)
+ New Polarization:       (0.36177,0.240731,0.90065)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 64, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
+Track (trackID 68, parentID 1) is processed with stopping code 2
+### pop requested out of 26 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.806552,0.558088,-0.194969)
- Old Polarization:       (-0.586299,0.712938,-0.384672)
- New Momentum Direction: (0.605165,0.751558,-0.262558)
- New Polarization:       (-0.79276,0.538727,-0.285139)
+ Old Momentum Direction: (0.664231,0.108855,-0.739559)
+ Old Polarization:       (-0.739539,-0.0485551,-0.67136)
+ New Momentum Direction: (0.890069,0.145865,-0.431856)
+ New Polarization:       (0.41762,0.118731,0.900831)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 67, parentID 1) is processed with stopping code 2
+### pop requested out of 25 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.825447,-0.0122645,0.564346)
+ Old Polarization:       (-0.556338,-0.186862,0.809673)
+ New Momentum Direction: (0.660578,-0.0163118,0.75058)
+ New Polarization:       (-0.74495,-0.138349,0.652617)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 66, parentID 1) is processed with stopping code 2
+### pop requested out of 24 stacked tracks.
+Scattering Photon!
+Old Momentum Direction: (0.67945,-0.0640208,-0.730923)
+Old Polarization: (-0.721347,-0.240474,-0.649485)
+New Polarization: (-0.362865,-0.573678,-0.541681)
+Polarization Change: (-0.417834,-0.660581,-0.623737)
+New Momentum Direction: (0.0701442,-0.632527,0.95519)
+Momentum Change: (0.061113,-0.551087,0.832207)
+ Photon at Boundary! 
+ Old Momentum Direction: (0.061113,-0.551087,0.832207)
+ Old Polarization:       (-0.417834,-0.660581,-0.623737)
+ New Momentum Direction: (0.0825025,-0.743968,0.663102)
+ New Polarization:       (-0.3017,-0.652794,-0.694865)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 65, parentID 1) is processed with stopping code 2
+### pop requested out of 23 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 64, parentID 1) is processed with stopping code 2
+### pop requested out of 22 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.771378,0.366561,0.520202)
+ Old Polarization:       (-0.61887,0.241675,0.747391)
+ New Momentum Direction: (0.522326,0.491191,0.69707)
+ New Polarization:       (-0.840819,0.160415,0.517002)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 63, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 13
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 15 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 6
-Track (trackID 95, parentID 1) is processed with stopping code 4
 ### pop requested out of 21 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.302699,0.573671,0.761101)
- Old Polarization:       (-0.883503,-0.13063,0.449842)
- New Momentum Direction: (0.408644,0.774456,0.482937)
- New Polarization:       (-0.333816,0.619295,-0.710662)
+ Old Momentum Direction: (0.835617,-0.52235,0.169984)
+ Old Polarization:       (-0.546523,-0.759422,0.352974)
+ New Momentum Direction: (0.676896,-0.699949,0.227779)
+ New Polarization:       (-0.734113,-0.619354,0.27835)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 101, parentID 95) is processed with stopping code 2
+Track (trackID 62, parentID 1) is processed with stopping code 2
 ### pop requested out of 20 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.837548,-0.362403,0.408873)
+ Old Polarization:       (-0.546246,-0.570946,0.612891)
+ New Momentum Direction: (0.675248,-0.489244,0.551979)
+ New Polarization:       (-0.73751,-0.458978,0.495398)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 61, parentID 1) is processed with stopping code 2
+### pop requested out of 19 stacked tracks.
 
 ** Photon Absorbed! **
-Track (trackID 100, parentID 95) is processed with stopping code 2
-### pop requested out of 19 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.854441,0.416949,-0.309976)
- Old Polarization:       (-0.174248,-0.332094,-0.927012)
- New Momentum Direction: (0.712776,0.562881,-0.418467)
- New Polarization:       (-0.310508,-0.28174,-0.907859)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 99, parentID 95) is processed with stopping code 2
+Track (trackID 60, parentID 1) is processed with stopping code 2
 ### pop requested out of 18 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.716165,0.627727,-0.305068)
- Old Polarization:       (-0.349482,-0.0558158,-0.935279)
- New Momentum Direction: (0.354047,0.841154,-0.408791)
- New Polarization:       (-0.607898,-0.125187,-0.784084)
+ Old Momentum Direction: (0.674882,0.737396,-0.0279505)
+ Old Polarization:       (-0.728839,0.67202,0.131083)
+ New Momentum Direction: (0.897593,0.439254,-0.0371742)
+ New Polarization:       (0.440705,-0.896113,0.0525382)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 98, parentID 95) is processed with stopping code 2
+Track (trackID 59, parentID 1) is processed with stopping code 2
 ### pop requested out of 17 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.978478,-0.0623445,0.196709)
- Old Polarization:       (-0.00548151,-0.960785,-0.277242)
- New Momentum Direction: (0.96101,-0.0835416,0.263591)
- New Polarization:       (-0.00986559,-0.96302,-0.269248)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 97, parentID 95) is processed with stopping code 2
-### pop requested out of 16 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.563931,0.79347,-0.228885)
- Old Polarization:       (-0.547694,0.151917,-0.822771)
- New Momentum Direction: (0.761306,0.570031,-0.308995)
- New Polarization:       (-0.171957,-0.281989,-0.943882)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 96, parentID 95) is processed with stopping code 2
-### pop requested out of 15 stacked tracks.
 
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 1
-Track (trackID 95, parentID 1) is processed with stopping code 4
+** Photon Absorbed! **
+Track (trackID 58, parentID 1) is processed with stopping code 2
 ### pop requested out of 16 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.476453,0.476294,0.73901)
- Old Polarization:       (-0.0879735,-0.810503,0.57909)
- New Momentum Direction: (0.643212,0.642997,0.415731)
- New Polarization:       (0.537958,0.00686916,-0.842943)
+ Old Momentum Direction: (0.83692,-0.221869,0.500339)
+ Old Polarization:       (-0.545056,-0.421019,0.725022)
+ New Momentum Direction: (0.679779,-0.297305,0.670455)
+ New Polarization:       (-0.731817,-0.335301,0.59331)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 102, parentID 95) is processed with stopping code 2
+Track (trackID 57, parentID 1) is processed with stopping code 2
 ### pop requested out of 15 stacked tracks.
-Track (trackID 95, parentID 1) is processed with stopping code 2
-### pop requested out of 14 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.785309,-0.397711,-0.474464)
- Old Polarization:       (-0.609293,-0.360592,-0.706212)
- New Momentum Direction: (0.558359,-0.532933,-0.635781)
- New Polarization:       (-0.822884,-0.258469,-0.50602)
+ Old Momentum Direction: (0.702731,0.68902,0.177258)
+ Old Polarization:       (-0.696933,0.616596,0.366189)
+ New Momentum Direction: (0.323478,0.916396,0.235753)
+ New Polarization:       (-0.937232,0.276009,0.213107)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 94, parentID 1) is processed with stopping code 2
+Track (trackID 56, parentID 1) is processed with stopping code 2
+### pop requested out of 14 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 55, parentID 1) is processed with stopping code 2
 ### pop requested out of 13 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.685538,-0.678526,0.263892)
- Old Polarization:       (-0.722408,-0.678965,0.130896)
- New Momentum Direction: (0.219693,-0.909225,0.353616)
- New Polarization:       (-0.972435,-0.233127,0.00472769)
- *** FresnelRefraction *** 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
 No Absorbtion length specified
-Track (trackID 93, parentID 1) is processed with stopping code 2
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,-0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,-0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,-0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (-0.643481,0.415073,-0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,-0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (-0.643481,0.415073,0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,0.415073,0.643154)
+ Old Polarization:       (0.764236,0.30082,0.570483)
+ New Momentum Direction: (-0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,0.30082,-0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,0.30082,-0.570483)
+ New Momentum Direction: (0.643481,-0.415073,0.643154)
+ New Polarization:       (-0.764236,-0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.643481,-0.415073,0.643154)
+ Old Polarization:       (-0.764236,-0.30082,0.570483)
+ New Momentum Direction: (0.643481,-0.415073,-0.643154)
+ New Polarization:       (0.764236,0.30082,0.570483)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+
+** Photon Absorbed! **
+Track (trackID 54, parentID 1) is processed with stopping code 2
 ### pop requested out of 12 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.813391,0.5268,-0.246732)
- Old Polarization:       (-0.577945,0.683598,-0.445728)
- New Momentum Direction: (0.623769,0.707821,-0.331514)
- New Polarization:       (-0.778997,0.528355,-0.337645)
+ Old Momentum Direction: (0.846842,-0.373678,0.37845)
+ Old Polarization:       (-0.531827,-0.600931,0.596693)
+ New Momentum Direction: (0.706859,-0.496992,0.503338)
+ New Polarization:       (-0.707341,-0.500999,0.498667)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 53, parentID 1) is processed with stopping code 2
+### pop requested out of 11 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.762439,-0.492065,-0.420189)
+ Old Polarization:       (-0.629433,-0.714553,-0.305333)
+ New Momentum Direction: (0.486767,-0.664288,-0.567256)
+ New Polarization:       (-0.861837,-0.471115,-0.187848)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 52, parentID 1) is processed with stopping code 2
+### pop requested out of 10 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.83963,-0.482813,0.248825)
+ Old Polarization:       (-0.542004,-0.714895,0.441765)
+ New Momentum Direction: (0.685754,-0.646969,0.333426)
+ New Polarization:       (-0.72702,-0.587219,0.355832)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 51, parentID 1) is processed with stopping code 2
+### pop requested out of 9 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.829922,-0.18541,0.526168)
+ Old Polarization:       (-0.554693,-0.374918,0.742801)
+ New Momentum Direction: (0.657863,-0.250303,0.710327)
+ New Polarization:       (-0.750925,-0.290243,0.593187)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 50, parentID 1) is processed with stopping code 2
+### pop requested out of 8 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.759284,-0.456782,-0.463507)
+ Old Polarization:       (-0.63249,-0.685579,-0.360468)
+ New Momentum Direction: (0.489473,-0.612088,-0.621099)
+ New Polarization:       (-0.859732,-0.457871,-0.226307)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 49, parentID 1) is processed with stopping code 2
+### pop requested out of 7 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.764293,-0.474758,-0.436418)
+ Old Polarization:       (-0.626849,-0.705823,-0.329961)
+ New Momentum Direction: (0.503278,-0.636176,-0.584801)
+ New Polarization:       (-0.851937,-0.478552,-0.212582)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 48, parentID 1) is processed with stopping code 2
+### pop requested out of 6 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.846816,-0.402795,0.347361)
+ Old Polarization:       (-0.531856,-0.63429,0.561074)
+ New Momentum Direction: (0.706804,-0.535718,0.46199)
+ New Polarization:       (-0.707388,-0.53014,0.467498)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 47, parentID 1) is processed with stopping code 2
+### pop requested out of 5 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.729326,-0.357967,-0.583046)
+ Old Polarization:       (-0.666107,-0.566033,-0.485704)
+ New Momentum Direction: (0.3833,-0.483256,-0.787112)
+ New Polarization:       (-0.912267,-0.33131,-0.240836)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 46, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.8286,-0.543392,0.134712)
+ Old Polarization:       (-0.556157,-0.771399,0.309245)
+ New Momentum Direction: (0.654819,-0.733579,0.181861)
+ New Polarization:       (-0.753228,-0.613649,0.236816)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 45, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.628507,0.58701,-0.510292)
+ Old Polarization:       (-0.777768,0.480572,-0.405126)
+ New Momentum Direction: (-0.628507,0.58701,-0.510292)
+ New Polarization:       (-0.777768,-0.480572,0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.628507,0.58701,-0.510292)
+ Old Polarization:       (-0.777768,-0.480572,0.405126)
+ New Momentum Direction: (-0.628507,-0.58701,-0.510292)
+ New Polarization:       (0.777768,-0.480572,-0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.628507,-0.58701,-0.510292)
+ Old Polarization:       (0.777768,-0.480572,-0.405126)
+ New Momentum Direction: (-0.628507,-0.58701,0.510292)
+ New Polarization:       (-0.777768,0.480572,-0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.628507,-0.58701,0.510292)
+ Old Polarization:       (-0.777768,0.480572,-0.405126)
+ New Momentum Direction: (0.628507,-0.58701,0.510292)
+ New Polarization:       (-0.777768,-0.480572,0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.628507,-0.58701,0.510292)
+ Old Polarization:       (-0.777768,-0.480572,0.405126)
+ New Momentum Direction: (0.628507,0.58701,0.510292)
+ New Polarization:       (0.777768,-0.480572,-0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.628507,0.58701,0.510292)
+ Old Polarization:       (0.777768,-0.480572,-0.405126)
+ New Momentum Direction: (0.628507,0.58701,-0.510292)
+ New Polarization:       (-0.777768,0.480572,-0.405126)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+
+** Photon Absorbed! **
+Track (trackID 44, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.65048,0.730662,-0.207383)
+ Old Polarization:       (-0.755025,0.651729,-0.0720191)
+ New Momentum Direction: (0.871644,0.403748,-0.277893)
+ New Polarization:       (0.312515,-0.894576,-0.319482)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 43, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 20
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 21 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.672327,0.673453,0.307307)
+ Old Polarization:       (-0.557631,0.187731,0.808582)
+ New Momentum Direction: (0.126703,0.902427,0.411792)
+ New Polarization:       (-0.875027,-0.0938439,0.47489)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 92, parentID 1) is processed with stopping code 2
-### pop requested out of 11 stacked tracks.
+### pop requested out of 20 stacked tracks.
 Scattering Photon!
-Old Momentum Direction: (0.680899,-0.661464,0.314392)
-Old Polarization: (-0.727668,-0.659621,0.18815)
-New Polarization: (-0.691835,-0.0134342,-0.624167)
-Polarization Change: (-0.742408,-0.0144163,-0.669793)
-New Momentum Direction: (0.22341,-0.940303,-0.28989)
-Momentum Change: (0.221413,-0.931899,-0.287299)
+Old Momentum Direction: (0.771057,-0.25509,-0.583439)
+Old Polarization: (-0.443792,-0.872343,-0.2051)
+New Polarization: (-0.440861,-0.869245,-0.210165)
+Polarization Change: (-0.442164,-0.871815,-0.210786)
+New Momentum Direction: (-0.103388,0.282317,-0.956684)
+Momentum Change: (-0.103097,0.281525,-0.953999)
  Photon at Boundary! 
- Old Momentum Direction: (0.221413,-0.931899,-0.287299)
- Old Polarization:       (-0.742408,-0.0144163,-0.669793)
- New Momentum Direction: (0.221413,0.931899,-0.287299)
- New Polarization:       (0.819928,-0.0184129,0.572171)
- *** FresnelReflection *** 
+ Old Momentum Direction: (-0.103097,0.281525,-0.953999)
+ Old Polarization:       (-0.442164,-0.871815,-0.210786)
+ New Momentum Direction: (-0.13712,0.374428,-0.917062)
+ New Polarization:       (-0.820893,0.475185,0.316754)
+ *** FresnelRefraction *** 
 No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.221413,0.931899,-0.287299)
- Old Polarization:       (0.819928,-0.0184129,0.572171)
- New Momentum Direction: (-0.221413,0.931899,-0.287299)
- New Polarization:       (0.819928,0.0184129,-0.572171)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
 Track (trackID 91, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
+### pop requested out of 19 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.78605,0.618002,0.0141052)
- Old Polarization:       (-0.609302,0.77843,-0.150992)
- New Momentum Direction: (0.550978,0.834303,0.019042)
- New Polarization:       (-0.828544,0.549616,-0.106946)
+ Old Momentum Direction: (0.895722,0.232598,0.378921)
+ Old Polarization:       (-0.300446,-0.311572,0.901474)
+ New Momentum Direction: (0.806423,0.309356,0.503965)
+ New Polarization:       (-0.459937,-0.207526,0.86336)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 90, parentID 1) is processed with stopping code 2
-### pop requested out of 9 stacked tracks.
+### pop requested out of 18 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.666849,0.000993598,0.745193)
- Old Polarization:       (-0.74219,0.090575,0.664041)
- New Momentum Direction: (0.900245,0.00134136,0.435381)
- New Polarization:       (0.434423,0.0635906,-0.898461)
+ Old Momentum Direction: (0.333934,0.613555,-0.715568)
+ Old Polarization:       (-0.93412,0.113829,-0.338325)
+ New Momentum Direction: (0.450811,0.8283,-0.332699)
+ New Polarization:       (-0.572939,0.554319,0.603715)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 89, parentID 1) is processed with stopping code 2
-### pop requested out of 8 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.800455,-0.264439,-0.537907)
- Old Polarization:       (-0.592122,-0.209494,-0.778141)
- New Momentum Direction: (0.595727,-0.354348,-0.720796)
- New Polarization:       (-0.798159,-0.16092,-0.580557)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+### pop requested out of 17 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 88, parentID 1) is processed with stopping code 2
-### pop requested out of 7 stacked tracks.
+### pop requested out of 16 stacked tracks.
 
 ** Photon Absorbed! **
 Track (trackID 87, parentID 1) is processed with stopping code 2
-### pop requested out of 6 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.697734,-0.710941,0.0879174)
- Old Polarization:       (-0.707758,-0.703106,-0.0687045)
- New Momentum Direction: (0.941941,-0.314102,0.118689)
- New Polarization:       (0.309933,0.949304,0.0525682)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+### pop requested out of 15 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 86, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
+### pop requested out of 14 stacked tracks.
 
 ** Photon Absorbed! **
 Track (trackID 85, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
+### pop requested out of 13 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.689416,0.194404,0.697792)
- Old Polarization:       (-0.718012,0.310716,0.622828)
- New Momentum Direction: (0.923817,0.260501,0.280538)
- New Polarization:       (0.157692,0.408808,-0.898893)
+ Old Momentum Direction: (0.45977,0.204987,-0.864056)
+ Old Polarization:       (-0.794264,-0.340261,-0.503356)
+ New Momentum Direction: (0.620689,0.276733,-0.733597)
+ New Polarization:       (0.666265,0.307073,0.679557)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 84, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
+### pop requested out of 12 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.699189,-0.7032,0.129013)
- Old Polarization:       (-0.706932,-0.706939,-0.0220226)
- New Momentum Direction: (0.936913,-0.303822,0.172878)
- New Polarization:       (0.285116,0.950316,0.124932)
+ Old Momentum Direction: (0.658631,0.688089,0.304532)
+ Old Polarization:       (-0.573246,0.196666,0.795431)
+ New Momentum Direction: (0.889152,0.200976,0.411118)
+ New Polarization:       (-0.308514,-0.400255,0.862911)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 83, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
+### pop requested out of 11 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.672684,-0.00493866,0.739914)
- Old Polarization:       (-0.736981,0.0847128,0.670583)
- New Momentum Direction: (0.901396,-0.0066178,0.432945)
- New Polarization:       (0.432682,0.051758,-0.900059)
+ Old Momentum Direction: (0.354933,0.525769,-0.773039)
+ Old Polarization:       (-0.913305,0.0183375,-0.406862)
+ New Momentum Direction: (0.477526,0.707369,-0.52115)
+ New Polarization:       (-0.30961,0.690576,0.653641)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 82, parentID 1) is processed with stopping code 2
+### pop requested out of 10 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.5967,0.776796,0.201339)
+ Old Polarization:       (-0.644277,0.314176,0.697281)
+ New Momentum Direction: (0.793611,0.546329,0.267781)
+ New Polarization:       (0.0753144,-0.524948,0.847796)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 81, parentID 1) is processed with stopping code 2
+### pop requested out of 9 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.38458,0.410878,-0.826606)
+ Old Polarization:       (-0.878846,-0.110939,-0.464029)
+ New Momentum Direction: (0.518386,0.553834,-0.65157)
+ New Polarization:       (0.0775256,0.728366,0.680789)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 80, parentID 1) is processed with stopping code 2
+### pop requested out of 8 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.971117,-0.0792074,0.225074)
+ Old Polarization:       (-0.219934,-0.662939,0.71564)
+ New Momentum Direction: (0.947509,-0.106138,0.301599)
+ New Polarization:       (-0.305147,-0.581825,0.7539)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 79, parentID 1) is processed with stopping code 2
+### pop requested out of 7 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.40038,0.404501,-0.822237)
+ Old Polarization:       (-0.870016,-0.113909,-0.479683)
+ New Momentum Direction: (0.532506,0.537987,-0.653459)
+ New Polarization:       (0.117281,0.717677,0.68643)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 78, parentID 1) is processed with stopping code 2
+### pop requested out of 6 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 77, parentID 1) is processed with stopping code 2
+### pop requested out of 5 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 76, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.96168,-0.0343686,0.272012)
+ Old Polarization:       (-0.236432,-0.606285,0.759288)
+ New Momentum Direction: (0.928978,-0.0463976,0.367216)
+ New Polarization:       (-0.339699,-0.500852,0.796085)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 75, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.903651,0.189211,0.384206)
+ Old Polarization:       (-0.300927,-0.357795,0.883983)
+ New Momentum Direction: (0.81592,0.255435,0.518678)
+ New Polarization:       (-0.465024,-0.243137,0.851256)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 74, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 73, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 5
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 15
 Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 6 stacked tracks.
+### pop requested out of 16 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.833919,0.134417,-0.535268)
- Old Polarization:       (-0.504019,0.58059,-0.639437)
- New Momentum Direction: (0.673125,0.180118,-0.717259)
- New Polarization:       (-0.703789,0.453891,-0.546502)
+ Old Momentum Direction: (0.254189,0.173218,-0.951516)
+ Old Polarization:       (-0.641173,-0.706379,-0.299876)
+ New Momentum Direction: (0.340614,0.232113,-0.911102)
+ New Polarization:       (0.836373,0.367865,0.406394)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 107, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.905134,0.415798,0.0885739)
- Old Polarization:       (-0.422359,0.903245,0.0759104)
- New Momentum Direction: (0.821873,0.557169,0.118689)
- New Polarization:       (-0.567652,0.818511,0.0883734)
- *** FresnelRefraction *** 
-No Absorbtion length specified
+### pop requested out of 15 stacked tracks.
+
+** Photon Absorbed! **
 Track (trackID 106, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
+### pop requested out of 14 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.764284,-0.0131178,0.644747)
- Old Polarization:       (-0.584713,0.407591,0.701413)
- New Momentum Direction: (0.492012,-0.0177091,0.870408)
- New Polarization:       (-0.828439,0.297798,0.474347)
+ Old Momentum Direction: (0.967744,0.250971,-0.0220298)
+ Old Polarization:       (0.178678,-0.62207,0.762301)
+ New Momentum Direction: (0.942192,0.333791,-0.0292997)
+ New Polarization:       (-0.26876,0.805047,0.528836)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 105, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
+### pop requested out of 13 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.875426,0.28527,-0.390193)
- Old Polarization:       (-0.456424,0.753571,-0.473083)
- New Momentum Direction: (0.761901,0.382262,-0.522859)
- New Polarization:       (-0.627622,0.63514,-0.450209)
+ Old Momentum Direction: (0.935067,0.347081,0.0719994)
+ Old Polarization:       (0.122567,-0.507174,0.853084)
+ New Momentum Direction: (0.878069,0.468559,0.0971992)
+ New Polarization:       (-0.214748,0.204311,0.95506)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 104, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.677928,-0.307428,0.667758)
- Old Polarization:       (-0.682062,0.0758148,0.727354)
- New Momentum Direction: (-0.677928,-0.307428,0.667758)
- New Polarization:       (-0.656013,-0.156933,-0.738254)
- *** FresnelReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.677928,-0.307428,0.667758)
- Old Polarization:       (-0.656013,-0.156933,-0.738254)
- New Momentum Direction: (-0.677928,-0.307428,-0.667758)
- New Polarization:       (0.656013,0.156933,-0.738254)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.677928,-0.307428,-0.667758)
- Old Polarization:       (0.656013,0.156933,-0.738254)
- New Momentum Direction: (-0.677928,0.307428,-0.667758)
- New Polarization:       (-0.656013,0.156933,0.738254)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
-Track (trackID 103, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 9
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 11 stacked tracks.
-Track (trackID 117, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.747426,-0.10119,0.656594)
- Old Polarization:       (-0.602949,0.311651,0.734389)
- New Momentum Direction: (0.455525,-0.135594,0.879836)
- New Polarization:       (-0.847444,0.236645,0.475224)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 116, parentID 1) is processed with stopping code 2
-### pop requested out of 9 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.701774,-0.315438,-0.638759)
- Old Polarization:       (-0.65537,0.0656594,-0.752448)
- New Momentum Direction: (0.273963,-0.425841,-0.862325)
- New Polarization:       (-0.926846,0.122426,-0.35492)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 115, parentID 1) is processed with stopping code 2
-### pop requested out of 8 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.810294,0.049751,-0.583907)
- Old Polarization:       (-0.531036,0.483724,-0.695709)
- New Momentum Direction: (0.615321,0.0669216,-0.785431)
- New Polarization:       (-0.747839,0.36459,-0.554807)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 114, parentID 1) is processed with stopping code 2
-### pop requested out of 7 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.614039,-0.607723,-0.503616)
- Old Polarization:       (-0.755211,-0.266959,-0.598656)
- New Momentum Direction: (-0.614039,-0.607723,-0.503616)
- New Polarization:       (-0.755211,0.266959,0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.614039,-0.607723,-0.503616)
- Old Polarization:       (-0.755211,0.266959,0.598656)
- New Momentum Direction: (-0.614039,0.607723,-0.503616)
- New Polarization:       (0.755211,0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.614039,0.607723,-0.503616)
- Old Polarization:       (0.755211,0.266959,-0.598656)
- New Momentum Direction: (-0.614039,0.607723,0.503616)
- New Polarization:       (-0.755211,-0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.614039,0.607723,0.503616)
- Old Polarization:       (-0.755211,-0.266959,-0.598656)
- New Momentum Direction: (0.614039,0.607723,0.503616)
- New Polarization:       (-0.755211,0.266959,0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.614039,0.607723,0.503616)
- Old Polarization:       (-0.755211,0.266959,0.598656)
- New Momentum Direction: (0.614039,-0.607723,0.503616)
- New Polarization:       (0.755211,0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.614039,-0.607723,0.503616)
- Old Polarization:       (0.755211,0.266959,-0.598656)
- New Momentum Direction: (0.614039,-0.607723,-0.503616)
- New Polarization:       (-0.755211,-0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.614039,-0.607723,-0.503616)
- Old Polarization:       (-0.755211,-0.266959,-0.598656)
- New Momentum Direction: (-0.614039,-0.607723,-0.503616)
- New Polarization:       (-0.755211,0.266959,0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.614039,-0.607723,-0.503616)
- Old Polarization:       (-0.755211,0.266959,0.598656)
- New Momentum Direction: (-0.614039,0.607723,-0.503616)
- New Polarization:       (0.755211,0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.614039,0.607723,-0.503616)
- Old Polarization:       (0.755211,0.266959,-0.598656)
- New Momentum Direction: (-0.614039,0.607723,0.503616)
- New Polarization:       (-0.755211,-0.266959,-0.598656)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
-Track (trackID 113, parentID 1) is processed with stopping code 2
-### pop requested out of 6 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.581077,-0.661797,0.473681)
-Old Polarization: (-0.792722,-0.328495,0.5135)
-New Polarization: (-0.821583,-0.268054,-0.0563052)
-Polarization Change: (-0.948669,-0.309517,-0.0650147)
-New Momentum Direction: (0.130696,-0.225029,-1.11549)
-Momentum Change: (0.1141,-0.196456,-0.973851)
- Photon at Boundary! 
- Old Momentum Direction: (0.1141,-0.196456,-0.973851)
- Old Polarization:       (-0.948669,-0.309517,-0.0650147)
- New Momentum Direction: (0.154036,-0.265215,-0.951806)
- New Polarization:       (-0.688577,-0.719669,0.0890958)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 112, parentID 1) is processed with stopping code 2
-### pop requested out of 5 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.557757,-0.81867,-0.1367)
- Old Polarization:       (-0.826086,-0.531558,-0.187157)
- New Momentum Direction: (0.741817,-0.645486,-0.181811)
- New Polarization:       (0.533116,0.732111,-0.424029)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 111, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.877428,0.34454,0.333784)
- Old Polarization:       (-0.455477,0.816709,0.354299)
- New Momentum Direction: (0.761976,0.465129,0.450609)
- New Polarization:       (-0.629762,0.694404,0.348142)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 110, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.881369,0.356596,0.309884)
-Old Polarization: (-0.450992,0.830429,0.3271)
-New Polarization: (-0.722484,0.474857,0.0737755)
-Polarization Change: (-0.832636,0.547255,0.0850236)
-New Momentum Direction: (-0.269956,-0.286935,-1.06021)
-Momentum Change: (-0.238679,-0.253691,-0.937376)
- Photon at Boundary! 
- Old Momentum Direction: (-0.238679,-0.253691,-0.937376)
- Old Polarization:       (-0.832636,0.547255,0.0850236)
- New Momentum Direction: (-0.322216,-0.342483,-0.882543)
- New Polarization:       (-0.859404,0.496776,0.120988)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 109, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.865877,0.308594,0.393733)
- Old Polarization:       (-0.468621,0.775803,0.42252)
- New Momentum Direction: (0.737501,0.416602,0.53154)
- New Polarization:       (-0.651964,0.644503,0.399448)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 108, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 11
-Track (trackID 1, parentID 0) is processed with stopping code 4
 ### pop requested out of 12 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.722296,-0.285166,-0.630055)
- Old Polarization:       (-0.632186,0.0971377,-0.768704)
- New Momentum Direction: (0.375747,-0.382122,-0.844273)
- New Polarization:       (-0.887153,0.115052,-0.446903)
+ Old Momentum Direction: (0.286036,0.133389,-0.948889)
+ Old Polarization:       (-0.60174,-0.74565,-0.286209)
+ New Momentum Direction: (0.386149,0.180076,-0.904689)
+ New Polarization:       (0.912546,0.0686611,0.403169)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 128, parentID 1) is processed with stopping code 2
+Track (trackID 103, parentID 1) is processed with stopping code 2
 ### pop requested out of 11 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 127, parentID 1) is processed with stopping code 2
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.0171355,0.557587,-0.829941)
+ Old Polarization:       (-0.949112,-0.270141,-0.161895)
+ New Momentum Direction: (-0.0229616,0.747167,-0.66424)
+ New Polarization:       (-0.929547,0.228606,0.289279)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 102, parentID 1) is processed with stopping code 2
 ### pop requested out of 10 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.602679,-0.605425,0.519845)
- Old Polarization:       (-0.770579,-0.272286,0.576254)
- New Momentum Direction: (-0.602679,-0.605425,0.519845)
- New Polarization:       (-0.770579,0.272286,-0.576254)
- *** TotalInternalReflection *** 
+ Old Momentum Direction: (-0.0440433,0.872394,-0.486815)
+ Old Polarization:       (-0.970102,0.0790658,0.229457)
+ New Momentum Direction: (-0.0594584,0.751367,-0.657201)
+ New Polarization:       (-0.98632,-0.145618,-0.0772482)
+ *** FresnelRefraction *** 
 No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.602679,-0.605425,0.519845)
- Old Polarization:       (-0.770579,0.272286,-0.576254)
- New Momentum Direction: (-0.602679,0.605425,0.519845)
- New Polarization:       (0.770579,0.272286,0.576254)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.602679,0.605425,0.519845)
- Old Polarization:       (0.770579,0.272286,0.576254)
- New Momentum Direction: (-0.602679,0.605425,-0.519845)
- New Polarization:       (-0.770579,-0.272286,0.576254)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
-Track (trackID 126, parentID 1) is processed with stopping code 2
+Track (trackID 101, parentID 1) is processed with stopping code 2
 ### pop requested out of 9 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.90084,0.395082,0.179991)
- Old Polarization:       (-0.425264,0.886447,0.182654)
- New Momentum Direction: (0.810236,0.533361,0.242988)
- New Polarization:       (-0.579633,0.790618,0.197354)
+ Old Momentum Direction: (0.0799992,0.967576,-0.239576)
+ Old Polarization:       (-0.838869,0.195175,0.508139)
+ New Momentum Direction: (0.107199,0.940982,-0.321032)
+ New Polarization:       (-0.239886,-0.288874,-0.926826)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 125, parentID 1) is processed with stopping code 2
+ Photon at Boundary! 
+ Old Momentum Direction: (0.107199,0.940982,-0.321032)
+ Old Polarization:       (-0.239886,-0.288874,-0.926826)
+ New Momentum Direction: (0.0799992,0.702225,-0.707446)
+ New Polarization:       (-0.165541,0.709225,0.685271)
+ *** FresnelRefraction *** 
+ Photon at Boundary! 
+ Old Momentum Direction: (0.0799992,0.702225,-0.707446)
+ Old Polarization:       (-0.165541,0.709225,0.685271)
+ New Momentum Direction: (0.107199,0.299745,-0.947978)
+ New Polarization:       (-0.0242233,-0.952401,-0.303883)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 100, parentID 1) is processed with stopping code 2
 ### pop requested out of 8 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.58865,-0.726248,-0.355043)
- Old Polarization:       (-0.789713,-0.422762,-0.444551)
- New Momentum Direction: (0.78879,-0.389184,-0.475758)
- New Polarization:       (-0.0897735,0.692771,-0.715548)
+ Old Momentum Direction: (0.248633,0.178517,-0.952005)
+ Old Polarization:       (-0.647478,-0.700366,-0.300431)
+ New Momentum Direction: (0.333169,0.239212,-0.912018)
+ New Polarization:       (0.816648,0.410249,0.405933)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 124, parentID 1) is processed with stopping code 2
+Track (trackID 99, parentID 1) is processed with stopping code 2
 ### pop requested out of 7 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.548699,-0.834657,0.0477293)
- Old Polarization:       (-0.836019,-0.547877,0.0300435)
- New Momentum Direction: (0.736382,-0.673527,0.0640551)
- New Polarization:       (0.662723,0.737129,0.132055)
+ Old Momentum Direction: (-0.0667451,0.7915,-0.607513)
+ Old Polarization:       (-0.995437,-0.0112098,0.0947601)
+ New Momentum Direction: (-0.0901059,0.565019,-0.820143)
+ New Polarization:       (-0.995288,-0.0214681,0.0945584)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 123, parentID 1) is processed with stopping code 2
+Track (trackID 98, parentID 1) is processed with stopping code 2
 ### pop requested out of 6 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.758669,-0.14083,-0.636073)
- Old Polarization:       (-0.58992,0.265783,-0.762466)
- New Momentum Direction: (0.475911,-0.19012,-0.858698)
- New Polarization:       (-0.836622,0.203252,-0.508677)
+ Old Momentum Direction: (0.683591,-0.0741388,-0.72609)
+ Old Polarization:       (-0.153824,-0.987117,-0.044029)
+ New Momentum Direction: (0.916012,-0.0993459,-0.388654)
+ New Polarization:       (-0.0712306,-0.993734,0.0861315)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 122, parentID 1) is processed with stopping code 2
+Track (trackID 97, parentID 1) is processed with stopping code 2
 ### pop requested out of 5 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.713565,-0.25844,0.651179)
- Old Polarization:       (-0.64293,0.127695,0.755205)
- New Momentum Direction: (0.363014,-0.343725,0.866068)
- New Polarization:       (-0.893271,0.136083,0.428424)
+ Old Momentum Direction: (0.880055,0.458291,0.124393)
+ Old Polarization:       (0.0691518,-0.382837,0.921224)
+ New Momentum Direction: (0.771418,0.61411,0.166686)
+ New Polarization:       (-0.12542,-0.110075,0.985978)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 121, parentID 1) is processed with stopping code 2
+Track (trackID 96, parentID 1) is processed with stopping code 2
 ### pop requested out of 4 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.605931,-0.68999,-0.395932)
- Old Polarization:       (-0.772113,-0.390253,-0.501541)
- New Momentum Direction: (0.805888,-0.270646,-0.526589)
- New Polarization:       (-0.236668,0.668003,-0.705521)
+ Old Momentum Direction: (0.228544,0.186942,-0.955416)
+ Old Polarization:       (-0.665899,-0.685886,-0.293493)
+ New Momentum Direction: (0.308535,0.252372,-0.917123)
+ New Polarization:       (0.758661,0.516316,0.397304)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 120, parentID 1) is processed with stopping code 2
+Track (trackID 95, parentID 1) is processed with stopping code 2
 ### pop requested out of 3 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 119, parentID 1) is processed with stopping code 2
+ Photon at Boundary! 
+ Old Momentum Direction: (0.387038,0.918553,0.0803849)
+ Old Polarization:       (-0.489023,0.130579,0.862442)
+ New Momentum Direction: (0.522502,0.845704,0.10852)
+ New Polarization:       (0.173844,-0.230268,0.957473)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 94, parentID 1) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.627495,-0.582787,-0.516342)
- Old Polarization:       (-0.741838,-0.246067,-0.623801)
- New Momentum Direction: (-0.627495,-0.582787,-0.516342)
- New Polarization:       (-0.741838,0.246067,0.623801)
- *** TotalInternalReflection *** 
+ Old Momentum Direction: (0.2234,0.203405,-0.953267)
+ Old Polarization:       (-0.676117,-0.672119,-0.301864)
+ New Momentum Direction: (0.299356,0.272563,-0.914383)
+ New Polarization:       (0.696666,0.592376,0.404656)
+ *** FresnelRefraction *** 
 No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,-0.582787,-0.516342)
- Old Polarization:       (-0.741838,0.246067,0.623801)
- New Momentum Direction: (-0.627495,0.582787,-0.516342)
- New Polarization:       (0.741838,0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,0.582787,-0.516342)
- Old Polarization:       (0.741838,0.246067,-0.623801)
- New Momentum Direction: (-0.627495,0.582787,0.516342)
- New Polarization:       (-0.741838,-0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,0.582787,0.516342)
- Old Polarization:       (-0.741838,-0.246067,-0.623801)
- New Momentum Direction: (0.627495,0.582787,0.516342)
- New Polarization:       (-0.741838,0.246067,0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,0.582787,0.516342)
- Old Polarization:       (-0.741838,0.246067,0.623801)
- New Momentum Direction: (0.627495,-0.582787,0.516342)
- New Polarization:       (0.741838,0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,-0.582787,0.516342)
- Old Polarization:       (0.741838,0.246067,-0.623801)
- New Momentum Direction: (0.627495,-0.582787,-0.516342)
- New Polarization:       (-0.741838,-0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,-0.582787,-0.516342)
- Old Polarization:       (-0.741838,-0.246067,-0.623801)
- New Momentum Direction: (-0.627495,-0.582787,-0.516342)
- New Polarization:       (-0.741838,0.246067,0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,-0.582787,-0.516342)
- Old Polarization:       (-0.741838,0.246067,0.623801)
- New Momentum Direction: (-0.627495,0.582787,-0.516342)
- New Polarization:       (0.741838,0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,0.582787,-0.516342)
- Old Polarization:       (0.741838,0.246067,-0.623801)
- New Momentum Direction: (-0.627495,0.582787,0.516342)
- New Polarization:       (-0.741838,-0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.627495,0.582787,0.516342)
- Old Polarization:       (-0.741838,-0.246067,-0.623801)
- New Momentum Direction: (0.627495,0.582787,0.516342)
- New Polarization:       (-0.741838,0.246067,0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,0.582787,0.516342)
- Old Polarization:       (-0.741838,0.246067,0.623801)
- New Momentum Direction: (0.627495,-0.582787,0.516342)
- New Polarization:       (0.741838,0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,-0.582787,0.516342)
- Old Polarization:       (0.741838,0.246067,-0.623801)
- New Momentum Direction: (0.627495,-0.582787,-0.516342)
- New Polarization:       (-0.741838,-0.246067,-0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (0.627495,-0.582787,-0.516342)
- Old Polarization:       (-0.741838,-0.246067,-0.623801)
- New Momentum Direction: (-0.627495,-0.582787,-0.516342)
- New Polarization:       (-0.741838,0.246067,0.623801)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-
-** Photon Absorbed! **
-Track (trackID 118, parentID 1) is processed with stopping code 2
+Track (trackID 93, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 12
 Track (trackID 1, parentID 0) is processed with stopping code 4
 ### pop requested out of 13 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.859832,0.222025,0.459775)
- Old Polarization:       (-0.466222,0.708526,0.529743)
- New Momentum Direction: (0.72932,0.297514,0.616099)
- New Polarization:       (-0.650611,0.580166,0.490013)
+ Old Momentum Direction: (0.251906,0.867541,-0.428855)
+ Old Polarization:       (-0.90569,0.367479,0.211387)
+ New Momentum Direction: (0.335034,0.749948,-0.570377)
+ New Polarization:       (-0.165525,-0.5491,-0.819201)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 140, parentID 1) is processed with stopping code 2
+Track (trackID 119, parentID 1) is processed with stopping code 2
 ### pop requested out of 12 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 139, parentID 1) is processed with stopping code 2
-### pop requested out of 11 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 138, parentID 1) is processed with stopping code 2
-### pop requested out of 10 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.9044,0.330755,-0.269559)
- Old Polarization:       (-0.412307,0.840061,-0.352563)
- New Momentum Direction: (0.820422,0.443211,-0.361209)
- New Polarization:       (-0.561083,0.745607,-0.359524)
+ Old Momentum Direction: (0.179964,0.599871,-0.779595)
+ Old Polarization:       (-0.980994,0.0509943,-0.187217)
+ New Momentum Direction: (0.241152,0.803827,-0.54379)
+ New Polarization:       (-0.812859,0.473414,0.339323)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 137, parentID 1) is processed with stopping code 2
-### pop requested out of 9 stacked tracks.
+Track (trackID 118, parentID 1) is processed with stopping code 2
+### pop requested out of 11 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.193042,0.511135,-0.837542)
+ Old Polarization:       (-0.966072,-0.0502544,-0.253336)
+ New Momentum Direction: (0.258676,0.68492,-0.681154)
+ New Polarization:       (-0.617327,0.65958,0.42879)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 117, parentID 1) is processed with stopping code 2
+### pop requested out of 10 stacked tracks.
 
 ** Photon Absorbed! **
-Track (trackID 136, parentID 1) is processed with stopping code 2
+Track (trackID 116, parentID 1) is processed with stopping code 2
+### pop requested out of 9 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.213823,0.398723,-0.891796)
+ Old Polarization:       (-0.935225,-0.180164,-0.304788)
+ New Momentum Direction: (0.288661,0.538277,-0.791791)
+ New Polarization:       (-0.257421,0.840177,0.477323)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 115, parentID 1) is processed with stopping code 2
 ### pop requested out of 8 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.712491,-0.346852,-0.60996)
- Old Polarization:       (-0.644468,0.0203312,-0.764361)
- New Momentum Direction: (0.340475,-0.464781,-0.817346)
- New Polarization:       (-0.903053,0.0804547,-0.421928)
+ Old Momentum Direction: (0.517328,0.855741,0.00885377)
+ Old Polarization:       (-0.597522,0.353779,0.719589)
+ New Momentum Direction: (0.688046,0.725571,0.0117755)
+ New Polarization:       (0.560389,-0.541576,0.626626)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 135, parentID 1) is processed with stopping code 2
+Track (trackID 114, parentID 1) is processed with stopping code 2
 ### pop requested out of 7 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.849175,0.187571,0.493679)
- Old Polarization:       (-0.479115,0.666845,0.570759)
- New Momentum Direction: (0.706543,0.251345,0.66153)
- New Polarization:       (-0.670629,0.53628,0.512504)
+ Old Momentum Direction: (0.71615,0.671403,0.19065)
+ Old Polarization:       (-0.369203,0.132613,0.919839)
+ New Momentum Direction: (0.353991,0.89968,0.255471)
+ New Polarization:       (-0.633836,0.0299235,0.772889)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 134, parentID 1) is processed with stopping code 2
+Track (trackID 113, parentID 1) is processed with stopping code 2
 ### pop requested out of 6 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.922204,0.386494,-0.012724)
- Old Polarization:       (-0.386675,0.921239,-0.0424461)
- New Momentum Direction: (0.857601,0.514037,-0.0169229)
- New Polarization:       (-0.514295,0.856805,-0.0372254)
+ Old Momentum Direction: (0.987219,-0.141739,-0.0728589)
+ Old Polarization:       (-0.0676076,-0.786469,0.613918)
+ New Momentum Direction: (0.976582,-0.191347,-0.0983595)
+ New Polarization:       (-0.11513,-0.850989,0.512409)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 133, parentID 1) is processed with stopping code 2
+Track (trackID 112, parentID 1) is processed with stopping code 2
 ### pop requested out of 5 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.910415,0.354767,-0.212802)
- Old Polarization:       (-0.40503,0.869109,-0.283902)
- New Momentum Direction: (0.832282,0.475387,-0.285155)
- New Polarization:       (-0.54796,0.783386,-0.293335)
+ Old Momentum Direction: (0.853014,-0.290389,-0.433637)
+ Old Polarization:       (-0.218163,-0.953229,0.209187)
+ New Momentum Direction: (0.709656,-0.392025,-0.58541)
+ New Polarization:       (-0.379127,-0.912827,0.151691)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 132, parentID 1) is processed with stopping code 2
+Track (trackID 111, parentID 1) is processed with stopping code 2
 ### pop requested out of 4 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.873234,0.284426,0.395682)
- Old Polarization:       (-0.452969,0.773161,0.443893)
- New Momentum Direction: (0.753143,0.383976,0.534171)
- New Polarization:       (-0.632259,0.64679,0.426511)
+ Old Momentum Direction: (0.872983,-0.285479,-0.395477)
+ Old Polarization:       (-0.195761,-0.947721,0.251997)
+ New Momentum Direction: (0.752613,-0.385397,-0.533894)
+ New Polarization:       (-0.340746,-0.921765,0.185047)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 110, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 109, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.543593,-0.146443,-0.826475)
+ Old Polarization:       (-0.56528,-0.791746,-0.231509)
+ New Momentum Direction: (0.73385,-0.197697,-0.649907)
+ New Polarization:       (0.11495,-0.906779,0.405633)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 108, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 5
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 6 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.296921,0.178258,-0.938116)
+ Old Polarization:       (-0.236799,-0.96548,-0.108509)
+ New Momentum Direction: (-0.400843,0.240648,-0.883976)
+ New Polarization:       (-0.78014,-0.595532,0.191634)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 124, parentID 1) is processed with stopping code 2
+### pop requested out of 5 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.565194,0.76343,-0.312619)
+ Old Polarization:       (0.74035,-0.302226,0.600451)
+ New Momentum Direction: (0.565194,-0.76343,-0.312619)
+ New Polarization:       (-0.552363,-0.0687414,-0.830765)
+ *** FresnelReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (0.565194,-0.76343,-0.312619)
+ Old Polarization:       (-0.552363,-0.0687414,-0.830765)
+ New Momentum Direction: (-0.565194,-0.76343,-0.312619)
+ New Polarization:       (-0.552363,0.0687414,0.830765)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.565194,-0.76343,-0.312619)
+ Old Polarization:       (-0.552363,0.0687414,0.830765)
+ New Momentum Direction: (-0.565194,-0.76343,0.312619)
+ New Polarization:       (0.552363,-0.0687414,0.830765)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+
+** Photon Absorbed! **
+Track (trackID 123, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+Scattering Photon!
+Old Momentum Direction: (0.388899,0.288513,-0.874939)
+Old Polarization: (0.540532,-0.840514,-0.036901)
+New Polarization: (0.415498,-0.846446,-0.0817393)
+Polarization Change: (0.439001,-0.894326,-0.086363)
+New Momentum Direction: (0.861777,0.393809,0.337994)
+Momentum Change: (0.856659,0.39147,0.335986)
+ Photon at Boundary! 
+ Old Momentum Direction: (0.856659,0.39147,0.335986)
+ Old Polarization:       (0.439001,-0.894326,-0.086363)
+ New Momentum Direction: (0.717613,0.528484,0.453581)
+ New Polarization:       (-0.638474,0.239085,0.731566)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 122, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.134227,0.990518,0.029273)
+ Old Polarization:       (-0.0540541,-0.0368149,0.997859)
+ New Momentum Direction: (-0.179864,0.982909,0.0392259)
+ New Polarization:       (-0.136094,-0.064357,0.988603)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.179864,0.982909,0.0392259)
+ Old Polarization:       (-0.136094,-0.064357,0.988603)
+ New Momentum Direction: (-0.134227,0.990518,0.029273)
+ New Polarization:       (-0.0546272,-0.0368916,0.997825)
+ *** FresnelRefraction *** 
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.134227,0.990518,0.029273)
+ Old Polarization:       (-0.0546272,-0.0368916,0.997825)
+ New Momentum Direction: (-0.179864,0.982909,0.0392259)
+ New Polarization:       (-0.136809,-0.0644837,0.988496)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 121, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 120, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 7
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 9 stacked tracks.
+Track (trackID 132, parentID 1) is processed with stopping code 2
+### pop requested out of 8 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.815398,0.520026,-0.254358)
+ Old Polarization:       (-0.345212,-0.0840809,0.934751)
+ New Momentum Direction: (-0.623886,0.702036,-0.343383)
+ New Polarization:       (0.564227,0.708637,0.423652)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 131, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
+### pop requested out of 7 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.771604,-0.124896,-0.623721)
- Old Polarization:       (-0.573707,0.286878,-0.767178)
- New Momentum Direction: (0.512413,-0.16861,-0.842023)
- New Polarization:       (-0.8145,0.215232,-0.538763)
+ Old Momentum Direction: (0.262481,0.681176,-0.68345)
+ Old Polarization:       (0.890664,0.10147,0.443195)
+ New Momentum Direction: (0.353951,0.918554,-0.176004)
+ New Polarization:       (0.638243,-0.0996714,0.763355)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 130, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
+### pop requested out of 6 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.784098,-0.0816044,-0.615248)
- Old Polarization:       (-0.558864,0.338309,-0.757112)
- New Momentum Direction: (0.545886,-0.110166,-0.830585)
- New Polarization:       (-0.79346,0.250447,-0.554705)
+ Old Momentum Direction: (-0.429453,-0.243343,-0.869686)
+ Old Polarization:       (0.0939711,-0.969826,0.224959)
+ New Momentum Direction: (-0.575467,-0.32608,-0.750007)
+ New Polarization:       (0.029129,-0.924665,0.379666)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 129, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 6
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 7 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.801092,-0.024733,0.59803)
- Old Polarization:       (-0.533984,0.421836,0.732745)
- New Momentum Direction: (0.605218,-0.0328949,0.795379)
- New Polarization:       (-0.747562,0.319923,0.582065)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 146, parentID 1) is processed with stopping code 2
-### pop requested out of 6 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.88612,0.273856,0.37389)
- Old Polarization:       (-0.429205,0.789283,0.439107)
- New Momentum Direction: (0.783787,0.366967,0.501012)
- New Polarization:       (-0.595059,0.674634,0.436777)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 145, parentID 1) is processed with stopping code 2
 ### pop requested out of 5 stacked tracks.
- Photon at Boundary! 
- Old Momentum Direction: (0.662031,-0.527379,-0.532529)
- Old Polarization:       (-0.70659,-0.20228,-0.678096)
- New Momentum Direction: (-0.662031,-0.527379,-0.532529)
- New Polarization:       (-0.70659,0.20228,0.678096)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.662031,-0.527379,-0.532529)
- Old Polarization:       (-0.70659,0.20228,0.678096)
- New Momentum Direction: (-0.662031,-0.527379,0.532529)
- New Polarization:       (0.70659,-0.20228,0.678096)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
- Photon at Boundary! 
- Old Momentum Direction: (-0.662031,-0.527379,0.532529)
- Old Polarization:       (0.70659,-0.20228,0.678096)
- New Momentum Direction: (-0.662031,0.527379,0.532529)
- New Polarization:       (-0.70659,-0.20228,-0.678096)
- *** TotalInternalReflection *** 
-No Absorbtion length specified
-Scattering Photon!
-Old Momentum Direction: (-0.662031,0.527379,0.532529)
-Old Polarization: (-0.70659,-0.20228,-0.678096)
-New Polarization: (-0.26269,-0.400847,-0.725249)
-Polarization Change: (-0.302188,-0.461118,-0.834298)
-New Momentum Direction: (-0.923372,0.174352,0.491355)
-Momentum Change: (-0.870779,0.164421,0.463368)
-Scattering Photon!
-Old Momentum Direction: (-0.870779,0.164421,0.463368)
-Old Polarization: (-0.302188,-0.461118,-0.834298)
-New Polarization: (-0.311447,-0.599427,-0.601513)
-Polarization Change: (-0.344328,-0.662712,-0.665019)
-New Momentum Direction: (0.552611,0.353366,-0.892657)
-Momentum Change: (0.498865,0.318998,-0.805838)
- Photon at Boundary! 
- Old Momentum Direction: (0.498865,0.318998,-0.805838)
- Old Polarization:       (-0.344328,-0.662712,-0.665019)
- New Momentum Direction: (0.673467,0.430647,-0.600821)
- New Polarization:       (0.634446,0.0803855,0.768776)
- *** FresnelRefraction *** 
-No Absorbtion length specified
-Track (trackID 144, parentID 1) is processed with stopping code 2
-### pop requested out of 4 stacked tracks.
 
 ** Photon Absorbed! **
-Track (trackID 143, parentID 1) is processed with stopping code 2
+Track (trackID 128, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.207121,0.143882,-0.967677)
+ Old Polarization:       (0.846166,-0.522797,0.103379)
+ New Momentum Direction: (0.275471,0.191363,-0.94207)
+ New Polarization:       (0.887287,-0.427717,0.172569)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 127, parentID 1) is processed with stopping code 2
 ### pop requested out of 3 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.809015,-0.031446,-0.586946)
- Old Polarization:       (-0.526484,0.405247,-0.747389)
- New Momentum Direction: (0.61008,-0.0423893,-0.791205)
- New Polarization:       (-0.74709,0.301849,-0.592236)
+ Old Momentum Direction: (-0.408008,0.877594,-0.251708)
+ Old Polarization:       (0.121268,0.325351,0.937785)
+ New Momentum Direction: (-0.550811,0.762324,-0.339806)
+ New Polarization:       (-0.834538,-0.509071,0.210697)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 142, parentID 1) is processed with stopping code 2
-### pop requested out of 2 stacked tracks.
-
-** Photon Absorbed! **
-Track (trackID 141, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
-
- Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
-Track (trackID 1, parentID 0) is processed with stopping code 4
-### pop requested out of 4 stacked tracks.
-CAImin = 1.80903e-07
-ge = 9.87225e-07
-CAImin = 1.80903e-07
-ge = 9.87225e-07
-Track (trackID 149, parentID 1) is processed with stopping code 2
-### pop requested out of 3 stacked tracks.
-Scattering Photon!
-Old Momentum Direction: (0.604514,-0.703392,0.373901)
-Old Polarization: (-0.782418,-0.436129,0.444538)
-New Polarization: (-0.362895,-0.790832,-0.180064)
-Polarization Change: (-0.40841,-0.89002,-0.202648)
-New Momentum Direction: (-0.863051,0.444396,-0.271446)
-Momentum Change: (-0.856217,0.440877,-0.269296)
-
-** Photon Absorbed! **
-Track (trackID 148, parentID 1) is processed with stopping code 2
+Track (trackID 126, parentID 1) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.577962,-0.815936,0.014415)
- Old Polarization:       (-0.815913,-0.578105,-0.00896013)
- New Momentum Direction: (0.780249,-0.625166,0.0194602)
- New Polarization:       (0.624749,0.780466,0.0236926)
+ Old Momentum Direction: (0.214959,0.756228,-0.61799)
+ Old Polarization:       (0.834596,0.186381,0.518374)
+ New Momentum Direction: (0.290195,0.468777,-0.834287)
+ New Polarization:       (0.92847,-0.349088,0.126807)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 147, parentID 1) is processed with stopping code 2
+Track (trackID 125, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 3
 Track (trackID 1, parentID 0) is processed with stopping code 4
 ### pop requested out of 4 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.952029,-0.0937616,0.291289)
- Old Polarization:       (-0.27896,-0.657206,0.700187)
- New Momentum Direction: (0.910681,-0.126578,0.39324)
- New Polarization:       (-0.39209,-0.564614,0.726276)
+ Old Momentum Direction: (-0.383407,0.858149,-0.341438)
+ Old Polarization:       (0.0563016,0.390719,0.918786)
+ New Momentum Direction: (-0.513765,0.725751,-0.457527)
+ New Polarization:       (-0.81125,-0.584476,-0.0161547)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 152, parentID 1) is processed with stopping code 2
+Track (trackID 135, parentID 1) is processed with stopping code 2
 ### pop requested out of 3 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.843183,0.354501,0.404192)
- Old Polarization:       (-0.457529,0.0783439,0.885737)
- New Momentum Direction: (0.687988,0.478528,0.545605)
- New Polarization:       (-0.663395,0.109864,0.74016)
+ Old Momentum Direction: (-0.747572,-0.0978432,-0.656934)
+ Old Polarization:       (-0.378317,-0.750226,0.542252)
+ New Momentum Direction: (-0.455956,-0.13111,-0.880292)
+ New Polarization:       (0.628193,-0.74806,-0.213963)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 151, parentID 1) is processed with stopping code 2
+Track (trackID 134, parentID 1) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.651322,0.692566,-0.31005)
+ Old Polarization:       (-0.255022,0.185045,0.949064)
+ New Momentum Direction: (-0.879285,0.227286,-0.418567)
+ New Polarization:       (-0.475685,-0.374559,0.795883)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 133, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
 
-** Photon Absorbed! **
-Track (trackID 150, parentID 1) is processed with stopping code 2
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 7
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 8 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.0781306,0.898688,-0.431573)
+ Old Polarization:       (0.796682,0.20396,0.568945)
+ New Momentum Direction: (0.105476,0.805869,-0.582624)
+ New Polarization:       (0.882212,-0.346198,-0.319138)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 142, parentID 1) is processed with stopping code 2
+### pop requested out of 7 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.510185,0.854607,-0.096742)
+ Old Polarization:       (0.0817164,0.160139,0.983706)
+ New Momentum Direction: (-0.683648,0.718207,-0.129634)
+ New Polarization:       (-0.457332,-0.283165,0.84301)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 141, parentID 1) is processed with stopping code 2
+### pop requested out of 6 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (0.0910294,0.282872,-0.954828)
+ Old Polarization:       (0.832578,-0.547673,-0.082876)
+ New Momentum Direction: (0.121069,0.37622,-0.918586)
+ New Polarization:       (0.989225,0.0310178,0.143083)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 140, parentID 1) is processed with stopping code 2
+### pop requested out of 5 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.404606,0.906184,-0.122983)
+ Old Polarization:       (0.211743,0.22366,0.951389)
+ New Momentum Direction: (-0.542173,0.823948,-0.164797)
+ New Polarization:       (-0.731354,-0.366166,0.575364)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 139, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.756402,-0.0293273,-0.653449)
+ Old Polarization:       (-0.221516,-0.92848,0.298087)
+ New Momentum Direction: (-0.481397,-0.0392986,-0.875621)
+ New Polarization:       (0.400981,-0.8982,-0.180138)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 138, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.857631,0.0556484,-0.511246)
+ Old Polarization:       (-0.334636,-0.81526,0.472621)
+ New Momentum Direction: (-0.719725,0.0751253,-0.690183)
+ New Polarization:       (0.531029,-0.580814,-0.616979)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 137, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.0654338,0.113152,-0.991421)
+ Old Polarization:       (0.636173,-0.760718,-0.128809)
+ New Momentum Direction: (-0.087027,0.150493,-0.984773)
+ New Polarization:       (-0.377716,0.909729,0.172404)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 136, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 
  Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
 Track (trackID 1, parentID 0) is processed with stopping code 4
 ### pop requested out of 3 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.7478,0.63189,-0.203742)
- Old Polarization:       (-0.662295,0.73146,-0.162273)
- New Momentum Direction: (0.456626,0.846733,-0.273014)
- New Polarization:       (-0.8886,0.449043,-0.0935422)
+ Old Momentum Direction: (-0.783446,0.621009,-0.0236474)
+ Old Polarization:       (-0.19197,-0.205642,0.959614)
+ New Momentum Direction: (-0.544178,0.838362,-0.031924)
+ New Polarization:       (0.352273,0.262863,0.898224)
  *** FresnelRefraction *** 
 No Absorbtion length specified
-Track (trackID 154, parentID 1) is processed with stopping code 2
+Track (trackID 144, parentID 1) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
  Photon at Boundary! 
- Old Momentum Direction: (0.746194,0.610713,-0.264998)
- Old Polarization:       (-0.665722,0.686245,-0.293056)
- New Momentum Direction: (0.451886,0.818355,-0.355098)
- New Polarization:       (-0.892072,0.415737,-0.177118)
+ Old Momentum Direction: (-0.77561,0.630498,-0.0300094)
+ Old Polarization:       (-0.19169,-0.189979,0.962893)
+ New Momentum Direction: (-0.533462,0.844868,-0.0402126)
+ New Polarization:       (0.347548,0.262294,0.900229)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 143, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 4
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 5 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.247107,0.938545,0.240982)
+ Old Polarization:       (0.850782,0.0911105,0.51756)
+ New Momentum Direction: (-0.333594,0.884804,0.325326)
+ New Polarization:       (0.432983,-0.162737,0.88659)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.333594,0.884804,0.325326)
+ Old Polarization:       (0.432983,-0.162737,0.88659)
+ New Momentum Direction: (-0.247107,0.65541,0.713706)
+ New Polarization:       (0.152683,0.753682,-0.639258)
+ *** FresnelRefraction *** 
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.247107,0.65541,0.713706)
+ Old Polarization:       (0.152683,0.753682,-0.639258)
+ New Momentum Direction: (-0.247107,-0.65541,0.713706)
+ New Polarization:       (-0.152683,0.753682,0.639258)
+ *** TotalInternalReflection *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.247107,-0.65541,0.713706)
+ Old Polarization:       (-0.152683,0.753682,0.639258)
+ New Momentum Direction: (-0.333594,-0.884804,0.325326)
+ New Polarization:       (-0.376241,-0.191459,-0.906524)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 148, parentID 1) is processed with stopping code 2
+### pop requested out of 4 stacked tracks.
+
+** Photon Absorbed! **
+Track (trackID 147, parentID 1) is processed with stopping code 2
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.927925,0.153359,-0.33976)
+ Old Polarization:       (-0.0637177,-0.963292,-0.260784)
+ New Momentum Direction: (-0.866309,0.205501,-0.455279)
+ New Polarization:       (0.11418,-0.805853,-0.581003)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 146, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.16279,0.968473,-0.188571)
+ Old Polarization:       (0.986278,0.154403,-0.0584435)
+ New Momentum Direction: (-0.21651,0.943516,-0.250799)
+ New Polarization:       (0.0735706,-0.240394,-0.967883)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.21651,0.943516,-0.250799)
+ Old Polarization:       (0.0735706,-0.240394,-0.967883)
+ New Momentum Direction: (-0.16279,0.709411,-0.685737)
+ New Polarization:       (-0.132953,0.672898,0.72769)
+ *** FresnelRefraction *** 
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.16279,0.709411,-0.685737)
+ Old Polarization:       (-0.132953,0.672898,0.72769)
+ New Momentum Direction: (-0.21651,0.348315,-0.912031)
+ New Polarization:       (-0.281049,-0.91688,-0.283447)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 145, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.88855,0.297456,0.349285)
+ Old Polarization:       (-0.0199056,-0.785611,0.6184)
+ New Momentum Direction: (-0.78526,0.401444,0.471391)
+ New Polarization:       (0.036897,-0.72964,0.682836)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 150, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.480798,0.75422,0.447197)
+ Old Polarization:       (0.630768,-0.0567613,0.773893)
+ New Momentum Direction: (-0.649077,0.462845,0.603716)
+ New Polarization:       (0.63343,-0.110643,0.765849)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 149, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 1
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.528146,0.802415,0.277836)
+ Old Polarization:       (-0.120941,-0.394937,0.910713)
+ New Momentum Direction: (-0.704454,0.60532,0.370584)
+ New Polarization:       (-0.120744,-0.616732,0.777857)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 151, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+
+ Exiting from G4Cerenkov::DoIt -- NumberOfSecondaries = 2
+Track (trackID 1, parentID 0) is processed with stopping code 4
+### pop requested out of 3 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.301554,0.773839,-0.556991)
+ Old Polarization:       (0.480759,0.627893,0.612062)
+ New Momentum Direction: (-0.407098,0.518518,-0.751938)
+ New Polarization:       (-0.164774,-0.851428,-0.497915)
  *** FresnelRefraction *** 
 No Absorbtion length specified
 Track (trackID 153, parentID 1) is processed with stopping code 2
+### pop requested out of 2 stacked tracks.
+ Photon at Boundary! 
+ Old Momentum Direction: (-0.205126,0.742178,-0.63804)
+ Old Polarization:       (0.745156,0.541084,0.389834)
+ New Momentum Direction: (-0.27692,0.425893,-0.861354)
+ New Polarization:       (0.308746,-0.809439,-0.499484)
+ *** FresnelRefraction *** 
+No Absorbtion length specified
+Track (trackID 152, parentID 1) is processed with stopping code 2
 ### pop requested out of 1 stacked tracks.
 Track (trackID 1, parentID 0) is processed with stopping code 2
 ### pop requested out of 2 stacked tracks.
-Track (trackID 156, parentID 1) is processed with stopping code 2
-### pop requested out of 1 stacked tracks.
 Track (trackID 155, parentID 1) is processed with stopping code 2
+### pop requested out of 1 stacked tracks.
+Track (trackID 154, parentID 1) is processed with stopping code 2
 ### pop requested out of 0 stacked tracks.
 ### 0 waiting tracks are re-classified to
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=0.53s Real=0.67s Sys=0.08s
+number of event = 1 User=0.58s Real=0.69s Sys=0.08s
 Idle> 
