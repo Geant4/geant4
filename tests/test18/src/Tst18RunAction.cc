@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Tst18RunAction.cc,v 1.5 2000-06-14 17:48:13 flei Exp $
+// $Id: Tst18RunAction.cc,v 1.6 2000-06-15 09:52:40 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,12 +91,12 @@ void Tst18RunAction::EndOfRunAction(const G4Run* )
       << G4std::setw(12)
       << Energies[i]
       << G4std::setw(12)<<G4std::setprecision(4) 
-      << setiosflags(G4std::ios::scientific)
-      << setiosflags(G4std::ios::right)
+      << G4std::setiosflags(G4std::ios::scientific)
+      << G4std::setiosflags(G4std::ios::right)
       << Weights[i]
       << G4std::setw(12)<<G4std::setprecision(4)
-      << setiosflags(G4std::ios::scientific)
-      << setiosflags(G4std::ios::right)
+      << G4std::setiosflags(G4std::ios::scientific)
+      << G4std::setiosflags(G4std::ios::right)
       << Times[i] << "     "
       << Particles[i]
       << G4endl ;    
