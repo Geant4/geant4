@@ -1,4 +1,3 @@
-
 #
 # This file is sourced by setup.csh script.
 # 
@@ -51,6 +50,30 @@ endif
 if ( `uname -n | grep dxplus` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM DEC-cxx
+  setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
+  setenv G4LIB $G4WORKDIR/lib
+  # G4 build flags :
+  setenv G4UI_BUILD_TERMINAL_SESSION 1
+  setenv G4UI_BUILD_GAG_SESSION      1
+  #####setenv G4UI_BUILD_XM_SESSION       1
+  #####setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv XKEYSYMDB /usr/lib/X11/XKeysymDB
+  setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
+  setenv G4VIS_BUILD_RAYX_DRIVER     1
+  ##### setenv G4VIS_BUILD_OIX_DRIVER      1
+  setenv G4VIS_BUILD_DAWN_DRIVER     1
+  setenv DAWN_BSD_UNIX_DOMAIN 1
+  setenv DAWN_HOME /afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
+  setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+  setenv G4VIS_BUILD_VRML_DRIVER     1
+  setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+endif
+
+if ( `uname -n | grep pcgeant` != "" ) then
+  setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
+  setenv G4SYSTEM Linx-g++
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
   setenv G4WORKDIR  /afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   setenv G4LIB $G4WORKDIR/lib
