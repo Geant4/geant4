@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4JPsi.hh,v 1.1 1999-01-07 16:10:11 gunter Exp $
+// $Id: G4JPsi.hh,v 1.2 1999-04-13 08:38:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,14 @@ class G4JPsi : public G4VMeson
    );
 
  public:
+   virtual ~G4JPsi(){}
+
    static G4JPsi* JPsiDefinition();
    static G4JPsi* JPsi();
    static G4double GetCuts() {return theJPsiLengthCut;}   
    static G4double* GetCutsInEnergy() {return theJPsiKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 #endif

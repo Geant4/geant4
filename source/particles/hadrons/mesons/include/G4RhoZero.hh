@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RhoZero.hh,v 1.1 1999-01-07 16:10:13 gunter Exp $
+// $Id: G4RhoZero.hh,v 1.2 1999-04-13 08:38:43 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,12 +55,14 @@ class G4RhoZero : public G4VMeson
    );
 
  public:
+   virtual ~G4RhoZero(){}
+ 
    static G4RhoZero*      RhoZeroDefinition();
    static G4RhoZero*      RhoZero();
    static G4double GetCuts() {return theRhoZeroLengthCut;}   
    static G4double* GetCutsInEnergy() {return theRhoZeroKineticEnergyCuts;};
 
-   void        SetCuts(G4double aCut);
+   virtual void        SetCuts(G4double aCut);
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EtaPrime.hh,v 1.1 1999-01-07 16:10:11 gunter Exp $
+// $Id: G4EtaPrime.hh,v 1.2 1999-04-13 08:38:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,12 +54,14 @@ class G4EtaPrime : public G4VMeson
    );
 
  public:
+   virtual  ~G4EtaPrime(){}
+
    static G4EtaPrime*      EtaPrimeDefinition();
    static G4EtaPrime*      EtaPrime(){return &theEtaPrime;}
    static G4double GetCuts() {return theEtaPrimeLengthCut;}   
    static G4double* GetCutsInEnergy() {return theEtaPrimeKineticEnergyCuts;};
 
-   void        SetCuts(G4double aCut);
+   virtual void        SetCuts(G4double aCut);
 };
 
 #endif
