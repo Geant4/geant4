@@ -1,4 +1,6 @@
-*** Begin of history file: Tue Aug 13 19:50:09 2002
-exe test_n
+*** Begin of history file: Thu Aug 15 19:24:22 2002
+exe bar1
+exe bar1
+exe bar1
 exit
-*** End   of history file: Tue Aug 13 19:50:29 2002
+*** End   of history file: Thu Aug 15 19:25:51 2002
