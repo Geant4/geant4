@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // 
-// $Id: Em1PhysicsList.cc,v 1.12 2003-06-03 09:59:55 vnivanch Exp $
+// $Id: Em1PhysicsList.cc,v 1.13 2003-09-18 07:22:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -40,7 +40,6 @@
 #include "G4Positron.hh"
 
 #include "Em1DetectorConstruction.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4Material.hh"
 #include "G4LossTableManager.hh"
 
@@ -112,7 +111,7 @@ void Em1PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new Em1PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
@@ -173,14 +172,14 @@ void Em1PhysicsList::SetCutForPositron(G4double cut)
 void Em1PhysicsList::GetRange(G4double val)
 {
   G4LogicalVolume* lBox = pDet->GetWorld()->GetLogicalVolume();
-  G4ParticleTable* theParticleTable =  G4ParticleTable::GetParticleTable();
+  G4ParticleTable* particleTable =  G4ParticleTable::GetParticleTable();
   const G4MaterialCutsCouple* couple = lBox->GetMaterialCutsCouple();
   const G4Material* currMat = lBox->GetMaterial();
 
   G4ParticleDefinition* part;
   G4double cut;
-  part = theParticleTable->FindParticle("e-");
-  cut = G4EnergyLossTables::GetRange(part,val,couple);
+  part = particleTable->FindParticle("e-");
+  cut = G4LossTableManager::Instance()->GetRange(part,val,couple);
   G4cout << "material : " << currMat->GetName()       << G4endl;
   G4cout << "particle : " << part->GetParticleName()  << G4endl;
   G4cout << "energy   : " << G4BestUnit(val,"Energy") << G4endl;
