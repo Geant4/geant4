@@ -108,8 +108,13 @@ inline G4int G4Line::IntersectRay2D(const G4Ray& ray)
     if( (t > -kCarTolerance/2) && (t < kCarTolerance/2) )
       t = 0;
     
+    // test the validity of the results	
     if(t>=0 && u>=0 && u<=1)
-      nbinter = 1;	
+      // test if the point is on the line
+      if( t==0 || u==0 )
+        return 999;
+      else	
+        nbinter = 1;	
   }
   
   return nbinter;

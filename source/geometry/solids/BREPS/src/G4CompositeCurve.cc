@@ -66,12 +66,18 @@ void G4CompositeCurve::IntersectRay2D(const G4Ray& ray,
 
 G4int G4CompositeCurve::IntersectRay2D(const G4Ray& ray)
 {
-  G4int nbinter = 0;
+  G4int nbinter = 0, temp = 0;
  
   for (G4int i=0; i<segments.entries(); i++) 
   {
     G4Curve& c= *(segments(i));
-    nbinter+= c.IntersectRay2D(ray); 
+    temp = c.IntersectRay2D(ray);
+
+    // test if the point is on the composite curve
+    if( temp==999 )
+      return 999;
+    else
+      nbinter+= temp; 
   }
  
   return nbinter;
