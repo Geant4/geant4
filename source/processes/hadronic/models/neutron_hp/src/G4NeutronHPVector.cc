@@ -69,8 +69,8 @@
 
   G4NeutronHPVector::G4NeutronHPVector()
   {
-    theData = new G4NeutronHPDataPoint[100]; 
-    nPoints=100;
+    theData = new G4NeutronHPDataPoint[20]; 
+    nPoints=20;
     nEntries=0;
     Verbose=0;
     theIntegral=NULL;
@@ -84,8 +84,8 @@
   
   G4NeutronHPVector::G4NeutronHPVector(G4int n)
   {
-    nPoints=G4std::max(n, 100);
-    theData = new G4NeutronHPDataPoint[nPoints]; 
+    theData = new G4NeutronHPDataPoint[G4std::max(n, 20)]; 
+    nPoints=G4std::max(n, 20);
     nEntries=0;
     Verbose=0;
     theIntegral=NULL;
@@ -196,7 +196,7 @@
     if(i>nEntries) G4Exception("Skipped some index numbers in G4NeutronHPVector");
     if(i==nPoints)
     {
-      nPoints = static_cast<G4int>(1.5*nPoints);
+      nPoints = static_cast<G4int>(1.2*nPoints);
       G4NeutronHPDataPoint * buff = new G4NeutronHPDataPoint[nPoints];
       for (G4int j=0; j<nEntries; j++) buff[j] = theData[j];
       delete [] theData;

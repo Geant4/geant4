@@ -21,9 +21,6 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronHPList.hh,v 1.6 2001-07-26 09:28:12 hpw Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 #ifndef G4NeutronHPList_h
 #define G4NeutronHPList_h 1
 
@@ -37,8 +34,8 @@ class G4NeutronHPList
   
   G4NeutronHPList()
   {
-    theData = new G4double[100]; 
-    nPoints=100;
+    theData = new G4double[2]; 
+    nPoints=2;
     nEntries=0;
   }
   

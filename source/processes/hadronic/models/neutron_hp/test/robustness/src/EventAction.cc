@@ -5,5 +5,5 @@
     void   EventAction::BeginOfEventAction(const G4Event*)
     {
       nEvent++;
-      cout << "Processing event "<<nEvent<<endl;
+      G4cout << "Processing event "<<nEvent<<G4endl;
     }
