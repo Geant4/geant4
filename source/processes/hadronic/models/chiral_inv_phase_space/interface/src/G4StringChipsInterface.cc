@@ -46,6 +46,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(G4int secondary = 0; secondary<theSecondaries->length(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->at(secondary)->Get4Momentum();
+    G4cout <<"ALL STRING particles "<<theSecondaries->at(secondary)->GetDefinition()->GetPDGCharge()<<" "
+           << theSecondaries->at(secondary)->GetDefinition()->GetPDGEncoding()<<" "
+	   << a4Mom <<G4endl; 
     G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
@@ -86,6 +89,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     runningEnergy += current->second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
+    G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
+           << current->second->GetDefinition()->GetPDGEncoding()<<" "
+	   << current->second->Get4Momentum() <<G4endl; 
     // projectile 4-momentum needed in constructor of quasmon
     particleCount++;
     theHigh = current->second->Get4Momentum(); 

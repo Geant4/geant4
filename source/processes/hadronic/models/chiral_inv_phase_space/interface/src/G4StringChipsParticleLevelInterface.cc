@@ -77,6 +77,9 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   for(G4int secondary = 0; secondary<theSecondaries->length(); secondary++)
   {
     G4LorentzVector a4Mom = theSecondaries->at(secondary)->Get4Momentum();
+    G4cout <<"ALL STRING particles "<<theSecondaries->at(secondary)->GetDefinition()->GetPDGCharge()<<" "
+           << theSecondaries->at(secondary)->GetDefinition()->GetPDGEncoding()<<" "
+	   << a4Mom <<G4endl; 
     G4double toSort = a4Mom.rapidity();
     G4Pair<G4double, G4KineticTrack *> it;
     it.first = toSort;
@@ -120,7 +123,10 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     runningEnergy += current->second->Get4Momentum().t();
     if(runningEnergy > theEnergyLostInFragmentation) break;
     
-    // projectile 4-momentum in target rest frame needed in constructor of QHadron
+     G4cout <<"ABSORBED STRING particles "<<current->second->GetDefinition()->GetPDGCharge()<<" "
+           << current->second->GetDefinition()->GetPDGEncoding()<<" "
+	   << current->second->Get4Momentum() <<G4endl; 
+   // projectile 4-momentum in target rest frame needed in constructor of QHadron
     particleCount++;
     theHigh = current->second->Get4Momentum(); 
     proj4Mom = current->second->Get4Momentum(); 
@@ -137,14 +143,45 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
 //    G4cout << "Anti-quark content: anit-d="<<nAD<<", anti-u="<<nAU<< ", anti-s="<< nAS << G4endl;
 //    G4cout << "G4QContent is constructed"<<endl;
     theContents.push_back(aProjectile);
-    theMomenta.push_back(proj4Mom);
+    theMomenta.push_back(1./MeV*proj4Mom);
   }
-  for(G4int hpw=0; hpw<theContents.size(); hpw++)
+  G4std::vector<G4QContent> theFinalContents;
+  G4std::vector<G4LorentzVector> theFinalMomenta;
+  if(theContents.size()<hitCount)
   {
-    G4QHadron* aHadron = new G4QHadron(theContents[hpw], 1./MeV*theMomenta[hpw]);
-    projHV.insert(aHadron);
+    for(G4int hp = 0; hp<theContents.size(); hp++)
+    {
+      G4QHadron* aHadron = new G4QHadron(theContents[hp], theMomenta[hp]);
+      projHV.insert(aHadron);
+    }
   }
-  
+  else
+  {
+    G4int hp;
+    for(hp=0; hp<hitCount; hp++) 
+    {
+      G4QContent co(0, 0, 0, 0, 0, 0);
+      theFinalContents.push_back(co);
+      G4LorentzVector mo(0,0,0,0);
+      theFinalMomenta.push_back(mo);
+    }
+    G4int running = 0;
+    while (running<theContents.size())
+    {
+      for(hp = 0; hp<hitCount; hp++)
+      {
+        theFinalContents[hp] +=theContents[running];
+	theFinalMomenta[hp]+=theMomenta[running];
+	running++;
+	if(running == theContents.size()) break;
+      }
+    }
+    for(hp = 0; hp<hitCount; hp++)
+    {
+      G4QHadron* aHadron = new G4QHadron(theFinalContents[hp], theFinalMomenta[hp]);
+      projHV.insert(aHadron);
+    }
+  }
   // construct the quasmon
   G4int nop = 223; // ??????
   G4double fractionOfSingleQuasiFreeNucleons = 0.15;
@@ -165,7 +202,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
   G4cout << "G4QNucleus parameters "<< fractionOfSingleQuasiFreeNucleons << " "
          << fractionOfPairedQuasiFreeNucleons << " "<< clusteringCoefficient << G4endl;
   G4cout << "G4Quasmon parameters "<< temperature << " "<< halfTheStrangenessOfSee << " "
-         <<etaToEtaPrime << G4endl;
+         << etaToEtaPrime << G4endl;
   G4cout << "The Target PDG code = "<<targetPDGCode<<G4endl;
   G4cout << "The projectile momentum = "<<1./MeV*proj4Mom<<G4endl;
   G4cout << "The target momentum = "<<1./MeV*targ4Mom<<G4endl;
