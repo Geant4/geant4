@@ -5,21 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.4 1999-12-15 14:51:48 gunter Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.5 1999-12-17 18:26:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, CN Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4PhotoElectricEffect physics process ------
 //                   by Michel Maire, April 1996
-// ************************************************************
+//
 // 12-06-96, Added SelectRandomAtom() method and new data member
 //           for cumulative total cross section, by M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
@@ -31,6 +22,14 @@
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
 // ------------------------------------------------------------
+
+// class description
+//
+// inherit from G4VDiscreteProcess
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4PhotoElectricEffect_h
 #define G4PhotoElectricEffect_h 1
@@ -45,34 +44,59 @@
 #include "G4Gamma.hh" 
 #include "G4Electron.hh"
 #include "G4Step.hh" 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4PhotoElectricEffect : public G4VDiscreteProcess
  
 {
-  public:
+  public:  // with description
  
      G4PhotoElectricEffect(const G4String& processName ="phot");
  
     ~G4PhotoElectricEffect();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-     
+      // true for Gamma only.
+           
      void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+       // Allows to define the binning of the PhysicsTables, 
+       // before to build them.
 
      void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
-     
+       // It builds the total CrossSectionPerAtom table, for Gamma,
+       // and for every element contained in the elementTable.
+       // It builds the MeanFreePath table, for Gamma,
+       // and for every material contained in the materialTable.       
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the G4ParticleWithCuts::SetCut() method.
+             
      void PrintInfoDefinition();
+       // Print few lines of informations about the process: validity range,
+       // origine ..etc..
+       // Invoked by BuildPhysicsTable().      
      
      G4double GetMeanFreePath(const G4Track&          aTrack,
                                     G4double          previousStepSize,
                                     G4ForceCondition* condition);
- 
+       // It returns the MeanFreePath of the process for the current track :
+       // (energy, material)
+       // The previousStepSize and G4ForceCondition* are not used.
+       // This function overloads a virtual function of the base class.		      
+       // It is invoked by the ProcessManager of the Particle.
+   
      G4double GetCrossSectionPerAtom(const G4DynamicParticle* aDynamicPhoton,
                                                G4Element*         anElement);
-
+       // It returns the total CrossSectionPerAtom of the process, 
+       // for the current DynamicGamma (energy), in anElement.
+       
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                      const G4Step&  aStep);
- 
+       // It computes the final state of the process (at end of step),
+       // returned as a ParticleChange object.			    
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the ProcessManager of the Particle.
+        
   protected:
   
      virtual inline G4double ComputeKBindingEnergy(G4double AtomicNumber);

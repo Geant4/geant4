@@ -5,25 +5,25 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eplusAnnihilation.hh,v 1.2 1999-12-15 14:51:49 gunter Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.3 1999-12-17 18:26:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ------------------------------------------------------------
-//      GEANT 4 class header file
-//      CERN Geneva Switzerland
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4eplusAnnihilation process ------
 //                   by Michel Maire, 7 july 1996
-// ************************************************************
+//
 // 10-01-97, crossection table + meanfreepath table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo() 
 // ------------------------------------------------------------
+
+// class description
+//
+// e+ e- ---> gamma gamma
+// inherit from G4VRestDiscreteProcess
+//
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef G4eplusAnnihilation_h
 #define G4eplusAnnihilation_h 1
@@ -39,38 +39,72 @@
 #include "G4Positron.hh"
 #include "G4Step.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class G4eplusAnnihilation : public G4VRestDiscreteProcess
  
 {    
-  public:
+  public:  // with description
  
      G4eplusAnnihilation(const G4String& processName ="annihil");
  
     ~G4eplusAnnihilation();
 
      G4bool IsApplicable(const G4ParticleDefinition&);
-     
+       // true for positron only.
+            
      void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
-     
+       // Allows to define the binning of the PhysicsTables, 
+       // before to build them.
+            
      void BuildPhysicsTable(const G4ParticleDefinition& PositronType);
-     
+       // It builds the total CrossSectionPerAtom table, for e+,
+       // and for every element contained in the elementTable.
+       // It builds the MeanFreePath table, for e+,
+       // and for every material contained in the materialTable.       
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the G4ParticleWithCuts::SetCut() method. 
+            
      void PrintInfoDefinition();
-     
+       // Print few lines of informations about the process: validity range,
+       // origine ..etc..
+       // Invoked by BuildPhysicsTable(). 
+           
      G4double GetMeanFreePath(const G4Track& aTrack,
                               G4double previousStepSize,
                               G4ForceCondition* condition);
- 
+       // It returns the MeanFreePath of the process for the current track :
+       // (energy, material)
+       // The previousStepSize and G4ForceCondition* are not used.
+       // This function overloads a virtual function of the base class.		      
+       // It is invoked by the ProcessManager of the Particle.
+        
      G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicPositron,
-                                         G4Element*         anElement);
+                                     G4Element*         anElement);     
+       // It returns the total CrossSectionPerAtom of the process, 
+       // for the current DynamicPositron (energy), in anElement.
 
      G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                     const G4Step& aStep); 
+       // It computes the final state of the process (at end of step),
+       // returned as a ParticleChange object.			    
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the ProcessManager of the Particle.
 
      G4double GetMeanLifeTime(const G4Track& aTrack,
                               G4ForceCondition* condition);
-
+       // It is invoked by the ProcessManager of the Positron if this
+       // e+ has a kinetic energy null. Then it return 0 to force the
+       // call of AtRestDoIt.
+       // This function overloads a virtual function of the base class.
+              
      G4VParticleChange* AtRestDoIt(const G4Track& aTrack,
-                                  const G4Step& aStep); 
+                                   const G4Step& aStep); 
+       // It computes the final state of the process:
+       //          e+ (at rest) e- (at rest)  ---> gamma gamma,
+       // returned as a ParticleChange object.			    
+       // This function overloads a virtual function of the base class.
+       // It is invoked by the ProcessManager of the Particle.
 
   protected:
 

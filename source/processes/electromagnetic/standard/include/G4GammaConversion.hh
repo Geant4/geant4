@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GammaConversion.hh,v 1.3 1999-12-17 16:20:49 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.4 1999-12-17 18:26:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ------------ G4GammaConversion physics process ------
@@ -23,6 +23,7 @@
 
 // class description
 //
+// gamma ---> e+ e- 
 // inherit from G4VDiscreteProcess
 //
 
