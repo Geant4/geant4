@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.6 2001-07-11 10:08:22 gunter Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.7 2001-08-31 16:44:24 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ public: // Without description
         // Constructors and Destructor
         ////////////////////////////////
 
-        G4OpBoundaryProcess(const G4String& processName = "Boundary");
+        G4OpBoundaryProcess(const G4String& processName = "OpBoundary");
 
 	~G4OpBoundaryProcess();
 
