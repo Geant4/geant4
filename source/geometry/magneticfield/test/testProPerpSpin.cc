@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testProPerpSpin.cc,v 1.5 2002-06-07 18:20:55 japost Exp $
+// $Id: testProPerpSpin.cc,v 1.6 2002-06-11 13:31:46 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -245,7 +245,7 @@ G4FieldManager* SetupField(G4int type)
       case 3: pStepper = new G4SimpleHeum( fEquation, ncompspin ); break;
       case 4: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
       // case 8: pStepper = new G4CashKarpRKF45( fEquation, ncompspin );    break;
-      default: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;q
+      default: pStepper = new G4ClassicalRK4( fEquation, ncompspin ); break;
     }
     
     pFieldMgr= G4TransportationManager::GetTransportationManager()->
@@ -432,7 +432,7 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
           G4double endDot= EndSpin.dot(EndUnitMomentum) ;
           G4cout << " dot product of spin and momentum = " << endDot << G4endl;
 	  if( endDot > 1.e-8 ){
-	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 "<<endl ;
+	     G4cout << " $$$$$$$$$$$$ Spin dot Momentum is above threshold of 1e-8 "<< G4endl ;
 	     G4cout << " Spin dot UnitMomentum= " << endDot << " ";
 	     G4cout << " Spin magnitude= " << EndSpin.mag() << " ";
 	     G4cout << " UnitMom mag= " << EndUnitMomentum.mag() << " ";
