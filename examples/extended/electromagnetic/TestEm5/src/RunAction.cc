@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.12 2004-08-05 14:11:04 maire Exp $
+// $Id: RunAction.cc,v 1.13 2004-08-05 15:02:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,12 +138,12 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4ParticleDefinition* particle = primary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
-  G4double charge   = particle->GetPDGCharge();    
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   
   G4EmCalculator emCalculator;
   G4double dEdxTable = 0.;
-  ///if (charge != 0.) dEdxTable = emCalculator.GetDEDX(particle,material,energy);
+  ///if (particle->GetPDGCharge()!= 0.) 
+  ///  dEdxTable = emCalculator.GetDEDX(particle,material,energy);
   G4double stopTable = dEdxTable/density;
   
   //Stopping Power from simulation.
