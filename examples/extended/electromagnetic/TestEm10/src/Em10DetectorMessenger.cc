@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em10DetectorMessenger.cc,v 1.2 2001-03-19 17:59:03 grichine Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.3 2001-03-23 13:51:44 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ RadiatorThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setRadThick",this
   RadiatorThickCmd->SetRange("SizeZ>0.");
   RadiatorThickCmd->AvailableForStates(Idle);
 
-  GasGapThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setRadThick",this);
+GasGapThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setGasGapThick",this);
   GasGapThickCmd->SetGuidance("Set Thickness of XTR gas gaps");
   GasGapThickCmd->SetParameterName("SizeZ",false,false);
   GasGapThickCmd->SetDefaultUnit("mm");

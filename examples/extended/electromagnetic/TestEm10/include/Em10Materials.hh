@@ -3,12 +3,7 @@
 #ifndef Em10Materials_h
 #define Em10Materials_h 1
 
-
-
 #include "G4Material.hh"
-
-
-
 
 
 G4String name, symbol ;             //a=mass of a mole;
@@ -360,9 +355,9 @@ G4double temperature, pressure;
   Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
   Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
 
-  // NIM A294 (1990) 465-472; STP
+  // Xe + 55% He + 15% CH4 ; NIM A294 (1990) 465-472; STP
 
-  G4double density = 1.963*mg/cm3;
+  density = 1.963*mg/cm3;
   G4Material* Xe55He15CH4 = new G4Material(name="Xe55He15CH4",density,
 					                      ncomponents=3);
   Xe55He15CH4->AddMaterial(Xe, 0.895);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em10DetectorConstruction.cc,v 1.2 2001-03-19 17:59:03 grichine Exp $
+// $Id: Em10DetectorConstruction.cc,v 1.3 2001-03-23 13:51:43 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,8 @@
 Em10DetectorConstruction::Em10DetectorConstruction()
 :solidWorld(NULL),logicWorld(NULL),physiWorld(NULL),
  solidAbsorber(NULL),logicAbsorber(NULL),physiAbsorber(NULL),
+ solidRadiator(NULL),logicRadiator(NULL),physiRadiator(NULL),
+ fSolidRadSlice(NULL),fLogicRadSlice(NULL),fPhysicRadSlice(NULL),
  AbsorberMaterial(NULL),WorldMaterial(NULL),fRadiatorMat(NULL),
  magField(NULL),calorimeterSD(NULL),worldchanged(false),fXTRModel(NULL)
 {
@@ -348,6 +350,30 @@ G4double temperature, pressure;
 //
 // MWPC mixtures
 
+  // 80% Xe + 20% CO2, STP
+
+  density = 5.0818*mg/cm3 ;      
+  G4Material* Xe20CO2 = new G4Material(name="Xe20CO2"  , density, ncomponents=2);
+  Xe20CO2->AddMaterial( Xe,              fractionmass = 0.922 ) ;
+  Xe20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.078 ) ;
+
+  // 80% Kr + 20% CO2, STP
+
+  density = 3.601*mg/cm3 ;      
+  G4Material* Kr20CO2 = new G4Material(name="Kr20CO2", density, 
+                                                       ncomponents=2);
+  Kr20CO2->AddMaterial( Kr,              fractionmass = 0.89 ) ;
+  Kr20CO2->AddMaterial( CarbonDioxide,   fractionmass = 0.11 ) ;
+
+  // Xe + 55% He + 15% CH4 ; NIM A294 (1990) 465-472; STP
+
+  density = 1.963*mg/cm3;
+  G4Material* Xe55He15CH4 = new G4Material(name="Xe55He15CH4",density,
+					                      ncomponents=3);
+  Xe55He15CH4->AddMaterial(Xe, 0.895);
+  Xe55He15CH4->AddMaterial(He, 0.050);
+  Xe55He15CH4->AddMaterial(metane,0.055);
+
   // 90% Xe + 10% CH4, STP ; NIM A248 (1986) 379-388
 
   density = 5.344*mg/cm3 ;      
@@ -416,8 +442,15 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
 
   radThick *= 1.2 ;
   G4cout<<"radThick = "<<radThick/mm<<" mm"<<G4endl ;
+  G4cout<<"fFoilNumber = "<<fFoilNumber<<G4endl ;
+  G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
+  G4cout<<"WorldMaterial = "<<WorldMaterial->GetName()<<G4endl ;
+ 
+  if(solidRadiator) delete solidRadiator;
+  if(logicRadiator) delete logicRadiator;
+  if(physiRadiator) delete physiRadiator;
 
-  G4Box* solidRadiator = new G4Box("Radiator",1.1*AbsorberRadius , 
+  solidRadiator = new G4Box("Radiator",1.1*AbsorberRadius , 
                                               1.1*AbsorberRadius, 
                                               0.5*radThick             ) ; 
                          
@@ -425,68 +458,35 @@ G4VPhysicalVolume* Em10DetectorConstruction::ConstructCalorimeter()
                                                        WorldMaterial,      
                                                        "Radiator");	       
                                    
-  G4VPhysicalVolume* physiRadiator = new G4PVPlacement(0,
+  physiRadiator = new G4PVPlacement(0,
                                      G4ThreeVector(0,0,zRad),	        
                                      "Radiator", logicRadiator,		
                                      physiWorld, false,	0       );  	
 
-  
+  if(fSolidRadSlice) delete fSolidRadSlice;
+  if(fLogicRadSlice) delete fLogicRadSlice; 
+  if(fPhysicRadSlice) delete fPhysicRadSlice; 
 
-    fSolidRadSlice = new G4Box("RadSlice",AbsorberRadius,
+  fSolidRadSlice = new G4Box("RadSlice",AbsorberRadius,
                                 AbsorberRadius,0.5*fRadThickness ) ;
 
-    fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
+  fLogicRadSlice = new G4LogicalVolume(fSolidRadSlice,fRadiatorMat,
                                           "RadSlice",0,0,0);
 
-    //   fPhysicRadSlice = new G4PVPlacement(0,
-    //      G4ThreeVector(0.,0.,fStartZ+1.2*fDetThickness),
-    //             "RadSlice",fLogicRadSlice,
-    //               physiWorld,false,0);
-    
-  for(i=0;i<fModuleNumber;i++)
-  {
-    //   rModule = fStartR + fDetThickness + fDetGap + 
-    //           (i-1)*(fFoilNumber*(fRadThickness + fGasGap) + 
-    //           fDetThickness + fDetGap) ;
-
-    zModule = fStartZ + fRadThickness + 
-              i*( fFoilNumber*(fRadThickness + fGasGap) + 
-              fDetThickness + fDetGap )  ;
-    G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
-    G4cout<<"i = "<<i<<"\t"<<G4endl ; 
+  zModule = fStartZ + fRadThickness ; 
+  G4cout<<"zModule = "<<zModule/mm<<" mm"<<G4endl ;
 
     for(j=0;j<fFoilNumber;j++)
     {  
-      //   rRadiator = rModule + j*(fRadThickness + fGasGap) ;
 
       zRadiator = zModule + j*(fRadThickness + fGasGap) ;
       G4cout<<zRadiator/mm<<" mm"<<"\t" ;
       //   G4cout<<"j = "<<j<<"\t" ;         
-      // RadRing
-
-            
-      // fSolidRadRing = new G4Box("RadRing",rRadiator,
-      //        rRadiator + fRadThickness,
-      //     fDetLength,0.0,360*deg     ) ;
-
-      //  fLogicRadRing = new G4LogicalVolume(fSolidRadRing,fRadiatorMat,
-      //                         "radRing",0,0,0);
-      
-      //  fPhysicRadRing = new G4PVPlacement(0,G4ThreeVector(),
-      //       "RadRing",fLogicRadRing,
-      //               physiWorld,false,j)  ; 
-                                                            
-      // We put slice relatively of Radiator, so zRadiator-zRad
       
       fPhysicRadSlice = new G4PVPlacement(0,G4ThreeVector(0.,0.,zRadiator-zRad),
                                          "RadSlice",fLogicRadSlice,
                                           physiRadiator,false,j);
      }                                 
-    //   fPhysicDetSlice = new G4PVPlacement(0,
-    //          G4ThreeVector(0.,0.,zRadiator+
-    //                        fDetGap +0.5*fDetThickness),"DetSlice",
-    //                        fLogicDetSlice,physiWorld,false,i); 
-  }                                            
   G4cout<<G4endl ;
 
   G4Box* solidElectrode = new G4Box("Electrode",AbsorberRadius,
@@ -666,14 +666,18 @@ void Em10DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
+
   for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
-     if(pttoMaterial->GetName() == materialChoice)
-        {AbsorberMaterial = pttoMaterial;
-         logicAbsorber->SetMaterial(pttoMaterial); 
+  { 
+    pttoMaterial = (*theMaterialTable)(J); 
+    
+    if(pttoMaterial->GetName() == materialChoice)
+    {
+      AbsorberMaterial = pttoMaterial;
+      logicAbsorber->SetMaterial(pttoMaterial); 
         // PrintCalorParameters();
-        }             
-   }
+    }             
+  }
 }
 ///////////////////////////////////////////////////////////////////////////
 //
@@ -694,11 +698,11 @@ void Em10DetectorConstruction::SetRadiatorMaterial(G4String materialChoice)
      
     if(pttoMaterial->GetName() == materialChoice)
     {
-      AbsorberMaterial = pttoMaterial;
-      logicRadiator->SetMaterial(pttoMaterial); 
+      fRadiatorMat = pttoMaterial;
+      fLogicRadSlice->SetMaterial(pttoMaterial); 
       // PrintCalorParameters();
     }             
-   }
+  }
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -712,14 +716,18 @@ void Em10DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 
   // search the material by its name   
   G4Material* pttoMaterial;
+
   for (G4int J=0 ; J<theMaterialTable->length() ; J++)
-   { pttoMaterial = (*theMaterialTable)(J);     
-     if(pttoMaterial->GetName() == materialChoice)
-        {WorldMaterial = pttoMaterial;
-         logicWorld->SetMaterial(pttoMaterial); 
+  { 
+    pttoMaterial = (*theMaterialTable)(J);
+     
+    if(pttoMaterial->GetName() == materialChoice)
+    {
+      WorldMaterial = pttoMaterial;
+      logicWorld->SetMaterial(pttoMaterial); 
        //  PrintCalorParameters();
-        }             
-   }
+    }             
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////
