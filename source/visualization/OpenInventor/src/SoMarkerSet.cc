@@ -10,7 +10,7 @@
 #include <Inventor/elements/SoLazyElement.h>
 
 #include <HEPVis/SbGL.h>
-//#include <HEPVis/actions/SoGL2PSAction.h>
+#include <HEPVis/actions/SoGL2PSAction.h>
 
 static void drawMarker(SoAction*,int);
 static GLubyte* getBitmap(int,int,char []); 
@@ -671,10 +671,9 @@ void drawMarker(
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
-
   GLsizei w = 0,h = 0;
   GLfloat xorig = 0,yorig = 0;
-  //GLfloat xmove = 0,ymove = 0;
+  GLfloat xmove = 0,ymove = 0;
 
   if((aStyle>=0)&&(aStyle<18)) {
     w = h = 5;
@@ -698,9 +697,9 @@ void drawMarker(
     return;
   }
 
-  //if(aAction->isOfType(SoGL2PSAction::getClassTypeId())) {
-    //((SoGL2PSAction*)aAction)->addBitmap(w,h,xorig,yorig,xmove,ymove);
-  //}
+  if(aAction->isOfType(SoGL2PSAction::getClassTypeId())) {
+    ((SoGL2PSAction*)aAction)->addBitmap(w,h,xorig,yorig,xmove,ymove);
+  }
 
 }
 //////////////////////////////////////////////////////////////////////////////

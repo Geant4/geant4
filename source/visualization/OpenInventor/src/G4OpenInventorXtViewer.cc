@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.4 2004-11-09 07:58:09 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.5 2004-11-09 09:16:47 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -30,7 +30,9 @@
  *	Mods for SoXtHepViewer
  * gb : on Win32 use an SoXtExaminerViewer.
  * gb 05 April 2004 : revisit to separate Windows things.
- * gb 06 November 2004 : restore the escape button.
+ * gb 09 November 2004 : restore the escape button.
+ * gb 09 November 2004 : have a menu bar in the viewer shell.
+ * gb 09 November 2004 : have gl2ps file production.
  */
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
@@ -41,13 +43,21 @@
 
 #include <Inventor/Xt/SoXt.h>
 #include <Inventor/Xt/viewers/SoXtExaminerViewer.h>
+
 #include <X11/StringDefs.h>
 #include <X11/Shell.h>
+
+#include <Xm/Xm.h>
 #include <Xm/PushB.h>
+#include <Xm/Form.h>
+#include <Xm/CascadeB.h>
+#include <Xm/RowColumn.h>
 
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
+
+#include "HEPVis/actions/SoGL2PSAction.h"
 
 //
 // Global variables 
@@ -69,11 +79,6 @@ void G4OpenInventorXtViewer::FinishView () {
 //    if (fShell!=0) XtRealizeWidget(fShell);
 //  }
 //}
-
-static void escapeButtonCbk(Widget,XtPointer aData,XtPointer) {
- G4VInteractorManager* interactorManager = (G4VInteractorManager*)aData;
- interactorManager->RequireExitSecondaryLoop (OIV_EXIT_CODE);
-}
 
 void G4OpenInventorXtViewer::KernelVisitDecision () {
   
@@ -146,9 +151,8 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
   //AddSecondaryLoopPostAction((G4SecondaryLoopAction)SecondaryLoopPostAction);
 
   G4cout << "Window name: " << fName << G4endl;
-  // 
+
   // Selection
-  //
   fSelection = new SoSelection;
   fSelection->policy = SoSelection::SINGLE;
   fSelection->ref();
@@ -162,7 +166,7 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
     //Create a shell window :
     G4String shellName = wName;
     shellName += "_shell"; 
-    Arg args[3];
+    Arg args[10];
     char s[32];
     sprintf(s,"%dx%d",SIZE,SIZE);
     XtSetArg(args[0],XtNgeometry,XtNewString(s));
@@ -172,28 +176,47 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer
 	  		       topLevelShellWidgetClass,
 			       SoXt::getDisplay(),
 			       args,3); 
-    parent = fShell;
+
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNbottomAttachment,XmATTACH_FORM);
+    Widget form = XmCreateForm (fShell,(char*)"form",args,4);
+    XtManageChild (form);
+
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_FORM);
+    XtSetArg(args[1],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[2],XmNrightAttachment ,XmATTACH_FORM);
+    Widget menuBar = XmCreateMenuBar (form,(char*)"menuBar",args,3);
+    XtManageChild(menuBar);
+
+    Widget menu = AddMenu(menuBar,"File","File");
+    AddButton(menu,"PostScript",PostScriptButtonCbk);
+    AddButton(menu,"Escape",EscapeButtonCbk);
+
+    fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
+    
+    XtSetArg(args[0],XmNtopAttachment   ,XmATTACH_WIDGET);
+    XtSetArg(args[1],XmNtopWidget       ,menuBar);
+    XtSetArg(args[2],XmNleftAttachment  ,XmATTACH_FORM);
+    XtSetArg(args[3],XmNrightAttachment ,XmATTACH_FORM);
+    XtSetArg(args[4],XmNbottomAttachment,XmATTACH_FORM);
+    XtSetValues(fViewer->getWidget(),args,5);
+
     fInteractorManager->AddShell(fShell);
+
   } else {
     char* str = fInteractorManager->GetCreationString();
     if(str!=0) wName = str;
+    fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
   }
-  //
-  // Create and Customize the Viewer
-  //
-  fViewer = new SoXtExaminerViewer(parent,wName.c_str(),TRUE);
-  Widget buttonsParent = fViewer->getAppPushButtonParent();
-  if(buttonsParent) {
-    Widget escapeButton = XtCreateManagedWidget
-      ("Esc",xmPushButtonWidgetClass,buttonsParent,NULL,0);
-    XtAddCallback(escapeButton,XmNactivateCallback,
-                  escapeButtonCbk,(XtPointer)fInteractorManager);
-    fViewer->addAppPushButton(escapeButton);
-  } else {
-    G4cout << "WARNING :"
-           << " no app buttons parent on your Inventor implementation viewer !"
-           << G4endl;
-  }
+
+  // Have a GL2PS render action :
+  const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
+  SoGL2PSAction* action = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(action);
+
+  // Else :
   fViewer->setSize(SbVec2s(SIZE,SIZE));
   fViewer->setSceneGraph(fSelection);
   fViewer->viewAll();
@@ -235,5 +258,58 @@ void G4OpenInventorXtViewer::DrawView () {
 void G4OpenInventorXtViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
+
+void G4OpenInventorXtViewer::WritePostScript(const G4String& aFile) {
+  if(!fViewer) return;
+  SoGL2PSAction* action = (SoGL2PSAction*)fViewer->getGLRenderAction();
+  action->setFileName(aFile.c_str());
+  action->enableFileWriting();
+  fViewer->render();
+  action->disableFileWriting();
+  fViewer->render();
+}
+
+void G4OpenInventorXtViewer::EscapeButtonCbk(
+ Widget,XtPointer aData,XtPointer) {
+ G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+ This->fInteractorManager->RequireExitSecondaryLoop (OIV_EXIT_CODE);
+}
+
+void G4OpenInventorXtViewer::PostScriptButtonCbk(
+ Widget,XtPointer aData,XtPointer) {
+ G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+ This->WritePostScript();
+}
+
+Widget G4OpenInventorXtViewer::AddMenu(
+ Widget aMenuBar
+,const G4String& aName
+,const G4String& aLabel
+)
+{
+  // Pulldown menu :
+  Widget menu = XmCreatePulldownMenu(aMenuBar,(char*)aName.c_str(),NULL,0);
+  // Cascade button :
+  Arg args[2];
+  XmString cps = 
+    XmStringLtoRCreate((char*)aLabel.c_str(),XmSTRING_DEFAULT_CHARSET);
+  XtSetArg (args[0],XmNlabelString,cps);
+  XtSetArg (args[1],XmNsubMenuId,menu);
+  Widget widget = XmCreateCascadeButton(aMenuBar,(char*)aName.c_str(),args,2);
+  XmStringFree (cps);
+  XtManageChild(widget);
+  return menu;
+}
+void G4OpenInventorXtViewer::AddButton (
+ Widget aMenu
+,const G4String& aLabel
+,XtCallbackProc aCallback
+)
+{
+  Widget widget = XmCreatePushButton(aMenu,(char*)aLabel.c_str(),NULL,0);
+  XtManageChild(widget);
+  XtAddCallback(widget,XmNactivateCallback,aCallback,(XtPointer)this);
+}
+
 
 #endif

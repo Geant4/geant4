@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.1 2004-04-08 09:37:30 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.2 2004-11-09 09:14:29 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,13 @@ private:
   void SetView();
   void KernelVisitDecision();
   G4bool CompareForKernelVisit(G4ViewParameters&);
+  void WritePostScript(const G4String& file = "g4out.ps");
+  Widget AddMenu(Widget,const G4String&,const G4String&);
+  void AddButton(Widget,const G4String&,XtCallbackProc);
+private:
+  static void PostScriptButtonCbk(Widget,XtPointer,XtPointer);
+  static void EscapeButtonCbk(Widget,XtPointer,XtPointer);
+private:
   G4OpenInventorSceneHandler& fG4OpenInventorSceneHandler;
   G4ViewParameters fLastVP;  // Memory for making kernel visit decisions.
   Widget fShell;
