@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.15 1999-05-07 00:58:22 gcosmo Exp $
+# $Id: binmake.gmk,v 1.16 1999-05-26 02:19:22 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -152,8 +152,8 @@ else
 	if [ \( -f $(G4BINDIR)/liblist \
 	  -a -f $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map \) ]; then \
 	$(G4BINDIR)/liblist \
-	  -d $(G4TMPDIR) \
-	  <$(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map; fi)
+	  -d $(G4WORKDIR)/tmp/$(G4SYSTEM) \
+	  < $(G4WORKDIR)/tmp/$(G4SYSTEM)/libname.map; fi)
 # Extra libraries to resolve remaining circular dependencies...
 #  LDLIBS2 += 
 endif
