@@ -43,6 +43,7 @@
 // 24-01-03 Temporarily close a control on usage of couples (V.Ivanchenko)
 // 24-01-03 Make models region aware (V.Ivanchenko)
 // 05-02-03 Fix compilation warnings (V.Ivanchenko)
+// 06-02-03 Add control on tmax in PostStepDoIt (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -747,6 +748,7 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   G4VEmModel* currentModel = SelectModel(finalT);
   G4double tcut = (*theCuts)[currentMaterialIndex];
   const G4DynamicParticle* dynParticle = track.GetDynamicParticle();
+  G4double tmax = currentModel->MaxSecondaryEnergy(dynParticle);
 
   /*
   if(0 < verboseLevel) {
@@ -758,7 +760,8 @@ G4VParticleChange* G4VEnergyLossSTD::PostStepDoIt(const G4Track& track,
   }
   */
 
-  SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
+  if (tcut < tmax)
+    SecondariesPostStep(currentModel,currentCouple,dynParticle,tcut,finalT);
 
   if (finalT < minKinEnergy) {
     aParticleChange.SetLocalEnergyDeposit(finalT);
