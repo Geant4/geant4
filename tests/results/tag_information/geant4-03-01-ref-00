@@ -1,0 +1,21 @@
+                      geant4-03-01-ref-00
+                      ===================
+
+geant4-03-01-ref-00 is the reference tag of 6th Apr 2001.
+
+geant4-03-01-ref-00 comprises geant4-03-00-ref-04
+
+and new tags:
+
+global							global-V03-00-11 
+materials						materials-V03-00-07 
+visualization						vis-V03-00-09 
+geometry/magneticfield					field-V03-00-05 
+geometry/volumes					geomvol-V03-00-03 
+geometry/solids/specific				geom-solids-specific-V03-00-01 
+processes/transportation				transport-V03-00-01 
+processes/parameterisation				param-V03-00-00 
+processes/electromagnetic/standard			stand-V03-00-05 
+processes/electromagnetic/utils				utils-V03-00-06
+processes/electromagnetic/muons				muons-V03-00-05 
+processes/hadronic/models/generator/de_excitation	de_excitation-V03-00-01
