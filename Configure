@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.30 2002-12-10 13:36:37 stesting Exp $
+# $Id: Configure,v 1.31 2002-12-13 15:46:47 stesting Exp $
 #
-# Generated on Tue Dec 10 14:32:23 CET 2002 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 13 16:43:52 CET 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -219,7 +219,6 @@ g4vis_use_openglxm=''
 g4vis_use_raytracer=''
 g4vis_use_vrml=''
 g4vis_use_vrmlfile=''
-g4use_hepodbms=''
 g4wanalysis_build=''
 g4wanalysis_build_jas=''
 g4wanalysis_build_lab=''
@@ -451,7 +450,11 @@ while test $# -gt 0; do
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
 	-install) shift; install=yes;;
-	-libs) shift; g4liblist=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
+	-cppflags) shift; g4cppflags=yes;;
+	-cxxflags) shift; g4cxxflags=yes;;
+	-incflags) shift; g4incflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -511,7 +514,11 @@ Usage: $me [-dehrsEKOSV] [-install] [-libs] [-f config.sh] [-D symbol] [-D symbo
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
   -install : start configuration AND installation of Geant4 libraries. 
-  -libs : retrieve the list of libraries to link
+  -ldlibs : retrieve the list of libraries to link
+  -ldflags : retrieve the list of directories where libraries are placed
+  -cxxflags : retrieve the list of cxxflags
+  -cppflags : retrieve the list of cppflags
+  -incflags : retrieve the list of incflags
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
@@ -768,8 +775,8 @@ case "$rsrc" in
 	;;
 ../../.) ;;
 *)
-	echo " "
-	echo "Sources for $package found in $src" >&4
+#	echo " "
+#	echo "Sources for $package found in $src" >&4
 	;;
 esac
 
@@ -1794,7 +1801,70 @@ if [ X$install = X ] ; then
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
-	if [ X$g4liblist = Xyes ] ; then
+	# create not_display flag
+
+if [ X$g4ldlibs != X -o X$g4ldflags != X -o X$g4cxxflags != X -o X$g4cppflags != X -o X$g4incflags != X ] ; then
+	g4non_display=yes
+#	echo g4non_display=$g4non_display
+fi
+
+	if [ X$g4cppflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	CPPFLAGS=`grep 'CPPFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo CPPFLAGS=$CPPFLAGS
+	echo $CPPFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of cppflags
+
+	if [ X$g4cxxflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	CXXFLAGS=`grep 'CXXFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo CXXFLAGS=$CXXFLAGS
+	echo $CXXFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of cxxflags
+
+	if [ X$g4incflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	INCFLAGS=`grep 'INCFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo INCFLAGS=$INCFLAGS
+	echo $INCFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of incflags
+
+	if [ X$g4ldflags = Xyes ] ; then
+
+	. $src/.config/bin/$g4system/env.sh
+
+	LDFLAGS=`grep 'LDFLAGS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+#	echo LDFLAGS=$LDFLAGS
+	echo $LDFLAGS
+	
+	$rm -rf .config/UU
+	exit 1
+
+	fi #end of ldflags
+
+	if [ X$g4ldlibs = Xyes ] ; then
 
 #	cat >&2 <<EOM
 #---------------------------------------------------
@@ -1803,11 +1873,55 @@ if [ X$install = X ] ; then
 #EOM
 	
 	. $src/.config/bin/$g4system/env.sh
-	$G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+
+#	echo TEST
+
+#	ls -l $G4INSTALL/config/scripts/GNUmakefile
+#	ls -l $G4LIB/$G4SYSTEM/GNUmakefile.db
+
+#	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+#	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
+
+#	echo LDLIBS_2=$LDLIBS_2
+#	echo $LDLIBS_2
+
+	if [ X$G4LIB_USE_GRANULAR = X ] ; then
+	
+# Global libs
+
+	LDLIBS_1=`grep 'LDLIBS_FINAL :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS_2=`echo $LDLIBS_1 | awk -F -lMarker '{print $2}'`
+
+	echo "$LDLIBS_2 $c"
+
+#	echo "-L$G4WORKDIR/lib/$G4SYSTEM -lG4persistency -lG4readout -lG4run -lG4event -lG4tracking -lG4parmodels -lG4processes -lG4digits+hits -lG4track -lG4particles -lG4geometry -lG4materials -lG4graphics_reps -lG4intercoms -lG4global $c"
+
 	$rm -rf .config/UU
 	exit 1
 
-	else
+	else 
+
+# Granular libs
+
+#	echo $n "-L$G4WORKDIR/lib/$G4SYSTEM $c" ; $G4WORKDIR/lib/$G4SYSTEM/liblist -m $G4WORKDIR/lib/$G4SYSTEM < $G4WORKDIR/lib/$G4SYSTEM/libname.map
+
+#	echo G4LIB=$G4LIB/$G4SYSTEM
+
+	LIBLIST_LIST=`$G4LIB/$G4SYSTEM/liblist -m $G4LIB/$G4SYSTEM < $G4LIB/$G4SYSTEM/libname.map`
+
+	LDLIBS3=`grep 'LDLIBS3 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+	LDLIBS4=`grep 'LDLIBS4 :=' $G4LIB/$G4SYSTEM/GNUmakefile.db | awk -F := '{print $2}'`
+
+	LDLIBS=$LIBLIST_LIST $LDLIBS3 $LDLIBS4	
+
+	echo $LDLIBS	
+	
+	$rm -rf .config/UU
+
+	exit 1
+	fi #end of check for global/granular
+
+	else #if not -lib but user mode
 
 # header for User
 echo " "
@@ -1849,8 +1963,8 @@ cp -i $src/.config/bin/$g4system/env.csh .
 cp -i $src/.config/bin/$g4system/env.sh  .
 
 	exit 1
-	fi
-else
+	fi #end of -lib or user
+else #there is no env.sh
 
 # header for Installer
 echo " "
@@ -1870,8 +1984,9 @@ echo " "
 	echo " "
 	$rm -rf .config/UU
 	exit 1
-	fi
-fi
+ fi #end of check for existence of env.sh 
+fi #end of check for "not -install"
+
 cd .config/UU
 
 case "$knowitall" in
@@ -2421,7 +2536,7 @@ esac
 
 case "$g4neutronhpcrosssections" in
 '')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.5
+	g4neutronhpcrosssections=$g4install/../G4NDL3.7
 	;;
 esac
 
@@ -2478,7 +2593,7 @@ gans=$ans
 	4) 
 		dflt=$g4neutronhpcrosssections
 		fn='f~'
-		rp="Where is G4NDL3.5 installed?"
+		rp="Where is G4NDL3.7 installed?"
 		. ./getfile
 		g4neutronhpcrosssections=$ans
 		;;
@@ -2655,7 +2770,7 @@ echo " "
 # Will be set (if needed) in GNUmakefile!
 case "$g4lib_use_granular" in
 '')
-	g4lib_use_granular=n
+	g4lib_use_granular=y
 	;;
 esac
 
@@ -2681,7 +2796,7 @@ gans=$ans
 	n*|N*) 
 		g4global=n
 		g4granular=y
-		g4lib_use_granular=n
+		g4lib_use_granular=y
 		break
 		;;
 	y*|Y*) 
@@ -2764,6 +2879,7 @@ gans=$ans
 	case $gans in
 	
 	n*|N*) 
+		g4lib_use_granular=n
 		break
 		;;
 	y*|Y*) 
@@ -3992,42 +4108,6 @@ g4vis_oglhome=$ans
 
 fi
 echo " "
-case "$g4use_hepodbms" in
-'')
-	g4use_hepodbms=n
-	;;
-esac
-
-g4message=`cat << EOM
-
-G4USE_HEPODBMS
-In Geant4, object persistency is provided as an optional category, so
-that the users could be able to run Geant4 with or without a commercial 
-ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
-objects is explained in documentation.
-
-For setting this you should have an ODMG compliant database
-(e.g. Objectivity/DB) installed and running on your system!
-EOM`
-
-dflt=$g4use_hepodbms
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4use_hepodbms=n
-		;;
-	y*|Y*) 
-		g4use_hepodbms=y
-		;;
-	esac
-
-
-
-echo " "
 case "$g4wlib_build_g3tog4" in
 '')
 	g4wlib_build_g3tog4=n
@@ -4044,7 +4124,6 @@ echo ""
 
 g4message=`cat << EOM
 
-  G4LIB_BUILD_G3TOG4
   G4USE_G3TOG4  
 
 If this variable is set, it will be built G3TOG4 module.
@@ -4222,7 +4301,6 @@ g4ui_use_win32='$g4ui_use_win32'
 g4ui_use_wo='$g4ui_use_wo'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
-g4use_hepodbms='$g4use_hepodbms'
 g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
 g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
 g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
