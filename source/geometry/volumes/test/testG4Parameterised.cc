@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Parameterised.cc,v 1.6 2003-11-02 16:06:33 gcosmo Exp $
+// $Id: testG4Parameterised.cc,v 1.7 2003-12-01 16:19:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,8 +37,6 @@
 
 // Global defs
 #include "globals.hh"
-
-#include "G4Navigator.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
@@ -170,7 +168,7 @@ G4VPhysicalVolume* BuildGeometry()
 //
 G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     myNav.SetWorldVolume(pTopNode);
 
@@ -184,14 +182,15 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,-5,-5),0,false);
     assert(located->GetName()=="Rotating Blocks");
     assert(located->GetCopyNo()== 0);
-    // assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),G4ThreeVector(0,-5,-5)));
-    // G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),G4ThreeVector(0,-5,-5)));
+    G4cout << " Local coords = " << myNav.CurrentLocalCoordinate() << G4endl;
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,100,5));
     assert(located->GetName()=="Rotating Blocks");
     assert(located->GetCopyNo()== 1);
-    // assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-    //                    G4ThreeVector(0,0,10)));
+    G4cout << " Local coords = " << myNav.CurrentLocalCoordinate() << G4endl;
+//    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+//                       G4ThreeVector(0,0,10)));
     
 // Check that outside point causes stack to unwind
     assert(!myNav.LocateGlobalPointAndSetup(G4ThreeVector(kInfinity,0,0)));
@@ -228,7 +227,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 //
 G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     G4double Step,physStep,safety;
     G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);

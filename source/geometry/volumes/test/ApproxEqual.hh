@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ApproxEqual.hh,v 1.4 2001-07-11 10:00:34 gunter Exp $
+// $Id: ApproxEqual.hh,v 1.5 2003-12-01 16:19:10 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -38,8 +38,32 @@
 
 #include "G4ThreeVector.hh"
 #include "G4AffineTransform.hh"
+#include "G4Navigator.hh"
 
 const G4double kApproxEqualTolerance = 1E-9;
+
+// Derived navigator class
+
+class MyNavigator : public G4Navigator
+{
+  public:
+  
+    MyNavigator() : G4Navigator() {}
+    ~MyNavigator(){}
+
+    G4ThreeVector CurrentLocalCoordinate() const
+    {
+      return GetCurrentLocalCoordinate();
+    }
+    G4ThreeVector GetNetTranslation() const
+    {
+      return NetTranslation();
+    }
+    G4RotationMatrix GetNetRotation() const
+    {
+      return NetRotation();
+    }
+};
 
 // Return true if the double check is approximately equal to target
 //
@@ -72,12 +96,3 @@ G4bool ApproxEqual(const G4AffineTransform &tf1,
 }
 
 #endif
-
-
-
-
-
-
-
-
-

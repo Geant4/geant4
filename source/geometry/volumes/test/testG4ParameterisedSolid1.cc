@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4ParameterisedSolid1.cc,v 1.9 2003-11-10 15:45:38 gcosmo Exp $
+// $Id: testG4ParameterisedSolid1.cc,v 1.10 2003-12-01 16:19:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,6 @@
 
 // Global defs
 #include "globals.hh"
-
-#include "G4Navigator.hh"
 
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
@@ -221,7 +219,7 @@ G4VPhysicalVolume* BuildGeometry()
 //
 G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     myNav.SetWorldVolume(pTopNode);
 
@@ -235,14 +233,14 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(0,-5,-5),0,false);
     assert(located->GetName()=="Rotating Block Or Sphere");
     assert(located->GetCopyNo()== 0);
-//  assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),G4ThreeVector(0,-5,-5)));
-//  G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),G4ThreeVector(0,-5,-5)));
+    G4cout << " Local coords = " << myNav.CurrentLocalCoordinate() << G4endl;
 
     located=myNav.LocateGlobalPointAndSetup(G4ThreeVector(100,0,5));
     assert(located->GetName()=="Rotating Block Or Sphere");
     assert(located->GetCopyNo()== 1);
-//  assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),
-//                     G4ThreeVector(0. ,0., 5)));
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),
+                       G4ThreeVector(0. ,0., 5)));
     
     // Check that the rotation is correct
     //
@@ -253,11 +251,11 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 //  G4cout << " Local coords = " << myNav.GetCurrentLocalCoordinate() << G4endl;
     G4ThreeVector ExpectedPosition(5*cos(angle1),-5.*sin(angle1),0.);
     G4cout << " Expected     = " << ExpectedPosition << G4endl;
-//  assert(ApproxEqual(myNav.GetCurrentLocalCoordinate(),ExpectedPosition ));
-//  if(!ApproxEqual(myNav.GetCurrentLocalCoordinate(),ExpectedPosition ))
-//     {
-//        G4cout << " Error: The coordinates do not match " << G4endl;
-//     }
+    assert(ApproxEqual(myNav.CurrentLocalCoordinate(),ExpectedPosition ));
+    if(!ApproxEqual(myNav.CurrentLocalCoordinate(),ExpectedPosition ))
+       {
+          G4cout << " Error: The coordinates do not match " << G4endl;
+       }
 #endif 
     
 // Check that outside point causes stack to unwind
@@ -334,7 +332,7 @@ G4bool testG4Navigator1(G4VPhysicalVolume *pTopNode)
 //
 G4bool testG4Navigator2(G4VPhysicalVolume *pTopNode)
 {
-    G4Navigator myNav;
+    MyNavigator myNav;
     G4VPhysicalVolume *located;
     G4double Step,physStep,safety;
     G4ThreeVector xHat(1,0,0),yHat(0,1,0),zHat(0,0,1);
