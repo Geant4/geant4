@@ -1,6 +1,6 @@
 dxplus02 dev_stl deb	geant4-00-cand-09g+	all all all all 1
 dxplus05 dev_stl opt	geant4-00-cand-09g+	all all all all 1
-hpplus02 dev_stl deb	geant4-00-cand-09g+	all all all all 1
+# hpplus02 dev_stl deb	geant4-00-cand-09g+	all all all all 1
 hpplus05 dev_stl opt	geant4-00-cand-09g+	all all all all 1
 rsplus06 dev_stl deb	geant4-00-cand-09g+	all all all all 1
 rsplus04 dev_stl opt	geant4-00-cand-09g+	all all all all 1
