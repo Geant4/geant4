@@ -381,6 +381,13 @@ int main(int argc,char** argv)
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
     positron->SetCuts(cutE);
+
+    G4cout << "Gamma cut in energy(keV) = " 
+           << gamma->GetEnergyThreshold(material)/keV
+           << G4endl; 
+    G4cout << "Electron cut in energy(keV) = " 
+           << electron->GetEnergyThreshold(material)/keV
+           << G4endl; 
   
     // Processes 
 
