@@ -155,6 +155,11 @@ protected:
                                          G4double previousStepSize,
                                          G4ForceCondition* condition);
 
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
+                                                G4double previousStepSize,
+                                                G4double currentMinimumStep,
+                                                G4double& currentSafety);
+
   virtual G4double MaxSecondaryEnergy(const G4DynamicParticle* dynParticle);
 
 private:
@@ -222,6 +227,7 @@ private:
   G4double                     chargeCorrection;
   G4double                     chargeLowLimit;
   G4double                     energyLowLimit;
+  G4double                     paramStepLimit;
 
   size_t                       fluobins;
   G4bool                       theBarkas;

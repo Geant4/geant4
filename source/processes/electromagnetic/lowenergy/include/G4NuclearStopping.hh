@@ -126,6 +126,7 @@ private:
   G4hNuclearStoppingModel*    model;
   G4bool                      fluctuations;
   G4bool                      initialised;
+  G4bool                      factorsAreActive;
 
   std::map<const G4Material*,double,std::less<const G4Material*> > factors;
 
@@ -140,7 +141,7 @@ inline G4bool G4NuclearStopping::IsApplicable(
                                 const G4ParticleDefinition& particle)
 {
   return(particle.GetPDGCharge() != 0.0
-      && particle.GetPDGMass() > proton_mass_c2*0.1);
+      && particle.GetPDGMass() > proton_mass_c2*0.9);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -161,8 +162,8 @@ inline G4double G4NuclearStopping::StoppingPower(const G4Track& aTrack)
   G4double dedx = 0.0;
   G4double e = aTrack.GetKineticEnergy();
   if(e < lowEnergy) e = lowEnergy;
-  if(e < highEnergy) dedx = model->TheValue(aTrack.GetDefinition(),
-                                            aTrack.GetMaterial(), e);
+  if(e < highEnergy)
+     dedx = model->TheValue(aTrack.GetDefinition(),aTrack.GetMaterial(),e);
   return dedx;
 }
 
