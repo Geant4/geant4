@@ -1,0 +1,87 @@
+
+                       geant4-04-01-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Introduced new G4Exception scheme based on severity level.
+  o Re-implemented EventAborted() method to ensure its correct behavior
+    during stepping.
+  o Bug fixes in low-energy processes for calculation of restricted energy
+    loss of electrons, and memory leak in G4AtomicTransition.
+  o Bug fix in G4MultipleScattering for lateral displacement.
+  o Removed obsolete constructors with chemical formula in G4Material.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config                                  config-V04-01-01
+------
+- binmake.gmk: added include path to persistency/run/include which was 
+  missing. Removed unnecessary processes/general/include. 
+- liblist.c: added protection and warning for file/directory not found 
+  in parsedir. Also small cosmetic improvements. 
+
+event                                   event-V04-01-02
+-----
+- G4Event: introduced 'EventAborted' flag.
+- Change the default value of charge for G4PrimaryParticle.
+
+geometry/volumes                        geomvol-V04-01-04
+----------------
+- Formatting cleanup in source implementation files.
+  No functional changes.
+
+global                                  global-V04-01-01
+------
+- Introduced new G4Exception scheme based on severity level.
+  o Added : G4ExceptionSeverity.hh
+  o Modified : G4VStateDependent[.hh.cc], G4Exception.cc,
+               G4StateManager.hh and globals.hh
+
+materials				materials-V04-01-00
+---------
+- G4Material: removed constructors with chemical formula.
+
+processes/electromagnetic/lowenergy     emlowen-V04-01-03
+-----------------------------------
+- Fix in calculation of restricted energy loss of e-.
+- Fixed memory leak problem in G4AtomicTransition.
+
+processes/electromagnetic/standard	stand-V04-01-00
+----------------------------------
+- GammaConversionToMuons: corrected syntax of OR conditions in DoIt().
+
+processes/electromagnetic/utils		utils-V04-01-01
+-------------------------------
+- G4VEnergyLoss: fix for gaussian fluctuations sampling at very low energy.
+- G4MultipleScattering: bug fix in PostStepDoIt() for lateral displacement.
+
+run					run-V04-01-03
+---
+- G4RunManager, G4RunMessenger:
+  o Introduced "soft abortion", to allow event loop to abort after
+    processing the current event. G4RunManager sets "eventAbortion"
+    flag of G4Event if that particular event is aborted.
+  o Introduced AbortEvent() method and corresponding UI command.
+- Introduced new G4Exception scheme:
+  o Added : G4ExceptionHandler[.hh.cc].
+  o Modified : G4RunManager[.hh.cc].
+- G4RunManager: introduced ResetNavigator() method needed in cases
+  where a geometry has been modified between runs in order to properly
+  re-initialize navigator's state.
+
+tracking				tracking-V04-01-01
+--------
+- G4TrackingManager.hh, G4TrackingManager.cc
+  o Re-implemented EventAborted() method to ensure this command
+    works properly during stepping phase.
+  o Set fpTrajectory pointer to zero when the trajectory is deleted.
+
+examples
+--------
+- extended/electromagnetic/TesEm5:
+  o Fixed RunAction: BookHisto() only at first run.
+- extended/gdml:
+  o Fixed warnings on SUN and SUN linker problem. 
