@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.17 2002-01-29 01:25:29 perl Exp $
+// $Id: test19.cc,v 1.18 2002-04-22 14:20:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 #include <stdlib.h>
 
 #include "globals.hh"
+//#include "SharedSolidDetectorConstruction.hh"
 #include "test19DetectorConstruction.hh"
 #include "MyPhysicsList.hh"
 #include "MyRunAction.hh"
@@ -109,6 +110,7 @@ int main (int argc, char** argv) {
 
   // User initialization classes
   runManager -> SetUserInitialization (new test19DetectorConstruction);
+  //runManager -> SetUserInitialization (new SharedSolidDetectorConstruction);
   runManager -> SetUserInitialization (new MyPhysicsList);
 
   // UserAction classes.
