@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2004-05-04 09:31:27 vnivanch Exp $
+$Id: History,v 1.40 2004-05-24 07:22:48 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+24-05-04 V.Ivanchenko (testem2-V06-01-02)
+- make UI command for acceptance to activate acceptance printout
+- no acceptance printout by default
 
 04-05-04 V.Ivanchenko (testem2-V06-01-01)
 - update PhysicsList - use conception of builders per package

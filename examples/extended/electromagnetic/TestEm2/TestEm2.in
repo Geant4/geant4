@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.12 2004-05-21 18:21:47 vnivanch Exp $
+# $Id: TestEm2.in,v 1.13 2004-05-24 07:22:49 vnivanch Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -15,6 +15,7 @@
 /testem/det/setLbin 9 1.11
 /testem/det/setRbin 6 0.111
 #
+# Acceptance printout is activated
 /testem/det/acceptance  0.9425 0.0355 3.0
 #
 /testem/phys/addPhysics  standard
