@@ -1,0 +1,107 @@
+macro run que=513-2-asd
+* Start the G4PhotoNuclearCrossSectionTest (Is geant4/bin in the PATH? Did you rehash?)
+  shell G4PhotoNuclearCrossSectionTest
+  pi/del *
+  zone 1 1
+*           TITLE  NAME NTH NEX XMIN XMAX YMIN YMAX XTXT YTXT
+  exec phot ^1!H   h1   227 326 150. 4.e7 0.03 0.60 8.e3 0.40
+  exec phot ^2!H   h2   227 310   2. 2.e4 0.04 4.00  40.   2.
+  exec phot ^12!C  c12  227 396  12. 1.e5 0.10 30.0  80.  10.
+  exec phot ^27!Al al27 227 303  10. 1.e4 0.30 90.0  80.  40.
+  exec phot Cu     cu   227 144   8. 2.e5 2.00 120. 100.  70.
+  exec phot Pb     pb   227 185   7. 1.e5 7.00 700. 100. 300.
+********
+*return
+*macro dummy que=513-2-asd
+********
+* pln=4 - portret, pln=5 - landscape
+  pln = 4
+* npx - subdivision of the screan in X direction, npy - in Y direction
+  npx=2
+  npy=3
+* define the range of the assembling pictures in memory
+  first=1
+  last=6
+* define the file name for the output
+  for/fil 99 photonuclear.ps
+* define the metafile type to assemble the pictures
+  meta -99 -[npx][npy][pln]
+  empty = 0
+* LOOP over pictures
+  i = [first] - 1
+loop:
+  i  = [i] + 1
+  if [i] > [last] goto print
+  mess '*** PhotoNucl.kumac is processing picture No: '//[i]
+  pi/pl [i]
+  empty = 1
+  goto loop
+* 
+print:
+  meta 0
+  for/clo 99
+  if [empty] = 1 then
+    mess '*** PhotoNucl.kumac is printing '//[fnam]//'.ps file on: '//[que]
+    shell xprint -h -P [que] photonuclear.ps
+  endif
+  if [empty] = 0 then
+     mess '%%% PhotoNucl.kumac error: Nothing to plot! %%%'
+  endif
+return
+
+macro phot targ=^12!C file=h1 nth=227 nex=326 xmin=1 _
+           xmax=4.e7 ymin=0.03 ymax=700 xt=8. yt=10.
+*
+  dir = ./
+  hi/del *
+  ve/del *
+  ve/cr de(999) R 999*0.
+  clr
+  ***opt zfl
+  swi gz
+  opt utit
+* Switch to high quality picture
+  gr/opt ndat
+  gr/set pass 5
+  igset  lwid 5.
+  gr/set bwid 5.
+  gr/set fwid 3.
+  gr/set hwid 3.
+  gr/set pwid 5.
+*
+  title 'E?[g]! (MeV)' u
+  title 'Nuclear photoabsorbtion cross section'
+  opt date
+  opt logx
+  opt logy
+  null [xmin] [xmax] [ymin] [ymax]
+* Switch to standard quality picture
+*  set pass 1
+*  igset lwid 1.
+*  set bwid 1.
+*  set fwid 1.
+*  set hwid 1.
+*
+  atitle ' ' '[s]?abs! (mb)'
+  title ' ' u
+  title ' '
+  set dmod 3
+  igset MTYP 20
+  SET TXFP -20
+  SET LTYP 1
+  ve/re eg,ex,er [file].dat
+  igset PMCI 1
+  igset PLCI 1
+  gra/hp/errors eg ex de er [nex] 20 .1 1
+  SET CHHE 1.
+  igset txci 1
+  itx [xt] [yt]  [targ]
+  ve/re e,ap [file].out
+  igset PLCI 1
+  igset LWID 4
+  gra/prim/graph [nth] e ap C 
+  igset LWID 1
+return
+
+
+
