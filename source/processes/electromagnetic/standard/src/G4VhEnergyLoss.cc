@@ -5,24 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.5 2000-06-13 16:49:58 maire Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.6 2000-06-22 13:25:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
 // -----------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4VhEnergyLoss physics process -----------
-//                by Laszlo Urban, 30 May 1997 
-//
-// **************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
-// It calculates the energy loss of charged hadrons.
-// **************************************************************
-//
 // 7/10/98: bug fixes + some cleanup , L.Urban 
 // 22/10/98 : cleanup , L.Urban
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
@@ -30,16 +17,18 @@
 // 01/03/99 : creation of sub-cutoff delta rays, L.Urban
 // 28/04/99 : bug fixed in DoIt , L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
-// --------------------------------------------------------------
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4VhEnergyLoss.hh"
-#include "G4EnergyLossMessenger.hh"
 #include "G4EnergyLossTables.hh"
 #include "G4Poisson.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
 
-// Initialisation of static members ******************************************
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int            G4VhEnergyLoss::NbOfProcesses    = 1 ;
 
 G4int            G4VhEnergyLoss::CounterOfProcess = 0 ;
@@ -97,28 +86,26 @@ G4double G4VhEnergyLoss::c2N       = 13.25e-21*keV*mm*mm   ;
 G4double G4VhEnergyLoss::c3N       = 0.500e-21*mm*mm       ;
 G4int    G4VhEnergyLoss::Ndeltamax = 100                   ;
 
-G4EnergyLossMessenger* G4VhEnergyLoss::hLossMessenger  = NULL;
-
-// constructor and destructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 G4VhEnergyLoss::G4VhEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
      theLossTable (NULL),
      MinKineticEnergy(1.*eV), 
      linLossLimit(0.05)
-{ 
- //create (only once) EnergyLoss messenger
- if(!hLossMessenger) hLossMessenger = new G4EnergyLossMessenger();
+{}
 
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VhEnergyLoss::~G4VhEnergyLoss() 
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
         delete theLossTable; theLossTable = NULL;
      }
-///     if(MinDeltaEnergy) delete MinDeltaEnergy;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 void G4VhEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
@@ -305,6 +292,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
     }
 
   }
+  
   // make the energy loss and the range table available
 
   G4EnergyLossTables::Register(&aParticleType,  
@@ -355,6 +343,7 @@ void G4VhEnergyLoss::BuildDEDXTable(
     }
 }
       
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
                                               G4Material *aMaterial)
@@ -407,6 +396,8 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
   return StepLimit ;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt( 
                               const G4Track& trackData,const G4Step& stepData) 
@@ -699,4 +690,4 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   return &aParticleChange ;
 }
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.hh,v 1.3 2000-06-07 17:00:49 maire Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.4 2000-06-22 13:26:03 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -56,8 +56,6 @@
 #include "G4Step.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
- 
-class G4EnergyLossMessenger;
  
 class G4VhEnergyLoss : public G4VEnergyLoss
  
@@ -202,8 +200,6 @@ class G4VhEnergyLoss : public G4VEnergyLoss
     static G4bool setMinDeltaCutInRange ;
 
     static G4double Charge ;
-
-    static G4EnergyLossMessenger* hLossMessenger;
 
   private:
 

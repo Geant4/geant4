@@ -5,21 +5,10 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.5 2000-06-13 16:49:57 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.6 2000-06-22 13:25:09 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
-// -----------------------------------------------------------
-//      GEANT 4 class implementation file 
-//
-//      For information related to this code contact:
-//      CERN, IT Division, ASD group
-//      History: based on object model of
-//      2nd December 1995, G.Cosmo
-//      ---------- G4VeEnergyLoss physics process -----------
-//                by Laszlo Urban, 20 March 1997 
-// **************************************************************
-// It is the first implementation of the NEW UNIFIED ENERGY LOSS PROCESS.
-// It calculates the energy loss of e+/e-.
+
 // --------------------------------------------------------------
 // 18/11/98  , L. Urban
 //  It is a modified version of G4VeEnergyLoss:
@@ -28,13 +17,12 @@
 // 28/04/99  bug fixed (unit independece now),L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // --------------------------------------------------------------
+
  
 #include "G4VeEnergyLoss.hh"
-#include "G4EnergyLossMessenger.hh"
 #include "G4Poisson.hh"
 #include "G4Navigator.hh"
 #include "G4TransportationManager.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -76,8 +64,6 @@ G4double G4VeEnergyLoss::UpperBoundEloss = 100.*TeV ;
 G4int    G4VeEnergyLoss::NbinEloss = 150 ;
 G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
-G4EnergyLossMessenger* G4VeEnergyLoss::eLossMessenger         = NULL;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
 // constructor and destructor
@@ -92,11 +78,7 @@ G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
      c1N(2.86e-23*MeV*mm*mm),
      c2N(c1N*MeV/10.),
      Ndeltamax(100)
-{
- //create (only once) EnergyLoss messenger 
- if(!eLossMessenger) eLossMessenger = new G4EnergyLossMessenger();
-
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -106,7 +88,6 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
        {
          theLossTable->clearAndDestroy();
          delete theLossTable; theLossTable = NULL;
-///         if(MinDeltaEnergy) delete MinDeltaEnergy;
        }
 }
 
