@@ -75,8 +75,8 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
                   Fe         224.07
                  BGO         186.87
                PbWO4         200.84
-            Tungsten         337.26
-                Lead         229.54
+            Tungsten         337.27
+                Lead         229.55
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -104,8 +104,8 @@ msc:   Tables of transport mean free paths.
                   Fe         224.07
                  BGO         186.87
                PbWO4         200.84
-            Tungsten         337.26
-                Lead         229.54
+            Tungsten         337.27
+                Lead         229.55
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -130,20 +130,20 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  1 mm            1 mm            1 mm            1 mm            1 mm 
+                            gamma              e-    
+Cut in range                  1 mm            1 mm 
 Cut in energy
-                Air         990 eV          990 eV         48.4 keV        83.2 keV         990 eV 
-              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV         990 eV 
-                lAr        6.18 keV         343 keV        3.24 MeV        8.32 MeV         990 eV 
-                 Al        6.89 keV         597 keV        5.02 MeV        13.1 MeV         990 eV 
-                 Fe        20.8 keV        1.28 MeV        8.52 MeV          22 MeV         990 eV 
-                BGO        77.7 keV        1.03 MeV        7.17 MeV        18.1 MeV         990 eV 
-              PbWO4        84.8 keV        1.13 MeV        7.63 MeV        19.2 MeV         990 eV 
-           Tungsten         105 keV        2.31 MeV        11.7 MeV        29.5 MeV         990 eV 
-               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV         990 eV 
+                Air         990 eV          990 eV 
+              Water         2.9 keV         347 keV
+                lAr        6.18 keV         343 keV
+                 Al        6.89 keV         597 keV
+                 Fe        20.8 keV        1.28 MeV
+                BGO        77.7 keV        1.03 MeV
+              PbWO4        84.8 keV        1.13 MeV
+           Tungsten         105 keV        2.31 MeV
+               Lead         101 keV        1.38 MeV
 ===================================================
-# $Id: TestEm2.out,v 1.8 2000-08-28 13:57:02 stesting Exp $
+# $Id: TestEm2.out,v 1.9 2000-11-24 10:50:41 stesting Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -194,10 +194,10 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
                  lAr         209.58
                   Al         349.52
                   Fe         697.65
-                 BGO         571.16
-               PbWO4         625.43
+                 BGO         571.17
+               PbWO4         625.41
             Tungsten         1205.1
-                Lead         750.49
+                Lead         750.46
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
@@ -223,10 +223,10 @@ msc:   Tables of transport mean free paths.
                  lAr         209.58
                   Al         349.52
                   Fe         697.65
-                 BGO         571.16
-               PbWO4         625.43
+                 BGO         571.17
+               PbWO4         625.41
             Tungsten         1205.1
-                Lead         750.49
+                Lead         750.46
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
@@ -251,18 +251,18 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                  5 mm            5 mm            5 mm            5 mm            5 mm 
+                            gamma              e-    
+Cut in range                  5 mm            5 mm 
 Cut in energy
-                Air         990 eV         3.24 keV         156 keV         326 keV         990 eV 
-              Water        5.78 keV        1.16 MeV        8.21 MeV          22 MeV         990 eV 
-                lAr        13.6 keV        1.16 MeV        8.01 MeV        20.9 MeV         990 eV 
-                 Al        14.6 keV        2.31 MeV        12.5 MeV        32.6 MeV         990 eV 
-                 Fe        46.4 keV        6.11 MeV        21.5 MeV        54.7 MeV         990 eV 
-                BGO         126 keV        4.72 MeV        18.1 MeV        45.7 MeV         990 eV 
-              PbWO4         137 keV        5.34 MeV        19.4 MeV        48.3 MeV         990 eV 
-           Tungsten         241 keV          13 MeV        30.7 MeV        75.3 MeV         990 eV 
-               Lead         204 keV        6.83 MeV          22 MeV          54 MeV         990 eV 
+                Air         990 eV         3.24 keV
+              Water        5.78 keV        1.16 MeV
+                lAr        13.6 keV        1.16 MeV
+                 Al        14.6 keV        2.31 MeV
+                 Fe        46.4 keV        6.11 MeV
+                BGO         126 keV        4.72 MeV
+              PbWO4         137 keV        5.34 MeV
+           Tungsten         241 keV          13 MeV
+               Lead         204 keV        6.83 MeV
 ===================================================
 #
 /run/verbose 2
@@ -293,20 +293,20 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=139.26s Real=149.91s Sys=10.55s
+  User=140.09s Real=152.81s Sys=11.26s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 1.11 radl:   15.34%       7.22%             0-> 1.11 radl:   15.34%     7.22% 
-    1.11-> 2.22 radl:   24.39%      10.63%             0-> 2.22 radl:   39.73%    14.25% 
-    2.22-> 3.33 radl:   21.31%       8.84%             0-> 3.33 radl:   61.04%    16.46% 
-    3.33-> 4.44 radl:   14.65%       7.32%             0-> 4.44 radl:   75.69%    15.53% 
-    4.44-> 5.55 radl:    8.02%       6.44%             0-> 5.55 radl:   83.71%    12.81% 
-    5.55-> 6.66 radl:    5.39%       5.96%             0-> 6.66 radl:   89.10%     9.10% 
-    6.66-> 7.77 radl:    2.64%       3.68%             0-> 7.77 radl:   91.74%     7.35% 
-    7.77-> 8.88 radl:    1.95%       3.26%             0-> 8.88 radl:   93.69%     5.34% 
-    8.88-> 9.99 radl:    1.06%       2.45%             0-> 9.99 radl:   94.75%     4.29% 
+    0.00-> 1.11 radl:   14.27%       5.32%             0-> 1.11 radl:   14.27%     5.32% 
+    1.11-> 2.22 radl:   25.49%      10.73%             0-> 2.22 radl:   39.76%    12.31% 
+    2.22-> 3.33 radl:   24.35%       9.19%             0-> 3.33 radl:   64.11%    14.46% 
+    3.33-> 4.44 radl:   14.08%       8.04%             0-> 4.44 radl:   78.19%    12.42% 
+    4.44-> 5.55 radl:    7.56%       5.98%             0-> 5.55 radl:   85.75%     9.56% 
+    5.55-> 6.66 radl:    4.56%       4.61%             0-> 6.66 radl:   90.31%     6.95% 
+    6.66-> 7.77 radl:    2.53%       3.85%             0-> 7.77 radl:   92.84%     4.92% 
+    7.77-> 8.88 radl:    1.36%       2.46%             0-> 8.88 radl:   94.20%     3.96% 
+    8.88-> 9.99 radl:    0.81%       2.04%             0-> 9.99 radl:   95.00%     3.23% 
 
 
 
@@ -314,21 +314,21 @@ Run Summary
 
         bin              Mean         rms                 bin            Mean      rms 
 
-    0.00-> 0.11 radl:   66.07%       9.65%             0-> 0.11 radl:   66.07%     9.65% 
-    0.11-> 0.22 radl:   16.33%       6.27%             0-> 0.22 radl:   82.40%     7.15% 
-    0.22-> 0.33 radl:    5.95%       3.16%             0-> 0.33 radl:   88.36%     5.59% 
-    0.33-> 0.44 radl:    3.21%       2.51%             0-> 0.44 radl:   91.57%     4.83% 
-    0.44-> 0.56 radl:    1.98%       2.02%             0-> 0.56 radl:   93.56%     4.51% 
-    0.56-> 0.67 radl:    1.19%       1.23%             0-> 0.67 radl:   94.75%     4.29% 
+    0.00-> 0.11 radl:   66.35%      10.09%             0-> 0.11 radl:   66.35%    10.09% 
+    0.11-> 0.22 radl:   16.35%       6.18%             0-> 0.22 radl:   82.70%     7.45% 
+    0.22-> 0.33 radl:    5.98%       3.96%             0-> 0.33 radl:   88.68%     5.74% 
+    0.33-> 0.44 radl:    3.19%       3.15%             0-> 0.44 radl:   91.87%     4.09% 
+    0.44-> 0.56 radl:    1.94%       2.23%             0-> 0.56 radl:   93.81%     3.33% 
+    0.56-> 0.67 radl:    1.19%       1.25%             0-> 0.67 radl:   95.00%     3.23% 
 
                               SUMMARY
-                         energy deposit :   94.75 % E0 +-    4.29 % E0
-                         charged traklen:   13.56 radl +-    0.63 radl
-                         neutral traklen:  198.16 radl +-   18.05 radl
+                         energy deposit :   95.00 % E0 +-    3.23 % E0
+                         charged traklen:   13.59 radl +-    0.48 radl
+                         neutral traklen:  200.27 radl +-   20.88 radl
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1072792655, 243967250
+ Current couple of seeds = 617458126, 1124214817
 ----------------------------------------
 
 
