@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.59 2001-06-19 15:12:58 morita Exp $
+# $Id: binmake.gmk,v 1.60 2001-06-21 08:50:57 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -259,7 +259,7 @@ endif
 #
 
 bin: 
-	@(MAKE_DFILES=1; export MAKE_DFILES; gmake bin_d)
+	@(MAKE_DFILES=1; export MAKE_DFILES; $(MAKE) bin_d)
 
 # Make $(G4TARGET) executable.
 bin_d: $(G4BINDIR)/$(G4TARGET)
