@@ -22,6 +22,3 @@
 /calor/setField 3 tesla
 #
 /vis/viewer/zoom 1.3
-/vis/drawVolume
-#
-/vis/scene/endOfEventAction accumulate

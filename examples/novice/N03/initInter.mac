@@ -1,6 +1,6 @@
 #
 # Macro file for the initialization phase of "exampleN03.cc"
-# when runing in interactive mode
+# when running in interactive mode
 #
 # Sets some default verbose
 #
@@ -16,14 +16,11 @@
 # (Edit the next line(s) to choose another graphic system)
 #
 /vis/open OGLIX
-#/vis/open DAWNFILE
 #
-# draw scene
-#
-/vis/drawVolume
-/vis/viewer/update
+###/vis/open DAWNFILE
 #
 # for drawing the tracks
 # (if too many tracks cause core dump => storeTrajectory 0)
+#
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
