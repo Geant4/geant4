@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.hh,v 1.14 2003-06-16 17:13:41 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.hh,v 1.15 2003-10-29 10:01:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,8 +107,8 @@ private:
   // Stop-gap solution of structure re-use.
   // A proper implementation would use geometry hierarchy.
   //
-  std::map <const G4VPhysicalVolume*, SoSeparator*,
-    std::less <const G4VPhysicalVolume*> > SeparatorMap;
+  std::map <const G4LogicalVolume*, SoSeparator*,
+    std::less <const G4LogicalVolume*> > SeparatorMap;
   SoSeparator *root;
   SoSeparator *staticRoot;
   SoSeparator *transientRoot;
