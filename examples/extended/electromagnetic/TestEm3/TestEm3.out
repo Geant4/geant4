@@ -107,13 +107,13 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
            material       min.delta energy(keV) 
 
-           Aluminium         82.737
+           Aluminium         82.738
          liquidArgon         52.207
                 Iron         142.65
               Copper         153.03
-            Tungsten         210.49
-                Lead         145.95
-             Uranium         198.26
+            Tungsten         210.48
+                Lead         145.94
+             Uranium         198.28
                Water         54.624
         Scintillator         55.559
             Silicium         76.801
@@ -145,13 +145,13 @@ msc:   Tables of transport mean free paths.
 
            material        min.delta energy(keV) 
 
-           Aluminium         82.737
+           Aluminium         82.738
          liquidArgon         52.207
                 Iron         142.65
               Copper         153.03
-            Tungsten         210.49
-                Lead         145.95
-             Uranium         198.26
+            Tungsten         210.48
+                Lead         145.94
+             Uranium         198.28
                Water         54.624
         Scintillator         55.559
             Silicium         76.801
@@ -187,29 +187,29 @@ MuPairProd:  theoretical cross sections
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 ============= The cut Energy ==============================
-                            gamma              e-             mu-          proton         neutron    
-Cut in range                500 mum         500 mum         500 mum         500 mum         500 mum
+                            gamma              e-    
+Cut in range                500 mum         500 mum
 Cut in energy
-          Aluminium        4.96 keV         365 keV        3.43 MeV        8.84 MeV         990 eV 
-        liquidArgon         4.4 keV         217 keV         2.2 MeV        5.54 MeV         990 eV 
-               Iron        14.2 keV         709 keV        5.68 MeV        14.5 MeV         990 eV 
-             Copper        17.1 keV         782 keV        6.04 MeV        15.4 MeV         990 eV 
-           Tungsten        87.5 keV        1.22 MeV        7.92 MeV        19.7 MeV         990 eV 
-               Lead        81.5 keV         763 keV        5.68 MeV        13.8 MeV         990 eV 
-            Uranium         105 keV        1.13 MeV        7.44 MeV        18.3 MeV         990 eV 
-              Water        2.18 keV         223 keV        2.31 MeV        6.04 MeV         990 eV 
-       Scintillator        1.83 keV         226 keV        2.34 MeV        6.11 MeV         990 eV 
-           Silicium        4.96 keV         335 keV        3.18 MeV        8.21 MeV         990 eV 
-             quartz        4.01 keV         330 keV        3.18 MeV        8.21 MeV         990 eV 
-            NemaG10        3.07 keV         292 keV        2.88 MeV        7.54 MeV         990 eV 
-                Air         990 eV          990 eV         27.2 keV        29.6 keV         990 eV 
-            Aerogel        1.27 keV        79.2 keV         863 keV        2.07 MeV         990 eV 
-        CarbonicGas         990 eV         8.52 keV         255 keV         534 keV         990 eV 
-         WaterSteam         990 eV          990 eV         5.97 keV        4.34 keV         990 eV 
-           Galactic         990 eV          990 eV          990 eV          990 eV          990 eV 
-               Beam         990 eV          990 eV          990 eV          990 eV          990 eV 
+          Aluminium        4.96 keV         365 keV
+        liquidArgon         4.4 keV         217 keV
+               Iron        14.2 keV         709 keV
+             Copper        17.1 keV         782 keV
+           Tungsten        87.5 keV        1.22 MeV
+               Lead        81.5 keV         763 keV
+            Uranium         105 keV        1.13 MeV
+              Water        2.18 keV         223 keV
+       Scintillator        1.83 keV         226 keV
+           Silicium        4.96 keV         335 keV
+             quartz        4.01 keV         330 keV
+            NemaG10        3.07 keV         292 keV
+                Air         990 eV          990 eV 
+            Aerogel        1.27 keV        79.2 keV
+        CarbonicGas         990 eV         8.52 keV
+         WaterSteam         990 eV          990 eV 
+           Galactic         990 eV          990 eV 
+               Beam         990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.7 2000-08-28 13:57:13 stesting Exp $
+# $Id: TestEm3.out,v 1.8 2000-11-24 11:02:55 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -242,19 +242,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=266.23s Real=285.96s Sys=19.34s
+  User=273.62s Real=311.24s Sys=20.37s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 811.66 MeV +- 13.61 MeV       51.32 cm  +-  1.09 cm 
- Absorber1 ( liquidArgon) : 177.83 MeV +- 13.82 MeV       88.70 cm  +-  7.21 cm 
+ Absorber0 (        Lead) : 814.79 MeV +- 14.27 MeV       51.33 cm  +-  1.17 cm 
+ Absorber1 ( liquidArgon) : 175.43 MeV +- 13.23 MeV       87.65 cm  +-  6.82 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 832029745, 769395179
+ Current couple of seeds = 1497149051, 1975036636
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.
