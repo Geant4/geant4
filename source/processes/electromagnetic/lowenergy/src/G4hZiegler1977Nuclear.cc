@@ -78,7 +78,8 @@ G4double G4hZiegler1977Nuclear::NuclearStoppingPower(G4double kineticEnergy,
                                          (pow(z1, 0.667) + pow(z2, 0.667)) ) 
                  / ((m1 +m2)*(m1 + m2)*
                     (4.0 + 0.197*pow(er,-1.6991)+6.584*pow(er,-1.0494))) ;
-    ionloss = G4RandGauss::shoot(ionloss,sig) ;
+
+    ionloss *= G4RandGauss::shoot(1.0,sig) ;
   }
   
   ionloss *= 8.462 * z1 * z2 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]

@@ -99,7 +99,7 @@ G4double G4hICRU49p::StoppingPower(const G4Material* material,
     G4double z = material->GetZ() ;
     G4double ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
 
-  } else if ( iMolecula < 11 ) {
+  } else if (iMolecula < 11) {
   
     // The data and the fit from: 
     // ICRU Report N49, 1993. Ziegler's model for protons.

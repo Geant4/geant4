@@ -18,14 +18,17 @@
 // 
 // Creation date: 20 July 2000
 //
-// Modifications: 
-// 20/07/2000  V.Ivanchenko First implementation
-//
 // Class Description: 
 //
-// Low energy protons/ions ionisation parametrisation
+// Low energy protons/ions nuclear stopping parametrisation
 //
 // Class Description: End 
+//
+// -------------------------------------------------------------------
+//
+// Modifications: 
+// 20/07/2000  V.Ivanchenko First implementation
+// 22/08/2000  V.Ivanchenko Bug fixed in call of a model
 //
 // -------------------------------------------------------------------
 //
@@ -54,10 +57,10 @@ G4hNuclearStoppingModel::G4hNuclearStoppingModel(const G4String& name):
   if("Ziegler1977" == name) { 
       nStopingPowerTable = new G4hZiegler1977Nuclear();
     
-  } else if("Ziegler1985" == name) {
+  } else if("ICRU_R49Mollere" == name || " " == name) {
       nStopingPowerTable = new G4hZiegler1985Nuclear();
 
-  } else if("ICRU_R49Mollere" == name || " " == name) {
+  } else if("Ziegler1985" == name) {
       nStopingPowerTable = new G4hMollereNuclear();
         
   } else {
@@ -135,7 +138,7 @@ G4double G4hNuclearStoppingModel::StoppingPower(
     G4double z2 = element->GetZ() ;
     G4double m2 = element->GetA()*mole/g ;
     nloss += (nStopingPowerTable->
-              NuclearStoppingPower(z1, z2, m1, m2, kineticEnergy))
+              NuclearStoppingPower(kineticEnergy, z1, z2, m1, m2))
            * theAtomicNumDensityVector[iel] ;    
   }
 

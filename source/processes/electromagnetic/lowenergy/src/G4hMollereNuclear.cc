@@ -72,6 +72,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+7,	1.942E-7,
     2.0E+7,	2.916E-7,
     1.5E+7,	3.887E-7,
+
     1.0E+7,	5.833E-7,
     8.0E+6,	7.287E-7,
     6.0E+6,	9.712E-7,
@@ -80,6 +81,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+6,	1.941E-6,
     2.0E+6,	2.911E-6,
     1.5E+6,	3.878E-6,
+
     1.0E+6,	5.810E-6,
     8.0E+5,	7.262E-6,
     6.0E+5,	9.663E-6,
@@ -88,6 +90,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+5,	1.913E-5,
     2.0E+5,	2.845E-5,
     1.5E+5,	3.762E-5,
+
     1.0E+5,	5.554E-5,
     8.0E+4,	6.866E-5,
     6.0E+4,	9.020E-5,
@@ -96,6 +99,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+4,	1.722E-4,
     2.0E+4,	2.499E-4,
     1.5E+4,	3.248E-4,
+
     1.0E+4,	4.688E-4,
     8.0E+3,	5.729E-4,
     6.0E+3,	7.411E-4,
@@ -104,46 +108,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+3,	1.370E-3,
     2.0E+3,	1.955E-3,
     1.5E+3,	2.511E-3,
-    1.0E+1,	1.210E-1,
-    8.0E+0,	1.377E-1,
-    6.0E+0,	1.611E-1,
-    5.0E+0,	1.768E-1,
-    4.0E+0,	1.968E-1,
-    3.0E+0,	2.235E-1,
-    2.0E+0,	2.613E-1,
-    1.5E+0,	2.871E-1,
-    1.0E+0,	3.199E-1,
-    8.0E-1,	3.354E-1,
-    6.0E-1,	3.523E-1,
-    5.0E-1,	3.609E-1,
-    4.0E-1,	3.693E-1,
-    3.0E-1,	3.766E-1,
-    2.0E-1,	3.803E-1,
-    1.5E-1,	3.788E-1,
-    1.0E-1,	3.711E-1,
-    8.0E-2,	3.644E-1,
-    6.0E-2,	3.530E-1,
-    5.0E-2,	3.444E-1,
-    4.0E-2,	3.323E-1,
-    3.0E-2,	3.144E-1,
-    2.0E-2,	2.854E-1,
-    1.5E-2,	2.629E-1,
-    1.0E-2,	2.298E-1,
-    8.0E-3,	2.115E-1,
-    6.0E-3,	1.883E-1,
-    5.0E-3,	1.741E-1,
-    4.0E-3,	1.574E-1,
-    3.0E-3,	1.372E-1,
-    2.0E-3,	1.116E-1,
-    1.5E-3,	9.559E-2,
-    1.0E-3,	7.601E-2,
-    8.0E-4,	6.668E-2,
-    6.0E-4,	5.605E-2,
-    5.0E-4,	5.008E-2,
-    4.0E-4,	4.352E-2,
-    3.0E-4,	3.617E-2,
-    2.0E-4,	2.768E-2,
-    1.5E-4,	2.279E-2,
+
     1.0E+3,	3.563E-3,
     8.0E+2,	4.314E-3,
     6.0E+2,	5.511E-3,
@@ -152,6 +117,7 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E+2,	9.855E-3,
     2.0E+2,	1.375E-2,
     1.5E+2,	1.736E-2,
+
     1.0E+2,	2.395E-2,
     8.0E+1,	2.850E-2,
     6.0E+1,	3.552E-2,
@@ -159,6 +125,52 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     4.0E+1,	4.802E-2,
     3.0E+1,	5.904E-2,
     1.5E+1,	9.426E-2,
+
+    1.0E+1,	1.210E-1,
+    8.0E+0,	1.377E-1,
+    6.0E+0,	1.611E-1,
+    5.0E+0,	1.768E-1,
+    4.0E+0,	1.968E-1,
+    3.0E+0,	2.235E-1,
+    2.0E+0,	2.613E-1,
+    1.5E+0,	2.871E-1,
+
+    1.0E+0,	3.199E-1,
+    8.0E-1,	3.354E-1,
+    6.0E-1,	3.523E-1,
+    5.0E-1,	3.609E-1,
+    4.0E-1,	3.693E-1,
+    3.0E-1,	3.766E-1,
+    2.0E-1,	3.803E-1,
+    1.5E-1,	3.788E-1,
+
+    1.0E-1,	3.711E-1,
+    8.0E-2,	3.644E-1,
+    6.0E-2,	3.530E-1,
+    5.0E-2,	3.444E-1,
+    4.0E-2,	3.323E-1,
+    3.0E-2,	3.144E-1,
+    2.0E-2,	2.854E-1,
+    1.5E-2,	2.629E-1,
+
+    1.0E-2,	2.298E-1,
+    8.0E-3,	2.115E-1,
+    6.0E-3,	1.883E-1,
+    5.0E-3,	1.741E-1,
+    4.0E-3,	1.574E-1,
+    3.0E-3,	1.372E-1,
+    2.0E-3,	1.116E-1,
+    1.5E-3,	9.559E-2,
+
+    1.0E-3,	7.601E-2,
+    8.0E-4,	6.668E-2,
+    6.0E-4,	5.605E-2,
+    5.0E-4,	5.008E-2,
+    4.0E-4,	4.352E-2,
+    3.0E-4,	3.617E-2,
+    2.0E-4,	2.768E-2,
+    1.5E-4,	2.279E-2,
+
     1.0E-4,	1.723E-2,
     8.0E-5,	1.473E-2,
     6.0E-5,	1.200E-2,
@@ -167,14 +179,14 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
     3.0E-5,	7.246E-3,
     2.0E-5,	5.358E-3,
     1.5E-5,	4.313E-3,
-    1.0E-5,	3.166E-3
+    0.0,	3.166E-3
   };
   
-  for (G4int i=0; 104; i++)
+  for (G4int i=1; i<104; i++)
     {
       if (er > a[i][0]) {
 	ionloss = 
-          (er-a[i][0])/(a[i-1][0]-a[i][0])*(a[i-1][1]-a[i][1])+a[i][1];   
+         (a[i][1]-a[i-1][1])*(er-a[i-1][0])/(a[i][0]-a[i-1][0])+a[i-1][1];   
 	break;
       }
     }
@@ -183,9 +195,10 @@ G4double G4hMollereNuclear::NuclearStoppingPower(G4double kineticEnergy,
   if(lossFlucFlag) {
     G4double sig = 4.0 * m1 * m2 / ((m1 + m2)*(m1 + m2)*
                   (4.0 + 0.197*pow(er,-1.6991)+6.584*pow(er,-1.0494))) ;
-    ionloss = G4RandGauss::shoot(ionloss,sig) ;
-  }  
 
+    ionloss *= G4RandGauss::shoot(1.0,sig) ;
+  }  
+   
   ionloss *= 8.462 * z1 * z2 * m1 / rm ; // Return to [ev/(10^15 atoms/cm^2]
 
   if ( ionloss < 0.0) ionloss = 0.0 ;

@@ -19,7 +19,7 @@
 // ************************************************************
 // Class Description:
 // G4hLowEnergyIonisation class is the extention of the ionisation 
-// process for the slow charged hadrons. The physics model is
+// process for the slow charged hadrons and ions. The physics model is
 // described in CERN-OPEN-99-121. User have a possibility to define
 // a parametrisation table via its name. 
 // Class Description - End
@@ -165,16 +165,15 @@ private:
 
   G4double BarkasTerm(const G4Material* material, 
                             G4double kineticEnergy) const;
-  // Function to compute the Barkas term						  
+  // Function to compute the Barkas term for protons  
+ 
   G4double BlochTerm(const G4Material* material,
                            G4double kineticEnergy,
-                           G4double particleMass, 
-                           G4double chargeSquare) const; 
-  // Function to compute the Bloch term	
+                           G4double cSquare) const; 
+  // Function to compute the Bloch term	for protons
 
   G4double ElectronicLossFluctuation(const G4DynamicParticle* particle,
                                      const G4Material* material,
-                                           G4double chargeSquare,
                                            G4double meanLoss,
                                            G4double step) const;
   // Function to sample electronic losses
@@ -214,14 +213,17 @@ private:
   // constants needed for the energy loss calculation  
   const G4double factor;
   const G4double protonMass;             
+  const G4double paramStepLimit; // parameter limits the step at low energy
   
   // particles 
   const G4Electron* theElectron;
   const G4Proton* theProton;
   const G4AntiProton* theAntiProton;
 
-  G4double fdEdx;      // computed in GetContraints
-  G4double fRangeNow ; // computed in GetContraints
+  G4double fdEdx;        // computed in GetContraints
+  G4double fRangeNow ;   //         
+  G4double charge;       //
+  G4double chargeSquare; //
  
 protected:
 

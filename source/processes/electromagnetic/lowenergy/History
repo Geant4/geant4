@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2000-08-18 17:13:51 vnivanch Exp $
+$Id: History,v 1.34 2000-08-22 22:22:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,11 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18.08.2000 - TRIM1985 model have been implemented
+22.08.2000 - V.Ivanchenko: A bug in Nuclear Stopping Power was fixed.
+             The calculation of step limit for low energy
+             hadrons/ions is upgraded.
+             The Barkas and Bloch corrections are introduced
+             for ions "on fly"
+
+18.08.2000 - V.Ivanchenko: TRIM1985 model have been implemented
              A bug in GetConstrain method for hadrons/ions is fixed
 
-18.08.2000 - two additional models of ions energy loss fluctuations
-             have been implemented
+18.08.2000 - V.Ivanchenko: two additional models of ions energy 
+             loss fluctuations have been implemented
 
 10.08.2000 - V.Ivanchenko: Old bug in Fluctuations of Electronic
              energy losses of hadrons and ions are fixed
