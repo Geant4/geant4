@@ -1,4 +1,4 @@
-# $Id: globlib.gmk,v 1.17 2001-05-30 15:04:14 gunter Exp $
+# $Id: globlib.gmk,v 1.18 2001-06-26 02:16:10 morita Exp $
 # --------------------------------------------------------------
 # Script for compound libraries.  Gabriele Cosmo, 25/6/98.
 # --------------------------------------------------------------
@@ -100,6 +100,9 @@ objs:
 
 includes::
 	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) $@ ); done
+ifdef G4ODBMS
+	-@cp -p $(G4SCHEMA_INCLUDE)/*.hh $(G4INCLUDE)/
+endif
 	
 wipe_libs:
 	@for lib in $(SUBLIBS); do (rm -f $(G4LIBDIR)/lib$$lib.a); done
