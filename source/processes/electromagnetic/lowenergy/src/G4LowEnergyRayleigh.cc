@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.14 1999-12-15 14:51:32 gunter Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.15 2000-01-26 09:50:01 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,8 +15,6 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyRayleigh physics process --------
 //                   by Alessandra Forti, November 1998
 // **************************************************************

@@ -5,7 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.18 1999-12-15 14:51:32 gunter Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.19 2000-01-26 09:50:00 lefebure Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.19 2000-01-26 09:50:00 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,22 +16,10 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyBremsstrahlung physics process --------
-//                     by Michel Maire, 24 July 1996
 //      ------------ G4LowEnergyBremsstrahlung: low energy modifications --------
 //                   by Alessandra Forti, March 1999
 //
 // **************************************************************
-// 26-09-96 : extension of the total crosssection above 100 GeV, M.Maire
-//  1-10-96 : new type G4OrderedTable; ComputePartialSumSigma(), M.Maire
-// 16-10-96 : DoIt() call to the non static GetEnergyCuts(), L.Urban
-// 13-12-96 : Sign corrected in grejmax and greject
-//            error definition of screenvar, L.Urban
-// 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
-// 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
-// 13-08-98 : new methods SetBining() PrintInfo()
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with with EEDL data A. Forti

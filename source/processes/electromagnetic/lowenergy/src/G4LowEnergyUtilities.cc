@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.cc,v 1.3 1999-12-15 14:51:33 gunter Exp $
+// $Id: G4LowEnergyUtilities.cc,v 1.4 2000-01-26 09:50:01 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,20 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyUtilities physics process --------
-//                   by Michel Maire, April 1996
+//                   by A.Forti  1999/03/02
 // **************************************************************
-// 12-06-96, Added SelectRandomAtom() method, by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 17-09-96, PartialSumSigma(i)
-//           split of ComputeBindingEnergy, M.Maire
-// 08-01-97, crossection table + meanfreepath table, M.Maire
-// 13-03-97, adapted for the new physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
-// --------------------------------------------------------------
 // This Class Header
 #include "G4LowEnergyUtilities.hh"
 

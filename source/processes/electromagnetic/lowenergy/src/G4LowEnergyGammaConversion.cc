@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.10 1999-12-15 14:51:32 gunter Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.11 2000-01-26 09:50:00 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,28 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      ------------ G4LowEnergyGammaConversion physics process --------
-//                   by Michel Maire, 24 May 1996
+//                   by A.Forti 1999/03/02
 // **************************************************************
-// 11-06-96, Added SelectRandomAtom() method, M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 24-06-96, simplification in ComputeMicroscopicCrossSection, M.Maire
-// 24-06-96, in DoIt : change the particleType stuff, M.Maire
-// 25-06-96, modification in the generation of the teta angle, M.Maire
-// 16-09-96, minors optimisations in DoIt. Thanks to P.Urban
-//           dynamical array PartialSumSigma
-// 13-12-96, fast sampling of epsil below 2 MeV, L.Urban
-// 14-01-97, crossection table + meanfreepath table.
-//           PartialSumSigma removed, M.Maire
-// 14-01-97, in DoIt the positron is always created, even with Ekine=0,
-//           for further annihilation, M.Maire
-// 14-03-97, new Physics scheme for geant4alpha, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 19-06-97, correction in ComputeMicroscopicCrossSection, L.Urban
-// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
-// --------------------------------------------------------------
 
 // This Class Header
 #include "G4LowEnergyGammaConversion.hh"

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.16 1999-12-15 14:51:32 gunter Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.17 2000-01-26 09:50:00 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,23 +15,9 @@
 //
 //      For information related to this code contact:
 //      CERN, IT Division, ASD group
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4LowEnergyCompton physics process --------
-//                   by Michel Maire, April 1996
-
 //      ------------ G4LowEnergyCompton low energy modifications --------
 //                   by Alessandra Forti, October 1998
 // **************************************************************
-// 28-05-96, DoIt() small change in ElecDirection, by M.Maire
-// 10-06-96, simplification in ComputeMicroscopicCrossSection(), by M.Maire
-// 21-06-96, SetCuts implementation, M.Maire
-// 13-09-96, small changes in DoIt for better efficiency. Thanks to P.Urban
-// 06-01-97, crossection table + meanfreepath table, M.Maire
-// 05-03-97, new Physics scheme, M.Maire
-// 28-03-97, protection in BuildPhysicsTable, M.Maire
-// 07-04-98, remove 'tracking cut' of the scattered gamma, MMa
-// 04-06-98, in DoIt, secondary production condition: range>G4std::min(threshold,safety)
 // Added Livermore data table construction methods A. Forti
 // Modified BuildMeanFreePath to read new data tables A. Forti
 // Modified PostStepDoIt to insert sampling with EPDL97 data A. Forti
