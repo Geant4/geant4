@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateSpin.cc,v 1.7 2002-10-29 13:55:23 japost Exp $
+// $Id: testPropagateSpin.cc,v 1.8 2002-11-20 17:51:57 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -235,7 +235,7 @@ G4FieldManager* SetupField(G4int type)
     G4Mag_SpinEqRhs *fEquation = new G4Mag_SpinEqRhs(&myMagField); 
     G4MagIntegratorStepper *pStepper;
 
-    const int ncompspin=15;
+    const int ncompspin=12;
 
     switch ( type ) 
     {
