@@ -1,4 +1,4 @@
-# $Id: allproc.mac,v 1.2 2004-07-27 10:13:16 maire Exp $
+# $Id: ioni.mac,v 1.1 2004-07-27 10:13:16 maire Exp $
 #
 # Macro file for "MuonProcesses.cc"
 # (can be run in batch, without graphic)
@@ -15,13 +15,15 @@
 #
 /run/initialize
 #
+/process/inactivate MuPairProd
+/process/inactivate MuBrems
+/process/inactivate MuNucl
+#
 /gun/particle mu+
 /gun/energy 10 TeV
 #
-/testem/histo/setFileName allproc.paw
+/testem/histo/setFileName ioni.paw
 /testem/histo/setHisto 1 100 -10. 0.
-/testem/histo/setHisto 2 100 -10. 0.
-/testem/histo/setHisto 3 100 -10. 0.
 #
 /testem/event/printModulo 1000
 #
