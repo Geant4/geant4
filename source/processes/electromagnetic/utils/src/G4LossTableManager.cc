@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.22 2003-07-23 11:36:26 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.23 2003-08-29 07:34:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -639,7 +639,7 @@ void G4LossTableManager::SetStepLimits(G4double v1, G4double v2)
   maxRangeVariation = v1;
   maxFinalStep = v2;
   for(G4int i=0; i<n_loss; i++) {
-    if(loss_vector[i]) loss_vector[i]->SetStepLimits(v1, v2);
+    if(loss_vector[i]) loss_vector[i]->SetStepFunction(v1, v2);
   }
 }
 

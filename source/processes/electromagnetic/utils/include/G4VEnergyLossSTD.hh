@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.hh,v 1.31 2003-08-27 11:51:45 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.hh,v 1.32 2003-08-29 07:34:03 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -131,7 +131,6 @@ public:
   G4PhysicsTable* BuildLambdaSubTable();
 
   void SetParticles(const G4ParticleDefinition*,
-                    const G4ParticleDefinition*,
                     const G4ParticleDefinition*);
 
   void SetParticle(const G4ParticleDefinition* p);

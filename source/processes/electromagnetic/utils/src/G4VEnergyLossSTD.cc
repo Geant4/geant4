@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossSTD.cc,v 1.48 2003-08-27 11:51:45 vnivanch Exp $
+// $Id: G4VEnergyLossSTD.cc,v 1.49 2003-08-29 07:34:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -136,7 +136,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   lowKinEnergy         = minKinEnergy*faclow;
 
   // default dRoverRange and finalRange
-  SetStepLimits(0.2, 1.0*mm);
+  SetStepFunction(0.2, 1.0*mm);
   SetVerboseLevel(0);
 
   modelManager = new G4EmModelManager();
@@ -294,9 +294,10 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
 
   // Are particle defined?
-  if( !particle ) particle = &part;
-  //if( !baseParticle )
-  baseParticle = DefineBaseParticle(particle);
+  if( !particle ) {
+    particle = &part;
+    baseParticle = DefineBaseParticle(particle);
+  }
 
   G4bool cutsWasModified = false;
   const G4ProductionCutsTable* theCoupleTable=
@@ -329,22 +330,15 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
-                                    const G4ParticleDefinition* p2,
-                                    const G4ParticleDefinition* p3)
+                                    const G4ParticleDefinition* p2)
 {
   particle = p1;
   baseParticle = p2;
-  secondaryParticle = p3;
-  G4bool yes = false;
-  if(particle) yes = particle->GetPDGCharge();
-  if(baseParticle) {
-    if(!baseParticle->GetPDGCharge()) yes = false;
-    else {
-      if((particle->GetPDGMass() < MeV &&
-          baseParticle->GetPDGMass() > MeV) ||
-         (particle->GetPDGMass() > MeV &&
-          baseParticle->GetPDGMass() < MeV)) yes = false;
-    }
+  G4bool yes = true;
+  if(particle && baseParticle) {
+    if((particle->GetPDGMass() < MeV && baseParticle->GetPDGMass() > MeV) ||
+       (particle->GetPDGMass() > MeV && baseParticle->GetPDGMass() < MeV)) yes = false;
+    
   }
   if(!yes) {
     G4cout << "Warning in G4VEnergyLossSTD::SetParticle: "
@@ -352,6 +346,8 @@ void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
            << " losses cannot be obtained from "
            << baseParticle->GetParticleName()
            << " losses" << G4endl;
+  } else {
+    DefineBaseParticle(p1);
   }
 }
 
