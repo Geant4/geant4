@@ -146,7 +146,7 @@ Cut in energy
 #/run/particle/applyCuts
 #
 /run/verbose 1
-/testem/event/printModulo 10
+/testem/event/printModulo 100
 #
 /gun/particle e-
 /gun/energy 5 GeV
@@ -161,107 +161,17 @@ Start Run processing.
 
 ---> Begin of Event: 0
 
----> Begin of Event: 10
-
----> Begin of Event: 20
-
----> Begin of Event: 30
-
----> Begin of Event: 40
-
----> Begin of Event: 50
-
----> Begin of Event: 60
-
----> Begin of Event: 70
-
----> Begin of Event: 80
-
----> Begin of Event: 90
-
 ---> Begin of Event: 100
-
----> Begin of Event: 110
-
----> Begin of Event: 120
-
----> Begin of Event: 130
-
----> Begin of Event: 140
-
----> Begin of Event: 150
-
----> Begin of Event: 160
-
----> Begin of Event: 170
-
----> Begin of Event: 180
-
----> Begin of Event: 190
 
 ---> Begin of Event: 200
 
----> Begin of Event: 210
-
----> Begin of Event: 220
-
----> Begin of Event: 230
-
----> Begin of Event: 240
-
----> Begin of Event: 250
-
----> Begin of Event: 260
-
----> Begin of Event: 270
-
----> Begin of Event: 280
-
----> Begin of Event: 290
-
 ---> Begin of Event: 300
 
----> Begin of Event: 310
-
----> Begin of Event: 320
-
----> Begin of Event: 330
-
----> Begin of Event: 340
-
----> Begin of Event: 350
-
----> Begin of Event: 360
-
----> Begin of Event: 370
-
----> Begin of Event: 380
-
----> Begin of Event: 390
-
 ---> Begin of Event: 400
-
----> Begin of Event: 410
-
----> Begin of Event: 420
-
----> Begin of Event: 430
-
----> Begin of Event: 440
-
----> Begin of Event: 450
-
----> Begin of Event: 460
-
----> Begin of Event: 470
-
----> Begin of Event: 480
-
----> Begin of Event: 490
 Run terminated.
 Run Summary
   Number of events processed : 500
-  User=377.85s Real=685.17s Sys=0.17s
+  User=355.99s Real=667.06s Sys=0.03s
                  LATERAL PROFILE                         CUMULATIVE LATERAL PROFILE
 
         bin              Mean         rms                 bin            Mean      rms 
