@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.4 1999-10-22 08:24:57 hpw Exp $
+// $Id: G4NeutronHPIsoData.hh,v 1.5 1999-11-19 18:07:38 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsoData_h
@@ -33,7 +33,14 @@ class G4NeutronHPIsoData
 {
 public:
 
-  G4NeutronHPIsoData(){theChannelData = NULL;}
+  G4NeutronHPIsoData()
+  {
+    theChannelData = NULL;
+    theFissionData = NULL;
+    theCaptureData = NULL;
+    theElasticData = NULL;
+    theInelasticData = NULL;
+  }
   
   ~G4NeutronHPIsoData(){if(theChannelData!=NULL) delete theChannelData;}
   
@@ -70,10 +77,10 @@ public:
   
   inline void ThinOut(G4double precision)
   {
-    theFissionData->ThinOut(precision);
-    theCaptureData->ThinOut(precision);
-    theElasticData->ThinOut(precision);
-    theInelasticData->ThinOut(precision);
+    if(theFissionData) theFissionData->ThinOut(precision);
+    if(theCaptureData) theCaptureData->ThinOut(precision);
+    if(theElasticData) theElasticData->ThinOut(precision);
+    if(theInelasticData) theInelasticData->ThinOut(precision);
   }
   
 private:
