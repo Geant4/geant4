@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.cc,v 1.4 2001-07-11 09:59:13 gunter Exp $
+// $Id: G4SimpleRunge.cc,v 1.5 2002-11-29 13:44:01 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Runge:
@@ -60,9 +60,9 @@ G4SimpleRunge::G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
 
 G4SimpleRunge::~G4SimpleRunge()
 {
-   ;
+   delete[] dydxTemp;
+   delete[] yTemp;
 }
-
 
 //////////////////////////////////////////////////////////////////
 //
@@ -74,7 +74,6 @@ G4SimpleRunge::DumbStepper( const G4double  yIn[],
 			          G4double  h,
 			 	  G4double  yOut[])
 {
-  //  const G4int nvar = 6 ;
   G4int i;
 
   for( i = 0; i < fNumberOfVariables; i++ ) 
@@ -89,7 +88,5 @@ G4SimpleRunge::DumbStepper( const G4double  yIn[],
     yOut[i] = yIn[i] + h * ( dydxTemp[i] );
   }
 
-  // NormaliseTangentVector( yOut );           
-  
   return ;
 }  
