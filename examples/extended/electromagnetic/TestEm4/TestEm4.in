@@ -1,0 +1,16 @@
+# $Id: TestEm4.in,v 1.1 2000-01-21 13:53:25 maire Exp $
+#
+# Macro file for "TestEm4.cc"
+# 
+# (can be run in batch, without graphic)
+#
+/control/verbose  2
+#
+#/run/particle/setCut 1.0 mm
+#/run/initialize
+#
+/run/verbose 2
+/event/drawTracks none
+/event/printModulo 10000
+#
+/run/beamOn 50000
