@@ -55,13 +55,13 @@ Test17PhysicsList::Test17PhysicsList(Test17DetectorConstruction* p)
 {
   pDet = p;
 
-  defaultCutValue = 1*mm;
+  defaultCutValue = 0.1*mm;
   cutForGamma     = defaultCutValue;
   cutForElectron  = defaultCutValue;
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 1*mm; 
+  MaxChargedStep = 0.1*mm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new Test17PhysicsListMessenger(this);

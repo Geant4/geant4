@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (06-Apr-2001)
+                                (29-Jun-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
@@ -80,8 +80,9 @@ MuonMinusCaptureAtRest is created
 Hadronic processes for pi+
 Hadronic processes for pi-
 Hadronic processes for proton
-Test17PhysicsList::SetCuts:CutLength : 1 mm
+Test17PhysicsList::SetCuts:CutLength : 100 mum
 Set cuts for all particles! 
+G4VUserPhysicsList::SetCutValue       :Set cuts for gamma
 
 phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
         Sandia crossSection below 50 KeV
@@ -94,7 +95,7 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
         PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
-Set cuts for gamma
+G4VUserPhysicsList::SetCutValue       :Set cuts for e-
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -110,13 +111,13 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-Set cuts for e-
+G4VUserPhysicsList::SetCutValue       :Set cuts for e+
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
-Set cuts for e+
-Set cuts for mu-
+G4VUserPhysicsList::SetCutValue       :Set cuts for mu-
+G4VUserPhysicsList::SetCutValue       :Set cuts for mu+
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -135,7 +136,7 @@ MuBrems:  theoretical cross section
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
     PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
-Set cuts for mu+
+G4VUserPhysicsList::SetCutValue       :Set cuts for proton
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
@@ -153,9 +154,12 @@ hLowEIoni:    Knock-on electron cross sections .
         from 5 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
-Set cuts for proton
-Set cuts for anti_proton
-G4VUserPhysicsList::SetCutValueForOthers   :1[mm]
+           material       min.delta energy(keV) 
+
+Methane      0.0432375
+Air      0.0858211
+G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
+G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
 Set cuts for He3
 Set cuts for IonC12
 Set cuts for alpha
@@ -175,21 +179,21 @@ Set cuts for pi0
 Set cuts for triton
 ============= The cut Energy ==============================
                       gamma            e-           
-Cut in range                  1 mm             1 mm
+Cut in range                100 mum           100 mum
 Cut in energy
- Beryllium                         2.01 keV           468 keV
-   Aluminum                          6.9 keV           599 keV
-   Carbon                         3.16 keV           523 keV
-   Silicon                          6.9 keV           542 keV
-   liquidArgon                         6.14 keV           344 keV
-   Iron                         20.6 keV          1.28 MeV
-   Copper                         24.7 keV           1.4 MeV
-   Gold                          112 keV          2.29 MeV
-   Lead                          100 keV          1.37 MeV
-   Water                         2.89 keV           353 keV
-   Methane                            1 eV           119 eV
-   Graphite                         3.33 keV           570 keV
-   Air                            1 eV           181 eV
+ Beryllium                          984 eV           108 keV
+   Aluminum                         2.33 keV           130 keV
+   Carbon                         1.32 keV           118 keV
+   Silicon                         2.29 keV           121 keV
+   liquidArgon                         1.99 keV          82.5 keV
+   Iron                         6.26 keV           235 keV
+   Copper                         7.32 keV           250 keV
+   Gold                         40.5 keV           348 keV
+   Lead                         29.4 keV           241 keV
+   Water                         1.08 keV          84.6 keV
+   Methane                            1 eV          2.62 eV
+   Graphite                         1.38 keV           128 keV
+   Air                            1 eV          4.02 eV
 ===================================================
 #
 # Macro file for the initialization phase of "test17" based on "TestEm6.cc"
@@ -208,9 +212,14 @@ Cut in energy
 ### Run 0 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Track Length in absorber = 0.00921999 +- 6.80249e-06  mm  
+    Track Length in absorber = 0.00921794 +- 6.55005e-06  mm  
+    CSDA  Range  in absorber = 0.0090121 +- 7.22892e-06  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
+
+### Comparison with the ICRU49 data: 
+    Track Length (G4/ICRU49 - 1) = 1.75447 +- 0.0710576 % 
+    CSDA  Range  (G4/ICRU49 - 1) = 1.6135 +- 0.0802134 % 
 
 (number) transmission coeff=0  reflection coeff=0
 
@@ -220,7 +229,8 @@ Cut in energy
 ### Run 1 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Track Length in absorber = 0.00976556 +- 7.33757e-06  mm  
+    Track Length in absorber = 0.00976205 +- 7.54586e-06  mm  
+    CSDA  Range  in absorber = 0.00923155 +- 1.37187e-05  mm  
 
     Energy deposit in absorber = 0.5 +- 0  MeV 
 
@@ -234,7 +244,8 @@ Cut in energy
 ### Run 2 start.
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
-    Track Length in absorber = 0.00901497 +- 8.71883e-06  mm  
+    Track Length in absorber = 0.00907342 +- 9.1746e-06  mm  
+    CSDA  Range  in absorber = 0.00838572 +- 4.84556e-06  mm  
 
     Energy deposit in absorber = 6 +- 0  MeV 
 

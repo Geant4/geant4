@@ -46,8 +46,8 @@
 Test17SteppingAction::Test17SteppingAction(Test17DetectorConstruction* DET,
                                            Test17EventAction* EA,
                                            Test17RunAction* RA)
-:detector (DET),eventaction (EA),runaction (RA),steppingMessenger(0),
- IDold(-1) ,evnoold(-1),prim(false)
+:detector (DET),eventaction (EA),runaction(RA),steppingMessenger(0),
+ IDold(-1),IDnow(-2),evnoold(-1),prim(false)
 {
   steppingMessenger = new Test17SteppingMessenger(this);
 }
@@ -57,24 +57,22 @@ Test17SteppingAction::Test17SteppingAction(Test17DetectorConstruction* DET,
 Test17SteppingAction::~Test17SteppingAction()
 {
   delete steppingMessenger ;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
 { 
+  G4double Edep,Theta,Thetaback,xend,yend,zend,rend,Tkin;
 
-  G4double Edep,Theta,Thetaback,Tsec,xend,yend,zend,rend;
-  G4double Tkin ;
+  G4double Tsec = aStep->GetPreStepPoint()->GetKineticEnergy();
   G4int evno = eventaction->GetEventno() ; 
 
   IDnow = evno+10000*(aStep->GetTrack()->GetTrackID())+
           100000000*(aStep->GetTrack()->GetParentID()); 
 
   Tkin  = aStep->GetTrack()->GetKineticEnergy() ; 
-    //   Edep = aStep->GetTotalEnergyDeposit() ;         
   Edep  = aStep->GetDeltaEnergy() ;         
-  Tsec  = Tkin - Edep ;
   Theta = acos(aStep->GetTrack()->GetMomentumDirection().x()) ;
   xend  = aStep->GetTrack()->GetPosition().x()/mm ;
 
@@ -83,6 +81,11 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
   // new particle
   if(IDnow != IDold) {
     IDold=IDnow ;
+    if(IDnow == 10001) {
+      runaction->FillEn(Tsec);
+      runaction->FillDef(aStep->GetTrack()->
+                         GetDynamicParticle()->GetDefinition());
+    }
 
     // primary
     if(0 == aStep->GetTrack()->GetParentID() ) {
@@ -146,11 +149,10 @@ void Test17SteppingAction::UserSteppingAction(const G4Step* aStep)
         eventaction->SetTr();
 
         if(0.5*pi > Theta) {
-            runaction->FillTh(Theta) ;
-            runaction->FillTt(Tkin) ;
-            yend= aStep->GetTrack()->GetPosition().y() ;
-            zend= aStep->GetTrack()->GetPosition().z() ;
-            rend = sqrt(yend*yend+zend*zend) ;
+            runaction->FillTt(Tkin);
+            yend= aStep->GetTrack()->GetPosition().y();
+            zend= aStep->GetTrack()->GetPosition().z();
+            rend = sqrt(yend*yend+zend*zend);
             runaction->FillR(rend);
 
   	 // charged secondaries backword

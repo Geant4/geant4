@@ -1,8 +1,9 @@
-#
-# Macro file for the initialization phase of "test17" based on "TestEm6.cc"
-#
-# It creates the default geometry (simple absorber cylinder )        
-#
+#====================================================
+# Macro file for the initialization phase of "test17" 
+# It provides the tests of ranges of hadrons 
+#    Created:   
+#    Modified:  13.07.01 V.Ivanchenko
+#====================================================
 /control/verbose 2
 /event/setverbose 0
 /tracking/verbose 0

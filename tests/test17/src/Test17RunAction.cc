@@ -32,7 +32,7 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "g4std/iomanip"
-
+#include "G4PionMinus.hh"
 #include "G4EnergyLossTables.hh"
 #include "Test17PrimaryGeneratorAction.hh"
 
@@ -43,7 +43,7 @@ Test17RunAction::Test17RunAction():
    HighestEnergy(100.*TeV),
    TotBin(200),
    theProton (G4Proton::Proton()),
-   theElectron ( G4Electron::Electron() ),
+   theElectron (G4Electron::Electron()),
    nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
    nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),
    nbinvertexz(0)
@@ -104,21 +104,17 @@ Test17RunAction::~Test17RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::SaveEvent()
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::SaveToTuple(G4String parname,G4double val)
-{
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::SaveToTuple(G4String parname,G4double val,G4double defval)
-{
-}
-
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -297,29 +293,52 @@ void Test17RunAction::EndOfRunAction(const G4Run* aRun)
 
   Transmitted /=TotNbofEvents ;
   Reflected   /=TotNbofEvents ;
+
+  G4bool   icru  = false;
+  G4double protL, protR;
+
+  if(abs(kinEnergy0 - 500.0*keV)<0.1*keV && part0 == theProton) { 
+    icru  = true;
+    protL = 0.009059*mm;
+    protR = 0.008869*mm;
+  }
+
+  if(abs(kinEnergy0 - MeV)<0.1*keV && part0 == G4PionMinus::PionMinus()) { 
+    icru  = true;
+    protL = 0.009158*mm*0.9059/0.8869;
+    protR = 0.009158*mm;
+  }
+
+
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  
            TotNbofEvents << G4endl ;
   G4cout << "    Track Length in absorber = " <<
-           tlSumAbs/mm      << " +- " << sAbs/mm    <<
+          tlSumAbs/mm      << " +- " << sAbs/mm    <<
           "  mm  " << G4endl; 
-  // G4cout << "    CSDA  Range  in absorber = " <<
-  //         nStepSumCharged/mm      << " +- " << sigstep/mm    <<
-  //        "  mm  " << G4endl; 
+  G4cout << "    CSDA  Range  in absorber = " <<
+          nStepSumCharged/mm      << " +- " << sigstep/mm    <<
+          "  mm  " << G4endl; 
   G4cout << G4endl;
   G4cout << "    Energy deposit in absorber = " <<
            EnergySumAbs/MeV << " +- " << sigAbs/MeV <<
           "  MeV " << G4endl ;
   G4cout << G4endl;
-  /*
-  G4cout << " ### Comparison with the ICRU49 data: " <<
-  G4cout << "    Track Length (G4/ICRU49 - 1) = " <<
-           tlSumAbs/(0.009059*mm) - 1.0 << " % " << G4endl; 
-  G4cout << "    CSDA  Range  (G4/ICRU49 - 1) = " <<
-           nStepSumCharged/(0.008869*mm) - 1.0 << " % " << G4endl;
-  G4cout << G4endl ;
-  */
+
+  if(icru) {
+    G4cout << "### Comparison with the ICRU49 data: " << G4endl;
+    G4cout << "    Track Length (G4/ICRU49 - 1) = " 
+           << 100.0*(tlSumAbs/protL - 1.0)
+           << " +- " << 100.0*sAbs/tlSumAbs  
+           << " % " << G4endl; 
+    G4cout << "    CSDA  Range  (G4/ICRU49 - 1) = " 
+           << 100.0*(nStepSumCharged/protR - 1.0) 
+           << " +- " << 100.0*sigstep/nStepSumCharged  
+           << " % " << G4endl;
+    G4cout << G4endl ;
+  }
+
   G4cout << "(number) transmission coeff=" << Transmitted <<
             "  reflection coeff=" << Reflected << G4endl;
   G4cout << G4endl; 
@@ -382,11 +401,6 @@ void Test17RunAction::FillNbOfSteps(G4double)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void Test17RunAction::FillEn(G4double)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 void Test17RunAction::FillTt(G4double)
 {}
 
@@ -398,11 +412,6 @@ void Test17RunAction::FillTb(G4double)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test17RunAction::FillTsec(G4double)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Test17RunAction::FillTh(G4double)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

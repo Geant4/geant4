@@ -33,6 +33,7 @@
 #define Test17RunAction_h 1
 
 #include "G4UserRunAction.hh"
+#include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "G4Proton.hh"
 #include "G4Alpha.hh"
@@ -74,8 +75,8 @@ public: // Without description
 
     void AddTrRef(G4double tr,G4double ref);
 
-    void FillEn(G4double En);
-    void FillTh(G4double Th);
+    void FillEn(G4double e) {kinEnergy0 = e;};
+    void FillDef(const G4ParticleDefinition* p) {part0 = p;};
     void FillThBack(G4double Th);
     void FillR(G4double R);
     void FillTt(G4double Tt);
@@ -180,6 +181,8 @@ public: // Without description
     G4double entryvertexz,undervertexz,oververtexz,distvertexz[200];
     G4double zlow,zhigh,dz;
     G4int nbinvertexz;
+    G4double kinEnergy0;
+    const G4ParticleDefinition* part0;
  
     //Test17RunMessenger* runMessenger ;
 
