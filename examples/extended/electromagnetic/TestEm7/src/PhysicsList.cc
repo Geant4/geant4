@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.8 2003-10-10 16:21:31 maire Exp $
+// $Id: PhysicsList.cc,v 1.9 2003-11-19 10:16:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -37,6 +37,7 @@
 #include "PhysListEmG4v52.hh"
 #include "PhysListHadronElastic.hh"
 #include "PhysListBinaryCascade.hh"
+#include "PhysListIonBinaryCascade.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -126,6 +127,10 @@ void PhysicsList::AddPhysicsList(const G4String& name)
   } else if (name == "binary") {
 
     hadronPhys.push_back( new PhysListBinaryCascade(name));
+
+  } else if (name == "binary_ion") {
+
+    hadronPhys.push_back( new PhysListIonBinaryCascade(name));
 
   } else {
 

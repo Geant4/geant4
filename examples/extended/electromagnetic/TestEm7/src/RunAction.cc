@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2003-10-10 16:21:32 maire Exp $
+// $Id: RunAction.cc,v 1.4 2003-11-19 10:16:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,10 +69,10 @@ void RunAction::bookHisto()
 #ifdef G4ANALYSIS_USE
  // Creating the analysis factory
  AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
- 
+
  // Creating the tree factory
  AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
+
  // Creating a tree mapped to an hbook file.
  G4bool readOnly  = false;
  G4bool createNew = true;
@@ -90,11 +90,11 @@ void RunAction::bookHisto()
  binLength = length/nbBins;
  offsetX   = 0.5*length;
  histo[0] = hf->createHistogram1D("1","Edep (MeV/mm)",nbBins, 0,length);
-  
+
  delete hf;
  delete tf;
- delete af;     
-#endif   
+ delete af;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,9 +104,9 @@ void RunAction::cleanHisto()
 #ifdef G4ANALYSIS_USE
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
-  
-  delete tree;
-#endif   
+
+//  delete tree;
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
