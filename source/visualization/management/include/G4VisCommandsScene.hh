@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.hh,v 1.3 1999-01-11 00:48:25 allison Exp $
+// $Id: G4VisCommandsScene.hh,v 1.4 1999-04-15 15:26:26 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -26,8 +26,6 @@ public:
 protected:
   void UpdateCandidateLists ();
   void UpdateVisManagerSceneAndViewParameters (const G4String& sceneName = "");
-  static G4String fSceneNameList;
-  // member so that it has long life - static because shared between objects.
 };
 
 class G4VisCommandSceneCreate: public G4VVisCommandScene {

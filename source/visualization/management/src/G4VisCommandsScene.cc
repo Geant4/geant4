@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.5 1999-03-29 16:39:11 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.6 1999-04-15 15:26:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -74,8 +74,6 @@ void G4VVisCommandScene::UpdateVisManagerSceneAndViewParameters
     fpVisManager -> SetCurrentScene (0);
   }
 }
-
-G4String G4VVisCommandScene::fSceneNameList;
 
 ////////////// /vis/scene/create ///////////////////////////////////////
 
