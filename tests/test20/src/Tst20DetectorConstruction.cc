@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorConstruction.cc,v 1.6 2003-05-15 08:49:13 gcosmo Exp $
+// $Id: Tst20DetectorConstruction.cc,v 1.7 2003-05-16 15:25:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,10 @@
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
 
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -63,6 +67,9 @@ Tst20DetectorConstruction::Tst20DetectorConstruction()
 
   // create commands for interactive definition of the calorimeter  
   detectorMessenger = new Tst20DetectorMessenger(this);
+
+  // define all necessary materials (not deleted!)
+  DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -70,13 +77,12 @@ Tst20DetectorConstruction::Tst20DetectorConstruction()
 Tst20DetectorConstruction::~Tst20DetectorConstruction()
 { 
   delete detectorMessenger;
- }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VPhysicalVolume* Tst20DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -180,12 +186,10 @@ G4VPhysicalVolume* Tst20DetectorConstruction::ConstructCalorimeter()
   // complete the Calor parameters definition and Print 
   ComputeCalorParameters();
   PrintCalorParameters();
+  CleanGeometry();
   //     
   // World
   //
-  if (solidWorld) delete solidWorld ;
-  if (logicWorld) delete logicWorld ;
-  if (physiWorld) delete physiWorld ;
 
   solidWorld = new G4Tubs("World",				//its name
 			  0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
@@ -206,11 +210,7 @@ G4VPhysicalVolume* Tst20DetectorConstruction::ConstructCalorimeter()
   // Absorber
   //
   if (AbsorberThickness > 0.) 
-    { 
-      if (solidAbsorber) delete solidAbsorber ;
-      if (logicAbsorber) delete logicAbsorber ;
-      if (physiAbsorber) delete physiAbsorber ;
-
+    {
       solidAbsorber = new G4Tubs("Absorber",		//its name
 				 0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
                           
@@ -365,6 +365,18 @@ void Tst20DetectorConstruction::SetMagField(G4double fieldValue)
       magField = 0;
       fieldMgr->SetDetectorField(magField);
     }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+void Tst20DetectorConstruction::CleanGeometry()
+{
+  if (physiWorld)
+  {
+    G4PhysicalVolumeStore::Clean();
+    G4LogicalVolumeStore::Clean();
+    G4SolidStore::Clean();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

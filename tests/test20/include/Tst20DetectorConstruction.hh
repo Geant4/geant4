@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst20DetectorConstruction.hh,v 1.3 2001-07-11 10:10:16 gunter Exp $
+// $Id: Tst20DetectorConstruction.hh,v 1.4 2003-05-16 15:25:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,6 +70,7 @@ class Tst20DetectorConstruction : public G4VUserDetectorConstruction
      
      G4VPhysicalVolume* Construct();
 
+     void CleanGeometry();
      void UpdateGeometry();
      
   public:
@@ -105,7 +106,7 @@ class Tst20DetectorConstruction : public G4VUserDetectorConstruction
      G4double           WorldSizeR;
      G4double           WorldSizeZ;
             
-     G4Tubs*             solidWorld;    //pointer to the solid World 
+     G4Tubs*            solidWorld;    //pointer to the solid World 
      G4LogicalVolume*   logicWorld;    //pointer to the logical World
      G4VPhysicalVolume* physiWorld;    //pointer to the physical World
 
