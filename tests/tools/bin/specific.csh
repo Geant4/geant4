@@ -175,10 +175,10 @@ setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 setenv G4VIS_BUILD_OPENGLX_DRIVER  1
 setenv G4VIS_BUILD_RAYX_DRIVER     1
 setenv G4VIS_BUILD_OIX_DRIVER      1
-setenv G4VIS_BUILD_DAWN_DRIVER     1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
-setenv G4VIS_BUILD_VRML_DRIVER     1
-setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+#setenv G4VIS_BUILD_DAWN_DRIVER     1
+#setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
+#setenv G4VIS_BUILD_VRML_DRIVER     1
+#setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
 # G4 use flags :
 setenv G4UI_USE_XM                 1
 setenv G4VIS_USE_OPENGLXM          1
@@ -287,7 +287,7 @@ setenv G4UI_USE_WO                 1
 setenv G4VIS_USE_OPACS             1
 setenv OCONFIG HP-UX-aCC
 source /lal/OPACS/v3/setup.csh
-setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:/lal/HEPVis/v5r0/Linux-gxx"
+setenv LD_LIBRARY_PATH "${LD_LIBRARY_PATH}:$OIVHOME/Linux-egcs:/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF"
 # Else :
 setenv CPPVERBOSE 1
 endif
