@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassWeightWindowProcess.cc,v 1.2 2003-08-19 15:17:40 dressel Exp $
+// $Id: G4MassWeightWindowProcess.cc,v 1.3 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,7 @@
 #include "G4MassWeightWindowProcess.hh"
 #include "G4VWeightWindowAlgorithm.hh"
 #include "G4GeometryCell.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 #include "G4VWeightWindowStore.hh"
@@ -50,14 +50,14 @@ G4MassWeightWindowProcess(const G4VWeightWindowAlgorithm &aWeightWindowAlgorithm
    fParticleChange(new G4ParticleChange),
    fWeightWindowAlgorithm(aWeightWindowAlgorithm),
    fWeightWindowStore(aWWStore),
-   fImportancePostStepDoIt(0),
+   fSplittingAndRussianRouletePostStepDoIt(0),
    fPlaceOfAction(placeOfAction)
 {
   if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
   }
   else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
   }
   if (!fParticleChange) {
     G4Exception("ERROR:G4MassWeightWindowProcess::G4MassWeightWindowProcess: new failed to create G4ParticleChange!");
@@ -67,7 +67,7 @@ G4MassWeightWindowProcess(const G4VWeightWindowAlgorithm &aWeightWindowAlgorithm
 
 G4MassWeightWindowProcess::~G4MassWeightWindowProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fSplittingAndRussianRouletePostStepDoIt;
   delete fParticleChange;
 }
 
@@ -104,7 +104,7 @@ G4MassWeightWindowProcess::PostStepDoIt(const G4Track &aTrack,
 		  fWeightWindowStore.GetLowerWeitgh(postCell,
 						    aTrack.
 						    GetKineticEnergy()));
-      fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+      fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
     }
   }
   return fParticleChange;

@@ -21,17 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.10 2003-06-16 17:12:42 gunter Exp $
+// $Id: G4SplittingAndRussianRouletePostStepDoIt.cc,v 1.1 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// G4ImportancePostStepDoIt.cc
+// G4SplittingAndRussianRouletePostStepDoIt.cc
 //
 // ----------------------------------------------------------------------
 
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
@@ -40,14 +40,14 @@
 #include <strstream>
 
 
-G4ImportancePostStepDoIt::
-G4ImportancePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
+G4SplittingAndRussianRouletePostStepDoIt::
+G4SplittingAndRussianRouletePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
   :
   fTrackTerminator(TrackTerminator)
 {}
-G4ImportancePostStepDoIt::~G4ImportancePostStepDoIt(){}
+G4SplittingAndRussianRouletePostStepDoIt::~G4SplittingAndRussianRouletePostStepDoIt(){}
 
-void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack, 
+void G4SplittingAndRussianRouletePostStepDoIt::DoIt(const G4Track& aTrack, 
 				    G4ParticleChange *aParticleChange,
 				    const G4Nsplit_Weight &nw)
 {  
@@ -68,7 +68,7 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
     // wrong answer
     char st[200];
     std::ostrstream os(st,200);
-    os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = "
+    os << "G4SplittingAndRussianRouletePostStepDoIt::DoIt: sampler returned nw = "
        << nw
        << "\n"
        << '\0';
@@ -78,7 +78,7 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
 }
 
-void G4ImportancePostStepDoIt::Split(const G4Track &aTrack,
+void G4SplittingAndRussianRouletePostStepDoIt::Split(const G4Track &aTrack,
 				     const G4Nsplit_Weight &nw,
 				     G4ParticleChange *aParticleChange)
 {
@@ -92,7 +92,7 @@ void G4ImportancePostStepDoIt::Split(const G4Track &aTrack,
     ptrack->SetWeight(nw.fW);
     
     if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()) {
-      G4Exception("ERROR - G4ImportancePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
+      G4Exception("ERROR - G4SplittingAndRussianRouletePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
     }
     
     aParticleChange->AddSecondary(ptrack);

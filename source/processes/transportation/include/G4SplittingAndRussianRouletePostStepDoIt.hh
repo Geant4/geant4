@@ -21,22 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.hh,v 1.6 2002-10-16 16:26:58 dressel Exp $
+// $Id: G4SplittingAndRussianRouletePostStepDoIt.hh,v 1.1 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4ImportancePostStepDoIt
+// Class G4SplittingAndRussianRouletePostStepDoIt
 //
 // Class description:
 //
-// Used internally by importance sampling.
-// It is responsible for the common part of importance sampling
-// for the "mass" and "parallel" geometry.
+// Used internally by importance and weight window sampling.
+// Creates cloned tracks or kills tracks.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
-#ifndef G4ImportancePostStepDoIt_hh
-#define G4ImportancePostStepDoIt_hh G4ImportancePostStepDoIt_hh
+#ifndef G4SplittingAndRussianRouletePostStepDoIt_hh
+#define G4SplittingAndRussianRouletePostStepDoIt_hh G4SplittingAndRussianRouletePostStepDoIt_hh
 
 class G4VImportanceSplitExaminer;
 class G4ParticleChange;
@@ -46,22 +45,23 @@ class G4Nsplit_Weight;
 class G4VTrackTerminator;
 
 
-class G4ImportancePostStepDoIt
+class G4SplittingAndRussianRouletePostStepDoIt
 {
 
 public:  // with description
 
-  explicit G4ImportancePostStepDoIt(const G4VTrackTerminator &
+  explicit G4SplittingAndRussianRouletePostStepDoIt(const G4VTrackTerminator &
 				    TrackTerminator);
     // simply construct
 
-  ~G4ImportancePostStepDoIt();
+  ~G4SplittingAndRussianRouletePostStepDoIt();
     // simple destruct
   
   void DoIt(const G4Track& aTrack, 
 	    G4ParticleChange *aParticleChange, 
 	    const G4Nsplit_Weight &nw);
-    // Do the PostStepDoIt part common to importance sampling in the 
+    // Do the PostStepDoIt part common to importance and weight window
+    // sampling in the 
     // "mass" and "parallel" geometry.
   
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.14 2003-06-16 17:12:43 gunter Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.15 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4ParallelImportanceProcess.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 
 G4ParallelImportanceProcess::
 G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
@@ -48,20 +48,20 @@ G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitEx
   G4ParallelTransport(pgeodriver, aStepper, aName),
   fParticleChange(G4ParallelTransport::fParticleChange),
   fImportanceSplitExaminer(aImportanceSplitExaminer),
-  fImportancePostStepDoIt(0)
+  fSplittingAndRussianRouletePostStepDoIt(0)
 {
   if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
   }
   else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
   }
 
 }
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fSplittingAndRussianRouletePostStepDoIt;
 }
 
 
@@ -76,7 +76,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   // get new weight and number of clones
   G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
-  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+  fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   

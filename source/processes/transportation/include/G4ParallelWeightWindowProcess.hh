@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.hh,v 1.7 2003-08-19 16:01:07 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.hh,v 1.8 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,7 +45,7 @@
 #include "G4VTrackTerminator.hh"
 #include "G4PlaceOfAction.hh"
 
-class G4ImportancePostStepDoIt;
+class G4SplittingAndRussianRouletePostStepDoIt;
 class G4VWeightWindowExaminer;
 class G4Nsplit_Weight;
 class G4VParallelStepper;
@@ -119,7 +119,7 @@ private:
   G4ParticleChange *fParticleChange;
   const G4VWeightWindowExaminer &fWeightWindowExaminer;
   G4VParallelStepper &fStepper;
-  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
+  G4SplittingAndRussianRouletePostStepDoIt *fSplittingAndRussianRouletePostStepDoIt;
   G4PlaceOfAction fPlaceOfAction;
 };
 

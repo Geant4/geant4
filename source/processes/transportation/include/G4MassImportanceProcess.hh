@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.hh,v 1.7 2003-06-13 09:27:04 dressel Exp $
+// $Id: G4MassImportanceProcess.hh,v 1.8 2003-08-19 16:37:22 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,10 +40,9 @@
 #define G4MassImportanceProcess_hh G4MassImportanceProcess_hh
 
 #include "G4VProcess.hh"
-#include "G4ImportanceFinder.hh"
 #include "G4VTrackTerminator.hh"
 
-class G4ImportancePostStepDoIt;
+class G4SplittingAndRussianRouletePostStepDoIt;
 class G4VImportanceAlgorithm;
 class G4VIStore;
 
@@ -106,8 +105,8 @@ private:
 
   G4ParticleChange *fParticleChange;
   const G4VImportanceAlgorithm &fImportanceAlgorithm;
-  G4ImportanceFinder fImportanceFinder;
-  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
+  const G4VIStore &fIStore;
+  G4SplittingAndRussianRouletePostStepDoIt *fSplittingAndRussianRouletePostStepDoIt;
 };
 
 #endif

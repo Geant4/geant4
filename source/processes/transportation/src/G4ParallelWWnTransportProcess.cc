@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWWnTransportProcess.cc,v 1.1 2003-08-19 15:18:22 dressel Exp $
+// $Id: G4ParallelWWnTransportProcess.cc,v 1.2 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4ParallelWWnTransportProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 
 G4ParallelWWnTransportProcess::
 G4ParallelWWnTransportProcess(const G4VWeightWindowExaminer 
@@ -49,20 +49,20 @@ G4ParallelWWnTransportProcess(const G4VWeightWindowExaminer
   G4ParallelTransport(pgeodriver, aStepper, aName),
   fParticleChange(G4ParallelTransport::fParticleChange),
   fWeightWindowExaminer(aWeightWindowExaminer),
-  fImportancePostStepDoIt(0)
+  fSplittingAndRussianRouletePostStepDoIt(0)
 {
   if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
   }
   else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
   }
 
 }
 
 G4ParallelWWnTransportProcess::~G4ParallelWWnTransportProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fSplittingAndRussianRouletePostStepDoIt;
 }
 
 G4VParticleChange *G4ParallelWWnTransportProcess::
@@ -78,7 +78,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 						   aTrack.
 						   GetKineticEnergy()));
 
-  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+  fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   

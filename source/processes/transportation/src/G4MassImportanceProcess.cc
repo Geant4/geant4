@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.14 2003-06-13 09:35:09 dressel Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.15 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,8 +34,9 @@
 #include "G4MassImportanceProcess.hh"
 #include "G4VImportanceAlgorithm.hh"
 #include "G4GeometryCell.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 #include "G4VTrackTerminator.hh"
+#include "G4VIStore.hh"
 
 G4MassImportanceProcess::
 G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
@@ -45,14 +46,14 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
  : G4VProcess(aName),
    fParticleChange(new G4ParticleChange),
    fImportanceAlgorithm(aImportanceAlgorithm),
-   fImportanceFinder(aIstore),
-   fImportancePostStepDoIt(0)
+   fIStore(aIstore),
+   fSplittingAndRussianRouletePostStepDoIt(0)
 {
   if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
   }
   else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
   }
   if (!fParticleChange) {
     G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
@@ -62,7 +63,7 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 
 G4MassImportanceProcess::~G4MassImportanceProcess()
 {
-  delete fImportancePostStepDoIt;
+  delete fSplittingAndRussianRouletePostStepDoIt;
   delete fParticleChange;
 }
 
@@ -96,10 +97,10 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 			  postpoint->GetTouchable()->GetReplicaNumber());
 
     G4Nsplit_Weight nw = fImportanceAlgorithm.
-      Calculate(fImportanceFinder.GetImportance(prekey),
-		fImportanceFinder.GetImportance(postkey), 
+      Calculate(fIStore.GetImportance(prekey),
+		fIStore.GetImportance(postkey), 
 		aTrack.GetWeight());
-    fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+    fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
   }
   return fParticleChange;
 }

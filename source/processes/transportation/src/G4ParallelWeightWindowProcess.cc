@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.8 2003-08-19 15:18:22 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.9 2003-08-19 16:37:23 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,7 +36,7 @@
 #include "G4ParallelWeightWindowProcess.hh"
 #include "G4VWeightWindowExaminer.hh"
 #include "G4VTrackTerminator.hh"
-#include "G4ImportancePostStepDoIt.hh"
+#include "G4SplittingAndRussianRouletePostStepDoIt.hh"
 #include "G4VParallelStepper.hh"
 
 G4ParallelWeightWindowProcess::
@@ -51,15 +51,15 @@ G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer
   fParticleChange(new G4ParticleChange),
   fWeightWindowExaminer(aWeightWindowExaminer),
   fStepper(aStepper),
-  fImportancePostStepDoIt(0),
+  fSplittingAndRussianRouletePostStepDoIt(0),
   fPlaceOfAction(placeOfAction)
   
 {
   if (TrackTerminator) {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*TrackTerminator);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*TrackTerminator);
   }
   else {
-    fImportancePostStepDoIt = new G4ImportancePostStepDoIt(*this);
+    fSplittingAndRussianRouletePostStepDoIt = new G4SplittingAndRussianRouletePostStepDoIt(*this);
   }
 
 }
@@ -67,7 +67,7 @@ G4ParallelWeightWindowProcess(const G4VWeightWindowExaminer
 G4ParallelWeightWindowProcess::~G4ParallelWeightWindowProcess()
 {
   delete fParticleChange;
-  delete fImportancePostStepDoIt;
+  delete fSplittingAndRussianRouletePostStepDoIt;
 }
 
 G4double G4ParallelWeightWindowProcess::
@@ -98,7 +98,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 				 aTrack.
 				 GetKineticEnergy()));
       
-      fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+      fSplittingAndRussianRouletePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
     }
 
   }
