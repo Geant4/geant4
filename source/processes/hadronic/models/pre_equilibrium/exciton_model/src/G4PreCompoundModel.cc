@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.1 2003-08-26 18:54:53 lara Exp $
+// $Id: G4PreCompoundModel.cc,v 1.2 2003-08-26 21:41:13 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -147,22 +147,16 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
   // Copy of the initial state 
   G4Fragment aFragment(theInitialState);
   
-  if (aFragment.GetA() < 5) 
-    {
-      G4ReactionProduct * theRP = new G4ReactionProduct(G4ParticleTable::GetParticleTable()->
-							GetIon(static_cast<G4int>(aFragment.GetZ()),
-							       static_cast<G4int>(aFragment.GetA()),
-							       aFragment.GetExcitationEnergy()));
-      theRP->SetMomentum(aFragment.GetMomentum().vect());
-      theRP->SetTotalEnergy(aFragment.GetMomentum().e());	  
-      Result->push_back(theRP);
-      return Result;
-    }
-  else if (aFragment.GetA() < 17 && aFragment.GetExcitationEnergy() > aFragment.GetBindingEnergy())
-    {
-      this->PerformEquilibriumEmission(aFragment, Result);
-      return Result;
-    }
+  if (aFragment.GetA() < 5) {
+    G4ReactionProduct * theRP = new G4ReactionProduct(G4ParticleTable::GetParticleTable()->
+						      GetIon(static_cast<G4int>(aFragment.GetZ()),
+							     static_cast<G4int>(aFragment.GetA()),
+							     aFragment.GetExcitationEnergy()));
+    theRP->SetMomentum(aFragment.GetMomentum().vect());
+    theRP->SetTotalEnergy(aFragment.GetMomentum().e());	  
+    Result->push_back(theRP);
+    return Result;
+  }
   
   G4PreCompoundEmission aEmission;
   if (useHETCEmission) aEmission.SetHETCModel();

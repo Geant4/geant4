@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundEmission.cc,v 1.1 2003-08-26 18:54:54 lara Exp $
+// $Id: G4PreCompoundEmission.cc,v 1.2 2003-08-26 21:41:12 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Hadronic Process: Nuclear Preequilibrium
@@ -222,25 +222,11 @@ G4ThreeVector G4PreCompoundEmission::AngularDistribution(G4VPreCompoundFragment 
   G4double Eav = 2.0*p*(p+1.0)/((p+h)*g);
 	
   // Excitation energy relative to the Fermi Level
-  G4double Uf = U - (p - h)*Ef;
-  //  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
+  //	G4double Uf = U - (p - h)*Ef;
+  G4double Uf = U - KineticEnergyOfEmittedFragment - Bemission;
 
 	
-  Eav *= rho(p+1,h,g,Uf,Ef);
-  G4double check = rho(p,h,g,Uf,Ef);
-  if (check <= 0.0) 
-    {
-      std::cout << '\n'
-                << "P = " << p
-                << "H = " << h
-                << "g = " << g
-                << "Uf = " << Uf
-                << "Ef = " << Ef
-                << "U = " << U 
-                << '\n';
-      G4Exception("G4PreCompoundEmission::AngularDistribution: La cagaste!!!!");
-    }
-  Eav /= check;
+  Eav *= rho(p+1,h,g,Uf,Ef)/rho(p,h,g,Uf,Ef);
 	
   Eav += - Uf/(p+h) + Ef;
 	
@@ -319,21 +305,17 @@ G4double G4PreCompoundEmission::rho(const G4double p, const G4double h, const G4
   //      fact[n] = fact[n-1]*static_cast<G4double>(n); 
   //    }
 	
-  G4double Aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
-  G4double alpha = E - (p*p+h*h)/(2.0*g);
-
+  G4double aph = (p*p + h*h + p - 3.0*h)/(4.0*g);
+	
   G4double tot = 0.0;
   for (G4int j = 0; j <= h; j++) 
     {
-      if (E-alpha-static_cast<G4double>(j)*Ef >= 0.0)
-	{
-	  G4double t1 = pow(-1.0, static_cast<G4double>(j));
-	  G4double t2 = fact[static_cast<G4int>(h)]/ (fact[static_cast<G4int>(h)-j]*fact[j]);
-	  G4double t3 = E - static_cast<G4double>(j)*Ef - Aph;
-	  if (t3 < 0.0) t3 = 0.0;
-	  t3 = pow(t3,p+h-1);
-	  tot += t1*t2*t3;
-	}
+      G4double t1 = pow(-1.0, static_cast<G4double>(j));
+      G4double t2 = fact[j]/ (fact[static_cast<G4int>(h)-j]*fact[static_cast<G4int>(h)]);
+      G4double t3 = E - static_cast<G4double>(j)*Ef - aph;
+      if (t3 < 0.0) t3 = 0.0;
+      t3 = pow(t3,p+h-1);
+      tot += t1*t2*t3;
     }
     
   tot *= pow(g,p+h)/(fact[static_cast<G4int>(p)]*fact[static_cast<G4int>(h)]*fact[static_cast<G4int>(p+h)-1]);
