@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.21 2001-09-20 02:00:52 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.22 2001-09-20 02:34:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -830,7 +830,6 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
 ///////////////////////////////////////////////////////////////
 G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 {
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   G4bool   ascii = fStoredInAscii;
@@ -903,7 +902,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
   
   const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   // number of materials in the table
-  numberOfMaterial =  G4Material::GetNumberOfMaterials();
+  numberOfMaterial =   G4Material::GetNumberOfMaterials();
 
   if (ascii) {
     /////////////// ASCII mode  /////////////////
@@ -1121,7 +1120,6 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
 G4bool  G4VUserPhysicsList::CheckForRetrievePhysicsTable(const G4String& directory, 
 							 G4bool          ascii)
 {
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   if (!fIsCheckedForRetrievePhysicsTable) {
@@ -1487,7 +1485,6 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   } 
 
   // number of materials in the table
-  const G4MaterialTable* matTable = G4Material::GetMaterialTable(); 
   numberOfMaterial = G4Material::GetNumberOfMaterials();
 
   // loop over all particles 
