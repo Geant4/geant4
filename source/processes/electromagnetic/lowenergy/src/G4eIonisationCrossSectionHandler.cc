@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.cc,v 1.2 2001-10-10 17:37:56 pia Exp $
+// $Id: G4eIonisationCrossSectionHandler.cc,v 1.3 2001-10-11 12:53:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,17 +68,16 @@ G4eIonisationCrossSectionHandler::~G4eIonisationCrossSectionHandler()
 }
 
 
-G4std::vector<G4VEMDataSet*>* 
-       G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
-                                const G4DataVector& energyVector, 
-				const G4DataVector* energyCuts)
+G4std::vector<G4VEMDataSet*>* G4eIonisationCrossSectionHandler::BuildCrossSectionsForMaterials(
+											       const G4DataVector& energyVector, 
+											       const G4DataVector* energyCuts)
 {
 
   G4std::vector<G4VEMDataSet*>* set = new G4std::vector<G4VEMDataSet*>;
 
   G4DataVector* energies;
   G4DataVector* cs;
-  G4int nBins = energyVector.size();
+  G4int nOfBins = energyVector.size();
 
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   if (materialTable == 0)
@@ -105,7 +104,7 @@ G4std::vector<G4VEMDataSet*>*
       cs       = new G4DataVector;
       G4double density = nAtomsPerVolume[i];
 
-      for (G4int bin=0; bin<nBins; bin++) {
+      for (G4int bin=0; bin<nOfBins; bin++) {
 
         G4double e = energyVector[bin];
         energies->push_back(e);
