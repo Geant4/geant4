@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.19 2001-12-05 08:27:17 gcosmo Exp $
+// $Id: G4Navigator.cc,v 1.20 2001-12-06 14:53:52 radoone Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -58,10 +58,16 @@ G4Navigator::LocateGlobalPointAndSetup(const G4ThreeVector& globalPoint,
   G4VPhysicalVolume *targetPhysical;
   G4LogicalVolume *targetLogical;
   G4VSolid *targetSolid=0;
-  G4ThreeVector localPoint, globalDirection=*pGlobalDirection;
+  G4ThreeVector localPoint, globalDirection;
   EInside insideCode;
+  
 
   G4bool considerDirection = (!ignoreDirection) || fLocatedOnEdge;
+  
+  if( considerDirection && pGlobalDirection != 0 )
+  {
+    globalDirection=*pGlobalDirection;
+  }
 
 #ifdef G4DEBUG_NAVIGATION
   G4cerr << "Upon entering LocateGlobalPointAndSetup " << G4endl;
