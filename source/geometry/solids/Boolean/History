@@ -1,5 +1,5 @@
 
-$Id: History,v 1.26 2002-01-10 15:36:46 gcosmo Exp $
+$Id: History,v 1.27 2002-01-11 08:46:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -20,7 +20,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
- Jan 10  2001  Gabriele Cosmo       geom-solid-bool-V04-00-00
+ Jan 10  2002  Gabriele Cosmo       geom-solid-bool-V04-00-00
   - Moved all verbosity mode warnings to G4BOOLDEBUG and commented exceptions.
   - Activated G4BOOLDEBUG mechanism in GNUmakefile.
   - Fixed unit tests.
