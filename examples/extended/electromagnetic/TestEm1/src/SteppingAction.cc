@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.4 2004-03-15 11:09:37 maire Exp $
+// $Id: SteppingAction.cc,v 1.5 2004-03-31 11:34:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,10 +38,6 @@
 
 #ifdef USE_AIDA
  #include "AIDA/IHistogram1D.h"
-#endif
-
-#ifdef USE_ROOT
-  #include "TH1F.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -72,12 +68,6 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double steplen = aStep->GetStepLength();
   if (charge != 0.) runAction->GetHisto(2)->fill(steplen);
 #endif
-
-#ifdef USE_ROOT
-  G4double charge  = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
-  G4double steplen = aStep->GetStepLength();
-  if (charge != 0.) runAction->GetHisto(2)->Fill(steplen);
-#endif                    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

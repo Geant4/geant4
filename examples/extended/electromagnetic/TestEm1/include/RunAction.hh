@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.3 2004-03-15 11:09:36 maire Exp $
+// $Id: RunAction.hh,v 1.4 2004-03-31 11:34:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,11 +47,6 @@ namespace AIDA {
 } 
 #endif
 
-#ifdef USE_ROOT
-  class TFile;
-  class TH1F;  
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
@@ -74,10 +69,6 @@ class RunAction : public G4UserRunAction
 #ifdef USE_AIDA   
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
-
-#ifdef USE_ROOT    
-    TH1F* GetHisto(G4int id) {return histo[id];}
-#endif
             
   private:  
     void bookHisto();
@@ -93,11 +84,6 @@ class RunAction : public G4UserRunAction
     AIDA::ITree*        tree;
     AIDA::IHistogram1D* histo[3];
 #endif
-
-#ifdef USE_ROOT         
-    TFile* tree;
-    TH1F*  histo[3];
-#endif                     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
