@@ -21,16 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.icc,v 1.5 2001-08-09 17:24:21 maire Exp $
+// $Id: G4ComptonScattering.icc,v 1.6 2001-08-31 13:28:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// ---------------------------------------------------------------
-//      GEANT 4 class inlined methods file
-//
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
-//      ------------ G4ComptonScattering physics process ---------
+//      ------------ G4ComptonScattering physics process --------------
 //                   by Michel Maire, April 1996
 // 
 // 10-06-96, updated by M.Maire
@@ -39,17 +33,18 @@
 // 21-11-97, change for lowest energy limit default action
 // 15-12-98, return DBL_MAX below LowestEnergyLimit
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
-// ---------------------------------------------------------------
+// --------------------------------------------------------------------
 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4ComptonScattering::IsApplicable(const G4ParticleDefinition& particle)
+inline G4bool G4ComptonScattering::IsApplicable(
+                                         const G4ParticleDefinition& particle)
 {
    return ( &particle == G4Gamma::Gamma() ); 
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4ComptonScattering::GetMeanFreePath(const G4Track& aTrack,
                                                      G4double,
@@ -63,18 +58,17 @@ inline G4double G4ComptonScattering::GetMeanFreePath(const G4Track& aTrack,
    G4Material* aMaterial = aTrack.GetMaterial();
 
    G4double MeanFreePath;
-   G4bool isOutRange ;
+   G4bool isOutRange;
 
    if (GammaEnergy > HighestEnergyLimit || GammaEnergy < LowestEnergyLimit)
      MeanFreePath = DBL_MAX;
    else
      MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
-                                       GetValue(GammaEnergy, isOutRange);                                     
-
+                                       GetValue(GammaEnergy, isOutRange);
    return MeanFreePath;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4ComptonScattering::ComputeMeanFreePath(G4double GammaEnergy,
                                                          G4Material* aMaterial)
@@ -83,25 +77,24 @@ inline G4double G4ComptonScattering::ComputeMeanFreePath(G4double GammaEnergy,
 
 {
   const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
-  const G4double* NbOfAtomsPerVolume      = aMaterial->GetVecNbOfAtomsPerVolume();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
-  G4double SIGMA = 0. ;
+  G4double SIGMA = 0.;
 
   for ( size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
       {             
-            SIGMA += NbOfAtomsPerVolume[elm] * 
-                     ComputeCrossSectionPerAtom( GammaEnergy,
-                                                (*theElementVector)(elm)->GetZ());
+        SIGMA += NbOfAtomsPerVolume[elm] * 
+                 ComputeCrossSectionPerAtom(GammaEnergy,
+                                            (*theElementVector)(elm)->GetZ());
       }       
-
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 inline G4double G4ComptonScattering::GetMicroscopicCrossSection(
-                                                 G4DynamicParticle* aDynamicGamma,
-                                                 G4Element*         anElement)
+                                            G4DynamicParticle* aDynamicGamma,
+                                            G4Element*         anElement)
  
 // gives the microscopic total cross section in GEANT4 internal units
 
@@ -109,15 +102,14 @@ inline G4double G4ComptonScattering::GetMicroscopicCrossSection(
    G4double crossSection;
    G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
    G4bool isOutRange ;
-
    if (GammaEnergy < LowestEnergyLimit || GammaEnergy > HighestEnergyLimit)
       crossSection = 0.;
    else
       crossSection = (*theCrossSectionTable)(anElement->GetIndex())->
-                                       GetValue(GammaEnergy, isOutRange);                                    
+                                       GetValue(GammaEnergy, isOutRange);
 
    return crossSection;
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
