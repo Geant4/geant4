@@ -70,13 +70,15 @@ public:
   virtual void Clear() = 0;
 
   virtual G4double Probability(G4int atomicNumber,
+                               G4int shellNumber,
 			       G4double kineticEnergy,
                                G4double tmin,
                                G4double tmax) const = 0;
 
   virtual G4double AverageEnergy(G4int atomicNumber,
-			       G4double kineticEnergy,
-                               G4double tcut) const = 0;
+                                 G4int shellNumber,
+       	                         G4double kineticEnergy,
+                                 G4double tcut) const = 0;
 
   virtual G4double CrossSectionWithCut(G4int atomicNumber,
 			       G4double kineticEnergy,
@@ -93,7 +95,6 @@ public:
   virtual G4double MinSecondaryEnergy(const G4Material* material) const = 0;
 
   virtual G4double MaxSecondaryEnergy(const G4ParticleDefinition* aParticle,
-		                      const G4Material* material,
                                             G4double kineticEnergy) const = 0;
 
   virtual G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,

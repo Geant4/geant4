@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.5 2001-09-05 12:29:51 vnivanch Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.6 2001-09-07 18:39:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -420,11 +420,29 @@ void G4CrossSectionHandler::BuildCrossSectionsWithCut(
 
               if(posDB!= dataMap.end()) {
 
-                elemCrossSection  = theGenerator->Probability(Z,e,tcut,tmax);
-                elemCrossSection *= (posDB->second)->FindValue(e);
-  	          
-              } else {
+                G4VEMDataSet* setForZ = pos->second;
+                size_t nShells = setForZ->NumberOfComponents();
+           
+		// Case when cross section by shell is stored by handler
+                if(nShells > 1) {
+                  for (G4int shell=0; shell<nShells; shell++) {
+                    G4double cs = setForZ->FindValue(e, shell);
+                    G4double pr = theGenerator->Probability(Z, shell, e,
+                                                            tcut, tmax);
+                    elemCrossSection += cs * pr;
+		  } 
 
+		  // Case when element cross section is known to
+		  // the handler and no shell data
+                } else {
+                  G4double cs = setForZ->FindValue(e);
+                  G4double pr = theGenerator->Probability(Z, -1, e, 
+                                                            tcut, tmax);
+                  elemCrossSection += cs * pr;
+		}
+
+		// Case when generator provides cross sections per element  
+              } else {
                 elemCrossSection = 
                           theGenerator->CrossSectionWithCut(Z, e, tcut, tmax);
 	      }
@@ -688,7 +706,7 @@ G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   if (pos != dataMap.end()) dataSet = pos->second;
 
   size_t nShells = dataSet->NumberOfComponents();
-  for (size_t i=0; i<nShells; i++)
+  for (G4int i=0; i<nShells; i++)
     {
       const G4VEMDataSet* shellDataSet = dataSet->GetComponent(i);
       if (shellDataSet != 0)
@@ -700,6 +718,22 @@ G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
     }
   // It should never get here
   return shell;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+const G4VEMDataSet* G4CrossSectionHandler::ShellDataSet(G4int Z) const
+{
+  G4VEMDataSet* dataSet = 0;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
+  pos = dataMap.find(Z);
+  if (pos != dataMap.end()) dataSet = pos->second;
+  else {
+    G4cout << "G4CrossSectionHandler::ShellDataSet - no data set found"
+           << " for Z= " << Z
+           << G4endl;
+  }
+  return dataSet;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

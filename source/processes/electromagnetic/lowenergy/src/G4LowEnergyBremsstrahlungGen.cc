@@ -81,6 +81,7 @@ void G4LowEnergyBremsstrahlungGen::Clear()
   c.clear();
   d.clear();
   activeZ.clear();
+  delete interpolation;
   if(verbose > 0) {
     G4cout << "G4LowEnergyBremsstrahlungGen is cleared"
            << G4endl;
@@ -235,6 +236,7 @@ void G4LowEnergyBremsstrahlungGen::Initialize()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LowEnergyBremsstrahlungGen::Probability(G4int atomicNumber,
+                                                   G4int,
 	  	                                   G4double kineticEnergy,
                                                    G4double tmin,
                                                    G4double tmax) const
@@ -259,6 +261,7 @@ G4double G4LowEnergyBremsstrahlungGen::Probability(G4int atomicNumber,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LowEnergyBremsstrahlungGen::AverageEnergy(G4int atomicNumber,
+                                                     G4int,
 	  	                                     G4double kineticEnergy,
                                                      G4double tcut) const
 {

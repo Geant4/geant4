@@ -227,8 +227,8 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(
       
       // loop for elements in the material
       for (size_t iel=0; iel<NumberOfElements; iel++ ) {
-        G4double Z = (*theElementVector)(iel)->GetZ();
-        G4double e = theGenerator->AverageEnergy(Z, lowEdgeEnergy, tcut);
+        G4int Z = (G4int)((*theElementVector)(iel)->GetZ());
+        G4double e = theGenerator->AverageEnergy(Z, -1, lowEdgeEnergy, tcut);
         G4double cs= shellCrossSectionHandler->FindValue(Z, lowEdgeEnergy);
         ionloss   += e * cs * theAtomicNumDensityVector[iel];
       }	

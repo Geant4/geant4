@@ -42,8 +42,8 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4LowEnergyBremsstrahlungGen_h
-#define G4LowEnergyBremsstrahlungGen_h 1
+#ifndef G4LowEnergyDeltaGen_h
+#define G4LowEnergyDeltaGen_h 1
 
 #include "G4VEMSecondaryGenerator.hh" 
 #include "globals.hh"
@@ -60,32 +60,26 @@ class G4Material;
 class G4ParticleChange;
 class G4VDataSetAlgorithm;
 class G4VEMDataSet;
+class G4ShellEMDataSet;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4LowEnergyBremsstrahlungGen : public G4VEMSecondaryGenerator
+class G4LowEnergyDeltaGen : public G4VEMSecondaryGenerator
 {
 
 public:
 
-  G4LowEnergyBremsstrahlungGen(const G4String& name = "LowEnBremstGen");
+  G4LowEnergyDeltaGen(const G4String& name = "LowEnDeltaGen");
 
-  virtual ~G4LowEnergyBremsstrahlungGen();
+  virtual ~G4LowEnergyDeltaGen();
 
   void Initialize();
 
   void Clear();
 
-  G4double Probability(G4int atomicNumber,
-                       G4int shellNumber,
-		       G4double kineticEnergy,
-                       G4double tmin,
-                       G4double tmax) const;
+  G4double Probability(G4int, G4int, G4double, G4double, G4double) const;
 
-  G4double AverageEnergy(G4int atomicNumber,
-                         G4int shellNumber,
-			 G4double kineticEnergy,
-                         G4double tcut) const;
+  G4double AverageEnergy(G4int, G4int, G4double, G4double) const;
 
   G4double CrossSectionWithCut(G4int,G4double,G4double,G4double) const 
            {return 0.0;};
@@ -94,13 +88,13 @@ public:
                                G4int, G4int, G4double, G4double);
 
   G4double MinSecondaryEnergy(const G4Material*) const 
-           {return lowestEnergyGamma;};
+           {return 0.0;};
 
-  void SetMinSecondaryEnergy(G4double val) {lowestEnergyGamma = val;};
+  //  void SetMinSecondaryEnergy(G4double val) {lowestEnergyGamma = val;};
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
                                     G4double kineticEnergy) const
-           {return kineticEnergy;};
+           {return 0.5*kineticEnergy;};
 
   void SetHighEnergyLimit(G4double val) {highEnergyLimit = val;};
 
@@ -134,26 +128,43 @@ protected:
 private:
 
   // hide assignment operator 
-  G4LowEnergyBremsstrahlungGen(const  G4LowEnergyBremsstrahlungGen&);
-  G4LowEnergyBremsstrahlungGen & operator =
-                              (const  G4LowEnergyBremsstrahlungGen &right);
+  G4LowEnergyDeltaGen(const  G4LowEnergyDeltaGen&);
+  G4LowEnergyDeltaGen & operator =
+                              (const  G4LowEnergyDeltaGen &right);
 
-  G4double FindValueA(G4int atomicNumber, G4double kineticEnergy) const;
+  const G4DataVector* FindParameters(G4int, G4int, G4double) const;
+
+  G4double FindEnergyLimit1(G4int, G4int) const;
+
+  G4double FindEnergyLimit2(G4int, G4int) const;
+
+  G4double IntSpectrum1(size_t, size_t, G4double, G4double, G4double,
+                        const G4DataVector&) const;
+
+  G4double IntSpectrum2(size_t, G4double, G4double, const G4DataVector&) const;
+
+  G4double IntSpectrum3(size_t, size_t, G4double, G4double, G4double) const;
+
+  G4double Spectrum1(size_t, G4double, G4double, const G4DataVector&) const;
+
+  G4double Spectrum2(G4double, const G4DataVector&) const;
 
   // Parameters of the energy spectra
   G4DataVector activeZ;
 
-  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > paramA;
+  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyLimit1;
+  G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyLimit2;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
 
-  G4std::vector<G4double> c;
-  G4std::vector<G4double> d;
-  G4int length;
+  size_t length_a;
+  size_t length_p;
+  size_t length_z;
 
   // The interpolation algorithm
   const G4VDataSetAlgorithm* interpolation;
+  const G4VDataSetAlgorithm* interpolation1;
 
-  // lower limit for generation of gamma in this model
-  G4double lowestEnergyGamma;    
+  const G4ShellEMDataSet* bindingData;
 
   // Limit of the model validity
   G4double lowEnergyLimit;    

@@ -67,7 +67,7 @@ class G4LowEnergyBremsstrahlung : public G4eLowEnergyLoss
 { 
 public:
  
-  G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
+  G4LowEnergyBremsstrahlung(const G4String& processName = "eLowEnergyBrem");
   
   ~G4LowEnergyBremsstrahlung();
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4ShellEMDataSet.hh,v 1.2 2001-09-07 18:39:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -66,7 +66,9 @@ public:
 
   ~G4ShellEMDataSet();
  
-  G4double FindValue(G4double e, G4int id = 0) const;
+  G4double FindValue(G4double e) const;
+
+  G4double FindValue(G4double e, G4int id) const;
 
   const G4VEMDataSet* GetComponent(G4int i) const { return components[i]; }
 

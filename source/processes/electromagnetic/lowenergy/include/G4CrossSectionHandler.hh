@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.3 2001-09-05 12:29:49 vnivanch Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.4 2001-09-07 18:39:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -76,6 +76,8 @@ public:
   const G4Element* SelectRandomElement(const G4Material* material, G4double e) const;
 
   G4int SelectRandomShell(G4int Z, G4double e) const;
+
+  const G4VEMDataSet* ShellDataSet(G4int Z) const;
 
   // For Discrete Processes
   G4VEMDataSet* BuildMeanFreePathForMaterials();
