@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.51 2001-08-02 16:14:41 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.52 2001-08-16 17:21:10 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1064,20 +1064,14 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
   G4double totMomentum = sqrt(totEnergy*totEnergy - ParticleMass*ParticleMass);
   G4double deltaKinEnergy = 0.0;
 
-
   // Energy Sampling
   deltaKinEnergy = EnergySampling(AtomIndex, subShellIndex,
                                     KineticEnergy, DeltaThreshold);
-  deltaKinEnergy+= 2.0*BindingEn;
-
-  // one more test for pathology cases
-  if( deltaKinEnergy < DeltaThreshold + 2.0*BindingEn) {
-    deltaKinEnergy -= 2.0*BindingEn;
-    if(deltaKinEnergy < 0.0) deltaKinEnergy = 0.0;
-    aParticleChange.SetEnergyChange(KineticEnergy - deltaKinEnergy);  
-    aParticleChange.SetLocalEnergyDeposit(deltaKinEnergy);
-    return G4VContinuousDiscreteProcess::PostStepDoIt(track,step);
-  }
+  if(deltaKinEnergy + BindingEn > KineticEnergy) 
+     deltaKinEnergy = KineticEnergy - BindingEn;
+  else if(deltaKinEnergy < 0.0) deltaKinEnergy = 0.0;
+ 
+  deltaKinEnergy += 2.0*BindingEn;
 
   // sampling of scattering angle neglecting atomic motion
   G4double deltaMomentum = sqrt(deltaKinEnergy * 
@@ -1171,8 +1165,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
 	G4DynamicParticle* newPart;
 	
 	// Direction of the outcoming particle isotropic selection
-	G4double newcosTh = 1-2*G4UniformRand();
-	G4double newsinTh = sqrt(1-newcosTh*newcosTh);
+	G4double newcosTh = 1.0-2.0*G4UniformRand();
+	G4double newsinTh = sqrt(1.0-newcosTh*newcosTh);
 	G4double newPhi = twopi*G4UniformRand();
 	
 	G4double dirx, diry, dirz;

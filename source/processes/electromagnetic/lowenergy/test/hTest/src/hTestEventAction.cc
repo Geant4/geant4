@@ -85,7 +85,7 @@ void hTestEventAction::BeginOfEventAction(const G4Event* evt)
 
   // Initialize user actions
   if(verbose > 0) {
-    G4cout << "hTestEventAction: Event #" 
+    G4cout << "hTestEventAction: Event # " 
            << nEvt << " started" << G4endl;
   }
 
@@ -112,7 +112,7 @@ void hTestEventAction::EndOfEventAction(const G4Event* evt)
   }  
 
   if(verbose > 0) {
-    G4cout << "hTestEventAction: Event #" 
+    G4cout << "hTestEventAction: Event # " 
            << nEvt << " ended" << G4endl;
   }
 }

@@ -66,10 +66,10 @@ hTestCalorimeterSD::~hTestCalorimeterSD()
 
 void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
 {
+  evno++;
   if(0 < theHisto->GetVerbose()) 
     G4cout << "hTestCalorimeterSD: Begin Of Event # " << evno << G4endl;
 
-  evno++;
   numAbs = theHisto->GetNumberOfAbsorbers();
   energy.resize(numAbs);
   for(G4int i=0; i<numAbs; i++) { energy[i] = 0.0; }
@@ -115,7 +115,7 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 
   if(tkin == 0.0) stop = true;
   if(0 == aStep->GetTrack()->GetParentID()) primary = true;
-  G4double del = 0.001*micrometer;
+  G4double del = 1.e-13*mm;
   if(zend <= del || zend >= zmax - del) outAbs = true;
 
   // new particle
