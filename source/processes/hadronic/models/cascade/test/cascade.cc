@@ -113,7 +113,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
   G4int    eBins = 1;     // bullet energy bins
   //  G4double eStep = (eMax - eMin) / eBins;
 
-  for(G4int e = 0; e < eBins; e++) { // Scan with different energy
+  for (G4int e = 0; e < eBins; e++) { // Scan with different energy
 
     n1 = 0;
     n2 = 0;
@@ -144,13 +144,15 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     G4std::vector<G4double> targetMomentum(4, 0.0);
 
     G4std::vector<G4double>  bulletMomentum(4, 0.0);
+    G4double mass = 0.93827;
+    bulletMomentum[3] = momZ;
     bulletMomentum[3] = sqrt(bulletMomentum[3] * bulletMomentum[3] + 2 * bulletMomentum[3] * mass); // only this is used in tests
     bulletMomentum[2] = sqrt(bulletMomentum[2] * bulletMomentum[2] + 2 * bulletMomentum[2] * mass);
     bulletMomentum[1] = sqrt(bulletMomentum[1] * bulletMomentum[1] + 2 * bulletMomentum[1] * mass); 
 
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType); // counts mom[0] = E tot from mom[1]-mom[3]
    
-    if (verboseLevel > -1) {
+    if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
       bull->printParticle();
     }
@@ -214,8 +216,8 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
 	output = collider->collide(bull, targ); 
       }
-      printData(i);
-      //      printCross(i);
+      //printData(i);
+      printCross(i);
     }
 
     delete bull;
@@ -230,7 +232,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     G4double nc = G4double(nCollisions);
 
-    if (verboseLevel > 2) {
+    if (verboseLevel > -1) {
       G4cout << 
 	setw(8)  << momZ    << 
 	setw(8)  << i    << 
@@ -455,7 +457,7 @@ G4int printCross(G4int i) {
 }
 
 G4int test() {
-  G4int verboseLevel = 3;
+  G4int verboseLevel = 1;
 
   if (verboseLevel > 2) {
     G4cout << " >>> test() " << G4endl;
@@ -467,16 +469,14 @@ G4int test() {
 
   if (verboseLevel > 2) {
     G4std::vector<G4double>  m(4, 0.0);
-    G4InuclParticle* b;
 
     G4double mZ = 0.585;
     G4double mY = 0.0;
-    G4double mX = 0.1;
+    G4double mX = 0.0;
     G4double mass = 0.93827;
 
     G4double e = sqrt(mZ * mZ + mY * mY + mX * mX + mass * mass);
 
-    cout << ">>>>>>>> e" << e;
     m[3] = mZ;
 
     //      G4double ekin = ipart->getKineticEnergy() * GeV;
@@ -531,6 +531,18 @@ G4int test() {
     bull = new G4InuclElementaryParticle(m, 1); // expects full mom[0]-mom[3] with correct E tot
     bull->printParticle();
 
+    cout << endl << ">>> Bullet initialization" << endl;
+
+    m[3] = 0.0 ;
+    m[2] = .585;
+    m[1] = 0.0;
+    m[0] = mass;
+
+    G4InuclElementaryParticle* bull1 = new G4InuclElementaryParticle(m, 1); 
+    bull1->printParticle();
+
+    G4InuclParticle* bull2 = new G4InuclElementaryParticle(m, 1); 
+    bull2->printParticle();
   }
 
   return 0;
