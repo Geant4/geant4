@@ -1,4 +1,4 @@
-$Id: README,v 1.3 1999-09-14 02:25:34 stanaka Exp $
+$Id: README,v 1.4 1999-09-14 02:34:09 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -98,7 +98,7 @@ $Id: README,v 1.3 1999-09-14 02:25:34 stanaka Exp $
 	NN 3: The macros "exN03VisX.mac" are tutorial macros for 
               visualization.  They can be tried as:
                % $G4BINDIR/exampleN03 exN03VisX.mac
-              For details, see commentt lines  described in the macro files.
+              For details, see comment lines  described in the macro files.
               These macros are designed to help your understanding the 
               User's Guide.    
 
