@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.hh,v 1.2 2005-02-15 19:35:11 vnivanch Exp $
+// $Id: G4EmCorrections.hh,v 1.3 2005-02-26 22:01:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -50,6 +50,7 @@
 
 #include "globals.hh"
 #include "G4AtomicShells.hh"
+#include "G4ionEffectiveCharge.hh"
 
 class G4Material;
 class G4ParticleDefinition;
@@ -63,9 +64,9 @@ public:
 
   virtual ~G4EmCorrections();
 
-  G4double HighOrderCorrectionsLE(const G4ParticleDefinition* p,
-                                  const G4Material* material,
-                                        G4double kineticEnergy);
+  G4double HighOrderCorrections(const G4ParticleDefinition* p,
+                                const G4Material* material,
+                                      G4double kineticEnergy);
 
   G4double Bethe(const G4ParticleDefinition* p,
                  const G4Material* material,
@@ -87,6 +88,10 @@ public:
                            const G4Material* material,
                                  G4double kineticEnergy);
 
+  G4double ShellCorrectionSTD(const G4ParticleDefinition* p,
+                              const G4Material* material,
+                                    G4double kineticEnergy);
+
   G4double DensityCorrection(const G4ParticleDefinition* p,
                              const G4Material* material,
                                    G4double kineticEnergy);
@@ -103,16 +108,10 @@ public:
                           const G4Material* material,
                                 G4double kineticEnergy);
 
-  G4double HighOrderCorrections(const G4ParticleDefinition* p,
-                                const G4Material* material,
-                                      G4double kineticEnergy);
-
-
   G4double NuclearDEDX(const G4ParticleDefinition* p,
                        const G4Material* material,
-			     G4double kineticEnergy);
-
-  void SetNuclearLossFluctuations(G4bool val);
+ 		             G4double kineticEnergy,
+                             G4bool fluct = true);
 
 private:
 
@@ -150,6 +149,8 @@ private:
   G4int        nEtaK;
   G4int        nEtaL;
 
+  G4double     COSEB[14];
+  G4double     COSXI[14];
   G4double     ZD[11];
 
   G4double     TheK[20];
@@ -168,18 +169,18 @@ private:
   G4double     Eta[29];
   G4double     CK[20][29];
   G4double     CL[26][28];
+  G4double     HM[53];
+  G4double     HN[31];
+  G4double     MSH[93];
+  G4double     TAU[93];
 
-  G4AtomicShells shells;
+  G4AtomicShells        shells;
+  G4ionEffectiveCharge  effCharge; 
 };
-
-inline void G4EmCorrections::SetNuclearLossFluctuations(G4bool val) 
-{
-  lossFlucFlag = val;
-}
 
 inline G4int G4EmCorrections::Index(G4double x, G4double* y, G4int n) 
 {
-  G4int idx = n;
+  G4int idx = n-1;
   do {idx--;} while (idx>0 && x<y[idx]);
   return idx;
 }

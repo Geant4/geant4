@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.1 2004-12-01 17:36:04 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.2 2005-02-26 21:59:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,6 +79,11 @@ public:
   G4bool IsInCharge(const G4ParticleDefinition*);
 
   G4double ComputeDEDX(const G4MaterialCutsCouple*,
+                       const G4ParticleDefinition*,
+                             G4double kineticEnergy,
+                             G4double cutEnergy);
+
+  G4double ComputeDEDX(const G4Material*,
                        const G4ParticleDefinition*,
                              G4double kineticEnergy,
                              G4double cutEnergy);
@@ -176,6 +181,16 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
   return tmax;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double G4BraggModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
+					  const G4ParticleDefinition* p,
+					        G4double kineticEnergy,
+                                                G4double cut)
+{
+  return ComputeDEDX(couple->GetMaterial(), p, kineticEnergy, cut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

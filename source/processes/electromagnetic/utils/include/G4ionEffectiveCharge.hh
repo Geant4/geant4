@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.hh,v 1.5 2005-01-25 19:10:23 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.hh,v 1.6 2005-02-26 22:01:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,8 +96,8 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
                            const G4Material* material,
 			         G4double kineticEnergy)
 {
-  G4double charge    = EffectiveCharge(p,material,kineticEnergy)
-                     *chargeCorrection/eplus;
+  G4double charge = EffectiveCharge(p,material,kineticEnergy)*chargeCorrection
+                  / eplus;
 
   return charge*charge;
 }
