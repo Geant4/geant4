@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VBasicShell.cc,v 1.7 2001-07-11 10:01:22 gunter Exp $
+// $Id: G4VBasicShell.cc,v 1.8 2001-10-22 08:02:58 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,7 +50,7 @@ G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine)
   G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
   G4String parameterString;
-  int i = commandLine.index(" ");
+  size_t i = commandLine.index(" ");
   if( i != G4std::string::npos )
   {
     commandString = (G4String)commandLine(0,i);
@@ -93,10 +93,10 @@ G4UIcommandTree* G4VBasicShell::FindDirectory(const char* dirName)
   G4UIcommandTree* comTree = G4UImanager::GetUIpointer()->GetTree();
   if( targetDir == "/" )
   { return comTree; }
-  int idx = 1;
+  size_t idx = 1;
   while( idx < targetDir.length()-1 )
   {
-    int i = targetDir.index("/",idx);
+    size_t i = targetDir.index("/",idx);
     comTree = comTree->GetTree((G4String)targetDir(0,i+1));
     if( comTree == NULL ) 
     { return NULL; }
@@ -110,7 +110,7 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
   G4String rawCommandLine = (G4String)commandName;
   G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
-  int i = commandLine.index(" ");
+  size_t i = commandLine.index(" ");
   if( i != G4std::string::npos )
   { commandString = (G4String)commandLine(0,i); }
   else
@@ -167,7 +167,7 @@ G4String G4VBasicShell::Complete(G4String commandName)
 {
   G4String rawCommandLine = commandName;
   G4String commandLine = rawCommandLine.strip(G4String::both);
-  int i = commandLine.index(" ");
+  size_t i = commandLine.index(" ");
   if( i != G4std::string::npos ) return rawCommandLine; // Already entering parameters, 
                                             // assume command path is correct.
   G4String commandString = commandLine; 
@@ -189,12 +189,12 @@ G4String G4VBasicShell::FindMatchingPath(
   if( aCommandPath.index( pathName ) == G4std::string::npos ) return empty;
   G4String remainingPath = aCommandPath;
   remainingPath.remove(0,pathName.length());
-  int i = remainingPath.first('/');
+  size_t i = remainingPath.first('/');
   if( i == G4std::string::npos ) {
     // Look for number of matching commands :
     G4std::vector<G4UIcommand*> commands;
-    int n_commandEntry = aTree->GetCommandEntry();
-    for( int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
+    G4int n_commandEntry = aTree->GetCommandEntry();
+    for( G4int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
       G4UIcommand* cmd = aTree->GetCommand(i_thCommand);
       G4String ss = cmd->GetCommandName();
       ss.resize(remainingPath.length());
@@ -205,7 +205,7 @@ G4String G4VBasicShell::FindMatchingPath(
       return (pathName + commands[0]->GetCommandName());
     } else if (n_commandEntry>=2) {
       G4cout << "Matching commands :" << G4endl; 
-      for( int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ ) {
+      for( G4int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ ) {
 	G4UIcommand* cmd = commands[i_thCommand];
 	G4cout << cmd->GetCommandName() << G4endl; 
       }
@@ -215,8 +215,8 @@ G4String G4VBasicShell::FindMatchingPath(
     G4std::vector<G4UIcommandTree*> trees;
     G4String nextPath = pathName;
     nextPath.append(remainingPath);
-    int n_treeEntry = aTree->GetTreeEntry();
-    for( int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
+    G4int n_treeEntry = aTree->GetTreeEntry();
+    for( G4int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
       G4UIcommandTree* tree = aTree->GetTree(i_thTree);
       G4String ss = tree->GetPathName();
       ss.resize(nextPath.length());
@@ -227,7 +227,7 @@ G4String G4VBasicShell::FindMatchingPath(
       return trees[0]->GetPathName();
     } else if (n_treeEntry>=2) {
       G4cout << "Matching directories :" << G4endl; 
-      for( int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ ) {
+      for( G4int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ ) {
 	G4UIcommandTree* tree = trees[i_thTree];
 	G4cout << tree->GetPathName() << G4endl; 
       }
@@ -239,8 +239,8 @@ G4String G4VBasicShell::FindMatchingPath(
     // Find path
     G4String nextPath = pathName;
     nextPath.append(remainingPath(0,i+1));
-    int n_treeEntry = aTree->GetTreeEntry();
-    for( int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
+    G4int n_treeEntry = aTree->GetTreeEntry();
+    for( G4int i_thTree = 1; i_thTree <= n_treeEntry; i_thTree++ ) {
       G4UIcommandTree* tree = aTree->GetTree(i_thTree);
       if( nextPath == tree->GetPathName() ) { 
 	return FindMatchingPath(tree,aCommandPath ); 
@@ -263,7 +263,7 @@ void G4VBasicShell::ExecuteCommand (
   if(aCommand.length()<2) return;
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
-  int commandStatus = UI->ApplyCommand(aCommand);
+  G4int commandStatus = UI->ApplyCommand(aCommand);
   switch(commandStatus) {
   case fCommandSucceeded:
     break;
@@ -321,7 +321,7 @@ void G4VBasicShell::ApplyShellCommand (
   } else if( command(0,4) == "hist" ) {
 
     G4int nh = UI->GetNumberOfHistory();
-    for(int i=0;i<nh;i++) { 
+    for(G4int i=0;i<nh;i++) { 
       G4cout << i << ": " << UI->GetPreviousCommand(i) << G4endl; 
     }
 
@@ -407,7 +407,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
-  int i = newCommand.index(" ");
+  size_t i = newCommand.index(" ");
   if( i != G4std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
@@ -428,12 +428,12 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
 
   G4UIcommandTree * floor[10];
   floor[0] = treeTop;
-  int iFloor = 0;
-  int prefixIndex = 1;
+  G4int iFloor = 0;
+  size_t prefixIndex = 1;
   G4String prefix = GetCurrentWorkingDirectory();
   while( prefixIndex < prefix.length()-1 )
   {
-    int ii = prefix.index("/",prefixIndex);
+    size_t ii = prefix.index("/",prefixIndex);
     floor[iFloor+1] = 
       floor[iFloor]->GetTree(prefix(0,ii+1));
     prefixIndex = ii+1;
@@ -456,7 +456,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
     } else if(i == 0) { 
       break;
     } else if( i > 0 ) {
-      int n_tree = floor[iFloor]->GetTreeEntry();
+      G4int n_tree = floor[iFloor]->GetTreeEntry();
       if( i > n_tree )
       { 
         if( i <= n_tree + floor[iFloor]->GetCommandEntry() )
