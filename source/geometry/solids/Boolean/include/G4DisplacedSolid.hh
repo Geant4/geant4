@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DisplacedSolid.hh,v 1.8 2000-11-02 12:25:45 gcosmo Exp $
+// $Id: G4DisplacedSolid.hh,v 1.9 2000-11-22 15:19:31 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -20,6 +20,7 @@
 // History:
 //
 // 28.10.98 V.Grichine, creation according J. Apostolakis's recommendations
+// 22.11.00 V.Grichine, new set methods for matrix/vectors
 
 #ifndef G4DisplacedSolid_HH
 #define G4DisplacedSolid_HH
@@ -91,17 +92,27 @@ class G4DisplacedSolid : public G4VSolid
       // return a self pointer else return 0.
 
     G4VSolid*                GetConstituentMovedSolid() const;
+
     G4AffineTransform        GetTransform() const; 
+    void       SetTransform(G4AffineTransform& ); 
+
     G4AffineTransform        GetDirectTransform() const; 
-      // Access methods.
+    void       SetDirectTransform(G4AffineTransform&); 
+      // Access/Set methods.
 
     G4RotationMatrix         GetFrameRotation() const;
+    void  SetFrameRotation(const G4RotationMatrix&);
+
     G4ThreeVector            GetFrameTranslation() const; 
-      // Get the rotation/translation, as applied to the frame of reference.
+    void  SetFrameTranslation(const G4ThreeVector&); 
+      // Get/Set the rotation/translation, as applied to the frame of reference.
 
     G4RotationMatrix         GetObjectRotation() const;
+    void  SetObjectRotation(const G4RotationMatrix&);
+
     G4ThreeVector            GetObjectTranslation() const; 
-      // Get the rotation/translation, as applied to the object.
+    void  SetObjectTranslation(const G4ThreeVector&); 
+      // Getet/S the rotation/translation, as applied to the object.
 
   public:  // without description
 
@@ -124,3 +135,7 @@ class G4DisplacedSolid : public G4VSolid
 } ;
 
 #endif
+
+
+
+
