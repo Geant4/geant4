@@ -4,8 +4,7 @@
 ifeq ($(G4SYSTEM),Linux-g++)
   CXX       := g++
   GNU_GCC = 1
-#  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
-  CXXFLAGS  := -Wall -pipe -fno-for-scope -DGNU_GCC
+  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
