@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -19,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4PhysicsTableHelper.cc,v 1.2 2004-11-07 01:38:17 kurasige Exp $
+// $Id: G4PhysicsTableHelper.cc,v 1.3 2004-12-15 15:42:37 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -11,13 +11,12 @@
 // * institutes,nor the agencies providing financial support for this *
 // * work  make  any representation or  warranty, express or implied, *
 // * regarding  this  software system or assume any liability for its *
-// * use.                                                            *
+// * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
 // * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  y
-// * This  code  implementation is the  intellectual property  of the *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //

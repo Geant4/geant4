@@ -5,7 +5,7 @@
 // * The following disclaimer summarizes all the specific disclaimers *
 // * of contributors to this software. The specific disclaimers,which *
 // * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geSant4/license                                  *
+// *   http://cern.ch/geant4/license                                  *
 // *                                                                  *
 // * Neither the authors of this software system, nor their employing *
 // * institutes,nor the agencies providing financial support for this *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.6 2004-12-02 14:02:33 pia Exp $
+// $Id: G4PenelopeBremsstrahlungTest.cc,v 1.7 2004-12-15 15:42:38 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------

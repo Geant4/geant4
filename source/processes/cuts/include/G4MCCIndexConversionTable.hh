@@ -1,3 +1,4 @@
+//
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -19,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4MCCIndexConversionTable.hh,v 1.1 2004-10-25 13:10:45 kurasige Exp $
+// $Id: G4MCCIndexConversionTable.hh,v 1.2 2004-12-15 15:42:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

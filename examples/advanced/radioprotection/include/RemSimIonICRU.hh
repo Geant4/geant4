@@ -19,7 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// $Id: RemSimIonICRU.hh,v 1.2 2004-11-23 14:37:47 guatelli Exp $
+//
+// $Id: RemSimIonICRU.hh,v 1.3 2004-12-15 15:41:04 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli, guatelli@ge.infn.it

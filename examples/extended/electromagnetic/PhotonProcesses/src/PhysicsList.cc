@@ -19,8 +19,8 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
-// 
-// $Id: PhysicsList.cc,v 1.2 2004-09-29 10:38:04 maire Exp $
+//
+// $Id: PhysicsList.cc,v 1.3 2004-12-15 15:41:06 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
