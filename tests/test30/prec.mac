@@ -1,0 +1,38 @@
+//---------------------------------------
+//        Macro file for test30
+//         examine PostStepDoIt 
+//        for hadronic physics
+//      Created: 13.03.2002 V.Ivanchenko
+//--------------------------------------- 
+#verbose
+0
+#energy(MeV)
+100.
+#events
+1000
+#material
+Fe
+//--------Proton_processes
+#particle
+proton
+//--------
+#generator
+preCompound
+#paw
+p_fe_100_prec.paw
+//#run
+//--------
+#energy(MeV)
+256.
+#position(mm)
+1 1 1
+#direction
+1 1 1
+#time(ns)
+1
+#paw
+p_fe_256_prec.paw
+#run
+#
+//--------Exit
+#exit
