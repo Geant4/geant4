@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParametrizedHadronicVertex.cc,v 1.1 2003-11-11 19:08:58 hpw Exp $
+// $Id: G4ParametrizedHadronicVertex.cc,v 1.2 2004-11-09 19:22:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -43,13 +43,13 @@ ApplyYourself(G4Nucleus & theTarget, const G4Track &thePhoton)
     G4HadProjectile thePro(thePhoton);
     if(RandBit::shootBit())
     {
-      if(theKineticEnergy<20*GeV) aR = theLowEPionMinus.ApplyYourself(thePro, theTarget);
-      else aR = theHighEPionMinus.ApplyYourself(thePro, theTarget);
+      if(theKineticEnergy<20*GeV) aR = theLowEPionMinus->ApplyYourself(thePro, theTarget);
+      else aR = theHighEPionMinus->ApplyYourself(thePro, theTarget);
     }
     else
     {
-      if(theKineticEnergy<20*GeV) aR = theLowEPionPlus.ApplyYourself(thePro, theTarget);
-      else aR = theHighEPionPlus.ApplyYourself(thePro, theTarget);
+      if(theKineticEnergy<20*GeV) aR = theLowEPionPlus->ApplyYourself(thePro, theTarget);
+      else aR = theHighEPionPlus->ApplyYourself(thePro, theTarget);
     }
     aR->SetTrafoToLab(thePro.GetTrafoToLab());
     if(aR->GetStatusChange()==stopAndKill)
