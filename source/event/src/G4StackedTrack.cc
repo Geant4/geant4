@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackedTrack.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4StackedTrack.cc,v 1.3 2000-01-26 06:42:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -17,10 +17,12 @@
 G4Allocator<G4StackedTrack> aStackedTrackAllocator;
 
 G4StackedTrack::G4StackedTrack() 
+:track(NULL),trajectory(NULL),priorityWeight(0.),
+ previousStackedTrack(NULL),nextStackedTrack(NULL)
 { }
 
-G4StackedTrack::G4StackedTrack(G4Track * newTrack) 
-:track(newTrack),priorityWeight(0.),
+G4StackedTrack::G4StackedTrack(G4Track * newTrack, G4VTrajectory * aTrajectory) 
+:track(newTrack),trajectory(aTrajectory),priorityWeight(0.),
  previousStackedTrack(NULL),nextStackedTrack(NULL)
 { }
 

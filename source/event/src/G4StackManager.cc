@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.cc,v 1.2 1999-12-15 14:49:41 gunter Exp $
+// $Id: G4StackManager.cc,v 1.3 2000-01-26 06:42:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -14,6 +14,7 @@
 
 #include "G4StackManager.hh"
 #include "G4StackingMessenger.hh"
+#include "G4VTrajectory.hh"
 #include "evmandefs.hh"
 #include "G4ios.hh"
 
@@ -42,7 +43,7 @@ const{ return false; }
 int G4StackManager::operator!=(const G4StackManager &) 
 const{ return true; }
 
-G4int G4StackManager::PushOneTrack(G4Track *newTrack)
+G4int G4StackManager::PushOneTrack(G4Track *newTrack,G4VTrajectory *newTrajectory)
 {
   G4ClassificationOfNewTrack classification;
   if(userStackingAction) 
@@ -61,10 +62,11 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack)
     }
 #endif
     delete newTrack;
+    delete newTrajectory;
   }
   else
   {
-    G4StackedTrack * newStackedTrack = new G4StackedTrack( newTrack );
+    G4StackedTrack * newStackedTrack = new G4StackedTrack( newTrack, newTrajectory );
     switch (classification)
     {
       case fUrgent:
@@ -85,7 +87,7 @@ G4int G4StackManager::PushOneTrack(G4Track *newTrack)
 }
 
 
-G4Track * G4StackManager::PopNextTrack()
+G4Track * G4StackManager::PopNextTrack(G4VTrajectory**newTrajectory)
 {
 #ifdef G4VERBOSE
   if( verboseLevel > 0 )
@@ -113,6 +115,7 @@ G4Track * G4StackManager::PopNextTrack()
 
   G4StackedTrack * selectedStackedTrack = urgentStack->PopFromStack();
   G4Track * selectedTrack = selectedStackedTrack->GetTrack();
+  *newTrajectory = selectedStackedTrack->GetTrajectory();
 
 #ifdef G4VERBOSE
   if( verboseLevel > 1 )
@@ -146,6 +149,7 @@ void G4StackManager::ReClassify()
     {
       case fKill:
         delete aStackedTrack->GetTrack();
+        delete aStackedTrack->GetTrajectory();
         delete aStackedTrack;
         break;
       case fUrgent:
@@ -185,6 +189,7 @@ G4int G4StackManager::PrepareNewEvent()
     while( (aStackedTrack=tmpStack.PopFromStack()) != NULL )
     {
       G4Track* aTrack = aStackedTrack->GetTrack();
+      G4VTrajectory* aTrajectory = aStackedTrack->GetTrajectory();
       aTrack->SetParentID(-1);
       G4ClassificationOfNewTrack classification;
       if(userStackingAction) 

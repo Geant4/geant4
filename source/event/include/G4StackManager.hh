@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackManager.hh,v 1.4 2000-01-12 01:29:50 asaim Exp $
+// $Id: G4StackManager.hh,v 1.5 2000-01-26 06:42:14 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -22,6 +22,7 @@
 #include "G4TrackStatus.hh"
 #include "globals.hh"
 class G4StackingMessenger;
+class G4VTrajectory;
 
 // class description:
 //
@@ -53,8 +54,8 @@ class G4StackManager
       int operator!=(const G4StackManager &right) const;
 
   public:
-      G4int PushOneTrack(G4Track *newTrack);
-      G4Track * PopNextTrack();
+      G4int PushOneTrack(G4Track *newTrack, G4VTrajectory *newTrajectory = NULL);
+      G4Track * PopNextTrack(G4VTrajectory**newTrajectory);
       G4int PrepareNewEvent();
 
   public: // with description

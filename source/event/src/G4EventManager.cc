@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.cc,v 1.4 2000-01-12 01:29:50 asaim Exp $
+// $Id: G4EventManager.cc,v 1.5 2000-01-26 06:42:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,8 +116,9 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     G4cout << "!!!!!!! Now start processing an event !!!!!!!" << G4endl;
   }
 #endif
-
-  while( ( track = trackContainer->PopNextTrack() ) != NULL )
+  
+  G4VTrajectory* previousTrajectory;
+  while( ( track = trackContainer->PopNextTrack(&previousTrajectory) ) != NULL )
   {
 
 #ifdef G4VERBOSE
@@ -145,7 +146,14 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
 
 #ifdef G4_STORE_TRAJECTORY
     G4VTrajectory * aTrajectory = trackManager->GimmeTrajectory();
-    if(aTrajectory)
+
+    if(previousTrajectory)
+    {
+      previousTrajectory->MergeTrajectory(aTrajectory);
+      delete aTrajectory;
+      aTrajectory = previousTrajectory;
+    }
+    if(aTrajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
     {
       if(!trajectoryContainer)
       { trajectoryContainer = new G4TrajectoryContainer; }
@@ -158,6 +166,10 @@ void G4EventManager::ProcessOneEvent(G4Event* anEvent)
     {
       case fStopButAlive:
       case fSuspend:
+        trackContainer->PushOneTrack( track, aTrajectory );
+        StackTracks( secondaries );
+        break;
+
       case fPostponeToNextEvent:
         trackContainer->PushOneTrack( track );
         StackTracks( secondaries );
