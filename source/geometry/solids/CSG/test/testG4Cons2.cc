@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Cons2.cc,v 1.10 2004-01-24 15:19:01 grichine Exp $
+// $Id: testG4Cons2.cc,v 1.11 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -77,7 +77,7 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-	G4double dist;
+	G4double dist, vol, volCheck;
 
 	G4ThreeVector   pzero(0,0,0);
 	
@@ -205,13 +205,24 @@ int main(void)
   pNorm=&norm;
   pgoodNorm=&goodNorm;
 
-	r90X.rotateX(halfpi);
-	r90Y.rotateY(halfpi);
-	r90Z.rotateZ(halfpi);
-	r45X.rotateX(pi/4);
-	r30Y.rotateY(pi/6);
-	//	G4cout << "G4Cons:"<< c4.GetName()
-	//   << " ID=" << c4.GetIdentifier() << "\n";
+  r90X.rotateX(halfpi);
+  r90Y.rotateY(halfpi);
+  r90Z.rotateZ(halfpi);
+  r45X.rotateX(pi/4);
+  r30Y.rotateY(pi/6);
+
+  //	G4cout << "G4Cons:"<< c4.GetName()
+  //   << " ID=" << c4.GetIdentifier() << "\n";
+
+  // check cubic volume
+
+  vol = c1.GetCubicVolume();
+  volCheck = 2*pi*50*(100*100-50*50);
+  assert(ApproxEqual(vol,volCheck));
+
+  vol = c6.GetCubicVolume();
+  volCheck = 2*pi*50*(150*150);
+  assert(ApproxEqual(vol,volCheck));
 
   EInside in;
   G4cout.precision(16) ;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.icc,v 1.1 2002-10-28 11:43:03 gcosmo Exp $
+// $Id: G4Cons.icc,v 1.2 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -157,4 +157,24 @@ inline
 G4double G4Cons::GetDPhi() const
 {
   return GetDeltaPhiAngle();
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Cons::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   
+  {
+    G4double Rmean, rMean, deltaR, deltar;
+
+    Rmean  = 0.5*(fRmax1+fRmax2);
+    deltaR = fRmax1-fRmax2;
+
+    rMean  = 0.5*(fRmin1+fRmin2);
+    deltar = fRmin1-fRmin2;
+    fCubicVolume = fDPhi*fDz*(Rmean*Rmean-rMean*rMean+(deltaR*deltaR-deltar*deltar)/12); 
+  }
+  return fCubicVolume;
 }

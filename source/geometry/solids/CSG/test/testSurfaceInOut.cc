@@ -440,7 +440,7 @@ G4ThreeVector GetVectorOnCons(G4Cons& cons)
 
 int main(void)
 {
-  G4int i,j, iMax=100000, jMax=1000;
+  G4int i,j, iMax=1000000, jMax=1000;
   G4int iCheck=iMax/10;
   G4double distIn, distOut;
   EInside surfaceP;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.icc,v 1.1 2002-10-28 11:43:04 gcosmo Exp $
+// $Id: G4Torus.icc,v 1.2 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -231,4 +231,14 @@ G4double G4TorusEquation::Derivative(G4double value)
   result += dz*TorusDerivativeZ(Lx,Ly,Lz);
 
   return result;
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Torus::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = fDPhi*pi*fRtor*(fRmax*fRmax-fRmin*fRmin); 
+  return fCubicVolume;
 }

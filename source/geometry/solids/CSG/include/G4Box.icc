@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.icc,v 1.1 2002-10-28 11:43:03 gcosmo Exp $
+// $Id: G4Box.icc,v 1.2 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -48,4 +48,14 @@ inline
 G4double G4Box::GetZHalfLength() const
 {
   return fDz;
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Box::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = 8*fDx*fDy*fDz; 
+  return fCubicVolume;
 }

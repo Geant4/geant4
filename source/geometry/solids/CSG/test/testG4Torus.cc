@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Torus.cc,v 1.7 2004-04-09 13:40:24 grichine Exp $
+// $Id: testG4Torus.cc,v 1.8 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -74,7 +74,7 @@ G4bool testG4Torus()
    G4double x; 
    G4double z;
  
-   G4double Dist;
+   G4double Dist, vol, volCheck;
    EInside side;
    G4ThreeVector *pNorm,norm;
    G4bool *pgoodNorm,goodNorm,calcNorm=true;
@@ -113,9 +113,6 @@ G4bool testG4Torus()
    G4ThreeVector v1(1,0,0);
    v1 = v1.unit();
 
-//    G4Torus t2("Hole Torus #2",45,50,50,0,360);
-// Check name
-   // assert(t1.GetName()=="Solid Torus #1");
 
 // Check torus roots
    
@@ -143,9 +140,22 @@ G4bool testG4Torus()
                       22.37458414788935       );
 
 
-//   num = t1.TorusRoots(Ri,pstart,vdirect) ;
-//   num = t1.TorusRoots(Ri,pother,vx) ;
+  //   num = t1.TorusRoots(Ri,pstart,vdirect) ;
+  //   num = t1.TorusRoots(Ri,pother,vx) ;
+  //    G4Torus t2("Hole Torus #2",45,50,50,0,360);
+  // Check name
+  // assert(t1.GetName()=="Solid Torus #1");
+
+  // check cubic volume
+
+   vol  = t1.GetCubicVolume();
+   volCheck = twopi*pi*Rtor*(Rmax*Rmax);
+   assert(ApproxEqual(vol,volCheck));
     
+   vol  = t2.GetCubicVolume();
+   volCheck = halfpi*pi*Rtor*(Rmax*Rmax-Rmin*Rmin);
+   assert(ApproxEqual(vol,volCheck));
+
     // Check Inside
     assert(t1.Inside(pzero)==kOutside);
     assert(t1.Inside(pbigx)==kOutside);

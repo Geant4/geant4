@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.hh,v 1.8 2003-06-16 16:53:22 gunter Exp $
+// $Id: G4Cons.hh,v 1.9 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -88,6 +88,7 @@ class G4Cons : public G4CSGSolid
   
         inline G4double    GetStartPhiAngle () const;
         inline G4double    GetDeltaPhiAngle () const;
+        inline G4double GetCubicVolume();
   
   // Modifiers
 

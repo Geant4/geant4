@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.icc,v 1.1 2002-10-28 11:43:04 gcosmo Exp $
+// $Id: G4Sphere.icc,v 1.2 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -139,4 +139,14 @@ inline
 G4double G4Sphere::GetDTheta() const
 {
   return GetDeltaThetaAngle();
+}
+///////////////////////////////////////////////////
+
+inline
+G4double G4Sphere::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = fDPhi*(cos(fSTheta)-cos(fSTheta+fDTheta))*
+                              (fRmax*fRmax*fRmax-fRmin*fRmin*fRmin)/3.; 
+  return fCubicVolume;
 }

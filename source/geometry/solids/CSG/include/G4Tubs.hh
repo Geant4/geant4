@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.hh,v 1.8 2003-06-16 16:53:28 gunter Exp $
+// $Id: G4Tubs.hh,v 1.9 2004-09-08 15:13:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,6 +91,8 @@ class G4Tubs : public G4CSGSolid
     inline G4double GetZHalfLength   () const;
     inline G4double GetStartPhiAngle () const;
     inline G4double GetDeltaPhiAngle () const;
+    inline G4double GetCubicVolume();
+
 
     // Modifiers
 

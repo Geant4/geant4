@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Box.cc,v 1.5 2002-01-08 16:16:56 gcosmo Exp $
+// $Id: testG4Box.cc,v 1.6 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -75,6 +75,11 @@ G4bool testG4Box()
 
 // Check name
     assert(b1.GetName()=="Test Box #1");
+
+    // Check cubic volume
+
+    assert(b2.GetCubicVolume() == 8000);    
+    assert(b1.GetCubicVolume() == 192000);    
 
 // Check Inside
     assert(b1.Inside(pzero)==kInside);

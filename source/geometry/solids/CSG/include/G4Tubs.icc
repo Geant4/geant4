@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.icc,v 1.1 2002-10-28 11:43:04 gcosmo Exp $
+// $Id: G4Tubs.icc,v 1.2 2004-09-08 15:13:52 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -122,4 +122,14 @@ inline
 G4double G4Tubs::GetDPhi () const
 {
   return GetDeltaPhiAngle();
+}
+
+///////////////////////////////////////////////////
+
+inline
+G4double G4Tubs::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = fDPhi*fDz*(fRMax*fRMax-fRMin*fRMin); 
+  return fCubicVolume;
 }

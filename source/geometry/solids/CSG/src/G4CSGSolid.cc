@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.6 2003-11-03 18:17:31 gcosmo Exp $
+// $Id: G4CSGSolid.cc,v 1.7 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -32,7 +32,7 @@
 //  - Base class constructor 
 
 G4CSGSolid::G4CSGSolid(const G4String& name) :
-   G4VSolid(name)
+  G4VSolid(name),fCubicVolume(0.)
 {
 }
 

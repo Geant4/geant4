@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Tubs.cc,v 1.12 2002-04-16 08:24:19 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.13 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -84,7 +84,7 @@ G4bool testG4Tubs()
     G4ThreeVector vmxmy(-1/sqrt(2.0),-1/sqrt(2.0),0);
     G4ThreeVector vxmy(1/sqrt(2.0),-1/sqrt(2.0),0);
 
-    G4double Dist;
+    G4double Dist, vol;
     G4ThreeVector *pNorm,norm;
     G4bool *pgoodNorm,goodNorm,calcNorm=true;
 
@@ -121,7 +121,14 @@ G4bool testG4Tubs()
 
 
 // Check name
-    assert(t1.GetName()=="Solid Tube #1");
+
+  assert(t1.GetName()=="Solid Tube #1");
+
+  // Check cubic volume
+  vol = t1.GetCubicVolume();
+  assert(ApproxEqual(vol,785398.16339744825));
+  assert( ApproxEqual(vol,785398.163397) );
+
 
 // Check Inside
 

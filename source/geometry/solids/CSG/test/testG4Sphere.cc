@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 
-// $Id: testG4Sphere.cc,v 1.12 2003-10-31 16:37:33 grichine Exp $
+// $Id: testG4Sphere.cc,v 1.13 2004-09-08 15:13:53 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -89,7 +89,7 @@ const G4String OutputInside(const EInside a)
 
 int main(void)
 {
-    G4double Dist;
+    G4double Dist, vol, volCheck;
     G4ThreeVector pzero(0,0,0),px(30,0,0),py(0,30,0),pz(0,0,30);
     G4ThreeVector pmx(-30,0,0),pmy(0,-30,0),pmz(0,0,-30);
     G4ThreeVector pbigx(100,0,0),pbigy(0,100,0),pbigz(0,0,100);
@@ -169,12 +169,12 @@ G4ThreeVector s9v(-0.6542770611918751,
 		   -0.0695116921641141,
 		   -0.7530535517814154);
 
- G4Sphere s10("s10",0*mm,0.018*mm,0*degree,360*degree,0*degree,180*degree);
+  G4Sphere s10("s10",0*mm,0.018*mm,0*degree,360*degree,0*degree,180*degree);
 
- G4ThreeVector s10p(0.01160957408065766*mm,
-0.01308205826682229*mm,0.004293345210644617*mm);
+  G4ThreeVector s10p(0.01160957408065766*mm,
+                     0.01308205826682229*mm,0.004293345210644617*mm);
 
- G4Sphere s11("s11",5000000.*mm,
+  G4Sphere s11("s11",5000000.*mm,
                     3700000000.*mm,
                    0*degree,360*degree,0*degree,180*degree);
 
@@ -182,32 +182,32 @@ G4ThreeVector s9v(-0.6542770611918751,
 
  // G4ThreeVector ps11( -3339032195.112830162*mm, -1480000000*mm, -592000000*mm );
 
- G4ThreeVector ps11( -3072559844.81995153427124*mm, -1924000000*mm, -740000000*mm );
+  G4ThreeVector ps11( -3072559844.81995153427124*mm, -1924000000*mm, -740000000*mm );
 
- G4Sphere sAlex("sAlex",500.*mm,
+  G4Sphere sAlex("sAlex",500.*mm,
                     501.*mm,
                    0*degree,360*degree,0*degree,180*degree);
 
-G4ThreeVector psAlex(-360.4617031263808*mm,
+  G4ThreeVector psAlex(-360.4617031263808*mm,
                      -158.1198807105035*mm,308.326878333183*mm);
 
-G4ThreeVector vsAlex(-0.7360912456240805,-0.4955800202572754,0.4610532741813497 );
+  G4ThreeVector vsAlex(-0.7360912456240805,-0.4955800202572754,0.4610532741813497 );
 
 
- G4Sphere sLHCB("sLHCB",8600*mm, 8606*mm, 
+  G4Sphere sLHCB("sLHCB",8600*mm, 8606*mm, 
     -1.699135525184141*degree,
-3.398271050368263*degree,88.52855940538514*degree,2.942881189229715*degree );
+    3.398271050368263*degree,88.52855940538514*degree,2.942881189229715*degree );
 
- G4ThreeVector pLHCB(8600.242072535835,-255.1193517702246,-69.0010277128286);
+  G4ThreeVector pLHCB(8600.242072535835,-255.1193517702246,-69.0010277128286);
 
 
- G4Sphere spAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 
+  G4Sphere spAroundX("SpAroundX",  10.*mm, 1000.*mm, -1.0*degree, 
                                                      2.0*degree, 
                                         0.*degree, 180.0*degree );
 
- G4double  radOne = 100.0*mm;
- G4double  angle = -1.0*degree - 0.25*kAngTolerance;
- G4ThreeVector  ptPhiMinus= G4ThreeVector( radOne*cos(angle) ,
+  G4double  radOne = 100.0*mm;
+  G4double  angle = -1.0*degree - 0.25*kAngTolerance;
+  G4ThreeVector  ptPhiMinus= G4ThreeVector( radOne*cos(angle) ,
                                            radOne*sin(angle),
                                            0.0 );
 
@@ -222,6 +222,15 @@ G4ThreeVector vsAlex(-0.7360912456240805,-0.4955800202572754,0.4610532741813497 
     //////////////// Check name /////////////////////////
 
     assert(s1.GetName()=="Solid G4Sphere");
+    
+    // check cubic volume
+
+    vol = s1.GetCubicVolume();
+    volCheck = 4*pi*125000/3; 
+
+    assert( ApproxEqual(vol,volCheck));
+
+    assert(ApproxEqual(s1.GetCubicVolume(),4*pi*125000/3));
 
 
     // Some user application cases
@@ -835,3 +844,4 @@ checkPoint( const G4Sphere &rSphere,
 
     return good;
 }
+

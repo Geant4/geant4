@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.hh,v 1.10 2003-11-03 18:17:30 gcosmo Exp $
+// $Id: G4Box.hh,v 1.11 2004-09-08 15:13:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -58,6 +58,7 @@ class G4Box : public G4CSGSolid
 
     virtual ~G4Box();
 
+
     void ComputeDimensions(G4VPVParameterisation* p,
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
@@ -80,6 +81,8 @@ class G4Box : public G4CSGSolid
     void SetYHalfLength(G4double dy) ;
 
     void SetZHalfLength(G4double dz) ;
+
+    inline G4double GetCubicVolume();
 
   // Methods for solid
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.10 2004-01-26 09:03:20 gcosmo Exp $
+// $Id: G4Sphere.hh,v 1.11 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -90,6 +90,7 @@ class G4Sphere : public G4CSGSolid
     inline G4double GetDeltaPhiAngle  () const;
     inline G4double GetStartThetaAngle() const;
     inline G4double GetDeltaThetaAngle() const;
+    inline G4double GetCubicVolume();
 
     // Modifiers
 

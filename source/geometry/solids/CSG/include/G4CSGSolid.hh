@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.hh,v 1.7 2003-06-16 16:53:21 gunter Exp $
+// $Id: G4CSGSolid.hh,v 1.8 2004-09-08 15:13:51 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -52,6 +52,10 @@ class G4CSGSolid : public G4VSolid
     virtual ~G4CSGSolid();
 
     virtual std::ostream& StreamInfo(std::ostream& os) const;
+
+  protected:
+
+  G4double fCubicVolume;
 };
 
 #endif
