@@ -47,8 +47,7 @@ G4AtomicDeexcitation::~G4AtomicDeexcitation()
 
 G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int Z,G4int shellId)
 { 
-  G4std::vector<G4DynamicParticle*>* vectorOfParticles = 
-    new G4std::vector<G4DynamicParticle*>;
+  G4std::vector<G4DynamicParticle*>* vectorOfParticles = new G4std::vector<G4DynamicParticle*>;
   G4DynamicParticle* aParticle;
   G4int provShellId = 0;
   G4int counter = 0;
@@ -101,26 +100,24 @@ G4std::vector<G4DynamicParticle*>* G4AtomicDeexcitation::GenerateParticles(G4int
   return vectorOfParticles;
 }
 
-const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId){
-   
-  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
-  G4int provShellId = -1;
-  G4int shellNum = 0;
-  G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);
-  
+const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
+{
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
   
-  const G4AtomicTransition* refShell = 
-    transitionManager->ReachableShell(Z,maxNumOfShells-1);
- 
+  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  G4int provShellId = -1;
+  G4int shellNum = 0;
+  G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);  
+  
+  const G4AtomicTransition* refShell = transitionManager->ReachableShell(Z,maxNumOfShells-1);
+
   // This loop gives shellNum the value of the index of shellId
   // in the vector storing the list of the shells reachable through
   // a radiative transition
   if ( shellId <= refShell->FinalShellId())
     {
-      while (shellId != transitionManager->
-	     ReachableShell(Z,shellNum)->FinalShellId())
+      while (shellId != transitionManager->ReachableShell(Z,shellNum)->FinalShellId())
 	{
 	  if(shellNum ==maxNumOfShells-1)
 	    {
@@ -130,13 +127,9 @@ const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
 	}
       G4int transProb = 1;
    
-      G4double partialProb = G4UniformRand();
-      
+      G4double partialProb = G4UniformRand();      
       G4double partSum = 0;
-      
-      const G4AtomicTransition* aShell = 
-	transitionManager->ReachableShell(Z,shellNum);
-      
+      const G4AtomicTransition* aShell = transitionManager->ReachableShell(Z,shellNum);      
       G4int trSize =  (aShell->TransitionProbabilities()).size();
     
       // Loop over the shells wich can provide an electron for a 
@@ -171,66 +164,64 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 							      G4int shellId,
 							      G4int provShellId )
 { 
-  G4AtomicTransitionManager*  transitionManager = 
-    G4AtomicTransitionManager::Instance();
-  G4int provenienceShell=0;
-  provenienceShell = provShellId;
+  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  G4int provenienceShell = provShellId;
 
   //isotropic angular distribution for the outcoming photon
-  G4double newcosTh = 1-2*G4UniformRand();
-  G4double  newsinTh = sqrt(1-newcosTh*newcosTh);
+  G4double newcosTh = 1.-2.*G4UniformRand();
+  G4double  newsinTh = sqrt(1.-newcosTh*newcosTh);
   G4double newPhi = twopi*G4UniformRand();
   
   G4double xDir =  newsinTh*sin(newPhi);
   G4double yDir = newsinTh*cos(newPhi);
   G4double zDir = newcosTh;
   
-    G4ThreeVector newGammaDirection(xDir,yDir,zDir);
-    
-      G4int shellNum = 0;
-      G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);
-      
-      // find the index of the shell named shellId
-      while (shellId != transitionManager->
-	     ReachableShell(Z,shellNum)->FinalShellId())
+  G4ThreeVector newGammaDirection(xDir,yDir,zDir);
+  
+  G4int shellNum = 0;
+  G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);
+  
+  // find the index of the shell named shellId
+  while (shellId != transitionManager->
+	 ReachableShell(Z,shellNum)->FinalShellId())
+    {
+      if(shellNum == maxNumOfShells-1)
 	{
-	  if(shellNum == maxNumOfShells-1)
-	    {
-	      break;
-	    }
-	  shellNum++;
+	  break;
 	}
-      // number of shell from wich an electron can reach shellId
-      size_t transitionSize = transitionManager->
-	ReachableShell(Z,shellNum)->OriginatingShellIds().size();
-      
-      size_t index = 0;
-
-      // find the index of the shell named provShellId in the vector
-      // storing the shells from which shellId can be reached 
-      while (provShellId !=transitionManager->
-	     ReachableShell(Z,shellNum)->OriginatingShellId(index))
+      shellNum++;
+    }
+  // number of shell from wich an electron can reach shellId
+  size_t transitionSize = transitionManager->
+    ReachableShell(Z,shellNum)->OriginatingShellIds().size();
+  
+  size_t index = 0;
+  
+  // find the index of the shell named provShellId in the vector
+  // storing the shells from which shellId can be reached 
+  while (provShellId != transitionManager->
+	 ReachableShell(Z,shellNum)->OriginatingShellId(index))
+    {
+      if(index ==  transitionSize-1)
 	{
-	  if(index ==  transitionSize-1)
-	    {
-	      break;
-	    }
-	  index++;
+	  break;
 	}
-      // energy of the gamma leaving provShellId for shellId
-      G4double transitionEnergy = transitionManager->
-	ReachableShell(Z,shellNum)->TransitionEnergy(index)*MeV;
-      
-      // This is the shell where the new vacancy is: it is the same
-      // shell where the electron came from
-      newShellId = transitionManager->
-	ReachableShell(Z,shellNum)->OriginatingShellId(index);
-    
-      G4DynamicParticle* newPart = new G4DynamicParticle(G4Gamma::Gamma(), 
-							 newGammaDirection,
-							 transitionEnergy);
-      return newPart;
-     
+      index++;
+    }
+  // energy of the gamma leaving provShellId for shellId
+  G4double transitionEnergy = transitionManager->
+    ReachableShell(Z,shellNum)->TransitionEnergy(index);
+  
+  // This is the shell where the new vacancy is: it is the same
+  // shell where the electron came from
+  newShellId = transitionManager->
+    ReachableShell(Z,shellNum)->OriginatingShellId(index);
+  
+  
+  G4DynamicParticle* newPart = new G4DynamicParticle(G4Gamma::Gamma(), 
+						     newGammaDirection,
+						     transitionEnergy);
+  return newPart;
 }
 
 G4DynamicParticle* G4AtomicDeexcitation::GenerateAuger(G4int Z, G4int shellId)

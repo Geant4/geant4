@@ -69,7 +69,7 @@ public:
   // Z is the atomic number of the element, shellIndex is the 
   // index (in EADL) of the final shell for the transition
   const G4AtomicTransition* ReachableShell(G4int Z, size_t shellIndex);
- 
+   
   // This function returns the number of shells of the element
   // whose atomic number is Z
   G4int NumberOfShells(G4int Z);

@@ -55,8 +55,3 @@ G4int G4AtomicShell::ShellId() const{
 
   return identifier;
 }
-
-
-
-
-
