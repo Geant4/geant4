@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.6 2001-07-11 10:08:57 gunter Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.7 2004-07-01 15:28:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -100,7 +100,7 @@ void G4OpenGLXmViewer::dolly_callback (Widget w,
 
   G4double dolly = (G4double)(cbs->value) / ten_to_the_dp;
 
-  pView->fVP.IncrementDolly (dolly);
+  pView->fVP.SetDolly (dolly);
   pView->SetView ();
   pView->ClearView ();
   pView->DrawView ();
