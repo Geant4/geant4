@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.38 2003-06-20 22:42:38 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.39 2003-06-25 09:03:27 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,7 +60,8 @@ const G4int  G4MagInt_Driver::fMaxStepBase = 250;  // Was 5000
 //
 G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
 				  G4MagIntegratorStepper *pItsStepper,
-				  G4int                   numComponents)
+				  G4int                   numComponents,
+				  G4int                   statisticsVerbose)
   : fNoIntegrationVariables(numComponents), 
     fMinNoVars(12), 
     fNoVars( std::max( fNoIntegrationVariables, fMinNoVars )),
@@ -68,7 +69,8 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
     fNoTotalSteps(0),  fNoBadSteps(0), fNoSmallSteps(0), fNoInitialSmallSteps(0),
     fDyerr_max(0.0), fDyerr_mx2(0.0), 
     fDyerrPos_smTot(0.0), fDyerrPos_lgTot(0.0), fDyerrVel_lgTot(0.0), 
-    fSumH_sm(0.0),   fSumH_lg(0.0)
+    fSumH_sm(0.0),   fSumH_lg(0.0),
+    fStatisticsVerboseLevel(statisticsVerbose)
 {  
 // In order to accomodate "Laboratory Time", which is [7], fMinNoVars=8 is required.
 // For proper time of flight and spin,  fMinNoVars must be 12
@@ -81,20 +83,25 @@ G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
       fVerboseLevel=2;
 #endif
 
-      G4cout << "MagIntDriver version: Accur-Adv: invE_nS, QuickAdv-2sqrt with Statistics "
+      if( (fVerboseLevel > 0) || (fStatisticsVerboseLevel > 1) ){
+	 G4cout << "MagIntDriver version: Accur-Adv: invE_nS, QuickAdv-2sqrt with Statistics "
 #ifdef G4FLD_STATS
-      << " enabled "
+		<< " enabled "
 #else
-      << " disabled "
+		<< " disabled "
 #endif
-	<< G4endl;
+		<< G4endl;
+      }
 }
 
 //  Destructor
 //
 G4MagInt_Driver::~G4MagInt_Driver()
 { 
-   PrintStatisticsReport() ;
+     if( fStatisticsVerboseLevel > 1 ){
+        PrintStatisticsReport() ;
+     }
+     // Future: for default verbose level, print an understandable summary
 }
 
 
