@@ -4,7 +4,6 @@
 
 #include "globals.hh"
 #include "Randomize.hh"
-
 #include "G4Collider.hh"
 #include "G4InuclCollider.hh"
 #include "G4IntraNucleiCascader.hh"
@@ -19,14 +18,13 @@
 #include "G4CollisionOutput.hh"
 #include "G4Analyser.hh"
 #include "G4WatcherGun.hh"
-
 #include "vector"
 #include "G4ThreeVector.hh"
 #include "G4NucleiModel.hh"
 #include "G4LorentzConvertor.hh"
 
 G4double eInit = 0.0;
-  G4double eTot = 0.0;
+G4double eTot = 0.0;
 G4double sumBaryon = 0.0;
 G4double sumEnergy = 0.0;
 
@@ -41,13 +39,12 @@ G4double     momZ = 160;      // momentum in z-direction
 G4double        A = 27.0;      // target atomic weight Al
 G4double        Z = 13.0;      // target atomic number
 
-
-  G4int n1 = 0;
-  G4int n2 = 0;
-  G4int n3 = 0;
-  G4int n5 = 0;
-  G4int n7 = 0;
-  G4int n10 = 0;
+G4int n1 = 0;
+G4int n2 = 0;
+G4int n3 = 0;
+G4int n5 = 0;
+G4int n7 = 0;
+G4int n10 = 0;
 
 G4CollisionOutput output;
 
@@ -60,12 +57,9 @@ G4int printCross(G4int i);
 G4int test();
 
 G4int verboseLevel = 1;
-
 G4InuclElementaryParticle* bull;
 
 int main(int argc, char **argv ) {
-
-
 
   if (verboseLevel > 1) {
     G4cout << " >>> cascade::main " << G4endl;
@@ -106,7 +100,6 @@ G4int testINCEvap() {
   return 0;
 };
 
-
 G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A, G4double Z) {
 
   G4int verboseLevel = 1;
@@ -122,12 +115,12 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
   for(G4int e = 0; e < eBins; e++) { // Scan with different energy
 
-  n1 = 0;
-  n2 = 0;
-  n3 = 0;
-  n5 = 0;
-  n7 = 0;
-  n10 = 0;
+    n1 = 0;
+    n2 = 0;
+    n3 = 0;
+    n5 = 0;
+    n7 = 0;
+    n10 = 0;
  
     // Colliders initialisation
     G4ElementaryParticleCollider*   colep = new G4ElementaryParticleCollider;
@@ -158,11 +151,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     //    G4InuclParticle* bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
     bull = new G4InuclElementaryParticle(bulletMomentum, bulletType);
 
-      G4double bullMass = bull->getParticleMass(bulletType);
-
-    G4std::vector<G4double>  bmom = bull->getMomentum();
-      eInit = sqrt(bmom[0] * bmom[0]);
-      cout << "+++++++++++++++++++++eInit" << eInit << endl;
+    G4double bullMass = bull->getParticleMass(bulletType);
  
     if (verboseLevel > 2) {
       G4cout << "Bullet:  " << G4endl;  
@@ -178,11 +167,11 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
       targ = new G4InuclNuclei(targetMomentum, A, Z);
       targ->setEnergy();      
 
-    G4std::vector<G4double> tmom = targ->getMomentum();
-      eInit += sqrt(tmom[0] * tmom[0]);
-      cout << "-------------------------    eInit" << eInit << endl;
+      G4std::vector<G4double> tmom = targ->getMomentum();
+      eInit = sqrt(tmom[0] * tmom[0]);
+      cout << "-----------------------------"<<eInit << endl;
 
-      if (verboseLevel > 2) {
+      if (verboseLevel > -1) {
 	G4cout << "Target:  " << G4endl;  
 	targ->printParticle();
       }
@@ -196,21 +185,22 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
     }
 
     for (G4int i = 1; i <= nCollisions; i++) {
+      
+      G4std::vector<G4double>  bmom = bull->getMomentum();
+      eInit += sqrt(bmom[0] * bmom[0]);
 
+      cout << "=====================eInit" << eInit << endl; 
       if (verboseLevel > 3) {
 	G4cout << "collision " << i << G4endl; 
       }
+
       if ( G4int(A) == 1 ) {
-
-   G4int is = 0;
-
-    targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
-    G4std::vector<G4double> tmom = targIsH->getMomentum();
-
-      eInit += sqrt(tmom[0] * tmom[0]);
-      cout << "~~~~~~~~~~~~~~~~~~~~~    eInit" << eInit << endl;
-
-     do {
+	G4int is = 0;
+	targIsH = new G4InuclElementaryParticle(targetMomentum, 1);
+	G4std::vector<G4double> tmom = targIsH->getMomentum();
+	eInit += sqrt(tmom[0] * tmom[0]);
+	cout << "*************" << eInit << endl;
+	do {
 	  if (verboseLevel > 1) {
 	    G4cout << "Target:  " << G4endl;  
 	    targIsH->printParticle();
@@ -219,7 +209,8 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 	  output = collider->collide(bull, targIsH);
 	  is = output.getOutgoingParticles().size();
 	  //	  		cout << "+";
-				} while( is == 2);
+	
+	} while( is == 2);
 
 	//		cout << " "  << G4endl;
 
@@ -227,7 +218,7 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
 	output = collider->collide(bull, targ); 
       }
-           printData(i);
+      printData(i);
       //      printCross(i);
     }
 
@@ -243,17 +234,17 @@ G4int testINCAll(G4int nCollisions, G4int bulletType, G4double momZ, G4double A,
 
     G4double nc = G4double(nCollisions);
 
-	  if (verboseLevel > 3) {
-    G4cout << 
-      setw(8)  << momZ    << 
-      setw(8)  << i    << 
-      setw(8)  << n1 / nc   << 
-      setw(13) << n2 / nc   << 
-      setw(13) << n3 / nc   << 
-      setw(13) << n5 / nc   << 
-      setw(13) << n7 / nc   << 
-      setw(13) << n10 / nc  << G4endl;
-	  }
+    if (verboseLevel > 3) {
+      G4cout << 
+	setw(8)  << momZ    << 
+	setw(8)  << i    << 
+	setw(8)  << n1 / nc   << 
+	setw(13) << n2 / nc   << 
+	setw(13) << n3 / nc   << 
+	setw(13) << n5 / nc   << 
+	setw(13) << n7 / nc   << 
+	setw(13) << n10 / nc  << G4endl;
+    }
   }
 
   return 0;
@@ -287,16 +278,16 @@ G4int printData(G4int i) {
     
       G4std::vector<G4double> m = ifrag->getMomentum();
 
-eTot   += sqrt(m[0] * m[0]);
+      eTot  += sqrt(m[0] * m[0]);
 
- cout << " >>>> etot" << eTot << endl;
+      cout << ">>>>>>>>>>>>eTot" << eTot << endl;
 
       G4ThreeVector mom(m[1], m[2], m[3]);    
       ekin = ifrag->getKineticEnergy() * GeV;
 
       G4int type = 0; // :::
 
-      if (verboseLevel > 2) {
+      if (verboseLevel > -1) {
 	G4cout << " Fragment mass: " << ifrag->getMass()  << G4endl;
         G4cout << " Momentum magnitude: " << mom.mag() << G4endl;
       }
@@ -346,7 +337,8 @@ eTot   += sqrt(m[0] * m[0]);
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       G4std::vector<G4double> mom = ipart->getMomentum();
       eTot   += sqrt(mom[0] * mom[0]);
- cout << " ->->->-> etot" << eTot << endl;
+
+      cout << "++++++++ eTot" << eTot << endl;
 
       // G4std::vector<G4double>  mom(3, 0.0);
       ekin = ipart->getKineticEnergy() * GeV;
@@ -387,7 +379,7 @@ eTot   += sqrt(m[0] * m[0]);
       cout << "NOTE: Kinetic energy conservation violated by " << sumEnergy << " GeV" << G4endl;
     }
 
-      cout << "ERROR: nergy conservation at level  " << eInit  - eTot << " GeV" << G4endl;
+    cout << "ERROR: nergy conservation at level  ~" << (eInit  - eTot) * GeV << " MeV" << G4endl;
   }
 
   if (sumEnergy < -5.0e-5 ) { // 0.05 MeV
@@ -435,56 +427,56 @@ G4int printCross(G4int i) {
     for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
       type = ipart->type();
 
-    switch(type) {
+      switch(type) {
 
-    case proton:
-      n1 +=1;
-      break;
+      case proton:
+	n1 +=1;
+	break;
 
-    case neutron:
-      n2 +=1;
-      break;
+      case neutron:
+	n2 +=1;
+	break;
 
-    case pionPlus:
-      n3 +=1;
-      break;
+      case pionPlus:
+	n3 +=1;
+	break;
 
-    case pionMinus:
-      n5 +=1;
-      break;
+      case pionMinus:
+	n5 +=1;
+	break;
 
-    case pionZero:
-      n7 +=1;
-      break;
+      case pionZero:
+	n7 +=1;
+	break;
 
-    case foton:
-      n10 +=1;
-      break;
+      case foton:
+	n10 +=1;
+	break;
 
-    default:
-      cout << "ERROR: unknown particle" << endl;
+      default:
+	cout << "ERROR: unknown particle" << endl;
+      }
     }
-}
-}
+  }
 
-    return 0;
+  return 0;
     
 }
 
-  G4int test() {
+G4int test() {
 
-    G4int verboseLevel = 1;
+  G4int verboseLevel = 1;
 
-    if (verboseLevel > 1) {
-      G4cout << " >>> test() " << G4endl;
-    }
+  if (verboseLevel > 1) {
+    G4cout << " >>> test() " << G4endl;
+  }
 
-    if (verboseLevel > 1) {
-      G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
-    }
+  if (verboseLevel > 1) {
+    G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
+  }
 
-    return 0;
-  };
+  return 0;
+};
 
 
 
