@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.7 2000-05-13 10:48:19 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.8 2000-05-22 08:09:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,12 +34,12 @@
 #include "G4Plane3D.hh"
 
 int G4OpenGLViewer::snglBuf_RGBA[10] =
-{ GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3, 
-  GLX_BLUE_SIZE, 2, GLX_DEPTH_SIZE, 1, None };
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
+  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
 
 int G4OpenGLViewer::dblBuf_RGBA[11] =
-{ GLX_RGBA, GLX_RED_SIZE, 3, GLX_GREEN_SIZE, 3,
-  GLX_BLUE_SIZE, 2, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
+{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
+  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
