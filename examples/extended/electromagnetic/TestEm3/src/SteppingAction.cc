@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.18 2005-01-11 17:29:56 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.19 2005-02-02 16:42:45 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,17 +73,15 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
   
-  if (edep > 0.) {    
-    // collect step length of charged particles
-    G4double stepl = 0.;
-    if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
+  // collect step length of charged particles
+  G4double stepl = 0.;
+  if (particle->GetPDGCharge() != 0.) stepl = aStep->GetStepLength();
     
-    // sum up per event
-    eventAct->SumEnergy(absorNum,edep,stepl);
+  // sum up per event
+  eventAct->SumEnergy(absorNum,edep,stepl);
   
-    //longitudinal profile of edep per absorber
-    histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
-  }  
+  //longitudinal profile of edep per absorber
+  if (edep>0.) histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
   
   //energy flow
   //

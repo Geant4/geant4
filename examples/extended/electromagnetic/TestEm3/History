@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2005-01-11 14:15:51 maire Exp $
+$Id: History,v 1.70 2005-02-02 16:42:43 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
+     
+02-02-05 mma 
+- SteppingAction : sum charged stepLenght, even if edep=0.
      
 11-01-05 mma (testem3-V07-00-02)
 - SteppingAction : corrections for energy flow
