@@ -59,6 +59,13 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
 	// Is allBehind?
 	//
 	allBehind = (zSign*(cos(phiOther)*radial.y() - sin(phiOther)*radial.x()) < 0);
+	
+	//
+	// Adjacent edges
+	//
+	G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
+	G4double cosMid = cos(midPhi), 
+                 sinMid = sin(midPhi);
 
         //
         // Allocate corners
@@ -87,9 +94,6 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
         //
         // Fill them
         //
-	G4double midPhi = phi + (start ? +0.5 : -0.5)*deltaPhi;
-	G4double cosMid = cos(midPhi), 
-		 sinMid = sin(midPhi);
 	G4double rFact = cos(0.5*deltaPhi);
 	G4ThreeVector sideNorm;
 
@@ -233,6 +237,77 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
 G4PolyPhiFace::~G4PolyPhiFace()
 {
 	delete [] edges;
+	delete [] corners;
+}
+
+
+//
+// Copy constructor
+//
+G4PolyPhiFace::G4PolyPhiFace( const G4PolyPhiFace &source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4PolyPhiFace *G4PolyPhiFace::operator=( const G4PolyPhiFace &source )
+{
+	if (this == &source) return this;
+
+	delete [] edges;
+	delete [] corners;
+	
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff (protected)
+//
+void G4PolyPhiFace::CopyStuff( const G4PolyPhiFace &source )
+{
+	//
+	// The simple stuff
+	//
+	numEdges	= source.numEdges;
+	normal  	= source.normal;
+	radial		= source.radial;
+	surface		= source.surface;
+	rMin		= source.rMin;
+	rMax		= source.rMax;
+	zMin		= source.zMin;
+	zMax		= source.zMax;
+	allBehind	= source.allBehind;
+	
+	//
+	// Corner dynamic array
+	//
+        corners = new G4PolyPhiFaceVertex[numEdges];
+	G4PolyPhiFaceVertex *corn = corners,
+		    	    *sourceCorn = source.corners;
+	do {
+		*corn = *sourceCorn;
+	} while( ++sourceCorn, ++corn < corners+numEdges );
+	
+	//
+	// Edge dynamic array
+	//
+        edges = new G4PolyPhiFaceEdge[numEdges];
+
+        G4PolyPhiFaceVertex *prev = corners+numEdges-1,
+                            *here = corners;
+        G4PolyPhiFaceEdge   *edge = edges,
+			    *sourceEdge = source.edges;
+        do {
+		*edge = *sourceEdge;
+                edge->v0 = prev;
+                edge->v1 = here;
+        } while( ++sourceEdge, ++edge, prev=here, ++here < corners+numEdges );
 }
 
 
@@ -514,7 +589,7 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
 	
 	
 //
-// InsideEdgeExact
+// InsideEdgesExact
 //
 // Decide if the point in r,z is inside the edges of our face,
 // **but** do so consistently with other faces.
@@ -542,30 +617,87 @@ G4bool G4PolyPhiFace::InsideEdgesExact( const G4double r, const G4double z,
 	     z > zMax+kCarTolerance    ) return false;
 	
 	//
-	// Exact check
+	// Exact check: loop over all vertices
 	//
 	G4double qx = p.x() + v.x(),
 		 qy = p.y() + v.y(),
 		 qz = p.z() + v.z();
-	G4double z0 = p.z() + v.z()*( p.x()*radial.y() - p.y()*radial.x() )/( radial.x()*v.y() - radial.y()*v.x() );
 
 	int answer = 0;
 	G4PolyPhiFaceVertex *corn = corners, 
 			    *prev = corners+numEdges-1;
-	do {
-		if ( ((corn->z <= z0) && (prev->z > z0)) ||
-		     ((corn->z >= z0) && (prev->z < z0))    ) {
-			
-			
-			G4ThreeVector qa( qx - prev->x, qy - prev->y, qz - prev->z ),
-			              qb( qx - corn->x, qy - corn->y, qz - corn->z );
-				      
-			G4ThreeVector qacb = qa.cross(qb); 
-				     
-			answer += (normSign*qacb.dot(v) <= 0) ? -1 : +1;
-		}
-	} while( prev=corn, ++corn < corners+numEdges );
 
+	G4double cornZ, prevZ;
+	
+	prevZ = ExactZOrder( z, qx, qy, qz, v, normSign, prev );
+	do {
+		//
+		// Get z order of this vertex, and compare to previous vertex
+		//
+		cornZ = ExactZOrder( z, qx, qy, qz, v, normSign, corn );
+		
+		if (cornZ < 0) {
+			if (prevZ < 0) continue;
+		}
+		else if (cornZ > 0) {
+			if (prevZ > 0) continue;
+		}
+		else {
+			//
+			// By chance, we overlap exactly (within precision) with 
+			// the current vertex. Continue if the same happened previously
+			// (e.g. the previous vertex had the same z value)
+			//
+			if (prevZ == 0) continue;
+			
+			//
+			// Otherwise, to decide what to do, we need to know what is
+			// coming up next. Specifically, we need to find the next vertex
+			// with a non-zero z order.
+			//
+			// One might worry about infinite loops, but the above conditional
+			// should prevent it
+			//
+			G4PolyPhiFaceVertex *next = corn;
+			G4double nextZ;
+			do {
+				next++;
+				if (next == corners+numEdges) next = corners;
+
+				nextZ = ExactZOrder( z, qx, qy, qz, v, normSign, next );
+			} while( nextZ == 0 );
+			
+			//
+			// If we won't be changing direction, go to the next vertex
+			//
+			if (nextZ*prevZ < 0) continue;
+		}
+	
+			
+		//
+		// We overlap in z with the side of the face that stretches from
+		// vertex "prev" to "corn". On which side (left or right) do
+		// we lay with respect to this segment?
+		//	
+		G4ThreeVector qa( qx - prev->x, qy - prev->y, qz - prev->z ),
+			      qb( qx - corn->x, qy - corn->y, qz - corn->z );
+
+		G4double aboveOrBelow = normSign*qa.cross(qb).dot(v);
+		
+		if (aboveOrBelow > 0) 
+			answer++;
+		else if (aboveOrBelow < 0)
+			answer--;
+		else {
+			//
+			// A precisely zero answer here means we exactly
+			// intersect (within roundoff) the edge of the face.
+			// Return true in this case.
+			//
+			return true;
+		}
+	} while( prevZ = cornZ, prev=corn, ++corn < corners+numEdges );
+	
 //	G4int fanswer = abs(answer);
 //	if (fanswer==1 || fanswer>2) {
 //		G4cerr << "G4PolyPhiFace::InsideEdgesExact: answer is " << answer << endl;

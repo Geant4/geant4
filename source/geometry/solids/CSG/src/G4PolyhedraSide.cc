@@ -291,6 +291,85 @@ G4PolyhedraSide::~G4PolyhedraSide()
 
 
 //
+// Copy constructor
+//
+G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSide &source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4PolyhedraSide *G4PolyhedraSide::operator=( const G4PolyhedraSide &source )
+{
+	if (this == &source) return this;
+	
+	delete cone;
+	delete [] vecs;
+	delete [] edges;
+	
+	CopyStuff( source );
+
+	return this;
+}
+
+
+//
+// CopyStuff
+//
+void G4PolyhedraSide::CopyStuff( const G4PolyhedraSide &source )
+{
+	//
+	// The simple stuff
+	//
+	numSide		= source.numSide;
+	r[0]		= source.r[0];
+	r[1]		= source.r[1];
+	z[0]		= source.z[0];
+	z[1]		= source.z[1];
+	startPhi	= source.startPhi;
+	deltaPhi	= source.deltaPhi;
+	endPhi		= source.endPhi;
+	phiIsOpen	= source.phiIsOpen;
+	allBehind	= source.allBehind;
+	
+	lenRZ		= source.lenRZ;
+	lenPhi[0]	= source.lenPhi[0];
+	lenPhi[1]	= source.lenPhi[1];
+	edgeNorm	= source.edgeNorm;
+	
+	cone = new G4IntersectingCone( *source.cone );
+
+	//
+	// Duplicate edges
+	//
+	G4int	numEdges = phiIsOpen ? numSide+1 : numSide;
+	edges = new G4PolyhedraSideEdge[numEdges];
+	
+	G4PolyhedraSideEdge *edge = edges,
+			    *sourceEdge = source.edges;
+	do {
+		*edge = *sourceEdge;
+	} while( ++sourceEdge, ++edge < edges + numEdges);
+
+	//
+	// Duplicate vecs
+	//
+	vecs = new G4PolyhedraSideVec[numSide];
+	
+	G4PolyhedraSideVec *vec = vecs,
+			   *sourceVec = source.vecs;
+	do {
+		*vec = *sourceVec;
+		vec->edges[0] = edges + (sourceVec->edges[0] - source.edges);
+		vec->edges[1] = edges + (sourceVec->edges[1] - source.edges);
+	} while( ++sourceVec, ++vec < vecs + numSide );
+}
+	
+
+//
 // Intersect
 //
 // Decide if a line intersects the face.
@@ -335,15 +414,6 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 {
 	G4double normSign = outgoing ? +1 : -1;
 	
-	isAllBehind = allBehind;
-	
-	//
-	// Which phi segment does the starting point p belong to?
-	// If we are not on a segment (i.e. in the phi gap), PhiSegment
-	// returns the value -1.
-	//
-	G4int iStart = PhiSegment( p.phi() );
-	
 	//
 	// ------------------TO BE IMPLEMENTED---------------------
 	// Testing the intersection of individual phi faces is
@@ -370,10 +440,10 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 	// once.
 	//
 	// Result: at worst, an iterative search. On average,
-	// two tests would be required.
+	// a little more than two tests would be required.
 	//
 	G4ThreeVector q = p + v;
-
+	
 	G4int face = 0;
 	G4PolyhedraSideVec *vec = vecs;
 	do {
@@ -389,59 +459,57 @@ G4bool G4PolyhedraSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &
 		G4ThreeVector delta = p - vec->center;
 		distFromSurface = -normSign*delta.dot(vec->normal);
 		
-		if (distFromSurface < (face == iStart ? -surfTolerance : 0)) continue;
+		if (distFromSurface < -surfTolerance) continue;
+		
+		//
+		//                            phi
+		//      c -------- d           ^
+		//      |          |           |
+		//      a -------- b           +---> r/z
+		//
+		//
+		// Do we remain on this particular segment?
+		//
+		G4ThreeVector qc = q - vec->edges[1]->corner[0];
+		G4ThreeVector qd = q - vec->edges[1]->corner[1];
+		
+		if (normSign*qc.cross(qd).dot(v) < 0) continue;
+		
+		G4ThreeVector qa = q - vec->edges[0]->corner[0];
+		G4ThreeVector qb = q - vec->edges[0]->corner[1];
+		
+		if (normSign*qa.cross(qb).dot(v) > 0) continue;
+		
+		//
+		// We found the one and only segment we might be intersecting.
+		// Do we remain within r/z bounds?
+		//
+		
+		if (normSign*qa.cross(qc).dot(v) < 0) return false;
+		if (normSign*qb.cross(qd).dot(v) > 0) return false;
+		
+		//
+		// We allow the face to be slightly behind the trajectory
+		// (surface tolerance) only if the point p is within
+		// the vicinity of the face
+		//
+		if (distFromSurface < 0) {
+			G4ThreeVector ps = p - vec->center; 
+			
+			G4double rz = ps.dot(vec->surfRZ);
+			if (fabs(rz) > lenRZ+surfTolerance) return false; 
+
+			G4double pp = ps.dot(vec->surfPhi);
+			if (fabs(pp) > lenPhi[0] + lenPhi[1]*rz + surfTolerance) return false;
+		}
+			
 
 		//
-		// Calculate distance to intersection point
+		// Intersection found. Return answer.
 		//
 		distance = distFromSurface/dotProd;
-		
-		//
-		// Do we remain on this particular face?
-		//
-		G4ThreeVector intersect = p + distance*v;		
-
-		if ( face != PhiSegment( intersect.phi() ) ) continue;
-		
-		//
-		// We found an intersecting face. Do we intersect 
-		// within the RZ bounds?
-		//
-		G4ThreeVector ic = intersect - vec->center;
-		G4double atRZ = vec->surfRZ.dot(ic);
-
-		if (atRZ < 0) {
-			if (r[0] > 0.0) {
-
-				if (atRZ < -lenRZ*1.2) return false;	// Forget it! Missed by a mile.
-
-				G4ThreeVector qa = q - vec->edges[0]->corner[0],
-					      qb = q - vec->edges[1]->corner[0];
-				G4ThreeVector qacb = qa.cross(qb);
-				if (normSign*qacb.dot(v) < 0) return false;
-
-				if (distFromSurface < 0) {
-					if (atRZ < -lenRZ-surfTolerance) return false;
-				}
-			}
-		}
-		else if (atRZ > 0) {
-			if (r[1] > 0.0) {
-
-				if (atRZ > lenRZ*1.2) return false;	// Missed by a mile
-
-				G4ThreeVector qa = q - vec->edges[0]->corner[1],
-					      qb = q - vec->edges[1]->corner[1];
-				G4ThreeVector qacb = qa.cross(qb);
-				if (normSign*qacb.dot(v) >= 0) return false;
-
-				if (distFromSurface < 0) {
-					if (atRZ > lenRZ+surfTolerance) return false;
-				}
-			}
-		}
-		
 		normal = vec->normal;
+		isAllBehind = allBehind;
 		return true;
 	} while( ++vec, ++face < numSide );
 
@@ -844,8 +912,6 @@ G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
 	
 	return answer;
 }
-
-
 
 
 //

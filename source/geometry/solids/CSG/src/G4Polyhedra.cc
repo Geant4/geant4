@@ -46,7 +46,7 @@
 G4Polyhedra::G4Polyhedra( G4String name, 
                           const G4double phiStart,
                           const G4double thePhiTotal,
- 		          const G4double theNumSide,	
+ 		          const G4int theNumSide,	
                           const G4int numZPlanes,
                           const G4double zPlane[],
                           const G4double rInner[],
@@ -64,21 +64,21 @@ G4Polyhedra::G4Polyhedra( G4String name,
 	//
 	// Some historical stuff
 	//
-	original_parameters.exist = true;
+	original_parameters = new G4PolyhedraHistorical;
 	
-	original_parameters.numSide = theNumSide;
-	original_parameters.Start_angle = phiStart;
-	original_parameters.Opening_angle = phiTotal;
-	original_parameters.Num_z_planes = numZPlanes;
-	original_parameters.Z_values = new G4double[numZPlanes];
-	original_parameters.Rmin = new G4double[numZPlanes];
-	original_parameters.Rmax = new G4double[numZPlanes];
+	original_parameters->numSide = theNumSide;
+	original_parameters->Start_angle = phiStart;
+	original_parameters->Opening_angle = phiTotal;
+	original_parameters->Num_z_planes = numZPlanes;
+	original_parameters->Z_values = new G4double[numZPlanes];
+	original_parameters->Rmin = new G4double[numZPlanes];
+	original_parameters->Rmax = new G4double[numZPlanes];
 
         G4int i;
 	for (i=0; i<numZPlanes; i++) {
-		original_parameters.Z_values[i] = zPlane[i];
-		original_parameters.Rmin[i] = rInner[i]/convertRad;
-		original_parameters.Rmax[i] = rOuter[i]/convertRad;
+		original_parameters->Z_values[i] = zPlane[i];
+		original_parameters->Rmin[i] = rInner[i]/convertRad;
+		original_parameters->Rmax[i] = rOuter[i]/convertRad;
 	}
 	
 	
@@ -103,12 +103,12 @@ G4Polyhedra::G4Polyhedra( G4String name,
 G4Polyhedra::G4Polyhedra( G4String name, 
 		    	  const G4double phiStart,
                     	  const G4double phiTotal,
- 		          const G4double theNumSide,	
+ 		          const G4int    theNumSide,	
 		    	  const G4int    numRZ,
 		    	  const G4double r[],
 		    	  const G4double z[]	 ) : G4VCSGfaceted( name )
 {
-	original_parameters.exist = false;
+	original_parameters = 0;
 	
 	G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
 	
@@ -125,7 +125,7 @@ G4Polyhedra::G4Polyhedra( G4String name,
 //
 void G4Polyhedra::Create( const G4double phiStart,
             	     	  const G4double phiTotal,
- 		          const G4double theNumSide,	
+ 		          const G4int    theNumSide,	
 		     	  G4ReduciblePolygon *rz  )
 {
 	//
@@ -269,14 +269,77 @@ void G4Polyhedra::Create( const G4double phiStart,
 G4Polyhedra::~G4Polyhedra()
 {
 	delete [] corners;
-
-	if (original_parameters.exist) {
-		delete [] original_parameters.Z_values;
-		delete [] original_parameters.Rmin;
-		delete [] original_parameters.Rmax;
-	}
+	if (original_parameters) delete original_parameters;
 	
 	delete enclosingCylinder;
+}
+
+
+//
+// Copy constructor
+//
+G4Polyhedra::G4Polyhedra( const G4Polyhedra &source ) : G4VCSGfaceted( source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4Polyhedra *G4Polyhedra::operator=( const G4Polyhedra &source )
+{
+	if (this == &source) return this;
+
+	G4VCSGfaceted::operator=( source );
+	
+	delete [] corners;
+	if (original_parameters) delete original_parameters;
+	
+	delete enclosingCylinder;
+	
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff
+//
+void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
+{
+	//
+	// Simple stuff
+	//
+	numSide		= source.numSide;
+	startPhi	= source.startPhi;
+	endPhi		= source.endPhi;
+	phiIsOpen	= source.phiIsOpen;
+	numCorner	= source.numCorner;
+
+	//
+	// The corner array
+	//
+	corners = new G4PolyhedraSideRZ[numCorner];
+	
+	G4PolyhedraSideRZ	*corn = corners,
+				*sourceCorn = source.corners;
+	do {
+		*corn = *sourceCorn;
+	} while( ++sourceCorn, ++corn < corners+numCorner );
+	
+	//
+	// Original parameters
+	//
+	if (source.original_parameters) {
+		original_parameters = new G4PolyhedraHistorical( *source.original_parameters );
+	}
+	
+	//
+	// Enclosing cylinder
+	//
+	enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 }
 
 
@@ -338,15 +401,15 @@ G4Polyhedron *G4Polyhedra::CreatePolyhedron() const
 	//
 	// This has to be fixed in visualization. Fake it for the moment.
 	// 
-	if (original_parameters.exist) {
+	if (original_parameters) {
 	
-		return new G4PolyhedronPgon( original_parameters.Start_angle,
-					     original_parameters.Opening_angle,
-					     original_parameters.numSide,
-					     original_parameters.Num_z_planes,
-					     original_parameters.Z_values,
-					     original_parameters.Rmin,
-					     original_parameters.Rmax);
+		return new G4PolyhedronPgon( original_parameters->Start_angle,
+					     original_parameters->Opening_angle,
+					     original_parameters->numSide,
+					     original_parameters->Num_z_planes,
+					     original_parameters->Z_values,
+					     original_parameters->Rmin,
+					     original_parameters->Rmax);
 	}
 	else {
 		G4cerr << "G4Polyhedra: visualization of this type of G4Polyhedra is not supported at this time" << endl;
@@ -363,3 +426,36 @@ G4NURBS *G4Polyhedra::CreateNURBS() const
 {
 	return 0;
 }
+
+
+
+
+//
+// G4Polyhedra::G4PolyhedraHistorical stuff
+//
+G4Polyhedra::G4PolyhedraHistorical::~G4PolyhedraHistorical()
+{
+	delete [] Z_values;
+	delete [] Rmin;
+	delete [] Rmax;
+}
+
+G4Polyhedra::G4PolyhedraHistorical::G4PolyhedraHistorical( const G4PolyhedraHistorical &source )
+{
+	Start_angle 	= source.Start_angle;
+	Opening_angle	= source.Opening_angle;
+	numSide		= source.numSide;
+	Num_z_planes	= source.Num_z_planes;
+	
+	Z_values	= new G4double[Num_z_planes];
+	Rmin		= new G4double[Num_z_planes];
+	Rmax		= new G4double[Num_z_planes];
+	
+	G4int i;
+	for( i = 0; i < Num_z_planes; i++) {
+		Z_values[i] = source.Z_values[i];
+		Rmin[i]	    = source.Rmin[i];
+		Rmax[i]	    = source.Rmax[i];
+	}
+}
+

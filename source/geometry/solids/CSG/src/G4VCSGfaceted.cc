@@ -30,12 +30,68 @@
 //
 G4VCSGfaceted::~G4VCSGfaceted()
 {
-	G4VCSGface **face = faces;
-	do {
-		delete *face;
-	} while( ++face < faces + numFace );
+	DeleteStuff();
+}
+
+
+//
+// Copy constructor
+//
+G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source ) : G4CSGSolid( source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4VCSGfaceted* G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+{
+	if (&source == this) return this;
 	
-	delete [] faces;
+	DeleteStuff();
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff (protected)
+//
+// Copy the contents of source
+//
+void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
+{
+	numFace = source.numFace;
+	if (numFace == 0) return;		// odd, but permissable?
+	
+	faces = new G4VCSGface*[numFace];
+	
+	G4VCSGface **face = faces,
+		   **sourceFace = source.faces;
+	do {
+		*face = (*sourceFace)->Clone();
+	} while( ++sourceFace, ++face < faces+numFace );
+}
+
+
+//
+// DeleteStuff (protected)
+//
+// Delete all allocated objects
+//
+void G4VCSGfaceted::DeleteStuff()
+{
+	if (numFace) {
+		G4VCSGface **face = faces;
+		do {
+			delete *face;
+		} while( ++face < faces + numFace );
+
+		delete [] faces;
+	}
 }
 
 

@@ -34,19 +34,19 @@ G4Polycone::G4Polycone( G4String name,
 	//
 	// Some historical ugliness
 	//
-	original_parameters.exist = true;
+	original_parameters = new G4PolyconeHistorical();
 	
-	original_parameters.Start_angle = phiStart;
-	original_parameters.Opening_angle = phiTotal;
-	original_parameters.Num_z_planes = numZPlanes;
-	original_parameters.Z_values = new G4double[numZPlanes];
-	original_parameters.Rmin = new G4double[numZPlanes];
-	original_parameters.Rmax = new G4double[numZPlanes];
+	original_parameters->Start_angle = phiStart;
+	original_parameters->Opening_angle = phiTotal;
+	original_parameters->Num_z_planes = numZPlanes;
+	original_parameters->Z_values = new G4double[numZPlanes];
+	original_parameters->Rmin = new G4double[numZPlanes];
+	original_parameters->Rmax = new G4double[numZPlanes];
         G4int i;
 	for (i=0; i<numZPlanes; i++) {
-		original_parameters.Z_values[i] = zPlane[i];
-		original_parameters.Rmin[i] = rInner[i];
-		original_parameters.Rmax[i] = rOuter[i];
+		original_parameters->Z_values[i] = zPlane[i];
+		original_parameters->Rmin[i] = rInner[i];
+		original_parameters->Rmax[i] = rOuter[i];
 	}
 		
 	//
@@ -73,7 +73,7 @@ G4Polycone::G4Polycone( G4String name,
 		    	const G4double r[],
 		    	const G4double z[]	 ) : G4VCSGfaceted( name )
 {
-	original_parameters.exist = false;
+	original_parameters = 0;
 
 	G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
 	
@@ -225,11 +225,76 @@ G4Polycone::~G4Polycone()
 {
 	delete [] corners;
 	
-	if (original_parameters.exist) {
-		delete [] original_parameters.Z_values;
-		delete [] original_parameters.Rmin;
-		delete [] original_parameters.Rmax;
+	if (original_parameters) delete original_parameters;
+}
+
+
+
+
+//
+// Copy constructor
+//
+G4Polycone::G4Polycone( const G4Polycone &source ) : G4VCSGfaceted( source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4Polycone *G4Polycone::operator=( const G4Polycone &source )
+{
+	if (this == &source) return this;
+	
+	G4VCSGfaceted::operator=( source );
+	
+	delete [] corners;
+	if (original_parameters) delete original_parameters;
+	
+	delete enclosingCylinder;
+	
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff
+//
+void G4Polycone::CopyStuff( const G4Polycone &source )
+{
+	//
+	// Simple stuff
+	//
+	startPhi	= source.startPhi;
+	endPhi		= source.endPhi;
+	phiIsOpen	= source.phiIsOpen;
+	numCorner	= source.numCorner;
+
+	//
+	// The corner array
+	//
+	corners = new G4PolyconeSideRZ[numCorner];
+	
+	G4PolyconeSideRZ	*corn = corners,
+				*sourceCorn = source.corners;
+	do {
+		*corn = *sourceCorn;
+	} while( ++sourceCorn, ++corn < corners+numCorner );
+	
+	//
+	// Original parameters
+	//
+	if (source.original_parameters) {
+		original_parameters = new G4PolyconeHistorical( *source.original_parameters );
 	}
+	
+	//
+	// Enclosing cylinder
+	//
+	enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 }
 
 
@@ -291,14 +356,14 @@ G4Polyhedron *G4Polycone::CreatePolyhedron() const
 	//
 	// This has to be fixed in visualization. Fake it for the moment.
 	// 
-	if (original_parameters.exist) {
+	if (original_parameters) {
 	
-		return new G4PolyhedronPcon( original_parameters.Start_angle,
-					     original_parameters.Opening_angle,
-					     original_parameters.Num_z_planes,
-					     original_parameters.Z_values,
-					     original_parameters.Rmin,
-					     original_parameters.Rmax);
+		return new G4PolyhedronPcon( original_parameters->Start_angle,
+					     original_parameters->Opening_angle,
+					     original_parameters->Num_z_planes,
+					     original_parameters->Z_values,
+					     original_parameters->Rmin,
+					     original_parameters->Rmax);
 	}
 	else {
 		G4cerr << "G4Polycone: visualization of this type of G4Polycone is not supported at this time" << endl;
@@ -314,3 +379,33 @@ G4NURBS *G4Polycone::CreateNURBS() const
 {
 	return 0;
 }
+
+
+//
+// G4Polycone:G4PolyconeHistorical stuff
+//
+G4Polycone::G4PolyconeHistorical::~G4PolyconeHistorical()
+{
+	delete [] Z_values;
+	delete [] Rmin;
+	delete [] Rmax;
+}
+
+G4Polycone::G4PolyconeHistorical::G4PolyconeHistorical( const G4Polycone::G4PolyconeHistorical &source )
+{
+	Start_angle 	= source.Start_angle;
+	Opening_angle	= source.Opening_angle;
+	Num_z_planes	= source.Num_z_planes;
+	
+	Z_values	= new G4double[Num_z_planes];
+	Rmin		= new G4double[Num_z_planes];
+	Rmax		= new G4double[Num_z_planes];
+	
+	G4int i;
+	for( i = 0; i < Num_z_planes; i++) {
+		Z_values[i] = source.Z_values[i];
+		Rmin[i]	    = source.Rmin[i];
+		Rmax[i]	    = source.Rmax[i];
+	}
+}
+

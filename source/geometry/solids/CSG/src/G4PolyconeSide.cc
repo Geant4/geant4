@@ -141,6 +141,75 @@ G4PolyconeSide::~G4PolyconeSide()
 }
 
 
+//
+// Copy constructor
+//
+G4PolyconeSide::G4PolyconeSide( const G4PolyconeSide &source )
+{
+	CopyStuff( source );
+}
+
+
+//
+// Assignment operator
+//
+G4PolyconeSide *G4PolyconeSide::operator=( const G4PolyconeSide &source )
+{
+	if (this == &source) return this;
+
+	delete cone;
+	if (phiIsOpen) delete [] corners;
+	
+	CopyStuff( source );
+	
+	return this;
+}
+
+
+//
+// CopyStuff
+//
+void G4PolyconeSide::CopyStuff( const G4PolyconeSide &source )
+{
+	r[0]		= source.r[0];
+	r[1]		= source.r[1];
+	z[0]		= source.z[0];
+	z[1]		= source.z[1];
+	
+	startPhi	= source.startPhi;
+	deltaPhi	= source.deltaPhi;
+	phiIsOpen	= source.phiIsOpen;
+	allBehind	= source.allBehind;
+	
+	cone		= new G4IntersectingCone( *source.cone );
+	
+	rNorm		= source.rNorm;
+	zNorm		= source.zNorm;
+	rS		= source.rS;
+	zS		= source.zS;
+	length		= source.length;
+	prevRNorm	= source.prevRNorm;
+	nextRNorm	= source.nextRNorm;
+	
+	rNormEdge[0] 	= source.rNormEdge[0];
+	rNormEdge[1]	= source.rNormEdge[1];
+	zNormEdge[0]	= source.zNormEdge[0];
+	zNormEdge[1]	= source.zNormEdge[1];
+	
+	if (phiIsOpen) {
+		corners = new G4ThreeVector[4];
+		
+		corners[0] = source.corners[0];
+		corners[1] = source.corners[1];
+		corners[2] = source.corners[2];
+		corners[3] = source.corners[3];
+	}
+}
+
+
+//
+// Intersect
+//
 G4bool G4PolyconeSide::Intersect( const G4ThreeVector &p, const G4ThreeVector &v,	
 				  const G4bool outgoing, const G4double surfTolerance,
 				  G4double &distance, G4double &distFromSurface,
