@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.17 2002-06-05 16:42:24 maire Exp $
+// $Id: Em3RunAction.cc,v 1.18 2002-12-05 17:11:11 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -175,8 +175,13 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   
   G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs;
   
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(2);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  G4long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(2);
     
   G4cout << "\n-------------------------------------------------------------\n"
          << G4std::setw(51) << "total energy dep" 
@@ -205,8 +210,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
     
   G4cout << "\n-------------------------------------------------------------";
   G4cout << G4endl;  
-  G4cout.setf(oldform,G4std::ios::floatfield);
-  G4cout.precision(oldprec);
+  G4cout.setf(mode,G4std::ios::floatfield);
+  G4cout.precision(prec);
     
   // show Rndm status
   HepRandom::showEngineStatus();
@@ -242,8 +247,13 @@ void Em3RunAction::PrintDedxTables()
 
   //print the kinetic energies
   //
-  G4long oldform = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
-  G4int  oldprec = G4cout.precision(3);
+#ifdef G4USE_STD_NAMESPACE
+  G4std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#else 
+  long mode = G4cout.setf(G4std::ios::fixed,G4std::ios::floatfield);
+#endif
+  G4int  prec = G4cout.precision(3);
      
   G4cout << "\n kinetic energies \n ";
   for (G4int j=0; j<nbin; ++j) {
@@ -290,8 +300,8 @@ void Em3RunAction::PrintDedxTables()
       G4cout << G4endl; 
      }
      
-  G4cout.precision(oldprec);
-  G4cout.setf(oldform,G4std::ios::floatfield);     
+  G4cout.precision(prec);
+  G4cout.setf(mode,G4std::ios::floatfield);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
