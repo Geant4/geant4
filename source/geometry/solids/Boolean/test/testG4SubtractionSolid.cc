@@ -215,7 +215,7 @@ int main()
     assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vmx)); // &&*pgoodNorm);
 
     dist=b1.DistanceToOut(ponxside,vy,calcNorm,pgoodNorm,pNorm);
-//  cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
+//  G4cout<<"b1.DistanceToOut(ponxside,vy) = "<<dist<<G4endl;
 //  assert(ApproxEqual(dist,0)&&ApproxEqual(*pNorm,vy)&&*pgoodNorm);
 
     dist=b1Sb2.DistanceToOut(ponb2mx,vmx,calcNorm,pgoodNorm,pNorm);
@@ -332,7 +332,7 @@ int main()
     dist=t1Sb3.DistanceToIn(G4ThreeVector(0,36,0),vx);
     assert(ApproxEqual(dist,10));
 
-    cout<<"Tracking functions are OK"<<G4endl ;
+    G4cout<<"Tracking functions are OK"<<G4endl ;
 
 // CalculateExtent
 
