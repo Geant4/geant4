@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2000-04-11 16:04:20 johna Exp $
+$Id: History,v 1.16 2000-04-12 08:44:52 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 11, 2000   J. Allison
+Apr 11,   00   J. Allison
 
 - Removed implementations of GetExtent in most sub-classes of G4VSolid (a
   default implementation exists in G4VSolid).
 - All implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
-    now correctly written: scene.AddThis(*this);
+  now correctly written: scene.AddThis(*this).
 
 Apr 05,   00   G. Cosmo                  geom-solids-csg-V01-01-01
  - G4Tubs.cc: fixed bug in function Inside(p).

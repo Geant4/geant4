@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-04-11 16:03:31 johna Exp $
+$Id: History,v 1.4 2000-04-12 08:48:00 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,12 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 11, 2000   J. Allison
-
+11-Apr-2000, J.Allison
+----------------------
 - Removed implementations of GetExtent in most sub-classes of G4VSolid (a
   default implementation exists in G4VSolid).
 - All implementations of DescribeYourselfTo (G4VGraphicsScene& scene) const
-    now correctly written: scene.AddThis(*this);
+  now correctly written: scene.AddThis(*this).
 
 05-Apr-2000, G.Cosmo   (geom-solids-specific-V01-01-00)
 --------------------
