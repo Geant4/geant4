@@ -1,4 +1,4 @@
-$Id: History,v 1.137 2001-07-18 22:39:02 stanaka Exp $
+$Id: History,v 1.138 2001-07-22 01:09:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+21st July 2001  John Allison  (vis-V03-02-04)
+- Added /vis/scene/add/scale.  Needs greps-V03-02-00 and intercoms-V03-02-02.
 
 19th July 2001  Satoshi Tanaka  (vis-V03-02-03)
 - Modification of G4DAWNFILEViewer.cc
