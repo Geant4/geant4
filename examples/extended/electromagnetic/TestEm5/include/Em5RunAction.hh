@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.hh,v 1.11 2002-12-12 13:26:51 maire Exp $
+// $Id: Em5RunAction.hh,v 1.12 2003-05-30 10:28:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,6 +96,10 @@ class Em5RunAction : public G4UserRunAction
     void SetThlow(G4double Thlow);
     void SetThhigh(G4double Thhigh);
 
+    void SetnbinThproj(G4int nbin);
+    void SetThlowproj(G4double Thlow);
+    void SetThhighproj(G4double Thhigh);
+
     void SetnbinThBack(G4int nbin);
     void SetThlowBack(G4double Thlow);
     void SetThhighBack(G4double Thhigh);
@@ -128,7 +132,7 @@ class Em5RunAction : public G4UserRunAction
     
 #ifndef G4NOHIST    
     AIDA::ITree* tree;
-    AIDA::IHistogram1D* histo[10];    
+    AIDA::IHistogram1D* histo[11];    
 #endif
     
     G4double EnergySumAbs,EnergySquareSumAbs;
@@ -153,6 +157,8 @@ class Em5RunAction : public G4UserRunAction
     G4int    nbinTsec;
     G4double Thlow,Thhigh,dTh;
     G4int    nbinTh;
+    G4double Thlowproj,Thhighproj,dThproj;
+    G4int    nbinThproj;
     G4double Thlowback,Thhighback,dThback;
     G4int    nbinThback;
     G4double Rlow,Rhigh;

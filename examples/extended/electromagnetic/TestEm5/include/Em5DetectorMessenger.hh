@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorMessenger.hh,v 1.5 2002-12-16 16:30:07 maire Exp $
+// $Id: Em5DetectorMessenger.hh,v 1.6 2003-05-30 10:28:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingMessenger.cc,v 1.5 2002-12-16 16:30:08 maire Exp $
+// $Id: Em5SteppingMessenger.cc,v 1.6 2003-05-30 10:28:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5DetectorConstruction.cc,v 1.11 2003-04-30 14:12:38 maire Exp $
+// $Id: Em5DetectorConstruction.cc,v 1.12 2003-05-30 10:28:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -226,7 +226,7 @@ temperature = 2.73*kelvin;
 G4Material* Vacuum = new G4Material("Galactic", z=1., a=1.01*g/mole,density,
                      kStateGas,temperature,pressure);
 		     
-G4cout << *(G4Material::GetMaterialTable()) << G4endl;
+//  ?????? G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 
   //default materials of the calorimeter
   AbsorberMaterial = Si;

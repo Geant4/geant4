@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: Em5RunMessenger.hh,v 1.6 2003-04-30 14:12:34 maire Exp $
+// $Id: Em5RunMessenger.hh,v 1.7 2003-05-30 10:28:04 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -96,6 +96,10 @@ class Em5RunMessenger: public G4UImessenger
    G4UIcmdWithAnInteger*      setnbinThCmd; 
    G4UIcmdWithADoubleAndUnit* setThlowCmd; 
    G4UIcmdWithADoubleAndUnit* setThhighCmd; 
+
+   G4UIcmdWithAnInteger*      setnbinThprojCmd;
+   G4UIcmdWithADoubleAndUnit* setThlowprojCmd;
+   G4UIcmdWithADoubleAndUnit* setThhighprojCmd;
 
    G4UIcmdWithAnInteger*      setnbinThbackCmd; 
    G4UIcmdWithADoubleAndUnit* setThlowbackCmd; 

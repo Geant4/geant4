@@ -53,6 +53,7 @@ C
       CALL FFKEY('HIS8',NHI8 ,3,'mixed')
       CALL FFKEY('HIS9',NHI9 ,3,'mixed')
       CALL FFKEY('HI10',NHI10,3,'mixed')
+      CALL FFKEY('HI11',NHI11,3,'mixed')
 *
       CALL FFKEY('DEEM',DEEM, 1,'REAL')
       CALL FFKEY('STMA',STMA, 1,'REAL')

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5RunAction.cc,v 1.15 2002-12-12 13:26:51 maire Exp $
+// $Id: Em5RunAction.cc,v 1.16 2003-05-30 10:28:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,7 +48,8 @@
 
 Em5RunAction::Em5RunAction()
   :histName("histfile"),nbinStep(0),nbinEn(0),nbinTt(0),nbinTb(0),
-   nbinTsec(0),nbinTh(0),nbinThback(0),nbinR(0),nbinGamma(0),nbinvertexz(0)
+   nbinTsec(0),nbinTh(0),nbinThproj(0),nbinThback(0),nbinR(0),nbinGamma(0),
+   nbinvertexz(0)
 {
   runMessenger = new Em5RunMessenger(this);
 }
@@ -101,6 +102,11 @@ void Em5RunAction::bookHisto()
   {
     histo[2] = hf->createHistogram1D("3","angle distribution at exit(deg)"
                                ,nbinTh,Thlow/deg,Thhigh/deg);
+  }
+  if(nbinThproj>0)
+  {
+    histo[10] = hf->createHistogram1D("11","projected angle distribution at exit(deg)"
+                                ,nbinThproj,Thlowproj/deg,Thhighproj/deg);
   }
   if(nbinR>0)
   {
@@ -511,7 +517,24 @@ void Em5RunAction::SetThhigh(G4double Thigh)
   if(nbinTh>0)
   G4cout << " Thigh in the Theta plot = " << Thhigh << G4endl ;
 }
-
+void Em5RunAction::SetnbinThproj(G4int nbin)
+{
+  nbinThproj = nbin ;
+  if(nbinThproj>0)
+    G4cout << " Nb of bins in Thetaproj plot = " << nbinThproj << G4endl ;
+}
+void Em5RunAction::SetThlowproj(G4double Tlow)
+{
+  Thlowproj = Tlow ;
+  if(nbinThproj>0)
+    G4cout << " Tlow  in the  Thetaproj plot = " << Thlowproj << G4endl ;
+}
+void Em5RunAction::SetThhighproj(G4double Thigh)
+{
+  Thhighproj = Thigh ;
+  if(nbinThproj>0)
+    G4cout << " Thigh in the Thetaproj plot = " << Thhighproj << G4endl ;
+}
 void Em5RunAction::SetnbinThBack(G4int nbin)
 {
   nbinThback = nbin ;

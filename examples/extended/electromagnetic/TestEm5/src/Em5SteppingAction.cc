@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5SteppingAction.cc,v 1.10 2003-04-05 17:33:52 vnivanch Exp $
+// $Id: Em5SteppingAction.cc,v 1.11 2003-05-30 10:28:05 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -183,6 +183,22 @@ void Em5SteppingAction::UserSteppingAction(const G4Step* aStep)
            wg = cn/sin(Theta) ;
            runaction->GetHisto(2)->fill(Theta/deg,wg) ;
         }
+#endif
+	
+       // theta projected plot (deg) .............................
+       G4double vx=aStep->GetTrack()->GetMomentumDirection().x() ;
+       G4double vy=aStep->GetTrack()->GetMomentumDirection().y() ;
+       G4double vplane = sqrt(vx*vx+vy*vy) ;
+       G4double thpr = 0. ;
+       if(vplane > 0.)
+       {
+         vx /= vplane ;
+         thpr = acos(vx) ;
+         if(vy < 0.) thpr *= -1. ;
+       }
+#ifndef G4NOHIST
+       if(runaction->GetHisto(10) != 0)
+          runaction->GetHisto(10)->fill(thpr/deg) ;
 #endif
 
        Ttrans = track->GetKineticEnergy() ;
