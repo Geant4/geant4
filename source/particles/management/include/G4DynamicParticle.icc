@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.icc,v 1.5 2000-10-20 11:34:45 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.6 2001-01-18 12:46:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -210,6 +210,16 @@ inline const G4DecayProducts* G4DynamicParticle::GetPreAssignedDecayProducts() c
 inline void G4DynamicParticle::SetPreAssignedDecayProducts(G4DecayProducts* aDecayProducts)
 {
  thePreAssignedDecayProducts = aDecayProducts;
+}
+
+inline G4double G4DynamicParticle::GetPreAssignedDecayProperTime() const
+{
+  return thePreAssignedDecayTime;
+}
+ 
+inline void G4DynamicParticle::SetPreAssignedDecayProperTime(G4double aTime)
+{
+  thePreAssignedDecayTime = aTime;
 }
 
 inline 

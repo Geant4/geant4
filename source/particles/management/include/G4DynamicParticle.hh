@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.hh,v 1.8 2000-10-20 11:34:45 kurasige Exp $
+// $Id: G4DynamicParticle.hh,v 1.9 2001-01-18 12:46:05 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 //                ------------------------
 //      Add theDynamicCharge and theElectronOccupancy
 //                             17 AUg. 1999   H.Kurashige  
+//      Add thePreAssignedDecayTime   18 Jan. 2001 H.Kurashige
 // ------------------------------------------------------------
 
 #ifndef G4DynamicParticle_h
@@ -157,6 +158,10 @@ class G4DynamicParticle
      const G4DecayProducts *GetPreAssignedDecayProducts() const;
      void SetPreAssignedDecayProducts(G4DecayProducts *aDecayProducts);
       //   Set/Get pre-assigned decay channel
+
+     G4double GetPreAssignedDecayProperTime() const;
+     void SetPreAssignedDecayProperTime(G4double);
+      //   Set/Get pre-assigned proper time when the particle will decay
  
    
   //- print out information
@@ -188,6 +193,8 @@ class G4DynamicParticle
      G4ElectronOccupancy* theElectronOccupancy;          
   
      G4DecayProducts *thePreAssignedDecayProducts;
+
+     G4double thePreAssignedDecayTime;
 
  private:
    G4int verboseLevel;
