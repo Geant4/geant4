@@ -1,5 +1,4 @@
 #define RUN
-//#define DEBUG
 
 #include "G4EquilibriumEvaporator.hh"
 #include "G4InuclNuclei.hh"
@@ -78,9 +77,9 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
     G4int itry_global = 0;
     while(try_again && itry_global < itry_global_max) {
       itry_global++;
-#ifdef DEBUG
+  if(verboseLevel > 1){
       G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl;
-#endif
+  }
       nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
       PEX[0] = sqrt(PEX[1] * PEX[1] + PEX[2] * PEX[2] + PEX[3] * PEX[3] +
                                              nuc_mass * nuc_mass);  	
@@ -89,9 +88,9 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
       if(timeToBigBang(A, Z, EEXS)) { // big bang
       
-#ifdef DEBUG
+  if(verboseLevel > 1){
         G4cout << " big bang in eql step " << G4endl;
-#endif
+  }
         G4InuclNuclei nuclei(PEX, A, Z);        
         nuclei.setExitationEnergy(EEXS);      
         G4CollisionOutput explosion = theBigBanger->collide(0, &nuclei);
@@ -188,11 +187,11 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 	    };
 	  };  
 //   again time to decide what next
-#ifdef DEBUG
+  if(verboseLevel > 1){
           G4cout << " wn " << W[0] << " wp " << W[1] << " wd " << W[2] << endl
 	       << " wh3 " << W[3] << " wt " << W[4] << " whe4 " << W[5] << endl
 	       << " wfi " << W[6] << G4endl;
-#endif
+  }
 	  G4int icase = -1;
 	  if(prob_sum < prob_cut_off) { // photon emission chain
             G4double UCR0 = 2.5 + 150.0 / A;
@@ -394,10 +393,10 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
               InuclNuclei nuclei(A,Z);        
               nuclei.setExitationEnergy(EEXS);
-#ifdef DEBUG
+  if(verboseLevel > 1){
 	      G4cout << " fission: A " << A << " Z " << Z << " eexs " << EEXS <<
 	       " Wn " << W[0] << " Wf " << W[6] << G4endl;
-#endif
+  }
 	      G4CollisionOutput foutput = theFissioner->collide(0, &nuclei);
 	      vector<G4InuclNuclei> nuclea = foutput.getNucleiFragments();
 	      if(nuclea.size() == 2) { // fission o'k

@@ -1,5 +1,3 @@
-//#define DEBUG
-
 #include "G4CollisionOutput.hh"
 #include "G4ParticleLargerEkin.hh"
 #include "algorithm"

@@ -1,8 +1,6 @@
 #define RUN
-//#define DEBUG
 
 #include <math.h>
-
 #include "G4NonEquilibriumEvaporator.hh"
 #include "G4InuclElementaryParticle.hh"
 #include "G4InuclNuclei.hh"
@@ -29,7 +27,6 @@ G4CollisionOutput output;
 if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
 //  initialization
-  
   G4double A = nuclei_target->getA();
   G4double Z = nuclei_target->getZ();
   vector<G4double> PEX = nuclei_target->getMomentum();
@@ -65,9 +62,9 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
     if(A >= a_cut && Z >= z_cut && EEXS > eexs_cut) { // ok
 
-#ifdef DEBUG
+      if(verboseLevel > 1) {
       G4cout << " A " << A << " Z " << Z << " EEXS " << EEXS << G4endl; 
-#endif
+      }
 //        update exiton system
       G4double nuc_mass = dummy_nuc.getNucleiMass(A, Z); 
       PEX[0] = sqrt(PEX[1] * PEX[1] + PEX[2] * PEX[2] + PEX[3] * PEX[3] +

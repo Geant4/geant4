@@ -1,5 +1,3 @@
-//#define DEBUG
-
 #include "G4Fissioner.hh"
 #include "G4InuclNuclei.hh"
 #include "G4FissionStore.hh"
@@ -16,11 +14,10 @@ G4CollisionOutput output;
 
 if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
 
-#ifdef DEBUG
+ if (verboseLevel > 1) {
   G4cout << " Fissioner input " << G4endl;
   nuclei_target->printParticle();
-#endif
- 
+ }
   G4double A = nuclei_target->getA();
   G4double Z = nuclei_target->getZ();
   G4double EEXS = nuclei_target->getExitationEnergy();
@@ -121,10 +118,10 @@ if(G4InuclNuclei* nuclei_target = dynamic_cast<G4InuclNuclei*>(target)) {
       nuclei2.setExitationEnergy(EEXS2);
       nuclei2.setEnergy();
       output.addTargetFragment(nuclei2);
-#ifdef DEBUG
+ if (verboseLevel > 1) {
       nuclei1.printParticle();
       nuclei2.printParticle();
-#endif
+ }
     };
   };
 }
@@ -159,7 +156,7 @@ const G4double two_thirds = 2.0 / 3.0;
 const G4int itry_max = 2000;
 const G4double DSOL1 = 1.0e-6;
 const G4double DS1 = 0.3;
- const G4double DS2 = 1.0 / DS1 / DS1; // ::: is this ok?
+const G4double DS2 = 1.0 / DS1 / DS1; // ::: is this ok?
 
 G4double A1[2];
 A1[0] = AF;
