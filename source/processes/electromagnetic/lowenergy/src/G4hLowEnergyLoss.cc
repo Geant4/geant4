@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.7 2000-10-04 00:05:21 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.8 2000-11-05 12:17:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -28,6 +28,7 @@
 // 07/12/98 : works for ions as well+ bug corrected, L.Urban
 // 02/02/99 : several bugs fixed, L.Urban
 // 31/03/00 : rename to lowenergy as G4hLowEnergyLoss.cc V.Ivanchenko
+// 05/11/00 : new method to calculate particle ranges
 // --------------------------------------------------------------
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -151,16 +152,14 @@ void G4hLowEnergyLoss::BuildDEDXTable(
                          const G4ParticleDefinition& aParticleType)
 {
   //  calculate data members TotBin,LOGRTable,RTable first
+ 
   G4double binning = dRoverRange;
   G4double lrate = log(HighestKineticEnergy/LowestKineticEnergy);
   G4int    nbin =  G4int(lrate/log(1.+binning) + 0.5 );
   nbin = (nbin+25)/50;
-  TotBin =50*nbin ;
-  if (TotBin<50) TotBin = 50;
-  if (TotBin>500) TotBin = 500;
   LOGRTable=lrate/TotBin;
   RTable   =exp(LOGRTable);
-
+ 
   // create table if there is no table or there is a new cut value
   G4bool MakeTable = false ;
      
@@ -273,6 +272,7 @@ void G4hLowEnergyLoss::BuildDEDXTable(
       BuildRangeCoeffCTable( aParticleType);
 
       // invert the range table
+
       BuildInverseRangeTable(aParticleType);
     }
   }
@@ -399,77 +399,30 @@ void G4hLowEnergyLoss::BuildRangeVector(G4int materialIndex,
                                         G4PhysicsLogVector* rangeVector)
 //  create range vector for a material
 {
-  G4int nbin=100;
   G4bool isOut;
-  G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
-  G4double loss1,loss2,ca,cb,cba ;
-  G4double taulim,rangelim,ltaulim,ltaumax,
-           LowEdgeEnergy,tau,Value,tau1,sqtau1 ;
-
   G4PhysicsVector* physicsVector= (*theDEDXTable)[materialIndex];
-  const G4MaterialTable* theMaterialTable =
-                                G4Material::GetMaterialTable() ;
+  G4double energy1 = rangeVector->GetLowEdgeEnergy(0);
+  G4double dedx    = physicsVector->GetValue(energy1,isOut);
+  G4double range   = 0.5*energy1/dedx;
+  rangeVector->PutValue(0,range);
+  G4int n = 100;
+  G4double del = 1.0/(G4double)n ;
 
-  // low energy part first...
-  loss1 = physicsVector->GetValue(t1,isOut);
-  loss2 = physicsVector->GetValue(t2,isOut);
-  tau1 = t1/Mass ;
-  sqtau1 = sqrt(tau1) ;
-  ca = (4.*loss2-loss1)/sqtau1 ;
-  cb = (2.*loss1-4.*loss2)/tau1 ;
-  cba = cb/ca ;
-  taulim = tlim/Mass ;
-  ltaulim = log(taulim) ;
-  ltaumax = log(HighestKineticEnergy/Mass) ;
+  for (G4int j=1; j<TotBin; j++) {
 
-  G4int i=-1;
-  G4double oldValue = 0. ;
-  G4double tauold ;
-  do
-  {
-    i += 1 ;
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
-    tau = LowEdgeEnergy/Mass;
-    if ( tau <= tau1 )
-    {
-      Value = 2.*Mass*log(1.+cba*sqrt(tau))/cb ;
+    G4double energy2 = rangeVector->GetLowEdgeEnergy(j);
+    G4double de = (energy2 - energy1) * del ;
+    G4double dedx1 = dedx ;
+
+    for (G4int i=1; i<n; i++) {
+      G4double energy = energy1 + i*de ;
+      G4double dedx2  = physicsVector->GetValue(energy,isOut);
+      range  += 0.5*de*(1.0/dedx1 + 1.0/dedx2);
+      dedx1   = dedx2;
     }
-    else
-    {
-      Value = 2.*Mass*log(1.+cba*sqtau1)/cb ;
-      if(tau<=taulim)
-      {
-        taulow = tau1 ;
-        tauhigh = tau ;
-        Value += RangeIntLin(physicsVector,nbin);
-      }
-      else
-      {
-        taulow = tau1 ;
-        tauhigh = taulim ; 
-        Value += RangeIntLin(physicsVector,nbin) ;
-        ltaulow = ltaulim ;
-        ltauhigh = log(tau) ;
-        Value += RangeIntLog(physicsVector,nbin);
-      }
-    }
-
-    rangeVector->PutValue(i,Value);
-    oldValue = Value ;
-    tauold = tau ;
-  } while (tau<=taulim) ;
-  
-  i += 1 ;
-  for (G4int j=i; j<TotBin; j++)
-  {
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(j);
-    tau = LowEdgeEnergy/Mass;
-    ltaulow = log(tauold);
-    ltauhigh = log(tau);
-    Value = oldValue+RangeIntLog(physicsVector,nbin);
-    rangeVector->PutValue(j,Value);
-    oldValue = Value ;
-    tauold = tau ;
+    rangeVector->PutValue(j,range);
+    dedx = dedx1 ;
+    energy1 = energy2 ;
   }
 }    
 
@@ -1011,10 +964,12 @@ void G4hLowEnergyLoss::InvertRangeVector(G4int materialIndex,
   G4int binnumber = -1 ;
   G4bool isOut ;
 
+
   //loop for range values
   for( G4int i=0; i<TotBin; i++)
   {
     LowEdgeRange = aVector->GetLowEdgeEnergy(i) ;  //i.e. GetLowEdgeValue(i)
+
     if( rangebin < LowEdgeRange )
     {
       do

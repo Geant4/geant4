@@ -77,7 +77,7 @@ private:
   
   G4double EnergyLoss(const G4Material* material,
                             G4double kineticEnergy,
-                            G4int zParticle) const;
+                            G4double zParticle) const;
   // returns the energy loss via the quantal harmonic oscillator model 
    
   // get number of shell, energy and oscillator strenghts for material

@@ -481,11 +481,6 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
 
-  if(0.0 == kineticEnergy) {
-    fdEdx = 0.0 ;
-    fRangeNow = 0.0 ;
-    return stepLimit ;
-  }
 
   charge = (particle->GetCharge())/eplus ;
   
@@ -500,10 +495,11 @@ G4double G4hLowEnergyIonisation::GetConstraints(
 
     //Very low energy dE/dx assumed to be according to Free Electron Gas Model
     if(tscaled < MinKineticEnergy) {
-      fdEdx     = 0.5 * ProtonParametrisedDEDX(material, MinKineticEnergy) * chargeSquare ;
+      fdEdx     = 0.5 * ProtonParametrisedDEDX(material, MinKineticEnergy) 
+                * sqrt(tscaled/MinKineticEnergy) ;
       fRangeNow = tscaled/fdEdx ;
       fdEdx    *= chargeSquare ;
-      dx        = fRangeNow ;
+      dx        = fRangeNow/paramStepLimit ;
 
       // Normal energy
     } else {
@@ -536,7 +532,8 @@ G4double G4hLowEnergyIonisation::GetConstraints(
 
     //Very low energy dE/dx assumed to be constant
     if(tscaled < MinKineticEnergy) {
-      fdEdx     = AntiProtonParametrisedDEDX(material, MinKineticEnergy) * chargeSquare ;
+      fdEdx     = AntiProtonParametrisedDEDX(material, MinKineticEnergy)
+                * sqrt(tscaled/MinKineticEnergy) ;
       fRangeNow = tscaled/fdEdx ;
       fdEdx    *= chargeSquare ;
       dx        = fRangeNow/paramStepLimit ;

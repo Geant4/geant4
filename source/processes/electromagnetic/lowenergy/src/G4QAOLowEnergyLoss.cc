@@ -21,7 +21,9 @@
 //                 Introduced sizes of L0, L1, L2 arrays
 // 23/05/2000 MGP  Made compliant to design
 // 02/08/2000 V.Ivanchenko Clean up according new design
-// 03/10/2000  V.Ivanchenko CodeWizard clean up
+// 03/10/2000 V.Ivanchenko CodeWizard clean up
+// 05/11/2000 V.Ivanchenko "Aluminum" - correct name, end of cycle
+//            over shells, and two bugs from previous edition
 //
 // ************************************************************
 // It is the Quantal Harmonic Oscillator Model for energy loss
@@ -144,7 +146,7 @@ G4bool G4QAOLowEnergyLoss::IsInCharge(
 G4double G4QAOLowEnergyLoss::TheValue(const G4DynamicParticle* particle,
 	       	                      const G4Material* material) 
 {
-  G4int zParticle = (G4int)(particle->GetCharge());
+  G4double zParticle = (G4int)(particle->GetCharge())/eplus;
 
   G4double energy = particle->GetKineticEnergy() ;
   G4double eloss  = EnergyLoss(material,energy,zParticle) ;
@@ -158,7 +160,7 @@ G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
        		                      const G4Material* material,
                                             G4double kineticEnergy) 
 {
-  G4int zParticle = (G4int)(aParticle->GetPDGCharge());
+  G4double zParticle = (aParticle->GetPDGCharge())/eplus;
 
   G4double eloss  = EnergyLoss(material,kineticEnergy,zParticle) ;
 
@@ -170,7 +172,7 @@ G4double G4QAOLowEnergyLoss::TheValue(const G4ParticleDefinition* aParticle,
 
 G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
                                               G4double kineticEnergy,
-                                              G4int zParticle) const 
+                                              G4double zParticle) const 
 {
   G4int nbOfShell = GetNumberOfShell(material);
   G4double ionisationEnergy = material->GetIonisation()
@@ -185,14 +187,13 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
 
   G4double fBetheVelocity = fine_structure_const * c_light / v;
   
-  G4double stoppingNumber = 0, l0Term = 0, l1Term = 0, l2Term = 0;
+  G4double l0Term = 0, l1Term = 0, l2Term = 0;
   
   for (G4int nos = 0 ; nos < nbOfShell ; nos++){
     
     G4double l0 = 0, l1 = 0, l2 = 0;
-    G4double NormalizedEnergy = 0;
-    NormalizedEnergy = ( 2 * electron_mass_c2 * v * v  ) / 
-                       ( c_squared * GetShellEnergy(material,nos) );
+    G4double NormalizedEnergy = ( 2.0 * electron_mass_c2 * v * v  ) / 
+                                ( c_squared * GetShellEnergy(material,nos) );
     l0 = GetL0(NormalizedEnergy);
     l0Term += GetShellStrength(material,nos)  * l0; 
     
@@ -204,11 +205,9 @@ G4double G4QAOLowEnergyLoss::EnergyLoss(const G4Material* material,
     
   }
        
-  stoppingNumber = zParticle * zParticle * 
-         (l0Term + 
-          zParticle * fBetheVelocity * l1Term + 
-          zParticle * zParticle * fBetheVelocity * fBetheVelocity * l2Term);
-  dedx = ( coeff * stoppingNumber);
+  dedx = coeff * zParticle * zParticle * (l0Term
+       + zParticle * fBetheVelocity * l1Term 
+       + zParticle * zParticle * fBetheVelocity * fBetheVelocity * l2Term);
               
   return dedx ; 
                             
@@ -241,23 +240,24 @@ G4int G4QAOLowEnergyLoss::GetNumberOfShell(const G4Material* material) const
 G4double G4QAOLowEnergyLoss::GetShellEnergy(const G4Material* material,
                                             G4int nbOfTheShell) const
 {
-  // 
-  G4double shellEnergy = alShellEnergy[0];
+    // 
+    G4double shellEnergy = alShellEnergy[0];
 
-  for(G4int i=0; i<numberOfMaterials; i++) {
-
-    if(materialAvailable[i] == material->GetName()) {
-      shellEnergy =  alShellEnergy[i];
-      return shellEnergy;
-    }
-  }
-
-  G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-         << "The model is not available for "
-         << material->GetName() << G4endl;
+    if(material->GetName() == "Aluminum") shellEnergy =  alShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Silicon"  ) shellEnergy =  siShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Copper") shellEnergy =  cuShellEnergy[nbOfTheShell];  
+    else if  (material->GetName() == "Tantalum") shellEnergy =  taShellEnergy[nbOfTheShell];
+    else if  (material->GetName() == "Gold" )  shellEnergy =  auShellEnergy[nbOfTheShell];   
+    else if  (material->GetName() == "Platinum") shellEnergy =  ptShellEnergy[nbOfTheShell];
+    else if  (material->GetNumberOfElements() == 1)
+      shellEnergy = GetOscillatorEnergy(material, nbOfTheShell);
+    else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
+		<< "The model is not available for "
+		<< material->GetName() 
+		<< G4endl;
 
   return  shellEnergy;
-  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -292,17 +292,19 @@ G4double G4QAOLowEnergyLoss::GetShellStrength(const G4Material* material,
 {
   G4double shellStrength = alShellStrength[0];
   
-  for(G4int i=0; i<numberOfMaterials; i++) {
-
-    if(materialAvailable[i] == material->GetName()) {
-      shellStrength =  alShellStrength[i];
-      return shellStrength;
-    }
-  }
-
-  G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
-         << "The model is not available for "
-         << material->GetName() << G4endl;
+  if(material->GetName() == "Aluminum") shellStrength = alShellStrength[nbOfTheShell];
+  else if  (material->GetName() == "Silicon"  ) shellStrength = siShellStrength[nbOfTheShell];
+  else if  (material->GetName() == "Copper") shellStrength = cuShellStrength[nbOfTheShell];  
+  else if  (material->GetName() == "Tantalum") shellStrength = taShellStrength[nbOfTheShell];
+  else if  (material->GetName() == "Gold" )  shellStrength = auShellStrength[nbOfTheShell];   
+  else if  (material->GetName() == "Platinum") shellStrength = ptShellStrength[nbOfTheShell];
+  else if  (material->GetNumberOfElements() == 1){
+    G4int Z = (G4int)(material->GetZ());
+    shellStrength = GetOccupationNumber(Z,nbOfTheShell) / Z ;}
+  else G4cout << "WARNING - G4QAOLowEnergyLoss::GetShellEnergy - "
+              << "The model is not available for "
+              << material->GetName() 
+              << G4endl;
 
   return shellStrength;
 }
@@ -328,6 +330,7 @@ G4double G4QAOLowEnergyLoss::GetL0(G4double normEnergy) const
     if( normEnergy < L0[n][0] ) break;
   }
   if(0 == n) n = 1 ;
+  if(n >= sizeL0) n = sizeL0 - 1 ;
 
   G4double l0    = L0[n][1];
   G4double l0p   = L0[n-1][1];
@@ -346,6 +349,7 @@ G4double G4QAOLowEnergyLoss::GetL1(G4double normEnergy) const
     if( normEnergy < L1[n][0] ) break;
   }
   if(0 == n) n = 1 ;
+  if(n >= sizeL1) n = sizeL1 - 1 ;
 
   G4double l1    = L1[n][1];
   G4double l1p   = L1[n-1][1];
@@ -365,6 +369,7 @@ G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
     if( normEnergy < L2[n][0] ) break;
   }
   if(0 == n) n = 1 ;
+  if(n >= sizeL2) n = sizeL2 - 1 ;
 
   G4double l2    = L2[n][1];
   G4double l2p   = L2[n-1][1];
@@ -377,7 +382,7 @@ G4double G4QAOLowEnergyLoss::GetL2(G4double normEnergy) const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 const G4String G4QAOLowEnergyLoss::materialAvailable[6] = {
-  "Aluminium",
+  "Aluminum",
   "Silicon",
   "Copper",
   "Tantalum",
