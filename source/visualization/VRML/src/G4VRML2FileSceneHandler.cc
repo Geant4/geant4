@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileSceneHandler.cc,v 1.3 2000-04-12 13:09:31 johna Exp $
+// $Id: G4VRML2FileSceneHandler.cc,v 1.4 2000-04-27 13:56:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileSceneHandler.cc
@@ -31,7 +31,6 @@
 #include "G4VisAttributes.hh"
 #include "G4VModel.hh"
 #include "G4Scene.hh"
-#include "G4Transform.hh"
 #include "G4Polyhedron.hh"
 #include "G4Box.hh"
 #include "G4Cons.hh"
