@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.8 2001-11-07 17:07:41 radoone Exp $
+// $Id: G4Scintillation.cc,v 1.9 2002-05-09 20:35:04 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,11 @@
 // Version:     1.0
 // Created:     1998-11-07  
 // Author:      Peter Gumplinger
-// Updated:     2000-09-18 by Peter Gumplinger
+// Updated:     2002-05-09 by Peter Gumplinger
+//              > use only the PostStepPoint location for the origin of
+//                scintillation photons when energy is lost to the medium
+//                by a neutral particle
+//              2000-09-18 by Peter Gumplinger
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
 //              2001-09-17, migration of Materials to pure STL (mma) 
@@ -113,6 +117,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 {
         aParticleChange.Initialize(aTrack);
 
+        const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
         const G4Material* aMaterial = aTrack.GetMaterial();
 
 	G4StepPoint* pPreStepPoint  = aStep.GetPreStepPoint();
@@ -231,7 +236,13 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
                 // Generate new G4Track object:
 
-                G4double rand = G4UniformRand();
+                G4double rand;
+
+                if (aParticle->GetDefinition()->GetPDGCharge() != 0) {
+                   rand = G4UniformRand();
+                } else {
+                   rand = 1.0;
+                }
 
                 G4double delta = rand * aStep.GetStepLength();
 		G4double deltaTime = delta /
