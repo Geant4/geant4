@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.34 2002-10-30 11:31:28 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.35 2002-11-13 11:55:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,9 +39,8 @@
 //  11.02.02 subSecFlag = false --> No sucutoff generation (mma) 
 //  14.02.02 initial value of data member finalRange has been changed L.Urban
 //  26.02.02 initial value of data member finalRange = 1 mm (mma)
-//  21.07.02 V.Ivanchenko Fix at low energies - if tmax below ionisation
+//  21.07.02 V.Ivanchenko Fix at low energies - if tmax below ionisation 
 //           potential then only Gaussian fluctuations are sampled.
-//  30.10.02 minor correction in fluctuation, L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -935,7 +934,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double a1,a2,a3;
   G4double p1,p2,p3 ;
   G4int nb;
-  G4double na,alfa,rfac,namean,sa,alfa1,ea,sea;
+  G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
   G4double dp3;
   G4double siga ;
 
@@ -951,21 +950,21 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
+  if(Tm > threshold) Tm = threshold;
+
   beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation ?
-  if(MeanLoss >= kappa*Tm)
+  if(MeanLoss >= kappa*Tm || Tm < kappa*ipotFluct)
   {
     electronDensity = aMaterial->GetElectronDensity() ;
     siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity*ChargeSquare/beta2) ;
-    loss = G4RandGauss::shoot(MeanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
-    return loss ;
+    do {
+      loss = G4RandGauss::shoot(MeanLoss,siga) ;
+    } while (loss < 0. || loss > 2.*MeanLoss);
+    return loss;
   }
-
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  if(Tm > threshold) Tm = threshold;
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
@@ -974,14 +973,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(Tm > ipotFluct)
-    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
-  else
-  {
-     a1 /= 1.-rateFluct ;
-     a2 /= 1.-rateFluct ;
-     a3  = 0. ;
-  } 
+  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  if(a1 < 0.) a1 = 0.;
+  if(a2 < 0.) a2 = 0.;
+  if(a3 < 0.) a3 = 0.;
 
   suma = a1+a2+a3;
 
@@ -991,22 +986,55 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
     {
       e0 = aMaterial->GetIonisation()->GetEnergy0fluct();
 
-      a3 = MeanLoss/e0;
-
-      if(a3>alim)
+      if(Tm == ipotFluct)
       {
-        siga=sqrt(a3) ;
-        p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+        a3 = MeanLoss/e0;
+
+        if(a3>alim)
+        {
+          siga=sqrt(a3) ;
+          p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+        }
+        else
+          p3 = G4float(G4Poisson(a3));
+
+        loss = p3*e0 ;
+
+        if(p3 > 0)
+          loss += (1.-2.*G4UniformRand())*e0 ;
+
       }
       else
-        p3 = G4float(G4Poisson(a3));
+      {
+        Tm = Tm-ipotFluct+e0 ;
+        a3 = MeanLoss*(Tm-e0)/(Tm*e0*log(Tm/e0));
 
-      loss = p3*e0 ;
+        if(a3>alim)
+        {
+          siga=sqrt(a3) ;
+          p3 = G4std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+        }
+        else
+          p3 = G4float(G4Poisson(a3));
 
-      if(p3 > 0)
-        loss += (1.-2.*G4UniformRand())*e0 ;
+        if(p3 > 0)
+        {
+          w = (Tm-e0)/Tm ;
+          if(p3 > G4float(nmaxCont2))
+          {
+            dp3 = p3 ;
+            Corrfac = dp3/G4float(nmaxCont2) ;
+            p3 = G4float(nmaxCont2) ;
+          }
+          else
+            Corrfac = 1. ;
 
+          for(G4int i=0; i<G4int(p3); i++) loss += 1./(1.-w*G4UniformRand()) ;
+          loss *= e0*Corrfac ;  
+        }        
+      }
     }
+    
   else                              // not so small Step
     {
       // excitation type 1
