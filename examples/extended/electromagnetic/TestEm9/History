@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2005-03-16 14:29:31 maire Exp $
+$Id: History,v 1.20 2005-03-18 16:12:56 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ track of all tags.
 
      ----------------------------------------------------------
      
-16-03-05 mma
+16-03-05 mma(testem9-V07-00-00)
 - remove He3 and ionC12 from predefined particles.
 - remove IonC12 class
 - PhysListEmStandard : treat alpha as GenericIon
