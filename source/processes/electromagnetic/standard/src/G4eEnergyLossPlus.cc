@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.9 1999-06-17 12:15:59 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.10 1999-06-18 10:35:57 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -1176,7 +1176,8 @@ G4VParticleChange* G4eEnergyLossPlus::AlongStepDoIt( const G4Track& trackData,
   // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
        
   //now the loss with fluctuation
-  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+ // if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowestKineticEnergy))
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
     if (finalT < 0.) finalT = E-MeanLoss;

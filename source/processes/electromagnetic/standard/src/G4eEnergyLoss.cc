@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.6 1999-06-17 12:15:57 urban Exp $
+// $Id: G4eEnergyLoss.cc,v 1.7 1999-06-18 10:35:54 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -913,7 +913,14 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   fParticleChange.Initialize(trackData);  
   
   G4double MeanLoss, finalT; 
-  
+
+ // G4cout.precision(6); 
+ // G4cout << endl;
+ // G4cout << "kinE=" << setw(20) << E
+ //       << "  Step=" << setw(20) << Step
+ //       << "  dEdx=" << setw(20) << fdEdx
+ //       << "   r=" << setw(20) << fRangeNow << endl;
+
   if (E < MinKineticEnergy)   finalT = 0.; 
   
   else if ( E<= LowestKineticEnergy)  
@@ -941,13 +948,21 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   if(finalT < MinKineticEnergy) finalT = 0. ;
 
   MeanLoss = E-finalT ;  
+  
+  // G4cout << "finalT=" << setw(20) << finalT
+  //       << "  MeanLoss=" << setw(20) << MeanLoss << endl;
 
   //now the loss with fluctuation
-  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+ // if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E))
+  if ((EnlossFlucFlag) && (finalT > 0.) && (finalT < E)&&(E > LowestKineticEnergy))
   {
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss);
     if (finalT < 0.) finalT = E-MeanLoss;
   }
+
+  // G4cout << "finalT=" << setw(20) << finalT << " after fluct." << endl;
+  // G4cout << endl;
+  
 
   // kill the particle if the kinetic energy <= 0  
   if (finalT <= 0. )
