@@ -32,4 +32,7 @@
 /tracking/storeTrajectory 1
 /event/drawTracks charged
 #
+# Flush visualization
+/vis/viewer/update
+#
 /run/verbose 2

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em2RunAction.cc,v 1.1 1999-10-11 15:08:53 maire Exp $
+// $Id: Em2RunAction.cc,v 1.2 1999-11-12 16:08:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -183,8 +183,7 @@ void Em2RunAction::BeginOfRunAction(const G4Run* aRun)
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/clear/view");
-      UI->ApplyCommand("/vis/draw/current");
+      UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
 }
 
@@ -235,7 +234,7 @@ void Em2RunAction::fillPerEvent()
 void Em2RunAction::EndOfRunAction(const G4Run* aRun)
 {
   if (G4VVisManager::GetConcreteInstance())
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/show/view");
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
      
   //compute and print statistic
   //     
