@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst32SensitiveDetector.cc,v 1.1 2002-06-13 12:16:36 jwellisc Exp $
+// $Id: Tst32SensitiveDetector.cc,v 1.2 2003-05-30 18:25:24 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -68,15 +68,15 @@ G4bool Tst32SensitiveDetector::ProcessHits(G4Step*aStep,
 
   edep *= weight;
 
-  const G4VPhysicalVolume* physVol 
-    = aStep->GetPreStepPoint()->GetPhysicalVolume();
-  int copyID = physVol->GetCopyNo();
+//  const G4VPhysicalVolume* physVol 
+//    = aStep->GetPreStepPoint()->GetPhysicalVolume();
+//  int copyID = physVol->GetCopyNo();
   
-  (*HitCollection)[copyID]->AddEdep( edep );
+//  (*HitCollection)[copyID]->AddEdep( edep );
 
-  if(verboseLevel>0) {
-    G4cout << " Energy added to CellID " << copyID << G4endl; 
-  }
+//  if(verboseLevel>0) {
+//    G4cout << " Energy added to CellID " << copyID << G4endl; 
+//  }
 
   return true;
 }
