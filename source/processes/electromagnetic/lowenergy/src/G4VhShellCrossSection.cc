@@ -30,37 +30,37 @@
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
 // 
-// Creation date: 20.10.01
-//
+// History:
+// -----------
+// 20 Oct 2001 V.Ivanchenko   1st implementation
+// 24 Oct 2001 MGP            Minor clean-up
 //
 // -------------------------------------------------------------------
 
 #include "G4VhShellCrossSection.hh"
-
+#include "Randomize.hh"
 
 G4VhShellCrossSection::G4VhShellCrossSection()
-{}
+{ }
 
 
 G4VhShellCrossSection::~G4VhShellCrossSection() 
-{}
+{ }
 
 
 G4int G4VhShellCrossSection::SelectRandomShell(G4int Z, 
-                                               G4double kineticEnergy) const 
+                                               G4double kineticEnergy,
+					       G4double mass, 
+					       G4double momentum) const 
 {
-  G4std::vector<G4double>* p = Probabilities(Z, kineticEnergy);
-  G4int shell = 0;
-  if(p) {
-    G4int nShells = p->size();
-    G4double q = G4UniformRand();
-    for (shell=0; shell<nShells; shell++) {
-       
-      if((*p)[shell] >= q) break;
-      q -= (*p)[shell];
-
-    } 
-    delete p;
+  G4std::vector<G4double> p = Probabilities(Z,kineticEnergy,mass,momentum);
+  size_t shell = 0;
+  G4int nShells = p.size();
+  G4double q = G4UniformRand();
+  for (shell=0; shell<nShells; shell++) {
+    
+    if (p[shell] >= q) break;
+    q -= p[shell];
   }
   return shell;
 }

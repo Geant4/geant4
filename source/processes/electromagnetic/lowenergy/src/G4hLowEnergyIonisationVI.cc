@@ -862,9 +862,11 @@ G4VParticleChange* G4hLowEnergyIonisationVI::AlongStepDoIt(
 
   // Deexcitation of ionised atoms
   edep = G4std::min(edep, eloss);  
+  G4double hMass = particle->GetMass();
+  G4double hMomentum = particle->GetTotalMomentum();
   G4std::vector<G4DynamicParticle*>* newpart = DeexciteAtom(material,
                                                             kineticEnergy,
-                                                            edep);
+                                                            edep,hMass,hMomentum);
   if(newpart) {
 
     size_t nSecondaries = newpart->size();
@@ -1035,7 +1037,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   
   aParticleChange.Initialize(trackData) ;
   G4Material* aMaterial = trackData.GetMaterial() ;
-  G4double Eexc = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
+  //  G4double Eexc = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
   
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
   
@@ -1166,9 +1168,9 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   G4ParticleDefinition* type = 0;
 
   // Select atom and shell
-
   G4int Z = SelectRandomAtom(aMaterial, KineticEnergy);
-  G4int shell = shellCS->SelectRandomShell(Z, DeltaKineticEnergy);
+  // - MGP - Is the following line correct?  
+  G4int shell = shellCS->SelectRandomShell(Z, DeltaKineticEnergy,ParticleMass,TotalMomentum);
   const G4AtomicShell* atomicShell = 
                 (G4AtomicTransitionManager::Instance())->Shell(Z, shell);
   G4double bindingEnergy = atomicShell->BindingEnergy();
@@ -1238,8 +1240,10 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
 
 G4std::vector<G4DynamicParticle*>* 
 G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
-	 			             G4double incidentEnergy,
-				             G4double eLoss) 
+				       G4double incidentEnergy,
+				       G4double hMass,
+				       G4double hMomentum,
+				       G4double eLoss) 
 {
   G4int index = material->GetIndex();
   G4double cutForElectrons = cutForDelta[index];
@@ -1288,10 +1292,9 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
     G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
 
     if (nVacancies && Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) ) {
-
       for(size_t j=0; j<nVacancies; j++) {
      
-        shell = shellCS->SelectRandomShell(Z, incidentEnergy);
+        shell = shellCS->SelectRandomShell(Z, incidentEnergy, hMass, hMomentum);
         shellId = transitionManager->Shell(Z, shell)->ShellId();
         G4double maxE = transitionManager->Shell(Z, shell)->BindingEnergy();
  
@@ -1359,7 +1362,8 @@ G4int G4hLowEnergyIonisationVI::SelectRandomAtom(const G4Material* material,
     norm += cross;
   }
   G4double q = norm*G4UniformRand();
-  for (G4int i=0; i<nElements; i++) {
+  G4int i;
+  for (i=0; i<nElements; i++) {
 
     if(p[i] > q) break;
     q -= p[i];

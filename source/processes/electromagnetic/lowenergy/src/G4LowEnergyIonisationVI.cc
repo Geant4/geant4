@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.9 2001-10-24 18:11:38 elena Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.10 2001-10-24 18:57:04 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -580,7 +580,7 @@ G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 	}
       while (totCounters<totVacancies){
 	G4double random = G4UniformRand() * nElements;
-	size_t intRandom = random;
+	size_t intRandom = (size_t) random;
 	if (intRandom==nElements)
 	  {
 	    intRandom -= 1;
