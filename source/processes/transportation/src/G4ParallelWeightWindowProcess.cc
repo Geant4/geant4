@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelWeightWindowProcess.cc,v 1.2 2002-05-31 10:16:02 dressel Exp $
+// $Id: G4ParallelWeightWindowProcess.cc,v 1.3 2002-05-31 14:50:38 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,8 +71,9 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 {
   *condition = NotForced;
   G4double stepLength = kInfinity;
-  
-  if (fInitStep && aTrack.GetTrackStatus() != fStopAndKill) {
+
+  if (aTrack.GetCurrentStepNumber() == 1
+      && aTrack.GetTrackStatus() != fStopAndKill) {
     fInitStep = false;
     G4double importance = fIStore.GetImportance(fPStepper.GetPStep().fPostTouchableKey);
     G4double weight = aTrack.GetWeight();
@@ -81,7 +82,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
     
     if (aTrack.GetWeight() != fNsplit_Weight.fW || 
 	fNsplit_Weight.fN != 1) {
-      *condition = ExclusivelyForced;
+      stepLength = 0.;
     }
   }
   
