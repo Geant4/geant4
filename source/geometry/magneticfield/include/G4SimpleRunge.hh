@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SimpleRunge.hh,v 1.6 2003-10-31 14:35:52 gcosmo Exp $
+// $Id: G4SimpleRunge.hh,v 1.7 2003-11-05 16:30:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@ class G4SimpleRunge : public G4MagErrorStepper
 
   public:  // with description
 
-    G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4SimpleRunge(G4EquationOfMotion *EquationRhs, G4int numberOfVariables = 6) ;
    ~G4SimpleRunge();
       // Constructor and destructor.
 

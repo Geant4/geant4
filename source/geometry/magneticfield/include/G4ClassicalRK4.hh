@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClassicalRK4.hh,v 1.8 2003-10-31 14:35:50 gcosmo Exp $
+// $Id: G4ClassicalRK4.hh,v 1.9 2003-11-05 16:30:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,7 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 {
   public:  // with description
 
-    G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4ClassicalRK4(G4EquationOfMotion *EquationMotion, G4int numberOfVariables = 6) ;
 
     ~G4ClassicalRK4() ;
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ExplicitEuler.hh,v 1.7 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4ExplicitEuler.hh,v 1.8 2003-11-05 16:30:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 
 // History:
 // - Created. W.Wander <wwc@mit.edu>, 12/09/97
+// - Adjusted for new Equation classes, J.Apostolakis 5/11/03
 // -------------------------------------------------------------------
 
 #ifndef G4EXPLICITEULER_HH
@@ -47,7 +48,7 @@ class G4ExplicitEuler : public G4MagErrorStepper
 
   public:  // with description
 
-    G4ExplicitEuler(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4ExplicitEuler(G4EquationOfMotion* EqRhs, G4int numberOfVariables = 6) ;
    ~G4ExplicitEuler();
 
     void  DumbStepper(  const G4double y[],

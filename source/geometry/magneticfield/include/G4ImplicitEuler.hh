@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImplicitEuler.hh,v 1.6 2003-10-31 14:35:51 gcosmo Exp $
+// $Id: G4ImplicitEuler.hh,v 1.7 2003-11-05 16:30:55 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -50,7 +50,7 @@ class G4ImplicitEuler : public G4MagErrorStepper
 
   public:  // with description
 
-    G4ImplicitEuler(G4Mag_EqRhs *EqRhs, G4int numberOfVariables = 6) ;
+    G4ImplicitEuler(G4EquationOfMotion *EqRhs, G4int numberOfVariables = 6) ;
    ~G4ImplicitEuler();
 
     void  DumbStepper(  const G4double y[] ,
