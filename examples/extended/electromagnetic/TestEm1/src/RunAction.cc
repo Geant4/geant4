@@ -20,26 +20,30 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.6 2004-07-23 15:39:39 maire Exp $
+// $Id: RunAction.cc,v 1.7 2004-08-03 11:31:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(HistoManager* histo)
-  : ProcCounter(0), histoManager(histo)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin,
+                     HistoManager* histo)
+:detector(det), primary(kin), ProcCounter(0), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -86,70 +90,97 @@ void RunAction::CountProcesses(G4String procName)
 
 void RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  std::ios::fmtflags mode = G4cout.flags();
+  G4cout.setf(std::ios::fixed,std::ios::floatfield);
+  
   G4int NbOfEvents = aRun->GetNumberOfEvent();
-  if (NbOfEvents)
-    { //nb of tracks and steps per event
-      G4double dNbOfEvents = double(NbOfEvents);
+  if (NbOfEvents == 0) return;
+  G4double dNbOfEvents = double(NbOfEvents);
     
-      std::ios::fmtflags mode = G4cout.flags();
-      G4cout.setf(std::ios::fixed,std::ios::floatfield);
-
-      G4int  prec = G4cout.precision(3);
+  G4ParticleDefinition* particle = primary->GetParticleGun()
+                                          ->GetParticleDefinition();
+  G4String partName = particle->GetParticleName();    
+  G4double energy   = primary->GetParticleGun()->GetParticleEnergy();
+  
+  G4double length      = detector->GetSize();    
+  G4Material* material = detector->GetMaterial();
+  G4double density     = material->GetDensity();
+   
+  G4cout << "\n ======================== run summary ======================\n";
+  
+  G4int prec = G4cout.precision(2);
+  
+  G4cout << "\n The run was: " << NbOfEvents << " " << partName << " of "
+         << G4BestUnit(energy,"Energy") << " through " 
+	 << G4BestUnit(length,"Length") << " of "
+	 << material->GetName() << " (density: " 
+	 << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+	 
+ G4cout << "\n ============================================================\n";
       
-      G4cout << "\n nb tracks/event"
-             << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
-             << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
-             << "\n nb  steps/event"
-             << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
-             << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
-             << G4endl;
+ G4cout.precision(3);
+ 
+ G4cout << "\n total energy deposit: " 
+        << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
 	     
-      G4cout << "\n total energy deposit: " 
-             << G4BestUnit(edep/dNbOfEvents, "Energy") << G4endl;
+ //nb of tracks and steps per event
+ //           
+ G4cout << "\n nb tracks/event"
+        << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
+        << "   charged: " << std::setw(10) << NbOfTraks1/dNbOfEvents
+        << "\n nb  steps/event"
+        << "   neutral: " << std::setw(10) << NbOfSteps0/dNbOfEvents
+        << "   charged: " << std::setw(10) << NbOfSteps1/dNbOfEvents
+        << G4endl;
       
-      //frequency of processes call       
-      G4cout << "\n nb of process calls per event: \n   ";       
-      for (size_t i=0; i< ProcCounter->size();i++)
-           G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
+ //frequency of processes call       
+ G4cout << "\n nb of process calls per event: \n   ";       
+ for (size_t i=0; i< ProcCounter->size();i++)
+     G4cout << std::setw(12) << (*ProcCounter)[i]->GetName();
            
-      G4cout << "\n   ";       
-      for (size_t j=0; j< ProcCounter->size();j++)
-      G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())
-                                                               /dNbOfEvents;
-      G4cout << G4endl;
+ G4cout << "\n   ";       
+ for (size_t j=0; j< ProcCounter->size();j++)
+ G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())/dNbOfEvents;
+ G4cout << G4endl;
       
-      //compute csda and projected ranges, and transverse dispersion
-      //
-      csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
-      G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
-      if (csdaRms>0.) csdaRms = sqrt(csdaRms); else csdaRms = 0.;
+ //compute csda and projected ranges, and transverse dispersion
+ //
+ csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
+ G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
+ if (csdaRms>0.) csdaRms = sqrt(csdaRms); else csdaRms = 0.;
       
-      projRange /= NbOfEvents; projRange2 /= NbOfEvents;
-      G4double projRms = projRange2 - projRange*projRange;        
-      if (projRms>0.) projRms = sqrt(projRms); else projRms = 0.;
+ projRange /= NbOfEvents; projRange2 /= NbOfEvents;
+ G4double projRms = projRange2 - projRange*projRange;        
+ if (projRms>0.) projRms = sqrt(projRms); else projRms = 0.;
        
-      transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
-      G4double trvsRms = transvDev2 - transvDev*transvDev;        
-      if (trvsRms>0.) trvsRms = sqrt(trvsRms); else trvsRms = 0.;
+ transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
+ G4double trvsRms = transvDev2 - transvDev*transvDev;        
+ if (trvsRms>0.) trvsRms = sqrt(trvsRms); else trvsRms = 0.;
+ 
+ //compare csda range with PhysicsTables
+ //
+ G4EmCalculator emCalculator;
+ G4double rangeTable = emCalculator.GetRange(particle,material,energy);
       
-      G4cout << "\n---------------------------------------------------------\n";
-      G4cout << " Primary particle : " ;
-      G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
-             << "   rms = "        << G4BestUnit(csdaRms,  "Length");
+ G4cout << "\n---------------------------------------------------------\n";
+ G4cout << " Primary particle : " ;
+ G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
+        << "   rms = "        << G4BestUnit(csdaRms,  "Length");
 
-      G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
-             << "   rms = "        << G4BestUnit(projRms,  "Length");
+ G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
+        << "   rms = "        << G4BestUnit(projRms,  "Length");
 	     
-      G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
+ G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
       	     
-      G4cout << "\n transverse dispersion at end = " 
-             << G4BestUnit(trvsRms,"Length");
-      G4cout << "\n---------------------------------------------------------\n";
-                               
-      G4cout.setf(mode,std::ios::floatfield);
-      G4cout.precision(prec);       
-    }         
-
+ G4cout << "\n transverse dispersion at end = " 
+        << G4BestUnit(trvsRms,"Length") << G4endl;
+	
+ G4cout << "\n mass CSDA Range from simulation = " 
+        << csdaRange*density/(g/cm2) << " g/cm2"
+	<< "\n               from PhysicsTable = " 
+        << rangeTable*density/(g/cm2) << " g/cm2";	
+ G4cout << "\n---------------------------------------------------------\n";
+                                    
   // delete and remove all contents in ProcCounter 
   while (ProcCounter->size()>0){
     OneProcessCount* aProcCount=ProcCounter->back();
@@ -158,10 +189,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   }
   delete ProcCounter;
   
+  // reset default formats
+  G4cout.setf(mode,std::ios::floatfield);
+  G4cout.precision(prec);
+ 
+  //save histograms      
   histoManager->save();
   
   // show Rndm status
-  HepRandom::showEngineStatus();
+  HepRandom::showEngineStatus(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: range.mac,v 1.2 2004-08-02 13:27:05 maire Exp $
+# $Id: range.mac,v 1.3 2004-08-03 11:31:40 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # 
@@ -18,7 +18,7 @@
 /process/inactivate msc
 /process/eLoss/fluct false
 #
-/testem/gun/setDefault 1
+/testem/gun/setDefault
 /gun/particle proton
 /gun/energy 100 MeV
 #

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.3 2004-03-15 11:09:36 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.4 2004-08-03 11:31:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@
 DetectorConstruction::DetectorConstruction()
 :pBox(0), lBox(0), aMaterial(0), magField(0)
 {
-  BoxSize = 20*m;
+  BoxSize = 10*m;
   DefineMaterials();
   SetMaterial("Aluminium");  
   detectorMessenger = new DetectorMessenger(this);

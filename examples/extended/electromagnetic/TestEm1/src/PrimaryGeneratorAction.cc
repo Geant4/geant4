@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.2 2004-07-23 15:39:39 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.3 2004-08-03 11:31:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(
 :Detector(DC)					       
 {
   particleGun  = new G4ParticleGun(1);
-  SetDefaultKinematic(0);
+  SetDefaultKinematic(1);
   rndmBeam = 0.;
     
   //create a messenger for this class

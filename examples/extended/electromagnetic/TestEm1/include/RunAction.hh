@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.hh,v 1.5 2004-07-23 15:39:34 maire Exp $
+// $Id: RunAction.hh,v 1.6 2004-08-03 11:31:43 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,15 +35,17 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoManager;
 class G4Run;
+class DetectorConstruction;
+class PrimaryGeneratorAction;
+class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
   public:
-    RunAction(HistoManager*);
+    RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
    ~RunAction();
 
   public:
@@ -67,7 +69,10 @@ class RunAction : public G4UserRunAction
     G4double        edep;
     G4double        csdaRange, csdaRange2;             
     G4double        projRange, projRange2;
-    G4double        transvDev, transvDev2;                 
+    G4double        transvDev, transvDev2;
+                     
+    DetectorConstruction*   detector;
+    PrimaryGeneratorAction* primary;
     ProcessesCount* ProcCounter;   
     HistoManager*   histoManager;
 };

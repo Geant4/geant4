@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2003-10-06 10:02:33 maire Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2004-08-03 11:31:44 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
   DefaultCmd->SetGuidance("set/reset kinematic defined in PrimaryGenerator");
   DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
   DefaultCmd->SetParameterName("position",true);
-  DefaultCmd->SetDefaultValue(0);
+  DefaultCmd->SetDefaultValue(1);
   DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   RndmCmd = new G4UIcmdWithADouble("/testem/gun/rndm",this);
