@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mag_UsualEqRhs.cc,v 1.7 2002-05-03 18:57:16 japost Exp $
+// $Id: G4Mag_UsualEqRhs.cc,v 1.8 2002-11-09 02:58:14 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,8 +29,7 @@
 //    of a charged particle in a magnetic field.
 //
 //  Initial version: J. Apostolakis, January 13th, 1997
-//  Modified:  
-//             J. Apostolakis, April 4th, 2002: for speedup
+//  Modified:        J. Apostolakis, November 9th, 2002
 //
 #include "G4Mag_UsualEqRhs.hh"
 
@@ -39,50 +38,18 @@ G4Mag_UsualEqRhs::EvaluateRhsGivenB( const G4double y[],
 			      const G4double B[3],
 				    G4double dydx[] ) const
 {
-   G4double cof; 
-   register double crossX, crossY, crossZ; 
-   G4double inv_momentum_magnitude;
-
-   // Original was
-   //    inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
-
    G4double momentum_mag_square = sqr(y[3]) + sqr(y[4]) + sqr(y[5]);
-   G4double epsil_mom_sq= momentum_mag_square * sqr(fInvCurrentMomentumXc) - 1.0;
+   G4double inv_momentum_magnitude = 1.0 / sqrt( momentum_mag_square );
 
-#if 0
-   // G4double inv_momentum_mag_1stOrder= fInvCurrentMomentumXc * 
-     // ( 1.0 - 0.5 * epsil_mom_sq );
-
-   G4double inv_momentum_mag_2ndOrder= fInvCurrentMomentumXc * 
-     ( 1.0 - 0.5 * epsil_mom_sq + 0.375 * epsil_mom_sq * epsil_mom_sq );
-
-   inv_momentum_magnitude= inv_momentum_mag_2ndOrder;
-   //******************************************************
-#else
-   G4double currentMomentum= 1.0 / fInvCurrentMomentumXc;
-   G4double inv_momentum_mag_other= currentMomentum / momentum_mag_square;
-
-   G4double inv_momentum_mag_other_1stOrder= inv_momentum_mag_other *
-     ( 1.0 + 0.5 * epsil_mom_sq );
-
-   inv_momentum_magnitude= inv_momentum_mag_other_1stOrder;
-   //******************************************************
-#endif 
-
-   cof = FCof()*inv_momentum_magnitude;
-
-   crossX= y[4]*B[2] - y[5]*B[1] ;   //  Cx = Vy*Bz - Vz*By
-   crossY= y[5]*B[0] - y[3]*B[2] ;   // Cy = Vz*Bx - Vx*Bz
-   crossZ= y[3]*B[1] - y[4]*B[0] ;   // Cz = Vx*By - Vy*Bx
-
+   G4double cof = FCof()*inv_momentum_magnitude;
 
    dydx[0] = y[3]*inv_momentum_magnitude;       //  (d/ds)x = Vx/V
    dydx[1] = y[4]*inv_momentum_magnitude;       //  (d/ds)y = Vy/V
    dydx[2] = y[5]*inv_momentum_magnitude;       //  (d/ds)z = Vz/V
 
-   dydx[3] = cof*crossX ; // Ax = a*(Vy*Bz - Vz*By)
-   dydx[4] = cof*crossY ; // (y[5]*B[0] - y[3]*B[2]); ie Ay= a*(Vz*Bx - Vx*Bz)
-   dydx[5] = cof*crossZ ; // (y[3]*B[1] - y[4]*B[0]); ie Az= a*(Vx*By - Vy*Bx)
+   dydx[3] = cof*(y[4]*B[2] - y[5]*B[1]) ;   // Ax = a*(Vy*Bz - Vz*By)
+   dydx[4] = cof*(y[5]*B[0] - y[3]*B[2]) ;   // Ay = a*(Vz*Bx - Vx*Bz)
+   dydx[5] = cof*(y[3]*B[1] - y[4]*B[0]) ;   // Az = a*(Vx*By - Vy*Bx)
 
    return ;
 }
