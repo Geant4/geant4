@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.14 2001-11-10 07:51:25 kurasige Exp $
+// $Id: G4Track.cc,v 1.15 2001-12-10 08:36:54 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,6 +101,9 @@ G4Track & G4Track::operator=(const G4Track &right)
    // Track ID (and Parent ID) is not copied and set to zero for new track
    fTrackID = 0;
    fParentID =0;
+
+   // CurrentStepNumber is set to be 0
+   fCurrentStepNumber = 0;
 
    // dynamic particle information 
    fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
