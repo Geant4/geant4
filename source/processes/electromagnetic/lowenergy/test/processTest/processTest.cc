@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: processTest.cc,v 1.7 2001-11-01 17:26:18 pia Exp $
+// $Id: processTest.cc,v 1.8 2001-11-03 18:56:11 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -67,7 +67,7 @@ int main()
   // Initialise the analysis
   G4AnalyserFactory* analysisFactory = new G4TestAnalyserFactory();
   G4Analyser* analyser = G4AnalyserHandler::getInstance(analysisFactory);
-  analyser->book();
+  analyser->book("test");
   //  G4Analyser* analyser2 = new G4TestAnalyser;
 
   // Configuration of the test set-up

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTest.cc,v 1.6 2001-11-01 17:26:19 pia Exp $
+// $Id: G4ProcessTest.cc,v 1.7 2001-11-03 18:56:11 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -88,6 +88,7 @@ void G4ProcessTest::buildTables(const G4String& type, G4bool isPolarised)
   if (ioni != 0)  
     {
       G4cout << ioni->GetProcessName() << " created" << G4endl;
+pwd
     }
 
   if (def == G4Gamma::GammaDefinition())
