@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.4 2001-11-12 08:06:20 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.5 2001-11-15 09:48:11 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -149,8 +149,11 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
       }
       G4double YNj=lE*lastPhi[lastL]-lastFun[lastL];
       G4double YN1=lE*lastPhi[lastL-1]-lastFun[lastL-1];
-      if(YNj<0.||YN1<0.)G4cerr<<",lE="<<lE<<",P1="<<lastPhi[lastL]<<",F1="<<lastPhi[lastL]
-                              <<",P2="<<lastPhi[lastL-1]<<",F2="<<lastPhi[lastL-1]<<G4endl;
+//      if(YNj<0.||YN1<0.)
+//      {
+//        G4cerr<<",lE="<<lE<<",P1="<<lastPhi[lastL]<<",F1="<<lastPhi[lastL]
+//                                <<",P2="<<lastPhi[lastL-1]<<",F2="<<lastPhi[lastL-1]<<G4endl;
+//      }
       //if(abs(lE-Xj)<.001)      lastSig=YNj;
       //else if(abs(lE-Xp)<.001)
       //{
@@ -171,6 +174,7 @@ G4double G4ElectroNuclearCrossSection::GetCrossSection(const G4DynamicParticle* 
 	}
   } // End of "sigma" calculation
   else return 0.;
+  if(lastSig<0.) lastSig = 0;
   return lastSig*millibarn;
 }
 

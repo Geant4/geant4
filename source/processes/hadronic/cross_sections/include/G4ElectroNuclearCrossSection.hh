@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.hh,v 1.2 2001-11-09 15:59:48 mkossov Exp $
+// $Id: G4ElectroNuclearCrossSection.hh,v 1.3 2001-11-15 09:48:11 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,15 +33,15 @@
 #define G4ElectroNuclearCrossSection_h 1
 
 #include "G4VCrossSectionDataSet.hh"
-/////////#include "G4HadronCrossSections.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-//#include "G4QPDGCode.hh"
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4NucleiPropertiesTable.hh"
 #include "g4std/vector"
 #include "Randomize.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 class G4ElectroNuclearCrossSection : public G4VCrossSectionDataSet
 {
@@ -59,7 +59,8 @@ public:
 	//return theHadronCrossSections->IsApplicable(aParticle, anElement);
 	// Possible prototype
 	G4bool result = false;
-	if( aParticle->GetDefinition()->GetPDGEncoding()==22) result = true;
+	if( aParticle->GetDefinition()==G4Electron::ElectronDefinition()) result = true;
+	if( aParticle->GetDefinition()==G4Positron::PositronDefinition()) result = true;
 	return result;
   }
 
