@@ -1,4 +1,4 @@
-$Id: History,v 1.83 2000-05-29 09:59:11 johna Exp $
+$Id: History,v 1.84 2000-06-02 12:24:51 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd June May 2000  John Allison
+- Forced /control/verbose 2 for compound commands.
 
 20th May 2000  John Allison
 - Bug fix in G4PhysicalVolumeModel for replicas (Guy Barrand).

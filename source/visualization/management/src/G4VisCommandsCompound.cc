@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCompound.cc,v 1.2 2000-05-15 11:49:22 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.3 2000-06-02 12:24:53 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -39,11 +39,14 @@ G4VisCommandDrawVolume::~G4VisCommandDrawVolume() {
 void G4VisCommandDrawVolume::SetNewValue
 (G4UIcommand* command, G4String newValue) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  UImanager->SetVerboseLevel(2);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->ApplyCommand("/vis/viewer/refresh");
   UImanager->ApplyCommand("/vis/viewer/show");
+  UImanager->SetVerboseLevel(keepVerbose);
 }
 
 ////////////// /vis/open ///////////////////////////////////////
@@ -107,10 +110,13 @@ G4VisCommandSpecify::~G4VisCommandSpecify() {
 void G4VisCommandSpecify::SetNewValue
 (G4UIcommand* command, G4String newValue) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4int keepVerbose = UImanager->GetVerboseLevel();
+  UImanager->SetVerboseLevel(2);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
   UImanager->ApplyCommand("/vis/viewer/refresh");
   UImanager->ApplyCommand("/vis/viewer/show");
   UImanager->ApplyCommand("/geometry/print " + newValue);
+  UImanager->SetVerboseLevel(keepVerbose);
 }
