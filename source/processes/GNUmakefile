@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2001-12-05 10:07:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.18 2002-06-13 17:49:26 jwellisc Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -31,6 +31,7 @@ SUBDIRS += hadronic/models/generator/string_common
 SUBDIRS += hadronic/models/generator/string_fragmentation
 SUBDIRS += hadronic/models/generator/util
 SUBDIRS += hadronic/models/radiative_decay
+SUBDIRS += hadronic/models/leading_particle
 
 
 SUBLIBS  = G4procman G4optical G4decay G4transportation G4parameterisation
@@ -46,6 +47,7 @@ SUBLIBS += G4hadronic_qgstring
 SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_string_common
 SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
 SUBLIBS += G4hadronic_radioactivedecay
+SUBLIBS += G4hadronic_leading_particle
 
 ifndef G4INSTALL
   G4INSTALL = ../..
