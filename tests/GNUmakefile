@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.17 2000-01-20 16:51:42 stesting Exp $
+# $Id: GNUmakefile,v 1.18 2000-01-22 11:47:11 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,6 +13,7 @@ include $(G4INSTALL)/config/architecture.gmk
 EXAMPLES = 01 02 03 04 05 06
 
 # Symbolic links to extended electromagnetic examples using test501, etc...
+ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
 ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes.
 ELECTROMAGNETIC += 8 ## Transistion radiation and PAI (photoabsorption
                      ## ionisation) model.
@@ -156,7 +157,6 @@ clean_examples_links_source:
 	  testdir=test1$$nn; \
 	  testin=test1$$nn.in; \
 	  testout=test1$$nn.out; \
-	  exdir=$(G4INSTALL)/examples/novice/N$$nn; \
 	  rm -f $$testdir/$$testin; \
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
@@ -165,7 +165,6 @@ clean_examples_links_source:
 	  testdir=test50$$nn; \
 	  testin=test50$$nn.in; \
 	  testout=test50$$nn.out; \
-	  exdir=$(G4INSTALL)/examples/extended/electromagnetic/TestEm$$nn; \
 	  rm -f $$testdir/$$testin; \
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
@@ -174,7 +173,6 @@ clean_examples_links_source:
 	  testdir=test4$$nn; \
 	  testin=test4$$nn.in; \
 	  testout=test4$$nn.out; \
-	  exdir=$(G4INSTALL)/examples/extended/persistency/PersistentEx$$nn; \
 	  rm -f $$testdir/$$testin; \
 	  rm -f $$testdir/$$testout; \
 	  rm -f $$testdir; \
