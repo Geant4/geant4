@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpticalPhoton.hh,v 1.1 1999-01-07 16:09:48 gunter Exp $
+// $Id: G4OpticalPhoton.hh,v 1.2 1999-04-13 08:22:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,11 +58,14 @@ class G4OpticalPhoton: public G4VBoson
    );
 
  public:
+   virtual  ~G4OpticalPhoton (){}
+
    static G4OpticalPhoton* OpticalPhotonDefinition();
    static G4OpticalPhoton* OpticalPhoton();
    static G4double  GetCuts() {return theOpticalPhotonLengthCut;}   
-   static G4double* GetCutsInEnergy() {return theOpticalPhotonKineticEnergyCuts;};
-   void SetCuts(G4double aCut); 
+   static G4double* GetCutsInEnergy() {return theOpticalPhotonKineticEnergyCuts;}
+
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline G4OpticalPhoton* G4OpticalPhoton::OpticalPhoton()

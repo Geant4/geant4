@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Geantino.hh,v 1.1 1999-01-07 16:09:47 gunter Exp $
+// $Id: G4Geantino.hh,v 1.2 1999-04-13 08:22:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ class G4Geantino : public G4VBoson
    static G4double  theGeantinoLengthCut;
    static G4double* theGeantinoKineticEnergyCuts;
 
- public:
+ private:
    G4Geantino(
        const G4String&     aName,        G4double            mass,
        G4double            width,        G4double            charge,   
@@ -56,12 +56,16 @@ class G4Geantino : public G4VBoson
        G4bool              stable,       G4double            lifetime,
        G4DecayTable        *decaytable
    );
+
+ public:
+   virtual ~G4Geantino(){}
+ 
    static G4Geantino* GeantinoDefinition();
    static G4Geantino* Geantino();
    static G4double  GetCuts() {return theGeantinoLengthCut;}   
    static G4double* GetCutsInEnergy() {return theGeantinoKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
    
 inline G4Geantino* G4Geantino::Geantino()

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4XicPlus.hh,v 1.1 1999-01-07 16:09:56 gunter Exp $
+// $Id: G4XicPlus.hh,v 1.2 1999-04-13 08:30:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,14 @@ class G4XicPlus : public G4VBarion
    );
 
  public:
+   virtual ~G4XicPlus(){}
+
    static G4XicPlus* XicPlusDefinition();
    static G4XicPlus* XicPlus();
    static G4double GetCuts() {return theXicPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theXicPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4XicPlus::SetCuts(G4double aCut)

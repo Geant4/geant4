@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LambdacPlus.hh,v 1.1 1999-01-07 16:09:54 gunter Exp $
+// $Id: G4LambdacPlus.hh,v 1.2 1999-04-13 08:32:55 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,12 +57,14 @@ class G4LambdacPlus : public G4VBarion
    );
 
  public:
+   virtual ~G4LambdacPlus(){}
+
    static G4LambdacPlus* LambdacPlusDefinition();
    static G4LambdacPlus* LambdacPlus();
    static G4double GetCuts() {return theLambdacPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theLambdacPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4LambdacPlus::SetCuts(G4double aCut)

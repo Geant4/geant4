@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChargedGeantino.hh,v 1.1 1999-01-07 16:09:47 gunter Exp $
+// $Id: G4ChargedGeantino.hh,v 1.2 1999-04-13 08:22:14 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,12 +58,14 @@ class G4ChargedGeantino : public G4VBoson
    );
 
  public:
+   virtual ~G4ChargedGeantino(){}
+ 
    static G4ChargedGeantino* ChargedGeantinoDefinition();
    static G4ChargedGeantino* ChargedGeantino();
    static G4double  GetCuts() {return theChargedGeantinoLengthCut;}   
    static G4double* GetCutsInEnergy() {return theChargedGeantinoKineticEnergyCuts;};
 
-   void   SetCuts(G4double aCut);
+   virtual void   SetCuts(G4double aCut);
 };
 
 inline G4ChargedGeantino* G4ChargedGeantino::ChargedGeantino()

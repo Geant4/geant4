@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Gamma.hh,v 1.1 1999-01-07 16:09:47 gunter Exp $
+// $Id: G4Gamma.hh,v 1.2 1999-04-13 08:22:15 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,12 +98,14 @@ class G4Gamma : public G4VBoson
    );
 
  public:
+   virtual ~G4Gamma(){}
+
    static G4Gamma* GammaDefinition();
    static G4Gamma* Gamma();
    static G4double  GetCuts() {return theGammaLengthCut;}   
    static G4double* GetCutsInEnergy() {return theGammaKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4Gamma::SetCuts(G4double aCut)

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4KaonPlus.hh,v 1.1 1999-01-07 16:10:11 gunter Exp $
+// $Id: G4KaonPlus.hh,v 1.2 1999-04-13 08:34:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -57,13 +57,14 @@ class G4KaonPlus : public G4VMeson
        G4DecayTable        *decaytable
    );
 
- public:
+public:
+   virtual ~G4KaonPlus(){}
    static G4KaonPlus* KaonPlusDefinition();
    static G4KaonPlus* KaonPlus() {return &theKaonPlus;}
    static G4double GetCuts() {return theKaonPlusLengthCut;}   
    static G4double* GetCutsInEnergy() {return theKaonPlusKineticEnergyCuts;};
 
-   void SetCuts(G4double aCut); 
+   virtual void SetCuts(G4double aCut); 
 };
 
 inline void G4KaonPlus::SetCuts(G4double aCut)
