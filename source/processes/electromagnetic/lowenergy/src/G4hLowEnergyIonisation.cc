@@ -81,7 +81,7 @@ G4hLowEnergyIonisation::~G4hLowEnergyIonisation()
     delete theMeanFreePathTable;
   }
 
-  delete qaoLoss;
+  //delete qaoLoss;
   qaoLoss = 0;
 
 }
@@ -878,9 +878,9 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
 
       ionloss = qaoloss->EnergyLoss(dynamicPart,material);
       ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
+    
+      return ionloss;
     }
-  return ionloss;
-  }
     
   // First of all check tables for specific materials for ICRU_49 parametrisation
  

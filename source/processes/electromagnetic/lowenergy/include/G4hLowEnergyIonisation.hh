@@ -225,7 +225,7 @@ private:
   
 private:
   //  private data members ...............................
-  G4VEnergyLossModel* qaoLoss;
+  G4VhEnergyLossModel* qaoLoss;
 
 protected:
   //  protected data members ...............................
