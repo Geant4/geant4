@@ -247,7 +247,7 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 		//
 		// Good answer
 		//
-		if (distOut2 < 0.5*kCarTolerance ) 
+		if (distOut2 > 0) 
 			return sqrt( distFrom*distFrom + distOut2 );
 		else 
 			return fabs(distFrom);
@@ -256,8 +256,8 @@ G4double G4PolyconeSide::Distance( const G4ThreeVector &p, const G4bool outgoing
 	//
 	// Try second side. 
 	//
-	distFrom = DistanceAway( p,  true, distOut2, 0 );
-	if (distFrom*normSign > -0.5*kCarTolerance) {
+	distFrom = normSign*DistanceAway( p,  true, distOut2, 0 );
+	if (distFrom > -0.5*kCarTolerance) {
 
 		if (distOut2 > 0) 
 			return sqrt( distFrom*distFrom + distOut2 );
