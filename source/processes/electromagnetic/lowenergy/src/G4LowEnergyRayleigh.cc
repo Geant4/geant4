@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.28 2001-11-07 21:31:16 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.29 2002-06-07 10:25:02 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -38,6 +38,7 @@
 // 24.04.01 V.Ivanchenko remove RogueWave 
 // 11.08.2001 MGP - Major revision according to a design iteration
 // 06.10.2001 MGP - Added strategy to test range for secondary generation
+// 05.06.2002 F.Longo and G.Depaola  - bug fixed in angular distribution
 //
 // --------------------------------------------------------------------
 
@@ -165,9 +166,9 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack,
       G4double theta = thetaHalf*2;
       cosTheta = cos(theta);
       sinTheta = sin(theta);
-      G4double sqrRayl = 1 + cosTheta * cosTheta;    
+      G4double sqrRayl = sqrt(27./32.)*(1 + cosTheta * cosTheta)*sinTheta;
       gReject = sqrRayl * dataFormFactor * dataFormFactor;
-
+      
     } while( gReject < randomFormFactor);
   
   // Scattered photon angles. ( Z - axis along the parent photon)
