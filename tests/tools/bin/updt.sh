@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: updt.sh,v 1.4 1999-07-28 10:37:23 stesting Exp $
+# $Id: updt.sh,v 1.5 1999-11-27 17:00:43 stesting Exp $
 # Usage:
 #   csh: updt.sh < something.sdb >& something.update.log
 #    sh: updt.sh < something.sdb > something.update.log 2>&1
@@ -13,7 +13,9 @@ do
 #
 # We have strange bug in CVS and NOT use -P flag!
 #
-    command="cvs $NOTHING update $DIRECTORIES -r $tag $module"
+# We are now at CVS 1.10.3.  -P re-instated!
+#
+    command="cvs $NOTHING update $DIRECTORIES -P -r $tag $module"
     if [ $module = \# ]
     then
 	echo $command - ignored
