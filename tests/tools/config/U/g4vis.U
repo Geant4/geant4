@@ -401,9 +401,9 @@ EOM`
 
 dflt=$g4vis_use_asciitree
 rp=$g4message
-# Don't ask by default!
+# Don't ask by default and set to 'y'!
 #. ./myread
-gans=$ans
+gans=y
 
 	case $gans in
 	
