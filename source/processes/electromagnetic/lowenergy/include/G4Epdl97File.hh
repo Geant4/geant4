@@ -27,7 +27,7 @@
 // Other Class Headers
 #include "globals.hh"
 #include "G4VDataFile.hh"
-#include "G4DataVector.hh"
+#include "G4Data.hh"
 
 // C++ Headers
 #include <fstream.h>
@@ -52,7 +52,7 @@ public:
 protected:
 
   // Member Functions
-  void GetDataValues(G4DataVector& valList);
+  void GetDataValues(G4Data& valList);
   G4double GetOneData(const char*);
 
 private:

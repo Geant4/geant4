@@ -29,8 +29,10 @@
 
 // Other Class Headers
 #include "globals.hh"
-#include "G4DataVector.hh"
 #include "G4PhysicsTable.hh"
+#include "G4Data.hh"
+#include "G4FirstLevel.hh"
+#include "G4SecondLevel.hh"
 
 // C++ Headers
 
@@ -54,7 +56,7 @@ public:
 
   // search the data table in the file
   void FillDataTable();
-  void FillTheTable(G4int nemEl = 0);
+  G4SecondLevel* FillTheTable(G4int nemEl = 0);
 
   // inline member functions
 
@@ -62,7 +64,7 @@ public:
   inline G4PhysicsTable* GetSndDataTable(){return theDataTable2;};
   inline G4PhysicsTable* GetTrdDataTable(){return theDataTable3;};
 
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> >* GetGlobalList();
+  //G4SecondLevel* GetGlobalList();
 
 protected:
 
@@ -72,7 +74,7 @@ private:
   G4PhysicsTable* theDataTable1;
   G4PhysicsTable* theDataTable2;
   G4PhysicsTable* theDataTable3;
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> > allElementList;
+  //  G4SecondLevel* allElementList;
 
   G4VDataFile& datfile;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.3 1999-05-29 14:17:46 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.4 1999-06-01 22:34:01 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,9 @@
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"
 
-// RW Headers
-#include <rw/tpslist.h>
+#include "G4Data.hh"
+#include "G4FirstLevel.hh"
+#include "G4SecondLevel.hh"
 
 class G4LowEnergyBremsstrahlung : public G4eEnergyLoss
  
@@ -114,19 +115,19 @@ private:
 				G4PhysicsTable* Table);
 
   G4double DataLogInterpolation(G4double Argument, 
-				const G4DataVector& arg, 
-				const G4DataVector& val);
+				const G4Data& arg, 
+				const G4Data& val);
 
   G4int FindBinLocation(G4double BinValue, G4PhysicsVector* theVec);
-  G4int FindBinLocation(G4double BinValue, const G4DataVector& arg);
+  G4int FindBinLocation(G4double BinValue, const G4Data& arg);
 
 private:
   
   G4PhysicsTable* theCrossSectionTable ;              
   G4PhysicsTable* theMeanFreePathTable ;              
   
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> >* ATable; 
-  RWTPtrSlist<G4DataVector>* BTable;
+  G4SecondLevel* ATable; 
+  G4FirstLevel* BTable;
   
   // partial sum of total crosssection
   G4OrderedTable PartialSumSigma;

@@ -26,7 +26,7 @@
 
 // Other Class Headers
 #include "globals.hh"
-#include "G4DataVector.hh"
+#include "G4Data.hh"
 
 // C++ Headers
 #include <fstream.h>
@@ -56,7 +56,7 @@ public:
   virtual G4bool FindTheProcess() = 0;
   virtual G4bool FindTheElement(G4int) = 0;
   virtual G4bool FindOneElemProc(G4int& subsh) = 0;
-  virtual void GetDataValues(G4DataVector& valList) = 0;
+  virtual void GetDataValues(G4Data& valList) = 0;
 
 protected:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.3 1999-04-01 06:42:56 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.4 1999-06-01 22:34:01 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,10 @@
 #include "G4Gamma.hh" 
 #include "G4Electron.hh"
 #include "G4Step.hh" 
-
+#include "G4Data.hh"
+#include "G4FirstLevel.hh"
+#include "G4SecondLevel.hh"
+#include "G4ThirdLevel.hh"
 // Used Variables Declarations
 class G4Element;
 class G4Step;
@@ -55,7 +58,10 @@ class G4PhysicsVector;
 
 //RW Headers
 #include <rw/tpslist.h>
-#include "CLHEP/Hist/HBookFile.h"
+
+typedef G4FirstLevel oneShellTable;
+typedef G4SecondLevel oneAtomTable;
+typedef G4ThirdLevel allAtomTable;
 
 class G4LowEnergyPhotoElectric : public G4VDiscreteProcess{
 
@@ -75,6 +81,8 @@ public:
   
   void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
   
+  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
+
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
@@ -97,7 +105,7 @@ private:
 
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, G4Material* aMaterial);
 
-  G4bool SelectRandomTransition(G4int, G4double*, RWTPtrSlist< RWTPtrSlist<G4DataVector> >*);
+  G4bool SelectRandomTransition(G4int, G4double*, const oneAtomTable*);
 
   G4double DataLogInterpolation(G4double Argument, 
 				G4double AtomicNumber, 
@@ -109,17 +117,14 @@ private:
   G4PhysicsTable* theBindingEnergyTable;   
   G4PhysicsTable* theMeanFreePathTable;
 
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> >* theFluorTransitionTable;
-  RWTPtrSlist< RWTPtrSlist<G4DataVector> >* theAugerTransitionTable;
+  oneAtomTable* theFluorTransitionTable;
+  oneAtomTable* theAugerTransitionTable;
 
   G4double LowestEnergyLimit;      
   G4double HighestEnergyLimit;     
   G4int NumbBinTable;              
   
   G4double MeanFreePath;           
-  //  HepTupleManager* PEPsdiManager;
-  //  HepTupleManager* PEManager;
-
 };
 
 

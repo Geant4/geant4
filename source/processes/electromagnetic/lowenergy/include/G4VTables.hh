@@ -25,7 +25,7 @@
 #define G4VTables_hh
 
 #include "globals.hh"
-
+#include "G4SecondLevel.hh"
 class G4VTables{
 
 public:
@@ -40,7 +40,7 @@ public:
 
   // search the data table in the file
   virtual void FillDataTable() = 0;
-  virtual void FillTheTable(G4int nemEl = 0) = 0;
+  virtual G4SecondLevel* FillTheTable(G4int nemEl = 0) = 0;
 
 protected:
 
