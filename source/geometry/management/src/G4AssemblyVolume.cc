@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4AssemblyVolume.cc,v 1.4 2001-02-07 17:30:58 gcosmo Exp $
+// $Id: G4AssemblyVolume.cc,v 1.5 2001-02-08 12:33:56 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,11 +116,12 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // Generate the unique name for the next PV instance
     // The name has format:
     //
-    // pvXXXXYYYYZZZZ
+    // av_WWW_impr_XXX_YYY_ZZZ
     // where the fields mean:
-    // XXXX - the actual number of daughters incremented by one
-    // YYYY - the name of a log. volume we want to make a placement of
-    // ZZZZ - the physical volume index inside a mother
+    // WWW - assembly volume instance number
+    // XXX - assembly volume imprint number
+    // YYY - the name of a log. volume we want to make a placement of
+    // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
            << GetInstanceCount()
@@ -177,11 +178,12 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
     // Generate the unique name for the next PV instance
     // The name has format:
     //
-    // pvXXXXYYYYZZZZ
+    // av_WWW_impr_XXX_YYY_ZZZ
     // where the fields mean:
-    // XXXX - the actual number of daughters incremented by one
-    // YYYY - the name of a log. volume we want to make a placement of
-    // ZZZZ - the physical volume index inside a mother
+    // WWW - assembly volume instance number
+    // XXX - assembly volume imprint number
+    // YYY - the name of a log. volume we want to make a placement of
+    // ZZZ - the log. volume index inside the assembly volume
     G4std::strstream pvName;
     pvName << "av_"
            << GetInstanceCount()
@@ -192,13 +194,6 @@ void G4AssemblyVolume::MakeImprint( G4LogicalVolume*  pMotherLV,
            << "_pv_"
            << i
            << G4std::ends;
-/*
-   pvName << "pv"
-           << numberOfDaughters
-           << fTriplets[i].GetVolume()->GetName().c_str()
-           << numberOfDaughters + i
-           << G4std::ends;
-*/
 
     G4Transform3D Ta( *(fTriplets[i].GetRotation()),
                       fTriplets[i].GetTranslation()
