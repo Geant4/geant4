@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.27 2004-07-26 15:58:24 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.28 2004-07-26 16:04:20 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -194,7 +194,6 @@ inline std::vector<G4Track*>*  G4ionIonisation::SecondariesAlongStep(
                                  G4double& scaledEnergy)
 {
   std::vector<G4Track*>* newp = 0;
-  const G4Material* theMaterial = couple->GetMaterial();
   G4double e = step.GetTrack()->GetKineticEnergy() - eloss;
   fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,theMaterial,e));
   if(subCutoff) {
