@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.hh,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4UserSpecialCuts.hh,v 1.6 2003-09-19 10:16:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //                  15 April 1998  M.Maire
@@ -43,6 +43,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4LossTableManager;
 
 class G4UserSpecialCuts : public G4VProcess 
 {
@@ -97,6 +99,8 @@ class G4UserSpecialCuts : public G4VProcess
   // hide assignment operator as private 
       G4UserSpecialCuts(G4UserSpecialCuts&);
       G4UserSpecialCuts& operator=(const G4UserSpecialCuts& right);
+
+  G4LossTableManager* theLossTableManager;
 
 };
 
