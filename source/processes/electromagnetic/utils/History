@@ -1,4 +1,4 @@
-$Id: History,v 1.19 2001-05-18 13:57:53 vnivanch Exp $
+$Id: History,v 1.20 2001-05-18 15:14:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 may 01: V.Ivanchenko 
+18 may 01: V.Ivanchenko (utils-V03-01-01)
 - clean up againist Linux ANSI strict compilation mode.
     
 16 may 01: L.Urban (utils-V03-01-00)
