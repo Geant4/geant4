@@ -1,0 +1,4 @@
+/vis/sceneHandler/create DAWNFILE dawnfile
+/vis/viewer/create dawnfile viewer_1
+/vis/scene/create scene_1
+/vis/sceneHandler/attach scene_1

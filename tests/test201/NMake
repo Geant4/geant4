@@ -3,7 +3,7 @@ This_macros = \
 bin="$(G4WORKDIR)\bin\$$(CONFIG)"\
 mgr=..\mgr\
 app=.\
-test_CPPFLAGS="/I ./include /DG4INTY_BUILD_WIN32 /DG4UI_BUILD_WIN32_SESSION /DG4VIS_BUILD_OI_DRIVER /DG4VIS_BUILD_OIWIN32_DRIVER /DG4VIS_USE /DG4INTY_USE_WIN32 /DG4UI_USE_WIN32 /DG4VIS_USE_OIWIN32"\
+test_CPPFLAGS="/I ./include /DG4INTY_BUILD_WIN32 /DG4UI_BUILD_WIN32_SESSION /DG4VIS_BUILD_OI_DRIVER /DG4VIS_BUILD_OIWIN32_DRIVER /DG4VIS_USE /DG4INTY_USE_WIN32 /DG4UI_USE_WIN32 /DG4VIS_USE_OIWIN32 /DG4VIS_USE_DAWNFILE /DG4VIS_USE_VRMLFILE"\
 rogue_CPPFLAGS="/I $(RWBASE)"\
 librwtool="$(RWBASE)\vc\librwtool.lib"\
 CLHEP_CPPFLAGS="/I $(CLHEPHOME)"\
@@ -17,6 +17,7 @@ libGL="glu32.lib opengl32.lib"\
 ATLAS_CPPFLAGS="/I $(G4ATLAS)\include /DATLAS"\
 libG4ATLAS="$(G4WORKDIR)\lib\$$(CONFIG)\libG4ATLAS.lib"\
 libWin="/subsystem:windows gdi32.lib user32.lib"
+#libWin="/subsystem:windows /nodefaultlib:libc gdi32.lib user32.lib"
 
 !include $(G4INSTALL)\tests\tools\NT\Config.nmk
 
