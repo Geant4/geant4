@@ -21,28 +21,28 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmModelP.hh,v 1.1 2003-10-27 15:24:08 grichine Exp $
+// $Id: PhysListEmPAI.hh,v 1.1 2004-05-27 18:04:31 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListEmModelP_h
-#define PhysListEmModelP_h 1
+#ifndef PhysListEmPAI_h
+#define PhysListEmPAI_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListEmModelP : public G4VPhysicsConstructor
+class PhysListEmPAI : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmModelP(const G4String& name = "model");
-    virtual ~PhysListEmModelP();
+    PhysListEmPAI(const G4String& name = "PAI");
+    virtual ~PhysListEmPAI();
 
   public: 
-    // This method is dummy for physics. 
+    // This method is dummy for physics
     virtual void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
