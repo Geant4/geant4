@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.30 2004-01-24 14:07:11 grichine Exp $
+// $Id: G4Cons.cc,v 1.31 2004-01-26 09:03:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -531,8 +531,7 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       break ;
     default:
       DumpInfo();
-      G4Exception("G4Cons::SurfaceNormal()",
-                  "LogicError", FatalException,
+      G4Exception("G4Cons::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.") ;
       break ;    
   }
@@ -1897,9 +1896,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
         G4cout << "Proposed distance :" << G4endl<< G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4Exception("G4Cons::DistanceToOut()",
-		    //  "LogicError", FatalException,
-                "Notification", JustWarning, 
+        G4Exception("G4Cons::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.") ;
         break ;
     }
@@ -1936,8 +1933,7 @@ G4double G4Cons::DistanceToOut(const G4ThreeVector& p) const
       G4cout << "point phi = "   << atan2(p.y(),p.x())/degree << " degree" 
              << G4endl << G4endl ; 
     }
-    G4Exception("G4Cons::DistanceToOut(p)",
-                "Notification", JustWarning, 
+    G4Exception("G4Cons::DistanceToOut(p)", "Notification", JustWarning, 
                 "Point p is outside !?" );
   }
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.hh,v 1.9 2003-10-09 14:27:02 grichine Exp $
+// $Id: G4Sphere.hh,v 1.10 2004-01-26 09:03:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,7 +148,7 @@ class G4Sphere : public G4CSGSolid
     inline G4double  GetDPhi()   const;
     inline G4double  GetSTheta() const;
     inline G4double  GetDTheta() const;
-  void DBG() const {return;};
+
   protected:
  
     G4ThreeVectorList*
@@ -174,11 +174,3 @@ class G4Sphere : public G4CSGSolid
 #include "G4Sphere.icc"
 
 #endif
-
-
-
-
-
-
-
-

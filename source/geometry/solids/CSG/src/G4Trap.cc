@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.23 2004-01-25 14:20:37 grichine Exp $
+// $Id: G4Trap.cc,v 1.24 2004-01-26 09:03:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1523,9 +1523,7 @@ G4double G4Trap::DistanceToOut(const G4ThreeVector& p, const G4ThreeVector& v,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Trap::DistanceToOut(p,v,...)",
-		    //  "LogicError", FatalException,
-                 "Notification", JustWarning, 
+        G4Exception("G4Trap::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }

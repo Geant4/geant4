@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.10 2004-01-25 14:20:36 grichine Exp $
+// $Id: G4Orb.cc,v 1.11 2004-01-26 09:03:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -307,7 +307,7 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
       break;
    default:
       DumpInfo();
-      G4Exception("G4Orb::SurfaceNormal()", "LogicError", FatalException,
+      G4Exception("G4Orb::SurfaceNormal()", "Notification", JustWarning,
                   "Undefined side for valid surface normal to solid.");
       break;    
   } 
@@ -386,7 +386,8 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     }
     else // inside ???
     {
-      G4cout<<"G4Orb::DistanceToIn(p,v) is called from inside ???"<<G4endl;
+      G4Exception("G4Orb::DistanceToIn(p,v)", "Notification",
+                  JustWarning, "Point p is inside !?"");
     }
   }
   return snxt;
@@ -497,7 +498,8 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-    G4cout<<"G4Orb::DistanceToOut(p,v,...): snxt = kInfinity    ???"<<G4endl;
+    G4Exception("G4Orb::DistanceToOut(p,v,..)", "Notification",
+                JustWarning, "Logic error: snxt = kInfinity ???");
   }
   if (calcNorm)    // Output switch operator
   {
@@ -524,9 +526,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Orb::DistanceToOut(p,v,...)",
-		    //  "LogicError", FatalException,
-                 "Notification", JustWarning, 
+        G4Exception("G4Orb::DistanceToOut(p,v,..)","Notification",JustWarning,
                     "Undefined side for valid surface normal to solid.");
         break;
     }
@@ -552,8 +552,7 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p ) const
      G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl ;
      G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl ;
      G4cout << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl ;
-     G4Exception("G4Orb::DistanceToOut(p)",
-                 "Notification", JustWarning, 
+     G4Exception("G4Orb::DistanceToOut(p)", "Notification", JustWarning, 
                  "Point p is outside !?" );
   }
 #endif
