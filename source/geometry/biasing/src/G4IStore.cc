@@ -53,7 +53,7 @@ G4double G4IStore::GetImportance(const G4VPhysicalVolume &aVolume,
   if (fCurrentIterator==fPtki.end()) {
     Error("GetImportance: Region does not exist");
   }
-  return fCurrentIterator->second;
+  return (*fCurrentIterator).second;
 }
 
 
@@ -65,7 +65,7 @@ G4double G4IStore::GetImportance(const G4PTouchableKey &ptk) const {
     G4cout << fPtki << G4endl;
     Error("GetImportance(ptk): Region does not exist");
   }
-  return fCurrentIterator->second;
+  return (*fCurrentIterator).second;
 }
 
 G4bool G4IStore::IsInWorld(const G4VPhysicalVolume &aVolume) const {
