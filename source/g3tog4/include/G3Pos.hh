@@ -20,7 +20,7 @@ public:
 
   G4bool operator == (const G3Pos& g3p) const;
 
-  virtual G3Pos::~G3Pos(){;}
+  virtual ~G3Pos(){;}
 
   VolTableEntry* GetMotherVTE();
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BuildGeom.cc,v 1.5 1999-05-22 06:31:34 lockman Exp $
+// $Id: G4BuildGeom.cc,v 1.6 1999-05-22 07:00:40 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -56,7 +56,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
 
   // Build the geometry
 
-  G4cout << "G3toG4 top level volume is " << G3Vol.GetFirstVTE()->GetName()
+  G4cout << "G3toG4 top level volume is " << *(G3Vol.GetFirstVTE()->GetName())
 	 << endl;
 
   /*

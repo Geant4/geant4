@@ -35,7 +35,7 @@ public:
 
   void SetLV(G4LogicalVolume* ll);
 
-  G4String GetName();
+  G4String* GetName();
 
   void AddG3Pos(G3Pos* aG3Pos);
 

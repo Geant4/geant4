@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: VolTableEntry.cc,v 1.2 1999-05-22 06:51:01 lockman Exp $
+// $Id: VolTableEntry.cc,v 1.3 1999-05-22 07:00:41 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "globals.hh"
@@ -105,8 +105,8 @@ void
 VolTableEntry::AddG3Pos(G3Pos* aG3Pos){
   _G3Pos.resize(_G3Pos.length()+1);
   _G3Pos.insert(aG3Pos);
-  G4cout << "Added G3Pos " << aG3Pos->GetName() << " copy " << _G3Pos.length()
-	 << " to VTE " << GetName() <<  endl;
+  //  G4cout << "Added G3Pos " << aG3Pos->GetName() << " copy " << _G3Pos.length()
+  // << " to VTE " << *GetName() <<  endl;
 };
 
 void
