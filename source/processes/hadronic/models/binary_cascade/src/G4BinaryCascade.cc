@@ -631,13 +631,17 @@ G4double G4BinaryCascade::GetExcitationEnergy()
      #endif
      return 0;
   }
+
   debug.push_back("====> current A, Z");
   debug.push_back(currentZ);
   debug.push_back(currentA);
   debug.push_back(finalZ);
   debug.push_back(finalA);
+  debug.push_back(nucleusMass);
+  debug.push_back(GetFinalNucleusMomentum().mag());
   debug.dump();
-  
+  PrintKTVector(&theTargetList, G4std::string(" current target list info"));
+  PrintKTVector(&theCapturedList, G4std::string(" current captured list info"));
 
   excitationE = GetFinalNucleusMomentum().mag() - nucleusMass;
 
@@ -878,8 +882,20 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
 
   currentA += finalBaryon-initialBaryon;
   currentZ += finalCharge-initialCharge;
+  
+  // assume due to rounding errors or similar, the projectile is still outside.
+  if(primary->GetState() != G4KineticTrack::inside)
+  {
+    G4int primBaryon = primary->GetDefinition()->GetBaryonNumber();
+    G4int primCharge(0);
+    if(primBaryon!=0) primCharge=static_cast<G4int>(primary->GetDefinition()->GetPDGCharge()+.1);
+    currentA+=primBaryon;
+    currentZ+=primCharge;
+  }
   G4KineticTrackVector oldSecondaries;
   oldSecondaries.push_back(primary);
+  G4cout << "Balancing debug ====== "
+      <<finalBaryon<<" "<<initialBaryon<<" "<<finalCharge<<" "<<initialCharge<<G4endl;
   G4KineticTrackVector oldTarget;
 
   primary->Hit();
@@ -1604,13 +1620,16 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
       G4cout << " error-DoTimeStep, aft, A, Z, sec-Z,A,m,m_in_nucleus "
        << currentA << " "
        << currentZ << " "
+       << GetTotalCharge(theTargetList)
+          + GetTotalCharge(theCapturedList)
+          + GetTotalCharge(*kt_inside) << " "
        << secondaryCharge << " "
        << secondaryBarions << " "
        << secondaryMass << " "
        << massInNucleus << " "
        << GetTotalCharge(theTargetList) << " " 
        << GetTotalCharge(theCapturedList) << " "
-       <<  GetTotalCharge(*kt_inside) << " "
+       << GetTotalCharge(*kt_inside) << " "
        << G4endl;
        
    }    
@@ -1638,7 +1657,11 @@ G4Fragment * G4BinaryCascade::FindFragments()
 
 
   G4int a = theTargetList.size()+theCapturedList.size();
-//G4cout << "target Captured: "<< theTargetList.size() << " " <<theCapturedList.size()<< G4endl;
+  G4cout << "target, captured, secondary: "
+         << theTargetList.size() << " " 
+	 << theCapturedList.size()<< " "
+	 << theSecondaryList.size()
+	 << G4endl;
   G4int zTarget = 0;
   G4KineticTrackVector::iterator i;
   for(i = theTargetList.begin(); i != theTargetList.end(); ++i)
@@ -1964,6 +1987,7 @@ void G4BinaryCascade::PrintKTVector(G4KineticTrackVector * ktv, G4std::string co
 	   << 1/fermi*pos << " R: " << 1/fermi*pos.mag() << " 4mom: "
 	   << 1/MeV*mom << " P: " << 1/MeV*mom.vect().mag() 
 	   << " M: " << 1/MeV*mom.mag() << G4endl;
+    G4cout <<"trackstatus: "<<kt->GetState()<<G4endl;
   }
 }
 
