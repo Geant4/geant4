@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsList.cc,v 1.12 2002-08-09 14:21:30 maire Exp $
+// $Id: Em5PhysicsList.cc,v 1.13 2003-02-20 10:52:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 
@@ -198,7 +198,7 @@ void Em5PhysicsList::ConstructEM()
      pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
       
     } else if (
-                particleName == "proton"  
+                particleName == "proton"
                || particleName == "antiproton"  
                || particleName == "pi+"  
                || particleName == "pi-"  
@@ -246,7 +246,7 @@ void Em5PhysicsList::SetCuts()
 {
   ////G4Timer theTimer ;
   ////theTimer.Start() ;
-  
+
   // reactualise cutValues
   if (currentDefaultCut != defaultCutValue)
     {
@@ -255,37 +255,26 @@ void Em5PhysicsList::SetCuts()
      if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
      currentDefaultCut = defaultCutValue;
     }
-      
+
   if (verboseLevel >0){
     G4cout << "Em5PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
-  
+
   //special for low energy physics
   //
-  G4double lowlimit=250*eV;  
+  G4double lowlimit=250*eV;
   G4Gamma   ::SetEnergyRange(lowlimit,100*GeV);
   G4Electron::SetEnergyRange(lowlimit,100*GeV);
   G4Positron::SetEnergyRange(lowlimit,100*GeV);
-      
+
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
+  // because some processes for e+/e- need cut values for gamma
   //
    SetCutValue(cutForGamma,"gamma");
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
 
-   SetCutValue(defaultCutValue,"mu-");
-   SetCutValue(defaultCutValue,"mu+");
-
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton 
-
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
-
-  SetCutValueForOthers(defaultCutValue);
-              
   if (verboseLevel>0) DumpCutValuesTable();
 
   ////theTimer.Stop();
