@@ -1,5 +1,5 @@
 
-$Id: History,v 1.35 2003-01-27 10:44:00 gcosmo Exp $
+$Id: History,v 1.36 2003-03-25 17:02:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Mar 25, 2003   G.Cosmo                   geom-bool-V05-00-01
+  - Fixed trivial strict pedantic warnings in G4ReflectedSolid.cc and
+    G4ReflectionFactory.cc.
+  - Minor fixes to unit tests.
 
  Jan 27, 2003   G.Cosmo                   geom-bool-V05-00-00
   - G4ReflectionFactory[.hh.cc] (courtesy of I.Hrivnacova):
