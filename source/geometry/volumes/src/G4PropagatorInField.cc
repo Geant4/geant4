@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.3 1999-07-23 11:48:31 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.4 1999-07-23 11:52:29 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -373,14 +373,17 @@ G4PropagatorInField::LocateIntersectionPoint(
 
     }else{  // E is NOT close enough to the curve (ie point F).
 
-       if( !first_step){
-	  // Check whether any volumes are encountered by the chord AF
-	  //----------------------------------------------------------
-	  fNavigator->LocateGlobalPointWithinVolume( Point_A );
-	       //   This locate is needed in all cases except for the 
-	       //   original point A, because - presumably - that was 
-	       //   called at the start of the physical Step
-       }
+       // Check whether any volumes are encountered by the chord AF
+       //----------------------------------------------------------
+
+       // First restore any Voxel etc information in the Navigator
+       //  before calling ComputeStep   --  not just if( !first_step)
+       
+       fNavigator->LocateGlobalPointWithinVolume( Point_A );
+       //   This locate is needed in all cases except for the 
+       //   original point A, because - presumably - that was 
+       //   called at the start of the physical Step
+
        first_step= false;
        
        // Calculate the length and direction of the chord AF
