@@ -180,13 +180,27 @@ void G4EpdlTables::FillDataTable() {
 	numTable++;
 	lineMatch = FALSE;
 	vecList.clear();
+
 	if(numTable == 99){
+	  
 	  break;
 	}
       }
     }
   }// end for(;;)
 
+  if(theDataTable1->length() == 0){
+    delete theDataTable1;
+  }
+  
+  if(theDataTable2->length() == 0){
+    delete theDataTable2;
+  }
+  
+  if(theDataTable3->length() == 0){
+    delete theDataTable3;
+  }
+  
 } // end FillDataTable
 
 

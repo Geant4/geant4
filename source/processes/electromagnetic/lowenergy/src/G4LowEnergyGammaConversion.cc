@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.4 1999-05-05 09:09:26 aforti Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.5 1999-06-02 17:43:20 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -209,8 +209,8 @@ G4VParticleChange* G4LowEnergyGammaConversion::PostStepDoIt(const G4Track& aTrac
   aParticleChange.SetNumberOfSecondaries(2) ; 
   
   G4double ElectKineEnergy = max(0.,ElectTotEnergy - electron_mass_c2) ;
-  cout<<"GetSafety"<<aStep.GetPostStepPoint()->GetSafety()<<endl;
-  if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElectKineEnergy,aMaterial)
+  cout<<"GetSafety: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
+  if (G4EnergyLossTables::GetRange(G4Electron::Electron(), ElectKineEnergy, aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
     G4ThreeVector ElectDirection ( dirx, diry, dirz );
@@ -270,7 +270,7 @@ void G4LowEnergyGammaConversion::BuildCrossSectionTable(){
   G4Epdl97File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theCrossSectionTable = table.GetFstDataTable();
   cout<<"************** PP CS ****************"<<endl;
 }
 

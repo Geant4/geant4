@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.1 1999-06-01 18:17:47 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.2 1999-06-02 17:43:48 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,12 +66,6 @@ public:
   
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
   
-  void BuildLossTable(const G4ParticleDefinition& aParticleType);
-  
-  void BuildShellCrossSectionTable();
-  
-  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
-  
   G4double GetMeanFreePath(const G4Track& track,
 			   G4double previousStepSize,
 			   G4ForceCondition* condition ) ;
@@ -86,6 +80,11 @@ protected:
   virtual G4double ComputeCrossSection(const G4double AtomicNumber,
 				       const G4double IncEnergy);
   
+  void BuildLossTable(const G4ParticleDefinition& aParticleType);
+  void BuildShellCrossSectionTable();
+  void BuildFluorTransitionTable();
+  void BuildSamplingCoeffTable();
+
 private:
   
   // hide assignment operator 
@@ -94,6 +93,8 @@ private:
   
 private:
   
+  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
+
   G4int SelectRandomShell(const G4int AtomIndex, const G4double IncEnergy);
   
   G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
@@ -115,6 +116,8 @@ private:
   G4double EnergySampling(const G4int, const G4int,const G4double);
   
   allAtomTable* allAtomShellCrossSec;
+  allAtomTable* theFluorTransitionTable;
+  allAtomTable* theSamplingCoeffTable;
   G4SecondLevel* theBindingEnergyTable;  
   
   G4double MeanFreePath;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.4 1999-06-01 22:34:01 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.5 1999-06-02 17:43:48 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -81,8 +81,6 @@ public:
   
   void BuildPhysicsTable(const G4ParticleDefinition& PhotonType);
   
-  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
-
   G4double GetMeanFreePath(const G4Track& aTrack, 
 			   G4double previousStepSize, 
 			   G4ForceCondition* condition);
@@ -97,27 +95,30 @@ protected:
   void BuildCrossSectionTable();
   void BuildBindingEnergyTable();
   void BuildMeanFreePathTable();
-  void BuildFluorTransitionTable(G4int);
+  void BuildFluorTransitionTable();
   void BuildAugerTransitionTable(G4int);
 
 
 private:
 
-  G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, G4Material* aMaterial);
+  oneAtomTable* BuildTables(const G4int, const G4int, const char*);
+
+  G4Element* SelectRandomAtom(const G4DynamicParticle* aDynamicPhoton, 
+			      G4Material* aMaterial);
 
   G4bool SelectRandomTransition(G4int, G4double*, const oneAtomTable*);
 
-  G4double DataLogInterpolation(G4double Argument, 
-				G4double AtomicNumber, 
-				G4PhysicsTable* Table);
+  G4double DataLogInterpolation(const G4double Argument, 
+				const G4double AtomicNumber, 
+				const G4PhysicsTable* Table);
 
-  G4int FindBinLocation(G4double, G4PhysicsVector*);
+  G4int FindBinLocation(const G4double, const G4PhysicsVector*);
   
   G4PhysicsTable* theCrossSectionTable;    
   G4PhysicsTable* theBindingEnergyTable;   
   G4PhysicsTable* theMeanFreePathTable;
 
-  oneAtomTable* theFluorTransitionTable;
+  allAtomTable* theFluorTransitionTable;
   oneAtomTable* theAugerTransitionTable;
 
   G4double LowestEnergyLimit;      

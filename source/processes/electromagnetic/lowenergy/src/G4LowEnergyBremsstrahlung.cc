@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.4 1999-06-01 22:40:17 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.5 1999-06-02 17:43:20 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -501,7 +501,7 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   G4Epdl89File File(name,par);
   G4EpdlTables table(File);
   table.FillDataTable();
-  theCrossSectionTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
+  theCrossSectionTable = table.GetFstDataTable();
   cout<<"************** BR CS ****************"<<endl;
 }
 
@@ -529,7 +529,6 @@ void G4LowEnergyBremsstrahlung::BuildATable(){
 
   if (ATable) {
     
-    //ATable->clearAndDestroy(); 
     delete ATable; 
   }
 
@@ -544,9 +543,9 @@ void G4LowEnergyBremsstrahlung::BuildATable(){
   for(;;){
 
     afile>>a>>b;
-    cout<<"a: "<<a<<" b: "<<b<<endl;
-    if(afile.eof()){
 
+    if(afile.eof()){
+      delete OneElementATable;
       afile.close();
       break;
     }

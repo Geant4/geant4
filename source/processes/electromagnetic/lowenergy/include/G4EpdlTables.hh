@@ -60,7 +60,7 @@ public:
 
   // inline member functions
 
-  inline G4PhysicsTable* GetFstDataTable(){return new G4PhysicsTable(*theDataTable1);};
+  inline G4PhysicsTable* GetFstDataTable(){return theDataTable1;};
   inline G4PhysicsTable* GetSndDataTable(){return theDataTable2;};
   inline G4PhysicsTable* GetTrdDataTable(){return theDataTable3;};
 

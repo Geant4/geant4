@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.4 1999-06-01 22:34:23 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.5 1999-06-02 17:44:05 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,7 +72,9 @@ inline G4double G4LowEnergyPhotoElectric::GetCrossSection(G4DynamicParticle* aDy
 } 
 
 
-inline G4double G4LowEnergyPhotoElectric::DataLogInterpolation(G4double Argument, G4double TableIndex, G4PhysicsTable* Table){
+inline G4double G4LowEnergyPhotoElectric::DataLogInterpolation(const G4double Argument, 
+							       const G4double TableIndex, 
+							       const G4PhysicsTable* Table){
 
   G4PhysicsVector* theVec = 0;
   theVec = (*Table)(TableIndex);
@@ -89,7 +91,8 @@ inline G4double G4LowEnergyPhotoElectric::DataLogInterpolation(G4double Argument
   return theVal;
 }
 
-inline G4int G4LowEnergyPhotoElectric::FindBinLocation(G4double arg, G4PhysicsVector* vec){
+inline G4int G4LowEnergyPhotoElectric::FindBinLocation(const G4double arg, 
+						       const G4PhysicsVector* vec){
 
   if(!vec){
 

@@ -33,7 +33,10 @@ class G4FirstLevel : public RWTPtrSortedVector< G4Data >{
 
 public:
 
+  //  G4FirstLevel( G4FirstLevel& )
+
  ~G4FirstLevel();
+
 
   G4bool operator == (const G4FirstLevel& ) const;
 

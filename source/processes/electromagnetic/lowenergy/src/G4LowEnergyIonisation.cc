@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.3 1999-06-01 22:45:50 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.4 1999-06-02 17:43:21 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,8 @@ G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
    : G4eEnergyLoss(processName),
      allAtomShellCrossSec(0),
      theBindingEnergyTable(0),
+     theFluorTransitionTable(0),
+     theSamplingCoeffTable(0),
      LowestKineticEnergy(100.*eV),
      HighestKineticEnergy(100.*GeV),
      TotBin(100)
@@ -55,13 +57,23 @@ G4LowEnergyIonisation::~G4LowEnergyIonisation()
 {
 
   if (allAtomShellCrossSec) {
-    // allAtomShellCrossSec->clearAndDestroy();
+
     delete allAtomShellCrossSec;
   }
 
   if (theBindingEnergyTable) {
-    // theBindingEnergyTable->clearAndDestroy();
+
     delete theBindingEnergyTable;
+  }
+
+  if (theFluorTransitionTable) {
+
+    delete theFluorTransitionTable;
+  }
+
+  if(theSamplingCoeffTable){
+
+    delete theSamplingCoeffTable;
   }
 }
 
@@ -86,7 +98,14 @@ void G4LowEnergyIonisation::BuildPhysicsTable(const G4ParticleDefinition& aParti
  
  
     BuildDEDXTable(aParticleType);
+
+    // binding energy table construction is hidden here
     BuildShellCrossSectionTable();
+
+    BuildFluorTransitionTable();
+
+    //BuildSamplingCoeffTable();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -209,12 +228,13 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
 
    allAtomShellCrossSec = new allAtomTable();
    theBindingEnergyTable = new G4SecondLevel();
+
    G4int dataNum = 2;
  
    for(G4int TableInd = 0; TableInd < 100; TableInd++){
      //     cout<<"ELEMENTO: "<<TableInd<<endl;
-     oneAtomTable* oneAtomShellCS = 
-       BuildTables(TableInd, dataNum, "ion-ss-cs-");
+     //     oneAtomTable* oneAtomShellCS = new oneAtomTable();
+     oneAtomTable* oneAtomShellCS = BuildTables(TableInd, dataNum, "ion-ss-cs-");
      
      G4FirstLevel* oneAtomBindingTable 
        = new G4FirstLevel();
@@ -237,10 +257,56 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
      theBindingEnergyTable->insert(oneAtomBindingTable);
      allAtomShellCrossSec->insert(oneAtomShellCS);
    
-     //     cout<<"allAtom length "<<TableInd+1<<": "
-     //	 <<allAtomShellCrossSec->entries()<<endl;
-	 //     cout<<TableInd<<" Fatto l'insert "<<endl;
+   }//end for on atoms
+}
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LowEnergyIonisation::BuildFluorTransitionTable(){
+
+  cout<<"************** IO FL ****************"<<endl;
+
+   if (theFluorTransitionTable) {
+
+    delete theFluorTransitionTable;
+  }
+
+   theFluorTransitionTable = new allAtomTable();
+   G4int dataNum = 3;
+   
+   for(G4int TableInd = 5; TableInd < 100; TableInd++){
+
+     //     oneAtomTable* oneAtomShellFL = new oneAtomTable();
+     oneAtomTable* oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
+     
+     theFluorTransitionTable->insert(oneAtomShellFL);
+    
+   }//end for on atoms
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
+
+  cout<<"************** IO Sc ****************"<<endl;
+
+   if (theSamplingCoeffTable) {
+
+    delete theSamplingCoeffTable;
+  }
+   theSamplingCoeffTable = new allAtomTable();
+
+   G4int dataNum = 12;
+   
+   for(G4int TableInd = 0; TableInd < 100; TableInd++){
+
+     oneAtomTable* oneAtomShellSc = new oneAtomTable();
+     oneAtomShellSc = BuildTables(TableInd, dataNum, "ioni-co-");
+     
+     theSamplingCoeffTable->insert(oneAtomShellSc);
+    
    }//end for on atoms
 }
 
@@ -497,8 +563,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     if(AtomIndex > 5){
       
       G4bool ThereAreShells = TRUE;
-      G4int NumPar = 3;
-      oneAtomTable* oneAtomFluorTrans = BuildTables(AtomIndex-1, NumPar, "fl-tr-pr-");
+      oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomIndex-6];
       
       while(ThereAreShells == TRUE){
 	
@@ -549,12 +614,10 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 	  photvec.insert(newPart);
 	  thePrimaryShell = fluorPar[0];
 	  theEnergyDeposit -= lastTransEnergy*MeV;
-	  
 	}
       }
-      
-      // oneAtomFluorTrans->clearAndDestroy();
-      delete oneAtomFluorTrans;
+
+      //      delete oneAtomFluorTrans;
     } //END OF THE CHECK ON ATOMIC NUMBER
     
     //controllare se il setnumberofsecondaries  si puo' cambiare
@@ -575,7 +638,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
     
     photvec.clear();
     elecvec.clear();
-    cout<<"END OF FLUORESCENCE"<<endl;
+    //    cout<<"END OF FLUORESCENCE"<<endl;
     
     // fill aParticleChange 
     // changed energy and momentum of the actual particle
@@ -603,7 +666,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
       
       
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
-  cout<<"************** End IO DoIt ****************"<<endl;
+  //  cout<<"************** End IO DoIt ****************"<<endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -762,8 +825,12 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 					       const G4double KinEn){
 
   // 1) Load Coefficients (I need Z number and the index of the shell)
-  const G4int NumPar = 12;
-  oneAtomTable* oneAtomCoeffTable = BuildTables(AtomicNumber-1, NumPar, "ioni-co-");
+  //***************** RICORDATI DI CORREGGERLO ************************
+   G4int dataNum = 12;
+   oneAtomTable* oneAtomCoeffTable = BuildTables(AtomicNumber-1, dataNum, "ioni-co-");
+
+    //(*theSamplingCoeffTable)[AtomicNumber-12];
+
   //  cout<<"Atomicnumber: "<<AtomicNumber<<" ShellNum "<<ShellIndex<<" KinEn: "<<KinEn<<endl;
   oneShellTable* oneShellCoeffTable = (*oneAtomCoeffTable)[ShellIndex];
   G4double BindingEn = (*(*(*theBindingEnergyTable)[AtomicNumber-1])[1])[ShellIndex];
@@ -876,7 +943,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
 	rejection /= Parms[7];
       
     }while(rejection < G4UniformRand());
-    cout<<"scelta l'area 1: ";
+    //   cout<<"scelta l'area 1: ";
   }
 
   else if(area1 < rand1 && rand1 < areaTot){
@@ -885,7 +952,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
     G4double Norm = (1/Parms[10])-(1/maxEn);
     G4double rand2 = Norm*G4UniformRand();
     sample = 1/((1/Parms[10])-rand2);
-    cout<<"scelta l'area 2: ";
+    // cout<<"scelta l'area 2: ";
   }
   // cout<<" sample: "<<sample<<endl;
   //clear the table

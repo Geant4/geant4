@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.7 1999-06-01 22:40:50 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.8 1999-06-02 17:43:21 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,12 +46,19 @@
 
 #include "CLHEP/String/Strings.h"
 
+#include <rw/tpordvec.h>
+typedef RWTPtrOrderedVector<G4DynamicParticle> G4ParticleVector;
 // constructor
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
     LowestEnergyLimit (100*eV),
     HighestEnergyLimit(100*GeV),
+    theCrossSectionTable(0),
+    theBindingEnergyTable(0),
+    theMeanFreePathTable(0),
+    theFluorTransitionTable(0),
+    theAugerTransitionTable(0),
     NumbBinTable(100)
 {
    if (verboseLevel>0) {
@@ -59,12 +66,6 @@ G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
      G4cout << "LowestEnergy: " << LowestEnergyLimit/keV << "keV ";
      G4cout << "HighestEnergy: " << HighestEnergyLimit/MeV << "MeV " << endl;
    }
-   theCrossSectionTable = 0;
-   theBindingEnergyTable = 0;
-   theMeanFreePathTable = 0;
-   theFluorTransitionTable = 0;
-   theAugerTransitionTable = 0;
-   //PEManager = new HBookFile("lephotoel.hbook", 100);
 }
  
 // destructor
@@ -86,16 +87,17 @@ G4LowEnergyPhotoElectric::~G4LowEnergyPhotoElectric()
       delete theMeanFreePathTable;
    }
 
+   // ClearAndDestroy of this tables is called in their destructors
    if (theFluorTransitionTable) {
-     //theFluorTransitionTable->clearAndDestroy();
+
       delete theFluorTransitionTable;
    }
 
    if (theAugerTransitionTable) {
-     // theAugerTransitionTable->clearAndDestroy();
+
       delete theAugerTransitionTable;
    }
-   //delete PEManager;
+
 }
  
  
@@ -106,19 +108,20 @@ void G4LowEnergyPhotoElectric::BuildPhysicsTable(const G4ParticleDefinition& Pho
 // Build microscopic cross section table and mean free path table
 {
 
-   // Build microscopic cross section tables for the Photo Electric Effect
-   BuildCrossSectionTable();
+  BuildCrossSectionTable();
 
-   // Build mean free path table for the Compton Scattering process
-   BuildMeanFreePathTable();
+  BuildMeanFreePathTable();
+  
+  BuildBindingEnergyTable();
 
-   // Build Binding Energy Table
-   BuildBindingEnergyTable();
+  BuildFluorTransitionTable();
+
+   
 }
 
 G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack, const G4Step&  aStep){
 
-  cout<<"************** Starting PE DoIt ****************"<<endl;
+   cout<<"************** Starting PE DoIt ****************"<<endl;
   // incoming particle initialization
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
 
@@ -147,22 +150,22 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4int thePrimaryShell = theBindEnVec->GetLowEdgeEnergy(g);
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
-  RWTPtrSlist<G4DynamicParticle> photvec;
+  G4ParticleVector photvec;
   G4int photInd = 0; 
-  RWTPtrSlist<G4DynamicParticle> elecvec;
+  G4ParticleVector elecvec;
   G4int elecInd = 0; 
 
   // primary outcoming electron
   G4double ElecKineEnergy = (PhotonEnergy - (*theBindEnVec)(g))*MeV;
   G4double theEnergyDeposit = (PhotonEnergy - ElecKineEnergy)*MeV;
 
-  cout<<"The electron enloss range is: "
-      <<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
-      <<endl;
+  // cout<<"The electron enloss range is: "
+  //  <<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
+  //  <<endl;
   
-  cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
+  //cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
   
-  cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
+  //cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
   
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
@@ -180,13 +183,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     if(AtomNum > 5){
       
       G4bool ThereAreShells = TRUE;
-      G4int NumPar = 3;
-      oneAtomTable* oneAtomFluorTrans = BuildTables(AtomNum-1, NumPar, "fl-tr-pr-");
-      
-      //    BuildFluorTransitionTable(AtomNum);
-    
-      //G4bool ThereAreShells = TRUE;
-      
+      oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[AtomNum-6]; 
+      cout<<"oneAtomFluorTrans length: "<<oneAtomFluorTrans->length()<<endl;
       while(ThereAreShells == TRUE){
 	
 	// Select the second transition from another subshell
@@ -238,7 +236,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
       }
      
       // oneAtomFluorTrans->clearAndDestroy();
-      delete oneAtomFluorTrans;
+      //      delete oneAtomFluorTrans;
     } //END OF THE CHECK ON ATOMIC NUMBER
     
     //controllare se il setnumberofsecondaries  si puo' cambiare
@@ -259,7 +257,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     
     photvec.clear();
     elecvec.clear();
-    cout<<"END OF FLUORESCENCE"<<endl;
+    //cout<<"END OF FLUORESCENCE"<<endl;
   } // END OF CUTS
   
   else{
@@ -282,7 +280,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   
   // Reset NbOfInteractionLengthLeft and return aParticleChange
   return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep );
-  cout<<"END OF PE POSTSTEPDOIT"<<endl;
+  //cout<<"END OF PE POSTSTEPDOIT"<<endl;
 }
 
 void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
@@ -316,6 +314,28 @@ void G4LowEnergyPhotoElectric::BuildBindingEnergyTable(){
   table.FillDataTable();
   theBindingEnergyTable = new G4PhysicsTable(*(table.GetFstDataTable())) ;
 
+}
+
+void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
+
+  cout<<"************** PE FL ****************"<<endl;
+
+   if (theFluorTransitionTable) {
+
+    delete theFluorTransitionTable;
+  }
+
+   theFluorTransitionTable = new allAtomTable();
+   G4int dataNum = 3;
+ 
+   for(G4int TableInd = 5; TableInd < 100; TableInd++){
+
+     //oneAtomShellFL = new oneAtomTable();
+     oneAtomTable* oneAtomShellFL = BuildTables(TableInd, dataNum, "fl-tr-pr-");
+     
+     theFluorTransitionTable->insert(oneAtomShellFL);
+     oneAtomTable* oneAtomFluorTrans = (*theFluorTransitionTable)[TableInd-5]; 
+   }//end for on atoms
 }
 
 oneAtomTable* G4LowEnergyPhotoElectric::BuildTables(const G4int TableInd, 
@@ -380,7 +400,6 @@ oneAtomTable* G4LowEnergyPhotoElectric::BuildTables(const G4int TableInd,
 
     else if(a == -2){
       
-      //      oneShellPar->clearAndDestroy();
       delete oneShellPar;
     }
 
@@ -402,24 +421,6 @@ oneAtomTable* G4LowEnergyPhotoElectric::BuildTables(const G4int TableInd,
   
   file.close();
   return oneAtomPar;
-}
-
-void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(G4int atomNum){
- 
-  if (theFluorTransitionTable) {
-  
-    // theFluorTransitionTable->clearAndDestroy(); 
-    delete theFluorTransitionTable;
-  }
-  cout<<"************** PE FL ****************"<<endl;
-
-  G4String name("eadl.asc");
-  G4int par[4] = {92, 931, 91, 0}; 
-  G4Epdl89File File(name,par);
-
-  G4EpdlTables table(File);
-  //  table.FillTheTable(atomNum);
-  theFluorTransitionTable = table.FillTheTable(atomNum);
 }
 
 void G4LowEnergyPhotoElectric::BuildAugerTransitionTable(G4int  atomNum){
@@ -553,13 +554,18 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   
   G4int ShellNum = 0;
   G4double TotalSum = 0; 
+  cout<<"oneAtomFluorTrans length: "<<TransitionTable->length()<<endl;
+  cout<<"ShellNum: "<<ShellNum<<endl;
+
   while(thePrimShell != (*(*(*TransitionTable)[ShellNum])[0])[0]){
   
     cout<<"TransitionTable entries: "<<TransitionTable->entries()
         <<" ShellNum: "<<ShellNum<<endl;
+
     if(ShellNum == TransitionTable->entries()-1){
       break;
     }
+
     ShellNum++;
   }
 
