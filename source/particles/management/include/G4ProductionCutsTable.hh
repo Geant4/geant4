@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.hh,v 1.4 2003-01-14 22:26:49 asaim Exp $
+// $Id: G4ProductionCutsTable.hh,v 1.5 2003-03-10 07:35:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@ class G4ProductionCuts;
 #include "G4ios.hh"
 #include "g4std/vector"
 #include "G4MaterialCutsCouple.hh"
+
 
 class G4ProductionCutsTable  
 {
@@ -97,14 +98,14 @@ class G4ProductionCutsTable
    G4CutTable energyCutTable;
 
    G4RegionStore* fG4RegionStore;
-   G4VRangeToEnergyConverter* converters[7]; 
+   G4VRangeToEnergyConverter* converters[NumberOfG4CutIndex]; 
 
    G4ProductionCuts* defaultProductionCuts;
    G4bool firstUse;
 
 // These two vectors are for the backward comparibility
-   G4double* rangeDoubleVector[7];
-   G4double* energyDoubleVector[7];
+   G4double* rangeDoubleVector[NumberOfG4CutIndex];
+   G4double* energyDoubleVector[NumberOfG4CutIndex];
 
   public: 
    const G4std::vector<G4double>* GetRangeCutsVector(size_t pcIdx) const;
@@ -147,6 +148,9 @@ class G4ProductionCutsTable
 			  G4MaterialCutsCouple* aCouple,
 			  G4Region* aRegion);
 
+    bool IsCoupleUsedInTheRegion(const G4MaterialCutsCouple* aCouple,
+				 const G4Region* aRegion) const;
+
   public: // with description
    // Store cuts and material information in files under the specified directory.
   G4bool  StoreCutsTable(const G4String& directory, 
@@ -161,6 +165,7 @@ class G4ProductionCutsTable
 				   G4bool          ascii = false);
   
   protected:
+
   // Store material information in files under the specified directory.
   virtual G4bool  StoreMaterialInfo(const G4String& directory, 
 				    G4bool          ascii = false);
@@ -175,14 +180,18 @@ class G4ProductionCutsTable
   // check stored materialCutsCouple is consistent with the current detector setup. 
   virtual G4bool  CheckMaterialCutsCoupleInfo(const G4String& directory, 
 				    G4bool          ascii = false);
-  
+
   // Store cut values information in files under the specified directory.
   virtual G4bool  StoreCutsInfo(const G4String& directory, 
-				G4bool          ascii = false);
+                                G4bool          ascii = false);
   
   // Retrieve cut values information in files under the specified directory.
   virtual G4bool  RetrieveCutsInfo(const G4String& directory,
-				   G4bool          ascii = false);
+                                   G4bool          ascii = false);
+
+  private:
+   enum { FixedStringLengthForStore = 32 }; 
+
 };
 
 inline 

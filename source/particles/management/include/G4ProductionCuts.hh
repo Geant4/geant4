@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.hh,v 1.3 2003-03-10 03:56:12 asaim Exp $
+// $Id: G4ProductionCuts.hh,v 1.4 2003-03-10 07:35:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,10 +49,10 @@ enum G4ProductionCutsIndex
   idxG4GammaCut =0,
   idxG4ElectronCut,
   idxG4PositronCut,
-  idxG4ProtonCut,
-  idxG4AntiProtonCut,
-  idxG4NeutronCut,
-  idxG4AntiNeutronCut,
+  //idxG4ProtonCut,
+  //idxG4AntiProtonCut,
+  //idxG4NeutronCut,
+  //idxG4AntiNeutronCut,
 
   NumberOfG4CutIndex
 };

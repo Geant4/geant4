@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCuts.icc,v 1.4 2003-03-10 03:56:12 asaim Exp $
+// $Id: G4ProductionCuts.icc,v 1.5 2003-03-10 07:35:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,10 +54,10 @@ inline
   if       ( name == "gamma" )        { index =  0; }
   else  if ( name == "e-" )           { index =  1; }
   else  if ( name == "e+" )           { index =  2; }
-  else  if ( name == "proton" )       { index =  3; }
-  else  if ( name == "anti_proton" )  { index =  4; }
-  else  if ( name == "neutron" )      { index =  5; }
-  else  if ( name == "anti_neutron" ) { index =  6; }
+//  else  if ( name == "proton" )       { index =  3; }
+//  else  if ( name == "anti_proton" )  { index =  4; }
+//  else  if ( name == "neutron" )      { index =  5; }
+//  else  if ( name == "anti_neutron" ) { index =  6; }
   else                                { index = -1; }
 
   return index;
