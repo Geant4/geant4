@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: A01DetectorConstruction.cc,v 1.5 2002-12-20 21:40:30 duns Exp $
+// $Id: A01DetectorConstruction.cc,v 1.6 2003-08-15 00:25:21 duns Exp $
 // --------------------------------------------------------------
 //
 
@@ -78,6 +78,7 @@ A01DetectorConstruction::A01DetectorConstruction()
 
 A01DetectorConstruction::~A01DetectorConstruction()
 {
+  delete armRotation;
   delete magneticField;
   delete messenger;
 
