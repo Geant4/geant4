@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.14 2002-04-22 13:40:36 gcosmo Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.15 2002-04-22 13:43:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -381,7 +381,7 @@ void G4SmartVoxelHeader::BuildConsumedNodes(G4int nReplicas)
     pNode=new G4SmartVoxelNode(nNode);
     if (!pNode)
     {
-      G4cout << ERROR - Node allocation failed." << G4endl;
+      G4cout << "ERROR - Node allocation failed." << G4endl;
       G4Exception("ERROR - G4SmartVoxelHeader::BuildConsumedNodes");
     }
     nodeList.push_back(pNode);
