@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.hh,v 1.5 2001-07-11 09:59:08 gunter Exp $
+// $Id: G4LineSection.hh,v 1.6 2001-12-04 15:10:00 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,7 +49,10 @@ class G4LineSection
      G4LineSection( const G4ThreeVector& PntA, const G4ThreeVector& PntB );
 
      G4double Dist( G4ThreeVector OtherPnt ) const;
-     G4double InvsqDistAB() const;
+
+  //   G4double InvsqDistAB() {return inverse_square_distAB;} const;
+
+     G4double GetABdistanceSq() const { return fABdistanceSq ; } ;
 
      static G4double Distline( const G4ThreeVector& OtherPnt, 
 			       const G4ThreeVector& LinePntA, 
@@ -58,13 +61,11 @@ class G4LineSection
 
      G4ThreeVector    EndpointA;
      G4ThreeVector   VecAtoB;
-     G4double inverse_square_distAB;
+
+  //  G4double inverse_square_distAB;
+
+     G4double fABdistanceSq ;
 };
 
-inline
-G4double G4LineSection::InvsqDistAB() const
-{
-  return inverse_square_distAB;
-}
 
 #endif

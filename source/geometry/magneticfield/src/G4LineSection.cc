@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LineSection.cc,v 1.5 2001-07-11 09:59:12 gunter Exp $
+// $Id: G4LineSection.cc,v 1.6 2001-12-04 15:10:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // typedef double    G4double;  
@@ -33,6 +33,8 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   : EndpointA(PntA), 
     VecAtoB(PntB-PntA)
 { 
+  fABdistanceSq = VecAtoB.mag2() ;  
+  /*
   G4double distABsquared = VecAtoB.mag2() ;  
   if ( distABsquared == 0.0)
   {
@@ -42,6 +44,7 @@ G4LineSection::G4LineSection( const G4ThreeVector& PntA,
   {
     inverse_square_distAB=1.0 / distABsquared ;
   }
+  */
 }
 
 G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
@@ -57,31 +60,36 @@ G4double G4LineSection::Dist( G4ThreeVector OtherPnt ) const
    
   //  Determine  Projection(AZ on AB) / Length(AB) 
   //
-  unit_projection= inner_prod * InvsqDistAB();
-
-  if( (0. <= unit_projection ) && (unit_projection <= 1.0 ) )
+  if( fABdistanceSq != 0.0 )
   {
-     dist_sq= sq_VecAZ -  unit_projection * inner_prod ;
-  }
-  else
- {
+    //  unit_projection= inner_prod * InvsqDistAB();
+    unit_projection = inner_prod/fABdistanceSq;
+
+    if( (0. <= unit_projection ) && (unit_projection <= 1.0 ) )
+    {
+      dist_sq= sq_VecAZ -  unit_projection * inner_prod ;
+    }
+    else
+    {
      //  The perpendicular from the point to the line AB meets the line
      //   in a point outside the line segment!
      
-     if( unit_projection < 0. ) 
-     {
-        // A is the closest point
+      if( unit_projection < 0. ) // A is the closest point
+      {
         dist_sq= sq_VecAZ;  
-     }
-     else
-     {
-        // B is the closest point
-
+      }
+      else                       // B is the closest point
+      {
 	G4ThreeVector   EndpointB = EndpointA + VecAtoB;
         G4ThreeVector   VecBZ =     OtherPnt - EndpointB;
         dist_sq =  VecBZ.mag2();
-     }
+      }
+    }
   }
+  else
+  {
+     dist_sq = (OtherPnt - EndpointA).mag2() ;   
+  }  
   if( dist_sq < 0.0 ) dist_sq = 0.0 ;
 
   return sqrt(dist_sq) ;  
