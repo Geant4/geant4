@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LossTableManager.cc,v 1.30 2003-11-10 20:27:32 vnivanch Exp $
+// $Id: G4LossTableManager.cc,v 1.31 2003-11-11 09:59:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -506,7 +506,7 @@ void G4LossTableManager::RetrievePhysicsTables(const G4ParticleDefinition* aPart
            << G4endl;
   }
   if(all_tables_are_built) {
-      G4cout << "### G4LossTableManager: all dEdx and Range tables are retrieved" << G4endl;
+      G4cout << "##### All dEdx and Range tables are retrieved #####" << G4endl;
   } else if(isLast) {
       G4cout << "### G4LossTableManager: WARNING! not all dEdx and Range tables are retrieved" << G4endl;
   }

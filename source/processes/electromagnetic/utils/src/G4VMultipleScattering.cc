@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VMultipleScattering.cc,v 1.19 2003-11-10 20:27:32 vnivanch Exp $
+// $Id: G4VMultipleScattering.cc,v 1.20 2003-11-11 09:59:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -123,6 +123,9 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if (buildLambdaTable) {
 
+    const G4ProductionCutsTable* theCoupleTable=
+          G4ProductionCutsTable::GetProductionCutsTable();
+    size_t numOfCouples = theCoupleTable->GetTableSize();
     theLambdaTable = new G4PhysicsTable(numOfCouples);
 
     for (size_t i=0; i<numOfCouples; i++) {
