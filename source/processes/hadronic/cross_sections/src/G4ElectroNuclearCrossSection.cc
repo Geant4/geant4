@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ElectroNuclearCrossSection.cc,v 1.6 2001-11-15 13:57:54 hpw Exp $
+// $Id: G4ElectroNuclearCrossSection.cc,v 1.7 2001-11-15 14:21:42 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -1647,7 +1647,7 @@ G4double G4ElectroNuclearCrossSection::GetEffectivePhotonEnergy()
 G4double G4ElectroNuclearCrossSection::SolveTheEquation(G4double f)
 {
   static const G4double z=log(2000.);
-  static const G4double p=0.0116*exp(0.16*z)+.4*exp(-0.2*z);
+  static const G4double p=0.0116*exp(0.16*z)+exp(-0.26*z);
   static const G4int    imax=7;    // Not more than "imax" steps to find the solution
   static const G4double eps=0.001; // Accuracy which satisfies the search
   G4double x=z+f/p/(lastLE-z);
