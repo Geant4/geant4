@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.cc,v 1.3 2002-05-02 08:43:24 dressel Exp $
+// $Id: G4ProcessPlacer.cc,v 1.4 2002-05-23 12:31:17 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -137,7 +137,14 @@ void G4ProcessPlacer::PrintProcVec(G4ProcessVector* processVec)
   G4int len = processVec->length();
   if (len==0) G4Exception("G4ProcessPlacer::G4ProcessPlacer:processVec len = 0");
   for (int pi=0; pi<len; pi++) {
-    G4cout << "   " << (*processVec)[pi]->GetProcessName() << G4endl;
+    G4VProcess *p = (*processVec)[pi];
+    if (p) {
+      G4cout << "   " << p->GetProcessName() << G4endl;
+    } 
+    else {
+      G4cout << "   " << "no process found for position: " << pi 
+	     << ", in vector of length: " << len << G4endl;
+    }
   }
 }
 
