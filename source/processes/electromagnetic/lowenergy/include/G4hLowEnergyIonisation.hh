@@ -61,7 +61,7 @@ public: // Without description
 
   ~G4hLowEnergyIonisation();
   
-  G4bool IsApplicable(const G4ParticleDefinition&) const;
+  G4bool IsApplicable(const G4ParticleDefinition&);
     
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType) ;
 

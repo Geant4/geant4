@@ -70,7 +70,7 @@ inline G4double G4hLowEnergyIonisation::GetContinuousStepLimit(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4bool G4hLowEnergyIonisation::IsApplicable(
-                                const G4ParticleDefinition& particle) const
+                                const G4ParticleDefinition& particle) 
 {
    return(particle.GetPDGCharge() != 0.);
 }

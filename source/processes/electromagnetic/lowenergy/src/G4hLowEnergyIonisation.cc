@@ -329,7 +329,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(
   
   // get electron and particle cuts in kinetic energy
   
-  G4double* deltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
+  // deltaCutInKineticEnergy = theElectron->GetCutsInEnergy() ;
   
   // loop for materials 
   
@@ -1066,7 +1066,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
    static const G4double kappa = 10. ;
    static const G4double theBohrVelocity2 = 50.0 * keV/protonMass ;
 
-  G4int    imat        = material->GetIndex() ; 
+  G4int    imaterial   = material->GetIndex() ; 
   G4double ipotFluct   = material->GetIonisation()->GetMeanExcitationEnergy() ;
   G4double electronDensity = material->GetElectronDensity() ;
   G4double zeff = electronDensity/(material->GetTotNbOfAtomsPerVolume()) ;
@@ -1074,7 +1074,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   // get particle data
   G4double tkin   = particle->GetKineticEnergy();
   G4double particleMass = particle->GetMass() ;
-  G4double deltaCutInKineticEnergyNow = deltaCutInKineticEnergy[imat];
+  G4double deltaCutInKineticEnergyNow = deltaCutInKineticEnergy[imaterial];
 
   // shortcut for very very small loss 
   if(meanLoss < minLoss) return meanLoss ;
