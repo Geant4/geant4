@@ -1,7 +1,10 @@
-$Id: History,v 1.7 2000-07-03 10:37:51 johna Exp $
+$Id: History,v 1.8 2001-01-16 18:22:16 johna Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+16th January 2001  John Allison
+- Changed screen units to pixels in MySteppingAction.cc.
 
 3rd July 2000  John Allison
 - Switched to replicas in MyDetectorConstruction.

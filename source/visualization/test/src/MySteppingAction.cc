@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.7 2000-10-18 13:52:20 allison Exp $
+// $Id: MySteppingAction.cc,v 1.8 2001-01-16 18:19:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,8 +70,10 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     intercept.SetVisAttributes (&iva);
     pVVisManager -> Draw (intercept);
 
+    const G4double pixels = 1.;
+
     G4Circle circle22(G4Point3D(100.*cm,100.*cm,0.));
-    circle22.SetScreenDiameter(50.*cm);
+    circle22.SetScreenDiameter(50.*pixels);
     circle22.SetFillStyle(G4Circle::noFill);
     G4Colour colour22;
     G4VisAttributes attribs22;
@@ -91,7 +93,7 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     pVVisManager->Draw(square222);
     
     G4Square square33(G4Point3D(-100.*cm,100.*cm,0.));
-    square33.SetScreenDiameter(50.*cm);
+    square33.SetScreenDiameter(50.*pixels);
     square33.SetFillStyle(G4Square::hashed);
     G4Colour colour33;
     G4VisAttributes attribs33;
