@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.29 2002-11-09 02:35:12 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.30 2002-11-29 23:11:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -107,7 +107,6 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4FieldTrack  yFldTrkStart(y_current);
 #endif
 
-  // G4double yscal[ncompSVEC];
   G4double y[G4FieldTrack::ncompSVEC], dydx[G4FieldTrack::ncompSVEC];
   G4double ystart[G4FieldTrack::ncompSVEC], yEnd[G4FieldTrack::ncompSVEC]; 
   G4double  x1, x2;
@@ -117,13 +116,10 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
   //  Assume that hstep > 0 
 
-  // ystart = y_current.PosVelVec();
   y_current.DumpToArray( ystart );
   x1= y_current.GetCurveLength();
   x2= x1 + hstep;
  
-  // //  Initial Step size "h" is half the interval
-  // h = 0.5 * hstep;
   //  Initial Step size "h" is the full interval
   h = hstep;   
   x = x1;
@@ -157,9 +153,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	}
      }
 
-#ifdef  G4DEBUG_FIELD
-     static G4int nStpPr=50;   // For debug printing of integrations with many steps
-#endif
+     static G4int nStpPr=50;   // For debug printing of long integrations
 
      // Perform the Integration
      //      
@@ -181,15 +175,15 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
         //-----------------------------------------------------
 
-#ifdef  G4DEBUG_FIELD
+        // #ifdef G4DEBUG_FIELD
  	   // if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
 	   // if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
-#endif
+
         yFldTrk.DumpToArray(y);    
 #ifdef  G4DEBUG_FIELD
   	  if(dbg>1) PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
 #endif	
-	dyerr = dyerr_len / h;    // was dyerr_len / hstep;
+	dyerr = dyerr_len / h;
 	hdid= h;
         x += hdid;
         // Compute suggested new step
@@ -288,9 +282,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 
 #ifdef G4DEBUG_FIELD
   if( dbg && no_warnings ){
-     G4cerr << " Exiting status: "
-	   << " no-steps " << nstp
-	   <<G4endl;
+     G4cerr << "G4MagIntegratorDriver exit status: no-steps " << nstp <<G4endl;
      PrintStatus( yEnd, x1, y, x, hstep, nstp);
   }
 #endif
@@ -425,7 +417,7 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],        // InOut
 	  errpos_sq =  sqr(yerr[0]) + sqr(yerr[1]) + sqr(yerr[2]) ;
 	  errpos_sq /= eps_pos*eps_pos; // Scale relative to required tolerance
 
-          // Accuracy for velocity
+          // Accuracy for momentum
           errvel_sq =  (sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) )
                      / (sqr(y[3]) + sqr(y[4]) + sqr(y[5]) );
           errvel_sq /= eps_rel_max*eps_rel_max; 
