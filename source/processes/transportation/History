@@ -1,4 +1,4 @@
-$Id: History,v 1.64 2002-12-16 11:22:01 gcosmo Exp $
+$Id: History,v 1.65 2003-01-08 00:09:37 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan, 7th, M.Asai           transport-V05-00-01
+----------------
+- Fix in G4Transportation.cc for updating material-cut-couple.
 
 Dec, 16th, G. Cosmo        transport-V05-00-00
 -------------------
