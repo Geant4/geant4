@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEmProcess.cc,v 1.1 2003-10-13 10:52:51 vnivanch Exp $
+// $Id: G4VEmProcess.cc,v 1.2 2003-10-13 12:57:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -134,7 +134,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if( !cutsWasModified ) return;
 
   Initialise();
-  BuildLambdaTable();
+  theLambdaTable = BuildLambdaTable();
   PrintInfoDefinition();
 
   if(0 < verboseLevel && theCuts) {
@@ -147,7 +147,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
+G4PhysicsTable* G4VEmProcess::BuildLambdaTable()
 {
 
   if(0 < verboseLevel) {
@@ -189,14 +189,14 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildLambdaTable()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetParticle(const G4ParticleDefinition* p)
+void G4VEmProcess::SetParticle(const G4ParticleDefinition* p)
 {
   particle = p;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEnergyLossSTD::SetSecondaryParticle(const G4ParticleDefinition* p)
+void G4VEmProcess::SetSecondaryParticle(const G4ParticleDefinition* p)
 {
   secondaryParticle = p;
 }
