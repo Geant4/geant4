@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.32 2001-08-05 02:29:26 johna Exp $
+// $Id: G4VisManager.cc,v 1.33 2001-08-05 19:02:27 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,7 +76,7 @@ G4VisManager::G4VisManager ():
     // No need to delete this; G4StateManager does this.
 
     if (fVerbosity >= startup) {
-      G4cout << "Constructing Visualization Manager...." << G4endl;
+      G4cout << "Visualization Manager instantiating..." << G4endl;
     }
 
     // Note: The specific graphics systems must be instantiated in a
@@ -119,7 +119,7 @@ G4VisManager::~G4VisManager () {
   }
   if (fVerbosity >= startup) {
     G4cout << "Graphics systems deleted." << G4endl;
-    G4cout << "VisManager deleting." << G4endl;
+    G4cout << "Visualization Manager deleting..." << G4endl;
   }
   for (i = 0; i < fMessengerList.size (); ++i) {
     delete fMessengerList[i];
@@ -140,10 +140,10 @@ G4VisManager* G4VisManager::GetInstance () {
 void G4VisManager::Initialise () {
 
   if (fVerbosity >= startup) {
-    G4cout << "Initialising Visualization Manager...." << G4endl;
+    G4cout << "Visualization Manager initialising..." << G4endl;
   }
 
-  if (fVerbosity >= confirmations) {
+  if (fVerbosity >= parameters) {
     PrintAllGraphicsSystems ();
     PrintInstalledGraphicsSystems ();
     G4cout <<
@@ -187,10 +187,17 @@ void G4VisManager::Initialise () {
   }
 
   if (fVerbosity >= startup) {
-    G4cout << "Registering graphics systems...." << G4endl;
+    G4cout << "Registering graphics systems..." << G4endl;
   }
 
   RegisterGraphicsSystems ();
+
+  if (fVerbosity >= confirmations) {
+    G4cout <<
+      "\nYou have successfully chosen to use the following graphics systems."
+	 << G4endl;
+    PrintAvailableGraphicsSystems ();
+  }
 
   RegisterMessengers ();
 
@@ -1047,9 +1054,10 @@ G4bool G4VisManager::IsValidView () {
 
   fpConcreteInstance = this;  // Unless we find another problem, users can use!
   G4bool isValid = true;
-  if (fpScene -> IsEmpty ()) {
-    fpScene -> AddWorldIfEmpty ();  // Add world by default if possible.
-    if (fpScene -> IsEmpty ()) {    // If still empty...
+  if (fpScene -> IsEmpty ()) {  // Add world by default if possible...
+    G4bool warn(fVerbosity >= warnings);
+    G4bool successful = fpScene -> AddWorldIfEmpty (warn);
+    if (!successful || fpScene -> IsEmpty ()) {        // If still empty...
       if (fVerbosity >= errors) {
 	G4cout << "ERROR: G4VisManager::IsViewValid ():";
 	G4cout <<

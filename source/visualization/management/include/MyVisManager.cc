@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyVisManager.cc,v 1.11 2001-08-05 02:29:06 johna Exp $
+// $Id: MyVisManager.cc,v 1.12 2001-08-05 19:02:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -127,11 +127,4 @@ void MyVisManager::RegisterGraphicsSystems () {
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);
 #endif
-
-  if (fVerbosity >= confirmations) {
-    G4cout <<
-      "\nYou have successfully chosen to use the following graphics systems."
-	 << G4endl;
-    PrintAvailableGraphicsSystems ();
-  }
 }

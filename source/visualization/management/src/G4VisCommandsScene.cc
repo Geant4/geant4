@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.20 2001-08-05 02:29:17 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.21 2001-08-05 19:02:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -330,6 +330,7 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 						   G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
 
   G4String& sceneName = newValue;
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
@@ -337,12 +338,13 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     fpVisManager -> SetAvailableSceneHandlers ();
 
   // Check scene name.
+  G4bool successful(true);
   const G4int nScenes = sceneList.size ();
   G4int iScene;
   for (iScene = 0; iScene < nScenes; iScene++) {
     G4Scene* scene = sceneList [iScene];
     if (sceneName == scene -> GetName ()) {
-      scene -> AddWorldIfEmpty ();
+      successful = scene -> AddWorldIfEmpty (warn);
       break;
     }
   }
@@ -350,6 +352,15 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
     if (verbosity >= G4VisManager::warnings) {
       G4cout << "WARNING: Scene \"" << sceneName << "\" not found."
 	"\n  /vis/scene/list to see scenes."
+	     << G4endl;
+    }
+    return;
+  }
+  if (!successful) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: Scene is empty.  Perhaps no geometry exists."
+	"\n  Try /run/initialize."
 	     << G4endl;
     }
     return;

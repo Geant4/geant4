@@ -1,4 +1,4 @@
-$Id: History,v 1.146 2001-08-05 02:40:12 johna Exp $
+$Id: History,v 1.147 2001-08-05 19:02:08 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+5th August 2001  John Allison
+- Small refinements to printing under new verbosity control.
 
 4th August 2001  John Allison  (vis-V03-02-10)
 - Re-implemented verbosity control.  Output statements wherever possible

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.18 2001-07-25 21:12:55 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.19 2001-08-05 19:02:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -243,7 +243,7 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	  translation = G4ThreeVector (0,0,-width*(nReplicas-1)*0.5+n*width);
 	  break;
 	case kRho:
-	  G4cerr <<
+	  G4cout <<
 	    "G4PhysicalVolumeModel::VisitGeometryAndGetVisReps: WARNING:"
 	    "\n  built-in replicated volumes replicated in radius are not yet"
 	    "\n  properly visualizable."

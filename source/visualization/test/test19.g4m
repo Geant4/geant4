@@ -4,11 +4,7 @@
 #
 /control/verbose 2
 /control/saveHistory
-#
-# John's personal preferences
-/vis/viewer/set/lightsMove true
-/vis/viewer/set/hiddenMarker true
-#/vis/verbose 10
+/vis/verbose confirmations
 #
 # See list of detector possibilities.
 /test19det/detector
@@ -60,6 +56,10 @@ help /vis/sceneHandler/create
 #
 # Create a viewer.
 /vis/viewer/create
+#
+# John's personal preferences
+/vis/viewer/set/lightsMove camera
+/vis/viewer/set/hiddenMarker true
 #
 /vis/viewer/set/lineSegmentsPerCircle 100
 /vis/viewer/refresh

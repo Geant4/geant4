@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.9 2001-07-11 10:09:14 gunter Exp $
+// $Id: G4Scene.hh,v 1.10 2001-08-05 19:02:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,21 +85,24 @@ public: // With description
   //////////////////////////////////////////////
   // Add, Set, Clear functions...
 
-  G4bool AddRunDurationModel (G4VModel*);
+  G4bool AddRunDurationModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are expected to last for the duration
   // of the run, for example geometry volumes.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
-  G4bool AddWorldIfEmpty ();
+  G4bool AddWorldIfEmpty (G4bool warn = false);
   // In some situations, if the user asks for a drawing and has not
   // yet set any run duration models it makes sense to put the "world"
   // in there by default.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
-  G4bool AddEndOfEventModel (G4VModel*);
+  G4bool AddEndOfEventModel (G4VModel*, G4bool warn = false);
   // Adds models of type which are described at the end of event when
   // the scene is current.
   // Returns false if model is already in the list.
+  // Prints warnings if warn is true.
 
   G4std::vector<G4VModel*>& SetRunDurationModelList ();
   // Allows you to change the model list - do with care!

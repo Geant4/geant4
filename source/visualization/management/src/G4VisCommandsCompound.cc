@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsCompound.cc,v 1.14 2001-08-05 02:29:15 johna Exp $
+// $Id: G4VisCommandsCompound.cc,v 1.15 2001-08-05 19:02:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // Compound /vis/ commands - John Allison  15th May 2000
@@ -66,7 +66,11 @@ void G4VisCommandDrawTree::SetNewValue
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/open " + system);
   UImanager->ApplyCommand("/vis/drawVolume " + pvname);
   UImanager->SetVerboseLevel(keepVerbose);
@@ -142,7 +146,11 @@ void G4VisCommandDrawView::SetNewValue
   
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   G4ViewParameters vp = currentViewer->GetViewParameters();
   G4bool keepAutoRefresh = vp.IsAutoRefresh();
   vp.SetAutoRefresh(false);
@@ -184,7 +192,11 @@ void G4VisCommandDrawVolume::SetNewValue
 (G4UIcommand* command, G4String newValue) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/volume " + newValue);
   UImanager->ApplyCommand("/vis/sceneHandler/attach");
@@ -238,7 +250,11 @@ void G4VisCommandOpen::SetNewValue (G4UIcommand* command, G4String newValue) {
   is >> systemName >> windowSizeHint;
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/vis/sceneHandler/create " + systemName);
   UImanager->ApplyCommand("/vis/viewer/create ! ! " + windowSizeHint);
   UImanager->SetVerboseLevel(keepVerbose);
@@ -266,7 +282,11 @@ void G4VisCommandSpecify::SetNewValue
 (G4UIcommand* command, G4String newValue) {
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
   G4int keepVerbose = UImanager->GetVerboseLevel();
-  UImanager->SetVerboseLevel(2);
+  G4int newVerbose(0);
+  if (keepVerbose >= 2 ||
+      fpVisManager->GetVerbosity() >= G4VisManager::confirmations)
+    newVerbose = 2;
+  UImanager->SetVerboseLevel(newVerbose);
   UImanager->ApplyCommand("/geometry/print " + newValue);
   UImanager->ApplyCommand("/vis/scene/create");
   UImanager->ApplyCommand("/vis/scene/add/logicalVolume " + newValue);

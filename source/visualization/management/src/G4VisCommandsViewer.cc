@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewer.cc,v 1.30 2001-08-05 02:29:22 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.31 2001-08-05 19:02:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -722,6 +722,7 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
 
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
 
   G4String& refreshName = newValue;
   G4VViewer* viewer = fpVisManager -> GetViewer (refreshName);
@@ -756,7 +757,16 @@ void G4VisCommandViewerRefresh::SetNewValue (G4UIcommand* command,
     }
     return;
   }
-  scene -> AddWorldIfEmpty ();
+  G4bool successful = scene -> AddWorldIfEmpty (warn);
+  if (!successful) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<
+	"ERROR: Scene is empty.  Perhaps no geometry exists."
+	"\n  Try /run/initialize."
+ 	     << G4endl;
+   }
+    return;
+  }
 
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "Refreshing viewer \"" << viewer -> GetName () << "\"..."

@@ -21,14 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: test19.cc,v 1.12 2001-07-27 22:33:29 johna Exp $
+// $Id: test19.cc,v 1.13 2001-08-05 19:02:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-// Usage: test19 dumb 5
-//   Arguments have defaults: tcsh 0
-//   Second argument is a verbosity-controlling integer flag.
+// Usage: test19 <session> <verbosity>
+//   Arguments have defaults: tcsh warnings
 
 #include <stdio.h>
 #include <ctype.h>
@@ -76,9 +75,9 @@ HINSTANCE hInstance,HINSTANCE hPrevInstance,LPSTR lpszCmdLine,int nCmdShow) {
 int main (int argc, char** argv) {
 #endif
 
-  G4int Verbose = 0;
+  G4String verbosityString("warnings");
 #ifndef G4UI_USE_WIN32
-  if ((argc >= 3)) Verbose = atoi (argv[2]);
+  if ((argc >= 3)) verbosityString = argv[2];
 #endif
 
   // Choose (G)UI.
@@ -129,7 +128,7 @@ int main (int argc, char** argv) {
 #ifdef G4VIS_USE
   // Instantiate and initialise Visualization Manager.
   G4VisManager* visManager = new MyVisManager;
-  visManager -> SetVerboseLevel (Verbose);
+  visManager -> SetVerboseLevel (verbosityString);
   visManager -> Initialize ();
 #endif
 
