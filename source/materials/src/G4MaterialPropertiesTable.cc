@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.3 1999-05-25 00:40:09 gcosmo Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.4 1999-11-05 21:13:33 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,12 +26,11 @@
 #include "globals.hh"
 #include "G4MaterialPropertiesTable.hh"
 
-unsigned hashString(const G4String &str) { return str.hash(); }
-
         //////////////
         // Operators
         //////////////
 
+/**************
 G4MaterialPropertiesTable&
 G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
 {
@@ -58,14 +57,15 @@ G4MaterialPropertiesTable::operator =(const G4MaterialPropertiesTable& right)
         }
         return *this;
 }
+**********/
 
         /////////////////
         // Constructors
         /////////////////
 
-G4MaterialPropertiesTable::G4MaterialPropertiesTable() : MPT(hashString),
-                                                         MPTiterator(MPT) {}
+G4MaterialPropertiesTable::G4MaterialPropertiesTable() {}
 
+/*********
 G4MaterialPropertiesTable::G4MaterialPropertiesTable
 			   (const G4MaterialPropertiesTable &right) : 
 			   MPT(hashString), MPTiterator(MPT)
@@ -88,6 +88,7 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable
                 MPT.insertKeyAndValue(newKey, newProp);
         }
 }
+*******/
 
         ////////////////
         // Destructors
@@ -95,7 +96,12 @@ G4MaterialPropertiesTable::G4MaterialPropertiesTable
 
 G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
 {
-	MPT.clearAndDestroy();
+  //	MPT.clearAndDestroy();
+  MPTiterator i;
+  for (i = MPT.begin(); i != MPT.end(); ++i) {
+    delete (*i).second;
+  }
+  MPT.clear();
 }
 
         ////////////
@@ -111,8 +117,7 @@ void G4MaterialPropertiesTable::AddProperty(char     *key,
 			new G4MaterialPropertyVector(PhotonMomenta, 
 					  	     PropertyValues, 
 						     NumEntries);
-	G4String *newKey = new G4String(key);
-	MPT.insertKeyAndValue(newKey, mpv);
+	MPT [G4String(key)] = mpv;
 }
 
 void G4MaterialPropertiesTable::AddProperty(char *key,
@@ -121,29 +126,24 @@ void G4MaterialPropertiesTable::AddProperty(char *key,
 //	Provides a way of adding a property to the Material Properties
 //	Table given an G4MaterialPropertyVector Reference and a key 
 
-	G4String *theKey = new G4String(key);
-	MPT.insertKeyAndValue(theKey, mpv);	
+	MPT [G4String(key)] = mpv;
 } 
 
 void G4MaterialPropertiesTable::RemoveProperty(char *key)
 {
-	G4String target(key);
-	MPT.remove(&target);
+	MPT.erase(G4String(key));
 }
 
 G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(char *key)
 {
-	G4String target(key);
-
-	return MPT.findValue(&target);
+	return MPT [G4String(key)];
 }
 
 void G4MaterialPropertiesTable::AddEntry(char     *key,
 					 G4double  aPhotonMomentum,
 					 G4double  aPropertyValue)
 {
-	G4String target(key);
-	G4MaterialPropertyVector *targetVector=MPT.findValue(&target);
+	G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector != NULL) {
 		targetVector->AddElement(aPhotonMomentum, aPropertyValue);
 	}
@@ -153,11 +153,10 @@ void G4MaterialPropertiesTable::AddEntry(char     *key,
 	}
 }
 
-void G4MaterialPropertiesTable::RemoveEntry(char *key, 
+void G4MaterialPropertiesTable::RemoveEntry(char *key,  
 					    G4double  aPhotonMomentum)
 {
-        G4String target(key);
-        G4MaterialPropertyVector *targetVector=MPT.findValue(&target);
+        G4MaterialPropertyVector *targetVector=MPT [G4String(key)];
 	if (targetVector) {
 		targetVector->RemoveElement(aPhotonMomentum);
  	}
@@ -168,9 +167,9 @@ void G4MaterialPropertiesTable::RemoveEntry(char *key,
 }
 void G4MaterialPropertiesTable::DumpTable()
 {
-	MPTiterator.reset();
-	while(++MPTiterator) {
-		G4cout << *MPTiterator.key() << endl;
-		MPTiterator.value()->DumpVector();
-	}
+  MPTiterator i;
+  for (i = MPT.begin(); i != MPT.end(); ++i) {
+		G4cout << *(*i).first << endl;
+		(*i).second->DumpVector();
+  }
 }

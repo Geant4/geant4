@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.hh,v 1.2 1999-10-30 01:42:49 gum Exp $
+// $Id: G4MaterialPropertiesTable.hh,v 1.3 1999-11-05 21:13:17 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@
 // Version:     1.0
 // Created:     1996-02-08
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class decriptors
+// Updated:     1999-10-29 add method and class descriptors
 //              1997-03-25 by Peter Gumplinger
 //              > cosmetics (only)
 // mail:        gum@triumf.ca
@@ -35,18 +35,16 @@
 
 #include <math.h>
 #include <rw/tphdict.h>
-#include <rw/cstring.h>
+#include "g4std/map"
 #include "globals.hh"
 #include "G4MaterialPropertyVector.hh"
 
 // Class Description:
-// An Material properties table is a hash table, with key = property 
+// An Material properties table is a hash table, with key = property
 // name, and value = G4MaterialPropertyVector.
 // Class Description - End:
 
 #define RefractionIndex "RINDEX"
-
-// unsigned hashString(const G4String &str);
 
 /////////////////////
 // Class Definition
@@ -54,11 +52,11 @@
 
 class G4MaterialPropertiesTable {
 
-public: // Without description
-
 	//////////////
         // Operators
         //////////////
+
+private:
 
 	G4MaterialPropertiesTable&
 		operator =(const G4MaterialPropertiesTable &right);
@@ -67,9 +65,15 @@ public: // Without description
 	// Constructor
 	////////////////
 
+public: // Without description
+
 	G4MaterialPropertiesTable(); 
-		  
+	
+private:
+
 	G4MaterialPropertiesTable(const G4MaterialPropertiesTable &right);
+
+public: // Without description
 
 	///////////////
 	// Destructor
@@ -87,18 +91,18 @@ public: // With description
 		         G4double *PhotonMomenta,
 		         G4double *PropertyValues,
 		         G4int     NumEntries);
-        // Add a new property to the table by giving a key-name and the 
+        // Add a new property to the table by giving a key-name and the
         // arrays x and y of size NumEntries.
 
 	void AddProperty(char *key, G4MaterialPropertyVector *opv);
-        // Add a new property to the table by giving a key-name and an 
+        // Add a new property to the table by giving a key-name and an
         // already constructed G4MaterialPropertyVector.
 
 	void RemoveProperty(char *key);
         // Remove a property from the table.
 
 	G4MaterialPropertyVector* GetProperty(char *key);
-        // Get the property from the table corresponding to the key-name. 
+        // Get the property from the table corresponding to the key-name.
 
 	void AddEntry(char *key, G4double aPhotonMomentum,
                                  G4double  aPropertyValue);
@@ -107,7 +111,7 @@ public: // With description
 	void RemoveEntry(char *key, G4double  aPhotonMomentum);
         // Remove an entry from the table for a given key and x-value.
 
-	void DumpTable();	
+	void DumpTable();
 
 private:
 
@@ -115,9 +119,10 @@ private:
 	// Private Data members
 	/////////////////////////
 
-	RWTPtrHashDictionary<G4String, G4MaterialPropertyVector> MPT;  
-	RWTPtrHashDictionaryIterator<G4String, G4MaterialPropertyVector> 
-						MPTiterator; 
+	G4std::map<G4String, G4MaterialPropertyVector*, less<G4String> > MPT;
+	typedef typename G4std::map<G4String, G4MaterialPropertyVector*,
+	  less<G4String> >::iterator MPTiterator;
+
 };
 
 #endif /* G4MaterialPropertiesTable_h */
