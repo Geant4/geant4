@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Navigator3.cc,v 1.1 1999-01-08 16:31:57 gunter Exp $
+// $Id: testG4Navigator3.cc,v 1.2 1999-11-24 21:13:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,9 +18,6 @@
 
 // Global defs
 #include "globals.hh"
-
-// Resolve template problem on some architectures.
-#include "locg4templates.hh"
 
 #include "G4Navigator.hh"
 
