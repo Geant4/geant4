@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.2 1999-03-03 14:55:25 urban Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.3 1999-03-03 15:02:21 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -28,6 +28,7 @@
 // 20-03-97 : new energy loss+ionisation+brems scheme, L.Urban
 // 07-04-98 : remove 'tracking cut' of the diffracted particle, MMa
 // 13-08-98 : new methods SetBining() PrintInfo()
+// 03/03/99 : Bug fixed in LPM effect, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
