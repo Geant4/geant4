@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.66 2003-11-21 15:05:17 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.67 2003-11-21 16:30:34 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -940,7 +940,7 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
 #ifdef pdebug
 		    G4cout<<"***G4QE::HQE:"<<iq<<",n="<<nHadrons<<",Tot="<<totQC<<totQM<<G4endl;//^
 		    for (G4int kq=0; kq<nQuasmons; kq++) // LOOP over Quasmons for DEBUG PRINTING ^
-		      G4cout<<kq<<",Sta/QC"<<theQuasmons[kq]->GetStatus()<<theQuasmons[kq]->GetQC()
+		      G4cout<<kq<<",St/QC="<<theQuasmons[kq]->GetStatus()<<theQuasmons[kq]->GetQC()
                     <<",M="<<theQuasmons[kq]->Get4Momentum().m()<<G4endl; //              ^
 #endif
             G4int nOfOUT = theQHadrons.size();   // Total #of QHadrons at this point      ^
@@ -998,7 +998,6 @@ G4QHadronVector  G4QEnvironment::HadronizeQEnvironment()
                     theQHadrons.push_back(curH); // Fill hadron-copy (delete equivalent)^ ^
                     delete curout->operator[](ih); //>-*Necessary to delete instances*>-^ ^
                   } // End of LOOP over Hadrons of the Quasmon                          ^ ^
-                  std::for_each(curout->begin(), curout->end(), DeleteQHadron()); // >--^ ^
                   curout->clear();               //                                     ^ ^
                   delete curout;                 //>*Necessary to delete VectPointers*>=^ ^
                   break;                         // @@ ??                               ^ ^
