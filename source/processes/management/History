@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-05-03 01:52:25 kurasige Exp $
+$Id: History,v 1.6 1999-06-17 09:06:22 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- June 17, 99 H.Kurashige (procman-01-00-04)
+- Disable Activate/InactivateProcess methods in G4ProcessManager 
+  (and related UI commands) in "Init" state 
+
 - May 3,  99 H.Kurashige (procman-01-00-03a)
 - Add G4ProcessManager::GetProcessActivation 
 
