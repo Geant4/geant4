@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryTransformer.hh,v 1.1 1999-01-07 16:06:34 gunter Exp $
+// $Id: G4PrimaryTransformer.hh,v 1.2 1999-11-05 04:16:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,6 +18,12 @@
 class G4Event;
 class G4PrimaryVertex;
 #include "G4PrimaryParticle.hh"
+
+// class description:
+//
+//  This class is exclusively used by G4EventManager for the conversion
+// from G4PrimaryVertex/G4PrimaryParticle to G4DynamicParticle/G4Track.
+//
 
 class G4PrimaryTransformer
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleGunMessenger.hh,v 1.1 1999-01-07 16:06:33 gunter Exp $
+// $Id: G4ParticleGunMessenger.hh,v 1.2 1999-11-05 04:16:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -26,6 +26,12 @@ class G4UIcmdWithAnInteger;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
+
+// class description:
+//
+//  This is a concrete class of G4UImessenger which handles commands for
+// G4ParticleGun.
+//
 
 class G4ParticleGunMessenger: public G4UImessenger
 {

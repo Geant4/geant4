@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EvManMessenger.hh,v 1.1 1999-01-07 16:06:32 gunter Exp $
+// $Id: G4EvManMessenger.hh,v 1.2 1999-11-05 04:16:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,6 +17,15 @@ class G4EventManager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
+
+// class description:
+//
+//  This is a concrete class of G4UImessenger which takes care of commands
+// addressed to G4EventManager. Commands handled by this messenger are
+//     /event/
+//     /event/abort
+//     /event/verbose
+//
 
 class G4EvManMessenger: public G4UImessenger
 {

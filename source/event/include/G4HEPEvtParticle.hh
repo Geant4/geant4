@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HEPEvtParticle.hh,v 1.1 1999-01-07 16:06:33 gunter Exp $
+// $Id: G4HEPEvtParticle.hh,v 1.2 1999-11-05 04:16:16 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,6 +18,10 @@
 #include "G4Allocator.hh"
 #include "G4PrimaryParticle.hh"
 
+// class desccription:
+//
+//  This class is exclusively used by G4HEPEvtInterface. This class represents
+// one particle in /HEPEVT/ list.
 
 class G4HEPEvtParticle 
 {
@@ -44,15 +48,15 @@ class G4HEPEvtParticle
 
   public:
       inline G4PrimaryParticle * GetTheParticle()
-      { return theParticle; };
+      { return theParticle; }
       inline void Done()
-      { ISTHEP *= -1; };
+      { ISTHEP *= -1; }
       inline G4int GetISTHEP()
-      { return ISTHEP; };
+      { return ISTHEP; }
       inline G4int GetJDAHEP1()
-      { return JDAHEP1; };
+      { return JDAHEP1; }
       inline G4int GetJDAHEP2()
-      { return JDAHEP2; };
+      { return JDAHEP2; }
 };
 
 extern G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackStack.hh,v 1.1 1999-01-07 16:06:35 gunter Exp $
+// $Id: G4TrackStack.hh,v 1.2 1999-11-05 04:16:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,6 +18,12 @@
 
 #include "G4StackedTrack.hh"
 #include "globals.hh"
+
+// class description:
+//
+//  This is a stack class used by G4StackManager. This class object
+// stores G4StackedTrack class objects in the form of bi-directional
+// linked list.
 
 class G4TrackStack 
 {
@@ -45,7 +51,7 @@ class G4TrackStack
 
   public:
       inline G4int GetNTrack() const
-      { return n_stackedTrack; };
+      { return n_stackedTrack; }
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StackingMessenger.hh,v 1.1 1999-01-07 16:06:34 gunter Exp $
+// $Id: G4StackingMessenger.hh,v 1.2 1999-11-05 04:16:18 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -17,6 +17,14 @@ class G4StackManager;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
+
+// class description:
+//
+//  This is a concrete class of G4UImessenger which handles the commands
+// for G4StackManager. It has the following commands:
+//   /event/stack/
+//   /event/stack/status
+//   /event/stack/clear
 
 class G4StackingMessenger: public G4UImessenger
 {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EventManager.hh,v 1.2 1999-04-15 08:41:50 asaim Exp $
+// $Id: G4EventManager.hh,v 1.3 1999-11-05 04:16:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,10 +33,11 @@ class G4EvManMessenger;
 class G4SDManager;
 #include "globals.hh"
 
-//## Class: G4EventManager
-//	G4EventManager controls an event. This class has only
-//	one public method, ProcessOneEvent(), which will be
-//	called by GEANT4.
+// class description:
+//
+//	G4EventManager controls an event. This class must be a singleton
+//      and should be constructed by G4RunManager.
+//
 
 class G4EventManager 
 {
@@ -49,8 +50,10 @@ class G4EventManager
       G4EventManager(const G4EventManager &right);
       G4EventManager& operator=(const G4EventManager& right);
 
-  public:
+  public: // with description
       void ProcessOneEvent(G4Event* anEvent);
+      //  This method it the main entry to this class for simulating an event.
+      // This method must be exclusively invoked by G4RunManager.
 
   private:
       void StackTracks(G4TrackVector *trackVector);
@@ -71,29 +74,35 @@ class G4EventManager
 
   public:
       inline const G4Event* GetConstCurrentEvent()
-      { return currentEvent; };
+      { return currentEvent; }
       inline G4Event* GetNonconstCurrentEvent()
-      { return currentEvent; };
+      { return currentEvent; }
+  public: // with description
       inline void AbortCurrentEvent()
       { 
         trackContainer->clear();
         if(tracking) trackManager->EventAborted();
-      };
+      }
+      //  This method aborts the processing of the current event. All stacked
+      // tracks are deleted. The contents of G4Event object is not completed,
+      // but trajectories, hits, and/or digits which are created before the
+      // moment of abortion can be used.
+  public:
       void SetUserAction(G4UserEventAction* userAction);
       inline void SetUserAction(G4UserStackingAction* userAction)
-      { trackContainer->SetUserStackingAction(userAction); };
+      { trackContainer->SetUserStackingAction(userAction); }
       inline void SetUserAction(G4UserTrackingAction* userAction)
-      { trackManager->SetUserAction(userAction); };
+      { trackManager->SetUserAction(userAction); }
       inline void SetUserAction(G4UserSteppingAction* userAction)
-      { trackManager->SetUserAction(userAction); };
+      { trackManager->SetUserAction(userAction); }
       inline G4int GetVerboseLevel()
-      { return verboseLevel; };
+      { return verboseLevel; }
       inline void SetVerboseLevel( G4int value )
       {
         verboseLevel = value;
         trackContainer->SetVerboseLevel( value );
         transformer->SetVerboseLevel( value );
-      };
+      }
 
 };
 

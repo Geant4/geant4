@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PrimaryVertex.hh,v 1.1 1999-01-07 16:06:34 gunter Exp $
+// $Id: G4PrimaryVertex.hh,v 1.2 1999-11-05 04:16:17 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -18,6 +18,13 @@
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
 #include "G4PrimaryParticle.hh"
+
+// class description:
+//
+//  This is the class which represents a primary vertex. The ofject of this
+// class is set to G4Event objct by G4VPrimaryGenerator concrete class.
+// This class object has one or more G4PrimaryParticle objects as primary
+// particles.
 
 class G4PrimaryVertex 
 {

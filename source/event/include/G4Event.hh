@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Event.hh,v 1.1 1999-01-07 16:06:32 gunter Exp $
+// $Id: G4Event.hh,v 1.2 1999-11-05 04:16:15 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -18,6 +18,15 @@
 #include "G4HCofThisEvent.hh"
 #include "G4DCofThisEvent.hh"
 #include "G4TrajectoryContainer.hh"
+
+// class description:
+//
+//  This is the class which represents an event. This class is constructed and
+// deleted by G4RunManager (or its derived class). When G4Event object is passed
+// to G4EventManager, G4Event must have one or more primary vertexes and primary 
+// particle(s) associated to the vertex(es) as an input of simulating an event.
+// As the consequences of simulating an event, G4Event has trajectories, hits
+// collections, and/or digi collections. 
 
 class G4VHitsCollection;
 class G4Event 
@@ -33,8 +42,13 @@ class G4Event
       int operator==(const G4Event &right) const;
       int operator!=(const G4Event &right) const;
 
+  public: // with description
       void Print() const;
+      // Print the event ID (starts with zero and increments by one) to G4cout.
       void Draw() const;
+      // Invoke Draw() methods of all stored trajectories, hits, and digits.
+      // For hits and digits, Draw() methods of the concrete classes must be
+      // implemented. Otherwise nothing will be drawn.
 
   private:
       // event ID
@@ -55,9 +69,17 @@ class G4Event
 
   public:
       inline void SetEventID(G4int i)
-      { eventID =  i; };
+      { eventID =  i; }
+      inline void SetHCofThisEvent(G4HCofThisEvent*value)
+      { HC = value; }
+      inline void SetDCofThisEvent(G4DCofThisEvent*value)
+      { DC = value; }
+      inline void SetTrajectoryContainer(G4TrajectoryContainer*value)
+      { trajectoryContainer = value; }
+  public: // with description
       inline G4int GetEventID() const
-      { return eventID; };
+      { return eventID; }
+      //  Returns the event ID
       inline void AddPrimaryVertex(G4PrimaryVertex* aPrimaryVertex)
       {
         if( thePrimaryVertex == NULL )
@@ -65,9 +87,12 @@ class G4Event
         else
         { thePrimaryVertex->SetNext( aPrimaryVertex ); }
         numberOfPrimaryVertex++;
-      };
+      }
+      //  This method sets a new primary vertex. This method must be invoked 
+      // exclusively by G4VPrimaryGenerator concrete class.
       inline G4int GetNumberOfPrimaryVertex() const
-      { return numberOfPrimaryVertex; };
+      { return numberOfPrimaryVertex; }
+      //  Returns number of primary vertexes the G4Event object has.
       inline G4PrimaryVertex* GetPrimaryVertex(G4int i=0)  const
       { 
         if( i == 0 )
@@ -84,19 +109,18 @@ class G4Event
         }
         else
         { return NULL; }
-      };
-      inline void SetHCofThisEvent(G4HCofThisEvent*value)
-      { HC = value; };
+      }
+      //  Returns i-th primary vertex of the event.
       inline G4HCofThisEvent* GetHCofThisEvent()  const
-      { return HC; };
-      inline void SetDCofThisEvent(G4DCofThisEvent*value)
-      { DC = value; };
+      { return HC; }
       inline G4DCofThisEvent* GetDCofThisEvent()  const
-      { return DC; };
-      inline void SetTrajectoryContainer(G4TrajectoryContainer*value)
-      { trajectoryContainer = value; };
+      { return DC; }
       inline G4TrajectoryContainer* GetTrajectoryContainer() const
-      { return trajectoryContainer; };
+      { return trajectoryContainer; }
+      //  These three methods returns the pointers to the G4HCofThisEvent
+      // (hits collections of this event), G4DCofThisEvent (digi collections
+      // of this event), and G4TrajectoryContainer (trajectory coonainer),
+      // respectively.
 };
 
 extern G4Allocator<G4Event> anEventAllocator;
