@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VGraphicsScene.hh,v 1.6 2001-07-11 10:01:15 gunter Exp $
+// $Id: G4VGraphicsScene.hh,v 1.7 2001-07-22 00:40:59 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // John Allison  19th July 1996
 //
@@ -48,6 +48,7 @@ class G4PhysicalVolumeModel;
 class G4Polycone;
 class G4Polyhedra;
 class G4Polyline;
+class G4Scale;
 class G4Text;
 class G4Circle;
 class G4Square;
@@ -107,6 +108,7 @@ public: // With description
   // }
 
   virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Scale&)      = 0;
   virtual void AddPrimitive (const G4Text&)       = 0;
   virtual void AddPrimitive (const G4Circle&)     = 0;
   virtual void AddPrimitive (const G4Square&)     = 0;
