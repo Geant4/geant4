@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.42 2003-07-31 14:04:32 gcosmo Exp $
+// $Id: G4Transportation.cc,v 1.43 2003-11-14 12:32:17 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -55,6 +55,7 @@
 #include "G4Transportation.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleTable.hh"
+#include "G4ChordFinder.hh"
 
 //////////////////////////////////////////////////////////////////////////
 //
