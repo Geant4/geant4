@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXrayTRadModel.hh,v 1.2 2001-07-11 10:01:30 gunter Exp $
+// $Id: G4VXrayTRadModel.hh,v 1.3 2003-01-23 11:30:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,9 +41,8 @@
 #define G4VXrayTRadModel_h 1
 
 
-#include "globals.hh"
-#include "templates.hh"
 #include "g4std/complex"
+#include "globals.hh"
 
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsLogVector.hh"

@@ -21,27 +21,17 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.cc,v 1.5 2002-03-28 07:58:29 gcosmo Exp $
+// $Id: G4VXTRenergyLoss.cc,v 1.6 2003-01-23 11:26:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "G4Timer.hh"
 
 #include "G4VXTRenergyLoss.hh"
-#include "Randomize.hh"
-#include "G4Material.hh"
 #include "G4MaterialTable.hh"
-#include "globals.hh"
-#include "g4std/complex"
 
-#include "G4LogicalVolume.hh"
-
-#include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
 #include "G4PhysicsLinearVector.hh"
-#include "G4PhysicsLogVector.hh"
-#include "G4Integrator.hh"
-#include "G4Gamma.hh"
 
 // Initialization of local constants
 

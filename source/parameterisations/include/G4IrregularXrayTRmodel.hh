@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IrregularXrayTRmodel.hh,v 1.3 2001-07-11 10:01:29 gunter Exp $
+// $Id: G4IrregularXrayTRmodel.hh,v 1.4 2003-01-23 11:30:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,10 +44,8 @@
 #ifndef G4IrregularXrayTRmodel_h
 #define G4IrregularXrayTRmodel_h 1
 
-#include "G4VFastSimulationModel.hh"
-// #include "G4ForwardXrayTR.hh"
-
 #include "G4VXrayTRadModel.hh"
+#include "G4VFastSimulationModel.hh"
 
 class G4IrregularXrayTRmodel : public G4VXrayTRadModel
 {

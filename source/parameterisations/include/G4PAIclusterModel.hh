@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIclusterModel.hh,v 1.3 2001-09-18 09:30:26 gcosmo Exp $
+// $Id: G4PAIclusterModel.hh,v 1.4 2003-01-23 11:30:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 
 
 #include "globals.hh"
-#include "templates.hh"
+
 #include "G4PAIonisation.hh"
 #include "G4VClusterModel.hh"
 #include "G4Step.hh"

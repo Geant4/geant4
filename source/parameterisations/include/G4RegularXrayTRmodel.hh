@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RegularXrayTRmodel.hh,v 1.3 2001-07-11 10:01:30 gunter Exp $
+// $Id: G4RegularXrayTRmodel.hh,v 1.4 2003-01-23 11:30:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,10 +43,8 @@
 #ifndef G4RegularXrayTRmodel_h
 #define G4RegularXrayTRmodel_h 1
 
-#include "G4VFastSimulationModel.hh"
-// #include "G4ForwardXrayTR.hh"
-
 #include "G4VXrayTRadModel.hh"
+#include "G4VFastSimulationModel.hh"
 
 class G4RegularXrayTRmodel : public G4VXrayTRadModel
 {

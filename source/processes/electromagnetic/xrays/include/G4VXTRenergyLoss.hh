@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VXTRenergyLoss.hh,v 1.3 2002-01-18 17:26:21 grichine Exp $
+// $Id: G4VXTRenergyLoss.hh,v 1.4 2003-01-23 11:26:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,9 +40,8 @@
 #define G4VXTRenergyLoss_h 1
 
 
-#include "globals.hh"
-#include "templates.hh"
 #include "g4std/complex"
+#include "globals.hh"
 #include "Randomize.hh"
 
 #include "G4LogicalVolume.hh"
