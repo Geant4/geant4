@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.hh,v 1.15 2002-09-04 02:09:37 asaim Exp $
+// $Id: G4SmoothTrajectory.hh,v 1.1 2002-09-04 02:09:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 //---------------------------------------------------------------
 //
-// G4Trajectory.hh
+// G4SmoothTrajectory.hh
 //
 // class description:
 //   This class represents the trajectory of a particle tracked.
@@ -36,19 +36,15 @@
 //     2) static information of particle which generated the 
 //        trajectory, 
 //     3) trackID and parent particle ID of the trajectory,
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//     4) Auxiliary points will be associated to G4SmoothTrajectoryPoint
+//        to assist drawing smoothly curved trajectory.
 //
 // ---------------------------------------------------------------
 
-class G4Trajectory;
+class G4SmoothTrajectory;
 
-#ifndef G4Trajectory_h
-#define G4Trajectory_h 1
+#ifndef G4SmoothTrajectory_h
+#define G4SmoothTrajectory_h 1
 
 #include "G4VTrajectory.hh"
 #include "G4Allocator.hh"
@@ -57,16 +53,14 @@ class G4Trajectory;
 #include "g4std/vector"            // G4RWTValOrderedVector
 #include "globals.hh"               // Include from 'global'
 #include "G4ParticleDefinition.hh"  // Include from 'particle+matter'
-#include "G4TrajectoryPoint.hh"     // Include from 'tracking'
+#include "G4SmoothTrajectoryPoint.hh"     // Include from 'tracking'
 #include "G4Track.hh"
 #include "G4Step.hh"
 
 class G4Polyline;                   // Forward declaration.
 
 typedef G4std::vector<G4VTrajectoryPoint*>  TrajectoryPointContainer;
-///////////////////
-class G4Trajectory : public G4VTrajectory
-///////////////////
+class G4SmoothTrajectory : public G4VTrajectory
 {
 
 //--------
@@ -75,16 +69,16 @@ public: // with description
 
 // Constructor/Destrcutor
 
-   G4Trajectory();
+   G4SmoothTrajectory();
 
-   G4Trajectory(const G4Track* aTrack);
-   G4Trajectory(G4Trajectory &);
-   virtual ~G4Trajectory();
+   G4SmoothTrajectory(const G4Track* aTrack);
+   G4SmoothTrajectory(G4SmoothTrajectory &);
+   virtual ~G4SmoothTrajectory();
 
 // Operators
    inline void* operator new(size_t);
    inline void  operator delete(void*);
-   inline int operator == (const G4Trajectory& right) const
+   inline int operator == (const G4SmoothTrajectory& right) const
    {return (this==&right);} 
 
 // Get/Set functions 
@@ -115,6 +109,7 @@ public: // with description
  // Get method for HEPRep style attributes
    virtual const G4AttValueList* GetAttValues() const;
 
+
 //---------
    private:
 //---------
@@ -129,18 +124,18 @@ public: // with description
 
 };
 
-extern G4Allocator<G4Trajectory> aTrajectoryAllocator;
+extern G4Allocator<G4SmoothTrajectory> aTrajectoryAllocator;
 
-inline void* G4Trajectory::operator new(size_t)
+inline void* G4SmoothTrajectory::operator new(size_t)
 {
   void* aTrajectory;
   aTrajectory = (void*)aTrajectoryAllocator.MallocSingle();
   return aTrajectory;
 }
 
-inline void G4Trajectory::operator delete(void* aTrajectory)
+inline void G4SmoothTrajectory::operator delete(void* aTrajectory)
 {
-  aTrajectoryAllocator.FreeSingle((G4Trajectory*)aTrajectory);
+  aTrajectoryAllocator.FreeSingle((G4SmoothTrajectory*)aTrajectory);
 }
 
 #endif

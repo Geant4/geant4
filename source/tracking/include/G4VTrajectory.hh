@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectory.hh,v 1.6 2001-07-11 10:08:42 gunter Exp $
+// $Id: G4VTrajectory.hh,v 1.7 2002-09-04 02:09:37 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,13 +30,13 @@
 // G4VTrajectory.hh
 //
 // class description:
-//   This is the abstract base class of a trajectory.
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Makoto  Asai   (e-mail: asai@kekvax.kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//   This class is the abstract base class which represents a trajectory of 
+//   a particle tracked.
+//   Its concrete class includes information of 
+//     1) List of trajectory points which compose the trajectory,
+//     2) static information of particle which generated the 
+//        trajectory, 
+//     3) trackID and parent particle ID of the trajectory,
 //
 // ---------------------------------------------------------------
 
@@ -44,24 +44,56 @@
 #define G4VTrajectory_h 1
 
 class G4Step;
-#include "G4VTrajectoryPoint.hh"
+class G4VTrajectoryPoint;
+class G4AttValueList;
+
+#include "G4ios.hh"
+#include "g4std/vector"
 #include "globals.hh"
+#include "G4ThreeVector.hh"
 
 class G4VTrajectory
 {
-public: // without description
+ public: // with description
+
+// Constructor/Destrcutor
 
    G4VTrajectory() {;}
    virtual ~G4VTrajectory() {;}
 
-   inline int operator == (const G4VTrajectory& right){return (this==&right);}
+// Operators
+   inline int operator == (const G4VTrajectory& right) const
+   {return (this==&right);} 
 
-   virtual void ShowTrajectory() const = 0;
-   virtual void DrawTrajectory(G4int i_mode=0) const = 0;
-   virtual void AppendStep(const G4Step*) = 0;
+// Get/Set functions 
+   virtual G4int GetTrackID() const = 0;
+   virtual G4int GetParentID() const = 0;
+   virtual G4String GetParticleName() const = 0;
+   virtual G4double GetCharge() const = 0;
+   // Charge is that of G4DynamicParticle
+   virtual G4int GetPDGEncoding() const = 0;
+   // Zero will be returned if the particle does not have PDG code.
+   virtual G4ThreeVector GetInitialMomentum() const = 0;
+   // Momentum at the origin of the track in global coordinate system.
+
+// Other member functions
    virtual int GetPointEntries() const = 0;
-   virtual G4VTrajectoryPoint* GetPoint(int) const = 0;
-   virtual void MergeTrajectory(G4VTrajectory*) = 0;
+   // Returns the number of trajectory points
+   virtual G4VTrajectoryPoint* GetPoint(G4int i) const = 0;
+   // Returns i-th trajectory point.
+   virtual void ShowTrajectory(G4std::ostream& os=G4cout) const = 0;
+   // Convert attributes in trajectory (and trajectory point if needed)
+   // to ostream. If default is used, it will be sent to G4cout.
+   virtual void DrawTrajectory(G4int i_mode=0) const = 0;
+   // Draw the trajectory
+   virtual const G4AttValueList* GetAttValues() const
+   { return 0; }
+
+ public:
+   // Following methods MUST be invoked exclusively by G4TrackingManager
+   virtual void AppendStep(const G4Step* aStep) = 0;
+   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory) = 0;
+
 };
 
 #endif

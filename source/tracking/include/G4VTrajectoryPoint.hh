@@ -21,27 +21,52 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrajectoryPoint.hh,v 1.5 2001-07-11 10:08:42 gunter Exp $
+// $Id: G4VTrajectoryPoint.hh,v 1.6 2002-09-04 02:09:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// class description
-//  The base class for the trajectory class
+//
+//---------------------------------------------------------------
+//
+// G4VTrajectoryPoint.hh
+//
+// class description:
+//   This class is the abstract base class which represents the point
+//   which consists of a trajectory.
+//   It includes information of a the point.
+//
+// ---------------------------------------------------------------
 
 #ifndef G4VTrajectoryPoint_h
 #define G4VTrajectoryPoint_h 1
 
+class G4AttValueList;
+#include "g4std/vector"
+#include "globals.hh"
+#include "G4ThreeVector.hh"
+
 class G4VTrajectoryPoint
 {
-   public:
+ public: // with description
 
+ // Constructor/Destructor
    G4VTrajectoryPoint() {;}
    virtual ~G4VTrajectoryPoint() {;}
 
+ // Operators
    inline int operator==(const G4VTrajectoryPoint& right) const
-   { return (this==&right); }
-};
+   { return (this==&right); };
 
+ // Get/Set functions
+   virtual const G4ThreeVector GetPosition() const = 0;
+
+ // Get method for a vector of auxiliary points
+   virtual const G4std::vector<G4ThreeVector*>* GetAuxiliaryPoints() const
+   { return 0; }
+
+ // Get method for HEPRep style attributes
+   virtual const G4AttValueList* GetAttValues() const
+   { return 0; }
+};
 
 #endif
 

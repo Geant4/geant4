@@ -21,39 +21,48 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryPoint.cc,v 1.7 2002-09-04 02:09:38 asaim Exp $
+// $Id: G4SmoothTrajectoryPoint.cc,v 1.1 2002-09-04 02:09:38 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // ---------------------------------------------------------------
 //
-// G4TrajectoryPoint.cc
+// G4SmoothTrajectoryPoint.cc
 //
 // ---------------------------------------------------------------
 
-#include "G4TrajectoryPoint.hh"
+#include "G4SmoothTrajectoryPoint.hh"
 
-G4Allocator<G4TrajectoryPoint> aTrajectoryPointAllocator;
+G4Allocator<G4SmoothTrajectoryPoint> aTrajectoryPointAllocator;
 
-G4TrajectoryPoint::G4TrajectoryPoint()
+G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint()
+: fAuxiliaryPointVector(0)
 {
   fPosition = G4ThreeVector(0.,0.,0.);
 }
 
-G4TrajectoryPoint::G4TrajectoryPoint(G4ThreeVector pos)
+G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(G4ThreeVector pos)
+: fAuxiliaryPointVector(0)
 {
   fPosition = pos;
 }
 
-G4TrajectoryPoint::G4TrajectoryPoint(const G4TrajectoryPoint &right)
- : fPosition(right.fPosition)
+G4SmoothTrajectoryPoint::G4SmoothTrajectoryPoint(const G4SmoothTrajectoryPoint &right)
+: fPosition(right.fPosition),fAuxiliaryPointVector(right.fAuxiliaryPointVector)
 {
 }
 
-G4TrajectoryPoint::~G4TrajectoryPoint()
+G4SmoothTrajectoryPoint::~G4SmoothTrajectoryPoint()
 {
+  if(!fAuxiliaryPointVector) {
+    for(size_t i=0;i<fAuxiliaryPointVector->size();i++) {
+     delete (*fAuxiliaryPointVector)[i];
+    }
+    fAuxiliaryPointVector->clear();
+    delete fAuxiliaryPointVector;
+  }
 }
 
-const G4AttValueList* G4TrajectoryPoint::GetAttValues() const
+const G4AttValueList* G4SmoothTrajectoryPoint::GetAttValues() const
 { return 0; }
 
