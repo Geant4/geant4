@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.hh,v 1.8 1999-12-15 14:53:57 gunter Exp $
+// $Id: G4Trajectory.hh,v 1.9 2000-01-26 04:20:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -89,6 +89,7 @@ class G4Trajectory : public G4VTrajectory
    virtual int GetPointEntries() const { return positionRecord->entries(); }
    virtual G4VTrajectoryPoint* GetPoint(G4int i) const 
    { return (*positionRecord)[i]; }
+   virtual void MergeTrajectory(G4VTrajectory* secondTrajectory);
 
    G4ParticleDefinition* GetParticleDefinition();
 

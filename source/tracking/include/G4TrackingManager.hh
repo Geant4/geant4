@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TrackingManager.hh,v 1.6 2000-01-23 09:51:35 tsasaki Exp $
+// $Id: G4TrackingManager.hh,v 1.7 2000-01-26 04:20:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -156,16 +156,15 @@ class G4TrackingManager
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserTrackingAction* apAction){
-     if (fpUserTrackingAction) delete fpUserTrackingAction;
+     fpUserTrackingAction = apAction;
      if(apAction != NULL){
-       fpUserTrackingAction = apAction;
        apAction->SetTrackingManagerPointer(this);
      }	
    }
 
    inline void G4TrackingManager::SetUserAction(G4UserSteppingAction* apAction){
+     fpSteppingManager->SetUserAction(apAction);
      if(apAction != NULL){
-       fpSteppingManager->SetUserAction(apAction);
        apAction->SetSteppingManagerPointer(fpSteppingManager);  
      }	
    }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trajectory.cc,v 1.7 1999-12-15 14:53:59 gunter Exp $
+// $Id: G4Trajectory.cc,v 1.8 2000-01-26 04:20:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -166,4 +166,19 @@ G4ParticleDefinition* G4Trajectory::GetParticleDefinition()
 {
    return (G4ParticleTable::GetParticleTable()->FindParticle(ParticleName));
 }
+
+/////////////////////////////////////////////
+void G4Trajectory::MergeTrajectory(G4VTrajectory* secondTrajectory)
+/////////////////////////////////////////////
+{
+  if(!secondTrajectory) return;
+
+  G4Trajectory* seco = (G4Trajectory*)secondTrajectory;
+  G4int ent = seco->GetPointEntries();
+  for(int i=1;i<ent;i++) // initial point of the second trajectory should not be merged
+  { 
+    positionRecord->append(seco->positionRecord->removeAt(1));
+  }
+}
+
 

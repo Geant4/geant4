@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.hh,v 1.10 2000-01-23 09:51:34 tsasaki Exp $
+// $Id: G4SteppingManager.hh,v 1.11 2000-01-26 04:20:30 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //---------------------------------------------------------------
@@ -473,7 +473,6 @@ class G4SteppingManager
   }
 
   inline void G4SteppingManager::SetUserAction(G4UserSteppingAction* apAction){
-    if (fUserSteppingAction) delete fUserSteppingAction;
     if (apAction != NULL) fUserSteppingAction = apAction;
   }
   inline G4UserSteppingAction* G4SteppingManager::GetUserAction(){
