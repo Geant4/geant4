@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.39 2001-09-10 11:01:27 johna Exp $
+// $Id: G4VisManager.cc,v 1.40 2001-11-06 13:04:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -151,7 +151,7 @@ void G4VisManager::Initialise () {
       "\n  G4VisManager and implementing RegisterGraphicsSystems(), in which"
       "\n  you should, normally, instantiate drivers which do not need"
       "\n  external packages or libraries, namely:"
-      "\n    ASCIITree, DAWNFILE, GAGTree, RayTracer, VRMLFILE"
+      "\n    ASCIITree, DAWNFILE, HepRepFile, GAGTree, RayTracer, VRMLFILE"
       "\n  and, optionally, drivers under control of the following"
       "\n  environment variables:"
 #ifdef G4VIS_BUILD_DAWN_DRIVER
@@ -843,6 +843,7 @@ void G4VisManager::PrintAllGraphicsSystems () const {
 	 << G4VisFeaturesOfDAWNFILE () <<
     "\n\n  GAGTree (prints geometry hierarchy, connectable to GAG"
     "\n  user interface)"
+    "\n\n  HepRepFile (file connection to HepRep viewers, e.g., WIRED)"
     "\n\n  OPACS (the Orsay Package) "
     "\n\n  OpenGLIX (direct/immediate drawing on X Windows)\n"
        << G4VisFeaturesOfOpenGLIX () <<
