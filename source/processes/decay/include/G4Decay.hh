@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Decay.hh,v 1.3 1999-12-15 14:51:27 gunter Exp $
+// $Id: G4Decay.hh,v 1.4 2000-10-20 11:28:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,9 @@
 
 class G4Decay : public G4VRestDiscreteProcess 
 {
+ // Class Description
+  //  This class is a decay process
+
   public:
     //  Constructors 
     G4Decay(const G4String& processName ="Decay");
@@ -49,7 +52,7 @@ class G4Decay : public G4VRestDiscreteProcess
     //  Assignment Operation (generated)
       G4Decay & operator=(const G4Decay &right);
 
-  public:
+  public: //With Description
      // G4Decay Process has both 
      // PostStepDoIt (for decay in flight) 
      //   and 
@@ -76,7 +79,7 @@ class G4Decay : public G4VRestDiscreteProcess
     // returns "true" if the decay process can be applied to
     // the particle type. 
  
-  protected:
+  protected: // With Description
     virtual G4VParticleChange* DecayIt(
 			     const G4Track& aTrack,
 			     const G4Step&  aStep
@@ -90,7 +93,7 @@ class G4Decay : public G4VRestDiscreteProcess
                              G4ForceCondition* condition
                             );
 
-  protected:
+  protected: // With Description
     // GetMeanFreePath returns ctau*beta*gamma for decay in flight 
     // GetMeanLifeTime returns ctau for decay at rest
     virtual G4double GetMeanFreePath(const G4Track& aTrack,
