@@ -86,7 +86,8 @@ public:
   virtual ~DicomPatientParameterisation();
 
   void GetDensity( double maxdensity , double mindensity );
-  char Densitybuf[300];
+private: 
+ char Densitybuf[300];
   FILE* readConfiguration; //lecturepref;
   int max;
   char name[300];
