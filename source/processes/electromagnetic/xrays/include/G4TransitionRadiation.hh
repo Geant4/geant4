@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4TransitionRadiation.hh,v 1.4 2000-02-09 10:38:46 grichine Exp $
+// $Id: G4TransitionRadiation.hh,v 1.5 2000-04-03 13:45:28 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4TransitionRadiation  -- header file
@@ -49,7 +49,7 @@ public:
 
 // Destructor
 
-   ~G4TransitionRadiation() ;
+  virtual ~G4TransitionRadiation() ;
 
 // Operators
 // G4TransitionRadiation& operator=(const G4TransitionRadiation& right) ;
