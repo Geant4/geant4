@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SandiaTableTest.cc,v 1.7 2004-03-08 16:35:17 grichine Exp $
+// $Id: G4SandiaTableTest.cc,v 1.8 2004-04-14 10:09:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -509,26 +509,20 @@ int main()
 //
 // Sandia cof according ComputeMatSandiaMatrix()
 //
-     // G4SandiaTable* sanMatrix = G4Material::GetMaterial(matName)->
-     // GetSandiaTable() ;
-     // sanIndex = sanMatrix->GetMatNbOfIntervals() ;
+   G4SandiaTable* sanMatrix = G4Material::GetMaterial(matName)->
+                              GetSandiaTable();
+   sanIndex = sanMatrix->GetMatNbOfIntervals();
       
-     // G4cout<<"Sandia cof according ComputeMatSandiaMatrix()"<<G4endl<<G4endl;
-     G4cout<<"Sandia cof according ComputeMatTable()"<<G4endl<<G4endl;
+   G4cout<<"Sandia cof according ComputeMatSandiaMatrix()"<<G4endl<<G4endl;
 
-     for(row = 0; row < sanIndex; row++)
-     {
-       //   G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV;
-
-       G4cout<<row<<"\t"<<sandia.GetSandiaMatTable(row,0)/keV;
-       
+     for (row=0; row<sanIndex; row++) {
+       G4cout<<row+1<<"\t"<<sanMatrix->GetSandiaCofForMaterial(row,0)/keV;
+	       
        unit = cm2/g;
-       for(iSan = 1; iSan < 5; iSan++)
-       {
+       for (iSan=1; iSan<5; iSan++) {
          unit *= keV; 
-   // G4cout<<"\t"<<(sanMatrix->GetSandiaCofForMaterial(row,iSan))/unit; // (density*unit);
-
-	 G4cout<<"\t"<<(sandia.GetSandiaMatTable(row,iSan))/unit; // (density*unit);
+         G4cout<<"\t"<<(sanMatrix->GetSandiaCofForMaterial(row,iSan))
+	                                                    /(density*unit);
        }
        G4cout<<G4endl;
      }      
