@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F01DetectorConstruction.cc,v 1.4 2001-07-11 09:57:59 gunter Exp $
+// $Id: F01DetectorConstruction.cc,v 1.5 2001-10-11 14:15:11 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,9 +75,9 @@ F01DetectorConstruction::F01DetectorConstruction()
   fElectrodeThick = 10.0*micrometer ;
   fGapThick = 1.0*mm ;
 
-  fRadThickness = 100*mm ;   // 0.5*mil ;   
-  fGasGap       = 100*mm  ;    // 30*mil ;    
-  fFoilNumber   = 100 ;
+  fRadThickness = 1*mm ;   // 0.5*mil ;   
+  fGasGap       = 1*mm  ;    // 30*mil ;    
+  fFoilNumber   = 0 ;
 
   fDetThickness = 40.0*mm ;
   fDetLength    = 200.0*cm  ;
@@ -411,7 +411,7 @@ H2O->AddElement(elO, natoms=1);
   fElectrodeMat = Al ;
 
   AbsorberMaterial = Air ; //  Kr20CO2 ;   // XeCO2CF4  ; 
-  fGapMat          = Kr20CO2 ;
+  fGapMat          = Air ; //  Kr20CO2 ;
 
   WorldMaterial    = Air ;
 }
@@ -452,6 +452,8 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
                                  0);			//copy number
 
   // TR radiator envelope
+
+  /* *******************************************************
 
   G4double radThick = fFoilNumber*(fRadThickness + fGasGap) + fDetGap   ;
 
@@ -507,7 +509,7 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
      }                                 
   G4cout<<G4endl ;
                      
-
+  ************************************************* */
        
   // Absorber
 
