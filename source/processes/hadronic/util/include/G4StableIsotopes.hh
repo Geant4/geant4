@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StableIsotopes.hh,v 1.1 1999-01-07 16:13:50 gunter Exp $
+// $Id: G4StableIsotopes.hh,v 1.2 1999-11-18 15:53:21 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4StableIsotopes_h
@@ -36,7 +36,7 @@ G4int GetIsotopeNucleonCount(G4int number) {return nucleonCount[number];}
 G4double GetAbundance(G4int number) {return abundance[number];}
 G4int GetProtonCount(G4int Z) {return protonCount[Z-1];}
 
-public:
+private:
 
 static const G4int protonCount[92];
 static const G4String elementName[92];
