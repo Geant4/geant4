@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.27 2002-06-11 08:15:52 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.28 2002-07-23 09:06:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -150,7 +150,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	}
      }
 
+#ifdef  G4DEBUG_FIELD
      static G4int nStpPr=50;   // For debug printing of integrations with many steps
+#endif
 
      // Perform the Integration
      //      
@@ -159,9 +161,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
         //--------------------------------------
         lastStepSucceeded= (hdid == h);   
-#         ifdef  G4DEBUG_FIELD
+#ifdef  G4DEBUG_FIELD
   	  if(dbg>2) PrintStatus( ySubStepStart, x1, y, x, h,  nstp); // Only
-#         endif
+#endif
      }else{
         G4FieldTrack yFldTrk( G4ThreeVector(0,0,0), 
 			      G4ThreeVector(0,0,0), 0., 0., 0., 0. );
@@ -172,14 +174,14 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         QuickAdvance( yFldTrk, dydx, h, dchord_step, dyerr_len ); 
         //-----------------------------------------------------
 
-#         ifdef  G4DEBUG_FIELD
+#ifdef  G4DEBUG_FIELD
  	   // if(dbg>1) OneGoodStep(y,dydx,x,h,2*eps,hdid,hnext) ;
 	   // if(dbg>1) PrintStatus( ystart, x1, y, x, h, -nstp);  
-#         endif
+#endif
         yFldTrk.DumpToArray(y);    
-#         ifdef  G4DEBUG_FIELD
+#ifdef  G4DEBUG_FIELD
   	  if(dbg>1) PrintStatus( ySubStepStart, x1, y, x, h,  nstp);   // Only this
-#         endif	
+#endif	
 	dyerr = dyerr_len / h;    // was dyerr_len / hstep;
 	hdid= h;
         x += hdid;
