@@ -18,7 +18,7 @@ class G4VGFlashSensitiveDetector
 
   public: // with description
       G4VGFlashSensitiveDetector() {}
-      G4VGFlashSensitiveDetector(const G4VGFlashSensitiveDetector &right) {}
+      G4VGFlashSensitiveDetector(const G4VGFlashSensitiveDetector &) {}
       // Constructors. The user's concrete class must use one of these constructors
       // by the constructor initializer of the derived class. The name of
       // the sensitive detector must be the same as for the corresponding GG4VSensitiveDetector.
