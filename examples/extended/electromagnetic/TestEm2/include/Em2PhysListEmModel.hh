@@ -21,42 +21,37 @@
 // ********************************************************************
 //
 //
+// $Id: Em2PhysListEmModel.hh,v 1.1 2002-10-31 14:07:47 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
-#ifndef Em2Particles_h
-#define Em2Particles_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef Em2PhysListEmModel_h
+#define Em2PhysListEmModel_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em2Particles : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Em2PhysListEmModel : public G4VPhysicsConstructor
 {
   public: 
-    Em2Particles(const G4String& name = "particles");
-    virtual ~Em2Particles();
+    Em2PhysListEmModel(const G4String& name = "model");
+    virtual ~Em2PhysListEmModel();
 
   public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    virtual void ConstructParticle();
+    // This method is dummy for physics. 
+    virtual void ConstructParticle() {};
  
-    // This method is dummy.
-    virtual void ConstructProcess() {};
-
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    virtual void ConstructProcess();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

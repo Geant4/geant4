@@ -20,52 +20,52 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// 
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//      It is provide the EM PhysicsList based on the prototype
-//      of design of model approach for EM physics
+// $Id: Em2PhysListGeneral.cc,v 1.1 2002-10-31 14:12:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
-#ifndef Em2ModelEM_h
-#define Em2ModelEM_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
+#include "Em2PhysListGeneral.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
-class Em2ModelEM : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Em2PhysListGeneral::Em2PhysListGeneral(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Em2PhysListGeneral::~Em2PhysListGeneral()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Em2PhysListGeneral::ConstructProcess()
 {
-  public: 
-    Em2ModelEM(const G4String& name = "model");
-    virtual ~Em2ModelEM();
+  // Add Decay Process
 
-  public: 
-    // This method is dummy for physics. 
-    virtual void ConstructParticle() {};
- 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
-};
+  G4Decay* fDecayProcess = new G4Decay();
 
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
 
-#endif
+    if (fDecayProcess->IsApplicable(*particle)) { 
 
+      pmanager ->AddProcess(fDecayProcess);
 
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
 
+    }
+  }
+}
 
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

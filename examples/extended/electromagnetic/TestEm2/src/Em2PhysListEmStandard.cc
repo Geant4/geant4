@@ -21,9 +21,13 @@
 // ********************************************************************
 //
 //
-// 
+// $Id: Em2PhysListEmStandard.cc,v 1.1 2002-10-31 14:12:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#include "Em2StandardEM.hh"
+#include "Em2PhysListEmStandard.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 
@@ -45,18 +49,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2StandardEM::Em2StandardEM(const G4String& name)
+Em2PhysListEmStandard::Em2PhysListEmStandard(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2StandardEM::~Em2StandardEM()
+Em2PhysListEmStandard::~Em2PhysListEmStandard()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2StandardEM::ConstructProcess()
+void Em2PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes
 

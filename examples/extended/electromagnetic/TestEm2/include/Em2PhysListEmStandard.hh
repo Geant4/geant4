@@ -21,33 +21,25 @@
 // ********************************************************************
 //
 //
+// $Id: Em2PhysListEmStandard.hh,v 1.1 2002-10-31 14:07:47 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
-//      It is provide the standard EM PhysicsList 
-//
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
-#ifndef Em2StandardEM_h
-#define Em2StandardEM_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifndef Em2PhysListEmStandard_h
+#define Em2PhysListEmStandard_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Em2StandardEM : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Em2PhysListEmStandard : public G4VPhysicsConstructor
 {
   public: 
-    Em2StandardEM(const G4String& name = "standard");
-    virtual ~Em2StandardEM();
+    Em2PhysListEmStandard(const G4String& name = "standard");
+    virtual ~Em2PhysListEmStandard();
 
   public: 
     // This method is dummy for physics
@@ -59,6 +51,7 @@ class Em2StandardEM : public G4VPhysicsConstructor
     virtual void ConstructProcess();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

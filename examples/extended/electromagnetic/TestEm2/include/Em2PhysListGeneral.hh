@@ -21,31 +21,26 @@
 // ********************************************************************
 //
 //
-// ------------------------------------------------------------
-//	GEANT 4 class header file 
-// Class Description:
-//      This class is an derived class of G4VPhysicsConstructor
+// $Id: Em2PhysListGeneral.hh,v 1.1 2002-10-31 14:07:47 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------ 
-//	History
-//        Created:       14.10.02  V.Ivanchenko
-//
-//        Modified:
-// 
-// ------------------------------------------------------------
-//
-#ifndef Em2GeneralPhysics_h
-#define Em2GeneralPhysics_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef Em2PhysListGeneral_h
+#define Em2PhysListGeneral_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "G4Decay.hh"
 #include "globals.hh"
 
-class Em2GeneralPhysics : public G4VPhysicsConstructor
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Em2PhysListGeneral : public G4VPhysicsConstructor
 {
   public: 
-    Em2GeneralPhysics(const G4String& name = "general");
-    virtual ~Em2GeneralPhysics();
+    Em2PhysListGeneral(const G4String& name = "general");
+    virtual ~Em2PhysListGeneral();
 
   public: 
     // This method is dummy for physics
@@ -58,6 +53,7 @@ class Em2GeneralPhysics : public G4VPhysicsConstructor
 
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

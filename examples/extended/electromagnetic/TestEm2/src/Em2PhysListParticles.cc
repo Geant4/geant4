@@ -21,9 +21,13 @@
 // ********************************************************************
 //
 //
-// 
+// $Id: Em2PhysListParticles.cc,v 1.1 2002-10-31 14:12:43 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $ 
 
-#include "Em2Particles.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "Em2PhysListParticles.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -41,11 +45,6 @@
 #include "G4Positron.hh"
 #include "G4NeutrinoE.hh"
 #include "G4AntiNeutrinoE.hh"
-
-//#include "G4NeutrinoTau.hh"
-//#include "G4TauMinus.hh"
-//#include "G4TauPlus.hh"
-//#include "G4AntiNeutrinoTau.hh"
 
 // Mesons
 #include "G4PionPlus.hh"
@@ -76,18 +75,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2Particles::Em2Particles(const G4String& name)
+Em2PhysListParticles::Em2PhysListParticles(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2Particles::~Em2Particles()
+Em2PhysListParticles::~Em2PhysListParticles()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Em2Particles::ConstructParticle()
+void Em2PhysListParticles::ConstructParticle()
 {
 
 // pseudo-particles
@@ -98,7 +97,7 @@ void Em2Particles::ConstructParticle()
   G4Gamma::GammaDefinition();
   
 // optical photon
-  //  G4OpticalPhoton::OpticalPhotonDefinition();
+  G4OpticalPhoton::OpticalPhotonDefinition();
 
 // leptons
   G4Electron::ElectronDefinition();
@@ -111,7 +110,7 @@ void Em2Particles::ConstructParticle()
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();  
 
-//  mesons
+// mesons
   G4PionPlus::PionPlusDefinition();
   G4PionMinus::PionMinusDefinition();
   G4PionZero::PionZeroDefinition();
@@ -124,19 +123,18 @@ void Em2Particles::ConstructParticle()
   G4KaonZeroLong::KaonZeroLongDefinition();
   G4KaonZeroShort::KaonZeroShortDefinition();
 
-//  barions
+// barions
   G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
   G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 
-//  ions
+// ions
   G4Deuteron::DeuteronDefinition();
   G4Triton::TritonDefinition();
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,47 +21,45 @@
 // ********************************************************************
 //
 //
-// 
+// $Id: Em2PhysListParticles.hh,v 1.1 2002-10-31 14:07:47 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 
-#include "Em2GeneralPhysics.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4ProcessManager.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#ifndef Em2PhysListParticles_h
+#define Em2PhysListParticles_h 1
+
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Em2GeneralPhysics::Em2GeneralPhysics(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-Em2GeneralPhysics::~Em2GeneralPhysics()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Em2GeneralPhysics::ConstructProcess()
+class Em2PhysListParticles : public G4VPhysicsConstructor
 {
-  // Add Decay Process
+  public: 
+    Em2PhysListParticles(const G4String& name = "particles");
+    virtual ~Em2PhysListParticles();
 
-  G4Decay* fDecayProcess = new G4Decay();
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    virtual void ConstructParticle();
+ 
+    // This method is dummy.
+    virtual void ConstructProcess() {};
 
-  theParticleIterator->reset();
-  while( (*theParticleIterator)() ){
-    G4ParticleDefinition* particle = theParticleIterator->value();
-    G4ProcessManager* pmanager = particle->GetProcessManager();
-
-    if (fDecayProcess->IsApplicable(*particle)) { 
-
-      pmanager ->AddProcess(fDecayProcess);
-
-      // set ordering for PostStepDoIt and AtRestDoIt
-      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
-      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
-
-    }
-  }
-}
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+
+
+
 
