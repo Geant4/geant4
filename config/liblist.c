@@ -1,4 +1,4 @@
-/* $Id: liblist.c,v 1.11 2002-02-06 18:44:36 radoone Exp $ */
+/* $Id: liblist.c,v 1.12 2002-03-14 08:15:08 gcosmo Exp $ */
 
 /*
 Given a "libname.map" file on standard input and a list or directory
@@ -181,7 +181,7 @@ int main (int argc, char** argv) {
   while (!feof(stdin))
     {
       /* Get library name... */
-      gets(buffer);
+      fgets(buffer,BUFSIZE,stdin);
       if(feof(stdin)) break;
       ptr=strtok(buffer,":\n");
 
@@ -231,7 +231,7 @@ int main (int argc, char** argv) {
 	}
 
       /* Get directory name... */
-      gets(buffer);
+      fgets(buffer,BUFSIZE,stdin);
       ptr=strtok(buffer,"/");
       if(!ptr)
 	{
