@@ -149,7 +149,8 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
 
    void SetBoundary(G4bool value)      {boundary = value;};
    void SetFacrange(G4double val)      {facrange=val;
-                                        nsmallstep = G4int(1./facrange) ;
+                                        nsmallstep = G4int(log((cf+facrange-1.)/
+                                                 facrange)/log(cf))+1 ;
                                         G4cout << " f= " << facrange 
                                                << " n= " << nsmallstep << G4endl ;};
       // Steplimit after boundary crossing = facrange*range
@@ -159,6 +160,11 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
    void SetTuning(G4double value)               {tuning = value;};
    void SetCparm (G4double value)               {cparm  = value;};
    void SetTlim  (G4double value)               {Tlim   = value;};
+   void Setalfa0(G4double value)                    {alfa0 = value;};
+   void Setalfa1(G4double value)                    {alfa1 = value;};
+   void Setxsi0(G4double value)                    {xsi0 = value;};
+   void Setbeta0(G4double value)                    {beta0 = value;};
+   void Setbeta1(G4double value)                    {beta1 = value;};
      // tuning of the transport mean free path
 
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
@@ -203,9 +209,9 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
 
    // model parameters
    G4bool   boundary;                         // spec. handling near boundaries
-   G4double facrange, tlimit;
+   G4double facrange,tlimit,tlimitmin,cf;
    G4int    stepno, stepnolastmsc, nsmallstep;
-
+   G4double laststep ;
    G4GPILSelection  valueGPILSelectionMSC;
 
    G4double pcz,zmean;                        // z(geom.step length)
@@ -226,6 +232,9 @@ class G4MultipleScatteringSTD : public G4VContinuousDiscreteProcess
    G4double FactPar;
 
    G4ParticleChangeForMSC fParticleChange; 
+
+   G4double alfa0,alfa1,xsi0,beta0,beta1 ;    // angle distr. params
+
 };
 
 #include "G4MultipleScatteringSTD.icc"
