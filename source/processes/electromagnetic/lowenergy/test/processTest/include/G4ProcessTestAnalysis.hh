@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.hh,v 1.1 2001-11-06 01:38:24 pia Exp $
+// $Id: G4ProcessTestAnalysis.hh,v 1.2 2001-11-06 21:54:14 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -46,6 +46,7 @@
 
 // Histogramming (from AIDA and Anaphe):
 #include "Interfaces/IHistoManager.h"
+//#include "Interfaces/IHistogramFactory.h"
 #include "Interfaces/IHistogram1D.h"
 #include "Interfaces/IHistogram2D.h"
 
@@ -78,14 +79,14 @@ private:
 
   static G4ProcessTestAnalysis* instance;
   IHistoManager* histoManager;
-  Lizard::NTupleFactory* factory;
+  Lizard::NTupleFactory* ntFactory;
 
   // ---- NOTE ----
   // Histograms are compliant to AIDA interfaces, ntuples are Lizard specific
 
-  G4std::map< G4String, IHistogram*, G4std::less<G4String> > histo1D;
-  //G4std::map< G4String, IHistogram*, G4std::less<G4String> > histo2D;
-  //G4std::map< G4String, IHistogram*, G4std::less<G4String> > histo3D;
+  G4std::map< G4String, IHistogram1D*, G4std::less<G4String> > histo1D;
+  //G4std::map< G4String, IHistogram2D*, G4std::less<G4String> > histo2D;
+  //G4std::map< G4String, IHistogram3D*, G4std::less<G4String> > histo3D;
   G4std::map< G4String, Lizard::NTuple*, G4std::less<G4String> > ntuples;
 
   // Quantities for the general ntuple

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessTestAnalysis.cc,v 1.1 2001-11-06 01:38:24 pia Exp $
+// $Id: G4ProcessTestAnalysis.cc,v 1.2 2001-11-06 21:54:15 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -45,15 +45,15 @@ G4ProcessTestAnalysis* G4ProcessTestAnalysis::instance = 0;
 G4ProcessTestAnalysis::G4ProcessTestAnalysis()
 {
   histoManager = createIHistoManager();
-  factory = Lizard::createNTupleFactory();
+  ntFactory = Lizard::createNTupleFactory();
 }
 
 G4ProcessTestAnalysis::~G4ProcessTestAnalysis()
 { 
-  delete factory;
-  factory = 0;
+  delete ntFactory;
+  ntFactory = 0;
 
-  G4std::map< G4String,IHistogram*,G4std::less<G4String> >::iterator pos1;
+  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
   for (pos1 = histo1D.begin(); pos1 != histo1D.end(); ++pos1)
     {
       IHistogram* h = pos1->second;
@@ -90,7 +90,7 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
 
   G4String ntFileName = storeName + "1" + ".hbook::1";
   const char* name = ntFileName.c_str();
-  Lizard::NTuple* ntuple1 = factory->createC(name);
+  Lizard::NTuple* ntuple1 = ntFactory->createC(name);
 
   //  Add and bind the attributes to the general final state nTuple
 
@@ -114,7 +114,7 @@ void G4ProcessTestAnalysis::book(const G4String& storeName)
 
   ntFileName = storeName + "2" + ".hbook::2";
   name = ntFileName.c_str();
-  Lizard::NTuple* ntuple2 = factory->createC(name);
+  Lizard::NTuple* ntuple2 = ntFactory->createC(name);
 
   //  Add and bind the attributes to the secondary nTuple
   if ( !( ntuple2->addAndBind( "px"	 , px        ) &&
@@ -198,26 +198,26 @@ void G4ProcessTestAnalysis::analyseSecondaries(const G4ParticleChange* particleC
 	}
             
       // Fill histograms
-      G4std::map< G4String,IHistogram*,G4std::less<G4String> >::iterator pos1;
+      G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
       
       pos1 = histo1D.find("eKin");
       if (pos1 != histo1D.end()) 
 	{
-	  IHistogram1D* h = dynamic_cast<IHistogram1D*>(pos1->second);
+	  IHistogram1D* h = pos1->second;
 	  h->fill(eKin);
 	}
 
       pos1 = histo1D.find("theta");
       if (pos1 != histo1D.end()) 
 	{
-	  IHistogram1D* h = dynamic_cast<IHistogram1D*>(pos1->second);
+	  IHistogram1D* h = pos1->second;
 	  h->fill(theta);
 	}
 
       pos1 = histo1D.find("phi");
       if (pos1 != histo1D.end()) 
 	{
-	  IHistogram1D* h = dynamic_cast<IHistogram1D*>(pos1->second);
+	  IHistogram1D* h = pos1->second;
 	  h->fill(phi);
 	}
       
@@ -278,19 +278,19 @@ void G4ProcessTestAnalysis::analyseGeneral(const G4Track& track,
 
   // Fill histograms
   
-  G4std::map< G4String,IHistogram*,G4std::less<G4String> >::iterator pos1;
+  G4std::map< G4String,IHistogram1D*,G4std::less<G4String> >::iterator pos1;
 
   pos1 = histo1D.find("nSec");
   if (pos1 != histo1D.end()) 
     {
-       IHistogram1D* h2 = dynamic_cast<IHistogram1D*>(pos1->second);
+       IHistogram1D* h2 = pos1->second;
        h2->fill(float(nSecondaries));
     }
   
   pos1 = histo1D.find("eDeposit");
   if (pos1 != histo1D.end()) 
     {
-      IHistogram1D* h2 =dynamic_cast<IHistogram1D*>(pos1->second); 
+      IHistogram1D* h2 = pos1->second; 
       h2->fill(eDeposit);
     }
 }
