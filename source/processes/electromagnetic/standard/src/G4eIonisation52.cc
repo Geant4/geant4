@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation52.cc,v 1.3 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4eIonisation52.cc,v 1.4 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------- G4eIonisation52 physics process --------------------------------
@@ -62,6 +62,8 @@ G4double G4eIonisation52::UpperBoundLambda = 100.*TeV;
 G4int    G4eIonisation52::NbinLambda = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4eIonisation52::G4eIonisation52(const G4String& processName)
    : G4VeEnergyLoss(processName),
@@ -285,7 +287,7 @@ G4double G4eIonisation52::ComputeRestrictedMeandEdx (
  if (&aParticleType==G4Electron::Electron())
    {
      Tmax = KineticEnergy/2.;
-     d = std::min(DeltaThreshold, Tmax)/particleMass;
+     d = min(DeltaThreshold, Tmax)/particleMass;
      dEdx = log(2.*(tau+2.)/Eexcm2)-1.-beta2
             + log((tau-d)*d)+tau/(tau-d)
             + (0.5*d*d+(2.*tau+1.)*log(1.-d/tau))/gamma2;
@@ -294,7 +296,7 @@ G4double G4eIonisation52::ComputeRestrictedMeandEdx (
  else        //positron
    {
      Tmax = KineticEnergy;  
-     d = std::min(DeltaThreshold, Tmax)/particleMass;
+     d = min(DeltaThreshold, Tmax)/particleMass;
      G4double d2=d*d/2., d3=d*d*d/3., d4=d*d*d*d/4.;
      G4double y=1./(1.+gamma);
      dEdx = log(2.*(tau+2.)/Eexcm2)+log(tau*d)

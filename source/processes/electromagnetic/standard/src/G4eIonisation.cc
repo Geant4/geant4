@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisation.cc,v 1.38 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4eIonisation.cc,v 1.39 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -71,6 +71,8 @@
 #include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eIonisation::G4eIonisation(const G4String& name)
   : G4VEnergyLossProcess(name),

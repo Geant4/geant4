@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.cc,v 1.1 2004-11-19 18:46:14 vnivanch Exp $
+// $Id: G4eeToHadrons.cc,v 1.2 2004-12-01 19:39:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,6 +54,8 @@
 #include "G4eeCrossSections.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eeToHadrons::G4eeToHadrons(const G4String& name)
   : G4VEmProcess(name),

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIxSection.cc,v 1.19 2004-06-07 07:33:21 gcosmo Exp $
+// $Id: G4PAIxSection.cc,v 1.20 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,6 +54,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4SandiaTable.hh"
 
+using namespace std;
 
 /* ******************************************************************
 

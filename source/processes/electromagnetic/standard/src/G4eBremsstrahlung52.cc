@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung52.cc,v 1.3 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4eBremsstrahlung52.cc,v 1.4 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -71,7 +71,7 @@ G4bool   G4eBremsstrahlung52::LPMflag = true;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-// constructor
+using namespace std;
  
 G4eBremsstrahlung52::G4eBremsstrahlung52(const G4String& processName)
   : G4VeEnergyLoss(processName),      // initialization
@@ -377,7 +377,7 @@ G4double G4eBremsstrahlung52::ComputeBremLoss(G4double Z,G4double,
   G4double delz = 1.e6;
   for (G4int ii=0; ii<NZ; ii++)
     {
-      if(abs(Z-ZZ[ii]) < delz)  { iz = ii; delz = abs(Z-ZZ[ii]);}
+      if(fabs(Z-ZZ[ii]) < delz)  { iz = ii; delz = fabs(Z-ZZ[ii]);}
     }
 
   G4double xx = log10(T);
@@ -618,10 +618,10 @@ G4double G4eBremsstrahlung52::ComputeCrossSectionPerAtom(
   G4double delz = 1.e6 ;
   for (G4int ii=0; ii<NZ; ii++)
   {
-    if(abs(AtomicNumber-ZZ[ii]) < delz)
+    if(fabs(AtomicNumber-ZZ[ii]) < delz)
     {
       iz = ii ;
-      delz = abs(AtomicNumber-ZZ[ii]) ;
+      delz = fabs(AtomicNumber-ZZ[ii]) ;
     }
   }
 
@@ -830,8 +830,8 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
        G4double screenmin = screenfac*epsilmin/(1.-epsilmin);
 
        // Compute the maximum of the rejection function
-       G4double F1 = std::max(ScreenFunction1(screenmin) - FZ ,0.);
-       G4double F2 = std::max(ScreenFunction2(screenmin) - FZ ,0.);
+       G4double F1 = max(ScreenFunction1(screenmin) - FZ ,0.);
+       G4double F2 = max(ScreenFunction2(screenmin) - FZ ,0.);
        grejmax = (F1 - epsilmin* (F1*ah - bh*epsilmin*F2))/(42.392 - FZ);
 
        // sample the energy rate of the emitted Gamma
@@ -843,8 +843,8 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
              x = pow(xmin, G4UniformRand());
              epsil = x*KineticEnergy/TotalEnergy;
              screenvar = screenfac*epsil/(1-epsil);
-             F1 = std::max(ScreenFunction1(screenvar) - FZ ,0.);
-             F2 = std::max(ScreenFunction2(screenvar) - FZ ,0.);
+             F1 = max(ScreenFunction1(screenvar) - FZ ,0.);
+             F2 = max(ScreenFunction2(screenvar) - FZ ,0.);
              migdal = (1. + MigdalFactor)/(1. + MigdalFactor/(x*x));
              greject = migdal*(F1 - epsil* (ah*F1 - bh*epsil*F2))/(42.392 - FZ);
         }  while( greject < G4UniformRand()*grejmax );
@@ -868,9 +868,9 @@ G4VParticleChange* G4eBremsstrahlung52::PostStepDoIt(const G4Track& trackData,
        G4double bl = bl0 + bl1*U + bl2*U2;
 
        // Compute the maximum of the rejection function
-       grejmax = std::max(1. + xmin* (al + bl*xmin), 1.+al+bl);
+       grejmax = max(1. + xmin* (al + bl*xmin), 1.+al+bl);
        G4double xm = -al/(2.*bl);
-       if ((xmin < xm)&&(xm < 1.)) grejmax = std::max(grejmax, 1.+ xm* (al + bl*xm));
+       if ((xmin < xm)&&(xm < 1.)) grejmax = max(grejmax, 1.+ xm* (al + bl*xm));
 
        // sample the energy rate of the emitted Gamma
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.19 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.20 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName,
     G4ProcessType type):G4VRestDiscreteProcess (processName, type),

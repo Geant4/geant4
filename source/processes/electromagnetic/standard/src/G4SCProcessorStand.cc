@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4SCProcessorStand.cc,v 1.1 2004-12-01 17:37:15 vnivanch Exp $
+// $Id: G4SCProcessorStand.cc,v 1.2 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,6 +61,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
+
 G4SCProcessorStand::G4SCProcessorStand(const G4String& nam)
   : G4VSubCutoffProcessor(nam),
     theLambdaSubTable(0),
@@ -91,7 +93,7 @@ void G4SCProcessorStand::Initialise(const G4ParticleDefinition* p,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
+vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
                     const G4Step&    step,
 			  G4double&  tmax,
                           G4double&  meanLoss,
@@ -131,7 +133,7 @@ std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
   G4double presafety  = pre->GetSafety();
   G4ThreeVector postpoint = step.GetPostStepPoint()->GetPosition();
   G4double postsafety = navigator->ComputeSafety(postpoint);
-  G4double safety = std::min(presafety,postsafety);
+  G4double safety = min(presafety,postsafety);
   if(safety >= rcut) return 0;
 
 
@@ -143,7 +145,7 @@ std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
   G4double length = step.GetStepLength();
   G4double inv_v = (ekin + mass)/(c_light*dp->GetTotalMomentum());
 
-  std::vector<G4Track*>* vtr = new std::vector<G4Track*>;
+  vector<G4Track*>* vtr = new vector<G4Track*>;
 
   do {
 
@@ -152,7 +154,7 @@ std::vector<G4Track*>*  G4SCProcessorStand::SampleSecondaries(
     if (fragment > 1.0) break;
 
     dt += del * inv_v;
-    std::vector<G4DynamicParticle*>* newp =
+    vector<G4DynamicParticle*>* newp =
            currentModel->SampleSecondaries(couple, dp, subcut, cut);
     if (newp) {
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.32 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.33 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +66,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.cc,v 1.3 2004-11-22 03:04:36 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.cc,v 1.4 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -68,6 +68,8 @@
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eeToTwoGammaModel::G4eeToTwoGammaModel(const G4ParticleDefinition*,
                                          const G4String& nam)
@@ -165,7 +167,7 @@ G4DynamicParticle* G4eeToTwoGammaModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
                              const G4MaterialCutsCouple*,
                              const G4DynamicParticle* dp,
                                    G4double,
@@ -212,7 +214,7 @@ std::vector<G4DynamicParticle*>* G4eeToTwoGammaModel::SampleSecondaries(
   G4double TotalAvailableEnergy = PositKinEnergy + 2.0*electron_mass_c2;
   G4double Phot1Energy = epsil*TotalAvailableEnergy;
 
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
 
   G4ThreeVector Phot1Direction (dirx, diry, dirz);
   Phot1Direction.rotateUz(PositDirection);

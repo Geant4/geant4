@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation52.cc,v 1.3 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4hIonisation52.cc,v 1.4 2004-12-01 19:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------- G4hIonisation52 physics process -------------------------------
@@ -76,6 +76,8 @@ G4double G4hIonisation52::UpperBoundLambda = 100.*TeV;
 G4int	 G4hIonisation52::NbinLambda = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4hIonisation52::G4hIonisation52(const G4String& processName)
    : G4VhEnergyLoss(processName),
@@ -358,7 +360,7 @@ G4double G4hIonisation52::ComputeRestrictedMeandEdx (
   //
   if (tau > taul)
     {
-     G4double rcut = std::min(DeltaThreshold/Tmax, 1.);
+     G4double rcut = min(DeltaThreshold/Tmax, 1.);
      dEdx = log(2.*electron_mass_c2*bg2*Tmax/Eexc2)
             +log(rcut)-(1.+rcut)*beta2;
 

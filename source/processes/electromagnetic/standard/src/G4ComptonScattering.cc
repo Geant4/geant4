@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonScattering.cc,v 1.22 2004-11-10 08:53:19 vnivanch Exp $
+// $Id: G4ComptonScattering.cc,v 1.23 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// constructor
+using namespace std;
 
 G4ComptonScattering::G4ComptonScattering(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),
@@ -197,7 +197,7 @@ G4double G4ComptonScattering::ComputeCrossSectionPerAtom
 
  G4double T0 = 15*keV; if (Z == 1.) T0 = 40*keV; 
 
- G4double X = std::max(GammaEnergy, T0) / electron_mass_c2;
+ G4double X = max(GammaEnergy, T0) / electron_mass_c2;
  CrossSection = p1Z*log(1.+2*X)/X
                 + (p2Z + p3Z*X + p4Z*X*X)/(1. + a*X + b*X*X + c*X*X*X);
 		

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation.hh,v 1.32 2004-11-17 18:21:30 vnivanch Exp $
+// $Id: G4ionIonisation.hh,v 1.33 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -142,7 +142,7 @@ inline G4double G4ionIonisation::MinPrimaryEnergy(
           const G4ParticleDefinition*, const G4Material*, G4double cut)
 {
   G4double x = 0.5*cut/electron_mass_c2;
-  G4double g = sqrt(1. + x);
+  G4double g = std::sqrt(1. + x);
   return proton_mass_c2*(g - 1.0);
 }
 
@@ -153,7 +153,7 @@ inline G4double G4ionIonisation::MaxSecondaryEnergy(const G4DynamicParticle* dyn
   G4double mass  = dynParticle->GetMass();
   G4double gamma = dynParticle->GetKineticEnergy()/mass + 1.0;
   G4double tmax  = electron_mass_c2*std::min(2.0*(gamma*gamma - 1.),
-                                             51200.*pow(proton_mass_c2/mass,0.66667));
+                                             51200.*std::pow(proton_mass_c2/mass,0.66667));
   return tmax;
 }
 

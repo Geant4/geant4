@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: hEnergyLossTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
+// $Id: hEnergyLossTest.cc,v 1.6 2004-12-01 19:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -252,7 +252,7 @@ int main()
      
   
     energy = 1.*GeV + mass ;
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
   
     G4ParticleMomentum theMomentum(momentum,0.,0.);
   

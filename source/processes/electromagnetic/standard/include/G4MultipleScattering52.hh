@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering52.hh,v 1.1 2004-11-19 19:19:28 vnivanch Exp $
+// $Id: G4MultipleScattering52.hh,v 1.2 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering52 physics process --------------------------
@@ -146,8 +146,8 @@ class G4MultipleScattering52 : public G4VContinuousDiscreteProcess
    void Setfacxsi(G4double value)      {facxsi = value;
                                     G4cout << " facxsi=" << facxsi << G4endl;};
    void SetFacrange(G4double val)  {facrange=val;
-                                    nsmallstep = G4int(log((cf+facrange-1.)/
-                                                 facrange)/log(cf))+1 ;
+                                    nsmallstep = G4int(std::log((cf+facrange-1.)/
+                                                 facrange)/std::log(cf))+1 ;
                                     G4cout << " fr=" << facrange 
                                            << "  nsmall=" << nsmallstep << G4endl ;};
      // Steplimit after boundary crossing = facrange*range

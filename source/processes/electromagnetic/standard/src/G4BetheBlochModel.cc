@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BetheBlochModel.cc,v 1.1 2004-12-01 17:37:15 vnivanch Exp $
+// $Id: G4BetheBlochModel.cc,v 1.2 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -53,6 +53,8 @@
 #include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4BetheBlochModel::G4BetheBlochModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
@@ -135,7 +137,7 @@ G4double G4BetheBlochModel::ComputeDEDX(const G4MaterialCutsCouple* couple,
                                               G4double cut)
 {
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double cutEnergy = std::min(cut,tmax);
+  G4double cutEnergy = min(cut,tmax);
 
   G4double tau   = kineticEnergy/mass;
   G4double gam   = tau + 1.0;
@@ -207,7 +209,7 @@ G4double G4BetheBlochModel::CrossSection(const G4MaterialCutsCouple* couple,
 {
   G4double cross = 0.0;
   G4double tmax = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
   if(cutEnergy < maxEnergy) {
 
     G4double totEnergy = kineticEnergy + mass;
@@ -236,8 +238,8 @@ G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double maxKinEnergy = std::min(maxEnergy,tmax);
-  G4double minKinEnergy = std::min(minEnergy,maxKinEnergy);
+  G4double maxKinEnergy = min(maxEnergy,tmax);
+  G4double minKinEnergy = min(minEnergy,maxKinEnergy);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double totEnergy     = kineticEnergy + mass;
@@ -287,13 +289,13 @@ G4DynamicParticle* G4BetheBlochModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4BetheBlochModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

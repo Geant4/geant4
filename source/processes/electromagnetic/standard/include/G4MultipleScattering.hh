@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.9 2004-11-19 19:19:28 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.10 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -51,7 +51,7 @@
 //
 //------------------------------------------------------------------------------
 //
-// $Id: G4MultipleScattering.hh,v 1.9 2004-11-19 19:19:28 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.10 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // class description
@@ -99,7 +99,7 @@ public:    // with description
 
   void Setfactail(G4double value)              {factail = value;}
   void SetFacrange(G4double val)              {facrange=val;
-        nsmallstep = G4int(log((cf+facrange-1.)/facrange)/log(cf))+1;}
+        nsmallstep = G4int(std::log((cf+facrange-1.)/facrange)/std::log(cf))+1;}
       // Steplimit after boundary crossing = facrange*range
       // estimated nb of steps at boundary nsmallstep = 1/facrange
 

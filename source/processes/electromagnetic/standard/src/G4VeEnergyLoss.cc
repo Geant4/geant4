@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.33 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.34 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -95,7 +95,7 @@ G4double G4VeEnergyLoss::RTable,G4VeEnergyLoss::LOGRTable;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor and destructor
+using namespace std;
  
 G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
@@ -520,7 +520,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
       postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
 
-      safety=std::min(presafety,postsafety);
+      safety=min(presafety,postsafety);
 
       if(safety<rcut)
       {

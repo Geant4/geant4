@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering52.cc,v 1.1 2004-11-19 19:18:42 vnivanch Exp $
+// $Id: G4MultipleScattering52.cc,v 1.2 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -82,6 +82,8 @@
 #include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4MultipleScattering52::G4MultipleScattering52(const G4String& processName)
      : G4VContinuousDiscreteProcess(processName),
@@ -721,7 +723,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
        // (Particle Physics Booklet, July 2002, eq. 26.10)
        if(Mass > electron_mass_c2) // + other conditions (beta, x/X0,...?)
        {
-         G4double Q = abs(aParticle->GetDefinition()->GetPDGCharge()) ;
+         G4double Q = fabs(aParticle->GetDefinition()->GetPDGCharge()) ;
          G4double X0 = trackData.GetMaterialCutsCouple()->
                        GetMaterial()->GetRadlen() ;
          G4double xx0 = truestep/X0 ;
@@ -831,7 +833,7 @@ G4VParticleChange* G4MultipleScattering52::PostStepDoIt(
          if(pr)
          {
            const G4double prlim = 0.10 ;
-           if((abs((xmeanth-xmean2)/(xmean1-xmean2)-prob)/prob > prlim) ||
+           if((fabs((xmeanth-xmean2)/(xmean1-xmean2)-prob)/prob > prlim) ||
               ((xmeanth-xmean2)/(xmean1-xmean2) > 1.) ||
               ((xmeanth-xmean2)/(xmean1-xmean2) < 0.) )
            {

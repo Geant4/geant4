@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SynchrotronRadiation.cc,v 1.11 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4SynchrotronRadiation.cc,v 1.12 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -44,6 +44,8 @@
 //
 //  Constructor
 //
+
+using namespace std;
  
 G4SynchrotronRadiation::G4SynchrotronRadiation(const G4String& processName,
     G4ProcessType type):G4VDiscreteProcess (processName, type),

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.1 2004-12-01 17:37:15 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.2 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,6 +60,8 @@
 #include "G4Electron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4BraggModel::G4BraggModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),
@@ -182,7 +184,7 @@ G4double G4BraggModel::CrossSection(const G4MaterialCutsCouple* couple,
 
   G4double cross     = 0.0;
   G4double tmax      = MaxSecondaryEnergy(p, kineticEnergy);
-  G4double maxEnergy = std::min(tmax,maxKinEnergy);
+  G4double maxEnergy = min(tmax,maxKinEnergy);
   if(cutEnergy < tmax) {
 
     G4double energy  = kineticEnergy + mass;
@@ -207,8 +209,8 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
                                    G4double maxEnergy)
 {
   G4double tmax = MaxSecondaryEnergy(dp);
-  G4double xmax = std::min(tmax, maxEnergy);
-  G4double xmin = std::min(xmax,tmin);
+  G4double xmax = min(tmax, maxEnergy);
+  G4double xmin = min(xmax,tmin);
 
   G4double kineticEnergy = dp->GetKineticEnergy();
   G4double energy  = kineticEnergy + mass;
@@ -256,13 +258,13 @@ G4DynamicParticle* G4BraggModel::SampleSecondary(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
+vector<G4DynamicParticle*>* G4BraggModel::SampleSecondaries(
                              const G4MaterialCutsCouple* couple,
                              const G4DynamicParticle* dp,
                                    G4double tmin,
                                    G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
 

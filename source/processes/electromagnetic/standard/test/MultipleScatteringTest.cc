@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MultipleScatteringTest.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
+// $Id: MultipleScatteringTest.cc,v 1.6 2004-12-01 19:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //--------------------------------------------------------------------
@@ -436,7 +436,7 @@ int main()
 
     mass = theParticle->GetPDGMass() ;  
     energy = 1.*GeV + mass ;
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
     G4ParticleMomentum theMomentum(momentum,0.,0.);
     G4double pModule = theMomentum.mag();
     G4DynamicParticle aParticle(theParticle,energy,theMomentum);
@@ -648,7 +648,7 @@ int main()
     for ( iw=0; iw<100; iw++)
     {
       theta=iw*dtheta ;
-      wg[iw]=fwg/(cos(theta)-cos(theta+dtheta)) ;
+      wg[iw]=fwg/(std::cos(theta)-std::cos(theta+dtheta)) ;
     }
 
    //  compute TransportMeanFreePath first
@@ -681,7 +681,7 @@ int main()
        xc=(*finalPos).x() ;
        yc=(*finalPos).y() ;
        zc=(*finalPos).z() ;
-       later = sqrt(xc*xc+yc*yc+zc*zc) ; 
+       later = std::sqrt(xc*xc+yc*yc+zc*zc) ; 
 
 
    G4cout << G4endl ;
@@ -713,7 +713,7 @@ int main()
        const G4ThreeVector* finalDir ;
        finalDir = (*aParticleChange).GetMomentumChange() ;
        costheta = (*finalDir).z() ;
-       theta = acos(costheta) ;
+       theta = std::acos(costheta) ;
        ibin = theta/dtheta ;
        if(ibin>99)
          over += 1. ;
@@ -739,7 +739,7 @@ int main()
              << " sec" << G4endl;
      outFile << G4endl ;
 
-     theta1e=distr[0]/exp(1.) ;
+     theta1e=distr[0]/std::exp(1.) ;
      i1e=-1 ;
 
      for ( ib=0 ; ib<100 ; ib++)

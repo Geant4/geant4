@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: eplusAnnihTest.cc,v 1.4 2003-06-16 17:02:28 gunter Exp $
+// $Id: eplusAnnihTest.cc,v 1.5 2004-12-01 19:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -245,7 +245,7 @@ int main()
         // 'Build' a new initial positron
         //
         Energy = Etot2;
-        G4double P = sqrt(Px2*Px2 + Py2*Py2 + Pz2*Pz2);
+        G4double P = std::sqrt(Px2*Px2 + Py2*Py2 + Pz2*Pz2);
 
         aPositron.SetKineticEnergy(Energy);
         aPositron.SetMomentumDirection(Px2/P, Py2/P, Pz2/P);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.cc,v 1.2 2004-11-10 08:53:20 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.cc,v 1.3 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -52,6 +52,8 @@
 #include "G4eeToTwoGammaModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4eplusAnnihilation70::G4eplusAnnihilation70(const G4String& name)
   : G4VEmProcess(name), isInitialised(false)

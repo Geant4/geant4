@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungModel.hh,v 1.10 2004-10-25 13:20:22 vnivanch Exp $
+// $Id: G4eBremsstrahlungModel.hh,v 1.11 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -165,7 +165,7 @@ inline G4double G4eBremsstrahlungModel::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable* (7.796 - 1.961*ScreenVariable);
 
@@ -183,7 +183,7 @@ G4double G4eBremsstrahlungModel::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 41.734 - ScreenVariable* (6.484 - 1.250*ScreenVariable);
 

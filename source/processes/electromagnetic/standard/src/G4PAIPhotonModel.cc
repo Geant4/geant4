@@ -52,8 +52,9 @@
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
 
-
 ////////////////////////////////////////////////////////////////////////
+
+using namespace std;
 
 G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String& nam)
   : G4VEmModel(nam),G4VEmFluctuationModel(nam),
@@ -183,7 +184,7 @@ void G4PAIPhotonModel::Initialise(const G4ParticleDefinition* p,
 
     // (*fPAIRegionVector[iRegion])
 
-    std::vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
+    vector<G4Material*>::const_iterator matIter = curReg->GetMaterialIterator();
     size_t jMat; 
     size_t numOfMat = curReg->GetNumberOfMaterials();
 
@@ -412,9 +413,9 @@ G4PAIPhotonModel::BuildLambdaVector(const G4MaterialCutsCouple* matCutsCouple)
   }
   if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
 
-  const std::vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->
+  const vector<G4double>*  deltaCutInKineticEnergy = theCoupleTable->
                                 GetEnergyCutsVector(idxG4ElectronCut);
-  const std::vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
+  const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
                                 GetEnergyCutsVector(idxG4GammaCut);
 
   if (fLambdaVector)         delete fLambdaVector;
@@ -497,7 +498,7 @@ G4PAIPhotonModel::GetdNdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( fabs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dNdxCut<<G4endl;
@@ -540,7 +541,7 @@ G4PAIPhotonModel::GetdNdxPhotonCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( fabs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dNdxPhotonCut<<G4endl;
@@ -584,7 +585,7 @@ G4PAIPhotonModel::GetdNdxPlasmonCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( abs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( fabs(x1-x2) <= eV  ) dNdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dNdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dNdxPlasmonCut<<G4endl;
@@ -627,7 +628,7 @@ G4PAIPhotonModel::GetdEdxCut( G4int iPlace, G4double transferCut)
   else
   {
     //  if ( x1 == x2  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
-    if ( abs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
+    if ( fabs(x1-x2) <= eV  ) dEdxCut = y1 + (y2 - y1)*G4UniformRand() ;
     else             dEdxCut = y1 + (transferCut - x1)*(y2 - y1)/(x2 - x1) ;      
   }
   //  G4cout<<""<<dEdxCut<<G4endl;
@@ -678,7 +679,7 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
 {
   G4int iTkin,iPlace;
   size_t jMat, jMatCC;
-  G4double tmax = std::min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
+  G4double tmax = min(MaxSecondaryEnergy(p, kineticEnergy), maxEnergy);
   G4double particleMass = p->GetPDGMass();
   G4double scaledTkin   = kineticEnergy*proton_mass_c2/particleMass;
   G4double charge       = p->GetPDGCharge();
@@ -696,7 +697,7 @@ G4double G4PAIPhotonModel::CrossSection( const G4MaterialCutsCouple* matCC,
   }
   if( jMatCC == numOfCouples && jMatCC > 0 ) jMatCC--;
 
-  const std::vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
+  const vector<G4double>*  photonCutInKineticEnergy = theCoupleTable->
                                 GetEnergyCutsVector(idxG4GammaCut);
 
   G4double photonCut = (*photonCutInKineticEnergy)[jMatCC] ;
@@ -764,7 +765,7 @@ G4PAIPhotonModel::SampleSecondary( const G4MaterialCutsCouple* matCC,
   fdNdxCutPhotonVector  = fdNdxCutPhotonTable[jMat];
   fdNdxCutPlasmonVector = fdNdxCutPlasmonTable[jMat];
 
-  G4double tmax = std::min(MaxSecondaryEnergy(dp), maxEnergy);
+  G4double tmax = min(MaxSecondaryEnergy(dp), maxEnergy);
   if( tmin >= tmax ) 
   {
     G4cout<<"G4PAIPhotonModel::SampleSecondary: tmin >= tmax "<<G4endl;
@@ -993,13 +994,13 @@ G4PAIPhotonModel::GetEnergyTransfer( G4PhysicsTable* pTable, G4int iPlace,
 
 ////////////////////////////////////////////////////////////////////////////
 
-std::vector<G4DynamicParticle*>* 
+vector<G4DynamicParticle*>* 
 G4PAIPhotonModel::SampleSecondaries( const G4MaterialCutsCouple* couple,
                                const G4DynamicParticle* dp,
                                      G4double tmin,
                                      G4double maxEnergy)
 {
-  std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
+  vector<G4DynamicParticle*>* vdp = new vector<G4DynamicParticle*>;
   G4DynamicParticle* delta             = SampleSecondary(couple, dp, tmin, maxEnergy);
   vdp->push_back(delta);
   return vdp;

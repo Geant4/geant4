@@ -1,4 +1,4 @@
-$Id: History,v 1.134 2004-12-01 17:38:37 vnivanch Exp $
+$Id: History,v 1.135 2004-12-01 19:37:12 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01 Dec 04: V.Ivant (stand-V06-02-14)
+- Migration to cmath
 
 01 Dec 04: V.Ivant (stand-V06-02-13)
 - Move in the classes with real models from utils

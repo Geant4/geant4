@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.11 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.12 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-// constructor
+using namespace std;
  
 G4PolarizedComptonScattering::G4PolarizedComptonScattering(
                                                   const G4String& processName)
@@ -69,7 +69,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    
    G4ThreeVector GammaPolarization0 = aDynamicGamma->GetPolarization();  
  
-   if (abs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
+   if (fabs(GammaPolarization0.mag() - 1.e0) > 1.e-14)
       G4ComptonScattering::PostStepDoIt(aTrack,aStep);
        
    G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();
@@ -106,7 +106,7 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    G4double Rand = G4UniformRand();
 
    int j = 0;
-   while ((j < 100) && (abs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
+   while ((j < 100) && (fabs(SetPhi(epsilon,sint2,middle,Rand)) > resolution))
 	{
           middle = (maximum + minimum)/2;
           if (SetPhi(epsilon,sint2,middle,Rand)*

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.cc,v 1.22 2004-11-19 19:18:42 vnivanch Exp $
+// $Id: G4MultipleScattering.cc,v 1.23 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -73,6 +73,8 @@
 #include "G4MscModel.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4MultipleScattering::G4MultipleScattering(const G4String& processName)
      : G4VMultipleScattering(processName),

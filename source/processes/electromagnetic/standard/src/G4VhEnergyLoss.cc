@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.47 2004-10-25 09:22:55 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.48 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -114,6 +114,8 @@ G4double G4VhEnergyLoss::cN       = 0.077*MeV*cm2/g;
 G4int    G4VhEnergyLoss::Ndeltamax = 100;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+using namespace std;
 
 G4VhEnergyLoss::G4VhEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
@@ -411,7 +413,7 @@ G4double G4VhEnergyLoss::GetConstraints(const G4DynamicParticle *aParticle,
 
  // compute the (random) Step limit
  //
- G4double r = std::min(finalRange, couple->GetProductionCuts()
+ G4double r = min(finalRange, couple->GetProductionCuts()
                  ->GetProductionCut(idxG4ElectronCut));
  G4double StepLimit;
  if (fRangeNow > r)
@@ -526,7 +528,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
                                                    ->GetNavigatorForTracking();
      G4double postsafety =
           navigator->ComputeSafety(stepData.GetPostStepPoint()->GetPosition());
-     G4double safety = std::min(presafety,postsafety);
+     G4double safety = min(presafety,postsafety);
 
      if (safety < rcut)
       {
@@ -565,7 +567,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
          {
           G4double T0=G4EnergyLossTables::GetPreciseEnergyFromRange(
                                              G4Electron::Electron(),
-                                             std::min(presafety,postsafety),
+                                             min(presafety,postsafety),
                                              couple);
           // absolute lower limit for T0
     	  if((T0<MinDeltaEnergyNow)||(LowerLimitForced[index]))

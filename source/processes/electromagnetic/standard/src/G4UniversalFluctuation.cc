@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.1 2004-12-01 17:37:15 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.2 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -56,6 +56,8 @@
 #include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
@@ -182,7 +184,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+          p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
         } else {
           p3 = G4double(G4Poisson(a3));
 	}
@@ -197,7 +199,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
         if(a3>alim)
         {
           siga=sqrt(a3) ;
-          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+          p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
         } else {
           p3 = G4double(G4Poisson(a3));
 	}
@@ -221,14 +223,14 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       // excitation type 1
       if(a1>alim) {
         siga=sqrt(a1) ;
-        p1 = std::max(0.,G4RandGauss::shoot(a1,siga)+0.5);
+        p1 = max(0.,G4RandGauss::shoot(a1,siga)+0.5);
       } else {
         p1 = G4double(G4Poisson(a1));
       }
       // excitation type 2
       if(a2>alim) {
         siga=sqrt(a2) ;
-        p2 = std::max(0.,G4RandGauss::shoot(a2,siga)+0.5);
+        p2 = max(0.,G4RandGauss::shoot(a2,siga)+0.5);
       } else {
         p2 = G4double(G4Poisson(a2));
       }
@@ -245,7 +247,7 @@ G4double G4UniversalFluctuation::SampleFluctuations(const G4Material* material,
       if(a3 > 0.) {
         if(a3>alim) {
           siga=sqrt(a3) ;
-          p3 = std::max(0.,G4RandGauss::shoot(a3,siga)+0.5);
+          p3 = max(0.,G4RandGauss::shoot(a3,siga)+0.5);
         } else {
           p3 = G4double(G4Poisson(a3));
         }

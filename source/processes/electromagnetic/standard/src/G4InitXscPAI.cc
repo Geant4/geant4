@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAI.cc,v 1.6 2004-05-10 15:54:32 grichine Exp $
+// $Id: G4InitXscPAI.cc,v 1.7 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,6 +61,8 @@ const G4double G4InitXscPAI::fSolidDensity = 0.05*g/cm3 ; // ~gas-solid border
 //
 // Constructor
 //
+
+using namespace std;
 
 G4InitXscPAI::G4InitXscPAI( const G4MaterialCutsCouple* matCC)
   : fPAIxscVector(NULL),
@@ -206,7 +208,7 @@ void G4InitXscPAI::Normalisation()
       energy2 = (*(*fMatSandiaMatrix)[0])[0] + 
               ( (*(*fMatSandiaMatrix)[0])[0] - (*(*fMatSandiaMatrix)[0])[0] )*i/100.;
       shift   = RutherfordIntegral(0,energy1,energy2);
-      if( shift >= abs(delta) ) break;
+      if( shift >= fabs(delta) ) break;
     }
     (*(*fMatSandiaMatrix)[0])[0] = energy2;
     cof -= shift;
@@ -355,12 +357,12 @@ G4double G4InitXscPAI::RePartDielectricConst(G4double enb)
       a3 = (*(*fMatSandiaMatrix)[i])[3]; 
       a4 = (*(*fMatSandiaMatrix)[i])[4];
  
-      if( abs(x0-x1) < 0.5*(x0+x1)*fDelta ) 
+      if( fabs(x0-x1) < 0.5*(x0+x1)*fDelta ) 
       {
         if(x0 >= x1) x0 = x1*(1+fDelta);
         else         x0 = x1*(1-fDelta);
       } 
-      if( abs(x0-x2) < 0.5*(x0+x2)*fDelta ) 
+      if( fabs(x0-x2) < 0.5*(x0+x2)*fDelta ) 
       {
         if(x0 >= x2) x0 = x2*(1+fDelta);
         else         x0 = x2*(1-fDelta);

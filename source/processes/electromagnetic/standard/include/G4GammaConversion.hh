@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.14 2004-11-10 08:53:18 vnivanch Exp $
+// $Id: G4GammaConversion.hh,v 1.15 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------------ G4GammaConversion physics process -------------------------
@@ -178,7 +178,7 @@ inline G4double G4GammaConversion::ScreenFunction1(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 42.392 - ScreenVariable*(7.796 - 1.961*ScreenVariable);
 
@@ -195,7 +195,7 @@ inline G4double G4GammaConversion::ScreenFunction2(G4double ScreenVariable)
    G4double screenVal;
 
    if (ScreenVariable > 1.)
-     screenVal = 42.24 - 8.368*log(ScreenVariable+0.952);
+     screenVal = 42.24 - 8.368*std::log(ScreenVariable+0.952);
    else
      screenVal = 41.405 - ScreenVariable*(5.828 - 0.8945*ScreenVariable);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlung.cc,v 1.39 2004-11-10 08:53:19 vnivanch Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.40 2004-12-01 19:37:15 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -79,6 +79,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+using namespace std;
+ 
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& name, G4double thresh):
   G4VEnergyLossProcess(name), 
   gammaThreshold(thresh),

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: tunemsc.cc,v 1.5 2004-08-30 15:48:35 vnivanch Exp $
+// $Id: tunemsc.cc,v 1.6 2004-12-01 19:37:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-------------------------------------------------------------------
@@ -471,7 +471,7 @@ int main()
 
     mass = theParticle->GetPDGMass() ;  
     energy = 1.*GeV + mass ;
-    momentum=sqrt(energy*energy-mass*mass) ;
+    momentum=std::sqrt(energy*energy-mass*mass) ;
     G4ParticleMomentum theMomentum(momentum,0.,0.);
     G4double pModule = theMomentum.mag();
     G4DynamicParticle aParticle(theParticle,energy,theMomentum);
@@ -696,7 +696,7 @@ int main()
    {
     G4cout << " give the particle momentum in MeV: " ;
     G4cin >> TMeV ;
-    TMeV = sqrt(TMeV*TMeV+mass*mass)-mass ;
+    TMeV = std::sqrt(TMeV*TMeV+mass*mass)-mass ;
    } 
 
     G4cout << " give the (geom.) Step in mm: " ;
@@ -784,7 +784,7 @@ int main()
     for ( iw=0; iw<100; iw++)
     {
       theta=iw*dtheta ;
-      wg[iw]=fwg/(cos(theta)-cos(theta+dtheta)) ;
+      wg[iw]=fwg/(std::cos(theta)-std::cos(theta+dtheta)) ;
     }
 
    //  compute TransportMeanFreePath first
@@ -817,7 +817,7 @@ int main()
        xc=(*finalPos).x() ;
        yc=(*finalPos).y() ;
        zc=(*finalPos).z() ;
-       later = sqrt(xc*xc+yc*yc+zc*zc) ; 
+       later = std::sqrt(xc*xc+yc*yc+zc*zc) ; 
 
 
    G4cout << G4endl ;
@@ -857,7 +857,7 @@ int main()
        const G4ThreeVector* finalDir ;
        finalDir = (*aParticleChange).GetMomentumChange() ;
        costheta = (*finalDir).z() ;
-       theta = acos(costheta) ;
+       theta = std::acos(costheta) ;
 
        thetamean += theta ;
        thetamean2 += theta*theta ;
@@ -872,8 +872,8 @@ int main()
        }
        if((*finalDir).x()>=0.)
        {
-       costheta=costheta/sqrt(costheta*costheta+((*finalDir).x())*((*finalDir).x()));
-       theta = acos(costheta);
+       costheta=costheta/std::sqrt(costheta*costheta+((*finalDir).x())*((*finalDir).x()));
+       theta = std::acos(costheta);
        ibin=theta/dtheta ;
        if(ibin>99)
          overx +1. ;
@@ -889,7 +889,7 @@ int main()
  
     thetamean /= events ;
     thetamean2 /= events ;
-    dthetamean = sqrt((thetamean2-thetamean*thetamean)/events) ;
+    dthetamean = std::sqrt((thetamean2-thetamean*thetamean)/events) ;
 
      G4cout << G4endl ;
      G4cout << "  theta distribution  kin.energy=" << TMeV << " MeV" ;
@@ -907,7 +907,7 @@ int main()
              << " sec" << G4endl;
      outFile << G4endl ;
 
-     theta1e=distr[0]/exp(1.) ;
+     theta1e=distr[0]/std::exp(1.) ;
      i1e=-1 ;
 
     G4cout << G4endl ;
@@ -929,7 +929,7 @@ int main()
 
        errdistr = DBL_MAX ;
        if( nev[ib]>0)
-          errdistr = distr[ib]/sqrt(nev[ib]) ;
+          errdistr = distr[ib]/std::sqrt(nev[ib]) ;
 
        G4cout << "  " << theta << "   " << distr[ib] << 
                " +- " << errdistr ;
@@ -937,7 +937,7 @@ int main()
                " +- " << errdistr ;
        errdistr = DBL_MAX ;
        if(nevx[ib]>0)
-          errdistr = distrx[ib]/sqrt(nevx[ib]) ;
+          errdistr = distrx[ib]/std::sqrt(nevx[ib]) ;
        G4cout << "    " << distrx[ib] << " +- " << errdistr << G4endl;
        outFile << "    " << distrx[ib] << " +- " << errdistr << G4endl;
 
@@ -974,13 +974,13 @@ int main()
        outFile << "in rad.  " << th1 << " < theta(1/e) < " << th2 << G4endl; 
        G4cout << G4endl;
        outFile << G4endl;
-       th1 = sqrt(2.*(exp(1./3.)-1.)*trueStep/lambda) ;
+       th1 = std::sqrt(2.*(std::exp(1./3.)-1.)*trueStep/lambda) ;
        th2 = th1*360./twopi ;
        G4cout << " theta(1/e) from the model function (theta<<1.appr.) " << G4endl;
        G4cout << " in degree: " << th2 << "     in radian:" << th1 << G4endl;
        outFile << "theta(1/e) from the model function (theta<<1.appr.)" << G4endl;
        outFile << " in degree: " << th2 << "     in radian:" << th1 << G4endl;
-       th1 = acos(1.-(exp(1./3.)-1.)*trueStep/lambda) ;
+       th1 = std::acos(1.-(std::exp(1./3.)-1.)*trueStep/lambda) ;
        th2 = th1*360./twopi ;
        G4cout << " theta(1/e) from the model function  " << G4endl;
        G4cout << " in degree: " << th2 << "     in radian:" << th1 << G4endl;
@@ -990,9 +990,9 @@ int main()
      G4cout << G4endl ;
      outFile << G4endl ;
 
-     lambdadata=(exp(1./3.)-1.)*trueStep/(1.-cos(theta1edata)) ;
-     lambdadatamax=(exp(1./3.)-1.)*trueStep/(1.-cos(theta1edata-errth)) ;
-     lambdadatamin=(exp(1./3.)-1.)*trueStep/(1.-cos(theta1edata+errth)) ;
+     lambdadata=(std::exp(1./3.)-1.)*trueStep/(1.-std::cos(theta1edata)) ;
+     lambdadatamax=(std::exp(1./3.)-1.)*trueStep/(1.-std::cos(theta1edata-errth)) ;
+     lambdadatamin=(std::exp(1./3.)-1.)*trueStep/(1.-std::cos(theta1edata+errth)) ;
      G4cout << G4endl;
      G4cout << " lambda from the experimental theta(1/e) (in mm) " << G4endl;
      G4cout << "     min.            mean              max." << G4endl;

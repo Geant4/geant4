@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.1 2004-12-01 17:37:15 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.2 2004-12-01 19:37:14 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,6 +58,8 @@
 #include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+using namespace std;
 
 G4IonFluctuations::G4IonFluctuations(const G4String& nam)
  :G4VEmFluctuationModel(nam),

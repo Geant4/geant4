@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.hh,v 1.17 2003-01-22 14:03:53 vnivanch Exp $
+// $Id: G4VhEnergyLoss.hh,v 1.18 2004-12-01 19:37:13 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------- G4VhEnergyLoss physics process --------------------------------
@@ -188,9 +188,9 @@ class G4VhEnergyLoss : public G4VEnergyLoss
                                          // calculated in BuildPhysicTable
     static G4double LowerBoundEloss;
     static G4double UpperBoundEloss;
-    static G4double RTable,LOGRTable;    // LOGRTable=log(UpperBoundEloss-
+    static G4double RTable,LOGRTable;    // LOGRTable=std::log(UpperBoundEloss-
                                          // LowerBoundEloss)/NbinEloss
-                                         // RTable = exp(LOGRTable)
+                                         // RTable = std::exp(LOGRTable)
 
     static G4PhysicsTable** RecorderOfProcess;
     static G4int CounterOfProcess;
