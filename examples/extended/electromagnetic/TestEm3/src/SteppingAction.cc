@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.12 2004-10-22 15:53:46 maire Exp $
+// $Id: SteppingAction.cc,v 1.13 2004-10-25 12:50:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -32,9 +32,9 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
-#include "G4VTouchable.hh"
 #include "G4Track.hh"
 #include "G4Positron.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,25 +52,27 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+  G4StepPoint* prePoint = aStep->GetPreStepPoint();
+  G4StepPoint* endPoint = aStep->GetPostStepPoint();
+  
   //if World, returns
   //
-  const G4Track* track = aStep->GetTrack();
-  G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetPhysicalVolume();
+  G4VPhysicalVolume* volume = prePoint->GetPhysicalVolume();
+  //if sum of absorbers do not fill exactly a layer: check material, not volume.
   G4Material* mat = volume->GetLogicalVolume()->GetMaterial();
   if (mat == detector->GetWorldMaterial()) return;
   
   //locate the absorber
   //
-  const 
-  G4VTouchable*  preStepTouchable= aStep->GetPreStepPoint()->GetTouchable();
-  G4int absorNum  = preStepTouchable->GetReplicaNumber( );
-  G4int layerNum  = preStepTouchable->GetReplicaNumber(1);  
+  G4int absorNum  = volume->GetCopyNo();
+  G4int layerNum  = prePoint->GetTouchable()->GetReplicaNumber(1);  
   
-  // collect energy and track length step by step
+  // collect energy deposit
   G4double edep = aStep->GetTotalEnergyDeposit();
-
+  
+  // collect step length of charged particles
   G4double stepl = 0.;
-  if (track->GetDefinition()->GetPDGCharge() != 0.)
+  if (aStep->GetTrack()->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
     
   // sum up per event
@@ -79,26 +81,19 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //longitudinal profile of edep per absorber
   histoManager->FillHisto(MaxAbsor+absorNum, layerNum+1., edep);
   
-  //energy flow : locate next volume
+  //energy flow
   //
-  const 
-  G4VTouchable*  postStepTouchable= aStep->GetPostStepPoint()->GetTouchable();
-  G4int absorNxt(0), layerNxt(0);
-  if (postStepTouchable->GetHistoryDepth() > 0) {
-    absorNxt  = postStepTouchable->GetReplicaNumber( );
-    layerNxt  = postStepTouchable->GetReplicaNumber(1);
-  }    
-
   //leaving an absorber ?  in forward direction ?
-  if ((absorNxt != absorNum || layerNxt != absorNum) &&
-      (track->GetMomentumDirection().x() > 0.)) {
-      G4int planNum = (detector->GetNbOfAbsor())*layerNum + absorNum;
+  const G4Track* track = aStep->GetTrack();
+  if ((endPoint->GetProcessDefinedStep()->GetProcessName() == "Transportation")
+      && (track->GetMomentumDirection().x() > 0.)) {
+      G4int planNum = 1 + (detector->GetNbOfAbsor())*layerNum + absorNum;
       G4double EnLeaving = track->GetKineticEnergy();
       if (track->GetDefinition() == G4Positron::Positron())
        EnLeaving += 2*electron_mass_c2;
       G4int ih = 2*MaxAbsor + 1;
       if (track->GetTrackID() != 1) ih += 1;
-      histoManager->FillHisto(ih, (G4double)planNum, EnLeaving);                       
+      histoManager->FillHisto(ih, (G4double)planNum, EnLeaving);
   }
 
 ////  example of Birk attenuation

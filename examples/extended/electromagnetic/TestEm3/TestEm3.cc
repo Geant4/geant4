@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TestEm3.cc,v 1.14 2004-10-22 15:53:41 maire Exp $
+// $Id: TestEm3.cc,v 1.15 2004-10-25 12:50:55 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,8 +62,12 @@ int main(int argc,char** argv) {
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-  //
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  
+  // histograms for this example
+  HistoManager* histo = new HistoManager();
+  
+  //  
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector,histo);
   runManager->SetUserAction(primary);
     
 #ifdef G4VIS_USE
@@ -71,8 +75,6 @@ int main(int argc,char** argv) {
   G4VisManager* visManager = new VisManager;
   visManager->Initialize();
 #endif
-
-  HistoManager* histo = new HistoManager();
     
   // set user action classes
   RunAction*      runAct = new RunAction(detector,primary,histo);
