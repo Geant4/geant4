@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: BuildCalorimeter.hh,v 1.2 1999-12-15 14:49:45 gunter Exp $
+// $Id: BuildCalorimeter.hh,v 1.3 2000-12-12 08:23:08 medernac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef BUILDCALORIMETER_HH
@@ -24,9 +24,9 @@ G4VPhysicalVolume* BuildCalorimeter()
     G4double a = 26.98*g/mole;
     G4double density = 2.7*g/cm3;
 
-    G4Box *myWorldBox= new G4Box ("WBox",10000,10000,10000);
-    G4Box *myCalBox = new G4Box ("CBox",1500,1500,1000);
-    G4Tubs *myTargetTube = new G4Tubs ("TTube",0,22.5,1000,0,360);
+    G4Box *myWorldBox= new G4Box ("WBox",10000*mm,10000*mm,10000*mm);
+    G4Box *myCalBox = new G4Box ("CBox",1500*mm,1500*mm,1000*mm);
+    G4Tubs *myTargetTube = new G4Tubs ("TTube",0,22.5*mm,1000*mm,0,360);
 
     G4LogicalVolume *myWorldLog=new G4LogicalVolume(myWorldBox,0,
 						   "WLog",0,0,0);
@@ -55,7 +55,7 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0-offset;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
 							  tName1,
 							  myTargetLog,
 							  myCalPhys,
@@ -74,7 +74,7 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate*mm,yTlate*mm,0),
 							  tName2,
 							  myTargetLog,
 							  myCalPhys,
