@@ -1,4 +1,4 @@
-//
+
 // ********************************************************************
 // * DISCLAIMER                                                       *
 // *                                                                  *
@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.44 2002-11-29 18:19:00 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.45 2003-03-31 14:42:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -677,7 +677,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(
                           G4double CurrentProposedStepLength,
                           G4double decreaseFactor,
                           G4double stepTrial,
-                    const G4FieldTrack& aFieldTrack)
+                    const G4FieldTrack& )
 {
   G4cout << " PiF: NoZeroStep= " << fNoZeroStep
          << " CurrentProposedStepLength= " << CurrentProposedStepLength
