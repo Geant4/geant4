@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4XXXViewer.cc,v 1.5 2003-06-16 17:14:01 gunter Exp $
+// $Id: G4XXXViewer.cc,v 1.6 2003-11-06 15:06:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4XXXViewer.hh"
@@ -53,6 +53,21 @@ void G4XXXViewer::DrawView() {
 #ifdef G4XXXDEBUG
   G4cout << "G4XXXViewer::DrawView() called." << G4endl;
 #endif
-  NeedKernelVisit ();  // Always need to visit G4 kernel.
-  ProcessView ();
+
+  // First, a view should decide when to re-visit the G4 kernel.
+  // Sometimes it might not be necessary, e.g., if the scene is stored
+  // in a graphical database (e.g., OpenGL's display lists) and only
+  // the viewing angle has changed.  But graphics systems without a
+  // graphical database will always need to visit the G4 kernel.
+
+  NeedKernelVisit ();  // Default is - always visit G4 kernel.
+  // Note: this routine sets the fNeedKernelVisit flag of *all* the
+  // views of the scene.
+
+  ProcessView ();      // The basic logic is here.
+
+  // Then a view may have more to do, e.g., display the graphical
+  // database.  That code should come here before finally...
+
+  FinishView ();       // Flush streams and/or swap buffers.
 }

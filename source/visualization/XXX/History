@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2003-10-03 15:16:03 gcosmo Exp $
+$Id: History,v 1.8 2003-11-06 15:06:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/XXX sub-category (a template graphics system)
 ---------------------------------------------------------------------------
+
+6th November 2003  John Allison  (vis-V05-02-03)
+- G4XXXViewer: improved comments.
 
 4th October 2003  Gabriele Cosmo (vis-V05-02-01)
 - Simplified GNUmakefile.
