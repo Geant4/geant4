@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.9 2002-06-06 10:42:05 jwellisc Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.10 2002-06-09 15:37:35 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,6 +43,10 @@
 #include "G4Gamma.hh"
 #include "G4GammaParticipants.hh"
 #include "G4QGSModel.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4StringChipsParticleLevelInterface.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
 
 class G4ElectroNuclearReaction : public G4HadronicInteraction
 {
@@ -53,7 +57,11 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
 
   private:
     G4ChiralInvariantPhaseSpace theLEModel;
-    G4QGSModel<G4GammaParticipants> theHEModel;
+    G4TheoFSGenerator theHEModel;
+    G4StringChipsParticleLevelInterface theCascade;
+    G4QGSModel< G4GammaParticipants > theStringModel;
+    G4QGSMFragmentation theFragmentation;
+    G4ExcitedStringDecay * theStringDecay;
     G4ElectroNuclearCrossSection theElectronData;
     G4PhotoNuclearCrossSection thePhotonData;
     G4ParticleChange theResult;
@@ -150,22 +158,20 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   } 
   else 
   {
-    G4KineticTrackVector * secondaries = theHEModel.Scatter(localTrack, aTargetNucleus);
-    G4int nSec = secondaries -> size();
-    theResult.SetNumberOfSecondaries(nSec);
-    G4int i;
-    for(i=0; i<secondaries->size(); i++)
+    theHEModel.SetTransport(&theCascade);
+    theHEModel.SetHighEnergyGenerator(&theStringModel);
+    theStringDecay = new G4ExcitedStringDecay(&theFragmentation);
+    theStringModel.SetFragmentationModel(theStringDecay);
+    theHEModel.SetMinEnergy(2.5*GeV);
+    theHEModel.SetMaxEnergy(100*TeV);
+
+    G4VParticleChange * aResult = theHEModel.ApplyYourself(localTrack, aTargetNucleus);
+    theResult.SetNumberOfSecondaries(aResult->GetNumberOfSecondaries());
+    for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
     {
-      G4DynamicParticle * aNew = 
-       new G4DynamicParticle(secondaries->operator[](i)->GetDefinition(),
-                             secondaries->operator[](i)->Get4Momentum().e(),
-                             secondaries->operator[](i)->Get4Momentum().vect());
-      // copy the stuff into theResult
-      theResult->AddSecondary(aNew);
-      delete secondaries->operator[](i);
+      theResult.AddSecondary(aResult->GetSecondary(all));
     }
-    delete secondaries;
-    result = theResult;
+    result = &theResult;
   }
   return result;
 }
