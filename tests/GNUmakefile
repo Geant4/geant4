@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.25 2000-06-13 14:10:34 johna Exp $
+# $Id: GNUmakefile,v 1.26 2000-06-15 16:21:26 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -66,37 +66,37 @@ all:
 # hand with: gmake examples_links_source
 	@$(ECHO) Making examples...
 	@for nn in $(EXAMPLES); do \
-	  (cd test1$$nn; $(MAKE)); \
+	  (cd test1$$nn && $(MAKE)); \
 	done;:
 	@for nn in $(ELECTROMAGNETIC); do \
-	  (cd test50$$nn; $(MAKE)); \
+	  (cd test50$$nn && $(MAKE)); \
 	done;:
 ifdef G4USE_HEPODBMS
 	@for nn in $(PERSISTENCY); do \
-	  (cd test4$$nn; $(MAKE)); \
+	  (cd test4$$nn && $(MAKE)); \
 	done;:
 endif
 	@$(ECHO) Making libG4TestTool.a for System Tests...
-	@cd tools/lib; $(MAKE);:
+	@cd tools/lib && $(MAKE);:
 	@$(ECHO) Making hadronic exercisers for System Tests...
 	@for dir in $(HADEXERDIRS); \
-	  do (cd $$dir; $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
+	  do (cd $$dir && $(MAKE) -f GNUmakefile.hadronic.exerciser); done;:
 	@$(ECHO) Making System Tests...
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done;:
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE)); done;:
 	@$(ECHO) Making links to examples binaries...
 	@$(MAKE) examples_links_binaries
 
 clean:
 	@for nn in $(EXAMPLES); do \
-	  (cd test1$$nndir; $(MAKE) clean); \
+	  (cd test1$$nndir && $(MAKE) clean); \
 	done;:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done;:
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) clean); done;:
 
 clean_libs:
 	@for nn in $(EXAMPLES); do \
-	  (cd test1$$nn; $(MAKE) clean_libs); \
+	  (cd test1$$nn && $(MAKE) clean_libs); \
 	done;:
-	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean_libs); done;:
+	@for dir in $(SUBDIRS); do (cd $$dir && $(MAKE) clean_libs); done;:
 
 examples_links_source:
 	@$(MAKE) clean_examples_links_source
