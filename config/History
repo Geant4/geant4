@@ -1,5 +1,6 @@
-$Id: History,v 1.133 2001-03-26 08:34:18 gunter Exp $
+$Id: History,v 1.134 2001-04-10 15:06:00 johna Exp $
 $Name: not supported by cvs2svn $
+
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th April 2001  John Allison  (config-V03-01-00)
+- Added G4VIS_BUILD_ASCIITREE_DRIVER and G4VIS_USE_ASCIITREE to G4VIS*gmk.
 
 22 March 2001 Gunter Folger (config-V03-00-03)
 - binmake.gmk, only store in executable PATH to libs from example/test; 
