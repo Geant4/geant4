@@ -194,13 +194,6 @@ void test31PhysicsList::SetCuts()
   SetCutValue(cutForElectron, "e-");
   SetCutValue(cutForPositron, "e+");   
   
-  // set cut values for proton and anti_proton before all other hadrons
-  // because some processes for hadrons need cut values for proton/anti_proton
-  SetCutValue(currentDefaultCut, "proton");
-  SetCutValue(currentDefaultCut, "anti_proton");
-     
-  SetCutValueForOthers(currentDefaultCut);
-  
   if (verboseLevel>0) DumpCutValuesTable();
 }
 

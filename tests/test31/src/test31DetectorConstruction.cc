@@ -240,6 +240,7 @@ void test31DetectorConstruction::DefineMaterials()
   ma->SetChemicalFormula("CsI");
   ma->AddElement(Cs,1);
   ma->AddElement(I,1);
+  ma->GetIonisation()->SetMeanExcitationEnergy(415.689*eV);
 
   density = 19.35*g/cm3;
   a = 183.85*g/mole;

@@ -73,6 +73,9 @@
 #include "G4Triton.hh"
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
+#include "G4IonC12.hh"
+#include "G4IonAr40.hh"
+#include "G4IonFe56.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -136,6 +139,9 @@ void test31Particles::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
+  G4IonC12::IonC12Definition();
+  G4IonAr40::IonAr40Definition();
+  G4IonFe56::IonFe56Definition();
 
 }
 

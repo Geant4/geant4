@@ -102,6 +102,7 @@ void test31ModelEM::ConstructProcess()
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
       G4VEnergyLossSTD* ion = new G4ionIonisation();
       pmanager->AddProcess(ion,      -1,2,2);
+      ion->SetVerboseLevel(0);
 
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) &&
@@ -112,6 +113,7 @@ void test31ModelEM::ConstructProcess()
       pmanager->AddProcess(hIon,   -1,2,2);
       //  hIon->SetLossFluctuations(false);
       hIon->SetDEDXBinning(240);
+      hIon->SetVerboseLevel(0);
     }
   }
 }
