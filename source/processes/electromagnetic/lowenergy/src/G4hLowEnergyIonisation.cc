@@ -1016,7 +1016,11 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   if (finalT <= MinKineticEnergy ) {
      
      finalT = 0.0;
-     aParticleChange.SetStatusChange(fStopButAlive); 
+      if(!particle->GetDefinition()->GetProcessManager()->
+                     GetAtRestProcessVector()->size())
+        aParticleChange.SetStatusChange(fStopAndKill);
+      else 
+        aParticleChange.SetStatusChange(fStopButAlive);
   } 
 
   aParticleChange.SetEnergyChange( finalT );
@@ -1382,8 +1386,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(
       finalKineticEnergy = 0.;
       aParticleChange.SetMomentumChange(ParticleDirection.x(),
                       ParticleDirection.y(),ParticleDirection.z());
-
-      aParticleChange.SetStatusChange(fStopButAlive);
+      if(!aParticle->GetDefinition()->GetProcessManager()->
+                     GetAtRestProcessVector()->size())
+        aParticleChange.SetStatusChange(fStopAndKill);
+      else 
+        aParticleChange.SetStatusChange(fStopButAlive);
     }
   
   aParticleChange.SetEnergyChange( finalKineticEnergy );
