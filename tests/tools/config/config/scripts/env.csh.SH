@@ -41,11 +41,6 @@ echo "On this machine the G4INSTALL=\$G4INSTALL"
 #?#G4INCLUDE="$g4include"
 
 #+
-if ( X$g4tmp != X ) then
-setenv G4TMP "$g4tmp"
-echo "On this machine the G4TMP=\$G4TMP"
-endif
-#+
 if ( X$g4lib != X ) then
 setenv G4LIB "$g4lib"
 echo "On this machine the G4LIB=\$G4LIB"

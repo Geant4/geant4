@@ -43,12 +43,6 @@ echo "On this machine the G4INSTALL=\$G4INSTALL"
 #?#G4INCLUDE="$g4include"
 
 #+
-if [ X$g4tmp != X ] ; then
-G4TMP="$g4tmp"
-export G4TMP
-echo "On this machine the G4TMP=\$G4TMP"
-fi
-#+
 if [ X$g4lib != X ] ; then 
 G4LIB="$g4lib"
 export G4LIB
