@@ -31,15 +31,15 @@
 /gun/generator Interplanetary
 /gun/generator Basic
 /gun/particle proton
-/run/data gcrZ=1.txt
+/gun/energy 100. MeV
 /run/initialize
 /configuration/choose vehicle
 /configuration/AddShielding On
 #/configuration/AddShielding Off
 #/configuration/AddSPE On
 #/configuration/AddSPE Off
-
-#/run/beamOn 1000
+#/shielding/thickness 30. cm
+/run/beamOn 1000
 
 
 

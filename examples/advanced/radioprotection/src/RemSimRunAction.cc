@@ -29,7 +29,7 @@
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
 //
-// $Id: RemSimRunAction.cc,v 1.6 2004-05-27 08:36:51 guatelli Exp $
+// $Id: RemSimRunAction.cc,v 1.7 2004-05-27 09:17:56 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -53,6 +53,7 @@ RemSimRunAction::RemSimRunAction()
  energies = new G4DataVector;
  data = new G4DataVector;
  messenger = new RemSimRunMessenger(this);
+ file = "";
 }
 
 RemSimRunAction::~RemSimRunAction()
@@ -61,8 +62,14 @@ RemSimRunAction::~RemSimRunAction()
   delete energies;
   delete data;   
  }
+
 void RemSimRunAction::BeginOfRunAction(const G4Run*)
 { 
+  if (file=="")
+   { 
+    G4String excep = "RemSimRunAction - load input data file!"; 
+    G4Exception(excep);
+    }
 }
 
 void RemSimRunAction::EndOfRunAction(const G4Run* aRun)
@@ -70,16 +77,19 @@ void RemSimRunAction::EndOfRunAction(const G4Run* aRun)
  G4double numberEvents = aRun -> GetNumberOfEvent();
  G4cout<< "Number of events:" << numberEvents << G4endl;
 }
+
 void RemSimRunAction::Read(G4String name)
-{ 
+{  
+ file = name;
  ReadData(MeV,name);
  G4cout << name << "  is the input file!" << G4endl;
 }
+
 void RemSimRunAction::ReadData(G4double unitE, G4String fileName)
 {
   char nameChar[100] = {""};
   std::ostrstream ost(nameChar, 100, std::ios::out);
-  
+
   ost << fileName;
   
   G4String name(nameChar);
@@ -137,10 +147,12 @@ G4DataVector* RemSimRunAction::GetPrimaryParticleEnergy()
 {
   return energies;
 }
+
 G4DataVector* RemSimRunAction::GetPrimaryParticleEnergyDistribution()
 {
   return data;
 }
+
 G4double RemSimRunAction::GetPrimaryParticleEnergyDistributionSum()
 {
   G4double sum = 0;

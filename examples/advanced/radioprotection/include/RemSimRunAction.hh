@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimRunAction.hh,v 1.5 2004-05-22 12:57:05 guatelli Exp $
+// $Id: RemSimRunAction.hh,v 1.6 2004-05-27 09:17:55 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Code developed by: S.Guatelli, guatelli@ge.infn.it
@@ -64,6 +64,7 @@ private:
   G4DataVector* data;
   G4int runID;
   RemSimRunMessenger* messenger;
+  G4String file;
 };
 #endif
 

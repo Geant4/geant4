@@ -31,7 +31,7 @@
 /vis/viewer/set/viewpointThetaPhi 90 180 deg
 /gun/particle proton
 /gun/generator Interplanetary
-/run/data gcrZ=1.txt
+#/run/data gcrZ=1.txt
 /configuration/choose moon
 /configuration/choose vehicle
 /configuration/AddShielding On
