@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+#include "G4PiNuclearCrossSection.hh"
+
+// by J.P Wellisch, Sun Sep 15 2002.
 // Implements P2-90-158;
 
  const G4double G4PiNuclearCrossSection::e1[38] = {0.02, 0.04, 0.06, 0.08, 0.1, 0.12, 0.13, 0.14, 0.15, 0.16, 0.17, 0.18, 0.19, 0.2, 0.22, 0.24, 0.26, 0.28, 0.3, 0.35, 0.4, 0.45, 0.5, 0.55, 0.6, 0.7, 0.8, 0.9, 1, 2, 3, 5, 10, 20, 50, 100, 500, 1000};

@@ -21,6 +21,9 @@
 // ********************************************************************
 // by J.P Wellisch, Sun Sep 15 2002.
 
+#ifndef G4PiData_h
+#define G4PiData_h
+
 #include "g4std/vector"
 #include "g4std/algorithm"
 #include "globals.hh"
