@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.70 2001-12-11 18:16:30 gcosmo Exp $
+# $Id: binmake.gmk,v 1.71 2001-12-11 20:27:19 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -36,7 +36,7 @@ endif
 ifndef GLOBALLIBS
   G4INCLUDE_EXEC := 0
 else
-  G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo yes)
+  G4INCLUDE_EXEC := $(shell [ -r $(G4INCLUDE)/globals.hh ] && echo 1)
 endif
 
 ifndef INCFLAGS
