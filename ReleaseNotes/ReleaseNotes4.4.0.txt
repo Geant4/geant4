@@ -176,7 +176,6 @@ to the related History files):
       - Added GetCurrentFieldManager() method.
       - Added 'maximum' epsilon value.
     o G4Navigator:
-      - fix for LocateGlobalPointWithinVolume(): clear state variables.
       - Fixed mirroring of the input argument for global direction into
         local variable in LocateGlobalPointAndSetup().
       - Added ResetState() method (that only reset state - not stack).
