@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2000-02-14 13:44:01 gcosmo Exp $
+# $Id: GNUmakefile,v 1.4 2001-09-19 09:52:46 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for STEP library.  Gabriele Cosmo, 15/11/96.
 # -------------------------------------------------------------
@@ -20,6 +20,18 @@ CPPFLAGS  += \
              -I$(G4BASE)/global/HEPRandom/include \
              -I$(G4BASE)/global/HEPGeometry/include
 
+# To avoid incompatibilities with ANSI standard treatment of strings, the
+# NIST STEP reader on gcc-2.95.X must be compiled in non-ANSI mode.
+#
+ifneq (,$(findstring Linux-g++,$(G4SYSTEM)))
+  ansi_options = -Wall -ansi -pedantic
+  ansi_flags = -DG4USE_STD_NAMESPACE
+  NCXX = $(filter-out $(ansi_options),$(CXXFLAGS))
+  NCPP = $(filter-out $(ansi_flags),$(CPPFLAGS))
+  CXXFLAGS := $(NCXX)
+  CPPFLAGS := $(NCPP)
+endif
+
 include $(G4INSTALL)/config/common.gmk
 
 # Fix for ISO AP203 geometry standard files to be always compiled without optimization.
@@ -40,3 +52,4 @@ $(G4TMPDIR)/SdaiCONFIG_CONTROL_DESIGN.o: src/SdaiCONFIG_CONTROL_DESIGN.cc
 	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
 	  src/SdaiCONFIG_CONTROL_DESIGN.cc
 endif
+

@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2001-06-18 08:41:12 gcosmo Exp $
+$Id: History,v 1.7 2001-09-19 09:52:46 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,6 +18,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+September 19, 2001      Gabriele Cosmo (STEP-V03-02-00)
+- dirobj.cc: restored usage of strdup() and force non-ansi compilation in GNUmakefile
+  for Linux-g++, to avoid incompatibilities on the usage of C strings operations
+  when "-ansi -pedantic" is adopted.
 
 June 18, 2001           Gabriele Cosmo (STEP-V03-01-00)
 - dirobj.cc: removed usage of strdup() to allow porting on Linux-g++ -ansi

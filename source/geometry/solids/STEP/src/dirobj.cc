@@ -10,7 +10,7 @@
 * and is not subject to copyright.
 */
 
-/* $Id: dirobj.cc,v 1.7 2001-06-18 08:19:40 gcosmo Exp $  */ 
+/* $Id: dirobj.cc,v 1.8 2001-09-19 09:52:46 gcosmo Exp $  */ 
 
 /*
  * DirObj implementation
@@ -500,12 +500,12 @@ void DirObj::InsertFile (const char* f, int index) {
         CheckIndex(index);
         spot = &fileList[index];
     }
-//#ifdef __O3DB__	// Removed strdup() for ANSI porting - GC
+#ifdef __O3DB__	// strdup() should be removed for ANSI porting - GC
     char* string = new char [strlen (f)];
     strcpy (string, f);
-//#else
-//    char* string = strdup(f);
-//#endif
+#else
+    char* string = strdup(f);
+#endif
     *spot = string;
     ++fileCount;
 }
