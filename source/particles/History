@@ -1,4 +1,4 @@
-$Id: History,v 1.36 2000-02-25 14:16:59 kurasige Exp $
+$Id: History,v 1.37 2000-02-27 08:07:22 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Feb 27, 00 H.Kurashige (particles-V01-00-01)
+------ hadrons-V01-00-01
+- Set particle sub-type for barions and mesons
+------ bosons-V01-00-00
+- Set particle sub-type 
+------ leptons-V01-00-00
+- Set particle sub-type 
+------ shortlived-V01-00-01
+- Set particle sub-type 
+- Added SetMultipletName to G4ExcitedBaryons/G4ExcitedMesons
+- Added GetMultipletName to G4ExcitedBaryons/G4ExcitedMesonsConstructor
+------ partman-V01-00-03
+- Added sub-type information in G4ParticleDefinition::DumpTable
+
 - Feb 25, 00 H.Kurashige (particles-V01-00-00)
 ------ partman-V01-00-02
 - Remove implementation for RW from G4ParticleTable and related.
