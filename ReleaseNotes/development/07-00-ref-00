@@ -162,7 +162,7 @@ run                                              run-V06-02-08
 ---
 - Fix wrong behaviour of G4RunManager when the user modifies the
   geometry without replacing the world.
-- Add PreparePhysicsTable() for nucleus process initialization.
+- Added PreparePhysicsTable() for nucleus process initialization.
 - Moved ConstructParticle() and ConstructProcess() methods to 'public'.
 - Modified BuildPhysicsTable() for new scheme of Store/RetrievePhysicsTable().
 - Changed date in G4RunManagerKernel for release 7.0.
