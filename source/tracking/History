@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2003-09-25 04:27:09 kurasige Exp $
+$Id: History,v 1.67 2003-10-03 14:51:53 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Oct.4, 2003 G.Cosmo (tracking-V05-02-02)
+- GNUmakefile:
+  o added dependency to new module "geometry/navigation".
+  o replaced "digits+hits" with "digits_hits".
+- Coworks with "geometry-V05-02-00" and "digits_hits-V05-02-00".
 
 Sept. 25, 2003 H.Kurashige (tracking-V05-02-01)
 - modify GNUMakefile for processes/cuts category
