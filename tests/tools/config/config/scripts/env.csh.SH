@@ -38,7 +38,10 @@ setenv G4INSTALL "$g4install"
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-#?#G4INCLUDE="$g4include"
+if ( X$g4include != X ) then
+setenv G4INCLUDE "$g4include"
+echo "On this machine the G4INCLUDE=\$G4INCLUDE"
+endif
 
 #+
 if ( X$g4lib != X ) then
