@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ModelingParameters.hh,v 1.9 2005-01-27 20:06:32 johna Exp $
+// $Id: G4ModelingParameters.hh,v 1.10 2005-03-15 12:56:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,7 @@ public: // With description
   void SetDensityCulling       (G4bool);
   void SetVisibleDensity       (G4double);
   void SetCullingCovered       (G4bool);
-  void SetNoOfSides            (G4int);
+  G4int SetNoOfSides           (G4int);  // Returns actual number set.
   void SetViewGeom             ();
   void UnsetViewGeom           ();
   void SetViewHits             ();

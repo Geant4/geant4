@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.32 2005-03-10 19:33:04 allison Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.33 2005-03-15 12:57:57 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -35,6 +35,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UnitsTable.hh"
 #include "G4VisManager.hh"
+#include "G4Polyhedron.hh"
 
 G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fLightsVector    (G4ThreeVector(1.,1.,1.)),
@@ -606,7 +607,7 @@ void G4VisCommandsViewerSet::SetNewValue
 
   else if (command == fpCommandLineSegments) {
     G4int nSides = G4UIcommand::ConvertToInt(newValue);
-    vp.SetNoOfSides(nSides);
+    nSides = vp.SetNoOfSides(nSides);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout <<
 	"Number of line segements per circle in polygon approximation is "
