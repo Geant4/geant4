@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HETest.cc,v 1.1 2000-04-15 09:13:53 hpw Exp $
+// $Id: G4HETest.cc,v 1.2 2001-06-08 17:38:12 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -27,10 +27,10 @@
 #include "G4BaryonConstructor.hh"
 #include "G4MesonConstructor.hh"
 #include "G4IonConstructor.hh"
+#include "G4StepPoint.hh"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
-#include "../src/G4HEPionPlusInelastic.cc"
 
 #include "G4Step.hh"
 
@@ -86,10 +86,10 @@
     G4int numberOfMaterials=1;
     G4Material* theMaterials[2000];
     
-      G4Material *theH = new G4Material(name="Hydrogen", density=1.032*g/cm3, nEl=2);
-      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
-      theH->AddElement( elH, 1 );
-      theMaterials[1] = theH;
+//      G4Material *theH = new G4Material(name="Hydrogen", density=1.032*g/cm3, nEl=2);
+//      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
+//      theH->AddElement( elH, 1 );
+//      theMaterials[1] = theH;
  
 //      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
 //      G4Element *elLi = new G4Element(name="Lithium", symbol="Li", iz=3., a=6.941*g/mole);
@@ -186,10 +186,10 @@
 //      theW->AddElement( elW, 1 );
 //      theMaterials[20] = theW;
 // 
-//       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
-//       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
-//       thePb->AddElement( elPb, 1 );
-//      theMaterials[21] = thePb;
+       G4Material *thePb = new G4Material(name="Lead", density=11.35*g/cm3, nEl=1);
+       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
+       thePb->AddElement( elPb, 1 );
+      theMaterials[21] = thePb;
 //
 //     G4Material *theU = new G4Material(name="Uranium", density=18.95*g/cm3, nEl=1);
 //      G4Element *elU  = new G4Element(name="Uranium", symbol="U", iz=92., a=238.03*g/mole);
@@ -267,7 +267,9 @@
    
    // --------- Test the GetMeanFreePath
    
+   G4StepPoint aStepPoint;
    G4Step aStep;
+   aStep.SetPreStepPoint(&aStepPoint);
    G4double meanFreePath;
    G4double incomingEnergy;
    G4int k, i, l, hpw = 0;   
@@ -283,7 +285,8 @@
    G4cout << "Please enter the PionPlus energy"<<G4endl;
    G4cin >> incomingEnergy;
    incomingEnergy*= GeV;
-   for (i=0; i<numberOfParticles; i++)
+//   for (i=0; i<numberOfParticles; i++)
+    i = 0;
    {
      outFile << G4endl
              << "New particle type: " << theParticles[i]->GetParticleName()
@@ -304,6 +307,11 @@ int j = 0;
            G4Track* aTrack = new G4Track( aParticle, aTime, aPosition );
            aTrack->SetTouchable(theTouchable);
            aStep.SetTrack( aTrack );
+           aStepPoint.SetTouchable(theTouchable);
+	   aStepPoint.SetMaterial(theMaterials[0]);
+           aStep.SetPreStepPoint(&aStepPoint);
+	   aStep.SetPostStepPoint(&aStepPoint);
+	   aTrack->SetStep(&aStep);
            ++hpw;
            if(hpw == 1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
@@ -320,7 +328,7 @@ int j = 0;
            aFinalState = (G4ParticleChange*)  (theProcesses[i]->PostStepDoIt( *aTrack, aStep ));
            G4cout << "NUMBER OF SECONDARIES="<<aFinalState->GetNumberOfSecondaries();
            G4double theFSEnergy = aFinalState->GetEnergyChange();
-           G4ThreeVector * theFSMomentum= aFinalState->GetMomentumChange();
+           G4ThreeVector * theFSMomentum= const_cast<G4ThreeVector *> (aFinalState->GetMomentumChange());
            G4cout << "FINAL STATE = "<<theFSEnergy<<" ";
            G4cout <<*theFSMomentum<<G4endl;
            G4Track * second;
@@ -330,7 +338,7 @@ int j = 0;
            for(isec=0;isec<aFinalState->GetNumberOfSecondaries();isec++)
            {
              second = aFinalState->GetSecondary(isec);
-             aSec = second->GetDynamicParticle();
+             aSec = const_cast<G4DynamicParticle *> (second->GetDynamicParticle());
              G4cout << "SECONDARIES info";
              G4cout << aSec->GetTotalEnergy();
              G4cout << aSec->GetMomentum();
