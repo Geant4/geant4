@@ -225,6 +225,27 @@ We believe none give rise to incorrect behaviour.
 <P> </P>
 
 <H3><I>Magnetic Field</I></H3>
+<UL>
+  <LI>The accuracy parameters <TT>EpsilonMin</TT> and <TT>EpsilonMax</TT>
+      (for the relative integration accuracy of momentum, energy etc in a
+      sub-step) have been moved from <TT>G4PropagatorInField</TT> to
+      <TT>G4FieldManager</TT>, enabling different values.<BR>
+      Default values have changed, in particular: 
+      <UL>
+      <LI><TT>EpsilonMin</TT> to <TT>0.001</TT> (from <TT>0.05</TT>) for
+          better energy / momentum integration.</LI>
+      <LI><TT>MaxLoopCount</TT> to <TT>1,000</TT> (from <TT>10,000</TT>)
+          to kill looping tracks.</LI>
+      </UL></LI>
+  <LI>In <TT>G4PropagatorInField</TT> the methods <TT>GetDeltaIntersection()</TT>,
+      <TT>GetDeltaOneStep()</TT> and their corresponding <TT>Set</TT> methods
+      including <TT>SetAccuraciesWithDeltaOneStep()</TT>, will become obsolete
+      in <TT>G4PropagatorInField</TT> at the next major release.<BR>
+      These quantities are properties of <TT>G4FieldManager</TT>.</LI>
+  <LI>Electric and electromagnetic fields must have their chord finder and
+      equation of motion initialised directly. See the example in
+      <TT>examples/extended/field/field02</TT>.</LI>
+</UL>
 
 <P> </P>
 
@@ -232,9 +253,9 @@ We believe none give rise to incorrect behaviour.
 <UL>
 <LI>Standard electromagnetic processes now adopt a new design based on
     a model approach for energy loss and multiple scattering.<BR>
-    Interfaces are not modified. However, the old processes
-    (frozen at the release 5.2 versions) are still available as classes
-    with "<TT>52</TT>" postfix to their name.</LI>
+    User interfaces are maintained unmodified. However, the old process
+    implementations (frozen at the release 5.2 versions) are still available
+    as classes with "<TT>52</TT>" postfix to their name.</LI>
 <LI>The class <TT>G4ionIonisation</TT> is now assumed to be used for
     simulation of the energy loss of <TT>GenericIons</TT>.
 </UL>
@@ -282,7 +303,7 @@ We believe none give rise to incorrect behaviour.
     The previous HepRep driver that produced HepRep version 1 files
     from <TT>/vis/open HepRepFile</TT> is still supported.
     But a new driver producing HepRep version 2 files is now available
-    from <TT>/vis/open HepRepXML</TT>.</LI><BR>
+    from <TT>/vis/open HepRepXML</TT>.<BR>
     The newer HepRep format allows the WIRED event display to give you greater
     control over visibility of various event and detector components.
     It will also set the stage for many improvements to come in later versions
@@ -586,7 +607,7 @@ please refer to the related History files provided in most packages):
             boundary. Changed <TT>ComputeStep()</TT> to accept above
             recalculation.</LI>
         <LI>New method <TT>GetVerboseLevel()</TT>, deprecating <TT>Verbose()</TT>.</LI>
-        <LI>Fixed </TT>LocateIntersectionPoint()</TT> for long-standing error.<BR>
+        <LI>Fixed <TT>LocateIntersectionPoint()</TT> for long-standing error.<BR>
             A section of the chord was not considered in use case where
             a previous chord at first appeared to have an intersection,
             but did not. Refined re-setting of <TT>finalSection</TT>
@@ -1151,7 +1172,7 @@ please refer to the related History files provided in most packages):
     <LI><I>analysis/A01</I>
         <UL>
         <LI>Renewed test to work with latest developments in AIDA 3.</LI>
-        </UL>
+        </UL></LI>
     <LI><I>biasing</I>
         <UL>
         <LI>Archived some obsolete files.</LI>
