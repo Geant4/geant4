@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.26 2001-08-14 18:32:45 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.27 2001-09-10 10:53:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -378,11 +378,10 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   fpCommand -> SetGuidance 
     ("/vis/scene/add/scale [<length> <length-unit>] [x|y|z] [<red>] [<green>] [<blue>] [auto|manual] [<xmid> <ymid> <zmid> <unit>]");
   fpCommand -> SetGuidance 
-    ("Defaults: 1 m x 1 1 1 auto 0 0 0 m");
+    ("Defaults: 1 m x 1 0 0 auto 0 0 0 m");
   fpCommand -> SetGuidance 
     ("Adds an annotated scale line to the current scene.");
-  fpCommand -> SetGuidance 
-    ("See G4Scale.hh for further description.");
+  fpCommand -> SetGuidance (G4Scale::GuidanceString);
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("length", 'd', omitable = true);
   parameter->SetDefaultValue (1.);
@@ -397,10 +396,10 @@ G4VisCommandSceneAddScale::G4VisCommandSceneAddScale () {
   parameter->SetDefaultValue (1.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("green", 'd', omitable = true);
-  parameter->SetDefaultValue (1.);
+  parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("blue", 'd', omitable = true);
-  parameter->SetDefaultValue (1.);
+  parameter->SetDefaultValue (0.);
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("auto|manual", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
@@ -522,7 +521,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand* command,
 
   // Let's go ahead a construct a scale and a scale model...
   G4Scale scale(length, annotation, scaleDirection,
-		autoPlacing, xmid, ymid, xmid);
+		autoPlacing, xmid, ymid, zmid);
   G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
   // Created of the heap because it needs a long lifetime.  This is a
   // mess.  The model determines the life but the vis atttributes are
