@@ -168,116 +168,132 @@ if [ $1 = "all" ] ; then
     nice $G4STTDIR/bin/run.sh test22
   ${G4STTDIR}/bin/geant4-unix.pl --end-test test22 18
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test101 19
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test23 19
+    nice $G4STTDIR/bin/run.sh test23
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test23 19
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test32 20
+    nice $G4STTDIR/bin/run.sh test32
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test32 20
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test101 21
     nice $G4STTDIR/bin/run.sh test101
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test101 19
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test101 21
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test102 20
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test102 22
     nice $G4STTDIR/bin/run.sh test102
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test102 20
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test102 22
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test103 21
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test103 23
   nice $G4STTDIR/bin/run.sh test103
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test103 21
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test103 23
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104 22
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104 24
     nice $G4STTDIR/bin/run.sh test104
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104 22
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104 24
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104.EMtest 23
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test104.EMtest 25
     nice $G4STTDIR/bin/run.sh test104.EMtest
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104.EMtest 23
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test104.EMtest 25
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test105 24
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test105 26
     nice $G4STTDIR/bin/run.sh test105
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test105 24
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test105 26
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test106 25
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test106 27
     nice $G4STTDIR/bin/run.sh test106
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test106 25
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test106 27
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test501 26
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test501 28
     nice $G4STTDIR/bin/run.sh test501
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test501 26
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test501 28
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test502 27
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test502 29
     nice $G4STTDIR/bin/run.sh test502
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test502 27
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test502 29
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test503 28
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test503 30
     nice $G4STTDIR/bin/run.sh test503
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test503 28
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test503 30
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test504 29
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test504 31
     nice $G4STTDIR/bin/run.sh test504
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test504 29
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test504 31
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test505 30
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test505 32
     nice $G4STTDIR/bin/run.sh test505
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test505 30
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test505 32
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test508 31
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test506 33
+    nice $G4STTDIR/bin/run.sh test506
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test506 33
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test508 34
     nice $G4STTDIR/bin/run.sh test508
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test508 31
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test508 34
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5010 32
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test5010 35
     nice $G4STTDIR/bin/run.sh test5010
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5010 32
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test5010 35
 
   if [ $G4USE_HEPODBMS ] ; then
    nice $G4STTDIR/bin/run.sh test401
    nice $G4STTDIR/bin/run.sh test402
   fi
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test601 33
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test601 36
     nice $G4STTDIR/bin/run.sh test601
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test601 33
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test601 36
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test602 34
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test602 37
     nice $G4STTDIR/bin/run.sh test602
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test602 34
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test602 37
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test701 35
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test701 38
     nice $G4STTDIR/bin/run.sh test701
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test701 35
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test701 38
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test702 36
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test702 39
     nice $G4STTDIR/bin/run.sh test702
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test702 36
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test702 39
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test703 37
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test703 40
     nice $G4STTDIR/bin/run.sh test703
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 37
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test703 40
 
 ###
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test801 38
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test801 41
     nice $G4STTDIR/bin/run.sh test801
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test801 38
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test801 41
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test802 39
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test802 42
     nice $G4STTDIR/bin/run.sh test802
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test802 39
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test802 42
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test803 40
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test803 43
     nice $G4STTDIR/bin/run.sh test803
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test803 40
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test803 43
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test804 41
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test804 44
     nice $G4STTDIR/bin/run.sh test804
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test804 41
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test804 44
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test805 42
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test805 45
     nice $G4STTDIR/bin/run.sh test805
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test805 42
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test805 45
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test806 43
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test806 46
     nice $G4STTDIR/bin/run.sh test806
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test806 43
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test806 46
 
-  ${G4STTDIR}/bin/geant4-unix.pl --start-test test807 44
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test807 47
     nice $G4STTDIR/bin/run.sh test807
-  ${G4STTDIR}/bin/geant4-unix.pl --end-test test807 44
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test807 47
+
+  ${G4STTDIR}/bin/geant4-unix.pl --start-test test1001 48
+    nice $G4STTDIR/bin/run.sh test1001
+  ${G4STTDIR}/bin/geant4-unix.pl --end-test test1001 48
 
 else
 
@@ -336,7 +352,7 @@ else
         > $dir/$1.exerciser$dot_G4LARGE_N.in
         rm -f $dir/$1$dot_G4LARGE_N.out
         rm -f $dir/$1$dot_G4LARGE_N.err
-        time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+        /usr/bin/time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
         $dir/$1.exerciser$dot_G4LARGE_N.in \
         > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
 #        if [ $1 = test11 ]; then
@@ -352,7 +368,7 @@ else
              -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
           rm -f $dir/$1$dot_G4LARGE_N.out
           rm -f $dir/$1$dot_G4LARGE_N.err
-          time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+          /usr/bin/time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
             $G4INSTALL/examples/extended/g3tog4/data/testmodel.dat \
             $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
           > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
@@ -367,7 +383,7 @@ else
              -f $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \) ]; then
           rm -f $dir/$1$dot_G4LARGE_N.out
           rm -f $dir/$1$dot_G4LARGE_N.err
-          time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
+          /usr/bin/time $G4WORKDIR/bin/$G4SYSTEM/$shortname \
           $G4INSTALL/tests/$shortname/$1$dot_G4LARGE_N.in \
           > $dir/$1$dot_G4LARGE_N.out 2> $dir/$1$dot_G4LARGE_N.err
         else
