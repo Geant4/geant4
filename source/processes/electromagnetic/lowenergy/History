@@ -1,4 +1,4 @@
-$Id: History,v 1.204 2004-09-27 16:22:32 pia Exp $
+$Id: History,v 1.205 2004-09-27 16:26:07 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-27.09.2004   MGP, tag emlowen-V06-01-03
+27.09.2004   MGP, tag emlowen-V06-02-00
              Fixes for compilation with gcc 3.4 (mostly by Gabriele)
 
 07.06.2004   G.Cosmo, tag emlowen-V06-01-02
