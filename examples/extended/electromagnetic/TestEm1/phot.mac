@@ -1,4 +1,4 @@
-# $Id: phot.mac,v 1.1 2002-02-06 13:57:58 maire Exp $
+# $Id: phot.mac,v 1.2 2002-12-11 14:31:30 maire Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -9,17 +9,17 @@
 #
 /run/initialize
 #
-/calor/setMat Germanium
-/calor/setSize 1 cm
-/calor/update
+/testem/det/setMat Germanium
+/testem/det/setSize 1 cm
+/testem/det/update
 #
-/gun/setDefault 1
+/testem/gun/setDefault 1
 #
 /run/verbose 2
 #
 /gun/particle gamma
 /gun/energy 1 MeV
-/gun/rndm  0.8
+/testem/gun/rndm  0.8
 #
 /tracking/verbose 1
 #
