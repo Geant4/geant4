@@ -1,4 +1,4 @@
-$Id: History,v 1.63 2002-07-24 10:43:22 gcosmo Exp $
+$Id: History,v 1.64 2002-10-31 21:09:27 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct  29th, 2002   J. Apostolakis - test-V04-01-02
+--------------------------------
+- Changed output of tests for small output change (GeV->MeV)
+
+Oct  29th, 2002   J. Apostolakis - test-V04-01-02
+--------------------------------
+- (Only changed and tagged test subdirectory)
+  Changed tests to use the new method SetChargeMomentumMass of 
+  PropagatorInField in order to be ready for its full use in 
+  G4PropagatorInField.
+  (A key problem at end-July was this non-preparedness of the unit tests.)
 
 Jul  24th, 2002   G. Cosmo - field-V04-01-01
+--------------------------
 - G4FieldManager[.hh.cc]: made fDefault_Delta_One_Step_Value and
   fDefault_Delta_Intersection_Val normal constants (not static) to
   resolve initialisation problems. Coworks with tag "geomvol-V04-01-01".
