@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.4 1999-01-11 00:48:34 allison Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.5 1999-02-07 17:34:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -450,8 +450,9 @@ void G4VisCommandViewerSelect::SetNewValue (G4UIcommand* command,
 
   G4cout << "Viewer \"" << selectName << "\"";
   if (found) {
-    if (ShortName (fpVisManager -> GetCurrentViewer () -> GetName ())
-	== selectShortName) {
+    G4VViewer* currentViewer = fpVisManager -> GetCurrentViewer ();
+    if (currentViewer &&
+	ShortName (currentViewer -> GetName ())	== selectShortName) {
       G4cout << " already selected." << endl;
     }
     else {
