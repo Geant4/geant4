@@ -3,6 +3,12 @@
 #ifndef G4ProtonInelasticCrossSection_h
 #define G4ProtonInelasticCrossSection_h
 
+// Class Description
+// Cross-sections for proton nuclear scattering up to 20 GeV, getting the low
+// energy threshold behaviour right.
+// H.P. Wellisch (TRIUMF), D. Axen (British Columbia U.). 1996. 
+// Published in Phys.Rev.C54:1329-1332,1996 
+// Class Description - End
 #include "globals.hh"
 #include "G4Proton.hh"
 

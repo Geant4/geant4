@@ -5,13 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CrossSectionDataStore.hh,v 1.2 1999-12-15 14:52:06 gunter Exp $
+// $Id: G4CrossSectionDataStore.hh,v 1.3 2000-12-14 08:33:02 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // GEANT4 physics class: G4CrossSectionDataStore -- header file
 // F.W. Jones, TRIUMF, 19-NOV-97
 //
+// Class Description
+// This is the class to which to register data-sets. You can get the instance
+// from energy hadronic process, and use its 'AddDataSet(...)' method to tailor
+// the cross-sectinos for your application.
+// Class Description - End
 
 #ifndef G4CrossSectionDataStore_h
 #define G4CrossSectionDataStore_h 1

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.hh,v 1.3 1999-12-15 14:52:06 gunter Exp $
+// $Id: G4HadronCrossSections.hh,v 1.4 2000-12-14 08:33:03 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //

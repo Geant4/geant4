@@ -6,6 +6,12 @@
 #include "globals.hh"
 #include "G4Neutron.hh"
 
+// Class Description
+// Cross-sections for neutron nuclear scattering from 14 MeV up to 20 GeV, getting the
+// low energy threshold behaviour right.
+// H.P. Wellisch (TRIUMF), M. Laidlaw (British Columbia U.). 1996. 
+// Class Description - End
+
 #include "G4VCrossSectionDataSet.hh"
 
 class G4NeutronInelasticCrossSection : public G4VCrossSectionDataSet
