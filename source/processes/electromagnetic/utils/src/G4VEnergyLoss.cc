@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.30 2002-02-14 10:01:56 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.31 2002-02-14 10:53:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -58,7 +58,7 @@ G4bool	     G4VEnergyLoss::setMinDeltaCutInRange = false;
 
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
 // G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
-G4double     G4VEnergyLoss::finalRange     = 1000.mm;
+G4double     G4VEnergyLoss::finalRange     = 1000*mm;
 G4double     G4VEnergyLoss::c1lim = dRoverRange;
 G4double     G4VEnergyLoss::c2lim = 2.*(1.-dRoverRange)*finalRange;
 G4double     G4VEnergyLoss::c3lim = -(1.-dRoverRange)*finalRange*finalRange;
