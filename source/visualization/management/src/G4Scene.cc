@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.cc,v 1.1 1999-01-09 16:31:12 allison Exp $
+// $Id: G4Scene.cc,v 1.2 1999-02-07 17:30:25 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,6 +15,9 @@
 
 #include "G4Vector3D.hh"
 #include "G4BoundingSphereScene.hh"
+#include "G4VisAttributes.hh"
+#include "G4PhysicalVolumeModel.hh"
+#include "G4TransportationManager.hh"
 
 G4Scene::G4Scene (const G4String& name):
   fName (name)
@@ -44,6 +47,33 @@ void G4Scene::AddRunDurationModel (G4VModel* pModel) {
   fStandardTargetPoint = fExtent.GetExtentCentre ();
 }
   
+void G4Scene::AddWorldIfEmpty () {
+  if (IsEmpty ()) {
+    G4VPhysicalVolume* pWorld =
+      G4TransportationManager::GetTransportationManager ()
+      -> GetNavigatorForTracking () -> GetWorldVolume ();
+    if (pWorld) {
+      const G4VisAttributes* pVisAttribs =
+	pWorld -> GetLogicalVolume () -> GetVisAttributes ();
+      if (!pVisAttribs || pVisAttribs -> IsVisible ()) {
+	G4cout << 
+	  "Your \"world\" has no vis attributes or is marked as visible."
+	  "\n  For a better view of the contents, mark the world as"
+	  " invisible, e.g.,"
+	  "\n  myWorldLogicalVol ->"
+	  " SetVisAttributes (G4VisAttributes::Invisible);"
+	       << endl;
+      }
+      AddRunDurationModel (new G4PhysicalVolumeModel (pWorld));
+      // Note: default depth and no modeling parameters.
+      G4cout <<
+	"G4Scene::AddWorldIfEmpty: The scene was empty,"
+	"\n   \"world\" has been added.";
+      G4cout << endl;
+    }
+  }
+}
+
 void G4Scene::Clear () {
   fRunDurationModelList.clearAndDestroy ();
   fEndOfEventModelList.clearAndDestroy ();

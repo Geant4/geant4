@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Scene.hh,v 1.1 1999-01-09 16:30:39 allison Exp $
+// $Id: G4Scene.hh,v 1.2 1999-02-07 17:30:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ public:
 
   enum {UNLIMITED = -1};
 
-  G4Scene (const G4String& name = "invalid scene");
+  G4Scene (const G4String& name = "scene-with-unspecified-name");
   ~G4Scene ();
 
   // Makes use of default (compiler generated) copy constructor and
@@ -72,6 +72,11 @@ public:
   void AddRunDurationModel (G4VModel*);
   // Adds models of type which are expected to last for the duration
   // of the run, for example geometry volumes.
+
+  void AddWorldIfEmpty ();
+  // In some situations, if the user asks for a drawing and has not
+  // yet set any run duration models it makes sense to put the "world"
+  // in there by default.
 
   void AddEndOfEventModel (G4VModel*);
   // Adds models of type which are described at the end of event when
