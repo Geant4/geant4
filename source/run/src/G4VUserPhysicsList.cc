@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.17 2001-07-15 04:52:50 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.18 2001-07-15 08:32:34 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -783,7 +783,8 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
 
   G4bool   ascii = fStoredInAscii;
   G4String dir   = directory;
-  if (dir.isNull()) dir = directoryPhysicsTable;  
+  if (dir.isNull()) dir = directoryPhysicsTable; 
+  else directoryPhysicsTable = dir; 
   if (!StoreMaterialInfo(dir, ascii)) return false;
   if (!StoreCutValues(dir,ascii)) return false;
 #ifdef G4VERBOSE  
@@ -803,7 +804,7 @@ G4bool G4VUserPhysicsList::StorePhysicsTable(const G4String& directory)
     G4ProcessVector* pVector = (particle->GetProcessManager())->GetProcessList();
     G4int  j;
     for ( j=0; j < pVector->entries(); ++j) {
-      if (!(*pVector)[j]->StorePhysicsTable(particle,directoryPhysicsTable,ascii)){   
+      if (!(*pVector)[j]->StorePhysicsTable(particle,dir,ascii)){   
 #ifdef G4VERBOSE  
 	if (verboseLevel>2){
 	  G4cout << "G4VUserPhysicsList::StorePhysicsTable   ";
@@ -886,7 +887,7 @@ G4bool G4VUserPhysicsList::StoreMaterialInfo(const G4String& directory,
     // material name and density
     for (size_t imat=0; imat<matTable->entries(); ++imat){
       G4String name =  ((*matTable)[imat])->GetName();
-      G4double density = ((*matTable)[imat])->GetDensity();
+      G4double density = ((*matTable)[imat])->GetDensity()/(g/cm3);
       for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
       for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
       fOut.write(temp, FixedStringLengthForStore);
@@ -940,9 +941,15 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
     for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
     for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=key[i];
     fOut.write(temp, FixedStringLengthForStore);
+   
+    const G4String defKey="Default";
+    for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0';
+    for (i=0; i<key.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=defKey[i];
+    fOut.write(temp, FixedStringLengthForStore);
 
+    G4double defaultCutValueInmm = defaultCutValue/mm;
     // default cut value
-    fOut.write( (char*)(&defaultCutValue), sizeof (G4double));
+    fOut.write( (char*)(&defaultCutValueInmm), sizeof (G4double));
   }
 
  // loop over all particles in G4ParticleTable 
@@ -971,7 +978,7 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
       } else {
 	/////////////// Binary mode  /////////////////
 	G4String name =  particle->GetParticleName();
-	G4double cutLength = particle->GetLengthCuts();
+	G4double cutLength = particle->GetLengthCuts()/mm;
 	for (i=0; i<FixedStringLengthForStore; ++i) temp[i] = '\0'; 
 	for (i=0; i<name.length() && i<FixedStringLengthForStore-1; ++i) temp[i]=name[i];
 	fOut.write(temp, FixedStringLengthForStore);
@@ -1000,7 +1007,7 @@ G4bool G4VUserPhysicsList::StoreCutValues(const G4String& directory,
 	    fOut << G4endl;
 	    jj =0;
 	  }
-	  fOut << G4std::setw(20) << cutArray[idx]/keV;
+	  fOut << G4std::setw(20) << cutArray[idx];
 	}
 	fOut << G4endl;
 	fOut.unsetf(G4std::ios::scientific);
@@ -1239,6 +1246,8 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory,
   if (ascii) {
     fIn >> keyword >> defaultCut;
   } else {
+    fIn.read(temp, FixedStringLengthForStore);
+    keyword = (const char*)(temp);
     fIn.read( (char*)(&defaultCut), sizeof (G4double));
   }
   if (fIn.fail()) {
@@ -1257,8 +1266,8 @@ G4bool G4VUserPhysicsList::CheckCutValues(const G4String& directory,
   if ((keyword != "Default")|| (ratio<0.999) ||(ratio>1.001) ){
 #ifdef G4VERBOSE  
     if (verboseLevel>0){
-      G4cout << "G4VUserPhysicsList::CheckCutValues ";
-      G4cout << " Inconsistent default cut values" << G4endl;;
+      G4cout << "G4VUserPhysicsList::CheckCutValues " ;
+      G4cout << " Inconsistent default cut values " << G4endl;;
     }
 #endif   
     fIn.close();
@@ -1392,6 +1401,8 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   if (ascii) {
     fIn >> keyword >> defaultCut;
   } else {
+    fIn.read(temp, FixedStringLengthForStore);
+    keyword = (const char*)(temp);
     fIn.read( (char*)(&defaultCut), sizeof (G4double));
   }
   if (fIn.fail()) {
@@ -1406,7 +1417,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
   } 
 
    // set default value
-  defaultCutValue = defaultCut;
+  defaultCutValue = defaultCut*mm;
 #ifdef G4VERBOSE  
   if (verboseLevel>2){
     G4cout.setf(G4std::ios::scientific);
@@ -1438,6 +1449,7 @@ G4bool  G4VUserPhysicsList::RetrieveCutValues(const G4String&  directory,
      fIn.read(name, FixedStringLengthForStore);
      fIn.read((char*)(&cutLength), sizeof (G4double));
     }
+    cutLength *= mm;
 
     if (fIn.eof()) break;
     if (fIn.fail()) {
