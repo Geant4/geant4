@@ -21,15 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4AllocatorPage.hh,v 1.3 2001-07-11 10:00:49 gunter Exp $
+// $Id: G4AllocatorPage.hh,v 1.4 2002-05-21 10:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
 //      -------------- G4AllocatorPage ----------------
 //                by Tim Bell, September 1995
 // ------------------------------------------------------------

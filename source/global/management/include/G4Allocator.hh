@@ -21,19 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4Allocator.hh,v 1.8 2002-01-17 10:49:02 gcosmo Exp $
+// $Id: G4Allocator.hh,v 1.9 2002-05-21 10:31:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
-//      GEANT 4 class header file 
+// GEANT 4 class header file 
 //
-//      History: first implementation, based on object model of
-//      2nd December 1995, G.Cosmo
+// Class Description:
+//
+// A class for fast allocation of objects to the heap through paging
+// mechanism. It's meant to be used by associating it to the object to
+// be allocated and defining for it new and delete operators via
+// MallocSingle() and FreeSingle() methods.
+       
 //      ---------------- G4Allocator ----------------
 //                by Tim Bell, September 1995
 // ------------------------------------------------------------
-// SG, HPW: Protection vs double deletion of the same element, June 97.
 
 #ifndef G4Allocator_h
 #define G4Allocator_h 1
@@ -41,64 +45,45 @@
 #include <stdlib.h>
 #include <stddef.h>
 
-// G4AllocatorPage
 #include "G4AllocatorPage.hh"
 
 template <class Type>
 class G4Allocator
 {
-  G4AllocatorPage<Type> *fPages;
-  G4AllocatorUnit<Type> *fFreeList;
-  
-private:
-  void AddNewPage();
-  Type *AddNewElement();	
-     
-  enum { Allocated = 0x47416C, Deleted = 0xB8BE93 };
+  public:  // with description
 
-public:
-  G4Allocator();
-  ~G4Allocator();
+    G4Allocator();
+    ~G4Allocator();
+      // Constructor & destructor
 
-  inline Type *MallocSingle()
-  {
-    Type *anElement;
+    inline Type* MallocSingle();
+    inline void FreeSingle(Type* anElement);
+      // Malloc and Free methods to be used when overloading
+      // new and delete operators in the client <Type> object
 
-    if (fFreeList != 0)
-    {
-      fFreeList->deleted = Allocated;
-      anElement = &fFreeList->fElement;
-      fFreeList = fFreeList->fNext;
-    }
-    else
-      anElement = AddNewElement();
-    return anElement;
-  }
+  private:
 
-  inline void FreeSingle(Type *anElement)
-  {
-    G4AllocatorUnit<Type> *fUnit;
+    void AddNewPage();
+    Type *AddNewElement();	
 
-    fUnit = (G4AllocatorUnit<Type> *)
-      ((char *) anElement -
-       offsetof(G4AllocatorUnit<Type>, fElement));
-    if (fUnit->deleted == Allocated) {
-      fUnit->deleted = Deleted;
-      fUnit->fNext = fFreeList;
-      fFreeList = fUnit;
-    }
-/*
-    else if  (fUnit->deleted == Deleted) {
-      // G4cerr << "G4Allocator : This object is already deleted"  << G4endl;
-    } else {
-      // G4cerr <<  "G4Allocator: This object is allocated not by G4Allocator"<< G4endl;
-    }
-*/
-  }
+  private:
 
+    enum { Allocated = 0x47416C, Deleted = 0xB8BE93 };
+
+    G4AllocatorPage<Type> *fPages;
+    G4AllocatorUnit<Type> *fFreeList;
 };
 
+// ------------------------------------------------------------
+// Inline implementation
+// ------------------------------------------------------------
 
+static const G4int G4AllocatorPageSize = 1024;
+
+// ************************************************************
+// G4Allocator constructor
+// ************************************************************
+//
 template <class Type>
 G4Allocator<Type>::G4Allocator()
 {
@@ -108,6 +93,10 @@ G4Allocator<Type>::G4Allocator()
   return;
 }
 
+// ************************************************************
+// G4Allocator destructor
+// ************************************************************
+//
 template <class Type>
 G4Allocator<Type>::~G4Allocator()
 {
@@ -127,8 +116,49 @@ G4Allocator<Type>::~G4Allocator()
   return;
 }
 
-static const G4int G4AllocatorPageSize = 1024;
+// ************************************************************
+// MallocSingle
+// ************************************************************
+//
+template <class Type>
+Type* G4Allocator<Type>::MallocSingle()
+{
+  Type * anElement;
 
+  if (fFreeList != 0)
+  {
+    fFreeList->deleted = Allocated;
+    anElement = &fFreeList->fElement;
+    fFreeList = fFreeList->fNext;
+  }
+  else
+    anElement = AddNewElement();
+  return anElement;
+}
+
+// ************************************************************
+// FreeSingle
+// ************************************************************
+//
+template <class Type>
+void G4Allocator<Type>::FreeSingle(Type* anElement)
+{
+  G4AllocatorUnit<Type> * fUnit;
+
+  fUnit = (G4AllocatorUnit<Type> *)
+          ((char *) anElement - offsetof(G4AllocatorUnit<Type>, fElement));
+  if (fUnit->deleted == Allocated)
+  {
+    fUnit->deleted = Deleted;
+    fUnit->fNext = fFreeList;
+    fFreeList = fUnit;
+  }
+}
+
+// ************************************************************
+// AddNewPage
+// ************************************************************
+//
 template <class Type>
 void G4Allocator<Type>::AddNewPage()
 {
@@ -151,6 +181,10 @@ void G4Allocator<Type>::AddNewPage()
   fFreeList = &aPage->fUnits[0];
 }
 
+// ************************************************************
+// AddNewElement
+// ************************************************************
+//
 template <class Type>
 Type *G4Allocator<Type>::AddNewElement()
 {
@@ -162,6 +196,5 @@ Type *G4Allocator<Type>::AddNewElement()
   fFreeList=fFreeList->fNext;
   return anElement;
 }
-
 
 #endif
