@@ -46,7 +46,10 @@
 #ifndef G4PAIModel_h
 #define G4PAIModel_h 1
 
+#include <vector>
 #include "G4VEmModel.hh"
+#include "G4Region.hh"
+#include "globals.hh"
 #include "G4VEmFluctuationModel.hh"
 
 class G4PAIModel : public G4VEmModel, public G4VEmFluctuationModel
@@ -109,6 +112,8 @@ public:
  				G4double&,
                                 G4double&);
 
+  void DefineForRegion(const G4Region* r) ;
+
 protected:
 
   G4double MaxSecondaryEnergy(const G4ParticleDefinition*,
@@ -122,6 +127,8 @@ private:
   G4PAIModel & operator=(const  G4PAIModel &right);
   G4PAIModel(const  G4PAIModel&);
 
+
+  std::vector<const G4Region*> fPAIRegionVector;
   const G4ParticleDefinition* fParticle;
   G4double fMass;
   G4double fSpin;
@@ -161,6 +168,22 @@ inline G4double G4PAIModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
   return tmax;
 }
 
+///////////////////////////////////////////////////////////////
+
+inline  void G4PAIModel::DefineForRegion(const G4Region* r) 
+{
+  //  G4Region* rPAI = r;
+  //  fPAIRegionVector.push_back(rPAI);
+  fPAIRegionVector.push_back(r);
+}
+
 
 
 #endif
+
+
+
+
+
+
+
