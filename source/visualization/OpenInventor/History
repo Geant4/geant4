@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-11-27 12:46:07 johna Exp $
+$Id: History,v 1.3 2003-01-14 10:18:22 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,21 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+14th January 2003  John Allison  (openinventor-V05-00-00)
+- Removed vertex.transform (*fpObjectTransformation) from
+  G4OpenInventorSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron).
+  Symptom was that polyhedron objects were being transformed twice.
+  The transformation is stored in 
+  G4OpenInventorSceneHandler::PreAddThis
+  ...
+  G4OpenInventorTransform3D oiTran (objectTransformation);
+  SoSFMatrix* oiMat = oiTran.GetOIMatrix();
+  SoMatrixTransform* xform = new SoMatrixTransform;
+  xform->matrix.setValue(oiMat->getValue());
+  currentSeparator->addChild(new SoResetTransform);
+  currentSeparator->addChild(xform);
+}
 
 27th November 2002  John Allison  (vis-V04-01-08)
 - Improved algorithm of CompareForKernelVisit.
