@@ -100,7 +100,7 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   maxKinEnergy(100.0*GeV),
   linLossLimit(0.05),
   minSubRange(0.1),
-  lossFluctuationFlag(false),
+  lossFluctuationFlag(true),
   rndmStepFlag(false),
   hasRestProcess(true),
   tablesAreBuilt(false),
@@ -712,7 +712,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
     G4double postStepScaledEnergy = v->GetValue(x, b);
     eloss = (preStepScaledEnergy - postStepScaledEnergy)/massRatio;
 
-    /*
+    /*    
     if(-1 < verboseLevel) {
       G4cout << "fRange(mm)= " << fRange/mm
              << " xPost(mm)= " << x/mm
@@ -747,7 +747,7 @@ G4VParticleChange* G4VEnergyLossSTD::AlongStepDoIt(const G4Track& track,
            << " currentChargeSquare= " << chargeSquare
            << G4endl;
   }
-  */
+  */  
 
   // Subcutoff and/or deexcitation
   G4std::vector<G4Track*>* newp =
