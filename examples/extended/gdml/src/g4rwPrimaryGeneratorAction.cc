@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: g4rwPrimaryGeneratorAction.cc,v 1.2 2004-12-06 18:13:13 gcosmo Exp $
+// $Id: g4rwPrimaryGeneratorAction.cc,v 1.3 2004-12-07 09:45:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -54,13 +54,13 @@ void gogdmlPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   switch(i)
   {
     case 0:
-      UI->ApplyCommand("/gun/direction 1.0 0.0 0.0");
+      UI->ApplyCommand("/gun/direction 0.2 0.0 1.0");
       break;
     case 1:
-      UI->ApplyCommand("/gun/direction 1.0 2.0 0.0");
+      UI->ApplyCommand("/gun/direction 0.0 0.3 1.0");
       break;
     case 2:
-      UI->ApplyCommand("/gun/direction 1.0 2.0 3.0");
+      UI->ApplyCommand("/gun/direction 0.1 0.0 1.0");
       break;
   }
 
