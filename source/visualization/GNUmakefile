@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.11 2001-08-24 23:26:50 perl Exp $
+# $Id: GNUmakefile,v 1.12 2001-10-02 00:02:13 perl Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -28,6 +28,8 @@ ifdef G4VIS_BUILD
   SUBLIBS += G4vis_management
   SUBDIRS += FukuiRenderer
   SUBLIBS += G4FR
+  SUBDIRS += HepRepFile
+  SUBLIBS += G4visHepRepFile
   SUBDIRS += RayTracer
   SUBLIBS += G4RayTracer
   SUBDIRS += VRML
