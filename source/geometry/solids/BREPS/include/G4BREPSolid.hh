@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.13 2004-09-22 09:52:08 gcosmo Exp $
+// $Id: G4BREPSolid.hh,v 1.14 2004-10-10 10:56:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -123,6 +123,9 @@ public: // with description
   G4NURBS*      CreateNURBS      () const;
     // Create a G4Polyhedron/G4NURBS/...  (It is the caller's responsibility
     // to delete it).  A null pointer means "not created".
+  virtual G4Polyhedron* GetPolyhedron () const;
+    // Smart access function - creates on request and stores for future
+    // access.  A null pointer means "not available".
 
   G4int Intersect(register const G4Ray&) const;
     // Gets the roughly calculated closest intersection point for
@@ -211,6 +214,7 @@ private:
   G4double fCubVolEpsilon;
   G4double fCubicVolume;
     // Statistics, error accuracy and cached value for volume.
+  mutable G4Polyhedron* fpPolyhedron;
 
   G4BREPSolid(const G4BREPSolid&);
   G4BREPSolid& operator=(const G4BREPSolid&);
