@@ -3,7 +3,7 @@
 #                                 Intel icc 8.0
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
-  CXXFLAGS  := -ansi -w1
+  CXXFLAGS  := -ansi -no-gcc -w1
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
