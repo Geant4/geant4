@@ -7,7 +7,7 @@
 /run/verbose 2
 #
 /run/particle/setGCut 2.13 mm    
-/run/particle/setEcut 7.0  mum
+/run/particle/setECut 7.0  mum
 /run/initialize
 #
 /calor/setAbsMat Silicon   
