@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronCrossSections.hh,v 1.1 1999-01-07 16:11:31 gunter Exp $
+// $Id: G4HadronCrossSections.hh,v 1.2 1999-07-04 14:17:26 fjones Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -74,7 +74,7 @@ class G4HadronCrossSections
 {
 public:
 
-   G4HadronCrossSections() : verboseLevel(0)
+   G4HadronCrossSections() : verboseLevel(0), prevParticleDefinition(0)
    {
    }
 
