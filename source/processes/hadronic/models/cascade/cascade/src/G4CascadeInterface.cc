@@ -37,7 +37,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* the
   return NULL;
 };
 
- #define debug_G4CascadeInterface
+#define debug_G4CascadeInterface
 
 G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, 
 						     G4Nucleus& theNucleus) {
@@ -91,6 +91,11 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 				theNucleusA, 
 				theNucleus.GetZ());
     target->setEnergy();
+
+    if (verboseLevel > 2) {
+      G4cout << "Target:  " << G4endl;  
+      targetH->printParticle();
+    }
   }
 
   G4CollisionOutput output;
@@ -124,26 +129,32 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
 
     if ( theNucleusA < 1.5 ) 
-    {
-     // Get momentum from H model
-     G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
-      targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
-      do
       {
-	 output = collider->collide(bullet, targetH); 
+	// Get momentum from H model
+	G4NucleiModel* model = new G4NucleiModel(new G4InuclNuclei(targetMomentum, 1, 1));
+	targetH = new G4InuclElementaryParticle((model->generateNucleon(1, 1)).getMomentum(), 1); 
+      
+	if (verboseLevel > 2) {
+	  G4cout << "Target:  " << G4endl;  
+	  targetH->printParticle();
+	}
+
+	do
+	  {
+	    output = collider->collide(bullet, targetH); 
+	  } 
+	while(output.getOutgoingParticles().size()<2.5);
       } 
-      while(output.getOutgoingParticles().size()<2.5);
-    } 
     else 
-    {
-      output = collider->collide(bullet, target ); 
-    }
+      {
+	output = collider->collide(bullet, target ); 
+      }
 
     if (verboseLevel > 1) 
-    {
-      G4cout << " Cascade output: " << G4endl;
-      output.printCollisionOutput();
-    }
+      {
+	G4cout << " Cascade output: " << G4endl;
+	output.printCollisionOutput();
+      }
   }
 
   // Convert cascade data to use hadronics interface
@@ -232,25 +243,25 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
     nucleiIterator ifrag;
 
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) 
-    {
-      G4double eKin = ifrag->getKineticEnergy() * GeV;
-      G4std::vector<G4double> mom = ifrag->getMomentum();
-      G4ThreeVector aMom(mom[1], mom[2], mom[3]);
-      aMom = aMom.unit();
+      {
+	G4double eKin = ifrag->getKineticEnergy() * GeV;
+	G4std::vector<G4double> mom = ifrag->getMomentum();
+	G4ThreeVector aMom(mom[1], mom[2], mom[3]);
+	aMom = aMom.unit();
 
-      // hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
+	// hpw @@@ ==> Should be zero: G4double fragmentExitation = ifrag->getExitationEnergyInGeV();
 
-      if (verboseLevel > 2) {
-	G4cout << " Nuclei fragment: " << G4endl;
-	ifrag->printParticle();
-      }
-      G4int A = G4int(ifrag->getA());
-      G4int Z = G4int(ifrag->getZ());
-      aIonDef = theTableOfParticles->FindIon(Z,A,0,Z);
+	if (verboseLevel > 2) {
+	  G4cout << " Nuclei fragment: " << G4endl;
+	  ifrag->printParticle();
+	}
+	G4int A = G4int(ifrag->getA());
+	G4int Z = G4int(ifrag->getZ());
+	aIonDef = theTableOfParticles->FindIon(Z,A,0,Z);
       
-      aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
-      theResult.AddSecondary(aFragment); 
-    }
+	aFragment =  new G4DynamicParticle(aIonDef, aMom, eKin);
+	theResult.AddSecondary(aFragment); 
+      }
   }
 
   return &theResult;
