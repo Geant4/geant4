@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.10 1999-09-18 15:24:03 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.11 1999-09-30 08:42:12 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -23,6 +23,7 @@
 // 09/12/98: charge can be different from +-1 !!!! L.Urban
 // 29/07/99: corr. for low energy , L.Urban
 // 17/09/99: corr. for high energy and/or small step , L.Urban
+// 30/09/99: nuclear size effect correction,  L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -51,6 +52,7 @@
        scatteringparameter(0.9),
        tuning (1.00),
        cpar (1.5),
+       NuclCorrPar (0.001),FactPar(0.40),
        fLatDisplFlag(true) 
   { }
 
@@ -78,7 +80,8 @@
     
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
-    G4double KineticEnergy,AtomicNumber,sigma,lambda ;
+    G4double KineticEnergy,AtomicNumber,AtomicWeight,
+             sigma,lambda ;
     G4double density ;
 
   // destroy old tables if any
@@ -123,9 +126,11 @@
           for (G4int iel=0; iel<NumberOfElements; iel++)
           {
             AtomicNumber = (*theElementVector)(iel)->GetZ() ;
+            AtomicWeight = (*theElementVector)(iel)->GetA() ;
             sigma += theAtomicNumDensityVector[iel]*
                      ComputeTransportCrossSection(aParticleType,
-                                     KineticEnergy,AtomicNumber) ;
+                                     KineticEnergy,
+                                     AtomicNumber,AtomicWeight) ;
           }
           sigma *= sigmafactor ;
  
@@ -150,7 +155,7 @@
   G4double G4MultipleScattering::ComputeTransportCrossSection(
                    const G4ParticleDefinition& aParticleType,
                          G4double KineticEnergy,
-                         G4double AtomicNumber)
+                         G4double AtomicNumber,G4double AtomicWeight)
   {
     const G4double epsfactor = 2.*electron_mass_c2*electron_mass_c2*
                                Bohr_radius*Bohr_radius/(hbarc*hbarc) ;
@@ -299,6 +304,38 @@
      sigma *=ChargeSquare*AtomicNumber*AtomicNumber/rat2 ;
      sigma /= beta2*bg2 ;
 
+  // nuclear size effect correction for high energy
+  // ( a simple approximation at present)
+     G4double corrnuclsize,a,x0,w1,w2,w ;
+
+     x0 = 1. - NuclCorrPar*ParticleMass/(KineticEnergy*
+               exp(2.*log(AtomicWeight/(g/mole))/3.)) ;
+     if((x0 < -1.) || (KineticEnergy  <= 10.*MeV))
+     {
+       x0=-1. ;
+       corrnuclsize = 1. ;
+     }
+     else
+     {
+     a = 1.+1./eps ;
+     if(eps > epsmax)
+       w1=log(2.*eps)+1./eps-3./(8.*eps*eps) ;
+     else
+       w1=log((a+1.)/(a-1.))-2./(a+1.) ;
+
+     w = 1./((1.-x0)*eps) ;
+     if(w < epsmin)
+       w2=-log(w)-1.+2.*w-1.5*w*w ;
+     else
+       w2 = log((a-x0)/(a-1.))-(1.-x0)/(a-x0) ;
+ 
+     corrnuclsize = w1/w2 ;
+
+     // ####################################################
+     corrnuclsize = exp(-FactPar*proton_mass_c2/KineticEnergy)*
+                    (corrnuclsize-1.)+1. ;
+     }
+
   //  correct this value using the corrections computed for e+/e-
      KineticEnergy *= electron_mass_c2/ParticleMass ;
 
@@ -367,6 +404,8 @@
      }
 
      sigma *= corrfactor ;
+
+     sigma /= corrnuclsize ;
 
      return sigma ;
   } 

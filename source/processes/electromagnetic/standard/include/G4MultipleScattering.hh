@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.4 1999-09-18 15:23:36 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.5 1999-09-30 08:43:00 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -21,6 +21,7 @@
 // **************************************************************
 //      UNIVERSAL: for arbitrary single charged particle
 //  09/12/98:      charge can be != +- 1 !!!!   L.Urban
+//  30/09/99:    nuclear size effect correction L.Urban 
 // --------------------------------------------------------------
 // 22/10/98: cleanup , L.Urban
 
@@ -34,6 +35,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4MuonPlus.hh"
+#include "G4PionPlus.hh"
 #include "G4Proton.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4GPILSelection.hh"
@@ -82,13 +84,17 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void SetCpar  (G4double value) { cpar   = value ; };
    void SetTlimitmsc  (G4double value) { Tlimit = value ; };
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
+   
+   void SetNuclCorrPar(G4double val) { NuclCorrPar = val; } ;
+   void SetFactPar(G4double val) { FactPar = val ; } ;
 
  protected:
 
    G4double ComputeTransportCrossSection(
                              const G4ParticleDefinition& aParticleType,
                                    G4double KineticEnergy,
-                                   G4double AtomicNumber) ;
+                                   G4double AtomicNumber,
+                                   G4double AtomicWeight) ;
 
    G4double TrueToGeomTransformation(const G4DynamicParticle* aParticle,
                                      G4Material* aMaterial,
@@ -132,6 +138,9 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4double tuning;
    G4double cpar;
    G4bool fLatDisplFlag ;
+
+   G4double NuclCorrPar ;
+   G4double FactPar ;
 
    //New ParticleChange
    G4ParticleChangeForMSC fParticleChange ;
