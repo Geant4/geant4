@@ -1,8 +1,12 @@
-# $Id: GNUmakefile,v 1.4 2003-06-02 17:19:25 gcosmo Exp $
+# $Id: GNUmakefile,v 1.5 2003-06-07 16:54:39 gcosmo Exp $
 # --------------------------------------------------------------
 # Makes libraries for each subdomain: 
 #         CSG, specific, Boolean, BREPS, STEP, STEPinterface.
 # GNUmakefile for solids libraries.  Gabriele Cosmo, 18/9/96.
+
+ifndef G4INSTALL
+  G4INSTALL = ../../..
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 SUBDIRS = CSG specific Boolean BREPS

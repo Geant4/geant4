@@ -1,9 +1,13 @@
-# $Id: GNUmakefile,v 1.6 2003-06-02 17:19:25 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2003-06-07 16:54:23 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for geometry.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------
 
 name := G4geometry
+
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
@@ -16,7 +20,4 @@ ifdef G4USE_STEP
   SUBLIBS += G4step G4stepinterface
 endif
 
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
 include $(G4INSTALL)/config/globlib.gmk
