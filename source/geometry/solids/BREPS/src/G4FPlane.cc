@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FPlane.cc,v 1.4 1999-05-12 13:54:00 sgiani Exp $
+// $Id: G4FPlane.cc,v 1.5 1999-05-25 17:48:36 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -14,6 +14,7 @@
 // - Proper initialization of sameSense in both the constructors. 
 // - Addition of third argument (sense) in the second constructor to ensure
 //   consistent setting of the normal in all the client code.
+// - Proper use of the tolerance in the Intersect function.
 
 #include "G4FPlane.hh"
 #include "G4CompositeCurve.hh"
@@ -223,19 +224,19 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     solz = startz + t * dirz;
 
     // solve tolerance problem
-    if( (solx > -kCarTolerance/2) && (solx < kCarTolerance/2) )
-      solx = 0;
+    if( (t*dirx >= -kCarTolerance/2) && (t*dirx <= kCarTolerance/2) )
+      solx = startx;
 
-    if( (soly > -kCarTolerance/2) && (soly < kCarTolerance/2) )
-      soly = 0;
+    if( (t*diry >= -kCarTolerance/2) && (t*diry <= kCarTolerance/2) )
+      soly = starty;
 
-    if( (solz > -kCarTolerance/2) && (solz < kCarTolerance/2) )
-      solz = 0;
+    if( (t*dirz >= -kCarTolerance/2) && (t*dirz <= kCarTolerance/2) )
+      solz = startz;
     
     if( ( (dirx < 0 && solx < startx)||(dirx >= 0 && solx >= startx) ) &&
 	( (diry < 0 && soly < starty)||(diry >= 0 && soly >= starty) ) &&
 	( (dirz < 0 && solz < startz)||(dirz >= 0 && solz >= startz) )    )
-      hitpoint= G4Point3D(solx,soly, solz);
+      hitpoint= G4Point3D(solx, soly, solz);
   }
    
   // closest_hit is a public Point3D in G4Surface
@@ -250,11 +251,13 @@ int G4FPlane::Intersect(const G4Ray& rayref)
   }
   else
   {
-    // calculate the squared ditance from the point to the intersection
+    // calculate the squared distance from the point to the intersection
+    // and set it in the distance data member (all clients know they have
+    // to take the sqrt)
     Distance( RayStart.distance2(closest_hit) );   
 
     // now, we have to verify that the hit point founded
-    // is included into de G4FPlane boundaries
+    // is included into the G4FPlane boundaries
 
     // project the hit to the xy plane,
     // with the same projection that took the boundary
@@ -274,7 +277,7 @@ int G4FPlane::Intersect(const G4Ray& rayref)
     {
       // the intersection point is into the boundaries
       // check if the intersection point is on the surface
-      if(distance < kCarTolerance*0.5)
+      if(distance <= kCarTolerance*0.5*kCarTolerance*0.5)
       {
 	// the point is on the surface, set the distance to 0            
 	Distance(0);         
