@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Tubs.cc,v 1.4 2000-05-17 16:12:24 grichine Exp $
+// $Id: testG4Tubs.cc,v 1.5 2000-11-09 09:28:45 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,7 +40,8 @@
 
 const G4String OutputInside(const EInside a)
 {
-	switch(a) {
+	switch(a) 
+        {
 		case kInside:  return "Inside"; 
 		case kOutside: return "Outside";
 		case kSurface: return "Surface";
@@ -82,11 +83,15 @@ G4bool testG4Tubs()
 
     G4Tubs t4("Hole Sector #4",45*mm,50*mm,50*mm,pi/2,pi/2);
 
-    G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
+  G4Tubs t5("Hole Sector #5",50*mm,100*mm,50*mm,0.0,270.0*deg);
 
-    G4Tubs tube6("tube6",750,760,350,0.31415926535897931,5.6548667764616276);
+  G4Tubs tube6("tube6",750,760,350,0.31415926535897931,5.6548667764616276);
 
-    G4Tubs tube7("tube7",2200,3200,2500,-0.68977164349384879,3.831364227270472);
+  G4Tubs tube7("tube7",2200,3200,2500,-0.68977164349384879,3.831364227270472);
+
+  G4Tubs tube8("tube8",2550,2580,2000,0,2*pi);
+
+  G4Tubs tube9("tube9",1150,1180,2000,0,2*pi);
 
 
 // Check name
@@ -224,6 +229,21 @@ G4bool testG4Tubs()
     calcNorm,pgoodNorm,pNorm);
     // G4cout<<"Dist=tube7.DistanceToOut(p,v) = "<<Dist<<G4endl;
     // assert(ApproxEqual(Dist,4950.348576972614));
+
+    Dist=tube8.DistanceToOut(
+ G4ThreeVector(6.71645645882942,2579.415860329989,-1.519530725281157),
+ G4ThreeVector(-0.6305220496340839,-0.07780451841562354,0.7722618738739774),
+    calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=tube8.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,4950.348576972614));
+
+    Dist=tube9.DistanceToOut(
+ G4ThreeVector(2.267347771505638,1170.164934028592,4.820317321984064),
+ G4ThreeVector(-0.1443054266272111,-0.01508874701037938,0.9894181489944458),
+    calcNorm,pgoodNorm,pNorm);
+    G4cout<<"Dist=tube9.DistanceToOut(p,v) = "<<Dist<<G4endl;
+    // assert(ApproxEqual(Dist,4950.348576972614));
+
 
     G4cout<<G4endl ;
 
