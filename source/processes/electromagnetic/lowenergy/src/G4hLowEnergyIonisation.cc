@@ -5,7 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-//
 // -------------------------------------------------------------
 //      GEANT 4 class implementation file 
 //
@@ -21,6 +20,7 @@
 // It is the extention of the ionisation process for the slow 
 // charged hadrons.
 // ************************************************************
+// 28 July 1999 V.Ivanchenko cleen up
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,8 +110,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
                                    G4Material::GetMaterialTable();
 
   //  create table
-  //IV  cout << "\n ### Construct new tables for proton energy loss"  << "\n     ZieglerHighEnergy = " << ZieglerHighEnergy  << " MeV" << " \n";
- //IV    cout << " Emin,max,Nbin = " << LowestKineticEnergy << "MeV; " << HighestKineticEnergy << "MeV; " << TotBin << endl;
 
   G4int numOfMaterials = theMaterialTable->length();
 
@@ -146,8 +144,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
     ionlossBB = GetBetheBlochLoss(material, ZieglerHighEnergy, DeltaCutInKineticEnergyNow) ; 
     paramB =  ionloss/ionlossBB - 1.0 ; 
 
-    //IV  cout << "\n ### " << material->GetName() << ": loss = "  << ionloss << "; paramB = " << paramB << "; ZieglerHighEnergy = " << ZieglerHighEnergy << " MeV \n";
-
     // now comes the loop for the kinetic energy values
 
     for (G4int i = 0 ; i < TotBin ; i++)
@@ -176,8 +172,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       // Chemical factor
         G4double x = GetChemicalFactor(material, LowEdgeEnergy, DeltaCutInKineticEnergyNow) ;
         ionloss *= x ;
-
-	//IV cout << "  E = " << LowEdgeEnergy/MeV << " MeV; ion = " << ionloss*mm/MeV << " MeV/mm; ChemicalFactor = " << x << endl ;
 
       // now put the loss into the vector
       aVector->PutValue(i,ionloss) ;
@@ -679,9 +673,6 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
 
     // now you can compute the total ionization loss
 
-  //IV  cout << "ionloss = " << ionloss << "; delta = " << delta << "; sh = " << sh << endl;
-  //IV cout << "Factor = " << Factor << "; Edensity = " << ElectronDensity << "; beta2 = " << beta2 << endl;
-
     ionloss -= delta + sh ;
     ionloss *= Factor*ElectronDensity/beta2 ;
   }
@@ -1134,7 +1125,7 @@ G4double G4hLowEnergyIonisation::GetChemicalFactor(const G4Material* material,
     return factor ;
   } 
 
-  // The compaund exist in the internal table for H ion
+  // The compaund exist in the internal table
   G4double gamma    = 1.0 + KinEnergy/proton_mass_c2 ;    
   G4double gamma25  = 1.0 + 25.0*keV/proton_mass_c2 ;
   G4double gamma125 = 1.0 + ExpKinEnergy/proton_mass_c2 ;
@@ -1146,9 +1137,6 @@ G4double G4hLowEnergyIonisation::GetChemicalFactor(const G4Material* material,
   factor = 1.0 + (ExpStopPower/BraggStopPower - 1.0) *
           (1.0 + exp( 1.48 * ( beta125/beta25 - 7.0 ) ) ) /
           (1.0 + exp( 1.48 * ( beta/beta25    - 7.0 ) ) ) ;
-
-  //IV  cout << "KinEnergy = " << KinEnergy << " MeV; ExpPower = " << ExpStopPower << "; BraggPower = " << BraggStopPower << endl ; 
-  //IV  cout << "  Factor = " << factor << endl ;
 
   return factor ;
 }

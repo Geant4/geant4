@@ -5,7 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// 
 // ------------------------------------------------------------
 //      GEANT 4 class header file 
 //
@@ -21,6 +20,7 @@
 // It is the extention of the ionisation process for the slow 
 // charged hadrons.
 // ************************************************************
+// 28 July 1999 V.Ivanchenko cleen up
 // ------------------------------------------------------------
  
 #ifndef G4hLowEnergyIonisation_h

@@ -5,10 +5,6 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyIonisation.icc,v 1.1 1999-07-27 20:01:53 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-// 
 // ---------------------------------------------------------------
 //      GEANT 4 class inlined methods file 
 //
@@ -18,17 +14,11 @@
 //                by Vladimir Ivanchenko, 27 July 1999 
 //                was made on the base of G4hIonisation class
 //                developed by Laszlo Urban
-// ***************************************************************
-// It is the first implementation of the NEW IONISATION PROCESS.               
-// It calculates the ionisation of charged hadrons.
-// ***************************************************************
-// 24/09/97: corrected by L.Urban
-// 20/11/97: correction on MeanFreePath for KineticEnergy > HighestLimit
-
 // ************************************************************
 // It is the extention of the ionisation process for the slow 
 // charged hadrons.
 // ************************************************************
+// 28 July 1999 V.Ivanchenko cleen up
 // ---------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
