@@ -52,7 +52,7 @@
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 #include "G4VEnergyLossSTD.hh"
 #include "G4LossTableManager.hh"
 #include "G4Step.hh"
@@ -219,14 +219,22 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
      particle->GetParticleName() != "GenericIon" &&
      theLambdaTable) return;
 
+  G4bool cutsWasModified = false;
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  for (size_t j=0; j<numOfCouples; j++){
+    if (theCoupleTable->GetMaterialCutsCouple(j)->IsRecalcNeeded()) {
+      cutsWasModified = true;
+      break;
+    }
+  }
+  if( !cutsWasModified ) return;
 
   // It is responsability of the G4LossTables to build DEDX and range tables
   (G4LossTableManager::Instance())->BuildDEDXTable(particle);
 
-  // Access to materials
-  const G4ProductionCutsTable* theCoupleTable=
-        G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
 
   //!!!! To be checked because finalRange is changed here !!!!
   for (size_t i=0; i<numOfCouples; i++) {
@@ -246,8 +254,6 @@ void G4VEnergyLossSTD::BuildPhysicsTable(const G4ParticleDefinition& part)
   }
   tablesAreBuilt = true;
 
-  //  if(particle == G4Electron::Electron() || particle == G4Proton::Proton()
-  //   || particle == G4GenericIon::GenericIon())
   if(!baseParticle) PrintInfoDefinition();
 
   if(0 < verboseLevel) {
@@ -423,7 +429,7 @@ G4bool G4VEnergyLossSTD::RetrievePhysicsTable(G4ParticleDefinition* part,
   return true;
 }
   
-		
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossSTD::SetParticles(const G4ParticleDefinition* p1,
@@ -815,25 +821,24 @@ void G4VEnergyLossSTD::SetInverseRangeTable(G4PhysicsTable* p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple*)
+G4PhysicsVector* G4VEnergyLossSTD::DEDXPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  return new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nDEDXBins);
+  G4int nbins = 3;
+  if( couple->IsUsed() ) nbins = nDEDXBins;
+  return new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nbins);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  G4PhysicsVector* v = 0;
   G4double cut  = (*theCuts)[couple->GetIndex()];
-  if(cut > maxKinEnergy) {
-    v = new G4PhysicsLogVector(maxKinEnergy*0.5, maxKinEnergy, 2);
-  } else {
-    G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
+  G4int nbins = 2;
+  if( couple->IsUsed() && cut < maxKinEnergy) nbins = nLambdaBins;
+  G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
                                minKinEnergy);
-    if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
-    v = new G4PhysicsLogVector(tmin, maxKinEnergy, nLambdaBins);
-  }
+  if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
+  G4PhysicsVector* v = new G4PhysicsLogVector(tmin, maxKinEnergy, nbins);
   return v;
 }
 
@@ -841,17 +846,7 @@ G4PhysicsVector* G4VEnergyLossSTD::LambdaPhysicsVector(const G4MaterialCutsCoupl
 
 G4PhysicsVector* G4VEnergyLossSTD::SubLambdaPhysicsVector(const G4MaterialCutsCouple* couple)
 {
-  G4PhysicsVector* v = 0;
-  G4double cut  = (*theCuts)[couple->GetIndex()];
-  if(cut > maxKinEnergy) {
-    v = new G4PhysicsLogVector(maxKinEnergy*0.5, maxKinEnergy, 2);
-  } else {
-    G4double tmin = G4std::max(MinPrimaryEnergy(particle, couple->GetMaterial(), cut),
-                               minKinEnergy);
-    if(tmin >= maxKinEnergy) tmin = 0.5*maxKinEnergy;
-    v = new G4PhysicsLogVector(tmin, maxKinEnergy, nLambdaBins);
-  }
-  return v;
+  return LambdaPhysicsVector(couple);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

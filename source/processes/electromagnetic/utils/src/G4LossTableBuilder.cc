@@ -29,10 +29,12 @@
 // File name:     G4LossTableBuilder
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 03.01.2002
 //
-// Modifications: 
+// Modifications:
+//
+// 23.01.2003 V.Ivanchenko Cut per region
 //
 // Class Description: 
 //
@@ -59,16 +61,16 @@ G4PhysicsTable* G4LossTableBuilder::BuildDEDXTable(
 
   if(!n_vectors) return 0;
 
-  G4PhysicsVector* pv = (*(list[0]))[0];
-  size_t nbins = pv->GetVectorLength();
-
-  G4double elow = pv->GetLowEdgeEnergy(0);
-  G4double ehigh = pv->GetLowEdgeEnergy(nbins);
   G4PhysicsTable* theTable = new G4PhysicsTable();
   G4bool b;
 
   for (size_t i=0; i<n_vectors; i++) {
 
+    G4PhysicsVector* pv = (*(list[0]))[i];
+    size_t nbins = pv->GetVectorLength();
+
+    G4double elow = pv->GetLowEdgeEnergy(0);
+    G4double ehigh = pv->GetLowEdgeEnergy(nbins);
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
     for (size_t j=0; j<nbins; j++) {
@@ -80,15 +82,15 @@ G4PhysicsTable* G4LossTableBuilder::BuildDEDXTable(
         dedx += ((*(list[k]))[i])->GetValue(energy, b);
 
       }
-      v->PutValue(j, dedx);      
+      v->PutValue(j, dedx);
     }
-    theTable->insert(v);   
+    theTable->insert(v);
   }
-  return theTable; 
-} 
+  return theTable;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-      
+
 G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
                               const G4PhysicsTable* dedxTable)
 // Build range table from the energy loss table
@@ -99,14 +101,14 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
   G4bool b;
   size_t n = 100;
   G4double del = 1.0/(G4double)n;
-  G4PhysicsVector* pv = (*dedxTable)[0];
-  size_t nbins = pv->GetVectorLength();
-  G4double elow = pv->GetLowEdgeEnergy(0);
-  G4double ehigh = pv->GetLowEdgeEnergy(nbins);
   G4PhysicsTable* theTable = new G4PhysicsTable();
 
   for (size_t i=0; i<n_vectors; i++) {
 
+    G4PhysicsVector* pv = (*dedxTable)[i];
+    size_t nbins = pv->GetVectorLength();
+    G4double elow = pv->GetLowEdgeEnergy(0);
+    G4double ehigh = pv->GetLowEdgeEnergy(nbins);
     G4PhysicsLogVector* v = new G4PhysicsLogVector(elow, ehigh, nbins);
 
     pv              = (*dedxTable)[i];
@@ -135,11 +137,11 @@ G4PhysicsTable* G4LossTableBuilder::BuildRangeTable(
     theTable->insert(v);
   }
 
-  return theTable; 
-}    
+  return theTable;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-      
+
 G4PhysicsTable* G4LossTableBuilder::BuildInverseRangeTable(
                       const G4PhysicsTable* dedxTable,
                       const G4PhysicsTable* rangeTable)
@@ -178,11 +180,11 @@ G4PhysicsTable* G4LossTableBuilder::BuildInverseRangeTable(
 
       for (ihigh=ilow+1; ihigh<nbins; ihigh++) {
         energy2 = pv->GetLowEdgeEnergy(ihigh);
-        range2  = pv->GetValue(energy2, b); 
+        range2  = pv->GetValue(energy2, b);
         if(range2 >= range || ihigh == nbins-1) {
           ilow = ihigh - 1;
           energy1 = pv->GetLowEdgeEnergy(ilow);
-          range1  = pv->GetValue(energy1, b); 
+          range1  = pv->GetValue(energy1, b);
           break;
 	}
       }
@@ -194,7 +196,7 @@ G4PhysicsTable* G4LossTableBuilder::BuildInverseRangeTable(
     theTable->insert(v);
   }
 
-  return theTable; 
-}    
+  return theTable;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
