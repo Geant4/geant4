@@ -1,6 +1,7 @@
 #
 # -------- AIX ----------     !!! not supported !!!
-#                                 AIX-4.3.2 xlC
+#                               AIX-4.3.2 xlC 6.0
+
 ifeq ($(G4SYSTEM),AIX-xlC)
   CXX       := xlC
   ifdef G4OPTIMISE
@@ -27,13 +28,8 @@ ifeq ($(G4SYSTEM),AIX-xlC)
   ifndef OGLLIBS
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
-  CPPFLAGS += -DG4NOT_ISO_DELETES
-  CPPFLAGS += -I$(G4BASE)/global/management/include/g4std/wrappers/$(G4SYSTEM)
-  ifdef G4USE_OSPACE
-    CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT
-    CPPFLAGS += -DG4USE_OSPACE -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
-    CPPFLAGS += $(OSPACEINC) -I$(OSPACE_BASE_DIR)
-  endif
+  G4USE_STD_NAMESPACE := yes
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
 
   define build-granular-shared-lib
     @echo "Shared Libraries not supported on $(G4SYSTEM)
