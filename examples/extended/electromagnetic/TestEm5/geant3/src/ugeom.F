@@ -1,12 +1,8 @@
 
       SUBROUTINE UGEOM
-C
-#include "geant321/gcbank.inc"
-#include "geant321/gcunit.inc"
-#include "geant321/gctrak.inc"
-#include "geant321/gckine.inc"
-#include "edepo.inc"
-C
+*
+#include "geomate.inc"
+*
       DIMENSION AWAT(2),ZWAT(2),WWAT(2)
       DIMENSION AAIR(2),ZAIR(2),WAIR(2)
       DIMENSION PALL(3),PVOL(3)
@@ -55,11 +51,9 @@ C
       if (FieldA.ne.0.) IFIELD=3
       FIELDM=10*FieldA
 *      
-      IF(IGAUTO.LE.0) THEN
-        DEEMAX=DEEM
-        STMIN =STMI
-        STEMAX=STMA
-      ENDIF
+      DEEMAX=DEEM
+      STMIN =STMI
+      STEMAX=STMA
       CALL GSTMED(1,'ABSORBER',MATABS,0,IFIELD,
      *            FIELDM,TMAXFD,STEMAX,DEEMAX,EPSIL,STMIN,0,0)
 C
@@ -84,6 +78,9 @@ C
 C     BUILD  GEOMETRY
 C
       CALL GSPOS('abso',1,'worl',XPOSAB,0.,0.,0,'ONLY')
+*      
+      X1ABSO = XPOSAB - 0.5*XABSOR
+      X2ABSO = XPOSAB + 0.5*XABSOR
 *                                                                               
 * *** Close geometry banks. (mandatory system routine)                         
       CALL GGCLOS

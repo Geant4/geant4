@@ -11,7 +11,9 @@
 #include "geant321/gcflag.inc"
 #include "geant321/gconst.inc"
 #include "geant321/gckine.inc"
-#include "edepo.inc"
+*
+#include "geomate.inc"
+#include "runinfo.inc"
 *
       DIMENSION VERTEX(3),PLAB(3)
       dimension rndm(2)
@@ -31,26 +33,18 @@
       XMASS   =  Q(JPA+7)
       PMOM    = SQRT(PKINE(1)*(PKINE(1)+2*XMASS))
       THETA   = PKINE(2)*DEGRAD
-      PHI     = PKINE(3)*DEGRAD
+      PHI     = PKINE(3)*DEGRAD   
 C
       PLAB(1)=PMOM*SIN(THETA)*COS(PHI)
       PLAB(2)=PMOM*SIN(THETA)*SIN(PHI)
       PLAB(3)=PMOM*COS(THETA)
+*      
+*     store the charge of primary particle in a free location
+      pkine(10) = Q(JPA+8)         
 C
       CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)
 *                                                                   
 * *** Kinematics debug                     
       IF (IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)            
-C
 *
-* *** initialisation per event
-      anbstep=1.e-6
-      anch=0.
-      anne=0.
-      anele=0.
-      anpos=0.
-      EDEP=0.
-      tra=0.
-      ref=0.
-*      
       END

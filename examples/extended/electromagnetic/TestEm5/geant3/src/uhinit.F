@@ -1,56 +1,42 @@
 
       SUBROUTINE UHINIT
-C
-#include "geant321/gcbank.inc"
-#include "geant321/gckine.inc"
-#include "edepo.inc"
-C
-      IF(NHI1.GT.0) THEN
-        CALL HBOOK1(1,'number of steps/event'
-     +               ,NHI1,HIS1(1),HIS1(2),0.)
-      ENDIF
-      IF(NHI2.GT.0) THEN
-        CALL HBOOK1(2,'energy deposit in absorber (MeV)'
-     +  ,NHI2,HIS2(1),HIS2(2),0.)
-      ENDIF
-      IF(NHI3.GT.0) THEN
-        CALL HBOOK1(3,'angle distribution at exit(deg)'
-     +  ,NHI3,HIS3(1),HIS3(2),0.)
-      ENDIF
-      IF(NHI11.GT.0) THEN
-        CALL HBOOK1(11,'proj. angle distribution at exit(deg)'
-     +  ,NHI11,HIS11(1),HIS11(2),0.)
-      ENDIF
-      IF(NHI4.GT.0) THEN
-        CALL HBOOK1(4,'lateral distribution at exit(mm)'
-     +  ,NHI4,HIS4(1),HIS4(2),0.)
-      ENDIF
-      IF(NHI5.GT.0) THEN
-        CALL HBOOK1(5,'kinetic energy of the primary at exit(MeV)'
-     +  ,NHI5,HIS5(1),HIS5(2),0.)
-      ENDIF
-      IF(NHI6.GT.0) THEN
-        CALL HBOOK1(6,'angle distr. of backscattered primaries(deg)'
-     +  ,NHI6,HIS6(1),HIS6(2),0.)
-      ENDIF
-      IF(NHI7.GT.0) THEN
-        CALL HBOOK1(7,'kinetic energy of backscattered primaries(MeV)'
-     +  ,NHI7,HIS7(1),HIS7(2),0.)
-      ENDIF
-      IF(NHI8.GT.0) THEN
-        CALL HBOOK1(8,'kinetic energy of the charged secondaries(MeV)'
-     +  ,NHI8,HIS8(1),HIS8(2),0.)
-      ENDIF
-      IF(NHI9.GT.0) THEN
-        CALL HBOOK1(9,'z of secondary charged vertices (mm)'
-     +  ,NHI9,HIS9(1),HIS9(2),0.)
-      ENDIF
-      IF(NHI10.GT.0) THEN
-        CALL HBOOK1(10,'energy of gammas escaping the absorber(MeV)'
-*    +  ,NHI10,HIS10(1),HIS10(2),0.)
-     +  ,NHI10,log10(HIS10(1)),log10(HIS10(2)),0.)
-      ENDIF
 *
-      CALL HIDOPT(0,'STAT')
+*
+#include "histo.inc"
+*
+      CHARACTER*50 title(16)
+*
+      data title /
+     1    'energy deposit in absorber',					 
+     2    'energy of charged secondaries at creation',			 
+     3    'energy of gammas at creation (log10(ekin/MeV))',		 
+     4	  '(transmit, charged) : kinetic energy at exit',		 
+     5	  '(transmit, charged) : space angle at exit',			 
+     6	  '(transmit, charged) : projected angle at exit',		 
+     7	  '(transmit, charged) : radial dispersion at exit',		 
+     8	  '(transmit, neutral) : kinetic energy at exit',		 
+     9	  '(transmit, neutral) : space angle at exit',
+     +	  '(transmit, neutral) : projected angle at exit',		 
+     1	  '(reflect , charged) : kinetic energy at exit',		 
+     2	  '(reflect , charged) : space angle at exit',			 
+     3	  '(reflect , charged) : projected angle at exit',		 
+     4	  '(reflect , neutral) : kinetic energy at exit',		 
+     5	  '(reflect , neutral) : space angle at exit',			 
+     6	  '(reflect , neutral) : projected angle at exit'   /		 
+*
+      if (histo(idhist)) call hdelet(idhist)
+*      
+      vmin = valmin
+      vmax = valmax      
+      if (idhist.eq.3) then
+        vmin = log10(1000*valmin)
+	vmax = log10(1000*valmax)
+      endif		
+      call hbook1(idhist,title(idhist),nbBins,vmin,vmax,0.)
+*      
+      histo   (idhist) = .true.
+      binWidth(idhist) = (valmax-valmin)/nbBins
+      if (valunit.le.0.) valunit = 1.                
+      histUnit(idhist) = valunit        
 *
       END

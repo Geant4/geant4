@@ -1,78 +1,79 @@
 
       SUBROUTINE UGINIT
-C
-#include "geant321/gcunit.inc"
-#include "geant321/gclist.inc"
-#include "geant321/gckine.inc"
-#include "edepo.inc"
+*
+#include "geomate.inc"
+#include "runinfo.inc"
+#include "histo.inc"
 
-      CHARACTER*25 filnam
-      CHARACTER*25 HF
-      CHARACTER*4 KEY
-      CHARACTER*2 SPACES 
-      DATA HF/'testem5.paw'/
+      CHARACTER*25 filnam  
+      CHARACTER*4  key
+      CHARACTER*2  spaces     
 C
 C     INITIALIZE GEANT STRUCTURES
 C
       CALL GINIT
 *
-C     default values (materials,sizes)
+*     default values (materials,sizes,tracking parameters)
 *
-      MATABS = 23
-      XABSOR = 1.
-      YZABSO = 2.
+      matabs = 23
+      Xabsor = 1.
+      YZabso = 2.
       FieldA = 0.
 *
-      MATWLD = 30      
-      XWORLD = 0.
-      YZWORL = 0.
+      matwld = 30      
+      Xworld = 0.
+      YZworl = 0.
       FieldW = 0.
 *      
-      XPOSAB = 0.
+      xposab = 0.
 *      
-      XVERT = -1000.
-      YVERT = 0.
-      ZVERT = 0.
+      xvert = -1000.
+      yvert = 0.
+      zvert = 0.
 *
-      NAME=HF  
-C
-C     DEFINE DATA CARDS
-C
-      CALL FFKEY('WORLD',MATWLD,4,'mixed')
-      CALL FFKEY('ABSOR',MATABS,4,'mixed')
-      CALL FFKEY('XPOS' ,XPOSAB,1,'real')  
-      CALL FFKEY('VERT' ,XVERT ,3,'real')  
+      deem = 0.2
+      stmi = 0.001
+      stma = 1.e+10
+      kill = .false.
 *
-      CALL FFKEY('HIS1',NHI1 ,3,'mixed')
-      CALL FFKEY('HIS2',NHI2 ,3,'mixed')
-      CALL FFKEY('HIS3',NHI3 ,3,'mixed')
-      CALL FFKEY('HIS4',NHI4 ,3,'mixed')
-      CALL FFKEY('HIS5',NHI5 ,3,'mixed')
-      CALL FFKEY('HIS6',NHI6 ,3,'mixed')
-      CALL FFKEY('HIS7',NHI7 ,3,'mixed')
-      CALL FFKEY('HIS8',NHI8 ,3,'mixed')
-      CALL FFKEY('HIS9',NHI9 ,3,'mixed')
-      CALL FFKEY('HI10',NHI10,3,'mixed')
-      CALL FFKEY('HI11',NHI11,3,'mixed')
+*     histograms
+      do ih = 1,MaxHist
+        histo(ih) = .false.
+      enddo	              
 *
-      CALL FFKEY('DEEM',DEEM, 1,'REAL')
-      CALL FFKEY('STMA',STMA, 1,'REAL')
-      CALL FFKEY('STMI',STMI, 1,'REAL')
+* *** Define data cards
+*
+*     geometry
+      CALL FFKEY('WORLD',matwld,4,'mixed')
+      CALL FFKEY('ABSOR',matabs,4,'mixed')
+      CALL FFKEY('XPOS' ,xposab,1,'real')  
+      CALL FFKEY('VERT' ,xvert ,3,'real')
+*      
+*     histograms
+      CALL FFKEY('HISTO',idhist,5,'MIXED')        
+*
+*     tracking parameters
+      CALL FFKEY('DEEM',deem, 1,'REAL')
+      CALL FFKEY('STMA',stma, 1,'REAL')
+      CALL FFKEY('STMI',stmi, 1,'REAL')
+*      
+      CALL FFKEY('KILL',kill, 1,'LOGICAL')
 *
 * *** read data cards
       PRINT *, 'G3 > gives the filename of the data cards to be read:'
       READ (*,'(A)') filnam
-      IF (filnam.EQ.' ') filnam = 'run01.dat'
+      IF (filnam.EQ.' ') filnam = 'testem5.dat'
       OPEN (unit=5,file=filnam,status='unknown',form='formatted')
 *
 *     filename should be 1st data card !
-      READ(5,98)KEY,SPACES,NAME
+      fileName = 'testem5.paw'
+      READ(5,98)key,spaces,fileName
 98    FORMAT(A4,A2,A25)
 *
       CALL GFFGO
 *
-        write(6,99) NAME
-99      FORMAT(/,15x,'histogram file --> NAME:',A25)
+      write(6,99) fileName
+99    FORMAT(/,15x,'histogram file --> Name: ',A25)
 C
 C     INITIALIZE ZEBRA STRUCTURES
 C
@@ -98,30 +99,36 @@ C
       CALL GPRINT('MATE',0)
       CALL GPRINT('TMED',0)
       CALL GPRINT('VOLU',0)
-C
-C     DEFINE HISTOGRAMS
-C
-      CALL UHINIT
-C
-C     SOME MORE INITIALISATION
-C
-      SEDEP=0.
-      SEDEP2=0.
-      sanch=0.
-      sanch2=0.
-      sanne=0.
-      sanne2=0.
-      sanele=0.
-      sanpos=0.
-      sstep=0.
-      s2step=0.
-      stra=0.
-      sref=0.
-      nth0=0
 *
-      X1ABSO = XPOSAB-0.5*XABSOR
-      X2ABSO = XPOSAB+0.5*XABSOR
+*     global initialisation for the run
 *
-      if(xvert.le.-1000.) XVERT=-0.5*XWORLD
+*     energy
+      sedep  = 0.
+      sedep2 = 0.
+*
+*     number of steps
+      sstpch  = 0.
+      sstpch2 = 0.
+      sstpne  = 0.
+      sstpne2 = 0.
+*
+*     track length
+      strkch  = 0.
+      strkch2 = 0.
+      strkne  = 0.
+      strkne2 = 0. 
+*
+*     number of secondaries
+      ngamma = 0
+      nelect = 0
+      nposit = 0
+*
+*     transmission, reflection counters
+      nbtransm(1) = 0
+      nbtransm(2) = 0
+      nbreflec(1) = 0
+      nbreflec(2) = 0                        
+*
+      if (xvert.le.-1000.) xvert = -0.5*Xworld
 *
       END
