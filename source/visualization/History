@@ -1,4 +1,4 @@
-$Id: History,v 1.201 2002-10-28 11:14:56 johna Exp $
+$Id: History,v 1.202 2002-10-29 15:47:39 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-Oct 28, 2002, J.Allison
+Oct 28, 2002, J.Allison  (vis-traj03, co-works with...
+geant4/source/tracking       traj03 (head as of Tue Oct 29 15:42:14 UTC 2002)
+geant4/source/intercoms      intercoms-V04-01-00 (ditto)
+geant4/source/graphics_reps  greps-V04-01-01 (ditto)
+geant4/source/digits+hits    hits-traj03 (*not* the head)
 - Changed G4XXXSceneHandler.cc for map of G4AttDefs, and improved.
 
 17th October 2002  John Allison (vis-V04-01-03 with...)
