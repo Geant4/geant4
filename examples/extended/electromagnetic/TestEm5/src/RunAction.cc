@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.13 2004-08-05 15:02:30 maire Exp $
+// $Id: RunAction.cc,v 1.14 2004-08-13 10:37:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,7 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4EmCalculator.hh"
+///#include "G4EmCalculator.hh"
 
 #include "Randomize.hh"
 #include <iomanip>
@@ -140,7 +140,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4String partName = particle->GetParticleName();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
   
-  G4EmCalculator emCalculator;
+  ///G4EmCalculator emCalculator;
   G4double dEdxTable = 0.;
   ///if (particle->GetPDGCharge()!= 0.) 
   ///  dEdxTable = emCalculator.GetDEDX(particle,material,energy);

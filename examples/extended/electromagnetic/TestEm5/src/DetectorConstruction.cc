@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: DetectorConstruction.cc,v 1.4 2004-07-29 08:50:06 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.5 2004-08-13 10:37:49 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,6 +107,7 @@ G4Element* Xe = new G4Element("Xenon",   symbol="Xe", z=54, a= 131.29*g/mole);
 // define simple materials
 //
 
+new G4Material("H2Liq"    , z= 1, a= 1.01*g/mole, density= 70.8*mg/cm3);
 new G4Material("Beryllium", z= 4, a= 9.01*g/mole, density= 1.848*g/cm3);
 new G4Material("Aluminium", z=13, a=26.98*g/mole, density= 2.700*g/cm3);
 new G4Material("Silicon"  , z=14, a=28.09*g/mole, density= 2.330*g/cm3);
