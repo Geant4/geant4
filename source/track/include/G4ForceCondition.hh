@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ForceCondition.hh,v 1.3 2001-07-11 10:08:35 gunter Exp $
+// $Id: G4ForceCondition.hh,v 1.4 2002-10-31 23:41:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,16 +47,20 @@
 enum G4ForceCondition  
 /////////////////////
 {
+  InActivated,       
+  // This PostStepDoit is inactivated by a user
   Forced,            
-    // This PostStepDoIt is forced to invoke.
+    // This PostStepDoIt is forced to invoke if particle is not a state of StopAndKill.              
   NotForced,         
     // This PostStepDoIt is not forced to invoke.
   Conditionally,     
     // This PostStepDoIt is forced to invoke only when corresponding
     // AlongStepDoIt limits the Step.
-  ExclusivelyForced  
+  ExclusivelyForced, 
     // Only this PostStepDoIt (or AtRestDoIt) is exclusively forced 
     // to invoke - all other DoIt including AlongStepDoIts are ignored.
+  StronglyForced
+   // This PostStepDoIt is really forced to invoke, anyway.
 };
 
 #endif

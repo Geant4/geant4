@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-02-12 01:48:52 kurasige Exp $
+$Id: History,v 1.46 2002-10-31 23:41:31 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Oct. 31, 02    T.Sasaki (track-V04-01-00)  
+- Added StronglyForced flag to G4ForceCondition
+- set fUndefined for the StepStatus in PostStepPoint after CopyPostToPre
 Feb. 09 ,02    H.Kurashige (track-V04-00-02)
 - Modify G4Track::GetVelocity to get better performance for massless particles
 

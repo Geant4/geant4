@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Step.icc,v 1.7 2001-10-22 04:19:40 kurasige Exp $
+// $Id: G4Step.icc,v 1.8 2002-10-31 23:41:52 tsasaki Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -136,6 +136,7 @@ inline
  void G4Step::CopyPostToPreStepPoint( )
  { 
    *(fpPreStepPoint) = *(fpPostStepPoint);
+   fpPostStepPoint->SetStepStatus(fUndefined);
  }
 
 
