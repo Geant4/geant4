@@ -5,6 +5,7 @@
 
 Intranuclear cascade (INC) model developed by Bertini \cite{bertini68, bertini69, bertini71}, solves the Boltzman equation on the average.
 Nuclear model consist of a three-region approximation to the continuously changing density distribution of nuclear matter within nuclei.
+Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
 
 INC model had been implemented in several codes such as HETC \cite{alsmiller90}. 
 Our model is based on re-engineering of INUCL code  \cite{titarenko99a}.
@@ -73,43 +74,47 @@ After INC, the residual excitation energy of the resulting nucleus (A', Z') are 
 \subsubsection{Layers}
 
 In the code the nucleus is composed of three consentric spheres in all cases,
- exept for Hydrogen, in which case the direct particle-particle collision is performed.
+exept for Hydrogen, in which case the direct particle-particle collision is performed.
 Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
 Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
 
-%[Nuclear radius]
-Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
 
+
+%[Nuclear radius]
+%Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
 %Layer radius 0.1 0.2 0.9.
 
 %[Nuclear density]
-Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. In cascade part, nucleus is divided into a finite number of zones with constant density.
-Fermi energy calculated in a local density approximation.
-%The nucleons are assumed to to have a Fermi gas momentum distribution.
-%The potential well depth is taken to be 7 MeV.
+%Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. 
+%In cascade part, nucleus is divided into a finite number of zones with constant density.
 
-The nucleon potential energy is
-$ V_{N} = \frac{p_{f}^2}{2 m_{N}} + BE_{N}(A, Z)$
+\begin{itemize}
+\item The nucleons are assumed to to have a Fermi gas momentum distribution. Fermi energy calculated in a local density approximation.
+\item Nuclear density effects are recalculated after each step.
+\item Nucleons binding energies (BE) are calculated using mass formula.
+A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
+experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
+\end{itemize}
 
+%For pions $V_{opt}$ is taken to be constant (about 7 MeV).
+%Smooth liquid high energy formula  has  
+%\item The potential well depth is taken to be 7 MeV.
+
+%\item The nucleon potential energy is
+%$ V_{N} = \frac{p_{f}^2}{2 m_{N}} + BE_{N}(A, Z)$
 %vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
-, where $p_{f} = 1.932 rd^{1/3}$
+%, where $p_{f} = 1.932 rd^{1/3}$
 
 %G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
 %G4double rd = dd0 * v[i] / v1[i];
 %G4double pff = pf_coeff * pow(rd, one_third);
 
-Nuclear density effects are recalculated after each step.
 
-Impulse distribution
+%Impulse distribution
 
-Distribution of potential energy.
+%Distribution of potential energy.
 
 %[Mass formula]
-Nucleons binding energies (BE) are calculated using mass formula.
-A parametrization of the nuclear binding energy uses combintaion of Kummel mass formula, or
-experimental data. Asymptotic high temperature mass formula is used if it's impossible to use experimental data.
-%For pions $V_{opt}$ is taken to be constant (about 7 MeV).
-%Smooth liquid high energy formula  has  
 
 % Continuous charge dencity
 % \begin{equation}
@@ -154,11 +159,12 @@ experimental data. Asymptotic high temperature mass formula is used if it's impo
 % In each region protons and neutrons have different potential energy.  
 
 %\subsubsection{Quantum effects}
+
 \subsubsection{Pauli exclusion principle}
-Pauli exclusion principle forbids interactions where the products would bi in occupied states.
-Following an assumption od completely degenerate Fermi gas, the levels are filled from the lowes level.
+Pauli exclusion principle forbids interactions where the products would be in occupied states.
+Following an assumption of completely degenerate Fermi gas, the levels are filled from the lowest level.
 The minimum energy allowed for the product of collision correspond to the lowest unfilled level of system, which is the Fermi energy in the region. 
-So in practice, Pauli exclusion prinsiple is taken into account by accepting only  secondary nucleons which have $E_n > E_f$.
+So in practice, Pauli exclusion prinsiple is taken into account by accepting only secondary nucleons which have $E_n > E_f$.
 
 % Constrains imposed by the Pauli exclusion principle 
 % are taken into account 
@@ -168,11 +174,9 @@ So in practice, Pauli exclusion prinsiple is taken into account by accepting onl
 % $E < E_F$, then this interaction is consideres prohibited,
 % and the trajectori of the particle is traced further from the forbideden point.
 
-
 % Energies of particles are compared with the so-called cut-off energy $E_{cutoff}$.
 % Particles with the energy $E > E_{cutoff}$ participate in the development of the INC.
 % Typical values are listed in Table~\ref{table:cutoff}.
-
 
 % \begin{table}[!hbt]
 % \caption{Typical cut-off values for HETC particles.}
@@ -214,7 +218,6 @@ So in practice, Pauli exclusion prinsiple is taken into account by accepting onl
 %   \end{center}
 
 % \end{figure}
-
 
 % The implementation of the INC model is briefly described in the following steps:
 % \newcounter{list}
@@ -262,57 +265,47 @@ So in practice, Pauli exclusion prinsiple is taken into account by accepting onl
 
 \subsubsection{Cross sections and kinematics}
 
-Cascade model has tabulated cross-sections
-
-Reletivistic kinematics is applied throughout the cascade, with accurate conservation of energy and momentum.
-
-Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
-Angles after collisions are sampled from experimental differential cross sections.
-%Cross-sections for production of one or two $\pi$ are included. 
-
-%pion absorption
-
+%Probabllility for interactions during INC is obtained using free (N, N) cross-sections. 
 Path lengths of nucleons in the nucleus are sampled according to the local density and to free N-N cross sections.
-%Total inelastic cross section has to be taken from outside to normalize all data. 
-% \item 
-
-Total reaction cross-sections [mbarn] were calculated by J.R. Letaw's formulation \cite{letaw83, letaw93, pearlstein89}
-
+Angles after collisions are sampled from experimental differential cross sections.
+%{\sc Geant4} cascade model uses tabulated cross-sections.
+Tabulated total reaction cross-sections are calculated by Letaw's formulation \cite{letaw83, letaw93, pearlstein89}.
 %$45 A^0.7 (1+0.016 sin(5.3-2.63 log10(A)))^(1-0.62 exp(-E / 200) sin(10.9 E^(-0.28)))
-
-For N-N cross-sections parametrizations based on the experimental data (energy and isospin dependent) are used. 
-The parameterizations described in \cite{barashenkov72} are used. 
+For N-N cross-sections parametrizations based on the experimental energy and isospin dependent data. 
+The parameterization described in \cite{barashenkov72} is used. 
 
 % interaction crosssections
 % (all data for (N, N) and (pi, N) interactions (dn/dsigma, d3sigma/d3p, 
 %             partial multiplicity for npi<=5  error 10-20\%)
 
+%Cross-sections for production of one or two $\pi$ are included. 
 
+%pion absorption
+
+
+%Total inelastic cross section has to be taken from outside to normalize all data. 
+% \item 
 
 \subsubsection{Exiton model}
 
-Important addition to INC was exiton model itroduced by Griffin in 1966 \cite{griffin66, griffin67}. 
+{\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
 The his model compound nucleon states are characterized by the number of exited particles and holes (the exitons).
 INC collisions give rise to a sequence of states characterized by increasing exciton number, eventually leading to a equilibrated nucleus.
-{\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66}.
 For practical implementation of exiton model we use parameters  from \cite{ribansky73}, (level densities) and \cite{kalbach78}  
 (matrix elements).
 
- 
 In exiton model the posible selection rules for a particle-hole configuarations in the cource of the cascade are:
-
 $\Delta p = 0, \pm 1$  $\Delta h = 0, \pm 1$  $\Delta n = 0, \pm 2$,
+%
+where p is the number of particle, h is number of holes and n = p + h is the number of exitons. 
 
-
-where p is the number of particle, h is number of holes and n = p + h is the number of exitons. % ::: p g exito
-
+% ::: p g exito
 % %What criteria for p-h excitation? is the next phase precompound or compound'? Only pions. The next phase is precompound. 
 %Initial conditions are defined during the cascad phase: 
 %p -number of "particles", i.e. nucleons, which can not escape the nucleus and have too small interaction probability; 
 %h - number of "holes" = number of nuclear nucleons involved in the cascade; energy - momentum of the exiton system derived from the conservation law.
 
 %exiton master equation
-
 
 % the Monte Carlo calculation of nuclear
 % reactions in the framework of the Cascade-Exciton Model (CEM) of
@@ -375,18 +368,17 @@ where p is the number of particle, h is number of holes and n = p + h is the num
 
 \subsection{Pre-equilibrium model}
 
-Uses target exitation data, exiton configuration for neutron and proton to produce non-equilibrium evaporation.
-Implementaion inclues holes and quasiparticles.
+Cascade pre-equilibrium model uses target exitation data, exiton configuration for neutron and proton to produce non-equilibrium evaporation.
+%Implementation inclues holes and quasiparticles.
 
 % \subsubsection{Precompound phase}
 % %, describe the PE model used, parameters, i.e., partial state densities, transition rates? 
 
-% Parametrixations of the level density, tabulated both with A and Z dependence and with high temperature 
-%behaviour (the nuclei binding energy using smooth liquid high energy formula)
+Parametrisations of the level density, is tabulated both with A and Z dependence and with high temperature 
+behaviour (the nuclei binding energy using smooth liquid high energy formula).
 
-
-%N -> N, N -> N + 2, N -> N -2, N -> N - 1 channels are treated.)
-%The angular distribution is isotropic in the frame of rest of the exiton system.
+N $\rightarrow$ N - 2, N $\rightarrow$ N - 1 N $\rightarrow$ N, N $\rightarrow$ N + 2,  channels are treated.
+The angular distribution is isotropic in the frame of rest of the exiton system.
 
 % The outline of the pre-equilibrium model is as follows~\cite{ferrari96}:
 % \begin{list}{\upshape \arabic{list}. }
@@ -437,13 +429,15 @@ Fission model is phenomenological, incorporating some features of the fission st
 \subsection{Evaporation model}
 
 Physics of particle emission of the exited nucleus (de-exitation) remaining after the INC is based on statistical theory
-originally developed by Weisskopf \cite{weisskopf37}. This model assumes complete energy equilibration before the particle emission, and re-equilibration of excitation energies between successive evaporations. As a result the angular distribution of emitted particles is isotropic.
+originally developed by Weisskopf \cite{weisskopf37}. 
+This model assumes complete energy equilibration before the particle emission, and re-equilibration of excitation energies between successive evaporations. 
+As a result the angular distribution of emitted particles is isotropic.
 
-{\sc Geant4} evaporation model for cascade implementation adapts often used comutational method developed by Dostrowski \cite{dostrovsky59, dostrovsky60}.
+{\sc Geant4} evaporation model for cascade implementation adapts often used computational method developed by Dostrowski \cite{dostrovsky59, dostrovsky60}.
 The emission of particles is computed until the exitation energy fall below some spesific cutoff. 
-If light nucleus is higly exited Fermi break-up model is executed. Also, fission is performed is channel is open. 
-The main chain of evaporation is followed until  $E_{exitation}$ falls below E$_{cutoff}$ = 0.1 MeV. Finally photon emission chain is followed until
-E$_{exitation}$ $<$ E$^{\gamma}_{cutoff}$ = 10$^{-15}$ MeV.
+If light nucleus is higly exited Fermi break-up model is executed. Also, fission is performed if channel is open. 
+The main chain of evaporation is followed until  $E_{exitation}$ falls below E$_{cutoff}$ = 0.1 MeV. 
+The evaporation model ends with  emission chain which is followed until E$_{exitation}$ $<$ E$^{\gamma}_{cutoff}$ = 10$^{-15}$ MeV.
 
 %Evaporation (Weisskopf - Ewing) 
 %Weisskopf-Ewing evaporation in competition with fission. 
