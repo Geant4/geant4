@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.27 2001-09-10 10:50:06 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.28 2001-11-06 13:00:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -349,17 +349,31 @@ void G4VisCommandSceneList::SetNewValue (G4UIcommand* command,
 ////////////// /vis/scene/notifyHandlers /////////////////////////
 
 G4VisCommandSceneNotifyHandlers::G4VisCommandSceneNotifyHandlers () {
-  G4bool omitable, currentAsDefault;
-  fpCommand = new G4UIcmdWithAString ("/vis/scene/notifyHandlers", this);
-  fpCommand -> SetGuidance ("/vis/scene/notifyHandlers [<scene-name>]");
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/notifyHandlers", this);
+  fpCommand -> SetGuidance
+    ("/vis/scene/notifyHandlers [<scene-name>] [r[efresh]|f[lush]]");
   fpCommand -> SetGuidance
     ("Notifies scene handlers of possible changes of scene.");
   fpCommand -> SetGuidance ("<scene-name> default is current scene name.");
   fpCommand -> SetGuidance
+    ("Clears and refreshes all viewers of current scene."
+     "\n  The default action \"refresh\" does not issue \"update\" (see"
+     "\n    /vis/viewer/update)."
+     "\nIf \"flush\" is specified, it issues an \"update\" as well as"
+     "\n  \"refresh\".  Useful for refreshing and initiating post-processing"
+     "\n  for graphics systems which need post-processing.");
+  fpCommand -> SetGuidance
     ("This command does not change current scene, scene handler or viewer.");
-  fpCommand -> SetParameterName ("scene-name",
-				 omitable = true,
-				 currentAsDefault = true);
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("scene-name", 's',
+				 omitable = true);
+  parameter -> SetCurrentAsDefault(true);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("refresh-flush", 's',
+				 omitable = true);
+  parameter -> SetDefaultValue("refresh");
+  fpCommand -> SetParameter (parameter);
   sceneNameCommands.push_back (fpCommand);
 }
 
@@ -378,7 +392,12 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
   G4bool warn(verbosity >= G4VisManager::warnings);
 
-  G4String& sceneName = newValue;
+  G4String sceneName, refresh_flush;
+  G4std::istrstream is ((char*)newValue.data());
+  is >> sceneName >> refresh_flush;
+  G4bool flush(false);
+  if (refresh_flush[0] == 'f') flush = true;
+
   const G4SceneList& sceneList = fpVisManager -> GetSceneList ();
   G4SceneHandlerList& sceneHandlerList =
     fpVisManager -> SetAvailableSceneHandlers ();
@@ -419,10 +438,14 @@ void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
 	  aViewer -> SetView ();  // Temporarily switch contexts.
 	  //??aViewer -> ClearView ();
 	  aViewer -> DrawView ();
+	  if (flush) aViewer -> ShowView ();
 	  if (verbosity >= G4VisManager::confirmations) {
 	    G4cout << "Viewer \"" << aViewer -> GetName ()
 		   << "\" of scene handler \"" << aSceneHandler -> GetName ()
-		   << "\"\n  refreshed at request of scene \"" << sceneName
+		   << "\"\n  ";
+	    if (flush) G4cout << "flushed";
+	    else G4cout << "refreshed";
+	    G4cout << " at request of scene \"" << sceneName
 		   << "\"." << G4endl;
 	  }
 	}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.hh,v 1.12 2001-09-10 10:49:18 johna Exp $
+// $Id: G4VisCommandsScene.hh,v 1.13 2001-11-06 13:00:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -108,7 +108,7 @@ private:
   G4VisCommandSceneNotifyHandlers (const G4VisCommandSceneNotifyHandlers&);
   G4VisCommandSceneNotifyHandlers& operator =
   (const G4VisCommandSceneNotifyHandlers&);
-  G4UIcmdWithAString* fpCommand;
+  G4UIcommand* fpCommand;
 };
 
 class G4VisCommandSceneRemove: public G4VVisCommandScene {
