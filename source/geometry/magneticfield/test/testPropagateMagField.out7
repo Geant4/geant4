@@ -3,7 +3,7 @@
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0,0,0)
  and UnitVelocity (0,0.6,0.8)
- Momentum in GeV/c is 469.136
+ Momentum in GeV/c is 0.469136 = 469.136 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0         0         0         0 0.00958505  0.599923       0.8       2.5       2.5        50 World            
     1 0.0119816   1.49994         2 0.0287454  0.599311       0.8         5         5    49.988 World            
@@ -23,7 +23,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   Ph
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0.2,0.3,0.4)
  and UnitVelocity (0.0733236,0.586588,0.806559)
- Momentum in GeV/c is 9851.86
+ Momentum in GeV/c is 9.85186 = 9851.86 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0       0.2       0.3       0.4 0.0737698  0.586533  0.806559       2.5       2.5         0 World            
     1  0.383867    1.7664    2.4164 0.0746621   0.58642  0.806559         5         5   49.6161 World            
@@ -44,7 +44,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   Ph
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0,0,0)
  and UnitVelocity (0,0.6,0.8)
- Momentum in GeV/c is 469.136
+ Momentum in GeV/c is 0.469136 = 469.136 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0         0         0         0 0.00958505  0.599923       0.8       2.5       2.5         0 World            
     1 0.0119816   1.49994         2 0.0287454  0.599311       0.8         5         5 0.0119816 World            
@@ -64,7 +64,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   Ph
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0.2,0.3,0.4)
  and UnitVelocity (0.0733236,0.586588,0.806559)
- Momentum in GeV/c is 9851.86
+ Momentum in GeV/c is 9.85186 = 9851.86 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0       0.2       0.3       0.4 0.0737698  0.586533  0.806559       2.5       2.5         0 World            
     1  0.383867    1.7664    2.4164 0.0746621   0.58642  0.806559         5         5  0.383867 World            
@@ -85,7 +85,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   Ph
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0,0,0)
  and UnitVelocity (0,0.6,0.8)
- Momentum in GeV/c is 469.136
+ Momentum in GeV/c is 0.469136 = 469.136 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0         0         0         0 0.00958505  0.599923       0.8       2.5       2.5         0 World            
     1 0.0119816   1.49994         2 0.0287454  0.599311       0.8         5         5 0.0119816 World            
@@ -105,7 +105,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   Ph
 Test PropagateMagField: ***********************
  Starting New Particle with Position (0.2,0.3,0.4)
  and UnitVelocity (0.0733236,0.586588,0.806559)
- Momentum in GeV/c is 9851.86
+ Momentum in GeV/c is 9.85186 = 9851.86 MeV
 Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z    StepLen   PhsStep    Safety         NextVolume 
     0       0.2       0.3       0.4 0.0737698  0.586533  0.806559       2.5       2.5         0 World            
     1  0.383867    1.7664    2.4164 0.0746621   0.58642  0.806559         5         5  0.383867 World            
