@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.13 2004-12-08 17:26:26 gcosmo Exp $
+// $Id: HepPolyhedron.h,v 1.14 2005-03-09 16:42:25 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -101,6 +101,8 @@
 //   SetNumberOfRotationSteps (n) - set number of steps for whole circle;
 //   ResetNumberOfRotationSteps() - reset number of steps for whole circle
 //                            to default value;
+//   IsErrorBooleanProcess()- true if there has been an error during the
+//                            processing of a Boolean operation.
 // History:
 //
 // 20.06.96 Evgeni Chernyaev <Evgueni.Tcherniaev@cern.ch> - initial version
@@ -150,6 +152,9 @@
 //
 // 05.11.02 E.Chernyaev
 // - added createTwistedTrap() and createPolyhedron();
+//
+// 06.03.05 J.Allison
+// - added IsErrorBooleanProcess
 //
 
 #ifndef HEP_POLYHEDRON_HH
@@ -298,6 +303,8 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
+  // If there has been an error during the above processing..
+  bool IsErrorBooleanProcess() const;
 
   // Get area of the surface of the polyhedron
   double GetSurfaceArea() const;
