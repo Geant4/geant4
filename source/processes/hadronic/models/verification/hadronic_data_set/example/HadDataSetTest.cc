@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HadDataSetTest.cc,v 1.2 2003-11-04 14:20:19 hpw Exp $
+// $Id: HadDataSetTest.cc,v 1.3 2004-01-30 14:58:57 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@
 #include "G4HadDataReading.hh"
 #include "G4VHadDataWriting.hh"
 #include "G4EXFORHadData.hh"
+#include "G4MSUHadData.hh"
 #include "G4ReadHadTotalXSC.hh"
 #include "G4ReadHadDoubleDiffXSC.hh"
 #include "G4HadFileFinder.hh"
@@ -67,50 +68,48 @@ int main(int argc, char** argv)
   G4String neutron("neutron");
   G4String nothing("");
 
-   if(argc < 2) 
-     {
+  if( argc < 2 ) 
+  {
        G4cout << "Input file is not specified! Exit" << G4endl;
        exit(1);
-     }
+  } 
+  std::ifstream* fin = new std::ifstream();
+  G4String fname = argv[1];
+  fin->open(fname.c_str());
    
-   std::ifstream* fin = new std::ifstream();
-   G4String fname = argv[1];
-   fin->open(fname.c_str());
-   
-   if( !fin->is_open()) 
-     {
+  if( !fin->is_open()) 
+  {
        G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
        exit(1);
-     }
+  }  
+  G4String whatIdo;
    
-   G4String whatIdo;
-   
-   (*fin) >> whatIdo;
+  (*fin) >> whatIdo;
    
    
-   ////
-   //
-   // Material definition
-   //
-   /// 
+  ////
+  //
+  // Material definition
+  //
+  /// 
    
-   density = 2.700*g/cm3;
-   a = 26.98*g/mole;
-   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
+  density = 2.700*g/cm3;
+  a = 26.98*g/mole;
+  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
    
-   density = 2.265*g/cm3;
-   a = 12.011*g/mole;
-   G4Material* C = new G4Material(name="Carbon", z=6., a, density);
+  density = 2.265*g/cm3;
+  a = 12.011*g/mole;
+  G4Material* C = new G4Material(name="Carbon", z=6., a, density);
    
-   density = 0.534*g/cm3;
-   a = 6.941*g/mole;
-   G4Material* Li = new G4Material(name="Li", z=3., a, density);
-   
+  density = 0.534*g/cm3;
+  a = 6.941*g/mole;
+  G4Material* Li = new G4Material(name="Li", z=3., a, density);
    
    
    
-   if (whatIdo=="1")
-     {
+   
+  if (whatIdo=="1")
+  {
        
        // File conversion from EXFOR data
        
@@ -127,9 +126,9 @@ int main(int argc, char** argv)
        G4HadFileSpec fileIwant(proton,C,neutron,process);
        
        G4EXFORHadData* exforAl = new G4EXFORHadData(fn,fileIwant);
-     }
-   else if (whatIdo=="2") 
-     {
+  }
+  else if (whatIdo=="2") 
+  {
        char* path = getenv("G4HADATASET");
        G4String pathstarttwo(path);
 
@@ -139,10 +138,9 @@ int main(int argc, char** argv)
        temp="HELPME";
    
        G4HadFileFinder* findit=new G4HadFileFinder(pathstarttwo,temp);
-     }
-   
-   else if (whatIdo=="3")
-     {
+  } 
+  else if (whatIdo=="3")
+  {
        char* pathstart = getenv("G4HADATASET");
      
        G4String temp;
@@ -157,16 +155,16 @@ int main(int argc, char** argv)
        //G4cout << fileIwant.G4HDSFilename()<< G4endl;
        //G4cout << fileIwant.G4HDSFilepath()<< G4endl;
        
-       temp=fileIwant.G4HDSFilename();
+       //  temp=fileIwant.G4HDSFilename();
+       //  temp="*Z*A*mat";
+       temp="*Z*A*mat";
        pathstarttwo=fileIwant.G4HDSFilepath();
        
 
-       G4HadFileFinder* findit=new G4HadFileFinder(pathstarttwo,temp); 
-       
-     }
-   
-   else if (whatIdo=="4") 
-     {
+       G4HadFileFinder* findit=new G4HadFileFinder(pathstarttwo,temp);    
+  }  
+  else if (whatIdo=="4") 
+  {
        char* pathstart = getenv("G4HADATASET");
        G4String temp;
        G4String pathstarttwo(pathstart);
@@ -184,9 +182,8 @@ int main(int argc, char** argv)
        
        // G4HadFileFinder* findit=new G4HadFileFinder(pathstart,temp); 
        
-       G4ReadHadDoubleDiffXSC* readExforAl = new G4ReadHadDoubleDiffXSC(fileIwant);
-       
-     }
+       G4ReadHadDoubleDiffXSC* readExforAl = new G4ReadHadDoubleDiffXSC(fileIwant);    
+  }
    
    
   /*
