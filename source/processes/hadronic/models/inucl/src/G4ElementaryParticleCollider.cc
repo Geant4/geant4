@@ -1,6 +1,3 @@
-//#define DEBUG
-//#define REPORT
-
 #include "G4Collider.hh"
 #include "G4ElementaryParticleCollider.hh"
 #include "G4ParticleLargerEkin.hh"
@@ -13,9 +10,9 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 //  generate nucleon or pion collission with NUCLEON 
 //  or pion with quasideutron
-#ifdef DEBUG
+  if(verboseLevel > 2){
         G4cout << " here " << G4endl;
-#endif		
+}
 
   G4CollisionOutput output;
   
@@ -30,7 +27,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
       if(particle1->nucleon() || particle2->nucleon()) { // ok
 
-#ifdef DEBUG
+  if(verboseLevel > 2){
         G4cout << " here1 " << G4endl;
 	particle1->printParticle();
 	particle2->printParticle();
@@ -39,7 +36,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	for(G4int i = 0; i < 4; i++) momb[i] += momt[i];
 	G4cout << " total input: px " << momb[1] << " py " << momb[2] 
 	  << " pz " << momb[3] << " e " << momb[0] << endl;
-#endif		
+  }
 	G4LorentzConvertor convertToSCM;
 	if(particle2->nucleon()) {
           convertToSCM.setBullet(particle1->getMomentum(), particle1->getMass());
@@ -53,45 +50,45 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
         double ekin = convertToSCM.getKinEnergyInTheTRS();
         double etot_scm = convertToSCM.getTotalSCMEnergy();
         double pscm = convertToSCM.getSCMMomentum();
-#ifdef DEBUG
+  if(verboseLevel > 2){
         G4cout << " ekin " << ekin << " etot_scm " << etot_scm << " pscm " <<
 	   	pscm << G4endl;
-#endif		
+  }
         vector<G4InuclElementaryParticle> particles = 	    
            generateSCMfinalState(ekin, etot_scm, pscm, particle1, particle2, &convertToSCM);
-#ifdef DEBUG
+  if(verboseLevel > 2){
         G4cout << " particles " << particles.size() << G4endl;
 	for(G4int i = 0; i < particles.size(); i++) 
 	  particles[i].printParticle();
-#endif
+  }
 	if(!particles.empty()) { // convert back to Lab
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	  vector<G4double> totscm(4, 0.0);
 	  vector<G4double> totlab(4, 0.0);
-#endif
+  }
 	  particleIterator ipart;
 	  for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	    vector<G4double> mom_scm = ipart->getMomentum();
 	    for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
-#endif
+  }
 	    vector<G4double> mom = 
 	      convertToSCM.backToTheLab(ipart->getMomentum());
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	    for(G4int i = 0; i < 4; i++) totlab[i] += mom[i];
-#endif
+  }
 	    ipart->setMomentum(mom); 
 	  };
 	  sort(particles.begin(), particles.end(),
 	                            ParticleLargerEkin());
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	  G4cout << " In SCM: total outgoing momentum " << G4endl 
 	   << " E " << totscm[0] << " px " << totscm[1]
 	    << " py " << totscm[2] << " pz " << totscm[3] << G4endl; 
 	  G4cout << " In Lab: total outgoing momentum " << G4endl 
 	   << " E " << totlab[0] << " px " << totlab[1]
 	    << " py " << totlab[2] << " pz " << totlab[3] << G4endl; 
-#endif
+  }
 	};
 	
 	output.addOutgoingParticles(particles);
@@ -115,37 +112,37 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    }; 
             convertToSCM.toTheCenterOfMass(); 
             G4double etot_scm = convertToSCM.getTotalSCMEnergy();
-#ifdef DEBUG
+  if(verboseLevel > 2){
             G4cout << " etot_scm " << etot_scm << G4endl;
-#endif
+  }
             vector<G4InuclElementaryParticle> particles = 
 	      generateSCMpionAbsorption(etot_scm, particle1, particle2);
-#ifdef DEBUG
+  if(verboseLevel > 2){
             G4cout << " particles " << particles.size() << G4endl;
 	    for(G4int i = 0; i < particles.size(); i++) 
 	         particles[i].printParticle();
-#endif
+  }
 	    if(!particles.empty()) { // convert back to Lab
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	      vector<G4double> totscm(4, 0.0);
-#endif
+  }
 	      particleIterator ipart;
 	      for(ipart = particles.begin(); ipart != particles.end(); ipart++) {
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	        vector<G4double> mom_scm = ipart->getMomentum();
 	        for(G4int i = 0; i < 4; i++) totscm[i] += mom_scm[i];
-#endif
+  }
 	        vector<G4double> mom = 
 	          convertToSCM.backToTheLab(ipart->getMomentum());
 	        ipart->setMomentum(mom); 
 	      };
 	      sort(particles.begin(), particles.end(),
 	                            ParticleLargerEkin());
-#ifdef DEBUG
+  if(verboseLevel > 2){
 	      G4cout << " In SCM: total outgoing momentum " << G4endl 
 	           << " E " << totscm[0] << " px " << totscm[1]
 	           << " py " << totscm[2] << " pz " << totscm[2] << G4endl; 
-#endif
+  }
 	
  	      output.addOutgoingParticles(particles);
             };
