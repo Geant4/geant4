@@ -1,11 +1,9 @@
-# --------------------------------------------------------------
-# $Id: GNUmakefile,v 1.4 2003-05-23 11:55:56 francy Exp $
+# $Id: GNUmakefile,v 1.5 2004-01-30 12:11:20 guatelli Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := Thyroid
-
+name := remsim
 G4TARGET := $(name)
 G4EXLIB := true
 
@@ -15,18 +13,12 @@ endif
 
 .PHONY: all
 all: lib bin
-include $(G4INSTALL)/config/architecture.gmk
+
 include $(G4INSTALL)/config/binmake.gmk
-
-
-
-
-
-
-
-
-
-
-
+ifdef G4ANALYSIS_USE  
+ CPPFLAGS += `aida-config --include`
+ LDFLAGS  += `aida-config --lib`
+ LOADLIBS += `aida-config --lib` 
+endif
 
 

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------
-$Id: README,v 1.2 2003-05-23 11:55:57 francy Exp $
+$Id: README,v 1.3 2004-01-30 12:11:20 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,31 +11,4 @@ $Id: README,v 1.2 2003-05-23 11:55:57 francy Exp $
 
 0. Introduction.
 
-Radioprotection example simulates energy deposition in the healthy lobe
-of thyroid after the submission of I-131 tabloid for metabolic therapy.
-
-1. Technical description
-
-1.0. I-131 tabloid  is  submitted in the patient for  metabolic therapy. 
-This therapy takes advantage from  the radioemmision of I-131 and from the 
-capabilty,for the patological nodule, to metabolize the most of I-131.
-This nodule (approximated as a sphere) is the source; and is constructed 
-in the ThyroidDetectorConstruction class. The source is composed by I-131
-omogeneusly distribuited in all the nodule.
-
-1.1. The water cilynder (the neck and world volume) is made sensitive detector. 
-At every hit energy deposition is read and stored into a "Thyroid.out" file.
-
-1.2. Visualizaion with was improved
-
-2. Make
-
-A standard Geant4 example GNUmakefile is provided.
-
-2. Usage
-
-Simply run "Thyroid" executable. The ASCII "Thyroid.out" file is
-produced.
-
-N.B.: actual version is still to debug, work is in progress
-
+Radioprotection example simulates the energy deposition in a phantom

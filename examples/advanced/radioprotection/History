@@ -1,20 +1,13 @@
 -------------------------------------------------------------------
-$Id: History,v 1.2 2003-05-23 11:55:57 francy Exp $
+$Id: History,v 1.3 2004-01-30 12:11:20 guatelli Exp $
 -------------------------------------------------------------------
 
      =========================================================
- 		      Geant4 - Brachytherapy example
+ 		      Geant4 - radiprotection example
      =========================================================
 
                       Category History file
                       ---------------------
-
-06.2002 - F. Castrovillari, tag Rad-fra-00
-          First unoffical submission of Thyroid advanced example.
-
-12.2002 - F. Castrovillari 
-          Completed the example without visualization
-
-05.2003 - F. Castrovillari, I. Sinopoli
-          Introduced visualization in the example
+01.2003 - S.Guatelli
+          First implementation
 
