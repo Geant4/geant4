@@ -1,39 +1,38 @@
 config                      Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-digits+hits                 Makoto.Asai@cern.ch             Makoto Asai
-digits+hits/detector        Makoto.Asai@cern.ch             Makoto Asai
-digits+hits/digits          Makoto.Asai@cern.ch             Makoto Asai
-digits+hits/hits            Makoto.Asai@cern.ch             Makoto Asai
-event                       Makoto.Asai@cern.ch             Makoto Asai
-g3tog4                      lockman@slac.stanford.edu       Bill Lockman
-geometry                    John.Apostolakis@cern.ch        John Apostolakis
-geometry/field              John.Apostolakis@cern.ch        John Apostolakis
-geometry/management         John.Apostolakis@cern.ch        John Apostolakis
-geometry/solids             John.Apostolakis@cern.ch        John Apostolakis
-geometry/transportation     John.Apostolakis@cern.ch        John Apostolakis
-geometry/volumes            John.Apostolakis@cern.ch        John Apostolakis
+digits+hits                 asai@slac.stanford.edu          Makoto Asai
+digits+hits/detector        asai@slac.stanford.edu          Makoto Asai
+digits+hits/digits          asai@slac.stanford.edu          Makoto Asai
+digits+hits/hits            asai@slac.stanford.edu          Makoto Asai
+event                       asai@slac.stanford.edu          Makoto Asai
+g3tog4                      Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+geometry                    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
+geometry/biasing            Michael.Dressel@cern.ch         Michael Dressel
+geometry/magneticfield      John.Apostolakis@cern.ch        John Apostolakis
+geometry/management         Gabriele Cosmo@cern.ch          Gabriele Cosmo
+geometry/solids             Gabriele Cosmo@cern.ch          Gabriele Cosmo
+geometry/volumes            Gabriele Cosmo@cern.ch          Gabriele Cosmo
 global                      Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/management           Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 global/HEPGeometry          Evgueni.Tcherniaev@cern.ch      Evgueni Tcherniaev
 global/HEPNumerics          Vladimir.Grichine@cern.ch       Vladimir Grichine
 graphics_reps               John.Allison@man.ac.uk          John Allison
-intercoms                   Makoto.Asai@cern.ch             Makoto Asai
+intercoms                   asai@slac.stanford.edu          Makoto Asai
 interfaces                  yoshidah@naruto-u.ac.jp         Hajime Yoshida
-interfaces/GAG              nagamatu@naruto-u.ac.jp         Masayasu Nagamatu
+interfaces/GAG              yoshidah@naruto-u.ac.jp	    Hajime Yoshida
 interfaces/common           barrand@lal.in2p3.fr            Guy Barrand
 interfaces/OPACS            barrand@lal.in2p3.fr            Guy Barrand
-interfaces/XVT              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-materials                   Michel.Maire@cern.ch            Michel Maire
+materials                   Marc.Verderi@in2p3.fr           Marc Verderi
 particles                   kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 persistency                 Youhei.Morita@cern.ch           Youhei Morita
 processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/electromagnetic           Michel.Maire@cern.ch            Michel Maire
-"/"/lowenergy               Maria.Grazia.Pia@cern.ch        Maria Grazia Pia
+"/electromagnetic           Michel.Maire@lapp.in2p3.fr      Michel Maire
+"/"/lowenergy               MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
                             pniemine@estec.esa.nl           Petteri Nieminen
 "/decay                     kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
 "/hadronic                  Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-"/"/cross_sections          fwj@Triumf.CA                   Fred Jones
+"/"/cross_sections          fwj@triumf.ca                   Fred Jones
 "/"/management              kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-"/"/stopping                FELAWKA@triumf.ca               Larry Felawka
+"/"/stopping                felawka@triumf.ca               Larry Felawka
 "/"/util                    chuma@triumf.ca                 Joe Chuma
 "/"/processes               Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/models/low_energy       chuma@triumf.ca                 Joe Chuma
@@ -50,65 +49,74 @@ processes                   Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/"/"/"/string_fragmentation Hans-Peter.Wellisch@cern.ch    Hans-Peter Wellisch
 "/"/"/"/util                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/optical                   gum@triumf.ca                   Peter Gumplinger
-"/parameterisation          verderi@polhp6.in2p3.fr         Marc Verderi
+"/parameterisation          Marc.Verderi@in2p3.fr           Marc Verderi
 "/photolepton_hadron        Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 "/transportation            John.Apostolakis@cern.ch        John Apostolakis
-readout                     Makoto.Asai@cern.ch             Makoto Asai
-run                         Makoto.Asai@cern.ch             Makoto Asai
+readout                     asai@slac.stanford.edu          Makoto Asai
+run                         asai@slac.stanford.edu          Makoto Asai
 track                       kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
-tracking                    Katsuya.Amako@kek.jp            Katsuya Amako
-visualization               John.Allison@man.ac.uk          John Allison
+tracking                    Takashi.Sasaki@kek.jp           Takashi Sasaki
+visualization               stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/management    John.Allison@man.ac.uk          John Allison
 visualization/G4Ray         John.Allison@man.ac.uk          John Allison
-visualization/FukuiRenderer tanaka@i1nws1.fuis.fukui-u.ac.jp Satoshi Tanaka
-visualization/VRML          tanaka@i1nws1.fuis.fukui-u.ac.jp Satoshi Tanaka
+visualization/FukuiRenderer stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
+visualization/VRML          stanaka@cs.ritsumei.ac.jp       Satoshi Tanaka
 visualization/OPACS         barrand@lal.in2p3.fr            Guy Barrand
-visualization/OpenGL        ajw@hep.man.ac.uk               Andy Walkden
-visualization/OpenInventor  jeffk@fnpspg.fnal.gov           Jeff Kallebach
+visualization/OpenGL        John.Allison@man.ac.uk          John Allison
 visualization/OpenInventor  joe@cactus.phyast.pitt.edu      Joe Boudreau
-visualization/RayTracer     Makoto.Asai@cern.ch             Makoto Asai
+visualization/RayTracer     asai@slac.stanford.edu          Makoto Asai
 environments                John.Allison@man.ac.uk          John Allison
 environments/Momo           yoshidah@naruto-u.ac.jp         Hajime Yoshida
 environments/OPACS          barrand@lal.in2p3.fr            Guy Barrand
-environments/XVT            Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-examples (general)          Makoto.Asai@cern.ch             Makoto Asai
-examples (UserPhysicsProcesses) fwj@Triumf.CA               Fred Jones
-examples/novice/N01         Makoto.Asai@cern.ch             Makoto Asai
+examples                    asai@slac.stanford.edu          Makoto Asai
+examples/novice/N01         asai@slac.stanford.edu          Makoto Asai
 examples/novice/N02         John.Apostolakis@cern.ch        John Apostolakis
-examples/novice/N03         Michel.Maire@cern.ch            Michel Maire
-examples/novice/N04         Makoto.Asai@cern.ch             Makoto Asai 
-examples/novice/N05         verderi@polhp6.in2p3.fr         Marc Verderi
+examples/novice/N03         Michel.Maire@lapp.in2p3.fr      Michel Maire
+examples/novice/N04         asai@slac.stanford.edu          Makoto Asai 
+examples/novice/N05         Marc.Verderi@in2p3.fr           Marc Verderi
 examples/novice/N06         gum@triumf.ca                   Peter Gumplinger
+examples/advanced           asai@slac.stanford.edu	    Makoto Asai
+  brachytherapy             chauvie.to.infn.it              Stephane Chauvie
+  gammaray_telescope        longof@ts.infn.it               Francesco Longo
+  underground_physics       a.s.howard@ic.ac.uk             Alex Howard
+  xray_fluorescence         MariaGrazia.Pia@ge.infn.it	    Maria Grazia Pia
+  xray_telescope            rnartall@estec.esa.nl           Ramon Nartallo
+examples/extended/analysis  barrand@lal.in2p3.fr	    Guy Barrand
+examples/extended/biasing   Michael.Dressel@cern.ch         Michael Dressel
 examples/extended/electromagnetic/:
-  TestEm1-5                 Michel.Maire@cern.ch            Michel Maire
-  TestEm6                   Vladimir.Ivantchencko@cern.ch   Vladimir Ivanchencko
-  TestEm8                   Vladimir.Grichine@cern.ch       Vladimir Grichine
+  TestEm1,2,3,4,5           Michel.Maire@lapp.in2p3.fr      Michel Maire
+  TestEm6                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+  TestEm8,10                Vladimir.Grichine@cern.ch       Vladimir Grichine
+examples/extended/field     John.Apostolakis@cern.ch        John Apostolakis
+examples/extended/g3tog4    Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 examples/extended/persistency  Youhei.Morita@cern.ch        Youhei Morita
-tests                       John.Allison@man.ac.uk          John Allison
-tests                       barrand@lal.in2p3.fr            Guy Barrand
-tests                       Frank.Behner@cern.ch            Frank Behner
-tests                       fwj@Triumf.CA                   Fred Jones
-tests                       Makoto.Asai@cern.ch             Makoto Asai
+tests                       Serguei.Sadilov@cern.ch         Serguei Sadilov
+tests                       fwj@triumf.ca                   Fred Jones
+tests                       asai@slac.stanford.edu          Makoto Asai
 tests                       Gabriele.Cosmo@cern.ch          Gabriele Cosmo
 tests/test01                John.Apostolakis@cern.ch        John Apostolakis
-tests/test02                Michel.Maire@cern.ch            Michel Maire
+tests/test02                Michel.Maire@lapp.in2p3.fr      Michel Maire
 tests/test02.hadron         Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test03                (not currently used - see tests/GNUmakefile)
 tests/test04                (not currently used - see tests/GNUmakefile)
 tests/test05                Gabriele.Cosmo@cern.ch          Gabriele Cosmo
-tests/test06                Michel.Maire@cern.ch            Michel Maire
-tests/test07                Frank.Behner@cern.ch            Frank Behner
+tests/test06                Michel.Maire@lapp.in2p3.fr      Michel Maire
+tests/test07                Serguei.Sadilov@cern.ch         Serguei Sadilov
 tests/test08                (not currently used - see tests/GNUmakefile)
-tests/test09                Michel.Maire@cern.ch            Michel Maire
-tests/test10                magni@mi.infn.it                Stefano Magni
+tests/test09                Michel.Maire@lapp.in2p3.fr      Michel Maire
+tests/test10                gum@triumf.ca		    Peter Gumplinger
 tests/test11                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test12                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test13                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test14                Maria.Grazia.Pia@cern.ch        Maria Grazia Pia
-                            pniemine@estec.esa.nl           Petteri Nieminen
+tests/test14                MariaGrazia.Pia@ge.infn.it      Maria Grazia Pia
 tests/test15                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
 tests/test16                Hans-Peter.Wellisch@cern.ch     Hans-Peter Wellisch
-tests/test17                (not currently used - see tests/GNUmakefile)
+tests/test17                Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+tests/test18                flei@space.qinetiq.com          Fan Lei
+tests/test20                MariaGrazia.Pia@ge.infn.it	    Maria Grazia Pia
+tests/test21                Hans-Peter.Wellisch@cern.ch	    Hans-Peter Wellisch
+tests/test22                Hans-Peter.Wellisch@cern.ch	    Hans-Peter Wellisch
+tests/test23                kurasige@phys.sci.kobe-u.ac.jp  Hisaya Kurasige
+tests/test30                Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
+tests/test31                Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
 tests/test201               barrand@lal.in2p3.fr            Guy Barrand
-tests/test301               Makoto.Asai@cern.ch             Makoto Asai
-tests/test302               Makoto.Asai@cern.ch             Makoto Asai
