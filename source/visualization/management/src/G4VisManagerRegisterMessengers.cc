@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.12 2000-05-02 09:58:11 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.13 2000-05-04 08:52:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -125,89 +125,110 @@ clicks, spawn other windows, change viewpoint, etc.).
 /vis/viewer/reset [<viewer-name>]
   default:      current viewer name
 
-* /vis/viewer/style wireframe|surface  (or /vis/viewer/set/style?)
-*or* /vis/viewer/surface   ) ( opposites, i.e., one
-*or* /vis/viewer/wireframe ) ( negates the other.
-* /vis/viewer/edge true|false
-* /vis/viewer/hiddenLine true|false
+* /vis/viewer/set/style wireframe|surface
+*or* /vis/viewer/set/surface   ) ( opposites, i.e., one
+*or* /vis/viewer/set/wireframe ) ( negates the other.
+
+* /vis/viewer/set/edge true|false
+
+* /vis/viewer/set/hiddenLine true|false
 
 From /vis/set/:
-* /vis/viewer/cull * Global culling flag.  Does not change specific
-                     culling flags.
-* /vis/viewer/cull_covered_daughters * Cull (i.e., do not Draw)
-                                       daughters covered by opaque
-                                       mothers.
-* /vis/viewer/cull_invisible_objects * Cull (i.e., do not Draw)
-                                       "invisible" objects.
-* /vis/viewer/cull_by_density * Cull (i.e., do not Draw) geometry
-                                objects with density less than
-                                specified - on/off and density (g / cm3).
-*obsolete - implemented elsewhere* /vis/viewer/drawing_style
-                                 * Style of drawing (wireframe, etc.).
-* /vis/viewer/marker_choices * Choices for marker drawing (hidden by
-                               surfaces, etc.).
-*obsolete* /vis/viewer/rep_style * Style of graphics representation
-                                   for geometrical volumes (polyhedron,
-                                   NURBS,...).
-*obsolete* /vis/viewer/scene * Several ways of setting the scene.  For
-                               example, choosing a physical volume.
-* /vis/viewer/section_plane * Set plane for drawing section (DCUT).
-                              Specify plane by x y z units nx ny nz,
-                              e.g., for a y-z plane at x = 1 cm:
-                              /vis~/set/section_plane on 1 0 0 cm 1 0 0
-* /vis/viewer/sides * Number of sides per circle in polygon approximation.
-*no longer needed - implemented elsewhere* /vis/viewer/verbose
-                                         * Controls amount of printing
-                                           (0 = quiet).
-*no longer needed - implemented elsewhere* /vis/viewer/view
-                                         * Make this view current.
+
+* /vis/viewer/set/cull
+*or* /vis/viewer/cull
+  Global culling flag.  Does not change specific culling flags.
+
+* /vis/viewer/set/cull_covered_daughters
+*or* /vis/viewer/cull_covered_daughters
+   Cull (i.e., do not Draw) daughters covered by opaque mothers.
+
+* /vis/viewer/set/cull_invisible_objects
+*or* /vis/viewer/cull_invisible_objects
+   Cull (i.e., do not Draw) "invisible" objects.
+
+* /vis/viewer/set/cull_by_density
+*or* /vis/viewer/cull_by_density
+  Cull (i.e., do not Draw) geometry objects with density less than
+  specified - on/off and density (g / cm3).
+
+* /vis/viewer/set/marker_choices
+  Choices for marker drawing (hidden by surfaces, etc.).
+
+* /vis/viewer/set/section_plane
+  Set plane for drawing section (DCUT).  Specify plane by x y z units nx ny nz,
+  e.g., for a y-z plane at x = 1 cm:
+  /vis/viewer/set/section_plane on 1 0 0 cm 1 0 0
+
+* /vis/viewer/set/sides
+  Number of sides per circle in polygon approximation.
 
 From /vis/camera/:
-*no longer needed - implemented elsewhere* /vis/viewer/reset
-                            * Resets dolly, pan and zoom.  Regains
-                              "Standard View".
-* /vis/viewer/dolly *   Moves the camera in by this distance.  Reset
-                        with /vis~/camera/reset.
-*special* /vis/viewer/orbit * Orbits the scene about the up-vector, lights
-                              fixed to the scene.  Draws N frames, the camera
-                              rotated Delta-beta about the up-vector each
-                              frame.
-* /vis/viewer/panBy * Moves the camera incrementatly right and up by these
-                      amounts.  Reset with /vis~/camera/reset.
-* /vis/viewer/panTo * Moves the camera to this position right and up
-                      relative to standard target point.  Reset with
-                      /vis~/camera/reset.
-* /vis/viewer/projection_style * Projection style (orthogonal, perspective).
-*or* /vis/viewer/orthgonal
-*or* /vis/viewer/perspective [<field-angle>] [deg|rad]
+
+* /vis/viewer/set/dollyBy
+*or* /vis/viewer/dollyBy
+  Moves the camera in by this distance.  Reset with /vis/viewer/reset.
+
+* /vis/viewer/set/dollyTo
+*or* /vis/viewer/dollyTo
+  Moves the camera to this distance from standard position..  Reset with
+  /vis/viewer/reset.
+
+*special* /vis/viewer/set/orbit
+  Orbits the scene about the up-vector, lights fixed to the scene.  Draws N
+   frames, the camera rotated Delta-beta about the up-vector each frame.
+
+* /vis/viewer/set/panBy
+*or*  /vis/viewer/panBy
+  Moves the camera incrementatly right and up by these amounts.  Reset with
+  /vis/viewer/reset.
+
+* /vis/viewer/set/panTo
+*or*  /vis/viewer/panTo
+  Moves the camera to this position right and up relative to standard position
+  point.  Reset with /vis/viewer/reset.
+
+* /vis/viewer/set/projection_style orthogonal|perspective [<field-angle>]
+*or* /vis/viewer/set/orthgonal
+*or* /vis/viewer/set/perspective [<field-angle>] [deg|rad]
   default:                        30          deg
-*special* /vis/viewer/spin * Spins the scene about the up-vector, lights
-                             fixed to the camera.  Draws N frames, the scene
-                             rotated Delta-beta about the up-vector each frame.
-* /vis/viewer/viewpoint * Set direction from target to camera as theta, phi
-                          (in degrees).  Also changes lightpoint direction if
-                          lights are set to move with camera.
-*or* /vis/viewer/viewpointThetaPhi <theta> <phi> [deg|rad]
-*or* /vis/viewer/viewpointVector [<x>] [<y>] [<z>]
+
+*special* /vis/viewer/set/spin
+  Spins the scene about the up-vector, lights fixed to the camera.  Draws N
+  frames, the scene rotated Delta-beta about the up-vector each frame.
+
+* /vis/viewer/set/viewpoint
+  Set direction from target to camera.  Also changes lightpoint direction if
+  lights are set to move with camera.
+*or* /vis/viewer/set/viewpointThetaPhi <theta> <phi> [deg|rad]
+*or* /vis/viewer/set/viewpointVector [<x>] [<y>] [<z>]
   default:                         0     0     1
-* /vis/viewer/window_size_hint * Size in pixels (Square window `size x size').
-                                 Affects future create_view commands (hint
-                                 only).
-* /vis/viewer/zoomBy * Multiplies magnification by this factor.  Reset with
-                       /vis~/camera/reset.
-* /vis/viewer/zoomTo * Magnifies by this factor realtive to standard view.
-                       Reset with /vis~/camera/reset.
+
+* /vis/viewer/set/window_size_hint
+  Size in pixels (Square window `size x size').  Affects future viewer/create
+  commands (hint only).
+
+* /vis/viewer/set/zoomBy
+  Multiplies magnification by this factor.  Reset with /vis/viewwer/reset.
+
+* /vis/viewer/set/zoomTo
+  Magnifies by this factor relative to standard view.  Reset with
+  /vis/viewer/reset.
 
 From /vis/lights:
-* /vis/viewer/lights move-with-camera|move-with-object
-*or* /vis/viewer/lightsMoveWithCamera ) ( Opposites, i.e., one
-*or* /vis/viewer/lightsMoveWithObject ) ( negates the other.
-* /vis/viewer/lightsThetaPhi <theta> <phi> [deg|rad]
-* /vis/viewer/lightsVector [<x>] [<y>] [<z>]
+
+* /vis/viewer/set/lights move-with-camera|move-with-object
+*or* /vis/viewer/set/lightsMoveWithCamera ) ( Opposites, i.e., one
+*or* /vis/viewer/set/lightsMoveWithObject ) ( negates the other.
+
+* /vis/viewer/set/lightsThetaPhi <theta> <phi> [deg|rad]
+* /vis/viewer/set/lightsVector [<x>] [<y>] [<z>]
   default:                   0     0     1
 
 * /vis/viewer/notifyOption immediate|delayed
+
 * /vis/viewer/notifyHandler
+
 * /vis/viewer/clone
 
 /vis/viewer/show [<viewer-name>]

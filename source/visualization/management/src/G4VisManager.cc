@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.16 2000-05-02 09:57:15 johna Exp $
+// $Id: G4VisManager.cc,v 1.17 2000-05-04 08:52:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -152,6 +152,9 @@ void G4VisManager::Initialise () {
 
   fInitialised = true;
 }
+
+// void G4VisManager::RegisterMessengers () - see separate file,
+// G4VisManagerRegisterMessengers.cc.
 
 const G4GraphicsSystemList& G4VisManager::GetAvailableGraphicsSystems () {
   G4int nSystems = fAvailableGraphicsSystems.entries ();
