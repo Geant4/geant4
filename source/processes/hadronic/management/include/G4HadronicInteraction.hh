@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HadronicInteraction.hh,v 1.1 1999-01-07 16:11:35 gunter Exp $
+// $Id: G4HadronicInteraction.hh,v 1.2 1999-03-29 09:35:31 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Interaction  abstract base class
@@ -18,6 +18,7 @@
  // Added units to energy initialization: J.L. Chuma  04-Apr-97
  // Modified by J.L.Chuma, 05-May-97  to Initialize theBlockedCounter
  // Modified by J.L.Chuma, 08-Jul-97 to implement the Nucleus changes
+ // Adding a registry for memory management of hadronic models, HPW 22-Mar-99
  
 #ifndef G4HadronicInteraction_h
 #define G4HadronicInteraction_h 1
@@ -28,7 +29,8 @@
 #include "G4Material.hh"
 #include "G4Nucleus.hh"
 #include "G4Track.hh"
- 
+#include "G4HadronicInteractionRegistry.hh"
+
  class G4HadronicInteraction
  {
  public:
@@ -38,7 +40,9 @@
       theBlockedCounter(0), theMinCounter(0), theMaxCounter(0),
       theMinCounterElements(0), theMaxCounterElements(0),
       theBlockedCounterElements(0)
-    { }
+    { 
+      G4HadronicInteractionRegistry::RegisterMe(this);
+    }
     
     virtual ~G4HadronicInteraction()
     { }
