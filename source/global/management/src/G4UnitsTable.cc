@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UnitsTable.cc,v 1.15 2001-07-11 10:00:59 gunter Exp $
+// $Id: G4UnitsTable.cc,v 1.16 2002-05-06 12:06:48 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
@@ -31,6 +31,7 @@
 // 13-10-98: units and symbols printed in fixed length, M.Maire
 // 01-03-01: parsec, M.Maire
 // 06-03-01: migration to STL vectors, G.Cosmo
+// 06-05-02: BestUnit operator<<  flux instead of G4cout (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -422,14 +423,14 @@ G4std::ostream& operator<<(G4std::ostream& flux, G4BestUnit a)
      {flux << a.Value[j]/(List[index]->GetValue()) << " ";}
 
   #ifdef G4USE_STD_NAMESPACE
-    std::ios::fmtflags oldform = G4cout.flags();
+    std::ios::fmtflags oldform = flux.flags();
   #else
-    G4long oldform = G4cout.flags();
+    G4long oldform = flux.flags();
   #endif
 
-  G4cout.setf(G4std::ios::left,G4std::ios::adjustfield);
+  flux.setf(G4std::ios::left,G4std::ios::adjustfield);
   flux << G4std::setw(len) << List[index]->GetSymbol();       
-  G4cout.flags(oldform);
+  flux.flags(oldform);
 
   return flux;
 }       
