@@ -36,6 +36,8 @@ special action has to be taken to prevent counting of
 "collisions" with boundaries of the tracking geometry as interactions.
 This is differently handled when scoring is done in the tracking geometry.
 
+--> G4GeometryCell must not share boundaries with the world volume! <--
+
 Known problems
 --------------
 In the following scenario it can happen that a particle is not
