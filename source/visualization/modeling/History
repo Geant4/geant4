@@ -1,4 +1,4 @@
-$Id: History,v 1.8 2001-02-03 18:39:56 johna Exp $
+$Id: History,v 1.9 2001-07-18 18:32:40 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,9 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+18th July 2001  John Allison  (modeling-V03-02-00)
+- Ensured rotation and translation of replica is restored.
 
 3rd February 2001  John Allison  (vis-V03-00-02)
 - Tidied for CodeWizard.

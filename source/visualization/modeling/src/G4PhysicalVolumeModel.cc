@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.16 2001-07-11 10:09:23 gunter Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.17 2001-07-18 18:32:43 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -225,6 +225,8 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       //   They have phi of offset+n*width to offset+(n+1)*width where
       //   n=0..nReplicas-1
       // 
+      G4ThreeVector originalTranslation = pVPV -> GetTranslation ();
+      G4RotationMatrix* pOriginalRotation = pVPV -> GetRotation ();
       for (int n = 0; n < nReplicas; n++) {
 	G4ThreeVector translation;  // Null.
 	G4RotationMatrix rotation;  // Null - life long enough for visualizing.
@@ -263,6 +265,9 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
 	DescribeAndDescend (pVPV, requestedDepth, pLV, pSol, pMaterial,
 			    theAT, sceneHandler);
       }
+      // Restore originals...
+      pVPV -> SetTranslation (originalTranslation);
+      pVPV -> SetRotation    (pOriginalRotation);
     }
   }
 
