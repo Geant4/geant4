@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.4 1999-04-13 09:44:27 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.5 1999-04-27 01:15:57 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -398,20 +398,20 @@ G4bool G4ParticleChange::CheckIt(const G4Track& aTrack)
 //  }
   if ( (theEnergyChange >0.) && 
         ( abs(theMomentumDirectionChange.mag2()-1.0) > perMillion ) ){
-    G4cout << " !!! the Momentum Change is not unit vector !!!!"
+    G4cout << "  G4ParticleChange::CheckIt !!! the Momentum Change is not unit vector !!!!"
          << " :  " << theMomentumDirectionChange.mag()
          << endl;
     itsOK = false;
   }
   if (theTimeChange - aTrack.GetGlobalTime() < -1.0*nanosecond*perMillion) {
-    G4cout << " !!! the global time goes back  !!!"
+    G4cout << "  G4ParticleChange::CheckIt !!! the global time goes back  !!!"
          << " :  " << aTrack.GetGlobalTime()/ns
          << " -> " << theTimeChange/ns
          << "[ns] " <<endl;
     itsOK = false;
   }
   if (theProperTimeChange - aTrack.GetProperTime() < -1.0*nanosecond*perMillion ) {
-    G4cout << " !!! the poper time goes back  !!!"
+    G4cout << "  G4ParticleChange::CheckIt !!! the proper time goes back  !!!"
          << " :  " << aTrack.GetProperTime()/ns
          << " -> " << theProperTimeChange/ns
          << "[ns] " <<endl;
