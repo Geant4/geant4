@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimDetectorConstruction.cc,v 1.4 2004-05-18 10:23:24 guatelli Exp $
+// $Id: RemSimDetectorConstruction.cc,v 1.5 2004-05-18 14:00:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -44,7 +44,8 @@
 #include "RemSimSensitiveDetector.hh"
 #include "G4SDManager.hh"
 #include "RemSimROGeometry.hh"
-
+#include "RemSimDecorator.hh"
+#include "RemSimShieldingDecorator.hh"
 RemSimDetectorConstruction::RemSimDetectorConstruction()
   :  experimentalHall_log(0),experimentalHall_phys(0),
      phantomPhys(0),detectorPhys(0)
@@ -137,4 +138,6 @@ G4VPhysicalVolume* RemSimDetectorConstruction::Construct()
 void RemSimDetectorConstruction::ConstructVolume()
 {
   pVehicle -> ConstructComponent(experimentalHall_phys);
+  RemSimDecorator* decorator = new RemSimShieldingDecorator(pVehicle);
+  decorator -> ConstructComponent(experimentalHall_phys);
 }

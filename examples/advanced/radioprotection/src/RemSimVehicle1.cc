@@ -401,28 +401,11 @@ void RemSimVehicle1::ConstructComponent(G4VPhysicalVolume* motherVolume)
                                                      layer27Log,
                                                      motherVolume,
 						    false,0);
-//   //shielding:10 cm water
-  
-//  thick = 10.*cm;
-//  translation = translation + 0.03*cm;  
-//  G4Material* water= pMaterial ->GetMaterial("Water"); 
-    
-//   G4Box* layer28 = new G4Box("layer28",sizeX/2.,sizeY/2.,thick/2.);
-
-//   G4LogicalVolume* layer28Log = new G4LogicalVolume(layer28,
-//                                                     water,
-//                                                    "layer28Log",
-//                                                     0,0,0);
-  
-//   G4VPhysicalVolume* layer28Phys = new G4PVPlacement(0,
-//                                                     G4ThreeVector(0.,0.,thick/2.+translation),
-//                                                     "layer28Phys", 
-//                                                      layer28Log,
-//                                                      motherVolume,
-// 						    false,0);
+  translation = translation + thick;  
+  G4cout<< "translation:"<<translation/m<< G4endl;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  green    (0.0,1.0,0.0);
-  
+ 
   G4VisAttributes* layer1VisAtt = new G4VisAttributes(green);
   layer1VisAtt -> SetVisibility(true);
   layer1VisAtt -> SetForceSolid(true);
