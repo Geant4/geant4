@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: XrayTelAnalysis.cc,v 1.7 2002-11-15 11:19:32 santin Exp $
+// $Id: XrayTelAnalysis.cc,v 1.8 2002-11-19 18:02:42 santin Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author:  A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
@@ -37,6 +37,9 @@
 #include "XrayTelAnalysis.hh"
 #include "globals.hh"
 #include "G4Track.hh"
+#include "G4ios.hh"
+#include "g4std/fstream"
+#include "g4std/iomanip"
 #include "G4SteppingManager.hh"
 #include "G4ThreeVector.hh"
 
@@ -44,6 +47,7 @@
 XrayTelAnalysis* XrayTelAnalysis::instance = 0;
 
 XrayTelAnalysis::XrayTelAnalysis()
+#ifdef G4ANALYSIS_USE
   : analysisFactory(0)
   , tree(0)
   , histoFactory(0)
@@ -52,11 +56,18 @@ XrayTelAnalysis::XrayTelAnalysis()
   , plotterFactory(0)
   , plotter(0)
 #endif
+#endif
 {
 #ifdef G4ANALYSIS_USE
   histFileName = "xraytel";
   histFileType = "hbook";
 #endif
+
+  asciiFileName="xraytel.out";
+  G4std::ofstream asciiFile(asciiFileName, G4std::ios::app);
+  if(asciiFile.is_open()) {
+    asciiFile << "Energy (keV)  x (mm)    y (mm)    z (mm)" << G4endl << G4endl;
+  }
 }
 
 XrayTelAnalysis::~XrayTelAnalysis()
@@ -84,10 +95,8 @@ XrayTelAnalysis::~XrayTelAnalysis()
 
 XrayTelAnalysis* XrayTelAnalysis::getInstance()
 {
-#ifdef G4ANALYSIS_USE
   if (instance == 0) instance = new XrayTelAnalysis;
   return instance;
-#endif
 }
 
 
@@ -102,7 +111,6 @@ void XrayTelAnalysis::book()
     G4bool readOnly   = false;
     AIDA::ITreeFactory* treeFactory = analysisFactory->createTreeFactory();
     if(treeFactory) {
-      //  histoManager->selectStore("XrayTel.his");
       G4String histFileNameComplete; 
       histFileNameComplete = histFileName+".hbook";
       tree = treeFactory->create(histFileNameComplete, "hbook", readOnly, fileExists);
@@ -132,6 +140,7 @@ void XrayTelAnalysis::book()
     }
   }
 #endif
+
 }
 
 void XrayTelAnalysis::finish()
@@ -165,7 +174,6 @@ void XrayTelAnalysis::finish()
 
 void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
 {
-#ifdef G4ANALYSIS_USE
   eKin = track.GetKineticEnergy()/keV;
   G4ThreeVector pos = track.GetPosition()/mm;
   y = pos.y();
@@ -175,6 +183,7 @@ void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
   dirY = dir.y();
   dirZ = dir.z();
 
+#ifdef G4ANALYSIS_USE
   // Fill histograms, all tracks
   AIDA::IHistogram1D* h1 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("1") );
   h1->fill(eKin);  // fill(x,y,weight)
@@ -214,6 +223,36 @@ void XrayTelAnalysis::analyseStepping(const G4Track& track, G4bool entering)
   }
 
 #endif
+
+  // Write to file
+  if (entering) {
+    G4std::ofstream asciiFile(asciiFileName, G4std::ios::app);
+    if(asciiFile.is_open()) {
+      asciiFile << G4std::setiosflags(G4std::ios::fixed)
+		<< G4std::setprecision(3)
+		<< G4std::setiosflags(G4std::ios::right)
+		<< G4std::setw(10);
+      asciiFile << eKin;
+      asciiFile << G4std::setiosflags(G4std::ios::fixed)
+		<< G4std::setprecision(3)
+		<< G4std::setiosflags(G4std::ios::right)
+		<< G4std::setw(10);
+      asciiFile << x;
+      asciiFile << G4std::setiosflags(G4std::ios::fixed)
+		<< G4std::setprecision(3)
+		<< G4std::setiosflags(G4std::ios::right)
+		<< G4std::setw(10);
+      asciiFile << y;
+      asciiFile << G4std::setiosflags(G4std::ios::fixed)
+		<< G4std::setprecision(3)
+		<< G4std::setiosflags(G4std::ios::right)
+		<< G4std::setw(10);
+      asciiFile << z
+		<< G4endl;
+      asciiFile.close();
+    }
+  }
+
 }
 
 #ifdef G4ANALYSIS_USE_PLOTTER
