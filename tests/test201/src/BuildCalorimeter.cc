@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildCalorimeter.cc,v 1.3 2001-07-11 10:10:23 gunter Exp $
+// $Id: BuildCalorimeter.cc,v 1.4 2001-08-02 23:55:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,7 @@ G4VPhysicalVolume* BuildCalorimeter()
     G4double density = 2.7*g/cm3;
     G4Material myMaterial("Aluminium", z, a, density);
 
-    G4VisAttributes* red   = new G4VisAttributes (G4Colour(1,0,0));
+    //G4VisAttributes* red   = new G4VisAttributes (G4Colour(1,0,0));
     G4VisAttributes* green = new G4VisAttributes (G4Colour(0,1,0));
     G4VisAttributes* blue  = new G4VisAttributes (G4Colour(0,0,1));
 
@@ -84,12 +84,12 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0-offset;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
-							  tName1,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
+	    new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+			      tName1,
+			      myTargetLog,
+			      myCalPhys,
+			      false,
+			      copyNo);
 	  }
       }
 
@@ -105,12 +105,12 @@ G4VPhysicalVolume* BuildCalorimeter()
 	  {
 	    copyNo++;
 	    xTlate=-1000.0-20.0+i*45.0;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
-							  tName2,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
+	    new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+			      tName2,
+			      myTargetLog,
+			      myCalPhys,
+			      false,
+			      copyNo);
 	  }
       }
 

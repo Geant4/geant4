@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: MyEventAction.cc,v 1.7 2001-07-11 10:10:23 gunter Exp $
+// $Id: MyEventAction.cc,v 1.8 2001-08-02 23:55:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,10 +50,10 @@ void MyEventAction::BeginOfEventAction(const G4Event*){
 
 void MyEventAction::EndOfEventAction(const G4Event* aEvent){
 
-  G4SDManager * SDman = G4SDManager::GetSDMpointer();
+  //G4SDManager * SDman = G4SDManager::GetSDMpointer();
   G4String colNam;
-  G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
-  G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
+  //G4int trackerCollID = SDman->GetCollectionID(colNam="TrackerCollection");
+  //G4int calorimeterCollID = SDman->GetCollectionID(colNam="CalCollection");
 
   G4cout << ">>> Event " << aEvent->GetEventID() << G4endl;
 

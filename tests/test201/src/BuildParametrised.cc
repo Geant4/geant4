@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildParametrised.cc,v 1.3 2001-07-11 10:10:23 gunter Exp $
+// $Id: BuildParametrised.cc,v 1.4 2001-08-02 23:55:45 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,13 +84,12 @@ G4VPhysicalVolume* BuildParametrised ()
   logicalPAttributes = new G4VisAttributes(G4Colour(1.,0.,0.));
   theLogicalBox->SetVisAttributes(logicalPAttributes);
   ParametrisedBox* thePar = new ParametrisedBox;
-  G4PVParameterised * theParametrized=
-    new G4PVParameterised("theParametrizedtest",
-                theLogicalBox,
-                theMother,
-                kYAxis,
-                2,
-                thePar);
+  new G4PVParameterised("theParametrizedtest",
+			theLogicalBox,
+			theMother,
+			kYAxis,
+			2,
+			thePar);
 
   // The Mother of Replica.
   G4VSolid * box3 = new G4Box("aBox", 1 * m, 2 * m, 3 * m);
@@ -113,12 +112,11 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VisAttributes * logicalRAttributes;
   logicalRAttributes = new G4VisAttributes(G4Colour(0.,1.,0.));
   theLogicalRBox->SetVisAttributes(logicalRAttributes);
-  G4VPhysicalVolume * theReplica=
-    new G4PVReplica("theReplicatest",
-                theLogicalRBox,
-                theRMother,
-                kXAxis,
-                5, 0.4 * m, 0);
+  new G4PVReplica("theReplicatest",
+		  theLogicalRBox,
+		  theRMother,
+		  kXAxis,
+		  5, 0.4 * m, 0);
 
   // The Mother of Tubs Replica.
   G4VSolid * tubs = new G4Tubs ("aTubsBox", 0.5 * m, 1 * m, 2 * m,
@@ -143,12 +141,11 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VisAttributes * logicalTAttributes;
   logicalTAttributes = new G4VisAttributes(G4Colour(0.,0.,1.));
   theLogicalTubsPart->SetVisAttributes(logicalTAttributes);
-  G4VPhysicalVolume * theTReplica=
-    new G4PVReplica("theTReplicatest",
-                theLogicalTubsPart,
-                theTMother,
-                kPhi,
-                5, 36. * deg, 90. * deg);
+  new G4PVReplica("theTReplicatest",
+		  theLogicalTubsPart,
+		  theTMother,
+		  kPhi,
+		  5, 36. * deg, 90. * deg);
 
   /*************** Bloggs's box to workaround bug in G4SmartVoxelHeader.
 
@@ -160,11 +157,10 @@ G4VPhysicalVolume* BuildParametrised ()
   G4VisAttributes * bloggsAttributes = 
     new G4VisAttributes(G4Colour(0.,1.,0.));
   theLogicalbloggs->SetVisAttributes(bloggsAttributes);
-  G4PVPlacement* bloggs =
-    new G4PVPlacement(    theNull,
-			  G4ThreeVector (10*m, -30*m, -40*m),
-			  "bloggs",
-			  theLogicalbloggs,
+  new G4PVPlacement(    theNull,
+                	  G4ThreeVector (10*m, -30*m, -40*m),
+		         "bloggs",
+		          theLogicalbloggs,
 			  thePitPosition,    
 			  NULL, 0);
 			  ***************/

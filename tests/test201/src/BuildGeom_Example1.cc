@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildGeom_Example1.cc,v 1.3 2001-07-11 10:10:23 gunter Exp $
+// $Id: BuildGeom_Example1.cc,v 1.4 2001-08-02 23:55:42 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,8 +75,10 @@ G4VPhysicalVolume* BuildGeom_Example1()
   density = 7.87*g/cm3;
   G4Material* Fe = new G4Material(name="Iron", z=26., a, density);
   a = 207.19*g/mole;
+  /******** Unused
   density = 11.35*g/cm3;
   G4Material* Pb = new G4Material(name="Lead", z=82., a, density);
+  ***********/
   density = 1.29e-03*g/cm3;
   G4Material* Air = new G4Material(name="Air", density, nel=2);
   Air->AddElement(elN, .7);
@@ -177,16 +179,16 @@ G4VPhysicalVolume* BuildGeom_Example1()
     = new G4Tubs("CRTubsR",174.636*cm,212.9*cm,30.5*cm,45.0*deg,45.0*deg);
   G4LogicalVolume* calRowLogR
     = new G4LogicalVolume(calRowTubsR,LeadGlass,"CRlogR",0,0,0);
-  G4PVPlacement* calRowPhysR = new G4PVPlacement(0,
-	       G4ThreeVector(0.*cm,0.*cm,0.*cm),
-	       "calRowPhysR",calRowLogR,calUnitPhysR,false,0);
+  new G4PVPlacement(0,
+		    G4ThreeVector(0.*cm,0.*cm,0.*cm),
+		    "calRowPhysR",calRowLogR,calUnitPhysR,false,0);
   G4Tubs* calRowTubsL 
     = new G4Tubs("CRTubsL",174.636*cm,212.9*cm,30.5*cm,90.0*deg,45.0*deg);
   G4LogicalVolume* calRowLogL
     = new G4LogicalVolume(calRowTubsL,LeadGlass,"CRlogL",0,0,0);
-  G4PVPlacement* calRowPhysL = new G4PVPlacement(0,
-	       G4ThreeVector(0.*cm,0.*cm,0.*cm),
-	       "calRowPhysL",calRowLogL,calUnitPhysL,false,0);
+  new G4PVPlacement(0,
+		    G4ThreeVector(0.*cm,0.*cm,0.*cm),
+		    "calRowPhysL",calRowLogL,calUnitPhysL,false,0);
 
 // Muon filter Iron
 
