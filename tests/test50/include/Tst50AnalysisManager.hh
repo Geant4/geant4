@@ -69,7 +69,8 @@ public:
   void AttenuationGammaCoeffiecient(G4int,G4double,G4double,G4double);
   void StoppingPower(G4int,G4double,G4double);
   void CSDARange(G4int,G4double,G4double);
-  void ParticleTransmission(G4int,G4double,G4double,G4double,G4double,G4double);  void FillEnergyDeposit(G4double);
+  void ParticleTransmission(G4int,G4double,G4double,G4double,G4double,G4double);  void TransmittedEnergy(G4int,G4double,G4double); 
+  void FillEnergyDeposit(G4double);
   void finish();
 
 private:
@@ -87,6 +88,7 @@ private:
   AIDA::IDataPointSet *  stoppingPowerDataPoint;  
   AIDA::IDataPointSet *  CSDARangeDataPoint;
   AIDA::IDataPointSet *  particleTransmissionDataPoint;
+  AIDA::IDataPointSet * particleTransmissionEnergyDataPoint;
   AIDA::IDataPointSet *  gammaAttenuationCoefficientDataPoint;
   AIDA::IHistogram1D* histogramEnergyDeposit;
 };

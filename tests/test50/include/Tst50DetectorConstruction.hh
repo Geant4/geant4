@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.hh,v 1.12 2003-07-10 07:52:59 guatelli Exp $
+// $Id: Tst50DetectorConstruction.hh,v 1.13 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -85,17 +85,13 @@ private:
   G4Material* aluminium;
   G4Material* silicon;
   G4Material* liquidArgon;  
-  G4Material* titanium;
   G4Material* iron;   
   G4Material* gallium;
   G4Material* germanium;
-  G4Material* molybdenum;
   G4Material* silver;
-  G4Material* cesium;
-  G4Material* tantalum;
+  G4Material* cesium; 
   G4Material* gold; 
   G4Material* lead;
-  G4Material* uranium;
   G4Material* water; 
   G4Material* quartz; 
   G4Material* air; 

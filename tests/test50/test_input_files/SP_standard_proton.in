@@ -56,4 +56,7 @@
 /target/setMaxStep 0.01 cm
 /gun/energy    1000.  MeV
 /run/beamOn 1
-
+/gun/energy    5000.  MeV
+/run/beamOn 1
+/gun/energy    10000.  MeV
+/run/beamOn 1

@@ -13,4 +13,4 @@
 /target/setTargetThick 0.53 mm
 /target/update
 /gun/energy 1. MeV
-/run/beamOn 100
+/run/beamOn 1000000

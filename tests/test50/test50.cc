@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.28 2003-07-03 13:43:09 guatelli Exp $
+// $Id: test50.cc,v 1.29 2003-07-28 15:05:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,7 +115,7 @@ int main(int argc,char** argv) {
   delete visManager;
 #endif
 
-  delete runManager;
+   delete runManager;
 
   return 0;
 }

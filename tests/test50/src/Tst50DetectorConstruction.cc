@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.24 2003-07-10 07:52:59 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.25 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -53,9 +53,9 @@
 
 Tst50DetectorConstruction::Tst50DetectorConstruction()
   :isRegisteredUserLimits(false), hydrogen(0),beryllium(0),graphite(0), 
-   magnesium(0), aluminium(0),silicon(0),liquidArgon(0),titanium(0),iron(0),
-   gallium(0),germanium(0), molybdenum(0),silver(0), cesium(0), tantalum(0), 
-   gold(0), lead(0), uranium(0), water(0), quartz(0), air(0),vacuum(0),
+   magnesium(0), aluminium(0),silicon(0),liquidArgon(0),iron(0),
+   gallium(0),germanium(0),silver(0), cesium(0), gold(0),
+   lead(0), water(0), quartz(0), air(0),vacuum(0),
    targetMaterial(0),defaultMaterial(0),
    solidWorld(0),logicWorld(0),physiWorld(0),
    solidTarget(0),logicTarget(0),physiTarget(0), 
@@ -81,17 +81,13 @@ Tst50DetectorConstruction::~Tst50DetectorConstruction()
   delete air;
   delete quartz;
   delete water;
-  delete uranium;
   delete lead;
   delete gold;
-  delete  tantalum;
   delete cesium;
   delete silver;
-  delete molybdenum;
   delete germanium;
   delete gallium;
   delete iron; 
-  delete titanium;
   delete liquidArgon;
   delete silicon;
   delete aluminium;
@@ -176,11 +172,6 @@ void Tst50DetectorConstruction::DefineMaterials()
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
   liquidArgon = new G4Material(name="liquidArgon", z=18., a, density);
- 
-  
-  a = 47.88*g/mole;
-  density = 4.50*g/cm3;
-  titanium = new G4Material("Titanium" ,z = 22.,a,density);
 
   a = 55.845*g/mole;
   density = 7.874*g/cm3;
@@ -194,10 +185,6 @@ void Tst50DetectorConstruction::DefineMaterials()
   a = 72.64*g/mole;
   germanium = new G4Material(name="Germanium", z=32., a, density);
 
-  density = 10.22*g/cm3;
-  a = 95.94*g/mole;
-  molybdenum = new G4Material(name="Molybdenum", z=42., a, density);  
-
   density = 10.5*g/cm3;
   a = 107.8682*g/mole;
   silver = new G4Material(name="Silver", z=47., a, density);
@@ -206,10 +193,6 @@ void Tst50DetectorConstruction::DefineMaterials()
   a = 132.90545*g/mole;
   cesium = new G4Material(name="Cesium", z=55., a, density);
 
-  density = 16.65*g/cm3; 
-  a = 180.9479*g/mole;
-  tantalum = new G4Material(name="Tantalum", z=73., a, density);
-  
   density = 19.32*g/cm3;
   a = 196.966*g/mole;
   gold = new G4Material(name="Gold", z=79., a, density);
@@ -221,14 +204,12 @@ void Tst50DetectorConstruction::DefineMaterials()
   //
   // define a material from elements.   case 1: chemical molecule
   //
-  density = 18.95*g/cm3; 
-  a = 238.02*g/mole; 
-  uranium = new G4Material(name="Uranium", z=92., a, density);
-
+ 
   density = 1.000*g/cm3;
   water = new G4Material(name="Water", density, ncomponents=2);
   water->AddElement(H, natoms=2);
   water->AddElement(O, natoms=1);
+
 
   density = 2.200*g/cm3;
   quartz = new G4Material(name="Quartz", density, ncomponents=2);

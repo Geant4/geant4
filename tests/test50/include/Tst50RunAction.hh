@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.17 2003-07-03 13:43:10 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.18 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //
 //
-// $Id: Tst50RunAction.hh,v 1.17 2003-07-03 13:43:10 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.18 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -65,6 +65,7 @@ class Tst50RunAction : public G4UserRunAction
   void TransmittedGammaNumber();
   void TransmittedParticleNumber();
   void BackscatteredParticleNumber();
+  void BackscatteredEnergy(G4double);
 
 private: 
   Tst50RunMessenger* messenger;
@@ -78,6 +79,7 @@ private:
   G4double particleBackscattered;// number of backscattered massive particles 
   Tst50PrimaryGeneratorAction* primary;
   Tst50DetectorConstruction* detector;
+  G4double backscatteredEnergy;
   
 };
 #endif

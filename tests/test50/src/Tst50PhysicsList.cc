@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.15 2003-05-15 16:00:59 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.16 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)

@@ -26,7 +26,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.24 2003-07-10 07:52:59 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.25 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
 //
@@ -93,7 +93,6 @@ Tst50AnalysisManager* Tst50AnalysisManager::getInstance()
 void Tst50AnalysisManager::book() 
 {
   theTree = treeFact -> create("test50.xml","xml",false, true,"uncompress");
-  G4cout<< " arrivo dentro il book degli xml"<<G4endl;
   
   //Create the factories for dataPoint and histograms
   dataPointFactory = aFact -> createDataPointSetFactory(*theTree); 
@@ -101,6 +100,10 @@ void Tst50AnalysisManager::book()
   stoppingPowerDataPoint = dataPointFactory -> create("SP","Stopping Power test",2); 
   CSDARangeDataPoint = dataPointFactory -> create ("CSDARange","CSDA Range test",2);
   particleTransmissionDataPoint = dataPointFactory -> create ("Transmission test",3);
+
+  // Energy of transmitted/backscattered particles
+ particleTransmissionEnergyDataPoint = dataPointFactory -> create ("TransmissionEnergy test",2);
+
   gammaAttenuationCoefficientDataPoint = dataPointFactory -> create ("Gamma attenuation coefficient test",2);  
 
  histogramFactory = aFact -> createHistogramFactory( *theTree );
@@ -183,6 +186,18 @@ void Tst50AnalysisManager::ParticleTransmission(G4int PointNumber,
   coordinateZ -> setErrorPlus(BackError);
   coordinateZ -> setErrorMinus(BackError);
 }
+void Tst50AnalysisManager::TransmittedEnergy(G4int PointNumber, G4double primaryParticleEnergy,G4double energy)
+{
+  particleTransmissionEnergyDataPoint-> addPoint();
+  AIDA::IDataPoint* point = particleTransmissionDataPoint -> point(PointNumber);
+  AIDA::IMeasurement* coordinateX = point -> coordinate( 0 );
+  coordinateX -> setValue(primaryParticleEnergy );
+  AIDA::IMeasurement* coordinateY = point -> coordinate( 1 );
+  coordinateY -> setValue(energy);
+  coordinateY -> setErrorPlus(0.);
+  coordinateY -> setErrorMinus(0.);
+}
+
 void Tst50AnalysisManager::FillEnergyDeposit(G4double energyDep)
 {
   histogramEnergyDeposit ->fill(energyDep);

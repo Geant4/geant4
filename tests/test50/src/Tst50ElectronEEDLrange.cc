@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronEEDLrange.cc,v 1.2 2003-05-17 18:11:53 guatelli Exp $
+// $Id: Tst50ElectronEEDLrange.cc,v 1.3 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)

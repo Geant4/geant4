@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronStandard.cc,v 1.1 2003-04-25 08:43:34 guatelli Exp $
+// $Id: Tst50ElectronStandard.cc,v 1.2 2003-07-28 15:05:52 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -60,7 +60,7 @@ void Tst50ElectronStandard::ConstructProcess()
      
       if (particleName == "e-") 
 	{
-	  manager->AddProcess(new G4MultipleScattering, -1, 1,1);
+	  // manager->AddProcess(new G4MultipleScattering, -1, 1,1);
 	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
 	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
 	}   
