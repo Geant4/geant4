@@ -1,4 +1,4 @@
-$Id: History,v 1.176 2003-04-12 16:42:36 vnivanch Exp $
+$Id: History,v 1.177 2003-04-17 16:56:45 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17.04-2003   MGP, tag emlowen-V05-00-14
+             Bug fix to the Auger effect, in response to user report
+
+17.04-2003   MGP, tag emlowen-V05-00-13
+             Modifications related to "cuts per region" by VI as below
+             Bug fix to G4LowEnergyGammaConversion (angular distribution)
 
 12.04-2003   VI migration to cut per region for fluo AlongStep
              G4ShellVacancy, G4hLowEnergyIonisation, G4LowEnergyIonisation
