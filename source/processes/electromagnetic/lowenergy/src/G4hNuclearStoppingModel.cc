@@ -72,10 +72,10 @@ void G4hNuclearStoppingModel::InitializeMe()
       nStopingPowerTable = new G4hZiegler1977Nuclear();
     
   } else if(ir49 == modelName || blank == modelName) {
-      nStopingPowerTable = new G4hZiegler1985Nuclear();
+      nStopingPowerTable = new G4hICRU49Nuclear();
 
   } else if(zi85 == modelName) {
-      nStopingPowerTable = new G4hICRU49Nuclear();
+      nStopingPowerTable = new G4hZiegler1985Nuclear();
         
   } else {
     G4cout << 

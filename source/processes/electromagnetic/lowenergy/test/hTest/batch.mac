@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of "TestEm6.cc"
+# Macro file for the initialization phase of "hTest.cc"
 #
 # It creates the default geometry (simple absorber box) 
 #
@@ -25,20 +25,21 @@
 #
 #/calor/cutG 2130.0 micrometer
 #/calor/cutE 50.0 mm
-/calor/cutG 0.5 mm
-/calor/cutE 0.5 mm
+#/calor/cutG 10.0 mm
+#/calor/cutE 0.015 mm
 #  hist file name
-/plots/sethistName enb.paw 
+/plots/sethistName C360le.paw 
+#/plots/sethistName enb.paw 
 #/plots/sethistName c12le.paw 
 /run/initialize
 #/run/particle/dumpCutValues
 #/event/drawTracks none
 #
-/gun/particle e-
+#/gun/particle e-
 #/gun/particle gamma
 #/gun/particle proton
-#/gun/particle IonC12
-/gun/energy 8.0 MeV
+/gun/particle IonC12
+/gun/energy 360.0 MeV
 #/gun/energy 3240.0 MeV
 #
 /run/beamOn 1000

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.7 2000-09-16 08:47:21 pia Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.8 2000-10-15 02:41:16 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -180,10 +180,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static void BuildRangeCoeffCTable(
                           const G4ParticleDefinition& aParticleType);
 
-  // MGP - Commented out the two lines below: bad design!
-  //    static const G4Proton* theProton ;
-  //    static const G4AntiProton* theAntiProton ;
-
 // ====================================================================
 
   public:
@@ -265,9 +261,6 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     G4double linLossLimit ;
    
     G4double MinKineticEnergy ;
-
-  //    G4double fdEdx;      // computed in GetContraints
-  //    G4double fRangeNow ; // computed in GetContraints
 
     static G4double finalRange ;  // last step before stop
     static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit

@@ -48,10 +48,10 @@ hTestDetectorConstruction::hTestDetectorConstruction()
  magField(NULL),calorimeterSD(NULL),defaultWorld(true)
 {
   // default parameter values of the calorimeter
-  AbsorberThickness = 1.0*mm;
+  AbsorberThickness = 0.1*mm;
   AbsorberSizeYZ    = 100.*cm;
   XposAbs           = 0.*cm ;  
-  NumberOfAbsorbers = 300;
+  NumberOfAbsorbers = 2000;
   ComputeCalorParameters();
 
   // create commands for interactive definition of the calorimeter  

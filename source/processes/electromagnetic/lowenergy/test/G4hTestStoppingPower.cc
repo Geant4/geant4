@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.4 2000-09-16 18:34:06 chauvie Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.5 2000-10-15 02:41:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -188,22 +188,27 @@ main()
   part[5] = ionAr40;  
   part[6] = ionFe56;  
 
-  G4double ecut = 10.0*mm;
-  G4double pcut = 0.01*mm;
+  G4double ecut = 1000.0*mm;
+  G4double pcut = 0.0001*mm;
   electron->SetCuts(ecut);
   proton->SetCuts(pcut);
   antiproton->SetCuts(pcut);
   G4cout << "Cuts are following: cutElectron = " << ecut 
          << " mm; cutProton = " << pcut << " mm" << G4endl;  
   
-  //--------- Ionisation processes definition and build physics table ------
+  //--------- Ionisation processes definition and build physics table --
     
   // Define models for parametrisation of electronic energy losses
   //  G4VLowEnergyModel* theBetheBlochModel = 
   //                   new G4hBetheBlochModel("Bethe-Bloch") ;
   //  theProtonModel = new G4hParametrisedLossModel(theProtonTable) ;
   //  theAntiProtonModel = new G4QAOLowEnergyLoss(theAntiProtonTable) ;
-  //  theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
+  
+  G4hNuclearStoppingModel* theNuclearStoppingModel = 
+    //                    new G4hNuclearStoppingModel("Ziegler1977") ;
+  //                     new G4hNuclearStoppingModel("Ziegler1985") ;
+                       new G4hNuclearStoppingModel("ICRU_R49") ;
+
   G4VLowEnergyModel* theIonEffChargeModel = 
                      new G4hIonEffChargeSquare("Ziegler1988") ;
 
@@ -220,8 +225,10 @@ main()
     theProcessManager[i] = new G4ProcessManager(part[i]);
     part[i]->SetProcessManager(theProcessManager[i]);
     hIon[i] = new G4hLowEnergyIonisation();
+    hIon[i]->SetEnlossFluc(false) ;
 
-  //  hIon[i]->SetNuclearStoppingOn();
+    //  hIon[i]->SetBarkasOff();
+    //    hIon[i]->SetNuclearStoppingOff();
   //  hIon[i]->SetStoppingPowerTableName("ICRU_R49p"); 
   
     theProcessManager[i]->AddProcess(hIon[i]);
@@ -327,25 +334,25 @@ main()
                                    ,num,log10(minE),log10(maxE)) ;
 
 
- h[38]= hbookManager->histogram("p   in C (MeV/mm)Ziegler1977p"
+ h[38]= hbookManager->histogram("p   in C (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[39]= hbookManager->histogram("p   in Al (MeV/mm)Ziegler1977p"
+ h[39]= hbookManager->histogram("p   in Al (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[40]= hbookManager->histogram("p   in Si (MeV/mm)Ziegler1977p"
+ h[40]= hbookManager->histogram("p   in Si (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[41]= hbookManager->histogram("p   in Cu (MeV/mm)Ziegler1977p"
+ h[41]= hbookManager->histogram("p   in Cu (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[42]= hbookManager->histogram("p   in Fe (MeV/mm)Ziegler1977p"
+ h[42]= hbookManager->histogram("p   in Fe (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[43]= hbookManager->histogram("p   in Pb (MeV/mm)Ziegler1977p"
+ h[43]= hbookManager->histogram("p   in Pb (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[44]= hbookManager->histogram("p   in C2H6 (MeV/mm)Ziegler1977p"
+ h[44]= hbookManager->histogram("p   in C2H6 (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[45]= hbookManager->histogram("p   in H2O (MeV/mm)Ziegler1977p"
+ h[45]= hbookManager->histogram("p   in H2O (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[46]= hbookManager->histogram("p   in lAr (MeV/mm)Ziegler1977p"
+ h[46]= hbookManager->histogram("p   in lAr (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
- h[47]= hbookManager->histogram("p   in CsI (MeV/mm)Ziegler1977p"
+ h[47]= hbookManager->histogram("p   in CsI (MeV/mm)Ziegler1985p"
                                    ,num,log10(minE),log10(maxE)) ;
 
 
@@ -565,6 +572,7 @@ main()
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
     h[34]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],water,tkin) ;
+    de += theNuclearStoppingModel->TheValue(part[1],water,tkin) ;
     //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
     h[35]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],LAr,tkin) ;
@@ -593,7 +601,7 @@ main()
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
     h[66]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],water,tkin) ;
-    //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
+    // G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
     h[67]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[1],LAr,tkin) ;
     h[68]->accumulate(log10(tkin),de) ;
@@ -603,6 +611,9 @@ main()
 
   G4cout << "AntiProton's dEdx histograms are filled!" << G4endl;
 
+  G4double mProt = part[0]->GetPDGMass()*1.007276;
+  G4double fact  = cm/(2700.0*MeV) ;      // to MeV/mg/cm^2
+
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
     de = theIonEffChargeModel->TheValue(part[3],Cu,tkin) ;
@@ -610,12 +621,18 @@ main()
     h[48]->accumulate(log10(tkin),de) ;
     de = theIonEffChargeModel->TheValue(part[4],Cu,tkin) ;
     h[49]->accumulate(log10(tkin),de) ;
-    de = hIon[3]->ComputeDEDX(part[3],Al,tkin) ;
-    h[50]->accumulate(log10(tkin),de) ;
-    de = hIon[4]->ComputeDEDX(part[4],Al,tkin) ;
-    h[51]->accumulate(log10(tkin),de) ;
-    de = hIon[5]->ComputeDEDX(part[5],Al,tkin) ;
-    h[52]->accumulate(log10(tkin),de) ;
+    G4double tRed = tkin * (part[3]->GetPDGMass())/mProt ;
+    de = hIon[3]->ComputeDEDX(part[3],Al,tRed) ;
+    de += theNuclearStoppingModel->TheValue(part[3],Al,tRed) ;
+    h[50]->accumulate(log10(tkin),de*fact) ;
+    tRed = tkin * (part[4]->GetPDGMass())/mProt ;
+    de = hIon[4]->ComputeDEDX(part[4],Al,tRed) ;
+    de += theNuclearStoppingModel->TheValue(part[4],Al,tRed) ;
+    h[51]->accumulate(log10(tkin),de*fact) ;
+    tRed = tkin * (part[5]->GetPDGMass())/mProt ;
+    de = hIon[5]->ComputeDEDX(part[5],Al,tRed) ;
+    de += theNuclearStoppingModel->TheValue(part[5],Al,tRed) ;
+    h[52]->accumulate(log10(tkin),de*fact) ;
   }
 
   G4cout << "Ions's dEdx histograms are filled!" << G4endl;
@@ -623,7 +640,10 @@ main()
   theProcessManager[7] = new G4ProcessManager(part[0]);
   part[0]->SetProcessManager(theProcessManager[7]);
   hIon[7] = new G4hLowEnergyIonisation();
-  hIon[7]->SetElectronicStoppingPowerModel(part[0],"Ziegler1977p"); 
+  hIon[7]->SetElectronicStoppingPowerModel(part[0],"Ziegler1985p"); 
+  hIon[7]->SetEnlossFluc(false) ;
+  //  hIon[7]->SetNuclearStoppingOff();
+  //  hIon[7]->SetBarkasOff();
   theProcessManager[7]->AddProcess(hIon[7]);
   hIon[7]->BuildPhysicsTable(*part[0]);
 

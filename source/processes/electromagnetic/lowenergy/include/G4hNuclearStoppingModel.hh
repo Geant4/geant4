@@ -74,6 +74,13 @@ public:
 		    const G4Material* material) const
                           {return true;};
 
+  void SetNuclearStoppingFluctuationsOn() 
+               {nStopingPowerTable->SetNuclearStoppingFluctuationsOn();}; 
+
+  void SetNuclearStoppingFluctuationsOff() 
+               {nStopingPowerTable->SetNuclearStoppingFluctuationsOff();}; 
+
+
 protected:
 
 private:

@@ -50,9 +50,9 @@ hTestRunAction::hTestRunAction()
   Steplow  = -0.5;
   Stephigh = 95.5;
 
-  nbinEn = 300;
+  nbinEn = 2000;
   Enlow  = 0.0;
-  Enhigh = 300.0;
+  Enhigh = 200.0;
 
   nbinTh = 90;
   Thlow  = 0.0;

@@ -5,11 +5,9 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#include "G4Timer.hh"
-   
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //
 // Always place it in front!
 //
@@ -41,13 +39,13 @@ hTestPhysicsList::hTestPhysicsList(hTestDetectorConstruction* p)
 {
   pDet = p;
 
-  defaultCutValue = 1*cm;
-  cutForGamma     = defaultCutValue;
+  defaultCutValue = 0.001*cm;
+  cutForGamma     = 0.1*cm;
   cutForElectron  = defaultCutValue;
   cutForProton    = defaultCutValue;
   
   //  MaxChargedStep = DBL_MAX; 
-  MaxChargedStep = 1*cm; 
+  MaxChargedStep = 0.001*cm; 
   
   SetVerboseLevel(2);
   physicsListMessenger = new hTestPhysicsListMessenger(this);
@@ -188,10 +186,12 @@ void hTestPhysicsList::ConstructEM()
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //  pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
-      pmanager->AddProcess(new G4LowEnergyBremsstrahlung,    -1,-1,3);       
-      //      pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+
+      //pmanager->AddProcess(new G4eIonisation,   -1, 2,2);
+      //pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);       
+
+      pmanager->AddProcess(new G4LowEnergyIonisation,  -1, 2,2);
+      pmanager->AddProcess(new G4LowEnergyBremsstrahlung, -1,-1,3);   
 
       hTestStepCut* theeminusStepCut = new hTestStepCut();
       theeminusStepCut->SetMaxStep(MaxChargedStep);  
@@ -200,7 +200,7 @@ void hTestPhysicsList::ConstructEM()
     } else if (particleName == "e+") {
       //positron      
       pmanager->AddProcess(new G4MultipleScattering, -1, 1,1);
-      //       pmanager->AddProcess(new G4LowEnergyIonisation,        -1, 2,2);
+      //  pmanager->AddProcess(new G4LowEnergyIonisation, -1, 2,2);
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
@@ -264,10 +264,10 @@ void hTestPhysicsList::ConstructEM()
       G4cout << "Ionic processes for " << particleName << G4endl; 
 
       // Standard ionisation
-      //        G4hIonisation* iIon = new G4hIonisation() ;
+      //   G4hIonisation* iIon = new G4hIonisation() ;
 
       // Standard ionisation with low energy extantion
-        G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
+      G4hLowEnergyIonisation* iIon = new G4hLowEnergyIonisation() ;
 
       // iIon->SetNuclearStoppingOff() ;
       // iIon->SetNuclearStoppingOn() ;
