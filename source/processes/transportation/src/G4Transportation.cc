@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Transportation.cc,v 1.31 2002-11-08 23:52:34 jacek Exp $
+// $Id: G4Transportation.cc,v 1.32 2002-12-16 11:21:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // ------------------------------------------------------------
@@ -50,6 +50,7 @@
 // =======================================================================
 
 #include "G4Transportation.hh"
+#include "G4ProductionCutsTable.hh"
 
 ///////////////////////////////////////////////////////////////////////////////
 //
@@ -603,6 +604,18 @@ G4VParticleChange* G4Transportation::PostStepDoIt( const G4Track& track,
   // ( <const_cast> pNewMaterial ) ;
 
   fParticleChange.SetMaterialChange( (G4Material *) pNewMaterial ) ;
+
+  const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
+  if( pNewVol != 0 ) pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
+  if( pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
+  {
+    // for parametrized volume
+    pNewMaterialCutsCouple
+     = G4ProductionCutsTable::GetProductionCutsTable()
+        ->GetMaterialCutsCouple(pNewMaterial,
+          pNewMaterialCutsCouple->GetProductionCuts());
+  }
+  fParticleChange.SetMaterialCutsCoupleChange( pNewMaterialCutsCouple );
 
   //    temporarily until Get/Set Material of ParticleChange, 
   //    and StepPoint can be made const. 
