@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleChange.cc,v 1.10 2000-02-13 15:08:27 kurasige Exp $
+// $Id: G4ParticleChange.cc,v 1.11 2000-10-20 11:42:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,11 +34,6 @@ G4bool G4ParticleChange::fUseEBForAll = false;
 
 G4ParticleChange::G4ParticleChange():G4VParticleChange(false)
 {
-#ifdef G4VERBOSE
-  if (verboseLevel>2) {
-    G4cout << "G4ParticleChange::G4ParticleChange() " << G4endl;
-  }
-#endif
 }
 
 G4ParticleChange::G4ParticleChange(G4bool useEB):G4VParticleChange(useEB)
@@ -73,6 +68,7 @@ G4ParticleChange::G4ParticleChange(const G4ParticleChange &right): G4VParticleCh
    theMassChange = right.theMassChange;
    theChargeChange = right.theChargeChange;
    theWeightChange = right.theWeightChange;
+   theProperTimeChange = right.theProperTimeChange;
 }
 
 // assignemnt operator
@@ -87,6 +83,7 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
+
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
       thePositionChange = right.thePositionChange;
@@ -95,6 +92,7 @@ G4ParticleChange & G4ParticleChange::operator=(const G4ParticleChange &right)
       theMassChange = right.theMassChange;
       theChargeChange = right.theChargeChange;
       theWeightChange = right.theWeightChange;
+
       theTrueStepLength = right.theTrueStepLength;
       theLocalEnergyDeposit = right.theLocalEnergyDeposit;
       theSteppingControlFlag = right.theSteppingControlFlag;
