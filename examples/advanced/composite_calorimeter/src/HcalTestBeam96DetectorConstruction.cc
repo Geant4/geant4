@@ -14,7 +14,7 @@
 #include "CCalMaterialFactory.hh"
 #include "CCalRotationMatrixFactory.hh"
 #include "CCalSensAssign.hh"
-#include "TestBeamMagneticField.hh"
+#include "CCalMagneticField.hh"
 #include "G4HcalTB96.hh"
 #include "utils.hh"
 
@@ -53,7 +53,7 @@ G4VPhysicalVolume* HcalTestBeam96DetectorConstruction::Construct() {
   static G4bool fieldIsInitialized = false;
   //And finally that it was not initialized previously
   if (!fieldIsInitialized) {
-    TestBeamMagneticField* ccalField=new TestBeamMagneticField("fmap.tb96");
+    CCalMagneticField* ccalField=new CCalMagneticField("fmap.tb96");
     G4double field = ccalField->GetConstantFieldvalue();
     if (field == 0) {
       ccalField = NULL;

@@ -1,15 +1,10 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSPrimaryGeneratorAction.cc
-// Author: I. Gonzalez
-// Last modification: 11/98 I.G.
-//		      06/08/99 V.L.
-//                    08/09/99 I.G. -> Add gunMessenger. Pythia file clean up.
-//                    18/04/00 P.A., S.B. Added functionality
-//                    10/01 P.Arce use COBRA GeneratorInterface
+// File: CCalPrimaryGeneratorAction.cc
+// Description: CCalPrimaryGeneratorAction Sets up particle beam
 ///////////////////////////////////////////////////////////////////////////////
 
-#include "CMSPrimaryGeneratorAction.hh"
-#include "CMSPrimaryGeneratorMessenger.hh"
+#include "CCalPrimaryGeneratorAction.hh"
+#include "CCalPrimaryGeneratorMessenger.hh"
 #include "G4HEPEvtInterface.hh"
 
 #include "G4Event.hh"
@@ -23,13 +18,13 @@
 
 #define debug
 
-CMSPrimaryGeneratorAction::CMSPrimaryGeneratorAction(): particleGun(0),
+CCalPrimaryGeneratorAction::CCalPrimaryGeneratorAction(): particleGun(0),
   generatorInput(singleFixed),  verboseLevel(0), n_particle(1), 
   particleName("pi-"), particleEnergy(100*GeV), particlePosition(0.,0.,0.),
   particleDir(1.,1.,0.1), isInitialized(0), scanSteps(0) {
   
   //Initialise the messenger
-  gunMessenger = new CMSPrimaryGeneratorMessenger(this);
+  gunMessenger = new CCalPrimaryGeneratorMessenger(this);
     
   //Default settings:
   SetMinimumEnergy(1.*GeV);
@@ -56,14 +51,14 @@ CMSPrimaryGeneratorAction::CMSPrimaryGeneratorAction(): particleGun(0),
   print(0);
 }
 
-CMSPrimaryGeneratorAction::~CMSPrimaryGeneratorAction() {
+CCalPrimaryGeneratorAction::~CCalPrimaryGeneratorAction() {
   if (gunMessenger)
     delete gunMessenger;
   if (particleGun)
     delete particleGun;
 }
 
-void CMSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
+void CCalPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
   if (isInitialized == 0) initialize();
 
@@ -99,8 +94,10 @@ void CMSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
     scanPhiStep = (phiMax - phiMin) / phiSteps;
 #ifdef debug
     if (verboseLevel > 2 ) {
-      G4cout << " scanEtaStep " << scanEtaStep << " # of Steps " << etaSteps << endl;
-      G4cout << " scanPhiStep " << scanPhiStep << " # of Steps " << phiSteps << endl;
+      G4cout << " scanEtaStep " << scanEtaStep << " # of Steps " << etaSteps 
+	     << endl;
+      G4cout << " scanPhiStep " << scanPhiStep << " # of Steps " << phiSteps 
+	     << endl;
     }
 #endif
 
@@ -140,12 +137,12 @@ void CMSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 } 
 
 
-void CMSPrimaryGeneratorAction::SetVerboseLevel(G4int val){
+void CCalPrimaryGeneratorAction::SetVerboseLevel(G4int val){
   verboseLevel = val;
 }
 
 
-void CMSPrimaryGeneratorAction::SetRandom(G4String val) { 
+void CCalPrimaryGeneratorAction::SetRandom(G4String val) { 
 
   if (val=="on") {
     generatorInput = singleRandom;
@@ -157,7 +154,7 @@ void CMSPrimaryGeneratorAction::SetRandom(G4String val) {
 }
 
 
-void CMSPrimaryGeneratorAction::SetScan(G4String val) { 
+void CCalPrimaryGeneratorAction::SetScan(G4String val) { 
 
   if (val=="on") {
     generatorInput = singleScan;
@@ -170,16 +167,17 @@ void CMSPrimaryGeneratorAction::SetScan(G4String val) {
 }
 
 
-void CMSPrimaryGeneratorAction::SetMinimumEnergy(G4double p){
+void CCalPrimaryGeneratorAction::SetMinimumEnergy(G4double p){
 
   if (p <= 0.) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetMinimumEnergy: value " << p/GeV << "GeV is out of bounds, it will not be used"<<endl;
-    G4cerr<<" Should be  >0.  Please check"<<endl; 
+    G4cerr << "CCalPrimaryGeneratorAction::SetMinimumEnergy: value " << p/GeV 
+	   << "GeV is out of bounds, it will not be used" << endl;
+    G4cerr << " Should be  >0.  Please check" << endl; 
   } else {
     energyMin = p;
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting min. value of energy to "
+      G4cout << " CCalPrimaryGeneratorAction: setting min. value of energy to "
 	     << energyMin/GeV << " GeV " << endl;
     }
 #endif
@@ -187,16 +185,17 @@ void CMSPrimaryGeneratorAction::SetMinimumEnergy(G4double p){
 }
 
 
-void CMSPrimaryGeneratorAction::SetMaximumEnergy(G4double p){
+void CCalPrimaryGeneratorAction::SetMaximumEnergy(G4double p){
 
   if (p <= 0.) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetMaximumEnergy: value " << p/GeV << "GeV is out of bounds, it will not be used"<<endl;
-    G4cerr<<" Should be  >0.  Please check"<<endl; 
+    G4cerr << "CCalPrimaryGeneratorAction::SetMaximumEnergy: value " << p/GeV 
+	   << "GeV is out of bounds, it will not be used" << endl;
+    G4cerr << " Should be  >0.  Please check" << endl; 
   } else {
     energyMax = p;
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting max. value of energy to "
+      G4cout << " CCalPrimaryGeneratorAction: setting max. value of energy to "
 	     << energyMax/GeV << " GeV " << endl;
     }
 #endif
@@ -204,16 +203,17 @@ void CMSPrimaryGeneratorAction::SetMaximumEnergy(G4double p){
 }
 
 
-void CMSPrimaryGeneratorAction::SetMinimumPhi(G4double p){
+void CCalPrimaryGeneratorAction::SetMinimumPhi(G4double p){
 
   if (fabs(p)>2.*pi) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetMinimumPhi: setting value quite large"<<endl;
-    G4cerr<<" Should be given in radians - Please check"<<endl;
+    G4cerr << "CCalPrimaryGeneratorAction::SetMinimumPhi: setting value quite "
+	   << "large" << endl;
+    G4cerr << " Should be given in radians - Please check" << endl;
   } else {
     phiMin = fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting min. value of phi to "
+      G4cout << " CCalPrimaryGeneratorAction: setting min. value of phi to "
 	     << phiMin << endl;
     }
 #endif
@@ -221,16 +221,17 @@ void CMSPrimaryGeneratorAction::SetMinimumPhi(G4double p){
 }
 
 
-void CMSPrimaryGeneratorAction::SetMaximumPhi(G4double p){
+void CCalPrimaryGeneratorAction::SetMaximumPhi(G4double p){
 
   if (fabs(p)>2.*pi) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetMaximumPhi: setting value quite large"<<endl;
-    G4cerr<<" Should be given in radians - Please check"<<endl;
+    G4cerr << "CCalPrimaryGeneratorAction::SetMaximumPhi: setting value quite "
+	   << "large" << endl;
+    G4cerr << " Should be given in radians - Please check" << endl;
   } else {
     phiMax = fabs(p);
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting max. value of phi to "
+      G4cout << " CCalPrimaryGeneratorAction: setting max. value of phi to "
 	     << phiMax << endl;
     }
 #endif
@@ -238,16 +239,17 @@ void CMSPrimaryGeneratorAction::SetMaximumPhi(G4double p){
 }
 
 
-void CMSPrimaryGeneratorAction::SetStepsPhi(G4int val){
+void CCalPrimaryGeneratorAction::SetStepsPhi(G4int val){
 
   if (val <= 0) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetStepsPhi: value " << val << " is out of bounds, it will not be used"<<endl;
-    G4cerr<<" Should be  > 0  Please check"<<endl; 
+    G4cerr << "CCalPrimaryGeneratorAction::SetStepsPhi: value " << val 
+	   << " is out of bounds, it will not be used" << endl;
+    G4cerr << " Should be  > 0  Please check" << endl; 
   } else {
     phiSteps = val;
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting no. of steps in phi to "
+      G4cout << " CCalPrimaryGeneratorAction: setting no. of steps in phi to "
 	     << phiSteps << endl;
     }
 #endif
@@ -255,56 +257,56 @@ void CMSPrimaryGeneratorAction::SetStepsPhi(G4int val){
 }
 
 
-void CMSPrimaryGeneratorAction::SetMinimumEta(G4double p){
+void CCalPrimaryGeneratorAction::SetMinimumEta(G4double p){
 
   etaMin = p;
 #ifdef debug
   if (verboseLevel >= 1 ) {
-    G4cout << " CMSPrimaryGeneratorAction: setting min. value of eta to "
+    G4cout << " CCalPrimaryGeneratorAction: setting min. value of eta to "
 	   << etaMin << endl;
   }
 #endif
 }
 
 
-void CMSPrimaryGeneratorAction::SetMaximumEta(G4double p){
+void CCalPrimaryGeneratorAction::SetMaximumEta(G4double p){
 
   etaMax = p;
 #ifdef debug
   if (verboseLevel >= 1 ) {
-    G4cout << " CMSPrimaryGeneratorAction: setting max. value of eta to "
+    G4cout << " CCalPrimaryGeneratorAction: setting max. value of eta to "
 	   << etaMax << endl;
   }
 #endif
 }
 
 
-void CMSPrimaryGeneratorAction::SetStepsEta(G4int val){
+void CCalPrimaryGeneratorAction::SetStepsEta(G4int val){
 
   if (val <= 0) {
-    G4cerr<<"CMSPrimaryGeneratorAction::SetStepsEta: value " << val << " is out of bounds, it will not be used"<<endl;
+    G4cerr<<"CCalPrimaryGeneratorAction::SetStepsEta: value " << val << " is out of bounds, it will not be used"<<endl;
     G4cerr<<" Should be  > 0  Please check"<<endl; 
   } else {
     etaSteps = val;
 #ifdef debug
     if (verboseLevel >= 1 ) {
-      G4cout << " CMSPrimaryGeneratorAction: setting no. of steps in eta to "
+      G4cout << " CCalPrimaryGeneratorAction: setting no. of steps in eta to "
 	     << etaSteps << endl;
     }
 #endif
   }
 }
 
-void CMSPrimaryGeneratorAction::SetGunPosition(const G4ThreeVector & pos) const {
+void CCalPrimaryGeneratorAction::SetGunPosition(const G4ThreeVector & pos) const {
 
   particleGun->SetParticlePosition(pos);
 }
 
-void CMSPrimaryGeneratorAction::SetRunNo(G4int val){
+void CCalPrimaryGeneratorAction::SetRunNo(G4int val){
   G4RunManager::GetRunManager()->SetRunIDCounter( val );
 }
 
-void CMSPrimaryGeneratorAction::initialize(){
+void CCalPrimaryGeneratorAction::initialize(){
 
   isInitialized = 1;
 
@@ -312,7 +314,7 @@ void CMSPrimaryGeneratorAction::initialize(){
 }
 
 
-void CMSPrimaryGeneratorAction::print(G4int val){
+void CCalPrimaryGeneratorAction::print(G4int val){
 
 #ifdef debug
   if (verboseLevel >= val) {
@@ -321,7 +323,7 @@ void CMSPrimaryGeneratorAction::print(G4int val){
       G4cout << endl
       	     << "**********************************************************************" << endl
 	     << "*                                                                    *" << endl  
-      	     << "* CMSPrimaryGeneratorAction DEFAULT Random Energy/Direction settings:*" << endl
+      	     << "* CCalPrimaryGeneratorAction DEFAULT Random Energy/Direction setting:*" << endl
 	     << "*                                                                    *" << endl  
 	     << "*                                                                    *" << endl  
 	     << "*   Energy in    [ "<< energyMin/GeV   << " - " << energyMax/GeV   << "] (GeV) "<< endl
@@ -335,7 +337,7 @@ void CMSPrimaryGeneratorAction::print(G4int val){
       G4cout << endl
 	     << "**********************************************************************" << endl
 	     << "*                                                                    *" << endl  
-      	     << "* CMSPrimaryGeneratorAction DEFAULT Scan Direction settings :        *" << endl
+      	     << "* CCalPrimaryGeneratorAction DEFAULT Scan Direction settings :       *" << endl
 	     << "*                                                                    *" << endl  
 	     << "*                                                                    *" << endl  
 	     << "*   Phi angle in [ " << phiMin/degree   << " - " << phiMax/degree << "] (deg) " << endl
@@ -348,7 +350,7 @@ void CMSPrimaryGeneratorAction::print(G4int val){
       G4cout << endl
 	     << "*******************************************************************" << endl
 	     << "*                                                                 *" << endl  
-	     << "* CMSPrimaryGeneratorAction: Current settings :                   *" << endl
+	     << "* CCalPrimaryGeneratorAction: Current settings :                  *" << endl
 	     << "*                                                                 *" << endl  
 	     << "* " << particleGun->GetNumberOfParticles() 
 	     << "  " << particleGun->GetParticleDefinition()->GetParticleName() 

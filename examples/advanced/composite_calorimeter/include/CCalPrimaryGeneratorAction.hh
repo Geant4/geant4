@@ -1,41 +1,31 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSPrimaryGeneratorAction.hh
-// Date: 06/98
+// File: CCalPrimaryGeneratorAction.hh
 // Description: Sets up particle beam
 //
 //     By default 1 pi+  is shot from (0,0,0)
 //     in (1,1,0.1) direction at 100 GeV
 //     Use /gun/... commands to modify energy,origin,direction at run time.
 //     or/and
-//         /OSCAR/generator/random true/false to have random direction
-//         /OSCAR/generator/scan   true/false to scan in eta/phi
+//         /CCal/generator/random true/false to have random direction
+//         /CCal/generator/scan   true/false to scan in eta/phi
 //     Use 
-//         /OSCAR/generator/minEnergy
-//         /OSCAR/generator/maxEnergy
-//         /OSCAR/generator/minPhi 
-//         /OSCAR/generator/maxPhi 
-//         /OSCAR/generator/minEta
-//         /OSCAR/generator/maxEta 
+//         /CCal/generator/minEnergy
+//         /CCal/generator/maxEnergy
+//         /CCal/generator/minPhi 
+//         /CCal/generator/maxPhi 
+//         /CCal/generator/minEta
+//         /CCal/generator/maxEta 
 //     to set the range in energy and direction of particles shot at random.
 //     Use 
-//         /OSCAR/generator/stepsPhi
-//         /OSCAR/generator/stepsEta
+//         /CCal/generator/stepsPhi
+//         /CCal/generator/stepsEta
 //     to set number of steps in Phi and Eta for the scan
 //
-//
-// Last modified: 08/98 I.G. (updated to beta version)
-//                06/08/99 V.Lefebure -> add possibility to use pythia events
-//                08/09/99 I.G.       -> Add gunMessenger. Pythia file clean up
-//                12/10/99 V.L.       -> add comments
-//		  14/10/99 V.L.	      -> add solid angle restriction
-//		  15/10/99 V.L.       -> add gun messenger options
-//                18/04/00 P.A., S.B. -> Extended functionality
-//                   10/01 P.Arce use COBRA GeneratorInterface
 ///////////////////////////////////////////////////////////////////////////////
 
 
-#ifndef CMSPrimaryGeneratorAction_h
-#define CMSPrimaryGeneratorAction_h 1
+#ifndef CCalPrimaryGeneratorAction_h
+#define CCalPrimaryGeneratorAction_h 1
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "G4ParticleGun.hh"
@@ -44,14 +34,14 @@
 #include "G4Event.hh"
 #include "G4VPrimaryGenerator.hh"
 
-#include "CMSPrimaryGeneratorMessenger.hh"
+#include "CCalPrimaryGeneratorMessenger.hh"
 
 enum generatorInputType {singleFixed, singleRandom, singleScan};
 
-class CMSPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
+class CCalPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction {
 public:
-  CMSPrimaryGeneratorAction();
-  ~CMSPrimaryGeneratorAction();
+  CCalPrimaryGeneratorAction();
+  ~CCalPrimaryGeneratorAction();
   
 public:
   void GeneratePrimaries(G4Event* anEvent);
@@ -76,7 +66,7 @@ public:
   G4double GetParticleEnergy() {return particleGun->GetParticleEnergy();}
 
 private:
-  CMSPrimaryGeneratorMessenger* gunMessenger;
+  CCalPrimaryGeneratorMessenger* gunMessenger;
   G4ParticleGun* particleGun;
   generatorInputType generatorInput;
 

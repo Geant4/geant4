@@ -1,5 +1,10 @@
-#ifndef HcalTB96Analysis_h 
-#define HcalTB96Analysis_h 1
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAnalysis.hh
+// Description: CCalAnalysis is a singleton class and interfaces all user
+//              analysis code
+///////////////////////////////////////////////////////////////////////////////
+#ifndef CCalAnalysis_h 
+#define CCalAnalysis_h 1
 
 #include "globals.hh"
 #include "g4std/vector"
@@ -13,9 +18,9 @@ class IHistogram2D;
 class ITuple;
 class IPlotter;
 
-class HcalTB96Analysis {
+class CCalAnalysis {
 public:
-  virtual ~HcalTB96Analysis();
+  virtual ~CCalAnalysis();
   
 public:
   void BeginOfRun(G4int n);
@@ -36,12 +41,12 @@ public:
   void setNtuple(float* hcalE, float* ecalE, float elab, float x, float y, 
 		 float z, float edep, float edec, float edhc);
 
-  static HcalTB96Analysis* getInstance();
+  static CCalAnalysis* getInstance();
 
 private:
-  HcalTB96Analysis();
+  CCalAnalysis();
 private:
-  static HcalTB96Analysis* instance;
+  static CCalAnalysis* instance;
 
   IAnalysisFactory* analysisFactory;
   ITree* tree;

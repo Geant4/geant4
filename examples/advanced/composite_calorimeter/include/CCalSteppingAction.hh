@@ -11,7 +11,7 @@
 class G4Step;
 class CCalSteppingAction : public G4UserSteppingAction {
 
-  friend class HcalTB96EndOfEventAction;
+  friend class CCalEndOfEventAction;
 private:
   CCalSteppingAction();
 public:

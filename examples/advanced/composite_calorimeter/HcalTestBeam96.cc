@@ -1,30 +1,28 @@
 ///////////////////////////////////////////////////////////////////////////////
 // File: HcalTestBeam96.cc
-// Author: veronique.lefebure@cern.ch  11.1998
-// 10/01 P.Arce  Reorganization of user actions   
 // Description: Main function for Geant4 application HCAL Test-BEAM H2-96
 ///////////////////////////////////////////////////////////////////////////////
 
 //#define VIS_USE
 
 #include "HcalTestBeam96DetectorConstruction.hh"
-#include "HcalTB96EndOfEventAction.hh"
-#include "HcalTB96RunAction.hh"
+#include "CCalEndOfEventAction.hh"
+#include "CCalRunAction.hh"
 
-#include "CMSPrimaryGeneratorAction.hh"
+#include "CCalPrimaryGeneratorAction.hh"
 #include "HcalTestBeam99PhysicsList.hh"
 
 #include "G4RunManager.hh"
 #include "G4UIterminal.hh"
 #ifdef VIS_USE
-  #include "CMSVisManager.hh"
+  #include "CCalVisManager.hh"
 #endif
 
 
 int main(int argc,char** argv) {
 
 #ifdef VIS_USE
-  CMSVisManager *visManager = new CMSVisManager;
+  CCalVisManager *visManager = new CCalVisManager;
   visManager->Initialize();
 #endif        
 
@@ -41,23 +39,23 @@ int main(int argc,char** argv) {
   // PRIMARY PARTICLEs GENERATION //
   //////////////////////////////////
 
-  CMSPrimaryGeneratorAction* primaryGenerator = new CMSPrimaryGeneratorAction;
+  CCalPrimaryGeneratorAction* primaryGenerator = new CCalPrimaryGeneratorAction;
   runManager->SetUserAction(primaryGenerator);
   
   /////////
   // RUN //
   /////////
 
-  runManager->SetUserAction(new HcalTB96RunAction);
+  runManager->SetUserAction(new CCalRunAction);
   
   ///////////
   // EVENT //
   ///////////
 
-  runManager->SetUserAction(new HcalTB96EndOfEventAction(primaryGenerator));
+  runManager->SetUserAction(new CCalEndOfEventAction(primaryGenerator));
   
   G4UImanager * UI = G4UImanager::GetUIpointer();
-  UI->ApplyCommand("/OSCAR/generator/verbose 2");
+  UI->ApplyCommand("/CCal/generator/verbose 2");
   UI->ApplyCommand("/gun/position -1380. 0. 0. mm");
   UI->ApplyCommand("/gun/direction 1. 0. 0.");
   UI->ApplyCommand("/gun/energy 10 GeV");

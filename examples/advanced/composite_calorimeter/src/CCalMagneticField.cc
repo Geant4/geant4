@@ -1,9 +1,8 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: TestBeamMagneticField.cc
-// Date: 11/1998 Veronique Lefebure
+// File: CCalMagneticField.cc
 // Description: User Field class implementation.
 ///////////////////////////////////////////////////////////////////////////////
-#include "TestBeamMagneticField.hh"
+#include "CCalMagneticField.hh"
 #include "utils.hh"
 #include "G4FieldManager.hh"
 #include <fstream.h>
@@ -13,7 +12,7 @@
 
 //Constructor and destructor:
 
-TestBeamMagneticField::TestBeamMagneticField(const G4String &filename) :
+CCalMagneticField::CCalMagneticField(const G4String &filename) :
   fval(0), pos(0), slope(0), intercept(0) {
 
   //Let's open the file
@@ -53,7 +52,7 @@ TestBeamMagneticField::TestBeamMagneticField(const G4String &filename) :
 }
 
 
-TestBeamMagneticField::~TestBeamMagneticField() {
+CCalMagneticField::~CCalMagneticField() {
   if (pos)
     delete[] pos;
   if (slope)
@@ -65,7 +64,7 @@ TestBeamMagneticField::~TestBeamMagneticField() {
 
 // Member functions
 
-void TestBeamMagneticField::MagneticField(const double x[3], double B[3]) const {
+void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
 
   G4int i=0;
   for (i=0; i<2; i++) {
@@ -94,7 +93,7 @@ void TestBeamMagneticField::MagneticField(const double x[3], double B[3]) const 
 }
 
 
-Hep3Vector TestBeamMagneticField::MagneticField(const Hep3Vector point) const {
+Hep3Vector CCalMagneticField::MagneticField(const Hep3Vector point) const {
 
   G4double x[3],B[3];
   Hep3Vector v;
@@ -102,7 +101,7 @@ Hep3Vector TestBeamMagneticField::MagneticField(const Hep3Vector point) const {
   x[0] = point.x();
   x[1] = point.y();
   x[2] = point.z();
-  TestBeamMagneticField::MagneticField(x, B);
+  CCalMagneticField::MagneticField(x, B);
   v.setX(B[0]);   
   v.setY(B[1]);   
   v.setZ(B[2]);   
@@ -110,7 +109,7 @@ Hep3Vector TestBeamMagneticField::MagneticField(const Hep3Vector point) const {
 }
 
 
-void TestBeamMagneticField::GetFieldValue(const double x[3], double* B) const {
-  TestBeamMagneticField::MagneticField(x, B);
+void CCalMagneticField::GetFieldValue(const double x[3], double* B) const {
+  CCalMagneticField::MagneticField(x, B);
 }
 

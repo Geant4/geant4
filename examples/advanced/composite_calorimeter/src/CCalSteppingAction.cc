@@ -3,7 +3,7 @@
 // Description: Study profiling during the steps
 ///////////////////////////////////////////////////////////////////////////////
 #include "CCalSteppingAction.hh"
-#include "HcalTB96Analysis.hh"
+#include "CCalAnalysis.hh"
 
 #include "G4SDManager.hh"
 #include "G4StepPoint.hh"
@@ -12,7 +12,7 @@
 
 CCalSteppingAction::CCalSteppingAction(){
 
-  HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
+  CCalAnalysis* analysis = CCalAnalysis::getInstance();
   timeHistoMaxBin=analysis->maxbin();
   int i; 
   for (i=0; i<50; i++){timeDeposit[i] = 0.;}
@@ -47,7 +47,7 @@ void CCalSteppingAction::UserSteppingAction(const G4Step* aStep){
 
 void CCalSteppingAction::endOfEvent(){
 
-  HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
+  CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->InsertLateralProfile(LateralProfile);  
   analysis->InsertTime(timeDeposit); 
   

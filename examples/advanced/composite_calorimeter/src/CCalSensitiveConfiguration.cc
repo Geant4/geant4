@@ -73,7 +73,7 @@ CCalSensitiveConfiguration::CCalSensitiveConfiguration():
 
   G4String name;
   GCInfo gcinfo;
-
+  
   while (is) {
     readName(is, name);
     readName(is, gcinfo.FileName);

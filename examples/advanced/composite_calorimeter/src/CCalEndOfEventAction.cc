@@ -1,12 +1,11 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: HcalTB96EndOfEventAction.cc
-// Date: 11/1998 Veronique Lefebure
-// Modifications: 09/00 Sudeshna Banerjee, Sunanda Banerjee
+// File: CCalEndOfEventAction.cc
+// Description: CCalEndOfEventAction provides User actions at end of event
 ///////////////////////////////////////////////////////////////////////////////
-#include "HcalTB96EndOfEventAction.hh"
-#include "HcalTB96Analysis.hh"
+#include "CCalEndOfEventAction.hh"
+#include "CCalAnalysis.hh"
 #include "CCaloSD.hh"
-#include "CMSPrimaryGeneratorAction.hh"
+#include "CCalPrimaryGeneratorAction.hh"
 #include "CCalG4HitCollection.hh"
 #include "CCalG4Hit.hh"
 #include "CCaloOrganization.hh"
@@ -25,12 +24,12 @@
 //#define debug
 //#define ddebug
 
-HcalTB96EndOfEventAction::HcalTB96EndOfEventAction
-(CMSPrimaryGeneratorAction* pg): isInitialized(false),SDnames(0),numberOfSD(0){
+CCalEndOfEventAction::CCalEndOfEventAction (CCalPrimaryGeneratorAction* pg): 
+  isInitialized(false),SDnames(0),numberOfSD(0) {
 
   primaryGenerator = pg;
 #ifdef debug
-  cout << "Instantiate HcalTB96EndOfEventAction" << endl;
+  cout << "Instantiate CCalEndOfEventAction" << endl;
 #endif
 
   cout << "Now Instantiate stepping action" << endl;
@@ -41,21 +40,21 @@ HcalTB96EndOfEventAction::HcalTB96EndOfEventAction
   cout << "end of instantiation of EndofEventAction" << endl;
 }
 
-HcalTB96EndOfEventAction::~HcalTB96EndOfEventAction() {
+CCalEndOfEventAction::~CCalEndOfEventAction() {
 
   if (theOrg)
     delete theOrg;
   if (SDnames)
     delete SDnames;
-  cout << "Deleting HcalTB96EndOfEventAction" << endl;
+  cout << "Deleting CCalEndOfEventAction" << endl;
 }
 
-void HcalTB96EndOfEventAction::initialize() {
+void CCalEndOfEventAction::initialize() {
 
   isInitialized = true;
   numberOfSD = CCalSDList::getInstance()->getNumberOfCaloSD();
 #ifdef debug
-  cout << "HcalTB96EndOfEventAction look for " << numberOfSD 
+  cout << "CCalEndOfEventAction look for " << numberOfSD 
        << " calorimeter-like SD" << endl;
 #endif
   if (numberOfSD > 0)
@@ -63,16 +62,16 @@ void HcalTB96EndOfEventAction::initialize() {
   for (int i=0; i<numberOfSD; i++) {
     SDnames[i] = G4String(CCalSDList::getInstance()->getCaloSDName(i));
 #ifdef debug
-    cout << "HcalTB96EndOfEventAction: found SD " << i << " name "
+    cout << "CCalEndOfEventAction: found SD " << i << " name "
 	 << SDnames[i] << endl;
 #endif
   }       
 }
 
-void HcalTB96EndOfEventAction::StartOfEventAction(const G4Event* evt)
+void CCalEndOfEventAction::StartOfEventAction(const G4Event* evt)
 { }
 
-void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
+void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 
   if (!isInitialized) initialize();
 
@@ -85,7 +84,7 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   G4HCofThisEvent* allHC = evt->GetHCofThisEvent();
   if (allHC == 0) {
 #ifdef debug
-    cout << "HcalTB96EndOfEventAction: No Hit Collection in this event" 
+    cout << "CCalEndOfEventAction: No Hit Collection in this event" 
 	 << endl;
 #endif
     return;
@@ -162,7 +161,7 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   float edhc = edep[0];
   delete[] edep;
 
-  HcalTB96Analysis* analysis = HcalTB96Analysis::getInstance();
+  CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->InsertEnergy(fullE);
   analysis->InsertEnergyHcal(hcalE);
   analysis->InsertEnergyEcal(ecalE);
@@ -170,15 +169,15 @@ void HcalTB96EndOfEventAction::EndOfEventAction(const G4Event* evt){
   analysis->EndOfEvent(nhit);
 }
 
-void HcalTB96EndOfEventAction::instanciateSteppingAction(){
+void CCalEndOfEventAction::instanciateSteppingAction(){
 
 	
   G4UserSteppingAction* theUA = const_cast<G4UserSteppingAction*>(G4RunManager::GetRunManager()->GetUserSteppingAction());
         
   if (theUA == 0) {
 #ifdef debug
-    cout << " HcalTB96EndOfEventAction::instanciateSteppingAction creates"
-	 << " CMSSteppingAction" << endl;
+    cout << " CCalEndOfEventAction::instanciateSteppingAction creates"
+	 << " CCalSteppingAction" << endl;
 #endif
     theSteppingAction = new CCalSteppingAction;  
     G4RunManager::GetRunManager()->SetUserAction(theSteppingAction);

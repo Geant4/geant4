@@ -1,32 +1,30 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: CMSPrimaryGeneratorMessenger.hh
-// Author: I. Gonzalez (based on Geant4 examples)
+// File: CCalPrimaryGeneratorMessenger.hh
 // Description: Adds a new command to (un)select random shooting.
-// Modification: 18/04/00  P.Arce New commands
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef CMSPrimaryGeneratorMessenger_h
-#define CMSPrimaryGeneratorMessenger_h 1
+#ifndef CCalPrimaryGeneratorMessenger_h
+#define CCalPrimaryGeneratorMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class CMSPrimaryGeneratorAction;
+class CCalPrimaryGeneratorAction;
 
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 
-class CMSPrimaryGeneratorMessenger: public G4UImessenger {
+class CCalPrimaryGeneratorMessenger: public G4UImessenger {
 public:
-  CMSPrimaryGeneratorMessenger(CMSPrimaryGeneratorAction* myGun);
-  ~CMSPrimaryGeneratorMessenger();
+  CCalPrimaryGeneratorMessenger(CCalPrimaryGeneratorAction* myGun);
+  ~CCalPrimaryGeneratorMessenger();
   
   void SetNewValue(G4UIcommand * command,G4String newValues);
   
 private:
-  CMSPrimaryGeneratorAction* myAction;
+  CCalPrimaryGeneratorAction* myAction;
   
   G4UIcmdWithAnInteger*      verboseCmd;
   G4UIcmdWithAString*        rndmCmd;

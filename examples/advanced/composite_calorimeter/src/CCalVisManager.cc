@@ -1,9 +1,12 @@
-// $Id: CMSVisManager.cc,v 1.1 2002-10-01 14:39:02 arce Exp $
-// John Allison 24th January 1998.
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalVisManager.cc
+// Description: CCalVisManager visualisation manager for the example
+///////////////////////////////////////////////////////////////////////////////
+
 #include <iostream>
 
 #ifdef G4VIS_USE
-#include "CMSVisManager.hh"
+#include "CCalVisManager.hh"
 
 // Supported drivers...
 
@@ -52,11 +55,11 @@
 #include "G4VRML2File.hh"
 #endif
 
-CMSVisManager::CMSVisManager (G4int verboseLevel) {
+CCalVisManager::CCalVisManager (G4int verboseLevel) {
   SetVerboseLevel( verboseLevel );
 }
 
-void CMSVisManager::RegisterGraphicsSystems () {
+void CCalVisManager::RegisterGraphicsSystems () {
 
 #ifdef G4VIS_USE_DAWN
   RegisterGraphicsSystem (new G4FukuiRenderer);

@@ -1,7 +1,11 @@
+///////////////////////////////////////////////////////////////////////////////
+// File: CCalAnalysis.cc
+// Description: CCalAnalysis interfaces all user analysis code
+///////////////////////////////////////////////////////////////////////////////
 
 #include "G4RunManager.hh" 
 
-#include "HcalTB96Analysis.hh"
+#include "CCalAnalysis.hh"
 #include "utils.hh"
 
 #include <AIDA/IAnalysisFactory.h>
@@ -18,11 +22,9 @@
 
 //#define debug
 
-HcalTB96Analysis* HcalTB96Analysis::instance = 0;
+CCalAnalysis* CCalAnalysis::instance = 0;
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0), 
+CCalAnalysis::CCalAnalysis() :analysisFactory(0), tree(0), tuple(0), 
   energy(0), profile(0) {
 
   int i=0;
@@ -120,32 +122,30 @@ HcalTB96Analysis::HcalTB96Analysis() :analysisFactory(0), tree(0), tuple(0),
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-HcalTB96Analysis::~HcalTB96Analysis() {
+CCalAnalysis::~CCalAnalysis() {
   Finish();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void HcalTB96Analysis::Init() {
+void CCalAnalysis::Init() {
 }                       
 
-void HcalTB96Analysis::Finish() {
+void CCalAnalysis::Finish() {
   if (tree) 
     delete tree;
   if (analysisFactory) 
     delete analysisFactory; // Will delete tree and histos.
 }             
 
-HcalTB96Analysis* HcalTB96Analysis::getInstance() {
-  if (instance == 0) instance = new HcalTB96Analysis();
+CCalAnalysis* CCalAnalysis::getInstance() {
+  if (instance == 0) instance = new CCalAnalysis();
   return instance;
 }
 
 
 // This function fill the 1d histogram of the energies in HCal layers
-void HcalTB96Analysis::InsertEnergyHcal(float* v) {
+void CCalAnalysis::InsertEnergyHcal(float* v) {
   for (int i=0; i<28; i++) {
     if (hcalE[i]) {
       double x = v[i];
@@ -157,8 +157,9 @@ void HcalTB96Analysis::InsertEnergyHcal(float* v) {
   }
 }
 
+
 // This function fill the 1d histogram of the energies in ECal layers
-void HcalTB96Analysis::InsertEnergyEcal(float* v) {
+void CCalAnalysis::InsertEnergyEcal(float* v) {
   for (int i=0; i<49; i++) {
     if (ecalE[i]) {
       double x = v[i];
@@ -170,8 +171,9 @@ void HcalTB96Analysis::InsertEnergyEcal(float* v) {
   }
 }
 
+
 // This function fill the 1d histogram of the lateral profile
-void HcalTB96Analysis::InsertLateralProfile(float* v) {
+void CCalAnalysis::InsertLateralProfile(float* v) {
   for (int i=0; i<28; i++) {
     if (lateralProfile[i]) {
       double x = v[i];
@@ -183,8 +185,9 @@ void HcalTB96Analysis::InsertLateralProfile(float* v) {
   }
 }
 
+
 // This function fill the 1d histogram of the energy 
-void HcalTB96Analysis::InsertEnergy(float v) {
+void CCalAnalysis::InsertEnergy(float v) {
   if (energy) {
     double x = v;
     energy->fill(x);
@@ -194,8 +197,9 @@ void HcalTB96Analysis::InsertEnergy(float v) {
   }
 }
 
+
 // This function fill the 1d histograms of time profiles
-void HcalTB96Analysis::InsertTime(float* v) {
+void CCalAnalysis::InsertTime(float* v) {
   for (int j=0; j<numberOfTimeSlices; j++) {
     if (timeHist[j]) {
       double x = v[j];
@@ -207,9 +211,10 @@ void HcalTB96Analysis::InsertTime(float* v) {
   }
 }
 
-void HcalTB96Analysis::setNtuple(float* hcalE, float* ecalE, float elab, 
-				 float x, float y, float z, float edep, 
-				 float edec, float edhc) {
+
+void CCalAnalysis::setNtuple(float* hcalE, float* ecalE, float elab, 
+			     float x, float y, float z, float edep, 
+			     float edec, float edhc) {
 
   ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
   if (ntuple) {
@@ -234,13 +239,13 @@ void HcalTB96Analysis::setNtuple(float* hcalE, float* ecalE, float elab,
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 /* 
    This member reset the histograms and it is called at the begin
    of each run; here we put the inizialization so that the histograms have 
    always the right dimensions depending from the detector geometry
 */
-void HcalTB96Analysis::BeginOfRun(G4int n)  { 
+void CCalAnalysis::BeginOfRun(G4int n)  { 
   
   int i=0;  
   /*
@@ -259,12 +264,9 @@ void HcalTB96Analysis::BeginOfRun(G4int n)  {
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-/* 
-   This member is called at the end of each run 
-*/
-void HcalTB96Analysis::EndOfRun(G4int n)  {
+//  This member is called at the end of each run 
+void CCalAnalysis::EndOfRun(G4int n)  {
 
   int i;
   ofstream       oFile;
@@ -315,10 +317,9 @@ void HcalTB96Analysis::EndOfRun(G4int n)  {
 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-/* This member is called at the end of every event */
-void HcalTB96Analysis::EndOfEvent(G4int flag) {
+// This member is called at the end of every event 
+void CCalAnalysis::EndOfEvent(G4int flag) {
 
   // The plotter is updated only if there is some
   // hits in the event

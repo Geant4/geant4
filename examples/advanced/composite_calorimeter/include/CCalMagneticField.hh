@@ -1,21 +1,19 @@
 ///////////////////////////////////////////////////////////////////////////////
-// File: TestBeamMagneticField.hh
-// Date:
-// Modifications: 20/09/00 SB
+// File: CCalMagneticField.hh
 // Description: A class for control of the Magnetic Field of the detector.
 //              The field is assumed to be uniform.
 ///////////////////////////////////////////////////////////////////////////////
-#ifndef TestBeamMagneticField_H
-#define TestBeamMagneticField_H
+#ifndef CCalMagneticField_H
+#define CCalMagneticField_H
 
 #include "G4UniformMagField.hh"
 #include "G4ThreeVector.hh"
 class G4FieldManager;
 
-class TestBeamMagneticField: public G4MagneticField {
+class CCalMagneticField: public G4MagneticField {
 public:
-  TestBeamMagneticField(const G4String &name);
-  ~TestBeamMagneticField();  
+  CCalMagneticField(const G4String &name);
+  ~CCalMagneticField();  
       
   // Access functions
   void MagneticField(const double Point[3], double Bfield[3]) const;
