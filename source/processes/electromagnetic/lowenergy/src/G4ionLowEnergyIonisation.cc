@@ -106,7 +106,7 @@ G4double G4ionLowEnergyIonisation::GetLowEnergyForParametrisation(const G4Materi
   G4double E1 = 3.25 * keV ;
   G4double E2 = 25.0 * keV / pow(Z, 0.667) ;
   E1 = G4std::max (E1, E2) ;
-  return max(ParamLowEnergy, E1) / MassRatio ; 
+  return G4std::max(ParamLowEnergy, E1) / MassRatio ; 
 }
 
 
