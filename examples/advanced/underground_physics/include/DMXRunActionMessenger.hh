@@ -56,8 +56,11 @@ class DMXRunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    DMXRunAction*   DMXRun;   
-    G4UIcmdWithAString* FileCmd;
+    DMXRunAction*   DMXRun;
+
+    G4UIcmdWithAString*   SaveHitsCmd;
+    G4UIcmdWithAString*   SavePmtCmd;
+    G4UIcmdWithAString*   SaveHistFileCmd;
 };
 
 #endif

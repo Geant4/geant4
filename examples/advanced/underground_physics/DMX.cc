@@ -97,9 +97,14 @@ int main(int argc,char** argv) {
 #endif
     
   // set user action classes
-  runManager->SetUserAction(new DMXPrimaryGeneratorAction);
-  runManager->SetUserAction(new DMXRunAction);
-  DMXEventAction* eventAction = new DMXEventAction;
+  DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction;
+  runManager->SetUserAction(DMXGenerator);
+  //  runManager->SetUserAction(new DMXPrimaryGeneratorAction);
+  // RunAction is inherited by EventAction for output filenames - will all
+  // change when implement proper analysis manager?
+  DMXRunAction* DMXRun = new DMXRunAction;
+  runManager->SetUserAction(DMXRun);
+  DMXEventAction* eventAction = new DMXEventAction(DMXRun,DMXGenerator);
   runManager->SetUserAction(eventAction);
   // eventAction is inherited by SteppingAction in order to switch colour
   // flag:

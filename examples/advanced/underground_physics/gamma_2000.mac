@@ -1,7 +1,7 @@
 ###############################################################################
 #                                                                             #
-# alpha_1000.mac                                                              #
-# Alpha spectrum from internal calibrator                                     #
+# gamma_1000.mac                                                              #
+# Gamma spectrum from internal calibrator                                     #
 # output in file hits.out                                                     #
 #                                                                             #
 ###############################################################################
@@ -19,14 +19,15 @@
 /dmx/draw/drawHits 0
 #
 # file output
-/dmx/savePmt  0
+#/dmx/savePmt  0
+/dmx/savePmt  1
 /dmx/saveHits 1
 #
 # gun: particle
 /dmx/gun/verbose 0
-/dmx/gun/particle alpha
+/dmx/gun/particle gamma
 /dmx/gun/energytype Mono
-/dmx/gun/energy 5.486 MeV
+/dmx/gun/energy 60.0 keV
 #
 # gun: isotropic
 /dmx/gun/angtype iso
@@ -40,20 +41,14 @@
 /dmx/gun/shape Cylinder
 #/dmx/gun/radius 250 mum
 #/dmx/gun/halfz 10.0 nm
+#/dmx/gun/radius 450 mum
 /dmx/gun/radius 650 mum
 /dmx/gun/halfz 300.0 nm
 #/dmx/gun/centre 0 0 82.750 mm
 /dmx/gun/centre 0 0 -311.75 mm
-#/dmx/gun/centre 0 0 0 mm
 /dmx/gun/confine americium_phys
 #
-# set to 0 if too many tracks to store
-/tracking/storeTrajectory 0
-#
-/dmx/hitsfile alpha.out
-/dmx/histogramfile alpha.his
+/dmx/hitsfile gamma_2000.out
+/dmx/histogramfile gamma_2000.his
 
-/run/beamOn 1000
-#
-/tracking/storeTrajectory 1
-
+/run/beamOn 2000

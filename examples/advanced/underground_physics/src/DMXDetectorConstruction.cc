@@ -37,6 +37,7 @@
 // --------------------------------------------------------------
 
 #include "DMXDetectorConstruction.hh"
+#include "DMXDetectorMessenger.hh"
 
 #include "DMXScintSD.hh"
 #include "DMXPmtSD.hh"
@@ -76,212 +77,45 @@
 
 #include "G4UserLimits.hh"
 
+#include "G4RunManager.hh"
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 DMXDetectorConstruction::DMXDetectorConstruction()  
 {
-  theUserLimits  = NULL; 
-  fUseUserLimits = false;
-  //  theMaxTimeCuts = 1000000. * s;
+  // create commands for interactive definition of time cuts:
+  detectorMessenger = new DMXDetectorMessenger(this);
+
+  theUserLimitsForRoom     = 0; 
+  theUserLimitsForDetector = 0; 
   // default time cut = infinite
   //  - note also number of steps cut in stepping action = MaxNoSteps
-  theMaxTimeCuts = DBL_MAX;
-  theMaxStepSize = DBL_MAX;
+  theMaxTimeCuts      = DBL_MAX;
+  theMaxStepSize      = DBL_MAX;
+  theDetectorStepSize = DBL_MAX;
+  theRoomTimeCut      = 1000. * nanosecond;
+  theMinEkine         = 250.0*eV; // minimum kinetic energy required in volume
+  theRoomMinEkine     = 250.0*eV; // minimum kinetic energy required in volume
 
-  theRoomTimeCut = 10000. * s;
 }
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-DMXDetectorConstruction::~DMXDetectorConstruction() {;}
+DMXDetectorConstruction::~DMXDetectorConstruction() 
+{
+  delete theUserLimitsForRoom;
+  delete theUserLimitsForDetector;
+  delete detectorMessenger;
+}
 
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-void DMXDetectorConstruction::DefineMaterials() {
+void DMXDetectorConstruction::DefineMaterials() 
+{
 
-  G4double density,      // density
-    a,                   // atomic mass
-    z;                   // atomic number
-  G4String name,         // name
-    symbol;              // symbol
-  G4int ncomponents,     // n components
-    iz,                  // number of protons
-    in;                  // number of nuceons
-  G4double abundance,    // abundance
-    temperature,         // temperature
-    pressure;            // pressure
+#include "DMXDetectorMaterial.icc"
 
-
-  // making vacuum
-  G4Material* vacuum = new G4Material 
-    (name="Vacuum", z=1., a=1.*g/mole, density=1.e-20*g/cm3,
-     kStateGas, temperature=0.1*kelvin, pressure=1.e-20*bar);
-
-
-  // xenons
-  G4Element* elementXe = new G4Element( "Xenon", "Xe", 54., 131.29*g/mole );
-  G4Material* LXe = new G4Material
-     ("LXe", 3.02*g/cm3, 1, kStateLiquid, 173.15*kelvin, 1.5*atmosphere );
-  G4Material* GXe = new G4Material
-     ("GXe", 0.005887*g/cm3, 1, kStateGas, 173.15*kelvin, 1.5*atmosphere );
-  LXe->AddElement( elementXe, 1);
-  GXe->AddElement( elementXe, 1);
-
-  const G4int NUMENTRIES = 2;
-  G4double LXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
-  G4double LXe_SCINT[NUMENTRIES] = { 1.0, 1.0 };
-  G4double LXe_RIND[NUMENTRIES]  = { 1.57, 1.57 };
-  G4double LXe_ABSL[NUMENTRIES]  = { 35.*cm, 35.*cm};
-  G4MaterialPropertiesTable *LXe_mt = new G4MaterialPropertiesTable();
-  LXe_mt->AddProperty("SCINTILLATION", LXe_PP, LXe_SCINT, NUMENTRIES);
-  LXe_mt->AddProperty("RINDEX",        LXe_PP, LXe_RIND,  NUMENTRIES);
-  LXe_mt->AddProperty("ABSLENGTH",     LXe_PP, LXe_ABSL,  NUMENTRIES);
-  LXe->SetMaterialPropertiesTable(LXe_mt);
-
-  G4double GXe_PP[NUMENTRIES]    = { 7.07*eV, 7.07*eV };
-  G4double GXe_SCINT[NUMENTRIES] = { 1.0, 1.0 };
-  G4double GXe_RIND[NUMENTRIES]  = { 1.00, 1.00 };
-  G4double GXe_ABSL[NUMENTRIES]  = { 100*m, 100*m};
-  G4MaterialPropertiesTable *GXe_mt = new G4MaterialPropertiesTable();
-  GXe_mt->AddProperty("SCINTILLATION", GXe_PP, GXe_SCINT, NUMENTRIES);
-  GXe_mt->AddProperty("RINDEX",        GXe_PP, GXe_RIND,  NUMENTRIES);
-  GXe_mt->AddProperty("ABSLENGTH",     GXe_PP, GXe_ABSL,  NUMENTRIES);
-  GXe->SetMaterialPropertiesTable(GXe_mt);
-
-
-  // making quartz
-  G4Element* O  = new G4Element
-    (name="Oxygen"  ,symbol="O" , z= 8., a=16.00*g/mole);
-  G4Element* Si = new G4Element
-    (name="Silicon",symbol="Si" , z= 14., a=28.09*g/mole);
-  G4Material* quartz = new G4Material
-    (name="quartz", density=2.200*g/cm3, ncomponents=2);
-  quartz->AddElement(Si, 1);
-  quartz->AddElement(O , 2);
-
-  G4double quartz_PP[NUMENTRIES]   = { 6.69*eV, 7.50*eV }; // lambda range 4 ri
-  G4double quartz_RIND[NUMENTRIES] = { 1.575, 1.628 };     // ref index
-  G4double quartz_ABSL[NUMENTRIES] = { 1.5*cm, 1.5*cm };   // atten length
-  G4MaterialPropertiesTable *quartz_mt = new G4MaterialPropertiesTable();
-  quartz_mt->AddProperty("RINDEX", quartz_PP, quartz_RIND, NUMENTRIES);
-  quartz_mt->AddProperty("ABSLENGTH", quartz_PP, quartz_ABSL, NUMENTRIES);
-  quartz->SetMaterialPropertiesTable(quartz_mt);
-
-
-  // aluminium
-  G4Element* Al = new G4Element
-    (name="Aluminium"  ,symbol="Al" , z= 13., a=26.98*g/mole);  
-  G4Material* metalAl = new G4Material
-    (name="MetalAluminium", density=2.700*g/cm3, ncomponents=1);
-  metalAl->AddElement(Al, 1);
-
-
-  // iron
-  G4Element* Fe = new G4Element
-    (name="Iron"  ,symbol="Fe" , z= 26., a=55.85*g/mole);  
-  G4Material* metalFe = new G4Material
-    (name="MetalIron", density=7.874*g/cm3, ncomponents=1);
-  metalFe->AddElement(Fe, 1);
-
-
-  // stainless steel
-  G4Element* C  = new G4Element( "Carbon", "C",   6. , 12.011*g/mole);
-  G4Element* Co = new G4Element( "Cobalt", "Co", 27. , 58.9332*g/mole);
-  G4Material* ssteel = new G4Material
-    (name="Steel", density=7.7*g/cm3, ncomponents=3);
-  ssteel->AddElement(C, 0.04);
-  ssteel->AddElement(Fe, 0.88);
-  ssteel->AddElement(Co, 0.08);
-
-
-  // copper
-  G4Element* Cu = new G4Element
-    (name="Copper"  ,symbol="Cu" , z= 29., a=63.55*g/mole);  
-  G4Material* metalCu = new G4Material
-    (name="MetalCopper", density=8.960*g/cm3, ncomponents=1);
-  metalCu->AddElement(Cu, 1);
-
-  // lead
-  G4Element* Pb = new G4Element
-    (name="Lead",symbol="Pb" , z= 82., a=207.2*g/mole);
-  G4Material* metalPb = new G4Material
-    (name="MetalLead", density=11.340*g/cm3, ncomponents=1);
-  metalPb->AddElement(Pb, 1);
-
-
-  /*
-  // Americium:
-  G4Isotope* Am241 = new G4Isotope
-    (name="Americium241", iz= 95, in=241, a=241.0*g/mole);
-  G4Element* Am = new G4Element
-    (name="Americium241", "Am", ncomponents=1);
-  Am->AddIsotope(Am241, abundance=1);
-  G4Material* sourceAm = new G4Material
-    (name="AmericiumSource", density=13.61*g/cm3, ncomponents=1);
-  sourceAm->AddElement(Am, 1);
-  */
-
-  // using Uranium because Americium not yet defined for RDM
-  G4Isotope* U235 = new G4Isotope
-    (name="Uranium235", iz= 92, in=235, a=235.0*g/mole);
-  G4Element* U = new G4Element
-    (name="Uranium", "U", ncomponents=1);
-  U->AddIsotope(U235, abundance=1);
-  G4Material* sourceAm = new G4Material
-    (name="UraniumSource", density=13.61*g/cm3, ncomponents=1);
-  sourceAm->AddElement(U, 1);
-
-  // air
-  G4Element* N = new G4Element
-    (name="Nitrogen",symbol="N" , z= 7., a=14.00674*g/mole);
-  G4Material* Air = new G4Material
-    ("AIR", 1.2929*kg/m3, 2, kStateGas, 300.00*kelvin, 1.0*atmosphere);
-  Air->AddElement(N, 0.8);
-  Air->AddElement(O , 0.2);
-
-
-  //concrete
-  G4Element* H = new G4Element
-    (name="Hydrogen",symbol="H" , z= 1., a=1.00794*g/mole);
-  G4Element* Ca = new G4Element
-    (name="Calcium",symbol="Ca" , z= 20., a=40.078*g/mole);
-  G4Material* concrete = new G4Material
-    (name="Concrete", density=2.3*g/cm3, ncomponents=6);
-  concrete->AddElement(Si, 0.227915);
-  concrete->AddElement(O, 0.60541);
-  concrete->AddElement(H, 0.09972);
-  concrete->AddElement(Ca, 0.04986);
-  concrete->AddElement(Al, 0.014245);
-  concrete->AddElement(Fe, 0.00285);
-
-  //water
-  G4Material* water = new G4Material
-    (name="water", density=1.00*g/cm3, ncomponents=2);
-  water->AddElement(H , 2);
-  water->AddElement(O , 1);
-
-  // print materials
-  //  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
-  //  G4cout << *(G4Isotope::GetIsotopeTable())   << G4endl;
-  //  G4cout << *(G4Element::GetElementTable())   << G4endl;
-
-  // assign materials
-       world_mat = concrete;
-         lab_mat = Air;
-      jacket_mat = ssteel;
-      vacuum_mat = vacuum;
-      vessel_mat = ssteel;
-    detector_mat = GXe;
-    CuShield_mat = metalCu;
-    liqPhase_mat = LXe;
-       alpha_mat = metalPb;
-   americium_mat = sourceAm;
-        ring_mat = ssteel;
-      mirror_mat = metalAl;
-        grid_mat = LXe;
-         pmt_mat = quartz;
-      phcath_mat = metalAl;
 }
 
 
@@ -289,29 +123,8 @@ void DMXDetectorConstruction::DefineMaterials() {
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 void DMXDetectorConstruction::DefineField() {
 
-  G4double EField = 0.0*kilovolt/cm;
+#include "DMXDetectorField.icc"
 
-  // create electric field
-  G4UniformElectricField* elecField = 
-     new G4UniformElectricField(G4ThreeVector(0,EField,0));
-
-  // equation of motion
-  G4EqMagElectricField* EquationOfMotion = 
-    new G4EqMagElectricField(elecField);
-
-  // stepper for equation of motion
-  G4MagIntegratorStepper* DMXStepper = 
-    new G4ClassicalRK4(EquationOfMotion); 
-
-  // chordfinder
-  G4ChordFinder* DMXChordFinder =
-    new G4ChordFinder(elecField, 1.0e-3*mm, DMXStepper);
-
-  // field manager
-  G4FieldManager* DMXFieldManager = new G4FieldManager();
-  DMXFieldManager->SetChordFinder(DMXChordFinder);  
-  G4TransportationManager::GetTransportationManager()
-    -> SetFieldManager(DMXFieldManager);
 }
 */
 
@@ -326,104 +139,329 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // make colours
   G4Colour  white   (1.0, 1.0, 1.0) ;
   G4Colour  grey    (0.5, 0.5, 0.5) ;
-  G4Colour  lgrey   (.75, .75, .75) ;
+  G4Colour  lgrey   (.85, .85, .85) ;
   G4Colour  red     (1.0, 0.0, 0.0) ;
   G4Colour  blue    (0.0, 0.0, 1.0) ;
   G4Colour  cyan    (0.0, 1.0, 1.0) ;
   G4Colour  magenta (1.0, 0.0, 1.0) ; 
   G4Colour  yellow  (1.0, 1.0, 0.0) ;
+  G4Colour  orange  (.75, .55, 0.0) ;
   G4Colour  lblue   (0.0, 0.0, .75) ;
+  G4Colour  lgreen  (0.0, .75, 0.0) ;
+  G4Colour  green   (0.0, 1.0, 0.0) ;
+  G4Colour  brown   (0.7, 0.4, 0.1) ;
+  
+
   //  un-used colours:
   //  G4Colour  black   (0.0, 0.0, 0.0) ;
-  //  G4Colour  green   (0.0, 1.0, 0.0) ;
-  //  G4Colour  lgreen  (0.0, .75, 0.0) ;
 
 
 
-  // Universe - room wall - CONCRETE ************************************
+  // Universe - room wall - CONCRETE ****************************************
 
-  G4double worldWidth  = 5.0*m;
-  G4double worldLength = 6.0*m;
-  G4double worldHeight = 3.0*m;
+  //NB: measured INSIDE of lab, therefore have to add twice wall thickness
+  G4double wallThick   = 24.*cm;
+  G4double worldWidth  = 470.0*cm + 2.*wallThick; // "x"
+  G4double worldLength = 690.0*cm + 2.*wallThick; // "y"
+  G4double worldHeight = 280.0*cm + 2.*wallThick; // "z"
 
-  G4Box* world_box= new G4Box
+  G4Box* world_box = new G4Box
      ("world_box", 0.5*worldWidth, 0.5*worldLength, 0.5*worldHeight );
-  world_log = new G4LogicalVolume(world_box, world_mat, "world_log");
-  world_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+  world_log  = new G4LogicalVolume(world_box, world_mat, "world_log");
+  world_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
      "world_phys", world_log, NULL, false,0);
 
   G4VisAttributes* world_vat= new G4VisAttributes(white);
-  //  world_log->SetVisAttributes(G4VisAttributes::Invisible);
-  world_vat->SetVisibility(true);
-  world_log->SetVisAttributes(world_vat);
+  world_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //world_vat->SetVisibility(true);
+  //world_vat->SetVisibility(false);
+  //world_log->SetVisAttributes(world_vat);
 
 
-  // Lab Space - AIR *****************************************************
+  // Lab Space - AIR ********************************************************
 
-  G4double wallThick = 30.*cm;
-  G4double labWidth  = worldWidth  - wallThick;
-  G4double labLength = worldLength - wallThick;
-  G4double labHeight = worldHeight - wallThick;
+  G4double labWidth  = worldWidth  - 2.*wallThick; //X
+  G4double labLength = worldLength - 2.*wallThick; //Y
+  G4double labHeight = worldHeight - 2.*wallThick; //Z
 
-  G4Box* lab_box= new G4Box
+  G4Box* lab_box = new G4Box
      ("lab_box", 0.5*labWidth, 0.5*labLength, 0.5*labHeight );
-  lab_log = new G4LogicalVolume(lab_box, lab_mat, "lab_log");
-  lab_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "lab_phys", 
+  lab_log  = new G4LogicalVolume(lab_box, lab_mat, "lab_log");
+  lab_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), "lab_phys", 
      lab_log, world_phys, false,0);
 
   G4VisAttributes* lab_vat= new G4VisAttributes(white);
-  lab_log->SetVisAttributes(G4VisAttributes::Invisible);
-  //  lab_log->SetVisibility(true);
+  //  lab_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  lab_vat->SetVisibility(true);
+  lab_vat->SetVisibility(false);
   lab_log->SetVisAttributes(lab_vat);
 
+// include room furniture: **************************************************
 
-  // outer vacuum jacket volume: stainless steel *************************
+#include "DMXDetectorRoom.icc"
 
-  G4double jacketRadius     = 15.0*cm;
-  G4double jacketHeight     = 40.0*cm;
-  G4double jacketMetalThick = 3.0*mm;
+  // Now start with detector assembly:
 
-  G4Tubs* jacket_tube=new G4Tubs("jacket_tube",
+  // first LN2 cooling container: *******************************************
+
+  G4double PosZ = -25.3*cm; // extra z-pos to correspond with height in lab
+
+  G4double LN2jacketRadius    = 107.5*mm;
+  G4double LN2jacketHeight    = 590.0*mm;
+  G4double jacketHeight       = 680.0*mm;
+  G4double jacketflangeHeight = 53.0*mm;
+  G4double LN2PosZ            = 0.5*jacketHeight + 0.5*LN2jacketHeight 
+                                + jacketflangeHeight + PosZ;
+
+  G4double temp_jackZ = 0.5*labHeight - LN2PosZ - 0.5*LN2jacketHeight;
+  //  G4cout << " Position of LN2 top from ceiling is: " 
+  //	 << G4BestUnit(temp_jackZ,"Length") << G4endl;
+
+  G4Tubs* LN2jacket_tube = new G4Tubs("LN2jacket_tube",
+     0.*cm, LN2jacketRadius, 0.5*LN2jacketHeight, 0.*deg, 360.*deg);
+  LN2jacket_log  = new G4LogicalVolume
+    (LN2jacket_tube, LN2jacket_mat, "LN2jacket_log");
+  LN2jacket_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,LN2PosZ),
+     "LN2jacket_phys", LN2jacket_log, lab_phys, false,0);
+
+  G4VisAttributes* LN2jacket_vat = new G4VisAttributes(lgrey);
+  // LN2jacket_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // LN2jacket_vat->SetVisibility(true);
+  LN2jacket_log->SetVisAttributes(LN2jacket_vat);
+
+  // LN2jacket vacuum: **********************
+
+  G4double LN2jacketMetalThick = 2.0*mm;
+  G4double LN2vacuumRadius     = LN2jacketRadius - LN2jacketMetalThick;
+  G4double LN2vacuumHeight     = LN2jacketHeight - LN2jacketMetalThick;
+
+  G4Tubs* LN2vacuum_tube = new G4Tubs("LN2vacuum_tube",
+     0.*cm, LN2vacuumRadius, 0.5*LN2vacuumHeight, 0.*deg, 360.*deg);
+  LN2vacuum_log  = new G4LogicalVolume
+    (LN2vacuum_tube, vacuum_mat, "LN2vacuum_log");
+  LN2vacuum_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+     "LN2vacuum_phys", LN2vacuum_log, LN2jacket_phys, false,0);
+
+  LN2vacuum_log->SetVisAttributes(G4VisAttributes::Invisible);
+
+  // LN2 vessel: ************************************************************
+
+  G4double LN2Radius       = 76.0*mm;
+  G4double LN2Height       = 590.0*mm;
+  G4double LN2vesselRadius = LN2Radius + LN2jacketMetalThick;
+  G4double LN2vesselHeight = LN2Height + 2.*LN2jacketMetalThick;
+  G4double LN2vesselPosZ   = 0.5*LN2jacketHeight - 0.5*LN2vesselHeight;
+
+  G4Tubs* LN2vessel_tube = new G4Tubs("LN2vessel_tube",
+     0.*cm, LN2vesselRadius, 0.5*LN2vesselHeight, 0.*deg, 360.*deg);
+  LN2vessel_log  = new G4LogicalVolume
+    (LN2vessel_tube, LN2jacket_mat, "LN2vessel_log");
+  LN2vessel_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,LN2vesselPosZ),
+     "LN2jacket_phys", LN2vessel_log, LN2vacuum_phys, false,0);
+
+  G4VisAttributes* LN2vessel_vat = new G4VisAttributes(lgrey);
+  // LN2vessel_log->SetVisAttributes(G4VisAttributes::Invisible);
+  // LN2vessel_vat->SetVisibility(true);
+  LN2vessel_log->SetVisAttributes(LN2vessel_vat);
+
+
+  // and finally LN2: *******************************************************
+
+  G4Tubs* LN2_tube = new G4Tubs("LN2_tube",
+     0.*cm, LN2Radius, 0.5*LN2Height, 0.*deg, 360.*deg);
+  LN2_log  = new G4LogicalVolume(LN2_tube, LN2_mat, "LN2_log");
+  LN2_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+     "LN2_phys", LN2_log, LN2vessel_phys, false,0);
+
+  G4VisAttributes* LN2_vat = new G4VisAttributes(green);
+  LN2_vat->SetVisibility(true);
+  LN2_log->SetVisAttributes(LN2_vat);
+
+
+  // outer vacuum jacket volume: stainless steel ****************************
+
+  G4double jacketRadius     = 127.5*mm;
+  //  G4double jacketHeight     = 680.0*mm; // defined above to get full-height
+  G4double jacketMetalThick = LN2jacketMetalThick;
+
+  G4Tubs* jacket_tube = new G4Tubs("jacket_tube",
      0.*cm, jacketRadius, 0.5*jacketHeight, 0.*deg, 360.*deg);
-  jacket_log = new G4LogicalVolume(jacket_tube, jacket_mat, "jacket_log");
-  jacket_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+  jacket_log  = new G4LogicalVolume(jacket_tube, jacket_mat, "jacket_log");
+  jacket_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,PosZ),
      "jacket_phys", jacket_log, lab_phys, false,0);
 
-  G4VisAttributes* jacket_vat= new G4VisAttributes(grey);
-  //  jacket_log->SetVisAttributes(G4VisAttributes::Invisible);
+  G4VisAttributes* jacket_vat = new G4VisAttributes(grey);
+  // jacket_log->SetVisAttributes(G4VisAttributes::Invisible);
   jacket_log->SetVisAttributes(jacket_vat);
 
+
+  // outer vacuum jacket flanges: stainless steel *************************
+
+  G4double jacketflangeRadius  = 127.5*mm;
+  // G4double jacketflangeHeight = 53.0*mm; // defined above to get full-height
+  G4double topjacketflangePosZ = 0.5*(jacketHeight+jacketflangeHeight);
+
+  G4Tubs* jacketflange_tube = new G4Tubs("jacketflange_tube",
+     0.*cm, jacketflangeRadius, 0.5*jacketflangeHeight, 0.*deg, 360.*deg);
+  jacketflange_log     = new G4LogicalVolume
+    (jacketflange_tube, jacketflange_mat, "jacketflange_log");
+  topjacketflange_phys = new G4PVPlacement
+    (0, G4ThreeVector(0.,0.,topjacketflangePosZ + PosZ),
+     "topjacketflange_phys", jacketflange_log, lab_phys, false,0);
+  bottomjacketflange_phys = new G4PVPlacement
+    (0, G4ThreeVector(0.,0.,-topjacketflangePosZ + PosZ),
+     "bottomjacketflange_phys", jacketflange_log, lab_phys, false,0);
+
+  // jacketflange_log->SetVisAttributes(G4VisAttributes::Invisible);
+  jacketflange_log->SetVisAttributes(jacket_vat);
 
   // vacuum **************************************************************
 
   G4double vacuumRadius = jacketRadius - jacketMetalThick;
   G4double vacuumHeight = jacketHeight - jacketMetalThick;
 
-  G4Tubs* vacuum_tube=new G4Tubs("vacuum_tube",
+  G4Tubs* vacuum_tube = new G4Tubs("vacuum_tube",
      0.*cm, vacuumRadius, 0.5*vacuumHeight, 0.*deg, 360.*deg);
-  vacuum_log = new G4LogicalVolume(vacuum_tube, vacuum_mat, "vacuum_log");
-  vacuum_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
+  vacuum_log  = new G4LogicalVolume(vacuum_tube, vacuum_mat, "vacuum_log");
+  vacuum_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,0.),
      "vacuum_phys", vacuum_log, jacket_phys, false,0);
 
-  //  G4VisAttributes* vacuum_vat= new G4VisAttributes(lgrey);
+  // G4VisAttributes* vacuum_vat= new G4VisAttributes(lgrey);
   vacuum_log->SetVisAttributes(G4VisAttributes::Invisible);
 
 
+  // copper cooling jacket volume: **************************************
+
+  G4double copperMetalThick = 3.0*mm;
+  G4double copperRadius     = 103.5*mm + copperMetalThick;
+  G4double copperHeight     = 420.0*mm;
+  G4double copperInner      = copperRadius - copperMetalThick;
+  G4double vesselHeight     = 320.0*mm;
+  G4double copperVPos       = 0.5*(vesselHeight-copperHeight) + 13.0*cm;
+  G4double coppertopThick   = 1.0*cm;
+  G4double coppertopVPos    = copperVPos + 0.5*(coppertopThick+copperHeight);
+
+  G4Tubs* copper_tube = new G4Tubs("copper_tube",
+     copperInner, copperRadius, 0.5*copperHeight, 0.*deg, 360.*deg);
+  copper_log  = new G4LogicalVolume(copper_tube, copper_mat, "copper_log");
+  copper_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,copperVPos), 
+     "copper_phys", copper_log, vacuum_phys, false,0);
+
+  G4Tubs* coppertop_tube = new G4Tubs("coppertop_tube",
+     0.*cm, copperRadius, 0.5*coppertopThick, 0.*deg, 360.*deg);
+  coppertop_log  = new G4LogicalVolume
+    (coppertop_tube, copper_mat, "coppertop_log");  
+  coppertop_phys = new G4PVPlacement(0,G4ThreeVector(0.,0.,coppertopVPos), 
+     "coppertop_phys", coppertop_log, vacuum_phys, false,0);
+
+  G4VisAttributes* copper_vat = new G4VisAttributes(orange);
+  //  copper_log->SetVisAttributes(G4VisAttributes::Invisible);
+  copper_log->SetVisAttributes(copper_vat);
+  coppertop_log->SetVisAttributes(copper_vat);
+
   // inner vessel jacket volume: stainless steel ************************
 
-  G4double vesselRadius = 10.0*cm;
-  G4double vesselHeight = 30.0*cm;
-  G4double vesselMetalThick = 3.0*mm;
+  //  G4double vesselHeight = 320.0*mm; // - moved earlier
+  G4double vesselMetalThick      = jacketMetalThick;
+  G4double vesselRadius          = 75.0*mm + vesselMetalThick;
+  G4double vesselflangeRadius    = 101.5*mm;
+  G4double vesselflangeThick     = 40.0*mm;
+  G4double PMTvesselRadius       = 31.0*mm + vesselMetalThick;
+  G4double PMTvesselHeight       = 152.0*mm;
+  G4double pmtvesselflangeRadius = 52.0*mm;
+  G4double pmtvesselflangeThick  = 32.0*mm;
+  G4double vesselVPos            = 7.0*cm;
+  G4double TotalvesselHeight     = PMTvesselHeight + vesselHeight;
 
-  G4Tubs* vessel_tube=new G4Tubs("vessel_tube",
+  G4Tubs* vessel_tube    = new G4Tubs("vessel_tube",
      0.*cm, vesselRadius, 0.5*vesselHeight, 0.*deg, 360.*deg);
-  vessel_log = new G4LogicalVolume(vessel_tube, vessel_mat, "vessel_log");
-  vessel_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), 
+  G4Tubs* PMTvessel_tube = new G4Tubs("PMTvessel_tube",
+     0.*cm, PMTvesselRadius, 0.5*PMTvesselHeight, 0.*deg, 360.*deg);
+
+  G4UnionSolid* vessel_sol = new G4UnionSolid
+    ("vessel_sol", vessel_tube, PMTvessel_tube,
+     G4Transform3D(G4RotationMatrix(), 
+		   G4ThreeVector(0,0,-0.5*(vesselHeight+PMTvesselHeight))));
+
+  vessel_log  = new G4LogicalVolume(vessel_sol, vessel_mat, "vessel_log");
+  vessel_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,vesselVPos), 
      "vessel_phys", vessel_log, vacuum_phys, false,0);
 
-  G4VisAttributes* vessel_vat= new G4VisAttributes(grey);
+
+  // flanges: 1=upper half (diff. inner diam.) 2=lower half
+  G4Tubs* vesseltop_flange1 = new G4Tubs("vesseltop_flange1",
+     0.*cm, vesselflangeRadius, 0.25*vesselflangeThick, 0.*deg, 360.*deg);
+  vesseltop_log1  = new G4LogicalVolume
+    (vesseltop_flange1, vessel_mat, "vesseltop_log1");  
+  vesseltop_phys1 = new G4PVPlacement
+    (0, 
+     G4ThreeVector(0.,0.,0.5*(vesselHeight+0.5*vesselflangeThick)+vesselVPos), 
+     "vesseltop_phys1", vesseltop_log1, vacuum_phys, false,0);
+
+  G4Tubs* vesseltop_flange2 = new G4Tubs("vesseltop_flange2",vesselRadius, 
+    vesselflangeRadius, 0.25*vesselflangeThick, 0.*deg, 360.*deg);
+  vesseltop_log2  = new G4LogicalVolume
+    (vesseltop_flange2, vessel_mat, "vesseltop_log2");  
+  vesseltop_phys2 = new G4PVPlacement
+    (0, 
+     G4ThreeVector(0.,0.,0.5*(vesselHeight-0.5*vesselflangeThick)+vesselVPos), 
+     "vesseltop_phys2", vesseltop_log2, vacuum_phys, false,0);
+
+
+  G4Tubs* vesselbottom_flange1 = new G4Tubs
+    ("vesselbottom_flange1",vesselRadius, vesselflangeRadius, 
+     0.25*vesselflangeThick, 0.*deg, 360.*deg);
+  vesselbottom_log1  = new G4LogicalVolume
+    (vesselbottom_flange1, vessel_mat, "vesselbottom_log1");  
+  vesselbottom_phys1 = new G4PVPlacement(0, 
+     G4ThreeVector(0.,0.,-0.5*(vesselHeight-0.5*vesselflangeThick)+vesselVPos),
+     "vesselbottom_phys1", vesselbottom_log1, vacuum_phys, false,0);
+
+  G4Tubs* vesselbottom_flange2 = new G4Tubs
+    ("vesselbottom_flange2",PMTvesselRadius, vesselflangeRadius, 
+     0.25*vesselflangeThick, 0.*deg, 360.*deg);
+  vesselbottom_log2  = new G4LogicalVolume
+    (vesselbottom_flange2, vessel_mat, "vesselbottom_log2");  
+  vesselbottom_phys2 = new G4PVPlacement(0, 
+     G4ThreeVector(0.,0.,-0.5*(vesselHeight+0.5*vesselflangeThick)+vesselVPos),
+     "vesselbottom_phys2", vesselbottom_log2, vacuum_phys, false,0);
+
+
+  G4Tubs* pmtvesselbottom_flange1 = new G4Tubs
+    ("pmtvesselbottom_flange1", PMTvesselRadius, pmtvesselflangeRadius, 
+     0.25*pmtvesselflangeThick, 0.*deg, 360.*deg);
+  pmtvesselbottom_log1  = new G4LogicalVolume
+    (pmtvesselbottom_flange1, vessel_mat, "pmtvesselbottom_log1");  
+  pmtvesselbottom_phys1 = new G4PVPlacement(0, G4ThreeVector(0.,0.,
+    (-0.5*vesselHeight-PMTvesselHeight+vesselVPos+0.25*pmtvesselflangeThick)),
+     "pmtvesselbottom_phys1", pmtvesselbottom_log1, vacuum_phys, false,0);
+
+  G4Tubs* pmtvesselbottom_flange2 = new G4Tubs
+    ("pmtvesselbottom_flange2", 0.*cm, pmtvesselflangeRadius, 
+     0.25*pmtvesselflangeThick, 0.*deg, 360.*deg);
+  pmtvesselbottom_log2  = new G4LogicalVolume
+    (pmtvesselbottom_flange2, vessel_mat, "pmtvesselbottom_log2");  
+  pmtvesselbottom_phys2 = new G4PVPlacement(0, G4ThreeVector(0.,0.,
+     -0.5*vesselHeight-PMTvesselHeight+vesselVPos-0.25*pmtvesselflangeThick),
+     "pmtvesselbottom_phys2", pmtvesselbottom_log2, vacuum_phys, false,0);
+
+
+  G4VisAttributes* vessel_vat     = new G4VisAttributes(grey);
+  G4VisAttributes* pmtvessel_vat  = new G4VisAttributes(yellow);
+  G4VisAttributes* pmtvessel_vat2 = new G4VisAttributes(green);
   //  vessel_log->SetVisAttributes(G4VisAttributes::Invisible);
+  //  vessel_vat->SetForceSolid(true);
+  //  pmtvessel_vat->SetForceSolid(true);
+  //  pmtvessel_vat2->SetForceSolid(true);
   vessel_log->SetVisAttributes(vessel_vat);
+  vesseltop_log1->SetVisAttributes(vessel_vat);
+  vesselbottom_log1->SetVisAttributes(vessel_vat);
+  vesseltop_log2->SetVisAttributes(pmtvessel_vat);
+  vesselbottom_log2->SetVisAttributes(pmtvessel_vat);
+  //  pmtvesselbottom_log->SetVisAttributes(vessel_vat);
+  pmtvesselbottom_log1->SetVisAttributes(vessel_vat);
+  pmtvesselbottom_log2->SetVisAttributes(pmtvessel_vat2);
+
 
 
   // *********************************************************************
@@ -435,41 +473,134 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // detector volume: gas phase ******************************************
 
-  G4double fullDetectorRadius = vesselRadius - vesselMetalThick;
-  G4double fullDetectorHeight = vesselHeight - vesselMetalThick;
+  G4double mirrorVPos     = 21.3*cm;
+  G4double gasGap         = 6.0*mm;
+  G4double DetectorRadius = vesselRadius - vesselMetalThick;
+  G4double GXeHeight      = TotalvesselHeight - mirrorVPos + gasGap;
+  G4double GXeVPos        = 0.5*vesselHeight - 0.5*GXeHeight;
 
-  G4Tubs* detector_tube=new G4Tubs("detector_tube",
-     0.*cm, fullDetectorRadius, 0.5*fullDetectorHeight, 0.*deg, 360.*deg);
-  detector_log = new G4LogicalVolume
-     (detector_tube, detector_mat, "detector_log");
-  detector_phys=new G4PVPlacement(0, G4ThreeVector(0.,0.,0.), 
-     "detector_phys", detector_log, vessel_phys, false,0);
+  G4Tubs* GXe_tube = new G4Tubs("GXe_tube",
+     0.*cm, DetectorRadius, 0.5*GXeHeight, 0.*deg, 360.*deg);
+  GXe_log  = new G4LogicalVolume(GXe_tube, GXe_mat, "GXe_log");
+  GXe_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,GXeVPos), 
+     "GXe_phys", GXe_log, vessel_phys, false,0);
 
-  G4VisAttributes* detector_vat= new G4VisAttributes(yellow);
-  //  detector_log->SetVisAttributes(G4VisAttributes::Invisible);
-  detector_log->SetVisAttributes(detector_vat);
+  G4VisAttributes* GXe_vat = new G4VisAttributes(cyan);
+  // GXe_vat->SetForceSolid(true);
+  GXe_vat->SetVisibility(true);
+  GXe_log->SetVisAttributes(GXe_vat);
 
 
   // liquid phase *******************************************************
 
-  G4double detectorRadius     = 4.0*cm;
-  G4double detectorHeight     = 21.3*cm;
-  G4double liqPhaseHeight    = 20.40*cm;
-  G4double liqPhaseRadius    = fullDetectorRadius;
-  G4double liqPhaseVPosition = -0.5*(detectorHeight-liqPhaseHeight);
+  G4double LXeHeight         = mirrorVPos - gasGap;
+  G4double PMTDetectorRadius = PMTvesselRadius - vesselMetalThick;
+  G4double PMTDetectorHeight = PMTvesselHeight;
+  G4double LXeTubeHeight     = LXeHeight - PMTDetectorHeight;
+  G4double LXe_solVPos       = -0.5*(LXeTubeHeight+PMTDetectorHeight);
+  G4double LXeVPos           = -0.5*TotalvesselHeight + 0.5*LXeHeight;
+  G4double mirrorVPosOff     = 21.3*cm - PMTDetectorHeight;
 
-  G4Tubs* liqPhase_tube=new G4Tubs("liqPhase_tube", 0.*cm, 
-     liqPhaseRadius, 0.5*liqPhaseHeight, 0.*deg, 360.*deg);
-  liqPhase_log =
-     new G4LogicalVolume(liqPhase_tube, liqPhase_mat, "liqPhase_log");
-  liqPhase_phys=new G4PVPlacement(0, 
-    G4ThreeVector(0.*cm, 0.*cm, liqPhaseVPosition), 
-    "liqPhase_phys", liqPhase_log, detector_phys, false, 0);
+  G4Tubs* LXe_tube = new G4Tubs("GXe_tube",
+     0.*cm, DetectorRadius, 0.5*LXeTubeHeight, 0.*deg, 360.*deg);
+  G4Tubs* PMTdetector_tube = new G4Tubs("PMTdetector_tube",
+   0.*cm, PMTDetectorRadius, 0.5*PMTDetectorHeight, 0.*deg, 360.*deg);
+
+  G4UnionSolid* LXe_sol = new G4UnionSolid
+    ("LXe_sol", LXe_tube, PMTdetector_tube,
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0,0,LXe_solVPos)));
+
+  LXe_log  = new G4LogicalVolume(LXe_sol, LXe_mat, "LXe_log");
+  LXe_phys = new G4PVPlacement(0, G4ThreeVector(0.*cm, 0.*cm, LXeVPos), 
+    "LXe_phys", LXe_log, vessel_phys, false, 0);
 
   // attributes
-  G4VisAttributes* liqPhase_vat= new G4VisAttributes(yellow);
-  liqPhase_vat->SetVisibility(true);
-  liqPhase_log->SetVisAttributes(liqPhase_vat);
+  G4VisAttributes* LXe_vat = new G4VisAttributes(lblue);
+  // LXe_vat->SetForceSolid(true);
+  LXe_vat->SetVisibility(true);
+  LXe_log->SetVisAttributes(LXe_vat);
+
+  
+  // Gas phase vessel lagging - for optical properties:
+
+  G4double laggingThickness = 10.*micrometer;
+  G4double laggingRadius    = DetectorRadius - laggingThickness;
+
+  G4Tubs* gaslag_tube = new G4Tubs("gaslag_tube", laggingRadius, 
+     DetectorRadius, 0.5*GXeHeight, 0.*deg, 360.*deg);
+  gaslag_log  = new G4LogicalVolume(gaslag_tube, vessel_mat, "gaslag_log");
+  gaslag_phys = new G4PVPlacement(0, G4ThreeVector(0.*cm, 0.*cm, 0.*cm),
+    "gaslag_phys", gaslag_log, GXe_phys, false, 0);
+
+  // attributes
+  G4VisAttributes* gaslag_vat = new G4VisAttributes(lgreen);
+  // gaslag_vat->SetForceSolid(true);
+  gaslag_vat->SetVisibility(true);
+  gaslag_log->SetVisAttributes(gaslag_vat);
+
+
+  // liquid phase vessel lagging - for optical properties:
+
+  G4double lagTubeRadius = DetectorRadius - laggingThickness;
+  G4double lagTubeHeight = LXeHeight - PMTDetectorHeight;
+  G4double lagPMTRadius  = PMTDetectorRadius - laggingThickness;
+  G4double lagPMTHeight  = PMTDetectorHeight;
+
+  G4Tubs* liqLag_tube = new G4Tubs("liqlag_tube", lagTubeRadius,
+     DetectorRadius, 0.5*lagTubeHeight, 0.*deg, 360.*deg);
+  G4Tubs* lagPMT_tube = new G4Tubs("lagPMT_tube", lagPMTRadius, 
+     PMTDetectorRadius, 0.5*lagPMTHeight, 0.*deg, 360.*deg);
+
+  G4UnionSolid* liqLag_sol = new G4UnionSolid
+    ("liqLag_sol", liqLag_tube, lagPMT_tube,
+    G4Transform3D(G4RotationMatrix(),G4ThreeVector(0,0,LXe_solVPos)));
+
+  liqLag_log  = new G4LogicalVolume(liqLag_sol, vessel_mat, "liqLag_log");
+  liqLag_phys = new G4PVPlacement(0, G4ThreeVector(0.*cm, 0.*cm, 0.*cm), 
+    "liqLag_phys", liqLag_log, LXe_phys, false, 0);
+
+  // attributes
+  G4VisAttributes* liqLag_vat = new G4VisAttributes(magenta);
+  // liqLag_vat->SetForceSolid(true);
+  liqLag_vat->SetVisibility(true);
+  liqLag_log->SetVisAttributes(liqLag_vat);
+
+
+  // Vessel Wall Optical Surface definition:
+  G4OpticalSurface* OpVesselSurface = new G4OpticalSurface
+    ("VesselSurface", unified, polished, dielectric_metal);
+
+  // created optical lagging onto vessel - to avoid clash between over-lapping
+  // liquid and gas phase - so removed below:
+  /*
+  G4LogicalBorderSurface* VesselSurface;
+  VesselSurface = new G4LogicalBorderSurface
+    ("Vessel", liqPhase_phys, vessel_phys, OpVesselSurface);
+  */
+
+  const G4int NUM = 2;
+  G4double vessel_PP[NUM]   = { 6.5*eV, 7.50*eV };
+  G4double vessel_REFL[NUM] = { 0.1, 0.1 };
+  G4MaterialPropertiesTable* vessel_mt = new G4MaterialPropertiesTable();
+  vessel_mt->AddProperty("REFLECTIVITY", vessel_PP, vessel_REFL, NUM);
+  OpVesselSurface->SetMaterialPropertiesTable(vessel_mt);
+
+  G4LogicalBorderSurface* VesselTopSurface;
+  VesselTopSurface = new G4LogicalBorderSurface
+    ("VesselTop", GXe_phys, vesseltop_phys1, OpVesselSurface);
+
+  G4LogicalBorderSurface* VesselBottomSurface;
+  VesselBottomSurface = new G4LogicalBorderSurface
+    ("VesselBottom", LXe_phys, vesselbottom_phys2, OpVesselSurface);
+
+  G4LogicalBorderSurface* GasVesselSurface;
+  GasVesselSurface = new G4LogicalBorderSurface
+    ("GasVessel", GXe_phys, gaslag_phys, OpVesselSurface);
+
+  G4LogicalBorderSurface* LiquidVesselSurface;
+  LiquidVesselSurface = new G4LogicalBorderSurface
+    ("LiquidVessel", LXe_phys, liqLag_phys, OpVesselSurface);
+
 
 
   // Cu Shield **********************************************************
@@ -478,29 +609,37 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double CuShieldThickness   = 2.4*mm;
   G4double CuShieldOuterRadius = 3.0*cm;
   G4double CuShieldInnerRadius = CuShieldOuterRadius-CuShieldThickness;
-  G4double CuShieldVPosition   = -0.5*(liqPhaseHeight-CuShieldHeight);
+  G4double CuShieldVPosition   = -0.5*LXeTubeHeight - PMTDetectorHeight 
+                                + 0.5*CuShieldHeight;
 
-  G4Tubs* CuShield_tube=new G4Tubs("CuShield_tube", CuShieldInnerRadius,
+  // Zero co-ordinate of the union is the zero of the first volume, 
+  // i.e. the offset is still present
+
+  G4Tubs* CuShield_tube = new G4Tubs("CuShield_tube", CuShieldInnerRadius,
      CuShieldOuterRadius, 0.5*CuShieldHeight, 0.*deg, 360.*deg);
-  CuShield_log = 
-     new G4LogicalVolume(CuShield_tube, CuShield_mat, "CuShield_log");
-  CuShield_phys=new G4PVPlacement(0, 
+  CuShield_log  = new G4LogicalVolume(CuShield_tube, CuShield_mat, 
+				     "CuShield_log");
+  CuShield_phys = new G4PVPlacement(0, 
      G4ThreeVector(0.*cm, 0.*cm, CuShieldVPosition), 
-     "CuShield_phys", CuShield_log, liqPhase_phys, false, 0);
-  G4VisAttributes* CuShield_vat= new G4VisAttributes(magenta);
+     "CuShield_phys", CuShield_log, LXe_phys, false, 0);
+
+  //  G4VisAttributes* CuShield_vat= new G4VisAttributes(magenta);
+  G4VisAttributes* CuShield_vat = new G4VisAttributes(brown);
+  //  CuShield_vat->SetForceSolid(true);
   CuShield_vat->SetVisibility(true);
   CuShield_log->SetVisAttributes(CuShield_vat);
 
   // Cu shield surface
   G4OpticalSurface* OpCuShieldSurface = new G4OpticalSurface
-    ("ShieldSurface", unified, polished, dielectric_metal);
+    ("ShieldSurface", unified, ground, dielectric_metal, 0.2);
+  //  ("ShieldSurface", unified, polished, dielectric_metal);
   G4LogicalBorderSurface* ShieldSurface;
   ShieldSurface = new G4LogicalBorderSurface
-    ("Shield", liqPhase_phys, CuShield_phys, OpCuShieldSurface);
+    ("Shield", LXe_phys, CuShield_phys, OpCuShieldSurface);
 
-  const G4int NUM = 2;
   G4double CuShield_PP[NUM]   = { 7.0*eV, 7.50*eV };
-  G4double CuShield_REFL[NUM] = { 0.271, 0.230 };
+  G4double CuShield_REFL[NUM] = { 0.4, 0.3 };
+  //  G4double CuShield_REFL[NUM] = { 0.271, 0.230 };
   G4MaterialPropertiesTable *CuShield_mt = new G4MaterialPropertiesTable();
   CuShield_mt->AddProperty("REFLECTIVITY", CuShield_PP, CuShield_REFL, NUM);
   OpCuShieldSurface->SetMaterialPropertiesTable(CuShield_mt);
@@ -509,87 +648,86 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // rings ***************************************************************
 
   G4double ringHeight      =  4.*mm;
-  G4double ringOuterRadius =  detectorRadius;
+  G4double ringOuterRadius =  4.0*cm;
   G4double ringInnerRadius =  CuShieldOuterRadius;
   G4double ringVOffset     =  0.5*ringHeight;
-  G4double ringVPosition   =  0.5*detectorHeight-ringVOffset;
+  G4double ringVPosition   =  -0.5*GXeHeight + gasGap +ringVOffset;
 
   G4Tubs* ring_tube=new G4Tubs("ring_tube", ringInnerRadius,
      ringOuterRadius, 0.5*ringHeight, 0.*deg, 360.*deg);
   ring_log = new G4LogicalVolume(ring_tube, ring_mat, "ring_log");
 
   // optical surface: ring materials table
-  G4double ring_PP[NUM]   = { 7.00*eV, 7.50*eV };
-  G4double ring_REFL[NUM] = { 0.25, 0.25 };
+  G4double ring_PP[NUM]   = { 6.00*eV, 7.50*eV };
+  G4double ring_REFL[NUM] = { 0.45, 0.35 };
   G4MaterialPropertiesTable *ring_mt = new G4MaterialPropertiesTable();
   ring_mt->AddProperty("REFLECTIVITY", ring_PP, ring_REFL, NUM);
 
-  G4OpticalSurface* OpRingSurface = new G4OpticalSurface("RingSurface", 
-     unified, polished, dielectric_metal);
-  // omitted last argument which is surface roughness if it's non-polished 
-  // - i.e. ground
+  G4OpticalSurface* OpRingSurface = new G4OpticalSurface
+    ("RingSurface", unified, ground, dielectric_metal, 0.05);
+  //    ("RingSurface", unified, polished, dielectric_metal);
+  // last argument is surface roughness if it's non-polished - i.e. ground
   OpRingSurface->SetMaterialPropertiesTable(ring_mt);
 
-  // rings
-  ring_phys_gas[0]=new G4PVPlacement(0,
-     G4ThreeVector(0.*cm, 0.*cm, ringVPosition),
-     "ring_phys0",ring_log,detector_phys,false, 0);
+  // rings inside gas phase
+  ring_phys_gas[0] = new G4PVPlacement(0, G4ThreeVector
+    (0.*cm, 0.*cm, ringVPosition),"ring_phys0",ring_log,GXe_phys,false, 0);
   G4LogicalBorderSurface* RingSurface_gas0;
   RingSurface_gas0 = new G4LogicalBorderSurface
-    ("Ring", detector_phys, ring_phys_gas[0], OpRingSurface);
+    ("Ring", GXe_phys, ring_phys_gas[0], OpRingSurface);
 
-  ring_phys_gas[1]=new G4PVPlacement(0,
+  ring_phys_gas[1] = new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.0*mm),
-     "ring_phys1",ring_log, detector_phys, false, 0);
+     "ring_phys1",ring_log, GXe_phys, false, 0);
   G4LogicalBorderSurface* RingSurface_gas1;
   RingSurface_gas1 = new G4LogicalBorderSurface
-    ("Ring", detector_phys, ring_phys_gas[1], OpRingSurface);
+     ("Ring", GXe_phys, ring_phys_gas[1], OpRingSurface);
 
 
-  // LIQUID Phase starts here:
-  ringVPosition+=0.5*(detectorHeight-liqPhaseHeight);
+  // rings inside liquid phase:
+  ringVPosition = 0.5*LXeTubeHeight;
 
-  ring_phys_liq[0]=new G4PVPlacement(0,
-     G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
-     "ring_phys2",ring_log,liqPhase_phys, false, 0);
+  ring_phys_liq[0] = new G4PVPlacement(0,
+     G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=0.5*ringHeight),
+     "ring_phys2",ring_log,LXe_phys, false, 0);
   G4LogicalBorderSurface* RingSurface_liq0;
   RingSurface_liq0 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[0], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[0], OpRingSurface);
 
-  ring_phys_liq[1]=new G4PVPlacement(0,
+  ring_phys_liq[1] = new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
-     "ring_phys3",ring_log, liqPhase_phys, false, 0);
+     "ring_phys3",ring_log, LXe_phys, false, 0);
   G4LogicalBorderSurface* RingSurface_liq1;
   RingSurface_liq1 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[1], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[1], OpRingSurface);
 
   ring_phys_liq[2]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
-     "ring_phys4",ring_log, liqPhase_phys, false, 0);
+     "ring_phys4",ring_log, LXe_phys, false, 0);
   G4LogicalBorderSurface* RingSurface_liq2;
   RingSurface_liq2 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[2], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[2], OpRingSurface);
 
   ring_phys_liq[3]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight),
-     "ring_phys5",ring_log, liqPhase_phys, false, 0);
+     "ring_phys5",ring_log, LXe_phys, false, 0);
   G4LogicalBorderSurface* RingSurface_liq3;
   RingSurface_liq3 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[3], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[3], OpRingSurface);
 
   ring_phys_liq[4]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
-     "ring_phys6",ring_log, liqPhase_phys,false, 0);
+     "ring_phys6",ring_log, LXe_phys,false, 0);
   G4LogicalBorderSurface* RingSurface_liq4;
   RingSurface_liq4 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[4], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[4], OpRingSurface);
 
   ring_phys_liq[5]=new G4PVPlacement(0,
      G4ThreeVector(0.*cm, 0.*cm, ringVPosition-=ringHeight+1.75*mm),
-     "ring_phys7",ring_log, liqPhase_phys,false, 0);
+     "ring_phys7",ring_log, LXe_phys,false, 0);
   G4LogicalBorderSurface* RingSurface_liq5;
   RingSurface_liq5 = new G4LogicalBorderSurface
-    ("Ring", liqPhase_phys, ring_phys_liq[5], OpRingSurface);
+    ("Ring", LXe_phys, ring_phys_liq[5], OpRingSurface);
 
 
   G4VisAttributes* ring_vat= new G4VisAttributes(lgrey);
@@ -602,17 +740,16 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double mirrorHeight    = 2.0*mm;
   G4double mirrorRadius    = ringInnerRadius;
   G4double mirrorVOffset   = 0.5*ringHeight;
-  G4double mirrorVPosition = 0.5*detectorHeight-mirrorVOffset;
+  G4double mirrorVPosition = -0.5*GXeHeight + gasGap +mirrorVOffset;
 
-  G4Tubs* mirror_tube=new G4Tubs("mirror_tube", 0.*cm, mirrorRadius,
+  G4Tubs* mirror_tube = new G4Tubs("mirror_tube", 0.*cm, mirrorRadius,
      0.5*mirrorHeight, 0.*deg, 360.*deg);
-  mirror_log =
-    new G4LogicalVolume(mirror_tube, mirror_mat, "mirror_log");
-  mirror_phys=new G4PVPlacement(0, 
+  mirror_log  = new G4LogicalVolume(mirror_tube, mirror_mat, "mirror_log");
+  mirror_phys = new G4PVPlacement(0, 
      G4ThreeVector(0.*cm, 0.*cm, mirrorVPosition),
-     "mirror_phys", mirror_log, detector_phys, false, 0);
+     "mirror_phys", mirror_log, GXe_phys, false, 0);
 
-  G4VisAttributes* mirror_vat= new G4VisAttributes(red);
+  G4VisAttributes* mirror_vat = new G4VisAttributes(cyan);
   mirror_vat->SetVisibility(true);
   //  mirror_vat->SetForceSolid(true);
   mirror_log->SetVisAttributes(mirror_vat);
@@ -623,10 +760,10 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     ("MirrorSurface", unified, polished, dielectric_metal);
   G4LogicalBorderSurface* MirrorSurface;
   MirrorSurface = new G4LogicalBorderSurface
-    ("Mirror", detector_phys, mirror_phys, OpMirrorSurface);
+    ("Mirror", GXe_phys, mirror_phys, OpMirrorSurface);
 
-  G4double mirror_PP[NUM]   = { 7.00*eV, 7.50*eV };
-  G4double mirror_REFL[NUM] = { 0.70, 0.70 };
+  G4double mirror_PP[NUM]   = { 6.00*eV, 7.50*eV };
+  G4double mirror_REFL[NUM] = { 0.75, 0.7 };
   G4MaterialPropertiesTable *mirror_mt = new G4MaterialPropertiesTable();
   mirror_mt->AddProperty("REFLECTIVITY", mirror_PP, mirror_REFL, NUM);
   OpMirrorSurface->SetMaterialPropertiesTable(mirror_mt);
@@ -637,23 +774,21 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double gridHeight     = 0.100*mm;
   G4double gridRadius     = ringInnerRadius;
   G4double grid1VOffset   = 5.5*ringHeight+2.75*mm;
-  G4double grid1VPosition = 0.5*liqPhaseHeight+(detectorHeight-liqPhaseHeight)
-                            - grid1VOffset;
+  G4double grid1VPosition = 0.5*LXeTubeHeight - grid1VOffset;
   G4double grid2VOffset   = 6.5*ringHeight+4.50*mm;
-  G4double grid2VPosition = 0.5*liqPhaseHeight+(detectorHeight-liqPhaseHeight)
-                            - grid2VOffset;
+  G4double grid2VPosition = 0.5*LXeTubeHeight - grid2VOffset;
 
-  G4Tubs* grid_tube=new G4Tubs("grid_tube", 0.*cm, gridRadius,
+  G4Tubs* grid_tube = new G4Tubs("grid_tube", 0.*cm, gridRadius,
      0.5*gridHeight, 0.*deg, 360.*deg);
 
-  grid1_log = new G4LogicalVolume(grid_tube, grid_mat, "grid1_log");
-  grid1_phys=new G4PVPlacement(0, G4ThreeVector(0.*cm, 0.*cm, grid1VPosition),
-     "grid1_phys", grid1_log, liqPhase_phys, false, 0);
-  grid2_log = new G4LogicalVolume(grid_tube, grid_mat, "grid2_log");
-  grid2_phys=new G4PVPlacement(0, G4ThreeVector(0.*cm, 0.*cm, grid2VPosition),
-     "grid2_phys", grid2_log, liqPhase_phys, false, 0);
+  grid1_log  = new G4LogicalVolume(grid_tube, grid_mat, "grid1_log");
+  grid1_phys = new G4PVPlacement(0,G4ThreeVector(0.*cm, 0.*cm, grid1VPosition),
+     "grid1_phys", grid1_log, LXe_phys, false, 0);
+  grid2_log  = new G4LogicalVolume(grid_tube, grid_mat, "grid2_log");
+  grid2_phys = new G4PVPlacement(0,G4ThreeVector(0.*cm, 0.*cm, grid2VPosition),
+     "grid2_phys", grid2_log, LXe_phys, false, 0);
 
-  G4VisAttributes* grid_vat= new G4VisAttributes(red);
+  G4VisAttributes* grid_vat = new G4VisAttributes(red);
   grid_vat->SetVisibility(true);
   grid1_log->SetVisAttributes(grid_vat);
   grid2_log->SetVisAttributes(grid_vat);
@@ -661,66 +796,90 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   
   // alpha source holder ************************************************
   
-  G4double alphaHeight     = 1.230*mm; // position where alpha starts
-  G4double recessHeight    = 0.23*mm;  // totals lead thickness = 1.23 mm
-  G4double alphaRadius     = 0.65*mm;  
-  G4double recessRadius    = 0.40*mm;
+  G4double alphaHeight     = 1.230*mm; // total lead thickness = 1.23 mm
+  G4double recessHeight    = 0.20*mm;  // totals lead thickness = 1.23 mm
+  G4double alphaRadius     = 0.75*mm;
+  G4double recessRadius    = 0.65*mm;
+  G4double recessVPosition = 0.5*(alphaHeight - recessHeight);
 
-  G4double recessVOffset   = 0.5*(alphaHeight - recessHeight);
-  //  G4double recessVPosition = recessVOffset;
   G4double alphaVOffset    = grid1VOffset-0.5*alphaHeight;
-  G4double alphaVPosition  = 0.5*liqPhaseHeight+(detectorHeight-liqPhaseHeight)
-                             - alphaVOffset;
+  G4double americiumHeight = 600.*nanometer; // assumes ~1% Am  
+  G4double extra_offset    = (recessHeight - 0.23*mm + 0.5*americiumHeight); 
+                             // 0.23 = offset for all release macros
+  G4double alphaVPosition  = 0.5*LXeTubeHeight - alphaVOffset + extra_offset;
 
   G4Tubs* alpha_tube  = new G4Tubs("alpha_tube", 0.*cm, alphaRadius,
      0.5*alphaHeight,  0.*deg, 360.*deg);
   G4Tubs* recess_tube = new G4Tubs("recess_tube", 0.*cm, recessRadius,
      0.5*recessHeight, 0.*deg, 360.*deg);
 
-  G4RotationMatrix rotMatrixAlpha;
-  rotMatrixAlpha.rotateY(0.0*deg);
+  //  G4RotationMatrix rotMatrixAlpha;       // unit rotation matrix
+  // G4double anglealpha_Phys = 0.0*deg;    // rotational angle
+  // rotMatrixAlpha.rotateY(anglealpha_Phys); // rot matrix
+  //    G4SubtractionSolid* alpha_sol = new G4SubtractionSolid
+  //      ("alpha_sol", alpha_tube, recess_tube, G4Transform3D
+  //       (rotMatrixAlpha, G4ThreeVector(0,0,recessVPosition)));
   G4SubtractionSolid* alpha_sol = new G4SubtractionSolid
     ("alpha_sol", alpha_tube, recess_tube, G4Transform3D
-     (rotMatrixAlpha, G4ThreeVector(0,0,recessVOffset)));
-  alpha_log = new G4LogicalVolume(alpha_sol, alpha_mat, "alpha_log");
-  alpha_phys  = new G4PVPlacement(0, G4ThreeVector(0., 0., alphaVPosition),
-    "alpha_phys", alpha_log, liqPhase_phys, false, 0);
+     (G4RotationMatrix(), G4ThreeVector(0. ,0. , recessVPosition)));
+  alpha_log  = new G4LogicalVolume(alpha_sol, alpha_mat, "alpha_log");
 
-  G4VisAttributes* alpha_vat= new G4VisAttributes(white);
+  alpha_phys = new G4PVPlacement(0, G4ThreeVector(0., 0., alphaVPosition),
+                         "alpha_phys", alpha_log, LXe_phys, false, 0);
+
+  G4VisAttributes* alpha_vat = new G4VisAttributes(white);
   alpha_vat->SetVisibility(true);
   alpha_log ->SetVisAttributes(alpha_vat);
 
   // alpha source HOLDER surface
   G4OpticalSurface* OpAlphaSurface = new G4OpticalSurface("AlphaSurface", 
-     unified, polished, dielectric_metal);
+     unified, ground, dielectric_metal, 0.4);
+  //     unified, polished, dielectric_metal);
   G4LogicalBorderSurface* AlphaSurface;
   AlphaSurface = new G4LogicalBorderSurface
-    ("Alpha", liqPhase_phys, alpha_phys, OpAlphaSurface);
+    ("Alpha", LXe_phys, alpha_phys, OpAlphaSurface);
 
-  G4double alpha_PP[NUM]   = { 7.00*eV, 7.50*eV };
-  G4double alpha_REFL[NUM] = { 0.1, 0.1 };
+  G4double alpha_PP[NUM]   = { 6.00*eV, 7.50*eV };
+  G4double alpha_REFL[NUM] = { 0.05, 0.05 };
   G4MaterialPropertiesTable *alpha_mt = new G4MaterialPropertiesTable();
   alpha_mt->AddProperty("REFLECTIVITY", alpha_PP, alpha_REFL, NUM);
   OpAlphaSurface->SetMaterialPropertiesTable(alpha_mt);
 
-
   // americium ***********************************************************
 
-  G4double americiumHeight    = 20.*nanometer;
-  G4double americiumRadius    = recessRadius;
+  // moved above for the "extra_offset":
+  // G4double americiumHeight    = 600.*nanometer; // assumes ~1% Am
+  G4double americiumRadius    = recessRadius - 50.0*micrometer;
   G4double americiumVOffset   = 0.5*(alphaHeight-americiumHeight)-recessHeight;
   G4double americiumVPosition = americiumVOffset;
 
-  sourceZ = -0.5*(detectorHeight-liqPhaseHeight)+
-    alphaVPosition + americiumVPosition;
-  G4cout << "Calibration source: Z= " << sourceZ/mm << " mm" << G4endl;
+  sourceZ = vesselVPos + LXeVPos + alphaVPosition + americiumVPosition + PosZ;
+  G4cout << G4endl << "Calibration source centre (X,Y,Z):  0, 0, " 
+	 << sourceZ/mm << " mm" << G4endl;
+//    G4double sourceZ2 = vesselVPos+LXeVPos+alphaVPosition-0.5*recessHeight 
+//      + americiumVPosition+ PosZ+0.5*labHeight;
+//    G4cout << "Height from Floor: Z= " << sourceZ2/mm << " mm" << G4endl;
 
   G4Tubs* americium_tube = new G4Tubs("americium_tube", 0.*cm,
      americiumRadius, 0.5*americiumHeight, 0.*deg, 360.*deg);
-  americium_log = new G4LogicalVolume(americium_tube, americium_mat,
+  americium_log  = new G4LogicalVolume(americium_tube, americium_mat,
      "americium_log");
   americium_phys = new G4PVPlacement(0, G4ThreeVector(0., 0.,
      americiumVPosition),"americium_phys", americium_log, alpha_phys,false,0);
+
+  // americium optical properties:
+  G4OpticalSurface* OpAmericiumSurface = new G4OpticalSurface
+    ("AmericiumSurface", unified, ground, dielectric_metal, 0.3);
+    //    ("AmericiumSurface", unified, polished, dielectric_metal);
+  G4LogicalBorderSurface* AmericiumSurface;
+  AmericiumSurface = new G4LogicalBorderSurface
+    ("Americium", LXe_phys, americium_phys, OpAlphaSurface);
+
+  G4double americium_PP[NUM]   = { 6.00*eV, 7.50*eV };
+  G4double americium_REFL[NUM] = { 0.47, 0.42 };
+  G4MaterialPropertiesTable *americium_mt = new G4MaterialPropertiesTable();
+  americium_mt->AddProperty("REFLECTIVITY", americium_PP, americium_REFL, NUM);
+  OpAlphaSurface->SetMaterialPropertiesTable(americium_mt);
 
   G4VisAttributes* americium_vat= new G4VisAttributes(cyan);
   americium_vat->SetVisibility(true);
@@ -732,34 +891,28 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4double pmtHeight    = 12.0*cm;
   G4double pmtRadius    = 2.6*cm;
-  G4double pmtVOffset   = 5.0*cm;
-  G4double pmtVPosition = -0.5*(liqPhaseHeight-pmtHeight)+pmtVOffset;
-
-  //  G4double windowVOffset   = 0.5*pmtHeight - 2.*pmtRadius*cos(30.0*deg);
-  //  G4double windowVPosition = pmtVPosition + windowVOffset;
+  G4double pmtVOffset   = 1.0*cm;
+  G4double pmtVPosition = -0.5*(LXeTubeHeight+pmtHeight)+pmtVOffset;
 
   G4Sphere* pmt_window = new G4Sphere("pmt_sphere", 0.*cm, 2.*pmtRadius, 
      0.*deg, 360.*deg, 0.*deg, 30.0*deg);
-  G4Tubs* pmt_tube=new G4Tubs("pmt_tube", 0.*cm,  pmtRadius, 0.5*pmtHeight,
-     0.*deg, 360.*deg); 
-
-  G4RotationMatrix rotMatrixpmt;       // unit rotation matrix
-  G4double anglepmt_Phys = 0.0*deg;    // rotational angle
-  rotMatrixpmt.rotateY(anglepmt_Phys); // rot matrix
+  G4Tubs* pmt_tube = new G4Tubs("pmt_tube", 0.*cm,  pmtRadius, 0.5*pmtHeight,
+     0.*deg, 360.*deg);
   
   G4UnionSolid* pmt_sol = new G4UnionSolid("pmt_sol", pmt_tube, pmt_window,
-    G4Transform3D(rotMatrixpmt, G4ThreeVector(0,0,0.5*pmtHeight
+    G4Transform3D(G4RotationMatrix(), G4ThreeVector(0,0,0.5*pmtHeight
     -2.*pmtRadius*cos(30.0*deg))));
 
-  pmt_log = new G4LogicalVolume(pmt_sol, pmt_mat, "pmt_log");
+  pmt_log  = new G4LogicalVolume(pmt_sol, pmt_mat, "pmt_log");
   pmt_phys = new G4PVPlacement(0,G4ThreeVector(0.*cm, 0.*cm, pmtVPosition),
-     "pmt_phys", pmt_log, liqPhase_phys, false, 0);
+     "pmt_phys", pmt_log, LXe_phys, false, 0);
 
-  G4OpticalSurface* pmt_opsurf = new G4OpticalSurface("pmt_opsurf",
-     unified, polished, dielectric_dielectric);
+  G4OpticalSurface* pmt_opsurf = new G4OpticalSurface
+    ("pmt_opsurf",unified, polished, dielectric_dielectric);
+  //    ("pmt_opsurf",unified, ground, dielectric_dielectric, 1.0);
   G4LogicalBorderSurface* pmt_surf;
   pmt_surf = new G4LogicalBorderSurface
-    ("pmt_surf", liqPhase_phys, pmt_phys, pmt_opsurf);
+    ("pmt_surf", LXe_phys, pmt_phys, pmt_opsurf);
 
   G4VisAttributes* pmt_vat= new G4VisAttributes(blue);
   pmt_vat->SetForceSolid(true);
@@ -769,9 +922,8 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   // photocathode *******************************************************
 
-  //  G4double phcathRadius      = 22.5*mm;
-  //  G4double phcathVOffset     = 2.*pmtRadius*cos(30.*deg);
-  G4double phcathVPosition   = 0.*cm;
+  G4double phcathVOffset     = 0.5*pmtHeight-2.*pmtRadius*cos(30.0*deg);
+  G4double phcathVPosition   = phcathVOffset;
 
   G4Sphere* phcath_sol = new G4Sphere("phcath_sphere",
      2.*pmtRadius-1.6*mm, 2.*pmtRadius-1.59*mm, 0.*deg, 360.*deg, 0.*deg, 
@@ -787,7 +939,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   phcath_surf = new G4LogicalBorderSurface
     ("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
 
-  G4double phcath_PP[NUM]   = { 7.00*eV, 7.50*eV };
+  G4double phcath_PP[NUM]   = { 6.00*eV, 7.50*eV };
   G4double phcath_REFL[NUM] = { 0.0, 0.0};
   G4MaterialPropertiesTable* phcath_mt = new G4MaterialPropertiesTable();
   phcath_mt->AddProperty("REFLECTIVITY", phcath_PP, phcath_REFL, NUM);
@@ -802,38 +954,50 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // ......................................................................
   // attach user limits ...................................................
 
-  world_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
-  lab_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
-  jacket_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
-  vacuum_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
-  vessel_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theRoomTimeCut));
-  detector_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  liqPhase_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  CuShield_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  ring_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  mirror_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  grid1_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  grid2_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  alpha_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  americium_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  pmt_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
-  phcath_log->SetUserLimits
-    (new G4UserLimits(theMaxStepSize,DBL_MAX,theMaxTimeCuts));
+  
+  G4cout << G4endl << "User Limits: " << G4endl 
+	 << "\t theMaxTimeCuts:     " << G4BestUnit(theMaxTimeCuts,"Time")  
+	 << G4endl
+	 << "\t theRoomTimeCut:     " << G4BestUnit(theRoomTimeCut,"Time")  
+	 << G4endl
+	 << "\t theMaxStepSize:     " << G4BestUnit(theMaxStepSize,"Length")
+	 << G4endl
+	 << "\t theMinEKine:        " << G4BestUnit(theMinEkine,"Energy")   
+	 << G4endl
+	 << "\t minRoomMinEKine:    " << G4BestUnit(theRoomMinEkine,"Energy")
+	 << G4endl << G4endl;
+
+  if (theUserLimitsForRoom != 0) delete theUserLimitsForRoom;
+  if (theUserLimitsForDetector != 0) delete theUserLimitsForDetector;
+
+  theUserLimitsForRoom = new G4UserLimits(theMaxStepSize,   // step length max
+					  DBL_MAX,          // track length max
+					  theRoomTimeCut,   // Time cut
+					  theRoomMinEkine); // min energy
+
+#include "DMXDetectorRoomLimits.icc"
+
+  theUserLimitsForDetector = new G4UserLimits(theDetectorStepSize,
+					      DBL_MAX, // Track Max
+					      theMaxTimeCuts,
+					      theMinEkine);
+
+      world_log->SetUserLimits(theUserLimitsForRoom);
+        lab_log->SetUserLimits(theUserLimitsForRoom);
+     jacket_log->SetUserLimits(theUserLimitsForRoom);
+     vacuum_log->SetUserLimits(theUserLimitsForRoom);
+     vessel_log->SetUserLimits(theUserLimitsForRoom);
+        GXe_log->SetUserLimits(theUserLimitsForDetector);
+        LXe_log->SetUserLimits(theUserLimitsForXenon);
+   CuShield_log->SetUserLimits(theUserLimitsForDetector);
+       ring_log->SetUserLimits(theUserLimitsForDetector);
+     mirror_log->SetUserLimits(theUserLimitsForDetector);
+      grid1_log->SetUserLimits(theUserLimitsForDetector);
+      grid2_log->SetUserLimits(theUserLimitsForDetector);
+      alpha_log->SetUserLimits(theUserLimitsForDetector);
+  americium_log->SetUserLimits(theUserLimitsForDetector);
+        pmt_log->SetUserLimits(theUserLimitsForDetector);
+     phcath_log->SetUserLimits(theUserLimitsForDetector);
 
 
   // ......................................................................
@@ -844,7 +1008,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4String name="/DMXDet/LXeSD";
   LXeSD = new DMXScintSD(name, this);
   SDman->AddNewDetector(LXeSD);
-  liqPhase_log->SetSensitiveDetector(LXeSD);
+  LXe_log->SetSensitiveDetector(LXeSD);
 
   SDman = G4SDManager::GetSDMpointer();
   name="/DMXDet/pmtSD";
@@ -852,8 +1016,78 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   SDman->AddNewDetector(pmtSD);
   phcath_log->SetSensitiveDetector(pmtSD);
 
-
   return world_phys;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// specific method to G4UserLimits:= SetUserMinEkine
+void DMXDetectorConstruction::SetRoomEnergyCut(G4double val)
+{
+  // set minimum charged particle energy cut - NB: for ROOM
+  theRoomMinEkine = val;
+  if (theUserLimitsForRoom != 0) 
+    {
+      theUserLimitsForRoom->SetUserMinEkine(val); 
+      G4cout << " Changing Room energy cut to: " << G4BestUnit(val,"Energy")
+	     << G4endl;
+    }
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// specific method to G4UserLimits:= SetUserMinEkine
+void DMXDetectorConstruction::SetEnergyCut(G4double val)
+{
+  // set minimum charged particle energy cut - NB: for Xenon Detector
+  theMinEkine = val;
+  if (theUserLimitsForDetector != 0) 
+    {
+      theUserLimitsForDetector->SetUserMinEkine(val);
+      G4cout << "Changing Detector energy cut to: " << G4BestUnit(val,"Energy")
+	     << G4endl;
+    }
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// specific method to G4UserLimits:= SetUserMaxTime
+void DMXDetectorConstruction::SetRoomTimeCut(G4double val)
+{
+  // set room time cut:
+  theRoomTimeCut = val;
+  if (theUserLimitsForRoom != 0) 
+    {
+      theUserLimitsForRoom->SetUserMaxTime(val);
+      G4cout << " Changing Room Time cut to: " << G4BestUnit(val,"Time")
+	     << G4endl;
+    }
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// specific method to G4UserLimits:= SetUserMaxTime
+void DMXDetectorConstruction::SetTimeCut(G4double val)
+{
+  // set detector time cut:
+  theMaxTimeCuts = val;
+  if (theUserLimitsForDetector != 0) 
+    {
+      theUserLimitsForDetector->SetUserMaxTime(val);
+      G4cout << " Changing Detector Time cut to: " << G4BestUnit(val,"Time")
+	     << G4endl;
+    }
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+//void DMXDetectorConstruction::UpdateGeometry()
+//{
+//  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+//}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 

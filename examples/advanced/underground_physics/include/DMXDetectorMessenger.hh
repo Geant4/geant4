@@ -33,64 +33,40 @@
 //               by A. Howard and H. Araujo 
 //                    (27th November 2001)
 //
-// MaxTimeCuts program
+// SteppingActionMessenger header
 // --------------------------------------------------------------
 
-#include "DMXMaxTimeCuts.hh"
+#ifndef DMXDetectorMessenger_h
+#define DMXDetectorMessenger_h 1
 
-#include "G4Step.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class DMXDetectorConstruction;
+class G4UIdirectory;
+
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithoutParameter;
 
 
-DMXMaxTimeCuts::DMXMaxTimeCuts(const G4String& aName)
-  : DMXSpecialCuts(aName)
-{
-   if (verboseLevel>1) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
-   }
-   SetProcessType(fUserDefined);
-}
+class DMXDetectorMessenger: public G4UImessenger {
 
-DMXMaxTimeCuts::~DMXMaxTimeCuts()
-{}
+  public:
+    DMXDetectorMessenger(DMXDetectorConstruction*);
+   ~DMXDetectorMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
 
-DMXMaxTimeCuts::DMXMaxTimeCuts(DMXMaxTimeCuts& right)
-{}
-
- 
-G4double DMXMaxTimeCuts::PostStepGetPhysicalInteractionLength(
-                             const G4Track& aTrack,
-			     G4double ,
-			     G4ForceCondition* condition
-			    )
-{
-  // condition is set to "Not Forced"
-  *condition = NotForced;
-
-   G4double     proposedStep = DBL_MAX;
-   // get the pointer to UserLimits
-   G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
-   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-
-   // can apply cuts for specific particles - use if(particleDef):
-   //   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
-
-   //   G4cout << " Time: " << pUserLimits->GetUserMaxTime(aTrack) << G4endl;
+  private:
+    DMXDetectorConstruction*  detectorConstruction;   
   
-   if (pUserLimits) {
-     G4double temp = DBL_MAX;
-     //max time limit
-     G4double dTime= (pUserLimits->GetUserMaxTime(aTrack) - aTrack.GetGlobalTime());
-     if (dTime < 0. ) {
-       proposedStep = 0.;
-     } else {  
-       G4double beta = (aParticle->GetTotalMomentum())/(aParticle->GetTotalEnergy());
-       temp = beta*c_light*dTime;
-       if (proposedStep > temp) proposedStep = temp;                  
-     }
+    G4UIcmdWithADoubleAndUnit* RoomEKineCutCmd;
+    G4UIcmdWithADoubleAndUnit* EKineCutCmd;
+    G4UIcmdWithADoubleAndUnit* RoomTimeCutCmd;
+    G4UIcmdWithADoubleAndUnit* TimeCutCmd;
+  //    G4UIcmdWithoutParameter*   UpdateCmd;
 
-   }
-   return proposedStep;
-}
+};
+
+#endif
+

@@ -46,6 +46,7 @@
 
 class DMXRunActionMessenger;
 class G4Run;
+class DMXAnalysisManager;
 
 class DMXRunAction : public G4UserRunAction
 {
@@ -57,14 +58,22 @@ class DMXRunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
 
-    void SetFilename(G4String val) { fileName = val; };
+  public:
+    void SetsavehitsFile   (G4String val)        { savehitsFile   = val;};
+    void SetsavepmtFile    (G4String val)        { savepmtFile   = val;};
+    void SetsavehistFile   (G4String val)        { savehistFile   = val;};
+
+    G4String GetsavehitsFile()                   {return savehitsFile;};
+    G4String GetsavepmtFile()                    {return savepmtFile;};
 
   private:
   
-  G4String fileName;  // log file name for the run
+  //messenger
+    G4String savehitsFile;
+    G4String savepmtFile;
+    G4String savehistFile;
+
   DMXRunActionMessenger* runMessenger;
-
-
 
 };
 

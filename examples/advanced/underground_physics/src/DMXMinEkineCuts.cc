@@ -21,30 +21,27 @@
 // ********************************************************************
 //
 //
+// $Id: DMXMinEkineCuts.cc,v 1.1 2002-06-16 21:00:05 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// 
 // --------------------------------------------------------------
-//   GEANT 4 - Underground Dark Matter Detector Advanced Example
+//	GEANT 4 class implementation file 
 //
-//      For information related to this code contact: Alex Howard
-//      e-mail: a.s.howard@ic.ac.uk
+//	History: first implementation, based on object model of
+//	2nd December 1995, G.Cosmo
 // --------------------------------------------------------------
-// Comments
-//
-//                  Underground Advanced
-//               by A. Howard and H. Araujo 
-//                    (27th November 2001)
-//
-// MaxTimeCuts program
+//                   15 April 1998 M.Maire
 // --------------------------------------------------------------
 
-#include "DMXMaxTimeCuts.hh"
+#include "DMXMinEkineCuts.hh"
 
 #include "G4Step.hh"
 #include "G4UserLimits.hh"
 #include "G4VParticleChange.hh"
 #include "G4EnergyLossTables.hh"
 
-
-DMXMaxTimeCuts::DMXMaxTimeCuts(const G4String& aName)
+DMXMinEkineCuts::DMXMinEkineCuts(const G4String& aName)
   : DMXSpecialCuts(aName)
 {
    if (verboseLevel>1) {
@@ -53,14 +50,14 @@ DMXMaxTimeCuts::DMXMaxTimeCuts(const G4String& aName)
    SetProcessType(fUserDefined);
 }
 
-DMXMaxTimeCuts::~DMXMaxTimeCuts()
+DMXMinEkineCuts::~DMXMinEkineCuts()
 {}
 
-DMXMaxTimeCuts::DMXMaxTimeCuts(DMXMaxTimeCuts& right)
+DMXMinEkineCuts::DMXMinEkineCuts(DMXMinEkineCuts& right)
 {}
 
  
-G4double DMXMaxTimeCuts::PostStepGetPhysicalInteractionLength(
+G4double DMXMinEkineCuts::PostStepGetPhysicalInteractionLength(
                              const G4Track& aTrack,
 			     G4double ,
 			     G4ForceCondition* condition
@@ -73,24 +70,27 @@ G4double DMXMaxTimeCuts::PostStepGetPhysicalInteractionLength(
    // get the pointer to UserLimits
    G4UserLimits* pUserLimits = aTrack.GetVolume()->GetLogicalVolume()->GetUserLimits();
    const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-
-   // can apply cuts for specific particles - use if(particleDef):
-   //   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
-
-   //   G4cout << " Time: " << pUserLimits->GetUserMaxTime(aTrack) << G4endl;
+   G4ParticleDefinition* aParticleDef = aTrack.GetDefinition();
   
-   if (pUserLimits) {
+   if (pUserLimits && aParticleDef->GetPDGCharge() != 0.0) {
+     //min kinetic energy
      G4double temp = DBL_MAX;
-     //max time limit
-     G4double dTime= (pUserLimits->GetUserMaxTime(aTrack) - aTrack.GetGlobalTime());
-     if (dTime < 0. ) {
-       proposedStep = 0.;
-     } else {  
-       G4double beta = (aParticle->GetTotalMomentum())/(aParticle->GetTotalEnergy());
-       temp = beta*c_light*dTime;
-       if (proposedStep > temp) proposedStep = temp;                  
-     }
+     G4double    eKine     = aParticle->GetKineticEnergy();
+     G4Material* aMaterial = aTrack.GetMaterial();
+     G4double eMin = pUserLimits->GetUserMinEkine(aTrack);
 
+     G4double    rangeNow = DBL_MAX;
+
+     rangeNow = G4EnergyLossTables::GetRange(aParticleDef,eKine,aMaterial);
+
+     if (eKine < eMin ) {
+       proposedStep = 0.;
+     } else {
+       // charged particles only
+       G4double rangeMin = G4EnergyLossTables::GetRange(aParticleDef,eMin,aMaterial);
+       temp = rangeNow - rangeMin;
+       if (proposedStep > temp) proposedStep = temp;        
+     }
    }
    return proposedStep;
 }

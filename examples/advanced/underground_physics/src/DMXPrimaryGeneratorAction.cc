@@ -33,20 +33,41 @@
 //               by A. Howard and H. Araujo 
 //                    (27th November 2001)
 //
+//
 // PrimaryGeneratorAction program
 // --------------------------------------------------------------
 
 #include "DMXPrimaryGeneratorAction.hh"
 
+#ifdef DMXENV_GPS_USE
+#include "G4GeneralParticleSource.hh"
+#else
 #include "DMXParticleSource.hh"
+#endif
+
+#ifdef G4ANALYSIS_USE
+#include "DMXAnalysisManager.hh"
+#endif
 
 #include "G4Event.hh"
+
+#include "Randomize.hh"
+
 #include "globals.hh"
 
 
 DMXPrimaryGeneratorAction::DMXPrimaryGeneratorAction() {
   
+#ifdef DMXENV_GPS_USE
+  particleGun = new G4GeneralParticleSource();
+#else
   particleGun = new DMXParticleSource();
+#endif
+
+  energy_pri=0;
+  //  seeds=NULL;
+  seeds[0] =-1;
+  seeds[1] =-1;
 
 }
 
@@ -59,8 +80,20 @@ DMXPrimaryGeneratorAction::~DMXPrimaryGeneratorAction() {
 
 void DMXPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent) {
 
+  energy_pri = 0.;
+
+  // seeds
+  //  seeds = HepRandom::getTheSeeds();
+  seeds[0] = *HepRandom::getTheSeeds();
+  seeds[1] = *(HepRandom::getTheSeeds()+1);
 
   particleGun->GeneratePrimaryVertex(anEvent);
+
+  energy_pri = particleGun->GetParticleEnergy();
+#ifdef G4ANALYSIS_USE 
+  DMXAnalysisManager* analysis =  DMXAnalysisManager::getInstance();
+  analysis->analysePrimaryGenerator(energy_pri);
+#endif
 
 }
 

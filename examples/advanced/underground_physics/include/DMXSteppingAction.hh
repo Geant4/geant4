@@ -45,6 +45,7 @@
 
 class DMXSteppingActionMessenger;
 class DMXEventAction;
+class DMXAnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

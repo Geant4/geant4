@@ -21,46 +21,47 @@
 // ********************************************************************
 //
 //
-// --------------------------------------------------------------
-//   GEANT 4 - Underground Dark Matter Detector Advanced Example
+// $Id: DMXMinEkineCuts.hh,v 1.1 2002-06-16 21:00:31 ahoward Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      For information related to this code contact: Alex Howard
-//      e-mail: a.s.howard@ic.ac.uk
-// --------------------------------------------------------------
-// Comments
+// 
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
 //
-//                  Underground Advanced
-//               by A. Howard and H. Araujo 
-//                    (27th November 2001)
-//
-// StackingActionMessenger header
-// --------------------------------------------------------------
+// ------------------------------------------------------------
+//                  14 Aug. 1998  H.Kurashige
+// ------------------------------------------------------------
 
-#ifndef DMXStackingActionMessenger_h
-#define DMXStackingActionMessenger_h 1
+#ifndef DMXMinEkineCuts_h
+#define DMXMinEkineCuts_h 1
 
-#include "G4UImessenger.hh"
+#include "G4ios.hh"
 #include "globals.hh"
-
-class DMXStackingAction;
-class G4UIcmdWithABool;
+#include "DMXSpecialCuts.hh"
 
 
-class DMXStackingActionMessenger: public G4UImessenger {
+class DMXMinEkineCuts : public DMXSpecialCuts
+{
+  public:     
 
-  public:
-    DMXStackingActionMessenger(DMXStackingAction*);
-    ~DMXStackingActionMessenger();
-    
-  public:
-    void SetNewValue(G4UIcommand* , G4String);
+     DMXMinEkineCuts(const G4String& processName ="DMXMinEkineCuts" );
 
+     virtual ~DMXMinEkineCuts();
+
+     // PostStep GPIL
+     virtual G4double PostStepGetPhysicalInteractionLength(
+                             const G4Track& track,
+			     G4double   previousStepSize,
+			     G4ForceCondition* condition
+			    );
+            
+			    
   private:
-    DMXStackingAction* DMXAction;
+  
+  // hide assignment operator as private 
+      DMXMinEkineCuts(DMXMinEkineCuts&);
+      DMXMinEkineCuts& operator=(const DMXMinEkineCuts& right);
 
-  private:
-    G4UIcmdWithABool* KillGammasCmd;
-    
 };
 
 #endif

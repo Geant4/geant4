@@ -46,14 +46,16 @@
 #include "DMXScintHit.hh"
 #include "DMXPmtHit.hh"
 
+class DMXRunAction;
+class DMXPrimaryGeneratorAction;
 class DMXEventActionMessenger;
-
+class DMXAnalysisManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 class DMXEventAction : public G4UserEventAction {
 
   public:
-    DMXEventAction();
+    DMXEventAction(DMXRunAction*, DMXPrimaryGeneratorAction*);
     virtual ~DMXEventAction();
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
@@ -78,6 +80,9 @@ class DMXEventAction : public G4UserEventAction {
   private:
     G4int event_id;
 
+    const long* seeds;
+    G4double energy_pri;
+
     // hits collections
     G4int scintillatorCollID;                
     G4int pmtCollID;
@@ -91,6 +96,7 @@ class DMXEventAction : public G4UserEventAction {
     G4double totEnergyNeutrons;
     G4double hitEnergy;
     G4double firstLXeHitTime;
+    G4double firstParticleE;
     G4double particleEnergy;
     G4String particleName;
     G4String firstParticleName;
@@ -112,6 +118,9 @@ class DMXEventAction : public G4UserEventAction {
     G4int saveHitsFlag;         
     G4int printModulo;                         
     DMXEventActionMessenger*  eventMessenger;
+
+    DMXRunAction*    runAct;  //pointer to run action
+    DMXPrimaryGeneratorAction* genAction; // pointer to particle generator
 
 };
 
