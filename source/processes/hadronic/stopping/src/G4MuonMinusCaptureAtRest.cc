@@ -190,7 +190,7 @@ AtRestDoIt(const G4Track& track,const G4Step&)
       G4DynamicParticle * aNewParticle = new G4DynamicParticle();
       aNewParticle->SetDefinition( aParticle->GetDefinition() );
       G4LorentzVector itV(aParticle->GetTotalEnergy(), aParticle->GetMomentum());
-      aNewParticle->SetMomentum(itV);
+      aNewParticle->SetMomentum(itV.vect());
       G4double localtime = globalTime + tDelay + aParticle->GetTOF();
       G4Track* aNewTrack = new G4Track( aNewParticle, localtime, position);
       aParticleChange.AddSecondary( aNewTrack );
