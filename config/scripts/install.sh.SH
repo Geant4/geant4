@@ -68,40 +68,93 @@ g4debug="$g4debug"
 #
 # g4shared
 #
-g4lib_build_shared="$g4lib_build_shared"
-g4lib_build_archive="$g4lib_build_archive"
-g4lib_use_shared="$g4lib_use_shared"
-g4lib_use_archive="$g4lib_use_archive"
+if [ X$g4lib_build_shared = Xy ] ; then
+g4lib_build_shared=1
+else
+g4lib_build_shared=""
+fi 
 
+if [ X$g4lib_build_static = Xy ] ; then
+g4lib_build_static=1
+else
+g4lib_build_static=""
+fi 
+
+if [ X$g4lib_use_shared = Xy ] ; then
+g4lib_use_shared=1
+else
+g4lib_use_shared=""
+fi 
+
+if [ X$g4lib_use_static = Xy ] ; then
+g4lib_use_static=1
+else
+g4lib_use_static=""
+fi 
+
+!GROK!THIS!
+
+: In the following dollars and backticks do not need the extra backslash.
+$spitshell >>install.sh <<'!NO!SUBS!'
 ######################################
-export G4SYSTEM="$g4system"
+G4SYSTEM="$g4system"
 
-export G4INSTALL="$g4install"
-export G4INCLUDE="$g4include"
-export G4BASE="$g4base"
-export G4WORKDIR="$g4workdir"
-export G4TMP="$g4tmp"
-export G4LIB="$g4lib"
-export G4BIN="$g4bin"
-export G4DATA="$g4data"
-export G4LEVELGAMMADATA="$g4levelgammadata"
+G4INSTALL="$g4install"
+G4INCLUDE="$g4include"
+G4BASE="$g4base"
+G4WORKDIR="$g4workdir"
+G4TMP="$g4tmp"
+G4LIB="$g4lib"
+G4BIN="$g4bin"
+G4DATA="$g4data"
+G4LEVELGAMMADATA="$g4levelgammadata"
 
-export G4CLHEP_BASE_DIR="$g4clhep_base_dir"
-export G4CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
-export G4CLHEP_LIB_DIR="$g4clhep_lib_dir"
-export G4CLHEP_LIB="$g4clhep_lib"
+G4CLHEP_BASE_DIR="$g4clhep_base_dir"
+G4CLHEP_INCLUDE_DIR="$g4clhep_include_dir"
+G4CLHEP_LIB_DIR="$g4clhep_lib_dir"
+G4CLHEP_LIB="$g4clhep_lib"
 
-export G4USE_OSPACE="$g4use_ospace"
-export G4OSPACE_BASE_DIR="$g4ospace_base_dir"
+G4USE_OSPACE="$g4use_ospace"
+G4OSPACE_BASE_DIR="$g4ospace_base_dir"
 
-export G4LIB_USE_GRANULAR="$g4lib_use_granular"
+G4LIB_USE_GRANULAR="$g4lib_use_granular"
 
-export G4DEBUG="$g4debug"
+G4DEBUG="$g4debug"
 
-export G4LIB_BUILD_SHARED="$g4lib_build_shared"
-export G4LIB_BUILD_ARCHIVE="$g4lib_build_archive"
-export G4LIB_USE_SHARED="$g4lib_use_shared"
-export G4LIB_USE_ARCHIVE="$g4lib_use_archive"
+G4LIB_BUILD_SHARED="$g4lib_build_shared"
+G4LIB_BUILD_STATIC="$g4lib_build_static"
+G4LIB_USE_SHARED="$g4lib_use_shared"
+G4LIB_USE_STATIC="$g4lib_use_static"
+
+#####################################################################
+export G4SYSTEM
+
+export G4INSTALL
+export G4INCLUDE
+export G4BASE
+export G4WORKDIR
+export G4TMP
+export G4LIB
+export G4BIN
+export G4DATA
+export G4LEVELGAMMADATA
+
+export G4CLHEP_BASE_DIR
+export G4CLHEP_INCLUDE_DIR
+export G4CLHEP_LIB_DIR
+export G4CLHEP_LIB
+
+export G4USE_OSPACE
+export G4OSPACE_BASE_DIR
+
+export G4LIB_USE_GRANULAR
+
+export G4DEBUG
+
+export G4LIB_BUILD_SHARED
+export G4LIB_BUILD_STATIC
+export G4LIB_USE_SHARED
+export G4LIB_USE_STATIC
 
 #####################################################################
 echo "On this machine the G4SYSTEM=$g4system"
@@ -129,28 +182,27 @@ echo "On this machine the G4LIB_USE_GRANULAR=$g4lib_use_granular"
 echo "On this machine the G4DEBUG=$g4debug"
 
 echo "On this machine the G4LIB_BUILD_SHARED=$g4lib_build_shared"
-echo "On this machine the G4LIB_BUILD_ARCHIVE=$g4lib_build_archive"
+echo "On this machine the G4LIB_BUILD_STATIC=$g4lib_build_static"
 echo "On this machine the G4LIB_USE_SHARED=$g4lib_use_shared"
-echo "On this machine the G4LIB_USE_ARCHIVE=$g4lib_use_archive"
+echo "On this machine the G4LIB_USE_STATIC=$g4lib_use_static"
 
 ###############################################################
 echo ""
-echo "OK, going to $g4install/source and start 'make'..."
+echo "OK, going to $g4install/source and start 'gmake'..."
 echo ""
 cd $g4install/source
 echo `pwd`
-if [ X$g4global = Xglobal ] ; then
-make global
+if [ X$g4global = Xy ] ; then
+gmake global
+if [ X$g4granular = Xy ] ; then
+gmake
+fi
 else
-make
+gmake
 fi
 if [ X$g4include = X1 ] ; then
-make includes
+gmake includes
 fi
-!GROK!THIS!
-
-: In the following dollars and backticks do not need the extra backslash.
-$spitshell >>install.sh <<'!NO!SUBS!'
 !NO!SUBS!
 chmod 755 install.sh
 $eunicefix install.sh
