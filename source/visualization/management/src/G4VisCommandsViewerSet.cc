@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.18 2002-04-22 14:47:56 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.19 2002-05-01 09:55:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -55,6 +55,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
     ("/vis/viewer/set/autoRefresh",this);
   fpCommandAutoRefresh->SetGuidance
     ("/vis/viewer/set/autoRefresh [true|false]");
+  fpCommandAutoRefresh->SetGuidance
+    ("DEPRECATED COMMAND.  Will be removed from next major release.");
   fpCommandAutoRefresh->SetGuidance
     ("View is automatically refreshed after a change of view parameters.");
   fpCommandAutoRefresh->SetParameterName("auto-refresh",omitable = true);
@@ -380,6 +382,12 @@ void G4VisCommandsViewerSet::SetNewValue
   else if (command == fpCommandAutoRefresh) {
     G4bool autoRefresh = GetNewBoolValue(newValue);
     vp.SetAutoRefresh(autoRefresh);
+    if (verbosity >= G4VisManager::warnings) {
+      G4cout <<
+	"/vis/viewer/set/autoRefresh is a DEPRECATED COMMAND."
+	"\n  It will be removed from next major release."
+	     << G4endl;
+    }
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Views will ";
       if (!vp.IsAutoRefresh()) G4cout << "not ";
