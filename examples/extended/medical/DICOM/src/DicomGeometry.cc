@@ -273,37 +273,44 @@ void DicomGeometry::PatientConstruction()
 
   G4VisAttributes* visualisationAttribute = new G4VisAttributes();
   visualisationAttribute->SetForceSolid(false);
-  visualisationAttribute->SetColour( red = 1., 
-                                     green = 0., 
-                                     blue= 0., 
-                                     alpha = 1.);
+  visualisationAttribute->SetColour( 1., 
+                                     0., 
+                                     0., 
+                                     1. );
   
- G4Box*  parameterisedBox = new G4Box( "Parameterisation Mother", 
-                                       totalColumns*(xPixelSpacing)/2.*mm, 
-                                       totalRows*(yPixelSpacing)/2.*mm,
-                                       totalNumberOfFile*(sliceThickness)/2.*mm);
-  logical_param = new G4LogicalVolume(parameterisedBox,air,"Parameterisation Mother (logical)");
-  logical_param->SetVisAttributes(visualisationAttribute);
+  //Building up the parameterisation ...
+ G4Box* parameterisedBox = new G4Box( "Parameterisation Mother", 
+                                      totalColumns*(xPixelSpacing)/2.*mm, 
+                                      totalRows*(yPixelSpacing)/2.*mm,
+                                      totalNumberOfFile*(sliceThickness)/2.*mm);
+  G4LogicalVolume* parameterisedLogicalvolume = 
+                               new G4LogicalVolume( parameterisedBox,
+                                                   air,
+                                                   "Parameterisation Mother (logical)" );
+  parameterisedLogicalvolume->SetVisAttributes(visualisationAttribute);
   
- 
-  G4double MiddleLocationValue=0;
-  for (G4int i=0;i< totalNumberOfFile;i++)
+  G4double MiddleLocationValue = 0;
+  for ( G4int i=0; i< totalNumberOfFile;i++ )
     {
       ReadConfiguration->ReadG4File( ReadConfiguration->GetListOfFile()[i] );
-      MiddleLocationValue=MiddleLocationValue+ReadConfiguration->GetSliceLocation();
+      MiddleLocationValue = MiddleLocationValue+ReadConfiguration->GetSliceLocation();
     }
-  MiddleLocationValue=MiddleLocationValue/totalNumberOfFile;
+  MiddleLocationValue = MiddleLocationValue/totalNumberOfFile;
     
   G4ThreeVector origin( 0.*mm,0.*mm,MiddleLocationValue*mm );
-  physical_param =  new G4PVPlacement(0,origin,logical_param,"Parameterisation Mother (placement)",logicWorld,false,0);
+  G4VPhysicalVolume* parameterisedPhysVolume =  
+                        new G4PVPlacement(0,origin,
+                                          parameterisedLogicalvolume,
+                                         "Parameterisation Mother (placement)",                                          logicWorld,false,0);
 
-  //  Parametrisation of Patient put inside
-  LungINhale = new G4Box("LungINhale",PatientX,PatientY,PatientZ);
-  Logical_LungINhale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
-  //Logical_LungINhale->SetVisAttributes(Attributes_LungINhale);
+  G4Box* LungINhale = new G4Box( "LungINhale", PatientX, PatientY, PatientZ);
+
+  G4LogicalVolume* logicLungInHale = new G4LogicalVolume(LungINhale,lunginhale,"Logical_LungINhale",0,0,0);
   G4int numberOfVoxels = patientConstructor->FindingNbOfVoxels(2.0,0.207);
-  Param_LungINhale = new DicomPatientParameterisation(numberOfVoxels,
-                                                       2.0 , 0.207 ,
+
+  G4VPVParameterisation* paramLungINhale = new DicomPatientParameterisation
+                                                    ( numberOfVoxels,
+                                                      2.0 , 0.207 ,
 						      lunginhale,
 						      lungexhale,
 						      adiposeTissue,
@@ -312,27 +319,41 @@ void DicomGeometry::PatientConstruction()
 						      muscle,
 						      liver,
 						      denseBone,
-						      trabecularBone);
-  Physical_LungINhale = new G4PVParameterised( "Physical_LungINhale" , Logical_LungINhale, logical_param, kZAxis, numberOfVoxels, Param_LungINhale );
-
-  
+						      trabecularBone );
+  G4VPhysicalVolume*  physicalLungINhale = 
+                    new G4PVParameterised( "Physical_LungINhale" , 
+                                           logicLungInHale, 
+                                           parameterisedLogicalvolume,
+                                           kZAxis, numberOfVoxels, 
+                                           paramLungINhale );
 }
 
 G4VPhysicalVolume* DicomGeometry::Construct()
 {
   InitialisationOfMaterials();
 
-  world_x_width = 1.*m;
-  world_y_width = 1.*m;
-  world_z_width = 1.*m;
+  G4double worldXDimension = 1.*m;
+  G4double worldYDimension = 1.*m;
+  G4double worldZDimension = 1.*m;
 
-  theWorldDim = G4ThreeVector(world_x_width,world_y_width,world_z_width);
+  theWorldDim = G4ThreeVector(worldXDimension,worldYDimension,worldZDimension);
+  solidWorld = new G4Box("WorldSolid",
+                          worldXDimension,
+                          worldYDimension,
+                          worldZDimension);
 
-  solidWorld = new G4Box("WorldSolid",world_x_width,world_y_width,world_z_width);
-  logicWorld = new G4LogicalVolume( solidWorld, air, "WorldLogical", 0, 0, 0);
-  physiWorld = new G4PVPlacement(0,G4ThreeVector(0,0,0),"World",logicWorld,0,false,0);
+  logicWorld = new G4LogicalVolume( solidWorld, 
+                                    air, 
+                                    "WorldLogical", 
+                                    0, 0, 0 );
 
-  patientConstructor -> readContour();  // Contours are not mandatory and are NOT finish yet
+  physiWorld = new G4PVPlacement( 0,
+                                  G4ThreeVector(0,0,0),
+                                  "World",
+                                  logicWorld,
+                                  0,
+                                  false,
+                                  0 );
   PatientConstruction();
 
   return physiWorld;

@@ -75,82 +75,16 @@ private:
   G4Material* phantom; 
   G4Material* breast; 
   G4Material* adiposeTissue; 
-  G4Material* lungexhale;
-  G4Material* air;
-
-  G4Box* AirBox;
-  G4LogicalVolume* Logical_air;
-
-  //  LungINhale
+  G4Material* lungexhale; 
   G4Material* lunginhale;
-  G4Box* LungINhale;
-  G4LogicalVolume* Logical_LungINhale;
-  G4VPhysicalVolume* Physical_LungINhale;
-  G4VPVParameterisation* Param_LungINhale;
-
-  //  LungEXhale
-  
-  G4Box* LungEXhale;
-  G4LogicalVolume* Logical_LungEXhale;
-  G4VPhysicalVolume* Physical_LungEXhale;
-  G4VPVParameterisation* Param_LungEXhale;
-
-  // Adipose tissue
-  
-  G4Box* Adipose;
-  G4LogicalVolume* Logical_Adipose;
-  G4VPhysicalVolume* Physical_Adipose;
-  G4VPVParameterisation* Param_Adipose;
-
-  // Breast
-  
-  G4Box* Breast;
-  G4LogicalVolume* Logical_Breast;
-  G4VPhysicalVolume* Physical_Breast;
-  G4VPVParameterisation* Param_Breast;
-
-  // Phantom
-  
-  G4Box* Phantom;
-  G4LogicalVolume* Logical_Phantom;
-  G4VPhysicalVolume* Physical_Phantom;
-  G4VPVParameterisation* Param_Phantom;
-
+  G4Material* air;
  
-  G4Box* Muscle;
-  G4LogicalVolume* Logical_Muscle;
-  G4VPhysicalVolume* Physical_Muscle;
-  G4VPVParameterisation* Param_Muscle;
-
-  G4Box* Liver;
-  G4LogicalVolume* Logical_Liver;
-  G4VPhysicalVolume* Physical_Liver;
-  G4VPVParameterisation* Param_Liver;
-
- 
-  G4Box* TrabecularBone;
-  G4LogicalVolume* Logical_TrabecularBone;
-  G4VPhysicalVolume* Physical_TrabecularBone;
-  G4VPVParameterisation* Param_TrabecularBone;
-
- 
-  G4Box* DenseBone;
-  G4LogicalVolume* Logical_DenseBone;
-  G4VPhysicalVolume* Physical_DenseBone;
-  G4VPVParameterisation* Param_DenseBone;
-
   // Logical Box to place Parameteristion inside it
  
-  G4LogicalVolume* logical_param;
-  G4VPhysicalVolume* physical_param;
   G4double alpha,red,green,blue;
 
-  G4double world_x_width;
-  G4double world_y_width;
-  G4double world_z_width;
-
-  G4String theFileName;	// for the histogram
-  //static DicomGeometry* theDetector;
+  G4String theFileName;	
+ 
 
   G4ThreeVector theWorldDim;
 
@@ -164,22 +98,6 @@ private:
 
   G4String aFileName[300];
   G4int Probe2compression;
-
-  G4String dataName[300];
-  G4String Proberowsbuf[300];
-  G4String Probecolumnsbuf[300];
-  G4String ProbeSliceTicknessbuf[300];
-  G4String Probecompression2buf[300];
-  G4String ProbeSliceLocationbuf[300];
-  G4String Probepixel_spacing_Xbuf[300];
-  G4String Probepixel_spacing_Ybuf[300];
-  G4int Proberows;
-  G4int Probecolumns;
-  G4int ProbeSliceTickness;
-  G4int Probecompression2;
-  G4double ProbeSliceLocation;
-  G4double Probepixel_spacing_X;
-  G4double Probepixel_spacing_Y;
 };
 
 #endif
