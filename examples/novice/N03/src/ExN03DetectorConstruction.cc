@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.9 2001-11-27 11:10:32 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.10 2001-11-27 11:37:37 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -133,6 +133,8 @@ U->AddIsotope(U8, abundance= 10.*perCent);
 //
 // define simple materials
 //
+
+new G4Material(name="Aluminium", z=13., a=26.98*g/mole, density=2.700*g/cm3);
 
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
