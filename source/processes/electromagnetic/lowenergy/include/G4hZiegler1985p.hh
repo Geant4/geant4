@@ -57,6 +57,7 @@ protected:
 
 private:
   const G4double protonMassAMU;
+  static G4double a[92][8];
 
 };
 

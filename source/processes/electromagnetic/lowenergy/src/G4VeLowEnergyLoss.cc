@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeLowEnergyLoss.cc,v 1.6 2000-11-22 16:06:57 vnivanch Exp $
+// $Id: G4VeLowEnergyLoss.cc,v 1.7 2001-05-07 23:32:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -884,7 +884,8 @@ G4double G4VeLowEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4int p1,p2,p3;
   G4int nb;
   G4double Corrfac, na,alfa,rfac,namean,sa,alfa1,ea,sea;
-  G4double dp1,dp3;
+  //  G4double dp1;
+  G4double dp3;
   G4double siga ;
 
   // shortcut for very very small loss 

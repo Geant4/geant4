@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.43 2001-04-29 01:23:32 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.44 2001-05-07 23:32:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,14 +68,15 @@ typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
 G4LowEnergyIonisation::G4LowEnergyIonisation(const G4String& processName)
    : G4eLowEnergyLoss(processName),
      allAtomShellCrossSec(0),
-     theBindingEnergyTable(0),
      theFluorTransitionTable(0),
      theSamplingCoeffTable(0),
-     CutForLowEnergySecondaryPhotons(0.),
-     CutForLowEnergySecondaryElectrons(0.),
+     theBindingEnergyTable(0),
      ZNumVec(0),
      ZNumVecFluor(0),
-     theMeanFreePathTable(0)
+     theMeanFreePathTable(0),
+     CutForLowEnergySecondaryPhotons(0.),
+     CutForLowEnergySecondaryElectrons(0.),
+     MeanFreePath(0.)
 { 
     LowestKineticEnergy  = GetLowerBoundEloss();
     HighestKineticEnergy = GetUpperBoundEloss();
@@ -185,7 +186,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
   
   // material properties
   ParticleMass = aParticleType.GetPDGMass();
-  G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
+  // G4double* ParticleCutInKineticEnergy = aParticleType.GetEnergyCuts() ;
   
   //  create table
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
@@ -234,7 +235,7 @@ void G4LowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticle
                = (*allAtomShellCrossSec)[ZNumVec->index(Z)];
 
             // contributions from the subshells 
-            for(G4int ish=0; ish<oneAtomCS->size(); ish++)
+            for(size_t ish=0; ish<oneAtomCS->size(); ish++)
             {
               ionloss += GetShellEnergyLosswithCut(Z,ish,LowEdgeEnergy,Tcut)*
                          theAtomicNumDensityVector[iel] ;
@@ -263,7 +264,7 @@ void G4LowEnergyIonisation::BuildShellCrossSectionTable(){
    allAtomShellCrossSec = new allAtomTable();
    G4int dataNum = 2;
  
-   for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+   for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
      G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -300,7 +301,7 @@ void G4LowEnergyIonisation::BuildFluorTransitionTable(){
   ZNumVecFluor = new G4DataVector(*ZNumVec);
   G4int dataNum = 3;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     if(AtomInd > 5){
       
@@ -328,7 +329,7 @@ void G4LowEnergyIonisation::BuildSamplingCoeffTable(){
   
   G4int dataNum = 17;
 
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     oneAtomTable* oneAtomShellSc = util.BuildSecondLevelTables(AtomInd, dataNum, "ioni/io-co-");
     
@@ -454,7 +455,7 @@ G4double G4LowEnergyIonisation::ComputeCrossSection(const G4double AtomIndex,
   const oneAtomTable* oneAtomCS
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec = 0;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -486,11 +487,11 @@ G4double G4LowEnergyIonisation::ComputeCrossSectionWithCut(const G4double AtomIn
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
    //loop on shells
-  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
-    G4double crossSec = 0;
-    G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    // G4double crossSec = 0;
+    // G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
+    // G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
 
     TotalCrossSection += GetShellCrossSectionwithCut(AtomIndex,ind,IncEnergy,CutEnergy);
   }
@@ -509,8 +510,9 @@ G4double G4LowEnergyIonisation::GetShellCrossSection(const G4double AtomicNumber
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomicNumber)];
 
   G4double crossSec = 0;
+  G4int oneSize = oneAtomCS->size();
 
-  if( ind >= oneAtomCS->size() ) return crossSec ;
+  if( ind >= oneSize ) return crossSec ;
 
   G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
   G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
@@ -1000,9 +1002,9 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
 
     // Create lists of pointers to DynamicParticles (photons and electrons) 
     G4ParticleVector photvec;
-    G4int photInd = 0; 
+    // G4int photInd = 0; 
     G4ParticleVector elecvec;
-    G4int elecInd = 0; 
+    // G4int elecInd = 0; 
 
   // select randomly one element constituing the material.
   G4Element* anElement = SelectRandomAtom(aParticle, aMaterial);
@@ -1293,11 +1295,11 @@ G4int G4LowEnergyIonisation::SelectRandomShell(const G4int AtomIndex
   const oneAtomTable* oneAtomCS 
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
-    G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
+    // G4DataVector* CrossSecVector = (*(*oneAtomCS)[ind])[1];
     if(IncEnergy < (*EnergyVector)[0]){ //First element is the shell number
 
       crossSec = 0;
@@ -1378,7 +1380,7 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
   // when the last subshell is reached CollIsFull becomes FALSE.
   G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
-  G4double TotalSum = 0; 
+  //  G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
@@ -1411,7 +1413,8 @@ G4bool G4LowEnergyIonisation::SelectRandomTransition(G4int thePrimShell,
     G4double PartSum = 0;
     
     TransProb = 1; 
-    while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->size()){
+    G4int trSize = (*(*TransitionTable)[ShellNum])[ProbCol]->size();
+    while(TransProb < trSize){
       
       PartSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
       
@@ -1663,7 +1666,7 @@ G4double G4LowEnergyIonisation::EnergySampling(const G4int AtomicNumber,
   
   G4double areaTot = area1+area2+area3;
   G4double areaDue = area1+area2;
-  G4int which;
+  G4int which = 0;
   // 4) Generate a random number .to select the region of work
   G4double rand1 = areaTot*G4UniformRand();
   

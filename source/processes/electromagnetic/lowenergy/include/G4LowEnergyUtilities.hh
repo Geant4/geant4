@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyUtilities.hh,v 1.7 2001-02-05 17:45:16 gcosmo Exp $
+// $Id: G4LowEnergyUtilities.hh,v 1.8 2001-05-07 23:32:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,8 +95,9 @@ inline G4double G4LowEnergyUtilities::DataLogInterpolation(const G4double Argume
                                                                const G4DataVector& valVec){
 
   G4int theLoc = FindBinLocation(Argument, argVec); 
+  G4int size = argVec.size()-1;
 
-  if(theLoc == argVec.size()-1){
+  if(theLoc == size){
     return valVec[theLoc];
   }
 
@@ -166,8 +167,9 @@ inline G4double G4LowEnergyUtilities::DataSemiLogInterpolation(const G4double Ar
                                                                 const G4DataVector& valVec){
 
   G4int theLoc = FindBinLocation(Argument, argVec); 
+  G4int size = argVec.size()-1;
 
-  if(theLoc == argVec.size()-1){
+  if (theLoc == size){
     return valVec[theLoc];
   }
 

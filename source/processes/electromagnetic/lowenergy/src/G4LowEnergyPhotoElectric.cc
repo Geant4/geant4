@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.28 2001-04-24 16:02:45 vnivanch Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.29 2001-05-07 23:32:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,17 +53,18 @@ typedef G4std::vector<G4DynamicParticle*> G4ParticleVector;
  
 G4LowEnergyPhotoElectric::G4LowEnergyPhotoElectric(const G4String& processName)
   : G4VDiscreteProcess(processName),             // initialization
-    LowestEnergyLimit (250*eV),
-    HighestEnergyLimit(100*GeV),
-    theCrossSectionTable(0),
-    theBindingEnergyTable(0),
-    theMeanFreePathTable(0),
-    theFluorTransitionTable(0),
-    allAtomShellCrossSec(0),
-    CutForLowEnergySecondaryPhotons(0.),
-    ZNumVec(0),
-    ZNumVecFluor(0),
-    NumbBinTable(200)
+  LowestEnergyLimit (250*eV),
+  HighestEnergyLimit(100*GeV),
+  NumbBinTable(200),
+  CutForLowEnergySecondaryPhotons(0.),
+  theCrossSectionTable(0),
+  theMeanFreePathTable(0),
+  allAtomShellCrossSec(0),
+  theFluorTransitionTable(0),
+  theBindingEnergyTable(0),
+  ZNumVec(0),
+  ZNumVecFluor(0),
+  MeanFreePath(0.)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
@@ -157,7 +158,7 @@ void G4LowEnergyPhotoElectric::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -182,7 +183,7 @@ void G4LowEnergyPhotoElectric::BuildShellCrossSectionTable(){
    allAtomShellCrossSec = new allAtomTable();
    G4int dataNum = 2;
  
-   for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+   for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
      G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -222,7 +223,7 @@ void G4LowEnergyPhotoElectric::BuildFluorTransitionTable(){
   ZNumVecFluor = new G4DataVector(*ZNumVec);
   G4int dataNum = 3;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     if(AtomInd > 5){
       
@@ -286,7 +287,7 @@ G4double G4LowEnergyPhotoElectric::ComputeCrossSection(const G4double AtomIndex,
   const oneAtomTable* oneAtomCS
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec = 0;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -347,7 +348,7 @@ void G4LowEnergyPhotoElectric::BuildMeanFreePathTable(){
       
       G4double SIGMA = 0;
       
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
 	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	const G4FirstLevel* oneAtomCS
@@ -420,9 +421,9 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 
   // Create lists of pointers to DynamicParticles (photons and electrons)
   G4ParticleVector photvec;
-  G4int photInd = 0; 
+  // G4int photInd = 0; 
   G4ParticleVector elecvec;
-  G4int elecInd = 0; 
+  // G4int elecInd = 0; 
 
   // primary outcoming electron
   G4double ElecKineEnergy = (PhotonEnergy - BindingEn);
@@ -576,7 +577,7 @@ G4int G4LowEnergyPhotoElectric::SelectRandomShell(const G4int AtomIndex,
   const oneAtomTable* oneAtomCS 
     = (*allAtomShellCrossSec)[ZNumVec->index(AtomIndex)];
 
-  for(G4int ind = 0; ind < oneAtomCS->size(); ind++){
+  for(size_t ind = 0; ind < oneAtomCS->size(); ind++){
 
     G4double crossSec;
     G4DataVector* EnergyVector = (*(*oneAtomCS)[ind])[0];
@@ -662,7 +663,7 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   // when the last subshell is reached CollIsFull becomes FALSE.
   G4bool ColIsFull = FALSE;
   G4int ShellNum = 0;
-  G4double TotalSum = 0; 
+  //  G4double TotalSum = 0; 
   G4int maxNumOfShells = TransitionTable->size()-1;
 
   if(thePrimShell <= 0) {
@@ -701,7 +702,8 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
       G4double PartSum = 0;
       
       TransProb = 1; 
-      while(TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->size()){
+      G4int trSize = (*(*TransitionTable)[ShellNum])[ProbCol]->size();
+      while(TransProb < trSize){
 	
 	PartSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
 	

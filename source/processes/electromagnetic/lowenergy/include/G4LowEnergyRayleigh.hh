@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.hh,v 1.8 2001-02-05 17:45:16 gcosmo Exp $
+// $Id: G4LowEnergyRayleigh.hh,v 1.9 2001-05-07 23:32:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,11 +74,11 @@ private:
   G4PhysicsTable* theMeanFreePathTable;  
   G4DataVector* ZNumVec;
 
-  G4LowEnergyUtilities util;
-
   G4double LowestEnergyLimit; // low  energy limit of the crosssection formula
   G4double HighestEnergyLimit; // high energy limit of the crosssection formula
   G4int NumbBinTable; // number of bins in the crossection table
+
+  G4LowEnergyUtilities util;
 
   G4double MeanFreePath; // actual Mean Free Path (current medium)
 };

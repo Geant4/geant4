@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.hh,v 1.15 2001-02-05 17:45:16 gcosmo Exp $
+// $Id: G4LowEnergyPhotoElectric.hh,v 1.16 2001-05-07 23:32:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -99,22 +99,25 @@ private:
      
 private:
 
+  G4double LowestEnergyLimit;      
+  G4double HighestEnergyLimit;     
+
+  G4int NumbBinTable;              
+
+  G4double CutForLowEnergySecondaryPhotons;
+
   G4SecondLevel* theCrossSectionTable;    
   G4PhysicsTable* theMeanFreePathTable;
 
   allAtomTable* allAtomShellCrossSec;
   allAtomTable* theFluorTransitionTable;
   G4SecondLevel* theBindingEnergyTable;   
-  G4DataVector thePrimShVec;
   G4DataVector* ZNumVec;
   G4DataVector* ZNumVecFluor;
 
+  G4DataVector thePrimShVec;
   G4LowEnergyUtilities util;
 
-  G4double LowestEnergyLimit;      
-  G4double HighestEnergyLimit;     
-  G4int NumbBinTable;              
-  G4double CutForLowEnergySecondaryPhotons;
   G4double MeanFreePath;           
 };
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.20 2001-04-24 16:02:45 vnivanch Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.21 2001-05-07 23:32:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,12 +38,13 @@
 G4LowEnergyRayleigh::G4LowEnergyRayleigh(const G4String& processName)
   : G4VDiscreteProcess(processName),
     theCrossSectionTable(0),
-    theMeanFreePathTable(0),
     theFormFactorTable(0),
+    theMeanFreePathTable(0),
     ZNumVec(0),
     LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(200)
+    NumbBinTable(200),
+    MeanFreePath(0)
 {
    if (verboseLevel>0) {
      G4cout << GetProcessName() << " is created "<< G4endl;
@@ -104,7 +105,7 @@ void G4LowEnergyRayleigh::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -126,7 +127,7 @@ void G4LowEnergyRayleigh::BuildFormFactorTable(){
   theFormFactorTable = new G4SecondLevel();
   G4int dataNum = 2;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -196,19 +197,19 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
     return G4VDiscreteProcess::PostStepDoIt(aTrack,aStep);
   }
 
-  G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
+  //  G4double E0_m = GammaEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum GammaDirection0 = aDynamicGamma->GetMomentumDirection();
   
   // Select randomly one element
   G4Material* aMaterial = aTrack.GetMaterial();
-  const G4int numOfElem = aMaterial->GetNumberOfElements();
+  //  const G4int numOfElem = aMaterial->GetNumberOfElements();
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
   
   // sample the energy of the scattered gamma 
 
   G4double wlGamma = h_Planck*c_light/GammaEnergy0;
   G4int elementZ = (G4int) theElement->GetZ();
-  G4double tableIndex = elementZ - 1;
+  //  G4double tableIndex = elementZ - 1;
 
   G4double Theta, DataFormFactor;
   G4double cosTheta, greject;
@@ -292,7 +293,7 @@ void G4LowEnergyRayleigh::BuildMeanFreePathTable(){
       const G4double BigPath= DBL_MAX;
       G4double SIGMA = 0 ;
       
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	// For each element            
 
 	G4double AtomIndex = (*theElementVector)(k)->GetZ();

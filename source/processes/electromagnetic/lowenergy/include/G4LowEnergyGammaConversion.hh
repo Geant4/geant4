@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.hh,v 1.7 2001-02-05 17:45:15 gcosmo Exp $
+// $Id: G4LowEnergyGammaConversion.hh,v 1.8 2001-05-07 23:32:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -76,13 +76,14 @@ private:
   G4SecondLevel* theCrossSectionTable;    
   G4PhysicsTable* theMeanFreePathTable;
 
-  G4LowEnergyUtilities util;
+  G4DataVector* ZNumVec;
 
   G4double LowestEnergyLimit; 
   G4double HighestEnergyLimit;
   G4int NumbBinTable; 
-  G4DataVector* ZNumVec;
+
   G4double MeanFreePath; // actual Mean Free Path (current medium)
+  G4LowEnergyUtilities util;
 };
 
 #include "G4LowEnergyGammaConversion.icc"

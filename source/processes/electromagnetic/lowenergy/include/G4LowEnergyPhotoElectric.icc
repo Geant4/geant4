@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.icc,v 1.14 2000-06-22 02:25:26 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.icc,v 1.15 2001-05-07 23:32:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@ G4LowEnergyPhotoElectric::GetMeanFreePath(const G4Track& aTrack, G4double,
   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
   G4Material* aMaterial = aTrack.GetMaterial();
 
-  G4bool isOutRange ;
+  // G4bool isOutRange ;
   if (GammaEnergy > HighestEnergyLimit){
      MeanFreePath = DBL_MAX;
    }	

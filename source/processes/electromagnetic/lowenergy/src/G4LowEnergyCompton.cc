@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyCompton.cc,v 1.22 2001-04-24 16:02:43 vnivanch Exp $
+// $Id: G4LowEnergyCompton.cc,v 1.23 2001-05-07 23:32:09 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,8 @@
 G4LowEnergyCompton::G4LowEnergyCompton(const G4String& processName)
   : G4VDiscreteProcess(processName),
     theCrossSectionTable(0),
-    theMeanFreePathTable(0),
     theScatteringFunctionTable(0),
+    theMeanFreePathTable(0),
     ZNumVec(0),
     LowestEnergyLimit (250*eV),              // initialization
     HighestEnergyLimit(100*GeV),
@@ -105,7 +105,7 @@ void G4LowEnergyCompton::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
   
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -127,7 +127,7 @@ void G4LowEnergyCompton::BuildScatteringFunctionTable(){
   theScatteringFunctionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
 
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
 
@@ -208,7 +208,7 @@ G4VParticleChange* G4LowEnergyCompton::PostStepDoIt(const G4Track& aTrack, const
 
   // Select randomly one element 
   G4Material* aMaterial = aTrack.GetMaterial();
-  const G4int numOfElem = aMaterial->GetNumberOfElements();
+  //  const G4int numOfElem = aMaterial->GetNumberOfElements();
   
   G4Element* theElement = SelectRandomAtom(aDynamicGamma, aMaterial);
   G4int elementZ = (G4int) theElement->GetZ();
@@ -336,7 +336,7 @@ void G4LowEnergyCompton::BuildMeanFreePathTable(){
       
       const G4double BigPath= DBL_MAX;
       G4double SIGMA = 0 ;
-      for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+      for ( size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 
 	G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
 	const G4FirstLevel* oneAtomCS

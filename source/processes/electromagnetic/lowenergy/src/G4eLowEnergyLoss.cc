@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eLowEnergyLoss.cc,v 1.7 2000-09-20 16:49:41 vnivanch Exp $
+// $Id: G4eLowEnergyLoss.cc,v 1.8 2001-05-07 23:32:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -97,15 +97,15 @@ G4EnergyLossMessenger* G4eLowEnergyLoss::eLossMessenger         = 0;
 G4eLowEnergyLoss::G4eLowEnergyLoss(const G4String& processName)
    : G4VeLowEnergyLoss (processName),
      theLossTable(0),
-     theDEDXTable(0),
-     Charge(-1.),lastCharge(0.),
      MinKineticEnergy(1.*eV),
+     Charge(-1.),lastCharge(0.),
+     theDEDXTable(0),
      //linLossLimit(0.02)
-     linLossLimit(0.05),
+     CounterOfProcess(0),
      RecorderOfProcess(0),
      fdEdx(0),
      fRangeNow(0),
-     CounterOfProcess(0)
+     linLossLimit(0.05)
 {
  
  //create (only once) EnergyLoss messenger 
@@ -324,7 +324,7 @@ G4VParticleChange* G4eLowEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   //  G4cout << "MGP -- Along eInit " << E/keV << " keV " << G4endl;
   
   G4Material* aMaterial = trackData.GetMaterial();
-  G4int index = aMaterial->GetIndex();
+  //  G4int index = aMaterial->GetIndex();
   
   G4double Step = stepData.GetStepLength();
 

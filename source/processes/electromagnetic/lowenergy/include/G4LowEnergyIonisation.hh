@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.17 2001-02-05 17:45:16 gcosmo Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.18 2001-05-07 23:32:07 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -129,19 +129,22 @@ private:
   allAtomTable* theFluorTransitionTable;
   allAtomTable* theSamplingCoeffTable;
   G4SecondLevel* theBindingEnergyTable;  
-  G4DataVector thePrimShVec;
   G4DataVector* ZNumVec;
   G4DataVector* ZNumVecFluor;
 
-  G4LowEnergyUtilities util;
+  G4PhysicsTable* theMeanFreePathTable;
+
+  G4double CutForLowEnergySecondaryPhotons;
+  G4double CutForLowEnergySecondaryElectrons;
+  G4double MeanFreePath;
 
   G4double LowestKineticEnergy;
   G4double HighestKineticEnergy;
   G4int TotBin;
-  G4double CutForLowEnergySecondaryPhotons;
-  G4double CutForLowEnergySecondaryElectrons;
-  G4double MeanFreePath;
-  G4PhysicsTable* theMeanFreePathTable;
+
+  G4LowEnergyUtilities util;
+
+  G4DataVector thePrimShVec;
 };
  
 #include "G4LowEnergyIonisation.icc"

@@ -39,59 +39,7 @@
 #include "globals.hh"
 #include "G4Material.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4hZiegler1985p::G4hZiegler1985p():G4VhElectronicStoppingPower(), 
-  protonMassAMU(1.007276)
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4hZiegler1985p::~G4hZiegler1985p() 
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4bool G4hZiegler1985p::HasMaterial(const G4Material* material) 
-{
-  if(1 == (material->GetNumberOfElements())) return true;
-  return false ;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4hZiegler1985p::StoppingPower(const G4Material* material,
-                                              G4double kineticEnergy) 
-{
-  G4double ionloss = 0.0 ;
-
-  // pure material (normally not the case for this function)
-  if(1 == (material->GetNumberOfElements())) {
-    G4double z = material->GetZ() ;
-    G4double ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
-  }
-  
-  return ionloss;
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
-                                                  G4double kineticEnergy) const
-{
-  G4double ionloss ;
-  G4int i = G4int(z) - 1 ;  // index of atom
-  if(i < 0)  i = 0 ;
-  if(i > 91) i = 91 ;
-  
-  // The data and the fit from: 
-  // J.F.Ziegler, J.P.Biersack, U.Littmark The Stoping and
-  // Range of Ions in Solids, Vol.1, Pergamon Press, 1985
-  // Proton kinetic energy for parametrisation in Ziegler's units (keV/amu)  
-  
-  G4double T = kineticEnergy/(keV*protonMassAMU) ; 
-  
-  static G4double a[92][8] = {
+G4double G4hZiegler1985p::a[92][8] = {
    0.0091827, 0.0053496, 0.69741, 0.48493, 316.07 , 1.0143, 9329.3, 0.053989,
    0.11393,   0.0051984, 1.0822,  0.39252, 1081.0 , 1.0645, 4068.5, 0.017699,
    0.85837,   0.0050147, 1.6044,  0.38844, 1337.3 , 1.047,  2659.2, 0.01898,
@@ -194,6 +142,60 @@ G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
    33.702,    0.0036901, 0.47257, 0.89235, 5295.7 , 0.8893,  2053.3, 0.0091908,
    2.7589,    0.0039806, 3.2092,  0.66122, 2505.4 , 0.82863, 2065.1, 0.022816
   };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4hZiegler1985p::G4hZiegler1985p():G4VhElectronicStoppingPower(), 
+  protonMassAMU(1.007276)
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4hZiegler1985p::~G4hZiegler1985p() 
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4hZiegler1985p::HasMaterial(const G4Material* material) 
+{
+  if(1 == (material->GetNumberOfElements())) return true;
+  return false ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hZiegler1985p::StoppingPower(const G4Material* material,
+                                              G4double kineticEnergy) 
+{
+  G4double ionloss = 0.0 ;
+
+  // pure material (normally not the case for this function)
+  if(1 == (material->GetNumberOfElements())) {
+    G4double z = material->GetZ() ;
+    G4double ionloss = ElectronicStoppingPower( z, kineticEnergy ) ;  
+  }
+  
+  return ionloss;
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4hZiegler1985p::ElectronicStoppingPower(G4double z,
+                                                  G4double kineticEnergy) const
+{
+  G4double ionloss ;
+  G4int i = G4int(z) - 1 ;  // index of atom
+  if(i < 0)  i = 0 ;
+  if(i > 91) i = 91 ;
+  
+  // The data and the fit from: 
+  // J.F.Ziegler, J.P.Biersack, U.Littmark The Stoping and
+  // Range of Ions in Solids, Vol.1, Pergamon Press, 1985
+  // Proton kinetic energy for parametrisation in Ziegler's units (keV/amu)  
+  
+  G4double T = kineticEnergy/(keV*protonMassAMU) ; 
+  
+  
   
   G4double e = T ;
   if ( T < 25.0 ) e = 25.0 ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.29 2001-04-24 16:02:43 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.30 2001-05-07 23:32:08 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,7 +149,7 @@ void G4LowEnergyBremsstrahlung::BuildCrossSectionTable(){
   theCrossSectionTable = new G4SecondLevel();
   G4int dataNum = 2;
  
-  for(G4int TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
+  for(size_t TableInd = 0; TableInd < ZNumVec->size(); TableInd++){
     
     G4int AtomInd = (G4int) (*ZNumVec)[TableInd];
     
@@ -321,7 +321,7 @@ void G4LowEnergyBremsstrahlung::BuildMeanFreePathTable()
        const G4double BigPath= DBL_MAX;
        G4double SIGMA = 0 ;
        
-       for ( G4int k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
+       for (  size_t k=0 ; k < material->GetNumberOfElements() ; k++ ){ 
 	 
 	 G4int AtomIndex = (G4int) (*theElementVector)(k)->GetZ();
          G4double interCrsSec = GetCrossSectionWithCut(AtomIndex, LowEdgeEnergy,Threshold);
@@ -429,7 +429,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   
   // limits of the energy sampling
   G4double TotalEnergy = ElectKinEn + electron_mass_c2;
-  G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
+  //  G4double TotalEnergysquare = TotalEnergy*TotalEnergy ;
   
   //
   // The emitted gamma energy is from EEDL data fitted with A/E+B function.
@@ -455,7 +455,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   G4double IntegrProb = p1+p2;  
   G4double R1 = G4UniformRand()*IntegrProb;
   
-  G4double GammaEnergy;
+  G4double GammaEnergy = 0.;
 
   if(R1 <= p1){ 
     
