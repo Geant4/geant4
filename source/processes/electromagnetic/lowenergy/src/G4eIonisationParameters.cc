@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.1 2001-08-20 16:37:37 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.2 2001-08-20 17:05:10 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -53,10 +53,10 @@ G4double G4IonisationParameters::Parameter(G4int Z, G4int shellIndex, G4int para
   return value;
 }
 
-const G4DataVector& G4IonisationParameters::Parameters(G4int Z, G4int shellIndex) const
-{
-  // To be implemented
-}
+//const G4DataVector& G4IonisationParameters::Parameters(G4int Z, G4int shellIndex) const
+//{
+// To be implemented
+//}
 
 void G4IonisationParameters::LoadData()
 {
