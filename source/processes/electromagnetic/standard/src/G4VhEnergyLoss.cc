@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VhEnergyLoss.cc,v 1.39 2003-04-07 10:20:27 vnivanch Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.40 2003-04-07 16:47:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -225,7 +225,9 @@ void G4VhEnergyLoss::BuildDEDXTable(
   if (Charge>0.) {theDEDXTable= theDEDXpTable;}
   else           {theDEDXTable= theDEDXpbarTable;}
 
-  if( !theDEDXTable || CutsWhereModified() )
+  G4String pname = aParticleType.GetParticleName(); 
+  if( !theDEDXTable || CutsWhereModified() &&
+      (pname == "proton" || pname == "anti_proton") )
 
   {
    // Build energy loss table as a sum of the energy loss due to the
