@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2000-08-18 11:11:26 maire Exp $
+$Id: History,v 1.4 2000-11-24 08:17:17 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th November 2000 Steve O'Neale (tagset210)
+- Update test outputs for min.delta energy cut
 
 18th August 2000  Michel Maire  
 - standard G4ionIonisation removed from the PhysicsList
