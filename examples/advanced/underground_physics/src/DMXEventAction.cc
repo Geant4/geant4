@@ -120,7 +120,7 @@ void DMXEventAction::BeginOfEventAction(const G4Event* evt) {
   if (event_id%printModulo == 0)
     {
       G4cout << "\n---> Begin of event: " << event_id << G4endl;
-      G4cout << " Primary Energy: " << G4BestUnit(energy_pri,"Energy") 
+      G4cout << "\n     Primary Energy: " << G4BestUnit(energy_pri,"Energy") 
 	     << G4endl;
       //      HepRandom::showEngineStatus(); 
     }
@@ -189,9 +189,9 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 	firstParticleName = (*SHC)[0]->GetParticle();
 	firstLXeHitTime   = (*SHC)[0]->GetTime();
 	firstParticleE = (*SHC)[0]->GetParticleEnergy();
-	if (event_id%printModulo == 0) {
-	  G4cout << " First hit in LXe: " << firstParticleName << G4endl;
-	  G4cout << " Number of hits in LXe: " << S_hits << G4endl;	
+	if (event_id%printModulo == 0 && S_hits > 0) {
+	  G4cout << "     First hit in LXe: " << firstParticleName << G4endl;
+	  G4cout << "     Number of hits in LXe: " << S_hits << G4endl; 
 	}
       }
       hitEnergy         = (*SHC)[i]->GetEdep();
@@ -248,10 +248,11 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 #endif
       }
     }
-    if (event_id%printModulo == 0) {
+    if (event_id%printModulo == 0 && P_hits > 0) {
       G4cout << "     Average light collection time: "
 	     << G4BestUnit(aveTimePmtHits,"Time") << G4endl;
-      G4cout << " Number of PMT hits (photons): " << P_hits << G4endl;
+      G4cout << "     Number of PMT hits (photoelectron equivalent): " 
+	     << P_hits << G4endl;
 //  #ifdef G4ANALYSIS_USE
 //        // plot histograms, interactively:
 //        DMXAnalysisManager* analysis = DMXAnalysisManager::getInstance();
@@ -278,7 +279,7 @@ void DMXEventAction::EndOfEventAction(const G4Event* evt) {
 
   // print this event by event (modulo n)  	
   if (event_id%printModulo == 0) 
-    G4cout << "---> End of event: " << event_id << G4endl;	
+    G4cout << "\n---> End of event: " << event_id << G4endl << G4endl;	
 
 }
 
@@ -292,9 +293,9 @@ void DMXEventAction::writeScintHitsToFile(void) {
   G4std::ofstream hitsfile(filename, G4std::ios::app);
   if(!event_id) {
     G4std::ofstream hitsfile(filename);
-    hitsfile <<"Evt     E_Prim  Etot    LXe     LXeTime PMT     PmtTime First   Flags   Seed1   Seed2" 
+    hitsfile <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
 	     << G4endl;
-    hitsfile <<"#       MeV       MeV     hits    ns      hits    ns      hit"
+    hitsfile <<"#       MeV     MeV     hits    ns      hits    ns                                      hit"
 	     << G4endl
 	     << G4endl;
   }
@@ -319,14 +320,14 @@ void DMXEventAction::writeScintHitsToFile(void) {
 	       << G4std::setiosflags(G4std::ios::fixed) 
 	       << G4std::setprecision(4)
 	       << aveTimePmtHits/nanosecond << "\t"
+	       << *seeds     << "\t"
+	       << *(seeds+1) << "\t"
 	       << firstParticleName << "\t"
 	       << (gamma_ev    ? "gamma " : "") 
 	       << (neutron_ev  ? "neutron " : "") 
 	       << (positron_ev ? "positron " : "") 
 	       << (electron_ev ? "electron " : "") 
 	       << (other_ev    ? "other " : "") 
-	       << *seeds     << "\t"
-	       << *(seeds+1) << "\t"
 	       << G4endl;
 
       if (event_id%printModulo == 0)
@@ -375,8 +376,8 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits) {
 	analysis->analysePMTHits(event_id,i,x,y,z);
 #endif
       }
-    if (event_id%printModulo == 0) 
-      G4cout << P_hits << "     PMT hits in " << filename << G4endl;  
+    if (event_id%printModulo == 0 && P_hits > 0) 
+      G4cout << "     " << P_hits << " PMT hits in " << filename << G4endl;  
     pmtfile.close();
   }
   

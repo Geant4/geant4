@@ -247,17 +247,17 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   // LN2 vessel: ************************************************************
 
   G4double LN2Radius       = 76.0*mm;
-  G4double LN2Height       = 590.0*mm;
+  G4double LN2Height       = 590.0*mm - 2.*LN2jacketMetalThick;
   G4double LN2vesselRadius = LN2Radius + LN2jacketMetalThick;
-  G4double LN2vesselHeight = LN2Height + 2.*LN2jacketMetalThick;
-  G4double LN2vesselPosZ   = 0.5*LN2jacketHeight - 0.5*LN2vesselHeight;
+  G4double LN2vesselHeight = LN2Height;
+  G4double LN2vesselPosZ   = 0.5*LN2vacuumHeight - 0.5*LN2vesselHeight;
 
   G4Tubs* LN2vessel_tube = new G4Tubs("LN2vessel_tube",
      0.*cm, LN2vesselRadius, 0.5*LN2vesselHeight, 0.*deg, 360.*deg);
   LN2vessel_log  = new G4LogicalVolume
     (LN2vessel_tube, LN2jacket_mat, "LN2vessel_log");
   LN2vessel_phys = new G4PVPlacement(0, G4ThreeVector(0.,0.,LN2vesselPosZ),
-     "LN2jacket_phys", LN2vessel_log, LN2vacuum_phys, false,0);
+     "LN2vessel_phys", LN2vessel_log, LN2vacuum_phys, false,0);
 
   G4VisAttributes* LN2vessel_vat = new G4VisAttributes(lgrey);
   // LN2vessel_log->SetVisAttributes(G4VisAttributes::Invisible);
@@ -772,9 +772,9 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
 
   G4double gridHeight     = 0.100*mm;
   G4double gridRadius     = ringInnerRadius;
-  G4double grid1VOffset   = 5.5*ringHeight+2.75*mm;
+  G4double grid1VOffset   = 3.5*ringHeight+1.75*mm;
   G4double grid1VPosition = 0.5*LXeTubeHeight - grid1VOffset;
-  G4double grid2VOffset   = 6.5*ringHeight+4.50*mm;
+  G4double grid2VOffset   = 4.5*ringHeight+3.50*mm;
   G4double grid2VPosition = 0.5*LXeTubeHeight - grid2VOffset;
 
   G4Tubs* grid_tube = new G4Tubs("grid_tube", 0.*cm, gridRadius,
@@ -801,7 +801,7 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
   G4double recessRadius    = 0.65*mm;
   G4double recessVPosition = 0.5*(alphaHeight - recessHeight);
 
-  G4double alphaVOffset    = grid1VOffset-0.5*alphaHeight;
+  G4double alphaVOffset    = grid1VOffset-0.5*alphaHeight - gridHeight;
   G4double americiumHeight = 600.*nanometer; // assumes ~1% Am  
   G4double extra_offset    = (recessHeight - 0.23*mm + 0.5*americiumHeight); 
                              // 0.23 = offset for all release macros

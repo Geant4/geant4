@@ -88,12 +88,13 @@
 
   // panel hole in wall between Al and "lab": ******************************
 
-  G4double panelholePosX = sidepanelPosX;
-  G4double panelholePosY = 0.5*(worldLength - holeThick) - panelThick;
-  G4double panelholePosZ = sidepanelPosZ;
+  G4double panelholePosX  = sidepanelPosX;
+  G4double panelholeThick = wallThick - panelThick;
+  G4double panelholePosY  = 0.5*(worldLength - panelholeThick) - panelThick;
+  G4double panelholePosZ  = sidepanelPosZ;
 
   G4Box* panelhole_box = new G4Box
-  ("panelhole_box",0.5*sidepanelWidth, 0.5*holeThick, 0.5*windowHeight );
+  ("panelhole_box",0.5*sidepanelWidth, 0.5*panelholeThick, 0.5*windowHeight );
   panelhole_log = new G4LogicalVolume
                        (panelhole_box, lab_mat, "panelhole_log");
 
@@ -128,11 +129,11 @@
   // door hole in wall between glass and "lab": ******************************
 
   G4double doorwindowPosX = doorglassPosX;
-  G4double doorwindowPosY = 0.5*(worldLength - holeThick) - panelThick;
+  G4double doorwindowPosY = 0.5*(worldLength - panelholeThick) - panelThick;
   G4double doorwindowPosZ = doorglassPosZ;
 
   G4Box* doorwindow_box = new G4Box
-  ("doorwindow_box",0.5*doorwindowWidth, 0.5*holeThick, 0.5*doorwindowHeight );
+  ("doorwindow_box",0.5*doorwindowWidth, 0.5*panelholeThick, 0.5*doorwindowHeight );
   doorwindow_log = new G4LogicalVolume
                        (doorwindow_box, lab_mat, "doorwindow_log");
   doorwindow_phys = new G4PVPlacement

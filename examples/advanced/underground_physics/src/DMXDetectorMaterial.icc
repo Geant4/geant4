@@ -21,6 +21,7 @@
 // ********************************************************************
 //
 //
+
   G4double density,      // density
     a,                   // atomic mass
     z;                   // atomic number

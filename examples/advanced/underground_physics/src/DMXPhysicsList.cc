@@ -64,7 +64,6 @@ DMXPhysicsList::DMXPhysicsList() : G4VUserPhysicsList()
   cutForProton        = defaultCutValue;
   cutForAlpha         = 1.0*nanometer;
   cutForGenericIon    = 1.0*nanometer;
-  cutForOpticalPhoton = 1.0*mm;
 
   VerboseLevel = 1;
   OpVerbLevel = 0;
@@ -256,6 +255,42 @@ void DMXPhysicsList::AddTransportation() {
 
 void DMXPhysicsList::ConstructEM() {
 
+// processes:
+  G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
+
+  G4LowEnergyPhotoElectric* lowePhot = new G4LowEnergyPhotoElectric();
+  G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation();
+  G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung();
+  G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
+
+  // note LowEIon uses proton as basis for its data-base, therefore
+  // cannot specify different LowEnergyIonisation models for different
+  // particles, but can change model globally for Ion, Alpha and Proton.
+
+  // ahadronLowEIon->SetNuclearStoppingOff() ;
+  ahadronLowEIon->SetNuclearStoppingPowerModel("ICRU_R49") ;
+  ahadronLowEIon->SetNuclearStoppingOn() ;
+  
+  //fluorescence switch off for hadrons (for now) PIXE:
+  ahadronLowEIon->SetFluorescence(false);
+
+  //fluorescence apply specific cut for fluorescence from photons, electrons
+  //and bremsstrahlung photons:
+  G4double fluorcut = 250*eV;
+  lowePhot->SetCutForLowEnSecPhotons(fluorcut);
+  loweIon->SetCutForLowEnSecPhotons(fluorcut);
+  loweBrem->SetCutForLowEnSecPhotons(fluorcut);
+  
+  // setting tables explicitly for electronic stopping power
+  //  ahadronLowEIon->SetElectronicStoppingPowerModel
+  //  (G4GenericIon::GenericIonDefinition(), "ICRU_R49p") ;
+  //  ahadronLowEIon->SetElectronicStoppingPowerModel
+  //  (G4Proton::ProtonDefinition(), "ICRU_R49p") ;
+
+  // Switch off the Barkas and Bloch corrections
+  //  ahadronLowEIon->SetBarkasOff();
+
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
@@ -264,17 +299,6 @@ void DMXPhysicsList::ConstructEM() {
     G4String particleType = particle->GetParticleType();
     G4double charge = particle->GetPDGCharge();
     
-    //processes
-    G4LowEnergyPhotoElectric* lowePhot = new G4LowEnergyPhotoElectric();
-    G4LowEnergyIonisation* loweIon  = new G4LowEnergyIonisation();
-    G4LowEnergyBremsstrahlung* loweBrem = new G4LowEnergyBremsstrahlung();
-    G4MultipleScattering* aMultipleScattering = new G4MultipleScattering();
-    G4hLowEnergyIonisation* ahadronLowEIon = new G4hLowEnergyIonisation();
-
-    // note LowEIon uses proton as basis for its data-base, therefore
-    // cannot specify different LowEnergyIonisation models for different
-    // particles, but can change model globally for Ion, Alpha and Proton.
-
     if (particleName == "gamma") 
       {
 	//gamma
@@ -308,7 +332,8 @@ void DMXPhysicsList::ConstructEM() {
 	pmanager->AddProcess(new G4MuIonisation(),          -1, 2, 2);
 	pmanager->AddProcess(new G4MuBremsstrahlung(),      -1,-1, 3);
 	pmanager->AddProcess(new G4MuPairProduction(),      -1,-1, 4);
-	pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
+	if( particleName == "mu-" )
+	  pmanager->AddProcess(new G4MuonMinusCaptureAtRest(), 0,-1,-1);
       } 
     else if (particleName == "proton"     ||
 	     particleName == "alpha"      ||
@@ -325,7 +350,7 @@ void DMXPhysicsList::ConstructEM() {
 	pmanager->AddProcess(ahadronLowEIon,-1,2,2); 
       } 
     else if ((!particle->IsShortLived()) &&
-	     (particle->GetPDGCharge() != 0.0) && 
+	     (charge != 0.0) && 
 	     (particle->GetParticleName() != "chargedgeantino")) 
       {
 	//all others charged particles except geantino
@@ -334,24 +359,6 @@ void DMXPhysicsList::ConstructEM() {
 	//      pmanager->AddProcess(new G4hIonisation(),       -1,2,2);      
       }
     
-    ahadronLowEIon->SetNuclearStoppingOn() ;
-
-  //fluorescence switch off for hadrons (for now) PIXE:
-    ahadronLowEIon->SetFluorescence(false);
-
-  //fluorescence apply specific cut for flourescence from photons, electrons
-  //and bremsstrahlung photons:
-    G4double cut = 250*eV;
-    lowePhot->SetCutForLowEnSecPhotons(cut);
-    loweIon->SetCutForLowEnSecPhotons(cut);
-    loweBrem->SetCutForLowEnSecPhotons(cut);
-
-    // ahadronLowEIon->SetNuclearStoppingOff() ;
-
-    // ahadronLowEIon->SetStoppingPowerTableName("ICRU_R49p") ;
-
-    // ahadronLowEIon->SetStoppingPowerTableName("Ziegler1977H") ;
-
   }
 }
 
@@ -816,8 +823,6 @@ void DMXPhysicsList::SetCuts()
   SetCutValue(cutForAlpha,  "alpha");
   SetCutValue(cutForGenericIon,  "GenericIon");
   
-  SetCutValue(cutForOpticalPhoton, "opticalphoton");
-
   SetCutValueForOthers(defaultCutValue);
   
   if (verboseLevel>0) DumpCutValuesTable();
