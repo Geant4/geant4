@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UniformElectricField.cc,v 1.9 2003-10-31 14:35:55 gcosmo Exp $
+// $Id: G4UniformElectricField.cc,v 1.10 2003-11-05 10:41:00 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,7 +71,7 @@ G4UniformElectricField::~G4UniformElectricField()
 }
 
 G4UniformElectricField::G4UniformElectricField (const G4UniformElectricField &p)
-   : G4ElectroMagneticField(p)
+   : G4ElectricField(p)
 {
    for (G4int i=0; i<6; i++)
       fFieldComponents[i] = p.fFieldComponents[i];

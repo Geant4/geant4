@@ -21,27 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagneticField.cc,v 1.2 2003-11-05 10:40:59 japost Exp $
+// $Id: G4ElectricField.cc,v 1.1 2003-11-05 10:40:59 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
 
-#include "G4MagneticField.hh"
+#include "G4ElectricField.hh"
 
-G4MagneticField::G4MagneticField()
+G4ElectricField::G4ElectricField()
 {
 }
 
-G4MagneticField::~G4MagneticField()
+G4ElectricField::~G4ElectricField()
 {
 }
 
-G4MagneticField::G4MagneticField(const G4MagneticField &)
+G4ElectricField::G4ElectricField(const G4ElectricField &)
   : G4ElectroMagneticField()
 {
 }
 
-G4MagneticField& G4MagneticField::operator = (const G4MagneticField &p)
+G4ElectricField& G4ElectricField::operator = (const G4ElectricField &p)
 {
   if (&p == this) return *this; *this = p; return *this;
 }
