@@ -21,18 +21,19 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.6 2003-01-08 15:37:14 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.7 2003-01-16 09:53:16 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#include "G4IonTable.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
 //#include "Tst50DetectorConstruction.hh"
 #include "Tst50PrimaryGeneratorMessenger.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
+#include "G4RadioactiveDecay.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
 #include "Randomize.hh"
@@ -51,11 +52,11 @@ Tst50PrimaryGeneratorAction::Tst50PrimaryGeneratorAction():
 // default particle
  
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  //  G4ParticleDefinition* particle = particleTable->FindParticle("proton");
-   G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
+   G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+   // G4ParticleDefinition* particle = particleTable->FindParticle("gamma");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(3.*MeV);
+  particleGun->SetParticleEnergy(1.*MeV);
   particleGun->SetParticlePosition(G4ThreeVector(0.*m,0.*m,-1.*m));
 }
 

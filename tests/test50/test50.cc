@@ -22,13 +22,18 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.6 2003-01-08 15:37:13 guatelli Exp $
+// $Id: test50.cc,v 1.7 2003-01-16 09:51:35 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#include <iostream.h>
+#include <iomanip.h>
+#include "globals.hh"
+#include "G4ios.hh"
+#include "g4std/fstream"
+#include "g4std/iomanip" 
 #include "Tst50DetectorConstruction.hh"
 #include "Tst50PhysicsList.hh"
 #include "Tst50PrimaryGeneratorAction.hh"
@@ -49,8 +54,59 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
+
 HepRandom::setTheEngine(new RanecuEngine);
+
+ G4bool lowE=false;
+ G4bool RangeOn=false;
+ G4bool MaxStep=false;
+ G4bool end=true;
+
+
+ G4cout.setf(ios::scientific, ios::floatfield);
+   if (argc<2){G4cout <<"Input file is not specified! Exit"<<G4endl;
+ exit(1);}
+ ifstream* fin=new ifstream();
+ string fname=argv[1];
+ fin->open(fname.c_str());
+ if (!fin->is_open())
+{G4cout<<"InputFile<"<<fname<<">doesn't exist!Exit"<<G4endl;
+ exit(1);}
+ // Read input file//
+ G4cout<<"Available commands are: "<<G4endl;
+ G4cout<<"#processes (LowE/Standard)"<<G4endl; 
+  G4cout<<"#range (on/off)"<<G4endl;  
+ G4cout<<"#setMaxStep (on/off)"<<G4endl;  
+
+ G4String line, line1, line2;
  
+   do
+     {
+       (*fin)>>line;
+       G4cout<<"Next line"<<line<<G4endl; 
+       if (line=="#processes")
+	 { 
+          line1="";
+	 (*fin)>>line1;
+         G4cout<<"Next line"<<line1<<G4endl; 
+	 if(line1=="LowE") {lowE=true;G4cout<<"arrivo ai LowEnergy"<<G4endl;}
+	 else {lowE=false;G4cout<<"non arrivo ai LowEnergy"<<G4endl;}
+         }
+       if (line=="#range"){line1="";(*fin)>>line1;
+
+       if(line1=="on"){RangeOn=true; G4cout<<RangeOn<<"range"<<G4endl;}}       
+
+ if (line=="#setMaxStep"){line1="";(*fin)>>line1;
+
+       if(line1=="on"){MaxStep=true; G4cout<<MaxStep<<"maxStep"<<G4endl;}}       
+
+   if (line=="end"){end=false;}
+
+
+
+     }while(end);           
+     
+
    G4int seed=time(NULL);
    HepRandom ::setTheSeed(seed);
   //my Verbose output class
@@ -60,9 +116,11 @@ HepRandom::setTheEngine(new RanecuEngine);
   G4RunManager * runManager = new G4RunManager;
 
   // UserInitialization classes (mandatory)
-  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction();
+  Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction( MaxStep);
   runManager->SetUserInitialization(Tst50detector);
-  runManager->SetUserInitialization(new Tst50PhysicsList);
+
+  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn);
+  runManager->SetUserInitialization(fisica);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!
@@ -92,7 +150,7 @@ HepRandom::setTheEngine(new RanecuEngine);
   UI->ApplyCommand("/event/verbose 0");
   UI->ApplyCommand("/tracking/verbose 0");
   
-  if(argc==1)
+  if(argc< 4)
   // Define (G)UI terminal for interactive mode  
   { 
     // G4UIterminal is a (dumb) terminal.
@@ -103,19 +161,21 @@ HepRandom::setTheEngine(new RanecuEngine);
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute elettroni.mac");    
+      UI->ApplyCommand("/control/execute elettroni.mac");
+ 
+
     session->SessionStart();
     delete session;
   }
   else
   // Batch mode
   { 
-    G4String command = "/control/execute elettroni.mac";
+    G4String command =("/control/execute");
     G4String fileName = argv[1];
     UI->ApplyCommand(command+fileName);
+
   }
-  
-  // runManager->BeamOn(500000);
+
 #ifdef G4VIS_USE
   delete visManager;
 #endif

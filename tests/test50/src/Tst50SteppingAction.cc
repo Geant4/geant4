@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.7 2003-01-08 15:37:14 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.8 2003-01-16 09:53:17 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,8 +47,7 @@ Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGener
   IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET) 
 { 
 
-  //initial_energy= p_Primary->GetInitialEnergy();
-  //G4cout<<initial_energy<<"form stepping"<<G4endl;
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,9 +65,7 @@ G4int evno = eventaction->GetEventno() ;//mi dice a che evento siamo
 //prendo l'energia iniziale delle particelle primarie
   initial_energy= p_Primary->GetInitialEnergy();
  
- 
-
-  //IDnow identifica univocamente la particella//
+   //IDnow identifica univocamente la particella//
 IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
           100000000*(Step->GetTrack()->GetParentID()); 
  
@@ -102,8 +99,6 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
 
     G4double Theta;
 
-    //CurV = Step->GetTrack()->GetVolume()->GetName();
-    //NexV = Step->GetTrack()->GetNextVolume()->GetName();
 
     PTyp = Step->GetTrack()->GetDefinition()->GetParticleType();    
   
@@ -119,29 +114,53 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
     XMoD = Step->GetTrack()->GetMomentumDirection().x();
     YMoD = Step->GetTrack()->GetMomentumDirection().y();
     ZMoD = Step->GetTrack()->GetMomentumDirection().z();
+    
+    G4String particle_name= p_Primary->GetParticle(); 
+    // ---------- energy of primary transmitted particles-----------// 
+    /*  
+if(0 == Step->GetTrack()->GetParentID() ) 
+  {
+   
+	G4cout<<"--------"<<Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()<<G4endl;
+    G4cout<<"-------------"<<Step->GetTrack()->GetVolume()->GetName()              <<"-----------------------"<<G4endl;
 
-// albe 8/1/2003 rifaccio distribuzione di theta
 
-    // XIMD = p_primary->GetInitialMomentumDirection().x();
-    //YIMD = p_primary->GetInitialMomentumDirection().y();
-    //ZIMD = p_primary->GetInitialMomentumDirection().z();
+if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
+  G4cout<<"arrivi dentro al target"<<G4endl; 
+  G4cout<<"-------------"<<Step->GetTrack()->GetNextVolume()->GetName()<<G4endl;
+    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+ G4cout<<"arrivi dentro al WORLD"<<G4endl;   
+   //volume in cui si esce e' il target 
+ G4cout<<XMoD<<YMoD<<ZMoD<<G4endl;   
+      if(XMoD==0 && YMoD==0 && ZMoD==1){G4cout<<KinE<<G4endl;
+      analysis->energy_transmitted(KinE);
+       runaction->Trans_number();
 
-    /*	
-    MMoD=sqrt(pow(XMoD,2.0)+pow(YMoD,2.0)+pow(ZMoD,2.0));
-    MIMD=sqrt(pow(XIMD,2.0)+pow(YIMD,2.0)+pow(ZIMD,2.0));
-
-    if (MMoD == 0) {
-	Theta = 0;
+       }}}}
+   
+// Theta = 0;
+/*
     } else if (MIMD == 0) {
 	Theta = 0;
     } else {   
 	Theta = acos((XMoD*XIMD+YMoD*YIMD+ZMoD*ZIMD)/(MMoD*MIMD))
     }
-    */
+   
     //susanna, istogrammo i processi delle particelle primarie// 
 
    G4String particle_name= p_Primary->GetParticle(); 
+ if(0 ==Step->GetTrack()->GetParentID() ) 
+   {
+if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
    
+    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+
+   //volume in cui si esce e' il target 
+    if(XMoD==0 && YMoD==0 && ZMoD==1){
+   
+
+   }
+  
    
 
 if(particle_name=="gamma")
@@ -153,7 +172,7 @@ if(particle_name=="gamma")
 
 	 //G4cout<< "processo del fotone-------------------------"
 	 //         << process<<G4endl;
-          if (process=="LowEnPhotoElec") 
+          if (process=="LowEnPhotoElec"||process=="phot") 
 	    { //G4cout<< "processo del fotone-------------------------"
 	      // <<" 1"<<G4endl; 
 	  runaction->primary_processes(3);
@@ -169,13 +188,13 @@ runaction->primary_processes(1);
 
 	     runaction->primary_processes(2);
 	}
- if (process=="LowEnCompton") 
+ if (process=="LowEnCompton"||process=="compt") 
            { 
 
 	     runaction->primary_processes(4);	 
   }
 
-if (process=="LowEnConversion") 
+if (process=="LowEnConversion"||process=="conv") 
            { 
 	     runaction->primary_processes(5);	
 	   }
@@ -198,7 +217,6 @@ if (process=="LowEnConversion")
  runaction->Trans_number();
 	}}}}}}
  else {
-
 if(particle_name=="e-"){
 
     //new particle    
@@ -228,6 +246,9 @@ if(stepLength!=0)
 G4double TotalStoppingPower=(energyLost/stepLength);
  G4cout<<"TotalStoppingPower in MeV/cm:"<<TotalStoppingPower/(MeV/cm)<<G4endl;}}
 }}
+*/
+
+
 
 range=0.;
 
@@ -246,11 +267,15 @@ if(0 ==Step->GetTrack()->GetParentID() )
        
 		      range=(sqrt(xend*xend+yend*yend+zend*zend)); 
 		    
-		      G4cout<<"range di e- in cm: "<<range/cm<<G4endl;
-		     
+		   
+		      G4double range2= range*(detector->GetDensity());
+		      G4cout<<"range di e- in g/cm2: "<<range2/(g/cm2)<<" "<<
+ initial_energy<<" initialenergy"<<G4endl;
  
- 
+  
 		   }
+}
+ /*
  //Radiation yield
  G4String process=Step->GetPostStepPoint()->GetProcessDefinedStep()
 	   ->GetProcessName();
@@ -263,7 +288,9 @@ if (process=="LowEnBrem")
 
   }
 
-}}}}
+}}}
+*/
+}
 
 
 

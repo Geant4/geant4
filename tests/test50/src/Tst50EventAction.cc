@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.5 2003-01-08 15:37:14 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.6 2003-01-16 09:53:15 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -64,7 +64,7 @@ Tst50EventAction::~Tst50EventAction()
  
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 {
-  G4cout<<"evento:"<<GetEventno()<<G4endl;
+  // G4cout<<"evento:"<<GetEventno()<<G4endl;
   energy=0;
 
 if (hit_CollID==-1)
@@ -105,11 +105,14 @@ void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 #endif
 	}
     }
+  /*
 G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
 G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
   G4double radiation=(energy/initialEnergy);
   G4cout<<"Radiation yield:"<< radiation<<G4endl;
-  // get number of stored trajectories
+ 
+  */
+ // get number of stored trajectories
   //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;

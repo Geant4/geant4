@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.4 2002-12-16 17:36:39 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.5 2003-01-16 09:51:47 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -70,13 +70,10 @@ void finish();
 
 static Tst50AnalysisManager* getInstance();
 
-
 void energy_deposit(G4double);
- 
- 
+  void energy_transmitted(G4double);
+  void fill_range(G4double,G4double);
 private:
-
-
 static Tst50AnalysisManager* instance;
 
 private:
@@ -87,15 +84,16 @@ private:
 AIDA::IAnalysisFactory*  aFact;
 AIDA::ITree*             theTree;
 AIDA::IHistogramFactory *histFact;
-  //AIDA::ITupleFactory     *tupFact;
+AIDA::ITupleFactory     *tupFact;
 AIDA::ITreeFactory      *treeFact;
-
+AIDA::ITuple *ntuple;
 AIDA::IHistogram1D *h1;
-
+AIDA::IHistogram1D *h2;
 private:
   G4double initial_energy;
   Tst50PrimaryGeneratorAction* p_Primary;
-
+  G4double en;
+  G4double range;
 };
 #endif
 #endif

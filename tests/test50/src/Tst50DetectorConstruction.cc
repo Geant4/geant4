@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorConstruction.cc,v 1.6 2003-01-08 15:37:14 guatelli Exp $
+// $Id: Tst50DetectorConstruction.cc,v 1.7 2003-01-16 09:53:13 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,14 +50,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50DetectorConstruction::Tst50DetectorConstruction()
+Tst50DetectorConstruction::Tst50DetectorConstruction(G4bool  max_Step)
 :TargetMaterial(0),defaultMaterial(0),
  solidWorld(0),logicWorld(0),physiWorld(0),
  solidTarget(0),logicTarget(0),physiTarget(0)
  
 {
   // default parameter values of the calorimeter
-  TargetThickness = 5.*mm;
+  TargetThickness = 0.1*mm;
   targetX=20. *cm;
   targetY=20. *cm;
   // create commands for interactive definition of the calorimeter  
@@ -65,8 +65,8 @@ Tst50DetectorConstruction::Tst50DetectorConstruction()
 
  
 theUserLimitsForTarget = NULL; 
- fUseUserLimits = false;//non fa nulla se c'e false ,devo mettere true 
- theMaxStepInTarget = 0.01*micrometer;
+ fUseUserLimits = max_Step;//non fa nulla se c'e false ,devo mettere true 
+ theMaxStepInTarget = 0.000000001*micrometer;
 
  detectorMessenger = new Tst50DetectorMessenger(this);
 }
@@ -132,8 +132,9 @@ U->AddIsotope(U8, abundance= 10.*perCent);
 //
 // define simple materials
 //
-
-
+a = 1.01*g/mole;
+ density=8.3748e-5 *g/cm3; 
+G4Material* HMat = new G4Material(name="Hydrogen", z=1., a, density);
 
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
@@ -220,7 +221,7 @@ G4VPhysicalVolume* Tst50DetectorConstruction::ConstructWorld()
   // World
   //
   solidWorld = new G4Box("World",				//its name
-                   targetX*5,targetY*5,TargetThickness*5);	//its size
+                   20.*m,20.*m,20.*m);	//its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    defaultMaterial,	//its material
@@ -310,6 +311,8 @@ void Tst50DetectorConstruction::PrintParameters()
   G4cout<<" Target xdimension is: "<<targetX/mm<<" mm"<<G4endl;
  G4cout<<" Target ydimension is: "<<targetY/mm<<" mm"<<G4endl;
  G4cout<<"Target Material is: "<<TargetMaterial->GetName()<<G4endl; 
+
+
     }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -322,6 +325,11 @@ void Tst50DetectorConstruction::SetTargetMaterial(G4String materialChoice)
       logicTarget->SetMaterial(pttoMaterial); 
       PrintParameters();
      }             
+}
+G4double Tst50DetectorConstruction::GetDensity()
+{
+  G4double Density=(TargetMaterial->GetDensity());
+  return Density;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

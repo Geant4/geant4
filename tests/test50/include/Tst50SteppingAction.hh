@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.hh,v 1.5 2003-01-08 15:37:13 guatelli Exp $
+// $Id: Tst50SteppingAction.hh,v 1.6 2003-01-16 09:52:49 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,6 +37,7 @@
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class G4Step;
 class Tst50AnalysisManager;
 class Tst50EventAction;
 class Tst50RunAction;

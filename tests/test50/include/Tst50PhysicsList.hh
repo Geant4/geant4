@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.hh,v 1.2 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.3 2003-01-16 09:52:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ class Tst50PhysicsListMessenger;
 class Tst50PhysicsList: public G4VUserPhysicsList
 {
   public:
-    Tst50PhysicsList();
+    Tst50PhysicsList(G4bool,G4bool);
    ~Tst50PhysicsList();
 public:
   void SetRangeConditions(G4String );
@@ -77,6 +77,8 @@ private:
   Tst50PhysicsListMessenger* physicsListMessenger;
   G4String rangeOn; 
    G4double cutForElectron;
+  G4bool Low;
+  G4bool  RangeOn;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
