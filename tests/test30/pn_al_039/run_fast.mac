@@ -7,7 +7,7 @@
 #verbose
 0
 #events
-1000
+100000
 //--------Proton_processes
 #particle
 proton
@@ -43,7 +43,7 @@ CHIPS
 chips.paw
 //run
 #generator
-kinetic
+binary
 #paw
 kin.paw
 #run
