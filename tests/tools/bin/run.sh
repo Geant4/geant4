@@ -110,6 +110,7 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test15
   nice $G4STTDIR/bin/run.sh test16
   nice $G4STTDIR/bin/run.sh test17
+  nice $G4STTDIR/bin/run.sh test18
 
 
 else
