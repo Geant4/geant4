@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MuPairProduction.cc,v 1.10 2000-02-10 09:10:39 urban Exp $
+// $Id: G4MuPairProduction.cc,v 1.11 2000-02-21 08:31:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -193,7 +193,7 @@ G4double G4MuPairProduction::ComputePairLoss(
   if( CutInPairEnergy >= MaxPairEnergy ) 
       CutInPairEnergy = MaxPairEnergy ;
 
-  if(MaxPairEnergy <= MinPairEnergy) return loss ;
+  if(CutInPairEnergy <= MinPairEnergy) return loss ;
 
   G4double aaa,bbb,hhh,x,epln,ep ;
   G4int kkk ;
@@ -560,13 +560,18 @@ G4double G4MuPairProduction::ComputeDMicroscopicCrossSection(
   static const G4double
   wgi[] ={ 0.0506,0.1112,0.1569,0.1813,0.1813,0.1569,0.1112,0.0506 };
 
+  G4double DCrossSection = 0. ;
+
   G4double TotalEnergy = KineticEnergy + ParticleMass ;
   G4double EnergyLoss = TotalEnergy - PairEnergy ;
   G4double a = 6.*ParticleMass*ParticleMass/(TotalEnergy*EnergyLoss) ;
   G4double b = 4.*electron_mass_c2/PairEnergy ;
+
+  if((b+2.*a*(1.-b))/(1.+(1.-a)*sqrt(1.-b)) <= 0.) return DCrossSection ;
+
   G4double tmn=log((b+2.*a*(1.-b))/(1.+(1.-a)*sqrt(1.-b))) ;
 
-  G4double DCrossSection = 0. ;
+ //  G4double DCrossSection = 0. ;
   G4double ro ;
 // Gaussian integration in ln(1-ro) ( with 8 points)
   for (G4int i=0; i<7; i++)
