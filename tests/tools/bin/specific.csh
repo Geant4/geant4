@@ -432,7 +432,6 @@ if ( `uname -n` == "pc-gbp" || `uname -n` == "pc100" ) then
   #setenv G4VIS_USE_OPACS             1
   #source /lal/OPACS/v3/setup.csh
   setenv JDKHOME /lal/JDK/1.2.2/Linux
-  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$OIVHOME/Linux-gxx:$HEPVISHOME/Linux-gxx:${OGLHOME}/lib
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$JDKHOME/jre/lib/i386:$JDKHOME/jre/lib/i386/classic:$JDKHOME/jre/lib/i386/native_threads
 set jars=/lal/jas/2.0alpha4/release/lib
   setenv CLASSPATH ${CLASSPATH}:$jars/collections.jar:$jars/hep.jar:$jars/jas.jar
