@@ -1,4 +1,4 @@
-$Id: History,v 1.60 2001-12-06 18:18:25 japost Exp $
+$Id: History,v 1.61 2001-12-08 01:49:25 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  8th, 2001       J. Apostolakis - geomvol-V03-02-06
+- G4PropagatorInField
+  * Interface: additional thresholds for No of steps, + get/Set methods
+
+  * Implementations
+     Modified choice of subsequent step size in case of Zero steps
+     - decrease quickly at first to try to ensure that the first/second
+         "re-steps" are enough in most cases.
+
+     - utilise addition threshold parameters (for # of steps)
+         to slow down the rate of decrease of the step size
+         for the 'difficult' cases which do not converse after
+         a few steps.                           
+
 Dec  6th, 2001       J. Apostolakis - geomvol-V03-02-05
 - G4Navigator
   Fix for Locate Global Point Within Volume:
