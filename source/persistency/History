@@ -15,7 +15,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 2, 99   Y.Morita
+December 2, 99   Y.Morita (persistency-V00-01-10)
 - bug fix in G4PHCofThisEvent, G4PHCofThisEvent, G4PersistentEventMan
 
 December 1, 99   Y.Morita (persistency-V00-01-09)
