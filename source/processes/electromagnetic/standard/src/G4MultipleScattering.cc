@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.cc,v 1.9 1999-08-02 07:42:13 urban Exp $
+// $Id: G4MultipleScattering.cc,v 1.10 1999-09-18 15:24:03 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -22,6 +22,7 @@
 // 24/10/97  correction in PostStepDoIt for tau << 1. L.Urban
 // 09/12/98: charge can be different from +-1 !!!! L.Urban
 // 29/07/99: corr. for low energy , L.Urban
+// 17/09/99: corr. for high energy and/or small step , L.Urban
 // --------------------------------------------------------------
 
 #include "G4MultipleScattering.hh"
@@ -72,7 +73,8 @@
     // parameter for "low energy" msc (not for ions)
     if((&aParticleType == G4Electron::Electron()) ||
        (&aParticleType == G4Positron::Positron())   )
-       Tlimit = 100.*keV ;
+    //   Tlimit = 100.*keV ;
+               ;
     
     const G4double sigmafactor = twopi*classic_electr_radius*
                                        classic_electr_radius ;
@@ -374,7 +376,7 @@
                                                const G4Track& trackData,
                                                const G4Step& stepData)
   {
-    static const G4double  taulim = 1.e-10 , randlim = 0.25*taulim*taulim ;
+    static G4double taulim=1.e-6 , randlim = 0.25*taulim*taulim  ;
     static const G4double tausmall = 5.e-5,taubig =50.,
           kappa = 2.5, kappapl1 = kappa+1., kappami1 = kappa-1. ;
     const G4DynamicParticle* aParticle ;
@@ -403,7 +405,11 @@
     if(stepFlag == 0)
     {
       tau = truestep/fTransportMeanFreePath ;
+
+     if(tau > taulim) 
       prob = exp(-tau)*(1.+scatteringparameter*tau) ;
+     else
+      prob=1.-(1.-scatteringparameter)*tau ;
     }
     else
     {
@@ -417,7 +423,10 @@
       {
         rand = G4UniformRand() ;
         if(rand > randlim)
-          cth = 1.-tau*(1./sqrt(rand)-1.)  ;
+        {
+          cth = 1.-scatteringparameter*tau*(1./sqrt(rand)-1.)  ;
+          if(cth < -1.) cth = -1. ;
+        }
         else 
           cth = -1. ; 
       }
@@ -442,6 +451,7 @@
     G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
 
     G4ThreeVector newDirection(dirx,diry,dirz) ;
+
 
     newDirection.rotateUz(ParticleDirection) ;
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MultipleScattering.hh,v 1.3 1999-07-29 08:44:15 urban Exp $
+// $Id: G4MultipleScattering.hh,v 1.4 1999-09-18 15:23:36 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -80,6 +80,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
            { scatteringparameter = value ; } ;
    void SetTuning(G4double value) { tuning = value ; };
    void SetCpar  (G4double value) { cpar   = value ; };
+   void SetTlimitmsc  (G4double value) { Tlimit = value ; };
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
 
  protected:
