@@ -1,3 +1,28 @@
+$Id: History,v 1.8 2003-10-03 15:18:22 gcosmo Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/VRML sub-category (a template graphics system)
+-----------------------------------------------------------------------------
+
+4th October 2003  Gabriele Cosmo (vis-V05-02-01)
+- Simplified GNUmakefile.
+
 VRML-V05-00-00 17th February 2003 Satoshi Tanaka
 - A Small bug fixing of VRML2 driver
  (Explicit cast from G4String to char*).
