@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsLinearVector.hh,v 1.1 1999-01-07 16:09:01 gunter Exp $
+// $Id: G4PhysicsLinearVector.hh,v 1.2 1999-11-16 17:40:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,12 +14,13 @@
 //
 //  G4PhysicsLinearVector.hh
 //
-//  Description:
+//  Class description:
+//
 //    A physics vector which has values of energy-loss, cross-section, 
 //    and other physics values of a particle in matter in a given 
 //    range of the energy, momentum, etc. The scale of energy/momentum
 //    bins is in linear.
-//
+
 //  History:
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
 //    03 Mar. 1996, K.Amako : Implemented the 1st version
@@ -61,8 +62,8 @@ class G4PhysicsLinearVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const {
-
+inline size_t G4PhysicsLinearVector::FindBinLocation(G4double theEnergy) const
+{
   // For G4PhysicsLinearVector, FindBinLocation is implemented using
   // a simple arithmetic calculation.
   //

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsFreeVector.hh,v 1.1 1999-01-07 16:09:01 gunter Exp $
+// $Id: G4PhysicsFreeVector.hh,v 1.2 1999-11-16 17:40:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,7 +14,8 @@
 //
 //  G4PhysicsFreeVector.hh
 //
-//  Description:
+//  Class description:
+//
 //    A physics vector which has values of energy-loss, cross-section, 
 //    and other physics values of a particle in matter in a given 
 //    range of the energy, momentum, etc. The scale of energy/momentum
@@ -22,7 +23,7 @@
 //    restrication is that bin values alway have to increase from
 //    a lower bin to a higher bin. This is necessary for the binary
 //    search to work correctly.
-//
+
 //  History:
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
 //    06 Jun. 1996, K.Amako : Implemented the 1st version
@@ -58,10 +59,10 @@ class G4PhysicsFreeVector : public G4PhysicsVector
     // Destructor
     ~G4PhysicsFreeVector();
 
-    // Special PutValue function for PhyiscsFreeVector
+    // Special PutValue function for PhysicsFreeVector
     void PutValue( size_t binNumber, G4double binValue, 
                                      G4double dataValue );   
-         // To use this method to fill a PhyiscsFreeVector, you have
+         // To use this method to fill a PhysicsFreeVector, you have
          // to Construct a PhysicsFreeVector of the size you need
          // using G4PhysicsFreeVector(size_t theNbin). Also take
          // note that you have to fill all bin values and data 
@@ -74,8 +75,8 @@ class G4PhysicsFreeVector : public G4PhysicsVector
 };
 
 
-inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const {
-
+inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const
+{
   // For G4PhysicsFreeVector, FindBinLocation is implemented using
   // the binary search algorithm.
   //
@@ -101,17 +102,3 @@ inline size_t G4PhysicsFreeVector::FindBinLocation(G4double theEnergy) const {
 }
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

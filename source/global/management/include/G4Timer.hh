@@ -1,19 +1,20 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Timer.hh,v 1.6 1999-05-24 20:39:23 gcosmo Exp $
+// $Id: G4Timer.hh,v 1.7 1999-11-16 17:40:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ----------------------------------------------------------------------
-// class G4Timer
+// Class G4Timer
 //
-// Class for timer objects, able to measure elasped user/system process
-// time.
+// Class description:
+//
+// Class for timer objects, able to measure elasped user/system process time.
 //
 // Note: Uses <sys/times.h> & <unistd.h> - POSIX.1 defined
 //
@@ -49,7 +50,7 @@
 //   Real times (arbitrary time 0)
 // tms fStartTimes,fEndTimes
 //   Timing structures (see times(2)) for start and end times
-//
+
 // History:
 // 23.08.96 P.Kent Updated to also computed real elapsed time
 // 21.08.95 P.Kent

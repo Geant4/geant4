@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsVector.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
+// $Id: G4PhysicsVector.hh,v 1.3 1999-11-16 17:40:43 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,13 +14,14 @@
 //
 //  G4PhysicsVector.hh
 //
-//  Description:
+//  Class description:
+//
 //    A physics vector which has values of energy-loss, cross-section, 
 //    and other physics values of a particle in matter in a given 
 //    range of the energy, momentum, etc.
 //    This class serves as the base class for a vector having various 
 //    energy scale, for example like 'log', 'linear', 'free', etc.
-//
+
 //  History:
 //    02 Dec. 1995, G.Cosmo : Structure created based on object model
 //    03 Mar. 1996, K.Amako : Implemented the 1st version
@@ -42,8 +43,8 @@ class G4PhysicsVector
   public:
 
     // Constructor and destructor
-    G4PhysicsVector(){};
-    virtual ~G4PhysicsVector(){};
+    G4PhysicsVector();
+    virtual ~G4PhysicsVector();
 
     // Public functions
     G4double GetValue(G4double theEnergy, G4bool& isOutRange);
@@ -125,100 +126,6 @@ class G4PhysicsVector
     G4String comment;
 };
 
-
-inline G4double G4PhysicsVector::operator[](const size_t binNumber) const
-{
-  return dataVector[binNumber];
-}
-
-
-inline G4double G4PhysicsVector::operator()(const size_t binNumber) const
-{
-  return dataVector(binNumber);
-}
-
-
-inline const G4RWTPtrOrderedVector<G4PhysicsVector>*
-G4PhysicsVector::GetNextTable() const
-{
-  return ptrNextTable;
-}
-
-
-inline G4double G4PhysicsVector::LinearInterpolation(G4double theEnergy, 
-                                                     size_t theLocBin) {
-
-  // Linear interpolation is used to get the value. If the give energy
-  // is in the highest bin, no interpolation will be Done. Because 
-  // there is an extra bin hidden from a user at locBin=numberOfBin, 
-  // the following interpolation is valid even the current locBin=
-  // numberOfBin-1. 
-
-  G4double intplFactor = (theEnergy-binVector(theLocBin)) 
-     / (binVector(theLocBin+1)-binVector(theLocBin)); // Interpolation factor
-
-  return dataVector(theLocBin) +
-         ( dataVector(theLocBin+1)-dataVector(theLocBin) ) * intplFactor;
-}
-
-
-inline G4double G4PhysicsVector::GetValue(G4double theEnergy, 
-                                          G4bool& isOutRange) {
-
-  // Use cache for speed up - check if the value 'theEnergy' is same as the 
-  // last call. If it is same, then use the last bin location. Also the
-  // value 'theEnergy' lies between the last energy and low edge of of the 
-  // bin of last call, then the last bin location is used.
-
-  isOutRange = false;                // No range check. 
-
-  size_t locBin;
-
-  if( theEnergy == lastEnergy ) {
-     return lastValue;        
-  } 
-  else if( (theEnergy < lastEnergy) && 
-           (theEnergy >= binVector(lastBin)) ) {
-     locBin = lastBin;
-
-     lastEnergy = theEnergy;
-     lastValue = LinearInterpolation(theEnergy, locBin);
-     return lastValue;
-  } 
-  else if( theEnergy < edgeMin ){
-     lastBin = 0;
-     lastEnergy = theEnergy;
-     lastValue = dataVector(0);
-     return lastValue;
-  } 
-  else if( theEnergy >= edgeMax ){
-     lastBin = numberOfBin-1;
-     lastEnergy = theEnergy;
-     lastValue = dataVector( numberOfBin-1 );
-     return lastValue;
-  } 
-  else {
-     locBin = FindBinLocation(theEnergy); 
-
-     lastBin = locBin;
-     lastEnergy = theEnergy;
-     lastValue = LinearInterpolation(theEnergy, locBin);
-     return lastValue;
-  }
-}
+#include "G4PhysicsVector.icc"
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: PhysicalConstants.h,v 1.1 1999-01-07 16:09:04 gunter Exp $
+// $Id: PhysicalConstants.h,v 1.2 1999-11-16 17:40:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -*- C++ -*-
@@ -136,8 +136,3 @@ static const HepDouble kGasThreshold   = 10.*mg/cm3;
 static const HepDouble universe_mean_density = 1.e-25*g/cm3;
 
 #endif /* HEP_PHYSICAL_CONSTANTS_H */
-
-
-
-
-

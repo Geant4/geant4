@@ -1,11 +1,11 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicsOrderedFreeVector.hh,v 1.2 1999-11-11 10:47:30 gunter Exp $
+// $Id: G4PhysicsOrderedFreeVector.hh,v 1.3 1999-11-16 17:40:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -20,7 +20,8 @@
 //		> cosmetics (only)
 // mail:        gum@triumf.ca
 //
-// Description:
+// Class description:
+//
 //    A physics ordered free vector inherits from G4PhysicsVector which
 //    has values of energy-loss, cross-section, and other physics values
 //    of a particle in matter in a given range of the energy, momentum,
@@ -28,7 +29,7 @@
 //    the user to insert energy/value pairs in sequence.  Methods to
 //    Retrieve the Max and Min energies and values from the vector are
 //    also provided. 
-//
+
 ////////////////////////////////////////////////////////////////////////
 
 #ifndef G4PhysicsOrderedFreeVector_h
@@ -89,57 +90,6 @@ private:
         G4double LinearInterpolationOfEnergy(G4double aValue, size_t theLocBin);
 };
 
-////////////////////
-// Inline methods
-////////////////////
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxValue()
-{
-	return dataVector.last();
-}
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinValue()
-{
-	return dataVector.first();
-}
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMaxLowEdgeEnergy()
-{
-	return binVector.last();
-}
-
-inline
-G4double G4PhysicsOrderedFreeVector::GetMinLowEdgeEnergy()
-{
-	return binVector.first();
-}
-
-inline
-void G4PhysicsOrderedFreeVector::DumpValues()
-{
-   for (G4int i = 0; i < numberOfBin; i++) {
-      G4cout << binVector[i] << "\t" << dataVector[i] << endl;
-   }
-
-}
-
-inline
-size_t G4PhysicsOrderedFreeVector::FindBinLocation(G4double theEnergy) const
-{
-   G4int n1 = 0;
-   G4int n2 = numberOfBin/2;
-   G4int n3 = numberOfBin - 1;
-   while (n1 != n3 - 1) {
-      if (theEnergy > binVector(n2))
-         n1 = n2;
-      else
-         n3 = n2;
-      n2 = n1 + (n3 - n1 + 1)/2;
-   }
-   return (size_t)n1;
-}
+#include "G4PhysicsOrderedFreeVector.icc"
 
 #endif /* G4PhysicsOrderedFreeVector_h */
