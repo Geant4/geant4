@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.7 1999-10-04 15:47:17 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.8 1999-11-05 16:07:32 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,7 +93,7 @@ The commands would look something like:
 /vis/sceneHandler/select [<scene-handler-name>]
 /vis/sceneHandler/remove <scene-handler-name>
 * /vis/sceneHandler/processScene
-* /vis/sceneHandler/notifyEndOfProcessiing
+* /vis/sceneHandler/notifyEndOfProcessing
 
 
 Viewers
@@ -112,7 +112,7 @@ clicks, spawn other windows, change viewpoint, etc.).
 * /vis/viewer/set/notifyOption immediate|delayed
 * /vis/viewer/notifyHandler
 * /vis/viewer/clone
-* /vis/viewer/update
+/vis/viewer/update [<viewer-name>]
 
 
 Global Commands
@@ -140,8 +140,7 @@ and
 would be
 
 /vis/scene/add/volume $1
-/vis/sceneHandler/processScene
-/vis/sceneHandler/notifyEndOfProcessiing
+/vis/scene/notifyHandlers
 /vis/viewer/update
 
 or some such.
@@ -180,6 +179,7 @@ or some such.
   command = new G4UIdirectory ("/vis/scene/");
   command -> SetGuidance ("Operations on Geant4 scenes.");
   fMessengerList.append (new G4VisCommandSceneCreate);
+  // fMessengerList.append (new G4VisCommandSceneEdit);
   fMessengerList.append (new G4VisCommandSceneList);
   fMessengerList.append (new G4VisCommandSceneNotifyHandlers);
   fMessengerList.append (new G4VisCommandSceneSelect);
@@ -206,6 +206,7 @@ or some such.
   fMessengerList.append (new G4VisCommandViewerList);
   fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerRemove);
+  fMessengerList.append (new G4VisCommandViewerUpdate);
 
   // Camera - OLD STYLE!!
   fMessengerList.append
