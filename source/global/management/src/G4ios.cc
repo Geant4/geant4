@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ios.cc,v 1.7 2004-06-09 07:30:03 gcosmo Exp $
+// $Id: G4ios.cc,v 1.8 2004-06-11 14:18:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,10 +31,6 @@
 // G4ios.cc
 //
 // History 1998 Nov. 3 Masayasu Nagamatu
-
-// Export extern symbols for DLLs build
-//
-#define G4IOS_EXPORT 1
 
 #include "G4ios.hh"
 #include "G4strstreambuf.hh"

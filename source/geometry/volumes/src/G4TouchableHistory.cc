@@ -21,17 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.cc,v 1.9 2004-06-09 07:26:07 gcosmo Exp $
+// $Id: G4TouchableHistory.cc,v 1.10 2004-06-11 14:17:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory Implementation
 //
 // ----------------------------------------------------------------------
-
-// Export extern symbols for DLLs build
-//
-#define G4TOUCHABLE_HISTORY_EXPORT 1
 
 #include "G4TouchableHistory.hh"
 
