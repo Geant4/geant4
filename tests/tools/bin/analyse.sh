@@ -15,7 +15,6 @@
 #     UNIX> cd <g4install>/tests/tools/bin
 #     UNIX> chmod u+x analyse.sh
 #     UNIX> ./analyse.sh $G4SYSTEM
-#    (UNIX> ./analyse.sh OSF1)
 #
 file=$G4WORKDIR/stt/$1/problems
 $G4INSTALL/tests/tools/bin/filter.sh $1 | awk -f $G4INSTALL/tests/tools/bin/$1.awk > $file
