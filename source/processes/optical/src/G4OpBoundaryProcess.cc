@@ -154,19 +154,19 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         G4SurfaceType type = dielectric_dielectric;
 
-        Rindex = NULL;
-        OpticalSurface = NULL;
+        Rindex = 0;
+        OpticalSurface = 0;
 
         G4LogicalSurface* Surface = G4LogicalBorderSurface::GetSurface
 				    (pPreStepPoint ->GetPhysicalVolume(),
 				     pPostStepPoint->GetPhysicalVolume());
 
-        if (Surface == NULL) Surface = G4LogicalSkinSurface::GetSurface
+        if (Surface == 0) Surface = G4LogicalSkinSurface::GetSurface
 				       (pPreStepPoint->GetPhysicalVolume()->
 						GetLogicalVolume());
 
-	//	if (Surface != NULL) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
-	if (Surface != NULL) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
+	//	if (Surface != 0) OpticalSurface = dynamic_cast <G4OpticalSurface*> (Surface->GetSurfaceProperty());
+	if (Surface != 0) OpticalSurface = (G4OpticalSurface*) Surface->GetSurfaceProperty();
 
 	if (OpticalSurface) {
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpWLS.cc,v 1.1 2003-09-23 22:24:06 gum Exp $
+// $Id: G4OpWLS.cc,v 1.2 2003-12-01 15:20:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -54,7 +54,7 @@
 G4OpWLS::G4OpWLS(const G4String& processName)
   : G4VDiscreteProcess(processName)
 {
-  theIntegralTable = NULL;
+  theIntegralTable = 0;
  
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
@@ -69,7 +69,7 @@ G4OpWLS::G4OpWLS(const G4String& processName)
 
 G4OpWLS::~G4OpWLS()
 {
-  if (theIntegralTable != NULL) {
+  if (theIntegralTable != 0) {
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
@@ -118,7 +118,7 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   // new G4PhysicsOrderedFreeVector allocated to hold CII's
 
   G4double WLSTime = 0.*ns;
-  G4PhysicsOrderedFreeVector* WLSIntegral = NULL;
+  G4PhysicsOrderedFreeVector* WLSIntegral = 0;
 
   WLSTime   = aMaterialPropertiesTable->
     GetConstProperty("WLSTIMECONSTANT");
