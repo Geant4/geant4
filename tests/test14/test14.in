@@ -21,45 +21,43 @@
 #
 /gun/direction 1 0 0
 #
-# gamma 500 eV in Al
-#
 /tracking/verbose 2
 /gun/particle gamma
 /gun/energy 10 keV
-/run/beamOn 1000
+/run/beamOn 1
 #
-/tracking/verbose 2
+/tracking/verbose 0
 /gun/particle gamma
 /gun/energy 2 keV
-/run/beamOn 1000
+/run/beamOn 10
 #
-/tracking/verbose 2
+/tracking/verbose 0
 /gun/particle gamma
 /gun/energy 800 eV
-/run/beamOn 1000
+/run/beamOn 10
 #
-/tracking/verbose 2
+/tracking/verbose 0
 /gun/particle gamma
 /gun/energy 250 eV
-/run/beamOn 1000
+/run/beamOn 10
 #
 # electron 500 eV in Al
 #
 /gun/particle e-
 /gun/energy 10 keV
-/run/beamOn 1000
+/run/beamOn 10
 #
 /gun/particle e-
 /gun/energy 2 keV
-/run/beamOn 1000
+/run/beamOn 10
 #
 /gun/particle e-
 /gun/energy 800 eV
-/run/beamOn 1000
+/run/beamOn 10
 #
 /gun/particle e-
 /gun/energy 500 eV
-/run/beamOn 1000
+/run/beamOn 10
 #
 exit
 
