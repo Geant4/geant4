@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: SystemOfUnits.SI.h,v 1.3 1999-04-29 17:54:00 gcosmo Exp $
+// $Id: G4UnitsTest.hh,v 1.1 1999-04-29 17:55:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -*- C++ -*-
