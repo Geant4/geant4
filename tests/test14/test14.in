@@ -2,7 +2,7 @@
 # Macro file test14.in
 # for tests of basic low energy e.m. processes (based on test09) 
 #
-#/control/verbose 2
+/control/verbose 2
 #/run/verbose 2
 #
 /run/initialize
@@ -36,7 +36,7 @@
 /tracking/verbose 0
 /gun/particle gamma
 #
-/tracking/verbose 0
+###/tracking/verbose 2
 # 
 /gun/energy 10 keV
 /run/beamOn 1000
@@ -70,26 +70,3 @@
 /run/beamOn 1000
 #
 exit
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
