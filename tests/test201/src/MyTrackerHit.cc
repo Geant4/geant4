@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyTrackerHit.cc,v 1.1 1999-01-08 16:35:58 gunter Exp $
+// $Id: MyTrackerHit.cc,v 1.2 1999-05-11 13:19:15 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -50,6 +50,7 @@ int MyTrackerHit::operator==(const MyTrackerHit &right) const
 
 void MyTrackerHit::Draw()
 {
+  /*
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if(pVVisManager)
   {
@@ -61,6 +62,7 @@ void MyTrackerHit::Draw()
     circle.SetVisAttributes(attribs);
     pVVisManager->Draw(circle);
   }
+  */
 }
 
 void MyTrackerHit::Print()

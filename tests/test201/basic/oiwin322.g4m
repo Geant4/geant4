@@ -1,0 +1,5 @@
+/vis/viewer/create oiwin32 viewer_2
+/vis/scene/create scene_2
+/vis/sceneHandler/attach scene_2
+# scenario :
+#/vis/scene/include/trajectories

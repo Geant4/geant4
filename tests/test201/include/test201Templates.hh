@@ -41,6 +41,7 @@
 #include "G4VViewer.hh"
 #include "G4UnitsTable.hh"
 #include "G4UItokenNum.hh"
+#include "G4Trajectory.hh"
 
 class SoSeparator;
 
@@ -115,6 +116,8 @@ template class RWTValVector<int (*)(void*)>;
 template class RWTValVector<int>;
 template class RWTValVector<void (*)(void)>;
 template class RWTValVector<void*>;
+template class RWTPtrOrderedVector<G4VTrajectoryPoint>;
+
 //
 // G4 :
 #include "G4DecayProducts.hh"
@@ -134,35 +137,6 @@ template class RWTValVector<void*>;
 #include "G4VisCommandsPrint.hh"
 #include "G4VisCommandsRefresh.hh"
 #include "G4VisCommandsShow.hh"
-/*
-class G4VisCommandCamera;
-class G4VisCommandCameraReset;
-class G4VisCommandClear;
-class G4VisCommandClearView;
-class G4VisCommandCopy;
-class G4VisCommandCopyView;
-class G4VisCommandCreateScene;
-class G4VisCommandCreateSceneClear;
-class G4VisCommandCreateView;
-class G4VisCommandCreateViewNewScene;
-class G4VisCommandCreateViewNewView;
-class G4VisCommandDelete;
-class G4VisCommandDeleteScene;
-class G4VisCommandDeleteView;
-class G4VisCommandDraw;
-class G4VisCommandDrawCurrent;
-class G4VisCommandLights;
-class G4VisCommandLightsMoveWithCamera;
-class G4VisCommandPrint;
-class G4VisCommandRefresh;
-class G4VisCommandRefreshView;
-class G4VisCommandSet;
-class G4VisCommandSetCullCoveredDaughters;
-class G4VisCommandSetCullInvisible;
-class G4VisCommandSetCulling;
-class G4VisCommandShow;
-class G4VisCommandShowView;
-*/
 
 template class G4Allocator<G4DCofThisEvent>;
 template class G4Allocator<G4DecayProducts>;
@@ -176,6 +150,8 @@ template class G4Allocator<G4PrimaryVertex>;
 template class G4Allocator<G4Run>;
 template class G4Allocator<G4StackedTrack>;
 template class G4Allocator<G4Track>;
+template class G4Allocator<G4Trajectory>;
+template class G4Allocator<G4TrajectoryPoint>;
 template class G4VisButtonCommandMessenger<G4VisCommandLightsMoveWithCamera>;
 template class G4VisButtonCommandMessenger<G4VisCommandSetCullCoveredDaughters>;
 template class G4VisButtonCommandMessenger<G4VisCommandSetCullInvisible>;
@@ -203,7 +179,5 @@ template class G4VisSimpleCommandMessenger<G4VisCommandDeleteView>;
 template class G4VisSimpleCommandMessenger<G4VisCommandDrawCurrent>;
 template class G4VisSimpleCommandMessenger<G4VisCommandRefreshView>;
 template class G4VisSimpleCommandMessenger<G4VisCommandShowView>;
-/*
-*/
 
 

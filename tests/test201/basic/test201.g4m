@@ -13,6 +13,7 @@
 /interactor/addButton vis "OpenGL X" "/vis~/create_view/new_graphics_system OGLIX"
 /interactor/addButton vis "Inventor X11" "/vis~/create_view/new_graphics_system OIX"
 /interactor/addButton vis "Inventor WIN32" "/control/execute oiwin32.g4m"
+/interactor/addButton vis "Inventor WIN32/2" "/control/execute oiwin322.g4m"
 /interactor/addButton vis "Set scene" "/control/execute scene.g4m"
 /interactor/addButton vis "Notify" "/vis/scene/notifyHandlers"
 #/interactor/addButton vis "Inventor ~WIN32" "/vis~/create_view/new_graphics_system OIWIN32"

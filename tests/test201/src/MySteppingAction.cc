@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.3 1999-05-07 10:22:31 barrand Exp $
+// $Id: MySteppingAction.cc,v 1.4 1999-05-11 13:19:14 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,37 +38,6 @@ void MySteppingAction::UserSteppingAction(const G4Step*) {
   double     d48 = RandGauss::shoot(0.7,0.1);
   OHistogramFillTwoDimensional(h2,james,d48,0.01);   
 #endif
-
-  // User Action Example - begin snippet.
-  /*debug
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  static int coutCount = 0;
-  if (coutCount < 10) {
-    coutCount++;
-    G4cout << "MySteppingAction::UserSteppingAction called." << endl;
-  }
-  if(pVVisManager) {
-    G4Polyline pl;
-    G4Colour c;
-    G4Step* pStep = GetSteppingManager () -> GetStep ();
-    G4double chg =
-      pStep -> GetTrack () -> GetDefinition () -> GetPDGCharge ();
-    if (chg != 0.) c = G4Colour (1., 0., 0.);
-    else           c = G4Colour (0., 1., 0.);
-    G4VisAttributes va (c);
-    pl.SetVisAttributes (&va);
-    pl.append (pStep -> GetPreStepPoint () -> GetPosition ());
-    pl.append (pStep -> GetPostStepPoint () -> GetPosition ());
-    static int coutCount = 0;
-    if (coutCount < 10) {
-      coutCount++;
-      G4cout << "MySteppingAction::UserSteppingAction: drawing "
-	   <<  pl << endl;
-    }
-    pVVisManager -> Draw (pl);
-  }
-  */
-  // User Action Example - end snippet.
 }
 
 
