@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.23 2004-11-14 10:01:53 gbarrand Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.24 2004-11-15 11:02:00 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -149,9 +149,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polyline& line) {
   SbVec3f* pCoords = new SbVec3f[nPoints];
 
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {
-    pCoords[iPoint].setValue(line[iPoint].x(),
-                             line[iPoint].y(),
-                             line[iPoint].z());
+    pCoords[iPoint].setValue((float)line[iPoint].x(),
+                             (float)line[iPoint].y(),
+                             (float)line[iPoint].z());
   }
 
   //
@@ -197,9 +197,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
 
   SbVec3f* points = new SbVec3f[pointn];
   for (G4int iPoint = 0; iPoint < pointn ; iPoint++) {
-    points[iPoint].setValue(polymarker[iPoint].x(),
-                            polymarker[iPoint].y(),
-                            polymarker[iPoint].z());
+    points[iPoint].setValue((float)polymarker[iPoint].x(),
+                            (float)polymarker[iPoint].y(),
+                            (float)polymarker[iPoint].z());
   }
 
   const G4Colour& c = GetColour (polymarker);
@@ -305,7 +305,9 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   const G4Point3D cCtr = circle.GetPosition();
    
   SoTranslation *cTrans = new SoTranslation;
-  cTrans->translation.setValue(cCtr.x(),cCtr.y(),cCtr.z());
+  cTrans->translation.setValue((float)cCtr.x(),
+                               (float)cCtr.y(),
+                               (float)cCtr.z());
   fCurrentSeparator->addChild(cTrans);
 
   //
@@ -313,7 +315,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   // 
 
   SoSphere *g4Sphere = new SoSphere();
-  g4Sphere->radius = size;
+  g4Sphere->radius = (float)size;
   fCurrentSeparator->addChild(g4Sphere);
 }
 
@@ -344,13 +346,15 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Square& Square) {
   const G4Point3D sOrig = Square.GetPosition();
    
   SoTranslation *sTrans = new SoTranslation;
-  sTrans->translation.setValue(sOrig.x(),sOrig.y(),sOrig.z());
+  sTrans->translation.setValue((float)sOrig.x(),
+                               (float)sOrig.y(),
+                               (float)sOrig.z());
   fCurrentSeparator->addChild(sTrans);
   
   SoCube *g4Square = new SoCube();
-  g4Square->width =  sSize;
-  g4Square->height = sSize;
-  g4Square->depth =  sSize;
+  g4Square->width =  (float)sSize;
+  g4Square->height = (float)sSize;
+  g4Square->depth =  (float)sSize;
   fCurrentSeparator->addChild(g4Square);
 }
 
@@ -424,7 +428,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4NURBS& nurb) {
   SoCoordinate4 *ctlPts = new SoCoordinate4;
   SoNurbsSurface *oi_nurb = new SoNurbsSurface;
   
-  complexity->value = 0.6;
+  complexity->value = (float)0.6;
   G4int    nPoints = nurb.GettotalnbrCtrlPts ();
   SbVec4f* points  = new SbVec4f[nPoints];
   for (G4int iPoint = 0; iPoint < nPoints ; iPoint++) {

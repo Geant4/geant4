@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2004-11-14 18:21:11 johna Exp $
+$Id: History,v 1.32 2004-11-15 11:01:41 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,10 @@ committal in the CVS repository !
 
 History file for visualization/OpenInventor
 -------------------------------------------
+
+15th November 2004  Guy Barrand
+- G4OpenInventorWinViewer : have it inheriting G4OpenInventorViewer.
+- G4OpenInventorSceneHandler : WIN32 : correct some warnings.
 
 14th November 2004  Guy Barrand
 - G4OpenInventorSceneHandler.cc : handle transparency.
