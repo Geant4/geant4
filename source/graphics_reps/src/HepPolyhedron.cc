@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.cc,v 1.4 2000-04-18 10:03:29 evc Exp $
+// $Id: HepPolyhedron.cc,v 1.5 2001-02-06 22:07:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1206,6 +1206,19 @@ HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
   CreatePrism();
 }
 
+HepPolyhedronTrd2::~HepPolyhedronTrd2() {}
+
+HepPolyhedronTrd1::HepPolyhedronTrd1(HepDouble Dx1, HepDouble Dx2,
+				     HepDouble Dy, HepDouble Dz)
+  : HepPolyhedronTrd2(Dx1, Dx2, Dy, Dy, Dz) {}
+
+HepPolyhedronTrd1::~HepPolyhedronTrd1() {}
+
+HepPolyhedronBox::HepPolyhedronBox(HepDouble Dx, HepDouble Dy, HepDouble Dz)
+  : HepPolyhedronTrd2(Dx, Dx, Dy, Dy, Dz) {}
+
+HepPolyhedronBox::~HepPolyhedronBox() {}
+
 HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
 				     HepDouble Theta,
 				     HepDouble Phi,
@@ -1258,6 +1271,15 @@ HepPolyhedronTrap::HepPolyhedronTrap(HepDouble Dz,
 
   CreatePrism();
 }
+
+HepPolyhedronTrap::~HepPolyhedronTrap() {}
+
+HepPolyhedronPara::HepPolyhedronPara(HepDouble Dx, HepDouble Dy, HepDouble Dz,
+				     HepDouble Alpha, HepDouble Theta,
+				     HepDouble Phi)
+  : HepPolyhedronTrap(Dz, Theta, Phi, Dy, Dx, Dx, Alpha, Dy, Dx, Dx, Alpha) {}
+
+HepPolyhedronPara::~HepPolyhedronPara() {}
 
 HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
 				     HepDouble Rmx1,
@@ -1334,6 +1356,28 @@ HepPolyhedronCons::HepPolyhedronCons(HepDouble Rmn1,
   RotateAroundZ(0, phi1, dphi, 2, 2, zz, rr, -1, -1); 
   SetReferences();
 }
+
+HepPolyhedronCons::~HepPolyhedronCons() {}
+
+HepPolyhedronCone::HepPolyhedronCone(HepDouble Rmn1, HepDouble Rmx1, 
+				     HepDouble Rmn2, HepDouble Rmx2,
+				     HepDouble Dz) :
+  HepPolyhedronCons(Rmn1, Rmx1, Rmn2, Rmx2, Dz, 0*deg, 360*deg) {}
+
+HepPolyhedronCone::~HepPolyhedronCone() {}
+
+HepPolyhedronTubs::HepPolyhedronTubs(HepDouble Rmin, HepDouble Rmax,
+				     HepDouble Dz, 
+				     HepDouble Phi1, HepDouble Dphi)
+  :   HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, Phi1, Dphi) {}
+
+HepPolyhedronTubs::~HepPolyhedronTubs() {}
+
+HepPolyhedronTube::HepPolyhedronTube (HepDouble Rmin, HepDouble Rmax,
+				      HepDouble Dz)
+  : HepPolyhedronCons(Rmin, Rmax, Rmin, Rmax, Dz, 0*deg, 360*deg) {}
+
+HepPolyhedronTube::~HepPolyhedronTube () {}
 
 HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
 				     HepDouble dphi,
@@ -1423,6 +1467,16 @@ HepPolyhedronPgon::HepPolyhedronPgon(HepDouble phi,
   delete [] zz;
   delete [] rr;
 }
+
+HepPolyhedronPgon::~HepPolyhedronPgon() {}
+
+HepPolyhedronPcon::HepPolyhedronPcon(HepDouble phi, HepDouble dphi, int nz,
+				     const HepDouble *z,
+				     const HepDouble *rmin,
+				     const HepDouble *rmax)
+  : HepPolyhedronPgon(phi, dphi, 0, nz, z, rmin, rmax) {}
+
+HepPolyhedronPcon::~HepPolyhedronPcon() {}
 
 HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
 				       HepDouble phi, HepDouble dphi,
@@ -1519,6 +1573,8 @@ HepPolyhedronSphere::HepPolyhedronSphere(HepDouble rmin, HepDouble rmax,
   delete [] rr;
 }
 
+HepPolyhedronSphere::~HepPolyhedronSphere() {}
+
 HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
 				       HepDouble rmax,
 				       HepDouble rtor,
@@ -1591,6 +1647,8 @@ HepPolyhedronTorus::HepPolyhedronTorus(HepDouble rmin,
   delete [] zz;
   delete [] rr;
 }
+
+HepPolyhedronTorus::~HepPolyhedronTorus() {}
 
 int HepPolyhedron::fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
 /***********************************************************************
