@@ -1,0 +1,27 @@
+g3tog4-01-00-06 has been tested on HP and Sun and Gabriele has compiled
+it successfully on AIX as well. The tests were done in
+geant4-00-cand-09b. Please include this tag in the May release.
+
+The ability to handle deferred and divided volumes is not fully
+implemented, but the foundation code is there. The logical and physical
+volumes are 'cached' in G3toG4 RW lists (RWTPtrOrderVector and
+RWTPtrHashDictionary) and then placed after the reading of the call list
+is completed. The caching involves the creation of a logical volume node
+tree (G3VolTable containing VolTableEntry objects). Each VolTableEntry
+(the equivalent of a G4LogicalVolume) knows its mother and  daughter
+VolTablEntrys and  its associated physical volumes. The G4 geometry is
+built by traversing the node tree from top down. Therefore it should be
+relatively straightforward to handle deferred / divided volumes since
+the parameters of a mother of a given volume will always be defined.
+
+I am able to set up and run interacting particles through the SVT test
+example (clGeometry + code in g3tog4/test/src reading svtwaf.dat). There
+is also an example of a G3 geometry involving deferred and divided
+volumes (testmodel.dat) which can be read and partially constructed
+without crashing. The clGeometry code should at some point be promoted
+to the user examples (it is currently patterned after N03).
+
+I expect to finish the deferred/divied volume implementation in the next
+couple of weeks or so, but bear in mind that I am heavily multiplexed.
+The activity level at SLAC is frenetic due to the very successful
+startup of BaBar and I am in the middle of this frenzy.
