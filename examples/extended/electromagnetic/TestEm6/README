@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2003-01-27 09:46:19 hbu Exp $
+$Id: README,v 1.7 2003-02-04 11:23:36 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -81,7 +81,17 @@ $Id: README,v 1.6 2003-01-27 09:46:19 hbu Exp $
      The threshold for producing secondaries can be changed.
      eg: /run/particle/setCut 100 micrometer
          /run/initialize
-	  	
+	 
+     To visualize the GammaConversionToMuons :
+        /control/execute run01.mac
+	/control/execute vis.mac
+	/run/beamOn
+		 
+     To visualize the AnnihiToMuPair :
+        /control/execute run11.mac
+	/control/execute vis.mac
+	/run/beamOn
+		  	
  6- HOW TO START ?
  
      - compile and link to generate an executable
