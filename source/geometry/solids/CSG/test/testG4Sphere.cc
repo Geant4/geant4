@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testG4Sphere.cc,v 1.5 2002-01-08 16:16:57 gcosmo Exp $
+// $Id: testG4Sphere.cc,v 1.6 2002-01-30 14:44:13 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4Sphere Test File
@@ -139,7 +139,13 @@ int main(void)
     G4Sphere s8("sphere",278.746*mm, 280.0*mm, 0.0*degree, 360.0*degree,
 		                               0.0*degree, 90.0*degree);
 
-
+    G4Sphere b216("b216", 1400.0, 1550.0, 
+                  0.022321428571428572, 
+		  0.014642857142857141,
+                  1.578117755366325,
+                  0.014642857142867141);
+G4ThreeVector p216(1549.9518578505142,1.2195415370970153,-12.155289555510985), 
+              v216(-0.61254821852534425,-0.51164551429243466,-0.60249775741147549);
 
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
@@ -192,6 +198,9 @@ int main(void)
 					       26.81253142743162*mm,
                                               114.8988524453591*mm  )  ) ;
     G4cout<<"s8.Inside(G4ThreeVector(-249.5020 ... = "
+          <<OutputInside(inside)<<G4endl ;
+    inside = b216.Inside(p216);
+    G4cout<<"b216.Inside(p216) = "
           <<OutputInside(inside)<<G4endl ;
     assert(s1.Inside(pzero)==kInside);
     assert(s2.Inside(pzero)==kOutside);
@@ -275,6 +284,8 @@ int main(void)
     //    Dist=s2.DistanceToOut(pbigx,vz,calcNorm,pgoodNorm,pNorm);
     //    G4cout<<"Dist=s2.DistanceToOut(pbigx,vz) = "<<Dist<<G4endl;
 
+    Dist=b216.DistanceToOut(p216,v216,calcNorm,pgoodNorm,pNorm);
+    G4cout<<"b216.DistanceToOut(p216,v216,... = "<<Dist<<G4endl;
 
      
 // Checking G4Sphere::DistanceToIn(P)
@@ -360,6 +371,8 @@ int main(void)
      assert(ApproxEqual(Dist,45));
      Dist=s3.DistanceToIn(ptesttheta1,vmz);
      assert(ApproxEqual(Dist,100-48/sqrt(2.)));
+     Dist=b216.DistanceToIn(p216,v216);
+     G4cout<<"b216.DistanceToIn(p216,v216) = "<<Dist<<G4endl;
 
      ///////////////////////////////////////////////////////////////////////////
 
