@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandlerFunc.icc,v 1.10 2002-06-23 03:31:51 stanaka Exp $
+// $Id: G4VRML2SceneHandlerFunc.icc,v 1.11 2002-11-10 05:10:17 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandlerFunc.icc
@@ -572,12 +572,12 @@ G4double  G4VRML2SCENEHANDLER::GetMarkerHalfSize ( const G4VMarker& mark )
 	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
 	//----- get marker radius in 3D units
-	if        ( size == mark.GetWorldSize()  ) {
+	if        ( mark.GetWorldSize() > 0.0 ) {
 
 		// get mark radius in 3D units
 		size = 0.5 * mark.GetWorldSize()  ; 
 
-	} else if ( size == mark.GetScreenSize() ) {
+	} else if ( mark.GetScreenSize() > 0.0 ) {
 
 		// local
 		double mark_radius_2d   = 0.5 * mark.GetScreenSize() ;
@@ -591,6 +591,7 @@ G4double  G4VRML2SCENEHANDLER::GetMarkerHalfSize ( const G4VMarker& mark )
 		// local
 		double mark_radius_2d \
 		 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
+		mark_radius_2d *= 0.1 ; // Magic number?
 
 		// get mark radius in 3D units
 		size \
