@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.21 2003-11-03 18:17:32 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.22 2003-12-04 10:44:07 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -39,6 +39,7 @@
 // --------------------------------------------------------------------
 
 #include "G4Trap.hh"
+#include "globals.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -507,6 +508,7 @@ G4Trap::G4Trap( const G4String& pName )
     fDx4        (1.),
     fTalpha2    (0.)
 {
+ MakePlanes();
 }
 
 ///////////////////////////////////////////////////////////////////////
