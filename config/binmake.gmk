@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.93 2003-11-18 08:40:42 stesting Exp $
+# $Id: binmake.gmk,v 1.94 2003-11-18 11:28:10 hpw Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #    First implementation: Gabriele Cosmo, 25/06/1998.
@@ -57,7 +57,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/optical/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
-              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/include \
               -I$(G4BASE)/processes/electromagnetic/standard/include \
               -I$(G4BASE)/processes/electromagnetic/muons/include \
               -I$(G4BASE)/processes/electromagnetic/utils/include \
@@ -87,6 +86,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/hadronic/models/de_excitation/photon_evaporation/include \
               -I$(G4BASE)/processes/hadronic/models/de_excitation/util/include \
               -I$(G4BASE)/processes/hadronic/models/inucl/include \
+              -I$(G4BASE)/processes/hadronic/models/photolepton_hadron/muon_nuclear/include \
               -I$(G4BASE)/processes/hadronic/models/pre_equilibrium/exciton_model/include \
               -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/body/include \
               -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
