@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisToOldVisCommands.cc,v 1.2 1999-01-09 16:31:35 allison Exp $
+// $Id: G4VisToOldVisCommands.cc,v 1.3 1999-06-19 16:29:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ void G4VisToOldVisCommands::SetNewValue
       "\n  /vis/viewer/create"
       "\nThis way you can also use \"/vis/scene/addVolume\" to select"
       "\n  sub-detector components.  (The command is still available"
-      "\n  as \"/vis~/create_view/new_graphics/system " << newValues <<
+      "\n  as \"/vis~/create_view/new_graphics_system " << newValues <<
       "\".)"
 	   << endl;
   }
