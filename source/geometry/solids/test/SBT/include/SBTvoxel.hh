@@ -68,11 +68,11 @@ class SBTvoxel {
 			      const G4int numPoints,
 			      const G4int numAttempts ) const;
 
-	G4ThreeVector SBTvoxel::GetRandomPoint() const;
+	G4ThreeVector GetRandomPoint() const;
 
-	G4double SBTvoxel::GaussianRandom(const G4double cutoff) const;
+	G4double GaussianRandom(const G4double cutoff) const;
 
-	G4bool SBTvoxel::GetRandomLimit( G4double x[2], const G4double range ) const;
+	G4bool GetRandomLimit( G4double x[2], const G4double range ) const;
 
 	G4VoxelLimits *NewRandomVoxel( const G4ThreeVector &theWidths ) const;
 	
