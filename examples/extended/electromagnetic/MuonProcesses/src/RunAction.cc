@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.3 2004-08-27 11:06:23 vnivanch Exp $
+// $Id: RunAction.cc,v 1.4 2004-09-26 21:14:56 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -220,7 +220,7 @@ G4double RunAction::ComputeTheory(G4String process, G4int NbOfMu)
   // 
   G4double lgeps, etransf, sigmaE, dsigma, NbProcess;
   G4double sigmaTot = 0.;
-  const G4double ln10 = log(10);
+  const G4double ln10 = log(10.);
     
   for (G4int ibin=0; ibin<nbOfBins; ibin++) {
     lgeps = binMin + (ibin+0.5)*binWidth;
