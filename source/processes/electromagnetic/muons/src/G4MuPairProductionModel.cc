@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MuPairProductionModel.cc,v 1.18 2004-04-28 14:39:43 vnivanch Exp $
+// $Id: G4MuPairProductionModel.cc,v 1.19 2004-05-05 18:45:42 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -143,7 +143,7 @@ G4bool G4MuPairProductionModel::IsInCharge(const G4ParticleDefinition* p)
 
 void G4MuPairProductionModel::Initialise(const G4ParticleDefinition*,
                                          const G4DataVector&)
-{
+{ 
   if (!samplingTablesAreFilled) MakeSamplingTables();
 }
 
@@ -155,7 +155,7 @@ G4double G4MuPairProductionModel::ComputeDEDX(const G4MaterialCutsCouple* couple
                                                     G4double cutEnergy)
 {
   G4double dedx = 0.0;
-  if (minPairEnergy >= cutEnergy || kineticEnergy <= lowestKinEnergy) return dedx;
+  if (cutEnergy <= minPairEnergy || kineticEnergy <= lowestKinEnergy) return dedx;
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -368,10 +368,9 @@ G4double G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* coupl
 						     G4double maxEnergy)
 {
   G4double cross = 0.0;
-  G4double tmax = std::min(maxEnergy, MaxSecondaryEnergy(particle, kineticEnergy));
-  G4double cut  = std::max(cutEnergy, minPairEnergy);
+  if (kineticEnergy <= lowestKinEnergy) return cross;
 
-  if (cut >= tmax || kineticEnergy <= lowestKinEnergy) return cross;
+  maxEnergy += particleMass;
 
   const G4Material* material = couple->GetMaterial();
   const G4ElementVector* theElementVector = material->GetElementVector();
@@ -381,7 +380,7 @@ G4double G4MuPairProductionModel::CrossSection(const G4MaterialCutsCouple* coupl
     G4double Z = (*theElementVector)[i]->GetZ();
     SetCurrentElement(Z);
     G4double tmax = std::min(maxEnergy,MaxSecondaryEnergy(particle, kineticEnergy));
-    G4double cut  = std::max(minPairEnergy,std::min(cutEnergy,tmax));
+    G4double cut  = std::max(minPairEnergy,cutEnergy);
     if(cut < tmax) {
       G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cut)
                   - ComputeMicroscopicCrossSection(kineticEnergy, Z, tmax);
@@ -515,14 +514,14 @@ std::vector<G4DynamicParticle*>* G4MuPairProductionModel::SampleSecondaries(
   if(PairEnergy > maxEnergy) PairEnergy = maxEnergy;
 
   // sample r=(E+-E-)/PairEnergy  ( uniformly .....)
-  G4double rmax = (1.-6.*particleMass*particleMass/(totalEnergy*
-                                               (totalEnergy-PairEnergy)))
+  G4double rmax = 
+    (1.-6.*particleMass*particleMass/(totalEnergy*(totalEnergy-PairEnergy)))
                                        *sqrt(1.-minPairEnergy/PairEnergy);
   G4double r = rmax * (-1.+2.*G4UniformRand()) ;
 
   // compute energies from PairEnergy,r
-  G4double ElectronEnergy=(1.-r)*PairEnergy/2. ;
-  G4double PositronEnergy=(1.+r)*PairEnergy/2. ;
+  G4double ElectronEnergy = (1.-r)*PairEnergy*0.5;
+  G4double PositronEnergy = PairEnergy - ElectronEnergy;
 
   //  angles of the emitted particles ( Z - axis along the parent particle)
   //      (mean theta for the moment)
