@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4NistElementBuilder.hh,v 1.1 2005-02-09 16:03:48 maire Exp $
+// $Id: G4NistElementBuilder.hh,v 1.2 2005-02-11 17:30:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4NistElementBuilder_h
@@ -65,10 +65,10 @@ public:
   void SetVerbose   (G4int vb) {verbose = vb;};
   void PrintElement (G4int Z, G4bool isotopes = false);
     
-  // Find or build G4element by atomic number  
+  // Find or build a G4Element by atomic number  
   const G4Element* FindOrBuildElement (G4int Z, G4bool buildIsotopes = true);
 
-  // Find  or build G4element by symbol
+  // Find  or build a G4Element by symbol
   const G4Element* FindOrBuildElement (const G4String& symb,
                                        G4bool buildIsotopes = true);
 
