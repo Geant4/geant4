@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.37 2001-08-14 18:31:31 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.38 2001-08-17 23:03:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -72,6 +72,7 @@ and its viewers must be smart enough to know when to recalculate
 graphics-system-dependent quantities when the scene or the view parameters
 change.
 
+See G4VisManager.hh and G4ViewParameters.hh for a more extended description.
 
 Scenes
 ======
