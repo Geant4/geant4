@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.15 2005-03-23 17:16:31 allison Exp $
+// $Id: G4BooleanSolid.cc,v 1.16 2005-04-04 09:44:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -34,7 +34,7 @@
 // --------------------------------------------------------------------
 
 #include "G4BooleanSolid.hh"
-
+#include "G4VSolid.hh"
 #include "G4Polyhedron.hh"
 
 //////////////////////////////////////////////////////////////////
