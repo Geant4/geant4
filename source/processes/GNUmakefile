@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.9 2000-05-26 07:17:24 stesting Exp $
+# $Id: GNUmakefile,v 1.10 2000-06-11 11:24:26 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -21,7 +21,6 @@ SUBDIRS += hadronic/models/generator/high_energy
 SUBDIRS += hadronic/models/generator/kinetic_model
 SUBDIRS += hadronic/models/generator/management
 SUBDIRS += hadronic/models/generator/pre_equilibrium
-SUBDIRS += hadronic/models/generator/radiative_decay
 SUBDIRS += hadronic/models/generator/quark_gluon_string
 SUBDIRS += hadronic/models/generator/string_common
 SUBDIRS += hadronic/models/generator/string_fragmentation
@@ -37,9 +36,10 @@ SUBLIBS += G4hadronic_mgt G4hadronic_util G4hadronic_proc
 SUBLIBS += G4hadronic_xsect G4hadronic_stop G4hadronic_LE G4hadronic_HE
 SUBLIBS += G4hadronic_neu G4hadronic_iso
 SUBLIBS += G4hadronic_deex G4hadronic_diffstring G4hadronic_HE_gen G4hadronic_kinetic
-SUBLIBS += G4hadronic_radioactivedecay G4hadronic_qgstring
+SUBLIBS += G4hadronic_qgstring
 SUBLIBS += G4hadronic_man_gen G4hadronic_preequ G4hadronic_string_common
 SUBLIBS += G4hadronic_stringfrag G4hadronic_util_gen
+SUBLIBS += G4hadronic_radioactivedecay
 
 ifndef G4INSTALL
   G4INSTALL = ../..
