@@ -13,6 +13,14 @@ class G4HadronicException : public std::exception
     theMessage = mess;
     theName = in;
     theLine = at;
+    
+    if(getenv("DumpCoreOnHadronicException") )
+    {
+      Report(G4cout);
+      G4Exception("G4HadronicException", "007", FatalException,
+                  "Fatal problem in above location");
+    }
+    
   }
   virtual ~G4HadronicException() throw () {}
   
