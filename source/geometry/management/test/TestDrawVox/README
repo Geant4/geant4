@@ -1,0 +1,26 @@
+$Id: README,v 1.1 1999-07-28 17:57:19 graignac Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Test01
+                            ------
+
+  The purpose of this test is to excersize the geometry extensively, and 
+try to validate its jobs.
+
+ To run it you can use
+
+    g4test test01.in
+
+ which will compile, run it and check its output, 
+or compile it and say:
+
+./AIX-AFS/test01 < test01.in | tee test01.newout
+diff test01.out test01.newout
+
+to run it and check the output yourself.
+
+    J. Apostolakis, July 5th, 1998

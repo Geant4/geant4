@@ -1,0 +1,12 @@
+/mydet/SelectDetector Honeycomb
+/run/initialize
+#/vis~/create_view/new_graphics_system  VRML1FILE
+/vis~/create_view/new_graphics_system DAWN
+/vis/draw/current
+/run/beamOn 1
+/vis/show/view
+
+#hello, I have voxelised
+
+#/vis/refresh/view
+#/run/geometryModified
