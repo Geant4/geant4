@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DisplacedSolid.cc,v 1.17 2003-06-16 16:53:15 gunter Exp $
+// $Id: G4DisplacedSolid.cc,v 1.18 2003-10-28 14:41:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4DisplacedSolid class for boolean 
@@ -318,7 +318,9 @@ G4DisplacedSolid::ComputeDimensions(       G4VPVParameterisation*,
                                      const G4VPhysicalVolume* ) 
 {
   DumpInfo();
-  G4Exception("G4DisplacedSolid::ComputeDimensions() - has no meaning!");
+  G4Exception("G4DisplacedSolid::ComputeDimensions()",
+                "NotApplicable", FatalException,
+                "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////

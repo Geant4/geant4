@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BooleanSolid.cc,v 1.9 2003-06-16 16:53:14 gunter Exp $
+// $Id: G4BooleanSolid.cc,v 1.10 2003-10-28 14:41:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for the abstract base class for solids created by boolean 
@@ -114,7 +114,9 @@ const G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no) const
   else
   {
     DumpInfo();
-    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid solid index");
+    G4Exception("G4BooleanSolid::GetConstituentSolid()",
+                "WrongArgumentValue", FatalException,
+                "Invalid solid index.");
   }
 
   return subSolid;
@@ -136,7 +138,9 @@ G4VSolid* G4BooleanSolid::GetConstituentSolid(G4int no)
   else
   {
     DumpInfo();
-    G4Exception("G4BooleanSolid::GetConstituentSolid() - invalid solid index");
+    G4Exception("G4BooleanSolid::GetConstituentSolid()",
+                "WrongArgumentValue", FatalException,
+                "Invalid solid index.");
   }
 
   return subSolid;

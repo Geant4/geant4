@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.11 2003-06-16 16:53:17 gunter Exp $
+// $Id: G4ReflectedSolid.cc,v 1.12 2003-10-28 14:41:47 gcosmo Exp $
 //
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -292,7 +292,9 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   else
   {
     DumpInfo();
-    G4Exception("G4ReflectedSolid::CalculateExtent() - Out of memory !");
+    G4Exception("G4ReflectedSolid::CalculateExtent()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   
   ClipCrossSection(vertices,0,pVoxelLimit,pAxis,pMin,pMax) ;
@@ -477,7 +479,9 @@ G4ReflectedSolid::ComputeDimensions(       G4VPVParameterisation*,
                                      const G4VPhysicalVolume* ) 
 {
   DumpInfo();
-  G4Exception("G4ReflectedSolid::ComputeDimensions() - has no meaning!");
+  G4Exception("G4BooleanSolid::ComputeDimensions()",
+               "NotApplicable", FatalException,
+               "Method not applicable in this context!");
 }
 
 //////////////////////////////////////////////////////////////////////////
