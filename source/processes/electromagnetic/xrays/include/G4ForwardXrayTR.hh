@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ForwardXrayTR.hh,v 1.5 2000-04-03 13:45:41 grichine Exp $
+// $Id: G4ForwardXrayTR.hh,v 1.6 2000-04-06 13:55:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4ForwardXrayTR -- header file
@@ -62,8 +62,9 @@ public:
 
 //  G4ForwardXrayTR(const G4ForwardXrayTR& right) ;
 
-// Destructor
-   virtual ~G4ForwardXrayTR() ;
+// Destructor //  virtual
+
+ ~G4ForwardXrayTR() ;
 
 // Operators
 // G4ForwardXrayTR& operator=(const G4ForwardXrayTR& right) ;
