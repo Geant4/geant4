@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.10 2002-07-19 17:32:50 vnivanch Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.11 2002-07-30 10:06:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -516,9 +516,9 @@ G4int G4VCrossSectionHandler::SelectRandomAtom(const G4Material* material, G4dou
 
   G4double random = G4UniformRand() * materialCrossSection0;
 
-  for (i=0 ; i < nElements ; i++ )
+  for (G4int k=0 ; k < nElements ; k++ )
     { 
-      if (random <= cross[i]) return (G4int) (*elementVector)[i]->GetZ();
+      if (random <= cross[k]) return (G4int) (*elementVector)[k]->GetZ();
     }
   // It should never get here
   return 0;
@@ -559,9 +559,9 @@ const G4Element* G4VCrossSectionHandler::SelectRandomElement(const G4Material* m
 
       G4double random = G4UniformRand() * materialCrossSection0;
 
-      for (i=0 ; i < nElements ; i++ )
+      for (G4int k=0 ; k < nElements ; k++ )
         { 
-          if (random <= cross[i]) return (*elementVector)[i];
+          if (random <= cross[k]) return (*elementVector)[k];
         }
       // It should never end up here
       G4cout << "G4VCrossSectionHandler::SelectRandomElement - no element found" << G4endl;
