@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.icc,v 1.7 2004-09-26 01:18:17 asaim Exp $
+// $Id: G4Region.icc,v 1.8 2004-09-28 14:16:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,7 +109,8 @@ inline
 std::vector<G4LogicalVolume*>::iterator
 G4Region::GetRootLogicalVolumeIterator()
 {
-  G4RootLVList::iterator iterator =  G4RootLVList::iterator(fRootVolumes.begin());
+  G4RootLVList::iterator iterator =
+    G4RootLVList::iterator(fRootVolumes.begin());
   return iterator;
 }
 
@@ -185,7 +186,8 @@ void G4Region::ClearMap()
 // ********************************************************************
 //
 inline
-void G4Region::RegisterMateralCouplePair(G4Material* mat,G4MaterialCutsCouple* couple)
+void G4Region::RegisterMaterialCouplePair(G4Material* mat,
+                                          G4MaterialCutsCouple* couple)
 {
   fMaterialCoupleMap.insert(G4MaterialCouplePair(mat,couple));
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.8 2004-09-26 01:18:17 asaim Exp $
+// $Id: G4Region.hh,v 1.9 2004-09-28 14:16:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -110,16 +110,17 @@ class G4Region
 
     void SetUserInformation(G4VUserRegionInformation* ui);
     G4VUserRegionInformation* GetUserInformation() const;
-      // Set and Get methods for user information
+      // Set and Get methods for user information.
 
     void ClearMap();
       // Reset G4MaterialCoupleMap
 
-    void RegisterMateralCouplePair(G4Material* mat,G4MaterialCutsCouple* couple);
-      // This method should be invoked by G4ProductionCutsTable
+    void RegisterMaterialCouplePair(G4Material* mat, G4MaterialCutsCouple*);
+      // Method invoked by G4ProductionCutsTable to register the pair.
 
     G4MaterialCutsCouple* FindCouple(G4Material* mat);
-      // Find a G4MaterialCutsCouple which corresponds to the material in this region
+      // Find a G4MaterialCutsCouple which corresponds to the material
+      // in this region.
 
   private:
 
