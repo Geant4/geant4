@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.31 2004-08-03 15:55:37 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.32 2004-11-11 16:06:12 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -317,15 +317,6 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   switch (polymarker.GetMarkerType()) {
   default:
-  case G4Polymarker::line:
-    {
-      G4Polyline polyline (polymarker);
-      for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
-	polyline.push_back (polymarker[iPoint]);
-      }
-      AddPrimitive (polyline);
-    }
-    break;
   case G4Polymarker::dots:
     {
       for (size_t iPoint = 0; iPoint < polymarker.size (); iPoint++) {
@@ -403,13 +394,12 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   default:
     G4Polyhedron::SetNumberOfRotationSteps
 	(fpModel -> GetModelingParameters () -> GetNoOfSides ());
-    pPolyhedron = solid.CreatePolyhedron ();
+    pPolyhedron = solid.GetPolyhedron ();
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
       pPolyhedron -> SetVisAttributes
 	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
       AddPrimitive (*pPolyhedron);
-      delete pPolyhedron;
     }
     else {
       G4VisManager::Verbosity verbosity =
