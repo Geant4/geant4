@@ -128,16 +128,10 @@ then
 chmod +x ${G4WORKDIR}/bin/${G4SYSTEM}/*
 fi
 
-if [ X$ACTION = Xrun -o X$ACTION = Xall ]
+if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
 then
 ${G4INSTALL}/tests/tools/bin/run.sh $ACTARG3
 fi
-
-if [ X$ACTION = Xdiff ]
-then
-${G4INSTALL}/tests/tools/bin/diff.sh $ACTARG3
-fi
-
 ####################################################################
 
 ########################
