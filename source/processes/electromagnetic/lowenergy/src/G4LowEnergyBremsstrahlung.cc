@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.50 2001-10-29 09:11:54 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.51 2001-10-29 09:24:55 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -186,7 +186,6 @@ void G4LowEnergyBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aPart
   theLossTable = new G4PhysicsTable(numOfMaterials);
   
   // Clean up the vector of cuts
-
   cutForSecondaryPhotons.clear();
 
   // Loop for materials
