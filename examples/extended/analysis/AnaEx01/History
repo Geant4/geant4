@@ -1,4 +1,4 @@
-$Id: History,v 1.1.1.1 2000-09-14 11:37:21 barrand Exp $
+$Id: History,v 1.2 2001-06-20 06:49:05 barrand Exp $
 --------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 June 2001, Guy Barrand :
+- AnaEx01SteppingVerbose.cc : replace "entries" to "size" in order
+  to compile with 03-00-ref-03 kernel.
 
 14 September 2000, Guy Barrand :
 - Birth.

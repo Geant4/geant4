@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: AnaEx01SteppingVerbose.cc,v 1.1.1.1 2000-09-14 11:37:21 barrand Exp $
+// $Id: AnaEx01SteppingVerbose.cc,v 1.2 2001-06-20 06:49:06 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -95,12 +95,12 @@ void AnaEx01SteppingVerbose::StepInfo()
 	       << ",Along=" << G4std::setw(2) << fN2ndariesAlongStepDoIt
 	       << ",Post="  << G4std::setw(2) << fN2ndariesPostStepDoIt
 	       << "), "
-	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).entries()
+	       << "#SpawnTotal=" << G4std::setw(3) << (*fSecondary).size()
 	       << " ---------------"
 	       << G4endl;
 
-	for(G4int lp1=(*fSecondary).entries()-tN2ndariesTot; 
-                        lp1<(*fSecondary).entries(); lp1++){
+	for(G4int lp1=(*fSecondary).size()-tN2ndariesTot; 
+                        lp1<(*fSecondary).size(); lp1++){
 	  G4cout << "    : "
 		 << G4std::setw(6)
 		 << G4BestUnit((*fSecondary)[lp1]->GetPosition().x(),"Length")
@@ -114,7 +114,6 @@ void AnaEx01SteppingVerbose::StepInfo()
 		 << (*fSecondary)[lp1]->GetDefinition()->GetParticleName();
 	  G4cout << G4endl;
 	}
-              
 	G4cout << "    :-----------------------------"
 	       << "----------------------------------"
 	       << "-- EndOf2ndaries Info ---------------"
