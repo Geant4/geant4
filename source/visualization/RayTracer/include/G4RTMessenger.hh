@@ -5,9 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RTMessenger.hh,v 1.2 2000-03-09 15:36:34 asaim Exp $
+// $Id: G4RTMessenger.hh,v 1.3 2000-03-09 17:38:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+
+// class description:
+//
+//  This is a concrete class of G4UImessenger. This class defines various
+// UI commands which are unique to G4RayTracer.
 //
 
 

@@ -5,9 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RTJpegMaker.hh,v 1.3 2000-03-09 15:36:34 asaim Exp $
+// $Id: G4RTJpegMaker.hh,v 1.4 2000-03-09 17:38:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+
+// class description:
+//
+//  This is a concrete class of G4VFigureFileMaker.
+//  This class converts 8 bits unsighned integer arrays which represent RGB of
+// each pixel to JPEG code and stores it to a file. The only one public method
+// of this class will be invoked by G4RayTracer.
 //
 
 #ifndef G4RTJpegMaker_H

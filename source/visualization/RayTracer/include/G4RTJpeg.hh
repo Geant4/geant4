@@ -5,10 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RTJpeg.hh,v 1.3 2000-03-09 15:36:33 asaim Exp $
+// $Id: G4RTJpeg.hh,v 1.4 2000-03-09 17:38:31 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
+
+// class description:
+//
+//  This header file defines some static constant variables and error classes
+// used internally by G4JpegMaker and related classes
+//
+
 #ifndef G4RTJpeg_H
 #define G4RTJpeg_H 1
 

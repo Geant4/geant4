@@ -5,9 +5,14 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RTJpegCoderTables.hh,v 1.3 2000-03-09 15:36:34 asaim Exp $
+// $Id: G4RTJpegCoderTables.hh,v 1.4 2000-03-09 17:38:32 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+// class description:
+//  
+//  This header file defines some hard coded numbers used by G4RTJpegCoder
+// to convert 8 bits RGB to JPEG.
 //
 
 #ifndef G4RTJpegCoderTable_H

@@ -5,9 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectory.hh,v 1.4 2000-03-09 15:36:35 asaim Exp $
+// $Id: G4RayTrajectory.hh,v 1.5 2000-03-09 17:38:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+
+// class description:
+//
+//  This is a concrete class of G4VTrajectory which represents a trajectory of a ray.
+//  This class is used by G4RayTracer. Objects of this class are created by G4RTTrackingAction.
+//  This class does not have concrete implementations of draw and print methods but
+// information stored in this class is used by determining a colour of a pixel of the picture.
 //
 
 ///////////////////

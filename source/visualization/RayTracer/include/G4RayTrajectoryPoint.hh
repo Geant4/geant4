@@ -5,9 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTrajectoryPoint.hh,v 1.2 2000-03-09 15:36:35 asaim Exp $
+// $Id: G4RayTrajectoryPoint.hh,v 1.3 2000-03-09 17:38:33 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+//
+
+// class description:
+//
+//  This is a concrete class of G4VTrajectoryPoint which represents a point where
+// a ray crosses upon a surface of a volume regardless of its visibility. Objects
+// of this class are created by G4RayTrajectory class object.
 //
 
 /////////////////////////
