@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsdvn.cc,v 1.7 2001-07-11 09:59:01 gunter Exp $
+// $Id: G4gsdvn.cc,v 1.8 2002-10-23 17:21:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi, 29 Oct 99
@@ -59,10 +59,10 @@ void G4CreateCloneVTEWithDivision(G4String vname, G3VolTableEntry* mvte,
     G4String shape = mvteClone->GetShape();
     G4int    nmed  = mvteClone->GetNmed();
     G4String mvteName = mvteClone->GetName();
-
+    
     G4String newName = vname;
     if (i>0) {
-      char index[4]; sprintf(index, "%d", i);
+      char index[5]; sprintf(index, "%d", i);
       newName.append(gSeparator); newName = newName + index;
     }	
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsposp.cc,v 1.14 2001-07-11 09:59:02 gunter Exp $
+// $Id: G4gsposp.cc,v 1.15 2002-10-23 17:21:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 13.10.99
@@ -138,7 +138,7 @@ void G4CloneDaughters(G3VolTableEntry* vte, G3VolTableEntry* vteClone)
 
         // generate vteClone name
         G4int cloneNo = dvteMaster->GetNoClones();
-        char index[4]; sprintf(index,"%d",cloneNo);
+        char index[5]; sprintf(index,"%d",cloneNo);
         G4String newName = dvteMaster->GetName();
         newName.append(gSeparator); newName = newName + index;
         
@@ -169,7 +169,7 @@ void G4CloneDaughters(G3VolTableEntry* vte, G3VolTableEntry* vteClone)
 	G3Division* dvteDivision = dvte->GetDivision();
 	if (dvteDivision) {          
 	  G3Division* dvteCloneDivision
-	    = new G3Division(dvteClone, vte, *dvteDivision);
+	    = new G3Division(dvteClone, vteClone, *dvteDivision);
           dvteClone->SetDivision(dvteCloneDivision);
           dvteCloneDivision->UpdateVTE();
 	}  
@@ -261,9 +261,9 @@ void G4CreateCloneVTE(G3VolTableEntry* vte, G3VolTableEntry* mvte,
       }
    
       if ( negpars || !(vteSameClone)) {
-        // generate vteClone name
+        // generate vteClone name	  
         G4int cloneNo = vte->GetNoClones();
-        char index[4]; sprintf(index,"%d",cloneNo);
+        char index[5]; sprintf(index,"%d",cloneNo);
         G4String newName = vte->GetName();
         newName.append(gSeparator); newName = newName + index;
         
