@@ -1,0 +1,64 @@
+#
+# Auto-generated test input file for test12 hadronics.
+#
+# /control/verbose 2
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# proton at 10 GeV in U
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# neutron at 10 GeV in U
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# proton at 10 GeV in Cu
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# neutron at 10 GeV in Cu
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
+/run/beamOn 20
+#
+# proton at 10 GeV in Si
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# neutron at 10 GeV in Si
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# proton at 10 GeV in H
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# neutron at 10 GeV in H
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
