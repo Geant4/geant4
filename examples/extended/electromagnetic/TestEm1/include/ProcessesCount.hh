@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: ProcessesCount.hh,v 1.4 2001-03-08 14:57:43 maire Exp $
+// $Id: ProcessesCount.hh,v 1.5 2001-03-08 16:45:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -29,12 +29,6 @@ class OneProcessCount
 public:
     OneProcessCount(G4String name) {Name=name; Counter=0;};
    ~OneProcessCount() {};
-    G4int operator==(const OneProcessCount& right) const {return (this==&right);};
-    G4int operator!=(const OneProcessCount& right) const {return (this!=&right);};
-    
-private:
-    OneProcessCount(OneProcessCount& right)                        {*this= right;};
-    const OneProcessCount& operator=(const OneProcessCount& right) {return right;};
    
 public:
     G4String      GetName()       {return Name;};
