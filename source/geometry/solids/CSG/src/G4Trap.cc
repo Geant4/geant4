@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.28 2004-12-02 09:31:29 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.29 2004-12-12 15:55:20 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -29,6 +29,7 @@
 // Implementation for G4Trap class
 //
 // History:
+// 12.12.04 V.Grichine: SurfaceNormal with edges/vertices 
 // 15.11.04 V.Grichine: bug fixed in G4Trap("name",G4ThreeVector[8] vp)
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
 // 19.11.99 V.Grichine: kUndef was added to Eside enum
@@ -1074,34 +1075,172 @@ EInside G4Trap::Inside( const G4ThreeVector& p ) const
 
 G4ThreeVector G4Trap::SurfaceNormal( const G4ThreeVector& p ) const
 {
-  G4double safe=kInfinity,Dist,safez;
-  G4int i,imin=0;
-  for (i=0;i<4;i++)
+  G4double safe = kInfinity, dist, distz;
+  G4ThreeVector norm;
+  G4int i, imin = 0;
+
+  for (i = 0; i < 4; i++)
   {
-    Dist=std::fabs(fPlanes[i].a*p.x()+fPlanes[i].b*p.y()
-        +fPlanes[i].c*p.z()+fPlanes[i].d);
-    if (Dist<safe)
+    dist =  std::fabs(fPlanes[i].a*p.x() + fPlanes[i].b*p.y()
+          + fPlanes[i].c*p.z() + fPlanes[i].d);
+    if ( dist < safe )
     {
-      safe=Dist;
-      imin=i;
+      safe = dist;
+      imin = i;
     }
   }
-  safez=std::fabs(std::fabs(p.z())-fDz);
-  if (safe<safez)
+  distz = std::fabs(std::fabs( p.z() ) - fDz );
+
+
+
+#ifndef G4NEW_SURF_NORMAL
+
+  if (safe < distz)
   {
-    return G4ThreeVector(fPlanes[imin].a,fPlanes[imin].b,fPlanes[imin].c);
+    norm = G4ThreeVector(fPlanes[imin].a,fPlanes[imin].b,fPlanes[imin].c);
   }
   else
   {
-    if (p.z()>0)
+    if ( p.z() > 0 ) norm = G4ThreeVector(0,0,1);
+    else             norm =  G4ThreeVector(0,0,-1);
+    
+  }
+
+
+#else
+
+  // New code for particle on surface including edges and corners with specific
+  // normals
+  G4double distx,disty,distmx,distmy;
+  G4double delta    = 0.5*kCarTolerance;
+  distmy            =  std::fabs(fPlanes[0].a*p.x() + fPlanes[0].b*p.y()
+          + fPlanes[0].c*p.z() + fPlanes[0].d);
+  disty             =  std::fabs(fPlanes[1].a*p.x() + fPlanes[1].b*p.y()
+          + fPlanes[1].c*p.z() + fPlanes[1].d);
+  distmx            =  std::fabs(fPlanes[2].a*p.x() + fPlanes[2].b*p.y()
+          + fPlanes[2].c*p.z() + fPlanes[2].d);
+  disty             =  std::fabs(fPlanes[3].a*p.x() + fPlanes[3].b*p.y()
+          + fPlanes[3].c*p.z() + fPlanes[3].d);
+
+  G4ThreeVector nX  = G4ThreeVector(fPlanes[3].a,fPlanes[3].b,fPlanes[3].c);
+  G4ThreeVector nmX = G4ThreeVector(fPlanes[2].a,fPlanes[2].b,fPlanes[2].c);
+  G4ThreeVector nY  = G4ThreeVector(fPlanes[1].a,fPlanes[1].b,fPlanes[1].c);
+  G4ThreeVector nmY = G4ThreeVector(fPlanes[0].a,fPlanes[0].b,fPlanes[0].c);
+  G4ThreeVector nZ  = G4ThreeVector( 0, 0,  1.0);
+  G4ThreeVector nmZ = G4ThreeVector( 0, 0, -1.0);
+
+  if (distx <= delta || 
+      distmx <= delta)        // on X/mX surface and around
+  {
+    if ( distx <= delta )     // on X surface
     {
-      return G4ThreeVector(0,0,1);
+      if (disty <= delta || distmy <= delta )
+      {
+        if (distz <= delta)   // corners around X surface
+        {
+          if ( disty <= delta )
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nY + nZ  ).unit();
+            else              norm = ( nX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nX + nmY + nZ  ).unit();
+            else              norm = ( nX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on XY edges
+	{
+          if ( disty <= delta )   norm = ( nX + nY  ).unit();
+          else                    norm = ( nX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on XZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nX + nZ  ).unit();
+          else                norm = ( nX + nmZ ).unit();
+        }
+        else                  norm = nX;        
+      }
     }
-    else
+    else                      // on mX surface
     {
-      return G4ThreeVector(0,0,-1);
+      if (disty <= delta || distmy <= delta)
+      {
+        if (distz <= delta)   // corners around mX surface
+        {
+          if ( disty <= delta )
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nY + nZ  ).unit();
+            else              norm = ( nmX + nY + nmZ ).unit(); 
+	  }
+          else
+	  {
+            if ( p.z() >= 0.) norm = ( nmX + nmY + nZ  ).unit();
+            else              norm = ( nmX + nmY + nmZ ).unit(); 
+	  }
+        }
+        else                  // on mXY edges
+	{
+          if (disty <= delta )  norm = ( nmX + nY  ).unit();
+          else                  norm = ( nmX + nmY ).unit();
+	}        
+      }
+      else
+      {
+        if (distz <= delta)   // on mXZ edges
+        {
+          if ( p.z() >= 0.)   norm = ( nmX + nZ  ).unit();
+          else                norm = ( nmX + nmZ ).unit();
+        }
+        else                  norm = nmX;        
+      }
     }
   }
+  else
+  {
+    if (disty <= delta || distmy <= delta)
+    {
+      if (distz <= delta)     // on YZ edges
+      {
+        if ( disty <= delta )
+	{
+          if ( p.z() >= 0.)   norm = ( nY + nZ  ).unit();
+          else                norm = ( nY + nmZ ).unit(); 
+	}
+        else
+	{
+            if ( p.z() >= 0.) norm = ( nmY + nZ  ).unit();
+            else              norm = ( nmY + nmZ ).unit(); 
+	}
+      }
+      else                    // on Y/mY surfaces
+      {
+        if (disty <= delta)   norm = nY;
+        else                  norm = nmY;
+      } 
+    }
+    else                      // on Z/mZ surfaces
+    {
+      if (distz <= delta) 
+      {
+          if ( p.z() >= 0.)   norm = nZ;
+          else                norm = nmZ; 
+      }
+      else                    // is not on surface !?
+      {
+        G4Exception("G4Trap::SurfaceNormal(p)", "Notification", JustWarning, 
+                    "Point p is not on surface !?" ); 
+      }
+    }      
+  }
+
+#endif
+
+  
+  return norm;
 }
 
 ////////////////////////////////////////////////////////////////////////////
