@@ -5,6 +5,13 @@
                     ----------------------------------------
                             (Martin.Liendl@cern.ch)
 
+ 1  Abbreviations
+ 2  Introduction
+ 3  Instrumenting the example with a user-geometry
+ 4  Reference of command line commands
+ 5  Known Problems
+
+
 1 Abbreviations
 ===============
 
@@ -123,21 +130,6 @@ navigational command and the DVs beeing the direct daughters of the MV.
 /olap/pwd always shows where in the full geometrical hierarchy the
 current NewWorld and MV is located.
 
-[[*** The following is experimental ***************************************
-
-Visualization can also be enabled from the command line. Simply type
-/olap/syncVis 1
-where the argument is a boolean and '0' turns the visualization off.
-If turned on every change of NewMother should also trigger a redraw
-of the chosen visualization driver. If the viewer is not updated,
-a flush can be triggered by /vis/viewer/update. Using VRML2FILE as
-visualization output, ECalBarrelAlveola_2 can be viewed in an appropriate
-VRML viewer:([fig] <fig:alv>Example of a NewWorld with a NewMother
-in red and her daughters in blue (Alveola structure and contained
-crystals of the CMS Ecal). ) 
-
-]]********************************************************************
-
 
 3.3 Detecting Overlaps
 ----------------------
@@ -155,15 +147,6 @@ To start overlap detection type
 
 After all 147 events are processed, a summary of detected overlaps
 is given. Multiple detected overlaps are only reported once 
-***** currently multiple detected overlaps can appear multiple
-***** times in the result **************************************
-
-[[********************************** experimental ***********************
-If visualization
-was enabled, the detected overlaps are visualized with green markers
-as shown in Fig. [fig:olap]. In this figure the NewMother is visualized
-in blue and her daughters in red.
-]]************************************************************************
 
 Error reports are written to G4cerr and to a log file if this is chosen
 (see section on output). The output looks like this:
@@ -177,18 +160,14 @@ delta=51
 vol 1: point=(-23,0,-40.02) vol 2: point=(-74,0,-40.02) axis=0 
 
 A -> B: 
-
 [0]: ins=[i] PVName=[NewWorld:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
 G4Box: x/2=1234.23 y/2=1234.23 z/2=60.06 
-
 [1]: ins=[o] PVName=[SiliconPatchPanel:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
 G4Tubs: z/2=60 rIn=74 rOut=1233 startPhi=0 deltaPhi=6.28319 
-
 [2]: ins=[s] PVName=[SiliconPatchPanel1:1] Type=[N] P=(-0,-0,-40) R=[0,90,90,90,0,0]
 G4Tubs: z/2=20 rIn=23 rOut=1135 startPhi=0 deltaPhi=6.28319 
 
 B -> A: 
-
 [0]: ins=[i] PVName=[NewWorld:0] Type=[N] P=(-0,-0,-0) R=[0,90,90,90,0,0]
 G4Box: x/2=1234.23 y/2=1234.23 z/2=60.06 
 
@@ -197,13 +176,15 @@ at least this distance. The following coordinates of points are points
 on the boundary of the overlapping volumes. In case of no overlap
 they should be the same points. The first point was found when tracking
 from A to B, while the second point was found when tracking from B
-to A. The minimum overlap for the program to detect, the boundary
-tolerance, can be set using the
+to A. Using the command
+/olap/delta <DELTA> <unit>
+the accuracy for detecting an overlap can be set. Overlaps will only
+be reported if two volumes overlap at least DELTA*unit on one of the
+genantino tracks scanning the volumes.
+The default value is 1 nm, which is quite tight.
 
-/olap/delta <value> <unit>
-
-where the default value is 1 nm.  To identify the overlapping volumes,
-the NavigationHistories of the two points are also printed.
+To identify the overlapping volumes,
+the NavigationHistories of the two points are also shown in the output.
 The format of these histories is as follows:
 
 [A]: ins=[B] PVName=[C] Type=[D] P=(E) R=[F] G
@@ -223,15 +204,42 @@ F --> Rotation(in deg:phiX,thetaX,phiY,..)
 
 G --> Solidtype: specification
 
-Example:
+In the sample output given above, one can deduce that 'SiliconPatchPanel1'
+with copy-no 1 is overlapping its mother 'SiliconPatchPanel'.
+A schematic sketch of this situation is below:
 
-[2]: ins=[s] PVName=[SiliconPatchPanel1:1] Type=[N] P=(-0,-0,-40) R=[0,90,90,90,0,0]
-G4Tubs: z/2=20 rIn=23 rOut=1135 startPhi=0 deltaPhi=6.28319
+(x=0)                                                      (x=-1234*mm)
+(B) <----------------------------------------------------> (A)
+ 
+  -------------------------------------------------------
+  |NewWorld                                             |
+  |        -------------------------------------------  |
+  |        |SiliconPatchPanel                        |  |
+  |        |                                         |  |
+  |    -----------------------------------           |  |
+  |    |SiliconPatchPanel1               |           |  |
+  |    |                                 |           |  |
+  |....x...*.............................|...........|..|
+  |    |                                 |           |  |
+  |    -----------------------------------           |  |
+  |        |                                         |  |
+  |        -------------------------------------------  |
+  |                                                     |
+  -------------------------------------------------------                      
 
-From the given information, one can deduce that SiliconPatchPanel1
-with copy-no 1 is overlapping its mother and therefore also indirectly
-the mother of its mother, the world-volume envelope called NewWorld.
-
+... = geantino rays from (A) to (B) and from (B) to (A)
+ x  = point found when tracking from (A) to (B)
+ *  = point found wehn tracking from (B) to (A)
+ 
+ 'x' and '*' should be on the same position in case of no
+ overlaps. But they are not, because 'SiliconPatchPanel1' is
+ protruding its mother volume 'SiliconPatchPanel'. 
+ The output report always assigns a point to the volume which
+ is left behind the current direction of the geantino ray.
+ In the example 'x' is assigned to 'SiliconPatchPanel1', because
+ the tracking direction was (A) to (B). On the other hand side,
+ '*' is assigned to 'NewWorld', because the tracking direction
+ was (B) to (A).
 
 3.4 Handling the output
 -----------------------
@@ -360,6 +368,51 @@ Default-filename is olap.log.
 /olap/logByVolume <path/>: Each logical volume makes its own file called
 NameOfLogicalVolume.log where overlap errors for that specific volume
 are put.
+
+
+5. Known Problem
+================
+
+. Overlaps of the same two volumes are sometimes reported more the one
+  time at the end of a run
+
+. Fake overlaps are reported sometimes when many boundaries of volumes
+  are parallel to the axis of 'NewWorld'. In this case, try to
+  use /olap/rotate to rotate the volumes inside 'NewWorld', set the
+  'NewWorld' again and redo the overlap scan.
+
+. Fake overlaps can be reported when the Geant4 tracking algorithm
+  gets 'caught' between volume boundaries (many small steps ...)
+
+. Visualization of overlaps is not yet correctly supported.
+
+
+----------------------------------------------------------------------------
+END OF README
+please don't read stuff below ...
+----------------------------------------------------------------------------
+
+[[********************************** experimental ***********************
+3.3
+If visualization
+was enabled, the detected overlaps are visualized with green markers
+as shown in Fig. [fig:olap]. In this figure the NewMother is visualized
+in blue and her daughters in red.
+]]************************************************************************
+
+[[*** The following is experimental ***************************************
+Visualization can also be enabled from the command line. Simply type
+/olap/syncVis 1
+where the argument is a boolean and '0' turns the visualization off.
+If turned on every change of NewMother should also trigger a redraw
+of the chosen visualization driver. If the viewer is not updated,
+a flush can be triggered by /vis/viewer/update. Using VRML2FILE as
+visualization output, ECalBarrelAlveola_2 can be viewed in an appropriate
+VRML viewer:([fig] <fig:alv>Example of a NewWorld with a NewMother
+in red and her daughters in blue (Alveola structure and contained
+crystals of the CMS Ecal). ) 
+
+]]********************************************************************
 
 
 [[************************************** experimental **********************
