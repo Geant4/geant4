@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.h,v 1.9 2001-07-11 10:01:06 gunter Exp $
+// $Id: HepPolyhedron.h,v 1.10 2002-11-07 16:19:07 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -148,6 +148,9 @@
 // 25.05.01 E.Chernyaev
 // - added GetSurfaceArea() and GetVolume();
 //
+// 05.11.02 E.Chernyaev
+// - added createTwistedTrap() and createPolyhedron();
+//
 
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
@@ -192,7 +195,7 @@ class HepPolyhedron {
   HepPoint3D *pV;
   G4Facet    *pF;
 
-  // Allocate memory for HepPolyhedron
+  // Re-allocate memory for HepPolyhedron
   void AllocateMemory(int Nvert, int Nface);
 
   // Find neighbouring facet
@@ -228,10 +231,7 @@ class HepPolyhedron {
 
  public:
   // Constructor
-  HepPolyhedron(int Nvert=0, int Nface=0)
-    : nvert(Nvert), nface(Nface),
-      pV(Nvert ? new HepPoint3D[Nvert+1] : 0),
-      pF(Nface ? new G4Facet[Nface+1] : 0) {}
+  HepPolyhedron() : nvert(0), nface(0), pV(0), pF(0) {}
 
   // Copy constructor
   HepPolyhedron(const HepPolyhedron & from);
@@ -323,6 +323,38 @@ class HepPolyhedron {
   static void ResetNumberOfRotationSteps() {
     fNumberOfRotationSteps = DEFAULT_NUMBER_OF_STEPS;
   }
+
+  /**
+   * Creates polyhedron for twisted trapezoid.
+   * The trapezoid is given by two bases perpendicular to the z-axis.
+   * 
+   * @param  Dz  half length in z
+   * @param  xy1 1st base (at z = -Dz)
+   * @param  xy2 2nd base (at z = +Dz)
+   * @return status of the operation - is non-zero in case of problem
+   */
+  int createTwistedTrap(double Dz,
+			const double xy1[][2], const double xy2[][2]);
+
+  /**
+   * Creates user defined polyhedron.
+   * This function allows to the user to define arbitrary polyhedron.
+   * The faces of the polyhedron should be either triangles or planar
+   * quadrilateral. Nodes of a face are defined by indexes pointing to
+   * the elements in the xyz array. Numeration of the elements in the
+   * array starts from 1 (like in fortran). The indexes can be positive
+   * or negative. Negative sign means that the corresponding edge is
+   * invisible. The normal of the face should be directed to exterior
+   * of the polyhedron. 
+   * 
+   * @param  Nnodes number of nodes
+   * @param  Nfaces number of faces
+   * @param  xyz    nodes
+   * @param  faces  faces (quadrilaterals or triangles)
+   * @return status of the operation - is non-zero in case of problem
+   */
+  int createPolyhedron(int Nnodes, int Nfaces,
+		       const double xyz[][3], const int faces[][4]);
 };
 
 class HepPolyhedronTrd2 : public HepPolyhedron {

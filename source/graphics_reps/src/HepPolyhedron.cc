@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: HepPolyhedron.cc,v 1.9 2001-07-11 10:01:10 gunter Exp $
+// $Id: HepPolyhedron.cc,v 1.10 2002-11-07 16:19:27 evc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,9 @@
 //
 // 25.05.01 E.Chernyaev
 // - added GetSurfaceArea() and GetVolume();
+//
+// 05.11.02 E.Chernyaev
+// - added createTwistedTrap() and createPolyhedron();
 //
   
 #include "HepPolyhedron.h"
@@ -91,18 +94,11 @@ HepPolyhedron::HepPolyhedron(const HepPolyhedron &from)
  * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
  *                                                                     *
  ***********************************************************************/
+: nvert(0), nface(0), pV(0), pF(0)
 {
-  if (from.nvert > 0 && from.nface > 0) {
-    nvert = from.nvert;
-    nface = from.nface;
-    pV = new HepPoint3D[nvert + 1];
-    pF = new G4Facet[nface + 1];
-    int i;
-    for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
-    for (i=1; i<=nface; i++) pF[i] = from.pF[i];
-  }else{
-    nvert = 0; nface = 0; pV = 0; pF = 0;
-  }
+  AllocateMemory(from.nvert, from.nface);
+  for (int i=1; i<=nvert; i++) pV[i] = from.pV[i];
+  for (int k=1; k<=nface; k++) pF[k] = from.pF[k];
 }
 
 HepPolyhedron & HepPolyhedron::operator=(const HepPolyhedron &from)
@@ -111,23 +107,14 @@ HepPolyhedron & HepPolyhedron::operator=(const HepPolyhedron &from)
  * Name: HepPolyhedron operator =                   Date:    23.07.96  *
  * Author: E.Chernyaev (IHEP/Protvino)              Revised:           *
  *                                                                     *
- * Function: Copy contents of one GEANT4 polyhedron to another         *
+ * Function: Copy contents of one polyhedron to another                *
  *                                                                     *
  ***********************************************************************/
 {
-  if (this == &from) return *this;
-  delete [] pV;
-  delete [] pF;
-  if (from.nvert > 0  && from.nface > 0) {
-    nvert = from.nvert;
-    nface = from.nface;
-    pV = new HepPoint3D[nvert + 1];
-    pF = new G4Facet[nface + 1];
-    int i;
-    for (i=1; i<=nvert; i++) pV[i] = from.pV[i];
-    for (i=1; i<=nface; i++) pF[i] = from.pF[i];
-  }else{
-    nvert = 0; nface = 0; pV = 0; pF = 0;
+  if (this != &from) {
+    AllocateMemory(from.nvert, from.nface);
+    for (int i=1; i<=nvert; i++) pV[i] = from.pV[i];
+    for (int k=1; k<=nface; k++) pF[k] = from.pF[k];
   }
   return *this;
 }
@@ -215,7 +202,7 @@ void HepPolyhedron::AllocateMemory(int Nvert, int Nface)
 /***********************************************************************
  *                                                                     *
  * Name: HepPolyhedron::AllocateMemory               Date:    19.06.96 *
- * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised: 05.11.02 *
  *                                                                     *
  * Function: Allocate memory for GEANT4 polyhedron                     *
  *                                                                     *
@@ -224,10 +211,17 @@ void HepPolyhedron::AllocateMemory(int Nvert, int Nface)
  *                                                                     *
  ***********************************************************************/
 {
-  nvert = Nvert;
-  nface = Nface;
-  pV    = new HepPoint3D[nvert+1];
-  pF    = new G4Facet[nface+1];
+  if (nvert == Nvert && nface == Nface) return;
+  if (pV != 0) delete [] pV;
+  if (pF != 0) delete [] pF;
+  if (Nvert > 0 && Nface > 0) {
+    nvert = Nvert;
+    nface = Nface;
+    pV    = new HepPoint3D[nvert+1];
+    pF    = new G4Facet[nface+1];
+  }else{
+    nvert = 0; nface = 0; pV = 0; pF = 0;
+  }
 }
 
 void HepPolyhedron::CreatePrism()
@@ -1243,6 +1237,106 @@ double HepPolyhedron::GetVolume() const
     v += ((pV[i2] - pV[i0]).cross(pV[i3] - pV[i1])).dot(g);
   }
   return v/6.;
+}
+
+int
+HepPolyhedron::createTwistedTrap(double Dz,
+				 const double xy1[][2],
+				 const double xy2[][2])
+/***********************************************************************
+ *                                                                     *
+ * Name: createTwistedTrap                           Date:    05.11.02 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Creates polyhedron for twisted trapezoid                  *
+ *                                                                     *
+ * Input: Dz       - half-length along Z             8----7            *
+ *        xy1[2,4] - quadrilateral at Z=-Dz       5----6  !            *
+ *        xy2[2,4] - quadrilateral at Z=+Dz       !  4-!--3            *
+ *                                                1----2               *
+ *                                                                     *
+ ***********************************************************************/
+{
+  AllocateMemory(12,18);
+
+  pV[ 1] = HepPoint3D(xy1[0][0],xy1[0][1],-Dz);
+  pV[ 2] = HepPoint3D(xy1[1][0],xy1[1][1],-Dz);
+  pV[ 3] = HepPoint3D(xy1[2][0],xy1[2][1],-Dz);
+  pV[ 4] = HepPoint3D(xy1[3][0],xy1[3][1],-Dz);
+
+  pV[ 5] = HepPoint3D(xy2[0][0],xy2[0][1], Dz);
+  pV[ 6] = HepPoint3D(xy2[1][0],xy2[1][1], Dz);
+  pV[ 7] = HepPoint3D(xy2[2][0],xy2[2][1], Dz);
+  pV[ 8] = HepPoint3D(xy2[3][0],xy2[3][1], Dz);
+
+  pV[ 9] = (pV[1]+pV[2]+pV[5]+pV[6])/4.;
+  pV[10] = (pV[2]+pV[3]+pV[6]+pV[7])/4.;
+  pV[11] = (pV[3]+pV[4]+pV[7]+pV[8])/4.;
+  pV[12] = (pV[4]+pV[1]+pV[8]+pV[5])/4.;
+
+  enum {DUMMY, BOTTOM,
+	LEFT_BOTTOM,  LEFT_FRONT,   LEFT_TOP,  LEFT_BACK,
+	BACK_BOTTOM,  BACK_LEFT,    BACK_TOP,  BACK_RIGHT,
+	RIGHT_BOTTOM, RIGHT_BACK,   RIGHT_TOP, RIGHT_FRONT,
+        FRONT_BOTTOM, FRONT_RIGHT,  FRONT_TOP, FRONT_LEFT,
+        TOP};
+
+  pF[ 1]=G4Facet(1,LEFT_BOTTOM, 4,BACK_BOTTOM, 3,RIGHT_BOTTOM, 2,FRONT_BOTTOM);
+
+  pF[ 2]=G4Facet(4,BOTTOM,     -1,LEFT_FRONT,  -12,LEFT_BACK,    0,0);
+  pF[ 3]=G4Facet(1,FRONT_LEFT, -5,LEFT_TOP,    -12,LEFT_BOTTOM,  0,0);
+  pF[ 4]=G4Facet(5,TOP,        -8,LEFT_BACK,   -12,LEFT_FRONT,   0,0);
+  pF[ 5]=G4Facet(8,BACK_LEFT,  -4,LEFT_BOTTOM, -12,LEFT_TOP,     0,0);
+
+  pF[ 6]=G4Facet(3,BOTTOM,     -4,BACK_LEFT,   -11,BACK_RIGHT,   0,0);
+  pF[ 7]=G4Facet(4,LEFT_BACK,  -8,BACK_TOP,    -11,BACK_BOTTOM,  0,0);
+  pF[ 8]=G4Facet(8,TOP,        -7,BACK_RIGHT,  -11,BACK_LEFT,    0,0);
+  pF[ 9]=G4Facet(7,RIGHT_BACK, -3,BACK_BOTTOM, -11,BACK_TOP,     0,0);
+
+  pF[10]=G4Facet(2,BOTTOM,     -3,RIGHT_BACK,  -10,RIGHT_FRONT,  0,0);
+  pF[11]=G4Facet(3,BACK_RIGHT, -7,RIGHT_TOP,   -10,RIGHT_BOTTOM, 0,0);
+  pF[12]=G4Facet(7,TOP,        -6,RIGHT_FRONT, -10,RIGHT_BACK,   0,0);
+  pF[13]=G4Facet(6,FRONT_RIGHT,-2,RIGHT_BOTTOM,-10,RIGHT_TOP,    0,0);
+
+  pF[14]=G4Facet(1,BOTTOM,     -2,FRONT_RIGHT,  -9,FRONT_LEFT,   0,0);
+  pF[15]=G4Facet(2,RIGHT_FRONT,-6,FRONT_TOP,    -9,FRONT_BOTTOM, 0,0);
+  pF[16]=G4Facet(6,TOP,        -5,FRONT_LEFT,   -9,FRONT_RIGHT,  0,0);
+  pF[17]=G4Facet(5,LEFT_FRONT, -1,FRONT_BOTTOM, -9,FRONT_TOP,    0,0);
+ 
+  pF[18]=G4Facet(5,FRONT_TOP, 6,RIGHT_TOP, 7,BACK_TOP, 8,LEFT_TOP);
+
+  return 0;
+}
+
+int
+HepPolyhedron::createPolyhedron(int Nnodes, int Nfaces,
+				const double xyz[][3],
+				const int  faces[][4])
+/***********************************************************************
+ *                                                                     *
+ * Name: createPolyhedron                            Date:    05.11.02 *
+ * Author: E.Chernyaev (IHEP/Protvino)               Revised:          *
+ *                                                                     *
+ * Function: Creates user defined polyhedron                           *
+ *                                                                     *
+ * Input: Nnodes  - number of nodes                                    *
+ *        Nfaces  - number of faces                                    *
+ *        nodes[][3] - node coordinates                                *
+ *        faces[][4] - faces                                           *
+ *                                                                     *
+ ***********************************************************************/
+{
+  AllocateMemory(Nnodes, Nfaces);
+  if (nvert == 0) return 1;
+
+  for (int i=0; i<Nnodes; i++) {
+    pV[i+1] = HepPoint3D(xyz[i][0], xyz[i][1], xyz[i][2]);
+  }
+  for (int k=0; k<Nfaces; k++) {
+    pF[k+1] = G4Facet(faces[k][0],0,faces[k][1],0,faces[k][2],0,faces[k][3],0);
+  }
+  SetReferences();
+  return 0;
 }
 
 HepPolyhedronTrd2::HepPolyhedronTrd2(HepDouble Dx1, HepDouble Dx2,
