@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.25 2002-05-20 16:31:49 grichine Exp $
+// $Id: G4PAIonisation.cc,v 1.26 2002-05-24 10:40:50 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -441,7 +441,7 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
 {
  aParticleChange.Initialize(trackData);
   
- G4Material* aMaterial = trackData.GetMaterial();
+ // G4Material* aMaterial = trackData.GetMaterial();
  const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle();
 
  G4double particleMass = aParticle->GetMass();
@@ -449,10 +449,10 @@ G4PAIonisation::PostStepDoIt( const G4Track& trackData,
  G4double TotalEnergy = KineticEnergy + particleMass;
  G4double Psquare = KineticEnergy*(TotalEnergy+particleMass);
  G4double Esquare = TotalEnergy*TotalEnergy;
- G4double betasquare=Psquare/Esquare; 
+ // G4double betasquare=Psquare/Esquare; 
  G4double summass = particleMass + electron_mass_c2;
- G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
-                      /(summass*summass+2.*electron_mass_c2*KineticEnergy);
+ // G4double MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
+ //                    /(summass*summass+2.*electron_mass_c2*KineticEnergy);
  G4ParticleMomentum ParticleDirection = aParticle->GetMomentumDirection();
  
  G4double massRatio = proton_mass_c2/particleMass ;
@@ -715,7 +715,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
       //   for(iTransfer=0;;iTransfer++)
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+   iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
@@ -739,7 +739,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
 	//  for(iTransfer=0;;iTransfer++)
         for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+       iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
@@ -776,7 +776,7 @@ G4PAIonisation::GetLossWithFluct( G4double Step,
 
 	//  for(iTransfer=0;;iTransfer++)
         for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+     iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
         {
           if( position >=
           ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
@@ -846,7 +846,7 @@ G4PAIonisation::GetAlongStepDelta( G4double Step,
                  ((*(*fPAItransferBank)(iPlace))(0)-dNdxCut1)*G4UniformRand() ;
 
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+   iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
@@ -872,7 +872,7 @@ G4PAIonisation::GetAlongStepDelta( G4double Step,
                    ((*(*fPAItransferBank)(iPlace+1))(0)-dNdxCut2)*G4UniformRand();
    
         for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+   iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
         {
           if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
         }
@@ -910,7 +910,7 @@ G4PAIonisation::GetAlongStepDelta( G4double Step,
         // G4cout<<position<<"\t" ;
 
         for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+    iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
         {
           if( position >=
           ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
@@ -958,7 +958,7 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
 
       //  for(iTransfer=0;;iTransfer++)
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+   iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
@@ -973,7 +973,7 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
 
       // for(iTransfer=0;;iTransfer++)
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+    iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
       }
@@ -995,7 +995,7 @@ G4PAIonisation::GetRandomEnergyTransfer( G4double scaledTkin )
 
       // for(iTransfer=0;;iTransfer++)
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+    iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
           if( position >=
           ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
@@ -1037,7 +1037,7 @@ G4PAIonisation::GetPostStepTransfer( G4double scaledTkin )
       position = dNdxCut1*G4UniformRand() ;
 
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+ iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace))(iTransfer)) break ;
       }
@@ -1051,7 +1051,7 @@ G4PAIonisation::GetPostStepTransfer( G4double scaledTkin )
       position = dNdxCut2*G4UniformRand() ;
 
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+  iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
         if(position >= (*(*fPAItransferBank)(iPlace+1))(iTransfer)) break ;
       }
@@ -1070,7 +1070,7 @@ G4PAIonisation::GetPostStepTransfer( G4double scaledTkin )
         // G4cout<<position<<"\t" ;
 
       for( iTransfer = 0;
-           iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength(); iTransfer++ )
+ iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()); iTransfer++ )
       {
           if( position >=
           ( (*(*fPAItransferBank)(iPlace))(iTransfer)*W1 + 
@@ -1101,7 +1101,7 @@ G4PAIonisation::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTrans
   }  
   else
   {
-    if ( iTransfer >= (*fPAItransferBank)(iPlace)->GetVectorLength())
+    if ( iTransfer >= G4int((*fPAItransferBank)(iPlace)->GetVectorLength()) )
     {
       iTransfer = (*fPAItransferBank)(iPlace)->GetVectorLength() - 1 ;
     }
@@ -1135,14 +1135,14 @@ G4PAIonisation::GetdNdxCut( G4int iPlace, G4double transferCut)
   G4double x1, x2, y1, y2, dNdxCut;
   
   for( iTransfer = 0 ; 
-       iTransfer < (*fPAItransferBank)(iPlace)->GetVectorLength() ; iTransfer++)
+    iTransfer < G4int((*fPAItransferBank)(iPlace)->GetVectorLength()) ; iTransfer++)
   {
     if(transferCut <= (*fPAItransferBank)(iPlace)->GetLowEdgeEnergy(iTransfer))
     {
       break ;
     }
   }  
-  if ( iTransfer >= (*fPAItransferBank)(iPlace)->GetVectorLength())
+  if ( iTransfer >= G4int((*fPAItransferBank)(iPlace)->GetVectorLength()) )
   {
       iTransfer = (*fPAItransferBank)(iPlace)->GetVectorLength() - 1 ;
   }

@@ -102,7 +102,7 @@ G4PAIonisation::GetMeanFreePath( const G4Track&          trackData,
 
   G4int iTkin, iPlace ;
   G4double charge, charge2, mass, massRatio, kinE, gamma, scaledE, meanFreePath ;
-  G4double E1, E2, W, W1, W2, primaryIon ; 
+  G4double E1, E2, W, W1, W2; // primaryIon ; 
 
  *condition = NotForced ;
 
