@@ -21,35 +21,49 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVParameterised.cc,v 1.5 2002-10-14 07:42:26 gcosmo Exp $
+// $Id: G4PVParameterised.cc,v 1.6 2002-10-14 16:16:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVParameterised
 //
 // Implementation
+//
+// ********************************************************************
 
 #include "G4PVParameterised.hh"
 
-G4PVParameterised::G4PVParameterised(const G4String& pName,
-			 G4LogicalVolume* pLogical,
-			 G4VPhysicalVolume* pMother,
-                         const EAxis pAxis,
-                         const G4int nReplicas,
-		         G4VPVParameterisation *pParam) :
-  G4PVReplica(pName,pLogical,pMother,pAxis,nReplicas,0,0),
-  fparam(pParam)
+G4PVParameterised::G4PVParameterised( const G4String& pName,
+                                            G4LogicalVolume* pLogical,
+                                            G4VPhysicalVolume* pMother,
+                                      const EAxis pAxis,
+                                      const G4int nReplicas,
+                                            G4VPVParameterisation *pParam)
+  : G4PVReplica(pName, pLogical, pMother, pAxis, nReplicas, 0, 0),
+    fparam(pParam)
 {
+#ifdef G4VERBOSE  
+  if ((pMother) && (pMother->IsParameterised()))
+  {
+    G4cout << "WARNING - A parameterised volume is being placed" << G4endl
+           << "          inside another parameterised volume !" << G4endl
+           << "          To make sure that no overlaps are generated," << G4endl
+           << "          you should verify the mother replicated shapes" << G4endl
+           << "          are of the same type and dimensions." << G4endl
+           << "  (To switch this warning off, compile with G4_NO_VERBOSE)"
+           << G4endl;
+  }
+#endif
 }
 
-G4PVParameterised::G4PVParameterised(const G4String& pName,
-			 G4LogicalVolume* pLogical,
-			 G4LogicalVolume* pMotherLogical,
-                         const EAxis pAxis,
-                         const G4int nReplicas,
-		         G4VPVParameterisation *pParam) :
-  G4PVReplica(pName,pLogical,pMotherLogical,pAxis,nReplicas,0,0),
-  fparam(pParam)
+G4PVParameterised::G4PVParameterised( const G4String& pName,
+                                            G4LogicalVolume* pLogical,
+                                            G4LogicalVolume* pMotherLogical,
+                                      const EAxis pAxis,
+                                      const G4int nReplicas,
+                                            G4VPVParameterisation *pParam)
+  : G4PVReplica(pName, pLogical, pMotherLogical, pAxis, nReplicas, 0, 0),
+    fparam(pParam)
 {
 }
 
@@ -59,24 +73,23 @@ G4PVParameterised::~G4PVParameterised()
 
 G4VPVParameterisation* G4PVParameterised::GetParameterisation() const
 {
-    return fparam;
+  return fparam;
 }
 
 G4bool G4PVParameterised::IsParameterised() const
 {
-    return true;
+  return true;
 }
 
-void G4PVParameterised::GetReplicationData(EAxis& axis,
-                                   G4int& nReplicas,
-				   G4double& width,
-                                   G4double& offset,
-                                   G4bool& consuming) const
+void G4PVParameterised::GetReplicationData( EAxis& axis,
+                                            G4int& nReplicas,
+                                            G4double& width,
+                                            G4double& offset,
+                                            G4bool& consuming) const
 {
-    axis=faxis;
-    nReplicas=fnReplicas;
-    width=fwidth;
-    offset=foffset;
-    consuming=false;
+  axis = faxis;
+  nReplicas = fnReplicas;
+  width = fwidth;
+  offset = foffset;
+  consuming = false;
 }
-

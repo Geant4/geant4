@@ -1,4 +1,4 @@
-$Id: History,v 1.39 2002-10-14 07:42:25 gcosmo Exp $
+$Id: History,v 1.40 2002-10-14 16:16:39 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 14, 2002  G. Cosmo                 geommng-V04-01-01
+October 14, 2002  G. Cosmo
+- G4PVReplica.cc, G4PVParameterised.cc:
+  Added checks for illegal geometry contructions; contructors now verify unicity
+  of daughter volumes for replicas and parameterised volumes, as well as checks
+  for attempt to replicate/parameterise the world volume.
+
+October 4, 2002  G. Cosmo
 - G4PVParameterised[.hh.cc], G4PVPlacement[.hh.cc]:
   Added new method IsParameterised() to enquire for existing parameterisation
   for a placed volume.
