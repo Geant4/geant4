@@ -1,4 +1,4 @@
-$Id: History,v 1.59 2001-04-24 16:02:41 vnivanch Exp $
+$Id: History,v 1.60 2001-05-02 12:02:34 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02.05.2001 - MGP, tag emlowen-V03-01-00
+             Same as emlowen-V03-00-00, with minor new functionalities in 
+             test/G4BremsstrahlungTest and G4eIonisationTest, and a new
+             test/G4PhotoelectricTest unit test
 
 24.04.2001 - V.Ivanchenko remove all references to RogueWave vectors
 
