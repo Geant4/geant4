@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2004-08-13 14:52:10 maire Exp $
+$Id: History,v 1.123 2004-08-20 12:56:18 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 Aug 04: V.Ivant (stand-V06-02-03)
+- Bug fix for e- ionisation in PAI model for small cuts (VG)
      
 13 Aug 04: mma (stand-V06-02-02)
 - in all discrete processes make ComputeCrossSection() public and virtual

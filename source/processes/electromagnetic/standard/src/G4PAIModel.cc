@@ -136,9 +136,8 @@ G4double G4PAIModel::LowEnergyLimit( const G4ParticleDefinition* p )
 ////////////////////////////////////////////////////////////////////////////
 
 G4double G4PAIModel::MinEnergyCut( const G4ParticleDefinition*,
-                                   const G4MaterialCutsCouple* couple )
+                                   const G4MaterialCutsCouple*)
 {
-  //  return couple->GetMaterial()->GetIonisation()->GetMeanExcitationEnergy();
   return 0.*eV; // any positive cut
 }
 
