@@ -1908,10 +1908,12 @@ L2600:
 	r[j - 1] = 0.;
 	s[j - 1] = 0.;
 	sos[j - 1] = 0.;
-	continue;
       }
-      s[j - 1] = sqrt(smalla[j - 1] * arg) * 2.;
-      sos[j - 1] = s[j - 1] * 10.;
+      else
+      {
+        s[j - 1] = sqrt(smalla[j - 1] * arg) * 2.;
+        sos[j - 1] = s[j - 1] * 10.;
+      }
     }
     n1 = 1;
     d__1 =
