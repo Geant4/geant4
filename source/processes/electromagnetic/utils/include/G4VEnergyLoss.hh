@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.hh,v 1.4 2000-03-01 09:07:32 urban Exp $
+// $Id: G4VEnergyLoss.hh,v 1.5 2000-05-23 14:24:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,6 +108,10 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
     // compute energy loss with/without fluctuation
     // ( default : with fluctuation)
 
+    static void SetSubSec       (G4bool  value) {subSecFlag = value ; }
+    // switch on/off the generation of the subcutoff secondaries
+    // ( default = subcutoff secondary generation )
+
     static void SetStepFunction (G4double c1, G4double c2)
                                {dRoverRange = c1; finalRange = c2;
                                 c1lim=dRoverRange ;
@@ -209,6 +213,7 @@ class G4VEnergyLoss : public G4VContinuousDiscreteProcess
 
    static G4bool   rndmStepFlag;    // control the randomization of the step
    static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
+   static G4bool       subSecFlag;  // control the generation of subcutoff secondaries
 
 
 };

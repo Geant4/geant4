@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.7 2000-04-10 09:57:24 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.8 2000-05-23 14:25:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,6 +30,7 @@ G4double     G4VEnergyLoss::ltauhigh      ;
 
 G4bool       G4VEnergyLoss::rndmStepFlag   = false;
 G4bool       G4VEnergyLoss::EnlossFlucFlag = true;
+G4bool       G4VEnergyLoss::subSecFlag     = true;
 G4double     G4VEnergyLoss::dRoverRange    = 20*perCent;
 G4double     G4VEnergyLoss::finalRange     = 200*micrometer;
 G4double     G4VEnergyLoss::c1lim = dRoverRange ;
@@ -118,7 +119,7 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
   static G4double masslimit = 0.52*MeV ;
 
   G4double tlim=2.*MeV,t1=0.1*MeV,t2=0.025*MeV ;
-  G4double tlime=10.*keV,factor=2.*electron_mass_c2 ;
+  G4double tlime=0.2*keV,factor=2.*electron_mass_c2 ;
   G4double loss1,loss2,ca,cb,cba ;
   G4double losslim,clim ;
   G4double taulim,rangelim,ltaulim,ltaumax,
@@ -187,7 +188,7 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
  {
   losslim = physicsVector->GetValue(tlime,isOut) ;
   taulim  = tlime/electron_mass_c2;
-  clim    = losslim/sqrt(taulim);
+  clim    = losslim;
   ltaulim = log(taulim);
   ltaumax = log(HighestKineticEnergy/electron_mass_c2);
 
@@ -199,7 +200,7 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
      i += 1 ;
      LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i);
      tau = LowEdgeEnergy/electron_mass_c2;
-     if (tau <= taulim) Value = factor*sqrt(tau)/clim;
+     if (tau <= taulim) Value = factor*sqrt(tau*taulim)/clim;
      else {
            rangelim = factor*taulim/losslim ;
            ltaulow  = log(taulim);

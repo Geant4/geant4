@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EnergyLossTables.cc,v 1.11 2000-03-21 11:16:44 urban Exp $
+// $Id: G4EnergyLossTables.cc,v 1.12 2000-05-23 14:25:26 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------------- 
@@ -80,8 +80,6 @@ void G4EnergyLossTables::Register(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-    // dEdx = (*dEdxTable)(materialIndex)->GetValue(
-    //          t.theLowestKineticEnergy,isOut);
      dEdx = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)
             *(*dEdxTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
@@ -131,9 +129,6 @@ void G4EnergyLossTables::Register(
 
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
-   // Range = scaledKineticEnergy/t.theLowestKineticEnergy*
-   //         (*rangeTable)(materialIndex)->GetValue(
-   //           t.theLowestKineticEnergy,isOut);
     Range = sqrt(scaledKineticEnergy/t.theLowestKineticEnergy)*
             (*rangeTable)(materialIndex)->GetValue(
               t.theLowestKineticEnergy,isOut);
