@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.19 1999-10-07 14:19:02 maire Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.20 1999-11-05 12:10:47 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -381,7 +381,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // Comp. Phys. Comm. 1206 pp 1-1-9 (1997)
   // 
   // incoming particle initialization
-  //  aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
 
   G4Material* aMaterial = aTrack.GetMaterial();
 

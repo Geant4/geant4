@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.12 1999-09-28 13:15:45 aforti Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.13 1999-11-05 12:10:47 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,7 +186,7 @@ G4VParticleChange* G4LowEnergyRayleigh::PostStepDoIt(const G4Track& aTrack, cons
 // TeV (draft). 
 
 
-//  aParticleChange.Initialize(aTrack);
+  aParticleChange.Initialize(aTrack);
   // Dynamic particle quantities  
   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
   G4double GammaEnergy0 = aDynamicGamma->GetKineticEnergy();

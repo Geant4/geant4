@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.15 1999-09-28 13:15:42 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.16 1999-11-05 12:10:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -677,7 +677,7 @@ G4VParticleChange* G4LowEnergyBremsstrahlung::PostStepDoIt(const G4Track& trackD
   const G4double LPMconstant = fine_structure_const*electron_mass_c2*
     electron_mass_c2/(8.*pi*hbarc) ;
   
-  //  aParticleChange.Initialize(trackData);
+  aParticleChange.Initialize(trackData);
   
   G4Material* aMaterial=trackData.GetMaterial() ;
   

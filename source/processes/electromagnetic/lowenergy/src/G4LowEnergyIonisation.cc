@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.23 1999-09-28 13:15:44 aforti Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.24 1999-11-05 12:10:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -416,7 +416,7 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt( const G4Track& trackData
   // Comp. Phys. Comm. 1206 pp 1-19 (1997)
   // 
 
-  //  aParticleChange.Initialize(trackData);
+  aParticleChange.Initialize(trackData);
   
   G4Material*               aMaterial = trackData.GetMaterial() ;
   const G4DynamicParticle*  aParticle = trackData.GetDynamicParticle() ;
