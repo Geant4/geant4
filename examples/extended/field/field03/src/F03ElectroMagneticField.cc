@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03ElectroMagneticField.cc,v 1.4 2003-06-25 16:42:22 japost Exp $
+// $Id: F03ElectroMagneticField.cc,v 1.5 2003-11-14 10:02:53 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -72,7 +72,7 @@ F03ElectroMagneticField::F03ElectroMagneticField()
   fEquation = new G4Mag_UsualEqRhs(fMagneticField); 
   fLocalEquation = new G4Mag_UsualEqRhs(fLocalMagneticField); 
  
-  fMinStep     = 1.0*mm ; // minimal step of 1 mm is default
+  fMinStep     = 0.25*mm ; // minimal step of 1 mm is default
   fStepperType = 4 ;      // ClassicalRK4 is default stepper
 
   fFieldManager = fLocalFieldManager = GetGlobalFieldManager();
