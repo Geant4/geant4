@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.hh,v 1.10 2001-11-09 19:17:20 japost Exp $
+// $Id: G4MagIntegratorDriver.hh,v 1.11 2002-04-19 17:31:41 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -165,7 +165,9 @@ class G4MagInt_Driver
      void PrintStat_Aux( const G4FieldTrack&  aFieldTrack,
 			 G4double             requestStep, 
 			 G4double             actualStep,
-			 G4int                subStepNo);       
+			 G4int                subStepNo,
+			 G4double             subStepSize,
+			 G4double             dotVelocities);       
        //  Verbose output for debugging
 
 #ifdef QUICK_ADV_TWO
