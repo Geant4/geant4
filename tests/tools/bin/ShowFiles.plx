@@ -106,7 +106,8 @@ foreach $Platform (@Platforms) {
                          next if ($line =~m/^\s+$/);                       # blank 
                          next if ($line =~m/^---$/);                       # diff marks end of compared sections
                          next if ($line =~m/Geant4 version \$Name:/);      # CVS Tags
-                         next if ($line =~m/\$Id: ShowFiles.plx,v 1.1 2000-06-04 10:51:11 stesting Exp $/);               # CVS Tags
+#                        next if ($line =~m/\$Id: ShowFiles.plx,v 1.2 2000-06-05 14:54:42 stesting Exp $/);               # CVS Tags
+                         next if ($line =~m/\$Id:/);               # CVS Tags
                          next if ($line =~m/\s+\(\d{2}-[A-Z][a-z]{2}-\d{2,4}\)/);
                          next if ($line =~ m/User=.*Real=.*Sys=/);
                          next if ($line =~ m/Material:.* 6317232936888469/);     # ISO printing
