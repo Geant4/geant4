@@ -70,7 +70,7 @@
     if( (mom.t()-mom.mag())/a1 < 50*MeV )
     {
 //      G4cout << "Using pre-compound only, E= "<<mom.t()-mom.mag()<<G4endl;
-      m_nucl = mom.mag();
+//      m_nucl = mom.mag();
       G4Fragment aPreFrag;
       aPreFrag.SetA(a1+a2);
       aPreFrag.SetZ(z1+z2);
@@ -79,6 +79,7 @@
       aPreFrag.SetNumberOfHoles(0);
       G4ThreeVector plop(0.,0., mom.vect().mag());
       G4double m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(G4lrint(z2),G4lrint(a2));
+      m_nucl=m2;
       G4LorentzVector aL(mom.t()+m2, plop);
       aPreFrag.SetMomentum(aL);
       G4ParticleDefinition * preFragDef;
@@ -119,8 +120,8 @@
 	m2=G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
       			  fancyNucleus->GetCharge(),fancyNucleus->GetMassNumber());
 	m_nucl = ( swapped ) ? m1 : m2;
-  //G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
-  //       <<" "<<m2-fancyNucleus->GetMass() << G4endl;
+//	  G4cout << " mass table, nucleus, delta : " << m2 <<" "<< fancyNucleus->GetMass()
+//               <<" "<<m2-fancyNucleus->GetMass() << G4endl;
 	G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
 	G4double aX=(2.*G4UniformRand()-1.)*impactMax;
 	G4double aY=(2.*G4UniformRand()-1.)*impactMax;
@@ -213,9 +214,10 @@
       }
       delete fancyNucleus;
       delete projectile;
-      debug.push_back("have the hits"); 
+      debug.push_back("have the hits. A,Z, excitE"); 
       debug.push_back(resA);
       debug.push_back(resZ);
+      debug.push_back(theStatisticalExEnergy);
       debug.dump();
       // Calculate excitation energy
       G4LorentzVector iState = mom;
@@ -282,35 +284,14 @@
         G4LorentzRotation boost_fragments_here(momentum.boostVector());
 	boost_fragments = boost_fragments_here;
 
-  //       G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
-  //              << resA <<" "<< resZ <<" "<< mFragment <<" "
-  //              << momentum.mag() <<" "<< momentum.mag() - mFragment 
-  // 	     << " "<<theStatisticalExEnergy << G4endl;
+//   	 G4cout << " Fragment a,z, Mass Fragment, mass spect-mom, exitationE " 
+//   		<< resA <<" "<< resZ <<" "<< mFragment <<" "
+//   		<< momentum.mag() <<" "<< momentum.mag() - mFragment 
+//   	   << " "<<theStatisticalExEnergy 
+// 	   << " "<< boost_fragments*pFragment<< G4endl;
       }
       else if(resA!=0)
       {
-  //       proFrag=new G4ReactionProductVector;
-  //       G4ReactionProduct * it(0);
-  //       while ( resA > 0 ) 
-  //       {
-  // 	 if(1==resZ) 
-  // 	 {
-  //             it = new G4ReactionProduct(G4Proton::ProtonDefinition());
-  // 	    resZ--;resA--;
-  // 	 } else
-  // 	 {
-  // 	    it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
-  // 	    resA--;
-  // 	 }
-  // // @@GF  fix.... momentum is wrong if more than one neutron @@
-  //          G4cout << "LIBIC: single "<<it->GetDefinition()->GetParticleName()
-  // 	        << ", momentum " <<  momentum << " mass " << momentum.mag()
-  // 		<< G4endl;
-  // 	 it->SetTotalEnergy(momentum.t());
-  // 	 it->SetMomentum(momentum.vect());
-  // 	 it->SetNewlyAdded(true);
-  // //	 proFrag->push_back(it);
-  //       }
            G4ReactionProductVector::iterator ispectator;
 	   for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
 	   {
@@ -349,10 +330,11 @@
   //  correct p/E of Cascade secondaries
       G4LorentzVector pCas=iState - pFragments;
   //    G4cout <<" Going to correct from " << fState << " to " << pCas << G4endl;
-      if ( ! EnergyAndMomentumCorrector(cascaders, pCas) )
+      G4bool EnergyIsCorrect=EnergyAndMomentumCorrector(cascaders, pCas);
+      if ( ! EnergyIsCorrect )
       {
 	 if(getenv("debug_G4BinaryLightIonReactionResults"))      
-           G4cout << "G4BinaryLightIonReaction E/P corrections failed" << G4endl;
+           G4cout << "G4BinaryLightIonReaction E/P correction for nucleus failed" << G4endl;
       }
 
   //  Add deexcitation secondaries 
@@ -360,7 +342,15 @@
       {
 	cascaders->push_back(*ii);
       }
-
+      if ( ! EnergyIsCorrect )
+      {
+         if (! EnergyAndMomentumCorrector(cascaders,iState))
+	 { 
+	   if(getenv("debug_G4BinaryLightIonReactionResults"))      
+             G4cout << "G4BinaryLightIonReaction E/P corrections failed" << G4endl;
+	 }
+      }
+      
     }
     
     // Rotate to lab
@@ -406,6 +396,8 @@
     debug1.dump();
     debug1.push_back(" Energy conservation initial/final/delta(init-final) ");
     debug1.push_back(aTrack.GetTotalEnergy() + m_nucl);
+    debug1.push_back(aTrack.GetTotalEnergy());
+    debug1.push_back(m_nucl);
     debug1.push_back(Etot);
     debug1.push_back(aTrack.GetTotalEnergy() + m_nucl - Etot);
     debug1.dump();
@@ -434,16 +426,17 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
         SumMom  += G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
         SumMass += (*Output)[i]->GetDefinition()->GetPDGMass();
         }
+//   G4cout << " E/P corrector, SumMass, SumMom.m2, TotalMass " 
+//         << SumMass <<" "<< SumMom.m2() <<" "<<TotalCollisionMass<< G4endl; 
     if (SumMass > TotalCollisionMass) return FALSE;
     SumMass = SumMom.m2();
     if (SumMass < 0) return FALSE;
     SumMass = sqrt(SumMass);
 
      // Compute c.m.s. hadron velocity and boost KTV to hadron c.m.s.
-//      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
     G4ThreeVector Beta = -SumMom.boostVector();
-//      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<G4endl;
-//    Output->Boost(Beta);
+//      G4cout << " == pre boost 2 "<< SumMom.e()<< " "<< SumMom.mag()<<" "<< Beta <<G4endl;
+//--old    Output->Boost(Beta);
       for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector mom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
@@ -489,7 +482,7 @@ G4bool G4BinaryLightIonReaction::EnergyAndMomentumCorrector(
 
     // Compute c.m.s. interaction velocity and KTV back boost   
     Beta = TotalCollisionMom.boostVector(); 
-//    Output->Boost(Beta);
+//--old    Output->Boost(Beta);
       for(i = 0; i < Output->size(); i++)
       {
         G4LorentzVector mom = G4LorentzVector((*Output)[i]->GetMomentum(),(*Output)[i]->GetTotalEnergy());
