@@ -476,7 +476,7 @@ G4double G4MuPairProductionModel::ComputeDDMicroscopicCrossSection(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
-                                               const G4ParticleDefinition* p,
+                                               const G4ParticleDefinition*,
                                                      G4double kineticEnergy,
                                                      G4double cutEnergy,
                                                      G4double maxEnergy)
@@ -492,8 +492,6 @@ G4double G4MuPairProductionModel::CrossSection(const G4Material* material,
   for (size_t i=0; i<material->GetNumberOfElements(); i++) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    //    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
-
     G4double cr = ComputeMicroscopicCrossSection(kineticEnergy, Z, cutEnergy);
 
     if(maxEnergy < kineticEnergy) {
@@ -526,8 +524,6 @@ G4DataVector* G4MuPairProductionModel::ComputePartialSumSigma(
   for (G4int i=0; i<nElements; i++ ) {
 
     G4double Z = (*theElementVector)[i]->GetZ();
-    //    G4double A = (*theElementVector)[i]->GetA()/(g/mole) ;
-
     cross += theAtomNumDensityVector[i] * ComputeMicroscopicCrossSection(kineticEnergy,
               Z, cut);
     dv->push_back(cross);
