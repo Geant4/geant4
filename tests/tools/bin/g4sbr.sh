@@ -66,6 +66,7 @@ cd /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin
 . /afs/cern.ch/sw/geant4/stt/$REFTREE/src/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
+echo  "CLHEP_BASE_DIR $CLHEP_BASE_DIR"
 ulimit -a
 
 ##########################
@@ -73,6 +74,7 @@ ulimit -a
 ##########################
 if [ -e $G4WORKDIR/inprogress.stat ]; then
   echo "In progress already!"
+  ls -l $G4WORKDIR/inprogress.stat
   exit 
 fi
 
