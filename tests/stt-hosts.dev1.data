@@ -11,7 +11,8 @@ hpplus02 dev1   opt        geant4-01-00-ref-02-tags3  all all all all  1
 # sgmedia dev1  deb        geant4-01-00-ref-02-tags3  all all all all  1
 # sgmedia dev1  opt        geant4-01-00-ref-02-tags3  all all all all  1
 sungeant dev1   deb_ISO    geant4-01-00-ref-02-tags3  all all all all  1
-sungeant dev1   opt_ISO    geant4-01-00-ref-02-tags3  all all all all  1
+# SUN 5.0 optimised ISO hangs...
+# sungeant dev1   opt_ISO    geant4-01-00-ref-02-tags3  all all all all  1
 sungeant dev1   deb_NONISO geant4-01-00-ref-02-tags3  all all all all  1
 sungeant dev1   opt_NONISO geant4-01-00-ref-02-tags3  all all all all  1
 pcgeant  dev1   deb        geant4-01-00-ref-02-tags3  all all all all  1
