@@ -65,7 +65,7 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
 
                  Air         86.583
            Aluminium     1.0854e+05
-                Lead     7.0466e+10
+                Lead     7.0465e+10
                 Lead     2.2328e+11
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -90,7 +90,7 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 
                  Air         86.583
            Aluminium     1.0854e+05
-                Lead     7.0466e+10
+                Lead     7.0465e+10
                 Lead     2.2328e+11
 
 hIoni:    Knock-on electron cross sections . 
