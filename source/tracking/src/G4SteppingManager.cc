@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SteppingManager.cc,v 1.4 1999-06-11 10:08:00 tsasaki Exp $
+// $Id: G4SteppingManager.cc,v 1.5 1999-06-29 16:16:59 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,7 +44,7 @@ G4SteppingManager::G4SteppingManager()
    fPreStepPoint  = fStep->GetPreStepPoint();
    fPostStepPoint = fStep->GetPostStepPoint();
 #ifdef G4VERBOSE
-   if(fVerbose == NULL)  fVerbose = new G4SteppingVerbose(this);
+   fVerbose = new G4SteppingVerbose(this);
 #endif
    fSelectedAtRestDoItVector 
       = new G4SelectedAtRestDoItVector(SIZEofSelectedDoIt);
