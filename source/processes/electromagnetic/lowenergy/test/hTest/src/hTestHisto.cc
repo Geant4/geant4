@@ -176,7 +176,7 @@ void hTestHisto::bookHisto()
   G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
   // Creating a tree mapped to a new hbook file.
-  tree = tf->create(histName,false,true,"hbook");
+  tree = tf->create(histName,false,false,"hbook");
   G4cout << "Tree store : " << tree->storeName() << G4endl;
  
   histo.resize(nHisto);
