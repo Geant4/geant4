@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.hh,v 1.7 2003-02-21 17:05:30 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.hh,v 1.8 2003-02-28 08:41:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -35,6 +35,7 @@
 // 25.09.01 V.Ivanchenko    Add parameter C and change interface to B
 // 29.11.01 V.Ivanchenko    Parametrisation is updated
 // 21.02.03 V.Ivanchenko    Number of parameters is defined in the constructor
+// 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 //
 // -------------------------------------------------------------------
 
@@ -60,7 +61,7 @@ class G4BremsstrahlungParameters {
 
 public:
 
-  G4BremsstrahlungParameters(size_t num, G4int minZ = 1, G4int maxZ = 99);
+  G4BremsstrahlungParameters(const G4String& name, size_t num, G4int minZ = 1, G4int maxZ = 99);
 
   ~G4BremsstrahlungParameters();
 
@@ -76,7 +77,7 @@ private:
   G4BremsstrahlungParameters(const G4BremsstrahlungParameters&);
   G4BremsstrahlungParameters & operator=(const G4BremsstrahlungParameters &right);
 
-  void LoadData();
+  void LoadData(const G4String& name);
 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> > param;
 
@@ -91,7 +92,7 @@ private:
 };
  
 #endif
- 
+
 
 
 

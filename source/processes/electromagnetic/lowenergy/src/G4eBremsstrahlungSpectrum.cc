@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.8 2003-02-21 17:05:39 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.9 2003-02-28 08:42:18 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,15 +31,16 @@
 // File name:     G4eBremsstrahlungSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivanchenko@cern.ch)
-// 
+//
 // Creation date: 29 September 2001
 //
-// Modifications: 
+// Modifications:
 // 10.10.01  MGP  Revision to improve code quality and consistency with design
 // 15.11.01  VI   Update spectrum model Bethe-Haitler spectrum at high energy
 // 30.05.02  VI   Update interpolation between 2 last energy points in the
 //                parametrisation
 // 21.02.03  V.Ivanchenko    Energy bins are defined in the constructor
+// 28.02.03  V.Ivanchenko    Filename is defined in the constructor
 //
 // -------------------------------------------------------------------
 
@@ -48,13 +49,13 @@
 #include "Randomize.hh"
 
 
-G4eBremsstrahlungSpectrum::G4eBremsstrahlungSpectrum(const G4DataVector& bins):
-  G4VEnergySpectrum(),
+G4eBremsstrahlungSpectrum::G4eBremsstrahlungSpectrum(const G4DataVector& bins,
+  const G4String& name):G4VEnergySpectrum(),
   lowestE(0.1*eV),
   xp(bins)
 {
   length = xp.size();
-  theBRparam = new G4BremsstrahlungParameters(length+1);
+  theBRparam = new G4BremsstrahlungParameters(name,length+1);
 
   verbose = 0;
 }

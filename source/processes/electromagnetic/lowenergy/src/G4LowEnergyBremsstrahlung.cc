@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.57 2003-02-21 17:05:38 vnivanch Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.58 2003-02-28 08:42:17 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -53,6 +53,7 @@
 // 30.07.2002 VI  Fix in restricted energy loss
 // 21.01.2003 VI  Cut per region
 // 21.02.2003 V.Ivanchenko    Energy bins for spectrum are defined here
+// 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 //
 // --------------------------------------------------------------
 
@@ -111,7 +112,8 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
     if(i == 14) x = 1.0;
     energyBins.push_back(x);
   }
-  energySpectrum = new G4eBremsstrahlungSpectrum(energyBins);
+  const G4String dataName("/brem/br-sp.dat");
+  energySpectrum = new G4eBremsstrahlungSpectrum(energyBins,dataName);
 
   if(verboseLevel > 0) {
     G4cout << "G4LowEnergyBremsstrahlungSpectrum is initialized"
@@ -130,11 +132,11 @@ void G4LowEnergyBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aP
   crossSectionHandler->LoadShellData("brem/br-cs-");
 
   if (verboseLevel > 0) {
-    G4cout << GetProcessName() 
-           << " is created; Cross section data: " 
+    G4cout << GetProcessName()
+           << " is created; Cross section data: "
            << G4endl;
     crossSectionHandler->PrintData();
-    G4cout << "Parameters: " 
+    G4cout << "Parameters: "
            << G4endl;
     energySpectrum->PrintData();
   }

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eBremsstrahlungSpectrum.hh,v 1.4 2003-02-21 17:05:30 vnivanch Exp $
+// $Id: G4eBremsstrahlungSpectrum.hh,v 1.5 2003-02-28 08:41:47 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,18 +31,19 @@
 // File name:     G4EBremsstrahlungSpectrum
 //
 // Author:        V.Ivanchenko (Vladimir.Ivantchenko@cern.ch)
-// 
+//
 // Creation date: 27 September 2001
 //
-// Modifications: 
+// Modifications:
 // 10.10.01  MGP  Revision to improve code quality and consistency with design
 // 29.11.01  V.Ivanchenko    Parametrisation is updated
 // 21.02.03  V.Ivanchenko    Energy bins are defined in the constructor
+// 28.02.03  V.Ivanchenko    Filename is defined in the constructor
 //
 // -------------------------------------------------------------------
 
-// Class Description: 
-// Provides various integration over gamma spectrum of e- Bremsstrahlung. 
+// Class Description:
+// Provides various integration over gamma spectrum of e- Bremsstrahlung.
 // Parametrisation is described in Physics Reference Manual based on
 // data from EEDL database.
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
@@ -62,7 +63,7 @@ class G4eBremsstrahlungSpectrum : public G4VEnergySpectrum
 {
 public:
 
-  G4eBremsstrahlungSpectrum(const G4DataVector& bins);
+  G4eBremsstrahlungSpectrum(const G4DataVector& bins,const G4String& name);
 
   ~G4eBremsstrahlungSpectrum();
 

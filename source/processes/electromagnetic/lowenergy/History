@@ -1,4 +1,4 @@
-$Id: History,v 1.170 2003-02-26 15:35:29 gcosmo Exp $
+$Id: History,v 1.171 2003-02-28 08:40:46 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.02-2003   VI Minor design iteration on Bremsstrahlung, to accomodate
+             variable name of file with parameters 
 
 26.02-2003   G.Cosmo, tag emlowen-V05-00-09
              Fixed usage of 'abs' in G4PenelopeCompton.cc to allow porting
