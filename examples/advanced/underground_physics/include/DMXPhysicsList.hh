@@ -51,13 +51,16 @@ public:
   DMXPhysicsList();
   virtual ~DMXPhysicsList();
 
+
+public:
+  void SetCuts();
+
+
 protected:
   // Construct particle and physics
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-  
-  virtual void SetCuts();
-  
+    
   // these methods Construct physics processes and register them
   virtual void ConstructGeneral();
   virtual void ConstructEM();

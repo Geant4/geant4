@@ -38,7 +38,7 @@
 // --------------------------------------------------------------
 
 #ifndef DMXPmtHit_h
-#define DMXPmttHit_h 1
+#define DMXPmtHit_h 1
 
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"

@@ -62,9 +62,6 @@ public:
 
   G4VPhysicalVolume* Construct();
 
-  void DefineMaterials();
-  void DefineField();
-
   // methods for UserLimits
   void      UseUserLimits(G4bool value); 
   G4bool    IsUseUserLimits()       { return fUseUserLimits; } 
@@ -74,18 +71,9 @@ public:
   void  SetMaxTime(G4double value);  
   void  SetMaxStepSize(G4double value);  
 
-public:
-
-  G4double  GetWorldHeight()      {return worldHeight;};      
-  G4double  GetWorldRadius()      {return worldRadius;};      
-  G4double  GetSourceZ()          {return sourceZ;};
-
-  const G4VPhysicalVolume* GetPhysWorld()    {return    world_phys;};
-  const G4VPhysicalVolume* GetPhysLiqPhase() {return liqPhase_phys;};
-  const G4VPhysicalVolume* GetPhysPmt()      {return      pmt_phys;};
-
-
 private:
+
+  void DefineMaterials();
 
   G4bool           fUseUserLimits;
   G4UserLimits*    theUserLimits; 
