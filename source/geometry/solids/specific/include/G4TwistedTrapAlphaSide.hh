@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapAlphaSide.hh,v 1.3 2005-03-02 15:40:18 link Exp $
+// $Id: G4TwistedTrapAlphaSide.hh,v 1.4 2005-03-11 16:03:58 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -136,9 +136,6 @@ class G4TwistedTrapAlphaSide : public G4VSurface
     G4double fdeltaX ;
     G4double fdeltaY ;
 
-
-  // temporary
-  G4double fDy ;
 
 };   
 

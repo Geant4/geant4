@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4TwistedGenTrap.cc,v 1.3 2005-03-10 17:17:59 link Exp $
+// $Id: G4TwistedGenTrap.cc,v 1.4 2005-03-11 16:04:00 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,6 +140,35 @@ G4TwistedGenTrap::G4TwistedGenTrap(const G4String &pname,         // Name of ins
 
   fdeltaX = 2 * fDz * std::tan(fTheta) * std::cos(fPhi)  ;  // dx in surface equation
   fdeltaY = 2 * fDz * std::tan(fTheta) * std::sin(fPhi)  ;  // dy in surface equation
+
+  if  (  ! ( ( fDx1  > 2*kCarTolerance)
+       && ( fDx2  > 2*kCarTolerance)
+       && ( fDx3  > 2*kCarTolerance)
+       && ( fDx4  > 2*kCarTolerance)
+       && ( fDy1   > 2*kCarTolerance)
+       && ( fDy2   > 2*kCarTolerance)
+       && ( fDz   > 2*kCarTolerance) 
+       && ( std::fabs(fPhiTwist) > 2*kAngTolerance )
+       && ( std::fabs(fPhiTwist) < pi/2 )
+       && ( std::fabs(fAlph) < pi/2 )
+	     && ( fTheta < pi/2 && fTheta >= 0 ) )
+	 )
+    {
+      
+      G4cerr << "ERROR - G4TwistedGenTrap()::G4TwistedGenTrap(): " << GetName() << G4endl
+             << "        Dimensions too small or too big! - " << G4endl 
+             << "fDx 1-4 = " << fDx1/cm << ", " << fDx2/cm << ", "  << fDx3/cm << ", " << fDx4/cm << " cm" << G4endl 
+	     << "fDy 1-2 = " << fDy1/cm << ", " << fDy2/cm << ", "  << " cm" << G4endl 
+	     << "fDz = " << fDz/cm << " cm" << G4endl 
+             << " twistangle " << fPhiTwist/deg << " deg" << G4endl 
+	     << " phi,theta = " << fPhi/deg << ", "  << fTheta/deg << " deg" << G4endl ;
+ 
+      G4Exception("G4TwistedTrap::G4TwistedGenTrap()", "InvalidSetup",
+                  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
+    }
+
+
+
 
   CreateSurfaces();
   fCubicVolume = 2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  )   ;
@@ -950,27 +979,34 @@ G4NURBS* G4TwistedGenTrap::CreateNURBS () const
 void G4TwistedGenTrap::CreateSurfaces() 
 {
    
-   // create 6 surfaces of TwistedTub.
+  // create 6 surfaces of TwistedTub.
 
-   fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,  fPhi    , fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg ) ;
-   fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+  if ( fDx1 == fDx2 && fDx3 == fDx4 ) {    // special case : Box
+    fSide0   = new G4TwistedTrapBoxSide("0deg",   fPhiTwist, fDz, fTheta, fPhi,       fDy1, fDx1, fDy2, fDx3, fAlph, 0.*deg ) ;
+    fSide180 = new G4TwistedTrapBoxSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi , fDy1, fDx1, fDy2, fDx3, fAlph, 180.*deg) ;
+  }
+  else {  // default general case
+    fSide0   = new G4TwistedTrapAlphaSide("0deg"   ,fPhiTwist, fDz, fTheta,  fPhi    , fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg ) ;
+    fSide180 = new G4TwistedTrapAlphaSide("180deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+  }
 
-   fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta, fPhi,      fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg) ;
-   fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
+  // create parallel sides
+  fSide90 = new G4TwistedTrapParallelSide("90deg",  fPhiTwist, fDz, fTheta, fPhi,      fDy1, fDx1, fDx2, fDy2, fDx3, fDx4, fAlph, 0.*deg) ;
+  fSide270 = new G4TwistedTrapParallelSide("270deg", fPhiTwist, fDz, fTheta, fPhi + pi, fDy1, fDx2, fDx1, fDy2, fDx4, fDx3, fAlph, 180.*deg) ;
 
-
-   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2, fDz, fAlph, fPhi, fTheta,  1 ) ;
-   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1, fDz, fAlph, fPhi, fTheta, -1 ) ;
+  // create endcaps
+  fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx3, fDx4, fDy2, fDz, fAlph, fPhi, fTheta,  1 ) ;
+  fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy1, fDz, fAlph, fPhi, fTheta, -1 ) ;
  
-   // Set neighbour surfaces
-
-   fSide0->SetNeighbours(  fSide270 , fLowerEndcap , fSide90  , fUpperEndcap );
-   fSide90->SetNeighbours( fSide0   , fLowerEndcap , fSide180 , fUpperEndcap );
-   fSide180->SetNeighbours(fSide90  , fLowerEndcap , fSide270 , fUpperEndcap );
-   fSide270->SetNeighbours(fSide180 , fLowerEndcap , fSide0   , fUpperEndcap );
-   fUpperEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
-   fLowerEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  ); 
-
+  // Set neighbour surfaces
+  
+  fSide0->SetNeighbours(  fSide270 , fLowerEndcap , fSide90  , fUpperEndcap );
+  fSide90->SetNeighbours( fSide0   , fLowerEndcap , fSide180 , fUpperEndcap );
+  fSide180->SetNeighbours(fSide90  , fLowerEndcap , fSide270 , fUpperEndcap );
+  fSide270->SetNeighbours(fSide180 , fLowerEndcap , fSide0   , fUpperEndcap );
+  fUpperEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  );
+  fLowerEndcap->SetNeighbours( fSide180, fSide270 , fSide0 , fSide90  ); 
+  
 }
 
 

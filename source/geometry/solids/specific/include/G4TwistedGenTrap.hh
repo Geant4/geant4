@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedGenTrap.hh,v 1.2 2005-03-07 13:24:06 link Exp $
+// $Id: G4TwistedGenTrap.hh,v 1.3 2005-03-11 16:03:57 link Exp $
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -45,6 +45,7 @@
 #include "G4VSolid.hh"
 #include "G4TwistedTrapAlphaSide.hh"
 #include "G4TwistedTrapParallelSide.hh"
+#include "G4TwistedTrapBoxSide.hh"
 #include "G4FlatTrapSide.hh" 
 
 class G4SolidExtentList;
@@ -143,8 +144,6 @@ class G4TwistedGenTrap: public G4VSolid
 
  private:
  
-  G4double fDx ;  // temp
-
   G4double fTheta;   
   G4double fPhi ;
 
@@ -157,7 +156,10 @@ class G4TwistedGenTrap: public G4VSolid
   G4double fDx4;     
 
   G4double fDz;         // Half-length along the z axis
-  
+
+  G4double fDx ;        // maximum side in x 
+  G4double fDy ;        // maximum side in y
+
   G4double fAlph ;
   G4double fTAlph ;    // tan(fAlph)
 
@@ -259,7 +261,7 @@ G4double G4TwistedGenTrap::GetCubicVolume()
 
   
   if(fCubicVolume != 0.) ;
-  else   fCubicVolume = 1 ;
+  else   fCubicVolume =  2 * fDz * ( ( fDx1 + fDx2 ) * fDy1 + ( fDx3 + fDx4 ) * fDy2  )  ;
   return fCubicVolume;
 }
 

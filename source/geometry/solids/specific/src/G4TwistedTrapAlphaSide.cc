@@ -708,7 +708,7 @@ G4int G4TwistedTrapAlphaSide::DistanceToSurface(const G4ThreeVector &gp,
    // check validity of solution ( valid phi,psi ) 
 
    G4double halfphi = 0.5*fPhiTwist ;
-   G4double uMax = fDy ;
+   G4double uMax = GetValueB(phiR)/2 ;
 
    if (  phiR > halfphi ) phiR =  halfphi ;
    if ( phiR < -halfphi ) phiR = -halfphi ;
@@ -770,7 +770,7 @@ G4int G4TwistedTrapAlphaSide::GetAreaCode(const G4ThreeVector &xx,
    G4int areacode = sInside;
    
    if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
-      G4int yaxis = 0;
+
       G4int zaxis = 1;
       
       if (withTol) {
