@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandler.cc,v 1.2 1999-12-15 14:54:16 gunter Exp $
+// $Id: G4VRML1SceneHandler.cc,v 1.3 2000-04-12 13:09:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandler.cc
@@ -25,6 +25,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4Point3D.hh"
+#include "G4Scene.hh"
 #include "G4VisAttributes.hh"
 #include "G4Transform.hh"
 #include "G4Polyhedron.hh"
@@ -33,6 +34,10 @@
 #include "G4Polyline.hh"
 #include "G4Trd.hh"
 #include "G4Tubs.hh"
+#include "G4Trap.hh"
+#include "G4Para.hh"
+#include "G4Torus.hh"
+#include "G4Sphere.hh"
 #include "G4Text.hh"
 #include "G4Circle.hh"
 #include "G4Square.hh"

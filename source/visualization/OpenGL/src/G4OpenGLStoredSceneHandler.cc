@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.6 1999-12-15 14:54:08 gunter Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.7 2000-04-12 13:09:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,7 +40,7 @@
 #include "G4VisAttributes.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4ModelingParameters.hh"
-
+#include "G4VModel.hh"
 #include "G4OpenGLStoredSceneHandler.hh"
 
 G4OpenGLStoredSceneHandler::G4OpenGLStoredSceneHandler (G4VGraphicsSystem& system,

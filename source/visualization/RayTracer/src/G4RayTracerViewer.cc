@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerViewer.cc,v 1.3 2000-02-24 14:33:56 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.4 2000-04-12 13:09:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -14,6 +14,7 @@
 #include "g4std/strstream"
 
 #include "G4VSceneHandler.hh"
+#include "G4Scene.hh"
 #include "G4RayTracer.hh"
 #include "G4UImanager.hh"
 

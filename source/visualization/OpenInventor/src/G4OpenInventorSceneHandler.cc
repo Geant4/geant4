@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.6 1999-12-15 14:54:12 gunter Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.7 2000-04-12 13:09:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 #include <HEPVis/nodes/SoG4Trap.h>
 #include <HEPVis/nodekits/SoDetectorTreeKit.h>
 
+#include "G4Scene.hh"
 #include "G4NURBS.hh"
 #include "G4OpenInventor.hh"
 #include "G4OpenInventorSceneHandler.hh"
@@ -59,6 +60,11 @@
 #include "G4Circle.hh"
 #include "G4Square.hh"
 #include "G4Polyhedron.hh"
+#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4Cons.hh"
+#include "G4Trap.hh"
+#include "G4Trd.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4VPhysicalVolume.hh"

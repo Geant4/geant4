@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.9 1999-12-15 14:54:19 gunter Exp $
+// $Id: G4VSceneHandler.hh,v 1.10 2000-04-12 13:13:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,31 +23,18 @@
 #include "globals.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Scene.hh"
 #include "G4ViewerList.hh"
 #include "G4ViewParameters.hh"
-#include "G4Box.hh"
-#include "G4Cons.hh"
-#include "G4Tubs.hh"
-#include "G4Trd.hh"
-#include "G4Trap.hh"
-#include "G4Sphere.hh"
-#include "G4Para.hh"
-#include "G4Torus.hh"
-#include "G4Polycone.hh"
-#include "G4Polyhedra.hh"
-#include "G4Transform3D.hh"
-#include "G4VModel.hh"
 
-class G4VGraphicsSystem;
+class G4Scene;
 class G4VViewer;
-class G4VSolid;
-class G4VisAttributes;
 class G4Colour;
 class G4Visible;
-class G4VSolid;
 class G4ModelingParameters;
+class G4VModel;
+class G4VGraphicsSystem;
 class G4LogicalVolume;
+class G4VPhysicalVolume;
 
 class G4VSceneHandler: public G4VGraphicsScene {
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.5 2000-02-24 12:18:02 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.6 2000-04-12 13:09:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 #include <assert.h>
 #include <unistd.h>
 
+#include "G4Scene.hh"
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VSolid.hh"

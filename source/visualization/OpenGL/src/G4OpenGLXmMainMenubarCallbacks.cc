@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.4 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.5 2000-04-12 13:09:08 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,8 @@
 #include "G4Xt.hh"
 
 #include "G4OpenGLXmViewer.hh"
+
+#include "G4Scene.hh"
 
 #include "G4OpenGLXmRadioButton.hh"
 #include "G4OpenGLXmSliderBar.hh"
