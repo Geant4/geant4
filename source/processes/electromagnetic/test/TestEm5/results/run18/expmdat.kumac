@@ -1,0 +1,49 @@
+macro XeCH23mm.expm
+
+*     Xenon (87.5%)  CH4 (7.5%)  C3H8 (5%)  23 mm
+*     20 degre C; 1 Atm; 4.9196 mg/cm3
+*
+*     proton 3 GeV/c
+*
+*     A.H. Walenta et al. NIM 161 (p.45) 1979
+*
+
+* distribution of the energy deposit
+*
+* (from 0.0 keV to 20.0 keV by bin of 0.4 keV --> 50 bins) 
+*
+nbin=50
+vector/create vect([nbin])
+
+vector/input vect _
+     0.0         0.0         0.0         0.0        43.48e-5 _ 
+    43.48e-5   108.69e-5   108.69e-5   152.17e-5   217.39e-5 _
+   434.78e-5   717.39e-5  1043.48e-5  1739.13e-5  2195.65e-5 _
+  2630.43e-5  2847.83e-5  3021.74e-5  3130.43e-5  3065.22e-5 _
+  2956.52e-5  2739.13e-5  2521.74e-5  2282.61e-5  2065.22e-5 _
+  1891.30e-5  1760.87e-5  1478.26e-5  1369.56e-5  1260.87e-5 _
+  1152.17e-5  1043.48e-5   934.78e-5   869.56e-5   760.87e-5 _
+   717.39e-5   652.17e-5   608.69e-5   543.48e-5   478.26e-5 _
+   434.78e-5   434.78e-5   391.30e-5   391.30e-5   326.08e-5 _
+   326.08e-5   282.61e-5   282.61e-5   282.61e-5   217.39e-5   
+
+
+* renormalization ! (0.92 according the overflows in our simulation)
+factor=0.92/$SIGMA(VSUM(vect))
+vec/op/vscale vect [factor] vect
+		    
+dE=0.4e-3
+Emin= 0.0
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 1 'Xe-CH3-C3H8  proton 3GeV/c' [nbin] [Emin] [Emax]
+put/contents 1 vect
+   
+*option logy
+h/pl 1
+
+* save histo
+*
+*h/file 1 expmdat.paw ! n
+*hrout 0
+ 
+return 	     

@@ -1,0 +1,46 @@
+macro sil20mum.expm
+
+*            Silicon 20.5 micrometer
+*            pion 5 GeV/c
+*
+*     R. Bailey et al. NIM 213 (p.201) 1983
+*
+
+* distribution of the energy deposit
+*
+* (from 0.0 keV to 13.0 keV by step of 200 eV --> 65 bins) 
+*
+nbin=65
+vector/create vect([nbin])
+
+vector/input vect _
+     0.0       165.62e-5   449.80e-5   615.42e-5   331.40e-5 _
+   520.80e-5   355.02e-5   544.42e-5   426.18e-5   639.20e-5 _
+   899.60e-5   994.22e-5  1031.00e-5  2012.21e-5  1963.21e-5 _
+  2509.40e-5  3030.20e-5  3124.98e-5  3503.61e-5  3716.79e-5 _
+  4213.81e-5  3503.61e-5  3622.01e-5  3574.78e-5  3551.00e-5 _
+  3622.01e-5  3164.98e-5  2911.81e-5  2722.41e-5  2533.01e-5 _
+  2225.38e-5  2343.61e-5  2320.00e-5  2035.98e-5  2130.60e-5 _
+  2035.98e-5  1728.19e-5  1420.40e-5  1444.02e-5  1870.20e-5 _
+  1349.40e-5  1349.40e-5   923.21e-5  1136.38e-5   994.22e-5 _
+   757.59e-5   804.10e-5   520.80e-5   473.41e-5   639.20e-5 _
+   615.42e-5   378.79e-5   639.20e-5   449.80e-5   402.41e-5 _
+   544.42e-5   260.40e-5   402.41e-5   213.01e-5   331.40e-5 _
+   213.01e-5   284.02e-5   236.79e-5   212.21e-5   260.40e-5   
+   
+		    
+dE=0.2e-3
+Emin=0.0
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 1 'Si 20micron. Pion 5GeV/c' [nbin] [Emin] [Emax]
+put/contents 1 vect
+
+option stat
+h/pl 1
+
+* save histo
+*
+*h/file 1 expmdat.paw ! n
+*hrout 0
+ 
+return 	     

@@ -1,0 +1,61 @@
+macro compar.kumac
+*
+set * ; opt * 
+*
+filecase keep
+h/file 1 expmdat.paw
+h/file 2 11jan00.paw
+h/file 3 12jan00.1cm.paw
+
+h/copy //lun1/1 101
+h/copy //lun2/2 102
+h/copy //lun3/2 103
+
+set *fon -40
+set mscf 1.5
+
+set ygti 0.5  ; set gsiz 0.35 ; set ymgu 1.5
+set vsiz 0.25 ; set yval 0.3  ; set ylab 0.55
+set asiz 0.25 ; set yhti 0.9  ; set xlab 1.2 
+
+title '20 micron Silicon  pion 5 GeV/c'
+
+xkey =10.0e-3
+ykey = 4.6e-2
+dykey= 0.3e-2
+
+max 101 0.06
+set dmod 2 ; set hcol 2 ; set plci 2
+h/pl 101 
+key [xkey] [ykey] 2  'data' ! l
+
+set dmod 1 ; set hcol 4 ; set plci 4
+h/pl 102 s
+ykey=[ykey]-[dykey] 
+key [xkey] [ykey] 1  'G4: 7 micron' ! l
+
+set dmod 3 ; set hcol 1 ; set plci 1
+h/pl 103 s
+ykey=[ykey]-[dykey] 
+key [xkey] [ykey] 3  'G4: 1 cm' ! l
+
+atitle Edep(MeV) Proba/bin
+exec Redraw-Axis
+
+*close 0
+return
+
+Macro Redraw-Axis
+set plci 1
+   X1 = $GRAFINFO('WNXMIN')
+   X2 = $GRAFINFO('WNXMAX')
+   Y1 = $GRAFINFO('WNYMIN')
+   Y2 = $GRAFINFO('WNYMAX')
+   IS = $GRAFINFO('?FAIS')
+   IC = $GRAFINFO('?FACI')
+   Set FAIS 0 ; Set FACI 1
+   Box [X1] [X2] [Y1] [Y2]
+   Set FAIS [IS] ; Set FACI [IC]
+   Tick XL [X1] !
+*   Tick YB ! [Y1]
+   Return

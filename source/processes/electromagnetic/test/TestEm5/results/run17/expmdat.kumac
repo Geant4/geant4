@@ -1,0 +1,82 @@
+macro ArCO15mm.expm
+
+*            Argon-CO2 (STP) 15 mm
+*
+*     W.Allison et al. NIM 133 (p.325) 1976
+*
+*     Argon: 80%  CO2: 20%  density: 1.8223 mg/cm3
+*
+
+* distribution of the energy deposit
+*
+* (from 0.0 keV to 6.0 keV by step of 100 eV --> 60 bins) 
+*
+nbin=60
+vector/create vect([nbin])
+*
+* e- 25 GeV
+*
+vector/input vect _
+     0.0         0.0         0.0         0.0        25.34e-5 _ 
+    50.69e-5    76.02e-5   126.70e-5   177.38e-5   177.38e-5 _
+   228.10e-5   304.14e-5   405.52e-5   557.59e-5   735.01e-5 _
+   937.76e-5  1140.53e-5  1368.63e-5  1647.43e-5  1926.22e-5 _
+  2179.67e-5  2382.44e-5  2534.51e-5  2762.61e-5  2889.34e-5 _
+  3041.41e-5  3193.48e-5  3218.82e-5  3269.51e-5  3269.51e-5 _
+  3218.82e-5  3142.79e-5  3041.41e-5  2965.37e-5  2889.34e-5 _
+  2737.27e-5  2610.54e-5  2458.47e-5  2304.40e-5  2179.67e-5 _
+  2078.30e-5  1900.88e-5  1723.46e-5  1622.08e-5  1495.36e-5 _
+  1444.67e-5  1343.29e-5  1241.90e-5  1140.53e-5  1089.84e-5 _
+  1013.80e-5   963.11e-5   861.73e-5   836.39e-5   760.35e-5 _
+   684.32e-5   658.97e-5   633.63e-5   557.59e-5   506.90e-5  
+
+*there is a cross stock problem in the electron data
+*
+size=[nbin]+4
+vector/create vec2([size])
+factor=1.236
+vec2(1)=0.
+vec2(2)=0.
+vec2(3)=0.
+vec2(4)=0.
+vec/copy      vect vec2(5:)
+vec/op/vscale vec2 [factor] vec2
+*
+ 		    
+dE=0.1e-3
+Emin=0.0
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 1 'ArCO2 e- 25 GeV' [nbin] [Emin] [Emax]
+put/contents 1 vec2
+
+*
+* proton 24 GeV
+*
+vector/input vect _
+     0.0         0.0         0.0         0.0       102.27e-5 _ 
+   127.84e-5   178.98e-5   281.26e-5   357.96e-5   485.80e-5 _
+   664.79e-5   894.91e-5  1201.74e-5  1508.57e-5  1815.39e-5 _
+  2122.22e-5  2531.32e-5  2940.42e-5  3196.11e-5  3426.23e-5 _
+  3528.51e-5  3758.63e-5  3809.77e-5  3681.72e-5  3733.06e-5 _
+  3707.49e-5  3747.49e-5  3579.65e-5  3375.10e-5  3170.54e-5 _
+  2966.00e-5  2787.01e-5  2633.60e-5  2429.05e-5  2147.79e-5 _
+  1994.37e-5  1866.53e-5  1687.55e-5  1585.27e-5  1483.00e-5 _
+  1355.15e-5  1176.17e-5  1048.32e-5   946.05e-5   971.62e-5 _
+   818.20e-5   767.07e-5   690.36e-5   664.79e-5   613.65e-5 _
+   562.51e-5   511.38e-5   487.81e-5   469.24e-5   434.67e-5 _
+   384.53e-5   357.96e-5   357.95e-5   357.95e-5   332.39e-5 
+   
+     
+create/1dhisto 2 'ArCO2 proton 24 GeV' [nbin] [Emin] [Emax]
+put/contents 2 vect
+   
+*option logy
+h/pl 1
+h/pl 2
+
+* save histo
+*
+h/file 1 expmdat.paw ! n
+hrout 0
+ 
+return 	     

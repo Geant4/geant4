@@ -1,0 +1,48 @@
+macro Xenon.expm
+
+*     Xenon   85 mm
+*     20 degre C; 1 Atm; 5.458 mg/cm3
+*
+*     electron 318 MeV
+*
+*     W. Herold et al. NIM 217 (p.277) 1983
+*
+
+* distribution of the energy deposit
+*
+* (from 0.0 keV to 120 keV by bin of 1.667 keV --> 72 bins) 
+*
+nbin=72
+vector/create vect([nbin])
+
+**NB: the data are directly entered in mm, and normalized after
+
+vector/input vect _
+     0    0    0    0    0    0    0    0    0    0 _
+     0    0    0    0    0    0    0    0    1    1 _
+     3    4    2    5    8    9   13   24   38   49 _
+    68   91  116  126  125  137  142  123  130  110 _
+   104  101   93   78   69   62   53   51   43   39 _
+    35   34   28   24   23   21   19   14   19   14 _
+    11   13    9   10    6    7   10    6    8    5 _
+     3    5   
+
+* renormalization ! (0.94 according the overflows in our simulation)
+factor=0.94/$SIGMA(VSUM(vect))
+vec/op/vscale vect [factor] vect
+		    
+Emin= 0.0
+Emax= 120.0e-3
+dE= ([Emax]-[Emin])/[nbin]		     
+create/1dhisto 1 'Xenon gas  e- 318 MeV' [nbin] [Emin] [Emax]
+put/contents 1 vect
+   
+*option logy
+h/pl 1
+
+* save histo
+*
+*h/file 1 expmdat.paw ! n
+*hrout 0
+ 
+return 	     

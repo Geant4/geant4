@@ -1,0 +1,286 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                  (07-Dec-99)
+             Copyright : Geant4 Collaboration
+**********************************************
+Constructing Visualization Manager....
+Initialising Visualization Manager....
+Registering graphics systems....
+
+***** Table : Nb of materials = 16 *****
+
+ Material: Beryllium     density:  1.848 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  35.267 cm 
+   --->  Element: Beryllium      Z =  4.0   N =   9.0   A =   9.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: Aluminium     density:  2.700 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   8.893 cm 
+   --->  Element: Aluminium      Z = 13.0   N =  27.0   A =  26.98 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:  Silicon     density:  2.330 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   9.368 cm 
+   --->  Element:  Silicon      Z = 14.0   N =  28.1   A =  28.09 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: liquidArgon     density:  1.390 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.065 cm 
+   --->  Element:    Argon Ar   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Iron     density:  7.870 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.759 cm 
+   --->  Element:     Iron      Z = 26.0   N =  55.9   A =  55.85 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:   Copper     density:  8.960 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   1.436 cm 
+   --->  Element:   Copper      Z = 29.0   N =  63.5   A =  63.55 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Gold     density: 19.320 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   3.344 mm 
+   --->  Element:     Gold      Z = 79.0   N = 197.0   A = 196.97 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:     Lead     density: 11.350 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:   5.612 mm 
+   --->  Element:     Lead      Z = 82.0   N = 207.2   A = 207.19 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material: XenonGas     density:  5.858 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength:  14.478 m  
+   --->  Element:    Xenon Xe   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+ Material:    Water     density:  1.000 g/cm3   temperature: 273.15 K  pressure:   1.00 atm  RadLength:  36.092 cm 
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:  11.21 %  Abundance  66.67 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  88.79 %  Abundance  33.33 %
+
+ Material:      Air     density:  1.290 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 285.161 m  
+   --->  Element: Nitrogen  N   Z =  7.0   N =  14.0   A =  14.01 g/mole  fractionMass:  70.00 %  Abundance  72.71 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  30.00 %  Abundance  27.29 %
+
+ Material: CarbonicGas     density:  1.977 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 183.083 m  
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:  27.29 %  Abundance  33.33 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  72.71 %  Abundance  66.67 %
+
+ Material: ArgonCO2     density:  1.822 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 119.089 m  
+   --->  Element:    Argon Ar   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass:  78.44 %  Abundance  57.19 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   5.88 %  Abundance  14.27 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.68 %  Abundance  28.54 %
+
+ Material: NewArgonCO2     density:  1.822 mg/cm3  temperature: 273.15 K  pressure:   1.00 atm  RadLength: 119.110 m  
+   --->  Element:    Argon Ar   Z = 18.0   N =  40.0   A =  39.95 g/mole  fractionMass:  78.41 %  Abundance  57.14 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   5.89 %  Abundance  14.29 %
+   --->  Element:   Oxygen  O   Z =  8.0   N =  16.0   A =  16.00 g/mole  fractionMass:  15.70 %  Abundance  28.57 %
+
+ Material: XenonMethanePropane     density:  4.920 mg/cm3  temperature: 293.15 K  pressure:   1.00 atm  RadLength:  17.654 m  
+   --->  Element:    Xenon Xe   Z = 54.0   N = 131.3   A = 131.29 g/mole  fractionMass:  97.12 %  Abundance  48.61 %
+   --->  Element:   Carbon  C   Z =  6.0   N =  12.0   A =  12.01 g/mole  fractionMass:   2.28 %  Abundance  12.50 %
+   --->  Element: Hydrogen  H   Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass:   0.60 %  Abundance  38.89 %
+
+ Material: Galactic     density:  0.000 mg/cm3  temperature:   2.73 K  pressure:   0.00 atm  RadLength: 6317232936888469300000.000 km 
+   --->  Element: Galactic      Z =  1.0   N =   1.0   A =   1.01 g/mole  fractionMass: 100.00 %  Abundance 100.00 %
+
+
+===================================================
+#
+# Macro file for the initialization phase of "TestEm5.cc"
+#
+# It creates the default geometry (simple absorber box )        
+#
+/run/verbose 2
+#
+/calor/setAbsMat XenonMethanePropane   
+
+ The  WORLD   is made of 1.5 cm  of Galactic. The transverse size (YZ) of the world is 2.4 cm 
+ The ABSORBER is made of 1 cm  of XenonMethanePropane. The transverse size (YZ) is 2 cm 
+ X position of the middle of the absorber 0 fm 
+/calor/setAbsThick 23 mm  
+/calor/setAbsYZ    60 mm
+/calor/update
+
+ The  WORLD   is made of 3.5 cm  of Galactic. The transverse size (YZ) of the world is 7.2 cm 
+ The ABSORBER is made of 2.3 cm  of XenonMethanePropane. The transverse size (YZ) is 6 cm 
+ X position of the middle of the absorber 0 fm 
+/gun/setDefault
+#
+#
+#  hist file name
+/plots/sethistName run18.1mm.paw
+ hist file = run18.1mm.paw
+#  PLOT: energy deposit distribution in Gas
+/plots/setnbinEn 50
+ Nb of bins in Edep plot = 50
+/plots/setEnlow   0. keV
+ Elow  in the  Edep plot = 0
+/plots/setEnhigh  20. keV  
+ Ehigh in the  Edep plot = 0.02
+#
+/calor/cutG 1. mm    
+/calor/cutE 1. mm
+/run/initialize
+physicsList->setCut() start.
+Em5PhysicsList::SetCuts:CutLength : 1 mm 
+
+phot:  Total cross sections from a parametrisation. Good description from 10 KeV to 50 MeV for all Z
+        Sandia crossSection below 50 KeV
+       PhysicsTables from 50 keV to 50 MeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+        Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a parametrisation. Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
+
+annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+MuIoni:  knock-on electron cross sections .
+          Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+      PhysicsTables from 1 keV to 1e+03 PeV in 100 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 100 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 TeV.
+    PhysicsTables from 1 GeV to 1e+03 PeV in 50 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1e+02 TeV in 150 bins. 
+============= The cut Energy ==============================
+                            gamma              e-             mu-          proton         neutron    
+Cut in range                  1 mm            1 mm            1 mm            1 mm             
+Cut in energy
+          Beryllium        1.99 keV         466 keV        4.28 MeV        11.5 MeV            
+          Aluminium        6.89 keV         597 keV        5.02 MeV        13.1 MeV            
+            Silicon        6.89 keV         541 keV        4.72 MeV        12.2 MeV            
+        liquidArgon        6.18 keV         343 keV        3.24 MeV        8.32 MeV            
+               Iron        20.8 keV        1.28 MeV        8.52 MeV          22 MeV            
+             Copper        24.6 keV         1.4 MeV        8.95 MeV          23 MeV            
+               Gold         111 keV        2.28 MeV        11.7 MeV        29.2 MeV            
+               Lead         101 keV        1.38 MeV        8.52 MeV        20.9 MeV            
+           XenonGas         990 eV         1.95 keV        85.3 keV         104 keV            
+              Water         2.9 keV         347 keV        3.39 MeV        8.95 MeV            
+                Air         990 eV          990 eV         48.4 keV        83.2 keV            
+        CarbonicGas         990 eV          990 eV         67.5 keV         136 keV            
+           ArgonCO2         990 eV          990 eV         54.1 keV        73.6 keV            
+        NewArgonCO2         990 eV          990 eV         54.1 keV        75.4 keV            
+ XenonMethanePropane         990 eV         1.55 keV        78.3 keV         101 keV            
+           Galactic         990 eV          990 eV          990 eV          990 eV             
+===================================================
+#
+/gun/particle proton 
+/gun/energy 2.20 GeV
+
+/event/printModulo 1000
+#
+/run/beamOn 100000
+### Run 0 start.
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 9876, 54321
+----------------------------------------
+Start closing geometry.
+Start Run processing.
+
+Run terminated.
+Run Summary
+  Number of events processed : 100000
+  User=81s Real=92s Sys=8.9s
+  
+ ================== run summary =====================
+ end of Run TotNbofEvents = 100000
+    mean charged track length   in absorber=25.3303 +- 0.0280006  mm  
+
+            mean energy deposit in absorber=0.0117813 +- 3.71967e-05  MeV 
+
+ mean number of steps in absorber (charged) =2.47919 +- 0.0163025      
+ mean number of steps in absorber (neutral) =0.0003 +- 5.4764e-05      
+
+   mean number of charged secondaries = 0.68614 +- 0.00384941
+
+   mean number of neutral secondaries = 0.0003 +- 5.4764e-05
+
+   mean number of e-s =0.68614  and e+s =0
+
+(number) transmission coeff=1  reflection coeff=0.50065
+
+ energy deposit distribution 
+#entries=100000    #underflows=0    #overflows=7920
+ bin nb      Elow      entries     normalized 
+    0         0           3       0.075
+    1    0.0004          16         0.4
+    2    0.0008          17       0.425
+    3    0.0012          33       0.825
+    4    0.0016          70        1.75
+    5     0.002         131       3.275
+    6    0.0024         226        5.65
+    7    0.0028         368         9.2
+    8    0.0032         620        15.5
+    9    0.0036         935      23.375
+   10     0.004        1319      32.975
+   11    0.0044        1701      42.525
+   12    0.0048        2103      52.575
+   13    0.0052        2642       66.05
+   14    0.0056        3193      79.825
+   15     0.006        3723      93.075
+   16    0.0064        4218      105.45
+   17    0.0068        4483     112.075
+   18    0.0072        4570      114.25
+   19    0.0076        4788       119.7
+   20     0.008        4795     119.875
+   21    0.0084        4952       123.8
+   22    0.0088        4660       116.5
+   23    0.0092        4365     109.125
+   24    0.0096        4174      104.35
+   25      0.01        3882       97.05
+   26    0.0104        3527      88.175
+   27    0.0108        3190       79.75
+   28    0.0112        2779      69.475
+   29    0.0116        2584        64.6
+   30     0.012        2276        56.9
+   31    0.0124        1917      47.925
+   32    0.0128        1714       42.85
+   33    0.0132        1514       37.85
+   34    0.0136        1407      35.175
+   35     0.014        1190       29.75
+   36    0.0144        1038       25.95
+   37    0.0148         944        23.6
+   38    0.0152         820        20.5
+   39    0.0156         744        18.6
+   40     0.016         658       16.45
+   41    0.0164         607      15.175
+   42    0.0168         547      13.675
+   43    0.0172         466       11.65
+   44    0.0176         437      10.925
+   45     0.018         415      10.375
+   46    0.0184         366        9.15
+   47    0.0188         348         8.7
+   48    0.0192         303       7.575
+   49    0.0196         302        7.55
+
+ Emp =          0.0084   width=         0.0064  MeV 
+
+
+--------- Ranecu engine status ---------
+ Initial seed (index) = 0
+ Current couple of seeds = 1860569668, 671577741
+----------------------------------------

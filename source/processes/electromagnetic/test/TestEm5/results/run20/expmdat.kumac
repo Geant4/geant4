@@ -1,0 +1,44 @@
+macro ArCH4.expm
+
+*     Argon (93%)  CH4 (7%)   15 mm
+*     0 degre C; 1 Atm; 1.709 mg/cm3
+*
+*     pion 3 GeV/c
+*
+*     F. Harris et al. NIM 107 (p.413) 1973
+*
+
+* distribution of the energy deposit
+*
+* (from 0.0 keV to 8.0 keV by bin of 0.2 keV --> 40 bins) 
+*
+nbin=40
+vector/create vect([nbin])
+
+**NB: the data are directly entered in mm, and normalized after
+
+vector/input vect _
+     3    4   10   19   35   64   91  109  140  163 _
+   164  160  138  130  115  103   89   76   56   45 _
+    37   30   27   22   20   15   13   12   10   11 _
+    10    8    6    7    6    5    4    3    5    2
+
+* renormalization ! (0.96 according the overflows in our simulation)
+factor=0.96/$SIGMA(VSUM(vect))
+vec/op/vscale vect [factor] vect
+		    
+dE=0.2e-3
+Emin= 0.0
+Emax= [Emin]+[nbin]*[dE]		     
+create/1dhisto 1 'Ar-CH4  pion 3GeV/c' [nbin] [Emin] [Emax]
+put/contents 1 vect
+   
+*option logy
+h/pl 1
+
+* save histo
+*
+*h/file 1 expmdat.paw ! n
+*hrout 0
+ 
+return 	     
