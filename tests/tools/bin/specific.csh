@@ -451,15 +451,15 @@ if ( `uname -n` == "papou1" ) then
   set prompt='g4-papou1> ' 
 endif
 
-if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "pc-gbp" || `uname -n` == "pc-89026" || `uname -n` == "pc100" || `uname -n` == "pcal26" ) then
+if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "nb-barrand2" ) then
   set prompt='g4-pc-gbp> ' 
 # Core :
   setenv CVSROOT :pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
   setenv G4INSTALL /geant4/geant4-05-00-ref-01
+  setenv G4SYSTEM Linux-g++
   setenv G4WORKDIR $G4INSTALL
   setenv G4STTDIR $G4WORKDIR/stt
   setenv G4LIB $G4WORKDIR/lib
-  setenv G4SYSTEM Linux-g++
   setenv G4DEBUG 1
   setenv G4LIB_BUILD_SHARED 1
   setenv CPPVERBOSE 1
@@ -470,25 +470,25 @@ if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "pc-gbp" || `uname -n`
   setenv G4LEVELGAMMADATA $G4WORKDIR/data/PhotonEvaporation
   setenv G4RADIOACTIVEDATA $G4WORKDIR/data/RadiativeDecay
   setenv G4LEDATA $G4WORKDIR/data/G4EMLOW0.3
-# CMT :
-#  source /projects/CMT/v1r12/mgr/setup.csh
 # OpenGL driver :
 #  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
 #  setenv G4VIS_BUILD_OPENGLX_DRIVER 1
 #  setenv G4VIS_USE_OPENGLXM 1
 #  setenv G4VIS_USE_OPENGLX 1
-#  setenv OGLHOME /lal/Mesa/3.2/Linux
+#  setenv OGLHOME /usr/include
+# CMT :
+#  source /projects/CMT/v1r12/mgr/setup.csh
 # Inventor driver :
-#  source /projects/HEPVis/v5r2p1/cmt/cleanup.csh
-#  source /projects/HEPVis/v5r2p1/cmt/setup.csh
+#  source /projects/HEPVis/v6r3/cmt/cleanup.csh
+#  source /projects/HEPVis/v6r3/cmt/setup.csh
 #  setenv G4VIS_BUILD_OIX_DRIVER 1
 #  setenv G4VIS_USE_OIX 1
-#  setenv TTFLIBS "-L/lal/freetype/1.3.1/Linux/lib -lttf"
-#  setenv OIVFLAGS "-I$HEPVISROOT/include -I$SOFREEROOT/include -I$SOFREEXTROOT/include"
-#  setenv OIVLIBS "-L$SOFREEXTROOT/$SOFREEXTCONFIG -lSoFreeXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVis ${TTFLIBS} -L$SOFREEROOT/$SOFREECONFIG -lSoFree"
+#  setenv TTFLIBS "-L/usr/lib -lttf"
+#  setenv OIVFLAGS "-I$HEPVISROOT/include -I$COINGLROOT/include -I$COINXTROOT/include"
+#  setenv OIVLIBS "-L$COINXTROOT/$COINXTCONFIG -lSoXt -L$HEPVISROOT/$HEPVISCONFIG -lHEPVisXt -lHEPVisDetector -lHEPVisGeometry -lHEPVisUtils ${TTFLIBS} -L$COINGLROOT/$COINGLCONFIG -lCoin"
 # UI Xm :
 #  setenv G4UI_BUILD_XM_SESSION 1
-# setenv G4UI_USE_XM 1
+#  setenv G4UI_USE_XM 1
 #  setenv XENVIRONMENT $G4INSTALL/examples/novice/N03/visTutor/g4Xt.xrm
 # AIDA :
 #  setenv G4ANALYSIS_USE 1
@@ -500,9 +500,8 @@ if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "pc-gbp" || `uname -n`
 #  source /projects/Lab/v9r0/cmt/setup.csh
 #  setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --cflags`
 #  setenv G4ANALYSIS_AIDA_CONFIG_LIBS `aida-config --libs`
+#  setenv PYTHONPATH ${PYTHONPATH}:.
 # Else :
-#  setenv G4VIS_BUILD_DAWN_DRIVER     1
-#  setenv G4VIS_BUILD_VRML_DRIVER     1
 #  setenv G4VIS_USE_DAWN              1
 #  setenv G4VIS_USE_DAWNFILE          1
 #  setenv G4VIS_USE_VRML              1
@@ -524,7 +523,6 @@ if ( `uname -n` == "VMhost.lal.in2p3.fr" || `uname -n` == "pc-gbp" || `uname -n`
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/AnaEx01
   setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${G4WORKDIR}/tmp/${G4SYSTEM}/DMX
-  setenv PYTHONPATH ${PYTHONPATH}:.
 endif
 
 if ( `uname -n` == "lx-si1.lal.in2p3.fr" ) then
