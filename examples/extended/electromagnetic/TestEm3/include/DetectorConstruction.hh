@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.5 2004-01-16 14:14:08 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.6 2004-04-16 16:19:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -90,7 +90,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
      const G4Material*        GetWorldMaterial()     {return defaultMaterial;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
-                 
+         
+     void SetBeamEnergy(G4double val) {beamEnergy = val;};
+     G4double GetBeamEnergy() const {return beamEnergy;};
+        
   private:
      
      G4int              NbOfAbsor;     
@@ -127,6 +130,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4UserLimits*      userLimits;
      
      DetectorMessenger* detectorMessenger;
+     G4double           beamEnergy;
       
   private:
     

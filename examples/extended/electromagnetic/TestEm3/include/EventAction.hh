@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.hh,v 1.4 2004-03-16 18:06:17 maire Exp $
+// $Id: EventAction.hh,v 1.5 2004-04-16 16:19:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -54,9 +54,10 @@ class EventAction : public G4UserEventAction
     void SetPrintModulo(G4int    val)  {printModulo = val;};
     
     void SumEnergy(G4int k, G4double de, G4double dl)
-        {energyDeposit[k] += de; trackLengthCh[k] += dl;};
+        { if(k>=0 && k<MaxAbsor) {energyDeposit[k] += de; trackLengthCh[k] += dl;} };
 	
-    void SumEnLeaving(G4int k, G4double En) {energyLeaving[k] += En;};   	
+    void SumEnLeaving(G4int k, G4double En) 
+        { if(k>=0 && k<MaxAbsor) {energyLeaving[k] += En;} };   	
         
   private:  
     DetectorConstruction* detector;

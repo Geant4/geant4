@@ -21,9 +21,8 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.13 2004-03-16 18:06:17 maire Exp $
+// $Id: RunAction.cc,v 1.14 2004-04-16 16:19:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,6 +33,7 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 
 #include "Randomize.hh"
@@ -176,22 +176,27 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   G4int NbOfEvents = aRun->GetNumberOfEvent();
   G4double norme = 1./NbOfEvents;
+  G4double beamEnergy = Detector->GetBeamEnergy();
+  G4double sqbeam = sqrt(beamEnergy/GeV);
 
-  G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs,MeanEleav,rmsEleav;
+  G4double MeanEAbs,rmsEAbs,MeanLAbs,rmsLAbs,MeanEleav,rmsEleav,res,sigres;
 
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int  prec = G4cout.precision(2);
 
-  G4cout << "\n-------------------------------------------------------------\n"
-         << std::setw(51) << "total energy dep"
-	 << std::setw(27) << "total tracklen"
-	 << std::setw(53) << "energy leakage from secondaries \n \n";	 
+  G4cout << "\n----------------------------------------------------------------------------\n"
+         << "                               "
+         << "total energy dep      sigE/E*sqrt(E0(GeV))  "
+	 << "        total tracklen"
+	 << "        mean energy leaving per layer \n \n";	 
 
   for (G4int k=0; k<Detector->GetNbOfAbsor(); k++)
     {
      MeanEAbs = norme*sumEAbs[k];
       rmsEAbs = norme*sqrt(abs(NbOfEvents*sum2EAbs[k] - sumEAbs[k]*sumEAbs[k]));
+      res     = rmsEAbs*sqbeam*100./MeanEAbs;
+      sigres  = res*sqrt(norme);
 
      MeanLAbs = norme*sumLAbs[k];
       rmsLAbs = norme*sqrt(abs(NbOfEvents*sum2LAbs[k] - sumLAbs[k]*sumLAbs[k]));
@@ -207,14 +212,15 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      << ") :"
      << std::setw( 7) << G4BestUnit(MeanEAbs,"Energy") << " +- "
      << std::setw( 5) << G4BestUnit( rmsEAbs,"Energy")
+     << "     (" << res << " +- " << sigres << ")%  " 
      << std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
      << std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
-     << std::setw(22) << G4BestUnit(MeanEleav,"Energy") << " +- "
+     << std::setw(12) << G4BestUnit(MeanEleav,"Energy") << " +- "
      << std::setw( 5) << G4BestUnit( rmsEleav,"Energy")     
      << G4endl;
     }
 
-  G4cout << "\n-------------------------------------------------------------";
+  G4cout << "\n----------------------------------------------------------------------------\n";
   G4cout << G4endl;
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
@@ -322,7 +328,7 @@ void RunAction::PrintDedxTables()
       G4cout << "\nG4VAL \n ";
       for (G4int l=0;l<nbin; ++l)
          {
-           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[l],couple);
+           G4double dedx = G4LossTableManager::Instance()->GetDEDX(part,tk[l],couple);
            G4cout << dedx/(MeV/cm) << "\t";
 	   if ((l+1)%ncolumn == 0) G4cout << "\n ";
          }

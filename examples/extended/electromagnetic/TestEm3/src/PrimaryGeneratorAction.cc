@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorAction.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
+// $Id: PrimaryGeneratorAction.cc,v 1.2 2004-04-16 16:19:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,6 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
                     = particleTable->FindParticle(particleName="e-");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
-  particleGun->SetParticleEnergy(1.*GeV);
   G4double position = -0.5*(Detector->GetWorldSizeX());
   particleGun->SetParticlePosition(G4ThreeVector(position,0.*cm,0.*cm));
 }
@@ -82,6 +81,9 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
 
 void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
+
+  particleGun->SetParticleEnergy(Detector->GetBeamEnergy());
+
   //this function is called at the begining of event
   //
   //randomize the beam, if requested.
