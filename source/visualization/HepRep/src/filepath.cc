@@ -8,6 +8,11 @@
 
 #include "zipios++/filepath.h"
 
+//MD: Linux 2.95 does not have S_ISSOCK under c++ and geant4
+#ifndef S_ISSOCK
+#define S_ISSOCK(mode)  0
+#endif
+
 namespace zipios {
 
 using namespace std ;

@@ -5,13 +5,17 @@
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.1 2003-07-11 06:01:45 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.2 2003-07-11 17:15:22 duns Exp $ */
 
 #include <stdio.h>
 
 #include "zutil.h"
 
 struct internal_state {int dummy;}; /* for buggy compilers */
+
+//MD
+extern FILE *fdopen;
+// (int __fd, __const char *__modes) __THROW;
 
 #ifndef Z_BUFSIZE
 #  ifdef MAXSEG_64K
