@@ -2,17 +2,24 @@
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
 #include "Randomize.hh"
+#include "G4KineticTrackVector.hh"
+#include "G4CollisionInitialState.hh"
 
 // first prototype
 
-G4CollisionInitialState * G4MesonAbsorption::
-GetCollision(G4KineticTrack * projectile, std::vector<G4KineticTrack *> targets)
+const std::vector<G4CollisionInitialState *> & G4MesonAbsorption::
+GetCollisions(G4KineticTrack * aProjectile, 
+	      std::vector<G4KineticTrack *> & someCandidates,
+	      G4double aCurrentTime)
 {
+  std::vector<G4CollisionInitialState *> result;
+  return result;
 }
 
 
-std::vector<G4KineticTrack *> * G4MesonAbsorption::
-Scatter(G4KineticTrack * projectile, std::vector<G4KineticTrack *> & targets)
+G4KineticTrackVector * G4MesonAbsorption::
+GetFinalState(G4KineticTrack * projectile, 
+              std::vector<G4KineticTrack *> & targets)
 {
   // Only 2-body absorption for the time being.
   // If insufficient, use 2-body absorption and clusterization to emulate 3-,4-,etc body absorption.
@@ -70,7 +77,7 @@ Scatter(G4KineticTrack * projectile, std::vector<G4KineticTrack *> & targets)
   G4KineticTrack * f2 = 
       new G4KineticTrack(targets[1]->GetDefinition(), 0., 
                         targets[1]->GetPosition(), final2);
-  std::vector<G4KineticTrack *> * result = new std::vector<G4KineticTrack *>;
+  std::vector<G4KineticTrack *> * result = new G4KineticTrackVector;
   result->push_back(f1);
   result->push_back(f2);
 
