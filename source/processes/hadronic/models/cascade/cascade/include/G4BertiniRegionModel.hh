@@ -9,7 +9,7 @@
 #include "G4Neutron.hh"
 
 
-typedef G4std::vector<G4double>::const_iterator iterator; 
+typedef G4std::vector<G4double>::const_iterator my_iterator; 
 
 class G4BertiniRegionModel {
   /*! \class G4BertiniRegionModel

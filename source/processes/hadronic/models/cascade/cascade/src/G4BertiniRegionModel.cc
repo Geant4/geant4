@@ -104,8 +104,8 @@ void G4BertiniRegionModel::Init(const G4int numberOfLayers, const G4int A, const
 //--------------------------------------------------------------
 
 G4double G4BertiniRegionModel::GetDensity(G4double r){
-  iterator j=density.begin();
-     for(iterator i=radius.begin(); i<radius.end(); i++){
+  my_iterator j=density.begin();
+     for(my_iterator i=radius.begin(); i<radius.end(); i++){
      if(r <= *i) return *j;
      j++;
    }
@@ -115,8 +115,8 @@ G4double G4BertiniRegionModel::GetDensity(G4double r){
 
 G4double G4BertiniRegionModel::GetPotentialEnergy(G4double r, G4int particle){
   if(particle == 0){ //proton
-    iterator j=protonPotentialEnergy.begin();
-     for(iterator i=radius.begin(); i<radius.end(); i++){
+    my_iterator j=protonPotentialEnergy.begin();
+     for(my_iterator i=radius.begin(); i<radius.end(); i++){
      if(r <= *i) return *j;
      j++;
    }
@@ -124,8 +124,8 @@ G4double G4BertiniRegionModel::GetPotentialEnergy(G4double r, G4int particle){
   }
   
   if(particle == 1){ //neutron
-    iterator j=neutronPotentialEnergy.begin();
-     for(iterator i=radius.begin(); i<radius.end(); i++){
+    my_iterator j=neutronPotentialEnergy.begin();
+     for(my_iterator i=radius.begin(); i<radius.end(); i++){
      if(r <= *i) return *j;
      j++;
    }
@@ -138,15 +138,15 @@ G4double G4BertiniRegionModel::GetMaximumNucleonMomentum(G4double r,
 						  G4int nucleon){
  
   if(nucleon == 0){
-     iterator j=protonFermiMomentum.begin();
-     for(iterator i=radius.begin(); i<radius.end(); i++){
+     my_iterator j=protonFermiMomentum.begin();
+     for(my_iterator i=radius.begin(); i<radius.end(); i++){
      if(r <= *i)  return *j;
      j++;
      }
   }
   if(nucleon==1){
-     iterator j=neutronFermiMomentum.begin();
-     for(iterator i=radius.begin(); i<radius.end(); i++){
+     my_iterator j=neutronFermiMomentum.begin();
+     for(my_iterator i=radius.begin(); i<radius.end(); i++){
      if(r <= *i)  return *j;
      j++;
      }
