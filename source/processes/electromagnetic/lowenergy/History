@@ -1,4 +1,4 @@
-$Id: History,v 1.85 2001-08-20 16:25:22 pia Exp $
+$Id: History,v 1.86 2001-08-20 17:08:35 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20.08.2001 - MGP, tag emlowen-V03-02-05
+             Added files resulting from design iteration in the data domain   
 
 20.08.2001 - MGP, tag emlowen-V03-02-04
 	     Same as emlowen-V03-02-02 + bug fix by V.I. described below
