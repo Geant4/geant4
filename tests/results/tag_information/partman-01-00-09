@@ -1,0 +1,15 @@
+- May 26, 99  J.Allison (partman-01-00-09)
+- In G4NucleiProperties.hh (Vicente Lara):
+  Added GetNuclearMass, GetBindingEnergy
+  Corrected GetMassExcess.
+- In G4NucleiPropertiesTabel.hh:
+  Added GetNuclearMass (VL).
+  Changed G4String to const char* in (JA):
+    static const char*& GetName(G4int Z, G4int A);
+    static const char* Name[nEntries];
+    static const char* noName;
+- Split G4NucleiPropertiesTable.cc into G4NucleiPropertiesTableA.cc
+  and G4NucleiPropertiesTableA.cc (JA).
+- G4DecayTable.cc: Added inclusion of globals.hh to make it
+  self-consistent (Gabriele, May 25).
+
