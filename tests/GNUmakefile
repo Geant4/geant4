@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.29 2000-07-26 15:36:16 stesting Exp $
+# $Id: GNUmakefile,v 1.30 2000-07-27 02:31:19 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -206,4 +206,4 @@ clean_examples_links_binaries:
 	@for nn in $(PERSISTENCY); do \
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test4$$nn; \
 	done;:
-        @rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
