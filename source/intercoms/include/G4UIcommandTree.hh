@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommandTree.hh,v 1.4 1999-12-15 14:50:39 gunter Exp $
+// $Id: G4UIcommandTree.hh,v 1.5 2000-02-14 12:24:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -28,7 +28,7 @@ class G4UIcommandTree
   public:
       G4UIcommandTree();
       G4UIcommandTree(G4String thePathName);
-      G4UIcommandTree(char * thePathName);
+      G4UIcommandTree(const char * thePathName);
       ~G4UIcommandTree();
       int operator==(const G4UIcommandTree &right) const;
       int operator!=(const G4UIcommandTree &right) const;

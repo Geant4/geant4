@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StateManager.hh,v 1.4 1999-12-15 14:50:38 gunter Exp $
+// $Id: G4StateManager.hh,v 1.5 2000-02-14 12:24:41 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -73,7 +73,7 @@ public: // with description
   G4String GetStateString(G4ApplicationState aState);
   //  A utility method which returns a string of the state name.
   void Pause();
-  void Pause(char* msg);
+  void Pause(const char* msg);
   void Pause(G4String msg);
   //  G4UIsession::pauseSession() will be invoked. The argument string "msg"
   // will be used as a prompt characters if the session is non-graphical.
