@@ -1,7 +1,5 @@
 #!/bin/sh -f
 #
-#
-#
 #  Usage :
 #     UNIX> cd <g4sttdir>/bin
 #     UNIX> chmod u+x run.sh
@@ -38,9 +36,7 @@ fi
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
-if [ -d $dir ] ; then
-  echo "" > /dev/null
-else 
+if [ ! -d $dir ] ; then
  echo "$dir does not exist."
  echo "This is now an error.  Create a directory or a symbolic link"
  echo "  to a directory by hand or in a calling script."
@@ -48,9 +44,7 @@ fi
 
 # Make $G4WORKDIR/stt/$G4SYSTEM directory :
 dir=$G4WORKDIR/stt/$G4SYSTEM
-if [ -d $dir ] ; then
-  echo "" > /dev/null
-else 
+if [ ! -d $dir ] ; then
   mkdir $dir
   echo "$dir created."
 fi

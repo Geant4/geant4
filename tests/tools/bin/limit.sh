@@ -52,6 +52,6 @@ fi
 fi
 
 if [ `uname -n | grep dxplus` ]; then
-echo "I don't know about limits here :)...ooops...already know :("
-ulimit -d 400000
+  echo "dxplus ulimit -d 400000"
+  ulimit -d 400000
 fi

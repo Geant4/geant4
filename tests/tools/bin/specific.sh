@@ -177,6 +177,12 @@ if [ X`uname -n | grep dxplus` != X  -o "$UNAMEN" = "dcosf01" ]; then
   export G4STTDIR=/afs/cern.ch/sw/geant4/stt/$REF/testtools/geant4/tests/tools
   export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
+  if [ "$UNAMEN" = "dxplus01" -o "$UNAMEN" = "dxplus02"  -o "$UNAMEN" = "dxplus03" -o "$UNAMEN" = "dxplus04" ]; then
+    export G4TMP=/tmp/geant4stt
+    if [ ! -d $G4TMP }; then
+      mkdir $G4TMP
+    fi
+  fi
   # G4 build flags :
   ######export G4UI_BUILD_XM_SESSION=1
 #  export G4VIS_BUILD_OPENGLXM_DRIVER=1

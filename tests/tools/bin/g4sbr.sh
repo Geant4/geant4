@@ -111,12 +111,25 @@ else
     echo "STT:ABORT stt.${REFTAG} already exists."
     exit
   fi
-  echo 'REMOVE bin/* lib/* tmp/*'
-  rm -r bin/* lib/* tmp/*
   echo "STT:CREATE stt.${REFTAG} and RESET stt symbolic link."
   mkdir stt.${REFTAG}
   rm -rf stt
   ln -s stt.${REFTAG} stt
+  # To enable G4TMP to be in local/nfs disk and lib/bin in afs
+  # (this is for public machines where geant4 does not own local disk space)
+  # G4TMP is defined in specific.sh which is sourced in setup.sh
+  G4TMP=${G4TMP:=$G4WORKDIR/tmp}
+  export G4TMP
+  G4LIB=${G4LIB:=$G4WORKDIR/lib}
+  export G4LIB
+  G4BIN=${G4BIN:=$G4WORKDIR/bin}
+  export G4BIN
+  echo "STT:REMOVE files in $G4TMP"
+  rm -r $G4TMP/*
+  echo "STT:REMOVE files in $G4LIB"
+  rm -r $G4LIB/*
+  echo "STT:REMOVE files in $G4BIN"
+  rm -r $G4BIN/*
 fi
 echo "STT:SETUPDirectories Finished"
 ########################################################
@@ -125,7 +138,7 @@ echo "STT:SETUPDirectories Finished"
 # Build&run all
 ################################
 cd ${G4WORKDIR}
-. ${G4INSTALL}/tests/tools/bin/limit.sh
+. ${G4STTDIR}/bin/limit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
