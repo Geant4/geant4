@@ -1,4 +1,3 @@
-$Id: hadronic_lists.gmk,v 1.2 2004-12-13 16:11:14 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for physics list user.  
 # JPW. Fri Jul 25 10:39:58 CEST 2003
