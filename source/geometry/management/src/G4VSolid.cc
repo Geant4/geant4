@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.cc,v 1.21 2004-09-15 09:55:35 grichine Exp $
+// $Id: G4VSolid.cc,v 1.22 2004-09-22 07:16:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VSolid
@@ -420,14 +420,29 @@ G4NURBS* G4VSolid::CreateNURBS () const
 
 ////////////////////////////////////////////////////////////////
 //
+// Returns an estimation of the solid volume in internal units.
+// The number of statistics and error accuracy is fixed.
+// This method may be overloaded by derived classes to compute the
+// exact geometrical quantity for solids where this is possible.
+// or anyway to cache the computed value.
+// This implementation does NOT cache the computed value.
+
+G4double G4VSolid::GetCubicVolume()
+{
+  G4int cubVolStatistics = 1000000;
+  G4double cubVolEpsilon = 0.001;
+  return EstimateCubicVolume(cubVolStatistics, cubVolEpsilon);
+}
+
+////////////////////////////////////////////////////////////////
+//
 // Calculate cubic volume based on Inside() method.
 // Accuracy is limited by the second argument or the statistics
 // expressed by the first argument.
 
-
-G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon)
+G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon) const
 {
-  G4int i, iInside=0;
+  G4int iInside=0;
   G4double px,py,pz,minX,maxX,minY,maxY,minZ,maxZ,volume;
   G4bool yesno;
   G4ThreeVector p;
@@ -443,16 +458,14 @@ G4double G4VSolid::EstimateCubicVolume(G4int nStat, G4double epsilon)
   yesno = this->CalculateExtent(kXAxis,limit,origin,minX,maxX);
   yesno = this->CalculateExtent(kYAxis,limit,origin,minY,maxY);
   yesno = this->CalculateExtent(kZAxis,limit,origin,minZ,maxZ);
- 
 
   // limits
 
   if(nStat < 100)    nStat   = 100;
   if(epsilon > 0.01) epsilon = 0.01;
 
-  for(i = 0; i < nStat; i++ )
+  for(size_t i = 0; i < nStat; i++ )
   {
-
     px = minX+(maxX-minX)*G4UniformRand();
     py = minY+(maxY-minY)*G4UniformRand();
     pz = minZ+(maxZ-minZ)*G4UniformRand();

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.15 2004-09-15 09:55:35 grichine Exp $
+// $Id: G4VSolid.hh,v 1.16 2004-09-22 07:15:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -165,10 +165,12 @@ class G4VSolid
       // Throw exception if ComputeDimensions called frrom an illegal
       // derived class.
 
-    virtual G4double GetCubicVolume() {return 0.;}
+    virtual G4double GetCubicVolume();
       // Returns an estimation of the solid volume in internal units.
-      // This method will become pure-virtual as soon as an implementation
-      // for all the implemented solids is provided.
+      // This method may be overloaded by derived classes to compute the
+      // exact geometrical quantity for solids where this is possible,
+      // or anyway to cache the computed value.
+      // Note: the computed value is NOT cached.
 
     virtual G4GeometryType  GetEntityType() const = 0;
       // Provide identification of the class of an object.
@@ -258,10 +260,10 @@ class G4VSolid
       // If the polygon is completely clipped away, the polygon is cleared.
 
 
-    G4double EstimateCubicVolume(G4int nStat, G4double epsilon);
-    // Calculate cubic volume based on Inside() method.
-    // Accuracy is limited by the second argument or the statistics
-    // expressed by the first argument.
+    G4double EstimateCubicVolume(G4int nStat, G4double epsilon) const;
+      // Calculate cubic volume based on Inside() method.
+      // Accuracy is limited by the second argument or the statistics
+      // expressed by the first argument.
 
 private:
 
