@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.51 2004-06-23 16:30:08 stesting Exp $
+# $Id: Configure,v 1.52 2004-06-23 21:33:09 stesting Exp $
 #
-# Generated on Wed Jun 23 18:15:52 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 23 23:32:10 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -166,6 +166,7 @@ g4bin=''
 g4lib=''
 g4tmp=''
 g4data=''
+g4elasticdata=''
 g4ledata=''
 g4levelgammadata=''
 g4neutronhpcrosssections=''
@@ -4462,6 +4463,7 @@ g4compiler='$g4compiler'
 g4conf='$g4conf'
 g4data='$g4data'
 g4debug='$g4debug'
+g4elasticdata='$g4elasticdata'
 g4global='$g4global'
 g4granular='$g4granular'
 g4include='$g4include'
