@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.61 2003-11-24 10:15:14 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.62 2003-11-24 16:29:16 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -727,7 +727,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         // While must be commented from here and down __________________________
         //G4bool frat=true;// [k/(k+p) factor of QuarkExchange] * [p/k factor of fixed ct] = p/(p+k)
         //G4int cMax=27;   // For m_gam=0:*[k/(k+p) factoreta 1/s {m<<k,s=m^2*(1+p/k)}]*[p/k (ct=0)]
-        //G4int pCount=0;  // so for m_gam=0 the suppression factor can be p*p/(p+k)/(p+k) @@ (??)
+        //G4int pCount=0;  // so for m_gam=0 the suppression factor can be p*p/(p+k)/(p+k) @@ (?)
 		//while (frat && pCount<cMax)
         //{
 		  // ____ Keep this when closing while______________________________
@@ -747,7 +747,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #ifdef debug
 	    G4cout<<"G4Q::HQ:**PHOTON is SUB'ED from Q** k="<<kMom<<",ct="<<cost<<",QM="<<quasM<<G4endl;
 #endif
-        // @@ (??) Pseudo Fermi-mom correction (use lib function for the 3d randomization --*
+        // @@ (?) Pseudo Fermi-mom correction (use lib function for the 3d randomization --*
         //G4double x = G4UniformRand(); //                                                    |
         //G4double y = G4UniformRand(); //                                                    |
         //G4double z = G4UniformRand(); //                                                    |
@@ -775,7 +775,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
         G4double dc=(pow(x,G4UniformRand())-1.)/x; // smearing of the delta-function absorbtion|
         if(dc<0.)dc=0.;                            // only positive smearing                   /
         cost-=dc;                                  // @@ for virtual photons smear in both dir |
-        // --- Quark mass correction ends here (???) ------------------------------------------*
+        // --- Quark mass correction ends here (?) ------------------------------------------*
 	  }
       else
 	  {
@@ -2381,7 +2381,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
       if(tmpQPDG.GetWidth()<.000001) reMass=tmpQPDG.GetMass();
       G4LorentzVector r4Mom(0.,0.,0.,reMass);
       G4LorentzVector s4Mom(0.,0.,0.,sMass);// Mass is random since probab. time
-      if(sPDG>MINPDG)                       // @@ For the Quark-Exchange hadronization (??)
+      if(sPDG>MINPDG)                       // @@ For the Quark-Exchange hadronization (?)
       {
 #ifdef debug
         G4cout<<"G4Q::HQ:Q->RQ+QEX s="<<sPDG<<",pM="<<pMass<<",E="<<theEnvironment<<G4endl;
