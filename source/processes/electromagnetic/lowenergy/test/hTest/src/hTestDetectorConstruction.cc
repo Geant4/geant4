@@ -203,32 +203,34 @@ void hTestDetectorConstruction::DefineMaterials()
 //
 
   density = 1.000*g/cm3;
-  G4Material* Water = new G4Material(name="Water", symbol="H_2O", 
-                                   density, ncomponents=2);
+  G4Material* Water = new G4Material("Water", density, 2);
+  Water->SetChemicalFormula("H_2O");
   Water->AddElement(elH, natoms=2);
   Water->AddElement(elO, natoms=1);
 
   density = 0.00066715*g/cm3;
-  G4Material* CH4 = new G4Material(name="Methane", symbol="CH_4", 
-                                   density, ncomponents=2);
+  G4Material* CH4 = new G4Material("Methane", density, 2);
+  CH4->SetChemicalFormula("CH_4");
   CH4->AddElement(elH, natoms=4);
   CH4->AddElement(elC, natoms=1);
 
-  G4Material*  Graphite = new G4Material(name="Graphite", symbol="Graphite",
-	 			         density=2.265*g/cm3, ncomponents=1);
+  G4Material* Graphite = new G4Material("Graphite", 2.265*g/cm3, 1);
+  Graphite->SetChemicalFormula("Graphite");
   Graphite->AddElement( elC, 1 );
 
   density = 5.3176*g/cm3;
-  G4Material* GaAs = new G4Material(name="GaAs", symbol="GaAs", 
-                                    density, ncomponents=2);
+  G4Material* GaAs = new G4Material("GaAs", density, ncomponents=2);
+  GaAs->SetChemicalFormula("GaAS");
   GaAs->AddElement(elGa, natoms=1);
   GaAs->AddElement(elAs, natoms=1);
 
-  G4Material* Ethane = new G4Material ("Ethane" ,"C_2H_6", 0.4241*g/cm3, 2);
+  G4Material* Ethane = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
+  Ethane->SetChemicalFormula("C_2H_6");
   Ethane->AddElement(elH,6);
   Ethane->AddElement(elC,2);
   
-  G4Material* CsI = new G4Material ("CsI" , "CsI", 4.53*g/cm3, 2);
+  G4Material* CsI = new G4Material ("CsI" , 4.53*g/cm3, 2);
+  CsI->SetChemicalFormula("CsI");
   CsI->AddElement(Cs,1);
   CsI->AddElement(I,1);
 
@@ -238,12 +240,12 @@ void hTestDetectorConstruction::DefineMaterials()
 
   density = 1.290*mg/cm3;
   //density = 1.*mg/cm3;
-  G4Material* Air = new G4Material(name="Air"  , density, ncomponents=2);
+  G4Material* Air = new G4Material("Air"  , density, ncomponents=2);
   Air->AddElement(elN, fractionmass=0.7);
   Air->AddElement(elO, fractionmass=0.3);
 
   density = 1.39*g/cm3;
-  G4Material* Mylar = new G4Material(name="Mylar"  , density, ncomponents=3);
+  G4Material* Mylar = new G4Material("Mylar"  , density, ncomponents=3);
   Mylar->AddElement(elC, natoms=10);
   Mylar->AddElement(elH, natoms=18);
   Mylar->AddElement(elO, natoms=5);
@@ -253,7 +255,7 @@ void hTestDetectorConstruction::DefineMaterials()
   temperature = 2.73*kelvin;
   a = 1.01*g/mole;
   z = 1.0;
-  G4Material* Vacuum = new G4Material(name="Vacuum", z, a, density,
+  G4Material* Vacuum = new G4Material("Vacuum", z, a, density,
                                       kStateGas,temperature,pressure);
 
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
