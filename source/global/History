@@ -1,4 +1,4 @@
-$Id: History,v 1.108 2003-01-22 17:57:51 gcosmo Exp $
+$Id: History,v 1.109 2003-02-05 15:26:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 05, 2003  G.Cosmo (global-V05-00-01)
+- Removed copies of SystemOfUnits.h and PhysicalConstants.h, now using
+  directly headers from CLHEP: changed globals.hh and G4SIunits.hh.
 
 January 22, 2003  G.Cosmo (global-V05-00-00)
 - global.hh: exclude definition of min/max for Windows .NET VC++ compiler.
