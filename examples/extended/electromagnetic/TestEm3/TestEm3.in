@@ -1,4 +1,4 @@
-# $Id: TestEm3.in,v 1.9 2003-11-27 18:20:16 vnivanch Exp $
+# $Id: TestEm3.in,v 1.10 2004-02-06 10:15:53 vnivanch Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -11,6 +11,8 @@
 #
 ##/testem/phys/addPhysics  g4v52
 /testem/phys/addPhysics  standard
+#/process/eLoss/verbose  3
+/process/eLoss/preciseRange  true
 #
 /run/initialize
 #
