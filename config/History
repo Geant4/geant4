@@ -1,4 +1,4 @@
-$Id: History,v 1.33 1999-05-31 17:28:13 stesting Exp $
+$Id: History,v 1.34 1999-06-01 13:52:44 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+1st June 1999  John Allison
+- Added /$(G4TARGET) to liblist -d $(G4WORKDIR)/tmp/$(G4SYSTEM) in binmake.gmk.
 
 31st May 1999  John Allison
 - Added -I$(G4BASE)/processes/electromagnetic/lowenergy/include.
