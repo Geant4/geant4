@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IntersectionSolid.cc,v 1.15 2001-08-13 14:03:37 gcosmo Exp $
+// $Id: G4IntersectionSolid.cc,v 1.16 2001-10-02 08:51:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of methods for the class G4IntersectionSolid
@@ -433,6 +433,10 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
 
   if( Inside(p) == kOutside )
   {
+    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p,v),"
+           << " point p is outside" << G4endl;
+    G4cerr << "          p = " << p << G4endl;
+    G4cerr << "          v = " << v << G4endl;
     G4cout << "Position:"  << G4endl << G4endl;
     G4cout << "p.x() = "   << p.x()/mm << " mm" << G4endl;
     G4cout << "p.y() = "   << p.y()/mm << " mm" << G4endl;
@@ -441,10 +445,6 @@ G4IntersectionSolid::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.x() = "   << v.x() << G4endl;
     G4cout << "v.y() = "   << v.y() << G4endl;
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
-    G4cerr << "WARNING - Invalid call in G4IntersectionSolid::DistanceToOut(p,v),"
-           << " point p is outside" << G4endl;
-    G4cerr << "          p = " << p << G4endl;
-    G4cerr << "          v = " << v << G4endl;
     #ifdef G4BOOLDEBUG
       G4Exception("Invalid call in G4IntersectionSolid::DistanceToOut(p,v), p is outside") ;
     #endif
