@@ -320,8 +320,8 @@ G4LEpp::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
 
     targetParticle->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
-    G4double ektotal = newP->GetKineticEnergy() + 
-                       targetParticle->GetKineticEnergy();
+    // G4double ektotal = newP->GetKineticEnergy() + 
+    //                    targetParticle->GetKineticEnergy();
 
     if (verboseLevel > 1) {
       G4cout << "  particle 1 momentum in LAB " 
