@@ -1,4 +1,4 @@
-$Id: History,v 1.50 2002-06-19 10:22:27 gcosmo Exp $
+$Id: History,v 1.51 2002-06-26 13:06:40 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun 26, 2002   V.Grichine                geom-csg-V04-01-00
+- G4Cons.cc: bug fixed in DistanceToIn(p,v) concerning z-crossing at the
+  edge with Rmin,Rmax.
 
 Jun 19, 2002   V.Grichine                geom-csg-V04-00-05
 - G4Sphere.cc: bug fixed in Inside() for treatment of point p on z-axis.
