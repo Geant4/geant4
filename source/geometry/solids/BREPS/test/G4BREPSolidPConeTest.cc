@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //////////////////////////////////////////////////////////////////////////
-// $Id: G4BREPSolidPConeTest.cc,v 1.9 2001-07-20 16:07:39 gcosmo Exp $
+// $Id: G4BREPSolidPConeTest.cc,v 1.10 2002-01-22 22:48:11 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //////////////////////////////////////////////////////////////////////////
 //
@@ -41,6 +41,61 @@
 
 #include "g4std/fstream"
 #include "g4std/iomanip"
+
+void checkSurfInOut( G4BREPSolid* solid, G4ThreeVector& position, G4ThreeVector& direction )
+{
+  G4double d;
+  
+  G4cout << G4endl
+         << "\tTest of In & Out" << solid->GetName()   << G4endl
+         << "\t--------------------------------------" << G4endl;
+  
+  d = solid->DistanceToIn( position, direction );
+  G4cout << "\tDistance to in="          << d;
+  d = solid->DistanceToIn( position );
+  G4cout << "\tClosest distance to in="  << d          <<G4endl;
+    
+  d = solid->DistanceToOut( position, direction );
+  G4cout << "\tDistance to out="         << d;
+  d = solid->DistanceToOut( position );
+  G4cout << "\tClosest distance to out=" << d          << G4endl;
+}
+
+void checkSolid( const G4String& where, G4BREPSolid* solid, G4ThreeVector& position, G4ThreeVector& direction, G4double estIn = 0.0, G4double estOut = 0.0 )
+{
+  G4double d;
+  
+  EInside in = solid->Inside( position );
+  
+  G4cout << G4endl
+         << where << " of " << solid->GetName()                   << G4endl
+         << "--------------------------------" << G4endl
+         << "estimation to in  =" << estIn     << G4endl
+         << "estimation to out =" << estOut    << G4endl
+         << "direction x=" << direction.x()
+         << "  y=" << direction.y()
+         << "  z=" << direction.z()            << G4endl
+         << "position x=" << position.x()
+         << "  y=" << position.y()
+         << "  z=" << position.z();
+
+  if( in == kInside ) {
+    G4cout <<" is inside";
+    d = solid->DistanceToOut( position, direction );
+    G4cout<<"  distance to out="<<d;
+    d = solid->DistanceToOut( position );
+    G4cout<<"  closest distance to out="<<d<<G4endl;
+  } else if( in == kOutside ) {
+    G4cout <<" is outside";
+    d = solid->DistanceToIn( position, direction );
+    G4cout<<"  distance to in="<<d;
+    d = solid->DistanceToIn( position );
+    G4cout<<"  closest distance to in="<<d<<G4endl;
+  } else {
+    G4cout <<" is on the surface"<<G4endl;
+    checkSurfInOut( solid, position, direction );
+  }
+}
 
 int main(G4int argc, char **argv)
 {
@@ -211,6 +266,75 @@ int main(G4int argc, char **argv)
     G4cout<<"  distance to in="<<d3<<G4endl;
   }
   
+  ///////////////////////////////////////////////////////////////////////////////////////
+  // Test due to the bugfix No. 320
+  // Solid setup (only profile of its upper half is shown):
+  //
+  //     +----+
+  //  +--+    +--+
+  //  +--+    +--+
+  //     +----+
+  //
+  // -------------- Z axis
+  //
+ 	G4double zValTOB[6]     = { -2800*mm, -1210*mm, -1210*mm, 1210*mm, 1210*mm, 2800*mm };
+ 	G4double rMinTOB[6]     = { 1160*mm,   1160*mm,  540*mm,  540*mm,  1160*mm, 1160*mm };
+ 	G4double rMaxTOB[6]     = { 1170*mm,   1170*mm,  1182*mm, 1182*mm, 1170*mm, 1170*mm };
+ 	G4BREPSolidPCone * cmsTOBSolid = new G4BREPSolidPCone( "BREPPolyconeTOBSolid",
+                                                         0.0*rad, twopi*rad,
+                                                  			 6, zValTOB[0], zValTOB, rMinTOB, 
+                                                         rMaxTOB );
+  // The critical gun settings
+  G4ThreeVector gunPosition( 904.05833958335438*mm, -761.44764667689935*mm, -382.29360686839397*mm );
+  G4ThreeVector gunDirection( -0.32132043849994285, 0.11159991009963287, 0.94037154139624957 );
+
+  checkSolid( "CMS case", cmsTOBSolid, gunPosition, gunDirection );  
+
+  G4ThreeVector gp( 541*mm, 0*mm, 1210*mm );
+  G4ThreeVector gd( -0.32132043849994285, 0.11159991009963287, 0.94037154139624957 );
   
+  checkSolid( "surface", cmsTOBSolid, gp, gd );  
+  
+  G4ThreeVector gpedge( 540*mm, 540*mm, -1210*mm );
+  G4ThreeVector gdedge( -0.32132043849994285, 0.11159991009963287, 0.94037154139624957 );
+  
+  checkSolid( "edge", cmsTOBSolid, gpedge, gdedge );  
+  
+  G4ThreeVector gpin( 540*mm, 540*mm, -1209*mm );
+  G4ThreeVector gdin( -0.32132043849994285, 0.11159991009963287, 0.94037154139624957 );
+  
+  checkSolid( "inside", cmsTOBSolid, gpin, gdin );  
+
+ 	G4double zVal1[6]     = { -200*mm,  -100*mm, -100*mm, 100*mm, 100*mm, 200*mm };
+ 	G4double rMin1[6]     = {   50*mm,    50*mm,   25*mm,  25*mm,  50*mm,  50*mm };
+// 	G4double rMin1[6]     = {   50*mm,    50*mm,   50*mm,  50*mm,  50*mm,  50*mm };
+ 	G4double rMax1[6]     = {   50*mm,   100*mm,  200*mm, 200*mm, 100*mm,  50*mm };
+ 	G4BREPSolidPCone* s1  = new G4BREPSolidPCone( "s1", 0.0*rad, twopi*rad, 6, zVal1[0], zVal1, rMin1, rMax1 );
+    
+  G4ThreeVector gps1in( 150*mm, 0*mm, 0*mm );
+  G4ThreeVector gds1in( 0, 0, 1 );
+  G4ThreeVector gps1out( 0*mm, 0*mm, 0*mm );
+  G4ThreeVector gds1out( 1, 0, 0 );
+  G4ThreeVector gps1edge( 50*mm, 0*mm, -200*mm );
+  G4ThreeVector gds1edge( 0, 0, 1 );
+  G4ThreeVector gps1surfout( 200*mm, 0*mm, 0*mm );
+  G4ThreeVector gds1surfout( -1, 0, 0 );
+  G4ThreeVector gps1surfin( 0*mm, 25*mm, 0*mm );
+  G4ThreeVector gds1surfin( 0, 1, 0 );
+  G4ThreeVector gps1plansurfleft( 150*mm, 0*mm, -100*mm );
+  G4ThreeVector gds1plansurfleft( 0, 0, 1 );
+  G4ThreeVector gps1plansurfright( 150*mm, 0*mm, 100*mm );
+  G4ThreeVector gds1plansurfright( 0, 0, -1 );
+  
+  checkSolid( "inside", s1, gps1in, gds1in );  
+  checkSolid( "outside", s1, gps1out, gds1out );  
+  checkSolid( "edge", s1, gps1edge, gds1edge, 0, 400 );  
+  checkSolid( "outer surface", s1, gps1surfout, gds1surfout, 0, 100 );  
+  checkSolid( "inner surface", s1, gps1surfin, gds1surfin, 0, 175 );  
+  checkSolid( "left planar surface", s1, gps1plansurfleft, gds1plansurfleft, 0, 200 );  
+  checkSolid( "left planar surface inv", s1, gps1plansurfleft, gds1plansurfright, 0 );  
+  checkSolid( "right planar surface", s1, gps1plansurfright, gds1plansurfright, 0, 200 );  
+  checkSolid( "right planar surface inv", s1, gps1plansurfright, gds1plansurfleft, 0 );  
+
   return EXIT_SUCCESS;
 }
