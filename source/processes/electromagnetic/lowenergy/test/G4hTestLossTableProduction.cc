@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLETestLossTable.cc,v 1.2 2000-05-03 16:35:56 chauvie Exp $
+// $Id: G4hTestLossTableProduction.cc,v 1.1 2001-04-24 14:10:30 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -19,10 +19,13 @@
 //
 //      Author:        Stephane Chauvie
 // 
-//      Creation date: 2 May 2000
+//      Creation date: 22nd April 2001
+//
+//      This test perform check on creation of loss table 
+//      Devoted to antiproton/proton differences
 //
 //      Modifications: 
-//
+//    
 // -------------------------------------------------------------------
 
 #include "globals.hh"
@@ -41,12 +44,6 @@
 #include "G4Proton.hh"
 #include "G4AntiProton.hh"
 
-#include "CLHEP/Hist/TupleManager.h"
-#include "CLHEP/Hist/HBookFile.h"
-#include "CLHEP/Hist/Histogram.h"
-#include "CLHEP/Hist/Tuple.h"
-
-HepTupleManager* hbookManager;
 
 main()
 {
@@ -60,18 +57,7 @@ main()
   G4cout.setf( ios::scientific, ios::floatfield );
   // -------------------------------------------------------------------
   ofstream out("g4hletestlosstable.dat");
-  // ---- HBOOK initialization
-
-
-  hbookManager = new HBookFile("g4hletestlosstable.hbook", 38);
-  assert (hbookManager != 0);
   
-  // ---- Book a histogram and ntuples
-  G4cout<<"Hbook file name: "<<((HBookFile*) hbookManager)->filename()<<G4endl;
-  
-  // ---- primary ntuple ------
-  HepTuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
-  assert (ntuple1 != 0);
   
   //--------- Materials definition ---------
 
@@ -121,12 +107,12 @@ main()
   //--------- Processes definition ---------
   
   G4hLowEnergyIonisation* hIonisationProcess = new G4hLowEnergyIonisation("ionLowEIoni");
-  hIonisationProcess->SetNuclearStoppingOn();
-  hIonisationProcess->SetStoppingPowerTableName("ICRU_R49p"); 
+  //hIonisationProcess->SetNuclearStoppingOn();
+  //hIonisationProcess->SetStoppingPowerTableName("ICRU_R49p"); 
   
   // Ionisation loss with/without Barkas effect
-  hIonisationProcess->SetAntiProtonStoppingOn();
-  //hIonisationProcess->SetAntiProtonStoppingOff();
+  hIonisationProcess->SetBarkasOn();
+  //hIonisationProcess->SetBarkasOff();
       
     G4ProcessManager* theProtonProcessManager = new G4ProcessManager(proton);
       proton->SetProcessManager(theProtonProcessManager);
@@ -193,41 +179,36 @@ main()
     
     if( particleID == 1){
       dedxnow = hIonisationProcess->
-        		GetPreciseDEDX(	apttoMaterial,
-    		        		p.GetKineticEnergy(),
-		   			p.GetDefinition()) ;
-      if(Tkin[ipnt]<=2*MeV) dedxnow+= hIonisationProcess->
-                            GetDeltaRaysEnergy( apttoMaterial,
-                       	      			p.GetKineticEnergy(),
-		       	      			deltaCut[J]);
+        		ComputeDEDX(p.GetDefinition(),
+						apttoMaterial,
+    		        		p.GetKineticEnergy()) ;
+//      if(Tkin[ipnt]<=2*MeV) dedxnow+= hIonisationProcess->
+//                            G4hLowEnergyIonisation::DeltaRaysEnergy( apttoMaterial,
+//                       	      			p.GetKineticEnergy(),
+// 		       	      			deltaCut[J]);
     }
     if( particleID == 2){
       dedxnow = hIonisationProcess->
-        		GetPreciseDEDX(	apttoMaterial,
-    		        		pbar.GetKineticEnergy(),
-		   			pbar.GetDefinition()) ;
-      if(Tkin[ipnt]<=2*MeV) dedxnow+= hIonisationProcess->
-        		    GetDeltaRaysEnergy( apttoMaterial,
-                       	      			pbar.GetKineticEnergy(),
-		       	      			deltaCut[J]);
+        		ComputeDEDX(pbar.GetDefinition(),
+						apttoMaterial,
+    		        		pbar.GetKineticEnergy()) ;
+ //     if(Tkin[ipnt]<=2*MeV) dedxnow+= hIonisationProcess->
+ //       		    DeltaRaysEnergy( apttoMaterial,
+ //                      	      			pbar.GetKineticEnergy(),
+ //		       	      			deltaCut[J]);
     }
     
        
   
-  //-----------ntuple-------------------------------------      
+  //-----------data-------------------------------------      
        
     if(MaterialName=="Silicon") out<<Tkin[ipnt]/MeV<<"   "<<dedxnow/MeV/mm<<G4endl;
-    ntuple1->column("matind",J);
-    ntuple1->column("kinen",Tkin[ipnt]/MeV);
-    ntuple1->column("dedx",dedxnow/MeV/mm);
-    ntuple1->dumpData();
-
+ 
     }
   }// for loop on materials
    
   
-  hbookManager->write();
-  delete hbookManager;
+ 
 
   // delete materials and elements
   delete Be;
