@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2003-11-25 15:08:14 gcosmo Exp $
+$Id: History,v 1.11 2003-12-01 17:25:40 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Dec  1st, 2003 John Apostolakis (fieldex01-V05-02-00)
+-----------------------------------------------------
+- Renamed F03ElectroMagneticField into F03FieldSetup (as it is a creator, 
+   not a field). 
+- FieldSetup is now called only in Detector Construction, not in main.
 
 25-11-03 Gabriele Cosmo
 -----------------------
