@@ -26,7 +26,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4IonFluctuation
+// File name:     G4IonFluctuations
 //
 // Author:        Vladimir Ivanchenko
 // 
@@ -41,20 +41,20 @@
 // -------------------------------------------------------------------
 //
 
-#ifndef G4IonFluctuation_h
-#define G4IonFluctuation_h 1
+#ifndef G4IonFluctuations_h
+#define G4IonFluctuations_h 1
 
 
 #include "G4VEmFluctuationModel.hh"
 
-class G4IonFluctuation : public G4VEmFluctuationModel
+class G4IonFluctuations : public G4VEmFluctuationModel
 {
 
 public:
 
-  G4IonFluctuation(const G4String& nam = "IonFluc");
+  G4IonFluctuations(const G4String& nam = "IonFluc");
 
-  ~G4IonFluctuation();
+  ~G4IonFluctuations();
 
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,
@@ -75,8 +75,8 @@ private:
   G4double CoeffitientB(const G4Material*, G4double&);
 
   // hide assignment operator
-  G4IonFluctuation & operator=(const  G4IonFluctuation &right);
-  G4IonFluctuation(const  G4IonFluctuation&);
+  G4IonFluctuations & operator=(const  G4IonFluctuations &right);
+  G4IonFluctuations(const  G4IonFluctuations&);
 
   const G4ParticleDefinition* particle;
 

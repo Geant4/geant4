@@ -26,7 +26,7 @@
 // GEANT4 Class header file
 //
 //
-// File name:     G4BohrFluctuation
+// File name:     G4BohrFluctuations
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -37,27 +37,27 @@
 //
 // Class Description:
 //
-// Implementation of Gaussion energy loss fluctuations
+// Implementation of Gaussion energy loss Fluctuations
 
 // -------------------------------------------------------------------
 //
 
-#ifndef G4BohrFluctuation_h
-#define G4BohrFluctuation_h 1
+#ifndef G4BohrFluctuations_h
+#define G4BohrFluctuations_h 1
 
 
 #include "G4VEmFluctuationModel.hh"
 #include "G4Material.hh"
 #include "G4DynamicParticle.hh"
 
-class G4BohrFluctuation : public G4VEmFluctuationModel
+class G4BohrFluctuations : public G4VEmFluctuationModel
 {
 
 public:
 
-  G4BohrFluctuation(const G4String& nam = "BohrFluc");
+  G4BohrFluctuations(const G4String& nam = "BohrFluc");
 
-  ~G4BohrFluctuation();
+  ~G4BohrFluctuations();
 
   G4double SampleFluctuations(const G4Material*,
                               const G4DynamicParticle*,
@@ -77,8 +77,8 @@ protected:
 private:
 
   // hide assignment operator
-  G4BohrFluctuation & operator=(const  G4BohrFluctuation &right);
-  G4BohrFluctuation(const  G4BohrFluctuation&);
+  G4BohrFluctuations & operator=(const  G4BohrFluctuations &right);
+  G4BohrFluctuations(const  G4BohrFluctuations&);
 
   const G4ParticleDefinition* particle;
 
@@ -95,7 +95,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-inline G4double G4BohrFluctuation::Dispersion(
+inline G4double G4BohrFluctuations::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
  				G4double& tmax,

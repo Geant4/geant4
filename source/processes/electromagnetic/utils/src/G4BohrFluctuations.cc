@@ -25,7 +25,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4BohrFluctuation
+// File name:     G4BohrFluctuations
 //
 // Author:        Vladimir Ivanchenko
 //
@@ -49,7 +49,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BohrFluctuation::G4BohrFluctuation(const G4String& nam)
+G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   minNumberInteractionsBohr(10.0),
   minFraction(0.2)
@@ -57,12 +57,12 @@ G4BohrFluctuation::G4BohrFluctuation(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4BohrFluctuation::~G4BohrFluctuation()
+G4BohrFluctuations::~G4BohrFluctuations()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BohrFluctuation::Initialise(const G4ParticleDefinition* part)
+void G4BohrFluctuations::Initialise(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();
@@ -72,7 +72,7 @@ void G4BohrFluctuation::Initialise(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4BohrFluctuation::SampleFluctuations(const G4Material* material,
+G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
                                                const G4DynamicParticle* dp,
                                                      G4double& tmax,
                                                      G4double& length,

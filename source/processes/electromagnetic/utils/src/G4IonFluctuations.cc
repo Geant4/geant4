@@ -54,7 +54,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonFluctuation::G4IonFluctuation(const G4String& nam)
+G4IonFluctuations::G4IonFluctuations(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   minNumberInteractionsBohr(10.0),
   theBohrBeta2(50.0*keV/proton_mass_c2),
@@ -63,12 +63,12 @@ G4IonFluctuation::G4IonFluctuation(const G4String& nam)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4IonFluctuation::~G4IonFluctuation()
+G4IonFluctuations::~G4IonFluctuations()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4IonFluctuation::Initialise(const G4ParticleDefinition* part)
+void G4IonFluctuations::Initialise(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();
@@ -78,11 +78,11 @@ void G4IonFluctuation::Initialise(const G4ParticleDefinition* part)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuation::SampleFluctuations(const G4Material* material,
-                                                const G4DynamicParticle* dp,
-				                      G4double& tmax,
-					              G4double& length,
-                                                      G4double& meanLoss)
+G4double G4IonFluctuations::SampleFluctuations(const G4Material* material,
+                                               const G4DynamicParticle* dp,
+                                                     G4double& tmax,
+                                                     G4double& length,
+                                                     G4double& meanLoss)
 {
 
   if(dp->GetDefinition() != particle) {
@@ -123,7 +123,7 @@ G4double G4IonFluctuation::SampleFluctuations(const G4Material* material,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuation::Dispersion(
+G4double G4IonFluctuations::Dispersion(
                           const G4Material* material,
                           const G4DynamicParticle* dp,
  				G4double& tmax,
@@ -152,7 +152,7 @@ G4double G4IonFluctuation::Dispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuation::CoeffitientA(G4double& zeff)
+G4double G4IonFluctuations::CoeffitientA(G4double& zeff)
 {
   // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
@@ -279,7 +279,7 @@ G4double G4IonFluctuation::CoeffitientA(G4double& zeff)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4IonFluctuation::CoeffitientB(const G4Material* material, G4double& zeff)
+G4double G4IonFluctuations::CoeffitientB(const G4Material* material, G4double& zeff)
 {
   // The aproximation of energy loss fluctuations
   // Q.Yang et al., NIM B61(1991)149-155.
