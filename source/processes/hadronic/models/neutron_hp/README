@@ -1,9 +1,0 @@
-The code below is a prototype for the low energy neutron transport.
-Stream-lining of the design and testing of microscopic data, as well
-as integretion testing is forseen in increments for the sub-sequent beta 
-versions of geant4.
-For the time being, only the code is provided here.
-The cross-section data needed for use of this component will be provided in 
-due course. Since we are still in the process of deviceing a good distribution
-mechanism of these data, please simply send mail to Hans-Peter.Wellisch@cern.ch,
-in case you would like to help in the testing of this code during the beta phase.
