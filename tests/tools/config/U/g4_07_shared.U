@@ -44,6 +44,8 @@ esac
 #
 echo ""
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -121,47 +123,50 @@ gans=$ans
 	esac
 done
 
-if [ X$g4lib_build_static = Xy ] ; then
+## Comment out in waiting G4LIB_USE_STATIC and G4LIB_USE_SHARED.
 #
-# Ask about g4lib_use_static - default "n". 
+#if [ X$g4lib_build_static = Xy ] ; then
+##
+## Ask about g4lib_use_static - default "n". 
+##
+#echo ""
 #
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You selected to build 'shared' (.so) and 'static' (.a) libraries. 
-Do you want to use 'static' (.a) libraries?
-EOM`
-
-dflt=$g4lib_use_static
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-#		g4lib_build_shared=1
-#		g4lib_build_static=1
-#		g4lib_use_shared=1
-		g4lib_use_static=y
-		break
-		;;
-#	[eE]) 
+#while test 1 = 1  ; do
+#
+#g4message=`cat << EOM
+#
+#You selected to build 'shared' (.so) and 'static' (.a) libraries. 
+#Do you want to use 'static' (.a) libraries?
+#EOM`
+#
+#dflt=$g4lib_use_static
+#rp=$g4message
+#. ./myread
+#gans=$ans
+#
+#	case $gans in
+#	
+#	n*|N*) 
 #		break
 #		;;
-#	*) 
-#		echo " "
+#	y*|Y*) 
+##		g4lib_build_shared=1
+##		g4lib_build_static=1
+##		g4lib_use_shared=1
+#		g4lib_use_static=y
 #		break
 #		;;
-	esac
-done
-fi
+##	[eE]) 
+##		break
+##		;;
+##	*) 
+##		echo " "
+##		break
+##		;;
+#	esac
+#done
+#fi
 
 fi
 
+fi # if !Win
