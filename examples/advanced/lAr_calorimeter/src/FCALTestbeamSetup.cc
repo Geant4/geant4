@@ -375,33 +375,33 @@ G4VPhysicalVolume * FCALTestbeamSetup::Construct()
   //-----------------------
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
-  if(!FcalTBSetupSD)
+  if(!FCALTBSetupSD)
     {
-      FcalTBSetupSD = new FCALTestbeamSetupSD("FCALTB/TBSetupSD");
-      SDman->AddNewDetector(FcalTBSetupSD);
+      FCALTBSetupSD = new FCALTestbeamSetupSD("FCALTB/TBSetupSD");
+      SDman->AddNewDetector(FCALTBSetupSD);
     }
-      LogicalScintS1andS3->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalScintS2->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalMWPC->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalHoleCntrScint->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalHoleCntrPb->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalHoleCntrAl->SetSensitiveDetector(FcalTBSetupSD);
+      LogicalScintS1andS3->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalScintS2->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalMWPC->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalHoleCntrScint->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalHoleCntrPb->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalHoleCntrAl->SetSensitiveDetector(FCALTBSetupSD);
 
 
-      //     theCryostatVolumes->SetSensitiveDetector(FcalTBSetupSD);
+      //     theCryostatVolumes->SetSensitiveDetector(FCALTBSetupSD);
 
-      LogicalLeadWall->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalIronWall->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalBigScint->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalSmallScint->SetSensitiveDetector(FcalTBSetupSD);
+      LogicalLeadWall->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalIronWall->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalBigScint->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalSmallScint->SetSensitiveDetector(FCALTBSetupSD);
  
-      LogicalBigIron->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalSmallIron->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalConcWallA->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalConcWallB->SetSensitiveDetector(FcalTBSetupSD);
-      LogicalConcWallIns->SetSensitiveDetector(FcalTBSetupSD);
+      LogicalBigIron->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalSmallIron->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalConcWallA->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalConcWallB->SetSensitiveDetector(FCALTBSetupSD);
+      LogicalConcWallIns->SetSensitiveDetector(FCALTBSetupSD);
 
-      LogicalMuContr->SetSensitiveDetector(FcalTBSetupSD);
+      LogicalMuContr->SetSensitiveDetector(FCALTBSetupSD);
       
 
 

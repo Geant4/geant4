@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALEMModuleSD.cc,v 1.2 2002-10-01 13:53:17 ahoward Exp $
+// $Id: FCALEMModuleSD.cc,v 1.3 2002-10-02 19:45:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,11 +15,11 @@
 
 #include "FCALEMModuleSD.hh"
 
-#include "ExN03CalorHit.hh"
+#include "FCALCalorHit.hh"
 
 #include "FCALTestbeamSetup.hh"
 #include "FCALEMModule.hh"
-#include "ExN03SteppingAction.hh"
+#include "FCALSteppingAction.hh"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4Step.hh"

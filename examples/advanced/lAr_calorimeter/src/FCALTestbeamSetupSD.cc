@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTestbeamSetupSD.cc,v 1.2 2002-10-01 13:49:12 ahoward Exp $
+// $Id: FCALTestbeamSetupSD.cc,v 1.3 2002-10-02 19:45:57 ahoward Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,7 +15,7 @@
 
 #include "FCALTestbeamSetupSD.hh"
 
-#include "ExN03CalorHit.hh"
+#include "FCALCalorHit.hh"
 
 #include "FCALTestbeamSetup.hh"
 
