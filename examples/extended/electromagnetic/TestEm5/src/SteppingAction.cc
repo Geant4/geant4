@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: SteppingAction.cc,v 1.3 2004-09-07 07:46:54 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.4 2004-09-24 09:58:08 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,7 +33,7 @@
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
-#include "G4Track.hh"
+#include "G4Step.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,12 +51,12 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
- const G4Track* track = aStep->GetTrack();
- if (aStep->GetPreStepPoint()->GetPhysicalVolume() != detector->GetAbsorber()) return;
+ if (aStep->GetPreStepPoint()->GetPhysicalVolume() != detector->GetAbsorber())
+   return;
  
  eventaction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
- G4double charge = track->GetDefinition()->GetPDGCharge();
+ G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();
  if (charge != 0.) { 
    eventaction->AddTrakLenCharg(aStep->GetStepLength());
    eventaction->CountStepsCharg();

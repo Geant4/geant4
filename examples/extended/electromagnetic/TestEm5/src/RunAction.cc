@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.15 2004-09-07 16:05:07 vnivanch Exp $
+// $Id: RunAction.cc,v 1.16 2004-09-24 09:58:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -139,17 +139,14 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-  G4double energyAvr = energy;
 
   G4EmCalculator emCalculator;
   G4double dEdxTable = 0.;
   if (particle->GetPDGCharge()!= 0.) { 
     dEdxTable = emCalculator.GetDEDX(particle,material,energy);
-    G4double e2 = energy - dEdxTable*length;
-    if(e2 > 0.) {
-      energyAvr = 0.5*(e2 + energy); 
-      dEdxTable = 0.5*(dEdxTable + emCalculator.GetDEDX(particle,material,e2));
-      //dEdxTable = emCalculator.ComputeDEDX(particle,material,"hIoni",energyAvr);
+    G4double eEnd = energy - dEdxTable*length;
+    if(eEnd > 0.) {
+      dEdxTable = 0.5*(dEdxTable + emCalculator.GetDEDX(particle,material,eEnd));
     }
   }
   G4double stopTable = dEdxTable/density;
@@ -173,8 +170,6 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") 
-         << "  meanEinAbs= " 
-         << G4BestUnit(energyAvr,      "Energy") 
          << G4endl;
 	 
   G4cout << "\n Mean dE/dx  = " << meandEdx/(MeV/cm) << " MeV/cm"

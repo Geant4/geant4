@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: HistoManager.cc,v 1.11 2004-09-23 11:37:31 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.12 2004-09-24 09:58:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,7 +31,7 @@
 #include "G4UnitsTable.hh"
 
 #ifdef G4ANALYSIS_USE
-#include <memory> // for the auto_ptr(T>
+#include <memory>       //for auto_ptr
 #include "AIDA/AIDA.h"
 #endif
 
@@ -40,8 +40,13 @@
 HistoManager::HistoManager()
 :tree(0),hf(0),factoryOn(false)
 {
+#ifdef G4ANALYSIS_USE
+  // Creating the analysis factory
+  af = AIDA_createAnalysisFactory();
+#endif 
+ 
   fileName = "testem5.aida";
-  fileType = "xml";
+  fileType = "hbook";
   // histograms
   for (G4int k=0; k<MaxHisto; k++) {
     histo[k] = 0;
@@ -58,6 +63,10 @@ HistoManager::HistoManager()
 HistoManager::~HistoManager()
 {
   delete histoMessenger;
+  
+#ifdef G4ANALYSIS_USE  
+  delete af;
+#endif    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,8 +74,6 @@ HistoManager::~HistoManager()
 void HistoManager::book()
 {
 #ifdef G4ANALYSIS_USE
-  // Creating the analysis factory
-  std::auto_ptr< AIDA::IAnalysisFactory > af( AIDA_createAnalysisFactory() );
   // Creating the tree factory
   std::auto_ptr< AIDA::ITreeFactory > tf( af->createTreeFactory() );
 
@@ -76,7 +83,7 @@ void HistoManager::book()
   tree = tf->create(fileName, fileType, readOnly, createNew, "uncompress");
 
   // Creating a histogram factory, whose histograms will be handled by the tree
-  std::auto_ptr< AIDA::IHistogramFactory > hf(af->createHistogramFactory( *tree ));
+  hf = af->createHistogramFactory(*tree);
 
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
@@ -101,7 +108,9 @@ void HistoManager::save()
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
     G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
-
+    
+    delete hf;
+    delete tree;
     factoryOn = false;
   }
 #endif
@@ -189,8 +198,7 @@ void HistoManager::RemoveHisto(G4int ih)
     return;
   }
 
-  histo[ih] = 0;
-  exist[ih] = false;
+  histo[ih] = 0;  exist[ih] = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

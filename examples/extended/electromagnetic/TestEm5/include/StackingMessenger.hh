@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StackingMessenger.hh,v 1.3 2004-06-21 10:57:11 maire Exp $
+// $Id: StackingMessenger.hh,v 1.4 2004-09-24 09:58:00 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "globals.hh"
 
 class StackingAction;
+class G4UIdirectory;
 class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +47,9 @@ class StackingMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    StackingAction*    stackAction;   
+    StackingAction*    stackAction;
+    
+    G4UIdirectory*     stackDir;          
     G4UIcmdWithABool*  killCmd;
 };
 

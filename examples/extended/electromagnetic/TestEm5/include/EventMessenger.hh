@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: EventMessenger.hh,v 1.3 2004-06-21 10:57:10 maire Exp $
+// $Id: EventMessenger.hh,v 1.4 2004-09-24 09:57:59 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -33,6 +33,7 @@
 #include "globals.hh"
 
 class EventAction;
+class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -47,7 +48,8 @@ class EventMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    EventAction*          eventAction;   
+    EventAction*          eventAction;
+    G4UIdirectory*        eventDir;          
     G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;
 };
