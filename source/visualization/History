@@ -1,4 +1,4 @@
-$Id: History,v 1.17 1999-05-25 13:20:01 johna Exp $
+$Id: History,v 1.18 1999-05-26 07:23:47 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-12a  26th May 1999  John Allison
+- G4TrajectoriesModel.cc: (*TC) [iT] -> DrawTrajectory ();
 
 vis-01-00-12  25th May 1999  John Allison
 - Moved global operator != to member function.
