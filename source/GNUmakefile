@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.57 2004-06-03 13:48:44 gcosmo Exp $
+# $Id: GNUmakefile,v 1.58 2004-06-03 14:26:37 gcosmo Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake global" makes global libraries for each subdomain.
@@ -98,7 +98,7 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 dll: win32def
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@echo "Verifying existence of global libraries ..."
-	@$(MAKE) kernel_global
+	@$(MAKE) global
 	@echo "Building Windows DLL libraries ..."
 	@$(MAKE) kernel_global G4LIB_BUILD_SHARED=1
 else
