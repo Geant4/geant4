@@ -91,6 +91,7 @@ export ANAPHETOP AIDA_DIR
 3) and add to lirary path the following directories:
 LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${G4WORKDIR}/lib/${G4SYSTEM}:${G4WORKDIR}/tmp/${G4SYSTEM}/exampleB02
 
+Now you should be able to run gmake and to run exampleB02.
 
 The example stores the plot in the file b02.hbook.
 To look at the histogram using lizard you also may use Anaphe 5.0.1
