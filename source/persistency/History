@@ -15,6 +15,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22, 99  Y.Morita
+- added digits+hits/digits
+- removed dependency of transient hits
+- introduced G4PersistencyMessenger
+
 November 20, 99  Y.Morita
 - Introduced G4PersistentSchema.hh to use Geant4 named schema
   (requires config-V00-01-12)
