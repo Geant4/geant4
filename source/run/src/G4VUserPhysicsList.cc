@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.42 2003-06-14 15:26:00 vnivanch Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.43 2003-06-18 16:54:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,9 +42,10 @@
 //       Removed ConstructAllParticles()  15 Apr. 1999 by H.Kurashige
 //       modified                         08, Mar 2001 by H.Kurashige
 //       modified for CUTS per REGION     10, Oct 2002 by H.Kurashige
-//       BuildPhysicsTables only for 
+//       BuildPhysicsTables only for
 //       particles with G4ProcessManager
 //       valid pointer                    14, June 2003 by V.Ivanchenko
+//       Check if particle IsShortLived   18, June 2003 by V.Ivanchenko
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -406,10 +407,11 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
       G4cout << " G4ProcessManager pointer " << particle->GetProcessManager() << G4endl;
     }
 #endif
-  G4ProcessManager* pManager = particle->GetProcessManager();
   // Rebuild the physics tables for every process for this particle type
-  if(pManager) {
+  // if particle is not ShortLived
+  if(!particle->IsShortLived()) {
     G4int j;
+    G4ProcessManager* pManager = particle->GetProcessManager();
     G4ProcessVector* pVector = pManager->GetProcessList();
     for ( j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*particle);
