@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReplicaNavigation.icc,v 1.7 2003-03-17 13:43:17 gcosmo Exp $
+// $Id: G4ReplicaNavigation.icc,v 1.8 2003-04-02 14:28:04 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -148,9 +148,9 @@ G4bool
 G4ReplicaNavigation::LevelLocate( G4NavigationHistory& history,
                             const G4VPhysicalVolume* blockedVol,
                             const G4int              blockedNum,
-                            const G4ThreeVector&,
-                            const G4ThreeVector* globalDirection,
-                            const G4bool         pLocatedOnEdge, 
+                            const G4ThreeVector&,     // globalPoint
+                            const G4ThreeVector*,     // globalDirection
+                            const G4bool,             // pLocatedOnEdge
                                   G4ThreeVector& localPoint )
 {
   G4VPhysicalVolume *motherPhysical, *pPhysical;
