@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.cc,v 1.8 2001-12-01 20:52:06 stanaka Exp $
+// $Id: G4FukuiRendererSceneHandler.cc,v 1.9 2002-09-02 04:39:21 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,7 +84,8 @@ fSystem   (system)                  ,
 fPrimDest (system.GetPrimDest() )   ,
 FRflag_in_modeling     (false)      ,
 flag_saving_g4_prim    (false)      ,
-COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX)
+COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX),
+fPrec (9), fPrec2 (16)
 {
 
 		//----- Connection to FukuiRenderer is set in the first scene
@@ -109,6 +110,14 @@ COMMAND_BUF_SIZE       (G4FRClientServer::SEND_BUFMAX)
 
 		//----- count instantiated scenes
 	fSceneCount++;
+
+		//----- precision control
+	if( getenv( "G4DAWN_PRECISION" ) != NULL ) {
+		sscanf( getenv("G4DAWN_PRECISION"), "%d", &fPrec ) ;
+	} else {
+                fPrec = 9 ;
+	}
+	fPrec2 = fPrec + 7 ;
 
 } // G4FukuiRendererSceneHandler, constructor
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.10 2001-09-17 07:40:32 stanaka Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.11 2002-09-02 04:39:10 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -229,6 +229,8 @@ private:
   char		fG4PrimDestDir [256] ; 
   char          fG4PrimFileName[256] ;
   G4int		fMaxFileNum           ;
+
+  G4int         fPrec, fPrec2 ;
 	
 };
 

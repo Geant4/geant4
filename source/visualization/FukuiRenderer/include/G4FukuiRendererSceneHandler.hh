@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FukuiRendererSceneHandler.hh,v 1.9 2001-09-17 07:40:32 stanaka Exp $
+// $Id: G4FukuiRendererSceneHandler.hh,v 1.10 2002-09-02 04:39:10 stanaka Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -239,6 +239,9 @@ private:
   G4bool		flag_saving_g4_prim ;	
 
   const int		COMMAND_BUF_SIZE    ;
+
+  G4int                 fPrec, fPrec2 ;
+
 };
 
 #endif
