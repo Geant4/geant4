@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-04-27 10:36:08 gcosmo Exp $
+$Id: History,v 1.7 2000-11-09 17:33:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov   09th, 2000   G. Cosmo                -  geomsolids-V02-00-00
+
+- General QA code review. See History file within each subdomain.
+  Includes tags: geom-solids-csg-V02-00-08, stepinterface-V02-00-00,
+                 breps-V02-00-01, geom-solids-specific-V02-00-02,
+		 geom-solid-bool-V02-00-01.
+- Included recent developments in unit tests SBT and Fred. (E.Medernach)
 
 Apr   27th, 2000   G. Cosmo
 
