@@ -1,4 +1,4 @@
-$Id: History,v 1.101 2003-06-21 00:49:33 japost Exp $
+$Id: History,v 1.102 2003-06-21 00:50:02 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -35,6 +35,8 @@ June 21st, 2003     J. Apostolakis - geomvol-V05-01-03
          has been set for the current step
       The flag ensures that the method FindAndSetFieldManager is always
       called once for each call to ComputeStep.
+
+ - Changes from "g4std" to <std> incorporated.
 
 May 26th, 2003      J. Apostolakis - geomvol-V05-01-02
 - G4PropagatorInField:  use safety in G4PropagatorInField.
