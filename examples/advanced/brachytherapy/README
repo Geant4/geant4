@@ -60,7 +60,7 @@ idle>/phantom/selectMaterial  materialName
 ------------------------------------------------------------------------
 ----> 3. Simulation output                                              |
 
-if ANALYSIS_USE = 1 in GNUmakefile the output is brachytherapy.hbk      |
+if ANALYSIS_USE = 1 the output is brachytherapy.hbk      |
  It contains:
  1)1Dhistogram with the primary particle energy                         |
  2)2Dhistogram with the distribution of energy in the plane 
@@ -115,8 +115,9 @@ setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
 
 setenv LD_LIBRARY_PATH $OGLHOME/lib
 
-# ---- Analysis---- AIDA 3.0 Anaphe 5.0.5
-setenv G4ANALYSIS_BUILD  1
+# ---- Analysis---- AIDA 3.0/ Anaphe 5.0.5
+setenv G4ANALYSIS_BUILD 1
+setenv G4ANALYSIS_USE 1
 source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/setupAnaphe.csh
 setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
 

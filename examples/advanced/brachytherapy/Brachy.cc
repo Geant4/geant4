@@ -108,6 +108,7 @@ int main(int argc ,char ** argv)
 	 << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
 	 << G4endl;
 #endif
+  
   // uncomment if interactive mode is needed ... 
   /* 
   G4UIsession* session=0;
@@ -149,8 +150,10 @@ int main(int argc ,char ** argv)
       UI->ApplyCommand(command+fileName);
     }  
   */
+  
   // comment if interactive mode is needed ...
   pRunManager -> BeamOn(100);
+  
   // Job termination
 #ifdef G4VIS_USE
   delete visManager;
