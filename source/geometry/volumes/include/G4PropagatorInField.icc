@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.icc,v 1.4 1999-07-27 20:56:13 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.5 1999-11-26 18:49:21 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,7 +34,8 @@ G4PropagatorInField( G4Navigator    *theNavigator,
     End_PointAndTangent(G4ThreeVector(0.,0.,0.),
 			G4ThreeVector(0.,0.,0.),0.0,0.0),
     fDelta_One_Step_Value(fDefault_Delta_One_Step_Value),
-    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val)
+    fDelta_Intersection_Val(fDefault_Delta_Intersection_Val),
+    fVerboseLevel(0)
 {
      // this->fChordFinder = new G4ChordFinder( (G4MagneticField*)0, 1e-6 );
 
