@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.53 2003-11-12 13:11:05 johna Exp $
+// $Id: G4VisManager.cc,v 1.54 2003-11-14 15:59:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1001,10 +1001,10 @@ void G4VisManager::BeginOfEvent () {
 
 void G4VisManager::EndOfEvent () {
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  const std::vector<G4VModel*>& EOEModelList =
-    fpScene -> GetEndOfEventModelList ();
-  size_t nModels = EOEModelList.size();
   if (GetConcreteInstance() && IsValidView ()) {
+    const std::vector<G4VModel*>& EOEModelList =
+      fpScene -> GetEndOfEventModelList ();
+    size_t nModels = EOEModelList.size();
     ClearTransientStoreIfMarked();
     if (nModels) {
       fVisManagerModelingParameters
