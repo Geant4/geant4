@@ -14,29 +14,6 @@ case "$g4vis_none" in
 	;;
 esac
 
-#####################################################################
-ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*|xargs echo`
-#echo ogl_dirs=$ogl_dirs
-
-if test "X$ogl_dirs" != "X" ; then
-
-g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
-#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
-
-# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
-g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
-g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
-
-	g4vis_oglhome=$g4ogl_base_dir_found
-else
-case "$g4vis_oglhome" in
-'')
-	$g4vis_oglhome=/usr
-	;;
-esac
-fi
-
-##########################################################################
 
 case "$g4vis_build_openglwin32_driver" in
 '')
@@ -220,6 +197,8 @@ case $g4vis_none in
 
 n)
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLX_DRIVER
@@ -277,6 +256,10 @@ gans=$ans
 		;;
 	esac
 
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OPENGLWIN32_DRIVER
@@ -305,6 +288,10 @@ gans=$ans
 		g4vis_use_openglwin32=y
 		;;
 	esac
+
+fi # if WIN
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -363,6 +350,10 @@ gans=$ans
 		;;
 	esac
 
+fi # if !WIN
+
+if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+
 g4message=`cat << EOM
 
   G4VIS_BUILD_OIWIN32_DRIVER
@@ -390,6 +381,10 @@ gans=$ans
 		g4vis_use_oiwin32=y
 		;;
 	esac
+
+fi # if WIN
+
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
 
 g4message=`cat << EOM
 
@@ -539,6 +534,7 @@ gans=y
 		;;
 	esac
 
+fi # if !WIN
 
 g4message=`cat << EOM
 
@@ -598,7 +594,33 @@ gans=y
 ;;
 esac
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 if [ X$g4vis_build_openglx_driver = Xy ] || [ X$g4vis_build_openglxm_driver = Xy ] || [ X$g4vis_build_openglwin32_driver = Xy ] ; then 
+
+#####################################################################
+ogl_dirs=`find /usr/local/lib /usr/lib -name libGLU\*|xargs echo`
+#echo ogl_dirs=$ogl_dirs
+
+if test "X$ogl_dirs" != "X" ; then
+
+g4ogl_base_dir_found=`echo $ogl_dirs|cut -d" " -f1`
+#echo g4ogl_base_dir_found=$g4ogl_base_dir_found
+
+# That's right: should be twice! (e.g./usr/local/lib/libGLU.so -> /usr/local)
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+g4ogl_base_dir_found=`dirname $g4ogl_base_dir_found`
+
+	g4vis_oglhome=$g4ogl_base_dir_found
+else
+case "$g4vis_oglhome" in
+'')
+	g4vis_oglhome=/usr
+	;;
+esac
+fi
+
+##########################################################################
 
 if test "X$ogl_dirs" != "X" ; then
 
@@ -608,8 +630,8 @@ g4message=`cat << EOM
   OGLHOME/lib
 
 You have selected to use OpenGL driver.
-Specify the correct path (OGLHOME) where OpenGL is installed in your system
-(it was found in):
+Specify the correct path (OGLHOME) where OpenGL is installed in your system.
+It was found in:
 EOM`
 
 else
@@ -632,4 +654,9 @@ rp=$g4message
 . ./getfile
 g4vis_oglhome=$ans
 
+if test "X$g4vis_oglhome" = "X/usr" -o "X$g4vis_oglhome" = "X/usr/local"; then
+g4vis_oglhome=""
 fi
+
+fi # if need
+fi # if platform

@@ -7,8 +7,12 @@
 ?S:	used for building G4SYSTEM.
 ?S:.
 
+if test "X$g4system" != "XWIN32-VC" -a "X$g4system" != "XWIN32-VC7"; then
+
 clhep_dirs=`find /usr/local/lib /usr/lib -name \*CLHEP\*|xargs echo`
 #echo clhep_dirs=$clhep_dirs
+
+fi
 
 if test "X$clhep_dirs" != "X" ; then
 
@@ -22,10 +26,15 @@ g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 g4clhep_base_dir_found=`dirname $g4clhep_base_dir_found`
 
 	g4clhep_base_dir=$g4clhep_base_dir_found
+
 else
 case "$g4clhep_base_dir" in
 '')
+	if test "X$g4system" = "XWIN32-VC" -o "X$g4system" = "XWIN32-VC7"; then
+	g4clhep_base_dir="c:/usr/local"
+	else
 	g4clhep_base_dir=/usr/local
+	fi
 	;;
 esac
 fi
@@ -54,7 +63,7 @@ if test "X$clhep_dirs" != "X" ; then
 
 g4message=`cat << EOM
 
-Please, specify where CLHEP is installed (it was found in):
+Please, specify where CLHEP is installed. It was found in:
 
 CLHEP_BASE_DIR:			$g4clhep_base_dir
 
@@ -185,4 +194,14 @@ gans=$ans
 	esac
 done
 
+if test "X$g4clhep_base_dir" = "X/usr" -o "X$g4clhep_base_dir" = "X/usr/local"; then
+g4clhep_base_dir=""
+fi
 
+if test "X$g4clhep_include_dir" = "X/usr/include" -o "X$g4clhep_include_dir" = "X/usr/local/include"; then
+g4clhep_include_dir=""
+fi
+
+if test "X$g4clhep_lib_dir" = "X/usr/lib" -o "X$g4clhep_lib_dir" = "X/usr/local/lib"; then
+g4clhep_lib_dir=""
+fi
