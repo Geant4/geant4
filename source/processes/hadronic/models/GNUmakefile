@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000-05-26 07:17:24 stesting Exp $
+# $Id: GNUmakefile,v 1.5 2000-06-27 15:24:19 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for hadronic models library. G.Folger 10-Dec-97
 # --------------------------------------------------------------
@@ -16,7 +16,6 @@ SUBDIRS += generator/kinetic_model
 SUBDIRS += generator/management
 SUBDIRS += generator/pre_equilibrium
 SUBDIRS += generator/quark_gluon_string
-SUBDIRS += generator/radiative_decay
 SUBDIRS += generator/string_common
 SUBDIRS += generator/string_fragmentation
 SUBDIRS += generator/util
