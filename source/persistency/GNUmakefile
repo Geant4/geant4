@@ -3,11 +3,11 @@
 # --------------------------------------------------------------
 # object files are compiled from DDL files as well as from CC files
 #
-#  include/*.ddl --> $(G4SYSTEM)/*.hh
-#                    $(G4SYSTEM)/*_ref.hh
-#                    $(G4SYSTEM)/*_ddl.cc --> $(G4SYSTEM)/*_ddl.o
-#  (schema) -------> $(G4TMPSCHEMA_BOOT)
-#  src/*.cc --------------------------------> $(G4SYSTEM)/*.o
+# include/*.ddl -> $(G4TMP)/$(G4SYSTEM)/*.hh     -> $(G4SCHEMA_INCLUDE)/*.hh
+#                  $(G4TMP)/$(G4SYSTEM)/*_ref.hh -> $(G4SCHEMA_INCLUDE)/*.hh
+#                  $(G4TMP)/$(G4SYSTEM)/*_ddl.cc -> $(G4TMP)/$(G4SYSTEM)/*_ddl.o
+# (schema) ------> $(G4TMPSCHEMA_BOOT) -----------> $(G4SCHEMA_BOOT)
+#  src/*.cc --------------------------------------> $(G4TMP)/$(G4SYSTEM)/*.o
 #
 # You must have unique G4SCHEMA_FDID assigned by your local 
 # manager of Objectivity/DB lock server.
@@ -47,7 +47,6 @@ ifndef G4SCHEMA_FDID
 	exit 1
 endif
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE) clean); done
-	@rm -f $(G4TMPSCHEMA_INCLUDE)/*.hh
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/G4TMPSCHEMA.FDDB
 	@rm -f $(G4TMPSCHEMA_BOOT_DIR)/*.G4TMPSCHEMA.DB
