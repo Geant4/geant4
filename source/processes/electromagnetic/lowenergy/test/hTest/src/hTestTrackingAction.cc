@@ -64,11 +64,13 @@ void hTestTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 
   G4ParticleDefinition* particle = aTrack->GetDefinition();
   G4String name = particle->GetParticleName();
+  theHisto->ResetTrackLength();
 
   if(0 < theHisto->GetVerbose()) {
     G4cout << "hTestTrackingAction: Next track #" 
            << aTrack->GetTrackID() << " of " << name 
-           << " with kinetic energy " << aTrack->GetKineticEnergy()/MeV << " MeV" << G4endl;
+           << " with kinetic energy " << aTrack->GetKineticEnergy()/MeV 
+           << " MeV" << G4endl;
   }
 
   //Save primary parameters

@@ -84,6 +84,7 @@ hTestDetectorConstruction::hTestDetectorConstruction():
   nameMatAbsorber   = G4String("Water");
   AbsorberThickness = 1.0*mm;    
   SizeXY            = 100.0*mm;
+  gap               = 0.0;
   NumberOfAbsorbers = 300;
   nameMatWorld      = G4String("Air");
   WorldSizeZ        = 400.0*mm;
@@ -282,13 +283,13 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
                           
   logicAbs = new G4LogicalVolume(solidAbs,AbsorberMaterial,"Absorber");
       			                  
-  G4double z;
+  G4double z = AbsorberThickness * 0.5;
 
   for (G4int j=0; j<NumberOfAbsorbers; j++) {
   
-    z = AbsorberThickness * (G4double(j) + 0.5) ; 
     physAbs = new G4PVPlacement(0,G4ThreeVector(0.0,0.0,z),
                                 "Absorber",logicAbs,physWorld,false,j);
+    z += AbsorberThickness + gap; 
   }
   
   //                               
@@ -302,12 +303,9 @@ G4VPhysicalVolume* hTestDetectorConstruction::ConstructGeometry()
   //                                        
   // Visualization attributes
   //
-
-#ifdef G4VIS_USE
   G4VisAttributes* VisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
   VisAtt->SetVisibility(true);
   logicAbs->SetVisAttributes(VisAtt);
-#endif
 
   PrintGeomParameters();  
 
@@ -380,6 +378,13 @@ void hTestDetectorConstruction::SetWorldSizeZ(G4double val)
   if(detIsConstructed) GeometryIsChanged();
 }  
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void hTestDetectorConstruction::SetGapBetweenAbsorbers(G4double val)
+{
+  gap = val;
+  if(detIsConstructed) GeometryIsChanged();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -421,8 +426,8 @@ void hTestDetectorConstruction::ComputeGeomParameters()
 {
   // Compute derived parameters of the 1st absorber 
      
-  if(WorldSizeZ < AbsorberThickness*NumberOfAbsorbers)
-     WorldSizeZ = AbsorberThickness*NumberOfAbsorbers + 1.0*mm;
+  if(WorldSizeZ < (AbsorberThickness + gap)*NumberOfAbsorbers)
+     WorldSizeZ = (AbsorberThickness + gap)*NumberOfAbsorbers + 1.0*mm;
 
   (hTestHisto::GetPointer())->SetNumberOfAbsorbers(NumberOfAbsorbers);
   (hTestHisto::GetPointer())->SetAbsorberThickness(AbsorberThickness);

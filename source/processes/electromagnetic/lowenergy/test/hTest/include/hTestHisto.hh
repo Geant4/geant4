@@ -79,22 +79,25 @@ public: // Without description
     void SaveToTuple(const G4String&, G4double);
     void SaveToTuple(const G4String&, G4double, G4double);
     void SaveEvent();
+    G4double GetTrackLength() const {return trackLength;};
+    void ResetTrackLength() {trackLength = 0.0;};
+    void AddTrackLength(G4double x)   {trackLength += x;};
     void AddEndPoint(G4double);
     void AddEnergy(G4double, G4double);
     void AddDeltaElectron(const G4DynamicParticle*);
     void AddPhoton(const G4DynamicParticle*);
-    inline void SetVerbose(G4int val) {verbose = val;};
-    inline G4int GetVerbose() const {return verbose;};
-    inline void SetHistoNumber(G4int val) {nHisto = val;};
+    void SetVerbose(G4int val) {verbose = val;};
+    G4int GetVerbose() const {return verbose;};
+    void SetHistoNumber(G4int val) {nHisto = val;};
 
     void SetNumberOfAbsorbers(G4int val) {NumberOfAbsorbers = val;};     
-    inline G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
+    G4int GetNumberOfAbsorbers() const {return NumberOfAbsorbers;};
     void SetAbsorberThickness(G4double val) {AbsorberThickness = val;};     
-    inline G4double  GetAbsorberThickness() const {return AbsorberThickness;};
-    inline void SetNumAbsorbersSaved(G4int val) {nAbsSaved = val;};
-    inline G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
+    G4double  GetAbsorberThickness() const {return AbsorberThickness;};
+    void SetNumAbsorbersSaved(G4int val) {nAbsSaved = val;};
+    G4int GetNumAbsorbersSaved() const {return nAbsSaved;};
     void SetMaxEnergy(G4double val) {maxEnergy = val;};     
-    inline G4double  GetMaxEnergy() const {return maxEnergy;};
+    G4double  GetMaxEnergy() const {return maxEnergy;};
 
 
 private:
@@ -119,6 +122,7 @@ private:
     G4int NumberOfAbsorbers;
     G4int nAbsSaved;
     G4double maxEnergy;
+    G4double trackLength;
 };
 
 #endif

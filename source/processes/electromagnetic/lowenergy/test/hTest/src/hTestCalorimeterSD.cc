@@ -83,6 +83,7 @@ void hTestCalorimeterSD::Initialize(G4HCofThisEvent*)
 G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
+  theHisto->AddTrackLength(aStep->GetStepLength());
 
   if(0.0 < edep) {
     G4int j = aStep->GetTrack()->GetVolume()->GetCopyNo();
@@ -143,9 +144,12 @@ G4bool hTestCalorimeterSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     theHisto->SaveToTuple("XEND",xend/mm);      
     theHisto->SaveToTuple("YEND",yend/mm);      
     theHisto->SaveToTuple("ZEND",zend/mm);      
+    theHisto->SaveToTuple("LTRK",(theHisto->GetTrackLength())/mm);      
     theHisto->SaveToTuple("TEND",0.0);
     theHisto->SaveToTuple("TETA",0.0);      
-    theHisto->AddEndPoint(zend);      
+
+    // exclude cases when tack return back
+    if(theHisto->GetTrackLength() < 2.0*zend) theHisto->AddEndPoint(zend);
   }
 
   return true;

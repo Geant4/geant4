@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComplexTest.cc,v 1.2 2001-07-11 10:02:49 gunter Exp $
+// $Id: G4ComplexTest.cc,v 1.3 2001-07-31 14:52:24 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -203,6 +203,15 @@ int main(int argc,char** argv)
   G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
   G4ParticleDefinition* part = gamma;
 
+  // Physics
+  G4eIonisation* posiLEion = 0;
+  G4eBremsstrahlung* posiLEbr = 0;
+  G4eIonisation* elecSTion = 0;
+  G4eBremsstrahlung* elecSTbr = 0;
+  G4LowEnergyIonisation* elecLEion = 0;
+  G4LowEnergyBremsstrahlung* elecLEbr = 0;
+  G4bool ionis = true;
+
   // Geometry 
 
   G4double initX = 0.; 
@@ -252,12 +261,6 @@ int main(int argc,char** argv)
   aprotManager = new G4ProcessManager(antiproton);
   antiproton->SetProcessManager(aprotManager);
 
-  G4eIonisation* elecSTion = 0;
-  G4eBremsstrahlung* elecSTbr = 0;
-  G4LowEnergyIonisation* elecLEion = 0;
-  G4LowEnergyBremsstrahlung* elecLEbr = 0;
-  G4bool ionis = true;
-
   string line, line1;
   G4bool end = true;
   for(G4int run=0; run<100; run++) {
@@ -292,6 +295,7 @@ int main(int argc,char** argv)
         (*fin) >> line1;
         if(line1 == "lowenergy") {lowE = true;}
         else                     {lowE = false;}
+        ionis = true;
       } else if(line == "#test") {
         (*fin) >> line1;
         if(line1 == "PostStep") {postDo = true;}
@@ -357,39 +361,43 @@ int main(int argc,char** argv)
     // -------------------------------------------------------------------
     // ---- HBOOK initialization
 
-    hbookManager = new HBookFile(hFile, 58);
-    //  assert (hbookManager != 0);
-  
-    // ---- Book a histogram and ntuples
-    G4cout<< "Hbook file name: <" << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
+    HepTuple* ntuple1 = 0; 
+    HepTuple* ntuple2 = 0; 
+    HepHistogram* hEKin = 0;
+    HepHistogram* hP = 0;
+    HepHistogram* hNSec = 0;
+    HepHistogram* hDebug = 0;
 
-    // ---- primary ntuple ------
-    HepTuple* ntuple1; 
-    ntuple1 = hbookManager->ntuple("Primary Ntuple");
-    assert (ntuple1 != 0);
+    // ---- Book a histogram and ntuples
+    if(usepaw) {
+      hbookManager = new HBookFile(hFile, 58);
+      assert (hbookManager != 0);
   
-    // ---- secondary ntuple ------
-    HepTuple* ntuple2; 
-    ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-    assert (ntuple2 != 0);
+      G4cout << "Hbook file name: <" 
+             << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
+
+      // ---- primary ntuple ------
+      ntuple1 = hbookManager->ntuple("Primary Ntuple");
+      assert (ntuple1 != 0);
+  
+      // ---- secondary ntuple ------
+      ntuple2 = hbookManager->ntuple("Secondary Ntuple");
+      assert (ntuple2 != 0);
 
       // ---- secondaries histos ----
-    HepHistogram* hEKin;
-    hEKin = hbookManager->histogram("Kinetic Energy (MeV)", 50,0.,gEnergy/MeV);
-    assert (hEKin != 0);  
+      hEKin= hbookManager->histogram("Kinetic Energy (MeV)",50,0.,gEnergy/MeV);
+      assert (hEKin != 0);  
   
-    HepHistogram* hP;
-    hP = hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy/MeV);
-    assert (hP != 0);  
+      hP= hbookManager->histogram("Momentum (MeV/c)", 50,0.,gEnergy/MeV);
+      assert (hP != 0);  
   
-    HepHistogram* hNSec;
-    hNSec = hbookManager->histogram("Number of secondaries", 20,0.,20.);
-    assert (hNSec != 0);  
+      hNSec= hbookManager->histogram("Number of secondaries", 20,0.,20.);
+      assert (hNSec != 0);  
   
-    HepHistogram* hDebug;
-    hDebug = hbookManager->histogram("Energy deposition (MeV)", 50,0.,gEnergy);
-    assert (hDebug != 0);  
-    G4cout<< "Histograms is initialised" << G4endl;
+      hDebug= hbookManager->histogram("Energy deposition (MeV)",50,0.,gEnergy);
+      assert (hDebug != 0);  
+      G4cout<< "Histograms is initialised" << G4endl;
+    }
 
     gamma->SetCuts(cutG);
     electron->SetCuts(cutE);
@@ -412,7 +420,6 @@ int main(int argc,char** argv)
         elecManager->AddProcess(elecLEbr);
         elecLEbr->BuildPhysicsTable(*electron);
         elecLEion->BuildPhysicsTable(*electron);
-        ionis = false;
       }
       if(nPart == 0) {
         if(nProcess == 2) dProcess =  new G4LowEnergyCompton();
@@ -448,7 +455,6 @@ int main(int argc,char** argv)
         elecManager->AddProcess(elecSTbr);
         elecSTbr->BuildPhysicsTable(*electron);
         elecSTion->BuildPhysicsTable(*electron);
-        ionis = false;
       }
       if(nPart == 0) {
         if(nProcess == 2) dProcess =  new G4ComptonScattering();
@@ -459,13 +465,8 @@ int main(int argc,char** argv)
           dProcess->BuildPhysicsTable(*gamma);
 	}
       } else if(nPart == 1) {
-        if(nProcess == 0) cdProcess =  elecLEion;
-        if(nProcess == 1) cdProcess =  elecLEbr;
-      } else if(nPart == 2) {
-        G4eIonisation* pLEion = new G4eIonisation();
-        G4eBremsstrahlung* pLEbr = new G4eBremsstrahlung();
-        if(nProcess == 0) cdProcess =  pLEion;
-        if(nProcess == 1) cdProcess =  pLEbr;
+        if(nProcess == 0) cdProcess =  elecSTion;
+        if(nProcess == 1) cdProcess =  elecSTbr;
       } else if(nPart == 3) {
         if(nProcess == 0) {
           cdProcess = new G4hIonisation();
@@ -480,22 +481,34 @@ int main(int argc,char** argv)
 	}
       }
     }
-    G4eIonisation* posiLEion = new G4eIonisation();
-    G4eBremsstrahlung* posiLEbr = new G4eBremsstrahlung();
-    positManager->AddProcess(posiLEion);
-    positManager->AddProcess(posiLEbr);
-    posiLEbr->BuildPhysicsTable(*positron);
-    posiLEion->BuildPhysicsTable(*positron);
+
+    if(ionis) {
+      posiLEion = new G4eIonisation();
+      posiLEbr = new G4eBremsstrahlung();
+      positManager->AddProcess(posiLEion);
+      positManager->AddProcess(posiLEbr);
+      posiLEbr->BuildPhysicsTable(*positron);
+      posiLEion->BuildPhysicsTable(*positron);
+      ionis = false;
+    }
+    if(nPart == 2) {
+      if(nProcess == 0) cdProcess =  posiLEion;
+      if(nProcess == 1) cdProcess =  posiLEbr;
+    }
 
     G4cout  <<  "Physics tables are built"  <<  G4endl;; 
   
     // Control on processes
     if(postDo && !dProcess && !cdProcess) {
-        G4cout << "Discret Process is not found out! Exit" << G4endl;
+        G4cout << "Discret Process is not found out! Exit"
+               << " nPart= " << nPart << " nProcess= " << nProcess 
+               << G4endl;
         break;
     }
     if(!postDo && !cdProcess) {
-        G4cout << "Continues Discret Process is not found out! Exit" << G4endl;
+        G4cout << "Continues Discret Process is not found out! Exit" 
+               << " nPart= " << nPart << " nProcess= " << nProcess 
+               << G4endl;
         break;
     }
 
@@ -578,12 +591,13 @@ int main(int argc,char** argv)
       G4double pxChange  = change.x();
       G4double pyChange  = change.y();
       G4double pzChange  = change.z();
-      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pChange   = sqrt(pxChange*pxChange + pyChange*pyChange 
+                                                  + pzChange*pzChange);
       
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
       G4double zChange = particleChange->GetPositionChange()->z();
-      G4double thetaChange = particleChange->GetPositionChange()->theta();
+      G4double thetaChange = change.theta();
 
       if(verbose) {
         G4cout << "---- Primary after the step ---- " << G4endl;
@@ -598,30 +612,29 @@ int main(int argc,char** argv)
                << "; rmax(mm)= " << rmax << G4endl;
       }
 
-      // Primary
-
-      ntuple1->column("eprimary", gEnergy/MeV);
-      ntuple1->column("energyf", energyChange/MeV);
-      //ntuple1->column("de", deltaE/MeV);
-      ntuple1->column("dedx", dedx*mm/MeV);
-      ntuple1->column("pxch", xChange*c_light/MeV);
-      ntuple1->column("pych", pyChange*c_light/MeV);
-      ntuple1->column("pzch", pzChange*c_light/MeV);
-      //ntuple1->column("pch", zChange);  
-      ntuple1->column("thetach", thetaChange/deg);  
-      ntuple1->column("nelectrons",nElectrons);
-      ntuple1->column("npositrons",nPositrons);
-      ntuple1->column("nphotons",nPhotons);
-      ntuple1->dumpData(); 
       de += deltaE;
       de2 += deltaE*deltaE; 
+
+      // Primary
+
+      if(usepaw) {
+        ntuple1->column("eprimary", gEnergy/MeV);
+        ntuple1->column("energyf", energyChange/MeV);
+        ntuple1->column("dedx", dedx*mm/MeV);
+        ntuple1->column("pxch", pxChange/MeV);
+        ntuple1->column("pych", pyChange/MeV);
+        ntuple1->column("pzch", pzChange/MeV);
+        ntuple1->column("theta", thetaChange/deg);  
+        ntuple1->dumpData(); 
       
-      // Secondaries physical quantities 
+        // Secondaries physical quantities 
       
-      hNSec->accumulate(particleChange->GetNumberOfSecondaries());
-      hDebug->accumulate(particleChange->GetLocalEnergyDeposit()/MeV);
+        hNSec->accumulate(particleChange->GetNumberOfSecondaries());
+        hDebug->accumulate(particleChange->GetLocalEnergyDeposit()/MeV);
       
-      for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++) {
+      }
+       
+      for (G4int i = 0; i < (particleChange->GetNumberOfSecondaries()); i++){
 	  // The following two items should be filled per event, not
 	  // per secondary; filled here just for convenience, to avoid
 	  // complicated logic to dump ntuple when there are no secondaries
@@ -637,10 +650,11 @@ int main(int argc,char** argv)
         G4double p   = sqrt(px*px+py*py+pz*pz);
 
         if (eKin > gEnergy) {
-	    G4cout << "WARNING: eFinal > eInit in event #" << iter << G4endl;
+	  G4cout << "WARNING: eFinal > eInit in event #" << iter << G4endl;
         }
 
-        G4String particleName = finalParticle->GetDefinition()->GetParticleName();
+        G4String particleName = 
+                 finalParticle->GetDefinition()->GetParticleName();
         if(verbose) {
 	  G4cout  << "==== Final " 
 		  <<  particleName  <<  " "  
@@ -652,10 +666,7 @@ int main(int argc,char** argv)
 		  <<  pz/MeV  << ") MeV;" 
 		  <<  G4endl;   
 	}
-	  
-	hEKin->accumulate(eKin/MeV);
-        hP->accumulate(p*c_light/MeV);
-	  
+	  	  
         G4int partType = 0;
         if (particleName == "e-") {
 	  partType = 1;
@@ -669,18 +680,24 @@ int main(int argc,char** argv)
 	  partType = 0;
           nPhotons++;
         }
-	// Fill the secondaries ntuple
-        ntuple2->column("eprimary",gEnergy);
-        ntuple2->column("px", px);
-        ntuple2->column("py", py);
-        ntuple2->column("pz", pz);
-        ntuple2->column("p", p);
-        ntuple2->column("e", e);
-        ntuple2->column("theta", theta);
-        ntuple2->column("ekin", eKin);
-        ntuple2->column("type", partType);  
-	ntuple2->dumpData(); 
-	  
+
+        if(usepaw) {
+          hEKin->accumulate(eKin/MeV);
+          hP->accumulate(p/MeV);
+
+	  // Fill the secondaries ntuple
+          ntuple2->column("eprimary",gEnergy);
+          ntuple2->column("px", px);
+          ntuple2->column("py", py);
+          ntuple2->column("pz", pz);
+          ntuple2->column("p", p);
+          ntuple2->column("e", e);
+          ntuple2->column("theta", theta);
+          ntuple2->column("ekin", eKin);
+          ntuple2->column("type", partType);  
+	  ntuple2->dumpData(); 
+	}	  
+
 	delete particleChange->GetSecondary(i);
       }
 	          
