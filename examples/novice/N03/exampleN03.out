@@ -234,7 +234,7 @@ Cut in energy
  Current couple of seeds = 627130152, 879601547
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  397.77 MeV       total track length:  92.777 cm 
-        Gap: total energy:  90.797 MeV       total track length:     2.5 m  
+   Absorber: total energy:  393.49 MeV       total track length:  90.749 cm 
+        Gap: total energy:  100.38 MeV       total track length:  2.7952 m  
 
-     30 hits are stored in ExN03CalorHitsCollection.
+     28 hits are stored in ExN03CalorHitsCollection.
