@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpAbsorption.hh,v 1.3 1999-10-30 00:37:24 gum Exp $
+// $Id: G4OpAbsorption.hh,v 1.4 1999-11-05 02:03:36 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -17,7 +17,7 @@
 // Version:     1.0
 // Created:     1996-05-21
 // Author:      Juliet Armstrong
-// Updated:     1999-10-29 add method and class decriptors
+// Updated:     1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
 //              1998-08-25 by Stefano Magni

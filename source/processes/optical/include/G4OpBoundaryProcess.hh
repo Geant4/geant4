@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpBoundaryProcess.hh,v 1.3 1999-10-30 00:38:35 gum Exp $
+// $Id: G4OpBoundaryProcess.hh,v 1.4 1999-11-05 02:04:09 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -18,7 +18,7 @@
 //                                  optical interfaces
 // Version:     1.1
 // Created:     1997-06-18
-// Modified:    1999-10-29 add method and class decriptors
+// Modified:    1999-10-29 add method and class descriptors
 //              1999-10-10 - Fill NewMomentum/NewPolarization in 
 //                           DoAbsorption. These members need to be
 //                           filled since DoIt calls 
