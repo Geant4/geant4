@@ -5,32 +5,41 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.icc,v 1.4 2000-11-20 17:29:03 gcosmo Exp $
+// $Id: G4FieldTrack.icc,v 1.5 2001-02-20 18:15:40 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "PhysicalConstants.h"
 
 inline
 G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
-			    const G4ThreeVector& pVelocity,    // Can be unit
+			    const G4ThreeVector& pMomentumDirection,    
 			          G4double       curve_length, 
-			          G4double       pEnergy,
-			          G4double       pLabortTimeOfFlight,
+			          G4double       kineticEnergy,
+			    const G4double       restMass_c2,
+			          G4double       velocity,
+			          G4double       pLaboratoryTimeOfFlight,
 			          G4double       pProperTimeOfFlight,
 			    const G4ThreeVector* pSpin)
- : fEnergy(pEnergy),
-   fLabTimeOfFlight(pLabortTimeOfFlight), 
+ : fKineticEnergy(kineticEnergy),
+   fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
    fProperTimeOfFlight(pProperTimeOfFlight),
-   fMomentumDir(pVelocity.unit())
+   fMomentumDir(pMomentumDirection),
+   fRestMass_c2(restMass_c2)
 {
-  SetCurvePnt( pPosition, pVelocity, curve_length );
+  G4double momentum  = sqrt(kineticEnergy*kineticEnergy
+                            +2.0*restMass_c2*kineticEnergy);
+
+  G4ThreeVector pMomentum= momentum * pMomentumDirection; 
+
+  SetCurvePnt( pPosition, pMomentum, curve_length );
   if(pSpin) fSpin = *pSpin;
 }
 
 inline
 G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
  : fDistanceAlongCurve( rStVec.fDistanceAlongCurve),
-   fEnergy( rStVec.fEnergy ),
+   fKineticEnergy( rStVec.fKineticEnergy ),
+   fRestMass_c2( rStVec.fRestMass_c2),
    fLabTimeOfFlight( rStVec.fLabTimeOfFlight ), 
    fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
    fMomentumModulus( rStVec.fMomentumModulus ),
@@ -56,18 +65,18 @@ G4FieldTrack::~G4FieldTrack()
 
 inline G4FieldTrack& 
 G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition, 
-			  const G4ThreeVector& pVelocity,  // Can be Unit
+			  const G4ThreeVector& pMomentum,  // Can be Unit
 			        G4double       s_curve )
 {
   SixVector[0] = pPosition.x(); 
   SixVector[1] = pPosition.y(); 
   SixVector[2] = pPosition.z(); 
 
-  SixVector[3] = pVelocity.x(); 
-  SixVector[4] = pVelocity.y(); 
-  SixVector[5] = pVelocity.z(); 
+  SixVector[3] = pMomentum.x(); 
+  SixVector[4] = pMomentum.y(); 
+  SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pVelocity.unit();
+  fMomentumDir = pMomentum.unit();
 
   fDistanceAlongCurve= s_curve;
 
@@ -89,17 +98,10 @@ void G4FieldTrack::SetPosition( G4ThreeVector pPosition)
    SixVector[2] = pPosition.z(); 
 } 
 
-// Older ... obsolete 
-inline
-G4ThreeVector  G4FieldTrack::Position() const
-{
-   return this->GetPosition();
-}
-
 inline
 const G4ThreeVector& G4FieldTrack::GetMomentumDir() const 
 {
-   // G4ThreeVector myVelocity( SixVector[3], SixVector[4], SixVector[5] );
+   // G4ThreeVector myMomentum( SixVector[3], SixVector[4], SixVector[5] );
    // return myVelocity;
    return fMomentumDir;
 } 
@@ -111,35 +113,23 @@ G4double  G4FieldTrack::GetCurveLength() const
 }
 
 inline
-G4double  G4FieldTrack::CurveS() const 
-{
-     return  this->GetCurveLength();
-}
-
-inline
 void G4FieldTrack::SetCurveLength(G4double nCurve_s)
 {
      fDistanceAlongCurve= nCurve_s;  
 }
 
+// #ifdef ENERGY_OK
 inline
-void G4FieldTrack::SetCurveS(G4double new_curve_s) 
+G4double  G4FieldTrack::GetKineticEnergy() const
 {
-     this->SetCurveLength(new_curve_s);
+   return fKineticEnergy;
 }
-
-#ifdef ENERGY_OK
-inline
-G4double  G4FieldTrack::GetEnergy() const
-{
-   return fEnergy;
-}
-#endif
+// #endif
 
 inline
-void G4FieldTrack::SetEnergy(G4double nEnergy)
+void G4FieldTrack::SetKineticEnergy(G4double newKinEnergy)
 {
-   fEnergy=nEnergy;
+   fKineticEnergy=newKinEnergy;
 }
 
 inline
@@ -197,19 +187,19 @@ void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
 }
 
 inline
-G4ThreeVector G4FieldTrack::GetVelocity() const 
+G4ThreeVector G4FieldTrack::GetMomentum() const 
 {
    return G4ThreeVector( SixVector[3], SixVector[4], SixVector[5] );
 } 
 
 inline
-void G4FieldTrack::SetVelocity(G4ThreeVector pVelocity)
+void G4FieldTrack::SetMomentum(G4ThreeVector pMomentum)
 {
-  SixVector[3] = pVelocity.x(); 
-  SixVector[4] = pVelocity.y(); 
-  SixVector[5] = pVelocity.z(); 
+  SixVector[3] = pMomentum.x(); 
+  SixVector[4] = pMomentum.y(); 
+  SixVector[5] = pMomentum.z(); 
 
-  fMomentumDir = pVelocity.unit(); 
+  fMomentumDir = pMomentum.unit(); 
 }
 
 // Dump values to array
@@ -226,12 +216,15 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
   valArr[4]=SixVector[4];
   valArr[5]=SixVector[5];
 
-  G4ThreeVector Velocity(valArr[3],valArr[4],valArr[5]);
-  G4double      velocity_mag_sq = Velocity.mag2();
+  G4ThreeVector Momentum(valArr[3],valArr[4],valArr[5]);
+  G4double      Momentum_mag_sq = Momentum.mag2();
 
-  G4double mass_in_Kg;
-  mass_in_Kg = fEnergy / velocity_mag_sq * (1-velocity_mag_sq/c_squared);
-  valArr[6]= mass_in_Kg;
+  // G4double mass_in_Kg;
+  // mass_in_Kg = fEnergy / velocity_mag_sq * (1-velocity_mag_sq/c_squared);
+  // valArr[6]= mass_in_Kg;
+
+  // The following components may or may not be integrated.
+  valArr[6]= fKineticEnergy; 
 
   // valArr[6]=fEnergy;  // When it is integrated over, do this ...
   valArr[7]=fLabTimeOfFlight;
@@ -259,15 +252,19 @@ void G4FieldTrack::LoadFromArray(G4double valArr[ncompSVEC])
   SixVector[4]=valArr[4];
   SixVector[5]=valArr[5];
 
-  G4ThreeVector Velocity(valArr[3],valArr[4],valArr[5]);
-  G4double      velocity_mag_sq = Velocity.mag2();
+  G4ThreeVector Momentum(valArr[3],valArr[4],valArr[5]);
 
-  // fEnergy=valArr[6]; // When it is integrated over, do this ...
+  G4double momentum_square= Momentum.mag2();
+  fMomentumDir= Momentum.unit();
 
-  G4double mass_in_Kg=valArr[6];
-  fEnergy= mass_in_Kg * velocity_mag_sq / (1-velocity_mag_sq/c_squared);
-                                                            // sqr(c_light)
-  fMomentumDir= Velocity.unit();
+  fKineticEnergy = momentum_square / 
+                   (sqrt(momentum_square+fRestMass_c2*fRestMass_c2)
+                     + fRestMass_c2 ); 
+  // The above equation is stable for small and large momenta
+
+  // The following components may or may not be
+  //    integrated over -- integration is optional
+  // fKineticEnergy= valArr[6];
 
   fLabTimeOfFlight=valArr[7];
   fProperTimeOfFlight=valArr[8];
@@ -292,7 +289,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SixVector[5]= rStVec.SixVector[5];
   SetCurveLength( rStVec.GetCurveLength() );
 
-  SetEnergy(  rStVec.fEnergy );
+  SetKineticEnergy(  rStVec.fKineticEnergy );
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
   SetSpin( rStVec.GetSpin() );
