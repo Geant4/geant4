@@ -167,6 +167,7 @@ if ( `uname -n | grep sun` != "" ) then
   setenv G4VIS_BUILD_DAWNFILE_DRIVER 1
   setenv G4VIS_BUILD_VRML_DRIVER     1
   setenv G4VIS_BUILD_VRMLFILE_DRIVER 1
+endif
 
 if ( `uname -n | grep hp` != "" ) then
   setenv G4USE_OSPACE 1
