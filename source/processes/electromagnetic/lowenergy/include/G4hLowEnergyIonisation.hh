@@ -23,6 +23,7 @@
 // 28 July 1999 V.Ivanchenko cleen up
 // 17 August 1999 G.Mancinelli implemented ICRU parametrization (protons)  
 // 20 August 1999 G.Mancinelli implemented ICRU parametrization (alpha)  
+// 31 August 1999 V.Ivanchenko update and cleen up 
 // ------------------------------------------------------------
  
 #ifndef G4hLowEnergyIonisation_h
@@ -70,9 +71,11 @@ protected:
   
 public:
   
-  void BuildLossTableZiegler(const G4ParticleDefinition& aParticleType);
+  void BuildLossTable(const G4ParticleDefinition& aParticleType);
+
+  //  void BuildLossTableZiegler(const G4ParticleDefinition& aParticleType);
   
-  void BuildLossTableICRU(const G4ParticleDefinition& aParticleType);
+  //  void BuildLossTableICRU(const G4ParticleDefinition& aParticleType);
   
   void SetStoppingPowerTableName(const G4String& dedxTable);
   
@@ -80,12 +83,12 @@ public:
   
   void SetNuclearStoppingOff();
   
-  G4double GetZieglerLoss(const G4Material* material, const G4double KinEnergy, 
-			  const G4double DeltaRayCutNow);
-  
-  G4double GetICRULoss(const G4Material* material, const G4double KinEnergy, 
-		       const G4double DeltaRayCutNow);
-  
+  G4double GetParametrizedLoss(const G4Material* material, const G4double KinEnergy, 
+			       const G4double DeltaRayCutNow);
+
+  G4double GetMolecICRU_R49Loss(const G4Material* material, const G4double KinEnergy, 
+			        const G4double DeltaRayCutNow, const G4int molecIndex);
+
   G4double GetBetheBlochLoss(const G4Material* material, const G4double KinEnergy,
 			     const G4double DeltaRayCutNow);
   
@@ -115,10 +118,13 @@ public:
   G4double GetDeltaRaysEnergy(const G4Material* material, const G4double KinEnergy,
 			      const G4double DeltaRayCutNow);
   
-  G4double GetChemicalFactor(const G4Material* material, const G4double KinEnergy,
-			     const G4double DeltaRayCutNow);
+  G4double GetChemicalFactor(const G4double ExpStopPower125, const G4double KinEnergy,
+			     const G4double BraggStopPower125);
   
-  G4int MolecIsInICRUTable(const G4Material*  material);
+  G4int MolecIsInICRU_R49p(const G4Material*  material);
+
+  G4double MolecIsInZiegler1988(const G4Material*  material);
+
   void PrintInfoDefinition();
   
 private:
@@ -137,8 +143,6 @@ private:
   G4double ParamHighEnergy;
   // name of parametrisation table of electron stopping power
   G4String DEDXtable;
-  // name of parametrisation type (Ziegler, ICRU)
-  G4String Parametrization;
   // flag of parametrisation of nucleus stopping power
   G4bool nStopping;
   
@@ -163,8 +167,7 @@ private:
   G4double ZieglerFactor; // Factor to convert the Stopping Power 
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
-  
-  
+    
 };
 
 #include "G4hLowEnergyIonisation.icc"
