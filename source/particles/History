@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2001-09-19 11:25:31 kurasige Exp $
+$Id: History,v 1.57 2001-09-20 02:12:32 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Sep 20, 2001  H.Kurashige (particles-V03-02-03)
+------- partman-V03-02-03
+- Modify to use G4Material::GetNumberOfMaterials 
+ 
 - Sep 19, 2001  H.Kurashige (particles-V03-02-02)
 ------- partman-V03-02-02
 ------- hadrons-V03-00-02
