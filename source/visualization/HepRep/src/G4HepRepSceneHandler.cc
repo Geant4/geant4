@@ -83,7 +83,6 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           eventLayer            ("Event"),
           calHitLayer           ("CalHit"),
           trajectoryLayer       ("Trajectory"),
-          trajectoryPointLayer  ("TrajectoryPoint"),
           hitLayer              ("Hit"),
           rootVolumeName        ("Geometry"),
           baseName              (""),
@@ -246,7 +245,6 @@ void G4HepRepSceneHandler::openHepRep() {
     _eventTypeTree        = NULL;
     _eventType            = NULL;
     _trajectoryType       = NULL;
-    _trajectoryPointType  = NULL;
     _hitType              = NULL;
     _calHitType           = NULL;
     _calHitFaceType       = NULL;     
@@ -288,7 +286,6 @@ bool G4HepRepSceneHandler::closeHepRep() {
     if (_eventType           != NULL) _heprep->addLayer(eventLayer);
     if (_calHitType          != NULL) _heprep->addLayer(calHitLayer);
     if (_trajectoryType      != NULL) _heprep->addLayer(trajectoryLayer);
-    if (_trajectoryPointType != NULL) _heprep->addLayer(trajectoryPointLayer);
     if (_hitType             != NULL) _heprep->addLayer(hitLayer);
 
     // open heprep file
@@ -555,32 +552,24 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
         G4Point3D vertex = trajectoryPoint->GetPosition();
         HepRepPoint* point = factory->createHepRepPoint(trajectoryInstance, vertex.x(), vertex.y(), vertex.z());
 
-        vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
-/* This uses way too much memory...
-        // add all points also as separate instances (MD -> JP: why?), with single points
-        const map<G4String,G4AttDef>* pointAttDefs = trajectoryPoint->GetAttDefs();
-        HepRepInstance* pointInstance = factory->createHepRepInstance(trajectoryInstance, 
-                                                        getTrajectoryPointType(pointAttDefs));
 
-        // Specify the position of the trajectory point.
-        factory->createHepRepPoint(pointInstance, vertex.x(), vertex.y(), vertex.z());
-*/
-
+        if (messenger.addPointAttributes()) {
+            vector<G4AttValue>* pointAttValues = trajectoryPoint->CreateAttValues();
 // FIXME
 // We cannot call addAttVals since it will only accept an instance and not a point.
 // For now we just copy the attvals on a point and do not search the instance or type.
-//        addAttVals(point, pointAttDefs, pointAttValues);
-        if (pointAttValues != NULL) {
-            // Copy the point's G4AttValues to HepRepAttValues.
-            for (vector<G4AttValue>::iterator attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
-                // Pos already in points being written
-                if (attValIterator->GetName() == "Pos") continue;
-                
-                point->addAttValue(attValIterator->GetName(), attValIterator->GetValue());
+//            addAttVals(point, pointAttDefs, pointAttValues);
+            if (pointAttValues != NULL) {
+                // Copy the point's G4AttValues to HepRepAttValues.
+                for (vector<G4AttValue>::iterator attValIterator = pointAttValues->begin(); attValIterator != pointAttValues->end(); attValIterator++) {
+                    // Pos already in points being written
+                    if (attValIterator->GetName() == "Pos") continue;
+                    
+                    point->addAttValue(attValIterator->GetName(), attValIterator->GetValue());
+                }
             }
+            delete pointAttValues;
         }
-        delete pointAttValues;
-
     }
 }
 
@@ -1026,22 +1015,14 @@ HepRepType* G4HepRepSceneHandler::getTrajectoryType() {
         _trajectoryType->addAttValue("DrawAs", G4String("Line"));
 
         _trajectoryType->addAttValue("LineWidthMultiplier", 2.0);
+        
+        // attributes to draw the points of a track as markers.
+        _trajectoryType->addAttValue("MarkName", G4String("Box"));
+        _trajectoryType->addAttValue("MarkSize", 4);
+        _trajectoryType->addAttValue("MarkType", G4String("Symbol"));
+        _trajectoryType->addAttValue("Fill", true);
     }
     return _trajectoryType;
-}
-
-HepRepType* G4HepRepSceneHandler::getTrajectoryPointType() {
-    if (_trajectoryPointType == NULL) {
-        _trajectoryPointType = factory->createHepRepType(getTrajectoryType(), "Trajectory/Point");
-        _trajectoryPointType->addAttValue("Layer", trajectoryPointLayer);
-        _trajectoryPointType->addAttValue("DrawAs", G4String("Point"));
-        _trajectoryPointType->addAttValue("MarkName", G4String("Box"));
-        _trajectoryPointType->addAttValue("MarkSize", 4);
-        _trajectoryPointType->addAttValue("MarkType", G4String("Symbol"));
-        _trajectoryPointType->addAttValue("Fill", true);
-        _trajectoryPointType->addAttValue("Visibility", true);
-    }
-    return _trajectoryPointType;
 }
 
 HepRepType* G4HepRepSceneHandler::getHitType() {

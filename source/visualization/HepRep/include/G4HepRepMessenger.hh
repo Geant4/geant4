@@ -42,6 +42,7 @@ class G4HepRepMessenger : public G4UImessenger {
         
         virtual G4String getEventNumberSuffix();
         virtual G4bool appendGeometry();
+        virtual G4bool addPointAttributes();
 
 
     private:            
@@ -52,6 +53,9 @@ class G4HepRepMessenger : public G4UImessenger {
         
         G4bool geometry;
 //        G4UIcmdWithABool* appendGeometryCommand;
+
+        G4bool pointAttributes;
+        G4UIcmdWithABool* addPointAttributesCommand;
 };
 
 #endif

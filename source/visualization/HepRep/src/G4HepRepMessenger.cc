@@ -44,11 +44,18 @@ G4HepRepMessenger::G4HepRepMessenger() :
     appendGeometryCommand->SetDefaultValue(true);
     appendGeometryCommand->AvailableForStates(G4State_Idle);
 */
+
+    addPointAttributesCommand = new G4UIcmdWithABool("/vis/heprep/addPointAttributes", this);
+    addPointAttributesCommand->SetGuidance("Adds point attributes to the points of trajectories.");
+    addPointAttributesCommand->SetParameterName("flag",false);
+    addPointAttributesCommand->SetDefaultValue(false);
+    addPointAttributesCommand->AvailableForStates(G4State_Idle);
 }
 
 G4HepRepMessenger::~G4HepRepMessenger() {
     delete setEventNumberSuffixCommand;
 //    delete appendGeometryCommand;
+    delete addPointAttributesCommand;
 }
 
 G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
@@ -56,6 +63,8 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
         return suffix;
 //    } else if (command==appendGeometryCommand) {
 //        return appendGeometryCommand->ConvertToString(geometry); 
+    } else if (command==addPointAttributesCommand) {
+        return addPointAttributesCommand->ConvertToString(pointAttributes); 
     } else {
         return "";
     }
@@ -66,6 +75,8 @@ void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
         suffix = newValue;
 //    } else if (command==appendGeometryCommand) {
 //        geometry = appendGeometryCommand->GetNewBoolValue(newValue);
+    } else if (command==addPointAttributesCommand) {
+        pointAttributes = addPointAttributesCommand->GetNewBoolValue(newValue);
     }
 }
 
@@ -75,4 +86,8 @@ G4String G4HepRepMessenger::getEventNumberSuffix() {
 
 G4bool G4HepRepMessenger::appendGeometry() {
     return geometry;
+}
+
+G4bool G4HepRepMessenger::addPointAttributes() {
+    return pointAttributes;
 }

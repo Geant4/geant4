@@ -88,6 +88,11 @@ To write 10 events (and geometries), use:
 /vis/viewer/update
 
 
+(Optional) To add attributes to each point on a trajectory, use:
+/vis/heprep/addPointAttributes 1
+Be aware that this may increase the size of the output dramatically.
+
+
 (Optional) To close the file, remove the SceneHandler, use:
 
 /vis/sceneHandler/remove scene-handler-0

@@ -142,7 +142,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepTypeTree*     getEventTypeTree();
         HEPREP::HepRepType*         getEventType();
         HEPREP::HepRepType*         getTrajectoryType       ();
-        HEPREP::HepRepType*         getTrajectoryPointType  ();
         HEPREP::HepRepType*         getHitType              ();
         HEPREP::HepRepType*         getCalHitType           ();
 
@@ -152,7 +151,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         // initialized Member Variables
         G4HepRepMessenger& messenger;
         G4String geometryLayer, eventLayer, calHitLayer;
-        G4String trajectoryLayer, trajectoryPointLayer, hitLayer;
+        G4String trajectoryLayer, hitLayer;
         G4String rootVolumeName;
         
         G4String baseName;
@@ -181,7 +180,6 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepTypeTree*                 _eventTypeTree;
         HEPREP::HepRepType*                     _eventType;
         HEPREP::HepRepType*                     _trajectoryType;
-        HEPREP::HepRepType*                     _trajectoryPointType;
         HEPREP::HepRepType*                     _hitType;
         HEPREP::HepRepType*                     _calHitType;
         HEPREP::HepRepType*                     _calHitFaceType;        
