@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.8 2001-03-12 06:39:22 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.9 2001-07-10 03:20:03 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -198,21 +198,28 @@ class G4VProcess
       // function. Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(const G4String& directory, 
+      virtual G4bool StorePhysicsTable(G4ParticleDefinition* ,
+				       const G4String& directory, 
 				       G4bool          ascii = false)
                                       {return true;}
       // Store PhysicsTable in a file. 
       // (return false in case of failure at I/O ) 
  
-      virtual G4bool RetrievePhysicsTable(const G4String& directory, 
-				          G4bool          ascii = false)
+      virtual G4bool RetrievePhysicsTable( G4ParticleDefinition* ,
+					   const G4String& directory, 
+				           G4bool          ascii = false)
                                       {return false;}
       // Retrieve Physics from a file. 
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
       // File name should be defined by each process 
       // and the file should be placed under the directory specifed by the argument. 
- 
+      const G4String& GetPhysicsTableFileName(G4ParticleDefinition* ,
+					      const G4String& directory,
+					      const G4String& tableName,
+					      G4bool ascii =false);
+      // this method is utility for Store/RetreivePhysicsTable
+
   ////////////////////////////
       const G4String& GetProcessName() const;
       //  Returns the name of the process.
@@ -268,6 +275,8 @@ class G4VProcess
  private: 
       G4String theProcessName;
       //  The name of the process
+
+      G4String thePhysicsTableFileName;
 
       G4ProcessType theProcessType;
       //  The type of the process
