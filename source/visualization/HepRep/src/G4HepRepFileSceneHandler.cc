@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileSceneHandler.cc,v 1.2 2001-11-08 21:50:59 perl Exp $
+// $Id: G4HepRepFileSceneHandler.cc,v 1.3 2001-11-19 15:07:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,11 +65,13 @@ G4HepRepFileSceneHandler::G4HepRepFileSceneHandler(G4VGraphicsSystem& system,
   fSceneCount++;
 
   hepRepXMLWriter = ((G4HepRepFile*)(&system))->GetHepRepXMLWriter();
-  G4cout << "  From scene handler const: opening file, G4HepRepFile.xml";
+  G4cout << "  From scene handler const: opening file, G4HepRepFile.xml"
+	 << G4endl;
 }
 
 G4HepRepFileSceneHandler::~G4HepRepFileSceneHandler() {}
 
+#ifdef G4HEPREPFILEDEBUG
 void G4HepRepFileSceneHandler::PrintThings() {
   G4cout <<
     "  with transformation "
@@ -85,124 +87,149 @@ void G4HepRepFileSceneHandler::PrintThings() {
   }
   G4cout << G4endl;
 }
+#endif
 
 void G4HepRepFileSceneHandler::AddThis(const G4Box& box) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Box& box) called for "
 	 << box.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(box);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Cons& cons) called for "
 	 << cons.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(cons);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Tubs& tubs) called for "
 	 << tubs.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(tubs);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Trd& trd) called for "
 	 << trd.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(trd);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Trap& trap) called for "
 	 << trap.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(trap);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Sphere& sphere) called for "
 	 << sphere.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(sphere);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Para& para) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Para& para) called for "
 	 << para.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(para);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Torus& torus) called for "
 	 << torus.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(torus);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Polycone& polycone) called for "
 	 << polycone.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(polycone);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Polyhedra& polyhedra) called for "
 	 << polyhedra.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(polyhedra);  // Invoke default action.
 }
 
 void G4HepRepFileSceneHandler::AddThis(const G4VSolid& solid) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddThis(const G4Solid& solid) called for "
 	 << solid.GetName()
 	 << G4endl;
   PrintThings();
+#endif
   hepRepXMLWriter->addType(fpCurrentPV->GetName());
   G4VSceneHandler::AddThis(solid);  // Invoke default action.
 }
 
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) called:"
     "\n  polyline: " << polyline
 	 << G4endl;
   PrintThings();
+#endif
 
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Line");
@@ -220,10 +247,12 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyline& polyline) {
 
 
 void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Polymarker& line) called"
 	 << G4endl;
   PrintThings();
+#endif
 
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Point");
@@ -244,20 +273,24 @@ void G4HepRepFileSceneHandler::AddPrimitive (const G4Polymarker& line) {
 }
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Text& text) called:"
     "\n  text: " << text.GetText()
 	 << G4endl;
   PrintThings();
-    G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4Text : not yet implemented. " << G4endl;
+#endif
+  G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4Text : not yet implemented. " << G4endl;
 }
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) called:"
     "\n  radius: " << circle.GetWorldRadius()
 	 << G4endl;
   PrintThings();
+#endif
 
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Point");
@@ -276,11 +309,13 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Circle& circle) {
 }
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) called:"
     "\n  side: " << square.GetWorldRadius()
 	 << G4endl;
   PrintThings();
+#endif
 
   hepRepXMLWriter->addInstance();
   hepRepXMLWriter->addAttValue("DrawAs","Point");
@@ -299,10 +334,12 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Square& square) {
 }
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) called."
 	 << G4endl;
   PrintThings();
+#endif
   if(polyhedron.GetNoFacets()==0)return;
 
   G4Normal3D surfaceNormal;
@@ -339,10 +376,12 @@ void G4HepRepFileSceneHandler::AddPrimitive(const G4Polyhedron& polyhedron) {
 }
 
 void G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) {
+#ifdef G4HEPREPFILEDEBUG
   G4cout <<
     "G4HepRepFileSceneHandler::AddPrimitive(const G4NURBS& nurbs) called."
 	 << G4endl;
   PrintThings();
+#endif
     G4cout << "G4HepRepFileSceneHandler::AddPrimitive G4NURBS : not implemented. " << G4endl;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HepRepFileViewer.cc,v 1.2 2001-11-08 21:51:01 perl Exp $
+// $Id: G4HepRepFileViewer.cc,v 1.3 2001-11-19 15:07:28 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4HepRepFileViewer.hh"
@@ -46,8 +46,10 @@ G4HepRepFileViewer::G4HepRepFileViewer
 G4HepRepFileViewer::~G4HepRepFileViewer() {}
 
 void G4HepRepFileViewer::SetView() {
+#ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::SetView() called." << G4endl;
-  hepRepXMLWriter->open("G4HepRep.xml");
+#endif
+  hepRepXMLWriter->open("G4HepRepFile.xml");
   hepRepXMLWriter->addAttDef("LVol", "Logical Volume", "Physics","");
   hepRepXMLWriter->addAttDef("Solid", "Solid Name", "Physics","");
   hepRepXMLWriter->addAttDef("EType", "Entity Type", "Physics","");
@@ -58,18 +60,21 @@ void G4HepRepFileViewer::SetView() {
 }
 
 void G4HepRepFileViewer::ClearView() {
+#ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::ClearView() called." << G4endl;
+#endif
 }
 
 void G4HepRepFileViewer::DrawView() {
+#ifdef G4HEPREPFILEDEBUG
   G4cout << "G4HepRepFileViewer::DrawView() called." << G4endl;
+#endif
   NeedKernelVisit ();  // Always need to visit G4 kernel.
   ProcessView ();
 }
 
 void G4HepRepFileViewer::ShowView () {
-//    OCameraViewNode (fGoCamera,fSceneHandler.GetRootNode());  
-#ifdef DEBUG
+#ifdef G4HEPREPFILEDEBUG
     G4cout << "G4HepRepFileViewer::ShowView" << G4endl;
 #endif
     G4VViewer::ShowView();

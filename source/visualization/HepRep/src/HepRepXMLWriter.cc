@@ -1,6 +1,6 @@
 //--------------------------------------------------------------------------
 // File and Version Information:
-// 	$Id: HepRepXMLWriter.cc,v 1.1 2001-11-06 11:48:09 johna Exp $
+// 	$Id: HepRepXMLWriter.cc,v 1.2 2001-11-19 15:07:28 johna Exp $
 //
 // Description:
 //	Create a HepRep XML File (HepRep version 1).
@@ -14,10 +14,10 @@
 // Copyright Information:
 //      Copyright (C) 2001          Stanford Linear Accelerator Center
 //------------------------------------------------------------------------
-#include <fstream.h>
-#include <unistd.h>
 
 #include "HepRepXMLWriter.hh"
+
+#include "G4ios.hh"
 
 HepRepXMLWriter::HepRepXMLWriter()
 {
@@ -28,10 +28,11 @@ void HepRepXMLWriter::addType(const char* name)
   if (fout.good())
   {
     endType();
-    fout << "  <heprep:type version=\"null\" name=\"" << name << "\">" << endl;
+    fout << "  <heprep:type version=\"null\" name=\"" << name << "\">"
+	 << G4endl;
     inType = true;
   } else {
-    cout << "HepRepXMLWriter:addType No file is currently open." << endl;
+    G4cout << "HepRepXMLWriter:addType No file is currently open." << G4endl;
   }
 }
 
@@ -42,13 +43,15 @@ void HepRepXMLWriter::addInstance()
     if (inType)
     {
       endInstance();
-      fout << "    <heprep:instance>" << endl;
+      fout << "    <heprep:instance>" << G4endl;
       inInstance = true;
     } else {
-      cout << "HepRepXMLWriter:addInstance No HepRep Type is currently open" << endl;
+      G4cout << "HepRepXMLWriter:addInstance No HepRep Type is currently open"
+	     << G4endl;
     }
   } else {
-    cout << "HepRepXMLWriter:addInstance No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addInstance No file is currently open"
+	   << G4endl;
   }
 }
 
@@ -59,13 +62,16 @@ void HepRepXMLWriter::addPrimitive()
     if (inInstance)
     {
       endPrimitive();
-      fout << "      <heprep:primitive>" << endl;
+      fout << "      <heprep:primitive>" << G4endl;
       inPrimitive = true;
     } else {
-      cout << "HepRepXMLWriter:addPrimitive No HepRep Instance is currently open" << endl;
+      G4cout <<
+	"HepRepXMLWriter:addPrimitive No HepRep Instance is currently open"
+	     << G4endl;
     }
   } else {
-    cout << "HepRepXMLWriter:addPrimitive No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addPrimitive No file is currently open"
+	   << G4endl;
   }
 }
 
@@ -76,13 +82,15 @@ void HepRepXMLWriter::addPoint(double x, double y, double z)
     if (inPrimitive)
     {
       endPoint();
-      fout << "        <heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << endl;
+      fout << "        <heprep:point x=\"" << x << "\" y=\"" << y << "\" z=\"" << z << "\">" << G4endl;
       inPoint = true;
     } else {
-      cout << "HepRepXMLWriter:addPoint No HepRep Primitive is currently open" << endl;
+      G4cout <<
+	"HepRepXMLWriter:addPoint No HepRep Primitive is currently open"
+	     << G4endl;
     }
   } else {
-    cout << "HepRepXMLWriter:addPoint No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addPoint No file is currently open" << G4endl;
   }
 }
 
@@ -94,11 +102,11 @@ void HepRepXMLWriter::addAttDef(const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << endl;
+    fout << "  <heprep:attdef extra=\"" << extra << "\" name=\"" << name << "\" type=\"" << type << "\"" << G4endl;
     indent();
-    fout << "    desc=\"" << desc << "\"/>" << endl;
+    fout << "    desc=\"" << desc << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttDef No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttDef No file is currently open" << G4endl;
   }
 }
 
@@ -109,11 +117,11 @@ void HepRepXMLWriter::addAttValue (const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << endl;
+    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << value << "\"/>" << endl;
+    fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttValue No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }
 }
 
@@ -123,11 +131,11 @@ void HepRepXMLWriter::addAttValue (const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << endl;
+    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << value << "\"/>" << endl;
+    fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttValue No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }
 }
 
@@ -137,11 +145,11 @@ void HepRepXMLWriter::addAttValue (const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << endl;
+    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << value << "\"/>" << endl;
+    fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttValue No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }
 }
 
@@ -151,11 +159,11 @@ void HepRepXMLWriter::addAttValue (const char* name,
   if (fout.good())
   {
     indent();
-    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << endl;
+    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << value << "\"/>" << endl;
+    fout << "    value=\"" << value << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttValue No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }
 }
 
@@ -170,11 +178,11 @@ void HepRepXMLWriter::addAttValue (const char* name,
     int redness = int(value1*255.);
     int greenness = int(value2*255.);
     int blueness = int(value3*255.);
-    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << endl;
+    fout << "  <heprep:attvalue showLabel=\"NONE\" name=\"" << name << "\"" << G4endl;
     indent();
-    fout << "    value=\"" << redness << "," << greenness << "," << blueness << "\"/>" << endl;
+    fout << "    value=\"" << redness << "," << greenness << "," << blueness << "\"/>" << G4endl;
   } else {
-    cout << "HepRepXMLWriter:addAttValue No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:addAttValue No file is currently open" << G4endl;
   }
 }
 
@@ -187,16 +195,16 @@ void HepRepXMLWriter::open(const char* filespec)
 
   if (fout.good())
   {
-    fout << "<?xml version=\"1.0\" ?>" << endl;
-    fout << "<heprep:heprep xmlns:heprep=\"http://www.freehep.org/HepRep\"" << endl;
-    fout << "  xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xsi:schemaLocation=\"HepRep.xsd\">" << endl;
+    fout << "<?xml version=\"1.0\" ?>" << G4endl;
+    fout << "<heprep:heprep xmlns:heprep=\"http://www.freehep.org/HepRep\"" << G4endl;
+    fout << "  xmlns:xsi=\"http://www.w3.org/1999/XMLSchema-instance\" xsi:schemaLocation=\"HepRep.xsd\">" << G4endl;
 
     inType = false;
     inInstance = false;
     inPrimitive = false;
     inPoint = false;
   } else {
-    cout << "HepRepXMLWriter:open Unable to write to file " << filespec << endl;
+    G4cout << "HepRepXMLWriter:open Unable to write to file " << filespec << G4endl;
   }
 }
 
@@ -205,10 +213,10 @@ void HepRepXMLWriter::close()
   if (fout.good())
   {
     endType();
-    fout << "</heprep:heprep>" << endl;
+    fout << "</heprep:heprep>" << G4endl;
     fout.close( );
   } else {
-    cout << "HepRepXMLWriter:close No file is currently open" << endl;
+    G4cout << "HepRepXMLWriter:close No file is currently open" << G4endl;
   }
 }
 
@@ -217,7 +225,7 @@ void HepRepXMLWriter::endType()
   if (inType)
   {
     endInstance();
-    fout << "  </heprep:type>" << endl;
+    fout << "  </heprep:type>" << G4endl;
     inType = false;
   }
 }
@@ -227,7 +235,7 @@ void HepRepXMLWriter::endInstance()
   if (inInstance)
   {
     endPrimitive();
-    fout << "    </heprep:instance>" << endl;
+    fout << "    </heprep:instance>" << G4endl;
     inInstance = false;
   }
 }
@@ -237,7 +245,7 @@ void HepRepXMLWriter::endPrimitive()
   if (inPrimitive)
   {
     endPoint();
-    fout << "      </heprep:primitive>" << endl;
+    fout << "      </heprep:primitive>" << G4endl;
     inPrimitive = false;
   }
 }
@@ -246,7 +254,7 @@ void HepRepXMLWriter::endPoint()
 {
   if (inPoint)
   {
-    fout << "        </heprep:point>" << endl;
+    fout << "        </heprep:point>" << G4endl;
     inPoint = false;
   }
 }
