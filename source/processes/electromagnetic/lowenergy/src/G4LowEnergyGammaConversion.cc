@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyGammaConversion.cc,v 1.11 2000-01-26 09:50:00 lefebure Exp $
+// $Id: G4LowEnergyGammaConversion.cc,v 1.12 2000-03-14 08:23:42 lefebure Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -17,6 +17,12 @@
 //      CERN, IT Division, ASD group
 //      ------------ G4LowEnergyGammaConversion physics process --------
 //                   by A.Forti 1999/03/02
+//
+// 14.03.2000 Veronique Lefebure;
+// Change initialisation of LowestEnergyLimit from 1.22 to 1.022.
+// Note that the hard coded value 1.022 should be used instead of
+// 2*electron_mass_c2 in order to agree with the value of the data bank EPDL97
+//
 // **************************************************************
 
 // This Class Header
@@ -34,7 +40,8 @@ G4LowEnergyGammaConversion::G4LowEnergyGammaConversion(const G4String& processNa
     theCrossSectionTable(0),
     theMeanFreePathTable(0),
     ZNumVec(0),
-    LowestEnergyLimit (1.2200),
+    //Use lowest limit of EPDL97 which is larger than 2*electron_mass_c2 = 1.02199812
+    LowestEnergyLimit (1.022000),
     HighestEnergyLimit(100*GeV),
     NumbBinTable(200)
 {
