@@ -1,4 +1,4 @@
-// $Id: G4PhysicalTouchable.cc,v 1.1 2005-02-15 17:34:17 japost Exp $
+// $Id: G4PhysicalTouchable.cc,v 1.2 2005-02-16 18:14:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -25,13 +25,13 @@ G4PhysicalTouchable::G4PhysicalTouchable( G4VPhysicalVolume* pCurrentVol, const 
 		       pCurrentVol->GetTranslation(),  // const G4ThreeVector &tlate,
 		       pCurrentVol->GetName(),         // const G4String &pName,
                        pCurrentVol->GetLogicalVolume(), // Current Log Vol
-                       0 );                            // physical Mother
+                       0 )                              // physical Mother
 {
    if( fpPhysVol ) fpPhysVol = pCurrentVol; 
    fpTouchable= pParentTouchable; 
 }
 
-virtual G4PhysicalTouchable::~G4PhysicalTouchable()
+G4PhysicalTouchable::~G4PhysicalTouchable()
       // Destructor, will be subclassed. Removes volume from volume Store.
 {
    // ???

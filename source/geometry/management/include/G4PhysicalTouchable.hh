@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalTouchable.hh,v 1.1 2005-02-15 17:33:50 japost Exp $
+// $Id: G4PhysicalTouchable.hh,v 1.2 2005-02-16 18:14:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -66,12 +66,15 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
       // Destructor, will be subclassed. Removes volume from volume Store.
 
     const G4VTouchable* GetTouchable() const; 
-      // Provide touchable
+      // Provide parent touchable
+    G4VPhysicalVolume* GetCurrentVolume(); 
+    const G4VPhysicalVolume* GetCurrentVolume() const; 
+      // Access 
 
     void SetCurrentVolume( G4VPhysicalVolume* pCurrentVol ); 
       // Revise current volume pointer
 
-    G4VPhysicalVolume* operator ->(); 
+    inline G4VPhysicalVolume* operator ->(); 
       // 
 
   private:
@@ -84,11 +87,9 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
 
 // Inline methods
 
-G4VPhysicalVolume* G4PhysicalTouchable::operator ->() // const
+inline G4VPhysicalVolume* G4PhysicalTouchable::operator ->() // const
 {
     return( fpPhysVol ? fpPhysVol : 0 );
 }
-
-
   
 #endif
