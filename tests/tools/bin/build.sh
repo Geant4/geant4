@@ -25,7 +25,7 @@
 #
 # Some checks :
 if [ -z "${MAKECMD}" ] ; then
-MAKECMD=gmake
+MAKECMD='gmake -k'
 fi
 # Some checks :
 if [ -z "${G4INSTALL}" ] ; then
