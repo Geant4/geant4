@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Win32.cc,v 1.3 1999-05-07 10:34:18 barrand Exp $
+// $Id: G4Win32.cc,v 1.4 1999-05-11 12:34:38 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -103,8 +103,8 @@ G4Win32::G4Win32 (
     Win32Inited = TRUE;
   }
 
-  AddDispatcher     ((G4DispatchFunction)G4Win32::dispatchWin32Event);
-  SetMainInteractor (topWindow);
+  AddDispatcher((G4DispatchFunction)G4Win32::dispatchWin32Event);
+  SetMainInteractor(topWindow);
 }
 /***************************************************************************/
 G4Win32::~G4Win32 (

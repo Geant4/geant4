@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.3 1999-04-16 10:06:09 barrand Exp $
+// $Id: G4VInteractorManager.cc,v 1.4 1999-05-11 12:33:54 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -155,12 +155,13 @@ void G4VInteractorManager::DispatchEvent (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   int dispatchern = dispatchers.entries();
+  G4DispatchFunction func;
+  G4bool status;
   for(int count=0;count<dispatchern;count++) {
-    if( 
-       (dispatchers[count]!=NULL)          &&
-       (dispatchers[count](a_event)==TRUE) 
-       )
-      break;
+    func = dispatchers[count];
+    if(func!=NULL) {
+      if(func(a_event)==true) return;
+    }
   }
 }
 /***************************************************************************/
