@@ -1,4 +1,12 @@
 # testing configuration Nov 20
+# Blocked directories
+# dev1 dxplus01 debug_ISO    15 Nov  libG4brep.a
+# dev1 dxplus03 debug_NONISO  7 Nov  cltog4 (bin)
+# prod dxplus03 debug_NONISO 30 Oct  test05.bin
+# prod dxplus03 debug_NONISO  6 Nov  (rm) test05 (bin)
+# prod dxplus04 optim_NONISO 14 Nov  cltog4 (bin)
+# prod dxplus05               6 Nov  ??
+#
 prod pcgeant  Linux-g++  debug   all all all all 1
 dev1 pcgeant  Linux-g++  debug   all all all all 1
 dev2 pcgeant  Linux-g++  debug   all all all all 1
@@ -12,7 +20,7 @@ dev1 dxplus02 DEC-cxx    optim_ISO      all all all all 1
 dev2 dxplus02 DEC-cxx    optim_ISO      all all all all 1
 % sleep 5
 prod dxplus03 DEC-cxx    debug_NONISO   all all all all 1
-dev1 dxplus03 DEC-cxx    debug_NONISO   all all all all 1
+dev1 dxplus05 DEC-cxx    debug_NONISO   all all all all 1
 dev2 dxplus03 DEC-cxx    debug_NONISO   all all all all 1
 % sleep 5
 prod dxplus04 DEC-cxx    optim_NONISO   all all all all 1
