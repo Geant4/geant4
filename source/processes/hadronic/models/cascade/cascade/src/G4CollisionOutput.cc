@@ -7,7 +7,7 @@ typedef vector<G4InuclElementaryParticle>::iterator particleIterator;
 G4CollisionOutput::G4CollisionOutput()
   : verboseLevel(2) {
   
-if (verboseLevel > 3) {
+  if (verboseLevel > 3) {
     G4cout << " >>> G4CollisionOutput::G4CollisionOutput" << G4endl;
   }
 }
@@ -83,7 +83,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
     G4bool need_hard_tuning = true;
     
     if(nucleiFragments.size() > 0) {
-      for(G4int i = 0; i < nucleiFragments.size(); i++) {
+      for(G4int i = 0; i < G4int(nucleiFragments.size()); i++) {
 
         G4double eex = nucleiFragments[i].getExitationEnergyInGeV();
 
@@ -128,7 +128,7 @@ void G4CollisionOutput::setOnShell(G4InuclParticle* bullet,
    	  G4double x2 = -(W - sqrt(DET));
 	  // choose the appropriate solution
           G4bool xset = false;
- 	  G4double x;
+ 	  G4double x = 0.0;
 
 	  if(mon_non_cons[0] > 0.0) { // x has to be > 0.0
 	    if(x1 > 0.0) {
@@ -223,14 +223,14 @@ pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de)
     G4int ibest2 = -1;  
     G4double pbest = 0.0;
     G4double pcut = 0.3 * sqrt(1.88 * fabs(de));
-    G4double p1;
+    G4double p1 = 0.0;
     G4double p2;
    
-    for(G4int i = 0; i < outgoingParticles.size() - 1; i++) {
+    for(G4int i = 0; i < G4int(outgoingParticles.size()) - 1; i++) {
 
       vector<G4double> mom1 = outgoingParticles[i].getMomentum();
 
-      for(G4int j = i+1; j < outgoingParticles.size(); j++) {
+      for(G4int j = i+1; j < G4int(outgoingParticles.size()); j++) {
 
 	vector<G4double> mom2 = outgoingParticles[j].getMomentum();
 
@@ -281,9 +281,3 @@ pair<pair<G4int, G4int>, G4int> G4CollisionOutput::selectPairToTune(G4double de)
 
   return badp;
 }
-
-
-
-
-
-

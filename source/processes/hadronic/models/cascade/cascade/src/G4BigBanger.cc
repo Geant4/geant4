@@ -57,7 +57,7 @@ G4CollisionOutput G4BigBanger::collide(G4InuclParticle* bullet,
 
     if (verboseLevel > 2) {
       G4cout << " particles " << particles.size() << G4endl;
-      for(G4int i = 0; i < particles.size(); i++) 
+      for(G4int i = 0; i < G4int(particles.size()); i++) 
 	particles[i].printParticle();
     }
     if(!particles.empty()) { // convert back to Lab
@@ -334,16 +334,3 @@ G4double G4BigBanger::generateX(G4int ia,
 
   return maxProbability(a);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
