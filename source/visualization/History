@@ -1,4 +1,4 @@
-$Id: History,v 1.164 2001-11-13 07:08:47 stanaka Exp $
+$Id: History,v 1.165 2001-11-14 14:18:27 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,10 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-13th November 2001 Satoshi Tanaka
+14th November 2001  John Allison
+- Added README.built_in_commands.
+
+13th November 2001  Satoshi Tanaka
 - visualization/README file is updated, adding minimal description
   on the HepRepFile driver. 
 
