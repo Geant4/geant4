@@ -1,4 +1,4 @@
-?RCS: $Id: Oldconfig.U,v 1.15 2003-02-21 15:15:35 sadilov Exp $
+?RCS: $Id: Oldconfig.U,v 1.16 2003-02-21 16:04:15 sadilov Exp $
 ?RCS:
 ?RCS: Copyright (c) 1991-1993, Raphael Manfredi
 ?RCS: 
@@ -9,6 +9,9 @@
 ?RCS: of the source tree for dist 3.0.
 ?RCS:
 ?RCS: $Log: not supported by cvs2svn $
+?RCS: Revision 1.15  2003/02/21 15:15:35  sadilov
+?RCS: awk -> sed
+?RCS:
 ?RCS: Revision 1.14  2003/02/20 17:01:04  sadilov
 ?RCS: Last version.
 ?RCS:
@@ -318,6 +321,8 @@ cd ../..
 			;;
 		cygwin*) osname=win32
 			;;
+		darwin*) osname=darwin
+			;;
 		domainos) osname=apollo
 			osvers="$3"
 			;;
@@ -580,6 +585,8 @@ case "$g4osname" in
 				;;
 		'win32')	g4osname=WIN32
 				;;
+		'darwin')	g4osname=Darwin
+				;;
 	esac
 esac
 
@@ -622,6 +629,9 @@ case  "$g4compiler" in
 				;;
 		'WIN32')
 				g4compiler=VC
+				;;
+		'Darwin')
+				g4compiler=g++
 				;;
 	esac
 esac
@@ -671,6 +681,9 @@ gans=$ans
 			'win32')
 					g4osnamerec=WIN32
 					;;
+			'darwin')
+					g4osnamerec=Darwin
+					;;
 		esac
 		dflt=$g4osname
 		rp="What is your OS'?"
@@ -717,6 +730,9 @@ EOM
 					;;
 			'WIN32')
 					g4compilerrec=VC
+					;;
+			'Darwin')
+					g4compilerrec=g++
 					;;
 		esac
 		dflt=$g4compiler
