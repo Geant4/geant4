@@ -245,7 +245,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=30.46s Real=34.25s Sys=3.79s
+  User=31.72s Real=35.27s Sys=3.55s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

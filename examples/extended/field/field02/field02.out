@@ -2985,7 +2985,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.42s Real=0.98s Sys=0.56s
+  User=0.43s Real=1.01s Sys=0.58s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

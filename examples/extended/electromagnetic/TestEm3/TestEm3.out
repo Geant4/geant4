@@ -181,18 +181,18 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   1 kByte
-    Total CPU time elapsed for geometry optimisation: 0.01 seconds
+    Total CPU time elapsed for geometry optimisation: 0 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-     100.00         0.01         0.00            2k Calorimeter
+       0.00         0.00         0.00            2k Calorimeter
        0.00         0.00         0.00            0k Layer
 
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      91.70          1k         1       50         50         0.01    Calorimeter
+      91.70          1k         1       50         50         0.00    Calorimeter
        8.30          0k         1        3          4         0.00    Layer
 ### Run 0 start.
 
@@ -208,19 +208,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=42.07s Real=51.65s Sys=6.2s
+  User=42.84s Real=53.51s Sys=6.21s
 
 ------------------------------------------------------------
 material             Total Edep   sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-      Lead: 811.41 MeV +- 15.41 MeV     1.899 +- 0.1899 %      56.1 cm  +- 1.22 cm 
-liquidArgon: 178.89 MeV +- 14.74 MeV     8.242 +- 0.8242 %      88.4 cm  +- 7.88 cm 
+      Lead: 810.67 MeV +- 13.97 MeV     1.724 +- 0.1724 %      56.1 cm  +- 1.12 cm 
+liquidArgon: 180.55 MeV +- 13.96 MeV     7.733 +- 0.7733 %      89.5 cm  +- 7.29 cm 
 
 ------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1020852666, 758798650
+ Current couple of seeds = 660789644, 742802748
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

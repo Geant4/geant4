@@ -202,13 +202,16 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=46.98s Real=859.5s Sys=88.24s
+  User=45.53s Real=855.57s Sys=92.83s
 
  ======================== run summary ======================
 
- Number of Events = 100000
+ The run was 100000 pi+ of 5 GeV through 20 mum of Silicon (density: 2.3 g/cm3 )
 
  Total energy deposit in absorber per event = 6.7 keV +- 21.82 eV 
+
+ Mean dE/dx = 3.268 MeV/cm	 stopping Power = 1.403 MeV*cm2/g
+ (fromTable = 2.803 MeV/cm)	 (from Table    = 1.203 MeV*cm2/g)
 
  Total track length (charged) in absorber per event = 20.97 mum +- 15.24 nm 
  Total track length (neutral) in absorber per event = 1.319 nm  +- 9.342 Ang
@@ -226,7 +229,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1636731634, 910890274
+ Current couple of seeds = 373382065, 383562868
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...

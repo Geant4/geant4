@@ -209,7 +209,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=141.04s Real=285.27s Sys=55.57s
+  User=143.44s Real=283.53s Sys=56.6s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of Water (density: 1 g/cm3 )
 

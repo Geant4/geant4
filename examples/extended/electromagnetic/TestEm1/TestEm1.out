@@ -73,7 +73,7 @@ Current available graphics systems are:
 #
 /run/initialize
 
- The Box is 20 m   of Aluminium
+ The Box is 10 m   of Aluminium
 
 phot:  Total cross sections from Sandia parametrisation. 
 PhysicsList::SetCuts:CutLength : 1 mm 
@@ -84,6 +84,15 @@ PhysicsList::SetCuts:CutLength : 1 mm
 #
 /gun/particle e-
 /gun/energy 100 MeV
+#
+/testem/histo/setFileName testem1.paw
+/testem/histo/setHisto 1 100 0 50 cm
+----> SetHisto 1: total track length of a charged particle (cm);  100 bins from 0 cm to 50 cm
+/testem/histo/setHisto 2 100 0 100
+----> SetHisto 2: nb steps per track (charged particles);  100 bins from 0 none to 100 none
+/testem/histo/setHisto 3 100 0 10 mm
+----> SetHisto 3: step length of charged particles (mm);  100 bins from 0 mm to 10 mm
+# 
 /run/beamOn 100
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
@@ -203,20 +212,37 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=29s Real=45s Sys=10s
+  User=29.11s Real=45.13s Sys=10.56s
 
- nb tracks/event   neutral:    27.0700   charged:   701.4100
- nb  steps/event   neutral:   145.7600   charged:  3504.0700
+ ======================== run summary ======================
 
- total energy deposit: 100.0000 MeV
+ The run was: 100 e- of 100.00 MeV through 10.00 m   of Aluminium (density: 2.70 g/cm3 )
+
+ ============================================================
+
+ total energy deposit: 99.830 MeV
+
+ nb tracks/event   neutral:     27.530   charged:    696.620
+ nb  steps/event   neutral:    140.840   charged:   3494.630
 
  nb of process calls per event: 
-          eIoni       brCMS        phot       compt        conv     annihil
-      3477.4900     25.1900     25.6800    118.6900      1.3900      1.3900
+          eIoni       brCMS        phot       compt        conv     annihilTransportation
+       3467.450      25.630      25.100     113.310       1.540       1.540       0.900
+
+---------------------------------------------------------
+ Primary particle : 
+ CSDA Range = 3.988 cm    rms = 4.777 cm 
+ proj Range = 3.774 cm    rms = 4.309 cm 
+ proj/CSDA  = 0.946
+ transverse dispersion at end = 7.778 mm 
+
+ mass CSDA Range from simulation = 10.767 g/cm2
+               from PhysicsTable = 85.395 g/cm2
+---------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1009674686, 985243040
+ Current couple of seeds = 99952960, 1311734930
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
