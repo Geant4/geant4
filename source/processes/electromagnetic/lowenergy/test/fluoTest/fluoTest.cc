@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -29,40 +7,35 @@
 #endif
 #include "Randomize.hh"
 #ifdef G4VIS_USE
-#include "fluoTestVisManager.hh"
+#include "FluoTestVisManager.hh"
 #endif
-#include "fluoTestDetectorConstruction.hh"
-#include "fluoTestPhysicsList.hh"
-#include "fluoTestPrimaryGeneratorAction.hh"
-#include "fluoTestRunAction.hh"
-#include "fluoTestEventAction.hh"
-#include "fluoTestSteppingAction.hh"
-#include "fluoTestSteppingVerbose.hh"
+#include "FluoTestDetectorConstruction.hh"
+#include "FluoTestPhysicsList.hh"
+#include "FluoTestPrimaryGeneratorAction.hh"
+#include "FluoTestRunAction.hh"
+#include "FluoTestEventAction.hh"
+#include "FluoTestSteppingAction.hh"
+#include "FluoTestSteppingVerbose.hh"
 
 #ifdef G4ANALYSIS_USE
-#include "fluoTestAnalysisManager.hh"
+#include "FluoTestAnalysisManager.hh"
 #endif
-
-/* This global file is used to store relevant data for
-   analysis with external tools */
-G4std::ofstream outFile;
-
 
 int main(int argc,char** argv) {
 
   // choose the Random engine
   HepRandom::setTheEngine(new RanecuEngine);
 
-  //fluoTest Verbose output class
-  G4VSteppingVerbose::SetInstance(new fluoTestSteppingVerbose);
+  //FluoTest Verbose output class
+  G4VSteppingVerbose::SetInstance(new FluoTestSteppingVerbose);
      
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  fluoTestDetectorConstruction* detector = new fluoTestDetectorConstruction;
+  FluoTestDetectorConstruction* detector = new FluoTestDetectorConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new fluoTestPhysicsList);
+  runManager->SetUserInitialization(new FluoTestPhysicsList);
   
  G4UIsession* session=0;
   
@@ -79,41 +52,41 @@ int main(int argc,char** argv) {
 #endif
 #endif
     }
-  
+    
 #ifdef G4VIS_USE
   //visualization manager
-   G4VisManager* visManager = new fluoTestVisManager;
+   G4VisManager* visManager = new FluoTestVisManager;
   visManager->Initialize();
 #endif
   
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
-  fluoTestAnalysisManager* analysisMgr = new fluoTestAnalysisManager(detector);
+  FluoTestAnalysisManager* analysisMgr = new FluoTestAnalysisManager(detector);
 #endif
   
  // Set optional user action classes
 #ifdef G4ANALYSIS_USE
-  fluoTestEventAction* eventAction = 
-    new fluoTestEventAction(analysisMgr);
-  fluoTestRunAction* runAction =
-    new fluoTestRunAction(analysisMgr);
-  fluoTestSteppingAction* stepAction = 
-    new fluoTestSteppingAction(detector,analysisMgr); 
- //#else 
-  //fluoTestEventAction* eventAction = new fluoTestEventAction();
-  //fluoTestRunAction* runAction = new fluoTestRunAction();
+  FluoTestEventAction* eventAction = 
+    new FluoTestEventAction(analysisMgr);
+  FluoTestRunAction* runAction =
+    new FluoTestRunAction(analysisMgr);
+  // FluoTestSteppingAction* stepAction = 
+  // new FluoTestSteppingAction(detector,analysisMgr);
+ FluoTestSteppingAction* stepAction = 
+  new FluoTestSteppingAction(analysisMgr);
+ #else 
+ FluoTestEventAction* eventAction = new FluoTestEventAction();
+  FluoTestRunAction* runAction = new FluoTestRunAction();
+  FluoTestSteppingAction* stepAction = new FluoTestSteppingAction();
 #endif 
 
 // set user action classes
-  runManager->SetUserAction(new fluoTestPrimaryGeneratorAction(detector));
+  runManager->SetUserAction(new FluoTestPrimaryGeneratorAction(detector));
   
   runManager->SetUserAction(eventAction); 
   runManager->SetUserAction(runAction);
-#ifdef G4ANALYSIS_USE 
-runManager->SetUserAction(stepAction);
-#else
-runManager->SetUserAction(new fluoTestSteppingAction);  
-#endif
+  runManager->SetUserAction(stepAction);
+
  //Initialize G4 kernel
   runManager->Initialize();
     
@@ -139,9 +112,11 @@ runManager->SetUserAction(new fluoTestSteppingAction);
     }
 
   // job termination
+  /*
 #ifdef G4VIS_USE
    delete visManager;
   #endif
+  */
 #ifdef G4ANALYSIS_USE
   delete analysisMgr;  
  #endif
@@ -150,4 +125,5 @@ delete runManager;
 }
 
  
+
 
