@@ -1,5 +1,5 @@
 
-$Id: History,v 1.8 2000-04-27 09:59:34 gcosmo Exp $
+$Id: History,v 1.9 2000-05-26 13:27:24 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ May 26   2000  John Allison         geom-solid-bool-V01-01-00
+
+  - Disabled CreatePolyhedron() method from G4UnionSolid, G4IntersectionSolid
+    and G4SubtractionSolid. It now temporarly returns a NULL pointer.
+    Visualisation of Boolean solids is therefore temporarly disabled, pending
+    a definitive fix in graphics_reps.
+    Files G4UnionSolid.cc, G4SubtractionSolid.cc and G4IntersectionSolid.cc
+    are included in the branch-tag "boolean_nopoly_branch".
 
  Apr 27   2000  Gabriele Cosmo
 
