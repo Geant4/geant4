@@ -1,4 +1,4 @@
-# $Id: stt-dev.sdb,v 1.28 1999-11-22 10:02:27 stesting Exp $
+# $Id: stt-dev.sdb,v 1.29 1999-11-23 16:18:29 stesting Exp $
 # .sdb files are read by checkout.sh and update.sh
 # Lines beginning "# " are ignored (the space after the '#' is important!
 # Blank lines are not allowed!
@@ -34,9 +34,9 @@ geant4/source/processes/decay	            geant4-00-01-ref-10
 geant4/source/processes/electromagnetic	    geant4-00-01-ref-10
 geant4/source/processes/electromagnetic/lowenergy  stephane-00-06
 geant4/source/processes/hadronic            had-V00-01-01
-geant4/source/processes/hadronic/management had_man-V00-01-01
+geant4/source/processes/hadronic/management had_man-V00-01-02
 geant4/source/processes/hadronic/models/generator/de_excitation  de_excitation-V00-01-01b
-geant4/source/processes/hadronic/models/isotope_production iso-V00-01-02
+geant4/source/processes/hadronic/models/isotope_production iso-V00-01-03
 geant4/source/processes/hadronic/models/neutron_hp neu-V00-01-02
 geant4/source/processes/management          geant4-00-01-ref-10
 geant4/source/processes/optical	            geant4-00-01-ref-10
