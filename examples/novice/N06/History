@@ -1,4 +1,4 @@
-$Id: History,v 1.10 2002-11-14 17:03:37 gum Exp $
+$Id: History,v 1.11 2002-11-21 22:58:25 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 21, 2002 Peter Gumplinger (exampleN06-V04-01-02)
+- exampleN06.out output changed because of small change in G4Scintillation
+ 
 November 14, 2002 Peter Gumplinger (exampleN06-V04-01-01)
 - reduced the scintillation photon yield to reduce the output size
 
