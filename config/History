@@ -1,4 +1,4 @@
-$Id: History,v 1.66 1999-11-10 14:36:45 gcosmo Exp $
+$Id: History,v 1.67 1999-11-10 15:23:13 morita Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th November 1999  Youhei Morita
+- binmake.gmk: added path to persistency/global/include.
+- common.gmk: Change G4ODBMS_DEPEND to G4ODBMS_NODDL
+- globlib.gmk: removed G4ODBMS_DEPEND, modified target "global"
 
 10th November 1999  Gabriele Cosmo (config-V00-01-05)
 - binmake.gmk: added path to HEPNumerics/include which was missing.
