@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicsTable.cc,v 1.6 2001-07-11 10:00:58 gunter Exp $
+// $Id: G4PhysicsTable.cc,v 1.7 2003-03-25 14:56:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,6 +50,7 @@ G4PhysicsTable::G4PhysicsTable(size_t capacity)
 }
 
 G4PhysicsTable::G4PhysicsTable(const G4PhysicsTable& right)
+  : G4PhysCollection()
 {
   *this = right;
 }
