@@ -1,0 +1,114 @@
+
+                       geant4-05-02-ref-02
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Design iteration implementing modular run-manager: introduced
+    G4RunManagerKernel class and simplified G4RunManager implementation.
+  o Reviewed G4EventManager introducing new entry methods for
+    ProcessOneEvent() to treat HepMC events and track-vectors.
+  o Changed the trackID numbering scheme for 'PostposedToNextEvent'
+    tracks. Now they use negative trackID.
+  o Updated model interface in STD processes: added possibility to have
+    STD and other processes in the same physics list.
+  o Implemented the handling of diffractive photon scattering in the
+    parton string models.
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+event                                   event-V05-02-03
+-----
+- Design iteration implemeting modular run-manager:
+  o With the introduction of G4RunManagerKernel class in Run category,
+    G4EventManager now toggles the application states between
+    'G4State_GeomClosed' and 'G4State_EventProc'.
+  o A new entry method G4EventManager::ProcessOneEvent() is introduced,
+    which takes HepMC event class object instead of G4Event object.
+  o A new entry method G4EventManager::ProcessOneEvent() is introduced,
+    which takes G4TrackVector class object.
+  o G4HepMCInterface::HepMC2G4() becomes a static service method.
+  o G4HepMCInterface::CheckVertexInsideWorld() is moved to
+    G4VPrimaryGenerator and also becomes a static servic method.
+  o Added mechanism for merging more than one kinds of primaries (HepMC
+    and G4PrimaryVertex or G4TrackVector and G4PrimaryVertex).
+  o Changed the trackID numbering scheme for 'PostposedToNextEvent' tracks.
+    Now they use negative trackID.
+  o Maintain links between pre-assigned decay products and corresponding
+    primary particle. Becuse of this, G4PrimaryParticle objects of
+    pre-assigned decay have proper track ID.
+
+particles                               particles-V05-02-00
+---------
+- Added one void pointer to G4DynamicParticle for the sake of maintaining
+  links between pre-assigned decay products and corresponding primary particle.
+
+processes/electromagnetic/muons         muons-V05-02-01
+-------------------------------
+- Updated model interface according to changes in utils module.
+
+processes/electromagnetic/standard      stand-V05-02-00
+----------------------------------
+- Updated model interface according to changes in utils module.
+
+processes/electromagnetic/utils         utils-V05-02-00
+-------------------------------
+- Updated model interface:
+  o substituted G4Material by G4MaterialCutsCouple in dEdx and
+    CrossSection methods.
+  o Added methods to define energy range for multiple-scattering table
+    and to change the energy range of the model.
+  o Added possibility to have STD and other processes in the same
+    PhysicsList.
+
+processes/hadronic/models/chiral_inv_phase_space/body ghad-chips-body-V05-02-00
+-----------------------------------------------------
+- Added protection against a rounding problem in the chips evaporation. 
+  Fixes a problem in gamma-nuclear reactions observed in CMS.
+ 
+processes/hadronic/models/.../string_fragmentation    ghad-stringfrag-V05-02-00
+--------------------------------------------------
+- Implemented the handling of diffractive photon scattering in
+  the parton string models. Mandatory for high energy gamma and
+  electro-nuclear reactions.
+
+processes/hadronic/models/.../quark_gluon_string      ghad-qgs-V05-02-00
+------------------------------------------------
+- Bug fix in G4QGSMSplitableHadron.
+
+processes/hadronic/stopping                           stopp-V05-02-00
+---------------------------
+- Fixed few cases of memory leaks occuring at every new run.
+
+processes/transportation                              transport-V05-02-00
+------------------------
+- G4Transportation: 
+  o Added verbosity level to control the printing of warnings. 
+  o Attempt to correct photon problem by using the velocity from current
+    medium for massless particles. 
+  o Use the finalVelocity to update TofF for optical photons.
+
+run                                                   run-V05-02-01
+---
+- Design iteration implementing modular run-manager:
+  o Introduced G4RunManagerKernel class and simplified G4RunManager
+    implementation.
+
+visualization/RayTracer                               raytracer-V05-02-00
+-----------------------
+- Fixed incomplete migration to Cuts per Region scheme, causing tracing
+  process to crash in release 5.2.
+
+examples                                              examples-V05-02-01
+--------
+- Updated reference outputs.
+- extended:
+  o biasing (exbiasing-V05-02-01)
+    + removed some unused arguments and suppressed some pedantic warnings
+    + archived some obsolete files
+
+tests                                                 tests-V05-02-00
+-----
+- Updated reference outputs.
