@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalTouchable.hh,v 1.1 2005-02-23 10:53:53 japost Exp $
+// $Id: G4PhysicalTouchable.hh,v 1.2 2005-03-03 17:09:12 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -54,6 +54,7 @@
 class G4LogicalVolume;
 class G4VPVParameterisation;
 class G4VTouchable;
+class G4NavigationHistory; 
 
 class G4PhysicalTouchable : public G4VPhysicalVolume
 {
@@ -61,17 +62,21 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
 
     G4PhysicalTouchable( G4VPhysicalVolume* pCurrentVol, 
 			 const G4VTouchable* pParentTouchable); 
+    G4PhysicalTouchable( G4VPhysicalVolume* pCurrentVol, 
+			 const G4NavigationHistory& parentHist); 
+      // Constructors, with existing touchable or history for use in one.
 
     virtual ~G4PhysicalTouchable();
       // Destructor, will be subclassed. Removes volume from volume Store.
 
-    const G4VTouchable* GetTouchable() const; 
-      // Provide parent touchable
-    G4VPhysicalVolume* GetCurrentVolume(); 
-    const G4VPhysicalVolume* GetCurrentVolume() const; 
+    inline const G4VTouchable* GetParentTouchable() const; 
+    void SetParentTouchable( const G4VTouchable* newParentT );  
+      // Provide / set parent touchable
+    inline G4VPhysicalVolume* GetCurrentVolume(); 
+    inline const G4VPhysicalVolume* GetCurrentVolume() const; 
       // Access 
 
-    void SetCurrentVolume( G4VPhysicalVolume* pCurrentVol ); 
+    inline void SetCurrentVolume( G4VPhysicalVolume* pCurrentVol ); 
       // Revise current volume pointer
 
     // inline G4VPhysicalVolume* operator ->(); 
@@ -100,13 +105,33 @@ class G4PhysicalTouchable : public G4VPhysicalVolume
       { fpPhysVol->GetReplicationData(axis, nReplicas, width, offset, consuming); } 
       // Return replication information. No-op for no replicated volumes.
 
+  private: 
+    void CopyAttributes( G4VPhysicalVolume* pCurrentVol );
+    G4PhysicalTouchable( const G4PhysicalTouchable & ) ; 
+  
   private:
     G4VPhysicalVolume*   fpPhysVol; 
       // Current volume pointer
 
     const G4VTouchable*  fpTouchable;
+    G4bool fCreatedParentTouch; 
 
 }; 
+
+inline G4VPhysicalVolume* G4PhysicalTouchable::GetCurrentVolume()
+{
+    return fpPhysVol;
+}
+inline const G4VPhysicalVolume* G4PhysicalTouchable::GetCurrentVolume() const
+{
+    return fpPhysVol;
+}
+
+inline const G4VTouchable* G4PhysicalTouchable::GetParentTouchable() const
+      // Provide touchable
+{
+   return fpTouchable; 
+}
 
 #if 0
 // Extra Inline methods
