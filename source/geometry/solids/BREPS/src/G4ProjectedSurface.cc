@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProjectedSurface.cc,v 1.6 2000-11-20 17:54:40 gcosmo Exp $
+// $Id: G4ProjectedSurface.cc,v 1.7 2001-06-15 11:36:32 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -105,8 +105,8 @@ void G4ProjectedSurface::CalcBBox()
       if(bmaxy < tmpy) box_maxy=tmpy;
     }
     
-  G4Point3D box_min(box_minx,box_miny);
-  G4Point3D box_max(box_maxx,box_maxy);
+  G4Point3D box_min(box_minx,box_miny,0.);
+  G4Point3D box_max(box_maxx,box_maxy,0.);
 
   delete bbox;
   bbox = new G4BoundingBox3D(box_min, box_max);
