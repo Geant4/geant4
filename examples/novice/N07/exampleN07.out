@@ -55,15 +55,19 @@ phot:  Total cross sections from Sandia parametrisation.
 ExN07PhysicsList::SetCuts: default cut length : 1 mm 
 /run/verbose 1
 /run/dumpRegion
+
 Region DefaultRegionForTheWorld
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 Region Calor-A
  Materials : Lead liquidArgon 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 Region Calor-B
  Materials : Lead liquidArgon 
  Production cuts :  gamma 1 cm     e- 1 cm     e+ 1 cm 
+
 Region Calor-C
  Materials : Lead liquidArgon 
  Production cuts :  gamma 10 cm     e- 10 cm     e+ 10 cm 
@@ -77,8 +81,8 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -115,8 +119,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -125,8 +129,8 @@ MuIoni:   tables are built for  mu+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuBrems:   tables are built for  mu+
@@ -138,12 +142,17 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -202,7 +211,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.14s Real=15.17s Sys=1.33s
+  User=20.37s Real=21.41s Sys=1.04s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -210,55 +219,55 @@ Region : Calor-A
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 2.51577 GeV      Gap 315.478 MeV
+    Absorber 2.92013 GeV      Gap 363.991 MeV
  Number of secondaries in an event :
-    gamma in Absorber 704.3    in Gap 49.2
-    e-    in Absorber 1169.4    in Gap 127.5
-    e+    in Absorber 62.1    in Gap 2.1
+    gamma in Absorber 941.8    in Gap 62.7
+    e-    in Absorber 1545.1    in Gap 166.8
+    e+    in Absorber 88.2    in Gap 2.7
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 100.528 keV    in Gap 6.30964 keV
-    e-    in Absorber 75.8069 eV     in Gap 101.671 eV 
-    e+    in Absorber 30.2241 keV    in Gap 424.932 keV
+    gamma in Absorber 100.511 keV    in Gap 6.27261 keV
+    e-    in Absorber 237.44 eV     in Gap 59.9537 eV 
+    e+    in Absorber 47.6203 keV    in Gap 345.804 keV
  Total track length of e+/e- in an event :
-    Absorber 80.4186 cm       Gap 41.4767 cm 
+    Absorber 1.08221 m        Gap 58.6288 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1980.1      Gap 215.3
+    Absorber 2620.5      Gap 280.6
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 1 cm     e- 1 cm     e+ 1 cm 
  Energy deposition in an event :
-    Absorber 4.46823 GeV      Gap 507.478 MeV
+    Absorber 3.02768 GeV      Gap 384.157 MeV
  Number of secondaries in an event :
-    gamma in Absorber 1310.7    in Gap 87.9
-    e-    in Absorber 2390.6    in Gap 231.1
-    e+    in Absorber 177.9    in Gap 5.4
+    gamma in Absorber 677.9    in Gap 55.9
+    e-    in Absorber 1231.1    in Gap 129.9
+    e+    in Absorber 96.1    in Gap 2.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 275.293 keV    in Gap 19.1815 keV
-    e-    in Absorber 36.3263 eV     in Gap 36.9808 eV 
-    e+    in Absorber 16.5545 keV    in Gap 186.226 keV
+    gamma in Absorber 282.245 keV    in Gap 19.3657 keV
+    e-    in Absorber 6.32662 eV     in Gap 83.9303 eV 
+    e+    in Absorber 14.3176 keV    in Gap 224.192 keV
  Total track length of e+/e- in an event :
-    Absorber 1.97124 m        Gap 1.0589 m  
+    Absorber 1.00619 m        Gap 62.0616 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 3908.4      Gap 392.4
+    Absorber 2009.9      Gap 226.8
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 10 cm     e- 10 cm     e+ 10 cm 
  Energy deposition in an event :
-    Absorber 2.69633 GeV      Gap 266.516 MeV
+    Absorber 2.69808 GeV      Gap 276.506 MeV
  Number of secondaries in an event :
-    gamma in Absorber 127.3    in Gap 8.5
-    e-    in Absorber 224.1    in Gap 18.8
-    e+    in Absorber 35.5    in Gap 0.9
+    gamma in Absorber 114    in Gap 9
+    e-    in Absorber 204.1    in Gap 16.8
+    e+    in Absorber 31.8    in Gap 1.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 315.231 keV    in Gap 62.9447 keV
-    e-    in Absorber 148.581 eV     in Gap 859.432 eV 
-    e+    in Absorber 44.0809 keV    in Gap 474.367 keV
+    gamma in Absorber 279.861 keV    in Gap 61.9278 keV
+    e-    in Absorber 824.233 eV     in Gap 556.252 eV 
+    e+    in Absorber 143.801 keV    in Gap 644.066 keV
  Total track length of e+/e- in an event :
-    Absorber 31.6109 cm       Gap 11.3126 cm 
+    Absorber 28.0785 cm       Gap 12.1111 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 374      Gap 33
+    Absorber 338.7      Gap 36
 ############################################################
 /run/dumpCouples
 
@@ -322,15 +331,19 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 /run/setCutForRegion Calor-B 2 mm
 /run/setCutForRegion Calor-C 2 cm
 /run/dumpRegion
+
 Region DefaultRegionForTheWorld
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 Region Calor-A
  Materials : Lead liquidArgon 
  Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
+
 Region Calor-B
  Materials : Lead liquidArgon 
  Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+
 Region Calor-C
  Materials : Lead liquidArgon 
  Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
@@ -344,8 +357,8 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -382,8 +395,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -392,8 +405,8 @@ MuIoni:   tables are built for  mu+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuBrems:   tables are built for  mu+
@@ -405,12 +418,17 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -469,7 +487,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=10.55s Real=16.19s Sys=1.35s
+  User=60.8s Real=63.89s Sys=3.08s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -477,55 +495,55 @@ Region : Calor-A
  Production thresholds :
     gamma 200 mum    e- 200 mum    e+ 200 mum
  Energy deposition in an event :
-    Absorber 2.57748 GeV      Gap 339.598 MeV
+    Absorber 6.40504 GeV      Gap 666.61 MeV
  Number of secondaries in an event :
-    gamma in Absorber 954.6    in Gap 72.3
-    e-    in Absorber 1641.2    in Gap 233.7
-    e+    in Absorber 65.5    in Gap 3
+    gamma in Absorber 3887    in Gap 224.1
+    e-    in Absorber 6191.3    in Gap 633.8
+    e+    in Absorber 302    in Gap 9.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 47.1872 keV    in Gap 2.80768 keV
-    e-    in Absorber 15.3859 eV     in Gap 9.9326 eV 
-    e+    in Absorber 844.099 eV     in Gap 126.25 keV
+    gamma in Absorber 47.1858 keV    in Gap 2.78995 keV
+    e-    in Absorber 1.41632 eV     in Gap 18.2019 eV 
+    e+    in Absorber 993.348 eV     in Gap 927.11 eV 
  Total track length of e+/e- in an event :
-    Absorber 93.4308 cm       Gap 53.2567 cm 
+    Absorber 3.67994 m        Gap 1.83565 m  
  Total number of steps of e+/e- in an event :
-    Absorber 2785.7      Gap 375.6
+    Absorber 10844.1      Gap 1102.1
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 2.59975 GeV      Gap 308.088 MeV
+    Absorber 2.71336 GeV      Gap 346.779 MeV
  Number of secondaries in an event :
-    gamma in Absorber 672.5    in Gap 41.9
-    e-    in Absorber 1141.5    in Gap 106.2
-    e+    in Absorber 65.8    in Gap 2.7
+    gamma in Absorber 758.4    in Gap 56.7
+    e-    in Absorber 1277.3    in Gap 122.9
+    e+    in Absorber 74.8    in Gap 3.1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 120.75 keV    in Gap 8.71224 keV
-    e-    in Absorber 4.20998 eV     in Gap 57.366 eV 
-    e+    in Absorber 15.863 keV    in Gap 181.287 keV
+    gamma in Absorber 120.614 keV    in Gap 8.59828 keV
+    e-    in Absorber 10.5334 eV     in Gap 21.1872 eV 
+    e+    in Absorber 13.3074 keV    in Gap 136.596 keV
  Total track length of e+/e- in an event :
-    Absorber 82.4822 cm       Gap 34.8312 cm 
+    Absorber 89.4983 cm       Gap 54.4804 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1910.8      Gap 173.6
+    Absorber 2142.1      Gap 223.2
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 3.04443 GeV      Gap 363.712 MeV
+    Absorber 3.76194 GeV      Gap 440.126 MeV
  Number of secondaries in an event :
-    gamma in Absorber 565.7    in Gap 47.3
-    e-    in Absorber 1084.9    in Gap 93.9
-    e+    in Absorber 91.4    in Gap 2.8
+    gamma in Absorber 858.1    in Gap 63.1
+    e-    in Absorber 1567.9    in Gap 147.1
+    e+    in Absorber 135.9    in Gap 5.2
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 320.191 keV    in Gap 28.1222 keV
-    e-    in Absorber 131.497 eV     in Gap 138.784 eV 
-    e+    in Absorber 5.90521 keV    in Gap 379.864 keV
+    gamma in Absorber 260.463 keV    in Gap 27.2882 keV
+    e-    in Absorber 7.23324 eV     in Gap 20.9284 eV 
+    e+    in Absorber 16.7698 keV    in Gap 115.947 keV
  Total track length of e+/e- in an event :
-    Absorber 95.7437 cm       Gap 51.5627 cm 
+    Absorber 1.41421 m        Gap 78.8891 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1743.5      Gap 178.8
+    Absorber 2565.1      Gap 271.1
 ############################################################
 /run/dumpCouples
 
@@ -588,15 +606,19 @@ Index : 6     used in the geometry : Yes     recalculation needed : No
 /N07/setAbsMat Aluminium
 /N07/setGapMat Water
 /run/dumpRegion
+
 Region DefaultRegionForTheWorld
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 Region Calor-A
  Materials : Aluminium Water 
  Production cuts :  gamma 200 mum    e- 200 mum    e+ 200 mum
+
 Region Calor-B
  Materials : Aluminium Water 
  Production cuts :  gamma 2 mm     e- 2 mm     e+ 2 mm 
+
 Region Calor-C
  Materials : Aluminium Water 
  Production cuts :  gamma 2 cm     e- 2 cm     e+ 2 cm 
@@ -610,8 +632,8 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -648,8 +670,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -658,8 +680,8 @@ MuIoni:   tables are built for  mu+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuBrems:   tables are built for  mu+
@@ -671,12 +693,17 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -765,7 +792,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=3.11s Real=5.9s Sys=0.22s
+  User=7.48s Real=7.75s Sys=0.27s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -773,55 +800,55 @@ Region : Calor-A
  Production thresholds :
     gamma 200 mum    e- 200 mum    e+ 200 mum
  Energy deposition in an event :
-    Absorber 666.798 MeV      Gap 303.043 MeV
+    Absorber 571.412 MeV      Gap 251.788 MeV
  Number of secondaries in an event :
-    gamma in Absorber 79.4    in Gap 27.1
-    e-    in Absorber 477.6    in Gap 235.6
-    e+    in Absorber 3.4    in Gap 1.1
+    gamma in Absorber 49.6    in Gap 15.8
+    e-    in Absorber 315.5    in Gap 157.6
+    e+    in Absorber 1.2    in Gap 0.4
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.22025 keV    in Gap 1.61556 keV
-    e-    in Absorber 11.5925 eV     in Gap 16.1117 eV 
-    e+    in Absorber 147.68 keV    in Gap 1.38742 MeV
+    gamma in Absorber 3.2465 keV    in Gap 1.74683 keV
+    e-    in Absorber 22.6309 eV     in Gap 4.03186 eV 
+    e+    in Absorber 1.38185 MeV    in Gap 1.6704 MeV
  Total track length of e+/e- in an event :
-    Absorber 66.944 cm       Gap 57.9187 cm 
+    Absorber 43.9886 cm       Gap 33.7042 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 654.1      Gap 322.9
+    Absorber 425.9      Gap 214.8
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 2 mm     e- 2 mm     e+ 2 mm 
  Energy deposition in an event :
-    Absorber 553.039 MeV      Gap 251.901 MeV
+    Absorber 571.609 MeV      Gap 254.205 MeV
  Number of secondaries in an event :
-    gamma in Absorber 31    in Gap 13.5
-    e-    in Absorber 175.2    in Gap 79.5
-    e+    in Absorber 1.3    in Gap 0.5
+    gamma in Absorber 40    in Gap 14.3
+    e-    in Absorber 207    in Gap 88.8
+    e+    in Absorber 1.9    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 9.58011 keV    in Gap 4.33332 keV
-    e-    in Absorber 11.6929 eV     in Gap 4.87377 eV 
-    e+    in Absorber 322.937 keV    in Gap 1.65834 MeV
+    gamma in Absorber 9.61747 keV    in Gap 3.95733 keV
+    e-    in Absorber 7.14659 eV     in Gap 30.951 eV 
+    e+    in Absorber 888.937 keV    in Gap 2.19459 MeV
  Total track length of e+/e- in an event :
-    Absorber 33.1237 cm       Gap 31.412 cm 
+    Absorber 37.4107 cm       Gap 32.129 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 231.9      Gap 116.2
+    Absorber 276.2      Gap 129.6
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 2 cm     e- 2 cm     e+ 2 cm 
  Energy deposition in an event :
-    Absorber 620.164 MeV      Gap 289.053 MeV
+    Absorber 679.854 MeV      Gap 310.133 MeV
  Number of secondaries in an event :
-    gamma in Absorber 40    in Gap 16.2
-    e-    in Absorber 226.5    in Gap 91.4
-    e+    in Absorber 2.4    in Gap 1
+    gamma in Absorber 49.7    in Gap 19.6
+    e-    in Absorber 305.2    in Gap 121
+    e+    in Absorber 4.5    in Gap 1
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 28.1966 keV    in Gap 11.7118 keV
-    e-    in Absorber 15.1296 eV     in Gap 6.83872 eV 
-    e+    in Absorber 1.77258 MeV    in Gap 996.977 keV
+    gamma in Absorber 28.2933 keV    in Gap 10.6762 keV
+    e-    in Absorber 2.89082 eV     in Gap 6.85873 eV 
+    e+    in Absorber 323.253 keV    in Gap 575.507 keV
  Total track length of e+/e- in an event :
-    Absorber 38.04 cm       Gap 40.765 cm 
+    Absorber 49.1835 cm       Gap 53.4287 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 292.2      Gap 125
+    Absorber 386.6      Gap 164.4
 ############################################################
 /run/dumpCouples
 
@@ -915,15 +942,19 @@ Index : 12     used in the geometry : Yes     recalculation needed : No
 /run/setCutForRegion Calor-B 0.1 mm
 /run/setCutForRegion Calor-C 1 mm
 /run/dumpRegion
+
 Region DefaultRegionForTheWorld
  Materials : Galactic 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
+
 Region Calor-A
  Materials : Aluminium Water 
  Production cuts :  gamma 10 mum    e- 10 mum    e+ 10 mum
+
 Region Calor-B
  Materials : Aluminium Water 
  Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
+
 Region Calor-C
  Materials : Aluminium Water 
  Production cuts :  gamma 1 mm     e- 1 mm     e+ 1 mm 
@@ -937,8 +968,8 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -975,8 +1006,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -985,8 +1016,8 @@ MuIoni:   tables are built for  mu+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuBrems:   tables are built for  mu+
@@ -998,12 +1029,17 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
+
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -1092,7 +1128,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=11.29s Real=17.34s Sys=1.42s
+  User=20.4s Real=21.76s Sys=1.36s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1100,55 +1136,55 @@ Region : Calor-A
  Production thresholds :
     gamma 10 mum    e- 10 mum    e+ 10 mum
  Energy deposition in an event :
-    Absorber 605.639 MeV      Gap 265.744 MeV
+    Absorber 618.553 MeV      Gap 274.418 MeV
  Number of secondaries in an event :
-    gamma in Absorber 73.5    in Gap 26.3
-    e-    in Absorber 1165.3    in Gap 2015.9
-    e+    in Absorber 1.6    in Gap 0.8
+    gamma in Absorber 77.2    in Gap 24
+    e-    in Absorber 1168.5    in Gap 2064.4
+    e+    in Absorber 2.6    in Gap 0.4
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 1.01637 keV    in Gap 1.01134 keV
-    e-    in Absorber 14.5365 eV     in Gap 9.21589 eV 
-    e+    in Absorber 146.594 keV    in Gap 2.88245 MeV
+    gamma in Absorber 1.00007 keV    in Gap 1.00048 keV
+    e-    in Absorber 4.31675 eV     in Gap 8.65635 eV 
+    e+    in Absorber 591.774 keV    in Gap 1.24709 MeV
  Total track length of e+/e- in an event :
-    Absorber 55.5946 cm       Gap 46.4016 cm 
+    Absorber 59.3827 cm       Gap 49.4823 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1585.7      Gap 2673.4
+    Absorber 1613.2      Gap 2752.1
 ############################################################
 Region : Calor-B
  Production thresholds :
     gamma 100 mum    e- 100 mum    e+ 100 mum
  Energy deposition in an event :
-    Absorber 598.25 MeV      Gap 266.785 MeV
+    Absorber 539.524 MeV      Gap 247.031 MeV
  Number of secondaries in an event :
-    gamma in Absorber 63.2    in Gap 19.9
-    e-    in Absorber 450.7    in Gap 222.2
-    e+    in Absorber 2    in Gap 0.4
+    gamma in Absorber 35    in Gap 13.6
+    e-    in Absorber 341.3    in Gap 189.7
+    e+    in Absorber 1    in Gap 0.3
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 2.34562 keV    in Gap 1.13688 keV
-    e-    in Absorber 41.0952 eV     in Gap 20.6728 eV 
-    e+    in Absorber 308.665 keV    in Gap 5.66178 MeV
+    gamma in Absorber 1.14357 keV    in Gap 1.12089 keV
+    e-    in Absorber 4.36517 eV     in Gap 3.76762 eV 
+    e+    in Absorber 2.30188 MeV    in Gap 1.65608 MeV
  Total track length of e+/e- in an event :
-    Absorber 51.6327 cm       Gap 42.8709 cm 
+    Absorber 53.0361 cm       Gap 40.3755 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 608.8      Gap 311.4
+    Absorber 463.3      Gap 263.6
 ############################################################
 Region : Calor-C
  Production thresholds :
     gamma 1 mm     e- 1 mm     e+ 1 mm 
  Energy deposition in an event :
-    Absorber 1.14019 GeV      Gap 547.582 MeV
+    Absorber 548.983 MeV      Gap 241.888 MeV
  Number of secondaries in an event :
-    gamma in Absorber 185.4    in Gap 71.3
-    e-    in Absorber 1089.1    in Gap 450
-    e+    in Absorber 12.2    in Gap 3.4
+    gamma in Absorber 33.4    in Gap 12
+    e-    in Absorber 181.1    in Gap 79.9
+    e+    in Absorber 0.7    in Gap 0
  Minimum kinetic energy of generated secondaries :
-    gamma in Absorber 3.04954 keV    in Gap 2.9248 keV
-    e-    in Absorber 4.44064 eV     in Gap 1.2023 eV 
-    e+    in Absorber 13.368 keV    in Gap 1.20433 MeV
+    gamma in Absorber 6.94347 keV    in Gap 3.34454 keV
+    e-    in Absorber 34.6122 eV     in Gap 16.0672 eV 
+    e+    in Absorber 889.991 keV    in Gap 2.88022e+295 J  
  Total track length of e+/e- in an event :
-    Absorber 2.24862 m        Gap 1.98337 m  
+    Absorber 34.644 cm       Gap 28.365 cm 
  Total number of steps of e+/e- in an event :
-    Absorber 1465.2      Gap 680.8
+    Absorber 243.6      Gap 115.9
 ############################################################
 /run/dumpCouples
 

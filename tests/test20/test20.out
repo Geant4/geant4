@@ -86,7 +86,7 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
     LowEnConversion,     LowEnPhotoElec,      LowEnRayleigh
 /particle/list
                  e+,                 e-,              gamma,           geantino
-
+             proton,
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -101,8 +101,8 @@ for LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 G4AugerData for Element no. 7 are loaded
 G4AugerData for Element no. 8 are loaded
@@ -126,12 +126,14 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
+### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -142,6 +144,7 @@ eBrem:   tables are built for  e+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 100 mum    e- 100 mum    e+ 100 mum
@@ -192,9 +195,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -221,12 +225,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.44s Sys=0s
+  User=0.96s Real=0.96s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -272,9 +277,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -301,12 +307,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.44s Real=0.44s Sys=0s
+  User=0.94s Real=0.95s Sys=0.01s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -352,9 +359,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -381,12 +389,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.42s Real=0.42s Sys=0s
+  User=0.94s Real=0.94s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -432,9 +441,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -461,7 +471,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.41s Real=0.41s Sys=0s
+  User=0.94s Real=0.94s Sys=0s
 #
 /calor/setAbsMat Lead      
 #====================
@@ -474,8 +484,8 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -489,12 +499,14 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
+### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -505,6 +517,7 @@ eBrem:   tables are built for  e+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -555,9 +568,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -589,12 +603,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.62s Real=0.62s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -648,6 +663,7 @@ Run Summary
   User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -679,12 +695,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.58s Real=0.58s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -735,9 +752,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -769,12 +787,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.54s Real=0.54s Sys=0s
+  User=1.4s Real=1.4s Sys=0s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -825,9 +844,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -859,7 +879,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.53s Real=0.53s Sys=0s
+  User=1.3s Real=1.3s Sys=0s
 #
 /calor/setAbsMat Water
 #======================
@@ -872,8 +892,8 @@ Run Summary
 /tracking/verbose 2
 /run/beamOn 1
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 1e+02 eV  to 1e+02 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 LowEnergyIoni:  Total cross sections from EEDL database.
@@ -887,12 +907,14 @@ LowEnBrem:  Total cross sections from EEDL database.
       Implementation of the continuous dE/dx part.
       At present it can be used for electrons in the energy range [250eV,100GeV].
       The process must work with G4LowEnergyIonisation.
+### All dEdx and Range tables are built #####
 
 eIoni:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
+### All dEdx and Range tables are built #####
 
 eBrem:   tables are built for  e+
       dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
@@ -903,6 +925,7 @@ eBrem:   tables are built for  e+
 annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -954,14 +977,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0    -49.8   0.00946        0        0         0    Absorber initStep
-    1   0.0314  -0.0135    -49.8   0.00286   0.0066     0.37      0.37    Absorber LowEnergyIoni
-    2   0.0313  -0.0134    -49.8         0  0.00286     0.37      0.74    Absorber LowEnergyIoni
+    1   0.0313  -0.0134    -49.8   0.00286   0.0066     0.37      0.37    Absorber LowEnergyIoni
+    2   0.0311  -0.0133    -49.8         0  0.00286     0.37      0.74    Absorber LowEnergyIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -998,12 +1022,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=1.5s Sys=0.12s
+  User=2.3s Real=2.4s Sys=0.1s
 # 
 /gun/energy 2 keV
 /gun/polarization 0. 1. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1062,6 +1087,7 @@ Run Summary
   User=0s Real=0.01s Sys=0.01s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1098,12 +1124,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=1.4s Sys=0.07s
+  User=2.2s Real=2.3s Sys=0.05s
 #
 /gun/energy 600 eV
 /gun/polarization 0. 0. 0.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1159,9 +1186,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0.01s
+  User=0.01s Real=0.01s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1198,12 +1226,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.4s Real=3.5s Sys=0.09s
+  User=4.7s Real=4.8s Sys=0.1s
 #
 /gun/energy 300 eV
 /gun/polarization 0. 0. 1.
 /tracking/verbose 2
 /run/beamOn 1
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1260,9 +1289,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1299,7 +1329,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.9s Real=2s Sys=0.07s
+  User=2.9s Real=2.9s Sys=0.07s
 #
 /gun/particle gamma
 #------------------
@@ -1317,6 +1347,7 @@ Run Summary
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1353,9 +1384,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.9s Real=0.92s Sys=0.02s
+  User=2s Real=2s Sys=0.01s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Aluminium 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1392,12 +1424,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.49s Real=0.49s Sys=0s
+  User=1.1s Real=1.1s Sys=0s
 /calor/setAbsMat Lead
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1434,9 +1467,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.1s Real=4.7s Sys=0.29s
+  User=8.1s Real=8.4s Sys=0.3s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Lead 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1473,12 +1507,13 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.4s Real=2.6s Sys=0.13s
+  User=5s Real=5.2s Sys=0.15s
 /calor/setAbsMat Water
 #======================
 /tracking/verbose 0
 /gun/energy 2 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1515,9 +1550,10 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.54s Real=0.54s Sys=0s
+  User=1.2s Real=1.2s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
+
 Region DefaultRegionForTheWorld
  Materials : Air Water 
  Production cuts :  gamma 1e+02 mum    e- 1e+02 mum    e+ 1e+02 mum
@@ -1554,7 +1590,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.36s Real=0.36s Sys=0s
+  User=0.84s Real=0.84s Sys=0s
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.

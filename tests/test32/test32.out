@@ -29,8 +29,8 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
        Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for e-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
@@ -67,8 +67,8 @@ hIoni:   tables are built for  proton
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for proton
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
@@ -77,8 +77,8 @@ MuIoni:   tables are built for  mu+
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-msc:  Model variant of multiple scattering 
-      Lambda tables from 100 eV  to 100 TeV in 100 bins.
+msc:  Model variant of multiple scattering for mu+
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuBrems:   tables are built for  mu+
@@ -90,6 +90,7 @@ MuPairProd:   tables are built for  mu+
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
+### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
       dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
@@ -97,15 +98,9 @@ MuIoni:   tables are built for  mu-
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
-MuBrems:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
-
-MuPairProd:   tables are built for  mu-
-      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
-      Lambda tables from threshold to 100 TeV in 120 bins.
-      Parametrised model 
+msc:  Model variant of multiple scattering for pi-
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
+      Boundary algorithm is active with facrange= 0.199
 
 ========= Table of registered couples ==============================
 
@@ -127,20 +122,20 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ### Run 0 start.
 number of event = 1000
- User=17.68s Real=20.35s Sys=2.26s
+ User=69.2s Real=73.89s Sys=2.54s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=13.59s Real=15.29s Sys=1.7s
+ User=37.15s Real=38.84s Sys=1.69s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=59.39s Real=62.17s Sys=2.1s
+ User=60s Real=62.11s Sys=2.1s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=51.51s Real=54.26s Sys=2.13s
+ User=41.23s Real=43.71s Sys=2.48s

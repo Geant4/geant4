@@ -4,12 +4,9 @@
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of U
-PreInit> #
-PreInit> # Auto-generated test input file for test12 hadronics.
-PreInit> #
-PreInit> PreInit> /run/verbose 2
-PreInit> /run/particle/setCut 1 m
-PreInit> /run/initialize
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
 userDetector->Construct() start.
 SLog is registered to the default region.
 physicsList->Construct() start.
@@ -19,15 +16,15 @@ phot:  Total cross sections from Sandia parametrisation.
 Thank you for using G4BinaryCascade. 
 physicsList->setCut() start.
 Tst24PhysicsList::SetCuts:CutLength : 1000 (mm)
-Idle> /gun/direction 1 0 0
-Idle> #
-Idle> # proton at 10 GeV in U
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial U
+/gun/direction 1 0 0
+#
+# proton at 10 GeV in U
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
 SimpleBox is now made of U
-Idle> /run/beamOn 20
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1000 (mm)]   is too big   for material  idx=3
 The cut in energy is set1.79769e+305GeV 
@@ -47,29 +44,29 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
         PhysicsTables from 1 keV to 100 GeV in 80 bins. 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
@@ -79,56 +76,56 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 
 MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 100 eV to 100 TeV in 120 bins.
+      dE/dx and range tables from 100 eV  to 100 TeV in 120 bins.
       Lambda tables from threshold to 100 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 100 eV to 100 TeV in 120 bins.
+      Lambda tables from 100 eV  to 100 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.199
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.88022e+295 J    e- 2.88022e+295 J    e+ 2.88022e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.88022e+295 J      e- 2.88022e+295 J      e+ 2.88022e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -143,26 +140,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=5.9s Real=8.8s Sys=0.13s
-Idle> #
-Idle> # neutron at 10 GeV in U
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial U
+  User=60s Real=62s Sys=0.27s
+#
+# neutron at 10 GeV in U
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
 SimpleBox is now made of U
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -172,26 +169,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=4s Real=6.3s Sys=0.16s
-Idle> #
-Idle> # pi+ at 10 GeV in U
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial U
+  User=45s Real=47s Sys=0.17s
+#
+# pi+ at 10 GeV in U
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
 SimpleBox is now made of U
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -201,26 +198,26 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.32s Real=0.52s Sys=0s
-Idle> #
-Idle> # pi- at 10 GeV in U
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial U
+  User=60s Real=61s Sys=0.07s
+#
+# pi- at 10 GeV in U
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial U
 SimpleBox is now made of U
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Uranium 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -230,15 +227,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.61s Sys=0.01s
-Idle> #
-Idle> # proton at 10 GeV in Cu
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Cu
+  User=61s Real=62s Sys=0.07s
+#
+# proton at 10 GeV in Cu
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
-Idle> /run/beamOn 20
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=2
 The cut in energy is set1.8e+305GeV 
@@ -252,29 +249,29 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
         PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
@@ -284,61 +281,61 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 
 MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -348,31 +345,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.1s Real=5s Sys=0.06s
-Idle> #
-Idle> # neutron at 10 GeV in Cu
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Cu
+  User=26s Real=27s Sys=0.3s
+#
+# neutron at 10 GeV in Cu
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -382,31 +379,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.9s Real=4.4s Sys=0.09s
-Idle> #
-Idle> # pi+ at 10 GeV in Cu
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Cu
+  User=29s Real=30s Sys=0.14s
+#
+# pi+ at 10 GeV in Cu
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -416,31 +413,31 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.25s Sys=0s
-Idle> #
-Idle> # pi- at 10 GeV in Cu
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Cu
+  User=31s Real=31s Sys=0.03s
+#
+# pi- at 10 GeV in Cu
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Copper 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : Yes     recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -450,15 +447,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.11s Sys=0s
-Idle> #
-Idle> # proton at 10 GeV in Si
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Si
+  User=32s Real=32s Sys=0.04s
+#
+# proton at 10 GeV in Si
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
 SimpleBox is now made of Si
-Idle> /run/beamOn 20
+/run/beamOn 20
 G4VRangeToEnergyConverter::ConvertCutToKineticEnergy   for gamma
 The cut in range [1e+03 (mm)]   is too big   for material  idx=1
 The cut in energy is set1.8e+305GeV 
@@ -472,29 +469,29 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
         PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
@@ -504,66 +501,66 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 
 MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -573,36 +570,36 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2s Real=2.5s Sys=0.06s
-Idle> #
-Idle> # neutron at 10 GeV in Si
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Si
+  User=22s Real=22s Sys=0.1s
+#
+# neutron at 10 GeV in Si
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
 SimpleBox is now made of Si
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -612,36 +609,36 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.2s Real=3.4s Sys=0.04s
-Idle> #
-Idle> # pi+ at 10 GeV in Si
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Si
+  User=17s Real=17s Sys=0.01s
+#
+# pi+ at 10 GeV in Si
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
 SimpleBox is now made of Si
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -651,36 +648,36 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.37s Sys=0s
-Idle> #
-Idle> # pi- at 10 GeV in Si
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial Si
+  User=20s Real=20s Sys=0s
+#
+# pi- at 10 GeV in Si
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial Si
 SimpleBox is now made of Si
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : Silicon 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : Yes     recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -690,15 +687,15 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.12s Real=0.17s Sys=0s
-Idle> #
-Idle> # proton at 10 GeV in H
-Idle> #
-Idle> /gun/particle proton
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial H
+  User=19s Real=20s Sys=0s
+#
+# proton at 10 GeV in H
+#
+/gun/particle proton
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
 SimpleBox is now made of H
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
@@ -709,29 +706,29 @@ compt:  Total cross sections from a parametrisation. Good description from 10 Ke
         PhysicsTables from 1 keV to 1e+02 GeV in 80 bins. 
 
 msc:  Model variant of multiple scattering for e-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 eIoni:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
 
 eIoni:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 1, integral: 1
       Delta cross sections from Moller+Bhabha, good description from 1 KeV to 100 GeV.
 
 eBrem:   tables are built for  e+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Total cross sections from a parametrisation based on the EEDL data library. 
       Good description from 1 KeV to 100 GeV, log scale extrapolation above 100 GeV.
@@ -741,71 +738,71 @@ annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
 msc:  Model variant of multiple scattering for proton
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 hIoni:   tables are built for  proton
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for Escaled > 2 MeV, parametrisation of Bragg peak below, Integral mode 0
 
 msc:  Model variant of multiple scattering for mu+
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 MuIoni:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 MuBrems:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 
 MuPairProd:   tables are built for  mu+
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Parametrised model 
 ### All dEdx and Range tables are built #####
 
 MuIoni:   tables are built for  mu-
-      dE/dx and range tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      dE/dx and range tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Lambda tables from threshold to 1e+02 TeV in 120 bins.
       Step function: finalRange(mm)= 1, dRoverRange= 0.2, integral: 0
       Bether-Bloch model for E > 0.2 MeV parametrisation of Bragg peak below.
 
 msc:  Model variant of multiple scattering for pi-
-      Lambda tables from 1e+02 eV to 1e+02 TeV in 120 bins.
+      Lambda tables from 1e+02 eV  to 1e+02 TeV in 120 bins.
       Boundary algorithm is active with facrange= 0.2
 
 Region DefaultRegionForTheWorld
  Materials : H 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : H
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 9.9e+02 eV    e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -815,41 +812,41 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
-Idle> #
-Idle> # neutron at 10 GeV in H
-Idle> #
-Idle> /gun/particle neutron
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial H
+  User=0.01s Real=0.01s Sys=0s
+#
+# neutron at 10 GeV in H
+#
+/gun/particle neutron
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
 SimpleBox is now made of H
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : H 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : H
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 9.9e+02 eV    e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -860,40 +857,40 @@ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0s Real=0s Sys=0s
-Idle> #
-Idle> # pi+ at 10 GeV in H
-Idle> #
-Idle> /gun/particle pi+
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial H
+#
+# pi+ at 10 GeV in H
+#
+/gun/particle pi+
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
 SimpleBox is now made of H
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : H 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : H
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 9.9e+02 eV    e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -904,40 +901,40 @@ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0s Real=0s Sys=0s
-Idle> #
-Idle> # pi- at 10 GeV in H
-Idle> #
-Idle> /gun/particle pi-
-Idle> /gun/energy 10 GeV
-Idle> /mydet/SelectMaterial H
+#
+# pi- at 10 GeV in H
+#
+/gun/particle pi-
+/gun/energy 10 GeV
+/mydet/SelectMaterial H
 SimpleBox is now made of H
-Idle> /run/beamOn 20
+/run/beamOn 20
 
 Region DefaultRegionForTheWorld
  Materials : H 
- Production cuts :  gamma 1 m    e- 1 m    e+ 1 m
+ Production cuts :  gamma 1 m      e- 1 m      e+ 1 m  
 
 ========= Table of registered couples ==============================
 
 Index : 0     used in the geometry : No      recalculation needed : No 
  Material : Uranium
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 2.9e+295 J    e+ 2.9e+295 J
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 2.9e+295 J      e+ 2.9e+295 J  
 
 Index : 1     used in the geometry : No      recalculation needed : No 
  Material : Copper
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 9.5e+02 GeV    e+ 7.8e+02 GeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 9.5e+02 GeV    e+ 7.8e+02 GeV
 
 Index : 2     used in the geometry : No      recalculation needed : No 
  Material : Silicon
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 2.9e+295 J    e- 1 GeV    e+ 9.6e+02 MeV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 2.9e+295 J      e- 1 GeV    e+ 9.6e+02 MeV
 
 Index : 3     used in the geometry : Yes     recalculation needed : No 
  Material : H
- Range cuts        :  gamma 1 m    e- 1 m    e+ 1 m
- Energy thresholds :  gamma 9.9e+02 eV    e- 7.1e+02 keV    e+ 6.8e+02 keV
+ Range cuts        :  gamma 1 m      e- 1 m      e+ 1 m  
+ Energy thresholds :  gamma 9.9e+02 eV     e- 7.1e+02 keV    e+ 6.8e+02 keV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
@@ -947,8 +944,8 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
-Idle> UserDetectorConstruction deleted.
+  User=0.01s Real=0.01s Sys=0s
+UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
