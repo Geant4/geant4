@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2003-10-31 17:23:26 vnivanch Exp $
+# $Id: GNUmakefile,v 1.5 2003-11-12 18:34:03 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -19,6 +19,7 @@ CPPFLAGS += -DG4ANALYSIS_USE
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS   += `aida-config --include`
+LDFLAGS    += -L/home/vnivanch/Anaphe/specific/redhat73/gcc-2.95.2/CLHEP/1.8.0.2/lib
 LDFLAGS    += `aida-config --lib`
 
 include $(G4INSTALL)/config/binmake.gmk
