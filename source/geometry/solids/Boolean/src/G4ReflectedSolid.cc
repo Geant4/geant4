@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ReflectedSolid.cc,v 1.1 2001-07-23 16:24:28 grichine Exp $
+// $Id: G4ReflectedSolid.cc,v 1.2 2001-09-17 14:15:59 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -41,17 +41,15 @@ G4ReflectedSolid::G4ReflectedSolid( const G4String& pName,
   G4VSolid(pName)
 {
   fPtrSolid = pSolid ;
-  fDirectTransform = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
+  G4RotationMatrix rotMatrix ;
+  
+  fDirectTransform = new G4AffineTransform(rotMatrix, transform.getTranslation()) ;  
 
-  fPtrTransform    = new G4AffineTransform(transform.getRotation().inverse(),
-                                           transform.getTranslation()) ;
+  fPtrTransform    = new G4AffineTransform(rotMatrix, transform.getTranslation()) ; 
   fPtrTransform->Invert() ;
 
   fDirectTransform3D = new G4Transform3D(transform) ;
-
-  fPtrTransform3D    = new G4Transform3D(transform.inverse()) ;
- 
+  fPtrTransform3D    = new G4Transform3D(transform.inverse()) ;   
 }
 
 /* **************************************************************
@@ -207,9 +205,22 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
                                          G4double& pMax           ) const 
 {
   G4AffineTransform sumTransform ;
+  G4bool extentR, extent ;
+  G4double min, max, minR, maxR ;
+
   sumTransform.Product(*fDirectTransform,pTransform) ;
-  return fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
-                                    pMin,pMax) ;
+
+  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,
+                                      min,max) ;
+  extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
+                                       minR,maxR) ;
+  if( maxR > 0 ) pMax = 2.0*maxR ;
+  else           pMax = 0.5*maxR ;
+
+  if( minR > 0 ) pMin = 0.5*minR ;
+  else           pMin = 2.0*minR ;
+
+  return extentR ;
 }
  
 /////////////////////////////////////////////////////

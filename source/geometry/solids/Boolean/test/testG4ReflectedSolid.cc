@@ -79,9 +79,11 @@ int main()
 
     G4ReflectX3D transformX ;
 
-    G4Point3D newPoint = transformX*G4Normal3D(1,1,1) ;
+    G4Point3D newPointN = transformX*G4Normal3D(1,1,1) ;
+    G4cout<<"x component of normal newPoint = "<<newPointN.x()<<G4endl ;
 
-    G4cout<<"x component of newPoint = "<<newPoint.x()<<G4endl ;
+    G4Point3D newPoint = transformX*G4Point3D(1,1,1) ;
+    G4cout<<"x component of point newPoint = "<<newPoint.x()<<G4endl ;
 
     //  G4Transform3D transfomX = G4ReflectX3D() ;
 
@@ -106,16 +108,17 @@ int main()
 
     G4ReflectedSolid passRotT3("passRotT3",&t3,transformX) ;
 
-    G4ReflectedSolid actiRotT3("actiRotT3",&t3,transform) ;
-    G4ReflectedSolid actiRotB1("actiRotB3",&b1,transform) ;
+    //    G4ReflectedSolid actiRotT3("actiRotT3",&t3,transform) ;
+    //    G4ReflectedSolid actiRotB1("actiRotB3",&b1,transform) ;
 
     G4ThreeVector pRmaxPlus(50,1,0) ;
    
     dist = passRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
+    assert(ApproxEqual(dist,50));
+    //  cout<<"passRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
-    dist = actiRotT3.DistanceToIn(pRmaxPlus,vmx) ;
-    cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
+    //    dist = actiRotT3.DistanceToIn(pRmaxPlus,vmx) ;
+    //   cout<<"actiRotT3.DistanceToIn(pRmaxPlus,vmx) = "<<dist<<G4endl ;
 
 // Check Inside
 
@@ -189,8 +192,8 @@ int main()
     dist=passRotT3.DistanceToIn(pbigx,vxy);
     assert(ApproxEqual(dist,kInfinity));
 
-    dist=actiRotT3.DistanceToIn(pbigmx,vxy);
-    assert(ApproxEqual(dist,kInfinity));
+    //    dist=actiRotT3.DistanceToIn(pbigmx,vxy);
+    //    assert(ApproxEqual(dist,kInfinity));
 
 
 //DistanceToIn(P)
@@ -257,7 +260,6 @@ int main()
     assert(ApproxEqual(dist,2));
 
 
-    /* *********************************************************
 
 
 
@@ -269,71 +271,61 @@ int main()
     G4AffineTransform origin ;
     G4double min,max;
 
-    assert(b1.CalculateExtent(kXAxis,limit,origin,min,max));
-    assert(ApproxEqual(min,-20)&&ApproxEqual(max,20));
+    G4cout<<"passRotT3.CalculateExtent: X, Y, Z:"<<G4endl;
 
-    assert(b1.CalculateExtent(kYAxis,limit,origin,min,max));
-    assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
+    assert(passRotT3.CalculateExtent(kXAxis,limit,origin,min,max));
+    G4cout<<"minX = "<<min<<"\t"<<"maxX = "<<max<<G4endl;
+    //  assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
-    assert(b1.CalculateExtent(kZAxis,limit,origin,min,max));
-    assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
+    assert(passRotT3.CalculateExtent(kYAxis,limit,origin,min,max));
+    G4cout<<"minY = "<<min<<"\t"<<"maxY = "<<max<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
-    assert(actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max));
-    G4cout<<"min of actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max) = "
-          <<min<<G4endl ;
-    G4cout<<"max of actiRotT3.CalculateExtent(kXAxis,limit,origin,min,max) = "
-          <<max<<G4endl ;
-    //  assert(ApproxEqual(min,0)&&ApproxEqual(max,50));
-
-    assert(actiRotB1.CalculateExtent(kXAxis,limit,origin,min,max));
-    assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
-
-
+    assert(passRotT3.CalculateExtent(kZAxis,limit,origin,min,max));
+    G4cout<<"minZ = "<<min<<"\t"<<"maxZ = "<<max<<G4endl;
+    // assert(ApproxEqual(min,-50)&&ApproxEqual(max,50));
 
 
     G4ThreeVector pmxmymz(-100,-110,-120);
     G4AffineTransform tPosOnly(pmxmymz);
 
-    assert(actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    G4cout<<"min of actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
+    assert(passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
+    G4cout<<"min of passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
           <<min<<G4endl ;
-    G4cout<<"max of actiRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
+    G4cout<<"max of passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max) = "
           <<max<<G4endl ;
     //  assert(ApproxEqual(min,-100)&&ApproxEqual(max,-50));
 
-    assert(actiRotB1.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-130)&&ApproxEqual(max,-70));
+    assert(passRotT3.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
+    assert(ApproxEqual(min,-300)&&ApproxEqual(max,-25));
 
-    assert(b1.CalculateExtent(kXAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-120)&&ApproxEqual(max,-80));
+    assert(passRotT3.CalculateExtent(kYAxis,limit,tPosOnly,min,max));
+    assert(ApproxEqual(min,-320)&&ApproxEqual(max,-30));
 
-    assert(b1.CalculateExtent(kYAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-140)&&ApproxEqual(max,-80));
+    assert(passRotT3.CalculateExtent(kZAxis,limit,tPosOnly,min,max));
+    assert(ApproxEqual(min,-340)&&ApproxEqual(max,-35));
 
-    assert(b1.CalculateExtent(kZAxis,limit,tPosOnly,min,max));
-    assert(ApproxEqual(min,-160)&&ApproxEqual(max,-80));
 
     G4RotationMatrix r90Z;
     r90Z.rotateZ(M_PI/2);
     G4AffineTransform tRotZ(r90Z,pzero);
 
-    assert(b1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
+    assert(passRotT3.CalculateExtent(kXAxis,limit,tRotZ,min,max));
+    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
 
-    assert(b1.CalculateExtent(kYAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-20)&&ApproxEqual(max,20));
+    assert(passRotT3.CalculateExtent(kYAxis,limit,tRotZ,min,max));
+    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
 
-    assert(b1.CalculateExtent(kZAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
+    assert(passRotT3.CalculateExtent(kZAxis,limit,tRotZ,min,max));
+    assert(ApproxEqual(min,-100)&&ApproxEqual(max,100));
 
-    assert(actiRotB1.CalculateExtent(kXAxis,limit,tRotZ,min,max));
-    assert(ApproxEqual(min,-20)&&ApproxEqual(max,20));
+    /* *********************************************************
 
 // Check that clipped away
 
     G4VoxelLimits xClip;
     xClip.AddLimit(kXAxis,-100,-50);
-    assert(!b1.CalculateExtent(kXAxis,xClip,origin,min,max));
+    assert(!passRotT3.CalculateExtent(kXAxis,xClip,origin,min,max));
 
 // Assert clipped to volume
 
@@ -347,59 +339,59 @@ int main()
     genRot.rotateZ(M_PI/6);
     G4AffineTransform tGen(genRot,vx);
 
-    assert(b1.CalculateExtent(kXAxis,allClip,tGen,min,max));
+    assert(passRotT3.CalculateExtent(kXAxis,allClip,tGen,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
-    assert(b1.CalculateExtent(kYAxis,allClip,tGen,min,max));
+    assert(passRotT3.CalculateExtent(kYAxis,allClip,tGen,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
-    assert(b1.CalculateExtent(kZAxis,allClip,tGen,min,max));
+    assert(passRotT3.CalculateExtent(kZAxis,allClip,tGen,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
     G4VoxelLimits buggyClip2;
     buggyClip2.AddLimit(kXAxis,5,15);
 
-    assert(b1.CalculateExtent(kXAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kXAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,5)&&ApproxEqual(max,15));
 
-    assert(b1.CalculateExtent(kYAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kYAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
 
-    assert(b1.CalculateExtent(kZAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kZAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
     buggyClip2.AddLimit(kYAxis,5,15);
 
-    assert(b1.CalculateExtent(kXAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kXAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,5)&&ApproxEqual(max,15));
 
-    assert(b1.CalculateExtent(kYAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kYAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,5)&&ApproxEqual(max,15));
 
-    assert(b1.CalculateExtent(kZAxis,buggyClip2,origin,min,max));
+    assert(passRotT3.CalculateExtent(kZAxis,buggyClip2,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
     G4VoxelLimits buggyClip1;
     buggyClip1.AddLimit(kXAxis,-5,+5);
 
-    assert(b1.CalculateExtent(kXAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kXAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
-    assert(b1.CalculateExtent(kYAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kYAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-30)&&ApproxEqual(max,30));
 
-    assert(b1.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
     buggyClip1.AddLimit(kYAxis,-5,+5);
 
-    assert(b1.CalculateExtent(kXAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kXAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
-    assert(b1.CalculateExtent(kYAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kYAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-5)&&ApproxEqual(max,5));
 
-    assert(b1.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
+    assert(passRotT3.CalculateExtent(kZAxis,buggyClip1,origin,min,max));
     assert(ApproxEqual(min,-40)&&ApproxEqual(max,40));
 
     ****************************************************** */
