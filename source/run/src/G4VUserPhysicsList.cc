@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VUserPhysicsList.cc,v 1.8 1999-12-15 14:53:54 gunter Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.9 2000-10-19 13:30:23 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -611,8 +611,9 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   G4String name[size] = {"gamma", "e-", "mu-", "proton", "neutron"};
   G4ParticleDefinition* particle[size];
   G4bool IsOK = true;
+  G4int size_display=2;
   G4int idx; 
-  for (idx=0; idx <size; idx++) {
+  for (idx=0; idx <size_display; idx++) {
     particle[idx] = theParticleTable->FindParticle(name[idx]);
   }
 
@@ -625,14 +626,14 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   
   // line 3
   G4cout << "                     ";
-  for (idx=0; idx <size; idx++) {
+  for (idx=0; idx <size_display; idx++) {
     G4cout << " " << G4std::setw(11) << name[idx] << "    ";
   }
   G4cout << G4endl;
 
   // line 4
   G4cout << "Cut in range       ";
-  for (idx=0; idx <size; idx++) {
+  for (idx=0; idx <size_display; idx++) {
     if (particle[idx] == 0) {
       G4cout << "            ";
     } else {
@@ -649,7 +650,7 @@ void G4VUserPhysicsList::DumpCutValuesTable() const
   const G4MaterialTable* materialTable = G4Material::GetMaterialTable();
   for (G4int J=0; J<materialTable->entries(); J++) {
     G4cout << " " << G4std::setw(18) << ((*materialTable)[J])->GetName();
-    for (idx=0; idx <size; idx++) {
+    for (idx=0; idx <size_display; idx++) {
       if (particle[idx] == 0) {
 	G4cout << "            ";
       } else {
