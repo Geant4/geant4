@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.5 2001-10-22 10:58:55 maire Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.6 2001-11-05 15:28:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,14 +92,14 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   unitPrm->SetParameterCandidates(unitList);
   AbsorCmd->SetParameter(unitPrm);
   //
-  AbsorCmd->AvailableForStates(PreInit,Idle);
+  AbsorCmd->AvailableForStates(Idle);
   
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(PreInit,Idle);
+  MagFieldCmd->AvailableForStates(Idle);
      
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
@@ -112,7 +112,7 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   MaxStepCmd->SetParameterName("Size",false);
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(PreInit,Idle); 
+  MaxStepCmd->AvailableForStates(Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

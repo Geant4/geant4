@@ -1,4 +1,4 @@
-$Id: History,v 1.14 2001-10-25 15:20:36 maire Exp $
+$Id: History,v 1.15 2001-11-05 15:28:39 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+39-10-01  mma (testem3-V03-02-02)
+-invert initialize and update in all macros (and TestEm3.in)
      
 25-10-01  mma (testem3-V03-02-01)
 - GetEnergyCuts() in PrintdEdx()
