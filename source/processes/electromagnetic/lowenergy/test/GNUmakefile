@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-09-18 12:34:49 pfeiffer Exp $
+# $Id: GNUmakefile,v 1.5 2001-09-21 09:58:40 pia Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -26,7 +26,7 @@ LOADLIBS += -lHepUtilities -lAIDA_Annotation
 # add for Histograms:
 LOADLIBS += -lAIDA_HBook 
 # add for Ntuples:
-LOADLIBS += -l AIDA_Ntuple -lNtupleTag -lNtupleTag_HBook 
+LOADLIBS += -lAIDA_Ntuple -lNtupleTag -lNtupleTag_HBook 
 # ... and finally system stuff and to deal with the "Fortran legacy":
 LOADLIBS += -lCHBook -ldl -lg2c 
 
