@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2004-08-03 11:31:44 maire Exp $
+// $Id: RunAction.cc,v 1.8 2004-08-05 14:40:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -160,7 +160,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
  //compare csda range with PhysicsTables
  //
  G4EmCalculator emCalculator;
- G4double rangeTable = emCalculator.GetRange(particle,material,energy);
+ G4double rangeTable = 0.;
+ if (particle->GetPDGCharge() != 0.)
+   rangeTable = emCalculator.GetRange(particle,material,energy);
       
  G4cout << "\n---------------------------------------------------------\n";
  G4cout << " Primary particle : " ;
