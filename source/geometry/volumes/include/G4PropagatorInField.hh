@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.16 2001-07-11 10:00:30 gunter Exp $
+// $Id: G4PropagatorInField.hh,v 1.17 2001-10-22 14:50:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -186,9 +186,11 @@ class G4PropagatorInField
    //  Values for the small possible relative accuracy of a step
    //       (corresponding to the greatest possible integration accuracy)
 
-     // Minimum for Relative accuracy of any Step 
+     // Limits for the Relative accuracy of any Step 
    G4double  fEpsilonMin; 
-   static const G4double  fEpsilonMinDefault;               // 1.0e-10 ;  
+   G4double  fEpsilonMax;
+   static const G4double  fEpsilonMinDefault;         // Can be 1.0e-5 to 1.0e-10 ...
+   static const G4double  fEpsilonMaxDefault;         // Can be 1.0e-1 to 1.0e-3 ...
 
    G4int  fmax_loop_count;
 
