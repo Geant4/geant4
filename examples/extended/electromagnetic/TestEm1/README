@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2001-03-27 08:34:07 maire Exp $
+$Id: README,v 1.3 2001-03-30 12:41:27 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -97,9 +97,9 @@ $Id: README,v 1.2 2001-03-27 08:34:07 maire Exp $
       1 : track length of a charged particle
       2 : number of steps per track (charged particle)
       3 : step length (charged particle)
- 	
- 	   
- Note that, for time being (on 26.03.2001), the histograms in G4
- are disabled  wia the cpp flag g4nohist := true in the gnumakefile 
- 	
- 	
+
+ Note that, histograms are disabled via the flag G4NOHIST in the GNUmakefile.
+ Currently, histograms in this example are implemented through the obsolete
+ CLHEP/Hist package, which is no longer supported. The implementation will
+ be replaced by direct call to the "analysis" module in a near future.
+
