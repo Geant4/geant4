@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisationVI.cc,v 1.6 2001-10-18 14:30:20 pia Exp $
+// $Id: G4LowEnergyIonisationVI.cc,v 1.7 2001-10-18 15:48:53 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -655,6 +655,16 @@ G4std::vector<G4Track*>* G4LowEnergyIonisationVI::SecondariesAlongStep(
   return vectorTracks;
 }
 */
+
+G4std::vector<G4DynamicParticle*>* 
+G4LowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
+				      G4double incidentEnergy,
+				      G4double eLoss)
+{
+  // Dummy implementation
+
+  return 0;
+}
 
 G4double G4LowEnergyIonisationVI::GetMeanFreePath(const G4Track& track,
 						G4double previousStepSize,

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyIonisationVI.hh,v 1.3 2001-10-18 14:15:19 pia Exp $
+// $Id: G4LowEnergyIonisationVI.hh,v 1.4 2001-10-18 15:48:46 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -85,8 +85,9 @@ protected:
 			   G4double previousStepSize,
 			   G4ForceCondition* condition );
 
-  G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
-                                                      G4double edep);
+  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
+							  G4double incidentEnergy,
+							  G4double eLoss);
 
 private:
 
@@ -107,9 +108,6 @@ private:
   G4AtomicDeexcitation deexcitationManager;
   G4ShellVacancy* shellVacancy;
   
-  virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
-							  G4double incidentEnergy,
-							  G4double eLoss);
 };
 
 #endif

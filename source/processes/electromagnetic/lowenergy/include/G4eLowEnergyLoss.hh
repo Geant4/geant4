@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eLowEnergyLoss.hh,v 1.5 2001-10-18 14:15:19 pia Exp $
+// $Id: G4eLowEnergyLoss.hh,v 1.6 2001-10-18 15:48:46 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,6 +31,18 @@
 // Further documentation available from http://www.ge.infn.it/geant4/lowE
 
 // -------------------------------------------------------------------
+//
+// This class is the implementation of the unified Energy Loss process.
+// It calculates the continuous energy loss for e+/e-.
+// The following processes give contributions to the continuous 
+// energy loss (by default) :
+//  ---  ionisation (= cont.ion.loss + delta ray production)
+//  --- bremsstrahlung (= cont.loss due to soft brems+discrete bremsstrahlung)
+//   more can be added   ..........
+// This class creates static dE/dx and range tables for e+ and e-,
+// which tables can be used by other processes , too.
+// G4eLowEnergyLoss is the base class for the processes giving contribution
+// to the (continuous) energy loss of e+/e- .
 //
 //      History: first implementation, based on object model of
 //      2nd December 1995, G.Cosmo
@@ -63,20 +75,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 #include "G4EnergyLossTables.hh"
-
-// Class description:
-// This class is the implementation of the unified Energy Loss process.
-// It calculates the continuous energy loss for e+/e-.
-// The following processes give contributions to the continuous 
-// energy loss (by default) :
-//  ---  ionisation (= cont.ion.loss + delta ray production)
-//  --- bremsstrahlung (= cont.loss due to soft brems+discrete bremsstrahlung)
-//   more can be added   ..........
-// This class creates static dE/dx and range tables for e+ and e-,
-// which tables can be used by other processes , too.
-// G4eLowEnergyLoss is the base class for the processes giving contribution
-// to the (continuous) energy loss of e+/e- .
-// Class description - end
 
 class G4EnergyLossMessenger;
  
@@ -142,10 +140,6 @@ class G4eLowEnergyLoss : public G4VeLowEnergyLoss
                                             
   protected:
 
-  /*
-    virtual G4std::vector<G4Track*>* SecondariesAlongStep(const G4Step& step,
-							  G4double edep) { return 0; }
-  */
   virtual G4std::vector<G4DynamicParticle*>* DeexciteAtom(const G4Material* material,
 							  G4double incidentEnergy,
 							  G4double eLoss) { return 0; }
