@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForRadDecay.hh,v 1.3 2001-07-11 10:08:36 gunter Exp $
+// $Id: G4ParticleChangeForRadDecay.hh,v 1.4 2001-10-24 05:41:46 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -55,7 +55,8 @@ class G4ParticleChangeForRadDecay: public G4ParticleChange
   protected:
     // hide copy constructor and assignment operaor as protected
     G4ParticleChangeForRadDecay(const G4ParticleChangeForRadDecay &right){}
-    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &right){}
+    G4ParticleChangeForRadDecay & operator=(const G4ParticleChangeForRadDecay &right){return *this;}
+
 
   public: // with description
   void AddSecondary(G4Track* aSecondary);
