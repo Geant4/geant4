@@ -1,0 +1,47 @@
+#
+# Macro file for the initialization phase of "PurgMag.cc"
+#
+# Sets some default verbose
+# and initializes the visualization.
+#
+#/control/verbose 2
+#/run/verbose 2
+#
+# Create empty scene ("world" is default)
+/vis/scene/create
+#
+# Add volume to scene
+/vis/scene/add/volume
+#
+# Create a scene handler for a specific graphics system
+# Edit the next line(s) to choose another graphic system
+#
+#/vis/sceneHandler/create DAWN
+#/vis/sceneHandler/create DAWNFILE
+/vis/sceneHandler/create OGLIX
+#/vis/sceneHandler/create VRML2FILE
+#
+# Create a viewer
+/vis/viewer/create
+#
+#  viewpoint  : (theta,phi) = (#*deg, #*deg), 
+#  zoom factor: #
+#  coordinate axes:
+#     x-axis:red,  y-axis:green,  z-axis:blue
+/vis/viewer/reset
+/vis/viewer/set/viewpointThetaPhi 90 0
+/vis/viewer/zoom   1.5
+#/vis/draw/axes       0 0 0 500
+#/vis/draw/text       0 0 0 mm 5 -120 -200 Assorbitore.0
+#
+#
+# Draw scene
+/vis/scene/notifyHandlers
+# for drawing the tracks
+# if too many tracks cause core dump => storeTrajectory 0
+/tracking/storeTrajectory 1
+/vis/scene/endOfEventAction    accumulate
+
+
+
+
