@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeModel.cc,v 1.3 1999-12-16 17:20:27 johna Exp $
+// $Id: G4LogicalVolumeModel.cc,v 1.4 2000-01-17 10:34:48 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,21 +63,21 @@ void G4LogicalVolumeModel::DescribeYourselfTo
   G4ModelingParameters nonCulledMP (*fpMP);
   nonCulledMP.SetCulling (false);
   fpMP = &nonCulledMP;    
-
   G4PhysicalVolumeModel::DescribeYourselfTo (sceneHandler);
-
   fpMP = tpMP;
 
-  // Add Voxels.
-  G4DrawVoxels dv;
-  G4PlacedPolyhedronList* pPPL =
-    dv.CreatePlacedPolyhedra (fpTopPV -> GetLogicalVolume ());
-  for (int i = 0; i < pPPL -> entries (); i++) {
-    const G4Transform3D& transform = (*pPPL)[i].GetTransform ();
-    const G4Polyhedron& polyhedron = (*pPPL)[i].GetPolyhedron ();
-    sceneHandler.BeginPrimitives (transform);
-    sceneHandler.AddPrimitive (polyhedron);
-    sceneHandler.EndPrimitives ();
+  if (fpTopPV -> GetLogicalVolume () -> GetVoxelHeader ()) {
+    // Add Voxels.
+    G4DrawVoxels dv;
+    G4PlacedPolyhedronList* pPPL =
+      dv.CreatePlacedPolyhedra (fpTopPV -> GetLogicalVolume ());
+    for (int i = 0; i < pPPL -> entries (); i++) {
+      const G4Transform3D& transform = (*pPPL)[i].GetTransform ();
+      const G4Polyhedron& polyhedron = (*pPPL)[i].GetPolyhedron ();
+      sceneHandler.BeginPrimitives (transform);
+      sceneHandler.AddPrimitive (polyhedron);
+      sceneHandler.EndPrimitives ();
+    }
+    delete pPPL;
   }
-  delete pPPL;
 }
