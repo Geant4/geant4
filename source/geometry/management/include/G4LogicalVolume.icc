@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.icc,v 1.18 2004-11-16 08:56:14 asaim Exp $
+// $Id: G4LogicalVolume.icc,v 1.19 2004-11-16 13:43:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -257,7 +257,7 @@ inline
 void G4LogicalVolume::UpdateMaterial(G4Material *pMaterial)
 {
   fMaterial=pMaterial;
-  if(rRegion) { fCutsCouple = fRegion->FindCouple(pMaterial); }
+  if(fRegion) { fCutsCouple = fRegion->FindCouple(pMaterial); }
   fMass = 0.;
 }
 
