@@ -15,6 +15,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 1, 99   Y.Morita (persistency-V00-01-09)
+- fix for HP-aCC, Geant4 NamedSchema
+- added G4TMPDIR to GNUmakefile include path
+
 November 29, 99  Y.Morita (persistency-V00-01-08)
 - bug fix for persistent hits (works with PersistentEx02-V00-01-01)
 
