@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4MScoreConfigurator.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,13 +51,16 @@ class G4MScoreConfigurator : public G4VSamplerConfigurator{
 public:
   G4MScoreConfigurator(const G4String &particlename,
 		       G4VPScorer &scorer);
-  ~G4MScoreConfigurator();
+  virtual ~G4MScoreConfigurator();
   
-  void Configure(G4VSamplerConfigurator *preConf);
-  G4VTrackTerminator *GetTrackTerminator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
   
 private:
+  G4MScoreConfigurator(const G4MScoreConfigurator&);
+  const G4MScoreConfigurator &operator=(const G4MScoreConfigurator&);
+
   G4ProcessPlacer fPlacer;
   G4VPScorer &fScorer;
   G4MScoreProcess *fMScoreProcess;

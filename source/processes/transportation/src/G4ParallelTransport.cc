@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransport.cc,v 1.6 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ParallelTransport.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,18 +34,23 @@
 #include "G4ParallelTransport.hh"
 #include "G4VPGeoDriver.hh"
 #include "G4VParallelStepper.hh"
-#include "G4Pstring.hh"
+#include "G4StringConversion.hh"
 
 G4ParallelTransport::G4ParallelTransport(G4VPGeoDriver &pgeodriver,
 					 G4VParallelStepper &aStepper,
 					 const G4String &aName)
- : G4VProcess(aName), 
-   fPgeodriver(pgeodriver),
-   fPStepper(aStepper),
+ : 
+  G4VProcess(aName), 
+  fParticleChange(new G4ParticleChange),
+  fPgeodriver(pgeodriver),
+  fPStepper(aStepper),
   fCrossBoundary(false),
   fInitStep(false)
 {
-  fParticleChange = new G4ParticleChange;
+  if (!fParticleChange) {
+    G4std::G4Exception("ERROR:G4ParallelTransport::G4ParallelTransport: new failed to create G4ParticleChange!");
+  }
+
   G4VProcess::pParticleChange = fParticleChange;
 }
 
@@ -66,7 +71,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4double   previousStepSize,
 				     G4ForceCondition* condition)
 {
-  G4double stepLength;
+  G4double stepLength = 0;
 
   // if this function is called on a new track let the navigator 
   // know about it
@@ -101,10 +106,10 @@ G4VParticleChange *
 G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
 				  const G4Step& aStep)
 {
-  if (aStep.GetStepLength() == 0.) {
-    G4String m = "G4PArallelTransport::PostStepDoIt: StepLength() == 0.\n";
-    m += "pos: " + str(aTrack.GetPosition()) + ", " 
-      + "dir: " +  str(aTrack.GetMomentumDirection()) + "\n";
+  if (!(aStep.GetStepLength() > 0.)) {
+    G4String m("G4PArallelTransport::InitPostDoIt: StepLength() == 0.\n");
+    m += "pos: " + G4std::str(aTrack.GetPosition()) + ", " 
+      + "dir: " +  G4std::str(aTrack.GetMomentumDirection()) + "\n";
     Warning(m);
   }
 
@@ -120,12 +125,39 @@ G4ParallelTransport::PostStepDoIt(const G4Track& aTrack,
     
 void G4ParallelTransport::Error(const G4String &m)
 {
-  G4cout << "ERROR - G4ParallelTransport::" << m << G4endl;
-  G4Exception("Program aborted.");
+  G4std::G4cout << "ERROR - G4ParallelTransport::" << m << G4endl;
+  G4std::G4Exception("Program aborted.");
 }
 
 void G4ParallelTransport::Warning(const G4String &m)
 {
-  G4cout << "WARNING - G4ParallelTransport: " << G4endl;
-  G4cout << m << G4endl;
+  G4std::G4cout << "WARNING - G4ParallelTransport: " << G4endl;
+  G4std::G4cout << m << G4endl;
 }
+
+G4double G4ParallelTransport::
+AlongStepGetPhysicalInteractionLength(const G4Track&,
+				      G4double  ,
+				      G4double  ,
+				      G4double& ,
+				      G4GPILSelection*) {
+  return -1.0;
+}
+
+G4double G4ParallelTransport::
+AtRestGetPhysicalInteractionLength(const G4Track& ,
+				   G4ForceCondition*) {
+  return -1.0;
+}
+  
+G4VParticleChange*  G4ParallelTransport::
+AtRestDoIt(const G4Track&, const G4Step&) {
+  return 0;
+}
+  
+G4VParticleChange* G4ParallelTransport::
+AlongStepDoIt(const G4Track&, const G4Step&) {
+  return 0;
+}
+  
+ 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PScoreConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
+// $Id: G4PScoreConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -56,11 +56,15 @@ G4PScoreConfigurator::~G4PScoreConfigurator(){
  
 void G4PScoreConfigurator::Configure(G4VSamplerConfigurator *preConf){
   fPScoreProcess = new G4PScoreProcess(fPStepper, fScorer);
+  if (!fPScoreProcess) {
+    G4std::G4Exception("ERROR:G4PScoreConfigurator::Configure: new failed to create G4PScoreProcess!");
+  }
   fPlacer.AddProcessAsSecondDoIt(fPScoreProcess);
 }
 
 
-G4VTrackTerminator *G4PScoreConfigurator:: GetTrackTerminator() {
+const G4VTrackTerminator *G4PScoreConfigurator:: 
+GetTrackTerminator() const {
   return fPScoreProcess;
 }
   

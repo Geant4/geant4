@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MImportanceConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
+// $Id: G4MImportanceConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -57,11 +57,13 @@ G4MImportanceConfigurator::
     fPlacer.RemoveProcess(fMassImportanceProcess);
     delete fMassImportanceProcess;
   }
-  if (fDeleteIalg) delete fIalgorithm;
+  if (fDeleteIalg) {
+    delete fIalgorithm;
+  }
 }
 void  
 G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf){
-  G4VTrackTerminator *terminator = 0;
+  const G4VTrackTerminator *terminator = 0;
   if (preConf) {
     terminator = preConf->GetTrackTerminator();
   };
@@ -70,9 +72,13 @@ G4MImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf){
     new G4MassImportanceProcess(*fIalgorithm, 
 				fIStore, 
 				terminator);
+  if (!fMassImportanceProcess) {
+    G4std::G4Exception("ERROR: G4MImportanceConfigurator::Configure: new failed to create  G4MassImportanceProcess!");
+  }
   fPlacer.AddProcessAsSecondDoIt(fMassImportanceProcess);
 }
 
-G4VTrackTerminator *G4MImportanceConfigurator::GetTrackTerminator(){
+const G4VTrackTerminator *G4MImportanceConfigurator::
+GetTrackTerminator() const {
   return fMassImportanceProcess;
 }

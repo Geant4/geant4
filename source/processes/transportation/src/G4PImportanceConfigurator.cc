@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
+// $Id: G4PImportanceConfigurator.cc,v 1.2 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,11 @@ G4PImportanceConfigurator(const G4String &particlename,
 	    parallelWorld.GetParallelStepper(),  
 	    istore),
   fParallelImportanceProcess(0)
-{}
+{
+  if (!fIalgorithm) {
+    G4std::G4Exception("ERROR:G4PImportanceConfigurator::G4PImportanceConfigurator: no fIalgorithm!");
+  }
+}
 
 
 G4PImportanceConfigurator::~G4PImportanceConfigurator(){
@@ -59,12 +63,14 @@ G4PImportanceConfigurator::~G4PImportanceConfigurator(){
     fPlacer.RemoveProcess(fParallelImportanceProcess);
     delete fParallelImportanceProcess;
   }
-  if (fDeleteIalg) delete fIalgorithm;
+  if (fDeleteIalg) {
+    delete fIalgorithm;
+  }
 }
 
 void G4PImportanceConfigurator::
 Configure(G4VSamplerConfigurator *preConf){
-  G4VTrackTerminator *terminator = 0;
+  const G4VTrackTerminator *terminator = 0;
   if (preConf) {
     terminator = preConf->GetTrackTerminator();
   };
@@ -74,11 +80,15 @@ Configure(G4VSamplerConfigurator *preConf){
 				    fPWorld.GetGeoDriver(), 
 				    fPWorld.GetParallelStepper(),
 				    terminator);
+  if (!fParallelImportanceProcess) {
+    G4std::G4Exception("ERROR:G4PImportanceConfigurator::Configure: new failed to create G4ParallelImportanceProcess!");
+  }
   
   fPlacer.AddProcessAsSecondDoIt(fParallelImportanceProcess); 
 }
 
-G4VTrackTerminator *G4PImportanceConfigurator::GetTrackTerminator(){
+const G4VTrackTerminator *G4PImportanceConfigurator::
+GetTrackTerminator() const {
   return fParallelImportanceProcess;
 }
 

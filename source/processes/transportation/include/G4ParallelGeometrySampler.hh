@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -52,6 +52,7 @@ class G4ParallelTransportConfigurator;
 class G4PScoreConfigurator;
 class G4PImportanceConfigurator;
 class G4WeightCutOffConfigurator;
+class G4VGCellFinder;
 
 class G4ParallelGeometrySampler : public G4VSampler{
 
@@ -60,20 +61,20 @@ public:
  
   G4ParallelGeometrySampler(G4VPhysicalVolume &worldvolume,
 			    const G4String &particlename);
-  ~G4ParallelGeometrySampler();
+  virtual ~G4ParallelGeometrySampler();
 
-  void PrepareScoring(G4VPScorer *Scorer);
-  void PrepareImportanceSampling(G4VIStore *istore,
+  virtual void PrepareScoring(G4VPScorer *Scorer);
+  virtual void PrepareImportanceSampling(G4VIStore *istore,
 				 const G4VImportanceAlgorithm 
 				 *ialg);
-  void PrepareWeightRoulett(G4double wsurvive, 
+  virtual void PrepareWeightRoulett(G4double wsurvive, 
 			    G4double wlimit,
 			    G4double isource);
   
-  void Configure();
+  virtual void Configure();
 
-  void ClearSampling();
-  G4bool IsConfigured() const;
+  virtual void ClearSampling();
+  virtual G4bool IsConfigured() const;
   
 private:
 
@@ -87,6 +88,7 @@ private:
   G4ParallelTransportConfigurator *fParallelTransportConfigurator;
   G4PImportanceConfigurator *fPImportanceConfigurator;
   G4PScoreConfigurator *fPScoreConfigurator;
+  G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
   G4bool fIsConfigured;

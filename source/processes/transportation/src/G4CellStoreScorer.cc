@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellStoreScorer.cc,v 1.2 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4CellStoreScorer.cc,v 1.3 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,7 +54,7 @@ Score(const G4Step &aStep, const G4PStep &aPstep){
   G4Track *track = aStep.GetTrack();
   
   if (track->GetTrackStatus()==fStopAndKill) {
-    G4cout << "G4CellStoreScorer::Score:   track status is StopAndKill -> do nothing" << G4endl;
+    G4std::G4std::G4cout << "G4CellStoreScorer::Score:   track status is StopAndKill -> do nothing" << G4endl;
   }
   else { 
     // chose the cells to be scored

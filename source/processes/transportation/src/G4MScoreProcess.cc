@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MScoreProcess.cc,v 1.6 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4MScoreProcess.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,6 +44,9 @@ G4MScoreProcess::G4MScoreProcess(G4VPScorer &aScorer,
   fKillTrack(false)
 {
   G4VProcess::pParticleChange = new G4ParticleChange;
+  if (!G4VProcess::pParticleChange) {
+    G4std::G4Exception("ERROR:G4MScoreProcess::G4MScoreProcess new failed to create G4ParticleChange!");
+  }
 }
 
 G4MScoreProcess::~G4MScoreProcess()
@@ -57,7 +60,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return kInfinity;
+  return G4std::kInfinity;
 }
   
 G4VParticleChange * 
@@ -65,7 +68,7 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
 {
   pParticleChange->Initialize(aTrack);
 
-  if (aStep.GetStepLength() > kCarTolerance) {
+  if (aStep.GetStepLength() > G4std::kCarTolerance) {
     G4StepPoint *prepoint = aStep.GetPreStepPoint();
     G4StepPoint *postpoint = aStep.GetPostStepPoint();
   
@@ -78,8 +81,9 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
     G4PStep pstep(prekey, postkey);
     pstep.SetCrossBoundary(false);
     
-    if (prekey != postkey) pstep.SetCrossBoundary(true);
-  
+    if (prekey != postkey) {
+      pstep.SetCrossBoundary(true);
+    } 
     fScorer.Score(aStep, pstep); 
   }
 
@@ -89,4 +93,38 @@ G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   }
 
   return G4VProcess::pParticleChange;
+}
+
+const G4String &G4MScoreProcess::GetName() const {
+  return theProcessName;
+}
+
+
+G4double G4MScoreProcess::
+AlongStepGetPhysicalInteractionLength(const G4Track&,
+				      G4double  ,
+				      G4double  ,
+				      G4double& ,
+				      G4GPILSelection*) {
+  return -1.0;
+}
+
+G4double G4MScoreProcess::
+AtRestGetPhysicalInteractionLength(const G4Track&,
+				   G4ForceCondition*) {
+  return -1.0;
+}
+
+G4VParticleChange* G4MScoreProcess::AtRestDoIt(const G4Track&,
+					       const G4Step&) {
+  return 0;
+}
+
+G4VParticleChange* G4MScoreProcess::AlongStepDoIt(const G4Track&,
+						  const G4Step&) {
+  return 0;
+}
+
+void G4MScoreProcess::KillTrack() const{
+  fKillTrack = true;
 }

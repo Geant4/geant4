@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSpecialCuts.cc,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4UserSpecialCuts.cc,v 1.6 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -43,7 +43,7 @@ G4UserSpecialCuts::G4UserSpecialCuts(const G4String& aName)
   : G4VProcess(aName)
 {
    if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
+     G4std::G4cout << GetProcessName() << " is created "<< G4endl;
    }
 }
 

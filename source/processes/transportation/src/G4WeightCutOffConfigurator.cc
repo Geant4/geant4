@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
+// $Id: G4WeightCutOffConfigurator.cc,v 1.2 2002-10-16 16:27:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -37,20 +37,24 @@
 
 G4WeightCutOffConfigurator::
 G4WeightCutOffConfigurator(const G4String &particlename,
-			      G4double wsurvival,
-			      G4double wlimit,
-			      G4double isource,
-			      G4VIStore *istore,
-			      G4VParallelStepper  *astepper)
+			   G4double wsurvival,
+			   G4double wlimit,
+			   G4double isource,
+			   G4VIStore *istore,
+			   const G4VGCellFinder  &aGCellfinder)
   :
   fPlacer(particlename),
   fWeightCutOffProcess(new  G4WeightCutOffProcess(wsurvival,
 						  wlimit,
 						  isource,
 						  istore,
-						  astepper)),
+						  aGCellfinder)),
   fPlaced(false)
-{}
+{
+  if (!fWeightCutOffProcess) {
+    G4std::G4Exception("ERROR:G4WeightCutOffConfigurator::G4WeightCutOffConfigurator: new failed to create G4WeightCutOffProcess!");
+  }
+}
 
 
 G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator(){
@@ -66,7 +70,8 @@ Configure(G4VSamplerConfigurator *preConf){
   fPlaced = true;
 }
 
-G4VTrackTerminator *G4WeightCutOffConfigurator::GetTrackTerminator(){
+const G4VTrackTerminator *G4WeightCutOffConfigurator::
+GetTrackTerminator() const {
   return 0;
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ImportancePostStepDoIt.cc,v 1.6 2002-08-13 10:07:46 dressel Exp $
+// $Id: G4ImportancePostStepDoIt.cc,v 1.7 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -31,18 +31,16 @@
 //
 // ----------------------------------------------------------------------
 
-#include "g4std/strstream"
-
 #include "G4ImportancePostStepDoIt.hh"
 #include "G4Track.hh"
 #include "G4ParticleChange.hh"
 #include "G4VImportanceSplitExaminer.hh"
 #include "G4Nsplit_Weight.hh"
 #include "G4VTrackTerminator.hh"
-
+#include "G4StringConversion.hh"
 
 G4ImportancePostStepDoIt::
-G4ImportancePostStepDoIt(G4VTrackTerminator &TrackTerminator)
+G4ImportancePostStepDoIt(const G4VTrackTerminator &TrackTerminator)
   :
   fTrackTerminator(TrackTerminator)
 {}
@@ -50,7 +48,7 @@ G4ImportancePostStepDoIt::~G4ImportancePostStepDoIt(){}
 
 void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack, 
 				    G4ParticleChange *aParticleChange,
-				    const G4Nsplit_Weight nw)
+				    const G4Nsplit_Weight &nw)
 {  
   // evaluate results from sampler
   if (nw.fN>1) {
@@ -67,10 +65,9 @@ void G4ImportancePostStepDoIt::DoIt(const G4Track& aTrack,
   }
   else {
     // wrong answer
-    G4std::ostrstream os;
-    os << "G4ImportancePostStepDoIt::DoIt: sampler returned nw = " 
-       << nw << '\0' << G4endl;
-    G4Exception(os.str());
+    G4String m("G4ImportancePostStepDoIt::DoIt: sampler returned nw = ");
+    m += G4std::str(nw);
+    G4std::G4Exception(m);
   }
 }
 
@@ -88,7 +85,7 @@ void G4ImportancePostStepDoIt::Split(const G4Track &aTrack,
     ptrack->SetWeight(nw.fW);
     
     if (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()) {
-      G4Exception("ERROR - G4ImportancePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
+      G4std::G4Exception("ERROR - G4ImportancePostStepDoIt::Split: (ptrack->GetMomentumDirection() != aTrack.GetMomentumDirection()");
     }
     
     aParticleChange->AddSecondary(ptrack);

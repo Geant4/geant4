@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PImportanceConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4PImportanceConfigurator.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,11 +55,14 @@ public:
 			      G4ParallelWorld &parallelWorld,
 			      G4VIStore &istore,
 			      const G4VImportanceAlgorithm *ialg);
-  ~G4PImportanceConfigurator();
-  void Configure(G4VSamplerConfigurator *preConf);
-  G4VTrackTerminator *GetTrackTerminator();
+  virtual ~G4PImportanceConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const;
   
 private:
+  G4PImportanceConfigurator(const G4PImportanceConfigurator &);
+  const G4PImportanceConfigurator &
+  operator=(const G4PImportanceConfigurator &);
   G4ProcessPlacer fPlacer;
   G4ParallelWorld &fPWorld;
   G4bool fDeleteIalg;

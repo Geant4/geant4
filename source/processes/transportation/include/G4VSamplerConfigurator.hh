@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSamplerConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4VSamplerConfigurator.hh,v 1.2 2002-10-16 16:26:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -50,11 +50,12 @@ class G4VTrackTerminator;
 
 class G4VSamplerConfigurator{
 public:
-  virtual ~G4VSamplerConfigurator() {}
+  G4VSamplerConfigurator();
+  virtual ~G4VSamplerConfigurator();
   virtual void Configure(G4VSamplerConfigurator *preConf) = 0;
     // do the configuration, if preConf is given a
     //  G4VTrackTerminator may be obtained from it
-  virtual G4VTrackTerminator *GetTrackTerminator() = 0;
+  virtual const G4VTrackTerminator *GetTrackTerminator() const = 0;
     // return a G4VTrackTerminator or 0
 };
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffProcess.cc,v 1.1 2002-10-10 13:25:31 dressel Exp $
+// $Id: G4WeightCutOffProcess.cc,v 1.2 2002-10-16 16:27:01 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -34,7 +34,8 @@
 #include "G4WeightCutOffProcess.hh"
 #include "G4VPScorer.hh"
 #include "G4PStep.hh"
-#include "G4VParallelStepper.hh"
+#include "G4ParallelGCellFinder.hh"
+#include "G4MassGCellFinder.hh"
 #include "G4TouchableHandle.hh"
 #include "G4VIStore.hh"
 
@@ -43,17 +44,20 @@ G4WeightCutOffProcess(G4double wsurvival,
 		      G4double wlimit,
 		      G4double isource,
 		      G4VIStore *istore,
-		      G4VParallelStepper *astepper,
+		      const G4VGCellFinder &aGCellFinder,
 		      const G4String &aName)
   : 
   G4VProcess(aName), 
+  fParticleChange(new G4ParticleChange),
   fWeightSurvival(wsurvival),
   fWeightLimit(wlimit),
   fSourceImportance(isource),
   fIStore(istore),
-  fPstepper(astepper)
+  fGCellFinder(aGCellFinder)
 {
-  fParticleChange = new G4ParticleChange;
+  if (!fParticleChange) {
+    G4std::G4Exception("ERROR:G4WeightCutOffProcess::G4WeightCutOffProcess: new failed to create G4ParticleChange!");
+  }
   G4VProcess::pParticleChange = fParticleChange;
 }
 
@@ -68,7 +72,7 @@ PostStepGetPhysicalInteractionLength(const G4Track& aTrack,
 				     G4ForceCondition* condition)
 {
   *condition = Forced;
-  return kInfinity;
+  return G4std::kInfinity;
 }
   
 G4VParticleChange * 
@@ -76,7 +80,7 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
 				    const G4Step &aStep)
 {
   fParticleChange->Initialize(aTrack);
-  G4GeometryCell postCell = GetPostGeometryCell(aStep);
+  G4GeometryCell postCell = fGCellFinder.GetPostGeometryCell(aStep);
   G4double R = fSourceImportance;
   if (fIStore) {
     G4double i = fIStore->GetImportance(postCell);
@@ -98,14 +102,33 @@ G4WeightCutOffProcess::PostStepDoIt(const G4Track& aTrack,
   return fParticleChange;
 }
 
-G4GeometryCell
-G4WeightCutOffProcess::GetPostGeometryCell(const G4Step &aStep){
-  if (fPstepper) {
-    return fPstepper->GetPStep().GetPostGeometryCell();
-  }
-  else {
-    const G4TouchableHandle& th =
-      aStep.GetPostStepPoint()->GetTouchableHandle();
-    return G4GeometryCell(*th->GetVolume(), th->GetReplicaNumber());
-  }
+const G4String &G4WeightCutOffProcess::GetName() const {
+  return theProcessName;
+}
+
+
+G4double G4WeightCutOffProcess::
+AlongStepGetPhysicalInteractionLength(const G4Track&,
+				      G4double  ,
+				      G4double  ,
+				      G4double& ,
+				      G4GPILSelection*) {
+  return -1.0;
+}
+
+  
+G4double G4WeightCutOffProcess::
+AtRestGetPhysicalInteractionLength(const G4Track& ,
+				   G4ForceCondition*) {
+  return -1.0;
+}
+  
+G4VParticleChange* G4WeightCutOffProcess::
+AtRestDoIt(const G4Track&, const G4Step&) {
+  return 0;
+}
+
+G4VParticleChange* G4WeightCutOffProcess::
+AlongStepDoIt(const G4Track&, const G4Step&) {
+  return 0;
 }

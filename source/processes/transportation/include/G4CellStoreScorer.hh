@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4CellStoreScorer.hh,v 1.1 2002-08-29 15:32:37 dressel Exp $
+// $Id: G4CellStoreScorer.hh,v 1.2 2002-10-16 16:26:57 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,11 +54,11 @@ class G4GeometryCell;
 class G4CellStoreScorer : public G4VPScorer
 {
 public:
-  G4CellStoreScorer(G4VCellScorerStore &csc);
+  explicit G4CellStoreScorer(G4VCellScorerStore &csc);
     // take a  G4VCellScorerStore created by the user to score
     // the cells contained in it. 
-  ~G4CellStoreScorer();
-  void Score(const G4Step &aStep, const G4PStep &aPStep);
+  virtual ~G4CellStoreScorer();
+  virtual void Score(const G4Step &aStep, const G4PStep &aPStep);
     // called to score a track for every step
  
 private:

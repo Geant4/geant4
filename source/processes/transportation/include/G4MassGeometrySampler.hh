@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4MassGeometrySampler.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,26 +44,27 @@
 class G4MImportanceConfigurator;
 class G4MScoreConfigurator;
 class G4WeightCutOffConfigurator;
+class G4VGCellFinder;
 
 class G4MassGeometrySampler : public G4VSampler{
 
 public:  
  
-  G4MassGeometrySampler(const G4String &particlename);
-  ~G4MassGeometrySampler();
+  explicit G4MassGeometrySampler(const G4String &particlename);
+  virtual ~G4MassGeometrySampler();
 
-  void PrepareScoring(G4VPScorer *Scorer);
-  void PrepareImportanceSampling(G4VIStore *istore,
-				 const G4VImportanceAlgorithm 
-				 *ialg);
-  void PrepareWeightRoulett(G4double wsurvive, 
-			    G4double wlimit,
-			    G4double isource);
+  virtual void PrepareScoring(G4VPScorer *Scorer);
+  virtual void PrepareImportanceSampling(G4VIStore *istore,
+					 const G4VImportanceAlgorithm 
+					 *ialg);
+  virtual void PrepareWeightRoulett(G4double wsurvive, 
+				    G4double wlimit,
+				    G4double isource);
   
-  void Configure();
+  virtual void Configure();
 
-  void ClearSampling();
-  G4bool IsConfigured() const;
+  virtual void ClearSampling();
+  virtual G4bool IsConfigured() const;
     
 private:
 
@@ -75,6 +76,7 @@ private:
   G4String fParticleName;
   G4MImportanceConfigurator *fMImportanceConfigurator;
   G4MScoreConfigurator *fMScoreConfigurator;
+  G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
   G4VIStore *fIStore;
   G4bool fIsConfigured;

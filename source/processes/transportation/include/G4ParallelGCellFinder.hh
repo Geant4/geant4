@@ -21,38 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.hh,v 1.4 2002-10-16 16:26:59 dressel Exp $
+// $Id: G4ParallelGCellFinder.hh,v 1.1 2002-10-16 16:27:41 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VTrackTerminator
+// Class G4ParallelGCellFinder
 //
 // Class description:
 //
-// This is an interface for an object which maybe told to kill a track.
-// The type it provides is needed in case importance biasing and
-// scoring is done at the same time. 
-// For navigation in the parallel geometry which is done 
-// by the importance biasing process (it derives from G4ParallelTransport)
-// importance biasing has to be done before scoring (to score the correct
-// volume). But since scoring would not be called if the importance
-// biasing kills a track it only tells a G4VTrackTerminator to kill the 
-// track. The scoring process implements the interface G4VTrackTerminator
-// and is now able to kill the track after it has done the scoring.
+// Find a G4GeometryCell in the parallel geometry.
 // 
+
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef G4VTrackTerminator_hh
-#define G4VTrackTerminator_hh G4VTrackTerminator_hh
+#ifndef G4ParallelGCellFinder_hh
+#define G4ParallelGCellFinder_hh G4ParallelGCellFinder_hh
+
 #include "globals.hh"
 
-class G4VTrackTerminator {
-public:
-  G4VTrackTerminator();
-  virtual ~G4VTrackTerminator();
-  virtual void KillTrack() const = 0;
-  virtual const G4String &GetName() const = 0;
+#include "G4VGCellFinder.hh"
+
+class G4VParallelStepper;
+class  G4ParallelGCellFinder : public G4VGCellFinder 
+{
+
+public:  // with description
+
+  explicit G4ParallelGCellFinder(const G4VParallelStepper &astepper);
+  virtual  ~G4ParallelGCellFinder();
+
+  virtual G4GeometryCell 
+  GetPreGeometryCell(const G4Step &aStep) const;
+  virtual G4GeometryCell 
+  GetPostGeometryCell(const G4Step &aStep) const;
+
+private:  
+  const G4VParallelStepper &fPStepper;
+  
 };
 
 #endif

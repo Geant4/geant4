@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightCutOffConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4WeightCutOffConfigurator.hh,v 1.2 2002-10-16 16:26:59 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,24 +44,27 @@
 #include "G4ProcessPlacer.hh"
 
 class G4WeightCutOffProcess;
-class G4VParallelStepper;
+class G4VGCellFinder;
 class G4VIStore;
 
 
 class G4WeightCutOffConfigurator : public G4VSamplerConfigurator {
 public:
   G4WeightCutOffConfigurator(const G4String &particlename,
-			      G4double wsurvival,
-			      G4double wlimit,
-			      G4double isource,
-			      G4VIStore *istore,
-			      G4VParallelStepper  *astepper);
+			     G4double wsurvival,
+			     G4double wlimit,
+			     G4double isource,
+			     G4VIStore *istore,
+			     const G4VGCellFinder &aGCellFinder);
 
-  ~G4WeightCutOffConfigurator();
-  void Configure(G4VSamplerConfigurator *preConf);
-  G4VTrackTerminator *GetTrackTerminator();
+  virtual ~G4WeightCutOffConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const ;
   
 private:
+  G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
+  const G4WeightCutOffConfigurator &
+  operator=(const G4WeightCutOffConfigurator&);
   G4ProcessPlacer fPlacer;
   G4WeightCutOffProcess *fWeightCutOffProcess;
   G4bool fPlaced;

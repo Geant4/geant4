@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VProcessPlacer.hh,v 1.6 2002-09-02 13:27:26 dressel Exp $
+// $Id: G4VProcessPlacer.hh,v 1.7 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -46,7 +46,8 @@ class G4VProcessPlacer
 
 public:  // with description
 
-  virtual ~G4VProcessPlacer() {}
+  G4VProcessPlacer();
+  virtual ~G4VProcessPlacer();
 
   virtual void AddProcessAsLastDoIt(G4VProcess *process) = 0;
     // place a post step do it process such that the 
@@ -58,7 +59,7 @@ public:  // with description
     // PostStepDoIt function is called second
     // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
-  void RemoveProcess(G4VProcess *process);
+  virtual void RemoveProcess(G4VProcess *process) = 0;
     // removes a given process 
 
 

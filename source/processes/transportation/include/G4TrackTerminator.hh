@@ -21,11 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4VTrackTerminator.hh,v 1.4 2002-10-16 16:26:59 dressel Exp $
+// $Id: G4TrackTerminator.hh,v 1.1 2002-10-16 16:27:41 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class G4VTrackTerminator
+// Class G4TrackTerminator
 //
 // Class description:
 //
@@ -36,23 +36,27 @@
 // by the importance biasing process (it derives from G4ParallelTransport)
 // importance biasing has to be done before scoring (to score the correct
 // volume). But since scoring would not be called if the importance
-// biasing kills a track it only tells a G4VTrackTerminator to kill the 
-// track. The scoring process implements the interface G4VTrackTerminator
+// biasing kills a track it only tells a G4TrackTerminator to kill the 
+// track. The scoring process implements the interface G4TrackTerminator
 // and is now able to kill the track after it has done the scoring.
 // 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef G4VTrackTerminator_hh
-#define G4VTrackTerminator_hh G4VTrackTerminator_hh
+#ifndef G4TrackTerminator_hh
+#define G4TrackTerminator_hh G4TrackTerminator_hh
 #include "globals.hh"
 
-class G4VTrackTerminator {
+class G4TrackTerminator {
 public:
-  G4VTrackTerminator();
-  virtual ~G4VTrackTerminator();
-  virtual void KillTrack() const = 0;
-  virtual const G4String &GetName() const = 0;
+  G4TrackTerminator():
+    fKillTrack(false)
+  {}
+  ~G4TrackTerminator();
+  void SetKillTrack(){fKillTrack = true;}
+  G4bool GetKillTrack() const {return fKillTrack;} 
+private:
+  G4bool fKillTrack;
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelTransportConfigurator.hh,v 1.1 2002-10-10 13:25:30 dressel Exp $
+// $Id: G4ParallelTransportConfigurator.hh,v 1.2 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,11 +51,15 @@ class G4ParallelTransportConfigurator : public G4VSamplerConfigurator{
 public:
   G4ParallelTransportConfigurator(const G4String &particlename,
 			     G4ParallelWorld &pworld);
-  ~G4ParallelTransportConfigurator();
-  void Configure(G4VSamplerConfigurator *preConf);
-  G4VTrackTerminator *GetTrackTerminator();
+  virtual ~G4ParallelTransportConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const;
   
 private:
+  G4ParallelTransportConfigurator(const 
+				  G4ParallelTransportConfigurator &);
+  const G4ParallelTransportConfigurator &
+  operator=(const G4ParallelTransportConfigurator &);
   G4ProcessPlacer fPlacer;
   G4ParallelWorld &fPWorld;
   G4ParallelTransport *fParallelTransport;

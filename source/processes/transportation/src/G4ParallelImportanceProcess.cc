@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.5 2002-09-18 13:52:11 dressel Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.6 2002-10-16 16:27:00 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -40,26 +40,19 @@ G4ParallelImportanceProcess::
 G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
 			    G4VPGeoDriver &pgeodriver,
 			    G4VParallelStepper &aStepper, 
-			    G4VTrackTerminator *TrackTerminator,
+			    const G4VTrackTerminator *TrackTerminator,
 			    const G4String &aName)
  : 
   G4ParallelTransport(pgeodriver, aStepper, aName),
-  fTrackTerminator(TrackTerminator),
+  fTrackTerminator(TrackTerminator ? TrackTerminator : this),
   fParticleChange(G4ParallelTransport::fParticleChange),
-  fImportanceSplitExaminer(aImportanceSplitExaminer)
-{
-  if (fTrackTerminator==0) {
-    fTrackTerminator = this;
-  }
-  fImportancePostStepDoIt = new 
-    G4ImportancePostStepDoIt(*fTrackTerminator);
-
-}
+  fImportanceSplitExaminer(aImportanceSplitExaminer),
+  fImportancePostStepDoIt(*fTrackTerminator)
+{}
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
-{
-  delete fImportancePostStepDoIt;
-}
+{}
+
 
 G4VParticleChange *G4ParallelImportanceProcess::
 PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
@@ -72,7 +65,7 @@ PostStepDoIt(const G4Track& aTrack, const G4Step &aStep)
   // get new weight and number of clones
   G4Nsplit_Weight nw(fImportanceSplitExaminer.Examine(aTrack.GetWeight()));
 
-  fImportancePostStepDoIt->DoIt(aTrack, fParticleChange, nw);
+  fImportancePostStepDoIt.DoIt(aTrack, fParticleChange, nw);
   return fParticleChange;
 }
   
@@ -84,6 +77,11 @@ void G4ParallelImportanceProcess::Error(const G4String &m)
 
 
 
-void G4ParallelImportanceProcess::KillTrack(){
+void G4ParallelImportanceProcess::KillTrack() const{
   fParticleChange->SetStatusChange(fStopAndKill);
+}
+
+
+const G4String &G4ParallelImportanceProcess::GetName() const {
+  return G4ParallelTransport::GetProcessName();
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.4 2002-10-10 13:24:09 dressel Exp $
+// $Id: G4VSampler.hh,v 1.5 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,7 +53,8 @@ class G4VSampler {
 
 public:  
   
-  virtual ~G4VSampler() {}
+  G4VSampler();
+  virtual ~G4VSampler();
 
   virtual void PrepareScoring(G4VPScorer *Scorer) = 0;
 

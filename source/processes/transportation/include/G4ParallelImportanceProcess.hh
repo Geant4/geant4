@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.hh,v 1.7 2002-09-18 13:52:10 dressel Exp $
+// $Id: G4ParallelImportanceProcess.hh,v 1.8 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -53,22 +53,20 @@ public:  // with description
   G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitExaminer,
 			      G4VPGeoDriver &pgeodriver, 
 			      G4VParallelStepper &aStepper,
-			      G4VTrackTerminator *TrackTerminator,
+			      const G4VTrackTerminator *TrackTerminator,
 			      const G4String &aName = "ParallelImportanceProcess");  
     // initialise G4ParallelTransport and members
 
-  ~G4ParallelImportanceProcess();
+  virtual ~G4ParallelImportanceProcess();
 
-  G4VParticleChange *PostStepDoIt(const G4Track&,
-				  const G4Step&);
+  virtual G4VParticleChange *PostStepDoIt(const G4Track&,
+					  const G4Step&);
     // do the "parallel transport" and importance sampling.
 
-  void KillTrack();
+  virtual void KillTrack() const;
     // used in case no scoring process follows that does the killing
-  
-  G4String GetName() const {
-    return theProcessName;
-  }
+
+  virtual const G4String &GetName() const;
 
 
 private:
@@ -76,14 +74,14 @@ private:
   G4ParallelImportanceProcess(const G4ParallelImportanceProcess &);
   G4ParallelImportanceProcess &operator=(const G4ParallelImportanceProcess &);
   
-  void Error(const G4String &m);
+  virtual void Error(const G4String &m);
 
 private:
 
-  G4VTrackTerminator *fTrackTerminator;
+  const G4VTrackTerminator *fTrackTerminator;
   G4ParticleChange *fParticleChange;
   const G4VImportanceSplitExaminer &fImportanceSplitExaminer;  
-  G4ImportancePostStepDoIt *fImportancePostStepDoIt;
+  G4ImportancePostStepDoIt fImportancePostStepDoIt;
 };
 
 #endif

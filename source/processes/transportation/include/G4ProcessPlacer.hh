@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProcessPlacer.hh,v 1.5 2002-08-29 15:32:00 dressel Exp $
+// $Id: G4ProcessPlacer.hh,v 1.6 2002-10-16 16:26:58 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -48,31 +48,36 @@ class G4ProcessPlacer : public G4VProcessPlacer
 
 public:  // with description
 
-  G4ProcessPlacer(const G4String &particlename);
+  explicit G4ProcessPlacer(const G4String &particlename);
     // create a process placer for a particle type
 
-  void AddProcessAsLastDoIt(G4VProcess *process);
+  virtual ~G4ProcessPlacer();
+
+  virtual void AddProcessAsLastDoIt(G4VProcess *process);
     // place a post step do it process such that the 
     // PostStepDoIt function is called last
     // THE ORDER CHANGES BY SUBSEQUENT CALLS     
 
-  void AddProcessAsSecondDoIt(G4VProcess *process);
+  virtual void AddProcessAsSecondDoIt(G4VProcess *process);
     // place a post step do it process such that the 
     // PostStepDoIt function is called second
     // THE ORDER CHANGES BY SUBSEQUENT CALLS         
 
-  void RemoveProcess(G4VProcess *process);
+  virtual void RemoveProcess(G4VProcess *process);
     // removes a given process 
-
-private:
-
-  G4ProcessManager &GetProcessManager();
 
   enum SecondOrLast
   {
     eSecond = 1,            
     eLast = 0
   };
+
+
+private:
+
+  G4ProcessManager *GetProcessManager();
+
+
 
   void AddProcessAs(G4VProcess *process, SecondOrLast);
 
