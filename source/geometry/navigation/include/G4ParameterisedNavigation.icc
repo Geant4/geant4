@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisedNavigation.icc,v 1.3 2004-09-26 01:18:17 asaim Exp $
+// $Id: G4ParameterisedNavigation.icc,v 1.4 2005-03-03 17:12:43 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -115,6 +115,21 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
   pPhysical = motherLogical->GetDaughter(0);
   pParam = pPhysical->GetParameterisation();
 
+  // Debug development  
+  G4cerr << "DebugLOG - G4ParameterisedNavigation::LevelLocate() " << G4endl
+	 << "            Current solid " << motherLogical
+                                              ->GetSolid()->GetName() << G4endl; 
+
+  G4cerr << " Attaching parent touchable information to Phys Volume " << G4endl; 
+  // Attach parent touchable information to Phys Volume
+  //   --> note: when a new object is created, it must be deleted.
+  G4VPhysicalVolume* newPhysical= CreateVolumeWithParent( pPhysical, history );
+  G4cerr << " G4ParameterisedNavigation::LevelLocate: "
+	 << " created new physical touchable " << newPhysical << G4endl; 
+  if( newPhysical ) { 
+     pPhysical= newPhysical; 
+  }
+
   // Search replicated daughter volume
   //
   for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
@@ -124,9 +139,13 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
     {
       // Obtain solid (as it can vary) and obtain its parameters
       //
-      pSolid = pParam->ComputeSolid(replicaNo, pPhysical); 
-      pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
-      pParam->ComputeTransformation(replicaNo, pPhysical);
+
+      // pSolid = pParam->ComputeSolid(replicaNo, pPhysical); 
+      // pSolid->ComputeDimensions(pParam, replicaNo, pPhysical);
+      // pParam->ComputeTransformation(replicaNo, pPhysical);
+
+      // Call virtual methods, and copy information if needed
+      pSolid= IdentifyAndPlaceSolid( replicaNo, pPhysical, pParam ); 
 
       // Setup history
       //
@@ -153,6 +172,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
         G4LogicalVolume *pLogical = pPhysical->GetLogicalVolume();
         pLogical->SetSolid(pSolid);
         pLogical->UpdateMaterial(pParam->ComputeMaterial(replicaNo, pPhysical));
+  // Check that 'physicalTouchable' acts correctly as proxy here.  TODO JA
 
         return true;
       }
