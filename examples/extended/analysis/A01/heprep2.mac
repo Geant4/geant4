@@ -36,6 +36,6 @@
 /gun/particle e+
 /run/beamOn 2
 /vis/viewer/flush
-/vis/viewer/update
-/vis/viewer/update
-/vis/viewer/update
+#/vis/viewer/update
+#/vis/viewer/update
+#/vis/viewer/update
