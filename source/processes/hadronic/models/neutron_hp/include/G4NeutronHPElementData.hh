@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPElementData.hh,v 1.2 1999-07-02 09:58:49 johna Exp $
+// $Id: G4NeutronHPElementData.hh,v 1.3 1999-10-22 08:24:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
@@ -75,6 +75,7 @@ private:
   G4NeutronHPVector * theCaptureData;
   G4NeutronHPVector * theElasticData;
   G4NeutronHPVector * theInelasticData;
+  G4double precision;
   
   G4NeutronHPVector * theBuffer;
   

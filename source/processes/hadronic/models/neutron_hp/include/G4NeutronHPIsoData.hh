@@ -7,7 +7,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPIsoData.hh,v 1.3 1999-07-02 09:59:16 johna Exp $
+// $Id: G4NeutronHPIsoData.hh,v 1.4 1999-10-22 08:24:57 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4NeutronHPIsoData_h
@@ -66,6 +66,14 @@ public:
     {
       theChannelData->SetPoint(i, aBuffer->GetPoint(i));
     }
+  }
+  
+  inline void ThinOut(G4double precision)
+  {
+    theFissionData->ThinOut(precision);
+    theCaptureData->ThinOut(precision);
+    theElasticData->ThinOut(precision);
+    theInelasticData->ThinOut(precision);
   }
   
 private:

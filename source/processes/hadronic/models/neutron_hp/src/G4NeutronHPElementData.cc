@@ -6,6 +6,7 @@
 
   G4NeutronHPElementData::G4NeutronHPElementData()
   {
+     precision = 0.02;
      theFissionData = new G4NeutronHPVector;
      theCaptureData = new G4NeutronHPVector;
      theElasticData = new G4NeutronHPVector;
@@ -57,6 +58,10 @@
         UpdateData(A, Z, count++, frac);
       }
     }
+    theElasticData.ThinOut(precision);
+    theInelasticData.ThinOut(precision);
+    theCaptureData.ThinOut(precision);
+    theFissionData.ThinOut(precision);
   }
   
   void G4NeutronHPElementData::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
@@ -99,6 +104,7 @@
     delete theBuffer;
     
 //    G4cout << "ElementWiseData::UpdateData finished"<endl;
+    theIsotopeWiseData[index].ThinOut(precision);
   }
   
   void G4NeutronHPElementData::Harmonise(G4NeutronHPVector *& theStore, G4NeutronHPVector * theNew)
