@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.32 2003-02-21 15:22:04 stesting Exp $
+# $Id: Configure,v 1.33 2003-02-21 16:04:59 stesting Exp $
 #
-# Generated on Fri Feb 21 16:16:41 CET 2003 [metaconfig 3.0 PL70]
+# Generated on Fri Feb 21 17:04:19 CET 2003 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -1348,6 +1348,8 @@ cd ../..
 			;;
 		cygwin*) osname=win32
 			;;
+		darwin*) osname=darwin
+			;;
 		domainos) osname=apollo
 			osvers="$3"
 			;;
@@ -1602,6 +1604,8 @@ case "$g4osname" in
 				;;
 		'win32')	g4osname=WIN32
 				;;
+		'darwin')	g4osname=Darwin
+				;;
 	esac
 esac
 
@@ -1644,6 +1648,9 @@ case  "$g4compiler" in
 				;;
 		'WIN32')
 				g4compiler=VC
+				;;
+		'Darwin')
+				g4compiler=g++
 				;;
 	esac
 esac
@@ -1693,6 +1700,9 @@ gans=$ans
 			'win32')
 					g4osnamerec=WIN32
 					;;
+			'darwin')
+					g4osnamerec=Darwin
+					;;
 		esac
 		dflt=$g4osname
 		rp="What is your OS'?"
@@ -1739,6 +1749,9 @@ EOM
 					;;
 			'WIN32')
 					g4compilerrec=VC
+					;;
+			'Darwin')
+					g4compilerrec=g++
 					;;
 		esac
 		dflt=$g4compiler
