@@ -1,7 +1,11 @@
-$Id: History,v 1.32 2000-04-07 13:28:46 gcosmo Exp $
+$Id: History,v 1.33 2000-07-21 13:48:30 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V02-00-00 21-Jul-2000 G.Cosmo
+- Fixed G3toG4PhysicsList::ConstructMesons() for test/clGeometry,
+  by removing obsolete call to G4RhoZero.
 
 g3tog4-V01-01-00 05-Apr-2000 G.Cosmo
 - Added include path to directory geometry/solids/specific.
