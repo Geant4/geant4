@@ -1,4 +1,4 @@
-$Id: History,v 1.84 2004-06-23 16:15:45 gcosmo Exp $
+$Id: History,v 1.85 2004-07-28 14:45:58 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28th July 2004  Gabriele Cosmo (examples-V06-02-00)
+- Updated reference outputs according to reference tag geant4-06-02-ref-01.
+- Includes tags: ccal-V06-02-00, lAr_calorimeter-V06-02-00, Rich-V06-02-00,
+                 xraytel-V06-02-00, exampleA01-V06-02-00,
+                 muonprocesses-V06-02-00, photonprocesses-V06-02-00,
+                 testem3-V06-02-00, testem7-V06-02-00, olapex-V06-02-00.
 
 24th June 2004  Gabriele Cosmo (examples-V06-01-02)
 - Updated reference outputs according to reference tag geant4-06-02-ref-00.
