@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.cc,v 1.46 2003-08-29 07:33:27 vnivanch Exp $
+// $Id: G4hIonisation.cc,v 1.47 2003-08-29 07:46:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -141,7 +141,7 @@ void G4hIonisation::InitialiseProcess()
 const G4ParticleDefinition* G4hIonisation::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
-  if(p) theParticle = p;
+  if(!theParticle) theParticle = p;
   if(p != BaseParticle() && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
   if(!isInitialised) InitialiseProcess();
 

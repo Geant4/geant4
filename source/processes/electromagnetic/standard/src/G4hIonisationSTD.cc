@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisationSTD.cc,v 1.12 2003-08-06 15:22:19 vnivanch Exp $
+// $Id: G4hIonisationSTD.cc,v 1.13 2003-08-29 07:46:38 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -137,7 +137,7 @@ const G4ParticleDefinition* G4hIonisationSTD::DefineBaseParticle(
                       const G4ParticleDefinition* p)
 {
   if(!theParticle) theParticle = p;
-  if(!theBaseParticle && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
+  if(p != BaseParticle() && p != G4Proton::Proton()) theBaseParticle = G4Proton::Proton();
   if(!isInitialised) InitialiseProcess();
   mass  = p->GetPDGMass();
   ratio = electron_mass_c2/mass;
