@@ -1,4 +1,4 @@
-$Id: History,v 1.8 1999-05-19 17:40:56 stesting Exp $
+$Id: History,v 1.9 1999-05-31 20:48:28 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+head 31 Mai 1999  Guy Barrand
+- G4VInteractorManager::SecondaryLoop : add a message to indicate
+  that we enter a "viewer" secondary X event loop and that someone
+  add to "Escape" it from the viewer to continue.
 
 interfaces-01-00-03  19th April 1999  John Allison
 - Protected G4VBasicShell.cc with if( tempPath.length()>0 ).
