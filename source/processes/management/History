@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2002-04-15 04:29:53 kurasige Exp $
+$Id: History,v 1.26 2002-09-17 15:42:08 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-procman-V03-02-03
+
+- Sep.17, 2002   H.Kurashige (procman-V04-01-00)
+- Add new commands of "/process/setVerbose " for G4ProcessTableMessenger
+
 - Apr.15, 2002   H.Kurashige (procman-V04-00-00)
 - Add G4VProcess::GetCurrentInteractionLength()
 - Fixed bugs in PostStepDoIt when MeanFreePath is equal to DBL_MAX
