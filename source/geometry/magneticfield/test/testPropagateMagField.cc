@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.26 2003-11-08 02:25:29 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.27 2003-11-17 17:57:02 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -529,24 +529,38 @@ void report_endPV(G4ThreeVector    Position,
 int main(int argc, char **argv)
 {
     G4VPhysicalVolume *myTopNode;
-    G4int type, optim;
-    G4bool optimise=true;
+    G4int type, optim, optimSaf;
+    G4bool optimiseVoxels=true;
+    G4bool optimisePiFwithSafety=true;
 
     type = 8 ;
+    G4cout << " Arguments:  stepper-no  optimise-Voxels optimise-PiF-with-safety" << G4endl;
 
-    if( argc >= 2 )
-      type = atoi(argv[1]);
+    if( argc >= 2 ){
+       type = atoi(argv[1]);
+    } 
 
     if( argc >=3 ){
       optim= atoi(argv[2]);
-      if( optim == 0 ) { optimise = false; }
+      if( optim == 0 ) { optimiseVoxels = false; }
     }
 
-    G4cout << " Testing with stepper number " << type; 
-    G4cout << " and optimisation " ; 
-    if (optimise)   G4cout << "on"; 
-    else            G4cout << "off"; 
-    G4cout << G4endl;
+    if( argc >=4 ){
+      optimSaf= atoi(argv[3]);
+      if( optimSaf == 0 ) { optimisePiFwithSafety= false; }
+    }
+
+    G4cout << " Testing with stepper number    " << type << G4endl; 
+    G4cout << "             " ; 
+    G4cout << " voxel optimisation      " ; 
+    // if (optimiseVoxels)   G4cout << "On"; 
+    // else                  G4cout << "Off"; 
+    G4cout << (optimiseVoxels ? "On" : "Off")  << G4endl;
+    G4cout << "             " ; 
+    G4cout << " Propagator safety optim " ; 
+    // const char* OnOff= (optimisePiFwithSafety ? "on" : "off") ; 
+    // G4cout << OnOff << G4endl;
+    G4cout << (optimisePiFwithSafety ? "On" : "Off")  << G4endl;
 
     // Create the geometry & field 
     myTopNode=BuildGeometry();	// Build the geometry
@@ -565,11 +579,13 @@ int main(int argc, char **argv)
 	   << " MaxEps = " <<  pMagFieldPropagator->GetMaximumEpsilonStep()
 	   << G4endl; 
 
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimisePiFwithSafety); 
+
 // Do the tests without voxels
     G4cout << " Test with no voxels" << G4endl; 
     testG4PropagatorInField(myTopNode, type);
 
-    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimiseVoxels); 
 
 // Repeat tests but with full voxels
     G4cout << " Test with full voxels" << G4endl; 
@@ -603,14 +619,14 @@ int main(int argc, char **argv)
 
     G4GeometryManager::GetInstance()->OpenGeometry();
 
-    optimise = ! optimise;
+    optimiseVoxels = ! optimiseVoxels;
 // Repeat tests but with the opposite optimisation choice
     G4cout << " Now test with optimisation " ; 
-    if (optimise)   G4cout << "on"; 
+    if (optimiseVoxels)   G4cout << "on"; 
     else            G4cout << "off"; 
     G4cout << G4endl;
 
-    pMagFieldPropagator->SetUseSafetyForOptimization(optimise); 
+    pMagFieldPropagator->SetUseSafetyForOptimization(optimiseVoxels); 
     testG4PropagatorInField(myTopNode, type);
 
     G4GeometryManager::GetInstance()->OpenGeometry();
