@@ -1,4 +1,4 @@
-$Id: History,v 1.235 2004-02-09 15:22:48 gunter Exp $
+$Id: History,v 1.236 2004-02-09 16:50:08 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -17,17 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9th February 2004  Gunter Folger
-- protect OGLFLAGS against containing -I/usr/include; this may cause 
-   wrong includes to be picked up.
-   
-30th January 2004  Guy Barrand
-- WIN32-VC7.gmk: material to build shared libs for Windows (DLLs).
-- config/win32def.c : program to help building DLLs.
-- source/GNUmakefile : target to build win32def.exe
-- source/materials/GNUmakefile : example of macro GLOBLIBS
-  used by the DLL builder in order to have global lib dependencies.
+10th February 2004  Gabriele Cosmo (config-V06-00-02)
+- Added configuration file Linux-icc.gmk for Intel/icc compiler
+  on Linux systems.
 
+10th February 2004  Guy Barrand
+- WIN32-VC7.gmk: added material to build shared libs for Windows (DLLs).
+- Added program win32def.c to help building DLLs, built from
+  source/GNUmakefile through a specialised target and placed in
+  $G4LIB/$G4SYSTEM.
+- source/materials/GNUmakefile: modified to provide an example of macro
+  GLOBLIBS used by the DLL builder in order to have global lib dependencies.
+
+9th February 2004  Gunter Folger (config-V06-00-01)
+- architecture.gmk:
+  o Protect OGLFLAGS against containing -I/usr/include; this may cause 
+    wrong includes to be picked up.
+   
 26th January 2004  Guy Barrand (config-V06-00-00)
 - Darwin-g++.gmk:
   o Use "g++" as a default compiler (in order to take the MacOSX
