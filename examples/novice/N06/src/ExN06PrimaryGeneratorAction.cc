@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN06PrimaryGeneratorAction.cc,v 1.2 2003-01-23 15:34:32 maire Exp $
+// $Id: ExN06PrimaryGeneratorAction.cc,v 1.3 2004-04-02 11:54:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,7 +48,7 @@ ExN06PrimaryGeneratorAction::ExN06PrimaryGeneratorAction()
   //default kinematic
   //
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
-  G4ParticleDefinition* particle = particleTable->FindParticle("e-");
+  G4ParticleDefinition* particle = particleTable->FindParticle("e+");
 
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleTime(0.0*ns);
