@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: ExN03DetectorConstruction.cc,v 1.18 2003-09-15 15:38:17 maire Exp $
+// $Id: ExN03DetectorConstruction.cc,v 1.19 2003-11-25 14:23:44 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,6 +39,7 @@
 #include "G4PVReplica.hh"
 #include "G4UniformMagField.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
@@ -213,6 +214,9 @@ defaultMaterial  = Vacuum;
 G4VPhysicalVolume* ExN03DetectorConstruction::ConstructCalorimeter()
 {
 
+  // Clean old geometry, if any
+  //
+  G4GeometryManager::GetInstance()->OpenGeometry();
   G4PhysicalVolumeStore::GetInstance()->Clean();
   G4LogicalVolumeStore::GetInstance()->Clean();
   G4SolidStore::GetInstance()->Clean();
