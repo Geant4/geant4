@@ -1,4 +1,4 @@
-$Id: History,v 1.31 2003-06-18 09:37:04 gcosmo Exp $
+$Id: History,v 1.32 2003-09-22 14:15:05 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,15 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+22-09-03 mma (testem3-V05-02-00)
+- suppression of Em3 in all class names.
+- materials: Silicium->Silicon.
+- command setHisto : unit must be given.
+- suppression of hits collection.
+- replace G4NOHIST by G4ANALYSIS_USE
+- most macro updated and renamed according the authors of experimental results.
+- adapt geant3
 
 18-06-03 G.Cosmo (testem3-V05-01-03)
 - Em3RunAction.cc: removed usage of G4USE_STD_NAMESPACE after
