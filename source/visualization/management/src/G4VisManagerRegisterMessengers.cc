@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.17 2000-05-15 11:49:31 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.18 2000-05-19 00:03:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,6 +19,7 @@
 #include "G4VisCommandsSceneInclude.hh"
 #include "G4VisCommandsSceneHandler.hh"
 #include "G4VisCommandsViewer.hh"
+#include "G4VisCommandsViewerSet.hh"
 
 // OLD STYLE!!
 #include "G4VisManMessenger.hh"
@@ -240,7 +241,7 @@ but this would mean re-inventing parameter parsing which is already
 contained in many G4UIcommand subclasses.  To re-use this code we have
 to know the type of the parameter, so we need separate commands.)
 
-* /vis/viewer/set/all <from-viewer-name>
+/vis/viewer/set/all <from-viewer-name>
   Copies view parameters from from-viewer to current viewer.
   Affects current viewer.
 
@@ -252,17 +253,17 @@ to know the type of the parameter, so we need separate commands.)
 * about possible values.
   Affects current viewer.
 
-* /vis/viewer/set/edge [true|false]
+/vis/viewer/set/edge [true|false]
   default:              true
   Affects current viewer.
 
-* /vis/viewer/set/hiddenEdge  [true|false]
+/vis/viewer/set/hiddenEdge  [true|false]
   default:                       true
   Affects current viewer.
 
 (Here follow some culling commands.  A possible (preferred) syntax is:
 
-* /vis/viewer/set/culling global|coveredDaughters|invisible|density [true|false]
+/vis/viewer/set/culling global|coveredDaughters|invisible|density [true|false]
   default:                                                           true
   Affects current viewer.
 
@@ -496,6 +497,10 @@ Default:             world             /vis/scene/add/volume $1
   fMessengerList.append (new G4VisCommandViewerReset);
   fMessengerList.append (new G4VisCommandViewerSelect);
   fMessengerList.append (new G4VisCommandViewerShow);
+
+  command = new G4UIdirectory ("/vis/viewer/set/");
+  command -> SetGuidance ("Set view parameters of current viewer.");
+  fMessengerList.append (new G4VisCommandsViewerSet);
 
   // Compound commands...
   fMessengerList.append (new G4VisCommandOpen);
