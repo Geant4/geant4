@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.16 1999-05-08 14:55:41 stesting Exp $
+# $Id: architecture.gmk,v 1.17 1999-05-10 11:19:56 stesting Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -430,6 +430,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
     CPPFLAGS += -I$(G4BASE)/global/STLInterface/wrappers
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/stl 
   endif
 endif
 

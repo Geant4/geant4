@@ -1,4 +1,4 @@
-$Id: History,v 1.21 1999-05-08 14:55:41 stesting Exp $
+$Id: History,v 1.22 1999-05-10 11:19:56 stesting Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10th May 1999  John Allison
+- Added -I$(OSPACEDIR)/ospace/stl for Sun.
 
 8th May 1999  John Allison
 - Added STLInterface/wrappers directory for SUN.
