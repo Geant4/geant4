@@ -167,6 +167,18 @@ setenv G4UI_USE_WIN32 1
 echo "On this machine the G4UI_USE_WIN32=\$G4UI_USE_WIN32"
 endif
 
+#+
+if ( X$g4ui_build_wo_session == Xy ) then
+setenv G4UI_BUILD_WO_SESSION 1
+echo "On this machine the G4UI_BUILD_WO_SESSION=\$G4UI_BUILD_WO_SESSION"
+endif
+
+#+
+if ( X$g4ui_use_wo == Xy ) then
+setenv G4UI_USE_WO 1
+echo "On this machine the G4UI_USE_WO=\$G4UI_USE_WO"
+endif
+
 #
 # g4vis
 #
@@ -180,12 +192,6 @@ endif
 if ( X$g4vis_build_opacs_driver == Xy ) then
 setenv G4VIS_BUILD_OPACS_DRIVER 1
 echo "On this machine the G4VIS_BUILD_OPACS_DRIVER=\$G4VIS_BUILD_OPACS_DRIVER"
-endif
-
-#+
-if ( X$g4vis_build_wo_session == Xy ) then
-setenv G4VIS_BUILD_WO_SESSION 1
-echo "On this machine the G4VIS_BUILD_WO_SESSION=\$G4VIS_BUILD_WO_SESSION"
 endif
 
 #+
@@ -234,12 +240,6 @@ endif
 if ( X$g4vis_use_opacs == Xy ) then
 setenv G4VIS_USE_OPACS 1
 echo "On this machine the G4VIS_USE_OPACS=\$G4VIS_USE_OPACS"
-endif
-
-#+
-if ( X$g4vis_use_wo == Xy ) then
-setenv G4VIS_USE_WO 1
-echo "On this machine the G4VIS_USE_WO=\$G4VIS_USE_WO"
 endif
 
 #+
