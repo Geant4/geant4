@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RunManager.hh,v 1.8 1999-12-15 14:53:52 gunter Exp $
+// $Id: G4RunManager.hh,v 1.9 2000-04-25 13:12:34 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,7 +118,7 @@ class G4RunManager
     // This method is available for Geant4 states of GeomClosed and EventProc. The state
     // will be changed to Idle, so that another event loop can be done.
 
-  protected: // with description
+  public: // with description
 
     virtual void InitializeGeometry();
     virtual void InitializePhysics();
