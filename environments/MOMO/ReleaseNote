@@ -23,13 +23,15 @@ was found when used with j2sdk-1.5.
 
 ABOUT **  Help function !
 
-   "Help" is displayed only when MOMO.jar is started in the directory where
+   "Help" is displayed only when the env variable G4INSTALL is set.
 it is stored.
 
 NOTICE 2 ** on "Project" menus
 
 "Compile" buttin is effective only when java is started in the canonical
 directory of Geant4, that is just above the src and include directories.
+
+An example is found in ./MomoHome.
 
 -------------------------------------------------------------------------
 2003 December 08
