@@ -1,0 +1,36 @@
+Command /run/storeRandomNumberStatus
+Guidance :
+Store the status of the random number engine to a file.
+See CLHEP manual for detail.
+Frequency : 0 - not stored
+            1 - begining of each run
+           -1 - begining of each run (file overwritten)
+            2 - begining of each event before generating primaries
+           -2 - begining of each event before generating primaries (file overwritten)
+Stored status can be restored by 
+  /run/restoreRandomNumberStatus command.
+In case Frequency is negative, a output file (file name RandEngine.stat)
+  is overwitten every time.
+In case Frequency is 1, file names are RandEngineRxxx.stat,
+  where xxx is the run number.
+In case Frequency is 2, file names are RandEngineRxxxEyyy.stat,
+  where xxx is the run number and yyy is the event number.
+
+ Range of parameters : frequency >=-2 && frequency <=2
+
+Parameter : frequency
+ Parameter type  : i
+ Omittable       : True
+ Default value   : 1
+
+
+Command /run/restoreRandomNumberStatus
+Guidance :
+Restore the status of the random number engine from a file.
+See CLHEP manual for detail.
+The engine status must be stored beforehand.
+
+Parameter : fileName
+ Parameter type  : s
+ Omittable       : True
+ Default value   : RandEngine.stat
