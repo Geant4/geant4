@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 1999-06-07 17:00:07 stesting Exp $
+# $Id: GNUmakefile,v 1.3 1999-06-08 12:09:17 stesting Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
@@ -30,32 +30,30 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 
 include $(G4INSTALL)/config/common.gmk
 
-CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
-CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
-
-# Temporary fix for HP-CC compiler and others. It cannot handle full
-# optimisation for those files.
-
-ifneq (,$(findstring HP,$(G4SYSTEM)))
-
-$(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4NucleiPropertiesTable.cc
-$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4ReactionDynamics.cc
-endif
-
-ifneq (,$(findstring SUN,$(G4SYSTEM)))
-$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4ReactionDynamics.cc
-endif
-
-ifneq (,$(findstring DEC,$(G4SYSTEM)))
-$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
-	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ src/G4ReactionDynamics.cc
-endif
+# Compiling G4NucleiPropertiesTable.cc and G4ReactionDynamics.cc
+# non-optimised on all platforms is recommended.
 
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    CXXFLAGS_WITH_ZM = $(CXXFLAGS) -Zm500
+
+  CXXFLAGS_WITH_ZM = $(CXXFLAGS) -Zm500
+
 $(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
-	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ src/G4NucleiPropertiesTable.cc
+	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	  src/G4NucleiPropertiesTable.cc
+$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
+	$(CXX) $(CXXFLAGS_WITH_ZM) $(CPPFLAGS) -c $(OUT_OBJ)$@ \
+	  src/G4ReactionDynamics.cc
+
+else
+
+  CXXFLAGS_WITHOUT_O := $(filter-out -O% , $(CXXFLAGS))
+  CXXFLAGS_WITHOUT_O := $(filter-out +O% , $(CXXFLAGS_WITHOUT_O))
+
+$(G4TMPDIR)/G4NucleiPropertiesTable.o: src/G4NucleiPropertiesTable.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
+	  src/G4NucleiPropertiesTable.cc
+$(G4TMPDIR)/G4ReactionDynamics.o: src/G4ReactionDynamics.cc
+	$(CXX) $(CXXFLAGS_WITHOUT_O) $(CPPFLAGS) -c -o $@ \
+	  src/G4ReactionDynamics.cc
+
 endif
