@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.hh,v 1.4 2004-05-26 21:25:51 duns Exp $
+// $Id: G4HepRepMessenger.hh,v 1.5 2004-05-27 05:55:19 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ class G4HepRepMessenger : public G4UImessenger {
         G4UIcmdWithAString* setEventNumberSuffixCommand;
         
         G4bool geometry;
-//        G4UIcmdWithABool* appendGeometryCommand;
+        G4UIcmdWithABool* appendGeometryCommand;
 
         G4bool pointAttributes;
         G4UIcmdWithABool* addPointAttributesCommand;

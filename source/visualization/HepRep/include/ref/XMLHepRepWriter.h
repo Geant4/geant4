@@ -8,6 +8,7 @@
 #include <stack>
 #include <set>
 #include <vector>
+#include <map>
 
 #include "zipios++/zipoutputstream.h"
 #include "zipios++/gzipoutputstream.h"
@@ -39,11 +40,13 @@ class XMLHepRepWriter : public virtual HEPREP::HepRepWriter {
         XMLWriter *xml;
         zipios::ZipOutputStream *zip;
         zipios::GZIPOutputStream *gz;
-
+        std::map<std::string, std::string> properties;
+        
     public:
         XMLHepRepWriter(std::ostream* out, bool randomAccess, bool compress);
         ~XMLHepRepWriter();
 
+        bool addProperty(std::string key, std::string value);
         bool close();
         bool write(HEPREP::HepRep* heprep, std::string name);
         bool write(std::vector<std::string> layers);

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepMessenger.cc,v 1.5 2004-05-26 21:25:52 duns Exp $
+// $Id: G4HepRepMessenger.cc,v 1.6 2004-05-27 05:55:20 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4HepRepMessenger.hh"
@@ -39,13 +39,11 @@ G4HepRepMessenger::G4HepRepMessenger() :
     setEventNumberSuffixCommand->SetDefaultValue("");
     setEventNumberSuffixCommand->AvailableForStates(G4State_Idle);
     
-/*
     appendGeometryCommand = new G4UIcmdWithABool("/vis/heprep/appendGeometry", this);
     appendGeometryCommand->SetGuidance("Appends copy of geometry to every event.");
     appendGeometryCommand->SetParameterName("flag",false);
     appendGeometryCommand->SetDefaultValue(true);
     appendGeometryCommand->AvailableForStates(G4State_Idle);
-*/
 
     addPointAttributesCommand = new G4UIcmdWithABool("/vis/heprep/addPointAttributes", this);
     addPointAttributesCommand->SetGuidance("Adds point attributes to the points of trajectories.");
@@ -62,7 +60,7 @@ G4HepRepMessenger::G4HepRepMessenger() :
 
 G4HepRepMessenger::~G4HepRepMessenger() {
     delete setEventNumberSuffixCommand;
-//    delete appendGeometryCommand;
+    delete appendGeometryCommand;
     delete addPointAttributesCommand;
     delete heprepDirectory;
     delete setCoordinateSystemCommand;
@@ -71,8 +69,8 @@ G4HepRepMessenger::~G4HepRepMessenger() {
 G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
     if (command==setEventNumberSuffixCommand) {
         return suffix;
-//    } else if (command==appendGeometryCommand) {
-//        return appendGeometryCommand->ConvertToString(geometry); 
+    } else if (command==appendGeometryCommand) {
+        return appendGeometryCommand->ConvertToString(geometry); 
     } else if (command==addPointAttributesCommand) {
         return addPointAttributesCommand->ConvertToString(pointAttributes); 
     } else if (command==setCoordinateSystemCommand) {
@@ -85,8 +83,8 @@ G4String G4HepRepMessenger::GetCurrentValue(G4UIcommand * command) {
 void G4HepRepMessenger::SetNewValue(G4UIcommand * command, G4String newValue) {
     if (command==setEventNumberSuffixCommand) {
         suffix = newValue;
-//    } else if (command==appendGeometryCommand) {
-//        geometry = appendGeometryCommand->GetNewBoolValue(newValue);
+    } else if (command==appendGeometryCommand) {
+        geometry = appendGeometryCommand->GetNewBoolValue(newValue);
     } else if (command==addPointAttributesCommand) {
         pointAttributes = addPointAttributesCommand->GetNewBoolValue(newValue);
     } else if (command==setCoordinateSystemCommand) {

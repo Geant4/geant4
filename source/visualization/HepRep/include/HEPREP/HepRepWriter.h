@@ -39,6 +39,15 @@ public:
     virtual ~HepRepWriter() { /* nop */; }
 
     /**
+     * Adds a property, to be written to the HepRep file when closed.
+     *
+     * @param key
+     * @param value
+     * @return false in case of a stream problem.
+     */
+    virtual bool addProperty(std::string key, std::string value) = 0;
+
+    /**
      * Closes the writer and its underlying stream.
      *
      * @return false in case of a stream problem.

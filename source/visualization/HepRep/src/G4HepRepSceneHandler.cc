@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4HepRepSceneHandler.cc,v 1.74 2004-05-26 22:04:07 duns Exp $
+// $Id: G4HepRepSceneHandler.cc,v 1.75 2004-05-27 05:55:20 duns Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -80,6 +80,7 @@ using namespace std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
 
+//#define LDEBUG 1
 //#define SDEBUG 1
 //#define PDEBUG 1
 
@@ -102,10 +103,11 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
           currentDepth          (0),
           currentPV             (0),
           currentLV             (0),
-          _heprep               (NULL)
+          _heprep               (NULL),
+          _heprepGeometry       (NULL)
 {
 
-#ifdef SDEBUG
+#ifdef LDEBUG
     cout << "G4HepRepSceneHandler::G4HepRepSceneHandler: " << system << endl;
 #endif
 
@@ -123,7 +125,7 @@ G4HepRepSceneHandler::G4HepRepSceneHandler (G4VGraphicsSystem& system, G4HepRepM
 
 
 G4HepRepSceneHandler::~G4HepRepSceneHandler () {
-#ifdef SDEBUG
+#ifdef LDEBUG
     cout << "G4HepRepSceneHandler::~G4HepRepSceneHandler() " << endl;
 #endif
     close();
@@ -139,7 +141,7 @@ void G4HepRepSceneHandler::open(G4String name) {
     if (writer != NULL) return;
 
     if (name == "stdout") {
-#ifdef SDEBUG
+#ifdef LDEBUG
         cout << "G4HepRepSceneHandler::Open() stdout" << endl;
 #endif
         writer = factory->createHepRepWriter(&cout, false, false);
@@ -152,7 +154,7 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumber = 0;
         eventNumberWidth = 0;        
     } else if (name == "stderr") {
-#ifdef SDEBUG
+#ifdef LDEBUG
         cout << "G4HepRepSceneHandler::Open() stderr" << endl;
 #endif
         writer = factory->createHepRepWriter(&cerr, false, false);
@@ -165,7 +167,7 @@ void G4HepRepSceneHandler::open(G4String name) {
         eventNumber = 0;
         eventNumberWidth = 0;        
     } else {
-#ifdef SDEBUG
+#ifdef LDEBUG
         cout << "G4HepRepSceneHandler::Open() " << name << endl;
 #endif
         if (eventNumberWidth < 0) {
@@ -233,13 +235,14 @@ void G4HepRepSceneHandler::open(G4String name) {
 
 
 void G4HepRepSceneHandler::openHepRep() {
-#ifdef SDEBUG
+#ifdef LDEBUG
     cout << "G4HepRepSceneHandler::OpenHepRep() " << endl;
 #endif
 
     if (_heprep != NULL) return;
 
     // all done on demand, once pointers are set to NULL
+    _heprepGeometry       = NULL;
     _geometryInstanceTree = NULL;
     _geometryRootInstance = NULL;
     _geometryInstance.clear();
@@ -264,7 +267,7 @@ void G4HepRepSceneHandler::openHepRep() {
 bool G4HepRepSceneHandler::closeHepRep(bool final) {
     if (_heprep == NULL) return true;
 
-#ifdef SDEBUG
+#ifdef LDEBUG
     cout << "G4HepRepSceneHandler::CloseHepRep() start" << endl;
 #endif
 
@@ -280,10 +283,21 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
         // using DrawView() called from /vis/viewer/flush)
         if (_eventInstanceTree != NULL) {
             GetCurrentViewer()->DrawView();
-    
-            // couple geometry to event if geometry was written
-            if ((_geometryInstanceTree != NULL)) {
-                getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+        
+            // couple geometry
+            if (messenger.appendGeometry()) {
+                // couple geometry to event if geometry was written
+                if ((_geometryInstanceTree != NULL)) {
+                    getEventInstanceTree()->addInstanceTree(getGeometryInstanceTree());
+                }
+            } else {
+                char name[128];
+                if (writeMultipleFiles) {
+                    sprintf(name, "%s%s%s#%s", baseName.c_str(), "-geometry", extension.c_str(), "G4GeometryData");
+                } else {
+                    sprintf(name, "%s%s#%s", "geometry", ".heprep", "G4GeometryData");
+                }   
+                getEventInstanceTree()->addInstanceTree(factory->createHepRepTreeID(name, "1.0"));
             }
         }
     
@@ -298,15 +312,30 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
     
         // Give this HepRep all of the layer order info for both geometry and event,
         // since these will both end up in a single HepRep.
-        if (_geometryRootType    != NULL) _heprep->addLayer(geometryLayer);
-        if (_eventType           != NULL) _heprep->addLayer(eventLayer);
-        if (_calHitType          != NULL) _heprep->addLayer(calHitLayer);
-        if (_trajectoryType      != NULL) _heprep->addLayer(trajectoryLayer);
-        if (_hitType             != NULL) _heprep->addLayer(hitLayer);
+        writeLayers(_heprepGeometry);
+        writeLayers(_heprep);
 
         // open heprep file
         if (writer == NULL) {
             open((GetScene() == NULL) ? G4String("G4HepRepOutput.heprep.zip") : GetScene()->GetName());
+        }
+
+        // write out separate geometry
+        if (!messenger.appendGeometry() && (_heprepGeometry != NULL)) {
+            if (writeMultipleFiles) {
+                char fileName[128];
+                sprintf(fileName, "%s%s%s", baseName.c_str(), "-geometry", extension.c_str());
+                openFile(G4String(fileName));
+            }
+
+            if (!writeMultipleFiles) writer->addProperty("RecordLoop.ignore", "geometry.heprep");
+
+            writer->write(_heprepGeometry, G4String("geometry.heprep"));
+            
+            delete _heprepGeometry;
+            _heprepGeometry = NULL;
+            
+            if (writeMultipleFiles) closeFile();
         }
     
         if (writeMultipleFiles) {
@@ -348,16 +377,19 @@ bool G4HepRepSceneHandler::closeHepRep(bool final) {
 
 void G4HepRepSceneHandler::close() {
 
-#ifdef SDEBUG
+#ifdef LDEBUG
     cout << "G4HepRepSceneHandler::Close() " << endl;
 #endif
 
     if (writer == NULL) return;
-
+    
     if (!writeMultipleFiles) {
         closeHepRep(true);
         closeFile();
     }
+    
+    G4HepRepViewer* viewer = dynamic_cast<G4HepRepViewer*>(GetCurrentViewer());
+    viewer->reset();
 }
 
 void G4HepRepSceneHandler::openFile(G4String name) {
@@ -374,6 +406,14 @@ void G4HepRepSceneHandler::closeFile() {
     out = NULL;
 }
 
+void G4HepRepSceneHandler::writeLayers(HepRep* heprep) {
+    if (heprep == NULL) return;
+    heprep->addLayer(geometryLayer); 
+    heprep->addLayer(eventLayer);
+    heprep->addLayer(calHitLayer);
+    heprep->addLayer(trajectoryLayer);
+    heprep->addLayer(hitLayer);
+}  
 
 void G4HepRepSceneHandler::EstablishSpecials(G4PhysicalVolumeModel& model) {
 #ifdef SDEBUG
@@ -984,11 +1024,23 @@ HepRep* G4HepRepSceneHandler::getHepRep() {
     return _heprep;
 }   
 
+HepRep* G4HepRepSceneHandler::getHepRepGeometry() {
+    if (_heprepGeometry == NULL) {
+        // Create the HepRep that holds the Trees.
+        _heprepGeometry = factory->createHepRep();
+    }
+    return _heprepGeometry;
+}   
+
 HepRepInstanceTree* G4HepRepSceneHandler::getGeometryInstanceTree() {
     if (_geometryInstanceTree == NULL) {
         // Create the Geometry InstanceTree.
         _geometryInstanceTree = factory->createHepRepInstanceTree("G4GeometryData", "1.0", getGeometryTypeTree());
-        getHepRep()->addInstanceTree(_geometryInstanceTree);
+        if (messenger.appendGeometry()) {
+            getHepRep()->addInstanceTree(_geometryInstanceTree);
+        } else {
+            getHepRepGeometry()->addInstanceTree(_geometryInstanceTree);
+        }
     }
     return _geometryInstanceTree;
 }
@@ -1043,7 +1095,11 @@ HepRepTypeTree* G4HepRepSceneHandler::getGeometryTypeTree() {
         // Create the Geometry TypeTree.
         HepRepTreeID* geometryTreeID = factory->createHepRepTreeID("G4GeometryTypes", "1.0");
         _geometryTypeTree = factory->createHepRepTypeTree(geometryTreeID);
-        getHepRep()->addTypeTree(_geometryTypeTree);
+        if (messenger.appendGeometry()) {
+            getHepRep()->addTypeTree(_geometryTypeTree);
+        } else {
+            getHepRepGeometry()->addTypeTree(_geometryTypeTree);
+        }
     }
     return _geometryTypeTree;
 }
