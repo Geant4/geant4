@@ -40,6 +40,7 @@
 // 13-02-03 The set of models is defined for region (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 13-04-03 Add startFromNull (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -129,6 +130,8 @@ public:
   const G4DataVector* SubCutoff() const;
 
   void FillDEDXVector(G4PhysicsVector*, const G4MaterialCutsCouple*);
+
+  void FillDEDXVectorForPreciseRange(G4PhysicsVector*, const G4MaterialCutsCouple*);
 
   void FillLambdaVector(G4PhysicsVector*, const G4MaterialCutsCouple*, 
                         G4bool startFromNull = true);

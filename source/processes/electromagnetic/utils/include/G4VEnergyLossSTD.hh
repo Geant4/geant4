@@ -43,6 +43,7 @@
 // 26-02-03 Region dependent step limit (V.Ivanchenko)
 // 26-03-03 Add GetDEDXDispersion (V.Ivanchenko)
 // 09-04-03 Fix problem of negative range limit for non integral (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -117,6 +118,8 @@ public:
   // Print out of the class parameters
 
   G4PhysicsTable* BuildDEDXTable();
+
+  G4PhysicsTable* BuildDEDXTableForPreciseRange();
 
   G4PhysicsTable* BuildLambdaTable();
 
@@ -322,8 +325,8 @@ private:
   G4PhysicsTable*  theInverseRangeTable;
   G4PhysicsTable*  theLambdaTable;
   G4PhysicsTable*  theSubLambdaTable;
-  G4DataVector     theDEDXAtMaxEnergy;
-  G4DataVector     theRangeAtMaxEnergy;
+  G4double*        theDEDXAtMaxEnergy;
+  G4double*        theRangeAtMaxEnergy;
 
   const G4DataVector*    theCuts;
 
@@ -397,7 +400,7 @@ inline G4double G4VEnergyLossSTD::GetDEDX(G4double& kineticEnergy,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
                                      const G4MaterialCutsCouple* couple)
 {
@@ -407,10 +410,10 @@ inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
          GetValue(kineticEnergy*massRatio, b))*reduceFactor;
 }
 
-/*
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4double G4VEnergyLossSTD::GetPreciseRange(G4double& kineticEnergy,
+inline G4double G4VEnergyLossSTD::GetRange(G4double& kineticEnergy,
                                             const G4MaterialCutsCouple* couple)
 {
   DefineMaterial(couple);
@@ -425,7 +428,7 @@ inline G4double G4VEnergyLossSTD::GetPreciseRange(G4double& kineticEnergy,
   }
   return x*reduceFactor;
 }
-*/
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4double G4VEnergyLossSTD::GetKineticEnergy(G4double& range,

@@ -57,6 +57,7 @@
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
 // 06-05-03 Set defalt finalRange = 1 mm (V.Ivanchenko)
 // 12-05-03 Update range calculations + lowKinEnergy (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -104,6 +105,8 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   theInverseRangeTable(0),
   theLambdaTable(0),
   theSubLambdaTable(0),
+  theDEDXAtMaxEnergy(0),
+  theRangeAtMaxEnergy(0),
   particle(0),
   baseParticle(0),
   secondaryParticle(0),
@@ -131,8 +134,6 @@ G4VEnergyLossSTD::G4VEnergyLossSTD(const G4String& name, G4ProcessType type):
   (G4LossTableManager::Instance())->Register(this);
   scoffProcessors.clear();
   scoffRegions.clear();
-  theDEDXAtMaxEnergy.clear();
-  theRangeAtMaxEnergy.clear();
 
   // default dRoverRange and finalRange
   SetStepLimits(0.2, 1.0*mm);
@@ -175,6 +176,8 @@ void G4VEnergyLossSTD::Clear()
     if(theInverseRangeTable) theInverseRangeTable->clearAndDestroy();
     if(theLambdaTable) theLambdaTable->clearAndDestroy();
     if(theSubLambdaTable) theSubLambdaTable->clearAndDestroy();
+    if(theDEDXAtMaxEnergy) delete theDEDXAtMaxEnergy;
+    if(theRangeAtMaxEnergy) delete theRangeAtMaxEnergy;
   }
 
   theDEDXTable = 0;
@@ -183,8 +186,8 @@ void G4VEnergyLossSTD::Clear()
   theSecondaryRangeTable = 0;
   theLambdaTable = 0;
   theSubLambdaTable = 0;
-  theDEDXAtMaxEnergy.clear();
-  theRangeAtMaxEnergy.clear();
+  theDEDXAtMaxEnergy = 0;
+  theRangeAtMaxEnergy = 0;
   modelManager->Clear();
   tablesAreBuilt = false;
 }
@@ -423,6 +426,60 @@ G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTable()
 
   if(0 < verboseLevel) {
     G4cout << "G4VEnergyLossSTD::BuildDEDXTable(): table is built for " 
+           << particle->GetParticleName()
+           << G4endl;
+    if(2 < verboseLevel) {
+      G4cout << *theTable << G4endl;
+    }
+  }
+
+  return theTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4PhysicsTable* G4VEnergyLossSTD::BuildDEDXTableForPreciseRange()
+{
+
+  if(0 < verboseLevel) {
+    G4cout << "G4VEnergyLossSTD::BuildDEDXTableForPreciseRange() for "
+           << GetProcessName()
+           << " and particle " << particle->GetParticleName()
+           << G4endl;
+  }
+
+  // vectors to provide continues dE/dx
+  G4DataVector factor;
+  G4DataVector dedxLow;
+  G4DataVector dedxHigh;
+
+  // Access to materials
+  const G4ProductionCutsTable* theCoupleTable=
+        G4ProductionCutsTable::GetProductionCutsTable();
+  size_t numOfCouples = theCoupleTable->GetTableSize();
+
+  G4PhysicsTable* theTable = new G4PhysicsTable(numOfCouples);
+
+  if(0 < verboseLevel) {
+    G4cout << numOfCouples << " materials"
+           << " minKinEnergy= " << minKinEnergy
+           << " maxKinEnergy= " << maxKinEnergy
+           << G4endl;
+  }
+
+  for(size_t i=0; i<numOfCouples; i++) {
+
+    // create physics vector and fill it
+    const G4MaterialCutsCouple* couple = theCoupleTable->GetMaterialCutsCouple(i);
+    G4PhysicsVector* aVector = DEDXPhysicsVectorForPreciseRange(couple);
+    modelManager->FillDEDXVectorForPreciseRange(aVector, couple);
+
+    // Insert vector for this material into the table
+    theTable->insert(aVector) ;
+  }
+
+  if(0 < verboseLevel) {
+    G4cout << "G4VEnergyLossSTD::BuildDEDXTableForPreciseRange(): table is built for " 
            << particle->GetParticleName()
            << G4endl;
     if(2 < verboseLevel) {
@@ -783,6 +840,8 @@ void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
   G4bool b;
   size_t nbins = pv->GetVectorLength();
   highKinEnergyForRange = pv->GetLowEdgeEnergy(nbins);
+  theDEDXAtMaxEnergy = new G4double [n];
+  theRangeAtMaxEnergy = new G4double [n];
 
   for (size_t i=0; i<n; i++) {
     pv = (*p)[i];
@@ -791,8 +850,8 @@ void G4VEnergyLossSTD::SetRangeTable(G4PhysicsTable* p)
     G4double e2 = pv->GetLowEdgeEnergy(nbins);
     G4double r2 = pv->GetValue(e2, b);
     G4double dedx = (e2-e1)/(r2-r1);
-    theDEDXAtMaxEnergy.push_back(dedx);
-    theRangeAtMaxEnergy.push_back(r2);
+    theDEDXAtMaxEnergy[i] = dedx;
+    theRangeAtMaxEnergy[i] = r2;
   }
 }
 

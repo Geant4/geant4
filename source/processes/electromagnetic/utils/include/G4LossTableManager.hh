@@ -134,6 +134,8 @@ public:
 
   void SetStepLimits(G4double v1, G4double v2);
 
+  void SetBuildPreciseRange(G4bool val);
+
   G4EnergyLossMessenger* GetMessenger();
 
 private:
@@ -177,6 +179,7 @@ private:
   G4bool rndmStepFlag;
   G4bool integral;
   G4bool all_tables_are_stored;
+  G4bool buildPreciseRange;
 
   G4double minSubRange;
   G4double maxRangeVariation;

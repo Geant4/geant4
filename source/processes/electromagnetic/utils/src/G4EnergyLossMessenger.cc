@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossMessenger.cc,v 1.7 2003-04-04 14:33:34 vnivanch Exp $
+// $Id: G4EnergyLossMessenger.cc,v 1.8 2003-05-13 14:16:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -113,6 +113,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  rangeCmd = new G4UIcmdWithABool("/process/eLoss/preciseRange",this);
+  rangeCmd->SetGuidance("Switch true/false the precise range calculation.");
+  rangeCmd->SetParameterName("range",true);
+  rangeCmd->SetDefaultValue(true);
+  rangeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -128,6 +134,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete MinEnCmd;
   delete MaxEnCmd;
   delete IntegCmd;
+  delete rangeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,6 +183,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   }
   if (command == IntegCmd) {
     lossTables->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+  }
+  if (command == rangeCmd) {
+    lossTables->SetBuildPreciseRange(IntegCmd->GetNewBoolValue(newValue));
   }
 
 }

@@ -41,6 +41,7 @@
 // 25-03-03 Add deregistration (V.Ivanchenko)
 // 02-04-03 Change messenger (V.Ivanchenko)
 // 26-04-03 Fix retrieve tables (V.Ivanchenko)
+// 13-05-03 Add calculation of precise range (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -109,6 +110,7 @@ G4LossTableManager::G4LossTableManager()
   theElectron  = G4Electron::Electron();
   tableBuilder = new G4LossTableBuilder();
   integral = true;
+  buildPreciseRange = true;
   verbose = 0;
 }
 
@@ -490,11 +492,24 @@ G4VEnergyLossSTD* G4LossTableManager::BuildTables(const G4ParticleDefinition* aP
   em->SetDEDXTable(dedx);
   dedx_vector[iem] = dedx;
   G4PhysicsTable* range = tableBuilder->BuildRangeTable(dedx);
-  em->SetRangeTable(range);
-  range_vector[iem] = range;
   G4PhysicsTable* invrange = tableBuilder->BuildInverseRangeTable(dedx, range);
   em->SetInverseRangeTable(invrange);
   inv_range_vector[iem] = invrange;
+  if(buildPreciseRange) {
+    range->clearAndDestroy();
+    G4std::vector<G4PhysicsTable*> newlist;
+    for (G4int i=0; i<n_dedx; i++) {
+      newlist.push_back(loss_list[i]->BuildDEDXTableForPreciseRange());
+    }
+    G4PhysicsTable* dedxForRange = newlist[0];
+    if (1 < n_dedx) dedxForRange = tableBuilder->BuildDEDXTable(newlist);
+    range = tableBuilder->BuildRangeTable(dedx);
+    for(G4int j=0; j<n_dedx; j++) {
+      newlist[j]->clearAndDestroy();
+    }
+  }  
+  em->SetRangeTable(range);
+  range_vector[iem] = range;
 
   loss_map[aParticle] = em;
   for (G4int j=0; j<n_dedx; j++) {
@@ -596,6 +611,13 @@ void G4LossTableManager::SetStepLimits(G4double v1, G4double v2)
   for(G4int i=0; i<n_loss; i++) {
     loss_vector[i]->SetStepLimits(v1, v2);
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4LossTableManager::SetBuildPreciseRange(G4bool val)
+{
+  buildPreciseRange = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
