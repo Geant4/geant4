@@ -21,54 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.4 2003-08-15 15:34:33 dressel Exp $
+// $Id: G4VWeightWindowStore.hh,v 1.1 2003-08-15 15:35:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - test33
+// ----------------------------------------------------------------------
+// Class G4VWeightWindowStore
 //
-// --------------------------------------------------------------
-// Comments:
-// The main function may be given a macro to execute file as argument. 
-// If no argument is given a session is started.
-// --------------------------------------------------------------
+// Class description:
+//
+// 
 
-#include "CLHEP/Random/Random.h"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#include "G4UIsession.hh"
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+#ifndef G4VWeightWindowStore_hh
+#define G4VWeightWindowStore_hh G4VWeightWindowStore_hh
 
-#include "Tst33AppStarter.hh"
+#include "globals.hh"
 
-#include "geomdefs.hh"
+class G4GeometryCell;
+class G4VPhysicalVolume;
+
+class  G4VWeightWindowStore
+{
+
+public:  // with description
+
+  G4VWeightWindowStore();
+  virtual  ~G4VWeightWindowStore();
+
+  virtual G4double GetLowerWeitgh(const G4GeometryCell &gCell, 
+			 G4double partEnergy) const = 0;
+    // derive a lower weight bound value of a "cell" addresed by a 
+    // G4GeometryCell and the coresponding energy from the store.
+
+  virtual G4bool IsKnown(const G4GeometryCell &gCell) const = 0;
+    // returns true if the gCell is in the store, else false 
 
 
-const G4double kCarTolerance = 1E-9*mm;
-const G4double kRadTolerance = 1E-9*mm;
-const G4double kAngTolerance = 1E-9*rad;
+  virtual const G4VPhysicalVolume &GetWorldVolume() const = 0;
+    // return a reference to the wolrd volume of the 
+    // "importance" geometry
+};
 
-
-int main(int argc, char **argv)
-{  
-
-  HepRandom::setTheSeed(345354);
-
-  Tst33AppStarter *appstarter = new Tst33AppStarter;
-
-  if (argc!=2) {
-    G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);      
-#else
-    session = new G4UIterminal();
-#endif    
-    session->SessionStart();
-  }
-  else {
-    G4UImanager::GetUIpointer()->
-      ApplyCommand(G4String("/control/execute ") + G4String(argv[1]));
-  }
-  delete appstarter;
-}
+#endif

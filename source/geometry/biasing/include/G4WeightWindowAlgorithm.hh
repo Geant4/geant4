@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4WeightWindowAlgorithm.hh,v 1.4 2002-10-14 12:36:01 dressel Exp $
+// $Id: G4WeightWindowAlgorithm.hh,v 1.5 2003-08-15 15:34:45 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -44,33 +44,19 @@ class G4WeightWindowAlgorithm : public G4VWeightWindowAlgorithm
 
 public:  // with description
   
-  G4WeightWindowAlgorithm();
+  G4WeightWindowAlgorithm(G4double upperLimitFaktor = 5,
+			  G4double survivalFaktor = 3,
+			  G4int maxNumberOfSplits = 5);
   
   virtual ~G4WeightWindowAlgorithm();
 
-  virtual void SetUpperLimit(G4double Upper);
-    // set upper limiting factor for window
-    // - Upper is the maximum factor by which the weight of a particle may
-    //   be higher than it should be according to the importance
-  
-  virtual void SetLowerLimit(G4double Lower);
-    // set lower limiting facotr for window
-    // - Lower is the minimal factor by which the wight may be
-    //   lower than it should be according to the importance
-
-
-
-  virtual G4Nsplit_Weight Calculate(G4double init_w, 
-				    G4double importance) const;
-    // calculate the number of tracks and their weight according 
-    // to the upper and lower limmiting factors of the window
-    // and the initial weight
-    // - init_w is the initial weight of the particle
-    // - importance is the importance of the cell
+  virtual G4Nsplit_Weight Calculate(G4double init_w,
+				    G4double lowerWeightBound) const;
 
 private:
-  G4double fUpper;
-  G4double fLower;
+  G4double fUpperLimitFaktor;
+  G4double fSurvivalFaktor;
+  G4int fMaxNumberOfSplits;
 };
 
 #endif

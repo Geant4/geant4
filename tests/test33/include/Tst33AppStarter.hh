@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.hh,v 1.5 2003-05-20 12:02:02 dressel Exp $
+// $Id: Tst33AppStarter.hh,v 1.6 2003-08-15 15:34:33 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -47,6 +47,7 @@ class Tst33DetectorConstruction;
 class Tst33VGeometry;
 class G4VSampler;
 class G4VIStore;
+class G4VWeightWindowStore;
 class G4CellStoreScorer;
 class G4CellScorer;
 class G4CellScorerStore;
@@ -67,6 +68,7 @@ public:
   void PostRun();
   void CreateScorer();
   void CreateIStore();
+  void CreateWeightWindowStore();
   void CreateWeightRoulette(G4int mode);
   void ClearSampling();
   void Run(G4int nevents);
@@ -80,6 +82,7 @@ private:
   G4bool CheckCreateScorer();
   void DeleteScorers();
   G4bool CheckCreateIStore();
+  G4bool CheckCreateWeightWindowStore();
   G4bool CheckCreateWeightRoulette();
   G4bool CheckCreateApp();
   void NewFailed(const G4String &function, const G4String &cl);
@@ -96,6 +99,7 @@ private:
   G4CellScorerStore *fScorerStore;
   const G4CellScorer *fCell_19_Scorer;
   G4VIStore *fIStore;
+  G4VWeightWindowStore *fWWStore;
   Tst33VEventAction *fEventAction;
   G4UserRunAction *fRunAction;
   G4bool fConfigured;

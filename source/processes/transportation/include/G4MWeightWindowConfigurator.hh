@@ -21,53 +21,55 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarterMessenger.hh,v 1.6 2003-08-15 15:34:33 dressel Exp $
-// GEANT4 tag 
+// $Id: G4MWeightWindowConfigurator.hh,v 1.1 2003-08-15 15:36:42 dressel Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
-// Class Tst33AppStarterMessenger
+// Class G4MWeightWindowConfigurator
 //
 // Class description:
-//
-// Implementing the comands to message the application.
+// This class builds and places  the G4ImportanceProcess.
+// If the object is deleted the process is removed from the 
+// process list.
 
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef Tst33AppStarterMessenger_hh
-#define Tst33AppStarterMessenger_hh Tst33AppStarterMessenger_hh
+#ifndef G4MWeightWindowConfigurator_hh
+#define G4MWeightWindowConfigurator_hh G4MWeightWindowConfigurator_hh
 
-#include <map>
-#include "G4UImessenger.hh"
+#include "globals.hh"
+#include "G4ProcessPlacer.hh"
+#include "G4VSamplerConfigurator.hh"
+#include "G4PlaceOfAction.hh"
+#include "G4MassWeightWindowProcess.hh"
 
-class G4UIcmdWithAnInteger;
-class Tst33AppStarter;
-class Tst33VApplication;
+class G4VWeightWindowStore;
+class G4VWeightWindowAlgorithm;
 
-typedef std::map<G4UIcmdWithAnInteger *, G4String> Tst33SimComands;
-
-class Tst33AppStarterMessenger : public G4UImessenger{
+class G4MWeightWindowConfigurator : public G4VSamplerConfigurator{
 public:
-  explicit Tst33AppStarterMessenger(Tst33AppStarter &);
-  virtual ~Tst33AppStarterMessenger();
-  virtual void SetNewValue(G4UIcommand* pCmd,G4String szValue);
+  G4MWeightWindowConfigurator(const G4String &particlename,
+			      G4VWeightWindowStore &wwstore,
+			      const G4VWeightWindowAlgorithm *wwAlg,
+			      G4PlaceOfAction placeOfAction);
+
+  virtual ~G4MWeightWindowConfigurator();
+  virtual void Configure(G4VSamplerConfigurator *preConf);
+  virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
 private:
-  Tst33AppStarterMessenger(const Tst33AppStarterMessenger &);
-  Tst33AppStarterMessenger &operator=(const Tst33AppStarterMessenger &);
-  Tst33AppStarter &fAppStarter;
-  G4UIcommand *fMassGeoCmd;
-  G4UIcommand *fParallelGeoCmd;
-  G4UIcommand *fScoringCmd;
-  G4UIcommand *fImpCmd;
-  G4UIcommand *fWWCmd;
-  G4UIcmdWithAnInteger *fWWRCmd;
-  G4UIcommand *fClearSmaplingCmd;
-  G4UIcommand *fConfigureSamplingCmd;
-  G4UIcommand *fVisAppComand;
-  G4UIcmdWithAnInteger *fTimedAppComand;
-  G4UIcommand *fPostRunCmd;
-  G4UIcmdWithAnInteger *fRunCmd;
+  G4MWeightWindowConfigurator(const G4MWeightWindowConfigurator &);
+  G4MWeightWindowConfigurator &
+  operator=(const G4MWeightWindowConfigurator &);
+
+  G4ProcessPlacer fPlacer;
+  G4VWeightWindowStore &fWeightWindowStore;
+  G4bool fDeleteWWalg;
+  const G4VWeightWindowAlgorithm *fWWalgorithm;
+  G4MassWeightWindowProcess *fMassWeightWindowProcess;
+  G4PlaceOfAction fPlaceOfAction;
 };
+
 
 #endif

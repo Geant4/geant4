@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33AppStarter.cc,v 1.7 2003-05-20 12:02:02 dressel Exp $
+// $Id: Tst33AppStarter.cc,v 1.8 2003-08-15 15:34:33 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -45,6 +45,7 @@
 #include "G4CellScorerStore.hh"
 #include "G4CellStoreScorer.hh"
 #include "Tst33IStoreBuilder.hh"
+#include "Tst33WeightWindowStoreBuilder.hh"
 #include "Tst33ScorerBuilder.hh"
 #include "Tst33VEventAction.hh"
 #include "Tst33VisRunAction.hh"
@@ -57,7 +58,7 @@
 #include "Tst33VisApplication.hh"
 #include "G4ProcessPlacer.hh"
 #include "Tst33WeightChangeProcess.hh"
-
+#include "G4PlaceOfAction.hh"
 
 Tst33AppStarter::Tst33AppStarter()
   : 
@@ -71,6 +72,7 @@ Tst33AppStarter::Tst33AppStarter()
   fScorer(0),
   fCell_19_Scorer(0),
   fIStore(0),
+  fWWStore(0),
   fConfigured(false),
   fWeightroulette(false),
   fTime(0),
@@ -206,11 +208,32 @@ G4bool Tst33AppStarter::CheckCreateIStore() {
   return createistore;
 }
 
+G4bool Tst33AppStarter::CheckCreateWeightWindowStore() {
+  G4bool createWWstore = true;
+  if (!IsGeo_n_App()) {
+    G4cout << "Tst33AppStarter::CheckCreateWeightWindowStore: !IsGeo_n_App()!" << G4endl;
+    createWWstore = false;
+  }  
+  if (fWWStore) {
+    G4cout << "Tst33AppStarter::CheckCreateWeightWindowStore: an weight window store already exists!" << G4endl;
+    createWWstore = false;
+  }
+  return createWWstore;
+}
+
 void Tst33AppStarter::CreateIStore() {
   if (CheckCreateIStore()) {
     Tst33IStoreBuilder ib;
     fIStore = ib.CreateIStore(fSampleGeometry);
     fSampler->PrepareImportanceSampling(fIStore);
+  }
+}
+
+void Tst33AppStarter::CreateWeightWindowStore() {
+  if (CheckCreateWeightWindowStore()) {
+    Tst33WeightWindowStoreBuilder wb;
+    fWWStore = wb.CreateWeightWindowStore(fSampleGeometry);
+    fSampler->PrepareWeightWindow(fWWStore,0,onBoundary);
   }
 }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSampler.hh,v 1.7 2003-06-13 09:55:16 dressel Exp $
+// $Id: G4VSampler.hh,v 1.8 2003-08-15 15:36:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,10 +42,14 @@
 
 
 #include "globals.hh"
+#include "G4PlaceOfAction.hh"
+
 
 class G4VPhysicalVolume;
 class G4VImportanceAlgorithm;
 class G4VIStore;
+class G4VWeightWindowAlgorithm;
+class G4VWeightWindowStore;
 class G4VScorer;
 
 
@@ -66,6 +70,11 @@ public:
   virtual void PrepareWeightRoulett(G4double wsurvive = 0.5, 
 				    G4double wlimit = 0.25,
 				    G4double isource = 1) = 0;
+
+  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+				   G4VWeightWindowAlgorithm *wwAlg = 0,
+				   G4PlaceOfAction placeOfAction = 
+				   onBoundary) = 0;
 
   virtual void Configure() = 0;
 

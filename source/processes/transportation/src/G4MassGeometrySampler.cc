@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassGeometrySampler.cc,v 1.8 2003-04-02 16:59:15 dressel Exp $
+// $Id: G4MassGeometrySampler.cc,v 1.9 2003-08-15 15:36:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -36,10 +36,12 @@
 #include "G4MassGeometrySampler.hh"
 
 #include "G4VIStore.hh"
+#include "G4WeightWindowStore.hh"
 #include "G4VScorer.hh"
 
 #include "G4MScoreConfigurator.hh"
 #include "G4MImportanceConfigurator.hh"
+#include "G4MWeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
 #include "G4MassGCellFinder.hh"
 
@@ -52,6 +54,8 @@ G4MassGeometrySampler(const G4String &particlename)
   fGCellFinder(0),
   fWeightCutOffConfigurator(0),
   fIStore(0),
+  fMWeightWindowConfigurator(0),
+  fWWStore(0),
   fIsConfigured(false)
 {}
 
@@ -64,6 +68,10 @@ void G4MassGeometrySampler::ClearSampling() {
   if (fMImportanceConfigurator) {
     delete fMImportanceConfigurator;
     fMImportanceConfigurator = 0;
+  }
+  if (fWeightCutOffConfigurator) {
+    delete fWeightCutOffConfigurator;
+    fWeightCutOffConfigurator = 0;
   }
   if (fMScoreConfigurator) {
     delete fMScoreConfigurator;
@@ -140,6 +148,22 @@ PrepareWeightRoulett(G4double wsurvive,
 
 }
 
+
+void G4MassGeometrySampler::
+PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+		    G4VWeightWindowAlgorithm *wwAlg,
+		    G4PlaceOfAction placeOfAction){
+
+  fWWStore = wwstore;
+  
+  fMWeightWindowConfigurator =
+    new G4MWeightWindowConfigurator(fParticleName,
+				    *fWWStore,
+				    wwAlg,
+				    placeOfAction);
+}
+
+
 void G4MassGeometrySampler::Configure(){
   if (!IsConfigured()) {
     fIsConfigured = true;
@@ -149,6 +173,9 @@ void G4MassGeometrySampler::Configure(){
     }
     if (fMImportanceConfigurator) {
       fConfigurators.push_back(fMImportanceConfigurator);
+    }
+    if (fMWeightWindowConfigurator) {
+      fConfigurators.push_back(fMWeightWindowConfigurator);
     }
     
     G4VSamplerConfigurator *preConf = 0;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.hh,v 1.4 2003-06-13 09:55:16 dressel Exp $
+// $Id: G4ParallelGeometrySampler.hh,v 1.5 2003-08-15 15:36:06 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,6 +71,11 @@ public:
 			    G4double wlimit,
 			    G4double isource);
   
+  virtual void PrepareWeightWindow(G4VWeightWindowStore *wwstore,
+				   G4VWeightWindowAlgorithm *wwAlg,
+				   G4PlaceOfAction placeOfAction);
+
+
   virtual void Configure();
 
   virtual void ClearSampling();

@@ -21,54 +21,27 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.4 2003-08-15 15:34:33 dressel Exp $
+// $Id: G4GeometryCellWeight.hh,v 1.1 2003-08-15 15:35:30 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-// --------------------------------------------------------------
-//      GEANT 4 - test33
+// ----------------------------------------------------------------------
+// Class G4GeometryCellWeight
 //
-// --------------------------------------------------------------
-// Comments:
-// The main function may be given a macro to execute file as argument. 
-// If no argument is given a session is started.
-// --------------------------------------------------------------
+// Class description:
+//
+// Used internally by importance sampling. 
+// It is acontainer for "cell" importance value pairs.
 
-#include "CLHEP/Random/Random.h"
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
-#include "G4UItcsh.hh"
-#include "G4UIsession.hh"
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
+#ifndef G4GeometryCellWeight_hh
+#define G4GeometryCellWeight_hh G4GeometryCellWeight_hh 
 
-#include "Tst33AppStarter.hh"
+#include <map>
+#include "globals.hh"
+#include "G4GeometryCell.hh"
+#include "G4GeometryCellComp.hh"
+typedef std::map<G4double, G4double, std::less<G4double> > G4UpperEnergyToLowerWeightMap;
+typedef std::map<G4GeometryCell, G4UpperEnergyToLowerWeightMap, G4GeometryCellComp>  G4GeometryCellWeight;
 
-#include "geomdefs.hh"
-
-
-const G4double kCarTolerance = 1E-9*mm;
-const G4double kRadTolerance = 1E-9*mm;
-const G4double kAngTolerance = 1E-9*rad;
-
-
-int main(int argc, char **argv)
-{  
-
-  HepRandom::setTheSeed(345354);
-
-  Tst33AppStarter *appstarter = new Tst33AppStarter;
-
-  if (argc!=2) {
-    G4UIsession * session = 0;
-#ifdef G4UI_USE_TCSH
-    session = new G4UIterminal(new G4UItcsh);      
-#else
-    session = new G4UIterminal();
-#endif    
-    session->SessionStart();
-  }
-  else {
-    G4UImanager::GetUIpointer()->
-      ApplyCommand(G4String("/control/execute ") + G4String(argv[1]));
-  }
-  delete appstarter;
-}
+#endif
