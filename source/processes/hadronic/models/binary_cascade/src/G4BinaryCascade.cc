@@ -364,123 +364,9 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
    G4cout << " Momentum transfer to Nucleus " << theMomentumTransfer << " " << theMomentumTransfer.mag() << G4endl;
 #endif
 
-  G4int counter=0;
-  G4int countreset=0;
-  G4double steplength=1.0 * fermi;
-  G4double radius = theOuterRadius + 3*fermi;
-  //G4cout << " nucl. Radius " << radius << G4endl;
-  // G4cerr <<"pre-while- theSecondaryList "<<G4endl;
-  while( theSecondaryList.size() > 0 )
-  {
-
-    G4int nsec=0;
-    G4double minTimeStep = 1.e-12*ns;   // about 30*fermi/(0.1*c_light);1.e-12*ns
-    G4std::vector<G4KineticTrack *>::iterator i;
-    for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
-    {
-      G4KineticTrack * kt = *i;
-      if( kt->GetPosition().mag() < radius) // capture happens only inside the nucleus
-      {
-	if((kt->GetDefinition() == G4Proton::Proton()) ||
-	   (kt->GetDefinition() == G4Neutron::Neutron()))
-        {
-	  nsec++;
-	  G4double tStep = steplength / ( kt->Get4Momentum().beta() * c_light );
-	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
-	         << " " <<kt->GetDefinition()->GetParticleName() << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
-	  if(tStep<minTimeStep)
-	  {
-	    minTimeStep = tStep;
-//            G4cerr <<"Position "<<kt->GetPosition().mag()<<" "
-//	           <<kt->GetTrackingMomentum().e()-kt->GetTrackingMomentum().mag()<<G4endl;
-	  }
-        }
-      }
-    }
-//    G4cerr << "CaptureCount = "<<counter<<" "<<nsec<<" "<<minTimeStep<<" "<<1*ns<<G4endl;
-    G4double timeToCollision=DBL_MAX;
-    G4CollisionInitialState * nextCollision=0;
-    if(theCollisionMgr->Entries() > 0)
-    {
-       nextCollision = theCollisionMgr->GetNextCollision();
-       timeToCollision = nextCollision->GetCollisionTime()-theCurrentTime;
-    }
-    //G4cout << " minTimeStep, timeToCollisiont  " <<minTimeStep << " " <<timeToCollision << G4endl;
-    if ( timeToCollision > minTimeStep )
-    {
-       //G4cerr <<"pre- DoTimeStep 2"<<G4endl;
-	DoTimeStep(minTimeStep);
-        ++counter;
-       //G4cerr <<"post- DoTimeStep 2"<<G4endl;
-    } else
-    {
-       // G4cerr <<"pre- DoTimeStep 3"<<G4endl;
-        if (!DoTimeStep(timeToCollision) )
-	{
-	   // Check if nextCollision is still valid, ie. partcile did not leave nucleus
-	   if (theCollisionMgr->GetNextCollision() != nextCollision )
-	   {
-	       nextCollision = 0;
-	   }
-	}
-       // G4cerr <<"post- DoTimeStep 3"<<G4endl;
-
-	if(nextCollision)
-	{
-	   if  ( ApplyCollision(nextCollision))
-	   {
-	       // G4cout << "ApplyCollision sucess " << G4endl;
-           } else
-           {
-	       theCollisionMgr->RemoveCollision(nextCollision);
-           }
-	}
-    }
-
-    if(countreset>100)
-    {
-#ifdef debug_G4BinaryCascade
-       G4cerr << "G4BinaryCascade.cc: Warning - aborting looping particle(s)" << G4endl;
-#endif
-
-//  add left secondaries to FinalSate
-       G4std::vector<G4KineticTrack *>::iterator iter;
-       for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
-       {
-	   theFinalState.push_back(*iter);
-       }
-       theSecondaryList.clear();
-
-       break;
-    }
-
-    if(Absorb())
-    {
-       haveProducts = true;
-      // G4cout << "Absorb sucess " << G4endl;
-    }
-
-    if(Capture())
-    {
-       haveProducts = true;
-      // G4cout << "Capture sucess " << G4endl;
-    }
-    if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping a while....
-    {
-        #ifdef debug_1_BinaryCascade
-        PrintKTVector(&theSecondaryList,G4std::string("stepping 100 steps"));
-	#endif
-	FindCollisions(&theSecondaryList);
-	counter=0;
-	++countreset;
-    }
-  }
-//  G4cerr <<"Finished capture loop "<<G4endl;
-
-       //G4cerr <<"pre- DoTimeStep 4"<<G4endl;
-  DoTimeStep(DBL_MAX);
-       //G4cerr <<"post- DoTimeStep 4"<<G4endl;
-
+  StepParticlesOut();
+  
+  
   if ( theSecondaryList.size() > 0 )
   {
 #ifdef debug_G4BinaryCascade
@@ -611,11 +497,12 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
 	  }
        }
 
-   } else {
+   } 
 #ifdef debug_G4BinaryCascade
-       G4cerr << "Binary Cascade: Warning negative Excitation Energy"<< G4endl;
-#endif
+   else {
+       G4cerr << "Binary Cascade Error: negative Excitation Energy "<< G4endl;
    }
+#endif
   {
 // fill in products the outgoing particles
      G4double Ekinout=0;
@@ -1036,7 +923,7 @@ G4bool G4BinaryCascade::Absorb()
       iter != theSecondaryList.end(); ++iter)
   {
      G4KineticTrack * kt = *iter;
-     if(kt->GetPosition().mag() < radius)// absorption happens only inside the nucleus
+     if(kt->GetState() == G4KineticTrack::inside)// absorption happens only inside the nucleus
      {
 	if(absorber.WillBeAbsorbed(*kt))
 	{
@@ -1090,23 +977,24 @@ G4bool G4BinaryCascade::Absorb()
 
 // Capture all p and n with Energy < theCutOnP
 //----------------------------------------------------------------------------
-G4bool G4BinaryCascade::Capture()
+G4bool G4BinaryCascade::Capture(G4bool verbose)
 //----------------------------------------------------------------------------
 {
   G4KineticTrackVector captured;
   G4bool capture = false;
   G4std::vector<G4KineticTrack *>::iterator i;
-  G4double radius = theOuterRadius + 3*fermi;
 
   G4RKPropagation * RKprop=(G4RKPropagation *)thePropagator;
 
   G4double capturedEnergy = 0;
   G4int particlesAboveCut=0;
   G4int particlesBelowCut=0;
+  if ( verbose ) G4cout << " Capture: secondaries " << theSecondaryList.size() << G4endl;
   for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
   {
     G4KineticTrack * kt = *i;
-    if(kt->GetPosition().mag() < radius) // capture happens only inside the nucleus
+    if (verbose) G4cout << "Capture position, radius, state " <<kt->GetPosition().mag()<<" "<<theOuterRadius<<" "<<kt->GetState()<<G4endl;
+    if(kt->GetState() == G4KineticTrack::inside) // capture happens only inside the nucleus
     {
       if((kt->GetDefinition() == G4Proton::Proton()) ||
 	 (kt->GetDefinition() == G4Neutron::Neutron()))
@@ -1115,6 +1003,7 @@ G4bool G4BinaryCascade::Capture()
          G4double field=RKprop->GetField(kt->GetDefinition()->GetPDGEncoding(),kt->GetPosition())
 	               -RKprop->GetBarrier(kt->GetDefinition()->GetPDGEncoding());
 	 G4double energy= kt->Get4Momentum().e() - kt->GetActualMass() + field;
+         if (verbose ) G4cout << "Capture: .e(), mass, field, energy" << kt->Get4Momentum().e() <<" "<<kt->GetActualMass()<<" "<<field<<" "<<energy<< G4endl;
 	 if( energy < theCutOnP )
 	 {
 	    capturedEnergy+=energy;
@@ -1132,7 +1021,7 @@ G4bool G4BinaryCascade::Capture()
     for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
     {
       G4KineticTrack * kt = *i;
-      if(kt->GetPosition().mag() < radius) // capture happens only inside the nucleus
+      if(kt->GetState() == G4KineticTrack::inside) // capture happens only inside the nucleus
       {
         if((kt->GetDefinition() == G4Proton::Proton()) ||
  	   (kt->GetDefinition() == G4Neutron::Neutron()))
@@ -1233,6 +1122,128 @@ G4bool G4BinaryCascade::CheckPauliPrinciple(G4KineticTrackVector * products)
   return myflag;
 }
 
+//----------------------------------------------------------------------------
+void G4BinaryCascade::StepParticlesOut()
+//----------------------------------------------------------------------------
+{
+  G4int counter=0;
+  G4int countreset=0;
+  G4double steplength=1.0 * fermi;
+  //G4cout << " nucl. Radius " << radius << G4endl;
+  // G4cerr <<"pre-while- theSecondaryList "<<G4endl;
+  while( theSecondaryList.size() > 0 )
+  {
+
+    G4int nsec=0;
+    G4double minTimeStep = 1.e-12*ns;   // about 30*fermi/(0.1*c_light);1.e-12*ns
+    G4std::vector<G4KineticTrack *>::iterator i;
+    for(i = theSecondaryList.begin(); i != theSecondaryList.end(); ++i)
+    {
+      G4KineticTrack * kt = *i;
+      if( kt->GetState() == G4KineticTrack::inside ) 
+      {
+	if((kt->GetDefinition() == G4Proton::Proton()) ||                     // @@@ GF why only for nucleons?
+	   (kt->GetDefinition() == G4Neutron::Neutron()))
+        {
+	  nsec++;
+	  G4double tStep = steplength / ( kt->Get4Momentum().beta() * c_light );
+	  G4cout << " minTimeStep, tStep Particle " <<minTimeStep << " " <<tStep
+	         << " " <<kt->GetDefinition()->GetParticleName() << " 4mom " << kt->GetTrackingMomentum()<<G4endl;
+	  if(tStep<minTimeStep)
+	  {
+	    minTimeStep = tStep;
+//            G4cerr <<"Position "<<kt->GetPosition().mag()<<" "
+//	           <<kt->GetTrackingMomentum().e()-kt->GetTrackingMomentum().mag()<<G4endl;
+	  }
+        }
+      }
+    }
+//    G4cerr << "CaptureCount = "<<counter<<" "<<nsec<<" "<<minTimeStep<<" "<<1*ns<<G4endl;
+    G4double timeToCollision=DBL_MAX;
+    G4CollisionInitialState * nextCollision=0;
+    if(theCollisionMgr->Entries() > 0)
+    {
+       nextCollision = theCollisionMgr->GetNextCollision();
+       timeToCollision = nextCollision->GetCollisionTime()-theCurrentTime;
+    }
+    //G4cout << " minTimeStep, timeToCollisiont  " <<minTimeStep << " " <<timeToCollision << G4endl;
+    if ( timeToCollision > minTimeStep )
+    {
+       //G4cerr <<"pre- DoTimeStep 2"<<G4endl;
+	DoTimeStep(minTimeStep);
+        ++counter;
+       //G4cerr <<"post- DoTimeStep 2"<<G4endl;
+    } else
+    {
+       // G4cerr <<"pre- DoTimeStep 3"<<G4endl;
+        if (!DoTimeStep(timeToCollision) )
+	{
+	   // Check if nextCollision is still valid, ie. partcile did not leave nucleus
+	   if (theCollisionMgr->GetNextCollision() != nextCollision )
+	   {
+	       nextCollision = 0;
+	   }
+	}
+       // G4cerr <<"post- DoTimeStep 3"<<G4endl;
+
+	if(nextCollision)
+	{
+	   if  ( ApplyCollision(nextCollision))
+	   {
+	       // G4cout << "ApplyCollision sucess " << G4endl;
+           } else
+           {
+	       theCollisionMgr->RemoveCollision(nextCollision);
+           }
+	}
+    }
+
+    if(countreset>100)
+    {
+#ifdef debug_G4BinaryCascade
+       G4cerr << "G4BinaryCascade.cc: Warning - aborting looping particle(s)" << G4endl;
+#endif
+
+//  add left secondaries to FinalSate
+       G4std::vector<G4KineticTrack *>::iterator iter;
+       for ( iter =theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
+       {
+	   theFinalState.push_back(*iter);
+       }
+       theSecondaryList.clear();
+
+       break;
+    }
+
+    if(Absorb())
+    {
+//       haveProducts = true;
+      // G4cout << "Absorb sucess " << G4endl;
+    }
+
+    if(Capture(true))
+    {
+//       haveProducts = true;
+       G4cout << "Capture sucess " << G4endl;
+    }
+    if ( counter > 100 && theCollisionMgr->Entries() == 0)   // no collision, and stepping a while....
+    {
+        #ifdef debug_1_BinaryCascade
+        PrintKTVector(&theSecondaryList,G4std::string("stepping 100 steps"));
+	#endif
+	FindCollisions(&theSecondaryList);
+	counter=0;
+	++countreset;
+    }
+  }
+//  G4cerr <<"Finished capture loop "<<G4endl;
+
+       //G4cerr <<"pre- DoTimeStep 4"<<G4endl;
+  DoTimeStep(DBL_MAX);
+       //G4cerr <<"post- DoTimeStep 4"<<G4endl;
+
+
+}
 
 //----------------------------------------------------------------------------
 void G4BinaryCascade::CorrectFinalPandE()
@@ -1496,7 +1507,7 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   {
      if ( (*iter)->GetPosition().mag() < nucleusSize )
      {
-       G4cout << " inside: " << iter << G4endl;
+//       G4cout << " inside: " << iter << G4endl;
 	if((*iter)->GetDefinition()->GetBaryonNumber()!=0) secondaryCharge += static_cast<G4int>((*iter)->GetDefinition()->GetPDGCharge() + 0.1);
 	secondaryBarions += (*iter)->GetDefinition()->GetBaryonNumber() == 1 ? 1 : 0;
 	secondaryMass += (*iter)->GetDefinition()->GetBaryonNumber() == 1 ?
