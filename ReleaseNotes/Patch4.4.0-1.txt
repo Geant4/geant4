@@ -60,6 +60,11 @@ List of fixes included in this public patch to release 4.0:
       and G4Timer.cc.
     - Removed obsolete inline definitions in g4std/wrappers/DEC-cxx/cmath.
 
+  o Materials:
+    ---------
+    - Fixed G4MaterialPropertyVector::AddElement() to consider ordering
+      of elements. 
+
   o Track & Tracking:
     ----------------
   - track:
