@@ -1,4 +1,6 @@
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
+#include "G4Cascade.hh"
+/*
 #include "G4ios.hh"
 #include <fstream.h>
 #include <iomanip.h>
@@ -23,8 +25,11 @@
 #include "g4templates.hh"
 #include "G4NeutronHPChannel.hh"
 
+*/
  // forward declarations
  
+
+/*
  G4int sortEnergies( const double Px, const double Py, const double Pz,
                      const double Ekin, double* sortedPx, double* sortedPy,
                      double* sortedPz, double* sortedE );
@@ -47,8 +52,14 @@
     return 0;
   }
  
+  */
  int main()
   {
+    cout << "Testing HETC cascade" << endl;
+
+    //G4Cascade myCascade;
+
+    /*
     G4cout.setf( ios::scientific, ios::floatfield );
     ofstream outFile( "InInelasticAlpha.listing.GetMeanFreePath", ios::out);
     outFile.setf( ios::scientific, ios::floatfield );
@@ -205,6 +216,8 @@ int j = 0;
      }  // material loop
    }  // particle loop
    return EXIT_SUCCESS;
+
+   */
 }
 
 
