@@ -50,14 +50,14 @@ class Test30Physics
     Test30Physics();
    ~Test30Physics();
      
-		G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);     
+    G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);     
     G4double GetNucleusMass() {return theProcess->GetMass();};
 		                      
   private:
 
-	  void Initialise();
+    void Initialise();
 	     
-	  Test30HadronProduction* theProcess; 
+    Test30HadronProduction* theProcess; 
 	
 };
 

@@ -88,14 +88,14 @@
 
 Test30Physics::Test30Physics()
 {
-	Initialise();
+  Initialise();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Test30Physics::~Test30Physics()
 {
-	if(theProcess) delete theProcess;
+  if(theProcess) delete theProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -141,36 +141,36 @@ void Test30Physics::Initialise()
   G4AntiOmegaMinus::AntiOmegaMinusDefinition();
 
 
-	G4Proton::ProtonDefinition();
+  G4Proton::ProtonDefinition();
   G4AntiProton::AntiProtonDefinition();
-	G4Neutron::NeutronDefinition();
+  G4Neutron::NeutronDefinition();
   G4AntiNeutron::AntiNeutronDefinition();
 	
   G4GenericIon::GenericIonDefinition();
   G4Deuteron::DeuteronDefinition();
   G4Alpha::AlphaDefinition();
   G4Triton::TritonDefinition();	
-	theProcess = 0;
+  theProcess = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4VProcess* Test30Physics::GetProcess(const G4String& gen_name, 
-		                                  const G4String& part_name,
-		                                        G4Material* mat)
+		                      const G4String& part_name,
+		                            G4Material* mat)
 { 
-	G4cout <<  "Test30Physics entry" << G4endl;
+  G4cout <<  "Test30Physics entry" << G4endl;
   if(theProcess) delete theProcess;
-	theProcess = 0;
+  theProcess = 0;
 	
   G4ProcessManager* man = 0;
 	  
-	if(part_name == "proton")   man = new G4ProcessManager(G4Proton::Proton());
-	else if(part_name == "pi+") man = new G4ProcessManager(G4PionPlus::PionPlus());
+  if(part_name == "proton")   man = new G4ProcessManager(G4Proton::Proton());
+  else if(part_name == "pi+") man = new G4ProcessManager(G4PionPlus::PionPlus());
   else if(part_name == "pi-") man = new G4ProcessManager(G4PionMinus::PionMinus());
   else if(part_name == "neutron") man = new G4ProcessManager(G4Neutron::Neutron());
 	  
-	if(!man) return 0; 
+  if(!man) return 0; 
 	
   theProcess = new Test30HadronProduction();	
   G4cout <<  "Process is created; gen= " << gen_name << G4endl;
@@ -181,25 +181,25 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   // Choose generator
 
   if(gen_name == "LEparametrisation") {
-		if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
+    if(part_name == "proton")   sg = new Test30VSecondaryGenerator(new G4LEProtonInelastic(),mat);
     else if(part_name == "pi+") sg = new Test30VSecondaryGenerator(new G4LEPionPlusInelastic(),mat);
-		else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
-		else if(part_name == "neutron") sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
+    else if(part_name == "pi-") sg = new Test30VSecondaryGenerator(new G4LEPionMinusInelastic(),mat);
+    else if(part_name == "neutron") sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "CHIPS") {
 
-			sg = new Test30VSecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
-      theProcess->SetSecondaryGenerator(sg);
-      man->AddDiscreteProcess(theProcess);
+    sg = new Test30VSecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
+    theProcess->SetSecondaryGenerator(sg);
+    man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "stringCHIPS") {
     sg = new Test30VSecondaryGenerator(new G4StringChipsInterface(),mat);
 		
-	G4cout <<  "Generator is ready" << G4endl;		
+    //G4cout <<  "Generator is ready" << G4endl;		
     theProcess->SetSecondaryGenerator(sg);
-		G4cout <<  "Generator is set" << G4endl;
+    //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
 
     
@@ -214,7 +214,6 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     man->AddDiscreteProcess(theProcess);
     
   } else {
-    //log << MSG::WARNING 
     G4cout << gen_name 
            << " generator is unkown - no hadron production" << G4endl;
   }
@@ -222,7 +221,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   G4cout <<  "Secondary generator <" 
          << gen_name << "> is initilized" 
          << G4endl;
-	return theProcess;
+  return theProcess;
 
 }	
 

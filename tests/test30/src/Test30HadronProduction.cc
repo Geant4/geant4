@@ -89,12 +89,6 @@ void Test30HadronProduction::SetSecondaryGenerator(Test30VSecondaryGenerator* ge
 {
   if(theGenerator) delete theGenerator;
   theGenerator = gen;
-  if(gen) {
-    G4cout << "Test30HadronProduction: the Secondary Generator <"
-           << theGenerator->GeneratorName()
-           << "> is initialized"
-           << G4endl;
-  } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

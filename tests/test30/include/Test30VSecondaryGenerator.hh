@@ -63,7 +63,7 @@ public:
 
   const G4String GeneratorName() const {return generatorName;};
 			   
-	G4double GetMass() {return mass;};
+  G4double GetMass() {return mass;};
 	 
 protected:
 
@@ -80,9 +80,9 @@ private:
   Test30VSecondaryGenerator& operator = (const Test30VSecondaryGenerator &right);
 
   G4HadronicInteraction* hInteraction;
-	G4Material* material;
+  G4Material* material;
   G4Nucleus targetNucleus;
-	G4double mass;
+  G4double mass;
 
 };
 
