@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Orb.cc,v 1.13 2004-06-30 13:28:50 grichine Exp $
+// $Id: G4Orb.cc,v 1.14 2004-07-02 15:45:38 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Orb
@@ -385,7 +385,7 @@ G4double G4Orb::DistanceToIn( const G4ThreeVector& p,
     {
       d2 = pDotV3d*pDotV3d - c ;             
       //  if ( pDotV3d >= 0 ) return snxt = kInfinity;
-      if ( d2 < fRmaxTolerance*fRmax) return snxt = kInfinity;
+      if ( d2 < fRmaxTolerance*fRmax || pDotV3d >= 0 ) return snxt = kInfinity;
       else                return snxt = 0.;
     }
     else // inside ???
