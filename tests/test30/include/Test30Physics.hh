@@ -24,7 +24,7 @@
 // -------------------------------------------------------------
 //      GEANT 4 class 
 //
-//      ---------- Test30Material -------
+//      ---------- Test30Physics -------
 //                by Vladimir Ivanchenko, 12 March 2002 
 // 
 //    Modified:
@@ -32,28 +32,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef Test30Material_h
-#define Test30Material_h 1
+#ifndef Test30Physics_h
+#define Test30Physics_h 1
 
 #include "globals.hh"
+#include "Test30HadronProduction.hh"
 
+class G4VProcess;
 class G4Material;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Test30Material 
+class Test30Physics 
 {
   public:
   
-    Test30Material();
-   ~Test30Material();
+    Test30Physics();
+   ~Test30Physics();
      
-		G4Material* GetMaterial(const G4String&);     
-                      
+		G4VProcess* GetProcess(const G4String&, const G4String&, G4Material*);     
+    G4double GetNucleusMass() {return theProcess->GetMass();};
+		                      
   private:
 
 	  void Initialise();
 	     
+	  Test30HadronProduction* theProcess; 
+	
 };
 
 #endif

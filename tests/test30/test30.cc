@@ -27,14 +27,11 @@
 //      CERN Geneva Switzerland
 //
 //
-//      File name:     G4StoppingPowerTest
-//                     This test provide cross sections 
-//                     tests for electromagnetic processes. The input
-//                     data have to be describe in ASCII file
+//      File name:     Test30
 //
 //      Author:        V.Ivanchenko 
 // 
-//      Creation date: 23 May 2001
+//      Creation date: 12 March 2002
 //
 //      Modifications: 
 //
@@ -46,9 +43,12 @@
 #include "g4std/iomanip"
 
 #include "G4Material.hh"
+#include "Test30Material.hh"
+#include "Test30Physics.hh"
 #include "G4VContinuousDiscreteProcess.hh"
 #include "G4ProcessManager.hh"
 #include "G4VParticleChange.hh"
+#include "G4ParticleChange.hh"
 
 #include "G4LowEnergyIonisation.hh"
 #include "G4LowEnergyBremsstrahlung.hh"
@@ -73,15 +73,18 @@
 
 #include "G4hIonisation.hh"
 #include "G4MultipleScattering.hh"
-#include "G4EnergyLossTables.hh"
-#include "G4ParticleChange.hh"
+#include "G4ParticleTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 #include "G4AntiProton.hh"
+#include "G4Neutron.hh"
 #include "G4Proton.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Gamma.hh"
+#include "G4PionZero.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 #include "G4ForceCondition.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
@@ -94,37 +97,28 @@
 #include "CLHEP/Hist/Histogram.h"
 #include "CLHEP/Hist/Tuple.h"
 
-#include "hTest/include/G4IonC12.hh"
-#include "hTest/include/G4IonAr40.hh"
 
 #include "G4Timer.hh"
 
-int main(int argc,char** argv)
+int main(int argc, char** argv)
 {
   HepTupleManager* hbookManager;
 
   // -------------------------------------------------------------------
   // Setup
 
-  G4int  nPart       =-1;
+  G4String  namePart = "proton";
   G4String  nameMat  = "Si";
-  G4int  nProcess    = 3;
-  G4bool usepaw      = false;
-  G4bool lowE        = true;
-  G4int verbose      = 0;
-  G4double emin      = 0.01*MeV;
-  G4double emax      = 100.0*MeV;
-  G4int nbin         = 1000;
+  G4String  nameGen  = "stringCHIPS";
+  G4bool    usepaw   = false;
+  G4int    verbose   = 0;
+  G4double energy    = 100.*MeV;
+  G4int    nevt      = 1000;
   G4String hFile     = "";
   G4double theStep   = 0.01*micrometer;
   G4double range     = 1.0*micrometer;
-  G4double cutG      = 10.0*mm;
-  G4double cutE      = 10.0*mm;
   G4Material* material = 0; 
-  G4String name[3] = {"Ionisation", "Bremsstrahlung",
-                      "Ionisation+Bremsstrahlung"};
-  G4bool setBarkasOff = false;
-  G4bool setNuclearOff= true;
+ 
 
   G4cout.setf( ios::scientific, ios::floatfield );
 
@@ -148,85 +142,11 @@ int main(int argc,char** argv)
   // -------------------------------------------------------------------
   //--------- Materials definition ---------
  
-  G4Material* ma[14];
-  ma[0] = new G4Material("Be",    4.,  9.01*g/mole, 1.848*g/cm3);
-  ma[1] = new G4Material("Graphite",6., 12.00*g/mole, 2.265*g/cm3 );
-  ma[1]->SetChemicalFormula("Graphite");
-  ma[2] = new G4Material("Al", 13., 26.98*g/mole, 2.7 *g/cm3);
-  ma[3] = new G4Material("Si",   14., 28.055*g/mole, 2.33*g/cm3);
-  
-  ma[4] = new G4Material("LAr",   18., 39.95*g/mole, 1.393*g/cm3);
-  ma[5] = new G4Material("Fe",      26., 55.85*g/mole, 7.87*g/cm3);
-  ma[6] = new G4Material("Cu",    29., 63.55*g/mole, 8.96*g/cm3);
-  ma[7] = new G4Material("W", 74., 183.85*g/mole, 19.30*g/cm3);
-  ma[8] = new G4Material("Pb",82., 207.19*g/mole, 11.35*g/cm3);
-  ma[9] = new G4Material("U", 92., 238.03*g/mole, 18.95*g/cm3);
-
-  G4Element*   H  = new G4Element ("Hydrogen", "H", 1. ,  1.01*g/mole);
-  G4Element*   O  = new G4Element ("Oxygen"  , "O", 8. , 16.00*g/mole);
-  G4Element*   C  = new G4Element ("Carbon"  , "C", 6. , 12.00*g/mole);
-  G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
-  G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
-
-  ma[10] = new G4Material("O2", 8., 16.00*g/mole, 1.1*g/cm3);
-  ma[10]->SetChemicalFormula("O_2");
-  ma[11] = new G4Material ("Water" , 1.*g/cm3, 2);
-  ma[11]->AddElement(H,2);
-  ma[11]->AddElement(O,1);
-  ma[11]->SetChemicalFormula("H_2O");
-
-  ma[12] = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
-  ma[12]->AddElement(H,6);
-  ma[12]->AddElement(C,2);
-  ma[12]->SetChemicalFormula("C_2H_6");
-  
-  ma[13] = new G4Material ("CsI" , 4.53*g/cm3, 2);
-  ma[13]->AddElement(Cs,1);
-  ma[13]->AddElement(I,1);
-  ma[13]->SetChemicalFormula("CsI");
-  
-  static const G4MaterialTable* theMaterialTable = 
-               G4Material::GetMaterialTable();
-
-  G4int nMaterials = G4Material::GetNumberOfMaterials();
-  G4cout << "Available materials are: " << G4endl;
-  G4int mat;
-  for (mat = 0; mat < nMaterials; mat++) {
-    G4cout << mat << ") " << ma[mat]->GetName() << G4endl;
-  }
-
-  G4cout << "Available processes are: " << G4endl;
-  for (mat = 0; mat < 2; mat++) {
-    G4cout << mat << ") " << name[mat] << G4endl;
-  }
-
-  // Particle definitions
-
-  G4ParticleDefinition* gamma = G4Gamma::GammaDefinition();
-  G4ParticleDefinition* electron = G4Electron::ElectronDefinition();
-  G4ParticleDefinition* positron = G4Positron::PositronDefinition();
-  G4ParticleDefinition* proton   = G4Proton::ProtonDefinition();
-  G4ParticleDefinition* antiproton = G4AntiProton::AntiProtonDefinition();
-  G4ParticleDefinition* c12 = G4IonC12::IonC12Definition();
-  G4ParticleDefinition* ar40 = G4IonAr40::IonAr40Definition();
-  G4ParticleDefinition* part = electron;
-
-  G4hLowEnergyIonisation* hionle = 0;
-  G4hLowEnergyIonisation* ionle = 0;
-  G4LowEnergyIonisation* eionle = 0;
-  G4LowEnergyBremsstrahlung* ebrle = 0;
-  G4hIonisation* ionst = 0;
-  G4hIonisation* hionst = 0;
-  G4eIonisation* eionst = 0;
-  G4eBremsstrahlung* ebrst = 0;
-
-  G4cout  <<  "Process is initialized"  <<  G4endl;; 
-
+  Test30Material*  mate = new Test30Material();
+  Test30Physics*   phys = new Test30Physics();
+	
   // Geometry 
 
-  G4double initX = 0.; 
-  G4double initY = 0.; 
-  G4double initZ = 1.;
   G4double dimX = 100.0*cm;
   G4double dimY = 100.0*cm;
   G4double dimZ = 100.0*cm;  
@@ -241,25 +161,16 @@ int main(int argc,char** argv)
   G4cout << "Available commands are: " << G4endl;
   G4cout << "#events" << G4endl;
   G4cout << "#particle" << G4endl;
-  G4cout << "#emin(MeV)" << G4endl;
-  G4cout << "#emax(MeV)" << G4endl;
-  G4cout << "#nbin" << G4endl;
-  G4cout << "#cutG(mm)" << G4endl;
-  G4cout << "#cutE(mm)" << G4endl;
+  G4cout << "#energy(MeV)" << G4endl;
   G4cout << "#range(mm)" << G4endl;
   G4cout << "#step(mm)" << G4endl;
   G4cout << "#material" << G4endl;
-  G4cout << "#process" << G4endl;
-  G4cout << "#domain" << G4endl;
+  G4cout << "#generator" << G4endl;
   G4cout << "#paw" << G4endl;
   G4cout << "#verbose" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
-  G4cout << "#barkas" << G4endl;
-  G4cout << "#nuclear" << G4endl;
 
-  G4ProcessManager *gmanager, *elecManager, *positManager,  
-                   *protManager, *aprotManager, *ionManager;
 
 
   string line, line1;
@@ -269,21 +180,12 @@ int main(int argc,char** argv)
       (*fin) >> line;
       G4cout << "Next line " << line << G4endl;
       if(line == "#particle") {
-        (*fin) >> nPart;
-      } else if(line == "#emin(MeV)") {
-        (*fin) >> emin;
-        emin *= MeV;
-      } else if(line == "#emax(MeV)") {
-        (*fin) >> emax;
-        emax *= MeV;
-      } else if(line == "#nbin") {
-        (*fin) >> nbin;
-      } else if(line == "#cutG(mm)") {
-        (*fin) >> cutG;
-        cutG *= mm;
-      } else if(line == "#cutE(mm)") {
-        (*fin) >> cutE;
-        cutE *= mm;
+        (*fin) >> namePart;
+      } else if(line == "#energy(MeV)") {
+        (*fin) >> energy;
+        energy *= MeV;
+      } else if(line == "#events") {
+        (*fin) >> nevt;
       } else if(line == "#range(mm)") {
         (*fin) >> range;
         range *= mm;
@@ -292,13 +194,10 @@ int main(int argc,char** argv)
         theStep *= mm;
       } else if(line == "#material") {
         (*fin) >> nameMat;
-      } else if(line == "#process") {
-        (*fin) >> nProcess;
-      } else if(line == "#domain") {
-        line1 = "";
-        (*fin) >> line1;
-        if(line1 == "lowenergy") {lowE = true;}
-        else                     {lowE = false;}
+      } else if(line == "#particle") {
+        (*fin) >> namePart;				
+      } else if(line == "#generator") {
+        (*fin) >> nameGen;
       } else if(line == "#paw") {
         usepaw = true;
         (*fin) >> hFile;
@@ -309,61 +208,36 @@ int main(int argc,char** argv)
       } else if(line == "#exit") {
         end = false;
         break;
-      } else if(line == "#barkas") {
-        line1 = "";
-        (*fin) >> line1;
-        G4cout << line1 << G4endl;
-        if(line1 == "off") setBarkasOff = true;
-        if(line1 == "on")  setBarkasOff = false;
-      } else if(line == "#nuclear") {
-        line1 = "";
-        (*fin) >> line1;
-        G4cout << line1 << G4endl;
-        if(line1 == "off") setNuclearOff = true;
-        if(line1 == "on")  setNuclearOff = false;
       }
     } while(end);
 
     if(!end) break;
 
     G4cout << "###### Start new run # " << run << "     #####" << G4endl;
-    if(nPart == 0) {
-      part = gamma;
-    } else if(nPart == 1) {
-      part = electron;
-    } else if(nPart == 2) {
-      part = positron;
-    } else if(nPart == 3) {
-      part = proton;
-    } else if(nPart == 4) {
-      part = antiproton;
-    } else if(nPart == 5) {
-      part = c12;
-    } else if(nPart == 6) {
-      part = ar40;
-    } else {
-      G4cout << "Particle #" << nPart 
-             << " is absent in the list of particles: Exit" << G4endl;
-      end = false;
-      break;
-    }
-    if(nProcess < 0 || nProcess > 2) {
-      G4cout << "Process #" << nProcess 
-             << " is absent in the list of processes: Exit" << G4endl;
-      end = false;
-      break;
-    }
+ 
+    material = mate->GetMaterial(nameMat);
 
+		G4ParticleDefinition* part = (G4ParticleTable::GetParticleTable())->FindParticle(namePart);
 
-    for (mat = 0; mat < nMaterials; mat++) {
-      material = ma[mat];
-      if(nameMat == material->GetName()) break;
-    }
-
+		G4VProcess* proc = phys->GetProcess(nameGen, namePart, material);
+		G4double amass = phys->GetNucleusMass();
+				
+    const G4ParticleDefinition* proton = G4Proton::Proton();
+    const G4ParticleDefinition* neutron = G4Neutron::Neutron();
+    const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
+    const G4ParticleDefinition* pip = G4PionPlus::PionPlus();
+    const G4ParticleDefinition* pi0 = G4PionZero::PionZero();
+		
+		if(!proc) {
+      G4cout << "For particle: " << part->GetParticleName() 
+					   << " generator " << nameGen << " is unavailable"
+					   << G4endl;			
+			exit(1);
+		}
+		
     G4cout << "The particle: " << part->GetParticleName() << G4endl;
     G4cout << "The material: " << material->GetName() << G4endl;
-    G4cout << "The cut on e-:" << cutE/mm << " mm" << G4endl;
-    G4cout << "The cut on g: " << cutG/mm << " mm" << G4endl;
+
     G4cout << "The step:     " << theStep/mm << " mm" << G4endl;
  
     // -------------------------------------------------------------------
@@ -375,196 +249,43 @@ int main(int argc,char** argv)
     // ---- Book a histogram and ntuples
     G4cout << "Hbook file name: <" 
            << ((HBookFile*) hbookManager)->filename() << ">" << G4endl;
-    G4double emin10 = log10(emin/MeV);
-    G4double emax10 = log10(emax/MeV);
-    G4double bin = (emax10 - emin10) / (G4double)nbin;
+    G4double mass = part->GetPDGMass();
+    G4double pmax = sqrt(energy*(energy + 2.0*mass));
 
-    HepHistogram* hist[4];
-    hist[0] = hbookManager->histogram("Stopping power (MeV*cm**2/g)", 
-                                     nbin,emin10,emax10);
-    hist[1] = hbookManager->histogram("Stopping power (MeV/mm)", 
-                                     nbin,emin10,emax10);
-    hist[2] = hbookManager->histogram("Step limit (mm)", 
-                                     nbin,emin10,emax10);
-    hist[3] = hbookManager->histogram("Number of secondaries", 
-                                      nbin,emin10,emax10);
-    //    assert (hDebug != 0);  
+    HepHistogram* h[22];
+
+    h[0]=hbookManager->histogram("Number of Secondaries",50,-0.5,49.5);
+    h[1]=hbookManager->histogram("Type of Secondaries",10,-0.5,9.5);
+    h[2]=hbookManager->histogram("Phi(degrees) of Secondaries",90,-180.0,180.0);
+    h[3]=hbookManager->histogram("P (MeV) for protons",100,0.,pmax);
+    h[4]=hbookManager->histogram("P (MeV) for pi-",100,0.,pmax);
+    h[5]=hbookManager->histogram("P (MeV) for pi+",100,0.,pmax);
+    h[6]=hbookManager->histogram("P (MeV) for neutrons",100,0.,pmax);
+    h[7]=hbookManager->histogram("Pt (MeV) for protons",100,0.,pmax);
+    h[8]=hbookManager->histogram("Pt (MeV) for pi-",100,0.,pmax);
+    h[9]=hbookManager->histogram("Pt (MeV) for pi+",100,0.,pmax);
+    h[10]=hbookManager->histogram("Pt (MeV) for neutrons",100,0.,pmax);
+    h[11]=hbookManager->histogram("E (MeV) for protons",100,0.,energy);
+    h[12]=hbookManager->histogram("E (MeV) for pi-",100,0.,energy);
+    h[13]=hbookManager->histogram("E (MeV) for pi+",100,0.,energy);
+    h[14]=hbookManager->histogram("E (MeV) for neutrons",100,0.,energy);
+    h[15]=hbookManager->histogram("delta E (MeV)",20,-1.,1.);
+    h[16]=hbookManager->histogram("delta P (GeV)",20,-1.,1.);
+    h[17]=hbookManager->histogram("delta Pt (GeV)",20,-1.,1.);
+		/*
+    h[18]=hbookManager->histogram("pi+pi- inv mass (GeV)",100,0.,2.);
+    h[19]=hbookManager->histogram("pi+ p inv mass (GeV)",150,0.,3.);
+    h[20]=hbookManager->histogram("pi0 p inv mass (GeV)",150,0.,3.);
+    h[21]=hbookManager->histogram("pi- p inv mass (GeV)",150,0.,3.);
+*/
+		
+		    //    assert (hDebug != 0);  
     G4cout<< "Histograms is initialised" << G4endl;
-
-    gamma->SetCuts(cutG);
-    electron->SetCuts(cutE);
-    positron->SetCuts(cutE);
-  
-    // Processes - all new 
-    G4bool success = false;
-
-    gmanager = new G4ProcessManager(gamma);
-    gmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
-    gmanager->AddDiscreteProcess(new G4LowEnergyCompton());
-    gmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());    
-
-    if(lowE) {
-
-      elecManager = new G4ProcessManager(electron);
-      electron->SetProcessManager(elecManager);
-      eionle = new G4LowEnergyIonisation();
-      eionle->SetEnlossFluc(false);
-      ebrle = new G4LowEnergyBremsstrahlung();
-      ebrle->SetEnlossFluc(false);
-      elecManager->AddProcess(eionle);
-      elecManager->AddProcess(ebrle);
-      eionle->BuildPhysicsTable(*electron);
-      ebrle->BuildPhysicsTable(*electron);
-      if(nPart == 1) {
-        if(nProcess == 2) {
-          success = true;
-	}
-
-      } else if (nPart == 3) {
-        protManager = new G4ProcessManager(proton);
-        proton->SetProcessManager(protManager);
-        hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
-        protManager->AddProcess(hionle);
-        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
-        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
-        if(setBarkasOff)   hionle->SetBarkasOff();
-        if(!setBarkasOff)  hionle->SetBarkasOn();
-        hionle->SetVerboseLevel(verbose);
-        hionle->BuildPhysicsTable(*proton);
-        success = true;
-
-      } else if (nPart == 4) {
-        aprotManager = new G4ProcessManager(antiproton);
-        antiproton->SetProcessManager(aprotManager);
-        hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
-        aprotManager->AddProcess(hionle);
-        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
-        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
-        if(setBarkasOff)   hionle->SetBarkasOff();
-        if(!setBarkasOff)  hionle->SetBarkasOn();
-        hionle->SetVerboseLevel(verbose);
-        hionle->BuildPhysicsTable(*antiproton);
-        success = true;
-
-      } else if (nPart == 5 || nPart == 6) {
-        protManager = new G4ProcessManager(proton);
-        proton->SetProcessManager(protManager);
-        hionle = new G4hLowEnergyIonisation();
-        hionle->SetEnlossFluc(false);
-        protManager->AddProcess(hionle);
-        if(setNuclearOff)  hionle->SetNuclearStoppingOff();
-        if(!setNuclearOff) hionle->SetNuclearStoppingOn();
-        if(setBarkasOff)   hionle->SetBarkasOff();
-        if(!setBarkasOff)  hionle->SetBarkasOn();
-        hionle->SetVerboseLevel(verbose);
-        hionle->BuildPhysicsTable(*proton);
-        ionManager = new G4ProcessManager(part);
-        part->SetProcessManager(ionManager);
-        ionle = new G4hLowEnergyIonisation();
-        ionle->SetEnlossFluc(false);
-        if(setNuclearOff)  ionle->SetNuclearStoppingOff();
-        if(!setNuclearOff) ionle->SetNuclearStoppingOn();
-        if(setBarkasOff)   ionle->SetBarkasOff();
-        if(!setBarkasOff)  ionle->SetBarkasOn();
-        ionManager->AddProcess(ionle);
-        ionle->SetVerboseLevel(verbose);
-        ionle->BuildPhysicsTable(*part);
-        success = true;
-      }
-
-    } else {
-
-      elecManager = new G4ProcessManager(electron);
-      electron->SetProcessManager(elecManager);
-      eionst = new G4eIonisation();
-      eionst->SetEnlossFluc(false);
-      elecManager->AddProcess(eionst);
-      ebrst = new G4eBremsstrahlung();
-      ebrst->SetEnlossFluc(false);
-      elecManager->AddProcess(ebrst);
-      eionst->BuildPhysicsTable(*electron);
-      ebrst->BuildPhysicsTable(*electron);
-      if(nPart == 1) {
-        if(nProcess == 2) {
-          success = true;
-	}
-      } else if(nPart == 2) {
-        positManager = new G4ProcessManager(positron);
-        positron->SetProcessManager(positManager);
-        if(nProcess == 0) {
-          eionst = new G4eIonisation();
-          eionst->SetEnlossFluc(false);
-          positManager->AddProcess(eionst);
-          eionst->BuildPhysicsTable(*positron);
-          success = true;
-        } else if(nProcess == 1) {
-          ebrst = new G4eBremsstrahlung();
-          ebrst->SetEnlossFluc(false);
-          positManager->AddProcess(ebrst);
-          ebrst->BuildPhysicsTable(*positron);
-          success = true;
-        } else if(nProcess == 2) {
-          eionst = new G4eIonisation();
-          ebrst = new G4eBremsstrahlung();
-          eionst->SetEnlossFluc(false);
-          ebrst->SetEnlossFluc(false);
-          positManager->AddProcess(eionst);
-          positManager->AddProcess(ebrst);
-          eionst->BuildPhysicsTable(*positron);
-          ebrst->BuildPhysicsTable(*positron);
-          success = true;
-	}
-
-      } else if (nPart == 3) {
-        protManager = new G4ProcessManager(proton);
-        proton->SetProcessManager(protManager);
-        hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
-        protManager->AddProcess(hionst);
-        hionst->SetVerboseLevel(verbose);
-        hionst->BuildPhysicsTable(*proton);
-        success = true;
-
-      } else if (nPart == 4) {
-        aprotManager = new G4ProcessManager(antiproton);
-        antiproton->SetProcessManager(aprotManager);
-        hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
-        aprotManager->AddProcess(hionst);
-        hionst->SetVerboseLevel(verbose);
-        hionst->BuildPhysicsTable(*antiproton);
-        success = true;
-
-      } else if (nPart == 5 || nPart == 6) {
-        protManager = new G4ProcessManager(proton);
-        proton->SetProcessManager(protManager);
-        hionst = new G4hIonisation();
-        hionst->SetEnlossFluc(false);
-        protManager->AddProcess(hionst);
-        hionst->SetVerboseLevel(verbose);
-        hionst->BuildPhysicsTable(*proton);
-        ionManager = new G4ProcessManager(part);
-        part->SetProcessManager(ionManager);
-        ionst = new G4hIonisation();
-        ionst->SetEnlossFluc(false);
-        ionManager->AddProcess(ionst);
-        ionst->SetVerboseLevel(verbose);
-        ionst->BuildPhysicsTable(*part);
-        success = true;
-      }
-    }
-
-    if(success) G4cout  <<  "Physics tables are built"  <<  G4endl;  
-    else        G4cout  <<  "Physics tables are not built!!!"  <<  G4endl;  
-
 
     // Create a DynamicParticle  
   
-    G4ParticleMomentum gDir(initX,initY,initZ);
-    G4double gEnergy = emax;
-    G4DynamicParticle dParticle(part,gDir,gEnergy);
+    G4ParticleMomentum gDir(0.0,0.0,1.0);
+    G4DynamicParticle dParticle(part,gDir,energy);
 
     // Track 
     G4ThreeVector aPosition(0.,0.,0.);
@@ -595,122 +316,155 @@ int main(int argc,char** argv)
 
     G4Timer* timer = new G4Timer();
     timer->Start();
+		const G4DynamicParticle* sec;
+		G4ParticleDefinition* pd;
+		G4ThreeVector  mom;
+		G4LorentzVector labv, fm;
+		G4double e, p, m, px, py, pz, pt;
+    G4VParticleChange* aChange = 0;
+			
+    for (G4int iter=0; iter<nevt; iter++) {
 
-    for (G4int iter=0; iter<nbin; iter++) {
-
-      G4double le = emin10 + ((G4double)iter + 0.5)*bin;
-      G4double  e = pow(10.0,le) * MeV;
       gTrack->SetStep(step); 
-      gTrack->SetKineticEnergy(e); 
+      gTrack->SetKineticEnergy(energy); 
       G4double x = 0.0;
-      G4VParticleChange* aChange = 0;
 
-      if(lowE) {
-
-        if(nPart == 1) {
-          if(nProcess == 0) {
-            x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionle->AlongStepDoIt(*gTrack,*step);
-
-          } else if(nProcess == 1) {
-            x = ebrle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrle->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionle->AlongStepDoIt(*gTrack,*step);
- 	  }
-
-        } else if (nPart == 3 ) {
-          x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionle->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 4) {
-          x = hionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionle->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 5 || nPart == 6) {
-          x = ionle->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = ionle->AlongStepDoIt(*gTrack,*step);
-
-	}
-
-      } else {
-
-
-        if(nPart == 1) {
-          if(nProcess == 0) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
-
-          } else if(nProcess == 1) {
-            x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrst->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
- 	  }
-
-        } else if(nPart == 2) {
-          if(nProcess == 0) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
-
-          } else if(nProcess == 1) {
-            x = ebrst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = ebrst->AlongStepDoIt(*gTrack,*step);
-          } else if(nProcess == 2) {
-            x = eionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-            aChange = eionst->AlongStepDoIt(*gTrack,*step);
- 	  }
-
-        } else if (nPart == 3) {
-          x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionst->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 4) {
-          x = hionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = hionst->AlongStepDoIt(*gTrack,*step);
-
-        } else if (nPart == 5 || nPart == 6) {
-          x = ionst->GetContinuousStepLimit(*gTrack,theStep,theStep,safety);
-          aChange = ionst->AlongStepDoIt(*gTrack,*step);
-	}
-      }
-
+			labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
+      aChange = proc->PostStepDoIt(*gTrack,*step);
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
-
-      //G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
-
-      if(n > 0) {
-        for(G4int i=0; i<n; i++) {
-          de += (aChange->GetSecondary(i))->GetKineticEnergy();
-          if(verbose) {
-            G4cout << "add " 
-                   << ((aChange->GetSecondary(i))->GetKineticEnergy())/eV
-                   << " eV" << G4endl;
-	  }
-	}
+      h[0]->accumulate((float)n,1.0);
+			
+			if(verbose && de > 0.0) {
+        G4cout << " de(MeV) = " << de/MeV << " n= " << n << G4endl;
       }
-      G4double st = de/(theStep*(material->GetDensity()));
-      st *= gram/(cm*cm*MeV); 
-      G4double s = de*mm/(theStep*MeV); 
+			 					
+      for(G4int i=0; i<n+1; i++) {
 
-      if(verbose) {
-          G4cout  <<  "Iteration = "  <<  iter 
-	          << "  E = " << e/MeV << " MeV; StepLimit= "
-	          << x/mm << " mm; de= " 
-                  << de/eV << " eV; dE/dx= "
-                  << st << " MeV*cm^2/g" <<  G4endl;
-      }
+				if(i<n) {
+					sec = aChange->GetSecondary(i)->GetDynamicParticle();
+					pd  = sec->GetDefinition();					
+					mom = sec->GetMomentumDirection();
+					e   = sec->GetKineticEnergy();
 
-      if(x > 1000.0*meter) x = 1000.0*meter;      
+			  } else {
+				  if(aChange->GetStatusChange() == fStopAndKill) break;
+					pd = part;
+					G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
+					mom = *(bChange->GetMomentumDirectionChange());
+					e   = bChange->GetEnergyChange();	
+				}
+				if (e < 0.0) {
+					e = 0.0;
+				}
+				m = pd->GetPDGMass();
+				p = sqrt(e*(e + 2.0*m));
+			  mom *= p;
+				h[2]->accumulate(mom.phi()/degree,1.0);
+					
+				de += e;
+        if(verbose) {
+            G4cout << i << "-th secondary  " 
+								   << pd->GetParticleName() << "   Ekin(MeV)= "
+                   << e/MeV
+								   << "   p(MeV)= " << mom/MeV
+								   << "   m(MeV)= " << m/MeV
+						       << "   Etot(MeV)= " << (e+m)/MeV
+                   << G4endl;
+        }
+				
+        m  = pd->GetPDGMass();
+        fm = G4LorentzVector(mom, e + m);
+        labv -= fm;
+        px = mom.x();
+        py = mom.y();
+        pz = mom.z();
+        p  = sqrt(px*px +py*py + pz*pz);
+        pt = sqrt(px*px +py*py);
 
-      hist[0]->accumulate(le,st);
-      hist[1]->accumulate(le,s);
-      hist[2]->accumulate(le,x/mm);
-      hist[3]->accumulate(le,(G4double)n);
+				if(pd == proton) { 
+						
+          h[1]->accumulate(1.0, 1.0);						
+          h[3]->accumulate(p/MeV, 1.0); 
+          h[7]->accumulate(pt/MeV, 1.0);
+          h[11]->accumulate(e/MeV, 1.0);
+		
+						/*				
+            for( j = i+1; j != mcp->end(); j++ ) {
+          mp1 = (*j);
+          if(1 == mp1->ParentID()) {
+            pd1 = tabl->FindParticle(mp1->ParticlePDGcode());
+            if(pd1) {
+              fm1 = mp1->FourMomentum();
+              mass = fm1.invariantMass(fm)/GeV;
+            }
+            if(pd1 == pip) {
+              h[15]->accumulate(mass);
+            } else if(pd1 == pi0) {
+              h[16]->accumulate(mass);
+            } else if(pd1 == pin) {
+              h[17]->accumulate(mass);
+            }
+          }
+					*/
+
+
+        } else if(pd == pin) {
+    
+			  	h[1]->accumulate(4.0, 1.0);						
+          h[4]->accumulate(p/MeV, 1.0); 
+          h[8]->accumulate(pt/MeV, 1.0);
+          h[12]->accumulate(e/MeV, 1.0);
+		
+/*
+        for( j = i+1; j != mcp->end(); j++ ) {
+          mp1 = (*j);
+          if(1 == mp1->ParentID()) {
+            pd1 = tabl->FindParticle(mp1->ParticlePDGcode());
+            if(pd1) {
+              fm1 = mp1->FourMomentum();
+              mass = fm1.invariantMass(fm)/GeV;
+            }
+            if(pd1 == pip) {
+              h[14]->accumulate(mass);
+            } else if(pd1 == proton) {
+              h[17]->accumulate(mass);
+            }
+          }
+        }
+*/			
+				
+        } else if(pd == pip) {
+    
+					h[1]->accumulate(3.0, 1.0);						
+          h[5]->accumulate(p/MeV, 1.0); 
+          h[9]->accumulate(pt/MeV, 1.0);
+          h[13]->accumulate(e/MeV, 1.0);
+		
+        } else if(pd == neutron) {
+    
+					h[1]->accumulate(2.0, 1.0);						
+          h[6]->accumulate(p/MeV, 1.0); 
+          h[10]->accumulate(pt/MeV, 1.0);
+          h[14]->accumulate(e/MeV, 1.0);
+				}
+			}
+				
+		  if(verbose > 0) {
+        G4cout << "Energy/Momentum balance= " << labv << G4endl;
+      }	
+
+		  h[15]->accumulate(labv.e()/MeV, 1.0);
+			px = labv.px();	
+			py = labv.py();
+			pz = labv.pz();							
+      p  = sqrt(px*px +py*py + pz*pz);
+      pt = sqrt(px*px +py*py);
+			h[16]->accumulate(p/GeV, 1.0);
+			h[17]->accumulate(pt/GeV, 1.0);
+			aChange->Clear();
+	
     }
 
     timer->Stop();
@@ -722,23 +476,11 @@ int main(int argc,char** argv)
     delete hbookManager;    
     G4cout << "# hbook is deleted" << G4endl;
     G4cout << "###### End of run # " << run << "     ######" << G4endl;
-    
 
   } while(end);
+
+	delete mate;
+	delete fin;
+
   G4cout << "###### End of test #####" << G4endl;
 }
-
-#include "hTest/src/G4IonC12.cc"
-#include "hTest/src/G4IonAr40.cc"
-
-
-
-
-
-
-
-
-
-
-
-

@@ -24,7 +24,7 @@
 // -------------------------------------------------------------
 //      GEANT 4 class 
 //
-//      ---------- Test30Material -------
+//      ---------- Test30VSecondaryGenerator -------
 //                by Vladimir Ivanchenko, 12 March 2002 
 // 
 //    Modified:
@@ -32,32 +32,61 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef Test30Material_h
-#define Test30Material_h 1
-
-#include "globals.hh"
-
-class G4Material;
+#include "Test30VSecondaryGenerator.hh"
+#include "G4Track.hh"
+#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4ElementVector.hh"
+#include "G4Material.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Test30Material 
+Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi,
+  G4Material* mat):
+  hInteraction(hadi),
+	material(mat)
 {
-  public:
+	G4cout << "New generator and material= " << material->GetName() << G4endl;
+  generatorName = "";
+	const G4ElementVector* ev = material->GetElementVector();
+  G4int Z = (G4int)(((*ev)[0])->GetZ() + 0.5);
+  G4int N = (G4int)(((*ev)[0])->GetN() + 0.5);
+	G4cout << "Nucleus with N= " << N << "  Z= " << Z << G4endl;
+  targetNucleus.SetParameters((G4double)N, (G4double)Z);
+	mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);
+	G4cout << "Mass from targetNucleus(MeV)= " << mass/MeV << G4endl;
+	mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
+	G4cout << "Mass from IonTable(MeV)=      " << mass/MeV << G4endl;	
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
+{
+  if(hInteraction) delete hInteraction;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4VParticleChange* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
+{
+ if (hInteraction) {
   
-    Test30Material();
-   ~Test30Material();
-     
-		G4Material* GetMaterial(const G4String&);     
-                      
-  private:
+   return hInteraction->ApplyYourself(track, targetNucleus);
 
-	  void Initialise();
-	     
-};
+ } else {
+   theParticleChange.Initialize(track);
+   return &theParticleChange;
+ }
 
-#endif
+}
 
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
 
 
