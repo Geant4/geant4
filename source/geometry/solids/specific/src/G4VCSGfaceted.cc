@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.8 2002-10-28 11:47:53 gcosmo Exp $
+// $Id: G4VCSGfaceted.cc,v 1.9 2002-10-30 13:52:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -58,7 +58,8 @@
 // Constructor
 //
 G4VCSGfaceted::G4VCSGfaceted( G4String name )
-  : G4VSolid(name)
+  : G4VSolid(name),
+    numFace(0), faces(0)
 {
 }
 

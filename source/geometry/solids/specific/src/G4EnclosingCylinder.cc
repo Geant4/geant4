@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnclosingCylinder.cc,v 1.4 2002-10-28 11:47:51 gcosmo Exp $
+// $Id: G4EnclosingCylinder.cc,v 1.5 2002-10-30 13:52:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,10 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
                                                 G4bool thePhiIsOpen, 
                                                 G4double theStartPhi,
                                                 G4double theTotalPhi )
+  : startPhi(theStartPhi), totalPhi(theTotalPhi),
+    rx1(0.), ry1(0.), dx1(0.), dy1(0.),
+    rx2(0.), ry2(0.), dx2(0.), dy2(0.),     
+    concave(theTotalPhi > M_PI)
 {
   //
   // Obtain largest r and smallest and largest z
@@ -58,10 +62,7 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
   //
   phiIsOpen = thePhiIsOpen;
   if ( phiIsOpen )
-  {
-    startPhi = theStartPhi;
-    totalPhi = theTotalPhi;
-    
+  {    
     rx1 = cos(startPhi);
     ry1 = sin(startPhi);
     dx1 = +ry1*10*kCarTolerance;
@@ -71,8 +72,6 @@ G4EnclosingCylinder::G4EnclosingCylinder( const G4ReduciblePolygon *rz,
     ry2 = sin(startPhi+totalPhi);
     dx2 = -ry2*10*kCarTolerance;
     dy2 = +rx2*10*kCarTolerance;
-    
-    concave = totalPhi > M_PI;
   }
   
   //

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ClippablePolygon.cc,v 1.7 2002-10-28 11:47:51 gcosmo Exp $
+// $Id: G4ClippablePolygon.cc,v 1.8 2002-10-30 13:52:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,6 +43,7 @@
 // Constructor
 //
 G4ClippablePolygon::G4ClippablePolygon()
+  : normal(0.,0.,0.)
 {
 }
 

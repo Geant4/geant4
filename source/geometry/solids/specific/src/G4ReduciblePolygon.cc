@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReduciblePolygon.cc,v 1.5 2002-10-28 11:47:53 gcosmo Exp $
+// $Id: G4ReduciblePolygon.cc,v 1.6 2002-10-30 13:52:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,8 @@
 G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[],
                                         const G4double b[],
                                               G4int n )
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
+    vertexHead(0)
 {
   //
   // Do all of the real work in Create
@@ -61,6 +63,8 @@ G4ReduciblePolygon::G4ReduciblePolygon( const G4double a[],
 G4ReduciblePolygon::G4ReduciblePolygon( const G4double rmin[],
                                         const G4double rmax[], 
                                         const G4double z[], G4int n )
+  : aMin(0.), aMax(0.), bMin(0.), bMax(0.),
+    vertexHead(0)
 {
   //
   // Translate

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolyconeSide.cc,v 1.5 2002-10-28 11:47:52 gcosmo Exp $
+// $Id: G4PolyconeSide.cc,v 1.6 2002-10-30 13:52:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,6 +56,7 @@ G4PolyconeSide::G4PolyconeSide( const G4PolyconeSideRZ *prevRZ,
                                       G4double theDeltaPhi, 
                                       G4bool thePhiIsOpen, 
                                       G4bool isAllBehind )
+  : corners(0)
 {
   //
   // Record values
