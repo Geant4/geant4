@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002-01-15 16:45:54 grichine Exp $
+# $Id: GNUmakefile,v 1.4 2003-09-20 14:40:47 vnivanch Exp $
 # --------------------------------------------------------------------
 # GNUmakefile for electromagnetic sub-library.  John Allison, 25/6/98.
 # --------------------------------------------------------------------
@@ -20,6 +20,7 @@ CPPFLAGS += \
             -I$(G4BASE)/geometry/volumes/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/processes/management/include \
+            -I$(G4BASE)/processes/cuts/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/bosons/include \
             -I$(G4BASE)/particles/leptons/include \
