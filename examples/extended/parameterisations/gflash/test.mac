@@ -1,5 +1,5 @@
 #
-# Macro file for the initialization phase of "exampleN02.cc"
+# Macro file for the initialization phase of gflash example
 # when runing in interactive mode
 #
 # Sets some default verbose
@@ -10,11 +10,8 @@
 /gps/energy    50 GeV
 /gps/direction  0. 0. 1.0
 
-#cuts
-/detector/switchUserLimits off
-/detector/minEkine 1 MeV
 
-# Paramatrisation off
+# Paramatrisation on 
 /GFlash/flag 1
 
 
