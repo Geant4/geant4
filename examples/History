@@ -1,4 +1,4 @@
-$Id: History,v 1.34 1999-12-01 17:18:41 stesting Exp $
+$Id: History,v 1.35 1999-12-03 18:29:37 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3rd December 1999  Gabriele Cosmo  (examples-V00-01-17)
+- Fixed definition of vacuum in exampleN02 and updated reference
+  output as for Linux-g++ (J.Apostolakis)
+- Included PersistentEx01-V00-01-04, PersistentEx02-V00-01-02.
+
 1st December 1999  John Allison  (examples-V00-01-16)
-- Added 1 Tev muon to exampleN02 (John Apostolakis).
+- Added 1 Tev muon to exampleN02 (J.Apostolakis).
 - Included PersistentEx01-V00-01-03, PersistentEx02-V00-01-01.
 
 29th November 1999  John Allison  (examples-V00-01-15)
