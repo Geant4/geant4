@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 1999-01-08 16:31:50 gunter Exp $
+# $Id: GNUmakefile,v 1.2 1999-06-04 13:15:50 japost Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -26,7 +26,7 @@ INCFLAGS := -I$(G4BASE)/geometry/management/include \
             -I$(G4BASE)/graphics_reps/include
 
 LDLIBS   := -lG4volumes -lG4csg -lG4geometrymng -lG4volumes -lG4geometrymng \
-            -lG4global \
-            -lG4graphics_reps
+            -lG4graphics_reps \
+            -lG4globman
 
 include $(G4INSTALL)/config/binmake.gmk
