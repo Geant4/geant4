@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.19 2003-04-11 11:36:22 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.20 2003-04-14 20:07:29 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,6 +163,22 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
   param->SetDefaultValue("all");
   applyCutsCmd->SetParameter(param);
   applyCutsCmd->AvailableForStates(G4State_PreInit,G4State_Init,G4State_Idle);
+
+  //  /run/particle/dumpCutValues command
+  dumpCutValuesCmd = new G4UIcmdWithAString("/run/particle/dumpCutValues",this);
+  dumpCutValuesCmd->SetGuidance("Dump a list of production threshold values in range and energy");
+  dumpCutValuesCmd->SetGuidance("for all registered material-cuts-couples.");
+  dumpCutValuesCmd->SetGuidance("Dumping a list takes place when you issue 'beamOn' and");
+  dumpCutValuesCmd->SetGuidance("actual conversion tables from range to energy are
+available.");
+  dumpCutValuesCmd->SetGuidance("If you want a list 'immediately', use '/run/dumpRegion' for threshold");
+  dumpCutValuesCmd->SetGuidance("list given in gange only. Also, '/run/dumpCouples'
+gives you the
+  dumpCutValuesCmd->SetGuidance("current list if you have already issued 'run/beamOn' at least once.");
+  dumpCutValuesCmd->SetParameterName("particle",true);
+  dumpCutValuesCmd->SetDefaultValue("all");
+  dumpCutValuesCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
 }
 
 G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
@@ -178,6 +194,7 @@ G4UserPhysicsListMessenger::~G4UserPhysicsListMessenger()
   delete retrieveCmd;
   delete asciiCmd;
   delete applyCutsCmd;
+  delete dumpCutValuesCmd;
   delete theDirectory;
 }
 
@@ -241,6 +258,8 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
 
     thePhysicsList->SetApplyCuts(flag, name);
  
+  } else if( command == dumpCutValuesCmd ) {
+    thePhysicsList->DumpCutValuesTable(1);
   }
 
 } 
