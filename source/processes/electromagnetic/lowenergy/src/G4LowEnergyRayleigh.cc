@@ -22,7 +22,7 @@
 //
 // --------------------------------------------------------------------
 //
-// $Id: G4LowEnergyRayleigh.cc,v 1.27 2001-11-07 20:47:30 pia Exp $
+// $Id: G4LowEnergyRayleigh.cc,v 1.28 2001-11-07 21:31:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -52,7 +52,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
 #include "G4ThreeVector.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4VCrossSectionHandler.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"

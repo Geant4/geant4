@@ -226,7 +226,6 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   InitializeParametrisation() ;
   G4Proton* theProton = G4Proton::Proton();
   G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
-  G4Electron* theElectron = G4Electron::Electron();
 
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
@@ -240,8 +239,6 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
 
   // Define cuts
 
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  
   //  create table
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 

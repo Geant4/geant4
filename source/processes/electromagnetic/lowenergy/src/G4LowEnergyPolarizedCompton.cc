@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPolarizedCompton.cc,v 1.10 2001-11-07 20:47:29 pia Exp $
+// $Id: G4LowEnergyPolarizedCompton.cc,v 1.11 2001-11-07 21:31:16 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ------------------------------------------------------------
@@ -61,7 +61,6 @@
 #include "G4DynamicParticle.hh"
 #include "G4VParticleChange.hh"
 #include "G4ThreeVector.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4VCrossSectionHandler.hh"
 #include "G4CrossSectionHandler.hh"
 #include "G4VEMDataSet.hh"

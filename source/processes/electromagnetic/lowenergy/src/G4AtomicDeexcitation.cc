@@ -165,7 +165,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 							      G4int provShellId )
 { 
   G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
-  G4int provenienceShell = provShellId;
+  //  G4int provenienceShell = provShellId;
 
   //isotropic angular distribution for the outcoming photon
   G4double newcosTh = 1.-2.*G4UniformRand();
