@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.6 1999-10-04 15:47:16 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.7 1999-10-25 10:29:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -137,7 +137,7 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
     G4Scene* pScene = fpVisManager -> GetCurrentScene ();
     const G4String& currentSceneName = pScene -> GetName ();
     pScene -> AddRunDurationModel (model);
-    UpdateVisManagerSceneAndViewParameters (currentSceneName);
+    UpdateVisManagerScene (currentSceneName);
     G4cout << "First occurrence of \"" << foundVolume -> GetName ()
 	   << "\", copy no. " << copyNo
 	   << ", found at depth " << foundDepth
@@ -212,7 +212,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
   G4Scene* pScene = fpVisManager -> GetCurrentScene ();
   const G4String& currentSceneName = pScene -> GetName ();
   pScene -> AddRunDurationModel (model);
-  UpdateVisManagerSceneAndViewParameters (currentSceneName);
+  UpdateVisManagerScene (currentSceneName);
   G4cout << "Logical volume \"" << pLV -> GetName ()
 	 << " with requested depth of descent "
 	 << requestedDepthOfDescent
@@ -275,7 +275,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 				 GetParticle(iParticle)))
 	pCurrentScene -> AddRunDurationModel
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
-    UpdateVisManagerSceneAndViewParameters ();
+    UpdateVisManagerScene ();
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	   << endl;
     return;
@@ -293,7 +293,7 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
      GetFlavoredWorldForThis(currentParticle)) {
     pCurrentScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis));
-    UpdateVisManagerSceneAndViewParameters (currentSceneName);
+    UpdateVisManagerScene (currentSceneName);
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
            << endl;
   }

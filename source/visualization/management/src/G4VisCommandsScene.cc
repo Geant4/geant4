@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsScene.cc,v 1.7 1999-05-10 14:04:15 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.8 1999-10-25 10:29:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -61,7 +61,7 @@ void G4VVisCommandScene::UpdateCandidateLists () {
   }
 }
 
-void G4VVisCommandScene::UpdateVisManagerSceneAndViewParameters
+void G4VVisCommandScene::UpdateVisManagerScene
 (const G4String& sceneName) {
   G4SceneList& sceneList = fpVisManager -> SetSceneList ();
   G4int iScene, nScenes = sceneList.entries ();
@@ -70,7 +70,6 @@ void G4VVisCommandScene::UpdateVisManagerSceneAndViewParameters
   }
   if (iScene < nScenes) {
     fpVisManager -> SetCurrentScene (sceneList [iScene]);
-    G4UImanager::GetUIpointer () -> ApplyCommand ("/vis/camera/reset");
   }
   else {
     fpVisManager -> SetCurrentScene (0);
@@ -129,7 +128,7 @@ void G4VisCommandSceneCreate::SetNewValue (G4UIcommand* command,
     sceneList.append (new G4Scene (newName));
     // Adds empty scene data object to list.
 
-    UpdateVisManagerSceneAndViewParameters (newName);
+    UpdateVisManagerScene (newName);
     G4cout << "New empty scene \"" << newName << "\" created." << endl;
 
     UpdateCandidateLists ();
@@ -221,7 +220,10 @@ G4VisCommandSceneNotifyHandlers::~G4VisCommandSceneNotifyHandlers () {
 
 G4String G4VisCommandSceneNotifyHandlers::GetCurrentValue
 (G4UIcommand* command) {
-  return fpVisManager -> GetCurrentScene () -> GetName ();
+  const G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  G4String currentSceneName;
+  if (pScene) currentSceneName = pScene -> GetName ();
+  return currentSceneName;
 }
 
 void G4VisCommandSceneNotifyHandlers::SetNewValue (G4UIcommand* command,
@@ -312,12 +314,12 @@ void G4VisCommandSceneRemove::SetNewValue (G4UIcommand* command,
     G4cout << "Scene \"" << removeName << "\" removed." << endl;
     UpdateCandidateLists ();
     if (sceneList.isEmpty ()) {
-      UpdateVisManagerSceneAndViewParameters ();
+      UpdateVisManagerScene ();
       G4cout << "No scenes left.  Please create a new one." << endl;
     }
     else {
       if (currentSceneName == removeName) {
-	UpdateVisManagerSceneAndViewParameters (sceneList [0] -> GetName ());
+	UpdateVisManagerScene (sceneList [0] -> GetName ());
 	G4cout << "Current scene is now \""
 	       << fpVisManager -> GetCurrentScene () -> GetName ()
 	       << "\"" << endl;
@@ -367,7 +369,7 @@ void G4VisCommandSceneSelect::SetNewValue (G4UIcommand* command,
   }
   G4cout << "Scene \"" << selectName;
   if (iScene < nScenes) {
-    UpdateVisManagerSceneAndViewParameters (selectName);
+    UpdateVisManagerScene (selectName);
     G4cout << "\" selected." << endl;
   }
   else {
