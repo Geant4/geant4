@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-11-19 12:41:57 johna Exp $
+$Id: History,v 1.18 2001-12-13 18:14:13 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+tests-V03-02-06 13th December 2001  Gabriele Cosmo
+- Updated reference outputs.
 
 tests-V03-02-05 19th November 2001  John Allison
 - This tag is geant4-04-00-cand-01 plus changes to VisManagers
