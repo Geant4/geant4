@@ -225,6 +225,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "binary") {
     G4BinaryCascade* hkm = new G4BinaryCascade();
+    hkm->SetMaxEnergy(15.*GeV);
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
@@ -232,12 +233,14 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
 
   } else if(gen_name == "binary_ion") {
     G4BinaryLightIonReaction* hkm = new G4BinaryLightIonReaction();
+    hkm->SetMaxEnergy(15.*GeV);
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
 
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
+    hkm->SetMaxEnergy(15.*GeV);
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
