@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.53 2004-06-23 21:34:53 stesting Exp $
+# $Id: Configure,v 1.54 2004-06-24 14:26:35 stesting Exp $
 #
-# Generated on Wed Jun 23 23:32:10 CEST 2004 [metaconfig 3.0 PL70]
+# Generated on Thu Jun 24 14:09:42 CEST 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -2506,6 +2506,12 @@ case "$g4lib" in
 	;;
 esac
 
+case "$g4bin" in
+'')
+	g4bin=$g4workdir/bin
+	;;
+esac
+
 while test 1 = 1  ; do
 
 g4message=`cat << EOM
@@ -2517,6 +2523,8 @@ g4message=`cat << EOM
 1) G4TMP:		$g4tmp
 
 2) G4LIB:		$g4lib
+
+3) G4BIN:		$g4bin
 
 To modify default settings, select number above (e.g. 2) 
 EOM`
@@ -2545,13 +2553,13 @@ gans=$ans
 		. ./getfile
 		g4lib=$ans
 		;;
-#	3) 
-#		dflt=$g4bin
-#		fn='d~+'
-#		rp="Where will be your Geant4 bin directory?"
-#		. ./getfile
-#		g4bin=$ans
-#		;;
+	3) 
+		dflt=$g4bin
+		fn='d~+'
+		rp="Where will be your Geant4 bin directory?"
+		. ./getfile
+		g4bin=$ans
+		;;
 
 #	[eE]) 
 #		break
