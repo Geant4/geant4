@@ -18,6 +18,14 @@ Al
 585.
 #elim(MeV)
 20.
+#emaxpi(MeV)
+250.
+#emax(MeV)
+500.
+#nbinsd
+50
+#nbinspi
+25
 #nangle
 5
 #angles
@@ -48,6 +56,6 @@ chips.paw
 kinetic
 #paw
 kin.paw
-#run
+//#run
 //--------Exit
 #exit
