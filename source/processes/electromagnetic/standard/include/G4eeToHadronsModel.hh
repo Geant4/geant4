@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadronsModel.hh,v 1.1 2004-10-14 12:16:38 vnivanch Exp $
+// $Id: G4eeToHadronsModel.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -61,7 +61,7 @@ public:
   G4eeToHadronsModel(const G4Vee2hadrons*, G4int ver=0,
                      const G4String& nam = "eeToHadrons");
 
-  ~G4eeToHadronsModel();
+  virtual ~G4eeToHadronsModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eplusAnnihilation70.hh,v 1.1 2004-08-11 14:20:47 vnivanch Exp $
+// $Id: G4eplusAnnihilation70.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,7 @@ public:
 
   G4eplusAnnihilation70(const G4String& name = "annihil");
 
-  ~G4eplusAnnihilation70();
+  virtual ~G4eplusAnnihilation70();
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 

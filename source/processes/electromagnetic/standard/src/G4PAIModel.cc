@@ -754,12 +754,12 @@ G4PAIModel::GetEnergyTransfer( G4int iPlace, G4double position, G4int iTransfer 
 ////////////////////////////////////////////////////////////////////////////
 
 std::vector<G4DynamicParticle*>* 
-G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple* couple,
-                               const G4DynamicParticle* dp,
-                                     G4double tmin,
-                                     G4double maxEnergy)
+G4PAIModel::SampleSecondaries( const G4MaterialCutsCouple*,
+                               const G4DynamicParticle*,
+                                     G4double,
+                                     G4double)
 {
-  std::vector<G4DynamicParticle*>* vdp = NULL;
+  std::vector<G4DynamicParticle*>* vdp = 0;
   // std::vector<G4DynamicParticle*>* vdp = new std::vector<G4DynamicParticle*>;
   //  G4DynamicParticle* delta             = SampleSecondary(couple, dp, tmin, maxEnergy);
   // vdp->push_back(delta);

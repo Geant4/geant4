@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToHadrons.hh,v 1.1 2004-10-14 12:16:38 vnivanch Exp $
+// $Id: G4eeToHadrons.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -62,7 +62,7 @@ public:
 
   G4eeToHadrons(const G4String& name = "ee2hadr");
 
-  ~G4eeToHadrons();
+  virtual ~G4eeToHadrons();
 
   virtual G4bool IsApplicable(const G4ParticleDefinition& p);
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eeToTwoGammaModel.hh,v 1.1 2004-08-11 14:24:20 vnivanch Exp $
+// $Id: G4eeToTwoGammaModel.hh,v 1.2 2004-10-25 13:20:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -57,7 +57,7 @@ public:
 
   G4eeToTwoGammaModel(const G4ParticleDefinition* p = 0, const G4String& nam = "eplus2gg");
 
-  ~G4eeToTwoGammaModel();
+  virtual ~G4eeToTwoGammaModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 

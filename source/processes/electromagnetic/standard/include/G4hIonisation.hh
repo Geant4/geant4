@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4hIonisation.hh,v 1.25 2004-01-21 18:05:22 vnivanch Exp $
+// $Id: G4hIonisation.hh,v 1.26 2004-10-25 13:20:23 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,7 +84,7 @@ public:
 
   G4hIonisation(const G4String& name = "hIoni");
 
-  ~G4hIonisation();
+  virtual ~G4hIonisation();
 
   G4bool IsApplicable(const G4ParticleDefinition& p);
 
