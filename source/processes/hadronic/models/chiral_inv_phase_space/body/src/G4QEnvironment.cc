@@ -23,7 +23,7 @@
 //34567890123456789012345678901234567890123456789012345678901234567890123456789012345678901
 //
 //
-// $Id: G4QEnvironment.cc,v 1.90 2004-04-06 12:49:13 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.91 2004-04-13 08:53:42 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -7173,6 +7173,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       G4int nB=curHadr->GetBaryonNumber();     // Total Baryon Number of the Hypernucleus
       G4int nC=curHadr->GetCharge();           // Charge of the Hypernucleus
       G4int nSM=0;                             // A#0f unavoidable Sigma-
+      G4int nSP=0;                             // A#0f unavoidable Sigma+
       if(nC<0)                                 // Negative hypernucleus
 	  {
         if(-nC<nL)
@@ -7186,8 +7187,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
           nL=0;
         }
       }
-      G4int nSP=0;                             // A#0f unavoidable Sigma+
-      if(nC>nB-nL)                             // Extra positive hypernucleus
+      else if(nC>nB-nL)                        // Extra positive hypernucleus
 	  {
         if(nC<nB)
 		{
@@ -7203,7 +7203,7 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       }
       G4LorentzVector r4M=curHadr->Get4Momentum(); // Real 4-momentum of the hypernucleus
       G4double reM=r4M.m();                    // Real mass of the hypernucleus
-      G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*1999000;// Subtract Lamb/Sig from Nucl
+      G4int rlPDG = hPDG-nL*1000000-nSP*1000999-nSM*999001;// Subtract Lamb/Sig from Nucl
       G4int    sPDG=3122;                      // Prototype for the Hyperon PDG
       G4double MLa=mLamb;                      // Prototype for one Hyperon decay
       if(nSP||nSM)
@@ -7244,10 +7244,10 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         {
           G4QHadron* theLam = new G4QHadron(sPDG,r4M);// Make a New Hadr for the Hyperon
           theQHadrons.push_back(theLam);       // (del.eq.- user is responsible for del)
-          //theFragments->push_back(theLam);     // (delete equivalent for the Hyperon)
+          //theFragments->push_back(theLam);   // (delete equivalent for the Hyperon)
         }
       }
-	  else if(reM>rlM+MLa)                     // Lambda(or Sigma) can be split
+	  else if(reM>rlM+MLa-eps)                  // Lambda(or Sigma) can be split
 	  {
         G4LorentzVector n4M(0.,0.,0.,rlM);
         G4LorentzVector h4M(0.,0.,0.,MLa);
@@ -7293,11 +7293,11 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
         for(G4int il=0; il<nL; il++)           // loop over excessive
         {
           G4QHadron* theLamb = new G4QHadron(sPDG,h4M);// Make a New Hadr for the Hyperon
-          theQHadrons.push_back(theLamb);    // (del.eq.- user is responsible for del)
+          theQHadrons.push_back(theLamb);      // (del.eq.- user is responsible for del)
           //theFragments->push_back(theLamb);    // (delete equivalent for the Hyperon)
         }
       }
-	  else if(reM>rnM+mPi0&&!nSP&&!nSM)        // Lambda->N only if Sigmas are absent
+	  else if(reM>rnM+mPi0-eps&&!nSP&&!nSM)    // Lambda->N only if Sigmas are absent
 	  {
         G4int nPi=static_cast<G4int>((reM-rnM)/mPi0);
         if (nPi>nL) nPi=nL;
@@ -7349,7 +7349,9 @@ G4QHadronVector* G4QEnvironment::FSInteraction()
       }
       else // If this Excepton shows up (lowProbable appearance) => include gamma decay
 	  {
-        G4double d=rnM+mPi0-reM;
+        G4double d=rlM+MLa-reM;
+		G4cerr<<"G4QE::FSI:R="<<rlM<<",S+="<<nSP<<",S-="<<nSM<<",L="<<nL<<",d="<<d<<G4endl;
+        d=rnM+mPi0-reM;
 		G4cerr<<"***G4QE::FSI: HypN="<<hPDG<<", M="<<reM<<"<"<<rnM+mPi0<<",d="<<d<<G4endl;
         throw G4QException("G4QEnvironment::FSInteract: Hypernuclear conversion");
       }
