@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PreCompoundModel.cc,v 1.2 2003-08-26 21:41:13 lara Exp $
+// $Id: G4PreCompoundModel.cc,v 1.3 2003-09-26 10:07:56 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -59,11 +59,13 @@ G4bool G4PreCompoundModel::operator!=(const G4PreCompoundModel &) const
 // Additional Declarations
 
 G4HadFinalState * G4PreCompoundModel::ApplyYourself(const G4HadProjectile & thePrimary,
-						      G4Nucleus & theNucleus)
+                                                    G4Nucleus & theNucleus)
 {  
   // prepare fragment
   G4Fragment anInitialState;
-  
+  // This si for GNASH transitions
+  anInitialState.SetParticleDefinition(const_cast<G4ParticleDefinition *>(thePrimary.GetDefinition()));
+
   G4int anA=static_cast<G4int>(theNucleus.GetN());
   anA += thePrimary.GetDefinition()->GetBaryonNumber();
 
@@ -183,18 +185,29 @@ G4ReactionProductVector* G4PreCompoundModel::DeExcite(const G4Fragment & theInit
     //    G4double g = (6.0/pi2)*aFragment.GetA()*
     //      theLDP.LevelDensityParameter(static_cast<G4int>(aFragment.GetA()),static_cast<G4int>(aFragment.GetZ()),
     //				   aFragment.GetExcitationEnergy());
-
+    
     G4double g = (6.0/pi2)*aFragment.GetA()*
       G4PreCompoundParameters::GetAddress()->GetLevelDensity();
     G4int EquilibriumExcitonNumber = static_cast<G4int>(sqrt(2.0*g*aFragment.GetExcitationEnergy())
-    					   + 0.5);
+                                                        + 0.5);
     
     // Loop for transitions, it is performed while there are preequilibrium transitions.
     G4bool ThereIsTransition = false;
     do 
       {
-	if (aFragment.GetNumberOfExcitons() < EquilibriumExcitonNumber && 
-	    aFragment.GetA() > 4 && Result->size() < 2) 
+        G4bool go_ahead = false;
+        G4double test = static_cast<G4double>(aFragment.GetNumberOfExcitons());
+        if (test < EquilibriumExcitonNumber)
+          {
+            test /= static_cast<G4double>(EquilibriumExcitonNumber);
+            test -= 1.0;
+            test = test*test;
+            test /= 0.32;
+            test = 1.0 - exp(-test);
+            go_ahead = (G4UniformRand() < test);
+          }
+      
+        if (go_ahead &&  aFragment.GetA() > 4)
 	  {
 	    //  	if (aFragment.GetNumberOfParticles() < 1) {
 	    //  	  aFragment.SetNumberOfHoles(aFragment.GetNumberOfHoles()+1);
