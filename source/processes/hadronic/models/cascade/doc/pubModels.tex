@@ -62,6 +62,8 @@ also physical foundation comes approximate at energies less than $200 MeV$, and 
 
 Basic steps of the INC model are summarised below:
 
+%G4BertiniNucleiModel.cc:951:  if (ab < max_a_for_cascad) { /// first decide whether it will be cascad or compound final nuclei
+
 \begin{enumerate}
 \item The spatial point, where the incident particle enters, is selected uniformly over the projected area of the nucleus.
 \item Total particle-particle crossections and region-depenent nucleon densities are used to select a path lenght for the projectile particle.
@@ -74,18 +76,69 @@ After INC, the residual excitation energy of the resulting nucleus (A', Z') are 
 
 \subsection{Nuclei model}
 
+\subsubsection{Initialization}
+Nuclear radius is defined using A dependent parametrization. 
+
+
+If target is Hydrogen (A = 1) direct particle-particle collision is performed, 
+and no nuclear modelling is used. 
+
+
+If $1 < A < 4$, a nuclei model consisting one layer with radius of 8.0 fermi is created.
+
+
+For $4 < A < 11$, nuclei model is composed of three consentric spheres $i = \{1, 2, 3\}$ with radius
+$$r_{i}(\alpha_{i}) = \sqrt{C_{1}^{2} (1 - \frac{1}{A}) + 6.4} \sqrt{-log( \alpha_{i})}$$.
+Here $\alpha_{i} = \{0.01, 0.3, 0.7\}$ and $C_{1} = 3.3836 A^{1/3}$
+
+% CU2 = sqrt(CU1 * (1.0 - 1.0 / a) + 6.4);
+% for (G4int i = 0; i < number_of_zones; i++) {
+% G4double y = sqrt(-log(alfa3[i]));
+% zone_radii.push_back(CU2 * y);
+
+If $A > 11$, nuclei model with three consentric spheres is used. The shere radius is now defined as:
+$$r_{i}(\alpha_{i}) =  C_{2} \log({\frac{1 + e^{- \frac{C_{1}}{C_{2}}}}{\alpha_{i}} - 1}) + C_{1}$$,
+
+where $C_{2} = 1.7234$.
+
+
+The nucleon potential energy is
+$$ E_{potential} ^{N} = \frac{p_{f}^2}{2 m_{N}} + BE_{N}(A, Z)$$
+
+where 
+
+$$rd = \frac{3 Z}{4\pi V_{t}} \frac{v_i}{r_{i}^3}$$
+ 
+$$p_{f} = 1.932 rd^{\frac{1}{3}}$$
+
+where $V_t$ is total nucleon volume, 
+% G4double rd = dd0 * v[i] / v1[i];
+%      rod.push_back(rd);
+%      G4double pff = pf_coeff * pow(rd, one_third);
+
+%vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
+%, where $p_{f} = 1.932 rd^{1/3}$
+
+%G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
+%G4double rd = dd0 * v[i] / v1[i];
+%G4double pff = pf_coeff * pow(rd, one_third);
+
+%G4double CU = cuu * pow(a, one_third);
+%G4double D1 = CU / AU;
+% G4double D = exp(-D1);
+%D = e^{- C_{1} / C_{2}}
+%G4double y = log((1.0 + D)/alfa3[i] - 1.0);
+%zone_radii.push_back(CU + AU * y);
+
+%Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
+%Nuclear radius uses parameterization. If A 
+
+%Layer radius is defined to be  0.01, 0.3, or 0.7times the nuclear radius.
 \subsubsection{Layers}
 
-In the code the nucleus is composed of three consentric spheres in all cases,
-exept for Hydrogen, in which case the direct particle-particle collision is performed.
-Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
-Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
 
-
-
-%[Nuclear radius]
-%Nuclear radius parameterization: By the definition R(A) is derived from eq. $Den(R(A)) = 0.01 Den max$.
-%Layer radius 0.1 0.2 0.9.
+%Our implementation consists of three concentric spheres, each with uniform density of neutrons and protons.
+%Nucleon  are supposed to to move in a radius-dependent well which incorporates both muclear and Coulomb effects.
 
 %[Nuclear density]
 %Nuclear density distribution are derived from the $Re(V_{opt}(r))$ distribution. 
@@ -103,14 +156,6 @@ experimental data. Asymptotic high temperature mass formula is used if it's impo
 %Smooth liquid high energy formula  has  
 %\item The potential well depth is taken to be 7 MeV.
 
-%\item The nucleon potential energy is
-%$ V_{N} = \frac{p_{f}^2}{2 m_{N}} + BE_{N}(A, Z)$
-%vz.push_back(0.5 * pff * pff / mproton + binding_energies[0]);
-%, where $p_{f} = 1.932 rd^{1/3}$
-
-%G4double dd0 = 3.0 * z * oneBypiTimes4 / tot_vol;
-%G4double rd = dd0 * v[i] / v1[i];
-%G4double pff = pf_coeff * pow(rd, one_third);
 
 
 %Impulse distribution
@@ -292,7 +337,7 @@ The parameterization described in \cite{barashenkov72} is used.
 \subsubsection{Exiton model}
 
 {\sc Geant4} cascade model implements exiton model proposed by Griffin \cite{griffin66, griffin67}.
-The his model compound nucleon states are characterized by the number of exited particles and holes (the exitons).
+The his model nucleon states are characterized by the number of exited particles and holes (the exitons).
 INC collisions give rise to a sequence of states characterized by increasing exciton number, eventually leading to a equilibrated nucleus.
 For practical implementation of exiton model we use parameters  from \cite{ribansky73}, (level densities) and \cite{kalbach78}  
 (matrix elements).
