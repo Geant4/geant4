@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.44 2003-06-19 13:03:30 gcosmo Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.45 2003-06-19 13:20:28 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,22 +30,15 @@
 //
 // ------------------------------------------------------------
 //	History
-//        first version                   09 Jan. 1998 by H.Kurashige
-//        modified                        24 Jan. 1998 by H.Kurashige 
-//        modified                        06 June 1998  by H.Kurashige 
-//        add G4ParticleWithCuts::SetEnergyRange
-//                                        18 June 1998  by H.Kurashige 
-//       modifeid for short lived particles 27  June 1998  by H.Kurashige
-//       G4BestUnit on output             12 nov. 1998  mma
-//       Added RemoveProcessManager        9 Feb. 1999 by H.Kurashige
-//       Fixed RemoveProcessManager       15 Apr. 1999 by H.Kurashige
-//       Removed ConstructAllParticles()  15 Apr. 1999 by H.Kurashige
-//       modified                         08, Mar 2001 by H.Kurashige
-//       modified for CUTS per REGION     10, Oct 2002 by H.Kurashige
-//       BuildPhysicsTables only for
-//       particles with G4ProcessManager
-//       valid pointer                    14, June 2003 by V.Ivanchenko
-//       Check if particle IsShortLived   18, June 2003 by V.Ivanchenko
+//       first version                    09 Jan 1998 by H.Kurashige
+//       Added SetEnergyRange             18 Jun 1998 by H.Kurashige 
+//       Change for short lived particles 27 Jun 1998 by H.Kurashige
+//       G4BestUnit on output             12 nov 1998 by M.Maire
+//       Added RemoveProcessManager        9 Feb 1999 by H.Kurashige
+//       Fixed RemoveProcessManager       15 Apr 1999 by H.Kurashige
+//       Removed ConstructAllParticles()  15 Apr 1999 by H.Kurashige
+//       Modified for CUTS per REGION     10 Oct 2002 by H.Kurashige
+//       Check if particle IsShortLived   18 Jun 2003 by V.Ivanchenko
 // ------------------------------------------------------------
 
 #include "globals.hh"
@@ -404,24 +397,15 @@ void G4VUserPhysicsList::BuildPhysicsTable(G4ParticleDefinition* particle)
     if (verboseLevel>2){
       G4cout << "G4VUserPhysicsList::BuildPhysicsTable  ";
       G4cout << " for " << particle->GetParticleName() << G4endl;
-      G4cout << " G4ProcessManager pointer " << particle->GetProcessManager() << G4endl;
     }
 #endif
   // Rebuild the physics tables for every process for this particle type
   // if particle is not ShortLived
   if(!particle->IsShortLived()) {
-    G4int j;
-    G4ProcessManager* pManager = particle->GetProcessManager();
-    G4ProcessVector* pVector = pManager->GetProcessList();
-    for ( j=0; j < pVector->size(); ++j) {
+    G4ProcessVector* pVector = particle->GetProcessManager()->GetProcessList();
+    for (G4int j=0; j < pVector->size(); ++j) {
       (*pVector)[j]->BuildPhysicsTable(*particle);
     }
-/*
-  for ( j=0; j < pVector->size(); ++j) {
-    // temporary addition to make the integral schema
-    BuildIntegralPhysicsTable((*pVector)[j], particle);
-  }
-  */
   }
 }
 
