@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.6 1999-05-31 14:48:08 maire Exp $
+// $Id: exampleN03.cc,v 1.7 1999-06-04 12:50:35 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,7 +51,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new ExN03PhysicsList);
   
- G4UIsession* session(NULL);
+ G4UIsession* session=0;
   
   if (argc==1)   // Define UI session for interactive mode.
     {
