@@ -12,7 +12,6 @@
 #include <IPlotter.h>
 #include <IVector.h>
 #include <IVectorFactory.h>
-#include "g4rw/tvordvec.h"
 #include "G4LizardSystem.hh"
 
 
@@ -382,10 +381,3 @@ void FluoTestAnalysisManager::EndOfEvent(G4int flag)
 }
 
 #endif
-
-
-
-
-
-
-

@@ -5,7 +5,7 @@
 //#include "FluoTestSensorHit.hh"
 #include "FluoTestEventActionMessenger.hh"
 
-#include "g4rw/tvordvec.h"
+#include "g4std/vector"
 
 #include "G4Event.hh"
 #include "G4EventManager.hh"
@@ -91,7 +91,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
     if (HCE) HPGeHC = (FluoTestSensorHitsCollection*)(HCE->GetHC(HPGeCollID));
     if(HPGeHC)
       {
-	n_hit = HPGeHC->entries();
+	n_hit = HPGeHC->size();
 	for (G4int i=0;i<n_hit;i++)
 	  {
 	    totEnergy += (*HPGeHC)[i]->GetEdepTot(); 
@@ -135,7 +135,7 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
       
       G4TrajectoryContainer * trajectoryContainer = evt->GetTrajectoryContainer();
       G4int n_trajectories = 0;
-      if (trajectoryContainer) n_trajectories = trajectoryContainer->entries();
+      if (trajectoryContainer) n_trajectories = trajectoryContainer->size();
       
       for (G4int i=0; i<n_trajectories; i++) 
 	{ G4Trajectory* trj = (G4Trajectory*)((*(evt->GetTrajectoryContainer()))[i]);
