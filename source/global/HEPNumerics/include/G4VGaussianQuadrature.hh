@@ -1,12 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGaussianQuadrature.hh,v 1.1 1999-01-07 16:08:55 gunter Exp $
+// $Id: G4VGaussianQuadrature.hh,v 1.2 1999-11-16 17:30:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Class description:
 //
 // Base Class for realisation of numerical methodes for integration of functions
 // with signature double f(double) by Gaussian quadrature methods
@@ -30,7 +32,7 @@
 //
 // G4double 
 // GammaLogarithm(G4double xx)
-//
+
 // ------------------------------------------------------------------------------
 //
 // History:

@@ -1,12 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChebyshevApproximation.hh,v 1.1 1999-01-07 16:08:53 gunter Exp $
+// $Id: G4ChebyshevApproximation.hh,v 1.2 1999-11-16 17:30:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Class description:
 //
 // Class creating the Chebyshev approximation for a function pointed by fFunction
 // data member. The Chebyshev polinom approximation provides an efficient evaluation
@@ -93,7 +95,7 @@
 // at the point (fMean - fDiff)
 //   
 // void IntegralChebyshevCof(G4double integralCof[]) const 
-//
+
 // --------------------------- HISTORY --------------------------------------
 //
 //  24.04.97   V.Grichine ( Vladimir.Grichine@cern.ch )

@@ -1,12 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleIntegration.hh,v 1.1 1999-01-07 16:08:54 gunter Exp $
+// $Id: G4SimpleIntegration.hh,v 1.2 1999-11-16 17:30:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Class description:
 //
 // Class for realisation of simple numerical methodes for integration of functions
 // with signature: double f(double). The methods based mainly on algorithms given in
@@ -29,7 +31,7 @@
 //
 //  AdaptGausIntegration(double a, double b) - integrate function from a to be with
 //                                             accuracy <= fTolerance 
-//
+
 // ----------------------------- History: ---------------------------------------- 
 //
 //  26.03.97   V.Grichine ( Vladimir.Grichine@cern.ch )

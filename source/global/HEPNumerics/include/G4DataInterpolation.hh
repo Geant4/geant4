@@ -1,12 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataInterpolation.hh,v 1.1 1999-01-07 16:08:53 gunter Exp $
+// $Id: G4DataInterpolation.hh,v 1.2 1999-11-16 17:30:56 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Class description:
 //
 // The class consists of some methods for data interpolations and extrapolations.
 // The methods based mainly on recommendations given in the book : An introduction to
@@ -81,14 +83,14 @@
 // decreasing. If index = -1 or fNumber, this indicates that pX is out of range.
 // The value index on input is taken as the initial approximation for index on
 // output.
-//
+
 // --------------------------------- History: --------------------------------------
 //
 //  3.4.97 V.Grichine (Vladimir.Grichine@cern.ch)
 //
 
 
-#ifndef  G4DATAINTERPOLATION_HH
+#ifndef G4DATAINTERPOLATION_HH
 #define G4DATAINTERPOLATION_HH
 
 #include "globals.hh"

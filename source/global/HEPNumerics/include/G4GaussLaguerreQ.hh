@@ -1,12 +1,14 @@
 // This code implementation is the intellectual property of
-// the RD44 GEANT4 collaboration.
+// the GEANT4 collaboration.
 //
 // By copying, distributing or modifying the Program (or any work
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4GaussLaguerreQ.hh,v 1.1 1999-01-07 16:08:54 gunter Exp $
+// $Id: G4GaussLaguerreQ.hh,v 1.2 1999-11-16 17:30:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
+//
+// Class description:
 //
 // Class for realization of Gauss-Laguerre quadrature method
 // Roots of ortogonal polynoms and corresponding weights are calculated based on
@@ -35,7 +37,7 @@
 // fAbscissa[i] and fWeight[i] arrays were created in constructor
 //
 // G4double  Integral() const 
-//
+
 // ------------------------------- HISTORY --------------------------------
 //
 // 13.05.97 V.Grichine (Vladimir.Grichine@cern.chz0
