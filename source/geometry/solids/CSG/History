@@ -1,4 +1,4 @@
-$Id: History,v 1.52 2002-10-28 11:43:37 gcosmo Exp $
+$Id: History,v 1.53 2003-02-14 09:50:02 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Feb 03, 2003   G.Cosmo                   geom-csg-V05-00-00
+- G4Cons.cc: enhanced treatment of phi-sections,
+  according to algorithm used also in G4Tubs (V.Grichine).
+- Updated unit tests.
 
 Oct 28, 2002   G.Cosmo                   geom-csg-V04-01-01
 - Added implementation of StreamInfo() to comply with new interface for
