@@ -32,6 +32,8 @@
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
 #include "PhysListEmModel.hh"
+#include "PhysListHadronElastic.hh"
+#include "PhysListBinaryCascade.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -71,6 +73,11 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 PhysicsList::~PhysicsList()
 {
   delete pMessenger;
+  delete generalPhysicsList;
+  delete emPhysicsList;
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    delete hadronPhys[i];
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -88,6 +95,9 @@ void PhysicsList::ConstructProcess()
   generalPhysicsList->ConstructProcess();
   emPhysicsList->ConstructProcess();
   AddStepMax();
+  for(size_t i=0; i<hadronPhys.size(); i++) {
+    hadronPhys[i]->ConstructProcess();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -111,6 +121,14 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmModel(name);
+
+  } else if (name == "elastic") {
+
+    hadronPhys.push_back( new PhysListHadronElastic(name));
+
+  } else if (name == "binary") {
+
+    hadronPhys.push_back( new PhysListBinaryCascade(name));
 
   } else {
 

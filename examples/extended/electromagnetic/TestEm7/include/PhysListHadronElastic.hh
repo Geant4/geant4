@@ -21,64 +21,56 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2003-05-15 11:23:52 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// ------------------------------------------------------------
+//	GEANT 4 class header file 
+// Class Description:
+//      This class is an derived class of G4VPhysicsConstructor
+//      It is provide PhysicsList for hadron eleastic process
 //
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
+// ------------------------------------------------------------ 
+//	History
+//        Created:       14.10.02  V.Ivanchenko
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//        Modified:
+// 
+// ------------------------------------------------------------
+//
+#ifndef PhysListHadronElastic_h
+#define PhysListHadronElastic_h 1
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "G4HadronElasticProcess.hh"
 #include "globals.hh"
 
-class G4VPhysicsConstructor;
-class StepMax;
-class PhysicsListMessenger;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsList: public G4VModularPhysicsList
+class PhysListHadronElastic : public G4VPhysicsConstructor
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+  public: 
+    PhysListHadronElastic(const G4String& name = "elastic");
+    virtual ~PhysListHadronElastic();
 
-    void ConstructParticle();
-    
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-        
-    void AddPhysicsList(const G4String& name);
+  public: 
+    // This method will be invoked in the Construct() method. 
+    // each particle type will be instantiated
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
     void ConstructProcess();
-    
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
 
   private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  generalPhysicsList;
-    G4VPhysicsConstructor*  particleList;
-    G4std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    G4String emName;
-    
-    StepMax* stepMaxProcess;
-    
-    PhysicsListMessenger* pMessenger;
+    // Elastic Process
+    G4HadronElasticProcess theElasticProcess;
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

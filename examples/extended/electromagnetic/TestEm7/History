@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-04-22 16:25:03 maire Exp $
+$Id: History,v 1.2 2003-05-15 11:23:51 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-05-03 V.Ivant (testem7-V05-01-00)
+ - Add hadron interactions
 
 22-04-03 mma (testem7-V05-00-00)
  - Creation. Derived from TestEm6

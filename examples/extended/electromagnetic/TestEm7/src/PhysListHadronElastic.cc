@@ -21,64 +21,46 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.2 2003-05-15 11:23:52 vnivanch Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
-// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+// 
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
-
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
-
-class G4VPhysicsConstructor;
-class StepMax;
-class PhysicsListMessenger;
+#include "PhysListHadronElastic.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4LElastic.hh"   
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+PhysListHadronElastic::PhysListHadronElastic(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+PhysListHadronElastic::~PhysListHadronElastic()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void PhysListHadronElastic::ConstructProcess()
 {
-  public:
-    PhysicsList();
-   ~PhysicsList();
+  
+  // Hadron elastic process
 
-    void ConstructParticle();
-    
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-        
-    void AddPhysicsList(const G4String& name);
-    void ConstructProcess();
-    
-    void AddStepMax();       
-    StepMax* GetStepMaxProcess() {return stepMaxProcess;};
+  theElasticProcess.RegisterMe( new G4LElastic() );
 
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pManager = particle->GetProcessManager();
+    if (particle->GetPDGMass() > 110.*MeV && theElasticProcess.IsApplicable(*particle)) { 
+      pManager->AddDiscreteProcess(&theElasticProcess);
+      G4cout << "### Elastic model are registered for " 
+             << particle->GetParticleName()
+             << G4endl;
+    }
+  }
 
-    G4VPhysicsConstructor*  emPhysicsList;
-    G4VPhysicsConstructor*  generalPhysicsList;
-    G4VPhysicsConstructor*  particleList;
-    G4std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    G4String emName;
-    
-    StepMax* stepMaxProcess;
-    
-    PhysicsListMessenger* pMessenger;
-};
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
 
