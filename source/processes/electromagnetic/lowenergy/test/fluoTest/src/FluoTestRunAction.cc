@@ -10,17 +10,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE
-FluoTestRunAction::FluoTestRunAction(FluoTestAnalysisManager* aMgr)
-  :analysisManager(aMgr)
-{
- 
-}
-#else
+
 FluoTestRunAction::FluoTestRunAction()
 {
 }
-#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -39,9 +33,7 @@ G4cout << "### Run " << aRun << " start." << G4endl;
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
-#ifdef G4ANALYSIS_USE
-  analysisManager->BeginOfRun();
-#endif
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -53,12 +45,8 @@ if (G4VVisManager::GetConcreteInstance()) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
  
- 
-// If analysis is used, print out the histograms
-#ifdef G4ANALYSIS_USE
-  analysisManager->EndOfRun(aRun->GetRunID());
-#endif
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

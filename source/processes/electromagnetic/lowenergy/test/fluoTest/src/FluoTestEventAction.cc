@@ -7,10 +7,6 @@
 
 #include "g4rw/tvordvec.h"
 
-#ifdef G4ANALYSIS_USE
-#include "FluoTestAnalysisManager.hh"
-#endif
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4HCofThisEvent.hh"
@@ -26,17 +22,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4ANALYSIS_USE
-FluoTestEventAction::FluoTestEventAction(FluoTestAnalysisManager* aMgr):
-  // HPGeCollID(-1), 
-    drawFlag("all"),
-  printModulo(1), eventMessenger(0),fAnalysisManager(aMgr)
- {
-   eventMessenger = new FluoTestEventActionMessenger(this);
 
-}
-
-#else
 
 FluoTestEventAction::FluoTestEventAction()
   :
@@ -47,7 +33,7 @@ FluoTestEventAction::FluoTestEventAction()
   eventMessenger = new FluoTestEventActionMessenger(this);
 }
 
-#endif
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -163,6 +149,8 @@ void FluoTestEventAction::EndOfEventAction(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
 
 
 

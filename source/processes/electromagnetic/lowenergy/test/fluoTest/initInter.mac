@@ -33,7 +33,7 @@
 
 #/tracking/verbose 6
 /gun/particle gamma
-/gun/energy 5 keV
+/gun/energy 4.9 keV
 /run/beamOn 1
 
 

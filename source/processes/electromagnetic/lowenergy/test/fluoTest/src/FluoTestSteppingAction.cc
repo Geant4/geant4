@@ -5,26 +5,14 @@
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "G4ios.hh"
-#ifdef G4ANALYSIS_USE
-#include "FluoTestAnalysisManager.hh"
-#endif
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#ifdef G4ANALYSIS_USE
-FluoTestSteppingAction::FluoTestSteppingAction(
-				   //FluoTestDetectorConstruction* DET,
- FluoTestAnalysisManager *aMgr )
-  :
-  //detector(DET),
-    analysisManager(aMgr)
-{
- }
 
-#else
 
 FluoTestSteppingAction::FluoTestSteppingAction()
 { }
-#endif
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FluoTestSteppingAction::~FluoTestSteppingAction()

@@ -30,7 +30,7 @@ FluoTestDetectorConstruction::FluoTestDetectorConstruction()
      solidOhmicPos(0),logicOhmicPos(0), physiOhmicPos(0), 
      solidOhmicNeg(0),logicOhmicNeg(0), physiOhmicNeg(0),*/
      solidWorld(0),logicWorld(0),physiWorld(0), 
-     solidSample (0),logicSample(0),physiSample (0) 
+     solidSample (0),logicSample(0),physiSample(0) 
      /*solidSi(0),logicSi(0),physiSi(0),
      solidHPGe(0),logicHPGe(0),physiHPGe(0), 
      solidDia1(0),logicDia1(0),physiDia1(0),
@@ -177,7 +177,7 @@ void FluoTestDetectorConstruction::DefineMaterials()
   a = 26.98*g/mole;
   G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
   /*
-  //define lead
+//define lead
   
   density = 11.35*g/cm3;
   a=207.19*g/mole;

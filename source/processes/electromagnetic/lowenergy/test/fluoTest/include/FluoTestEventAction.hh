@@ -19,11 +19,9 @@ class FluoTestEventActionMessenger;
 class FluoTestEventAction : public G4UserEventAction
 {
   public:
-#ifdef G4ANALYSIS_USE
-  FluoTestEventAction(FluoTestAnalysisManager* = 0 );
-#else
+
     FluoTestEventAction();
-#endif   
+   
    virtual ~FluoTestEventAction();
 
     public:
@@ -38,9 +36,7 @@ class FluoTestEventAction : public G4UserEventAction
    G4String                    drawFlag;
     G4int                       printModulo;                         
     FluoTestEventActionMessenger*  eventMessenger;
-#ifdef G4ANALYSIS_USE
-    FluoTestAnalysisManager* fAnalysisManager;
-#endif
+
 };
 
 #endif
