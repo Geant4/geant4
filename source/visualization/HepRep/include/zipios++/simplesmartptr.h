@@ -127,7 +127,7 @@ public:
 
   /** The assignment operator doesn't copy the reference count, it
       leaves it unchanged.  */
-  const ReferenceCount &operator= ( const ReferenceCount &src ) {}
+  const ReferenceCount &operator= ( const ReferenceCount &src ) { return src; }
 private:
 
   /** Increases the reference count. */
