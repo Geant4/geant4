@@ -41,11 +41,6 @@ List of fixes included in this public patch since release 6.2:
       o Fixes curing rare conditions of loops at boundaries for G4Orb
         and G4Sphere. Addresses problem report #547.
 
-  o Materials
-    ---------
-    + Added protection in G4AtomicShells::GetNumberOfShells(Z).
-      Fixes problem report #643.
-
   o Electromagnetic standard processes:
     ----------------------------------
     + standard:
