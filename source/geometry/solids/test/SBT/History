@@ -10,6 +10,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 20, 2001 - G.Cosmo
+----------------------
+- Updates for migration to STL vector, modified SBTrun.cc.
+
+Jan 25, 2001 - E.Medernach
+--------------------------
+- Introduced program to process fatal execution error from Fred
+  (new directory "process").
+
+Dec 14, 2000 - E.Medernach
+--------------------------
+- Improved support for Boolean solids:
+  o Modified: SBTrun.cc, G4InteractiveSolid[.hh.cc]
+  o Updated "log" area.
+
 Nov 09, 2000 - G.Cosmo
 ----------------------
 - Cleaned up files and moved to new directories.

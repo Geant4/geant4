@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Trap.cc,v 1.10 2001-04-18 17:12:39 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.11 2001-04-20 19:49:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -1380,7 +1380,8 @@ G4ThreeVectorList*
 G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
     G4ThreeVectorList *vertices;
-    vertices=new G4ThreeVectorList(8);
+    vertices=new G4ThreeVectorList();
+    vertices->reserve(8);
     if (vertices)
 	{
 	    G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,-fDz*fTthetaSphi-fDy1,-fDz);
@@ -1392,14 +1393,14 @@ G4Trap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 	    G4ThreeVector vertex6(+fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
 	    G4ThreeVector vertex7(+fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,+fDz*fTthetaSphi+fDy2,+fDz);
 
-	    vertices->insert(pTransform.TransformPoint(vertex0));
-	    vertices->insert(pTransform.TransformPoint(vertex1));
-	    vertices->insert(pTransform.TransformPoint(vertex2));
-	    vertices->insert(pTransform.TransformPoint(vertex3));
-	    vertices->insert(pTransform.TransformPoint(vertex4));
-	    vertices->insert(pTransform.TransformPoint(vertex5));
-	    vertices->insert(pTransform.TransformPoint(vertex6));
-	    vertices->insert(pTransform.TransformPoint(vertex7));
+	    vertices->push_back(pTransform.TransformPoint(vertex0));
+	    vertices->push_back(pTransform.TransformPoint(vertex1));
+	    vertices->push_back(pTransform.TransformPoint(vertex2));
+	    vertices->push_back(pTransform.TransformPoint(vertex3));
+	    vertices->push_back(pTransform.TransformPoint(vertex4));
+	    vertices->push_back(pTransform.TransformPoint(vertex5));
+	    vertices->push_back(pTransform.TransformPoint(vertex6));
+	    vertices->push_back(pTransform.TransformPoint(vertex7));
 	}
     else
 	{

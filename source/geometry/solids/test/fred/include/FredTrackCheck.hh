@@ -10,7 +10,7 @@
 #include "globals.hh"
 #include "G4Track.hh"
 
-#include "g4rw/tpsrtvec.h"
+#include "g4std/vector"
 
 
 class FredTrackData {
@@ -46,7 +46,7 @@ class FredTrackCheck {
 	void Clear( );
 
 	private:
-	G4RWTPtrSortedVector<FredTrackData> hitList;
+	G4std::vector<FredTrackData*> hitList;
 };
 
 #endif

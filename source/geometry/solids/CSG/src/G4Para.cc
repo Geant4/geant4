@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Para.cc,v 1.6 2000-11-20 17:57:59 gcosmo Exp $
+// $Id: G4Para.cc,v 1.7 2001-04-20 19:49:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -17,7 +17,6 @@
 // 31.10.96 V.Grichine Modifications according G4Box/Tubs before to commit
 // 18.11.99 V. Grichine , kIndefined was added to ESide
 
-#include <math.h>
 #include "G4Para.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1002,7 +1001,8 @@ G4ThreeVectorList*
    G4Para::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
     G4ThreeVectorList *vertices;
-    vertices=new G4ThreeVectorList(8);
+    vertices=new G4ThreeVectorList();
+    vertices->reserve(8);
     if (vertices)
 	{
 	    G4ThreeVector vertex0(-fDz*fTthetaCphi-fDy*fTalpha-fDx,-fDz*fTthetaSphi-fDy,-fDz);
@@ -1014,14 +1014,14 @@ G4ThreeVectorList*
 	    G4ThreeVector vertex6(+fDz*fTthetaCphi+fDy*fTalpha-fDx,+fDz*fTthetaSphi+fDy,+fDz);
 	    G4ThreeVector vertex7(+fDz*fTthetaCphi+fDy*fTalpha+fDx,+fDz*fTthetaSphi+fDy,+fDz);
 
-	    vertices->insert(pTransform.TransformPoint(vertex0));
-	    vertices->insert(pTransform.TransformPoint(vertex1));
-	    vertices->insert(pTransform.TransformPoint(vertex2));
-	    vertices->insert(pTransform.TransformPoint(vertex3));
-	    vertices->insert(pTransform.TransformPoint(vertex4));
-	    vertices->insert(pTransform.TransformPoint(vertex5));
-	    vertices->insert(pTransform.TransformPoint(vertex6));
-	    vertices->insert(pTransform.TransformPoint(vertex7));
+	    vertices->push_back(pTransform.TransformPoint(vertex0));
+	    vertices->push_back(pTransform.TransformPoint(vertex1));
+	    vertices->push_back(pTransform.TransformPoint(vertex2));
+	    vertices->push_back(pTransform.TransformPoint(vertex3));
+	    vertices->push_back(pTransform.TransformPoint(vertex4));
+	    vertices->push_back(pTransform.TransformPoint(vertex5));
+	    vertices->push_back(pTransform.TransformPoint(vertex6));
+	    vertices->push_back(pTransform.TransformPoint(vertex7));
 	}
     else
 	{

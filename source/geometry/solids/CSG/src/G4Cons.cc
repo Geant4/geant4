@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Cons.cc,v 1.16 2000-11-20 17:57:58 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.17 2001-04-20 19:49:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -453,7 +453,7 @@ G4bool G4Cons::CalculateExtent( const EAxis              pAxis,
     pMin = +kInfinity ;
     pMax = -kInfinity ;
 
-    noEntries          = vertices->entries() ;
+    noEntries          = vertices->size() ;
     noBetweenSections4 = noEntries-4 ;
 	    
     for ( i = 0 ; i < noEntries ; i += 4 )
@@ -2046,7 +2046,8 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   {
     sAngle = fSPhi ;
   } 
-  vertices = new G4ThreeVectorList(noCrossSections*4) ;
+  vertices = new G4ThreeVectorList();
+  vertices->reserve(noCrossSections*4) ;
 
   if (vertices)
   {
@@ -2075,10 +2076,10 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       vertex2 = G4ThreeVector(rMaxX2,rMaxY2,+fDz) ;
       vertex3 = G4ThreeVector(rMinX2,rMinY2,+fDz) ;
 
-      vertices->insert(pTransform.TransformPoint(vertex0)) ;
-      vertices->insert(pTransform.TransformPoint(vertex1)) ;
-      vertices->insert(pTransform.TransformPoint(vertex2)) ;
-      vertices->insert(pTransform.TransformPoint(vertex3)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex0)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex1)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex2)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex3)) ;
     }
   }
   else

@@ -719,7 +719,7 @@ void SBTrun::TestInsidePoint( const G4VSolid *testVolume, G4int *nError,
 // times already.
 //
 void SBTrun::ReportError( G4int *nError, const G4ThreeVector p, 
-			  const G4ThreeVector v, const G4double distance,
+			  const G4ThreeVector v, G4double distance,
 			  const G4String comment, G4std::ostream &logger )
 {
   //
@@ -786,7 +786,6 @@ void SBTrun::ClearErrors()
   }
   errorList = 0;
 }
-
 
 //
 // CountErrors

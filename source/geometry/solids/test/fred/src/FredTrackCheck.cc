@@ -16,7 +16,7 @@ FredTrackCheck::FredTrackCheck() {;}
 //
 FredTrackCheck::~FredTrackCheck()
 { 
-	hitList.clearAndDestroy();
+  Clear();
 }
 
 
@@ -30,10 +30,17 @@ void FredTrackCheck::AddInHit( const G4Track *track )
 	//
 	// Do we already know about this track?
 	//
-	FredTrackData	*trackData;
+	FredTrackData	*trackData = 0;
 	FredTrackData	*target = new FredTrackData( track->GetTrackID() );
 	
-	if (trackData = hitList.find( target )) {
+        G4std::vector<FredTrackData*>::const_iterator i;
+	for (i=hitList.begin(); i!=hitList.end(); ++i) {
+	  if (**i==*target) {
+	     trackData = *i;
+	     break;
+	  }
+	}
+	if (trackData) {
 	
 		//
 		// Yup: increment appropriately
@@ -46,7 +53,7 @@ void FredTrackCheck::AddInHit( const G4Track *track )
 		// Nope: make one
 		//
 		target->IncrementIn();
-		hitList.insert( target );
+		hitList.push_back( target );
 	}
 }
 
@@ -60,11 +67,18 @@ void FredTrackCheck::AddOutHit( const G4Track *track )
 	//
 	// Do we already know about this track?
 	//
-	FredTrackData	*trackData;
+	FredTrackData	*trackData = 0;
 	FredTrackData	*target = new FredTrackData( track->GetTrackID() );
 	
-	if (trackData = hitList.find( target )) {
-	
+        G4std::vector<FredTrackData*>::const_iterator i;
+	for (i=hitList.begin(); i!=hitList.end(); ++i) {
+	  if (**i==*target) {
+	     trackData = *i;
+	     break;
+	  }
+	}
+	if (trackData) {
+
 		//
 		// Yup: increment appropriately
 		//
@@ -76,7 +90,7 @@ void FredTrackCheck::AddOutHit( const G4Track *track )
 		// Nope: make one
 		//
 		target->IncrementOut();
-		hitList.insert( target );
+		hitList.push_back( target );
 	}
 }
 
@@ -97,10 +111,17 @@ void FredTrackCheck::GetTrackStat( const G4Track *track, G4int *nIn, G4int *nOut
 //
 void FredTrackCheck::GetTrackStatID( G4int trackID, G4int *nIn, G4int *nOut )
 {
-	FredTrackData	*trackData;
+	FredTrackData	*trackData = 0;
 	FredTrackData	target( trackID );
 	
-	if (trackData = hitList.find( &target )) {
+        G4std::vector<FredTrackData*>::const_iterator i;
+	for (i=hitList.begin(); i!=hitList.end(); ++i) {
+	  if (**i==target) {
+	     trackData = *i;
+	     break;
+	  }
+	}
+	if (trackData) {
 		*nIn = trackData->GetNIn();
 		*nOut = trackData->GetNOut();
 	}
@@ -118,7 +139,22 @@ void FredTrackCheck::GetTrackStatID( G4int trackID, G4int *nIn, G4int *nOut )
 //
 void FredTrackCheck::Clear()
 {
-	hitList.clearAndDestroy();
+  FredTrackData* a = 0;
+  G4std::vector<FredTrackData*>::iterator i;
+  while (hitList.size()>0)
+  {
+    a = hitList.back();
+    hitList.pop_back();
+    for (i=hitList.begin(); i!=hitList.end(); i++)
+    {
+      if (*i==a)
+      {
+	hitList.erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
 }
 
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.28 2001-02-21 15:47:14 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.29 2001-04-20 19:49:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -1648,7 +1648,8 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   if (fDPhi == M_PI*2.0 && fSPhi == 0 ) sAngle = -meshAngle*0.5 ;
   else                                  sAngle =  fSPhi ;
     
-  vertices = new G4ThreeVectorList(noCrossSections*4);
+  vertices = new G4ThreeVectorList();
+  vertices->reserve(noCrossSections*4);
     
   if ( vertices )
   {
@@ -1669,10 +1670,10 @@ G4Tubs::CreateRotatedVertices(const G4AffineTransform& pTransform) const
       vertex2 = G4ThreeVector(rMaxX,rMaxY,+fDz) ;
       vertex3 = G4ThreeVector(rMinX,rMinY,+fDz) ;
 
-      vertices->insert(pTransform.TransformPoint(vertex0)) ;
-      vertices->insert(pTransform.TransformPoint(vertex1)) ;
-      vertices->insert(pTransform.TransformPoint(vertex2)) ;
-      vertices->insert(pTransform.TransformPoint(vertex3)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex0)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex1)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex2)) ;
+      vertices->push_back(pTransform.TransformPoint(vertex3)) ;
     }
   }
   else

@@ -10,6 +10,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 20, 2001 - G.Cosmo
+----------------------
+- Updates for migration to STL vector, modified FredTrackCheck[.hh.cc].
+
 Nov 09, 2000 - G.Cosmo
 ----------------------
 - Created.

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Sphere.cc,v 1.8 2000-11-20 17:57:59 gcosmo Exp $
+// $Id: G4Sphere.cc,v 1.9 2001-04-20 19:49:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -304,18 +304,18 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
 	    pMin=+kInfinity;
 	    pMax=-kInfinity;
 
-	    noEntries=vertices->entries();  // noPolygonVertices*noPhiCrossSections
+	    noEntries=vertices->size();  // noPolygonVertices*noPhiCrossSections
 	    noBetweenSections=noEntries-noPolygonVertices;
 	    
-	         G4ThreeVectorList ThetaPolygon ;
+	    G4ThreeVectorList ThetaPolygon ;
 	    for (i=0;i<noEntries;i+=noPolygonVertices)
 		{
 		   for(j=0;j<(noPolygonVertices/2)-1;j++)
 		  {
-		    ThetaPolygon.append(vertices->operator()(i+j)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+j+1)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices-2-j)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices-1-j)) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+j]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+j+1]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-2-j]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1-j]) ;		  
 	            CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
 		    ThetaPolygon.clear() ;
 		  }
@@ -324,17 +324,17 @@ G4bool G4Sphere::CalculateExtent( const EAxis pAxis,
 		{
 		   for(j=0;j<noPolygonVertices-1;j++)
 		  {
-		    ThetaPolygon.append(vertices->operator()(i+j)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+j+1)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices+j+1)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices+j)) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+j]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+j+1]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j+1]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j]) ;		  
 	            CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
 		    ThetaPolygon.clear() ;
 		  }
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices-1)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+noPolygonVertices)) ;		  
-		    ThetaPolygon.append(vertices->operator()(i+2*noPolygonVertices-1)) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i]) ;  
+		    ThetaPolygon.push_back((*vertices)[i+noPolygonVertices]) ;		  
+		    ThetaPolygon.push_back((*vertices)[i+2*noPolygonVertices-1]) ;		  
 	            CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
 		    ThetaPolygon.clear() ;
 		}
@@ -2651,7 +2651,8 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
                fRmax/cos(meshAnglePhi*0.5) : fRmax/cos(meshTheta*0.5);
     G4double* cosCrossTheta = new G4double[noThetaSections];
     G4double* sinCrossTheta = new G4double[noThetaSections];    
-    vertices=new G4ThreeVectorList(noPhiCrossSections*(noThetaSections*2));
+    vertices=new G4ThreeVectorList();
+    vertices->reserve(noPhiCrossSections*(noThetaSections*2));
     if (vertices && cosCrossTheta && sinCrossTheta)
 	{
     for (crossSectionPhi=0;crossSectionPhi<noPhiCrossSections;crossSectionPhi++)
@@ -2672,7 +2673,7 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
 		  rMinZ=fRmin*cosCrossTheta[crossSectionTheta];
 		    
 		    vertex=G4ThreeVector(rMinX,rMinY,rMinZ);
-		    vertices->insert(pTransform.TransformPoint(vertex));
+		    vertices->push_back(pTransform.TransformPoint(vertex));
 		    
 		}    // Theta forward 
     
@@ -2683,7 +2684,7 @@ G4Sphere::CreateRotatedVertices(const G4AffineTransform& pTransform,
 		  rMaxZ=meshRMax*cosCrossTheta[crossSectionTheta];
 		    
 		    vertex=G4ThreeVector(rMaxX,rMaxY,rMaxZ);
-		    vertices->insert(pTransform.TransformPoint(vertex));
+		    vertices->push_back(pTransform.TransformPoint(vertex));
 
 		}   // Theta back 
 	  }       // Phi

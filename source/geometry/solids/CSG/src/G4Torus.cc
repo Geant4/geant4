@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Torus.cc,v 1.23 2001-01-29 13:12:57 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.24 2001-04-20 19:49:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -884,7 +884,7 @@ G4bool G4Torus::CalculateExtent(const EAxis pAxis,
     pMin = +kInfinity ;
     pMax = -kInfinity ;
 
-    noEntries          = vertices->entries() ;
+    noEntries          = vertices->size() ;
     noBetweenSections4 = noEntries - noPolygonVertices ;
 	    
     for (i=0;i<noEntries;i+=noPolygonVertices)
@@ -2115,7 +2115,8 @@ G4ThreeVectorList*
   {
     sAngle = fSPhi ;
   }
-  vertices = new G4ThreeVectorList(noCrossSections*4) ;
+  vertices = new G4ThreeVectorList();
+  vertices->reserve(noCrossSections*4) ;
   
   if (vertices)
   {
@@ -2136,10 +2137,10 @@ G4ThreeVectorList*
 		    vertex2=G4ThreeVector(rMaxX,rMaxY,+fRmax);
 		    vertex3=G4ThreeVector(rMinX,rMinY,+fRmax);
 
-		    vertices->insert(pTransform.TransformPoint(vertex0));
-		    vertices->insert(pTransform.TransformPoint(vertex1));
-		    vertices->insert(pTransform.TransformPoint(vertex2));
-		    vertices->insert(pTransform.TransformPoint(vertex3));
+		    vertices->push_back(pTransform.TransformPoint(vertex0));
+		    vertices->push_back(pTransform.TransformPoint(vertex1));
+		    vertices->push_back(pTransform.TransformPoint(vertex2));
+		    vertices->push_back(pTransform.TransformPoint(vertex3));
     }
     noPolygonVertices = 4 ;
   }
