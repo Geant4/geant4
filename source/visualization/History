@@ -1,4 +1,4 @@
-$Id: History,v 1.226 2003-10-03 15:08:28 gcosmo Exp $
+$Id: History,v 1.227 2003-10-17 09:22:37 gbarrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,10 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+17th October 2003  Guy Barrand
+- OPACS being (for long) deprecated, remove OPACS related things
+  in Geant4 repository.
 
 4th October 2003  Gabriele Cosmo  (vis-V05-02-01)
 - Modified GNUmakefiles:

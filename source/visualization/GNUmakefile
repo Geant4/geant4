@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 2001-11-06 12:50:20 johna Exp $
+# $Id: GNUmakefile,v 1.14 2003-10-17 09:21:02 gbarrand Exp $
 # -----------------------------------------------------------------------
 # GNUmakefile for visualization and modeling.  John Allison, 5/7/95.
 # Modeling is always made.  Others by environment.  John Allison  4/7/98.
@@ -39,10 +39,6 @@ ifdef G4VIS_BUILD
   SUBDIRS += XXX
   SUBLIBS += G4visXXX
 
-ifdef G4VIS_BUILD_OPACS_DRIVER
-  SUBDIRS += OPACS
-  SUBLIBS += G4OPACS
-endif
 ifdef G4VIS_BUILD_OPENGL_DRIVER
   SUBDIRS += OpenGL
   SUBLIBS += G4OpenGL
