@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.icc,v 1.5 2001-07-11 10:03:25 gunter Exp $
+// $Id: G4MuPairProduction.icc,v 1.6 2001-09-17 17:05:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ---------------------------------------------------------------
@@ -35,6 +35,7 @@
 //
 // Modified:
 //
+// 17-09-01 migration of Materials to pure STL (mma) 
 // 29.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 //
 // ---------------------------------------------------------------
@@ -84,7 +85,7 @@ inline G4double G4MuPairProduction::ComputeMeanFreePath(
       {             
             SIGMA += theAtomNumDensityVector[i] * 
                   ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                         (*theElementVector)(i)->GetZ(), 
+                                         (*theElementVector)[i]->GetZ(), 
                                          ElectronEnergyCut,PositronEnergyCut );
       }       
 

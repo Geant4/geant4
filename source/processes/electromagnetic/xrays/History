@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-11-13 20:17:51 gum Exp $
+$Id: History,v 1.6 2001-09-17 17:01:16 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+17 sep 01: mma (xrays-V03-02-00)
+- modifs in almost all classes for the migration of Materials to pure STL,
+  but backward compatible with g4rw   
 
 12 Nov 00: pg  (xrays-V02-00-04)
 - G4Cerenkov.cc: add check on CerenkovAngleIntegrals->IsFilledVectorExist()

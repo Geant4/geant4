@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MuPairProduction.cc,v 1.19 2001-08-10 15:49:02 maire Exp $
+// $Id: G4MuPairProduction.cc,v 1.20 2001-09-17 17:05:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------
@@ -37,7 +37,8 @@
 // 06/05/99 , bug fixed , L.Urban
 // 10/02/00  modifications+bug fix , new e.m. structure, L.Urban
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 10-08-01 : new methods Store/Retrieve PhysicsTable (mma)   
+// 10-08-01 : new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01, migration of Materials to pure STL (mma)    
 // --------------------------------------------------------------
 
 #include "G4MuPairProduction.hh"
@@ -129,7 +130,7 @@ void G4MuPairProduction::BuildLossTable(
   ElectronCutInKineticEnergy = (*theElectron).GetEnergyCuts() ;
   PositronCutInKineticEnergy = (*thePositron).GetEnergyCuts() ;
 
-  G4int numOfMaterials = theMaterialTable->length() ;
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if (theLossTable) {
       theLossTable->clearAndDestroy();
@@ -167,7 +168,7 @@ void G4MuPairProduction::BuildLossTable(
       pairloss = 0.;
       for (G4int iel=0; iel<NumberOfElements; iel++)
       {
-        Z=(*theElementVector)(iel)->GetZ();
+        Z=(*theElementVector)[iel]->GetZ();
         natom = theAtomicNumDensityVector[iel] ;
         loss = ComputePairLoss(&aParticleType,
                                  Z,KineticEnergy,eCut,pCut) ;   
@@ -304,7 +305,7 @@ void G4MuPairProduction::ComputePartialSumSigma(
   {             
     SIGMA += theAtomNumDensityVector[Ielem] * 
              ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                        (*theElementVector)(Ielem)->GetZ(), 
+                                        (*theElementVector)[Ielem]->GetZ(), 
                                         ElectronEnergyCut,PositronEnergyCut );
 
     PartialSumSigma[Imate]->push_back(SIGMA);
@@ -899,7 +900,7 @@ G4Element* G4MuPairProduction::SelectRandomAtom(G4Material* aMaterial) const
 
   for ( G4int i=0; i < NumberOfElements; i++ )
   {
-    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
   }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;

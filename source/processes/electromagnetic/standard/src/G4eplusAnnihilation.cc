@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.9 2001-09-07 16:29:24 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.10 2001-09-17 17:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,8 @@
 // 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 13-07-01, DoIt: suppression of production cut for the gamma (mma)
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)    
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 17-09-01, migration of Materials to pure STL (mma)     
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -107,7 +108,7 @@ void G4eplusAnnihilation::BuildThePhysicsTable()
      //create physics vector then fill it ....
      ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
                                         NumbBinTable );
-     AtomicNumber = (*theElementTable)(J)->GetZ();
+     AtomicNumber = (*theElementTable)[J]->GetZ();
  
      for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
         {
@@ -134,7 +135,7 @@ void G4eplusAnnihilation::BuildThePhysicsTable()
      //create physics vector then fill it ....
      ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
                                         NumbBinTable );
-     material = (*theMaterialTable)(J);
+     material = (*theMaterialTable)[J];
  
      for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
         {

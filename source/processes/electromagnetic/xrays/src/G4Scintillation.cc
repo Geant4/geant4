@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scintillation.cc,v 1.6 2001-07-11 10:03:42 gunter Exp $
+// $Id: G4Scintillation.cc,v 1.7 2001-09-17 17:01:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -36,6 +36,7 @@
 // Updated:     2000-09-18 by Peter Gumplinger
 //              > change: aSecondaryPosition=x0+rand*aStep.GetDeltaPosition();
 //                        aSecondaryTrack->SetTouchable(0);
+//              2001-09-17, migration of Materials to pure STL (mma) 
 //
 // mail:        gum@triumf.ca
 //
@@ -156,11 +157,7 @@ G4Scintillation::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 	
 	////////////////////////////////////////////////////////////////
 
-	G4double Pmin = Intensity->GetMinPhotonMomentum();
-	G4double Pmax = Intensity->GetMaxPhotonMomentum();
-	G4double dp = Pmax - Pmin;
-
-	G4int materialIndex = G4Material::GetMaterialTable()->index(aMaterial);
+	G4int materialIndex = aMaterial->GetIndex();
 
 	// Retrieve the Scintillation Integral for this material  
 	// new G4PhysicsOrderedFreeVector allocated to hold CII's
@@ -278,7 +275,7 @@ void G4Scintillation::BuildThePhysicsTable()
 
 	const G4MaterialTable* theMaterialTable = 
                                G4Material::GetMaterialTable();
-	G4int numOfMaterials = theMaterialTable->length();
+	G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
 	// create new physics table
 	
@@ -295,7 +292,7 @@ void G4Scintillation::BuildThePhysicsTable()
                 // for the material from the material's optical
                 // properties table 
 
-		G4Material* aMaterial = (*theMaterialTable)(i);
+		G4Material* aMaterial = (*theMaterialTable)[i];
 
 		G4MaterialPropertiesTable* aMaterialPropertiesTable =
 				aMaterial->GetMaterialPropertiesTable();

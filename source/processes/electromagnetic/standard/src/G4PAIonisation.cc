@@ -21,20 +21,21 @@
 // ********************************************************************
 //
 //
-// $Id: G4PAIonisation.cc,v 1.18 2001-07-11 10:03:30 gunter Exp $
+// $Id: G4PAIonisation.cc,v 1.19 2001-09-17 17:07:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // **************************************************************
 //
+// 17.09.01 migration of Materials to pure STL (mma)
+// 28.05.01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
-// 12.07.00, V.Grichine - modifications in BuildPAIonisationTable 
-// 11.07.00, V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
+// 12.07.00 V.Grichine - modifications in BuildPAIonisationTable 
+// 11.07.00 V.Grichine - GetRandomEnergyTransfer, and PostStepDoIt
 //                        modifications
-// 03.07.00, V.Grichine - modifications in AlongStepDoIt
-// 08-04-98: remove 'traking cut' of the ionizing particle, MMa
-// 30-11-97: V. Grichine
-// 28-05-01: V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 03.07.00 V.Grichine - modifications in AlongStepDoIt
+// 08-04-98 remove 'traking cut' of the ionizing particle, MMa
+// 30-11-97 V. Grichine
 //
 // **************************************************************
 
@@ -65,11 +66,11 @@ G4PAIonisation::G4PAIonisation( const G4String& materialName,
    : G4VPAIenergyLoss(processName),
      theElectron ( G4Electron::Electron() )
 {
-  G4int numberOfMat, iMat ;
+  G4int  iMat ;
   theMeanFreePathTable  = NULL; 
   lastCutInRange = 0. ;
   static const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  numberOfMat = theMaterialTable->length() ;
+  G4int numberOfMat = G4Material::GetNumberOfMaterials() ;
   for(iMat=0;iMat<numberOfMat;iMat++)
   {
     if(materialName == (*theMaterialTable)[iMat]->GetName() )
@@ -322,7 +323,7 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
     const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
     const G4double BigValue = DBL_MAX ;
 
-    G4int numOfMaterials = theMaterialTable->length();    //create table
+    G4int numOfMaterials = G4Material::GetNumberOfMaterials();    //create table
 
     if (theMeanFreePathTable) 
     {
@@ -368,7 +369,7 @@ G4PAIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
               sigma +=  theAtomicNumDensityVector[iel]*
                         ComputeMicroscopicCrossSection(aParticleType,
                         LowEdgeEnergy,
-                       (*theElementVector)(iel)->GetZ() ) ;
+                       (*theElementVector)[iel]->GetZ() ) ;
           }
           // mean free path = 1./macroscopic cross section
 

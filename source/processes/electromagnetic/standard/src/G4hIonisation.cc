@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.17 2001-08-29 16:43:06 maire Exp $
+// $Id: G4hIonisation.cc,v 1.18 2001-09-17 17:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4hIonisation physics process -----------
@@ -41,7 +41,8 @@
 // 28/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
-// 29-08-01 PostStepDoIt: correction for spin 1/2 (instead of 1) (mma)  
+// 29-08-01 PostStepDoIt: correction for spin 1/2 (instead of 1) (mma)
+// 17-09-01 migration of Materials to pure STL (mma)   
 //
 // --------------------------------------------------------------
 
@@ -215,7 +216,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
                        chargeSquare*
                        ComputeCrossSectionPerAtom(aParticleType,
                                                   LowEdgeEnergy,
-		               (*theElementVector)(iel)->GetZ(),
+		               (*theElementVector)[iel]->GetZ(),
 		                               DeltaThreshold);
             }
 
@@ -251,7 +252,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
 
  G4double taul = material->GetIonisation()->GetTaul();
 
- G4double dEdx;
+ G4double dEdx = 0.;
  //
  // high energy part , Bethe-Bloch formula 
  // 
@@ -307,7 +308,7 @@ G4double G4hIonisation::ComputeRestrictedMeandEdx (
      dEdx = 0.;
      for (G4int iel=0; iel<NumberOfElements; iel++)
         {
-          const G4Element* element = (*theElementVector)(iel);         
+          const G4Element* element = (*theElementVector)[iel];         
           if (tau < element->GetIonisation()->GetTau0())  
             dEdx += NbOfAtomsPerVolume[iel]
                        *(element->GetIonisation()->GetAlow()*sqrt(tau)

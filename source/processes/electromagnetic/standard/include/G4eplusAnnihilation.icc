@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.icc,v 1.7 2001-09-07 16:29:22 maire Exp $
+// $Id: G4eplusAnnihilation.icc,v 1.8 2001-09-17 17:07:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -29,6 +29,7 @@
 // 10-01-97, crossection table + meanfreepath table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 17-09-01, migration of Materials to pure STL (mma) 
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -109,7 +110,7 @@ inline G4double G4eplusAnnihilation::ComputeMeanFreePath(
      {             
         SIGMA += NbOfAtomsPerVolume[elm] * 
                  ComputeCrossSectionPerAtom(PositKinEnergy,
-                                            (*theElementVector)(elm)->GetZ());
+                                            (*theElementVector)[elm]->GetZ());
      }       
 
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;

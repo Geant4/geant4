@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.10 2001-08-31 16:05:20 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.11 2001-09-17 17:07:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ------------ G4GammaConversion physics process -------------------------
@@ -49,7 +49,8 @@
 // 11-07-01, PostStepDoIt - sampling epsil: power(rndm,0.333333)
 // 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)   
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 17-09-01, migration of Materials to pure STL (mma)    
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -119,7 +120,7 @@ void G4GammaConversion::BuildThePhysicsTable()
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable );
-        AtomicNumber = (*theElementTable)(J)->GetZ();
+        AtomicNumber = (*theElementTable)[J]->GetZ();
  
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {
@@ -146,7 +147,7 @@ void G4GammaConversion::BuildThePhysicsTable()
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable);
-        material = (*theMaterialTable)(J);
+        material = (*theMaterialTable)[J];
  
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {
@@ -384,7 +385,7 @@ G4Element* G4GammaConversion::SelectRandomAtom(
 
   const G4int NumberOfElements            = aMaterial->GetNumberOfElements();
   const G4ElementVector* theElementVector = aMaterial->GetElementVector();
-  if (NumberOfElements == 1) return (*theElementVector)(0);
+  if (NumberOfElements == 1) return (*theElementVector)[0];
 
   const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
 
@@ -393,8 +394,8 @@ G4Element* G4GammaConversion::SelectRandomAtom(
  
   for ( G4int i=0 ; i < NumberOfElements ; i++ )
       { PartialSumSigma += NbOfAtomsPerVolume[i] *
-                  GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)(i));
-        if (rval <= PartialSumSigma) return ((*theElementVector)(i));
+                  GetCrossSectionPerAtom(aDynamicGamma, (*theElementVector)[i]);
+        if (rval <= PartialSumSigma) return ((*theElementVector)[i]);
       }
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;

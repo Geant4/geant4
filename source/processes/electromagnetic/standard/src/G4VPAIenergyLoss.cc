@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VPAIenergyLoss.cc,v 1.2 2001-07-11 10:03:31 gunter Exp $
+// $Id: G4VPAIenergyLoss.cc,v 1.3 2001-09-17 17:07:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -39,7 +39,8 @@
 // corrected by V. Grichine on 24/11/97
 // corrected by L. Urban    on 27/05/98   ( other corrections come soon!)
 // 10/02/00  modifications , new e.m. structure, L.Urban
-// 02/03/00 initialisation of theDEDXTable
+// 02/03/00  initialisation of theDEDXTable
+// 17-09-01, migration of Materials to pure STL (mma) 
 //
  
 
@@ -160,12 +161,9 @@ void G4VPAIenergyLoss::BuildDEDXTable(const G4ParticleDefinition& aParticleType)
 //
 //  different processes.                                           
 
-    const G4MaterialTable* theMaterialTable=
-                                     G4Material::GetMaterialTable();
-
 //  create table for the total energy loss
 
-    G4int numOfMaterials = theMaterialTable->length();
+    G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   G4PhysicsTable** RecorderOfProcess;
   int CounterOfProcess;

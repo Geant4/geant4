@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cerenkov.cc,v 1.10 2001-07-11 10:03:42 gunter Exp $
+// $Id: G4Cerenkov.cc,v 1.11 2001-09-17 17:01:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -33,7 +33,8 @@
 // Version:     2.1
 // Created:     1996-02-21  
 // Author:      Juliet Armstrong
-// Updated:     2000-11-12 by Peter Gumplinger
+// Updated:     2001-09-17, migration of Materials to pure STL (mma) 
+//              2000-11-12 by Peter Gumplinger
 //              > add check on CerenkovAngleIntegrals->IsFilledVectorExist()
 //              in method GetAverageNumberOfPhotons 
 //              > and a test for MeanNumPhotons <= 0.0 in DoIt
@@ -314,7 +315,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 
 	const G4MaterialTable* theMaterialTable=
 	 		       G4Material::GetMaterialTable();
-	G4int numOfMaterials = theMaterialTable->length();
+	G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
 	// create new physics table
 	
@@ -330,7 +331,7 @@ void G4Cerenkov::BuildThePhysicsTable()
 		// Retrieve vector of refraction indices for the material
 		// from the material's optical properties table 
 
-		G4Material* aMaterial = (*theMaterialTable)(i);
+		G4Material* aMaterial = (*theMaterialTable)[i];
 
 		G4MaterialPropertiesTable* aMaterialPropertiesTable =
 				aMaterial->GetMaterialPropertiesTable();
@@ -467,7 +468,7 @@ G4Cerenkov::GetAverageNumberOfPhotons(const G4DynamicParticle* aParticle,
 	// 	- Refraction Indices for the current material
 	//	- new G4PhysicsOrderedFreeVector allocated to hold CAI's
  
-	G4int materialIndex = G4Material::GetMaterialTable()->index(aMaterial);
+	G4int materialIndex = aMaterial->GetIndex();
 
 	// Retrieve the Cerenkov Angle Integrals for this material  
 

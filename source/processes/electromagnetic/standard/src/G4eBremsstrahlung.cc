@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.cc,v 1.19 2001-08-29 16:43:05 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.20 2001-09-17 17:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,8 @@
 // 07-08-00 : new cross section/en.loss parametrisation, LPM flag , L.Urban
 // 21-09-00 : corrections in the LPM implementation, L.Urban
 // 28-05-01 : V.Ivanchenko minor changes to provide ANSI -wall compilation
-// 09-08-01 : new methods Store/Retrieve PhysicsTable (mma) 
+// 09-08-01 : new methods Store/Retrieve PhysicsTable (mma)
+// 17-09-01 : migration of Materials to pure STL (mma)  
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -135,7 +136,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
   //  create table
   
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length() ;
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if (theLossTable) { theLossTable->clearAndDestroy();
                          delete theLossTable;
@@ -175,7 +176,7 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
              //  loop for elements in the material
              for (G4int iel=0; iel<NumberOfElements; iel++)
                {
-                Z=(*theElementVector)(iel)->GetZ();
+                Z=(*theElementVector)[iel]->GetZ();
                 natom = theAtomicNumDensityVector[iel] ;
                 if (KineticEnergy <= Thigh)
                   {
@@ -448,7 +449,7 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
      {             
        SIGMA += theAtomNumDensityVector[i] * 
                 ComputeCrossSectionPerAtom( ParticleType, KineticEnergy,
-                                           (*theElementVector)(i)->GetZ(), 
+                                           (*theElementVector)[i]->GetZ(), 
                                            GammaEnergyCut );
      }       
            // now compute the correction due to the supression(s)
@@ -654,7 +655,7 @@ void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* Parti
       {             
         SIGMA += theAtomNumDensityVector[Ielem] * 
                  ComputeCrossSectionPerAtom( ParticleType, KineticEnergy,
-                                            (*theElementVector)(Ielem)->GetZ(), 
+                                            (*theElementVector)[Ielem]->GetZ(), 
                                              GammaEnergyCut );
         PartialSumSigma[Imate]->push_back(SIGMA);
    }
@@ -910,7 +911,7 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 
   G4double rval = G4UniformRand()*((*PartialSumSigma[Index])[NumberOfElements-1]);
   for ( G4int i=0; i < NumberOfElements; i++ )
-    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)(i));
+    if (rval <= (*PartialSumSigma[Index])[i]) return ((*theElementVector)[i]);
   G4cout << " WARNING !!! - The Material '"<< aMaterial->GetName()
        << "' has no elements, NULL pointer returned." << G4endl;
   return NULL;

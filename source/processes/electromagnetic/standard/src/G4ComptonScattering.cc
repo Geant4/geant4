@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.10 2001-08-31 13:28:29 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.11 2001-09-17 17:07:12 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,7 +43,8 @@
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 17-09-01, migration of Materials to pure STL (mma)  
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -112,7 +113,7 @@ void G4ComptonScattering::BuildThePhysicsTable()
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable );
-        AtomicNumber = (*theElementTable)(J)->GetZ();
+        AtomicNumber = (*theElementTable)[J]->GetZ();
  
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {
@@ -139,7 +140,7 @@ void G4ComptonScattering::BuildThePhysicsTable()
         //create physics vector then fill it ....
         ptrVector = new G4PhysicsLogVector(LowestEnergyLimit,HighestEnergyLimit,
                                            NumbBinTable ) ;
-        material = (*theMaterialTable)(J);
+        material = (*theMaterialTable)[J];
  
         for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
            {

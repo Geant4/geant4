@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.cc,v 1.17 2001-08-29 16:43:05 maire Exp $
+// $Id: G4eIonisation.cc,v 1.18 2001-09-17 17:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
@@ -36,6 +36,7 @@
 // 28-05-01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 09-08-01  new methods Store/Retrieve PhysicsTable (mma)
 // 13-08-01  new function ComputeRestrictedMeandEdx()  (mma)
+// 17-09-01  migration of Materials to pure STL (mma) 
 // --------------------------------------------------------------
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -199,7 +200,7 @@ void G4eIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
               SIGMA += NbOfAtomsPerVolume[iel]*
                        ComputeCrossSectionPerAtom(aParticleType,
                                                   LowEdgeEnergy,
-                               (*theElementVector)(iel)->GetZ(),
+                               (*theElementVector)[iel]->GetZ(),
                                                 DeltaThreshold);
              }
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.16 2001-09-13 11:16:20 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.17 2001-09-17 17:07:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -37,6 +37,7 @@
 // 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 11/09/01  minor correction in 'subcutoff' delta generation, L.Urban
 // 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
+// 17-09-01, migration of Materials to pure STL (mma) 
 // --------------------------------------------------------------
 
  
@@ -133,8 +134,8 @@ void G4VeEnergyLoss::BuildDEDXTable(
   // different processes.                                           
   //
 
-  const G4MaterialTable* theMaterialTable=G4Material::GetMaterialTable();
-  G4int numOfMaterials = theMaterialTable->length();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   // create table for the total energy loss
 
@@ -329,7 +330,7 @@ void G4VeEnergyLoss::BuildDEDXTable(
          
          MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                                G4Electron::Electron(),MinDeltaCutInRange,
-                                          (*theMaterialTable)(mat)) ;
+                                          (*theMaterialTable)[mat]) ;
 
          if(MinDeltaEnergy[mat]<absLowerLimit)
            MinDeltaEnergy[mat] = absLowerLimit ; 

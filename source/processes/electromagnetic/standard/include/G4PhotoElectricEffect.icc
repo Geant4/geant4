@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.icc,v 1.7 2001-08-31 12:22:14 maire Exp $
+// $Id: G4PhotoElectricEffect.icc,v 1.8 2001-09-17 17:07:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -34,7 +34,8 @@
 // 20-11-97, change for lowest energy limit default action
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, use Sandia crossSection, V.Grichine mma
-// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 17-09-01, migration of Materials to pure STL (mma)  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +116,7 @@ inline G4double G4PhotoElectricEffect::ComputeMeanFreePath(G4double GammaEnergy,
       {             
             SIGMA += NbOfAtomsPerVolume[elm] * 
                      ComputeCrossSectionPerAtom(GammaEnergy,
-                                             (*theElementVector)(elm)->GetZ());
+                                             (*theElementVector)[elm]->GetZ());
       }       
 
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX ;

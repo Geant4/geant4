@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VMuEnergyLoss.cc,v 1.13 2001-09-13 11:17:14 urban Exp $
+// $Id: G4VMuEnergyLoss.cc,v 1.14 2001-09-17 17:05:41 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // --------------------------------------------------------------
 //      GEANT 4 class implementation file 
@@ -42,6 +42,7 @@
 // 29/05/01 V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 10/09/01 L.Urban : loss+ mechanism (subcutoff delta rays) implemented
 // 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
+// 17-09-01, migration of Materials to pure STL (mma) 
 // --------------------------------------------------------------
  
 
@@ -159,7 +160,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
   const G4MaterialTable* theMaterialTable=
                                    G4Material::GetMaterialTable();
 
-  G4int numOfMaterials = theMaterialTable->length();
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
   if( MakeTable )
   {
@@ -347,7 +348,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 
       MinDeltaEnergy[mat] = G4EnergyLossTables::GetPreciseEnergyFromRange(
                             G4Electron::Electron(),MinDeltaCutInRange,
-                                       (*theMaterialTable)(mat)) ;
+                                       (*theMaterialTable)[mat]) ;
       if(MinDeltaEnergy[mat]<Tlowerlimit) MinDeltaEnergy[mat]=Tlowerlimit ;
 
       if(MinDeltaEnergy[mat]>G4Electron::Electron()->GetCutsInEnergy()[mat])
@@ -355,7 +356,7 @@ G4VMuEnergyLoss::~G4VMuEnergyLoss()
 
    //  if((subSecFlag) && (aParticleType.GetParticleName()=="mu+"))
    //  {
-   //    G4cout << G4std::setw(20) << (*theMaterialTable)(mat)->GetName()
+   //    G4cout << G4std::setw(20) << (*theMaterialTable)[mat]->GetName()
    //         << G4std::setw(15) << MinDeltaEnergy[mat]/keV ;
    //      if(LowerLimitForced[mat])
    //           G4cout << "  lower limit forced." << G4endl;

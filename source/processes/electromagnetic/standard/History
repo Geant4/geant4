@@ -1,4 +1,4 @@
-$Id: History,v 1.32 2001-09-13 12:54:17 maire Exp $
+$Id: History,v 1.33 2001-09-17 17:07:11 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+17 sep 01: mma (stand-V03-02-04)
+- modifs in almost all classes for the migration of Materials to pure STL,
+  but backward compatible with g4rw   
 
 13 sep 01: L/Urban (stand-V03-02-03)
 -G4VxEnergyLoss: min.delta cut is set as rcut/100 + some optimisation
