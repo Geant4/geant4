@@ -95,6 +95,8 @@ NI                      [<copy-no>] [<depth>]
 
 /vis/scene/add/ghosts [<particle>]
   default:                 all
+  Adds ghost volumes (G4FlavoredParallelWorld) to the current scene.
+  Selects by particle.
 
 /vis/scene/add/hits [<sensitive-volume-name>]
   default:              (argument not impl'd yet.)
@@ -125,8 +127,6 @@ NI                      [<copy-no>] [<depth>]
   == 5000 is a good choice.  (Enable storing with
   "/tracking/storeTrajectory 1".)  See also "/vis/scene/endOfEventAction".
 
-NI /vis/scene/add/transientObjects ???????????? (JA 9/Aug/01)
-
 /vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>]
   default:                     world                -1         -1
   Adds physical volume to current scene.
@@ -137,8 +137,6 @@ NI /vis/scene/add/transientObjects ???????????? (JA 9/Aug/01)
 /vis/scene/create [<scene-name>]
   default       auto-generated name
   This scene becomes current.
-
-NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
 
 /vis/scene/endOfEventAction [accumulate|refresh]
   default:                        refresh
@@ -167,14 +165,6 @@ NI /vis/scene/edit  (Just make a new one? JA 9/Aug/01)
 /vis/scene/select [<scene-name>]
   default:      current scene name
   This scene becomes current.
-
-NI /vis/scene/set/hitOption accumulate|byEvent
-  default:                   byEvent
-  (Implemented as see /vis/scene/accumulate true|false.))
-
-NI /vis/scene/set/modelingStyle [<modeling-style>]
-
-NI /vis/scene/set/notifyOption immediate|delayed
 
 
 Scene Handlers
@@ -366,10 +356,6 @@ NI /vis/viewer/set/cutawayPlane ...
   after first use: current as default.
   Set direction from target to camera.  Also changes lightpoint direction if
   lights are set to move with camera.
-
-NI /vis/viewer/notifyOption immediate|delayed ?Issue of "update" after "set"?
-
-NI /vis/viewer/notifyHandler ??
 
 /vis/viewer/update [<viewer-name>]
   default:     current viewer name
