@@ -8,5 +8,5 @@ hpplus04 dev_stl opt	geant4-00-01-ref-01-tags3	all all all all 1
 # sgmedia dev_stl opt	geant4-00-01-ref-01-tags3	all all all all 1
 sungeant dev_stl deb	geant4-00-01-ref-01-tags3	all all all all 1
 # sungeant dev_stl opt	geant4-00-01-ref-01-tags3	all all all all 1
-pcgeant dev_stl deb	geant4-00-01-ref-01-tags3	all all all all 1
+# pcgeant dev_stl deb	geant4-00-01-ref-01-tags3	all all all all 1
 # pcgeant dev_stl opt	geant4-00-01-ref-01-tags3	all all all all 1
