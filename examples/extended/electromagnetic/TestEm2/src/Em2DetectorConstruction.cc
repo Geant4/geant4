@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em2DetectorConstruction.cc,v 1.12 2003-03-17 15:30:08 vnivanch Exp $
+// $Id: Em2DetectorConstruction.cc,v 1.13 2003-03-26 16:23:17 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,7 +192,7 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
   solidEcal = new G4Tubs("Ecal",0.,EcalRadius,0.5*EcalLength,0.,360*deg);
   logicEcal = new G4LogicalVolume( solidEcal,myMaterial,"Ecal",0,0,0);
   physiEcal = new G4PVPlacement(0,G4ThreeVector(),
-                                "Ecal",logicEcal,0,false,0);
+                                logicEcal,"Ecal",0,false,0);
 				
   // Ring
   //
@@ -200,19 +200,19 @@ G4VPhysicalVolume* Em2DetectorConstruction::ConstructVolumes()
      {
       solidRing = new G4Tubs("Ring",i*dR,(i+1)*dR,0.5*EcalLength,0.,360*deg);
       logicRing = new G4LogicalVolume(solidRing,myMaterial,"Ring",0,0,0);
-      physiRing = new G4PVPlacement(0,G4ThreeVector(),"Ring",logicRing,
-                                    physiEcal,false,i);
+      physiRing = new G4PVPlacement(0,G4ThreeVector(),logicRing,"Ring",
+                                    logicEcal,false,i);
 				                   				
       // Slice
       solidSlice = new G4Tubs("Slice",i*dR,(i+1)*dR,0.5*dL,0.,360*deg);
       logicSlice = new G4LogicalVolume(solidSlice,myMaterial,"Slice",0,0,0);
       logicSlice-> SetVisAttributes(G4VisAttributes::Invisible);
       if (nLtot >1)
-        physiSlice = new G4PVReplica("Slice",logicSlice,physiRing,
+        physiSlice = new G4PVReplica("Slice",logicSlice,logicRing,
                                     kZAxis,nLtot,dL);
       else
-        physiSlice = new G4PVPlacement(0,G4ThreeVector(),"Slice",logicSlice,
-                                    physiRing,false,0);
+        physiSlice = new G4PVPlacement(0,G4ThreeVector(),logicSlice,"Slice",
+                                    logicRing,false,0);
      }				                   
 
 

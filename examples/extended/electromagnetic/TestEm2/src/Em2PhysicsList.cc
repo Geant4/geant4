@@ -21,7 +21,9 @@
 // ********************************************************************
 //
 // 
-
+// $Id: Em2PhysicsList.cc,v 1.13 2003-03-26 16:23:17 maire Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -36,7 +38,6 @@
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -119,8 +120,7 @@ void Em2PhysicsList::AddPhysicsList(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Em2PhysicsList::SetCuts()
-{
-     
+{    
   if (verboseLevel >0){
     G4cout << "Em2PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
