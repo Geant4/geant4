@@ -263,6 +263,8 @@
   
   void G4NeutronHPVector::ThinOut(G4double precision)
   {
+    // anything in there?
+    if(GetVectorLength()==0) return;
     // make the new vector
     G4NeutronHPDataPoint * aBuff = new G4NeutronHPDataPoint[nPoints];
     G4double x, x1, x2, y, y1, y2;
