@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Box.cc,v 1.1 1999-01-07 16:07:55 gunter Exp $
+// $Id: G4Box.cc,v 1.2 1999-04-13 11:05:04 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -77,8 +77,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	    xMax=xoffset+fDx;
 	    if (pVoxelLimit.IsXLimited())
 		{
-		    if (xMin>pVoxelLimit.GetMaxXExtent()
-			||xMax<pVoxelLimit.GetMinXExtent())
+		    if (xMin>pVoxelLimit.GetMaxXExtent()+kCarTolerance
+			||xMax<pVoxelLimit.GetMinXExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -101,8 +101,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	    yMax=yoffset+fDy;
 	    if (pVoxelLimit.IsYLimited())
 		{
-		    if (yMin>pVoxelLimit.GetMaxYExtent()
-			||yMax<pVoxelLimit.GetMinYExtent())
+		    if (yMin>pVoxelLimit.GetMaxYExtent()+kCarTolerance
+			||yMax<pVoxelLimit.GetMinYExtent()-kCarTolerance)
 			{
 			    return false;
 			}
@@ -125,8 +125,8 @@ G4bool G4Box::CalculateExtent(const EAxis pAxis,
 	    zMax=zoffset+fDz;
 	    if (pVoxelLimit.IsZLimited())
 		{
-		    if (zMin>pVoxelLimit.GetMaxZExtent()
-			||zMax<pVoxelLimit.GetMinZExtent())
+		    if (zMin>pVoxelLimit.GetMaxZExtent()+kCarTolerance
+			||zMax<pVoxelLimit.GetMinZExtent()-kCarTolerance)
 			{
 			    return false;
 			}
