@@ -1,5 +1,11 @@
 This README file details what the various macros test.
 
+The log files of these tests can be downloaded from
+
+	http://www.space.dera.gov.uk/space_env/gspm.html
+
+-----------------------------------
+
 test1.g4mac
 -----------
 point source, isotropic radiation, monoenergetic
