@@ -1,0 +1,29 @@
+# $Id: run08.mac,v 1.1 2002-08-02 09:59:14 maire Exp $
+#
+# Macro file for "TestEm3.cc" 
+# (can be run in batch, without graphic)
+#
+# Iron 1 layer; proton 500 MeV
+#
+/control/verbose 2
+#
+/run/particle/setCut 1 mm
+/run/initialize
+#
+/calor/setNbOfLayers 1
+/calor/setNbOfAbsor 1
+/calor/setAbsor 0 Iron 5 cm
+/calor/setSizeYZ 4 cm
+/calor/update
+#
+/process/inactivate msc
+#
+/gun/setDefault
+#
+/run/verbose 2
+/event/printModulo 100
+/tracking/stepMax 2 cm
+#
+/gun/particle proton
+/gun/energy 500 MeV
+/run/beamOn 100
