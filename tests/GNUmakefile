@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.43 2002-06-25 14:34:19 gcosmo Exp $
+# $Id: GNUmakefile,v 1.44 2002-06-28 13:47:22 stesting Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -17,7 +17,7 @@ PERSISTENCY += 01 02
 
 # Symbolic links to extended electromagnetic examples using test501, etc...
 ELECTROMAGNETIC += 1 2 3 4 5 ## Awaiting description.
-ELECTROMAGNETIC += 6 ## Tests GammaConversionToMuons EM process.
+ELECTROMAGNETIC += 6 ## Low energy electromagnetic processes (moved to lowenergy).
 ELECTROMAGNETIC += 8 10 ## Transistion radiation and PAI (photoabsorption
                        ## ionisation) model.
 
@@ -26,6 +26,12 @@ G3TOG4 += 01 02   ## 01 - clGeometry  02 cltog4 (actually hand coded for now)
 
 # Symbolic links to extended field examples using test701, etc...
 FIELD += 01 02 03
+
+# Symbolic links to extended gdml examples using test901, etc...
+GDML += 01
+
+# Symbolic links to extended geometry OLAP examples using test1001, etc...
+OLAP += 01
 
 # Symbolic links to extended BIAS examples using test801, etc...
 BIAS += 01 02 03 04 05 06 07
@@ -67,10 +73,10 @@ SUBDIRS += test20 ## Polarised LowE processes.
 SUBDIRS += test21 ## added nov 2001 (info to come).
 SUBDIRS += test22 ## added nov 2001 (info to come).
 SUBDIRS += test23 ## Cut per material and persistency of physics table.
-SUBDIRS += test32 ## leading_particle hadronic model for MARS13 biasing.
+SUBDIRS += test32 ## Leading_particle biasing model of G4Mars5Ge on MARS13.
 
 # Tests with hadronic exercisers.
-HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21
+HADEXERDIRS = test02 test11 test12 test13 test15 test16 test21 
 
 .PHONY : all examples_links clean clean_libs clean_examples_links
 
@@ -96,10 +102,22 @@ endif
 	@for nn in $(G3TOG4); do \
 	  (cd test6$$nn && $(MAKE)); \
 	done;:
+
 	@$(ECHO) Making Field Tests...
 	@for nn in $(FIELD); do \
 	  (cd test7$$nn && $(MAKE)); \
 	done;:
+
+	@$(ECHO) Making GDML Tests...
+	@for nn in $(GDML); do \
+	  (cd test9$$nn && $(MAKE) XERCESCROOT=$(XERCESCROOT)); \
+	done;:
+
+	@$(ECHO) Making OLAP Tests...
+	@for nn in $(OLAP); do \
+	  (cd test10$$nn && $(MAKE)); \
+	done;:
+
 	@$(ECHO) Making Biasing Tests...
 	@for nn in $(BIAS); do \
 	  (cd test8$$nn && $(MAKE)); \
@@ -173,11 +191,20 @@ examples_links_source:
          ln -s clGeometry.in  $$testdir/test601.in;  \
          ln -s clGeometry.out $$testdir/test601.out; \
          true
+
 	@testdir=test602; \
 	exdir=$(G4INSTALL)/examples/extended/g3tog4/cltog4; \
          ln -s $$exdir $$testdir; \
          ln -s cltog4.in  $$testdir/test602.in;  \
          ln -s cltog4.out $$testdir/test602.out; :
+
+	@testdir=test901; \
+	exdir=$(G4INSTALL)/examples/extended/gdml; \
+         ln -s $$exdir $$testdir; :
+
+	@testdir=test1001; \
+	exdir=$(G4INSTALL)/examples/extended/geometry/olap; \
+         ln -s $$exdir $$testdir; :
 
 	@for nn in $(FIELD); do \
 	  testdir=test7$$nn; \
@@ -197,12 +224,11 @@ examples_links_source:
 	  testdir=test8$$nn; \
 	  exdir=$(G4INSTALL)/examples/extended/biasing/B$$nn; \
 	  ln -s $$exdir $$testdir; \
-	  for i in $$exdir/*.in; do \
-	    exin=`basename $$i`; \
-	    exout=`basename $$i .in`.out; \
-	    testin=`echo $$exin | sed s/biasing/test8/`; \
-	    testout=`echo $$exout | sed s/biasing/test8/`; \
-	    ln -s $$exin $$testdir/$$testin; \
+	  for i in $$exdir/*.cc; do \
+	    exin=`basename $$i .cc`.in; \
+	    exout=`basename $$i .cc`.out; \
+	    testin=`echo $$exin | sed s/exampleB/test8/`; \
+	    testout=`echo $$exout | sed s/exampleB/test8/`; \
 	    ln -s $$exout $$testdir/$$testout; \
 	  done; \
 	done;:
@@ -227,9 +253,13 @@ examples_links_binaries:
 	done;:
 	@ln -s clGeometry $(G4WORKDIR)/bin/$(G4SYSTEM)/test601; \
 	ln -s cltog4    $(G4WORKDIR)/bin/$(G4SYSTEM)/test602; \
+	ln -s olapex    $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001; \
+	ln -s gogdml    $(G4WORKDIR)/bin/$(G4SYSTEM)/test901; \
         true
 
 clean_examples_links_source:
+	@rm -f test901
+	@rm -f test1001
 	@rm -f test104/test104.EMtest.in
 	@rm -f test104/test104.EMtest.out
 	@for nn in $(EXAMPLES); do \
@@ -241,6 +271,20 @@ clean_examples_links_source:
 	done;:
 	@for nn in $(ELECTROMAGNETIC); do \
 	  testdir=test50$$nn; \
+	  for i in $$testdir/$$testdir.*; do \
+	    rm -f $$i; \
+	  done; \
+	  rm -f $$testdir; \
+	done;:
+	@for nn in $(FIELD); do \
+	  testdir=test7$$nn; \
+	  for i in $$testdir/$$testdir.*; do \
+	    rm -f $$i; \
+	  done; \
+	  rm -f $$testdir; \
+	done;:
+	@for nn in $(BIAS); do \
+	  testdir=test8$$nn; \
 	  for i in $$testdir/$$testdir.*; do \
 	    rm -f $$i; \
 	  done; \
@@ -273,3 +317,5 @@ clean_examples_links_binaries:
 	  rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test8$$nn; \
 	done;:
 	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test601 $(G4WORKDIR)/bin/$(G4SYSTEM)/test602;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test901 ;:
+	@rm -f $(G4WORKDIR)/bin/$(G4SYSTEM)/test1001;:
