@@ -3447,6 +3447,7 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
     34.21,34.31,34.42,34.52,34.63,34.73,34.84,34.94,35.04,35.15,
     35.25,35.36,35.46,35.57,35.67,35.78 };
 
+  chargeTarget = G4int(targetCharge);
   G4int idxx = chargeTarget-1;
   if(idxx>99) idxx=99;  
   G4double q = zeff[idxx];
@@ -3466,7 +3467,6 @@ void G4MuonMinusCaptureAtRest::DoMuCapture()
   txi = cfe * pols;
   tyi = sfe * pols;
   tzi = polc;
-  chargeTarget = G4int(targetCharge);
   //  Choice of the mass number of the target nucleus: use the input
   rndm[0] = G4UniformRand();
   rndm[1] = G4UniformRand();
