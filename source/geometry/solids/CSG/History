@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2000-05-11 15:09:51 gcosmo Exp $
+$Id: History,v 1.18 2000-05-18 07:33:29 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 17,   00   V. Grichine               geom-solids-csg-V01-01-03
+
+- G4Tubs.cc:
+  o introduced fix in DistanceToOut(p,v,...) in computation of xi, yi for
+    (sphi >= -0.5*kCarTolerance). This fixes problem reports #76 and #91.
+  o added more diagnostics in case of invalid enum for DistanceToOut.
+- Updated unit test for G4Tubs.
 
 May 05,   00   V. Grichine               geom-solids-csg-V01-01-02
 
