@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VDecayChannel.cc,v 1.7 2000-03-23 16:43:16 hweber Exp $
+// $Id: G4VDecayChannel.cc,v 1.8 2000-05-29 01:30:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -387,7 +387,7 @@ G4int G4VDecayChannel::GetAngularMomentum()
 #endif
     for (G4int j=MiniSpin; j<=MaxiSpin; j+=2){    // loop over all possible spin couplings
       lMin = abs(PiSpin-j)/2;
-#ifdef G4VERBOSE
+#ifdef G4VERBOSE 
       if (verboseLevel>1)
 	G4cout << "-> checking 2*j=" << j << G4endl;
 #endif
@@ -396,9 +396,15 @@ G4int G4VDecayChannel::GetAngularMomentum()
 	if (verboseLevel>1)
 	  G4cout << " checking l=" << l << G4endl;
 #endif
-	if (PParity == D1Parity*D2Parity*pow(-1,l)) {    // check parity for this l
-	  return l;
-	}
+        if (l%2==0) {
+	  if (PParity == D1Parity*D2Parity) {    // check parity for this l
+	    return l;
+          } 
+	} else {
+	  if (PParity == -1*D1Parity*D2Parity) {    // check parity for this l
+            return l;
+          }
+        }
       }
     }
   } else {
@@ -422,10 +428,4 @@ void G4VDecayChannel::DumpInfo()
   }
   G4cout << G4endl;
 }
-
-
-
-
-
-
 
