@@ -125,14 +125,14 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
     G4double F_IS, F_AS, G_IS, G_AS;
 
     F_IS = 1./6.*(-2.*x_squared+3.*x-x0_squared);
-    F_AS = 1./6.*sqrt(x_squared-x0_squared)*(2.*x-2.+sqrt(1.-x0_squared));
+    F_AS = 1./6.*std::sqrt(x_squared-x0_squared)*(2.*x-2.+std::sqrt(1.-x0_squared));
 
     G_IS = 2./9.*(michel_rho-0.75)*(4.*x_squared-3.*x-x0_squared);
     G_IS = G_IS + michel_eta*(1.-x)*x0;
 
     G_AS = 3.*(michel_xsi-1.)*(1.-x);
-    G_AS = G_AS+2.*(michel_xsi*michel_delta-0.75)*(4.*x-4.+sqrt(1.-x0_squared));
-    G_AS = 1./9.*sqrt(x_squared-x0_squared)*G_AS;
+    G_AS = G_AS+2.*(michel_xsi*michel_delta-0.75)*(4.*x-4.+std::sqrt(1.-x0_squared));
+    G_AS = 1./9.*std::sqrt(x_squared-x0_squared)*G_AS;
 
     F_IS = F_IS + G_IS;
     F_AS = F_AS + G_AS;
@@ -141,7 +141,7 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
     G4double R_IS = F_c(x,x0);
 
-    G4double F = 6.*F_IS + R_IS/sqrt(x_squared-x0_squared);
+    G4double F = 6.*F_IS + R_IS/std::sqrt(x_squared-x0_squared);
 
     // *** Radiative Corrections ***
 
@@ -151,9 +151,9 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
 
     ctheta = 2.*rndm-1.;
 
-    G4double G = 6.*F_AS - R_AS/sqrt(x_squared-x0_squared);
+    G4double G = 6.*F_AS - R_AS/std::sqrt(x_squared-x0_squared);
 
-    FG = sqrt(x_squared-x0_squared)*F*(1.+(G/F)*ctheta);
+    FG = std::sqrt(x_squared-x0_squared)*F*(1.+(G/F)*ctheta);
 
     if(FG>FG_max){
       G4cout<<"***Problem in Muon Decay *** : FG > FG_max"<<G4endl;
@@ -175,11 +175,11 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   // calculate daughter momentum
   G4double daughtermomentum[3];
 
-  daughtermomentum[0] = sqrt(energy*energy - EMASS*EMASS);
+  daughtermomentum[0] = std::sqrt(energy*energy - EMASS*EMASS);
 
-  G4double stheta = sqrt(1.-ctheta*ctheta);
-  G4double cphi = cos(phi);
-  G4double sphi = sin(phi);
+  G4double stheta = std::sqrt(1.-ctheta*ctheta);
+  G4double cphi = std::cos(phi);
+  G4double sphi = std::sin(phi);
 
   //Coordinates of the decay positron with respect to the muon spin
 
@@ -200,13 +200,13 @@ G4DecayProducts *G4MuonDecayChannelWithSpin::DecayIt(G4double)
   // daughter 1 ,2 (neutrinos)
   // create neutrinos in the C.M frame of two neutrinos
   G4double energy2 = parentmass*(1.0 - x/2.0); 
-  G4double vmass   = sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
+  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
-  G4double sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
+  G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
   G4double phin  = 2.0*M_PI*G4UniformRand()*rad;
-  G4double sinphin = sin(phin);
-  G4double cosphin = cos(phin);
+  G4double sinphin = std::sin(phin);
+  G4double cosphin = std::cos(phin);
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 
@@ -247,17 +247,17 @@ G4double G4MuonDecayChannelWithSpin::R_c(G4double x){
   G4double L2 = 0.0;
 
   for(G4int n=1; n<=n_max; n++){
-    L2 += pow(x,n)/(n*n);
+    L2 += std::pow(x,n)/(n*n);
   }
 
-  G4double omega = log(EMMU/EMASS);
+  G4double omega = std::log(EMMU/EMASS);
 
   G4double r_c;
 
   r_c = 2.*L2-(pi*pi/3.)-2.;
-  r_c = r_c + omega * (1.5+2.*log((1.-x)/x));
-  r_c = r_c - log(x)*(2.*log(x)-1.);
-  r_c = r_c + (3.*log(x)-1.-1./x)*log(1.-x);
+  r_c = r_c + omega * (1.5+2.*std::log((1.-x)/x));
+  r_c = r_c - std::log(x)*(2.*std::log(x)-1.);
+  r_c = r_c + (3.*std::log(x)-1.-1./x)*std::log(1.-x);
 
   return r_c;
 }

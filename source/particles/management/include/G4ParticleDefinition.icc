@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.icc,v 1.7 2004-09-02 01:52:41 asaim Exp $
+// $Id: G4ParticleDefinition.icc,v 1.8 2004-12-02 08:08:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -119,29 +119,4 @@ G4bool G4ParticleDefinition::GetApplyCutsFlag() const
 {
   return fApplyCutsFlag;
 }
-
-inline
- void G4ParticleDefinition::SetAtomicNumber(G4int i)
-{
-  theAtomicNumber = i;
-}
-
-inline
- G4int G4ParticleDefinition::GetAtomicNumber() const
-{
-  return theAtomicNumber;
-}
-
-inline
- void G4ParticleDefinition::SetAtomicMass(G4int i)
-{
-  theAtomicMass = i;
-}
-
-inline
- G4int G4ParticleDefinition::GetAtomicMass() const
-{
-  return theAtomicMass;
-}
-
 

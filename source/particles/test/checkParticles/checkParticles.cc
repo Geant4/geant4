@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: checkParticles.cc,v 1.5 2004-02-13 05:51:53 kurasige Exp $
+// $Id: checkParticles.cc,v 1.6 2004-12-02 08:12:17 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -106,7 +106,7 @@ void CheckMass(const char* inputString)
     return;
   } 
  
-  if ( abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-4 ) {
+  if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-4 ) {
 	G4cout << "Mass is inconsistent for " << particle->GetParticleName();
     G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
     G4cout <<  encoding << " " << mass <<  " ";
@@ -123,7 +123,7 @@ void CheckMass(const char* inputString)
       G4cout << " for " << name << G4endl;
       return;
     } 
-    if ( abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-3 ) {
+    if ( std::abs(particle->GetPDGMass()/GeV-mass)/mass > 1.0e-3 ) {
 	  G4cout << "Mass is inconsistent for " << particle->GetParticleName();
       G4cout << " mass = " << particle->GetPDGMass()/GeV << G4endl;
       G4cout <<  encoding << " " << mass <<  " ";
@@ -157,7 +157,7 @@ void CheckWidth(const char* inputString)
     return;
   } 
  
-  if ( abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-3 ) {
+  if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-3 ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
     G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
     G4cout <<  encoding << " " << width <<  " ";
@@ -174,7 +174,7 @@ void CheckWidth(const char* inputString)
       G4cout << " for " << name << G4endl;
       return;
     } 
-   if ( abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-4 ) {
+   if ( std::abs(particle->GetPDGWidth()/GeV-width)/width > 1.0e-4 ) {
 	G4cout << "Width is inconsistent for " << particle->GetParticleName();
     G4cout << " width = " << particle->GetPDGWidth()/GeV << G4endl;
     G4cout <<  encoding << " " << width <<  " ";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.4 2002-04-03 09:05:33 kurasige Exp $
+// $Id: G4NeutronBetaDecayChannel.cc,v 1.5 2004-12-02 08:08:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -117,7 +117,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double r0;
   do {
       x = xmax*G4UniformRand();
-      p = sqrt(x*(x+2.0*m));
+      p = std::sqrt(x*(x+2.0*m));
       w = 1.0-2.0*G4UniformRand();
       r = p*(x+m)*(xmax-x)*(xmax-x)*(1.0+aENuCorr*p/(x+m)*w);
       r0 = G4UniformRand()*(xmax+m)*(xmax+m)*xmax*xmax*(1.0+aENuCorr);
@@ -126,7 +126,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   //create daughter G4DynamicParticle 
   // rotation materix to lab frame
   G4double costheta = 2.*G4UniformRand()-1.0;
-  G4double theta = acos(costheta)*rad;
+  G4double theta = std::acos(costheta)*rad;
   G4double phi  = 2.0*M_PI*G4UniformRand()*rad;
   G4RotationMatrix rm;
   rm.rotateY(theta);
@@ -143,7 +143,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   // daughter 1 (nutrino) in XZ plane
   G4double eNu = xmax-x; 
   G4double cosn = w;
-  G4double sinn = sqrt((1.0-cosn)*(1.0+cosn));
+  G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
   G4ThreeVector direction1(sinn, 0.0, cosn);
   direction1 = rm * direction1;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleDefinition.cc,v 1.21 2004-09-02 01:52:41 asaim Exp $
+// $Id: G4ParticleDefinition.cc,v 1.22 2004-12-02 08:09:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -71,9 +71,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		     G4bool              stable,
 		     G4double            lifetime,
 		     G4DecayTable        *decaytable,
-		     G4bool              shortlived,
-		     const G4String&     subType,
-                     G4int               anti_encoding)
+		     G4bool              shortlived)
 		 : theParticleName(aName), 
 		   thePDGMass(mass),
 		   thePDGWidth(width),
@@ -90,7 +88,7 @@ G4ParticleDefinition::G4ParticleDefinition(
 		   theLeptonNumber(lepton),
 		   theBaryonNumber(baryon),
 		   theParticleType(pType), 
-		   theParticleSubType(subType), 
+		   theParticleSubType(""), 
 		   thePDGEncoding(encoding),
 		   theAntiPDGEncoding(-1*encoding),
 		   fShortLivedFlag(shortlived),
@@ -99,12 +97,8 @@ G4ParticleDefinition::G4ParticleDefinition(
                    theDecayTable(decaytable),
 		   theProcessManager(0),
                    verboseLevel(1),
-  		   fApplyCutsFlag(false),
-                   theAtomicNumber(0),
-                   theAtomicMass(0)
+  		   fApplyCutsFlag(false)
 {
-   if (anti_encoding !=0) theAntiPDGEncoding = anti_encoding;
- 
    // check name and register this particle into ParticleTable
    theParticleTable = G4ParticleTable::GetParticleTable();
    theParticleTable->Insert(this);

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTableA.cc,v 1.8 2003-12-12 06:48:41 kurasige Exp $
+// $Id: G4NucleiPropertiesTableA.cc,v 1.9 2004-12-02 08:08:59 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -96,7 +96,7 @@ G4double G4NucleiPropertiesTable::GetNuclearMass(G4int Z, G4int A)
   G4int i=GetIndex(Z, A);	
   if (i >= 0){
     const G4double NuclearMass = GetAtomicMass(Z,A) - G4double(Z)*electron_mass_c2 +
-      1.433e-5*MeV*pow(G4double(Z),2.39);
+      1.433e-5*MeV*std::pow(G4double(Z),2.39);
     return NuclearMass;
   } else { 
     return 0.0;

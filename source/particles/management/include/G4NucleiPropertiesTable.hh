@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NucleiPropertiesTable.hh,v 1.11 2003-12-12 06:48:41 kurasige Exp $
+// $Id: G4NucleiPropertiesTable.hh,v 1.12 2004-12-02 08:08:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -46,6 +46,7 @@
 // Remove "theInstance"  by H.Kurashige (12 Dec. 03)
 // -------------------------------------------------------------------
 #include "globals.hh"
+#include <cmath>
 
 
 #ifndef G4NucleiPropertiesTable_h

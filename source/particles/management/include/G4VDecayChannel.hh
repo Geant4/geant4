@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.hh,v 1.10 2002-11-20 15:05:55 gcosmo Exp $
+// $Id: G4VDecayChannel.hh,v 1.11 2004-12-02 08:08:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@
 
 #include "G4ios.hh"
 #include "globals.hh"
+#include <cmath>
 
 class    G4ParticleDefinition;
 class    G4DecayProducts;

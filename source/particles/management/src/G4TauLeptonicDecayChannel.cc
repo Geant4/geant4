@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TauLeptonicDecayChannel.cc,v 1.2 2002-03-28 10:56:09 kurasige Exp $
+// $Id: G4TauLeptonicDecayChannel.cc,v 1.3 2004-12-02 08:09:00 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -131,7 +131,7 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
     // determine momentum/energy
     r = G4UniformRand();
     p = pmax*G4UniformRand();
-    e = sqrt(p*p + daughtermass[0]*daughtermass[0]);
+    e = std::sqrt(p*p + daughtermass[0]*daughtermass[0]);
   } while (r > spectrum(p,e,parentmass,daughtermass[0]) );
   energy = e- daughtermass[0];
 
@@ -140,10 +140,10 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   daughtermomentum[0] = p;
   G4double costheta, sintheta, phi, sinphi, cosphi; 
   costheta = 2.*G4UniformRand()-1.0;
-  sintheta = sqrt((1.0-costheta)*(1.0+costheta));
+  sintheta = std::sqrt((1.0-costheta)*(1.0+costheta));
   phi  = 2.0*M_PI*G4UniformRand()*rad;
-  sinphi = sin(phi);
-  cosphi = cos(phi);
+  sinphi = std::sin(phi);
+  cosphi = std::cos(phi);
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle 
          = new G4DynamicParticle( daughters[0], direction0*daughtermomentum[0]);
@@ -152,13 +152,13 @@ G4DecayProducts *G4TauLeptonicDecayChannel::DecayIt(G4double)
   // daughter 1 ,2 (nutrinos)
   // create neutrinos in the C.M frame of two neutrinos
   G4double energy2 = parentmass-e; 
-  G4double vmass   = sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
+  G4double vmass   = std::sqrt((energy2-daughtermomentum[0])*(energy2+daughtermomentum[0]));
   G4double beta = -1.0*daughtermomentum[0]/energy2;
   G4double costhetan = 2.*G4UniformRand()-1.0;
-  G4double sinthetan = sqrt((1.0-costhetan)*(1.0+costhetan));
+  G4double sinthetan = std::sqrt((1.0-costhetan)*(1.0+costhetan));
   G4double phin  = 2.0*M_PI*G4UniformRand()*rad;
-  G4double sinphin = sin(phin);
-  G4double cosphin = cos(phin);
+  G4double sinphin = std::sin(phin);
+  G4double cosphin = std::cos(phin);
 
   G4ThreeVector direction1(sinthetan*cosphin,sinthetan*sinphin,costhetan);
   G4DynamicParticle * daughterparticle1 

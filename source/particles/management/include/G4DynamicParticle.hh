@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DynamicParticle.hh,v 1.13 2003-10-21 20:56:13 asaim Exp $
+// $Id: G4DynamicParticle.hh,v 1.14 2004-12-02 08:08:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@
 
 
 #include "globals.hh"
+#include <cmath>
 #include "G4ios.hh"
 
 #include "G4ParticleDefinition.hh"

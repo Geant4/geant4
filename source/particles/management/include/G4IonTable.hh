@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.hh,v 1.20 2003-06-16 16:58:03 gunter Exp $
+// $Id: G4IonTable.hh,v 1.21 2004-12-02 08:08:58 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,6 +45,7 @@
 #include "globals.hh"
 #include "G4ParticleDefinition.hh"
 
+#include <cmath>
 #include <vector>
 
 class G4ParticleTable;
