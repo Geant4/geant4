@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4JTPolynomialSolver.hh,v 1.2 2005-03-01 14:02:24 link Exp $
+// $Id: G4JTPolynomialSolver.hh,v 1.3 2005-03-01 17:20:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class description:
@@ -55,7 +55,6 @@
 // Translated to C++ and adapted to use STL vectors,
 // by Oliver Link (Oliver.Link@cern.ch)
 //
-// 01-Mar-05 O.Link Removed #include <cfloat> (compiler warning Windows/VC++)
 // --------------------------------------------------------------------
 
 #ifndef G4JTPOLYNOMIALSOLVER_HH
