@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.7 2003-08-15 12:25:23 urban Exp $
+// $Id: G4MscModel.cc,v 1.8 2003-08-28 08:20:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -433,8 +433,8 @@ G4double G4MscModel::GeomPathLength(
     G4double T1 = theManager->GetEnergy(particle,range-tPathLength,couple);
 
     if (theLambdaTable) {
-      G4bool b;
-      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,b);
+      G4bool bb;
+      lambda1 = ((*theLambdaTable)[couple->GetIndex()])->GetValue(T1,bb);
     } else {
       lambda1 = CrossSection(couple,particle,T1,0.0,1.0);
     }
