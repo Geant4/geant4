@@ -1,4 +1,4 @@
-$Id: History,v 1.26 2003-02-28 19:21:22 perl Exp $
+$Id: History,v 1.27 2003-05-29 22:17:47 duns Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/HepRep sub-category
 ---------------------------------------------------------------------------
+
+29th May 2003 Mark Donszelmann and Joseph Perl
+- Modified G4HepRepSceneHandler (HEPREP2) to write more complete heprep, including
+  attributes.
+- Copied new Streamer from FREEHEP library.
 
 28th February 2003  Joseph Perl
 - Modified G4HepRepFileSceneHandler to allow some volumes to be initially invisible.

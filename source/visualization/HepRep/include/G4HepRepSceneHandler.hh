@@ -21,28 +21,6 @@
 // ********************************************************************
 //
 //
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
-//
 
 /**
  * @author Mark Donszelmann
@@ -53,6 +31,8 @@
 
 #include "globals.hh"
 #include "g4std/iostream"
+#include <stack>
+#include <map>
 
 // HepRep
 #include "HEPREP/HepRep.h"
@@ -64,6 +44,8 @@
 #include "G4Material.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
+
+#include "XMLHepRepStreamer.h"
 
 //class G4HepRep;
 
@@ -112,15 +94,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         static G4int GetSceneCount () { return sceneCount; }
 
-        HEPREP::HepRep *GetHepRep() { return heprep; }
-        HEPREP::HepRepWriter *GetHepRepWriter() { return writer; }
-        HEPREP::HepRepFactory *GetHepRepFactory();
-        void open();
         void close();
-
-    protected:
-//        void RequestPrimitives (const G4VSolid& solid);
-
     private:
         static G4int sceneCount;      // No. of extanct scenes.
         static G4int sceneIdCount;    // static counter for scenes.
@@ -133,22 +107,62 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
 
         G4Transform3D transform;
 
-        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color,const G4String& key = G4String("Color"));
-        void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
-        void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
-        HEPREP::HepRepInstance* CreateInstance(HEPREP::HepRepInstance* p, HEPREP::HepRepType* altType);
-        bool IsEventData ();
+        G4int geomParentDepth;
+        std::map<G4String, HEPREP::HepRepType *> geomTypeFullNameMap;
+        std::stack<G4String> geomParentTypeFullNameS;
+        std::stack<HEPREP::HepRepInstance *> geomParentInstanceS;
+
+        G4int eventParentDepth;
+        std::map<G4String, HEPREP::HepRepType *> eventTypeFullNameMap;
+        std::stack<G4String> eventParentTypeFullNameS;
+        std::stack<HEPREP::HepRepInstance *> eventParentInstanceS;
 
         G4std::ostream* out;
-        HEPREP::HepRepFactory* heprepFactory;
-        HEPREP::HepRepWriter* writer;
-        HEPREP::HepRepInstance *parent;
-        HEPREP::HepRep *heprep;
-        HEPREP::HepRepType *geometryType;
-        HEPREP::HepRepType *eventType;
-        HEPREP::HepRepType *trackType;
-        HEPREP::HepRepType *calHitType;
-        HEPREP::HepRepType *hitType;
+        HEPREP::HepRepFactory* factory;
+        XMLHepRepStreamer* writer;
+        HEPREP::HepRep* heprep;
+
+        G4std::ostream* geomTypeOut;
+        G4std::ostream* geomInstanceOut;
+        HEPREP::HepRepFactory* geomTypeHepRepFactory;
+        HEPREP::HepRepFactory* geomInstanceHepRepFactory;
+        HEPREP::HepRepWriter* geomTypeWriter;
+        HEPREP::HepRepWriter* geomInstanceWriter;
+        HEPREP::HepRep* geomTypeHeprep;
+        HEPREP::HepRep* geomInstanceHeprep;
+        HEPREP::HepRepInstanceTree* geomInstanceTree;
+
+        G4std::ostream* eventTypeOut;
+        G4std::ostream* eventInstanceOut;
+        HEPREP::HepRepFactory* eventTypeHepRepFactory;
+        HEPREP::HepRepFactory* eventInstanceHepRepFactory;
+        HEPREP::HepRepWriter* eventTypeWriter;
+        HEPREP::HepRepWriter* eventInstanceWriter;
+        HEPREP::HepRep* eventTypeHeprep;
+        HEPREP::HepRep* eventInstanceHeprep;
+        HEPREP::HepRepInstanceTree* eventInstanceTree;
+
+        char geomTypeFname [256];
+        char geomInstanceFname [256];
+        char eventTypeFname [256];
+        char eventInstanceFname [256];
+
+        void SetColour (HEPREP::HepRepAttribute *attribute, const G4Colour& color,
+			            const G4String& key = G4String("Color"));
+        void SetLine (HEPREP::HepRepInstance *instance, const G4Visible& visible);
+        void SetMarker (HEPREP::HepRepInstance *instance, const G4VMarker& marker);
+
+        HEPREP::HepRepInstance* CreateGeomInstance(G4String typeName, G4int depth);
+        HEPREP::HepRepInstance* CreateEventInstance(G4String typeName, G4int depth,
+					    const G4std::map<G4String,G4AttDef>* attDefs = NULL,
+					    G4std::vector<G4AttValue>* attValues = NULL);
+
+        bool IsEventData ();
+
+        void open();
+        void openGeomHepRep();
+        void openEventHepRep();
+        void mergeAndDelete(char* fname);
 };
 
 #endif

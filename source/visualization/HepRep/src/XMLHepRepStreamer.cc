@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 
 #include "XMLHepRepStreamer.h"
 
@@ -31,33 +9,30 @@
 using namespace std;
 using namespace HEPREP;
 
-XMLHepRepStreamer::XMLHepRepStreamer(ostream* out)
-    : XMLWriter(out, "  ", NAMESPACE) {
+XMLHepRepStreamer::XMLHepRepStreamer(ostream* out, bool writeTreesOnly)
+    : writeTreesOnly(writeTreesOnly), XMLWriter(out, "  ", NAMESPACE) {
 
     this->nameSpace = NAMESPACE;
-    openDoc();
+    if (!writeTreesOnly) openDoc();
 }
 
 XMLHepRepStreamer::~XMLHepRepStreamer() {
 }
 
 bool XMLHepRepStreamer::close() {
-    while (!hepreps.empty()) {
-        hepreps.pop();
-        closeTag();
-    }
-
-    closeDoc();
+    closeDoc(true);
     XMLWriter::close();
     return true;
 }
 
 bool XMLHepRepStreamer::write(HepRep* root) {
-    setAttribute("xmlns", "http://www.freehep.org/HepRep");
-    setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
-    setAttribute("xsi", "schemaLocation", "HepRep.xsd");
-    openTag(nameSpace, "heprep");
-    writtenLayers = false;
+    if (!writeTreesOnly) {
+        setAttribute("xmlns", "http://www.freehep.org/HepRep");
+        setAttribute("xmlns", "xsi", "http://www.w3.org/2001/XMLSchema-instance");
+        setAttribute("xsi", "schemaLocation", "HepRep.xsd");
+        openTag(nameSpace, "heprep");
+        writtenLayers = false;
+    }
     hepreps.push(root);
     this->heprep = root;
     return true;
@@ -72,7 +47,7 @@ bool XMLHepRepStreamer::write(HepRepTypeTree* typeTree) {
         hepreps.pop();
         closeTag();
     }
-    if (!writtenLayers) {
+    if ((!writtenLayers) && (!writeTreesOnly)) {
         writtenLayers = true;
         string layerOrder = "";
         bool comma = false;
@@ -209,7 +184,7 @@ bool XMLHepRepStreamer::write(HepRepAttValue* attValue) {
     setAttribute("type", attValue->getTypeName());
 
     string label = dynamic_cast<DefaultHepRepAttValue*>(attValue)->toShowLabel();
-    setAttribute("showLabel", label);
+    setAttribute("showlabel", label);
     printTag(nameSpace, "attvalue");
     return true;
 }

@@ -1,25 +1,3 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 
 #include <cstdlib>
 #include <cstring>
@@ -124,6 +102,18 @@ string DefaultHepRepAttValue::getString() {
     return stringValue;
 }
 
+string DefaultHepRepAttValue::getLowerCaseString() {
+    if (type != HepRepConstants::TYPE_STRING) cerr << "Trying to access AttValue as 'string'" << endl;
+    char *tmp = new char[strlen(stringValue.c_str())];
+    strcpy(tmp, stringValue.c_str());
+    int i = -1;
+    do {
+        i++;
+        tmp[i] = tolower(tmp[i]);
+    } while (tmp[i] != 0);
+    return tmp;
+}
+
 long DefaultHepRepAttValue::getLong() {
     if (type != HepRepConstants::TYPE_LONG) cerr << "Trying to access AttValue as 'long'" << endl;
     return longValue;
@@ -164,7 +154,7 @@ string DefaultHepRepAttValue::getAsString() {
                                             return buffer;
         case HepRepConstants::TYPE_INT:     sprintf(buffer, "%d", getInteger());
                                             return buffer;
-        case HepRepConstants::TYPE_DOUBLE:  sprintf(buffer, "%f", getDouble());
+        case HepRepConstants::TYPE_DOUBLE:  sprintf(buffer, "%g", getDouble());
                                             return buffer;
         case HepRepConstants::TYPE_BOOLEAN: return (getBoolean()) ? "true" : "false";
         default:                            return "Unknown typecode";

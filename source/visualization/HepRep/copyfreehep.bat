@@ -7,3 +7,4 @@ copy %HEPREP%\geant4\*.cc src
 copy "%HEPREP%\streamer-c++\*.cc" src
 del src\HepRepStreamerExample.cc
 del src\HepRepStreamerTest.cc
+del src\HepRepStreamerTreeOnly.cc
