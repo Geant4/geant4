@@ -95,13 +95,15 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
         // Fill them
         //
 	G4double rFact = cos(0.5*deltaPhi);
-	G4ThreeVector sideNorm;
+	G4double rFactNormalize = 1.0/sqrt(1.0+rFact*rFact);
 
         G4PolyPhiFaceVertex *prev = corners+numEdges-1,
                             *here = corners;
         G4PolyPhiFaceEdge   *edge = edges;
         do {
-                edge->v0 = prev;
+ 		G4ThreeVector sideNorm;
+		
+        	edge->v0 = prev;
                 edge->v1 = here;
 
                 G4double dr = here->r - prev->r,
@@ -123,111 +125,100 @@ G4PolyPhiFace::G4PolyPhiFace( const G4ReduciblePolygon *rz, const G4double phi,
 					          -zSignOther*cos(phiOther), 0 );
 		}
 		else {
-			sideNorm = G4ThreeVector( dz*cosMid, dz*sinMid, -dr*rFact );
-			sideNorm = sideNorm.unit();
+			sideNorm = G4ThreeVector( edge->tz*cosMid, edge->tz*sinMid, -edge->tr*rFact );
+			sideNorm *= rFactNormalize;
 		}
 		sideNorm += normal;
 		
-		//
-		// --- Just for now --- Leave these normals unnormalized
-		//
-		edge->norm3D = sideNorm;
+		edge->norm3D = sideNorm.unit();
         } while( edge++, prev=here, ++here < corners+numEdges );
 
         //
-        // Go back an fill in corner "normals", which are just the
-        // average of the normals of the ajoining edges
+        // Go back and fill in corner "normals"
         //
         G4PolyPhiFaceEdge *prevEdge = edges+numEdges-1;
         edge = edges;
         do {
+		//
+		// Calculate vertex 2D normals (on the phi surface)
+		//
 		G4double rPart = prevEdge->tr + edge->tr;
 		G4double zPart = prevEdge->tz + edge->tz;
 		G4double norm = sqrt( rPart*rPart + zPart*zPart );
-                edge->v0->rNorm = +zPart/norm;
-                edge->v0->zNorm = -rPart/norm;
-
-		G4ThreeVector norm3D = prevEdge->norm3D + edge->norm3D - normal;
-
-		if (edge->v0->r < DBL_MIN &&
-		    edge->v1->r > DBL_MIN &&
-		    prevEdge->v0->r > DBL_MIN ) {
-		 	//
-			// Oh boy, it doesn't get any more obscure than this!
-			// What we have is a corner point at r==0, without
-			// any adjacent edges along r==0. Example:
+		G4double rNorm = +zPart/norm;
+		G4double zNorm = -rPart/norm;
+		
+                edge->v0->rNorm = rNorm;
+                edge->v0->zNorm = zNorm;
+		
+		//
+		// Calculate the 3D normals.
+		//
+		// Find the vector perpendicular to the z axis
+		// that defines the plane that contains the vertex normal
+		//
+		G4ThreeVector xyVector;
+		
+		if (edge->v0->r < DBL_MIN) {
 			//
-			//                   \****|
-			//                    \***|         R
-			//                     \**|         ^
-			//                      \*|         |
-			//                       \|         |
-			//  ......(R=0)...........+........ o----> Z
+			// This is a vertex at r==0, which is a special
+			// case. The normal we will construct lays in the
+			// plane at the center of the phi opening.
 			//
-			// Implication? This is a 3D corner that has four
-			// adjoining faces, the only possible (phi segmented) 
-			// Polycone/hedra corner
-			// that has more than three. It is quite a special
-			// case, which I will deal with here.
-			//
-			// (BTW: in such interesting shapes like these, the thickness
-			// of the shape on the z axis is zero. The interesting question
-			// is: will a particle traveling exactly along the z axis
-			// intersect the shape? The reasonable answer: yes. This is
-			// dealt with in G4PolyconeSide and G4PolyhedraSide.)
+			// We also know that rNorm < 0
 			//
 			G4double zSignOther = start ? -1 : 1;
-			G4ThreeVector normalOther = G4ThreeVector(  zSignOther*sin(phiOther), 
-								   -zSignOther*cos(phiOther), 0 );
-								   
-			norm3D = prevEdge->norm3D + edge->norm3D + 2*normalOther;
-
-			G4double midPhi = phiOther + (start ? -0.5 : +0.5)*deltaPhi;
-			G4double cosMid = cos(midPhi), 
-				 sinMid = sin(midPhi);
-			G4ThreeVector sideNorm1 = G4ThreeVector( edge->tz*cosMid, 
-						 		 edge->tz*sinMid, -edge->tr*rFact );
-			G4ThreeVector sideNorm2 = G4ThreeVector( prevEdge->tz*cosMid, 
-						 		 prevEdge->tz*sinMid, -prevEdge->tr*rFact );
-
-			norm3D += sideNorm1.unit() + sideNorm2.unit();
+			G4ThreeVector normalOther(  zSignOther*sin(phiOther), 
+					           -zSignOther*cos(phiOther), 0 );
+					      
+			xyVector = - normal - normalOther;
 		}
 		else {
 			//
-			// Corner normal should be average of normals of connecting edges,
-			// or, equivalently, the average of all connecting faces.
+			// This is a vertex at r > 0. The plane
+			// is the average of the normal and the
+			// normal of the adjacent phi face
 			//
-			// prevEdge->norm3D = normal + side1.normal = A
-			// edge->norm3D     = normal + side2.normal = B
-			// A + B - normal = normal + side1.normal + side2.normal
-			//
-			// This trick only works, though, if the edge->norm3D and 
-			// prevEdge->norm3D are left unnormalized!
-			//
-		
-			norm3D = prevEdge->norm3D + edge->norm3D - normal;
+			xyVector = G4ThreeVector( cosMid, sinMid, 0 );
+			if (rNorm < 0)
+				xyVector -= normal;
+			else
+				xyVector += normal;
 		}
-
+		
 		//
-		// Normalize the resulting vector
+		// Combine it with the r/z direction from the face
 		//
-		edge->v0->norm3D = norm3D.unit();
+		edge->v0->norm3D = rNorm*xyVector.unit() + G4ThreeVector( 0, 0, zNorm );
         } while(  prevEdge=edge, ++edge < edges+numEdges );
 	
-	//
-	// Okay, go back and normalize the edge normal vectors
-	//
-	edge = edges;
-	do {
-		edge->norm3D = edge->norm3D.unit();
-	} while( ++edge < edges+numEdges );
-
 	//
 	// Build point on surface
 	//
 	G4double rAve = 0.5*(rMax-rMin),
 		 zAve = 0.5*(zMax-zMin);
 	surface = G4ThreeVector( rAve*radial.x(), rAve*radial.y(), zAve );
+}
+
+
+//
+// Diagnose
+//
+// Throw an exception if something is found inconsistent with
+// the solid.
+//
+// For debugging purposes only
+//
+void G4PolyPhiFace::Diagnose( G4VSolid *owner )
+{
+	G4PolyPhiFaceVertex   *corner = corners;
+	do {
+		G4ThreeVector test(corner->x, corner->y, corner->z);
+		test -= 1E-6*corner->norm3D;
+		
+		if (owner->Inside(test) != kInside) 
+			G4Exception( "G4PolyPhiFace::Diagnose -- Bad vertex normal found" );
+	} while( ++corner < corners+numEdges );
 }
 
 
@@ -430,30 +421,15 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, const G4double tolerance,
 	G4double distRZ2;
 	G4PolyPhiFaceVertex *base3Dnorm;
 	G4ThreeVector	    *head3Dnorm;
-	G4bool wereIn = InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm );
 	
-	if (wereIn) {
+	if (InsideEdges( r, p.z(), &distRZ2, &base3Dnorm, &head3Dnorm )) {
 		//
 		// Looks like we're inside. Distance is distance in phi.
 		//
 		*bestDistance = fabs(distPhi);
-	}
-	else {
+		
 		//
-		// We're outside the extent of the face,
-		// so the distance is penalized by distance from edges in RZ
-		//
-		*bestDistance = sqrt( distPhi*distPhi + distRZ2 );
-	}
-	
-	//
-	// Can we be on the surface? Yes, but only if we're inside, or
-	// close to inside by tolerance
-	//	
-	if (wereIn || distRZ2 < tolerance*tolerance ) {
-		//
-		// Yup, answer depends on distPhi, and we can use tolerance
-		// to decide if we are on the surface
+		// Use distPhi to decide fate
 		//
 		if (distPhi < -tolerance) return kInside;
 		if (distPhi <  tolerance) return kSurface;
@@ -461,14 +437,29 @@ EInside G4PolyPhiFace::Inside( const G4ThreeVector &p, const G4double tolerance,
 	}
 	else {
 		//
-		// Nope. we can only be in or out, and we must
-		// used the edge normal to decide
+		// We're outside the extent of the face,
+		// so the distance is penalized by distance from edges in RZ
+		//
+		*bestDistance = sqrt( distPhi*distPhi + distRZ2 );
+		
+		//
+		// Use edge normal to decide fate
 		//
 		G4ThreeVector cc( base3Dnorm->r*radial.x(),
 				  base3Dnorm->r*radial.y(),
 				  base3Dnorm->z );
 		cc = p - cc;
-		return head3Dnorm->dot(cc) < 0 ? kInside : kOutside;
+		G4double normDist = head3Dnorm->dot(cc);
+		if ( distRZ2 > tolerance*tolerance ) {
+			//
+			// We're far enough away that kSurface is not possible
+			//
+			return normDist < 0 ? kInside : kOutside;
+		}
+		
+		if (normDist < -tolerance) return kInside;
+		if (normDist <  tolerance) return kSurface;
+		return kOutside;
 	}
 }	
 
@@ -562,24 +553,12 @@ void G4PolyPhiFace::CalculateExtent( const EAxis axis,
 	//
 	// Clip away
 	//
-	polygon.Clip( voxelLimit );
-	
-	//
-	// Get extent
-	//
-	G4double min, max;
-	
-	if (polygon.GetExtent( axis, min, max )) {
-		//
-		// Calculate dot product of normal along the axis
-		//
-		G4ThreeVector rotatedNormal = transform.TransformAxis( normal );
-		G4double dotNormal = rotatedNormal(axis);
-	
+	if (polygon.PartialClip( voxelLimit, axis )) {
 		//
 		// Add it to the list
 		//
-		extentList.AddSurface( min, max, dotNormal, dotNormal, kCarTolerance );
+		polygon.SetNormal( transform.TransformAxis(normal) );
+		extentList.AddSurface( polygon );
 	}
 }
 

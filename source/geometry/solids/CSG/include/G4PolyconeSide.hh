@@ -60,8 +60,10 @@ class G4PolyconeSide : public G4VCSGface {
 	G4double rNorm, zNorm;	// Normal to surface in r,z space
 	G4double rS, zS;	// Unit vector along surface in r,z space
 	G4double length;	// Length of face in r,z space
-	G4double prevRNorm;  	// Rnorm of previous polyconeSide, or zero if none
-	G4double nextRNorm;	// Rnorm of next polyconeSide, or zero if none
+	G4double prevRS,
+		 prevZS;	// Unit vector along previous polyconeSide
+	G4double nextRS,
+		 nextZS;	// Unit vector along next polyconeSide
 	
 	G4double rNormEdge[2],
 		 zNormEdge[2];	// Normal to edges
@@ -69,12 +71,18 @@ class G4PolyconeSide : public G4VCSGface {
 	G4ThreeVector *corners;	// The coordinates of the corners (if phiIsOpen)
 				
 	G4double DistanceAway( const G4ThreeVector &p, const G4bool opposite,
-			       G4double &distOutside2, G4double *rzNorm );
+			       G4double &distOutside2, G4double *rzNorm=0 );
 			
 	G4bool PointOnCone( const G4ThreeVector &hit, const G4double normSign,
 			    const G4ThreeVector &p, const G4ThreeVector &v, G4ThreeVector &normal );
 
 	void CopyStuff( const G4PolyconeSide &source );
+	
+	static void FindLineIntersect( const G4double x1, const G4double y1,
+				       const G4double tx1, const G4double ty1,
+				       const G4double x2, const G4double y2,
+				       const G4double tx2, const G4double ty2,
+				       G4double &x, G4double &y );
 };
 
 

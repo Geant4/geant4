@@ -186,82 +186,53 @@ G4PolyhedraSide::G4PolyhedraSide( const G4PolyhedraSideRZ *prevRZ,
 		edge->normal = eNorm.unit();	
 		
 		//
-		// Vertex normal is average of norms of attached edges 
+		// Vertex normal is average of norms of adjacent surfaces (all four)
+		// However, vec->edgeNorm is unit vector in some direction
+		// as the sum of normals of adjacent PolyhedraSide with vec.
+		// The normalization used for this vector should be the same
+		// for vec and prev.
 		//
-		eNorm = edge->normal + vec->edgeNorm[0] + prev->edgeNorm[0];
+		eNorm = vec->edgeNorm[0] + prev->edgeNorm[0];
 		edge->cornNorm[0] = eNorm.unit();
 	
-		eNorm = edge->normal + vec->edgeNorm[1] + prev->edgeNorm[1];
+		eNorm = vec->edgeNorm[1] + prev->edgeNorm[1];
 		edge->cornNorm[1] = eNorm.unit();
 	} while( prev=vec, ++vec < vecs + numSide );
 	
 	if (phiIsOpen) {
 		G4double rFact = cos(0.5*deltaPhi);
 		//
-		// If phi is open, we need to patch up the first and last edges
+		// If phi is open, we need to patch up normals of the
+		// first and last edges and their corresponding
+		// vertices.
 		//
-		G4double phi1 = startPhi - 0.5*M_PI;
-		G4ThreeVector phiNorm( cos(phi1), sin(phi1), 0 );
-		
+		// We use vectors that are in the plane of the
+		// face. This should be safe.
+		//
 		vec = vecs;
 		
-		//
-		// Edge normal is average of vec->normal and the normal
-		// of the face closing the polyhedra in phi
-		//
-		G4ThreeVector eNorm = vec->normal + phiNorm;
-		vec->edges[0]->normal = eNorm.unit();
+		G4ThreeVector normvec = vec->edges[0]->corner[0] - vec->edges[0]->corner[1];
+		normvec = normvec.cross(vec->normal);
+		if (normvec.dot(vec->surfPhi) > 0) normvec = -normvec;
+
+		vec->edges[0]->normal = normvec.unit();
+		
+		vec->edges[0]->cornNorm[0] = (vec->edges[0]->corner[0] - vec->center).unit();
+		vec->edges[0]->cornNorm[1] = (vec->edges[0]->corner[1] - vec->center).unit();
 		
 		//
-		// We need the edge normals (like above) of the adjacent
-		// G4PolyhedraSides.
+		// Repeat for ending phi
 		//
-		G4double dr = r[0]-prevRZ->r, dz = z[0]-prevRZ->z;
-		phi1 = startPhi + 0.5*deltaPhi;
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		
-		//
-		// Average three line normals for the vertex normal
-		//
-		eNorm = eNorm.unit() + vec->edges[0]->normal + vec->edgeNorm[0];
-		vec->edges[0]->cornNorm[0] = eNorm.unit();
-		
-		//
-		// Repeat for edgeNorm[1]
-		//
-		dr = nextRZ->r-r[1], dz = nextRZ->z-z[1];
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		eNorm = eNorm.unit() + vec->edges[0]->normal + vec->edgeNorm[1];
-		vec->edges[0]->cornNorm[1] = eNorm.unit();
-		
-		//
-		// That was bad...
-		//
-		// But, now repeat for ending phi (edge[1])
-		//
-		phi1 = startPhi + phiTotal + 0.5*M_PI;
-		phiNorm = G4ThreeVector( cos(phi1), sin(phi1), 0 );
-		
 		vec = vecs + numSide - 1;
-
-		eNorm = vec->normal + phiNorm;
-		vec->edges[1]->normal = eNorm.unit();
-
-		dr = r[0]-prevRZ->r, dz = z[0]-prevRZ->z;
-		phi1 = startPhi + phiTotal - 0.5*deltaPhi;
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-
-		eNorm = eNorm.unit() + vec->edges[1]->normal + vec->edgeNorm[0];
-		vec->edges[1]->cornNorm[0] = eNorm.unit();
-
-		dr = nextRZ->r-r[1], dz = nextRZ->z-z[1];
-		eNorm = G4ThreeVector( dz*rFact*cos(phi1), dz*rFact*sin(phi1), -dr );
-		eNorm = eNorm.unit() + vec->edges[1]->normal + vec->edgeNorm[1];
-		vec->edges[1]->cornNorm[1] = eNorm.unit();
 		
-		//
-		// Phew! I need a beer!
-		//
+		normvec = vec->edges[1]->corner[0] - vec->edges[1]->corner[1];
+		normvec = normvec.cross(vec->normal);
+		if (normvec.dot(vec->surfPhi) < 0) normvec = -normvec;
+
+		vec->edges[1]->normal = normvec.unit();
+		
+		vec->edges[1]->cornNorm[0] = (vec->edges[1]->corner[0] - vec->center).unit();
+		vec->edges[1]->cornNorm[1] = (vec->edges[1]->corner[1] - vec->center).unit();
 	}
 	
 	//
@@ -647,8 +618,6 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 				       const G4AffineTransform &transform,
 				       G4SolidExtentList &extentList        )
 {
-	G4ClippablePolygon polygon;
-	
 	//
 	// Loop over all sides
 	//
@@ -658,7 +627,7 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 		// Fill our polygon with the four corners of
 		// this side, after the specified transformation
 		//
-		polygon.ClearAllVertices();
+		G4ClippablePolygon polygon;
 		
 		polygon.AddVertexInOrder( transform.TransformPoint( vec->edges[0]->corner[0] ) );
 		polygon.AddVertexInOrder( transform.TransformPoint( vec->edges[0]->corner[1] ) );
@@ -668,22 +637,14 @@ void G4PolyhedraSide::CalculateExtent( const EAxis axis,
 		//
 		// Get extent
 		//	
-		polygon.Clip( voxelLimit );
-		
-		//
-		// Add it to the list
-		//
-		G4double min, max;
-		
-		if (polygon.GetExtent( axis, min, max )) {
+		if (polygon.PartialClip( voxelLimit, axis )) {
 			//
 			// Get dot product of normal along target axis
 			//
-			G4ThreeVector rotatedNormal = transform.TransformAxis(vec->normal);
-			G4double dotNormal = rotatedNormal(axis);
-			
-			extentList.AddSurface( min, max, dotNormal, dotNormal, kCarTolerance );
-		}
+			polygon.SetNormal( transform.TransformAxis(vec->normal) );
+
+			extentList.AddSurface( polygon );
+                }
 	} while( ++vec < vecs+numSide );
 	
 	return;
@@ -918,7 +879,7 @@ G4int G4PolyhedraSide::PhiSegment( const G4double phi0 )
 // Return value = total distance from the side
 //
 G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
-					     const G4PolyhedraSideVec vec,
+					     const G4PolyhedraSideVec &vec,
 					     G4double *normDist )
 {
 	G4ThreeVector pc = p - vec.center;
@@ -942,7 +903,7 @@ G4double G4PolyhedraSide::DistanceToOneSide( const G4ThreeVector &p,
 // and updates normDist appropriate depending on edge normals.
 //
 G4double G4PolyhedraSide::DistanceAway( const G4ThreeVector &p,
-					const G4PolyhedraSideVec vec,
+					const G4PolyhedraSideVec &vec,
 					G4double *normDist )
 {
 	G4double distOut2;

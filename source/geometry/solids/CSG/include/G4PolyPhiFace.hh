@@ -68,6 +68,8 @@ class G4PolyPhiFace : public G4VCSGface {
 
 	G4VCSGface *Clone() { return new G4PolyPhiFace(*this); }
 	
+	void Diagnose( G4VSolid *solid );
+	
 	protected:
 	G4PolyPhiFaceEdge	*edges;		// The edges of the face
         G4PolyPhiFaceVertex     *corners;       // And the corners

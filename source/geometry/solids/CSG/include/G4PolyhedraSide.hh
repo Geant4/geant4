@@ -110,11 +110,11 @@ class G4PolyhedraSide : public G4VCSGface {
 	G4int PhiSegment( const G4double phi );
 	
 	G4double DistanceToOneSide( const G4ThreeVector &p,
-				    const G4PolyhedraSideVec vec,
+				    const G4PolyhedraSideVec &vec,
 				    G4double *normDist );
 
 	G4double DistanceAway( const G4ThreeVector &p,
-			       const G4PolyhedraSideVec vec,
+			       const G4PolyhedraSideVec &vec,
 			       G4double *normDist );
 			       
 	void CopyStuff( const G4PolyhedraSide &source );

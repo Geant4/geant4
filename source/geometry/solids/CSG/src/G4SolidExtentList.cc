@@ -13,15 +13,36 @@
 //
 
 #include "G4SolidExtentList.hh"
-
+#include "G4VoxelLimits.hh"
 
 //
-// Constructor
+// Constructor (default)
 //
 G4SolidExtentList::G4SolidExtentList() 
 {
-	max = -DBL_MAX;
-	min = +DBL_MAX;
+	axis = kZAxis;
+	limited = false;
+	minLimit = -DBL_MAX;
+	maxLimit = +DBL_MAX;
+}
+
+
+//
+// Constructor (limited case)
+//
+G4SolidExtentList::G4SolidExtentList( const EAxis targetAxis, const G4VoxelLimits &voxelLimits )
+{
+	axis = targetAxis;
+	
+	limited = voxelLimits.IsLimited( axis );
+	if (limited) {
+		minLimit = voxelLimits.GetMinExtent( axis );
+		maxLimit = voxelLimits.GetMaxExtent( axis );
+	}
+	else {
+		minLimit = -DBL_MAX;
+		maxLimit = +DBL_MAX;
+	}
 }
 
 
@@ -33,53 +54,37 @@ G4SolidExtentList::~G4SolidExtentList() {;}
 
 
 //
-// AddExtent
+// AddSurface
 //
-// Add a new extent. Arguments:
-//	aMin	- The minimum of the clipped surface along the target axis
-//	aMax	- The maximum of the clipped surface along the target axis
-//	aNinNormal	- The dot product of the target axis and the 
-//			  normal of the surface at the minimum point
-//	aNaxNormal	- The dot product of the target axis and the 
-//			  normal of the surface at the maximum point
-//	tolerance	- Surface tolerance
 //
-// Notes:
-//	aMinNormal and aMaxNormal will be equal for a planer surface
-//
-void G4SolidExtentList::AddSurface( const G4double aMin, const G4double aMax, 
-			            const G4double aMinNormal, const G4double aMaxNormal,
-				    const G4double tolerance )
+void G4SolidExtentList::AddSurface( const G4ClippablePolygon &surface )
 {
 	//
-	// Decide if we have a new maximum or minimum, and
-	// update the 
+	// Keep track of four surfaces
 	//
-	// Be very careful how you decide: we want to avoid updating
-	// maxNormal if (due to roundoff problems)
-	// a maximum belonging to a surface with a 
-	// positive normal accidently falls below a maximum belonging
-	// to a surface with a negative normal.
-	//
-	// We do, however, want to keep track of the absolute maximum
-	// and minimum, to be as conservative as possible.
-	//
-	if (aMinNormal >= 0) {
-		if (aMax > max-tolerance) maxNormal = aMaxNormal;
+	G4double min, max;
+	
+	surface.GetExtent( axis, min, max );
+	
+	if (min > maxLimit) {
+		//
+		// Nearest surface beyond maximum limit
+		//
+		if (surface.InFrontOf(minAbove,axis)) minAbove = surface;
+	}
+	else if (max < minLimit) {
+		//
+		// Nearest surface below minimum limit
+		//
+		if (surface.BehindOf(maxBelow,axis)) maxBelow = surface;
 	}
 	else {
-		if (aMax > max+tolerance) maxNormal = aMaxNormal;
+		//
+		// Max and min surfaces inside
+		//
+		if (surface.BehindOf(maxSurface,axis)) maxSurface = surface;
+		if (surface.InFrontOf(minSurface,axis)) minSurface = surface;
 	}
-	if (aMax > max) max = aMax;
-
-
-	if (aMaxNormal <= 0) {
-		if (aMin < min+tolerance) minNormal = aMinNormal;
-	}
-	else {
-		if (aMin > min-tolerance) minNormal = aMinNormal;
-	}
-	if (aMin < min) min = aMin;
 }
 
 
@@ -87,41 +92,65 @@ void G4SolidExtentList::AddSurface( const G4double aMin, const G4double aMax,
 //
 // GetExtent
 //
-// Return extent for the unlimited case
+// Return extent after processing all surfaces
 //
-G4bool G4SolidExtentList::GetExtent( G4double &theMin, G4double &theMax ) const
+G4bool G4SolidExtentList::GetExtent( G4double &min, G4double &max ) const
 {
-	if (min > max) return false;
+	//
+	// Did we have any surfaces within the limits?
+	//
+	if (minSurface.Empty()) {
+		//
+		// Nothing! Do we have anything above?
+		//
+		if (minAbove.Empty()) return false;
+		
+		//
+		// Yup. Is it facing inwards?
+		//
+		if (minAbove.GetNormal().operator()(axis) < 0) return false;
+		
+		//
+		// No. We must be entirely within the solid
+		//
+		max = maxLimit + kCarTolerance;
+		min = minLimit - kCarTolerance;
+		return true;
+	}
 	
-	theMin = min;
-	theMax = max;
+	//
+	// Check max surface
+	//
+	if (maxSurface.GetNormal().operator()(axis) < 0) {
+		//
+		// Inward facing: max limit must be embedded within solid
+		//
+		max = maxLimit + kCarTolerance;
+	}
+	else {
+		G4double sMin, sMax;
+		maxSurface.GetExtent( axis, sMin, sMax );
+		max = ( (sMax > maxLimit) ? maxLimit : sMax ) + kCarTolerance;
+	}
+	
+	//
+	// Check min surface
+	//
+	if (minSurface.GetNormal().operator()(axis) > 0) {
+		//
+		// Inward facing: max limit must be embedded within solid
+		//
+		min = minLimit - kCarTolerance;
+	}
+	else {
+		G4double sMin, sMax;
+		minSurface.GetExtent( axis, sMin, sMax );
+		min = ( (sMin < minLimit) ? minLimit : sMin ) - kCarTolerance;
+	}
 	
 	return true;
 }
 
 
-//
-// UpdateLimitedExtent
-//
-// Return extent limited by input values of min and max. If nothing
-// is left of the solid within the input values, return false.
-//
-G4bool G4SolidExtentList::UpdateLimitedExtent( G4double &updatedMin, G4double &updatedMax ) const
-{
-	if (min > max) return false;
-	
-	//
-	// Update max, but only if the normal of the surface that produced
-	// the maximum is positive
-	//
-	if (maxNormal >= 0) updatedMax = max;
-	
-	//
-	// Similar for minimum
-	//
-	if (minNormal <= 0) updatedMin = min;
-	
-	return true;
-}
 
 	

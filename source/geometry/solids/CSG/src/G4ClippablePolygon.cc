@@ -1,7 +1,7 @@
 //
 // G4ClippablePolygon.cc
 //
-// Based on code from G4VSolid (P. Kent, V. Grichine, J. Allison)
+// Includes code from G4VSolid (P. Kent, V. Grichine, J. Allison)
 //
 // ----------------------------------------------------------
 // This code implementation is the intellectual property of
@@ -38,13 +38,15 @@ void G4ClippablePolygon::ClearAllVertices()
 //
 // Clip
 //
-void G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
+const G4bool G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
 {
-	if (!voxelLimit.IsLimited()) return;
+	if (voxelLimit.IsLimited()) {
+		ClipAlongOneAxis( voxelLimit, kXAxis );
+		ClipAlongOneAxis( voxelLimit, kYAxis );
+		ClipAlongOneAxis( voxelLimit, kZAxis );
+	}
 	
-	ClipAlongOneAxis( voxelLimit, kXAxis );
-	ClipAlongOneAxis( voxelLimit, kYAxis );
-	ClipAlongOneAxis( voxelLimit, kZAxis );
+	return (vertices.entries() > 0);
 }
 
 
@@ -53,21 +55,23 @@ void G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
 //
 // Clip, while ignoring the indicated axis
 //
-void G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe )
+const G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe )
 {
-	if (!voxelLimit.IsLimited()) return;
+	if (voxelLimit.IsLimited()) {
+		if (IgnoreMe != kXAxis) ClipAlongOneAxis( voxelLimit, kXAxis );
+		if (IgnoreMe != kYAxis) ClipAlongOneAxis( voxelLimit, kYAxis );
+		if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
+	}
 	
-	if (IgnoreMe != kXAxis) ClipAlongOneAxis( voxelLimit, kXAxis );
-	if (IgnoreMe != kYAxis) ClipAlongOneAxis( voxelLimit, kYAxis );
-	if (IgnoreMe != kZAxis) ClipAlongOneAxis( voxelLimit, kZAxis );
+	return (vertices.entries() > 0);
 }
 
 
 //
 // GetExtent
 //
-G4bool G4ClippablePolygon::GetExtent( const EAxis axis, 
-				      G4double &min, G4double &max )
+const G4bool G4ClippablePolygon::GetExtent( const EAxis axis, 
+				            G4double &min, G4double &max ) const
 {
 	//
 	// Okay, how many entries do we have?
@@ -99,6 +103,231 @@ G4bool G4ClippablePolygon::GetExtent( const EAxis axis,
 	return true;
 }
 
+
+//
+// GetMinPoint
+//
+// Returns pointer to minimum point along the specified axis.
+// Take care! Do not use pointer after destroying parent polygon.
+//
+const G4ThreeVector *G4ClippablePolygon::GetMinPoint( const EAxis axis ) const
+{
+	G4int noLeft = vertices.entries();
+	if (noLeft==0) G4Exception( "G4ClippablePolygon::GetMinPoint -- empty polygon" );
+	
+	const G4ThreeVector *answer = &(vertices[0]);
+	G4double min = answer->operator()(axis);
+
+	G4int i;
+	for( i=1; i<noLeft; i++ ) {
+		G4double component = vertices(i).operator()( axis );
+		if (component < min) {
+			answer = &(vertices[i]);
+			min = component;
+		}
+	}
+	
+	return answer;
+}
+
+
+//
+// GetMaxPoint
+//
+// Returns pointer to maximum point along the specified axis.
+// Take care! Do not use pointer after destroying parent polygon.
+//
+const G4ThreeVector *G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
+{
+	G4int noLeft = vertices.entries();
+	if (noLeft==0) G4Exception( "G4ClippablePolygon::GetMaxPoint -- empty polygon" );
+	
+	const G4ThreeVector *answer = &(vertices[0]);
+	G4double max = answer->operator()(axis);
+
+	G4int i;
+	for( i=1; i<noLeft; i++ ) {
+		G4double component = vertices(i).operator()( axis );
+		if (component > max) {
+			answer = &(vertices[i]);
+			max = component;
+		}
+	}
+	
+	return answer;
+}
+		
+
+//
+// InFrontOf
+//
+// Decide if this polygon is in "front" of another when
+// viewed along the specified axis. For our purposes here,
+// it is sufficient to use the minimum extent of the
+// polygon along the axis to determine this.
+//
+// In case the minima of the two polygons are equal,
+// we use a more sophisticated test.
+//
+// Note that it is possible for the two following
+// statements to both return true or both return false:
+//         polygon1.InFrontOf(polygon2)
+//         polygon2.BehindOf(polygon1)
+//
+const G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const
+{
+	//
+	// If things are empty, do something semi-sensible
+	//
+	G4int noLeft = vertices.entries();
+	if (noLeft==0) return false;
+	
+	if (other.Empty()) return true;
+
+	//
+	// Get minimum of other polygon
+	//
+	const G4ThreeVector *minPointOther = other.GetMinPoint( axis );
+	const G4double minOther = minPointOther->operator()(axis);
+	
+	//
+	// Get minimum of this polygon
+	//
+	const G4ThreeVector *minPoint = GetMinPoint( axis );
+	const G4double min = minPoint->operator()(axis);
+	
+	//
+	// Easy decision
+	//
+	if (min < minOther-kCarTolerance) return true;		// Clear winner
+	
+	if (minOther < min-kCarTolerance) return false;		// Clear loser
+	
+	//
+	// We have a tie (this will not be all that rare since our
+	// polygons are connected)
+	//
+	// Check to see if there is a vertex in the other polygon
+	// that is behind this one (or vice versa)
+	//
+	G4bool answer;
+	G4ThreeVector normalOther = other.GetNormal();
+	
+	if (fabs(normalOther(axis)) > fabs(normal(axis))) {
+		G4double minP, maxP;
+		GetPlanerExtent( *minPointOther, normalOther, minP, maxP );
+		
+		answer = (normalOther(axis) > 0) ? (minP < -kCarTolerance) : (maxP > +kCarTolerance);
+	}
+	else {
+		G4double minP, maxP;
+		other.GetPlanerExtent( *minPoint, normal, minP, maxP );
+		
+		answer = (normal(axis) > 0) ? (maxP > +kCarTolerance) : (minP < -kCarTolerance);
+	}
+	return answer;
+}
+
+//
+// BehindOf
+//
+// Decide if this polygon is behind another.
+// See notes in method "InFrontOf"
+//
+const G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other, EAxis axis ) const
+{
+	//
+	// If things are empty, do something semi-sensible
+	//
+	G4int noLeft = vertices.entries();
+	if (noLeft==0) return false;
+	
+	if (other.Empty()) return true;
+
+	//
+	// Get minimum of other polygon
+	//
+	const G4ThreeVector *maxPointOther = other.GetMaxPoint( axis );
+	const G4double maxOther = maxPointOther->operator()(axis);
+	
+	//
+	// Get minimum of this polygon
+	//
+	const G4ThreeVector *maxPoint = GetMaxPoint( axis );
+	const G4double max = maxPoint->operator()(axis);
+	
+	//
+	// Easy decision
+	//
+	if (max > maxOther+kCarTolerance) return true;		// Clear winner
+	
+	if (maxOther > max+kCarTolerance) return false;		// Clear loser
+	
+	//
+	// We have a tie (this will not be all that rare since our
+	// polygons are connected)
+	//
+	// Check to see if there is a vertex in the other polygon
+	// that is in front of this one (or vice versa)
+	//
+	G4bool answer;
+	G4ThreeVector normalOther = other.GetNormal();
+	
+	if (fabs(normalOther(axis)) > fabs(normal(axis))) {
+		G4double minP, maxP;
+		GetPlanerExtent( *maxPointOther, normalOther, minP, maxP );
+		
+		answer = (normalOther(axis) > 0) ? (maxP > +kCarTolerance) : (minP < -kCarTolerance);
+	}
+	else {
+		G4double minP, maxP;
+		other.GetPlanerExtent( *maxPoint, normal, minP, maxP );
+		
+		answer = (normal(axis) > 0) ? (minP < -kCarTolerance) : (maxP > +kCarTolerance);
+	}
+	return answer;
+}
+
+
+//
+// GetPlanerExtent
+//
+// Get min/max distance in or out of a plane
+//
+const G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
+					          const G4ThreeVector &planeNormal,
+					          G4double &min, G4double &max ) const
+{
+	//
+	// Okay, how many entries do we have?
+	//
+	G4int noLeft = vertices.entries();
+	
+	//
+	// Return false if nothing is left
+	//
+	if (noLeft == 0) return false;
+	
+	//
+	// Initialize min and max to our first vertex
+	//
+	min = max = planeNormal.dot(vertices(0)-pointOnPlane);
+	
+	//
+	// Compare to the rest
+	//
+	G4int i;
+	for( i=1; i<noLeft; i++ ) {
+		G4double component = planeNormal.dot(vertices(i) - pointOnPlane);
+		if (component < min )
+			min = component;
+		else if (component > max )
+			max = component;
+	}
+	
+	return true;
+}
+	
 
 
 //

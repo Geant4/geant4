@@ -5,15 +5,7 @@
 //
 // This utility class is designed for one specific purpose: to
 // calculate the extent of a CSG solid for a voxel
-// (G4VSolid::CalculateExtent). It consists of a sorted, single-linked
-// list of objects which are characterized by two values: 
-//         1. A double value (indicating the distance along
-//            an axis associated with a solid surface
-//         2. Whether this value is asociated with an "outgoing"
-//            surface.
-// Outgoing means that the normal of the surface (pointing outwards
-// from the solid) is aligned with the axis (dot product with axis
-// is positive).
+// (G4VSolid::CalculateExtent). 
 //
 // ----------------------------------------------------------
 // This code implementation is the intellectual property of
@@ -29,25 +21,31 @@
 
 #include "globals.hh"
 
+#include "G4ClippablePolygon.hh"
+
 class G4SolidExtentList {
 	public:
 	
 	G4SolidExtentList();
+	G4SolidExtentList( const EAxis targetAxis, const G4VoxelLimits &voxelLimits );
 	~G4SolidExtentList();
 
 
-	void AddSurface( const G4double aMin, const G4double aMax,
-			 const G4double aMinNormal, const G4double aMaxNormal,
-			 const G4double tolerance );
+	void AddSurface( const G4ClippablePolygon &surface );
 
 	G4bool GetExtent( G4double &min, G4double &max ) const;
-	G4bool UpdateLimitedExtent( G4double &min, G4double &max ) const;
 
 	protected:
+	
+	EAxis	 axis;		// Target axis
+	G4bool   limited;	// True if limited
+	G4double minLimit;	// ... min limit
+	G4double maxLimit;	// ... max limit
 
-	G4double min, max;		// The current min and max
-	G4double minNormal,
-		 maxNormal;		// ...and the corresponding normals
+	G4ClippablePolygon minSurface,		// Minimum surface within limits
+			   maxSurface,		// Maximum
+			   minAbove,		// Minimum surface totally above max limit
+			   maxBelow;		// Maximum surface totally below min limit
 };
 
 

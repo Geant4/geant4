@@ -31,24 +31,37 @@ typedef RWTValOrderedVector<G4ThreeVector> G4ThreeVectorList;
 class G4ClippablePolygon {
 	public:
 	G4ClippablePolygon() {;}
-	~G4ClippablePolygon() {;}
+	virtual ~G4ClippablePolygon() {;}
 	
-	void AddVertexInOrder( const G4ThreeVector vertex );
-	void ClearAllVertices();
+	virtual void AddVertexInOrder( const G4ThreeVector vertex );
+	virtual void ClearAllVertices();
 	
-	void Clip( const G4VoxelLimits &voxelLimit );
+	virtual void SetNormal( const G4ThreeVector &newNormal ) { normal = newNormal; }
+	virtual const G4ThreeVector GetNormal() const { return normal; }
+	
+	virtual const G4bool Clip( const G4VoxelLimits &voxelLimit );
 
-	void PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe );
+	virtual const G4bool PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe );
 	
-	void ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, const EAxis axis );
+	virtual void ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, const EAxis axis );
 	
-	G4bool GetExtent( const EAxis axis, 
-			  G4double &min, G4double &max );
-			       
-	G4bool GetNumVertices() const { return vertices.entries(); }
+	virtual const G4bool GetExtent( const EAxis axis, 
+		    	                G4double &min, G4double &max ) const;
+	virtual const G4ThreeVector *GetMinPoint( const EAxis axis ) const;
+	virtual const G4ThreeVector *GetMaxPoint( const EAxis axis ) const;
+			  
+	virtual const G4int GetNumVertices() const { return vertices.entries(); }
+	virtual const G4bool Empty() const { return vertices.entries()==0; }
+	
+	virtual const G4bool InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const;
+	virtual const G4bool BehindOf( const G4ClippablePolygon &other, EAxis axis ) const;
+	virtual const G4bool GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
+					      const G4ThreeVector &planeNormal,
+					      G4double &min, G4double &max ) const;
 			      
-	private:
+	protected:
 	G4ThreeVectorList vertices;
+	G4ThreeVector normal;
 	
 	void ClipToSimpleLimits( G4ThreeVectorList& pPolygon,
 				 G4ThreeVectorList& outputPolygon,
