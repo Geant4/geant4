@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimVPrimaryGeneratorFactory.hh,v 1.4 2004-05-17 07:37:28 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,6 @@ public:
 
 public:
   virtual void GeneratePrimaries(G4Event* anEvent)=0;
-  virtual void GenerateIsotropicFlux()=0;
   virtual G4double GetInitialEnergy()=0;
 };
 #endif

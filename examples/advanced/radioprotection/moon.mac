@@ -1,0 +1,35 @@
+#Activate e.m. physics
+/physics/addPhysics photon-epdl
+/physics/addPhysics electron-eedl
+/physics/addPhysics positron-standard
+/physics/addPhysics ion-ICRU
+/physics/addPhysics hadronic
+/physics/addPhysics muon-standard
+/physics/addPhysics decay
+# Sets some default verbose
+#
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+#/tracking/verbose 1
+#
+# create empty scene
+#
+#/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+#/vis/open OGLIX
+#
+#/vis/open DAWNFILE
+#/vis/open VRML2FILE
+#/vis/drawVolume
+#
+# draw scene
+#
+/gun/particle proton
+/gun/generator Moon
+/run/data gcrZ=1.txt
+/run/initialize
+/run/beamOn 500

@@ -21,42 +21,49 @@
 // ********************************************************************
 //
 //
-//    *****************************************
-//    *                                       *
-//    *      RemSimDetectrorMessenger.hh      *
-//    *                                       *
-//    *****************************************
+// Code developed by:
+//  S.Guatelli
 //
-// $Id: RemSimPrimaryGeneratorMessenger.hh,v 1.3 2004-05-17 07:37:28 guatelli Exp $
+//    *********************************
+//    *                               *
+//    *    RemSimRunMessenger.cc *
+//    *                               *
+//    *********************************
+//
+//
+// $Id: RemSimRunMessenger.cc,v 1.1 2004-05-17 07:37:28 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-#ifndef RemSimPrimaryGeneratorMessenger_h
-#define RemSimPrimaryGeneratorMessenger_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "RemSimRunMessenger.hh"
+#include "RemSimRunAction.hh"
+#include "RemSimRunAction.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithAnInteger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithoutParameter.hh"
 
-class RemSimPrimaryGeneratorAction;
-class RemSimRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+RemSimRunMessenger::RemSimRunMessenger( RemSimRunAction* arun): run(arun)
+{ 
+  runDir = new G4UIdirectory("/run/");
+  runDir->SetGuidance("Select data.txt.");
+        
+  readFileCmd = new G4UIcmdWithAString("/run/data",this);
+  readFileCmd->SetGuidance("Select data.txt/ write the name of the file"); 
+  readFileCmd->SetParameterName("choice",true);
+  readFileCmd->AvailableForStates(G4State_PreInit,G4State_Idle);         
+ }
 
-class RemSimPrimaryGeneratorMessenger: public G4UImessenger
+RemSimRunMessenger::~RemSimRunMessenger()
 {
-public:
-  RemSimPrimaryGeneratorMessenger(RemSimPrimaryGeneratorAction* );
-  ~RemSimPrimaryGeneratorMessenger();
-    
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
-  RemSimPrimaryGeneratorAction* primary;//pointer to detector
-  G4UIdirectory*                gunDir; 
-  G4UIcmdWithAString*           fluxCmd; //change vehicle 
-};
-#endif
+  delete readFileCmd;
+  delete runDir;
+}
+
+void RemSimRunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{ 
+   if(command == readFileCmd) run -> Read(newValue);
+}
 

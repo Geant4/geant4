@@ -31,7 +31,7 @@
 //    *********************************
 //
 //
-// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.2 2004-03-12 10:55:55 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorMessenger.cc,v 1.3 2004-05-17 07:37:28 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,30 +46,24 @@
 #include "G4UIcmdWithoutParameter.hh"
 
 RemSimPrimaryGeneratorMessenger::RemSimPrimaryGeneratorMessenger( RemSimPrimaryGeneratorAction* prim): primary(prim)
-{ 
-  primaryDir = new G4UIdirectory("/beam/");
-  primaryDir->SetGuidance("primary particle generator control.");
+{  
+  gunDir = new G4UIdirectory("/gun/");
+  gunDir->SetGuidance("Select the generation configuration of primary particles.");
         
-  isotropicFluxCmd = new G4UIcmdWithAString("/beam/flux",this);
-  isotropicFluxCmd->SetGuidance("Assign the isotropic flux option to primary particles."); 
-  isotropicFluxCmd->SetParameterName("choice",true);
-  isotropicFluxCmd->SetCandidates("isotropic");
-  isotropicFluxCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
+  fluxCmd = new G4UIcmdWithAString("/gun/generator",this);
+  fluxCmd -> SetGuidance("Assign the configuration of generation of primary particles."); 
+  fluxCmd -> SetParameterName("choice",true);
+  fluxCmd -> SetCandidates("Moon Interplanetary Basic");
+  fluxCmd -> AvailableForStates(G4State_PreInit,G4State_Idle); 
  }
 
 RemSimPrimaryGeneratorMessenger::~RemSimPrimaryGeneratorMessenger()
 {
-  delete isotropicFluxCmd;
-  delete primaryDir;
-}
-
+  delete fluxCmd;
+} 
+ 
 void RemSimPrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
-   if(command == isotropicFluxCmd )
-   {
-     if(newValue=="isotropic") 
-       primary->GenerateIsotropicFlux();
-     else G4cout<< newValue<< " option is not available!"<<G4cout; 
-  }
+ if(command == fluxCmd) primary -> SelectPrimaries(newValue);
 }
 

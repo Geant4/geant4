@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimPrimaryGeneratorAction.hh,v 1.4 2004-05-17 07:37:28 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -43,10 +43,14 @@ public:
 
 public:
   void GeneratePrimaries(G4Event* anEvent);
-  void GenerateIsotropicFlux();
   G4double GetInitialEnergy();
-private:
-  RemSimVPrimaryGeneratorFactory* primaryFactory;
+  void SelectPrimaries(G4String value);
+
+private: 
+  G4String value;
+  RemSimVPrimaryGeneratorFactory* primaryFactory1;
+  RemSimVPrimaryGeneratorFactory* primaryFactory2;
+  RemSimVPrimaryGeneratorFactory* primaryFactory3;
   RemSimPrimaryGeneratorMessenger* messenger;
 };
 #endif

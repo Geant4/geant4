@@ -19,50 +19,74 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//
 
-#include "RemSimBasicGenerator.hh"
+#include "CLHEP/Random/RandGeneral.h"
+#include "RemSimInterplanetarySpaceConfiguration.hh"
 #include "RemSimVPrimaryGeneratorFactory.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ios.hh"
-
+#include "Randomize.hh"
 #ifdef G4ANALYSIS_USE  
 #include "RemSimAnalysisManager.hh"
 #endif
+#include "RemSimRunAction.hh"
+#include <fstream>
+#include <strstream>
 
-RemSimBasicGenerator::RemSimBasicGenerator()
+RemSimInterplanetarySpaceConfiguration::RemSimInterplanetarySpaceConfiguration()
 {
   G4int n_particle = 1;
   particleGun = new G4ParticleGun(n_particle);
+
+  run = new RemSimRunAction();
   
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName = "proton";
   particleGun -> SetParticleDefinition(particleTable->FindParticle(particleName));
   particleGun -> SetParticlePosition(G4ThreeVector(0., 0., -25.*m));  
   G4ThreeVector v(0.0,0.0,1.0);
-  particleGun -> SetParticleEnergy(100.*MeV);
+  particleGun -> SetParticleEnergy(1.*MeV);
   particleGun -> SetParticleMomentumDirection(v);
 }
 
-RemSimBasicGenerator::~RemSimBasicGenerator()
+RemSimInterplanetarySpaceConfiguration::~RemSimInterplanetarySpaceConfiguration()
 {
+  delete run;
   delete particleGun;
 }
 
-void RemSimBasicGenerator::GeneratePrimaries(G4Event* anEvent)
-{
+void RemSimInterplanetarySpaceConfiguration::GeneratePrimaries(G4Event* anEvent){
+  // Read the ASCII files containing  the fluxes of particles in respect
+  // to the energy in MeV
 
+  G4DataVector* energies = run -> GetPrimaryParticleEnergy();
+  G4DataVector* data = run -> GetPrimaryParticleEnergyDistribution();	 
+  G4double sum = run -> GetPrimaryParticleEnergyDistributionSum();
+  G4double partSum = 0;
+  G4int j = 0;
+  G4double random = sum*G4UniformRand();
+  while (partSum<random)
+    {
+      partSum += (*data)[j];
+      j++;
+    }
+	 
+  particleGun -> SetParticleEnergy((*energies)[j]);    
+ 
 #ifdef G4ANALYSIS_USE   
  G4double energy = particleGun -> GetParticleEnergy(); 
  RemSimAnalysisManager* analysis = RemSimAnalysisManager::getInstance();
  analysis -> primaryParticleEnergyDistribution(energy/MeV);
 #endif
-  particleGun -> GeneratePrimaryVertex(anEvent);
+ 
+ particleGun -> GeneratePrimaryVertex(anEvent);
 }
 
-G4double RemSimBasicGenerator:: GetInitialEnergy()
+G4double RemSimInterplanetarySpaceConfiguration:: GetInitialEnergy()
 {
  G4double primaryParticleEnergy = particleGun -> GetParticleEnergy();
  return primaryParticleEnergy;

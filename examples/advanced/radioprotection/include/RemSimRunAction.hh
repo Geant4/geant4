@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimRunAction.hh,v 1.3 2004-03-12 10:55:54 guatelli Exp $
+// $Id: RemSimRunAction.hh,v 1.4 2004-05-17 07:37:28 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -41,7 +41,7 @@
 
 class G4Run;
 class RemSimAnalysisManager;
-
+class RemSimRunMessenger;
 class RemSimRunAction : public G4UserRunAction
 {
 public:
@@ -51,10 +51,19 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run* );
+  void Read(G4String);
+
+  void ReadData(G4double, G4String);
+  G4DataVector* GetPrimaryParticleEnergy();
+  G4DataVector* GetPrimaryParticleEnergyDistribution();
+  G4double GetPrimaryParticleEnergyDistributionSum();
   G4int GetRunID() {return runID;};
 
 private:
+  G4DataVector* energies;
+  G4DataVector* data;
   G4int runID;
+  RemSimRunMessenger* messenger;
 };
 #endif
 

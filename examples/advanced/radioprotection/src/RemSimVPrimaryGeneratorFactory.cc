@@ -20,10 +20,6 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RemSimVPrimaryGeneratorFactory.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
 
 #include "RemSimVPrimaryGeneratorFactory.hh"
 

@@ -21,13 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: RemSimPrimaryGeneratorAction.cc,v 1.3 2004-03-12 10:55:55 guatelli Exp $
-// GEANT4 tag $Name: not supported by cvs2svn $
-//
-
+// $Id: RemSimPrimaryGeneratorAction.cc,v 1.4 2004-05-17 07:37:28 guatelli Exp $
 #include "RemSimPrimaryGeneratorAction.hh"
 #include "RemSimPrimaryGeneratorMessenger.hh"
 #include "RemSimBasicGenerator.hh"
+#include "RemSimMoonSurfaceConfiguration.hh"
+#include "RemSimInterplanetarySpaceConfiguration.hh"
 #include "RemSimVPrimaryGeneratorFactory.hh"
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
@@ -37,28 +36,80 @@
 
 RemSimPrimaryGeneratorAction::RemSimPrimaryGeneratorAction()
 {
-  primaryFactory = new RemSimBasicGenerator();
+  value = "Basic";
+  primaryFactory1 = new RemSimBasicGenerator();
+  primaryFactory2 = new RemSimInterplanetarySpaceConfiguration();
+  primaryFactory3 = new RemSimMoonSurfaceConfiguration();
   messenger = new RemSimPrimaryGeneratorMessenger(this);
 }
 
 RemSimPrimaryGeneratorAction::~RemSimPrimaryGeneratorAction()
 {
   delete messenger;
-  delete primaryFactory;
+  delete primaryFactory3;
+  delete primaryFactory2;
+  delete primaryFactory1;
 }
 
 void RemSimPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  primaryFactory -> GeneratePrimaries(anEvent);
+ if(value == "Basic") 
+   { 
+     primaryFactory1 -> GeneratePrimaries(anEvent);
+   }
+
+ else if(value == "Interplanetary") 
+   { 
+     primaryFactory2 -> GeneratePrimaries(anEvent);
+    }
+
+ else if (value == "Moon") 
+  { 
+    primaryFactory3 -> GeneratePrimaries(anEvent);
+  }
 }
 
-void RemSimPrimaryGeneratorAction::GenerateIsotropicFlux()
-{
-  primaryFactory ->GenerateIsotropicFlux();
-}
 G4double RemSimPrimaryGeneratorAction::GetInitialEnergy()
 {
-  G4double initialEnergy = primaryFactory ->GetInitialEnergy();
-  return initialEnergy;
-  G4cout<< initialEnergy<<"<-------Initial energy from primaryPArticleAction"<<G4endl;
+  if(value == "Basic") 
+    { 
+      G4double initialEnergy = primaryFactory1 -> GetInitialEnergy();
+      return initialEnergy;
+    }
+
+  else if(value == "Interplanetary") 
+    { 
+      G4double initialEnergy = primaryFactory2 -> GetInitialEnergy();
+      return initialEnergy;
+    }
+
+  else if (value == "Moon") 
+    { 
+      G4double initialEnergy = primaryFactory3 -> GetInitialEnergy();
+      return initialEnergy;
+    }
 }
+
+void RemSimPrimaryGeneratorAction::SelectPrimaries(G4String val)
+{ 
+  value = val;
+
+  if(value == "Basic") 
+    { 
+      G4cout<<" The configuration is the basic generator"<<G4endl;
+    }
+
+  else if(value == "Interplanetary") 
+    { 
+      G4cout<<" The configuration is the interplanetary space configuration"
+	    <<G4endl;
+    }
+
+  else if (value == "Moon") 
+    { 
+      G4cout<<" The configuration is the Moon configuration"<<G4endl;
+    }
+
+  else G4cout<< "This Generator is not defined!"<<G4endl;  
+}
+
