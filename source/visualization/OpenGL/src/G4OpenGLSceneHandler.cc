@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.19 2004-07-01 15:29:11 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.20 2004-07-09 15:44:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -360,10 +360,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     // cout << "Hidden edge not implememented in G4OpenGL.\n"
     // << "Using hidden surface removal." << G4endl;
   case (G4ViewParameters::hsr):
-    glDepthFunc (GL_LESS);    
     glEnable (GL_DEPTH_TEST);
-    glCullFace (GL_BACK); 
+    glDepthFunc (GL_LESS);    
     glEnable (GL_CULL_FACE);
+    glCullFace (GL_BACK); 
     glEnable (GL_LIGHTING);
     glPolygonMode (GL_FRONT, GL_FILL);
     GLfloat materialColour [4];
@@ -374,14 +374,17 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     glMaterialfv (GL_FRONT, GL_AMBIENT_AND_DIFFUSE, materialColour);
     break;
   case (G4ViewParameters::hlr):
-    glDepthFunc (GL_LESS);    
+    glEnable (GL_STENCIL_TEST);
+    // The stencil buffer is cleared in G4OpenGLViewer::ClearView.
+    // The procedure below leaves it clear.
+    glStencilFunc (GL_ALWAYS, 0, 1);
+    glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
     glEnable (GL_DEPTH_TEST);
-    glCullFace (GL_BACK); 
-    glEnable (GL_CULL_FACE);
-    glDisable (GL_LIGHTING);
     glDepthFunc (GL_LESS);    
-    glCullFace (GL_BACK); 
+    glEnable (GL_CULL_FACE);
+    glCullFace (GL_BACK);
     glPolygonMode (GL_FRONT, GL_LINE);
+    glDisable (GL_LIGHTING);
     glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
     break;
   case (G4ViewParameters::wireframe):
@@ -394,90 +397,95 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     break;
   }
 
-  // Loop through all the facets...
-  DrawQuads (polyhedron);
-
-  // Do it all over again (twice) for hlr...
-  if  (drawing_style == G4ViewParameters::hlr) {
-
-    glEnable (GL_STENCIL_TEST);
-    glClear (GL_STENCIL_BUFFER_BIT);
-    glStencilFunc (GL_ALWAYS, 0, 1);
-    glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
-    glEnable (GL_POLYGON_OFFSET_FILL);
-    glStencilFunc (GL_EQUAL, 0, 1);
-    glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
-    glPolygonMode (GL_FRONT, GL_LINE);
-
-    DrawQuads (polyhedron);
-
-    //and once more to reset the stencil bits...
-    glStencilFunc (GL_ALWAYS, 0, 1);
-    glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
-    glPolygonMode (GL_FRONT, GL_FILL);
-    GLdouble clear_colour[4];
-    glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
-    glColor4dv (clear_colour);
-
-    DrawQuads (polyhedron);
-
-    glDisable (GL_STENCIL_TEST);
-    glDisable (GL_POLYGON_OFFSET_FILL);
-  }
-}
-
-void G4OpenGLSceneHandler::DrawQuads (const G4Polyhedron& polyhedron) {
-
-  G4bool notLastFace;
-  G4Normal3D SurfaceUnitNormal;
-
-  glEdgeFlag (GL_TRUE);
-
-  glBegin (GL_QUADS);
-
   //Loop through all the facets...
+  G4bool notLastFace;
   do {
 
-    //First, find surface normal for the facet...
+    //First, find surface normal and note "not last facet"...
+    G4Normal3D SurfaceUnitNormal;
     notLastFace = polyhedron.GetNextUnitNormal (SurfaceUnitNormal);
     glNormal3d(SurfaceUnitNormal.x(), SurfaceUnitNormal.y(),
 	       SurfaceUnitNormal.z());
 
     //Loop through the four edges of each G4Facet...
+    //G4int lastEdgeFlag (true);
     G4bool notLastEdge;
     G4Point3D vertex[4];
-    G4int edgeFlag[4], lastEdgeFlag (true);
-    edgeFlag[0] = G4int (true);
+    G4int edgeFlag[4];
     G4int edgeCount = 0;
-    glEdgeFlag (GL_TRUE);
+    glBegin (GL_QUADS);
     do {
       notLastEdge = polyhedron.GetNextVertex (vertex[edgeCount], 
 					      edgeFlag[edgeCount]);
       // Check to see if edge is visible or not...
-      if (edgeFlag[edgeCount] != lastEdgeFlag) {
-	lastEdgeFlag = edgeFlag[edgeCount];
-	if (edgeFlag[edgeCount]) {
-	  glEdgeFlag (GL_TRUE);
-	} else {
-	  glEdgeFlag (GL_FALSE);
-	}
+      if (edgeFlag[edgeCount]) {
+	glEdgeFlag (GL_TRUE);
+      } else {
+	glEdgeFlag (GL_FALSE);
       }
       glVertex3d (vertex[edgeCount].x(), 
 		  vertex[edgeCount].y(),
 		  vertex[edgeCount].z());
       edgeCount++;
     } while (notLastEdge);
-    while (edgeCount < 4) {  // duplicate last real vertex.
+    // HEPPolyhedron produces triangles too; in that case add an extra vertex..
+    while (edgeCount < 4) {
       vertex[edgeCount] = vertex[edgeCount-1];
+      edgeFlag[edgeCount] = G4int (false);
+      glEdgeFlag (GL_FALSE);
       glVertex3d (vertex[edgeCount].x(),
 		  vertex[edgeCount].y(), 
 		  vertex[edgeCount].z());
       edgeCount++;
     }
-    
-  } while (notLastFace);  
+    glEnd ();
 
-  glEnd();
+    // Do it all over again (twice) for hlr...
+    if  (drawing_style == G4ViewParameters::hlr) {
+
+      // Draw through stencil...
+      glStencilFunc (GL_EQUAL, 0, 1);
+      glStencilOp (GL_KEEP, GL_KEEP, GL_KEEP);
+      glPolygonMode (GL_FRONT, GL_FILL);
+      GLdouble clear_colour[4];
+      glGetDoublev (GL_COLOR_CLEAR_VALUE, clear_colour);
+      glColor4dv (clear_colour);
+      glBegin (GL_QUADS);
+      for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
+	if (edgeFlag[edgeCount]) {
+	  glEdgeFlag (GL_TRUE);
+	} else {
+	  glEdgeFlag (GL_FALSE);
+	}
+	glVertex3d (vertex[edgeCount].x(), 
+		    vertex[edgeCount].y(),
+		    vertex[edgeCount].z());
+      }
+      glEnd ();
+
+      // and once more to reset the stencil bits...
+      glStencilFunc (GL_ALWAYS, 0, 1);
+      glStencilOp (GL_INVERT, GL_INVERT, GL_INVERT);
+      glPolygonMode (GL_FRONT, GL_LINE);
+      glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
+
+      glBegin (GL_QUADS);
+      for (int edgeCount = 0; edgeCount < 4; ++edgeCount) {
+	if (edgeFlag[edgeCount]) {
+	  glEdgeFlag (GL_TRUE);
+	} else {
+	  glEdgeFlag (GL_FALSE);
+	}
+	glVertex3d (vertex[edgeCount].x(), 
+		    vertex[edgeCount].y(),
+		    vertex[edgeCount].z());
+      }
+      glEnd ();
+      
+    }
+  } while (notLastFace);  
+  
+  glDisable (GL_STENCIL_TEST);
 }
 
 //Method for handling G4NURBS objects for drawing solids.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.hh,v 1.16 2004-07-01 15:29:06 johna Exp $
+// $Id: G4OpenGLSceneHandler.hh,v 1.17 2004-07-09 15:44:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -96,10 +96,6 @@ private:
 		      G4int nSides);
   // Draws in world coordinates a polygon in the screen plane knowing
   // viewpoint direction and up vector.
-
-  void DrawQuads(const G4Polyhedron& polyhedron);
-  // Encapsulates drawing of quadrilaterals (which has to be repeated
-  // 3 times for hidden line removal).
 
   static const GLubyte fStippleMaskHashed [128];
 };
