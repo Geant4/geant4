@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClassicalRK4.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4ClassicalRK4.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,8 +36,8 @@ class G4ClassicalRK4 : public G4MagErrorStepper
    
     void DumbStepper( const G4double  yIn[],
 		      const G4double  dydx[],
-		      const G4double  h,
-			    G4double  yOut[]) ;
+		            G4double  h,
+		            G4double  yOut[]) ;
       // Given values for the variables y[0,..,n-1] and their derivatives
       // dydx[0,...,n-1] known at x, use the classical 4th Runge-Kutta
       // method to advance the solution over an interval h and return the
@@ -50,16 +50,22 @@ class G4ClassicalRK4 : public G4MagErrorStepper
 
     void StepWithEst( const G4double  yIn[],
 		      const G4double  dydx[],
-	              const G4double  h,
+	                    G4double  h,
 		            G4double  yOut[],
                             G4double& alpha2,
                             G4double& beta2,
 		      const G4double B1[],
-			    G4double B2[] );
+		            G4double B2[] );
 
     //  Could make above G4SixPoint to keep tangents too ...?
 
-    G4int IntegratorOrder() { return 4; };
+    G4int IntegratorOrder() const { return 4; }
+
+  private:
+
+    G4ClassicalRK4(const G4ClassicalRK4&);
+    G4ClassicalRK4& operator=(const G4ClassicalRK4&);
+      // Private copy constructor and assignment operator.
 
   private:
 

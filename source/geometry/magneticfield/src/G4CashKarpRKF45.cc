@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.cc,v 1.4 1999-12-15 14:49:48 gunter Exp $
+// $Id: G4CashKarpRKF45.cc,v 1.5 2000-11-01 15:15:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // The Cash-Karp Runge-Kutta-Fehlberg 4/5 method is an embedded fourth
@@ -24,8 +24,8 @@
 //
 // Constructor
 
-G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagIntegratorStepper(EqRhs, numberOfVariables)
+G4CashKarpRKF45::G4CashKarpRKF45(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+  : G4MagIntegratorStepper(EqRhs, numberOfVariables)
 {
   fNumberOfVariables = numberOfVariables ;
 
@@ -67,7 +67,7 @@ G4CashKarpRKF45::~G4CashKarpRKF45()
 void
 G4CashKarpRKF45::Stepper(const G4double yInput[],
 			 const G4double dydx[],
-			 const G4double Step,
+			       G4double Step,
 			       G4double yOut[],
 			       G4double yErr[])
 {
@@ -156,7 +156,7 @@ G4CashKarpRKF45::Stepper(const G4double yInput[],
 void
 G4CashKarpRKF45::StepWithEst(const G4double yInput[],
 			     const G4double dydx[],
-			     const G4double Step,
+			           G4double Step,
 			           G4double yOut[],
                                    G4double& alpha2,
 			           G4double& beta2,

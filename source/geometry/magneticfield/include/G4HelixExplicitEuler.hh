@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixExplicitEuler.hh,v 1.4 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4HelixExplicitEuler.hh,v 1.5 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,7 +47,7 @@ class G4HelixExplicitEuler : public G4MagHelicalStepper
     // Replaced by MagFieldEvaluate( const G4double y[], G4double B[] )   
     // in G4HelicalStepper
   
-    G4int IntegratorOrder() { return 1; }
+    G4int IntegratorOrder() const { return 1; }
 };
 
 #endif /* G4EXPLICITEULER_HH */

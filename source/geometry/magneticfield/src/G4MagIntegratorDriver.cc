@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.12 2000-05-09 11:51:47 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.13 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,8 +23,7 @@
 #include "G4ios.hh"
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
-#include "geomdefs.hh"          
-                             //  for kCarTolerance
+#include "geomdefs.hh"         //  for kCarTolerance
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -33,14 +32,31 @@ const G4double G4MagInt_Driver::max_stepping_increase = 5.0;
 const G4double G4MagInt_Driver::max_stepping_decrease = 0.1;
 
 //  The (default) maximum number of steps is Base divided by the order of Stepper
+//
 const G4int  G4MagInt_Driver::fMaxStepBase = 5000;  
 
+//  Constructor
+//
+G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
+				  G4MagIntegratorStepper *pItsStepper,
+				  G4int                   numComponents)
+  : nvar(numComponents)
+{  
+      RenewStepperAndAdjust( pItsStepper );
+      hminimum_val= hminimum;
+      fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
+}
+
+//  Destructor
+//
+G4MagInt_Driver::~G4MagInt_Driver()
+{
+}
+
 G4bool
-G4MagInt_Driver::AccurateAdvance( 
-			   G4FieldTrack& y_current,
-		     const G4double     hstep,
-		     const G4double     eps
-		     )
+G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
+		                 G4double     hstep,
+		                 G4double     eps    )
 //		     const G4double dydx[6],    // We could may add this ??
 
 // Runge-Kutta driver with adaptive stepsize control. Integrate starting
@@ -242,8 +258,8 @@ void
 G4MagInt_Driver::OneGoodStep(      G4double y[],
 			     const G4double dydx[],
 				   G4double& x,
-			     const G4double htry,
-			     const G4double eps_rel_max,
+			           G4double htry,
+			           G4double eps_rel_max,
 				   G4double& hdid,
 				   G4double& hnext )
 
@@ -326,11 +342,11 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],
 // QuickAdvance just tries one Step - it does not ensure accuracy
 //
 G4bool  G4MagInt_Driver::QuickAdvance(       
-			    G4FieldTrack& y_posvel,   // INOUT
-		      const G4double     dydx[],  
-		            G4double     hstep,       // In
-			    G4double&    dchord_step,
-			    G4double&    dyerr )  
+			    G4FieldTrack& y_posvel,         // INOUT
+		            const G4double     dydx[],  
+		                  G4double     hstep,       // In
+			          G4double&    dchord_step,
+			          G4double&    dyerr )  
 {
     G4double yerr_vec[G4FieldTrack::ncompSVEC], yarrin[G4FieldTrack::ncompSVEC], yarrout[G4FieldTrack::ncompSVEC]; 
     G4double s_start;

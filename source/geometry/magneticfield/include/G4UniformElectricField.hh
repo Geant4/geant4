@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UniformElectricField.hh,v 1.3 2000-04-27 09:14:06 gcosmo Exp $
+// $Id: G4UniformElectricField.hh,v 1.4 2000-11-01 15:15:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,7 +50,8 @@ class G4UniformElectricField : public G4ElectroMagneticField
 	                     G4double B[]      ) const ;
 
   private:
-         G4double fFieldComponents[6] ;
+  
+    G4double fFieldComponents[6] ;
 };
 
 #endif

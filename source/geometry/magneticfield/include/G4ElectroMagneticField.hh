@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ElectroMagneticField.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4ElectroMagneticField.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,19 +32,21 @@ class G4ElectroMagneticField : public G4MagneticField
      G4ElectroMagneticField() {;}
      virtual ~G4ElectroMagneticField() {;}
 
-     G4ElectroMagneticField(const G4ElectroMagneticField &p) {;}
-     G4ElectroMagneticField& operator = (const G4ElectroMagneticField &p);
+     G4ElectroMagneticField(const G4ElectroMagneticField &) {;}
+     G4ElectroMagneticField& operator = (const G4ElectroMagneticField &);
        // Copy constructor & assignment operators.
 
-     virtual void  GetFieldValue( const  double Point[3],
-					 double *Bfield ) const = 0;
+     virtual void  GetFieldValue(const G4double Point[3],
+				       G4double *Bfield ) const = 0;
 };
 
 // Inline implementations
 
-inline  G4ElectroMagneticField& 
+inline
+G4ElectroMagneticField& 
 G4ElectroMagneticField::operator = (const G4ElectroMagneticField &p)
 {
+  if (&p == this) return *this;
   *this = p; return *this;
 }
 

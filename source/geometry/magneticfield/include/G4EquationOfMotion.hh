@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EquationOfMotion.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4EquationOfMotion.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,10 +42,9 @@ class G4EquationOfMotion
        // This is the _only_ function a subclass must define.
        // The other two functions use Rhs_givenB.
 
-     virtual void SetChargeMomentumMass( 
-				 const G4double particleCharge, // in e+ units
-			         const G4double MomentumXc,
-			         const G4double MassXc2) = 0;
+     virtual void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+                                        G4double MomentumXc,
+                                        G4double MassXc2) = 0;
        // Set the charge, momentum and mass of the current particle
        // --> used to set the equation's coefficients ...
 
@@ -67,8 +66,8 @@ class G4EquationOfMotion
        // Obtain only the field - the stepper assumes it is pure Magnetic.
        // Not protected, because G4RKG3_Stepper uses it directly.
 
-     G4Field* GetFieldObj();
-     void     SetFieldObj(G4Field* pField);
+     const G4Field* GetFieldObj() const;
+     void           SetFieldObj(G4Field* pField);
 
   private:
 

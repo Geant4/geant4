@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EqMagElectricField.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4EqMagElectricField.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,13 +34,13 @@ class G4EqMagElectricField : public G4Mag_EqRhs
 
     ~G4EqMagElectricField() {;} 
 
-    void  SetChargeMomentumMass( const G4double particleCharge, // in e+ units
-			         const G4double MomentumXc,
-				 const G4double mass);
+    void  SetChargeMomentumMass(G4double particleCharge, // in e+ units
+			        G4double MomentumXc,
+				G4double mass);
 
-    void EvaluateRhsGivenB( const  G4double y[],
-			    const  G4double Field[],
-			           G4double dydx[] ) const;
+    void EvaluateRhsGivenB(const G4double y[],
+			   const G4double Field[],
+			         G4double dydx[] ) const;
       // Given the value of the electromagnetic field, this function 
       // calculates the value of the derivative dydx.
 

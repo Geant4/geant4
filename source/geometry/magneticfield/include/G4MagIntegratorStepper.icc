@@ -5,23 +5,30 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.icc,v 1.3 1999-12-15 14:49:47 gunter Exp $
+// $Id: G4MagIntegratorStepper.icc,v 1.4 2000-11-01 15:15:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-inline G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion() const
- { return  fEquation_Rhs; } 
 
-inline void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
-	{  fEquation_Rhs-> RightHandSide(y, dydx); }
+inline
+G4EquationOfMotion* G4MagIntegratorStepper::GetEquationOfMotion()
+{
+  return  fEquation_Rhs;
+} 
 
-inline G4int   G4MagIntegratorStepper::GetNumberOfVariables()
- { return fNumberOfVariables; } 
-inline void  G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
- { fNumberOfVariables = newNo; } 
+inline
+G4int G4MagIntegratorStepper::GetNumberOfVariables() const
+{
+  return fNumberOfVariables;
+}
 
+inline
+void G4MagIntegratorStepper::SetNumberOfVariables(G4int newNo)
+{
+  fNumberOfVariables = newNo;
+}
 
-inline void G4MagIntegratorStepper::
-NormaliseTangentVector( G4double vec[6] )
+inline
+void G4MagIntegratorStepper::NormaliseTangentVector( G4double vec[6] )
 {
    double drds2 = vec[3]*vec[3]+vec[4]*vec[4]+vec[5]*vec[5];
 
@@ -31,4 +38,3 @@ NormaliseTangentVector( G4double vec[6] )
 	 vec[i+3] *= normx;   
    }
 }
-

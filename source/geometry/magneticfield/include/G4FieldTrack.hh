@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.hh,v 1.3 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4FieldTrack.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,10 +36,10 @@ class  G4FieldTrack
 
      G4FieldTrack( const G4ThreeVector& pPosition, 
 		   const G4ThreeVector& pVelocity,   // Or UnitVelocity
-		   const G4double       curve_length,
-		   const G4double       Energy,
-		   const G4double       LabratTimeOfFlight=0.0,
-		   const G4double       ProperTimeOfFlight=0.0, 
+		         G4double       curve_length,
+		         G4double       Energy,
+		         G4double       LabratTimeOfFlight=0.0,
+		         G4double       ProperTimeOfFlight=0.0, 
 		   const G4ThreeVector* pSpin=0);
 
      G4FieldTrack( const G4FieldTrack&   pFieldTrack );
@@ -47,48 +47,49 @@ class  G4FieldTrack
      ~G4FieldTrack();
        // Destructor 
 
-     G4FieldTrack& operator = ( const G4FieldTrack & rStVec );
-       // Equality operator
+     inline G4FieldTrack& operator = ( const G4FieldTrack & rStVec );
+       // Assignment operator
 
-     G4ThreeVector  GetVelocity() const;   
-     G4ThreeVector  GetPosition() const; 
-     const G4ThreeVector& GetMomentumDir() const;
-     G4double       GetCurveLength() const;
+     inline G4ThreeVector  GetVelocity() const;   
+     inline G4ThreeVector  GetPosition() const; 
+     inline const G4ThreeVector& GetMomentumDir() const;
+     inline G4double       GetCurveLength() const;
        // Distance along curve of point.
-     G4double       GetMomentumModulus() const;
-     G4ThreeVector  GetSpin()   const;
-     G4double       GetLabTimeOfFlight() const;
-     G4double       GetProperTimeOfFlight() const;
+     inline G4double       GetMomentumModulus() const;
+     inline G4ThreeVector  GetSpin()   const;
+     inline G4double       GetLabTimeOfFlight() const;
+     inline G4double       GetProperTimeOfFlight() const;
        // Accessors.
 
-     void SetPosition(G4ThreeVector nPos); 
-     void SetVelocity(G4ThreeVector nMomDir);
+     inline void SetPosition(G4ThreeVector nPos); 
+     inline void SetVelocity(G4ThreeVector nMomDir);
        // Does change mom-dir too.
-     void SetMomentumDir(G4ThreeVector nMomDir);
+     inline void SetMomentumDir(G4ThreeVector nMomDir);
        // Does NOT change velocity.
-     void SetCurveLength(G4double nCurve_s);
+     inline void SetCurveLength(G4double nCurve_s);
        // Distance along curve.
-     void SetEnergy(G4double nEnergy);
+     inline void SetEnergy(G4double nEnergy);
        // Does not modify momentum.
-     void SetMomentumModulus(G4double nMomentumMod);
+     inline void SetMomentumModulus(G4double nMomentumMod);
        // Does not modify energy.
-     void SetSpin(G4ThreeVector nSpin);
-     void SetLabTimeOfFlight(G4double nTOF); 
-     void SetProperTimeOfFlight(G4double nTOF);
+     inline void SetSpin(G4ThreeVector nSpin);
+     inline void SetLabTimeOfFlight(G4double nTOF); 
+     inline void SetProperTimeOfFlight(G4double nTOF);
        //  Modifiers
 
    public: // without description
 
-     G4FieldTrack&  SetCurvePnt(const G4ThreeVector& pPosition, 
-				const G4ThreeVector& pVelocity,
-				const G4double       s_curve );
+     inline G4FieldTrack& SetCurvePnt(const G4ThreeVector& pPosition, 
+				      const G4ThreeVector& pVelocity,
+				            G4double       s_curve );
        // Old multi-set method
 
-     G4ThreeVector  Position() const;
+     inline G4ThreeVector Position() const;
        // Renamed to GetPosition
 
-     G4double       CurveS()    const;  // distance along curve of point
-     void SetCurveS(G4double new_curve_s);
+     inline G4double CurveS() const;
+       // Distance along curve of point
+     inline void SetCurveS(G4double new_curve_s);
        // Old methods to be deleted. 
 
      // G4double       GetEnergy() const;       //  Wrong Energy  --> FIXME
@@ -99,8 +100,8 @@ class  G4FieldTrack
      // static const G4int ncompSVEC=15;
        // Needed and should be used only for RK integration driver
      enum { ncompSVEC = 16 };
-     void DumpToArray(   G4double valArr[ncompSVEC] ) const; 
-     void LoadFromArray( const G4double valArr[ncompSVEC] ); 
+     inline void DumpToArray(G4double valArr[ncompSVEC]) const; 
+     inline void LoadFromArray(G4double valArr[ncompSVEC]); 
      
      friend  G4std::ostream&
              operator<<( G4std::ostream& os, G4FieldTrack& SixVec);

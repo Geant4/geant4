@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.cc,v 1.4 2000-04-12 18:29:26 japost Exp $
+// $Id: G4MagHelicalStepper.cc,v 1.5 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagHelicalStepper.hh"
@@ -23,6 +23,10 @@ G4MagHelicalStepper::G4MagHelicalStepper(G4Mag_EqRhs *EqRhs)
                                        // position & velocity
 {
   fPtrMagEqOfMot = EqRhs;
+}
+
+G4MagHelicalStepper::~G4MagHelicalStepper()
+{
 }
 
 void
@@ -125,10 +129,10 @@ G4MagHelicalStepper::AdvanceHelix( const G4double  yIn[],
 
 void
 G4MagHelicalStepper::Stepper( const G4double yInput[],
-		     const G4double dydx[],
-		     const G4double hstep,
-		     G4double yOut[],
-		     G4double yErr[]      )
+		              const G4double dydx[],
+		                    G4double hstep,
+		                    G4double yOut[],
+		                    G4double yErr[]      )
 {  
    const G4int nvar = 6 ;
 
@@ -182,7 +186,7 @@ G4MagHelicalStepper::Stepper( const G4double yInput[],
 
 
 G4double
-G4MagHelicalStepper::DistChord()   const 
+G4MagHelicalStepper::DistChord() const 
 {
   // Soon: must check whether h/R > 2 pi  !!
   //  Method below is good only for < 2 pi

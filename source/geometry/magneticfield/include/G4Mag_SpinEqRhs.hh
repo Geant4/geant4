@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Mag_SpinEqRhs.hh,v 1.3 2000-04-27 09:14:06 gcosmo Exp $
+// $Id: G4Mag_SpinEqRhs.hh,v 1.4 2000-11-01 15:15:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -26,8 +26,8 @@
 #include "G4Mag_EqRhs.hh"
 #include "G4MagneticField.hh"
 
-class G4Mag_SpinEqRhs : public G4Mag_EqRhs{
-
+class G4Mag_SpinEqRhs : public G4Mag_EqRhs
+{
    public:  // with description
 
      G4Mag_SpinEqRhs( G4MagneticField* MagField )
@@ -35,9 +35,9 @@ class G4Mag_SpinEqRhs : public G4Mag_EqRhs{
     ~G4Mag_SpinEqRhs() {;}
        // Constructor and destructor. No actions.
 
-     void SetChargeMomentumMass(const G4double particleCharge, // in e+ units
-                                const G4double MomentumXc,
-                                const G4double mass); 
+     void SetChargeMomentumMass(G4double particleCharge, // in e+ units
+                                G4double MomentumXc,
+                                G4double mass); 
 
      void EvaluateRhsGivenB( const  G4double y[],
 			     const  G4double B[3],

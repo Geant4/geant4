@@ -5,52 +5,61 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.4 2000-04-27 09:14:06 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.icc,v 1.5 2000-11-01 15:15:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-inline G4double G4MagInt_Driver::GetHmin()
+inline
+G4double G4MagInt_Driver::GetHmin() const
 {
       return hminimum_val;
 } 
 
-inline G4double G4MagInt_Driver::Hmin()
+inline
+G4double G4MagInt_Driver::Hmin() const
 {
       return hminimum_val;
 }
 
-inline G4double G4MagInt_Driver::GetSafety()
+inline
+G4double G4MagInt_Driver::GetSafety() const
 {
       return safety;
 }
 
-inline G4double G4MagInt_Driver::GetPshrnk()
+inline
+G4double G4MagInt_Driver::GetPshrnk() const
 {
       return pshrnk;
 } 
 
-inline G4double G4MagInt_Driver::GetPgrow()
+inline
+G4double G4MagInt_Driver::GetPgrow() const
 {
       return pgrow;
 }
  
-inline G4double G4MagInt_Driver::GetErrcon()
+inline
+G4double G4MagInt_Driver::GetErrcon() const
 {
       return errcon;
 }
 
-inline G4double G4MagInt_Driver::SetHmin(G4double newval)
+inline
+void G4MagInt_Driver::SetHmin(G4double newval)
 {
-      return hminimum_val;
+      hminimum_val = newval;
 } 
 
-inline G4double G4MagInt_Driver::ComputeAndSetErrcon()
+inline
+G4double G4MagInt_Driver::ComputeAndSetErrcon()
 {
       errcon = pow(max_stepping_increase/GetSafety(),1.0/GetPgrow());
       return errcon;
 } 
 
-inline void G4MagInt_Driver::ReSetParameters( G4double new_safety )
+inline
+void G4MagInt_Driver::ReSetParameters(G4double new_safety)
 {
       safety = new_safety;
       pshrnk = -1.0 / pIntStepper->IntegratorOrder();
@@ -58,66 +67,65 @@ inline void G4MagInt_Driver::ReSetParameters( G4double new_safety )
       ComputeAndSetErrcon();
 }
 
-inline void G4MagInt_Driver::SetSafety(G4double val)
+inline
+void G4MagInt_Driver::SetSafety(G4double val)
 { 
       safety=val;
       ComputeAndSetErrcon();
 }
 
-inline void G4MagInt_Driver::SetPgrow(G4double  val)
+inline
+void G4MagInt_Driver::SetPgrow(G4double  val)
 { 
       pgrow=val;
       ComputeAndSetErrcon(); 
 }
 
-inline void G4MagInt_Driver::SetErrcon(G4double val)
+inline
+void G4MagInt_Driver::SetErrcon(G4double val)
 { 
       errcon=val;
 }
 
-inline void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
+inline
+void G4MagInt_Driver::RenewStepperAndAdjust(G4MagIntegratorStepper *pItsStepper)
 {  
       pIntStepper = pItsStepper; 
       ReSetParameters();
 }
 
-inline void  G4MagInt_Driver:: SetChargeMomentumMass(                
-		     const G4double particleCharge,    // in e+ units
-		     const G4double MomentumXc,
-		     const G4double Mass )
+inline
+void G4MagInt_Driver::SetChargeMomentumMass(G4double particleCharge, // e+
+		                            G4double MomentumXc,
+		                            G4double Mass )
 { 
       pIntStepper->GetEquationOfMotion()
                  ->SetChargeMomentumMass(particleCharge, MomentumXc, Mass); 
 }
 
-//    Constructor
-//
-inline G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum, 
-					 G4MagIntegratorStepper *pItsStepper,
-					 G4int                   numComponents)
-  : nvar(numComponents)
-{  
-      RenewStepperAndAdjust( pItsStepper );
-      hminimum_val= hminimum;
-      fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
+inline
+const G4MagIntegratorStepper* G4MagInt_Driver::GetStepper() const
+{
+  return pIntStepper;
 }
 
-inline G4MagIntegratorStepper* G4MagInt_Driver::GetStepper()
-{  return pIntStepper; }
+inline
+G4int G4MagInt_Driver::GetMaxNoSteps() const
+{
+  return fMaxNoSteps;
+}
 
-inline  G4int  G4MagInt_Driver::GetMaxNoSteps()
-{  return fMaxNoSteps; }
+inline
+void G4MagInt_Driver::SetMaxNoSteps(G4int val)
+{
+  fMaxNoSteps= val;
+}
 
-inline  void     G4MagInt_Driver::SetMaxNoSteps(G4int val)
-{  fMaxNoSteps= val; }
-
-inline void G4MagInt_Driver::GetDerivatives( 
-				 const G4FieldTrack y_curr,    // const, INput
-				       G4double     dydx[]  )  // OUTput
+inline
+void G4MagInt_Driver::GetDerivatives(const G4FieldTrack y_curr,  // const, INput
+				           G4double     dydx[])  // OUTput
 { 
   G4double  tmpValArr[G4FieldTrack::ncompSVEC];
   y_curr.DumpToArray( tmpValArr  );
   pIntStepper -> RightHandSide( tmpValArr , dydx );
-  
 }
-

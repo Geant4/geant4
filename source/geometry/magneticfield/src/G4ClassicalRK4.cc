@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClassicalRK4.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4ClassicalRK4.cc,v 1.3 2000-11-01 15:15:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ClassicalRK4.hh"
@@ -16,9 +16,9 @@
 //
 // Constructor sets the number of variables (default = 6)
 
-G4ClassicalRK4:: G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagErrorStepper(EqRhs, numberOfVariables),
-  fNumberOfVariables(numberOfVariables)
+G4ClassicalRK4::G4ClassicalRK4(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+  : G4MagErrorStepper(EqRhs, numberOfVariables),
+    fNumberOfVariables(numberOfVariables)
 {
    dydxm = new G4double[fNumberOfVariables];
    dydxt = new G4double[fNumberOfVariables]; 
@@ -29,7 +29,7 @@ G4MagErrorStepper(EqRhs, numberOfVariables),
 //
 // Destructor
 
-G4ClassicalRK4:: ~G4ClassicalRK4()
+G4ClassicalRK4::~G4ClassicalRK4()
 {
   delete[] dydxm;
   delete[] dydxt;
@@ -49,8 +49,8 @@ G4ClassicalRK4:: ~G4ClassicalRK4()
 void
 G4ClassicalRK4::DumbStepper( const G4double  yIn[],
 			     const G4double  dydx[],
-			     const G4double  h,
-			 	   G4double  yOut[])
+			           G4double  h,
+			           G4double  yOut[])
 {
   const G4int nvar = fNumberOfVariables;   //  GetNumberOfVariables(); 
   G4int i;
@@ -93,8 +93,8 @@ G4ClassicalRK4::DumbStepper( const G4double  yIn[],
 void
 G4ClassicalRK4::StepWithEst( const G4double  yIn[],
 			     const G4double  dydx[],
-			     const G4double  h,
-			 	   G4double  yOut[],
+			           G4double  h,
+			           G4double  yOut[],
                                    G4double& alpha2,
                                    G4double& beta2,
 			     const G4double  B1[],
@@ -104,7 +104,7 @@ G4ClassicalRK4::StepWithEst( const G4double  yIn[],
  G4Exception(" G4ClassicalRK4::StepWithEst ERROR: this Method is no longer used.");
 
 #if 0  //  const G4int nvar = 6 ; 
-  const G4int nvar = GetNumberOfVariables(); 
+  G4int nvar = GetNumberOfVariables(); 
   G4int i;
   G4double  hh = h*0.5 , h6 = h/6.0 ;
   G4double B[3] ;

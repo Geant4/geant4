@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.hh,v 1.6 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4MagErrorStepper.hh,v 1.7 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -34,13 +34,13 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
   public:  // with description
 
     G4MagErrorStepper(G4Mag_EqRhs *EqRhs,G4int numberOfVariables);
-    ~G4MagErrorStepper();
+    virtual ~G4MagErrorStepper();
   
     void Stepper( const G4double y[],
 		  const G4double dydx[],
-		  const G4double h,
-		  G4double yout[],
-		  G4double yerr[]  );
+		        G4double h,
+		        G4double yout[],
+		        G4double yerr[]  );
       // The stepper for the Runge Kutta integration. The stepsize 
       // is fixed, with the Step size given by h.
       // Integrates ODE starting values y[0 to 6].
@@ -48,14 +48,20 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 
     virtual  void DumbStepper( const G4double y[],
 			       const G4double dydx[],
-			       const G4double h,
-			       G4double yout[] ) = 0;
+			             G4double h,
+			             G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
 
-    G4double DistChord()   const;
+    G4double DistChord() const;
 
   private:
-  
+
+    G4MagErrorStepper(const G4MagErrorStepper&);
+    G4MagErrorStepper& operator=(const G4MagErrorStepper&);
+      // Private copy constructor and assignment operator.
+
+  private:
+
     G4ThreeVector fInitialPoint, fMidPoint, fFinalPoint;
       // Data stored in order to find the chord
  

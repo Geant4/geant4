@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Field.hh,v 1.3 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4Field.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -29,8 +29,8 @@ class G4Field
 
       virtual void  GetFieldValue( const  double Point[3],
 					  double *Bfield ) const = 0;
-      G4Field(){};
-      virtual ~G4Field(){};
+      G4Field(){;}
+      virtual ~G4Field(){;}
 
      // A field signature function that can be used to insure
      // that the Equation of motion object and the G4Field object

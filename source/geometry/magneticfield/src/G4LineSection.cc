@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LineSection.cc,v 1.3 2000-02-25 16:57:15 grichine Exp $
+// $Id: G4LineSection.cc,v 1.4 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // typedef double    G4double;  
@@ -13,10 +13,10 @@
 #include "G4LineSection.hh" 
 
 G4LineSection::G4LineSection( const G4ThreeVector& PntA, 
-			      const G4ThreeVector& PntB ) 
+			      const G4ThreeVector& PntB )
+  : EndpointA(PntA), 
+    VecAtoB(PntB-PntA)
 { 
-  EndpointA= PntA; 
-  VecAtoB=PntB-PntA; 
   G4double distABsquared = VecAtoB.mag2() ;  
   if ( distABsquared == 0.0)
   {

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RKG3_Stepper.hh,v 1.4 2000-04-27 09:14:06 gcosmo Exp $
+// $Id: G4RKG3_Stepper.hh,v 1.5 2000-11-01 15:15:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -36,7 +36,7 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
 
     void Stepper( const G4double yIn[],
 	          const G4double dydx[],
-	          const G4double h,
+	                G4double h,
 		        G4double yOut[],
 		        G4double yErr[]  );
       // The method which must be provided, even if less efficient.
@@ -45,7 +45,7 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
  
     void StepNoErr( const G4double tIn[7],
 		    const G4double dydx[7],
-		    const G4double Step,
+		          G4double Step,
 			  G4double tOut[7],
 			  G4double B[3] );
       // Integrator RK Stepper from G3 with only two field evaluation per 
@@ -55,7 +55,7 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
 
     void StepWithEst( const G4double  tIn[7],
 		      const G4double dydx[7],
-		      const G4double Step,
+		            G4double Step,
 			    G4double tOut[7],
 			    G4double& alpha2,    // to delete ?
 			    G4double& beta2,
@@ -68,11 +68,11 @@ class G4RKG3_Stepper : public G4MagIntegratorStepper
 
   public:  // without description
 
-    G4int IntegratorOrder() { return 4; };
+    G4int IntegratorOrder() const { return 4; }
   
   protected:
-    //	void Field( const  double Point[3],
-    //			   double Bfield[3] )  const
+    //	void Field( const G4double Point[3],
+    //			  G4double Bfield[3] )  const
     //	  { EqRhs-> GetFieldValue( Point, Bfield ) ; }
 
   private:

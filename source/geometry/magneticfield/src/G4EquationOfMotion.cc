@@ -5,12 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EquationOfMotion.cc,v 1.2 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4EquationOfMotion.cc,v 1.3 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4EquationOfMotion.hh"
 
 static const int G4maximum_number_of_field_components = 16;
+
+G4EquationOfMotion::~G4EquationOfMotion()
+{}
 
 void 
 G4EquationOfMotion::RightHandSide( const  G4double y[],

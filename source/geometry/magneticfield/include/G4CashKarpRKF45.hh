@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CashKarpRKF45.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4CashKarpRKF45.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -28,7 +28,7 @@
 
 #include "G4MagIntegratorStepper.hh"
 
-class G4CashKarpRKF45: public G4MagIntegratorStepper
+class G4CashKarpRKF45 : public G4MagIntegratorStepper
 {
 
   public:  // with description
@@ -38,13 +38,13 @@ class G4CashKarpRKF45: public G4MagIntegratorStepper
 
     void Stepper( const G4double y[],
 		  const G4double dydx[],
-		  const G4double h,
+		        G4double h,
 			G4double yout[],
 			G4double yerr[] ) ;
 
     void StepWithEst( const G4double yIn[],
 		      const G4double dydx[],
-		      const G4double Step,
+		            G4double Step,
 		            G4double yOut[],
                             G4double& alpha2,
 			    G4double& beta2,
@@ -55,7 +55,13 @@ class G4CashKarpRKF45: public G4MagIntegratorStepper
 
    G4double  DistChord() const = 0 ; // This is not IMPLEMENTED yet. 
                                      //  It must be done before it can work.
-   G4int        IntegratorOrder() { return 4 ; };
+   G4int IntegratorOrder() const { return 4; }
+
+  private:
+
+   G4CashKarpRKF45(const G4CashKarpRKF45&);
+   G4CashKarpRKF45& operator=(const G4CashKarpRKF45&);
+     // Private copy constructor and assignment operator.
 
   private:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.hh,v 1.4 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.5 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -32,13 +32,13 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
   public:  // with description
 
     G4MagHelicalStepper(G4Mag_EqRhs *EqRhs);
-    ~G4MagHelicalStepper() {;}
+    virtual ~G4MagHelicalStepper();
   
     void Stepper( const G4double y[],
 		  const G4double dydx[],
-		  const G4double h,
-		  G4double yout[],
-		  G4double yerr[]  );
+		        G4double h,
+		        G4double yout[],
+		        G4double yerr[]  );
       // The stepper for the Runge Kutta integration.
       // The stepsize is fixed, equal to h.
       // Integrates ODE starting values y[0 to 6]
@@ -50,16 +50,14 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
 			       G4double yout[] ) = 0;
       // Performs a 'dump' Step without error calculation.
   
-    G4double DistChord()   const;
+    G4double DistChord() const;
       // Estimate maximum distance of curved solution and chord ... 
 
   protected:  // with description
 
-    //  --- Methods used to implement all the derived classes -----
-
-    void LinearStep( const G4double  yIn[],
-	             const G4double  h,
-			   G4double  yHelix[]);
+    inline void LinearStep( const G4double  yIn[],
+	                          G4double  h,
+			          G4double  yHelix[]);
       // A linear Step in regions without magnetic field.
 
     void AdvanceHelix( const G4double  yIn[],
@@ -68,13 +66,19 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
 		       G4double  yHelix[]);    // output 
       // A first order Step along a helix inside the field.
 
-    void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
+    inline void MagFieldEvaluate( const G4double y[], G4ThreeVector& Bfield );
       // Evaluate the field at a certain point.
 
   protected:  // without description
 
     // void MagFieldEvaluate( const G4double y[], G4double B[] )   
     //  { GetEquationOfMotion()->  GetFieldValue(y, B); }
+
+  private:
+
+    G4MagHelicalStepper(const G4MagHelicalStepper&);
+    G4MagHelicalStepper& operator=(const G4MagHelicalStepper&);
+      // Private copy constructor and assignment operator.
 
   private:
   

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4HelixHeum.hh,v 1.4 2000-04-27 09:14:05 gcosmo Exp $
+// $Id: G4HelixHeum.hh,v 1.5 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -43,7 +43,7 @@ class G4HelixHeum : public G4MagHelicalStepper
 
   public: // without description
   
-    G4int IntegratorOrder() { return 2; }
+    G4int IntegratorOrder() const { return 2; }
 };
 
 #endif /* G4HELIXHEUM_HH */

@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2000-05-12 13:57:53 gcosmo Exp $
+$Id: History,v 1.22 2000-11-01 15:15:47 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 1st, 2000  G. Cosmo - field-V02-00-00
+
+- QA code revision and cleanup (+fixes from CodeWizard filtering):
+  o Added (private) declarations of copy constructor and assignment operator
+    where needed.
+  o Added "const" qualifier to accessor methods, wherever needed.
+  o Added equality check on operator= where needed.
+  o Made destructor "virtual" for classes having virtual methods,
+    wherever missing.
+  o Changed virtual functions to non-inline wherever's the case.
+  o Changed return value to be "const" pointer to functions:
+    - G4EquationOfMotion::GetFieldObj()
+    - G4FieldManager::GetDetectorField()
+    - G4MagIntegratorDriver::GetStepper()
+  o Fixed and corrected signature to G4MagIntegratorDriver::SetHmin().
+  o Added "inline" qualifier to methods' declarations.
+  o General cosmetics
+
+Jun 2nd, 2000  J. Apostolakis
+- G4FieldManager[.hh.icc]
+  o Added DeltaIntersection and DeltaOneStep to FieldManager: added
+    Get/Set methods and SetAccuraciesWithDeltaOneStep().
 
 May 11th, 2000  J. Apostolakis - field-V01-01-02
 

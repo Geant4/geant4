@@ -5,15 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldTrack.icc,v 1.2 1999-12-15 14:49:46 gunter Exp $
+// $Id: G4FieldTrack.icc,v 1.3 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "PhysicalConstants.h"
 
 inline G4FieldTrack& 
-G4FieldTrack::SetCurvePnt( const G4ThreeVector& pPosition, 
+G4FieldTrack::SetCurvePnt(const G4ThreeVector& pPosition, 
 			  const G4ThreeVector& pVelocity,  // Can be Unit
-			  const G4double       s_curve )
+			        G4double       s_curve )
 {
   SixVector[0] = pPosition.x(); 
   SixVector[1] = pPosition.y(); 
@@ -33,29 +33,29 @@ G4FieldTrack::SetCurvePnt( const G4ThreeVector& pPosition,
 inline
 G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
 			    const G4ThreeVector& pVelocity,    // Can be unit
-			    const G4double       curve_length, 
-			    const G4double       pEnergy,
-			    const G4double       pLabortTimeOfFlight,
-			    const G4double       pProperTimeOfFlight,
-			    const G4ThreeVector* pSpin) :
-  fEnergy(pEnergy),
-  fLabTimeOfFlight(pLabortTimeOfFlight), 
-  fProperTimeOfFlight(pProperTimeOfFlight)
+			          G4double       curve_length, 
+			          G4double       pEnergy,
+			          G4double       pLabortTimeOfFlight,
+			          G4double       pProperTimeOfFlight,
+			    const G4ThreeVector* pSpin)
+ : fEnergy(pEnergy),
+   fLabTimeOfFlight(pLabortTimeOfFlight), 
+   fProperTimeOfFlight(pProperTimeOfFlight),
+   fMomentumDir(pVelocity.unit())
 {
   SetCurvePnt( pPosition, pVelocity, curve_length );
-  if(pSpin){ fSpin= *pSpin; }
-  fMomentumDir = pVelocity.unit();
+  if(pSpin) fSpin = *pSpin;
 }
 
 inline
-G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  ) :
-  fEnergy( rStVec.fEnergy ),
-  fLabTimeOfFlight( rStVec.fLabTimeOfFlight ), 
-  fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
-  fMomentumModulus( rStVec.fMomentumModulus ),
-  fMomentumDir( rStVec.fMomentumDir ),
-  fSpin( rStVec.fSpin ), 
-  fDistanceAlongCurve( rStVec.fDistanceAlongCurve)
+G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  )
+ : fEnergy( rStVec.fEnergy ),
+   fLabTimeOfFlight( rStVec.fLabTimeOfFlight ), 
+   fProperTimeOfFlight( rStVec.fProperTimeOfFlight ), 
+   fMomentumModulus( rStVec.fMomentumModulus ),
+   fMomentumDir( rStVec.fMomentumDir ),
+   fSpin( rStVec.fSpin ), 
+   fDistanceAlongCurve( rStVec.fDistanceAlongCurve)
 {
   SixVector[0]= rStVec.SixVector[0];
   SixVector[1]= rStVec.SixVector[1];
@@ -69,16 +69,20 @@ G4FieldTrack::G4FieldTrack( const G4FieldTrack&  rStVec  ) :
   // 	      rStVec.GetCurveLength() );   // Slow, so changed it
 }
 
-// Destructor 
-inline G4FieldTrack::~G4FieldTrack(){}
+inline
+G4FieldTrack::~G4FieldTrack()
+{
+}
 
-inline G4ThreeVector  G4FieldTrack::GetPosition() const
+inline
+G4ThreeVector G4FieldTrack::GetPosition() const
 {
    G4ThreeVector myPosition( SixVector[0], SixVector[1], SixVector[2] );
    return myPosition;
 } 
 
-inline void G4FieldTrack::SetPosition( G4ThreeVector pPosition) 
+inline
+void G4FieldTrack::SetPosition( G4ThreeVector pPosition) 
 {
    SixVector[0] = pPosition.x(); 
    SixVector[1] = pPosition.y(); 
@@ -86,72 +90,120 @@ inline void G4FieldTrack::SetPosition( G4ThreeVector pPosition)
 } 
 
 // Older ... obsolete 
-inline G4ThreeVector  G4FieldTrack::Position() const
+inline
+G4ThreeVector  G4FieldTrack::Position() const
 {
    return this->GetPosition();
 }
 
-inline const G4ThreeVector& G4FieldTrack::GetMomentumDir() const 
+inline
+const G4ThreeVector& G4FieldTrack::GetMomentumDir() const 
 {
    // G4ThreeVector myVelocity( SixVector[3], SixVector[4], SixVector[5] );
    // return myVelocity;
    return fMomentumDir;
 } 
 
-inline G4double  G4FieldTrack::GetCurveLength() const 
+inline
+G4double  G4FieldTrack::GetCurveLength() const 
 {
      return  fDistanceAlongCurve;  
 }
 
-inline G4double  G4FieldTrack::CurveS() const 
+inline
+G4double  G4FieldTrack::CurveS() const 
 {
      return  this->GetCurveLength();
 }
 
-inline void G4FieldTrack::SetCurveLength(G4double nCurve_s)
+inline
+void G4FieldTrack::SetCurveLength(G4double nCurve_s)
 {
      fDistanceAlongCurve= nCurve_s;  
 }
 
-inline void  G4FieldTrack::SetCurveS(G4double new_curve_s) 
+inline
+void G4FieldTrack::SetCurveS(G4double new_curve_s) 
 {
      this->SetCurveLength(new_curve_s);
 }
 
 #ifdef ENERGY_OK
-inline G4double  G4FieldTrack::GetEnergy() const
-{ return fEnergy;}
+inline
+G4double  G4FieldTrack::GetEnergy() const
+{
+   return fEnergy;
+}
 #endif
 
-inline void G4FieldTrack::SetEnergy(G4double nEnergy)
-{ fEnergy=nEnergy;}
-inline G4ThreeVector  G4FieldTrack::GetSpin()   const
-{ return fSpin;}
-inline void G4FieldTrack::SetSpin(G4ThreeVector nSpin)
-{ fSpin=nSpin; }
+inline
+void G4FieldTrack::SetEnergy(G4double nEnergy)
+{
+   fEnergy=nEnergy;
+}
 
-inline G4double  G4FieldTrack::GetLabTimeOfFlight() const
-{ return fLabTimeOfFlight; }
-inline void G4FieldTrack::SetLabTimeOfFlight(G4double nTOF)
-{ fLabTimeOfFlight=nTOF;}
+inline
+G4ThreeVector G4FieldTrack::GetSpin() const
+{
+   return fSpin;
+}
 
-inline G4double  G4FieldTrack::GetProperTimeOfFlight() const
-{ return fProperTimeOfFlight; }
-inline void G4FieldTrack::SetProperTimeOfFlight(G4double nTOF)
-{ fProperTimeOfFlight=nTOF;}
+inline
+void G4FieldTrack::SetSpin(G4ThreeVector nSpin)
+{
+   fSpin=nSpin;
+}
 
-inline G4double G4FieldTrack::GetMomentumModulus() const
-{ return fMomentumModulus;}
-inline void G4FieldTrack::SetMomentumModulus(G4double nMomentumMod)
-{ fMomentumModulus= nMomentumMod ;}         // does not modify energy
+inline
+G4double G4FieldTrack::GetLabTimeOfFlight() const
+{
+   return fLabTimeOfFlight;
+}
 
-inline void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
-{ fMomentumDir= newMomDir; }
+inline
+void G4FieldTrack::SetLabTimeOfFlight(G4double nTOF)
+{
+   fLabTimeOfFlight=nTOF;
+}
 
-inline G4ThreeVector G4FieldTrack::GetVelocity() const 
-{ return G4ThreeVector( SixVector[3], SixVector[4], SixVector[5] ); } 
+inline
+G4double  G4FieldTrack::GetProperTimeOfFlight() const
+{
+   return fProperTimeOfFlight;
+}
 
-inline void G4FieldTrack::SetVelocity(G4ThreeVector pVelocity)
+inline
+void G4FieldTrack::SetProperTimeOfFlight(G4double nTOF)
+{
+   fProperTimeOfFlight=nTOF;
+}
+
+inline
+G4double G4FieldTrack::GetMomentumModulus() const
+{
+   return fMomentumModulus;
+}
+
+inline
+void G4FieldTrack::SetMomentumModulus(G4double nMomentumMod)
+{
+   fMomentumModulus= nMomentumMod;         // does not modify energy
+}
+
+inline
+void G4FieldTrack::SetMomentumDir(G4ThreeVector newMomDir)
+{
+   fMomentumDir= newMomDir;
+}
+
+inline
+G4ThreeVector G4FieldTrack::GetVelocity() const 
+{
+   return G4ThreeVector( SixVector[3], SixVector[4], SixVector[5] );
+} 
+
+inline
+void G4FieldTrack::SetVelocity(G4ThreeVector pVelocity)
 {
   SixVector[3] = pVelocity.x(); 
   SixVector[4] = pVelocity.y(); 
@@ -198,7 +250,7 @@ void G4FieldTrack::DumpToArray(G4double valArr[ncompSVEC] ) const
 //   note that momentum direction must-be/is normalised
 
 inline
-void G4FieldTrack::LoadFromArray( const G4double valArr[ncompSVEC] )
+void G4FieldTrack::LoadFromArray(G4double valArr[ncompSVEC])
 {
   SixVector[0]=valArr[0];
   SixVector[1]=valArr[1];
@@ -227,6 +279,8 @@ void G4FieldTrack::LoadFromArray( const G4double valArr[ncompSVEC] )
 inline
 G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
 {
+  if (&rStVec == this) return *this;
+
   // SetCurvePnt(rStVec.GetPosition(), 
   //	      rStVec.GetMomentumDir(), 
   //	      rStVec.GetCurveLength() );
@@ -247,6 +301,3 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
 
   return *this;
 }
-     
-
-

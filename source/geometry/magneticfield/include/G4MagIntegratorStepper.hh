@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.hh,v 1.4 2000-04-27 09:14:06 gcosmo Exp $
+// $Id: G4MagIntegratorStepper.hh,v 1.5 2000-11-01 15:15:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,12 +30,12 @@ class G4MagIntegratorStepper
   public:  // with description
 
      G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs, G4int num_variables);
-     ~G4MagIntegratorStepper(){;}
+     virtual ~G4MagIntegratorStepper();
        // Constructor and destructor. No actions.
 
      virtual  void  Stepper(  const G4double y[],
 			      const G4double dydx[],
-			      const G4double h,
+			            G4double h,
 				    G4double yout[],
 				    G4double yerr[]  ) = 0 ;
        // The stepper for the Runge Kutta integration.
@@ -47,22 +47,22 @@ class G4MagIntegratorStepper
        // Estimate the maximum distance of a chord from the true path
        // over the segment last integrated.
 
-     void NormaliseTangentVector( G4double vec[6] );
+     inline void NormaliseTangentVector( G4double vec[6] );
        // Simple utility function to (re)normalise 'unit velocity' vector.
 
-     virtual void RightHandSide( const  double y[], double dydx[] );   
+     virtual void RightHandSide( const double y[], double dydx[] );   
        // Utility method to supply the standard Evaluation of the
        // Right Hand side of the associated equation.
 
-     G4int  GetNumberOfVariables();
-     void   SetNumberOfVariables(G4int newNo);
+     inline G4int  GetNumberOfVariables() const;
+     inline void   SetNumberOfVariables(G4int newNo);
        // Get/Set the number of variables that the stepper will compile over.
 
-     virtual G4int IntegratorOrder() = 0;
+     virtual G4int IntegratorOrder() const = 0;
        // Returns the order of the integrator
        // i.e. its error behaviour is of the order O(h^order).
 
-     G4EquationOfMotion *GetEquationOfMotion() const; 
+     inline G4EquationOfMotion *GetEquationOfMotion(); 
        // As some steppers (eg RKG3) require other methods of Eq_Rhs
        // this function allows for access to them.
 
@@ -70,13 +70,18 @@ class G4MagIntegratorStepper
 
 #if 0
      void
-     SetChargeAndMomentum( const G4double particleCharge, // in e+ units
-			   const G4double MomentumXc)
+     SetChargeAndMomentum( G4double particleCharge, // in e+ units
+			   G4double MomentumXc)
        //  Supply the standard Evaluation of the Right Hand side 
        //   of the associated equation.
        {theEquation_Rhs -> SetChargeAndMomentum(particleCharge, MomentumXc);}
 #endif 
 
+  private:
+  
+     G4MagIntegratorStepper(const G4MagIntegratorStepper&);
+     G4MagIntegratorStepper& operator=(const G4MagIntegratorStepper&);
+       // Private copy constructor and assignment operator.
 
   private:
 

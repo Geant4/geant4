@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ExplicitEuler.hh,v 1.3 2000-04-27 09:14:04 gcosmo Exp $
+// $Id: G4ExplicitEuler.hh,v 1.4 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,12 +35,12 @@ class G4ExplicitEuler : public G4MagErrorStepper
 
     void  DumbStepper(  const G4double y[],
 		        const G4double dydx[],
-		        const G4double h,
+		              G4double h,
 			      G4double yout[]);
 
   public:  // without description
 
-    G4int     IntegratorOrder() { return 1; };
+    G4int IntegratorOrder() const { return 1; }
 
   private:
 

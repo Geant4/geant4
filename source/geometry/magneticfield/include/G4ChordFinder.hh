@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ChordFinder.hh,v 1.4 2000-05-11 14:47:00 japost Exp $
+// $Id: G4ChordFinder.hh,v 1.5 2000-11-01 15:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,8 +45,8 @@ class G4ChordFinder
 
 
       G4double    AdvanceChordLimited( G4FieldTrack& yCurrent,
-                                    const  G4double     stepInitial,
-                                    const  G4double     epsStep_Relative  );
+                                       G4double stepInitial,
+                                       G4double epsStep_Relative  );
         // Uses ODE solver's driver to find the endpoint that satisfies 
         // the chord criterion: that d_chord < delta_chord
         // -> Returns Length of Step taken.
@@ -54,33 +54,39 @@ class G4ChordFinder
       G4FieldTrack ApproxCurvePointV(const  G4FieldTrack&  curveAPointVelocity,
 		  	             const  G4FieldTrack&  curveBPointVelocity,
 			             const  G4ThreeVector& currentEPoint,
-			             const  G4double      epsStep);
+			                    G4double      epsStep);
 
-      G4double  GetDeltaChord();
-      void      SetDeltaChord( G4double newval);
+      inline G4double  GetDeltaChord() const;
+      inline void      SetDeltaChord(G4double newval);
 
-      void SetChargeMomentumMass( const G4double pCharge,    // in e+ units
-				  const G4double pMomentum,
-				  const G4double pMass );
+      inline void SetChargeMomentumMass(G4double pCharge,  // in e+ units
+				        G4double pMomentum,
+				        G4double pMass );
         // Function to inform integration driver of charge, speed.
 
-      void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
-      G4MagInt_Driver* GetIntegrationDriver();
+      inline void SetIntegrationDriver(G4MagInt_Driver* IntegrationDriver);
+      inline G4MagInt_Driver* GetIntegrationDriver();
         // Access and set Driver.
 
    protected:   // .........................................................
 
-      G4bool AcceptableMissDist(G4double dChordStep);
+      inline G4bool AcceptableMissDist(G4double dChordStep) const;
 
-      G4double NewStep( const G4double stepTrialOld, 
-		        const G4double dChordStep,                // Current dchord estimate
-                              G4double& stepEstimate_Unconstrained ) ;  
+      G4double NewStep( G4double stepTrialOld, 
+		        G4double dChordStep,     // Current dchord estimate
+                        G4double& stepEstimate_Unconstrained ) ;  
       
       G4double FindNextChord( const  G4FieldTrack  yStart,
-		              const  G4double     stepMax,
+		              G4double     stepMax,
 			      G4FieldTrack& yEnd,
 			      G4double&    dyErr,      //  Error of endpoint 
 			      G4double     epsStep );  
+
+   private:  // ............................................................
+
+      G4ChordFinder(const G4ChordFinder&);
+      G4ChordFinder& operator=(const G4ChordFinder&);
+        // Private copy constructor and assignment operator.
 
    private:  // ............................................................
                                             // G4int    nOK, nBAD;

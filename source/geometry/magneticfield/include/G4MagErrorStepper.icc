@@ -5,25 +5,18 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.icc,v 1.6 2000-03-03 12:09:13 gcosmo Exp $
+// $Id: G4MagErrorStepper.icc,v 1.7 2000-11-01 15:15:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
-inline G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
-					    G4int numberOfVariables)
-     :G4MagIntegratorStepper(EqRhs,numberOfVariables)
+inline
+G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
+				     G4int numberOfVariables)
+     : G4MagIntegratorStepper(EqRhs,numberOfVariables)
   {
-      const G4int nvar = this->GetNumberOfVariables() ;
+      G4int nvar = this->GetNumberOfVariables() ;
       yMiddle=     new G4double[nvar]; 
       dydxMid=     new G4double[nvar];
       yInitial=    new G4double[nvar];
       yOneStep= new G4double[nvar];
-  }
-
-inline G4MagErrorStepper::~G4MagErrorStepper()
-  {
-      delete[] yMiddle;
-      delete[] dydxMid;
-      delete[] yInitial;
-      delete[] yOneStep;
   }

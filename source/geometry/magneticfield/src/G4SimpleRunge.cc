@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleRunge.cc,v 1.2 1999-12-15 14:49:50 gunter Exp $
+// $Id: G4SimpleRunge.cc,v 1.3 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Runge:
@@ -29,9 +29,9 @@
 //
 // Constructor
 
-G4SimpleRunge::G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables): 
-G4MagErrorStepper(EqRhs, numberOfVariables),
-  fNumberOfVariables(numberOfVariables)
+G4SimpleRunge::G4SimpleRunge(G4Mag_EqRhs *EqRhs, G4int numberOfVariables)
+  : G4MagErrorStepper(EqRhs, numberOfVariables),
+    fNumberOfVariables(numberOfVariables)
 {
    dydxTemp = new G4double[fNumberOfVariables] ;
    yTemp    = new G4double[fNumberOfVariables] ;
@@ -55,7 +55,7 @@ G4SimpleRunge::~G4SimpleRunge()
 void
 G4SimpleRunge::DumbStepper( const G4double  yIn[],
 			    const G4double  dydx[],
-			    const G4double  h,
+			          G4double  h,
 			 	  G4double  yOut[])
 {
   //  const G4int nvar = 6 ;

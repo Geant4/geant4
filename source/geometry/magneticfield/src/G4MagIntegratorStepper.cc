@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorStepper.cc,v 1.3 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4MagIntegratorStepper.cc,v 1.4 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagIntegratorStepper.hh"
@@ -15,8 +15,16 @@
 
 G4MagIntegratorStepper::G4MagIntegratorStepper(G4Mag_EqRhs *EqRhs,
 					       G4int       num_var)
+  : fEquation_Rhs(EqRhs),
+    fNumberOfVariables(num_var)
 {
-   fEquation_Rhs= EqRhs;
-   fNumberOfVariables = num_var;
 }
 
+G4MagIntegratorStepper::~G4MagIntegratorStepper()
+{
+}
+
+void G4MagIntegratorStepper::RightHandSide( const  double y[], double dydx[] )   
+{
+  fEquation_Rhs-> RightHandSide(y, dydx);
+}

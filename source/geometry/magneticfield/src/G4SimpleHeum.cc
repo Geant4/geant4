@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SimpleHeum.cc,v 1.3 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4SimpleHeum.cc,v 1.4 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  Simple Heum:
@@ -56,9 +56,9 @@ G4SimpleHeum::~G4SimpleHeum()
 
 void
 G4SimpleHeum::DumbStepper( const G4double  yIn[],
-			    const G4double  dydx[],
-			    const G4double  h,
-			 	  G4double  yOut[])
+			   const G4double  dydx[],
+			         G4double  h,
+			 	 G4double  yOut[])
 {
   //  const G4int nvar = 6 ;
 

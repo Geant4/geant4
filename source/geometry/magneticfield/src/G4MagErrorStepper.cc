@@ -5,19 +5,27 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.cc,v 1.7 2000-05-09 11:41:00 japost Exp $
+// $Id: G4MagErrorStepper.cc,v 1.8 2000-11-01 15:15:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagErrorStepper.hh"
 #include "G4ThreeVector.hh"
 #include "G4LineSection.hh"
 
+G4MagErrorStepper::~G4MagErrorStepper()
+{
+   delete[] yMiddle;
+   delete[] dydxMid;
+   delete[] yInitial;
+   delete[] yOneStep;
+}
+
 void
 G4MagErrorStepper::Stepper( const G4double yInput[],
-		     const G4double dydx[],
-		     const G4double hstep,
-		     G4double yOutput[],
-		     G4double yError []      )
+		            const G4double dydx[],
+		                  G4double hstep,
+		                  G4double yOutput[],
+		                  G4double yError []      )
 {  
    const G4int nvar = this->GetNumberOfVariables() ;
 
@@ -59,7 +67,7 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
 
 
 G4double
-G4MagErrorStepper::DistChord()   const 
+G4MagErrorStepper::DistChord() const 
 {
   // Estimate the maximum distance from the curve to the chord
   //
