@@ -359,7 +359,7 @@
       {
 	if(theIntegral[i]/theIntegral[GetVectorLength()-1]>0.15) 
 	{
-	  result = theData[min(i+1, GetVectorLength()-1)].GetX();
+	  result = theData[G4std::min(i+1, GetVectorLength()-1)].GetX();
           the15percentBorderCash = result;
 	  break;
 	}
