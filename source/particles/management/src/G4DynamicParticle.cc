@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.3 1999-04-13 08:00:18 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.4 1999-05-06 16:37:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -138,7 +138,7 @@ G4DynamicParticle::G4DynamicParticle(G4ParticleDefinition * aParticleDefinition,
     SetMomentumDirection(aParticleMomentum.x()/pModule,
                          aParticleMomentum.y()/pModule,
                          aParticleMomentum.z()/pModule);
-    if (totalEnergy > pModule2) {
+    if (totalEnergy > pModule) {
       G4double mass = sqrt(totalEnergy*totalEnergy - pModule2);
       theDynamicalMass = mass;
       SetKineticEnergy(totalEnergy-mass);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.hh,v 1.4 1999-04-23 00:47:58 kurasige Exp $
+// $Id: G4IonTable.hh,v 1.5 1999-05-06 16:37:36 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -84,8 +84,7 @@ class G4IonTable
 
  private:
    G4IonList*                  fIonList;
-   G4double                    electronMass, protonMass, neutronMass;
-      
+
    enum { numberOfElements = 110};
    static const G4String       elementName[numberOfElements];
 

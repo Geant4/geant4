@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4IonTable.cc,v 1.8 1999-04-23 00:48:07 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.9 1999-05-06 16:37:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,9 +40,6 @@
 G4IonTable::G4IonTable()
 {
   fIonList = new G4IonList();
-  protonMass=0.0;
-  neutronMass=0.0;
-  electronMass=0.0;
 }
 
 G4IonTable::~G4IonTable()
@@ -88,19 +85,14 @@ G4int G4IonTable::GetVerboseLevel() const
 
 G4ParticleDefinition* G4IonTable::GetIon(G4int Z, G4int A, G4int J, G4int Q)
 {
+  static G4double electronMass =  0.0;
+ 
   // Search ions with A, Z 
   G4ParticleDefinition* ion;
   G4bool isFound = false;
 
-  // check if proton/neutron/electron exits and get their masses
-  if (protonMass<=0.0) {
-    G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
-    G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
-    if ((proton == 0)||(neutron == 0)) {
-      G4Exception("G4IonTable: G4Proton or G4Neutron is not defined !!"); 
-    }
-    protonMass = proton->GetPDGMass();
-    neutronMass = neutron->GetPDGMass();
+  // check if electron exits and get their masses
+  if (electronMass<=0.0) {
     G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
     if (electron == 0) {
       G4Exception("G4IonTable: G4Electron is not defined !!"); 
@@ -207,6 +199,21 @@ G4String G4IonTable::GetIonName(G4int Z, G4int A, G4int J, G4int Q) const
 
 G4double  G4IonTable::GetNucleusMass(G4int Z, G4int A) const
 {
+ static G4double protonMass = 0.0;
+ static G4double neutronMass = 0.0;
+
+ // check if proton/neutron/electron exits and get their masses
+  if (protonMass<=0.0) {
+    G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
+    G4ParticleDefinition* neutron = G4ParticleTable::GetParticleTable()->FindParticle("neutron");
+    if ((proton == 0)||(neutron == 0)) {
+      G4Exception("G4IonTable: G4Proton or G4Neutron is not defined !!"); 
+    }
+    protonMass = proton->GetPDGMass();
+    neutronMass = neutron->GetPDGMass();
+  }
+
+  // calculate nucleus mass
   G4ParticleDefinition* ion=0;
   G4double mass;
   if ( (Z<=2) ) {
