@@ -1,6 +1,0 @@
-* MEDERNACH Emmanuel  Aug 2000
-Add parameter script support with automatic exit
-Add a directory for geant4 script and for log files
-Add a pause like fred/pause to be used for visualization
-Add the current solid in the log file (second line in the log file) 
-script to visualize errors with comment : ErrorView

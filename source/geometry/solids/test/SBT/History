@@ -1,0 +1,19 @@
+
+           History file for geometry/solids/test/SBT
+	   -----------------------------------------
+This file should be used to briefly summarize all major modifications
+introduced in the code and keep track of all tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Aug 22, 2000 - E.Medernach
+--------------------------
+- Added parameter script support with automatic exit
+- Added a directory for geant4 script and for log files
+- Added a pause like fred/pause to be used for visualization
+- Added the current solid in the log file (second line in the log file) 
+  script to visualize errors with comment: ErrorView
