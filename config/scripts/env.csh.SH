@@ -76,7 +76,7 @@ endif
 #+
 if ( X$g4elasticdata != X ) then
 setenv G4ELASTICDATA "$g4elasticdata"
-echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
 endif
 
 #

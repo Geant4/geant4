@@ -102,7 +102,7 @@ if [ X$g4elasticdata != X ] ; then
 G4ELASTICDATA="$g4elasticdata"
 export G4ELASTICDATA
 if [ X\$g4non_display = X ] ; then
-echo "On this machine the G4ELASTICDATA=\$g4elasticdata"
+echo "On this machine the G4ELASTICDATA=\$G4ELASTICDATA"
 fi
 fi
 
