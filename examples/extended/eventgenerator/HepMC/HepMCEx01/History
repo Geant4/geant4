@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2002-05-28 14:05:17 murakami Exp $
+$Id: History,v 1.3 2002-11-19 10:23:45 murakami Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,9 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Nov. 19, 2002  K.Murakami
+- modified as is ExN04. (physics lists and vis. manager)
+- "std" namespace left/not cared was modified to "G4std".
 
 May. 28, 2002  K.Murakami
-- rename classes and filenames.
+- renamed classes and filenames.
 
 Apr. 15, 2002  K.Murakami
 - Creared.
