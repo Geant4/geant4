@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testPropagateMagField.cc,v 1.3 2000-04-12 18:30:03 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.4 2001-02-20 18:13:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -323,11 +323,18 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 
 
        // ->GetChordFinder().SetChargeAndMomentum(
+       G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
+       G4double kineticEnergy =  momentum*momentum /
+                  ( sqrt( momentum*momentum + proton_mass_c2 * proton_mass_c2 ) 
+		    + proton_mass_c2 );
+       G4double velocity = momentum / ( proton_mass_c2 + kineticEnergy );
+       G4double labTof= 10.0*ns, properTof= 0.1*ns;
+       G4ThreeVector Spin(1.0, 0.0, 0.0);
+                                                   // Momentum in Mev/c ?
        SetChargeMomentumMass(
 		      +1,                    // charge in e+ units
-		  (0.5+iparticle*10.0) * proton_mass_c2,
-                                             // Momentum in Mev/c ?
+		      momentum, 
 		      proton_mass_c2); 
        G4cout << G4endl;
        G4cout << "Test PropagateMagField: ***********************" << G4endl
@@ -345,8 +352,20 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
 	  // G4cerr << "Starting Step " << istep << " in volume " 
 	       // << located->GetName() << G4endl;
 
-	  step_len=pMagFieldPropagator->ComputeStep( Position, UnitMomentum, 
-						     physStep, safety
+          G4FieldTrack  initTrack( Position, 
+				   UnitMomentum,
+				   0.0,            // starting S curve len
+				   kineticEnergy,
+				   proton_mass_c2,
+				   velocity,
+				   labTof, 
+				   properTof,
+				   0              // or &Spin
+				   ); 
+
+	  step_len=pMagFieldPropagator->ComputeStep( initTrack, 
+						     physStep, 
+						     safety
 #ifdef G4MAG_CHECK_VOLUME
 						     ,located);
 #else
