@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ChordFinder.cc,v 1.29 2002-06-10 17:18:07 sussi Exp $
+// $Id: G4ChordFinder.cc,v 1.30 2002-11-06 17:10:19 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,7 +256,14 @@ G4double G4ChordFinder::NewStep(G4double  stepTrialOld,
 #if 1 
   // const G4double  threshold = 1.21, multiplier = 0.9;   //  0.9 < 1 / sqrt(1.21)
 
-  stepEstimate_Unconstrained = stepTrialOld * sqrt( fDeltaChord / dChordStep );
+  if (dChordStep > 0.0)
+  {
+    stepEstimate_Unconstrained = stepTrialOld * sqrt( fDeltaChord / dChordStep );
+  }
+  else
+  {
+    stepEstimate_Unconstrained = stepTrialOld ;
+  }
   stepTrial =  0.98 * stepEstimate_Unconstrained;
 
   // if ( dChordStep < threshold * fDeltaChord ){
