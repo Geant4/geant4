@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2004-12-02 16:33:15 vnivanch Exp $
+$Id: History,v 1.24 2005-03-02 12:30:36 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+02-03-05 mma (testem7-V07-00-00)
+- RunAction : put a protection for the creation of analysis factory;
 
 02 Dec 04: V.Ivant (testem7-V06-02-04)
 - Migration to cmath
