@@ -120,10 +120,6 @@ void Tst01DetectorConstruction::SwitchDetector()
     ConstructDetectors();
   }
 
-  G4bool geometry_initialised=0;
-
-  if (fWorldPhysVol) geometry_initialised=1;
-
   switch(detectorChoice)
   { 
     case 1:
@@ -141,10 +137,7 @@ void Tst01DetectorConstruction::SwitchDetector()
       fWorldPhysVol = simpleBoxDetector ;
     }
   }
-  G4RunManager* theRunManager = G4RunManager::GetRunManager();
-  theRunManager->GeometryHasBeenModified();
-  theRunManager->DefineWorldVolume(fWorldPhysVol);
-  if (geometry_initialised) theRunManager->ResetNavigator();
+  G4RunManager::GetRunManager()->DefineWorldVolume(fWorldPhysVol);
 }
 
 /////////////////////////////////////////////////////////////////////
