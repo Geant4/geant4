@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.cc,v 1.15 2001-12-10 08:36:54 kurasige Exp $
+// $Id: G4Track.cc,v 1.16 2001-12-12 11:07:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -49,8 +49,9 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
     fpDynamicParticle(apValueDynamicParticle),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
-    fWeight(1.0),
+    fStepLength(0.0),         fWeight(1.0),
     fpStep(0),
+    fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
     fpUserInformation(0)
 {    
@@ -66,8 +67,9 @@ G4Track::G4Track()
     fpDynamicParticle(0),
     fTrackStatus(fAlive),
     fBelowThreshold(false),   fGoodForTracking(false),
-    fWeight(1.0),
+    fStepLength(0.0),         fWeight(1.0),
     fpStep(0),
+    fVtxKineticEnergy(0.0),
     fpLVAtVertex(0),          fpCreatorProcess(0),
     fpUserInformation(0)
 {
@@ -97,6 +99,7 @@ G4Track & G4Track::operator=(const G4Track &right)
    fLocalTime = right.fLocalTime;
    fTrackLength = right.fTrackLength;
    fWeight = right.fWeight;
+   fStepLength = right.fStepLength;
 
    // Track ID (and Parent ID) is not copied and set to zero for new track
    fTrackID = 0;
