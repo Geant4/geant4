@@ -1,4 +1,4 @@
-# $Id: TestEm2.in,v 1.1 2000-01-21 14:40:57 maire Exp $
+# $Id: TestEm2.in,v 1.2 2000-06-20 12:58:06 maire Exp $
 #
 # Macro file for "TestEm2.cc" 
 # (can be run in batch, without graphic)
@@ -22,7 +22,7 @@
 /event/drawTracks none
 /event/printModulo 20
 #
-/gun/particle electron
+/gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
 
