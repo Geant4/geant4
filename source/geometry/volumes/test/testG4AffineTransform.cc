@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4AffineTransform.cc,v 1.1 1999-01-08 16:31:55 gunter Exp $
+// $Id: testG4AffineTransform.cc,v 1.2 1999-04-19 18:51:39 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -91,15 +91,37 @@ G4bool testG4AffineTransform()
 	assert(ApproxEqual(vec,G4ThreeVector(2,-1,-2)));
 
 	G4AffineTransform invTf=rtTf.Inverse();
+
+#if 0
+	G4ThreeVector forwV= rtTf.TransformPoint(xyzVec);
+	G4ThreeVector backV= invTf.TransformPoint(forwV);
+        
+        G4ThreeVector diffV= xyzVec - backV; 
+        G4cout << " Diff of xyzVec and backV is " << diffV << endl;
+#endif
 	assert(ApproxEqual(invTf.TransformPoint(rtTf.TransformPoint(xyzVec)),
 			   xyzVec));
+
 	invTf*=rtTf;
 // Might need tolerant checking:
 	assert(ApproxEqual(invTf,origin));
 
 	invTf=rtTf;
 	invTf.Invert();
+
+        G4double MaxAbsDiff(const G4AffineTransform &tf1,
+	                    const G4AffineTransform &tf2); 
+        G4double maxabsdiff= MaxAbsDiff( invTf, rtTf.Inverse() );
+        G4cout << "Max difference is " << maxabsdiff << endl;
+	assert( maxabsdiff <= 1.e-12 );
+
+        G4AffineTransform  rtTf_inv=rtTf.Inverse();
+	assert(MaxAbsDiff( invTf, rtTf.Inverse()) <= 1.e-12 );
+#if 0
+	assert(invTf==rtTf_inv);
+         
 	assert(invTf==rtTf.Inverse());
+#endif
 
 	G4AffineTransform txTf2(xyzVec);
 	txTf2+=xyzVec;
@@ -128,3 +150,16 @@ int main()
 	return 0;
 }
 
+G4double MaxAbsDiff(const G4AffineTransform &tf1,
+	            const G4AffineTransform &tf2)
+{
+        G4double maxabs= 0.0;
+	for (G4int i=0;i<15;i++)
+		{
+                  G4double absdiff; 
+
+		  absdiff= fabs(tf1[i]-tf2[i]);
+                  maxabs= max(absdiff, maxabs); 
+		}
+	return maxabs;
+}
