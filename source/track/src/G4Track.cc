@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.6 2001-02-17 07:45:36 kurasige Exp $
+// $Id: G4Track.cc,v 1.7 2001-02-17 08:10:53 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -152,7 +152,7 @@ G4double G4Track::GetVelocity() const
           // light velocity = c/reflection-index 
 	  velocity /= 
 	    mat->GetMaterialPropertiesTable()->GetProperty("RINDEX")->
-	    GetMinProperty() ; 
+	    GetProperty((fpDynamicParticle->GetMomentum()).mag()) ; 
 	}
       }  
     }
