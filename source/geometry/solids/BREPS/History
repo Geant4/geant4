@@ -1,4 +1,4 @@
-$Id: History,v 1.45 2002-11-06 23:33:10 radoone Exp $
+$Id: History,v 1.46 2002-11-18 09:21:24 gcosmo Exp $
 ----------------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
 07/11/2002 : R. Chytracek      breps-V04-01-02
 - All BREP solids + G4PlacedSolids now implement virtual StreamInfo(...) method
   end properly expose their construction parameters via this interface to an
