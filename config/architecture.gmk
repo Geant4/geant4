@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.11 1999-05-06 02:17:09 gcosmo Exp $
+# $Id: architecture.gmk,v 1.12 1999-05-07 00:58:21 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -41,6 +41,9 @@ MAKEFLAGS= --no-print-directory
 # Specify G4USE_STL when using STL, even for using our "temporary"
 # STLinterface to RogueWave.
 #
+ifdef G4USE_OSPACE
+  G4USE_STL := 1
+endif
 ifdef G4USE_STL
   CPPFLAGS  += -DG4USE_STL
 endif
@@ -155,8 +158,10 @@ endif
 
 ifdef G4USE_STL
   RWINC      := $(G4BASE)/global/STLInterface
-  OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
-  OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
+  ifdef G4USE_OSPACE
+    OSPACEDIR  := /afs/cern.ch/sw/geant4/dev/ObjectSpace/$(G4SYSTEM)/pro/ToolKit
+    OSPACELIBS := -L$(OSPACEDIR)/ospace/lib -lospace
+  endif
 else
   ifndef RWBASE
     RWBASE    := /afs/cern.ch/sw/geant4/dev/rogue/$(G4SYSTEM)
@@ -372,10 +377,10 @@ ifeq ($(G4SYSTEM),AIX-xlC)
       OBJY_LDLIB := oo_shar.4.02
     endif
   endif
-#  ifdef G4USE_STL
-#    CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-#    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
-#  endif
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_AIX_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+  endif
 endif
 
 # -------- SUN ---------
@@ -416,7 +421,7 @@ ifeq ($(G4SYSTEM),SUN-CC)
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
   VISLIBS  +=  -L/usr/lib -lsocket -lnsl
-  ifdef G4USE_STL
+  ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_SOLARIS_2_5 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS
     CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
   endif
@@ -460,7 +465,7 @@ ifeq ($(G4SYSTEM),HP-aCC)
       OBJY_LDLIB := oo
     endif
   endif
-  ifdef G4USE_STL
+  ifdef G4USE_OSPACE
     CPPFLAGS += -DOS_HPUX_10_20 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
     CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
   endif
@@ -491,10 +496,10 @@ ifeq ($(G4SYSTEM),SGI-CC)
     OGLLIBS   := -L/usr/lib -lGLU -lGL
   endif
   CPPFLAGS += -DSOCKET_IRIX_SOLARIS
-#  ifdef G4USE_STL
-#    CPPFLAGS += -DOS_IRIX_6_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-#    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
-#  endif
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_IRIX_6_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+  endif
 endif
 
 # -------- DEC ---------
@@ -524,7 +529,11 @@ ifeq ($(G4SYSTEM),DEC-cxx)
 #   OGLLIBS   := -lMesaGLU -lMesaGL
   endif
   ifdef G4USE_STL
-    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+#    CPPFLAGS += -DG4USE_OLDSTL
+    CXXFLAGS += -nostdnew
+  endif
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_OSF1_4 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING -DOS_NO_ALLOCATORS -D__NO_EDG_EXCEPTION_CLASSES
     CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
   endif
 endif
@@ -557,10 +566,10 @@ ifeq ($(G4SYSTEM),Linux-g++)
     OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
   endif
   OIVFLAGS  += -I$(OIHOME)/include 
-#  ifdef G4USE_STL
-#    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
-#    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
-#  endif
+  ifdef G4USE_OSPACE
+    CPPFLAGS += -DOS_LINUX_2 -DOS_NEW_CHECK -DOS_STL_ASSERT -DOS_NO_WSTRING  -DOS_NO_ALLOCATORS
+    CPPFLAGS += -I$(OSPACEDIR)/ospace/std -I$(OSPACEDIR)
+  endif
 endif
 
 # ------ WIN32/VC/NICE ------

@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.14 1999-05-06 15:47:27 stesting Exp $
+# $Id: binmake.gmk,v 1.15 1999-05-07 00:58:22 gcosmo Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -176,7 +176,7 @@ ifdef G4ODBMS
 
   LDLIBS4 += -l$(OBJY_LDLIB) -lHepODBMS
 endif
-ifdef G4USE_STL
+ifdef G4USE_OSPACE
   LDLIBS4 += $(OSPACELIBS)
 endif
 

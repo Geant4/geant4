@@ -1,4 +1,4 @@
-$Id: History,v 1.17 1999-05-06 15:47:26 stesting Exp $
+$Id: History,v 1.18 1999-05-07 00:58:20 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+6th May 1999  Gabriele Cosmo
+- Introduced G4USE_OSPACE for ObjectSpace STL. If defined G4USE_STL is
+  set as well. Modified architecture.gmk and binmake.gmk.
 
 6th May 1999  John Allison
 - Removed extra library for circular dependencies.  Now all solved!
