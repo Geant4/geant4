@@ -102,7 +102,7 @@ void G4HepRepSceneHandler::open() {
 
     char fname [256];
     G4std::ostrstream ost(fname, 256);
-    ost << GetScene()->GetName() << fileNo++ << ".heprep" << G4std::ends;
+    ost << GetScene()->GetName() << "-" << fileNo++ << ".heprep" << G4std::ends;
 
 #ifdef DEBUG
     G4cout << "G4HepRepSceneHandler::open(" << fname << ") " << G4endl;
@@ -264,7 +264,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
 	MarkerSizeType markerType;
 	G4double size = GetMarkerDiameter( line , markerType );
     instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
+	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
 
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
@@ -288,7 +288,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
 	MarkerSizeType markerType;
 	G4double size = GetMarkerRadius( circle , markerType );
     instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
+	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;
@@ -368,7 +368,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
 	MarkerSizeType markerType;
 	G4double size = GetMarkerRadius( square , markerType );
     instance->addAttValue("MarkSize", size);
-	instance->addAttValue("MarkType", (markerType == screen) ? "Symbol" : "Real");
+	instance->addAttValue("MarkType", (markerType == screen) ? G4String("Symbol") : G4String("Real"));
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
     delete point;
