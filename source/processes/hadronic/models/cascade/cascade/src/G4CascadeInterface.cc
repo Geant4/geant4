@@ -185,12 +185,10 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   // Get nuclei fragments
   if(!nucleiFragments.empty()) { 
     nucleiIterator ifrag;
-    G4std::vector<G4double> mom(3);
 
     for(ifrag = nucleiFragments.begin(); ifrag != nucleiFragments.end(); ifrag++) {
       G4double eKin = ifrag->getKineticEnergy() * GeV;
-
-      mom = ifrag->getMomentum();
+      G4std::vector<G4double> mom = ifrag->getMomentum();
       G4ThreeVector aMom(mom[1], mom[2], mom[3]);
       aMom = aMom.unit();
       G4LorentzVector momentum(aMom, eKin); // fix eKin to eTotal
@@ -217,5 +215,3 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   return &theResult;
 }
-
-
