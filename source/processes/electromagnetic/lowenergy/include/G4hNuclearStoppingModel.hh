@@ -70,33 +70,33 @@ public:
 	            const G4Material* material,
                           G4double kineticEnergy);
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle,
-                           const G4Material* material) const
-                          {return highEnergyLimit;};
+  G4double HighEnergyLimit(const G4ParticleDefinition* ,
+                           const G4Material* ) const
+  {return highEnergyLimit;};
  
-  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle,
-                          const G4Material* material) const
-                          {return lowEnergyLimit;};
+  G4double LowEnergyLimit(const G4ParticleDefinition* ,
+                          const G4Material* ) const
+  {return lowEnergyLimit;};
 
-  G4double HighEnergyLimit(const G4ParticleDefinition* aParticle) const
-                          {return highEnergyLimit;};
+  G4double HighEnergyLimit(const G4ParticleDefinition* ) const
+  {return highEnergyLimit;};
  
-  G4double LowEnergyLimit(const G4ParticleDefinition* aParticle) const
-                          {return lowEnergyLimit;};
+  G4double LowEnergyLimit(const G4ParticleDefinition* ) const
+  {return lowEnergyLimit;};
  
-  G4bool IsInCharge(const G4DynamicParticle* particle,
-		    const G4Material* material) const
-                          {return true;};
+  G4bool IsInCharge(const G4DynamicParticle* ,
+		    const G4Material* ) const
+  {return true;};
 
-  G4bool IsInCharge(const G4ParticleDefinition* aParticle,
-		    const G4Material* material) const
-                          {return true;};
+  G4bool IsInCharge(const G4ParticleDefinition* ,
+		    const G4Material* ) const
+  {return true;};
 
   void SetNuclearStoppingFluctuationsOn() 
-               {nStopingPowerTable->SetNuclearStoppingFluctuationsOn();}; 
+  {nStopingPowerTable->SetNuclearStoppingFluctuationsOn();}; 
 
   void SetNuclearStoppingFluctuationsOff() 
-               {nStopingPowerTable->SetNuclearStoppingFluctuationsOff();}; 
+  {nStopingPowerTable->SetNuclearStoppingFluctuationsOff();}; 
 
 
 protected:

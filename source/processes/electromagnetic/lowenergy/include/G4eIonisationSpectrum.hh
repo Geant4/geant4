@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 // 
-// $Id: G4eIonisationSpectrum.hh,v 1.4 2002-05-30 19:52:23 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.hh,v 1.5 2003-05-20 20:03:34 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -82,8 +82,7 @@ public:
 
   G4double MaxEnergyOfSecondaries(G4double kineticEnergy,
                                   G4int Z = 0,
-				  const G4ParticleDefinition* pd=0) const
-  { return 0.5*kineticEnergy; };
+				  const G4ParticleDefinition* pd=0) const;
 
   G4double Excitation(G4int Z, G4double e) const;
   
