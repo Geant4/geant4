@@ -6,6 +6,7 @@
 #include <vector>
 #include "G4ping.hh"
 #include "G4Delete.hh"
+#include "G4Neutron.hh"
   
   G4BinaryLightIonReaction::G4BinaryLightIonReaction()
   : theModel(), theHandler(), theProjectileFragmentation(&theHandler) {}
@@ -143,7 +144,7 @@
     G4int i(0);
     for(i=0; i<result->size(); i++)
     {
-      // hpw if( (*result)[i]->GetNewlyAdded() ) 
+      if( (*result)[i]->GetNewlyAdded() ) 
       {
         fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
       }
@@ -158,15 +159,36 @@
     aProRes.SetNumberOfCharged(0);
     aProRes.SetNumberOfHoles(a1-resA);
     aProRes.SetMomentum(momentum);
+    G4ParticleDefinition * resDef(0);
+    if( resZ>0 || resA>1)
+    {
+       resDef = G4ParticleTable::GetParticleTable()->FindIon(resZ,resA,0.0,resZ);  
+    }
+    else if(resA!=0)
+    {
+      resDef=G4Neutron::NeutronDefinition();
+    }
 
     // call precompound model
     G4ReactionProductVector * proFrag(0);
-    if(resA>0) proFrag = theProjectileFragmentation.DeExcite(aProRes);
-    else proFrag=new G4ReactionProductVector;
-
+    if(resA>1) 
+    {
+      aProRes.SetParticleDefinition(resDef);
+      proFrag = theProjectileFragmentation.DeExcite(aProRes);
+    }
+    else if(resA!=0)
+    {
+      proFrag=new G4ReactionProductVector;
+      G4ReactionProduct * it(0);
+      if(0==resZ) it = new G4ReactionProduct(G4Neutron::NeutronDefinition());
+      if(1==resZ) it = new G4ReactionProduct(G4Proton::ProtonDefinition());
+      it->SetTotalEnergy(momentum.t());
+      it->SetMomentum(momentum.vect());
+      proFrag->push_back(it);
+    }
     // collect the evaporation part
     G4ReactionProductVector::iterator ii;
-    for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
+    if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
     {
       result->push_back(*ii);
     }

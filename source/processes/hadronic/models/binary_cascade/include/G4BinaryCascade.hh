@@ -74,6 +74,19 @@ public:
 
 private:
 
+  G4int GetTotalCharge(G4std::vector<G4KineticTrack *> & aV)
+  {
+    G4double result = 0;
+    G4std::vector<G4KineticTrack *>::iterator i;
+    for(i = aV.begin(); i != aV.end(); ++i)
+    {
+       if((*i)->GetDefinition() == G4Proton::Proton())
+       {
+          ++result;
+       }
+    }
+    return result;
+  }
   void PrintWelcomeMessage();
   void BuildTargetList();
   void FindCollisions(G4KineticTrackVector * secondaries);

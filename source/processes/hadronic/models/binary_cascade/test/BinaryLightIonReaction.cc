@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BinaryLightIonReaction.cc,v 1.3 2003-05-22 09:00:14 hpw Exp $
+// $Id: BinaryLightIonReaction.cc,v 1.4 2003-05-27 09:22:22 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -192,8 +192,9 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the Proton energy [MeV]"<<G4endl;
+   G4cout << "Please enter the projectile energy [AMeV]"<<G4endl;
    G4cin >> incomingEnergy;
+   incomingEnergy*=a;
    G4int errorOne;
    G4cout << "Please enter the problematic event number"<<G4endl;
    G4cin >> errorOne;
