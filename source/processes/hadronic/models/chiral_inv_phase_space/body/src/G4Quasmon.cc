@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.cc,v 1.19 2000-09-24 16:03:19 mkossov Exp $
+// $Id: G4Quasmon.cc,v 1.20 2000-09-25 07:26:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -2976,7 +2976,7 @@ G4QHadronVector* G4Quasmon::Fragment(G4QNucleus& nucEnviron)
   for (int hadron=0; hadron<nHadrs; hadron++)
   {
     G4QHadron* curHadr = new G4QHadron(theQHadrons[hadron]);
-    theFragments->insert(curHadr);
+    theFragments->insert(curHadr);         // (delete equivalent - user)
   }
   return theFragments;
 }

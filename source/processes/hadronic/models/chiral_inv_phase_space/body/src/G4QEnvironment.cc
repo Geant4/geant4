@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.17 2000-09-24 16:03:18 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.18 2000-09-25 07:26:36 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -414,6 +414,7 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 		}
         delete output->at(ind);                    // destruction of the hadron of "output"  ===========^
 	  } // End of LOOP over "output" of annihilation
+      delete output;                               // @@ not needed delete @@                        ^
       if(!efFlag)                                  // ==> Not Energy Flux case: MultyQuasmon case    ^
 	  {
         if(!(input.entries())) return;             // *** RETURN *** Without Quasmon creation--------^
@@ -431,22 +432,23 @@ void G4QEnvironment::CreateQuasmon(const G4QContent& projQC, const G4LorentzVect
 #endif
         input.clearAndDestroy();                   // Here we are DESTROING input >------------------^
         theEnvironment =muq->GetEnvironment();     // Get residual Environment after interaction
-        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons **!!DESTROY!!** <-------------+
+        G4QuasmonVector* outQ = muq->GetQuasmons();// Copy of quasmons **!!DESTROY!!** <---------------+
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: before delete muq"<<G4endl;
 #endif
         delete muq;
-        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup); // Recover user's parameters for Quasmons ^
-	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output           ^
+        G4Quasmon::SetParameters(QTemper,QSOverU,QEtaSup); // Recover user's parameters for Quasmons   ^
+	    G4int nMQ = outQ->entries();               // A#of Quasmons in MultyQuasmon output             ^
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: after GetQuasmon nMQ="<<nMQ<<G4endl;
 #endif
-        if(nMQ) for(G4int mh=0; mh<nMQ; mh++)      // @@ One can escape creation/distruction but...  ^
+        if(nMQ) for(G4int mh=0; mh<nMQ; mh++)      // @@ One can escape creation/distruction but...    ^
         {
           G4Quasmon* curQ = new G4Quasmon(outQ->at(mh));
-          theQuasmons.insert(curQ);                // Here we fill in theQuasmons new Quasmon-copies ^
-          delete outQ->at(mh);                     // (delete equivalent for members) >--------------+
+          theQuasmons.insert(curQ);                // Here we fill in theQuasmons new Quasmon-copies   ^
+          delete outQ->at(mh);                     // (delete equivalent for members) >----------------^
 		}
+        delete outQ;                               // @@ not needed delete @@
 #ifdef pdebug
 	    G4cout<<"G4QEnvironment::CreateQ: befor return"<<G4endl;
 #endif
@@ -740,10 +742,10 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
               if(dM>0)
 			  {
                 theQuasmons[iq]->InitQuasmon(totQC,tot4M);// Update the week Quasmon
-                G4QHadronVector* output=theQuasmons[iq]->Fragment(vE); // !!!DESTROY!!! <---^
+                G4QHadronVector* curout=theQuasmons[iq]->Fragment(vE); // !!!DESTROY!!! <---^
                 G4int ast=theQuasmons[iq]->GetStatus();  // Status of the Quasmon           ^
                 if(!ast) nlq--;                   // Reduce nlq is Quasmon decayed          ^
-                G4int nHadrons = output->entries();
+                G4int nHadrons = curout->entries();
 #ifdef pdebug
                 G4cout<<"G4QEnv::HadrQEnv:VacuumRecoveredQ#"<<iq<<",nH="<<nHadrons<<G4endl;
 #endif
@@ -751,16 +753,18 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 	            {
     	          for (G4int ih=0; ih<nHadrons; ih++)
                   {
-                    G4QHadron* curH = new G4QHadron(output->at(ih));
+                    G4QHadron* curH = new G4QHadron(curout->at(ih));
 #ifdef pdebug
                     G4cout<<"G4QEnv::HadrQE:Recovered, H#"<<ih<<", QPDG="<<curH->GetQPDG()
                           <<",4M="<<curH->Get4Momentum()<<G4endl;
 #endif
                     theQHadrons.insert(curH);     // Fill hadron-copy (delete equivalent)   ^
-                    delete output->at(ih);        // >--------------------------------------^
+                    delete curout->at(ih);        // >--------------------------------------^
                   }
+                  delete curout;                  // @@ not needed delete @@ ---------------^
                   break;
 	            }
+                else delete curout;               // @@ not needed delete @@ ---------------^
 			  }
               nOfOUT  = theQHadrons.entries();    // Update the value of OUTPUT entries
 		    }
@@ -771,6 +775,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 	        }
 		  } // End of PANIC treatment
 		} // End of trouble handling with Quasmon decay in Vacuum
+        delete output;                           // @@ not needed delete @@
 	  } // End of check for the already decayed Quasmon
 	} // End of the LOOP over Quasmons
     return theQHadrons;
@@ -1032,6 +1037,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 			    }
 			  }
 			}
+            delete output;                       // @@ not needed delete @@
 		  }
 	    } // End of fragmentation LOOP over Quasmons (jq)
       }
@@ -1139,20 +1145,20 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
 		  {
             G4Quasmon* resid = new G4Quasmon(totQC,tot4M); // deleted 3 lines below
             G4QNucleus vacuum(90000000);
- 	        G4QHadronVector* output=resid->Fragment(vacuum); // **!!DESTROY!!** <-^
+ 	        G4QHadronVector* curout=resid->Fragment(vacuum); // **!!DESTROY!!** <-^
             delete resid;
-            G4int nHadrons = output->entries();
+            G4int nHadrons = curout->entries();
             if(nHadrons>0)                       // Transfer QHadrons to Output   ^
 	        {
     	      for (G4int ih=0; ih<nHadrons; ih++)
               {
-                G4QHadron* curH = new G4QHadron(output->at(ih));
+                G4QHadron* curH = new G4QHadron(curout->at(ih));
 #ifdef pdebug
             G4cout<<"G4QEnv::HadrQE:NewB<2, H#"<<ih<<", QPDG="<<curH->GetQPDG()
                   <<",4M="<<curH->Get4Momentum()<<G4endl;
 #endif
                 theQHadrons.insert(curH);        // Insert new hadron-copy        ^
-                delete output->at(ih);           // >-----------------------------^
+                delete curout->at(ih);           // >-----------------------------^
 			  }
 	        }
 			else
@@ -1160,6 +1166,7 @@ G4QHadronVector G4QEnvironment::HadronizeQEnvironment()
               G4cerr<<"***G4QEnv::HadronizeQEnv: MQ="<<tot4M.m()<<",QC="<<totQC<<G4endl;
 			  G4Exception("G4QEnvironment::HadronizeQEnv: Quasmon doesn't decay");
 			}
+            delete curout;                       // @@ not needed delete @@
             return theQHadrons;
 		  }
 		}
@@ -1992,7 +1999,7 @@ G4QHadronVector* G4QEnvironment::Fragment()
     if(!nF&&(hPDG>80000000&&hPDG<90000000||hPDG==90000000||
              hPDG>90000000&&(hPDG%1000000>200000||hPDG%1000>300)))
       G4cerr<<"***G4QEnv::Fragment: PDG("<<hadron<<")="<<hPDG<<", M="<<M<<G4endl;
-    theFragments->insert(curHadr);                    // (delete equivalent)
+    theFragments->insert(curHadr);                    // (delete equivalent - user)
   }
 #ifdef pdebug
   G4cout<<"G4QEnvironment::Fragment ===OUT==="<<G4endl;
@@ -2015,7 +2022,7 @@ G4QuasmonVector* G4QEnvironment::GetQuasmons()
           <<theQuasmons[iq]->GetQC()<<",M="<<theQuasmons[iq]->Get4Momentum().m()<<G4endl;
 #endif
     G4Quasmon* curQ = new G4Quasmon(theQuasmons[iq]);
-    quasmons->insert(curQ);                       // (delete equivalent)
+    quasmons->insert(curQ);                       // (delete equivalent - user)
   }
 #ifdef pdebug
   G4cout<<"G4QEnvironment::GetQuasmons ===OUT==="<<G4endl;

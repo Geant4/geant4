@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.10 2000-09-16 14:16:39 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.11 2000-09-25 07:26:21 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -123,7 +123,7 @@ inline G4LorentzVector G4Quasmon::Get4Momentum() const {return q4Mom;}
 inline G4QContent      G4Quasmon::GetQC()        const {return valQ;}
 inline G4QPDGCode      G4Quasmon::GetQPDG()      const {return G4QPDGCode(valQ);}
 inline G4int           G4Quasmon::GetStatus()    const {return status;}
-inline void            G4Quasmon::ClearOutput()        {theQHadrons.clear();}
+inline void            G4Quasmon::ClearOutput()        {theQHadrons.clearAndDestroy();}
 inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)
 {
   G4QParticle* part = theWorld.GetQParticle(PDG);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QCHIPSWorld.cc,v 1.2 2000-09-10 13:58:57 mkossov Exp $
+// $Id: G4QCHIPSWorld.cc,v 1.3 2000-09-25 07:26:35 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,14 +78,17 @@ G4QParticleVector* G4QCHIPSWorld::InitCHIPSWorld(G4int nOfParts)
       if (nOfParts>mnofParts)
       {
         nOfParts=mnofParts;
-        G4cerr<<"G4QCHIPSWorld::InitCHIPSWorld: nOfParts="<<nOfParts<<" >"<<mnofParts<<G4endl;
+        G4cerr<<"***G4QCHIPSWorld::InitCHIPSWorld: nOfParts="<<nOfParts<<" >"<<mnofParts<<G4endl;
       }
       if (nOfParts<10) nOfParts=10;             // Minimal number of particles for Vacuum
+#ifdef debug
+      G4cerr<<"G4QCHIPSWorld::InitCHIPSWorld:Should be once, i="<<init<<",n="<<nOfParts<<",c="<<curNP<<G4endl;
+#endif
       for (G4int i=curNP; i<nOfParts; i++) 
       {
         G4QParticle* curPart = new G4QParticle; // Created
         curPart->InitQParticle(i);              //   ||
-        theWorld.insert(curPart);               // Filled
+        theWorld.insert(curPart);               // Filled (forever but once)
 #ifdef debug
         G4cout<<"G4QCHIPSWorld::InitCHIPSWorld: Particle#"<<i<<"(of "<<nOfParts<<") done"<<endl;
 #endif
