@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Step.cc,v 1.2 1999-02-17 12:49:53 tsasaki Exp $
+// $Id: G4Step.cc,v 1.3 1999-04-28 12:28:45 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,7 +30,6 @@
 // ---------------------------------------------------------------
 
 #include "G4Step.hh"
-#include "G4VProcess.hh"
 
 ////////////////
 G4Step::G4Step()
