@@ -1,87 +1,133 @@
--------------------------------------------------------------------
-$Id: README,v 1.1 2002-09-30 13:07:56 pia Exp $
--------------------------------------------------------------------
 
      =========================================================
- 		      Geant4 - Liquid Argon calorimeter example
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                             README
-                      ---------------------
+                             lArCal 
+                            --------
 
 
+This example is intended to simulate the Liquid Argon Calorimeter
+of the ATLAS Detector at LHC. 
 
-------How to run the new version of AIDA:----------------------
+1. GEOMETRY DEFINITION
+------------------------
+
+The liquid Argon calorimeter consists of two modules; an electromagnetic 
+and a hadronic one whose geometry parameters are defined in 
+FCALEMModuleParameters.input and FCALHadModuleParameters.input files.
+It contains a FCALTestbemSetup class whose geometry is given by 
+FCALTestbeamSetupParameters.input. See these files for details concerning to
+radius, lenght and angles of the different components. 
 
 
-1)Aida  platform for Linux:gcc compiler 2.95.2
-
--------------------------enviroment with the compiler 2.95.2 on lxplus---------
-
-
-setenv G4LEDATA /afs/cern.ch/sw/geant4/dev/data/G4EMLOW1.1
-setenv G4INSTALL /...
-#
-# ---- Linux setup ----
-#
-
-  setenv G4SYSTEM Linux-g++
+2.  AN EVENT : THE PRIMARY GENERATOR
+------------------------------------ 
+    
+ The primary kinematic consists of a single particle which hits the
+ geometry perpendicular to the input face. The FCALPrimaryGeneratorAction 
+ class  gives the particle and its energy (by default it is an electron of
+ 80 GeV). Theses parameters can be changed in commands of ParticleGun class
+ inside the macros given in this example. 
  
-#choose where you want to put the G4-libraries and G4workdir
+ The subdirectory data-tracks contains the kinematic files 
+ of the particles for different energies (20 GeV, 40 GeV, 60 GeV, 80 GeV, 
+ 120 GeV and 200 GeV). 
+ The information given inside these files are the X, Y, Z and cosX, 
+ cosY, cosZ variables for each event. 
 
-  setenv G4LIB ....
-  setenv G4WORKDIR ...
+  A RUN is a set of events.
+ 	
 
+3. VISUALIZATION
+------------------
 
----visualization-----
+ The Visualization Manager is set in the main().
+ The initialisation of the drawing is done via the command
+ > /control/execute vis.mac
+ 	
+ The detector has a default view which is a transversal view of the geometry.
 
-
-
-# ---- set up VRMLview
-setenv G4VIS_BUILD_VRMLFILE_DRIVER  1
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv G4VRMLFILE_MAX_FILE_NUM     100
-setenv G4VRMLFILE_VIEWER        vrmlview    #if installed
-setenv G4VIS_USE_VRML               1
-setenv G4VIS_USE_VRMLFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/contrib/VRML/bin/Linux"
-
-# ---- set up OpenGL or Mesa 
-setenv G4VIS_BUILD_OPENGLX_DRIVER   1
-setenv G4VIS_USE_OPENGLX            1
-setenv OGLHOME /afs/cern.ch/sw/geant4/dev/Mesa/Linux-g++
-
-# ---- set up DAWN
-setenv G4VIS_BUILD_DAWN_DRIVER      1
-setenv G4VIS_BUILD_DAWNFILE_DRIVER  1  
-setenv G4VIS_USE_DAWN               1
-setenv G4VIS_USE_DAWNFILE           1
-setenv PATH ${PATH}:"/afs/cern.ch/sw/geant4/dev/DAWN/Linux-g++"
+ The tracks are drawn at the end of event, and erased at the end of run.
+ Optionally the way of drawing the particles can be changed in the
+ TBEVentActionMessenger class.  
 
 
+ 4. PHYSICS DEMO
+ -----------------
 
------------------------------------------------------------------------------------
+ The particle's type and the physic processes which will be available
+ in this example are set in FCALPhysicsList class.
+
+ In addition a build-in interactive command (/process/inactivate proname)
+ allows to activate/inactivate the processes one by one.
+
+ The threshold for producing secondaries can be changed.
+ eg: /run/particle/setCut 100 micrometer
+     /run/initialize
 
 
-# ---- Analysis----
+ 5. HOW TO START ?
+ ----------------- 
 
-setenv G4ANALYSIS_BUILD  1
-setenv PATH "${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.0/bin"
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.0/install/sharedstart.csh
-setenv G4ANALYSIS_AIDA_CONFIG_CFLAGS `aida-config --noLicense --include`
-setenv G4ANALYSIS_AIDA_CONFIG_LIBS   `aida-config --noLicense --libs`
+ - compile and link to generate an executable
+      % cd geant4/examples/advanced/lAr_calorimeter/lArcal 
+      % gmake
+ 		
+ - execute the program  in 'batch' mode from macro files
+      % lArcal    prerunlAr.mac
+ 		
+ - execute Test  in 'interactive mode' with visualization
+      %  lArcal 
+         ....
+  
+ Idle> type your commands
+         ....
+ 	
+  Idle> exit
 
-# ---- add to the LD_LIBRARY_PATH 
-setenv LD_LIBRARY_PATH $OGLHOME/lib
-#
-# ---- end of Linux set-up ----
+6. HISTOGRAMS
+--------------
+ 
+ lArcal produces 4 histograms (saved as fcal.paw) which illustrate
+ the final state of the most important variables of the example:
 
-before running remenber to delete *.hbk
+ Histo1 --> Number of tracks out of World
+ Histo2 --> Number of secondary particles
+ Histo3 --> Electromagnetic Energy deposit in the EMModule
+ Histo4 --> Hadronic Energy deposit in the HadModule
 
-in the file brachy.py there are the instructions  to visualize the histograms with the old version of Lizard;
+ The example generates 3 ntuples too which contains the same information 
+ than the histograms. 
 
-in order to do that open another lxplus with egcs-2.91.66 and make:
-source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.3-sec/install/sharedstart.csh
-then digit lizard in the directory where brachy3.hbk is and then follow the instruction of the brachy.py
+ See their definitions in FCALRunAction.cc
+
+ Note that histograms are disabled via the flag G4ANALYSIS_USE in GNUmakefile.
+
+
+ 7. Using the Anaphe implementation of the AIDA 3.0 histograms:
+ ---------------------------------------------------------------
+
+ In order to use the new Anaphe implementation of the AIDA 3.0 interfaces, 
+ prepare some environment variables by source-ing one of the following 
+ startup scripts.
+
+ # This example has been developed and tested with the gcc-2.95.2 compiler:
+                                                       ----------
+
+ o Set up the environment variable: G4ANALYSIS_USE 
+ o setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat72/gcc-2.95.2/5.0.2/bin
+                                                         |
+                                                         |
+                                             (Hier your system must be specified;
+                                              if it is redhat61 or redhat73... this
+                                              link has to be changed to the 
+                                              corresponding system.)
+
+  o source /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/install/sharedstart.csh or .sh
+  o ln -s /afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.2/scripts/* ~/bin/. 
+    (This has to be made only one)
+     
+ After this, you will have access to the 'aida-config' command which
+ is used in the GNUmakefile.
 
