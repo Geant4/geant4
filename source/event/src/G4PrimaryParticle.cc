@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.7 2001-07-13 15:01:54 gcosmo Exp $
+// $Id: G4PrimaryParticle.cc,v 1.8 2002-07-29 14:38:27 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -35,34 +35,40 @@ G4Allocator<G4PrimaryParticle> aPrimaryParticleAllocator;
 G4PrimaryParticle::G4PrimaryParticle()
 :PDGcode(0),G4code(0),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
+ mass(0.),charge(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
 {;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode)
 :PDGcode(Pcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
-{ G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
+{ G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
+  if(G4code) charge = G4code->GetPDGCharge();
+  else       charge = 0.0;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
                         G4double px,G4double py,G4double pz)
 :PDGcode(Pcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
-{ G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); }
+{ G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
+  if(G4code) charge = G4code->GetPDGCharge(); 
+  else       charge = 0.0;}
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode)
 :G4code(Gcode),Px(0.),Py(0.),Pz(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
-{ PDGcode = Gcode->GetPDGEncoding(); }
+{ PDGcode = Gcode->GetPDGEncoding();
+  charge = Gcode->GetPDGCharge(); }
 
 G4PrimaryParticle::G4PrimaryParticle(G4ParticleDefinition* Gcode,
                         G4double px,G4double py,G4double pz)
 :G4code(Gcode),Px(px),Py(py),Pz(pz),
  nextParticle(0),daughterParticle(0),trackID(-1),
  mass(0.),polX(0.),polY(0.),polZ(0.),Weight0(1.0),properTime(0.0)
-{ PDGcode = Gcode->GetPDGEncoding(); }
+{ PDGcode = Gcode->GetPDGEncoding(); 
+  charge = Gcode->GetPDGCharge(); }
 
 G4PrimaryParticle::~G4PrimaryParticle()
 {
@@ -76,12 +82,15 @@ void G4PrimaryParticle::SetPDGcode(G4int Pcode)
 {
   PDGcode = Pcode;
   G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode);
+  if(G4code) charge = G4code->GetPDGCharge();
+  else       charge = 0.0;
 }
 
 void G4PrimaryParticle::SetG4code(G4ParticleDefinition* Gcode)
 {
   G4code = Gcode;
   PDGcode = Gcode->GetPDGEncoding();
+  charge = G4code->GetPDGCharge();
 }
 
 const G4PrimaryParticle & 
