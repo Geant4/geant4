@@ -121,8 +121,8 @@ if ( `uname -n | grep sun` != "" ) then
     # Persistency...
     if ( $?G4USE_HEPODBMS ) then  # Protect against double calling.
     else
-      source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
-      setenv G4EXAMPLE_FDID 207
+##      source $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.csh
+##      setenv G4EXAMPLE_FDID 207
     endif
   else
     setenv G4SYSTEM SUN-CC5

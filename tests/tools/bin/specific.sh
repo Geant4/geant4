@@ -94,8 +94,8 @@ if [ `uname -n | grep sungeant` ]; then
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # Persistency...
     if [ X$G4USE_HEPODBMS = X ]; then
-      . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
-      export G4EXAMPLE_FDID=207
+#       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
+#       export G4EXAMPLE_FDID=207
     fi
   else
     export G4SYSTEM=SUN-CC5
