@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4PenelopeBremsstrahlung.cc,v 1.6 2003-05-20 20:16:13 pia Exp $
+// $Id: G4PenelopeBremsstrahlung.cc,v 1.7 2003-05-23 11:38:48 pandola Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -35,6 +35,8 @@
 // 24.04.2003 V.Ivanchenko - Cut per region mfpt
 // 20.05.2003 MGP          - Removed compilation warnings
 //                           Restored NotForced in GetMeanFreePath
+// 23.05.2003 L.Pandola    - Bug fixed. G4double cast to elements of
+//                           ebins vector (is it necessary?)
 //
 //----------------------------------------------------------------
 
@@ -97,39 +99,40 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   if( energySpectrum != 0 ) delete energySpectrum;
   //grid of reduced energy bins for photons  
  
-  G4DataVector ebins;
-  ebins.push_back(1.0e-12);
-  ebins.push_back(0.05);
-  ebins.push_back(0.075);
-  ebins.push_back(0.1);
-  ebins.push_back(0.125);
-  ebins.push_back(0.15);
-  ebins.push_back(0.2);
-  ebins.push_back(0.25);
-  ebins.push_back(0.3);
-  ebins.push_back(0.35);
-  ebins.push_back(0.40);
-  ebins.push_back(0.45);
-  ebins.push_back(0.50);
-  ebins.push_back(0.55);
-  ebins.push_back(0.60);
-  ebins.push_back(0.65);
-  ebins.push_back(0.70);
-  ebins.push_back(0.75);
-  ebins.push_back(0.80);
-  ebins.push_back(0.85);
-  ebins.push_back(0.90);
-  ebins.push_back(0.925);
-  ebins.push_back(0.95);
-  ebins.push_back(0.97);
-  ebins.push_back(0.99);
-  ebins.push_back(0.995);
-  ebins.push_back(0.999);
-  ebins.push_back(0.9995);  
-  ebins.push_back(0.9999);
-  ebins.push_back(0.99995);
-  ebins.push_back(0.99999);
-  ebins.push_back(1.0);
+  ebins.clear();
+
+  ebins.push_back((G4double) 1.0e-12);
+  ebins.push_back((G4double) 0.05);
+  ebins.push_back((G4double) 0.075);
+  ebins.push_back((G4double) 0.1);
+  ebins.push_back((G4double) 0.125);
+  ebins.push_back((G4double) 0.15);
+  ebins.push_back((G4double) 0.2);
+  ebins.push_back((G4double) 0.25);
+  ebins.push_back((G4double) 0.3);
+  ebins.push_back((G4double) 0.35);
+  ebins.push_back((G4double) 0.40);
+  ebins.push_back((G4double) 0.45);
+  ebins.push_back((G4double) 0.50);
+  ebins.push_back((G4double) 0.55);
+  ebins.push_back((G4double) 0.60);
+  ebins.push_back((G4double) 0.65);
+  ebins.push_back((G4double) 0.70);
+  ebins.push_back((G4double) 0.75);
+  ebins.push_back((G4double) 0.80);
+  ebins.push_back((G4double) 0.85);
+  ebins.push_back((G4double) 0.90);
+  ebins.push_back((G4double) 0.925);
+  ebins.push_back((G4double) 0.95);
+  ebins.push_back((G4double) 0.97);
+  ebins.push_back((G4double) 0.99);
+  ebins.push_back((G4double) 0.995);
+  ebins.push_back((G4double) 0.999);
+  ebins.push_back((G4double) 0.9995);  
+  ebins.push_back((G4double) 0.9999);
+  ebins.push_back((G4double) 0.99995);
+  ebins.push_back((G4double) 0.99999);
+  ebins.push_back((G4double) 1.0);
 
  
   const G4String dataName("/penelope/br-sp-pen.dat");
@@ -177,7 +180,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   // Build loss table for Bremsstrahlung
 
   BuildLossTable(aParticleType);
-
+ 
   if(verboseLevel > 0) {
     G4cout << "The loss table is built"
            << G4endl;
@@ -193,8 +196,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
 
     RecorderOfPositronProcess[CounterOfPositronProcess] = (*this).theLossTable;
     CounterOfPositronProcess++;
-  }
-
+  } 
   // Build mean free path data using cut values
 
   if( theMeanFreePath != 0 ) delete theMeanFreePath;
@@ -213,8 +215,7 @@ void G4PenelopeBremsstrahlung::BuildPhysicsTable(const G4ParticleDefinition& aPa
   if(verboseLevel > 0) {
     G4cout << "G4PenelopeBremsstrahlung::BuildPhysicsTable end"
            << G4endl;
-      }
- 
+  }
 }
 
 
@@ -222,7 +223,6 @@ void G4PenelopeBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParti
 {
   // Build table for energy loss due to soft brems
   // the tables are built for *MATERIALS* binning is taken from LowEnergyLoss
-
   G4double lowKineticEnergy  = GetLowerBoundEloss();
   G4double highKineticEnergy = GetUpperBoundEloss();
   size_t totBin = GetNbinEloss();
@@ -321,7 +321,6 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
      return G4VContinuousDiscreteProcess::PostStepDoIt(track, step);
 
   G4int Z = crossSectionHandler->SelectRandomAtom(couple, kineticEnergy);
-
   G4double tGamma = energySpectrum->SampleEnergy(Z, tCut, kineticEnergy, kineticEnergy);
   //bisogna recuperare il puntatore
   G4AngularData* elementData =  materialAngularData[index]; //punta al vettore che contiene i puntatori del materiale
@@ -342,7 +341,7 @@ G4VParticleChange* G4PenelopeBremsstrahlung::PostStepDoIt(const G4Track& track,
   }while(Z_try != Z);
  
   G4PenelopeBremsstrahlungAngular* finalAngularData = (*elementData)[indexEl];
-
+  
   // Sample gamma angle (Z - axis along the parent particle).
   G4double dirZ = finalAngularData->ExtractCosTheta(kineticEnergy,tGamma);
 
