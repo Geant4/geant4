@@ -3,7 +3,7 @@ macro g4g3.kumac
 set * ; opt * 
 *
 filecase keep
-h/file 1 17jan02.paw
+h/file 1 v40ref01cuts.paw
 h/file 2 ../../geant3/results/run01/01jun99.paw
 
 set *fon -40
