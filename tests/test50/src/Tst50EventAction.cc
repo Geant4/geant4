@@ -21,11 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.cc,v 1.13 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50EventAction.cc,v 1.14 2003-03-12 17:21:24 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #include "G4UnitsTable.hh" 
 #include "Tst50EventAction.hh"
 #ifdef G4ANALYSIS_USE
@@ -46,76 +45,61 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 Tst50EventAction::Tst50EventAction(Tst50PrimaryGeneratorAction* Primary,G4bool RY,G4String file, G4bool foil):
-  hit_CollID(-1),p_Primary(Primary),RadiationY(RY),filename(file),Foil(foil)
-{
- 
- 
-}
+  hit_CollID(-1),p_Primary(Primary),filename(file),RadiationY(RY),Foil(foil)
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
 Tst50EventAction::~Tst50EventAction()
-{
- 
-}
+{ }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
- 
 void Tst50EventAction::BeginOfEventAction(const G4Event*)
 { 
   N_Steps=0;
- energyDep=0.;
- energy=0.; 
- energyDepPrimary=0.;
- energyDepSecondary=0.; 
- length=0.;
+  energyDep=0.;
+  energy=0.; 
+  energyDepPrimary=0.;
+  energyDepSecondary=0.; 
+  length=0.;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void Tst50EventAction::EndOfEventAction(const G4Event* evt)
 {
- G4double initialEnergy=p_Primary->GetInitialEnergy();
-
-	  
+  G4double initialEnergy=p_Primary->GetInitialEnergy();
 	
- if (Foil)
-   {
 #ifdef G4ANALYSIS_USE
-    
-	    Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
+  if (Foil)
+    {
+      Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
 	    
-	        analysis->energy_deposit(energyDep);
+      analysis->energy_deposit(energyDep);
             
-	        analysis->energy_depositPrimary(energyDepPrimary);
+      analysis->energy_depositPrimary(energyDepPrimary);
            
-	        analysis->energy_depositSecondary(energyDepSecondary);
+      analysis->energy_depositSecondary(energyDepSecondary);
 
-		analysis->Steps_Num(N_Steps);
-                analysis->track_length(length);	
-#endif	
-   }
+      analysis->Steps_Num(N_Steps);
+      analysis->track_length(length);		
+    }
+#endif
 
-/*
-G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
-G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
-  G4double radiation=(energy/initialEnergy);
-  G4cout<<"Radiation yield:"<< radiation<<G4endl;
+  /*
+    G4cout<<"energia iniziale in MeV:"<<initialEnergy/MeV<<G4endl;
+    G4cout<<"energia in MeV:"<<energy/MeV<<G4endl;
+    G4double radiation=(energy/initialEnergy);
+    G4cout<<"Radiation yield:"<< radiation<<G4endl;
  
   */
   if (RadiationY)
     {
-G4std::ofstream pmtfile(filename, G4std::ios::app);
- G4double radiation=(energy/MeV)/(initialEnergy/MeV);
- G4cout<<"Radiation yield:"<< radiation<<G4endl;
-if(pmtfile.is_open()){
-  pmtfile<<'\t'<<radiation<<'\t'<<'\t'<<initialEnergy/MeV<<G4endl;
-     }
+      G4std::ofstream pmtfile(filename, G4std::ios::app);
+      G4double radiation=(energy/MeV)/(initialEnergy/MeV);
+      G4cout<<"Radiation yield:"<< radiation<<G4endl;
+      if(pmtfile.is_open()){
+	pmtfile<<'\t'<<radiation<<'\t'<<'\t'<<initialEnergy/MeV<<G4endl;
+      }
     }
- // get number of stored trajectories
+  // get number of stored trajectories
   //
   G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
   G4int n_trajectories = 0;
@@ -123,17 +107,14 @@ if(pmtfile.is_open()){
   
   // periodic printing
   //
-      
-
-
   // extract the trajectories and draw them
   //
   if (G4VVisManager::GetConcreteInstance())
     {
-     for (G4int i=0; i<n_trajectories; i++) 
+      for (G4int i=0; i<n_trajectories; i++) 
         { G4Trajectory* trj = (G4Trajectory*)
-	                            ((*(evt->GetTrajectoryContainer()))[i]);
-          trj->DrawTrajectory(50);
+	    ((*(evt->GetTrajectoryContainer()))[i]);
+	trj->DrawTrajectory(50);
         }
     }
 }
@@ -143,38 +124,38 @@ G4int Tst50EventAction::GetEventno()
   return evno ;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double Tst50EventAction::RadiationYield(G4double energyLost)
 {
   energy += energyLost;
- 
+
+  // ---- MGP ---- Added the following line, since the function, 
+  // ---- MGP ---- which expected to return a double, did not return anything;
+  // ---- MGP ---- is it correct?
+  return energy;
 }
+
 void Tst50EventAction::CalculateEnergyDeposit(G4double deposit)
 {
   energyDep += deposit;
-
- 
 }
+
 void Tst50EventAction::CalculateEnergyDepositPrimary(G4double deposit_primary)
 {
   energyDepPrimary += deposit_primary;
-
- 
 }
+
 void Tst50EventAction::CalculateEnergyDepositSecondary(G4double deposit_secondary)
 {
   energyDepSecondary += deposit_secondary;
-
- 
 }
+
 void Tst50EventAction::Number_Steps()
 {
   N_Steps += 1;
 }
+
 void Tst50EventAction::Track_length(G4double step_dl)
 {
-
   length += step_dl;
-
 }

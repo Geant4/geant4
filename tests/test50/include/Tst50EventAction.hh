@@ -21,11 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50EventAction.hh,v 1.8 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50EventAction.hh,v 1.9 2003-03-12 17:21:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef Tst50EventAction_h
 #define Tst50EventAction_h 1
@@ -37,39 +35,36 @@ class Tst50AnalysisManager;
 class G4Event;
 class Tst50PrimaryGeneratorAction;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class Tst50EventAction : public G4UserEventAction
 {
-  public:
-    Tst50EventAction(Tst50PrimaryGeneratorAction*,G4bool,G4String, G4bool);
-   ~Tst50EventAction();
+public:
+  Tst50EventAction(Tst50PrimaryGeneratorAction*, G4bool, G4String, G4bool);
+  ~Tst50EventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void EndOfEventAction(const G4Event*);
-    G4int    GetEventno();
+  void BeginOfEventAction(const G4Event*);
+  void EndOfEventAction(const G4Event*);
+  G4int    GetEventno();
   G4double RadiationYield(G4double);
   void CalculateEnergyDeposit(G4double);
   void CalculateEnergyDepositPrimary(G4double);
- void CalculateEnergyDepositSecondary(G4double);
+  void CalculateEnergyDepositSecondary(G4double);
   void Number_Steps();
   void Track_length(G4double);
-  private:
-    G4int hit_CollID;
+
+private:
+  G4int hit_CollID;
   G4double energy;
   G4double energyDep;
   Tst50PrimaryGeneratorAction* p_Primary;
   G4String filename;
   G4bool RadiationY; 
   G4double energyDepPrimary;
- G4double energyDepSecondary;
+  G4double energyDepSecondary;
   G4bool Foil;
   G4int N_Steps;
   G4double length;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

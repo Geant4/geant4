@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.11 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.12 2003-03-12 17:21:23 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -44,73 +44,75 @@
 #include "globals.hh"
 #include "g4std/vector"
 #include "G4ThreeVector.hh"
-#include "AIDA/IHistogram1D.h"
-#include "AIDA/IHistogram2D.h"
-#include "AIDA/IAnalysisFactory.h"
-namespace AIDA{
-class ITree;
-class IHistogramFactory;
-class IAnalysisFactory;
-class ITupleFactory;
-class ITuple;
-class ITreeFactory;
+//#include "AIDA/IHistogram1D.h"
+//#include "AIDA/IHistogram2D.h"
+//#include "AIDA/IAnalysisFactory.h"
+# include <AIDA/AIDA.h>
 
+namespace AIDA 
+{
+  class ITree;
+  class IHistogramFactory;
+  class IAnalysisFactory;
+  class ITupleFactory;
+  class ITuple;
+  class ITreeFactory;
 };
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 class Tst50PrimaryGeneratorAction;
 class Tst50DetectorConstruction;
-class Tst50AnalysisManager
-{
+
+class Tst50AnalysisManager { 
+
 public:
+  
+  ~Tst50AnalysisManager();
 
-~Tst50AnalysisManager();
+  void book();
 
-void book();
+  void finish();
 
-void finish();
+  static Tst50AnalysisManager* getInstance();
 
-static Tst50AnalysisManager* getInstance();
-
-void energy_deposit(G4double);
-void energy_depositPrimary(G4double);
-void energy_depositSecondary(G4double);
+  void energy_deposit(G4double);
+  void energy_depositPrimary(G4double);
+  void energy_depositSecondary(G4double);
   void energy_transmitted(G4double);
   void fill_data(G4double,G4double, G4double);
   void energy_backscatter(G4double);
   void angleB(G4double );
- void angleT(G4double );
+  void angleT(G4double );
   void fill_dataBrem(G4double,G4double);
   void angle_energy_gamma(G4double,G4double);
-void Step(G4double );
+  void Step(G4double );
   void Steps_Num(G4int );
   void track_length(G4double);
-private:
-static Tst50AnalysisManager* instance;
-
-private:
-Tst50AnalysisManager();
 
 private:
 
-AIDA::IAnalysisFactory*  aFact;
-AIDA::ITree*             theTree;
-AIDA::IHistogramFactory *histFact;
-AIDA::ITupleFactory     *tupFact;
-AIDA::ITreeFactory      *treeFact;
-AIDA::ITuple *ntuple;
-AIDA::ITuple *ntuple2;
-AIDA::IHistogram1D *h1;
-AIDA::IHistogram1D *h2;
-AIDA::IHistogram1D *h3;
-AIDA::IHistogram1D *h4;
-AIDA::IHistogram2D *h6;
-AIDA::IHistogram1D *h5;
-AIDA::IHistogram1D *h7;
-AIDA::IHistogram1D *h8;
-AIDA::IHistogram1D *h9;
-AIDA::IHistogram1D *h10;
-AIDA::IHistogram1D *h11;
-private:
+  static Tst50AnalysisManager* instance;
+
+  Tst50AnalysisManager();
+
+  AIDA::IAnalysisFactory*  aFact;
+  AIDA::ITree*             theTree;
+  AIDA::IHistogramFactory* histFact;
+  AIDA::ITupleFactory*     tupFact;
+  AIDA::ITreeFactory*      treeFact;
+  AIDA::ITuple*            ntuple;
+  AIDA::ITuple*            ntuple2;
+  AIDA::IHistogram1D*      h1;
+  AIDA::IHistogram1D*      h2;
+  AIDA::IHistogram1D*      h3;
+  AIDA::IHistogram1D*      h4;
+  AIDA::IHistogram2D*      h6;
+  AIDA::IHistogram1D*      h5;
+  AIDA::IHistogram1D*      h7;
+  AIDA::IHistogram1D*      h8;
+  AIDA::IHistogram1D*      h9;
+  AIDA::IHistogram1D*      h10;
+  AIDA::IHistogram1D*      h11;
+
   Tst50PrimaryGeneratorAction* p_Primary;
   Tst50DetectorConstruction* p_Detector;
   G4double en;
