@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.20 2000-06-21 11:02:54 johna Exp $
+# $Id: GNUmakefile,v 1.21 2000-11-03 16:48:45 gunter Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -101,6 +101,12 @@ $(G4LIBDIR)/liblist: $(G4INSTALL)/config/liblist.c
 	@echo "Compiling liblist.c..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
 	$(CC) $(CCFLAGS) -o $(G4LIBDIR)/liblist $(G4INSTALL)/config/liblist.c
+
+includes:
+	@echo Installing includes files in $(G4INCLUDE)
+	@for dir in $(SUBDIR1); do (cd $$dir && $(MAKE) $@); done
+	@for dir in $(SUBDIR2); do (cd $$dir && $(MAKE) $@); done
+	@for dir in $(SUBDIR3); do (cd $$dir && $(MAKE) $@); done
 
 clean_libs:
 	@echo Removing all libraries ...
