@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Region.hh,v 1.2 2002-12-16 09:24:02 gcosmo Exp $
+// $Id: G4Region.hh,v 1.3 2002-12-16 14:03:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Region
@@ -82,7 +82,7 @@ class G4Region
     inline G4ProductionCuts* GetProductionCuts() const;
 
     inline G4std::vector<G4LogicalVolume*>::iterator
-           GetRootLogicalVolumeIterator() const;
+           GetRootLogicalVolumeIterator();
     inline G4std::vector<G4Material*>::const_iterator
            GetMaterialIterator() const;
       // Return iterators to lists of root logical volumes and materials.
