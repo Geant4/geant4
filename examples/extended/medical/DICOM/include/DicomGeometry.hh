@@ -159,32 +159,9 @@ private:
   char LogicPatientArrayName[30];
   char PhysiPatientArrayName[30];
 
-  int flag_contours;
-
   G4double PatientX;
   G4double PatientY;
   G4double PatientZ;
-
-  int max;
-  char maxbuf[300];
-  int compression;
-  char compressionbuf[300];
-  char name[300];
-  int columns,rows;
-  double pixel_spacing_X,pixel_spacing_Y;
-  double SliceTickness;
-  double SliceLocation;
-  char rowsbuf[300],columnsbuf[300];
-  char pixel_spacing_Xbuf[300],pixel_spacing_Ybuf[300];
-  char SliceTicknessbuf[300];
-  char SliceLocationbuf[300];
-  char fullname[300];
-  FILE* readData;
-  FILE* readConf;
-
-  int lenc,lenr;
-  char Densitybuf[300];
-  vector<double> Density;
 
   char aFileName[300];
   int Probe2compression;
