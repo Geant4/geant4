@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (27-June-2003)
+                                (27-August-2003)
              Copyright : Geant4 Collaboration
 **********************************************
 G4Material: Mean excitation energy is changed for Water Iold= 70.8926eV; Inew= 75 eV;
@@ -215,7 +215,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=21.8s Real=30.05s Sys=3.85s
+  User=20.95s Real=29.22s Sys=4.04s
 
 ============   SUMMARY   ============
 
@@ -255,6 +255,67 @@ Run Summary
 /gun/particle mu-
 /gun/energy 1 GeV
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 990.00000 eV     e- 3.23970 keV    e+ 3.20006 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : PbWO4
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 137.41922 keV    e- 5.33819 MeV    e+ 4.95810 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 14.62030 keV    e- 2.31122 MeV    e+ 2.14666 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Si
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Fe
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+====================================================================
+
 ### Run 1 start  beam E= 1000.00000 MeV
 
 --------- Ranecu engine status ---------
@@ -267,7 +328,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.17000s Real=2.64000s Sys=0.37000s
+  User=1.07000s Real=2.82000s Sys=0.40000s
 
 ============   SUMMARY   ============
 
@@ -306,6 +367,67 @@ Run Summary
 #
 /testem/phys/VertexCuts 1 mm
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 990.00000 eV     e- 3.23970 keV    e+ 3.20006 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : PbWO4
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 137.41922 keV    e- 5.33819 MeV    e+ 4.95810 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 14.62030 keV    e- 2.31122 MeV    e+ 2.14666 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Si
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Fe
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+====================================================================
+
 ### Run 2 start  beam E= 1000.00000 MeV
 
 --------- Ranecu engine status ---------
@@ -318,7 +440,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.15000s Real=3.09000s Sys=0.35000s
+  User=1.14000s Real=2.43000s Sys=0.36000s
 
 ============   SUMMARY   ============
 
@@ -357,6 +479,67 @@ Run Summary
 #
 /gun/particle e-
 /run/beamOn 100
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 990.00000 eV     e- 3.23970 keV    e+ 3.20006 keV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes     recalculation needed : No 
+ Material : PbWO4
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 137.41922 keV    e- 5.33819 MeV    e+ 4.95810 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 2     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 5.00000 mm     e- 5.00000 mm     e+ 5.00000 mm 
+ Energy thresholds :  gamma 14.62030 keV    e- 2.31122 MeV    e+ 2.14666 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 3     used in the geometry : Yes     recalculation needed : No 
+ Material : Air
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 990.00000 eV     e+ 990.00000 eV 
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 4     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 33.88755 keV    e+ 33.47294 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 5     used in the geometry : Yes     recalculation needed : No 
+ Material : Si
+ Range cuts        :  gamma 10.00000 mum    e- 10.00000 mum    e+ 10.00000 mum
+ Energy thresholds :  gamma 990.00000 eV     e- 31.47473 keV    e+ 31.08964 keV
+ Region(s) which use this couple : 
+    VertexDetector
+
+Index : 6     used in the geometry : Yes     recalculation needed : No 
+ Material : Fe
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 60.40187 keV    e- 12.95184 MeV    e+ 12.02966 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+Index : 7     used in the geometry : Yes     recalculation needed : No 
+ Material : Al
+ Range cuts        :  gamma 1.00000 cm     e- 1.00000 cm     e+ 1.00000 cm 
+ Energy thresholds :  gamma 20.49488 keV    e- 4.54874 MeV    e+ 4.27720 MeV
+ Region(s) which use this couple : 
+    MuonDetector
+
+====================================================================
+
 ### Run 3 start  beam E= 1000.00000 MeV
 
 --------- Ranecu engine status ---------
@@ -369,7 +552,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=21.98000s Real=26.89000s Sys=3.77000s
+  User=21.13000s Real=26.24000s Sys=4.00000s
 
 ============   SUMMARY   ============
 
