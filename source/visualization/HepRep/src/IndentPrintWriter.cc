@@ -54,7 +54,7 @@ void IndentPrintWriter::println() {
 
 void IndentPrintWriter::doIndent() {
 	for (int i=0; i<indentLevel; i++) {
-	    *out << indentString.c_str();
+//	    *out << indentString.c_str();
 	}
 	indented = true;
 }
