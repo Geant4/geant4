@@ -114,7 +114,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 	    ipart->setMomentum(mom); 
 	  };
 
-	  G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	  sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	  if(verboseLevel > 2){
 	    G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -182,7 +182,7 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
 
 	        ipart->setMomentum(mom); 
 	      };
-	      G4std::sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
+	      sort(particles.begin(), particles.end(), G4ParticleLargerEkin());
 
 	      if(verboseLevel > 2){
 		G4cout << " In SCM: total outgoing momentum " << G4endl 
@@ -400,7 +400,7 @@ G4int G4ElementaryParticleCollider::generateMultiplicity(G4int is,
   };
 
   const G4double large_cut = 4.0;
-  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+  pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int l = is;
@@ -617,8 +617,7 @@ generateSCMfinalState(G4double ekin,
 	    G4std::vector<G4std::vector<G4double> > scm_momentums;
 	    G4std::vector<G4double> tot_mom(4);
 
-	    G4int i(0);
-	    for(i = 0; i < multiplicity - 2; i++) {
+	    for(G4int i = 0; i < multiplicity - 2; i++) {
 
 	      G4double p0 = particle_kinds[i] < 3 ? 0.36 : 0.25;
 	      G4double alf = 1.0 / p0 / (p0 - (modules[i] + p0) *
@@ -679,7 +678,7 @@ generateSCMfinalState(G4double ekin,
 	    }            
 
 	    if(fabs(ct) < ang_cut) {
-	      for(i = 0; i < multiplicity - 2; i++) 
+	      for(G4int i = 0; i < multiplicity - 2; i++) 
 		scm_momentums[i] = toSCM->rotate(scm_momentums[i]);
 	      tot_mom = toSCM->rotate(tot_mom);  
 
@@ -1118,7 +1117,7 @@ generateOutgoingKindsFor2toMany(
   };
 
   G4int il = getIL(is, mult);
-  G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
+  pair<G4int, G4double> iksk = getPositionInEnergyScale1(ekin);
   G4int ik = iksk.first;
   G4double sk = iksk.second;
   G4int n;      
@@ -1167,8 +1166,7 @@ generateOutgoingKindsFor2toMany(
   G4double ptot = 0.0;
   G4int ml = 0;
 
-  G4int i(0);
-  for(i = 0; i < il; i++) {
+  for(G4int i = 0; i < il; i++) {
     ptot += sig[i];
     if(sl <= ptot) {
       ml = i;
@@ -1222,46 +1220,47 @@ G4double G4ElementaryParticleCollider::getMomModuleFor2toMany(
   }
 
   const G4double rmn[14][10][2] = {
-    0.5028,  0.6305,  3.1442, -3.7333, -7.8172,  13.464,  8.1667, 
-    -18.594, 1.6208,  1.9439, -4.3139, -4.6268,  12.291,  9.7879, 
-    -15.288, -9.6074, 0.0,     0.0,     0.0,     0.0,     0.9348,  
-    2.1801,  -10.59,  1.5163,  29.227, -16.38,  -34.55,  27.944,
-    -0.2009,-0.3464,  1.3641,  1.1093, -3.403,  -1.9313,  3.8559,
-    1.7064,  0.0,     0.0,     0.0,     0.0,    -0.0967, -1.2886, 
-    4.7335, -2.457, -14.298,   15.129,  17.685, -23.295,  0.0126,  
-    0.0271, -0.0835, -0.1164,  0.186,   0.2697, -0.2004, -0.3185, 
-    0.0,     0.0,     0.0,     0.0,    -0.025,   0.2091, -0.6248,  
-    0.5228, 2.0282, -2.8687,  -2.5895,  4.2688, -0.0002, -0.0007,  
-    0.0014,  0.0051, -0.0024,-0.015,    0.0022,  0.0196,  0.0,     
-    0.0,     0.0,     0.0,     1.1965,  0.9336, -0.8289, -1.8181,
-    1.0426,  5.5157, -1.909,  -8.5216,  1.2419,  1.8693, -4.3633,
-    -5.5678, 13.743,  14.795, -18.592, -16.903,  0.0,     0.0,
-    0.0,     0.0,     0.287,   1.7811, -4.9065, -8.2927,  16.264,
-    20.607,-19.904, -20.827,  -0.244,  -0.4996,  1.3158,  1.7874,
-    -3.5691,-4.133,   4.3867,  3.8393,  0.0,     0.0,     0.0,
-    0.0,    -0.2449, -1.5264,  2.9191,  6.8433, -9.5776, -16.067,
-    11.938, 16.845,   0.0157,  0.0462, -0.0826, -0.1854,  0.2143,
-    0.4531, -0.2585, -0.4627,  0.0,     0.0,     0.0,     0.0,
-    0.0373,  0.2713, -0.422,  -1.1944,  1.3883,  2.7495, -1.7476,
-    -2.9045,-0.0003, -0.0013,  0.0014,  0.0058, -0.0034, -0.0146,
-    0.0039,  0.0156,  0.0,     0.0,     0.0,     0.0,     0.0,    
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,    
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
-    0.0,     0.1451,  0.0929,  0.1538,  0.1303,  0.0,     0.0,     
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     
-    0.4652,  0.5389,  0.2744,  0.4071,  0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0, 
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,    -0.033,
-    -0.0545,-0.0146, -0.0288,  0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.6296,  0.1491,
-    0.8381,  0.1802,  0.0,     0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.1787,  0.385,   0.0086,
-    0.3302,  0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,     0.0,     0.0,     0.0,     0.0,
-    0.0,     0.0,     0.0,    -0.0026, -0.0128,  0.0033, -0.0094
+    {{0.5028,   0.6305}, {3.1442, -3.7333}, {-7.8172,  13.464}, {8.1667, -18.594}, {1.6208,   1.9439}, 
+     {-4.3139, -4.6268}, {12.291,  9.7879}, {-15.288, -9.6074}, {   0.0,     0.0}, {   0.0,      0.0}},     
+
+    {{0.9348,   2.1801}, {-10.59,  1.5163}, { 29.227,  -16.38}, {-34.55,  27.944}, {-0.2009, -0.3464},  
+     {1.3641,   1.1093}, {-3.403, -1.9313}, { 3.8559,  1.7064}, {   0.0,     0.0}, {    0.0,     0.0}},    
+
+    {{-0.0967, -1.2886}, {4.7335,  -2.457}, {-14.298,  15.129}, {17.685, -23.295}, { 0.0126,  0.0271}, 
+     {-0.0835, -0.1164}, { 0.186,  0.2697}, {-0.2004, -0.3185}, {   0.0,     0.0}, {    0.0,     0.0}},    
+
+    {{-0.025,   0.2091}, {-0.6248, 0.5228}, { 2.0282, -2.8687}, {-2.5895, 4.2688}, {-0.0002, -0.0007},  
+     {0.0014,   0.0051}, {-0.0024, -0.015}, { 0.0022,  0.0196}, {    0.0,    0.0}, {    0.0,     0.0}},     
+
+    {{1.1965,   0.9336}, {-0.8289,-1.8181}, { 1.0426,  5.5157}, { -1.909,-8.5216}, { 1.2419,  1.8693}, 
+     {-4.3633, -5.5678}, { 13.743, 14.795}, {-18.592, -16.903}, {    0.0,    0.0}, {    0.0,     0.0}},     
+
+    {{0.287,    1.7811}, {-4.9065,-8.2927}, { 16.264,  20.607}, {-19.904,-20.827}, {-0.244,  -0.4996},  
+     {1.3158,   1.7874}, {-3.5691, -4.133}, { 4.3867,  3.8393}, {    0.0,    0.0}, {   0.0,      0.0}}, 
+   
+    {{-0.2449, -1.5264}, { 2.9191, 6.8433}, {-9.5776, -16.067}, { 11.938, 16.845}, {0.0157,   0.0462}, 
+     {-0.0826, -0.1854}, { 0.2143, 0.4531}, {-0.2585, -0.4627}, {    0.0,    0.0}, {   0.0,      0.0}},
+
+    {{0.0373,   0.2713}, {-0.422, -1.1944}, { 1.3883,  2.7495}, {-1.7476,-2.9045}, {-0.0003, -0.0013},  
+     {0.0014,   0.0058}, {-0.0034,-0.0146}, { 0.0039,  0.0156}, {    0.0,    0.0}, {    0.0,     0.0}},     
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0},     
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, { 0.1451,  0.0929},{ 0.1538,  0.1303}},  
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0},     
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, { 0.4652,  0.5389},{ 0.2744,  0.4071}},  
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0}, 
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, { -0.033, -0.0545},{-0.0146, -0.0288}},  
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0},     
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, { 0.6296,  0.1491},{ 0.8381,  0.1802}},  
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0},     
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, { 0.1787,   0.385},{ 0.0086,  0.3302}},  
+
+    {{   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {    0.0,     0.0},{    0.0,     0.0},     
+     {   0.0,      0.0}, {    0.0,    0.0}, {    0.0,     0.0}, {-0.0026, -0.0128},{ 0.0033, -0.0094}}
   };
 
   G4double S = inuclRndm();
@@ -1494,7 +1493,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   G4bool rech = false;
 
   if(is == 6 || is == 5 || is == 7 || is == 14) {
-    G4std::pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
+    pair<G4int, G4double> iksk = getPositionInEnergyScale2(ekin);
     G4int ik = iksk.first;
     G4double sk = iksk.second;
     G4double chrg;
@@ -1512,7 +1511,7 @@ G4bool G4ElementaryParticleCollider::reChargering(G4double ekin,
   return rech;
 }
 
-G4std::pair<G4double, G4double> G4ElementaryParticleCollider::
+pair<G4double, G4double> G4ElementaryParticleCollider::
 adjustIntervalForElastic(
 			 G4double ekin, 
 			 G4double ak, 
@@ -1664,7 +1663,7 @@ adjustIntervalForElastic(
     };
   };
 
-  return G4std::pair<G4double, G4double>(a, b);
+  return pair<G4double, G4double>(a, b);
 }  
 
 G4std::vector<G4double> G4ElementaryParticleCollider::
@@ -1785,7 +1784,7 @@ particleSCMmomentumFor2to2(
     G4double b = 0.0;
 
     if(k <= 3) {
-      G4std::pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
+      pair<G4double, G4double> ab = adjustIntervalForElastic(ekin, ak, ae, k, is, ssv, st);
 
       a = ab.first;
       b = ab.second;
@@ -1963,7 +1962,7 @@ generateSCMpionAbsorption(G4double etot_scm,
 
   G4double pmod = sqrt((a * a - m1 * m2) / (m1 + m2 + 2.0 * a));
   G4std::vector<G4double> mom(4);
-  G4std::pair<G4double, G4double> COS_SIN = randomCOS_SIN();
+  pair<G4double, G4double> COS_SIN = randomCOS_SIN();
   G4double FI = randomPHI();
   G4double pt = pmod * COS_SIN.second;
 
