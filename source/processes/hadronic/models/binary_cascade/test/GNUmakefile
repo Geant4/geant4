@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2003-05-05 12:23:53 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2003-05-05 16:19:58 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -8,7 +8,7 @@ ifndef G4TARGET
 endif
 
 ifndef G4INSTALL
-  G4INSTALL = ../../../../../../../
+  G4INSTALL = ../../../../../../
 endif
 
 G4EXEC_BUILD = true

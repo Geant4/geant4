@@ -1,4 +1,4 @@
-#include "G4BinaryCascade.hh"
+#include "G4BinaryLightIonReaction.hh"
 #include "G4Nucleus.hh"
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
