@@ -104,8 +104,8 @@ Cut in energy
 /gun/energy 50 MeV
 /run/beamOn 1 
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.0501211 (GeV)
-     Total energy deposition in 1-th BOX: 0.0498789 (GeV)
+     Total energy deposition in 0-th BOX: 0.0444953 (GeV)
+     Total energy deposition in 1-th BOX: 0.0555047 (GeV)
 #
 # gamma 500 MeV in Al
 #
@@ -113,8 +113,8 @@ Cut in energy
 /gun/energy 500 MeV
 /run/beamOn 1
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.500482 (GeV)
-     Total energy deposition in 1-th BOX: 0.499518 (GeV)
+     Total energy deposition in 0-th BOX: 0.510398 (GeV)
+     Total energy deposition in 1-th BOX: 0.489602 (GeV)
 #
 # for tests of basic e.m. processes
 #
@@ -190,8 +190,8 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
 >>> Event 0
-     Total energy deposition in 0-th BOX: 0.496909 (GeV)
-     Total energy deposition in 1-th BOX: 0.503091 (GeV)
+     Total energy deposition in 0-th BOX: 0.498951 (GeV)
+     Total energy deposition in 1-th BOX: 0.501049 (GeV)
 #
 # muon 100 GeV in Pb
 #
@@ -199,8 +199,8 @@ msc:   Tables of transport mean free paths.
 /gun/energy 100 GeV
 /run/beamOn 1
 >>> Event 0
-     Total energy deposition in 0-th BOX: 9.60615 (GeV)
-     Total energy deposition in 1-th BOX: 18.6507 (GeV)
+     Total energy deposition in 0-th BOX: 17.3973 (GeV)
+     Total energy deposition in 1-th BOX: 25.5833 (GeV)
 #
 /run/particle/dumpCutValues
 ============= The cut Energy ==============================

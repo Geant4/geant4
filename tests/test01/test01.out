@@ -29,8 +29,6 @@ Tst01PhysicsList::SetCuts:/tracking/verbose 1
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
 *********************************************************************************************************
 
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0        0        0        0     1e+05        0        0         0       SPhys initStep
     1    2e+04        0        0     1e+05        0    2e+04     2e+04  OutOfWorld Transportation
 /tracking/verbose 0
 /run/beamOn 10
