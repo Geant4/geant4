@@ -1,4 +1,4 @@
-$Id: History,v 1.56 2002-10-28 09:57:23 dressel Exp $
+$Id: History,v 1.57 2002-10-28 13:35:01 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct  28th, 2002 M.Dressel cand-01-transport-V05-00-00
+Oct  28th, 2002 M.Dressel transport-V04-01-02
 -----------------------------------------------------
 - bug fix in G4MassGeometry
 
@@ -41,7 +41,6 @@ Oct  10th, 2002 M.Dressel transport-V04-01-01-internal-5
   and G4ParallelGeometrySampler. 
 - Introduction of Configurators to setup the processes.
 
-
 Sep  18th, 2002 M.Dressel transport-V04-01-01-internal-4
 --------------------------------------------------------
 - tagging a version before reducing the number of Samplers
@@ -50,15 +49,12 @@ Sep  2th, 2002 M.dressel  transport-V04-01-01-internal-3
 -----------------------------------------
     code cleanup for code-wizard
 
-
 Aug  29th, 2002 M.Dressel int-1-V04-01-01
 -----------------------------------------
 - adopted to changes in int-2-geombias-V04-01-01:
      renaming of G4PTouchableKey to G4GeometryCell 
      changing  G4VIStore and G4IStore 
      and dependants
-
-  
 
 Aug  13th, 2002 M.Dressel transport-V04-01-01
 ----------------------------------------------
