@@ -186,11 +186,11 @@ setenv G4VIS_USE_OPENGLX           1
 setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/HP-UX-aCC
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/HP-UX-aCC
 setenv OGLHOME        /lal/Mesa/3.0/HP-UX
-setenv OIVHOME        /lal/SoFree/v2r1
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0/HP-UX-aCC-SF -lHEPVisXt -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFreeXt -lSoFree"
+setenv OIVHOME        /lal/SoFree/v2r3
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/HP-UX-aCC-SF -lHEPVis -L$OIVHOME/HP-UX-aCC -lSoFree"
 setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
@@ -231,11 +231,11 @@ setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/OSF1-cxx
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/OSF1-cxx
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/OSF1-cxx
 setenv OGLHOME        /lal/Mesa/3.0/OSF1
 setenv OIVHOME        /lal/OpenInventor/2.5
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0/OSF1-TGS -lHEPVisXt -lHEPVis  -L$OIVHOME/lib -lInventorXt -lInventor -limage"
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/OSF1-cxx-TGS -lHEPVis  -L$OIVHOME/lib -lInventorXt -lInventor -limage"
 setenv XENVIRONMENT   $OIVHOME/app-defaults/Inventor
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
@@ -274,11 +274,11 @@ setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/Linux-gxx
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/Linux-gxx
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/Linux-gxx
 setenv OGLHOME        /lal/Mesa/3.0/Linux
-setenv OIVHOME        /lal/SoFree/v2r1
-setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0/include"
-setenv OIVLIBS        "-L/lal/HEPVis/v5r0/Linux-gxx -lHEPVisXt -lHEPVis -L$OIVHOME/Linux-gxx -lSoFreeXt -lSoFree"
+setenv OIVHOME        /lal/SoFree/v2r3
+setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
+setenv OIVLIBS        "-L/lal/HEPVis/v5r0-06-LAL/Linux-egcs-SF -lHEPVis -L$OIVHOME/Linux-egcs -lSoFree"
 setenv SOFREEUSER     $OIVHOME/user/
 # OPACS :
 setenv G4UI_BUILD_WO_SESSION       1
@@ -322,7 +322,7 @@ setenv G4VIS_USE_RAYX              1
 setenv G4VIS_USE_OIX               1
 # Specific :
 setenv RWBASE         /lal/rogue/6.1/SunOS-CC
-setenv CLHEP_BASE_DIR /lal/CLHEP/1.3/SunOS-CC
+setenv CLHEP_BASE_DIR /lal/CLHEP/1.4/SunOS-CC
 setenv OGLHOME        /lal/Mesa/3.0/SunOS
 setenv OIVHOME        /lal/SoFree/v2r3
 setenv OIVFLAGS       "-I$OIVHOME/include -I/lal/HEPVis/v5r0-06-LAL/include"
