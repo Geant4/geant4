@@ -1,5 +1,5 @@
 #! /bin/sh
-# $Id: update.sh,v 1.8 2000-02-25 13:23:29 stesting Exp $
+# $Id: update.sh,v 1.9 2000-05-03 13:14:37 stesting Exp $
 # Edit stt-prod.sdb or stt-dev.sdb and execute.
 # Usage: update.sh [-n]
 
@@ -57,6 +57,8 @@ else
   echo INSPECTING NEW DIRECTORIES...
 fi
 
-cd $G4INSTALL/..
-geant4/tests/tools/bin/updt.sh  < geant4/tests/stt-$REF.sdb \
-  > $dir/update.log 2>&1
+cd $G4INSTALL
+echo "RUNNING updt.sh IN $G4INSTALL"
+echo "REDIRECT Bonsai sdb FILE INTO INPUT, E.G., update.sh [-n] < bonsai.sdb"
+echo "REDIRECT OUTPUT TO WHERE YOU LIKE, E.G., update.sh [-n] < bonsai.sdb >& update.log"
+tests/tools/bin/updt.sh
