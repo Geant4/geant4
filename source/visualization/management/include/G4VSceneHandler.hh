@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.5 1999-10-04 15:44:06 johna Exp $
+// $Id: G4VSceneHandler.hh,v 1.6 1999-11-05 16:25:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -213,8 +213,22 @@ public:
   G4int IncrementViewCount ();
 
   virtual void ClearStore ();
+  // Clears graphics database (display lists) if any.  This base class
+  // implements some common functionality so...
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::ClearStore () {
+  //   G4VSceneHandler::ClearStore ();
+  //   ...
+  // }
+
   virtual void ClearTransientStore ();
-  // Clears graphics database (display lists) if any.
+  // Clears transient part of graphics database (display lists) if any.
+  // This base class implements some common functionality so...
+  // IMPORTANT: invoke this from your polymorphic versions, e.g.:
+  // void MyXXXSceneHandler::ClearTransientStore () {
+  //   G4VSceneHandler::ClearTransientStore ();
+  //   ...
+  // }
 
   void AddViewerToList      (G4VViewer* pView);  // Add view to view List.
   void RemoveViewerFromList (G4VViewer* pView);  // Remove view from view List.

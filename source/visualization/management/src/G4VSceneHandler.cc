@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.5 1999-10-04 15:44:05 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.6 1999-11-05 16:25:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,9 @@ void G4VSceneHandler::PostAddThis () {
   fpVisAttribs = 0;
 }
 
-void G4VSceneHandler::ClearStore () {}
+void G4VSceneHandler::ClearStore () {
+  fpViewer -> NeedKernelVisit ();
+}
 
 void G4VSceneHandler::ClearTransientStore () {}
 
