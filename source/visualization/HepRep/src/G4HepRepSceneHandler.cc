@@ -427,7 +427,7 @@ void G4HepRepSceneHandler::AddThis (const G4VTrajectory& trajectory) {
     vector<G4AttValue>* trajectoryAttValues = trajectory.CreateAttValues();
     const map<G4String,G4AttDef>* trajectoryAttDefs = trajectory.GetAttDefs();
 
-    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstanceTree(), 
+    HepRepInstance* trajectoryInstance = factory->createHepRepInstance(getEventInstance(), 
                                                         getTrajectoryType(trajectoryAttDefs));
     addAttVals(trajectoryInstance, trajectoryAttValues);
     delete trajectoryAttValues;
@@ -890,6 +890,7 @@ HepRepType* G4HepRepSceneHandler::getEventType() {
         _eventType->addAttValue("Color", 1.0, 1.0, 1.0, 1.0);
         _eventType->addAttValue("FillColor", 1.0, 1.0, 1.0, 1.0);
         _eventType->addAttValue("LineWidth", 1.0);
+        _eventType->addAttValue("HasFrame", true);
     
         getEventTypeTree()->addType(_eventType);
     }
@@ -952,7 +953,7 @@ HepRepType* G4HepRepSceneHandler::getCalHitType(const map<G4String,G4AttDef>* at
     if (_calHitType == NULL) {
         _calHitType = factory->createHepRepType(getEventType(), "CalHit");
         _calHitType->addAttValue("Layer", calHitLayer);
-        _calHitType->addAttValue("Fill", false);
+        _calHitType->addAttValue("Fill", true);
         _calHitType->addAttValue("DrawAs", "Polygon");
 
         addAttDefs(_calHitType, attDefs);
