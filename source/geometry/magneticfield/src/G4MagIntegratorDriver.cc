@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.10 1999-12-15 14:49:49 gunter Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.11 2000-05-05 18:15:49 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,7 +118,11 @@ G4MagInt_Driver::AccurateAdvance(
      // Check the endpoint
      G4double endPointDist= (EndPos-StartPos).mag(); 
      if( endPointDist >= h*(1.+perMillion) ){
-        WarnEndPointTooFar ( endPointDist, h, eps, dbg ); 
+        // Issue a warning only for gross differences -
+        //   we understand how small difference occur.
+        if( endPointDist >= h*(1.+perThousand) ){ 
+           WarnEndPointTooFar ( endPointDist, h, eps, dbg ); 
+	}
         noBadSteps  ++;
      } else { // ie (!dbg)
         noGoodSteps ++;
