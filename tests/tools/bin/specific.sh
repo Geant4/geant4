@@ -93,10 +93,10 @@ if [ `uname -n | grep sungeant` ]; then
     export G4USE_OSPACE=1
     export PATH=`echo $PATH | sed s/SUNWspro50/SUNWspro/`
     # Persistency...
-    if [ X$G4USE_HEPODBMS = X ]; then
+#    if [ X$G4USE_HEPODBMS = X ]; then
 #       . $G4INSTALL/examples/extended/persistency/PersistentEx01/g4odbms_setup.sh
 #       export G4EXAMPLE_FDID=207
-    fi
+#    fi
   else
     export G4SYSTEM=SUN-CC5
     export DEBOPT=${DEBOPT}_ISO
