@@ -527,10 +527,10 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   set prompt='mac-91114-g4> ' 
 # Core :
   setenv MAKECMD make
-  setenv CVSROOT :ext:gbarrand@sungeant.cern.ch:/afs/cern.ch/sw/geant4/cvs
+  setenv CVSROOT :ext:gbarrand@geant4.cvs.cern.ch:/cvs/Geant4
   setenv CVS_RSH ssh
 #  setenv G4INSTALL /geant4/geant4.6.0
-  setenv G4INSTALL /geant4/geant4-06-02-cand-02
+  setenv G4INSTALL /geant4/geant4-07-00-ref-01
   setenv G4SYSTEM Darwin-g++
   setenv G4WORKDIR $G4INSTALL/Darwin
   setenv G4STTDIR $G4WORKDIR/stt
