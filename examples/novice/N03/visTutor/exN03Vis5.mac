@@ -44,14 +44,14 @@
 /vis/sceneHandler/create Xo
 /vis/viewer/create
 
-# Add detector geometry to the current scene
+# Add the world volume to the current scene
 /vis/scene/add/volume
 /tracking/storeTrajectory 1
 #/vis/scene/add/trajectories
 
 # Bird-eye view of events
-/vis/camera/reset
-/vis/camera/viewpoint    45 45 
+/vis/viewer/reset 
+/vis/viewer/viewpointThetaPhi   45 45 
 
 /run/beamOn 1
 

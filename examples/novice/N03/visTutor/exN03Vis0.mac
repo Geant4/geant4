@@ -3,11 +3,13 @@
 #                                                                     #
 #  AUTHOR(S): Satoshi Tanaka                                          #
 #                                                                     #
-#  DATE: November 10, 1999                                            #
-#        May      20, 2000                                            # 
-#        June     06, 2000                                            # 
-#        October  17, 2000                                            # 
+#  DATE:                                                              #
+#        June     20, 2001                                            #
 #        November 26, 2000                                            #
+#        October  17, 2000                                            # 
+#        June     06, 2000                                            # 
+#        May      20, 2000                                            # 
+#        November 10, 1999                                            #
 #                                                                     #
 #  CONTENTS: A simplest macro to demonstrate visualization of         #
 #            detector geometry and events                             #
@@ -34,7 +36,7 @@
 #    % setenv G4VIS_USE_DAWNFILE           1                          #
 #                                                                     #
 #  ADDITIONAL NOTES:                                                  #
-#    The compound command "/vis/open <graphics-system-name>"          #
+#    The compound command "/vis/open <vis-driver-name>"               #
 #    is equivalent to the following set of commands:                  #
 #                                                                     #
 #      /vis/sceneHandler/create $1                                    #
@@ -48,11 +50,10 @@
 #      /vis/sceneHandler/attach                                       #
 #      /vis/viewer/refresh                                            #
 #                                                                     #
-#    WARNING: You need one more command "/vis/viewer/update" for      #
-#             flushing in using post-processin visualization drivers  #
+#    WARNING: You should execute "/vis/viewer/update"  after          #
+#             "/vis/drawVolume" in order to complete visualization    #
+#             when you use  post-processin visualization drivers      #
 #             such as the DAWNFILE, VRMLFILE, OpenGL Motif drivers.   #
-#             You can execute, e.g. "/vis/draw/axes" before executing #
-#             "/vis/viewer/update" to visualize coordinate axes.      #
 #                                                                     #
 #######################################################################
 
@@ -65,10 +66,8 @@
 /vis/open OGLIX
 
 # Set camera 
-#  Note: Camera setting should be done
-#        for each scene handler.
-/vis/camera/reset 
-#/vis/camera/viewpoint 70 20
+/vis/viewer/reset 
+/vis/viewer/viewpointThetaPhi 70 20
 
 # Visualize of the whole detector geometry
 /vis/drawVolume
@@ -83,7 +82,7 @@
 #  * In order to make the file "g4_XX.eps" printable, 
 #    append the "showpage" PostScript command to the file. 
 #    You can do it with the 4th page of the DAWN GUI panel 
-#    or by editing the file by hand.
+#    or by editing the EPS file by hand.
 #
 #  * Set an environmental variable if you wish to 
 #    skip DAWN GUI:
@@ -110,11 +109,9 @@
 /vis/sceneHandler/attach 
 
 # Set camera 
-#  Note: Camera setting should be done 
-#        for each scene handler.
-/vis/camera/reset 
-/vis/camera/zoom      1.2
-/vis/camera/viewpoint 20 70
+/vis/viewer/reset 
+/vis/viewer/zoom              1.5
+/vis/viewer/viewpointThetaPhi 70 20
 
 # Visualize events added to the current scene
 /tracking/storeTrajectory 1
