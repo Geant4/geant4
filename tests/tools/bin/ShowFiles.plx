@@ -34,8 +34,9 @@ opendir(TT,"$TestTop") || die "Failed to opendir TestTop  $TestTop $!";
 @Platforms=grep(m/^[A-Z]/,readdir(TT));
 closedir(TT);
 foreach $Platform (@Platforms) {
-   print "$Platform\n";
+#  print "PLATFORM:  $Platform\n";
 #  next unless (-d "$TestTop/$Platform");
+   next if ( "AIX-xlC" eq "$Platform" || "SUN-CC5" eq "$Platform" );
    $PDir="$TestTop/$Platform";
    next unless (-d "$PDir");
    opendir(PLATFORM,"$PDir")  || die "Failed to opendir Platform $PDir $! ";
