@@ -61,7 +61,7 @@ public:
 
   G4NuclearLevelManager();
   G4NuclearLevelManager(const G4int Z, const G4int A, const G4String& filename);
-  //  G4NuclearLevelManager(const G4NuclearLevelManager & right);  
+  G4NuclearLevelManager(const G4NuclearLevelManager & right);  
 
   ~G4NuclearLevelManager();
   

@@ -51,6 +51,7 @@
 #include <fstream>
 #include <strstream>
 #include <algorithm>
+#include "G4HadTmpUtil.hh"
 
 G4NuclearLevelManager::G4NuclearLevelManager():
     _nucleusA(0), _nucleusZ(0), _fileName(""), _validity(false), 
@@ -430,7 +431,7 @@ void G4NuclearLevelManager::MakeLevels()
 	_levels->push_back(newLevel);
     }
 
-    //    std::sort(_levels->begin(), _levels->end());
+	G4PtrSort<G4NuclearLevel>(_levels);
 
     return;
 }
@@ -452,7 +453,7 @@ void G4NuclearLevelManager::PrintAll()
     { _levels->operator[](i)->PrintAll(); }
 }
 
-/*
+
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 {
     _levelEnergy = right._levelEnergy;
@@ -486,7 +487,7 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
 	    _levels->push_back(new G4NuclearLevel(*(right._levels->operator[](i))));
 	  }
 	
-	std::sort(_levels->begin(), _levels->end());
+	G4PtrSort<G4NuclearLevel>(_levels);
       }
     else 
       {
@@ -494,4 +495,3 @@ G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)
       }
 }
 
-*/
