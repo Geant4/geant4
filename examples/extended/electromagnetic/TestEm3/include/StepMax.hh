@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: StepMax.hh,v 1.5 2005-02-22 09:30:24 vnivanch Exp $
+// $Id: StepMax.hh,v 1.6 2005-03-01 17:55:19 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -71,20 +71,23 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
+inline 
+G4double StepMax::PostStepGetPhysicalInteractionLength( const G4Track& aTrack,
                                     G4double, G4ForceCondition* condition)
 {
   // condition is set to "Not Forced"
   *condition = NotForced;
+  
   G4double limit = DBL_MAX; 
   G4int n = aTrack.GetVolume()->GetCopyNo();
-  if(n < MaxAbsor) limit = stepMax[n];
+  if (n < MaxAbsor) limit = stepMax[n];
   return limit;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+inline 
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
    // do nothing
    aParticleChange.Initialize(aTrack);
