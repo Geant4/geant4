@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.hh,v 1.1 2003-06-16 15:11:40 gcosmo Exp $
+// $Id: G4PVDivision.hh,v 1.2 2003-10-01 14:53:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PVDivision
@@ -127,8 +127,6 @@ class G4PVDivision : public G4VPhysicalVolume
                                      G4double& width,
                                      G4double& offset,
                                      G4bool& consuming ) const;
-    virtual void Setup(G4VPhysicalVolume *pMother);
-
     G4bool IsParameterised() const;
 
   private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.1 2003-06-16 15:11:41 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.2 2003-10-01 14:53:39 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file
@@ -222,12 +222,6 @@ void G4PVDivision::GetReplicationData(EAxis& axis,
   width=fwidth;
   offset=foffset;
   consuming=false;
-}
-
-//--------------------------------------------------------------------------
-void G4PVDivision::Setup(G4VPhysicalVolume *pMother)
-{
-  SetMother(pMother);
 }
 
 
