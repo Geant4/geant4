@@ -1,4 +1,4 @@
-$Id: History,v 1.282 2005-03-10 19:34:36 allison Exp $
+$Id: History,v 1.283 2005-03-15 13:06:48 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,13 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+15th March 2005  John Allison  (vis-V07-00-12)
+- Added return type G4int to G4ViewParameters::SetNoOfSides and
+  G4ModelingParameters::SetNoOfSides.  They return no. of sides, i.e.,
+  sides per circle in polyhedron contruction, that are actually set;
+  there is a lower limit of 12.
+- G4PhysicalVolumeModel: bug fix: no. of rotation steps correctly applied.
 
 10th March 2005  John Allison  (vis-V07-00-11)
 - Reviewed all vis commands.  Improved guidance, simplified and
