@@ -1,0 +1,98 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4GammaConversionToMuons.icc,v 1.1 2002-04-19 14:44:33 hbu Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//         ------------ G4GammaConversionToMuons physics process ------
+//         by H.Burkhardt, S. Kelner and R. Kokoulin, April 2002
+// -----------------------------------------------------------------------------
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4bool G4GammaConversionToMuons::IsApplicable(
+                                        const G4ParticleDefinition& particle)
+{
+   return ( &particle == G4Gamma::Gamma() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4GammaConversionToMuons::GetCrossSectionPerAtom(
+                                   const G4DynamicParticle* aDynamicGamma,
+                                         G4Element*         anElement)
+
+// gives the total cross section per atom in GEANT4 internal units
+{
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4double AtomicZ = anElement->GetZ();
+   G4double AtomicA = anElement->GetA()/(g/mole);
+   G4double crossSection =
+        ComputeCrossSectionPerAtom(GammaEnergy,AtomicZ,AtomicA);
+   return crossSection;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4GammaConversionToMuons::GetMeanFreePath(const G4Track& aTrack,
+                                              G4double, G4ForceCondition*)
+
+// returns the photon mean free path in GEANT4 internal units
+// (MeanFreePath is a private member of the class)
+
+{
+   const G4DynamicParticle* aDynamicGamma = aTrack.GetDynamicParticle();
+   G4double GammaEnergy = aDynamicGamma->GetKineticEnergy();
+   G4Material* aMaterial = aTrack.GetMaterial();
+
+   if (GammaEnergy <  LowestEnergyLimit)
+     MeanFreePath = DBL_MAX;
+   else
+     MeanFreePath = ComputeMeanFreePath(GammaEnergy,aMaterial);
+
+   return MeanFreePath;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline G4double G4GammaConversionToMuons::ComputeMeanFreePath(
+                            G4double GammaEnergy, G4Material* aMaterial)
+
+// computes and returns the photon mean free path in GEANT4 internal units
+{
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();
+
+  G4double SIGMA = 0 ;
+
+  for ( size_t i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
+  {
+    G4double AtomicZ = (*theElementVector)[i]->GetZ();
+    G4double AtomicA = (*theElementVector)[i]->GetA()/(g/mole);
+    SIGMA += NbOfAtomsPerVolume[i] *
+      ComputeCrossSectionPerAtom(GammaEnergy,AtomicZ,AtomicA);
+  }
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
