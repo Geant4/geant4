@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4RunManagerKernel.cc,v 1.13 2004-03-18 08:47:53 gcosmo Exp $
+// $Id: G4RunManagerKernel.cc,v 1.14 2004-05-04 16:43:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -31,7 +31,7 @@
 #include "G4StateManager.hh"
 #include "G4ApplicationState.hh"
 #include "G4ExceptionHandler.hh"
-#include "G4EventManager.hh"
+//#include "G4EventManager.hh"
 #include "G4GeometryManager.hh"
 #include "G4TransportationManager.hh"
 //#include "G4Navigator.hh"

@@ -1,4 +1,4 @@
-$Id: History,v 1.109 2004-03-18 08:48:09 gcosmo Exp $
+$Id: History,v 1.110 2004-05-04 16:43:24 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 04, 2004, M.Asai (run-V06-01-00)
+- Access methods to G4TrackingManager and G4StackManager are added
+  to G4RunManagerKernel.
 
 March 18, 2004, M.Asai (run-V06-00-02)
 - Added NIM reference to header and WWW info.
