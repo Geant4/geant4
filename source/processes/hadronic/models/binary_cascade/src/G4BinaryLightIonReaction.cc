@@ -236,7 +236,9 @@
 	  G4double deltaE = localFermiEnergy - (aNuc->GetMomentum().t()-aNuc->GetMomentum().mag());
 	  theStatisticalExEnergy += deltaE;
 	}
-	debug.push_back("collected a hit"); debug.dump();
+	debug.push_back("collected a hit"); 
+	debug.push_back(aNuc->GetMomentum());
+	debug.dump();
       }
       delete fancyNucleus;
       delete projectile;
@@ -260,11 +262,19 @@
           fState += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
 	  cascaders->push_back((*result)[i]);
 //          G4cout <<" secondary ... ";
+          debug.push_back("secondary ");
+	  debug.push_back((*result)[i]->GetDefinition()->GetParticleName());
+	  debug.push_back(G4LorentzVector((*result)[i]->GetMomentum(),(*result)[i]->GetTotalEnergy()));
+	  debug.dump();
 	}
 	else {
 //          G4cout <<" spectator ... ";
           pspectators += G4LorentzVector( (*result)[i]->GetMomentum(), (*result)[i]->GetTotalEnergy() );
 	  spectators->push_back((*result)[i]);
+          debug.push_back("spectator ");
+	  debug.push_back((*result)[i]->GetDefinition()->GetParticleName());
+	  debug.push_back(G4LorentzVector((*result)[i]->GetMomentum(),(*result)[i]->GetTotalEnergy()));
+	  debug.dump();
 	}
 
 //       G4cout << (*result)[i]<< " "
@@ -328,6 +338,7 @@
 //      G4cout << " == post boost 1 "<< momentum.e()<< " "<< momentum.mag()<<G4endl;
   //    G4LorentzRotation boost_spectator_mom(-momentum.boostVector());
   //     G4cout << "- momentum " << boost_spectator_mom * momentum << G4endl; 
+      G4LorentzVector pFragments(0);
       if(resZ>0 && resA>1) 
       {
 	//  Make the fragment
@@ -368,6 +379,8 @@
 	   for (ispectator=spectators->begin();ispectator!=spectators->end();ispectator++)
 	   {
 	       (*ispectator)->SetNewlyAdded(true);
+	       cascaders->push_back(*ispectator);
+	       pFragments+=G4LorentzVector((*ispectator)->GetMomentum(),(*ispectator)->GetTotalEnergy());
   // 	     G4cout << "from spectator "  
   //  	      << (*ispectator)->GetDefinition()->GetParticleName() << " " 
   //  	      << (*ispectator)->GetMomentum()<< " " 
@@ -383,7 +396,6 @@
       if(proFrag) debug.push_back(proFrag->size());
       debug.dump();
       G4ReactionProductVector::iterator ii;
-      G4LorentzVector pFragments(0);
       if(proFrag) for(ii=proFrag->begin(); ii!=proFrag->end(); ii++)
       {
 	(*ii)->SetNewlyAdded(true);
