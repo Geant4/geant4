@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.5 1999-04-16 09:06:09 mora Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.6 1999-10-04 15:47:16 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -14,7 +14,9 @@
 
 #include "G4VisManager.hh"
 #include "G4TransportationManager.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4PhysicalVolumeModel.hh"
+#include "G4LogicalVolumeModel.hh"
 #include "G4ModelingParameters.hh"
 #include "G4PhysicalVolumeSearchScene.hh"
 #include "G4VGlobalFastSimulationManager.hh"
@@ -42,8 +44,8 @@ G4VisCommandSceneAddVolume::G4VisCommandSceneAddVolume () {
   fpCommand -> SetGuidance ("Adds a physical volume to the current scene.");
   fpCommand -> SetGuidance
     ("1st parameter: volume name (default \"world\").");
-  fpCommand -> SetGuidance
-    ("               \"list\" to list all volumes.");
+  //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
+  //    ("               \"list\" to list all volumes.");
   fpCommand -> SetGuidance
     ("2nd parameter: copy number (default 0).");
   fpCommand -> SetGuidance
@@ -145,6 +147,79 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 	   << endl;
   }
 }
+
+////////////// /vis/scene/add/logicalVolume ///////////////////////////////////////
+
+G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand ("/vis/scene/add/logicalVolume", this);
+  fpCommand -> AvailableForStates (Idle, GeomClosed);
+  fpCommand -> SetGuidance
+    ("/vis/scene/add/logicalVolume <logical-volume-name> [<depth-of-descending>]");
+  fpCommand -> SetGuidance ("Adds a logical volume to the current scene.");
+  fpCommand -> SetGuidance
+    ("1st parameter: volume name.");
+  //  fpCommand -> SetGuidance  // Not implemented - should be in geom?
+  //    ("               \"list\" to list all volumes.");
+  fpCommand -> SetGuidance
+    ("2nd parameter: depth of descending geometry hierarchy (default 1).");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("volume", 's', omitable = false);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("depth", 'i', omitable = true);
+  parameter -> SetDefaultValue (1);
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddLogicalVolume::~G4VisCommandSceneAddLogicalVolume () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddLogicalVolume::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand* command,
+						     G4String newValue) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.isEmpty ()) {
+    G4cout << "No scenes - please create one before adding anything."
+	   << endl;
+    return;
+  }
+
+  G4String name;
+  G4int requestedDepthOfDescent;
+  const char* s = newValue;
+  istrstream is ((char*)s);
+  is >> name >> requestedDepthOfDescent;
+
+  G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
+  int nLV = pLVStore -> entries ();
+  int iLV;
+  G4LogicalVolume* pLV;
+  for (iLV = 0; iLV < nLV; iLV++ ) {
+    pLV = (*pLVStore) [iLV];
+    if (pLV -> GetName () == name) break;
+  }
+  if (iLV == nLV) {
+    G4cout << "Logical volume " << name
+	   << " not found in logical volume Store." << endl;
+    return;
+  }
+
+  G4VModel* model = new G4LogicalVolumeModel (pLV, requestedDepthOfDescent);
+  G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pScene -> GetName ();
+  pScene -> AddRunDurationModel (model);
+  UpdateVisManagerSceneAndViewParameters (currentSceneName);
+  G4cout << "Logical volume \"" << pLV -> GetName ()
+	 << " with requested depth of descent "
+	 << requestedDepthOfDescent
+	 << ",\n  has been added to scene \"" << currentSceneName << "\""
+	 << endl;
+}
+
 
 ////////////// /vis/scene/add/ghosts ///////////////////////////////////////
 

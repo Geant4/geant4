@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.6 1999-05-25 09:14:21 johna Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.7 1999-10-04 15:47:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,10 +64,11 @@ manages a list of scenes.
 /vis/scene/select [<scene-name>]
 * /vis/scene/edit
 /vis/scene/remove <scene-name>
-/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>] 
 /vis/scene/add/ghosts [<particle>]
 * /vis/scene/add/ghost [<particle>] [<physical-volume-name>]
-                     [<copy-no>] [<depth>]
+*                      [<copy-no>] [<depth>]
+/vis/scene/add/logicalVolume <logical-volume-name> [<depth>] 
+/vis/scene/add/volume [<physical-volume-name>] [<copy-no>] [<depth>] 
 /vis/scene/include/hits [<sensitive-volume-name>] (argument not impl'd yet.)
 /vis/scene/include/trajectories [<sensitive-volume-name>] (do.)
 * /vis/scene/include/transientObjects
@@ -187,6 +188,7 @@ or some such.
   command -> SetGuidance ("Add model to current scene.");
   fMessengerList.append (new G4VisCommandSceneAddVolume);
   fMessengerList.append (new G4VisCommandSceneAddGhosts);
+  fMessengerList.append (new G4VisCommandSceneAddLogicalVolume);
   command = new G4UIdirectory ("/vis/scene/include/");
   command -> SetGuidance ("Include drawing option in current scene.");
   fMessengerList.append (new G4VisCommandSceneIncludeHits);

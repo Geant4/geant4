@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.hh,v 1.2 1999-01-09 16:31:02 allison Exp $
+// $Id: G4VisCommandsSceneAdd.hh,v 1.3 1999-10-04 15:47:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -20,6 +20,17 @@ public:
   // Uses compiler defaults for copy constructor and assignment.
   G4VisCommandSceneAddVolume ();
   ~G4VisCommandSceneAddVolume ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4UIcommand* fpCommand;
+};
+
+class G4VisCommandSceneAddLogicalVolume: public G4VVisCommandScene {
+public:
+  // Uses compiler defaults for copy constructor and assignment.
+  G4VisCommandSceneAddLogicalVolume ();
+  ~G4VisCommandSceneAddLogicalVolume ();
   G4String GetCurrentValue (G4UIcommand* command);
   void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
