@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.88 2003-08-28 11:48:16 gcosmo Exp $
+# $Id: architecture.gmk,v 1.89 2003-10-01 15:52:37 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -89,14 +89,6 @@ endif
 ifneq ($(G4LIB_BUILD_G3TOG4),)
   G4LIB_BUILD_G3TOG4 = 1
   G4USE_G3TOG4 = 1
-endif
-
-# Specify if to build the STEP and STEinterface modules or not.
-# Default is NO.
-#
-ifneq ($(G4LIB_BUILD_STEP),)
-  G4LIB_BUILD_STEP = 1
-  G4USE_STEP = 1
 endif
 
 # If not specified, the default path for G4 binaries G4BIN is
