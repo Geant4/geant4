@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.29 2002-11-29 16:07:19 japost Exp $
+// $Id: G4PropagatorInField.hh,v 1.30 2003-05-19 17:31:27 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PropagatorInField 
@@ -235,7 +235,11 @@ class G4PropagatorInField
 
    G4double  fCharge, fInitialMomentumModulus, fMass;
 
-  // Introducing smooth curved trajectory display (jacek 30/10/2002)
+
+public:
+  // Added smooth (curved) trajectory for display (jacek 30/10/2002)
+  // 
+  void SetTrajectoryFilter(G4VCurvedTrajectoryFilter* filter);
 
    // Last safety origin & value: for optimisation
    G4ThreeVector  fPreviousSftOrigin;
@@ -243,11 +247,11 @@ class G4PropagatorInField
 
 private:
   // The filter encapsulates the algorithm which selects which
-  // intermediate points should be stored in a trajectory. If the
-  // pointer is not NULL, then PIF should submit all the intermediate
-  // points it calculates, to the filter. The pointer should be set to
-  // NULL when no intermediate points need to be stored. This
-  // (jacek 04/11/2002)
+  // intermediate points should be stored in a trajectory. 
+  //   If it is not NULL, then PIF should submit all the intermediate
+  //   points it calculates, to the filter. 
+  //   The pointer should be set to NULL when no intermediate points 
+  //   need to be stored.     (jacek 04/11/2002)
   G4VCurvedTrajectoryFilter* fpTrajectoryFilter;
 };
 
