@@ -28,6 +28,10 @@ public:
   int GetTestResult() const;
   int Test(const G4Ray&);
 
+  // this function return 1 if the point is inside and on the bbox,
+  // 0 if the point is outside the bbox
+  G4int Inside(const G4Point3D&);
+
   static const G4BoundingBox3D space;
 
     
