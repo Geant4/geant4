@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.3 2000-09-10 13:58:58 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.4 2000-09-16 14:16:40 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -460,14 +460,13 @@ G4double G4QPDGCode::GetWidth()
 G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 //      ===================================================
 {
-  static const G4double delMi = G4QPDGCode(1114).GetMass();
-  static const G4double delPP = G4QPDGCode(2224).GetMass();
-  static const G4double mP    = G4QPDGCode(2212).GetMass();
-  static const G4double mN    = G4QPDGCode(2112).GetMass();
-  static const G4double mL    = G4QPDGCode(3122).GetMass();
-  static const G4double mK    = G4QPDGCode( 321).GetMass();
-  static const G4double mK0   = G4QPDGCode( 311).GetMass();
-  static const G4int nSh = 164;
+  static const G4double mP  = G4QPDGCode(2212).GetMass();
+  static const G4double mN  = G4QPDGCode(2112).GetMass();
+  static const G4double mL  = G4QPDGCode(3122).GetMass();
+  static const G4double mK  = G4QPDGCode( 321).GetMass();
+  static const G4double mK0 = G4QPDGCode( 311).GetMass();
+  static const G4double mPi = G4QPDGCode( 211).GetMass();
+  static const G4int    nSh = 164;
   static G4double sh[nSh] = {0.,                        // Fake element for C++ N=Z=0
                                -4.315548,   2.435504,  -1.170501,   3.950887,   5.425238,
                                 13.342524,  15.547586,  22.583129,  23.983480,  30.561036,
@@ -565,15 +564,24 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     else return 0.;
     S=0;
   }
+  if(N<0)
+  {
+    if(Z+N<1) return 0.;
+    k+=-N*mPi;
+    Z+=N;
+    N=0;
+  }
+  if(Z<0)
+  {
+    if(Z+N<1) return 0.;
+    k+=-Z*mPi;
+    N+=Z;
+    Z=0;
+  }
   G4double A=Z+N;                     // Baryon Number of the nucleus
   G4double m=k+A*um;                  // Expected mass in atomic units
   G4double D=N-Z;                     // Isotopic shift of the nucleus
-  if (Z==-1||N==-1)                   // Iso-Nuclei
-  {
-    if(Z==-1) return k+delMi+(N-1)*mN+S*mL;
-    else      return k+delPP+(Z-1)*mP+S*mL;
-  }
-  else if(A<1||Z<0||N<0)              // @@ Can be generalized to anti-nuclei
+  if(A<1||Z<0||N<0)                   // @@ Can be generalized to anti-nuclei
   {
     //G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Quasmon.hh,v 1.9 2000-09-13 14:24:16 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.10 2000-09-16 14:16:39 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -71,6 +71,7 @@ public:
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron); // Pub-wrapper for HadronizeQuasmon()
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
+  void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
   void              KillQuasmon();                    // Kill Quasmon (status=0)
 
 private:  
@@ -128,6 +129,14 @@ inline G4double        G4Quasmon::GetRandomMass(G4int PDG, G4double maxM)
   G4QParticle* part = theWorld.GetQParticle(PDG);
   return G4QHadron(part, maxM).GetMass();
 }
+
+inline void G4Quasmon::IncreaseBy(const G4Quasmon* pQuasm)
+{
+  valQ  += pQuasm->GetQC();
+  q4Mom += pQuasm->Get4Momentum();
+  status= 3;
+}
+
 inline void G4Quasmon::InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M)
 {
   valQ  = qQCont;
