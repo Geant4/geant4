@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Integrator.icc,v 1.7 2001-07-11 10:00:40 gunter Exp $
+// $Id: G4Integrator.icc,v 1.8 2002-09-19 10:59:12 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation of G4Integrator methods. 
@@ -372,6 +372,8 @@ G4Integrator<T,F>::Legendre( T& typeT, F f, G4double a, G4double b, G4int nLegen
       integral += fWeight[i]*( (typeT.*f)(xMean + dx) + 
                                (typeT.*f)(xMean - dx)    ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 } 
 
@@ -443,6 +445,9 @@ Legendre( G4double (*f)(G4double), G4double a, G4double b, G4int nLegendre)
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*( (*f)(xMean + dx) + (*f)(xMean - dx)    ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
+
    return integral *= xDiff ;
 } 
 
@@ -756,6 +761,8 @@ G4Integrator<T,F>::Chebyshev( T& typeT, F f, G4double a,
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*(typeT.*f)(xMean + dx)  ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 }
 
@@ -799,6 +806,8 @@ G4Integrator<T,F>::Chebyshev( G4double (*f)(G4double),
       dx = xDiff*fAbscissa[i] ;
       integral += fWeight[i]*(*f)(xMean + dx)  ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral *= xDiff ;
 }
 
@@ -880,6 +889,8 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
    {
       integral += fWeight[i]*(typeT.*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -965,6 +976,8 @@ newton += ((1.0+2.55*cofi)/(1.9*cofi) + 1.26*cofi*alpha/(1.0+3.5*cofi))*
    {
       integral += fWeight[i]*(*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1082,6 +1095,8 @@ G4double G4Integrator<T,F>::Hermite( T& typeT, F f, G4int nHermite)
      integral += fWeight[i]*( (typeT.*f)(fAbscissa[i]) + 
                               (typeT.*f)(-fAbscissa[i])   ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1174,6 +1189,8 @@ G4double G4Integrator<T,F>::Hermite( G4double (*f)(G4double), G4int nHermite)
    {
      integral += fWeight[i]*( (*f)(fAbscissa[i]) + (*f)(-fAbscissa[i])   ) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1291,6 +1308,8 @@ G4double G4Integrator<T,F>::Jacobi( T& typeT, F f, G4double alpha,
    {
       integral += fWeight[i]*(typeT.*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
@@ -1414,6 +1433,8 @@ G4double G4Integrator<T,F>::Jacobi( G4double (*f)(G4double), G4double alpha,
    {
       integral += fWeight[i]*(*f)(fAbscissa[i]) ;
    }
+   delete[] fAbscissa;
+   delete[] fWeight;
    return integral ;
 }
 
