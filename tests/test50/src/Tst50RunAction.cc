@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.cc,v 1.17 2003-05-17 13:07:48 guatelli Exp $
+// $Id: Tst50RunAction.cc,v 1.18 2003-05-17 13:42:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,10 +65,11 @@ void Tst50RunAction::BeginOfRunAction(const G4Run* aRun)
       G4UImanager* UI = G4UImanager::GetUIpointer();
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
-  fg=0;
+
+  gamma_trans=0;
   numberEvents=0;
-  number=0;
-  numberB=0;
+  particle_trans=0;
+  particle_back=0;
 
 }
 
@@ -107,8 +108,8 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
   
   if (particle_name =="gamma")
     {
-      G4double trans=(fg/numberEvents);
-      G4double trans_error=-(log(sqrt(fg)/numberEvents)/(thickness*density)); 
+      G4double trans=(gamma_trans/numberEvents);
+      G4double trans_error=-(log(sqrt(gamma_trans)/numberEvents)/(thickness*density)); 
       G4double trans_coeff= -(log(trans))/(thickness*density);
       Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
       analysis -> attenuation_coeffiecient(runID,energy/MeV,trans_coeff/(cm2/g),trans_error/(cm2/g));
@@ -119,10 +120,10 @@ void Tst50RunAction::EndOfRunAction(const G4Run* aRun)
     {
      if (particle_name =="e-" || particle_name =="e+")
       {
-       G4double ft=(number/numberEvents) ;
-       G4double ft_error= (sqrt(number))/numberEvents;
-       G4double fb=(numberB/numberEvents);
-       G4double fb_error= (sqrt(numberB))/numberEvents;
+       G4double ft=(particle_trans/numberEvents) ;
+       G4double ft_error= (sqrt(particle_trans))/numberEvents;
+       G4double fb=(particle_back/numberEvents);
+       G4double fb_error= (sqrt(particle_back))/numberEvents;
        Tst50AnalysisManager* analysis = Tst50AnalysisManager::getInstance();
        analysis-> trasmission(runID,energy/MeV,ft,fb,ft_error,fb_error);
       }
@@ -137,14 +138,14 @@ void  Tst50RunAction::Set_Trans(G4String newValue)
 
 void  Tst50RunAction::gamma_transmitted()
 {
-  fg = fg +1;
+  gamma_trans= gamma_trans +1;
 }
 
 void  Tst50RunAction::Trans_number()
 {
-  number= number+1;
+  particle_trans= particle_trans+1;
 }
 void  Tst50RunAction::Back_number()
 {
-  numberB= numberB+1;
+  particle_back= particle_back+1;
 }

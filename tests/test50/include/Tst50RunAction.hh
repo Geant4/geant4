@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.13 2003-05-17 11:32:34 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.14 2003-05-17 13:42:42 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -57,14 +57,15 @@ class Tst50RunAction : public G4UserRunAction
   G4int GetRun_ID ();
 
 private:
-  G4double number;
-  G4double numberB;
-  G4int numberEvents;
+  G4double particle_trans;// number of transmitted massive particles
+  G4double particle_back;// number of backscattered massive particles
+  G4int numberEvents;// number of events in the BeamOn 
   G4int runID;
-  G4double fg;
+  G4double gamma_trans;// number of transmitted gamma 
   Tst50PrimaryGeneratorAction* p_Primary;
   Tst50DetectorConstruction* p_Detector;
-  G4bool flag;
+  G4bool flag; // if true transmission test, if false SP and CSDA range
+               // valid for massive particles
   Tst50RunMessenger* p_messenger;
 };
 #endif
