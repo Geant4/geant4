@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleTable.cc,v 1.4 1999-05-18 14:55:40 fbehner Exp $
+// $Id: G4ParticleTable.cc,v 1.5 1999-05-19 14:55:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParticleTable
@@ -21,6 +21,7 @@
 //      added dictionary for encoding    24 Sep., 98 H.Kurashige
 //      fixed bugs in destruction of IonTable 08 Nov.,98 H.Kurashige
 //      commented out G4cout/G4cout in the constructor 10 Nov.,98 H.Kurashige
+//      modified destructor for STL interface 18 May 1999
 
 #include "G4ios.hh"
 #include "globals.hh"
@@ -50,27 +51,12 @@ G4ParticleTable::G4ParticleTable():verboseLevel(0),fParticleMessenger(0)
 
 G4ParticleTable::~G4ParticleTable()
 {
-  // delete G4String objects for key
-  G4String* pS;
-  //For STL use
-#ifdef G4USE_STL
   if(fDictionary)
     {
-      fDictionary->clearAndDestroy();
+      fDictionary->clear();
       delete fDictionary;
     }
   delete fIterator;
-#else
-  if (fDictionary->entries()>0){
-    fIterator -> reset();
-    while( (*fIterator)() ){
-      if (pS =  fIterator -> key()) delete pS;
-    }
-    fDictionary -> clear();
-  }
-  delete fIterator;
-  delete fDictionary;
-#endif
   if (fParticleMessenger!=0) delete fParticleMessenger;  
 
   // delete dictionary for encoding
@@ -147,45 +133,19 @@ void G4ParticleTable::RemoveAllParticles()
   }
 
   // delete dictionary for encoding
-#ifdef G4USE_STL
   if (fEncodingDictionary)
     {
-      fEncodingDictionary->clearAndDestroy();
+      fEncodingDictionary->clear();
       fEncodingDictionary = 0;
     }
-#else
-  if (fEncodingDictionary!=0){
-   G4int* pCode;
-   G4PTblEncodingDicIterator* fEncodeIterator;
-   fEncodeIterator = new  G4PTblEncodingDicIterator(*fEncodingDictionary);
-   fEncodeIterator-> reset();
-   while( (*fEncodeIterator)() ){
-     if (pCode = fEncodeIterator-> key()) delete pCode;
-   }
-   fEncodingDictionary -> clear();
-   delete fEncodeIterator;
-   delete fEncodingDictionary;
-   fEncodingDictionary = 0;
-  }
-#endif
 
   // delete G4String objects for key
-#ifdef G4USE_STL
   if (fDictionary)
     {
-      fDictionary->clearAndDestroyKeyandValue();
+      fDictionary->clear();
       delete fDictionary;
       fDictionary = 0;
     }
-#else
-  G4String* pS;
-  fIterator -> reset();
-  while( (*fIterator)() ){
-    if (pS =  fIterator -> key()) delete pS;
-  }
-  fDictionary -> clear();
-#endif
-
 }
 
 G4ParticleDefinition* G4ParticleTable::Insert(G4ParticleDefinition *particle)
