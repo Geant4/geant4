@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4RunAction.hh,v 1.9 2002-05-29 15:32:28 maire Exp $
+// $Id: Em4RunAction.hh,v 1.10 2002-12-10 17:20:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,8 +40,10 @@
 class G4Run;
 
 #ifndef G4NOHIST
+namespace AIDA {
   class ITree;
   class IHistogram1D;
+}  
 #endif
 
 class Em4RunAction : public G4UserRunAction
@@ -55,7 +57,7 @@ class Em4RunAction : public G4UserRunAction
     void   EndOfRunAction(const G4Run*);
 
 #ifndef G4NOHIST    
-    IHistogram1D* GetHisto(G4int id) {return histo[id];}
+    AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
         
   private:
@@ -63,8 +65,8 @@ class Em4RunAction : public G4UserRunAction
     
   private:      
 #ifndef G4NOHIST         
-    ITree* tree;               // the tree should only be deleted at the end
-    IHistogram1D* histo[1];    // (after writing the histos to file)
+    AIDA::ITree* tree;             //the tree should only be deleted at the end
+    AIDA::IHistogram1D* histo[1];  // (after writing the histos to file)
 #endif         
 };
 

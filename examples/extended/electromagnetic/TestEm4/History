@@ -1,4 +1,4 @@
-$Id: History,v 1.18 2002-06-05 17:35:11 maire Exp $
+$Id: History,v 1.19 2002-12-10 17:20:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+10-12-02 mma (testem4-V04-01-00)
+-migration to AIDA 3.0
+-UI commands under directory /testem/
      
 05-06-02 mma (testem4-V04-00-02)
 -do not delete histos in destructor 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em4EventActionMessenger.hh,v 1.4 2001-10-17 14:04:14 maire Exp $
+// $Id: Em4EventActionMessenger.hh,v 1.5 2002-12-10 17:20:30 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 #include "G4UImessenger.hh"
 
 class Em4EventAction;
+class G4UIdirectory;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -50,7 +51,8 @@ class Em4EventActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Em4EventAction* eventAction;   
+    Em4EventAction* eventAction;
+    G4UIdirectory*        testemDir;   
     G4UIcmdWithAString*   DrawCmd;
     G4UIcmdWithAnInteger* PrintCmd;
 };
