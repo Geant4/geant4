@@ -1,4 +1,4 @@
-# $Id: binmake.gmk,v 1.34 1999-11-10 14:36:45 gcosmo Exp $
+# $Id: binmake.gmk,v 1.35 1999-11-10 15:09:48 morita Exp $
 # ----------------------------------------------------------
 # Script defining rules and paths for making binaries.
 #                          Gabriele Cosmo, 25/06/1998.
@@ -79,6 +79,7 @@ endif
 
 ifdef G4ODBMS
   INCFLAGS += \
+              -I$(G4BASE)/persistency/global/include \
               -I$(G4BASE)/persistency/management/include \
               -I$(G4BASE)/persistency/events/include \
               -I$(G4BASE)/persistency/digits+hits/hits/include \
