@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PolynomialSolver.icc,v 1.4 2001-01-29 12:48:19 gcosmo Exp $
+// $Id: G4PolynomialSolver.icc,v 1.5 2001-01-29 13:13:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // class G4PolynomialSolver
@@ -13,8 +13,8 @@
 // 19.12.00 E.Medernach, First implementation
 //
 
-#define POLEPSILON 1e-12
-#define PINFINITY  9.0E99
+#define POLEPSILON   1e-12
+#define POLINFINITY  9.0E99
 #define ITERATION  12 // 20 But 8 is really enough for Newton with a good guess
 
 template <class T, class F>
@@ -168,7 +168,7 @@ G4double G4PolynomialSolver<T,F>::Newton (G4double IntervalMin,
     while ((NewtonIsSafe = BezierClipping(&IntervalMin,&IntervalMax)) == 0) ;
 
     if (NewtonIsSafe == -1) {
-      return PINFINITY;
+      return POLINFINITY;
     }
   }
 
@@ -194,7 +194,7 @@ G4double G4PolynomialSolver<T,F>::Newton (G4double IntervalMin,
       i ++;
       
       if (i > ITERATION) 
-	return PINFINITY;
+	return POLINFINITY;
     }    
   }
   return Lambda ;
