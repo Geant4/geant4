@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.hh,v 1.5 2000-04-25 14:33:04 maire Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.6 2000-05-23 15:44:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -118,13 +118,16 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
 
      G4PhysicsTable* theMeanFreePathTable ;              
 
-     G4OrderedTable PartialSumSigma;    // partial sum of total crosssection
+     G4OrderedTable PartialSumSigma;       // partial sum of total crosssection
 
      static G4double LowerBoundLambda;     // low  energy limit of the crossection formula
-     static G4double UpperBoundLambda;    // high energy limit of the crossection formula 
-     static G4int    NbinLambda ;                 // number of bins in the tables 
-     G4double LowestKineticEnergy,HighestKineticEnergy ;
-     G4int    TotBin ;
+     static G4double UpperBoundLambda;     // high energy limit of the crossection formula 
+     static G4int    NbinLambda;           // number of bins in the tables 
+     
+     G4double MinThreshold;                // minimun value for the production threshold
+     
+     G4double LowestKineticEnergy,HighestKineticEnergy; // bining of the Eloss table
+     G4int    TotBin;                                   // (from G4VeEnergyLoss)
 
   public:
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.icc,v 1.2 1999-12-15 14:51:49 gunter Exp $
+// $Id: G4eBremsstrahlung.icc,v 1.3 2000-05-23 15:44:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -92,29 +92,6 @@ inline G4double G4eBremsstrahlung::ScreenFunction2(G4double ScreenVariable)
 
    return screenVal;
 } 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4eBremsstrahlung::ComputeMeanFreePath(
-                                     const G4ParticleDefinition* ParticleType,
-                                           G4double KineticEnergy,
-                                           const G4Material* aMaterial)
-{
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
-  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];   
-  G4double SIGMA = 0 ;
-
-  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
-      {             
-            SIGMA += theAtomNumDensityVector[i] * 
-                     ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                                     (*theElementVector)(i)->GetZ(), 
-                                                     GammaEnergyCut );
-      }       
-
-  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

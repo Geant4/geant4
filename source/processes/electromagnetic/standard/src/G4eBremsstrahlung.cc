@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.10 2000-04-25 14:33:11 maire Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.11 2000-05-23 15:44:29 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ G4int	 G4eBremsstrahlung::NbinLambda = 100 ;
 G4eBremsstrahlung::G4eBremsstrahlung(const G4String& processName)
   : G4VeEnergyLoss(processName),      // initialization
     theMeanFreePathTable(NULL)
-{ }
+{MinThreshold = 10*keV; }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -108,7 +108,6 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
            losslim,loss,rate,natom,Cut;
 
   const G4double MinKinEnergy = 1.*keV;
-  const G4double MinCut = 1.*keV;
   const G4double Thigh = 100.*GeV;
   const G4double Cuthigh = 50.*GeV;
   const G4double Factorhigh = 36./(1450.*GeV);
@@ -151,15 +150,13 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
           TotalEnergy = KineticEnergy+ParticleMass ;
 
           Cut = GammaCutInKineticEnergy[J] ;
-          if (Cut < MinCut) Cut = MinCut ;
-          if (Cut > KineticEnergy) Cut = KineticEnergy ;
+          if (Cut < MinThreshold)  Cut = MinThreshold;
+          if (Cut > KineticEnergy) Cut = KineticEnergy;
 
           bremloss = 0.;
 
           if (KineticEnergy>MinKinEnergy)
             {
-             if (Cut > KineticEnergy) Cut = KineticEnergy ;
-
              //  loop for elements in the material
              for (G4int iel=0; iel<NumberOfElements; iel++)
                {
@@ -456,31 +453,27 @@ void G4eBremsstrahlung::BuildLambdaTable(const G4ParticleDefinition& ParticleTyp
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* ParticleType,
-                                               G4double KineticEnergy,
-                                               const G4Material* aMaterial)
-
-// Build the table of cross section per element. The table is built for MATERIALS.
-// This table is used by DoIt to select randomly an element in the material. 
+G4double G4eBremsstrahlung::ComputeMeanFreePath(
+                                  const G4ParticleDefinition* ParticleType,
+                                  G4double KineticEnergy,
+                                  const G4Material* aMaterial)
 {
-   G4int Imate = aMaterial->GetIndex();
-   G4int NbOfElements = aMaterial->GetNumberOfElements();
-   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
-   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
-   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
+  const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+  G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
+  if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
+     
+  G4double SIGMA = 0 ;
 
-   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
-
-   G4double SIGMA = 0. ;
-
-   for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ )
+  for ( G4int i=0 ; i < aMaterial->GetNumberOfElements() ; i++ )
       {             
-        SIGMA += theAtomNumDensityVector[Ielem] * 
-                 ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
-                                                 (*theElementVector)(Ielem)->GetZ(), 
-                                                 GammaEnergyCut );
-        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
-   }
+            SIGMA += theAtomNumDensityVector[i] * 
+                     ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                     (*theElementVector)(i)->GetZ(), 
+                                                     GammaEnergyCut );
+      }       
+
+  return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -677,6 +670,35 @@ G4double G4eBremsstrahlung::ComputePositronCorrFactorSigma( G4double AtomicNumbe
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4eBremsstrahlung::ComputePartialSumSigma(const G4ParticleDefinition* ParticleType,
+                                               G4double KineticEnergy,
+                                               const G4Material* aMaterial)
+
+// Build the table of cross section per element. The table is built for MATERIALS.
+// This table is used by DoIt to select randomly an element in the material. 
+{
+   G4int Imate = aMaterial->GetIndex();
+   G4int NbOfElements = aMaterial->GetNumberOfElements();
+   const G4ElementVector* theElementVector = aMaterial->GetElementVector(); 
+   const G4double* theAtomNumDensityVector = aMaterial->GetAtomicNumDensityVector();
+   G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[Imate];
+
+   PartialSumSigma(Imate) = new G4ValVector(NbOfElements);
+
+   G4double SIGMA = 0. ;
+
+   for ( G4int Ielem=0 ; Ielem < NbOfElements ; Ielem++ )
+      {             
+        SIGMA += theAtomNumDensityVector[Ielem] * 
+                 ComputeMicroscopicCrossSection( ParticleType, KineticEnergy,
+                                                 (*theElementVector)(Ielem)->GetZ(), 
+                                                 GammaEnergyCut );
+        PartialSumSigma(Imate)->insertAt(Ielem, SIGMA);
+   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
                                                   const G4Step& stepData)
 //
@@ -734,7 +756,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
 
    // Gamma production cut in this material
    G4double GammaEnergyCut = (G4Gamma::GetCutsInEnergy())[aMaterial->GetIndex()];
-
+   if (GammaEnergyCut < MinThreshold) GammaEnergyCut = MinThreshold;
+  
    // check against insufficient energy
     if (KineticEnergy < GammaEnergyCut)
        {
@@ -933,7 +956,7 @@ G4Element* G4eBremsstrahlung::SelectRandomAtom(G4Material* aMaterial) const
 void G4eBremsstrahlung::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from a parametrisation. ";
-           comments += "Good description from 1 KeV to 100 GeV.\n";
+           comments += "Good description from 10 KeV to 100 GeV.\n";
            comments += "        log scale extrapolation above 100 GeV \n";
            comments += "        Gamma energy sampled from a parametrised formula.";
                      
