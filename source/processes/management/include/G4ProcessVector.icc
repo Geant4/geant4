@@ -1,0 +1,109 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4ProcessVector.icc,v 1.1 2000-11-03 03:44:52 kurasige Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+inline G4bool G4ProcessVector::operator==(const G4ProcessVector &right) const
+{
+  return (this == (G4ProcessVector *) &right);
+}
+
+inline G4int G4ProcessVector::entries() const
+{
+  return pProcVector->size();
+}
+
+inline G4int G4ProcessVector::length() const
+{
+  return pProcVector->size();
+}
+
+inline G4int G4ProcessVector::index(G4VProcess* aProcess) const
+{
+  G4ProcVector::iterator it;
+  size_t j=0;
+  for (it=pProcVector->begin();it!=pProcVector->end(); ++j,it++) {
+    if (*(*it)==*aProcess) return j;
+  }
+  return -1;
+}
+ 
+inline G4bool G4ProcessVector::contains(G4VProcess* aProcess) const
+{
+  G4ProcVector::iterator it;
+  for (it=pProcVector->begin();it!=pProcVector->end(); it++) {
+    if (*(*it)==*aProcess) return true;
+  }
+  return false;
+}
+
+inline G4bool G4ProcessVector::insert(G4VProcess* aProcess)
+{
+  pProcVector->push_back(aProcess);
+  return true;
+}
+
+inline G4bool G4ProcessVector::insertAt(G4int i,G4VProcess* aProcess)
+{
+  if ( (i<0) || (i>pProcVector->size()) ) return false;
+  if (i==pProcVector->size()) {
+    pProcVector->push_back(aProcess);
+  } else {
+    G4ProcVector::iterator it=pProcVector->begin();
+    int j;
+    for(j=0;j!=i;++j) it++;
+    pProcVector->insert(it, aProcess);
+  }
+  return true;
+}
+
+inline G4VProcess* G4ProcessVector::removeAt(G4int i)
+{
+  G4ProcVector::iterator it=pProcVector->begin();
+  int j;
+  for(j=0;j<pProcVector->size() && j<i;++j) it++;
+  G4VProcess* rValue = *it;
+  pProcVector->erase(it);
+  return rValue;
+}
+
+inline G4VProcess* G4ProcessVector::removeLast()
+{
+  G4VProcess* rValue = pProcVector->back();
+  pProcVector->pop_back();
+  return rValue;
+}
+
+inline void G4ProcessVector::clear()
+{
+  pProcVector->clear();
+}
+
+inline G4VProcess* const& G4ProcessVector::operator[](G4int i) const
+{
+  return (*pProcVector)[i];
+}
+
+inline G4VProcess* const& G4ProcessVector::operator()(G4int i) const
+{
+  return (*pProcVector)[i];
+}
+
+inline G4VProcess* & G4ProcessVector::operator[](G4int i)
+{
+  return (*pProcVector)[i];
+}
+
+inline G4VProcess* & G4ProcessVector::operator()(G4int i)
+{
+  return (*pProcVector)[i];
+}
+
+
+
+

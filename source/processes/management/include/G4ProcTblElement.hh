@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.hh,v 1.7 2000-03-02 01:45:10 kurasige Exp $
+// $Id: G4ProcTblElement.hh,v 1.8 2000-11-03 03:44:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,7 +49,7 @@ class G4ProcTblElement
     ~G4ProcTblElement();
     //  Destructor
 
-    G4ProcTblElement & operator=(G4ProcTblElement &right);
+    G4ProcTblElement & operator=(const G4ProcTblElement &right);
     // Assignment operator
 
     G4int operator==(const G4ProcTblElement &right) const;

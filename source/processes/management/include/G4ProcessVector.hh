@@ -5,21 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessVector.hh,v 1.5 1999-11-15 10:39:47 gunter Exp $
+// $Id: G4ProcessVector.hh,v 1.6 2000-11-03 03:44:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
-//	For information related to this code contact:
-//	CERN, CN Division, ASD group
-//	History: first implementation, based on object model of
-//	2nd December 1995, G.Cosmo
-//
 // Class Description
-//  This class is a container for pointers to physics process objects. Its 
-//  functionality is derived from G4RWTPtrOrderedVector<T>.
+//  This class is a container for pointers to physics process objects.
 // ------------------------------------------------------------
 
 #ifndef G4ProcessVector_h
@@ -27,29 +21,84 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
-#include "G4VProcess.hh"
+class G4VProcess;
 
-class G4ProcessVector : public G4RWTPtrOrderedVector<G4VProcess>
+class G4ProcessVector 
 {
-  //  Is a container for pointers to physics process objects. Its 
-  //  functionality is derived from G4RWTPtrOrderedVector<T>.
-
   public:
+    //  Constructors
+    G4ProcessVector(size_t dummy=0);
+    G4ProcessVector(const G4ProcessVector &);
 
-      G4ProcessVector(size_t capac=G4RWDEFAULT_CAPACITY)
-        : G4RWTPtrOrderedVector<G4VProcess>(capac) {;}
-      //  Constructor.
+    //  Destructor.
+    virtual ~G4ProcessVector();
 
-      virtual ~G4ProcessVector() {;}
-      //  Destructor.
+    //assignment operator
+    G4ProcessVector & operator=(G4ProcessVector &right);
+ 
+    // equal operator
+    G4bool operator==(const G4ProcessVector &right) const;
 
-      G4bool operator==(const G4ProcessVector &right) const
-      {
-        return (this == (G4ProcessVector *) &right);
-      }
+  public: // With Description
+    // Returns the number of items
+    G4int entries() const;
+    G4int length() const;
+    
+    // Returns the position of the element
+    G4int index(G4VProcess* aProcess) const;
+ 
+    // Returns "true" if the element exists
+    G4bool contains(G4VProcess* aProcess) const;
 
+    // Insert an element
+    G4bool insert(G4VProcess* aProcess);
+
+    // Insert an element at i-th position
+    G4bool insertAt(G4int i, G4VProcess* aProcess);
+    
+    // Remove and returns the i-th element
+    G4VProcess* removeAt(G4int i);
+
+    // Remove and returns the last element
+    G4VProcess* removeLast();
+    
+    // Clear the collection by removing all items
+    void clear();
+    
+    // returns const reference to the i-th item
+    G4VProcess* const& operator[](G4int i) const;
+    G4VProcess* const& operator()(G4int i) const;
+
+    // returns  reference to the i-th item
+    G4VProcess* & operator[](G4int i);
+    G4VProcess* & operator()(G4int i);
+
+  protected:
+    // Use STL Vector 
+    typedef G4std::vector<G4VProcess*> G4ProcVector;
+
+    G4ProcVector * pProcVector;
 };
-  
+
+#include "G4ProcessVector.icc"
+
 #endif
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcTblElement.cc,v 1.4 2000-03-02 01:16:06 kurasige Exp $
+// $Id: G4ProcTblElement.cc,v 1.5 2000-11-03 03:44:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,9 +24,8 @@
 
 // default constructor ////////////////////////
 G4ProcTblElement::G4ProcTblElement()
+   :pProcess(0),pProcMgrVector(0)
 {
-  pProcess = 0;
-  pProcMgrVector=0;
 }
 
 //////////////////////////
@@ -39,13 +38,7 @@ G4ProcTblElement::G4ProcTblElement(G4VProcess* aProcess):
 // copy constructor //////////////////////////
 G4ProcTblElement::G4ProcTblElement(const G4ProcTblElement &right)
 {
-  pProcess       = right.pProcess;
-  // copy all contents in  pProcMgrVector
-  pProcMgrVector = new G4ProcMgrVector();
-  G4ProcMgrVector::iterator i;
-  for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
-    pProcMgrVector->push_back(*i);
-  }
+  *this = right;
 }
 
 
@@ -60,7 +53,7 @@ G4ProcTblElement::~G4ProcTblElement()
 
 
 //////////////////////////
-G4ProcTblElement & G4ProcTblElement::operator=(G4ProcTblElement &right)
+G4ProcTblElement & G4ProcTblElement::operator=(const G4ProcTblElement &right)
 {
   if (this != &right) {
     pProcess       = right.pProcess;
@@ -71,7 +64,7 @@ G4ProcTblElement & G4ProcTblElement::operator=(G4ProcTblElement &right)
     }
     pProcMgrVector = new G4ProcMgrVector();
     G4ProcMgrVector::iterator i;
-    for (i = pProcMgrVector->begin(); i!= pProcMgrVector->end(); ++i) {
+    for (i = right.pProcMgrVector->begin(); i!= right.pProcMgrVector->end(); ++i) {
       pProcMgrVector->push_back(*i);
     }
   }
@@ -91,6 +84,26 @@ G4int G4ProcTblElement::operator!=(const G4ProcTblElement &right) const
 {
   return (this != &right);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

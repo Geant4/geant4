@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ProcessTable.cc,v 1.5 2000-03-02 01:16:06 kurasige Exp $
+// $Id: G4ProcessTable.cc,v 1.6 2000-11-03 03:44:52 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -64,11 +64,13 @@ G4ProcessTable::~G4ProcessTable()
 
   if ( fProcTblVector != 0) {
     G4ProcTableVector::iterator idx;
-    for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
+    
+    // destruction of processes has moved to G4VUserPhysicsList
+    // for (idx=fProcTblVector->begin(); idx!=fProcTblVector->end(); ++idx) {
       // delete all processes
-      delete (*idx)->GetProcess();
-      delete (*idx);
-    }  
+      // delete (*idx)->GetProcess();
+      // delete (*idx);
+    //}  
     fProcTblVector ->clear();
     delete fProcTblVector;
   }
