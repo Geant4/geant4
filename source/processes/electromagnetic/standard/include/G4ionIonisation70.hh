@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation70.hh,v 1.1 2005-02-26 22:01:07 vnivanch Exp $
+// $Id: G4ionIonisation70.hh,v 1.2 2005-02-27 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -128,6 +128,8 @@ private:
   G4double                    preKinEnergy;
 
   G4double                    eth;
+  G4double                    baseMass;
+  G4double                    massRatio;
   G4bool                      isInitialised;
   G4bool                      subCutoff;
 };
@@ -171,15 +173,12 @@ inline G4double G4ionIonisation70::GetMeanFreePath(const G4Track& track,
   currentParticle = track.GetDefinition();
   theMaterial     = track.GetMaterial();
   preKinEnergy    = track.GetKineticEnergy();
-  G4double mRatio = proton_mass_c2/track.GetDynamicParticle()->GetMass();
+  massRatio       = baseMass/track.GetDynamicParticle()->GetMass();
  
-  G4double q_2 = currentParticle->GetPDGCharge()/eplus;
-  if(preKinEnergy*mRatio > eth) q_2 *= q_2; 
-  else q_2 = effCharge.EffectiveChargeSquareRatio(currentParticle,theMaterial,
+  G4double q_2    = effCharge.EffectiveChargeSquareRatio(currentParticle,theMaterial,
                                                   preKinEnergy);
-
-  SetMassRatio(mRatio);
-  SetReduceFactor(1.0/(q_2*mRatio));
+  SetMassRatio(massRatio);
+  SetReduceFactor(1.0/(q_2*massRatio));
   SetChargeSquare(q_2);
   SetChargeSquareRatio(q_2);
 
@@ -198,7 +197,7 @@ inline std::vector<G4Track*>*  G4ionIonisation70::SecondariesAlongStep(
 {
   std::vector<G4Track*>* newp = 0;
   G4double s = step.GetStepLength();
-  if(scaledEnergy > eth) eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
+  if(scaledEnergy > eth) eloss += s*corr->HighOrderCorrections(currentParticle,theMaterial,preKinEnergy);
   else                   eloss += s*corr->NuclearDEDX(currentParticle,theMaterial,preKinEnergy - eloss*0.5);
   preKinEnergy -= eloss;
   fParticleChange.SetProposedCharge(effCharge.EffectiveCharge(currentParticle,theMaterial,preKinEnergy));

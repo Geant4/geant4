@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCorrections.cc,v 1.3 2005-02-26 22:01:20 vnivanch Exp $
+// $Id: G4EmCorrections.cc,v 1.4 2005-02-27 18:07:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -162,7 +162,7 @@ G4double G4EmCorrections::HighOrderCorrections(const G4ParticleDefinition* p,
   }
      
   G4double mterm = 
-        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(2.0*electron_mass_c2*bg2/eexc)))
+        za*beta*(1.725 + pi*cosx*(0.52 - 2.0*std::sqrt(eexc/2.0*electron_mass_c2*bg2)))
       + za2*(3.246 - 0.451*beta2)
       + za3*(1.522*beta + 0.987*invbeta)
       + za2*za2*(4.569 - 0.494*beta2 - 2.696*invbeta2)

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmCalculator.cc,v 1.12 2005-02-26 22:01:20 vnivanch Exp $
+// $Id: G4EmCalculator.cc,v 1.13 2005-02-27 18:07:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -352,7 +352,7 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	}
         if(isIon) res1 += corr->HighOrderCorrections(p,mat,eth/massRatio);  
         G4double res0 = res1;
-        if(FindEmModel(p, processName, eth-0.1*keV)) {
+        if(FindEmModel(p, processName, eth-1.0*keV)) {
 	  if(baseParticle) {
 	    res0 = currentModel->ComputeDEDX(currentCouple, baseParticle, eth, cut)
 	         * chargeSquare;
@@ -360,6 +360,8 @@ G4double G4EmCalculator::ComputeDEDX(G4double kinEnergy,
 	    res0 = currentModel->ComputeDEDX(currentCouple, p, eth, cut);
 	  }
 	}
+        //G4cout << "eth= " << eth << " escaled= " << escaled << " res0= " << res0 << " res1= " 
+        //       << res1 <<  "  q2= " << chargeSquare << G4endl; 
         res *= (1.0 + (res0/res1 - 1.0)*eth/escaled);
       }
       if(verbose > 0) {

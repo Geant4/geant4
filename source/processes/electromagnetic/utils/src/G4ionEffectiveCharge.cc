@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionEffectiveCharge.cc,v 1.9 2005-02-26 22:01:20 vnivanch Exp $
+// $Id: G4ionEffectiveCharge.cc,v 1.10 2005-02-27 18:07:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -54,7 +54,7 @@
 G4ionEffectiveCharge::G4ionEffectiveCharge()
 {
   chargeCorrection = 1.0;
-  energyHighLimit  = 2.0*MeV;
+  energyHighLimit  = 10.0*MeV;
   energyLowLimit   = 1.0*keV;
   energyBohr       = 25.*keV;
   massFactor       = amu_c2/(proton_mass_c2*keV);

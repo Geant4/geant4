@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ionIonisation70.cc,v 1.1 2005-02-26 22:01:07 vnivanch Exp $
+// $Id: G4ionIonisation70.cc,v 1.2 2005-02-27 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -90,7 +90,7 @@ G4ionIonisation70::~G4ionIonisation70()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4ionIonisation70::InitialiseEnergyLossProcess(const G4ParticleDefinition* part,
-                                                  const G4ParticleDefinition* bpart)
+                                                    const G4ParticleDefinition* bpart)
 {
   if(isInitialised) return;
 
@@ -103,11 +103,13 @@ void G4ionIonisation70::InitialiseEnergyLossProcess(const G4ParticleDefinition* 
   SetBaseParticle(theBaseParticle);
   SetSecondaryParticle(G4Electron::Electron());
 
+  if(theBaseParticle) baseMass = theBaseParticle->GetPDGMass();
+  else                baseMass = theParticle->GetPDGMass();
+
   flucModel = new G4IonFluctuations();
   //  eth = 10.0*MeV/4.0026;
   eth = 2.0*MeV;
   G4VEmModel* em = new G4BraggIonModel();
-  //G4VEmModel* em = new G4BraggModel();
   em->SetLowEnergyLimit(0.1*keV);
   em->SetHighEnergyLimit(eth);
   AddEmModel(1, em, flucModel);

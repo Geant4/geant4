@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggIonModel.hh,v 1.2 2004-11-10 08:53:18 vnivanch Exp $
+// $Id: G4BraggIonModel.hh,v 1.3 2005-02-27 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -108,7 +108,7 @@ private:
 
   void SetParticle(const G4ParticleDefinition* p);
 
-  G4double HeEffChargeSquare(G4double z, G4double kinEnergy) const;
+  G4double HeEffChargeSquare(G4double z, G4double kinEnergyInMeV) const;
 
   // hide assignment operator
   G4BraggIonModel & operator=(const  G4BraggIonModel &right);
@@ -130,13 +130,14 @@ private:
   G4double mass;
   G4double spin;
   G4double chargeSquare;
-  G4double HeMassAMU;
   G4double massRate;
   G4double ratio;
   G4double highKinEnergy;
   G4double lowKinEnergy;
   G4double lowestKinEnergy;
-  G4double rateMass;
+  G4double HeMass;
+  G4double massFactor;
+  G4double rateMassHe2p;
   G4double theZieglerFactor;
 
   G4int    iMolecula;          // index in the molecula's table
@@ -149,7 +150,7 @@ inline G4double G4BraggIonModel::MaxSecondaryEnergy(
           const G4ParticleDefinition* pd,
                 G4double kinEnergy)
 {
-  if(isIon) SetParticle(pd);
+  if(pd != particle) SetParticle(pd);
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
@@ -160,14 +161,20 @@ inline G4double G4BraggIonModel::MaxSecondaryEnergy(
 
 inline G4double G4BraggIonModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
-  if(isIon) {
-    mass =  dp->GetMass();
-    ratio = electron_mass_c2/mass;
-  }
-  G4double tau  = dp->GetKineticEnergy()/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
+  return MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BraggIonModel::SetParticle(const G4ParticleDefinition* p)
+{
+  particle = p;
+  mass = particle->GetPDGMass();
+  spin = particle->GetPDGSpin();
+  G4double q   = particle->GetPDGCharge()/eplus;
+  chargeSquare = q*q;
+  massRate     = mass/proton_mass_c2;
+  ratio        = electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.hh,v 1.2 2005-02-26 21:59:34 vnivanch Exp $
+// $Id: G4BraggModel.hh,v 1.3 2005-02-27 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -162,7 +162,7 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
           const G4ParticleDefinition* pd,
                 G4double kinEnergy)
 {
-  if(isIon) SetParticle(pd);
+  if(pd != particle) SetParticle(pd);
   G4double tau  = kinEnergy/mass;
   G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
                   (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
@@ -173,14 +173,20 @@ inline G4double G4BraggModel::MaxSecondaryEnergy(
 
 inline G4double G4BraggModel::MaxSecondaryEnergy(const G4DynamicParticle* dp)
 {
-  if(isIon) {
-    mass =  dp->GetMass();
-    ratio = electron_mass_c2/mass;
-  }
-  G4double tau  = dp->GetKineticEnergy()/mass;
-  G4double tmax = 2.0*electron_mass_c2*tau*(tau + 2.) /
-                  (1. + 2.0*(tau + 1.)*ratio + ratio*ratio);
-  return tmax;
+  return MaxSecondaryEnergy(dp->GetDefinition(),dp->GetKineticEnergy());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
+{
+  particle = p;
+  mass = particle->GetPDGMass();
+  spin = particle->GetPDGSpin();
+  G4double q = particle->GetPDGCharge()/eplus;
+  chargeSquare = q*q;
+  massRate     = mass/proton_mass_c2;
+  ratio = electron_mass_c2/mass;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

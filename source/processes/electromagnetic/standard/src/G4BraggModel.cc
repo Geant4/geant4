@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BraggModel.cc,v 1.3 2005-02-26 21:59:34 vnivanch Exp $
+// $Id: G4BraggModel.cc,v 1.4 2005-02-27 18:07:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -84,22 +84,6 @@ G4BraggModel::~G4BraggModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BraggModel::SetParticle(const G4ParticleDefinition* p)
-{
-  if(particle != p) {
-    particle = p;
-    mass = particle->GetPDGMass();
-    spin = particle->GetPDGSpin();
-    G4double q = particle->GetPDGCharge()/eplus;
-    chargeSquare = q*q;
-    massRate     = mass/proton_mass_c2;
-    ratio = electron_mass_c2/mass;
-    if(particle->GetParticleName() == "GenericIon") isIon = true;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4BraggModel::HighEnergyLimit(const G4ParticleDefinition* p)
 {
   if(!particle) SetParticle(p);
@@ -135,7 +119,8 @@ G4bool G4BraggModel::IsInCharge(const G4ParticleDefinition* p)
 void G4BraggModel::Initialise(const G4ParticleDefinition* p,
                               const G4DataVector&)
 {
-  if(!particle) SetParticle(p);
+  if(p != particle) SetParticle(p);
+  if(particle->GetParticleType() == "nucleus") isIon = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -430,8 +415,8 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
    {6.109E+0, 6.887E+0, 9.966E+3, 5.551E+2, 5.151E-3},
    {5.924E+0, 6.677E+0, 1.018E+4, 5.925E+2, 4.919E-3},
    {5.238E+0, 5.900E+0, 1.038E+4, 6.300E+2, 4.758E-3},
-   //   {5.623,    6.354,    7160.0,   337.6,    0.013940}, // Ag
-   {5.345E+0, 6.038E+0, 6.790E+3, 3.978E+2, 1.676E-2}, // Ag
+   // {5.623,    6.354,    7160.0,   337.6,    0.013940}, // Ag Ziegler77
+   {5.345E+0, 6.038E+0, 6.790E+3, 3.978E+2, 1.676E-2}, // Ag ICRU49
    {5.814E+0, 6.554E+0, 1.080E+4, 3.555E+2, 4.626E-3},
    {6.229E+0, 7.024E+0, 1.101E+4, 3.709E+2, 4.540E-3},
    {6.409E+0, 7.227E+0, 1.121E+4, 3.864E+2, 4.474E-3},
@@ -466,7 +451,8 @@ G4double G4BraggModel::ElectronicStoppingPower(G4double z,
    {5.071E+0, 5.704E+0, 1.630E+4, 4.409E+2, 3.082E-3},
    {4.946E+0, 5.563E+0, 1.649E+4, 4.401E+2, 2.965E-3},
    {4.477E+0, 5.034E+0, 1.667E+4, 4.393E+2, 2.871E-3},
-   {4.844E+0, 5.458E+0, 7.852E+3, 9.758E+2, 2.077E-2},
+   //  {4.856,    5.460,    18320.0,  438.5,    0.002542}, //Ziegler77
+   {4.844E+0, 5.458E+0, 7.852E+3, 9.758E+2, 2.077E-2}, //ICRU49
    {4.307E+0, 4.843E+0, 1.704E+4, 4.878E+2, 2.882E-3},
        // Z= 81-90
    {4.723E+0, 5.311E+0, 1.722E+4, 5.370E+2, 2.913E-3},
