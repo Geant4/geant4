@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Cons2.cc,v 1.2 1999-12-15 14:50:09 gunter Exp $
+// $Id: testG4Cons2.cc,v 1.3 2000-07-27 13:06:01 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Simple test of G4Cons
@@ -94,8 +94,9 @@ int main(void)
 	       c7("Thin Tube",95,100,95,100,50,0,2*M_PI),
 	       c8a("Solid Full Cone2",0,100,0,150,50,0,2*M_PI),
 	       c8b("Hollow Full Cone2",50,100,100,150,50,0,2*M_PI),
-	       c8c("Hollow Full Cone2inv",100,150,50,100,50,0,2*M_PI);
-	
+	  c8c("Hollow Full Cone2inv",100,150,50,100,50,0,2*M_PI),
+	cms("cms cone",0.0,70.0,0.0,157.8,2949.0,0.0,6.2831853071796);
+
 	G4ThreeVector norm,*pNorm;
 	G4bool *pgoodNorm,goodNorm,calcNorm=true;
 	
@@ -396,6 +397,26 @@ int main(void)
 	    !*pgoodNorm||
 	    OutRange(*pNorm,G4ThreeVector(0,2./sqrt(5.),-1.0/sqrt(5.))))
 	    G4cout << "Error hollow parr3d " <<Dist << G4endl;
+
+	Dist=cms.DistanceToOut(
+        G4ThreeVector(0.28628920024909,-0.43438111004815,-2949.0),
+        G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
+        calcNorm,pgoodNorm,pNorm);
+	G4cout << "cms.DistToOut() =  " <<Dist << G4endl;
+
+	Dist=cms.DistanceToOut(
+        G4ThreeVector(0.28628920024909,-0.43438111004815,
+                     -2949.0 + kCarTolerance*0.25),
+        G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
+        calcNorm,pgoodNorm,pNorm);
+	G4cout << "cms.DistToOut(+) =  " <<Dist << G4endl;
+
+	Dist=cms.DistanceToOut(
+        G4ThreeVector(0.28628920024909,-0.43438111004815,
+                      -2949.0 - kCarTolerance*0.25),
+        G4ThreeVector(6.0886686196674e-05,-9.2382200635766e-05,0.99999999387917),
+        calcNorm,pgoodNorm,pNorm);
+	G4cout << "cms.DistToOut(-) =  " <<Dist << G4endl;
 
 	G4cout << "Testing G4Cons::DistanceToIn...\n";
 	Dist=c1.DistanceToIn(pzero);
