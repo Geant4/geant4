@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.cc,v 1.5 2000-11-20 19:05:57 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.cc,v 1.6 2001-04-17 14:44:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,7 @@ G4LogicalBorderSurface::G4LogicalBorderSurface(const G4String& name,
     Volume1(vol1), Volume2(vol2)
 {
   // Store in the table of Surfaces
-  theBorderSurfaceTable.insert(this);
-  theIndexInTable = theBorderSurfaceTable.index(this);
+  theBorderSurfaceTable.push_back(this);
 }
 
 G4LogicalBorderSurface::
@@ -56,7 +55,6 @@ G4LogicalBorderSurface(const G4LogicalBorderSurface& right)
   SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
   Volume1 = right.Volume1;
   Volume2 = right.Volume2;
-  theIndexInTable = right.theIndexInTable;
   theBorderSurfaceTable = right.theBorderSurfaceTable;
 }
 
@@ -77,7 +75,6 @@ G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     Volume1 = right.Volume1;
     Volume2 = right.Volume2;
-    theIndexInTable = right.theIndexInTable;
     theBorderSurfaceTable = right.theBorderSurfaceTable;
   }
   return *this;
@@ -98,7 +95,7 @@ G4LogicalBorderSurface::operator!=(const G4LogicalBorderSurface &right) const
   // Methods
   ////////////
 
-const G4RWTPtrOrderedVector<G4LogicalBorderSurface>*
+const G4std::vector<G4LogicalBorderSurface*> *
 G4LogicalBorderSurface::GetSurfaceTable()
 {
 	return &theBorderSurfaceTable;
@@ -106,14 +103,14 @@ G4LogicalBorderSurface::GetSurfaceTable()
 
 size_t G4LogicalBorderSurface::GetNumberOfBorderSurfaces()
 {
-	return theBorderSurfaceTable.length();
+	return theBorderSurfaceTable.size();
 }
 
 G4LogicalBorderSurface*
 G4LogicalBorderSurface::GetSurface(const G4VPhysicalVolume* vol1,
 				   const G4VPhysicalVolume* vol2)
 {
-	for (size_t i=0; i<theBorderSurfaceTable.length(); i++) {
+	for (size_t i=0; i<theBorderSurfaceTable.size(); i++) {
 		if(theBorderSurfaceTable[i]->GetVolume1() == vol1 &&
 		   theBorderSurfaceTable[i]->GetVolume2() == vol2 )
 			return theBorderSurfaceTable[i];
@@ -129,7 +126,7 @@ void G4LogicalBorderSurface::DumpInfo() // Class method (it is really const)
     G4cout << "***** Surface Table : Nb of Surfaces = " << 
             GetNumberOfBorderSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theBorderSurfaceTable.length(); i++) {
+    for (size_t i=0; i<theBorderSurfaceTable.size(); i++) {
       G4cout << theBorderSurfaceTable[i]->GetName() << " : " << G4endl <<
           "  Surface type   = " << theBorderSurfaceTable[i]->GetName() << G4endl;
 #ifdef PRINT_INFO

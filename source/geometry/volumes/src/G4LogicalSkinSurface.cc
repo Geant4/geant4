@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.cc,v 1.5 2000-11-20 19:05:58 gcosmo Exp $
+// $Id: G4LogicalSkinSurface.cc,v 1.6 2001-04-17 14:44:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -45,8 +45,7 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4String&   name,
     LogVolume(logicalVolume)
 {
   // Store in the table of Surfaces
-  theSurfaceTable.insert(this);
-  theIndexInTable = theSurfaceTable.index(this);
+  theSurfaceTable.push_back(this);
 }
 
 G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface &right)
@@ -54,7 +53,6 @@ G4LogicalSkinSurface::G4LogicalSkinSurface(const G4LogicalSkinSurface &right)
 {
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theIndexInTable = right.theIndexInTable;
     theSurfaceTable = right.theSurfaceTable;
 }
 
@@ -74,7 +72,6 @@ G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface &right)
     SetName(right.GetName());
     SetTransitionRadiationSurface(right.GetTransitionRadiationSurface());
     LogVolume = right.LogVolume;
-    theIndexInTable = right.theIndexInTable;
     theSurfaceTable = right.theSurfaceTable;
   }
   return *this;
@@ -97,13 +94,13 @@ G4LogicalSkinSurface::operator!=(const G4LogicalSkinSurface &right) const
 
 size_t G4LogicalSkinSurface::GetNumberOfSkinSurfaces()
 {
-	return theSurfaceTable.length();
+	return theSurfaceTable.size();
 }
 
 G4LogicalSkinSurface*
 G4LogicalSkinSurface::GetSurface(const G4LogicalVolume* vol)
 {
-	for (size_t i=0; i<theSurfaceTable.length(); i++) {
+	for (size_t i=0; i<theSurfaceTable.size(); i++) {
 		if(theSurfaceTable[i]->GetLogicalVolume() == vol)
 			return theSurfaceTable[i];
 	}
@@ -118,7 +115,7 @@ void G4LogicalSkinSurface::DumpInfo()
     G4cout << "***** Surface Table : Nb of Surfaces = "
            << GetNumberOfSkinSurfaces() << " *****" << G4endl;
 
-    for (size_t i=0; i<theSurfaceTable.length(); i++) {
+    for (size_t i=0; i<theSurfaceTable.size(); i++) {
       G4LogicalSkinSurface *pSkinSurface= theSurfaceTable[i];
       G4cout << theSurfaceTable[i]->GetName() << " : " << G4endl <<
 	" Skin of logical volume " << pSkinSurface->GetLogicalVolume()->GetName  ()

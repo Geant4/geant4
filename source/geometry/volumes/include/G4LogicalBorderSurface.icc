@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalBorderSurface.icc,v 1.2 2000-11-01 16:51:06 gcosmo Exp $
+// $Id: G4LogicalBorderSurface.icc,v 1.3 2001-04-17 14:44:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,10 +43,4 @@ inline
 void G4LogicalBorderSurface::SetVolume2(G4VPhysicalVolume* vol2)
 {
   Volume2 = vol2;
-}
-
-inline
-size_t G4LogicalBorderSurface::GetIndex() const
-{
-  return theIndexInTable;
 }

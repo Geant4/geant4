@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.5 2000-11-01 16:51:06 gcosmo Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.6 2001-04-17 14:44:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -36,14 +36,11 @@
 #include "G4LogicalSurface.hh"
 #include "G4LogicalVolume.hh"
 
-// G4RWTPtrOrderedVector
-#include "g4rw/tpordvec.h"
-
+#include "g4std/vector"
 
 /////////////////////
 // Class Definition
 /////////////////////
-
 
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
@@ -75,10 +72,6 @@ class G4LogicalSkinSurface : public G4LogicalSurface
         static void DumpInfo(); // const 
 	  // Methods dealing with the table of surfaces.
 
-#if THESE_ARE_NEEDED
-	inline size_t GetIndex() const;
-#endif
-
         //////////////
         // Operators
         //////////////
@@ -100,15 +93,12 @@ private:
 	G4LogicalVolume* LogVolume;
 	  // Logical Volume pointer on side 1
 
-  	static G4RWTPtrOrderedVector<G4LogicalSkinSurface> theSurfaceTable;
+  	static G4std::vector<G4LogicalSkinSurface*> theSurfaceTable;
 	  // The static Table of Surfaces
-
-	size_t theIndexInTable;
-	  // Index of surface in the surface table
 
 };
 
-typedef G4RWTPtrOrderedVector<G4LogicalSkinSurface> G4LogicalSkinSurfaceTable;
+typedef G4std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 
 ////////////////////
 // Inline methods

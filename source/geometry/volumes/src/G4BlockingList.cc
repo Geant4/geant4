@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BlockingList.cc,v 1.2 1999-12-15 14:50:26 gunter Exp $
+// $Id: G4BlockingList.cc,v 1.3 2001-04-17 14:44:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -19,9 +19,9 @@
 void G4BlockingList::FullyReset()
 {
 	fBlockTagNo=1;
-	for (G4int i=fBlockingList.length()-1;i>=0;i--)
+	for (G4int i=fBlockingList.size()-1;i>=0;i--)
 		{
-			fBlockingList(i)=0;
+			fBlockingList[i]=0;
 		}	
 	
 }

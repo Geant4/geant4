@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.icc,v 1.3 2000-11-01 16:51:06 gcosmo Exp $
+// $Id: G4NavigationHistory.icc,v 1.4 2001-04-17 14:44:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -40,11 +40,11 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
 
   // fNavHistory=h.fNavHistory;   // This works, but is very slow.
   if( this->GetMaxDepth() < h.fStackDepth ){
-     fNavHistory.reshape( h.fStackDepth ); 
+     fNavHistory.resize( h.fStackDepth ); 
   }
   register G4int ilev= h.fStackDepth;
   for ( ; ilev>=0; ilev--) { 
-     fNavHistory(ilev) = h.fNavHistory(ilev); 
+     fNavHistory[ilev] = h.fNavHistory[ilev]; 
   } 
 
   fStackDepth=h.fStackDepth;
@@ -67,10 +67,10 @@ void G4NavigationHistory::Clear()
 	tmpNavLevel=G4NavigationLevel(0, dummyTransform, kParameterised, -1) ;
 
 	Reset();
-	for (G4int ilev=fNavHistory.length()-1; ilev>=0; ilev--)
+	for (G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
 	{
 	   // fNavHistory(ilev)= 0;
-	   fNavHistory(ilev)= tmpNavLevel;
+	   fNavHistory[ilev]= tmpNavLevel;
 	}
 }
 
@@ -85,7 +85,7 @@ void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
 	if(pVol !=0) {
 	    translation=pVol->GetTranslation();
 	}
-	fNavHistory(0)= G4NavigationLevel( pVol,
+	fNavHistory[0]= G4NavigationLevel( pVol,
 					   G4AffineTransform(translation), 
 					   kNormal );
 }
@@ -93,31 +93,31 @@ void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
 inline
 const G4AffineTransform* G4NavigationHistory::GetPtrTopTransform() const
 {
-	return   fNavHistory(fStackDepth).GetPtrTransform();
+	return   fNavHistory[fStackDepth].GetPtrTransform();
 }
 
 inline
 const G4AffineTransform& G4NavigationHistory::GetTopTransform() const
 {
-	return fNavHistory(fStackDepth).GetTransform();
+	return fNavHistory[fStackDepth].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetTopReplicaNo() const
 {
-	return fNavHistory(fStackDepth).GetReplicaNo();
+	return fNavHistory[fStackDepth].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetTopVolumeType() const
 {
-	return fNavHistory(fStackDepth).GetVolumeType();
+	return fNavHistory[fStackDepth].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
 {
-	return fNavHistory(fStackDepth).GetPhysicalVolume();
+	return fNavHistory[fStackDepth].GetPhysicalVolume();
 }
 
 inline
@@ -130,31 +130,31 @@ inline
 const G4AffineTransform&
 G4NavigationHistory::GetTransform(G4int n) const
 {
-	return fNavHistory(n).GetTransform();
+	return fNavHistory[n].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetReplicaNo(G4int n) const
 {
-	return fNavHistory(n).GetReplicaNo();
+	return fNavHistory[n].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetVolumeType(G4int n) const
 {
-	return fNavHistory(n).GetVolumeType();
+	return fNavHistory[n].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetVolume(G4int n) const
 {
-	return fNavHistory(n).GetPhysicalVolume();
+	return fNavHistory[n].GetPhysicalVolume();
 }
 
 inline
 G4int G4NavigationHistory::GetMaxDepth() const
 {
-	return fNavHistory.length();
+	return fNavHistory.size();
 }
 
 inline
@@ -177,11 +177,11 @@ void G4NavigationHistory::BackLevel(G4int n)
 inline
 void G4NavigationHistory::EnlargeHistory()
 {
-	G4int len=fNavHistory.length();
+	G4int len=fNavHistory.size();
 	if (len==fStackDepth)
 		{       // Note: Resize operation clears additional entries
 			G4int nlen=len+kHistoryStride;
-			fNavHistory.reshape(nlen);
+			fNavHistory.resize(nlen);
 		}	
 }
 
@@ -193,9 +193,9 @@ void G4NavigationHistory::NewLevel(G4VPhysicalVolume *pNewMother,
 {
 	EnlargeHistory();	// Enlarge if required
 	fStackDepth++;
-	fNavHistory(fStackDepth) = 
+	fNavHistory[fStackDepth] = 
 	       G4NavigationLevel(pNewMother, 
-				 fNavHistory(fStackDepth-1).GetTransform(),
+				 fNavHistory[fStackDepth-1].GetTransform(),
 				 G4AffineTransform(pNewMother->GetRotation(),
 						pNewMother->GetTranslation()),
 				 vType,

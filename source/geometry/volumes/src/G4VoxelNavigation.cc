@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VoxelNavigation.cc,v 1.6 2000-11-20 19:06:01 gcosmo Exp $
+// $Id: G4VoxelNavigation.cc,v 1.7 2001-04-17 14:44:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -217,10 +217,10 @@ G4double G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector&localPoint) c
 
 	localVoxelDepth=fVoxelDepth;
 
-	curHeader=fVoxelHeaderStack(localVoxelDepth);
-	curHeaderAxis=fVoxelAxisStack(localVoxelDepth);
-	curNodeNo=fVoxelNodeNoStack(localVoxelDepth);
-	curNodeWidth=fVoxelSliceWidthStack(localVoxelDepth);
+	curHeader=fVoxelHeaderStack[localVoxelDepth];
+	curHeaderAxis=fVoxelAxisStack[localVoxelDepth];
+	curNodeNo=fVoxelNodeNoStack[localVoxelDepth];
+	curNodeWidth=fVoxelSliceWidthStack[localVoxelDepth];
 	
 // Compute linear intersection distance to boundaries of max/min
 // to collected nodes at current level
@@ -254,10 +254,10 @@ G4double G4VoxelNavigation::ComputeVoxelSafety(const G4ThreeVector&localPoint) c
 	    	{
 		localVoxelDepth--;
 
-		curHeader=fVoxelHeaderStack(localVoxelDepth);
-		curHeaderAxis=fVoxelAxisStack(localVoxelDepth);
-		curNodeNo=fVoxelNodeNoStack(localVoxelDepth);
-		curNodeWidth=fVoxelSliceWidthStack(localVoxelDepth);
+		curHeader=fVoxelHeaderStack[localVoxelDepth];
+		curHeaderAxis=fVoxelAxisStack[localVoxelDepth];
+		curNodeNo=fVoxelNodeNoStack[localVoxelDepth];
+		curNodeWidth=fVoxelSliceWidthStack[localVoxelDepth];
 		curNodeOffset=curNodeNo*curNodeWidth;
 		minCurCommonDelta=localPoint(curHeaderAxis)
 		    -curHeader->GetMinExtent()
@@ -314,10 +314,10 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 	    {
 		targetPoint=localPoint+localDirection*currentDistance;
 	        newDistance= currentDistance;
-		workHeader=fVoxelHeaderStack(depth);
-		workHeaderAxis=fVoxelAxisStack(depth);
-		workNodeNo=fVoxelNodeNoStack(depth);
-		workNodeWidth=fVoxelSliceWidthStack(depth);
+		workHeader=fVoxelHeaderStack[depth];
+		workHeaderAxis=fVoxelAxisStack[depth];
+		workNodeNo=fVoxelNodeNoStack[depth];
+		workNodeWidth=fVoxelSliceWidthStack[depth];
 		workMinExtent=workHeader->GetMinExtent();
 		    
 		workCoord=targetPoint(workHeaderAxis);
@@ -350,10 +350,10 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 // Check if end of Step within collected boundaries of current voxel
 	depth=fVoxelDepth;
 	    {
-		workHeader=fVoxelHeaderStack(depth);
-		workHeaderAxis=fVoxelAxisStack(depth);
-		workNodeNo=fVoxelNodeNoStack(depth);
-		workNodeWidth=fVoxelSliceWidthStack(depth);
+		workHeader=fVoxelHeaderStack[depth];
+		workHeaderAxis=fVoxelAxisStack[depth];
+		workNodeNo=fVoxelNodeNoStack[depth];
+		workNodeWidth=fVoxelSliceWidthStack[depth];
 		workMinExtent=workHeader->GetMinExtent();
 		    
 		workCoord=targetPoint(workHeaderAxis);
@@ -400,7 +400,7 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 		    {
 // Compute intersection point on the least refined voxel boundary that is Hit
 			voxelPoint=localPoint+localDirection*newDistance;
-			fVoxelNodeNoStack(newDepth)=newNodeNo;
+			fVoxelNodeNoStack[newDepth]=newNodeNo;
 			fVoxelDepth=newDepth;
 			newVoxelNode=0;
 
@@ -430,11 +430,11 @@ G4bool G4VoxelNavigation::LocateNextVoxel(const G4ThreeVector& localPoint,
 						newNodeNo=newHeaderNoSlices-1;
 					    }
 // Stack info for stepping
-					fVoxelAxisStack(fVoxelDepth)=newHeaderAxis;
-					fVoxelNoSlicesStack(fVoxelDepth)=newHeaderNoSlices;
-					fVoxelSliceWidthStack(fVoxelDepth)=newHeaderNodeWidth;
-					fVoxelNodeNoStack(fVoxelDepth)=newNodeNo;
-					fVoxelHeaderStack(fVoxelDepth)=newHeader;
+					fVoxelAxisStack[fVoxelDepth]=newHeaderAxis;
+					fVoxelNoSlicesStack[fVoxelDepth]=newHeaderNoSlices;
+					fVoxelSliceWidthStack[fVoxelDepth]=newHeaderNodeWidth;
+					fVoxelNodeNoStack[fVoxelDepth]=newNodeNo;
+					fVoxelHeaderStack[fVoxelDepth]=newHeader;
 				    }
 		
 			    }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BlockingList.hh,v 1.4 2000-04-25 16:15:02 gcosmo Exp $
+// $Id: G4BlockingList.hh,v 1.5 2001-04-17 14:44:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4BlockingList
@@ -30,7 +30,7 @@
 #define G4BLOCKINGLIST_HH
 
 #include "globals.hh"
-#include "g4rw/tvvector.h"
+#include "g4std/vector"
 
 const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters
 				           // initially
@@ -77,7 +77,7 @@ class G4BlockingList
     G4int fBlockTagNo, fStride;		
       // Current blocked volume tag number.
 
-    G4RWTValVector<G4int> fBlockingList; 
+    G4std::vector<G4int> fBlockingList; 
       // Blocked volumes: Elements with indices
       // corresponding to blocked volume set to fBlockTagNo.
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NavigationHistory.hh,v 1.7 2000-11-20 18:59:38 gcosmo Exp $
+// $Id: G4NavigationHistory.hh,v 1.8 2001-04-17 14:44:24 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationHistory
@@ -31,8 +31,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
 
-#include "g4rw/tvvector.h"
-#include "g4rw/tpvector.h"
+#include "g4std/vector"
 #include "g4std/iostream"
 
 class G4NavigationHistory
@@ -122,7 +121,7 @@ class G4NavigationHistory
 
  private:
 
-  G4RWTValVector<G4NavigationLevel>  fNavHistory;
+  G4std::vector<G4NavigationLevel>  fNavHistory;
 
   G4int fStackDepth;
     // Depth of stack: effectively depth in geometrical tree
