@@ -1,4 +1,4 @@
-$Id: History,v 1.25 2003-02-27 13:59:57 maire Exp $
+$Id: History,v 1.26 2003-03-26 11:39:25 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-Feb 27, 2002  mma (exampleN04-V05-00-00)
+26-03-03  mma 
+- Use G4PVPlacement and G4PVParametrised constructors in logical mother.
+      
+Feb 27, 2003  mma (exampleN04-V05-00-00)
 - added capture and fission in HadronPhysics (Hans-Peter)
 
 Jun 19, 2002  Gabriele Cosmo (exampleN04-V04-00-02)
