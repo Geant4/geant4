@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysListEmStandard.cc,v 1.2 2004-08-17 18:07:30 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.3 2004-12-06 12:02:42 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,26 +54,26 @@ PhysListEmStandard::~PhysListEmStandard()
 void PhysListEmStandard::ConstructProcess()
 {
   // Add standard EM Processes for Muon
+  //  
   G4ParticleDefinition* particle = G4MuonPlus::MuonPlus();
   G4ProcessManager* pmanager = particle->GetProcessManager();    
-
-  pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
-  pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
-  pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
+  //
+  pmanager->AddProcess(new G4MuIonisation,     -1, 1,1);
+  pmanager->AddProcess(new G4MuBremsstrahlung, -1, 2,2);
+  pmanager->AddProcess(new G4MuPairProduction, -1, 3,3);       
 
   particle = G4MuonMinus::MuonMinus();
   pmanager = particle->GetProcessManager();    
-
-  pmanager->AddProcess(new G4MuIonisation,        -1, 1,1);
-  pmanager->AddProcess(new G4MuBremsstrahlung,    -1, 2,2);
-  pmanager->AddProcess(new G4MuPairProduction,    -1, 3,3);       
+  //
+  pmanager->AddProcess(new G4MuIonisation,     -1, 1,1);
+  pmanager->AddProcess(new G4MuBremsstrahlung, -1, 2,2);
+  pmanager->AddProcess(new G4MuPairProduction, -1, 3,3);       
     
   //extend binning of PhysicsTables
   //
   G4LossTableManager::Instance()->SetMaxEnergy(1000.0*PeV);
   G4LossTableManager::Instance()->SetDEDXBinning(220);
   G4LossTableManager::Instance()->SetLambdaBinning(220);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
