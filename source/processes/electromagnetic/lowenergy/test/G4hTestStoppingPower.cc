@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.5 2000-10-15 02:41:38 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.6 2001-01-12 11:14:33 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -90,6 +90,7 @@ main()
   G4Material* Al  = new G4Material("Aluminium", 13., 26.98*g/mole, 2.7 *g/cm3);
   G4Material* Si  = new G4Material("Silicon", 14., 28.055*g/mole, 2.33*g/cm3);
   G4Material* LAr = new G4Material("LArgon",   18., 39.95*g/mole, 1.393*g/cm3);
+  G4Material* Ti  = new G4Material("Titan", 22., 47.867*g/mole, 4.54*g/cm3);
   G4Material* Fe  = new G4Material("Iron",      26., 55.85*g/mole, 7.87*g/cm3);
   G4Material* Cu  = new G4Material("Copper",    29., 63.55*g/mole, 8.96*g/cm3);
   G4Material*  W  = new G4Material("Tungsten",74., 183.85*g/mole, 19.30*g/cm3);
@@ -102,15 +103,18 @@ main()
   G4Element*  Cs  = new G4Element ("Cesium"  , "Cs", 55. , 132.905*g/mole);
   G4Element*   I  = new G4Element ("Iodide"  , "I", 53. , 126.9044*g/mole);
 
-  G4Material* water = new G4Material ("Water" ,"H_2O", 1.*g/cm3, 2);
+  //  G4Material* water = new G4Material ("Water" ,"H_2O", 1.*g/cm3, 2);
+  G4Material* water = new G4Material ("Water" , 1.*g/cm3, 2);
   water->AddElement(H,2);
   water->AddElement(O,1);
 
-  G4Material* ethane = new G4Material ("Ethane" ,"C_2H_6", 0.4241*g/cm3, 2);
+  //  G4Material* ethane = new G4Material ("Ethane" ,"C_2H_6", 0.4241*g/cm3, 2);
+  G4Material* ethane = new G4Material ("Ethane" , 0.4241*g/cm3, 2);
   ethane->AddElement(H,6);
   ethane->AddElement(C,2);
   
-  G4Material* csi = new G4Material ("CsI" , "CsI", 4.53*g/cm3, 2);
+  //  G4Material* csi = new G4Material ("CsI" , "CsI", 4.53*g/cm3, 2);
+  G4Material* csi = new G4Material ("CsI" ,  4.53*g/cm3, 2);
   csi->AddElement(Cs,1);
   csi->AddElement(I,1);
 
@@ -227,8 +231,8 @@ main()
     hIon[i] = new G4hLowEnergyIonisation();
     hIon[i]->SetEnlossFluc(false) ;
 
-    //  hIon[i]->SetBarkasOff();
-    //    hIon[i]->SetNuclearStoppingOff();
+    // hIon[i]->SetBarkasOff();
+        hIon[i]->SetNuclearStoppingOff();
   //  hIon[i]->SetStoppingPowerTableName("ICRU_R49p"); 
   
     theProcessManager[i]->AddProcess(hIon[i]);
@@ -248,7 +252,7 @@ main()
   G4double tkin;
   s = (log10(maxE)-log10(minE))/num;
 
- HepHistogram* h[69] ;
+ HepHistogram* h[71] ;
        
   // Test on Stopping Powers for all elements
 
@@ -407,6 +411,9 @@ main()
  h[69]= hbookManager->histogram("pbar   in CsI (MeV/mm) QAOLoss"
                                    ,num,log10(minE),log10(maxE)) ;
 
+ h[70] = hbookManager->histogram("p 6.5 MeV (keV*cm2/10^15!atoms) Ziegler77p"
+                                                  ,92,0.5,92.5) ;
+
  
  G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p() ;
  G4VhElectronicStoppingPower* Z85p = new G4hZiegler1985p() ;
@@ -511,6 +518,13 @@ main()
     de = (I49He->ElectronicStoppingPower(z, tau/rateMass))*q2 ;
     h[27]->accumulate(z,de) ;
   }
+  tau = 6.5*MeV ;
+  for ( j=1; j<93; j++)
+  { 
+    z = G4double(j);
+    de = Z77p->ElectronicStoppingPower(z, tau) ;
+    h[70]->accumulate(z,de) ;
+  }
   tau = 10.0*keV ;
   for ( j=1; j<93; j++)
   { 
@@ -572,7 +586,7 @@ main()
     //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
     h[34]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],water,tkin) ;
-    de += theNuclearStoppingModel->TheValue(part[1],water,tkin) ;
+    //    de += theNuclearStoppingModel->TheValue(part[1],water,tkin) ;
     //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
     h[35]->accumulate(log10(tkin),de) ;
     de = hIon[0]->ComputeDEDX(part[0],LAr,tkin) ;
@@ -642,7 +656,7 @@ main()
   hIon[7] = new G4hLowEnergyIonisation();
   hIon[7]->SetElectronicStoppingPowerModel(part[0],"Ziegler1985p"); 
   hIon[7]->SetEnlossFluc(false) ;
-  //  hIon[7]->SetNuclearStoppingOff();
+  hIon[7]->SetNuclearStoppingOff();
   //  hIon[7]->SetBarkasOff();
   theProcessManager[7]->AddProcess(hIon[7]);
   hIon[7]->BuildPhysicsTable(*part[0]);
@@ -729,8 +743,7 @@ main()
       }
     }
   }
-				   
-   
+				      
   //----------- End of work -------------------------------------      
 
   G4cout << "Save Ntuple and Hbook" << G4endl;  
