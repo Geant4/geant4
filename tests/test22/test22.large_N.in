@@ -1,24 +1,23 @@
 #
 # Macro file test22.in
-# for tests of basic e.m. processes
 #
 /control/verbose 2
 # /run/verbose 2
 /run/initialize
 /gun/direction 1 0 0
 #
-# gamma 500 MeV in Al
+# gamma 100 GeV in Al
 #
 /mydet/SelectMaterial Al
 /gun/particle gamma
-/gun/energy 500 MeV
-/run/beamOn 10000
+/gun/energy 100 GeV
+/run/beamOn 50
 #
-# electron 500 MeV in Air
+# electron 100 GeV in Air
 #
 /mydet/SelectMaterial Air
 /gun/particle e-
-/gun/energy 500 MeV
-/run/beamOn 10000
+/gun/energy 100 GeV
+/run/beamOn 50
 #
 exit
