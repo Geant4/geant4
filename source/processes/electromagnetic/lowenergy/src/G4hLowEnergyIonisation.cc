@@ -44,6 +44,7 @@
 // 05 Nov.   2000 MG Pia - Removed const cast previously introduced to get
 //                the code compiled (const G4Material* now introduced in 
 //                electromagnetic/utils utils-V02-00-03 tag)
+// 21 Nov.   2000 V.Ivanchenko Fix a problem in fluctuations
 //
 // -----------------------------------------------------------------------
 
@@ -1156,7 +1157,7 @@ G4double G4hLowEnergyIonisation::ElectronicLossFluctuation(
   // Gaussian fluctuation 
   if(meanLoss > kappa*tmax)
   {
-    siga = tmax * (0.5-0.25*beta2) * step * twopi_mc2_rcl2 
+    siga = tmax * (1.0-0.5*beta2) * step * twopi_mc2_rcl2 
          * electronDensity / beta2 ;
 
     // High velocity
