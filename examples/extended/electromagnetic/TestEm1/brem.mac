@@ -22,11 +22,13 @@
 /run/initialize
 #/run/beamOn 1
 #
+/process/eLoss/verbose  0
 /process/inactivate   phot
 /process/inactivate   compt
 /process/inactivate   conv
 /process/inactivate   eIoni
-/process/inactivate   msc
+/process/inactivate   eBrem
+#/process/inactivate   msc
 #
 #/process/eLoss/fluct     false
 #/process/eLoss/integral  false
