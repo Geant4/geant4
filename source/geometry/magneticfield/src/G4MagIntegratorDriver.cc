@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.19 2001-11-13 16:39:01 gcosmo Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.20 2001-11-21 16:43:16 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -91,7 +91,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
   G4double x, hnext, hdid, h ;
 
   G4int  no_warnings=0;
-#ifdef G4DEBUG
+#ifdef G4DEBUG_FIELD
   static G4int dbg=0;
   dbg=1;
   fVerboseLevel=2;
@@ -177,7 +177,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	lastStepSucceeded= (dyerr<= eps);
 #endif
      }
-// #ifdef G4DEBUG
+// #ifdef G4DEBUG_FIELD
      if(lastStepSucceeded) noFullIntegr++ ; else noSmallIntegr++ ;
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
