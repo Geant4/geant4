@@ -654,9 +654,13 @@ rp=$g4message
 . ./getfile
 g4vis_oglhome=$ans
 
+if test "X$g4osname" = "XLinux"; then 
+
 if test "X$g4vis_oglhome" = "X/usr" -o "X$g4vis_oglhome" = "X/usr/local"; then
 g4vis_oglhome=""
 fi
 
+fi # if platform (Linux vs SUN)
+
 fi # if need
-fi # if platform
+fi # if platform (Unix vs Win)
