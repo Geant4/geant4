@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.hh,v 1.9 2001-10-29 16:23:41 maire Exp $
+// $Id: G4VeEnergyLoss.hh,v 1.10 2001-11-08 08:45:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,6 +31,7 @@
 // 02-02-99 new data members ,  L.Urban 
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 29-10-01 all static functions no more inlined (mma)
+// 08-11-01 Charge,lastCharge not data members, L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,9 +142,6 @@ class G4VeEnergyLoss : public G4VEnergyLoss
     G4PhysicsTable* theLossTable;
      
     G4double MinKineticEnergy ;           
-
-    G4double Charge,lastCharge ;
-
 
   private:
 

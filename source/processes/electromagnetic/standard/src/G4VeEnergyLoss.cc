@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.cc,v 1.19 2001-10-29 16:23:41 maire Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.20 2001-11-08 08:45:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 
@@ -39,6 +39,7 @@
 // 12/09/01  min.delta cut is set as rcut/100 + some optimisation, L.Urban
 // 17-09-01, migration of Materials to pure STL (mma)
 // 29-10-01 all static functions no more inlined (mma) 
+// 08-11-01 Charge,lastCharge not data members, L.Urban
 // -----------------------------------------------------------------------------
 
  
@@ -92,8 +93,6 @@ G4VeEnergyLoss::G4VeEnergyLoss(const G4String& processName)
    : G4VEnergyLoss (processName),
      theLossTable(0),
      MinKineticEnergy(1.*eV),
-     Charge(-1.),
-     lastCharge(0.),
      theDEDXTable(0),
      linLossLimit(0.05),
      cN(0.077*MeV*cm2/g),
@@ -420,6 +419,7 @@ G4VParticleChange* G4VeEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
   // get particle and material pointers from trackData
   const G4DynamicParticle* aParticle = trackData.GetDynamicParticle();
+  G4double Charge = aParticle->GetDefinition()->GetPDGCharge()/eplus;
   G4double E      = aParticle->GetKineticEnergy() ;
  
   G4Material* aMaterial = trackData.GetMaterial();

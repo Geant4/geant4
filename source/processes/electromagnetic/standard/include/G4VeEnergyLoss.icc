@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VeEnergyLoss.icc,v 1.5 2001-08-06 11:48:48 maire Exp $
+// $Id: G4VeEnergyLoss.icc,v 1.6 2001-11-08 08:45:43 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -29,6 +29,7 @@
 // 18/11/98, L. Urban
 //  It is a modified version of G4VeEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
+// 08-11-01 Charge,lastCharge not data members, L.Urban
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -43,9 +44,6 @@ inline G4double G4VeEnergyLoss::GetConstraints(
 
   G4double StepLimit;
   const G4ParticleDefinition* ParticleType=aParticle->GetDefinition();
-
-  Charge = aParticle->GetDefinition()->GetPDGCharge();
-  if (Charge != lastCharge) lastCharge = Charge;
 
   G4double KineticEnergy = aParticle->GetKineticEnergy();
 
