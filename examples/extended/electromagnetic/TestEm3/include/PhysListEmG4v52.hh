@@ -21,34 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmModel.hh,v 1.1 2003-09-22 14:06:42 maire Exp $
+// $Id: PhysListEmG4v52.hh,v 1.1 2003-10-06 10:09:23 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListEmModel_h
-#define PhysListEmModel_h 1
+#ifndef PhysListEmG4v52_h
+#define PhysListEmG4v52_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListEmModel : public G4VPhysicsConstructor
+class PhysListEmG4v52 : public G4VPhysicsConstructor
 {
   public: 
-    PhysListEmModel(const G4String& name = "model");
-    virtual ~PhysListEmModel();
+    PhysListEmG4v52(const G4String& name = "g4v52");
+    ~PhysListEmG4v52();
 
   public: 
     // This method is dummy for physics. 
-    virtual void ConstructParticle() {};
+    void ConstructParticle() {};
  
     // This method will be invoked in the Construct() method.
     // each physics process will be instantiated and
     // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+    void ConstructProcess();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmStandard.cc,v 1.1 2003-09-22 14:06:20 maire Exp $
+// $Id: PhysListEmStandard.cc,v 1.2 2003-10-06 10:09:25 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,6 +46,7 @@
 #include "G4MuPairProduction.hh"
 
 #include "G4hIonisation.hh"
+#include "G4ionIonisation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,7 +72,7 @@ void PhysListEmStandard::ConstructProcess()
     G4String particleName = particle->GetParticleName();
      
     if (particleName == "gamma") {
-      // gamma
+      // gamma         
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
@@ -97,6 +98,10 @@ void PhysListEmStandard::ConstructProcess()
       pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
       pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       
      
+    } else if( particleName == "GenericIon" ) { 
+      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      pmanager->AddProcess(new G4ionIonisation,     -1, 2,2);
+
     } else if ((!particle->IsShortLived()) &&
 	       (particle->GetPDGCharge() != 0.0) && 
 	       (particle->GetParticleName() != "chargedgeantino")) {

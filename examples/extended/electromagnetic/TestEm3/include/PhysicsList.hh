@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.1 2003-09-22 14:06:43 maire Exp $
+// $Id: PhysicsList.hh,v 1.2 2003-10-06 10:09:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,8 +48,8 @@ class PhysicsList: public G4VModularPhysicsList
     PhysicsList();
    ~PhysicsList();
 
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
+    void ConstructParticle();
+    void ConstructProcess();
     void AddPhysicsList(const G4String& name);
 
     void SetCuts();

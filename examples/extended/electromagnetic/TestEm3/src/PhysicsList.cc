@@ -31,14 +31,9 @@
 #include "PhysListParticles.hh"
 #include "PhysListGeneral.hh"
 #include "PhysListEmStandard.hh"
-#include "PhysListEmModel.hh"
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
+#include "PhysListEmG4v52.hh"
 
 #include "G4LossTableManager.hh"
-#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -105,11 +100,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandard(name);
 
-  } else if (name == "model") {
+  } else if (name == "g4v52") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmModel(name);
+    emPhysicsList = new PhysListEmG4v52(name);
 
   } else {
 
@@ -139,6 +134,10 @@ void PhysicsList::SetCuts()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
 
 void PhysicsList::SetCutForGamma(G4double cut)
 {
