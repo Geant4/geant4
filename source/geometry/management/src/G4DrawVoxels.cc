@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.cc,v 1.12 2000-11-20 17:31:34 gcosmo Exp $
+// $Id: G4DrawVoxels.cc,v 1.13 2001-05-03 12:25:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -80,7 +80,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
    G4ThreeVector t_centerofBoundingBox((xmin+xmax)*0.5,(ymin+ymax)*0.5,(zmin+zmax)*0.5);
    
    //ppl->resize(ppl->entries()+1);	//manual resize to avoid Rogue grabbing RW_DEFAULT
-   ppl->insert(G4PlacedPolyhedron(bounding_polyhedronBox,G4Translate3D(t_centerofBoundingBox)));
+   ppl->push_back(G4PlacedPolyhedron(bounding_polyhedronBox,G4Translate3D(t_centerofBoundingBox)));
    
    G4ThreeVector t_FirstCenterofVoxelPlane;
    const G4VisAttributes* voxelsVisAttributes=0;
@@ -147,7 +147,7 @@ void  G4DrawVoxels::ComputeVoxelPolyhedra(const G4LogicalVolume* lv,
 	current_translation_vector*=step*slice_no;
 		   
 	//ppl->resize(ppl->entries()+1);	//manual resize to avoid Rogue grabbing RW_DEFAULT
-	ppl->insert(G4PlacedPolyhedron(voxel_plane,G4Translate3D(current_translation_vector+t_FirstCenterofVoxelPlane)));
+	ppl->push_back(G4PlacedPolyhedron(voxel_plane,G4Translate3D(current_translation_vector+t_FirstCenterofVoxelPlane)));
 		   
 	slice_no=(slice->IsHeader()?slice->GetHeader()->GetMaxEquivalentSliceNo()+1
 		  			     :slice->GetNode()->GetMaxEquivalentSliceNo()+1);
@@ -215,8 +215,8 @@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume* lv) const{
    G4PlacedPolyhedronList* pplist=CreatePlacedPolyhedra(lv);
    if(pVVisManager) {
 	//Drawing the bounding and voxel polyhedra for the pVolume
-	for (size_t i=0;i<pplist->entries();i++)
-	   pVVisManager->Draw((*pplist)(i).GetPolyhedron(),(*pplist)(i).GetTransform()*transf3D);	
+	for (size_t i=0;i<pplist->size();i++)
+	   pVVisManager->Draw((*pplist)[i].GetPolyhedron(),(*pplist)[i].GetTransform()*transf3D);
    }
    else G4cout << "@@@@ void G4DrawVoxels::DrawVoxels(const G4LogicalVolume*) pVVisManager is null! @@@@" <<G4endl; 	
    delete pplist;
