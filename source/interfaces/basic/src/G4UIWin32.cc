@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.cc,v 1.4 1999-05-06 15:21:00 barrand Exp $
+// $Id: G4UIWin32.cc,v 1.5 1999-11-02 20:07:31 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -131,9 +131,6 @@ static G4bool ConvertStringToInt(const char*,int&);
 
 static int actionIdentifier = 0;
 
-static unsigned CommandsHashFun(const int& identifier) {
-  return (unsigned)identifier;
-}
 /***************************************************************************/
 G4UIWin32::G4UIWin32 (
  HINSTANCE a_hInstance
@@ -145,7 +142,6 @@ G4UIWin32::G4UIWin32 (
 ,textWindow(NULL)
 ,editWindow(NULL)
 ,menuBar(NULL)
-,commands(CommandsHashFun)
 ,textBuffer(NULL)
 ,textCols(80)
 ,textRows(12)
@@ -575,7 +571,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 	  exitHelp = true;
 	  This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
 	} else {
-	  This->fHistory.insert(command);
+	  This->fHistory.push_back(command);
 	  This->fHistoryPos = -1;
 	  This->ApplyShellCommand (command,exitSession,exitPause);
 	}
@@ -605,8 +601,8 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 			 GetParent(a_window),GWL_USERDATA);
       if(This!=NULL) {
 	int pos = This->fHistoryPos== -1 ? 
-	  This->fHistory.entries()-1 : This->fHistoryPos-1;
-	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	  This->fHistory.size()-1 : This->fHistoryPos-1;
+	if((pos>=0)&&(pos<This->fHistory.size())) {
 	  G4String command = This->fHistory[pos];
 	  const char* d = command.data();
 	  int l = strlen(d);
@@ -622,7 +618,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 			 GetParent(a_window),GWL_USERDATA);
       if(This!=NULL) {
 	int pos = This->fHistoryPos + 1;
-	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	if((pos>=0)&&(pos<This->fHistory.size())) {
 	  G4String command = This->fHistory[pos];
 	  const char* d = command.data();
 	  int l = strlen(d);
@@ -630,7 +626,7 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
 	  Edit_SetSel(a_window,l,l);
 	  //
 	  This->fHistoryPos = pos;
-	} else if(pos>=This->fHistory.entries()) {
+	} else if(pos>=This->fHistory.size()) {
 	  Edit_SetText(a_window,"");
 	  Edit_SetSel(a_window,0,0);
 	  //

@@ -6,13 +6,17 @@
 // and all its terms.
 //
 
-#include <rw/ctoken.h>
+#include <string.h>
+#include <stdlib.h>
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4VInteractiveSession.hh"
 
 #include "G4InteractorMessenger.hh"
+
+#define STRDUP(str)  ((str) != NULL ? (strcpy((char*)malloc((unsigned)strlen(str) + 1), str)) : (char*)NULL)
+#define STRDEL(str) {if((str)!=NULL) {free(str);str=NULL;}}
 
 static G4bool GetValues (G4String,int,G4String*); 
 
@@ -81,27 +85,36 @@ G4bool GetValues (
 ,G4String* params
 ) 
 {
-  RWCTokenizer newValueToken( newValue );
-  G4String aToken;
+  char* value = STRDUP(newValue.data());
+  if(value==NULL) return false;
+  char* tok = strtok(value," ");
   for( int i=0; i<paramn;i++ ) {
-    aToken = (G4String)newValueToken();
-    if( aToken(0)=='"' ) {
-      while( aToken(aToken.length()-1) != '"' ) {
-	G4String additionalToken = (G4String)newValueToken();
-	if( additionalToken.isNull() ) { 
+    if(tok==NULL) {
+      STRDEL(value);
+      return false;
+    }
+    G4String token = tok;
+    if( token(0)=='"' ) {
+      while( token(token.length()-1) != '"' ) {
+	tok = strtok(NULL," ");
+	if( (tok==NULL) || (*tok=='\0')) {
+	  STRDEL(value);
 	  return false;
 	}
-	aToken += " ";
-	aToken += additionalToken;
+	token += " ";
+	token += tok;
       }
-      aToken = (G4String)aToken.strip(G4String::both,'"');
+      token = (G4String)token.strip(G4String::both,'"');
     }
-    if( aToken.isNull() ) {
+    if( token.isNull() ) {
+      STRDEL(value);
       return false;
     } else { 
-      params[i] = aToken;
+      params[i] = token;
     }
+    tok = strtok(NULL," ");
   }
+  STRDEL(value);
   return true;
 }
 

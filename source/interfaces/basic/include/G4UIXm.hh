@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIXm.hh,v 1.4 1999-05-11 13:26:29 barrand Exp $
+// $Id: G4UIXm.hh,v 1.5 1999-11-02 20:07:28 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIXm_h
@@ -13,7 +13,7 @@
 
 #if defined(G4UI_BUILD_XM_SESSION) || defined(G4UI_USE_XM)
 
-#include <rw/tvhdict.h>
+#include "g4std/map"
 
 #include <X11/Intrinsic.h>
 
@@ -41,7 +41,7 @@ private:
   void ExitHelp();
 private:
   Widget form,shell,command,menuBar,text;
-  RWTValHashDictionary<Widget,G4String> commands;
+  G4std::map<Widget,G4String> commands;
   static void commandEnteredCallback(Widget,XtPointer,XtPointer);
   static void keyHandler(Widget,XtPointer,XEvent*,Boolean*);
   G4bool fHelp;

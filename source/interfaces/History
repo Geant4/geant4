@@ -1,4 +1,4 @@
-$Id: History,v 1.15 1999-10-29 05:30:39 yhajime Exp $
+$Id: History,v 1.16 1999-11-02 20:11:44 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02 Nov 1999 Guy Barrand
+- basic/G4UIWin32, G4UIXm : RW -> STL.
+- common/G4VBasicShell, G4VInteractiveSession, G4VInteractorManager : RW -> STL.
+
 29 Oct. 1999 Hajime Yoshida
 - tag interfaces-V00-01-01
 

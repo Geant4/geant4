@@ -10,13 +10,9 @@
 
 #include "G4VInteractiveSession.hh"
 
-static unsigned InteractorsHashFun (const G4String& name) {
-  return name.hash();
-}
 /***************************************************************************/
 G4VInteractiveSession::G4VInteractiveSession (
 )
-:interactors(InteractorsHashFun)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -65,9 +61,9 @@ G4Interactor G4VInteractiveSession::GetInteractor (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  G4Interactor value;
-  if(interactors.findValue(a_name,value)==false) return NULL;
-  return value;
+  G4interactor_map::iterator it;
+  if((it=interactors.find(a_name))==interactors.end()) return NULL;
+  return (*it).second;  
 }
 
 

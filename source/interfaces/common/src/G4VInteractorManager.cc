@@ -5,13 +5,15 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VInteractorManager.cc,v 1.5 1999-05-31 20:47:42 barrand Exp $
+// $Id: G4VInteractorManager.cc,v 1.6 1999-11-02 20:06:49 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
 
 #include <stdlib.h>
 #include <string.h>
+
+#include "g4std/algorithm"
 
 #include "G4VInteractorManager.hh"
 
@@ -135,8 +137,8 @@ void G4VInteractorManager::AddDispatcher (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_dispatcher==NULL) return;
-  if(dispatchers.contains(a_dispatcher)==TRUE) return;
-  dispatchers.insert(a_dispatcher);
+  if(find(dispatchers.begin(),dispatchers.end(),a_dispatcher)!=dispatchers.end()) return;
+  dispatchers.push_back(a_dispatcher);
 }
 /***************************************************************************/
 void G4VInteractorManager::RemoveDispatcher (
@@ -145,7 +147,7 @@ void G4VInteractorManager::RemoveDispatcher (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  dispatchers.removeAll(a_dispatcher);
+  remove(dispatchers.begin(),dispatchers.end(),a_dispatcher);
 }
 /***************************************************************************/
 void G4VInteractorManager::DispatchEvent (
@@ -154,7 +156,7 @@ void G4VInteractorManager::DispatchEvent (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int dispatchern = dispatchers.entries();
+  int dispatchern = dispatchers.size();
   G4DispatchFunction func;
   G4bool status;
   for(int count=0;count<dispatchern;count++) {
@@ -172,8 +174,8 @@ void G4VInteractorManager::AddSecondaryLoopPreAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_preAction==NULL) return;
-  if(preActions.contains(a_preAction)==TRUE) return;
-  preActions.insert(a_preAction);
+  if(find(preActions.begin(),preActions.end(),a_preAction)!=preActions.end()) return;
+  preActions.push_back(a_preAction);
 }
 /***************************************************************************/
 void G4VInteractorManager::SecondaryLoopPreActions (
@@ -181,7 +183,7 @@ void G4VInteractorManager::SecondaryLoopPreActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int preActionn = preActions.entries();
+  int preActionn = preActions.size();
   for(int count=0;count<preActionn;count++) {
     if(preActions[count]!=NULL) preActions[count]();
   }
@@ -194,8 +196,8 @@ void G4VInteractorManager::AddSecondaryLoopPostAction (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_postAction==NULL) return;
-  if(postActions.contains(a_postAction)==TRUE) return;
-  postActions.insert(a_postAction);
+  if(find(postActions.begin(),postActions.end(),a_postAction)!=postActions.end()) return;
+  postActions.push_back(a_postAction);
 }
 /***************************************************************************/
 void G4VInteractorManager::SecondaryLoopPostActions (
@@ -203,7 +205,7 @@ void G4VInteractorManager::SecondaryLoopPostActions (
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
-  int postActionn = postActions.entries();
+  int postActionn = postActions.size();
   for(int count=0;count<postActionn;count++) {
     if(postActions[count]!=NULL) postActions[count]();
   }
@@ -266,8 +268,8 @@ void G4VInteractorManager::AddShell (
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
   if(a_shell==NULL) return;
-  if(shells.contains(a_shell)==TRUE) return;
-  shells.insert(a_shell);
+  if(find(shells.begin(),shells.end(),a_shell)!=shells.end()) return;
+  shells.push_back(a_shell);
 }
 /***************************************************************************/
 void G4VInteractorManager::RemoveShell (
@@ -275,8 +277,8 @@ void G4VInteractorManager::RemoveShell (
 )
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
-{
-  shells.removeAll(a_shell);
+{  
+  remove(shells.begin(),shells.end(),a_shell);
 }
 /***************************************************************************/
 void G4VInteractorManager::SetParentInteractor (

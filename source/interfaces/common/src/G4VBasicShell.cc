@@ -5,9 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VBasicShell.cc,v 1.4 1999-05-19 17:40:56 stesting Exp $
+// $Id: G4VBasicShell.cc,v 1.5 1999-11-02 20:06:46 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
+#include "g4std/vector"
 
 #include "G4VBasicShell.hh"
 #include "G4StateManager.hh"
@@ -37,7 +39,7 @@ G4String G4VBasicShell::ModifyToFullPathCommand(const char* aCommandLine)
   G4String commandString;
   G4String parameterString;
   int i = commandLine.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   {
     commandString = (G4String)commandLine(0,i);
     parameterString = " ";
@@ -97,7 +99,7 @@ G4UIcommand* G4VBasicShell::FindCommand(const char* commandName)
   G4String commandLine = (G4String)rawCommandLine.strip(G4String::both);
   G4String commandString;
   int i = commandLine.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   { commandString = (G4String)commandLine(0,i); }
   else
   { commandString = commandLine; }
@@ -154,7 +156,7 @@ G4String G4VBasicShell::Complete(G4String commandName)
   G4String rawCommandLine = commandName;
   G4String commandLine = rawCommandLine.strip(G4String::both);
   int i = commandLine.index(" ");
-  if( i != RW_NPOS ) return rawCommandLine; // Already entering parameters, 
+  if( i != G4std::string::npos ) return rawCommandLine; // Already entering parameters, 
                                             // assume command path is correct.
   G4String commandString = commandLine; 
   G4String targetCom = ModifyPath(commandString);
@@ -172,21 +174,21 @@ G4String G4VBasicShell::FindMatchingPath(
   G4String empty = "";
   if(aTree==NULL) return empty;
   G4String pathName = aTree->GetPathName();
-  if( aCommandPath.index( pathName ) == RW_NPOS ) return empty;
+  if( aCommandPath.index( pathName ) == G4std::string::npos ) return empty;
   G4String remainingPath = aCommandPath;
   remainingPath.remove(0,pathName.length());
   int i = remainingPath.first('/');
-  if( i == RW_NPOS ) {
+  if( i == G4std::string::npos ) {
     // Look for number of matching commands :
-    RWTPtrOrderedVector<G4UIcommand> commands;
+    G4std::vector<G4UIcommand*> commands;
     int n_commandEntry = aTree->GetCommandEntry();
     for( int i_thCommand = 1; i_thCommand <= n_commandEntry; i_thCommand++ ) {
       G4UIcommand* cmd = aTree->GetCommand(i_thCommand);
       G4String ss = cmd->GetCommandName();
       ss.resize(remainingPath.length());
-      if( remainingPath == ss ) commands.insert(cmd);
+      if( remainingPath == ss ) commands.push_back(cmd);
     }
-    n_commandEntry = commands.entries();
+    n_commandEntry = commands.size();
     if(n_commandEntry==1) {
       return (pathName + commands[0]->GetCommandName());
     } else if (n_commandEntry>=2) {
@@ -198,7 +200,7 @@ G4String G4VBasicShell::FindMatchingPath(
       return empty;
     }
     // Look for sub tree :
-    RWTPtrOrderedVector<G4UIcommandTree> trees;
+    G4std::vector<G4UIcommandTree*> trees;
     G4String nextPath = pathName;
     nextPath.append(remainingPath);
     int n_treeEntry = aTree->GetTreeEntry();
@@ -206,9 +208,9 @@ G4String G4VBasicShell::FindMatchingPath(
       G4UIcommandTree* tree = aTree->GetTree(i_thTree);
       G4String ss = tree->GetPathName();
       ss.resize(nextPath.length());
-      if( nextPath == ss ) trees.insert(tree);
+      if( nextPath == ss ) trees.push_back(tree);
     }
-    n_treeEntry = trees.entries();
+    n_treeEntry = trees.size();
     if(n_treeEntry==1) {
       return trees[0]->GetPathName();
     } else if (n_treeEntry>=2) {
@@ -394,7 +396,7 @@ void G4VBasicShell::TerminalHelp(G4String newCommand)
   if(UI==NULL) return;
   G4UIcommandTree * treeTop = UI->GetTree();
   int i = newCommand.index(" ");
-  if( i != RW_NPOS )
+  if( i != G4std::string::npos )
   {
     G4String newValue = newCommand(i+1,newCommand.length()-(i+1));
     newValue.strip(G4String::both);

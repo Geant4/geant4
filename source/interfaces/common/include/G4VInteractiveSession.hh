@@ -9,7 +9,7 @@
 #ifndef G4VInteractiveSession_H
 #define G4VInteractiveSession_H 1
 
-#include <rw/tvhdict.h>
+#include "g4std/map"
 
 #include "G4VInteractorManager.hh"
 
@@ -25,7 +25,8 @@ public:
   G4Interactor GetInteractor(G4String);
 private:
   G4UImessenger* messenger;
-  RWTValHashDictionary<G4String,G4Interactor> interactors;
+  typedef G4std::map<G4String,G4Interactor> G4interactor_map;
+  G4interactor_map interactors;
 };
 
 #endif
