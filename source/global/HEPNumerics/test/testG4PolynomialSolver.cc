@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4PolynomialSolver.cc,v 1.2 2001-01-29 09:49:55 gcosmo Exp $
+// $Id: testG4PolynomialSolver.cc,v 1.3 2001-01-29 09:57:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4PolynomialSolver.hh"
@@ -20,22 +20,22 @@ public:
   
   ~MyFunctionClass () {;}
 
-  setParam(G4double param)
+  void setParam(G4double param)
   {
     Parameter = param;    
   }
   
 
-G4double MyFunctionClass::Function(G4double value)
-{
-  G4double result;
+  G4double Function(G4double value)
+  {
+    G4double result;
 
-  result = value * value - Parameter;
+    result = value * value - Parameter;
   
-  return result ;  
-}    
+    return result ;  
+  }    
 
-G4double MyFunctionClass::Derivative(G4double value)
+  G4double Derivative(G4double value)
   {
     G4double result;
 
@@ -45,9 +45,10 @@ G4double MyFunctionClass::Derivative(G4double value)
   }
 
 private:
-  G4double Parameter;
-} ;
 
+  G4double Parameter;
+
+} ;
 
 
 G4int main (void)
