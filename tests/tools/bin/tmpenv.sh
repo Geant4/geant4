@@ -46,12 +46,11 @@ if [ `uname -n | grep dxplus` ]; then
   ulimit -d 400000
 # (current understanding) TMPDIR is compiler loader  workspace (few 100 MBytes)
 #                         G4TMP  are dependency files, object files  (up to Gbytes)
-  if [ X$REFTREE = Xprod ]; then
-    if [ ! -d /tmp/geant4tmp ]; then
-      mkdir /tmp/geant4tmp
+# system people see no problems - lets use it for dev1 and dev2 too.
+# we might even use /pool for optim and /tmp for debug (bigger)
+# 
+    if [ ! -d /tmp/g4${REFTREE}tmp ]; then
+      mkdir /tmp/g4${REFTREE}tmp
     fi
-    export TMPDIR=/tmp/geant4tmp
-#  else
-#  export TMPDIR=/afs/cern.ch/sw/geant4/stt/tmpdir
-  fi
+    export TMPDIR=/tmp/g4${REFTREE}tmp
 fi
