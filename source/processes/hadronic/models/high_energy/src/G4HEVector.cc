@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEVector.cc,v 1.11 2002-06-18 07:38:11 jwellisc Exp $
+// $Id: G4HEVector.cc,v 1.12 2002-07-16 10:39:53 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -929,7 +929,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 0.9382723;
               charge = -1.;
               code = -2212;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon       = -1;
               strangeness  = 0;
@@ -949,7 +949,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 0.93956563;
               charge = 0.;
               code = -2112;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon = -1;
               strangeness  = 0;
@@ -969,7 +969,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 1.115684;
               charge = 0.;
               code = -3122;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon = -1;
               strangeness  = 1;
@@ -1009,7 +1009,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 1.18937;
               charge = -1.;
               code = -3222;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon = -1;
               strangeness  = 1;
@@ -1019,7 +1019,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 1.19255;
               charge = 0.;
               code = -3212;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon       = -1;
               strangeness  = 1;
@@ -1029,7 +1029,7 @@ G4HEVector::setDefinition(G4String name)
               mass = 1.19744;
               charge = 1.;
               code = -3112;
-              particleType = "Baryon";
+              particleType = "AntiBaryon";
               particleName = name;
               baryon       = -1;
               strangeness  = 1;
@@ -1059,7 +1059,7 @@ G4HEVector::setDefinition(G4String name)
                mass = 1.3149;
                charge = 0.;
                code = -3322;
-               particleType = "Baryon";
+               particleType = "AntiBaryon";
                particleName = name;
                baryon = -1;
                strangeness  = 2;
@@ -1069,7 +1069,7 @@ G4HEVector::setDefinition(G4String name)
                mass = 1.32132;
                charge = 1.;
                code = -3312;
-               particleType = "Baryon";
+               particleType = "AntiBaryon";
                particleName = name;
                baryon       = -1;
                strangeness  = 2;
@@ -1089,7 +1089,7 @@ G4HEVector::setDefinition(G4String name)
                mass = 1.67245;
                charge = 1.;
                code = -3334;
-               particleType = "Baryon";
+               particleType = "AntiBaryon";
                particleName = name;
                baryon       = -1;
                strangeness  = 3;

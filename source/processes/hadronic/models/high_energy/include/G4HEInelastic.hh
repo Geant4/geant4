@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEInelastic.hh,v 1.8 2001-08-01 17:09:39 hpw Exp $
+// $Id: G4HEInelastic.hh,v 1.9 2002-07-16 10:39:52 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,7 +55,7 @@ class G4HEInelastic : public G4HadronicInteraction
          G4HEInelastic()
             { 
               SetParticles();
-              conserveEnergy = false;
+              conserveEnergy = true;
             };
         ~G4HEInelastic(){ };
          
