@@ -5,9 +5,8 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4EllipticalTube.hh,v 1.3 2000-04-11 16:03:39 johna Exp $
+// $Id: G4EllipticalTube.hh,v 1.4 2000-04-18 19:06:42 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
 //
 // --------------------------------------------------------------------
 // GEANT 4 class header file
@@ -62,9 +61,9 @@ class G4EllipticalTube : public G4CSGSolid {
 	//
 	// Parameter access
 	//
-	const G4double GetDx() const { return dx; }
-	const G4double GetDy() const { return dy; }
-	const G4double GetDz() const { return dz; }
+	G4double GetDx() const { return dx; }
+	G4double GetDy() const { return dy; }
+	G4double GetDz() const { return dz; }
 	
 	void SetDx( const G4double newDx ) { dx = newDx; }
 	void SetDy( const G4double newDy ) { dy = newDy; }
@@ -76,11 +75,11 @@ class G4EllipticalTube : public G4CSGSolid {
 	//
 	// Utility
 	//
-	inline const G4double CheckXY( const G4double x, const G4double y, const G4double toler ) const {
+	inline G4double CheckXY( const G4double x, const G4double y, const G4double toler ) const {
 		G4double rx = x/(dx+toler), ry = y/(dy+toler);
 		return rx*rx + ry*ry;
 	}
-	inline const G4double CheckXY( const G4double x, const G4double y ) const {
+	inline G4double CheckXY( const G4double x, const G4double y ) const {
 		G4double rx = x/dx, ry = y/dy;
 		return rx*rx + ry*ry;
 	}

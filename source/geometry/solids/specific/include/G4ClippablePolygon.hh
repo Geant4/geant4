@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.hh,v 1.1 2000-04-07 10:55:04 gcosmo Exp $
+// $Id: G4ClippablePolygon.hh,v 1.2 2000-04-18 19:06:38 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -48,25 +48,25 @@ class G4ClippablePolygon {
 	virtual void SetNormal( const G4ThreeVector &newNormal ) { normal = newNormal; }
 	virtual const G4ThreeVector GetNormal() const { return normal; }
 	
-	virtual const G4bool Clip( const G4VoxelLimits &voxelLimit );
+	virtual G4bool Clip( const G4VoxelLimits &voxelLimit );
 
-	virtual const G4bool PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe );
+	virtual G4bool PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe );
 	
 	virtual void ClipAlongOneAxis( const G4VoxelLimits &voxelLimit, const EAxis axis );
 	
-	virtual const G4bool GetExtent( const EAxis axis, 
-		    	                G4double &min, G4double &max ) const;
+	virtual G4bool GetExtent( const EAxis axis, 
+		  		  G4double &min, G4double &max ) const;
 	virtual const G4ThreeVector *GetMinPoint( const EAxis axis ) const;
 	virtual const G4ThreeVector *GetMaxPoint( const EAxis axis ) const;
 			  
-	virtual const G4int GetNumVertices() const { return vertices.entries(); }
-	virtual const G4bool Empty() const { return vertices.entries()==0; }
+	virtual G4int GetNumVertices() const { return vertices.entries(); }
+	virtual G4bool Empty() const { return vertices.entries()==0; }
 	
-	virtual const G4bool InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const;
-	virtual const G4bool BehindOf( const G4ClippablePolygon &other, EAxis axis ) const;
-	virtual const G4bool GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
-					      const G4ThreeVector &planeNormal,
-					      G4double &min, G4double &max ) const;
+	virtual G4bool InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const;
+	virtual G4bool BehindOf( const G4ClippablePolygon &other, EAxis axis ) const;
+	virtual G4bool GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
+		  			const G4ThreeVector &planeNormal,
+		  			G4double &min, G4double &max ) const;
 			      
 	protected:
 	G4ThreeVectorList vertices;

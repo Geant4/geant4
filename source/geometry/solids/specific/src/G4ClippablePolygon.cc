@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ClippablePolygon.cc,v 1.1 2000-04-07 11:00:16 gcosmo Exp $
+// $Id: G4ClippablePolygon.cc,v 1.2 2000-04-18 19:07:11 davidw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ void G4ClippablePolygon::ClearAllVertices()
 //
 // Clip
 //
-const G4bool G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
+G4bool G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
 {
 	if (voxelLimit.IsLimited()) {
 		ClipAlongOneAxis( voxelLimit, kXAxis );
@@ -62,7 +62,7 @@ const G4bool G4ClippablePolygon::Clip( const G4VoxelLimits &voxelLimit )
 //
 // Clip, while ignoring the indicated axis
 //
-const G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe )
+G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, const EAxis IgnoreMe )
 {
 	if (voxelLimit.IsLimited()) {
 		if (IgnoreMe != kXAxis) ClipAlongOneAxis( voxelLimit, kXAxis );
@@ -77,8 +77,8 @@ const G4bool G4ClippablePolygon::PartialClip( const G4VoxelLimits &voxelLimit, c
 //
 // GetExtent
 //
-const G4bool G4ClippablePolygon::GetExtent( const EAxis axis, 
-				            G4double &min, G4double &max ) const
+G4bool G4ClippablePolygon::GetExtent( const EAxis axis, 
+  				      G4double &min, G4double &max ) const
 {
 	//
 	// Okay, how many entries do we have?
@@ -181,7 +181,7 @@ const G4ThreeVector *G4ClippablePolygon::GetMaxPoint( const EAxis axis ) const
 //         polygon1.InFrontOf(polygon2)
 //         polygon2.BehindOf(polygon1)
 //
-const G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const
+G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other, EAxis axis ) const
 {
 	//
 	// If things are empty, do something semi-sensible
@@ -241,7 +241,7 @@ const G4bool G4ClippablePolygon::InFrontOf( const G4ClippablePolygon &other, EAx
 // Decide if this polygon is behind another.
 // See notes in method "InFrontOf"
 //
-const G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other, EAxis axis ) const
+G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other, EAxis axis ) const
 {
 	//
 	// If things are empty, do something semi-sensible
@@ -301,9 +301,9 @@ const G4bool G4ClippablePolygon::BehindOf( const G4ClippablePolygon &other, EAxi
 //
 // Get min/max distance in or out of a plane
 //
-const G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
-					          const G4ThreeVector &planeNormal,
-					          G4double &min, G4double &max ) const
+G4bool G4ClippablePolygon::GetPlanerExtent( const G4ThreeVector &pointOnPlane, 
+  					    const G4ThreeVector &planeNormal,
+  					    G4double &min, G4double &max ) const
 {
 	//
 	// Okay, how many entries do we have?
