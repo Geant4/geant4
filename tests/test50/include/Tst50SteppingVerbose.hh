@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingVerbose.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50SteppingVerbose.hh,v 1.2 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //   This class manages the verbose outputs in G4SteppingManager. 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.8 2003-01-16 09:53:17 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.9 2003-01-16 14:11:51 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -41,10 +41,14 @@
 #endif
 #include "Tst50PrimaryGeneratorAction.hh"
 #include "Tst50RunAction.hh"
+#include "G4ios.hh"
+#include "g4std/fstream"
+#include "g4std/iomanip"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, Tst50DetectorConstruction* DET ):
-  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET) 
+Tst50SteppingAction::Tst50SteppingAction(Tst50EventAction* EA, Tst50PrimaryGeneratorAction* PG, Tst50RunAction* RA, Tst50DetectorConstruction* DET,G4String file ):
+  IDold(-1),eventaction (EA), p_Primary(PG), runaction(RA), detector(DET), filename(file) 
 { 
 
   
@@ -248,7 +252,7 @@ G4double TotalStoppingPower=(energyLost/stepLength);
 }}
 */
 
-
+G4std::ofstream pmtfile(filename, G4std::ios::app);
 
 range=0.;
 
@@ -266,13 +270,18 @@ if(0 ==Step->GetTrack()->GetParentID() )
                      G4double  zend= Step->GetTrack()->GetPosition().z()/mm ;
        
 		      range=(sqrt(xend*xend+yend*yend+zend*zend)); 
-		    
-		   
+
+	 
+	      
 		      G4double range2= range*(detector->GetDensity());
 		      G4cout<<"range di e- in g/cm2: "<<range2/(g/cm2)<<" "<<
  initial_energy<<" initialenergy"<<G4endl;
  
-  
+		      if(pmtfile.is_open()){
+			G4cout<<"arrivo qui dentro"<<G4endl; 
+          pmtfile<<'\t'<<initial_energy<<'\t'<<range2<<'\t'<<G4endl;}
+	       
+
 		   }
 }
  /*

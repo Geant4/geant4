@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50TrackerHit.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50TrackerHit.hh,v 1.2 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

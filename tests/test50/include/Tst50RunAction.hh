@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50RunAction.hh,v 1.4 2003-01-07 15:29:39 guatelli Exp $
+// $Id: Tst50RunAction.hh,v 1.5 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

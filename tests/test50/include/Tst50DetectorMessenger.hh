@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50DetectorMessenger.hh,v 1.3 2003-01-08 15:37:13 guatelli Exp $
+// $Id: Tst50DetectorMessenger.hh,v 1.4 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

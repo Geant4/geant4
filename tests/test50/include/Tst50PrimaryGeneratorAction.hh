@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.hh,v 1.5 2003-01-08 15:37:13 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.hh,v 1.6 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

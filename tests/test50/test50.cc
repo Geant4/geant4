@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.7 2003-01-16 09:51:35 guatelli Exp $
+// $Id: test50.cc,v 1.8 2003-01-16 14:11:50 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -61,7 +61,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool RangeOn=false;
  G4bool MaxStep=false;
  G4bool end=true;
-
+ G4String filename="test50.out";
 
  G4cout.setf(ios::scientific, ios::floatfield);
    if (argc<2){G4cout <<"Input file is not specified! Exit"<<G4endl;
@@ -106,8 +106,9 @@ HepRandom::setTheEngine(new RanecuEngine);
 
      }while(end);           
      
-
-   G4int seed=time(NULL);
+   if (RangeOn==true) filename="Range.out";
+  
+ G4int seed=time(NULL);
    HepRandom ::setTheSeed(seed);
   //my Verbose output class
   G4VSteppingVerbose::SetInstance(new Tst50SteppingVerbose);
@@ -138,12 +139,25 @@ HepRandom::setTheEngine(new RanecuEngine);
  
    runManager->SetUserAction(pEventAction );
      
- Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector);
+ Tst50SteppingAction* steppingaction =new Tst50SteppingAction(pEventAction,p_Primary,p_run, Tst50detector, filename);
  runManager->SetUserAction(steppingaction);
 
   //Initialize G4 kernel
   runManager->Initialize();
-      
+    
+  if(RangeOn)
+    {
+G4std::ofstream ofs;
+
+	ofs.open(filename);
+		{
+
+		  ofs<<"e-  energy (MeV)"<<'\t'<<"range(g/cm2)"<<'\t'<<G4endl;}
+	       
+       ofs.close();                     
+		
+    }
+  
   //get the pointer to the User Interface manager 
   G4UImanager * UI = G4UImanager::GetUIpointer();  
  UI->ApplyCommand("/run/verbose 0");
@@ -161,7 +175,7 @@ HepRandom::setTheEngine(new RanecuEngine);
       session = new G4UIterminal();
 #endif    
 
-      UI->ApplyCommand("/control/execute elettroni.mac");
+      UI->ApplyCommand("/control/execute");
  
 
     session->SessionStart();
