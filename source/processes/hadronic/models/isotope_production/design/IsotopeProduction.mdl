@@ -1,0 +1,285 @@
+
+(object Petal
+    version    	37)
+
+(object Design "<Top Level>"
+    is_unit    	TRUE
+    is_loaded  	TRUE
+    defaults   	(object defaults
+	rightMargin 	0.250000
+	leftMargin 	0.250000
+	topMargin  	0.250000
+	bottomMargin 	0.500000
+	pageOverlap 	0.250000
+	clipIconLabels 	TRUE
+	autoResize 	FALSE
+	snapToGrid 	TRUE
+	gridX      	0
+	gridY      	0
+	defaultFont 	(object Font
+	    size       	12
+	    face       	"helvetica"
+	    bold       	FALSE
+	    italics    	FALSE
+	    underline  	FALSE
+	    strike     	FALSE
+	    color      	2
+	    default_color 	FALSE)
+	showMessageNum 	3
+	showClassOfObject 	TRUE
+	notation   	"Booch")
+    root_category 	(object Class_Category "<Top Level>"
+	exportControl 	"Public"
+	global     	TRUE
+	subsystem  	"<Top Level>"
+	logical_models 	(list unit_reference_list
+	    (object Class "G4NeutronIsotopeProduction"
+		fields     	(list has_relationship_list
+		    (object Has_Relationship
+			supplier   	"G4NeutronElementIsoCrossSection"
+			exportControl 	"Private"
+			Containment 	"By Reference"
+			supplier_cardinality 	(value cardinality "n")
+			client_cardinality 	(value cardinality "1")))
+		superclasses 	(list inheritance_relationship_list
+		    (object Inheritance_Relationship
+			supplier   	"G4VDiscreteProcess")))
+	    (object Class "G4VDiscreteProcess")
+	    (object Class "G4NeutronHPNames")
+	    (object Class "G4NeutronHPVector")
+	    (object Class "G4NeutronIsoProdCrossSection"
+		fields     	(list has_relationship_list
+		    (object Has_Relationship
+			label      	"one particular isotope"
+			supplier   	"G4NeutronHPVector"
+			exportControl 	"Private"
+			Containment 	"By Value"
+			supplier_cardinality 	(value cardinality "1")
+			client_cardinality 	(value cardinality "1")))
+		class_attributes 	(list class_attribute_list
+		    (object ClassAttribute "theIsoName"
+			type       	"G4String"
+			Containment 	"By Value")))
+	    (object Class "G4NeutronIsoIsoCrossSection"
+		fields     	(list has_relationship_list
+		    (object Has_Relationship
+			label      	"all production cross-sections"
+			supplier   	"G4NeutronIsoProdCrossSection"
+			exportControl 	"Private"
+			Containment 	"By Reference"
+			supplier_cardinality 	(value cardinality "n")
+			client_cardinality 	(value cardinality "1"))
+		    (object Has_Relationship
+			label      	"interaction cross-section"
+			supplier   	"G4NeutronHPVector"
+			exportControl 	"Private"
+			Containment 	"By Value")
+		    (object Has_Relationship
+			supplier   	"G4NeutronHPNames"
+			exportControl 	"Private"
+			Containment 	"By Value")))
+	    (object Class "G4NeutronElementIsoCrossSection"
+		fields     	(list has_relationship_list
+		    (object Has_Relationship
+			supplier   	"G4NeutronIsoIsoCrossSection"
+			exportControl 	"Private"
+			Containment 	"By Reference"
+			supplier_cardinality 	(value cardinality "n")
+			client_cardinality 	(value cardinality "1")))
+		operations 	(list Operations
+		    (object Operation "Init"
+			parameters 	(list Parameters
+			    (object Parameter "anElement"
+				type       	"const G4Element &"))
+			result     	"G4bool"
+			concurrency 	"Sequential"
+			opExportControl 	"Public"
+			uid        	0))))
+	logical_presentations 	(list unit_reference_list
+	    (object ClassDiagram "Main"
+		title      	"Main"
+		zoom       	100
+		max_height 	28350
+		max_width  	21600
+		origin_x   	0
+		origin_y   	0
+		items      	(list diagram_item_list
+		    (object ClassView "Class" "G4NeutronIsotopeProduction" @1
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(838, 835)
+			label      	(object ItemLabel
+			    Parent_View 	@1
+			    location   	(679, 705)
+			    nlines     	2
+			    max_width  	374
+			    justify    	0
+			    label      	"G4NeutronIsotopeProduction")
+			compartment 	(object Compartment
+			    Parent_View 	@1
+			    location   	(575, 821)
+			    font       	(object Font
+				size       	10
+				face       	"helvetica"
+				bold       	FALSE
+				italics    	FALSE
+				underline  	FALSE
+				strike     	FALSE
+				color      	2
+				default_color 	FALSE)
+			    anchor     	2
+			    nlines     	1
+			    max_width  	581
+			    justify    	0)
+			width      	543
+			height     	385)
+		    (object ClassView "Class" "G4VDiscreteProcess" @2
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1195, 278)
+			label      	(object ItemLabel
+			    Parent_View 	@2
+			    location   	(1082, 188)
+			    nlines     	2
+			    max_width  	261
+			    justify    	0
+			    label      	"G4VDiscreteProcess")
+			width      	379
+			height     	271)
+		    (object InheritView "" @3
+			client     	@1
+			supplier   	@2
+			line_style 	0)
+		    (object ClassView "Class" "G4NeutronHPNames" @4
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1770, 318)
+			label      	(object ItemLabel
+			    Parent_View 	@4
+			    location   	(1666, 234)
+			    nlines     	2
+			    max_width  	240
+			    justify    	0
+			    label      	"G4NeutronHPNames"))
+		    (object ClassView "Class" "G4NeutronHPVector" @5
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1855, 1642)
+			label      	(object ItemLabel
+			    Parent_View 	@5
+			    location   	(1751, 1558)
+			    nlines     	2
+			    max_width  	240
+			    justify    	0
+			    label      	"G4NeutronHPVector"))
+		    (object ClassView "Class" "G4NeutronIsoProdCrossSection" @6
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(2466, 1282)
+			label      	(object ItemLabel
+			    Parent_View 	@6
+			    location   	(2333, 1174)
+			    nlines     	2
+			    max_width  	313
+			    justify    	0
+			    label      	"G4NeutronIsoProdCrossSection")
+			compartment 	(object Compartment
+			    Parent_View 	@6
+			    location   	(2132, 1290)
+			    font       	(object Font
+				size       	10
+				face       	"helvetica"
+				bold       	FALSE
+				italics    	FALSE
+				underline  	FALSE
+				strike     	FALSE
+				color      	2
+				default_color 	FALSE)
+			    anchor     	2
+			    nlines     	2
+			    max_width  	713
+			    justify    	0)
+			width      	454
+			height     	322
+			annotation 	8)
+		    (object HasView "one particular isotope" @7
+			label      	(object ItemLabel
+			    Parent_View 	@7
+			    location   	(2175, 1452)
+			    anchor_loc 	1
+			    nlines     	1
+			    max_width  	450
+			    justify    	0
+			    label      	"one particular isotope")
+			client     	@6
+			supplier   	@5
+			line_style 	0)
+		    (object ClassView "Class" "G4NeutronIsoIsoCrossSection" @8
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1940, 849)
+			label      	(object ItemLabel
+			    Parent_View 	@8
+			    location   	(1808, 739)
+			    nlines     	2
+			    max_width  	309
+			    justify    	0
+			    label      	"G4NeutronIsoIsoCrossSection")
+			compartment 	(object Compartment
+			    Parent_View 	@8
+			    location   	(1481, 855)
+			    font       	(object Font
+				size       	10
+				face       	"helvetica"
+				bold       	FALSE
+				italics    	FALSE
+				underline  	FALSE
+				strike     	FALSE
+				color      	2
+				default_color 	FALSE)
+			    anchor     	2
+			    nlines     	3
+			    max_width  	963
+			    justify    	0)
+			width      	449
+			height     	328)
+		    (object ClassView "Class" "G4NeutronElementIsoCrossSection" @9
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(1267, 1304)
+			label      	(object ItemLabel
+			    Parent_View 	@9
+			    location   	(1130, 1192)
+			    nlines     	2
+			    max_width  	322
+			    justify    	0
+			    label      	"G4NeutronElementIsoCrossSection")
+			compartment 	(object Compartment
+			    Parent_View 	@9
+			    location   	(1040, 1308)
+			    font       	(object Font
+				size       	10
+				face       	"helvetica"
+				bold       	FALSE
+				italics    	FALSE
+				underline  	FALSE
+				strike     	FALSE
+				color      	2
+				default_color 	FALSE)
+			    anchor     	2
+			    nlines     	2
+			    max_width  	502
+			    justify    	0)
+			width      	468
+			height     	334)
+		    (object HasView "" @10
+			client     	@1
+			supplier   	@9
+			line_style 	0)
+		    (object ClassView "Class" "G4NeutronHPVector" @11
+			IncludeAttribute 	TRUE
+			IncludeOperation 	TRUE
+			location   	(2523, 390)
+			label      	(object ItemLabel
+			    Parent_View 	@11
+			    loca
