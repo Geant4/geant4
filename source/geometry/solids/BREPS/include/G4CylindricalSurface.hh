@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4CylindricalSurface.hh,v 1.3 2000-01-21 13:47:41 gcosmo Exp $
+// $Id: G4CylindricalSurface.hh,v 1.4 2000-02-16 12:02:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4CylindricalSurface.h,v 1.16 1993/12/30 02:14:08 rensing Exp  */
@@ -61,7 +61,7 @@ public:
   
   G4String GetEntityType(){return G4String("Cylindrical_Surface");}
   
-  virtual char *NameOf() const { return (char*)("G4CylindricalSurface"); }
+  virtual const char* NameOf() const { return "G4CylindricalSurface"; }
   
   virtual void PrintOn( G4std::ostream& os = G4cout ) const;
   
@@ -128,7 +128,7 @@ private:
 //----->		 { axis = c.axis;  radius = c.radius; }
 //
 //  function to return class name
-//----->virtual char *NameOf() const { return "G4CylindricalSurface"; }
+//----->virtual const char* NameOf() const { return "G4CylindricalSurface"; }
 //
 //  printing function
 //----->virtual void PrintOn( G4std::ostream& os = G4cout ) const;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RectangularTrimmedSurface.hh,v 1.3 2000-01-21 13:47:45 gcosmo Exp $
+// $Id: G4RectangularTrimmedSurface.hh,v 1.4 2000-02-16 12:02:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4FCylindricalSurface.hh"
@@ -19,7 +19,7 @@ public:
   int Intersect(const G4Ray&);  
   void CalcBBox();
 
-  virtual char *Name() const { return (char*)("G4RectangularTrimmedSurface"); }    
+  virtual const char* Name() const { return "G4RectangularTrimmedSurface"; }    
 
 
 private:

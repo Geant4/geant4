@@ -93,7 +93,7 @@ public:
   virtual inline void Reset(){Intersected=0;active = 1; distance = kInfinity;};
 
   // one function for type info (GetEntityType) should be enough
-  virtual char *Name() const { return (char*)("G4Surface"); }
+  virtual const char* Name() const { return "G4Surface"; }
   virtual int MyType() const { return Type; }  
 
   // To be replaced by a CLHEP vector operation

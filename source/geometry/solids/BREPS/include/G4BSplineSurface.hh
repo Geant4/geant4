@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.hh,v 1.4 2000-01-21 13:47:39 gcosmo Exp $
+// $Id: G4BSplineSurface.hh,v 1.5 2000-02-16 12:02:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __BSPLINESURFACE_H
@@ -21,7 +21,7 @@ class G4BSplineSurface : public G4Surface
 public:
 
   G4BSplineSurface();
-  G4BSplineSurface(char*, G4Ray&);
+  G4BSplineSurface(const char*, G4Ray&);
   G4BSplineSurface(const  G4BSplineSurface &tmp);
   G4BSplineSurface(G4int, G4int, G4KnotVector&,  G4KnotVector&, 
 		   G4ControlPoints&);    

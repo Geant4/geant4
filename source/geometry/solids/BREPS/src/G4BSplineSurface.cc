@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BSplineSurface.cc,v 1.5 2000-02-14 17:49:32 gcosmo Exp $
+// $Id: G4BSplineSurface.cc,v 1.6 2000-02-16 12:02:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -24,7 +24,7 @@ G4BSplineSurface::G4BSplineSurface()
 }
 
 
-G4BSplineSurface::G4BSplineSurface(char* nurbfilename, G4Ray& rayref)
+G4BSplineSurface::G4BSplineSurface(const char* nurbfilename, G4Ray& rayref)
 {
   distance = kInfinity;    
   Hit=(G4UVHit*)0;

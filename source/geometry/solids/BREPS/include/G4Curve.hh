@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Curve.hh,v 1.3 1999-12-15 14:49:56 gunter Exp $
+// $Id: G4Curve.hh,v 1.4 2000-02-16 12:02:51 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef __CURVE_H
@@ -135,7 +135,7 @@ public:
   virtual void SetParentSrfPtr(const G4Surface* srf){}
 
 
-  virtual const char* Name(){return "G4Curve";}
+  virtual const char* Name() const {return "G4Curve";}
 
   G4bool operator==(const G4Curve& right) const 
   {

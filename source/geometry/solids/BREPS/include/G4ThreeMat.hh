@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ThreeMat.hh,v 1.3 2000-01-21 13:47:46 gcosmo Exp $
+// $Id: G4ThreeMat.hh,v 1.4 2000-02-16 12:02:52 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  G4ThreeMat.h,v 1.7 1993/12/30 02:15:55 rensing Exp  */
@@ -53,7 +53,7 @@ public:
 //  copy constructor
 	G4ThreeMat( const G4ThreeMat& m );
 //  function to return class name
-	virtual char *NameOf() const { return (char*)("G4ThreeMat"); }
+	virtual const char* NameOf() const { return "G4ThreeMat"; }
 //  printing functions (derived classes do not need to overwrite operator <<)
 	friend G4std::ostream& operator<<( G4std::ostream& os, const G4ThreeMat& m );
 	virtual void PrintOn( G4std::ostream& os = G4cout ) const;
