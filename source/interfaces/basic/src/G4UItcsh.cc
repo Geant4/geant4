@@ -21,13 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4UItcsh.cc,v 1.8 2002-10-17 02:41:22 murakami Exp $
+// $Id: G4UItcsh.cc,v 1.9 2003-06-04 16:29:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #ifndef WIN32
 
 #include <ctype.h>
+#include "G4Types.hh"
 #include "g4std/strstream"
 #include "G4StateManager.hh"
 #include "G4UIcommandStatus.hh"

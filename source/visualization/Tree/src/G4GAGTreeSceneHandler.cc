@@ -23,6 +23,7 @@
 // Satoshi Tanaka  31th May 2001
 // A scene handler to dump geometry hierarchy to GAG.
 
+#include "G4Types.hh"
 #include "g4std/strstream"
 
 #include "G4GAGTreeSceneHandler.hh"

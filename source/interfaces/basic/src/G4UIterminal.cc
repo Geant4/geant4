@@ -21,10 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4UIterminal.cc,v 1.17 2001-11-26 19:15:08 asaim Exp $
+// $Id: G4UIterminal.cc,v 1.18 2003-06-04 16:29:42 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
+#include "G4Types.hh"
 #include "g4std/strstream"
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
