@@ -65,18 +65,17 @@ DMXScintSD::~DMXScintSD(){ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void DMXScintSD::Initialize(G4HCofThisEvent* HCE)
+void DMXScintSD::Initialize(G4HCofThisEvent*)
 {
   scintillatorCollection = new DMXScintHitsCollection
     (SensitiveDetectorName,collectionName[0]);
 
   HitID = -1;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool DMXScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory* ROhist)
+G4bool DMXScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
   G4ParticleDefinition* particleType = aStep->GetTrack()->GetDefinition();

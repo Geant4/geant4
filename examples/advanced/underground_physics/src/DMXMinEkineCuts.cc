@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DMXMinEkineCuts.cc,v 1.3 2003-08-28 14:25:13 vnivanch Exp $
+// $Id: DMXMinEkineCuts.cc,v 1.4 2003-12-02 16:59:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -53,7 +53,8 @@ DMXMinEkineCuts::DMXMinEkineCuts(const G4String& aName)
 DMXMinEkineCuts::~DMXMinEkineCuts()
 {}
 
-DMXMinEkineCuts::DMXMinEkineCuts(DMXMinEkineCuts& right)
+DMXMinEkineCuts::DMXMinEkineCuts(DMXMinEkineCuts&)
+  : DMXSpecialCuts()
 {}
 
 

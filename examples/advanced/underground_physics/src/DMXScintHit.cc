@@ -64,6 +64,7 @@ DMXScintHit::~DMXScintHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXScintHit::DMXScintHit(const DMXScintHit& right)
+  : G4VHit(right)
 {
   edep      = right.edep;
   pos       = right.pos;
@@ -88,7 +89,7 @@ const DMXScintHit& DMXScintHit::operator=(const DMXScintHit& right)
 
 int DMXScintHit::operator==(const DMXScintHit& right) const
 {
-  return 0;
+  return (this==&right) ? 1 : 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

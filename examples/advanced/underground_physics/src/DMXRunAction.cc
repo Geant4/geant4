@@ -100,7 +100,7 @@ void DMXRunAction::BeginOfRunAction(const G4Run* aRun)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void DMXRunAction::EndOfRunAction(const G4Run* aRun)
+void DMXRunAction::EndOfRunAction(const G4Run*)
 {
 
 #ifdef G4ANALYSIS_USE
