@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QPDGCode.cc,v 1.24 2001-11-28 13:32:08 stesting Exp $
+// $Id: G4QPDGCode.cc,v 1.25 2001-11-28 13:47:07 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QPDGCode ----------------
@@ -727,6 +727,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
     N+=Z;                             // A=Z+N>=0
     Z=0;
   }
+  A=Z+N;
   if (!A) return k+S*mL+S*.001;       // @@ multy LAMBDA states are not implemented
   G4double m=k+A*um;                  // Expected mass in atomic units
   G4double D=N-Z;                     // Isotopic shift of the nucleus
@@ -738,7 +739,6 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
 #endif
     return 0.;                        // @@ Temporary
   }
-  A=Z+N;
   if     (!Z) return k+N*(mN+.1)+S*(mL+.1);  // @@ n+LAMBDA states are not implemented
   else if(!N) return k+Z*(mP+1.)+S*(mL+.1);  // @@ p+LAMBDA states are not implemented
   else if(N<=9&&Z<=9) m+=1.433e-5*pow(double(Z),2.39)-Z*me+c[N-1][Z-1];
