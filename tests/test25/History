@@ -12,6 +12,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21st March 2004  Gabriele Cosmo (test25-V06-00-01)
+- Removed -pg compilation option in GNUmakefile which was most probably
+  originally introduced and forgotten...
+  It was causing profile build to be triggered and, as side effect,
+  confusing the output generated with Valgrind !
+
 19th March 2004  Gabriele Cosmo (test25-V06-00-00)
 - Fixed definition of materials and values in messenger.
 - Made test25.in be the default input script.
@@ -22,3 +28,4 @@ track of all tags.
 
 7th November 2002  Hans-Peter Wellisch
 - Created the test.
+
