@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.icc,v 1.5 2001-11-26 11:18:22 gcosmo Exp $
+// $Id: G4Navigator.icc,v 1.6 2001-11-27 16:24:09 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -298,29 +298,17 @@ void G4Navigator::LocateGlobalPointAndUpdateTouchableHandle(
                                 G4TouchableHandle&   oldTouchableToUpdate,
                           const G4bool               RelativeSearch )
 {
-  //G4TouchableHandle nextTouchableHandle= oldTouchableToUpdate;
-  G4VPhysicalVolume* pPhysVol;
-  pPhysVol= LocateGlobalPointAndSetup( position, 0, RelativeSearch);
-
-  //nextTouchableHandle->UpdateYourself( pPhysVol, &fHistory );
-
-  if( fEnteredDaughter | fExitedMother )
+  G4VPhysicalVolume* pPhysVol=LocateGlobalPointAndSetup( position, 0, RelativeSearch);
+  if( fEnteredDaughter || fExitedMother )
   {
-     //nextTouchableHandle = CreateTouchableHistoryHandle();
-     //nextTouchableHandle = CreateTouchableHistory();
      oldTouchableToUpdate = CreateTouchableHistory();
-  }
-  // else{
-  //    oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
-  // }
-  if( pPhysVol == 0 ){
-        // We want to ensure that the touchable is correct in this case.
+     if( pPhysVol == 0 ){
+              // We want to ensure that the touchable is correct in this case.
               //  The method below should do this and recalculate a lot more ....
         oldTouchableToUpdate->UpdateYourself( pPhysVol, &fHistory );
+     }
   }
-
   return;
-    //return nextTouchableHandle;
 }
 
 inline
