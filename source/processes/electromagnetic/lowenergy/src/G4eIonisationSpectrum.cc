@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationSpectrum.cc,v 1.15 2002-05-31 19:44:21 vnivanch Exp $
+// $Id: G4eIonisationSpectrum.cc,v 1.16 2002-05-31 19:54:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -295,7 +295,11 @@ G4double G4eIonisationSpectrum::SampleEnergy(G4int Z,
 
   if(aria <= aria1) { 
 
-    amaj = G4std::max(p[7],p[23]) * factor;
+    amaj = p[4];
+    for (size_t i=5; i<24; i++) {
+      if(p[i] > amaj) amaj = p[i];
+    }
+
     a1 = 1./a1;
     a2 = 1./a2;
 
