@@ -1,6 +1,6 @@
 dxplus04 dev	deb	geant4-00-cand-11+	all all all all 1
 dxplus03 dev	opt	geant4-00-cand-11+	all all all all 1
-# hpplus04 dev	deb	geant4-00-cand-11+	all all all all 1
+hpplus05 dev	deb	geant4-00-cand-11+	all all all all 1
 hpplus03 dev	opt	geant4-00-cand-11+	all all all all 1
 rsplus05 dev	deb	geant4-00-cand-11+	all all all all 1
 rsplus03 dev	opt	geant4-00-cand-11+	all all all all 1
