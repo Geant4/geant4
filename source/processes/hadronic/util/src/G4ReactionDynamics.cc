@@ -127,7 +127,7 @@
       targetHasChanged = true;
       currentParticle.SetKineticEnergy( ek );
       currentParticle.SetMomentum( m );
-      forVeryForward = targetParticle.GetDefinition()->GetPDGMass();
+      forVeryForward = aProton->GetPDGMass();
     }
     const G4double atomicWeight = targetNucleus.GetN();
     const G4double atomicNumber = targetNucleus.GetZ();
@@ -223,9 +223,9 @@
         else
         {
           G4double ran = G4UniformRand();
-          if( ran < 0.33333 )
+          if( ran < 0.3181 )
             pVec->SetDefinition( aPiPlus );
-          else if( ran < 0.66667 )
+          else if( ran < 0.6819 )
             pVec->SetDefinition( aPiZero );
           else
             pVec->SetDefinition( aPiMinus );
@@ -1116,7 +1116,7 @@
       for( i=0; i<vecLen+2; ++i )tempV.SetElement( tempLen++, &tempR[i] );
       constantCrossSection = true;
 
-      wgt = GenerateNBodyEvent(-forVeryForward + pseudoParticle[3].GetTotalEnergy()/MeV+
+      wgt = GenerateNBodyEvent( pseudoParticle[3].GetTotalEnergy()/MeV+
                                 pseudoParticle[4].GetTotalEnergy()/MeV,
        constantCrossSection, tempV, tempLen );
       theoreticalKinetic = 0.0;
@@ -1454,9 +1454,9 @@
         else
         {                                       // add a pion
           G4double ran = G4UniformRand();
-          if( ran < 0.33333 )
+          if( ran < 0.3181 )
             pVec->SetDefinition( aPiPlus );
-          else if( ran < 0.66667 )
+          else if( ran < 0.6819 )
             pVec->SetDefinition( aPiZero );
           else
             pVec->SetDefinition( aPiMinus );
