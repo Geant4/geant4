@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.7 2001-09-10 18:07:35 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.8 2001-09-14 16:11:05 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,7 +62,7 @@ G4CrossSectionHandler::~G4CrossSectionHandler()
   delete interpolation;
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+  for (pos = dataMap.begin(); pos != dataMap.end(); ++pos)
     {
       G4VEMDataSet* dataSet = pos->second;
       delete dataSet;
@@ -242,20 +242,28 @@ void G4CrossSectionHandler::Clear()
   // Reset the map of data sets: remove the data sets from the map 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+  if(! dataMap.empty())
     {
-      G4VEMDataSet* dataSet = pos->second;
-      dataMap.erase(pos);
-      delete dataSet;
+        for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
+	{
+	  G4VEMDataSet* dataSet = pos->second;
+	  delete dataSet;
+	  dataSet = 0;
+	}
+      dataMap.clear();
     }
 
   // Reset the list of cross sections
   G4std::vector<G4VEMDataSet*>::iterator mat;
-  for (mat = crossSections.begin(); mat!= crossSections.end(); ++mat)
+  if (! crossSections.empty())
     {
-      G4VEMDataSet* set = *mat;
-      crossSections.erase(mat);
-      delete set;
+      for (mat = crossSections.begin(); mat!= crossSections.end(); mat++)
+	{
+	  G4VEMDataSet* set = *mat;
+	  delete set;
+          set = 0;
+	}
+      crossSections.clear();
     }
 
   activeZ.clear();
