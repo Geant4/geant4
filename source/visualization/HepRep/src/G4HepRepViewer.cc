@@ -41,8 +41,6 @@
 using namespace HEPREP;
 using namespace std;
 
-#define SDEBUG 1
-
 G4HepRepViewer::G4HepRepViewer (G4VSceneHandler& sceneHandler, const G4String& name)
         : G4VViewer (sceneHandler, sceneHandler.IncrementViewCount(), name),
         geometryIncluded(false) {

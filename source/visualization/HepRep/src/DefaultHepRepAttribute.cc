@@ -29,7 +29,9 @@ vector<HepRepAttValue*>* DefaultHepRepAttribute::getAttValuesFromNode() {
 }
 
 bool DefaultHepRepAttribute::addAttValue(HepRepAttValue* hepRepAttValue) {
-    attValues[hepRepAttValue->getLowerCaseName()] = hepRepAttValue;
+    string lowerCaseName = hepRepAttValue->getLowerCaseName();
+    if (attValues[lowerCaseName] != NULL) delete attValues[lowerCaseName];
+    attValues[lowerCaseName] = hepRepAttValue;
     return true;
 }
 

@@ -28,7 +28,9 @@ vector<HepRepAttDef *>* DefaultHepRepDefinition::getAttDefsFromNode() {
 }
 
 bool DefaultHepRepDefinition::addAttDef(HepRepAttDef* hepRepAttDef) {
-    attDefs[hepRepAttDef->getLowerCaseName()] = hepRepAttDef;
+    string lowerCaseName = hepRepAttDef->getLowerCaseName();
+    if (attDefs[lowerCaseName] != NULL) delete attDefs[lowerCaseName];
+    attDefs[lowerCaseName] = hepRepAttDef;
     return true;
 }
 
