@@ -1,4 +1,4 @@
-$Id: History,v 1.159 2001-08-27 16:22:12 johna Exp $
+$Id: History,v 1.160 2001-08-30 00:15:10 johna Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th August 2001  John Allison/Joseph Perl  (config-V03-02-06)
+- Needed by vis-V03-02-14.
+- First developers release of HepRep graphics driver.
 
 27th August 2001  John Allison
 - Tidied HepRep configuration in G4VIS*, moving stuff to interactivity.gmk.
