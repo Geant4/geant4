@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.cc,v 1.10 2001-09-11 12:20:52 maire Exp $
+// $Id: G4MultipleScattering.cc,v 1.11 2001-09-13 11:00:20 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------------------------
@@ -36,6 +36,7 @@
 // 10-09-01 small change in GetContinuousStepLimit, L.Urban
 // 11-09-01 G4MultipleScatteringx put as default G4MultipleScattering
 //          store/retrieve physics table reactivated (mma)
+// 13-09-10 corr. in ComputeTransportCrossSection, L.Urban
 // -----------------------------------------------------------------------------
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -378,8 +379,8 @@ G4double G4MultipleScattering::ComputeTransportCrossSection(
      sigma *= corrfactor;
 
   //  nucl. size correction for particles other than e+/e- only at present !!!!
-  if((&aParticleType != G4Electron::Electron()) &&
-     (&aParticleType != G4Positron::Positron())  )    
+  if((aParticleType.GetParticleName() != "e-") &&
+     (aParticleType.GetParticleName() != "e+")   )
      sigma /= corrnuclsize;
 
   return sigma;

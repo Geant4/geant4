@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultipleScattering.icc,v 1.5 2001-09-11 12:18:38 maire Exp $
+// $Id: G4MultipleScattering.icc,v 1.6 2001-09-13 11:00:19 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------ G4MultipleScattering physics process ---------------------------
@@ -81,14 +81,13 @@ inline G4double G4MultipleScattering::GetMeanFreePath(
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline 
-G4double G4MultipleScattering::GetLambda(G4double KineticEnergy,
-                                          G4Material* material)
+G4double G4MultipleScattering::GetTransportMeanFreePath(G4double KineticEnergy,
+                                                        G4Material* material)
 {
   G4bool isOut;
   
-  G4double lambda = (*theTransportMeanFreePathTable)
-                    (material->GetIndex())->GetValue(KineticEnergy,isOut);
-  return lambda;
+  return  (*theTransportMeanFreePathTable)
+          (material->GetIndex())->GetValue(KineticEnergy,isOut);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
