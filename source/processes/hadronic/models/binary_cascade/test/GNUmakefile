@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2003-05-05 16:19:58 hpw Exp $
+# $Id: GNUmakefile,v 1.3 2003-07-01 15:23:56 hpw Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -30,6 +30,7 @@ LOADLIBS += $(EXTRALIBS)
 include $(G4INSTALL)/config/binmake.gmk
     
 INCFLAGS += -I$(G4BASE)/processes/hadronic/models/generator/scattering/include
+INCFLAGS += -I$(G4BASE)/processes/hadronic/models/binary_cascade/include
 
 
 
