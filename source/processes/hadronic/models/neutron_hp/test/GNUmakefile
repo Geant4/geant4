@@ -51,25 +51,5 @@ INCFLAGS := \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/tracking/include 
 
-LDLIBS   := \
-	    -lG4hadronic_neu \
-	    -lG4event \
-	    -lG4global \
-	    -lG4materials \
-	    -lG4processes \
-	    -lG4particles \
-	    -lG4hadronic_deex    \
-	    -lG4hadronic_man_gen \
-	    -lG4hadronic_util_gen \
-	    -lG4processes \
-	    -lG4track \
-            -lG4tracking \
-	    -lG4digits+hits \
-	    -lG4geometry \
-	    -lG4graphics_reps \
-	    -lG4intercoms \
-	    -lG4global \
-            -l$(RWLIB)
-
 include $(G4INSTALL)/config/binmake.gmk
 

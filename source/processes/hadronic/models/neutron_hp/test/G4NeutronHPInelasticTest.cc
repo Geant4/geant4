@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.2 1999-12-15 14:53:21 gunter Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.3 2000-04-15 07:56:35 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -24,14 +24,20 @@
 #include "G4NeutronHPIsoData.hh"
 
 #include "G4DynamicParticle.hh"
+#include "G4LeptonConstructor.hh"
+#include "G4BaryonConstructor.hh"
+#include "G4MesonConstructor.hh"
+#include "G4IonConstructor.hh"
 
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
 
 #include "G4Step.hh"
 
-#include "g4templates.hh"
-#include "G4NeutronHPChannel.hh"
+#include "../src/G4NeutronHPInelasticCompFS.cc"
+#include "../src/G4NeutronHPInelasticBaseFS.cc"
+
+ 
  // forward declarations
  
  G4int sortEnergies( const double Px, const double Py, const double Pz,
@@ -68,8 +74,20 @@
     G4double a, iz, z, density;
     G4int nEl;
     
+ // constructing the particles
+ 
+ G4LeptonConstructor aC1;
+ G4BaryonConstructor aC2;
+ G4MesonConstructor aC3;
+ G4IonConstructor aC4;
+ 
+ aC1.ConstructParticle();
+ aC2.ConstructParticle();
+ aC3.ConstructParticle();
+ aC4.ConstructParticle();
+
     G4int numberOfMaterials=1;
-    G4Material* theMaterials[23];
+    G4Material* theMaterials[2000];
     
   // natural Carbon only: copied to 6_12_Carbon
   // G4InterpolationManager: unknown interpolation scheme (might already be debugged on axcnsi)
@@ -228,12 +246,17 @@
 //       G4Element *elPb = new G4Element(name="Lead", symbol="Pb", iz=82., a=207.19*g/mole);
 //       thePb->AddElement( elPb, 1 );
 //      theMaterials[21] = thePb;
-
-     // Init runs
-     G4Material *theU = new G4Material(name="Uranium", density=18.95*g/cm3, nEl=1);
-      G4Element *elU  = new G4Element(name="Uranium", symbol="U", iz=92., a=238.03*g/mole);
-      theU->AddElement( elU, 1 );
-     theMaterials[22] = theU;
+//
+//     // Init runs
+//     G4Material *theU = new G4Material(name="Uranium", density=18.95*g/cm3, nEl=1);
+//      G4Element *elU  = new G4Element(name="Uranium", symbol="U", iz=92., a=238.03*g/mole);
+//      theU->AddElement( elU, 1 );
+//     theMaterials[22] = theU;
+//     
+     G4Material *theAu = new G4Material(name="Gold", density=18.95*g/cm3, nEl=1);
+     G4Element *elAu  = new G4Element(name="Gold", symbol="Au", iz=79., a=197.*g/mole);
+     theAu->AddElement( elAu, 1 );
+     theMaterials[23] = theAu;
     
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
