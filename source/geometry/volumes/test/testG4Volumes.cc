@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4Volumes.cc,v 1.3 1999-12-15 14:50:29 gunter Exp $
+// $Id: testG4Volumes.cc,v 1.4 2000-02-29 11:38:03 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,7 @@ G4bool testG4PVPlacement()
     assert(offsetx.GetRotation()==0);
 
     assert(offsetx.GetFrameRotation()==0);
-    cout << "FrameTranslation=" << offsetx.GetFrameTranslation() 
+    G4cout << "FrameTranslation=" << offsetx.GetFrameTranslation() 
          << "Expected= "        << vmx << G4endl;
     assert(offsetx.GetFrameTranslation()==vmx);
 
