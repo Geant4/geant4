@@ -18,6 +18,7 @@
 /calor/setAbsThick 0.15 mm  
 /calor/setAbsYZ 10. cm
 /calor/update
+/gun/setDefault
 #
 /calor/cutG 1.00 mm
 /calor/cutE 5.0 mum

@@ -11,6 +11,7 @@
 /calor/setAbsThick 530.0 mum  
 /calor/setAbsYZ 10. cm
 /calor/update
+/gun/setDefault
 #
 #  hist file name
 /plots/sethistName geant4.plot14
