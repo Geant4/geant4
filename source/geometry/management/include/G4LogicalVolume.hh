@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.hh,v 1.11 2003-01-30 07:57:32 gcosmo Exp $
+// $Id: G4LogicalVolume.hh,v 1.12 2003-04-03 10:26:53 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -161,8 +161,12 @@ class G4LogicalVolume
     inline void AddDaughter(G4VPhysicalVolume* p);
       // Add the volume p as a daughter of the current logical volume.
     inline G4bool IsDaughter(const G4VPhysicalVolume* p) const;
-      // Returns true is the volume p is a daughter of the current
+      // Returns true if the volume p is a daughter of the current
       // logical volume.
+    G4bool IsAncestor(const G4VPhysicalVolume* p) const;
+      // Returns true if the volume p is part of the hierarchy of
+      // volumes established by the current logical volume. Scans
+      // recursively the volume tree.
     inline void RemoveDaughter(const G4VPhysicalVolume* p);
       // Remove the volume p from the List of daughter of the current
       // logical volume.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalVolume.cc,v 1.14 2003-01-30 07:57:32 gcosmo Exp $
+// $Id: G4LogicalVolume.cc,v 1.15 2003-04-03 10:26:54 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -174,6 +174,30 @@ G4LogicalVolume::SetFieldManager(G4FieldManager* pNewFieldMgr,
       DaughterLogVol->SetFieldManager(pNewFieldMgr, forceAllDaughters);
     }
   }
+}
+
+
+// ********************************************************************
+// IsAncestor
+//
+// Finds out if the current logical volume is an ancestor of a given 
+// physical volume
+// ********************************************************************
+//
+G4bool
+G4LogicalVolume::IsAncestor(const G4VPhysicalVolume* aVolume) const
+{
+  G4bool isDaughter = IsDaughter(aVolume);
+  if (!isDaughter)
+  {
+    for (G4PhysicalVolumeList::const_iterator itDau = fDaughters.begin();
+         itDau != fDaughters.end(); itDau++)
+    {
+      isDaughter = (*itDau)->GetLogicalVolume()->IsAncestor(aVolume);
+      if (isDaughter)  break;
+    }
+  }
+  return isDaughter;
 }
 
 
