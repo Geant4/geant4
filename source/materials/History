@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2002-10-17 09:32:30 maire Exp $
+$Id: History,v 1.39 2002-10-29 16:17:03 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+29.10.02 V.Ivanchenko - materials-V04-01-02
+         G4IonisParamMat: Add Set and Find MeanExcitation energy methods.
+         
 17.10.02 V.Ivanchenko - materials-V04-01-01
          G4IonisParamElm.cc: Fix excitation energy interpolation.
     

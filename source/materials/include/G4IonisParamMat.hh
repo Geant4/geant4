@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.hh,v 1.6 2001-07-11 10:01:25 gunter Exp $
+// $Id: G4IonisParamMat.hh,v 1.7 2002-10-29 16:17:04 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -33,7 +33,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
-// 09.03.01: copy constructor and assignement operator in public (mma)
+// 28-10-02: add setMeanExcitationEnergy (V.Ivanchenko)
+// 09-03-01: copy constructor and assignement operator in public (mma)
 // 09-07-98: data moved from G4Material (mma)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -61,6 +62,8 @@ public:
      
     // parameters for mean energy loss calculation:
     G4double  GetMeanExcitationEnergy()   const {return fMeanExcitationEnergy;};
+    void      SetMeanExcitationEnergy(G4double value);
+    G4double  FindMeanExcitationEnergy(const G4String& chFormula);
     G4double  GetLogMeanExcEnergy()       const {return fLogMeanExcEnergy;};
     G4double* GetShellCorrectionVector()  const {return fShellCorrectionVector;};
     G4double  GetTaul()                   const {return fTaul;};

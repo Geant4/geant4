@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonisParamMat.cc,v 1.9 2001-09-13 08:57:46 maire Exp $
+// $Id: G4IonisParamMat.cc,v 1.10 2002-10-29 16:17:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
+// 28-10-02, add setMeanExcitationEnergy (V.Ivanchenko)
 // 08-02-01, fShellCorrectionVector correctly handled (mma)
 // 16-01-01, bug corrected in ComputeDensityEffect() E100eV (L.Urban)
 // 18-07-98, bug corrected in ComputeDensityEffect() for gas
@@ -54,16 +55,21 @@ void G4IonisParamMat::ComputeMeanParameters()
   // compute mean excitation energy and shell correction vector
 
   fTaul = (*(fMaterial->GetElementVector()))[0]->GetIonisation()->GetTaul();
+
+  fMeanExcitationEnergy = 0.;
   fLogMeanExcEnergy = 0.;
 
-  for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++)
+
+  for (size_t i=0; i < fMaterial->GetNumberOfElements(); i++) {
     fLogMeanExcEnergy += (fMaterial->GetVecNbOfAtomsPerVolume())[i]
-                   *((*(fMaterial->GetElementVector()))[i]->GetZ())
-                   *log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
-                                                             ->GetMeanExcitationEnergy());
+                       *((*(fMaterial->GetElementVector()))[i]->GetZ())
+                       *log((*(fMaterial->GetElementVector()))[i]->GetIonisation()
+                      ->GetMeanExcitationEnergy());
+  }
 
   fLogMeanExcEnergy /= fMaterial->GetTotNbOfElectPerVolume();
   fMeanExcitationEnergy = exp(fLogMeanExcEnergy);
+
   fShellCorrectionVector = new G4double[3];
 
   for (G4int j=0; j<=2; j++)
@@ -188,6 +194,89 @@ void G4IonisParamMat::ComputeFluctModel()
   fEnergy1fluct    = exp(fLogEnergy1fluct);
   fEnergy0fluct    = 10.*eV;
   fRateionexcfluct = 0.4;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+void G4IonisParamMat::SetMeanExcitationEnergy(G4double value)
+{
+  if(value == fMeanExcitationEnergy || value <= 0.0) return;
+
+  if(fMeanExcitationEnergy > 0.0) {
+
+    G4cout << "G4Material: Mean excitation energy is changed for " << fMaterial->GetName()
+           << " Iold= " << fMeanExcitationEnergy/eV
+           << "eV; Inew= " << value/eV << " eV;"
+           << G4endl;
+  }  
+  
+  fMeanExcitationEnergy = value;
+  fLogMeanExcEnergy = log(value);
+ 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
+
+G4double G4IonisParamMat::FindMeanExcitationEnergy(const G4String& chFormula)
+{
+
+  // The data on mean excitation energy for compaunds
+  // from "Stopping Powers for Electrons and Positrons"
+  // ICRU Report N#37, 1984  (energy in eV)
+
+  const size_t numberOfMolecula = 79 ;
+  
+  static G4String name[numberOfMolecula] = {
+
+    // gas
+    "NH_3",       "C_4H_10",    "CO_2",       "C_2H_6",      "C_7H_16",
+    "C_6H_14",    "CH_4",       "NO",         "N_2O",        "C_8H_18",
+    "C_5H_12",    "C_3H_8",     "H_2O-Gas", 
+
+    // liquid
+    "C_3H_6O",    "C_6H_5NH_2",  "C_6H_6",    "C_4H_9OH",    "CCl_4",    
+    "C_6H_5Cl",   "CHCl_3",      "C_6H_12",   "C_6H_4Cl_2",  "C_4Cl_2H_8O", 
+    "C_2Cl_2H_4", "(C_2H_5)_2O", "C_2H_5OH",  "C_3H_5(OH)_3","C_7H_16",     
+    "C_6H_14",    "CH_3OH",      "C_6H_5NO_2","C_5H_12",     "C_3H_7OH",    
+    "C_5H_5N",    "C_8H_8",      "C_2Cl_4",   "C_7H_8",      "C_2Cl_3H",    
+    "H_2O",       "C_8H_10"
+
+    //solid
+    "C_5H_5N_5",  "C_5H_5N_5O",  "(C_6H_11NO)-nylon",  "C_25H_52", 
+    "(C_2H_4)-Polyethylene",     "(C_5H_8O-2)-Polymethil_Methacrylate",   
+    "(C_8H_8)-Polystyrene",      "A-150-tissue",       "Al_2O_3",  "CaF_2", 
+    "LiF",        "Photo_Emulsion",  "(C_2F_4)-Teflon",  "SiO_2"     
+
+  } ;
+    
+  static G4double meanExcitation[numberOfMolecula] = {
+
+    53.7,   48.3,  85.0,  45.4,  49.2,
+    49.1,   41.7,  87.8,  84.9,  49.5,
+    48.2,   47.1,  71.6,
+
+    64.2,   66.2,  63.4,  59.9,  166.3,
+    89.1,  156.0,  56.4, 106.5,  103.3, 
+   111.9,   60.0,  62.9,  72.6,   54.4,  
+    54.0,  67.6,   75.8,  53.6,   61.1,  
+    66.2,  64.0,  159.2,  62.5,  148.1,  
+    75.0,  61.8,
+
+    71.4,  75.0,   63.9,  48.3,   57.4,
+    74.0,  68.7,   65.1, 145.2,  166.,
+    94.0, 331.0,   99.1, 139.2 
+
+  } ;
+
+  G4double x = fMeanExcitationEnergy;
+
+  for(size_t i=0; i<numberOfMolecula; i++) {
+    if(chFormula == name[i]) {
+      x = meanExcitation[i]*eV;
+      break;
+    }
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
