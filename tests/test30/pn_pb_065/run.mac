@@ -10,7 +10,7 @@
 10000
 //--------Proton_processes
 #particle
-proton
+neutron
 //--------
 #material
 Pb

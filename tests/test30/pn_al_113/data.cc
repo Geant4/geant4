@@ -220,7 +220,8 @@ int main(int argc, char** argv)
               f2  = cs[j+1]; 
               y2  = (*f2)[i]; 
               ct2 = cos((*angle)[j+1]);
-              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
+	      //              y1 += (y2 - y1)*(1.0 - ct1)/(ct2 - ct1);
+              y1  = y2;
               ct1 = 1.0;
               if(y1 < 0.0) y1 = 0.0;
 	    } else if (j == na-2) {

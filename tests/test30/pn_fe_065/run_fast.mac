@@ -13,7 +13,7 @@
 neutron
 //--------
 #material
-Pb
+Fe
 #energy(MeV)
 65
 #emax(MeV)
@@ -21,9 +21,9 @@ Pb
 #elim(MeV)
 15.
 #nangle
-2
+5
 #angles
-20. 28.   
+9.5 16.5 21. 24.5 28.   
 #dangle
 4.
 //--------

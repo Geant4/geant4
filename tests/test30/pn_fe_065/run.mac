@@ -7,13 +7,13 @@
 #verbose
 0
 #events
-1000
+10000
 //--------Proton_processes
 #particle
 neutron
 //--------
 #material
-Pb
+Fe
 #energy(MeV)
 65
 #emax(MeV)
@@ -21,12 +21,29 @@ Pb
 #elim(MeV)
 15.
 #nangle
-2
+5
 #angles
-20. 28.   
+9.5 16.5 21. 24.5 28.   
+#nbinsd
+40
 #dangle
 4.
 //--------
+#generator
+LEparametrisation
+#paw
+par.paw
+#run
+#generator
+preCompound
+#paw
+prec.paw
+#run
+#generator
+CHIPS
+#paw
+chips.paw
+#run
 generator
 kinetic
 #paw
