@@ -1,5 +1,10 @@
 History file for geometry/solids/STEPinterface
 
+6th February 1999  John Allison  stepinterface-01-00-00 on ONE FILE ONLY...
+- Commented out some troublesome printing in G4GeometryTable.cc.  Changes
+  (a) in branch stepintf-geant4-00-branch (from geant4-00), (b) in branch
+   stepintf-01-00-00-branch, and (c) in head of G4GeometryTable.cc.
+
 revision 1.9
 date: 1998/12/09 12:00:42;  author: broglia;  state: Exp;  lines: +22 -37
 December 9, 1998 : L. Broglia
