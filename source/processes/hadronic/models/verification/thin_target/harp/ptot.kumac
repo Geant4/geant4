@@ -16,17 +16,17 @@ zone 2 2
 
 hi/file 1 bic.paw
 hi/pl 13 hist
-itx 5 200 'Binary'
+itx 5 100 'Binary'
 close 1
 hi/file 1 ber.paw
 hi/pl 13 hist
-itx 5 200 'Bertini'
+itx 5 100 'Bertini'
 close 1
 hi/file 1 qgsc.paw
 hi/pl 13 hist
-itx 5 200 'QGSC'
+itx 5 100 'QGSC'
 close 1
 hi/file 1 qgsp.paw
 hi/pl 13 hist
-itx 5 200 'QGSP'
+itx 5 100 'QGSP'
 close 1

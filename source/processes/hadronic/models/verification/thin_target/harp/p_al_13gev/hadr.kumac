@@ -13,28 +13,31 @@ set ygti 0.5
 set yhti 0.5
 set ymgl 1.0
 set ywin 1.0
-hi/del 0
 zone 2 3
 
 close 1
+hi/del 0
 hi/file 1 bic.paw
 title 'Binary G4 6.2p02  theta = (15 - 300)mrad, p = (0.2-13.0)GeV'
 exe ../had
 exe ../prf bic62 ps
 
 close 1
+hi/del 0
 hi/file 1 ber.paw
 title 'Bertini G4 6.2p02  theta = (15 - 300)mrad, p = (0.2-13.0)GeV'
 exe ../had
 exe ../prf ber62 ps
 
 close 1
+hi/del 0
 hi/file 1 qgsp.paw
 title 'QGSP G4 6.2p02  theta = (15 - 300)mrad, p = (0.2-13.0)GeV'
 exe ../had
 exe ../prf qgsp62 ps
 
 close 1
+hi/del 0
 hi/file 1 qgsc.paw
 title 'QGSC G4 6.2p02  theta = (15 - 300)mrad, p = (0.2-13.0)GeV'
 exe ../had
