@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BlockingList.hh,v 1.6 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4BlockingList.hh,v 1.7 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4BlockingList
@@ -41,6 +41,7 @@
 // History:
 //
 // 24.7.96 P.Kent Separated from G4Navigator
+// ********************************************************************
 
 #ifndef G4BLOCKINGLIST_HH
 #define G4BLOCKINGLIST_HH
@@ -49,7 +50,7 @@
 #include "g4std/vector"
 
 const G4int kBlockingListMaxDefault = 500; // Block up to 511 daughters
-				           // initially
+                                           // initially
 const G4int kBlockingListStride = 128;
 const G4int kBlockTagNoMax = 2147483647;   // 2^31-1 maximum tag no may reach
 
@@ -90,7 +91,7 @@ class G4BlockingList
 
   private:
 
-    G4int fBlockTagNo, fStride;		
+    G4int fBlockTagNo, fStride;
       // Current blocked volume tag number.
 
     G4std::vector<G4int> fBlockingList; 

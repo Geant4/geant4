@@ -21,14 +21,15 @@
 // ********************************************************************
 //
 //
-// $Id: G4TransportationManager.icc,v 1.5 2001-07-11 10:00:31 gunter Exp $
+// $Id: G4TransportationManager.icc,v 1.6 2002-07-23 08:50:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
-//	GEANT 4  inlined function members implementation
+//  GEANT 4  inlined function members implementation
 // ------------------------------------------------------------
 //
 // Created:  10 March 1997, J. Apostolakis
 //  
+// ********************************************************************
 
 inline
 G4Navigator* G4TransportationManager::GetNavigatorForTracking() const
@@ -51,19 +52,18 @@ G4FieldManager* G4TransportationManager::GetFieldManager() const
 inline
 void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
 {
-   fNavigatorForTracking= newNavigator;
-   // fPropagatorInField->setNavigator(newNavigator);
+   fNavigatorForTracking = newNavigator;
 }
 
 inline
-void  G4TransportationManager::SetPropagatorInField( 
-		G4PropagatorInField*  newFieldPropagator )
+void G4TransportationManager::SetPropagatorInField( 
+           G4PropagatorInField* newFieldPropagator )
 {
-   fPropagatorInField=    newFieldPropagator;
+   fPropagatorInField = newFieldPropagator;
 }
 
 inline
 void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 {
-   fFieldManager=      newFieldManager; 
+   fFieldManager = newFieldManager; 
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.hh,v 1.9 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4NavigationHistory.hh,v 1.10 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationHistory
@@ -36,6 +36,7 @@
 //
 // 25.07.96 P.Kent Initial version. Services derived from
 //                 requirements of G4Navigator.
+// ********************************************************************
 
 #ifndef G4NAVIGATIONHISTORY_HH
 #define G4NAVIGATIONHISTORY_HH
@@ -117,8 +118,8 @@ class G4NavigationHistory
     // Returns specified physical volume pointer.
 
   inline void NewLevel(G4VPhysicalVolume *pNewMother,
-		       EVolume vType=kNormal,
-		       G4int nReplica=-1);
+                       EVolume vType=kNormal,
+                       G4int nReplica=-1);
     // Changes navigation level to that of the new mother.
 
   inline void BackLevel();

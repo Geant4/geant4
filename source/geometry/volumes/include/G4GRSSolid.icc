@@ -21,60 +21,72 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.icc,v 1.5 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4GRSSolid.icc,v 1.6 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4GRSSolid inline implementation
+// ********************************************************************
 
-inline G4GRSSolid::G4GRSSolid(G4VSolid *pSolid,
-		       const G4RotationMatrix *pRot,
-		       const G4ThreeVector &tlate)
+inline
+G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
+                  const G4RotationMatrix *pRot,
+                  const G4ThreeVector &tlate )
   : G4VTouchable(),
-    fsolid(pSolid), ftlate(tlate)
+    fsolid(pSolid),
+    ftlate(tlate)
 {
   if (pRot)
-    {
-      frot=new G4RotationMatrix(*pRot);
-      if (!frot) G4Exception ("G4GRSSolid::G4GRSSolid cannot alloc G4RotationMatrix");
-    }
+  {
+    frot = new G4RotationMatrix(*pRot);
+    if ( !frot )
+      G4Exception ("G4GRSSolid::G4GRSSolid cannot allocate G4RotationMatrix");
+  }
   else
-    {
-      frot=0;
-    }
+  {
+    frot=0;
+  }
 }
 
-inline G4GRSSolid::G4GRSSolid(G4VSolid *pSolid,
-		       const G4RotationMatrix &rot,
-		       const G4ThreeVector &tlate)
+inline
+G4GRSSolid::G4GRSSolid( G4VSolid *pSolid,
+                  const G4RotationMatrix &rot,
+                  const G4ThreeVector &tlate )
   : G4VTouchable(),
-    fsolid(pSolid), ftlate(tlate)
+    fsolid(pSolid),
+    ftlate(tlate)
 {
-  frot=new G4RotationMatrix(rot);
-  if (!frot) G4Exception ("G4GRSSolid::G4GRSSolid cannot alloc G4RotationMatrix");
+  frot = new G4RotationMatrix(rot);
+  if ( !frot )
+    G4Exception ("G4GRSSolid::G4GRSSolid cannot allocate G4RotationMatrix");
 }
 
-inline G4VSolid* G4GRSSolid::GetSolid(G4int depth) const
+inline
+G4VSolid* G4GRSSolid::GetSolid( G4int depth ) const
 {
-  if( depth != 0 ) {
-     G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
+  if( depth != 0 )
+  {
+    G4Exception("G4GRSSolid::GetSolid: has no meaning for depth!=0");
   }
   return fsolid;
-
 }
 
-inline const G4ThreeVector& G4GRSSolid::GetTranslation(G4int depth) const
+inline
+const G4ThreeVector& G4GRSSolid::GetTranslation( G4int depth ) const
 {
-  if( depth != 0 ) {
-     G4Exception("G4GRSSolid::GetTranslation: has no meaning for depth!=0");
+  if( depth != 0 )
+  {
+    G4Exception("G4GRSSolid::GetTranslation: has no meaning for depth!=0");
   }
   return ftlate;
 }
 
-inline const G4RotationMatrix* G4GRSSolid::GetRotation(G4int depth) const
+inline
+const G4RotationMatrix* G4GRSSolid::GetRotation( G4int depth ) const
 {
-  if( depth != 0 ) {
-     G4Exception("G4GRSSolid::GetRotation: has no meaning for depth!=0");
+  if( depth != 0 )
+  {
+    G4Exception("G4GRSSolid::GetRotation: has no meaning for depth!=0");
   }
   return frot;
 }

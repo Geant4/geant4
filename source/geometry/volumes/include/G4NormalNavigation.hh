@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NormalNavigation.hh,v 1.4 2001-07-11 10:00:30 gunter Exp $
+// $Id: G4NormalNavigation.hh,v 1.5 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 
 // History:
 // - Created. Paul Kent, Aug 96
+// ********************************************************************
 
 #ifndef G4NORMALNAVIGATION_HH
 #define G4NORMALNAVIGATION_HH
@@ -50,13 +51,13 @@ class G4NormalNavigation
 {
   public:  // with description
 
-    G4bool LevelLocate(G4NavigationHistory &history,
-		       const G4VPhysicalVolume *blockedVol,
-                       const G4int blockedNum,
-                       const G4ThreeVector &globalPoint,
-                       const G4ThreeVector* globalDirection,
-		       const G4bool pLocatedOnEdge, 
-		       G4ThreeVector &localPoint);
+    G4bool LevelLocate( G4NavigationHistory &history,
+                  const G4VPhysicalVolume *blockedVol,
+                  const G4int blockedNum,
+                  const G4ThreeVector &globalPoint,
+                  const G4ThreeVector* globalDirection,
+                  const G4bool pLocatedOnEdge, 
+                        G4ThreeVector &localPoint);
       // Search positioned volumes in mother at current top level of history
       // for volume containing globalPoint. Do not test the blocked volume.
       // If a containing volume is found, `stack' the new volume and return
@@ -64,21 +65,21 @@ class G4NormalNavigation
       // of the daughters). localPoint = global point in local system on entry,
       // point in new system on exit.
 
-    G4double ComputeStep(const G4ThreeVector &localPoint,
-			 const G4ThreeVector &localDirection,
-			 const G4double currentProposedStepLength,
-			 G4double &newSafety,
-			 G4NavigationHistory &history,
-			 G4bool &validExitNormal,
-			 G4ThreeVector &exitNormal,
-			 G4bool &exiting,
-			 G4bool &entering,
-                         G4VPhysicalVolume *(*pBlockedPhysical),
-                         G4int &blockedReplicaNo);
+    G4double ComputeStep( const G4ThreeVector &localPoint,
+                          const G4ThreeVector &localDirection,
+                          const G4double currentProposedStepLength,
+                                G4double &newSafety,
+                                G4NavigationHistory &history,
+                                G4bool &validExitNormal,
+                                G4ThreeVector &exitNormal,
+                                G4bool &exiting,
+                                G4bool &entering,
+                                G4VPhysicalVolume *(*pBlockedPhysical),
+                                G4int &blockedReplicaNo );
 
-    G4double ComputeSafety(const G4ThreeVector &globalpoint,
-			   const G4NavigationHistory &history,
-    		           const G4double pMaxLength=DBL_MAX );
+    G4double ComputeSafety( const G4ThreeVector &globalpoint,
+                            const G4NavigationHistory &history,
+                            const G4double pMaxLength=DBL_MAX );
 };
 
 #include "G4AuxiliaryNavServices.hh"    // Needed for inline methods

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.hh,v 1.13 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4NavigationLevel.hh,v 1.14 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevel
@@ -35,6 +35,7 @@
 //
 // 30.09.97 J.Apostolakis Initial version. Services derived from
 //                        requirements of touchables & G4NavigatorHistory.
+// ********************************************************************
 
 #ifndef G4NAVIGATIONLEVEL_HH
 #define G4NAVIGATIONLEVEL_HH
@@ -53,15 +54,15 @@ class G4NavigationLevel
  public:  // with description
 
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
-		     const G4AffineTransform& newT,
-		     EVolume                  newVolTp,
-		     G4int                    newRepNo= -1);
+                     const G4AffineTransform& newT,
+                     EVolume                  newVolTp,
+                     G4int                    newRepNo= -1);
 
    G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
-		     const G4AffineTransform& levelAbove,
-		     const G4AffineTransform& relativeCurrent,
-		     EVolume                  newVolTp,
-		     G4int                    newRepNo= -1);
+                     const G4AffineTransform& levelAbove,
+                     const G4AffineTransform& relativeCurrent,
+                     EVolume                  newVolTp,
+                     G4int                    newRepNo= -1);
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
@@ -82,8 +83,6 @@ class G4NavigationLevel
 
  public:  // without description
 
-   // inline    G4AffineTransform& GetTransform();
-
    inline const G4AffineTransform* GetPtrTransform() const;
      // To try to resolve the possible problem with returning a reference.
 
@@ -96,14 +95,12 @@ class G4NavigationLevel
    inline void operator delete(void *ptr, void*);  // Not accepted Sun/HP
 #endif
      // Pre-allocated 'new' and 'delete' for use with STL 
-     // Do not (directly) use Allocator   -   F.Behner/J.Apostolakis
+     // Do not (directly) use Allocator
 
  private:
 
    G4NavigationLevelRep*  fLevelRep;
 };
-
-// extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 
 #include "G4NavigationLevel.icc"
 

@@ -21,12 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationHistory.icc,v 1.6 2002-04-19 08:22:04 gcosmo Exp $
+// $Id: G4NavigationHistory.icc,v 1.7 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4NavigationHistory Inline implementation
 //
+// ********************************************************************
 
 inline
 G4NavigationHistory&
@@ -35,14 +36,15 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
   if (&h == this) return *this;
 
   // fNavHistory=h.fNavHistory;   // This works, but is very slow.
-  if( this->GetMaxDepth() < h.fStackDepth ){
-     fNavHistory.resize( h.fStackDepth ); 
-  }
-  register G4int ilev= h.fStackDepth;
-  for ( ; ilev>=0; ilev--) { 
-     fNavHistory[ilev] = h.fNavHistory[ilev]; 
-  } 
 
+  if( this->GetMaxDepth() < h.fStackDepth )
+  {
+    fNavHistory.resize( h.fStackDepth ); 
+  }
+  for ( register G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
+  { 
+    fNavHistory[ilev] = h.fNavHistory[ilev]; 
+  } 
   fStackDepth=h.fStackDepth;
 
   return *this;
@@ -51,150 +53,153 @@ G4NavigationHistory::operator=(const G4NavigationHistory &h)
 inline
 void G4NavigationHistory::Reset()
 {
-	fStackDepth=0;
+  fStackDepth=0;
 }
 
 inline
 void G4NavigationHistory::Clear()
 {
-	G4AffineTransform dummyTransform(G4ThreeVector(0.));
+  G4AffineTransform dummyTransform(G4ThreeVector(0.));
 
-	G4NavigationLevel  tmpNavLevel;
-	tmpNavLevel=G4NavigationLevel(0, dummyTransform, kParameterised, -1) ;
+  G4NavigationLevel  tmpNavLevel;
+  tmpNavLevel=G4NavigationLevel(0, dummyTransform, kParameterised, -1) ;
 
-	Reset();
-	for (G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
-	{
-	   // fNavHistory(ilev)= 0;
-	   fNavHistory[ilev]= tmpNavLevel;
-	}
+  Reset();
+  for (register G4int ilev=fNavHistory.size()-1; ilev>=0; ilev--)
+  {
+     // fNavHistory(ilev)= 0;
+     fNavHistory[ilev]= tmpNavLevel;
+  }
 }
 
 inline
 void G4NavigationHistory::SetFirstEntry(G4VPhysicalVolume* pVol)
 {
-	G4ThreeVector translation(0.,0.,0.);
+  G4ThreeVector translation(0.,0.,0.);
 
-   	// Protection needed in case pVol=null 
-        //   so that a touchable-history can signal OutOfWorld 
-	//   
-	if(pVol !=0) {
-	    translation=pVol->GetTranslation();
-	}
-	fNavHistory[0]= G4NavigationLevel( pVol,
-					   G4AffineTransform(translation), 
-					   kNormal );
+  // Protection needed in case pVol=null 
+  // so that a touchable-history can signal OutOfWorld 
+  //
+  if( pVol!=0 )
+  {
+    translation=pVol->GetTranslation();
+  }
+  fNavHistory[0] =
+    G4NavigationLevel( pVol, G4AffineTransform(translation), kNormal );
 }
 
 inline
 const G4AffineTransform* G4NavigationHistory::GetPtrTopTransform() const
 {
-	return   fNavHistory[fStackDepth].GetPtrTransform();
+  return fNavHistory[fStackDepth].GetPtrTransform();
 }
 
 inline
 const G4AffineTransform& G4NavigationHistory::GetTopTransform() const
 {
-	return fNavHistory[fStackDepth].GetTransform();
+  return fNavHistory[fStackDepth].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetTopReplicaNo() const
 {
-	return fNavHistory[fStackDepth].GetReplicaNo();
+  return fNavHistory[fStackDepth].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetTopVolumeType() const
 {
-	return fNavHistory[fStackDepth].GetVolumeType();
+  return fNavHistory[fStackDepth].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetTopVolume() const
 {
-	return fNavHistory[fStackDepth].GetPhysicalVolume();
+  return fNavHistory[fStackDepth].GetPhysicalVolume();
 }
 
 inline
 G4int G4NavigationHistory::GetDepth() const
 {
-	return fStackDepth;
+  return fStackDepth;
 }
 
 inline
 const G4AffineTransform&
 G4NavigationHistory::GetTransform(G4int n) const
 {
-	return fNavHistory[n].GetTransform();
+  return fNavHistory[n].GetTransform();
 }
 
 inline
 G4int G4NavigationHistory::GetReplicaNo(G4int n) const
 {
-	return fNavHistory[n].GetReplicaNo();
+  return fNavHistory[n].GetReplicaNo();
 }
 
 inline
 EVolume G4NavigationHistory::GetVolumeType(G4int n) const
 {
-	return fNavHistory[n].GetVolumeType();
+  return fNavHistory[n].GetVolumeType();
 }
 
 inline
 G4VPhysicalVolume* G4NavigationHistory::GetVolume(G4int n) const
 {
-	return fNavHistory[n].GetPhysicalVolume();
+  return fNavHistory[n].GetPhysicalVolume();
 }
 
 inline
 G4int G4NavigationHistory::GetMaxDepth() const
 {
-	return fNavHistory.size();
+  return fNavHistory.size();
 }
 
 inline
 void G4NavigationHistory::BackLevel()
 {
-	assert(fStackDepth>0);
+  assert( fStackDepth>0 );
 
-        //  Tell  the  level  that I am forgetting it
-        // delete fNavHistory(fStackDepth); 
-        fStackDepth--;
+  // Tell  the  level  that I am forgetting it
+  // delete fNavHistory(fStackDepth);
+  //
+  fStackDepth--;
 }
 
 inline
 void G4NavigationHistory::BackLevel(G4int n)
 {
-	assert(n<=fStackDepth);
-        fStackDepth-=n;
+  assert( n<=fStackDepth );
+  fStackDepth-=n;
 }
 
 inline
 void G4NavigationHistory::EnlargeHistory()
 {
-	G4int len=fNavHistory.size();
-	if (len==fStackDepth)
-		{       // Note: Resize operation clears additional entries
-			G4int nlen=len+kHistoryStride;
-			fNavHistory.resize(nlen);
-		}	
+  G4int len = fNavHistory.size();
+  if ( len==fStackDepth )
+  {
+    // Note: Resize operation clears additional entries
+    //
+    G4int nlen = len+kHistoryStride;
+    fNavHistory.resize(nlen);
+  }  
 }
 
 
 inline
-void G4NavigationHistory::NewLevel(G4VPhysicalVolume *pNewMother,
-				   EVolume vType,
-				   G4int nReplica)
+void G4NavigationHistory::NewLevel( G4VPhysicalVolume *pNewMother,
+                                    EVolume vType,
+                                    G4int nReplica )
 {
-	EnlargeHistory();	// Enlarge if required
-	fStackDepth++;
-	fNavHistory[fStackDepth] = 
-	       G4NavigationLevel(pNewMother, 
-				 fNavHistory[fStackDepth-1].GetTransform(),
-				 G4AffineTransform(pNewMother->GetRotation(),
-						pNewMother->GetTranslation()),
-				 vType,
-				 nReplica); 
-	// The constructor computes the new global->local transform
+  EnlargeHistory();  // Enlarge if required
+  fStackDepth++;
+  fNavHistory[fStackDepth] =
+    G4NavigationLevel( pNewMother, 
+                       fNavHistory[fStackDepth-1].GetTransform(),
+                       G4AffineTransform(pNewMother->GetRotation(),
+                       pNewMother->GetTranslation()),
+                       vType,
+                       nReplica ); 
+  // The constructor computes the new global->local transform
 }

@@ -21,12 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.hh,v 1.7 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4LogicalSkinSurface.hh,v 1.8 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-////////////////////////////////////////////////////////////////////////
 // class G4LogicalSkinSurface
-////////////////////////////////////////////////////////////////////////
 //
 // Class description:
 //
@@ -36,89 +34,63 @@
 // History:
 // -------
 // Created:     1997-06-16
-// Author:      John Apostolakis
-// mail:        John.Apostolakis@cern.ch
-// Modified:    1997-06-16  John Apostolakis
+// Author:      John Apostolakis (John.Apostolakis@cern.ch)
 //
-////////////////////////////////////////////////////////////////////////
+// ********************************************************************
 
 #ifndef G4LogicalSkinSurface_h
 #define G4LogicalSkinSurface_h 1
-
-/////////////
-// Includes
-/////////////
 
 #include "G4LogicalSurface.hh"
 #include "G4LogicalVolume.hh"
 
 #include "g4std/vector"
 
-/////////////////////
-// Class Definition
-/////////////////////
-
 class G4LogicalSkinSurface : public G4LogicalSurface 
 {
 
-  public:
+  public:  // with description
 
-        ////////////////////////////////
-        // Constructors and Destructor
-        ////////////////////////////////
+    G4LogicalSkinSurface( const G4String& name,
+                                G4LogicalVolume* vol,
+                                G4OpticalSurface* opticalSurface );
+    ~G4LogicalSkinSurface();
+       // Constructor and destructor.
 
-        // Is the name meaningful for the logical skin surface ?
+    static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
+    inline const G4LogicalVolume* GetLogicalVolume() const;
+    inline void  SetLogicalVolume(G4LogicalVolume* vol);
+       // Accessors.
 
-        G4LogicalSkinSurface(const G4String& name, G4LogicalVolume* vol,
-			     G4OpticalSurface* opticalSurface);
+    static size_t GetNumberOfSkinSurfaces();
+    static void DumpInfo(); // const 
+      // To handle with the table of surfaces.
 
-	~G4LogicalSkinSurface();
+    G4int operator==(const G4LogicalSkinSurface &right) const;
+    G4int operator!=(const G4LogicalSkinSurface &right) const;
+      // Operators.
 
-	////////////
-	// Methods
-        ////////////
-  public:
-  
-        static G4LogicalSkinSurface* GetSurface(const G4LogicalVolume* vol);
+  private:
 
-	inline const G4LogicalVolume* GetLogicalVolume() const;
-	inline void  SetLogicalVolume(G4LogicalVolume* vol);
+    G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
+    const G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
+      // Assignment and copying must be denied.
 
-        static size_t GetNumberOfSkinSurfaces();
-        static void DumpInfo(); // const 
-	  // Methods dealing with the table of surfaces.
+  private:
 
-        //////////////
-        // Operators
-        //////////////
+    G4LogicalVolume* LogVolume;
+      // Logical Volume pointer on side 1.
 
-	G4int operator==(const G4LogicalSkinSurface &right) const;
-	G4int operator!=(const G4LogicalSkinSurface &right) const;
-
-private:
-
-        G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
-	const G4LogicalSkinSurface & operator=(const G4LogicalSkinSurface &right);
-	  // Assignment and copying must be denied.
-
-	// ------------------
-	// Basic data members ( To define a 'logical' surface)
-	// ------------------
-
-private:
-	G4LogicalVolume* LogVolume;
-	  // Logical Volume pointer on side 1
-
-  	static G4std::vector<G4LogicalSkinSurface*> theSurfaceTable;
-	  // The static Table of Surfaces
+    static G4std::vector<G4LogicalSkinSurface*> theSurfaceTable;
+      // The static Table of Surfaces.
 
 };
 
 typedef G4std::vector<G4LogicalSkinSurface*> G4LogicalSkinSurfaceTable;
 
-////////////////////
+// ********************************************************************
 // Inline methods
-////////////////////
+// ********************************************************************
 
 #include "G4LogicalSkinSurface.icc"
 

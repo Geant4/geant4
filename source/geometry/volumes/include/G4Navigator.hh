@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.18 2002-06-03 10:17:56 gcosmo Exp $
+// $Id: G4Navigator.hh,v 1.19 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -83,6 +83,7 @@
 
 // History:
 // - Created. Paul Kent, July 95/96
+// ********************************************************************
 
 #ifndef G4NAVIGATOR_HH
 #define G4NAVIGATOR_HH

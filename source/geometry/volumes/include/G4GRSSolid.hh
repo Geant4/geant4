@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSSolid.hh,v 1.5 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4GRSSolid.hh,v 1.6 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,6 +36,7 @@
 
 // History:
 // - Created. Paul Kent, August 1996
+// ********************************************************************
 
 #ifndef G4GRSSOLID_HH
 #define G4GRSSOLID_HH
@@ -50,11 +51,11 @@ class G4GRSSolid : public G4VTouchable
   public:  // with description
 
     G4GRSSolid(G4VSolid *pSolid,
-	       const G4RotationMatrix *pRot,
-	       const G4ThreeVector &tlate);
+         const G4RotationMatrix *pRot,
+         const G4ThreeVector &tlate);
     G4GRSSolid(G4VSolid *pSolid,
-	       const G4RotationMatrix &rot,
-	       const G4ThreeVector &tlate);
+         const G4RotationMatrix &rot,
+         const G4ThreeVector &tlate);
     ~G4GRSSolid();
 
     inline G4VSolid* GetSolid(G4int depth=0) const;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.hh,v 1.4 2001-07-11 10:00:27 gunter Exp $
+// $Id: G4AuxiliaryNavServices.hh,v 1.5 2002-07-23 08:50:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 
 // History:
 // - Created: Paul Kent, Aug 96
+// ********************************************************************
 
 #ifndef G4AuxiliaryNavServices_hh
 #define G4AuxiliaryNavServices_hh
@@ -50,17 +51,18 @@ class G4AuxiliaryNavServices
  public:  // with description
 
    static G4bool CheckPointOnSurface( const G4VSolid* sampleSolid, 
-				      const G4ThreeVector& localPoint, 
-				      const G4ThreeVector* globalDirection, 
-				      const G4AffineTransform& sampleTransform,
-				      const G4bool  locatedOnEdge);
+                                      const G4ThreeVector& localPoint, 
+                                      const G4ThreeVector* globalDirection, 
+                                      const G4AffineTransform& sampleTransform,
+                                      const G4bool locatedOnEdge);
      //
-     // Is the track (Point, direction) inside the solid sampleSolid ? 
-     // Returns true if we are going to enter the volume, which is the case if:
-     //   - The point is inside
-     //   - The point is on the surface and the direction points inside
+     // Is the track (point, direction) inside the solid 'sampleSolid' ? 
+     // Returns true if we are going to enter the volume,
+     // which is the case if:
+     //   - the point is inside
+     //   - the point is on the surface and the direction points inside
      //     or along it.
-     // Else returns false
+     // Else returns false.
 
  private:
  

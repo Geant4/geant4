@@ -21,15 +21,16 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalSkinSurface.icc,v 1.4 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4LogicalSkinSurface.icc,v 1.5 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalSkinSurface inline implementation
+//
+// ********************************************************************
 
 inline
-const G4LogicalVolume*
-G4LogicalSkinSurface::GetLogicalVolume() const
+const G4LogicalVolume* G4LogicalSkinSurface::GetLogicalVolume() const
 {
   return LogVolume;
 }

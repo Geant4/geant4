@@ -21,61 +21,65 @@
 // ********************************************************************
 //
 //
-// $Id: G4AuxiliaryNavServices.icc,v 1.5 2002-01-08 14:20:31 japost Exp $
+// $Id: G4AuxiliaryNavServices.icc,v 1.6 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // class G4AuxiliaryNavServices Inline implementation
 //
+// ********************************************************************
 
-inline G4bool G4AuxiliaryNavServices::CheckPointOnSurface( const G4VSolid* sampleSolid, 
-                                                           const G4ThreeVector& localPoint, 
-                                                           const G4ThreeVector* globalDirection, 
-                                                           const G4AffineTransform& sampleTransform,
-                                                           const G4bool  locatedOnEdge)
+inline G4bool
+G4AuxiliaryNavServices::
+CheckPointOnSurface( const G4VSolid* sampleSolid, 
+                     const G4ThreeVector& localPoint, 
+                     const G4ThreeVector* globalDirection, 
+                     const G4AffineTransform& sampleTransform,
+                     const G4bool locatedOnEdge)
 {
   G4ThreeVector localDirection, sampleNormal;
-  G4bool        enter=false;
+  G4bool        enter = false;
 
-  EInside insideSolid=sampleSolid->Inside(localPoint); 
-  if (insideSolid!=kOutside) 
+  EInside insideSolid = sampleSolid->Inside(localPoint); 
+  if ( insideSolid!=kOutside ) 
   {
-     G4bool checkDirection= locatedOnEdge && (globalDirection!=0);
-     if( (insideSolid==kSurface) && checkDirection)
-     {
-        // We are probably located on an edge.
-        localDirection= sampleTransform.TransformAxis(*globalDirection); 
+    G4bool checkDirection= locatedOnEdge && (globalDirection!=0);
+    if( (insideSolid==kSurface) && checkDirection)
+    {
+      // We are probably located on an edge.
+      //
+      localDirection= sampleTransform.TransformAxis(*globalDirection); 
 
-        // Check whether we enter the volume
-        // 
-        sampleNormal= sampleSolid->SurfaceNormal(localPoint);
-        if ( sampleNormal.dot(localDirection) <= 0 )
+      // Check whether we enter the volume
+      // 
+      sampleNormal = sampleSolid->SurfaceNormal(localPoint);
+      if ( sampleNormal.dot(localDirection) <= 0 )
+      {
+        if( sampleNormal.dot(localDirection) == 0 )
         {
-           if( sampleNormal.dot(localDirection) == 0 )
-           {
-              // We can't decide yet, let's make sure we're entering the solid
-              //
-              // If by a confusion we entered the next solid we find out now that
-              // whether to leave or to enter.
-              // This happens when we're no the surface or edge shared by two solids
-              //
-              G4double distanceToIn = sampleSolid->DistanceToIn( localPoint, localDirection );
-              if( distanceToIn != kInfinity )
-              {
-                 enter = true;
-              } 
-           }
-           else
-           {
-              enter= true;
-           }
+          // We can't decide yet, let's make sure we're entering the solid.
+          // If by a confusion we entered the next solid we find out now
+          // whether to leave or to enter.
+          // This happens when we're on the surface or edge shared by two
+          // solids
+          //
+          G4double distanceToIn =
+                   sampleSolid->DistanceToIn( localPoint, localDirection );
+          if( distanceToIn != kInfinity )
+          {
+            enter = true;
+          } 
         }
-     }
-     else
-     {
-        enter= true;
-     }
+        else
+        {
+          enter = true;
+        }
+      }
+    }
+    else
+    {
+      enter = true;
+    }
   }
   return enter;
 }
-

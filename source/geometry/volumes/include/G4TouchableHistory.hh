@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.hh,v 1.5 2001-07-11 10:00:31 gunter Exp $
+// $Id: G4TouchableHistory.hh,v 1.6 2002-07-23 08:50:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 
 // History:
 // - Created. Paul Kent, August 1996
+// ********************************************************************
 
 #ifndef G4TOUCHABLEHISTORY_HH
 #define G4TOUCHABLEHISTORY_HH
@@ -49,7 +50,7 @@ class G4TouchableHistory : public G4VTouchable
 
  public:  // with description
 
-  G4TouchableHistory(const G4NavigationHistory& history);
+  G4TouchableHistory( const G4NavigationHistory& history );
   G4TouchableHistory(); 
     // The default constructor produces a touchable-history of 
     // 'zero-depth', ie an "unphysical" and not very unusable one.
@@ -57,18 +58,18 @@ class G4TouchableHistory : public G4VTouchable
 
   virtual ~G4TouchableHistory();
 
-  inline G4VPhysicalVolume* GetVolume(G4int depth=0) const;
-  inline G4VSolid* GetSolid(G4int depth=0) const;
-  const G4ThreeVector& GetTranslation(G4int depth=0) const;
-  const G4RotationMatrix* GetRotation(G4int depth=0) const;
+  inline G4VPhysicalVolume* GetVolume( G4int depth=0 ) const;
+  inline G4VSolid* GetSolid( G4int depth=0 ) const;
+  const G4ThreeVector& GetTranslation( G4int depth=0 ) const;
+  const G4RotationMatrix* GetRotation( G4int depth=0 ) const;
 
-  inline G4int GetReplicaNumber(G4int depth=0) const;
+  inline G4int GetReplicaNumber( G4int depth=0 ) const;
   inline G4int GetHistoryDepth()  const;
   G4int MoveUpHistory( G4int num_levels = 1 );
     // Access methods for touchables with history
 
-  virtual void  UpdateYourself(G4VPhysicalVolume*   pPhysVol,
-			       const G4NavigationHistory* history=0); 
+  virtual void  UpdateYourself( G4VPhysicalVolume*   pPhysVol,
+                          const G4NavigationHistory* history=0 ); 
     // Update methods for touchables with history
 
  public:  // without description
@@ -77,12 +78,9 @@ class G4TouchableHistory : public G4VTouchable
     // Should this method be "deprecated" ?
     // it is used now in G4Navigator::LocateGlobalPointAndSetup
 
-  // void  ResetLevel();
-       // Set the level to the top level.
-
  private:
 
-  inline G4int CalculateHistoryIndex(G4int stackDepth) const;
+  inline G4int CalculateHistoryIndex( G4int stackDepth ) const;
 
   G4RotationMatrix frot;
   G4ThreeVector ftlate;

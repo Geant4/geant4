@@ -21,66 +21,70 @@
 // ********************************************************************
 //
 //
-// $Id: G4TouchableHistory.icc,v 1.6 2001-07-11 10:00:31 gunter Exp $
+// $Id: G4TouchableHistory.icc,v 1.7 2002-07-23 08:50:36 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4TouchableHistory inline implementation
+// ********************************************************************
 
 inline
 G4TouchableHistory::G4TouchableHistory()
-  : frot(G4RotationMatrix()), ftlate(G4ThreeVector(0.,0.,0.)), fhistory()
+  : frot(G4RotationMatrix()),
+    ftlate(G4ThreeVector(0.,0.,0.)),
+    fhistory()
 {
 }
 
 inline
-G4TouchableHistory::G4TouchableHistory(const G4NavigationHistory &history)
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
   : fhistory(history)
 {
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
-  ftlate=tf.NetTranslation();
-  frot=tf.NetRotation();
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
 }
 
 inline
-void  G4TouchableHistory::UpdateYourself(G4VPhysicalVolume*   pPhysVol,
-                                   const G4NavigationHistory* pHistory) 
+void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
+                                    const G4NavigationHistory* pHistory ) 
 {
-  fhistory= *pHistory;  
+  fhistory = *pHistory;  
   G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
-  if( pPhysVol == 0 ){
+  if( pPhysVol == 0 )
+  {
     // This means that the track has left the World Volume.
     // Since the Navigation History does not already reflect this,
-    // we must correct this problem here. John A. (--> K. Amako)
+    // we must correct this problem here.
+    //
     fhistory.SetFirstEntry(pPhysVol);
   }
-  ftlate=tf.NetTranslation();
-  frot=tf.NetRotation();
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
 }
 
 inline
-G4int G4TouchableHistory::CalculateHistoryIndex(G4int stackDepth) const
+G4int G4TouchableHistory::CalculateHistoryIndex( G4int stackDepth ) const
 {
   return (fhistory.GetDepth()-stackDepth); // was -1
 }
 
 inline
-G4VPhysicalVolume* G4TouchableHistory::GetVolume(G4int depth) const
+G4VPhysicalVolume* G4TouchableHistory::GetVolume( G4int depth ) const
 {
   return fhistory.GetVolume(CalculateHistoryIndex(depth));
 }
 
 inline
-G4VSolid* G4TouchableHistory::GetSolid(G4int depth) const
+G4VSolid* G4TouchableHistory::GetSolid( G4int depth ) const
 {
   return fhistory.GetVolume(CalculateHistoryIndex(depth))
                             ->GetLogicalVolume()->GetSolid();
 }
 
 inline
-G4int G4TouchableHistory::GetReplicaNumber(G4int depth) const
+G4int G4TouchableHistory::GetReplicaNumber( G4int depth ) const
 {
-  // return this->GetHistory()->GetTopReplicaNo();
   return fhistory.GetReplicaNo(CalculateHistoryIndex(depth));
 }
 
@@ -94,19 +98,19 @@ inline
 G4int G4TouchableHistory::MoveUpHistory( G4int num_levels )
 {
   G4NavigationHistory* nHistory= &fhistory;
-  G4int maxLevelsMove=  nHistory->GetDepth();
-  G4int minLevelsMove=  0;              // Cannot redescend today!
-				        // Soon it will be possible
-					// by adding a data member here
-				        //     fCurrentDepth;
-
-  if( num_levels > maxLevelsMove ){
-      num_levels = maxLevelsMove;
+  G4int maxLevelsMove = nHistory->GetDepth();
+  G4int minLevelsMove = 0;              // Cannot redescend today!
+                                        // Soon it will be possible
+                                        // by adding a data member here
+                                        //     fCurrentDepth;
+  if( num_levels > maxLevelsMove )
+  {
+    num_levels = maxLevelsMove;
   }
-  else if( num_levels < minLevelsMove ){
-      num_levels = minLevelsMove;
+  else if( num_levels < minLevelsMove )
+  {
+    num_levels = minLevelsMove;
   }
-
   nHistory->BackLevel( num_levels ); 
 
   return num_levels;

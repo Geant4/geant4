@@ -21,25 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: G4GRSVolumeHandle.hh,v 1.3 2001-11-06 17:08:14 gcosmo Exp $
+// $Id: G4GRSVolumeHandle.hh,v 1.4 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-// Class G4TouchableHandle
+// Class G4GRSVolumeHandle
 //
 // Class description:
 //
-// Type providing reference counting mechanism for any kind of touchable
-// objects.
+// Type providing reference counting mechanism for volume touchables.
 // The basic rule for the use of this type is that this handle must always
 // be exchanged by reference never dinamically allocated (i.e. never
 // instantiated using 'new').
 //
 // For more details see G4ReferenceCountedHandle.
 
-// Author:      Radovan Chytracek, CERN  (Radovan.Chytracek@cern.ch)
-// Version:     1.0
-// Date:        March 2001
-// ----------------------------------------------------------------------
+// Author: Radovan Chytracek (Radovan.Chytracek@cern.ch), March 2001
+//
+// ********************************************************************
+
 #ifndef _G4GRSVOLUMEHANDLE_H_
 #define _G4GRSVOLUMEHANDLE_H_ 1
 

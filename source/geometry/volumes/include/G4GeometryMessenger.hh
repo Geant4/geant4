@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GeometryMessenger.hh,v 1.3 2002-04-03 11:51:29 gcosmo Exp $
+// $Id: G4GeometryMessenger.hh,v 1.4 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // --------------------------------------------------------------------
@@ -35,6 +35,7 @@
 // and controlling the detector geometry and navigation.
 
 // Author: G.Cosmo, CERN.
+// --------------------------------------------------------------------
 
 #ifndef G4GeometryMessenger_hh
 #define G4GeometryMessenger_hh
@@ -64,7 +65,7 @@ class G4GeometryMessenger : public G4UImessenger
     void SetNewValue( G4UIcommand* command, G4String newValues );
     G4String GetCurrentValue( G4UIcommand* command );
   
-  protected:
+  private:
 
     void Init();
     void ResetNavigator();
@@ -79,15 +80,11 @@ class G4GeometryMessenger : public G4UImessenger
                               *cylCmd, *runCmd, *resCmd;
     G4UIcmdWithADoubleAndUnit *tolCmd;
   
-  private:
-
     G4bool geometryOpened;
     G4ThreeVector x, p;
     G4bool        newtol;
     G4double      tol;
 
-  private:
-  
     G4TransportationManager* tmanager;
     G4GeomTestStreamLogger* tlogger;
     G4GeomTestVolume* tvolume;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.hh,v 1.6 2001-07-11 10:00:29 gunter Exp $
+// $Id: G4NavigationLevelRep.hh,v 1.7 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4NavigationLevelRep
@@ -38,6 +38,7 @@
 // History:
 //
 // - 1 October 1997, J.Apostolakis: initial version. 
+// ********************************************************************
 
 #ifndef G4NAVIGATIONLEVELREP_HH
 #define G4NAVIGATIONLEVELREP_HH
@@ -53,16 +54,16 @@ class G4NavigationLevelRep
 
  public:  // with description
 
-   G4NavigationLevelRep(G4VPhysicalVolume*       newPtrPhysVol,
-		        const G4AffineTransform& newT,
-		        EVolume                  newVolTp,
-		        G4int                    newRepNo= -1);
+   G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
+                   const G4AffineTransform&  newT,
+                         EVolume             newVolTp,
+                         G4int               newRepNo= -1 );
 
-   G4NavigationLevelRep(G4VPhysicalVolume*       newPtrPhysVol,
-		        const G4AffineTransform& levelAbove,
-		        const G4AffineTransform& relativeCurrent,
-		        EVolume                  newVolTp,
-		        G4int                    newRepNo= -1);
+   G4NavigationLevelRep( G4VPhysicalVolume*  newPtrPhysVol,
+                   const G4AffineTransform&  levelAbove,
+                   const G4AffineTransform&  relativeCurrent,
+                         EVolume             newVolTp,
+                         G4int               newRepNo= -1 );
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
@@ -91,12 +92,6 @@ class G4NavigationLevelRep
    inline void operator delete(void *aTrack);
      // Override "delete" to use "G4Allocator".
 
- public:  // without description
-
-   // G4AffineTransform& GetTransform();
-   // const G4AffineTransform* GetPtrTransform() const;
-   // G4AffineTransform&  accessTransform();
-
  private:
 
    G4AffineTransform  sTransform;
@@ -115,7 +110,5 @@ class G4NavigationLevelRep
 };
 
 #include "G4NavigationLevelRep.icc"
-
-// extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
 
 #endif

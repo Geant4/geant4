@@ -21,124 +21,113 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevel.icc,v 1.11 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4NavigationLevel.icc,v 1.12 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 30.09.97 J.Apostolakis Initial version. 
 //                        
+// ********************************************************************
+
+extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
 
 inline
-G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume*   pPhysVol,
-				     const G4AffineTransform& afTransform,
-				     EVolume            volTp,
-				     G4int              repNo)
+G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
+                                const G4AffineTransform& afTransform,
+                                      EVolume            volTp,
+                                      G4int              repNo )
 {
-      fLevelRep=new G4NavigationLevelRep( pPhysVol, 
-				          afTransform,
-					  volTp, 
-					  repNo );
+  fLevelRep = new G4NavigationLevelRep( pPhysVol, afTransform, volTp, repNo );
 }
 
 inline
-G4NavigationLevel::G4NavigationLevel(G4VPhysicalVolume* pPhysVol,
-		                     const G4AffineTransform& levelAbove,
-		                     const G4AffineTransform& relativeCurrent,
-		                     EVolume            volTp,
-		                     G4int              repNo)
+G4NavigationLevel::G4NavigationLevel( G4VPhysicalVolume* pPhysVol,
+                                const G4AffineTransform& levelAbove,
+                                const G4AffineTransform& relativeCurrent,
+                                      EVolume            volTp,
+                                      G4int              repNo )
 {
-      fLevelRep=new G4NavigationLevelRep( pPhysVol, 
-					  levelAbove, 
-					  relativeCurrent, 
-					  volTp, 
-					  repNo );
+  fLevelRep = new G4NavigationLevelRep( pPhysVol, 
+                                        levelAbove, 
+                                        relativeCurrent, 
+                                        volTp, 
+                                        repNo );
 }
 
 inline
 G4NavigationLevel::G4NavigationLevel()
 {
-      fLevelRep= new G4NavigationLevelRep();
+  fLevelRep = new G4NavigationLevelRep();
 }
 
 inline
 G4NavigationLevel::G4NavigationLevel(const G4NavigationLevel& right)
-  :  fLevelRep( right.fLevelRep )
+  : fLevelRep( right.fLevelRep )
 {
-      fLevelRep->AddAReference(); 
+  fLevelRep->AddAReference(); 
 }
 
 inline
 G4NavigationLevel::~G4NavigationLevel()
 {
-      if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
+  if( fLevelRep->RemoveAReference() )
+    delete fLevelRep; 
 }
 
 inline
-G4NavigationLevel& 
-G4NavigationLevel::operator=(const G4NavigationLevel &right)
+G4NavigationLevel& G4NavigationLevel::operator=(const G4NavigationLevel &right)
 { 
-      if (&right == this) return *this;
+  if ( &right == this ) return *this;
 
-      // The order of these two lines is needed to handle "a=a"
-      right.fLevelRep->AddAReference(); 
-      if( fLevelRep->RemoveAReference() ) delete fLevelRep; 
+  // The order of these two statements is needed to handle "a=a"
+  //
+  right.fLevelRep->AddAReference(); 
+  if( fLevelRep->RemoveAReference() )
+    delete fLevelRep; 
 
-      fLevelRep= right.fLevelRep;
-      return *this;
+  fLevelRep = right.fLevelRep;
+  return *this;
 } 
 
 inline
 G4VPhysicalVolume* G4NavigationLevel::GetPhysicalVolume() const 
 { 
-      return fLevelRep->GetPhysicalVolume(); 
+  return fLevelRep->GetPhysicalVolume(); 
 }
-
-#if 0
-inline
-G4AffineTransform& G4NavigationLevel::GetTransform()
-{ 
-      return fLevelRep->GetTransform() ; 
-} 
-#endif
 
 inline
 const G4AffineTransform& G4NavigationLevel::GetTransform() const 
 { 
-      return fLevelRep->GetTransform() ; 
+  return fLevelRep->GetTransform() ; 
 } 
 
 inline
 const G4AffineTransform* G4NavigationLevel::GetPtrTransform() const 
 { 
-      return fLevelRep->GetTransformPtr() ; 
+  return fLevelRep->GetTransformPtr() ; 
 } 
 
 inline
-EVolume  G4NavigationLevel::GetVolumeType() const 
+EVolume G4NavigationLevel::GetVolumeType() const 
 { 
-      return fLevelRep->GetVolumeType() ; 
+  return fLevelRep->GetVolumeType() ; 
 }
 
 inline
-G4int    G4NavigationLevel::GetReplicaNo() const 
+G4int G4NavigationLevel::GetReplicaNo() const 
 { 
-      return fLevelRep->GetReplicaNo() ; 
+  return fLevelRep->GetReplicaNo() ; 
 }
 
-extern G4Allocator<G4NavigationLevel> aNavigationLevelAllocator;
-
-// I believe that there is no provision in case this class is subclassed.
+// There is no provision in case this class is subclassed.
 // If it is subclassed, this will fail and may not give errors!
 //
 inline
 void* G4NavigationLevel::operator new(size_t)
 {
-  // void *aNavigationLevel;
-  // aNavigationLevel= (void *) aNavigationLevelAllocator.MallocSingle();
-  // return aNavigationLevel;
   return (void *) aNavigationLevelAllocator.MallocSingle();
 }
 
-// Added for use by STL.  F.Behner  (used for pre-allocation)
+// Added for use by STL (used for pre-allocation).
 //
 inline
 void* G4NavigationLevel::operator new(size_t,void *a)
@@ -152,12 +141,11 @@ void G4NavigationLevel::operator delete(void *aLevel)
   aNavigationLevelAllocator.FreeSingle((G4NavigationLevel *) aLevel);
 }
 
-// Added for use by STL.  J. Apostolakis  (used for free-ing pre-allocated?)
-
+// Added for use by STL (used for free-ing pre-allocated?).
+//
 #ifndef G4NOT_ISO_DELETES
 inline
 void G4NavigationLevel::operator delete(void *ptr, void *p)
 {
-  ;
 }
 #endif

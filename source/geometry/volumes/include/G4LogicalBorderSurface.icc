@@ -21,30 +21,30 @@
 // ********************************************************************
 //
 //
-// $Id: G4LogicalBorderSurface.icc,v 1.4 2001-07-11 10:00:28 gunter Exp $
+// $Id: G4LogicalBorderSurface.icc,v 1.5 2002-07-23 08:50:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4LogicalBorderSurface inline implementation
+//
+// ********************************************************************
 
 inline
-void G4LogicalBorderSurface::SetPhysicalVolumes(G4VPhysicalVolume* vol1,
-				                G4VPhysicalVolume* vol2)
+void G4LogicalBorderSurface::SetPhysicalVolumes( G4VPhysicalVolume* vol1,
+                                                 G4VPhysicalVolume* vol2 )
 {
   Volume1 = vol1;
   Volume2 = vol2;
 }
 
 inline
-const G4VPhysicalVolume*
-G4LogicalBorderSurface::GetVolume1() const
+const G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume1() const
 {
   return Volume1;
 }
 
 inline
-const G4VPhysicalVolume*
-G4LogicalBorderSurface::GetVolume2() const
+const G4VPhysicalVolume* G4LogicalBorderSurface::GetVolume2() const
 {
   return Volume2;
 }

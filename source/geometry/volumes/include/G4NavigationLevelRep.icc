@@ -21,20 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4NavigationLevelRep.icc,v 1.5 2001-07-11 10:00:29 gunter Exp $
+// $Id: G4NavigationLevelRep.icc,v 1.6 2002-07-23 08:50:35 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  1 October 1997 J.Apostolakis Initial version. 
 //                        
+// ********************************************************************
+
+extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
 
 // Constructors
 //--------------
 
 inline
-G4NavigationLevelRep::G4NavigationLevelRep(G4VPhysicalVolume* pPhysVol,
-				     const G4AffineTransform& afTransform,
-				     EVolume            volTp,
-				     G4int              repNo)
+G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
+                                      const G4AffineTransform& afTransform,
+                                            EVolume            volTp,
+                                            G4int              repNo )
    :  sTransform(afTransform),
       sPhysicalVolumePtr(pPhysVol),
       sReplicaNo(repNo),
@@ -54,21 +57,21 @@ G4NavigationLevelRep::G4NavigationLevelRep()
 }
 
 inline
-G4NavigationLevelRep::G4NavigationLevelRep(G4VPhysicalVolume* pPhysVol,
-		     const G4AffineTransform& levelAbove,
-		     const G4AffineTransform& relativeCurrent,
-		           EVolume            volTp,
-		           G4int              repNo )
+G4NavigationLevelRep::G4NavigationLevelRep( G4VPhysicalVolume* pPhysVol,
+                                      const G4AffineTransform& levelAbove,
+                                      const G4AffineTransform& relativeCurrent,
+                                            EVolume            volTp,
+                                            G4int              repNo )
    :  sPhysicalVolumePtr(pPhysVol),
       sReplicaNo(repNo),
       sVolumeType(volTp),
       fCountRef(1) 
 {
-      sTransform.InverseProduct( levelAbove, relativeCurrent );
+  sTransform.InverseProduct( levelAbove, relativeCurrent );
 }
 
 inline
-G4NavigationLevelRep::G4NavigationLevelRep(G4NavigationLevelRep& right)
+G4NavigationLevelRep::G4NavigationLevelRep( G4NavigationLevelRep& right )
    :  sTransform(right.sTransform), 
       sPhysicalVolumePtr(right.sPhysicalVolumePtr),
       sReplicaNo(right.sReplicaNo),
@@ -84,9 +87,13 @@ inline
 G4NavigationLevelRep::~G4NavigationLevelRep()
 {
 #ifdef DEBUG_NAVIG_LEVEL
-    if(fCountRef>0){ 
-	G4Exception( " A G4NavigationLevelRep is being deleted that has a positive of reference counts (fCountRef > 0) " ); 
-    } 
+  if(fCountRef>0)
+  {
+    G4cout << "ERROR! - A G4NavigationLevelRep is being deleted that has"
+           << G4endl << " positive reference count (fCountRef > 0) !"
+           << G4endl;
+    G4Exception( "ERROR - G4NavigationLevelRep::~G4NavigationLevelRep()" ); 
+  } 
 #endif
 }
 
@@ -95,9 +102,9 @@ G4NavigationLevelRep::~G4NavigationLevelRep()
 
 inline
 G4NavigationLevelRep& 
-G4NavigationLevelRep::operator=(const G4NavigationLevelRep &right)
+G4NavigationLevelRep::operator=( const G4NavigationLevelRep &right )
 { 
-  if (&right == this) return *this;
+  if ( &right == this ) return *this;
 
   if (&right)
   {
@@ -111,33 +118,28 @@ G4NavigationLevelRep::operator=(const G4NavigationLevelRep &right)
   return *this;
 } 
 
+// Accessors
+// --------------
+
 inline
 G4VPhysicalVolume*
 G4NavigationLevelRep::GetPhysicalVolume()
 { 
-      return sPhysicalVolumePtr; 
+  return sPhysicalVolumePtr; 
 }
 
 inline
 const G4AffineTransform&
 G4NavigationLevelRep::GetTransform() const 
 { 
-      return sTransform; 
+  return sTransform; 
 } 
-
-#if 0
-inline
-G4AffineTransform& G4NavigationLevelRep::GetTransform()       
-{ 
-      return sTransform; 
-} 
-#endif
 
 inline
 const G4AffineTransform*
 G4NavigationLevelRep::GetTransformPtr() const 
 { 
-      return &sTransform; 
+  return &sTransform; 
 } 
 
 inline
@@ -155,16 +157,14 @@ G4int G4NavigationLevelRep::GetReplicaNo() const
 inline
 void G4NavigationLevelRep::AddAReference() 
 {
-   fCountRef++; 
+  fCountRef++; 
 }
 
 inline
 G4bool G4NavigationLevelRep::RemoveAReference() 
 {
-   return( --fCountRef <= 0); 
+  return( --fCountRef <= 0 ); 
 }
-
-extern G4Allocator<G4NavigationLevelRep> aNavigLevelRepAllocator;
 
 // There is no provision that this class is subclassed.
 // If it is subclassed & new data members are added then the
