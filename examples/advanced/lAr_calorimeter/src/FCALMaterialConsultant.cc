@@ -257,27 +257,29 @@ FCALMaterialConsultant * FCALMaterialConsultant::construct()
 
 G4Material * FCALMaterialConsultant::Material(G4String what)
 {
-  if(what == "Air")               return Air;
-  if(what == "Vacuum")            return Vacuum;
-  if(what == "LiquidArgon")       return LiquidArgon;
-  if(what == "Aluminium")         return Aluminium;
-  if(what == "Iron")              return Iron;
-  if(what == "Copper")            return Copper;
-  if(what == "Tungsten")          return Tungsten;
-  if(what == "Lead")              return Lead;
-  if(what == "CO2")               return CO2;
-  if(what == "ArgonGas")          return ArgonGas;
-  if(what == "ShieldingConcrete") return ShieldingConcrete;
-  if(what == "Polystyrene")       return Polystyrene;
-  if(what == "StainlessSteel")    return StainlessSteel;
-  if(what == "Nickel")            return Nickel;
-  if(what == "FCAL1CuArKap")      return FCAL1CuArKap;
-  if(what == "FCAL1CuAr")         return FCAL1CuAr;
-  if(what == "FCAL2CuArKap")      return FCAL2CuArKap;
-  if(what == "FCAL2WFeNi")        return FCAL2WFeNi;
-  if(what == "FCAL2WFeNiCuAr")    return FCAL2WFeNiCuAr;
-  if(what == "MWPCArCO2")         return MWPCArCO2;
-  if(what == "RhoaCell")          return RhoaCell;
+  G4Material* material = 0;
+  if(what == "Air")               material = Air;
+  if(what == "Vacuum")            material = Vacuum;
+  if(what == "LiquidArgon")       material = LiquidArgon;
+  if(what == "Aluminium")         material = Aluminium;
+  if(what == "Iron")              material = Iron;
+  if(what == "Copper")            material = Copper;
+  if(what == "Tungsten")          material = Tungsten;
+  if(what == "Lead")              material = Lead;
+  if(what == "CO2")               material = CO2;
+  if(what == "ArgonGas")          material = ArgonGas;
+  if(what == "ShieldingConcrete") material = ShieldingConcrete;
+  if(what == "Polystyrene")       material = Polystyrene;
+  if(what == "StainlessSteel")    material = StainlessSteel;
+  if(what == "Nickel")            material = Nickel;
+  if(what == "FCAL1CuArKap")      material = FCAL1CuArKap;
+  if(what == "FCAL1CuAr")         material = FCAL1CuAr;
+  if(what == "FCAL2CuArKap")      material = FCAL2CuArKap;
+  if(what == "FCAL2WFeNi")        material = FCAL2WFeNi;
+  if(what == "FCAL2WFeNiCuAr")    material = FCAL2WFeNiCuAr;
+  if(what == "MWPCArCO2")         material = MWPCArCO2;
+  if(what == "RhoaCell")          material = RhoaCell;
 
+  return material;
 };
 				  

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALPrimaryGeneratorAction.cc,v 1.4 2003-12-09 15:30:31 gunter Exp $
+// $Id: FCALPrimaryGeneratorAction.cc,v 1.5 2004-01-27 09:08:05 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -68,7 +68,7 @@ FCALPrimaryGeneratorAction::FCALPrimaryGeneratorAction()
   G4int InEvent = 0;
   G4String file_name = "data-tracks/tracks-80GeV.dat";
   ifstream Traks_file(file_name);
-  if(!Traks_file) G4cerr << "WARNING:  Failed to open file " << file_name << endl;
+  if(!Traks_file) G4cerr << "WARNING:  Failed to open file " << file_name << G4endl;
   Traks_file.seekg(0);
   
   while(!(Traks_file.eof())) {
@@ -110,7 +110,7 @@ void FCALPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   particleGun->GeneratePrimaryVertex(anEvent);
 
   G4cout << "--------------------------------------------" << G4endl;
-    G4cout << " Event,  X,Y,Z Generated Vertex : " << endl;
+  G4cout << " Event,  X,Y,Z Generated Vertex : " << G4endl;
   G4cout << Nevent << " " << X[Nevent] << " " << Y[Nevent] << " " << Z[Nevent]<< G4endl;
   G4cout << "--------------------------------------------" << G4endl;
  

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: FCALTBEventAction.cc,v 1.8 2003-12-02 14:39:04 gcosmo Exp $
+// $Id: FCALTBEventAction.cc,v 1.9 2004-01-27 09:08:05 ribon Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -109,12 +109,12 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   // Write Leaving Particles in File
   //--------------------------------
   G4String FileName1 = "OutTracks_802_1mm.dat";
-  G4int iostemp1;
+  std::ios::openmode iostemp1;
   if(Init1 == 0) {
-    iostemp1 = ios::out;
+    iostemp1 = std::ios::out;
     Init1++;
   } else {
-    iostemp1 = ios::out|ios::app; // ios::app;  
+    iostemp1 = std::ios::out|std::ios::app; // std::ios::app;  
   };
   ofstream OutTracks(FileName1, iostemp1);
 
@@ -127,7 +127,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
       OutOfWorld = StepAction->GetOutOfWorldTracks(i,j);
       OutTracks << OutOfWorld << " " ; 
     }
-    OutTracks << G4endl;
+    OutTracks << std::endl;
 
     // G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
 
@@ -150,24 +150,24 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   // Write Secondary Particles in File
   //--------------------------------
   G4String FileName2 = "SecndTracks_802_1mm.dat";
-  G4int iostemp2;
+  std::ios::openmode iostemp2;
   if(Init2 == 0) {
-    iostemp2 = ios::out;
+    iostemp2 = std::ios::out;
     Init2++;
   } else {
-    iostemp2 = ios::out|ios::app; // ios::app;  
+    iostemp2 = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
   ofstream SecndTracks(FileName2, iostemp2);
   
   G4double Secondary;
   
-  SecndTracks << NSecondaries << G4endl;
+  SecndTracks << NSecondaries << std::endl;
   for(i=1; i<= NSecondaries ; i++){
     for(j=1; j<11 ; j++) {
       Secondary = StepAction->GetSecondaries(i,j);
       SecndTracks << Secondary  << " " ; }
-    SecndTracks << G4endl;
+    SecndTracks << std::endl;
     // G4double Secondary2 = StepAction->GetSecondaries(i,j);
 
 #ifdef G4ANALYSIS_USE
@@ -181,12 +181,12 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
 
   // Write Edep in FCAL1 and FCAL2 
   G4String FileName3 = "EdepFCAL_802_1mm.dat";
-  G4int iostemp3;
+  std::ios::openmode iostemp3;
   if(Init3 == 0) {
-    iostemp3 = ios::out;
+    iostemp3 = std::ios::out;
     Init3++;
   } else {
-    iostemp3 = ios::out|ios::app; // ios::app;  
+    iostemp3 = std::ios::out|std::ios::app; // std::ios::app;  
   };
   
   ofstream EdepFCAL(FileName3, iostemp3);
@@ -197,7 +197,7 @@ void FCALTBEventAction::EndOfEventAction(const G4Event*)
   
   EdepFCAL << EmEdep << " ";
   EdepFCAL << HadEdep; 
-  EdepFCAL << G4endl;
+  EdepFCAL << std::endl;
   EdepFCAL.close();
 
 
