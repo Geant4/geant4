@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2003-03-10 11:34:16 vnivanch Exp $
+$Id: History,v 1.22 2003-03-11 08:43:34 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,8 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 March 03: V. Ivanchenko (xrays-V05-00-03)
+- Minor fix to cut per region
+
 10 March 03: V. Ivanchenko (xrays-V05-00-02)
-- Cut per region
+- Cut per region G4ForwardXrayTR.cc
 
 12 February 03: G. Cosmo (xrays-V05-00-01)
 - Replaced call to RandPoisson::shoot() with G4Poisson(), more performant.
