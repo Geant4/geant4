@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.13 2004-11-25 23:34:13 mverderi Exp $
+// $Id: G4FastStep.cc,v 1.14 2004-12-07 08:22:33 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -502,7 +502,7 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
 
   G4bool itsOKforMomentum = true;
   if ( theEnergyChange >0.) {
-    accuracy = abs(theMomentumChange.mag2()-1.0);
+    accuracy = std::abs(theMomentumChange.mag2()-1.0);
     if (accuracy > GetAccuracyForWarning()) {
       G4cout << "  G4FastStep::CheckIt    : ";
       G4cout << "the Momentum Change is not unit vector !!"
