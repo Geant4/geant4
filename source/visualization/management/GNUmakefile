@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.7 2004-06-03 11:40:15 gcosmo Exp $
+# $Id: GNUmakefile,v 1.8 2004-06-17 13:54:27 gcosmo Exp $
 # -------------------------------------------------------------
 # GNUmakefile for visualization library.  John Allison, 5/7/95.
 
@@ -8,7 +8,7 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
-GLOBLIBS  = libG4vis_management.lib libG4modeling.lib
+GLOBLIBS  = libG4modeling.lib
 GLOBLIBS += libG4run.lib libG4event.lib
 GLOBLIBS += libG4tracking.lib libG4processes.lib libG4digits_hits.lib
 GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
