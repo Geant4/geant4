@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4BREPSolidPolyhedra.cc,v 1.9 1999-05-28 08:49:12 sgiani Exp $
+// $Id: G4BREPSolidPolyhedra.cc,v 1.10 1999-09-17 13:35:29 sgiani Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Corrections by S.Giani:
@@ -16,7 +16,9 @@
 // - Xaxis now properly rotated to compute correct scope of vertixes
 // - corrected surface orientation for outer faces parallel to Z
 // - completed explicit setting of the orientation for all faces
-// - some comparison between doubles avoided by using tolerances. 
+// - some comparison between doubles avoided by using tolerances 
+// - visualisation parameters made consistent with the use made by constructor
+//   of the input arguments (i.e. circumscribed radius).
 //
 // 
 // The polygonal solid G4BREPSolidPolyhedra is a shape defined by an inner 
@@ -218,8 +220,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
   }
   
   // Store the original parameters, to be used in visualisation
-  // Note radii are scaled because this BREP uses the radius of the
-  // inscribed circle but graphics_reps/G4Polyhedron uses the radius of
+  // Note radii are not scaled because this BREP uses the radius of the
+  // circumscribed circle and also graphics_reps/G4Polyhedron uses the radius of
   // the circumscribed circle.
   original_parameters.Start_angle= phi1;
   original_parameters.Opening_angle= dphi;		   
@@ -228,7 +230,8 @@ G4BREPSolidPolyhedra::G4BREPSolidPolyhedra(G4String name,
   original_parameters.Z_values= new G4double[num_z_planes];
   original_parameters.Rmin= new G4double[num_z_planes];
   original_parameters.Rmax= new G4double[num_z_planes];
-  G4double rFactor = cos(dphi/(2*sides));
+  
+  G4double rFactor = 1.;
 
   for(int is=0;is<num_z_planes;is++)
   {
