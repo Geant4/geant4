@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLWin32Viewer.hh,v 1.9 2003-06-10 17:58:55 gcosmo Exp $
+// $Id: G4OpenGLWin32Viewer.hh,v 1.10 2003-06-23 13:03:48 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,9 +35,7 @@
 
 #include "globals.hh"
 
-#include <windows.h>
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include "G4OpenGL.hh"
 
 #include "G4VViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
@@ -49,14 +47,23 @@ class G4OpenGLWin32Viewer: virtual public G4OpenGLViewer {
 public:
   G4OpenGLWin32Viewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLWin32Viewer ();
+  void SetView ();
+  void ShowView ();
   void FinishView ();
-
 protected:
   void GetWin32Connection ();
   void CreateGLWin32Context ();
   virtual void CreateMainWindow ();
-  G4int WinSize_x, WinSize_y;
-
+protected:
+  G4int WinSize_x;
+  G4int WinSize_y;
+private:
+  static LRESULT CALLBACK WindowProc(HWND,UINT,WPARAM,LPARAM);
+  static bool SetWindowPixelFormat(HDC);
+private:
+  HWND fWindow;
+  HDC fHDC;
+  HGLRC fHGLRC;
 };
 
 #endif
