@@ -24,11 +24,14 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.hh,v 1.7 2002-11-14 05:07:21 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.hh,v 1.8 2002-11-14 18:36:03 duns Exp $
  */
 
 #ifndef G4HEPREPSCENEHANDLER_HH
 #define G4HEPREPSCENEHANDLER_HH 1
+
+#include "globals.hh"
+#include "g4std/iostream"
 
 // HepRep
 #include "HEPREP/HepRep.h"
@@ -119,7 +122,7 @@ class G4HepRepSceneHandler: public G4VSceneHandler {
         HEPREP::HepRepInstance* CreateInstance(HEPREP::HepRepInstance* p, HEPREP::HepRepType* altType);
         bool IsEventData ();
 
-        std::ostream* out;
+        G4std::ostream* out;
         HEPREP::HepRepFactory* heprepFactory;
         HEPREP::HepRepWriter* writer;
         HEPREP::HepRepInstance *parent;

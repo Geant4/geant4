@@ -22,7 +22,7 @@ using namespace HEPREP;
 
 int main(int argc, char** argv) {
 
-    char* fname = "HepRepStreamerTest.xml";
+    char* fname = (char*)"HepRepStreamerTest.xml";
 
     printf("Creating Factory...\n");
 	HepRepFactory* factory = new XMLHepRepStreamerFactory();

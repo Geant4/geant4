@@ -24,9 +24,10 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRepSceneHandler.cc,v 1.8 2002-11-14 05:08:09 duns Exp $
+ * @version $Id: G4HepRepSceneHandler.cc,v 1.9 2002-11-14 18:36:43 duns Exp $
  */
 
+#include "globals.hh"
 #include "g4std/vector"
 #include "g4std/strstream"
 #include "g4std/fstream"
@@ -65,7 +66,7 @@
 
 
 using namespace HEPREP;
-using namespace std;
+using namespace G4std;
 
 G4int G4HepRepSceneHandler::sceneCount = 0;
 G4int G4HepRepSceneHandler::sceneIdCount = 0;
@@ -139,17 +140,17 @@ void G4HepRepSceneHandler::open() {
     typeTree->addType(geometryType);
 
     eventType = heprepFactory->createHepRepType(NULL, "Event");
-    eventType->addAttValue("Layer", (char*)"Event");
+    eventType->addAttValue("Layer", G4String("Event"));
     typeTree->addType(eventType);
 
     trackType = heprepFactory->createHepRepType(eventType, "Track");
-    trackType->addAttValue("Layer", (char*)"Track");
+    trackType->addAttValue("Layer", G4String("Track"));
 
     calHitType = heprepFactory->createHepRepType(eventType, "Calorimeter Hit");
-    calHitType->addAttValue("Layer", (char*)"CalHit");
+    calHitType->addAttValue("Layer", G4String("CalHit"));
 
     hitType = heprepFactory->createHepRepType(eventType, "Hit");
-    hitType->addAttValue("Layer", (char*)"Hit");
+    hitType->addAttValue("Layer", G4String("Hit"));
 
     HepRepInstanceTree* instanceTree = heprepFactory->createHepRepInstanceTree("G4Data", "1.0", typeTree);
     heprep->addInstanceTree(instanceTree);
@@ -219,7 +220,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyline& line) {
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, trackType);
 
-    instance->addAttValue("DrawAs", string("Line"));
+    instance->addAttValue("DrawAs", G4String("Line"));
     SetColour(instance, GetColour(line));
     for (size_t i=0; i < line.size(); i++) {
         G4Point3D vertex = transform * line[i];
@@ -238,9 +239,9 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polymarker& line) {
     HepRepFactory* factory = GetHepRepFactory();
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
-    instance->addAttValue("DrawAs", string("Point"));
+    instance->addAttValue("DrawAs", G4String("Point"));
 
-    instance->addAttValue("MarkName", string("Square"));
+    instance->addAttValue("MarkName", G4String("Square"));
     instance->addAttValue("MarkSize", 4);
 
     SetColour(instance, GetColour(line));
@@ -260,8 +261,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Circle& circle) {
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     SetColour (instance, GetColour(circle));
-    instance->addAttValue("DrawAs", string("Point"));
-    instance->addAttValue("MarkName", string("Dot"));
+    instance->addAttValue("DrawAs", G4String("Point"));
+    instance->addAttValue("MarkName", G4String("Dot"));
     instance->addAttValue("MarkSize", radius);
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());
@@ -295,7 +296,7 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Polyhedron& polyhedron) {
     G4bool notLastFace;
     do {
         HepRepInstance* face = CreateInstance(parent, calHitType);
-        face->addAttValue("DrawAs", string("Polygon"));
+        face->addAttValue("DrawAs", G4String("Polygon"));
         SetColour(face, GetColour(polyhedron));
 
         notLastFace = polyhedron.GetNextNormal (surfaceNormal);
@@ -336,8 +337,8 @@ void G4HepRepSceneHandler::AddPrimitive (const G4Square& square) {
     HepRepInstance* instance = CreateInstance(parent, hitType);
 
     SetColour (instance, GetColour(square));
-    instance->addAttValue("DrawAs", string("Point"));
-    instance->addAttValue("MarkName", string("Square"));
+    instance->addAttValue("DrawAs", G4String("Point"));
+    instance->addAttValue("MarkName", G4String("Square"));
     instance->addAttValue("MarkSize", size);
 
     HepRepPoint* point = factory->createHepRepPoint(instance, center.x(), center.y(), center.z());

@@ -24,7 +24,7 @@
 
 /**
  * @author Mark Donszelmann
- * @version $Id: G4HepRep.cc,v 1.7 2002-11-14 05:08:06 duns Exp $
+ * @version $Id: G4HepRep.cc,v 1.8 2002-11-14 18:36:40 duns Exp $
  */
 
 //G4

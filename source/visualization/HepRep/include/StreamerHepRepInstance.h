@@ -20,7 +20,7 @@
 /**
  *
  * @author M.Donszelmann
- * @version $Id: StreamerHepRepInstance.h,v 1.5 2002-11-14 05:07:40 duns Exp $
+ * @version $Id: StreamerHepRepInstance.h,v 1.6 2002-11-14 18:36:19 duns Exp $
  */
 class StreamerHepRepInstance : public StreamerHepRepAttribute, public virtual HEPREP::HepRepInstance {
 
