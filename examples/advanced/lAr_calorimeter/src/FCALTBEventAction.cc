@@ -23,7 +23,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: FCALTBEventAction.cc,v 1.4 2002-12-17 15:53:30 pmendez Exp $
+// $Id: FCALTBEventAction.cc,v 1.5 2003-02-14 15:55:20 pmendez Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,8 @@
 #ifdef G4ANALYSIS_USE
 
 #include "FCALTBEventAction.hh"
+
+#include "FCALTBEventActionMessenger.hh"
 
 #include "FCALRunAction.hh"
 
@@ -55,6 +57,8 @@
 #include "Randomize.hh"
 #include "FCALSteppingAction.hh"
 
+#include "FCALAnalysisManager.hh"
+
 #include "G4ios.hh"
 #include "iostream.h"
 #include "fstream.h"
@@ -64,14 +68,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA, FCALRunAction* RA)
-  :calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA), RunAction(RA)
-{;}  
+FCALTBEventAction::FCALTBEventAction(FCALSteppingAction* SA)
+  :calorimeterCollID(-1),drawFlag("all"),printModulo(10), StepAction(SA), eventMessenger(0)
+{
+  eventMessenger = new FCALTBEventActionMessenger(this);
+  runManager = new FCALRunAction();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALTBEventAction::~FCALTBEventAction()
-{;}
+{
+  delete eventMessenger;
+  eventMessenger = 0;
+  delete  runManager;
+  runManager = 0;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -123,15 +135,23 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
 
     G4double OutOfWorld2 = StepAction->GetOutOfWorldTracks(i,j);
 
-    RunAction->GetHisto(1)->fill(OutOfWorld);
+
+#ifdef G4ANALYSIS_USE
+
+    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
+    analysis->analyseEnergyDep(OutOfWorld);
+
+#endif
+
+    //    RunAction->GetHisto(1)->fill(OutOfWorld);
 
 
-    RunAction->GetTuple(1)->fill(0,OutOfWorld);
-    RunAction->GetTuple(1)->fill(1,i);
-    RunAction->GetTuple(1)->fill(2,j);
-
-    
-    RunAction->GetTuple(1)->addRow();
+//    RunAction->GetTuple(1)->fill(0,OutOfWorld);
+//    RunAction->GetTuple(1)->fill(1,i);
+//    RunAction->GetTuple(1)->fill(2,j);
+//
+//    
+//    RunAction->GetTuple(1)->addRow();
 
   } 
 
@@ -163,14 +183,19 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
     SecndTracks << G4endl;
     G4double Secondary2 = StepAction->GetSecondaries(i,j);
 
-    RunAction->GetHisto(2)->fill(Secondary);
+#ifdef G4ANALYSIS_USE
+    FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
+    analysis->analyseEnergyDep(Secondary);
+#endif
 
-    RunAction->GetTuple(2)->fill(0,Secondary);
-    RunAction->GetTuple(2)->fill(1,i);
-    RunAction->GetTuple(2)->fill(2,j);
-    
-    
-    RunAction->GetTuple(2)->addRow();
+//    RunAction->GetHisto(2)->fill(Secondary);
+//
+//    RunAction->GetTuple(2)->fill(0,Secondary);
+//    RunAction->GetTuple(2)->fill(1,i);
+//    RunAction->GetTuple(2)->fill(2,j);
+//    
+//    
+//    RunAction->GetTuple(2)->addRow();
     
 
   }
@@ -199,16 +224,23 @@ void FCALTBEventAction::EndOfEventAction(const G4Event* evt)
   EdepFCAL.close();
 
 
-  RunAction->GetHisto(3)->fill(EmEdep);
-  RunAction->GetHisto(4)->fill(HadEdep);
+#ifdef G4ANALYSIS_USE
+  FCALAnalysisManager* analysis = FCALAnalysisManager::getInstance();
+  analysis->analyseEnergyDep(EmEdep);
+  analysis->analyseEnergyDep(HadEdep);
 
+#endif
 
-  RunAction->GetTuple(3)->fill(0,EmEdep);
-  RunAction->GetTuple(3)->fill(1,HadEdep);
-  
-    
-    
-  RunAction->GetTuple(3)->addRow();
+//  RunAction->GetHisto(3)->fill(EmEdep);
+//  RunAction->GetHisto(4)->fill(HadEdep);
+//
+//
+//  RunAction->GetTuple(3)->fill(0,EmEdep);
+//  RunAction->GetTuple(3)->fill(1,HadEdep);
+//  
+//    
+//    
+//  RunAction->GetTuple(3)->addRow();
     
 
 

@@ -22,6 +22,10 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// Author: Patricia Mendez (patricia.mendez@cern.ch)
+
+
+
 #include "FCALTBEventActionMessenger.hh"
 
 #include "FCALTBEventAction.hh"
@@ -32,7 +36,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 FCALTBEventActionMessenger::FCALTBEventActionMessenger(FCALTBEventAction* EvAct)
-:fcaltbeventAction(EvAct)
+:eventAction(EvAct)
 { 
   DrawCmd = new G4UIcmdWithAString("/event/drawTracks",this);
   DrawCmd->SetGuidance("Draw the tracks in the event");
@@ -63,10 +67,10 @@ void FCALTBEventActionMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
   if(command == DrawCmd)
-    {fcaltbeventAction->SetDrawFlag(newValue);}
-    
+    {eventAction->SetDrawFlag(newValue);}
+  
   if(command == PrintCmd)
-    {fcaltbeventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}           
+    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}           
    
 }
 

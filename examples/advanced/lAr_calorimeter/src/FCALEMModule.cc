@@ -172,7 +172,7 @@ G4LogicalVolume * FCALEMModule::Construct()
    LogicalF1LArGap->SetVisAttributes(G4VisAttributes::Invisible);
    
 
-   // Sensitive Volumes
+    // Sensitive Volumes
    G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
    if(!FcalEmModuleSD)
