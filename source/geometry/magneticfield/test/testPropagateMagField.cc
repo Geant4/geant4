@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.8 2001-07-11 09:59:14 gunter Exp $
+// $Id: testPropagateMagField.cc,v 1.9 2001-11-09 19:28:56 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -340,8 +340,6 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int type)
        UnitMomentum = (G4ThreeVector(0.,0.6,0.8) 
 		    + (float)iparticle * G4ThreeVector(0.1, 0.2, 0.3)).unit();
 
-
-       // ->GetChordFinder().SetChargeAndMomentum(
        G4double momentum = (0.5+iparticle*10.0) * proton_mass_c2; 
 
        G4double kineticEnergy =  momentum*momentum /
