@@ -6,11 +6,11 @@
 using namespace std;
 
 IndentPrintWriter::IndentPrintWriter(ostream* out, int level)
-    : out(out), indentLevel(level) {
-
-    indentString = "  ";
-    indented = false;
-    closed = false;
+    : out(out), 
+      closed(false), 
+      indentLevel(level),
+      indented(false),
+      indentString("  ") {
 }
 
 IndentPrintWriter::~IndentPrintWriter() {
