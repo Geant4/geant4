@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.27 2004-05-28 12:45:01 hpw Exp $
+# $Id: GNUmakefile,v 1.28 2004-06-01 05:44:36 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -30,11 +30,12 @@ SUBLIBS += G4emutils
 SUBLIBS += G4xrays 
 SUBLIBS += G4emlowenergy
 
-SUBDIRS +=  hadronic/management 
+SUBDIRS += hadronic/management 
 SUBDIRS += hadronic/util
 SUBDIRS += hadronic/processes
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/stopping
+SUBDIRS += hadronic/models/abrasion
 SUBDIRS += hadronic/models/binary_cascade
 SUBDIRS += hadronic/models/cascade/evaporation
 SUBDIRS += hadronic/models/cascade/utils
@@ -70,6 +71,7 @@ SUBDIRS += hadronic/models/radioactive_decay
 SUBDIRS += hadronic/models/theo_high_energy
 SUBDIRS += hadronic/models/util
 
+SUBLIBS +=  G4hadronic_abrasion
 SUBLIBS +=  G4hadronic_xsect 
 SUBLIBS +=  G4hadronic_mgt
 SUBLIBS +=  G4hadronic_proc
