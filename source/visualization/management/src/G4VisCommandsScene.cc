@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsScene.cc,v 1.21 2001-08-05 19:02:22 johna Exp $
+// $Id: G4VisCommandsScene.cc,v 1.22 2001-08-09 20:09:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -79,8 +79,6 @@ void G4VVisCommandScene::UpdateVisManagerScene
     pScene = sceneList [iScene];
   }
   fpVisManager -> SetCurrentScene (pScene);
-
-  G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
 }
 
 ////////////// /vis/scene/create ///////////////////////////////////////
