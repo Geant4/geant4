@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManager.hh,v 1.2 1999-04-14 14:25:23 mora Exp $
+// $Id: G4FastSimulationManager.hh,v 1.3 1999-10-29 15:39:35 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,9 +52,16 @@ typedef G4LogicalVolume G4Envelope;
 //        G4FastSimulationManager class
 //
 //-------------------------------------------
+
+// Class Description:
+//  The G4VFastSimulationModel objects are attached to the envelope through a G4FastSimulationManager.
+//   This object will manage the list of models and will message them at tracking time.
+//
+
+
 class G4FastSimulationManager
 {
-public:
+public:  // with description
   //------------------------
   // Constructor/Destructor
   //------------------------
@@ -64,33 +71,58 @@ public:
   // the IsUnique flag should be set TRUE to avoid the
   // G4AffineTransform re-calculations each time we reach
   // the envelope.
+
   G4FastSimulationManager(G4Envelope *anEnvelope,
 			  G4bool IsUnique=FALSE);
+  // This is the only constructor. In this constructor you specify the envelope by giving the 
+  // G4LogicalVolume pointer. The G4FastSimulationManager object will bind itself to this envelope 
+  // and will notify this G4LogicalVolume to become an envelope. If you know that this volume is
+  // placed only once, you can turn the IsUnique boolean to "true" to allow some optimization. 
+  //
+  // Note that if you choose to use the G4VFastSimulationModel(const G4String&, G4LogicalVolume*, 
+  // G4bool) constructor for you model, the G4FastSimulationManager will be constructed using the 
+  // given G4LogicalVolume* and G4bool values of the model constructor.
+  //
+
+public:  // without description
   ~G4FastSimulationManager();
 
+
+public:  // with description
   // Methods to add/remove models to/from the Model 
   // List.
   //
   void AddFastSimulationModel(G4VFastSimulationModel*);
+  // Add a model to the Model List.
+
   void RemoveFastSimulationModel(G4VFastSimulationModel*);
+  // Remove a model from the Model List.
 
   // Methods to activate/inactivate models from the Model 
   // List.
 
   G4bool ActivateFastSimulationModel(const G4String&);
+  // Activate a model in the Model List.
+
   G4bool InActivateFastSimulationModel(const G4String&);
+  // Inactivate a model in the Model List.
 
   // Methods to add/remove GhostPlacements to/from the 
   // GhostPlacements List.
   //
   G4Transform3D* AddGhostPlacement(G4RotationMatrix*,
 				   const G4ThreeVector&);
-  
+  // Flag that the envelope is a ghost volume giving its global placement, where the rotation matrix
+  // and the translatation vector of 3D transformation describe the placement relative to the world 
+  // coordinates. 
+
   G4Transform3D* AddGhostPlacement(G4Transform3D*);
+  // The same but using a G4Transform3D.
   
   G4bool RemoveGhostPlacement(const G4Transform3D*);
-  
-  
+  // Removes a Ghost placement.
+
+public:  // without description  
   // Methods for print/control commands
   void ListTitle() const;
   void ListModels() const;

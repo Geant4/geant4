@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastSimulationManagerProcess.hh,v 1.3 1999-04-28 10:06:39 mora Exp $
+// $Id: G4FastSimulationManagerProcess.hh,v 1.4 1999-10-29 15:39:36 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,6 +48,13 @@
 //        G4FastSimulationManagerProcess class
 //
 //------------------------------------------
+
+
+// Class Description:
+// This is a G4VProcess. It provides the interface between the tracking and the parameterisation.
+// It has to be set in the process list of the particles you want to parameterise. 
+//
+
 class G4FastSimulationManagerProcess : public G4VProcess
 {
 public:

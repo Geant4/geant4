@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastStep.hh,v 1.3 1999-04-19 14:27:44 mora Exp $
+// $Id: G4FastStep.hh,v 1.4 1999-10-29 15:39:36 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,61 +56,64 @@ class G4DynamicParticle;
 //        G4FastStep class
 //
 //-------------------------------------------
+
+// Class Description:
+//  The final state of the particles after parameterisation has to be returned through a G4FastStep 
+//  reference. This final state is described has "requests" the tracking will apply after your 
+//  parameterisation has been invoked.
+//
+//  To facilitate the developers work, changes of position/normalized direction of the 
+//  momentum/polarization can be specified in the local coordinate system of the envelope or in the 
+//  global one.
+//
+//  The default is local system coordinates.
+//
+
 class G4FastStep: public G4VParticleChange
 {
-public:
-  //===================================================
-  //Fast Simulation Model Interface (section for users)
-  //===================================================
-  //
-  //                Particle management
-  //                -------------------
-  //
-  //   The methods here provide an implementation of the
-  // G4VParticleChange class for parameterisations.
-  // They have to be filled to describe the FINAL STATE
-  // of the particles.
-  //
-  //   To facilitate the developers work, changes of 
-  // position/normalized direction of the momentum/polarization 
-  // can be specified in the local coordinate system of the envelope 
-  // or in the global one.
-  //
-  //   The default is local system coordinates.
-
-
-  // -- The KillPrimaryTrack() set the kinetic energy of the
-  // -- primary to zero, and set the "fStopAndKill" signal
-  // -- used by the stepping.
+public: // with Description
   void KillPrimaryTrack();
+  // Set the kinetic energy of the primary to zero, and set the "fStopAndKill" signal
+  // used by the stepping.
 
   // -- Methods used to change the position, normalized direction of 
   // the momentum, time etc... of the primary.
   // .. space and time:
   void SetPrimaryTrackFinalPosition (const G4ThreeVector &, 
 				     G4bool localCoordinates = true);
+  // Set the primary position.
+
   void SetPrimaryTrackFinalTime (G4double);
+  // Set the primary final time.
+
   void SetPrimaryTrackFinalProperTime (G4double);
+  // Set the primary final Proper Time.
 
   // .. dynamics:
   // Be careful: the Track Final Momentum means the normalized direction 
   // of the momentum!
   void SetPrimaryTrackFinalMomentum (const G4ThreeVector &, 
 				     G4bool localCoordinates = true);
+  // Set the primary final momentum.
+
   void SetPrimaryTrackFinalKineticEnergy (G4double);
+  // Set the primary final kinetic energy.
+
   void SetPrimaryTrackFinalKineticEnergyAndDirection(G4double, 
 						     const G4ThreeVector &, 
 						     G4bool localCoordinates 
 						     = true);
+  // Set the primary final kinetic energy and direction.
+
   void SetPrimaryTrackFinalPolarization(const G4ThreeVector &, 
 					G4bool localCoordinates = true);
+  // Set the primary final polarization.
 
-  // .. true path length of the primary during the FastStep:
   void SetPrimaryTrackPathLength (G4double);
+  // Set the true path length of the primary during the step.
 
-  // Weight applied for event biasing mechanism:
   void SetPrimaryTrackFinalEventBiasingWeight (G4double);
-
+  // Set the weight applied for event biasing mechanism.
 
   // ------------------------------
   // -- Management of secondaries:
@@ -130,11 +133,13 @@ public:
   // -- Total Number of secondaries to be created,
   // -- (to be called first)
   void SetNumberOfSecondaryTracks(G4int);
+  // Set the total number of secondaries that will be created.
 
   // -- Number of secondaries effectively stored:
   // -- (incremented at each CreateSecondaryTrack()
   // -- call)
   G4int GetNumberOfSecondaryTracks();
+  // Returns the number of secondaries effectively stored.
 
   // -- Create a secondary: the arguments are:
   // --     * G4DynamicsParticle: see header file, many constructors exist
@@ -151,6 +156,19 @@ public:
 				G4ThreeVector,
 				G4double,
 				G4bool localCoordinates=true);
+  // Create a secondary. The arguments are:
+  // 
+  //   G4DynamicsParticle: see the G4DynamicsParticle reference, many constructors exist
+  //                       (allow to set particle type + energy + the normalized direction of 
+  //                       momentum...);
+  //   G4ThreeVector     : Polarization;
+  //   G4ThreeVector     : Position;
+  //   G4double          : Time;
+  //   G4bool            : says if Position/Momentum are given in the local envelope coordinate 
+  //                       system (true by default).
+  //
+  // Returned value: pointer to the track created.
+  //
   
   //-- Create a secondary: the difference with he above declaration
   //-- is that the Polarization is not given and is assumed already set
@@ -160,9 +178,15 @@ public:
 				G4ThreeVector,
 				G4double,
 				G4bool localCoordinates=true);
+  //  Create a secondary. The difference with he above declaration is that the Polarization is not 
+  //  given and is assumed already set in the G4DynamicParticle.
+  //
+  //  Returned value: pointer to the track created
+
   
-  // -- Gives a pointer on the i-th secondary track created:
+
   G4Track* GetSecondaryTrack(G4int);
+  // Returns a pointer on the i-th secondary track created.
 
   //------------------------------------------------
   //
@@ -176,35 +200,29 @@ public:
   //
   //------------------------------------------------
   void SetTotalEnergyDeposited(G4double anEnergyPart);
+  // Set the total energy deposited.
+  // It should be the delta energy of primary less the energy of the secondaries.
+
   G4double GetTotalEnergyDeposited() const;
+  // Returns the total energy deposited.
 
-  //----------------------------------------------------
-  //
-  //   Control of the stepping manager Hit invocation:
-  //   -----------------------------------------------
-  //
-  //     In a usual parameterisation, the control of
-  //   the hits production is under the user
-  //   responsability in his G4VFastSimulationModel
-  //   (he generally produces several hits at once.)
-  //
-  //     However, in the particular case the G4Fast-
-  //   Simulation user's model acts as the physics
-  //   replacement only (ie replaces all the ***DoIt()
-  //   and leads to the construction of a meaningful
-  //   G4Step), the user can delegate to the
-  //   G4SteppingManager the responsability to invoke
-  //   the Hit()method of the current sensitive if any.
-  //
-  //     By default, the G4SteppingManager is asked to
-  //   NOT invoke this Hit() method when parameterisation
-  //   is invoked. (See Initialize() method of G4FastStep)
-  //   
-  //----------------------------------------------------
   void ForceSteppingHitInvocation();
+  // Control of the stepping manager Hit invocation.
+  //
+  // In a usual parameterisation, the control of the hits production is under the user
+  // responsability in his G4VFastSimulationModel (he generally produces several hits at once.)
+  //
+  // However, in the particular case the G4FastSimulation user's model acts as the physics
+  // replacement only (ie replaces all the ***DoIt() and leads to the construction of a meaningful
+  // G4Step), the user can delegate to the G4SteppingManager the responsability to invoke
+  // the Hit()method of the current sensitive if any.
+  //
+  // By default, the G4SteppingManager is asked to NOT invoke this Hit() method when parameterisation
+  // is invoked.
+  //   
 
 
-
+public: // Without description
   //=======================================================
   // Implementation section and kernel interfaces.
   //=======================================================

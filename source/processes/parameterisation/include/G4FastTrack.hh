@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FastTrack.hh,v 1.2 1999-04-14 14:25:27 mora Exp $
+// $Id: G4FastTrack.hh,v 1.3 1999-10-29 15:39:37 mora Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -43,9 +43,19 @@ typedef G4LogicalVolume G4Envelope;
 //        G4FastTrack class
 //
 //-------------------------------------------
+
+// Class Description:
+//  The G4FastTrack provides you access to the current G4Track, gives simple access to envelope 
+//  related features (G4LogicalVolume, G4VSolid, G4AffineTransform references between the global 
+//  and the envelope local coordinates systems) and simple access to the position, momentum 
+//  expressed in the envelope coordinate system. Using those quantities and the G4VSolid methods, 
+//  you can for example easily check how far you are from the envelope boundary. 
+//
+
+
 class G4FastTrack
 {
-public:
+public: // without description
   //------------------------
   // Constructor/Destructor
   //------------------------
@@ -74,27 +84,49 @@ public:
   // Informations useful to the user :
   // General public get functions.
   //----------------------------------
+
+public: // with Description
+
   const G4Track* GetPrimaryTrack() const;
+  // Returns the current G4Track.
+
   G4Envelope* GetEnvelope() const;
+  // Returns the Envelope G4LogicalVolume pointer.
+
   G4VPhysicalVolume* GetEnvelopePhysicalVolume() const;
+  // Returns the Envelope G4VPhysicalVolume pointer.
+
   G4VSolid* GetEnvelopeSolid() const;
+  // Returns the Envelope G4VSolid pointer.
 
   //-----------------------------------
   // Primary track informations in the
   // Envelope coordinate system.
   //-----------------------------------
+
   G4ThreeVector GetPrimaryTrackLocalPosition() const;
+  // Returns the particle position in envelope coordinates.
+
   G4ThreeVector GetPrimaryTrackLocalMomentum() const;
+  // Returns the particle momentum in envelope coordinates.
+
   G4ThreeVector GetPrimaryTrackLocalDirection() const;
+  // Returns the particle direction in envelope coordinates.
+
   G4ThreeVector GetPrimaryTrackLocalPolarization() const;
+  // Returns the particle polarization in envelope coordinates.
   
   //------------------------------------
   // 3D transformation of the envelope:
   //------------------------------------
   // Global -> Local
+
   const G4AffineTransform* GetAffineTransformation() const;  
+  // Returns the envelope Global -> Local G4AffineTransform
+
   // Local -> Global
   const G4AffineTransform* GetInverseAffineTransformation() const; 
+  // Returns the envelope Local -> Global G4AffineTransform
 
   //-----------------
   // Private members
