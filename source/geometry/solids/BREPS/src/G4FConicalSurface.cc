@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.2 1999-01-14 16:08:39 broglia Exp $
+// $Id: G4FConicalSurface.cc,v 1.3 1999-01-15 14:29:00 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -425,44 +425,22 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
 {  
   //  return the Normal unit vector to the G4ConicalSurface at a point p 
   //  on (or nearly on) the G4ConicalSurface
-  G4Vector3D s    = p - origin;
-  G4double   smag = s.mag2();
+  G4Vector3D s  = p - origin;
+  G4double   da = s * Position.GetAxis();
+  G4double   r  = sqrt( s*s + da*da);
+  G4double   z  = tan_angle * r; 
+
+  if (Position.GetAxis().z() < 0)
+    z = -z; 
+
+  G4Vector3D n(p.x(), p.y(), z);
+  G4double   nmag = n.mag2(); 
   
-  //  if the point happens to be at the origin, calculate a unit vector Normal
-  //  to the axis, with zero z component
-  if ( smag == 0.0 )
-  {
-    G4double ax = Position.GetAxis().x();
-    G4double ay = Position.GetAxis().y();
-    G4double ap = sqrt( ax * ax  +  ay * ay );
-
-    if ( ap == 0.0 )
-      return G4Vector3D( 1.0, 0.0, 0.0 );
-    else
-      return G4Vector3D( ay / ap, -ax / ap, 0.0 );
-  }
-
-  //  otherwise do the calculation of the Normal to the conical surface
-  else 
-  {
-    G4double l = s * Position.GetAxis();
-
-    s = s*(1/smag);
-    G4Vector3D q    = origin  +  l * Position.GetAxis();
-    G4Vector3D v    = p - q;
-
-    G4double   sl   = v.mag2() * 
-      sin( atan2((large_radius - small_radius), length) );
-    
-    G4Vector3D n    = v - sl * s;
-
-    G4double   nmag = n.mag2(); 
-
-    if ( nmag != 0.0 )
-      n=n*(1/nmag);
-    
-    return n;
-  }
+  if ( nmag != 0.0 )
+    n=n*(1/nmag);
+  
+  return n;
+  
 }
 
 // Add by L. Broglia
