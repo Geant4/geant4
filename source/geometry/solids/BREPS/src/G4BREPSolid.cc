@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.20 2001-07-20 11:52:43 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.21 2002-10-28 11:30:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -1466,4 +1466,18 @@ G4Point3D G4BREPSolid::Scope() const
   scope.setZ(fabs(Max.z()) - fabs(Min.z()));	  
   
   return scope;
+}
+
+
+G4std::ostream& G4BREPSolid::StreamInfo(G4std::ostream& os) const
+{
+  os << "-----------------------------------------------------------\n"
+     << "    *** Dump for solid - " << GetName() << " ***\n"
+     << "    ===================================================\n"
+     << " Solid type: " << GetEntityType() << "\n"
+     << " Parameters: \n"
+     << "   Number of solids: " << NumberOfSolids << "\n"
+     << "-----------------------------------------------------------\n";
+
+  return os;
 }

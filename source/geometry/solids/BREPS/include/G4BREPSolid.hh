@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.9 2001-07-11 09:59:30 gunter Exp $
+// $Id: G4BREPSolid.hh,v 1.10 2002-10-28 11:30:57 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -54,10 +54,6 @@ public: // with description
   G4BREPSolid(const G4String&, G4Surface**, G4int);
   virtual ~G4BREPSolid();
     // Constructors & destructor
-
-  virtual G4String GetEntityType() const;
-    // Returns identifier for solid type entity.
-    // A generic BREP solid is considered a "Closed_Shell".
 
   virtual void Initialize();
     // Calculates the bounding box for solids and surfaces.
@@ -112,6 +108,13 @@ public: // with description
   G4Point3D Scope() const;
     // Utility function to determine the maximum scope of the solid
     // in the coordinates X, Y, Z. Returned as a G4Point3D.
+
+  virtual G4String GetEntityType() const;
+    // Returns identifier for solid type entity.
+    // A generic BREP solid is considered a "Closed_Shell".
+
+  virtual G4std::ostream& StreamInfo(G4std::ostream& os) const;
+    // Streams solid contents to output stream.
 
   void DescribeYourselfTo (G4VGraphicsScene& scene) const;
     // Dispatch function which identifies the solid to the graphics scene.
