@@ -14,8 +14,9 @@
 //
 //      File name:     G4TransitionManager.hh
 //
-//      Author:        Alfonso Mantero (alf@mailandnews.com)
-// 
+//      Authors:        Alfonso Mantero (alfonso.mantero@ge.infn.it)
+//                      Elena Guardincerri (elena.guardincerri@ge.infn.it) 
+//
 //      Creation date: 1 May 2001
 //
 // -------------------------------------------------------------------
