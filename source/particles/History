@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2000-05-22 02:20:59 kurasige Exp $
+$Id: History,v 1.42 2000-05-29 01:34:53 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,8 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
--  May 22, 00 H.Kurashige (particles-V01-01-01a)
------- partman-V01-01-00a
+-  May 29, 00 H.Kurashige (particles-V01-01-01b)
+------ partman-V01-01-00b
 - Fixed problem using pow in G4VDecayChannel::GetAngularMomentum()
 
 
