@@ -68,49 +68,49 @@ G4DEBUG="$g4debug"
 #
 # g4analysis
 #
-if [ X$g4analysis_build = Xy ] ; then
+if [ X$g4wanalysis_build = Xy ] ; then
 G4ANALYSIS_BUILD=1
 else
 G4ANALYSIS_BUILD=""
 fi 
 
-if [ X$g4analysis_build_lab = Xy ] ; then
+if [ X$g4wanalysis_build_lab = Xy ] ; then
 G4ANALYSIS_BUILD_LAB=1
 else
 G4ANALYSIS_BUILD_LAB=""
 fi 
 
-if [ X$g4analysis_build_jas = Xy ] ; then
+if [ X$g4wanalysis_build_jas = Xy ] ; then
 G4ANALYSIS_BUILD_JAS=1
 else
 G4ANALYSIS_BUILD_JAS=""
 fi 
 
-if [ X$g4analysis_build_lizard = Xy ] ; then
+if [ X$g4wanalysis_build_lizard = Xy ] ; then
 G4ANALYSIS_BUILD_LIZARD=1
 else
 G4ANALYSIS_BUILD_LIZARD=""
 fi 
 
-if [ X$g4analysis_use = Xy ] ; then
+if [ X$g4wanalysis_use = Xy ] ; then
 G4ANALYSIS_USE=1
 else
 G4ANALYSIS_USE=""
 fi 
 
-if [ X$g4analysis_use_lab = Xy ] ; then
+if [ X$g4wanalysis_use_lab = Xy ] ; then
 G4ANALYSIS_USE_LAB=1
 else
 G4ANALYSIS_USE_LAB=""
 fi 
 
-if [ X$g4analysis_use_jas = Xy ] ; then
+if [ X$g4wanalysis_use_jas = Xy ] ; then
 G4ANALYSIS_USE_JAS=1
 else
 G4ANALYSIS_USE_JAS=""
 fi 
 
-if [ X$g4analysis_use_lizard = Xy ] ; then
+if [ X$g4wanalysis_use_lizard = Xy ] ; then
 G4ANALYSIS_USE_LIZARD=1
 else
 G4ANALYSIS_USE_LIZARD=""
@@ -437,10 +437,10 @@ echo "On this machine the G4BIN=\$G4BIN"
 echo "On this machine the G4DATA=\$G4DATA"
 echo "On this machine the G4LEVELGAMMADATA=\$G4LEVELGAMMADATA"
 
-echo "On this machine the CLHEP_BASE_DIR=\$G4CLHEP_BASE_DIR"
-echo "On this machine the CLHEP_INCLUDE_DIR=\$G4CLHEP_INCLUDE_DIR"
-echo "On this machine the CLHEP_LIB_DIR=\$G4CLHEP_LIB_DIR"
-echo "On this machine the CLHEP_LIB=\$G4CLHEP_LIB"
+echo "On this machine the CLHEP_BASE_DIR=\$CLHEP_BASE_DIR"
+echo "On this machine the CLHEP_INCLUDE_DIR=\$CLHEP_INCLUDE_DIR"
+echo "On this machine the CLHEP_LIB_DIR=\$CLHEP_LIB_DIR"
+echo "On this machine the CLHEP_LIB=\$CLHEP_LIB"
 
 echo "On this machine the G4USE_OSPACE=\$G4USE_OSPACE"
 echo "On this machine the G4OSPACE_BASE_DIR=\$G4OSPACE_BASE_DIR"
