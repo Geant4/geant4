@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.3 2001-10-18 10:07:50 gcosmo Exp $
+// $Id: G4ReflectedSolid.cc,v 1.4 2002-02-15 15:06:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -154,6 +154,38 @@ G4AffineTransform  G4ReflectedSolid::GetDirectTransform() const
 void G4ReflectedSolid::SetDirectTransform(G4AffineTransform& transform) 
 {
    fDirectTransform = &transform ;
+}
+
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+
+G4Transform3D  G4ReflectedSolid::GetTransform3D() const
+{
+   G4Transform3D aTransform = *fPtrTransform3D;
+   return aTransform;
+}
+
+void G4ReflectedSolid::SetTransform3D(G4Transform3D& transform) 
+{
+   fPtrTransform3D = &transform ;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+
+G4Transform3D  G4ReflectedSolid::GetDirectTransform3D() const
+{
+   G4Transform3D aTransform= *fDirectTransform3D;
+   return aTransform;
+}
+
+void G4ReflectedSolid::SetDirectTransform3D(G4Transform3D& transform) 
+{
+   fDirectTransform3D = &transform ;
 }
 
 /////////////////////////////////////////////////////////////////////////////

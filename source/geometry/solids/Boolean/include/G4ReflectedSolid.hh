@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.2 2001-10-18 10:07:49 gcosmo Exp $
+// $Id: G4ReflectedSolid.hh,v 1.3 2002-02-15 15:06:25 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,6 +35,7 @@
 // History:
 //
 // 23.07.01 V.Grichine, creation according John/Gabriele recommendations
+// 15.02.02 V.Grichine, get/set methods for fPtr(Direct)Transform3D
 
 #ifndef G4ReflectedSolid_HH
 #define G4ReflectedSolid_HH
@@ -102,6 +103,11 @@ class G4ReflectedSolid : public G4VSolid
     void       SetTransform(G4AffineTransform&);
     G4AffineTransform        GetDirectTransform() const; 
     void       SetDirectTransform(G4AffineTransform&);
+
+    G4Transform3D        GetTransform3D() const; 
+    void       SetTransform3D(G4Transform3D&);
+    G4Transform3D        GetDirectTransform3D() const; 
+    void       SetDirectTransform3D(G4Transform3D&);
       // Accessors methods.
 
     G4RotationMatrix         GetFrameRotation() const;
@@ -141,3 +147,11 @@ class G4ReflectedSolid : public G4VSolid
 } ;
 
 #endif
+
+
+
+
+
+
+
+
