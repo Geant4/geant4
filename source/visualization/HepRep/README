@@ -26,19 +26,19 @@ Joseph Perl
 9 November 2001
 
 
-Driver: HepRep
---------------
+Driver: HepRepXML
+-----------------
 The version of HepRep produced by this driver is HepRep Version 2.
 
-To set the filename:
-/vis/scene/create filename
+To set the base part of the filename (filename = basefilename-seqno.heprep):
+/vis/scene/create basefilename
 
 To select the driver
-/vis/open HepRep
+/vis/open HepRepXML
 
 Any call to draw part of an event will open the file and start writing.
 
-File is closed by:
+Each file is closed by:
 /vis/viewer/flush
 
 Multiple events can be written by:
@@ -51,5 +51,5 @@ or in future
 
 http://wired.freehep.org
 
-12 Nov 2002
+27 Nov 2002
 Mark Donszelmann
