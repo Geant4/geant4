@@ -42,6 +42,7 @@
 #include "G4ios.hh"
 #include "globals.hh"
 #include "G4VDiscreteProcess.hh"
+#include "G4HadFinalState.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -54,7 +55,7 @@ class G4VParticleChange;
 
 class Test30HadronProduction : public G4VDiscreteProcess
 {
-  public:     
+  public:
 
      Test30HadronProduction(const G4String& processName = "HadronProduction" );
 
@@ -89,6 +90,7 @@ class Test30HadronProduction : public G4VDiscreteProcess
 
      Test30VSecondaryGenerator* theGenerator;
      G4VParticleChange          theChange;
+
 };
 
 

@@ -58,7 +58,7 @@ Test30VSecondaryGenerator::Test30VSecondaryGenerator(G4HadronicInteraction* hadi
   mass = targetNucleus.AtomicMass((G4double)N, (G4double)Z);
   G4cout << "Mass from targetNucleus(MeV)= " << mass/MeV << G4endl;
   mass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, N);
-  G4cout << "Mass from IonTable(MeV)=      " << mass/MeV << G4endl;	
+  G4cout << "Mass from IonTable(MeV)=      " << mass/MeV << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -68,15 +68,18 @@ Test30VSecondaryGenerator::~Test30VSecondaryGenerator()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4VParticleChange* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
+G4HadFinalState* Test30VSecondaryGenerator::Secondaries(const G4Track& track)
 {
- if (hInteraction) {
-  
-   return hInteraction->ApplyYourself(track, targetNucleus);
+  G4HadProjectile thePro(track);
+  if (hInteraction) {
+
+    G4HadFinalState *result = hInteraction->ApplyYourself(thePro, targetNucleus);
+    result->SetTrafoToLab(thePro.GetTrafoToLab());
+    return result;
+//   return hInteraction->ApplyYourself(track, targetNucleus);
 
  } else {
-   theParticleChange.Initialize(track);
-   return &theParticleChange;
+    return 0;
  }
 
 }

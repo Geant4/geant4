@@ -442,16 +442,16 @@ int main(int argc, char** argv)
     G4double logmax = binlog*nbinlog;
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
-		
+
     if(usepaw) {
 
       // Creating a histogram factory, whose histograms will be handled by the tree
       std::auto_ptr< AIDA::IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
 
       // Creating an 1-dimensional histogram in the root directory of the tree
-  
+
       // ---- Book a histogram and ntuples
-      G4cout << "Hbook file name: <" << hFile << ">" << G4endl;      
+      G4cout << "Hbook file name: <" << hFile << ">" << G4endl;
       G4cout << "energy = " << energy/MeV << " MeV" << G4endl;
       G4cout << "emax   = " << emax/MeV << " MeV" << G4endl;
       G4cout << "pmax   = " << pmax/MeV << " MeV" << G4endl;
@@ -478,7 +478,7 @@ int main(int argc, char** argv)
       h[18]=hf->createHistogram1D("19","E (MeV) for pi0",100,0.,energy);
       h[19]=hf->createHistogram1D("20","Pz (MeV) for pi0",100,-pmax,pmax);
       h[20]=hf->createHistogram1D("21","Pt (MeV) for pi0",100,0.,pmax);
-      
+
       h[21]=hf->createHistogram1D("22","E(MeV) protons",nbinse,0.,emax);
       h[22]=hf->createHistogram1D("23","E(MeV) neutrons",nbinse,0.,emax);
 
@@ -551,9 +551,9 @@ int main(int argc, char** argv)
 
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
-    }		
-    // Create a DynamicParticle  
-  
+    }
+    // Create a DynamicParticle
+
     G4DynamicParticle dParticle(part,aDirection,energy);
     G4VCrossSectionDataSet* cs = 0;
     G4double cross_sec = 0.0;
@@ -578,12 +578,12 @@ int main(int argc, char** argv)
     G4double factora= cross_sec*MeV*1000.0*(G4double)nbinsa/(twopi*2.0*barn*(G4double)nevt);
     G4double factorb= cross_sec*1000.0/(barn*(G4double)nevt);
     G4cout << "### factor  = " << factor
-           << "### factora = " << factor 
+           << "### factora = " << factor
            << "    cross(b)= " << cross_sec/barn << G4endl;
-  
+
     if(nangl > 0) {
       for(G4int k=0; k<nangl; k++) {
-   
+
         if(nangl == 1) {
           bng1[0] = std::max(0.0,ang[0] - dangl);
           bng2[0] = std::min(180., ang[0] + dangl);
@@ -606,7 +606,7 @@ int main(int argc, char** argv)
 
     if(nanglpi > 0) {
       for(G4int k=0; k<nanglpi; k++) {
-   
+
         if(nangl == 1) {
           bngpi1[0] = std::max(0.0,angpi[0] - dangl);
           bngpi2[0] = std::min(180., angpi[0] + dangl);
@@ -629,11 +629,11 @@ int main(int argc, char** argv)
 
     G4Track* gTrack;
     gTrack = new G4Track(&dParticle,aTime,aPosition);
- 
-    // Step 
+
+    // Step
 
     G4Step* step;
-    step = new G4Step();  
+    step = new G4Step();
     step->SetTrack(gTrack);
 
     G4StepPoint *aPoint, *bPoint;
@@ -667,7 +667,7 @@ int main(int argc, char** argv)
     G4LorentzVector labv, fm;
     G4double e, p, m, px, py, pz, pt, theta;
     G4VParticleChange* aChange = 0;
-			
+
     for (G4int iter=0; iter<nevt; iter++) {
 
       if(verbose>1) {
@@ -681,8 +681,8 @@ int main(int argc, char** argv)
 
       dParticle.SetKineticEnergy(e0);
 
-      gTrack->SetStep(step); 
-      gTrack->SetKineticEnergy(energy); 
+      gTrack->SetStep(step);
+      gTrack->SetKineticEnergy(energy);
 
       labv = G4LorentzVector(0.0, 0.0, pmax, energy + mass + amass);
       aChange = proc->PostStepDoIt(*gTrack,*step);
@@ -690,18 +690,18 @@ int main(int argc, char** argv)
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
       G4int nn= n;
-			
+
       if(iter == 1000*(iter/1000)) {
         G4cerr << "##### " << iter << "-th event  #####" << G4endl;
-      }	
+      }
 
       G4int nbar = 0;
- 
+
       for(G4int j=0; j<n+1; j++) {
 
 	if(j<n) {
 	   sec = aChange->GetSecondary(j)->GetDynamicParticle();
-	   pd  = sec->GetDefinition();					
+	   pd  = sec->GetDefinition();
            if(pd->GetPDGMass() > 100.*MeV) nbar++;
 
 	} else {
@@ -709,7 +709,7 @@ int main(int argc, char** argv)
            nn++;
 	}
       }
-		 					
+
       for(G4int i=0; i<nn; i++) {
 
 	if(i<n) {
@@ -722,7 +722,7 @@ int main(int argc, char** argv)
 	   pd = part;
 	   G4ParticleChange* bChange = dynamic_cast<G4ParticleChange*>(aChange);
 	   mom = *(bChange->GetMomentumDirectionChange());
-	   e   = bChange->GetEnergyChange();	
+	   e   = bChange->GetEnergyChange();
 	}
 	if (e < 0.0) {
            e = 0.0;
@@ -858,9 +858,9 @@ int main(int argc, char** argv)
       }
 
 
-      px = labv.px();	
+      px = labv.px();
       py = labv.py();
-      pz = labv.pz();							
+      pz = labv.pz();
       p  = sqrt(px*px +py*py + pz*pz);
       pt = sqrt(px*px +py*py);
 
@@ -869,9 +869,9 @@ int main(int argc, char** argv)
 	h[15]->fill(labv.e()/MeV, 1.0);
 	h[16]->fill(pz/GeV, 1.0);
 	h[17]->fill(pt/GeV, 1.0);
-      }	
+      }
       aChange->Clear();
-	
+
     }
 
     timer->Stop();

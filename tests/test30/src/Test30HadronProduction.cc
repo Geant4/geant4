@@ -50,7 +50,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Test30HadronProduction::Test30HadronProduction(const G4String& aName)  
+Test30HadronProduction::Test30HadronProduction(const G4String& aName)
  :G4VDiscreteProcess(aName),
   theGenerator(0)
 {
@@ -97,27 +97,31 @@ G4VParticleChange* Test30HadronProduction::PostStepDoIt(
                     const G4Track& track,
                     const G4Step&)
 {
-  pParticleChange = theGenerator->Secondaries(track);
+  G4HadFinalState* result = theGenerator->Secondaries(track);
   ClearNumberOfInteractionLengthLeft();
 
-  if(pParticleChange->GetStatusChange() != fStopAndKill) {
+  theChange.Initialize(track);
 
-    theChange.Initialize(track);
-    G4int ns = pParticleChange->GetNumberOfSecondaries();
-    ns++;
-    theChange.SetNumberOfSecondaries(ns);
-    for(G4int i=0; i<ns-1; i++) {
-      theChange.AddSecondary(pParticleChange->GetSecondary(i));
-    }
-    G4ParticleChange* pc = dynamic_cast<G4ParticleChange*>(pParticleChange);
-    G4Track* tr = new G4Track(track);
-    tr->SetKineticEnergy(pc->GetEnergyChange());
-    tr->SetMomentumDirection(*(pc->GetMomentumDirectionChange()));
-    theChange.AddSecondary(tr);
-    theChange.SetStatusChange(fStopAndKill);
-    pParticleChange->Clear();
-    pParticleChange = &theChange;     
+  G4int ns = result->GetNumberOfSecondaries();
+  if(result->GetStatusChange() == isAlive) ns++;
+  theChange.SetNumberOfSecondaries(ns);
+
+  for(G4int i=0; i<ns-1; i++) {
+    G4Track tr(result->GetSecondary(i)->GetParticle(),
+               track.GetGlobalTime(),
+	       track.GetPosition());
+    theChange.AddSecondary(&tr);
   }
+
+  if(result->GetStatusChange() == isAlive) {
+    G4DynamicParticle dp(*(track.GetDynamicParticle()));
+    G4Track tr(&dp,track.GetGlobalTime(),track.GetPosition());
+    tr.SetKineticEnergy(result->GetEnergyChange());
+    tr.SetMomentumDirection(result->GetMomentumChange());
+    theChange.AddSecondary(&tr);
+    theChange.SetStatusChange(fStopAndKill);
+  }
+  delete result;
 
   return pParticleChange;
 }

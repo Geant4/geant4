@@ -78,12 +78,12 @@
 #include "G4LEPionPlusInelastic.hh"
 #include "G4LEPionMinusInelastic.hh"
 #include "G4LEProtonInelastic.hh"
-#include "G4PionMinusNuclearReaction.hh"
-#include "G4StringChipsInterface.hh"
+//#include "G4PionMinusNuclearReaction.hh"
+//#include "G4StringChipsInterface.hh"
 #include "G4PreCompoundModel.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4BinaryCascade.hh"
-#include "G4CascadeInterface.hh"
+//#include "G4CascadeInterface.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -102,7 +102,7 @@ Test30Physics::~Test30Physics()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Test30Physics::Initialise()
-{ 
+{
   G4Electron::ElectronDefinition();
   G4Positron::PositronDefinition();
   G4MuonPlus::MuonPlusDefinition();
@@ -173,10 +173,12 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
   else if(part_name == "pi+") man = new G4ProcessManager(G4PionPlus::PionPlus());
   else if(part_name == "pi-") man = new G4ProcessManager(G4PionMinus::PionMinus());
   else if(part_name == "neutron") man = new G4ProcessManager(G4Neutron::Neutron());
-	  
-  if(!man) return 0; 
-	
-  theProcess = new Test30HadronProduction();	
+  else if(part_name == "deuteron") man = new G4ProcessManager(G4Deuteron::Deuteron());
+  else if(part_name == "alpha") man = new G4ProcessManager(G4Alpha::Alpha());
+
+  if(!man) return 0;
+
+  theProcess = new Test30HadronProduction();
   G4cout <<  "Process is created; gen= " << gen_name << G4endl;
 
   // Physics list for the given run
@@ -191,7 +193,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     else if(part_name == "neutron") sg = new Test30VSecondaryGenerator(new G4LENeutronInelastic(),mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-
+/*
   } else if(gen_name == "CHIPS") {
 
     sg = new Test30VSecondaryGenerator(new G4PionMinusNuclearReaction(),mat);
@@ -206,7 +208,7 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     //G4cout <<  "Generator is set" << G4endl;
     man->AddDiscreteProcess(theProcess);
 
-
+*/
   } else if(gen_name == "preCompound") {
     theDeExcitation = new G4ExcitationHandler();
     G4PreCompoundModel* pcm = new G4PreCompoundModel(theDeExcitation);
@@ -232,20 +234,20 @@ G4VProcess* Test30Physics::GetProcess(const G4String& gen_name,
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
     hkm->SetDeExcitation(0);
-
+/*
   } else if(gen_name == "bertini") {
     G4CascadeInterface* hkm = new G4CascadeInterface();
     sg = new Test30VSecondaryGenerator(hkm, mat);
     theProcess->SetSecondaryGenerator(sg);
     man->AddDiscreteProcess(theProcess);
-
+*/
   } else {
     G4cout << gen_name
            << " generator is unkown - no hadron production" << G4endl;
   }
-  
-  G4cout <<  "Secondary generator <" 
-         << gen_name << "> is initialized" 
+
+  G4cout <<  "Secondary generator <"
+         << gen_name << "> is initialized"
          << G4endl;
   return theProcess;
 
