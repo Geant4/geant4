@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIcommand.cc,v 1.6 2001-02-08 06:07:19 asaim Exp $
+// $Id: G4UIcommand.cc,v 1.7 2001-03-08 17:00:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -244,16 +244,16 @@ G4String G4UIcommand::UnitsList(G4String unitCategory)
   G4String retStr;
   G4UnitsTable& UTbl = G4UnitDefinition::GetUnitsTable();
   G4int i;
-  for(i=0;i<UTbl.entries();i++)
+  for(i=0;i<UTbl.size();i++)
   { if(UTbl[i]->GetName()==unitCategory) break; }
-  if(i==UTbl.entries())
+  if(i==UTbl.size())
   { 
     G4cerr << "Unit category <" << unitCategory << "> is not defined." << G4endl;
     return retStr;
   }
   G4UnitsContainer& UCnt = UTbl[i]->GetUnitsList();
   retStr = UCnt[0]->GetSymbol();
-  G4int je = UCnt.entries();
+  G4int je = UCnt.size();
   for(int j=1;j<je;j++)
   {
     retStr += " ";
