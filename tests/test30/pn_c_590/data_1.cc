@@ -68,17 +68,25 @@ int main(int argc, char** argv)
     exit(1);
   }
 
-  /*
   ofstream* fout_a = new ofstream();
   string fname1 = "dsde_1.dat";
   fout_a->open(fname1.c_str(), std::ios::out|std::ios::trunc);
   ofstream* fout_b = new ofstream();
   string fname2 = "dsdtet_1.dat";
   fout_b->open(fname2.c_str(), std::ios::out|std::ios::trunc);
-  */
   ofstream* fout_c = new ofstream();
   string fname3 = "dsdedtet_1.dat";
   fout_c->open(fname3.c_str(), std::ios::out|std::ios::trunc);
+
+  ofstream* fout_a1 = new ofstream();
+  string fname4 = "dsde_1.out";
+  fout_a1->open(fname4.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_b1 = new ofstream();
+  string fname5 = "dsdtet_1.out";
+  fout_b1->open(fname5.c_str(), std::ios::out|std::ios::trunc);
+  ofstream* fout_c1 = new ofstream();
+  string fname6 = "dsdedtet_1.out";
+  fout_c1->open(fname6.c_str(), std::ios::out|std::ios::trunc);
 
   //there can't be lines longer than nmax characters
   const int nmax = 200;
@@ -86,11 +94,14 @@ int main(int argc, char** argv)
   std::string line1, line2, word1, word2, word3;
   G4bool end = true;
 
-
+  G4DataVector* energy = new G4DataVector();
+  int nbin = 0;
+  int n = 0;
+  int counter = 0;
+  double elim0= 2.0*MeV;
+  double x, an, e1, e2, e3, e4, y1, y2, ct1, ct2, xs;
   G4DataVector* angle = new G4DataVector();
   std::vector<G4DataVector*> cs;
-  G4int counter = 0;
-  G4double an;
 
   // main loop 
 
@@ -111,50 +122,143 @@ int main(int argc, char** argv)
     // analize line contence
 
     // end of file
-    if(fin->eof()) {
-      end = false;
-    } else if(line[0] == 'E' && line[1] == 'N' && line[2] == 'D') {
+    if(line[0] == 'E' && line[1] == 'N' && line[2] == 'D') {
       end = false;
     } else if(line[0] == 'A' && line[1] == 'D' && line[2] == 'E') {
 
-      G4DataVector* energy = new G4DataVector();
-      G4DataVector* cross = new G4DataVector();
+      G4DataVector* cross = 0;
+   
       (*fin) >> an;
-      counter++;
       an *= degree;
-      angle->push_back(an);
-      (*fout_c) << "#####..New data..##### Theta(deg)= " << an/degree << G4endl;
-      G4int nbin, i;
-      std::string mystr;
-      G4double e0, e1, e2, es1, es2, x, xs;
-      (*fin) >> mystr >> i >> nbin;
-      (*fin) >> mystr >> mystr >> mystr >> mystr >> mystr >> mystr;
-      (*fin) >> mystr >> mystr >> mystr >> mystr >> mystr >> mystr;
+      
+      (*fin) >> n;
+      if(an < 40.*degree) nbin = n;
 
-      for (i=0; i<nbin; i++) {
-        (*fin) >> e1 >> e2 >> es1 >> es2 >> x >> xs;
-        x *= 1000.0;      
-        xs *= 1000.0;      
+      angle->push_back(an);
+      cross = new G4DataVector();
+      cs.push_back(cross);
+
+      if(0 < verbose) {
+        (*fout_c) << "#####..Result.of.parcing..####### n= " << nbin 
+                  << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                  << G4endl;
+        (*fout_c1) << "#####..Result.of.parcing..####### n= " << nbin 
+                   << " Angle(degree)= " << (*angle)[angle->size()-1]/degree
+                   << G4endl;
+      }
+
+      for(int i=0; i<n; i++) {
+
+        (*fin) >> e1 >> e2 >> e3 >> e4 >> x >> xs;
+        x *= 1000.0;     
+        e1 = 0.5*(e1 + e2); 
+        if(an < 40.*degree) energy->push_back(e1);
+
         if(1 < verbose) {
           cout << "an= " << an/degree << " e1= " << e1 
                << " e2= " << e2 << " cross= " << x
-               << " +- " << xs  
+               << " +- " << xs << " %" 
                << endl;
         }  
-
-        e0 = 0.5*(e1 + e2);
-        energy->push_back(e0);
+    
         cross->push_back(x);
-        (*fout_c) << "e(MeV)= " << e0/MeV 
-                  << " cross(mb/sr)= " << x 
-                  << " +- " << xs 
-                  << endl;
 
-      } 
+        (*fout_c) << "e(MeV)= " << (*energy)[i]  
+                  << " cross(mb/MeV/sr)= " << (*cross)[i] << endl;
+        (*fout_c1) << (*cross)[i] << " ";
+      }
+      for(int j=n; j<nbin; j++) {
+         cross->push_back(0.0);
+         (*fout_c1) << (*cross)[j] << " ";
+      }
+
+      (*fout_c1) << " " << endl;
+
     }
   } while (end);
-  //  (*fout_a) << "#####..End..#####" << G4endl;
-  //  (*fout_b) << "#####..End..#####" << G4endl;
+
+     
+  angle->push_back(pi);
+  int na = angle->size();
+  G4DataVector* f1;
+  G4DataVector* f2;
+  
+  
+  (*fout_a) << "#####..Result.of.integration..#####.."
+            << G4endl;
+  (*fout_b) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
+            << elim0/MeV
+            << G4endl;
+  (*fout_a1) << "#####..Result.of.integration..Energy points"
+             << G4endl;
+  (*fout_b1) << "#####..Result.of.integration..#####.. Elim(MeV)= " 
+             << elim0/MeV
+             << G4endl;
+
+  for(int ii=0; ii<nbin; ii++) {
+    (*fout_a1) << (*energy)[ii] << " ";
+  }
+  (*fout_a1) << G4endl;
+  (*fout_a1) << "#####..Result.of.integration" << G4endl;
+
+  for(int i=0; i<nbin; i++) {
+        
+    x = 0.0;
+    for(int j=0; j<na-1; j++) {
+
+      f1  = cs[j];  
+      y1  = (*f1)[i];  
+      ct1 = cos((*angle)[j]);
+      ct2 = cos((*angle)[j+1]);
+
+      if(j == 0) {
+        f2  = cs[j+1]; 
+        y2  = (*f2)[i]; 
+        ct1 = 1.0;
+      } else if (j == na-2) {
+        f2  = cs[j-1]; 
+        y2  = (*f2)[i]; 
+        ct2 = cos((*angle)[j-1]);
+        y2 -= (y2 - y1)*(ct2 + 1.0)/(ct2 - ct1);
+        ct2 = -1.0;
+        if(y2 < 0.0) y2 = 0.0;
+      } else {
+        f2  = cs[j+1]; 
+        y2  = (*f2)[i]; 
+      }
+      x  += 0.5*(y1 + y2)*(ct1 - ct2);  
+    }        
+    x *= twopi;
+    (*fout_a) << "e(MeV)= " << (*energy)[i] 
+              << " cross(mb/MeV)= " << x << endl;
+    (*fout_a1) << x << " ";
+  }
+
+  (*fout_a1) << G4endl;
+
+  for(int j=0; j<na-1; j++) {
+    f1  = cs[j];  
+    an  = cos((*angle)[j]);
+    x   = 0.0;
+    for(i=0; i<nbin-1; i++) {
+      y1  = (*f1)[i];
+      e1  = (*energy)[i];
+      e2  = (*energy)[i+1];
+      if(e2 < elim0) {
+        y1 = 0.0;
+      } else if (e1 < elim0) {
+        y1 *= (e2 - elim0)/(e2 - e1);
+      }
+      x += y1*(e2 - e1);
+    }
+    (*fout_b) << "cos(theta)= " << an 
+              << " cross(mb/sr)= " << x << endl;
+    (*fout_b1) << x << " ";
+  }
+  (*fout_b1) << G4endl ;
+
+  (*fout_a) << "#####..End..#####" << G4endl;
+  (*fout_b) << "#####..End..#####" << G4endl;
   (*fout_c) << "#####..End..#####" << G4endl;
 }
 

@@ -19,7 +19,7 @@ C
 #elim(MeV)
 2.
 #emaxpi(MeV)
-250.
+300.
 #emax(MeV)
 600.
 #nbinse
@@ -27,7 +27,7 @@ C
 #nbinsd
 60
 #nbinspi
-25
+30
 #nangle
 5
 #angles

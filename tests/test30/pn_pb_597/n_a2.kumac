@@ -11,52 +11,53 @@ set NDVY 010205
  zone
  opt logy
  
- null 0 590 0.001 1000
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ null 0 500 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 90 deg'
  
  
 * hi/file 1 prec.paw
 * set dmod 3
 * hi/pl 30 shist
-* line 380 1.6 410 1.6
-* itx 415 35 'PREC'
+* line 100 1.6 110 1.6
+* itx 115 35 'PREC'
 * close 1
  
  
  hi/file 1 kin.paw
  set dmod 1
  hi/pl 30 shist
- line 380 1.2 410 1.2
- itx 415 15 'KIN'
+ line 100 1.2 110 1.2
+ itx 115 15 'KIN'
  close 1
  
- ve/create X1(25) R 1.5 2.5 3.5 4.5 5.5 6.5 7.5 8.5 10.5 12.5 14.5 16.5 19.5 30 50 70 90 110 130 170 190 230 270 310 370 
  
- ve/create Y1(25) R 228.45 206.5 136.9 92.67 61.2 47.94 37.99 24.55 13.41 11.25 6.73 4.69 4.11 2.84 1.89 1.36 0.967 0.653 0.408 0.275 0.185 0.117 0.07 0.025 0.0089
- gr/h/symb X1 Y1 25 25 0.2
- 
+ ve/create X1(39) R 0.8195 0.978 1.1505 1.3535 1.5925 1.874 2.2045 2.5935 3.0515 3.59 4.2235 4.9695 5.847 6.8785 8.0925 9.521 11.2005 13.176 15.501 18.237 21.4555 25.2415 29.6965 34.937 41.1015 48.3545 56.887 66.9245 78.7325 92.6225 108.965 128.19 150.8 177.4 208.695 245.505 288.8 339.73 399.64 
+  
+ ve/create Y1(39) R 217.4 239.1 230.7 226.2 225.1 231.8 226.6 210.1 182.9 146.7 127.1 92.67 61.2 47.94 37.99 24.55 13.41 11.25 6.731 4.688 4.107 3.6 2.904 2.673 2.196 2.05 1.73 1.459 1.255 0.9669 0.7864 0.5196 0.4075 0.2746 0.1849 0.117 0.06998 0.02534 0.008891
+
+gr/h/symb X1 Y1 39 25 0.2
+
  exe ../prf n_a2 eps
 
- null 0 590 0.001 1000
- atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr)'
+ null 0 500 0.01 100
+ atitle 'E?kin!(MeV) secondary neutron' 'ds/dEdo (mb/MeV/sr) theta = 90 deg'
  
- gr/h/symb X1 Y1 25 25 0.2
+ gr/h/symb X1 Y1 39 25 0.2
 
- hi/file 1 par.paw
+  hi/file 1 par.paw
  set dmod 3
  hi/pl 30 shist
- line 380 1.8 410 1.8
- itx 415 60 'LEPAR'
+ line 100 1.8 110 1.8
+ itx 115 60 'LEPAR'
  close 1
  
- hi/file 1 chips.paw
+  hi/file 1 chips.paw
  set dmod 1
  hi/pl 30 shist
- line 380 1.4 410 1.4
- itx 415 22 'CHIPS'
+ line 100 1.4 110 1.4
+ itx 115 22 'CHIPS'
  close 1
  
-
  exe ../prf nk_a2 eps
 
  opt liny
