@@ -158,16 +158,24 @@ private:
   G4double PatientY;
   G4double PatientZ;
 
-  char aFileName[300];
+  G4String aFileName[300];
   G4int Probe2compression;
 
-  char dataName[300];
-  char Proberowsbuf[300],Probecolumnsbuf[300], ProbeSliceTicknessbuf[300];
-  char Probecompression2buf[300],ProbeSliceLocationbuf[300];
-  char Probepixel_spacing_Xbuf[300],Probepixel_spacing_Ybuf[300];
-  G4int Proberows, Probecolumns, ProbeSliceTickness, Probecompression2;
+  G4String dataName[300];
+  G4String Proberowsbuf[300];
+  G4String Probecolumnsbuf[300];
+  G4String ProbeSliceTicknessbuf[300];
+  G4String Probecompression2buf[300];
+  G4String ProbeSliceLocationbuf[300];
+  G4String Probepixel_spacing_Xbuf[300];
+  G4String Probepixel_spacing_Ybuf[300];
+  G4int Proberows;
+  G4int Probecolumns;
+  G4int ProbeSliceTickness;
+  G4int Probecompression2;
   G4double ProbeSliceLocation;
-  G4double Probepixel_spacing_X, Probepixel_spacing_Y;
+  G4double Probepixel_spacing_X;
+  G4double Probepixel_spacing_Y;
 };
 
 #endif
