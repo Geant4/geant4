@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.2 1999-01-09 16:31:21 allison Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.3 1999-01-11 00:48:32 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -69,8 +69,8 @@ G4String G4VisCommandSceneAddVolume::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
-  if (list.isEmpty ()) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
     return;
@@ -120,10 +120,10 @@ void G4VisCommandSceneAddVolume::SetNewValue (G4UIcommand* command,
   }
 
   if (model) {
-    const G4String& currentSceneName =
-      fpVisManager -> GetCurrentSceneData ().GetName ();
-    (list [currentSceneName]).AddRunDurationModel (model);
-    UpdateVisManagerSceneDataAndViewParameters (currentSceneName);
+    G4Scene* pScene = fpVisManager -> GetCurrentScene ();
+    const G4String& currentSceneName = pScene -> GetName ();
+    pScene -> AddRunDurationModel (model);
+    UpdateVisManagerSceneAndViewParameters (currentSceneName);
     G4cout << "First occurrence of \"" << foundVolume -> GetName ()
 	   << "\", copy no. " << copyNo
 	   << ", found at depth " << foundDepth
@@ -160,11 +160,11 @@ G4String G4VisCommandSceneAddGhosts::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  const G4String& currentSceneName =
-    fpVisManager -> GetCurrentSceneData ().GetName ();
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pCurrentScene -> GetName ();
 
-  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
-  if (list.isEmpty ()) {
+  G4SceneList& sceneList = fpVisManager -> SetSceneList ();
+  if (sceneList.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
     return;
@@ -186,9 +186,9 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
       if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
 	 GetFlavoredWorldForThis(theParticleTable->
 				 GetParticle(iParticle)))
-	(list [currentSceneName]).AddRunDurationModel
+	pCurrentScene -> AddRunDurationModel
 	  (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
-    UpdateVisManagerSceneDataAndViewParameters ();
+    UpdateVisManagerSceneAndViewParameters ();
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	   << endl;
     return;
@@ -204,9 +204,9 @@ void G4VisCommandSceneAddGhosts::SetNewValue (G4UIcommand* command,
   G4FlavoredParallelWorld* worldForThis;
   if(worldForThis=theGlobalFastSimulationManager->
      GetFlavoredWorldForThis(currentParticle)) {
-    (list [currentSceneName]).AddRunDurationModel
+    pCurrentScene -> AddRunDurationModel
       (new G4FlavoredParallelWorldModel (worldForThis));
-    UpdateVisManagerSceneDataAndViewParameters (currentSceneName);
+    UpdateVisManagerSceneAndViewParameters (currentSceneName);
     G4cout << "Ghosts added to the Scene, refresh the view to see it."
            << endl;
   }

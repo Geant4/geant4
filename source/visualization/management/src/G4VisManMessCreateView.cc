@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCreateView.cc,v 1.2 1999-01-09 16:31:29 allison Exp $
+// $Id: G4VisManMessCreateView.cc,v 1.3 1999-01-11 00:48:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -140,7 +140,7 @@ void G4VisManMessenger::DoCommandCreateView (const G4String& commandPath,
       if (iGS >=0 && iGS < nSystems) {
 	// Valid index.  Create view.
 	G4VGraphicsSystem* pSystem = gsl [iGS];;
-	fpVMan -> SetCurrentGraphicsSystemAndCreateView (pSystem);
+	fpVMan -> SetCurrentGraphicsSystemAndCreateViewer (pSystem);
 	if (fpVMan -> GetVerboseLevel () > 0) {
 	  G4cout << "Graphics system set to " << pSystem -> GetName () << endl;
 	  if (fpVMan -> GetVerboseLevel () > 1) {

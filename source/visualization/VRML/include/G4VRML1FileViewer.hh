@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1FileViewer.hh,v 1.1 1999-01-09 16:27:32 allison Exp $
+// $Id: G4VRML1FileViewer.hh,v 1.2 1999-01-11 00:47:59 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1FileViewer.hh
@@ -33,7 +33,7 @@ private:
 	void SetView();
 
 private:
-	G4VRML1FileSceneHandler& fScene; // Reference to Graphics Scene for this view.
+	G4VRML1FileSceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.
 };
 
 #endif //G4VRML1File_VIEW_HH

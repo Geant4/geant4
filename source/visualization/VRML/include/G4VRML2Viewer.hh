@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2Viewer.hh,v 1.1 1999-01-09 16:27:40 allison Exp $
+// $Id: G4VRML2Viewer.hh,v 1.2 1999-01-11 00:48:03 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.hh
@@ -36,7 +36,7 @@ private:
 	void SendViewParameters ()  ;
 
 private:
-	G4VRML2SceneHandler& fScene; // Reference to Graphics Scene for this view.
+	G4VRML2SceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.
 	G4FRClient&   fDest ;	
 
 	G4double      fViewHalfAngle ;	

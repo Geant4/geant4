@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessSet.cc,v 1.2 1999-01-09 16:31:32 allison Exp $
+// $Id: G4VisManMessSet.cc,v 1.3 1999-01-11 00:48:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -236,7 +236,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       G4cout << "\nDensity cut is now: "
 	   << getVP.GetVisibleDensity () * cm3 / g << " g/cm3.";
       G4cout << endl;
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -340,7 +340,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       //}
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -386,7 +386,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	if (getVP.IsMarkerNotHidden ()) G4cout << "not";
 	G4cout << " hidden by surfaces." << endl;
       //}
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -441,7 +441,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       G4cout << "\nSection plane is now: "
 	   << getVP.GetSectionPlane ();
       G4cout << endl;
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (getVP);
@@ -488,7 +488,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       }
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -554,7 +554,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
     G4cout << "Temporary algorithm..." << endl;
 
     G4VPhysicalVolume* pVPV =
-      fpVMan -> GetCurrentSceneData ().GetPhysicalVolume ();
+      fpVMan -> GetCurrentScene ().GetPhysicalVolume ();
     G4VPhysicalVolume* pNewVPV = 0;
 
     if (pVPV) {
@@ -632,11 +632,11 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
   if (commandPath == "/vis~/set/view") {
     // Make List of available views.
     RWTPtrOrderedVector<G4VViewer> vList;
-    const G4SceneHandlerList& gml = fpVMan -> GetAvailableScenes ();
+    const G4SceneHandlerList& gml = fpVMan -> GetAvailableSceneHandlers ();
     G4int nViewTotal = 0;
     G4int iGM, nScenes = gml.entries ();
     for (iGM = 0; iGM < nScenes; iGM++) {
-      const G4ViewerList& views = gml [iGM] -> GetViewList ();
+      const G4ViewerList& views = gml [iGM] -> GetViewerList ();
       int nViews = views.entries ();
       for (int iView = 0; iView < nViews; iView++) {
 	G4VViewer* pView = views [iView];
@@ -665,7 +665,7 @@ void G4VisManMessenger::DoCommandSet (const G4String& commandPath,
       }
       else {
 	G4VViewer* pView = vList[iSelect];
-	fpVMan -> SetCurrentView (pView);
+	fpVMan -> SetCurrentViewer (pView);
 	if (fpVMan -> GetVerboseLevel () > 0) {
 	  G4cout << "Current view now " << pView -> GetName () << endl;
 	  if (fpVMan -> GetVerboseLevel () > 1) {

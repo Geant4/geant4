@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2FileViewer.cc,v 1.1 1999-01-09 16:27:51 allison Exp $
+// $Id: G4VRML2FileViewer.cc,v 1.2 1999-01-11 00:48:11 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2FileViewer.cc
@@ -29,7 +29,7 @@
 G4VRML2FileViewer::G4VRML2FileViewer(G4VRML2FileSceneHandler& scene,
 				 const G4String& name) :
  G4VViewer(scene, scene.IncrementViewCount(), name),
- fScene(scene),
+ fSceneHandler(scene),
  fDest(scene.fDest)
 {
 	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
@@ -58,7 +58,7 @@ void G4VRML2FileViewer::DrawView()
 #endif
 
 	// Open VRML2 file and output header comments
-	fScene.beginSending() ; 
+	fSceneHandler.beginSending() ; 
 
         // Viewpoint node
         SendViewParameters(); 
@@ -82,7 +82,7 @@ void G4VRML2FileViewer::ShowView(void)
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4VRML2FileViewer::ShowView()" << endl;
 #endif
-	fScene.endSending();
+	fSceneHandler.endSending();
 }
 
 void G4VRML2FileViewer::FinishView(void)
@@ -106,7 +106,7 @@ void G4VRML2FileViewer::SendViewParameters ()
 	if ( fsin_VHA < 1.0e-6 ) { return ; } 
 
 	// camera distance
-	G4double extent_radius = fScene.GetSceneData().GetExtent().GetExtentRadius();
+	G4double extent_radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 	G4double camera_distance = extent_radius / fsin_VHA ;
 
 	// camera position on Z axis

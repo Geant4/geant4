@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessCamera.cc,v 1.2 1999-01-09 16:31:28 allison Exp $
+// $Id: G4VisManMessCamera.cc,v 1.3 1999-01-11 00:48:35 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -200,10 +200,10 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       }
-      // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+      // fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();
       // fpVMan -> Show ();
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -225,7 +225,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       fpVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (false);
       for (int i = 0; i < nFrames; i++) {
 	RotateViewpointAboutUpVectorBy (dbeta);
-	fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+	fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
 	fpVMan -> Draw ();    
 	fpVMan -> Show ();    
       }
@@ -248,10 +248,10 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       }
-      // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+      // fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();    
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -312,11 +312,11 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	}
       }
       // if (ViewValid ()) {
-	// fpVMan -> GetCurrentView () -> ClearView ();
+	// fpVMan -> GetCurrentViewer () -> ClearView ();
 	// fpVMan -> Draw ();    
 	// fpVMan -> Show ();    
       // }
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -338,7 +338,7 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       fpVMan -> SetCurrentViewParameters ().SetLightsMoveWithCamera (true);
       for (int i = 0; i < nFrames; i++) {
 	RotateViewpointAboutUpVectorBy (dbeta);
-	fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+	fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
 	fpVMan -> Draw ();    
 	fpVMan -> Show ();    
       }
@@ -369,11 +369,11 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
       }
     }
     // if (ViewValid ()) {
-      // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+      // fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();
     // }    
-    G4VViewer* pView = fpVMan -> GetCurrentView ();
+    G4VViewer* pView = fpVMan -> GetCurrentViewer ();
     if (pView) {
       // Copy current view parameters into current view.
       pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());
@@ -411,10 +411,10 @@ void G4VisManMessenger::DoCommandCamera (const G4String& commandPath,
 	  fpVMan -> PrintCurrentView ();
 	}
       }
-      // fpVMan -> GetCurrentView () -> ClearView ();  // Clears buffer only.
+      // fpVMan -> GetCurrentViewer () -> ClearView ();  // Clears buffer only.
       // fpVMan -> Draw ();    
       // fpVMan -> Show ();    
-      G4VViewer* pView = fpVMan -> GetCurrentView ();
+      G4VViewer* pView = fpVMan -> GetCurrentViewer ();
       if (pView) {
 	// Copy current view parameters into current view.
 	pView -> SetViewParameters (fpVMan -> GetCurrentViewParameters ());

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.hh,v 1.3 1999-01-09 16:31:09 allison Exp $
+// $Id: G4VisManager.hh,v 1.4 1999-01-11 00:48:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,9 +32,11 @@
 // the VisManager take place with the current viewer, in particular,
 // the Draw operations.
 
-// Each scene comprises drawable objects such as detectors components
-// and hits when appropriate.  Each scene handler handles a specific
-// scene.  Each viewer has its "view parameters".
+// Each scene comprises drawable objects such as detector components
+// and hits when appropriate.  A scene handler translates a scene into
+// graphics-system-specific function calls and, possibly, a
+// graphics-system-dependent database - display lists, scene graphs,
+// etc.  Each viewer has its "view parameters".
 
 // G4VisManager is "state dependent", i.e., it is notified on change
 // of state (G4ApplicationState).  This is used to draw hits and
@@ -76,9 +78,12 @@ class G4VisManager: public G4VVisManager, public G4VStateDependent {
 
   // List of classes and functions which need access to private
   // members of G4VisManager.  This is mainly to obtain access to
-  // GetInstance (), which is private to other users.  The normal user
-  // should use G4VVisManager::GetConcreteInstance () instead - always
-  // testing for non-zero.
+  // GetInstance (), which is private.  The correct way for normal
+  // users to obtain a pointer to the vis manager is with
+  // G4VVisManager::GetConcreteInstance (), always testing for
+  // non-zero.
+
+  friend void G4OpenGLXmViewerSecondaryLoopPostAction ();  // Mmmm!
 
   friend class G4VSceneHandler;
   friend class G4VViewer;
@@ -134,34 +139,20 @@ public:
   //////////////////////////////////////////////////////////////////////
   // Drawing routines!
 
-  void Clear ();
-  // Clear current scene and current view, marking all its views as
-  // needing refreshing.  This is a comprehensive clear which clears
-  // both framebuffers of a double buffered system and clears the
-  // scene's graphics database (display lists, etc.) and clears the
-  // current scene data.
-
-  void ClearScene ();
-  // Clear current scene, marking all its views as needing refreshing.
-  // Clears the scene's graphics databse (display lists, etc.)
-  // Clears the current scene data.
-
   void ClearView ();
-  // Clear visible window of current view (both buffers of a double
+  // Clear visible window of current viewer (both buffers of a double
   // buffered system).
 
   void Draw ();
   // Draw current scene in current view.
 
   void Show ();
-  // Show current view (for graphics systems which require to process
-  // all drawn objects before finalising the view).
+  // Show current view (initiates post-procesing of graphical
+  // databases for graphics systems which require it.)
 
-  // Now functions for drawing hits, digis, etc.  These are treated as
-  // "transients", in contrast to the scene (as defined by the Scene
-  // Data), which is treated as "permanent".  The crucial difference
-  // is that a scene can be recreated by a visit to the GEANT4 kernel
-  // if the graphics system requires it; transient objects cannot.
+  // ///////////////////////////////////////////////////////////////
+  // Now functions for drawing various visualization primitives,
+  // useful for representing hits, digis, etc.
 
   void Draw (const G4Polyline&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
@@ -184,9 +175,10 @@ public:
   void Draw (const G4NURBS&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
 
-  // Now Follow functions for drawing a GEANT4 geometry object.  Note
-  // that the 2nd argument overrides any visualization attributes that
-  // are associated with the object itself.
+  // //////////////////////////////////////////////////////////////////
+  // Now functions for drawing a GEANT4 geometry object.  Note that
+  // the 2nd argument overrides any visualization attributes that are
+  // associated with the object itself.
 
   void Draw (const G4VSolid&, const G4VisAttributes&,
     const G4Transform3D& objectTransformation = G4Transform3D::Identity);
@@ -199,25 +191,34 @@ public:
 
   G4bool Notify (G4ApplicationState requestedState);
   // This is called on change of state (G4ApplicationState).  It is
-  // used to draw hits and trajectories in the current scene at the
-  // end of event, as required.
+  // used to draw hits and trajectories if included in the current
+  // scene at the end of event, as required.
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
 
-  void ClearCurrentSceneData ();
-  void CopyScene ();
-  // Copy scene data of current scene into current scene data.
-  void CopyView ();
-  // Copy view parameters of current view into current view parameters.
-  void CreateScene         (G4String name = "");
-  // Creates scene of the current system.
-  void CreateView          (G4String name = "");
-  // Creates view of the current scene.
-  void DeleteCurrentScene  ();  // Leaves current scene and view undefined!
-  void DeleteCurrentView   ();  // Leaves current scene and view undefined!
-  void GeometryHasChanged  ();  // Used by run manager to notify change.
-  void RefreshCurrentView  ();  // Soft clear, then redraw.
+  void CopyViewParameters ();
+  // Copy view parameters of current viewer into current view parameters.
+
+  void CreateSceneHandler (G4String name = "");
+  // Creates scene handler for the current system.
+
+  void CreateViewer  (G4String name = "");
+  // Creates viewer for the current scene handler.
+
+  void DeleteCurrentSceneHandler ();
+  // Leaves current scene handler and viewer undefined!
+
+  void DeleteCurrentViewer ();
+  // Leaves current scene and view undefined!
+
+  void GeometryHasChanged ();
+  // Used by run manager to notify change.
+
+  void RefreshCurrentView  ();
+  // Soft clear, then redraw.
+
+  // These can go when OLD STYLE commands go...
   void PrintCurrentSystem  () const;
   void PrintCurrentSystems () const;
   void PrintCurrentScene   () const;
@@ -227,27 +228,27 @@ public:
   // Access functions.
 
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
-  G4VSceneHandler*                    GetCurrentScene             () const;
-  G4VViewer*                     GetCurrentView              () const;
-  const G4Scene&           GetCurrentSceneData         () const;
+  G4Scene*                     GetCurrentScene             () const;
+  G4VSceneHandler*             GetCurrentSceneHandler      () const;
+  G4VViewer*                   GetCurrentViewer            () const;
   const G4ViewParameters&      GetCurrentViewParameters    () const;
   const G4GraphicsSystemList&  GetAvailableGraphicsSystems ();
   // The above is non-const because it checks and updates the List by
   // calling RegisterGraphicsSystems() if no graphics systems are
   // already registered.
-  const G4SceneHandlerList&           GetAvailableScenes          () const;
-  const G4SceneList& GetSceneDataObjectList      () const;
+  const G4SceneHandlerList&    GetAvailableSceneHandlers   () const;
+  const G4SceneList&           GetSceneList                () const;
   G4int                        GetVerboseLevel             () const;
   G4bool                       IsValidView                 ();
-  void              SetCurrentGraphicsSystemAndCreateView
+  void              SetCurrentGraphicsSystemAndCreateViewer
                                                 (G4VGraphicsSystem* pSystem);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
-  void              SetCurrentScene             (G4VSceneHandler* pScene);
-  void              SetCurrentView              (G4VViewer* pView);
-  G4Scene&      SetCurrentSceneData         ();  // Returns lvalue.
+  void              SetCurrentScene             (G4Scene*);
+  void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);
+  void              SetCurrentViewer            (G4VViewer* pView);
   G4ViewParameters& SetCurrentViewParameters    ();  // Returns lvalue.
-  G4SceneHandlerList&      SetAvailableScenes          ();  // Returns lvalue.
-  G4SceneList& SetSceneDataObjectList ();  // Returns lvalue.
+  G4SceneHandlerList& SetAvailableSceneHandlers ();  // Returns lvalue.
+  G4SceneList&      SetSceneList                ();  // Returns lvalue.
   void              SetVerboseLevel             (G4int vLevel);
 
 protected:
@@ -261,12 +262,12 @@ protected:
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
-  G4VSceneHandler*             fpSceneHandler;     // Current scene handler.
-  G4VViewer*              fpViewer;           // Current viewer.
+  G4Scene*              fpScene;            // Current scene.
+  G4VSceneHandler*      fpSceneHandler;     // Current scene handler.
+  G4VViewer*            fpViewer;           // Current viewer.
   G4GraphicsSystemList  fAvailableGraphicsSystems;
-  G4SceneHandlerList           fAvailableScenes;
-  G4SceneList fSceneDataObjectList;
-  G4Scene           fSD;                // Current scene data object.
+  G4SceneHandlerList    fAvailableSceneHandlers;
+  G4SceneList           fSceneList;
   G4ViewParameters      fVP;                // Current viewing parameters.
   G4int                 fVerbose;           // Verbosity level 0-10.
   G4VisManMessenger*    fpMessenger;        // Pointer to messenger.

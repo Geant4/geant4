@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateX.cc,v 1.2 1999-01-09 16:23:13 allison Exp $
+// $Id: G4OpenGLImmediateX.cc,v 1.3 1999-01-11 00:47:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,20 +31,20 @@ G4OpenGLImmediateX::G4OpenGLImmediateX ():
 		     G4VisFeaturesOfOpenGLIX (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VSceneHandler* G4OpenGLImmediateX::CreateScene (const G4String& name) {
+G4VSceneHandler* G4OpenGLImmediateX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this, name);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VViewer* G4OpenGLImmediateX::CreateView (G4VSceneHandler& scene,
+G4VViewer* G4OpenGLImmediateX::CreateViewer (G4VSceneHandler& scene,
 					 const G4String& name) {
   G4VViewer* pView =
     new G4OpenGLImmediateXViewer ((G4OpenGLImmediateSceneHandler&) scene, name);
   if (pView) {
     if (pView -> GetViewId () < 0) {
-      G4cerr << "G4OpenGLImmediateX::CreateView: error flagged by negative"
+      G4cerr << "G4OpenGLImmediateX::CreateViewer: error flagged by negative"
 	" view id in G4OpenGLImmediateXViewer creation."
 	"\n Destroying view and returning null pointer."
 	   << endl;
@@ -53,7 +53,7 @@ G4VViewer* G4OpenGLImmediateX::CreateView (G4VSceneHandler& scene,
     }
   }
   else {
-    G4cerr << "G4OpenGLImmediateX::CreateView: null pointer on"
+    G4cerr << "G4OpenGLImmediateX::CreateViewer: null pointer on"
       " new G4OpenGLImmediateXViewer." << endl;
   }
   return pView;

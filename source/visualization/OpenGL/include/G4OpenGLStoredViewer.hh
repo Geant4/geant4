@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredViewer.hh,v 1.1 1999-01-09 16:22:45 allison Exp $
+// $Id: G4OpenGLStoredViewer.hh,v 1.2 1999-01-11 00:47:38 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -37,7 +37,7 @@ public:
 protected:
   void KernelVisitDecision ();
   void DrawDisplayLists ();
-  G4OpenGLStoredSceneHandler&            fScene; // Graphics Scene for this view.
+  G4OpenGLStoredSceneHandler&            fSceneHandler; // Graphics Scene for this view.
 };
 
 #endif

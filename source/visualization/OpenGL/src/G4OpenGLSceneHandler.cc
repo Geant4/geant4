@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.1 1999-01-09 16:23:17 allison Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.2 1999-01-11 00:47:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   const G4Colour& c = GetColour (line);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
-  if (fpView -> GetViewParameters ().IsMarkerNotHidden ())
+  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else glEnable (GL_DEPTH_TEST);
 
@@ -98,7 +98,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
   const G4Colour& c = GetColour (circle);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
   
-  if (fpView -> GetViewParameters ().IsMarkerNotHidden ())
+  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else glEnable (GL_DEPTH_TEST);
   
@@ -132,13 +132,13 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Circle& circle) {
  
   G4bool userSpecified = (circle.GetWorldSize() || circle.GetScreenSize());
   
-  const G4VMarker& def = fpView -> GetViewParameters().GetDefaultMarker();
+  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
   
   //Make sure we Draw circles...
   glEnable (GL_POINT_SMOOTH);
 
   G4double size;
-  G4double scale = fpView -> GetViewParameters().GetGlobalMarkerScale();
+  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
   if (size = scale * // Assignment intentional.
       userSpecified ? circle.GetWorldSize() : def.GetWorldSize()) {
 
@@ -218,7 +218,7 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
   const G4Colour& c = GetColour (Square);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
-  if (fpView -> GetViewParameters ().IsMarkerNotHidden ())
+  if (fpViewer -> GetViewParameters ().IsMarkerNotHidden ())
     glDisable (GL_DEPTH_TEST);
   else glEnable (GL_DEPTH_TEST);
 
@@ -268,10 +268,10 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Square& Square) {
 
   G4bool userSpecified = (Square.GetWorldSize() || Square.GetScreenSize());
   
-  const G4VMarker& def = fpView -> GetViewParameters().GetDefaultMarker();
+  const G4VMarker& def = fpViewer -> GetViewParameters().GetDefaultMarker();
   
   G4double size;
-  G4double scale = fpView -> GetViewParameters().GetGlobalMarkerScale();
+  G4double scale = fpViewer -> GetViewParameters().GetGlobalMarkerScale();
   if (size = scale * // Assignment intentional.
       userSpecified ? Square.GetWorldSize() : def.GetWorldSize()) {
 

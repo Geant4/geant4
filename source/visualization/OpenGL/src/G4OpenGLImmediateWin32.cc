@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateWin32.cc,v 1.2 1999-01-09 16:23:10 allison Exp $
+// $Id: G4OpenGLImmediateWin32.cc,v 1.3 1999-01-11 00:47:43 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,19 +30,19 @@ G4OpenGLImmediateWin32::G4OpenGLImmediateWin32 ():
 		     G4VisFeaturesOfOpenGLIWin32 (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VSceneHandler* G4OpenGLImmediateWin32::CreateScene () {
+G4VSceneHandler* G4OpenGLImmediateWin32::CreateSceneHandler () {
   G4VSceneHandler* pScene = new G4OpenGLImmediateSceneHandler (*this);
   G4cout << G4OpenGLImmediateSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VViewer* G4OpenGLImmediateWin32::CreateView (G4VSceneHandler& scene) {
+G4VViewer* G4OpenGLImmediateWin32::CreateViewer (G4VSceneHandler& scene) {
   G4VViewer* pView =
     new G4OpenGLImmediateWin32Viewer ((G4OpenGLImmediateSceneHandler&) scene);
   if (pView) {
     if (pView -> GetViewId () < 0) {
-      G4cerr << "G4OpenGLImmediateWin32::CreateView: error flagged by negative"
+      G4cerr << "G4OpenGLImmediateWin32::CreateViewer: error flagged by negative"
 	" view id in G4OpenGLImmediateWin32Viewer creation."
 	"\n Destroying view and returning null pointer."
 	   << endl;
@@ -51,7 +51,7 @@ G4VViewer* G4OpenGLImmediateWin32::CreateView (G4VSceneHandler& scene) {
     }
   }
   else {
-    G4cerr << "G4OpenGLImmediateWin32::CreateView: null pointer on"
+    G4cerr << "G4OpenGLImmediateWin32::CreateViewer: null pointer on"
       " new G4OpenGLImmediateWin32Viewer." << endl;
   }
   return pView;

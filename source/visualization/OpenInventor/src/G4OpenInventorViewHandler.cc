@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorViewHandler.cc,v 1.1 1999-01-09 16:25:17 allison Exp $
+// $Id: G4OpenInventorViewHandler.cc,v 1.2 1999-01-11 00:47:55 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -112,12 +112,12 @@ void G4OpenInventorViewer::KernelVisitDecision () {
 G4OpenInventorViewer::G4OpenInventorViewer (G4OpenInventorSceneHandler& scene,
 					const G4String& name):
 G4VViewer (scene, scene.IncrementViewCount (), name),
-fScene (scene),
+fSceneHandler (scene),
 OIvisualfound (false),
 G4OIViewer(NULL),
 G4OIShell(NULL)
 {
-  interactorManager = ((G4OpenInventor*)fScene.GetGraphicsSystem()) -> 
+  interactorManager = ((G4OpenInventor*)fSceneHandler.GetGraphicsSystem()) -> 
     GetInteractorManager ();
   Widget toplevel = (Widget)interactorManager->GetMainInteractor ();
 
@@ -133,7 +133,7 @@ G4OIShell(NULL)
   G4OISelection = new SoSelection;
   G4OISelection->policy = SoSelection::SINGLE;
   G4OISelection->ref();
-  G4OISelection->addChild(fScene.root);
+  G4OISelection->addChild(fSceneHandler.root);
 
   Widget    parent = (Widget)interactorManager->GetParentInteractor ();
   SbBool    buildInsideParent;

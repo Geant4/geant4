@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredWin32.hh,v 1.2 1999-01-09 16:22:45 allison Exp $
+// $Id: G4OpenGLStoredWin32.hh,v 1.3 1999-01-11 00:47:39 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,8 +21,8 @@
 class G4OpenGLStoredWin32: public G4VGraphicsSystem {
 public:
   G4OpenGLStoredWin32 ();
-  G4VSceneHandler* CreateScene ();
-  G4VViewer*  CreateView  (G4VSceneHandler&);
+  G4VSceneHandler* CreateSceneHandler ();
+  G4VViewer*  CreateViewer  (G4VSceneHandler&);
 };
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2File.hh,v 1.2 1999-01-09 16:27:37 allison Exp $
+// $Id: G4VRML2File.hh,v 1.3 1999-01-11 00:48:01 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2File.hh
@@ -24,8 +24,8 @@ class G4VRML2File: public G4VGraphicsSystem {
 public:
 	G4VRML2File(); 
 	~G4VRML2File();
-	G4VSceneHandler* CreateScene(const G4String& name = "");
-	G4VViewer*  CreateView(G4VSceneHandler&, const G4String& name = "");
+	G4VSceneHandler* CreateSceneHandler(const G4String& name = "");
+	G4VViewer*  CreateViewer(G4VSceneHandler&, const G4String& name = "");
 
 };
 

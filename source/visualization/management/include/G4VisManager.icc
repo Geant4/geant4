@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.icc,v 1.3 1999-01-09 16:31:10 allison Exp $
+// $Id: G4VisManager.icc,v 1.4 1999-01-11 00:48:27 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -15,16 +15,16 @@ inline void G4VisManager::Initialize () {
   Initialise ();
 }
 
-inline G4VSceneHandler* G4VisManager::GetCurrentScene () const {
+inline G4VSceneHandler* G4VisManager::GetCurrentSceneHandler () const {
   return fpSceneHandler;
 }
 
-inline G4VViewer* G4VisManager::GetCurrentView () const {
+inline G4VViewer* G4VisManager::GetCurrentViewer () const {
   return fpViewer;
 }
 
-inline const G4Scene& G4VisManager::GetCurrentSceneData () const {
-  return fSD;
+inline G4Scene* G4VisManager::GetCurrentScene () const {
+  return fpScene;
 }
 
 inline const G4ViewParameters&
@@ -33,13 +33,12 @@ G4VisManager::GetCurrentViewParameters () const {
 }
 
 inline const G4SceneHandlerList&
-G4VisManager::GetAvailableScenes () const {
-  return fAvailableScenes;
+G4VisManager::GetAvailableSceneHandlers () const {
+  return fAvailableSceneHandlers;
 }
 
-inline const G4SceneList&
-G4VisManager::GetSceneDataObjectList () const {
-  return fSceneDataObjectList;
+inline const G4SceneList& G4VisManager::GetSceneList () const {
+  return fSceneList;
 }
 
 inline G4VGraphicsSystem*
@@ -51,21 +50,20 @@ inline G4int G4VisManager::GetVerboseLevel () const {
   return fVerbose;
 }
 
-inline G4Scene& G4VisManager::SetCurrentSceneData () {
-  return fSD;
+inline void G4VisManager::SetCurrentScene (G4Scene* pScene) {
+  fpScene = pScene;
 }
 
 inline G4ViewParameters& G4VisManager::SetCurrentViewParameters () {
   return fVP;
 }
 
-inline G4SceneList&
-G4VisManager::SetSceneDataObjectList () {
-  return fSceneDataObjectList;
+inline G4SceneList& G4VisManager::SetSceneList () {
+  return fSceneList;
 }
 
-inline G4SceneHandlerList& G4VisManager::SetAvailableScenes () {
-  return fAvailableScenes;
+inline G4SceneHandlerList& G4VisManager::SetAvailableSceneHandlers () {
+  return fAvailableSceneHandlers;
 }
 
 inline void G4VisManager::SetVerboseLevel (G4int vLevel) {

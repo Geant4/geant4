@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1Viewer.cc,v 1.1 1999-01-09 16:27:48 allison Exp $
+// $Id: G4VRML1Viewer.cc,v 1.2 1999-01-11 00:48:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRMLView.cc
@@ -25,7 +25,7 @@
 #include "G4ios.hh"
 
 G4VRML1Viewer::G4VRML1Viewer(G4VRML1SceneHandler& scene, const G4String& name) :
-	G4VViewer(scene, scene.IncrementViewCount(), name), fScene(scene)
+   G4VViewer(scene, scene.IncrementViewCount(), name), fSceneHandler(scene)
 {}
 
 G4VRML1Viewer::~G4VRML1Viewer()
@@ -63,7 +63,7 @@ void G4VRML1Viewer::ShowView(void)
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4VRML1Viewer::ShowView()" << endl;
 #endif
-	fScene.endSending();
+	fSceneHandler.endSending();
 }
 
 void G4VRML1Viewer::FinishView(void)
@@ -72,7 +72,7 @@ void G4VRML1Viewer::FinishView(void)
 	G4cerr << "***** G4VRML1Viewer::FinishView()" << endl;
 	//G4cerr << "G4VRML1Viewer::FinishView(); not implemented. " << endl;
 #endif
-	//fScene.endSending();
+	//fSceneHandler.endSending();
 }
 
 #endif

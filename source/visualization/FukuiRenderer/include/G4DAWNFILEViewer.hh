@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.hh,v 1.1 1999-01-09 16:11:39 allison Exp $
+// $Id: G4DAWNFILEViewer.hh,v 1.2 1999-01-11 00:47:18 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -48,7 +48,7 @@ public:
   void  SendDrawingStyleToDAWNGUI( ostream& out ) ;
 
 private:
-  G4DAWNFILESceneHandler& fScene; // Reference to Graphics Scene for this view.
+  G4DAWNFILESceneHandler& fSceneHandler; // Reference to Graphics Scene for this view.
 
   char  fG4PrimViewer          [32] ;
   char  fG4PrimViewerInvocation[64] ;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.2 1999-01-09 16:23:41 allison Exp $
+// $Id: G4OpenGLXmRotationCallbacks.cc,v 1.3 1999-01-11 00:47:50 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -267,7 +267,7 @@ void G4OpenGLXmViewer::reset_callback (Widget w,
 		 XmNuserData, &pView,
 		 NULL);
   
-  pView->fVP.SetCurrentTargetPoint(pView->fScene.GetSceneData().GetStandardTargetPoint());
+  pView->fVP.SetCurrentTargetPoint(pView->fSceneHandler.GetScene()->GetStandardTargetPoint());
   pView->fVP.SetZoomFactor(1.0);
   pView->fVP.SetDolly(0.0);
   pView->SetView ();

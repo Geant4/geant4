@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.1 1999-01-09 16:11:48 allison Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.2 1999-01-11 00:47:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -45,7 +45,7 @@ const char  FR_ENV_MULTI_WINDOW[] = "G4DAWN_MULTI_WINDOW" ;
 	//----- G4DAWNFILEViewer, constructor
 G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
 				const G4String& name): 
-  G4VViewer (scene, scene.IncrementViewCount (), name), fScene (scene)
+  G4VViewer (scene, scene.IncrementViewCount (), name), fSceneHandler (scene)
 {
 	// Set a g4.prim-file viewer 
 	strcpy( fG4PrimViewer, "dawn" ); 
@@ -61,7 +61,7 @@ G4DAWNFILEViewer::G4DAWNFILEViewer (G4DAWNFILESceneHandler& scene,
 
 		strcpy( fG4PrimViewerInvocation, fG4PrimViewer );
 		strcat( fG4PrimViewerInvocation, " ");
-		strcat( fG4PrimViewerInvocation, fScene.GetG4PrimFileName() );
+		strcat( fG4PrimViewerInvocation, fSceneHandler.GetG4PrimFileName() );
 	}
 
 	// Set a PostScript Viewer
@@ -96,10 +96,10 @@ G4DAWNFILEViewer::ClearView( void )
 #endif
 
 		//----- Begin saving data to g4.prim
-	fScene.BeginSavingG4Prim();
+	fSceneHandler.BeginSavingG4Prim();
 
 		//----- Clear old data
-	fScene.SendStr( FR_CLEAR_DATA );
+	fSceneHandler.SendStr( FR_CLEAR_DATA );
 
 }
 
@@ -111,7 +111,7 @@ void G4DAWNFILEViewer::DrawView ()
 	G4cerr << "***** G4DAWNFILEViewer::DrawView () " << endl;
 #endif
 		//----- Error recovery
-	if( fScene.IsInModeling() )  {
+	if( fSceneHandler.IsInModeling() )  {
 	   G4cerr << "WARNING from DAWNFILE driver:" << endl;
 	   G4cerr << "  You've invoked a drawing command before " << endl;
 	   G4cerr << "  completing your previous visualization." << endl;
@@ -122,7 +122,7 @@ void G4DAWNFILEViewer::DrawView ()
 	}
 
 		//----- Begin Saving g4.prim file
-	fScene.BeginSavingG4Prim();
+	fSceneHandler.BeginSavingG4Prim();
 
 		//----- set view if necessary
 	SendViewParameters(); 
@@ -146,20 +146,20 @@ void G4DAWNFILEViewer::ShowView( void )
 	G4cerr << "***** G4DAWNFILEViewer::ShowView () " << endl;
 #endif
 
-	if( fScene.IsInModeling() ) // if( fScene.flag_in_modeling ) 
+	if( fSceneHandler.IsInModeling() ) // if( fSceneHandler.flag_in_modeling ) 
 	{
 
 			//----- End of Data		
-		fScene.FREndModeling();
+		fSceneHandler.FREndModeling();
 
 			//----- Draw all
-		fScene.SendStr( FR_DRAW_ALL );
+		fSceneHandler.SendStr( FR_DRAW_ALL );
 
 			//----- Close device
-		fScene.SendStr( FR_CLOSE_DEVICE );
+		fSceneHandler.SendStr( FR_CLOSE_DEVICE );
 
 			//----- End saving data to g4.prim
-		fScene.EndSavingG4Prim()              ;
+		fSceneHandler.EndSavingG4Prim()              ;
 
 
 			//----- string for viewer invocation
@@ -170,25 +170,25 @@ void G4DAWNFILEViewer::ShowView( void )
 
 			strcpy( fG4PrimViewerInvocation, fG4PrimViewer );
 			strcat( fG4PrimViewerInvocation, " ");
-			strcat( fG4PrimViewerInvocation, fScene.GetG4PrimFileName() );
+			strcat( fG4PrimViewerInvocation, fSceneHandler.GetG4PrimFileName() );
 		}
 
 
 		//----- Invoke DAWN
-		if( false == G4FRofstream::DoesFileExist( fScene.GetG4PrimFileName() ) )   
+		if( false == G4FRofstream::DoesFileExist( fSceneHandler.GetG4PrimFileName() ) )   
 		{
 			G4cout << "ERROR: Failed to generate file  ";
-			G4cout << fScene.GetG4PrimFileName() << endl;
+			G4cout << fSceneHandler.GetG4PrimFileName() << endl;
 
 		} else 	if( strcmp( GetG4PrimViewerInvocation(), "" ) )  
 		{
-			G4cout << "File  " << fScene.GetG4PrimFileName() ;
+			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ;
 			G4cout << "  is generated." << endl;
 			G4cout << GetG4PrimViewerInvocation() << endl;
 			system( GetG4PrimViewerInvocation() );
 
 		} else { // no view, i.e., only file generation
-			G4cout << "File  " << fScene.GetG4PrimFileName() ; 
+			G4cout << "File  " << fSceneHandler.GetG4PrimFileName() ; 
 			G4cout << "  is generated." << endl;
 			G4cout << "No viewer is invoked." << endl;
 		}
@@ -260,12 +260,12 @@ void G4DAWNFILEViewer::SendViewParameters ()
 	const    G4double        MAX_HALF_ANGLE     = 0.499 * M_PI ;
 
 		//----- Send Bounding Box
-	fScene.SendBoundingBox();
+	fSceneHandler.SendBoundingBox();
 
 		//----- CALC camera distance
 		//..... Note: Camera cannot enter inside object
 	G4double  camera_distance ;
-	G4double  radius = fScene.GetSceneData().GetExtent().GetExtentRadius();
+	G4double  radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 
 	G4double half_view_angle  = fabs ( fVP.GetFieldHalfAngle () ) ;
 	if( half_view_angle > MAX_HALF_ANGLE ) { 
@@ -372,7 +372,7 @@ void G4DAWNFILEViewer::SendViewParameters ()
 
 
 		//----- SET CAMERA
-	fScene.SendStr( FR_SET_CAMERA );
+	fSceneHandler.SendStr( FR_SET_CAMERA );
 
 
 } // G4DAWNFILEViewer::SendViewParameters () 

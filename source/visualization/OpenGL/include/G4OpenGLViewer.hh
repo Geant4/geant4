@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.hh,v 1.1 1999-01-09 16:22:52 allison Exp $
+// $Id: G4OpenGLViewer.hh,v 1.2 1999-01-11 00:47:41 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,10 +46,10 @@ protected:
 
   static int snglBuf_RGBA[10];
   static int dblBuf_RGBA[11];
-  G4OpenGLSceneHandler&                    fScene;  // Graphics Scene for this view.
+  G4OpenGLSceneHandler&                    fSceneHandler;  // Graphics Scene for this view.
 
 private:
-  //  G4OpenGLSceneHandler&                    fScene;  // Graphics Scene for this view.
+  //  G4OpenGLSceneHandler&                    fSceneHandler;  // Graphics Scene for this view.
 };
 
 class G4OpenGLImmediateSceneHandler;

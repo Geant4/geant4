@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.1 1999-01-09 16:23:30 allison Exp $
+// $Id: G4OpenGLViewer.cc,v 1.2 1999-01-11 00:47:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ int G4OpenGLViewer::dblBuf_RGBA[11] =
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-fScene (scene),
+fSceneHandler (scene),
 white_background (False),
 transparency_enabled (False),
 antialiasing_enabled (False),
@@ -96,7 +96,7 @@ void G4OpenGLViewer::SetView () {
   const G4Point3D& target = fVP.GetCurrentTargetPoint ();
 
   // Get radius of scene.
-  G4double radius = fScene.GetSceneData().GetExtent().GetExtentRadius();
+  G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1.;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);
 

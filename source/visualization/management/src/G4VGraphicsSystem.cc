@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VGraphicsSystem.cc,v 1.2 1999-01-09 16:31:14 allison Exp $
+// $Id: G4VGraphicsSystem.cc,v 1.3 1999-01-11 00:48:29 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,7 +42,7 @@ G4VGraphicsSystem::G4VGraphicsSystem (const G4String& name,
 
 ostream& operator << (ostream& os, const G4VGraphicsSystem& gs) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
-  const G4SceneHandlerList& scenes = pVMan -> GetAvailableScenes ();
+  const G4SceneHandlerList& scenes = pVMan -> GetAvailableSceneHandlers ();
   os << "Graphics System: " << gs.GetName ();
   if (gs.GetNickname () != "") {
     os << ", nickname: " << gs.GetNickname ();

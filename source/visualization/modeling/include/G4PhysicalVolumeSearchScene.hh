@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeSearchScene.hh,v 1.1 1999-01-07 16:15:35 gunter Exp $
+// $Id: G4PhysicalVolumeSearchScene.hh,v 1.2 1999-01-11 00:48:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

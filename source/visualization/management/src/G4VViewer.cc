@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.2 1999-01-10 13:25:45 allison Exp $
+// $Id: G4VViewer.cc,v 1.3 1999-01-11 00:48:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 #include "G4Event.hh"
 
 G4VViewer::G4VViewer (G4VSceneHandler& scene, G4int id, const G4String& name):
-fScene (scene),
+fSceneHandler (scene),
 fViewId (id),
 fModified (true),
 fNeedKernelVisit (true)
@@ -39,7 +39,7 @@ fNeedKernelVisit (true)
   if (name == "") {
     char charname [50];
     ostrstream ost (charname, 50);
-    ost << fScene.GetName () << '-' << fViewId << ends;
+    ost << fSceneHandler.GetName () << '-' << fViewId << ends;
     fName = charname;
   }
   else {
@@ -60,7 +60,7 @@ const G4VisAttributes* G4VViewer::GetApplicableVisAttributes
 
 void G4VViewer::NeedKernelVisit () {
   // Notify all views that a kernel visit is required.
-  const G4ViewerList& viewList = fScene.GetViewList ();
+  const G4ViewerList& viewList = fSceneHandler.GetViewerList ();
   for (int i = 0; i < viewList.entries (); i++) {
     viewList [i] -> SetNeedKernelVisit ();
   }
@@ -82,7 +82,7 @@ void G4VViewer::ProcessView () {
   // object's DrawView ())...
   if (fNeedKernelVisit) {
     fNeedKernelVisit = false;
-    fScene.ProcessScene (*this);
+    fSceneHandler.ProcessScene (*this);
   }
 }
 

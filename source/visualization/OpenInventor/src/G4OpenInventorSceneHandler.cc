@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenInventorSceneHandler.cc,v 1.1 1999-01-09 16:25:15 allison Exp $
+// $Id: G4OpenInventorSceneHandler.cc,v 1.2 1999-01-11 00:47:54 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -202,7 +202,7 @@ void G4OpenInventorSceneHandler::AddPrimitive (const G4Circle& circle) {
   //
   G4double userSpecified = circle.GetWorldSize() || circle.GetScreenSize();
   const G4VMarker& defaultMarker =
-     fpView -> GetViewParameters().GetDefaultMarker();
+     fpViewer -> GetViewParameters().GetDefaultMarker();
 
   G4double size = GetMarkerSize ( circle );
 
@@ -584,7 +584,7 @@ void G4OpenInventorSceneHandler::PreAddThis
   // First find the color attributes.
   //
   const G4VisAttributes* pVisAttribs =
-  fpView -> GetApplicableVisAttributes (&visAttribs);
+  fpViewer -> GetApplicableVisAttributes (&visAttribs);
   const G4Colour& g4Col =  pVisAttribs -> GetColour ();
   const double red=g4Col.GetRed ();
   const double green=g4Col.GetGreen ();
@@ -698,9 +698,9 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 
 	//----- parameters to calculate 3d size from 2d size
 	const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
-	double zoom_factor  = fpView->GetViewParameters().GetZoomFactor() ;
+	double zoom_factor  = fpViewer->GetViewParameters().GetZoomFactor() ;
 	if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
-	double extent_radius_3d = GetSceneData().GetExtent().GetExtentRadius() ;
+	double extent_radius_3d = GetScene()->GetExtent().GetExtentRadius() ;
 	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
 	//----- get marker radius in 3D units
@@ -722,7 +722,7 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 	} else {
 		// local
 		double mark_radius_2d \
-		 = fpView->GetViewParameters().GetDefaultMarker().GetScreenSize();
+		 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
 
 		// get mark radius in 3D units
 		size \
@@ -731,7 +731,7 @@ G4double  G4OpenInventorSceneHandler::GetMarkerSize ( const G4VMarker& mark )
 	}
 
 		//----- global rescaling
-	size *= fpView->GetViewParameters().GetGlobalMarkerScale(); 
+	size *= fpViewer->GetViewParameters().GetGlobalMarkerScale(); 
 
 		//----- return size
 	return size ;

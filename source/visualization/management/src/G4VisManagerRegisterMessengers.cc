@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManagerRegisterMessengers.cc,v 1.3 1999-01-09 16:31:34 allison Exp $
+// $Id: G4VisManagerRegisterMessengers.cc,v 1.4 1999-01-11 00:48:40 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -228,20 +228,20 @@ or some such.
   // Clear - OLD STYLE!!
   fMessengerList.append
     (new G4VisCommandDirectoryMessenger <G4VisCommandClear>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandClearScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandClearScene>);
   fMessengerList.append
     (new G4VisSimpleCommandMessenger <G4VisCommandClearView>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandClearViewAndScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandClearViewAndScene>);
 
   // Copy - OLD STYLE!!
   fMessengerList.append
     (new G4VisCommandDirectoryMessenger <G4VisCommandCopy>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandCopyAll>);
-  fMessengerList.append
-    (new G4VisSimpleCommandMessenger <G4VisCommandCopyScene>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyAll>);
+//  fMessengerList.append
+//    (new G4VisSimpleCommandMessenger <G4VisCommandCopyScene>);
   fMessengerList.append
     (new G4VisSimpleCommandMessenger <G4VisCommandCopyView>);
 

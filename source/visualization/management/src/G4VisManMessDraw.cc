@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManMessDraw.cc,v 1.2 1999-01-09 16:31:29 allison Exp $
+// $Id: G4VisManMessDraw.cc,v 1.3 1999-01-11 00:48:36 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -234,7 +234,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
     }
     G4ParticleTable* theParticleTable=G4ParticleTable::GetParticleTable();
 
-    G4Scene& currentScene = theVisManager -> SetCurrentSceneData ();
+    G4Scene* currentScene = theVisManager -> GetCurrentScene ();
     // Ok, lets look on the parameters
     if(newValues=="all") {
       G4FlavoredParallelWorld* CurrentFlavoredWorld;
@@ -243,7 +243,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
 	if(CurrentFlavoredWorld=theGlobalFastSimulationManager->
 	   GetFlavoredWorldForThis(theParticleTable->
 				   GetParticle(iParticle)))
-	  currentScene.AddRunDurationModel
+	  currentScene -> AddRunDurationModel
 	    (new G4FlavoredParallelWorldModel (CurrentFlavoredWorld));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	     << endl;
@@ -258,7 +258,7 @@ void G4VisManMessenger::DoCommandDraw (const G4String& commandPath,
     G4FlavoredParallelWorld* worldForThis;
     if(worldForThis=theGlobalFastSimulationManager->
        GetFlavoredWorldForThis(currentParticle)) {
-      currentScene.AddRunDurationModel
+      currentScene -> AddRunDurationModel
 	(new G4FlavoredParallelWorldModel (worldForThis));
       G4cout << "Ghosts added to the Scene, refresh the view to see it."
 	   << endl;

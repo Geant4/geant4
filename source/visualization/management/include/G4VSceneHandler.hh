@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.1 1999-01-09 16:30:46 allison Exp $
+// $Id: G4VSceneHandler.hh,v 1.2 1999-01-11 00:48:15 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -154,19 +154,19 @@ public:
 
   //////////////////////////////////////////////////////////////
   // Access functions.
-  const G4String&    GetName           () const;
-  void               SetName           (const G4String&);
-  G4int              GetSceneId        () const;
-  G4int              GetViewCount      () const;
-  G4VGraphicsSystem* GetGraphicsSystem () const;
-  const G4Scene& GetSceneData      () const;
-  const G4ViewerList& GetViewList       () const;
-  const G4VModel*    GetModel          () const;
-  G4VViewer*           GetCurrentView    () const;
-  void         SetCurrentView (G4VViewer*);
-  void         SetSceneData   (const G4Scene&);
-  G4ViewerList& SetViewList    ();  // Non-const if you need to change.
-  void         SetModel       (const G4VModel*);
+  const G4String&     GetName           () const;
+  void                SetName           (const G4String&);
+  G4int               GetSceneId        () const;
+  G4int               GetViewCount      () const;
+  G4VGraphicsSystem*  GetGraphicsSystem () const;
+  G4Scene*            GetScene          () const;
+  const G4ViewerList& GetViewerList     () const;
+  const G4VModel*     GetModel          () const;
+  G4VViewer*          GetCurrentViewer  () const;
+  void          SetCurrentViewer (G4VViewer*);
+  void          SetScene         (G4Scene*);
+  G4ViewerList& SetViewerList    ();  // Non-const so you can change.
+  void          SetModel         (const G4VModel*);
 
   //////////////////////////////////////////////////////////////
   // Public utility functions.
@@ -216,8 +216,8 @@ public:
   virtual void ClearStore ();
   // Clears graphics database (display lists) if any.
 
-  void AddViewToList      (G4VViewer* pView);  // Add view to view List.
-  void RemoveViewFromList (G4VViewer* pView);  // Remove view from view List.
+  void AddViewerToList      (G4VViewer* pView);  // Add view to view List.
+  void RemoveViewerFromList (G4VViewer* pView);  // Remove view from view List.
 
 protected:
 
@@ -229,13 +229,13 @@ protected:
   //////////////////////////////////////////////////////////////
   // Data members
 
-  G4VGraphicsSystem&     fSystem;      // Abstract system for this scene.
+  G4VGraphicsSystem&     fSystem;      // Graphics system.
   const G4int            fSceneId;     // Id of this instance.
   G4String               fName;
-  G4int                  fViewCount;   // To determine view ids for this scene.
-  G4ViewerList            fViewList;    // Views.
-  G4VViewer*               fpView;       // Current view.
-  G4Scene            fSD;          // Scene data for this scene.
+  G4int                  fViewCount;   // To determine view ids.
+  G4ViewerList           fViewerList;  // Viewers.
+  G4VViewer*             fpViewer;     // Current viewer.
+  G4Scene*               fpScene;      // Scene for this scene handler.
 
   //////////////////////////////////////////////////////////////
   // Workspace...

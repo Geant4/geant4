@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2Viewer.cc,v 1.1 1999-01-09 16:27:54 allison Exp $
+// $Id: G4VRML2Viewer.cc,v 1.2 1999-01-11 00:48:12 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.cc
@@ -28,7 +28,7 @@
 
 G4VRML2Viewer::G4VRML2Viewer(G4VRML2SceneHandler& scene, const G4String& name) :
  G4VViewer(scene, scene.IncrementViewCount(), name),
- fScene(scene),
+ fSceneHandler(scene),
  fDest(scene.fDest)
 {
 	fViewHalfAngle = 0.5 * 0.785398 ; // 0.5 * 45*deg
@@ -57,7 +57,7 @@ void G4VRML2Viewer::DrawView()
 	G4cerr << "***** G4VRML2Viewer::DrawView()" << endl;
 #endif
 	// Open VRML2 file and output header comments
-	fScene.beginSending() ;
+	fSceneHandler.beginSending() ;
 
         // Viewpoint node
         SendViewParameters(); 
@@ -81,7 +81,7 @@ void G4VRML2Viewer::ShowView(void)
 #if defined DEBUG_FR_VIEW
 	G4cerr << "***** G4VRML2Viewer::ShowView()" << endl;
 #endif
-	fScene.endSending();
+	fSceneHandler.endSending();
 }
 
 void G4VRML2Viewer::FinishView(void)
@@ -90,7 +90,7 @@ void G4VRML2Viewer::FinishView(void)
 	G4cerr << "***** G4VRML2Viewer::FinishView()" << endl;
 	//G4cerr << "G4VRML2Viewer::FinishView(); not implemented. " << endl;
 #endif
-	//fScene.endSending();
+	//fSceneHandler.endSending();
 }
 
 void G4VRML2Viewer::SendViewParameters () 
@@ -106,7 +106,7 @@ void G4VRML2Viewer::SendViewParameters ()
 	if ( fsin_VHA < 1.0e-6 ) { return ; } 
 
 	// camera distance
-	G4double extent_radius = fScene.GetSceneData().GetExtent().GetExtentRadius();
+	G4double extent_radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
 	G4double camera_distance = extent_radius / fsin_VHA ;
 
 	// camera position on Z axis

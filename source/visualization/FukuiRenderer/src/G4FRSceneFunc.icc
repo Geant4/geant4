@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FRSceneFunc.icc,v 1.2 1999-01-09 16:11:50 allison Exp $
+// $Id: G4FRSceneFunc.icc,v 1.3 1999-01-11 00:47:22 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,7 +25,7 @@ void G4FRSCENE::AddPrimitive (const G4Polyline& polyline)
      G4int            nPoints = polyline.entries ();
      G4int            i ;  
      const            G4VisAttributes*  pVA =
-       fpView->GetApplicableVisAttributes ( polyline.GetVisAttributes() ); 
+       fpViewer->GetApplicableVisAttributes ( polyline.GetVisAttributes() ); 
 
 		//----- skip drawing invisible primitive
      if( pVA ){
@@ -243,7 +243,7 @@ void G4FRSCENE::AddPrimitive ( const G4Polyhedron& polyhedron )
 	InitializeFR();
 
 		//----- Attributes
-	if(!SendVisAttributes( fpView->GetApplicableVisAttributes
+	if(!SendVisAttributes( fpViewer->GetApplicableVisAttributes
 			       (polyhedron.GetVisAttributes() ) ) ) {
 		  SendStr( FR_COLOR_RGB_RED ); // color 
 	}
@@ -385,7 +385,7 @@ void G4FRSCENE::AddThis( const G4Box& box )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_GREEN ); // color 
 	}
 
@@ -421,7 +421,7 @@ G4FRSCENE::AddThis( const G4Tubs& tubes )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_BLUE ); // color 
 	}
 
@@ -460,7 +460,7 @@ G4FRSCENE::AddThis( const G4Cons& cons )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_CYAN ); // color 
 	}
 
@@ -500,7 +500,7 @@ void G4FRSCENE::AddThis ( const G4Trd& trd )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_MAGENTA ); // color 
 	}
 
@@ -537,7 +537,7 @@ void G4FRSCENE::AddThis ( const G4Sphere& sphere )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_YELLOW ); // color 
 	}
 
@@ -595,7 +595,7 @@ void G4FRSCENE::AddThis (const G4Para& para)
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 	  SendStr( FR_COLOR_RGB_RED ); // color 
 	}
 
@@ -648,7 +648,7 @@ void G4FRSCENE::AddThis (const G4Trap& trap)
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 		  SendStr( FR_COLOR_RGB_GREEN ); // color 
 	}
 
@@ -719,7 +719,7 @@ G4FRSCENE::AddThis( const G4Torus& torus )
 
 		//----- Attributes
 	if(!SendVisAttributes
-	   ( fpView->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
+	   ( fpViewer->GetApplicableVisAttributes( fpVisAttribs ) ) ) {
 		  SendStr( FR_COLOR_RGB_BLUE ); // color 
 	}
 
@@ -803,7 +803,7 @@ G4bool G4FRSCENE::IsVisible()
 	G4bool  visibility  = true ;
 
 	const G4VisAttributes* pVisAttribs =
-	  fpView->GetApplicableVisAttributes( fpVisAttribs );
+	  fpViewer->GetApplicableVisAttributes( fpVisAttribs );
 
 		//----- 
 	if( ( getenv( FR_ENV_CULL_INVISIBLE_OBJECTS ) != NULL      )   && \
@@ -822,7 +822,7 @@ G4bool G4FRSCENE::IsVisible()
 void G4FRSCENE::SendBoundingBox( void )
 {
 		//----- (1A) CALC bounding box of the bounding sphere
-	const  G4VisExtent&  extent = GetSceneData().GetExtent();
+	const  G4VisExtent&  extent = GetScene()->GetExtent();
 	const  G4Point3D&    center = extent.GetExtentCenter(); 
 	const  G4double      radius = extent.GetExtentRadius();
 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredSceneHandler.cc,v 1.1 1999-01-09 16:23:18 allison Exp $
+// $Id: G4OpenGLStoredSceneHandler.cc,v 1.2 1999-01-11 00:47:45 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -147,7 +147,7 @@ void G4OpenGLStoredSceneHandler::ClearStore () {
 
 void G4OpenGLStoredSceneHandler::BeginModeling () {
 
-  if (fpView -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
   }
   G4VSceneHandler::BeginModeling();
@@ -172,7 +172,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   glEndList ();
   G4VSceneHandler::EndModeling ();
 
-  if (fpView -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = false;
     //    glDisable (GL_POLYGON_OFFSET_FILL);
   }

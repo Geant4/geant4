@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.icc,v 1.1 1999-01-09 16:30:47 allison Exp $
+// $Id: G4VSceneHandler.icc,v 1.2 1999-01-11 00:48:16 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,28 +110,28 @@ inline void G4VSceneHandler::SetName (const G4String& name) {
   fName = name;
 }
 
-inline const G4Scene& G4VSceneHandler::GetSceneData () const {
-  return fSD;
+inline G4Scene* G4VSceneHandler::GetScene () const {
+  return fpScene;
 }
 
-inline const G4ViewerList& G4VSceneHandler::GetViewList () const {
-  return fViewList;
+inline const G4ViewerList& G4VSceneHandler::GetViewerList () const {
+  return fViewerList;
 }
 
 inline const G4VModel* G4VSceneHandler::GetModel () const {
   return fpModel;
 }
 
-inline G4VViewer* G4VSceneHandler::GetCurrentView () const {
-  return fpView;
+inline G4VViewer* G4VSceneHandler::GetCurrentViewer () const {
+  return fpViewer;
 }
 
-inline void G4VSceneHandler::SetCurrentView (G4VViewer* pView) {
-  fpView = pView;
+inline void G4VSceneHandler::SetCurrentViewer (G4VViewer* pViewer) {
+  fpViewer = pViewer;
 }
 
-inline G4ViewerList& G4VSceneHandler::SetViewList () {
-  return fViewList;
+inline G4ViewerList& G4VSceneHandler::SetViewerList () {
+  return fViewerList;
 }
 
 inline void

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.1 1999-01-09 16:23:49 allison Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.2 1999-01-11 00:47:51 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,7 @@
 #include <X11/Shell.h>
 
 static G4ViewParameters viewingParameters;
-static void SecondaryLoopPostAction ();
+void G4OpenGLXmViewerSecondaryLoopPostAction ();
 
 void G4OpenGLXmViewer::ShowView () {
 
@@ -50,7 +50,7 @@ void G4OpenGLXmViewer::ShowView () {
 
 }
 
-static void SecondaryLoopPostAction ()
+void G4OpenGLXmViewerSecondaryLoopPostAction ()
 {
   if(G4Xt::getInstance () -> GetExitSecondaryLoopCode ()==OGL_EXIT_CODE)
     {
@@ -93,7 +93,7 @@ void G4OpenGLXmViewer::GetXmConnection () {
 *toplevel*primaryColorSetId: 3\n\
 *toplevel*secondaryColorSetId: 3\n\
 ");
-  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)SecondaryLoopPostAction);
+  interactorManager->AddSecondaryLoopPostAction ((G4SecondaryLoopAction)G4OpenGLXmViewerSecondaryLoopPostAction);
   
   shell = XtAppCreateShell ((String)fName.data(),(String)fName.data(),topLevelShellWidgetClass,XtDisplay(toplevel),NULL,0); 
   interactorManager->AddShell (shell);

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRenderer.cc,v 1.2 1999-01-09 16:11:51 allison Exp $
+// $Id: G4FukuiRenderer.cc,v 1.3 1999-01-11 00:47:23 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -69,8 +69,8 @@ G4FukuiRenderer::~G4FukuiRenderer ()
 	}
 }
 
-	//-----  G4FukuiRenderer::CreateScene () 
-G4VSceneHandler* G4FukuiRenderer::CreateScene (const G4String& name) 
+	//-----  G4FukuiRenderer::CreateSceneHandler () 
+G4VSceneHandler* G4FukuiRenderer::CreateSceneHandler (const G4String& name) 
 {
 	G4VSceneHandler* p = new G4FukuiRendererSceneHandler (*this, name);
 
@@ -82,8 +82,8 @@ G4VSceneHandler* G4FukuiRenderer::CreateScene (const G4String& name)
 	return p;
 }
 
-	//-----  G4FukuiRenderer::CreateView () 
-G4VViewer* G4FukuiRenderer::CreateView (G4VSceneHandler& scene, const G4String& name) 
+	//-----  G4FukuiRenderer::CreateViewer () 
+G4VViewer* G4FukuiRenderer::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
 	if(!flag_connected) return NULL;
        	G4VViewer* pView = 

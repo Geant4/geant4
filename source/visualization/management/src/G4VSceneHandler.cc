@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.cc,v 1.2 1999-01-10 13:25:43 allison Exp $
+// $Id: G4VSceneHandler.cc,v 1.3 1999-01-11 00:48:30 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fSystem                (system),
   fSceneId               (id),
   fViewCount             (0),
-  fpView                 (0),
+  fpViewer               (0),
   fReadyForTransients    (false),
   fpModel                (0),
   fpObjectTransformation (0),
@@ -56,7 +56,7 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
   fpCurrentLV            (0)
 {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
-  fSD = pVMan -> GetCurrentSceneData ();
+  fpScene = pVMan -> GetCurrentScene ();
   if (name == "") {
     char charname [50];
     ostrstream ost (charname, 50);
@@ -69,11 +69,11 @@ G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4S
 }
 
 G4VSceneHandler::~G4VSceneHandler () {
-  fViewList.clearAndDestroy ();
+  fViewerList.clearAndDestroy ();
 }
 
-void G4VSceneHandler::AddViewToList (G4VViewer* pView) {
-  fViewList.append (pView);
+void G4VSceneHandler::AddViewerToList (G4VViewer* pViewer) {
+  fViewerList.append (pViewer);
 }
 
 void G4VSceneHandler::EstablishSpecials (G4PhysicalVolumeModel& pvModel) {
@@ -138,15 +138,15 @@ void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
   }
 }
 
-void G4VSceneHandler::RemoveViewFromList (G4VViewer* pView) {
-  fViewList.remove (pView);
+void G4VSceneHandler::RemoveViewerFromList (G4VViewer* pViewer) {
+  fViewerList.remove (pViewer);
 }
 
-void G4VSceneHandler::SetSceneData (const G4Scene& sd) {
-  fSD = sd;
-  // Notify all views that a kernel visit is required.
-  for (int i = 0; i < fViewList.entries (); i++) {
-    fViewList [i] -> SetNeedKernelVisit ();
+void G4VSceneHandler::SetScene (G4Scene* pScene) {
+  fpScene = pScene;
+  // Notify all viewers that a kernel visit is required.
+  for (int i = 0; i < fViewerList.entries (); i++) {
+    fViewerList [i] -> SetNeedKernelVisit ();
   }
 }
 
@@ -159,7 +159,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     pNURBS = solid.CreateNURBS ();
     if (pNURBS) {
       pNURBS -> SetVisAttributes
-	(fpView -> GetApplicableVisAttributes (fpVisAttribs));
+	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
       AddPrimitive (*pNURBS);
       delete pNURBS;
       break;
@@ -177,7 +177,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
     G4Polyhedron::ResetNumberOfRotationSteps ();
     if (pPolyhedron) {
       pPolyhedron -> SetVisAttributes
-	(fpView -> GetApplicableVisAttributes (fpVisAttribs));
+	(fpViewer -> GetApplicableVisAttributes (fpVisAttribs));
       AddPrimitive (*pPolyhedron);
       delete pPolyhedron;
     }
@@ -208,7 +208,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
   // Traverse geometry tree and send drawing primitives to window(s).
 
   const RWTPtrOrderedVector <G4VModel>& runDurationModelList =
-    fSD.GetRunDurationModelList ();
+    fpScene -> GetRunDurationModelList ();
 
   if (runDurationModelList.entries ()) {
     G4cout << "Traversing scene data..." << endl;
@@ -245,7 +245,7 @@ void G4VSceneHandler::ProcessScene (G4VViewer& view) {
 
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
   // Create modeling parameters from View Parameters...
-  const G4ViewParameters& vp = fpView -> GetViewParameters ();
+  const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
   // Convert rep styles...
   G4ModelingParameters::RepStyle modelRepStyle =
     G4ModelingParameters::wireframe;
@@ -295,14 +295,14 @@ G4ModelingParameters* G4VSceneHandler::CreateModelingParameters () {
 const G4Colour& G4VSceneHandler::GetColour (const G4Visible& visible) {
   // Colour is determined by the applicable (real) vis attributes.
   const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpView -> GetApplicableVisAttributes (pVA);
+  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
   return pVA -> GetColour ();
 }
 
 const G4Colour& G4VSceneHandler::GetTextColour (const G4Text& text) {
   const G4VisAttributes* pVA = text.GetVisAttributes ();
   if (!pVA) {
-    pVA = fpView -> GetViewParameters (). GetDefaultTextVisAttributes ();
+    pVA = fpViewer -> GetViewParameters (). GetDefaultTextVisAttributes ();
   }
   return pVA -> GetColour ();
 }
@@ -313,7 +313,7 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   // attributes, except when overridden - see GetDrawingStyle (const
   // G4VisAttributes* pVisAttribs).
   const G4VisAttributes* pVA = visible.GetVisAttributes ();
-  pVA = fpView -> GetApplicableVisAttributes (pVA);
+  pVA = fpViewer -> GetApplicableVisAttributes (pVA);
   return GetDrawingStyle (pVA);
 }
 
@@ -323,7 +323,7 @@ G4ViewParameters::DrawingStyle G4VSceneHandler::GetDrawingStyle
   // it can be overriddden by the ForceDrawingStyle flag in the vis
   // attributes.
   G4ViewParameters::DrawingStyle style =
-    fpView->GetViewParameters().GetDrawingStyle();
+    fpViewer->GetViewParameters().GetDrawingStyle();
   if (pVisAttribs -> IsForceDrawingStyle ()) {
     G4VisAttributes::ForcedDrawingStyle forcedStyle =
       pVisAttribs -> GetForcedDrawingStyle ();
@@ -368,7 +368,7 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
 				  G4VSceneHandler::MarkerSizeType& markerSizeType) {
   G4bool userSpecified = marker.GetWorldSize() || marker.GetScreenSize();
   const G4VMarker& defaultMarker =
-    fpView -> GetViewParameters().GetDefaultMarker();
+    fpViewer -> GetViewParameters().GetDefaultMarker();
   G4double size;
   if (size = // Assignment intentional.
       userSpecified ? marker.GetWorldSize() : defaultMarker.GetWorldSize()) {
@@ -382,7 +382,7 @@ G4double G4VSceneHandler::GetMarkerSize (const G4VMarker& marker,
     markerSizeType = screen;
   }
   if (size <= 0.) size = 1.;
-  size *= fpView -> GetViewParameters().GetGlobalMarkerScale();
+  size *= fpViewer -> GetViewParameters().GetGlobalMarkerScale();
   return size;
 }
 
@@ -391,12 +391,12 @@ ostream& operator << (ostream& os, const G4VSceneHandler& s) {
   G4VisManager* pVMan = G4VisManager::GetInstance ();
 
   os << "Scene " << s.fName << " has "
-     << s.fViewList.entries () << " views:";
-  for (int i = 0; i < s.fViewList.entries (); i++) {
-    os << "\n  " << s.fViewList [i];
+     << s.fViewerList.entries () << " viewers:";
+  for (int i = 0; i < s.fViewerList.entries (); i++) {
+    os << "\n  " << s.fViewerList [i];
   }
 
-  os << "\n  " << s.fSD;
+  os << "\n  " << *s.fpScene;
 
   return os;
 }

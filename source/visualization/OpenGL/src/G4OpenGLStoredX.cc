@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredX.cc,v 1.2 1999-01-09 16:23:22 allison Exp $
+// $Id: G4OpenGLStoredX.cc,v 1.3 1999-01-11 00:47:47 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,14 +32,14 @@ G4OpenGLStoredX::G4OpenGLStoredX ():
 		     G4VisFeaturesOfOpenGLSX (),
 		     G4VGraphicsSystem::threeD) {}
 
-G4VSceneHandler* G4OpenGLStoredX::CreateScene (const G4String& name) {
+G4VSceneHandler* G4OpenGLStoredX::CreateSceneHandler (const G4String& name) {
   G4VSceneHandler* pScene = new G4OpenGLStoredSceneHandler (*this, name);
   G4cout << G4OpenGLStoredSceneHandler::GetSceneCount ()
        << ' ' << fName << " scenes extanct." << endl;
   return    pScene;
 }
 
-G4VViewer* G4OpenGLStoredX::CreateView (G4VSceneHandler& scene,
+G4VViewer* G4OpenGLStoredX::CreateViewer (G4VSceneHandler& scene,
 				      const G4String& name) {
   G4VViewer* pView =
     new G4OpenGLStoredXViewer ((G4OpenGLStoredSceneHandler&) scene, name);
@@ -47,13 +47,13 @@ G4VViewer* G4OpenGLStoredX::CreateView (G4VSceneHandler& scene,
     if (pView -> GetViewId () < 0) {
       delete pView;
       pView = 0;
-      G4cerr << "G4OpenGLStoredX::CreateView: error flagged by"
+      G4cerr << "G4OpenGLStoredX::CreateViewer: error flagged by"
 	" negative view id in G4OpenGLStoredXViewer creation."
 	"\n Destroying view and returning null pointer." << endl;
     }
   }
   else {
-    G4cerr << "G4OpenGLStoredX::CreateView: null pointer on"
+    G4cerr << "G4OpenGLStoredX::CreateViewer: null pointer on"
       " new G4OpenGLStoredXViewer." << endl;
   }
   return pView;

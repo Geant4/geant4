@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.1 1999-01-09 16:23:09 allison Exp $
+// $Id: G4OpenGLImmediateSceneHandler.cc,v 1.2 1999-01-11 00:47:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,7 +85,7 @@ void G4OpenGLImmediateSceneHandler::EndPrimitives () {
 
 void G4OpenGLImmediateSceneHandler::BeginModeling () {
 
-  if (fpView -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
   }
   G4VSceneHandler::BeginModeling();
@@ -93,7 +93,7 @@ void G4OpenGLImmediateSceneHandler::BeginModeling () {
 
 void G4OpenGLImmediateSceneHandler::EndModeling () {
   G4VSceneHandler::EndModeling ();
-  if (fpView -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
+  if (fpViewer -> GetViewParameters ().GetDrawingStyle() == G4ViewParameters::hlr) {
     initialize_hlr = true;
     //    glDisable (GL_POLYGON_OFFSET_FILL);
   }

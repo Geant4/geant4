@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2.cc,v 1.2 1999-01-09 16:27:49 allison Exp $
+// $Id: G4VRML2.cc,v 1.3 1999-01-11 00:48:09 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2.cc
@@ -51,7 +51,7 @@ G4VRML2::~G4VRML2()
 }
 
 
-G4VSceneHandler* G4VRML2::CreateScene(const G4String& name) 
+G4VSceneHandler* G4VRML2::CreateSceneHandler(const G4String& name) 
 {
 	G4VSceneHandler *p = NULL;
 
@@ -63,7 +63,7 @@ G4VSceneHandler* G4VRML2::CreateScene(const G4String& name)
 	return p;
 }
 
-G4VViewer* G4VRML2::CreateView(G4VSceneHandler& scene, const G4String& name)
+G4VViewer* G4VRML2::CreateViewer(G4VSceneHandler& scene, const G4String& name)
 {
 	G4VViewer* pView = NULL;
 

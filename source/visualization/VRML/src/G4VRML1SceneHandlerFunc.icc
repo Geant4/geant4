@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML1SceneHandlerFunc.icc,v 1.1 1999-01-09 16:27:47 allison Exp $
+// $Id: G4VRML1SceneHandlerFunc.icc,v 1.2 1999-01-11 00:48:08 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML1SceneHandlerFunc.icc
@@ -446,7 +446,7 @@ void G4VRML1SCENE::SendMaterialNode( const G4VisAttributes*  pVA )
 void G4VRML1SCENE::SendMaterialNode()
 {
 	SendMaterialNode
-	( fpView->GetApplicableVisAttributes (fpVisAttribs) );
+	( fpViewer->GetApplicableVisAttributes (fpVisAttribs) );
 }
 
 
@@ -573,9 +573,9 @@ G4double  G4VRML1SCENE::GetMarkerHalfSize ( const G4VMarker& mark )
 
 	//----- parameters to calculate 3d size from 2d size
 	const double HALF_SCREEN_SIZE_2D = 300.0 ; // pixels
-	double zoom_factor  = fpView->GetViewParameters().GetZoomFactor() ;
+	double zoom_factor  = fpViewer->GetViewParameters().GetZoomFactor() ;
 	if ( zoom_factor <=  0.0 ) { zoom_factor = 1.0 ; }
-	double extent_radius_3d = GetSceneData().GetExtent().GetExtentRadius() ;
+	double extent_radius_3d = GetScene()->GetExtent().GetExtentRadius() ;
 	if ( extent_radius_3d <= 0.0 ) { extent_radius_3d = 1.0 ; } 
 
 	//----- get marker radius in 3D units
@@ -597,7 +597,7 @@ G4double  G4VRML1SCENE::GetMarkerHalfSize ( const G4VMarker& mark )
 	} else {
 		// local
 		double mark_radius_2d \
-		 = fpView->GetViewParameters().GetDefaultMarker().GetScreenSize();
+		 = fpViewer->GetViewParameters().GetDefaultMarker().GetScreenSize();
 
 		// get mark radius in 3D units
 		size \
@@ -606,7 +606,7 @@ G4double  G4VRML1SCENE::GetMarkerHalfSize ( const G4VMarker& mark )
 	}
 
 		//----- global rescaling
-	size *= fpView->GetViewParameters().GetGlobalMarkerScale(); 
+	size *= fpViewer->GetViewParameters().GetGlobalMarkerScale(); 
 
 		//----- return size
 	return size ;

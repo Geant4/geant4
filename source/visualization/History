@@ -1,4 +1,4 @@
-$Id: History,v 1.5 1999-01-11 00:38:49 allison Exp $
+$Id: History,v 1.6 1999-01-11 00:46:58 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+vis-01-00-04 11th January 1999  John Allison
+- Completed change of names from scene to sceneHandler, view to viewer.
+- Vis manager and scene handlers now keep pointer to scene, rather than a copy.
+- G4SceneList now a simple RWTPtrOrderedVector.
+- /vis/camera/reset now resets viewpoint direction and up vector.
 
 vis-01-00-03 10th January 1999  John Allison
 - Added flags for viewing geom, hits, digis to G4ModelingParameters.

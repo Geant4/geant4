@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLStoredViewer.cc,v 1.1 1999-01-09 16:23:19 allison Exp $
+// $Id: G4OpenGLStoredViewer.cc,v 1.2 1999-01-11 00:47:46 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,7 +31,7 @@ class G4OpenGLStoredSceneHandler;
 G4OpenGLStoredViewer::G4OpenGLStoredViewer (G4OpenGLStoredSceneHandler& scene):
 G4VViewer (scene, -1),  
 G4OpenGLViewer (scene), 
-fScene (scene)
+fSceneHandler (scene)
 {}
 
 void G4OpenGLStoredViewer::KernelVisitDecision () {
@@ -77,14 +77,14 @@ void G4OpenGLStoredViewer::KernelVisitDecision () {
 
 void G4OpenGLStoredViewer::DrawDisplayLists () {
   
-  if (fScene.fTopPODL) glCallList (fScene.fTopPODL);
+  if (fSceneHandler.fTopPODL) glCallList (fSceneHandler.fTopPODL);
   
-  G4int nTODLs = fScene.fTODLList.entries ();
+  G4int nTODLs = fSceneHandler.fTODLList.entries ();
   for (int i = 0; i < nTODLs; i++) {
     glPushMatrix();
-    G4OpenGLTransform3D oglt (fScene.fTODLTransformList (i));
+    G4OpenGLTransform3D oglt (fSceneHandler.fTODLTransformList (i));
     glMultMatrixd (oglt.GetGLMatrix ());
-    glCallList (fScene.fTODLList(i));
+    glCallList (fSceneHandler.fTODLList(i));
     glPopMatrix();
   }
 }

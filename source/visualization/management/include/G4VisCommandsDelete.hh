@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsDelete.hh,v 1.2 1999-01-09 16:30:58 allison Exp $
+// $Id: G4VisCommandsDelete.hh,v 1.3 1999-01-11 00:48:24 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ public:
     if (pVMan -> GetVerboseLevel () > 1) {
       pVMan -> PrintCurrentView ();
     }
-    pVMan -> DeleteCurrentScene ();
+    pVMan -> DeleteCurrentSceneHandler ();
     if (pVMan -> GetVerboseLevel () > 1) {
       pVMan -> PrintCurrentView ();
     }
@@ -68,7 +68,7 @@ public:
     if (pVMan -> GetVerboseLevel () > 1) {
       pVMan -> PrintCurrentView ();
     }
-    pVMan -> DeleteCurrentView ();
+    pVMan -> DeleteCurrentViewer ();
     if (pVMan -> GetVerboseLevel () > 1) {
       pVMan -> PrintCurrentView ();
     }

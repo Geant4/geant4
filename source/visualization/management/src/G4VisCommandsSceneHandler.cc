@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneHandler.cc,v 1.3 1999-01-09 16:31:21 allison Exp $
+// $Id: G4VisCommandsSceneHandler.cc,v 1.4 1999-01-11 00:48:33 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/sceneHandler commands - John Allison  10th October 1998
@@ -29,7 +29,7 @@ G4VVisCommandSceneHandler::G4VVisCommandSceneHandler () {}
 
 void G4VVisCommandSceneHandler::UpdateCandidateLists () {
 
-  const G4SceneHandlerList& list = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
 
   fSceneHandlerNameList = G4String ();
   for (int iScene = 0; iScene < list.entries (); iScene++) {
@@ -80,7 +80,7 @@ G4VisCommandSceneHandlerAttach::~G4VisCommandSceneHandlerAttach () {
 }
 
 G4String G4VisCommandSceneHandlerAttach::GetCurrentValue (G4UIcommand* command) {
-  return fpVisManager -> GetCurrentSceneData ().GetName ();
+  return fpVisManager -> GetCurrentScene () -> GetName ();
 }
 
 void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
@@ -94,7 +94,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* pSceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (!pSceneHandler) {
     G4cout <<
       "Current scene handler not defined.  Please select or create one."
@@ -103,7 +103,7 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
   }
 
   G4SceneList& sceneList =
-    fpVisManager -> SetSceneDataObjectList ();
+    fpVisManager -> SetSceneList ();
 
   if (sceneList.isEmpty ()) {
     G4cout <<
@@ -112,10 +112,14 @@ void G4VisCommandSceneHandlerAttach::SetNewValue (G4UIcommand* command,
     return;
   }
 
-  if (sceneList.contains (sceneName)) {
-    const G4Scene& scene = sceneList [sceneName];
-    pSceneHandler -> SetSceneData (scene);
-    fpVisManager -> SetCurrentSceneData () = scene;
+  G4int iScene, nScenes = sceneList.entries ();
+  for (iScene = 0; iScene < nScenes; iScene++) {
+    if (sceneList [iScene] -> GetName () == sceneName) break;
+  }
+  if (iScene < nScenes) {
+    G4Scene* pScene = sceneList [iScene];
+    pSceneHandler -> SetScene (pScene);
+    fpVisManager -> SetCurrentScene (pScene);
     G4cout << "Scene \"" << sceneName
 	   << "\" attached to scene handler \"" << pSceneHandler -> GetName ()
 	   << "." << endl;
@@ -208,7 +212,7 @@ G4String G4VisCommandSceneHandlerCreate::GetCurrentValue
   }
 
   G4String sceneName;
-  const G4VSceneHandler* scene = fpVisManager -> GetCurrentScene ();
+  const G4VSceneHandler* scene = fpVisManager -> GetCurrentSceneHandler ();
   if (scene) {
     sceneName = scene -> GetName ();
   }
@@ -259,9 +263,6 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   fpVisManager -> SetCurrentGraphicsSystem (pSystem);
   if (fpVisManager -> GetVerboseLevel () > 0) {
     G4cout << "Graphics system set to " << pSystem -> GetName () << endl;
-    if (fpVisManager -> GetVerboseLevel () > 1) {
-      fpVisManager -> PrintCurrentSystem ();
-    }
   }
 
   // Now deal with name of scene handler.
@@ -271,7 +272,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   }
   if (newName == nextName) fId++;
 
-  const G4SceneHandlerList& list = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   int iScene;
   for (iScene = 0; iScene < list.entries (); iScene++) {
     G4VSceneHandler* sceneHandler = list [iScene];
@@ -282,7 +283,7 @@ void G4VisCommandSceneHandlerCreate::SetNewValue (G4UIcommand* command,
   }
 
   //Create scene handler.
-  fpVisManager -> CreateScene (newName);
+  fpVisManager -> CreateSceneHandler (newName);
   G4cout << "New scene handler \"" << newName << "\" created." << endl;
 
   // Attach scene.
@@ -331,7 +332,7 @@ void G4VisCommandSceneHandlerList::SetNewValue (G4UIcommand* command,
   istrstream is ((char*)newValue.data());
   is >> name >> verbosity;
 
-  const G4SceneHandlerList& list = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   G4bool found = false;
   for (int iSH = 0; iSH < list.entries (); iSH++) {
     if (name != "all") {
@@ -375,7 +376,7 @@ G4VisCommandSceneHandlerRemove::~G4VisCommandSceneHandlerRemove () {
 }
 
 G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand* command) {
-  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (sceneHandler) {
     return sceneHandler -> GetName ();
   }
@@ -387,13 +388,14 @@ G4String G4VisCommandSceneHandlerRemove::GetCurrentValue (G4UIcommand* command) 
 void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& removeName = newValue;
-  G4VSceneHandler* currentSceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* currentSceneHandler =
+    fpVisManager -> GetCurrentSceneHandler ();
   G4String currentName;
   if (currentSceneHandler) {
     currentName = currentSceneHandler -> GetName ();
   }
 
-  G4SceneHandlerList& list = fpVisManager -> SetAvailableScenes ();
+  G4SceneHandlerList& list = fpVisManager -> SetAvailableSceneHandlers ();
   G4int iSH;
   for (iSH = 0; iSH < list.entries (); iSH++) {
     if (list [iSH] -> GetName () == removeName) break;
@@ -408,7 +410,7 @@ void G4VisCommandSceneHandlerRemove::SetNewValue (G4UIcommand* command,
 
   G4cout << "Scene handler \"" << removeName << "\" removed." << endl;
   if (removeName == currentName) {
-    fpVisManager -> DeleteCurrentScene ();
+    fpVisManager -> DeleteCurrentSceneHandler ();
   }
   else {
     list.remove (list [iSH]);
@@ -440,7 +442,7 @@ G4VisCommandSceneHandlerSelect::~G4VisCommandSceneHandlerSelect () {
 
 G4String G4VisCommandSceneHandlerSelect::GetCurrentValue 
 (G4UIcommand* command) {
-  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentScene ();
+  G4VSceneHandler* sceneHandler = fpVisManager -> GetCurrentSceneHandler ();
   if (sceneHandler) {
     return sceneHandler -> GetName ();
   }
@@ -452,19 +454,19 @@ G4String G4VisCommandSceneHandlerSelect::GetCurrentValue
 void G4VisCommandSceneHandlerSelect::SetNewValue (G4UIcommand* command,
 					   G4String newValue) {
   G4String& selectName = newValue;
-  const G4SceneHandlerList& list = fpVisManager -> GetAvailableScenes ();
+  const G4SceneHandlerList& list = fpVisManager -> GetAvailableSceneHandlers ();
   G4cout << "Scene handler \"" << selectName << "\"";
   G4int iSH;
   for (iSH = 0; iSH < list.entries (); iSH++) {
     if (list [iSH] -> GetName () == selectName) break;
   }
   if (iSH < list.entries ()) {
-    if (fpVisManager -> GetCurrentScene () -> GetName () == selectName) {
+    if (fpVisManager -> GetCurrentSceneHandler () -> GetName () == selectName) {
       G4cout << " already selected." << endl;
     }
     else {
       G4cout << " being selected." << endl;
-      fpVisManager -> SetCurrentScene (list [iSH]);
+      fpVisManager -> SetCurrentSceneHandler (list [iSH]);
     }
   }
   else {

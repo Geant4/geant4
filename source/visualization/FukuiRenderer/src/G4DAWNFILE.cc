@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILE.cc,v 1.2 1999-01-09 16:11:46 allison Exp $
+// $Id: G4DAWNFILE.cc,v 1.3 1999-01-11 00:47:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -41,8 +41,8 @@ G4DAWNFILE::~G4DAWNFILE ()
 {}
 
 
-	//-----  G4DAWNFILE::CreateScene (const G4String& name) 
-G4VSceneHandler* G4DAWNFILE::CreateScene (const G4String& name) 
+	//-----  G4DAWNFILE::CreateSceneHandler (const G4String& name) 
+G4VSceneHandler* G4DAWNFILE::CreateSceneHandler (const G4String& name) 
 {
 	G4VSceneHandler* p = new G4DAWNFILESceneHandler (*this, name);
 
@@ -52,8 +52,8 @@ G4VSceneHandler* G4DAWNFILE::CreateScene (const G4String& name)
 	return p;
 }
 
-	//-----  G4DAWNFILE::CreateView ()
-G4VViewer* G4DAWNFILE::CreateView (G4VSceneHandler& scene, const G4String& name) 
+	//-----  G4DAWNFILE::CreateViewer ()
+G4VViewer* G4DAWNFILE::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
        	G4VViewer* pView = 
 	  new G4DAWNFILEViewer ((G4DAWNFILESceneHandler&) scene, name);

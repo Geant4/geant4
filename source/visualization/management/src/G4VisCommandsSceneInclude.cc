@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsSceneInclude.cc,v 1.2 1999-01-09 16:31:22 allison Exp $
+// $Id: G4VisCommandsSceneInclude.cc,v 1.3 1999-01-11 00:48:34 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/scene commands - John Allison  9th August 1998
@@ -39,7 +39,7 @@ G4String G4VisCommandSceneIncludeHits::GetCurrentValue (G4UIcommand* command) {
 
 void G4VisCommandSceneIncludeHits::SetNewValue (G4UIcommand* command,
 						G4String newValue) {
-  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
@@ -47,12 +47,11 @@ void G4VisCommandSceneIncludeHits::SetNewValue (G4UIcommand* command,
   }
 
   G4HitsModel* model = new G4HitsModel;
-  const G4String& currentSceneName =
-    fpVisManager -> GetCurrentSceneData ().GetName ();
-  (list [currentSceneName]).AddEndOfEventModel (model);
-  UpdateVisManagerSceneDataAndViewParameters ();
-  G4cout << "Hits will be drawn at end of event when scene \""
-	 << currentSceneName << "\" is current"
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pCurrentScene -> GetName ();
+  pCurrentScene -> AddEndOfEventModel (model);
+  G4cout << "Hits will be drawn in scene \""
+	 << currentSceneName << "\"."
 	 << endl;
 }
 
@@ -79,7 +78,7 @@ G4String G4VisCommandSceneIncludeTrajectories::GetCurrentValue (G4UIcommand* com
 
 void G4VisCommandSceneIncludeTrajectories::SetNewValue (G4UIcommand* command,
 					      G4String newValue) {
-  G4SceneList& list = fpVisManager -> SetSceneDataObjectList ();
+  G4SceneList& list = fpVisManager -> SetSceneList ();
   if (list.isEmpty ()) {
     G4cout << "No scenes - please create one before adding anything."
 	   << endl;
@@ -87,11 +86,10 @@ void G4VisCommandSceneIncludeTrajectories::SetNewValue (G4UIcommand* command,
   }
 
   G4TrajectoriesModel* model = new G4TrajectoriesModel;
-  const G4String& currentSceneName =
-    fpVisManager -> GetCurrentSceneData ().GetName ();
-  (list [currentSceneName]).AddEndOfEventModel (model);
-  UpdateVisManagerSceneDataAndViewParameters ();
-  G4cout << "Trajectories will be drawn at end of event when scene \""
-	 << currentSceneName << "\" is current"
+  G4Scene* pCurrentScene = fpVisManager -> GetCurrentScene ();
+  const G4String& currentSceneName = pCurrentScene -> GetName ();
+  pCurrentScene -> AddEndOfEventModel (model);
+  G4cout << "Trajectories will be drawn in scene \""
+	 << currentSceneName << "\"."
 	 << endl;
 }

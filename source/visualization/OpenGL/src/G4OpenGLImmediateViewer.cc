@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLImmediateViewer.cc,v 1.1 1999-01-09 16:23:10 allison Exp $
+// $Id: G4OpenGLImmediateViewer.cc,v 1.2 1999-01-11 00:47:42 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 G4OpenGLImmediateViewer::G4OpenGLImmediateViewer (G4OpenGLImmediateSceneHandler& scene):
 G4VViewer (scene, -1),
 G4OpenGLViewer (scene),
-fScene (scene)
+fSceneHandler (scene)
 {}
 
 #endif

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.2 1999-01-09 16:23:38 allison Exp $
+// $Id: G4OpenGLXmMainMenubarCallbacks.cc,v 1.3 1999-01-11 00:47:49 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -192,8 +192,8 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							   pan_slider_list,
 							   True,
 							   2,
-							   pView->pan_sens = pView->GetScene()->GetSceneData().GetExtent().GetExtentRadius() / 10.0,
-							   pView->pan_sens_limit = pView->GetScene()->GetSceneData().GetExtent().GetExtentRadius(),
+							   pView->pan_sens = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius() / 10.0,
+							   pView->pan_sens_limit = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius(),
 							   0);
 	pView->fppanning_box->AddChild (pView->fppanning_slider);
 	
@@ -229,8 +229,8 @@ void G4OpenGLXmViewer::actions_callback (Widget w,
 							 True,
 							 2,
 							 pView->fVP.GetDolly(),
-							 pView->dolly_high = pView->GetScene()->GetSceneData().GetExtent().GetExtentRadius(),
-							 pView->dolly_low = -(pView->GetScene()->GetSceneData().GetExtent().GetExtentRadius()));
+							 pView->dolly_high = pView->GetScene()->GetScene()->GetExtent().GetExtentRadius(),
+							 pView->dolly_low = -(pView->GetScene()->GetScene()->GetExtent().GetExtentRadius()));
 	//							 pView->dolly_high,
 	//							 pView->dolly_low);
 	pView->fpdolly_box->AddChild (pView->fpdolly_slider);
