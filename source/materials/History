@@ -1,4 +1,4 @@
-$Id: History,v 1.17 2001-04-03 12:32:53 maire Exp $
+$Id: History,v 1.18 2001-04-03 14:37:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      
 03.04.01 M.Maire - materials-V03-00-07
-         fnulcof added in G4SandiaTable     
+         removed warning to cerr in GetIsotope(name), GetElement(name),
+	 and GetMaterial(name).
+         fnulcof added as data member in G4SandiaTable.
      
 22.03.01 M.Maire - materials-V03-00-06
          revision of destructor, copy constructor, assignement operator in
