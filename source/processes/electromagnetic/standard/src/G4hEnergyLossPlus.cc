@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLossPlus.cc,v 1.4 1999-04-28 15:07:16 urban Exp $
+// $Id: G4hEnergyLossPlus.cc,v 1.5 1999-05-10 13:25:35 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -1394,6 +1394,8 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is the same as in Glandz in Geant3.
 {
+  static const G4double Tlow=10.*keV ;
+
   // check if the material has changed ( cache mechanism)
   if (aMaterial != lastMaterial)
     {
@@ -1423,6 +1425,10 @@ G4double G4hEnergyLossPlus::GetLossWithFluct(const G4DynamicParticle* aParticle,
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
   threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
+
+  // ************************************************************************
+  if((Tkin < threshold)||(Tkin < Tlow))  return MeanLoss ;
+  // ************************************************************************
 
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);

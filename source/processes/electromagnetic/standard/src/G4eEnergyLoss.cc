@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.cc,v 1.4 1999-03-04 15:53:02 urban Exp $
+// $Id: G4eEnergyLoss.cc,v 1.5 1999-05-10 13:25:32 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // $Id: 
@@ -909,7 +909,7 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
   G4int index = aMaterial->GetIndex();
   
   G4double Step = stepData.GetStepLength();
-  
+
   fParticleChange.Initialize(trackData);  
   
   G4double MeanLoss, finalT; 
@@ -967,10 +967,12 @@ G4VParticleChange* G4eEnergyLoss::AlongStepDoIt( const G4Track& trackData,
 
 G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
                                                G4Material* aMaterial,
-                                               G4double    MeanLoss)
+                                             G4double    MeanLoss)
 //  calculate actual loss from the mean loss
 //  The model used to get the fluctuation is the same as in Glandz in Geant3.
 {
+  static const G4double Tlow=10.*keV ;
+
   // check if the material has changed ( cache mechanism)
 
   if (aMaterial != lastMaterial)
@@ -987,7 +989,6 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
       ipotFluct    = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
       ipotLogFluct = aMaterial->GetIonisation()->GetLogMeanExcEnergy();
     }
-
   G4double threshold,w1,w2,w3,lnw3,C,prob,
            beta2,suma,e0,Em,loss,lossc ,w;
   G4double a1,a2,a3;
@@ -1000,8 +1001,13 @@ G4double G4eEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   // get particle data
   G4double Tkin   = aParticle->GetKineticEnergy();
+
   if (Charge<0.) threshold =((*G4Electron::Electron()).GetCutsInEnergy())[imat];
   else           threshold =((*G4Positron::Positron()).GetCutsInEnergy())[imat];
+
+  // ************************************************************************
+  if((Tkin < threshold)||(Tkin < Tlow))  return MeanLoss ;
+  // ************************************************************************
 
   G4double rmass = electron_mass_c2/ParticleMass;
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
