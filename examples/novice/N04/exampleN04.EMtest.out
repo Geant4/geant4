@@ -116,24 +116,24 @@ msc:  Model variant of multiple scattering for pi-
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     15 hits are stored in ExN04TrackerHitsCollection.
-     6 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 0.26176603 (GeV)
+     11 hits are stored in ExN04TrackerHitsCollection.
+     4 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 0.58056245 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 ### Run 1 start.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 0
-     13 hits are stored in ExN04TrackerHitsCollection.
-     43 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 15.856069 (GeV)
+     5 hits are stored in ExN04TrackerHitsCollection.
+     41 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 2.8854321 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Stage 0->1 : 1 hits found in the muon chamber.
 Stage 1->2 : 1 isolated muon found.
 >>> Event 1
-     6 hits are stored in ExN04TrackerHitsCollection.
-     22 hits are stored in ExN04CalorimeterHitsCollection.
-     Total energy deposition in calorimeter : 1.520103 (GeV)
+     0 hits are stored in ExN04TrackerHitsCollection.
+     54 hits are stored in ExN04CalorimeterHitsCollection.
+     Total energy deposition in calorimeter : 3.5684286 (GeV)
      1 hits are stored in ExN04MuonHitsCollection.
 Graphics systems deleted.
 Visualization Manager deleting...
