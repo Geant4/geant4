@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+// $Id: example_MyPythia.cc,v 1.3 2002-12-13 11:42:38 gcosmo Exp $
+// ====================================================================
+//   example_MyPythia.cc
 //
 //   sample event generation using Pythia and HepMC(CLHEP)
 // ====================================================================

@@ -22,6 +22,9 @@
 //
 //   sample event generation using Pythia and HepMC(CLHEP)
 // ====================================================================
+// $Id: example_MyPythia.cc,v 1.3 2002-12-13 11:42:37 gcosmo Exp $
+// ====================================================================
+//   example_MyPythia.cc
 
 #include "CLHEP/HepMC/CBhepevt.h"
 #include "CLHEP/HepMC/WriteHepMC.h"

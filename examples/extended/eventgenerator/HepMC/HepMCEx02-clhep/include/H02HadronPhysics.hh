@@ -19,6 +19,9 @@
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
+//========================
+// taken from example N04 of G4 distribution
+//========================
 #ifndef H02HadronPhysics_h
 #define H02HadronPhysics_h 1
 
