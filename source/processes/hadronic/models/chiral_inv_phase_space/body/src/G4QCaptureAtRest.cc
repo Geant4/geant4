@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4QCaptureAtRest.cc,v 1.12 2005-02-21 18:47:56 mkossov Exp $
+// $Id: G4QCaptureAtRest.cc,v 1.13 2005-03-24 16:06:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QCaptureAtRest class -----------------
@@ -180,7 +180,7 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
   std::vector<G4double> sumfra;
   for(i=0; i<nE; ++i)
   {
-	G4double frac=material->GetFractionVector()[i];
+   	G4double frac=material->GetFractionVector()[i];
     G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
     if(projPDG==13||projPDG==15)
     {
@@ -195,22 +195,52 @@ G4VParticleChange* G4QCaptureAtRest::AtRestDoIt(const G4Track& track, const G4St
     sumfra.push_back(sum);             // remember the summation steps
   }
   G4double rnd = sum*G4UniformRand();
-  for(i=0; i<nE; ++i)
-  {
-    G4int cZ=static_cast<G4int>((*theElementVector)[i]->GetZ());
-    sum=sumfra[i];
-    if (rnd<sum)  
-    { 
-	     Z = cZ;
-      break;
-	   }
-  }
+  for(i=0; i<nE; ++i) if (rnd<sumfra[i]) break;
+  G4Element* pElement=(*theElementVector)[i];
+  Z=static_cast<G4int>(pElement->GetZ());
   if(Z<=0)
   {
     G4cerr<<"---Worning---G4QCaptureAtRest::AtRestDoIt:Element with Z="<<Z<< G4endl;
     if(Z<0) return 0;
   }
-  G4int N = G4QIsotope::Get()->GetNeutrons(Z);
+  G4int N = Z;
+  G4IsotopeVector* isoVector=pElement->GetIsotopeVector();
+  G4int isoSize=isoVector->size();
+#ifdef debug
+  G4cout<<"G4QCaptureAtRest::AtRestDoIt: isovectorLength="<<isoSize<<G4endl;
+#endif
+  if(isoVector->size())               // The Element has not trivial abumdance set
+  {
+    // @@ the following solution is temporary till G4Element can contain the QIsotopIndex
+    G4int curInd=G4QIsotope::Get()->GetLastIndex(Z);
+    if(!curInd)                       // The new artificial element must be defined 
+				{
+      std::vector<std::pair<G4int,G4double>*>* newAbund =
+                                               new std::vector<std::pair<G4int,G4double>*>;
+      G4double* abuVector=pElement->GetRelativeAbundanceVector();
+      for(G4int j=0; j<isoSize; j++)
+      {
+        N=pElement->GetIsotope(j)->GetN()-Z;
+        if(pElement->GetIsotope(j)->GetZ()!=Z) G4cerr<<"*G4QCaptureAtRest::AtRestDoIt: Z="
+																																							 <<pElement->GetIsotope(j)->GetZ()<<"#"<<Z<<G4endl;
+        G4double abund=abuVector[j];
+								std::pair<G4int,G4double>* pr= new std::pair<G4int,G4double>(N,abund);
+#ifdef debug
+        G4cout<<"G4QCaptureAtRest::AtRestDoIt:pair#="<<j<<", N="<<N<<",ab="<<abund<<G4endl;
+#endif
+        newAbund->push_back(pr);
+						}
+#ifdef debug
+      G4cout<<"G4QCaptureAtRest::AtRestDoIt: pairVectorLength="<<newAbund->size()<<G4endl;
+#endif
+      curInd=G4QIsotope::Get()->InitElement(Z,1,newAbund);
+      for(G4int k=0; k<isoSize; k++) delete (*newAbund)[k];
+      delete newAbund;
+    }
+    // @@ ^^^^^^^^^^ End of the temporary solution ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    N = G4QIsotope::Get()->GetNeutrons(Z,curInd);
+  }
+  else  N = G4QIsotope::Get()->GetNeutrons(Z);
   nOfNeutrons=N;                                       // Remember it for energy-mom. check
   if(manualFlag) G4QNucleus::SetParameters(freeNuc,freeDib,clustProb,mediRatio); // ManualP
 		else if(Z+N>20) G4QNucleus::SetParameters(.18,.06,6.,1.); //HeavyNuclei ClusterizationPar

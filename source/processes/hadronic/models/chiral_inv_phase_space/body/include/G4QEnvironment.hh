@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.25 2005-02-04 08:53:50 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.26 2005-03-24 16:06:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -49,9 +49,9 @@ public:
 
   //Selectors
   G4QNucleus       GetEnvironment() const;
-  G4QuasmonVector* GetQuasmons();
-  G4QHadronVector* GetQHadrons();
-  G4QHadronVector* GetProjectiles();
+  G4QuasmonVector* GetQuasmons();           // User is responsible for Destroy/Clear/Delete
+  G4QHadronVector* GetQHadrons();           // User is responsible for Destroy/Clear/Delete
+  G4QHadronVector* GetProjectiles();        // User is responsible for Destroy/Clear/Delete
 
   // Modifiers
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
@@ -59,7 +59,14 @@ public:
   // Static functions
   static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
-private:  
+  static void OpenElectromagneticDecays();
+  static void CloseElectromagneticDecays();
+
+protected:
+  void CleanUpQHadrons();  // Only another G4QEnvironment issue can use it (can make mess)
+  void FillQHadrons(G4QHadronVector* input); //Only another G4QEnvironment issue can use it
+
+private:
   G4QHadronVector* FSInteraction();         // Final State Interaction after Hadronization
   G4QHadronVector  HadronizeQEnvironment(); // Main HadronizationFunction used in Fragment
   void             CopyAndDeleteHadronVector(G4QHadronVector* HV);//Copy HadrVect to Output
@@ -82,6 +89,8 @@ private:
 // Body
 private:
   // Static Parameters
+  static G4bool      WeakDecays;     // Flag for opening WeakDecays (notUsed: allAreClosed)
+  static G4bool      ElMaDecays;     // Flag for opening ElectroMagDecays (true by default)
   static G4bool      EnergyFlux;     // Flag for Energy Flux use instead of Multy Quasmon
   static G4double    SolidAngle;     // Part of Solid Angle to capture secondaries(@@A-dep)
   static G4double    PiPrThresh;     // Pion Production Threshold for gammas
@@ -89,7 +98,8 @@ private:
   static G4double    DiNuclMass;     // Double Nucleon Mass for virtual normalization
   // Output hadrons
   G4QHadronVector    theQHadrons;    // Vector of generated secondary hadrons
-  // Internal working parameters
+  // Internal working objects
+  G4QHadronVector    intQHadrons;    // Vector of postponed secondary hadrons
   G4QCHIPSWorld*     theWorld;       // the CHIPS World
   G4int              nBarClust;      // Maximum BarionNumber of clusters (To optimize calc)
   G4double           f2all;          // Ratio of freeNucleons to free+denseNucleons

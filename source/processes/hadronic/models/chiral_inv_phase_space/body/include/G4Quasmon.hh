@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.hh,v 1.36 2005-02-17 17:13:55 mkossov Exp $
+// $Id: G4Quasmon.hh,v 1.37 2005-03-24 16:06:06 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -65,6 +65,8 @@ public:
   static void SetTemper(G4double temperature);
   static void SetSOverU(G4double ssin2g);
   static void SetEtaSup(G4double etaetap);
+  static void OpenElectromagneticDecays();
+  static void CloseElectromagneticDecays();
 
   //Selectors
   G4double          GetTemper()       const;
@@ -82,6 +84,7 @@ public:
   // Public wrapper for HadronizeQuasmon(,)
   G4QHadronVector*  Fragment(G4QNucleus& nucEnviron, G4int nQ = 1);
   G4QHadronVector*  DecayQuasmon();                   // Decay Quasmon if it's Res or Chipo
+  G4QHadronVector*  DecayQHadron(G4QHadron* hadron);  // Decay Quasmon if it's Res or Chipo
   void              ClearOutput();                    // Clear but not destroy the output
   void              InitQuasmon(const G4QContent& qQCont, const G4LorentzVector& q4M);
   void              IncreaseBy(const G4Quasmon* pQuasm); // as operator+= but by pointer
@@ -93,17 +96,13 @@ private:
   G4QHadronVector   HadronizeQuasmon(G4QNucleus& qEnv, G4int nQ=1); // + new Neuclear Envir
   G4double          GetRandomMass(G4int PDGCode, G4double maxM);
   void              ModifyInMatterCandidates();
-  void              InitCandidateVector(G4int maxMes, G4int maxBar, G4int maxClust);
-  //void            CalculateHadronizationProbabilities(G4double excE, G4double kQ,
-  //                                                 G4double kLS, G4bool piF, G4bool gaF);
   void              CalculateHadronizationProbabilities(G4double excE, G4double kQ,
                                                         G4LorentzVector k4M,
                                                         G4bool piF, G4bool gaF);
   void              FillHadronVector(G4QHadron* qHadron);
   G4int             RandomPoisson(G4double meanValue);
   G4double          GetQPartonMomentum(G4double mMinResidual2, G4double mCandidate2);
-  G4bool            DecayOutHadron(G4QHadron* qHadron, G4int DFlag=0);
-  G4bool            CheckGroundState(G4bool corFlag = false);// Forbid correction by default
+  G4bool            CheckGroundState(G4bool corFlag=false); // Forbid correction by default
   void              KillEnvironment(); // Kill Environment (Z,N,S=0,LV=0)
 
 // Body
@@ -112,6 +111,8 @@ private:
   static G4double    Temperature;   // Quasmon Temperature
   static G4double    SSin2Gluons;   // Percent of ssbar sea in a constituen gluon
   static G4double    EtaEtaprime;   // Part of eta-prime in all etas
+  static G4bool      WeakDecays;    // Flag for opening WeakDecays (notUsed: allAreClosed)
+  static G4bool      ElMaDecays;    // Flag for opening ElectroMagDecays (true by default)
   // Hadronic input
   G4LorentzVector    q4Mom;         // 4-momentum of the Quasmon +++++
   G4QContent         valQ;          // Quark Content of the Quasmon  +++++
