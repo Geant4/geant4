@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VViewer.cc,v 1.8 2000-05-04 19:15:12 johna Exp $
+// $Id: G4VViewer.cc,v 1.9 2000-05-13 10:52:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,13 +42,6 @@ fNeedKernelVisit (true)
   }
   fShortName = fName (0, fName.find (' '));
   fShortName.strip ();
-
-  // Initialise current target point if possible.  In other respects
-  // the view parameters take default values.
-  const G4Scene* scene = fSceneHandler.GetScene();
-  if (scene) {
-    fVP.SetCurrentTargetPoint(scene->GetStandardTargetPoint());
-  }
 }
 
 G4VViewer::~G4VViewer () {}

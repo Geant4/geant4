@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ViewParameters.hh,v 1.7 2000-05-02 09:52:29 johna Exp $
+// $Id: G4ViewParameters.hh,v 1.8 2000-05-13 10:51:31 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,10 +25,10 @@
 //
 // There is also the "Standard Target Point", which is the centre of
 // the Bounding Sphere (note that this belongs to the scene and is
-// stored in the G4Scene object).  The "Current Target Point", initially
-// set to the Standard Target Point, is incremented by the "dolly"
-// and "zoom" commands, and can be reset to the Standard Target
-// Point with the "/vis/viewer/reset" command.
+// stored in the G4Scene object).  The "Current Target Point", defined
+// relative to the Standard Target Point, is changed by the
+// "dolly" and "zoom" commands, and can be reset to the Standard
+// Target Point with the "/vis/viewer/reset" command.
 //
 // Also, the "Standard Camera Position" is the "Standard Camera
 // Distance" along the Viewpoint Direction vector from the Standard
@@ -49,9 +49,6 @@
 //
 // Finally, the view is magnified by the "Zoom Factor" which is
 // reset to 1 by the "/vis/viewer/reset" command.
-//
-// Note: the camera movements pan, dolly and zoom, are currently coded
-// in "G4VisManMessenger.cc".
 //
 // The algorithms for calculating various useful quantities from the
 // View Parameters, such as GetCameraDistance, are described below.
@@ -211,11 +208,11 @@ private:
                                  // to fViewpointDirection!)
   G4double     fFieldHalfAngle;  // Radius / camara distance, 0 for parallel.
   G4double     fZoomFactor;      // Magnification relative to Standard View.
-  G4Point3D    fCurrentTargetPoint;
+  G4Point3D    fCurrentTargetPoint;  // Relative to standard target point.
   G4double     fDolly;           // Distance towards current target point.
   G4bool       fLightsMoveWithCamera;
   G4Vector3D   fRelativeLightpointDirection;
-  // i.e., rel. to object or camera accoding to G4bool LightsMoveWithCamera.
+  // i.e., rel. to object or camera accoding to G4bool fLightsMoveWithCamera.
   G4Vector3D   fActualLightpointDirection;
   G4bool       fViewGeom;        // View geometry objects.
   G4bool       fViewHits;        // View hits, if any.
@@ -236,4 +233,3 @@ private:
 #include "G4ViewParameters.icc"
 
 #endif
-

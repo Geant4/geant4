@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FukuiRendererViewer.cc,v 1.4 1999-12-15 14:54:01 gunter Exp $
+// $Id: G4FukuiRendererViewer.cc,v 1.5 2000-05-13 10:57:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -224,7 +224,9 @@ void G4FukuiRendererViewer::SendViewParameters ()
 			       h_angle ); 
 
 		//----- (4A) CALC target point
-	const G4Point3D&  target_point = fVP.GetCurrentTargetPoint();
+	const G4Point3D&  target_point
+	  = fSceneHandler.GetScene()->GetStandardTargetPoint()
+	  + fVP.GetCurrentTargetPoint();
 
 		//----- (4B) SEND target point
 	fSceneHandler.SendStrDouble3( FR_TARGET_POINT, 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.3 1999-12-15 14:54:10 gunter Exp $
+// $Id: G4OpenGLXmPanningCallbacks.cc,v 1.4 2000-05-13 10:47:52 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -20,6 +20,7 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include "G4OpenGLXmViewer.hh"
+#include "G4Scene.hh"
 
 void G4OpenGLXmViewer::zoom_callback (Widget w, 
 				    XtPointer clientData, 
@@ -119,7 +120,10 @@ void G4OpenGLXmViewer::left_right_pan_callback (XtPointer clientData,
     delta = -((G4double)pView->pan_sens);
   }
   
-  G4Point3D tp = pView -> fVP.GetCurrentTargetPoint ();
+  G4Point3D stp
+    = pView -> GetSceneHandler()->GetScene()->GetStandardTargetPoint();
+
+  G4Point3D tp = stp + pView -> fVP.GetCurrentTargetPoint ();
   
   const G4Vector3D& upVector = pView->fVP.GetUpVector ();
   const G4Vector3D& vpVector = pView->fVP.GetViewpointDirection ();
@@ -128,7 +132,7 @@ void G4OpenGLXmViewer::left_right_pan_callback (XtPointer clientData,
   G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
   
   tp += delta * unitRight;
-  pView->fVP.SetCurrentTargetPoint (tp);
+  pView->fVP.SetCurrentTargetPoint (tp - stp);
 
   pView->SetView ();
   pView->ClearView ();
@@ -169,14 +173,16 @@ void G4OpenGLXmViewer::up_down_pan_callback (XtPointer clientData,
     delta = -((G4double)pView->pan_sens);
   }
   
-  G4Point3D tp = pView->fVP.GetCurrentTargetPoint ();
+  G4Point3D stp
+    = pView -> GetSceneHandler()->GetScene()->GetStandardTargetPoint();
+  G4Point3D tp = stp + pView -> fVP.GetCurrentTargetPoint ();
   const G4Vector3D& upVector = pView->fVP.GetUpVector ();
   const G4Vector3D& vpVector = pView->fVP.GetViewpointDirection ();
   
   G4Vector3D unitRight = (upVector.cross (vpVector)).unit();
   G4Vector3D unitUp    = (vpVector.cross (unitRight)).unit();
   tp += delta * unitUp;
-  pView->fVP.SetCurrentTargetPoint (tp);
+  pView->fVP.SetCurrentTargetPoint (tp - stp);
   
   pView->SetView ();
   pView->ClearView ();

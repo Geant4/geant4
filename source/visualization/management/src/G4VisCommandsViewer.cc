@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsViewer.cc,v 1.16 2000-05-04 19:17:14 johna Exp $
+// $Id: G4VisCommandsViewer.cc,v 1.17 2000-05-13 10:52:22 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer commands - John Allison  25th October 1998
@@ -461,7 +461,7 @@ void G4VisCommandViewerReset::SetNewValue (G4UIcommand* command,
     G4ViewParameters vp = viewer->GetViewParameters();
     const G4VSceneHandler* sceneHandler = viewer->GetSceneHandler();
     const G4Scene* scene = sceneHandler->GetScene();
-    vp.SetCurrentTargetPoint (scene->GetStandardTargetPoint ());
+    vp.SetCurrentTargetPoint (G4Point3D());
     vp.SetZoomFactor (1.);
     vp.SetDolly (0.);
     vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DAWNFILEViewer.cc,v 1.7 2000-05-11 06:49:28 stanaka Exp $
+// $Id: G4DAWNFILEViewer.cc,v 1.8 2000-05-13 10:58:23 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -269,7 +269,9 @@ void G4DAWNFILEViewer::SendViewParameters ()
         gui_out << "0"  << G4endl     ; // auto target
 
 		//----- target point 
-	const G4Point3D&  target_point = fVP.GetCurrentTargetPoint();
+	const G4Point3D&  target_point
+	  = fSceneHandler.GetScene()->GetStandardTargetPoint()
+	  + fVP.GetCurrentTargetPoint();
 	gui_out << target_point.x()          << G4endl ;
 	gui_out << target_point.y()          << G4endl ;
 	gui_out << target_point.z()          << G4endl ;

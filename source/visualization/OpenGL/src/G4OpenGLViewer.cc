@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OpenGLViewer.cc,v 1.6 2000-04-12 13:09:08 johna Exp $
+// $Id: G4OpenGLViewer.cc,v 1.7 2000-05-13 10:48:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -98,7 +98,9 @@ void G4OpenGLViewer::SetView () {
   
   // Get radius of scene, etc.
   // Note that this procedure properly takes into account zoom, dolly and pan.
-  const G4Point3D& targetPoint = fVP.GetCurrentTargetPoint ();
+  const G4Point3D& targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint ();
   G4double radius = fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1.;
   const G4double cameraDistance = fVP.GetCameraDistance (radius);

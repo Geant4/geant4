@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4RayTracerViewer.cc,v 1.5 2000-05-02 10:06:05 johna Exp $
+// $Id: G4RayTracerViewer.cc,v 1.6 2000-05-13 10:55:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #include "G4RayTracerViewer.hh"
@@ -31,7 +31,9 @@ void G4RayTracerViewer::SetView() {
 
   // Get radius of scene, etc.  (See G4OpenGLViewer::SetView().)
   // Note that this procedure properly takes into account zoom, dolly and pan.
-  const G4Point3D& targetPoint = fVP.GetCurrentTargetPoint();
+  const G4Point3D& targetPoint
+    = fSceneHandler.GetScene()->GetStandardTargetPoint()
+    + fVP.GetCurrentTargetPoint();
   G4double radius =  // See G4ViewParameters for following procedure.
     fSceneHandler.GetScene()->GetExtent().GetExtentRadius();
   if(radius<=0.) radius = 1.;

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VRML2Viewer.cc,v 1.5 1999-12-27 07:49:22 stanaka Exp $
+// $Id: G4VRML2Viewer.cc,v 1.6 2000-05-13 10:55:15 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2Viewer.cc
@@ -105,7 +105,9 @@ void G4VRML2Viewer::SendViewParameters ()
 	G4double camera_distance = extent_radius / fsin_VHA ;
 
 	// camera position on Z axis
-	const G4Point3D&	target_point = fVP.GetCurrentTargetPoint();
+	const G4Point3D&	target_point
+	  = fSceneHandler.GetScene()->GetStandardTargetPoint()
+	  + fVP.GetCurrentTargetPoint();
 	G4double		E_z = target_point.z() + camera_distance;
 	G4Point3D		E(0.0, 0.0, E_z );
 

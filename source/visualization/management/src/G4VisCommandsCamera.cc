@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisCommandsCamera.cc,v 1.6 2000-05-04 19:15:42 johna Exp $
+// $Id: G4VisCommandsCamera.cc,v 1.7 2000-05-13 10:52:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,7 +19,7 @@ void G4VisCommandCameraReset::SetValue () {
   if (pVMan -> IsValidView ()) {
     const G4Scene* pScene = pVMan -> GetCurrentScene ();
     G4ViewParameters& vp = pVMan -> SetCurrentViewParameters ();
-    vp.SetCurrentTargetPoint (pScene -> GetStandardTargetPoint ());
+    vp.SetCurrentTargetPoint (G4Point3D());
     vp.SetZoomFactor (1.);
     vp.SetDolly (0.);
     vp.SetViewpointDirection (G4Vector3D (0., 0., 1.));

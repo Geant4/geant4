@@ -1,4 +1,4 @@
-$Id: History,v 1.73 2000-05-11 08:48:35 stanaka Exp $
+$Id: History,v 1.74 2000-05-13 10:47:06 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,9 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+13th May 2000  John Allison
+- Redefined current target point to be *relative* to standard target point.
 
 11th May 2000  Satoshi Tanaka vis-V01-01-03
 - In G4DAWNFILEViewer.cc, 
