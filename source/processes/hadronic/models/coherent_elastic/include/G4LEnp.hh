@@ -14,14 +14,14 @@
 // * use.                                                             *
 // *                                                                  *
 // * This  code  implementation is the  intellectual property  of the *
-// * authors in the GEANT4 collaboration.                             *
+// * GEANT4 collaboration.                                            *
 // * By copying,  distributing  or modifying the Program (or any work *
 // * based  on  the Program)  you indicate  your  acceptance of  this *
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
  //
- // G4 Low energy model: n-n or p-p scattering
+ // G4 Low energy model: n-p scattering
  // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
  //  
  // For further comments see G4LEnpData.hh and G4LEnp.cc
@@ -43,11 +43,14 @@
 #include "G4TrackStatus.hh"
 #include "G4HadronicInteraction.hh"
 
+#include "HbookHistogram.hh"
+
+
 class G4LEnp : public G4HadronicInteraction
 {
  private:
 
-   enum { NENERGY=22, NANGLE=180 };
+   enum { NENERGY=21, NANGLE=180 };
 
  public:
 
@@ -58,13 +61,17 @@ class G4LEnp : public G4HadronicInteraction
    G4VParticleChange* ApplyYourself(const G4Track& aTrack,
                                     G4Nucleus& targetNucleus);
 
-   void SetCoulombSuppression(G4int State);
-  
+   HbookHistogram* HAngCM;
+
  private:
+
+ // The following arrays are declared static to allow the use of initializers.
+ // They are initialized in G4LEnpData.hh
 
    static G4float sig[NENERGY][NANGLE];
    static G4float pcm[NENERGY], elab[NENERGY], 
      dsigmax[NENERGY], sigtot[NENERGY];
+
 };
 
 #endif
