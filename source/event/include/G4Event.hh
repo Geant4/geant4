@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.hh,v 1.5 2001-07-13 15:01:45 gcosmo Exp $
+// $Id: G4Event.hh,v 1.6 2002-08-13 18:17:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -83,6 +83,10 @@ class G4Event
       // TrajectoryContainer
       G4TrajectoryContainer * trajectoryContainer;
 
+      // Boolean flag which shall be set to true if the event is aborted and 
+      // thus the containing information is not to be used.
+      G4bool eventAborted;
+
   public:
       inline void SetEventID(G4int i)
       { eventID =  i; }
@@ -92,6 +96,8 @@ class G4Event
       { DC = value; }
       inline void SetTrajectoryContainer(G4TrajectoryContainer*value)
       { trajectoryContainer = value; }
+      inline void SetEventAborted()
+      { eventAborted = true; }
   public: // with description
       inline G4int GetEventID() const
       { return eventID; }
@@ -137,6 +143,9 @@ class G4Event
       // (hits collections of this event), G4DCofThisEvent (digi collections
       // of this event), and G4TrajectoryContainer (trajectory coonainer),
       // respectively.
+      inline G4bool IsAborted() const { return eventAborted; }
+      //  Return a boolean which indicates the event has been aborted and thus
+      // it should not be used for analysis.
 };
 
 extern G4Allocator<G4Event> anEventAllocator;

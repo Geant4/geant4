@@ -1,4 +1,4 @@
-$Id: History,v 1.41 2002-07-29 14:51:21 gcosmo Exp $
+$Id: History,v 1.42 2002-08-13 18:17:52 asaim Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Aug 13 2002, M.Asai (event-V04-01-01)
+- G4Event: Introducing an EventAborted flag.
 
 Jun 29 2002, V.Ivantchenko (event-V04-01-00)
 - G4PrimaryParticle: fixed initialisation of 'charge' in constructors.

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.4 2001-07-13 15:01:52 gcosmo Exp $
+// $Id: G4Event.cc,v 1.5 2002-08-13 18:17:53 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -40,13 +40,13 @@ G4Allocator<G4Event> anEventAllocator;
 G4Event::G4Event()
 :eventID(0),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0)
+ HC(0),DC(0),trajectoryContainer(0),eventAborted(false)
 {;}
 
 G4Event::G4Event(G4int evID)
 :eventID(evID),
  thePrimaryVertex(0),numberOfPrimaryVertex(0),
- HC(0),DC(0),trajectoryContainer(0)
+ HC(0),DC(0),trajectoryContainer(0),eventAborted(false)
 {;}
 
 G4Event::~G4Event()
