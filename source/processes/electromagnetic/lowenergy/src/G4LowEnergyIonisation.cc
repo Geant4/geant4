@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.72 2001-10-28 11:52:30 pia Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.73 2001-10-29 09:11:55 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -81,6 +81,7 @@
 //                          consistency with design
 // 19.10.01 V.Ivanchenko    update according to new design, V.Ivanchenko
 // 26.10.01 V.Ivanchenko    clean up deexcitation
+// 28.10.01 V.Ivanchenko    update printout
 //
 // --------------------------------------------------------------
 
@@ -243,7 +244,7 @@ void G4LowEnergyIonisation::BuildLossTable(
   
   // Clean up the vector of cuts
 
-  //cutForDelta.resize(numOfMaterials);
+  cutForDelta.clear();
 
   // Loop for materials
   
@@ -560,8 +561,8 @@ G4VParticleChange* G4LowEnergyIonisation::PostStepDoIt(const G4Track& track,
 void G4LowEnergyIonisation::PrintInfoDefinition()
 {
   G4String comments = "Total cross sections from EEDL database,";
-  comments += "Gamma energy sampled from a parametrised formula.";
-  comments += "Implementation of the continuous dE/dx part.";  
+  comments += "\n Gamma energy sampled from a parametrised formula.";
+  comments += "\n Implementation of the continuous dE/dx part.";  
   comments += "\n At present it can be used for electrons ";
   comments += " in the energy range [250eV,100GeV]";
   comments += "\n the process must work with G4LowEnergyBremsstrahlung";
