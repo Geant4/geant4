@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: HepPolyhedron.h,v 1.6 2001-04-10 15:30:43 evc Exp $
+// $Id: HepPolyhedron.h,v 1.7 2001-04-11 15:00:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -130,14 +130,7 @@
 #ifndef HEP_POLYHEDRON_HH
 #define HEP_POLYHEDRON_HH
 
-#include <CLHEP/config/CLHEP.h>
-#include <CLHEP/config/iostream.h>
-#include <CLHEP/Units/SystemOfUnits.h>
 #include <CLHEP/Geometry/Point3D.h>
-#include <CLHEP/Geometry/Vector3D.h>
-#include <CLHEP/Geometry/Normal3D.h>
-#include <CLHEP/Geometry/Plane3D.h>
-#include <CLHEP/Geometry/Transform3D.h>
 
 #ifndef HepStd
 #ifndef HEP_USE_STD
@@ -188,9 +181,6 @@ class HepPolyhedron {
 
   // Create HepPolyhedron for prism with quadrilateral base
   void CreatePrism();
-
-  // Get number of steps for whole circle
-  int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
 
   // Generate facets by revolving an edge around Z-axis
   void RotateEdge(int k1, int k2, HepDouble r1, HepDouble r2,
@@ -294,6 +284,9 @@ class HepPolyhedron {
   HepPolyhedron add(const HepPolyhedron &p) const;
   HepPolyhedron subtract(const HepPolyhedron &p) const;
   HepPolyhedron intersect(const HepPolyhedron &p) const;
+
+  // Get number of steps for whole circle
+  static int GetNumberOfRotationSteps() { return fNumberOfRotationSteps; }
 
   // Set number of steps for whole circle
   static void SetNumberOfRotationSteps(int n);
