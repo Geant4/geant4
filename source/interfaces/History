@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2000-08-01 08:02:20 gcosmo Exp $
+$Id: History,v 1.36 2000-08-11 15:31:12 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11 August 2000 Guy Barrand
+- G4UIWo.cc : add some cast in order to compile with OSF1/cxx strict_ansi mode.
+
 1 August 2000 Gabriele Cosmo (interfaces-V02-00-01)
 - Fixed warnings on HP-aCC system in G4UItcsh.cc, due to unproper usage of G4int
   where unsigned (size_t) was requested instead.
