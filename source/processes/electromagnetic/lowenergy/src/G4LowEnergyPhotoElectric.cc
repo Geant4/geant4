@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.35 2001-09-21 08:42:13 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.36 2001-09-23 18:27:59 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -207,13 +207,15 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
 	  else
 	    {
 	      G4double itsKineticEnergy = aPhoton->GetKineticEnergy();
-	      if(itsKineticEnergy>=cutForLowEnergySecondaryPhotons)
+	      G4double eDepositTmp = energyDeposit - itsKineticEnergy;
+	      if (itsKineticEnergy>=cutForLowEnergySecondaryPhotons &&
+		 eDepositTmp > 0.)
 		{
 		  nPhotons++;
 		  // Local energy deposit is given as the sum of the 
 		  // energies of incident photons minus the energies
 		  // of the outcoming fluorescence photons
-		  energyDeposit -= itsKineticEnergy* MeV;
+		  energyDeposit -= itsKineticEnergy;
 		  
 		}
 	      else
