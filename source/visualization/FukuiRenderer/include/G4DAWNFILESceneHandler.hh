@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4DAWNFILESceneHandler.hh,v 1.11 2002-09-02 04:39:10 stanaka Exp $
+// $Id: G4DAWNFILESceneHandler.hh,v 1.12 2002-12-11 15:58:02 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Satoshi TANAKA
@@ -86,6 +86,12 @@ public:
     G4VSceneHandler::AddThis (polyhedra);
   }
   void AddThis ( const G4VSolid& solid  );
+  void AddThis ( const G4VTrajectory& traj) {
+    G4VSceneHandler::AddThis(traj);
+  }
+  void AddThis ( const G4VHit& hit) {
+    G4VSceneHandler::AddThis(hit);
+  }
 
   void ClearTransientStore();  // Used for triggering detector re-drawing.
 

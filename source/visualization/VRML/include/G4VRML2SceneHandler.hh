@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VRML2SceneHandler.hh,v 1.9 2002-06-23 03:31:43 stanaka Exp $
+// $Id: G4VRML2SceneHandler.hh,v 1.10 2002-12-11 15:57:56 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G4VRML2SceneHandler.hh
@@ -66,6 +66,12 @@ public:
           G4VSceneHandler::AddThis (polyhedra);
         }
 	void AddThis(const G4VSolid&);
+        void AddThis ( const G4VTrajectory& traj) {
+          G4VSceneHandler::AddThis(traj);
+        }
+        void AddThis ( const G4VHit& hit) {
+          G4VSceneHandler::AddThis(hit);
+        }
 
 	void BeginPrimitives(const G4Transform3D& objectTransformation);
 	void EndPrimitives();

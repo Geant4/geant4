@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.16 2002-11-11 18:08:22 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.17 2002-12-11 15:57:58 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,6 +93,9 @@ const GLubyte G4OpenGLSceneHandler::fStippleMaskHashed [128] = {
 //Method for handling G4Polyline objects (from tracking or wireframe).
 void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
 {
+  G4int nPoints = line.size ();
+  if (nPoints <= 0) return;
+
   const G4Colour& c = GetColour (line);
   glColor3d (c.GetRed (), c.GetGreen (), c.GetBlue ());
 
@@ -103,7 +106,6 @@ void G4OpenGLSceneHandler::AddPrimitive (const G4Polyline& line)
   glDisable (GL_LIGHTING);
   glBegin (GL_LINE_STRIP);
 
-  G4int nPoints = line.size ();
   for (G4int iPoint = 0; iPoint < nPoints; iPoint++) {
   G4double x, y, z;
     x = line[iPoint].x(); 
