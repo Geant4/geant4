@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2002-11-07 02:26:32 gum Exp $
+$Id: History,v 1.41 2002-11-07 02:28:14 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 <<<<<<< History
      
-05.11.02 P.Gumplinger - materials-V04-01-01
+05.11.02 P.Gumplinger - materials-V04-01-03
          Add constant material properties to the G4MaterialPropertiesTable
 
 =======
