@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4SmartVoxelHeader.cc,v 1.1 1999-01-07 16:07:21 gunter Exp $
+// $Id: G4SmartVoxelHeader.cc,v 1.2 1999-02-15 10:31:26 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -409,7 +409,7 @@ void G4SmartVoxelHeader::BuildVoxelsWithinLimits(G4LogicalVolume* pVolume,
     BuildEquivalentSliceNos();
     CollectEquivalentNodes();	// Collect common nodes
     RefineNodes(pVolume,pLimits); // Refine nodes creating headers
-    CollectEquivalentHeaders();	// Collect any common headers
+// No common headers can exist because collapsed by construction
 }
 
 // Destructor - Delete all proxies and underlying objects
@@ -1043,10 +1043,8 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 			    delete targetNode;
 
 // Create new headers + proxies and replace in fslices
-			    for (replaceNo=minNo;replaceNo<=maxNo;replaceNo++)
-				{
 				    newLimits=pLimits;
-				    newLimits.AddLimit(faxis,fminExtent+sliceWidth*replaceNo,fminExtent+sliceWidth*(replaceNo+1));
+				    newLimits.AddLimit(faxis,fminExtent+sliceWidth*minNo,fminExtent+sliceWidth*(maxNo+1));
 				    replaceHeader=new G4SmartVoxelHeader(pVolume,newLimits,targetList,replaceNo);
 				    if (!replaceHeader)
 					{
@@ -1059,6 +1057,9 @@ void G4SmartVoxelHeader::RefineNodes(G4LogicalVolume* pVolume,
 					{
 					    G4Exception("G4SmartVoxelHeader::RefineNodes - Refined VoxelProxy new failed");
 					}
+			    for (replaceNo=minNo;replaceNo<=maxNo;replaceNo++)
+				{
+
 				    fslices(replaceNo)=replaceHeaderProxy;
 				}
 // Finished replacing current `equivalent' group
