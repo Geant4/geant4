@@ -1,0 +1,15 @@
+#================================================
+# Macro file for the Ion test of "test31.cc"
+#         10.04.01 V.Ivanchneko
+#================================================ 
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+/event/verbose 0
+/test31/verbose 0
+#
+/process/eLoss/fluct        false
+/process/inactivate    msc
+/gun/particle          e-
+/run/beamOn            1000
+

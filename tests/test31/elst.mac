@@ -1,0 +1,36 @@
+#================================================
+# Macro file for the Ion test of "test31.cc"
+#         10.04.01 V.Ivanchneko
+#================================================ 
+/control/verbose 2
+/run/verbose 2
+/tracking/verbose 0
+/event/verbose 0
+/test31/verbose 0
+#
+/test31/physics/cutGamma    1 cm
+#/test31/physics/cutGamma    100 cm
+/test31/physics/cutElectron 0.1 mm
+#/test31/physics/cutElectron 100 mm
+/test31/physics/MaxStep     0.1 mm
+/test31/physics/EMList      Standard
+/test31/physics/HadronList  none
+/test31/AbsorberMaterial    Silicon
+/test31/AbsorberThick       1 mm
+/test31/NumberOfAbsorbers   60
+/test31/maxDeltaEnergy      1.0 MeV
+/test31/WorldMaterial       Vacuum
+#/test31/HistoName           hbook.paw 
+/test31/HistoName           el_st.paw 
+/test31/HistoNumber         5
+/test31/NumberOfEvents      1000
+/test31/gun/beamE           10.0 MeV
+#
+/gun/particle e-
+#/gun/particle gamma
+#/gun/particle proton
+#/gun/particle alpha
+#/gun/energy 10.0 MeV
+#
+#/run/beamOn 10
+
