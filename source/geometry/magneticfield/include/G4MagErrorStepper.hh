@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.hh,v 1.2 1999-02-12 12:26:31 japost Exp $
+// $Id: G4MagErrorStepper.hh,v 1.3 1999-03-04 14:04:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract base class (ie Interface)
@@ -32,7 +32,7 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
   public:
 
   G4MagErrorStepper(G4Mag_EqRhs *EqRhs,G4int numberOfVariables);
-  ~G4MagErrorStepper(){} ;
+  ~G4MagErrorStepper();
   
   //   The stepper for the Runge Kutta integration. The stepsize 
   // is fixed, with the Step size given by h.
@@ -60,6 +60,7 @@ private:
   G4ThreeVector yInitial, yMidPoint, yFinal;
   
   // G4int theNumberOfVariables ; 
+  G4double *yTemp, *dydxTemp, *yIn; 
 };
 #include  "G4MagErrorStepper.icc"
 
