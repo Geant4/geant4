@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VProcess.hh,v 1.7 2000-11-08 00:47:23 kurasige Exp $
+// $Id: G4VProcess.hh,v 1.8 2001-03-12 06:39:22 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,6 +32,8 @@
 //   Remove thePhysicsTable       2 Aug. 1998   H.Kurashige
 //   Add PILfactor and GPIL       3 Nov. 2000   H.Kurashige
 //   Add Store/RetrievePhysicsTable 8  Nov. 2000   H.Kurashige
+//   Modify Store/RetrievePhysicsTable methods 9 Mar. 2001   H.Kurashige
+
 #ifndef G4VProcess_h 
 #define G4VProcess_h 1
 
@@ -196,11 +198,15 @@ class G4VProcess
       // function. Not another BuildPhysicsTable, please.
 
 
-      virtual G4bool StorePhysicsTable(const G4String& directory){return true;}
+      virtual G4bool StorePhysicsTable(const G4String& directory, 
+				       G4bool          ascii = false)
+                                      {return true;}
       // Store PhysicsTable in a file. 
-      // (return false in caase of failure at I/O ) 
+      // (return false in case of failure at I/O ) 
  
-      virtual G4bool RetrievePhysicsTable(const G4String& directory){return false;}
+      virtual G4bool RetrievePhysicsTable(const G4String& directory, 
+				          G4bool          ascii = false)
+                                      {return false;}
       // Retrieve Physics from a file. 
       // (return true if the Physics Table can be build by using file)
       // (return false if the process has no functionality or in case of failure)
