@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2002-05-16 21:22:10 gum Exp $
+$Id: History,v 1.16 2002-11-08 01:36:14 gum Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07 November 02: P. Gumplinger (xrays-V04-01-00)
+- G4Scintillation now allows for fast and slow components. Scintillation properties are stored
+  with the material and retrieved with GetConstProperty.
 
 16 may 02: P. Gumplinger (xrays-V04-00-04)
 - G4Scintillation now inherits from G4VRestDiscreteProcess changes made accordingly
