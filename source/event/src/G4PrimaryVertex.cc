@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryVertex.cc,v 1.8 2004-06-09 07:24:21 gcosmo Exp $
+// $Id: G4PrimaryVertex.cc,v 1.9 2004-06-11 14:11:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4PRIMARY_VERTEX_EXPORT 1
 
 #include "G4PrimaryVertex.hh"
 #include "G4VUserPrimaryVertexInformation.hh"

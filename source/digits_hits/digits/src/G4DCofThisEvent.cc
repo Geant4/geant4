@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4DCofThisEvent.cc,v 1.2 2004-06-09 07:21:59 gcosmo Exp $
+// $Id: G4DCofThisEvent.cc,v 1.3 2004-06-11 14:10:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4DCOF_THIS_EVENT_EXPORT 1
 
 #include "G4DCofThisEvent.hh"
 

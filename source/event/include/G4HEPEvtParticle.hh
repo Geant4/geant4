@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.hh,v 1.7 2004-06-09 07:24:17 gcosmo Exp $
+// $Id: G4HEPEvtParticle.hh,v 1.8 2004-06-11 14:11:15 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -75,7 +75,7 @@ class G4HEPEvtParticle
       { return JDAHEP2; }
 };
 
-#if defined G4HEPEVT_PARTICLE_EXPORT
+#if defined G4EVENT_ALLOC_EXPORT
   extern G4DLLEXPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;
 #else
   extern G4DLLIMPORT G4Allocator<G4HEPEvtParticle> aHEPEvtParticleAllocator;

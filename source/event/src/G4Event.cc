@@ -21,15 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4Event.cc,v 1.7 2004-06-09 07:24:20 gcosmo Exp $
+// $Id: G4Event.cc,v 1.8 2004-06-11 14:11:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 // G4Event
-
-// Export extern symbols for DLLs build
-//
-#define G4EVENT_EXPORT 1
 
 #include "G4Event.hh"
 #include "G4VVisManager.hh"

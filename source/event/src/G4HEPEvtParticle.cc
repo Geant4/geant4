@@ -21,14 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4HEPEvtParticle.cc,v 1.6 2004-06-09 07:24:20 gcosmo Exp $
+// $Id: G4HEPEvtParticle.cc,v 1.7 2004-06-11 14:11:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4HEPEVT_PARTICLE_EXPORT 1
 
 #include "G4HEPEvtParticle.hh"
 

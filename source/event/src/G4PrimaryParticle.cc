@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4PrimaryParticle.cc,v 1.12 2004-06-09 07:24:21 gcosmo Exp $
+// $Id: G4PrimaryParticle.cc,v 1.13 2004-06-11 14:11:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4PRIMARY_PARTICLE_EXPORT 1
 
 #include "G4PrimaryParticle.hh"
 #include "G4ParticleDefinition.hh"

@@ -21,13 +21,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4TrajectoryContainer.cc,v 1.3 2004-06-09 07:24:22 gcosmo Exp $
+// $Id: G4TrajectoryContainer.cc,v 1.4 2004-06-11 14:11:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
-// Export extern symbols for DLLs build
-//
-#define G4TRAJECTORY_CONTAINER_EXPORT 1
 
 #include "G4TrajectoryContainer.hh"
 G4Allocator<G4TrajectoryContainer> aTrajectoryContainerAllocator;

@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.6 2004-06-01 15:35:08 gcosmo Exp $
+# $Id: GNUmakefile,v 1.7 2004-06-11 14:11:15 gcosmo Exp $
 # ------------------------------------------------------------
 # GNUmakefile for events library.  Makoto Asai, 5/9/95.
 # ------------------------------------------------------------
@@ -16,6 +16,7 @@ GLOBLIBS += libG4intercoms.lib libG4global.lib
 
 include $(G4INSTALL)/config/architecture.gmk
 
+CPPFLAGS += -DG4EVENT_ALLOC_EXPORT
 CPPFLAGS += \
             -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPRandom/include \
