@@ -136,7 +136,7 @@ if (verboseLevel > 3) {
 	    output = theIntraNucleiCascader->collide(&nbullet, &ntarget);
 	  };   
 
-	  if (verboseLevel > 1) {
+	  if (verboseLevel > 0) {
 	    G4cout << " After Cascade " << G4endl;
 
 	    output.printCollisionOutput();
@@ -144,11 +144,14 @@ if (verboseLevel > 3) {
 	    G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << 
                        G4endl;
 	  }
-
+	  
 	  // the rest, if any
 	  TRFoutput.addOutgoingParticles(output.getOutgoingParticles());
+
 	  if(output.numberOfNucleiFragments() == 1) { // there is smth. after
-               
+	    
+G4cout << "::::::::::::::" << G4endl;
+	    
 	    G4InuclNuclei cascad_rec_nuclei = output.getNucleiFragments()[0];
 
 	    if(explosion(&cascad_rec_nuclei)) {
@@ -187,6 +190,8 @@ if (verboseLevel > 3) {
 	      TRFoutput.addTargetFragments(output.getNucleiFragments());         
 	    };
 	  };
+
+	 
 	  // convert to the LAB       
 	  G4bool withReflection = convertToTargetRestFrame.reflectionNeeded();       
 	  vector<G4InuclElementaryParticle> particles = 

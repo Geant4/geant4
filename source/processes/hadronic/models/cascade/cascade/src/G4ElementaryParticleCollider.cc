@@ -206,24 +206,20 @@ G4CollisionOutput  G4ElementaryParticleCollider::collide(G4InuclParticle* bullet
             };
 	  }
 	  else {
-	    G4cout << " ElementaryParticleCollider -> can collide just pions with
-               deutron at the moment " << G4endl;
+	    G4cout << " ElementaryParticleCollider -> can collide just pions with deutron at the moment " << G4endl;
 	  }; 
 	}
 	else {
-	  G4cout << " ElementaryParticleCollider -> can collide just smth. with
-            nucleon or deutron at the moment " << G4endl;
+	  G4cout << " ElementaryParticleCollider -> can collide just smth. with nucleon or deutron at the moment " << G4endl;
         };
       };  
     }
     else {
-      G4cout << " ElementaryParticleCollider -> can not collide photons
-       at the moment " << G4endl;
+      G4cout << " ElementaryParticleCollider -> can not collide photons at the moment " << G4endl;
     }; 
   }
   else {
-    G4cout << " ElementaryParticleCollider -> can collide only particle
-      with particle " << G4endl;
+    G4cout << " ElementaryParticleCollider -> can collide only particle with particle " << G4endl;
   }; 	 	 
 
   return output;

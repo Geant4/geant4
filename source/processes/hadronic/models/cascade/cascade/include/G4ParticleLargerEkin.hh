@@ -1,3 +1,4 @@
+
 #ifndef G4PARTICLE_LARGER_EKIN_HH
 #define G4PARTICLE_LARGER_EKIN_HH
 
@@ -19,4 +20,4 @@ public:
  
 };
 
-#endif G4PARTICLE_LARGER_EKIN_HH
+#endif // G4PARTICLE_LARGER_EKIN_HH

@@ -12,10 +12,10 @@ class G4InuclParticle {
 
 public:
 
-  G4InuclParticle() {
+  G4InuclParticle() {};
 
-  };
-
+  virtual ~G4InuclParticle() { };
+ 
   G4InuclParticle(const vector<G4double>& mom) {
 
     setMomentum(mom);

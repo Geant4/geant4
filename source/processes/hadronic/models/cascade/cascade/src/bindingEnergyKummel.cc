@@ -122,7 +122,7 @@ if (verboseLevel > 3) {
   if(INS <= 2) OMT += OMN[INS] * PPHN;
   if(IPS <= 2) OMT += OMP[IPS] * PPHZ;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " OMT " << OMT << G4endl;
   }
 
@@ -130,7 +130,7 @@ if (verboseLevel > 3) {
 
   G4double TET = 0.0;
 
-  if (verboseLevel> 1) {
+  if (verboseLevel> 3) {
     G4cout << " PPHN " << PPHN << " PPHZ " << PPHZ << G4endl;
     G4cout << " INS " << INS << " IPS " << IPS << G4endl;
   }
@@ -151,14 +151,14 @@ if (verboseLevel > 3) {
       }; 
     };
 
-    if (verboseLevel > 1){
+    if (verboseLevel > 3){
       G4cout << " IT " << IT << G4endl; 
     }
 
     if(IT >= 0) TET = TMET[IT] * PPHN * PPHZ;
   };
 
-  if (verboseLevel> 1) {
+  if (verboseLevel> 3) {
     G4cout << " TET " << TET << G4endl;
   }
 
@@ -178,7 +178,7 @@ if (verboseLevel > 3) {
     TET1 += TMET1[3] * TVSP * PPHN;
   };
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " TET1 " << TET1 << G4endl;
   }
 
@@ -196,7 +196,7 @@ if (verboseLevel > 3) {
   };
   TBET += BET[IPS] * APR;
 
-  if (verboseLevel> 1) {
+  if (verboseLevel> 3) {
     G4cout << " TBET " << TBET << G4endl;
   }
 
@@ -207,7 +207,7 @@ if (verboseLevel > 3) {
 		   (TNUP[IPS] + TKSP[IPS] * APR) * PPHZ);
   TBET -= TBET1;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " TBET1 " << TBET1 << G4endl;
   }
 
@@ -245,7 +245,7 @@ if (verboseLevel > 3) {
     };
   };
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " TDEF " << TDEF << G4endl;
   }
 
@@ -295,7 +295,7 @@ if (verboseLevel > 3) {
   };
   TPE += TPEN + TPEP;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " TPE " << TPE << " TPEN " << TPEN << " TPEP " << TPEP << G4endl;
   }
 
@@ -303,7 +303,7 @@ if (verboseLevel > 3) {
   DM = (AKU - US * X2 + Z * (Z - 1.0) / X1 * (OMT - UC) - UT / A *
 	(AN - Z) * (AN - Z) + TET + TET1 + TBET + TDEF + TPE) * 0.001;	  
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " kummel " << G4endl; 
   }
 

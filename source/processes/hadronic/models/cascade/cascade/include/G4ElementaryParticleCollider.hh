@@ -82,20 +82,4 @@ private:
     
 };        
 
-#endif // G4ELEMENTARY_PARTICLE_COLLIDER_HH 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+#endif // G4ELEMENTARY_PARTICLE_COLLIDER_HH

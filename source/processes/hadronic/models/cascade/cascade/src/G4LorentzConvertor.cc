@@ -45,7 +45,7 @@ if (verboseLevel > 3) {
   for(i = 1; i < 4; i++) {
     scm_momentum[i] = -target_mom[i] - velocity[i] * xx;
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " i " << i << " pscm(i) " << scm_momentum[i] << G4endl;
     }
 
@@ -57,7 +57,7 @@ if (verboseLevel > 3) {
     ga = small;
     degenerated = true;
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " degenerated case " << G4endl; 
     }
 
@@ -65,7 +65,7 @@ if (verboseLevel > 3) {
     ga = sqrt(ga);
   }; 
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " ga " << ga << " v2 " << v2 << " pb " << pb << 
       " pb * pb / pa " << pb * pb / pa << " pv " << pv << G4endl;
   }
@@ -84,7 +84,7 @@ if (verboseLevel > 3) {
 
   vector<G4double> mom_rot(4);
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " ga " << ga << " gbpp " << gbpp << " gapp " << gapp << G4endl;  
     G4cout << " gegenerated " << degenerated << G4endl;
     G4cout << " before rotation: px " << mom[1] << " py " << mom[2] <<
@@ -105,7 +105,7 @@ if (verboseLevel > 3) {
       mom[3] * scm_momentum[3] / pscm;
   };
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " after rotation: px " << mom_rot[1] << " py " << mom_rot[2] <<
       " pz " << mom_rot[3] << G4endl;
   }
@@ -194,7 +194,7 @@ if (verboseLevel > 3) {
   for(i = 1; i < 4; i++) {
     scm_momentum[i] = bullet_mom[i] + velocity[i] * xx;
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 3) {
       G4cout << " rf: i " << i << " pscm(i) " << scm_momentum[i] << G4endl;
     }
     pa += scm_momentum[i] * scm_momentum[i];
@@ -223,7 +223,7 @@ if (verboseLevel > 3) {
 
   const G4double small = 1.0e-10;
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " at rest: px " << mom[1] << " py " << mom[2] << " pz " << mom[3] << 
       " e " << mom[0] << G4endl;
     G4cout << " v2 " << v2 << G4endl;   
@@ -243,7 +243,7 @@ if (verboseLevel > 3) {
     for(i = 1; i < 4; i++) mom1[i] = mom[i] + velocity[i] * xx;
   };
 
-  if (verboseLevel > 1) {
+  if (verboseLevel > 3) {
     G4cout << " at lab: px " << mom1[1] << " py " << mom1[2] << " pz " << mom1[3] << G4endl;
   }
 
