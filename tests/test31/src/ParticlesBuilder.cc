@@ -21,13 +21,24 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.cc,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
+// $Id: ParticlesBuilder.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $ 
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   ParticleBuilder
+//
+// Author:      V.Ivanchenko 03.05.2004
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PhysListParticles.hh"
+#include "ParticlesBuilder.hh"
 
 // Bosons
 #include "G4ChargedGeantino.hh"
@@ -73,20 +84,22 @@
 #include "G4He3.hh"
 #include "G4GenericIon.hh"
 
+//#include "IonC12.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListParticles::PhysListParticles(const G4String& name)
+ParticlesBuilder::ParticlesBuilder(const G4String& name)
    :  G4VPhysicsConstructor(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysListParticles::~PhysListParticles()
+ParticlesBuilder::~ParticlesBuilder()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysListParticles::ConstructParticle()
+void ParticlesBuilder::ConstructParticle()
 {
 
 // pseudo-particles
@@ -135,6 +148,7 @@ void PhysListParticles::ConstructParticle()
   G4He3::He3Definition();
   G4Alpha::AlphaDefinition();
   G4GenericIon::GenericIonDefinition();
+//  IonC12::IonDefinition();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

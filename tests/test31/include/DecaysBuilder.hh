@@ -21,48 +21,51 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: DecaysBuilder.hh,v 1.1 2004-08-19 16:30:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef DecaysBuilder_h
+#define DecaysBuilder_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class DecaysBuilder : public G4VPhysicsConstructor
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList* pPhysicsList;
-    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
-    
+public:
+  DecaysBuilder(const G4String& name = "decays");
+  virtual ~DecaysBuilder();
+
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
+private:
+
+   // hide assignment operator
+  DecaysBuilder & operator=(const DecaysBuilder &right);
+  DecaysBuilder(const DecaysBuilder&);
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
+
+
+
+
+
+
 

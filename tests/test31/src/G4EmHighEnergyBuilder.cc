@@ -21,14 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.hh,v 1.3 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: G4EmHighEnergyBuilder.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   PhysicsList
+// ClassName:   G4EmHighEnergyBuilder
 //
 // Author:      V.Ivanchenko 03.05.2004
 //
@@ -36,53 +34,66 @@
 //
 //----------------------------------------------------------------------------
 //
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsList_h
-#define PhysicsList_h 1
+#include "G4EmHighEnergyBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
 
-#include "G4VModularPhysicsList.hh"
-#include "globals.hh"
+#include "G4AnnihiToMuPair.hh"
+#include "G4GammaConversionToMuons.hh"
+#include "G4eeToHadrons.hh"
 
-class PhysicsListMessenger;
+#include "G4Gamma.hh"
+#include "G4Electron.hh"
+#include "G4Positron.hh"
+#include "G4MuonPlus.hh"
+#include "G4MuonMinus.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsList: public G4VModularPhysicsList
+G4EmHighEnergyBuilder::G4EmHighEnergyBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4EmHighEnergyBuilder::~G4EmHighEnergyBuilder()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void G4EmHighEnergyBuilder::ConstructParticle()
 {
-public:
-  PhysicsList();
-  ~PhysicsList();
-
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-  virtual void SetCuts();
-
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-
-  void AddPhysicsList(const G4String&);
-  void SetVerbose(G4int val);
-
-private:
-
-  // hide assignment operator
-  PhysicsList & operator=(const PhysicsList &right);
-  PhysicsList(const PhysicsList&);
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;
-  G4int    verbose;
-  G4bool   emBuilderIsRegisted;
-
-  PhysicsListMessenger* pMessenger;
-
-};
+  // Minimal set of particles
+  G4Gamma::Gamma();
+  G4Electron::Electron();
+  G4Positron::Positron();
+  G4MuonPlus::MuonPlus();
+  G4MuonMinus::MuonMinus();
+  G4PionPlus::PionPlus();
+  G4PionMinus::PionMinus();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void G4EmHighEnergyBuilder::ConstructProcess()
+{
+  // Add standard EM Processes for gamma
+  G4ParticleDefinition* particle = G4Gamma::Gamma();
+  G4ProcessManager* pmanager = particle->GetProcessManager();
+  pmanager->AddDiscreteProcess( new G4GammaConversionToMuons() );
+
+  // Add standard EM Processes for e+
+  particle = G4Positron::Positron();
+  pmanager = particle->GetProcessManager();
+  pmanager->AddDiscreteProcess( new G4AnnihiToMuPair() );
+  pmanager->AddDiscreteProcess( new G4eeToHadrons() );
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

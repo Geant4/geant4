@@ -20,49 +20,68 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysicsListMessenger.hh,v 1.3 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: G4Vee2hadrons.hh,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
+// -------------------------------------------------------------------
+//
+// GEANT4 Class header file
+//
+//
+// File name:     G4Vee2hadrons
+//
+// Author:        Vladimir Ivanchenko
+//
+// Creation date: 12.08.2004
+//
+// Modifications:
+//
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// Class Description:
+//
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+// -------------------------------------------------------------------
+//
+
+#ifndef G4Vee2hadrons_h
+#define G4Vee2hadrons_h 1
 
 #include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4ThreeVector.hh"
+#include <vector>
 
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
+class G4DynamicParticle;
+class G4PhysicsVector;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class PhysicsListMessenger: public G4UImessenger
+class G4Vee2hadrons 
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList* pPhysicsList;
-    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
-    
+
+public:
+
+  G4Vee2hadrons() {};
+
+  virtual ~G4Vee2hadrons() {};
+
+  virtual G4double ThresholdEnergy() const = 0;
+
+  virtual G4double PeakEnergy() const = 0;
+
+  virtual G4double ComputeCrossSection(G4double) const = 0;
+
+  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
+
+  virtual std::vector<G4DynamicParticle*>* SampleSecondaries(
+                      G4double, const G4ThreeVector&) const = 0;
+
+private:
+
+  // hide assignment operator
+  G4Vee2hadrons & operator=(const  G4Vee2hadrons &right);
+  G4Vee2hadrons(const  G4Vee2hadrons&);
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif
-

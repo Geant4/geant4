@@ -21,35 +21,34 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListGeneral.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
+// $Id: ParticlesBuilder.hh,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListGeneral_h
-#define PhysListGeneral_h 1
+#ifndef ParticlesBuilder_h
+#define ParticlesBuilder_h 1
 
 #include "G4VPhysicsConstructor.hh"
-#include "G4Decay.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListGeneral : public G4VPhysicsConstructor
+class ParticlesBuilder : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListGeneral(const G4String& name = "general");
-    virtual ~PhysListGeneral();
+public:
+  ParticlesBuilder(const G4String& name = "particles");
+  virtual ~ParticlesBuilder();
 
-  public: 
-    // This method is dummy for physics
-    virtual void ConstructParticle() {};
- 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type 
-    virtual void ConstructProcess();
+public:
+  // This method will be invoked in the Construct() method.
+  // each particle type will be instantiated
+  virtual void ConstructParticle();
+
+  // This method is dummy.
+  virtual void ConstructProcess() {};
 
 };
 

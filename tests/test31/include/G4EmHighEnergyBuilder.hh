@@ -21,34 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListEmPenelope.hh,v 1.2 2004-07-27 08:38:30 vnivanch Exp $
+// $Id: G4EmHighEnergyBuilder.hh,v 1.1 2004-08-19 16:30:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListEmPenelope_h
-#define PhysListEmPenelope_h 1
+#ifndef G4EmHighEnergyBuilder_h
+#define G4EmHighEnergyBuilder_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListEmPenelope : public G4VPhysicsConstructor
+class G4EmHighEnergyBuilder : public G4VPhysicsConstructor
 {
-  public:
-    PhysListEmPenelope(const G4String& name = "Penelope");
-    virtual ~PhysListEmPenelope();
+public:
+  G4EmHighEnergyBuilder(const G4String& name = "EM_stan_HE");
+  virtual ~G4EmHighEnergyBuilder();
 
-  public:
-    // This method is dummy for physics.
-    virtual void ConstructParticle() {};
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
 
-    // This method will be invoked in the Construct() method.
-    // each physics process will be instantiated and
-    // registered to the process manager of each particle type
-    virtual void ConstructProcess();
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
+private:
+
+  // hide assignment operator
+  G4EmHighEnergyBuilder & operator=(const G4EmHighEnergyBuilder &right);
+  G4EmHighEnergyBuilder(const G4EmHighEnergyBuilder&);
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

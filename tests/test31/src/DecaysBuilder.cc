@@ -21,48 +21,68 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: DecaysBuilder.cc,v 1.1 2004-08-19 16:30:06 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
+//---------------------------------------------------------------------------
+//
+// ClassName:   DecayBuilder
+//
+// Author:      V.Ivanchenko 03.05.2004
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
-
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
+#include "DecaysBuilder.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4ProcessManager.hh"
+#include "G4Decay.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+DecaysBuilder::DecaysBuilder(const G4String& name)
+   :  G4VPhysicsConstructor(name)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+DecaysBuilder::~DecaysBuilder()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DecaysBuilder::ConstructParticle()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DecaysBuilder::ConstructProcess()
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList* pPhysicsList;
-    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
-    
-};
+  // Add Decay Process
+
+  G4Decay* fDecayProcess = new G4Decay();
+
+  theParticleIterator->reset();
+  while( (*theParticleIterator)() ){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (fDecayProcess->IsApplicable(*particle)) {
+
+      pmanager ->AddProcess(fDecayProcess);
+
+      // set ordering for PostStepDoIt and AtRestDoIt
+      pmanager ->SetProcessOrdering(fDecayProcess, idxPostStep);
+      pmanager ->SetProcessOrdering(fDecayProcess, idxAtRest);
+
+    }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
 

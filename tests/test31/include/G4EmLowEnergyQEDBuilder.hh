@@ -21,45 +21,44 @@
 // ********************************************************************
 //
 //
-// $Id: PhysListParticles.hh,v 1.2 2004-07-27 09:17:05 vnivanch Exp $
+// $Id: G4EmLowEnergyQEDBuilder.hh,v 1.1 2004-08-19 16:30:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysListParticles_h
-#define PhysListParticles_h 1
+#ifndef G4EmLowEnergyQEDBuilder_h
+#define G4EmLowEnergyQEDBuilder_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysListParticles : public G4VPhysicsConstructor
+class G4EmLowEnergyQEDBuilder : public G4VPhysicsConstructor
 {
-  public: 
-    PhysListParticles(const G4String& name = "particles");
-    virtual ~PhysListParticles();
+public:
+  G4EmLowEnergyQEDBuilder(const G4String& name = "EM_LowE_QED");
+  virtual ~G4EmLowEnergyQEDBuilder();
 
-  public: 
-    // This method will be invoked in the Construct() method. 
-    // each particle type will be instantiated
-    virtual void ConstructParticle();
- 
-    // This method is dummy.
-    virtual void ConstructProcess() {};
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
+private:
+
+   // hide assignment operator
+  G4EmLowEnergyQEDBuilder & operator=(const G4EmLowEnergyQEDBuilder &right);
+  G4EmLowEnergyQEDBuilder(const G4EmLowEnergyQEDBuilder&);
 
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-
-
-
-
-
-
 

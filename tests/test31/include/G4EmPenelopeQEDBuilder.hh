@@ -21,45 +21,41 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.hh,v 1.3 2004-08-19 16:29:25 vnivanch Exp $
+// $Id: G4EmPenelopeQEDBuilder.hh,v 1.1 2004-08-19 16:30:05 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PhysicsListMessenger_h
-#define PhysicsListMessenger_h 1
+#ifndef G4EmPenelopeQEDBuilder_h
+#define G4EmPenelopeQEDBuilder_h 1
 
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
-
-class PhysicsList;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PhysicsListMessenger: public G4UImessenger
+class G4EmPenelopeQEDBuilder : public G4VPhysicsConstructor
 {
-  public:
-  
-    PhysicsListMessenger(PhysicsList* );
-   ~PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    PhysicsList* pPhysicsList;
-    
-    G4UIcmdWithADoubleAndUnit* gammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* electCutCmd;
-    G4UIcmdWithADoubleAndUnit* protoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* allCutCmd;    
-    G4UIcmdWithAString*        pListCmd;
-    
+public:
+  G4EmPenelopeQEDBuilder(const G4String& name = "EM_Penelope_QED");
+  virtual ~G4EmPenelopeQEDBuilder();
+
+public:
+  // This method is dummy for physics
+  virtual void ConstructParticle();
+
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type
+  virtual void ConstructProcess();
+
+private:
+
+   // hide assignment operator
+  G4EmPenelopeQEDBuilder & operator=(const G4EmPenelopeQEDBuilder &right);
+  G4EmPenelopeQEDBuilder(const G4EmPenelopeQEDBuilder&);
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

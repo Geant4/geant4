@@ -118,22 +118,9 @@ int main(int argc,char** argv) {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
      UI->ApplyCommand(command+fileName);
-     /*
-     // Initialize G4 kernel
-     G4int nev = det->GetNumberOfEvents();
-     if(nev > 0) {
-
-       if(verbose >0) {
-         G4cout << "Start event loop for " << nev
-                << " events" << G4endl;
-       }
-
-       runManager->BeamOn(nev);
-     }
-     */
     }
     
-  // job termination
+ // job termination
   
 #ifdef G4VIS_USE
   delete visManager;
