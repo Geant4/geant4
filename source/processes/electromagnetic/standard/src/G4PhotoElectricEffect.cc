@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.9 1999-12-15 14:51:52 gunter Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.10 2000-06-21 12:12:56 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,6 +33,7 @@
 // 06-01-99, use Sandia crossSection below 50 keV, V.Grichine mma
 // 20-05-99, protection against very low energy photons ,L.Urban
 // 08-06-99, removed this above protection from the DoIt. mma
+// 21-06-00, in DoIt, killing photon: aParticleChange.SetEnergyChange(0.); mma  
 // --------------------------------------------------------------
 
 #include "G4PhotoElectricEffect.hh"
@@ -266,7 +267,8 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
    //
    // Kill the incident photon 
    //
-   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);  
+   aParticleChange.SetLocalEnergyDeposit(PhotonEnergy-ElecKineEnergy);
+   aParticleChange.SetEnergyChange(0.);  
    aParticleChange.SetStatusChange(fStopAndKill); 
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
