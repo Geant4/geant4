@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MultipleScattering.hh,v 1.13 2003-01-22 14:04:11 vnivanch Exp $
+// $Id: G4MultipleScattering.hh,v 1.14 2003-02-05 12:28:18 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //------------- G4MultipleScattering physics process --------------------------
@@ -39,8 +39,8 @@
 //          (L.Urban)
 // 24-04-02 some minor changes in boundary algorithm, L.Urban
 // 24-05-02 changes in data members, L.Urban
-// 30-10-02 changes in data members, L.Urban
-// 15-01-03 Migrade to cut per region (V.Ivanchenko)
+// 30-10-02 changes in data members, L.Urban 
+// 05-02-03 changes in data members, L.Urban 
 //------------------------------------------------------------------------------
 
 // class description
@@ -116,7 +116,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
                                    G4double& currentSafety); 
      // It performs the true step length --> geometrical step length
      // transformation. It is invoked by the
-     // AlongStepGetPhysicalInteractionLength method.
+     // AlongStepGetPhysicalInteractionLength method.  
 
    G4double GetMeanFreePath(const G4Track& aTrack,
                             G4double previousStepSize,
@@ -126,26 +126,26 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-
+			    
    G4double GetTransportMeanFreePath(
-                          G4double KineticEnergy, const G4Material* material);
+                          G4double KineticEnergy,G4Material* material);
      // Just a utility method to get the values of the transport
      //  mean free path . (It is not used inside the class.)
-
+   
    G4VParticleChange* AlongStepDoIt(const G4Track& aTrack,const G4Step& aStep);
      // The geometrical step length --> true path length transformation
      // is performed here (the inverse of the transformation done
-     // by GetContinuousStepLimit).
+     // by GetContinuousStepLimit).  
 
    G4VParticleChange* PostStepDoIt(const G4Track& aTrack,const G4Step& aStep);
-     // It computes the final state of the particle: samples the
+     // It computes the final state of the particle: samples the 
      // scattering angle and computes the lateral displacement.
      // The final state is returned as a ParticleChange object.
      // This function overloads a virtual function of the base class.
      // It is invoked by the ProcessManager of the Particle.
 
-   void Setpcz(G4double value)                  {pcz = value;};
-     // geom. step length distribution
+   void Setsamplez(G4bool value)               {samplez = value;};
+     // geom. step length distribution should be sampled or not
 
    void Setdtrl(G4double value)                 {dtrl = value;};
      // to reduce the energy/step dependence
@@ -156,14 +156,15 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    void SetFacrange(G4double val)  {facrange=val;
                                     nsmallstep = G4int(log((cf+facrange-1.)/
                                                  facrange)/log(cf))+1 ;
-                                    G4cout << " fr=" << facrange
+                                    G4cout << " fr=" << facrange 
                                            << "  nsmall=" << nsmallstep << G4endl ;};
      // Steplimit after boundary crossing = facrange*range
      // estimated nb of steps at boundary nsmallstep = 1/facrange
 
+
    void SetLateralDisplacementFlag(G4bool flag) {fLatDisplFlag = flag;};
      // lateral displacement to be/not to be computed
-
+   
    void SetNuclCorrPar(G4double val)            {NuclCorrPar = val;};
    void SetFactPar(G4double val)                {FactPar = val;};
 
@@ -175,7 +176,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
                                    G4double AtomicNumber,
                                    G4double AtomicWeight);
      // It computes the transport cross section.
-     // The transport mean free path is 1/(transport cross section).
+     // The transport mean free path is 1/(transport cross section). 
 
  private:
 
@@ -187,8 +188,6 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4PhysicsTable* theTransportMeanFreePathTable;
 
-   G4double fTransportMeanFreePath,kappa;
-
    G4double taubig,tausmall,taulim;
 
    G4double LowestKineticEnergy;
@@ -196,7 +195,7 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4int    TotBin;
 
    G4int       materialIndex;
-
+  
    G4double tLast;
    G4double zLast;
 
@@ -207,11 +206,12 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
    G4double laststep ;
    G4GPILSelection  valueGPILSelectionMSC;
 
-   G4double pcz,zmean;                        // z(geom.step length)
-                                              //  distribution 
+   G4double zmean;                            // z(geom.step length)
+   G4bool samplez ;                           //  distribution 
 
-   G4double range,T1,lambda1,cth1,z1,t1,dtrl; // used to reduce the energy
-                                              // (or step length) dependence
+   G4double range,T0,T1,lambda0,lambda1,      // used to reduce the energy
+            Tlow,alam,blam,dtrl,lambdam,      // (or step length) dependence
+            clam,zm,cthm;
 
    // with/without lateral displacement
    G4bool fLatDisplFlag;
@@ -222,10 +222,9 @@ class G4MultipleScattering : public G4VContinuousDiscreteProcess
 
    G4ParticleChangeForMSC fParticleChange; 
 
-   G4double alfa1,alfa2,alfa3,xsi,c0,facxsi ;    // angle distr. parameters
+   G4double alfa1,alfa2,alfa3,b,xsi,c0,facxsi ;    // angle distr. parameters
                                                  // facxsi : some tuning 
                                                  // possibility in the tail 
-
 };
 
 #include "G4MultipleScattering.icc"
