@@ -212,6 +212,8 @@ void test31DetectorConstruction::DefineMaterials()
   ma->SetChemicalFormula("H_2O");
   ma->AddElement(elH, natoms=2);
   ma->AddElement(elO, natoms=1);
+  G4double exc = ma->GetIonisation()->FindMeanExcitationEnergy("H_2O");
+  ma->GetIonisation()->SetMeanExcitationEnergy(exc);
   
   density = 0.0006672*g/cm3;
   ma = new G4Material("Methane", density, 2);
