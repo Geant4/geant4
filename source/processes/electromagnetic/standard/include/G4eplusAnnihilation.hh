@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.6 2001-08-09 17:24:23 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.7 2001-09-07 16:29:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -103,7 +103,7 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
        // It returns the MeanFreePath of the process for the current track :
        // (energy, material)
        // The previousStepSize and G4ForceCondition* are not used.
-       // This function overloads a virtual function of the base class.		      
+       // This function overloads a virtual function of the base class.	
        // It is invoked by the ProcessManager of the Particle.
         
      G4double GetCrossSectionPerAtom(G4DynamicParticle* aDynamicPositron,

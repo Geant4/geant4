@@ -21,24 +21,25 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.icc,v 1.6 2001-08-09 17:24:23 maire Exp $
+// $Id: G4eplusAnnihilation.icc,v 1.7 2001-09-07 16:29:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 10-01-97, crossection table + meanfreepath table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation 
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4bool G4eplusAnnihilation::IsApplicable(const G4ParticleDefinition& particle)
+inline G4bool G4eplusAnnihilation::IsApplicable(
+                                           const G4ParticleDefinition& particle)
 {
    return ( &particle == G4Positron::Positron() ); 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
                                            G4DynamicParticle* aDynamicPositron,
@@ -62,7 +63,7 @@ inline G4double G4eplusAnnihilation::GetCrossSectionPerAtom(
    return crossSection; 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 inline G4double G4eplusAnnihilation::GetMeanFreePath(const G4Track& aTrack,
                                                      G4double,
@@ -71,48 +72,50 @@ inline G4double G4eplusAnnihilation::GetMeanFreePath(const G4Track& aTrack,
 // returns the positron mean free path in GEANT4 internal units
 
 {
-   const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
-   G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
-   G4Material* aMaterial = aTrack.GetMaterial();
+  const G4DynamicParticle* aDynamicPositron = aTrack.GetDynamicParticle();
+  G4double PositronEnergy = aDynamicPositron->GetKineticEnergy();
+  G4Material* aMaterial = aTrack.GetMaterial();
 
-   G4double MeanFreePath;
-   G4bool isOutRange ;
+  G4double MeanFreePath;
+  G4bool isOutRange ;
 
-   if (PositronEnergy > HighestEnergyLimit)
-     MeanFreePath = DBL_MAX;
-   else {
-     if (PositronEnergy < LowestEnergyLimit) PositronEnergy = 1.01*LowestEnergyLimit;
+  if (PositronEnergy > HighestEnergyLimit) MeanFreePath = DBL_MAX;
+  else 
+    {
+     if (PositronEnergy < LowestEnergyLimit)
+                                    PositronEnergy = 1.01*LowestEnergyLimit;
      MeanFreePath = (*theMeanFreePathTable)(aMaterial->GetIndex())->
                     GetValue( PositronEnergy, isOutRange );
-   }
+    }
 
-   return MeanFreePath; 
+  return MeanFreePath; 
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-inline G4double G4eplusAnnihilation::ComputeMeanFreePath(G4double PositKinEnergy,
+inline G4double G4eplusAnnihilation::ComputeMeanFreePath(
+                                                       G4double PositKinEnergy,
                                                        G4Material* aMaterial)
 
 // returns the positron mean free path in GEANT4 internal units
 
 {
-  const G4ElementVector* theElementVector = aMaterial->GetElementVector() ;
-  const G4double* NbOfAtomsPerVolume      = aMaterial->GetVecNbOfAtomsPerVolume();   
+  const G4ElementVector* theElementVector = aMaterial->GetElementVector();
+  const G4double* NbOfAtomsPerVolume = aMaterial->GetVecNbOfAtomsPerVolume();   
 
   G4double SIGMA = 0 ;
 
-  for ( size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
-      {             
-            SIGMA += NbOfAtomsPerVolume[elm] * 
-                     ComputeCrossSectionPerAtom(PositKinEnergy,
-                                               (*theElementVector)(elm)->GetZ());
-      }       
+  for (size_t elm=0 ; elm < aMaterial->GetNumberOfElements() ; elm++ )
+     {             
+        SIGMA += NbOfAtomsPerVolume[elm] * 
+                 ComputeCrossSectionPerAtom(PositKinEnergy,
+                                            (*theElementVector)(elm)->GetZ());
+     }       
 
   return SIGMA > DBL_MIN ? 1./SIGMA : DBL_MAX;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4eplusAnnihilation::GetMeanLifeTime(const G4Track&,
                                                      G4ForceCondition*)
@@ -123,5 +126,5 @@ inline G4double G4eplusAnnihilation::GetMeanLifeTime(const G4Track&,
    return 0.0; 
 } 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

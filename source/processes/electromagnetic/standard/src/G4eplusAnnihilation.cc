@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.8 2001-08-29 16:43:05 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.9 2001-09-07 16:29:24 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 // 10-01-97, crossection table + mean free path table, M.Maire
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
@@ -36,13 +36,13 @@
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)    
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eplusAnnihilation.hh"
 #include "G4UnitsTable.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 // constructor
  
@@ -57,7 +57,7 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName)
   BuildThePhysicsTable();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 // destructor
  
@@ -74,82 +74,83 @@ G4eplusAnnihilation::~G4eplusAnnihilation()
    }
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void G4eplusAnnihilation::SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins)
+void G4eplusAnnihilation::SetPhysicsTableBining(
+                                     G4double lowE, G4double highE, G4int nBins)
 {
   LowestEnergyLimit = lowE; HighestEnergyLimit = highE; NumbBinTable = nBins;
 }  
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 void G4eplusAnnihilation::BuildThePhysicsTable()
-
-// Build total cross section and mean free path tables
 {
-   G4double LowEdgeEnergy, Value;
-   G4PhysicsLogVector* ptrVector;
+ // Build total cross section and mean free path tables
 
-// Build cross section per atom tables for the e+e- annihilation
+ G4double LowEdgeEnergy, Value;
+ G4PhysicsLogVector* ptrVector;
 
-   if (theCrossSectionTable) {
-          theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable; }
+ // Build cross section per atom tables for the e+e- annihilation
 
-   theCrossSectionTable = new G4PhysicsTable( G4Element::GetNumberOfElements()) ;
-   const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
-   G4double AtomicNumber;
-   size_t J;
+ if (theCrossSectionTable) {
+        theCrossSectionTable->clearAndDestroy(); delete theCrossSectionTable;}
 
-   for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
-       { 
-        //create physics vector then fill it ....
-        ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
-                                           NumbBinTable ) ;
-        AtomicNumber = (*theElementTable)(J)->GetZ();
+ theCrossSectionTable = new G4PhysicsTable( G4Element::GetNumberOfElements());
+ const G4ElementTable* theElementTable = G4Element::GetElementTable() ;
+ G4double AtomicNumber;
+ size_t J;
+
+ for ( J=0 ; J < G4Element::GetNumberOfElements(); J++ )  
+    { 
+     //create physics vector then fill it ....
+     ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
+                                        NumbBinTable );
+     AtomicNumber = (*theElementTable)(J)->GetZ();
  
-        for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
-           {
-             LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
-             Value = ComputeCrossSectionPerAtom( LowEdgeEnergy, AtomicNumber);  
-             ptrVector->PutValue( i , Value ) ;
-           }
+     for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
+        {
+          LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
+          Value = ComputeCrossSectionPerAtom( LowEdgeEnergy, AtomicNumber);  
+          ptrVector->PutValue( i , Value ) ;
+        }
 
-        theCrossSectionTable->insertAt( J , ptrVector ) ;
+     theCrossSectionTable->insertAt( J , ptrVector );
 
-      }
+    }
 
-// Build mean free path table for the e+e- annihilation
+ // Build mean free path table for the e+e- annihilation
 
-   if (theMeanFreePathTable) {
-          theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable; }
+ if (theMeanFreePathTable) {
+        theMeanFreePathTable->clearAndDestroy(); delete theMeanFreePathTable;}
 
-   theMeanFreePathTable = new G4PhysicsTable( G4Material::GetNumberOfMaterials() );
-   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
-   G4Material* material;
+ theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+ const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+ G4Material* material;
 
-   for ( J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
-       { 
-        //create physics vector then fill it ....
-        ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
-                                           NumbBinTable ) ;
-        material = (*theMaterialTable)(J);
+ for ( J=0 ; J < G4Material::GetNumberOfMaterials(); J++ )  
+    { 
+     //create physics vector then fill it ....
+     ptrVector = new G4PhysicsLogVector(LowestEnergyLimit, HighestEnergyLimit,
+                                        NumbBinTable );
+     material = (*theMaterialTable)(J);
  
-        for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
-           {
-             LowEdgeEnergy = ptrVector->GetLowEdgeEnergy( i ) ;
-             Value = ComputeMeanFreePath( LowEdgeEnergy, material);  
-             ptrVector->PutValue( i , Value ) ;
-           }
+     for ( G4int i = 0 ; i < NumbBinTable ; i++ )      
+        {
+          LowEdgeEnergy = ptrVector->GetLowEdgeEnergy(i);
+          Value = ComputeMeanFreePath( LowEdgeEnergy, material);  
+          ptrVector->PutValue( i , Value );
+        }
 
-        theMeanFreePathTable->insertAt( J , ptrVector ) ;
+     theMeanFreePathTable->insertAt( J , ptrVector );
 
-      }
+    }
    
-   PrintInfoDefinition();          
+ PrintInfoDefinition();          
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
                               (G4double PositKinEnergy, G4double AtomicNumber)
@@ -164,27 +165,28 @@ G4double G4eplusAnnihilation::ComputeCrossSectionPerAtom
  G4double gama = 1. + PositKinEnergy/electron_mass_c2;
  G4double gama2 = gama*gama, sqgama2 = sqrt(gama2-1.);
 
- return pi_rcl2*AtomicNumber*((gama2+4*gama+1.)*log(gama+sqgama2) - (gama+3.)*sqgama2) 
-                            /((gama2-1.)*(gama+1.));
+ return pi_rcl2*AtomicNumber
+         *((gama2+4*gama+1.)*log(gama+sqgama2) - (gama+3.)*sqgama2) 
+         /((gama2-1.)*(gama+1.));
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
  
 G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
-                                                    const G4Step&  aStep)
+                                                     const G4Step&  aStep)
 //
 // The secondaries Gamma energies are sampled using the Heitler cross section.
 //  
-// A modified version of the random number techniques of Butcher & Messel is used 
-//    (Nuc Phys 20(1960),15).
+// A modified version of the random number techniques of Butcher & Messel
+// is used (Nuc Phys 20(1960),15).
 //
 // GEANT4 internal units.
 //
-// Note 1 : The initial electron is assumed free and at rest.
+// Note 1: The initial electron is assumed free and at rest.
 //          
-// Note 2 : The annihilation processes producing one or more than two photons are
-//          ignored, as negligible compared to the two photons process.         
+// Note 2: The annihilation processes producing one or more than two photons are
+//         ignored, as negligible compared to the two photons process.         
  
 {
    aParticleChange.Initialize(aTrack);
@@ -200,8 +202,8 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    if (aTrack.GetTrackStatus() == fStopButAlive) return &aParticleChange;
 
    G4double gamam1 = PositKinEnergy/electron_mass_c2;
-   G4double gama   = gamam1+1. , gamap1 = gamam1+2. , sqgrate = sqrt(gamam1/gamap1)/2. ,
-                                                      sqg2m1  = sqrt(gamam1*gamap1);
+   G4double gama   = gamam1+1. , gamap1 = gamam1+2.;
+   G4double sqgrate = sqrt(gamam1/gamap1)/2. , sqg2m1 = sqrt(gamam1*gamap1);
 
    // limits of the energy sampling
    G4double epsilmin = 0.5 - sqgrate , epsilmax = 0.5 + sqgrate;
@@ -210,7 +212,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    //
    // sample the energy rate of the created gammas 
    //
-   G4double epsil, greject ;
+   G4double epsil, greject;
 
    do {
         epsil = epsilmin*pow(epsilqot,G4UniformRand());
@@ -221,10 +223,10 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    // scattered Gamma angles. ( Z - axis along the parent positron)
    //
    
-   G4double cost = (epsil*gamap1-1.)/(epsil*sqg2m1) , sint = sqrt((1.+cost)*(1.-cost));
-
-
-   G4double phi  = twopi * G4UniformRand() ;
+   G4double cost = (epsil*gamap1-1.)/(epsil*sqg2m1);
+   G4double sint = sqrt((1.+cost)*(1.-cost));
+   G4double phi  = twopi * G4UniformRand();
+   
    G4double dirx = sint*cos(phi) , diry = sint*sin(phi) , dirz = cost;
  
    //
@@ -246,8 +248,8 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
 
    G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
    if (Phot2Energy > 0.) {
-     G4double Eratio = Phot1Energy/Phot2Energy;
-     G4double PositP = sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
+     G4double Eratio= Phot1Energy/Phot2Energy;
+     G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
      G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
                                     (PositP-dirz*Phot1Energy)/Phot2Energy); 
      Phot2Direction.rotateUz(PositDirection); 
@@ -257,7 +259,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
      aParticleChange.AddSecondary(aParticle2);
    }   
 
-   aParticleChange.SetLocalEnergyDeposit(0.) ;
+   aParticleChange.SetLocalEnergyDeposit(0.);
 
    //
    // Kill the incident positron 
@@ -270,7 +272,7 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    return &aParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
                                                   const G4Step&  aStep)
@@ -305,7 +307,7 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
    return &aParticleChange;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
 				              const G4String& directory, 
@@ -329,12 +331,12 @@ G4bool G4eplusAnnihilation::StorePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+  G4cout << GetProcessName() << ": Success to store the PhysicsTables in "  
          << directory << G4endl;
   return true;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
 					         const G4String& directory, 
@@ -370,22 +372,24 @@ G4bool G4eplusAnnihilation::RetrievePhysicsTable(G4ParticleDefinition* particle,
     return false;
   }
   
-  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+  G4cout << GetProcessName() << ": Success to retrieve the PhysicsTables from "
          << directory << G4endl;
   return true;
 }
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4eplusAnnihilation::PrintInfoDefinition()
 {
-  G4String comments = "Total cross section from Heilter formula (annihilation into 2 photons).\n";
+  G4String comments = "Total cross section from Heilter formula" 
+                      "(annihilation into 2 photons).\n";
            comments += "        gamma energies sampled according Heitler";
                      
   G4cout << G4endl << GetProcessName() << ":  " << comments
-         << "\n        PhysicsTables from " << G4BestUnit(LowestEnergyLimit,"Energy")
+         << "\n        PhysicsTables from " 
+	           << G4BestUnit(LowestEnergyLimit ,"Energy")
          << " to " << G4BestUnit(HighestEnergyLimit,"Energy") 
          << " in " << NumbBinTable << " bins. \n";
 }         
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
