@@ -1,0 +1,194 @@
+
+                       geant4-05-02-ref-05
+                       ===================
+
+Some of the development/fixes included since the last reference tag are:
+
+  o Migration to use new G4Exception scheme in the geometry module.
+  o Fixes to CSG and Boolean solids to correctly initialise default
+    safety to zero in DistanceToIn/Out(p) methods.
+  o Added PAI model processes to standard EM modules.
+  o Updated default settings for EM standard processes.
+  o Physics tuning of CHIPS hadronic model on a number of experimental
+    data sets. 
+  o Review of novice and extended examples.
+
+
+---------- Reference-tag 'Release Notes' -----------
+
+Summarised, the list of changes is the following:
+
+config/Configure                        config-V05-02-03
+----------------
+- binmake.gmk:
+  o Added particles/utils module to include paths.
+
+event                                   event-V05-02-08
+-----
+- Increased the array size from 256 to 1024 for user defined histograms.
+- Bug fix in G4GeneralParticleSource:
+  make sure the SideRefVec(1/2/3) are unit vectors.
+
+geometry/biasing                        geombias-V05-02-03
+----------------
+- Migrated calls to G4Exception to new scheme.
+
+geometry/divisions                      geomdiv-V05-02-03
+------------------
+- Completed implementation for Para, Trd.
+- Corrections for cons and tubs.
+- First trial implementation for polyhedra.
+- Migrated calls to G4Exception to new scheme.
+- Added G4Orb to dummy parameterisations.
+
+geometry/magneticfield                  field-V05-02-00
+----------------------
+- Migrated to use new G4Exception scheme.
+- Updated outputs of unit tests.
+
+geometry/management                     geommng-V05-02-02
+-------------------
+- Introduced new abstract class G4VUserRegionInformation for storing
+  user information associated with a G4Region.
+- G4VPVParameterisation: added G4Orb.
+- Migrated calls to G4Exception to new scheme.
+
+geometry/navigation                     geomnav-V05-02-02
+-------------------
+- G4PropagatorInField: 
+  o Added option to turn On/Off the optimisation of using the safety 
+    in calling G4Navigator. 
+  o Fixed trivial compilation warning.
+- Migrated calls to G4Exception to new scheme.
+
+geometry/solids                         geomsolids-V05-02-01
+---------------
+- Migrated calls to G4Exception to new scheme.
+- Boolean:
+  o Fixes to default safety to zero in DistIn/Out(p) methods.
+- CSG (geom-csg-V05-02-03):
+  o Fixes to default safety to zero in DistIn/Out(p) methods.
+  o G4Sphere: fix in Inside() for Phi_start (0.5 kAngTol < phi < Phi_start). 
+
+geometry/volumes                        geomvol-V05-02-02
+----------------
+- Migrated calls to G4Exception to new scheme.
+
+particles                               particles-V05-02-06
+---------
+- Added new sub-module "utils".
+- Fixed NULL type pointer initialisation in G4DynamicParticle
+  to G4PrimaryParticle.
+- Fixed anti-particle PDG code for Gluon.
+
+processes/electromagnetic/muons         muons-V05-02-07
+-------------------------------
+- Fixes in G4MuPairProductionModel:
+  o 2*xi in ComputeDDMicroscopicCrossSection().
+  o 8 integration points in ComputeDMicroscopicCrossSection().
+
+processes/electromagnetic/standard      stand-V05-02-05
+----------------------------------
+- Added PAI model processes.
+- Updated default settings for processes.
+
+processes/electromagnetic/utils         utils-V05-02-09
+-------------------------------
+- Updated logic of BuildPhysicsTable() to take into account
+  desactivated processes
+- Updated default settings for stepping algorithm.
+- Minor change of interface to G4EmFluctuationModel for PAI development.
+- Updated logic of the messenger and G4LossTableManager to provide
+  independence on command sequence.
+- Increased verbosity for store/retrieve tables.
+- Added new method DefineForRegion() to G4VEmModel.
+- Fixed minor problems in messenger.
+
+processes/hadronic/models/chiral_inv_phase_space/body ghad-chips-body-V05-02-02
+-----------------------------------------------------
+- Physics tuning of CHIPS on a number of experimental data sets. 
+- Eta, omega, Sigma0 etc. radiative decays are switched on to avoid transport.
+- Introduced few corrections for the BaryonNumber=0 reactions. 
+
+visualization/OpenInventor                            openinventor-V05-02-00
+--------------------------
+- Patch in G4OpenInventorSceneHandler::PreAddThis() to cope with changes
+  introduced in G4VPhysicalVolume where pointer to mother physical-volume
+  is no longer available.
+- Cleared usage of 'NULL' in favour of '0'.
+
+examples                                              examples-V05-02-04
+--------
+- Updated reference outputs.
+- advanced:
+  o brachytherapy (brachy-V05-02-00)
+    + Implemented migration to cuts by region.
+  o lAr_calorimeter (lAr_calorimeter-V05-02-00)
+    + Implemented migration to cuts by region.
+  o underground_physics (DMX-V05-02-00)
+    + Implemented migration to cuts by region.
+- extended:
+  o electromagnetic/TestEm1 (testem1-V05-02-04)
+    + Added printout of total energy deposit.
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Added process G4eBremsstrahlungCMS.
+    + Class EmModel renamed G4v52. All macros updated.
+    + G4NOHIST replaced by G4ANALYSIS_USE.
+    + Cosmetics in material definitions.
+    + Suppressed of Em1 in all class names.
+  o electromagnetic/TestEm2 (testem2-V05-02-01)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Suppressed of Em2 in all class names.
+    + G4NOHIST replaced by G4ANALYSIS_USE.
+    + Cosmetics in material definitions.
+    + migration em-STD to em-standard processes.
+  o electromagnetic/TestEm3 (testem3-V05-02-04)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Completed migration to model EM physics.
+    + Class EmModel renamed to G4v52.
+  o electromagnetic/TestEm4 (testem4-V05-02-02)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Migration em-STD to em-standard processes.
+    + G4NOHIST replaced by G4ANALYSIS_USE.
+  o electromagnetic/TestEm5 (testem5-V05-02-05)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Migration em-STD to em-standard processes.
+  o electromagnetic/TestEm6 (testem6-V05-02-01)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + G4NOHIST replaced by G4ANALYSIS_USE.
+    + Cosmetics in material definitions.
+    + Use SetMaterial() in constructor.
+    + Updated all macros for /run/initialize.
+  o electromagnetic/TestEm7 (testem7-V05-02-02)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..     
+    + Updated Binary cascade constructor.
+    + Migration em-STD to em-standard processes.
+    + G4NOHIST replaced by G4ANALYSIS_USE.
+    + Cosmetics in material definitions.
+  o electromagnetic/TestEm9 (testem9-V05-02-03)
+    + PhysListEmStandard: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Fixed minor problem in interactive mode.
+    + Added EventMessenger class.
+    + Updated Binary cascade constructor.
+- novice:
+  o N01 (exampleN01-V05-02-00)
+    + Cosmetics in material definitions.
+  o N02 (exampleN02-V05-02-02)
+    + Cosmetics in material definitions.
+    + PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Cleared compilation warnings due to new class G4Orb.
+  o N03 (exampleN03-V05-02-01)
+    + PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+  o N04 (exampleN04-V05-02-03)
+    + PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Cosmetics in material definitions.
+    + Cleared compilation warnings due to new class G4Orb.
+  o N06 (exampleN06-V05-02-01)
+    + PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+    + Cosmetics in material definitions.
+  o N07 (exampleN07-V05-02-00)
+    + PhysicsList: AddProcess(Bremsstrahlung,-1,3,3) ..etc..
+
+tests                                                 tests-V05-02-03
+-----
+- Updated reference outputs.
