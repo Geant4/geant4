@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.9 2001-10-26 14:43:36 mverderi Exp $
+// $Id: G4FastStep.cc,v 1.10 2002-11-20 17:05:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -455,28 +455,28 @@ G4bool G4FastStep::CheckIt(const G4Track& aTrack)
   
   // Energy should not be larger than the initial value
   accuracy = ( theEnergyChange - aTrack.GetKineticEnergy())/MeV;
-  if (accuracy > accuracyForWarning) {
+  if (accuracy > GetAccuracyForWarning()) {
     G4cout << "  G4FastStep::CheckIt    : ";
     G4cout << "the energy becomes larger than the initial value !!" << G4endl;
     G4cout << "  Difference:  " << accuracy  << "[MeV] " <<G4endl;
     itsOK = false;
-    if (accuracy > accuracyForException) exitWithError = true;
+    if (accuracy > GetAccuracyForException()) exitWithError = true;
   }
 
   G4bool itsOKforMomentum = true;
   if ( theEnergyChange >0.) {
     accuracy = abs(theMomentumChange.mag2()-1.0);
-    if (accuracy > accuracyForWarning) {
+    if (accuracy > GetAccuracyForWarning()) {
       G4cout << "  G4FastStep::CheckIt    : ";
       G4cout << "the Momentum Change is not unit vector !!"
 	     << "  Difference:  " << accuracy << G4endl;
       itsOK = itsOKforMomentum = false;
-      if (accuracy > accuracyForException) exitWithError = true;
+      if (accuracy > GetAccuracyForException()) exitWithError = true;
     }
   }
   
   accuracy = (aTrack.GetGlobalTime()- theTimeChange)/ns;  
-  if (accuracy > accuracyForWarning) {
+  if (accuracy > GetAccuracyForWarning()) {
     G4cout << "  G4FastStep::CheckIt    : ";
     G4cout << "the global time goes back  !!"
 	   << " Difference:  " << accuracy << "[ns] " <<G4endl;

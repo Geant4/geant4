@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GlobalFastSimulationManager.cc,v 1.10 2002-11-15 11:41:56 stesting Exp $
+// $Id: G4GlobalFastSimulationManager.cc,v 1.11 2002-11-20 17:05:14 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -62,7 +62,7 @@ G4GlobalFastSimulationManager::GetGlobalFastSimulationManager()
   if(!fGlobalFastSimulationManager)
   {
     fGlobalFastSimulationManager = new G4GlobalFastSimulationManager;
-    fpConcreteInstance = fGlobalFastSimulationManager;
+    SetConcreteInstance(fGlobalFastSimulationManager);
   }
   return fGlobalFastSimulationManager;
 }
