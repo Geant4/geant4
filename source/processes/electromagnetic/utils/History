@@ -1,4 +1,4 @@
-$Id: History,v 1.111 2003-09-20 15:40:32 vnivanch Exp $
+$Id: History,v 1.112 2003-09-25 06:48:16 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25 Sept 03: H.Kurashige (utils-V05-02-05)
+- Add "#include G4MaterialCutsCouple.hh" in G4MultipleScattering52.hh
 
 20 Sept 03: V.Ivant (utils-V05-02-04)
 -Use warning for obsolete interfaces which uses G4Material instead of
