@@ -35,11 +35,8 @@
       CALL GZEBRA( NGBANK)
       CALL HLIMIT(-NHBOOK)
 *
-* *** Open metafile
-      CALL HPLINT (0)
-      OPEN (unit=8,file='testem4.view.ps',status='unknown',
-     &      form='formatted')
-      CALL HPLCAP (-8)
+* *** initialize HIGZ
+      CALL HPLINT(0)
 *
 * *** GEANT initialisation
       CALL UGINIT
@@ -264,15 +261,14 @@
 +SEQ,CELOSS.                                                              
 *                                                                               
 * *** drawing
-*                                                          
+*
++self,if=-batch.                                                          
         IF (ISWIT(1).NE.0) THEN
-+self,if=batch.
-         CALL ICLRWK (0,0)
-+self.
          CALL GDHEAD (110110,'TestEm4',0.)
          CALL GDSHOW (3)
          CALL GDXYZ  (0)
       END IF
++self.      
 *
 *     energy deposited
 *                                                                                
@@ -295,7 +291,7 @@
 *
 * *** print  selected histo                                                                               
 *
-* *** close HIGZ file
+* *** close HIGZ
       CALL HPLEND
 *                                                                               
 * *** Save selected histograms                                                  
