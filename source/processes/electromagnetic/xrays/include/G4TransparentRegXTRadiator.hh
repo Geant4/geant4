@@ -21,21 +21,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaXTRadiator.hh,v 1.3 2005-04-05 08:27:21 grichine Exp $
+// $Id: G4TransparentRegXTRadiator.hh,v 1.1 2005-04-05 08:28:04 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 ///////////////////////////////////////////////////////////////////////////
 // 
-// Rough process describing a radiator of X-ray transition radiation.  
-// Thicknesses of plates and gas gaps are distributed according to gamma 
-// distribution. x are thicknesses of plates or gas gaps:
-//
-// p(x) = (alpha/<x>)^alpha * x^(alpha-1) * std::exp(-alpha*x/<x>) / G(alpha)
-//
-// G(alpha) is Euler's gamma function.
-// Plates have mean <x> = fPlateThick > 0 and power alpha = fAlphaPlate > 0 :
-// Gas gaps have mean <x> = fGasThick > 0 and power alpha = fAlphaGas > 0 :
+// Process describing a radiator of X-ray transition radiation.  
+// Thicknesses of plates and gas gaps are fixed.
 // We suppose that:
 // formation zone ~ mean thickness << absorption length
 // for each material and in the range 1-100 keV. This allows us to simplify
@@ -43,38 +36,32 @@
 // 
 // 
 // History:
-// 21.01.02 V. Grichine, first version 
+//
+// 05.04.05 V. Grichine, first version 
 //
 
 
-#ifndef G4GammaXTRadiator_h
-#define G4GammaXTRadiator_h 1
+#ifndef G4TransparentRegXTRadiator_h
+#define G4TransparentRegXTRadiator_h 1
 
 #include "G4VXTRenergyLoss.hh"
 
-class G4GammaXTRadiator : public G4VXTRenergyLoss
+class G4TransparentRegXTRadiator : public G4VXTRenergyLoss
 {
 public:
 
-   G4GammaXTRadiator (G4LogicalVolume *anEnvelope,
-                           G4double,G4double,
-                           G4Material*,G4Material*,
+  G4TransparentRegXTRadiator (G4LogicalVolume *anEnvelope,G4Material*,G4Material*,
                         G4double,G4double,G4int,
-                        const G4String & processName = "XTRgammaRadiator");
-  ~G4GammaXTRadiator ();
+                        const G4String & processName = "TransparentRegXTRadiator");
+  ~G4TransparentRegXTRadiator ();
+
+  // reimplementation of base class function in analytical way
+
+  G4double SpectralXTRdEdx(G4double energy);
 
   // Pure virtual function from base class
 
   G4double GetStackFactor( G4double energy, G4double gamma, G4double varAngle);
-
-private:
-
 };
 
 #endif
-
-
-
-
-
-
