@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: testG4ReplicaNavigation.cc,v 1.1 1999-01-08 16:31:58 gunter Exp $
+// $Id: testG4ReplicaNavigation.cc,v 1.2 1999-05-03 17:18:38 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -171,7 +171,11 @@ G4bool testG4ReplicaNavigation()
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(0,21,0));
   assert(Dist==1);
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(21,21,0));
-  assert(Dist==sqrt(2.*441.)-20.);
+  cout.precision(8);
+  // cout << " Dist is " << Dist << " and expected= " << sqrt(2.*441.)-20. << endl;
+  // cout << "   a difference of " << Dist-(sqrt(2.*441.)-20.) << endl;
+  assert( Dist - (sqrt(2.*441.)-20.) < 1.e-14 );
+  // assert(ApproxEqual(Dist, sqrt(2.*441.)-20.));
 
 
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(0,0,0),
