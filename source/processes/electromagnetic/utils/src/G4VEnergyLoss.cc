@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VEnergyLoss.cc,v 1.9 2000-05-25 12:32:25 urban Exp $
+// $Id: G4VEnergyLoss.cc,v 1.10 2000-05-25 16:50:27 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -135,19 +135,19 @@ void G4VEnergyLoss::BuildRangeVector(G4PhysicsTable* theDEDXTable,
 
   // cure 'accidental' 0. dE/dx vales first .....
   G4double lossmin = +1.e10 ;
-  for (G4int i=0; i<TotBin; i++)
+  for (G4int i1=0; i1<TotBin; i1++)
   {
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i) ;
+    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i1) ;
     Value = physicsVector->GetValue(LowEdgeEnergy,isOut);
     if((Value < lossmin)&&(Value > 0.))
       lossmin = Value ;
   }
-  for (G4int i=0; i<TotBin; i++)
+  for (G4int i2=0; i2<TotBin; i2++)
   {
-    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i) ;
+    LowEdgeEnergy = rangeVector->GetLowEdgeEnergy(i2) ;
     Value = physicsVector->GetValue(LowEdgeEnergy,isOut);
     if(Value < lossmin)
-      physicsVector->PutValue(i,small*lossmin) ;
+      physicsVector->PutValue(i2,small*lossmin) ;
   }
         
   // low energy part first...
