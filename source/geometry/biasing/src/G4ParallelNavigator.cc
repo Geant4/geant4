@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelNavigator.cc,v 1.15 2003-03-24 14:35:31 dressel Exp $
+// $Id: G4ParallelNavigator.cc,v 1.16 2003-03-27 09:34:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -220,7 +220,7 @@ ComputeStepLengthShifted(const G4String &m,
 	     << m << G4endl;
       G4cout << "  trys = "
 	     << ++trys << G4endl;
-      G4cout.precision(50);
+      G4cout.precision(12);
       G4cout << "  shifted position: " << shift_pos 
 	     << ", direction: " << aDirection << G4endl;
     }
