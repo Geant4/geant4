@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalSurface.icc,v 1.2 1999-12-15 14:49:51 gunter Exp $
+// $Id: G4LogicalSurface.icc,v 1.3 2000-04-20 16:49:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 ////////////////////////////////////////////////////////////////////////
@@ -20,31 +20,70 @@
 //
 ////////////////////////////////////////////////////////////////////////
 
-// #include "G4ios.hh"
-
 /////////////////////////
 // Class Inline Methods
 /////////////////////////
+
+inline G4OpticalSurface*
+G4LogicalSurface::GetOpticalSurface() const
+{
+	return theOpticalSurface;
+} 
+
+inline void
+G4LogicalSurface::SetOpticalSurface(G4OpticalSurface* ptrOpticalSurface) 
+{
+	theOpticalSurface = ptrOpticalSurface;
+} 
+
+inline G4String
+G4LogicalSurface::GetName() const
+{
+	return theName;
+}
+
+inline void
+G4LogicalSurface::SetName(const G4String& name)
+{
+	theName = name;
+}
+
+inline G4TransitionRadiationSurface*
+G4LogicalSurface::GetTransitionRadiationSurface() const
+{
+	return theTransRadSurface;
+} 
+
+inline void
+G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
+                                                transRadSurf )
+{
+	theTransRadSurface= transRadSurf;
+} 
 
 
   //////////////
   // Operators
   //////////////
 
-inline const G4LogicalSurface & G4LogicalSurface::operator=(const G4LogicalSurface &right)
+inline const G4LogicalSurface &
+G4LogicalSurface::operator=(const G4LogicalSurface &right)
 {
 	return right;
 }
 
-inline G4int G4LogicalSurface::operator==(const G4LogicalSurface &right) const
+inline G4int
+G4LogicalSurface::operator==(const G4LogicalSurface &right) const
 {
 	return (this == (G4LogicalSurface *) &right);
 }
 
-inline G4int G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
+inline G4int
+G4LogicalSurface::operator!=(const G4LogicalSurface &right) const
 {
 	return (this != (G4LogicalSurface *) &right);
 }
+
   /////////////////
   // Constructors 
   /////////////////

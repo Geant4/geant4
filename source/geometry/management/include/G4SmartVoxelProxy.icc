@@ -1,0 +1,45 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SmartVoxelProxy.icc,v 1.1 2000-04-20 16:49:48 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// G4SmartVoxelProxy Inline implementation
+//
+
+inline
+G4bool G4SmartVoxelProxy::IsHeader() const
+{
+  return (fHeader) ? true:false;
+}   
+
+inline
+G4bool G4SmartVoxelProxy::IsNode() const
+{
+  return (fNode) ? true:false;
+}
+
+inline
+G4SmartVoxelNode* G4SmartVoxelProxy::GetNode() const
+{
+  assert(fNode != 0);
+  return fNode;
+}
+
+inline
+G4SmartVoxelHeader* G4SmartVoxelProxy::GetHeader() const
+{
+  assert(fHeader != 0);
+  return fHeader;
+}
+
+inline
+G4bool G4SmartVoxelProxy::operator == (const G4SmartVoxelProxy& v) const
+{
+  return (this==&v) ? true : false;
+}

@@ -1,0 +1,67 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SmartVoxelHeader.icc,v 1.1 2000-04-20 16:49:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// G4SmartVoxelHeader Inline implementation
+//
+
+inline
+G4int G4SmartVoxelHeader::GetMaxEquivalentSliceNo() const
+{
+  return fmaxEquivalent;
+}
+
+inline
+void G4SmartVoxelHeader::SetMaxEquivalentSliceNo(const G4int pMax)
+{
+  fmaxEquivalent=pMax;
+}
+
+inline
+G4int G4SmartVoxelHeader::GetMinEquivalentSliceNo() const
+{
+  return fminEquivalent;
+}
+
+inline
+void G4SmartVoxelHeader::SetMinEquivalentSliceNo(const G4int pMin)
+{
+  fminEquivalent=pMin;
+}
+
+inline
+EAxis G4SmartVoxelHeader::GetAxis() const
+{
+  return faxis;
+}
+
+inline
+G4double G4SmartVoxelHeader::GetMaxExtent() const
+{
+  return fmaxExtent;
+}
+
+inline
+G4double G4SmartVoxelHeader::GetMinExtent() const
+{
+  return fminExtent;
+}
+
+inline
+G4int G4SmartVoxelHeader::GetNoSlices() const
+{
+  return fslices.entries();
+}
+
+inline
+G4SmartVoxelProxy* G4SmartVoxelHeader::GetSlice(const G4int n) const
+{
+  return fslices(n);
+}

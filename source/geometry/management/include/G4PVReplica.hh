@@ -5,11 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PVReplica.hh,v 1.2 1999-12-15 14:49:51 gunter Exp $
+// $Id: G4PVReplica.hh,v 1.3 2000-04-20 16:49:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4PVReplica
+//
+// Class description:
 //
 // Represents many touchable detector elements differing only in their
 // positioning. The elements' positions are calculated by means of a simple
@@ -51,7 +53,7 @@
 //   The replications are `phi sections' or wedges, and of cons/tubs form
 //   They have phi of offset+n*width to offset+(n+1)*width where
 //   n=0..nReplicas-1
-//
+
 // History:
 // 29.07.95 P.Kent         First non-stub version
 // 26.10.97 J.Apostolakis  Added constructor that takes mother logical volume
@@ -65,7 +67,8 @@
 
 class G4PVReplica : public G4VPhysicalVolume
 {
-public:
+  public:
+
     G4PVReplica(const G4String& pName,
 		G4LogicalVolume* pLogical,
 		G4VPhysicalVolume* pMother,
@@ -95,13 +98,16 @@ public:
                                    G4double& offset,
                                    G4bool& consuming) const;
     virtual void Setup(G4VPhysicalVolume *pMother);
-private:
+
+ private:
+
     void CheckAndSetParameters(
                          const EAxis pAxis,
                          const G4int nReplicas,
 		         const G4double width,
                          const G4double offset);
-protected:
+ protected:
+
     EAxis faxis;
     G4int fnReplicas;
     G4double fwidth,foffset;

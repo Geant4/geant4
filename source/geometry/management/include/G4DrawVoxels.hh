@@ -5,31 +5,31 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.hh,v 1.7 1999-12-15 14:49:51 gunter Exp $
+// $Id: G4DrawVoxels.hh,v 1.8 2000-04-20 16:49:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // class G4DrawVoxels
 //
-// Implementation
+// Class description:
 //
-// Define G4DrawVoxelsDebug for debugging information on G4cout
-//
-// History:
-// 03/08/1999 The G4VisAttributes have been made member data for lifetime reasons / visualisation  L.G (see John Allison for further explanation) 
-// 29.07.99 first comitted version L.G.
+// Utility class for the visualization of voxels in the detector geometry.
+// Define G4DrawVoxelsDebug for debugging information printed to G4cout.
 
+// History:
+// 03/08/1999 The G4VisAttributes have been made member data for lifetime
+//            reasons / visualisation - L.G (ask John Allison for further
+//            explanation).
+// 29/07/1999 First comitted version - L.G.
 
 #ifndef G4DrawVoxels_HH
 #define G4DrawVoxels_HH
 
-//***********what I need to use (include and forward declarations) FOR DRAWING VOXELS****************
+// *********** what I need to use (include and forward declarations)
+//             FOR DRAWING VOXELS ****************
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 #include "G4PlacedPolyhedron.hh" //#include "G4Polyhedron.hh" included
-
-//#include <rw/tpordvec.h>
-//#include <rw/tvordvec.h>
 
 #include "G4SmartVoxelHeader.hh"
 #include "G4VoxelLimits.hh"
@@ -42,13 +42,19 @@
 
 #define G4DrawVoxelsDebug
 
-//***************************************************************************************************
-class G4DrawVoxels{
-  public: 
-    //constructor. It initialises the members data to default colors
+// ***********************************************************************
+
+class G4DrawVoxels
+{
+  public: // with description
+
     G4DrawVoxels();
+      // Constructor. It initialises the members data to default colors
+      // Copy constructor and assignment operator not supported (array
+      // fvoxelcolours ...).
+
     ~G4DrawVoxels(){};
-    //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
+      // Destructor NOT virtual. Not a base class.
     
     void DrawVoxels(const G4LogicalVolume* lv) const;
     G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*) const;
@@ -57,7 +63,8 @@ class G4DrawVoxels{
     void SetBoundingBoxVisAttributes(G4VisAttributes&);
 
   private:
-    //Member data
+  
+    // Member data
     G4VisAttributes fVoxelsVisAttributes[3];
     G4VisAttributes fBoundingBoxVisAttributes;
     
@@ -65,7 +72,8 @@ class G4DrawVoxels{
     
     G4AffineTransform GetAbsoluteTransformation(const G4VPhysicalVolume*) const;
     
-    //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
+    // Copy constructor Assignment operator not supported (array
+    // fvoxelcolours ...)
     G4DrawVoxels(const G4DrawVoxels&);	
     G4DrawVoxels operator=(const G4DrawVoxels&);	
 };

@@ -1,0 +1,55 @@
+// This code implementation is the intellectual property of
+// the GEANT4 collaboration.
+//
+// By copying, distributing or modifying the Program (or any work
+// based on the Program) you indicate your acceptance of this statement,
+// and all its terms.
+//
+// $Id: G4SmartVoxelNode.icc,v 1.1 2000-04-20 16:49:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+//
+// G4SmartVoxelNode Inline implementation
+//
+
+inline
+G4int G4SmartVoxelNode::GetVolume(const G4int pVolumeNo) const
+{
+  return fcontents(pVolumeNo);
+}
+
+inline
+void G4SmartVoxelNode::Insert(G4int pVolumeNo)
+{
+  fcontents.insert(pVolumeNo);
+}
+
+inline
+G4int G4SmartVoxelNode::GetNoContained() const
+{
+  return fcontents.entries();
+}
+
+inline
+G4int G4SmartVoxelNode::GetMaxEquivalentSliceNo() const
+{
+  return fmaxEquivalent;
+}
+
+inline
+void G4SmartVoxelNode::SetMaxEquivalentSliceNo(const G4int pMax)
+{
+  fmaxEquivalent=pMax;
+}
+
+inline
+G4int G4SmartVoxelNode::GetMinEquivalentSliceNo() const
+{
+  return fminEquivalent;
+}
+
+inline
+void G4SmartVoxelNode::SetMinEquivalentSliceNo(const G4int pMin)
+{
+  fminEquivalent=pMin;
+}

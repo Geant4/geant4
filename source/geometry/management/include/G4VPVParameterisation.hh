@@ -5,15 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VPVParameterisation.hh,v 1.2 1999-12-15 14:49:51 gunter Exp $
+// $Id: G4VPVParameterisation.hh,v 1.3 2000-04-20 16:49:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VPVParamterisation
 //
+// Class description:
+//
 // Parameterisation class, able to compute the transformation and
 // (indirectly) the dimensions of parameterised volumes, given a
 // replication number.
-//
+
 // History:
 // 25.07.96 P.Kent        Initial stub version
 // 20.09.96 V.Grichine    Modifications for G4Trap/Cons/Sphere
@@ -43,67 +45,50 @@ class G4Material;
 
 class G4VPVParameterisation
 {
-public:
+  public:
 
     virtual void ComputeTransformation(const G4int,
                                        G4VPhysicalVolume *) const = 0;
 
-    virtual G4VSolid*   ComputeSolid(const G4int,
-                                       G4VPhysicalVolume *);
+    virtual G4VSolid*   ComputeSolid(const G4int, G4VPhysicalVolume *);
 				       
-    virtual G4Material* ComputeMaterial(const G4int,
-                                       G4VPhysicalVolume *);
+    virtual G4Material* ComputeMaterial(const G4int, G4VPhysicalVolume *);
 				       
     virtual void ComputeDimensions(G4Box &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Tubs &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Trd &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
 	
     virtual void ComputeDimensions(G4Trap &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
-
+                                   const G4VPhysicalVolume *) const {}
 	
     virtual void ComputeDimensions(G4Cons &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
 
     virtual void ComputeDimensions(G4Sphere &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Torus &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Para &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}
+                                   const G4VPhysicalVolume *) const {}
+
     virtual void ComputeDimensions(G4Hype &,
                                    const G4int,
-                                   const G4VPhysicalVolume *) const
-	{
-	}	
+                                   const G4VPhysicalVolume *) const {}
 };
 
 #endif

@@ -5,12 +5,12 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: meshdefs.hh,v 1.2 1999-12-15 14:49:52 gunter Exp $
+// $Id: meshdefs.hh,v 1.3 2000-04-20 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
 // Tube/Cone Meshing constants for extent calculations
-//
+
 // History:
 // 13.08.95 P.Kent Created separate file
 
@@ -27,8 +27,3 @@ const G4int kMaxMeshSections=37; // max wedges+1 to make
                                  // =>10 degrees/wedge for complete tube
 
 #endif
-
-
-
-
-

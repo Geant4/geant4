@@ -5,13 +5,13 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: voxeldefs.hh,v 1.3 1999-12-15 14:49:52 gunter Exp $
+// $Id: voxeldefs.hh,v 1.4 2000-04-20 16:49:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-
+//
 //
 // Voxel Optimisation Constants
-//
+
 // History:
 // 12.02.99 S.Giani made numerical values consistent with Geant3.21
 // 13.08.95 P.Kent Created separate file
@@ -33,8 +33,3 @@ const G4int kMinVoxelVolumesLevel3=4; // Only make third level of refinement
 				      // if >= this no of volumes in
                                       // 2nd level node
 #endif
-
-
-
-
-
