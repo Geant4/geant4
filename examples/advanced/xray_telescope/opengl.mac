@@ -66,7 +66,7 @@
 /vis/scene/add/volume
 
 # Add all trajectories to the current scene
-/vis/scene/add/trajectories
+#/vis/scene/add/trajectories
 
 # Set drawing style
 /vis/viewer/set/style surface
@@ -86,7 +86,7 @@
 /tracking/storeTrajectory 1
 
 # Set to draw tracks of positively charged particles
-/event/drawTracks charged
+# /event/drawTracks charged
 
 # Set General Particle Source options
 /gps/particle proton

@@ -68,7 +68,6 @@ void XrayTelEventAction::BeginOfEventAction(const G4Event* Ev)
 
 void XrayTelEventAction::EndOfEventAction(const G4Event* Ev)
 {
-  //  if (drawEvent){
   if (*drawEvent){
     const G4Event* evt = fpEventManager->GetConstCurrentEvent();
 

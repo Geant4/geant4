@@ -33,6 +33,9 @@
 // CHANGE HISTORY
 // --------------
 //
+// 30.11.2000 R. Nartallo, A. Pfeiffer
+// - Implementation of analysis manager code for histograming
+//
 // 15.11.2000 R. Nartallo
 // - Minor changes proposed by F. Lei to implement the GPS module now 
 //   replacing the standard particle gun 
@@ -48,7 +51,7 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-#include "G4UIGAG.hh"
+//#include "G4UIGAG.hh"
 #include "G4UIterminal.hh"
 #include "G4UIXm.hh" 
 #include "XrayTelDetectorConstruction.hh"
@@ -60,6 +63,8 @@
 #include "XrayTelPrimaryGeneratorAction.hh"
 #include <iostream.h>
 #include "g4std/vector"
+
+#include "XrayTelAnalysisManager.hh"
 
 int main( int argc, char** argv )
 {
@@ -75,14 +80,18 @@ int main( int argc, char** argv )
   G4std::vector<G4double*> EnteringEnergy;
   G4std::vector<G4ThreeVector*> EnteringDirection;
 
+  // create manager for analysis. 
+  char* s = getenv("G4ANALYSIS_SYSTEM");
+  XrayTelAnalysisManager* analysisManager = new XrayTelAnalysisManager(s?s:"");
+
   // set mandatory user action class
-  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction );
+  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
   runManager->SetUserAction(new XrayTelRunAction(&EnteringEnergy,
-				&EnteringDirection, &drawEvent));
+				&EnteringDirection, &drawEvent, analysisManager));
   runManager->SetUserAction(new XrayTelEventAction(&drawEvent));
   runManager->SetUserAction(new XrayTelSteppingAction(
-				&EnteringEnergy, &EnteringDirection, &drawEvent));
-   
+				&EnteringEnergy, &EnteringDirection, &drawEvent, analysisManager));
+
   // visualization manager
   G4VisManager* visManager = new XrayTelVisManager;
   visManager->Initialize();    
@@ -93,8 +102,8 @@ int main( int argc, char** argv )
   // get the pointer to the User Interface manager 
   G4UImanager *UI = G4UImanager::GetUIpointer();  
   if ( argc==1 ){
-    G4UIsession * session = new G4UIGAG;
-    //G4UIsession * session = new G4UIterminal;
+    // G4UIsession * session = new G4UIGAG;
+    G4UIsession * session = new G4UIterminal;
     session->SessionStart();
     delete session;
   }
@@ -109,7 +118,7 @@ int main( int argc, char** argv )
 
   // job termination
   delete visManager;
+  delete analysisManager;
   delete runManager;
   return 0;
 }
-

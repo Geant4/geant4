@@ -22,6 +22,12 @@
 // CHANGE HISTORY
 // --------------
 //
+// 30.11.2000 R. Nartallo
+// - Add pre-processor directives to compile without analysis option
+//
+// 16.11.2000 A. Pfeiffer
+// - Implementation of analysis manager call
+//
 // 06.11.2000 R.Nartallo
 // - First implementation of xray_telescope Physics list
 // - Based on Chandra and XMM models
@@ -42,16 +48,18 @@
 #include "g4std/vector"
 
 #include "XrayTelSteppingAction.hh"
-//#include "XrayTelHistogram.hh"
+#include "XrayTelAnalysisManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayTelSteppingAction::XrayTelSteppingAction(
 					     G4std::vector<G4double*>* enEnergy, 
 					     G4std::vector<G4ThreeVector*>* enDirect,
-					     G4bool* dEvent)
-  : EnteringEnergy(enEnergy),
-    EnteringDirection(enDirect),drawEvent(dEvent)
+					     G4bool* dEvent,
+					     XrayTelAnalysisManager* aAnalysisManager)
+  : enteringEnergy(enEnergy),
+    enteringDirection(enDirect),drawEvent(dEvent),
+  fAnalysisManager(aAnalysisManager)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,16 +91,21 @@ void XrayTelSteppingAction::UserSteppingAction(const G4Step*)
   //--- Entering Detector
   if(volName != "Detector_P" && nextVolName == "Detector_P") {
 
-    EnteringEnergy->push_back ( new G4double (fTrack->GetKineticEnergy()) );
-    EnteringDirection->push_back (new G4ThreeVector (pos));
+    enteringEnergy->push_back ( new G4double (fTrack->GetKineticEnergy()) );
+    enteringDirection->push_back (new G4ThreeVector (pos));
 
     // now we want to do some analysis at this step ... 
     // call back to the analysis-manger to do the analysis ...
-    //    histoManager->analyze(pSM);
+
+#ifdef G4ANALYSIS_USE
+    if(fAnalysisManager) fAnalysisManager->Step(fpSteppingManager);
+#endif
 
     *drawEvent = true;
   }
 }
+
+
 
 
 

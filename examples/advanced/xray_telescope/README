@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2000-11-16 13:46:15 nartallo Exp $
+$Id: README,v 1.4 2000-11-30 14:14:05 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,18 +23,22 @@ GUI, visualisation, particle generation and analysis schemes available
 in Geant4:
 
  - the simulation can be run from GAG or the command prompt
+
  - macros are provided to display the geometry and particle tracks with 
    OpenGL, DAWN Postscript or VRML visualisation
+
  - the generation of particles is done via the new General Particle Source
 
- - histograming facilities are provided with three different systems Lizard
-   OpenScientist and JAS
+ - histograming facilities are provided for the Linux and Solaris environment
+   with the Lizard system at present, other analysis systems such as 
+   OpenScientist and JAS will be implemented at a later stage
 
 In order to be able to use any of these packages, prior installation is 
 necessary and a number of environment variables will have to be set.
 
 
-1. Setting up the environment variables for GAG and Visualisation options
+1. Setting up the environment variables for GAG, Visualisation and 
+   Analysis options
 
 #set up GAG 
 setenv G4UI_BUILD_GAG_SESSION       1
@@ -61,32 +65,105 @@ setenv G4VIS_BUILD_DAWNFILE_DRIVER  1
 setenv G4VIS_USE_DAWN               1
 setenv G4VIS_USE_DAWNFILE           1
 
+#set up Lizard
+setenv LIZARDROOT  /usr/local/freeLizard/3.2.0  #get correct path 
+setenv G4ANALYSIS_SYSTEM Lizard
+setenv G4ANALYSIS_USE               1
+setenv G4ANALYSIS_USE_LIZARD        1
+setenv G4ANALYSIS_BUILD             1
+setenv G4ANALYSIS_BUILD_LIZARD      1
 
-2. Sample run
+#add to the LD_LIBRARY_PATH 
+setenv LD_LIBRARY_PATH /usr/local/freeLizard/3.2.0/Linux/lib
+
+IMPORTANT WARNING! 
+setenv G4ANALYSIS_BUILD  1 
+must always be set to build the example even if the analysis option 
+is not required 
+
+
+Sources
+-------
+
+GAG can be obtained from
+
+http://erpc1.naruto-u.ac.jp/~geant4/
+
+OpenGL Mesa needs to be installed prior to building Geant4 and can be
+downloaded from
+
+http://www.mesa3d.org/download.html
+
+DAWN can be obtained from
+
+http://133.7.51.8/dawn/
+
+VRMLview for Linux can be obtained from
+
+
+
+2. Run
 To execute a sample simulation with visualisation of proton tracks
-reaching teh detector run:
+reaching the detector run:
 
-XrayTel longsection.macro
+XrayTel opengl.mac  for OpenGL display
+XrayTel vrml.mac    for VRML display and output file
+XrayTel dawn.mac    for dawn display and PS output file
+
+To execute a run without visualisation
+
+XrayTel test.mac
+
+
+If the Lizard analysis options are set, histograming windows will
+automatically open and the corresponding files will be created.
+A 2D histogram (scatter plot) will display in real time every proton 
+hit that reaches the detector. 
+A 1D histogram will display the energy distribution of the protons
+that reach the detector at the end of the run.
+
+The final energy and (x,y,z) position of the protons that reach the 
+detector is output to a file "detector.hits".  This file is created
+if it does not exist or appended to if it does. 
 
 
 3. Detector description
 
- The detector is defined in ....DetectorConstruction.cc
+The telescope and detector geometry is defined in 
+XrayTelDetectorConstruction.cc
 
- The experimental hall, which is the world volume, is made of vaccuum
- and it is a box. ...
- 
 4. Physics processes
 
-...PhysicsList.cc defines ...
+The physics processes are in XrayTelPhysicsList.cc
+The main process in this example is MultipleScattering of the protons
+on the mirror surfaces.
 
 5. Event generation
 
+This is done using the new General Particle Source. Documentation for 
+this can be found in
 
-6. main()
+http://www.space.dera.gov.uk/space_env/gspm.html
 
-XrayTel.cc has the main() method. In the main() method, three
-mandatory user classes described above are constructed and set to
-the G4RunManager object. Then, the "Initialize()" method of G4RunManager
-is invoked. 
+6. Analysis
+
+At present the analysis package implemented is Lizard. As this is still
+under development only simple histograming is used. The main purpose of 
+including this facility was to provide the basis for the implementation of 
+AIDA interfaces between Geant4 and analysis packages, in particular
+Lizard, OpenScientist and JAS. More complex analysis features may be
+implemented in future releases.
+
+The current implementation of the analysis class is very preliminary 
+and new tags of this example are anticipated to be released soon after 
+the general release 
+
+Lizard is not currently implemented on platforms other than Linux 
+and Solaris. To build and execute the example on other platforms the
+analysis environment variables must not be set, except for  
+G4ANALYSIS_BUILD which is required for building the executable.
+
+
+
+
 
