@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.hh,v 1.6 2004-11-15 14:53:29 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.hh,v 1.7 2004-11-21 13:16:33 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,6 +59,10 @@ private:
   static void CountTrianglesCbk(Widget,XtPointer,XtPointer);
   static void EraseDetectorCbk(Widget,XtPointer,XtPointer);
   static void EraseEventCbk(Widget,XtPointer,XtPointer);
+  static void SetSolidCbk(Widget,XtPointer,XtPointer);
+  static void SetWireFrameCbk(Widget,XtPointer,XtPointer);
+  static void UpdateSceneCbk(Widget,XtPointer,XtPointer);
+  static void HelpCbk(Widget,XtPointer,XtPointer);
 private:
   Widget fShell;
   SoXtExaminerViewer* fViewer;

@@ -61,6 +61,10 @@ protected:
   void CountTriangles();
   void EraseDetector();
   void EraseEvent();
+  void SetSolid();
+  void SetWireFrame();
+  void UpdateScene();
+  void Help(const G4String& topic = "controls");
 private:
   G4bool CompareForKernelVisit(G4ViewParameters&);
 private:

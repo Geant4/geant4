@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorXtViewer.cc,v 1.13 2004-11-15 14:53:30 gbarrand Exp $
+// $Id: G4OpenInventorXtViewer.cc,v 1.14 2004-11-21 13:16:33 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -111,7 +111,11 @@ G4OpenInventorXtViewer::G4OpenInventorXtViewer(
    {Widget menu = AddMenu(menuBar,"Etc","Etc");
     AddButton(menu,"Triangles",CountTrianglesCbk);
     AddButton(menu,"Erase detector",EraseDetectorCbk);
-    AddButton(menu,"Erase event",EraseEventCbk);}
+    AddButton(menu,"Erase event",EraseEventCbk);
+    AddButton(menu,"Set solid",SetSolidCbk);
+    AddButton(menu,"Set wire frame",SetWireFrameCbk);
+    AddButton(menu,"Update scene",UpdateSceneCbk);
+    AddButton(menu,"Help controls",HelpCbk);}
 
     fViewer = new SoXtExaminerViewer(form,wName.c_str(),TRUE);
     
@@ -242,6 +246,30 @@ void G4OpenInventorXtViewer::EraseEventCbk(
   Widget,XtPointer aData,XtPointer) {
   G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
   This->EraseEvent();
+}
+
+void G4OpenInventorXtViewer::SetSolidCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetSolid();
+}
+
+void G4OpenInventorXtViewer::SetWireFrameCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->SetWireFrame();
+}
+
+void G4OpenInventorXtViewer::UpdateSceneCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->UpdateScene();
+}
+
+void G4OpenInventorXtViewer::HelpCbk(
+  Widget,XtPointer aData,XtPointer) {
+  G4OpenInventorXtViewer* This = (G4OpenInventorXtViewer*)aData;
+  This->Help();
 }
 
 

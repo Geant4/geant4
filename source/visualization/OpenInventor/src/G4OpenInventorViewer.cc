@@ -276,5 +276,80 @@ void G4OpenInventorViewer::EraseDetector() {
 void G4OpenInventorViewer::EraseEvent() {
   fG4OpenInventorSceneHandler.fTransientRoot->removeAllChildren();
 }
+void G4OpenInventorViewer::SetSolid() {
+  G4ViewParameters vp = GetViewParameters();
+  G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
+  //From G4VisCommandsViewerSet : /vis/viewer/set/style solid.
+  switch (existingStyle) {
+  case G4ViewParameters::wireframe:
+    vp.SetDrawingStyle(G4ViewParameters::hsr);
+    break;
+  case G4ViewParameters::hlr:
+    vp.SetDrawingStyle(G4ViewParameters::hlhsr);
+    break;
+  case G4ViewParameters::hsr:
+    break;
+  case G4ViewParameters::hlhsr:
+    break;
+  }
+  SetViewParameters(vp);
+  if (vp.IsAutoRefresh()) {
+    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    SetView();
+    ClearView();
+    DrawView();
+  }
+}
+void G4OpenInventorViewer::SetWireFrame() {
+  G4ViewParameters vp = GetViewParameters();
+  G4ViewParameters::DrawingStyle existingStyle = vp.GetDrawingStyle();
+  //From G4VisCommandsViewerSet : /vis/viewer/set/style wire.
+  switch (existingStyle) {
+  case G4ViewParameters::wireframe:
+    break;
+  case G4ViewParameters::hlr:
+    break;
+  case G4ViewParameters::hsr:
+    vp.SetDrawingStyle(G4ViewParameters::wireframe);
+    break;
+  case G4ViewParameters::hlhsr:
+    vp.SetDrawingStyle(G4ViewParameters::hlr);
+    break;
+  }
+  SetViewParameters(vp);
+  if (vp.IsAutoRefresh()) {
+    //G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/refresh");
+    SetView();
+    ClearView();
+    DrawView();
+  }
+}
+void G4OpenInventorViewer::UpdateScene() {
+  fG4OpenInventorSceneHandler.ClearStore();
+  SetView();
+  //ClearView();
+  DrawView();
+  //ShowView();
+}
+void G4OpenInventorViewer::Help(const G4String& aTopic) {
+  if(aTopic=="controls") {
+  G4cout <<
+"\n\
+#######################################################################\n\
+#   Controls on an Inventor examiner viewer are :                     #\n\
+#  - in picking mode (cursor is the upper left arrow)                 #\n\
+#   Ctrl + pick a volume : see daughters.                             #\n\
+#   Shift + pick a volume : see mother.                               #\n\
+#  - in viewing mode (cursor is the hand)                             #\n\
+#   Left-button + pointer move : rotate.                              #\n\
+#   Ctrl+Left-button + pointer move : pane.                           #\n\
+#   Ctrl+Shift+Left-button + pointer move : scale.                    #\n\
+#   Middle-button + pointer move : pane.                              #\n\
+#   Right-button : popup menu.                                        #\n\
+#                                                                     #\n\
+#######################################################################\n\
+" << G4endl;
+  }
+}
 
 #endif
