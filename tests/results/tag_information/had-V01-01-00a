@@ -1,0 +1,82 @@
+Notes on the had-V01-01-00a tag:
+
+Some bug fixes; new functionality was added as needed by 
+users. Please see below for the details:
+
+hadronic/util:
+changes in G4ReactionDynamics to adapt to the memory management policy
+of
+G4FastVector; Fix of memory-leak (array size information was not
+deleted)
+
+hadronic/stopping:
+no change
+
+hadronic/management:
+Fix of memory-leak (array size information was not deleted).; Changes in 
+G4HadronInelasticProcess.cc to allow for ion interactions.
+
+hadronic/cross_sections:
+New functionality added: Cross-section classes for ion-ion reactions,
+and for
+ion reactions on Hydrogen.
+
+hadronic/processes:
+New process for ion induced reactions was added.
+
+hadronic/models/isotope_production:
+New functionality added: A model for proton induced isotope production
+was
+added; validity range is the proton spallation energy range; To use
+this, an
+update of the G4NDL library is still required.
+
+hadronic/models/low_energy:
+changes in nucleon and ion induced reaction classes to adapt to the
+memory 
+management policy of G4FastVector;
+
+hadronic/models/high_energy:
+No changes; known bug - energy non conservation.
+
+hadronic/models/neutron_hp:
+A set of fixes to allow for slightly inconsistent numbers in the
+data-files.
+Enables production of residual nuclei for some inelastic final states.
+
+hadronic/models/generator/de_excitation:
+Design iteration to allow re-use of root-finding algorithms;
+tuning/debugging
+
+hadronic/models/generator/diffractive_string:
+no changes
+
+hadronic/models/generator/high_energy:
+no changes
+
+hadronic/models/generator/kinetic_model:
+no changes
+
+hadronic/models/generator/management:
+no changes
+
+hadronic/models/generator/pre_equilibrium:
+no changes
+
+hadronic/models/generator/quark_gluon_string:
+New feature: Added gamma annihilation cross-sections and
+anti-nucleaon-nucleon
+annihilation; Bug fixes in AntiSigma SU(12) wafe-function. Extended
+G4SPBaryon.
+
+hadronic/models/generator/string_common:
+no changes
+
+hadronic/models/generator/string_fragmentation:
+G4VLongitudinalStringDecay extended to allow string excitation dependent
+parameters.
+
+hadronic/models/generator/util:
+Bug-fixes and added functionality in G4KineticTrack;
+Removing compiler warnings in G4Fancy3DNucleus,
+G4NuclearShellModelDensity, etc..
