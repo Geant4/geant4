@@ -44,7 +44,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4VDecayChannel.hh"
 
-#include "G4Allocator.hh"
+// #include "G4Allocator.hh"
 
 class G4KineticTrackVector;
 
@@ -191,7 +191,7 @@ public:
       G4double theProjectilePotential;
 };
 
-extern G4Allocator<G4KineticTrack> theKTAllocator;
+// extern G4Allocator<G4KineticTrack> theKTAllocator;
 
 
 // Class G4KineticTrack 
