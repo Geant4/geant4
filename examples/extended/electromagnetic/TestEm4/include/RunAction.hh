@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003-10-06 14:51:16 maire Exp $
+// $Id: RunAction.hh,v 1.3 2004-02-27 14:59:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,11 +39,16 @@
 
 class G4Run;
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
 namespace AIDA {
   class ITree;
   class IHistogram1D;
 }  
+#endif
+
+#ifdef USE_ROOT
+  class TFile;
+  class TH1F;  
 #endif
 
 class RunAction : public G4UserRunAction
@@ -56,17 +61,26 @@ class RunAction : public G4UserRunAction
     void BeginOfRunAction(const G4Run*);
     void   EndOfRunAction(const G4Run*);
 
-#ifdef G4ANALYSIS_USE    
+#ifdef USE_AIDA    
     AIDA::IHistogram1D* GetHisto(G4int id) {return histo[id];}
 #endif
-        
+
+#ifdef USE_ROOT    
+    TH1F* GetHisto(G4int id) {return histo[id];}
+#endif 
+       
   private:
     void bookHisto();
     
   private:      
-#ifdef G4ANALYSIS_USE         
+#ifdef USE_AIDA         
     AIDA::ITree* tree;             //the tree should only be deleted at the end
     AIDA::IHistogram1D* histo[1];  // (after writing the histos to file)
+#endif
+
+#ifdef USE_ROOT         
+    TFile* tree;
+    TH1F*  histo[1];
 #endif         
 };
 

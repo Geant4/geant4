@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventAction.cc,v 1.2 2003-10-06 14:51:17 maire Exp $
+// $Id: EventAction.cc,v 1.3 2004-02-27 14:59:06 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,10 +40,13 @@
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
 
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   #include "AIDA/IHistogram1D.h"
 #endif
 
+#ifdef USE_ROOT
+  #include "TH1F.h"
+#endif
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* run)
@@ -76,15 +79,20 @@ void EventAction::BeginOfEventAction( const G4Event* evt)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction( const G4Event* evt)
-{
+{	 		 
   if (drawFlag != "none") 
     G4cout << " Energy deposit: " 
            << G4BestUnit(TotalEnergyDeposit,"Energy") << G4endl;
 	   
-#ifdef G4ANALYSIS_USE
+#ifdef USE_AIDA
   Run->GetHisto(0)->fill(TotalEnergyDeposit/MeV);
 #endif
 
+#ifdef USE_ROOT
+  Run->GetHisto(0)->Fill(TotalEnergyDeposit/MeV);
+#endif
+
+  // draw trajectories
   if(G4VVisManager::GetConcreteInstance())
   {
    G4TrajectoryContainer* trajectoryContainer = evt->GetTrajectoryContainer();
@@ -93,9 +101,9 @@ void EventAction::EndOfEventAction( const G4Event* evt)
    for(G4int i=0; i<n_trajectories; i++) 
       { G4Trajectory* trj = (G4Trajectory *)
                                       ((*(evt->GetTrajectoryContainer()))[i]);
-        if (drawFlag == "all") trj->DrawTrajectory(50);
+        if (drawFlag == "all") trj->DrawTrajectory(1000);
         else if ((drawFlag == "charged")&&(trj->GetCharge() != 0.))
-                               trj->DrawTrajectory(50); 
+                               trj->DrawTrajectory(1000); 
       }
   }
 }

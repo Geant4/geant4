@@ -1,4 +1,4 @@
-$Id: README,v 1.8 2003-10-06 14:51:15 maire Exp $
+$Id: README,v 1.9 2004-02-27 14:59:03 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -40,7 +40,7 @@ $Id: README,v 1.8 2003-10-06 14:51:15 maire Exp $
  	
  5- PHYSICS SURVEY
  
- 	the energy deposited in C6F6 is histogramed 
+ 	the energy deposited in C6F6 is histogramed, either with AIDA or ROOT
  	
  6- HOW TO START ?
  
@@ -58,14 +58,14 @@ $Id: README,v 1.8 2003-10-06 14:51:15 maire Exp $
  		....
  		Idle> exit
  		
- 	- visualize the histogram
+ 	- visualize the histogram (aida)
  		paw> h/file 1 testem4.paw
  		paw> option stat
  		paw> option logy
  		paw> h/pl 1 	
 
  Note that, by default, histograms are disabled. To activate them, uncomment
- the flag G4ANALYSIS_USE in GNUmakefile.
+ the flag USE_AIDA or USE_ROOT in GNUmakefile.
   
 
  7- Using the Anaphe implementation of the AIDA 3.0 histograms:
@@ -83,3 +83,8 @@ $Id: README,v 1.8 2003-10-06 14:51:15 maire Exp $
  At cern 'setupAnaphe' is available at: 
  /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe.csh
  (or /afs/cern.ch/sw/lhcxx/share/LHCXX/latest/scripts/setupAnaphe)
+
+ 8- ROOT
+ 
+ To install root, see http://root.cern.ch
+ Make sure that the environment variable ROOTSYS used in GNUmakefile is defined. 
