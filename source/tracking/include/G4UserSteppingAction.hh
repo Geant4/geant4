@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserSteppingAction.hh,v 1.7 2001-07-11 10:08:41 gunter Exp $
+// $Id: G4UserSteppingAction.hh,v 1.8 2003-05-21 20:41:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,7 @@ public: // with description
 
 // Member functions
    void SetSteppingManagerPointer(G4SteppingManager* pValue);
-   virtual void UserSteppingAction(const G4Step* aStep){;}
+   virtual void UserSteppingAction(const G4Step*){;}
 
 //-----------
    protected:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserTrackingAction.hh,v 1.8 2001-07-11 10:08:41 gunter Exp $
+// $Id: G4UserTrackingAction.hh,v 1.9 2003-05-21 20:41:21 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -63,8 +63,8 @@ public: // with description
 
 // Member functions
    void SetTrackingManagerPointer(G4TrackingManager* pValue);
-   virtual void PreUserTrackingAction(const G4Track* aTrack){;}
-   virtual void PostUserTrackingAction(const G4Track* aTrack){;}
+   virtual void PreUserTrackingAction(const G4Track*){;}
+   virtual void PostUserTrackingAction(const G4Track*){;}
 
 //----------- 
    protected:
