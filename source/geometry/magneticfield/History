@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2002-11-20 18:38:06 japost Exp $
+$Id: History,v 1.67 2002-11-29 23:22:59 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 29th, 2002     J. Apostolakis - field-V04-01-04
+---------------------------------
+Further fixes for unitialised variable - in other steppers:
+G4ExplicitEuler, G4ImplicitEuler, G4ImplicitEuler
+
+Large memory leak fix for G4ImplicitEuler, small for ExplicitEuler.
+Test accuracy requirements for spin adjusted.
 
 Nov 20th, 2002     J. Apostolakis - field-V04-01-03
 ---------------------------------
