@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.2 2004-05-28 13:13:35 gcosmo Exp $
+// $Id: G4VSurface.icc,v 1.3 2004-10-06 07:16:24 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -313,29 +313,34 @@ void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min,
 inline
 G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces) 
 {
+
+  int sAxis0Min = sAxis0 & sAxisMin ;
+  int sAxis1Min = sAxis1 & sAxisMin ;
+  int sAxis0Max = sAxis0 & sAxisMax ;
+  int sAxis1Max = sAxis1 & sAxisMax ;
+
    G4int i = 0;
    
-   if (areacode & (sAxis0 | sAxisMin)) {
-       surfaces[i] = fNeighbours[0];
-       i++;
-   }
-   if (areacode & (sAxis1 | sAxisMin)) {
-       surfaces[i] = fNeighbours[1];
-       i++;
-       if (i == 2) return i;
-   }
-   if (areacode & (sAxis0 | sAxisMax)) {
-       surfaces[i] = fNeighbours[2];
-       i++;
-       if (i == 2) return i;
-   }
-   if (areacode & (sAxis1 | sAxisMax)) {
-       surfaces[i] = fNeighbours[3];
-       i++;
-       if (i == 2) return i;
-   }
-   
-   return i;
+  if ( (areacode & sAxis0Min ) == sAxis0Min ) {
+    i++ ;
+  }
+  
+  if ( ( areacode & sAxis1Min ) == sAxis1Min ) {
+    i++ ;
+    if ( i == 2 ) return i ;
+  }
+
+  if ( ( areacode & sAxis0Max ) == sAxis0Max ) {
+    i++ ;
+    if ( i == 2 ) return i ;
+  }
+  
+  if ( ( areacode & sAxis1Max ) == sAxis1Max ) {
+    i++ ;
+    if ( i == 2 ) return i ;
+  }
+    
+  return i ;
 }
 
 //=====================================================================

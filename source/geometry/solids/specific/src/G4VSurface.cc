@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.6 2004-05-28 16:52:44 gcosmo Exp $
+// $Id: G4VSurface.cc,v 1.7 2004-10-06 07:14:37 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -382,7 +382,7 @@ G4double G4VSurface::DistanceToIn(const G4ThreeVector &gp,
                   // tmpxx[k] is same boundary (or corner) of xx.
                  
                   neighbournormal = neighbours[j]->GetNormal(tmpgxx[k], true);
-                  if (neighbournormal * gv < 0) isaccepted[1] = true;
+                  if (neighbournormal * gv < 0) isaccepted[j] = true;
                }
             } 
 

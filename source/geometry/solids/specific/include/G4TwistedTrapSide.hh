@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.2 2004-08-27 13:37:23 link Exp $
+// $Id: G4TwistedTrapSide.hh,v 1.3 2004-10-06 07:15:52 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,9 +50,10 @@ class G4TwistedTrapSide : public G4VSurface
    
   G4TwistedTrapSide(const G4String     &name,
 		    G4double      PhiTwist,
-		    G4double      halfzlen,
+		    G4double      Halfzlen,
 		    G4double      HalfSides[2],
-		    G4int         handedness);
+		    G4double      AngleSide,
+		    G4int         Handedness);
 
    virtual ~G4TwistedTrapSide();
    
@@ -81,28 +82,21 @@ class G4TwistedTrapSide : public G4VSurface
   inline G4ThreeVector SurfacePoint( G4double phi, G4double psi) ;
   inline void GetPhiPsiAtX(G4ThreeVector x, G4double &phi, G4double &psi) ;
     
-  virtual G4double DistanceToPlane(const G4ThreeVector &p,
-				   const G4ThreeVector &A,
-				   const G4ThreeVector &B,
-				   const G4ThreeVector &C,
-				   const G4ThreeVector &D,
-				   const G4int          parity,
-				   G4ThreeVector &xx,
-				   G4ThreeVector &n);
   
-   virtual G4int GetAreaCode(const G4ThreeVector &xx, 
+  virtual G4int GetAreaCode(const G4ThreeVector &xx, 
                                    G4bool         withTol = true);
 
-   virtual void SetCorners();
+  virtual void SetCorners();
 
-   virtual void SetBoundaries();
+  virtual void SetBoundaries();
 
-  private:
+private:
 
-  G4double       fSideX;
-  G4double       fSideY;
+  G4double       fXHalfLength;  // b in the surface equation
+  G4double       fYHalfLength;  // a in the surface equation (only used for limitaion)
   G4double       fZHalfLength ;
   G4double       fPhiTwist ;
+  G4double       fAngleSide ;
 
 };   
 
@@ -115,14 +109,14 @@ inline
 void G4TwistedTrapSide::GetPhiPsiAtX(G4ThreeVector x, G4double &phi, G4double &psi)
 {
   phi = x.z()/(2*fZHalfLength)*fPhiTwist ;
-  psi = atan( ( fSideY/2 * cos(phi) - x.x() )/ ( fSideY/2 * sin(phi) ) ) ;
+  psi = atan( ( fXHalfLength * cos(phi) - x.x() )/ ( fXHalfLength * sin(phi) ) ) ;
 }
 
 inline
 G4ThreeVector G4TwistedTrapSide::SurfacePoint( G4double phi, G4double psi) 
 {
-  G4ThreeVector vec( fSideY/2 * cos(phi) - fSideY/2 * sin(phi)*tan(psi),
-		     fSideY/2 * sin(phi) + fSideY/2 * cos(phi)*tan(psi),
+  G4ThreeVector vec( fXHalfLength * cos(phi) - fXHalfLength * sin(phi)*tan(psi),
+		     fXHalfLength * sin(phi) + fXHalfLength * cos(phi)*tan(psi),
 		     2*fZHalfLength*phi/fPhiTwist );
   return vec ;
 }
@@ -134,8 +128,8 @@ G4ThreeVector G4TwistedTrapSide::NormAng( G4double phi, G4double psi )
 {
   // function to calculate the norm at a given point on the surface
   G4double L = 2*fZHalfLength ;
-  G4ThreeVector nvec( L*cos(phi), L*sin(phi), fSideY/2*fPhiTwist*tan(psi));
-  return nvec / nvec.mag() ;
+  G4ThreeVector nvec( L*cos(phi), L*sin(phi), fXHalfLength*fPhiTwist*tan(psi));
+  return nvec.unit() ;
 }
 
 
@@ -154,8 +148,9 @@ G4ThreeVector G4TwistedTrapSide::ProjectAtPXPZ(const G4ThreeVector &p,
   G4double phi = p.z()/(2*fZHalfLength)*fPhiTwist ;
   G4double sinphi = sin(phi) ;
   G4double cosphi = cos(phi) ;
-  G4double bhalf = fSideY/2 ;
-  G4double y = bhalf *( sinphi + cosphi * ( bhalf * cosphi - p.x() ) / ( bhalf * sinphi ) ) ;
+
+  G4double y = fXHalfLength *  ( sinphi + cosphi * 
+				 ( fXHalfLength * cosphi - p.x() ) / ( fXHalfLength * sinphi ) ) ;
   G4ThreeVector xx(p.x(), y  , p.z());
   if (isglobal) {
      return (fRot * xx + fTrans);

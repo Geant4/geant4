@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.hh,v 1.2 2004-08-27 13:37:12 link Exp $
+// $Id: G4TwistedTrapezoid.hh,v 1.3 2004-10-06 07:15:44 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -49,6 +49,7 @@
 
 #include "G4VSolid.hh"
 #include "G4TwistedTrapSide.hh"
+#include "G4FlatTrapSide.hh" 
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
@@ -59,22 +60,21 @@ class G4TwistedTrapezoid : public G4VSolid
  
   G4TwistedTrapezoid(const G4String &pname,         // Name of instance
 		     G4double  twistedangle,  // Twisted angle
-		     G4double  halfzlen,      // half z length 
-		     G4double  halfSideX,         // half length in x
-		     G4double  halfSideY,         // half length in y
-                      G4double  dphi);         // Phi angle of a segment
-                      
-   virtual ~G4TwistedTrapezoid();
+		     G4double  halfSideX,     // half length in x
+		     G4double  halfSideY,     // half length in y
+		     G4double  halfSideZ)  ;   // half z length 
+  
+  virtual ~G4TwistedTrapezoid();
              
-  void ComputeDimensions(G4VPVParameterisation   *  /* p  */ ,
-                         const G4int                /* n  */ ,
-                         const G4VPhysicalVolume *  /* prep */ );
+  void ComputeDimensions(G4VPVParameterisation*    ,
+                         const G4int               ,
+                         const G4VPhysicalVolume*  );
  
-  G4bool CalculateExtent(const EAxis               paxis,
-                         const G4VoxelLimits      &pvoxellimit,
-                         const G4AffineTransform  &ptransform,
-                               G4double           &pmin,
-                               G4double           &pmax ) const;
+  G4bool CalculateExtent(const EAxis               pAxis,
+                         const G4VoxelLimits      &pVoxelLimit,
+                         const G4AffineTransform  &pTransform,
+                               G4double           &pMin,
+                               G4double           &pMax ) const;
 
   G4double DistanceToIn (const G4ThreeVector &p,
                          const G4ThreeVector &v ) const;
@@ -110,29 +110,31 @@ class G4TwistedTrapezoid : public G4VSolid
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
 
+ protected:  // with description
+
+  G4ThreeVectorList*
+    CreateRotatedVertices(const G4AffineTransform& pTransform) const;
+      // Create the List of transformed vertices in the format required
+      // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
+
+
  public:  // without description
 
  private:
  
-  inline void  SetFields(G4double phitwist, G4double fHalfZ, 
-			 G4double fHalfSideX, G4double fHalfSideY);
+  inline void  SetFields(G4double phitwist, 
+			 G4double fHalfSideX, G4double fHalfSideY, G4double fHalfSideZ);
                      
   void         CreateSurfaces();
 
-  
-  static void  AddPolyToExtent( const G4ThreeVector     &v0,
-                                const G4ThreeVector     &v1,
-                                const G4ThreeVector     &w1,
-                                const G4ThreeVector     &w0,
-                                const G4VoxelLimits     &voxellimit,
-                                const EAxis              axis,
-                                      G4SolidExtentList &extentlist );
  private:
  
   G4double fPhiTwist;       // Twist angle from -fZHalfLength to fZHalfLength
   G4double fZHalfLength;    // Half length along z-axis
 
   G4double fHalfSides[2];   // Half length along x and y axis
+                            // 0 : x Axis, 1: Y axis
+                            //    ( a )      ( b )   in the surface equation
      
   G4VSurface *fLowerEndcap ;  // surface of -ve z
   G4VSurface *fUpperEndcap ;  // surface of +ve z
@@ -221,17 +223,17 @@ class G4TwistedTrapezoid : public G4VSolid
 //---------------------
 
 inline
-void G4TwistedTrapezoid::SetFields(G4double phitwist, G4double fHalfZ ,
-				   G4double fHalfSideX, G4double fHalfSideY)
+void G4TwistedTrapezoid::SetFields(G4double phitwist, 
+  G4double fHalfSideX, G4double fHalfSideY, G4double fHalfSideZ)
 {
-   fPhiTwist     = phitwist;
+  fPhiTwist     = phitwist;
 
-   fHalfSides[0]  = fHalfSideX ;
-   fHalfSides[1]  = fHalfSideY ;
+  fHalfSides[0]  = fHalfSideX ;
+  fHalfSides[1]  = fHalfSideY ;
 
-   fZHalfLength = fHalfZ ;
+  fZHalfLength = fHalfSideZ ;
 
-   //   G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
+//   G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
 
 }
 
