@@ -120,7 +120,7 @@ help /vis/sceneHandler/create
 /vis/scene/endOfEventAction accumulate
 /vis/scene/endOfRunAction accumulate
 /vis/scene/add/volume
-/vis/scene/include/trajectories
+/vis/scene/add/trajectories 5000
 #/vis/sceneHandler/create OGLSX
 /vis/sceneHandler/create OGLSXm
 /vis/viewer/create
