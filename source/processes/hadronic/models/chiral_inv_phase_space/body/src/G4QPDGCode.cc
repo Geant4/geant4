@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QPDGCode.cc,v 1.4 2000-09-16 14:16:40 mkossov Exp $
+// $Id: G4QPDGCode.cc,v 1.5 2000-09-19 07:00:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -403,12 +403,35 @@ G4double G4QPDGCode::GetMass()
   G4int ab=theQCode;
   G4int szn=thePDGCode-90000000;
   if(szn==0) return 0.;
-  if(ab<0 && szn>0)
+  if( szn>-1000000)
   {
-    G4int s = szn/1000000;
-    G4int zn= szn%1000000;
-    G4int z = zn /1000;
-    G4int n = zn %1000;
+    G4int ds=0;
+    G4int dz=0;
+    G4int dn=0;
+    if(szn<-1000)
+    {
+      szn+=1000000;
+      ds++;
+    }
+    else if(szn<0)
+    {
+      szn+=1000;
+      dz++;
+    }
+    G4int sz =szn/1000;
+    G4int n  =szn%1000;
+    if(n>700)
+    {
+      n=1000-n;
+      dz--;
+    }
+    G4int z  =sz%1000-dz;
+    if(z>700)
+    {
+      z=1000-z;
+      ds--;
+    }
+    G4int s  =sz/1000-ds;
     return GetNuclMass(z,n,s);
   }
   else if(ab<0)
@@ -581,7 +604,7 @@ G4double G4QPDGCode::GetNuclMass(G4int Z, G4int N, G4int S)
   G4double A=Z+N;                     // Baryon Number of the nucleus
   G4double m=k+A*um;                  // Expected mass in atomic units
   G4double D=N-Z;                     // Isotopic shift of the nucleus
-  if(A<1||Z<0||N<0)                   // @@ Can be generalized to anti-nuclei
+  if(A+S<1&&k==0.||Z<0||N<0)          // @@ Can be generalized to anti-nuclei
   {
     //G4cerr<<"***G4QPDGCode::GetNuclMass: A="<<A<<"<1 || Z="<<Z<<"<0 || N="<<N<<"<0"<<G4endl;
     //@@G4Exception("***G4QPDGCode::GetNuclMass: Impossible nucleus");

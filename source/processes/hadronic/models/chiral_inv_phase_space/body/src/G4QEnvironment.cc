@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4QEnvironment.cc,v 1.12 2000-09-18 09:29:22 mkossov Exp $
+// $Id: G4QEnvironment.cc,v 1.13 2000-09-19 07:00:08 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -1658,23 +1658,24 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
       G4int bPDG=bHadron->GetPDGCode();
       G4int rPDG=rHadron->GetPDGCode();
 #ifdef pdebug
-      G4cout<<"G4QEnv::EvapResid:Done evapFragmPDG="<<bPDG<<", resNuclPDG="<<rPDG<<G4endl;
+      G4cout<<"G4QEnv::EvapResid:Done evapFragmPDG="<<bPDG<<rHadron->Get4Momentum()
+            <<", resNuclPDG="<<rPDG<<rHadron->Get4Momentum()<<G4endl;
 #endif
       qH->SetNFragments(2);                    // Fill a#of fragments to decaying Hadron
       theQHadrons.insert(qH);                  // Fill hadron in the HadronVector with nf=2
       G4int fB=bHadron->GetBaryonNumber();     // Baryon number of evaporated fragment
       if(fB<2)theQHadrons.insert(bHadron);     // Fill Evapor. Baryon to Output HadronVector
-      else if(fB==2)                           // "Dibaryon" case needs decay
+      else if(fB==2)                           // => "Dibaryon" case needs decay
 	  {
         G4double fGSM = bHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
-        G4double fM   = bHadron->GetMass();   // Real mass of the dibaryon
+        G4double fM   = bHadron->Get4Momentum().m();  // Real mass of the dibaryon
         if(fM<fGSM-0.003)
 		{
           G4cerr<<"***G4QEnv::EvapRes: M="<<fM<<" < GSM="<<fGSM<<", d="<<fGSM-fM<<G4endl;
           G4Exception("***G4QEnv::EvaporateResidual: Evaporation below mass shell");
 		}
         else if(abs(fM-fGSM)<=0.001&&bPDG==90001001) theQHadrons.insert(bHadron);
-        else DecayDibaryon(bHadron);           // "Decay" case
+        else DecayDibaryon(bHadron);           // => "Dibaryon Decay" case
 	  }
       else
 	  {
@@ -1683,17 +1684,23 @@ void G4QEnvironment::EvaporateResidual(G4QHadron* qH)
 	  }
       G4int rB=rHadron->GetBaryonNumber();     // Baryon number of the residual nucleus
       if(rB>2) EvaporateResidual(rHadron);     // Continue evaporation
-      else if(rB==2)                           // "Dibaryon" case needs decay
+      else if(rB==2)                           // => "Dibaryon" case needs decay
 	  {
-        G4double fGSM = rHadron->GetQPDG().GetMass(); // Ground State mass of the dibaryon
-        G4double fM   = rHadron->GetMass();    // Real mass of the dibaryon
-        if(fM<fGSM-0.001)
+        G4QPDGCode fQ = rHadron->GetQPDG();
+        G4int     fQC = fQ.GetQCode();
+        G4double fGSM = fQ.GetMass();          // Ground State mass of the dibaryon
+        G4double fM   = rHadron->Get4Momentum().m();  // Real mass of the dibaryon
+#ifdef pdebug
+		G4cout<<"G4QEnv::EvapResid:ResidDibar M="<<fM<<", GSM="<<fGSM<<", Q="<<fQC<<G4endl;
+#endif
+
+        if(fM<=fGSM-0.001)
 		{
           G4cerr<<"***G4QEnv::EvapRes: <residual> M="<<fM<<" < GSM="<<fGSM<<G4endl;
           G4Exception("***G4QEnv::EvaporateResidual: Evaporation below mass shell");
 		}
-        else if(abs(fM-fGSM)<=0.001&&bPDG==90001001)theQHadrons.insert(rHadron);
-        else DecayDibaryon(rHadron);           // "Decay" case
+        else if(abs(fM-fGSM)<0.001&&rPDG==90001001)theQHadrons.insert(rHadron);
+        else DecayDibaryon(rHadron);           // => "Dibaryon Decay" case
 	  }
       else theQHadrons.insert(rHadron);        // Fill ResidNucleus=Baryon to Output HadronVector
 	}
@@ -1877,6 +1884,9 @@ void G4QEnvironment::DecayDibaryon(G4QHadron* qH)
   static const G4double mDeut= G4QPDGCode(2112).GetNuclMass(1,1,0);
   G4LorentzVector q4M = qH->Get4Momentum();  // Get 4-momentum of the Dibaryon
   G4int          qPDG = qH->GetPDGCode();    // PDG Code of the decayin dybaryon
+#ifdef pdebug
+  G4cout<<"G4QEnv::DecayDibaryon: *Called* PDG="<<qPDG<<",4M="<<q4M<<G4endl;
+#endif
   G4int          fPDG = 2212;                // Prototype for pp case
   G4int          sPDG = 2212;
   G4double       fMass= mProt;
@@ -1926,7 +1936,7 @@ void G4QEnvironment::DecayDibaryon(G4QHadron* qH)
   if(!G4QHadron(q4M).DecayIn2(f4Mom, s4Mom))
   {
     G4cerr<<"***G4QEnv::DecayDibaryon:fPDG="<<fPDG<<"(fM="<<fMass<<") + sPDG="<<sPDG
-          <<"(sM="<<sMass<<")"<<" >? TotM="<<q4M.m()<<G4endl;
+          <<"(sM="<<sMass<<")"<<" >? TotM="<<q4M.m()<<q4M<<G4endl;
     G4Exception("***G4QEnv::DecayDibaryon: DecayIn2 didn't succeed for dibaryon");
   }
 #ifdef pdebug
