@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2003-04-25 17:04:07 gcosmo Exp $
+$Id: History,v 1.2 2003-04-28 09:11:09 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+April 28, 2003  G.Cosmo (exampleN07-V05-00-03)
+- Added large_N macro. Reduced number of events in the standard macro.
+
 April 25, 2003  G.Cosmo (exampleN07-V05-00-02)
 - Fixed exampleN07.cc to protect against use of TCSH.
 - Created.
