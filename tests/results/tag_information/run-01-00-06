@@ -1,0 +1,5 @@
+/run/storeRandomNumberStatus [frequency]
+  where frequency = 0 : not stored (default)
+                  = 1 : stored at the begining of each run
+                  = 2 : stored at the begining of each event
+/run/restoreRandomNumberStatus 
