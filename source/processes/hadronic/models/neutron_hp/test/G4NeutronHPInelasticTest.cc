@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4NeutronHPInelasticTest.cc,v 1.6 2001-02-17 16:51:26 hpw Exp $
+// $Id: G4NeutronHPInelasticTest.cc,v 1.7 2001-05-11 13:38:56 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -22,6 +22,13 @@
 #include "G4NeutronInelasticProcess.hh"
 #include "G4NeutronHPInelastic.hh"
 #include "G4NeutronHPIsoData.hh"
+#include "G4NeutronHPElastic.hh"
+#include "G4NeutronHPCapture.hh"
+#include "G4NeutronHPFission.hh"
+#include "G4NeutronHPElasticData.hh"
+#include "G4NeutronHPFissionData.hh"
+#include "G4NeutronHPInelasticData.hh"
+#include "G4NeutronHPCaptureData.hh"
 
 #include "G4DynamicParticle.hh"
 #include "G4LeptonConstructor.hh"
@@ -95,12 +102,12 @@
   // G4InterpolationManager: unknown interpolation scheme (might already be debugged on axcnsi)
 //  combined bug in G4LegendreTable and G4PhotonDist fixed
      // Init runs
-//      G4Material *thePS = new G4Material(name="PolyStyrene", density=1.032*g/cm3, nEl=2);
+      G4Material *thePS = new G4Material(name="PolyStyrene", density=1.032*g/cm3, nEl=1);
 //      G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
-//      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
+      G4Element *elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a=1.01*g/mole);
 //      thePS->AddElement( elC, 8 );
-//      thePS->AddElement( elH, 8 );
-//      theMaterials[1] = thePS;
+      thePS->AddElement( elH, 8 );
+      theMaterials[1] = thePS;
 // 
 //      // Init runs
 //      G4Material *theLi = new G4Material(name="Lithium", density=0.534*g/cm3, nEl=1);
@@ -267,10 +274,10 @@
 //      theHe3->AddElement(elHe3 , 1 );
 //      theMaterials[24] = theHe3;
     
-     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
-     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
-     theC->AddElement( elC, 1 );
-     theMaterials[25] = theC;
+//     G4Material *theC = new G4Material(name="Carbon", density=18.95*g/cm3, nEl=1);
+//     G4Element *elC = new G4Element(name="Carbon", symbol="C", iz=6., a=12.01*g/mole);
+//     theC->AddElement( elC, 1 );
+//     theMaterials[25] = theC;
 
     G4cout << "Please enter material number"<<G4endl;
     G4int inputNumber;
@@ -314,6 +321,10 @@
    theNeutron->SetProcessManager(theNeutronProcessManager);
    G4NeutronInelasticProcess theInelasticProcess; 
    G4NeutronHPInelastic theNeutronHPInelastic;
+   G4NeutronHPInelasticData someData;
+   G4NeutronHPElastic theNeutronHPElastic;
+   G4NeutronHPCapture theNeutronHPCapture;
+   G4NeutronHPFission theNeutronHPFission;
    G4cout << "Inelastic instanciated!!!"<<G4endl;
    theInelasticProcess.RegisterMe(&theNeutronHPInelastic);
    theNeutronProcessManager->AddDiscreteProcess(&theInelasticProcess);
@@ -385,6 +396,7 @@ int j = 0;
 	   aStep.SetPostStepPoint(&aStepPoint);
 	   aTrack->SetStep(&aStep);
            ++hpw;
+	   if(hpw == 100*(hpw/100)) clog << "Event counter = "<<hpw<<G4endl;
            if(hpw == 1000*(hpw/1000))
            G4cerr << "FINAL EVENTCOUNTER=" << hpw
                 << " current energy: " << incomingEnergy

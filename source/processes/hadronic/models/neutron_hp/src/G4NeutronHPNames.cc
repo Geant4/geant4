@@ -138,6 +138,7 @@
     while(!(check));
 //    G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
 //    G4cout << "File-name: "<<*theName<<G4endl;
+    if(getenv("NeutronHPNamesLogging")) G4cout << "Names::GetName: last theName proposal = "<< *theName <<" "<<A<<" "<<Z<<G4endl;
     delete theName;
     return result;
   }

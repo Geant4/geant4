@@ -20,6 +20,11 @@
     ifstream theChannel(filename,ios::in|ios::nocreate);
 #endif
     
+    if(Z==1 && (aFile.GetZ()!=Z || abs(aFile.GetA()-A)>0.0001) )
+    {
+      if(getenv("NeutronHPNamesLogging")) G4cout << "Skipped = "<< filename <<" "<<A<<" "<<Z<<G4endl;
+      return false;
+    }
     if(!theChannel) return false;
     // accommodating deficiencie of some compilers
     if(theChannel.eof()) return false; 

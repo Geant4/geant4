@@ -1,49 +1,43 @@
 #include "G4Neutron.hh"
-#include "G4Proton.hh"
-#include "G4NeutronHPCaptureData.hh"
-#include "G4Alpha.hh"
-
-#include "G4LeptonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4IonConstructor.hh"
+#include "G4Nucleus.hh"
+#include "G4ReactionProduct.hh"
+#include "G4NucleiPropertiesTable.hh"
 
 main()
 {
- G4LeptonConstructor aC1;
- G4BaryonConstructor aC2;
- G4MesonConstructor aC3;
- G4IonConstructor aC4;
- 
- aC1.ConstructParticle();
- aC2.ConstructParticle();
- aC3.ConstructParticle();
- aC4.ConstructParticle();
-
-   G4NeutronHPCaptureData genDataSet;
-
-//   G4Element* theElement = new G4Element("copper", "Cu", 29, 63.54*g/mole);
-//   G4Element* theElement = new G4Element("copper", "Al", 13, 27.0*g/mole);
-//   G4Element* theElement = new G4Element("carbon", "C", 6, 12.0*g/mole);
-//   G4Element* theElement = new G4Element("Lead", "Pb", 82, 207.2*g/mole);
-//   G4Element* theElement = new G4Element("Hydrogen", "H", 1, 1.01*g/mole);
-   G4Element* theElement = new G4Element("Magnesium", "Mg", 12, 24.01*g/mole);
-   G4ParticleDefinition * theParticleDefinition;
-   theParticleDefinition = G4Neutron::NeutronDefinition();
-   genDataSet.BuildPhysicsTable(*theParticleDefinition);
-   @@@@@@@@@@@@@@@ Incomplete at the moment @@@@@@@@@@@@@@@@@@
-
-   G4double ekin = 10E-5*eV;
-   G4DynamicParticle* theDynamicParticle;
-   while(ekin < 20*MeV)
-   {
-     ekin *= 1.01;
-     theDynamicParticle = new G4DynamicParticle(theParticleDefinition,
-                                                 G4ParticleMomentum(1.,0.,0.), ekin);
-       cout << ekin/MeV 
-            << " " 
-            << genDataSet.GetCrossSection(theDynamicParticle, theElement)/millibarn
-            << G4endl;
-     delete theDynamicParticle;
-   }
+  G4Nucleus theNucleus;
+  theNucleus.SetParameters(12, 6);
+  G4double theBaseA = 12;
+  G4int theBaseZ = 6;
+  G4double eps = 0.000001;
+  G4double targetMass = ( G4NucleiPropertiesTable::GetAtomicMass(theBaseZ+eps, theBaseA+eps)-
+                          theBaseZ* G4Electron::Electron()->GetPDGMass() ) /
+                          G4Neutron::Neutron()->GetPDGMass();
+  
+  G4ReactionProduct theNeutron( G4Neutron::NeutronDefinition() );
+  G4ReactionProduct theTarget;
+  
+  G4int N=1000;
+  G4int i, j;
+  G4double start = 10000.*eV;
+  for(j=0; j<100; j++)
+  {
+    G4ThreeVector aMom (start, 0., 0.);
+    start *=1.2;
+    G4double mean = 0;
+    G4double eKin = aMom*aMom/(2.*G4Neutron::NeutronDefinition()->GetPDGMass());
+    for(i=0; i<N; i++)
+    {
+      theNeutron.SetMomentum( aMom );
+      theNeutron.SetKineticEnergy( eKin );
+      theTarget = theNucleus.GetThermalNucleus(targetMass);
+      theNeutron.Lorentz(theNeutron, -1*theTarget);
+      G4double eKinetic = theNeutron.GetKineticEnergy();
+      G4double velocity = sqrt(2.*eKinetic/G4Neutron::NeutronDefinition()->GetPDGMass());
+      G4cout << "Velocity = "<<velocity<<endl;
+      mean += velocity;
+    }
+    mean /= G4double(N);
+    G4cout << "E, Mean = "<<eKin<<" "<<mean<<endl;
+  }
 }
