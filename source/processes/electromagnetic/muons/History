@@ -1,4 +1,4 @@
-$Id: History,v 1.66 2004-03-02 17:45:03 vnivanch Exp $
+$Id: History,v 1.67 2004-04-28 17:47:25 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28 April 04: V.Ivant (muons-V06-01-00)
+- MuPairProduction: fix minor energy non-conservation, fix
+  problem of calculation of maximumum energy transfer for
+  compounds
 
 02 March 04: V.Ivant (muons-V06-00-02)
 - Minor fix in initialisation of MuPairProductionModel
