@@ -22,6 +22,9 @@ fi
 
 if [ $G4USE_STL ]; then
   DEBOPT=${DEBOPT}_STL
+  if [ `uname -n | grep sun` ]; then
+    export G4USE_OSPACE=1
+  fi
 fi
 
 UNAMEN=`uname -n `
@@ -115,7 +118,7 @@ if [ `uname -n | grep sungeant` ]; then
 fi
 
 
-if [ `uname -n | grep hpplus` ]; then
+if [ `uname -n | grep hp` ]; then
   export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=HP-aCC
   export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4

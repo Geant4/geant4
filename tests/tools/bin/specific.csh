@@ -25,6 +25,9 @@ endif
 
 if ( $?G4USE_STL ) then
   setenv DEBOPT ${DEBOPT}_STL
+  if ( `uname -n | grep sun` != "" ) then
+    setenv G4USE_OSPACE 1
+  endif
 endif
 
 if ( `uname -n | grep rsplus` != "" ) then
@@ -141,7 +144,7 @@ if ( `uname -n | grep sun` != "" ) then
   setenv LD_LIBRARY_PATH /opt/SUNWspro/lib:/usr/openwin/lib:/usr/dt/lib:/usr/local/lib:/afs/cern.ch/sw/geant4/dev/CLHEP/SUN-CC/new/lib
 endif
 
-if ( `uname -n | grep hpplus` != "" ) then
+if ( `uname -n | grep hp` != "" ) then
   setenv CVSROOT /afs/cern.ch/sw/geant4/cvs
   setenv G4SYSTEM HP-aCC
   setenv G4INSTALL /afs/cern.ch/sw/geant4/stt/$REF/src/geant4
