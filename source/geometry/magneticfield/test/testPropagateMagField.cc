@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: testPropagateMagField.cc,v 1.20 2003-06-19 15:19:58 japost Exp $
+// $Id: testPropagateMagField.cc,v 1.21 2003-10-29 09:53:23 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //  
@@ -66,7 +66,7 @@ class G4LinScale : public G4VPVParameterisation
   
   virtual void ComputeDimensions(G4Box &pBox,
 				 const G4int n,
-				 const G4VPhysicalVolume* pRep) const
+				 const G4VPhysicalVolume* ) const
   {
     pBox.SetXHalfLength(10);
     pBox.SetYHalfLength(5+n);
@@ -95,6 +95,9 @@ class G4LinScale : public G4VPVParameterisation
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
   virtual void ComputeDimensions(G4Para &,
+				 const G4int ,
+				 const G4VPhysicalVolume*) const {}
+  virtual void ComputeDimensions(G4Orb &,
 				 const G4int ,
 				 const G4VPhysicalVolume*) const {}
 };
@@ -480,7 +483,7 @@ int main(int argc, char **argv)
 
 
 void report_endPV(G4ThreeVector    Position, 
-                  G4ThreeVector UnitVelocity,
+                  G4ThreeVector,   //  UnitVelocity,
 		  G4double step_len, 
                   G4double physStep, 
                   G4double safety,
