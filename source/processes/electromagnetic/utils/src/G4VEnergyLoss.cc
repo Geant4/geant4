@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.37 2003-01-22 14:04:12 vnivanch Exp $
+// $Id: G4VEnergyLoss.cc,v 1.38 2003-02-05 14:25:49 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -42,6 +42,7 @@
 //  21.07.02 V.Ivanchenko Fix at low energies - if tmax below ionisation
 //           potential then only Gaussian fluctuations are sampled.
 //  15.01.03 Migrade to cut per region (V.Ivanchenko)
+//  05.02.03 Minor fix for several region case (V.Ivanchenko)
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -786,7 +787,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffBTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "B"
 {
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfMaterials = theRangeTable->length();
 
   if(theRangeCoeffBTable)
   { theRangeCoeffBTable->clearAndDestroy();
@@ -846,7 +847,7 @@ G4PhysicsTable* G4VEnergyLoss::BuildRangeCoeffCTable(G4PhysicsTable* theRangeTab
 // Build tables of coefficients for the energy loss calculation
 //  create table for coefficients "C"
 {
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4int numOfMaterials = theRangeTable->length();
 
   if(theRangeCoeffCTable)
   { theRangeCoeffCTable->clearAndDestroy();
