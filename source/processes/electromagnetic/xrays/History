@@ -1,4 +1,4 @@
-$Id: History,v 1.27 2003-10-03 15:35:05 gcosmo Exp $
+$Id: History,v 1.28 2004-07-27 11:19:26 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 July 04: V.Ivant (xrays-V06-02-00)
+- Fix a compilation problem connected with removal of the dependence
+  of particle cathegory on G4Material
 
 4 Oct 03: G.Cosmo (xrays-V05-02-01)
 - Modified GNUmakefiles:
