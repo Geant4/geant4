@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.3 2002-11-11 19:29:05 stesting Exp $
+# $Id: GNUmakefile,v 1.4 2002-11-29 09:44:00 dressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for tests module.  Gabriele Cosmo, 27/06/98.
 # --------------------------------------------------------------
@@ -15,11 +15,15 @@ CPPFLAGS  += -I$(G4INSTALL)/tests/tools/include
 EXTRA_LINK_DEPENDENCIES := \
   $(G4INSTALL)/tests/tools/lib/$(G4SYSTEM)/libG4TestTool.a 
 
+include $(G4INSTALL)/config/architecture.gmk
+LDFLAGS += -L/usr/local/lib -lXm
+
 
 
 .PHONY: all
 
 all: lib bin
+
 
 include $(G4INSTALL)/config/binmake.gmk
 
