@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.23 2003-10-28 17:11:23 gcosmo Exp $
+// $Id: G4Box.cc,v 1.24 2003-11-03 18:17:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,7 +35,7 @@
 //             and information before exception in DistanceToOut(p,v,...)
 //  15.11.00 - D.Williams, V.Grichine: bug fixed in CalculateExtent - change
 //                                     algorithm for rotated vertices
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Box.hh"
 

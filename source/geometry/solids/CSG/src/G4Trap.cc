@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trap.cc,v 1.20 2003-10-28 17:11:25 gcosmo Exp $
+// $Id: G4Trap.cc,v 1.21 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Trap
@@ -36,8 +36,7 @@
 // 04.06.99 S.Giani: Fixed CalculateExtent in rotated case. 
 // 19.11.99 V.Grichine: kUndef was added to Eside enum
 // 13.12.99 V.Grichine: bug fixed in DistanceToIn(p,v)
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Trap.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.39 2003-10-28 17:11:26 gcosmo Exp $
+// $Id: G4Tubs.cc,v 1.40 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,8 +48,7 @@
 // 20.02.01 V.Grichine: bug fixed in Inside(p) and CalculateExtent was 
 //                      simplified base on G4Box::CalculateExtent
 // 20.07.01 V.Grichine: bug fixed in Inside(p)
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Tubs.hh"
 

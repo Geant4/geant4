@@ -20,7 +20,17 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
+// $Id: G4Orb.cc,v 1.7 2003-11-03 18:17:32 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
+// class G4Orb
+//
+// Implementation for G4Orb class
+//
+// History:
+//
+// 20.08.03 V.Grichine - created
+// --------------------------------------------------------------------
 
 #include <assert.h>
 

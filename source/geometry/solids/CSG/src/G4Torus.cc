@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.32 2003-10-28 17:11:25 gcosmo Exp $
+// $Id: G4Torus.cc,v 1.33 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,7 +39,7 @@
 // 03.10.00 E.Medernach: SafeNewton added
 // 11.01.01 E.Medernach: Use G4PolynomialSolver to find roots
 //
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Torus.hh"
 

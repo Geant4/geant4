@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.26 2003-11-03 09:57:57 grichine Exp $
+// $Id: G4Sphere.cc,v 1.27 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -41,7 +41,7 @@
 // 09.10.98 V.Grichine: modifications in Distance ToOut(p,v,...)
 // 17.09.96 V.Grichine: final modifications to commit
 // 28.03.94 P.Kent: old C++ code converted to tolerant geometry
-// 
+// --------------------------------------------------------------------
 
 #include <assert.h>
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Para.cc,v 1.17 2003-10-28 17:11:24 gcosmo Exp $
+// $Id: G4Para.cc,v 1.18 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Para
@@ -33,7 +33,7 @@
 // 31.10.96 V.Grichine: Modifications according G4Box/Tubs before to commit
 // 18.11.99 V.Grichine: kUndef was added to ESide
 // 14.02.02 V.Grichine: bug fixed in Inside according to proposal of D.Wright
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Para.hh"
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.28 2003-10-28 17:11:24 gcosmo Exp $
+// $Id: G4Cons.cc,v 1.29 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -41,7 +41,7 @@
 // 17.08.00 V.Grichine: if one and only one Rmin=0, it'll be 1e3*kRadTolerance 
 // 05.10.00 V.Grichine: bugs fixed in   Distance ToIn(p,v)
 // 26.06.02 V.Grichine: bugs fixed in   Distance ToIn(p,v)
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Cons.hh"
 

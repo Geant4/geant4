@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.16 2003-10-28 17:11:25 gcosmo Exp $
+// $Id: G4Trd.cc,v 1.17 2003-11-03 18:17:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -30,8 +30,7 @@
 // History:
 //    ~1996, V.Grichine, 1st implementation based on old code of P.Kent
 // 07.05.00, V.Grichine, in d = DistanceToIn(p,v), if d<0.5*kCarTolerance, d=0
-//
-// ********************************************************************
+// --------------------------------------------------------------------
 
 #include "G4Trd.hh"
 

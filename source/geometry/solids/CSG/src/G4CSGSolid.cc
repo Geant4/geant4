@@ -21,9 +21,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4CSGSolid.cc,v 1.5 2003-06-16 16:53:35 gunter Exp $
+// $Id: G4CSGSolid.cc,v 1.6 2003-11-03 18:17:31 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+// --------------------------------------------------------------------
+
 #include "G4CSGSolid.hh"
 
 // Constructor
