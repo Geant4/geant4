@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PropagatorInField.cc,v 1.15 2001-03-19 18:45:09 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.16 2001-05-15 14:51:48 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,7 @@
 //   correct order initialisation of static (class) data members
 //const G4double G4PropagatorInField::fDefault_Delta_Intersection_Val= 0.1 * mm;
 //const G4double G4PropagatorInField::fDefault_Delta_One_Step_Value = 0.25 * mm;
+// const G4double  G4PropagatorInField::fEpsilonMin = 1.0e-10 ;  
 
 // -------------------------------------------------------------------------
 #if OLD_SIGNATURE_IS_INVALID
@@ -60,22 +61,23 @@ G4PropagatorInField::
 }
 #endif
 
-// -------------------------------------------------------------------------
-G4double 
-G4PropagatorInField::
-  ComputeStep(G4FieldTrack& pFieldTrack,
-	      G4double      CurrentProposedStepLength,
-	      G4double&     currentSafety,                // IN/OUT
-	      G4VPhysicalVolume *pPhysVol)
-
+///////////////////////////////////////////////////////////////////////////
+//
 // Compute the next geometric Step
+
+
+G4double G4PropagatorInField::
+         ComputeStep( G4FieldTrack&      pFieldTrack,
+	              G4double           CurrentProposedStepLength,
+	              G4double&          currentSafety,                // IN/OUT
+	              G4VPhysicalVolume* pPhysVol)
 {
   // Parameters for adaptive Runge-Kutta integration
-  //
+  
   G4double      h_TrialStepSize;        // 1st Step Size 
   G4double      TruePathLength= CurrentProposedStepLength;
   G4double      StepTaken= 0.0; 
-  G4double      s_length_taken; 
+  G4double      s_length_taken, epsilon ; 
   G4bool        intersects;
   G4bool        first_substep= true;
 
@@ -107,15 +109,21 @@ G4PropagatorInField::
   // (used to calculate the relative accuracy) must be guessed.
   //
   
-  if( CurrentProposedStepLength >= kInfinity ){
+  if( CurrentProposedStepLength >= kInfinity )
+  {
      G4ThreeVector StartPointA, VelocityUnit;
      StartPointA = pFieldTrack.GetPosition();
      VelocityUnit= pFieldTrack.GetMomentumDir();
+
      CurrentProposedStepLength= 1.e3 *  ( 10.0 * cm + 
 		  fNavigator->GetWorldVolume()->GetLogicalVolume()->
                   GetSolid()->DistanceToOut(StartPointA, VelocityUnit) ) ;
   }
-  this->SetEpsilonStep( GetDeltaOneStep() / CurrentProposedStepLength);
+  epsilon = GetDeltaOneStep() / CurrentProposedStepLength ;
+
+  if( epsilon < fEpsilonMin ) epsilon = fEpsilonMin ;
+
+  this->SetEpsilonStep( epsilon );
 
   if( fNoZeroStep > fThresholdNo_ZeroSteps ) {
      G4double stepTrial; //  = fMidPoint_CurveLen_of_LastAttempt;
