@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.10 2002-05-27 17:10:51 pia Exp $
+# $Id: GNUmakefile,v 1.11 2002-06-18 14:08:34 pia Exp $
 # ----------------------------------------------------------------
 # Makes test program in environment variable G4TARGET.
 # ----------------------------------------------------------------
@@ -15,7 +15,11 @@ endif
 G4EXEC_BUILD = true
 
 include $(G4INSTALL)/config/architecture.gmk
-
+#
+# ---- Not clear why I need this here... MGP, 18 June 2002
+OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+LOADLIBS += $(OGLLIBS)
+# ----
 #
 # NEW: this requires the env-var LHCXX_REL_DIR to be set up correctly,
 # see the first lines in G4ComptonTest.cc
@@ -28,5 +32,7 @@ LDFLAGS  += `aida-config --useHBook --lib`
 #LOADLIBS += -lpacklib $(FCLIBS)
 
 include $(G4INSTALL)/config/binmake.gmk
+
+
 
 
