@@ -1,5 +1,7 @@
 //#define CHECK_MOMC
 
+#include <iomanip.h>
+
 #include "globals.hh"
 //#include "Randomize.hh"
 
@@ -20,32 +22,44 @@
 
 #include "vector"
 
+
 G4int testINC();
 G4int testINCEvap();
 G4int testINCAll();
+G4int test();
 
 int main() {
 
-  testINC(); // only INC model
-  testINCAll(); // INC, pre-eq, evap, fission 
+  testINC();     // Only INC model
+  testINCEvap(); // INC and evaporation
+  //  testINCAll();  // INC, pre-eq, evap, fission 
+  test();        // misc. testing
 
   return 0;       
 };
 
 G4int testINCEvap() {
 
-return 0;
+  G4int verboseLevel = 1;
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> testINCEvap " << G4endl;
+  }
+  
+  return 0;
 };
 
 G4int testINC() {
-  G4int verboseLevel = 2;
+  G4int verboseLevel = 2; // eguals 1 for data file production, 2 for testing, 3 all
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> testINC" << G4endl;
+  }
 
   G4CollisionOutput TRFoutput;
 
   typedef G4std::vector<G4InuclElementaryParticle>::iterator particleIterator;
-  G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
 
-  G4cout << " ::: testing interface" << G4endl;
   // 0.8 GeV proton with momentum along Z axis
   G4InuclParticle* bullet = new G4InuclElementaryParticle(0.1,1); // momentumBullet, bulletType 
 
@@ -62,24 +76,26 @@ G4int testINC() {
   cascader->setElementaryParticleCollider(collider);
   cascader->setInteractionCase(1); // Interaction type is particle with nuclei.
 
-  G4int nCollisions = 2;
+  G4int nCollisions = 10;
+
+    if (verboseLevel > 1) {
+  G4cout << setw(6)<< "#ev" << setw(6)  << "part" << setw(11) << "Ekin [GeV]" << setw(11) << "momx" << setw(11) << "momy" << setw(11) << "momz" << G4endl;
+
+    }
 
   for (G4int i = 1; i <= nCollisions; i++){
     // Make INC
-    G4cout << "collision " << i << G4endl; 
+    if (verboseLevel > 2) {
+      G4cout << "collision " << i << G4endl; 
+    }
+
     G4CollisionOutput output =  cascader->collide(bullet, target); 
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 2) {
       G4cout << " After Cascade " << G4endl;
-
       output.printCollisionOutput();
-
-      G4cout << " ++++++++++++++++++++++++++++++++++++++++++++++++++ " << 
-	G4endl;
     }
 	  
-
-
     // Convert Bertini data to Geant4 format
     G4std::vector<G4InuclElementaryParticle> particles = output.getOutgoingParticles();
 
@@ -93,10 +109,17 @@ G4int testINC() {
 	    G4double ekin = ipart->getKineticEnergy() * GeV;
 	    G4int type = ipart->type();
 
-	    G4cout << type << " " << ekin << " " << mom[1] * GeV << " " << mom[2] * GeV << " " << mom[3] * GeV << G4endl;
+	    if (verboseLevel > 0) {
+
+    if (verboseLevel > 0) {
+  cout.precision(4);
+
+  G4cout << setw(6) << i << setw(6)  << type << setw(11) << ekin << setw(11) << mom[1] * GeV << setw(11) << mom[2] * GeV << setw(11) << mom[3] * GeV << G4endl;
+	    }
 	  }
       }
     
+      }
   }
   return 0;
 };
@@ -104,13 +127,17 @@ G4int testINC() {
 
 G4int testINCAll()  {
 
+  G4int verboseLevel = 0;
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> testINCAll() " << G4endl;
+  }
   // Set the default random engine to RanecuEngine
   //  RanecuEngine defaultEngine;
   //HepRandom::setTheEngine(&defaultEngine);
   //  HepRandom::setTheSeed(345354);
   //G4double x = RandFlat::shoot();
   //  G4double koe = G4UniformRand();
-  G4int verboseLevel = 1;
   
   // General test program for hetc and inucl
 
@@ -142,7 +169,8 @@ G4int testINCAll()  {
     // Bullet could be nucleon or pion or nuclei
     // proton momentum in Z-direction [GeV]
     G4double bulletEnergy = eMin + eStep * e; 
-    if (verboseLevel > 1) {
+
+    if (verboseLevel > 2) {
       G4cout << "Bullet E =" << bulletEnergy << " GeV" << endl;
     };
 
@@ -202,7 +230,7 @@ G4int testINCAll()  {
     for(G4int i = 0; i < nrain; i++) {
       if((i + 1) % to_report == 0) 
 
-	if (verboseLevel > 1) {
+	if (verboseLevel > 2) {
 	  G4cout << " Event " << i+1 <<":" << G4endl;
       	}
 
@@ -226,6 +254,22 @@ G4int testINCAll()  {
     //  analyser->printResults();
     //  analyser->printResultsSimple();
     analyser->printResultsNtuple();
+  }
+
+  return 0;
+};
+
+
+G4int test() {
+
+  G4int verboseLevel = 1;
+
+  if (verboseLevel > 1) {
+    G4cout << " >>> test() " << G4endl;
+  }
+
+  if (verboseLevel > 1) {
+    G4cout << " MeV: " << MeV << " GeV: " << GeV << G4endl;
   }
 
   return 0;
