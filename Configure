@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.25 2002-06-26 17:12:08 stesting Exp $
+# $Id: Configure,v 1.26 2002-06-26 17:27:19 stesting Exp $
 #
-# Generated on Wed Jun 26 19:11:34 CEST 2002 [metaconfig 3.0 PL70]
+# Generated on Wed Jun 26 19:27:06 CEST 2002 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -3113,8 +3113,10 @@ g4message=`cat << EOM
 
   G4UI_NONE
 
-If set, no UI sessions nor any UI libraries are built. This can be useful
-when running a pure batch job or in a user framework having its own UI system.
+If this variable is set, no UI sessions nor any UI libraries are built. 
+This can be useful when running a pure batch job or in a user framework 
+having its own UI system.
+Do you want to set this variable ?
 
 EOM`
 
@@ -3914,8 +3916,8 @@ g4message=`cat << EOM
   OGLHOME/include
   OGLHOME/lib
 
-You are selecting to use OpenGL driver.
-Where is it installed?
+You have selected to use OpenGL driver.
+Specify the correct path (OGLHOME) where OpenGL is installed in your system:
 EOM`
 
 dflt=$g4vis_oglhome
