@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.17 2004-05-11 15:35:07 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.18 2004-05-12 08:33:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -117,8 +117,7 @@ public:
   virtual G4bool IsApplicable(const G4ParticleDefinition& p) = 0;
     // True for all charged particles
 
-  virtual
-  void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
   // Build physics table during initialisation
 
   virtual void PrintInfoDefinition();
@@ -191,27 +190,27 @@ public:
   virtual void ActivateAugerElectronProduction(G4bool, const G4Region* region = 0);
   // Activate deexcitation code
 
-  virtual void SetSubCutoff(G4bool) {};
+  virtual void SetSubCutoff(G4bool);
 
   void SetDEDXTable(G4PhysicsTable* p);
-  G4PhysicsTable* DEDXTable() const {return theDEDXTable;};
+  G4PhysicsTable* DEDXTable() const;
 
   void SetRangeTable(G4PhysicsTable* pRange);
   G4PhysicsTable* RangeTable() const;
 
   void SetRangeTableForLoss(G4PhysicsTable* p);
-  G4PhysicsTable* RangeTableForLoss() const {return theRangeTableForLoss;};
+  G4PhysicsTable* RangeTableForLoss() const;
 
   void SetInverseRangeTable(G4PhysicsTable* p);
-  G4PhysicsTable* InverseRangeTable() const {return theInverseRangeTable;};
+  G4PhysicsTable* InverseRangeTable() const;
 
   void SetSecondaryRangeTable(G4PhysicsTable* p);
 
   void SetLambdaTable(G4PhysicsTable* p);
-  G4PhysicsTable* LambdaTable() {return theLambdaTable;};
+  G4PhysicsTable* LambdaTable();
 
   void SetSubLambdaTable(G4PhysicsTable* p);
-  G4PhysicsTable* SubLambdaTable() {return theSubLambdaTable;};
+  G4PhysicsTable* SubLambdaTable();
 
   G4double GetDEDX(G4double& kineticEnergy, const G4MaterialCutsCouple* couple);
 
@@ -230,23 +229,23 @@ public:
                              const G4MaterialCutsCouple* couple);
   // It returns the MeanFreePath of the process for a (energy, material)
 
-  void SetLinearLossLimit(G4double val) {linLossLimit = val;};
+  void SetLinearLossLimit(G4double val);
 
-  void SetLossFluctuations(G4bool val) {lossFluctuationFlag = val;};
+  void SetLossFluctuations(G4bool val);
 
   void SetIntegral(G4bool val);
-  G4bool IsIntegral() const {return integral;}
+  G4bool IsIntegral() const;
 
-  void SetRandomStep(G4bool val) {rndmStepFlag = val;};
+  void SetRandomStep(G4bool val);
 
-  void SetMinSubRange(G4double val) {minSubRange = val;};
+  void SetMinSubRange(G4double val);
 
   void SetStepLimits(G4double v1, G4double v2);
   void SetStepFunction(G4double v1, G4double v2);
 
-  G4bool TablesAreBuilt() const {return  tablesAreBuilt;};
+  G4bool TablesAreBuilt() const;
 
-  G4int NumberOfSubCutoffRegions() const {return nSCoffRegions;};
+  G4int NumberOfSubCutoffRegions() const;
 
   G4double MeanFreePath(const G4Track& track,
                               G4double previousStepSize,
@@ -257,27 +256,24 @@ public:
                                      G4double currentMinimumStep,
                                      G4double& currentSafety);
 
-  void      ResetNumberOfInteractionLengthLeft();
+  void ResetNumberOfInteractionLengthLeft();
   // reset (determine the value of)NumberOfInteractionLengthLeft
 
   G4double GetRangeForLoss(G4double kineticEnergy);
 
 protected:
 
-  virtual
-  G4double GetMeanFreePath(const G4Track& track,
+  virtual G4double GetMeanFreePath(const G4Track& track,
                                          G4double previousStepSize,
                                          G4ForceCondition* condition);
 
-  virtual
-  G4double GetContinuousStepLimit(const G4Track& track,
+  virtual G4double GetContinuousStepLimit(const G4Track& track,
                                                 G4double previousStepSize,
                                                 G4double currentMinimumStep,
                                                 G4double& currentSafety);
 
   virtual
-  const G4ParticleDefinition* DefineBaseParticle(
-          const G4ParticleDefinition*) {return 0;};
+  const G4ParticleDefinition* DefineBaseParticle(const G4ParticleDefinition*);
 
   virtual
   G4PhysicsVector* DEDXPhysicsVector(const G4MaterialCutsCouple*);
@@ -300,17 +296,17 @@ protected:
 
   G4VSubCutoffProcessor* SubCutoffProcessor(size_t index);
 
-  size_t CurrentMaterialCutsCoupleIndex() const {return currentMaterialIndex;};
+  size_t CurrentMaterialCutsCoupleIndex() const;
 
-  void SetMassRatio(G4double val) {massRatio = val;};
+  void SetMassRatio(G4double val);
 
-  void SetReduceFactor(G4double val) {reduceFactor = val;};
+  void SetReduceFactor(G4double val);
 
-  void SetChargeSquare(G4double val) {chargeSquare = val;};
+  void SetChargeSquare(G4double val);
 
-  void SetChargeSquareRatio(G4double val) {chargeSqRatio = val;};
+  void SetChargeSquareRatio(G4double val);
   
-  G4double GetCurrentRange() const {return fRange;};
+  G4double GetCurrentRange() const;
 
 private:
 
@@ -599,63 +595,6 @@ inline const G4ParticleDefinition* G4VEnergyLossProcess::SecondaryParticle() con
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VEnergyLossProcess::SetDEDXBinning(G4int nbins)
-{
-  nDEDXBins = nbins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
-{
-  nDEDXBinsForRange = nbins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetLambdaBinning(G4int nbins)
-{
-  nLambdaBins = nbins;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::MinKinEnergy() const
-{
-  return minKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
-{
-  minKinEnergy = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
-{
-  maxKinEnergy = e;
-  if(e < maxKinEnergyForRange) maxKinEnergyForRange = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEnergyLossProcess::SetMaxKinEnergyForPreciseRange(G4double e)
-{
-  maxKinEnergyForRange = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline G4double G4VEnergyLossProcess::MaxKinEnergy() const
-{
-  return maxKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 inline G4double G4VEnergyLossProcess::GetLambda(G4double kineticEnergy,
                                           const G4MaterialCutsCouple* couple)
 {
@@ -686,6 +625,90 @@ inline G4PhysicsTable* G4VEnergyLossProcess::RangeTable() const
   G4PhysicsTable* t = thePreciseRangeTable;
   if(!t) t = theRangeTableForLoss;
   return t;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::DEDXTable() const 
+{
+  return theDEDXTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::RangeTableForLoss() const 
+{
+  return theRangeTableForLoss;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::InverseRangeTable() const 
+{
+  return theInverseRangeTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::LambdaTable() 
+{
+  return theLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4PhysicsTable* G4VEnergyLossProcess::SubLambdaTable() 
+{
+  return theSubLambdaTable;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4bool G4VEnergyLossProcess::IsIntegral() const 
+{
+  return integral;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline size_t G4VEnergyLossProcess::CurrentMaterialCutsCoupleIndex() const 
+{
+  return currentMaterialIndex;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::SetMassRatio(G4double val) 
+{
+  massRatio = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::SetReduceFactor(G4double val) 
+{
+  reduceFactor = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::SetChargeSquare(G4double val) 
+{
+  chargeSquare = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline void G4VEnergyLossProcess::SetChargeSquareRatio(G4double val) 
+{
+  chargeSqRatio = val;
+}
+  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+inline G4double G4VEnergyLossProcess::GetCurrentRange() const 
+{
+  return fRange;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.18 2004-05-06 06:24:27 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.19 2004-05-12 08:33:44 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -1255,6 +1255,118 @@ G4bool G4VEnergyLossProcess::RetrievePhysicsTable(G4ParticleDefinition* part,
   lManager->RetrievePhysicsTables(particle, this);
 
   return res;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLinearLossLimit(G4double val) 
+{
+  linLossLimit = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLossFluctuations(G4bool val) 
+{
+  lossFluctuationFlag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetSubCutoff(G4bool) 
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetRandomStep(G4bool val) 
+{
+  rndmStepFlag = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMinSubRange(G4double val) 
+{
+  minSubRange = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4VEnergyLossProcess::TablesAreBuilt() const 
+{
+  return  tablesAreBuilt;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4int G4VEnergyLossProcess::NumberOfSubCutoffRegions() const 
+{
+  return nSCoffRegions;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+  
+const G4ParticleDefinition* G4VEnergyLossProcess::DefineBaseParticle(
+          const G4ParticleDefinition*) 
+{
+  return 0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetDEDXBinning(G4int nbins)
+{
+  nDEDXBins = nbins;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetDEDXBinningForPreciseRange(G4int nbins)
+{
+  nDEDXBinsForRange = nbins;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLambdaBinning(G4int nbins)
+{
+  nLambdaBins = nbins;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEnergyLossProcess::MinKinEnergy() const
+{
+  return minKinEnergy;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
+{
+  minKinEnergy = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
+{
+  maxKinEnergy = e;
+  if(e < maxKinEnergyForRange) maxKinEnergyForRange = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMaxKinEnergyForPreciseRange(G4double e)
+{
+  maxKinEnergyForRange = e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4VEnergyLossProcess::MaxKinEnergy() const
+{
+  return maxKinEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
