@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingManager2.cc,v 1.14 2004-01-21 01:29:36 asaim Exp $
+// $Id: G4SteppingManager2.cc,v 1.15 2004-04-28 06:57:50 amako Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -232,7 +232,6 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
    G4double lifeTime, shortestLifeTime;
 
    fAtRestDoItProcTriggered = 0;
-   fN2ndariesAtRestDoIt = 0;
    shortestLifeTime = DBL_MAX;
 
    unsigned int NofInactiveProc=0;
@@ -292,11 +291,13 @@ void G4SteppingManager::InvokeAtRestDoItProcs()
        fParticleChange->UpdateStepForAtRest(fStep);
 
        // Now Store the secondaries from ParticleChange to SecondaryList
-       G4Track*  tempSecondaryTrack;
+       G4Track* tempSecondaryTrack;
+       G4int    num2ndaries;
 
-       fN2ndariesAtRestDoIt = fParticleChange->GetNumberOfSecondaries();
+       num2ndaries = fParticleChange->GetNumberOfSecondaries();
+       fN2ndariesAtRestDoIt += num2ndaries;
 
-       for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAtRestDoIt; DSecLoop++){
+       for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -348,8 +349,6 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
    }
 
 // Invoke the all active continuous processes
-   fN2ndariesAlongStepDoIt = 0;
-
    for( size_t ci=0 ; ci<MAXofAlongStepLoops ; ci++ ){
      fCurrentProcess = (*fAlongStepDoItVector)[ci];
      if (fCurrentProcess== NULL) continue;
@@ -367,10 +366,12 @@ void G4SteppingManager::InvokeAlongStepDoItProcs()
 
      // Now Store the secondaries from ParticleChange to SecondaryList
      G4Track* tempSecondaryTrack;
+     G4int    num2ndaries;
 
-     fN2ndariesAlongStepDoIt = fParticleChange->GetNumberOfSecondaries();
+     num2ndaries = fParticleChange->GetNumberOfSecondaries();
+     fN2ndariesAlongStepDoIt += num2ndaries;
 
-     for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesAlongStepDoIt; DSecLoop++){
+     for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
          tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
 
          if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
@@ -411,8 +412,6 @@ void G4SteppingManager::InvokePostStepDoItProcs()
 {
 
 // Invoke the specified discrete processes
-   fN2ndariesPostStepDoIt = 0;
-
    for(size_t np=0; np < MAXofPostStepLoops; np++){
    //
    // Note: DoItVector has inverse order against GetPhysIntVector
@@ -467,14 +466,16 @@ void G4SteppingManager::InvokePSDIP(size_t np)
 
          // Now Store the secondaries from ParticleChange to SecondaryList
          G4Track* tempSecondaryTrack;
+         G4int    num2ndaries;
 
-         fN2ndariesPostStepDoIt = fParticleChange->GetNumberOfSecondaries();
+         num2ndaries = fParticleChange->GetNumberOfSecondaries();
+         fN2ndariesPostStepDoIt += num2ndaries;
 
-         for(G4int DSecLoop=0 ; DSecLoop< fN2ndariesPostStepDoIt; DSecLoop++){
+         for(G4int DSecLoop=0 ; DSecLoop< num2ndaries; DSecLoop++){
             tempSecondaryTrack = fParticleChange->GetSecondary(DSecLoop);
-    
-           if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
-           { ApplyProductionCut(tempSecondaryTrack); }
+   
+            if(tempSecondaryTrack->GetDefinition()->GetApplyCutsFlag())
+            { ApplyProductionCut(tempSecondaryTrack); }
 
             // Set parentID 
             tempSecondaryTrack->SetParentID( fTrack->GetTrackID() );
