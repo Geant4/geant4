@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4ParticleDefinition.cc,v 1.8 2000-02-25 07:36:24 kurasige Exp $
+// $Id: G4ParticleDefinition.cc,v 1.9 2000-02-27 06:44:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -215,7 +215,8 @@ void G4ParticleDefinition::DumpTable() const
   G4cout << ", " << theAntiQuarkContent[5] << G4endl;
   G4cout << " Lepton number : " << theLeptonNumber;
   G4cout << " Baryon number : " << theBaryonNumber << G4endl;
-  G4cout << " Particle type : " << theParticleType << G4endl;
+  G4cout << " Particle type : " << theParticleType ;
+  G4cout << " [" << theParticleSubType << "]" << G4endl;
 
   if ( fShortLivedFlag ){
     G4cout << " ShortLived : ON" << G4endl;
