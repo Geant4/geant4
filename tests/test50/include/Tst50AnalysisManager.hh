@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: Tst50AnalysisManager.hh,v 1.1 2002-11-26 17:57:48 guatelli Exp $
+// $Id: Tst50AnalysisManager.hh,v 1.2 2002-11-27 18:14:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -71,6 +71,7 @@ static Tst50AnalysisManager* getInstance();
 
 void energy_deposit(G4double);
   void primary_processes(G4int);
+  void trans_particles();
 private:
 
 
@@ -89,6 +90,7 @@ AIDA::ITreeFactory      *treeFact;
 
 AIDA::IHistogram1D *h1;
 AIDA::IHistogram1D *h2;
+AIDA::IHistogram1D *h3;
 };
 
 #endif

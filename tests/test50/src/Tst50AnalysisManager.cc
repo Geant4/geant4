@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: Tst50AnalysisManager.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50AnalysisManager.cc,v 1.2 2002-11-27 18:14:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include <stdlib.h>
@@ -107,12 +107,12 @@ void Tst50AnalysisManager::book()
  
 
 
- h1= histFact->createHistogram1D("10","Energy Deposit", 300000,0.,30.);
+ h1= histFact->createHistogram1D("10","Energy Deposit", 3000000,0.,0.03);
 
  // in questo istogramma  metto il deposito di energia di ogni evento nel target
  h2= histFact->createHistogram1D("20","primary_processes", 6000,0.,6.);
 
- 
+ h3= histFact->createHistogram1D("30","transmitted gamma",200,0.,2.);
 }
  
 void Tst50AnalysisManager::primary_processes(G4int process)
@@ -129,6 +129,12 @@ void Tst50AnalysisManager::energy_deposit(G4double En)
   h1->fill(En);
 }
 
+
+void Tst50AnalysisManager::trans_particles()
+{
+ h3->fill(1);
+
+}
 void Tst50AnalysisManager::finish() 
 {  
   // write all histograms to file

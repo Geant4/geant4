@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50SteppingAction.cc,v 1.1 2002-11-26 17:57:49 guatelli Exp $
+// $Id: Tst50SteppingAction.cc,v 1.2 2002-11-27 18:14:18 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,14 +138,22 @@ IDnow = evno+10000*(Step->GetTrack()->GetTrackID())+
 
 if (process=="LowEnConversion") 
            { 
-	     analysis->primary_processes(5);
+	     analysis->primary_processes(5); 
 	   }
 
 
 	}
+      //per il coeff di attenuazione//
 
-	   
-
+if(0 == Step->GetTrack()->GetParentID() )   
+  { if(Step->GetPreStepPoint()->GetPhysicalVolume()->GetName()=="Target"){
+    
+    if(Step->GetTrack()->GetNextVolume()->GetName() == "World" ) {
+   //volume in cui si esce e' il target 
+    if(XMoD==0 && YMoD==0 && ZMoD==1){ 
+      if(KinE == 20.*keV)
+	{analysis->trans_particles(); G4cout<<" fotone trasmesso"<<G4endl;}}}}}
+  
     /*
     G4cout << "UserSteppingAction:"
 //	   << " CurV " << CurV
