@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.42 2003-06-16 17:02:50 gunter Exp $
+// $Id: G4VEnergyLoss.cc,v 1.43 2003-11-06 17:18:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -961,6 +961,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   if(Tm > threshold) Tm = threshold;
 
   beta2 = tau2/(tau1*tau1);
+  //  G4cout << "### tmax= " << Tm << " kappa= " << kappa << " l= " << step << G4endl;
 
   // Gaussian fluctuation ?
   if(MeanLoss >= kappa*Tm || Tm < kappa*ipotFluct)
@@ -971,6 +972,7 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
     do {
       loss = G4RandGauss::shoot(MeanLoss,siga) ;
     } while (loss < 0. || loss > 2.*MeanLoss);
+    //  G4cout << "de= " << MeanLoss << "  fluc= " << loss-MeanLoss << " sig= " << siga <<G4endl; 
     return loss;
   }
 

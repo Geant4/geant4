@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.hh,v 1.9 2003-10-16 13:06:40 vnivanch Exp $
+// $Id: G4UniversalFluctuation.hh,v 1.10 2003-11-06 17:18:36 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -111,8 +111,8 @@ private:
   G4double problim;
   G4double sumalim;
   G4double alim;
-  G4int    nmaxCont1;
-  G4int    nmaxCont2;
+  G4double nmaxCont1;
+  G4double nmaxCont2;
 
 };
 
