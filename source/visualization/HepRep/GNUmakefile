@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.1 2001-08-24 23:27:02 perl Exp $
+# $Id: GNUmakefile,v 1.2 2001-11-06 11:36:20 johna Exp $
 
 name := G4visHepRep
 
@@ -20,10 +20,5 @@ CPPFLAGS += -I$(G4BASE)/geometry/management/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/CSG/include
 CPPFLAGS += -I$(G4BASE)/geometry/volumes/include
 CPPFLAGS += -I$(G4BASE)/geometry/solids/specific/include
-
-ifdef G4VIS_BUILD_HEPREP_DRIVER
-  CPPFLAGS += -DHEPREP 
-  CPPFLAGS += -DDEBUG
-endif
 
 include $(G4INSTALL)/config/common.gmk
