@@ -60,13 +60,13 @@
 /vis/open OGLIX
 /vis/viewer/set/style wireframe
 /vis/drawVolume
-/vis/viewer/viewpointThetaPhi 60 -75 deg  
+/vis/viewer/set/viewpointThetaPhi 60 -75 deg  
 /vis/scene/endOfEventAction accumulate
 
 # Visualize one event added to the current scene
 # * Command "/vis/scene/notifyHandlers" is written in 
 #   XrayTelRunAction::BeginOfRunAction()
-# * Command "/vis/show/view" is written in 
+# * Command "/vis/viewer/update" is written in 
 #   XrayTelRunAction::EndOfRunAction()
 
 # Store particle trajactories for visualization
