@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F02DetectorConstruction.cc,v 1.6 2003-04-17 07:28:49 grichine Exp $
+// $Id: F02DetectorConstruction.cc,v 1.7 2003-06-25 17:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4ios.hh"
 
@@ -71,6 +75,8 @@ F02DetectorConstruction::F02DetectorConstruction()
 
   detectorMessenger = new F02DetectorMessenger(this);
   
+  DefineMaterials();
+
   //  fEmField = new F02ElectroMagneticField() ;
 }
 
@@ -90,7 +96,6 @@ F02DetectorConstruction::~F02DetectorConstruction()
 
 G4VPhysicalVolume* F02DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -224,14 +229,16 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
   ComputeCalorParameters();
   PrintCalorParameters();
       
+  // Cleanup old geometry
+  
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+
   // World
   
-  if(solidWorld) delete solidWorld ;
-  if(logicWorld) delete logicWorld ;
-  if(physiWorld) delete physiWorld ;
-
   solidWorld = new G4Tubs("World",				//its name
-                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
+                   0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);       //its size
                          
   logicWorld = new G4LogicalVolume(solidWorld,		//its solid
                                    WorldMaterial,	//its material
@@ -248,10 +255,6 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
 
   if (AbsorberThickness > 0.) 
   { 
-      if(solidAbsorber) delete solidAbsorber ;
-      if(logicAbsorber) delete logicAbsorber ;
-      if(physiAbsorber) delete physiAbsorber ;
-
       solidAbsorber = new G4Tubs("Absorber",		
                           0.,AbsorberRadius,AbsorberThickness/2.,0.,twopi); 
                           
@@ -266,7 +269,6 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
                                         physiWorld,       
                                         false,             
                                         0);                
-                                        
   }
                                  
   // Sensitive Detectors: Absorber 

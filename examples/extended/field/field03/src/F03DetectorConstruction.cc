@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: F03DetectorConstruction.cc,v 1.6 2003-04-17 07:29:18 grichine Exp $
+// $Id: F03DetectorConstruction.cc,v 1.7 2003-06-25 17:02:00 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,6 +44,10 @@
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 
 #include "G4ios.hh"
 
@@ -81,6 +85,8 @@ F03DetectorConstruction::F03DetectorConstruction()
 
   detectorMessenger = new F03DetectorMessenger(this);
   
+  DefineMaterials();
+
   fEmField = new F03ElectroMagneticField() ;
 }
 
@@ -100,7 +106,6 @@ F03DetectorConstruction::~F03DetectorConstruction()
 
 G4VPhysicalVolume* F03DetectorConstruction::Construct()
 {
-  DefineMaterials();
   return ConstructCalorimeter();
 }
 
@@ -240,11 +245,11 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
   ComputeCalorParameters();
   PrintCalorParameters();
       
-  // World
-  
-  if(solidWorld) delete solidWorld ;
-  if(logicWorld) delete logicWorld ;
-  if(physiWorld) delete physiWorld ;
+  // Cleanup old geometry
+
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
 
   solidWorld = new G4Tubs("World",				// its name
                    0.,WorldSizeR,WorldSizeZ/2.,0.,twopi);       // its size
@@ -274,10 +279,6 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
   G4cout<<"fRadiatorMat = "<<fRadiatorMat->GetName()<<G4endl ;
   G4cout<<"WorldMaterial = "<<WorldMaterial->GetName()<<G4endl ;
  
-  if(solidRadiator) delete solidRadiator;
-  if(logicRadiator) delete logicRadiator;
-  if(physiRadiator) delete physiRadiator;
-
   solidRadiator = new G4Tubs("Radiator",0.0, 
                                               1.01*AbsorberRadius, 
                                               0.5*radThick,0.0,twopi             ) ; 
@@ -297,11 +298,7 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
   physiRadiator = new G4PVPlacement(0,
                                      G4ThreeVector(0,0,zRad),	        
                                      "Radiator", logicRadiator,		
-                                     physiWorld, false,	0       );  	
-
-  if(fSolidRadSlice) delete fSolidRadSlice;
-  if(fLogicRadSlice) delete fLogicRadSlice; 
-  if(fPhysicRadSlice) delete fPhysicRadSlice; 
+                                     physiWorld, false,	0       );
 
   fSolidRadSlice = new G4Tubs("RadSlice",0.0,
                                 AbsorberRadius,0.5*fRadThickness,0.0,twopi ) ;
@@ -329,10 +326,6 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
 
   if (AbsorberThickness > 0.) 
   { 
-      if(solidAbsorber) delete solidAbsorber ;
-      if(logicAbsorber) delete logicAbsorber ;
-      if(physiAbsorber) delete physiAbsorber ;
-
       solidAbsorber = new G4Tubs("Absorber", 1.0*mm, 
                                   AbsorberRadius,
                                   AbsorberThickness/2., 
@@ -348,8 +341,7 @@ G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
                                         logicAbsorber,     
                                         physiWorld,       
                                         false,             
-                                        0);                
-                                        
+                                        0);
   }
                                  
   // Sensitive Detectors: Absorber 
