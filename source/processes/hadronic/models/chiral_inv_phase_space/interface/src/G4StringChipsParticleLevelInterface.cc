@@ -392,7 +392,6 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
       delete output->operator[](particle);
       continue;
     }
-    theSec = new G4ReactionProduct;  
     G4int pdgCode = output->operator[](particle)->GetPDGCode();
 
 
