@@ -1,4 +1,4 @@
-$Id: History,v 1.1 1999-01-07 16:14:14 gunter Exp $
+$Id: History,v 1.2 1999-02-09 15:11:02 kurasige Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Feb. 9 99 H.Kurashige
+- G4VUserPhysicsList::RemoveProcessManager is added 
+
 Dec. 9 98 H.Kurashige (tag run-00-04-01)
 - G4VUserPhysicsList is updated to use G4GenericIon (Hisaya)
 - G4VUserPhysicsList::ConstructAllParticles method is added (Hisaya)
