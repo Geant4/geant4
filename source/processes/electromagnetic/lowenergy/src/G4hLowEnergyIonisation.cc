@@ -65,7 +65,7 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     antiProtonHighEnergy(2.*MeV),
     theProtonTable("ICRU_R49p"),
     theAntiProtonTable("ICRU_R49p"),
-    theNuclearTable("ICRU_R49Mollere"),
+    theNuclearTable("ICRU_R49"),
     theBetheBlochModel(NULL),
     theProtonModel(NULL),
     theAntiProtonModel(NULL),
@@ -75,9 +75,6 @@ G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
     theIonYangFluctuationModel(NULL),
     nStopping(true),
     theBarkas(true),
-    //    theProton (G4Proton::Proton()),
-    //    theAntiProton (G4AntiProton::AntiProton()),
-    //    theElectron ( G4Electron::Electron() ),
     paramStepLimit (0.005),
     factor(twopi_mc2_rcl2),
     protonMass(proton_mass_c2)
@@ -146,7 +143,7 @@ void G4hLowEnergyIonisation::InitialiseParametrisation()
   theNuclearStoppingModel = new G4hNuclearStoppingModel(theNuclearTable) ;
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
   theIonChuFluctuationModel = new G4IonChuFluctuationModel("Chu") ;
-  theIonYangFluctuationModel = new G4IonYangFluctuationModel("Chu") ;
+  theIonYangFluctuationModel = new G4IonYangFluctuationModel("Yang") ;
 
   // Energy limits for parametrisation of electronic energy losses
   protonLowEnergy = G4std::max(protonLowEnergy,
