@@ -56,6 +56,8 @@
 
 G4hBetheBlochModel::G4hBetheBlochModel(const G4String& name)
   : G4VLowEnergyModel(name), 
+    lowEnergyLimit(1.*MeV),
+    highEnergyLimit(100.*GeV),
     twoln10(2.*log(10.)),
     bg2lim(0.0169), 
     taulim(8.4146e-3)

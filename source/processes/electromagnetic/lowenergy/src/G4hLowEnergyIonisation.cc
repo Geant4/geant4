@@ -80,6 +80,7 @@
 // 10 Jun   2002 V.Ivanchenko Restore fStopButAlive
 // 12 Jun   2002 V.Ivanchenko Fix in fluctuations - if tmax<2*Ipot Gaussian
 //                            fluctuations enables
+// 20 Sept  2002 V.Ivanchenko Clean up energy ranges for models
 
 // -----------------------------------------------------------------------
 
@@ -143,7 +144,7 @@ void G4hLowEnergyIonisation::InitializeMe()
   TotBin               = 200 ;
   protonLowEnergy      = 1.*keV ; 
   protonHighEnergy     = 2.*MeV ;
-  antiProtonLowEnergy  = 1.*keV ;
+  antiProtonLowEnergy  = 5.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
   minGammaEnergy       = 25.*keV;
   minElectronEnergy    = 25.*keV;
@@ -197,9 +198,6 @@ void G4hLowEnergyIonisation::SetElectronicStoppingPowerModel(
 void G4hLowEnergyIonisation::InitializeParametrisation() 
 
 {
-  G4Proton* theProton = G4Proton::Proton();
-  G4AntiProton* theAntiProton = G4AntiProton::AntiProton();
-
   // Define models for parametrisation of electronic energy losses
   theBetheBlochModel = new G4hBetheBlochModel("Bethe-Bloch") ;
   theProtonModel = new G4hParametrisedLossModel(theProtonTable) ;
@@ -208,22 +206,6 @@ void G4hLowEnergyIonisation::InitializeParametrisation()
   theIonEffChargeModel = new G4hIonEffChargeSquare("Ziegler1988") ;
   theIonChuFluctuationModel = new G4IonChuFluctuationModel("Chu") ;
   theIonYangFluctuationModel = new G4IonYangFluctuationModel("Yang") ;
-
-  // Energy limits for parametrisation of electronic energy losses
-  protonLowEnergy = G4std::max(protonLowEnergy,
-                               theProtonModel->LowEnergyLimit(theProton)) ;   
-
-  G4double x1 = theBetheBlochModel->LowEnergyLimit(theProton) ;   
-  G4double x2 = theProtonModel->HighEnergyLimit(theProton) ;   
-  if(protonHighEnergy < x1) protonHighEnergy = x1 ;
-  if(protonHighEnergy > x2) protonHighEnergy = x2 ;
-  
-  antiProtonLowEnergy = G4std::max(antiProtonLowEnergy,
-                      theAntiProtonModel->LowEnergyLimit(theAntiProton)) ;   
-
-  x2 = theAntiProtonModel->HighEnergyLimit(theAntiProton) ;   
-  if(antiProtonHighEnergy < x1) antiProtonHighEnergy = x1 ;
-  if(antiProtonHighEnergy > x2) antiProtonHighEnergy = x2 ;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -410,25 +392,15 @@ void G4hLowEnergyIonisation::BuildLossTable(
     // get material parameters needed for the energy loss calculation  
     const G4Material* material= (*theMaterialTable)[j];
 
-    // low energy of Bethe-Bloch formula for this material
-    G4double highE = G4std::max(highEnergy,theBetheBlochModel->
-                                LowEnergyLimit(&aParticleType,material)) ;
-
     if ( charge > 0.0 ) {
-      ionloss = ProtonParametrisedDEDX(material,highE) ;
+      ionloss = ProtonParametrisedDEDX(material,highEnergy) ;
     } else {
-      ionloss = AntiProtonParametrisedDEDX(material,highE) ;
+      ionloss = AntiProtonParametrisedDEDX(material,highEnergy) ;
     }
 
-    ionlossBB = theBetheBlochModel->TheValue(&aParticleType,material,highE) ;
-    ionlossBB -= DeltaRaysEnergy(material,highE,proton_mass_c2) ;
+    ionlossBB = theBetheBlochModel->TheValue(&aParticleType,material,highEnergy) ;
+    ionlossBB -= DeltaRaysEnergy(material,highEnergy,proton_mass_c2) ;
 
-    /*
-    if(theBarkas) {
-      ionlossBB += BarkasTerm(material,highE)*charge ;
-      ionlossBB += BlochTerm(material,highE,1.0) ;
-    }
-    */
     
     paramB =  ionloss/ionlossBB - 1.0 ; 
 
@@ -437,7 +409,7 @@ void G4hLowEnergyIonisation::BuildLossTable(
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
 
       // low energy part for this material, parametrised energy loss formulae
-      if ( lowEdgeEnergy < highE ) {
+      if ( lowEdgeEnergy < highEnergy ) {
 	 
         if ( charge > 0.0 ) {
           ionloss = ProtonParametrisedDEDX(material,lowEdgeEnergy) ;
@@ -453,12 +425,6 @@ void G4hLowEnergyIonisation::BuildLossTable(
 
         ionloss -= DeltaRaysEnergy(material,lowEdgeEnergy,proton_mass_c2) ;
 
-	/*
-        if(theBarkas) {
-          ionloss += BarkasTerm(material,lowEdgeEnergy)*charge ;
-          ionloss += BlochTerm(material,lowEdgeEnergy,1.0) ;
-        }
-	*/
 	ionloss *= (1.0 + paramB*highEnergy/lowEdgeEnergy) ;
       }      
 	  

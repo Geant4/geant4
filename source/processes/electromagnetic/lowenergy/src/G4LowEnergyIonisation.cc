@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.88 2002-07-30 18:14:36 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.89 2002-09-20 16:26:34 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -91,6 +91,7 @@
 // 03.06.02 MGP             Restore fStopAndKill
 // 19.06.02 VI              Additional printout
 // 30.07.02 VI              Fix in restricted energy loss
+// 20.09.02 VI              Remove ActivateFlurescence from SetCut...
 //
 // --------------------------------------------------------------
 
@@ -693,14 +694,12 @@ void G4LowEnergyIonisation::SetCutForLowEnSecPhotons(G4double cut)
 {
   cutForPhotons = cut;
   deexcitationManager.SetCutForSecondaryPhotons(cut);
-  ActivateFluorescence(true);
 }   
 
 void G4LowEnergyIonisation::SetCutForLowEnSecElectrons(G4double cut)
 {
   cutForElectrons = cut;
   deexcitationManager.SetCutForAugerElectrons(cut);
-  ActivateFluorescence(true);
 }
 
 void G4LowEnergyIonisation::ActivateAuger(G4bool val)

@@ -21,40 +21,46 @@ set NDVX 010206
 set NDVY 010205
 zone
 
-
-opt logy
-null -3 3 1.0 200.
+null -3 3 1.0 125.
 
 close 1
-hi/file 1 stop_p_pb_st.paw
+hi/file 1 ion_p_au_le.paw
 set dmod 1
-hi/pl 1 CS
-
-close 1
-hi/file 1 stop_p_pb_stn.paw
-set dmod 2
-hi/pl 1 CS
+hi/pl 11 CShist
+ 
+ close 1
+hi/file 1 ion_p_au_le2.paw
+set dmod 3
+hi/pl 11 CShist
+ 
+ close 1
+hi/file 1 ion_ap_au_le.paw
+set dmod 4
+hi/pl 11 CShist
 
  ve/del X Y Y1
- ve/create X(6) R -2 -1 0 1 2 3 
- ve/create Y2(6) R 48.71 121.1 62.92 17.78 3.551 1.185
- gr/h/symb X Y2 6 21 0.3
+ ve/create X(12) R -3 -2 -1 0 0.097 0.176 0.243 0.301 0.477 1 2 3 
+ ve/create Y2(12) R 14.76 46.66 108.9 62.91 56.98 52.39 48.68 45.58 36.92 17.98 3.627 1.201
+ gr/h/symb X Y2 12 21 0.25
 
 
 atitle 'log?10!(E?kin!(MeV))' 'dE/dx (MeV*cm**2/g)'
 
-itx -2 225 'Proton Ionisation Losses in Lead'
+itx -2 130  'Electronic Stopping Power in Gold'
 
-*set ltyp 1
-*line 1.0 50.0 1.5 50.0
-itx 0.5 70 'solid line - standard'
+set ltyp 1
+line 1.0 110.0 1.5 110.0
+itx 1.7 110 'p ICRU49'
+ 
+set ltyp 3
+line 1.0 95.0 1.5 95.0
+itx 1.7 95 'p Ziegler85'
+ 
+ set ltyp 4
+line 1.0 80.0 1.5 80.0
+itx 1.7 80 'pbar QOM'
 
-*set ltyp 2
-*line 1.0 50.0 1.5 50.0
-itx 0.5 50 'dashed line - new'
+exe hTest/prf dedx_au eps
 
-exe hTest/prf dedx_p_pb_n ps
-
-opt liny
 set dmod 1
 

@@ -408,14 +408,14 @@ int main(int argc,char** argv)
     G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
     IHistogram1D* hist[4];
-    ITuple* ntuple1 = 0;
+    //    ITuple* ntuple1 = 0;
 
     if(usepaw) {
 
       // ---- primary ntuple ------
       // If using Anaphe HBOOK implementation, there is a limitation on the length of the
       // variable names in a ntuple
-      ntuple1 = tpf->create( "100", "tuple", "float ekin, dedx" );
+      //      ntuple1 = tpf->create( "100", "tuple", "float ekin, dedx" );
 
 
       // Creating a histogram factory, whose histograms will be handled by the tree
@@ -479,6 +479,10 @@ int main(int argc,char** argv)
         if(!setNuclearOff) hionle->SetNuclearStoppingOn();
         if(setBarkasOff)   hionle->SetBarkasOff();
         if(!setBarkasOff)  hionle->SetBarkasOn();
+	hionle->SetElectronicStoppingPowerModel(proton,"ICRU_R49p");
+        //hionle->SetElectronicStoppingPowerModel(proton,"Ziegler77p");
+        //hionle->SetElectronicStoppingPowerModel(proton,"Ziegler1985p");
+	//hionle->SetHighEnergyForProtonParametrisation(2.0*MeV);
         hionle->SetVerboseLevel(verbose);
         hionle->BuildPhysicsTable(*proton);
         success = true;
@@ -617,6 +621,8 @@ int main(int argc,char** argv)
     G4ParticleMomentum gDir(initX,initY,initZ);
     G4double gEnergy = emax;
     G4DynamicParticle dParticle(part,gDir,gEnergy);
+    dParticle.SetMass(part->GetPDGMass());
+    dParticle.SetCharge(part->GetPDGCharge());
 
     // Track 
     G4ThreeVector aPosition(0.,0.,0.);
@@ -737,8 +743,9 @@ int main(int argc,char** argv)
             aChange = ionst->AlongStepDoIt(*gTrack,*step);
 	  }
         }
+        G4double dedx0 = G4EnergyLossTables::GetPreciseDEDX(part,e,material);
 
-        G4double delx = theStep;
+	//       G4double delx = theStep;
         G4double de = aChange->GetLocalEnergyDeposit();
         G4int n = aChange->GetNumberOfSecondaries();
 
@@ -755,9 +762,11 @@ int main(int argc,char** argv)
 	    }
 	  }
         }
-        G4double st = de/(delx*(material->GetDensity()));
+	//        G4double st = de/(delx*(material->GetDensity()));
+        G4double st = dedx0/(material->GetDensity());
         st *= gram/(cm*cm*MeV); 
-        G4double s = de*mm/(delx*MeV); 
+	//        G4double s = de*mm/(delx*MeV); 
+        G4double s = dedx0*mm/MeV; 
 
         if(verbose) {
           G4cout  << iter 
@@ -775,15 +784,18 @@ int main(int argc,char** argv)
           if(verbose>1) {
             G4cout << " de(MeV) = " << de/MeV 
                    << G4endl;
+	    /*
             G4cout << " n1= " << ntuple1->findColumn("ekin") 
                    << " n2= " << ntuple1->findColumn("dedx") 
                    << G4endl;
+	    */
 	  }
+	  /*
           ntuple1->fill( ntuple1->findColumn("ekin"), (float)le);
           ntuple1->fill( ntuple1->findColumn("dedx"), st10);
           ntuple1->addRow();
           // G4cout << "ntuple is filled " << G4endl; 
-
+	  */
           hist[0]->fill(le,st*xstatf);
           hist[1]->fill(le,s*xstatf);
           hist[2]->fill(le,x*xstatf/mm);
