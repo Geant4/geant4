@@ -2,8 +2,8 @@
 #
 #  Hasami.plx
 #
-$NextShot="bonsai.000";
-if (defined($ARGV[0])) {$NextShot="bonsai.$ARGV[0]"}
+$NextShot="bonsai000.sdb";
+if (defined($ARGV[0])) {$NextShot="bonsai$ARGV[0].sdb"}
 print "Prepare $NextShot to drive Geant4 System Tests\n";
 unlink("bonsai.sdb");
 #
