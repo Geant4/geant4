@@ -1,4 +1,4 @@
-$Id: History,v 1.177 2001-12-14 08:37:39 gcosmo Exp $
+$Id: History,v 1.178 2002-01-25 15:49:06 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25th January 2002 Gabriele Cosmo (config-V04-00-00)
+- sys/HP-aCC.gmk: removed include path to global/management/include/std/wrappers,
+  which was unused and not neccessary.
 
 10th December 2001 Gabriele Cosmo (config-V03-02-15)
 - architecture.gmk:
