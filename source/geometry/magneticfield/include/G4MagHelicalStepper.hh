@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagHelicalStepper.hh,v 1.5 2000-11-01 15:15:49 gcosmo Exp $
+// $Id: G4MagHelicalStepper.hh,v 1.6 2001-03-22 18:48:52 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -80,6 +80,7 @@ class G4MagHelicalStepper : public G4MagIntegratorStepper
     G4MagHelicalStepper& operator=(const G4MagHelicalStepper&);
       // Private copy constructor and assignment operator.
 
+    static const G4double fUnitConstant;   //  As in G4Mag_EqRhs.hh/cc where it is not used.
   private:
   
     G4ThreeVector yInitial, yMidPoint, yFinal;
