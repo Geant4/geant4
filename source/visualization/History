@@ -1,4 +1,4 @@
-$Id: History,v 1.122 2001-05-24 13:38:12 johna Exp $
+$Id: History,v 1.123 2001-05-24 13:40:20 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -27,6 +27,7 @@ History file for visualization category
 24th May 2001  John Allison  (vis-V03-01-03)
 - Added missing files G4ASCIITreeMessenger.hh/cc.
 - Bug fix in G4ASCIITreeMessenger.cc: currentAsDefault = true.
+- Drivers in alphabetical order in MyVisManager.cc.
 
 23rd May 2001  John Allison
 - Eliminated Linux pedantic warnings, except FukuiRenderer, VRML and OPACS.
