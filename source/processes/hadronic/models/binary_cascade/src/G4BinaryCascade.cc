@@ -1538,8 +1538,14 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
   {
      theCapturedList.insert(theCapturedList.end(),
                             kt_captured->begin(),kt_captured->end());
-     std::for_each(kt_captured->begin(),kt_captured->end(),
-              std::mem_fun(&G4KineticTrack::Hit));
+//should be      std::for_each(kt_captured->begin(),kt_captured->end(),
+//              std::mem_fun(&G4KineticTrack::Hit));
+// but VC 6 requires:
+     std::vector<G4KineticTrack *>::iterator i_captured;
+     for(i_captured=kt_captured->begin();i_captured!=kt_captured->end();i_captured++)
+     {
+        (*i_captured)->Hit();
+     }
      UpdateTracksAndCollisions(kt_captured, NULL, NULL);
   }
   
