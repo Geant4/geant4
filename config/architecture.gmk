@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.68 2000-11-03 16:49:48 gunter Exp $
+# $Id: architecture.gmk,v 1.69 2000-11-17 11:18:30 gunter Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -302,10 +302,10 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   LDFLAGS   := -link $(LIB_PATH)$(CLHEP_LIB_DIR)
   LOADLIBS  := $(CLHEP_LIB)
 else
-##  LDFLAGS   := -L$(CLHEP_LIB_DIR)
-  LDFLAGS   := 
-##  LOADLIBS  := -l$(CLHEP_LIB)
-  LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
+  LDFLAGS   := -L$(CLHEP_LIB_DIR)
+#  LDFLAGS   := 
+  LOADLIBS  := -l$(CLHEP_LIB)
+#  LOADLIBS  := $(CLHEP_LIB_DIR)/lib$(CLHEP_LIB).a
   LOADLIBS  += -lm
 endif
 
