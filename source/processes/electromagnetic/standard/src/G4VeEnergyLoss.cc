@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VeEnergyLoss.cc,v 1.4 2000-05-25 12:53:54 urban Exp $
+// $Id: G4VeEnergyLoss.cc,v 1.5 2000-06-13 16:49:57 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -105,8 +105,8 @@ G4VeEnergyLoss::~G4VeEnergyLoss()
      if (theLossTable) 
        {
          theLossTable->clearAndDestroy();
-         delete theLossTable;
-         if(MinDeltaEnergy) delete MinDeltaEnergy ;
+         delete theLossTable; theLossTable = NULL;
+///         if(MinDeltaEnergy) delete MinDeltaEnergy;
        }
 }
 

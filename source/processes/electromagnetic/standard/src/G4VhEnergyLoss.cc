@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VhEnergyLoss.cc,v 1.4 2000-05-25 12:53:55 urban Exp $
+// $Id: G4VhEnergyLoss.cc,v 1.5 2000-06-13 16:49:58 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -115,9 +115,9 @@ G4VhEnergyLoss::~G4VhEnergyLoss()
 {
      if(theLossTable) {
         theLossTable->clearAndDestroy();
-        delete theLossTable;
+        delete theLossTable; theLossTable = NULL;
      }
-     if(MinDeltaEnergy) delete MinDeltaEnergy ;
+///     if(MinDeltaEnergy) delete MinDeltaEnergy;
 }
  
 void G4VhEnergyLoss::BuildDEDXTable(
@@ -679,7 +679,7 @@ G4VParticleChange* G4VhEnergyLoss::AlongStepDoIt(
   {
     MeanLoss /= ChargeSquare ;
     finalT = E-GetLossWithFluct(aParticle,aMaterial,MeanLoss)*ChargeSquare ;
-    if (finalT < 0.) finalT = 0. ;
+    if (finalT < 0.) finalT = 0.  ;
   }
 
   //  kill the particle if the kinetic energy <= 0  
