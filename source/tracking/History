@@ -1,4 +1,4 @@
-$Id: History,v 1.80 2004-11-10 11:23:25 tsasaki Exp $
+$Id: History,v 1.81 2004-11-18 06:42:18 tsasaki Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov.18,2005 T.Sasaki(tracking-V06-02-06)
+- G4SteppingManager2.cc Fix on interactive on/of for AtRest processes
+Nov.16,2005 T.Sasaki(tracking-V06-02-05)
+- G4SteppingManager2.cc  change the track status to StopAndKill when a track looses all kinetic energy cumlatively while the AlongStep loop
 Nov.10,2004 T.Sasaki(tracking-V06-02-04)
 - G4SteppingVerbose forced to be singleton.
 - G4SteppingManager no more issue G4Excetpion even if no atRestDoit proccesses exit.
