@@ -462,7 +462,7 @@ default:             world
               [<zoom-factor>]
               [<dolly>] [<dolly-unit>]
 default: 0 0 0 0 cm 1 0 cm
-  /vis/viewer/viewpointThetaPhi $1 $2 deg
+  /vis/viewer/set/viewpointThetaPhi $1 $2 deg
   /vis/viewer/panTo $3 $4 $5
   /vis/viewer/zoomTo $6
   /vis/viewer/dollyTo $7 $8
