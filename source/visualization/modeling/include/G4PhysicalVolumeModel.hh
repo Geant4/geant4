@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.17 2004-09-13 18:04:55 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.18 2005-01-26 17:07:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -104,7 +104,8 @@ public: // With description
 
   void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
 				     G4VPhysicalVolume** ppCurrentPV,
-				     G4LogicalVolume**   ppCurrentLV);
+				     G4LogicalVolume**   ppCurrentLV,
+				     G4Material**        ppCurrentMaterial);
   // For use (optional) by the scene handler if it needs to know about
   // the current information maintained through these pointers.
 
@@ -121,7 +122,7 @@ protected:
 			   G4int requestedDepth,
 			   G4LogicalVolume*,
 			   G4VSolid*,
-			   const G4Material*,
+			   G4Material*,
 			   const G4Transform3D&,
 			   G4VGraphicsScene&);
 
@@ -149,6 +150,7 @@ protected:
   G4int              fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume* fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*   fpCurrentLV;    // Current logical volume.
+  G4Material*    fpCurrentMaterial;  // Current material.
   G4bool             fCurtailDescent;// Can be set to curtail descent.
 
   ////////////////////////////////////////////////////////////
@@ -157,6 +159,7 @@ protected:
   G4int*              fpCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume** fppCurrentPV;    // Current physical volume.
   G4LogicalVolume**   fppCurrentLV;    // Current logical volume.
+  G4Material**    fppCurrentMaterial;  // Current material.
 
 private:
 

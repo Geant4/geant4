@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeMassScene.hh,v 1.2 2004-12-10 18:19:40 gcosmo Exp $
+// $Id: G4PhysicalVolumeMassScene.hh,v 1.3 2005-01-26 17:07:07 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -66,6 +66,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4PhysicalVolumeModel;
+class G4Material;
 
 class G4PhysicalVolumeMassScene: public G4VGraphicsScene {
 
@@ -130,6 +131,7 @@ private:
   G4int                fCurrentDepth;  // Current depth of geom. hierarchy.
   G4VPhysicalVolume*   fpCurrentPV;    // Current physical volume.
   G4LogicalVolume*     fpCurrentLV;    // Current logical volume.
+  G4Material*      fpCurrentMaterial;  // Current material.
 };
 
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeSearchScene.cc,v 1.7 2003-05-30 13:01:32 johna Exp $
+// $Id: G4PhysicalVolumeSearchScene.cc,v 1.8 2005-01-26 17:07:37 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@ G4PhysicalVolumeSearchScene::G4PhysicalVolumeSearchScene
   fCurrentDepth                 (0),
   fpCurrentPV                   (0),
   fpCurrentLV                   (0),
+  fpCurrentMaterial             (0),
   fpCurrentObjectTransformation (0),
   fFoundDepth                   (0),
   fpFoundPV                     (0),
@@ -54,7 +55,8 @@ void G4PhysicalVolumeSearchScene::EstablishSpecials
 (G4PhysicalVolumeModel& pvModel) {
   pvModel.DefinePointersToWorkingSpace (&fCurrentDepth,
 					&fpCurrentPV,
-					&fpCurrentLV);
+					&fpCurrentLV,
+					&fpCurrentMaterial);
 }
 
 void G4PhysicalVolumeSearchScene::FindVolume (const G4VSolid&) {

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhysicalVolumeModel.cc,v 1.25 2004-09-22 19:50:32 johna Exp $
+// $Id: G4PhysicalVolumeModel.cc,v 1.26 2005-01-26 17:07:34 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,8 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fCurtailDescent (false),
   fpCurrentDepth  (0),
   fppCurrentPV    (0),
-  fppCurrentLV    (0)
+  fppCurrentLV    (0),
+  fppCurrentMaterial (0)
 {
   const int len = 8; char a [len];
   std::ostrstream o (a, len); o.seekp (std::ios::beg);
@@ -133,13 +134,14 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
     if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
     if (fppCurrentPV)   *fppCurrentPV   = fpCurrentPV;
     if (fppCurrentLV)   *fppCurrentLV   = fpCurrentLV;
-
+    if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
     sceneHandler.DecommissionSpecials (*this);
 
     // Clear pointers to working space.
     fpCurrentDepth = 0;
     fppCurrentPV   = 0;
     fppCurrentLV   = 0;
+    fppCurrentMaterial = 0;
   }
 }
 
@@ -162,10 +164,12 @@ G4String G4PhysicalVolumeModel::GetCurrentDescription () const {
 void G4PhysicalVolumeModel::DefinePointersToWorkingSpace
 (G4int*              pCurrentDepth,
  G4VPhysicalVolume** ppCurrentPV,
- G4LogicalVolume**   ppCurrentLV) {
+ G4LogicalVolume**   ppCurrentLV,
+ G4Material**        ppCurrentMaterial) {
   fpCurrentDepth = pCurrentDepth;
   fppCurrentPV   = ppCurrentPV;
   fppCurrentLV   = ppCurrentLV;
+  fppCurrentMaterial = ppCurrentMaterial;
 }
 
 void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
@@ -289,7 +293,7 @@ void G4PhysicalVolumeModel::DescribeAndDescend
  G4int requestedDepth,
  G4LogicalVolume* pLV,
  G4VSolid* pSol,
- const G4Material* pMaterial,
+ G4Material* pMaterial,
  const G4Transform3D& theAT,
  G4VGraphicsScene& sceneHandler) {
 
@@ -298,8 +302,10 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (fpCurrentDepth) *fpCurrentDepth = fCurrentDepth;
   fpCurrentPV = pVPV;
   fpCurrentLV = pLV;
+  fpCurrentMaterial = pMaterial;
   if (fppCurrentPV) *fppCurrentPV = fpCurrentPV;
   if (fppCurrentLV) *fppCurrentLV = fpCurrentLV;
+  if (fppCurrentMaterial) *fppCurrentMaterial = fpCurrentMaterial;
 
   const G4RotationMatrix objectRotation = pVPV -> GetObjectRotationValue ();
   const G4ThreeVector&  translation     = pVPV -> GetTranslation ();
