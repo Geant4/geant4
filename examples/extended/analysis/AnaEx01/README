@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2000-10-31 13:14:51 barrand Exp $
+$Id: README,v 1.3 2000-10-31 13:34:07 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -11,4 +11,41 @@ $Id: README,v 1.2 2000-10-31 13:14:51 barrand Exp $
   This example shows the usage of histogramming with the
  analysis category. 	
  	  
-   	
+  To use the G4AnalysisManager the source/analysis category
+ must have been reconstructed with one of the environment
+ variable setted :
+    G4ANALYSIS_BUILD_OPEN_SCIENTIST
+    G4ANALYSIS_BUILD_JAS
+
+  To use an analysis system with this example, the coresponding
+ environment variable must be setted :
+    G4ANALYSIS_USE_OPEN_SCIENTIST
+    G4ANALYSIS_USE_JAS
+
+  Then to cosntruct this example :
+    csh> setenv G4ANALYSIS_USE_OPEN_SCIENTIST 1
+    csh> setenv G4ANALYSIS_USE_JAS 1
+    csh> gmake
+ 
+  To use it, select one analysis system with the environment
+ variable :
+    G4ANALYSIS_SYSTEM OpenScientist
+
+  For example :
+    csh> setenv G4ANALYSIS_SYSTEM OpenScientist
+  or :
+    csh> setenv G4ANALYSIS_SYSTEM jas
+ Today, only one system could be used at a time.
+
+ Working with OpenScientist :
+ --------------------------
+  If working with OpenScientist run the program
+ from the analysis/OpenScientist directory :
+   csh> cd analyis/OpenScientist
+   csh> $G4WORKDIR/bin/$G4SYSTEM/AnaEx01
+  It must produce a g4osc.root file that contains
+ some histograms. You can visualize them with :
+   csh> source <path>/Lab/<version>/cmt/setup.csh
+   csh> oxm
+ and click in File/session to execute the session.tcl 
+ file.
