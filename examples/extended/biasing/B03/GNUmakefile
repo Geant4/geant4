@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.5 2002-11-13 08:59:21 mdressel Exp $
+# $Id: GNUmakefile,v 1.6 2002-11-13 09:27:41 mdressel Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -16,7 +16,6 @@ endif
 all: lib _B03App.so bin
 include $(G4INSTALL)/config/architecture.gmk
 
-ANAPHE_BASE := /opt/Anaphe/5.0.1/specific/redhat72/gcc-2.95.2
 
 CPPFLAGS += -I$(ANAPHE_BASE)/PublicDomainPackages/2.0.0/include/python2.2/
 
