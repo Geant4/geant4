@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenInventorWinViewer.cc,v 1.5 2004-11-09 07:36:13 gbarrand Exp $
+// $Id: G4OpenInventorWinViewer.cc,v 1.6 2004-11-09 09:28:18 gbarrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*
@@ -45,6 +45,8 @@
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4VInteractorManager.hh"
 
+#include "HEPVis/actions/SoGL2PSAction.h"
+
 #include <windowsx.h>
 
 // To have sizeChanged public :
@@ -58,7 +60,8 @@ public:
 };
 
 #define SIZE 400
-#define ID_ESCAPE 314
+#define ID_POSTSCRIPT 1
+#define ID_ESCAPE 2
 
 //static void SecondaryLoopPostAction ();
 
@@ -177,6 +180,7 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     HMENU menuBar = CreateMenu();
     HMENU casc = CreatePopupMenu();
     ::AppendMenu(menuBar,MF_POPUP,(UINT)casc,"File");
+    ::AppendMenu(casc,MF_STRING,ID_POSTSCRIPT,"PostScript");
     ::AppendMenu(casc,MF_STRING,ID_ESCAPE,"Escape");
 
     fShell = ::CreateWindow(className, shellName.c_str(), 
@@ -204,6 +208,12 @@ G4OpenInventorWinViewer::G4OpenInventorWinViewer
     if(str!=0) wName = str;
   }
   fViewer = new Geant4_SoWinExaminerViewer(parent,wName.c_str(),TRUE);
+
+  // Have a GL2PS render action :
+  const SbViewportRegion& vpRegion = fViewer->getViewportRegion();
+  SoGL2PSAction* action = new SoGL2PSAction(vpRegion);
+  fViewer->setGLRenderAction(action);
+
   fViewer->setSize(SbVec2s(SIZE,SIZE));
   fViewer->setSceneGraph(fSelection);
   fViewer->viewAll();
@@ -243,6 +253,16 @@ void G4OpenInventorWinViewer::DrawView () {
 void G4OpenInventorWinViewer::ShowView () {
   fInteractorManager -> SecondaryLoop ();
 }
+
+void G4OpenInventorWinViewer::WritePostScript(const G4String& aFile) {
+  if(!fViewer) return;
+  SoGL2PSAction* action = (SoGL2PSAction*)fViewer->getGLRenderAction();
+  action->setFileName(aFile.c_str());
+  action->enableFileWriting();
+  fViewer->render();
+  action->disableFileWriting();
+  //fViewer->render();
+}
 //////////////////////////////////////////////////////////////////////////////
 LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc ( 
  HWND   aWindow
@@ -278,12 +298,15 @@ LRESULT CALLBACK G4OpenInventorWinViewer::WindowProc (
     //::PostQuitMessage(0);
   }return 0;
   case WM_COMMAND:{
-    if(aWParam==ID_ESCAPE) {
-      G4OpenInventorWinViewer* This = 
-        (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
-      if(This) {
-        //printf("debug : escape...\n");
+    G4OpenInventorWinViewer* This = 
+      (G4OpenInventorWinViewer*)::GetWindowLong(aWindow,GWL_USERDATA);
+    if(This) {
+      if(aWParam==ID_ESCAPE) {
+        printf("debug : escape...\n");
         This->fInteractorManager->RequireExitSecondaryLoop(OIV_EXIT_CODE);
+      } else if(aWParam==ID_POSTSCRIPT) {
+        printf("debug : PS...\n");
+        This->WritePostScript();
       }
     }
   }return 0;
