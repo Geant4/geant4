@@ -25,6 +25,7 @@ G4RTMessenger::G4RTMessenger(G4RayTracer* p1,G4RTSteppingAction* p2)
   fileCmd->SetGuidance("Define the name of output JPEG file.");
   fileCmd->SetParameterName("fileName",true);
   fileCmd->SetDefaultValue("g4RayTracer.jpeg");
+  fileCmd->AvailableForStates(Idle);
 
   columnCmd = new G4UIcmdWithAnInteger("/vis/rayTracer/column",this);
   columnCmd->SetGuidance("Define the number of horizontal pixels.");
