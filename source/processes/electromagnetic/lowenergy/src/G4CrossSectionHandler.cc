@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.1 2001-08-20 16:37:37 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.2 2001-08-23 19:55:12 stesting Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -60,7 +60,7 @@ G4CrossSectionHandler::G4CrossSectionHandler(const G4VDataSetAlgorithm* algorith
 G4CrossSectionHandler::~G4CrossSectionHandler()
 {
   delete interpolation;
-  G4std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
@@ -76,7 +76,7 @@ G4CrossSectionHandler::~G4CrossSectionHandler()
 
 void G4CrossSectionHandler::PrintData() const
 {
-  G4std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
@@ -240,7 +240,7 @@ void G4CrossSectionHandler::LoadShellData(const G4String& fileName)
 void G4CrossSectionHandler::Clear()
 {
   // Reset the map of data sets: remove the data sets from the map 
-  G4std::map<G4int,G4VEMDataSet*,std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
   for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
     {
@@ -266,7 +266,7 @@ G4double G4CrossSectionHandler::FindValue(G4int Z, G4double e) const
 {
   G4double value = 0.;
   
-  G4std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   if (pos!= dataMap.end())
     {
@@ -501,7 +501,7 @@ G4int G4CrossSectionHandler::SelectRandomShell(G4int Z, G4double e) const
   G4double partialSum = 0.;
 
   G4VEMDataSet* dataSet = 0;
-  G4std::map<G4int,G4VEMDataSet*,std::less<G4int> >::const_iterator pos;
+  G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::const_iterator pos;
   pos = dataMap.find(Z);
   if (pos != dataMap.end()) dataSet = pos->second;
 
