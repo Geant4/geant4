@@ -32,7 +32,7 @@ set NDVY 010205
  
 ve/create X(4) R 24 35 46 88 
 ve/create Y(4) R 0.00256 0.00351 0.00415 0.0051  
-ve/create Z1(4) R 0 0 0 0 0 
+ve/create Z1(4) R 0  0 0 0 
 ve/create Z(4) R 0.00016 0.00016 0.00016 0.0009
 gr/h/error X Y Z1 Z 4 21 0.2 
  
