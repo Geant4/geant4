@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.4 2003-08-15 15:34:33 dressel Exp $
+// $Id: test33.cc,v 1.5 2003-08-22 13:14:49 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,9 +45,9 @@
 #include "geomdefs.hh"
 
 
-const G4double kCarTolerance = 1E-9*mm;
-const G4double kRadTolerance = 1E-9*mm;
-const G4double kAngTolerance = 1E-9*rad;
+// const G4double kCarTolerance = 1E-9*mm;
+// const G4double kRadTolerance = 1E-9*mm;
+// const G4double kAngTolerance = 1E-9*rad;
 
 
 int main(int argc, char **argv)
