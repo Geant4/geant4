@@ -1,0 +1,70 @@
+#
+# ------ MacOS-X ------      !!! not supported !!!
+#                          MacOS 10.1 GNU-gcc 2.92.2
+#
+# Helmut Burkhardt - CERN
+#
+ifeq ($(G4SYSTEM),Darwin-g++)
+  CXX       := g++
+  GNU_GCC = 1
+  CXXFLAGS  := -Wall -ansi -pedantic -pipe -fno-for-scope -DGNU_GCC
+  ifdef G4OPTIMISE
+    CXXFLAGS  += -O
+    FCFLAGS   := -O
+    CCFLAGS   := -O
+  else
+    ifdef G4DEBUG
+      CXXFLAGS  += -g
+      FCFLAGS   := -g
+      CCFLAGS   := -g
+    endif
+  endif
+  ifdef G4PROFILE
+    CXXFLAGS  += -pg
+    FCFLAGS   += -pg
+    CCFLAGS   += -pg
+  endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
+  endif
+  G4RUNPATHOPTION := -Wl,-rpath 
+  FC := g77
+  FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
+  FCLIBS := -lg2c -lnsl
+  ECHO    := /bin/echo -e
+  SHEXT   := so
+  X11FLAGS  := -I/usr/include/X11/extensions -I/usr/include/X11
+  X11LIBS   := -L/usr/X11R6/lib  -lXmu -lXt -lXext -lX11 -lSM -lICE
+  XMFLAGS   := -I/usr/X11R6/include
+  XMLIBS    := -lXm -lXpm
+  DLDLIBS   := -ldl
+  ifndef OGLHOME
+    OGLHOME  := /usr/X11R6
+  endif
+  ifndef OGLFLAGS
+    OGLFLAGS  := -I$(OGLHOME)/include 
+  endif
+  ifndef OGLLIBS
+    OGLLIBS   := -L$(OGLHOME)/lib -lGLU -lGL
+  endif
+  OIVFLAGS  += -I$(OIHOME)/include 
+  G4USE_STD_NAMESPACE := yes
+  CPPFLAGS += -DG4USE_STD_NAMESPACE
+  ifdef G4ODBMS
+    G4DDLX_FLAGS += -DG4std=""
+  endif
+  define build-granular-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMPDIR); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) *.o
+  endef
+  define build-global-shared-lib
+    @libdir=`(cd $(@D);/bin/pwd)`; \
+     cd $(G4TMP)/$(G4SYSTEM); \
+     $(CXX) -Wl,-soname,$(@F) -shared -o $$libdir/$(@F) \
+                    $(foreach dir,$(SUBLIBS),$(dir)/*.o);
+  endef
+
+endif
