@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: SteppingAction.cc,v 1.3 2003-11-27 18:20:18 vnivanch Exp $
+// $Id: SteppingAction.cc,v 1.4 2004-01-15 14:51:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,29 +51,29 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4Track* track = aStep->GetTrack();
-  G4VPhysicalVolume* volume = track->GetVolume();
+  G4VPhysicalVolume* volume = aStep->GetPreStepPoint()->GetPhysicalVolume();
   if (volume == detector->GetphysiWorld()) return;
-  
+
   G4int absorNo = volume->GetCopyNo();
-  
+
   // collect energy and track length step by step
   G4double edep = aStep->GetTotalEnergyDeposit();
-  
+
   G4double stepl = 0.;
   if (track->GetDefinition()->GetPDGCharge() != 0.)
     stepl = aStep->GetStepLength();
-    
+
   // sum up per event
   eventAct->SumEnergy(absorNo,edep,stepl);
-  
+
   // energy leaving each volume
   if (track->GetNextVolume() != volume) {
     G4double EnLeaving = track->GetKineticEnergy();
     if (track->GetDefinition() == G4Positron::Positron())
        EnLeaving += 2*electron_mass_c2;
     eventAct->SumEnLeaving(absorNo,EnLeaving);
-  }       
-    
+  }
+
 ////  example of Birk attenuation
 ////  G4double destep   = aStep->GetTotalEnergyDeposit();
 ////  G4double response = BirkAttenuation(aStep);

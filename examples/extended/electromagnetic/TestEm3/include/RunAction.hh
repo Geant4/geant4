@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.hh,v 1.2 2003-11-03 16:42:50 maire Exp $
+// $Id: RunAction.hh,v 1.3 2004-01-15 14:47:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -82,7 +82,7 @@ class RunAction : public G4UserRunAction
     
 #ifdef G4ANALYSIS_USE    
     AIDA::ITree* tree;
-    AIDA::IHistogramFactory* hf;    
+    AIDA::IHistogramFactory* hf;
     AIDA::IHistogram1D* histo[MaxAbsor];
     G4double histoUnit[MaxAbsor];    
 #endif      

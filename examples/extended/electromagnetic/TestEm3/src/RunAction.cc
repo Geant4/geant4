@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2004-01-15 10:37:25 vnivanch Exp $
+// $Id: RunAction.cc,v 1.4 2004-01-15 14:47:52 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,7 +42,8 @@
 #include <iomanip>
 
 #ifdef G4ANALYSIS_USE
- #include "AIDA/AIDA.h"
+#include <memory> // for the auto_ptr(T>
+#include "AIDA/AIDA.h"
 #endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,24 +54,22 @@ RunAction::RunAction(DetectorConstruction* det)
   runMessenger = new RunActionMessenger(this);
 
 #ifdef G4ANALYSIS_USE
-   // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
+  // Creating the analysis factory
+  std::auto_ptr<AIDA::IAnalysisFactory> af(AIDA_createAnalysisFactory());
 
- // Creating the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
+  // Creating the tree factory
+  std::auto_ptr<AIDA::ITreeFactory> tf(af->createTreeFactory());
 
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = false;
- tree = tf->create("testem3.paw", "hbook", readOnly, createNew);
+  // Creating a tree mapped to an hbook file.
+  G4bool readOnly  = false;
+  G4bool createNew = true;
+  tree = tf->create("testem3.paw", "hbook", readOnly, createNew);
+  // Creating a histogram factory, whose histograms will be handled by the tree
+  //std::auto_ptr<AIDA::IHistogramFactory>
+  hf = af->createHistogramFactory(*tree);
 
- // Creating a histogram factory, whose histograms will be handled by the tree
- hf   = af->createHistogramFactory(*tree);
+  for (G4int k=0; k<MaxAbsor; k++) {histo[k] = 0; histoUnit[k] = 1.;}
 
- for (G4int k=0; k<MaxAbsor; k++) {histo[k] = 0; histoUnit[k] = 1.;}
-
- delete tf;
- delete af;
 #endif
 }
 
@@ -86,7 +85,7 @@ RunAction::~RunAction()
 void RunAction::SetHisto(G4int k,
                G4int nbins, G4double valmin, G4double valmax, G4String unit)
 {
-  const G4String id[] = {"0","1","2","3","4","5","6","7","8","9","10"};
+  const G4String id[11] = {"0","1","2","3","4","5","6","7","8","9","10"};
   G4String title = "Edep in absorber " + id[k] + " (" + unit + ")";
   G4double valunit = G4UnitDefinition::GetValueOf(unit);
   valmin /= valunit; valmax /= valunit;
@@ -132,7 +131,7 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs,
                                          G4double Eleav)
-{      
+{
   //accumulate statistic
   //
   sumEAbs[kAbs]  += EAbs;  sum2EAbs[kAbs]  += EAbs*EAbs;
@@ -186,7 +185,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
      << std::setw(12) << G4BestUnit(MeanLAbs,"Length") << " +- "
      << std::setw( 5) << G4BestUnit( rmsLAbs,"Length")
      << std::setw(22) << G4BestUnit(MeanEleav,"Energy") << " +- "
-     << std::setw( 5) << G4BestUnit( rmsEleav,"Energy")     
+     << std::setw( 5) << G4BestUnit( rmsEleav,"Energy")
      << G4endl;
     }
 
@@ -202,9 +201,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   tree->commit();       // Writing the histograms to the file
   tree->close();        // and closing the tree (and the file)
   G4cout << "Histograms are saved" << G4endl;
-
   delete hf;
-  delete tree;
 #endif
 }
 

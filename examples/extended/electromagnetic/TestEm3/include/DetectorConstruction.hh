@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorConstruction.hh,v 1.2 2004-01-15 10:37:25 vnivanch Exp $
+// $Id: DetectorConstruction.hh,v 1.3 2004-01-15 14:47:51 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -43,53 +43,53 @@ class G4UserLimits;
 
 class DetectorMessenger;
 
-     const G4int MaxAbsor = 10;
+static const G4int MaxAbsor = 10;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
   public:
-  
+
     DetectorConstruction();
    ~DetectorConstruction();
 
   public:
-  
-     void SetNbOfAbsor     (G4int);      
-     void SetAbsorMaterial (G4int,G4String);     
+
+     void SetNbOfAbsor     (G4int);
+     void SetAbsorMaterial (G4int,G4String);
      void SetAbsorThickness(G4int,G4double);
-          
-     void SetWorldMaterial (G4String);          
-     void SetCalorSizeYZ   (G4double);          
-     void SetNbOfLayers    (G4int);   
-      
+
+     void SetWorldMaterial (G4String);
+     void SetCalorSizeYZ   (G4double);
+     void SetNbOfLayers    (G4int);
+
      void SetMagField   (G4double);
      void SetMaxStepSize(G4double);
-     
+
      G4VPhysicalVolume* Construct();
 
      void UpdateGeometry();
-     
+
   public:
-  
-     void PrintCalorParameters(); 
 
-     G4double GetWorldSizeX()           {return WorldSizeX;}; 
+     void PrintCalorParameters();
+
+     G4double GetWorldSizeX()           {return WorldSizeX;};
      G4double GetWorldSizeYZ()          {return WorldSizeYZ;};
-     
-     G4double GetCalorThickness()       {return CalorThickness;}; 
-     G4double GetCalorSizeYZ()          {return CalorSizeYZ;};
-      
-     G4int GetNbOfLayers()              {return NbOfLayers;}; 
 
-     G4int       GetNbOfAbsor()             {return NbOfAbsor;}; 
+     G4double GetCalorThickness()       {return CalorThickness;};
+     G4double GetCalorSizeYZ()          {return CalorSizeYZ;};
+
+     G4int GetNbOfLayers()              {return NbOfLayers;};
+
+     G4int       GetNbOfAbsor()             {return NbOfAbsor;};
      G4Material* GetAbsorMaterial(G4int i)  {return AbsorMaterial[i];};
-     G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};      
-     
+     G4double    GetAbsorThickness(G4int i) {return AbsorThickness[i];};
+
      const G4VPhysicalVolume* GetphysiWorld()        {return physiWorld;};
      const G4VPhysicalVolume* GetAbsorber(G4int i)   {return physiAbsor[i];};
-                 
+
   private:
      
      G4int              NbOfAbsor;     
