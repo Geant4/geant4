@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.hh,v 1.8 2001-07-11 10:08:37 gunter Exp $
+// $Id: G4StepPoint.hh,v 1.9 2001-10-22 04:19:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@
 class G4VProcess;
 #include "G4SteppingControl.hh"
 #include "G4StepStatus.hh"           // Include from 'track'
-#include "G4VTouchable.hh"           // Include from 'geometry'
+#include "G4TouchableHandle.hh"      // Include from 'geometry'
 #include "G4Material.hh"
 #include "G4LogicalVolume.hh"
 
@@ -124,7 +124,8 @@ class G4StepPoint
   G4VPhysicalVolume* GetPhysicalVolume() const;
 
   const G4VTouchable* GetTouchable() const;
-  void  SetTouchable(const G4VTouchable* apValue);
+  const G4TouchableHandle& GetTouchableHandle() const;
+  void  SetTouchableHandle(const G4TouchableHandle& apValue);
 
   G4Material* GetMaterial() const;
   void SetMaterial(G4Material*);
@@ -176,7 +177,9 @@ class G4StepPoint
    G4ThreeVector fMomentumDirection;
    G4double fKineticEnergy;
    G4double fVelocity; 
-   const G4VTouchable* fpTouchable;
+      //  Momentum,energy and velocity
+   G4TouchableHandle fpTouchable;
+      //  Touchable Handle  
    G4Material* fpMaterial;
       // Material of the volmue
    G4double fSafety;

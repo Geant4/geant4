@@ -21,22 +21,23 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.icc,v 1.6 2001-07-11 10:08:36 gunter Exp $
+// $Id: G4ParticleChangeForTransport.icc,v 1.7 2001-10-22 04:19:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
-
 inline 
- void G4ParticleChangeForTransport::SetTouchableChange(const G4VTouchable* fTouchable)
+ void G4ParticleChangeForTransport::SetTouchableHandle(const G4TouchableHandle& 
+fTouchable)
 {
-  theTouchableChange =   fTouchable;
+  theTouchableHandle =   fTouchable;
 }
 
 inline 
- const G4VTouchable* G4ParticleChangeForTransport::GetTouchableChange() const
+ const G4TouchableHandle& G4ParticleChangeForTransport::GetTouchableHandle() const
 {
-  return theTouchableChange;
+  return theTouchableHandle;
 }
+
 
 inline 
  void G4ParticleChangeForTransport::SetMaterialChange(G4Material* fMaterial)

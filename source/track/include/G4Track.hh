@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.11 2001-07-11 10:08:37 gunter Exp $
+// $Id: G4Track.hh,v 1.12 2001-10-22 04:19:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -35,14 +35,10 @@
 //     1) current position/time of the particle,
 //     2) static particle information,
 //     3) the pointer to the physical volume where currently
-//        the particle exists,
-//
-// Contact:
-//   Questions and comments to this code should be sent to
-//     Katsuya Amako  (e-mail: Katsuya.Amako@kek.jp)
-//     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
+//        the particle exists
 //
 //---------------------------------------------------------------
+//   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
 
 #ifndef G4Track_h
 #define G4Track_h 1
@@ -54,7 +50,7 @@
 #include "G4Allocator.hh"             // Include from 'particle+matter'
 #include "G4DynamicParticle.hh"       // Include from 'particle+matter'
 #include "G4TrackStatus.hh"           // Include from 'tracking'
-#include "G4VTouchable.hh"            // Include from 'geometry'
+#include "G4TouchableHandle.hh"       // Include from 'geometry'
 #include "G4VUserTrackInformation.hh"
 
 #include "G4Material.hh"
@@ -134,11 +130,13 @@ public: // With description
    G4Material* GetMaterial() const;
    G4Material* GetNextMaterial() const;
 
-   const G4VTouchable* GetTouchable() const;
-   void SetTouchable(const G4VTouchable* apValue);
+   const G4VTouchable*      GetTouchable() const;
+   const G4TouchableHandle& GetTouchableHandle() const;
+   void SetTouchableHandle( const G4TouchableHandle& apValue);
 
-   const G4VTouchable* GetNextTouchable() const;
-   void SetNextTouchable(const G4VTouchable* apValue);
+   const G4VTouchable*      GetNextTouchable() const;
+   const G4TouchableHandle& GetNextTouchableHandle() const;
+   void SetNextTouchableHandle( const G4TouchableHandle& apValue);
 
   // energy
    G4double GetKineticEnergy() const;
@@ -236,8 +234,9 @@ public: // With description
    G4int fParentID;
    G4int fTrackID;
 
-   const G4VTouchable* fpTouchable;
-   const G4VTouchable* fpNextTouchable;
+   G4TouchableHandle fpTouchable;
+   G4TouchableHandle fpNextTouchable;
+  // Touchable Handle
 
    G4DynamicParticle* fpDynamicParticle;
    G4TrackStatus fTrackStatus;

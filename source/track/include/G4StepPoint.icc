@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StepPoint.icc,v 1.4 2001-07-11 10:08:37 gunter Exp $
+// $Id: G4StepPoint.icc,v 1.5 2001-10-22 04:19:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -116,8 +116,10 @@
    { return fpTouchable->GetVolume(); }
 
    inline const G4VTouchable* G4StepPoint::GetTouchable() const
+   { return fpTouchable(); }
+   inline const G4TouchableHandle& G4StepPoint::GetTouchableHandle() const 
    { return fpTouchable; }
-   inline void G4StepPoint::SetTouchable(const G4VTouchable* apValue)
+   inline void G4StepPoint::SetTouchableHandle(const G4TouchableHandle& apValue) 
    { fpTouchable = apValue; }
 
    inline G4double G4StepPoint::GetSafety() const

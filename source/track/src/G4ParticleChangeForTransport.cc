@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.cc,v 1.10 2001-08-16 08:17:59 kurasige Exp $
+// $Id: G4ParticleChangeForTransport.cc,v 1.11 2001-10-22 04:19:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,7 +36,7 @@
 // --------------------------------------------------------------
 
 #include "G4ParticleChangeForTransport.hh"
-#include "G4VTouchable.hh"
+#include "G4TouchableHandle.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
 #include "G4TrackFastVector.hh"
@@ -62,7 +62,7 @@ G4ParticleChangeForTransport::G4ParticleChangeForTransport(const G4ParticleChang
   if (verboseLevel>0) {
     G4cout << "G4ParticleChangeForTransport::  copy constructor is called " << G4endl;
   }
-  theTouchableChange = right.theTouchableChange;
+  theTouchableHandle = right.theTouchableHandle;
 }
 
 // assignemnt operator
@@ -77,7 +77,7 @@ G4ParticleChangeForTransport & G4ParticleChangeForTransport::operator=(const G4P
       theSizeOftheListOfSecondaries = right.theSizeOftheListOfSecondaries;
       theNumberOfSecondaries = right.theNumberOfSecondaries;
       theStatusChange = right.theStatusChange;
-      theTouchableChange = right.theTouchableChange;
+      theTouchableHandle = right.theTouchableHandle;
       theMaterialChange = right.theMaterialChange;
       theMomentumDirectionChange = right.theMomentumDirectionChange;
       thePolarizationChange = right.thePolarizationChange;
@@ -192,7 +192,7 @@ G4Step* G4ParticleChangeForTransport::UpdateStepForPostStep(G4Step* pStep)
 
   // update next touchable 
   // (touchable can be changed only at PostStepDoIt) 
-  pPostStepPoint->SetTouchable( theTouchableChange );
+  pPostStepPoint->SetTouchableHandle( theTouchableHandle );
 
   pPostStepPoint->SetMaterial( theMaterialChange );
 
@@ -218,9 +218,13 @@ void G4ParticleChangeForTransport::DumpInfo() const
 
   G4cout.precision(3);
   G4cout << "        Touchable (pointer) : " 
-       << G4std::setw(20) << theTouchableChange
+       << G4std::setw(20) << theTouchableHandle()
        << G4endl; 
 }
+
+
+
+
 
 
 

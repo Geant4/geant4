@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleChangeForTransport.hh,v 1.7 2001-07-11 10:08:36 gunter Exp $
+// $Id: G4ParticleChangeForTransport.hh,v 1.8 2001-10-22 04:19:39 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,7 +32,8 @@
 // ------------------------------------------------------------
 //   Implemented for the new scheme                 10 May. 1998  H.Kurahige
 //   Added theMaterialChange                        16 FEb. 2000  H.Kurahige
-//   Remove thePolarizationChange		    12 Feb. 2001 H.Kurashige
+//   Remove thePolarizationChange		    12 Feb. 2001  H.Kurashige
+//   Modification for G4TouchableHandle             22 Oct. 2001  R.Chytracek
 //
 // Class Description
 //  This class is a concrete class for ParticleChange for transportation
@@ -42,7 +43,7 @@
 
 #include "globals.hh"
 #include "G4ios.hh"
-class G4VTouchable;
+#include "G4TouchableHandle.hh"
 #include "G4ParticleChange.hh"
 
 class G4ParticleChangeForTransport: public G4ParticleChange
@@ -80,8 +81,8 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     //   "Change", what it stores (and returns in get) are the "FINAL" 
     //   values of the Position, Momentum, etc.
 
-    const G4VTouchable* GetTouchableChange() const;
-    void  SetTouchableChange(const G4VTouchable* fTouchable);
+    const G4TouchableHandle& GetTouchableHandle() const;
+    void  SetTouchableHandle(const G4TouchableHandle& fTouchable);
     //  Get/Set the touchable of the current particle.
     //  Note: Touchable in PostStepPoint will be updated only after PostStepDoIt
 
@@ -96,7 +97,7 @@ class G4ParticleChangeForTransport: public G4ParticleChange
     virtual void DumpInfo() const;
 
   protected:
-    const G4VTouchable* theTouchableChange;
+    G4TouchableHandle theTouchableHandle;
     //  The changed touchable of a given particle.
 
   private:

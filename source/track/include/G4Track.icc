@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.icc,v 1.7 2001-07-11 10:08:37 gunter Exp $
+// $Id: G4Track.icc,v 1.8 2001-10-22 04:19:40 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //-----------------------------------------------------------------
@@ -117,17 +117,36 @@
 
 
 // touchable
-   inline const G4VTouchable* G4Track::GetTouchable() const
-   { return fpTouchable; }
+   inline const G4VTouchable* G4Track::GetTouchable() const 
+   {
+     return fpTouchable();
+   }
 
-   inline void G4Track::SetTouchable(const G4VTouchable* apValue)
-   { fpTouchable = apValue; }
+   inline const G4TouchableHandle& G4Track::GetTouchableHandle() const 
+   {
+     return fpTouchable;
+   }
 
-   inline const  G4VTouchable* G4Track::GetNextTouchable() const
-   { return fpNextTouchable; }
+   inline void G4Track::SetTouchableHandle( const G4TouchableHandle& apValue) 
+   {
+     fpTouchable = apValue;
+   }
 
-   inline void G4Track::SetNextTouchable(const G4VTouchable* apValue)
-   { fpNextTouchable = apValue; }
+   inline const  G4VTouchable* G4Track::GetNextTouchable() const 
+   {
+     return fpNextTouchable();
+   }
+
+   inline const  G4TouchableHandle& G4Track::GetNextTouchableHandle() const 
+   {
+     return fpNextTouchable;
+   }
+
+   inline void G4Track::SetNextTouchableHandle( const G4TouchableHandle& apValue)
+   {
+     fpNextTouchable = apValue;
+   }
+
 
 // kinetic energy
    inline G4double G4Track::GetKineticEnergy() const
