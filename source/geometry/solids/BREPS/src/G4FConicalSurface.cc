@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.4 1999-01-19 13:16:53 broglia Exp $
+// $Id: G4FConicalSurface.cc,v 1.5 1999-01-20 07:34:48 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -342,20 +342,11 @@ int G4FConicalSurface::Intersect(const G4Ray& ry )
   // the hit point must be into the bounding box of the conical surface
   G4Point3D p0 = x + s[0]*dhat;
   G4Point3D p1 = x + s[1]*dhat;
-
-  // replace by BBox.Inside(p0), to be created
-
-  G4Point3D boxmin = GetBBox()->GetBoxMin();
-  G4Point3D boxmax = GetBBox()->GetBoxMax();
-
-  if(  ( p0.x()<boxmin.x() || p0.x()>boxmax.x() ) ||
-       ( p0.y()<boxmin.y() || p0.y()>boxmax.y() ) ||
-       ( p0.z()<boxmin.z() || p0.z()>boxmax.z() )    )
+  
+  if( !GetBBox()->Inside(p0) )
     s[0] = kInfinity;
 
-  if(  ( p1.x()<boxmin.x() || p1.x()>boxmax.x() ) ||
-       ( p1.y()<boxmin.y() || p1.y()>boxmax.y() ) ||
-       ( p1.z()<boxmin.z() || p1.z()>boxmax.z() )    )
+  if( !GetBBox()->Inside(p1) )
     s[1] = kInfinity;
  
   //  now loop over each positive solution, keeping the first one (smallest
