@@ -1,0 +1,166 @@
+#
+# Hand-generated test input file for test12 hadronics.
+#
+/control/verbose 2
+/run/verbose 2
+/run/particle/setCut 1 m
+/run/initialize
+/gun/direction 1 0 0
+#
+# deuteron at 1 GeV/nucleon in U
+#
+/gun/particle deuteron
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# deuteron at 1 GeV/nucleon on H 
+#
+/gun/particle deuteron
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# deuteron at 1 GeV/nucleon on Silicon 
+#
+/gun/particle deuteron
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#
+# deuteron at 200 MeV in U
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# deuteron at 200 MeV/nucleon on H 
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# deuteron at 200 MeV/nucleon on Silicon 
+#
+/gun/particle deuteron
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#  .....end deuteron.............
+#
+# alpha at 1 GeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# alpha at 1 GeV/nucleon on H 
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# alpha at 1 GeV/nucleon on Silicon 
+#
+/gun/particle alpha
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+
+# deuteron at 200 MeV/nucleon in U
+#
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# alpha at 200 MeV/nucleon on H 
+#
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# alpha at 200 MeV/nucleon on Silicon 
+#
+/gun/particle alpha
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#  .....end alpha............
+#
+# C(12,6)++ at 1 GeV/nucleon in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# C(12,6)++ at 1 GeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# C(12,6)++ at 1 GeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+# C(12,6)++ at 1 GeV/nucleon on Water 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H2O
+/run/beamOn 20
+#
+#
+# C(12,6)++ at 200 MeV in U
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
+/mydet/SelectMaterial U
+/run/beamOn 20
+#
+# C(12,6)++ at 200 MeV/nucleon on H 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
+/mydet/SelectMaterial H
+/run/beamOn 20
+#
+# C(12,6)++ at 200 MeV/nucleon on Silicon 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 200 MeV
+/mydet/SelectMaterial Si
+/run/beamOn 20
+#
+#  .....end C(12,6)++............
+#
+# beyond what we really can do.... we think.
+# Fe(56,26) charge 5 at 2 GeV in Lead
+#
+/gun/particle ion
+/gun/ion 26 56 5
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial Pb
+/run/beamOn 1
