@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.5 2000-08-04 14:28:04 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.6 2000-09-16 08:47:22 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -89,8 +89,8 @@ G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffATable = NULL ;
 G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffBTable = NULL ;
 G4PhysicsTable* G4hLowEnergyLoss::theRangeCoeffCTable = NULL ;
 
-const G4Proton* G4hLowEnergyLoss::theProton=G4Proton::Proton() ;
-const G4AntiProton* G4hLowEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
+//const G4Proton* G4hLowEnergyLoss::theProton=G4Proton::Proton() ;
+//const G4AntiProton* G4hLowEnergyLoss::theAntiProton=G4AntiProton::AntiProton() ;
 
 G4double G4hLowEnergyLoss::ParticleMass;
 G4double G4hLowEnergyLoss::ptableElectronCutInRange = 0.0*mm ;

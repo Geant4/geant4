@@ -1,4 +1,4 @@
-$Id: History,v 1.37 2000-09-16 08:06:36 pia Exp $
+$Id: History,v 1.38 2000-09-16 08:47:21 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -32,7 +32,10 @@ committal in the CVS repository !
 
 16.09.2000 - MGP, tag emlowen-V02-00-07
 	     Fix in G4hICRU49He::StoppingPower - a1 changed into e1 (typo?) 
-	     to remove compilation problems
+	     to remove compilation problems on DEC (uninitialized variable)
+             Fix in G4hLowEnergyLoss, eliminated two protected variables
+             G4Proton* theProton and G4AntiProton* theAntiProton 
+             to revove compilation problems on DEC (hiding)
 
 16.09.2000 - MGP, tag emlowen-V02-00-06
 	     Modifications by V.I. in hadron classes (renaming of classes

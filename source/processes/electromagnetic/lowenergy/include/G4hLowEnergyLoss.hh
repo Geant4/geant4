@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hLowEnergyLoss.hh,v 1.6 2000-09-05 13:03:39 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.hh,v 1.7 2000-09-16 08:47:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -180,8 +180,9 @@ class G4hLowEnergyLoss : public G4VContinuousDiscreteProcess
     static void BuildRangeCoeffCTable(
                           const G4ParticleDefinition& aParticleType);
 
-    static const G4Proton* theProton ;
-    static const G4AntiProton* theAntiProton ;
+  // MGP - Commented out the two lines below: bad design!
+  //    static const G4Proton* theProton ;
+  //    static const G4AntiProton* theAntiProton ;
 
 // ====================================================================
 
