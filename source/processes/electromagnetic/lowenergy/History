@@ -1,4 +1,4 @@
-$Id: History,v 1.115 2001-10-24 07:42:12 pia Exp $
+$Id: History,v 1.116 2001-10-25 03:05:07 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+25.10.2001 - MGP, tag emlowen-V03-02-33
+             G4LowEnergyPolarizedCompton moved to new design
+             Many bug fixes in G4eIonisationParameters and G4BremsstrahlungParameters
+             New classes for shell cross sections for proton-induced fluorescence 
+             Fluorescence introduced in temporary class G4hLowEnergyIonisation
+             Fluorescence introduced in the continuous part of electron
+             ionisation in G4eLowEnergyLoss and temporary G4LowEnergyIonisationVI
 
 18.10.2001 - MGP, tag emlowen-V03-02-32
              Same as previous one, with on top fixes to G4BremsstrahlungParameters.cc
