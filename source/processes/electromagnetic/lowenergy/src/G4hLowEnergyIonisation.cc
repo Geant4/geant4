@@ -151,7 +151,6 @@ void G4hLowEnergyIonisation::SetNuclearStoppingOff()
 void G4hLowEnergyIonisation::SetAntiProtonStoppingOn()
 {
   pbarStop = true ;
-  ParamLowEnergy = 0.05*MeV ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -867,28 +866,21 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
   G4int molecIndex = 0 ;
   ionloss = 0.0 ;
    
-  // start with aniproton management with quantum harmonic
+  // start with antiproton management with quantum harmonic
   // oscillator loss model
-
   G4ParticleDefinition* pbarDef = G4AntiProton::AntiProtonDefinition();
   if ( pbarStop && (qaoLoss->IsInCharge(KinEnergy,pbarDef,material) ))
     {
       G4DynamicParticle dynamicPart();
       dynamicPart.SetDefinition(pbarDef);
       dynamicPart.SetKineticEnergy(KinEnergy);
-      // does it require also the following?
-      // dynamicPart.SetCharge(-1);
+      dynamicPart.SetCharge(-1);
 
       ionloss = qaoloss->EnergyLoss(dynamicPart,material);
       ionloss -= GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
     }
-  //  if(-0.5>Charge && pbarStop && qaoloss.IsMaterial(material->GetName())){
-  //  ionloss = qaoloss.EnergyLoss(Charge, material, KinEnergy);
-  //  ionloss-=GetDeltaRaysEnergy(material,KinEnergy,DeltaRayCutNow);
   return ionloss;
   }
-  
-  
     
   // First of all check tables for specific materials for ICRU_49 parametrisation
  
