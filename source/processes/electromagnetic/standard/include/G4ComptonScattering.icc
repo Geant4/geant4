@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.icc,v 1.7 2001-09-17 17:07:11 maire Exp $
+// $Id: G4ComptonScattering.icc,v 1.8 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4ComptonScattering physics process --------------
+//------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
 // 
 // 10-06-96, updated by M.Maire
@@ -34,7 +34,7 @@
 // 15-12-98, return DBL_MAX below LowestEnergyLimit
 // 28-05-01, V.Ivanchenko minor changes to provide ANSI -wall compilation
 // 17-09-01, migration of Materials to pure STL (mma) 
-// --------------------------------------------------------------------
+//------------------------------------------------------------------------------
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.cc,v 1.11 2001-09-17 17:07:12 maire Exp $
+// $Id: G4ComptonScattering.cc,v 1.12 2001-09-21 09:50:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,7 +44,8 @@
 // 13-07-01, DoIt: suppression of production cut for the electron (mma)
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)  
+// 17-09-01, migration of Materials to pure STL (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)  
 // -----------------------------------------------------------------------------
 
 #include "G4ComptonScattering.hh"
@@ -60,7 +61,8 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName)
     theMeanFreePathTable(NULL),  
     LowestEnergyLimit ( 10*keV),              
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100)
+    NumbBinTable(100),
+    fminimalEnergy(1*eV)
 {
  BuildThePhysicsTable();
 }
@@ -247,12 +249,15 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
    GammaDirection1.rotateUz(GammaDirection0);
    aParticleChange.SetMomentumChange( GammaDirection1 );
    G4double GammaEnergy1 = epsilon*GammaEnergy0;
-   if (GammaEnergy1 > 0.)
+   G4double localEnergyDeposit = 0.;
+   
+   if (GammaEnergy1 > fminimalEnergy)
      {
        aParticleChange.SetEnergyChange( GammaEnergy1 );
      }
    else
-     {    
+     {
+       localEnergyDeposit += GammaEnergy1;    
        aParticleChange.SetEnergyChange(0.) ;
        aParticleChange.SetStatusChange(fStopAndKill);
      }
@@ -263,7 +268,7 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
 
    G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1;
 
-    if (ElecKineEnergy > 0.)	
+    if (ElecKineEnergy > fminimalEnergy)	
       {
         G4double ElecMomentum = sqrt(ElecKineEnergy*
 	                            (ElecKineEnergy+2.*electron_mass_c2));
@@ -277,14 +282,14 @@ G4VParticleChange* G4ComptonScattering::PostStepDoIt(const G4Track& aTrack,
 
         aParticleChange.SetNumberOfSecondaries(1);
         aParticleChange.AddSecondary( aElectron );
-        aParticleChange.SetLocalEnergyDeposit (0.); 
       }
     else
       {
         aParticleChange.SetNumberOfSecondaries(0);
-        aParticleChange.SetLocalEnergyDeposit (0.);
-      }
-
+	localEnergyDeposit += ElecKineEnergy;
+      }      
+    aParticleChange.SetLocalEnergyDeposit (localEnergyDeposit);
+       
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);
 }

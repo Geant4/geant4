@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ComptonScattering.hh,v 1.6 2001-08-09 17:24:21 maire Exp $
+// $Id: G4ComptonScattering.hh,v 1.7 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4ComptonScattering physics process ------
+//------------------ G4ComptonScattering physics process -----------------------
 //                   by Michel Maire, April 1996
 //
 // 10-06-96, updated by M.Maire 
@@ -35,8 +35,10 @@
 // 12-03-97, new physics scheme again
 // 13-08-98, new methods SetBining()  PrintInfo()
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
-// ------------------------------------------------------------
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 19-09-01, come back to previous ProcessName "compt"
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)  
+// -----------------------------------------------------------------------------
 
 // class description
 //
@@ -67,7 +69,7 @@ class G4ComptonScattering : public G4VDiscreteProcess
 { 
   public:  // with description
  
-     G4ComptonScattering(const G4String& processName ="compton");
+     G4ComptonScattering(const G4String& processName ="compt");
  
     ~G4ComptonScattering();
 
@@ -139,10 +141,16 @@ class G4ComptonScattering : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crosssection
      G4PhysicsTable* theMeanFreePathTable;    // table for mean free path
        
-     G4double LowestEnergyLimit ;      // low  energy limit of the tables
-     G4double HighestEnergyLimit ;     // high energy limit of the tables
-     G4int NumbBinTable ;              // number of bins in the tables
+     G4double LowestEnergyLimit;      // low  energy limit of the tables
+     G4double HighestEnergyLimit;     // high energy limit of the tables
+     G4int NumbBinTable;              // number of bins in the tables
+     
+  protected:   
+     
+     G4double fminimalEnergy;         // minimalEnergy of produced particles
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ComptonScattering.icc"
   

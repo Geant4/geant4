@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.cc,v 1.10 2001-09-17 17:07:13 maire Exp $
+// $Id: G4eplusAnnihilation.cc,v 1.11 2001-09-21 09:50:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,7 +35,8 @@
 // 13-07-01, DoIt: suppression of production cut for the gamma (mma)
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)     
+// 17-09-01, migration of Materials to pure STL (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -51,9 +52,10 @@ G4eplusAnnihilation::G4eplusAnnihilation(const G4String& processName)
   : G4VRestDiscreteProcess (processName),
     theCrossSectionTable(NULL),
     theMeanFreePathTable(NULL),   
-    LowestEnergyLimit ( 10*keV), 
-    HighestEnergyLimit( 10*TeV),
-    NumbBinTable(100)
+    LowestEnergyLimit (10*keV), 
+    HighestEnergyLimit(10*TeV),
+    NumbBinTable(100),
+    fminimalEnergy(1*eV)
 {
   BuildThePhysicsTable();
 }
@@ -234,21 +236,23 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
    // kinematic of the created pair
    //
 
-   aParticleChange.SetNumberOfSecondaries(2) ; 
+   aParticleChange.SetNumberOfSecondaries(2);
+   G4double localEnergyDeposit = 0.; 
 
    G4double TotalAvailableEnergy = PositKinEnergy + 2*electron_mass_c2;
    G4double Phot1Energy = epsil*TotalAvailableEnergy;
-   if (Phot1Energy > 0.) {
-     G4ThreeVector Phot1Direction ( dirx, diry, dirz );
+   if (Phot1Energy > fminimalEnergy) {
+     G4ThreeVector Phot1Direction (dirx, diry, dirz);
      Phot1Direction.rotateUz(PositDirection);   
      // create G4DynamicParticle object for the particle1  
      G4DynamicParticle* aParticle1= new G4DynamicParticle (G4Gamma::Gamma(),
                                                  Phot1Direction, Phot1Energy);
      aParticleChange.AddSecondary(aParticle1);
-   }   
+   }
+   else  localEnergyDeposit += Phot1Energy;  
 
    G4double Phot2Energy =(1.-epsil)*TotalAvailableEnergy;
-   if (Phot2Energy > 0.) {
+   if (Phot2Energy > fminimalEnergy) {
      G4double Eratio= Phot1Energy/Phot2Energy;
      G4double PositP= sqrt(PositKinEnergy*(PositKinEnergy+2.*electron_mass_c2));
      G4ThreeVector Phot2Direction (-dirx*Eratio, -diry*Eratio,
@@ -259,16 +263,17 @@ G4VParticleChange* G4eplusAnnihilation::PostStepDoIt(const G4Track& aTrack,
                                                  Phot2Direction, Phot2Energy);
      aParticleChange.AddSecondary(aParticle2);
    }   
-
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   else  localEnergyDeposit += Phot2Energy;
+     
+   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident positron 
    //
 
-   aParticleChange.SetMomentumChange( 0., 0., 0. ) ;
-   aParticleChange.SetEnergyChange(0.) ; 
-   aParticleChange.SetStatusChange(fStopAndKill) ;
+   aParticleChange.SetMomentumChange( 0., 0., 0. );
+   aParticleChange.SetEnergyChange(0.); 
+   aParticleChange.SetStatusChange(fStopAndKill);
 
    return &aParticleChange;
 }
@@ -288,10 +293,10 @@ G4VParticleChange* G4eplusAnnihilation::AtRestDoIt(const G4Track& aTrack,
 {
    aParticleChange.Initialize(aTrack);
 
-   aParticleChange.SetNumberOfSecondaries(2) ; 
+   aParticleChange.SetNumberOfSecondaries(2); 
 
    G4double cosTeta = 2*G4UniformRand()-1. , sinTeta = sqrt(1.-cosTeta*cosTeta);
-   G4double Phi     = twopi * G4UniformRand() ;
+   G4double Phi     = twopi * G4UniformRand();
    G4ThreeVector Direction (sinTeta*cos(Phi), sinTeta*sin(Phi), cosTeta);   
  
    aParticleChange.AddSecondary( new G4DynamicParticle (G4Gamma::Gamma(),

@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.hh,v 1.7 2001-08-31 16:05:20 maire Exp $
+// $Id: G4GammaConversion.hh,v 1.8 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4GammaConversion physics process -------------------------
+//------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
 //
 // 11-06-96, Added GetRandomAtom() method and new data member
@@ -36,7 +36,9 @@
 // 14-03-97, new physics scheme for geant4alpha, M.Maire
 // 13-08-98, new methods SetBining() PrintInfo()
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)  
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 19-09-01, come back to previous ProcessName: "conv"
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)  
 // -----------------------------------------------------------------------------
 
 // class description
@@ -70,7 +72,7 @@ class G4GammaConversion : public G4VDiscreteProcess
 {  
   public:  // with description
  
-     G4GammaConversion(const G4String& processName ="gamaconv");
+     G4GammaConversion(const G4String& processName ="conv");
  
     ~G4GammaConversion();
 
@@ -152,12 +154,16 @@ class G4GammaConversion : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crossection
      G4PhysicsTable* theMeanFreePathTable;
      
-     G4double LowestEnergyLimit ;      // low  energy limit of the tables
-     G4double HighestEnergyLimit ;     // high energy limit of the tables 
-     G4int NumbBinTable ;              // number of bins in the tables
-
-     G4double MeanFreePath;            // actual MeanFreePath (current medium)
+     G4double LowestEnergyLimit ;     // low  energy limit of the tables
+     G4double HighestEnergyLimit ;    // high energy limit of the tables 
+     G4int NumbBinTable ;             // number of bins in the tables
+     
+     G4double fminimalEnergy;         // minimalEnergy of produced particles
+    
+     G4double MeanFreePath;           // actual MeanFreePath (current medium)
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4GammaConversion.icc"
   

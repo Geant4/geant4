@@ -21,12 +21,12 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaConversion.cc,v 1.11 2001-09-17 17:07:12 maire Exp $
+// $Id: G4GammaConversion.cc,v 1.12 2001-09-21 09:50:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-//      ------------ G4GammaConversion physics process -------------------------
+//------------------ G4GammaConversion physics process -------------------------
 //                   by Michel Maire, 24 May 1996
-// -----------------------------------------------------------------------------
+// 
 // 11-06-96, Added SelectRandomAtom() method, M.Maire
 // 21-06-96, SetCuts implementation, M.Maire
 // 24-06-96, simplification in ComputeCrossSectionPerAtom, M.Maire
@@ -50,7 +50,8 @@
 // 13-07-01, DoIt: suppression of production cut for the (e-,e+) (mma)
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)    
+// 17-09-01, migration of Materials to pure STL (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)      
 // -----------------------------------------------------------------------------
 
 #include "G4GammaConversion.hh"
@@ -66,7 +67,8 @@ G4GammaConversion::G4GammaConversion(const G4String& processName)
     theMeanFreePathTable(NULL),  
     LowestEnergyLimit (2*electron_mass_c2),
     HighestEnergyLimit(100*GeV),
-    NumbBinTable(100)
+    NumbBinTable(100),
+    fminimalEnergy(1*eV)
 {
  BuildThePhysicsTable(); 
 }
@@ -337,23 +339,28 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
    aParticleChange.SetNumberOfSecondaries(2) ; 
 
    G4double ElectKineEnergy = G4std::max(0.,ElectTotEnergy - electron_mass_c2);
+   G4double localEnergyDeposit = 0.;
 
-   if (ElectKineEnergy > 0.)
+   if (ElectKineEnergy > fminimalEnergy)
      {
-       G4ThreeVector ElectDirection ( dirx, diry, dirz );
+       G4ThreeVector ElectDirection (dirx, diry, dirz);
        ElectDirection.rotateUz(GammaDirection);   
  
        // create G4DynamicParticle object for the particle1  
        G4DynamicParticle* aParticle1= new G4DynamicParticle(
                         G4Electron::Electron(),ElectDirection,ElectKineEnergy);
-       aParticleChange.AddSecondary( aParticle1 ); 
+       aParticleChange.AddSecondary(aParticle1); 
      }
+   else
+     { localEnergyDeposit += ElectKineEnergy;}   
 
    // the e+ is always created (even with Ekine=0) for further annihilation.
 
    G4double PositKineEnergy = G4std::max(0.,PositTotEnergy - electron_mass_c2);
+   if (PositKineEnergy < fminimalEnergy)
+     { localEnergyDeposit += PositKineEnergy; PositKineEnergy = 0.;}
 
-   G4ThreeVector PositDirection ( -dirx, -diry, dirz );
+   G4ThreeVector PositDirection (-dirx, -diry, dirz);
    PositDirection.rotateUz(GammaDirection);   
  
    // create G4DynamicParticle object for the particle2 
@@ -361,7 +368,7 @@ G4VParticleChange* G4GammaConversion::PostStepDoIt(const G4Track& aTrack,
                       G4Positron::Positron(),PositDirection,PositKineEnergy);
    aParticleChange.AddSecondary(aParticle2); 
 
-   aParticleChange.SetLocalEnergyDeposit(0.);
+   aParticleChange.SetLocalEnergyDeposit(localEnergyDeposit);
 
    //
    // Kill the incident photon 

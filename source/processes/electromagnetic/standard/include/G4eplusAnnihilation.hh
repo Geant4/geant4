@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eplusAnnihilation.hh,v 1.7 2001-09-07 16:29:22 maire Exp $
+// $Id: G4eplusAnnihilation.hh,v 1.8 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -31,7 +31,8 @@
 // 17-03-97, merge 'in fly' and 'at rest', M.Maire
 // 31-08-98, new methods SetBining() and PrintInfo()
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma)   
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)   
 // 
 
 // class description
@@ -155,7 +156,10 @@ class G4eplusAnnihilation : public G4VRestDiscreteProcess
      G4double LowestEnergyLimit;      // low  energy limit of the tables
      G4double HighestEnergyLimit;     // high energy limit of the tables 
      G4int NumbBinTable;              // number of bins in the tables
+     G4double fminimalEnergy;         // minimalEnergy of produced particles     
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4eplusAnnihilation.icc"
   

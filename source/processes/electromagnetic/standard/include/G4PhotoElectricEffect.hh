@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.hh,v 1.8 2001-08-09 17:24:22 maire Exp $
+// $Id: G4PhotoElectricEffect.hh,v 1.9 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -37,7 +37,9 @@
 // 17-11-98, use table of atomic shells in PostStepDoIt, mma
 // 06-01-99, Sandia crossSection below 50 keV, V.Grichine mma 
 // 03-08-01, new methods Store/Retrieve PhysicsTable (mma)
-// 06-08-01, BuildThePhysicsTable() called from constructor (mma) 
+// 06-08-01, BuildThePhysicsTable() called from constructor (mma)
+// 19-09-01, come back to previous process name "phot"
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)   
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,7 +72,7 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
 {
   public:  // with description
  
-     G4PhotoElectricEffect(const G4String& processName ="photelec");
+     G4PhotoElectricEffect(const G4String& processName ="phot");
  
     ~G4PhotoElectricEffect();
 
@@ -159,13 +161,17 @@ class G4PhotoElectricEffect : public G4VDiscreteProcess
      G4PhysicsTable* theCrossSectionTable;    // table for crossection
      G4PhysicsTable* theMeanFreePathTable;    // table for Mean free path
      
-     G4double LowestEnergyLimit ;      // low  energy limit of the tables
-     G4double HighestEnergyLimit ;     // high energy limit of the tables 
-     G4int NumbBinTable ;              // number of bins in the tables
-
-     G4double MeanFreePath;            // actual Mean Free Path (current medium)
+     G4double LowestEnergyLimit ;    // low  energy limit of the tables
+     G4double HighestEnergyLimit ;   // high energy limit of the tables 
+     G4int NumbBinTable ;            // number of bins in the tables
+     
+     G4double fminimalEnergy;        // minimalEnergy of produced particles
+     
+     G4double MeanFreePath;          // actual Mean Free Path (current medium)
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
 #include "G4PhotoElectricEffect.icc"
   
 #endif

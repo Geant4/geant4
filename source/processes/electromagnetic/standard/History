@@ -1,4 +1,4 @@
-$Id: History,v 1.33 2001-09-17 17:07:11 maire Exp $
+$Id: History,v 1.34 2001-09-21 09:50:52 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21 sep 01: mma (stand-V03-02-06)
+- DoIt: fminimalEnergy = 1*eV in phot,comp,conv,anni     
+     
+19 sep 01: mma (stand-V03-02-05)
+- come back to the previous ProcessNames
      
 17 sep 01: mma (stand-V03-02-04)
 - modifs in almost all classes for the migration of Materials to pure STL,

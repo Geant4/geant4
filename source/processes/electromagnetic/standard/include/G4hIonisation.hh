@@ -21,21 +21,22 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.13 2001-08-14 17:31:05 maire Exp $
+// $Id: G4hIonisation.hh,v 1.14 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4hIonisation physics process -----------
 //                 by Laszlo Urban, 30 May 1997 
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 //
 // corrected by L.Urban on 24/09/97
 // corrected by L.Urban on 13/01/98
 // bugs fixed by L.Urban on 02/02/99
-// 10/02/00  modifications , new e.m. structure, L.Urban
+// 10/02/00 modifications , new e.m. structure, L.Urban
 // 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
-// 14-08-01  new function ComputeRestrictedMeandEdx() + 'cleanup' (mma) 
+// 14-08-01 new function ComputeRestrictedMeandEdx() + 'cleanup' (mma)
+// 19-09-01 come back to previous process name "hIoni" 
 //
-// ------------------------------------------------------------
+// -----------------------------------------------------------------------------
 
 // Class description
 //
@@ -44,22 +45,22 @@
 //
 // Class description - end
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #ifndef G4hIonisation_h
 #define G4hIonisation_h 1
  
 #include "G4VhEnergyLoss.hh"
  
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 class G4hIonisation : public G4VhEnergyLoss 
  
 {
   public:   // with description
  
-    G4hIonisation(const G4String& processName = "hIonisa"); 
+    G4hIonisation(const G4String& processName = "hIoni"); 
 
    ~G4hIonisation();
 
@@ -161,6 +162,8 @@ class G4hIonisation : public G4VhEnergyLoss
     static G4int GetNbinLambda() {return NbinLambda;};
       // get the parameters of the mean free path table.
 };
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 #include "G4hIonisation.icc"
  

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisation.hh,v 1.12 2001-08-14 10:01:25 maire Exp $
+// $Id: G4eIonisation.hh,v 1.13 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------- G4eIonisation physics process -----------
@@ -30,6 +30,7 @@
 // 10-02-00 modifications , new e.m. structure, L.Urban
 // 03-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // 13-08-01 new function ComputeRestrictedMeandEdx() (mma)
+// 19-09-01 come back to previous ProcessName "eIoni"
 //
 // ------------------------------------------------------------
 
@@ -55,7 +56,7 @@ class G4eIonisation : public G4VeEnergyLoss
 {
   public:   // with description
  
-    G4eIonisation(const G4String& processName = "eIonisa"); 
+    G4eIonisation(const G4String& processName = "eIoni"); 
 
    ~G4eIonisation();
 

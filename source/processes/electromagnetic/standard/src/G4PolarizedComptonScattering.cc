@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PolarizedComptonScattering.cc,v 1.7 2001-08-31 14:58:47 maire Exp $
+// $Id: G4PolarizedComptonScattering.cc,v 1.8 2001-09-21 09:50:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -33,7 +33,8 @@
 //    - Sampling of Phi
 //    - Depolarization probability
 // 
-// 13-07-01, DoIt: suppression of production cut for the electron (mma) 
+// 13-07-01, DoIt: suppression of production cut for the electron (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma) 
 //
 // -----------------------------------------------------------------------------
 
@@ -138,13 +139,15 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    SystemOfRefChange(GammaDirection0,GammaDirection1,
                      GammaPolarization0,GammaPolarization1);
 
-
-   if (GammaEnergy1 > 0.)
+   G4double localEnergyDeposit = 0.;
+   
+   if (GammaEnergy1 > fminimalEnergy)
      {
        aParticleChange.SetEnergyChange(GammaEnergy1);
      }
    else
-     {    
+     {
+       localEnergyDeposit += GammaEnergy1;    
        aParticleChange.SetEnergyChange(0.) ;
        aParticleChange.SetStatusChange(fStopAndKill);
      }
@@ -152,9 +155,9 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
    //
    // kinematic of the scattered electron
    //
-   G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1 ;
+   G4double ElecKineEnergy = GammaEnergy0 - GammaEnergy1;
       
-   if (ElecKineEnergy > 0.)                     
+   if (ElecKineEnergy > fminimalEnergy)                     
      {
        G4double ElecMomentum = sqrt(ElecKineEnergy*
 	                           (ElecKineEnergy+2.*electron_mass_c2));
@@ -167,13 +170,14 @@ G4VParticleChange* G4PolarizedComptonScattering::PostStepDoIt(
 	                  G4Electron::Electron(),ElecDirection,ElecKineEnergy);
        aParticleChange.SetNumberOfSecondaries(1);
        aParticleChange.AddSecondary( aElectron );
-       aParticleChange.SetLocalEnergyDeposit (0.); 
       }
     else
       {
        aParticleChange.SetNumberOfSecondaries(0);
-       aParticleChange.SetLocalEnergyDeposit (0.);
+       localEnergyDeposit += ElecKineEnergy;
       }
+      
+    aParticleChange.SetLocalEnergyDeposit (localEnergyDeposit);       
 
    //  Reset NbOfInteractionLengthLeft and return aParticleChange
    return G4VDiscreteProcess::PostStepDoIt( aTrack, aStep);

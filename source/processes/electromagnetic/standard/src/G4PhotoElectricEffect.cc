@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PhotoElectricEffect.cc,v 1.19 2001-09-17 17:07:12 maire Exp $
+// $Id: G4PhotoElectricEffect.cc,v 1.20 2001-09-21 09:50:54 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -47,7 +47,8 @@
 // 13-07-01, DoIt: suppression of production cut of the electron (mma)
 // 06-08-01, new methods Store/Retrieve PhysicsTable (mma)
 // 06-08-01, BuildThePhysicsTable() called from constructor (mma)
-// 17-09-01, migration of Materials to pure STL (mma)  
+// 17-09-01, migration of Materials to pure STL (mma)
+// 20-09-01, DoIt: fminimalEnergy = 1*eV (mma)    
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -65,7 +66,8 @@ G4PhotoElectricEffect::G4PhotoElectricEffect(const G4String& processName)
     theMeanFreePathTable(NULL),
     LowestEnergyLimit (50*keV),
     HighestEnergyLimit(50*MeV),
-    NumbBinTable(100)
+    NumbBinTable(100),
+    fminimalEnergy(1*eV)
 {
  BuildThePhysicsTable();
 }
@@ -268,7 +270,7 @@ G4VParticleChange* G4PhotoElectricEffect::PostStepDoIt(const G4Track& aTrack,
       
    G4double ElecKineEnergy = PhotonEnergy - anElement->GetAtomicShell(i);
 
-   if (ElecKineEnergy > 0.)
+   if (ElecKineEnergy > fminimalEnergy)
      {
       // the electron is created in the direction of the incident photon ...  
       G4DynamicParticle* aElectron = new G4DynamicParticle (

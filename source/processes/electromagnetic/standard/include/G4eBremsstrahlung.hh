@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eBremsstrahlung.hh,v 1.11 2001-08-10 15:16:19 maire Exp $
+// $Id: G4eBremsstrahlung.hh,v 1.12 2001-09-21 09:50:53 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,7 +33,8 @@
 // 01-09-98, new method  PrintInfo() 
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
-// 09-08-01: new methods Store/Retrieve PhysicsTable (mma) 
+// 09-08-01: new methods Store/Retrieve PhysicsTable (mma)
+// 19-09-01: come back to previous process name "eBrem" 
 // ------------------------------------------------------------
 
 // Class description
@@ -69,7 +70,7 @@ class G4eBremsstrahlung : public G4VeEnergyLoss
 { 
   public:
  
-     G4eBremsstrahlung(const G4String& processName = "eBrems");
+     G4eBremsstrahlung(const G4String& processName = "eBrem");
  
     ~G4eBremsstrahlung();
 
