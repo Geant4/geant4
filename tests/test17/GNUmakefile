@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2000-05-26 15:50:37 pia Exp $
+# $Id: GNUmakefile,v 1.5 2001-10-30 22:12:22 vnivanch Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -13,9 +13,9 @@ endif
 
 .PHONY: all tools
  
-tools:
-	cd ../tools/lib; $(MAKE)
-	$(MAKE) all
+#tools:
+#	cd ../tools/lib; $(MAKE)
+#	$(MAKE) all
 
 all: lib bin
 

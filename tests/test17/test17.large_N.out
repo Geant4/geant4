@@ -1,3 +1,4 @@
+Unit category <Error tolerance> is not defined.
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
                                 (29-Jun-2001)
@@ -89,7 +90,7 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
        PhysicsTables from 50 keV to 50 MeV in 100 bins. 
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
-        Scattered gamma energy according Klein-Nishina.
+       Scattered gamma energy according Klein-Nishina.
         PhysicsTables from 10 keV to 100 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
@@ -113,7 +114,7 @@ eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data l
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for e+
 
-annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 G4VUserPhysicsList::SetCutValue       :Set cuts for mu-
@@ -124,10 +125,10 @@ msc:   Tables of transport mean free paths.
           displacement of the particle , too.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
-MuIoni:  knock-on electron cross sections .
-          Good description above the mean excitation energy.
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
@@ -154,10 +155,6 @@ hLowEIoni:    Knock-on electron cross sections .
         from 5 keV  to 2 MeV .
         Parametrization of the Barkas effect is switched on.
         Nuclear stopping power model is ICRU_R49
-           material       min.delta energy(keV) 
-
-Methane      0.0432375
-Air      0.0858211
 G4VUserPhysicsList::SetCutValue       :Set cuts for anti_proton
 G4VUserPhysicsList::SetCutValueForOthers   :0.1[mm]
 Set cuts for He3
@@ -195,63 +192,84 @@ Cut in energy
    Graphite                         1.38 keV           128 keV
    Air                            1 eV          4.02 eV
 ===================================================
-#====================================================
-# Macro file for the initialization phase of "test17" 
-# It provides the tests of ranges of hadrons 
-#    Created:   
-#    Modified:  13.07.01 V.Ivanchenko
-#====================================================
-/event/setverbose 0
-/tracking/verbose 0
+/run/verbose 1
 #
-/run/initialize
+#/run/initialize
 #
 /gun/particle proton
-#/gun/zvertex -0.16 mum
 /gun/energy 500 keV
+/tracking/verbose 0
 /run/beamOn 10000
 ### Run 0 start.
+Start Run processing.
+EvtNo= 827  length= 0.00879862  xend= 0.00381338
+EvtNo= 7065  length= 0.0186306  xend= -0.0118009
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=11.95s Real=12.05s Sys=0.01s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9999 for proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.2218 +- 0.00211933  microns 
-    CSDA  Range  in absorber = 9.01343 +- 0.00212777  microns 
+ end of Run TotNbofEvents = 9998 for proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.21897 +- 0.00208969  microns 
+    CSDA  Range  in absorber = 9.00586 +- 0.00212364  microns 
 
-    Energy deposit in absorber = 0.5 +- 0  MeV 
+    Energy deposit in absorber = 0.5  MeV 
 
 ### Comparison with the ICRU49 data: 
-    Track Length (G4 - ICRU49) = 0.162796 +- 0.00211933 microns 
-    CSDA  Range  (G4 - ICRU49) = 0.144431 +- 0.00212777 microns 
+    Track Length (G4 - ICRU49) = 0.159972 +- 0.00208969 microns 
+    CSDA  Range  (G4 - ICRU49) = 0.13686 +- 0.00212364 microns 
 
-(number) transmission coeff=0  reflection coeff=0.0001
+Average Number electrons per event = 0
+Average Number photons per event   = 0
 
 #
 /gun/particle anti_proton
 /run/beamOn 10000
 ### Run 1 start.
+Start Run processing.
+EvtNo= 160  length= 0.00962096  xend= 0.00214699
+EvtNo= 341  length= 0.0095304  xend= 0.00412484
+EvtNo= 1807  length= 0.00950738  xend= 0.00339889
+EvtNo= 4410  length= 0.00936745  xend= 0.00372834
+EvtNo= 5686  length= 0.00936745  xend= 0.00286315
+EvtNo= 8924  length= 0.00935399  xend= 0.00410856
+EvtNo= 8928  length= 0.00936745  xend= 0.00415206
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=13.77s Real=14.04s Sys=0s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9992 for anti_proton with Ekin = 0.5 MeV
-    Track Length in absorber = 9.58595 +- 0.00217148  microns 
-    CSDA  Range  in absorber = 9.26391 +- 0.00270311  microns 
+ end of Run TotNbofEvents = 9993 for anti_proton with Ekin = 0.5 MeV
+    Track Length in absorber = 9.58539 +- 0.00215436  microns 
+    CSDA  Range  in absorber = 9.27129 +- 0.0027553  microns 
 
-    Energy deposit in absorber = 0.500052 +- 3.66622e-05  MeV 
+    Energy deposit in absorber = 0.5  MeV 
 
-(number) transmission coeff=0.0002  reflection coeff=0.0008
-
+Average Number electrons per event = 0
+Average Number photons per event   = 0
 
 #scaled energy
 /gun/particle IonC12
 /gun/energy 6000 keV
 /run/beamOn 10000
 ### Run 2 start.
+Start Run processing.
+EvtNo= 4926  length= 0.00841309  xend= 0.00403149
+Run terminated.
+Run Summary
+  Number of events processed : 10000
+  User=13.54s Real=13.86s Sys=0.03s
  ================== run summary =====================
 
- end of Run TotNbofEvents = 9998 for IonC12 with Ekin = 6 MeV
-    Track Length in absorber = 8.57354 +- 0.00150459  microns 
-    CSDA  Range  in absorber = 8.38128 +- 0.00156116  microns 
+ end of Run TotNbofEvents = 9999 for IonC12 with Ekin = 6 MeV
+    Track Length in absorber = 8.57201 +- 0.00148487  microns 
+    CSDA  Range  in absorber = 7.9612 +- 0.00478038  microns 
 
-    Energy deposit in absorber = 6 +- 0  MeV 
+    Energy deposit in absorber = 6  MeV 
 
-(number) transmission coeff=0  reflection coeff=0.0002
+Average Number electrons per event = 0
+Average Number photons per event   = 0
 
+G4 kernel has come to Quit state.

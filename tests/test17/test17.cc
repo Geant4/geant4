@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test17.cc,v 1.7 2001-07-11 10:10:04 gunter Exp $
+// $Id: test17.cc,v 1.8 2001-10-30 22:12:22 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,6 @@
 #include "Test17RunAction.hh"
 #include "Test17EventAction.hh"
 #include "Test17SteppingAction.hh"
-#include "Test17SteppingVerbose.hh"
 
 int main(int argc,char** argv) {
 

@@ -1,18 +1,15 @@
-#====================================================
-# Macro file for the initialization phase of "test17" 
-# It provides the tests of ranges of hadrons 
-#    Created:   
-#    Modified:  13.07.01 V.Ivanchenko
-#====================================================
-/control/verbose 2
-/event/setverbose 0
-/tracking/verbose 0
 #
-/run/initialize
+# Macro file for the initialization phase of "test17" 
+#
+#
+/control/verbose 2
+/run/verbose 1
+#
+#/run/initialize
 #
 /gun/particle proton
-#/gun/zvertex -0.16 mum
 /gun/energy 500 keV
+/tracking/verbose 0
 /run/beamOn 10000
 #
 /gun/particle anti_proton
@@ -22,3 +19,4 @@
 /gun/particle IonC12
 /gun/energy 6000 keV
 /run/beamOn 10000
+#
