@@ -1,0 +1,49 @@
+Dear STT members,
+
+  I've committed and tagged "run" category on behalf of Makoto.
+  
+  Major modification is
+ 
+  1) Removed G4VPhysicsList::ConstructAllParticles and related methods.
+
+  2) Modified SetCuts method (SetCuts take no argument now)
+
+   Modification 1) is introduced to resolve dependencies on all particle
+granular libraries in G4VUserPhysicsList pointed out by John and Simone as
+listed below.
+
+   As noted by Makoto, these modifications also affect on ALL examples and test
+programs. I and Makoto will start committing the corrections on geant4/examples
+and geant4/test directories.
+    
+Best Regards,
+                                                        Hisaya
+ 
+John Allison wrote:
+> 
+> Dear Makoto,
+> 
+> Simone and I have been looking into why a simple MyUserPhysicsList
+> still pulls in all the particles granular libraries.  The dependencies
+> come from G4VUserPhysicsList with its implemented functions:
+> 
+>    // Construct All particles
+>     virtual void ConstructAllParticles();
+>     // these methods Construct all particles in each category
+>     virtual void ConstructAllBosons();
+>     virtual void ConstructAllLeptons();
+>     virtual void ConstructAllMesons();
+>     virtual void ConstructAllBarions();
+>     virtual void ConstructAllIons();
+>     virtual void ConstructAllShortLiveds();
+> 
+> I don't see an easy way to cure this except by removing these
+> functions, or making them pure virtual and implementing them somewhere
+> else.
+> 
+> Anyway, over to you.  Can you think of a solution?  Unless we do I
+> think we cannot benefit from the granular libraries of particles.
+> 
+> Best wishes,
+> 
+> John.
