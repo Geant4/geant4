@@ -11,22 +11,22 @@ ifstream in;
 in.open("cascade.out", ios::in);
 
 Float_t nEve, typePart, eKin, momX, momY, momZ, nucEx;
-Int_t nucA, nucZ;
+Int_t nucA, nucZ,sumB,sumE;
 Int_t nlines = 0;
 
 TFile *f = new TFile("cascade.root","RECREATE");
 TH1F *h1 = new TH1F("h1","particle types",100,-4,4);
-TNtuple *ntuple = new TNtuple("ntuple","data from cascade.out","nEve:typePart:eKin:momX:momY:momZ:nucA:nucZ:nucEx");
+TNtuple *ntuple = new TNtuple("ntuple","data from cascade.out","nEve:typePart:eKin:momX:momY:momZ:nucA:nucZ:nucEx:sumB:sumE");
 
 while (1) {
-  in >> nEve >> typePart >> eKin >> momX >> momY >> momZ >> nucA >> nucZ >> nucEx;
+  in >> nEve >> typePart >> eKin >> momX >> momY >> momZ >> nucA >> nucZ >> nucEx >> sumB >> sumE;
   if (!in.good()) break;
 
   // Show first lines of data
   if (nlines < 2) printf("nEve = %1i, typePart = %1i, eKin = %4f\n",nEve, typePart, eKin);
 
   h1->Fill(typePart);
-  ntuple->Fill(nEve, typePart, eKin, momX, momY, momZ, nucA, nucZ, nucEx);
+  ntuple->Fill(nEve, typePart, eKin, momX, momY, momZ, nucA, nucZ, nucEx, sumB, sumE);
   nlines++;
 }
 
