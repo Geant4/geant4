@@ -220,8 +220,7 @@ void ExN06PhysicsList::ConstructOp()
   theCerenkovProcess->SetMaxNumPhotonsPerStep(MaxNumPhotons);
 
   theScintillationProcess->SetTrackSecondariesFirst(true);
-  theScintillationProcess->SetScintillationYield(100./MeV);
-  theScintillationProcess->SetResolutionScale(1.0);
+  theScintillationProcess->SetScintillationYieldFactor(1.);
 
   G4OpticalSurfaceModel themodel = unified;
   theBoundaryProcess->SetModel(themodel);
