@@ -1,0 +1,25 @@
+25  0.00e-0 0.00e-0 0.00e-0 number of data lines+2, first, then <R-type><frac><err><Ref 1:Amsler,2:CERN,3:BNL> 
+1   6.20e-3 1.00e-3 1.00e-0 3Pi0              Amsler et al. (1995f)
+2   6.90e-2 0.35e-2 2.00e-0 Pi+Pi-Pi0         CERN - C.Amsler and F.Myher, Ann.Rev.Nucl.Part.Sci.41,219(1991)
+2   6.90e-2 0.40e-2 1.00e-0 Pi+Pi-Pi0         Foster et al. (1968b)
+2   7.30e-2 0.90e-2 3.00e-0 Pi+Pi-Pi0         BNL  - J.Sedlak and V.Simak, Sov.J.Part.Nucl.19,191(1988)
+3   1.34e-3 1.40e-4 1.00e-0 KsKlPi0           Amsler et al. (1993d)
+3   1.50e-3 0.60e-4 1.00e-0 KsKsPi0           < Armenteros (1965) + Barash (1965) > 
+4   0.00e-0 0.00e-0 1.00e-0 K+K-Pi0  
+5   5.64e-3 0.35e-3 1.00e-0 K-+KslPi+-        < Armenteros (1965) + Barash (1965) > + Abele et al. (1998d)
+6   6.50e-3 0.72e-3 1.00e-0 Pi0Pi0eta         Amsler et al. (1994d)
+7   1.63e-2 0.12e-2 3.00e-0 Pi+Pi-eta         Abele et al.  (1997a)
+7   1.33e-2 0.16e-2 1.00e-0 Pi+Pi-eta         Amsler et al. (1994d)
+7   1.38e-2 0.17e-2 6.00e-0 Pi+Pi-eta         Espigat et al. (1972)
+8   2.00e-3 0.40e-3 1.00e-0 Pi0etaeta         Amsler et al. (1995e)
+9   2.00e-2 0.21e-2 1.00e-0 Pi0Pi0omega       Amsler et al. (1993a)
+9   2.57e-2 0.17e-2 1.00e-0 Pi0Pi0omega       Amsler et al. (1994d)
+10  6.60e-2 0.60e-2 5.00e-0 Pi+Pi-omega       Bizzarri et al.  (1969)
+11  6.80e-3 0.50e-3 1.00e-0 omegaetaPi0       Amsler et al. (1994c)
+12  3.20e-3 0.50e-3 3.00e-0 Pi0Pi0eta'        Abele et al.  (1997e)
+12  3.70e-3 0.80e-3 3.00e-0 Pi0Pi0eta'        Abele et al.  (1997e)
+13  7.50e-3 2.00e-3 3.00e-0 Pi+Pi-eta'        Urner  (1995)
+14  2.30e-4 0.50e-4 1.00e-0 Pi0etaeta'        Amsler et al. (1994f)
+15  9.70e-5 2.60e-5 1.00e-0 Pi0Pi0Phi         Abele et al. (1997c)
+16  4.60e-4 0.90e-4 1.00e-0 Pi+Pi-Phi         Bizzarri et al.  (1969)
+17  0.00e-0 0.00e-0 1.00e-0 *** The last line. The counter in the first line must show number of this one ***

@@ -1,0 +1,1290 @@
+macro aph run=1 gen=1 com=0 scs=0.93 scm=1.10
+*
+  run=2000*[run]
+  hi/del *
+  ve/del *
+  pi/del *
+  exec creavec
+  clo 35
+  targ = H
+  file = h0100
+  if [run] > 0 then
+    exec chips [targ] [file] 1 0 [run]
+  endif
+  exec readpar pf=chipstest_[file].in
+*
+  opt zfl
+  swi gz
+*
+  if [gen] = 1 then
+    opt nsta
+    clr
+    exec MomMul [scs] [scm]
+*@@*    exec Channels
+*QQ*    exec ThreeChn
+*QQ*    exec TwoChn
+  endif
+  if [com] = 1 then
+	   opt htit
+    opt stat
+    exec 3pi0
+    exec pipm0
+    exec 3K
+    exec pieep
+  endif
+*
+return
+*
+macro Sdat run=0 gen=0 scs=0.93 scm=1.10
+*
+  hi/del *
+  ve/del *
+  pi/del *
+  clo 35
+*
+  exec creavec
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevt,freeN,freeD,clustP,rM,sA_
+              chipstest0000.in 'F7.2,2F5.2,I4,2F6.0,3I9,5F5.2' 'OC' -/*/  
+*
+ nsqs = 10
+ nsts = 7
+ ve/cr vsqs([nsqs]) r 1900 2000 2200 2500 3000 3500 4000 4500 5000 5500
+ ve/cr vsts([nsts]) r  100 120 140 160 180 200 220
+ ve/cr vcolor([nsts]) i  1   2   3   4   6   7   1
+ ve/cr vang([nsts]) r   33  30  26  22  19  18  17
+ ve/cr vdx([nsts]) r    0.  0.  0. .25  0. .25  0.
+ ve/cr vdy([nsts]) r    0.  0. -.1  .3  0.  .2 -.3
+* nsqs = 3
+* nsts = 2
+* ve/cr vsqs([nsqs]) r 2000 2500 3000 | 3500 4000 4500 5000 5500
+* ve/cr vsts([nsts]) r 140 160 | 180 200 220
+* ve/cr vcolor([nsts]) i 1 2 | 3 4 6
+***  lcd ../../CHIPSstl
+  if [run] = 1 then
+    do i = 1 , [nsts]
+      sts = vsts([i])
+	  ve/cr   work(1) r [sts]
+	  ve/copy work temp
+      ve/del  work
+      do j = 1 , [nsqs]
+	    sqs = vsqs([j])
+	    ve/cr   work(1) r [sqs]
+	    ve/copy work sqrts
+        ve/del  work
+        ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+              chipstest.in 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
+        wait ' ' 2
+        shell CHIPStest > chips_[sts]_[sqs].log
+        wait ' ' 2
+	    exec makehbk
+        wait ' ' 2
+	    shell mv chips.hbook chips_[sts]_[sqs].hbook
+      enddo
+    enddo
+  endif
+*
+***  lcd ../pawanal/aph
+*
+  ve/cr mean([nsqs],[nsts]) r
+  ve/cr merr([nsqs],[nsts]) r
+  ve/cr mtmp([nsqs],[nsts]) r
+  ve/cr msqs([nsqs],[nsts]) r
+  if [gen] = 1 then
+    1d 119 'Pion Multiplicity n?[p]!' 30 -0.5 29.5 0
+    call hbarx(119)
+    ve/cr par(3) r
+    ve/cr step(3) r 3*.1
+    ve/cr pmin(3) r
+    ve/cr pmax(3) r
+    ve/cr perr(3) r
+*
+    opt zfl
+    swi gz
+    do i = 1 , [nsts]
+      sts = vsts([i])
+    	ve/cr   work(1) r [sts]
+    	ve/copy work temp
+      ve/del  work
+      do j = 1 , [nsqs]
+    	  sqs = vsqs([j])
+    	  ve/cr   work(1) r [sqs]
+    	  ve/copy work sqrts
+        ve/del  work
+        lcd ../../CHIPStest
+        hi/fil 35 /scratch/mkossov/tmp/chips_[sts]_[sqs].hbook
+        hrin 1
+        nevts = $hinfo(1,'entries')
+        w = 1. / [nevts]
+        hi/del 1
+*  
+        lcd ../pawanal/aph
+* * 
+        if [gen] = 1 then
+          opt nsta
+          nt/pl 25.Mpip+Mpim+Mpi0 ! -119
+    	    pi/del ' '
+          add 119 119 119 [w] 0.
+      	  hi/fit 119 g ! 0 par step pmin pmax perr
+          ve/copy temp      mtmp([j]:[j],[i]:[i])
+          ve/copy sqrts     msqs([j]:[j],[i]:[i])
+          ve/copy par(2:2)  mean([j]:[j],[i]:[i])
+          ve/copy perr(2:2) merr([j]:[j],[i]:[i])
+        endif
+        clo 35
+      enddo
+    enddo
+*  
+    ve/wr mtmp,msqs,mean,merr mean_pi_mul_vs_sqrts_[nsts]_[nsqs].vect '4E15.7'
+*  
+  else
+    ve/read mtmp,msqs,mean,merr mean_pi_mul_vs_sqrts_[nsts]_[nsqs].vect '4E15.7'
+  endif
+  exec plotmul [nsts] [nsqs]
+  exec prieps apcmul 
+*
+return
+*
+macro MomMul ss=1.0 sm=1.0
+*
+  exec missdec
+  exec Agetdec
+*
+********************* Pion Momentum *******************
+ve/read kex,sext,dsext data_apc_H.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+sc = [ss] * 0.222
+ve/copy $sigma(sext*[sc]) scext
+ve/copy $sigma(dsext*[sc]) dscext
+mess '*** Integrated Spectrum (charged pions):'
+mess $sigma(0.02*vsum(scext))
+opt utit
+title 'Pion momentum (GeV/c)' u
+title 'Proton antiproton annihilation at rest'
+zone 2 1
+opt logy
+null 0 1 0.02 40.
+set dmod 1
+hi/pl  126(1:50) shist
+atitle ' '  '1/N?A! dN/dP (Annihilation^-1! (GeV/c)^-1!)'
+title ' '
+title ' ' u
+if [nex1] > 0.5 then
+    set dmod 1
+    h/errors kex(2:[nex]) scext(2:[nex]) _
+                      ? dscext(2:[nex]) [nex1] 24 .15
+endif
+set dmod 1
+exec ~/PTOOL/notes 0.65 0.92  ' ' 0. 0.35 40
+exec ~/PTOOL/snotes  0.45 0.82 'Charged pions' 0. 0.35 40
+exec ~/PTOOL/legline 0.65 0.92 'CHIPS MC'    0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/legend  0.15 0.92 'p&^\261!p data'    0. 0.35 40 0
+set mtyp
+set dmod
+*
+*
+********************* Pion Multiplicity *******************
+ve/del scext
+ve/del dscext
+ve/del kex
+ve/del sext
+ve/del dsext
+ve/read kex,sext,dsext data_apcm_H.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+scmm =  sext(1)
+sc   = dsext(1)
+ve/copy $sigma(sext*[sc]/[scmm]*[sm]) scext
+ve/copy $sigma(dsext*[sc]/[scmm]*[sm]) dscext
+*
+* Correction from the Amsler's review:
+ ve/cr corrm(3) r 0.075 0.155 0.295
+ ve/cr ecorrm(3) r 0.01 0.01 0.01
+ ve/copy $sigma(corrm*[sm]) scext(3:5)
+ ve/copy $sigma(ecorrm*[sm]) dscext(3:5)
+ ve/del corrm,ecorrm
+*
+opt logy
+null 0 10 0.002 6.9
+title 'Pion multiplicity' u
+set dmod 1
+hi/pl 119 shist
+atitle ' ' 'dN/N?A! (Annihilation^-1!)'
+title ' ' u
+if [nex1] > 0.5 then
+    set dmod 1
+    h/errors kex(2:[nex]) scext(2:[nex]) _
+                      ? dscext(2:[nex]) [nex1] 24 .15
+endif
+set dmod 1
+exec ~/PTOOL/notes  0.1 0.1 ' ' 0. 0.35 40 0
+exec ~/PTOOL/legline 0.65 0.92 'CHIPS MC' _
+     0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/legend  0.15 0.92 'p&^\261!p data' _
+     0. 0.35 40 0
+set mtyp
+exec ~/PTOOL/snotes  0.25 0.85 _
+    '[p]^+!+[p]^-!+[p]^0! multiplicity' 0. 0.35 40 0
+exec ~/PTOOL/snotes  0.9 0.05 'Kaon Channels' 90. 0.35 40 0
+set dmod
+*
+ exec prieps MomMul
+*
+return
+*
+macro Channels
+*************** Meson Channels *******************
+**************************************************
+*
+  exec missdec
+  exec Agetdec
+*
+zone 1 1
+set mtyp
+ve/del scext
+ve/del dscext
+ve/del kex
+ve/del sext
+ve/del dsext
+ve/read kex,sext,dsext,refx data_apcf_h.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+opt logy
+title 'Proton antiproton annihilation at rest'
+title 'Annihilation Channels' u
+null 0.1 21.9 0.00002 4.5
+set dmod 1
+hi/pl 200 shist
+hi/pl 200 s
+atitle ' ' 'dN/N?A! (Annihilation^-1!)      ^!'
+title ' ' u
+  set dmod 1
+*
+* Print all points
+goto averag
+  sum = 0.
+  smc = 0.
+  ind = 1
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+     ind = [ind] + 1
+	 if [ichan] <> 1 then
+	  if [ichan] <> 3 then
+       br  = sext([i]:[i])
+       sum = [sum] + [br]
+       bmc  = fann([ind]:[ind])
+       smc = [smc] + [bmc]
+      endif
+     endif
+    endif
+    h/errors kex([i]:[i]) sext([i]:[i]) _
+                      ? dsext([i]:[i])  1 $sigma(24+refx([i])) .15
+  enddo
+*
+* Calculate & print Average
+averag:
+  sump = 0.
+  sums = 0.
+  ssp = 0.
+  ssm = 1.e7
+  smc = 0.
+  ind = 1
+  ve/copy $sigma(0.*fann) avrg
+  ve/copy avrg xavrg
+  ve/copy avrg savrg
+  npt = $sigma(nco(avrg))
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+*
+* Store calculated average
+     ve/cr work(3) r $sigma([ind]-1) $sigma([ssp]/[ssm]) $sigma(sqrt(1./[ssm]))
+     ve/copy work(1:1) xavrg([ind]:[ind])
+     ve/copy work(2:2)  avrg([ind]:[ind])
+     ve/copy work(3:3) savrg([ind]:[ind])
+     ve/del work
+	 if  [ind] = 9  then
+       ve/cr   work(1) r $sigma(avrg([ind])-avrg(2)-avrg(4))
+	   ve/copy work(1:1) avrg([ind]:[ind])
+       ve/del  work
+     endif
+     sums = $sigma([sums]+savrg([ind])**2)
+     sump = $sigma([sump]+avrg([ind]))
+*
+     ind = [ind] + 1
+     ssm = $sigma(1./dsext([i])**2)
+     ssp = $sigma(sext([i])/dsext([i])**2)
+     bmc  = fann([ind]:[ind])
+     smc = [smc] + [bmc]
+    else
+     ssm = $sigma([ssm]+1./dsext([i])**2)
+     ssp = $sigma([ssp]+sext([i])/dsext([i])**2)
+    endif
+  enddo
+  exec ~/PTOOL/red
+  h/errors xavrg avrg ? savrg [npt] 20 .2
+  ve/copy $sigma(0.2*avrg/avrg) dxavrg
+  h/errors xavrg $sigma(avrg+savrg) dxavrg ? [npt] 20  .002
+  h/errors xavrg $sigma(avrg-savrg) dxavrg ? [npt] 20  .002
+  exec ~/PTOOL/black
+  sum  = [sump]
+  dsum = $sigma(sqrt([sums]))
+*-------------
+* Labels
+opt liny
+exec ~/PTOOL/snotes   1. .3e-4 '2[p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   2. .3e-4 '[p]^+![p]^-!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   3. .3e-4 '3[p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   4. .3e-4 '[p]^+![p]^-![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   5. .3e-4 '2[p]^+!2[p]^-!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   6. .3e-4 '2[p]^+!2[p]^-![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   7. .3e-4 '3[p]^+!3[p]^-!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   8. .3e-4 '3[p]^+!3[p]^-![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes   9. .3e-4 _
+'neutrals, excl. 2[p]^0!, 3[p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  10. .3e-4 _
+'[p]^+![p]^-! + (neutrals, excl. [p]^0!)' 90. 0.3 40 0
+exec ~/PTOOL/snotes  11. .3e-4 _
+'2[p]^+!2[p]^-! + (neutrals, excl. [p]^0!)' 90. 0.3 40 0
+exec ~/PTOOL/snotes  12. .3e-4 _
+'3[p]^+!3[p]^-! + (neutrals, excl. [p]^0!)' 90. 0.3 40 0
+exec ~/PTOOL/snotes  13. .3e-4 _
+'4[p]^+!4[p]^-! + X' 90. 0.3 40 0
+exec ~/PTOOL/snotes  14. .3e-4 'K^0!K&^\261!!^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  15. .3e-4 'K^ +!K^ -!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  16. .3e-4 'K^0!K&^\261!!^0![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  17. .3e-4 'K^ +!K^ -![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  18. .3e-4 'K^ - +!K^SL![p]^+ -!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  19. .3e-4 _
+'K^0!K&^\261!!^0! + (non-strange, excl. [p]^0!)' 90. 0.3 40 0
+exec ~/PTOOL/snotes  20. .3e-4 _
+'K^ +!K^ -! + (non-strange, excl. [p]^0!)' 90. 0.3 40 0
+exec ~/PTOOL/snotes  21. .3e-4 _
+'K^ + -!K^SL! + (non-strange, excl. [p]^-+!)' 90. 0.3 40 0
+*
+exec ~/PTOOL/notes  0.1 0.1 ' ' 0. 0.35 40 0
+exec ~/PTOOL/legline 0.5 0.91 'CHIPS MC' _
+     0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/snotes  0.05 0.91 'points: p&^\261!!^!p data' _
+     0. 0.35 40 0
+tsum = $format([sum],'F6.3')
+tdsum = $format([dsum],'F5.3')
+txt = 'Exp. sum of channels ='//[tsum]//'"A#'//[tdsum]
+exec ~/PTOOL/snotes  0.647 0.89 [txt]  0. 0.30 40 0
+tsum = $format([smc],'F8.5')
+txt = 'MC sum of channels  ='//[tsum]
+exec ~/PTOOL/snotes  0.65 0.85 [txt]  0. 0.30 40 0
+***exec paramline
+*
+*@@* exec prieps Channels
+*
+return
+*
+macro ThreeChn
+**** 3 particle final states ****
+***goto stop
+exec miss3p
+exec Aget3p
+*
+zone 1 1
+set mtyp
+ve/del kex
+ve/del sext
+ve/del dsext
+ve/del refx
+ve/read kex,sext,dsext,refx data_apcf3_h.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+opt logy
+title 'Proton antiproton annihilation at rest'
+title 'Annihilation Channels with Three-Particle Final States' u
+null 0.1 16.9 0.000002 1.5
+set dmod 1
+hi/pl 400 shist
+hi/pl 400 s
+atitle ' ' 'dN/N?A! (Annihilation^-1!)      ^!'
+title ' ' u
+  set dmod 1
+*
+* Print all points
+goto aver3p
+  sum = 0.
+  smc = 0.
+  ind = 1
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+     ind = [ind] + 1
+       br  = sext([i]:[i])
+       sum = [sum] + [br]
+       bmc  = fann3([ind]:[ind])
+       smc = [smc] + [bmc]
+    endif
+    h/errors kex([i]:[i]) sext([i]:[i]) _
+                      ? dsext([i]:[i])  1 $sigma(24+refx([i])) .15
+  enddo
+*
+* Calculate & print Average
+aver3p:
+  sump = 0.
+  sums = 0.
+  ssp = 0.
+  ssm = 1.e7
+  smc = 0.
+  ind = 1
+  ve/del avrg,xavrg,savrg,dxavrg
+  ve/copy $sigma(0.*fann3) avrg
+  ve/copy avrg xavrg
+  ve/copy avrg savrg
+  npt = $sigma(nco(avrg))
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+*
+* Store calculated average
+     ve/cr work(3) r $sigma([ind]-1) $sigma([ssp]/[ssm]) $sigma(sqrt(1./[ssm]))
+     ve/copy work(1:1) xavrg([ind]:[ind])
+     ve/copy work(2:2)  avrg([ind]:[ind])
+     ve/copy work(3:3) savrg([ind]:[ind])
+     ve/del work
+       sums = $sigma([sums]+savrg([ind])**2)
+       sump = $sigma([sump]+avrg([ind]))
+*
+     ind = [ind] + 1
+     ssm = $sigma(1./dsext([i])**2)
+     ssp = $sigma(sext([i])/dsext([i])**2)
+       bmc  = fann3([ind]:[ind])
+       smc = [smc] + [bmc]
+    else
+     ssm = $sigma([ssm]+1./dsext([i])**2)
+     ssp = $sigma([ssp]+sext([i])/dsext([i])**2)
+    endif
+  enddo
+  exec ~/PTOOL/red
+  h/errors xavrg avrg ? savrg [npt] 20 .2
+  ve/copy $sigma(0.2*avrg/avrg) dxavrg
+  h/errors xavrg $sigma(avrg+savrg) dxavrg ? [npt] 20  .002
+  h/errors xavrg $sigma(avrg-savrg) dxavrg ? [npt] 20  .002
+  exec ~/PTOOL/black
+  sum  = [sump]
+  dsum = $sigma(sqrt([sums]))
+*-------------
+* Labels
+opt liny
+exec ~/PTOOL/snotes  1. .3e-5 '[p]^0![p]^0![p]^0!'  90. 0.3 40 0
+exec ~/PTOOL/snotes  2. .3e-5 '[p]^+![p]^-![p]^0!'  90. 0.3 40 0
+exec ~/PTOOL/snotes  3. .3e-5 'K^0!K&^\261!!^0![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes  4. .3e-5 'K^ +!K^ -![p]^0!'      90. 0.3 40 0
+exec ~/PTOOL/snotes  5. .3e-5 'K^ - +!K^SL![p]^+ -!'   90. 0.3 40 0
+exec ~/PTOOL/snotes  6. .3e-5 '[c][p]^0![p]^0!'     90. 0.3 40 0
+exec ~/PTOOL/snotes  7. .3e-5 '[c][p]^+![p]^-!'     90. 0.3 40 0
+exec ~/PTOOL/snotes  8. .3e-5 '[c][c][p]^0!'        90. 0.3 40 0
+exec ~/PTOOL/snotes  9. .3e-5 '[w][p]^0![p]^0!'     90. 0.3 40 0
+exec ~/PTOOL/snotes 10. .3e-5 '[w][p]^+![p]^-!'     90. 0.3 40 0
+exec ~/PTOOL/snotes 11. .3e-5 '[w][c][p]^0!'        90. 0.3 40 0
+exec ~/PTOOL/snotes 12. .3e-5 '[c\242][p]^0![p]^0!' 90. 0.3 40 0
+exec ~/PTOOL/snotes 13. .3e-5 '[c\242][p]^+![p]^-!' 90. 0.3 40 0
+exec ~/PTOOL/snotes 14. .3e-5 '[c\242][c][p]^0!'    90. 0.3 40 0
+exec ~/PTOOL/snotes 15. .3e-5 '[f][p]^0![p]^0!'     90. 0.3 40 0
+exec ~/PTOOL/snotes 16. .3e-5 '[f][p]^+![p]^-!'     90. 0.3 40 0
+*
+exec ~/PTOOL/notes  0.1 0.1 ' ' 0. 0.35 40 0
+exec ~/PTOOL/legline 0.5 0.91 'CHIPS MC' _
+     0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/snotes  0.05 0.91 'points: p&^\261!p data' _
+     0. 0.35 40 0
+tsum = $format([sum],'F6.3')
+tdsum = $format([dsum],'F5.3')
+txt = 'Exp. sum of channels ='//[tsum]//'"A#'//[tdsum]
+exec ~/PTOOL/snotes  0.647 0.89 [txt]  0. 0.30 40 0
+tsum = $format([smc],'F8.5')
+txt = 'MC sum of channels  ='//[tsum]
+exec ~/PTOOL/snotes  0.65 0.85 [txt]  0. 0.30 40 0
+***exec paramline
+*
+*@@* exec prieps ThreeChn
+*
+return
+*
+macro TwoChn
+**** Resonances ****
+***goto stop
+exec missres
+exec Agetres
+*
+zone 1 1
+set mtyp
+ve/del kex
+ve/del sext
+ve/del dsext
+ve/del refx
+ve/read kex,sext,dsext,refx data_apcfp_H.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 1
+opt logy
+title 'Proton antiproton annihilation at rest'
+title 'Annihilation Channels with Two-Particle Final States' u
+null 0.1 32.9 0.000002 1.5
+set dmod 1
+hi/pl 300 shist
+hi/pl 300 s
+atitle ' ' 'dN/N?A! (Annihilation^-1!)      ^!'
+title ' ' u
+  set dmod 1
+*
+* Print all points
+goto averr
+  sum = 0.
+  smc = 0.
+  ind = 1
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+     ind = [ind] + 1
+       br  = sext([i]:[i])
+       sum = [sum] + [br]
+       bmc  = fannr([ind]:[ind])
+       smc = [smc] + [bmc]
+    endif
+    h/errors kex([i]:[i]) sext([i]:[i]) _
+                      ? dsext([i]:[i])  1 $sigma(24+refx([i])) .15
+  enddo
+*
+* Calculate & print Average
+averr:
+  sump = 0.
+  sums = 0.
+  ssp = 0.
+  ssm = 1.e7
+  smc = 0.
+  ind = 1
+  ve/del avrg,xavrg,savrg,dxavrg
+  ve/copy $sigma(0.*fannr) avrg
+  ve/copy avrg xavrg
+  ve/copy avrg savrg
+  npt = $sigma(nco(avrg))
+  do i = 2, [nex]
+    ichan = kex([i]:[i])
+	if [ichan] = [ind] then
+*
+* Store calculated average
+     ve/cr work(3) r $sigma([ind]-1) $sigma([ssp]/[ssm]) $sigma(sqrt(1./[ssm]))
+     ve/copy work(1:1) xavrg([ind]:[ind])
+     ve/copy work(2:2)  avrg([ind]:[ind])
+     ve/copy work(3:3) savrg([ind]:[ind])
+     ve/del work
+*
+     sums = $sigma([sums]+savrg([ind])**2)
+     sump = $sigma([sump]+avrg([ind]))
+*
+     ind = [ind] + 1
+     ssm = $sigma(1./dsext([i])**2)
+     ssp = $sigma(sext([i])/dsext([i])**2)
+     bmc = fannr([ind]:[ind])
+     smc = [smc] + [bmc]
+    else
+     ssm = $sigma([ssm]+1./dsext([i])**2)
+     ssp = $sigma([ssp]+sext([i])/dsext([i])**2)
+    endif
+  enddo
+  exec ~/PTOOL/red
+  h/errors xavrg avrg ? savrg [npt] 20 .2
+  ve/copy $sigma(0.2*avrg/avrg) dxavrg
+  h/errors xavrg $sigma(avrg+savrg) dxavrg ? [npt] 20  .002
+  h/errors xavrg $sigma(avrg-savrg) dxavrg ? [npt] 20  .002
+  exec ~/PTOOL/black
+  sum  = [sump]
+  dsum = $sigma(sqrt([sums]))
+*-------------
+* Labels
+opt liny
+exec ~/PTOOL/snotes  1. .3e-5 '[p]^0![p]^0!'        90. 0.3 40 0
+exec ~/PTOOL/snotes  2. .3e-5 '[p]^+![p]^-!'        90. 0.3 40 0
+exec ~/PTOOL/snotes  3. .3e-5 'K^0!K&^\261!!^0!'    90. 0.3 40 0
+exec ~/PTOOL/snotes  4. .3e-5 'K^ +!K^ -!'          90. 0.3 40 0
+exec ~/PTOOL/snotes  5. .3e-5 '[c][p]^0!'           90. 0.3 40 0
+exec ~/PTOOL/snotes  6. .3e-5 '[c][c]'              90. 0.3 40 0
+exec ~/PTOOL/snotes  7. .3e-5 '[r]^0![p]^0!'        90. 0.3 40 0
+exec ~/PTOOL/snotes  8. .3e-5 '[r]^- +![p]^+ -!'    90. 0.3 40 0
+exec ~/PTOOL/snotes  9. .3e-5 '[r]^0![c]'           90. 0.3 40 0
+exec ~/PTOOL/snotes 10. .3e-5 '[r]^0![r]^0!'        90. 0.3 40 0
+exec ~/PTOOL/snotes 11. .3e-5 '[w][p]^0!'           90. 0.3 40 0
+exec ~/PTOOL/snotes 12. .3e-5 '[w][c]'              90. 0.3 40 0
+exec ~/PTOOL/snotes 13. .3e-5 '[w][r]^0!'           90. 0.3 40 0
+exec ~/PTOOL/snotes 14. .3e-5 '[w][w]'              90. 0.3 40 0
+exec ~/PTOOL/snotes 15. .3e-5 'K*^0!K&^\261!!^0! + c.c.' 90. 0.3 40 0
+exec ~/PTOOL/snotes 16. .3e-5 'K*^+ -!K^ - +!'      90. 0.3 40 0
+exec ~/PTOOL/snotes 17. .3e-5 'K*^0!K&^\261!*^0!'  90. 0.3 40 0
+exec ~/PTOOL/snotes 18. .3e-5 'K*^+ -!K*^ - +!'      90. 0.3 40 0
+exec ~/PTOOL/snotes 19. .3e-5 '[c\242][p]^0!'       90. 0.3 40 0
+exec ~/PTOOL/snotes 20. .3e-5 '[c\242][c]'          90. 0.3 40 0
+exec ~/PTOOL/snotes 21. .3e-5 '[c\242][r]^0!'       90. 0.3 40 0
+exec ~/PTOOL/snotes 22. .3e-5 '[c\242][w]'          90. 0.3 40 0
+exec ~/PTOOL/snotes 23. .3e-5 '[f][p]^0!'           90. 0.3 40 0
+exec ~/PTOOL/snotes 24. .3e-5 '[f][c]'              90. 0.3 40 0
+exec ~/PTOOL/snotes 25. .3e-5 '[f][r]^0!'           90. 0.3 40 0
+exec ~/PTOOL/snotes 26. .3e-5 '[f][w]'              90. 0.3 40 0
+exec ~/PTOOL/snotes 27. .3e-5 'f?2![p]^0!'          90. 0.3 40 0
+exec ~/PTOOL/snotes 28. .3e-5 'f?2![r]^0!'          90. 0.3 40 0
+exec ~/PTOOL/snotes 29. .3e-5 'f?2![w]'             90. 0.3 40 0
+exec ~/PTOOL/snotes 30. .3e-5 'a?2![p]'             90. 0.3 40 0
+exec ~/PTOOL/snotes 31. .3e-5 'a?2![w]'             90. 0.3 40 0
+exec ~/PTOOL/snotes 32. .3e-5 'f?2![\242][p]^0!'    90. 0.3 40 0
+*
+exec ~/PTOOL/notes  0.1 0.1 ' ' 0. 0.35 40 0
+exec ~/PTOOL/legline 0.5 0.91 'CHIPS MC' _
+     0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/snotes  0.05 0.91 'points: p&^\261!p data' _
+     0. 0.35 40 0
+tsum = $format([sum],'F6.3')
+tdsum = $format([dsum],'F5.3')
+txt = 'Exp. sum of channels ='//[tsum]//'"A#'//[tdsum]
+exec ~/PTOOL/snotes  0.647 0.89 [txt]  0. 0.30 40 0
+tsum = $format([smc],'F8.5')
+txt = 'MC sum of channels  ='//[tsum]
+exec ~/PTOOL/snotes  0.65 0.85 [txt]  0. 0.30 40 0
+***exec paramline
+*
+set mtyp
+set dmod
+*
+*@@* exec prieps TwoChn
+*
+return
+*
+macro Aget3p 1=H
+*
+nevts = $hinfo(1,'entries')
+weight = 1. / [nevts]
+*
+ NFRAC3 = 16
+*
+ 1d 401 '[p]^0![p]^0![p]^0!'   20 -0.5 19.5 0
+ 1d 402 '[p]^+![p]^-![p]^0!'   20 -0.5 19.5 0
+ 1d 403 'K^0!K&^\261!!^0![p]^0!'  20 -0.5 19.5 0
+ 1d 404 'K^+!K^-![p]^0!'       20 -0.5 19.5 0
+ 1d 405 'K^ - +!K^SL![p]^+ -!'    20 -0.5 19.5 0
+ 1d 406 '[c][p]^0![p]^0!'      20 -0.5 19.5 0
+ 1d 407 '[c][p]^+![p]^-!'      20 -0.5 19.5 0
+ 1d 408 '[c][c][p]^0!'         20 -0.5 19.5 0
+ 1d 409 '[w][p]^0![p]^0!'      20 -0.5 19.5 0
+ 1d 410 '[w][p]^+![p]^-!'      20 -0.5 19.5 0
+ 1d 411 '[w][c][p]^0!'         20 -0.5 19.5 0
+ 1d 412 '[c\242][p]^0![p]^0!'  20 -0.5 19.5 0
+ 1d 413 '[c\242][p]^+![p]^-!'  20 -0.5 19.5 0
+ 1d 414 '[c\242][c][p]^0!'     20 -0.5 19.5 0
+ 1d 415 '[f][p]^0![p]^0!'      20 -0.5 19.5 0
+ 1d 416 '[f][p]^+![p]^-!'      20 -0.5 19.5 0
+*
+ opt zfl
+ swi z
+ set xwin 0.001
+ set ywin 0.001
+ zone 6 6
+ do i = 1, [NFRAC3]
+   id = 400 + [i]
+   if [i] < 6 then
+     nt/pl 25.MtotR $[i] -[id]
+   else
+     nt/pl 27.MtotR $[i] -[id]
+   endif
+ enddo
+ pi/del ' '
+ swi gz
+ set xwin
+ set ywin
+ zone 1 1
+*
+ fdimr = [NFRAC3] + 2
+ ve/cr fann3([fdimr]) r 0.  _
+      $HINFO(401,'SUM') $HINFO(402,'SUM') $HINFO(403,'SUM') _
+      $HINFO(404,'SUM') $HINFO(405,'SUM') $HINFO(406,'SUM') _
+      $HINFO(407,'SUM') $HINFO(408,'SUM') $HINFO(409,'SUM') _
+      $HINFO(410,'SUM') $HINFO(411,'SUM') $HINFO(412,'SUM') _
+      $HINFO(413,'SUM') $HINFO(414,'SUM') $HINFO(415,'SUM') _
+      $HINFO(416,'SUM')
+1d 400 'Fann3' [fdimr] -0.475 $sigma([fdimr]-0.475)
+call HBARX(400)
+put/cont 400 fann3
+put/err  400 $sigma(sqrt(fann3)) 
+add 400 400 400 [weight] 0.
+ve/copy $sigma([weight]*fann3) fann3
+*
+return
+*
+macro miss3p
+ cut 0 -
+* -- from NTUPLE#25:
+ cut $1  MtotD=3.and.MPi0=3
+ cut $2  MtotD=3.and.MPip=1.and.MPim=1.and.MPi0=1
+ cut $3  MtotD=3.and.MPi0=1.and.MK0=1.and.MaK0=1
+ cut $4  MtotD=3.and.MPi0=1.and.MKp=1.and.MKm=1
+ cut $5  MtotD=3.and.MPip+MPim=1.and.MKp+MKm=1.and.MK0+MaK0=1
+* -- from NTUPLE#27:
+ cut $6  MtotR=3.and.MPi0=2.and.Meta=1
+ cut $7  (MtotR=3.and.MPip=1.and.MPim=1.and.Meta=1).or.(MtotR=2.and.Meta=1.and.Mrho0=1.and.MPi0<2)
+ cut $8  MtotR=3.and.MPi0=1.and.Meta=2
+ cut $9  MtotR=3.and.MPi0=2.and.Momega=1
+ cut $10 (MtotR=3.and.MPip=1.and.MPim=1.and.Momega=1).or.(MtotR=2.and.Momega=1.and.Mrho0=1.and.MPi0<2)
+ cut $11 MtotR=3.and.Momega=1.and.Meta=1.and.MPi0=1
+ cut $12 MtotR=3.and.MPi0=2.and.Metap=1
+ cut $13 (MtotR=3.and.MPip=1.and.MPim=1.and.Metap=1).or.(MtotR=2.and.Metap=1.and.Mrho0=1.and.MPi0<2)
+ cut $14 MtotR=3.and.MPi0=1.and.Meta=1.and.Metap=1
+ cut $15 MtotR=3.and.MPi0=2.and.Mphi=1
+ cut $16 (MtotR=3.and.MPip=1.and.MPim=1.and.Mphi=1).or.(MtotR=2.and.Mphi=1.and.Mrho0=1)
+*
+return
+*
+macro Agetdec 1=H
+*
+ 1d 111 'nprot  trig' 20 -0.5 19.5 0
+ 1d 112 'nneut  trig' 40 -0.5 39.5 0
+ 1d 113 'npim  trig'  20 -0.5 19.5 0
+ 1d 114 'npip  trig'  20 -0.5 19.5 0
+ 1d 115 'npi0  trig'  20 -0.5 19.5 0
+ 1d 117 'ngam  trig'  20 -0.5 19.5 0
+ 1d 119 'Pion Multiplicity n?[p]!' 20 -0.5 19.5 0
+ 1d 120 'Charged Pion Multiplicity n?[p]!' 20 -0.5 19.5 0
+ 1d 121 'P?prot!' 100 0. 2. 0
+ 1d 122 'P?neut!' 100 0. 2. 0
+ 1d 123 'P?pim!'  100 0. 2. 0
+ 1d 124 'P?pip!'  100 0. 2. 0
+ 1d 125 'P?pi0!'  100 0. 2. 0
+ NFRAC = 21
+ 1d 201 'M2P0'        20 -0.5 19.5 0
+ 1d 202 'MPpPm'       20 -0.5 19.5 0
+ 1d 203 'M3P0'        20 -0.5 19.5 0
+ 1d 204 'MPpPmP0'     20 -0.5 19.5 0
+ 1d 205 'M2Pp2Pm'     20 -0.5 19.5 0
+ 1d 206 'M2Pp2PmP0'   20 -0.5 19.5 0
+ 1d 207 'M3Pp3Pm'     20 -0.5 19.5 0
+ 1d 208 'M3Pp3PmP0'   20 -0.5 19.5 0
+ 1d 209 'MnP0(n>1)'   20 -0.5 19.5 0
+ 1d 210 'MPpPmnP0(n>1)'  20 -0.5 19.5 0
+ 1d 211 'M2Pp2PmnP0(n>1)'   20 -0.5 19.5 0
+ 1d 212 'M3Pp3PmnP0(n>1)'   20 -0.5 19.5 0
+ 1d 213 'MK0aK0'      20 -0.5 19.5 0
+ 1d 214 'MKpKm'       20 -0.5 19.5 0
+ 1d 215 'MP0K0aK0'    20 -0.5 19.5 0
+ 1d 216 'MPpmKmpKsl'  20 -0.5 19.5 0
+ 1d 217 'MK0aK0X(M>3)+MK0aK0[g]'   20 -0.5 19.5 0
+ 1d 218 'MKpKmX(M>2)'   20 -0.5 19.5 0
+ 1d 219 'MKmpKslX(M<>3.or.MPpm<>1)'   20 -0.5 19.5 0
+ 1d 220 'M(Kmpsl=1)X'   20 -0.5 19.5 0
+ 1d 221 'M4Pp4PmnP0(n>0)'   20 -0.5 19.5 0
+ call HBARX(0)
+ opt zfl
+ swi z
+ set xwin 0.001
+ set ywin 0.001
+ zone 6 6
+*
+* Pion multiplicity in events with no Kaons; Kaon mult. added as chann.9
+  nt/pl 25.(MKp+MK0+MKm+MaK0)*9./(MKp+MK0+MKm+MaK0) MKp+MK0+MKm+MaK0>0 -120
+  nt/pl 25.Mpip+Mpim+Mpi0 MKp+MK0+MKm+MaK0=0 -119
+  add 120 119 119 1. 1.
+*
+ do i = 1, [NFRAC]
+   id = 200 + [i]
+   nt/pl 25.MtotD $[i] -[id]
+ enddo
+ nt/pl 20.0.001*sqrt(px**2+py**2+pz**2) PDG=211 -124
+ nt/pl 20.0.001*sqrt(px**2+py**2+pz**2) PDG=-211 -123
+ nt/pl 20.0.001*sqrt(px**2+py**2+pz**2) PDG=111.or.PDG=221 -125
+ pi/del ' '
+ swi gz
+ set xwin
+ set ywin
+ zone 1 1
+*
+dP  = 0.020         | (GeV) P-interval
+nevts = $hinfo(1,'entries')
+wi = 1. / [nevts]
+wi = [wi] / [dP]
+weight = [wi]
+add 121 121 121 [weight] 0.
+add 122 122 122 [weight] 0.
+add 123 123 123 [weight] 0.
+add 124 124 124 [weight] 0.
+add 125 125 125 [weight] 0.
+add 123 124 126 1. 1.
+weight = 1. / [nevts]
+add 111 111 111 [weight] 0.
+add 112 112 112 [weight] 0.
+add 113 113 113 [weight] 0.
+add 114 114 114 [weight] 0.
+add 115 115 115 [weight] 0.
+add 119 119 119 [weight] 0.
+fdim = [NFRAC] + 2
+ve/cr fann([fdim]) r 0. _
+      $HINFO(201,'SUM') $HINFO(202,'SUM') $HINFO(203,'SUM') _
+      $HINFO(204,'SUM') $HINFO(205,'SUM') $HINFO(206,'SUM') _
+      $HINFO(207,'SUM') $HINFO(208,'SUM') $HINFO(209,'SUM') _
+      $HINFO(210,'SUM') $HINFO(211,'SUM') $HINFO(212,'SUM') _
+      $HINFO(213,'SUM') $HINFO(214,'SUM') $HINFO(215,'SUM') _
+      $HINFO(216,'SUM') $HINFO(217,'SUM') $HINFO(218,'SUM') _
+      $HINFO(219,'SUM') $HINFO(220,'SUM') $HINFO(221,'SUM') 
+1d 200 'Fann' [fdim] -0.475 $sigma([fdim]-0.475)
+call HBARX(200)
+put/cont 200 fann
+put/err  200 $sigma(sqrt(fann)) 
+add 200 200 200 [weight] 0.
+ve/copy $sigma([weight]*fann) fann
+*
+return
+*
+macro Agetres 1=H
+*
+nevts = $hinfo(1,'entries')
+weight = 1. / [nevts]
+*
+ NFRACR = 32
+*
+ 1d 301 '[p]^0![p]^0!'    20 -0.5 19.5 0
+ 1d 302 '[p]^+![p]^-!'    20 -0.5 19.5 0
+ 1d 303 'K^0!K^0!'        20 -0.5 19.5 0
+ 1d 304 'K^+!K^-!'        20 -0.5 19.5 0
+ 1d 305 '[c][p]^0!'       20 -0.5 19.5 0
+ 1d 306 '[c][c]'          20 -0.5 19.5 0
+ 1d 307 '[r]^0![p]^0!'    20 -0.5 19.5 0
+ 1d 308 '[r]^- +![p]^+ -!'  20 -0.5 19.5 0
+ 1d 309 '[r]^0![c]'       20 -0.5 19.5 0
+ 1d 310 '[r]^0![r]^0!'    20 -0.5 19.5 0
+ 1d 311 '[w][p]^0!'       20 -0.5 19.5 0
+ 1d 312 '[w][c]'          20 -0.5 19.5 0
+ 1d 313 '[w][r]^0!'       20 -0.5 19.5 0
+ 1d 314 '[w][w]'          20 -0.5 19.5 0
+ 1d 315 'K^*0!K^0!'       20 -0.5 19.5 0
+ 1d 316 'K^*+-!K^-+!'     20 -0.5 19.5 0
+ 1d 317 'K^0*!K&^\216!!^0*! + c.c.'       20 -0.5 19.5 0
+ 1d 318 'K^+-*!K^-+*!'    20 -0.5 19.5 0
+ 1d 319 '[c\242][p]^0!'   20 -0.5 19.5 0
+ 1d 320 '[c\242][c]'      20 -0.5 19.5 0
+ 1d 321 '[c\242][r]^0!'   20 -0.5 19.5 0
+ 1d 322 '[c\242][w]'      20 -0.5 19.5 0
+ 1d 323 '[f][p]^0!'       20 -0.5 19.5 0
+ 1d 324 '[f][c]'          20 -0.5 19.5 0
+ 1d 325 '[f][r]^0!'       20 -0.5 19.5 0
+ 1d 326 '[f][w]'          20 -0.5 19.5 0
+ 1d 327 'f?2![p]^0!'      20 -0.5 19.5 0
+ 1d 328 'f?2![r]^0!'      20 -0.5 19.5 0
+ 1d 329 'f?2![w]'         20 -0.5 19.5 0
+ 1d 330 'a?2![p]'         20 -0.5 19.5 0
+ 1d 331 'a?2![w]'         20 -0.5 19.5 0
+ 1d 332 'f?2![\242][p]^0!'      20 -0.5 19.5 0
+*
+ opt zfl
+ swi z
+ set xwin 0.001
+ set ywin 0.001
+ zone 6 6
+ do i = 1, [NFRACR]
+   id = 300 + [i]
+   nt/pl 27.MtotR $[i] -[id]
+ enddo
+ pi/del ' '
+ swi gz
+ set xwin
+ set ywin
+ zone 1 1
+*
+ fdimr = [NFRACR] + 2
+ ve/cr fannr([fdimr]) r 0.  _
+      $HINFO(301,'SUM') $HINFO(302,'SUM') $HINFO(303,'SUM') _
+      $HINFO(304,'SUM') $HINFO(305,'SUM') $HINFO(306,'SUM') _
+      $HINFO(307,'SUM') $HINFO(308,'SUM') $HINFO(309,'SUM') _
+      $HINFO(310,'SUM') $HINFO(311,'SUM') $HINFO(312,'SUM') _
+      $HINFO(313,'SUM') $HINFO(314,'SUM') $HINFO(315,'SUM') _
+      $HINFO(316,'SUM') $HINFO(317,'SUM') $HINFO(318,'SUM') _
+      $HINFO(319,'SUM') $HINFO(320,'SUM') $HINFO(321,'SUM') _
+      $HINFO(322,'SUM') $HINFO(323,'SUM') $HINFO(324,'SUM') _
+      $HINFO(325,'SUM') $HINFO(326,'SUM') $HINFO(327,'SUM') _
+      $HINFO(328,'SUM') $HINFO(329,'SUM') $HINFO(330,'SUM') _
+      $HINFO(331,'SUM') $HINFO(332,'SUM')
+1d 300 'Fannr' [fdimr] -0.475 $sigma([fdimr]-0.475)
+call HBARX(300)
+put/cont 300 fannr
+put/err  300 $sigma(sqrt(fannr)) 
+add 300 300 300 [weight] 0.
+ve/copy $sigma([weight]*fannr) fannr
+*
+*
+return
+*
+macro missdec
+ cut 0 -
+ cut  $1 MtotD=2.and.MPi0=2
+ cut  $2 MtotD=2.and.MPip=1.and.MPim=1
+ cut  $3 MtotD=3.and.MPi0=3
+ cut  $4 MtotD=3.and.MPip=1.and.MPim=1.and.MPi0=1
+ cut  $5 MtotD=4.and.MPip=2.and.MPim=2
+ cut  $6 MtotD=5.and.MPip=2.and.MPim=2.and.MPi0=1
+ cut  $7 MtotD=6.and.MPip=3.and.MPim=3
+ cut  $8 MtotD=7.and.MPip=3.and.MPim=3.and.MPi0=1
+ cut  $9 MtotD=MPi0+Mgam.and.MPi0+Mgam>1.5.and..not.($1.or.$3)
+ cut $10 MtotD=2+MPi0+Mgam.and.MPip=1.and.MPim=1.and._
+(MPi0+Mgam>1.5.or.Mgam>0.5)
+ cut $11 MtotD=4+MPi0+Mgam.and.MPip=2.and.MPim=2.and._
+(MPi0+Mgam>1.5.or.Mgam>0.5)
+ cut $12 MtotD=6+MPi0+Mgam.and.MPip=3.and.MPim=3.and._
+(MPi0+Mgam>1.5.or.Mgam>0.5)
+ cut $13 MPip=4.and.MPim=4
+ cut $14 MtotD=2.and.MK0=1.and.MaK0=1
+ cut $15 MtotD=2.and.MKp=1.and.MKm=1
+ cut $16 MtotD=3.and.MPi0=1.and.MK0=1.and.MaK0=1
+ cut $17 MtotD=3.and.MPi0=1.and.MKp=1.and.MKm=1
+ cut $18 MtotD=3.and.MPip+MPim=1.and.MKp+MKm=1.and.MK0+MaK0=1
+ cut $19 MK0=1.and.MaK0=1.and..not.($14.or.$16)
+ cut $20 MKp=1.and.MKm=1.and..not.($15.or.$17)
+ cut $21 MKp+MKm=1.and.MK0+MaK0=1.and..not.$18
+ cut 25 _
+.not.($1.or.$2.or.$3.or.$4.or.$5.or._
+$6.or.$7.or.$8.or.$9.or.$10.or._
+$11.or.$12.or.$13.or.$14.or.$15.or._
+$16.or.$17.or.$18.or.$19.or.$20.or.$21)
+*
+***** nt/sc 25 $25
+*
+return
+*
+macro missres
+ cut 0 -
+ cut  $1 MtotR=2.and.MPi0=2
+ cut  $2 MtotR=2.and.MPip+Mpim=2
+ cut  $3 MtotR=2.and.MK0+MaK0=2
+ cut  $4 MtotR=2.and.MKp+MKm=2
+ cut  $5 MtotR=2.and.MPi0=1.and.Meta=1
+ cut  $6 MtotR=2.and.Meta=2
+ cut  $7 MtotR=2.and.MPi0=1.and.Mrho0=1
+ cut  $8 MtotR=2.and.MPip+MPim=1.and.Mrhop+Mrhom=1
+ cut  $9 MtotR=2.and.Meta=1.and.Mrho0=1
+ cut $10 MtotR=2.and.Mrho0=2
+ cut $11 MtotR=2.and.Momega=1.and.MPi0=1
+ cut $12 MtotR=2.and.Momega=1.and.Meta=1
+ cut $13 MtotR=2.and.Mrho0=1.and.Momega=1
+ cut $14 MtotR=2.and.Momega=2
+ cut $15 MtotR=2.and.(MKS0+MaK0=2.or.MaKS0+MK0=2)
+ cut $16 MtotR=2.and.(MKSC+MKm=2.or.MaKSC+MKp=2)
+ cut $17 MtotR=2.and.MKS0+MaKS0=2
+ cut $18 MtotR=2.and.MKSC+MaKSC=2
+ cut $19 MtotR=2.and.MPi0=1.and.Metap=1
+ cut $20 MtotR=2.and.Meta=1.and.Metap=1
+ cut $21 MtotR=2.and.Metap=1.and.Mrho0=1
+ cut $22 MtotR=2.and.Momega=1.and.Metap=1
+ cut $23 MtotR=2.and.MPi0=1.and.Mphi=1
+ cut $24 MtotR=2.and.Meta=1.and.Mphi=1
+ cut $25 MtotR=2.and.Mrho0=1.and.Mphi=1
+ cut $26 MtotR=2.and.Momega=1.and.Mphi=1
+ cut $27 MtotR=2.and.Mf2=1.and.MPi0=1
+ cut $28 MtotR=2.and.Mf2=1.and.Mrho0=1
+ cut $29 MtotR=2.and.Mf2=1.and.Momega=1
+ cut $30 MtotR=2.and.Ma2p+Ma2m+Ma20=1.and.MPip+Mpim+MPi0=1
+ cut $31 MtotR=2.and.Ma20=1.and.Momega=1
+ cut $32 MtotR=2.and.Mf2p=1.and.MPi0=1
+*
+return
+*
+macro recover
+clo 35
+hi/del *
+lcd ../../CHIPStest
+shell cp chips.hbook /scratch/mkossov/tmp/chips.hbook
+hi/fil 35 /scratch/mkossov/tmp/chips.hbook ! u
+nt/reco 20
+nt/reco 22
+nt/reco 25
+nt/reco 27
+nt/pri 25
+1d 1 'Recovered Events' 1 0 2
+ve/cr work(1) r $hinfo(25,'entries')
+put/cont 1 work
+hrout 1
+hrout 20
+hrout 22
+hrout 25
+hrout 27
+hi/pl 1
+**clo 35
+hi/pl 1
+ve/del work
+lcd ../pawanal/aph
+return
+*
+macro pr fr=1 to=4
+ exec ~/PTOOL/pri land [fr] [to] hdat1 atsbhp 2 2 
+return
+*
+macro chips targ=C file=c0606 np=6 nn=6 runn=2000
+  exec readpar pf=chipstest0000.in
+*
+  pdg  = $sigma([np]*1000+[nn])
+  pdgt = 90000000 + [pdg]
+*  mess 'After Target PDG = '//[pdgt]
+  ve/cr   work(2) i [pdgt] [runn]
+  ve/copy work(1:1) pdgtg
+  ve/copy work(2:2) nevnt
+  ve/del  work  
+  exec writepar pf=chipstest.in
+*  shell rm chips_[file].log
+  shell cp chipstest.in chipstest_[file].in
+  wait ' ' 2
+  shell ./CHIPStest | > chips_[file].log
+  wait ' ' 2
+  exec makehbk
+  wait ' ' 2
+  shell mv chips.hbook chips_[file].hbook
+*
+return
+*
+macro readpar  pf=chipstest.in
+  ve/read  temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC' -/*/  
+return
+*
+macro writepar pf=chipstest.in
+  ve/write temp,ssse,eepr,nop,momb,enb,pdgpr,pdgtg,nevnt,freeN,freeD,clustP,rM,sA_
+              [pf] 'F7.2,F5.2,F5.2,I4,F6.0,F6.0,2I9,I9,5F5.2' 'OC'
+return
+*
+macro creavec
+ ve/cr temp(1) r 
+ ve/cr ssse(1) r
+ ve/cr eepr(1) r
+ ve/cr nop(1) i
+ ve/cr momb(1) r
+ ve/cr enb(1) r
+ ve/cr pdgpr(1) i
+ ve/cr pdgtg(1) i
+ ve/cr nevnt(1) i
+ ve/cr freeN(1) r
+ ve/cr freeD(1) r
+ ve/cr clustP(1) r
+ ve/cr rM(1) r
+ ve/cr sA(1) r
+return
+*
+macro paramline
+ttemp = temp(1)
+tssse = ssse(1)
+teepr = eepr(1)
+tsqrts  = sqrts(1)
+txtm = 't='//[ttemp]//' ss='//[tssse]//' eep='//[teepr]//' sqs='//[tsqrts]
+exec ~/PTOOL/snotes 0.05 0.96 [txtm] 0. 0.35 40 0
+return
+*
+macro 3pi0 
+title '[p]^0![p]^0! eff. mass in pp&^\261! [\256] [p]^0![p]^0![p]^0! reaction'
+cut 0 -
+**.and.mtotr=3 | --need to forbid f2
+cut $1 pdg1=111.and.pdg2=111.and.pdg3=111
+1d 501 'm12' 100 0 1800 0.
+hi/copy 501 502 'm13'
+hi/copy 501 503 'm23'
+hi/copy 501 510 'm?[p]^0!?[p]^0!!'
+nt/pl 22.m12 $1 -501
+nt/pl 22.m13 $1 -502
+nt/pl 22.m23 $1 -503
+add 501 502 510 1. 1.
+add 503 510 510 1. 1.
+hi/pl 510
+title ' '
+return
+*
+macro pipm0 
+title '[p][p] eff. mass in pp&^\261! [\256] [p][p][p] reaction'
+cut 0 -
+cut $2 abs(pdg1)<300.and.abs(pdg3)<300.and.abs(pdg3)<300
+1d 601 'm12' 100 0 1800 0.
+hi/copy 601 602 'm13'
+hi/copy 601 603 'm23'
+hi/copy 601 610 'm?[p][p]!'
+nt/pl 22.m12 $2 -601
+nt/pl 22.m13 $2 -602
+nt/pl 22.m23 $2 -603
+add 601 602 610 1. 1.
+add 603 610 610 1. 1.
+hi/pl 610
+title ' '
+return
+*
+macro 3K 
+title 'K^0!K&^\261!^0! eff. mass in pp&^\261! [\256] [p]^0!K^0!K&^\261!^0! reaction'
+cut 0 -
+cut $1 pdg1=111.and.abs(pdg2)=311.and.abs(pdg3)=311
+cut $2 pdg2=111.and.abs(pdg3)=311.and.abs(pdg1)=311
+cut $3 pdg3=111.and.abs(pdg1)=311.and.abs(pdg2)=311
+1d 701 'm12' 40 0.8 3.2 0.
+hi/copy 701 702 'm13'
+hi/copy 701 703 'm23'
+hi/copy 701 710 'm?K^0!?K&^\261!^0!!'
+nt/pl 22.(0.001*m12)**2 $3 -701
+nt/pl 22.(0.001*m13)**2 $2 -702
+nt/pl 22.(0.001*m23)**2 $1 -703
+add 701 702 710 1. 1.
+add 703 710 710 1. 1.
+hi/pl 710
+title ' '
+return
+*
+macro pieep
+title '[c][c\242] eff. mass in pp&^\261! [\256] [p]^0![c][c\242] reaction'
+cut 0 -
+cut $1 pdg1=111.and.pdg2+pdg3=552
+cut $2 pdg2=111.and.pdg3+pdg1=552
+cut $3 pdg3=111.and.pdg1+pdg2=552
+1d 801 'm12' 20 1500. 1750. 0.
+hi/copy 801 802 'm13'
+hi/copy 801 803 'm23'
+hi/copy 801 810 'm?[c][c\242]!'
+nt/pl 22.m12 $3 -801
+nt/pl 22.m13 $2 -802
+nt/pl 22.m23 $1 -803
+add 801 802 810 1. 1.
+add 803 810 810 1. 1.
+hi/pl 810
+title ' '
+return
+*
+macro prieps fnam=radshow fil=99
+*
+  for/fil [fil] [fnam].eps
+  meta -[fil] -113
+  mess '*** Creating eps-file: '//[fnam]//'.eps'
+  pi/pl ' '
+  meta 0
+  for/clo [fil]
+return
+*
+macro PlotMul nsts=7 nsqs=10
+opt liny
+opt utit
+zone 1 1
+*
+NH = 8 
+title 'Multifragmentation of excited hadronic systems'
+title '[\326]s&^[\330]!  (GeV)' u
+null 0 6.9 0 15.9
+title ' ' u
+atitle ' ' 'Pion multiplicity                            ^!'
+set dmod 1
+*
+ve/del kex
+ve/del sext
+ve/del dsext
+ve/read kex,sext,dsext Hmul.vexp
+nexh = kex(1)
+nex  = [nexh]
+nex1 = [nexh] - 2
+scsmm =  sext(1)
+scs   = dsext(1)
+nbase =   kex(2)
+scnmm =  sext(2)
+scn   = dsext(2)
+ve/copy $sigma(kex*[scs]/[scsmm]) ckex
+ve/copy $sigma([nbase]-sext*[scn]/[scnmm]) scext
+ve/copy $sigma((dsext-sext)*[scn]/[scnmm]) dscext
+if [nex1] > 0.5 then
+    set dmod 1
+    h/errors ckex(3:[nex]) scext(3:[nex]) _
+                      ? dscext(3:[nex]) [nex1] 24 .15
+    ve/copy ckex(8:8)   ckex(4:4)
+    ve/copy ckex(13:13) ckex(5:5)
+    ve/copy scext(8:8)   scext(4:4)
+    ve/copy scext(13:13) scext(5:5)
+    ve/copy dscext(8:8)   dscext(4:4)
+    ve/copy dscext(13:13) dscext(5:5)
+    h/errors ckex(3:5) scext(3:5) _
+                      ? dscext(3:5) 3 20 .17
+endif
+ve/del ckex
+ve/del scext
+ve/del dscext
+ve/del kex
+ve/del sext
+ve/del dsext
+*
+***arrow .275 .275 0. 2. 0.35
+*
+  ve/copy $sigma(0.001*msqs) msqs_GeV 
+  do i = 1 , [nsts]
+    col = vcolor([i])
+    ang = vang([i])
+    dxtx = vdx([i])
+    dytx = vdy([i])
+    exec ~/PTOOL/white [col]
+    graph [nsqs] msqs_GeV(1:[nsqs],[i]:[i]) mean(1:[nsqs],[i]:[i]) l
+    xtx = msqs_GeV([nsqs],[i])
+    ytx = mean([nsqs],[i])
+    xtx = [xtx] + [dxtx]
+    ytx = [ytx] + [dytx]
+    ttx = vsts([i])
+    exec ~/PTOOL/snotes [xtx] [ytx] [ttx] [ang] 0.35 30
+    if [i] = 1 then
+      ytx = [ytx] + 0.6
+      ttx = 'T (MeV)'
+      exec ~/PTOOL/snotes [xtx] [ytx] [ttx] [ang] 0.35 30
+    endif
+  enddo
+  exec ~/PTOOL/black
+*
+exec ~/PTOOL/notes   0.1 0.1 ' ' 0. 0.35 40
+***exec ~/PTOOL/snotes   0.05 0.06 '2m?[p]!' 0. 0.35 30
+set mtyp 20
+exec ~/PTOOL/legend  0.15 0.92 ' ' 0. 0.35 40 0
+exec ~/PTOOL/snotes  0.10 0.92 'p&^\261!p' 0. 0.35 40 0
+set mtyp 24
+exec ~/PTOOL/legend  0.32 0.92 ' ' 0. 0.35 40 0
+exec ~/PTOOL/snotes  0.27 0.92 'e^+!e^-!' 0. 0.35 40 0
+set mtyp
+exec ~/PTOOL/legline 0.54 0.92 'CHIPS MC' 0. 0.35 40 0
+set dmod
+*
+return
+*
+macro makehbk
+ ve/cr nevts(1) r
+ ve/read nevts histnevt.out
+ 1d 1 'N events' 1 0. 2. 0.
+ put/cont 1 nevts
+ hi/fil 35 chips.hbook ! n
+ nt/create 20 'Incl' 43 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   ND    PDG   NS    NZ    NN    m     Px    _
+  Py    Pz    E
+ nt/read 20 tuplincl.out ! ! 9000000
+ nt/create 22 '3pi' 40 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p   m3pi  m12   m13   m23   pdg1  pdg2  pdg3
+ nt/read 22 tuple3pi.out ! ! 9000000
+ nt/create 25 'EvtA' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 25 tuplevta.out ! ! 9000000
+ nt/create 27 'EvtQ' 33 //lun35 8096 _
+  Nevt  MtotD MtotR  Mprot Mneut Mdeut Mtrit MHe3  MHe4  Mgam  _
+  Mpim  Mpip  Mpi0   MKp   MK0   MKm   MaK0  Meta  Metap Mrhom _
+  Mrhop Mrho0 Momega Mphi  MKS0  MKSC  MaKS0 MaKSC Mf2   Ma2m  _
+  Ma2p  Ma20  Mf2p
+ nt/read 27 tuplevtq.out ! ! 9000000
+ hrout *
+* clo 35
+ ve/del nevts
+* hi/del *
+return
