@@ -1,0 +1,34 @@
+$Id: History,v 1.1 2000-05-22 08:17:21 johna Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+History file for visualization/OpenGL
+-------------------------------------
+
+22nd May 2000  John Allison
+- Fixed slow response of 2nd window of OpenGLXm.  Worked around Mesa bug
+  by sharing static visuals in G4OpenGLXViewer (Guy Barrand):
+    static XVisualInfo* vi_single_buffer;
+    static XVisualInfo* vi_double_buffer;
+- Removed ChooseVisual from G4OpenGLXmViewer.cc - done in base class
+  G4OpenGLXViewer.
+- Protected double deletion of window in destructors of G4OpenGLXmViewer
+  and G4OpenGLXViewer (Guy Barrand).
+- Changed requested bits per colour to r,g,b = 1,1,1 in G4OpenGLViewer.cc.
+- Corrected order of CreateMainWindow() and InitializeGLView() in X*Viewer
+  constructors.
