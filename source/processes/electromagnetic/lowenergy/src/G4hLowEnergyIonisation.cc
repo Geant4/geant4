@@ -93,6 +93,8 @@
 #include "G4LogLogInterpolation.hh"
 #include "G4SemiLogInterpolation.hh"
 
+#include "G4CutsPerMaterialWarning.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
@@ -229,7 +231,12 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
   charge = aParticleType.GetPDGCharge()/eplus ;
   chargeSquare = charge*charge ;
 
-  G4double electronCutInRange = theElectron->GetCuts(); 
+  // ---- MGP ---- workaround for the deprecated "cuts per material"
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  const G4Material* material = (*theMaterialTable)[0];  
+  G4double electronCutInRange = G4Electron::Electron()->GetEnergyThreshold(material);
+  //                    was   = G4Electron::Electron()->GetCuts(); 
+  // ---- MGP ----
 
   // Define cuts
 
@@ -247,7 +254,7 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     const G4Material* material= (*theMaterialTable)[j];
 
     // the cut cannot be below lowest limit
-    G4double tCut = ((G4Electron::Electron())->GetCutsInEnergy())[j];
+    G4double tCut = G4Electron::Electron()->GetEnergyThreshold(material);
     if(tCut > HighestKineticEnergy) tCut = HighestKineticEnergy;
 
     G4double excEnergy = material->GetIonisation()->GetMeanExcitationEnergy();
@@ -256,7 +263,7 @@ void G4hLowEnergyIonisation::BuildPhysicsTable(
     cutForDelta.push_back(tCut);
 
     // the cut cannot be below lowest limit
-    tCut = ((G4Gamma::Gamma())->GetCutsInEnergy())[j];
+    tCut = G4Gamma::Gamma()->GetEnergyThreshold(material);
     if(tCut > HighestKineticEnergy) tCut = HighestKineticEnergy;
     tCut = G4std::max(tCut,minGammaEnergy);
     cutForGamma.push_back(tCut);
