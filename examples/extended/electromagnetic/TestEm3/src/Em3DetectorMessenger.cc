@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3DetectorMessenger.cc,v 1.6 2001-11-05 15:28:40 maire Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.7 2002-12-05 00:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -52,19 +52,19 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   SizeYZCmd->SetParameterName("Size",false);
   SizeYZCmd->SetRange("Size>0.");
   SizeYZCmd->SetUnitCategory("Length");
-  SizeYZCmd->AvailableForStates(PreInit,Idle);
+  SizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   NbLayersCmd = new G4UIcmdWithAnInteger("/calor/setNbOfLayers",this);
   NbLayersCmd->SetGuidance("Set number of layers.");
   NbLayersCmd->SetParameterName("NbLayers",false);
   NbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
-  NbLayersCmd->AvailableForStates(PreInit,Idle);
+  NbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   NbAbsorCmd = new G4UIcmdWithAnInteger("/calor/setNbOfAbsor",this);
   NbAbsorCmd->SetGuidance("Set number of Absorbers.");
   NbAbsorCmd->SetParameterName("NbAbsor",false);
   NbAbsorCmd->SetRange("NbAbsor>0");
-  NbAbsorCmd->AvailableForStates(PreInit,Idle);
+  NbAbsorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
    
   AbsorCmd = new G4UIcommand("/calor/setAbsor",this);
   AbsorCmd->SetGuidance("Set the absor nb, the material, the thickness.");
@@ -92,27 +92,27 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   unitPrm->SetParameterCandidates(unitList);
   AbsorCmd->SetParameter(unitPrm);
   //
-  AbsorCmd->AvailableForStates(Idle);
+  AbsorCmd->AvailableForStates(G4State_Idle);
   
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle);
+  MagFieldCmd->AvailableForStates(G4State_Idle);
      
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/tracking/stepMax",this);
   MaxStepCmd->SetGuidance("Set max allowed step size");
   MaxStepCmd->SetParameterName("Size",false);
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(Idle); 
+  MaxStepCmd->AvailableForStates(G4State_Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10DetectorMessenger.cc,v 1.5 2001-11-21 18:48:56 mverderi Exp $
+// $Id: Em10DetectorMessenger.cc,v 1.6 2002-12-05 00:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,93 +47,93 @@ Em10DetectorMessenger::Em10DetectorMessenger(Em10DetectorConstruction * Em10Det)
   AbsMaterCmd->SetGuidance("Select Material of the Absorber.");
   AbsMaterCmd->SetParameterName("choice",true);
   AbsMaterCmd->SetDefaultValue("Xe");
-  AbsMaterCmd->AvailableForStates(Idle);
+  AbsMaterCmd->AvailableForStates(G4State_Idle);
 
   RadiatorMaterCmd = new G4UIcmdWithAString("/XTRdetector/setRadMat",this);
   RadiatorMaterCmd->SetGuidance("Select Material of the XTR radiator.");
   RadiatorMaterCmd->SetParameterName("choice",true);
   RadiatorMaterCmd->SetDefaultValue("CH2");
-  RadiatorMaterCmd->AvailableForStates(Idle);
+  RadiatorMaterCmd->AvailableForStates(G4State_Idle);
 
   ModelCmd = new G4UIcmdWithAnInteger("/XTRdetector/setModel",this);
   ModelCmd->SetGuidance("Select Model for XTR");
   ModelCmd->SetParameterName("choice",true);
   ModelCmd->SetDefaultValue(0);
-  // ModelCmd->AvailableForStates(PreInit,Idle);
-  ModelCmd->AvailableForStates(Idle);
+  // ModelCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  ModelCmd->AvailableForStates(G4State_Idle);
 
   FoilNumCmd = new G4UIcmdWithAnInteger("/XTRdetector/setFoilNum",this);
   FoilNumCmd->SetGuidance("Select foil number for XTR");
   FoilNumCmd->SetParameterName("choice",true);
   FoilNumCmd->SetDefaultValue(0);
-  FoilNumCmd->AvailableForStates(PreInit,Idle);
+  FoilNumCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   WorldMaterCmd = new G4UIcmdWithAString("/XTRdetector/setWorldMat",this);
   WorldMaterCmd->SetGuidance("Select Material of the World.");
   WorldMaterCmd->SetParameterName("wchoice",true);
   WorldMaterCmd->SetDefaultValue("Air");
-  WorldMaterCmd->AvailableForStates(Idle);
+  WorldMaterCmd->AvailableForStates(G4State_Idle);
   
   AbsThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setAbsThick",this);
   AbsThickCmd->SetGuidance("Set Thickness of the Absorber");
   AbsThickCmd->SetParameterName("SizeZ",false,false);
   AbsThickCmd->SetDefaultUnit("mm");
   AbsThickCmd->SetRange("SizeZ>0.");
-  AbsThickCmd->AvailableForStates(Idle);
+  AbsThickCmd->AvailableForStates(G4State_Idle);
 
   RadiatorThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setRadThick",this);
   RadiatorThickCmd->SetGuidance("Set Thickness of XTR radiator");
   RadiatorThickCmd->SetParameterName("SizeZ",false,false);
   RadiatorThickCmd->SetDefaultUnit("mm");
   RadiatorThickCmd->SetRange("SizeZ>0.");
-  RadiatorThickCmd->AvailableForStates(Idle);
+  RadiatorThickCmd->AvailableForStates(G4State_Idle);
 
   GasGapThickCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setGasGapThick",this);
   GasGapThickCmd->SetGuidance("Set Thickness of XTR gas gaps");
   GasGapThickCmd->SetParameterName("SizeZ",false,false);
   GasGapThickCmd->SetDefaultUnit("mm");
   GasGapThickCmd->SetRange("SizeZ>0.");
-  GasGapThickCmd->AvailableForStates(Idle);
+  GasGapThickCmd->AvailableForStates(G4State_Idle);
   
   AbsRadCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setAbsRad",this);
   AbsRadCmd->SetGuidance("Set radius of the Absorber");
   AbsRadCmd->SetParameterName("SizeR",false,false);
   AbsRadCmd->SetDefaultUnit("mm");
   AbsRadCmd->SetRange("SizeR>0.");
-  AbsRadCmd->AvailableForStates(Idle);
+  AbsRadCmd->AvailableForStates(G4State_Idle);
   
   AbsZposCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setAbsZpos",this);
   AbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
   AbsZposCmd->SetParameterName("Zpos",false,false);
   AbsZposCmd->SetDefaultUnit("mm");
-  AbsZposCmd->AvailableForStates(Idle);
+  AbsZposCmd->AvailableForStates(G4State_Idle);
   
   WorldZCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setWorldZ",this);
   WorldZCmd->SetGuidance("Set Z size of the World");
   WorldZCmd->SetParameterName("WSizeZ",false,false);
   WorldZCmd->SetDefaultUnit("mm");
   WorldZCmd->SetRange("WSizeZ>0.");
-  WorldZCmd->AvailableForStates(Idle);
+  WorldZCmd->AvailableForStates(G4State_Idle);
   
   WorldRCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setWorldR",this);
   WorldRCmd->SetGuidance("Set R size of the World");
   WorldRCmd->SetParameterName("WSizeR",false,false);
   WorldRCmd->SetDefaultUnit("mm");
   WorldRCmd->SetRange("WSizeR>0.");
-  WorldRCmd->AvailableForStates(Idle);
+  WorldRCmd->AvailableForStates(G4State_Idle);
   
   UpdateCmd = new G4UIcmdWithoutParameter("/XTRdetector/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/XTRdetector/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false,false);
   MagFieldCmd->SetDefaultUnit("tesla");
-  MagFieldCmd->AvailableForStates(Idle);  
+  MagFieldCmd->AvailableForStates(G4State_Idle);  
 
 }
 

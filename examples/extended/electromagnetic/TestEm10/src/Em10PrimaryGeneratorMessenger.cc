@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em10PrimaryGeneratorMessenger.cc,v 1.2 2001-07-11 09:57:25 gunter Exp $
+// $Id: Em10PrimaryGeneratorMessenger.cc,v 1.3 2002-12-05 00:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ Em10PrimaryGeneratorMessenger::Em10PrimaryGeneratorMessenger(Em10PrimaryGenerato
   RndmCmd->SetParameterName("choice",true);
   RndmCmd->SetDefaultValue("off");
   RndmCmd->SetCandidates("on off");
-  RndmCmd->AvailableForStates(PreInit,Idle);
+  RndmCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
  
   setxvertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/xvertex",this);
   setxvertexCmd->SetGuidance(" Set x coord. of the primary vertex.");

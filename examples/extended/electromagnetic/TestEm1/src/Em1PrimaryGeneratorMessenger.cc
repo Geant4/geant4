@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em1PrimaryGeneratorMessenger.cc,v 1.1 2001-12-07 11:49:10 maire Exp $
+// $Id: Em1PrimaryGeneratorMessenger.cc,v 1.2 2002-12-05 00:24:23 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,14 +46,14 @@ Em1PrimaryGeneratorMessenger::Em1PrimaryGeneratorMessenger(
   DefaultCmd->SetGuidance("0=boxCenter, else=frontFace");
   DefaultCmd->SetParameterName("position",true);
   DefaultCmd->SetDefaultValue(0);
-  DefaultCmd->AvailableForStates(PreInit,Idle);
+  DefaultCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   RndmCmd = new G4UIcmdWithADouble("/gun/rndm",this);
   RndmCmd->SetGuidance("random lateral extension on the beam");
   RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
   RndmCmd->SetParameterName("rBeam",false);
   RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
-  RndmCmd->AvailableForStates(Idle);  
+  RndmCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

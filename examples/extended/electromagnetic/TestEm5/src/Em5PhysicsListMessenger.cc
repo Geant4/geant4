@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em5PhysicsListMessenger.cc,v 1.7 2002-06-05 15:43:43 urban Exp $
+// $Id: Em5PhysicsListMessenger.cc,v 1.8 2002-12-05 00:24:25 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -44,28 +44,28 @@ Em5PhysicsListMessenger::Em5PhysicsListMessenger(Em5PhysicsList * List)
   cutGCmd->SetParameterName("Gcut",false);
   cutGCmd->SetRange("Gcut>0.");
   cutGCmd->SetUnitCategory("Length");
-  cutGCmd->AvailableForStates(PreInit,Idle);
+  cutGCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   cutECmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setECut",this);
   cutECmd->SetGuidance("Set electron cut.");
   cutECmd->SetParameterName("Ecut",false);
   cutECmd->SetRange("Ecut>0.");
   cutECmd->SetUnitCategory("Length");  
-  cutECmd->AvailableForStates(PreInit,Idle);
+  cutECmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   cutPCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/setPCut",this);
   cutPCmd->SetGuidance("Set proton cut.");
   cutPCmd->SetParameterName("Pcut",false);
   cutPCmd->SetRange("Pcut>0.");
   cutPCmd->SetUnitCategory("Length");    
-  cutPCmd->AvailableForStates(PreInit,Idle);
+  cutPCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   rCmd = new G4UIcmdWithADoubleAndUnit("/run/particle/getRange",this);
   rCmd->SetGuidance("get the electron cut for the current material.");
   rCmd->SetParameterName("energy",false);
   rCmd->SetRange("energy>0.");
   rCmd->SetUnitCategory("Energy");     
-  rCmd->AvailableForStates(PreInit,Idle);
+  rCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   setMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
   setMaxStepCmd->SetGuidance("Set max. step length in the detector");

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PrimaryGeneratorMessenger.cc,v 1.1 2002-05-23 13:30:43 maire Exp $
+// $Id: PrimaryGeneratorMessenger.cc,v 1.2 2002-12-05 00:24:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,7 +45,7 @@ PrimaryGeneratorMessenger::PrimaryGeneratorMessenger(
   RndmCmd->SetGuidance("in fraction of 0.5*sizeYZ");
   RndmCmd->SetParameterName("rBeam",false);
   RndmCmd->SetRange("rBeam>=0.&&rBeam<=1.");
-  RndmCmd->AvailableForStates(Idle);  
+  RndmCmd->AvailableForStates(G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

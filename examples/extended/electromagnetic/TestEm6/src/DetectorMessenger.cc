@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: DetectorMessenger.cc,v 1.1 2002-05-23 13:30:36 maire Exp $
+// $Id: DetectorMessenger.cc,v 1.2 2002-12-05 00:24:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,34 +48,34 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   MaterCmd = new G4UIcmdWithAString("/calor/setMat",this);
   MaterCmd->SetGuidance("Select material of the box.");
   MaterCmd->SetParameterName("choice",false);
-  MaterCmd->AvailableForStates(PreInit,Idle);
+  MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   SizeCmd = new G4UIcmdWithADoubleAndUnit("/calor/setSize",this);
   SizeCmd->SetGuidance("Set size of the box");
   SizeCmd->SetParameterName("Size",false);
   SizeCmd->SetRange("Size>0.");
   SizeCmd->SetUnitCategory("Length");
-  SizeCmd->AvailableForStates(PreInit,Idle);
+  SizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
       
   MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/calor/setField",this);  
   MagFieldCmd->SetGuidance("Define magnetic field.");
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(PreInit,Idle);
+  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
     
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(Idle);
+  UpdateCmd->AvailableForStates(G4State_Idle);
       
   MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/tracking/stepMax",this);
   MaxStepCmd->SetGuidance("Set max allowed step size");
   MaxStepCmd->SetParameterName("Size",false);
   MaxStepCmd->SetRange("Size>0.");
   MaxStepCmd->SetUnitCategory("Length");
-  MaxStepCmd->AvailableForStates(Idle);   
+  MaxStepCmd->AvailableForStates(G4State_Idle);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

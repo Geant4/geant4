@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em8RunMessenger.cc,v 1.4 2001-07-11 09:57:56 gunter Exp $
+// $Id: Em8RunMessenger.cc,v 1.5 2002-12-05 00:24:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -187,13 +187,13 @@ Em8RunMessenger::Em8RunMessenger(Em8RunAction* RA)
   RndmSaveCmd->SetGuidance("freq = 2 saved on: endOfEvent.rndm");    
   RndmSaveCmd->SetParameterName("frequency",false);
   RndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
-  RndmSaveCmd->AvailableForStates(PreInit,Idle); 
+  RndmSaveCmd->AvailableForStates(G4State_PreInit,G4State_Idle); 
          
   RndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
   RndmReadCmd->SetGuidance("get rndm status from an external file.");
   RndmReadCmd->SetParameterName("fileName",true);
   RndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
-  RndmReadCmd->AvailableForStates(PreInit,Idle);  
+  RndmReadCmd->AvailableForStates(G4State_PreInit,G4State_Idle);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

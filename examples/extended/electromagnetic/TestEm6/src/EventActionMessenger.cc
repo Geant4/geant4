@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: EventActionMessenger.cc,v 1.1 2002-05-23 13:30:42 maire Exp $
+// $Id: EventActionMessenger.cc,v 1.2 2002-12-05 00:24:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,13 +47,13 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
   DrawCmd->SetParameterName("choice",true);
   DrawCmd->SetDefaultValue("all");
   DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(Idle);
+  DrawCmd->AvailableForStates(G4State_Idle);
   
   PrintCmd = new G4UIcmdWithAnInteger("/event/printModulo",this);
   PrintCmd->SetGuidance("Print events modulo n");
   PrintCmd->SetParameterName("EventNb",false);
   PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(Idle);      
+  PrintCmd->AvailableForStates(G4State_Idle);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

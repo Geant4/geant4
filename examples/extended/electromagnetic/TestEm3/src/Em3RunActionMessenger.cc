@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.8 2001-11-28 17:54:46 maire Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.9 2002-12-05 00:24:24 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,7 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
   VmaxPrm->SetParameterRange("Vmax>=0.&&Vmax<=1.");
   HistoCmd->SetParameter(VmaxPrm);  
   //
-  HistoCmd->AvailableForStates(Idle);    
+  HistoCmd->AvailableForStates(G4State_Idle);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

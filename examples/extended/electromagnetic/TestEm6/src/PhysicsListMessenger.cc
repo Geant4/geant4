@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.1 2002-05-23 13:30:43 maire Exp $
+// $Id: PhysicsListMessenger.cc,v 1.2 2002-12-05 00:24:26 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
          "Set factor to artificially increase the GammaToMuPair cross section");
   GammaToMuPairFac->SetParameterName("GammaToMuPairFac",false);
   GammaToMuPairFac->SetRange("GammaToMuPairFac>0.0");
-  GammaToMuPairFac->AvailableForStates(PreInit,Idle);
+  GammaToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
