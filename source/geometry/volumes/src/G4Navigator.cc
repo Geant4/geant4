@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.cc,v 1.28 2002-06-01 00:59:34 japost Exp $
+// $Id: G4Navigator.cc,v 1.29 2002-06-01 01:20:47 japost Exp $
 // GEANT4 tag $ Name:  $
 // 
 // class G4Navigator Implementation  Paul Kent July 95/96
@@ -608,8 +608,7 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
       fExiting= exitingReplica;
      }
 
-  
-  G4cout << "G4Navigator ComputeStep: fExitNormal = " <<  fExitNormal << endl;
+  // G4cout << "G4Navigator ComputeStep: fExitNormal = " <<  fExitNormal << endl;
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
     {
@@ -632,46 +631,43 @@ G4double G4Navigator::ComputeStep(const G4ThreeVector &pGlobalpoint,
 
   if( fExiting )
   {
-     G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
-	    << " fValidExitNormal = " << fValidExitNormal 
-	    << endl;
+#    ifdef G4DEBUG_NAVIGATION
+        G4cout << " At G4Nav CompStep End - if(exiting) - fExiting= " << fExiting 
+               << " fValidExitNormal = " << fValidExitNormal  << endl;
+        G4cout << " fExitNormal= " << fExitNormal << endl;
+#    endif
      if(fValidExitNormal)
      {
-        G4cout << " fExitNormal= " << fExitNormal << endl;
         // Convention: fExitNormal is in the 'grand-mother' coordinate system
         fMotherExitNormal= fExitNormal;
 
         // If no relocation were made, we would need to rotate it back to 
 	//   this (the mother) coordinate system
         // const G4RotationMatrix* motherRotation= motherPhysical->GetRotation();
-	// fMotherExitNormal *= (*motherRotation);  // Un-rotate gran->mother
-   
+	// G4ThreeVector trueMotherExitNormal = fMotherExitNormal;
+	// trueMotherExitNormal *= (*motherRotation);  // Un-rotate gran->mother
+
         // However, relocation will put us either in
 	//   - the grand-mother (OK)
-	//   - in the grand-grand mother (must be dealt with)
- 
-        G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
+	//   - in the grand-grand mother (to BE checked if this is dealt with)
      }else{
-       G4cout << " fExitNormal= " << fExitNormal << endl;
        // We must calculate the normal anyway (in order to have it if requested)
        G4ThreeVector finalGlobalPoint, finalLocalPoint, localExitNormal;
        finalGlobalPoint= fLastLocatedPointLocal + localDirection*Step;
        finalLocalPoint = ComputeLocalPoint(finalGlobalPoint);
        localExitNormal = motherLogical->GetSolid()->SurfaceNormal(finalLocalPoint);
-       fMotherExitNormal = localExitNormal;
-       G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
- 
        const G4RotationMatrix* mRot= motherPhysical->GetRotation();
        if( mRot ) { 
 	  G4ThreeVector grandMotherExitNormal = localExitNormal;
-                        grandMotherExitNormal *= (*mRot); 
-	  G4ThreeVector globalExitNormal= 
-	      GetLocalToGlobalTransform().TransformAxis(localExitNormal);
-	  G4cout << "GlobalNormal = " << globalExitNormal << endl
-		 << "GrandMotherN = " << grandMotherExitNormal << endl; 
+          grandMotherExitNormal *= (*mRot); 
+          // Now fMotherExitNormal is in the 'grand-mother' coordinate system
+	  fMotherExitNormal = grandMotherExitNormal;
        }
      }
-   }
+#    ifdef G4DEBUG_NAVIGATION
+       G4cout << " fMotherExitNormal= " << fMotherExitNormal << endl;
+#    endif
+  }
 
 #ifdef G4VERBOSE
   if( fVerbose > 1 ) 
