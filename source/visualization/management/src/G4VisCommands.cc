@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommands.cc,v 1.4 2001-08-11 21:38:56 johna Exp $
+// $Id: G4VisCommands.cc,v 1.5 2001-08-17 23:02:17 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/ top level commands - John Allison  5th February 2001
@@ -92,5 +92,6 @@ void G4VisCommandVerbose::SetNewValue (G4UIcommand* command,
     fpVisManager->GetVerbosityValue(newValue);
   fpVisManager->SetVerboseLevel(verbosity);
   // Always prints whatever the verbosity...
-  G4cout << "Visualization verbosity changed to " << verbosity << G4endl;
+  G4cout << "Visualization verbosity changed to "
+	 << G4VisManager::VerbosityString(verbosity) << G4endl;
 }
