@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PhysicsList.cc,v 1.4 2000-03-05 03:35:18 kurasige Exp $
+// $Id: Em3PhysicsList.cc,v 1.5 2000-04-17 12:05:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -14,6 +14,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "Em3PhysicsList.hh"
+#include "Em3PhysicsListMessenger.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -28,14 +29,20 @@
 
 Em3PhysicsList::Em3PhysicsList():  G4VUserPhysicsList()
 {
-  defaultCutValue = 0.5*mm;
+  currentDefaultCut = defaultCutValue = 0.5*mm;
+  cutForGamma       = defaultCutValue;
+  cutForElectron    = defaultCutValue;
+  cutForProton      = defaultCutValue;
+  
+  pMessenger = new Em3PhysicsListMessenger(this);
+
   SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 Em3PhysicsList::~Em3PhysicsList()
-{}
+{delete pMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -210,21 +217,30 @@ void Em3PhysicsList::ConstructGeneral()
 
 void Em3PhysicsList::SetCuts()
 {
+  // reactualise cutValues
+  if (currentDefaultCut != defaultCutValue)
+    {
+     if(cutForGamma    == currentDefaultCut) cutForGamma    = defaultCutValue;
+     if(cutForElectron == currentDefaultCut) cutForElectron = defaultCutValue;
+     if(cutForProton   == currentDefaultCut) cutForProton   = defaultCutValue;
+     currentDefaultCut = defaultCutValue;
+    }
+    
   if (verboseLevel >0){
     G4cout << "Em3PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }  
 
   // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma 
-  SetCutValue(defaultCutValue, "gamma");
-  SetCutValue(defaultCutValue, "e-");
-  SetCutValue(defaultCutValue, "e+");
+  // because some processes for e+/e- need cut values for gamma
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForElectron, "e+");      
  
   // set cut values for proton and anti_proton before all other hadrons
   // because some processes for hadrons need cut values for proton/anti_proton 
-  SetCutValue(defaultCutValue, "proton");
-  SetCutValue(defaultCutValue, "anti_proton");
+  SetCutValue(cutForProton, "proton");
+  SetCutValue(cutForProton, "anti_proton");
    
   SetCutValueForOthers(defaultCutValue);
 
@@ -232,5 +248,26 @@ void Em3PhysicsList::SetCuts()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3PhysicsList::SetCutForGamma(G4double cut)
+{
+  ResetCuts();
+  cutForGamma = cut;
+}
+
+void Em3PhysicsList::SetCutForElectron(G4double cut)
+{
+  ResetCuts();
+  cutForElectron = cut;
+}
+
+void Em3PhysicsList::SetCutForProton(G4double cut)
+{
+  ResetCuts();
+  cutForProton = cut;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 
 
