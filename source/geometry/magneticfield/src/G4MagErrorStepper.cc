@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.cc,v 1.1 1999-01-07 16:07:10 gunter Exp $
+// $Id: G4MagErrorStepper.cc,v 1.2 1999-02-09 15:03:03 gum Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4MagErrorStepper.hh"
@@ -19,13 +19,13 @@ G4MagErrorStepper::Stepper( const G4double yInput[],
 		     G4double yOut[],
 		     G4double yErr[]      )
 {  
-   const G4int nvar = 6 ;
+   const G4int nvar = theNumberOfVariables ;
 
    G4int i;
    // correction for Richardson Extrapolation.
    G4double  correction = 1. / ( (1 << IntegratorOrder()) -1 );
    
-   G4double yTemp[7], dydxTemp[6], yIn[7] ;
+   G4double yTemp[nvar], dydxTemp[nvar], yIn[nvar] ;
 
    //  Saving yInput because yInput and yOut can be aliases for same array
 
