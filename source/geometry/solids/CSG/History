@@ -1,4 +1,4 @@
-$Id: History,v 1.35 2000-12-12 09:12:46 gcosmo Exp $
+$Id: History,v 1.36 2001-01-18 16:37:16 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jan 18,   00   V. Grichine               geom-solids-csg-V03-00-00
+- Fixed condition from (pPhi<0) to (pPhi<-0.5*kAngleTolerance) in
+  G4Tubs::Inside(p). Fixes problem report #198.
 
 Dec 07,   00   V. Grichine               geom-solids-csg-V02-00-14
 - G4Tubs.cc: corrections in phi-section algorithm of Inside(p).
