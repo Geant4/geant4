@@ -361,12 +361,11 @@ echo "Starting installation..."
 echo ""
 
 cd $g4install/
-cd ..
 #echo `pwd`
 
 if [ X$g4includes_flag = Xn ] ; then
-mkdir -p $g4final_install
-tar cvf - geant4 |(cd $g4final_install; tar xf -)
+mkdir -p $g4final_install/include/geant4
+find . -name \*.h -o -name \*.hh -o -name \*.icc | xargs tar cvf - |(cd $g4final_install/include/geant4; tar xf -)
 fi
 
 ########################################

@@ -34,7 +34,7 @@ echo "On this machine the G4SYSTEM=\$G4SYSTEM"
 # g4dirs.U
 #
 #+
-setenv G4INSTALL "$g4install"
+setenv G4INSTALL "$g4final_install/include/geant4"
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
@@ -45,7 +45,7 @@ endif
 
 #+
 if ( X$g4lib != X ) then
-setenv G4LIB "$g4lib"
+setenv G4LIB "$g4final_install/lib/geant4"
 echo "On this machine the G4LIB=\$G4LIB"
 endif
 

@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.61 2004-12-03 01:01:30 stesting Exp $
+# $Id: Configure,v 1.62 2004-12-06 05:24:33 stesting Exp $
 #
-# Generated on Fri Dec  3 01:45:40 CET 2004 [metaconfig 3.0 PL70]
+# Generated on Mon Dec  6 06:05:32 CET 2004 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -445,13 +445,13 @@ while test $# -gt 0; do
 	case "$1" in
 	-d) shift; fastread=yes;;
 	-e) shift; alldone=cont;;
-	-install) shift; install=yes;;
 	-build) shift; g4build=yes;;
-	-ldlibs) shift; g4ldlibs=yes;;
-	-ldflags) shift; g4ldflags=yes;;
+	-incflags) shift; g4incflags=yes;;
+	-install) shift; install=yes;;
 	-cppflags) shift; g4cppflags=yes;;
 	-cxxflags) shift; g4cxxflags=yes;;
-	-incflags) shift; g4incflags=yes;;
+	-ldlibs) shift; g4ldlibs=yes;;
+	-ldflags) shift; g4ldflags=yes;;
 	-f)
 		shift
 		cd ../..
@@ -510,13 +510,13 @@ Usage: $me [-dehrsEKOSV] [-install] [-build] [-libs] [-f config.sh] [-D symbol] 
                  [-U symbol] [-U symbol=]
   -d : use defaults for all answers.
   -e : go on without questioning past the production of config.sh.
-  -install : start installation of Geant4 libraries. 
   -build : start configuration AND build of Geant4 libraries. 
-  -ldlibs : retrieve the list of libraries to link
-  -ldflags : retrieve the list of directories where libraries are placed
-  -cxxflags : retrieve the list of cxxflags
   -cppflags : retrieve the list of cppflags
+  -cxxflags : retrieve the list of cxxflags
   -incflags : retrieve the list of incflags
+  -install : start installation of Geant4 libraries. 
+  -ldflags : retrieve the list of directories where libraries are placed
+  -ldlibs : retrieve the list of libraries to link
   -f : specify an alternate default configuration file.
   -h : print this help message and exit (with an error status).
   -r : reuse C symbols value if possible (skips costly nm extraction).
@@ -1817,11 +1817,8 @@ dflt=n
 
 cd ../..
 
-echo g4build=$g4build
 
 if [ X$g4build = X ] ; then
-
-echo HUY
 
 	if test -f $src/.config/bin/$g4system/env.sh; then
 
@@ -2448,7 +2445,7 @@ esac
 
 case "$g4final_install" in
 '')
-	g4final_install=$g4final_install
+	g4final_install=$g4install
 	;;
 esac
 
@@ -2480,13 +2477,12 @@ g4workdir=$g4install
 #################################
 g4message=`cat << EOM
 
-Where is Geant4 libraries and source should be installed?
-
-It will be \$(your_prefix)/geant4/lib and \$(your_prefix)/geant4.
+Specify the path where Geant4 libraries and source files should be
+installed.
 EOM`
 
 #dflt="NO DEFAULT ANSWER"
-dflt=$g4install
+dflt=$g4final_install
 fn='d~'
 rp=$g4message
 . ./getfile
@@ -2555,7 +2551,7 @@ esac
 #	;;
 #esac
 
-while test 1 = 1  ; do
+while test 1 = 0  ; do
 
 g4message=`cat << EOM
 

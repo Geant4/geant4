@@ -442,11 +442,6 @@ echo "############################################################"
 echo ""
 fi
 
-# There is no env!
-if [ X$g4includes_flag = Xy ] ; then
-$g4make includes
-fi
-
 !GROK!THIS!
 
 : In the following dollars and backticks do not need the extra backslash.

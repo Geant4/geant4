@@ -37,7 +37,7 @@ fi
 # g4dirs.U
 #
 #+
-G4INSTALL="$g4install"
+G4INSTALL="$g4final_install/include/geant4"
 export G4INSTALL
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4INSTALL=\$G4INSTALL"
@@ -54,7 +54,7 @@ fi
 
 #+
 if [ X$g4lib != X ] ; then 
-G4LIB="$g4lib"
+G4LIB="$g4final_install/lib/geant4"
 export G4LIB
 if [ X\$g4non_display = X ] ; then
 echo "On this machine the G4LIB=\$G4LIB"
