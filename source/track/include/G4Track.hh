@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Track.hh,v 1.14 2001-12-13 15:31:22 kurasige Exp $
+// $Id: G4Track.hh,v 1.15 2001-12-14 09:59:35 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -256,9 +256,7 @@ public: // With description
       // this will be set equal to 'StepLength' in G4Step.
 
    G4double fWeight;
-     // This is a weight for this track used by G4VEvtBiasMechanism 
-     // to execute inclusive simulation for hadronic/electomagnetic shower
-     // and neutron transportation etc. 
+     // This is a weight for this track 
 
    const G4Step* fpStep;
 
