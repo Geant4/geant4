@@ -1,4 +1,4 @@
-# $Id: architecture.gmk,v 1.55 1999-12-03 16:32:54 gcosmo Exp $
+# $Id: architecture.gmk,v 1.56 1999-12-05 18:10:27 gcosmo Exp $
 # ------------------------------------------------------------------------
 #       GEANT 4 - Architecture configuration script for GNU Make
 #
@@ -197,7 +197,7 @@ ifdef G4USE_OSPACE
   ifeq ($(G4SYSTEM),WIN32-VC)
     OSPACE_BASE_DIR := $(OBJECT_SPACE_BASE)
     OSPACEINC  := -I$(OSPACE_BASE_DIR)/ospace/std -I$(OSPACE_BASE_DIR)/ospace/stl -I$(OSPACE_BASE_DIR)
-    OSPACELIBS := '-libpath:$(OSPACE_BASE_DIR)\lib std-2.1-vc5.0-mt.lib'
+    OSPACELIBS := '-libpath:$(OSPACE_BASE_DIR)/lib std-2.1-vc5.0-mt.lib'
     CPPFLAGS   += -DG4USE_OLDSTL 
     CPPFLAGS   += -DOS_WIN_NT_4_0 -DOS_MULTI_THREADED -D_WIN32_WINNT $(OSPACEINC)
   endif
@@ -411,7 +411,7 @@ ifeq ($(G4SYSTEM),SUN-CC5)
     CCFLAGS := -g
   endif
 #  CXXFLAGS += -fnonstd
-  G4_HAVE_BOOL = yes
+  G4_HAVE_BOOL := yes
   CFRONT_G4TEMPLATE_REPOSITORY  := true
   FC     := f77
   SHEXT  := so
@@ -663,7 +663,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     CXXFLAGS  += -Od -Zi -Fd$(G4LIBDIR)/lib$(name)
   endif
   CXXFLAGS += -MD -GX -Zm200 -nologo -DWIN32 -D_CONSOLE 
-  CXXFLAGS += -D_WIN32 -DOS -DG4NOT_ISO_DELETES
+  CXXFLAGS += -D_WIN32 -DOS
   CPPFLAGS += -DWIN32
   #
   # Should set $INCLUDE environment, if not set as below
