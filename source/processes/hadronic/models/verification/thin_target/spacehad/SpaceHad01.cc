@@ -42,7 +42,9 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <fstream>
+#include <strstream>
 #include <iomanip>
+#include <string.h>
 
 #include "G4Material.hh"
 #include "G4ElementVector.hh"
@@ -80,6 +82,12 @@
 #include "G4GRSVolume.hh"
 
 #include "G4UnitsTable.hh"
+
+#include "../../hadronic_data_set/example/include/G4HadFileSpec.hh"
+#include "../../hadronic_data_set/example/include/G4HadFileFinder.hh"
+#include "../../hadronic_data_set/example/include/G4ReadHadDoubleDiffXSC.hh"
+
+
 
 //////////////////////////////////////////////////////////////////
 ///
@@ -203,28 +211,6 @@ int main(int argc, char** argv)
   G4double nx = 0.0, ny = 0.0, nz = 0.0;
  
 
-  G4cout.setf( std::ios::scientific, std::ios::floatfield );
-
-
-  ///////////////////////////////////////////////////////////////////
-  ///
-  /// Control on input
-
-  if(argc < 2) 
-  {
-    G4cout << "Input file is not specified! Exit" << G4endl;
-    exit(1);
-  }
-
-  std::ifstream* fin = new std::ifstream();
-  G4String fname = argv[1];
-  fin->open(fname.c_str());
-  
-  if( !fin->is_open()) 
-  {
-    G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
-    exit(1);
-  }
 
   ///////////////////////////////////////////////////////////////////
   ///
@@ -246,12 +232,46 @@ int main(int argc, char** argv)
 
   assert(pFrame);
 
+
+  G4cout.setf( std::ios::scientific, std::ios::floatfield );
+  std::ifstream* fin = new std::ifstream();
+  G4String fname;
+  G4bool fG4HDS = false;
+ 
+  ///////////////////////////////////////////////////////////////////
+  ///
+  /// Control on input
+
+  if( argc < 2 ) // no input file after SpaceHad01: G4HDS case
+  {
+    fG4HDS = true;
+    fname = "g4hds.mac";
+    fin->open(fname.c_str());
+  
+    if( !fin->is_open()) 
+    {
+      G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
+      exit(1);
+    }
+    // Reading from G4HDS for a process
+  }
+  else  // shibata and other data case
+  {
+    fname = argv[1];
+    fin->open(fname.c_str());
+  
+    if( !fin->is_open()) 
+    {
+      G4cout << "Input file <" << fname << "> does not exist! Exit" << G4endl;
+      exit(1);
+    }
+  }
   ///////////////////////////////////////////////////////////////
   ///
   /// Read input file
   ///
 
-
+  /*
   G4cout << "Available commands are: " << G4endl;
   G4cout << "#events" << G4endl;
   G4cout << "#exclusive" << G4endl;
@@ -285,14 +305,13 @@ int main(int argc, char** argv)
   G4cout << "#time(ns)" << G4endl;
   G4cout << "#run" << G4endl;
   G4cout << "#exit" << G4endl;
-
+  */
 
 
   G4String line, line1;
   G4bool end = true;
   
-  for(G4int run = 0 ; run < 100 ; run++ ) 
-  {
+
     do 
     {
       (*fin) >> line;
@@ -401,9 +420,18 @@ int main(int argc, char** argv)
       }
     } while(end);
 
-    if(!end) break;
+    if( !end ) 
+    {
+      G4cout<<"Exit due to wrong end of macro file"<<G4endl;
+      exit(1);
+    }
 
-    G4cout << "###### Start new run # " << run << "     #####" << G4endl;
+
+    //
+    // Start run and initialisation of material, physics etc ...
+    //
+
+    G4cout << "###### Start new run # " << G4endl; 
  
     material = mate->GetMaterial(nameMat);
     
@@ -428,6 +456,73 @@ int main(int argc, char** argv)
     const G4ParticleDefinition* deu = G4Deuteron::DeuteronDefinition();
     const G4ParticleDefinition* tri = G4Triton::TritonDefinition();	
     const G4ParticleDefinition* alp = G4Alpha::AlphaDefinition();
+
+
+    if(fG4HDS)
+    {
+
+      char* pathstart = getenv("G4HADATASET");
+      G4String temp;
+      G4String pathstarttwo(pathstart);      
+      G4String process2="dd";
+      G4String pName(proton->GetParticleName());     
+      G4String nName(neutron->GetParticleName());     
+       
+      G4HadFileSpec fileIwant( pName,
+                               material,
+                               nName,
+                               process2 );
+       
+       //G4cout << fileIwant.G4HDSFilename()<< G4endl;
+       //G4cout << fileIwant.G4HDSFilepath()<< G4endl;
+       
+       temp = fileIwant.G4HDSFilename();
+       
+       // G4HadFileFinder* findit=new G4HadFileFinder(pathstart,temp); 
+       
+       G4ReadHadDoubleDiffXSC* readExforAl = new G4ReadHadDoubleDiffXSC(fileIwant);    
+
+       std::vector<G4PhysicsTable*>* doubleDiffXscBank = readExforAl->GetDoubleDiffXscBank();
+       std::vector<G4DataVector*>* angleDdTable = readExforAl->GetAngleDdTable(); 
+       G4DataVector*  TkinVector       = readExforAl->GetTkinVector();
+       G4DataVector*  angleVector      = readExforAl->GetAngleVector();
+       G4DataVector   energyUnitVector = readExforAl->GetEnergyUnitVector();
+       G4DataVector   angleUnitVector  = readExforAl->GetAngleUnitVector();
+       G4DataVector   ddXscUnitVector  = readExforAl->GetDdXscUnitVector();
+
+       G4cout<<G4endl<<"External Output of G4HDS DoubleDiffXscBank data"<<G4endl;
+       G4cout<<"DoubleDiffXscBank->size() = "<<doubleDiffXscBank->size()<<G4endl<<G4endl;
+       size_t jAngle=0; 
+
+       for(size_t i = 0; i < doubleDiffXscBank->size(); ++i)
+       {
+         G4cout<<G4endl<<"(*doubleDiffXscBank)["<<i<<"]->size() = "
+               <<(*doubleDiffXscBank)[i]->size()<<G4endl;
+
+         for(  size_t j = 0; j < (*doubleDiffXscBank)[i]->size(); ++j )
+         {
+            G4cout<<G4endl<<"(*(*doubleDiffXscBank)["<<i<<"])("<<j<<")->GetVectorLength() = "
+                  <<(*(*doubleDiffXscBank)[i])(j)->GetVectorLength()<<G4endl;
+            G4cout<<G4endl<<"Tkin"<<"\t"<<"angle"<<"\t"
+                  <<"omega"<<"\t"<<"ddXsc"<<G4endl<<G4endl;
+
+            for(size_t k = 0; k < (*(*doubleDiffXscBank)[i])(j)->GetVectorLength(); ++k)
+            {
+              G4cout<<(*TkinVector)[i]/energyUnitVector[i]<<"\t"
+
+	  //  <<(*angleVector)[jAngle]/angleUnitVector[i]<<"\t"
+              <<(*(*angleDdTable)[i])[j]/angleUnitVector[i]<<"\t"
+
+              <<(*(*doubleDiffXscBank)[i])(j)->GetLowEdgeEnergy(k)/energyUnitVector[i]
+              <<"\t"
+	      <<(*(*(*doubleDiffXscBank)[i])(j))(k)/ddXscUnitVector[i]<<G4endl;
+          }
+          jAngle++;
+        } 
+      }
+
+    }
+
 		
     if(!proc) 
     {
@@ -1132,6 +1227,8 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
 	    //////////////////////////////////////////
 	    /////////// SG Here the proton cross section
 	    ///////////////////////////////////////////
+	    /*
+	      SG Commented by me
 
 	    if(e >= elim) 
 	    {
@@ -1171,6 +1268,7 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
                 break;
 	      }
 	    }
+	    */
 	    //////////////////////////////////////////////////////////////////////
           } 
           else if(pd == pin) 
@@ -1271,8 +1369,8 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
             //ibin = (G4int)(ee*nbinlog/logmax);
 	    /// SG changed by me
 	    ///	    if(ibin>=0 && ibin<nbinlog) h50[ibin] += f;
-	    /*
-	      SG Commented by me
+
+
 	      if(e >= elim) 
 	    {
               ibin = (G4int)(cos(theta)*nbinsa/2);
@@ -1310,7 +1408,7 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
 		  }
                 break;
 		}
-		}*/
+		}
 	  } 
           else if(pd == deu)   h1[5] +=1.;	
           else if(pd == tri)   h1[6] +=1.;
@@ -1648,9 +1746,10 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
       /// Say, using similar groups of data
 
     }
-    G4cerr << "###### End of run # " << run << "     ######" << G4endl;
+  G4cout << "###### End of run # " << G4endl;
 
-  }             // while(end);
+
+  fin->close();
   delete mate;
   delete fin;
   delete phys;
@@ -1658,14 +1757,3 @@ std::cout << "Tree store : " << tree->storeName() << std::endl;
   G4cout << "###### End of test #####" << G4endl;
   return 1;
 }
-
-
-
-
-
-
-
-
-
-
-
