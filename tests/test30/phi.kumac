@@ -1,0 +1,39 @@
+* exe kumac/nimeps
+opt zfl
+opt nfit
+opt nsta
+opt nbox
+opt ngri
+set MSCF 0.80
+set XLAB 0.6
+set NDVX 010206
+set NDVY 010205
+ zone
+ zone 2 2
+ 
+ hi/file 1 p_fe_100_par.paw
+ hi/pl 3
+ itx 100 1200 'proton 100 MeV on Fe'
+ itx -20 150 'GHEISHA++'
+ close 1
+ 
+ hi/file 1 p_fe_100_prec.paw
+ hi/pl 3
+ itx -20 150 'Precompaund'
+ close 1
+ 
+ hi/file 1 p_fe_100_schip.paw
+ hi/pl 3
+ itx -20 150 'CHIPS'
+ close 1
+ 
+ hi/file 1 p_fe_100_kin.paw
+ hi/pl 3
+ itx 20 1500 'Kinetic'
+ close 1
+
+
+exe kumac/prf phi eps
+
+
+
