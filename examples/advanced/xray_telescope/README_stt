@@ -1,0 +1,40 @@
+*******************************************************************************
+*******************************************************************************
+     Readme File for STT of the X-Ray Telescope Advanced Example
+*******************************************************************************
+*******************************************************************************
+
+STT testing of XrayTel should contain the following:
+
+gmake
+XrayTel test.mac
+
+this should produce one output file:
+xraytel.out (0.5 kbytes)
+
+This should be compared with 
+xraytel_ref.out
+
+The job should take ~ 2 minutes on a 1 GHz Linux machine
+
+The memory usage should be around 6 Mbytes.
+
+Platforms to be tested on:
+SUN and LINUX, NOT WINDOWS.
+
+At a future date G4ANALYSIS_USE should be set and the AIDA/Anaphe 
+packages tested.
+In this case 
+- computation time ~ 4 minutes
+- memory usage ~ 18 Mbytes
+- the file xraytel.hbook is created (~250 kbytes)
+- this file should be compared to xraytel_ref.hbook
+
+If G4ANALYSIS_USE_PLOTTER is set together with G4ANALYSIS_USE, the 
+AIDA/Anaphe plotter (Grace) can be tested in interactive runs.
+
+Giovanni Santin
+e-mail: giovanni.santin@cern.ch
+
+*******************************************************************************
+*******************************************************************************
