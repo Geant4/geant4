@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DrawVoxels.hh,v 1.4 1999-08-03 09:09:40 graignac Exp $
+// $Id: G4DrawVoxels.hh,v 1.5 1999-08-03 09:51:57 graignac Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,8 @@ class G4DrawVoxels{
     ~G4DrawVoxels(){};
     //Copy constructor Assignment operator not supported (array fvoxelcolours ...)
     
-    void DrawVoxels(const G4LogicalVolume* lv) const;
-    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*) const;
+    void DrawVoxels(const G4LogicalVolume* lv);
+    G4PlacedPolyhedronList* CreatePlacedPolyhedra(const G4LogicalVolume*);
 
     void SetVoxelsVisAttributes(G4VisAttributes&,G4VisAttributes&,G4VisAttributes&);
     void SetBoundingBoxVisAttributes(G4VisAttributes&);
