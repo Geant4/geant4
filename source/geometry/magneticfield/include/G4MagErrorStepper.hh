@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.hh,v 1.1 1999-01-07 16:07:04 gunter Exp $
+// $Id: G4MagErrorStepper.hh,v 1.2 1999-02-12 12:26:31 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Abstract base class (ie Interface)
@@ -53,12 +53,13 @@ class G4MagErrorStepper : public G4MagIntegratorStepper
 			       G4double yout[] ) = 0;
   
   G4double DistChord()   const;
+
 private:
   
   // Data stored in order to find the chord
   G4ThreeVector yInitial, yMidPoint, yFinal;
   
-  G4int theNumberOfVariables ; 
+  // G4int theNumberOfVariables ; 
 };
 #include  "G4MagErrorStepper.icc"
 

@@ -5,12 +5,11 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagErrorStepper.icc,v 1.1 1999-01-07 16:07:04 gunter Exp $
+// $Id: G4MagErrorStepper.icc,v 1.2 1999-02-12 12:27:25 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 inline G4MagErrorStepper::G4MagErrorStepper(G4Mag_EqRhs *EqRhs,
 					    G4int numberOfVariables)
-     :G4MagIntegratorStepper(EqRhs),
-      theNumberOfVariables(numberOfVariables)
+     :G4MagIntegratorStepper(EqRhs,numberOfVariables)
   {};
