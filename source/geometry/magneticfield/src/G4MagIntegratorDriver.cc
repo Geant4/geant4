@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.30 2002-11-29 23:11:43 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.31 2002-12-12 08:19:38 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -153,7 +153,9 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
 	}
      }
 
+#ifdef  G4DEBUG_FIELD
      static G4int nStpPr=50;   // For debug printing of long integrations
+#endif
 
      // Perform the Integration
      //      
