@@ -6,19 +6,17 @@ class Octree;
 
 class MiddleNode : public OctreeNode
 {
-  //    friend class Octree;
-
 public:
   OctreeNode*  mChildren[8];
-
-  void ResetFamily();
   MiddleNode();
-  MiddleNode( OctreeNode* pParent );
   ~MiddleNode();
 
-  OctreeNode*& operator []( G4int index );
-  OctreeNodeType Type();
+public:
+  void ResetFamily();
+  MiddleNode( OctreeNode* pParent );
   G4int FindChild( const OctreeNode* pNode );
   G4int MemSize();
+  OctreeNode*& operator []( G4int index )   {return mChildren[index];}
+  OctreeNodeType Type()                     {return MIDDLE_NODE;}
 };
 #endif
