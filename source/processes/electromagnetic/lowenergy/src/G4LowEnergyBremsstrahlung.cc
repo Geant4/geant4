@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyBremsstrahlung.cc,v 1.61 2003-05-20 22:17:06 pia Exp $
+// $Id: G4LowEnergyBremsstrahlung.cc,v 1.62 2003-05-20 23:33:31 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -55,6 +55,7 @@
 // 21.02.2003 V.Ivanchenko    Energy bins for spectrum are defined here
 // 28.02.03 V.Ivanchenko    Filename is defined in the constructor
 // 24.03.2003 P.Rodrigues Changes to accommodate new angular generators
+// 20.05.2003 MGP  Removed memory leak related to angularDistribution
 //
 // --------------------------------------------------------------
 
@@ -85,6 +86,8 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam)
   angularDistribution->PrintGeneratorInformation();
 }
 
+/*
+// Commented out for release 5.2 (June 2003), allowing no interface change
 G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam, G4VBremAngularDistribution* distribution)
   : G4eLowEnergyLoss(nam),
     crossSectionHandler(0),
@@ -97,13 +100,14 @@ G4LowEnergyBremsstrahlung::G4LowEnergyBremsstrahlung(const G4String& nam, G4VBre
 
   angularDistribution->PrintGeneratorInformation();
 }
-
+*/
 
 G4LowEnergyBremsstrahlung::~G4LowEnergyBremsstrahlung()
 {
   if(crossSectionHandler) delete crossSectionHandler;
   if(energySpectrum) delete energySpectrum;
   if(theMeanFreePath) delete theMeanFreePath;
+  delete angularDistribution;
   energyBins.clear();
 }
 
@@ -383,3 +387,8 @@ void G4LowEnergyBremsstrahlung::SetCutForLowEnSecPhotons(G4double cut)
   cutForPhotons = cut;
 }
 
+void G4LowEnergyBremsstrahlung::SetAngularGenerator(G4VBremAngularDistribution* distribution)
+{
+  angularDistribution = distribution;
+  angularDistribution->PrintGeneratorInformation();
+}

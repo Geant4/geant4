@@ -22,7 +22,7 @@
 //
 // 
 // -------------------------------------------------------------------
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.32 2003-03-26 10:44:40 silvarod Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.33 2003-05-20 23:33:25 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -69,8 +69,9 @@ public:
  
   G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
 
-  G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem",
-			    G4VBremAngularDistribution* distribution = 0);
+  // Commented out for release 5.2 (June 2003), allowing no interface change
+  // G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem",
+  //			       G4VBremAngularDistribution* distribution = 0);
 
   ~G4LowEnergyBremsstrahlung();
   
@@ -82,6 +83,9 @@ public:
 				  const G4Step& step);
  
   void SetCutForLowEnSecPhotons(G4double cut);
+
+  // Temporary for release 5.2 (June 2003), allowing no interface change
+  void SetAngularGenerator(G4VBremAngularDistribution* distribution);
   
   void PrintInfoDefinition();
         
