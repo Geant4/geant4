@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: remsim.cc,v 1.3 2004-03-12 09:17:45 guatelli Exp $
+// $Id: remsim.cc,v 1.4 2004-03-12 09:20:34 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -50,8 +50,6 @@
 #include "RemSimAnalysisManager.hh"
 #endif 
 
-#include "QGSP.hh"
-#include "QGSC.hh" 
 int main(int argc,char** argv)
 {
   // Construct the default run manager
@@ -60,6 +58,7 @@ int main(int argc,char** argv)
   // set mandatory initialization classes
   RemSimDetectorConstruction* detector = new RemSimDetectorConstruction();
   runManager->SetUserInitialization(detector);
+
   runManager->SetUserInitialization(new RemSimPhysicsList);
 
   // set mandatory user action class
@@ -102,7 +101,7 @@ if(argc==1)
       session = new G4UIterminal();
 #endif    
 
-    UI->ApplyCommand("/control/execute vis1.mac");    
+    UI->ApplyCommand("/control/execute vis.mac");    
     session->SessionStart();
     delete session;
   }
