@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4Scatterer.cc,v 1.8 2003-11-10 12:23:33 hpw Exp $ //
+// $Id: G4Scatterer.cc,v 1.9 2003-11-12 10:11:50 gunter Exp $ //
 //
 
 #include "globals.hh"
@@ -324,15 +324,14 @@ G4KineticTrackVector* G4Scatterer::Scatter(const G4KineticTrack& trk1,
          pFinal +=final->Get4Momentum();
        }
 
-       //if ( (pInitial-pFinal).mag() > 0.1*MeV )
-       {
-   	//  #ifdef debug_G4Scatterer
-          G4cout << "G4Scatterer: momentum imbalance, pInitial= " <<pInitial << " pFinal= " <<pFinal<< G4endl;
-	//  #endif
-       }
        #ifdef debug_G4Scatterer
+       if ( (pInitial-pFinal).mag() > 0.1*MeV )
+       {
+          G4cout << "G4Scatterer: momentum imbalance, pInitial= " <<pInitial << " pFinal= " <<pFinal<< G4endl;
+       }
        G4cout << "Scatterer costh= " << trk1.Get4Momentum().vect().unit() *(products->operator[](0))->Get4Momentum().vect().unit()<< G4endl;
        #endif
+       
        for(size_t hpw=0; hpw<products->size(); hpw++)
        {
          energyBalance-=products->operator[](hpw)->Get4Momentum().t();
