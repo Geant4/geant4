@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReferenceCountedHandle.hh,v 1.6 2001-07-11 10:00:51 gunter Exp $
+// $Id: G4ReferenceCountedHandle.hh,v 1.7 2001-09-24 21:08:09 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -97,17 +97,17 @@ private: // with description
 
 public: // with description
   G4ReferenceCountedHandle( X* rep = 0 )
-  : fObj( 0 ) {
+  : fObj( 0 )        {
     if( rep != 0 ) {
 	    fObj = new RCH::CountedObject( rep );
 	  }
   } // Constructor
 
-  ~G4ReferenceCountedHandle() {
-    if( 0 == Release() )    {
-      if( fObj != 0 )     {
-        delete fObj;
-	      fObj = 0;
+  ~G4ReferenceCountedHandle()  {
+    if( fObj != 0 )          {
+      if( 0 == Release() ) {
+          delete fObj;
+	        fObj = 0;
       }
     }
   } // Destructor
@@ -125,11 +125,11 @@ public: // with description
     AddRef();
   } // Copy constructor
 
-  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
-    if( this->fObj != right.GetCountedObject() )              {
-      if( 0 == this->Release() )          {
-        if( this->fObj != 0 )           {
-          delete this->fObj;
+  inline G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle& right ) {
+    if( this->fObj != right.GetCountedObject() ) {
+      if( this->fObj != 0 ) {
+        if( 0 == this->Release() ) {
+            delete this->fObj;
         }
       }
       this->fObj = right.GetCountedObject();
@@ -141,9 +141,9 @@ public: // with description
   template <class T>
   G4ReferenceCountedHandle& operator=( const G4ReferenceCountedHandle<T>& right ) {
     if( this->fObj != right.GetCountedObject() )              {
-      if( 0 == this->Release() )          {
-        if( this->fObj != 0 )           {
-          delete this->fObj;
+      if( this->fObj != 0 ) {
+        if( 0 == this->Release() ) {
+            delete this->fObj;
         }
       }
       this->fObj = right.GetCountedObject();
@@ -152,11 +152,11 @@ public: // with description
     return *this;
   } // Assignment operator by reference
 
-  G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
+  inline G4ReferenceCountedHandle& operator =( const G4ReferenceCountedHandle* right ) {
     if( this->fObj != right->GetCountedObject() )               {
-      if( 0 == this->Release() )          {
-        if( this->fObj != 0 )           {
-          delete this->fObj;
+      if( this->fObj != 0 ) {
+        if( 0 == this->Release() ) {
+            delete this->fObj;
         }
       }
       this->fObj = right->GetCountedObject();
@@ -165,7 +165,7 @@ public: // with description
     return *this;
   } // Assignment operator by pointer, should not be ever called 
 
-  G4ReferenceCountedHandle& operator =( X* pRefObj ) {
+  inline G4ReferenceCountedHandle& operator =( X* pRefObj ) {
     if( this->fObj == 0 || pRefObj != this->fObj->GetObject() ) {
       if( 0 == Release() )          {
         if( fObj != 0 )           {
@@ -177,7 +177,7 @@ public: // with description
     return *this;
   } // Assignment operator by pointer to the counted class object
   
-  RCH::CountedObject* GetCountedObject() const {
+  inline RCH::CountedObject* GetCountedObject() const {
     return fObj;
   }
 
@@ -193,27 +193,27 @@ public: // with description
      return( ( fObj != 0 ) ? fObj->Count() : 0 );
   } // Forward to Counter class
 
-  X* operator ->() const {
+  inline X* operator ->() const {
      return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
   } // Operator -> allowing the access to counted object
     // The check for 0-ness is left out for performance reasons, see operator () bellow
     // May be called on initialized smart-pointer only!
 
-  bool operator !() const {
+  inline bool operator !() const {
      return( ( fObj == 0 || fObj->GetObject() == 0 ) ? true : false );
   } // Validity test operator
   
-  operator bool() const {
+  inline operator bool() const {
     return( ( fObj != 0 && fObj->GetObject() != 0 ) ? true : false );
   }
 
-  X& operator *() const {
+  inline X& operator *() const {
      return( ( fObj != 0 ) ? *(fObj->GetObject()) : 0 );
   } // Dereference operator to make the feeling of dereferencing a pointer to
     // the counted object
     // May be called on initialized smart-pointer only!
 
-  X* operator ()() const {
+  inline X* operator ()() const {
      return( ( fObj != 0 ) ? fObj->GetObject() : 0 );
   } // Functor operator (for covinience)
 
@@ -224,3 +224,4 @@ private:
 };
 
 #endif // _G4REFERENCECOUNTEDHANDLE_H_
+
