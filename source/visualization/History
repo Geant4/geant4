@@ -1,4 +1,4 @@
-$Id: History,v 1.178 2002-02-05 19:52:58 perl Exp $
+$Id: History,v 1.179 2002-02-10 07:13:42 perl Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
-4th February 2002  Joseph Perl
+4th February 2002  Joseph Perl  (vis-V04-00-01)
 - HepRep: Check for missing hierarchy layers in HepRepXMLWriter.
   (Not strictly needed since have a culled layer check in SceneHandler,
   but may be useful in other applications of HepRepXMLWriter).
