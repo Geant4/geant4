@@ -73,6 +73,8 @@ XrayFluoPrimaryGeneratorMessenger::XrayFluoPrimaryGeneratorMessenger(XrayFluoPri
   isoVert->SetCandidates("on off");
   isoVert->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  G4cout << "XrayFluoPrimaryGeneratorMessenger created" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -83,6 +85,9 @@ XrayFluoPrimaryGeneratorMessenger::~XrayFluoPrimaryGeneratorMessenger()
   delete  RndmVert;
   delete spectrum;
   delete isoVert;
+
+  G4cout << "XrayFluoPrimaryGeneratorMessenger deleted" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -44,12 +44,16 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::XrayFluoSteppingAction()
-{ }
+{
+  G4cout << "XrayFluoSteppingAction created" << G4endl; 
+ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{ }
+{ 
+  G4cout << "XrayFluoSteppingAction deleted" << G4endl;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,3 +67,4 @@ void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+

@@ -38,7 +38,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
-
+#include "XrayFluoDetectorConstruction.hh"
 class XrayFluoRunAction;
 class XrayFluoEventActionMessenger;
 
@@ -75,14 +75,19 @@ private:
   //the sigma is to be set in the file XrayFluoEventAction.cc 
   G4double RandomCut(G4double);
 
+
+  XrayFluoVDetectorType* detectorType;
+
+  
+  
+  //XrayFluoRunAction* runManager;
+
+
   //this method distributes the energy deposit (which must be given as
   //argument) according to the response function stored in the file 
   //response.dat
-  
-  
-  XrayFluoRunAction* runManager;
 
-public: G4double ResponseFunction(G4double);
+  //public: G4double ResponseFunction(G4double);
   
 
 };

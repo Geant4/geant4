@@ -49,11 +49,15 @@
 #include "G4Colour.hh"
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
+#include "G4UserLimits.hh"
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
 XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
-  : DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
+  : detectorType(0),DeviceSizeX(0),DeviceSizeY(0),DeviceThickness(0),
     solidWorld(0),logicWorld(0),physiWorld(0),
     solidHPGe(0),logicHPGe(0),physiHPGe(0),
     solidSample (0),logicSample(0),physiSample (0),
@@ -65,17 +69,22 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     OhmicPosMaterial(0), OhmicNegMaterial(0),
     pixelMaterial(0),sampleMaterial(0),
     Dia1Material(0),Dia3Material(0),
-    defaultMaterial(0)
-  ,HPGeSD(0)
+    defaultMaterial(0),HPGeSD(0)
   
 { 
   NbOfPixelRows     =  1;
   NbOfPixelColumns  =  1;
   NbOfPixels        =  NbOfPixelRows*NbOfPixelColumns;
-    PixelSizeXY       = 5 * cm;
-  PixelThickness =  3.5 * mm;
-  ContactSizeXY     = 0.005*mm;
-  SampleThickness = 2.5 * mm;
+
+  PixelSizeXY       = 5 * cm;
+  PixelThickness = 3.5 * mm; //changed should be 3.5 mm
+
+  G4cout << "PixelThickness(mm): "<< PixelThickness/mm << G4endl;
+  G4cout << "PixelSizeXY(cm): "<< PixelSizeXY/cm << G4endl;
+
+  ContactSizeXY     = 5*cm;
+  SampleThickness = 4 * mm;
+
   SampleSizeXY = 3. * cm;
   Dia1Thickness = 1. *mm;
   Dia3Thickness = 1. *mm;
@@ -89,20 +98,26 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
   OhmicNegThickness = 0.005*mm;
   OhmicPosThickness = 0.005*mm;
   ThetaHPGe = 135. * deg;
+  PhiHPGe = 225. * deg;
+
+  ThetaDia1 = 135. * deg;
+  PhiDia1 = 90. * deg;
+  AlphaDia1 = 225. * deg;
+
+  AlphaDia3 = 180. * deg;
   Dia3Dist =  66.5 * mm;
   Dia3InnerSize = 1. * mm;
-  PhiHPGe = 225. * deg;
-  ThetaDia1 = 135. * deg;
   ThetaDia3 = 180. * deg;
   PhiDia3 = 90. * deg;
+
   DistDia = 66.5 * mm;
   DistDe =DistDia+ (Dia1Thickness
 		    +PixelThickness)/2+OhmicPosThickness ;
-  PhiDia1 = 90. * deg;
-  AlphaDia1 = 225. * deg;
-  AlphaDia3 = 180. * deg;
+
   PixelCopyNb=0;
+  G4String defaultDetectorType = "sili";
   ComputeApparateParameters();
+  SetDetectorType(defaultDetectorType);
   
   // create commands for interactive definition of the apparate
   
@@ -111,9 +126,49 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::instance = 0;
+
+XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::GetInstance()
+{
+  if (instance == 0)
+    {
+      instance = new XrayFluoDetectorConstruction;
+     
+    }
+  return instance;
+}
+
+void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
+{
+
+  if (type=="sili")
+    {
+      detectorType = XrayFluoSiLiDetectorType::GetInstance();
+    }
+//   else if (type=="hpge")
+//     {
+//       detectorType = XrayFluoHPGeDetectorType::GetInstance();
+//     }
+  else 
+    {
+      G4String excep = type + "detector type unknown";
+      G4Exception(excep);
+    }
+}
+
+XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
+{
+  return detectorType;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XrayFluoDetectorConstruction::~XrayFluoDetectorConstruction()
+
 { 
   delete detectorMessenger;
+  delete detectorType;
   G4cout << "XrayFluoDetectorConstruction deleted" << G4endl;
 }
 
@@ -184,6 +239,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
 
   //define Cromium
  
+
   a = 51.996*g/mole;
   G4Element* Cr  = new G4Element(name="Cromium"  ,symbol="Cr" , z= 24., a);
 
@@ -219,7 +275,6 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   G4Element* elS  = new G4Element(name="Zolfo"  ,symbol="S" , z= 16., a);
 
 
-
   //define carbon
   
   a = 12.0107*g/mole;
@@ -235,6 +290,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   G4Element* O  = new G4Element(name="Oxygen"  ,symbol="O" , z= 8., a);
 
   //define Arsenic
+
   a = 74.9216 * g/mole;
   G4Element * As = new G4Element( name="arsenic",symbol="As",z= 33.,a);
 
@@ -300,7 +356,27 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   G4Element* elU  = new G4Element(name="Uranium",symbol="U", z=92.,a);
 
 
-  G4cout << "Elementi creati" << G4endl;
+  // define Palladium
+  a= 106.4*g/mole;
+  G4Element* Pd = new   G4Element(name="Palladium",symbol="Pd",z=46.,a);
+
+  // define cadmium
+  a = 112.4 *g/mole;
+  G4Element* Cd = new   G4Element(name="Cadmium",symbol="Cd",z=48.,a);
+
+  // define Silver
+  a = 107.87 *g/mole;
+  G4Element* Ag = new   G4Element(name="Silver",symbol="Ag",z=47.,a);
+
+  // define Clorine
+  a = 35.453 * g/mole;
+  G4Element * Cl = new G4Element( name="Chlorine",symbol="Cl",z= 17.,a);
+
+
+  G4cout << "Elements created" << G4endl;
+
+
+
 
 
 
@@ -388,9 +464,37 @@ void XrayFluoDetectorConstruction::DefineMaterials()
 
 
   density = 3*g/cm3;
-  G4Material* mars1 = new G4Material(name="Mars1", density, ncomponents=2);
+            mars1 = new G4Material(name="Mars1", density, ncomponents=2);
   mars1->AddMaterial(tracesOfMars1, fractionmass=0.0044963163);
   mars1->AddMaterial(mars1Main, fractionmass=0.9955036837);
+
+  // define anorthosite
+
+  density = 2.8*g/cm3;
+  anorthosite = new G4Material(name="Anorthosite", density, ncomponents=21);
+  anorthosite->AddElement(Fe,   fractionmass=0.095283);
+  anorthosite->AddElement(Mn,   fractionmass=0.00137086);
+  anorthosite->AddElement(Ni,   fractionmass=5e-5);
+  anorthosite->AddElement(elCu, fractionmass=5.2e-4);
+  anorthosite->AddElement(Na,   fractionmass=0.017635);
+  anorthosite->AddElement(Mg,   fractionmass=0.0245361);
+  anorthosite->AddElement(elAl, fractionmass=0.0800355);
+  anorthosite->AddElement(elSi, fractionmass=0.232204);
+  anorthosite->AddElement(Ca,   fractionmass=0.0635368);
+  anorthosite->AddElement(K, fractionmass=0.00464912);
+  anorthosite->AddElement(C,    fractionmass=0.000837803);
+  anorthosite->AddElement(P,    fractionmass=0.00176742);
+  anorthosite->AddElement(elTi, fractionmass=0.0240879);
+  anorthosite->AddElement(Cl,   fractionmass=0.00014);
+  anorthosite->AddElement(Pd,   fractionmass=0.00001);
+  anorthosite->AddElement(Cd,   fractionmass=0.00018);
+  anorthosite->AddElement(Ag,   fractionmass=0.00048);
+  anorthosite->AddElement(elS,  fractionmass=0.00144);
+  anorthosite->AddElement(V,    fractionmass=0.00228);
+  anorthosite->AddElement(Ba,   fractionmass=0.00151);
+  anorthosite->AddElement(O,    fractionmass=0.447026);
+
+
 
   //define Neodimuim
   
@@ -404,6 +508,7 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   materialMg->AddElement(Mg,natoms=1);
 
   //define iron 
+
 
   density = 7.86 * g/cm3;
               FeMaterial = new G4Material(name="Iron",density,ncomponents=1);
@@ -517,10 +622,12 @@ void XrayFluoDetectorConstruction::DefineMaterials()
   
   //default materials of the apparate
   
-  sampleMaterial = mars1;
+
+  sampleMaterial = anorthosite;
+
   Dia1Material = Pb;
   Dia3Material = Pb;
-  pixelMaterial = HPGe;
+  pixelMaterial = Si;
   OhmicPosMaterial = Cu;
   OhmicNegMaterial = Pb;
   defaultMaterial = Vacuum;
@@ -563,7 +670,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       
       
       logicHPGe = new G4LogicalVolume(solidHPGe,	//its solid
-				      defaultMaterial,	//its material
+				      defaultMaterial,	//its material 
 				      "HPGeDetector");	//its name
       
       zRotPhiHPGe.rotateX(PhiHPGe);
@@ -577,8 +684,11 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 				    false,		//no boolean operation
 				    0);		//copy number
     }
-  // Pixel   
+  // Pixel
   
+
+
+
   for ( G4int j=0; j < NbOfPixelColumns ; j++ )
     { for ( G4int i=0; i < NbOfPixelRows ; i++ )
       { 
@@ -589,22 +699,28 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	
 	logicPixel = new G4LogicalVolume(solidPixel,	
 					 pixelMaterial,	//its material
-					 "Pixel");	        //its name 
+					 "Pixel");	        //its name
+
+	/*
 	zRotPhiHPGe.rotateX(PhiHPGe);
 	G4double x,y,z;
 	z = DistDe * cos(ThetaHPGe);
 	y =DistDe * sin(ThetaHPGe);
-	x = 0.*cm; 
-	
+	x = 0.*cm;*/ 
 	physiPixel = new G4PVPlacement(0,	       
 				       G4ThreeVector(0,
-						     i*PixelSizeXY,
+						     i*PixelSizeXY, 
 						     j*PixelSizeXY ),
 				       "Pixel",  
 				       logicPixel,	 //its logical volume
 				       physiHPGe, //its mother  volume
 				       false,	 //no boolean operation
 				       PixelCopyNb);//copy number
+
+
+
+	
+
 	
 	// OhmicNeg
 	
@@ -635,7 +751,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 	
 	if (OhmicPosThickness > 0.) 
 	  { solidOhmicPos = new G4Box("OhmicPos",		//its name
-				      ContactSizeXY/2,ContactSizeXY/2,OhmicPosThickness/2); 
+				      PixelSizeXY/2,PixelSizeXY/2,OhmicPosThickness/2); 
 	  
 	  logicOhmicPos = new G4LogicalVolume(solidOhmicPos,    //its solid
 					      OhmicPosMaterial, //its material
@@ -652,10 +768,15 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 					    PixelCopyNb); 
 	  
 	  }
-	PixelCopyNb += PixelCopyNb;
+	
+	PixelCopyNb += PixelCopyNb; 
+	G4cout << "PixelCopyNb: " << PixelCopyNb << G4endl;
       }
-    } 
+    }
+
   
+
+
     //Sample
     
     solidSample=0;  logicSample=0;  physiSample=0;
@@ -741,6 +862,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
     
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   
+
   if(!HPGeSD)
     {
       HPGeSD = new XrayFluoHPGeSD ("HPGeSD",this);
@@ -758,12 +880,18 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   logicWorld->SetVisAttributes (G4VisAttributes::Invisible);
    G4VisAttributes* simpleBoxVisAtt= new G4VisAttributes(G4Colour(1.0,1.0,1.0));
    G4VisAttributes * yellow= new G4VisAttributes( G4Colour(255/255. ,255/255. ,51/255. ));
+   G4VisAttributes * red= new G4VisAttributes( G4Colour(255/255. , 0/255. , 0/255. ));
+   G4VisAttributes * blue= new G4VisAttributes( G4Colour(0/255. , 0/255. ,  255/255. ));
   yellow->SetVisibility(true);
   yellow->SetForceSolid(true);
+  red->SetVisibility(true);
+  red->SetForceSolid(true);
+  blue->SetVisibility(true);
+
   simpleBoxVisAtt->SetVisibility(true);
  
-  logicPixel->SetVisAttributes(simpleBoxVisAtt);
-  logicHPGe->SetVisAttributes(G4VisAttributes::Invisible );
+  logicPixel->SetVisAttributes(red); //modified!!!
+  logicHPGe->SetVisAttributes(blue);
   logicSample->SetVisAttributes(simpleBoxVisAtt);
   
   logicDia1->SetVisAttributes(simpleBoxVisAtt);
@@ -772,9 +900,9 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   logicOhmicNeg->SetVisAttributes(yellow);
   logicOhmicPos->SetVisAttributes(yellow);
   //always return the physical World
-  
-  
+    
   PrintApparateParameters();
+
   return physiWorld;
 }
 
@@ -793,9 +921,9 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 	 << SampleSizeXY/cm
 	 << " cm"
 	 << G4endl
-	 <<" Material: " << sampleMaterial->GetName() 
+	 <<" Material: " << logicSample->GetMaterial()->GetName() 
 	 <<G4endl
-	  <<"The HPGeDetector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick"
+	  <<"The Detector is a slice  " << DeviceThickness/(1.e-6*m) <<  " micron thick of " << pixelMaterial->GetName()
 	 <<G4endl
 	 
 
@@ -809,46 +937,20 @@ void XrayFluoDetectorConstruction::UpdateGeometry()
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
 }
 
+
 void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
 
-  if( newMaterial == "dolorite") {
-    sampleMaterial = dolorite;
-  }
 
-  else if ( newMaterial == "iron") {
-    sampleMaterial = FeMaterial;
-}
-
-  else if ( newMaterial == "silicon") {
-    sampleMaterial = Si;
+  G4Material* pttoMaterial = G4Material::GetMaterial(newMaterial);     
+  if (pttoMaterial){
+    G4cout << "Material!!!!" << newMaterial << G4cout;
+    logicSample->SetMaterial(pttoMaterial);
+    PrintApparateParameters();
+  }            
+  
 }
 
-  else if ( newMaterial == "aluminium") {
-    sampleMaterial = Al;
-}
-
-  else if ( newMaterial == "copper") {
-    sampleMaterial = Cu;
-}
-  else if ( newMaterial == "germanium") {
-    sampleMaterial = HPGe;
-}
-  else if ( newMaterial == "magnesium") {
-    sampleMaterial = materialMg;
-}
-
-  else if ( newMaterial == "neodimium") {
-    sampleMaterial = materialNd;
-}
-  else if ( newMaterial == "tin") {
-    sampleMaterial = Sn;
-}
-  else if ( newMaterial == "titanium") {
-    sampleMaterial = Ti;
-}
-
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

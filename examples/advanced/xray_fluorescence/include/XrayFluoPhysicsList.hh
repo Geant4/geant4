@@ -42,6 +42,7 @@ class XrayFluoPhysicsListMessenger;
 class G4LowEnergyIonisation;
 class G4LowEnergyPhotoElectric;
 class G4LowEnergyBremsstrahlung;
+class G4eIonisation;
 class XrayFluoDetectorConstruction;
 class XrayFluoPhysicsList: public G4VUserPhysicsList
 {
@@ -89,6 +90,7 @@ private:
   G4LowEnergyIonisation*  LeIoprocess;
   G4LowEnergyPhotoElectric* LePeprocess;
   G4LowEnergyBremsstrahlung* LeBrprocess;
+  // G4eIonisation* eIoProcess; // modified
   XrayFluoPhysicsListMessenger* physicsListMessenger;
   G4double cutForGamma;
   G4double cutForElectron;

@@ -138,8 +138,9 @@ void XrayFluoVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_OIWIN32
   RegisterGraphicsSystem (new G4OpenInventorWin32);
 #endif
-
+ 
  /*
+
 #ifdef G4VIS_USE_VRML
   RegisterGraphicsSystem (new G4VRML1);
   RegisterGraphicsSystem (new G4VRML2);

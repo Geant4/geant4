@@ -55,10 +55,10 @@ public:
   int operator==(const XrayFluoSensorHit&) const;
   inline void* operator new(size_t);
   inline void  operator delete(void*);
-  void AddEnergy(G4double de)    {EdepTot += de;};
+  inline void AddEnergy(G4double de)    {EdepTot += de;};
   void Draw();
   void Print();
-  G4double GetEdepTot()      { return EdepTot;};
+  inline G4double GetEdepTot()      { return EdepTot;};
   
 private:
   

@@ -45,22 +45,29 @@
 XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstruction * Det)
 :Detector(Det)
 { 
-   detDir = new G4UIdirectory("/apparate/");
+  detDir = new G4UIdirectory("/apparate/");
   detDir->SetGuidance("detector control.");
 
   UpdateCmd = new G4UIcmdWithoutParameter("/apparate/update",this);
   UpdateCmd->SetGuidance("Update apparate geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
+
   UpdateCmd->AvailableForStates(G4State_Idle);
 
   sampleCmd = new G4UIcmdWithAString("/apparate/sample",this);
   sampleCmd->SetGuidance("select a diferent material for the sample");
-  sampleCmd->SetGuidance("The command /apparate/update command MUST be applied after this one");
   sampleCmd->SetParameterName("choice",true);
-  sampleCmd->SetDefaultValue("dolorite");
-  sampleCmd->SetCandidates("dolorite iron silicon aluminium titanium tin neodimium magnesium germanium copper mars1");
+  sampleCmd->SetDefaultValue("mars1");
+  sampleCmd->SetCandidates("Dolorite Iron Silicon Aluinium Oxigen Titanium Tin Lead Neodimium Magnesium Copper Anorthosite Mars1");
   sampleCmd->AvailableForStates(G4State_Idle);
+
+  detectorCmd = new G4UIcmdWithAString("/apparate/detector",this);
+  detectorCmd->SetGuidance("select a diferent detectorType");
+  detectorCmd->SetParameterName("choice",true);
+  detectorCmd->SetDefaultValue("sili");
+  detectorCmd->SetCandidates("sili");
+  detectorCmd->AvailableForStates(G4State_Idle);
   
 }
 
@@ -81,6 +88,10 @@ void XrayFluoDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 
  else if ( command == sampleCmd )
    { Detector->SetSampleMaterial(newValue);}
+
+ else if ( command == detectorCmd )
+   { Detector->SetDetectorType(newValue);}
+
  }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -49,18 +49,20 @@ class G4UIcmdWithoutParameter;
 
 class XrayFluoDetectorMessenger: public G4UImessenger
 {
-  public:
-    XrayFluoDetectorMessenger(XrayFluoDetectorConstruction* );
-   ~XrayFluoDetectorMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
 
- private:
-    XrayFluoDetectorConstruction*    Detector;
-    G4UIdirectory*             detDir;
-
-    G4UIcmdWithoutParameter*   UpdateCmd;
-    G4UIcmdWithAString* sampleCmd;
+public:
+  XrayFluoDetectorMessenger(XrayFluoDetectorConstruction* );
+  ~XrayFluoDetectorMessenger();
+  
+  void SetNewValue(G4UIcommand*, G4String);
+  
+private:
+  XrayFluoDetectorConstruction*    Detector;
+  G4UIdirectory*             detDir;
+  
+  G4UIcmdWithoutParameter*   UpdateCmd;
+  G4UIcmdWithAString* sampleCmd;
+  G4UIcmdWithAString* detectorCmd;
 
 };
 

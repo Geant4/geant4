@@ -68,9 +68,12 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
-  particleGun->SetParticleEnergy(6.*keV);
+  particleGun->SetParticleEnergy(10.*keV);
+
   G4double position = -0.5*(XrayFluoDetector->GetWorldSizeZ());
   particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
+
+  G4cout << "XrayFluoPrimaryGeneratorAction created" << G4endl;
   
 }
 
@@ -82,6 +85,9 @@ XrayFluoPrimaryGeneratorAction::~XrayFluoPrimaryGeneratorAction()
   delete particleGun;
   delete gunMessenger;
   delete runManager;
+
+  G4cout << "XrayFluoPrimaryGeneratorAction deleted" << G4endl;
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -149,9 +155,9 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	    {
 	      G4double random = G4UniformRand();
 	      
-	      G4double randomNum = G4UniformRand()*5.0E6;
+	      G4double randomNum = G4UniformRand(); //*5.0E6;
 	      
-	      particleEnergy = random *  energyRange;
+	      particleEnergy = (random*energyRange) + minEnergy;
 	      
 	      if ((dataSet->FindValue(particleEnergy,id)) > randomNum)
 		{
@@ -197,4 +203,12 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+
+
+
+
+
+
+
 

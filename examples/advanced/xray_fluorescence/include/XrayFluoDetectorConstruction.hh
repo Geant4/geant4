@@ -35,9 +35,13 @@
 #ifndef XrayFluoDetectorConstruction_h
 #define XrayFluoDetectorConstruction_h 1
 
+#include "XrayFluoSiLiDetectorType.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
+
+
+
 class G4Box;
 class G4Tubs;
 class G4LogicalVolume;
@@ -45,6 +49,7 @@ class G4VPhysicalVolume;
 class G4Material;
 class XrayFluoDetectorMessenger;
 class XrayFluoHPGeSD;
+class XrayFluoVDetectorType;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,7 +57,7 @@ class XrayFluoDetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   
-  XrayFluoDetectorConstruction();
+
   ~XrayFluoDetectorConstruction();
   
 public:
@@ -61,12 +66,21 @@ public:
   
   void UpdateGeometry();
 
+
   void SetSampleMaterial(G4String newMaterial);
+
+  void SetDetectorType(G4String type);
+
+  static XrayFluoDetectorConstruction* GetInstance();
+
   
 public:
   
   void PrintApparateParameters(); 
-  
+
+  XrayFluoVDetectorType* GetDetectorType();
+
+
   G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
   G4double GetWorldSizeXY()          {return WorldSizeXY;};
   
@@ -99,6 +113,12 @@ public:
   
 private:
   
+  XrayFluoDetectorConstruction();
+
+  static XrayFluoDetectorConstruction* instance;
+
+  XrayFluoVDetectorType* detectorType;
+
   G4double           DeviceSizeX;
   G4double           DeviceSizeY;
   G4double           DeviceThickness;
@@ -143,6 +163,7 @@ private:
   G4Material*        Dia1Material;
   G4Material*        Dia3Material;
   G4Material*        defaultMaterial;
+<<<<<<< XrayFluoDetectorConstruction.hh
   
   G4Material*        dolorite;
   G4Material*        FeMaterial;
@@ -154,7 +175,8 @@ private:
   G4Material*        materialNd;
   G4Material*        Sn;
   G4Material*        Ti;
-
+  G4Material*        mars1;
+  G4Material*        anorthosite;
 
 
 
@@ -250,10 +272,16 @@ inline void XrayFluoDetectorConstruction::ComputeApparateParameters()
   // Compute derived parameters of the apparate
   
   DeviceThickness = PixelThickness+OhmicNegThickness+OhmicPosThickness;
-  DeviceSizeY =NbOfPixelRows*std::max(ContactSizeXY,PixelSizeXY);
-  DeviceSizeX =NbOfPixelColumns*std::max(ContactSizeXY,PixelSizeXY);
-  
-  WorldSizeZ = (2 * (DistDe  +1.4142 *(std::max(std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
+
+  G4cout << "DeviceThickness(cm): "<< DeviceThickness/cm << G4endl;
+
+  DeviceSizeY =(NbOfPixelRows * G4std::max(ContactSizeXY,PixelSizeXY));
+  DeviceSizeX =(NbOfPixelColumns * G4std::max(ContactSizeXY,PixelSizeXY));
+
+  G4cout << "DeviceSizeX(cm): "<< DeviceSizeX/cm <<G4endl;
+  G4cout << "DeviceSizeY(cm): "<< DeviceSizeY/cm << G4endl;
+
+  WorldSizeZ = (2 * (DistDe  +1.4142 *(G4std::max(G4std::max(DeviceThickness,DeviceSizeY), DeviceSizeX))))+5*m; 
   WorldSizeXY = 2 * (DistDe +1.4142 *Dia1SizeXY)+5*m;
   
 }

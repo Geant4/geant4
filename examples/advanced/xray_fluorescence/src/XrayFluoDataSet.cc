@@ -47,6 +47,8 @@ XrayFluoDataSet::XrayFluoDataSet(G4int Z,
   numberOfBins = energies->size();
   unit1 = unitE;
   unit2 = unitData;
+
+  G4cout << "XrayFluo FluoDataSet created" << G4endl;
 }
 
 XrayFluoDataSet:: XrayFluoDataSet(G4int Z, 
@@ -61,6 +63,9 @@ XrayFluoDataSet:: XrayFluoDataSet(G4int Z,
   unit2 = unitData;  
   LoadData(dataFile);
   numberOfBins = energies->size();
+
+  G4cout << "XrayFluo FluoDataSet created" << G4endl;
+
 }
 
 
@@ -70,6 +75,7 @@ XrayFluoDataSet::~XrayFluoDataSet()
 { 
   delete energies;
   delete data;
+  G4cout << "XrayFluo FluoDataSet deleted" << G4endl;
 }
 
 
@@ -134,7 +140,7 @@ void XrayFluoDataSet::LoadData(const G4String& fileName)
   
   G4String name(nameChar);
   
-  char* path = getenv("G4INSTALL");
+  char* path = getenv("PWD");
  
   G4String pathString(path);
   G4String dirFile = pathString + "/" + name;
@@ -199,6 +205,16 @@ void XrayFluoDataSet::PrintData() const
 	     << G4endl; 
     }
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

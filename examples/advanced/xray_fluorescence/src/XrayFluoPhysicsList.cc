@@ -51,11 +51,14 @@ XrayFluoPhysicsList::XrayFluoPhysicsList(XrayFluoDetectorConstruction* p)
 : G4VUserPhysicsList()
 {
   pDet = p;
-  defaultCutValue = 0.00001*mm;
+
+  SetGELowLimit(250*eV);
+
+  defaultCutValue = 0.000001*mm;
 
   cutForGamma = defaultCutValue;
   cutForElectron = defaultCutValue;
-  cutForProton    = 0.00001*mm;
+  cutForProton    = 0.001*mm;
   SetVerboseLevel(1);
   physicsListMessenger = new XrayFluoPhysicsListMessenger(this);
 }
@@ -150,27 +153,31 @@ void XrayFluoPhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
      
       LePeprocess = new G4LowEnergyPhotoElectric();
-      //LePeprocess->ActivateAuger(false);
+      LePeprocess->ActivateAuger(true);
       //LePeprocess->SetCutForLowEnSecPhotons(10000 * keV);
       //LePeprocess->SetCutForLowEnSecElectrons(10000 * keV);
+
       pmanager->AddDiscreteProcess(LePeprocess);
 
-      pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh);
+      //pmanager->AddDiscreteProcess(new G4LowEnergyRayleigh("Rayleigh"));
       
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
 
-      LeIoprocess = new G4LowEnergyIonisation();
-      //LeIoprocess->ActivateAuger(false);
-      //LeIoprocess->SetCutForLowEnSecPhotons(10000 keV);
-      //LeIoprocess->SetCutForLowEnSecElectrons(10000 keV);
-      pmanager->AddProcess(LeIoprocess, -1,  2, 2);
+      
+      LeIoprocess = new G4LowEnergyIonisation("IONI");
+      LeIoprocess->ActivateAuger(true);
+      //eIoProcess = new G4eIonisation("stdIONI");
+      LeIoprocess->SetCutForLowEnSecPhotons(10000*keV);
+      LeIoprocess->SetCutForLowEnSecElectrons(10000*keV);
+      pmanager->AddProcess(LeIoprocess, -1,  2, 2); 
+      
 
       LeBrprocess = new G4LowEnergyBremsstrahlung();
       pmanager->AddProcess(LeBrprocess, -1, -1, 3);
-
-    } else if (particleName == "e+") {
+      
+      } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
       pmanager->AddProcess(new G4eIonisation,      -1, 2,2);
@@ -253,7 +260,7 @@ void XrayFluoPhysicsList::SetCuts(){
    SetCutValue(cutForElectron,"e-");
    SetCutValue(cutForElectron,"e+");
    SetCutValue(cutForProton, "proton");
-   SetCutValueForOthers(cutForProton);
+   //SetCutValueForOthers(cutForProton);
    if (verboseLevel>0) DumpCutValuesTable();
 }
 
