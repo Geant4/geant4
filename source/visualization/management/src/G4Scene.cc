@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.cc,v 1.10 2001-08-11 21:39:59 johna Exp $
+// $Id: G4Scene.cc,v 1.11 2001-08-24 20:47:41 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,9 +60,14 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
     return false;
   }
   fRunDurationModelList.push_back (pModel);
-  nModels = fRunDurationModelList.size ();  // ...has increased by 1...
+  CalculateExtent ();
+  return true;
+}
+
+void G4Scene::CalculateExtent () {
+  G4int nModels = fRunDurationModelList.size ();
   G4BoundingSphereScene boundingSphereScene;
-  for (i = 0; i < nModels; i++) {
+  for (G4int i = 0; i < nModels; i++) {
     const G4VisExtent& thisExtent =
       fRunDurationModelList[i] -> GetExtent ();
     G4Point3D thisCentre = thisExtent.GetExtentCentre ();
@@ -72,7 +77,6 @@ G4bool G4Scene::AddRunDurationModel (G4VModel* pModel, G4bool warn) {
   }
   fExtent = boundingSphereScene.GetBoundingSphereExtent ();
   fStandardTargetPoint = fExtent.GetExtentCentre ();
-  return true;
 }
 
 G4bool G4Scene::AddWorldIfEmpty (G4bool warn) {

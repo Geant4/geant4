@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Scene.hh,v 1.11 2001-08-11 21:39:53 johna Exp $
+// $Id: G4Scene.hh,v 1.12 2001-08-24 20:47:39 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -122,6 +122,9 @@ public: // With description
   // If set true, the visualization manager will request viewer to
   // refresh "transient" objects, such as hits, at end of event.
   // Otherwise they will be accumulated.
+
+  void CalculateExtent();
+  // (Re-)calculates the extent from the extents of its models.
 
 private:
   G4String fName;
