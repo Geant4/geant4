@@ -164,10 +164,11 @@
                               0.312+0.200*log(log(centerofmassEnergy*centerofmassEnergy))+
                               pow(centerofmassEnergy*centerofmassEnergy,1.5)/6000.0 );
     
-    G4double forwardEnergy = centerofmassEnergy/2.0 - currentMass;
+    G4double freeEnergy = centerofmassEnergy-currentMass-targetMass;
+    G4double forwardEnergy = freeEnergy/2.;
     G4int forwardCount = 1;            // number of particles in forward hemisphere
     
-    G4double backwardEnergy = centerofmassEnergy/2.0 - targetMass;
+    G4double backwardEnergy = freeEnergy/2.;
     G4int backwardCount = 1;           // number of particles in backward hemisphere
     if(veryForward)
     {
@@ -1152,7 +1153,7 @@
     //
     if( simulatedKinetic != 0.0 )
     {
-      wgt = theoreticalKinetic/simulatedKinetic;
+      wgt = (theoreticalKinetic)/simulatedKinetic;
       theoreticalKinetic = currentParticle.GetKineticEnergy()/MeV * wgt;
       simulatedKinetic = theoreticalKinetic;
       currentParticle.SetKineticEnergy( theoreticalKinetic*MeV );
@@ -1408,12 +1409,14 @@
     G4int forwardCount = 1;            // number of particles in forward hemisphere
     currentParticle.SetSide( 1 );
     G4double forwardMass = currentParticle.GetMass()/GeV;
+    G4double cMass = forwardMass;
     
     // target is always in backward hemisphere
     G4int backwardCount = 1;           // number of particles in backward hemisphere
     G4int backwardNucleonCount = 1;    // number of nucleons in backward hemisphere
     targetParticle.SetSide( -1 );
     G4double backwardMass = targetParticle.GetMass()/GeV;
+    G4double bMass = backwardMass;
     
     for( i=0; i<vecLen; ++i )
     {
@@ -1488,8 +1491,8 @@
       }
     }
       // DEBUGGING --> DumpFrames::DumpFrame(vec, vecLen);
-    G4double forwardEnergy = centerofmassEnergy/2.0 - forwardMass;
-    G4double backwardEnergy = centerofmassEnergy/2.0 - backwardMass;
+    G4double forwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +cMass - forwardMass;
+    G4double backwardEnergy = (centerofmassEnergy-cMass-bMass)/2.0 +bMass - backwardMass;
     G4double eAvailable = centerofmassEnergy - (forwardMass+backwardMass);
     G4bool secondaryDeleted;
     G4double pMass;
@@ -2000,9 +2003,10 @@
     // make sure that kinetic energies are correct
     // the backward nucleon cluster is not produced within proper kinematics!!!
     //
+
     if( simulatedKinetic != 0.0 )
     {
-      wgt = theoreticalKinetic/simulatedKinetic;
+      wgt = (theoreticalKinetic)/simulatedKinetic;
       currentParticle.SetKineticEnergy( wgt*currentParticle.GetKineticEnergy() );
       pp = currentParticle.GetTotalMomentum()/MeV;
       pp1 = currentParticle.GetMomentum().mag()/MeV;
