@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4SteppingVerbose.cc,v 1.14 2003-06-16 17:13:20 gunter Exp $
+// $Id: G4SteppingVerbose.cc,v 1.15 2004-01-27 11:23:46 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -238,7 +238,7 @@ void G4SteppingVerbose::StepInfo()
 /////////////////////////////////////////
 {
   CopyState();
- 
+  G4cout.precision(16); 
   G4int prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
@@ -713,7 +713,7 @@ void G4SteppingVerbose::ShowStep() const
 // Show header
    G4cout << G4endl;
    G4cout << "    ++G4Step Information " << G4endl;
-   G4cout.precision(3);
+   G4cout.precision(16);
 
 // Show G4Step specific information
    G4cout << "      Address of G4Track    : " << fStep->GetTrack() << G4endl;
