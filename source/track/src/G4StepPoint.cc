@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4StepPoint.cc,v 1.4 2001-02-17 11:25:13 kurasige Exp $
+// $Id: G4StepPoint.cc,v 1.5 2001-02-17 11:27:13 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -52,7 +52,7 @@ G4StepPoint::G4StepPoint(const G4StepPoint &right):
   fpProcessDefinedStep(right.fpProcessDefinedStep),
   fMass(right.fMass),
   fCharge(right.fCharge),
-  fWeight(right.fWeight)
+  fWeight(right.fWeight),
   fVelocity(right.fVelocity)
 {}
 
