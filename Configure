@@ -18,9 +18,9 @@
 # you may fetch it yourself from your nearest archive site.)
 #
 
-# $Id: Configure,v 1.16 2001-12-13 22:40:45 sadilov Exp $
+# $Id: Configure,v 1.17 2001-12-14 11:52:39 sadilov Exp $
 #
-# Generated on Thu Dec 13 23:12:53 CET 2001 [metaconfig 3.0 PL70]
+# Generated on Fri Dec 14 12:51:05 CET 2001 [metaconfig 3.0 PL70]
 
 cat >/tmp/c1$$ <<EOF
 WARNING!!!!!
@@ -155,16 +155,6 @@ cf_by=''
 cf_time=''
 contains=''
 d_portable=''
-g4clhep_base_dir=''
-g4clhep_include_dir=''
-g4clhep_lib=''
-g4clhep_lib_dir=''
-g4debug=''
-g4data=''
-g4ledata=''
-g4levelgammadata=''
-g4neutronhpcrosssections=''
-g4radioactivedata=''
 g4base=''
 g4conf=''
 g4include=''
@@ -173,14 +163,24 @@ g4workdir=''
 g4bin=''
 g4lib=''
 g4tmp=''
+g4data=''
+g4ledata=''
+g4levelgammadata=''
+g4neutronhpcrosssections=''
+g4radioactivedata=''
+g4clhep_base_dir=''
+g4clhep_include_dir=''
+g4clhep_lib=''
+g4clhep_lib_dir=''
 g4global=''
 g4granular=''
 g4lib_use_granular=''
-g4use_hepodbms=''
+g4debug=''
 g4lib_build_shared=''
 g4lib_build_static=''
 g4lib_use_shared=''
 g4lib_use_static=''
+g4_build_wo_session=''
 g4ui_build_gag_session=''
 g4ui_build_terminal_session=''
 g4ui_build_win32_session=''
@@ -190,13 +190,16 @@ g4ui_use_gag=''
 g4ui_use_tcsh=''
 g4ui_use_terminal=''
 g4ui_use_win32=''
+g4ui_use_wo=''
 g4ui_use_xaw=''
 g4ui_use_xm=''
 g4vis_build_asciitree_driver=''
 g4vis_build_dawn_driver=''
 g4vis_build_dawnfile_driver=''
+g4vis_build_oiwin32_driver=''
 g4vis_build_oix_driver=''
 g4vis_build_opacs_driver=''
+g4vis_build_openglwin32_driver=''
 g4vis_build_openglx_driver=''
 g4vis_build_openglxm_driver=''
 g4vis_build_raytracer_driver=''
@@ -205,13 +208,16 @@ g4vis_build_vrmlfile_driver=''
 g4vis_use_asciitree=''
 g4vis_use_dawn=''
 g4vis_use_dawnfile=''
+g4vis_use_oiwin32=''
 g4vis_use_oix=''
 g4vis_use_opacs=''
+g4vis_use_openglwin32=''
 g4vis_use_openglx=''
 g4vis_use_openglxm=''
 g4vis_use_raytracer=''
 g4vis_use_vrml=''
 g4vis_use_vrmlfile=''
+g4use_hepodbms=''
 g4wanalysis_build=''
 g4wanalysis_build_jas=''
 g4wanalysis_build_lab=''
@@ -1747,7 +1753,10 @@ or
 
 . env.sh
 
-You can use these files for further modifications
+They will source in your shell Geant4 environments.
+It will also check G4WORKDIR setting and set it to
+your HOME if needed.
+You can use these files also for further modifications
 (adding your own environments).
 ---------------------------------------------------
 EOM
@@ -2123,439 +2132,6 @@ rm -f getfile.ok
 EOSC
 
 echo " "
-case "$g4clhep_base_dir" in
-'')
-	g4clhep_base_dir=/usr/local
-	;;
-esac
-
-case "$g4clhep_include_dir" in
-'')
-	g4clhep_include_dir=$g4clhep_base_dir/include
-	;;
-esac
-
-case "$g4clhep_lib_dir" in
-'')
-	g4clhep_lib_dir=$g4clhep_base_dir/lib
-	;;
-esac
-
-case "$g4clhep_lib" in
-'')
-	g4clhep_lib=CLHEP
-	;;
-esac
-
-#while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Please, specify where CLHEP is installed:
-
-CLHEP_BASE_DIR:			$g4clhep_base_dir
-
-According to it will be set:
-
-CLHEP_INCLUDE_DIR		
-CLHEP_LIB_DIR			
-CLHEP_LIB		
-
-You will be asked about customizing these next.
-EOM`
-
-
-#dflt="Press [Enter] for default settings"
-#fn='d~'
-rp=$g4message
-#. ./myread
-#gans=$ans
-
-#	case $gans in
-
-#	1) 
-		dflt=$g4clhep_base_dir
-		fn='d~'
-#		rp="Where is CLHEP installed?"
-		. ./getfile
-		g4clhep_base_dir=$ans
-		g4clhep_include_dir=$ans/include
-		g4clhep_lib_dir=$ans/lib
-#		;;
-#	2) 
-#		dflt=$g4clhep_include_dir
-#		fn='d~'
-#		rp="Where is CLHEP include directory?"
-#		. ./getfile
-#		g4clhep_include_dir=$ans
-#		;;
-#	3) 
-#		dflt=$g4clhep_lib_dir
-#		fn='d~'
-#		rp="Where is CLHEP lib directory?"
-#		. ./getfile
-#		g4clhep_lib_dir=$ans
-#		;;
-#	4) 
-#		dflt=$g4clhep_lib
-#		rp="What is CLHEP lib title?"
-#		. ./myread
-#		g4clhep_lib=$ans
-#		;;
-##	[eE]) 
-##		break
-##		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-#	esac
-#done
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-You can customize paths of you CLHEP installation:
-
-1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
-2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
-3) CLHEP_LIB:			$g4clhep_lib
-
-Select from list above (e.g. 2) 
-EOM`
-
-
-dflt="Press [Enter] for default settings"
-#fn='d~'
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-
-	1) 
-		dflt=$g4clhep_include_dir
-		fn='d~'
-		rp="Where is CLHEP include directory?"
-		. ./getfile
-		g4clhep_include_dir=$ans
-		;;
-	2) 
-		dflt=$g4clhep_lib_dir
-		fn='d~'
-		rp="Where is CLHEP lib directory?"
-		. ./getfile
-		g4clhep_lib_dir=$ans
-		;;
-	3) 
-		dflt=$g4clhep_lib
-		rp="What is CLHEP lib title?"
-		. ./myread
-		g4clhep_lib=$ans
-		;;
-#	[eE]) 
-##		break
-##		;;
-	*) 
-#		echo " "
-		break
-		;;
-	esac
-done
-
-
-echo " "
-
-case "$g4data" in
-'')
-	g4data=$g4install/data
-	;;
-esac
-
-case "$g4levelgammadata" in
-'')
-	g4levelgammadata=$g4data/PhotonEvaporation
-	;;
-esac
-
-case "$g4radioactivedata" in
-'')
-	g4radioactivedata=$g4data/RadiativeDecay
-	;;
-esac
-
-case "$g4ledata" in
-'')
-	g4ledata=$g4install/../G4EMLOW0.5
-	;;
-esac
-
-case "$g4neutronhpcrosssections" in
-'')
-	g4neutronhpcrosssections=$g4install/../G4NDL3.5
-	;;
-esac
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Please, specify directories where the Geant4 data is installed:
-
-1) G4LEVELGAMMADATA:		$g4levelgammadata
-
-2) G4RADIOACTIVEDATA:		$g4radioactivedata
-
-Data which is not part of the default Geant4 distribution:
-
-3) G4LEDATA:			$g4ledata
-
-4) NeutronHPCrossSections:	$g4neutronhpcrosssections
-
-Select from list above (e.g. 2) 
-EOM`
-
-#dflt="NO DEFAULT ANSWER"
-dflt="Press [Enter] for default settings"
-#fn='d~'
-rp=$g4message
-. ./myread
-gans=$ans
-
-
-	case $gans in
-
-	1) 
-		dflt=$g4levelgammadata
-		fn='f~'
-		rp="Where is Geant4 PhotonEvaporation data installed?"
-		. ./getfile
-		g4levelgammadata=$ans
-		;;
-	2) 
-		dflt=$g4radioactivedata
-		fn='f~'
-		rp="Where is Geant4 RadiativeDecay data installed?"
-		. ./getfile
-		g4radioactivedata=$ans
-		;;
-	3) 
-		dflt=$g4ledata
-		fn='f~'
-		rp="Where is G4EMLOW0.5 data installed ?"
-		. ./getfile
-		g4ledata=$ans
-		;;
-	4) 
-		dflt=$g4neutronhpcrosssections
-		fn='f~'
-		rp="Where is G4NDL3.5 installed?"
-		. ./getfile
-		g4neutronhpcrosssections=$ans
-		;;
-#	[eE]) 
-#		break
-#		;;
-	*) 
-		break
-#		echo " "
-		;;
-	esac
-done
-
-
-echo " "
-case "$g4debug" in
-'')
-	g4debug=""
-	;;
-esac
-
-#
-# Ask about g4debug - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to compile libraries in DEBUG mode (-g)?
-EOM`
-
-dflt="n"
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-		g4debug=1
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-
-echo " "
-case "$g4global" in
-'')
-	g4global=n
-	;;
-esac
-
-echo " "
-# By default it's 'grabular'!
-case "$g4granular" in
-'')
-	g4granular=y
-	;;
-esac
-
-echo " "
-# Will be set (if needed) in GNUmakefile!
-case "$g4lib_use_granular" in
-'')
-	g4lib_use_granular=n
-	;;
-esac
-
-#
-# Ask about g4global - default "(empty)". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Do you want to build 'global' compound libraries?
-EOM`
-
-dflt=$g4global
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4global=n
-		g4granular=y
-		g4lib_use_granular=n
-		break
-		;;
-	y*|Y*) 
-		g4global=y
-		g4granular=n
-		g4lib_use_granular=n
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4global = Xy ] ; then
-#
-# Ask about g4granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Granular libraries are used by defaults, you asked to build global
-compound libraries. Do you want to build 'granular' libraries too?
-EOM`
-
-dflt=$g4granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4granular=n
-		break
-		;;
-	y*|Y*) 
-		g4granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-
-if [ X$g4granular = Xy ] ; then
-#
-# Ask about g4lib_use_granular - default "n". 
-#
-echo ""
-
-while test 1 = 1  ; do
-
-g4message=`cat << EOM
-
-Global libraries are used by defaults, you asked to build global
-compound libraries and granular libraries. 
-Do you want to use 'granular' libraries instead?
-EOM`
-
-dflt=$g4lib_use_granular
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		break
-		;;
-	y*|Y*) 
-		g4lib_use_granular=y
-		break
-		;;
-#	[eE]) 
-#		break
-#		;;
-#	*) 
-#		echo " "
-#		break
-#		;;
-	esac
-done
-fi
-fi
-
-### End file - without will be problem! Check in others...
-
-echo " "
 
 #echo "SSS"
 #echo `pwd`
@@ -2715,6 +2291,439 @@ gans=$ans
 		break
 #		echo " "
 		;;
+	esac
+done
+
+echo " "
+
+case "$g4data" in
+'')
+	g4data=$g4install/data
+	;;
+esac
+
+case "$g4levelgammadata" in
+'')
+	g4levelgammadata=$g4data/PhotonEvaporation
+	;;
+esac
+
+case "$g4radioactivedata" in
+'')
+	g4radioactivedata=$g4data/RadiativeDecay
+	;;
+esac
+
+case "$g4ledata" in
+'')
+	g4ledata=$g4install/../G4EMLOW0.5
+	;;
+esac
+
+case "$g4neutronhpcrosssections" in
+'')
+	g4neutronhpcrosssections=$g4install/../G4NDL3.5
+	;;
+esac
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify directories where the Geant4 data is installed:
+
+1) G4LEVELGAMMADATA:		$g4levelgammadata
+
+2) G4RADIOACTIVEDATA:		$g4radioactivedata
+
+Data which is not part of the default Geant4 distribution:
+
+3) G4LEDATA:			$g4ledata
+
+4) NeutronHPCrossSections:	$g4neutronhpcrosssections
+
+Select from list above (e.g. 2) 
+EOM`
+
+#dflt="NO DEFAULT ANSWER"
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+
+	case $gans in
+
+	1) 
+		dflt=$g4levelgammadata
+		fn='f~'
+		rp="Where is Geant4 PhotonEvaporation data installed?"
+		. ./getfile
+		g4levelgammadata=$ans
+		;;
+	2) 
+		dflt=$g4radioactivedata
+		fn='f~'
+		rp="Where is Geant4 RadiativeDecay data installed?"
+		. ./getfile
+		g4radioactivedata=$ans
+		;;
+	3) 
+		dflt=$g4ledata
+		fn='f~'
+		rp="Where is G4EMLOW0.5 data installed ?"
+		. ./getfile
+		g4ledata=$ans
+		;;
+	4) 
+		dflt=$g4neutronhpcrosssections
+		fn='f~'
+		rp="Where is G4NDL3.5 installed?"
+		. ./getfile
+		g4neutronhpcrosssections=$ans
+		;;
+#	[eE]) 
+#		break
+#		;;
+	*) 
+		break
+#		echo " "
+		;;
+	esac
+done
+
+echo " "
+case "$g4clhep_base_dir" in
+'')
+	g4clhep_base_dir=/usr/local
+	;;
+esac
+
+case "$g4clhep_include_dir" in
+'')
+	g4clhep_include_dir=$g4clhep_base_dir/include
+	;;
+esac
+
+case "$g4clhep_lib_dir" in
+'')
+	g4clhep_lib_dir=$g4clhep_base_dir/lib
+	;;
+esac
+
+case "$g4clhep_lib" in
+'')
+	g4clhep_lib=CLHEP
+	;;
+esac
+
+#while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Please, specify where CLHEP is installed:
+
+CLHEP_BASE_DIR:			$g4clhep_base_dir
+
+According to it will be set:
+
+CLHEP_INCLUDE_DIR		
+CLHEP_LIB_DIR			
+CLHEP_LIB		
+
+You will be asked about customizing these next.
+EOM`
+
+
+#dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+#. ./myread
+#gans=$ans
+
+#	case $gans in
+
+#	1) 
+		dflt=$g4clhep_base_dir
+		fn='d~'
+#		rp="Where is CLHEP installed?"
+		. ./getfile
+		g4clhep_base_dir=$ans
+		g4clhep_include_dir=$ans/include
+		g4clhep_lib_dir=$ans/lib
+#		;;
+#	2) 
+#		dflt=$g4clhep_include_dir
+#		fn='d~'
+#		rp="Where is CLHEP include directory?"
+#		. ./getfile
+#		g4clhep_include_dir=$ans
+#		;;
+#	3) 
+#		dflt=$g4clhep_lib_dir
+#		fn='d~'
+#		rp="Where is CLHEP lib directory?"
+#		. ./getfile
+#		g4clhep_lib_dir=$ans
+#		;;
+#	4) 
+#		dflt=$g4clhep_lib
+#		rp="What is CLHEP lib title?"
+#		. ./myread
+#		g4clhep_lib=$ans
+#		;;
+##	[eE]) 
+##		break
+##		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+#	esac
+#done
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+You can customize paths of you CLHEP installation:
+
+1) CLHEP_INCLUDE_DIR:		$g4clhep_include_dir
+2) CLHEP_LIB_DIR:		$g4clhep_lib_dir
+3) CLHEP_LIB:			$g4clhep_lib
+
+Select from list above (e.g. 2) 
+EOM`
+
+
+dflt="Press [Enter] for default settings"
+#fn='d~'
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+
+	1) 
+		dflt=$g4clhep_include_dir
+		fn='d~'
+		rp="Where is CLHEP include directory?"
+		. ./getfile
+		g4clhep_include_dir=$ans
+		;;
+	2) 
+		dflt=$g4clhep_lib_dir
+		fn='d~'
+		rp="Where is CLHEP lib directory?"
+		. ./getfile
+		g4clhep_lib_dir=$ans
+		;;
+	3) 
+		dflt=$g4clhep_lib
+		rp="What is CLHEP lib title?"
+		. ./myread
+		g4clhep_lib=$ans
+		;;
+#	[eE]) 
+##		break
+##		;;
+	*) 
+#		echo " "
+		break
+		;;
+	esac
+done
+
+
+
+echo " "
+case "$g4global" in
+'')
+	g4global=n
+	;;
+esac
+
+echo " "
+# By default it's 'grabular'!
+case "$g4granular" in
+'')
+	g4granular=y
+	;;
+esac
+
+echo " "
+# Will be set (if needed) in GNUmakefile!
+case "$g4lib_use_granular" in
+'')
+	g4lib_use_granular=n
+	;;
+esac
+
+#
+# Ask about g4global - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to build 'global' compound libraries?
+EOM`
+
+dflt=$g4global
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4global=n
+		g4granular=y
+		g4lib_use_granular=n
+		break
+		;;
+	y*|Y*) 
+		g4global=y
+		g4granular=n
+		g4lib_use_granular=n
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4global = Xy ] ; then
+#
+# Ask about g4granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Granular libraries are used by defaults, you asked to build global
+compound libraries. Do you want to build 'granular' libraries too?
+EOM`
+
+dflt=$g4granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4granular=n
+		break
+		;;
+	y*|Y*) 
+		g4granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+
+if [ X$g4granular = Xy ] ; then
+#
+# Ask about g4lib_use_granular - default "n". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Global libraries are used by defaults, you asked to build global
+compound libraries and granular libraries. 
+Do you want to use 'granular' libraries instead?
+EOM`
+
+dflt=$g4lib_use_granular
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4lib_use_granular=y
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
+	esac
+done
+fi
+fi
+
+### End file - without will be problem! Check in others...
+
+
+echo " "
+case "$g4debug" in
+'')
+	g4debug=""
+	;;
+esac
+
+#
+# Ask about g4debug - default "(empty)". 
+#
+echo ""
+
+while test 1 = 1  ; do
+
+g4message=`cat << EOM
+
+Do you want to compile libraries in DEBUG mode (-g)?
+EOM`
+
+dflt="n"
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		break
+		;;
+	y*|Y*) 
+		g4debug=1
+		break
+		;;
+#	[eE]) 
+#		break
+#		;;
+#	*) 
+#		echo " "
+#		break
+#		;;
 	esac
 done
 
@@ -3060,7 +3069,8 @@ g4message=`cat << EOM
 
   Specifies to include and use the XAW interfaces in the
   application to be built.
-  The XAW (X11 Athena Widget set) are required to activate these driver.
+  The XAW (X11 Athena Widget set) extensions are required to activate 
+  and build this driver.
 EOM`
 
 dflt=$g4ui_use_xaw
@@ -3083,12 +3093,12 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_XM_SESSION
-  Specifies to include in kernel library the XM
-  Motif-based user interfaces.
-
   G4UI_USE_XM
-  Specifies to use the XM interfaces in the
-  application to be built.
+
+  Specifies to include and use the XM Motif based user interfaces.
+  The XM Motif exteansions are required to activate and build this
+  driver.
+
 EOM`
 
 dflt=$g4ui_use_xm
@@ -3112,12 +3122,11 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WIN32_SESSION
-  Specifies to include in kernel library the WIN32 terminal interface
-  for Windows systems.
-
   G4UI_USE_WIN32
-  Specifies to use the WIN32 interfaces in the application to be built
-  on Windows systems.
+
+  Specifies to include and use the terminal interface for 
+  Windows systems.
+
 EOM`
 
 dflt=$g4ui_use_win32
@@ -3140,7 +3149,6 @@ gans=$ans
 g4message=`cat << EOM
 
   G4UI_BUILD_WO_SESSION
-
   G4UI_USE_WO
 
   Specifies to include in kernel library and use the OPACS WO terminal
@@ -3191,42 +3199,6 @@ gans=y
 
 ;;
 esac
-
-
-echo " "
-case "$g4use_hepodbms" in
-'')
-	g4use_hepodbms=n
-	;;
-esac
-
-g4message=`cat << EOM
-
-G4USE_HEPODBMS
-In Geant4, object persistency is provided as an optional category, so
-that the users could be able to run Geant4 with or without a commercial 
-ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
-objects is explained in documentation.
-
-For setting this you should have an ODMG compliant database
-(e.g. Objectivity/DB) installed and running on your system!
-EOM`
-
-dflt=$g4use_hepodbms
-rp=$g4message
-. ./myread
-gans=$ans
-
-	case $gans in
-	
-	n*|N*) 
-		g4use_hepodbms=n
-		;;
-	y*|Y*) 
-		g4use_hepodbms=y
-		;;
-	esac
-
 
 
 echo " "
@@ -3626,7 +3598,7 @@ g4message=`cat << EOM
 
 OPACS is a visualization environment based on X windows and OpenGL. 
 It is written in ANSI C and is highly portable (UNIX, NT/X11, VMS). 
-The version of OPACS installed is required.
+The OPACS tool is required to activate and build this driver.
 
 EOM`
 
@@ -3797,6 +3769,42 @@ esac
 
 
 echo " "
+case "$g4use_hepodbms" in
+'')
+	g4use_hepodbms=n
+	;;
+esac
+
+g4message=`cat << EOM
+
+G4USE_HEPODBMS
+In Geant4, object persistency is provided as an optional category, so
+that the users could be able to run Geant4 with or without a commercial 
+ODBMS package. How to store and retrieve Geant4 events, hits and geometry 
+objects is explained in documentation.
+
+For setting this you should have an ODMG compliant database
+(e.g. Objectivity/DB) installed and running on your system!
+EOM`
+
+dflt=$g4use_hepodbms
+rp=$g4message
+. ./myread
+gans=$ans
+
+	case $gans in
+	
+	n*|N*) 
+		g4use_hepodbms=n
+		;;
+	y*|Y*) 
+		g4use_hepodbms=y
+		;;
+	esac
+
+
+
+echo " "
 
 case "$g4wanalysis_use" in
 '')
@@ -3903,6 +3911,7 @@ cf_time='$cf_time'
 contains='$contains'
 d_portable='$d_portable'
 eunicefix='$eunicefix'
+g4_build_wo_session='$g4_build_wo_session'
 g4base='$g4base'
 g4bin='$g4bin'
 g4clhep_base_dir='$g4clhep_base_dir'
@@ -3939,14 +3948,17 @@ g4ui_use_gag='$g4ui_use_gag'
 g4ui_use_tcsh='$g4ui_use_tcsh'
 g4ui_use_terminal='$g4ui_use_terminal'
 g4ui_use_win32='$g4ui_use_win32'
+g4ui_use_wo='$g4ui_use_wo'
 g4ui_use_xaw='$g4ui_use_xaw'
 g4ui_use_xm='$g4ui_use_xm'
 g4use_hepodbms='$g4use_hepodbms'
 g4vis_build_asciitree_driver='$g4vis_build_asciitree_driver'
 g4vis_build_dawn_driver='$g4vis_build_dawn_driver'
 g4vis_build_dawnfile_driver='$g4vis_build_dawnfile_driver'
+g4vis_build_oiwin32_driver='$g4vis_build_oiwin32_driver'
 g4vis_build_oix_driver='$g4vis_build_oix_driver'
 g4vis_build_opacs_driver='$g4vis_build_opacs_driver'
+g4vis_build_openglwin32_driver='$g4vis_build_openglwin32_driver'
 g4vis_build_openglx_driver='$g4vis_build_openglx_driver'
 g4vis_build_openglxm_driver='$g4vis_build_openglxm_driver'
 g4vis_build_raytracer_driver='$g4vis_build_raytracer_driver'
@@ -3955,8 +3967,10 @@ g4vis_build_vrmlfile_driver='$g4vis_build_vrmlfile_driver'
 g4vis_use_asciitree='$g4vis_use_asciitree'
 g4vis_use_dawn='$g4vis_use_dawn'
 g4vis_use_dawnfile='$g4vis_use_dawnfile'
+g4vis_use_oiwin32='$g4vis_use_oiwin32'
 g4vis_use_oix='$g4vis_use_oix'
 g4vis_use_opacs='$g4vis_use_opacs'
+g4vis_use_openglwin32='$g4vis_use_openglwin32'
 g4vis_use_openglx='$g4vis_use_openglx'
 g4vis_use_openglxm='$g4vis_use_openglxm'
 g4vis_use_raytracer='$g4vis_use_raytracer'

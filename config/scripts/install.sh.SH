@@ -40,7 +40,11 @@ export G4INSTALL
 echo "On this machine the G4INSTALL=\$G4INSTALL"
 
 #+
-#?#G4INCLUDE="$g4include"
+if [ X$g4include != X ] ; then
+G4INCLUDE="$g4include"
+export G4INCLUDE
+echo "On this machine the G4INCLUDE=\$G4INCLUDE"
+fi
 
 #+
 if [ X$g4tmp != X ] ; then
@@ -54,13 +58,6 @@ if [ X$g4lib != X ] ; then
 G4LIB="$g4lib"
 export G4LIB
 echo "On this machine the G4LIB=\$G4LIB"
-fi
-
-#+
-if [ X$g4data != X ] ; then 
-G4DATA="$g4data"
-export G4DATA
-echo "On this machine the G4DATA=\$G4DATA"
 fi
 
 #+
