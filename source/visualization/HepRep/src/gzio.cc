@@ -5,18 +5,13 @@
  * Compile this file with -DNO_DEFLATE to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.3 2003-07-11 17:20:42 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.4 2003-07-12 15:19:56 duns Exp $ */
 
 #include <stdio.h>
 
 #include "zutil.h"
 
 struct internal_state {int dummy;}; /* for buggy compilers */
-
-//MD: g++ does not seem to have fdopen in C++ mode
-#ifdef __GLIBC__
-extern FILE *fdopen(int __fd, __const char *__modes) __THROW;
-#endif
 
 #ifndef Z_BUFSIZE
 #  ifdef MAXSEG_64K
@@ -158,7 +153,7 @@ local gzFile gz_open (const char *path, const char *mode, int fd)
     s->stream.avail_out = Z_BUFSIZE;
 
     errno = 0;
-    s->file = fd < 0 ? F_OPEN(path, fmode) : (FILE*)fdopen(fd, fmode);
+    s->file = fd < 0 ? F_OPEN(path, fmode) : NULL; //MD: (FILE*)fdopen(fd, fmode);
 
     if (s->file == NULL) {
         return destroy(s), (gzFile)Z_NULL;
