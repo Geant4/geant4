@@ -1,12 +1,12 @@
-dxplus04 dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-dxplus03 dev	opt	geant4-00-cand-09c-small_N+	all all all all 1
-# hpplus04 dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-hpplus03 dev	opt	geant4-00-cand-09c-small_N+	all all all all 1
-rsplus05 dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-rsplus03 dev	opt	geant4-00-cand-09c-small_N+	all all all all 1
-# sgmedia dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-# sgmedia dev	opt	geant4-00-cand-09c-small_N+	all all all all 1
-sungeant dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-sungeant dev 	opt	geant4-00-cand-09c-small_N+	all all all all 1
-pcgeant dev	deb	geant4-00-cand-09c-small_N+	all all all all 1
-pcgeant dev	opt	geant4-00-cand-09c-small_N+	all all all all 1
+dxplus04 dev	deb	not-defined+	all all all all 1
+dxplus03 dev	opt	not-defined+	all all all all 1
+# hpplus04 dev	deb	not-defined+	all all all all 1
+hpplus03 dev	opt	not-defined+	all all all all 1
+rsplus05 dev	deb	not-defined+	all all all all 1
+rsplus03 dev	opt	not-defined+	all all all all 1
+# sgmedia dev	deb	not-defined+	all all all all 1
+# sgmedia dev	opt	not-defined+	all all all all 1
+sungeant dev	deb	not-defined+	all all all all 1
+# sungeant dev 	opt	not-defined+	all all all all 1
+pcgeant dev	deb	not-defined+	all all all all 1
+# pcgeant dev	opt	not-defined+	all all all all 1
