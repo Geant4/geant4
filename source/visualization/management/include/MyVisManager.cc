@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MyVisManager.cc,v 1.5 2000-01-29 00:43:10 asaim Exp $
+// $Id: MyVisManager.cc,v 1.6 2001-04-10 14:56:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,10 @@
 #include "G4VRML2File.hh"
 #endif
 
+#ifdef G4VIS_USE_ASCIITREE
+#include "G4ASCIITree.hh"
+#endif
+
 MyVisManager::MyVisManager () {}
 
 void MyVisManager::RegisterGraphicsSystems () {
@@ -117,6 +121,10 @@ void MyVisManager::RegisterGraphicsSystems () {
 #ifdef G4VIS_USE_VRMLFILE
   RegisterGraphicsSystem (new G4VRML1File);
   RegisterGraphicsSystem (new G4VRML2File);
+#endif
+
+#ifdef G4VIS_USE_ASCIITREE
+  RegisterGraphicsSystem (new G4ASCIITree);
 #endif
 
   if (fVerbose > 0) {

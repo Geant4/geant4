@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VisManager.cc,v 1.21 2001-02-23 15:43:32 johna Exp $
+// $Id: G4VisManager.cc,v 1.22 2001-04-10 14:56:10 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -139,6 +139,9 @@ void G4VisManager::Initialise () {
 #endif
 #ifdef G4VIS_BUILD_RAYTRACER_DRIVER
       "\n    G4VIS_USE_RAYTRACER"
+#endif
+#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+      "\n    G4VIS_USE_ASCIITREE"
 #endif
       "\n  Thus, in your main() you have something like:"
       "\n    G4VisManager* visManager = new MyVisManager;"
@@ -875,6 +878,9 @@ void G4VisManager::PrintInstalledGraphicsSystems () const {
 #ifdef G4VIS_BUILD_RAYTRACER_DRIVER
        << "\n  RayTracer (produces JPEG file)"
 #endif
+#ifdef G4VIS_BUILD_ASCIITREE_DRIVER
+       << "\n  ASCII Tree (produces ASCII file of geometry hierarchy)"
+#endif
        << G4endl;
 }
 
@@ -1097,6 +1103,19 @@ public:
 G4RayTracer::G4RayTracer ():
   G4VGraphicsSystem ("RayTracer",
                      "RayTracer",
+		     G4VGraphicsSystem::noFunctionality) {}
+
+#endif
+
+#ifndef G4VIS_BUILD_ASCIITREE_DRIVER
+
+class G4ASCIITree: public G4VGraphicsSystem {
+public:
+  G4ASCIITree ();
+};
+G4ASCIITree::G4ASCIITree ():
+  G4VGraphicsSystem ("ASCIITree",
+                     "ATREE",
 		     G4VGraphicsSystem::noFunctionality) {}
 
 #endif
