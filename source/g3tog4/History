@@ -1,7 +1,11 @@
-$Id: History,v 1.6 1999-05-06 04:17:36 lockman Exp $
+$Id: History,v 1.7 1999-05-06 17:46:12 lockman Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+g3tog4-01-00-03 24-Apr-1999 Lockman
+- G3MatTable, G3RotTable: updated to use RWTPtrOrderedVector instead of
+  RWTPtrHashDictionary
+
 g3tog4-01-00-02 24-Apr-1999 Lockman
 - temporarily comment out G4gsdv* code
 - G4gstmed: now just store a link between tracking medium number and assoicated

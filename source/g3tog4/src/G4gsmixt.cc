@@ -5,18 +5,17 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4gsmixt.cc,v 1.2 1999-05-06 04:26:03 lockman Exp $
+// $Id: G4gsmixt.cc,v 1.3 1999-05-06 17:46:59 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include <iomanip.h>
 #include <math.h>
-#include "G4strstreambuf.hh"
-#include "G4ios.hh"
+#include "globals.hh"
 #include "G3toG4.hh"
-#include "G4Isotope.hh"
 #include "G3EleTable.hh"
 #include "G3MatTable.hh"
+#include "G4Material.hh"
 
 void PG4gsmixt(RWCString tokens[])
 {
