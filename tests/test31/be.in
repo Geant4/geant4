@@ -12,7 +12,7 @@
 #
 /testem/phys/addPhysics       standard
 #/testem/phys/addPhysics        g4v52
-#/testem/phys/addPhysics       modelP
+#/testem/phys/addPhysics       penelope
 #/testem/phys/addPhysics       lowenergy
 #
 /testem/target1Material       Be

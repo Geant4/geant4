@@ -13,21 +13,20 @@
 /testem/phys/addPhysics       standard
 #/testem/phys/addPhysics        g4v52
 #/testem/phys/addPhysics       modelP
-#/testem/phys/addPhysics       lowenergy
+#/testem/phys/addPhysics      penelope
 #
 /testem/target1Material       Be
 /testem/target2Material       W
 /testem/target1Z              9 mm
 /testem/target2Z              6 mm
 #
-/testem/histoName            results_paw/62be_w_st.paw
-#/testem/histoName            results_paw/be_w_52.paw
-#/testem/histoName            results_paw/be_w_le.paw
+/testem/histoName             62be_w_st.paw
+#/testem/histoName            be_w_52.paw
+#/testem/histoName            be_w_le.paw
 #
 /gun/particle e-
 /gun/energy 50.0 MeV
 #
-#/process/eLoss/preciseRange  true
 #/process/eLoss/StepFunction 0.2 1. mm
 /run/initialize
 /testem/stepMax               0.5  mm
