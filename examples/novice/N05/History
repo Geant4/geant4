@@ -1,4 +1,4 @@
-$Id: History,v 1.6 2000-06-28 13:18:58 johna Exp $
+$Id: History,v 1.7 2000-07-28 10:17:26 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+July 28, 2000  Gabriele Cosmo (exampleN05-V02-00-01)
+- Includes also new ExN05VisManager class.
 
 June 26, 2000  John Allison  (exampleN05-V02-00-00)
 - Reduced no. of events per run from 500 to 250 in exampleN05.large_N.in.
