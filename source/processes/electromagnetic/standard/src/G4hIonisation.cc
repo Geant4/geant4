@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.cc,v 1.14 2001-07-11 10:03:32 gunter Exp $
+// $Id: G4hIonisation.cc,v 1.15 2001-08-10 13:55:05 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------
@@ -46,7 +46,8 @@
 //            simulate energy losses of ions; correction to
 //            cross section for particles with spin 1 is inserted
 //            as well
-// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation 
+// 28/05/01  V.Ivanchenko minor changes to provide ANSI -wall compilation
+// 10-08-01, new methods Store/Retrieve PhysicsTable (mma) 
 // --------------------------------------------------------------
  
 
@@ -350,7 +351,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
                          material->GetNumberOfElements() ;
  
   // get the electron kinetic energy cut for the actual material,
-  //  it will be used in ComputeMicroscopicCrossSection
+  //  it will be used in ComputeCrossSectionPerAtom
   // ( it is the SAME for ALL the ELEMENTS in THIS MATERIAL )
   //   ------------------------------------------------------
 
@@ -367,7 +368,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
            {
              sigma +=  theAtomicNumDensityVector[iel]*
                        chargeSquare*
-                       ComputeMicroscopicCrossSection(aParticleType,
+                       ComputeCrossSectionPerAtom(aParticleType,
                        LowEdgeEnergy,(*theElementVector)(iel)->GetZ() ) ;
            }
 
@@ -384,7 +385,7 @@ void G4hIonisation::BuildLambdaTable(const G4ParticleDefinition& aParticleType)
 }
 
 
-G4double G4hIonisation::ComputeMicroscopicCrossSection(
+G4double G4hIonisation::ComputeCrossSectionPerAtom(
                                  const G4ParticleDefinition& aParticleType,
                                  G4double KineticEnergy,
                                  G4double AtomicNumber)
@@ -393,7 +394,7 @@ G4double G4hIonisation::ComputeMicroscopicCrossSection(
   // cross section formula is OK for spin=0 and 1/2 only !
   // *****************************************************************
 
-  // calculates the microscopic cross section in GEANT4 internal units
+  // calculates the totalcross section per atom in GEANT4 internal units
   //    ( it is called for elements , AtomicNumber = Z )
 
     G4double TotalEnergy,
@@ -450,7 +451,80 @@ G4double G4hIonisation::ComputeMicroscopicCrossSection(
     return TotalCrossSection ;
 }
  
- 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4hIonisation::StorePhysicsTable(G4ParticleDefinition* particle,
+				              const G4String& directory, 
+				              G4bool          ascii)
+{
+  G4String particleName = particle->GetParticleName();
+  G4String filename;
+  
+  // store stopping power table
+  if ((particleName == "proton")||(particleName == "anti_proton")){
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  if ( !theLossTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }}
+  
+  // store mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  if ( !theMeanFreePathTable->StorePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->StorePhysicsTable in " << filename
+           << G4endl;
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in storing the PhysicsTables in "  
+         << directory << G4endl;
+  return true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4bool G4hIonisation::RetrievePhysicsTable(G4ParticleDefinition* particle,
+					         const G4String& directory, 
+				                 G4bool          ascii)
+{
+  // delete theLossTable and theMeanFreePathTable
+  if (theLossTable != 0) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable; 
+  }   
+  if (theMeanFreePathTable != 0) {
+    theMeanFreePathTable->clearAndDestroy();
+    delete theMeanFreePathTable;
+  }
+  
+  G4String particleName = particle->GetParticleName();
+  G4String filename;
+  
+  // retreive stopping power table
+  if ((particleName == "proton")||(particleName == "anti_proton")){
+  filename = GetPhysicsTableFileName(particle,directory,"StoppingPower",ascii);
+  theLossTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theLossTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theLossTable0->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }}
+  
+  // retreive mean free path table
+  filename = GetPhysicsTableFileName(particle,directory,"MeanFreePath",ascii);
+  theMeanFreePathTable = new G4PhysicsTable(G4Material::GetNumberOfMaterials());
+  if ( !theMeanFreePathTable->RetrievePhysicsTable(filename, ascii) ){
+    G4cout << " FAIL theMeanFreePathTable->RetrievePhysicsTable in " << filename
+           << G4endl;  
+    return false;
+  }
+  
+  G4cout << GetProcessName() << ": Success in retrieving the PhysicsTables from "
+         << directory << G4endl;
+  return true;
+}
+  
  
 G4VParticleChange* G4hIonisation::PostStepDoIt(
                                               const G4Track& trackData,   

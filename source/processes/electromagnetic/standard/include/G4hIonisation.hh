@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hIonisation.hh,v 1.11 2001-07-11 10:03:29 gunter Exp $
+// $Id: G4hIonisation.hh,v 1.12 2001-08-10 13:55:04 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,6 +41,7 @@
 // corrected by L.Urban on 13/01/98
 // bugs fixed by L.Urban on 02/02/99
 // 10/02/00  modifications , new e.m. structure, L.Urban
+// 10-08-01 new methods Store/Retrieve PhysicsTable (mma)
 // ------------------------------------------------------------
  
 #ifndef G4hIonisation_h
@@ -63,7 +64,7 @@ class G4hIonisation : public G4VhEnergyLoss
 {
   public:
  
-     G4hIonisation(const G4String& processName = "hIoni"); 
+     G4hIonisation(const G4String& processName = "hIonisa"); 
 
     ~G4hIonisation();
 
@@ -74,7 +75,17 @@ class G4hIonisation : public G4VhEnergyLoss
     virtual void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
     void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
-
+    
+    G4bool StorePhysicsTable(G4ParticleDefinition* ,
+		             const G4String& directory, G4bool);
+      // store eLoss and MeanFreePath tables into an external file
+      // specified by 'directory' (must exist before invokation)
+      
+    G4bool RetrievePhysicsTable(G4ParticleDefinition* ,   
+			        const G4String& directory, G4bool);
+      // retrieve eLoss and MeanFreePath tables from an external file
+      // specified by 'directory'
+      
     virtual void PrintInfoDefinition();
 
     G4double GetMeanFreePath(
@@ -87,7 +98,7 @@ class G4hIonisation : public G4VhEnergyLoss
 
   protected:
 
-    virtual G4double ComputeMicroscopicCrossSection(
+    virtual G4double ComputeCrossSectionPerAtom(
                             const G4ParticleDefinition& aParticleType,
                             G4double KineticEnergy,
                             G4double AtomicNumber);
