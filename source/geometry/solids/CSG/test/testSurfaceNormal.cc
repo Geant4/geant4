@@ -30,7 +30,7 @@
 //
 // History:
 //
-// 14.07.04 V.Grichine creation for box, orb and sphere
+// 11.11.04 V.Grichine creation for box
 
 #include "G4ios.hh"
 #include <assert.h>
