@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FieldManager.icc,v 1.1 2000-04-27 16:27:50 gcosmo Exp $
+// $Id: G4FieldManager.icc,v 1.2 2000-06-02 12:10:48 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -42,4 +42,27 @@ inline
 G4ChordFinder*  G4FieldManager::GetChordFinder()
 {
      return fChordFinder;
+}
+
+inline G4double G4FieldManager::GetDeltaIntersection()
+{ return fDelta_Intersection_Val; }
+
+inline G4double G4FieldManager::GetDeltaOneStep()    
+{ return fDelta_One_Step_Value; }
+
+inline void G4FieldManager::SetDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+}
+
+inline void G4FieldManager::SetDeltaIntersection(G4double valDeltaIntersection)
+{
+  fDelta_Intersection_Val = valDeltaIntersection;
+}
+
+// void  SetDeltaIntersection(G4double);   
+inline void G4FieldManager::SetAccuraciesWithDeltaOneStep(G4double valDeltaOneStep)
+{ 
+  fDelta_One_Step_Value= valDeltaOneStep;  
+  fDelta_Intersection_Val = 0.4 * fDelta_One_Step_Value;
 }
