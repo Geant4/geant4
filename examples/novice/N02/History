@@ -1,4 +1,4 @@
-$Id: History,v 1.21 2001-10-24 12:20:42 maire Exp $
+$Id: History,v 1.22 2001-11-07 04:35:32 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+07-11-01 Satoshi (exampleN02-V03-02-02)
+- vis.mac: /vis/viewer/refresh + /vis/viewer/update is replaced 
+  with their equivalent command /vis/viewer/flush. 
      
 24-10-01 mma (exampleN02-V03-02-01)
 - initInter.mac renamed vis.mac

@@ -28,6 +28,4 @@
 /tracking/storeTrajectory 1
 /vis/scene/endOfEventAction accumulate
 #
-/vis/viewer/refresh
-/vis/viewer/update
-
+/vis/viewer/flush
