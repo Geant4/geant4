@@ -1,0 +1,3 @@
+- Temporarly redefined RW_NPOS in STLInterface/rw/defs.h.
+  Will be removed in the RWT->G4RWT migration and replaced with
+  G4std::string::npos directly in the code.
