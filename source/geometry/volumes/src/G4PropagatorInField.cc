@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.cc,v 1.27 2001-12-08 01:12:51 japost Exp $
+// $Id: G4PropagatorInField.cc,v 1.28 2001-12-08 01:17:04 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // 
@@ -279,7 +279,7 @@ G4double G4PropagatorInField::
 		   NewSafety,  
 		   do_loop_count, 
 		   pPhysVol);
-	// G4cout << " Step accepted taken =" << StepTaken << endl;
+	// G4cout << " Step accepted taken =" << StepTaken << G4endl;
      }
 #endif
 
@@ -338,9 +338,9 @@ G4double G4PropagatorInField::
 
 #ifdef G4DEBUG_FIELD
   if( fNoZeroStep ){
-     G4cout << " PiF: Step returning=" << StepTaken << endl;
+     G4cout << " PiF: Step returning=" << StepTaken << G4endl;
      G4cout << " ------------------------------------------------------- "
-	    << endl;
+	    << G4endl;
   }
 #endif
 
@@ -715,7 +715,7 @@ G4PropagatorInField::PrintStepLengthDiagnostic(G4double CurrentProposedStepLengt
 	    << " last proposed step-length= " << fLast_ProposedStepLength 
 	    << " decreate factor = " << decreaseFactor
 	    << " step trial = " << stepTrial
-	    << endl;
+	    << G4endl;
      //     printStatus( pFieldTrack,  pFieldTrack, CurrentProposedStepLength, 
      //	                 -1.0,  0,  pPhysVol);
 
