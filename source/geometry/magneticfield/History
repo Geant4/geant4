@@ -1,4 +1,4 @@
-$Id: History,v 1.10 1999-06-29 19:43:11 japost Exp $
+$Id: History,v 1.11 1999-07-06 20:45:35 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,31 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July      6th, 1999   J. Apostolakis - field-01-00-07
+
+G4MagIntegrationDriver: 
+ i) AccurateAdvance now that the chord distance is smaller than the curve len-
+gth (times 1+epsilon).
+
+ii) OneGoodStep and QuickAdvance considers the error of the velocity as well as
+the error of the position - and ensure that both relative errors are within
+the "eps" maximum given.
+
+G4ChordFinder:
+  Having found that the curve_length vs ABdist disrepancy has its basis in
+the imprecision of the integration:
+  i) Modified the exception in this case to happen only for very large
+   relative disrepancies ( 10 * eps ).
+ ii) Undertaken a default corrective action in all other cases
+Note that this disrepancy only happens for very straight sections of track -
+ie step lengths much smaller than the curvature of the track.
+
+July      1st, 1999   J. Apostolakis - field-01-00-06a
+
+In order to cope with the anomalous condition created by candidate fix
+in G4PropagatorInField,  we ensure that the fraction_AE is always between
+0 and 1.0.  (giving it a default value of 0.5 whenever it is wrong).
+( in G4ChordFinder::ApproxCurvePointV )
 
 June     29th, 1999   J. Apostolakis - field-01-00-06
 
