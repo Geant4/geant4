@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4UserPhysicsListMessenger.cc,v 1.18 2003-04-10 21:15:59 asaim Exp $
+// $Id: G4UserPhysicsListMessenger.cc,v 1.19 2003-04-11 11:36:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -143,11 +143,19 @@ G4UserPhysicsListMessenger::G4UserPhysicsListMessenger(G4VUserPhysicsList* pPart
 
   //Commnad    /run/particle/applyCuts command
   applyCutsCmd = new G4UIcommand("/run/particle/applyCuts",this);
-  applyCutsCmd->SetGuidance("Obsolete command for setting ApplyCuts flag.");
-  applyCutsCmd->SetGuidance("It is harmless to remove this command from UI macro.");
-  applyCutsCmd->SetGuidance("This command does nothing but kept for backward compatibility.");
-  applyCutsCmd->SetGuidance("Similar functionarity will be provided by future release");
-  applyCutsCmd->SetGuidance("with different command name.");
+  applyCutsCmd->SetGuidance("Set applyCuts flag for a particle.");
+  applyCutsCmd->SetGuidance(" Some EM processes which do not have infrared divergence");
+  applyCutsCmd->SetGuidance("may generate gamma, e- and/or e+ with kinetic energies");
+  applyCutsCmd->SetGuidance("below the production threshold. By setting this flag,");
+  applyCutsCmd->SetGuidance("such secondaries below threshold are eliminated and");
+  applyCutsCmd->SetGuidance("kinetic energies of such secondaries are accumulated");
+  applyCutsCmd->SetGuidance("to the energy deposition of their mother.");
+  applyCutsCmd->SetGuidance(" Note that 'applyCuts' makes sense only for gamma,");
+  applyCutsCmd->SetGuidance("e- and e+. If this command is issued for other particle,");
+  applyCutsCmd->SetGuidance("a warning message is displayed and the command is");
+  applyCutsCmd->SetGuidance("ignored.");
+  applyCutsCmd->SetGuidance(" If particle name is 'all', this command affects on");
+  applyCutsCmd->SetGuidance("gamma, e- and e+.");
   param = new G4UIparameter("Flag",'s',true);
   param->SetDefaultValue("true");
   applyCutsCmd->SetParameter(param);
@@ -221,17 +229,17 @@ void G4UserPhysicsListMessenger::SetNewValue(G4UIcommand * command,G4String newV
       thePhysicsList->SetStoredInAscii();
     }
 
-//  } else if( command == applyCutsCmd ) {
-//    G4Tokenizer next( newValue );
-//
-//    // check 1st argument
-//    G4String temp = G4String(next());
-//    G4bool flag = (temp =="true" || temp=="TRUE");
-//
-//    // check 2nd argument
-//    G4String name = G4String(next());
-//
-//    thePhysicsList->SetApplyCuts(flag, name);
+  } else if( command == applyCutsCmd ) {
+    G4Tokenizer next( newValue );
+
+    // check 1st argument
+    G4String temp = G4String(next());
+    G4bool flag = (temp =="true" || temp=="TRUE");
+
+    // check 2nd argument
+    G4String name = G4String(next());
+
+    thePhysicsList->SetApplyCuts(flag, name);
  
   }
 
@@ -287,7 +295,7 @@ G4String G4UserPhysicsListMessenger::GetCurrentValue(G4UIcommand * command)
     }
 
 //  } else if( command == applyCutsCmd ) {
-//   if (thePhysicsList->GetApplyCuts("proton")){
+//   if (thePhysicsList->GetApplyCuts("gamma")){
 //     cv =  "true";
 //   } else {
 //     cv =  "false";

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.38 2003-03-17 21:32:31 asaim Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.39 2003-04-11 11:36:22 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -573,6 +573,25 @@ void G4VUserPhysicsList::G4VUserPhysicsList::ResetCuts()
     G4cout << " This method gives no effect and you can remove it. "<< G4endl;
   }
 #endif
+}
+
+void G4VUserPhysicsList::SetApplyCuts(G4bool value, const G4String& name)
+{
+  if(name=="all")
+  {
+    theParticleTable->FindParticle("gamma")->SetApplyCutsFlag(value);
+    theParticleTable->FindParticle("e-")->SetApplyCutsFlag(value);
+    theParticleTable->FindParticle("e+")->SetApplyCutsFlag(value);
+  }
+  else
+  {
+    theParticleTable->FindParticle(name)->SetApplyCutsFlag(value);
+  }
+}
+
+G4bool G4VUserPhysicsList::GetApplyCuts(const G4String& name) const
+{
+  return theParticleTable->FindParticle(name)->GetApplyCutsFlag();
 }
 
 
