@@ -1,4 +1,4 @@
-$Id: History,v 1.112 2001-10-18 10:54:14 pia Exp $
+$Id: History,v 1.113 2001-10-18 14:39:31 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+18.10.2001 - MGP, tag emlowen-V03-02-30
+             Electron processes: contributions to the implementation by V.I.
+                                 revision of code quality and consistency
+                                 with design by MGP
 
 18.10.2001 - MGP, tag emlowen-V03-02-29
              Modification of G4hNuclearStoppingModel and 
