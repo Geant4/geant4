@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.hh,v 1.3 2002-02-15 15:06:25 grichine Exp $
+// $Id: G4ReflectedSolid.hh,v 1.4 2002-02-15 15:41:23 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -99,10 +99,6 @@ class G4ReflectedSolid : public G4VSolid
       // return a self pointer else return 0.
 
     G4VSolid*                GetConstituentMovedSolid() const;
-    G4AffineTransform        GetTransform() const; 
-    void       SetTransform(G4AffineTransform&);
-    G4AffineTransform        GetDirectTransform() const; 
-    void       SetDirectTransform(G4AffineTransform&);
 
     G4Transform3D        GetTransform3D() const; 
     void       SetTransform3D(G4Transform3D&);
@@ -131,6 +127,11 @@ class G4ReflectedSolid : public G4VSolid
       // For creating graphical representations (ie for visualisation).
 
   protected:
+
+    G4AffineTransform        GetTransform() const; 
+    void       SetTransform(G4AffineTransform&);
+    G4AffineTransform        GetDirectTransform() const; 
+    void       SetDirectTransform(G4AffineTransform&);
 
     G4VSolid*          fPtrSolid        ;
     G4AffineTransform* fPtrTransform    ;
