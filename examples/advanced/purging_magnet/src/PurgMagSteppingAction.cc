@@ -29,7 +29,7 @@
 //    *                                 *
 //    ***********************************
 //
-// $Id: PurgMagSteppingAction.cc,v 1.2 2004-06-18 09:18:01 gunter Exp $
+// $Id: PurgMagSteppingAction.cc,v 1.3 2004-11-29 13:39:12 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -62,9 +62,7 @@ PurgMagSteppingAction::~PurgMagSteppingAction()
 
 void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
   
-{
-  G4double gx, gy, gz, ge, gpx, gpy, gpz, ex, ey, ez, ee, epx, epy, epz, px, py, pz, pe, ppx, ppy, ppz;
-  
+{ 
   //Collection at SSD in N-tuples. Electrons and photons separated
   //Prestep point in World, next volume MeasureVolume, process transportation
 
@@ -83,7 +81,9 @@ void PurgMagSteppingAction::UserSteppingAction(const G4Step* aStep)
 #endif             
 	  
 #ifdef G4ANALYSIS_USE
-	  
+	  G4double gx, gy, gz, ge, gpx, gpy, gpz, ex, ey, ez, ee;
+          G4double epx, epy, epz, px, py, pz, pe, ppx, ppy, ppz;
+   
 	  // Position
           ex = (aStep->GetTrack()->GetPosition().x())/cm;
 	  ey = (aStep->GetTrack()->GetPosition().y())/cm;
