@@ -42,12 +42,8 @@ class ANAPlot : public TVANAPlot<DataPointType>
     G4bool Insert(G4int aPDG, G4double anEnergy, G4double aXsec)
     {
       if(aPDG==thePDG)
-      {
-        for(G4int i=0; i<theDataPoints.size(); i++)
-	    {
+        for(unsigned i=0; i<theDataPoints.size(); i++)
 	      if(theDataPoints[i].InsertAt(anEnergy, aXsec)) break;
-	    }
-      }
       return aPDG==thePDG;
     }
     
@@ -63,7 +59,7 @@ class ANAPlot : public TVANAPlot<DataPointType>
 #endif
       ofstream theOutput(it);
       G4double aWeight = theTotalXsec/theStatistics/theFilter->RelativeGeometricalAcceptance();
-      for(G4int i=0; i<theDataPoints.size(); i++)
+      for(unsigned i=0; i<theDataPoints.size(); i++)
       {
 //        theDataPoints[i].DumpInfo(aOStream);
         if(theOutputFile!="") 
@@ -95,10 +91,6 @@ ANAPlot<DataPointType, FilterType>::ANAPlot(G4int aPDG, G4double aMass, G4double
          thePDG(aPDG), theTotalXsec(aTotalXsec), theFilter(aFilter)
 {
   static const G4int nBins = 33;
-  static const G4double hBins[nBins] = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-                                        0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-                                        0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,
-                                        0.,0.,0.};
   theStatistics = 10000;
   theOutputFile = fn;
 

@@ -28,11 +28,10 @@
 
 class ANADataPoint
 {
-  public:
-  //           bin highEdge, WidthForBin Norm, MassOfOutParticle
+public:
+//           bin highEdge, WidthForBin Norm, MassOfOutParticle
   ANADataPoint(G4double aBin, G4double aWidth, G4double aMass) : 
-         highBin(aBin), theMass(aMass), meanK(0), 
-	 entries(0), xSec(0), theWidth(aWidth){}
+    highBin(aBin), theMass(aMass), meanK(0), entries(0), xSec(0), theWidth(aWidth){}
 
   //              TotEnergyOfPart  , WeightOfEvent
   G4bool InsertAt(G4double anEnergy, G4double aXsec)
@@ -83,11 +82,10 @@ class ANADataPoint
 
   G4double highBin;
   G4double theMass;
-  G4double theWidth;
 //  G4std::vector<G4double> input;
-
   G4double meanK;
   G4int entries;
   G4double xSec;
+  G4double theWidth;
 };
 #endif

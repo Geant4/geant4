@@ -23,14 +23,14 @@
 #ifndef DoubleBandFilter_h
 #define DoubleBandFilter_h
 
-//#define debug
+//#define debugDBF
 
 #include "GammaNuclear/src/VFilter.h"
 #include "globals.hh"
 
 class DoubleBandFilter : public TVANAFilter<G4double>
 {
-  public:
+public:
   
   DoubleBandFilter(G4double higherThan, G4double lowerEquals, G4String aName)
    : TVANAFilter<G4double>(aName)
@@ -49,7 +49,7 @@ class DoubleBandFilter : public TVANAFilter<G4double>
   { 
     // Filters in cos(th)
     G4double result = (theHigh - theLow);
-#ifdef debug
+#ifdef debugDBF
     G4cout << "acceptance "<< result << G4endl;
 #endif
     return result;

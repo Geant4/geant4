@@ -58,13 +58,13 @@ class ANAParticle
       return result;
     }
     
-  private:
+private:
   G4int charge;
   G4int pdgCode;
-  G4double energy;
   G4double px;
   G4double py;
   G4double pz;
+  G4double energy;
 };
 
 inline

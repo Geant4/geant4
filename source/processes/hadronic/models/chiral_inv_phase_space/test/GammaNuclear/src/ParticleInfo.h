@@ -168,15 +168,13 @@ ANAParticleInfo::ANAParticleInfo(G4double xSec, G4String aFileName) : theFileNam
 inline
 void ANAParticleInfo::Analyse()
 {
-  G4int aParticle;
-  G4int aPlot;
+  //G4int aPlot;
   ifstream theData(theFileName);
   G4int counter = 0;
   for(;;)
   {
     counter++;
-    if(counter == 10000*(counter/10000)) 
-       G4cout << "taken care of "<<counter<<" particles." << G4endl;
+    if(counter==10000*(counter/10000)) G4cout<<"Taken care of "<<counter<<" particles."<<G4endl;
     ANAParticle aPart;
     if(!aPart.Init(theData)) break;
     ProcessOne(aPart);
@@ -185,7 +183,7 @@ void ANAParticleInfo::Analyse()
 
 void ANAParticleInfo::Plot(G4String aPreFix, G4int aStatistics)
 {
-  for(int aPlot = 0; aPlot<thePlots.size(); aPlot++)
+  for(unsigned aPlot = 0; aPlot<thePlots.size(); aPlot++)
   {
 #ifdef debug
     G4cout << "New plot:"<<G4endl;
@@ -200,7 +198,7 @@ inline void ANAParticleInfo::ProcessOne(ANAParticle aPart)
     G4int pdg = aPart.GetPDGCode();
     G4double energy = aPart.GetEnergy();
     G4double weight = aPart.GetWeight();
-    for(int aPlot = 0; aPlot<thePlots.size(); aPlot++)
+    for(unsigned aPlot = 0; aPlot<thePlots.size(); aPlot++)
     {
       if(thePlots[aPlot]->Filter( &(aPart) ))
       {
