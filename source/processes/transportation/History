@@ -1,4 +1,4 @@
-$Id: History,v 1.71 2003-06-04 15:46:41 gcosmo Exp $
+$Id: History,v 1.72 2003-06-12 10:16:05 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun, 12th, M.Dressel       transport-V05-01-02
+--------------------
+fixed "'this' : used in base member initializer list" in 
+src\G4MassImportanceProcess.cc, src\G4ParallelImportanceProcess.cc
 
 Jun, 4th, G.Cosmo          transport-V05-01-01
 -----------------

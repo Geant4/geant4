@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelImportanceProcess.cc,v 1.10 2003-06-04 15:45:32 gcosmo Exp $
+// $Id: G4ParallelImportanceProcess.cc,v 1.11 2003-06-12 10:16:05 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -45,11 +45,15 @@ G4ParallelImportanceProcess(const G4VImportanceSplitExaminer &aImportanceSplitEx
 			    const G4String &aName)
  : 
   G4ParallelTransport(pgeodriver, aStepper, aName),
-  fTrackTerminator(TrackTerminator ? TrackTerminator : this),
+  fTrackTerminator(TrackTerminator),
   fParticleChange(G4ParallelTransport::fParticleChange),
   fImportanceSplitExaminer(aImportanceSplitExaminer),
   fImportancePostStepDoIt(*fTrackTerminator)
-{}
+{
+  if (! TrackTerminator) {
+    fTrackTerminator = this;
+  }
+}
 
 G4ParallelImportanceProcess::~G4ParallelImportanceProcess()
 {}

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MassImportanceProcess.cc,v 1.11 2003-04-02 16:59:15 dressel Exp $
+// $Id: G4MassImportanceProcess.cc,v 1.12 2003-06-12 10:16:05 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -42,11 +42,14 @@ G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			const G4String &aName)
  : G4VProcess(aName),
    fParticleChange(new G4ParticleChange),
-   fTrackTerminator(TrackTerminator ? TrackTerminator : this),
+   fTrackTerminator(TrackTerminator),
    fImportanceAlgorithm(aImportanceAlgorithm),
    fImportanceFinder(aIstore),
    fImportancePostStepDoIt(*fTrackTerminator)
 {
+  if (! TrackTerminator) {
+    fTrackTerminator = this;
+  }
   if (!fParticleChange) {
     G4Exception("ERROR:G4MassImportanceProcess::G4MassImportanceProcess: new failed to create G4ParticleChange!");
   }
