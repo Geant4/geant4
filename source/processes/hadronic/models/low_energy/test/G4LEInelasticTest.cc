@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LEInelasticTest.cc,v 1.8 2002-07-18 13:47:36 jwellisc Exp $
+// $Id: G4LEInelasticTest.cc,v 1.9 2003-02-18 14:22:15 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -212,7 +212,7 @@
 //   G4cout <<"Now debug the DoIt: enter the problem event number"<< G4endl;
    G4int debugThisOne=1;
 //   G4cin >> debugThisOne;
-   G4cout << "Please enter the Proton energy"<<G4endl;
+   G4cout << "Please enter the Proton energy [MeV]"<<G4endl;
    G4cin >> incomingEnergy;
    G4int errorOne;
    G4cout << "Please enter the problematic event number"<<G4endl;

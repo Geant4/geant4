@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HadronElasticTest.cc,v 1.3 2001-07-11 10:06:53 gunter Exp $
+// $Id: G4HadronElasticTest.cc,v 1.4 2003-02-18 14:22:15 jwellisc Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -47,6 +47,7 @@
 #include "G4Proton.hh"
 #include "G4Box.hh"
 #include "G4PVPlacement.hh"
+#include "G4ParticleChange.hh"
 
 #ifdef G4_SOLVE_TEMPLATES
 #include "g4templates.hh"
@@ -55,6 +56,7 @@
 int main()
 {
 // Material definition
+   G4cout << "Starting "<<G4endl;
 
 // Note: due to a bug in the constructor, the state argument is required
    G4Material Copper("copper", 29., 63.54*g/mole, 8.96*g/cm3, kStateSolid);
@@ -70,7 +72,6 @@ int main()
 
    G4PionPlus* pionplus = G4PionPlus::PionPlusDefinition();
 // pionplus->DumpTable();
-   G4ProcessManager* thePionPlusProcessManager = pionplus->GetProcessManager();
 
 // Process definition
 
@@ -81,12 +82,8 @@ int main()
    //   theLElasticProcess.SetVerboseLevel(2);
    //   theLElasticProcess.setCrossSectionDataVerboseLevel(2);
 
-   theProtonProcessManager->AddDiscreteProcess(&theLElasticProcess);
    theLElasticProcess.BuildPhysicsTable(*proton);
    theLElasticProcess.DumpPhysicsTable(*proton);
-   thePionPlusProcessManager->AddDiscreteProcess(&theLElasticProcess);
-   theLElasticProcess.BuildPhysicsTable(*pionplus);
-   theLElasticProcess.DumpPhysicsTable(*pionplus);
 
 // G4MuEnergyLoss theEnergyLossProcess;
 // theProcessManager->AddContinuousProcess(&theEnergyLossProcess);
@@ -99,7 +96,7 @@ int main()
 // Physics
 
    G4double T;
-   G4cout << "Enter proton kinetic energy in GeV: ";
+   G4cout << "Enter proton kinetic energy in GeV: "<<G4endl;
    G4cin >> T;
    aProton.SetKineticEnergy(T*GeV);
    aPionPlus.SetKineticEnergy(T*GeV);
@@ -107,7 +104,7 @@ int main()
    G4cout << "proton momentum=" << p << G4endl;
    G4cout << "pionplus momentum=" << aPionPlus.GetTotalMomentum()/GeV << G4endl;
    G4double px, py, pz;
-   G4cout << "Enter momentum direction px/p, py/p, pz/p: ";
+   G4cout << "Enter momentum direction px/p, py/p, pz/p: "<<G4endl;
    G4cin >> px >> py >> pz;
    aProton.SetMomentumDirection(G4ParticleMomentum(px, py, pz));
    aProton.DumpInfo();
@@ -123,7 +120,7 @@ int main()
            " mm" << G4endl;
 
    G4int nevent;
-   G4cout << G4endl << "Enter number of events: ";
+   G4cout << G4endl << "Enter number of events: "<<G4endl;
    G4cin >> nevent;
 
    G4Step aStep;
@@ -155,7 +152,7 @@ int main()
 
    
     for (G4int ievent = 1; ievent <= nevent; ievent++) {
-      pch = theLElasticProcess.PostStepDoIt( *aTrack, aStep );
+      pch = dynamic_cast<G4ParticleChange *>(theLElasticProcess.PostStepDoIt( *aTrack, aStep ));
 //      pch = theLElasticProcess.DoIt(&aProton, &Copper, aStep);
       G4double pxi = p*pch->GetMomentumChange()->x();
       G4double pyi = p*pch->GetMomentumChange()->y();
