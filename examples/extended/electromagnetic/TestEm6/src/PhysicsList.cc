@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsList.cc,v 1.1 2002-05-23 13:30:42 maire Exp $
+// $Id: PhysicsList.cc,v 1.2 2003-01-27 09:46:20 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,6 +47,7 @@ PhysicsList::PhysicsList()
   defaultCutValue = 1.*km;
   pMes = new PhysicsListMessenger(this);
   theGammaToMuPairProcess = 0;
+  theAnnihiToMuPairProcess = 0;
   SetVerboseLevel(1);
 }
 
@@ -114,6 +115,7 @@ void PhysicsList::ConstructProcess()
 #include "G4eIonisation.hh"
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
+#include "G4AnnihiToMuPair.hh"
 
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
@@ -142,10 +144,14 @@ void PhysicsList::ConstructEM()
 
     } else if (particleName == "e+") {
       //positron
-      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
-      pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+      // to make the process of e+e- annihilation more visible,
+      // do not enable the other standard processes:
+      // pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
+      // pmanager->AddProcess(new G4eIonisation,       -1, 2,2);
+      // pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      // pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);
+      theAnnihiToMuPairProcess=new G4AnnihiToMuPair;
+      pmanager->AddDiscreteProcess(theAnnihiToMuPairProcess);
       
     } else if( particleName == "mu+" || 
                particleName == "mu-"    ) {
@@ -202,11 +208,18 @@ void PhysicsList::SetCuts()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PhysicsList::setGammaToMuPairFac(G4double fac)
+void PhysicsList::SetGammaToMuPairFac(G4double fac)
 {
   if(theGammaToMuPairProcess) theGammaToMuPairProcess->SetCrossSecFactor(fac);
 }
 
+void PhysicsList::SetAnnihiToMuPairFac(G4double fac)
+{
+  if(theAnnihiToMuPairProcess) theAnnihiToMuPairProcess->SetCrossSecFactor(fac);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4GammaConversionToMuons* PhysicsList::theGammaToMuPairProcess  = 0;
+G4AnnihiToMuPair*         PhysicsList::theAnnihiToMuPairProcess = 0;
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.5 2002-12-12 12:48:15 maire Exp $
+$Id: README,v 1.6 2003-01-27 09:46:19 hbu Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -7,11 +7,12 @@ $Id: README,v 1.5 2002-12-12 12:48:15 maire Exp $
 
                             TestEm6 
                             -------
-     This example is intended to test the process of
-     gamma conversion to a pair of muons.
-     To make this process more visible, the usually much more frequent
-     gamma conversion to a pair of electrons is not selected in the
-     physics list.
+     This example is intended to test the processes of gamma conversion
+     to a pair of muons and annihilation of positrons with atomic
+     electrons to a pair of muons.
+     To make these process more visible, the usually much more frequent
+     gamma conversion to a pair of electrons and the standard positron
+     processes are not selected in the physics list.
 	
  1- GEOMETRY DEFINITION
  
@@ -38,6 +39,7 @@ $Id: README,v 1.5 2002-12-12 12:48:15 maire Exp $
      Futhermore, a high production cut (1 km, which gives infinity in energy)
      prevent any production of delta-electrons from ionization or gamma
      from bremsstrahlung.
+     For Positrons, only the annihilation process is selected.
  		
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
@@ -123,12 +125,14 @@ $Id: README,v 1.5 2002-12-12 12:48:15 maire Exp $
 
  9- HOW TO INCREASE STATISTICS ON gamma -> mu+mu- ?
  
-     The process of gamma -> mu+mu- has a low cross section but can be important
+     The processes of gamma -> mu+mu-  and e+e- -> mu+mu-
+     have a low cross section but can be important
      for leakage through thick absorbers and calorimeters.
      Straight forward simulation will be quite time consuming.
-     To make the process more visible, the cross section can be artificially
-     increased by some factor (here 1000) using the command
-     (only effective after  /run/initialize)
+     To make the processes more visible, the cross section can be
+     artificially increased by some factor (here 1000)
+     using the commands  (only effective after  /run/initialize)
 
-     /run/process/setGammaToMuPairFac 1000
+     /testem/phys/SetGammaToMuPairFac  1000
+     /testem/phys/SetAnnihiToMuPairFac 1000
  

@@ -22,7 +22,7 @@
 //
 
 //
-// $Id: DetectorConstruction.cc,v 1.1 2002-05-23 13:30:36 maire Exp $
+// $Id: DetectorConstruction.cc,v 1.2 2003-01-27 09:46:19 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -93,6 +93,10 @@ void DetectorConstruction::DefineMaterials()
  a = 55.85*g/mole;
  density = 7.870*g/cm3;
  G4Material* Fe  = new G4Material("Iron"    , z, a, density);
+
+ a = 12.011*g/mole;
+ density = 2.265*g/cm3; // typical density of graphite
+ G4Material* C = new G4Material("C", z=6. , a, density);
 
  G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 

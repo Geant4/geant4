@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: PhysicsListMessenger.cc,v 1.3 2002-12-12 12:48:16 maire Exp $
+// $Id: PhysicsListMessenger.cc,v 1.4 2003-01-27 09:46:20 hbu Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,12 +41,20 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
 :physList(physL)
 { 
   GammaToMuPairFac=new G4UIcmdWithADouble
-                                      ("/testem/phys/setGammaToMuPairFac",this);
+                                      ("/testem/phys/SetGammaToMuPairFac",this);
   GammaToMuPairFac->SetGuidance(
          "Set factor to artificially increase the GammaToMuPair cross section");
   GammaToMuPairFac->SetParameterName("GammaToMuPairFac",false);
   GammaToMuPairFac->SetRange("GammaToMuPairFac>0.0");
   GammaToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+  AnnihiToMuPairFac=new G4UIcmdWithADouble
+                                      ("/testem/phys/SetAnnihiToMuPairFac",this);
+  AnnihiToMuPairFac->SetGuidance(
+         "Set factor to artificially increase the AnnihiToMuPair cross section");
+  AnnihiToMuPairFac->SetParameterName("AnnihiToMuPairFac",false);
+  AnnihiToMuPairFac->SetRange("AnnihiToMuPairFac>0.0");
+  AnnihiToMuPairFac->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,6 +62,7 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* physL)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete GammaToMuPairFac;
+  delete AnnihiToMuPairFac;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -62,8 +71,12 @@ void PhysicsListMessenger::SetNewValue(G4UIcommand* command,
                                           G4String newValue)
 { 
   if(command == GammaToMuPairFac)
-   { physList->setGammaToMuPairFac(
+   { physList->SetGammaToMuPairFac(
                            GammaToMuPairFac->GetNewDoubleValue(newValue));}   
+
+  if( command == AnnihiToMuPairFac)
+   { physList->SetAnnihiToMuPairFac(
+                          AnnihiToMuPairFac->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
