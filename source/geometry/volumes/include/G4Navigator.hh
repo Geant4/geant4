@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Navigator.hh,v 1.10 2001-11-05 22:19:28 radoone Exp $
+// $Id: G4Navigator.hh,v 1.11 2001-11-07 00:42:16 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -169,7 +169,7 @@ class G4Navigator
     // same volume as the previous position.  Usually this can be guaranteed
     // only if the point is within safety.
 
-  inline void LocateGlobalPointAndUpdateTouchableHandle(
+  void LocateGlobalPointAndUpdateTouchableHandle(
 			  const G4ThreeVector&       position,
 			  const G4ThreeVector&       direction,
 				G4TouchableHandle&         oldTouchableToUpdate,
