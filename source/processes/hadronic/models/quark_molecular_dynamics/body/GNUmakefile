@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.4 2001-08-10 20:02:59 sscherer Exp $
+# $Id: GNUmakefile,v 1.5 2003-10-08 16:42:21 hpw Exp $
 # -----------------------------------------------------------
 # GNUmakefile for hadronic library.  Gabriele Cosmo, 18/9/96.
 # -----------------------------------------------------------
@@ -26,7 +26,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/processes/hadronic/processes/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/management/include \
+            -I$(G4BASE)/processes/hadronic/models/management/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \
@@ -36,9 +36,9 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/shortlived/include \
             -I$(G4BASE)/materials/include \
             -I$(G4BASE)/intercoms/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/util/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/string_common/include \
-            -I$(G4BASE)/processes/hadronic/models/generator/string_fragmentation/include \
+            -I$(G4BASE)/processes/hadronic/models/util/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \
+            -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/quark_molecular_dynamics/util/include \
            
 include $(G4INSTALL)/config/common.gmk

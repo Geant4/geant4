@@ -1,9 +1,9 @@
-# $Id: GNUmakefile,v 1.1 2003-10-08 15:30:27 hpw Exp $
+# $Id: GNUmakefile,v 1.2 2003-10-08 16:42:20 hpw Exp $
 # ----------------------------------------------------------------
 # GNUmakefile for hadronic management library.  G.Folger 10-Dec-97
 # ----------------------------------------------------------------
 
-name := G4hadronic_mgt
+name := G4had_mod_man
 
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
