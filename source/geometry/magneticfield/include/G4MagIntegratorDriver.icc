@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.icc,v 1.1 1999-01-07 16:07:05 gunter Exp $
+// $Id: G4MagIntegratorDriver.icc,v 1.2 1999-07-27 20:34:01 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 inline G4double G4MagInt_Driver::ComputeAndSetErrcon()
@@ -63,10 +63,17 @@ inline G4MagInt_Driver::G4MagInt_Driver( G4double                hminimum,
 {  
       RenewStepperAndAdjust( pItsStepper );
       hminimum_val= hminimum;
+      fMaxNoSteps = fMaxStepBase / pIntStepper->IntegratorOrder();
 }
 
 inline G4MagIntegratorStepper* G4MagInt_Driver::GetStepper()
 {  return pIntStepper; }
+
+inline  G4int  G4MagInt_Driver::GetMaxNoSteps()
+{  return fMaxNoSteps; }
+
+inline  void     G4MagInt_Driver::SetMaxNoSteps(G4int val)
+{  fMaxNoSteps= val; }
 
 inline void G4MagInt_Driver::GetDerivatives( 
 				 const G4FieldTrack y_curr,    // const, INput
