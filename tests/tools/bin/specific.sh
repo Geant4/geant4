@@ -525,6 +525,25 @@ export OIVLIBS="-L/geant4/OSF1/lib -lhepvisXt -lhepvis  -L$OIVHOME/lib -lInvento
 export XENVIRONMENT=$OIVHOME/app-defaults/Inventor
 fi
 
+if [ `uname -n` = nb-barrand2 ] ; then
+#export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs'
+export G4INSTALL=Z:/geant4/geant4-05-00-ref-01
+export G4SYSTEM=WIN32-VC
+export G4WORKDIR=$G4INSTALL
+export G4STTDIR=$G4WORKDIR/stt
+export G4LIB=$G4WORKDIR/lib
+export G4DEBUG=1
+export CPPVERBOSE=1
+# G4 build flags :
+export G4UI_BUILD_WIN32_SESSION=1
+export G4VIS_BUILD_OPENGLWIN32_DRIVER=1
+# G4 use flags :
+export G4UI_USE_WIN32=1
+export G4VIS_USE_OPENGLWIN32=1
+# Specific :
+export CLHEP_BASE_DIR=C:/CLHEP/1.8.0.0
+fi
+
 # Global environment
 
 export XERCESCROOT=/afs/cern.ch/sw/geant4/dev/XercesC/$G4SYSTEM
