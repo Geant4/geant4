@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.12 2001-12-07 12:57:30 pfeiffer Exp $
+# $Id: GNUmakefile,v 1.13 2001-12-07 16:31:35 gcosmo Exp $
 # --------------------------------------------------------------
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
@@ -11,6 +11,8 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
+include $(G4INSTALL)/config/architecture.gmk
+
 # Copy the GammaRayTelAnalysis files according to which version
 # is selected. For this the target tmpana has been created.
 # As the dependency is checked before "all" is reached, we need
@@ -18,13 +20,13 @@ endif
 
 ifdef G4ANALYSIS_AIDA_CONFIG_CFLAGS
 # AIDA (version 2.2 for now) selected
-FOO := $(shell cp include/GammaRayTelAnalysis.hh-AIDA include/GammaRayTelAnalysis.hh )
-FOO := $(shell cp src/GammaRayTelAnalysis.cc-AIDA src/GammaRayTelAnalysis.cc )
+  FOO := $(shell cp include/GammaRayTelAnalysis.hh-AIDA include/GammaRayTelAnalysis.hh )
+  FOO := $(shell cp src/GammaRayTelAnalysis.cc-AIDA src/GammaRayTelAnalysis.cc )
 else
 # Anaphe selected 
-include anaphe.gmk
-FOO := $(shell cp include/GammaRayTelAnalysis.hh-Anaphe include/GammaRayTelAnalysis.hh )
-FOO := $(shell cp src/GammaRayTelAnalysis.cc-Anaphe src/GammaRayTelAnalysis.cc )
+  include anaphe.gmk
+  FOO := $(shell cp include/GammaRayTelAnalysis.hh-Anaphe include/GammaRayTelAnalysis.hh )
+  FOO := $(shell cp src/GammaRayTelAnalysis.cc-Anaphe src/GammaRayTelAnalysis.cc )
 endif
 
 # End Analysis.
