@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParallelGeometrySampler.cc,v 1.4 2002-10-28 17:47:15 dressel Exp $
+// $Id: G4ParallelGeometrySampler.cc,v 1.5 2002-10-30 10:19:21 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -65,20 +65,26 @@ G4ParallelGeometrySampler::~G4ParallelGeometrySampler(){
 void G4ParallelGeometrySampler::ClearSampling() {
   if (fParallelTransportConfigurator) {
     delete fParallelTransportConfigurator;
+    fParallelTransportConfigurator = 0;
   }
   if (fPImportanceConfigurator) {
     delete fPImportanceConfigurator;
+    fPImportanceConfigurator = 0;
   }
   if (fPScoreConfigurator) {
     delete fPScoreConfigurator;
+    fPScoreConfigurator = 0;
   }
   if (fWeightCutOffConfigurator) {
     delete fWeightCutOffConfigurator;
+    fWeightCutOffConfigurator = 0;
   }
   if (fGCellFinder) {
     delete fGCellFinder;
+    fGCellFinder = 0;
   }
   fIStore = 0;
+  fConfigurators.clear();
   fIsConfigured = false;
 };
 
