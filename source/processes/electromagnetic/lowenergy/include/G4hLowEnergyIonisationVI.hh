@@ -182,9 +182,11 @@ private:
 
   void InitializeParametrisation();
 
-  void BuildLossTable(const G4ParticleDefinition& aParticleType) ;
+  void BuildLossTable(const G4ParticleDefinition& aParticleType);
 
-  void BuildLambdaTable(const G4ParticleDefinition& aParticleType) ;
+  void BuildDataForFluorescence(const G4ParticleDefinition& aParticleType);
+
+  void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
   
   void SetProtonElectronicStoppingPowerModel(const G4String& dedxTable) 
                               {theProtonTable = dedxTable ;};

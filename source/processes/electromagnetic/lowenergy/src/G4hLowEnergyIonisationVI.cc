@@ -248,7 +248,6 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
     cutForDelta[j] = tCut;
   }
 
-
   if(0.0 < charge) 
     {
 
@@ -277,6 +276,7 @@ void G4hLowEnergyIonisationVI::BuildPhysicsTable(
   }
   
   BuildLambdaTable(aParticleType) ;
+  BuildDataForFluorescence(aParticleType);
 
   if(verboseLevel > 0) {
     G4cout << "G4hLowEnergyIonisationVI::BuildPhysicsTable: "
@@ -330,30 +330,6 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
   // Clean up the vector of cuts
 
   gammaCutInEnergy = (G4Gamma::Gamma())->GetCutsInEnergy();
-
-  if (shellVacancy != 0) delete shellVacancy;
-  shellVacancy = new G4ShellVacancy();
-  G4DataVector* ksi = 0;
-  G4DataVector* ksi1 = 0;
-  G4DataVector* energy = 0;
-  G4DataVector* energy1 = 0;
-  size_t binForFluo = TotBin/10;
-  G4int length = zFluoDataVector.size();
-  if(length) {
-    for(G4int i=0; i<length; i++) {
-      delete &zFluoDataVector[i];
-    }
-    zFluoDataVector.clear();
-  }
-
-
-  G4double mass = aParticleType.GetPDGMass();
-
-  G4PhysicsLogVector* bVector = new G4PhysicsLogVector(LowestKineticEnergy,
-		                		       HighestKineticEnergy,
-						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = 
-                             G4AtomicTransitionManager::Instance();
   
   //  loop for materials  
   for (G4int j=0; j<numOfMaterials; j++) {
@@ -425,8 +401,47 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     }
     // Insert vector for this material into the table
     theLossTable->insert(aVector) ;
+  }
+}
 
-    // fill data for fluorescence
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4hLowEnergyIonisationVI::BuildDataForFluorescence(const G4ParticleDefinition& aParticleType)
+{
+  // fill data for fluorescence
+
+  G4double mass = aParticleType.GetPDGMass();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  
+  //  create table
+  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+
+  if (shellVacancy != 0) delete shellVacancy;
+  shellVacancy = new G4ShellVacancy();
+  G4DataVector* ksi = 0;
+  G4DataVector* ksi1 = 0;
+  G4DataVector* energy = 0;
+  G4DataVector* energy1 = 0;
+  size_t binForFluo = TotBin/10;
+  G4int length = zFluoDataVector.size();
+  if(length) {
+    for(G4int i=0; i<length; i++) {
+      delete &zFluoDataVector[i];
+    }
+    zFluoDataVector.clear();
+  }
+
+  G4PhysicsLogVector* bVector = new G4PhysicsLogVector(LowestKineticEnergy,
+		                		       HighestKineticEnergy,
+						       binForFluo);
+  G4AtomicTransitionManager* transitionManager = 
+                             G4AtomicTransitionManager::Instance();
+
+  //  loop for materials  
+  for (G4int j=0; j<numOfMaterials; j++) {
+
+    // get material parameters needed for the energy loss calculation  
+    const G4Material* material= (*theMaterialTable)[j];
 
     const G4ElementVector* theElementVector = material->GetElementVector();
     size_t NumberOfElements = material->GetNumberOfElements() ;
@@ -436,6 +451,8 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     G4VEMDataSet* xsis = new G4CompositeEMDataSet(interp, 1., 1.);
     G4VDataSetAlgorithm* interp1 = new G4LogLogInterpolation();
     G4VEMDataSet* xsis1 = new G4CompositeEMDataSet(interp1, 1., 1.);
+    
+    G4double tCut = cutForDelta[j];
 
     for (size_t iel=0; iel<NumberOfElements; iel++ ) {
 
@@ -471,18 +488,20 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
           cross      += yy*theAtomicNumDensityVector[iel];
           cross1     += zz*theAtomicNumDensityVector[iel];
 	}
-        energy1->push_back(lowEdgeEnergy);
+        energy1->push_back(tkin);
         ksi1->push_back(cross1);
 
         if(eAverage > 0.) cross /= eAverage;
         else              cross  = 0.;
 
-        energy->push_back(lowEdgeEnergy);
+        energy->push_back(tkin);
         ksi->push_back(cross);
       }
-      G4VEMDataSet* set = new G4EMDataSet(Z,energy,ksi,interp,1.,1.);
+      G4VDataSetAlgorithm* algo = interp->Clone();
+      G4VEMDataSet* set = new G4EMDataSet(Z,energy,ksi,algo,1.,1.);
       xsis->AddComponent(set);
-      G4VEMDataSet* set1 = new G4EMDataSet(Z,energy1,ksi1,interp,1.,1.);
+      G4VDataSetAlgorithm* algo1 = interp1->Clone();
+      G4VEMDataSet* set1 = new G4EMDataSet(Z,energy1,ksi1,algo1,1.,1.);
       xsis1->AddComponent(set1);
     }
     if(verboseLevel) xsis->PrintData();
@@ -491,7 +510,6 @@ void G4hLowEnergyIonisationVI::BuildLossTable(
     zFluoDataVector.push_back(xsis1);    
   }
   delete bVector;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -535,7 +553,6 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
     const G4double* theAtomicNumDensityVector = 
                            material->GetAtomicNumDensityVector();
     const G4int NumberOfElements = material->GetNumberOfElements() ;
-    G4cout << "Nel= " << NumberOfElements << G4endl;
       
       // get the electron kinetic energy cut for the actual material,
       //  it will be used in ComputeMicroscopicCrossSection
@@ -543,7 +560,6 @@ void G4hLowEnergyIonisationVI::BuildLambdaTable(
       //   ------------------------------------------------------
       
     G4double deltaCut = cutForDelta[J];
-    G4cout << "deltaCut= " << deltaCut <<  G4endl;
       
     for ( G4int i = 0 ; i < TotBin ; i++ ) {
       lowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
@@ -885,7 +901,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::AlongStepDoIt(
   G4double hMomentum = particle->GetTotalMomentum();
   G4std::vector<G4DynamicParticle*>* newpart = 0;
 
-  // newpart = DeexciteAtom(material, kineticEnergy, edep, hMass, hMomentum);
+  newpart = DeexciteAtom(material, kineticEnergy, edep, hMass, hMomentum);
 
   if(newpart) {
 
@@ -1170,7 +1186,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   G4double cutForPhotons = gammaCutInEnergy[aMaterial->GetIndex()];
  
   // Fluorescence data start from element 6
-  /*
+  
   if (Z > 5 && finalKineticEnergy >= bindingEnergy
             && (bindingEnergy >= cutForPhotons 
             ||  bindingEnergy >= DeltaCut) ) {
@@ -1203,8 +1219,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
 	}
       }
     }
-  }
-  */    
+  }    
   
   // Save delta-electrons
 
@@ -1239,7 +1254,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
   aParticleChange.AddSecondary(theDeltaRay);
 
   // Save Fluorescence and Auger
-  /*
+  
   if (secondaryVector) {
 
     for (size_t l = 0; l < nSecondaries; l++) {
@@ -1249,7 +1264,7 @@ G4VParticleChange* G4hLowEnergyIonisationVI::PostStepDoIt(
     }
     delete secondaryVector;
   }
-  */    
+      
    
   return G4VContinuousDiscreteProcess::PostStepDoIt(trackData,stepData);
 }
@@ -1263,6 +1278,7 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
 				       G4double hMomentum,
 				       G4double eLoss) 
 {
+  G4cout << "DeexciteAtom Start" << G4endl;
   G4int index = material->GetIndex();
   G4double cutForElectrons = cutForDelta[index];
   G4double cutForPhotons = gammaCutInEnergy[index];
@@ -1286,6 +1302,8 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
     }
   }
 
+  G4cout << "stop= " << stop << G4endl;
+
   if(stop) return 0;
 
   // create vector of tracks of secondary particles
@@ -1303,11 +1321,16 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
   G4double etot = 0.0; 
   G4std::vector<G4int> n = shellVacancy->GenerateNumberOfIonisations(material,
                                          incidentEnergy, eLoss);
+
+  G4cout << "n= " << n.size() << G4endl;
+
   for (size_t i=0; i<nElements; i++) {
 
     size_t nVacancies = n[i];
     G4int Z = (G4int)((*theElementVector)[i]->GetZ());
     G4double maxE = transitionManager->Shell(Z, 0)->BindingEnergy();
+
+  G4cout << "maxE= " << maxE << G4endl;
 
     if (nVacancies && Z>5 && (maxE>cutForPhotons || maxE>cutForElectrons) ) {
       for(size_t j=0; j<nVacancies; j++) {
@@ -1348,10 +1371,16 @@ G4hLowEnergyIonisationVI::DeexciteAtom(const G4Material* material,
       }
     }
   }
+
+  G4cout << "close to end " << G4endl;
+
   if(partVector->size()==0) {
     delete partVector;
     return 0;
   }
+
+  G4cout << "end " << G4endl;
+
   return partVector;
 }
 
@@ -1386,7 +1415,7 @@ G4int G4hLowEnergyIonisationVI::SelectRandomAtom(const G4Material* material,
     if(p[i] > q) break;
     q -= p[i];
   }
-  Z = (G4int)(*theElementVector)[i]->GetZ();
+  Z = (G4int)((*theElementVector)[i]->GetZ());
 
   return Z;
 }
