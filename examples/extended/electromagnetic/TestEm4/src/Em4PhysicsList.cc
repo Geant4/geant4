@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em4PhysicsList.cc,v 1.1 1999-10-12 11:26:58 maire Exp $
+// $Id: Em4PhysicsList.cc,v 1.2 1999-11-10 15:28:40 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -108,16 +108,16 @@ void Em4PhysicsList::ConstructEM()
     //electron
 
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4eIonisation,-1,2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,-1,-1,3);      
+      pmanager->AddProcess(new G4eIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);      
 
     } else if (particleName == "e+") {
     //positron
 
       pmanager->AddProcess(new G4MultipleScattering,-1,1,1);
-      pmanager->AddProcess(new G4eIonisation,-1,2,2);
-      pmanager->AddProcess(new G4eBremsstrahlung,-1,-1,3);
-      pmanager->AddProcess(new G4eplusAnnihilation,0,-1,4);      
+      pmanager->AddProcess(new G4eIonisation,       -1,2,2);
+      pmanager->AddProcess(new G4eBremsstrahlung,   -1,-1,3);
+      pmanager->AddProcess(new G4eplusAnnihilation,  0,-1,4);      
     }
   }
 }
