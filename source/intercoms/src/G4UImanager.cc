@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UImanager.cc,v 1.1 1999-01-07 16:09:27 gunter Exp $
+// $Id: G4UImanager.cc,v 1.2 1999-10-28 04:37:18 yhajime Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -318,10 +318,8 @@ void G4UImanager::Interact(G4String pC)
 
  void G4UImanager::SetCoutDestination(G4UIsession *const value)
 {
-#ifdef G4STREAM
     G4coutbuf.SetDestination(value);
     G4cerrbuf.SetDestination(value);
-#endif
 }
 
 
