@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ParticlePropertyTable.cc,v 1.1 2003-06-11 07:20:06 kurasige Exp $
+// $Id: G4ParticlePropertyTable.cc,v 1.2 2003-10-03 16:03:30 gcosmo Exp $
 //
 // class G4ParticlePropertyTable
 //
@@ -81,13 +81,13 @@ const G4ParticlePropertyTable & G4ParticlePropertyTable::operator=(const G4Parti
 }
   
 ////////////////////////
-G4int G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &right) const
+G4int G4ParticlePropertyTable::operator==(const G4ParticlePropertyTable &) const
 {
   return true;
 }
 
 ////////////////////////
-G4int G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &right) const
+G4int G4ParticlePropertyTable::operator!=(const G4ParticlePropertyTable &) const
 {
   return false;
 }
