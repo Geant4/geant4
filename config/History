@@ -1,4 +1,4 @@
-$Id: History,v 1.140 2001-06-19 20:40:20 johna Exp $
+$Id: History,v 1.141 2001-06-21 08:11:29 gunter Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+21th June 2001 Gunter Folger
+- In common.gmk, run gmake via $(MAKE)
 
 19th June 2001 John Allison (config-V03-01-03)
 - Added GAG_TREE to G4VIS_BUILD.gmk and G4VIS_USE.gmk.
