@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleChange.cc,v 1.10 2001-12-14 09:59:36 kurasige Exp $
+// $Id: G4VParticleChange.cc,v 1.11 2002-11-20 16:52:49 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -242,22 +242,12 @@ G4bool G4VParticleChange::CheckIt(const G4Track& aTrack)
   return itsOK;
 }
 
+const G4double G4VParticleChange::GetAccuracyForWarning() const
+{
+  return accuracyForWarning;
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+const G4double G4VParticleChange::GetAccuracyForException() const
+{
+  return accuracyForException;
+}
