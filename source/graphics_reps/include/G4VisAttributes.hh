@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.hh,v 1.8 2002-10-23 12:04:31 johna Exp $
+// $Id: G4VisAttributes.hh,v 1.9 2002-10-24 14:36:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -48,10 +48,14 @@
 #ifndef __G4VISATTRIBUTES_HH__
 #define __G4VISATTRIBUTES_HH__
 
-#include "G4ios.hh"
 #include "globals.hh"
+#include "g4std/vector"
+
 #include "G4Colour.hh"
 #include "G4Color.hh"
+
+class G4AttValue;
+class G4AttDef;
 
 class G4VisAttributes {
 
@@ -79,7 +83,9 @@ public: // With description
   LineStyle       GetLineStyle                   () const;
   G4double        GetLineWidth                   () const;
   G4bool          IsForceDrawingStyle            () const;
-  ForcedDrawingStyle GetForcedDrawingStyle () const;
+  ForcedDrawingStyle GetForcedDrawingStyle       () const;
+  const G4std::vector<G4AttValue>* GetAttValues  () const;
+  const G4std::vector<G4AttDef>*   GetAttDefs    () const;
 
   void SetVisibility         (G4bool);
   void SetDaughtersInvisible (G4bool);
@@ -93,6 +99,8 @@ public: // With description
   void SetLineWidth          (G4double);
   void SetForceWireframe     (G4bool);
   void SetForceSolid         (G4bool);
+  void SetAttValues          (const G4std::vector<G4AttValue>*);
+  void SetAttDefs            (const G4std::vector<G4AttDef>*);
 
 private:
 
@@ -104,6 +112,8 @@ private:
                                    // pixels for screen, 0.1 mm for paper.
   G4bool      fForceDrawingStyle;  // To switch on forced drawing style.
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
+  const G4std::vector<G4AttValue>* fAttValues;  // For picking, etc.
+  const G4std::vector<G4AttDef>*   fAttDefs;    // Corresponding definitions.
 };
 
 #include "G4VisAttributes.icc"

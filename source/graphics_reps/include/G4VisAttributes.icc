@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisAttributes.icc,v 1.4 2001-07-11 10:01:05 gunter Exp $
+// $Id: G4VisAttributes.icc,v 1.5 2002-10-24 14:36:40 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,15 @@ inline G4bool G4VisAttributes::IsForceDrawingStyle () const {
 inline G4VisAttributes::ForcedDrawingStyle
 G4VisAttributes::GetForcedDrawingStyle () const {
   return fForcedStyle;
+}
+
+inline const G4std::vector<G4AttValue>*
+G4VisAttributes::GetAttValues () const {
+  return fAttValues;
+}
+
+inline const G4std::vector<G4AttDef>* G4VisAttributes::GetAttDefs () const {
+  return fAttDefs;
 }
 
 inline void G4VisAttributes::SetVisibility (G4bool v) {fVisible = v;}
@@ -93,4 +102,14 @@ inline void G4VisAttributes::SetForceWireframe (G4bool force) {
 inline void G4VisAttributes::SetForceSolid (G4bool force) {
   fForceDrawingStyle = force;
   fForcedStyle = G4VisAttributes::solid;
+}
+
+inline void G4VisAttributes::SetAttValues
+ (const G4std::vector<G4AttValue>* attValues){
+  fAttValues = attValues;
+}
+
+inline void G4VisAttributes::SetAttDefs
+ (const G4std::vector<G4AttDef>* attDefs) {
+  fAttDefs = attDefs;
 }
