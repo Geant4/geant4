@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.23 2003-11-18 08:39:25 stesting Exp $
+# $Id: GNUmakefile,v 1.24 2003-11-18 11:11:53 hpw Exp $
 # ----------------------------------------------------------------------
 # GNUmakefile for processes library, Gabriele Cosmo 27-Jun-1998
 # ----------------------------------------------------------------------
@@ -30,7 +30,6 @@ SUBLIBS += G4emutils
 SUBLIBS += G4xrays 
 SUBLIBS += G4emlowenergy
 
-SUBDIRS += hadronic/models/photolepton_hadron
 SUBDIRS +=  hadronic/management 
 SUBDIRS += hadronic/util
 SUBDIRS += hadronic/processes
@@ -59,6 +58,7 @@ SUBDIRS += hadronic/models/leading_particle
 SUBDIRS += hadronic/models/low_energy
 SUBDIRS += hadronic/models/management
 SUBDIRS += hadronic/models/neutron_hp
+SUBDIRS += hadronic/models/photolepton_hadron/muon_nuclear
 SUBDIRS += hadronic/models/parton_string/diffraction
 SUBDIRS += hadronic/models/parton_string/hadronization
 SUBDIRS += hadronic/models/parton_string/management
@@ -102,6 +102,7 @@ SUBLIBS +=  G4hadronic_deex_multifragmentation
 SUBLIBS +=  G4hadronic_deex_photon_evaporation
 SUBLIBS +=  G4hadronic_deex_util
 SUBLIBS +=  G4had_preequ_exciton
+SUBLIBS +=  G4had_muon_nuclear
 SUBLIBS +=  G4had_string_diff
 SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
