@@ -401,6 +401,7 @@ if ( `uname -n` == "NB-BARRAND" ) then
   setenv G4STTDIR  $G4WORKDIR/stt
   setenv G4LIB     $G4WORKDIR/lib
   setenv G4SYSTEM  WIN32-VC7
+  setenv CPPVERBOSE 1
   # Specific :
   setenv CLHEP_BASE_DIR /cygdrive/c/barrand/CLHEP/1.8.1.0/VisualC
 endif
