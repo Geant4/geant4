@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LElasticTest.cc,v 1.2 2003-02-18 14:22:15 jwellisc Exp $
+// $Id: G4LElasticTest.cc,v 1.3 2003-05-12 13:16:43 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Johannes Peter Wellisch, 22.Apr 1997: full test-suite coded.    
@@ -253,12 +253,14 @@ int j = 0;
            {
              second = aFinalState->GetSecondary(isec);
              aSec = const_cast<G4DynamicParticle *> (second->GetDynamicParticle());
-             G4cout << "SECONDARIES info";
-             G4cout << aSec->GetTotalEnergy();
-             G4cout << aSec->GetMomentum();
+             G4cout << aSec->GetTotalEnergy()<<" ";
+             G4cout << aSec->GetMomentum().x()<<" ";
+             G4cout << aSec->GetMomentum().y()<<" ";
+             G4cout << aSec->GetMomentum().z()<<" ";
              G4cout << aSec->GetDefinition()->GetPDGEncoding()<<" ";
 	     G4cout << (1-isec)*aFinalState->GetNumberOfSecondaries()<<" ";
 	     G4cout << aSec->GetDefinition()->GetParticleName()<<" ";
+             G4cout << "SECONDARIES info";
 	     G4cout << G4endl;
 	     if(aSec->GetDefinition()->GetParticleType() == "baryon")
 	     { 

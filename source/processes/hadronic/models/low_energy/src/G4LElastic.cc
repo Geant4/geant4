@@ -176,7 +176,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double cost = 1. - rr;
    G4double sint = sqrt(G4std::max(rr*(2. - rr), 0.));
    if (sint == 0.) return &theParticleChange;
-   if (verboseLevel > 1)
+    if (verboseLevel > 1)
       G4cout << "cos(t)=" << cost << "  sin(t)=" << sint << G4endl;
 // Scattered particle referred to axis of incident particle
    G4double m1=aParticle->GetDefinition()->GetPDGMass();
@@ -189,17 +189,26 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double a=1+m2/m1;
    G4double b=-2.*p*cost;
    G4double c=p*p*(1-m2/m1);
-
-// relativistic calculation
-   a = m1*m1 + p*p*sint*sint;
-   b = 2.*(m1*m1-m2*m2)*p*cost;
-   c = m1*m1*p*p + m1*m1*m2*m2 - m2*m2*m2*m2/4.;
-
    G4double p1 = (-b+sqrt(b*b-4.*a*c))/(2.*a);
    G4double px = p1*sint*sin(phi);
    G4double py = p1*sint*cos(phi);
    G4double pz = p1*cost;
-//   G4cerr << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
+
+// relativistic calculation
+   G4double etot = sqrt(m1*m1+p*p)+m2;
+   a = etot*etot-p*p*cost*cost;
+   b = 2*p*p*(m1*cost*cost-etot);
+   c = p*p*p*p*sint*sint;
+   
+   G4double de = (-b-sqrt(b*b-4.*a*c))/(2.*a);
+   G4double e1 = sqrt(p*p+m1*m1)-de;
+   p1 = sqrt(e1*e1-m1*m1);
+   px = p1*sint*sin(phi);
+   py = p1*sint*cos(phi);
+   pz = p1*cost;
+
+   //G4cout << "Relevant test "<<p<<" "<<p1<<" "<<cost<<" "<<de<<G4endl;
+   //G4cerr << "p1/p = "<<p1/p<<" "<<m1<<" "<<m2<<" "<<a<<" "<<b<<" "<<c<<G4endl;
 // Incident particle
    G4double pxinc = p*(aParticle->GetMomentumDirection().x());
    G4double pyinc = p*(aParticle->GetMomentumDirection().y());
@@ -216,6 +225,7 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    G4double pxre=pxinc-pxnew;
    G4double pyre=pyinc-pynew;
    G4double pzre=pzinc-pznew;
+   G4ThreeVector it0(pxnew*GeV, pynew*GeV, pznew*GeV);
    pxnew = pxnew/p1;
    pynew = pynew/p1;
    pznew = pznew/p1;
@@ -232,12 +242,13 @@ G4LElastic::ApplyYourself(const G4Track& aTrack, G4Nucleus& targetNucleus)
    {
       theParticleChange.SetNumberOfSecondaries(1);
       theParticleChange.SetMomentumChange(pxnew, pynew, pznew);
+      theParticleChange.SetEnergyChange(sqrt(m1*m1+it0.mag2())-m1);
       G4ParticleDefinition * theDef = G4ParticleTable::GetParticleTable()->FindIon(Z,A,0,Z);
-      G4ThreeVector it(pxre, pyre, pzre);
+      G4ThreeVector it(pxre*GeV, pyre*GeV, pzre*GeV);
       G4DynamicParticle * aSec = 
 	  new G4DynamicParticle(theDef, it.unit(), it.mag2()/(2.*m2));
       theParticleChange.AddSecondary(aSec);
-      //G4cout << "Final check ###### "<<p<<" "<<it.mag()<<" "<<p1<<G4endl;
+     // G4cout << "Final check ###### "<<p<<" "<<it.mag()<<" "<<p1<<G4endl;
    }
 
    return &theParticleChange;
