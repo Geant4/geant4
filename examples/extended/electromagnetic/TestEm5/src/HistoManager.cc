@@ -20,13 +20,11 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: HistoManager.cc,v 1.8 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: HistoManager.cc,v 1.9 2004-06-21 10:57:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #include "HistoManager.hh"
 #include "HistoMessenger.hh"
@@ -83,17 +81,19 @@ void HistoManager::book()
   // create selected histograms
   for (G4int k=0; k<MaxHisto; k++) {
     if (exist[k]) {
-      histo[k] = hf->createHistogram1D( Label[k],Title[k],Nbins[k], Vmin[k], Vmax[k]);
+      histo[k] = hf->createHistogram1D( Label[k], Title[k],
+                                                  Nbins[k], Vmin[k], Vmax[k]);
       factoryOn = true;
     }
   }
   if(factoryOn) 
-      G4cout << "----> Histogram Tree is opened " << G4endl;
+      G4cout << "\n----> Histogram Tree is opened " << G4endl;
 
   delete tf;
   delete af;
 #endif
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void HistoManager::save()
@@ -102,7 +102,7 @@ void HistoManager::save()
   if (factoryOn) {
     tree->commit();       // Writing the histograms to the file
     tree->close();        // and closing the tree (and the file)
-    G4cout << "----> Histogram Tree is saved in " << fileName << G4endl;
+    G4cout << "\n----> Histogram Tree is saved in " << fileName << G4endl;
 
     delete hf;
     delete tree;
@@ -121,7 +121,7 @@ void HistoManager::FillHisto(G4int ih, G4double e, G4double weight)
     return;
   }
 #ifdef G4ANALYSIS_USE
-  if(exist[ih]) histo[ih]->fill(e/Unit[ih],weight);
+  if(exist[ih]) histo[ih]->fill(e/Unit[ih], weight);
 #endif
 }
 

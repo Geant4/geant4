@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: HistoManager.hh,v 1.5 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: HistoManager.hh,v 1.6 2004-06-21 10:57:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,13 +56,13 @@ class HistoManager
     void SetFileType (const G4String& name) { fileType = name;};
     void book();
     void save();
+    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
     void FillHisto(G4int id, G4double e, G4double weight = 1.0);
-    void SetHisto (G4int, G4int, G4double, G4double, const G4String& unit="none");
     void RemoveHisto (G4int);
 
-    G4bool                   HistoExist(G4int id)   {return exist[id];}
-    G4double                 GetHistoUnit(G4int id) {return Unit[id];}
-    G4double                 GetBinWidth (G4int id) {return Width[id];}
+    G4bool    HistoExist  (G4int id) {return exist[id];}
+    G4double  GetHistoUnit(G4int id) {return Unit[id];}
+    G4double  GetBinWidth (G4int id) {return Width[id];}
 
   private:
 

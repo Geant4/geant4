@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: EventAction.cc,v 1.3 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: EventAction.cc,v 1.4 2004-06-21 10:57:13 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -40,10 +37,6 @@
 #include "G4Trajectory.hh"
 #include "G4VVisManager.hh"
 
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
-  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(RunAction* RA, HistoManager* histo)

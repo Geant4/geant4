@@ -20,13 +20,10 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-
 //
-// $Id: TrackingAction.cc,v 1.7 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: TrackingAction.cc,v 1.8 2004-06-21 10:57:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -90,10 +87,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && charged) id = 11;
   else if (reflect  && neutral) id = 14;
 
-  if(histoManager->HistoExist(id)) {
-    G4double energy = aTrack->GetKineticEnergy();
-    histoManager->FillHisto(id,energy);
-  }
+  histoManager->FillHisto(id, aTrack->GetKineticEnergy());
 
   //space angle distribution at exit
   //
@@ -103,7 +97,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
   else if (reflect  && neutral) id = 15;
 
   G4ThreeVector direction = aTrack->GetMomentumDirection();
-  if(histoManager->HistoExist(id)) {
+  if (histoManager->HistoExist(id)) {
     G4double theta  = acos(direction.x());
     G4double dteta  = histoManager->GetBinWidth(id);
     G4double weight = 1./(twopi*sin(theta)*dteta);
@@ -130,9 +124,9 @@ void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 
   //projected position at exit
   //
-  if (transmit && charged && histoManager->HistoExist(7)) {
-    histoManager->FillHisto(7,position.y());
-    histoManager->FillHisto(7,position.z());
+  if (transmit && charged) {
+    histoManager->FillHisto(7, position.y());
+    histoManager->FillHisto(7, position.z());
   }
 }
 

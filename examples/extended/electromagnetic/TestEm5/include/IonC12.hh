@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: IonC12.hh,v 1.3 2003-08-11 10:26:24 maire Exp $
+// $Id: IonC12.hh,v 1.4 2004-06-21 10:57:10 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Each class inheriting from G4VIon

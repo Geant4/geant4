@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.6 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: RunAction.cc,v 1.7 2004-06-21 10:57:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,11 +65,9 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   nbStepsNeutral = nbStepsNeutral2 = 0.;
   MscProjecTheta = MscProjecTheta2 = 0.;
 
-  nbGamma = nbElect = nbPosit = nTheta = 0;
+  nbGamma = nbElect = nbPosit = 0;
 
   Transmit[0] = Transmit[1] = Reflect[0] = Reflect[1] = 0;
-
-  MscHighland = ComputeMscHighland();
 
   histoManager->book();
 
@@ -128,9 +123,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   reflect[1] = 100.*Reflect[1]/TotNbofEvents;
 
   G4double rmsMsc = 0.;
-  if (nTheta > 0)
-    rmsMsc = sqrt(MscProjecTheta2/(G4double)nTheta);
-
+  if (Transmit[1] > 0) {
+    MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
+    rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
+    if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
+  }  
 
   G4cout << "\n ======================== run summary ======================\n";
 
@@ -174,11 +171,13 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 
   // compute width of the Gaussian central part of the MultipleScattering
   //
-  G4cout << "\n MultipleScattering: rms proj angle of transmit primary particle = "
+  if (histoManager->HistoExist(6)) {
+    G4cout << "\n MultipleScattering: rms proj angle of transmit primary particle = "
          << rmsMsc/mrad << " mrad " << G4endl;
 
-  G4cout << " MultipleScattering: computed theta0 (Highland formula)          = "
- 	 << MscHighland/mrad << " mrad" << G4endl;
+    G4cout << " MultipleScattering: computed theta0 (Highland formula)          = "
+ 	 << ComputeMscHighland()/mrad << " mrad" << G4endl;
+  }	 
 
   G4cout.precision(prec);
 

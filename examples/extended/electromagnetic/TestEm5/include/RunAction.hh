@@ -20,12 +20,9 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.hh,v 1.4 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: RunAction.hh,v 1.5 2004-06-21 10:57:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,8 +66,7 @@ class RunAction : public G4UserRunAction
                  {TrakLenNeutral += length; TrakLenNeutral2 += length*length;};
 
     void AddMscProjTheta (G4double theta)
-                 { if(abs(theta) < 3.0*MscHighland) {
-		     MscProjecTheta += theta;  MscProjecTheta2 += theta*theta; nTheta++;}};
+                 {MscProjecTheta += theta;  MscProjecTheta2 += theta*theta;};
 
     void CountStepsCharg (G4int nSteps)
                  {nbStepsCharged += nSteps; nbStepsCharged2 += nSteps*nSteps;};
@@ -100,8 +96,7 @@ class RunAction : public G4UserRunAction
     G4double nbStepsCharged, nbStepsCharged2;
     G4double nbStepsNeutral, nbStepsNeutral2;
     G4double MscProjecTheta, MscProjecTheta2;
-    G4double MscHighland;
-    G4int    nbGamma, nbElect, nbPosit, nTheta;
+    G4int    nbGamma, nbElect, nbPosit;
     G4int    Transmit[2],   Reflect[2];
 
     DetectorConstruction*   detector;

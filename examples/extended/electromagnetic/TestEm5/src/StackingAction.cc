@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: StackingAction.cc,v 1.2 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: StackingAction.cc,v 1.3 2004-06-21 10:57:15 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,10 +34,6 @@
 #include "StackingMessenger.hh"
 
 #include "G4Track.hh"
-
-#ifdef G4ANALYSIS_USE
- #include "AIDA/IHistogram1D.h"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

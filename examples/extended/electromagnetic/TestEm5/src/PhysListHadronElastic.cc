@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: PhysListHadronElastic.cc,v 1.3 2004-06-18 09:18:11 gunter Exp $
+// $Id: PhysListHadronElastic.cc,v 1.4 2004-06-21 10:57:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

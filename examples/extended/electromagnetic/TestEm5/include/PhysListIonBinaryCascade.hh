@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListIonBinaryCascade.hh,v 1.2 2004-04-29 13:55:10 maire Exp $
+// $Id: PhysListIonBinaryCascade.hh,v 1.3 2004-06-21 10:57:11 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Class Description:
@@ -49,7 +49,7 @@ class PhysListIonBinaryCascade : public G4VPhysicsConstructor
 {
   public:
     PhysListIonBinaryCascade(const G4String& name = "binary_ion");
-    virtual ~PhysListIonBinaryCascade();
+   ~PhysListIonBinaryCascade();
 
   public:
     // This method will be invoked in the Construct() method.

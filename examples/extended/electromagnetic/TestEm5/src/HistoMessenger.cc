@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: HistoMessenger.cc,v 1.3 2004-06-18 09:47:49 vnivanch Exp $
+// $Id: HistoMessenger.cc,v 1.4 2004-06-21 10:57:14 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,9 +88,9 @@ HistoMessenger::~HistoMessenger()
 {
   delete rmhistoCmd;
   delete histoCmd;
+  delete typeCmd;  
   delete factoryCmd;
   delete histoDir;
-  delete typeCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -116,7 +115,7 @@ void HistoMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
    }
     
   if (command == rmhistoCmd)
-   { histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));}         
+    histoManager->RemoveHisto(rmhistoCmd->GetNewIntValue(newValues));         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
