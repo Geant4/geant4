@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.cc,v 1.26 2004-07-02 16:02:29 gcosmo Exp $
+// $Id: G4BREPSolid.cc,v 1.27 2004-09-15 09:50:34 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,8 @@ G4BREPSolid::G4BREPSolid(const G4String& name)
  : G4VSolid(name),
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   nb_of_surfaces(0), SurfaceVec(0), solidname(name)
+   nb_of_surfaces(0), SurfaceVec(0), solidname(name),
+fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.)
 {
 }
 
@@ -61,7 +62,8 @@ G4BREPSolid::G4BREPSolid( const G4String&   name        ,
  : G4VSolid(name),
    Box(0), Convex(0), AxisBox(0), PlaneSolid(0), place(0), bbox(0),
    intersectionDistance(kInfinity), active(1), startInside(0),
-   nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec)
+   nb_of_surfaces(numberOfSrfs), SurfaceVec(srfVec),
+fCubVolStatistics(1000000),fCubVolEpsilon(0.001),fCubicVolume(0.)
 {
   Initialize();
 }

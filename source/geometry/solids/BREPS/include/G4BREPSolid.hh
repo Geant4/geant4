@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolid.hh,v 1.11 2003-06-16 16:52:22 gunter Exp $
+// $Id: G4BREPSolid.hh,v 1.12 2004-09-15 09:50:32 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -140,7 +140,13 @@ public: // with description
   inline G4int GetNumberOfSolids() const;
   inline const G4Axis2Placement3D* GetPlace() const;
   inline const G4BoundingBox3D*    GetBBox()  const;
-    // Accessors methods.
+  inline G4double GetCubicVolume();
+   // Accessors methods.
+  G4int GetCubVolStatistics() const {return fCubVolStatistics;};
+  G4double GetCubVolEpsilon() const {return fCubVolEpsilon;};
+
+  void SetCubVolStatistics(G4int st) {fCubVolStatistics=st;};
+  void SetCubVolEpsilon(G4double ep) {fCubVolEpsilon=ep;};
 
 public:
 
@@ -198,6 +204,11 @@ protected:
    
 
 private:
+
+  G4int    fCubVolStatistics;
+  G4double fCubVolEpsilon;
+  G4double fCubicVolume;
+
 
   G4BREPSolid(const G4BREPSolid&);
   G4BREPSolid& operator=(const G4BREPSolid&);
