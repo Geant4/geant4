@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsViewerSet.cc,v 1.26 2004-08-03 15:58:01 johna Exp $
+// $Id: G4VisCommandsViewerSet.cc,v 1.27 2004-09-13 20:22:11 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 // /vis/viewer/set commands - John Allison  16th May 2000
@@ -652,7 +652,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandLightsVector) {
-    fLightsVector = G4UIcommand::ConvertToInt(newValue);
+    fLightsVector = G4UIcommand::ConvertTo3Vector(newValue);
     vp.SetLightpointDirection(fLightsVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Lights direction set to "
@@ -825,7 +825,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandUpVector) {
-    fUpVector = G4UIcommand::ConvertToInt(newValue);
+    fUpVector = G4UIcommand::ConvertTo3Vector(newValue);
     vp.SetUpVector(fUpVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Up direction set to " << vp.GetUpVector() << G4endl;
@@ -851,7 +851,7 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = G4UIcommand::ConvertToInt(newValue);
+    fViewpointVector = G4UIcommand::ConvertTo3Vector(newValue);
     vp.SetViewAndLights(fViewpointVector);
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Viewpoint direction set to "
