@@ -28,11 +28,11 @@ G4InteractorMessenger::G4InteractorMessenger (
 
   G4UIparameter* parameter;
 
-  interactorDirectory = new G4UIdirectory("/interactor/");
+  interactorDirectory = new G4UIdirectory("/gui/");
   interactorDirectory->SetGuidance("UI interactors commands.");
 
-  // /interactor/addMenu :
-  addMenu = new G4UIcommand("/interactor/addMenu",this);
+  // /gui/addMenu :
+  addMenu = new G4UIcommand("/gui/addMenu",this);
   addMenu->SetGuidance("Add a menu to menu bar.");
   parameter = new G4UIparameter("Name",'s',false);
   parameter->SetDefaultValue("dummy");
@@ -41,8 +41,8 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter->SetDefaultValue("dummy");
   addMenu->SetParameter (parameter);
 
-  // /interactor/addButton :
-  addButton = new G4UIcommand("/interactor/addButton",this);
+  // /gui/addButton :
+  addButton = new G4UIcommand("/gui/addButton",this);
   addButton->SetGuidance("Add a button to menu.");
   parameter = new G4UIparameter("Menu",'s',false);
   parameter->SetDefaultValue("dummy");
@@ -53,6 +53,13 @@ G4InteractorMessenger::G4InteractorMessenger (
   parameter = new G4UIparameter("Command",'s',false);
   parameter->SetDefaultValue("");
   addButton->SetParameter (parameter);
+
+  // /gui/system :
+  sys = new G4UIcommand("/gui/system",this);
+  sys->SetGuidance("Send a command to the system.");
+  parameter = new G4UIparameter("Command",'s',false);
+  parameter->SetDefaultValue("");
+  sys->SetParameter (parameter);
 
 }
 
@@ -75,6 +82,8 @@ void G4InteractorMessenger::SetNewValue (
       session->AddMenu((const char*)params[0],(const char*)params[1]);
     } else if(command==addButton) {
       session->AddButton((const char*)params[0],(const char*)params[1],(const char*)params[2]);
+    } else if(command==sys) {
+      system((const char*)params[0]);
     }
   }
   delete [] params;

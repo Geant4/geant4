@@ -1,4 +1,4 @@
-$Id: History,v 1.22 2000-05-19 07:04:59 johna Exp $
+$Id: History,v 1.23 2000-05-22 01:30:48 barrand Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+20 May 2000 Guy Barrand
+- common/G4InteractorMessenger : change command name "interactor" to "gui".
 
 19 May 2000 John Allison  (interfaces-V01-01-00)
 - G4UIterminal displays a candidate list in case a given parameter is
