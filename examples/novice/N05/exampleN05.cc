@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN05.cc,v 1.5 1999-12-15 14:49:27 gunter Exp $
+// $Id: exampleN05.cc,v 1.6 2000-06-29 07:42:05 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -56,7 +56,7 @@
 #include "G4RunManager.hh"
 
 #ifdef G4VIS_USE
-#include "MyVisManager.cc"
+#include "ExN05VisManager.hh"
 #endif
 
 #include "G4ios.hh"
@@ -96,8 +96,8 @@ int main(int argc, char** argv) {
   // Visualization:
   //----------------
 #ifdef G4VIS_USE
-  G4cout << "Instantiating MyVisManager......." << G4endl;
-  G4VisManager* visManager = new MyVisManager;
+  G4cout << "Instantiating Visualization Manager......." << G4endl;
+  G4VisManager* visManager = new ExN05VisManager;
   visManager -> Initialize ();
 #endif
 
