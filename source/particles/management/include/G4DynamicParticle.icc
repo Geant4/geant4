@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.icc,v 1.6 2001-01-18 12:46:05 kurasige Exp $
+// $Id: G4DynamicParticle.icc,v 1.7 2001-03-05 08:32:16 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -179,11 +179,6 @@ inline void G4DynamicParticle::SetMomentumDirection(G4double px, G4double py, G4
   theMomentumDirection.setZ(pz);
 }
 
-inline void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
-{
-  theParticleDefinition = aParticleDefinition;
-  theDynamicalMass = theParticleDefinition->GetPDGMass();
-}
 
 inline void G4DynamicParticle::SetPolarization(G4double polX, G4double polY, G4double polZ)
 {

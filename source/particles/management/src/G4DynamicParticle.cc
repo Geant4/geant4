@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DynamicParticle.cc,v 1.8 2001-01-18 12:46:08 kurasige Exp $
+// $Id: G4DynamicParticle.cc,v 1.9 2001-03-05 08:32:38 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -35,6 +35,8 @@
 //         modify DumpInfo()
 //      revised by Hisaya Kurashige, 5  June 1998
 //         remove    theKillProcess
+//      revised by Hisaya Kurashige, 5  Mar 2001
+//         fixed  SetDefinition()
 //--------------------------------------------------------------
 #include "G4DynamicParticle.hh"
 #include "G4DecayProducts.hh"
@@ -256,6 +258,32 @@ G4DynamicParticle & G4DynamicParticle::operator=(const G4DynamicParticle &right)
 }
 
 ////////////////////
+void G4DynamicParticle::SetDefinition(G4ParticleDefinition * aParticleDefinition)
+{
+  // remove preassigned decay
+  if (thePreAssignedDecayProducts != 0) {
+    G4cout << " G4DynamicParticle::SetDefinition()::";
+    G4cout << "!!! Pre-assigned decay products is attached !!!! " << G4endl; 
+    DumpInfo(0); 
+    G4cout << "!!! New Definition is " << aParticleDefinition->GetParticleName() << " !!! " << G4endl; 
+    G4cout << "!!! Pre-assigned decay products will be deleted !!!! " << G4endl; 
+    delete thePreAssignedDecayProducts;
+  }
+  thePreAssignedDecayProducts = 0;
+
+  theParticleDefinition = aParticleDefinition;
+  // set Dynamic mass/chrge
+  theDynamicalMass = theParticleDefinition->GetPDGMass();
+  theDynamicalCharge = theParticleDefinition->GetPDGCharge();
+
+  // Set electron orbits
+  if (theElectronOccupancy != 0) delete theElectronOccupancy;
+  theElectronOccupancy =0;
+  AllocateElectronOccupancy();
+
+}
+
+////////////////////
 G4int G4DynamicParticle::operator==(const G4DynamicParticle &right) const
 {
   return (this == (G4DynamicParticle *) &right);
@@ -354,11 +382,6 @@ void G4DynamicParticle::DumpInfo(G4int mode) const
          << "   Kinetic Energy = " << GetKineticEnergy() /GeV << "[GeV]" << G4endl
          << "   ProperTime     = " << GetProperTime() /ns <<  "[ns]" << G4endl;
     if (mode>0) {
-      if( theElectronOccupancy != 0) {
-	theElectronOccupancy->DumpInfo();
-      }
-    }
-    if (mode>1) {
       if( theElectronOccupancy != 0) {
 	theElectronOccupancy->DumpInfo();
       }
