@@ -5,11 +5,16 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FlavoredParallelWorldModel.hh,v 1.3 1999-04-16 09:05:39 mora Exp $
+// $Id: G4FlavoredParallelWorldModel.hh,v 1.4 1999-11-25 14:18:44 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // P. Mora de Freitas et M.Verderi - 19 June 1998.
-// Model for flavored parallel world volumes.
+//
+// Class Description:
+//
+// Model for flavored parallel world volumes.  Inherits from
+// G4PhysicalVolumeModel; for more information see that class
+// description.
 
 #ifndef G4FLAVOREDPARALLELWORLDMODEL_HH
 #define G4FLAVOREDPARALLELWORLDMODEL_HH
@@ -20,7 +25,7 @@ class G4VFlavoredParallelWorld;
 
 class G4FlavoredParallelWorldModel : public G4PhysicalVolumeModel {
   
-public:
+public: // With description
   
   G4FlavoredParallelWorldModel
   (G4VFlavoredParallelWorld* FPW,

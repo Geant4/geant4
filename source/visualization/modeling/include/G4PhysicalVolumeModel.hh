@@ -5,15 +5,21 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PhysicalVolumeModel.hh,v 1.5 1999-11-10 18:20:58 johna Exp $
+// $Id: G4PhysicalVolumeModel.hh,v 1.6 1999-11-25 14:18:49 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  31st December 1997.
-// Model for physical volumes.
-
-// It describes a physical volume and its daughters to any desired depth.
-// Note: the "sought depth" is specified in the modeling parameters.
+//
+// Class Description:
+//
+// Model for physical volumes.  It describes a physical volume and its
+// daughters to any desired depth.  Note: the "sought depth" is
+// specified in the modeling parameters.
+//
+// For access to base class information, e.g., modeling parameters,
+// use GetModelingParameters() inherited from G4VModel.  See Class
+// Description of the base class G4VModel.
 
 #ifndef G4PHYSICALVOLUMEMODEL_HH
 #define G4PHYSICALVOLUMEMODEL_HH
@@ -30,7 +36,7 @@ class G4VisAttributes;
 
 class G4PhysicalVolumeModel: public G4VModel {
 
-public:
+public: // With description
 
   enum {UNLIMITED = -1};
 
@@ -57,26 +63,20 @@ public:
   // implementation of this function and
   // G4VSceneHandler::Establish/DecommissionSpecials.
 
-  G4String GetCurrentTag () const;
-  // A tag which depends on the current state of the model.
-
   G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
+
+  G4String GetCurrentTag () const;
+  // A tag which depends on the current state of the model.
 
   G4bool Validate ();
   // Validate, but allow internal changes (hence non-const function).
 
-  //////////////////////////////////////////////////////////
-  // Access functions.
-
   void DefinePointersToWorkingSpace (G4int*              pCurrentDepth,
 				     G4VPhysicalVolume** ppCurrentPV,
 				     G4LogicalVolume**   ppCurrentLV);
-
-  /////////////////////////////////////////////////
-  // Access to other information: use GetModelingParameters()
-  // (inherited from G4VModel) and the access functions of
-  // G4ModelingParameters.
+  // For use (optional) by the scene handler if it needs to know about
+  // the current information maintained through these pointers.
 
 protected:
 

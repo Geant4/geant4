@@ -1,4 +1,4 @@
-$Id: History,v 1.2 1999-02-07 17:24:13 johna Exp $
+$Id: History,v 1.3 1999-11-25 14:18:40 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/modeling
 ---------------------------------------
+
+vis-V00-01-10  25th November 1999  John Allison
+- Adapted header files of modeling for Software Reference Manual.
+
+vis-01-00-05  7th February 1999  John Allison
 
 vis-01-00-05  7th February 1999  John Allison
 - Added list facility to G4PhysicalVolumeSearchScene.

@@ -5,15 +5,19 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LogicalVolumeModel.hh,v 1.1 1999-10-04 15:37:37 johna Exp $
+// $Id: G4LogicalVolumeModel.hh,v 1.2 1999-11-25 14:18:46 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 // John Allison  26th July 1999.
-// Model for logical volumes.
-
-// It describes a logical volume and its daughters to any depth -
-// usually only the first by default.
+//
+// Class Description:
+//
+// Model for logical volumes.  It describes a logical volume and its
+// daughters to any depth - usually only the first by default.
+//
+// Inherits from G4PhysicalVolumeModel; for more information see that
+// class description.
 
 #ifndef G4LOGICALVOLUMEMODEL_HH
 #define G4LOGICALVOLUMEMODEL_HH
@@ -28,7 +32,7 @@ class G4ModelingParameters;
 
 class G4LogicalVolumeModel: public G4PhysicalVolumeModel {
 
-public:
+public: // With description
 
   G4LogicalVolumeModel
   (G4LogicalVolume*,
@@ -38,10 +42,10 @@ public:
 
   virtual ~G4LogicalVolumeModel ();
 
+  void DescribeYourselfTo (G4VGraphicsScene&);
+
   G4String GetCurrentDescription () const;
   // A description which depends on the current state of the model.
-
-  void DescribeYourselfTo (G4VGraphicsScene&);
 
 protected:
 
