@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastSimulationManager.cc,v 1.5 2001-07-11 10:08:24 gunter Exp $
+// $Id: G4FastSimulationManager.cc,v 1.6 2001-10-26 14:43:36 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -82,7 +82,7 @@ G4FastSimulationManager::~G4FastSimulationManager()
 G4bool
 G4FastSimulationManager::ActivateFastSimulationModel(const G4String& aName) 
 {
-  G4int iModel;
+  size_t iModel;
 
   // If the model is already active, do nothing.
   for (iModel=0; iModel<ModelList.size(); iModel++)
@@ -107,7 +107,7 @@ G4FastSimulationManager::InActivateFastSimulationModel(const G4String& aName)
 {
   // Look for in the ModelList, if found remove from it and keep the pointer 
   // on the fInactivatedModels list.
-  for (G4int iModel=0; iModel<ModelList.size(); iModel++)
+  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
     if(ModelList[iModel]->GetName() == aName) {
       fInactivatedModels.
 	push_back (ModelList.removeAt(iModel));
@@ -181,7 +181,7 @@ G4FastSimulationManager::
 PostStepGetFastSimulationManagerTrigger(const G4Track& track,
 					const G4Navigator* theNavigator)
 {
-  G4int iModel;
+  size_t iModel;
   
   // If particle type changed re-build the fApplicableModelList.
   if(fLastCrossedParticle!=track.GetDefinition()) {
@@ -246,7 +246,7 @@ G4bool
 G4FastSimulationManager::AtRestGetFastSimulationManagerTrigger(const G4Track& track,
 							       const G4Navigator* theNavigator)
 {
-  G4int iModel;
+  size_t iModel;
   
   // If particle type changed re-build the fApplicableModelList.
   if(fLastCrossedParticle!=track.GetDefinition()) {
@@ -301,10 +301,10 @@ InsertGhostHereIfNecessary(G4VPhysicalVolume* theClone,
 
   // If there are, verifies if at least one model is applicable
   // for theParticle.
-  for (G4int iModel=0; iModel<ModelList.size(); iModel++)
+  for (size_t iModel=0; iModel<ModelList.size(); iModel++)
     if(ModelList[iModel]->IsApplicable(theParticle)) {
       // Ok, we find one. Place the ghost(s).
-      for (G4int ighost=0; ighost<GhostPlacements.size(); ighost++)
+      for (size_t ighost=0; ighost<GhostPlacements.size(); ighost++)
 	GhostPhysical=new 
 	  G4PVPlacement(*(GhostPlacements[ighost]),
 			fFastTrack.GetEnvelope()->GetName(),
@@ -328,7 +328,7 @@ G4FastSimulationManager::ListTitle() const
 void 
 G4FastSimulationManager::ListModels() const
 {
-  G4int iModel;
+  size_t iModel;
 
   G4cout << "Current Models for the ";
   ListTitle();
@@ -345,7 +345,7 @@ G4FastSimulationManager::ListModels() const
 void 
 G4FastSimulationManager::ListModels(const G4String& aName) const
 {
-  G4int iModel;
+  size_t iModel;
   G4int titled = 0;
   G4ParticleTable* theParticleTable=
     G4ParticleTable::GetParticleTable();
@@ -404,7 +404,7 @@ G4FastSimulationManager::ListModels(const G4String& aName) const
 void 
 G4FastSimulationManager::ListModels(const G4ParticleDefinition* aPD) const
 {
-  G4int iModel;
+  size_t iModel;
   G4bool unique=true;
   
   // Active Models

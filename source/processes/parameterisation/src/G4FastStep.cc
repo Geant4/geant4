@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastStep.cc,v 1.8 2001-07-11 10:08:24 gunter Exp $
+// $Id: G4FastStep.cc,v 1.9 2001-10-26 14:43:36 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -320,10 +320,10 @@ G4Step* G4FastStep::UpdateStepForPostStep(G4Step* pStep)
   // pointer to G4ParticleMometum. Also it is a normalized 
   // momentum vector.
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
+  //  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
+  //  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumChange);
@@ -353,10 +353,10 @@ G4Step* G4FastStep::UpdateStepForAtRest(G4Step* pStep)
 { 
   // A physics process always calculates the final state of the particle
 
-  G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
+  // G4StepPoint* pPreStepPoint  = pStep->GetPreStepPoint(); 
   G4StepPoint* pPostStepPoint = pStep->GetPostStepPoint(); 
   G4Track*     aTrack  = pStep->GetTrack();
-  G4double     mass = aTrack->GetDynamicParticle()->GetMass();
+  // G4double     mass = aTrack->GetDynamicParticle()->GetMass();
  
   // update kinetic energy and momentum direction
   pPostStepPoint->SetMomentumDirection(theMomentumChange);

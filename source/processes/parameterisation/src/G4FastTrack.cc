@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FastTrack.cc,v 1.5 2001-07-11 10:08:25 gunter Exp $
+// $Id: G4FastTrack.cc,v 1.6 2001-10-26 14:43:37 mverderi Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------
@@ -47,8 +47,8 @@
 //
 G4FastTrack::G4FastTrack(G4Envelope *anEnvelope,
 			 G4bool IsUnique) :
-  fEnvelope(anEnvelope),fEnvelopeSolid(fEnvelope->GetSolid()),
-  fIsUnique(IsUnique), fAffineTransformationDefined(false)
+  fAffineTransformationDefined(false),   fEnvelope(anEnvelope),
+  fIsUnique(IsUnique),   fEnvelopeSolid(fEnvelope->GetSolid())
 {}
 
 // -----------
