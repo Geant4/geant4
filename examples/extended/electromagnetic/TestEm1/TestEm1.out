@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (06-Apr-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -112,7 +112,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV
             Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.14 2001-04-19 19:36:36 stesting Exp $
+# $Id: TestEm1.out,v 1.15 2001-04-26 12:33:03 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -218,7 +218,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=54s Real=60s Sys=5.5s
+  User=53s Real=58s Sys=5.3s
 
  nb tracks/event   neutral:   28.25   charged:  664.76
  nb  steps/event   neutral:  148.67   charged: 2195.14

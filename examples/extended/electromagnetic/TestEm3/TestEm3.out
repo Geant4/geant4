@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (06-Apr-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 
@@ -163,7 +163,7 @@ Cut in energy
            Galactic         990 eV          990 eV 
                Beam         990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.15 2001-04-19 19:36:53 stesting Exp $
+# $Id: TestEm3.out,v 1.16 2001-04-26 12:33:36 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -196,7 +196,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.3e+02s Real=1.4e+02s Sys=9.9s
+  User=1.2e+02s Real=1.3e+02s Sys=9.9s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 

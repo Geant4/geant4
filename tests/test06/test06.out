@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (06-Apr-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 SimpleBox is now made of Pb
@@ -87,7 +87,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=15.46s Real=16.29s Sys=0.76s
+  User=15.83s Real=16.36s Sys=0.51s
 #
 # electron 500 MeV in Air
 #
@@ -100,7 +100,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.29s Real=1.29s Sys=0s
+  User=1.27s Real=1.29s Sys=0.02s
 #
 exit
 G4 kernel has come to Quit state.

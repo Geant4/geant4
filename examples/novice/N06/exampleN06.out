@@ -1,6 +1,6 @@
 **********************************************
  Geant4 version $Name: not supported by cvs2svn $
-                                (15-Dec-2000)
+                                (06-Apr-2001)
              Copyright : Geant4 Collaboration
 **********************************************
 /run/initialize
@@ -19637,5 +19637,5 @@ Track (trackID 1909, parentID 1) is processed with stopping code 2
      0 urgent tracks and 0 waiting tracks.
 NULL returned from G4StackManager.
 Terminate current event processing.
-number of event = 1 User=2.94s Real=3.3s Sys=0.32s
+number of event = 1 User=2.84s Real=3.22s Sys=0.3s
 exit
