@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eBremsstrahlung.cc,v 1.12 2000-08-08 10:28:01 urban Exp $
+// $Id: G4eBremsstrahlung.cc,v 1.13 2000-09-21 09:34:29 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,6 +31,7 @@
 // 03-03-99 : Bug fixed in LPM effect, L.Urban
 // 10/02/00  modifications , new e.m. structure, L.Urban
 // 07/08/00  new cross section/en.loss parametrisation, LPM flag , L.Urban
+// 21/09/00 : corrections in the LPM implementation, L.Urban
 // --------------------------------------------------------------
 
 #include "G4eBremsstrahlung.hh"
@@ -41,7 +42,7 @@
 G4double G4eBremsstrahlung::LowerBoundLambda = 1.*keV ;
 G4double G4eBremsstrahlung::UpperBoundLambda = 100.*TeV ;
 G4int	 G4eBremsstrahlung::NbinLambda = 100 ;
-G4double G4eBremsstrahlung::probsup = 0.50 ;
+G4double G4eBremsstrahlung::probsup = 1.00 ;
 G4bool G4eBremsstrahlung::LPMflag = true;  
 
 
@@ -203,6 +204,13 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
 
             }
 
+	   static const G4double MigdalConstant = classic_electr_radius
+                                                 *electron_Compton_length
+                                                 *electron_Compton_length/pi;
+	   G4double TotalEnergy = KineticEnergy+electron_mass_c2 ;
+	   G4double kp2 = MigdalConstant*TotalEnergy*TotalEnergy*
+                                     (material->GetElectronDensity()) ;
+
            // now compute the correction due to the supression(s)
            G4double kmin = 1.*eV ;
            G4double kmax = Cut ;
@@ -227,6 +235,9 @@ void G4eBremsstrahlung::BuildLossTable(const G4ParticleDefinition& aParticleType
                u = exp(v) ;
                
                fac = u*SupressionFunction(material,KineticEnergy,u) ;
+
+             probsup = 1. ;
+		fac *= probsup*(u*u/(u*u+kp2))+1.-probsup ;
 
                if((n==0)||(n==nn))
                  c=0.5;
@@ -521,7 +532,6 @@ G4double G4eBremsstrahlung::ComputeMeanFreePath(
                fac *= c ;
                fsig += fac ;
              }
-            // fsig *=dv/log(kmax/kmin) ;
              y = kmin/kmax ;
              fsig *=dv/(-4.*log(y)/3.-4.*(1.-y)/3.+0.5*(1.-y*y)) ;
 
@@ -875,13 +885,8 @@ G4VParticleChange* G4eBremsstrahlung::PostStepDoIt(const G4Track& trackData,
    if(LPMflag)
    {
      // take into account the supression due to the LPM effect
-     if(GammaEnergy < LPMGammaEnergyLimit)
-     {
-       if (G4UniformRand() <= SupressionFunction(aMaterial,KineticEnergy,GammaEnergy))
-        LPMOK = true ;
-     }
-     else
-       LPMOK = true ;
+     if (G4UniformRand() <= SupressionFunction(aMaterial,KineticEnergy,GammaEnergy))
+     LPMOK = true ;
    }
    else
      LPMOK = true ;
@@ -997,6 +1002,9 @@ G4double G4eBremsstrahlung::SupressionFunction(const G4Material* aMaterial,
 
     if(s2lpm < 1.)
     {
+      if((1.-sp) < 1.e-6)
+      w = s2lpm*(3.-sp) ;
+      else
       w = s2lpm*(1.+1./sp) ;
       supr = Cnorm*(sqrt(w*w+4.*s2lpm)-w)/2. ;
     }
