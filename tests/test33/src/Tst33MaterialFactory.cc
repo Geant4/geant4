@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33MaterialFactory.cc,v 1.4 2002-11-04 10:57:48 dressel Exp $
+// $Id: Tst33MaterialFactory.cc,v 1.5 2003-02-19 08:35:16 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -34,8 +34,6 @@
 #include "Tst33MaterialFactory.hh"
 #include "G4Element.hh"
 #include "G4Material.hh"
-#include "PhysicalConstants.h"
-
 
 Tst33MaterialFactory::Tst33MaterialFactory(){
 
