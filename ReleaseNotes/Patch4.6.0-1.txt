@@ -8,12 +8,15 @@ List of fixes included in this public patch since release 6.0:
 
   o Configuration:
     -------------
+    + Configure:
+      o Corrected defaults for shared-libs build.
+    + architecture.gmk:
+      o Protect OGLFLAGS against containing include path to /usr/include.
+        This may cause wrong includes to be picked up.
     + Darwin-g++.gmk:
       o Adopt "g++" as the default as compiler.
       o Corrected procedure for building .dylib shared libs.
         Previous default Linux commands do not work on MacOSX.
-    + Configure:
-      o Corrected defaults for shared-libs build.
 
   o Geometry:
     --------
