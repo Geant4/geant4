@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hTestStoppingPower.cc,v 1.3 2000-09-04 14:16:18 vnivanch Exp $
+// $Id: G4hTestStoppingPower.cc,v 1.4 2000-09-16 18:34:06 chauvie Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // -------------------------------------------------------------------
@@ -51,7 +51,7 @@
 
 #include "G4hZiegler1977Nuclear.hh"
 #include "G4hZiegler1985Nuclear.hh"
-#include "G4hMollereNuclear.hh"
+//#include "G4hMollereNuclear.hh" // exist no more
 
 
 #include "G4Box.hh"
@@ -241,7 +241,7 @@ main()
   G4double tkin;
   s = (log10(maxE)-log10(minE))/num;
 
- HepHistogram* h[60] ;
+ HepHistogram* h[69] ;
        
   // Test on Stopping Powers for all elements
 
@@ -377,7 +377,30 @@ main()
                                                   ,92,0.5,92.5) ;
  h[59] =  hbookManager->histogram("p 4 MeV   (keV*cm2/10^15!atoms) Ziegler1985p"
                                                   ,92,0.5,92.5) ;
+// Histo for Antiproton
+ 
+ h[60]= hbookManager->histogram("pbar   in C (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[61]= hbookManager->histogram("pbar   in Al (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[62]= hbookManager->histogram("pbar   in Si (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[63]= hbookManager->histogram("pbar   in Cu (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[64]= hbookManager->histogram("pbar   in Fe (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[65]= hbookManager->histogram("pbar   in Pb (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[66]= hbookManager->histogram("pbar   in C2H6 (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[67]= hbookManager->histogram("pbar   in H2O (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[68]= hbookManager->histogram("pbar   in lAr (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
+ h[69]= hbookManager->histogram("pbar   in CsI (MeV/mm) QAOLoss"
+                                   ,num,log10(minE),log10(maxE)) ;
 
+ 
  G4VhElectronicStoppingPower* Z77p = new G4hZiegler1977p() ;
  G4VhElectronicStoppingPower* Z85p = new G4hZiegler1985p() ;
  G4VhElectronicStoppingPower* Z77He = new G4hZiegler1977He() ;
@@ -551,6 +574,34 @@ main()
   }
 
   G4cout << "Proton's dEdx histograms are filled!" << G4endl;
+  
+  for (j = 0 ; j < num-1 ; j++) {
+    tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
+    de = hIon[0]->ComputeDEDX(part[1],Graphite,tkin) ;
+    h[60]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],Al,tkin) ;
+    h[61]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],Si,tkin) ;
+    h[62]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],Cu,tkin) ;
+    h[63]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],Fe,tkin) ;
+    h[64]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],Pb,tkin) ;
+    h[65]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],ethane,tkin) ;
+    //    G4cout << "ethane: E = " << tkin << "; dedx = " << de << G4endl;
+    h[66]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],water,tkin) ;
+    //    G4cout << "water : E = " << tkin << "; dedx = " << de << G4endl;
+    h[67]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],LAr,tkin) ;
+    h[68]->accumulate(log10(tkin),de) ;
+    de = hIon[0]->ComputeDEDX(part[1],csi,tkin) ;
+    h[69]->accumulate(log10(tkin),de) ;
+  }
+
+  G4cout << "AntiProton's dEdx histograms are filled!" << G4endl;
 
   for (j = 0 ; j < num-1 ; j++) {
     tkin = pow(10.0,(log10(minE) + (G4double(j)+0.5)*s));
