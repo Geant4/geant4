@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst14PhysicsList.cc,v 1.13 2001-11-04 10:47:18 vnivanch Exp $
+// $Id: Tst14PhysicsList.cc,v 1.14 2002-05-31 22:22:25 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 
@@ -233,7 +233,7 @@ void Tst14PhysicsList::SetLowEnSecElecCut(G4double cut){
   G4cout<<"Low energy secondary electrons cut is now set to: "<<cut*MeV<<" (MeV)"<<G4endl;
   //  G4cout<<"for processes LowEnergyBremsstrahlung, LowEnergyPhotoElectric, LowEnergyIonisation"<<G4endl;
   G4cout<<"for processes LowEnergyIonisation"<<G4endl;
-  //  G4LowEnergyPhotoElectric::SetCutForLowEnSecElectrons(cut);
+  LePeprocess->SetCutForLowEnSecElectrons(cut);
   LeIoprocess->SetCutForLowEnSecElectrons(cut);
 }
 
