@@ -2,6 +2,7 @@
 #define G4BinaryLightIonReaction_h
 
 #include "G4BinaryCascade.hh"
+#include "G4PreCompoundModel.hh"
 
 class G4BinaryLightIonReaction : public G4HadronicInteraction 
 {
@@ -10,6 +11,7 @@ class G4BinaryLightIonReaction : public G4HadronicInteraction
   
   private:
     G4BinaryCascade theModel;
+    G4PreCompoundModel theProjectileFragmentation;
 };
 
 #endif

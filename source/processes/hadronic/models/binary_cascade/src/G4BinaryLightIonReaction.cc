@@ -6,9 +6,7 @@
 
 G4VParticleChange *G4BinaryLightIonReaction::
 ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
-{
-    // add rotation to Z !!!!! @@@@@@
-    
+{    
     G4double a1=aTrack.GetDefinition()->GetBaryonNumber();
     G4double z1=aTrack.GetDefinition()->GetPDGCharge();
     G4double m1=aTrack.GetDefinition()->GetPDGMass();
@@ -32,11 +30,12 @@ ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
     }
 
     G4ReactionProductVector * result = 0;
+    G4V3DNucleus * fancyNucleus(0);
     while(!result)
     {
       G4V3DNucleus * projectile = new G4Fancy3DNucleus;
       projectile->Init(a1, z1);
-      G4V3DNucleus * fancyNucleus = new G4Fancy3DNucleus;  
+      fancyNucleus = new G4Fancy3DNucleus;  
       fancyNucleus->Init(a2, z2);
 
       G4double impactMax = fancyNucleus->GetOuterRadius()+projectile->GetOuterRadius();
@@ -72,14 +71,49 @@ ApplyYourself(const G4Track &aTrack, G4Nucleus & targetNucleus )
       
     }
     //inverse transformation in case we swapped.
-    fancyNucleus->StartLoop();   
+    fancyNucleus->StartLoop();  
+    G4int resA(0), resZ(0); 
+    G4Nucleon * aNuc;
     while( (aNuc=fancyNucleus->GetNextNucleon()) )
     {
-      if(!aNuc->Hit())
+      if(!aNuc->AreYouHit())
       {
-        // stuff them away.
+        resA++;
+	resZ+=aNuc->GetDefinition()->GetPDGCharge();
+      }
+      // Calculate excitation energy
+      // ...
+      G4double anEnergy(0);
+      
+      // Calculate net momentum
+      // ...
+      G4ThreeVector p;
+      
+      //Make the fragment
+      G4Fragment aProRes;
+      aProRes.SetA(resA);
+      aProRes.SetZ(resZ);
+      aProRes.SetNumberOfParticles(0);
+      aProRes.SetNumberOfCharged(0);
+      aProRes.SetNumberOfHoles(a2-resA);
+      G4LorentzVector momentum(p, anEnergy);
+      aProRes.SetMomentum(momentum);
+      
+      // call precompound model
+      G4ReactionProductVector * proFrag(0);
+      proFrag = theProjectileFragmentation.DeExcite(aProRes);
+      
+      // collect the evaporation part
+      G4ReactionProductVector::iterator i;
+      for(i=proFrag->begin(); i!=proFrag->end(); i++)
+      {
+        result->push_back(*i);
       }
     }
+    // Rotate to lab
+    // ...
+    // Fill the particle change
+    // ... 
   return 0;
 }
 
