@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RE01Field.cc,v 1.1 2004-11-26 07:37:42 asaim Exp $
+// $Id: RE01Field.cc,v 1.2 2004-12-02 07:34:56 asaim Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -41,7 +41,7 @@ void RE01Field::GetFieldValue(const double Point[3],double *Bfield) const
 {
   Bfield[0] = 0.;
   Bfield[1] = 0.;
-  if(abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq)
+  if(std::abs(Point[2])<zmax && (sqr(Point[0])+sqr(Point[1]))<rmax_sq)
   { Bfield[2] = Bz; }
   else
   { Bfield[2] = 0.; }
