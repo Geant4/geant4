@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BREPSolidPolyhedra.hh,v 1.8 2002-02-12 18:37:42 radoone Exp $
+// $Id: G4BREPSolidPolyhedra.hh,v 1.9 2002-02-13 17:39:48 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -126,7 +126,7 @@ private:
   G4BREPSolidPolyhedra& operator=(const G4BREPSolidPolyhedra&);
     // Private copy constructor and assignment operator.
   
-  typedef enum {
+  typedef enum _SF {
     EInverse = 0,
     ENormal = 1
   } ESurfaceSense;
@@ -141,6 +141,10 @@ private:
                                       G4Vector3D& xAxis, G4double partAngle,
                                       ESurfaceSense sense );
   
+  G4Surface* ComputePlanarSurface( G4double r1, G4double r2,
+                                   const G4Point3D& origin, G4Vector3D& xAxis,
+                                   G4int sides, G4double partAngle,
+                                   ESurfaceSense sense );
 
   //   The following is only utilised in storing the shape parameters for
   //  use in visualising this shape.  J.A. Feb  24, 1997
