@@ -61,25 +61,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
- eIoni   Minimum Delta cut in range=0.1  mm.
-
-           material       min.delta energy(keV) 
-
-                 Air           0.99
-            H2liquid         28.089
-               Water         81.851
-         liquidArgon         79.954
-           Aluminium         125.02
-             Silicon         116.88
-                Iron         225.11
-                Lead         228.53
-             Uranium         294.24
-
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -88,44 +74,30 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
- hIoni    Minimum Delta cut in range=0.1  mm.
-
-           material        min.delta energy(keV) 
-
-                 Air           0.99
-            H2liquid         28.089
-               Water         81.851
-         liquidArgon         79.954
-           Aluminium         125.02
-             Silicon         116.88
-                Iron         225.11
-                Lead         228.53
-             Uranium         294.24
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range                  1 mm            1 mm 
@@ -140,7 +112,7 @@ Cut in energy
                Lead         101 keV        1.38 MeV
             Uranium         110 keV        1.92 MeV
 ===================================================
-# $Id: TestEm1.out,v 1.11 2001-03-30 09:02:57 stesting Exp $
+# $Id: TestEm1.out,v 1.12 2001-04-19 19:30:26 stesting Exp $
 #
 # Macro file for "TestEm1.cc"
 # (can be run in batch, without graphic)
@@ -160,40 +132,26 @@ phot:  Total cross sections from a parametrisation. Good description from 10 KeV
 
 compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
         Scattered gamma energy according Klein-Nishina.
-        PhysicsTables from 10 keV to 100 GeV in 100 bins. 
+        PhysicsTables from 10 keV to 1e+02 GeV in 100 bins. 
 
 conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
         e+e- energies according Bethe-Heitler
-        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+        PhysicsTables from 1 MeV to 1e+02 GeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
         delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
-
- eIoni   Minimum Delta cut in range=0.000605  mm.
-
-           material       min.delta energy(keV) 
-
-                 Air           0.99
-            H2liquid           0.99
-               Water         3.2733
-         liquidArgon         3.9154
-           Aluminium         6.2979
-             Silicon         5.8817
-                Iron         10.524
-                Lead         9.1135
-             Uranium         11.689
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -202,44 +160,30 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
- hIoni    Minimum Delta cut in range=0.000605  mm.
-
-           material        min.delta energy(keV) 
-
-                 Air           0.99
-            H2liquid           0.99
-               Water         3.2733
-         liquidArgon         3.9154
-           Aluminium         6.2979
-             Silicon         5.8817
-                Iron         10.524
-                Lead         9.1135
-             Uranium         11.689
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range                2.2 mm         6.05 mum
@@ -274,18 +218,18 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=91.99s Real=97.75s Sys=5.73s
+  User=54s Real=60s Sys=5.5s
 
- nb tracks/event   neutral:   27.57   charged:  666.07
- nb  steps/event   neutral:  144.93   charged: 2194.99
+ nb tracks/event   neutral:   28.25   charged:  664.76
+ nb  steps/event   neutral:  148.67   charged: 2195.14
 
  nb of process calls per event: 
-       eIoni    eBrem     conv  annihil    compt     phot
-     2168.94    24.47     1.58     1.58   117.36    25.99
+       eIoni    eBrem    compt     phot     conv  annihil
+     2168.25    25.46   120.42    26.82     1.43     1.43
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1463312763, 65501812
+ Current couple of seeds = 1296175024, 1662236208
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

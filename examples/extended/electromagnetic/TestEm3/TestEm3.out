@@ -103,34 +103,11 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
- eIoni   Minimum Delta cut in range=0.05  mm.
-
-           material       min.delta energy(keV) 
-
-           Aluminium         82.719
-         liquidArgon         53.268
-                Iron         143.41
-              Copper         153.59
-            Tungsten         210.64
-                Lead         145.79
-             Uranium         197.41
-               Water         54.852
-        Scintillator         55.938
-            Silicium         77.338
-              quartz           77.2
-             NemaG10         69.507
-                 Air           0.99
-             Aerogel         20.477
-         CarbonicGas         6.4196
-          WaterSteam           0.99
-            Galactic           0.99
-                Beam           0.99
-
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
@@ -139,53 +116,30 @@ annihil:  Total cross section from Heilter formula (annihilation into 2 photons)
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
-
- hIoni    Minimum Delta cut in range=0.05  mm.
-
-           material        min.delta energy(keV) 
-
-           Aluminium         82.719
-         liquidArgon         53.268
-                Iron         143.41
-              Copper         153.59
-            Tungsten         210.64
-                Lead         145.79
-             Uranium         197.41
-               Water         54.852
-        Scintillator         55.938
-            Silicium         77.338
-              quartz           77.2
-             NemaG10         69.507
-                 Air           0.99
-             Aerogel         20.477
-         CarbonicGas         6.4196
-          WaterSteam           0.99
-            Galactic           0.99
-                Beam           0.99
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range                500 mum         500 mum
@@ -209,7 +163,7 @@ Cut in energy
            Galactic         990 eV          990 eV 
                Beam         990 eV          990 eV 
 ===================================================
-# $Id: TestEm3.out,v 1.12 2001-03-30 09:03:15 stesting Exp $
+# $Id: TestEm3.out,v 1.13 2001-04-19 19:30:41 stesting Exp $
 #
 # Macro file for "exampleN03.cc" 
 # (can be run in batch, without graphic)
@@ -242,19 +196,19 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=141.92s Real=151.68s Sys=9.63s
+  User=1.3e+02s Real=1.4e+02s Sys=9.9s
 
 -------------------------------------------------------------
                                    total energy dep            total tracklen 
  
- Absorber0 (        Lead) : 812.12 MeV +- 16.14 MeV       51.89 cm  +-  1.22 cm 
- Absorber1 ( liquidArgon) : 177.04 MeV +- 15.38 MeV       88.78 cm  +-  8.08 cm 
+ Absorber0 (        Lead) : 815.55 MeV +- 13.54 MeV       52.15 cm  +-  1.14 cm 
+ Absorber1 ( liquidArgon) : 173.85 MeV +- 12.77 MeV       86.85 cm  +-  6.62 cm 
 
 -------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 859140068, 732198684
+ Current couple of seeds = 273622358, 263061346
 ----------------------------------------
 G4 kernel has come to Quit state.
 Deletion of G4 kernel class start.

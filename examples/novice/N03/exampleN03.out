@@ -83,79 +83,43 @@ eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 
         delta ray energy sampled from  differential Xsection.
         PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
- eIoni   Minimum Delta cut in range=0.1  mm.
-
-           material       min.delta energy(keV) 
-
-           Aluminium         125.02
-         liquidArgon         79.954
-              Copper         239.08
-                Lead         228.53
-               Water         81.851
-        Scintillator         83.337
-              quartz         116.29
-                 Air           0.99
-             Aerogel         30.338
-         CarbonicGas         9.5961
-          WaterSteam           0.99
-            Galactic           0.99
-                Beam           0.99
-
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
  Good description from 1 KeV to 100 GeV.
         log scale extrapolation above 100 GeV 
         Gamma energy sampled from a parametrised formula.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 annihil:  Total cross section from Heilter formula (annihilation into 2 photons).
         gamma energies sampled according Heitler
         PhysicsTables from 10 keV to 10 TeV in 100 bins. 
 
- hIoni    Minimum Delta cut in range=0.1  mm.
-
-           material        min.delta energy(keV) 
-
-           Aluminium         125.02
-         liquidArgon         79.954
-              Copper         239.08
-                Lead         228.53
-               Water         81.851
-        Scintillator         83.337
-              quartz         116.29
-                 Air           0.99
-             Aerogel         30.338
-         CarbonicGas         9.5961
-          WaterSteam           0.99
-            Galactic           0.99
-                Beam           0.99
-
 hIoni:    Knock-on electron cross sections . 
          Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+        PhysicsTables from 1 keV to 1e+02 TeV in 100 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuIoni:  knock-on electron cross sections .
           Good description above the mean excitation energy.
          delta ray energy sampled from  differential Xsection.
-      PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+      PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 msc:   Tables of transport mean free paths.
           New model of MSC , computes the lateral 
           displacement of the particle , too.
-        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+        PhysicsTables from 1e+02 eV  to 1e+02 TeV in 100 bins. 
 
 MuBrems:  theoretical cross section 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 
 MuPairProd:  theoretical cross sections 
           Good description up to 1000 PeV.
-    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+    PhysicsTables from 1 keV to 1e+03 PeV in 150 bins. 
 ============= The cut Energy ==============================
                             gamma              e-    
 Cut in range                  1 mm            1 mm 
@@ -184,10 +148,10 @@ Cut in energy
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:   275.7 MeV       total track length:  15.744 cm 
-        Gap: total energy:   15.91 MeV       total track length:  8.5146 cm 
+   Absorber: total energy: 2.8e+02 MeV       total track length:      17 cm 
+        Gap: total energy:     8.2 MeV       total track length:     4.1 cm 
 
-     8 hits are stored in ExN03CalorHitsCollection.
+     9 hits are stored in ExN03CalorHitsCollection.
 #
 # list the existing physics processes
      Transportation,              hIoni,                msc,              eIoni
@@ -202,11 +166,11 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 977297571, 951316126
+ Current couple of seeds = 1007375238, 624422740
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  281.73 MeV       total track length:  15.949 cm 
-        Gap: total energy:  13.208 MeV       total track length:  7.3282 cm 
+   Absorber: total energy: 2.7e+02 MeV       total track length:      15 cm 
+        Gap: total energy:      19 MeV       total track length:     9.9 cm 
 
      10 hits are stored in ExN03CalorHitsCollection.
 #
@@ -231,10 +195,10 @@ Cut in energy
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 627130152, 879601547
+ Current couple of seeds = 1472867459, 1074604418
 ----------------------------------------
 ---> End of event: 0
-   Absorber: total energy:  393.49 MeV       total track length:  90.749 cm 
-        Gap: total energy:  100.38 MeV       total track length:  2.7952 m  
+   Absorber: total energy: 4.1e+02 MeV       total track length:      95 cm 
+        Gap: total energy:      81 MeV       total track length:     2.2 m  
 
-     28 hits are stored in ExN03CalorHitsCollection.
+     25 hits are stored in ExN03CalorHitsCollection.
