@@ -1,4 +1,4 @@
-$Id: History,v 1.106 2003-10-01 14:51:40 gcosmo Exp $
+$Id: History,v 1.107 2003-10-01 15:08:07 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,7 +24,7 @@ September 30th, 2003  G. Cosmo - geomvol-V05-02-01
     G4IdentityTrajectoryFilter[.hh.cc]
     G4VCurvedTrajectoryFilter[.hh.cc]
   Moved files to new module geometry/navigation:
-    G4AuxiliaryNavServices[.hh.icc]
+    G4AuxiliaryNavServices[.hh.icc.cc]
     G4GeometryMessenger[.hh.cc]
     G4Navigator[.hh.icc.cc]
     G4NormalNavigation[.hh.icc.cc]
