@@ -1,4 +1,4 @@
-# $Id: common.gmk,v 1.37 2004-06-08 09:58:23 gcosmo Exp $
+# $Id: common.gmk,v 1.38 2004-06-08 10:04:47 gcosmo Exp $
 # ----------------------------------------------------------------
 # Common part of GNUmakefile for libraries.  John Allison, 5/7/95.
 # ----------------------------------------------------------------
@@ -128,18 +128,18 @@ $(installed_includes): $(G4INCLUDE)/% : include/%
 #
 ifndef G4EXLIB
 clean:
-	@$(ECHO) Cleaning up ...
-	@$(RM) -f $(G4LIBDIR)/lib$(name).a
-	@$(RM) -f $(G4LIBDIR)/*$(name).lib
-	@$(RM) -f $(G4LIBDIR)/*$(name).exp
-	@$(RM) -f $(G4LIBDIR)/lib$(name).$(SHEXT)
-	@$(RM) -rf $(G4TMPDIR)
+	@echo Cleaning up ...
+	@rm -f $(G4LIBDIR)/lib$(name).a
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/lib$(name).$(SHEXT)
+	@rm -rf $(G4TMPDIR)
 endif
 
 clean_libs:
-	@$(ECHO) Removing library lib$(name).a ...
-	@$(RM) -f $(G4LIBDIR)/*$(name).a
-	@$(ECHO) Removing library lib$(name).$(SHEXT) ...
-	@$(RM) -f $(G4LIBDIR)/*$(name).lib
-	@$(RM) -f $(G4LIBDIR)/*$(name).exp
-	@$(RM) -f $(G4LIBDIR)/*$(name).$(SHEXT)
+	@echo Removing library lib$(name).a ...
+	@rm -f $(G4LIBDIR)/*$(name).a
+	@echo Removing library lib$(name).$(SHEXT) ...
+	@rm -f $(G4LIBDIR)/*$(name).lib
+	@rm -f $(G4LIBDIR)/*$(name).exp
+	@rm -f $(G4LIBDIR)/*$(name).$(SHEXT)
