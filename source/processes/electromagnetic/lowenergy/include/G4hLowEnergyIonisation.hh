@@ -39,6 +39,7 @@
 #include "Randomize.hh"
 #include "G4hLowEnergyLoss.hh"
 #include "G4VhEnergyLossModel.hh"
+#include "G4QAOLowEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
