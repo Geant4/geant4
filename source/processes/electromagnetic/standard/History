@@ -1,4 +1,4 @@
-$Id: History,v 1.120 2004-08-05 11:17:15 maire Exp $
+$Id: History,v 1.121 2004-08-12 18:23:37 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+12 Aug 04: V.Ivant (stand-V06-02-01)
+- G4ionIonisation - effective charge is taken from util class (VI)
+- G4eplusAnnihilation70 introduced (VI)
      
 05 Aug 04: mma
 - suppress G4eplusAnnihilation.icc, G4GammaConversionToMuons.icc
