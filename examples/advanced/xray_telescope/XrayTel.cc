@@ -12,6 +12,7 @@
 #include "XrayTelRunAction.hh"
 #include "XrayTelSteppingAction.hh"
 #include "XrayTelPrimaryGeneratorAction.hh"
+#include "XrayTelHistogram.hh"
 
 #include <iostream.h>
 
@@ -32,11 +33,15 @@ int main( int argc, char** argv )
   runManager->SetUserInitialization( telescope );
   runManager->SetUserInitialization(new XrayTelPhysicsList);
 
+  cerr << "main: creating histoMgr " << endl;
+  XrayTelHistogram histoMgr;
+  cerr << "... histoMgr created " << endl;
+
   // set mandatory user action class
   runManager->SetUserAction(new XrayTelPrimaryGeneratorAction( telescope ));
   runManager->SetUserAction(new XrayTelRunAction);
   runManager->SetUserAction(new XrayTelEventAction);
-  runManager->SetUserAction(new XrayTelSteppingAction);
+  runManager->SetUserAction(new XrayTelSteppingAction(&histoMgr) );
    
   // visualization manager
   G4VisManager* visManager = new XrayTelVisManager;

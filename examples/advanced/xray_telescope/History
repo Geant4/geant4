@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-10-17 09:34:32 nartallo Exp $
+$Id: History,v 1.3 2000-10-17 12:07:21 nartallo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -24,3 +24,10 @@ committal in the CVS repository !
              Tydied up geometry
              Add all physics processes to XrayTelPhysicsList.cc
              Modified *.hh accordingly
+17.10.2000 - RN, tag xraytel-V02-00-02
+             Added histogramming capability
+	     Added XrayTelHistogram.hh, XrayTelHistogram.cc
+	     Modified: GNUmakefile
+		       XrayTel.cc
+		       XrayTelSteppingAction.hh
+		       XrayTelSteppingAction.cc
