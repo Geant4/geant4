@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSectionTest.cc,v 1.5 2000-08-03 08:37:05 gcosmo Exp $
+// $Id: G4PAIxSectionTest.cc,v 1.6 2001-05-25 08:34:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -111,29 +111,13 @@ int main()
   density = 1.848*g/cm3;
   G4Material* Be = new G4Material(name="Beryllium", z=4. , a, density);
 
-  a = 26.98*g/mole;
-  density = 2.7*g/cm3;
-  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
-
   density = 1.390*g/cm3;
   a = 39.95*g/mole;
   G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
 
-  density = 7.870*g/cm3;
-  a = 55.85*g/mole;
-  G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
-
-  density = 8.960*g/cm3;
-  a = 63.55*g/mole;
-  G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-
   density = 19.32*g/cm3;
   a =196.97*g/mole;
   G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
-
-  density = 11.35*g/cm3;
-  a = 207.19*g/mole;
-  G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
 
   // Carbon dioxide
 
@@ -166,7 +150,28 @@ int main()
 
   ***************************************************** */
 
+  a = 26.98*g/mole;
+  density = 2.7*g/cm3;
+  G4Material* Al = new G4Material(name="Aluminium", z=13., a, density);
 
+  // Silicon as detector material
+
+  density = 2.330*g/cm3;
+  a = 28.09*g/mole;
+  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
+
+
+  density = 7.870*g/cm3;
+  a = 55.85*g/mole;
+  G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
+
+  density = 8.960*g/cm3;
+  a = 63.55*g/mole;
+  G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
+
+  density = 11.35*g/cm3;
+  a = 207.19*g/mole;
+  G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
 
   // Polypropelene
 
@@ -182,11 +187,6 @@ int main()
   Kapton->AddElement(elC,5);
   Kapton->AddElement(elH,4);
 
-  // Silicon as detector material
-
-  density = 2.330*g/cm3;
-  a = 28.09*g/mole;
-  G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
 
   // Germanium as detector material
 
@@ -399,7 +399,7 @@ int main()
 
   G4int i, j, k, numOfMaterials, iSan, nbOfElements, sanIndex, row ;
   G4double maxEnergyTransfer, kineticEnergy ;
-  G4double tau, gamma, bg2, beta2, rateMass, Tmax ;
+  G4double tau, gamma, bg2, beta2, rateMass, Tmax, Tmin, Tkin ;
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable() ;
 
@@ -415,11 +415,11 @@ int main()
   }
   G4String testName ;
   G4cout<<"Enter material name for test : "<<G4std::flush ;
-  G4cin>>testName ;
+  //  G4cin>>testName ;
 
   for(k=0;k<numOfMaterials;k++)
   {
-    if((*theMaterialTable)[k]->GetName() != testName) continue ;
+    //    if((*theMaterialTable)[k]->GetName() != testName) continue ;
 
      outFile << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
      G4cout << "Material : " <<(*theMaterialTable)[k]->GetName() << G4endl ;
@@ -487,20 +487,31 @@ int main()
      G4cout <<"Normalization Cof = "<<testPAI.GetNormalizationCof()<<G4endl ;
      G4cout << G4endl ;
 
-     outFile<<"Lorentz factor"<<"\t"<<"Max E transfer, kev"<<"\t"
-          <<"<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
+     Tmin     = sandia.GetPhotoAbsorpCof(1,0) ;  // 0.02*keV ;
+     G4cout<<"Tmin = "<<Tmin/eV<<" eV"<<G4endl;
+
+     outFile
+            <<"Tkin, keV"<<"\t"
+            <<"Lorentz factor"<<"\t"
+            <<"Max E transfer, kev"<<"\t"
+            <<"<dE/dx>, keV/cm"<<"\t\t"
+            <<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
    
-     G4cout << "Lorentz factor"<<"\t"<<"Max E transfer, kev"<<"\t"
-            << "<dE/dx>, keV/cm"<<"\t\t"<<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
+     G4cout 
+            <<"Tkin, keV"<<"\t"
+            << "Lorentz factor"<<"\t"
+            <<"Max E transfer, kev"<<"\t"
+            << "<dE/dx>, keV/cm"<<"\t\t"
+            <<"<dN/dx>, 1/cm"<<G4endl<<G4endl ;
    
 
      //   G4PAIxSection testPAIproton(k,maxEnergyTransfer) ;
 
-     kineticEnergy = 110*MeV ;
+     kineticEnergy = 10.0*keV ;  // 110*MeV ;
 
      //     for(j=1;j<testPAIproton.GetNumberOfGammas();j++)
 
-     for(j=1;j<30;j++)
+     for(j=1;j<70;j++)
      {
        tau      = kineticEnergy/proton_mass_c2 ;
        gamma    = tau +1.0 ;
@@ -511,18 +522,29 @@ int main()
        Tmax     = 2.0*electron_mass_c2*bg2
                    /(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
 
+
+       Tkin = maxEnergyTransfer ;
+
        if ( maxEnergyTransfer > Tmax)         
        {
-          maxEnergyTransfer = Tmax ;
+          Tkin = Tmax ;
        }
-       G4PAIxSection testPAIproton(k,maxEnergyTransfer,bg2) ;
+       if ( Tmax <= Tmin + 0.5*eV )         
+       {
+          Tkin = Tmin + 0.5*eV ;
+       }
+       G4PAIxSection testPAIproton(k,Tkin,bg2) ;
       
-       outFile << gamma << "\t"
-               << maxEnergyTransfer/keV<<"\t\t"
-               << testPAIproton.GetMeanEnergyLoss()*cm/keV << "\t\t"
-               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << G4endl ;
-       G4cout  << gamma << "\t"
-               << maxEnergyTransfer/keV<<"\t\t"
+       outFile 
+               << kineticEnergy/keV<<"\t"
+               << gamma << "\t"
+               << Tkin/keV<<"\t"
+               << testPAIproton.GetMeanEnergyLoss()*cm/keV << "\t"
+               << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t" << G4endl ;
+       G4cout  
+               << kineticEnergy/keV<<"\t\t"
+               << gamma << "\t\t"
+               << Tkin/keV<<"\t\t"
                << testPAIproton.GetMeanEnergyLoss()*cm/keV << "\t\t"
                << testPAIproton.GetIntegralPAIxSection(1)*cm << "\t\t" << G4endl ;
 
@@ -531,14 +553,17 @@ int main()
        //          <<testPAIproton.GetPAItable(0,j)*cm/keV<<"\t\t"
        //  	      <<testPAIproton.GetPAItable(1,j)*cm<<"\t\t"<<G4endl ;
 
-       kineticEnergy *= 1.5 ;
+       kineticEnergy *= 1.4 ;   // 1.5 ;
      }
      G4cout<<G4endl ;
      outFile<<G4endl ;
   }
+  return 1 ;
 
   G4String confirm ;
-  G4cout<<"Enter 'y' , if you would like to get dE/dx-distribution : "<<G4std::flush ;
+  G4cout<<"Enter 'y' , if you would like to get dE/dx-distribution : "
+        <<G4std::flush ;
+
   G4cin>>confirm ;
   if(confirm != "y" ) return 1 ;
   G4cout<<G4endl ;

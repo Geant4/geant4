@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4PAIxSection.cc,v 1.4 1999-12-15 14:51:51 gunter Exp $
+// $Id: G4PAIxSection.cc,v 1.5 2001-05-25 08:34:40 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -19,8 +19,10 @@
 //
 // History:
 // 1st version 11.06.97 V. Grichine
-
 // 20.11.98 adapted to a new Material/SandiaTable interface, mma 
+// 17.05.01 V. Grichine, low energy extension down to 10*keV of proton
+
+
 
 #include "G4ios.hh"
 #include <math.h>
@@ -765,37 +767,49 @@ G4double G4PAIxSection::DifPAIxSection( G4int              i ,
                                         G4double betaGammaSq  )
 {        
    G4double be2,cof,x1,x2,x3,x4,x5,x6,x7,x8,result ;
-
+   G4double beta, be4 ;
+   G4double betaBohr2 = fine_structure_const*fine_structure_const ;
+   G4double betaBohr4 = betaBohr2*betaBohr2*4.0 ;
    be2 = betaGammaSq/(1 + betaGammaSq) ;
+   be4 = be2*be2 ;
+   //  beta = sqrt(be2) ;
    cof = 1 ;
    x1 = log(2*electron_mass_c2/fSplineEnergy[i]) ;
-   x2 = -log((1/betaGammaSq - fRePartDielectricConst[i])*
-	     (1/betaGammaSq - fRePartDielectricConst[i]) + 
-	     fImPartDielectricConst[i]*fImPartDielectricConst[i])/2 ;
-   
-   x3 = -fRePartDielectricConst[i] + 1/betaGammaSq ;
-   x5 = -1 - fRePartDielectricConst[i] +
-         be2*((1 +fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) +
-	 fImPartDielectricConst[i]*fImPartDielectricConst[i]) ;
 
-   if(fImPartDielectricConst[i]==0)
+   if( betaGammaSq < 0.01 ) x2 = log(be2) ;
+   else
    {
-      x6=0 ;
+     x2 = -log( (1/betaGammaSq - fRePartDielectricConst[i])*
+	        (1/betaGammaSq - fRePartDielectricConst[i]) + 
+	        fImPartDielectricConst[i]*fImPartDielectricConst[i] )/2 ;
+   }
+   if( fImPartDielectricConst[i] == 0.0 ||betaGammaSq < 0.01 )
+   {
+     x6=0 ;
    }
    else
    {
-      x7 = atan2(fImPartDielectricConst[i],x3) ;
-      x6 = x5 * x7 ;
+     x3 = -fRePartDielectricConst[i] + 1/betaGammaSq ;
+     x5 = -1 - fRePartDielectricConst[i] +
+          be2*((1 +fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) +
+	  fImPartDielectricConst[i]*fImPartDielectricConst[i]) ;
+
+     x7 = atan2(fImPartDielectricConst[i],x3) ;
+     x6 = x5 * x7 ;
    }
     // if(fImPartDielectricConst[i] == 0) x6 = 0 ;
    
    x4 = ((x1 + x2)*fImPartDielectricConst[i] + x6)/hbarc ;
+   //   if( x4 < 0.0 ) x4 = 0.0 ;
    x8 = (1 + fRePartDielectricConst[i])*(1 + fRePartDielectricConst[i]) + 
         fImPartDielectricConst[i]*fImPartDielectricConst[i] ;
 
-   result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i])*
-            fine_structure_const/be2/pi ;
-
+   result = (x4 + cof*fIntegralTerm[i]/fSplineEnergy[i]/fSplineEnergy[i]) ;
+   if(result < 1.0e-8) result = 1.0e-8 ;
+   result *= fine_structure_const/be2/pi ;
+   //   result *= (1-exp(-beta/betaBohr))*(1-exp(-beta/betaBohr)) ;
+   //  result *= (1-exp(-be2/betaBohr2)) ;
+   result *= (1-exp(-be4/betaBohr4)) ;
    if(fDensity >= 0.1)
    { 
       result /= x8 ;
