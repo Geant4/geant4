@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: exampleB01.cc,v 1.8 2002-04-19 10:54:24 gcosmo Exp $
+// $Id: exampleB01.cc,v 1.9 2002-04-19 12:01:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -116,7 +116,7 @@ int main(int argc, char **argv)
 	 mt != mtallies.end(); mt++) {
       G4String tmp((*mt).first);
       if (tmp == "HistorysEntering") {
-	nEnteringTracks = (*mt).second.GetXsum();
+	nEnteringTracks = G4int((*mt).second.GetXsum());
       }
       if (tmp == "EnergyEnteringHistory") {
 	meanTrackEnergy =  (*mt).second.GetMean();

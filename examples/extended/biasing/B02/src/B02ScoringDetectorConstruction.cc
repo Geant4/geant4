@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B02ScoringDetectorConstruction.cc,v 1.3 2002-04-19 10:54:27 gcosmo Exp $
+// $Id: B02ScoringDetectorConstruction.cc,v 1.4 2002-04-19 12:01:46 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -109,7 +109,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   G4double pos_y = 0*cm;
   G4double pos_z = -1*MhightShield;
   
-  G4VPhysicalVolume *pM1 = 
+//  G4VPhysicalVolume *pM1 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
 		      M1_log, name, score_worldCylinder_log, false, 0);
   
@@ -135,7 +135,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
   name ="scorecell: D1";
   
-  G4VPhysicalVolume *pD1 = 
+//  G4VPhysicalVolume *pD1 = 
     new G4PVPlacement(0, G4ThreeVector(0, 0, 0),
 		      D1_log, name, M1_log, false, 0);
 
@@ -148,7 +148,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   pos_x = 0*cm;
   pos_y = 0*cm;
   pos_z = MhightShield;
-  G4VPhysicalVolume *pM2 = 
+//  G4VPhysicalVolume *pM2 = 
     new G4PVPlacement(0, G4ThreeVector(pos_x, pos_y, pos_z),
 		      M2_log, name, score_worldCylinder_log, false, 0);
   
@@ -159,7 +159,7 @@ G4VPhysicalVolume* B02ScoringDetectorConstruction::Construct()
   
   name ="scorecell: D2";
   
-  G4VPhysicalVolume *pD2 = 
+//  G4VPhysicalVolume *pD2 = 
     new G4PVPlacement(0, G4ThreeVector(0, 0, 0),
 		      D2_log, name, M2_log, false, 0);
   

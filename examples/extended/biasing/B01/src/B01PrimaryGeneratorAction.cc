@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: B01PrimaryGeneratorAction.cc,v 1.2 2002-04-19 10:54:26 gcosmo Exp $
+// $Id: B01PrimaryGeneratorAction.cc,v 1.3 2002-04-19 12:01:45 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -52,7 +52,5 @@ B01PrimaryGeneratorAction::~B01PrimaryGeneratorAction()
 
 void B01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-  G4int i = anEvent->GetEventID() % 3;
   particleGun->GeneratePrimaryVertex(anEvent);
 }
