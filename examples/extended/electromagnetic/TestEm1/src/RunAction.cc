@@ -20,18 +20,14 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: RunAction.cc,v 1.5 2004-03-31 11:34:59 maire Exp $
+// $Id: RunAction.cc,v 1.6 2004-07-23 15:39:39 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-// 08.03.01 Hisaya: adapted for STL   
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
+#include "HistoManager.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -40,66 +36,16 @@
 #include "Randomize.hh"
 #include <iomanip>
 
-#ifdef USE_AIDA
- #include "AIDA/AIDA.h"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-  : ProcCounter(0)
+RunAction::RunAction(HistoManager* histo)
+  : ProcCounter(0), histoManager(histo)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{
- cleanHisto();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::bookHisto()
-{
-#ifdef USE_AIDA
- // Creating the analysis factory
- AIDA::IAnalysisFactory* af = AIDA_createAnalysisFactory();
- 
- // Creating the tree factory
- AIDA::ITreeFactory* tf = af->createTreeFactory();
- 
- // Creating a tree mapped to an hbook file.
- G4bool readOnly  = false;
- G4bool createNew = true;
- tree = tf->create("testem1.paw", "hbook", readOnly, createNew);
-
- // Creating a histogram factory, whose histograms will be handled by the tree
- AIDA::IHistogramFactory* hf = af->createHistogramFactory(*tree);
-
- // booking histograms
- histo[0] = hf->createHistogram1D("1","track length (mm) of a charged particle",
-                         100,0.,50*cm);
- histo[1] = hf->createHistogram1D("2","Nb steps per track (charged particle)",
-                         100,0.,100.);
- histo[2] = hf->createHistogram1D("3","step length (mm) charged particle",
-                         100,0.,10*mm);
-		       
- delete hf;
- delete tf;
- delete af;		       
-#endif
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::cleanHisto()
-{
-#ifdef USE_AIDA
-  tree->commit();       // Writing the histograms to the file
-  tree->close();        // and closing the tree (and the file) 
-  delete tree;
-#endif
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -111,13 +57,16 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   HepRandom::showEngineStatus();
 
-  NbOfTraks0 = 0; NbOfTraks1 = 0; NbOfSteps0 = 0; NbOfSteps1 = 0;
-  edep = 0.0;
+  NbOfTraks0 = NbOfTraks1 = NbOfSteps0 = NbOfSteps1 = 0;
+  edep = 0.;
+  csdaRange = csdaRange2 = 0.;
+  projRange = projRange2 = 0.;
+  transvDev = transvDev2 = 0.;    
   ProcCounter = new ProcessesCount;
      
   //histograms
   //
-  if (aRun->GetRunID() == 0) bookHisto();
+  histoManager->book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -145,7 +94,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       std::ios::fmtflags mode = G4cout.flags();
       G4cout.setf(std::ios::fixed,std::ios::floatfield);
 
-      G4int  prec = G4cout.precision(4);
+      G4int  prec = G4cout.precision(3);
       
       G4cout << "\n nb tracks/event"
              << "   neutral: " << std::setw(10) << NbOfTraks0/dNbOfEvents
@@ -167,8 +116,36 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
       for (size_t j=0; j< ProcCounter->size();j++)
       G4cout << std::setw(12) << ((*ProcCounter)[j]->GetCounter())
                                                                /dNbOfEvents;
-      G4cout << G4endl;    
-                         
+      G4cout << G4endl;
+      
+      //compute csda and projected ranges, and transverse dispersion
+      //
+      csdaRange /= NbOfEvents; csdaRange2 /= NbOfEvents;
+      G4double csdaRms = csdaRange2 - csdaRange*csdaRange;        
+      if (csdaRms>0.) csdaRms = sqrt(csdaRms); else csdaRms = 0.;
+      
+      projRange /= NbOfEvents; projRange2 /= NbOfEvents;
+      G4double projRms = projRange2 - projRange*projRange;        
+      if (projRms>0.) projRms = sqrt(projRms); else projRms = 0.;
+       
+      transvDev /= 2*NbOfEvents; transvDev2 /= 2*NbOfEvents;
+      G4double trvsRms = transvDev2 - transvDev*transvDev;        
+      if (trvsRms>0.) trvsRms = sqrt(trvsRms); else trvsRms = 0.;
+      
+      G4cout << "\n---------------------------------------------------------\n";
+      G4cout << " Primary particle : " ;
+      G4cout << "\n CSDA Range = " << G4BestUnit(csdaRange,"Length")
+             << "   rms = "        << G4BestUnit(csdaRms,  "Length");
+
+      G4cout << "\n proj Range = " << G4BestUnit(projRange,"Length")
+             << "   rms = "        << G4BestUnit(projRms,  "Length");
+	     
+      G4cout << "\n proj/CSDA  = " << projRange/csdaRange;
+      	     
+      G4cout << "\n transverse dispersion at end = " 
+             << G4BestUnit(trvsRms,"Length");
+      G4cout << "\n---------------------------------------------------------\n";
+                               
       G4cout.setf(mode,std::ios::floatfield);
       G4cout.precision(prec);       
     }         
@@ -180,7 +157,9 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     delete aProcCount;
   }
   delete ProcCounter;
-
+  
+  histoManager->save();
+  
   // show Rndm status
   HepRandom::showEngineStatus();
 }

@@ -20,38 +20,70 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.3 2004-07-23 15:39:34 maire Exp $
+// $Id: HistoManager.hh,v 1.1 2004-07-23 15:39:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+#ifndef HistoManager_h
+#define HistoManager_h 1
 
-#include "G4UserTrackingAction.hh"
-
-class PrimaryGeneratorAction;
-class RunAction;
-class HistoManager;
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+namespace AIDA {
+ class ITree;
+ class IHistogramFactory;
+ class IHistogram1D;
+}
 
-  public:  
-    TrackingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
-   ~TrackingAction() {};
-   
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
-    
+class HistoMessenger;
+
+const G4int MaxHisto = 4;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoManager
+{
+  public:
+
+    HistoManager();
+   ~HistoManager();
+
+    void SetFileName (const G4String& name) { fileName = name;};
+    void SetFileType (const G4String& name) { fileType = name;};
+    void book();
+    void save();
+    void SetHisto (G4int,G4int,G4double,G4double,const G4String& unit="none");  
+    void FillHisto(G4int id, G4double e, G4double weight = 1.0);
+    void RemoveHisto (G4int);
+
+    G4bool    HistoExist  (G4int id) {return exist[id];}
+    G4double  GetHistoUnit(G4int id) {return Unit[id];}
+    G4double  GetBinWidth (G4int id) {return Width[id];}
+
   private:
-    PrimaryGeneratorAction* primary;
-    RunAction*              runAction;
-    HistoManager*           histoManager;  
+
+    G4String                 fileName;
+    G4String                 fileType;
+    AIDA::ITree*             tree;
+    AIDA::IHistogramFactory* hf;
+    AIDA::IHistogram1D*      histo[MaxHisto];
+    G4bool                   exist[MaxHisto];
+    G4String                 Label[MaxHisto];
+    G4String                 Title[MaxHisto];
+    G4int                    Nbins[MaxHisto];
+    G4double                 Vmin [MaxHisto];
+    G4double                 Vmax [MaxHisto];
+    G4double                 Unit [MaxHisto];
+    G4double                 Width[MaxHisto];
+    G4bool                   factoryOn;
+    HistoMessenger*          histoMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

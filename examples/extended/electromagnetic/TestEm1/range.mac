@@ -1,0 +1,26 @@
+# $Id: range.mac,v 1.1 2004-07-23 15:39:15 maire Exp $
+#
+# Macro file for "TestEm1.cc"
+# 
+# compute the range of primary particle
+#
+/control/verbose 2
+/run/verbose 2
+#
+/testem/det/setMat Aluminium
+/testem/det/setSize 10 cm
+#
+/testem/phys/addPhysics  standard
+#
+/run/initialize
+#
+/testem/phys/setCuts 10 km
+/process/eLoss/fluct 0
+/process/inactivate msc
+#
+/testem/gun/setDefault 1
+/gun/particle proton
+/gun/energy 100 MeV
+#
+/testem/event/printModulo 1000
+/run/beamOn 1000

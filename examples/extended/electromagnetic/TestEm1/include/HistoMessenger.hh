@@ -20,38 +20,50 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: TrackingAction.hh,v 1.3 2004-07-23 15:39:34 maire Exp $
+// $Id: HistoMessenger.hh,v 1.1 2004-07-23 15:39:34 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef TrackingAction_h
-#define TrackingAction_h 1
+#ifndef HistoMessenger_h
+#define HistoMessenger_h 1
 
-#include "G4UserTrackingAction.hh"
-
-class PrimaryGeneratorAction;
-class RunAction;
-class HistoManager;
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class TrackingAction : public G4UserTrackingAction {
+class HistoManager;
+class G4UIdirectory;
+class G4UIcommand;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
-  public:  
-    TrackingAction(PrimaryGeneratorAction*, RunAction*, HistoManager*);
-   ~TrackingAction() {};
-   
-    void  PreUserTrackingAction(const G4Track*);
-    void PostUserTrackingAction(const G4Track*);
-    
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class HistoMessenger: public G4UImessenger
+{
+  public:
+
+   HistoMessenger(HistoManager* );
+  ~HistoMessenger();
+
+   void SetNewValue(G4UIcommand* ,G4String );
+
   private:
-    PrimaryGeneratorAction* primary;
-    RunAction*              runAction;
-    HistoManager*           histoManager;  
+
+   HistoManager*           histoManager;
+   
+   G4UIdirectory*          histoDir;   
+   G4UIcmdWithAString*     factoryCmd;
+   G4UIcmdWithAString*     typeCmd;
+   G4UIcommand*            histoCmd;
+   G4UIcmdWithAnInteger*   rmhistoCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+
