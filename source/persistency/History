@@ -15,6 +15,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November, 02   Y.Morita (persistency-V04-01-00)
+- tools for developers
+
 23 November, 02   Y.Morita
 - new abstract interface for persistency for release 5.0.
 - for actual implementation of HepODBMS and ROOT I/O, see
