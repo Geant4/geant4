@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCSGfaceted.hh,v 1.8 2003-06-16 16:53:56 gunter Exp $
+// $Id: G4VCSGfaceted.hh,v 1.9 2004-09-22 13:14:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -87,16 +87,33 @@ class G4VCSGfaceted : public G4VSolid
 
   virtual G4VisExtent GetExtent() const;
 
+  G4int GetCubVolStatistics() const;
+  G4double GetCubVolEpsilon() const;
+  void SetCubVolStatistics(G4int st);
+  void SetCubVolEpsilon(G4double ep);
+
+  virtual G4double GetCubicVolume();
+    // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
+
   protected:  // without description
 
   G4int    numFace;
   G4VCSGface **faces;
+  G4double fCubicVolume;
 
   virtual G4double DistanceTo( const G4ThreeVector &p,
                                const G4bool outgoing ) const;
 
   void CopyStuff( const G4VCSGfaceted &source );
   void DeleteStuff();
+
+  private:
+
+  G4int    fCubVolStatistics;
+  G4double fCubVolEpsilon;
+    // Statistics, error accuracy for volume estimation.
+
 };
 
 #endif

@@ -26,7 +26,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VCSGfaceted.cc,v 1.11 2004-09-01 23:40:21 davidw Exp $
+// $Id: G4VCSGfaceted.cc,v 1.12 2004-09-22 13:15:48 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -59,7 +59,8 @@
 //
 G4VCSGfaceted::G4VCSGfaceted( G4String name )
   : G4VSolid(name),
-    numFace(0), faces(0)
+    numFace(0), faces(0), fCubicVolume(0.),
+    fCubVolStatistics(1000000), fCubVolEpsilon(0.001)
 {
 }
 
@@ -114,6 +115,7 @@ void G4VCSGfaceted::CopyStuff( const G4VCSGfaceted &source )
   do {
     *face = (*sourceFace)->Clone();
   } while( ++sourceFace, ++face < faces+numFace );
+  fCubicVolume = source.fCubicVolume;
 }
 
 
@@ -421,4 +423,51 @@ std::ostream& G4VCSGfaceted::StreamInfo( std::ostream& os ) const
      << "-----------------------------------------------------------\n";
 
   return os;
+}
+
+
+//
+// GetCubVolStatistics
+//
+G4int G4VCSGfaceted::GetCubVolStatistics() const
+{
+  return fCubVolStatistics;
+}
+
+
+//
+// GetCubVolEpsilon
+//
+G4double G4VCSGfaceted::GetCubVolEpsilon() const
+{
+  return fCubVolEpsilon;
+}
+
+
+//
+// SetCubVolStatistics
+//
+void G4VCSGfaceted::SetCubVolStatistics(G4int st)
+{
+  fCubVolStatistics=st;
+}
+
+
+//
+// SetCubVolEpsilon
+//
+void G4VCSGfaceted::SetCubVolEpsilon(G4double ep)
+{
+  fCubVolEpsilon=ep;
+}
+
+
+//
+// GetCubicVolume
+//
+G4double G4VCSGfaceted::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = EstimateCubicVolume(fCubVolStatistics,fCubVolEpsilon); 
+  return fCubicVolume;
 }

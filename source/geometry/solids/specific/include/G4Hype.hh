@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.hh,v 1.7 2003-06-16 16:53:52 gunter Exp $
+// $Id: G4Hype.hh,v 1.8 2004-09-22 13:14:50 gcosmo Exp $
 // $Original: G4Hype.hh,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -140,6 +140,8 @@ class G4Hype : public G4VSolid
 
   std::ostream& StreamInfo(std::ostream& os) const;
 
+  G4double GetCubicVolume();
+
   void          DescribeYourselfTo (G4VGraphicsScene& scene) const;
   G4VisExtent   GetExtent          () const;
   G4Polyhedron* CreatePolyhedron   () const;
@@ -196,6 +198,11 @@ class G4Hype : public G4VSolid
   // Used by distanceToOut
 
   enum ESide {outerFace,innerFace,leftCap, rightCap};
+
+ private:
+
+  G4double fCubicVolume;
+
 };
 
 #include "G4Hype.icc"

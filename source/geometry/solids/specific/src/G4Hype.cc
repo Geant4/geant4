@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Hype.cc,v 1.11 2003-10-28 17:15:56 gcosmo Exp $
+// $Id: G4Hype.cc,v 1.12 2004-09-22 13:15:47 gcosmo Exp $
 // $Original: G4Hype.cc,v 1.0 1998/06/09 16:57:50 safai Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
@@ -75,7 +75,7 @@ G4Hype::G4Hype(const G4String& pName,
                      G4double newInnerStereo,
                      G4double newOuterStereo,
                      G4double newHalfLenZ)
-  : G4VSolid(pName)
+  : G4VSolid(pName), fCubicVolume(0.)
 {
   // Check z-len
   //
@@ -1360,4 +1360,14 @@ G4double G4Hype::ApproxDistInside( G4double pr, G4double pz,
   // Answer
   //
   return fabs((pr-rh)*dr)/len;
+}
+
+//
+// GetCubicVolume
+//
+G4double G4Hype::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  return fCubicVolume;
 }

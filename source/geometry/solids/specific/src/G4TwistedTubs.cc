@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.cc,v 1.5 2004-05-28 13:13:37 gcosmo Exp $
+// $Id: G4TwistedTubs.cc,v 1.6 2004-09-22 13:15:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -67,7 +67,8 @@ G4TwistedTubs::G4TwistedTubs(const G4String &pname,
                                    G4double  dphi)
    : G4VSolid(pname), fDPhi(dphi), 
      fLowerEndcap(0), fUpperEndcap(0), fLatterTwisted(0),
-     fFormerTwisted(0), fInnerHype(0), fOuterHype(0)
+     fFormerTwisted(0), fInnerHype(0), fOuterHype(0),
+     fCubicVolume(0.)
 {
    if (endinnerrad < DBL_MIN) {
       G4Exception("G4TwistedTubs::G4TwistedTubs()", "InvalidSetup",
@@ -1010,4 +1011,14 @@ void G4TwistedTubs::CreateSurfaces()
 G4GeometryType G4TwistedTubs::GetEntityType() const
 {
   return G4String("G4TwistedTubs");
+}
+
+//=====================================================================
+//* GetCubicVolume ----------------------------------------------------
+
+G4double G4TwistedTubs::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+    else fCubicVolume = G4VSolid::GetCubicVolume(); 
+  return fCubicVolume;
 }

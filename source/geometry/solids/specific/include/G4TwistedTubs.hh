@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTubs.hh,v 1.3 2004-05-24 12:09:47 gcosmo Exp $
+// $Id: G4TwistedTubs.hh,v 1.4 2004-09-22 13:14:50 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -163,6 +163,10 @@ class G4TwistedTubs : public G4VSolid
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
 
+  G4double GetCubicVolume();
+    // Returns an estimation of the geometrical cubic volume of the
+    // solid. Caches the computed value once computed the first time.
+
  public:  // without description
 
 #ifdef G4SPECSDEBUG
@@ -214,7 +218,9 @@ class G4TwistedTubs : public G4VSolid
   G4VSurface *fFormerTwisted;  // Surface of +ve phi
   G4VSurface *fInnerHype;      // Surface of -ve r
   G4VSurface *fOuterHype;      // Surface of +ve r
-    
+
+  G4double fCubicVolume;       // Cached value for cubic volume
+
   class LastState              // last Inside result
   {
     public:
@@ -298,6 +304,7 @@ void G4TwistedTubs::SetFields(G4double phitwist, G4double innerrad,
                               G4double outerrad, G4double negativeEndz, 
                               G4double positiveEndz)
 {
+   fCubicVolume  = 0.;
    fPhiTwist     = phitwist;
    fEndZ[0]      = negativeEndz;
    fEndZ[1]      = positiveEndz;
