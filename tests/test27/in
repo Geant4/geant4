@@ -121,6 +121,14 @@
 /mydet/SelectMaterial Si
 /run/beamOn 20
 #
+# C(12,6)++ at 1 GeV/nucleon on Water 
+#
+/gun/particle ion
+/gun/ion 6 12 2
+/gun/energy 1.0 GeV
+/mydet/SelectMaterial H2O
+/run/beamOn 20
+#
 #
 # C(12,6)++ at 200 MeV in U
 #

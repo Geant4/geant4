@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27DetectorConstruction.hh,v 1.2 2003-12-05 11:42:16 gunter Exp $
+// $Id: Tst27DetectorConstruction.hh,v 1.3 2004-04-07 15:54:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -55,6 +55,8 @@ class Tst27DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* theCu;
      G4Material* thePb;
      G4Material* theU;
+     G4Material* theH2O;
+     
      G4Material* selectedMaterial;
      G4String materialChoice;
      Tst27DetectorMessenger * detectorMessenger;

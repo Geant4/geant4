@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst27DetectorConstruction.cc,v 1.3 2003-12-05 11:42:16 gunter Exp $
+// $Id: Tst27DetectorConstruction.cc,v 1.4 2004-04-07 15:54:31 gunter Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -104,6 +104,37 @@ void Tst27DetectorConstruction::SelectMaterialPointer()
     theU = new G4Material(name="Uranium", z=92., a, density);
   }
 
+  if(!theH2O)
+    {
+    G4int ncomponents, Z, N;
+    G4double abundance;
+    //Oxygen
+    //   G4Isotope This class describes the properties of atoms: atomic number, number of nucleons, mass per mole, etc.*/
+    G4Isotope* O16 = new G4Isotope(name="O16", Z=8, N=16, a = 15.994*g/mole);
+    G4Isotope* O17 = new G4Isotope(name="O17", Z=8, N=17, a = 16.999*g/mole);
+    G4Isotope* O18 = new G4Isotope(name="O18", Z=8, N=18, a = 17.999*g/mole);
+  /*G4Element
+    This class describes the properties of atoms: effective atomic number, effective number of nucleons, effective mass per mole, number of isotopes, shell energy, and quantities like cross section per atom, etc.*/
+    G4Element* elO  = new G4Element(name="Oxygen", symbol="O", ncomponents=3);
+    elO->AddIsotope(O16, abundance= 99.762*perCent);
+    elO->AddIsotope(O17, abundance= 0.038*perCent);
+    elO->AddIsotope(O18, abundance= 0.200*perCent);
+
+  //Hydrogen
+    G4Isotope* H1 = new G4Isotope(name="H1", Z=1, N=1, a = 1.008*g/mole);
+    G4Isotope* H2 = new G4Isotope(name="H2", Z=1, N=2, a = 2.014*g/mole);
+    G4Element* elH  = new G4Element(name="Hydrogen", symbol="H", ncomponents=2);
+    elH->AddIsotope(H1, abundance= 99.985*perCent);
+    elH->AddIsotope(H2, abundance= 0.015*perCent);
+
+  /*H2O*/
+    theH2O = new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
+    theH2O->AddElement(elH, 2);
+    theH2O->AddElement(elO, 1);
+    // overwrite computed meanExcitationEnergy with ICRU recommended value
+    theH2O->GetIonisation()->SetMeanExcitationEnergy(75.0*eV);
+
+  }
   if(materialChoice=="H")
   { selectedMaterial = theH; }
   else if(materialChoice=="Si")
@@ -112,7 +143,9 @@ void Tst27DetectorConstruction::SelectMaterialPointer()
   { selectedMaterial = theCu; }
   else if(materialChoice=="Pb")
   { selectedMaterial = thePb; }
-  else
+  else if(materialChoice=="H2O")
+  { selectedMaterial = theH2O; }
+    else
   { selectedMaterial = theU; }
 
   if(simpleBoxLog)
