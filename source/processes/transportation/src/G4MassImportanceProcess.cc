@@ -7,6 +7,7 @@ G4MassImportanceProcess::
 G4MassImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
 			const G4VIStore &aIstore,
 			const G4String &aName):
+  G4VProcess(aName),
   fImportanceAlgorithm(aImportanceAlgorithm),
   fImportanceFinder(new G4ImportanceFinder(aIstore)){
   fParticleChange = new G4ParticleChange;
@@ -31,7 +32,8 @@ G4VParticleChange *
 G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
 				      const G4Step &aStep){
   fParticleChange->Initialize(aTrack);
-  if (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary) {
+  if (aStep.GetPostStepPoint()->GetStepStatus() == fGeomBoundary
+      && aStep.GetStepLength() > kCarTolerance) {
     if (aTrack.GetTrackStatus()==fStopAndKill) {
       G4cout << "G4MassImportanceProcess::PostStepDoIt StopAndKill" << G4endl;
     }
@@ -53,3 +55,6 @@ G4MassImportanceProcess::PostStepDoIt(const G4Track &aTrack,
   }
   return fParticleChange;
 }
+
+
+

@@ -19,6 +19,6 @@ G4MassImportanceScoreManager(G4VIStore &aIstore,
 {}
 
 void G4MassImportanceScoreManager::Initialize(){
-  G4MassImportanceManager::Initialize();
   G4MassScoreManager::Initialize();
+  G4MassImportanceManager::Initialize();
 }

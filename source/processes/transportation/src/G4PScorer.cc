@@ -22,7 +22,7 @@ void G4PScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
     if (aPstep.fCrossBoundary) { 
       // Pstep crosses boundary
       fPtkTallys[post_ptk]["HistorysEntering"].Xin(1);
-      fPtkTallys[post_ptk]["WeightedHistorysEntering"].Xin(weight);
+      fPtkTallys[post_ptk]["WeighteOfHistorysEntering"].Xin(weight);
       fPtkTallys[post_ptk]["EnergyEnteringHistory"].
 	Xin(track->GetKineticEnergy());
       fPtkTallys[post_ptk]["WeightedEnergyEnteringHistory"].
@@ -31,7 +31,7 @@ void G4PScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
     else { 
       // Pstep with both points in the same I volume
       fPtkTallys[post_ptk]["Collisions"].Xin(1);
-      fPtkTallys[post_ptk]["WeightedCollisions"].Xin(1, weight);
+      fPtkTallys[post_ptk]["WeighteOfCollisions"].Xin(weight);
     }
   }
 }

@@ -29,18 +29,20 @@ void G4PIScorer::Score(const G4Step &aStep, const G4PStep &aPstep){
       G4StepPoint* postpoint = aStep.GetPostStepPoint();
       
       G4cout << "G4PIScorer::Score:" << G4endl;
-      G4cout << "Track wieght = " << weight << G4endl;
-      G4cout << "Importance = " << import << G4endl;
-      G4cout << "i_w = " << i_w << G4endl;
-      G4cout << "Stepnumber = " << aStep.GetTrack()->GetCurrentStepNumber() 
+      G4cout << "  Stepnumber = " << aStep.GetTrack()->GetCurrentStepNumber() 
 	     << G4endl;
-      G4cout << "aPstep: " << aPstep << G4endl;
-      G4cout << "steplength = " << aStep.GetStepLength() << G4endl;
-      G4cout << "pre_pos = " << prepoint->GetPosition()
+      G4cout << "  TrackID = " << aStep.GetTrack()->GetTrackID() << G4endl;
+      G4cout << "  ParentID = " << aStep.GetTrack()->GetParentID() << G4endl;
+      G4cout << "  Track wieght = " << weight << G4endl;
+      G4cout << "  Importance = " << import << G4endl;
+      G4cout << "  i_w = " << i_w << G4endl;
+      G4cout << "  aPstep: " << aPstep << G4endl;
+      G4cout << "  steplength = " << aStep.GetStepLength() << G4endl;
+      G4cout << "  pre_pos = " << prepoint->GetPosition()
 	     << ", pre_dir = " << prepoint->GetMomentumDirection() << G4endl;
-      G4cout << "post_pos = " << postpoint->GetPosition()
+      G4cout << "  post_pos = " << postpoint->GetPosition()
 	     << ", post_dir = " << postpoint->GetMomentumDirection() << G4endl;
-      G4cout << "vxt mom: " << track->GetVertexMomentumDirection() << G4endl;
+      G4cout << "  vxt mom: " << track->GetVertexMomentumDirection() << G4endl;
       fCorrectWeight = false;
     }
     fPScorer.Score(aStep, aPstep);

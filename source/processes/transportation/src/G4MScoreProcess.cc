@@ -26,21 +26,22 @@ G4VParticleChange *
 G4MScoreProcess::PostStepDoIt(const G4Track& aTrack, const G4Step &aStep){
   pParticleChange->Initialize(aTrack);
 
-  G4StepPoint *prepoint = aStep.GetPreStepPoint();
-  G4StepPoint *postpoint = aStep.GetPostStepPoint();
+  if (aStep.GetStepLength() > kCarTolerance) {
+    G4StepPoint *prepoint = aStep.GetPreStepPoint();
+    G4StepPoint *postpoint = aStep.GetPostStepPoint();
   
 
-  G4PTouchableKey prekey(*(prepoint->GetPhysicalVolume()), 
-			 prepoint->GetTouchable()->GetReplicaNumber());
-  G4PTouchableKey postkey(*(postpoint->GetPhysicalVolume()), 
-			  postpoint->GetTouchable()->GetReplicaNumber());
+    G4PTouchableKey prekey(*(prepoint->GetPhysicalVolume()), 
+			   prepoint->GetTouchable()->GetReplicaNumber());
+    G4PTouchableKey postkey(*(postpoint->GetPhysicalVolume()), 
+			    postpoint->GetTouchable()->GetReplicaNumber());
 
-  G4PStep pstep(prekey, postkey);
-  pstep.fCrossBoundary = false;
+    G4PStep pstep(prekey, postkey);
+    pstep.fCrossBoundary = false;
+    
+    if (prekey != postkey) pstep.fCrossBoundary = true;
   
-  if (prekey != postkey) pstep.fCrossBoundary = true;
-  
-  fScorer.Score(aStep, pstep); 
-
+    fScorer.Score(aStep, pstep); 
+  }
   return G4VProcess::pParticleChange;
 }

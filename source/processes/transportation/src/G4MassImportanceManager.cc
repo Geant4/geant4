@@ -43,5 +43,5 @@ CreateMassImportanceProcess(){
 
 void G4MassImportanceManager::Initialize(){
   G4ProcessPlacer placer(fParticleName);
-  placer.AddProcessAsLastDoIt(CreateMassImportanceProcess());
+  placer.AddProcessAsSecondDoIt(CreateMassImportanceProcess());
 }
