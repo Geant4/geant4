@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FConicalSurface.cc,v 1.5 1999-01-20 07:34:48 broglia Exp $
+// $Id: G4FConicalSurface.cc,v 1.6 1999-01-20 12:57:10 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/G4FConicalSurface.cc,v 1.2 1993/02/05 00:38:39 alanb Exp  */
@@ -426,6 +426,9 @@ G4Vector3D G4FConicalSurface::SurfaceNormal( const G4Point3D& p ) const
   if ( nmag != 0.0 )
     n=n*(1/nmag);
   
+  if( !sameSense )
+    n = -n;
+
   return n;
   
 }

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4FCylindricalSurface.cc,v 1.4 1999-01-20 07:34:49 broglia Exp $
+// $Id: G4FCylindricalSurface.cc,v 1.5 1999-01-20 12:57:10 broglia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 /*  /usr/local/gismo/repo/geometry/FG4Cylinder.cc,v 1.1 1992/10/27 22:02:29 alanb Exp  */
@@ -307,6 +307,9 @@ G4Vector3D G4FCylindricalSurface::SurfaceNormal( const G4Point3D& p ) const
   
   if ( nmag != 0.0 )
     n = n * (1/nmag);
+
+  if( !sameSense )
+    n = -n;
   
   return n;
 }
