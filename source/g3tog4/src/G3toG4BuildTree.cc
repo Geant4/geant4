@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4BuildTree.cc,v 1.15 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3toG4BuildTree.cc,v 1.16 2001-07-16 15:38:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 2.8.99 
@@ -66,7 +66,7 @@ void G3toG4BuildLVTree(G3VolTableEntry* curVTE, G3VolTableEntry* motherVTE)
       
       // insert logical volume to G3SensVol vector
       // in case it is sensitive
-      if (mte->GetISVOL()) G3SensVol.insert(curLog);
+      if (mte->GetISVOL()) G3SensVol.push_back(curLog);
     }  
   }
   else {

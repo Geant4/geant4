@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4gsatt.cc,v 1.10 2001-07-11 09:59:00 gunter Exp $
+// $Id: G4gsatt.cc,v 1.11 2001-07-16 15:38:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
-#include "g4rw/cstring.h"
+#include "globals.hh"
 #include "G3toG4.hh"
 #include "G3VolTable.hh"
 

@@ -1,7 +1,16 @@
-$Id: History,v 1.44 2001-05-30 08:13:34 gcosmo Exp $
+$Id: History,v 1.45 2001-07-16 15:38:17 gcosmo Exp $
 
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
+
+g3tog4-V03-02-00 16-Jul-2001 G.Cosmo
+- Migration to STL vector, removed references to Rogue-Wave Tools.h++
+  wrappers. Modified files:
+  G3EleTable[.hh.cc], G3MatTable[.hh.cc], G3MedTable[.hh.cc],
+  G3RotTable[.hh.cc], G3VolTableEntry[.hh.cc], G3SensVolVector.hh,
+  G3toG4BuildTree.cc, G4gsatt.cc, clparse.cc.
+- Replaced usage of "NULL" with "0".
+- Replaced usage of "int" with "G4int".
 
 g3tog4-V03-01-01 30-May-2001 G.Cosmo
 - Cleared pedantic warnings detected on Linux-g++ with ISO/ANSI setup.

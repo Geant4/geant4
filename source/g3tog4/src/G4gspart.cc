@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4gspart.cc,v 1.4 2001-07-11 09:59:01 gunter Exp $
+// $Id: G4gspart.cc,v 1.5 2001-07-16 15:38:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "G4ProcessManager.hh"
@@ -56,7 +56,7 @@ void G4gspart(G4int ipart, G4String chnpar, G4int itrtyp, G4double amass,
               G4double charge, G4double tlife, G4double*, G4int)
 {
     // Handle conversion of itrtyp into an appropriate ProcessManager
-    G4ProcessManager *mgr = NULL;
+    G4ProcessManager *mgr = 0;
     switch (itrtyp) {
     case 1:
         // gamma

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.cc,v 1.8 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3VolTableEntry.cc,v 1.9 2001-07-16 15:38:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, 13.10.99
@@ -43,7 +43,7 @@ G3VolTableEntry::G3VolTableEntry(G4String& vname, G4String& shape,
     fRpar = new G4double[npar];
     for (G4int i=0; i<npar; i++) fRpar[i] = rpar[i];
   }
-  fClones.insert(this);
+  fClones.push_back(this);
 }
 
 G3VolTableEntry::~G3VolTableEntry(){
@@ -59,27 +59,27 @@ G3VolTableEntry::operator == ( const G3VolTableEntry& lv) const {
 void 
 G3VolTableEntry::AddG3Pos(G3Pos* aG3Pos){
   G3Vol.CountG3Pos();
-  fG3Pos.insert(aG3Pos);
+  fG3Pos.push_back(aG3Pos);
 }
 
 void 
 G3VolTableEntry::AddDaughter(G3VolTableEntry* aDaughter){
   if (FindDaughter(aDaughter->GetName()) == 0) {
-    fDaughters.insert(aDaughter);
+    fDaughters.push_back(aDaughter);
   }
 }
 
 void 
 G3VolTableEntry::AddMother(G3VolTableEntry* itsMother){
   if (FindMother(itsMother->GetName()) == 0) {
-    fMothers.insert(itsMother);
+    fMothers.push_back(itsMother);
   }  
 }
 
 void 
 G3VolTableEntry::AddClone(G3VolTableEntry* itsClone){
   if (FindClone(itsClone->GetName()) == 0) {
-    fClones.insert(itsClone);
+    fClones.push_back(itsClone);
   }  
 }
 
@@ -186,8 +186,15 @@ void G3VolTableEntry::SetHasNegPars(G4bool hasNegPars) {
 }
 
 void G3VolTableEntry::ClearG3PosCopy(G4int copy) {
-  if (fG3Pos.entries()>0 && copy>=0 && copy<G4int(fG3Pos.entries())) 
-    fG3Pos.removeAt(copy);
+  if (fG3Pos.size()>0 && copy>=0 && copy<G4int(fG3Pos.size())) {
+    G3Pos* tmp=0;
+    G4std::vector<G3Pos*>::iterator it=fG3Pos.begin();
+    for(G4int j=0;j<copy;j++) it++;
+    if(it!=fG3Pos.end()) {
+        tmp = fG3Pos[copy];
+        fG3Pos.erase(it);
+    }
+  }
 }
 
 void G3VolTableEntry::ClearDivision() {
@@ -222,12 +229,12 @@ G3VolTableEntry::GetRpar() {
 
 G4int 
 G3VolTableEntry::NPCopies() {
-  return fG3Pos.entries();
+  return fG3Pos.size();
 }
 
 G3Pos* 
 G3VolTableEntry::GetG3PosCopy(G4int copy) {
-  if (fG3Pos.entries()>0 && copy>=0)
+  if (fG3Pos.size()>0 && copy>=0)
     return fG3Pos[copy];
   else
     return 0;
@@ -250,22 +257,22 @@ G3VolTableEntry::GetLV() {
 
 G4int
 G3VolTableEntry::GetNoDaughters() {
-  return fDaughters.entries();
+  return fDaughters.size();
 }
 
 G4int
 G3VolTableEntry::GetNoMothers() {
-  return fMothers.entries();
+  return fMothers.size();
 }
 
 G4int
 G3VolTableEntry::GetNoClones() {
-  return fClones.entries();
+  return fClones.size();
 }
 
 G3VolTableEntry* 
 G3VolTableEntry::GetDaughter(G4int i) {
-  if (i<G4int(fDaughters.entries()) && i>=0)
+  if (i<G4int(fDaughters.size()) && i>=0)
     return fDaughters[i];
   else 
     return 0;
@@ -273,7 +280,7 @@ G3VolTableEntry::GetDaughter(G4int i) {
 
 G3VolTableEntry*
 G3VolTableEntry::GetMother(G4int i){
-  if (i<G4int(fMothers.entries()) && i>=0)
+  if (i<G4int(fMothers.size()) && i>=0)
     return fMothers[i];
   else
     return 0;
@@ -282,7 +289,7 @@ G3VolTableEntry::GetMother(G4int i){
 // to be removed
 G3VolTableEntry*
 G3VolTableEntry::GetMother(){
-  if (fMothers.entries()>0)
+  if (fMothers.size()>0)
     return fMothers[0];
   else
     return 0;  
@@ -290,7 +297,7 @@ G3VolTableEntry::GetMother(){
 
 G3VolTableEntry*
 G3VolTableEntry::GetClone(G4int i){
-  if (i<G4int(fClones.entries()) && i>=0)
+  if (i<G4int(fClones.size()) && i>=0)
     return fClones[i];
   else
     return 0;

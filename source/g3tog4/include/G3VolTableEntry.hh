@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3VolTableEntry.hh,v 1.5 2001-07-11 09:58:58 gunter Exp $
+// $Id: G3VolTableEntry.hh,v 1.6 2001-07-16 15:38:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -69,7 +69,7 @@
 #include "globals.hh"
 #include "G3Pos.hh"
 #include "G3Division.hh"
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4LogicalVolume;
 class G4Material;
@@ -142,10 +142,10 @@ class G3VolTableEntry
     G4VSolid* fSolid;
     G4LogicalVolume* fLV;
     G4bool fHasNegPars;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fDaughters;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fMothers;
-    G4RWTPtrOrderedVector<G3VolTableEntry> fClones;
-    G4RWTPtrOrderedVector<G3Pos> fG3Pos;
+    G4std::vector<G3VolTableEntry*> fDaughters;
+    G4std::vector<G3VolTableEntry*> fMothers;
+    G4std::vector<G3VolTableEntry*> fClones;
+    G4std::vector<G3Pos*> fG3Pos;
     G3Division*  fDivision;
 };
 

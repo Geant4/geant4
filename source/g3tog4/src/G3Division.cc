@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3Division.cc,v 1.11 2001-07-11 09:58:58 gunter Exp $
+// $Id: G3Division.cc,v 1.12 2001-07-16 15:38:19 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, V.Berejnoi 13.10.99
@@ -306,7 +306,7 @@ void G3Division::SetRangeAndAxis()
     }
     else if ( shape == "PGON" ) {
         G4int i;
-        G4int nz = int(Rpar[3]);
+        G4int nz = G4int(Rpar[3]);
 
         G4double pPhi1 = Rpar[0]*deg;
         G4double dPhi  = Rpar[1]*deg;
@@ -322,9 +322,9 @@ void G3Division::SetRangeAndAxis()
 
         for(i=0; i<nz; i++) 
         {
-            int i4=3*i+4;
-            int i5=i4+1;
-            int i6=i4+2;
+            G4int i4=3*i+4;
+            G4int i5=i4+1;
+            G4int i6=i4+2;
             
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;
@@ -355,7 +355,7 @@ void G3Division::SetRangeAndAxis()
         G4int i;
         G4double pPhi1 = Rpar[0]*deg;
         G4double dPhi  = Rpar[1]*deg;    
-        G4int nz = int(Rpar[2]);
+        G4int nz = G4int(Rpar[2]);
     
         G4double *DzArray = new G4double[nz];
         G4double *Rmax    = new G4double[nz];
@@ -368,9 +368,9 @@ void G3Division::SetRangeAndAxis()
         rangelo[2] =  kInfinity ;
         
         for(i=0; i<nz; i++){
-            int i4=3*i+3;
-            int i5=i4+1;
-            int i6=i4+2;
+            G4int i4=3*i+3;
+            G4int i5=i4+1;
+            G4int i6=i4+2;
             
             DzArray[i] = Rpar[i4]*cm;
             Rmin[i] = Rpar[i5]*cm;

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: clparse.cc,v 1.12 2001-07-11 09:59:02 gunter Exp $
+// $Id: clparse.cc,v 1.13 2001-07-16 15:38:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova
@@ -29,7 +29,6 @@
 
 #include "globals.hh"
 #include "g4std/fstream"
-#include "g4rw/rstream.h"
 #include "g4rw/ctoken.h"
 #include "G3toG4.hh"
 #include "G3EleTable.hh"
@@ -92,7 +91,7 @@ void PG4gsdetd(G4String *tokens);
 void PG4gsdetu(G4String *tokens);
 void PG4ggclos();
 
-void G3CLRead(G4String & fname, char *select = NULL){
+void G3CLRead(G4String & fname, char *select = 0){
 //
 //  G3CLRead
 //  Read the call List file, parse the tokens, and pass the token
@@ -167,7 +166,7 @@ void G3CLEval(G4String tokens[], char *select)
     const char* routine = tokens[1];
 
     // If context is selected, return unless context matches.
-    if (select != NULL && select != "*") if ( strcmp(select,context) ) return;
+    if (select != 0 && select != "*") if ( strcmp(select,context) ) return;
 
     // Branch on Geant3 routine name
     ofile << "Do routine " << routine << " in context " << context << G4endl;

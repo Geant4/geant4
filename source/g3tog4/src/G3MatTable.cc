@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.cc,v 1.14 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3MatTable.cc,v 1.15 2001-07-16 15:38:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -35,13 +35,13 @@ G3MatTable::G3MatTable()
 
 G3MatTable::~G3MatTable()
 {
-  fMatVector->clearAndDestroy();
+  Clear();
   delete fMatVector;
 }
 
 G4Material* G3MatTable::get(G4int id) const
 {
-  for (size_t i=0; i< fMatVector->entries(); i++) {
+  for (size_t i=0; i< fMatVector->size(); i++) {
     G3MatTableEntry* mte = (*fMatVector)[i];
     if (id == mte->GetID()) return mte->GetMaterial();
   }
@@ -51,10 +51,22 @@ G4Material* G3MatTable::get(G4int id) const
 void G3MatTable::put(G4int id, G4Material* material)
 {
   G3MatTableEntry* mte = new G3MatTableEntry(id, material);
-  fMatVector->insert(mte);
+  fMatVector->push_back(mte);
 }
 
 void G3MatTable::Clear()
 {
-  fMatVector->clearAndDestroy();
+  G3MatTableEntry* a;
+  while (fMatVector->size()>0) {
+    a = fMatVector->back();
+    fMatVector->pop_back();
+    for (G3MaterialVector::iterator i=fMatVector->begin();
+                                    i!=fMatVector->end(); i++){
+      if (*i==a) {
+	fMatVector->erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
 }

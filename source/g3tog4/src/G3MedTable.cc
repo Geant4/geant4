@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.cc,v 1.12 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3MedTable.cc,v 1.13 2001-07-16 15:38:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -35,13 +35,13 @@ G3MedTable::G3MedTable()
 
 G3MedTable::~G3MedTable()
 {
-  fMedVector->clearAndDestroy();
+  Clear();
   delete fMedVector;
 }
 
 G3MedTableEntry* G3MedTable::get(G4int id) const
 {
-  for (size_t i=0; i< fMedVector->entries(); i++) {
+  for (size_t i=0; i< fMedVector->size(); i++) {
     G3MedTableEntry* mte = (*fMedVector)[i];
     if (id == mte->GetID()) return mte;
   }
@@ -53,10 +53,22 @@ void G3MedTable::put(G4int id, G4Material* material, G4MagneticField* field,
 {
   G3MedTableEntry* mte 
     = new G3MedTableEntry(id, material, field, limits, isvol);
-  fMedVector->insert(mte);
+  fMedVector->push_back(mte);
 }
 
 void G3MedTable::Clear()
 {
-  fMedVector->clearAndDestroy();
+  G3MedTableEntry* a;
+  while (fMedVector->size()>0) {
+    a = fMedVector->back();
+    fMedVector->pop_back();
+    for (G3MediumVector::iterator i=fMedVector->begin();
+                                  i!=fMedVector->end(); i++){
+      if (*i==a) {
+	fMedVector->erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
 }

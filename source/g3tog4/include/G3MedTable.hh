@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MedTable.hh,v 1.9 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3MedTable.hh,v 1.10 2001-07-16 15:38:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -43,13 +43,13 @@
 
 #include "globals.hh"
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Material;
 class G4MagneticField;
 class G4UserLimits;
 
-typedef G4RWTPtrOrderedVector<G3MedTableEntry>  G3MediumVector;
+typedef G4std::vector<G3MedTableEntry*>  G3MediumVector;
 
 class G3MedTable
 {

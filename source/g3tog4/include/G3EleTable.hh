@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.hh,v 1.6 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3EleTable.hh,v 1.7 2001-07-16 15:38:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -39,8 +39,6 @@
 #ifndef G4ELETABLE_HH
 #define G4ELETABLE_HH 1
 
-#include "g4rw/ctoken.h"
-#include "g4rw/tpordvec.h"
 #include "globals.hh"
 #include "G4Element.hh"
 
@@ -56,13 +54,13 @@ public:  // with description
 private:
 
   void LoadUp();
-  int parse(G4double& Z, char* name, char* sym, G4double& A); 
+  G4int parse(G4double& Z, char* name, char* sym, G4double& A); 
 
 private:
 
   char** _EleNames;
   G4Element** _Ele;
-  int _MaxEle;
+  G4int _MaxEle;
 
 };
 

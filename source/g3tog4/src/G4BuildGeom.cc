@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BuildGeom.cc,v 1.14 2001-07-11 09:59:00 gunter Exp $
+// $Id: G4BuildGeom.cc,v 1.15 2001-07-16 15:38:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I. Hrivnacova, 13.10.99 
@@ -61,7 +61,7 @@ G4LogicalVolume* G4BuildGeom(G4String& inFile){
 
   G4cout << "Reading the call List file " << inFile << "..." << G4endl;
 
-  G3CLRead(inFile, NULL);
+  G3CLRead(inFile, 0);
 
   G3Part.PrintAll();
 
@@ -123,7 +123,7 @@ void checkVol(G4LogicalVolume* _lvol, G4int level)
   
   G4cout << "G44LogicalVolume " << _lvol->GetName() << " at level " << level
 	 << " contains " << ndau << " daughters." << G4endl;
-  for (int idau=0; idau<ndau; idau++){
+  for (G4int idau=0; idau<ndau; idau++){
     _pdvol = _lvol-> GetDaughter(idau);
     _ldvol = _pdvol -> GetLogicalVolume();
     G4cout << "G4VPhysical volume " << G4std::setw(5) << _pdvol -> GetName() 

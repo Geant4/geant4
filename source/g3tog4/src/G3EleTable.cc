@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3EleTable.cc,v 1.10 2001-07-11 09:58:58 gunter Exp $
+// $Id: G3EleTable.cc,v 1.11 2001-07-16 15:38:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -57,9 +57,9 @@ G3EleTable::GetEle(G4double Z){
   return _Ele[index];
 }
 
-int 
+G4int 
 G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){ 
- int rc = 0;
+ G4int rc = 0;
   if (Z>0 && Z <=_MaxEle){
     G4int z = (G4int) Z-1;
     G4std::istrstream in(_EleNames[z]);
@@ -72,7 +72,7 @@ G3EleTable::parse(G4double& Z, char* name, char* sym, G4double& A){
 
 void
 G3EleTable::LoadUp(){
-  int i=0;
+  G4int i=0;
   _EleNames[i]=(char *)"Hydrogen H 1.00794"; i++;
   _EleNames[i]=(char *)"Helium He 4.0026"; i++;
   _EleNames[i]=(char *)"Lithium Li 6.941"; i++;
@@ -194,7 +194,7 @@ G3EleTable::LoadUp(){
   _EleNames[i]=(char *)"Meitnerium Mt 266.1378";  i++;
 
   // initialize element pointers to 0
-  for (int j=0; j<i; j++) {
+  for (G4int j=0; j<i; j++) {
     _Ele[j]=0;
   }
 }

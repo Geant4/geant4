@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3RotTable.cc,v 1.14 2001-07-11 09:58:59 gunter Exp $
+// $Id: G3RotTable.cc,v 1.15 2001-07-16 15:38:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by I.Hrivnacova, 27 Sep 99
@@ -36,13 +36,12 @@ G3RotTable::G3RotTable()
 G3RotTable::~G3RotTable()
 {
   fRotVector->clear();
-  //fRotVector->clearAndDestroy();
   delete fRotVector;
 }
 
 G4RotationMatrix* G3RotTable::Get(G4int id) const
 {
-  for (size_t i=0; i<fRotVector->entries(); i++) {
+  for (size_t i=0; i<fRotVector->size(); i++) {
     G3RotTableEntry* rte = (*fRotVector)[i];
     if (id == rte->GetID()) return rte->GetMatrix();
   }
@@ -52,10 +51,22 @@ G4RotationMatrix* G3RotTable::Get(G4int id) const
 void G3RotTable::Put(G4int id, G4RotationMatrix* matrix)
 {
   G3RotTableEntry* rte = new G3RotTableEntry(id, matrix);
-  fRotVector->insert(rte);
+  fRotVector->push_back(rte);
 }
 
 void G3RotTable::Clear()
 {
-  fRotVector->clearAndDestroy();
+  G3RotTableEntry* a;
+  while (fRotVector->size()>0) {
+    a = fRotVector->back();
+    fRotVector->pop_back();
+    for (G3RotMatrixVector::iterator i=fRotVector->begin();
+                                     i!=fRotVector->end(); i++){
+      if (*i==a) {
+	fRotVector->erase(i);
+	i--;
+      }
+    } 
+    if ( a )  delete a;    
+  } 
 }

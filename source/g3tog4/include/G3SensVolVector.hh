@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3SensVolVector.hh,v 1.4 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3SensVolVector.hh,v 1.5 2001-07-16 15:38:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // vector of logical volumes that were defined with
@@ -32,10 +32,10 @@
 #ifndef G3SENSVOLVECTOR_HH
 #define G3SENSVOLVECTOR_HH 1
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 #include "G4LogicalVolume.hh"
 
-typedef G4RWTPtrOrderedVector<G4LogicalVolume> G3SensVolVector;
+typedef G4std::vector<G4LogicalVolume*> G3SensVolVector;
 
 extern G3SensVolVector G3SensVol;
 #endif

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3MatTable.hh,v 1.10 2001-07-11 09:58:57 gunter Exp $
+// $Id: G3MatTable.hh,v 1.11 2001-07-16 15:38:18 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------
@@ -41,11 +41,11 @@
 
 #include "globals.hh"
 
-#include "g4rw/tpordvec.h"
+#include "g4std/vector"
 
 class G4Material;
 
-typedef G4RWTPtrOrderedVector<G3MatTableEntry>  G3MaterialVector;
+typedef G4std::vector<G3MatTableEntry*>  G3MaterialVector;
 
 class G3MatTable
 {

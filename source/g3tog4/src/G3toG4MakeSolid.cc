@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G3toG4MakeSolid.cc,v 1.8 2001-07-11 09:59:00 gunter Exp $
+// $Id: G3toG4MakeSolid.cc,v 1.9 2001-07-16 15:38:21 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // modified by I.Hrivnacova, V.Berejnoi 27 Sep 99 
@@ -56,7 +56,7 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
   // modified
   if (Deferred) return solid;
 
-  for (int i=0;i<3;i++){
+  for (G4int i=0;i<3;i++){
     OKAxis[i]=false;
   };
 
@@ -237,8 +237,8 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
 
   } else if ( shape == "PGON" ) {
     G4int i;
-    G4int npdv = int(Rpar[2]);
-    G4int nz = int(Rpar[3]);
+    G4int npdv = G4int(Rpar[2]);
+    G4int nz = G4int(Rpar[3]);
     G4double pPhi1 = Rpar[0]*deg;
     G4double dPhi  = Rpar[1]*deg;
     G4double *DzArray = new G4double[nz];
@@ -250,9 +250,9 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     NegVolPars = 0;
 
     for(i=0; i<nz; i++) {
-      int i4=3*i+4;
-      int i5=i4+1;
-      int i6=i4+2;
+      G4int i4=3*i+4;
+      G4int i5=i4+1;
+      G4int i6=i4+2;
       DzArray[i] = Rpar[i4]*cm;
       Rmin[i] = Rpar[i5]*cm;
       Rmax[i] = Rpar[i6]*cm;
@@ -266,7 +266,7 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     G4int i;
     G4double pPhi1 =  Rpar[0]*deg;
     G4double dPhi  = Rpar[1]*deg;    
-    G4int nz = int(Rpar[2]);
+    G4int nz = G4int(Rpar[2]);
     G4double *DzArray = new G4double[nz];
     G4double *Rmax    = new G4double[nz];
     G4double *Rmin    = new G4double[nz];
@@ -276,9 +276,9 @@ G4VSolid* G3toG4MakeSolid(const G4String& vname, const G4String& shape,
     NegVolPars = 0;
 
     for(i=0; i<nz; i++){
-      int i4=3*i+3;
-      int i5=i4+1;
-      int i6=i4+2;
+      G4int i4=3*i+3;
+      G4int i5=i4+1;
+      G4int i6=i4+2;
       DzArray[i] = Rpar[i4]*cm;
       Rmin[i] = Rpar[i5]*cm;
       Rmax[i] = Rpar[i6]*cm;
