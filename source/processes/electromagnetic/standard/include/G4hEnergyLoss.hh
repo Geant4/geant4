@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.hh,v 1.1 1999-01-07 16:11:18 gunter Exp $
+// $Id: G4hEnergyLoss.hh,v 1.2 1999-02-16 13:34:49 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -36,6 +36,7 @@
 //
 // 7/10/98 some bugs fixed + some cleanup , L.Urban 
 // 22/10/98 cleanup , L.Urban
+// 02/02/99 several bugs fixed, L.Urban
 //
 
 #ifndef G4hEnergyLoss_h
@@ -113,15 +114,13 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
 
     G4PhysicsTable* theLossTable ;
    
+    G4double MinKineticEnergy ;
 
   private:
 
     G4double fdEdx;      // computed in GetContraints
-
     G4double fRangeNow ; // computed in GetContraints
-
-    G4int EnergyBinNumber ;
-    G4double RangeCoeffA,RangeCoeffB,RangeCoeffC ;
+    G4double linLossLimit ;
 
     // variables for the integration routines
      static G4double Mass,taulow,tauhigh,ltaulow,ltauhigh;
@@ -159,7 +158,11 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
     static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
     static void SetStepFunction (G4double c1, G4double c2)
-                                      {dRoverRange = c1; finalRange = c2;}
+                               {dRoverRange = c1; finalRange = c2;
+                                c1lim=dRoverRange ;
+                                c2lim=2.*(1-dRoverRange)*finalRange;
+                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+                               }
 
   protected:
 
@@ -208,12 +211,9 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static const G4Proton* theProton ;
     static const G4AntiProton* theAntiProton ;
 
-
 // ====================================================================
 
-
   public:
-
 
   protected:
 
@@ -244,8 +244,10 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4double ParticleMass ;
 
     // cut in range
-    static G4double CutInRange;
+    static G4double ptableElectronCutInRange;
+    static G4double pbartableElectronCutInRange;
 
+    static G4double Charge ;
   private:
 
     static G4PhysicsTable* theDEDXTable;
@@ -275,6 +277,7 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
                                   //  in one step  
 
     static G4double finalRange ;  // last step before stop
+    static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
 
     static G4bool rndmStepFlag ;
     static G4bool EnlossFlucFlag ;
@@ -289,7 +292,6 @@ class G4hEnergyLoss : public G4VContinuousDiscreteProcess
     static G4double RTable,LOGRTable; // LOGRTable=log(HighestKineticEnergy
                                       //          /LowestKineticEnergy)/TotBin
                                       //   RTable = exp(LOGRTable)
-
 
 };
  

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLoss.hh,v 1.1 1999-01-07 16:11:16 gunter Exp $
+// $Id: G4eEnergyLoss.hh,v 1.2 1999-02-16 13:34:46 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -32,6 +32,7 @@
 //  27.05.98 OldGetRange removed + other corrs , L.Urban
 //  10.09.98 cleanup
 //  16.10.98 public method SetStepFunction() + messenger class 
+//  20.01.99 new data members , L.Urban
 // ------------------------------------------------------------
  
 #ifndef G4eEnergyLoss_h
@@ -51,6 +52,7 @@
 #include "G4Positron.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4EnergyLossTables.hh"
 
 class G4EnergyLossMessenger;
  
@@ -134,11 +136,19 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
      
     G4double ParticleMass;               // heavily used
 
-  private:
+    G4double MinKineticEnergy ;           // 
+
+    G4double Charge,lastCharge ;
 
     G4PhysicsTable* theDEDXTable;
- 
     G4PhysicsTable* theRangeTable;
+
+    G4PhysicsTable* theRangeCoeffATable;
+    G4PhysicsTable* theRangeCoeffBTable;
+    G4PhysicsTable* theRangeCoeffCTable;
+    
+  private:
+
     G4PhysicsTable* theInverseRangeTable;
 
     G4PhysicsTable* theLabTimeTable ;
@@ -150,8 +160,8 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     G4double fdEdx;                       // computed in GetConstraints
     G4double fRangeNow;                   // computed in GetConstraints
 
-    G4int    EnergyBinNumber;             // computed in GetConstraints
-                                          // (needed to compute range)   
+    G4double linLossLimit ;               //
+
     G4int TotBin;                         // number of bins in table, 
                                           // calculated in BuildPhysicTable
     G4double LowestKineticEnergy;
@@ -160,10 +170,6 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
                                          // LowestKineticEnergy)/TotBin
                                          // RTable = exp(LOGRTable)
 
-    G4PhysicsTable* theRangeCoeffATable;
-    G4PhysicsTable* theRangeCoeffBTable;
-    G4PhysicsTable* theRangeCoeffCTable;
-    
     // variables for the integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
     
@@ -223,6 +229,7 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     static G4double dRoverRange;     // dRoverRange is the maximum allowed
                                      // deltarange/range in one Step 
     static G4double finalRange;      // final step before stopping
+    static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
     
     static G4bool   rndmStepFlag;    // control the randomization of the step
     static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
@@ -239,7 +246,13 @@ class G4eEnergyLoss : public G4VContinuousDiscreteProcess
     static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
     static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
     static void SetStepFunction (G4double c1, G4double c2) 
-                                      {dRoverRange = c1; finalRange = c2;}         
+                               {dRoverRange = c1; finalRange = c2;  
+                                c1lim=dRoverRange ;
+                                c2lim=2.*(1-dRoverRange)*finalRange;
+                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+                               }
+  
+                                       
 };
  
 #include "G4eEnergyLoss.icc"

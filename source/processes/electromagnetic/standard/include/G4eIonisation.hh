@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eIonisation.hh,v 1.1 1999-01-07 16:11:17 gunter Exp $
+// $Id: G4eIonisation.hh,v 1.2 1999-02-16 13:34:48 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.hh,v 1.1 1999-01-07 16:11:16 gunter Exp $
+// $Id: G4eEnergyLossPlus.hh,v 1.2 1999-02-16 13:34:47 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id: 
@@ -31,6 +31,7 @@
 // 18/11/98  , L. Urban
 //  It is a modified version of G4eEnergyLoss:
 //  continuous energy loss with generation of subcutoff delta rays
+// 02/02/99  new data members ,  L.Urban 
 // ---------------------------------------------------------------
  
 #ifndef G4eEnergyLossPlus_h
@@ -50,6 +51,7 @@
 #include "G4Positron.hh"
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
+#include "G4EnergyLossTables.hh"
 
 class G4EnergyLossMessenger;
  
@@ -133,11 +135,19 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
      
     G4double ParticleMass;               // heavily used
 
-  private:
+    G4double MinKineticEnergy ;           //
+
+    G4double Charge,lastCharge ;
 
     G4PhysicsTable* theDEDXTable;
- 
     G4PhysicsTable* theRangeTable;
+
+    G4PhysicsTable* theRangeCoeffATable;
+    G4PhysicsTable* theRangeCoeffBTable;
+    G4PhysicsTable* theRangeCoeffCTable;
+
+  private:
+
     G4PhysicsTable* theInverseRangeTable;
 
     G4PhysicsTable* theLabTimeTable ;
@@ -149,8 +159,8 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
     G4double fdEdx;                       // computed in GetConstraints
     G4double fRangeNow;                   // computed in GetConstraints
 
-    G4int    EnergyBinNumber;             // computed in GetConstraints
-                                          // (needed to compute range)   
+    G4double linLossLimit ;               //
+
     G4int TotBin;                         // number of bins in table, 
                                           // calculated in BuildPhysicTable
     G4double LowestKineticEnergy;
@@ -159,10 +169,6 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
                                          // LowestKineticEnergy)/TotBin
                                          // RTable = exp(LOGRTable)
 
-    G4PhysicsTable* theRangeCoeffATable;
-    G4PhysicsTable* theRangeCoeffBTable;
-    G4PhysicsTable* theRangeCoeffCTable;
-    
     // variables for the integration routines
     G4double taulow,tauhigh,ltaulow,ltauhigh;
     
@@ -207,6 +213,9 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
     static G4PhysicsTable** RecorderOfElectronProcess;
     static G4PhysicsTable** RecorderOfPositronProcess;
     
+    static G4double MinDeltaCutInRange; // minimum cut for delta rays
+    static G4double* MinDeltaEnergy ;  
+
   private:
      
     //for interpolation within the tables
@@ -220,12 +229,11 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
     static G4double dRoverRange;     // dRoverRange is the maximum allowed
                                      // deltarange/range in one Step 
     static G4double finalRange;      // final step before stopping
+    static G4double c1lim,c2lim,c3lim ; // coeffs for computing steplimit
     
     static G4bool   rndmStepFlag;    // control the randomization of the step
     static G4bool   EnlossFlucFlag;  // control the energy loss fluctuation
 
-    static G4double MinDeltaEnergy;  // minimum kin.energy of delta rays
-    
     static G4EnergyLossMessenger* eLossMessenger;
          
   public:
@@ -237,9 +245,15 @@ class G4eEnergyLossPlus : public G4VContinuousDiscreteProcess
     
     static void SetRndmStep     (G4bool   value) {rndmStepFlag   = value;}
     static void SetEnlossFluc   (G4bool   value) {EnlossFlucFlag = value;}
-    static void SetStepFunction (G4double c1, G4double c2) 
-                                      {dRoverRange = c1; finalRange = c2;}         
-    static void SetMinDeltaEnergy(G4double value){MinDeltaEnergy = value;}
+    static void SetStepFunction (G4double c1, G4double c2)
+                               {dRoverRange = c1; finalRange = c2;
+                                c1lim=dRoverRange ;
+                                c2lim=2.*(1-dRoverRange)*finalRange;
+                                c3lim=-(1.-dRoverRange)*finalRange*finalRange;
+                               }
+
+    static void SetMinDeltaCutInRange(G4double value)
+                                    {MinDeltaCutInRange = value;}
 };
  
 #include "G4eEnergyLossPlus.icc"

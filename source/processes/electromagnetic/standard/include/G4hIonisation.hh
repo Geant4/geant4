@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hIonisation.hh,v 1.1 1999-01-07 16:11:18 gunter Exp $
+// $Id: G4hIonisation.hh,v 1.2 1999-02-16 13:34:50 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -25,6 +25,7 @@
 // ************************************************************
 // corrected by L.Urban on 24/09/97
 // corrected by L.Urban on 13/01/98
+// bugs fixed by L.Urban on 02/02/99
 // ------------------------------------------------------------
  
 #ifndef G4hIonisation_h
@@ -102,10 +103,8 @@ class G4hIonisation : public G4hEnergyLoss
     const G4Proton* theProton;
     const G4AntiProton* theAntiProton;
 
-    const G4double* ParticleCutInKineticEnergy;
     const G4double* DeltaCutInKineticEnergy ; 
  
-    G4double ParticleCutInKineticEnergyNow ; 
     G4double DeltaCutInKineticEnergyNow ;
 };
  
