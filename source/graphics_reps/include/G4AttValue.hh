@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttValue.hh,v 1.2 2002-10-23 14:59:11 johna Exp $
+// $Id: G4AttValue.hh,v 1.3 2002-10-24 14:35:20 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTVALUE_HH
@@ -51,21 +51,20 @@
   class G4AttValue {
     
   public:
-    G4AttValue(G4String name, G4String value, 
-             G4String showLabel): 
+    G4AttValue(const G4String& name,
+	       const G4String& value,
+	       const G4String& showLabel): 
       m_name(name),m_value(value),
       m_showLabel(showLabel){};
-    G4AttValue():
-      m_name(""),m_value(""),
-      m_showLabel(""){};
+    G4AttValue(){};
     
-    virtual G4String getName(){return m_name;};
-    virtual G4String getValue(){return m_value;};
-    virtual G4String getShowLabel(){return m_showLabel;};
+    const G4String& GetName()const{return m_name;};
+    const G4String& GetValue()const{return m_value;};
+    const G4String& GetShowLabel()const{return m_showLabel;};
 
-    virtual void setName(G4String name){m_name = name;};
-    virtual void setValue(G4String val){m_value = val;};
-    virtual void setShowLabel(G4String lab){m_showLabel = lab;};
+    void SetName(const G4String& name){m_name = name;};
+    void SetValue(const G4String& val){m_value = val;};
+    void SetShowLabel(const G4String& lab){m_showLabel = lab;};
 
   private:
     /// The name of the attribute 

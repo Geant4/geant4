@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4AttDef.hh,v 1.2 2002-10-23 14:59:10 johna Exp $
+// $Id: G4AttDef.hh,v 1.3 2002-10-24 14:35:14 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 
 #ifndef G4ATTDEF_HH
@@ -53,29 +53,28 @@
   class G4AttDef{
 
   public:
-    G4AttDef(G4String name, G4String desc, 
-	   G4String category, G4String extra, 
-	   G4String valueType):
+    G4AttDef(const G4String& name,
+	     const G4String& desc,
+	     const G4String& category,
+	     const G4String& extra,
+	     const G4String& valueType):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType(valueType){};
 
-    G4AttDef():
-      m_name(""),m_desc(""),
-      m_category(""),
-      m_extra(""),m_valueType(""){};
+    G4AttDef(){};
     
-    G4String getName(){return m_name;};
-    G4String getDesc(){return m_desc;};
-    G4String getCategory(){return m_category;};
-    G4String getExtra(){return m_extra;};
-    G4String getValueType(){return m_valueType;};
+    const G4String& GetName()const{return m_name;};
+    const G4String& GetDesc()const{return m_desc;};
+    const G4String& GetCategory()const{return m_category;};
+    const G4String& GetExtra()const{return m_extra;};
+    const G4String& GetValueType()const{return m_valueType;};
 
-    void setName(G4String name){m_name = name;};
-    void setDesc(G4String desc){m_desc = desc;};
-    void setCategory(G4String cat){m_category = cat;};
-    void setExtra(G4String extra){m_extra = extra;};
-    void setValueType(G4String type){m_valueType = type;};
+    void SetName(const G4String& name){m_name = name;};
+    void SetDesc(const G4String& desc){m_desc = desc;};
+    void SetCategory(const G4String& cat){m_category = cat;};
+    void SetExtra(const G4String& extra){m_extra = extra;};
+    void SetValueType(const G4String& type){m_valueType = type;};
 
   private:
     /// The name of the attribute
