@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ProductionCutsTable.cc,v 1.2 2003-11-03 02:18:44 kurasige Exp $
+// $Id: G4ProductionCutsTable.cc,v 1.3 2003-11-07 05:46:51 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -516,14 +516,25 @@ G4bool  G4ProductionCutsTable::CheckMaterialInfo(const G4String& directory,
       return false;
     }
     G4double ratio = abs(density/((*matTable)[idx])->GetDensity() );
-    if ( (name != ((*matTable)[idx])->GetName()) || (0.999>ratio) || (ratio>1.001) ){
+    if ( name != ((*matTable)[idx])->GetName()){
       if (verboseLevel >0) {
 	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
-	G4cout << " Inconsistent material name or density" << G4endl;;
+	G4cout << " Inconsistent material name ";
 	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
-	G4cout << "Name:   " << name << "(should be " << ((*matTable)[idx])->GetName() << ")" << G4endl;
-	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density ;
-	G4cout << "(should be " << ((*matTable)[idx])->GetDensity() << ")" << G4endl;      
+	G4cout << "Name:   " << name << " (should be " << ((*matTable)[idx])->GetName() << ")" << G4endl;
+	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) << "[g/cm3]"<< G4endl;    
+	G4cout << std::resetiosflags(std::ios::scientific);
+      }
+      fIn.close();
+      return false;
+     } else if ((0.999>ratio) || (ratio>1.001) ){
+      if (verboseLevel >0) {
+	G4cout << "G4ProductionCutsTable::CheckMaterialInfo  ";
+	G4cout << " Inconsistent material density" << G4endl;;
+	G4cout << " at " << idx+1 << "th  material "<< G4endl;	
+	G4cout << "Name:   " << name << G4endl;
+	G4cout << "Density:" << std::setiosflags(std::ios::scientific) << density / (g/cm3) ;
+	G4cout << "(should be " << ((*matTable)[idx])->GetDensity()/  (g/cm3)<< ")" << " [g/cm3]"<< G4endl;      
 	G4cout << std::resetiosflags(std::ios::scientific);
       }
       fIn.close();
@@ -735,7 +746,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
       if (verboseLevel >0) {
 	G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	G4cout << "Index of couples is inconsistent at ";
-	G4cout << index << ":"  << name << "  in" << fileName << G4endl;
+	G4cout << index << ":"  << name << " in " << fileName << G4endl;
 	G4cout <<" ( should be " << aCouple->GetIndex() << ":" ;
 	G4cout << aCouple->GetMaterial()->GetName() << ")" << G4endl;
       }
@@ -746,7 +757,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
       if (verboseLevel >0) {
 	G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	G4cout << "MaterialName is inconsistent at ";
-	G4cout << index << ":"  << name << "  in" << fileName << G4endl;
+	G4cout << index << ":"  << name << " in " << fileName << G4endl;
 	G4cout <<" ( should be " << aCouple->GetIndex() << ":" ;
 	G4cout << aCouple->GetMaterial()->GetName() << ")" << G4endl;
       }
@@ -763,7 +774,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
 	if(verboseLevel>0) { 
 	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	  G4cout << "Region Name is inconsistent at ";
-	  G4cout << index << ":  " << name << "  in" << fileName << G4endl;
+	  G4cout << index << ":  " << name << " in " << fileName << G4endl;
 	  G4cout <<" ( should be " << aCouple->GetIndex() << ": NONE  )" << G4endl;
 	}
 	return false;
@@ -774,7 +785,7 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
 	if(verboseLevel>0) { 	
 	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
 	  G4cout << "Region Name is inconsistent ";
-	  G4cout << index << ":  " << name << "  in" << fileName << G4endl;
+	  G4cout << index << ":  " << name << " in " << fileName << G4endl;
 	}
 	return false;
       }
@@ -793,9 +804,12 @@ G4bool  G4ProductionCutsTable::CheckMaterialCutsCoupleInfo(const G4String& direc
       G4double ratio =  cutValues[idx]/aCut->GetProductionCut(idx);
       if ((0.999>ratio) || (ratio>1.001) ){
 	if(verboseLevel>0) { 	
-	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo ";
-	  G4cout <<  idx << "th CutValue is inconsistent   in" << fileName << G4endl;
-	  G4cout << "( should be  "<< aCut->GetProductionCut(idx) << ")  " << G4endl;
+	  G4cout << "G4ProductionCutTable::CheckMaterialCutsCoupleInfo  ";
+	  G4cout << index << ":"  << name << "  in " << fileName << G4endl;
+	  G4cout <<  idx << "th CutValue (=" << cutValues[idx]/mm ;
+	  G4cout << "[mm]) is inconsistent in ";
+	  G4cout << "( should be  "<< aCut->GetProductionCut(idx)/mm;
+	  G4cout << "[mm])  " << G4endl;
 	}
 	return false;
       }
