@@ -29,9 +29,10 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyAnalysisManager.cc,v 1.7 2002-11-18 15:18:37 guatelli Exp $
+// $Id: BrachyAnalysisManager.cc,v 1.8 2002-11-27 11:11:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
+#ifdef  G4ANALYSIS_USE
 #include <stdlib.h>
 #include "g4std/fstream"
 #include "BrachyAnalysisManager.hh"
@@ -158,7 +159,7 @@ void BrachyAnalysisManager::finish()
   theTree->close();
 
 }
-
+#endif
 
 
 

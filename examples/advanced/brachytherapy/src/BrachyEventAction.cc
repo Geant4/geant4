@@ -29,7 +29,7 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyEventAction.cc,v 1.12 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyEventAction.cc,v 1.13 2002-11-27 11:11:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionI.hh"
@@ -48,7 +48,11 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4VVisManager.hh"
+
+#ifdef G4ANALYSIS_USE
 #include"BrachyAnalysisManager.hh"
+#endif
+
 #include "BrachyPrimaryGeneratorActionIr.hh"
 //....
 
@@ -113,9 +117,9 @@ if(m_HitsCollectionID < 0)
    for (G4int h=0; h<HitCount; h++)
                 {
 	      
-			  
+#ifdef G4ANALYSIS_USE			  
                   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();	
-             
+#endif             
                      i=((*CHC)[h])->GetZID();
                      k=((*CHC)[h])->GetXID();
                      j=((*CHC)[h])->GetYID();  
@@ -126,7 +130,7 @@ if(m_HitsCollectionID < 0)
                         x = (-m_NumVoxelZ+1+2*k)*VoxelWidth_X/2; 
                         z = (- m_NumVoxelZ+1+2*i)*VoxelWidth_Z/2;
                         y=(- m_NumVoxelZ+1+2*j)*VoxelWidth_Z/2;
-
+#ifdef G4ANALYSIS_USE
 			if(EnergyDep!=0)
                          
 			  { 
@@ -138,7 +142,7 @@ if(m_HitsCollectionID < 0)
 			  }
 			 
 			if(EnergyDep!=0)analysis->fill_Tuple(x,y,z,EnergyDep);
-
+#endif 
 		       
 		}
 	}

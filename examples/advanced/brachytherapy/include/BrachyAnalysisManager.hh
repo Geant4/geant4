@@ -25,7 +25,7 @@
 // S.Guatelli
 //
 //
-// $Id: BrachyAnalysisManager.hh,v 1.5 2002-11-18 15:18:35 guatelli Exp $
+// $Id: BrachyAnalysisManager.hh,v 1.6 2002-11-27 11:11:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //    **********************************
@@ -37,6 +37,7 @@
 
 // the class Analysis creates and managed histograms and ntuples
 //
+#ifdef G4ANALYSIS_USE
 #ifndef G4PROCESSTESTANALYSIS_HH
 #define G4PROCESSTESTANALYSIS_HH
 
@@ -95,7 +96,7 @@ AIDA::ITuple *ntuple;
 };
 
 #endif
-
+#endif
 
 
 

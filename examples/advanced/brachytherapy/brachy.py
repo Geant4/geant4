@@ -1,15 +1,12 @@
-hm.selectStore("brachy3.hbk")
+#Lizard 3.6.6
+
+
+hm.selectStore("brachytherapy.hbk")
 hm.ls()
 #spectrum of initial particles      
-hEn=hm.load1D("30") 
+hEn=hm.load1D("20") 
 hplot(hEn)
-#if you want to print the results:pl.psPrint("Brachyspettro.ps") 
-h2=hm.load2D("20")
+#if you want to print the results:pl.psPrint("Brachytherapy.ps") 
+h2=hm.load2D("10")
 hplot(h2)
-v=vm.from2D(h2)
-vm.list()      
-vector=vm.retrieve2D (3)  
-pl.dataOption("representation","color")
-pl.plot(vector)
-vector.toAscii("brachy.dat")
 pl.reset()

@@ -107,7 +107,20 @@ int main(int argc ,char ** argv)
  G4VisManager* visManager = new BrachyVisManager;
  visManager->Initialize();
 #endif
-
+     */
+  
+// output environment variables:
+#ifdef G4ANALYSIS_USE
+   G4cout << G4endl << G4endl << G4endl 
+	  << " User Environment " << G4endl
+	  << " Using AIDA 3.0 analysis " << G4endl;
+# else
+   G4cout << G4endl << G4endl << G4endl 
+	  << " User Environment " << G4endl
+	  << " G4ANALYSIS_USE environment variable not set, NO ANALYSIS " 
+	  << G4endl;
+#endif
+  /*
 G4UIsession* session=0;
 
 

@@ -35,11 +35,15 @@
 //    *                                          *
 //    ********************************************
 //
-// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.2 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyPrimaryGeneratorActionIr.cc,v 1.3 2002-11-27 11:11:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #include "BrachyPrimaryGeneratorActionIr.hh"
+
+#ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
+
 #include "G4ParticleTable.hh"
 #include "Randomize.hh"  
 #include "G4Event.hh"
@@ -74,7 +78,9 @@ BrachyPrimaryGeneratorActionIr::~BrachyPrimaryGeneratorActionIr()
 
 void BrachyPrimaryGeneratorActionIr::GeneratePrimaries(G4Event* anEvent)
 {
+#ifdef G4ANALYSIS_USE
 BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+#endif
 
  G4ParticleTable* pParticleTable = G4ParticleTable::GetParticleTable();
  G4String ParticleName = "gamma";
@@ -123,8 +129,9 @@ Energy = 356*keV;
    m_pParticleGun->SetParticleEnergy(Energy);
  
    //Check the energy
+#ifdef G4ANALYSIS_USE
    analysis->Spectrum(Energy);
-   
+#endif   
    m_pParticleGun->GeneratePrimaryVertex(anEvent);
 
  

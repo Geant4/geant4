@@ -36,13 +36,17 @@
 //    *                             *
 //    *******************************
 //
-// $Id: BrachyRunAction.cc,v 1.8 2002-11-18 15:18:38 guatelli Exp $
+// $Id: BrachyRunAction.cc,v 1.9 2002-11-27 11:11:22 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
 #include "BrachyRunAction.hh"
 #include "BrachyEventAction.hh"
+
+#ifdef G4ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
+
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -68,9 +72,12 @@ BrachyRunAction::~BrachyRunAction()
   delete pRun;
 }
 void BrachyRunAction::BeginOfRunAction(const G4Run* aRun)
-{ BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
+{ 
+
+#ifdef G4ANALYSIS_USE
+BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
    analysis->book();
-  
+#endif  
    G4RunManager*  pRunManager=G4RunManager::GetRunManager() ;
 
     if(pRunManager)
@@ -101,16 +108,18 @@ if (a==1)factory=new BrachyFactoryI;
 
 void BrachyRunAction::EndOfRunAction(const G4Run* aRun)
 {
+#ifdef G4ANALYSIS_USE
   BrachyAnalysisManager* analysis = BrachyAnalysisManager::getInstance();
-
+#endif
  
 
 
 
    G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
   
-      
+#ifdef G4ANALYSIS_USE      
       analysis->finish();
+#endif
       delete factory;
 
       
