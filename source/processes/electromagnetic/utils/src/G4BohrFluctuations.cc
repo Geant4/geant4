@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.8 2004-04-05 08:00:19 vnivanch Exp $
+// $Id: G4BohrFluctuations.cc,v 1.9 2004-05-11 15:35:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -60,7 +60,7 @@ G4BohrFluctuations::G4BohrFluctuations(const G4String& nam)
   minNumberInteractionsBohr(10.0),
   minFraction(0.2),
   xmin(0.2),
-  minLoss(0.000001*eV)
+  minLoss(0.001*eV)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -89,6 +89,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
   if(meanLoss <= minLoss) return meanLoss;
   G4double siga = Dispersion(material,dp,tmax,length);
   G4double loss = meanLoss;
+
   G4double navr = minNumberInteractionsBohr;
 
   // Gaussian fluctuation
@@ -97,6 +98,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     navr = meanLoss*meanLoss/siga;
     if (navr < minNumberInteractionsBohr) gauss = false;
   }
+//  G4cout << "### meanLoss= " << meanLoss << "  navr= " << navr << " sig= " << sqrt(siga) << G4endl;
 
   if(gauss) {
     // Increase fluctuations for big fractional energy loss
@@ -130,6 +132,7 @@ G4double G4BohrFluctuations::SampleFluctuations(const G4Material* material,
     G4double n    = (G4double)(G4Poisson(navr));
     loss = meanLoss*n/navr;
   }
+
   return loss;
 }
 

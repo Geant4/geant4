@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.hh,v 1.16 2004-05-10 18:46:02 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.hh,v 1.17 2004-05-11 15:35:07 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -309,6 +309,8 @@ protected:
   void SetChargeSquare(G4double val) {chargeSquare = val;};
 
   void SetChargeSquareRatio(G4double val) {chargeSqRatio = val;};
+  
+  G4double GetCurrentRange() const {return fRange;};
 
 private:
 
