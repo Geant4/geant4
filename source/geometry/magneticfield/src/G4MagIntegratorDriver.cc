@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.3 1999-06-29 18:56:11 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.4 1999-07-06 20:22:34 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,8 @@
 #include "G4ios.hh"
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
+
+// #define G4DEBUG 1
 
 //  Stepsize can increase by no more than 5.0
 //           and decrease by no more than 1/10. = 0.1
@@ -51,7 +53,8 @@ G4MagInt_Driver::AccurateAdvance(
 {
   static const G4int maxstp = 5000;
 
-  G4int nstp, i ;
+  G4int nstp, i; 
+  static G4int dbg=1;
   G4double x, hnext, hdid, h ;
 
   // G4double yscal[ncompSVEC];
@@ -73,19 +76,61 @@ G4MagInt_Driver::AccurateAdvance(
   h = hstep;   
   x = x1;
 
-  G4int  nOK =0, nBAD = 0 ;
+  G4int  noFullIntegr=0, noSmallIntegr = 0 ;
+  static G4int  noGoodSteps =0, noBadSteps = 0 ;  // Bad = chord > curve-len 
 
   for(i=0;i<nvar;i++) y[i] = ystart[i] ;
 
   nstp=1;
   do{
+#ifdef G4DEBUG
+     G4ThreeVector StartPos( y[0], y[1], y[2] ); 
+#endif
+
      pIntStepper->RightHandSide( y, dydx );
 
      if( x+h > x2 )  h = x2 - x ; // When stepsize overshoots, decrease it!
 
      OneGoodStep(y,dydx,x,h,eps,hdid,hnext) ;
 
-     if(hdid == h) nOK++ ; else nBAD++ ;
+#ifdef G4DEBUG
+     if(hdid == h) noFullIntegr++ ; else noSmallIntegr++ ;
+     G4ThreeVector EndPos( y[0], y[1], y[2] );
+
+     G4double endPointDist= (EndPos-StartPos).mag(); 
+     if( endPointDist >= h*(1.+perMillion) ){
+	static G4double maxRelError= 0.0;
+	G4bool isNewMax;
+
+        noBadSteps  ++;
+        isNewMax = endPointDist > (1.0 + maxRelError) * h;
+	if( isNewMax )
+	   maxRelError= endPointDist / h - 1.0; 
+
+        if( dbg &&  ( isNewMax || (endPointDist >= h*(1.+eps) ) ) ){ 
+           static G4int noWarnings = 0;
+           if( (noWarnings ++ < 10) || (dbg>1) ){
+ 	      G4cerr << " Warning (G4MagIntergratorDriver): "
+		     << " The integration produced an endpoint which " << endl
+		     << "   is further from the startpoint than the curve length." << endl; 
+          
+	      G4cerr << "   Distance of endpoints = " << endPointDist
+		     << "  curve length = " <<  h
+		     << "  Difference (curveLen-endpDist)= " << (h - endPointDist)
+		     << "  relative = " << (h-endPointDist) / h 
+		     << endl;
+	   }else{
+	      G4cerr << "  EndpointDist = " << endPointDist
+		     << "  curve length = " <<  h
+		     << "  Diff (cl-ed)= " << (h - endPointDist)
+		     << "  rel = " << (h-endPointDist) / h 
+		     << endl;
+	   }
+	} else { // ie (!dbg)
+	   noGoodSteps ++;
+	} // end if (dbg)
+     }
+#endif
 
      if(fabs(hnext) <= Hmin())
      {
@@ -158,23 +203,35 @@ G4MagInt_Driver::OneGoodStep(      G4double y[],
 // 16.2 Adaptive StepSize Control for Runge-Kutta, p. 719
 
 {
+      G4double errpos_sq, errvel_sq, errmax_sq;
       G4double errmax, h, htemp, xnew ;
       G4int i;
+      const G4double eps_vel_rel= eps;  // The same relative error 
+                                        // (eps too is a pure number)
 
       G4double yerr[G4FieldTrack::ncompSVEC], ytemp[G4FieldTrack::ncompSVEC];
 
       h = htry ; // Set stepsize to the initial trial value
 
+      // G4double inv_epspos_sq= 1.0 / eps * eps; 
+
       for (;;)
       {
-	  pIntStepper-> Stepper(y,dydx,h,ytemp,yerr) ; 
-
+	  pIntStepper-> Stepper(y,dydx,h,ytemp,yerr); 
+          G4double eps_pos = eps * h; 
 	  // Evaluate accuracy
 	  //
-	  errmax = sqrt( sqr(yerr[0]) + sqr(yerr[1]) + sqr(yerr[2]) );
+	  errpos_sq =  sqr(yerr[0]) + sqr(yerr[1]) + sqr(yerr[2]) ;
+	  errpos_sq /= eps_pos*eps_pos; // Scale relative to required tolerance
 
-	  errmax /= eps;  // Scale relative to required tolerance
-	  if(errmax <= 1.0 ) break ; // Step succeeded. 
+          // Accuracy for velocity
+          errvel_sq =  (sqr(yerr[3]) + sqr(yerr[4]) + sqr(yerr[5]) )
+                     / (sqr(y[3]) + sqr(y[4]) + sqr(y[5]) );
+          errvel_sq /= eps_vel_rel*eps_vel_rel; 
+
+          errmax_sq = max( errpos_sq, errvel_sq ); // Square of maximum error
+          errmax = sqrt( errmax_sq );
+	  if(errmax_sq <= 1.0 ) break ; // Step succeeded. 
 
 	  // Step failed; compute the size of retrial Step.
 	  htemp = GetSafety()*h*pow(errmax,GetPshrnk()) ;
@@ -213,10 +270,11 @@ G4bool  G4MagInt_Driver::QuickAdvance(
 		      const G4double     dydx[],  
 		            G4double     hstep,       // In
 			    G4double&    dchord_step,
-			    G4double&    dyerr_len )  
+			    G4double&    dyerr )  
 {
     G4double yerr_vec[G4FieldTrack::ncompSVEC], yarrin[G4FieldTrack::ncompSVEC], yarrout[G4FieldTrack::ncompSVEC]; 
     G4double s_start;
+    G4double dyerr_len, dyerr_vel, vel_mag;
 
     // Move data into array
     y_posvel.DumpToArray( yarrin );      //  yarrin  <== y_posvel 
@@ -235,7 +293,15 @@ G4bool  G4MagInt_Driver::QuickAdvance(
     // A single measure of the error   
     //      TO-DO :  account for  tangent vector,  energy,  spin, ... ? 
     dyerr_len= sqrt( sqr(yerr_vec[0])+sqr(yerr_vec[1])+sqr(yerr_vec[2]));
+    dyerr_vel= sqrt( sqr(yerr_vec[3])+sqr(yerr_vec[4])+sqr(yerr_vec[5]));
+    vel_mag  = sqrt( sqr(yarrout[3])+sqr(yarrout[4])+sqr(yarrout[5]) );
 
+    if( (dyerr_len / hstep) > (dyerr_vel / vel_mag) ) {
+       dyerr = dyerr_len;
+    }else{
+       // Scale it to the position - for now
+       dyerr = (dyerr_vel / vel_mag) * hstep;
+    }
 #ifdef RETURN_A_NEW_STEP_LENGTH
     // The following step cannot be done here because "eps" is not known.
     dyerr_len /= eps;
