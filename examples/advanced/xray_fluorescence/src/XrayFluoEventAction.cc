@@ -82,8 +82,8 @@ XrayFluoEventAction::~XrayFluoEventAction()
 
 void XrayFluoEventAction::BeginOfEventAction(const G4Event* evt)
 {
-  
-  if (HPGeCollID==-1)
+ 
+  if (HPGeCollID==-1 && evt)
     {
       G4SDManager * SDman = G4SDManager::GetSDMpointer();
       HPGeCollID = SDman->GetCollectionID("HPGeCollection");
@@ -180,7 +180,7 @@ G4double XrayFluoEventAction::ResponseFunction(G4double energy)
   G4double efficiency = 1.;
   
   const XrayFluoDataSet* dataSet = runManager->GetEfficiencySet();
-  G4double id = 0;
+  G4int id = 0;
   
   G4double random = G4UniformRand();
  

@@ -75,6 +75,7 @@ XrayFluoDataSet::~XrayFluoDataSet()
 
 G4double XrayFluoDataSet::FindValue(G4double e, G4int id) const
 {
+  id = id;
   G4double value;
   G4double e0 = (*energies)[0];
   // Protections

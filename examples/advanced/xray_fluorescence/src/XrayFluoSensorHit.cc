@@ -49,10 +49,12 @@ XrayFluoSensorHit::XrayFluoSensorHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSensorHit::XrayFluoSensorHit(const XrayFluoSensorHit& right)
+  :G4VHit(right)
 {
-   EdepTot = right.EdepTot ; 
+  
+  EdepTot = right.EdepTot ; 
   EdepDetect = right.EdepDetect;
- 
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,6 +79,8 @@ const XrayFluoSensorHit& XrayFluoSensorHit::operator=(const XrayFluoSensorHit& r
 
 int XrayFluoSensorHit::operator==(const XrayFluoSensorHit& right) const
 {
+  if(EdepTot == right.EdepTot && EdepDetect == right.EdepDetect)
+    {return 1;}
   return 0;
 }
 

@@ -136,15 +136,17 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 void XrayFluoRunAction::EndOfRunAction(const G4Run* aRun )
 {
 
-  XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-
-
-  // Run ended, update the visualization
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  if (aRun){
+    
+    XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
+    
+    
+    // Run ended, update the visualization
+    if (G4VVisManager::GetConcreteInstance()) {
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+    }
+    analysis->finish();
   }
-   analysis->finish();
- 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
