@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSceneHandler.cc,v 1.22 2001-08-14 18:30:29 johna Exp $
+// $Id: G4VSceneHandler.cc,v 1.23 2001-09-10 10:52:01 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -297,7 +297,9 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   AddPrimitive(tick12.transform(transformation));
   AddPrimitive(tick21.transform(transformation));
   AddPrimitive(tick22.transform(transformation));
-  AddPrimitive(G4Text(scale.GetAnnotation(), textPosition));
+  G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
+  text.SetScreenSize(24.);
+  AddPrimitive(text);
 }
 
 void G4VSceneHandler::AddPrimitive (const G4Polymarker& polymarker) {
