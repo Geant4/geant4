@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// 
+//
 
 #include "test31GeneralPhysics.hh"
 #include "G4ParticleDefinition.hh"
@@ -55,7 +55,7 @@ void test31GeneralPhysics::ConstructProcess()
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
 
-    if (fDecayProcess.IsApplicable(*particle)) { 
+    if (fDecayProcess.IsApplicable(*particle)) {
 
       pmanager ->AddProcess(&fDecayProcess);
 
@@ -64,7 +64,7 @@ void test31GeneralPhysics::ConstructProcess()
       pmanager ->SetProcessOrdering(&fDecayProcess, idxAtRest);
 
     }
-    if (stepCut && particle->GetPDGCharge()) { 
+    if (stepCut && particle->GetPDGCharge() != 0.0) {
       pmanager ->AddProcess(stepCut);
       pmanager ->SetProcessOrdering(stepCut, idxPostStep);
     }

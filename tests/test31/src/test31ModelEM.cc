@@ -65,54 +65,59 @@ void test31ModelEM::ConstructParticle()
 void test31ModelEM::ConstructProcess()
 {
   // Add EM processes realised on base of prototype of model approach design
-
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
     G4String particleName = particle->GetParticleName();
-     
+
     if (particleName == "gamma") {
-      // gamma         
+      // gamma
       pmanager->AddDiscreteProcess(new G4PhotoElectricEffect);
       pmanager->AddDiscreteProcess(new G4ComptonScattering);
       pmanager->AddDiscreteProcess(new G4GammaConversion);
-      
+
     } else if (particleName == "e-") {
       //electron
       pmanager->AddProcess(new G4MultipleScatteringSTD, -1, 1,1);
       pmanager->AddProcess(new G4eIonisationSTD,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlungSTD,    -1,-1,3);
-	    
+
     } else if (particleName == "e+") {
       //positron
       pmanager->AddProcess(new G4MultipleScatteringSTD, -1, 1,1);
       pmanager->AddProcess(new G4eIonisationSTD,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlungSTD,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,      0,-1,4);
-      
-    } else if( particleName == "mu+" || 
+
+    } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
-      //muon  
+      //muon
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1, 1,1);
       pmanager->AddProcess(new G4MuIonisationSTD,      -1, 2,2);
       pmanager->AddProcess(new G4MuBremsstrahlungSTD,  -1,-1,3);
-      pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);       
-     
+      pmanager->AddProcess(new G4MuPairProductionSTD,  -1,-1,4);
+
     } else if ((!particle->IsShortLived()) &&
-	       (particle->GetPDGCharge() != 0.0) && 
+	       (particle->GetPDGCharge() != 0.0) &&
 	       (particle->GetParticleName() != "chargedgeantino")) {
       //all others charged particles except geantino
+      /*
+      G4cout << "Add processes for " << particle->GetParticleName()
+             << "  mass= " << particle->GetPDGMass()
+	     << G4endl;
+	     */
       pmanager->AddProcess(new G4MultipleScatteringSTD,-1,1,1);
-      if(particle->GetPDGMass() < 1.0*GeV ) {
+      if(particle->GetPDGMass() < 1.0*GeV && particleName != "GenericIon" ) {
         G4VEnergyLossSTD* hIon = new G4hIonisationSTD();
         pmanager->AddProcess(hIon,   -1,2,2);
 	//  hIon->SetLossFluctuations(false);
         hIon->SetDEDXBinning(240);
 
       } else {
-        pmanager->AddProcess(new G4ionIonisation,      -1,2,2);
-      }           
+        G4VEnergyLossSTD* ion = new G4ionIonisation();
+        pmanager->AddProcess(ion,      -1,2,2);
+      }
     }
   }
 }
