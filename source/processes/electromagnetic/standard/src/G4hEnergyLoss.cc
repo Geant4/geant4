@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4hEnergyLoss.cc,v 1.17 2000-02-25 07:35:16 urban Exp $
+// $Id: G4hEnergyLoss.cc,v 1.18 2000-03-07 17:33:20 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -78,7 +78,7 @@ G4double G4hEnergyLoss::pbartableElectronCutInRange = 0.0*mm ;
 G4double         G4hEnergyLoss::Charge ;   
 
 G4double G4hEnergyLoss::LowerBoundEloss = 1.*keV ;
-G4double G4hEnergyLoss::UpperBoundEloss = 100.*TeV ;;	
+G4double G4hEnergyLoss::UpperBoundEloss = 100.*TeV ;	
 G4int    G4hEnergyLoss::NbinEloss = 100 ; 
 G4double G4hEnergyLoss::RTable,G4hEnergyLoss::LOGRTable;
 // just to keep hLowEnergyIonisation working

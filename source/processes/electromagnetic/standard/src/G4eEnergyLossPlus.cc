@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4eEnergyLossPlus.cc,v 1.19 2000-02-17 09:07:27 urban Exp $
+// $Id: G4eEnergyLossPlus.cc,v 1.20 2000-03-07 17:33:22 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //  
 // -----------------------------------------------------------
@@ -71,7 +71,7 @@ G4PhysicsTable*  G4eEnergyLossPlus::thepRangeCoeffBTable         = NULL;
 G4PhysicsTable*  G4eEnergyLossPlus::thepRangeCoeffCTable         = NULL;
 
 G4double G4eEnergyLossPlus::LowerBoundEloss = 1.*keV ;
-G4double G4eEnergyLossPlus::UpperBoundEloss = 100.*TeV ;;
+G4double G4eEnergyLossPlus::UpperBoundEloss = 100.*TeV ;
 G4int    G4eEnergyLossPlus::NbinEloss = 100 ;
 G4double G4eEnergyLossPlus::RTable,G4eEnergyLossPlus::LOGRTable;
 
