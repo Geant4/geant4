@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4VEnergyLossProcess.cc,v 1.46 2005-03-11 12:28:46 vnivanch Exp $
+// $Id: G4VEnergyLossProcess.cc,v 1.47 2005-03-11 15:39:00 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -736,7 +736,7 @@ G4VParticleChange* G4VEnergyLossProcess::PostStepDoIt(const G4Track& track,
   // Integral approach
   if (integral) {
     G4double lx = GetLambdaForScaledEnergy(postStepScaledEnergy);
-    if(preStepLambda<lx && 0 < verboseLevel) {
+    if(preStepLambda<lx && 1 < verboseLevel) {
       G4cout << "WARING: for " << particle->GetParticleName()
              << " and " << GetProcessName()
              << " E(MeV)= " << finalT/MeV
