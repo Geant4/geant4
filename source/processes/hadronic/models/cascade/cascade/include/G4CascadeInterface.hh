@@ -48,7 +48,7 @@ public:
 
   G4ReactionProductVector* Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus);
 
-  G4VParticleChange* ApplyYourself(const G4Track& aTrack, 
+  G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                    G4Nucleus& theNucleus); 
 
 private:
@@ -63,7 +63,7 @@ private:
 
   G4int verboseLevel;
 private:
-  G4ParticleChange theResult;  
+  G4HadFinalState theResult;  
   
 };
 

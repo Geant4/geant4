@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4GammaNuclearReaction.hh,v 1.9 2002-12-12 19:16:59 gunter Exp $
+// $Id: G4GammaNuclearReaction.hh,v 1.10 2003-07-01 16:32:50 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -44,17 +44,18 @@ class G4GammaNuclearReaction : public G4HadronicInteraction
     {
     }
     
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+    G4Nucleus& aTargetNucleus);
 
   private:
     G4ChiralInvariantPhaseSpace theModel;
 };
 
 inline
-G4VParticleChange * G4GammaNuclearReaction::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+G4HadFinalState * G4GammaNuclearReaction::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
 {
-  if(aTrack.GetDynamicParticle()->GetDefinition() != G4Gamma::GammaDefinition())
+  if(aTrack.GetDefinition() != G4Gamma::GammaDefinition())
   {
     G4Exception("Called G4GammaNuclearReaction for particle other than gamma");
   }

@@ -32,7 +32,7 @@
 //#include "G4Quasmon.hh"
 #include "G4QNucleus.hh"
 #include "G4QHadronVector.hh"
-#include "G4ParticleChange.hh"
+#include "G4HadFinalState.hh"
 #include "G4LorentzVector.hh"
 #include "G4DynamicParticle.hh"
 #include "G4IonTable.hh"
@@ -41,19 +41,21 @@
 class G4ChiralInvariantPhaseSpace 
 {
   public: 
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, 
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
                                       G4Nucleus& aTargetNucleus, 
-				      G4ParticleChange * aChange = 0);
+				      G4HadFinalState * aChange = 0);
 
+    virtual ~G4ChiralInvariantPhaseSpace(){}
   private:
-    G4ParticleChange theResult;
+    G4HadFinalState theResult;
 };
 
 inline
-G4VParticleChange * G4ChiralInvariantPhaseSpace::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange * aChange)
+G4HadFinalState * G4ChiralInvariantPhaseSpace::
+ApplyYourself(const G4HadProjectile& aTrack, 
+G4Nucleus& aTargetNucleus, G4HadFinalState * aChange)
 {
-  G4ParticleChange * aResult;
+  G4HadFinalState * aResult;
   if(aChange != 0)
   {
     aResult = aChange;
@@ -61,14 +63,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   else
   {
     aResult = & theResult;
-    aResult->Initialize(aTrack);
-    aResult->SetStatusChange(fStopAndKill);
+    aResult->Clear();
+    aResult->SetStatusChange(stopAndKill);
   }
   //projectile properties needed in constructor of quasmon
   G4LorentzVector proj4Mom;
-  proj4Mom = aTrack.GetDynamicParticle()->Get4Momentum();
-  G4int projectilePDGCode = aTrack.GetDynamicParticle()
-                                  ->GetDefinition()
+  proj4Mom = aTrack.Get4Momentum();
+  G4int projectilePDGCode = aTrack.GetDefinition()
 				  ->GetPDGEncoding();
   
   //target properties needed in constructor of quasmon
@@ -114,7 +115,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus, G4ParticleChange
   delete pan;
   
   // Fill the particle change.
-  aResult->SetNumberOfSecondaries(output->size());
   G4DynamicParticle * theSec;
 #ifdef CHIPSdebug
   G4cout << "G4ChiralInvariantPhaseSpace: NEW EVENT #ofHadrons="<<output->size()<<endl;

@@ -31,7 +31,8 @@
 class G4ProtonAntiProtonReaction : public G4HadronicInteraction
 {
   public: 
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+    G4Nucleus& aTargetNucleus);
 
   private:
     G4ChiralInvariantPhaseSpace theModel;

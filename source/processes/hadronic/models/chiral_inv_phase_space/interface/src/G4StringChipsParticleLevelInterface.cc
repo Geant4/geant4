@@ -72,8 +72,8 @@ G4StringChipsParticleLevelInterface::G4StringChipsParticleLevelInterface()
   }
 }
 
-G4VParticleChange* G4StringChipsParticleLevelInterface::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+G4HadFinalState* G4StringChipsParticleLevelInterface::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
   return theModel.ApplyYourself(aTrack, theNucleus);
 }

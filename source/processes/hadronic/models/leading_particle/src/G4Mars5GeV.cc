@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Mars5GeV.cc,v 1.5 2003-06-03 09:37:45 hpw Exp $
+// $Id: G4Mars5GeV.cc,v 1.6 2003-07-01 16:28:45 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -74,26 +74,22 @@ G4Mars5GeV::G4Mars5GeV() : G4InelasticInteraction(),
   selec3.Eth = 0.001*MeV;
 }
 
-G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
+G4HadFinalState* G4Mars5GeV::ApplyYourself(const G4HadProjectile& aTrack,
                                              G4Nucleus& 
                                             )
 {
+  theParticleChange.Clear();
 #ifdef G4VERBOSE
   if (GetVerboseLevel() > 2) {
     G4cout << " G4Mars5GeV:ApplyYourself" << G4endl;
   }
 #endif
 
-  theParticleChange.Initialize(aTrack);
-
   // get the incident particle type
-  incidentParticle = aTrack.GetDynamicParticle();
+  incidentParticle = &aTrack;
 
   // get the incident particle energy/momentum
   incidentMarsEncoding = GetMarsEncoding(incidentParticle->GetDefinition());
-
-  // get weight of the parent track
-  incidentWeight = aTrack.GetWeight();
 
   // Atomic and charge number 
   GetTargetNuclei( aTrack.GetMaterial() );
@@ -109,9 +105,6 @@ G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
 
   // create secondaries
   //  set max. number of secondaries 
-  theParticleChange.SetNumberOfSecondaries(numberOfSecondaries);
-  //  secondary weight is determined by this model 
-  theParticleChange.SetSecondaryWeightByProcess(true);
 
   for (idx=0; idx<numberOfSecondaries; idx+=1){
 
@@ -135,19 +128,12 @@ G4VParticleChange* G4Mars5GeV::ApplyYourself(const G4Track& aTrack,
       }
 #endif 
     } else {
-      G4Track* track = new G4Track(
-				 secondaries[idx],
-				 aTrack.GetGlobalTime(),
-				 aTrack.GetPosition()
-				 );
-
-      track->SetWeight(fweight);      
+      G4HadSecondary *track = new G4HadSecondary(secondaries[idx], fweight);
       theParticleChange.AddSecondary(track);
     }
   }
   // kill incident particle
-  theParticleChange.SetStatusChange(fStopAndKill);
-  theParticleChange.SetLocalEnergyDeposit (0.);
+  theParticleChange.SetStatusChange(stopAndKill);
   
   return &theParticleChange;
 
@@ -406,7 +392,7 @@ void G4Mars5GeV::AddSecondary()
     G4cout << " Particle :" << selec1.Tprod;
     G4cout << ":" << GetParticleName(selec1.Tprod) <<G4endl;
     G4cout << " Energy   :" << selec1.EN <<G4endl;
-    G4cout << "Weight    :" <<  selec1.V * incidentWeight << G4endl;
+    G4cout << "Weight    :" <<  selec1.V  << G4endl;
   }
 #endif
   // determine direction cosine
@@ -419,7 +405,7 @@ void G4Mars5GeV::AddSecondary()
     selec2.Ch = (gg*gg - g2*g2)/g;
     selec2.Sh = 2.0*gg*g2/g;
   }
-  G4ThreeVector pin = incidentParticle->GetMomentumDirection();
+  G4ThreeVector pin = incidentParticle->Get4Momentum().vect().unit();
   G4ThreeVector pout;
 
   Trans(&pin, &pout);
@@ -435,7 +421,7 @@ void G4Mars5GeV::AddSecondary()
   // add secondary into list
 
   secondaries.SetElement(numberOfSecondaries, secondary);
-  weightOfSecondaries[numberOfSecondaries] = selec1.V * incidentWeight;
+  weightOfSecondaries[numberOfSecondaries] = selec1.V;
   numberOfSecondaries +=1;
 }
 

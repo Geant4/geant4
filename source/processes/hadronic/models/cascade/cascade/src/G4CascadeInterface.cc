@@ -60,7 +60,7 @@ G4ReactionProductVector* G4CascadeInterface::Propagate(G4KineticTrackVector* ,
 
 // #define debug_G4CascadeInterface
 
-G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack, 
+G4HadFinalState* G4CascadeInterface::ApplyYourself(const G4HadProjectile& aTrack, 
 						     G4Nucleus& theNucleus) {
 #ifdef debug_G4CascadeInterface
   static G4int counter(0);
@@ -71,8 +71,6 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   if (verboseLevel > 3) {
     G4cout << " >>> G4CascadeInterface::ApplyYourself" << G4endl;
   };
-
-  theResult.Initialize(aTrack);
 
   G4double eInit     = 0.0;
   G4double eTot      = 0.0;
@@ -96,11 +94,11 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
 
   // Code momentum and energy.
   G4double px,py,pz;
-  px=aTrack.GetDynamicParticle()->Get4Momentum().px() / GeV;
-  py=aTrack.GetDynamicParticle()->Get4Momentum().py() / GeV;
-  pz=aTrack.GetDynamicParticle()->Get4Momentum().pz() / GeV;
+  px=aTrack.Get4Momentum().px() / GeV;
+  py=aTrack.Get4Momentum().py() / GeV;
+  pz=aTrack.Get4Momentum().pz() / GeV;
   
-  G4LorentzVector projectileMomentum = aTrack.GetDynamicParticle()->Get4Momentum();
+  G4LorentzVector projectileMomentum = aTrack.Get4Momentum();
   G4LorentzRotation toZ;
   toZ.rotateZ(-projectileMomentum.phi());
   toZ.rotateY(-projectileMomentum.theta());
@@ -221,9 +219,7 @@ G4VParticleChange* G4CascadeInterface::ApplyYourself(const G4Track& aTrack,
   std::vector<G4InuclNuclei>             nucleiFragments = output.getNucleiFragments();
   std::vector<G4InuclElementaryParticle> particles =       output.getOutgoingParticles();
 
-  G4int numSecondaries = nucleiFragments.size()+particles.size();
-  theResult.SetStatusChange(fStopAndKill);
-  theResult.SetNumberOfSecondaries(numSecondaries);
+  theResult.SetStatusChange(stopAndKill);
 
   if (!particles.empty()) { 
     particleIterator ipart;

@@ -39,8 +39,8 @@ G4StringChipsInterface::G4StringChipsInterface()
   // theEnergyLossPerFermi = 1.*GeV;
 }
 
-G4VParticleChange* G4StringChipsInterface::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& theNucleus)
+G4HadFinalState* G4StringChipsInterface::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
   return theModel.ApplyYourself(aTrack, theNucleus);
 }

@@ -22,7 +22,7 @@
 //
 //
 //
-// $Id: G4ElectroNuclearReaction.hh,v 1.15 2003-02-04 10:17:51 jwellisc Exp $
+// $Id: G4ElectroNuclearReaction.hh,v 1.16 2003-07-01 16:32:50 hpw Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -61,7 +61,8 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
       theCascade = new G4GeneratorPrecompoundInterface;
     }
     
-    G4VParticleChange * ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus);
+    virtual G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack, 
+    G4Nucleus& aTargetNucleus);
 
   private:
     G4ChiralInvariantPhaseSpace theLEModel;
@@ -72,17 +73,20 @@ class G4ElectroNuclearReaction : public G4HadronicInteraction
     G4ExcitedStringDecay * theStringDecay;
     G4ElectroNuclearCrossSection theElectronData;
     G4PhotoNuclearCrossSection thePhotonData;
-    G4ParticleChange theResult;
+    G4HadFinalState theResult;
 };
 
-inline G4VParticleChange* G4ElectroNuclearReaction::
-ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
+inline G4HadFinalState* G4ElectroNuclearReaction::
+ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus)
 {
+  theResult.Clear();
   static const G4double dM=G4Proton::Proton()->GetPDGMass()+G4Neutron::Neutron()->GetPDGMass(); // Mean double nucleon mass = m_n+m_p (@@ no binding)
   static const G4double me=G4Electron::Electron()->GetPDGMass();      // electron mass
   static const G4double me2=me*me;        // squared electron mass
   static const G4double dpi=2*M_PI; // 2*pi
-  const G4DynamicParticle* theElectron=aTrack.GetDynamicParticle();
+  G4DynamicParticle theTempEl(const_cast<G4ParticleDefinition *>(aTrack.GetDefinition()), 
+                              aTrack.Get4Momentum().vect());
+  const G4DynamicParticle* theElectron=&theTempEl;
   const G4ParticleDefinition* aD = theElectron->GetDefinition();
   if((aD != G4Electron::ElectronDefinition()) && (aD != G4Positron::PositronDefinition()))
     G4Exception("G4ElectroNuclearReaction::ApplyYourself called for neither electron or positron");
@@ -110,7 +114,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4double xSec = theElectronData.GetCrossSection(theElectron, anElement); // Check cross section
   if(xSec<=0.) 
   {
-    theResult.Initialize(aTrack);
     return &theResult;        // DO-NOTHING condition
   }
   G4double photonEnergy = theElectronData.GetEquivalentPhotonEnergy();
@@ -119,6 +122,7 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   {
     G4cout << "G4ElectroNuclearReaction::ApplyYourself: photonEnergy is very high"<<G4endl;
     G4cout << "If this condition appears frequently, please contact Hans-Peter.Wellisch@cern.ch"<<G4endl;
+    return &theResult;        // DO-NOTHING condition
   }
   G4double photonQ2 = theElectronData.GetEquivalentPhotonQ2(photonEnergy);
   G4double W=photonEnergy-photonQ2/dM;   // Hadronic energy flow (W-energy) from the virtual photon
@@ -128,7 +132,6 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   }
   if(W<0.) 
   {
-    theResult.Initialize(aTrack);
     return &theResult;        // DO-NOTHING condition
     G4Exception("G4ElectroNuclearReaction::ApplyYourself: negative equivalent energy");
   }
@@ -142,16 +145,13 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4double rndFraction = theElectronData.GetVirtualFactor(photonEnergy, photonQ2);
   if(sigNu*G4UniformRand()>sigK*rndFraction) 
   {
-    theResult.Initialize(aTrack);
     return &theResult; // DO-NOTHING condition
   }
-  theResult.Initialize(aTrack);
-  theResult.Clear();
-  theResult.SetStatusChange(fAlive);
+  theResult.SetStatusChange(isAlive);
   // Scatter an electron and make gamma+A reaction
   G4double iniE=theElectronKinEnergy+me; // Initial total energy of electron
   G4double finE=iniE-photonEnergy;       // Final total energy of electron
-  theResult.SetEnergyChange(finE-me);    // Modifies the KINETIC ENERGY (Why not in the name?)
+  theResult.SetEnergyChange(G4std::max(0.,finE-me));    // Modifies the KINETIC ENERGY (Why not in the name?)
   G4double EEm=iniE*finE-me2;            // Just an intermediate value to avoid "2*"
   G4double iniP=sqrt(iniE*iniE-me2);     // Initial momentum of the electron
   G4double finP=sqrt(finE*finE-me2);     // Final momentum of the electron
@@ -167,15 +167,14 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
   G4double sinx=sint*sin(phi);           // x-component
   G4double siny=sint*cos(phi);           // y-component
   G4ThreeVector findir=cost*dir+sinx*ortx+siny*orty;
-  theResult.SetMomentumDirectionChange(findir); // new direction for the electron
+  theResult.SetMomentumChange(findir); // new direction for the electron
   G4ThreeVector photonMomentum=iniP*dir-finP*findir;
   G4DynamicParticle localGamma(G4Gamma::GammaDefinition(), photonEnergy, photonMomentum);
   //G4DynamicParticle localGamma(G4Gamma::GammaDefinition(), photonDirection, photonEnergy);
   //G4DynamicParticle localGamma(G4Gamma::GammaDefinition(), photonLorentzVector);
   G4ThreeVector position(0,0,0);
-  G4Track localTrack(&localGamma, 0., position);
-  localTrack.SetStep(aTrack.GetStep());
-  G4VParticleChange * result;
+  G4HadProjectile localTrack(localGamma);
+  G4HadFinalState * result;
   if(photonEnergy < 3*GeV)  
   {
     result = theLEModel.ApplyYourself(localTrack, aTargetNucleus, &theResult);
@@ -190,12 +189,12 @@ ApplyYourself(const G4Track& aTrack, G4Nucleus& aTargetNucleus)
     theHEModel->SetMinEnergy(2.5*GeV);
     theHEModel->SetMaxEnergy(100*TeV);
 
-    G4VParticleChange * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
-    theResult.SetNumberOfSecondaries(aResult->GetNumberOfSecondaries());
+    G4HadFinalState * aResult = theHEModel->ApplyYourself(localTrack, aTargetNucleus);
     for(G4int all = 0; all < aResult->GetNumberOfSecondaries(); all++)
     {
       theResult.AddSecondary(aResult->GetSecondary(all));
     }
+    aResult->SecondariesAreStale();
     result = &theResult;
   }
   return result;
