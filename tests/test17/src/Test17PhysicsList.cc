@@ -24,7 +24,7 @@
 // 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-   
+
 //
 // Always place it in front!
 //
@@ -61,7 +61,7 @@ Test17PhysicsList::Test17PhysicsList(Test17DetectorConstruction* p)
 
   //  MaxChargedStep = DBL_MAX; 
   MaxChargedStep = 0.1*mm; 
-  
+
   SetVerboseLevel(2);
   physicsListMessenger = new Test17PhysicsListMessenger(this);
 }
@@ -176,7 +176,6 @@ void Test17PhysicsList::ConstructProcess()
 #include "G4MuIonisation.hh"
 #include "G4MuBremsstrahlung.hh"
 #include "G4MuPairProduction.hh"
-#include "G4MuonMinusCaptureAtRest.hh"
 
 #include "G4hIonisation.hh"
 #include "G4hLowEnergyIonisation.hh"
@@ -216,17 +215,16 @@ void Test17PhysicsList::ConstructEM()
       pmanager->AddProcess(new G4eIonisation,        -1, 2,2);
       pmanager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
       pmanager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-                  
+
       pmanager->AddProcess(theStepCut,          -1,-1,5);
 
-    } else if( particleName == "mu+" || 
+    } else if( particleName == "mu+" ||
                particleName == "mu-"    ) {
      //muon
      pmanager->AddProcess(new G4MultipleScattering,-1, 1,1);
      pmanager->AddProcess(new G4MuIonisation,      -1, 2,2);
      pmanager->AddProcess(new G4MuBremsstrahlung,  -1,-1,3);
-     pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);       	       
-     pmanager->AddProcess(new G4MuonMinusCaptureAtRest,0,-1,-1);
+     pmanager->AddProcess(new G4MuPairProduction,  -1,-1,4);
 
     } else if (
                 particleName == "proton"  
