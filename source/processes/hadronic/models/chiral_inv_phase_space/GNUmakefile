@@ -9,9 +9,6 @@ SUBDIRS +=  nucleus
 SUBDIRS +=  utils
 
 SUBLIBS  = G4hadronic_body_ci
-SUBLIBS += G4hadronic_nuc_ci
-SUBLIBS += G4hadronic_util_ci
-
 ifndef G4INSTALL
   G4INSTALL = ../../../../..
 endif
