@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ScoreTable.cc,v 1.1 2002-10-28 10:06:01 dressel Exp $
+// $Id: G4ScoreTable.cc,v 1.2 2002-11-04 10:52:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -32,14 +32,13 @@
 // ----------------------------------------------------------------------
 
 #include "G4ScoreTable.hh"
-
-#include "G4StringConversion.hh"
+#include "g4std/strstream"
 
 #include "G4VPhysicalVolume.hh"
 #include "G4VIStore.hh"
 #include "g4std/set"
 #include "G4CellScorer.hh"
-#include "G4CellScoreComposer.hh"
+
 
 G4ScoreTable::G4ScoreTable(const G4VIStore *aIStore) :
   fIStore(aIStore),
@@ -53,7 +52,7 @@ void G4ScoreTable::
 Print(const G4MapGeometryCellCellScorer &cs,
       G4std::ostream *out){
   if (!out) {
-    out = &G4std::G4cout;
+    out = &G4cout;
   }
   PrintHeader(out);
   PrintTable(cs, out);
@@ -86,8 +85,14 @@ void G4ScoreTable::PrintHeader(G4std::ostream *out)
 }
 
 G4String G4ScoreTable::CreateName(const G4GeometryCell &gCell) {
-  G4String name(gCell.GetPhysicalVolume().GetName());
-  name += "_rep:" + G4std::str(gCell.GetReplicaNumber());
+  
+  char st[200];
+  G4std::ostrstream os(st,200);
+  os << gCell.GetPhysicalVolume().GetName()
+     << "_rep:" << gCell.GetReplicaNumber()
+     << '\0';
+  G4String name(st);
+
   return name;
 }
    

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorerStore.cc,v 1.1 2002-10-28 10:06:01 dressel Exp $
+// $Id: G4CellScorerStore.cc,v 1.2 2002-11-04 10:52:39 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ AddCellScorer(G4VPhysicalVolume &vol, G4int repnum) {
   G4CellScorer *s = 0;
   s = new G4CellScorer;
   if (!s) {
-    G4std::G4Exception("ERROR:G4CellScorerStore::AddCellScorer new failed to create G4CellScorer!");
+    G4Exception("ERROR:G4CellScorerStore::AddCellScorer new failed to create G4CellScorer!");
   }  
   fMapGeometryCellCellScorer[G4GeometryCell(vol, repnum)] = s;
   return s;
@@ -62,7 +62,7 @@ AddCellScorer(const G4GeometryCell &gCell) {
   G4CellScorer *s = 0;
   s = new G4CellScorer;
   if (!s) {
-    G4std::G4Exception("ERROR:G4CellScorerStore::AddCellScorer new failed to create G4CellScorer!");
+    G4Exception("ERROR:G4CellScorerStore::AddCellScorer new failed to create G4CellScorer!");
   }  
   fMapGeometryCellCellScorer[gCell] = s;
   return s;
