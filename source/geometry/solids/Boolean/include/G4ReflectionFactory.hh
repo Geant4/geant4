@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.3 2003-05-12 12:35:39 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.4 2003-06-12 12:47:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -75,12 +75,12 @@ class G4VSolid;
 
 typedef G4std::pair<G4VPhysicalVolume*,
                     G4VPhysicalVolume*> G4PhysicalVolumesPair;  
+typedef G4std::map<G4LogicalVolume*, G4LogicalVolume*,  
+                   G4std::less<G4LogicalVolume*> > G4ReflectedVolumesMap;
 
 class G4ReflectionFactory 
 {
-    typedef G4std::map<G4LogicalVolume*, G4LogicalVolume*,  
-                       G4std::less<G4LogicalVolume*> > LogicalVolumesMap;
-    typedef LogicalVolumesMap::const_iterator LogicalVolumesMapIterator;
+    typedef G4ReflectedVolumesMap::const_iterator LogicalVolumesMapIterator;
 
   public:  // with description
   
@@ -131,6 +131,26 @@ class G4ReflectionFactory
       // Sets/gets precision factor for the scale consistency check
       // The default value is set to 10*kCarTolerance.
 
+    G4LogicalVolume* GetConstituentLV(G4LogicalVolume* reflLV) const;
+      // Returns the consituent volume of the given reflected volume,
+      // 0 if the given reflected volume was not found.
+
+    G4LogicalVolume* GetReflectedLV(G4LogicalVolume* lv) const;
+      // Returns the reflected volume of the given consituent volume,
+      // 0 if the given volume was not reflected.
+
+    G4bool IsConstituent(G4LogicalVolume* lv) const;
+      // Returns true if the given volume has been already reflected
+      // (is in the map of constituent volumes).
+
+    G4bool IsReflected(G4LogicalVolume* lv) const;
+      // Returns true if the given volume is a reflected volume
+      // (is in the map reflected  volumes).
+
+    const G4ReflectedVolumesMap& GetReflectedVolumesMap() const;
+      // Returns a handle to the internal map of volumes which have
+      // been reflected, after that placement or replication is performed.
+
   protected:	  
 
     G4ReflectionFactory();
@@ -166,22 +186,6 @@ class G4ReflectionFactory
       // Should copy and transform daughter of PVReplica type of
       // a constituent volume into a reflected volume. 
 
-    G4LogicalVolume* GetConstituentLV(G4LogicalVolume* reflLV) const;
-      // Returns the consituent volume of the given reflected volume,
-      // 0 if the given reflected volume was not found.
-
-    G4LogicalVolume* GetReflectedLV(G4LogicalVolume* lv) const;
-      // Returns the reflected volume of the given consituent volume,
-      // 0 if the given volume was not reflected.
-
-    G4bool IsConstituent(G4LogicalVolume* lv) const;
-      // Returns true if the given volume has been already reflected
-      // (is in the map of constituent volumes).
-
-    G4bool IsReflected(G4LogicalVolume* lv) const;
-      // Returns true if the given volume is a reflected volume
-      // (is in the map reflected  volumes).
-
     G4bool IsReflection(const G4Scale3D& scale) const;
       // Returns true if the scale is negative, false otherwise.
 
@@ -200,8 +204,8 @@ class G4ReflectionFactory
 
     G4int              fVerboseLevel;
     G4String           fNameExtension;
-    LogicalVolumesMap  fConstituentLVMap;
-    LogicalVolumesMap  fReflectedLVMap;
+    G4ReflectedVolumesMap  fConstituentLVMap;
+    G4ReflectedVolumesMap  fReflectedLVMap;
 };
 
 #endif
