@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.5 1999-05-05 09:09:26 aforti Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.6 1999-05-31 17:01:22 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,13 +41,10 @@
 #include "G4Epdl89File.hh"
 #include "G4EpdlTables.hh"
 #include "G4PhysicsFreeVector.hh" 
-//#include "G4FastVector.hh"
 #include "G4Step.hh"
 #include "Randomize.hh" 
 
 #include "CLHEP/String/Strings.h"
-//#include <rw/tvordvec.h>
-//#include <rw/tvordvec.h>
 
 // constructor
  
@@ -125,7 +122,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   // incoming particle initialization
   if(getenv("GENERAL")) aParticleChange.Initialize(aTrack);
 
-
   G4Material* aMaterial = aTrack.GetMaterial();
 
   const G4DynamicParticle* aDynamicPhoton = aTrack.GetDynamicParticle();
@@ -144,8 +140,6 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4PhysicsVector* theBindEnVec = (*theBindingEnergyTable)(AtomNum-1);
   
   G4int g = 0;
-
-
   while(g < theBindEnVec->GetVectorLength() && PhotonEnergy < (*theBindEnVec)(g)){
     g++;
   }
@@ -162,14 +156,14 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   G4double ElecKineEnergy = (PhotonEnergy - (*theBindEnVec)(g))*MeV;
   G4double theEnergyDeposit = (PhotonEnergy - ElecKineEnergy)*MeV;
 
-    cout<<"The electron enloss range is: "
-	<<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
-	<<endl;
-
-    cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
-
-    cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
-
+  cout<<"The electron enloss range is: "
+      <<G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
+      <<endl;
+  
+  cout<<"The electron energy cut is: "<<G4Electron::GetCuts()<<endl;
+  
+  cout<<"The safety cut is: "<<aStep.GetPostStepPoint()->GetSafety()<<endl;
+  
   if (G4EnergyLossTables::GetRange(G4Electron::Electron(),ElecKineEnergy,aMaterial)
       >= min(G4Electron::GetCuts(), aStep.GetPostStepPoint()->GetSafety()) ){
 
@@ -241,8 +235,8 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
     G4int numOfDau = numOfElec + numOfPhot;
 
     aParticleChange.SetNumberOfSecondaries(numOfDau);
-    
-    for( G4int l = 0; l<numOfElec; l++ ){
+    G4int l = 0;
+    for( l = 0; l<numOfElec; l++ ){
       
       aParticleChange.AddSecondary(elecvec[l]);
     }
@@ -470,7 +464,8 @@ G4bool G4LowEnergyPhotoElectric::SelectRandomTransition(G4int thePrimShell,
   if(ShellNum != TransitionTable->entries()-1) {
     
     //TransProb start from 1 because the first element of the list is the primary shall id number
-    for(G4int TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
+    G4int TransProb = 1;
+    for(TransProb = 1; TransProb < (*(*TransitionTable)[ShellNum])[ProbCol]->length(); TransProb++){ 
       
       TotalSum += (*(*(*TransitionTable)[ShellNum])[ProbCol])[TransProb];
     }
