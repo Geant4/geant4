@@ -1,4 +1,4 @@
--n $Id: History,v 1.28 2003-11-06 19:01:55 pia Exp $
+-n $Id: History,v 1.29 2004-03-18 18:19:25 pia Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 Mar 2004 - MGP, tag test14-V06-00-00
+              test14_penelope.in with a reasonable number of events
+              to run, compatible with the improved performance of Penelope
+              processes resulting with emlowen-V06-00-08
+
 06 Nov 2003 - MGP, tag test14-V05-02-02
+              Activate Penelope processes for electrons
               Activate Penelope processes for electrons
     
 06 Nov 2003 - MGP, tag test14-V05-02-01
