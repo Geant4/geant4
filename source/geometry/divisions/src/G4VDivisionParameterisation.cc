@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.cc,v 1.4 2003-10-22 12:58:50 gcosmo Exp $
+// $Id: G4VDivisionParameterisation.cc,v 1.5 2003-10-30 10:19:36 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation Implementation file
@@ -44,8 +44,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
   : faxis(axis), fnDiv( nDiv), fwidth(step),
     foffset(offset), fmotherSolid( motherSolid ) 
 {
-  G4int verbose = 0;
-  if (verbose >= 1)
+  if (verbose >= -1)
   {
     G4cout << " G4VDivisionParameterisation  no divisions " << fnDiv
            << " = " << nDiv << G4endl
@@ -54,7 +53,7 @@ G4VDivisionParameterisation( EAxis axis, G4int nDiv,
   }
   theVoluFirstCopyNo = 1;
 
-  CheckAxisIsValid();
+  G4cout << " call check axis is valid " << G4endl;
 
 }
 

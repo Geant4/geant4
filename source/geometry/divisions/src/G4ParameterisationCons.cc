@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationCons.cc,v 1.3 2003-10-17 09:38:47 gcosmo Exp $
+// $Id: G4ParameterisationCons.cc,v 1.4 2003-10-30 10:19:36 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationCons Implementation file

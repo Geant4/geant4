@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PVDivision.cc,v 1.7 2003-10-22 12:58:50 gcosmo Exp $
+// $Id: G4PVDivision.cc,v 1.8 2003-10-30 10:19:36 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4PVDivision Implementation file

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDivisionParameterisation.hh,v 1.2 2003-10-16 10:42:42 arce Exp $
+// $Id: G4VDivisionParameterisation.hh,v 1.3 2003-10-30 10:19:19 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4VDivisionParameterisation
@@ -83,7 +83,7 @@ protected:  // with description
 			   G4double offset ) const;
   
 private: 
-  virtual void CheckAxisIsValid(){};
+  virtual void CheckAxisIsValid(){ };
   
 protected:
   

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParameterisationPolyhedra.cc,v 1.1 2003-10-16 10:42:43 arce Exp $
+// $Id: G4ParameterisationPolyhedra.cc,v 1.2 2003-10-30 10:19:36 arce Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4ParameterisationPolyhedra Implementation file
@@ -29,6 +29,9 @@
 // 14.10.03 - P.Arce Initial version
 // ********************************************************************
 
+#define protected public
+#include "G4Polyhedra.hh"
+#define protected protected
 #include "G4ParameterisationPolyhedra.hh"
 
 #include <iomanip>
@@ -36,7 +39,6 @@
 #include "G4RotationMatrix.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
-#include "G4Polycone.hh"
 
 //--------------------------------------------------------------------------
 G4ParameterisationPolyhedraRho::
@@ -45,10 +47,10 @@ G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
                                G4VSolid* msolid, DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
 {
-  SetType( "DivisionPolyconeRho" );
+  SetType( "DivisionPolyhedraRho" );
 
-  G4Polycone* msol = (G4Polycone*)(msolid);
-  G4PolyconeHistorical* original_pars = msol->GetOriginalParameters();
+  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
+  G4PolyhedraHistorical* original_pars = msol->GetOriginalParameters();
 
   if( divType == DivWIDTH )
   {
@@ -57,6 +59,9 @@ G4ParameterisationPolyhedraRho( EAxis axis, G4int nDiv,
   }
   else if( divType == DivNDIV )
   {
+    G4cout  << " original_pars " << original_pars << G4endl;
+    G4cout  << " original_pars rmax size " << original_pars->Rmax << " " <<  original_pars->Rmin << G4endl;
+
     fwidth = CalculateWidth( original_pars->Rmax[0]
                            - original_pars->Rmin[0], nDiv, offset );
   }
@@ -107,12 +112,12 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume* physVol ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationPolyhedraRho::
-ComputeDimensions( G4Polycone& tubs, const G4int copyNo,
+ComputeDimensions( G4Polyhedra& phedra, const G4int copyNo,
                    const G4VPhysicalVolume* ) const
 {
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
-  G4PolyconeHistorical* origparam = msol->GetOriginalParameters();
+  G4PolyhedraHistorical* origparam = msol->GetOriginalParameters();
   G4double nZplanes = origparam->Num_z_planes;
   G4int ii = 0;
   G4double width = 0.;
@@ -124,11 +129,14 @@ ComputeDimensions( G4Polycone& tubs, const G4int copyNo,
     origparam->Rmax[ii] = foffset + width*(copyNo+1);
   }
 
+  *(phedra.original_parameters) = *origparam;
+  phedra.Reset();
+
   if( verbose >= -2 )
   {
     G4cout << "G4ParameterisationPolyhedraRho::ComputeDimensions()" << G4endl
            << copyNo << G4endl;
-    tubs.DumpInfo();
+    phedra.DumpInfo();
   }
 }
 
@@ -139,8 +147,8 @@ G4ParameterisationPolyhedraPhi( EAxis axis, G4int nDiv,
                                G4VSolid* msolid, DivisionType divType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
 { 
-  SetType( "DivisionPolyconePhi" );
-  G4Polycone* msol = (G4Polycone*)(msolid);
+  SetType( "DivisionPolyhedraPhi" );
+  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
   G4double deltaPhi = msol->GetEndPhi() - msol->GetStartPhi();
 
   if( divType == DivWIDTH )
@@ -199,12 +207,12 @@ ComputeTransformation( const G4int copyNo, G4VPhysicalVolume *physVol ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationPolyhedraPhi::
-ComputeDimensions( G4Polycone&, const G4int,
+ComputeDimensions( G4Polyhedra&, const G4int,
                    const G4VPhysicalVolume* ) const
 {
 /*
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
-  G4PolyconeHistorical* orig_pars = msol->GetOriginalParameters();
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
+  G4PolyhedraHistorical* orig_pars = msol->GetOriginalParameters();
 
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();
@@ -235,9 +243,9 @@ G4ParameterisationPolyhedraZ( EAxis axis, G4int nDiv,
                              G4VSolid* msolid, DivisionType )
   :  G4VDivisionParameterisation( axis, nDiv, width, offset, msolid )
 { 
-  SetType( "DivisionPolyconeZ" );
+  SetType( "DivisionPolyhedraZ" );
 /*
-  G4Polycone* msol = (G4Polycone*)(msolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(msolid);
 
   if( divType == DivWIDTH )
   {
@@ -270,8 +278,8 @@ ComputeTransformation( const G4int, G4VPhysicalVolume* ) const
 {
 /*
   //----- set translation: along Z axis
-  G4Polycone* motherPolycone = (G4Polycone*)(GetMotherSolid());
-  G4double posi = -motherPolycone->GetZHalfLength() + foffset
+  G4Polyhedra* motherPolyhedra = (G4Polyhedra*)(GetMotherSolid());
+  G4double posi = -motherPolyhedra->GetZHalfLength() + foffset
                   + fwidth/2 + copyNo*fwidth;
   G4ThreeVector origin(0.,0.,posi); 
   physVol->SetTranslation( origin );
@@ -298,11 +306,11 @@ ComputeTransformation( const G4int, G4VPhysicalVolume* ) const
 //--------------------------------------------------------------------------
 void
 G4ParameterisationPolyhedraZ::
-ComputeDimensions( G4Polycone&, const G4int,
+ComputeDimensions( G4Polyhedra&, const G4int,
                    const G4VPhysicalVolume* ) const
 {
 /*
-  G4Polycone* msol = (G4Polycone*)(fmotherSolid);
+  G4Polyhedra* msol = (G4Polyhedra*)(fmotherSolid);
 
   G4double pRMin = msol->GetInnerRadius();
   G4double pRMax = msol->GetOuterRadius();
