@@ -1,4 +1,4 @@
-$Id: History,v 1.266 2004-12-10 18:15:46 gcosmo Exp $
+$Id: History,v 1.267 2005-01-26 17:18:24 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,23 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+26th January 2005  John Allison  (vis-V07-00-00)
+- G4VisManager:: removed optional argument
+  const G4Transform3D& objectTransformation = G4Transform3D::Identity
+  from Draw methods for a hit and trajectory.
+- Trapped illegal nesting of Begin/EndPrimitives.
+- Added fpCurrentMaterial to G4VSceneHandler and relevant derived
+  classes and models for work with G4PhysicalVolumeModel via
+  EstablishSpecials.  So now, the material is also available (in addition
+  to current depth, logical and physical volum) during drawing of geometry
+  items.
+- Changed ASCIITree to use G4VSolid::GetCubicVolume and
+  G4LogicalVolume::GetMass.
+- Changed G4PhysicalVolumeMassScene to use G4VSolid::GetCubicVolume.
+- Improved guidance for /vis/viewer/set/hiddenMarker.
+- G4VisCommandsViewerSet: made Up and Viewpoint vectors unit for safety.
+- Some additions to test area.
 
 10th December 2004 Gabriele Cosmo (vis-V06-02-09)
 - Replaced M_PI with CLHEP's pi.
