@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.hh,v 1.19 2003-03-10 08:33:56 asaim Exp $
+// $Id: G4VUserPhysicsList.hh,v 1.20 2003-03-14 00:44:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -227,7 +227,10 @@ class G4VUserPhysicsList
    // Invoke SetCuts for all particles in a region
    void SetCutsForRegion(G4double aCut, const G4String& rname);
 
-///////////////////////////////////////////////////////////////////////////////
+   // Following are utility methods are obsolete
+   void ResetCuts();
+
+///////////////////////////////////////////////////////////////////
   public:   
    // Get/SetApplyCuts gets/sets the flag for ApplyCuts
    // void SetApplyCuts(G4bool value, const G4String& name); 

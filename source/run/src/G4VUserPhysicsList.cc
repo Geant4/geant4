@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VUserPhysicsList.cc,v 1.35 2003-03-11 07:21:31 kurasige Exp $
+// $Id: G4VUserPhysicsList.cc,v 1.36 2003-03-14 00:44:41 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -677,7 +677,15 @@ void G4VUserPhysicsList::RetrievePhysicsTable(G4ParticleDefinition* particle,
   }
 }
 
-
+void G4VUserPhysicsList::G4VUserPhysicsList::ResetCuts()
+{
+#ifdef G4VERBOSE  
+  if (verboseLevel>0){
+    G4cout << "G4VUserPhysicsList::ResetCuts() is obsolete.";
+    G4cout << " This method gives no effect and you can remove it. "<< G4endl;
+  }
+#endif
+}
 
 
 
