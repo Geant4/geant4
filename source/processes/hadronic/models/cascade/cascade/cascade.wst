@@ -1,0 +1,72 @@
+WORKSET VERSION 1
+
+#
+# Workshop WorkSet File
+#
+
+%%File
+
+[FileData
+  (processDirectory ".")
+  (currentDirectory ".")
+  (files 
+    { 
+    })
+]
+
+%%Build
+
+[BuildData
+  (currentDirectory ".")
+  (targets 
+    { 
+      [BuildTarget
+        (makefile "GNUmakefile")
+        (target "<Default>")
+        (options "")
+        (command "gmake")
+        (buildDirectory ".")
+      ]
+    })
+]
+
+%%Debug
+
+[DebugData
+  (currentDirectory ".")
+  (programs 
+    { 
+    })
+]
+
+%%Browse
+
+[BrowseData
+  (AccuBrowseDirectory ".")
+  (PatternSearchDirectory ".")
+  (mode "PatternSearch")
+  (directories 
+    { 
+    })
+]
+
+%%SUNW_Analyzer
+
+
+
+%%SUNW_Looptool
+
+
+
+%%SUNW_Codemgrtool
+
+
+
+%%tha
+
+
+
+%%SUNW_Visual
+
+
+
