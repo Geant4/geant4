@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronPenelope.cc,v 1.2 2004-06-02 10:16:09 guatelli Exp $
+// $Id: Tst50PositronPenelope.cc,v 1.1 2004-06-02 10:16:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria.Grazia.Pia@cern.ch
@@ -31,7 +31,7 @@
 //
 // -------------------------------------------------------------------
 
-#include "Tst50ElectronPenelope.hh"
+#include "Tst50PositronPenelope.hh"
 
 #include "G4ProcessManager.hh"
 #include "G4Gamma.hh"
@@ -41,14 +41,14 @@
 #include "G4PenelopeBremsstrahlung.hh"
 #include "G4PenelopeAnnihilation.hh"
 
-Tst50ElectronPenelope::Tst50ElectronPenelope(const G4String& name): 
+Tst50PositronPenelope::Tst50PositronPenelope(const G4String& name): 
 G4VPhysicsConstructor(name)
 { }
 
-Tst50ElectronPenelope::~Tst50ElectronPenelope()
+Tst50PositronPenelope::~Tst50PositronPenelope()
 { }
 
-void Tst50ElectronPenelope::ConstructProcess()
+void Tst50PositronPenelope::ConstructProcess()
 {
   
   
@@ -60,15 +60,12 @@ void Tst50ElectronPenelope::ConstructProcess()
       G4ProcessManager* manager = particle->GetProcessManager();
       G4String particleName = particle->GetParticleName();
      
-      if (particleName == "e-") 
+      if (particleName == "e+") 
 	{
-	  //	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
-	  G4PenelopeIonisation* ioni = new G4PenelopeIonisation();
-	  G4PenelopeBremsstrahlung* brem = new G4PenelopeBremsstrahlung();
-          manager -> AddProcess(ioni, -1, 2,2);
-	  manager -> AddProcess(brem, -1,-1,3); 
-          ioni -> SetEnlossFluc(false); 
-          brem -> SetEnlossFluc(false); 
+	  manager -> AddProcess(new G4MultipleScattering,    -1, 1,1);
+          manager -> AddProcess(new G4PenelopeIonisation,    -1, 2,2);
+	  manager -> AddProcess(new G4PenelopeBremsstrahlung,-1,-1,3);  
+          manager -> AddProcess(new G4PenelopeAnnihilation,   0,-1,4);
 	}   
     }
 }

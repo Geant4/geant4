@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50PhysicsList.cc,v 1.19 2003-11-17 14:43:42 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.20 2004-06-02 10:16:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Unknown (contact: Maria.Grazia.Pia@cern.ch)
@@ -46,6 +46,7 @@
 #include "Tst50ElectronPenelope.hh"
 #include "Tst50PositronStandard.hh"
 #include "Tst50PositronStandardBack.hh"
+#include "Tst50PositronPenelope.hh"
 #include "Tst50ProtonStandard.hh"
 #include "Tst50ProtonEEDL.hh"
 #include "Tst50ProtonEEDLziegler.hh"
@@ -132,21 +133,7 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	   photonIsRegistered = true;
 	}
     }
-  // Register polarised processes for photons
-  if (name == "photon-polarised")
-    {
-      if (photonIsRegistered) 
-	{
-	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name  
-		 << " cannot be registered ---- photon List already existing" << G4endl;
-	} 
-      else 
-	{
-	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
-	  RegisterPhysics( new Tst50PhotonPolarised(name) );
-	  photonIsRegistered = true;
-	}
-    }
+
   // Register standard processes for electrons
   if (name == "electron-standard") 
     {
@@ -277,6 +264,21 @@ void Tst50PhysicsList::AddPhysicsList(const G4String& name)
 	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
 	  RegisterPhysics( new Tst50PositronStandardBack(name) );
 	  protonIsRegistered = true;
+	}
+    }
+
+ if (name == "positron-penelope")
+    {
+     if (positronIsRegistered) 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name 
+		 << " cannot be registered ---- positron List already existing" << G4endl;
+	} 
+      else 
+	{
+	  G4cout << "Tst50PhysicsList::AddPhysicsList: " << name << " is registered" << G4endl;
+	  RegisterPhysics( new Tst50PositronPenelope(name) );
+	  positronIsRegistered = true;
 	}
     }
 

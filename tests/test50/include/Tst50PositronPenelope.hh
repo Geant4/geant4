@@ -20,55 +20,50 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst50ElectronPenelope.cc,v 1.2 2004-06-02 10:16:09 guatelli Exp $
+//
+// $Id: Tst50PositronPenelope.hh,v 1.1 2004-06-02 10:16:09 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
 //
 // History:
 // -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
+// 22 Feb 2003 MGP          Created
 //
 // -------------------------------------------------------------------
 
-#include "Tst50ElectronPenelope.hh"
+// Class description:
+// System test for e/gamma, electron processes a' la Penelope for PhysicsList
+// Further documentation available from http://www.ge.infn.it/geant4/lowE
 
-#include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4MultipleScattering.hh"
-#include "G4PenelopeIonisation.hh"
-#include "G4PenelopeBremsstrahlung.hh"
-#include "G4PenelopeAnnihilation.hh"
+// -------------------------------------------------------------------
 
-Tst50ElectronPenelope::Tst50ElectronPenelope(const G4String& name): 
-G4VPhysicsConstructor(name)
-{ }
+#ifndef TST50POSITRONPENELOPE_HH
+#define TST50POSITRONPENELOPE_HH 1
 
-Tst50ElectronPenelope::~Tst50ElectronPenelope()
-{ }
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-void Tst50ElectronPenelope::ConstructProcess()
-{
+class Tst50PositronPenelope : public G4VPhysicsConstructor {
+
+public: 
+
+  Tst50PositronPenelope(const G4String& name = "positron-penelope");
   
+  virtual ~Tst50PositronPenelope();
   
-  theParticleIterator->reset();
+  // This method is dummy for physics
+  virtual void ConstructParticle() {};
+  
+  virtual void ConstructProcess();
+};
 
-  while( (*theParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = theParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-     
-      if (particleName == "e-") 
-	{
-	  //	  manager -> AddProcess(new G4MultipleScattering, -1, 1,1);
-	  G4PenelopeIonisation* ioni = new G4PenelopeIonisation();
-	  G4PenelopeBremsstrahlung* brem = new G4PenelopeBremsstrahlung();
-          manager -> AddProcess(ioni, -1, 2,2);
-	  manager -> AddProcess(brem, -1,-1,3); 
-          ioni -> SetEnlossFluc(false); 
-          brem -> SetEnlossFluc(false); 
-	}   
-    }
-}
+#endif
+
+
+
+
+
+
+
+
