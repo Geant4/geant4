@@ -392,7 +392,7 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 // FixMe: in some cases there could be a significant
 //        part to do still in the nucleus, or we stepped to far... depending on
 //        slope of potential
-    G4double t_in, t_out;
+    G4double t_in=-1, t_out=0;  // set onto boundary.
 
 // should go out, or are already out by a too long step..
     if(is_exiting || 
@@ -427,7 +427,12 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	   {
 	     G4cout << "RKPropagation-Transport: problem with particle exiting - ignored" << G4endl;
              G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
-             kt->SetState(G4KineticTrack::captured);
+             if (kt->GetDefinition() == G4Proton::Proton() ||
+	         kt->GetDefinition() == G4Neutron::Neutron() ) {
+                kt->SetState(G4KineticTrack::captured);
+	     } else {
+	        kt->SetState(G4KineticTrack::gone_out);  //@@GF tofix
+	     }
 	     continue; // the particle cannot exit the nucleus
 	   }
 	   G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));
@@ -443,7 +448,12 @@ void G4RKPropagation::Transport(G4KineticTrackVector & active,
 	if(newE < kt->GetActualMass())
 	{  // the particle cannot exit the nucleus  @@@ GF check.
           G4cout << " cannot leave nucleus, E in/out: " << kt->GetTrackingMomentum() << " / " << newE <<G4endl;
-          kt->SetState(G4KineticTrack::captured);
+             if (kt->GetDefinition() == G4Proton::Proton() ||
+	         kt->GetDefinition() == G4Neutron::Neutron() ) {
+                kt->SetState(G4KineticTrack::captured);
+	     } else {
+	        kt->SetState(G4KineticTrack::gone_out);  //@@GF tofix
+	     }
 	  continue;
 	}
 	G4double newP = sqrt(newE*newE- sqr(kt->GetActualMass()));

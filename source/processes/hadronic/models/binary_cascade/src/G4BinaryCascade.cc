@@ -647,7 +647,7 @@ G4double G4BinaryCascade::GetExcitationEnergy()
   debug.push_back(nucleusMass);
   debug.push_back(GetFinalNucleusMomentum().mag());
   debug.dump();
-  PrintKTVector(&theTargetList, std::string(" current target list info"));
+//  PrintKTVector(&theTargetList, std::string(" current target list info"));
   PrintKTVector(&theCapturedList, std::string(" current captured list info"));
 
   excitationE = GetFinalNucleusMomentum().mag() - nucleusMass;
@@ -809,7 +809,7 @@ void  G4BinaryCascade::FindCollisions(G4KineticTrackVector * secondaries)
     }
   }
 
-  G4cout << " FindCollisions found collisions" << endl;
+  G4cout << " FindCollisions found collisions" << G4endl;
   theCollisionMgr->Print();
  
 }
@@ -1047,6 +1047,7 @@ G4bool G4BinaryCascade::Capture(G4bool verbose)
  	   (kt->GetDefinition() == G4Neutron::Neutron()))
         {
 	  captured.push_back(kt);
+	  kt->Hit();				// 
 	  theCapturedList.push_back(kt);
 	}
       }
@@ -1487,10 +1488,13 @@ G4bool G4BinaryCascade::DoTimeStep(G4double theTimeStep)
 // Add track missing nucleus to addFinals
   for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::miss_nucleus));
+//  tracks going straight through in a single step....
   for_each( kt_outside->begin(),kt_outside->end(),
            SelectFromKTV(kt_gone_out,G4KineticTrack::gone_out));
     
-PrintKTVector(kt_gone_out, std::string("pushing to final state.."));
+PrintKTVector(kt_gone_out, std::string("append to final state.."));
+	theFinalState.insert(theFinalState.end(),
+			kt_gone_out->begin(),kt_gone_out->end());
 
 // Partclies which could not leave nucleus,  captured...
   G4KineticTrackVector * kt_captured = new G4KineticTrackVector;
@@ -1531,6 +1535,8 @@ PrintKTVector(kt_gone_out, std::string("pushing to final state.."));
   {
      theCapturedList.insert(theCapturedList.end(),
                             kt_captured->begin(),kt_captured->end());
+     for_each(kt_captured->begin(),kt_captured->end(),
+              std::mem_fun(&G4KineticTrack::Hit));
      UpdateTracksAndCollisions(kt_captured, NULL, NULL);
   }
   
@@ -1561,6 +1567,7 @@ PrintKTVector(kt_gone_out, std::string("pushing to final state.."));
 
   delete kt_inside;
   delete kt_outside;
+  delete kt_captured;
   delete kt_gone_in;
   delete kt_gone_out;
 
@@ -1696,9 +1703,16 @@ G4KineticTrackVector* G4BinaryCascade::CorrectBarionsOnBoundary(
      {
 	if((*iter)->GetDefinition()->GetBaryonNumber()==1) 
 	{
-	   (*iter)->Update4Momentum((*iter)->GetTrackingMomentum().e() + correction);
+           if ((*iter)->Get4Momentum().e()+correction > (*iter)->GetActualMass())
+	   {
+	      (*iter)->Update4Momentum((*iter)->GetTrackingMomentum().e() + correction);
+	   } else
+	   {
+	      // particle cannot go out due to change of nuclear potential! 
+	      //  @@GF@@ ignore for the moment. 
+	      G4cout << "Not correcting outgoing " << *iter << G4endl;	      
+	   }   
 	}
-	theFinalState.push_back(*iter);
      }
 
      PrintKTVector(out,std::string("out AFTER correction"));
