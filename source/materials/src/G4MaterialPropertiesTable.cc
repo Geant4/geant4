@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MaterialPropertiesTable.cc,v 1.8 1999-12-15 14:50:51 gunter Exp $
+// $Id: G4MaterialPropertiesTable.cc,v 1.9 2000-03-03 10:21:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -110,7 +110,7 @@ G4MaterialPropertiesTable::~G4MaterialPropertiesTable()
         // Methods
         ////////////
 
-void G4MaterialPropertiesTable::AddProperty(char     *key,
+void G4MaterialPropertiesTable::AddProperty(const char     *key,
 					    G4double *PhotonMomenta,
 					    G4double *PropertyValues,
 					    G4int     NumEntries)
@@ -122,7 +122,7 @@ void G4MaterialPropertiesTable::AddProperty(char     *key,
 	MPT [G4String(key)] = mpv;
 }
 
-void G4MaterialPropertiesTable::AddProperty(char *key,
+void G4MaterialPropertiesTable::AddProperty(const char *key,
 					    G4MaterialPropertyVector *mpv)
 {
 //	Provides a way of adding a property to the Material Properties
@@ -131,17 +131,17 @@ void G4MaterialPropertiesTable::AddProperty(char *key,
 	MPT [G4String(key)] = mpv;
 } 
 
-void G4MaterialPropertiesTable::RemoveProperty(char *key)
+void G4MaterialPropertiesTable::RemoveProperty(const char *key)
 {
 	MPT.erase(G4String(key));
 }
 
-G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(char *key)
+G4MaterialPropertyVector* G4MaterialPropertiesTable::GetProperty(const char *key)
 {
 	return MPT [G4String(key)];
 }
 
-void G4MaterialPropertiesTable::AddEntry(char     *key,
+void G4MaterialPropertiesTable::AddEntry(const char     *key,
 					 G4double  aPhotonMomentum,
 					 G4double  aPropertyValue)
 {
@@ -155,7 +155,7 @@ void G4MaterialPropertiesTable::AddEntry(char     *key,
 	}
 }
 
-void G4MaterialPropertiesTable::RemoveEntry(char *key,  
+void G4MaterialPropertiesTable::RemoveEntry(const char *key,  
 					    G4double  aPhotonMomentum)
 {
         G4MaterialPropertyVector *targetVector=MPT [G4String(key)];

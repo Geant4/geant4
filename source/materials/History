@@ -1,4 +1,4 @@
-$Id: History,v 1.3 1999-11-16 11:04:04 gcosmo Exp $
+$Id: History,v 1.4 2000-03-03 10:20:59 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+March   03, 00 M.Maire  - materials-V01-00-00
+               const char* everywhere in G4MaterialPropertiesTable
+	       
 Nov     16, 99 G.Cosmo  - materials-V00-01-03
                Removed useless inclusion of RW tphdict.h from
 	       G4MaterialPropertiesTable.hh. This tag includes the global
