@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Nsplit_Weight.hh,v 1.8 2002-11-04 10:43:05 dressel Exp $
+// $Id: G4Nsplit_Weight.hh,v 1.9 2002-11-20 13:18:47 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -29,8 +29,8 @@
 //
 // Class description:
 // 
-// A struct used by importance sampling. It contains the number of tracks
-// a mother track should be split into and their weight.
+// A class (struct) used by importance sampling. It contains the number
+// of tracks a mother track should be split into and their weight.
  
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
@@ -39,8 +39,10 @@
 
 #include "globals.hh"
 
-struct G4Nsplit_Weight
+class G4Nsplit_Weight
 {
+  public:
+
   G4int fN;
     // number of tracks a mother track should be split into
     // including the mother track
