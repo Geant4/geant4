@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.cc,v 1.4 2000-06-02 05:36:53 asaim Exp $
+// $Id: G4Track.cc,v 1.5 2001-01-18 12:25:12 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -38,6 +38,7 @@ G4Track::G4Track(G4DynamicParticle* apValueDynamicParticle,
    fPosition = aValuePosition;
    fpTouchable = 0;
    fpNextTouchable = 0; 
+   fpStep=0;
 
    fpLVAtVertex = 0;
    fpCreatorProcess = 0;
@@ -63,6 +64,7 @@ G4Track::G4Track()
    fTrackID = 0;
    fpTouchable = 0;
    fpNextTouchable = 0;
+   fpStep=0;
 
    fpDynamicParticle = 0;
    fpLVAtVertex = 0;
@@ -75,6 +77,12 @@ G4Track::G4Track()
 
    fpUserInformation = 0;
 }
+//////////////////
+G4Track::G4Track(const G4Track& right)
+//////////////////
+{
+  *this = right;
+}
 
 ///////////////////
 G4Track::~G4Track()
@@ -82,6 +90,42 @@ G4Track::~G4Track()
 {
    delete fpDynamicParticle;
    delete fpUserInformation;
+}
+
+//////////////////
+G4Track & G4Track::operator=(const G4Track &right)
+//////////////////
+{
+  if (this != &right) {
+   fCurrentStepNumber = right.fCurrentStepNumber;
+   fGlobalTime = right.fGlobalTime;
+   fLocalTime = right.fLocalTime;
+   fTrackLength = right.fTrackLength;
+   fParentID = right.fParentID;
+
+   // Track ID is not copied and set to zero for new track
+   fTrackID = 0;
+
+   // pointers to Touchables or Step are not copied
+   fpTouchable = 0;
+   fpNextTouchable = 0;
+   fpStep=0;
+
+   fpDynamicParticle = new G4DynamicParticle(*(right.fpDynamicParticle));
+
+   fVtxKineticEnergy = right.fVtxKineticEnergy;
+   fVtxPosition = right.fVtxPosition;
+   fpLVAtVertex = right.fpLVAtVertex;
+   fpCreatorProcess = right.fpCreatorProcess;
+
+   fTrackStatus = right.fTrackStatus;
+   fBelowThreshold = right.fBelowThreshold;
+   fGoodForTracking = right.fGoodForTracking;
+   fWeight = right.fWeight;
+
+   fpUserInformation = right.fpUserInformation;
+  }
+  return *this;
 }
 
 ///////////////////

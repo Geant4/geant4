@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Track.hh,v 1.9 2000-10-18 15:00:09 kurasige Exp $
+// $Id: G4Track.hh,v 1.10 2001-01-18 12:25:08 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -55,11 +55,13 @@ public: // With description
 
 // Constructor
    G4Track();
+   G4Track(const G4Track&);
    G4Track(G4DynamicParticle* apValueDynamicParticle,
            G4double aValueTime,
            const G4ThreeVector& aValuePosition);
       // aValueTime is a global time
 
+   G4Track& operator=(const  G4Track&);
 //--------
 public: 
 
