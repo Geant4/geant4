@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3EventAction.cc,v 1.11 2001-10-22 10:58:56 maire Exp $
+// $Id: Em3EventAction.cc,v 1.12 2001-11-28 17:54:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -47,7 +47,6 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4UnitsTable.hh"
-#include "Randomize.hh"
 
 #ifndef G4NOHIST
  #include "CLHEP/Hist/HBookFile.h"
@@ -57,7 +56,7 @@
 
 Em3EventAction::Em3EventAction(Em3RunAction* run,Em3PrimaryGeneratorAction* kin,
                                Em3DetectorConstruction* det)
-:Em3Run(run),Em3Kin(kin),Detector(det),calorimeterCollID(-1),drawFlag("all"),
+:Em3Run(run),Em3Kin(kin),Detector(det),calorimeterCollID(-1),drawFlag("none"),
  printModulo(10000),eventMessenger(0)
 {
   eventMessenger = new Em3EventActionMessenger(this);
@@ -79,13 +78,6 @@ void Em3EventAction::BeginOfEventAction(const G4Event* evt)
  //survey printing
  if (evtNb%printModulo == 0) 
     G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
-    
- //save rndm status
- if (Em3Run->GetRndmFreq() == 2)
-   { 
-    HepRandom::saveEngineStatus("beginOfEvent.rndm");   
-    if (evtNb%printModulo == 0) HepRandom::showEngineStatus();
-   }         
 
  // initialize Hits collection    
  if (calorimeterCollID==-1)

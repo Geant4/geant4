@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.hh,v 1.8 2001-07-11 09:57:40 gunter Exp $
+// $Id: Em3RunAction.hh,v 1.9 2001-11-28 17:54:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef Em3RunAction_h
 #define Em3RunAction_h 1
@@ -37,7 +37,7 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4Run;
 class Em3RunActionMessenger;
@@ -59,9 +59,6 @@ class Em3RunAction : public G4UserRunAction
     
     void fillPerEvent(G4int,G4double,G4double);
     
-    void  SetRndmFreq(G4int   val)  {saveRndm = val;}
-    G4int GetRndmFreq()             {return saveRndm;}
-    
 #ifndef G4NOHIST
     HepHistogram* GetHisto(G4int id) {return histo[id];}    
 #endif
@@ -80,7 +77,6 @@ class Em3RunAction : public G4UserRunAction
 
     Em3DetectorConstruction* Detector;    
     Em3RunActionMessenger*   runMessenger;        
-    G4int saveRndm;
     
 #ifndef G4NOHIST    
     HepTupleManager* hbookManager;    
@@ -88,7 +84,7 @@ class Em3RunAction : public G4UserRunAction
 #endif               
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
 void Em3RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
@@ -99,7 +95,7 @@ void Em3RunAction::fillPerEvent(G4int kAbs, G4double EAbs, G4double LAbs)
   sumLAbs[kAbs] += LAbs; sum2LAbs[kAbs] += LAbs*LAbs;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

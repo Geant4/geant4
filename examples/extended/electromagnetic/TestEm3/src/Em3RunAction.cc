@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunAction.cc,v 1.14 2001-10-25 14:32:03 maire Exp $
+// $Id: Em3RunAction.cc,v 1.15 2001-11-28 17:54:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,6 +34,7 @@
 
 #include "G4Run.hh"
 #include "G4Material.hh"
+#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
@@ -52,7 +53,7 @@ Em3RunAction::Em3RunAction(Em3DetectorConstruction* det)
 :Detector(det)
 {
   runMessenger = new Em3RunActionMessenger(this);   
-  saveRndm = 1;
+
 #ifndef G4NOHIST
   // init hbook
   hbookManager = new HBookFile("TestEm3.paw", 68);
@@ -82,10 +83,9 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
   // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("beginOfRun.rndm");
-    }
+  //
+  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  HepRandom::showEngineStatus();
        
   //initialize cumulative quantities
   //
@@ -95,11 +95,8 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
   //drawing
   // 
   if (G4VVisManager::GetConcreteInstance())
-    {
-      G4UImanager* UI = G4UImanager::GetUIpointer(); 
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
-    
+     G4UImanager::GetUIpointer()->ApplyCommand("/vis/scene/notifyHandlers");
+     
   //histograms
   //
   bookHisto();
@@ -193,11 +190,8 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout.setf(oldform,G4std::ios::floatfield);
   G4cout.precision(oldprec);
     
-  // save Rndm status
-  if (saveRndm > 0)
-    { HepRandom::showEngineStatus();
-      HepRandom::saveEngineStatus("endOfRun.rndm");
-    }                         
+  // show Rndm status
+  HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -1,4 +1,4 @@
-# $Id: storeTables.mac,v 1.1 2001-10-23 10:30:12 maire Exp $
+# $Id: storeTables.mac,v 1.2 2001-11-28 17:54:46 maire Exp $
 #
 # Macro file for "testEm3.cc"
 # 
@@ -17,6 +17,6 @@
 #
 /run/particle/retrievePhysicsTable physdata
 #
-/rndm/read beginOfRun.rndm
+/random/resetEngineFrom currentRun.rndm
 /run/beamOn 3
 #

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.hh,v 1.6 2001-10-22 10:58:50 maire Exp $
+// $Id: Em3RunActionMessenger.hh,v 1.7 2001-11-28 17:54:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -36,10 +36,7 @@
 #include "G4UImessenger.hh"
 
 class Em3RunAction;
-class G4UIdirectory;
 class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,12 +49,8 @@ class Em3RunActionMessenger: public G4UImessenger
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
-    Em3RunAction*          Em3Run;   
-    G4UIdirectory*         RndmDir;
-    G4UIcmdWithAnInteger*  RndmSaveCmd;       
-    G4UIcmdWithAString*    RndmReadCmd;
-    
-    G4UIcommand*           HistoCmd;        
+    Em3RunAction* Em3Run;
+    G4UIcommand*  HistoCmd;        
  
 };
 

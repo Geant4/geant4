@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Em3RunActionMessenger.cc,v 1.7 2001-10-22 10:58:59 maire Exp $
+// $Id: Em3RunActionMessenger.cc,v 1.8 2001-11-28 17:54:46 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,39 +32,16 @@
 #include "Em3RunActionMessenger.hh"
 
 #include "Em3RunAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4ios.hh"
 #include "globals.hh"
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
 :Em3Run(run)
 {    
-  RndmDir = new G4UIdirectory("/rndm/");
-  RndmDir->SetGuidance("Rndm status control.");
-  
-  RndmSaveCmd = new G4UIcmdWithAnInteger("/rndm/save",this);
-  RndmSaveCmd->SetGuidance("set frequency to save rndm on external files.");
-  RndmSaveCmd->SetGuidance("freq = 0 not saved");
-  RndmSaveCmd->SetGuidance("freq > 0 saved on: beginOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq > 0 saved on:   endOfRun.rndm");
-  RndmSaveCmd->SetGuidance("freq = 2 saved on: beginOfEvent.rndm");    
-  RndmSaveCmd->SetParameterName("frequency",false);
-  RndmSaveCmd->SetRange("frequency>=0 && frequency<=2");
-  RndmSaveCmd->AvailableForStates(PreInit,Idle); 
-         
-  RndmReadCmd = new G4UIcmdWithAString("/rndm/read",this);
-  RndmReadCmd->SetGuidance("get rndm status from an external file.");
-  RndmReadCmd->SetParameterName("fileName",true);
-  RndmReadCmd->SetDefaultValue ("beginOfRun.rndm");
-  RndmReadCmd->AvailableForStates(PreInit,Idle);
-  
   HistoCmd = new G4UIcommand("/run/setHisto",this);
   HistoCmd->SetGuidance("Set histo Edep/Ebeam in absorber k");
   HistoCmd->SetGuidance("  histo=absor number : from 0 to NbOfAbsor-1");
@@ -97,7 +74,6 @@ Em3RunActionMessenger::Em3RunActionMessenger(Em3RunAction* run)
 
 Em3RunActionMessenger::~Em3RunActionMessenger()
 {
-  delete RndmSaveCmd; delete RndmReadCmd; delete RndmDir;
   delete HistoCmd;  
 }
 
@@ -105,15 +81,6 @@ Em3RunActionMessenger::~Em3RunActionMessenger()
 
 void Em3RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {   
-  if (command == RndmSaveCmd)
-      Em3Run->SetRndmFreq(RndmSaveCmd->GetNewIntValue(newValue));
-		 
-  if (command == RndmReadCmd)
-    { G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
-      HepRandom::restoreEngineStatus(newValue);
-      HepRandom::showEngineStatus();
-    }
-    
   if (command == HistoCmd)
    { G4int idh,nbins; G4double vmin,vmax;
      const char* t = newValue;
