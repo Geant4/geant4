@@ -93,15 +93,13 @@ G4BinaryCascade::G4BinaryCascade(const G4BinaryCascade& )
 
 G4BinaryCascade::~G4BinaryCascade()
 {
-    std::cout << " ~G4BinaryCascade " << std::endl;
   ClearAndDestroy(&theTargetList);
   ClearAndDestroy(&theSecondaryList);
   ClearAndDestroy(&theCapturedList);
   ClearAndDestroy(&theProjectileList);
   delete thePropagator;
   delete theCollisionMgr;
-    std::cout << " ~G4BinaryCascade exit" << std::endl;
-// GF core dump  std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
+  std::for_each(theImR.begin(), theImR.end(), Delete<G4BCAction>());
 }
 
 //----------------------------------------------------------------------------
@@ -849,9 +847,12 @@ G4bool G4BinaryCascade::ApplyCollision(G4CollisionInitialState * collision)
   oldSecondaries.push_back(primary);
 //#ifdef debug_G4BinaryCascade
   if ( (finalBaryon-initialBaryon) != 0 || (finalCharge-initialCharge) != 0 ) 
-     {G4cout << "G4BinaryCascade: Error in Balancing " << G4endl;}
-//  G4cout << "Balancing debug ====== "
-//      <<finalBaryon<<" "<<initialBaryon<<" "<<finalCharge<<" "<<initialCharge<<G4endl;
+     {
+        G4cout << "G4BinaryCascade: Error in Balancing: " << G4endl;
+        G4cout << "initial/final baryon number, initial/final Charge "
+            << initialBaryon <<" "<< finalBaryon <<" "
+	    << initialCharge <<" "<< finalCharge <<G4endl;
+     }
 //#endif
 
   G4KineticTrackVector oldTarget = collision->GetTargetCollection();
