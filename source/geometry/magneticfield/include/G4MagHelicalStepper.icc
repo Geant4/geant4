@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagHelicalStepper.icc,v 1.6 2002-03-28 13:42:25 japost Exp $
+// $Id: G4MagHelicalStepper.icc,v 1.7 2002-05-31 16:22:54 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,7 +39,7 @@ G4MagHelicalStepper::LinearStep( const G4double  yIn[],
 
   for( G4int i = 0; i < 3; i++ ) {
     yDir[i]   = inv_momentum * yIn[i+3];
-    yLinear[i]   = yIn[i] + h * yDir[i+3];
+    yLinear[i]   = yIn[i] + h * yDir[i];
     // yLinear[i]   = yIn[i] + h_div_momentum * yIn[i+3];
     yLinear[i+3] = yIn[i+3];
   }
