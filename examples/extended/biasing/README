@@ -10,13 +10,13 @@ applications.
 General remark to biasing
 -------------------------
 The tools provided for importance sampling (or geometrical splitting and
-Russiann roulett) require the user to have a good understanding of the physics
+Russian roulette) require the user to have a good understanding of the physics
 in the problem. This is because the user has to decide which particle types 
 have to be biased, define the regions (physical volumes, replicas) and 
-assign importances to that regions. If this is not done properly the rsults
+assign importances to that regions. If this is not done properly the results
 can not expected to describe a real experiment. 
-The examples given here only demonstrate how to use the tools tecnically. They
-don't intend to produce physical correcxt results.
+The examples given here only demonstrate how to use the tools technically. They
+don't intend to produce physical correct results.
 
 Known problems
 --------------
@@ -28,7 +28,7 @@ between volumes. If the GPIL method of a physical process returns
 0 as step length for a particle on a boundary and if the PostStepDoIt of
 that process changes the direction of the particle to go back in the 
 former volume the biasing won't be invoked. 
-This will produce particles with weights that do not coresspondend to the
+This will produce particles with weights that do not correspondent to the
 importance of the current volumes.
 
 
@@ -38,11 +38,11 @@ I. Examples for scoring without biasing
 I. 1. Example B01
 -----------------
 This example shows the use of scoring in the "tracking" geometry.
-It scores several values for neutrons for evry physical volume
+It scores several values for neutrons for every physical volume
 in the tracking geometry. 
 All scored values are printed after the running. In addition a more
 exclusive output of selected values is printed. The way how the
-last ouput is produced shows how to extract certain values from all
+last output is produced shows how to extract certain values from all
 scored values.
 
 
@@ -70,3 +70,4 @@ geometry.
 
 III. Examples for biasing and scoring
 =====================================
+....
