@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4QEnvironment.hh,v 1.20 2004-02-13 16:59:13 mkossov Exp $
+// $Id: G4QEnvironment.hh,v 1.21 2004-03-10 12:41:09 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4QEnvironment ----------------
@@ -32,10 +32,6 @@
 #ifndef G4QEnvironment_h
 #define G4QEnvironment_h 1
 
-// Standard G4-headers
-//#include "G4HadronicException.hh"
-
-// CHIPS headers
 #include "G4QuasmonVector.hh"
 
 class G4QEnvironment 
@@ -55,6 +51,7 @@ public:
   G4QNucleus       GetEnvironment() const;
   G4QuasmonVector* GetQuasmons();
   G4QHadronVector* GetQHadrons();
+  G4QHadronVector* GetProjectiles();
 
   // Modifiers
   G4QHadronVector* Fragment();              // User must clear and destroy the G4QHadronVec
@@ -62,7 +59,7 @@ public:
   // Static functions
   static void SetParameters(G4double solAn=0.4,G4bool efFlag=false,G4double piThresh=141.4,
                             G4double mpisq=20000., G4double dinum=1880.);
-  // General functions
+  // General purpose functions
   G4ThreeVector    RndmDir();               // Randomize 3D direction (@@subst by libFunc)
 
 private:  
@@ -103,14 +100,16 @@ private:
   G4QNucleus         theEnvironment; // InitialNucleus (later ResidualNuclearEnvironment)
   G4LorentzVector    tot4Mom;        // Total 4-momentum in the reaction
   G4int              totCharge;      // Total charge in the reaction (for current control)
+  G4int              totBaryoN;      // Total baryon number in the reaction (for cur.cont)
+  G4QHadronVector    theProjectiles; // Vector of projectiles in the interaction
+  G4int              theTargetPDG;   // PDG of the target nucleus in the interaction
 };
 
 inline G4bool G4QEnvironment::operator==(const G4QEnvironment &rhs) const
-              {return this == &rhs;}
+                                                                     {return this == &rhs;}
 inline G4bool G4QEnvironment::operator!=(const G4QEnvironment &rhs) const
-              {return this != &rhs;}
-inline G4QNucleus G4QEnvironment::GetEnvironment()                  const
-              {return theEnvironment;}
+                                                                     {return this != &rhs;}
+inline G4QNucleus G4QEnvironment::GetEnvironment() const {return theEnvironment;}
 #endif
 
 
