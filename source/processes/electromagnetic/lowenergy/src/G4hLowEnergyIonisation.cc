@@ -133,8 +133,8 @@ void G4hLowEnergyIonisation::InitializeMe()
   protonHighEnergy     = 2.*MeV ;
   antiProtonLowEnergy  = 1.*keV ;
   antiProtonHighEnergy = 2.*MeV ;
-  minGammaEnergy       = 25.*keV;
-  minElectronEnergy    = 25.*keV;
+  minGammaEnergy       = 250.*keV;
+  minElectronEnergy    = 250.*keV;
   verboseLevel         = 0;
   shellCS = new G4hShellCrossSection();
 }
@@ -704,6 +704,7 @@ G4double G4hLowEnergyIonisation::GetMeanFreePath(const G4Track& trackData,
    *condition = NotForced ;
 
    G4double kineticEnergy = (aParticle->GetKineticEnergy())*initialMass/(aParticle->GetMass());
+   charge = aParticle->GetCharge();
    chargeSquare = theIonEffChargeModel->TheValue(aParticle, aMaterial);
 
    if(kineticEnergy < LowestKineticEnergy) meanFreePath = DBL_MAX;
@@ -734,7 +735,7 @@ G4double G4hLowEnergyIonisation::GetConstraints(
   G4double stepLimit = 0.0 ;
   G4double dx, highEnergy;
   
-  G4double massRatio = initialMass/(particle->GetMass()) ;
+  G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double kineticEnergy = particle->GetKineticEnergy() ;
   
   // Scale the kinetic energy
@@ -763,12 +764,9 @@ G4double G4hLowEnergyIonisation::GetConstraints(
         fdEdx = G4EnergyLossTables::GetDEDX(theProton, tscaled, material) 
               * chargeSquare ;
         // Correction for positive ions
-        if(theBarkas && 0.0 < charge) {
-          G4double loss = BarkasTerm(material,tscaled)*
-                        (chargeSquare*sqrt(chargeSquare) - 1.0); 
-          loss  += BlochTerm(material,tscaled,chargeSquare); 
-          loss  -= BlochTerm(material,tscaled,1.0); 
-          fdEdx += loss ;
+        if(theBarkas) {
+          fdEdx += BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+          fdEdx += BlochTerm(material,tscaled,chargeSquare); 
 	}
 
 	// Parametrisation - recalculate dE/dx
@@ -800,6 +798,12 @@ G4double G4hLowEnergyIonisation::GetConstraints(
       if(tscaled > highEnergy) {
         fdEdx = G4EnergyLossTables::GetDEDX(theAntiProton, tscaled, material) 
               * chargeSquare ;
+
+        // Correction for positive ions
+        if(theBarkas) {
+          fdEdx -= BarkasTerm(material,tscaled)*sqrt(chargeSquare)*chargeSquare; 
+          fdEdx += BlochTerm(material,tscaled,chargeSquare); 
+	}
     
       // For Bragg's peak dE/dx is recalculated
       } else {
@@ -854,7 +858,7 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   const G4DynamicParticle* particle = trackData.GetDynamicParticle() ;
   
   G4double kineticEnergy = particle->GetKineticEnergy() ;
-  G4double massRatio = initialMass/(particle->GetMass()) ;
+  G4double massRatio = proton_mass_c2/(particle->GetMass()) ;
   G4double tscaled= kineticEnergy*massRatio ; 
   G4double eloss = 0.0 ;
   G4double nloss = 0.0 ;
@@ -873,8 +877,8 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
   } else if(tscaled < protonHighEnergy && charge > 0.0) {
     
     if(nStopping) {
-      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step 
-	* sqrt(chargeSquare) / (particle->GetCharge());
+      nloss = (theNuclearStoppingModel->TheValue(particle, material))*step;
+      //      	* sqrt(chargeSquare) / charge;
     }
     
     G4double eFinal = kineticEnergy - step*fdEdx - nloss ;

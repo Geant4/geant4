@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4hLowEnergyLoss.cc,v 1.14 2001-11-23 11:45:29 vnivanch Exp $
+// $Id: G4hLowEnergyLoss.cc,v 1.15 2002-02-27 14:38:53 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -----------------------------------------------------------
@@ -370,7 +370,8 @@ void G4hLowEnergyLoss::BuildDEDXTable(
     (Charge>0)?
       theProperTimepTable: theProperTimepbarTable,
     LowestKineticEnergy, HighestKineticEnergy,
-    proton_mass_c2/aParticleType.GetPDGMass(),TotBin);
+    proton_mass_c2/aParticleType.GetPDGMass(),
+    TotBin);
 
 }
 
@@ -380,7 +381,7 @@ void G4hLowEnergyLoss::BuildRangeTable(
                              const G4ParticleDefinition& aParticleType)
 // Build range table from the energy loss table
 {
-   Mass = proton_mass_c2; 
+  Mass = aParticleType.GetPDGMass();
 
    G4int numOfMaterials = G4Material::GetNumberOfMaterials();
 
