@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VEnergyLoss.cc,v 1.32 2002-02-26 12:21:51 maire Exp $
+// $Id: G4VEnergyLoss.cc,v 1.33 2002-07-22 10:55:26 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,6 +39,8 @@
 //  11.02.02 subSecFlag = false --> No sucutoff generation (mma) 
 //  14.02.02 initial value of data member finalRange has been changed L.Urban
 //  26.02.02 initial value of data member finalRange = 1 mm (mma)
+//  21.07.02 V.Ivanchenko Fix at low energies - if tmax below ionisation 
+//           potential then only Gaussian fluctuations are sampled.
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -948,21 +950,21 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
   G4double tau   = Tkin/ParticleMass, tau1 = tau+1., tau2 = tau*(tau+2.);
   G4double Tm    = 2.*electron_mass_c2*tau2/(1.+2.*tau1*rmass+rmass*rmass);
 
+  if(Tm > threshold) Tm = threshold;
+
   beta2 = tau2/(tau1*tau1);
 
   // Gaussian fluctuation ?
-  if(MeanLoss >= kappa*Tm)
+  if(MeanLoss >= kappa*Tm || Tm < kappa*ipotFluct)
   {
     electronDensity = aMaterial->GetElectronDensity() ;
     siga = sqrt(Tm*(1.0-0.5*beta2)*step*
                 factor*electronDensity*ChargeSquare/beta2) ;
-    loss = G4RandGauss::shoot(MeanLoss,siga) ;
-    if(loss < 0.) loss = 0. ;
-    return loss ;
+    do {
+      loss = G4RandGauss::shoot(MeanLoss,siga) ;
+    } while (loss < 0. || loss > 2.*MeanLoss);
+    return loss;
   }
-
-  if (Tm <= ipotFluct) Tm = ipotFluct ;
-  if(Tm > threshold) Tm = threshold;
 
   w1 = Tm/ipotFluct;
   w2 = log(2.*electron_mass_c2*tau2);
@@ -971,14 +973,10 @@ G4double G4VEnergyLoss::GetLossWithFluct(const G4DynamicParticle* aParticle,
 
   a1 = C*f1Fluct*(w2-e1LogFluct-beta2)/e1Fluct;
   a2 = C*f2Fluct*(w2-e2LogFluct-beta2)/e2Fluct;
-  if(Tm > ipotFluct)
-    a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
-  else
-  {
-     a1 /= 1.-rateFluct ;
-     a2 /= 1.-rateFluct ;
-     a3  = 0. ;
-  } 
+  a3 = rateFluct*MeanLoss*(Tm-ipotFluct)/(ipotFluct*Tm*log(w1));
+  if(a1 < 0.) a1 = 0.;
+  if(a2 < 0.) a2 = 0.;
+  if(a3 < 0.) a3 = 0.;
 
   suma = a1+a2+a3;
 
