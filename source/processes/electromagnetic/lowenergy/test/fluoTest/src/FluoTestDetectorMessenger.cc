@@ -1,29 +1,7 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "myDetectorMessenger.hh"
-#include "myDetectorConstruction.hh"
+#include "FluoTestDetectorMessenger.hh"
+#include "FluoTestDetectorConstruction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -31,12 +9,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-myDetectorMessenger::myDetectorMessenger(myDetectorConstruction * Det)
+FluoTestDetectorMessenger::FluoTestDetectorMessenger(FluoTestDetectorConstruction * Det)
 :Detector(Det)
 { 
-  detDir = new G4UIdirectory("/apparate/");
+   detDir = new G4UIdirectory("/apparate/");
   detDir->SetGuidance("detector control.");
-      
+  /*    
   SamMaterCmd = new G4UIcmdWithAString("/apparate/setSamMat",this);
   SamMaterCmd->SetGuidance("Select Material of the Sample.");
   SamMaterCmd->SetParameterName("choice",false);
@@ -219,37 +197,38 @@ myDetectorMessenger::myDetectorMessenger(myDetectorConstruction * Det)
   HPGeRotCmd->AvailableForStates(Idle);
 
   Dia1RotCmd = new G4UIcmdWithADoubleAndUnit("/apparate/setDia1Rot",this);
-  HPGeRotCmd->SetGuidance("Set rotation angle of the 1st diaphragm around z-axes");
+  Dia1RotCmd->SetGuidance("Set rotation angle of the 1st diaphragm around z-axes");
   Dia1RotCmd->SetParameterName("Size",false);
   Dia1RotCmd->SetRange("Size>0.,Size<(2*pi)");
   Dia1RotCmd->SetUnitCategory("Length");    
   Dia1RotCmd->AvailableForStates(Idle);
 
   Dia2RotCmd = new G4UIcmdWithADoubleAndUnit("/apparate/setDia2Rot",this);
-  HPGeRotCmd->SetGuidance("Set rotation angle of the 2nd diaphragm around z-axes");
+  Dia2RotCmd->SetGuidance("Set rotation angle of the 2nd diaphragm around z-axes");
   Dia2RotCmd->SetParameterName("Size",false);
   Dia2RotCmd->SetRange("Size>0.,Size<(2*pi)");
   Dia2RotCmd->SetUnitCategory("Length");    
   Dia2RotCmd->AvailableForStates(Idle);
 
   Dia3RotCmd = new G4UIcmdWithADoubleAndUnit("/apparate/setDia3Rot",this);
-  HPGeRotCmd->SetGuidance("Set rotation angle of the 3rd diaphragm around z-axes");
+  Dia3RotCmd->SetGuidance("Set rotation angle of the 3rd diaphragm around z-axes");
   Dia3RotCmd->SetParameterName("Size",false);
   Dia3RotCmd->SetRange("Size>0.,Size<(2*pi)");
   Dia3RotCmd->SetUnitCategory("Length");    
   Dia3RotCmd->AvailableForStates(Idle);
- 
+  */
   UpdateCmd = new G4UIcmdWithoutParameter("/apparate/update",this);
   UpdateCmd->SetGuidance("Update apparate geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
- myDetectorMessenger::~myDetectorMessenger()
-{
+ FluoTestDetectorMessenger::~FluoTestDetectorMessenger()
+{/*
   delete SamMaterCmd;   delete SiMaterCmd;
   delete HPGeMaterCmd;  delete Dia1MaterCmd;
   delete Dia2MaterCmd;  delete Dia3MaterCmd;
@@ -268,26 +247,26 @@ myDetectorMessenger::myDetectorMessenger(myDetectorConstruction * Det)
   delete Dia1RotCmd;    delete Dia2RotCmd;
   delete Dia3RotCmd; 
  
-  delete SiAngleCmd;    delete HPGeRotCmd;
-  delete Dia1AngleCmd;    delete Dia2RotCmd;
+  delete SiAngleCmd;    delete HPGeAngleCmd;
+  delete Dia1AngleCmd;    delete Dia2AngleCmd;
   delete Dia3AngleCmd; 
-
+ */
   delete UpdateCmd;
   delete detDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void myDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
+void FluoTestDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{ /*
   if( command == SamMaterCmd )
    { Detector->SetSampleMaterial(newValue);}
    
   if( command == SiMaterCmd )
    { Detector->SetSiMaterial(newValue);}
 
-  if( command == HPGeMaterCmd )
-   { Detector->SetHPGeMaterial(newValue);}
+  //  if( command == HPGeMaterCmd )
+  // { Detector->SetHPGeMaterial(newValue);}
 
   if( command == Dia1MaterCmd )
    { Detector->SetDia1Material(newValue);}
@@ -301,8 +280,8 @@ void myDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == SiThickCmd )
    { Detector->SetSiThickness(SiThickCmd->GetNewDoubleValue(newValue));}
    
- if( command == HPGeThickCmd )
-   { Detector->SetHPGeThickness(HPGeThickCmd->GetNewDoubleValue(newValue));}
+  //if( command == HPGeThickCmd )
+  // { Detector->SetHPGeThickness(HPGeThickCmd->GetNewDoubleValue(newValue));}
 
  if( command == Dia1ThickCmd )
    { Detector->SetDia1Thickness(Dia1ThickCmd->GetNewDoubleValue(newValue));}
@@ -322,8 +301,8 @@ void myDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == SamSizeYZCmd )
    { Detector->SetSampleSizeYZ(SamSizeYZCmd->GetNewDoubleValue(newValue));}
  
- if( command == HPGeSizeYZCmd )
-   { Detector->SetHPGeSizeYZ(SamSizeYZCmd->GetNewDoubleValue(newValue));}
+  // if( command == HPGeSizeYZCmd )
+  // { Detector->SetHPGeSizeYZ(SamSizeYZCmd->GetNewDoubleValue(newValue));}
 
    if( command == Dia1SizeYZCmd )
      { Detector->SetDia1SizeYZ(Dia1SizeYZCmd->GetNewDoubleValue(newValue));}
@@ -370,7 +349,7 @@ void myDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
  if( command == Dia3AngleCmd )
    { Detector->SetDia3Rotation(Dia3AngleCmd->GetNewDoubleValue(newValue));} 
-
+  */
  if( command == UpdateCmd )
    { Detector->UpdateGeometry(); }
  }

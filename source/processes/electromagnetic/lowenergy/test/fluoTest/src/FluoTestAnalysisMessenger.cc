@@ -1,40 +1,18 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 #ifdef G4ANALYSIS_USE
-#include "myAnalysisMessenger.hh"
+#include "FluoTestAnalysisMessenger.hh"
 
-#include "myAnalysisManager.hh"
+#include "FluoTestAnalysisManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-myAnalysisMessenger::myAnalysisMessenger(myAnalysisManager* analysisManager)
-  :myAnalysis(analysisManager)
+FluoTestAnalysisMessenger::FluoTestAnalysisMessenger(FluoTestAnalysisManager* analysisManager)
+  :FluoTestAnalysis(analysisManager)
 
 { 
-  myAnalysisDir = new G4UIdirectory("/analysis/");
-  myAnalysisDir->SetGuidance("esperimento analysis control.");
+  FluoTestAnalysisDir = new G4UIdirectory("/analysis/");
+  FluoTestAnalysisDir->SetGuidance("esperimento analysis control.");
   
   //   Commands for the 1D histograms (energy deposition in the last 
   //    layer and hits distribution along the sample)
@@ -107,7 +85,7 @@ myAnalysisMessenger::myAnalysisMessenger(myAnalysisManager* analysisManager)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-myAnalysisMessenger::~myAnalysisMessenger()
+FluoTestAnalysisMessenger::~FluoTestAnalysisMessenger()
 {
   delete Histo1DDrawCmd; 
   //delete Histo1DSaveCmd; 
@@ -118,27 +96,27 @@ myAnalysisMessenger::~myAnalysisMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void myAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void FluoTestAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 { 
 
   // 1D Histograms
 
   if( command == Histo1DDrawCmd )
-    { myAnalysis->SetHisto1DDraw(newValue);}
+    { FluoTestAnalysis->SetHisto1DDraw(newValue);}
 
   if( command == Histo1DSaveCmd )
-    { myAnalysis->SetHisto1DSave(newValue);}
+    { FluoTestAnalysis->SetHisto1DSave(newValue);}
 
   // 2D Histograms
 
   //if( command == Histo2DDrawCmd )
-  // { myAnalysis->SetHisto2DDraw(newValue);}
+  // { FluoTestAnalysis->SetHisto2DDraw(newValue);}
 
   //if( command == Histo2DSaveCmd )
-  //{ myAnalysis->SetHisto2DSave(newValue);}
+  //{ FluoTestAnalysis->SetHisto2DSave(newValue);}
 
   //if( command == Histo2DModeCmd )
-  //  { myAnalysis->SetHisto2DMode(newValue);}
+  //  { FluoTestAnalysis->SetHisto2DMode(newValue);}
    
 }
 

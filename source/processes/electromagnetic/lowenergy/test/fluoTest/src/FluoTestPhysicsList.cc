@@ -1,29 +1,7 @@
-//
-// ********************************************************************
-// * DISCLAIMER                                                       *
-// *                                                                  *
-// * The following disclaimer summarizes all the specific disclaimers *
-// * of contributors to this software. The specific disclaimers,which *
-// * govern, are listed with their locations in:                      *
-// *   http://cern.ch/geant4/license                                  *
-// *                                                                  *
-// * Neither the authors of this software system, nor their employing *
-// * institutes,nor the agencies providing financial support for this *
-// * work  make  any representation or  warranty, express or implied, *
-// * regarding  this  software system or assume any liability for its *
-// * use.                                                             *
-// *                                                                  *
-// * This  code  implementation is the  intellectual property  of the *
-// * GEANT4 collaboration.                                            *
-// * By copying,  distributing  or modifying the Program (or any work *
-// * based  on  the Program)  you indicate  your  acceptance of  this *
-// * statement, and all its terms.                                    *
-// ********************************************************************
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "fluoTestPhysicsList.hh"
-#include "fluoTestPhysicsListMessenger.hh"
+#include "FluoTestPhysicsList.hh"
+#include "FluoTestPhysicsListMessenger.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
 #include "G4ProcessManager.hh"
@@ -37,26 +15,26 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-fluoTestPhysicsList::fluoTestPhysicsList():  G4VUserPhysicsList()
+FluoTestPhysicsList::FluoTestPhysicsList():  G4VUserPhysicsList()
 {
   currentDefaultCut = defaultCutValue = 1.0*mm;
   cutForGamma       = defaultCutValue;
   cutForElectron    = defaultCutValue;
   cutForProton      = defaultCutValue;
- physicsListMessenger = new fluoTestPhysicsListMessenger(this);
+ physicsListMessenger = new FluoTestPhysicsListMessenger(this);
  SetVerboseLevel(1);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-fluoTestPhysicsList::~fluoTestPhysicsList()
+FluoTestPhysicsList::~FluoTestPhysicsList()
 {
  delete physicsListMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructParticle()
+void FluoTestPhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -71,7 +49,7 @@ void fluoTestPhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructBosons()
+void FluoTestPhysicsList::ConstructBosons()
 {
   // pseudo-particles
   G4Geantino::GeantinoDefinition();
@@ -85,7 +63,7 @@ void fluoTestPhysicsList::ConstructBosons()
 }
  //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructLeptons()
+void FluoTestPhysicsList::ConstructLeptons()
 {
   // leptons
   G4Electron::ElectronDefinition();
@@ -101,7 +79,7 @@ void fluoTestPhysicsList::ConstructLeptons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructMesons()
+void FluoTestPhysicsList::ConstructMesons()
 {
  //  mesons
   G4PionPlus::PionPlusDefinition();
@@ -119,7 +97,7 @@ void fluoTestPhysicsList::ConstructMesons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructBaryons()
+void FluoTestPhysicsList::ConstructBaryons()
 {
 //  barions
   G4Proton::ProtonDefinition();
@@ -131,7 +109,7 @@ void fluoTestPhysicsList::ConstructBaryons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructProcess()
+void FluoTestPhysicsList::ConstructProcess()
 {
   AddTransportation();
   ConstructEM();
@@ -140,9 +118,9 @@ void fluoTestPhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4ComptonScattering.hh"
-#include "G4GammaConversion.hh"
-#include "G4PhotoElectricEffect.hh"
+//#include "G4ComptonScattering.hh"
+//#include "G4GammaConversion.hh"
+//#include "G4PhotoElectricEffect.hh"
 
 #include "G4MultipleScattering.hh"
 
@@ -163,7 +141,7 @@ void fluoTestPhysicsList::ConstructProcess()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::ConstructEM()
+void FluoTestPhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -174,20 +152,20 @@ void fluoTestPhysicsList::ConstructEM()
     // gamma
     pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion());
     //pmanager->AddDiscreteProcess(new G4GammaConversion());
-      pmanager->AddDiscreteProcess(new G4LowEnergyCompton());      
-    // pmanager->AddDiscreteProcess(new G4ComptonScattering());    
-	pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
-	//pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
+     pmanager->AddDiscreteProcess(new G4LowEnergyCompton());      
+     //pmanager->AddDiscreteProcess(new G4ComptonScattering());    
+    pmanager->AddDiscreteProcess(new G4LowEnergyPhotoElectric());
+    // pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
   }else if (particleName == "e-") {
 
    
     //electron
       G4VProcess* theeminusMultipleScattering = new G4MultipleScattering();
       G4VProcess* theeminusIonisation         = new G4LowEnergyIonisation();
-      // G4VProcess* theeminusIonisation         = new G4eIonisation();
-       G4VProcess* theeminusBremsstrahlung     = new G4LowEnergyBremsstrahlung();
-       //G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
-      G4VProcess* theeminusRayleigh           = new G4LowEnergyRayleigh();
+      //G4VProcess* theeminusIonisation         = new G4eIonisation();
+      G4VProcess* theeminusBremsstrahlung     = new G4LowEnergyBremsstrahlung();
+      //G4VProcess* theeminusBremsstrahlung     = new G4eBremsstrahlung();
+       G4VProcess* theeminusRayleigh           = new G4LowEnergyRayleigh();
      
       //
       // add processes
@@ -281,7 +259,7 @@ void fluoTestPhysicsList::ConstructEM()
 
 #include "G4Decay.hh"
 
-void fluoTestPhysicsList::ConstructGeneral()
+void FluoTestPhysicsList::ConstructGeneral()
 {
   // Add Decay Process
    G4Decay* theDecayProcess = new G4Decay();
@@ -300,10 +278,10 @@ void fluoTestPhysicsList::ConstructGeneral()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void fluoTestPhysicsList::SetGELowLimit(G4double lowcut)
+void FluoTestPhysicsList::SetGELowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
-    G4cout << "fluoTestPhysicsList::SetCuts:";
+    G4cout << "FluoTestPhysicsList::SetCuts:";
     G4cout << "Gamma and Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
@@ -314,21 +292,21 @@ void fluoTestPhysicsList::SetGELowLimit(G4double lowcut)
 }
 
 
-void fluoTestPhysicsList::SetGammaLowLimit(G4double lowcut)
+void FluoTestPhysicsList::SetGammaLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
-    G4cout << "fluoTestPhysicsList::SetCuts:";
+    G4cout << "FluoTestPhysicsList::SetCuts:";
     G4cout << "Gamma cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
   }  
 
   G4Gamma::SetEnergyRange(lowcut,1e5);
 
 } 
-void fluoTestPhysicsList::SetElectronLowLimit(G4double lowcut)
+void FluoTestPhysicsList::SetElectronLowLimit(G4double lowcut)
 {
   if (verboseLevel >0){
 
-    G4cout << "fluoTestPhysicsList::SetCuts:";
+    G4cout << "FluoTestPhysicsList::SetCuts:";
     G4cout << "Electron cut in energy: " << lowcut*MeV << " (MeV)" << G4endl;
 
   }  
@@ -337,7 +315,7 @@ void fluoTestPhysicsList::SetElectronLowLimit(G4double lowcut)
 
 } 
 
- void fluoTestPhysicsList::SetCuts()
+ void FluoTestPhysicsList::SetCuts()
 {
  
   // reactualise cutValues
@@ -349,7 +327,7 @@ void fluoTestPhysicsList::SetElectronLowLimit(G4double lowcut)
     }
     
   if (verboseLevel >0){
-    G4cout << "fluoTestPhysicsList::SetCuts:";
+    G4cout << "FluoTestPhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;    
   } 
  
@@ -372,34 +350,34 @@ void fluoTestPhysicsList::SetElectronLowLimit(G4double lowcut)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-void fluoTestPhysicsList::SetCutForGamma(G4double cut)
+void FluoTestPhysicsList::SetCutForGamma(G4double cut)
 {
   ResetCuts();
   cutForGamma = cut;
 }
 
-void fluoTestPhysicsList::SetCutForElectron(G4double cut)
+void FluoTestPhysicsList::SetCutForElectron(G4double cut)
 {
   ResetCuts();
   cutForElectron = cut;
 }
 
-void fluoTestPhysicsList::SetCutForProton(G4double cut)
+void FluoTestPhysicsList::SetCutForProton(G4double cut)
 {
   ResetCuts();
   cutForProton = cut;
 }
 
-G4double fluoTestPhysicsList::GetCutForGamma() const
+G4double FluoTestPhysicsList::GetCutForGamma() const
 {
   return cutForGamma;
 }
-G4double fluoTestPhysicsList::GetCutForElectron() const
+G4double FluoTestPhysicsList::GetCutForElectron() const
 {
   return cutForElectron;
 }
 
-G4double fluoTestPhysicsList::GetCutForProton() const
+G4double FluoTestPhysicsList::GetCutForProton() const
 {
   return cutForProton;
 }
