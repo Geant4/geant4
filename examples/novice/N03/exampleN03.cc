@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: exampleN03.cc,v 1.11 2000-06-13 10:30:39 barrand Exp $
+// $Id: exampleN03.cc,v 1.12 2000-06-14 09:10:57 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,7 +22,11 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
+
+#ifdef G4UI_USE_XM
 #include "G4UIXm.hh"
+#endif
+
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
