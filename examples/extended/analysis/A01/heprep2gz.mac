@@ -9,9 +9,7 @@
 #
 # Create empty scene ("world" is default)
 #
-# gz currently not supported, compress file with gzip afterwards
-#
-/vis/scene/create A01Output.heprep
+/vis/scene/create A01Output.heprep.gz
 #
 # Create a scene handler for a specific graphics system
 # Edit the next line(s) to choose another graphic system

@@ -34,4 +34,4 @@
 /mydet/fieldValue 4. tesla
 /mydet/momentum 2. GeV
 /gun/particle e+
-/run/beamOn 1
+/run/beamOn 10
