@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.hh,v 1.24 2002-07-23 08:50:36 gcosmo Exp $
+// $Id: G4PropagatorInField.hh,v 1.25 2002-07-29 10:27:55 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -62,7 +62,6 @@ class G4PropagatorInField
 
    G4PropagatorInField( G4Navigator    *theNavigator, 
                         G4FieldManager *detectorFieldMgr );
-   G4PropagatorInField( G4Navigator    *theNavigator );
   ~G4PropagatorInField();
 
    G4double ComputeStep( G4FieldTrack      &pFieldTrack,
@@ -188,10 +187,10 @@ class G4PropagatorInField
    //  Values for the small possible relative accuracy of a step
    //  (corresponding to the greatest possible integration accuracy)
 
+   G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
+   G4double  fEpsilonMaxDefault;   // Can be 1.0e-1 to 1.0e-3 ...
    G4double  fEpsilonMin; 
    G4double  fEpsilonMax;
-   static const G4double  fEpsilonMinDefault;   // Can be 1.0e-5 to 1.0e-10 ...
-   static const G4double  fEpsilonMaxDefault;   // Can be 1.0e-1 to 1.0e-3 ...
      // Limits for the Relative accuracy of any Step 
 
    G4int  fmax_loop_count;
