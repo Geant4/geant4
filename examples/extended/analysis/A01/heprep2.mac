@@ -1,6 +1,9 @@
 #
 # Macro file for A01app
 #
+# This file does visualization using the HepRep2 format.
+# This format is not yet ready for general use (still being debugged).
+#
 /run/verbose 2
 #
 #
