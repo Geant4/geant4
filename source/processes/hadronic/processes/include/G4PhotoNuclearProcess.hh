@@ -36,6 +36,7 @@
 
 #include "G4HadronInelasticProcess.hh"
 #include "G4Gamma.hh"
+#include "G4PhotoNuclearCrossSection.hh"
  
 
  class G4PhotoNuclearProcess : public G4HadronInelasticProcess
@@ -45,11 +46,17 @@
     G4PhotoNuclearProcess(
      const G4String& processName = "PhotonInelastic" ) :
 
-      G4HadronInelasticProcess( processName, G4Gamma:Gamma() )
-    { }
-        
+    G4HadronInelasticProcess( processName, G4Gamma:Gamma() )
+    { 
+      G4CrossSectionDataStore * theStore = GetCrossSectionDataStore();
+      theStore->AddDataSet(&theData);
+    } 
+    
     ~G4PhotoNuclearProcess()
     { }
+ private:
+ 
+   G4PhotoNuclearCrossSection theData;
  };
 
 #endif
