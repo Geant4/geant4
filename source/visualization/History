@@ -1,4 +1,4 @@
-$Id: History,v 1.216 2003-02-17 07:11:56 stanaka Exp $
+$Id: History,v 1.217 2003-02-17 07:16:39 stanaka Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -26,7 +26,7 @@ History file for visualization category
 
 17th February 2003 Satoshi Tanaka (vis-V05-00-01)
 - A Small bug fixing of VRML2 driver
- (Explicit cast from G4String to char*).
+ (Explicit cast from G4String to char* in G4VRML2SceneHandlerFunc.icc).
 
 24th January 2003  Joseph Perl
 - Fixes to HepRep - see History file.
