@@ -31,7 +31,7 @@ set NDVY 010205
  close 1
  
 ve/create X(5) R 24 35 48 88 151 
-ve/create Y(5) R 0.045 0.038 0.0331 0.0089 0.00225 
+ve/create Y(5) R 0.036 0.0386 0.0307 0.0142 0.0036 
 gr/h/symb X Y 5 21 0.2
  
 

@@ -30,8 +30,8 @@ set NDVY 010205
  itx 115 0.1 'KIN'
  close 1
  
-ve/create X(5) R 24 35 46 88 151
-ve/create Y(5) R 0.01333 0.01465 0.0128 0.00395 0.00137 
+ve/create X(5) R 24 35 48 88 151
+ve/create Y(5) R 0.045 0.038 0.0331 0.0089 0.00225 
 gr/h/symb X Y 5 21 0.2
  
 
