@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4Tubs.cc,v 1.5 1999-04-15 18:50:01 japost Exp $
+// $Id: G4Tubs.cc,v 1.6 1999-04-16 20:06:58 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -730,7 +730,12 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 	{
 	   s = -b-sqrt(d) ;
 
-	   if (s >= 0)	// If 'forwards'
+// DCW: See comments below
+//
+//	   if (s >= 0)	// If 'forwards'
+//
+	   G4double normDist = (t3 + s*t2 )/fRMax - fRMax;
+	   if (normDist > -0.5*kCarTolerance) 
 	   {
 // Check z intersection
 	      zi=p.z()+s*v.z();
@@ -741,7 +746,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		  if (!seg)
 		  { 
-                     return s; 
+// DCW: We should return 0 if the normal distance is within kCarTolerance
+//                    return s; 
+		      return (normDist < 0.5*kCarTolerance) ? 0 : s;
                   }
 		  else
 		  {
@@ -814,13 +821,36 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 	  if (d>=0)	// If real root
 	  {
-// Always want 2nd root - we are outside and know rmax Hit was bad
-// - If on surface of rmin also need farthest root
+	    // Always want 2nd root - we are outside and know rmax Hit was bad
+	    // - If on surface of rmin also need farthest root
 
-	      s=-b+sqrt(d);
+	    //  The line below can introduce round-off problem (in the
+	    // case d-b*b is small,b>0.  Already t3-fRMin*fRMin could lead to
+	    // loss precision in such a case.                             DCW
 
-	      if (s >= 0)	// check forwards
-	      {
+  	       s=-b+sqrt(d);
+
+	    // Special care must be taken in the comparison below. We must
+	    // consider possible intersections even if the point is slightly
+	    // in front of fRMin. Specifically, we must allow the point to be
+	    // kCarTolerance in front.                                    DCW 
+	    //
+	    //	 if (s >= 0)	// check forwards
+	    //	 {
+	    //
+	    // How to improve ? If we check the radius t3 < tolIRMin2, this
+	    // does not work either, since p could be on the other side of the
+	    // x/y origin (and we could have a phi slice).  Instead, the
+	    // safest thing is to use the dot product of the normal at the
+	    // intersecting point.  
+	    //
+	    //    ( p.x*(p.x + s*v.x) + p.y*(p.y + s*v.y) )/fRMin - fRMin
+	    //
+	    //    ( t3 + s*(v.x*p.x + v.y*p.y) )/fRMin - fRMin
+
+	       G4double normDist = (t3 + s*(p.x()*v.x() + p.y()*v.y()) )/fRMin - fRMin;
+	       if (normDist < kCarTolerance) {
+
 // Check z intersection
 
 		 zi=p.z()+s*v.z();
@@ -830,7 +860,9 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 // Z ok. Check phi 
 		    if (!seg)
 		    { 
-                       return s; 
+// DCW: We should return 0 if the normal distance is within kCarTolerance
+//                     return s; 
+		       return (normDist > -0.5*kCarTolerance) ? 0 : s;
                     }
 		    else
 		    {
@@ -869,7 +901,7 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
        cosSPhi=cos(fSPhi);
        Comp=v.x()*sinSPhi-v.y()*cosSPhi;
 	                	
-       if (Comp<0)  // Compnent in outwards normal dirn
+       if (Comp<0)  // Component in outwards normal dirn
        {
 	  Dist=(p.y()*cosSPhi-p.x()*sinSPhi);
 
@@ -899,7 +931,11 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		      if ((yi*cosCPhi-xi*sinCPhi) <= 0)
 		      {
-			 snxt=s;
+//
+// DCW: we must return exactly zero if the point is within tolerance
+//      of the surface.
+//			 snxt=s;
+			 snxt = (Dist > -kCarTolerance*0.5) ? 0 : s;
 		      }
  		   }    
 	        }
@@ -944,7 +980,11 @@ G4double G4Tubs::DistanceToIn(const G4ThreeVector& p,
 
 		      if ((yi*cosCPhi-xi*sinCPhi)>=0)
 		      {
-			 snxt=s;
+//
+// DCW: we must return exactly zero if the point is within tolerance
+//      of the surface.
+//			 snxt=s;
+			 snxt = (Dist > -kCarTolerance*0.5) ? 0 : s;
 		      }
  		   }    
 		}
@@ -1695,3 +1735,6 @@ G4NURBS* G4Tubs::CreateNURBS () const {
   }
   return pNURBS;
 }
+
+
+
