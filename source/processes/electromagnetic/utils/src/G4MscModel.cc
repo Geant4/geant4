@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4MscModel.cc,v 1.18 2004-05-25 08:11:33 urban Exp $
+// $Id: G4MscModel.cc,v 1.19 2004-07-19 13:46:41 urban Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -58,7 +58,8 @@
 //          SampleCosineTheta
 // 23-04-04 true -> geom and geom -> true transformation has been
 //          rewritten, changes in the angular distribution (L.Urban)
-// 25-05-04 corr. in SampleCosineTheta for t ~ range .
+// 19-07-04 correction in SampleCosineTheta in order to avoid
+//          num. precision problems at high energy/small step(L.Urban) 
 
 // Class Description:
 //
@@ -635,20 +636,22 @@ G4double G4MscModel::SampleCosineTheta(G4double trueStepLength, G4double Kinetic
           xmean1 = 1.-x1fac2/a ;
 
           // from continuity of the 1st derivatives
-          c = a*(b-x0) ;
+          //   c = a*(b-x0) ;
+          c = xsi ;
 
           if(c == 1.) c=1.000001 ;
           if(c == 2.) c=2.000001 ;
 
-          b1 = b+1. ;
-	  bx = b-x0 ;
+          b1 = 2.   ;
+	  //  bx = b-x0 ;
+	  bx = xsi/a ;
           eb1=exp((c-1.)*log(b1)) ;
           ebx=exp((c-1.)*log(bx)) ;
           xmean2 = (x0*eb1+ebx+(eb1*bx-b1*ebx)/(2.-c))/(eb1-ebx) ;
 
 	  G4double f1x0 = a*ea/eaa ;
 	  G4double f2x0 = (c-1.)*eb1*ebx/(eb1-ebx)/
-                          exp(c*log(b-x0)) ;
+                          exp(c*log(bx)) ;
           // from continuity at x=x0
           prob = f2x0/(f1x0+f2x0) ;
           // from xmean = xmeanth
