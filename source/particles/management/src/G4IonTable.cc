@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4IonTable.cc,v 1.30 2001-10-15 09:58:34 kurasige Exp $
+// $Id: G4IonTable.cc,v 1.31 2003-01-15 11:35:50 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -483,6 +483,8 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
     G4Exception("G4IonTable::SetCuts : GenericIon is not defined !!");
   }  
 
+  //VI--- old peace of code
+  /*
   if (genericIon->GetEnergyCuts() != 0) {
    G4std::vector<G4double> cuts;
     for (size_t j=0; j<G4Material::GetNumberOfMaterials(); j +=1) {
@@ -517,6 +519,28 @@ void  G4IonTable::SetCuts(G4ParticleDefinition* ion)
 #endif      
 
   }
+  */
+
+  //VI--- proposed
+  
+  G4String name = ion->GetParticleName();
+
+  // Build Physics Tables for the ion
+  // create command string for buildPhysicsTable
+  char cmdBld[60];
+  G4std::ostrstream osBld(cmdBld,60);
+  osBld << "/run/particle/buildPhysicsTable "<< name << '\0';
+ 
+  // set /control/verbose 0
+  G4int tempVerboseLevel = G4UImanager::GetUIpointer()->GetVerboseLevel();
+  G4UImanager::GetUIpointer()->SetVerboseLevel(0);
+
+  // issue /run/particle/buildPhysicsTable
+  G4UImanager::GetUIpointer()->ApplyCommand(cmdBld);
+
+  // retreive  /control/verbose 
+  G4UImanager::GetUIpointer()->SetVerboseLevel(tempVerboseLevel);
+
 }
 
 ////////////////////
