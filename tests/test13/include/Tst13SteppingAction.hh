@@ -9,8 +9,9 @@ class Tst13SteppingAction : public G4UserSteppingAction
 {
   public:
     Tst13SteppingAction();
-    ~Tst13SteppingAction();
-    virtual void UserSteppingAction();
+    virtual ~Tst13SteppingAction();
+
+    virtual void UserSteppingAction(const G4Step*);
 };
 
 #endif
