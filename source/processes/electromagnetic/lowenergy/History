@@ -1,4 +1,4 @@
-$Id: History,v 1.2 2000-01-21 13:36:11 vnivanch Exp $
+$Id: History,v 1.3 2000-03-31 15:00:35 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+31.03.2000 - Vladimir Ivanchenko update 
+             1) G4hLowEnergyIonisation.cc limitation DeltaCut > Eexc
+                is insert in dedx, cross section calculation and sampling
+             2) G4hLowEnergyLoss.cc is creating in the lowenergy as a
+                klon of G4hEnergyLoss.cc
+             3) Spin 1/2 and spin 1 corrections are inserted is cross
+                section calculation, cross section sampling, de/dx
+             4) IfAplicable check lepton number
+                
 
 21.01.2000 - Vladimir Ivanchenko update 
              1) G4hLowEnergyIonisation.cc Barkas effect calculation

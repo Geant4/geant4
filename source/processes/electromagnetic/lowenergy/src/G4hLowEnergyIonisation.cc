@@ -37,7 +37,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4hLowEnergyIonisation::G4hLowEnergyIonisation(const G4String& processName)
-  : G4hEnergyLoss(processName),
+  : G4hLowEnergyLoss(processName),
     theMeanFreePathTable(NULL),
     ParamLowEnergy(1.*keV),
     ParamHighEnergy(2.*MeV),
@@ -211,9 +211,6 @@ void G4hLowEnergyIonisation::BuildLossTable(const G4ParticleDefinition& aParticl
       for (G4int i = 0 ; i < TotBin ; i++)
 	{
 	  LowEdgeEnergy = aVector->GetLowEdgeEnergy(i) ;
-	      ionloss = GetParametrisedLoss(material, LowEdgeEnergy, 
-                                            DeltaCutInKineticEnergyNow) ;
-
 	  
 	  if ( LowEdgeEnergy < ParamHighEnergy ) {
 	    //  low energy part , parametrised energy loss formulae
@@ -363,8 +360,7 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
   
   G4double LowEdgeEnergy , Value ,sigma ;
   G4bool isOutRange ;
-  const G4MaterialTable* theMaterialTable=
-    G4Material::GetMaterialTable();
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
   //Particle properties
 
@@ -400,12 +396,10 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
       
       const G4Material* material= (*theMaterialTable)[J];
       
-      const G4ElementVector* theElementVector=
-	material->GetElementVector() ;
-      const G4double* theAtomicNumDensityVector =
-	material->GetAtomicNumDensityVector();
-      const G4int NumberOfElements=
-	material->GetNumberOfElements() ;
+      const G4ElementVector* theElementVector = material->GetElementVector() ;
+      const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector();
+      const G4int NumberOfElements = material->GetNumberOfElements() ;
+      G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
       
       // get the electron kinetic energy cut for the actual material,
       //  it will be used in ComputeMicroscopicCrossSection
@@ -426,7 +420,8 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
 	      sigma +=  theAtomicNumDensityVector[iel]*ChargeSquare*
 		ComputeMicroscopicCrossSection(aParticleType,
 					       LowEdgeEnergy,
-					       (*theElementVector)(iel)->GetZ() ) ;
+					       (*theElementVector)(iel)->GetZ(),
+                                               Eexc ) ;
 	    }
 	  
 	  // mean free path = 1./macroscopic cross section
@@ -445,18 +440,20 @@ void G4hLowEnergyIonisation::BuildLambdaTable(const G4ParticleDefinition& aParti
 G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
                                  const G4ParticleDefinition& aParticleType,
                                  G4double KineticEnergy,
-                                 G4double AtomicNumber)
+                                 G4double AtomicNumber,
+                                 G4double ExcEnergy)
 {
   //******************************************************************
-  // cross section formula is OK for spin=0 and 1/2 only !
+  // cross section formula is OK for spin=0, 1/2, 1 only !
   // *****************************************************************
   
   // calculates the microscopic cross section in GEANT4 internal units
   //    ( it is called for elements , AtomicNumber = Z )
   
-  G4double TotalEnergy,
-    betasquare,
-    MaxKineticEnergyTransfer,TotalCrossSection,tempvar;
+  G4double TotalEnergy, Beta2, Tmax, var ;
+  G4double TotalCrossSection = 0.0 ;
+
+  G4double Eexc2 = ExcEnergy*ExcEnergy ;
   
   // get particle data ...................................
   
@@ -464,36 +461,35 @@ G4double G4hLowEnergyIonisation::ComputeMicroscopicCrossSection(
   
   // some kinematics......................
   
-  betasquare = KineticEnergy*(TotalEnergy+ParticleMass)
-    /(TotalEnergy*TotalEnergy);
-  tempvar = ParticleMass+electron_mass_c2;
-  MaxKineticEnergyTransfer = 2.*electron_mass_c2*KineticEnergy
-    *(TotalEnergy+ParticleMass)
-    /(tempvar*tempvar+2.*electron_mass_c2*KineticEnergy);
+  Beta2  = KineticEnergy*(TotalEnergy+ParticleMass) / (TotalEnergy*TotalEnergy);
+  var    = ParticleMass+electron_mass_c2;
+  Tmax   = 2.*electron_mass_c2*KineticEnergy * (TotalEnergy+ParticleMass)
+         / (var*var+2.*electron_mass_c2*KineticEnergy);
+
+  // Validity range for delta electron cross section
+  G4double DeltaCut = G4std::max(DeltaCutInKineticEnergyNow, ExcEnergy);
   
   // now you can calculate the total cross section ------------------
   
-  if( MaxKineticEnergyTransfer > DeltaCutInKineticEnergyNow )
-    {
-      tempvar=DeltaCutInKineticEnergyNow/MaxKineticEnergyTransfer;
-      TotalCrossSection = (1.-tempvar*(1.-betasquare*log(tempvar)))
-	/DeltaCutInKineticEnergyNow;
+  if( Tmax > DeltaCut ) {
+
+      var=DeltaCut/Tmax;
+      TotalCrossSection = (1.-var*(1.-Beta2*log(var))) / DeltaCut ;
+      G4double spin = aParticleType.GetPDGSpin() ;
       
       // +term for spin=1/2 particle
-      if(aParticleType.GetPDGSpin() == 0.5)
-	{
-	  TotalCrossSection +=  0.5
-	    *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
-	    /(TotalEnergy*TotalEnergy);
-	  G4double  Section =  0.5
-	    *(MaxKineticEnergyTransfer-DeltaCutInKineticEnergyNow)
-	    /(TotalEnergy*TotalEnergy);
-	}
-      TotalCrossSection = twopi_mc2_rcl2 * AtomicNumber
-	*TotalCrossSection/betasquare;
+      if( 0.5 == spin )
+	  TotalCrossSection +=  0.5 * (Tmax - DeltaCut) / (TotalEnergy*TotalEnergy);
+
+      // +term for spin=1 particle
+      else if( 0.9 < spin )
+	  TotalCrossSection += -log(var)/(3.0*DeltaCut) +
+                               (Tmax - DeltaCut) *
+         ( (5.0+ 1.0/var)*0.25 / (TotalEnergy*TotalEnergy) - 
+           Beta2 / (Tmax * DeltaCut) ) / 3.0 ;
+	
+      TotalCrossSection *= twopi_mc2_rcl2 * AtomicNumber / Beta2 ;
     }
-  else
-    TotalCrossSection= 0.0 ;
   
   return TotalCrossSection ;
 }
@@ -584,17 +580,16 @@ G4VParticleChange* G4hLowEnergyIonisation::AlongStepDoIt(
 
 {
   // compute the energy loss after a step 
-  const G4DynamicParticle* aParticle;
-  G4Material* aMaterial;
+
   G4double finalT = 0.0 ;
 
   aParticleChange.Initialize(trackData) ;
-  aMaterial = trackData.GetMaterial() ;
+  G4Material* aMaterial = trackData.GetMaterial() ;
   
   // get the actual (true) Step length from stepData 
   const G4double Step = stepData.GetStepLength() ;
 
-  aParticle = trackData.GetDynamicParticle() ;
+  const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
 
   G4int index = aMaterial->GetIndex() ;
   G4double E = aParticle->GetKineticEnergy() ;
@@ -703,8 +698,6 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
 {
   // Units are expressed in GEANT4 internal units.
   
-  const G4DynamicParticle* aParticle ;
-  G4Material* aMaterial;
   G4double KineticEnergy,TotalEnergy,TotalMomentum,
     betasquare,MaxKineticEnergyTransfer,
     DeltaKineticEnergy,DeltaTotalMomentum,costheta,sintheta,phi,
@@ -712,9 +705,11 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
     x,xc,te2,grej,Psquare,Esquare,summass,rate,grejc,finalMomentum ;
   
   aParticleChange.Initialize(trackData) ;
-  aMaterial = trackData.GetMaterial() ;
+  G4Material* aMaterial = trackData.GetMaterial() ;
+  G4double Eexc = aMaterial->GetIonisation()->GetMeanExcitationEnergy();
+  G4double Eexc2 = Eexc*Eexc ;
   
-  aParticle = trackData.GetDynamicParticle() ;
+  const G4DynamicParticle* aParticle = trackData.GetDynamicParticle() ;
   
   ParticleMass=aParticle->GetDefinition()->GetPDGMass();
               KineticEnergy=aParticle->GetKineticEnergy();
@@ -726,16 +721,19 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
   
   //  get kinetic energy cut for the electron....
   DeltaCutInKineticEnergyNow = DeltaCutInKineticEnergy[aMaterial->GetIndex()];
-  
+
   // some kinematics......................
   
   betasquare=Psquare/Esquare ;
   MaxKineticEnergyTransfer = 2.*electron_mass_c2*Psquare
     /(summass*summass+2.*electron_mass_c2*KineticEnergy);
-  
+
+  // Validity range for delta electron cross section
+  G4double DeltaCut = G4std::max(DeltaCutInKineticEnergyNow,Eexc);
+    
   // sampling kinetic energy of the delta ray 
   
-  if( MaxKineticEnergyTransfer <= DeltaCutInKineticEnergyNow )
+  if( MaxKineticEnergyTransfer <= DeltaCut )
     {
       // pathological case (it should not happen ,
       // there is no change at all).....
@@ -746,21 +744,28 @@ G4VParticleChange* G4hLowEnergyIonisation::PostStepDoIt(const G4Track& trackData
   else
     {
       // normal case ......................................
-      xc=DeltaCutInKineticEnergyNow/MaxKineticEnergyTransfer ;
-      rate=MaxKineticEnergyTransfer/TotalEnergy ;
+      xc   = DeltaCut / MaxKineticEnergyTransfer ;
+      rate = MaxKineticEnergyTransfer / TotalEnergy ;
+      rate = rate*rate ;
+      G4double spin = aParticle->GetDefinition()->GetPDGSpin() ;   
       
-      if(aParticle->GetDefinition()->GetPDGSpin() == 1)     
-	te2=0.5*rate*rate ;
-      else
-	te2=0. ;
-      
-      // sampling follows ...
-      grejc=1.-betasquare*xc+te2*xc*xc ;
-      
+      // sampling follows ...      
       do {
 	x=xc/(1.-(1.-xc)*G4UniformRand());
-	grej=(1.-x*(betasquare-x*te2))/grejc ;
-      } while( G4UniformRand()>grej );
+
+        if(0.0 == spin) {
+          grej = 1.0 - betasquare * x ;
+
+        } else if (0.5 == spin) {
+          grej = (1.0 - betasquare * x + 0.5*x*x*rate) / (1.0 + 0.5 * rate) ;
+
+        } else {
+          grej = (1.0 - betasquare * x ) * (1.0 + x/ (3.0*xc)) + 
+                  x * x * rate * (1.0 + 0.5 * x / xc) / 3.0 / 
+                 (1.0 + 1.0/(3.0*xc) + rate *(1.0+ 0.5/xc) /3.0) ;
+        }
+
+       } while( G4UniformRand() > grej );
     }
   
   DeltaKineticEnergy = x * MaxKineticEnergyTransfer ;
@@ -858,11 +863,18 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
     if ((molecIndex > 0)) {
       ionloss = GetMolecICRU_R49Loss(material, KinEnergy, 
                                      DeltaRayCutNow, molecIndex);
+
+      // Barkas corrections for negative particles
+      if( (-0.5 > Charge) && pbarStop) {
+        ionloss += ComputeBarkasTerm( material, KinEnergy ) * (Charge - 1.0) ;
+      }  
+ 
+      if ( ionloss <= 0.0) ionloss = 0.0 ;
       return ionloss;
     }
   }
 
-  // Powers parametrisation in ICRU49
+  // Powers parametrisation in ICRU49 
   if ( DEDXtable == "ICRU_R49PowersHe" ) {
 
     molecIndex = (MolecIsInICRU_R49PowersHe(material))+1;  
@@ -870,6 +882,12 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
       ionloss = GetMolecICRU_R49Loss(material, KinEnergy, 
                                      DeltaRayCutNow, molecIndex) ; 
 
+      // Barkas corrections for negative particles
+      if( (-0.5 > Charge) && pbarStop) {
+        ionloss += ComputeBarkasTerm( material, KinEnergy ) * (Charge - 1.0) ;
+      }  
+ 
+      if ( ionloss <= 0.0) ionloss = 0.0 ;
       return ionloss;
     }
     DEDXtable = "ICRU_R49He" ;
@@ -880,12 +898,9 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
   // Now cycle over elements - calculation based on Bragg's rule 
 
   // get elements in the actual material,
-  const G4ElementVector* theElementVector=
-    material->GetElementVector() ;
-  const G4double* theAtomicNumDensityVector=
-    material->GetAtomicNumDensityVector() ;
-  const G4int NumberOfElements=
-    material->GetNumberOfElements() ;
+  const G4ElementVector* theElementVector  =material->GetElementVector() ;
+  const G4double* theAtomicNumDensityVector=material->GetAtomicNumDensityVector() ;
+  const G4int NumberOfElements             = material->GetNumberOfElements() ;
   
   ionloss    = 0.0 ;
   ionloss125 = 0.0 ;
@@ -982,7 +997,7 @@ G4double G4hLowEnergyIonisation::GetParametrisedLoss(G4Material* material,
   // Correction term for the Barkas effect applied if pbarStop = true
   // and only for negative charged particles
   // Barkas term is taken into account in Ziegler/ICRU tables,
-  // so for antiprotons a correction term must be multiplied by factor 2 
+  // so for antiprotons a correction term must be multiplied by factor (-2) 
   if( (-0.5 > Charge) && pbarStop) {
 
     ionloss += ComputeBarkasTerm( material, KinEnergy ) * (Charge - 1.0) ;
@@ -1126,8 +1141,7 @@ G4double G4hLowEnergyIonisation::GetMolecICRU_R49Loss(const G4Material* material
     G4double NbOfAtomsPerVolume  = material->GetTotNbOfAtomsPerVolume();
     const G4int NumberOfElements = material->GetNumberOfElements() ;
   
-    G4double A1 = ProtonMassAMU ;
-    G4double ionloss, ion ;
+    G4double ionloss = 0.0 ;
   
     if(DEDXtable == "ICRU_R49p") {
       ionloss = GetStoppingPowerICRU_R49p(molecIndex, KinEnergy, "Mol") ; 
@@ -1140,46 +1154,20 @@ G4double G4hLowEnergyIonisation::GetMolecICRU_R49Loss(const G4Material* material
 
     ionloss *= NbOfAtomsPerVolume*ZieglerFactor ;
     
-    ion = 0.0;
     G4int nAtoms = 0;
     
-    const G4int* theAtomsVector=
-      material->GetAtomsVector() ;
-    const G4ElementVector* theElementVector=
-      material->GetElementVector() ;
-    
-    //  to calculate nuclear stopping power 
-    //  loop for the elements in the material
+    const G4int* theAtomsVector = material->GetAtomsVector() ;
+    const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector() ;
+
+    //    const G4ElementVector* theElementVector=
+    //      material->GetElementVector() ;
     
     for (G4int iel=0; iel<NumberOfElements; iel++)
       {
-	nAtoms += theAtomsVector[iel];	  
+	nAtoms += theAtomsVector[iel];
       }
     ionloss /= nAtoms;
     
-    if(nStopping) {
-      
-      // use Bragg's rule for nuclear stopping...
-      
-      const G4double* theAtomicNumDensityVector=
-	material->GetAtomicNumDensityVector() ;
-      
-      for (G4int iel=0; iel<NumberOfElements; iel++)
-	{
-          const G4Element* element = (*theElementVector)(iel) ;
-	  G4double Z2 = element->GetZ() ;
-	  G4double A2 = element->GetA()*mole/g ;
-	  G4int iz = int(Z2) ;
-	  if( iz <= 0 ) iz = 1 ;
-	  if( iz > 92 ) iz = 92 ; 
-	  
-	  // use Moliere	  
-	  
-	  G4double ionn = GetStoppingPowerMoliere(1.0, Z2, A1, A2, KinEnergy) ;
-	  ion += ionn*theAtomicNumDensityVector[iel]*ZieglerFactor ;
-	}
-      ionloss += ion ;
-    }
     // Correction due to delta-electrons energy loss Bethe-Bloch 
     // formula is used.
     ionloss -= GetDeltaRaysEnergy(material, KinEnergy, DeltaRayCutNow) ;
@@ -1202,12 +1190,9 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
     
     //  low energy part , parametrised L.Urban energy loss formulae
     
-    const G4ElementVector* theElementVector=
-      material->GetElementVector() ;
-    const G4double* theAtomicNumDensityVector=
-      material->GetAtomicNumDensityVector() ;
-    const G4int NumberOfElements=
-      material->GetNumberOfElements() ;
+    const G4ElementVector* theElementVector = material->GetElementVector() ;
+    const G4double* theAtomicNumDensityVector = material->GetAtomicNumDensityVector() ;
+    const G4int NumberOfElements = material->GetNumberOfElements() ;
     
     ionloss = 0. ;
     
@@ -1233,16 +1218,18 @@ G4double G4hLowEnergyIonisation::GetBetheBlochLoss(const G4Material* material,
     G4double X0den = material->GetIonisation()->GetX0density();
     G4double X1den = material->GetIonisation()->GetX1density();
     G4double* ShellCorrectionVector;
-    ShellCorrectionVector = material->GetIonisation()->
-      GetShellCorrectionVector();
+    ShellCorrectionVector = material->GetIonisation()->GetShellCorrectionVector();
     
     gamma = tau + 1.0 ;
     bg2 = tau*(tau+2.0) ;
     beta2 = bg2/(gamma*gamma) ;
     Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*RateMass+RateMass*RateMass) ;
     
-    if ( DeltaRayCutNow < Tmax)
-      rcut = DeltaRayCutNow/Tmax ;
+    // Validity range for delta electron cross section
+    G4double DeltaCut = G4std::max(DeltaRayCutNow, Eexc);
+
+    if ( DeltaCut < Tmax)
+      rcut = DeltaCut/Tmax ;
     else
       rcut = 1.;
     
@@ -1311,14 +1298,21 @@ G4double G4hLowEnergyIonisation::GetDeltaRaysEnergy(const G4Material* material,
   
   gamma = tau + 1.0 ;
   bg2 = tau*(tau+2.0) ;
-    beta2 = bg2/(gamma*gamma) ;
-    Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*RateMass+RateMass*RateMass) ;
+  beta2 = bg2/(gamma*gamma) ;
+  Tmax = 2.*electron_mass_c2*bg2/(1.+2.*gamma*RateMass+RateMass*RateMass) ;
+
+  G4double Eexc = material->GetIonisation()->GetMeanExcitationEnergy();
+  G4double Eexc2 = Eexc*Eexc ;
+
+  // Validity range for delta electron cross section
+  G4double DeltaCut = G4std::max(DeltaRayCutNow, Eexc);
+
     
-    if ( DeltaRayCutNow < Tmax) {
-      x = DeltaRayCutNow / Tmax ;
+  if ( DeltaCut < Tmax) {
+      x = DeltaCut / Tmax ;
       ionloss = ( beta2 * (x - 1.0) - log(x) ) * Factor * ElectronDensity / beta2 ;
-    }
-    return ionloss ;
+  }
+  return ionloss ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -36,7 +36,7 @@
  
 #include "G4ios.hh"
 #include "Randomize.hh"
-#include "G4hEnergyLoss.hh"
+#include "G4hLowEnergyLoss.hh"
 #include "globals.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -44,7 +44,7 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4PhysicsLinearVector.hh"
 
-class G4hLowEnergyIonisation : public G4hEnergyLoss
+class G4hLowEnergyIonisation : public G4hLowEnergyLoss
 {
 public: // Without description
   
@@ -56,6 +56,8 @@ public: // Without description
   
   void BuildPhysicsTable(const G4ParticleDefinition& aParticleType);
   
+  void SetPhysicsTableBining(G4double lowE, G4double highE, G4int nBins);
+
   void BuildLambdaTable(const G4ParticleDefinition& aParticleType);
   
   G4double GetMeanFreePath(
@@ -75,7 +77,8 @@ protected:
   virtual G4double ComputeMicroscopicCrossSection(
 						  const G4ParticleDefinition& aParticleType,
 						  G4double KineticEnergy,
-						  G4double AtomicNumber);
+						  G4double AtomicNumber,
+                                                  G4double ExcEnergy);
       
 public: // With description
   
@@ -260,6 +263,7 @@ protected:
   // unit [ev/(10^15 atoms/cm^2]
   // into the Geant4 dE/dx unit
     
+  /*
    static G4double LowerBoundLambda ; // bining for lambda table
    static G4double UpperBoundLambda ;
    static G4int    NbinLambda ;
@@ -275,7 +279,7 @@ protected:
     static G4double GetLowerBoundLambda() { return LowerBoundLambda;};
     static G4double GetUpperBoundLambda() { return UpperBoundLambda;};
     static G4int GetNbinLambda() {return NbinLambda;};
-
+    */
 };
 
 #include "G4hLowEnergyIonisation.icc"
