@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXm.cc,v 1.7 2001-07-11 10:08:54 gunter Exp $
+// $Id: G4OpenGLImmediateXm.cc,v 1.8 2002-02-24 01:48:05 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,8 +31,6 @@
 #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
 
 #include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4VisFeaturesOfOpenGL.hh"
 #include "G4VSceneHandler.hh"

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLStoredXViewer.cc,v 1.7 2001-08-14 18:03:20 johna Exp $
+// $Id: G4OpenGLStoredXViewer.cc,v 1.8 2002-02-24 01:48:19 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,15 +34,8 @@
 #include "G4OpenGLStoredXViewer.hh"
 
 #include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
-
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
 
 G4OpenGLStoredXViewer::G4OpenGLStoredXViewer (G4OpenGLStoredSceneHandler& scene,
 					  const G4String& name):

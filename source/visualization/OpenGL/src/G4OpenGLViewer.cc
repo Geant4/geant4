@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.cc,v 1.12 2001-07-11 10:08:56 gunter Exp $
+// $Id: G4OpenGLViewer.cc,v 1.13 2002-02-24 01:48:24 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,15 +31,12 @@
 #ifdef G4VIS_BUILD_OPENGL_DRIVER
 
 #include <GL/gl.h>
-#include <GL/glx.h>
 #include <GL/glu.h>
 
 #include "G4OpenGLViewer.hh"
 #include "G4OpenGLSceneHandler.hh"
 #include "G4OpenGLTransform3D.hh"
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
 
 #include "G4Scene.hh"
 #include "G4VisExtent.hh"
@@ -49,20 +46,12 @@
 #include "G4Normal3D.hh"
 #include "G4Plane3D.hh"
 
-int G4OpenGLViewer::snglBuf_RGBA[10] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1, 
-  GLX_BLUE_SIZE, 1, GLX_DEPTH_SIZE, 1, None };
-
-int G4OpenGLViewer::dblBuf_RGBA[11] =
-{ GLX_RGBA, GLX_RED_SIZE, 1, GLX_GREEN_SIZE, 1,
-  GLX_BLUE_SIZE, 1, GLX_DOUBLEBUFFER, GLX_DEPTH_SIZE, 1, None };
-
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-white_background (False),
-transparency_enabled (False),
-antialiasing_enabled (False),
-haloing_enabled (False),
+white_background (false),
+transparency_enabled (false),
+antialiasing_enabled (false),
+haloing_enabled (false),
 fSceneHandler (scene)
 {
   // Make changes to view parameters for OpenGL...

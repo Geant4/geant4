@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateXViewer.cc,v 1.6 2001-07-14 21:47:50 johna Exp $
+// $Id: G4OpenGLImmediateXViewer.cc,v 1.7 2002-02-24 01:48:04 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -34,15 +34,8 @@
 #include "G4OpenGLImmediateXViewer.hh"
 
 #include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
-
-#include <X11/Xatom.h>
-#include <X11/Xutil.h>
 
 G4OpenGLImmediateXViewer::G4OpenGLImmediateXViewer (G4OpenGLImmediateSceneHandler& scene,
 						const G4String&  name):

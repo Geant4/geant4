@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLSceneHandler.cc,v 1.14 2001-08-24 18:37:09 johna Exp $
+// $Id: G4OpenGLSceneHandler.cc,v 1.15 2002-02-24 01:48:09 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,7 +41,6 @@
 // Also seems to be required for HP's CC and AIX xlC, at least.
 
 #include <GL/gl.h>
-#include <GL/glx.h>
 #include <GL/glu.h>
 
 #include "G4OpenGLSceneHandler.hh"

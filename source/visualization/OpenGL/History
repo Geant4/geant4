@@ -1,4 +1,4 @@
-$Id: History,v 1.15 2001-08-24 20:28:15 johna Exp $
+$Id: History,v 1.16 2002-02-24 01:47:46 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,11 @@ committal in the CVS repository !
 
 History file for visualization/OpenGL
 -------------------------------------
+
+23rd February 2002  John Allison  (opengl-V04-00-01)
+- Changes to encourage compilation on Windows in preparation for
+  implementation of G4OpenGLWin32Viewer.  Removed spurious includes of
+  glx.h, unistd.h and assert.h.
 
 24th August 2001  John Allison  (vis-V03-02-13)
 - Limited the printing of warnings in

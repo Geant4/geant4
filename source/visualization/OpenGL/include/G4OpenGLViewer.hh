@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLViewer.hh,v 1.7 2001-07-11 10:08:50 gunter Exp $
+// $Id: G4OpenGLViewer.hh,v 1.8 2002-02-24 01:47:51 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -60,8 +60,6 @@ protected:
     antialiasing_enabled,   //is antialiasing enabled?
     haloing_enabled;        //is haloing enabled for wireframe?
 
-  static int snglBuf_RGBA[10];
-  static int dblBuf_RGBA[11];
   G4OpenGLSceneHandler&                    fSceneHandler;  // Graphics Scene for this view.
 
 private:

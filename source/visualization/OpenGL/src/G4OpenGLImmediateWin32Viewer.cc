@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.4 2001-07-14 21:47:49 johna Exp $
+// $Id: G4OpenGLImmediateWin32Viewer.cc,v 1.5 2002-02-24 01:48:00 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,12 +33,8 @@
 #include "G4OpenGLImmediateWin32Viewer.hh"
 
 #include <GL/gl.h>
-#include <GL/glx.h>
-#include <GL/glu.h>
 
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
 
 G4OpenGLImmediateWin32Viewer::G4OpenGLImmediateWin32Viewer (G4OpenGLImmediateSceneHandler& scene):
 G4OpenGLViewer (scene),

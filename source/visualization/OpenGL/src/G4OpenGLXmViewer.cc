@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4OpenGLXmViewer.cc,v 1.10 2001-07-30 23:34:22 johna Exp $
+// $Id: G4OpenGLXmViewer.cc,v 1.11 2002-02-24 01:48:29 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -40,9 +40,6 @@
 #include <GL/glu.h>
 
 #include "G4ios.hh"
-#include <assert.h>
-#include <unistd.h>
-#include <stdlib.h>
 
 #include "G4VisExtent.hh"
 #include "G4LogicalVolume.hh"
