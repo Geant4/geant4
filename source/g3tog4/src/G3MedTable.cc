@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MedTable.cc,v 1.3 1999-05-06 18:02:04 lockman Exp $
+// $Id: G3MedTable.cc,v 1.4 1999-05-06 18:12:26 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,10 +25,10 @@ G3MedTable::~G3MedTable(){
 
 G4Material*
 G3MedTable::get(G4int MedID){
-  return (*_Med)[MedID];
+  return (*_Med)[MedID-1];
 };
 
 void 
 G3MedTable::put(G4int MedID, G4Material* MatPT){
-  _Med->insertAt(MedID, MatPT);
+  _Med->insertAt(MedID-1, MatPT);
 };

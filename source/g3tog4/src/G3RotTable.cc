@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3RotTable.cc,v 1.3 1999-05-06 17:46:56 lockman Exp $
+// $Id: G3RotTable.cc,v 1.4 1999-05-06 18:12:29 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -25,10 +25,10 @@ G3RotTable::~G3RotTable(){
 
 G3toG4RotationMatrix*
 G3RotTable::get(G4int RotID){
-  return (*_Rot)[RotID];
+  return (*_Rot)[RotID-1];
 };
 
 void 
 G3RotTable::put(G4int RotID, G3toG4RotationMatrix *RotPT){
-  _Rot->insertAt(RotID, RotPT);
+  _Rot->insertAt(RotID-1, RotPT);
 };

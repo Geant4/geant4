@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G3MatTable.cc,v 1.3 1999-05-06 17:46:53 lockman Exp $
+// $Id: G3MatTable.cc,v 1.4 1999-05-06 18:12:22 lockman Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -26,9 +26,9 @@ G3MatTable::~G3MatTable(){
 
 G4Material*
 G3MatTable::get(G4int MatID){
-  return (*_Mat)[MatID];
+  return (*_Mat)[MatID-1];
 };
 
 void G3MatTable::put(G4int MatID, G4Material* MatPT){
-  _Mat->insertAt(MatID, MatPT);
+  _Mat->insertAt(MatID-1, MatPT);
 };
