@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4NeutronBetaDecayChannel.cc,v 1.2 2001-09-20 02:35:48 kurasige Exp $
+// $Id: G4NeutronBetaDecayChannel.cc,v 1.3 2001-11-06 02:06:21 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,7 +46,7 @@
 G4NeutronBetaDecayChannel::G4NeutronBetaDecayChannel(
 				       const G4String& theParentName, 
 				       G4double        theBR)
-                   :G4VDecayChannel("Muon Decay"),
+                   :G4VDecayChannel("Neutron Decay"),
 		    aENuCorr(-0.102)
 {
   // set names for daughter particles
