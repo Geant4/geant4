@@ -1,4 +1,4 @@
-$Id: History,v 1.7 1999-11-10 17:10:14 japost Exp $
+$Id: History,v 1.8 1999-11-19 16:22:52 grichine Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,20 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 17,   99   J. Apostolakis             geom-solids-csg-01-00-03
+ 
+ - Tagged
+
+Nov 17,   99   V. Grichine
+
+   Added initialisation to Eside "side" variable in DistanceToOut(p,v)
+   in CSG solids.    
+                            --> Problem report from D.C. Williams, BaBaR
+
+   A check in G4Trap Makeplane added.
+
+
 
 Nov 10,   99   J. Apostolakis             geom-solids-csg-01-00-02-cand
 
