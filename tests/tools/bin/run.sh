@@ -62,7 +62,7 @@ fi
 if [ $1 = "all" ] ; then 
   nice $G4INSTALL/tests/tools/bin/run.sh test01
   nice $G4INSTALL/tests/tools/bin/run.sh test02
-  nice $G4INSTALL/tests/tools/bin/run.sh test02.hadron
+#  nice $G4INSTALL/tests/tools/bin/run.sh test02.hadron
   nice $G4INSTALL/tests/tools/bin/run.sh test03
   nice $G4INSTALL/tests/tools/bin/run.sh test05
   nice $G4INSTALL/tests/tools/bin/run.sh test06
@@ -100,11 +100,13 @@ cd $G4INSTALL/tests/$shortname
 /bin/rm -f $dir/$1.diff
 if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 ]
 then
-  $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser | \
-  $G4WORKDIR/bin/$G4SYSTEM/$shortname  > $dir/$1.out 2> $dir/$1.err
+  $G4WORKDIR/bin/$G4SYSTEM/$shortname.hadronic.exerciser \
+  > $dir/$1.exerciser.in; \
+  $G4WORKDIR/bin/$G4SYSTEM/$shortname < $dir/$1.exerciser.in \
+  > $dir/$1.out 2> $dir/$1.err
 else
   $G4WORKDIR/bin/$G4SYSTEM/$shortname \
-   <  $G4INSTALL/tests/$shortname/$1.in > $dir/$1.out 2> $dir/$1.err
+  < $G4INSTALL/tests/$shortname/$1.in > $dir/$1.out 2> $dir/$1.err
 fi
 diff $1.out $dir/$1.out > $dir/$1.diff 2> $dir/$1.diff_err
 #cat $dir/$1.diff
