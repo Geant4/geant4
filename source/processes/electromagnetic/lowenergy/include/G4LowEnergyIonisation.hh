@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyIonisation.hh,v 1.6 1999-06-28 15:47:04 aforti Exp $
+// $Id: G4LowEnergyIonisation.hh,v 1.7 1999-07-01 17:37:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -32,12 +32,14 @@
 
 
 // Base Class Headers
+#include "G4VDiscreteProcess.hh"
 #include "G4eEnergyLoss.hh"
 
 // Contained Variables Headers
 #include "G4LowEnergyUtilities.hh"
 #include "G4Electron.hh"
 #include "G4Positron.hh"
+#include <fstream.h>
 
 typedef G4FirstLevel oneShellTable;
 typedef G4SecondLevel oneAtomTable;
@@ -64,6 +66,9 @@ public:
 			   G4ForceCondition* condition ) ;
 
   inline G4double GetTransitionShell(G4int k){return(thePrimShVec(k));};
+
+  G4VParticleChange* AlongStepDoIt(const G4Track& track,
+				   const G4Step& Step) ;
 
   G4VParticleChange *PostStepDoIt(const G4Track& track,         
 				  const G4Step& Step ) ;                 
@@ -97,6 +102,8 @@ private:
   
   G4bool SelectRandomTransition(G4int, G4double*, 
 				const oneAtomTable*);
+
+
 
   G4double EnergySampling(const G4int, const G4int,const G4double);
 

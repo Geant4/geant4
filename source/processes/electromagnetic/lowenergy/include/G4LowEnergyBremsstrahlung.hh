@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4LowEnergyBremsstrahlung.hh,v 1.6 1999-06-28 15:47:02 aforti Exp $
+// $Id: G4LowEnergyBremsstrahlung.hh,v 1.7 1999-07-01 17:37:26 aforti Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,6 +29,7 @@
 #define G4LowEnergyBremsstrahlung_h 1
 
 // Base Class Headers
+//#include "G4VDiscreteProcess.hh"
 #include "G4eEnergyLoss.hh"
 
 // Contained Variables Headers
@@ -36,9 +37,8 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 
-class G4LowEnergyBremsstrahlung : public G4eEnergyLoss
+class G4LowEnergyBremsstrahlung : public G4eEnergyLoss{
  
-{ 
 public:
  
   G4LowEnergyBremsstrahlung(const G4String& processName = "LowEnBrem");
@@ -75,15 +75,16 @@ protected:
   void BuildBTable();
   void BuildZVec();
 
-  void ComputePartialSumSigma(G4double KineticEnergy, const G4Material* aMaterial);
+  void ComputePartialSumSigma(G4double KineticEnergy, 
+			      const G4Material* aMaterial);
   
 private:
   
   G4double ComputeA(G4int Z, G4double ElectKinEnergy); // interpolation
   G4double ComputeB(G4int Z, G4double ElectKinEnergy); // parametrized formula
   
-  G4double ComputeBremLoss(G4double Z,G4double natom,G4double T,
-			   G4double Cut,G4double x);
+  G4double ComputeBremLoss(G4double Z, G4double natom, G4double T,
+			   G4double Cut, G4double x);
   
   G4double ComputeXYPolynomial(G4double x,G4double y,G4int xSize,
 			       G4int ySize,const G4double coeff[]);
