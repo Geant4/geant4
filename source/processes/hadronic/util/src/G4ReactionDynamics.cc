@@ -1066,6 +1066,7 @@
     G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
     G4int diff = 0;
     if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
+    if(numberofFinalStateNucleons == 1) diff = 0;
     pseudoParticle[4].SetMomentum( 0.0, 0.0, 0.0 );
     pseudoParticle[4].SetMass( protonMass*(numberofFinalStateNucleons-diff)*MeV );
     pseudoParticle[4].SetTotalEnergy( protonMass*(numberofFinalStateNucleons-diff)*MeV );
@@ -1912,6 +1913,7 @@
     G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
     G4int diff = 0;
     if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
+    if(numberofFinalStateNucleons == 1) diff = 0;
     pseudoParticle[5].SetMomentum( 0.0, 0.0, 0.0 );
     pseudoParticle[5].SetMass( protonMass*(numberofFinalStateNucleons-diff)*MeV );
     pseudoParticle[5].SetTotalEnergy( protonMass*(numberofFinalStateNucleons-diff)*MeV );
