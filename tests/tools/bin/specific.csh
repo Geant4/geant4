@@ -478,6 +478,7 @@ if ( `whoami` == "gbarrand" ) then
   source /afs/cern.ch/sw/contrib/Lab/v4r0/cmt/setup.csh
   # Lizard :
   setenv LIZARDROOT /afs/cern.ch/project/asddat/lhcxx/3.2.0/Gecko
+  setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:${LIZARDROOT}/lib
   # CLHEP :
   setenv CLHEP_BASE_DIR /afs/cern.ch/sw/lhcxx/specific/@sys/CLHEP/1.5.0.0
   #
