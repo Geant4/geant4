@@ -1,35 +1,41 @@
-# $Id: G4VIS_USE.gmk,v 1.5 2001-06-19 20:38:31 johna Exp $
+# $Id: G4VIS_USE.gmk,v 1.6 2001-07-27 21:49:12 johna Exp $
 # -------------------------------------------------------------
 # GNUmakefile for CPPFLAGS for visualization USE phase.
 #   John Allison, 24th January 1998.
+
+ifndef G4VIS_NONE
+  G4VIS_USE = 1
 
 ifndef VISLIBS 
  VISLIBS :=
 endif
 
-ifdef G4VIS_USE_DAWN
-  G4VIS_USE_DAWN_OR_DAWNFILE = 1
-  CPPFLAGS += -DG4VIS_USE_DAWN
-endif
-ifdef G4VIS_USE_DAWNFILE
-  G4VIS_USE_DAWN_OR_DAWNFILE = 1
-  CPPFLAGS += -DG4VIS_USE_DAWNFILE
-endif
-ifdef G4VIS_USE_DAWN_OR_DAWNFILE
-  G4VIS_USE = 1
-  CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
-  VISLIBS += -lG4FR
-endif
+# Not needing external packages or libraries...
+# Set old USE variables for backwards compatibility of user code...
 
-ifdef G4VIS_USE_RAYTRACER
-  G4VIS_USE = 1
-  CPPFLAGS += -DG4VIS_USE_RAYTRACER
-  CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
-  VISLIBS += -lG4RayTracer
+CPPFLAGS += -DG4VIS_USE_DAWNFILE
+CPPFLAGS += -I$(G4BASE)/visualization/FukuiRenderer/include
+VISLIBS  += -lG4FR
+
+CPPFLAGS += -DG4VIS_USE_RAYTRACER
+CPPFLAGS += -I$(G4BASE)/visualization/RayTracer/include
+VISLIBS  += -lG4RayTracer
+
+CPPFLAGS += -DG4VIS_USE_VRMLFILE
+CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
+VISLIBS  += -lG4VRML
+
+CPPFLAGS += -DG4VIS_USE_ASCIITREE
+CPPFLAGS += -DG4VIS_USE_GAGTREE
+CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
+VISLIBS  += -lG4Tree
+
+ifdef G4VIS_USE_DAWN
+  CPPFLAGS += -DG4VIS_USE_DAWN
+  # CPPFLAGS += -I... and VISLIBS += set above.
 endif
 
 ifdef G4VIS_USE_OPACS
-  G4VIS_USE  = 1
   INC_OPACS  = 1
   LOAD_OPACS = 1
   CPPFLAGS += -DG4VIS_USE_OPACS
@@ -50,7 +56,6 @@ ifdef G4VIS_USE_OPENGLXM
   LOAD_XM   = 1
 endif
 ifdef G4VIS_USE_OPENGL
-  G4VIS_USE = 1
   CPPFLAGS += -DG4VIS_USE_OPENGL
   CPPFLAGS += -I$(G4BASE)/visualization/OpenGL/include
   VISLIBS += -lG4OpenGL
@@ -69,7 +74,6 @@ ifdef G4VIS_USE_OIWIN32
   CPPFLAGS += -DG4VIS_USE_OIWIN32
 endif
 ifdef G4VIS_USE_OI
-  G4VIS_USE = 1
   CPPFLAGS += -DG4VIS_USE_OI
   CPPFLAGS += -I$(G4BASE)/visualization/OpenInventor/include
   VISLIBS += -lG4OpenInventor
@@ -78,31 +82,8 @@ ifdef G4VIS_USE_OI
 endif
 
 ifdef G4VIS_USE_VRML
-  G4VIS_USE_VRML_OR_VRMLFILE = 1
   CPPFLAGS += -DG4VIS_USE_VRML
-endif
-ifdef G4VIS_USE_VRMLFILE
-  G4VIS_USE_VRML_OR_VRMLFILE = 1
-  CPPFLAGS += -DG4VIS_USE_VRMLFILE
-endif
-ifdef G4VIS_USE_VRML_OR_VRMLFILE
-  G4VIS_USE = 1
-  CPPFLAGS += -I$(G4BASE)/visualization/VRML/include
-  VISLIBS += -lG4VRML
-endif
-
-ifdef G4VIS_USE_ASCIITREE
-  G4VIS_USE_TREE = 1
-  CPPFLAGS += -DG4VIS_USE_ASCIITREE
-endif
-ifdef G4VIS_USE_GAGTREE
-  G4VIS_USE_TREE = 1
-  CPPFLAGS += -DG4VIS_USE_GAGTREE
-endif
-ifdef G4VIS_USE_TREE
-  G4VIS_USE = 1
-  CPPFLAGS += -I$(G4BASE)/visualization/Tree/include
-  VISLIBS += -lG4Tree
+  # CPPFLAGS += -I... and VISLIBS += set above.
 endif
 
 ifdef G4VIS_USE
@@ -122,3 +103,4 @@ ifdef G4VIS_USE
   VISLIBS  += -lG4modeling
 endif
 
+endif # G4VIS_NONE
