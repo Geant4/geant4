@@ -1,4 +1,4 @@
-$Id: History,v 1.5 2000-05-03 14:33:06 stesting Exp $
+$Id: History,v 1.6 2000-06-17 12:13:57 stesting Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 17, 2000  John Allison  (test06-V01-01-03)
+- Updated test14.out for geant4-01-01-ref-06.
 
 3rd May 2000  John Allison  (test14-V01-01-02)
 - Updated test14.out for em-V01-01-01.
