@@ -81,10 +81,6 @@
 int main(int argc ,char ** argv)
 
 {
-  HepRandom::setTheEngine(new RanecuEngine);
-  G4int seed = time(0);
-  HepRandom :: setTheSeed(seed);
-
   G4RunManager* pRunManager = new G4RunManager;
 
   G4String sensitiveDetectorName = "Phantom";
