@@ -1,4 +1,4 @@
-$Id: History,v 1.40 2001-05-23 17:50:37 japost Exp $
+$Id: History,v 1.41 2001-05-23 17:51:10 japost Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,7 +16,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-May 23rd, 2001       J. Apostolakis - geomvol-V03-01-04
+May 23rd, 2001       J. Apostolakis - geomvol-V03-01-05
 - Moved Delta Intersection and One Step from PropagatorIn Field to Field Manager
    (Incorporating changes into a tag, finally, after fix to G4FieldManager constructors. ) 
 
