@@ -25,66 +25,63 @@
 // GEANT4 Class file
 //
 //
-// File name:  G4VhShellCrossSection
+// File name:  G4hShellCrossSectionExp   
 //
-// Author:      S. Dussoni and A. Mantero (Alfonso.Mantero@ge.infn.it)
+// Author:     Simona Saliceti (simona.saliceti@ge.infn.it)
 // 
 // History:
 // -----------
-// 23 Oct 2001 A. Mantero   1st implementation
-// 24 Oct 2001 MGP          Cleaned up
-// 29 Oct 2001 VI           Add delta energy
-//
+// From 23 Oct 2001 A. Mantero G4hShellCrossSection
+// 30/03/2004 Simona Saliceti 1st implementation
 // -------------------------------------------------------------------
-
 // Class Description: 
-//
-// Abstract class for models of shell cross sections in proton ionisation
-
+// Empiric Model for shell cross sections in proton ionisation
 // -------------------------------------------------------------------
-//
+// $Id: G4hShellCrossSectionExp.hh,v 1.1 2004-04-27 09:45:48 saliceti Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 
-#ifndef G4VHSHELLCROSSSECTION_HH
-#define G4VHSHELLCROSSSECTION_HH 1
+#ifndef G4HSHELLCROSSSECTIONEXP_HH
+#define G4HSHELLCROSSSECTIONEXP_HH 1
 
 #include "globals.hh"
-#include <vector>
+#include "G4VhShellCrossSection.hh" 
+#include "G4hShellCrossSectionExpData.hh"
 
-class G4VhShellCrossSection 
+class G4hShellCrossSectionExp : public G4VhShellCrossSection
 {
-
 public:
 
-  G4VhShellCrossSection();
+  G4hShellCrossSectionExp();
 
-  virtual ~G4VhShellCrossSection();
+  virtual ~G4hShellCrossSectionExp();
 
-  G4int SelectRandomShell(G4int Z, 
-                          G4double incidentEnergy,
-			  G4double mass, 
-			  G4double deltaEnergy) const;
-
- virtual std::vector<G4double> GetCrossSection(G4int Z,
+  virtual std::vector<G4double> GetCrossSection(G4int Z,
 						G4double incidentEnergy,
 						G4double mass,
 						G4double deltaEnergy,
-					        G4bool testFlag = false) const =0;
-
-  //protected:
+						G4bool testFlag = false) const;
+ 
+  void SetTotalCS(G4double);
+ 
+protected:
 
   virtual std::vector<G4double> Probabilities(G4int Z,
 					      G4double incidentEnergy,
 					      G4double mass,
-					      G4double deltaEnergy) const = 0;
+					      G4double deltaEnergy) const;
 
 
 private:
 
-  // Hide copy constructor and assignment operator 
-  G4VhShellCrossSection(const  G4VhShellCrossSection&);
-  G4VhShellCrossSection & operator=(const  G4VhShellCrossSection &right);
+  G4double GetCrossSectionExp(G4int Z,
+			      G4double incidentEnergy) const;
 
+  // Hide copy constructor and assignment operator 
+  G4hShellCrossSectionExp(const G4hShellCrossSectionExp&);
+  G4hShellCrossSectionExp & operator = (const G4hShellCrossSectionExp &right);
+  G4hShellCrossSectionExpData* kShellData;
+
+  G4double atomTotalCrossSection;
 };
 
 #endif
-

@@ -34,7 +34,7 @@
 // 23 Oct 2001 A. Mantero   1st implementation
 // 24 Oct 2001 MGP          Cleaned up
 // 29 Oct 2001 VI           Add delta energy
-//
+// 22 Apr 2004 S.Saliceti   Add GetCrossSection method
 // -------------------------------------------------------------------
 
 // Class Description: 
@@ -56,12 +56,18 @@ public:
 
   virtual ~G4hShellCrossSection();
 
+  virtual std::vector<G4double> GetCrossSection(G4int Z,
+						G4double incidentEnergy,
+						G4double mass,
+						G4double deltaEnergy,
+						G4bool testFlag = false) const;
+
 protected:
 
   virtual std::vector<G4double> Probabilities(G4int Z,
-						G4double incidentEnergy,
-						G4double mass,
-						G4double deltaEnergy) const;
+					      G4double incidentEnergy,
+					      G4double mass,
+					      G4double deltaEnergy) const;
 
 private:
 

@@ -85,6 +85,7 @@
 #include "G4IonYangFluctuationModel.hh"
 #include "G4AtomicDeexcitation.hh"
 #include "G4MaterialCutsCouple.hh"
+#include <map>
 
 class G4VEMDataSet;
 class G4ShellVacancy;
@@ -272,6 +273,7 @@ private:
   G4VLowEnergyModel* theNuclearStoppingModel;
   G4VLowEnergyModel* theIonChuFluctuationModel;
   G4VLowEnergyModel* theIonYangFluctuationModel;
+  std::map<G4int,G4double,std::less<G4int> > totalCrossSectionMap;
 
   // name of parametrisation table of electron stopping power
   G4String theProtonTable;
@@ -307,7 +309,7 @@ private:
   G4VhShellCrossSection* shellCS;
   std::vector<G4VEMDataSet*> zFluoDataVector;
   G4bool theFluo;
-
+  G4bool expFlag;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
