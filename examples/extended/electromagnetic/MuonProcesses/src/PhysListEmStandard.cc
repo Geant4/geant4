@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: PhysListEmStandard.cc,v 1.4 2004-12-06 12:15:39 vnivanch Exp $
+// $Id: PhysListEmStandard.cc,v 1.5 2004-12-06 13:39:37 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,8 +87,7 @@ void PhysListEmStandard::ConstructProcess()
   G4LossTableManager::Instance()->SetMaxEnergy(1000.0*PeV);
   G4LossTableManager::Instance()->SetDEDXBinning(220);
   G4LossTableManager::Instance()->SetLambdaBinning(220);
-  G4LossTableManager::Instance()->SetVerbose(3);
-
+  G4LossTableManager::Instance()->SetVerbose(0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
