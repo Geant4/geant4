@@ -9,7 +9,7 @@
 set -x
 
 # Execute stt members specifc setup first :
-. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/specific.sh
+. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/specific.sh
 
 if [ -n "$G4SYSTEM" ]; then
     echo "You are working on a $G4SYSTEM system"
@@ -20,8 +20,8 @@ fi
 
 # we are working in the stt afs ref area
 if [ "$1" = "sttref" ]; then
-export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM
+export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM
 export G4LIB=$G4WORKDIR/lib
 fi
 # Some checks :

@@ -23,10 +23,10 @@ fi
 UNAMEN=`uname -n `
 ANS=`uname -n | grep rsplus`
 if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=AIX-xlC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -34,23 +34,23 @@ if [ X`uname -n | grep rsplus` != X  -o "$UNAMEN" = "shift51" ]; then
   #####export G4UI_BUILD_XM_SESSION=1
   #####export G4VIS_BUILD_OPENGLXM_DRIVER=1
 #  export G4VIS_BUILD_OPENGLX_DRIVER=1
-#  export OGLHOME=/afs/cern.ch/rd44/dev/Mesa/Mesa-1.2.8
+#  export OGLHOME=/afs/cern.ch/sw/geant4/dev/Mesa/Mesa-1.2.8
 #  export G4VIS_BUILD_RAYX_DRIVER=1
 #  export G4VIS_BUILD_RAYX_DRIVER=1
   #####export G4VIS_BUILD_OIX_DRIVER=1
 #  export G4VIS_BUILD_DAWN_DRIVER=1
 #  export DAWN_BSD_UNIX_DOMAIN=1
-#  export DAWN_HOME=/afs/cern.ch/rd44/dev/DAWN/AIX-AFS
+#  export DAWN_HOME=/afs/cern.ch/sw/geant4/dev/DAWN/AIX-AFS
 #  export G4VIS_BUILD_DAWNFILE_DRIVER=1
 #  export G4VIS_BUILD_VRML_DRIVER=1
 #  export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 
 if [ `uname -n | grep sunasd1` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -67,10 +67,10 @@ if [ `uname -n | grep sunasd1` ]; then
 fi
 
 if [ `uname -n | grep suncmsb` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 #
   export CLHEP_BASE_DIR=/afs/cern.ch/user/s/stesting/work/clhep
@@ -91,10 +91,10 @@ if [ `uname -n | grep suncmsb` ]; then
 fi
 
 if [ `uname -n | grep sungeant` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SUN-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -112,10 +112,10 @@ fi
 
 
 if [ `uname -n | grep hpplus` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=HP-aCC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -132,10 +132,10 @@ if [ `uname -n | grep hpplus` ]; then
 fi
 
 if [ `uname -n | grep axcnsi` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -152,10 +152,10 @@ if [ `uname -n | grep axcnsi` ]; then
 fi
 
 if [ `uname -n | grep dxplus` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=DEC-cxx
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -172,10 +172,10 @@ if [ `uname -n | grep dxplus` ]; then
 fi
 
 if [ `uname -n | grep pcitasd04` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -193,10 +193,10 @@ fi
 
 
 if [ `uname -n | grep sgmedia` ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=SGI-CC
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
   # G4 build flags :
 #  export G4UI_BUILD_TERMINAL_SESSION=1
@@ -225,16 +225,16 @@ export G4VIS_DEBUG=1
 export G4VIS_BUILD_DAWN_DRIVER=1
 export DAWN_BSD_UNIX_DOMAIN=1
 if [ "$UNAME" = "Linux" ]; then
-  export CVSROOT=/afs/cern.ch/rd44/cvs
+  export CVSROOT=/afs/cern.ch/sw/geant4/cvs
   export G4SYSTEM=Linux-g++
-  export G4INSTALL=/afs/cern.ch/rd44/stt/$REF/src/geant4
-  export G4WORKDIR=/afs/cern.ch/rd44/stt/$REF/$G4SYSTEM/$DEBOPT
+  export G4INSTALL=/afs/cern.ch/sw/geant4/stt/$REF/src/geant4
+  export G4WORKDIR=/afs/cern.ch/sw/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
   export G4LIB=$G4WORKDIR/lib
 export G4VIS_BUILD_OPENGLX_DRIVER=1
 export G4VIS_USE_OPENGLX=1
 export G4VIS_BUILD_OPENGLXM_DRIVER=1
 export G4VIS_USE_OPENGLXM=1
-export CLHEP_BASE_DIR=/afs/cern.ch/rd44/stt/$REF/Linux-g++/CLHEP
+export CLHEP_BASE_DIR=/afs/cern.ch/sw/geant4/stt/$REF/Linux-g++/CLHEP
 #/usr/local/CLHEP1.3/CLHEP
 export CLHEP_LIB=CLHEP
 #CLHEP-c++
@@ -254,7 +254,7 @@ export G4VIS_BUILD_VRMLFILE_DRIVER=1
 fi
 #
 if [ `uname -n` = aleph ] ; then
-export CVSROOT=:pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+export CVSROOT=:pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 export G4INSTALL=/geant4/stt/$REF/src/geant4
 export G4SYSTEM=HP-aCC
 export G4WORKDIR=/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
@@ -284,7 +284,7 @@ export SOFREEUSER=/projects/SoFree/user/
 fi
 #
 if [ `uname -n` = asc ] ; then
-export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs'
+export CVSROOT=':pserver:barrand@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs'
 export G4INSTALL=/geant4/stt/$REF/src/geant4
 export G4SYSTEM=OSF1
 export G4WORKDIR=/geant4/stt/$REF/$G4SYSTEM/$DEBOPT
@@ -339,7 +339,7 @@ export G4VIS_USE_VRML=1
 export G4VIS_USE_VRMLFILE=1
 # Specific :
 export MOMOPATH=$G4INSTALL/environments/Momo/tcltk
-export CVSROOT=:pserver:allison@g4cvs.cern.ch:/afs/cern.ch/rd44/cvs
+export CVSROOT=:pserver:allison@g4cvs.cern.ch:/afs/cern.ch/sw/geant4/cvs
 export CVSEDITOR=emacs
 export CLHEP_BASE_DIR=/usr/local
 export RWBASE=/usr/local

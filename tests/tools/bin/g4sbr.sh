@@ -50,8 +50,8 @@ fi
 ####################################################################
 # Setup environment in $REFTREE
 ####################################################################
-cd /afs/cern.ch/rd44/stt/${REFTREE}/src/geant4/tests/tools/bin
-. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/setup.sh
+cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/src/geant4/tests/tools/bin
+. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/setup.sh
 
 env | grep G4
 ulimit -a
@@ -79,11 +79,11 @@ EOF
 ######################################################################
 if [ X$NONINCREMENTAL = X ]
 then
-cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}/stt/${G4SYSTEM}
+cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}/stt/${G4SYSTEM}
 NEXT_NUMBER=$[`ls -c1 gmake.log.*|sort|tail -1|cut -d "." -f3`+1]
 mv gmake.log gmake.log.${NEXT_NUMBER}
 else
-cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}
+cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}
 echo REMOVE
 mv stt stt.${PREVTAG}
 rm -r bin lib tmp
@@ -93,8 +93,8 @@ fi
 ################################
 # Build&run all in ref[+]
 ################################
-cd /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}
-. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/limit.sh
+cd /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}
+. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/limit.sh
 
 if [ X$ACTION = Xbuild -o X$ACTION = Xall  ]
 then
@@ -106,7 +106,7 @@ then
 ################
 #${G4INSTALL}/tests/tools/bin/build_specific.sh &
 #${G4INSTALL}/tests/tools/bin/build.sh
-. /afs/cern.ch/rd44/stt/ref+/src/geant4/tests/tools/bin/tmpenv.sh
+. /afs/cern.ch/sw/geant4/stt/ref+/src/geant4/tests/tools/bin/tmpenv.sh
 ${G4INSTALL}/tests/tools/bin/build.sh $ACTARG1 $ACTARG2
 #unset $TMPDIR
 #${G4INSTALL}/tests/tools/bin/build.sh test all
@@ -117,7 +117,7 @@ fi
 #
 if [ X$G4SYSTEM = XDEC-cxx  ]
 then
-chmod +x /afs/cern.ch/rd44/stt/${REFTREE}/${G4SYSTEM}/bin/${G4SYSTEM}/*
+chmod +x /afs/cern.ch/sw/geant4/stt/${REFTREE}/${G4SYSTEM}/bin/${G4SYSTEM}/*
 fi
 
 if [ X$ACTION = Xrun -o X$ACTION = Xall  ]
