@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CellScorerStore.cc,v 1.2 2002-11-04 10:52:39 dressel Exp $
+// $Id: G4CellScorerStore.cc,v 1.3 2004-07-01 10:05:40 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -55,7 +55,7 @@ AddCellScorer(G4VPhysicalVolume &vol, G4int repnum) {
   }  
   fMapGeometryCellCellScorer[G4GeometryCell(vol, repnum)] = s;
   return s;
-};
+}
 
 G4CellScorer *G4CellScorerStore::
 AddCellScorer(const G4GeometryCell &gCell) {
@@ -66,7 +66,7 @@ AddCellScorer(const G4GeometryCell &gCell) {
   }  
   fMapGeometryCellCellScorer[gCell] = s;
   return s;
-};
+}
 
 const G4MapGeometryCellCellScorer &G4CellScorerStore::GetMapGeometryCellCellScorer() const {
   return fMapGeometryCellCellScorer;
