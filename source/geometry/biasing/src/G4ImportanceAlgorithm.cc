@@ -1,9 +1,46 @@
-#include "G4ImportanceAlgorithm.hh"
-#include "Randomize.hh"
-#include "g4std/strstream"
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4ImportanceAlgorithm.cc,v 1.4 2002-04-09 16:23:49 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// GEANT 4 class source file
+//
+// G4ImportanceAlgorithm.cc
+//
+// ----------------------------------------------------------------------
 
-G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false) {}
-G4ImportanceAlgorithm::~G4ImportanceAlgorithm(){
+#include "g4std/strstream"
+#include "Randomize.hh"
+
+#include "G4ImportanceAlgorithm.hh"
+
+G4ImportanceAlgorithm::G4ImportanceAlgorithm(): fWorned(false)
+{}
+
+G4ImportanceAlgorithm::~G4ImportanceAlgorithm()
+{
   if(fWorned) {
     G4cout << G4endl;
     Warning("~G4ImportanceAlgorithm: ipre_over_ipost ! in [0.25, 4] seen");
@@ -12,9 +49,9 @@ G4ImportanceAlgorithm::~G4ImportanceAlgorithm(){
 }
 
 G4Nsplit_Weight
-G4ImportanceAlgorithm::
-Calculate(G4double ipre_over_ipost, G4double init_w) const{
-
+G4ImportanceAlgorithm::Calculate(G4double ipre_over_ipost,
+                                 G4double init_w) const
+{
   if ((ipre_over_ipost<0.25 || ipre_over_ipost> 4) && !fWorned) {
     G4std::ostrstream os;
     os << "Calculate: ipre_over_ipost ! in [0.25, 4]: ipre_over_ipost = "
@@ -65,6 +102,16 @@ Calculate(G4double ipre_over_ipost, G4double init_w) const{
     }
   }
   
-
   return nw;
+}
+
+void G4ImportanceAlgorithm::Error(const G4String &m) const
+{
+  G4cout << "ERROR - G4ImportanceAlgorithm::" << m << G4endl;
+  G4Exception("Program aborted.");
+}
+
+void G4ImportanceAlgorithm::Warning(const G4String &m) const
+{
+  G4cout << "WARNING - G4ImportanceAlgorithm::" << m << G4endl;
 }

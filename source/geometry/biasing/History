@@ -1,4 +1,4 @@
-$Id: History,v 1.3 2002-04-08 08:21:14 gcosmo Exp $
+$Id: History,v 1.4 2002-04-09 16:23:41 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+April 9th, 2002  G.Cosmo
+- Added liability disclaimer to all files and minor cosmetics.
 
 April 8th, 2002  M.Dressel - geombias-V04-00-02
 - Resolved compilation problems on HP-aCC.

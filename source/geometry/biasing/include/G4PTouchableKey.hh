@@ -1,34 +1,73 @@
+//
+// ********************************************************************
+// * DISCLAIMER                                                       *
+// *                                                                  *
+// * The following disclaimer summarizes all the specific disclaimers *
+// * of contributors to this software. The specific disclaimers,which *
+// * govern, are listed with their locations in:                      *
+// *   http://cern.ch/geant4/license                                  *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.                                                             *
+// *                                                                  *
+// * This  code  implementation is the  intellectual property  of the *
+// * GEANT4 collaboration.                                            *
+// * By copying,  distributing  or modifying the Program (or any work *
+// * based  on  the Program)  you indicate  your  acceptance of  this *
+// * statement, and all its terms.                                    *
+// ********************************************************************
+//
+//
+// $Id: G4PTouchableKey.hh,v 1.2 2002-04-09 16:23:47 gcosmo Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+//
+// ----------------------------------------------------------------------
+// Class G4PTouchableKey
+//
+// Class description:
+//
+// <<insert the description here>>
+
+// Author: Michael Dressel (Michael.Dressel@cern.ch)
+// ----------------------------------------------------------------------
 #ifndef G4PTouchableKey_hh
-#define G4PTouchableKey_hh G4PTouchableKey_hh
+#define G4PTouchableKey_hh
 
 #include "globals.hh"
+
 class G4VPhysicalVolume;
 
-class G4PTouchableKey {
-public:
-  G4PTouchableKey(const G4VPhysicalVolume &aVolume,
-		G4int RepNum) :
-    fVPhysiclaVolume(&aVolume),
-    fRepNum(RepNum){}
-  
+class G4PTouchableKey
+{
+
+public:  // with description
+
+  G4PTouchableKey(const G4VPhysicalVolume &aVolume, G4int RepNum);
+  ~G4PTouchableKey();
+
+public:  // without description
+
   const G4VPhysicalVolume *fVPhysiclaVolume;
   G4int fRepNum;
 };
 
-class G4PTkComp {
-public:
-  bool operator() (const G4PTouchableKey &k1, const G4PTouchableKey &k2) 
-    const {
-    if (k1.fVPhysiclaVolume != k2.fVPhysiclaVolume) {
-      return  k1.fVPhysiclaVolume < k2.fVPhysiclaVolume;
-    } else {
-      return k1.fRepNum < k2.fRepNum;
-    }
-  }
+// -----------------------------------------------------------------------
+
+class G4PTkComp
+{
+
+public:  // without description
+
+  G4bool operator() (const G4PTouchableKey &k1,
+                     const G4PTouchableKey &k2) const;
 };
 
-bool operator==(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
-bool operator!=(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
+// -----------------------------------------------------------------------
 
+G4bool operator==(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
+G4bool operator!=(const G4PTouchableKey &k1, const G4PTouchableKey &k2);
 
 #endif
