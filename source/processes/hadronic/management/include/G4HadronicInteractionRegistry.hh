@@ -16,7 +16,7 @@ class G4HadronicInteractionRegistry
   
   protected:
 
-  G4HadronicInteractionRegistry() 
+  G4HadronicInteractionRegistry(G4String aString) 
   { G4Exception("G4HadronicInteractionRegistry meant as a singleton; please do not inherit");}
 
   private:
