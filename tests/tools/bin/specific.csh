@@ -550,6 +550,11 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   # GUI :
   setenv G4UI_BUILD_XM_SESSION 1
   setenv G4UI_USE_XM 1
+  # OpenGL :
+  setenv G4VIS_BUILD_OPENGLXM_DRIVER 1
+  setenv G4VIS_BUILD_OPENGLX_DRIVER  1
+  setenv G4VIS_USE_OPENGLXM          1
+  setenv G4VIS_USE_OPENGLX           1
   # Inventor :
   setenv G4VIS_BUILD_OIX_DRIVER 1
   setenv G4VIS_USE_OIX 1
@@ -560,7 +565,7 @@ if ( `uname -n` == mac-91114.lal.in2p3.fr || `uname -n` == Ordinateur-de-Guy-Bar
   setenv OIVLIBS "-L$HEPVISHOME/Darwin -lHEPVisDetector -lHEPVisGeometry -lHEPVisUtils -L$OIXHOME/Darwin -lSoXt -L$OIVHOME/Darwin -lCoin"
   setenv DYLD_LIBRARY_PATH "$OIVHOME/Darwin:$OIXHOME/Darwin:$HEPVISHOME/Darwin"
   setenv XENVIRONMENT visTutor/g4Xt.xrm
-  setenv DYLD_BIND_AT_LAUNCH 1
+#  setenv DYLD_BIND_AT_LAUNCH 1
 # AIDA :
 #  setenv G4ANALYSIS_USE 1
 # Falsetto implementation :
