@@ -28,6 +28,27 @@ setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/share/LHCXX/5.0.5/scripts/
         http://anaphe.web.cern.ch/anaphe 
  for more info
 
+--------> How to run <----------
+1) batch mode
+$G4WORKDIR/bin/Linux-g++/test50 file.in
+
+examples of file.in for each kind of test are available in 
+test_input_files
+
+2) interactive mode
+$G4WORKDIR/bin/Linux-g++/test50
+
+---------------------------------------------------------------------*
+default macro file is initialised ---> default.mac                   
+                                                                     *
+Standard processes for gamma, e-, e+
+a beam of gamma (1.MeV) energy impinges on a target of liquid argon  *
+whose dimensions are:
+                                                                     *
+ Target zdimension is: 0.1 mm
+ Target xdimension is: 200 mm                                        *
+ Target ydimension is: 200 mm                                        
+---------------------------------------------------------------------*
 --------> Modular Physics <----------
 
 choice of physics lists:
@@ -55,31 +76,6 @@ choice of physics lists:
                *processes set for CSDA range and SP
 
 
---------> How to run <----------
-
-setenv G4WORKDIR workdir
-gmake
-
-1) batch mode
-$G4WORKDIR/bin/Linux-g++/test50 file.in
-
-examples of file.in for each kind of test are available in the present
-directory
-
-2) interactive mode
-$G4WORKDIR/bin/Linux-g++/test50
-
----------------------------------------------------------------------*
-default macro file is initialised ---> default.mac                   
-                                                                     *
-Standard processes for gamma, e-, e+
-a beam of gamma (1.MeV) energy impinges on a target of liquid argon  *
-whose dimensions are:
-                                                                     *
- Target zdimension is: 0.1 mm
- Target xdimension is: 200 mm                                        *
- Target ydimension is: 200 mm                                        
----------------------------------------------------------------------*
 --------> Output <----------
 
 test50.xml
@@ -120,7 +116,6 @@ In the following sections measurement units for each particular test
 <measurement errorMinus="3.67423461e-02" errorPlus="3.67423461e-02" value="5.40000000e-01"/> -> transmitted particle/NumberOfEvents
 <measurement errorMinus="1.93649167e-02" errorPlus="1.93649167e-02" value="1.50000000e-01"/> -> backscattered particles/NumberOfEvents
 </dataPoint>
-
 
 --------> Test description <----------
 
