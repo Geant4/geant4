@@ -21,6 +21,11 @@ ifeq ($(G4SYSTEM),Linux-egcs)
     FCFLAGS   += -fPIC
     CCFLAGS   += -fPIC
   endif
+  ifdef G4PROFILE
+    CXXFLAGS  += -pg
+    FCFLAGS   += -pg
+    CCFLAGS   += -pg
+  endif
   G4RUNPATHOPTION := -Wl,-rpath 
   FC := g77
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
