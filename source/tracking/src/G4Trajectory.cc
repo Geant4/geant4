@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trajectory.cc,v 1.18 2002-10-28 11:11:05 johna Exp $
+// $Id: G4Trajectory.cc,v 1.19 2002-10-28 12:14:36 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -171,11 +171,11 @@ const G4std::map<G4String,G4AttDef>* G4Trajectory::GetAttDefs() const
   G4std::map<G4String,G4AttDef>* store
     = G4AttDefStore::GetInstance("G4Trajectory",isNew);
   if (isNew) {
-    (*store)[G4String("PN")] =
-      G4AttDef("PN","Particle Name","Physics","","G4String");
-    (*store)[G4String("IMom")] =
-      G4AttDef("IMom", "Momentum of track at start of trajectory",
-	       "Physics","","G4ThreeVector");
+    G4String PN("PN");
+    (*store)[PN] = G4AttDef(PN,"Particle Name","Physics","","G4String");
+    G4String IMom("IMom");
+    (*store)[IMom] = G4AttDef(IMom, "Momentum of track at start of trajectory",
+			      "Physics","","G4ThreeVector");
   }
   return store;
 }
