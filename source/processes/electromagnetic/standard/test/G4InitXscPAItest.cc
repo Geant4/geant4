@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4InitXscPAItest.cc,v 1.2 2004-05-10 15:54:32 grichine Exp $
+// $Id: G4InitXscPAItest.cc,v 1.3 2004-11-10 07:46:03 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -592,10 +592,12 @@ int main()
           Tkin = Tmin + 0.5*eV ;
        }
        xscPAI.IntegralPAIxSection(bg2,Tkin);
+       xscPAI.IntegralPAIdEdx(bg2,Tkin);
        xscPAI.IntegralCherenkov(bg2,Tkin);
        xscPAI.IntegralPlasmon(bg2,Tkin);
       
-       dEdx = xscPAI.IntegralPAIdEdx(Tmin,bg2,Tkin)*cm/keV; // integral(Tmin,Tkin) of E*dN/dE
+       G4PhysicsLogVector* dEdxVector = xscPAI.GetPAIdEdxVector();
+       dEdx = (*dEdxVector)(0)*cm/keV; // integral(Tmin,Tkin) of E*dN/dE
 
        G4PhysicsLogVector* vectorXsc = xscPAI.GetPAIxscVector();
        dNdx = (*vectorXsc)(0)*cm ;
@@ -628,6 +630,7 @@ int main()
        for( i = 0; i < vectorXsc->GetVectorLength()-2; i ++ )
        {
          dNdx  = (*vectorXsc)(i);
+         // dEdx  = (*dEdxVector)(i);
          dNdxC = (*vectorChe)(i);
          dNdxP = (*vectorPla)(i);
 
@@ -637,11 +640,6 @@ int main()
          eTransfer = vectorXsc->GetLowEdgeEnergy(i);
          lambda = xscPAI.GetPhotonLambda(eTransfer);
          
-         bg2=2*eTransfer/electron_mass_c2;
-         Tmax     = 2.0*electron_mass_c2*bg2
-                   /(1.0+2.0*gamma*rateMass+rateMass*rateMass) ;
-         if ( Tmax <= Tmin + 0.5*eV )    Tmax = Tmin + 0.5*eV ;   
-         dEdx=xscPAI.IntegralPAIdEdx(Tmin,bg2,Tmax);
          rangeE = 0.5*eTransfer/dEdx;
 
 	   G4cout<< i <<"\t"<< eTransfer/keV <<"\t"<< lambda/mm<<"\t"<< rangeE/mm
