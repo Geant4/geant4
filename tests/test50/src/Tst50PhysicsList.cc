@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.cc,v 1.8 2003-02-10 15:09:50 guatelli Exp $
+// $Id: Tst50PhysicsList.cc,v 1.9 2003-03-03 11:31:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -43,12 +43,12 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr):  G4VUserPhysicsList()
+Tst50PhysicsList::Tst50PhysicsList(G4bool LowEn,G4bool range,G4bool SP,G4bool RY,G4bool adr,G4bool penelope):  G4VUserPhysicsList()
 { RangeOn=range;
  Stopping= SP;
   Low=LowEn;
   RadiationY=RY;
-  
+  Penelope=penelope;
   defaultCutValue = 1.*mm;
    SetVerboseLevel(1);
    Adronic=adr;
@@ -179,6 +179,12 @@ void Tst50PhysicsList::ConstructProcess()
 #include "G4LowEnergyPhotoElectric.hh"
 #include "G4LowEnergyCompton.hh"  
 #include "G4LowEnergyGammaConversion.hh" 
+//gamma penelope
+#include "G4PenelopeCompton.hh"
+#include "G4PenelopeGammaConversion.hh"
+#include "G4PenelopePhotoElectric.hh"
+#include "G4PenelopeRayleigh.hh"
+
 // e-
 #include "G4LowEnergyIonisation.hh" 
 #include "G4LowEnergyBremsstrahlung.hh" 
@@ -205,12 +211,22 @@ void Tst50PhysicsList::ConstructEM()
       pmanager->AddDiscreteProcess(new G4LowEnergyCompton);
       pmanager->AddDiscreteProcess(new G4LowEnergyGammaConversion);
       G4cout<<"Low Energy processes for gamma ray"<<G4endl;}
-      else{
+      else if (Penelope== true)
+	{
+
+          pmanager->AddDiscreteProcess(new G4PenelopePhotoElectric);
+	  pmanager->AddDiscreteProcess(new G4PenelopeCompton);
+	  pmanager->AddDiscreteProcess(new G4PenelopeGammaConversion);
+	  pmanager->AddDiscreteProcess(new G4PenelopeRayleigh);
+	    
+ G4cout<<" Penelope  processes for gamma ray"<<G4endl;
+	}
+else{
          pmanager->AddDiscreteProcess(new G4GammaConversion());
          pmanager->AddDiscreteProcess(new G4ComptonScattering());      
          pmanager->AddDiscreteProcess(new G4PhotoElectricEffect());
            G4cout<<"Standard  processes for gamma ray"<<G4endl;
-      }
+}
      
     } else if (particleName == "e-") {
  

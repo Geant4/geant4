@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: test50.cc,v 1.15 2003-02-10 11:21:04 guatelli Exp $
+// $Id: test50.cc,v 1.16 2003-03-03 11:31:08 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -65,6 +65,7 @@ HepRandom::setTheEngine(new RanecuEngine);
  G4bool SP=false;
  G4bool Foil= false;
  G4bool Adronic= false;
+ G4bool Penelope= false;
  G4String filename="test50.txt";
  G4cout<<argc<<":argc"<<G4endl;
  G4cout.setf(ios::scientific, ios::floatfield);
@@ -79,13 +80,14 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
  exit(1);}
  // Read input file//
  G4cout<<"Available commands are: "<<G4endl;
- G4cout<<"#processes (LowE/Standard)"<<G4endl; 
+ G4cout<<"#processes (LowE/Standard/Penelope)"<<G4endl; 
   G4cout<<"#range (on/off)"<<G4endl;  
  G4cout<<"#setMaxStep (on/off)"<<G4endl;
  G4cout<<"#StoppingPower(on/off)"<<G4endl; 
  G4cout<<"#RadiationYield(on/off)"<<G4endl; 
  G4cout<<"#Foil(on/off)"<<G4endl;
  G4cout<<"#Hadronic(on/off)"<<G4endl; 
+
 
  G4String line, line1, line2;
  
@@ -99,8 +101,9 @@ if (argc==1){G4cout <<"Input file is not specified!"<<G4endl;}
 	 (*fin)>>line1;
          G4cout<<"Next line"<<line1<<G4endl; 
 	 if(line1=="LowE") {lowE=true;G4cout<<"arrivo ai LowEnergy"<<G4endl;}
-	 else {lowE=false;G4cout<<"non arrivo ai LowEnergy"<<G4endl;}
-         }
+	 else if (line1=="Penelope"){Penelope=true; G4cout<<Penelope<<" :gamma Penelope processes switched on"<<G4endl;
+         
+	 }}
        if (line=="#range"){line1="";(*fin)>>line1;
 
        if(line1=="on"){RangeOn=true; G4cout<<RangeOn<<"range"<<G4endl;}}       
@@ -144,7 +147,7 @@ if (line=="end"){end=false;}
   Tst50DetectorConstruction* Tst50detector = new Tst50DetectorConstruction( MaxStep);
   runManager->SetUserInitialization(Tst50detector);
 
-  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn,SP,RY,Adronic);
+  Tst50PhysicsList* fisica = new Tst50PhysicsList(lowE,RangeOn,SP,RY,Adronic,Penelope);
   runManager->SetUserInitialization(fisica);
   
 #ifdef G4VIS_USE

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PhysicsList.hh,v 1.6 2003-02-07 13:27:49 guatelli Exp $
+// $Id: Tst50PhysicsList.hh,v 1.7 2003-03-03 11:31:10 guatelli Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -44,7 +44,7 @@ class Tst50PhysicsListMessenger;
 class Tst50PhysicsList: public G4VUserPhysicsList
 {
   public:
-    Tst50PhysicsList(G4bool,G4bool,G4bool,G4bool,G4bool);
+    Tst50PhysicsList(G4bool,G4bool,G4bool,G4bool,G4bool,G4bool);
    ~Tst50PhysicsList();
 public:
   void SetRangeConditions(G4String );
@@ -82,6 +82,7 @@ private:
   G4bool Stopping;
   G4bool RadiationY;
   G4bool Adronic;
+  G4bool Penelope;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
