@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: RunAction.cc,v 1.7 2004-06-21 10:57:15 maire Exp $
+// $Id: RunAction.cc,v 1.8 2004-07-29 08:50:07 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,7 +127,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
     MscProjecTheta /= (2*Transmit[1]); MscProjecTheta2 /= (2*Transmit[1]);
     rmsMsc = MscProjecTheta2 - MscProjecTheta*MscProjecTheta;
     if (rmsMsc > 0.) rmsMsc = sqrt(rmsMsc);
-  }  
+  }
+  
+  G4double meandEdx = EnergyDeposit/(detector->GetAbsorberThickness());
+  G4double stopPower = meandEdx/(detector->GetAbsorberMaterial()->GetDensity());  
 
   G4cout << "\n ======================== run summary ======================\n";
 
@@ -138,6 +141,10 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n Total energy deposit in absorber per event = "
          << G4BestUnit(EnergyDeposit,"Energy") << " +- "
          << G4BestUnit(rmsEdep,      "Energy") << G4endl;
+	 
+  G4cout << " Mean dE/dx = " << meandEdx/(MeV/cm) << " MeV/cm"
+         << "\t stopping Power = " << stopPower/(MeV*cm2/g) << " MeV*cm2/g"
+	 << G4endl;
 
   G4cout << "\n Total track length (charged) in absorber per event = "
          << G4BestUnit(TrakLenCharged,"Length") << " +- "

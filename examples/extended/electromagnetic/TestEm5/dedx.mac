@@ -1,4 +1,4 @@
-# $Id: dedx.mac,v 1.1 2004-03-17 14:03:38 maire Exp $
+# $Id: dedx.mac,v 1.2 2004-07-29 08:50:04 maire Exp $
 #
 # macro file for TestEm5.cc
 #
@@ -7,7 +7,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setAbsMat Water   
+/testem/det/setAbsMat Graphite   
 /testem/det/setAbsThick 1 cm  
 /testem/det/setAbsYZ    1 cm
 #
@@ -21,8 +21,8 @@
 /process/eLoss/fluct false
 #
 /testem/gun/setDefault
-/gun/particle mu+ 
-/gun/energy 300 MeV
+/gun/particle e- 
+/gun/energy 500 MeV
 #
 /testem/stepMax 1 mm
 /tracking/verbose 1
