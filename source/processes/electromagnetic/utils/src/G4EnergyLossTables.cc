@@ -21,10 +21,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.cc,v 1.18 2003-01-17 18:55:55 vnivanch Exp $
+// $Id: G4EnergyLossTables.cc,v 1.19 2003-03-12 17:58:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
-// ------------------------------------------------------------------- 
+// -------------------------------------------------------------------
 // first version created by P.Urban , 06/04/1998
 // modifications + "precise" functions added by L.Urban , 27/05/98
 // modifications , TOF functions , 26/10/98, L.Urban
@@ -34,22 +34,26 @@
 // 27.09.01 L.Urban , bug fixed (negative energy deposit)
 // 26.10.01 all static functions moved from .icc files (mma)
 // 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
+// 12.03.03 Add warnings to obsolete interfaces (V.Ivanchenko)
 // -------------------------------------------------------------------
 
 #include "G4EnergyLossTables.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4RegionStore.hh"
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EnergyLossTablesHelper G4EnergyLossTables::t  ;
-const G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0; 
+const G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
 G4double G4EnergyLossTables::QQPositron = eplus*eplus ;
 G4double G4EnergyLossTables::Chargesquare ;
 G4int    G4EnergyLossTables::oldIndex = -1 ;
 G4double G4EnergyLossTables::rmin = 0. ;
 G4double G4EnergyLossTables::rmax = 0. ;
 G4double G4EnergyLossTables::Thigh = 0. ;
+G4int    G4EnergyLossTables::let_counter = 0;
+G4int    G4EnergyLossTables::let_max_num_warnings = 2;
 
 G4EnergyLossTables::helper_map G4EnergyLossTables::dict;
 
@@ -98,7 +102,7 @@ void G4EnergyLossTables::Register(
   dict[p]= G4EnergyLossTablesHelper(tDEDX, tRange,tInverseRange,
                     tLabTime,tProperTime,lowestKineticEnergy,
 		    highestKineticEnergy, massRatio,NumberOfBins);
-           
+
   t = GetTables(p) ;    // important for cache !!!!!
   lastParticle = p ;
   Chargesquare = (p->GetPDGCharge())*(p->GetPDGCharge())/
@@ -112,7 +116,7 @@ const G4PhysicsTable* G4EnergyLossTables::GetDEDXTable(
 {
   helper_map::iterator it;
   if((it=dict.find(p))==dict.end()) return 0;
-  return (*it).second.theDEDXTable;  
+  return (*it).second.theDEDXTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -175,6 +179,7 @@ G4double G4EnergyLossTables::GetDEDX(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -219,6 +224,7 @@ G4double G4EnergyLossTables::GetLabTime(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -263,6 +269,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     G4double KineticEnergyEnd,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -304,7 +311,7 @@ G4double G4EnergyLossTables::GetDeltaLabTime(
     scaledKineticEnergy = facT*KineticEnergyStart*t.theMassRatio;
   else
     scaledKineticEnergy = KineticEnergyEnd*t.theMassRatio;
- 
+
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
      timeend = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
@@ -339,6 +346,7 @@ G4double G4EnergyLossTables::GetProperTime(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -383,6 +391,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     G4double KineticEnergyEnd,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -424,7 +433,7 @@ G4double G4EnergyLossTables::GetDeltaProperTime(
     scaledKineticEnergy = facT*KineticEnergyStart*t.theMassRatio;
   else
     scaledKineticEnergy = KineticEnergyEnd*t.theMassRatio;
- 
+
   if (scaledKineticEnergy<t.theLowestKineticEnergy) {
 
      timeend = exp(ppar*log(scaledKineticEnergy/t.theLowestKineticEnergy))*
@@ -459,6 +468,7 @@ G4double G4EnergyLossTables::GetRange(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if(aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -508,6 +518,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
                                      const G4Material *aMaterial)
 // it returns the value of the kinetic energy for a given range
 {
+  CPRWarning();
   if( aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -569,7 +580,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
-
+  CPRWarning();
   if( aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -598,7 +609,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
 	      t.theHighestKineticEnergy,isOut);
 
   } else {
-    
+
       dEdx = (*dEdxTable)(materialIndex)->GetValue(
                           scaledKineticEnergy,isOut) ;
 
@@ -614,6 +625,7 @@ G4double G4EnergyLossTables::GetPreciseEnergyFromRange(
     G4double KineticEnergy,
     const G4Material *aMaterial)
 {
+  CPRWarning();
   if( aParticle != lastParticle)
   {
     t= GetTables(aParticle);
@@ -861,7 +873,7 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
- G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
+G4double G4EnergyLossTables::GetPreciseRangeFromEnergy(
     const G4ParticleDefinition *aParticle,
     G4double KineticEnergy,
     const G4MaterialCutsCouple *couple)
@@ -914,6 +926,27 @@ G4double G4EnergyLossTables::GetPreciseDEDX(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void G4EnergyLossTables::CPRWarning()
+{
+  if (let_counter <  let_max_num_warnings) {
 
+    G4cout << G4endl;
+    G4cout << "##### G4EnergyLossTable WARNING: The obsolete interface is used" << G4endl;
+    G4cout << "##### Please, substitute G4Material by G4MaterialCutsCouple" << G4endl;
+    G4cout << "##### Obsolete interface will be removed soon" << G4endl;
+    G4cout << G4endl;
+    let_counter++;
+    if ((G4RegionStore::GetInstance())->size() > 1) {
+     G4Exception("G4EnergyLossTables:: More than 1 region - table cannot be accessed");
+     exit(1);
+   }
 
+  } else if (let_counter == let_max_num_warnings) {
+
+    G4cout << "##### G4EnergyLossTable WARNING closed" << G4endl;
+    let_counter++;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

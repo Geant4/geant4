@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EnergyLossTables.hh,v 1.13 2003-01-17 18:55:54 vnivanch Exp $
+// $Id: G4EnergyLossTables.hh,v 1.14 2003-03-12 17:58:32 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // $Id:
@@ -59,6 +59,7 @@
 // 10.11.99: moved from RWT hash dictionary to STL map, G.Barrand, M.Maire
 // 26.10.01: all static functions movev from .icc to .cc file (mma)
 // 15.01.03 Add interfaces required for "cut per region" (V.Ivanchenko)
+// 12.03.03 Add warnings to obsolete interfaces (V.Ivanchenko)
 //
 // -----------------------------------------------------------------------------
 
@@ -196,6 +197,9 @@ public:
   typedef const G4ParticleDefinition* K;
 
 private:
+
+  static void CPRWarning();
+
   typedef G4std::map<K,G4EnergyLossTablesHelper,G4std::less<K> > helper_map;
   static helper_map dict;
 
@@ -207,6 +211,8 @@ private:
   static G4double Chargesquare ;
   static G4int oldIndex ;
   static G4double rmin,rmax,Thigh ;
+  static G4int  let_counter;
+  static G4int  let_max_num_warnings;
 
 };
 
