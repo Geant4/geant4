@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Element.hh,v 1.12 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Element.hh,v 1.13 2001-09-17 09:14:01 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -155,7 +155,7 @@ public:  // with description
   
   //the index of this element in the Table:
   //
-  size_t GetIndex();
+  size_t GetIndex() const;
     
   //return pointer to an element, given its name:
   //
@@ -254,7 +254,7 @@ G4Element* G4Element::GetElement(G4String elementName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-size_t G4Element::GetIndex()
+size_t G4Element::GetIndex() const
 {  
   // return the index of this Element in theElementTable
   //

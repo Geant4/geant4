@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Material.hh,v 1.15 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Material.hh,v 1.16 2001-09-17 09:14:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -238,7 +238,7 @@ public:  // with description
   size_t GetNumberOfMaterials()   {return theMaterialTable.size();};
   
   //the index of this material in the Table:    
-  size_t GetIndex();
+  size_t GetIndex() const;
     
   //return  pointer to a material, given its name:    
   static  G4Material* GetMaterial(G4String name);
@@ -360,7 +360,7 @@ G4double G4Material::GetA() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-size_t G4Material::GetIndex()
+size_t G4Material::GetIndex() const
 {  
   // return the index of this Material in theMaterialTable
   //

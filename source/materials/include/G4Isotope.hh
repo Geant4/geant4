@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Isotope.hh,v 1.11 2001-09-14 16:36:56 maire Exp $
+// $Id: G4Isotope.hh,v 1.12 2001-09-17 09:14:02 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -92,7 +92,7 @@ class G4Isotope
     static 
     size_t GetNumberOfIsotopes()      {return theIsotopeTable.size();};
     
-    size_t GetIndex();    
+    size_t GetIndex() const;    
     
     friend
     G4std::ostream& operator<<(G4std::ostream&, G4Isotope*);
@@ -145,7 +145,7 @@ G4Isotope* G4Isotope::GetIsotope(G4String isotopeName)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline
-size_t G4Isotope::GetIndex()
+size_t G4Isotope::GetIndex() const
 {  
   // return the index of this isotope in theIsotopeTable
   //
