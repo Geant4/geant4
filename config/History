@@ -1,4 +1,4 @@
-$Id: History,v 1.171 2001-11-21 09:20:54 gcosmo Exp $
+$Id: History,v 1.172 2001-11-29 16:44:32 gcosmo Exp $
 $Name: not supported by cvs2svn $
 
 -------------------------------------------------------------------
@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+29th November 2001 Gabriele Cosmo (config-V03-02-13)
+- Removed SUN-CC5.gmk configuration file. Now replaced by SUN-CC architecture
 
 21st Novemver 2001 Gabriele Cosmo (config-V03-02-12)
 - On top of "config-V03-02-11", added paths in binmake.gmk including
