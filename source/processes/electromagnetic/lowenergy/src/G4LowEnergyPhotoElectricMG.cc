@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.3 2001-09-16 09:42:47 elena Exp $
+// $Id: G4LowEnergyPhotoElectricMG.cc,v 1.4 2001-09-16 10:54:52 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -189,7 +189,7 @@ G4VParticleChange* G4LowEnergyPhotoElectricMG::PostStepDoIt(const G4Track& aTrac
   if (Z > 5){
        
     photonVector = deexcitationManager.GenerateParticles(Z,shellId);
-    for (G4int k=0; k< photonVector->size();k++)
+    for (size_t k=0; k< photonVector->size();k++)
       {
 	G4DynamicParticle* newPhoton =(*photonVector)[k];
 	if ( newPhoton != 0)
