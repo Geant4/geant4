@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSolid.hh,v 1.14 2004-09-06 08:25:43 gcosmo Exp $
+// $Id: G4VSolid.hh,v 1.15 2004-09-15 09:55:35 grichine Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -256,6 +256,12 @@ class G4VSolid
       // the polygon is described by the vertices at (0),(1),...,(n),(0) in
       // pPolygon. 
       // If the polygon is completely clipped away, the polygon is cleared.
+
+
+    G4double EstimateCubicVolume(G4int nStat, G4double epsilon);
+    // Calculate cubic volume based on Inside() method.
+    // Accuracy is limited by the second argument or the statistics
+    // expressed by the first argument.
 
 private:
 
