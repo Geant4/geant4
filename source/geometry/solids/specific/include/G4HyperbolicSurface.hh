@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.hh,v 1.4 2004-05-24 12:09:47 gcosmo Exp $
+// $Id: G4HyperbolicSurface.hh,v 1.5 2004-11-10 18:04:39 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.cc,v 1.4 2004-11-10 18:04:51 link Exp $
+// $Id: G4TwistedBoxSide.cc,v 1.1 2004-11-10 18:05:44 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +29,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedTrapSide.cc
+// G4TwistedBoxSide.cc
 //
 // Author: 
 //   Oliver Link
@@ -37,38 +37,38 @@
 
 #include <cmath>
 
-#include "G4TwistedTrapSide.hh"
+#include "G4TwistedBoxSide.hh"
 //#include "G4PolynomialSolver.hh"
 #include "G4ApproxPolySolver.hh" 
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
-				     G4double      PhiTwist,
-				     G4double      pDx1,
-				     G4double      pDx2,
-				     G4double      pDy,
-				     G4double      pDz,
-				     G4double      AngleSide)
+G4TwistedBoxSide::G4TwistedBoxSide(const G4String     &name,
+				   G4double      PhiTwist,
+				   G4double      pDx,
+				   G4double      pDy,
+				   G4double      pDz,
+				   G4double      AngleSide) 
   : G4VSurface(name)
 {  
 
-	      
+  // attention ! local coordinate system
+
   fAxis[0]    = kYAxis; // in local coordinate system
   fAxis[1]    = kZAxis;
+
+  fDx = pDx ;
+  fDy = pDy ;
+  fDz = pDz ;
+
+  fPhiTwist = PhiTwist ;     // dphi
+  fAngleSide = AngleSide ;  // 0,90,180,270 deg
+  
   fAxisMin[0] = -pDy ;  // Y Axis boundary
   fAxisMax[0] = pDy ;
   fAxisMin[1] = -pDz ;      // Z Axis boundary
   fAxisMax[1] = pDz ;
-  
-  fDx1  = pDx1 ;
-  fDx2  = pDx2 ;
-  fDy   = pDy ;
-  fDz   = pDz ;
-
-  fPhiTwist = PhiTwist ;     // dphi
-  fAngleSide = AngleSide ;  // 0,90,180,270 deg
   
   fRot.rotateZ( AngleSide ) ; 
   
@@ -85,14 +85,14 @@ G4TwistedTrapSide::G4TwistedTrapSide(const G4String     &name,
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistedTrapSide::~G4TwistedTrapSide()
+G4TwistedBoxSide::~G4TwistedBoxSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4TwistedTrapSide::GetNormal(const G4ThreeVector &tmpxx, 
+G4ThreeVector G4TwistedBoxSide::GetNormal(const G4ThreeVector &tmpxx, 
                                                 G4bool isGlobal) 
 {
    // GetNormal returns a normal vector at a surface (or very close
@@ -137,7 +137,7 @@ G4ThreeVector G4TwistedTrapSide::GetNormal(const G4ThreeVector &tmpxx,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
                                           const G4ThreeVector &gv,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
@@ -184,12 +184,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
   G4double PhiR = -1024 ;
  
   G4double L = 2*fDz ;
-  G4double a = 2*fDx2 ;
-  G4double d = 2*fDx1 ;
-  G4double b = 2*fDy ;
-
-  G4double amd = a-d ;
-  G4double apd = a+d ;
+  G4double a = 2*fDx ;
 
   // special case vz = 0
 
@@ -198,9 +193,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     if ( fabs(p.z()) <= L ) {     // intersection possible in z
  
       PhiR = p.z() * fPhiTwist / L ;  // phi is determined by the z-position 
-      uR =  (b*(4*p.y()*v.x() - 4*p.x()*v.y() + apd*v.y()*cos(PhiR) - apd*v.x()*sin(PhiR)))/
-	(2.*((2*b*v.x() - amd *v.y())*cos(PhiR) + ( amd * v.x() + 2*b*v.y())*sin(PhiR)));
-
+      uR = (2*p.y()*v.x() - 2*p.x()*v.y() + a*v.y()*cos(PhiR) - a*v.x()*sin(PhiR) ) /
+	(2*v.x()*cos(PhiR) + 2*v.y()*sin(PhiR)) ;
       //      G4cout  << "solution vz = 0 : "  << PhiR << " , " << uR << G4endl ;
 
     }
@@ -225,20 +219,12 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
   else {
 
+    G4double phipzvx = fPhiTwist*p.z()*v.x()  ;
+    G4double phipzvy = fPhiTwist*p.z()*v.y() ;
 
     G4double phivz   = fPhiTwist*v.z();
-    G4double phipz   = fPhiTwist*p.z();
-
-    G4double phixz = phivz * p.x() - phipz*v.x() ;
-    G4double phiyz = phivz * p.y() - phipz*v.y() ;
-
-    G4double amd3 = 3*amd ;
-    G4double amd6 = 6*amd ;
-    G4double Lvx = L*v.x() ;
-    G4double Lvy = L*v.y() ;
-    G4double b2  = b*2 ;
-    G4double b6  = b*6 ;
-    G4double b12 = b*12 ;
+    G4double phipxvz = phivz * p.x() ;
+    G4double phipyvz = phivz * p.y() ;
 
     G4double c[5],s[4] ;  
 
@@ -250,19 +236,17 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     G4cout << " Point P = " << p << G4endl ;
     G4cout << " Direction v = " << v << G4endl ;
     G4cout << " a = " << a << G4endl ;
-    G4cout << " d = " << d << G4endl ;
-    G4cout << " b = " << b << G4endl ;
     G4cout << " L = " << L << G4endl ;
     G4cout << " twist = " << fPhiTwist << G4endl ;
     G4cout << " ---------------------------------- " << G4endl ;
 #endif
     
-    G4double ctmp =   - b2*Lvy       - amd*Lvx;
-    c[0] = ( b12*phixz - amd6*phiyz  - 3*b*apd*phivz          ) / ctmp ;
-    c[1] = ( b12*Lvx +   amd6*phixz  - amd6*Lvy  + b12*phiyz    ) / ctmp ;
-    c[2] = ( b12*Lvy +   amd3*phiyz  + amd6*Lvx  - b6 *phixz    ) / ctmp ;
-    c[3] = ( -b6*Lvx -   amd *phixz  + amd3*Lvy  - b2 *phiyz    ) / ctmp ;
-    c[4] = 1 ;
+    G4double ctmp = -4*L*v.y() + 6*a*phivz ;
+    c[0] = ( - 60*phipzvx - 30*a*phivz + 60*phipxvz ) / ctmp  ;
+    c[1] = ( 60*L*v.x() - 60*phipzvy + 60*phipyvz ) / ctmp  ;
+    c[2] = ( 24*phipzvx + 60*L*v.y() - 3*a*phivz - 24*phipxvz ) / ctmp ;
+    c[3] = ( -24*L*v.x() + 4*phipzvy - 4*phipyvz ) / ctmp ;
+    c[4] = 1 ;  // normal form of polynom (c4 = 1 )
     
   // solve the polynom analytically
     G4ApproxPolySolver trapEq ;
@@ -284,8 +268,8 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       G4double ztmp = L*s[i]/fPhiTwist ;
       if ( fabs(ztmp)<fDz+ctol ) {
 	PhiR = stmp ;
-	uR = b * ( 4*phiyz + 4*Lvy*PhiR - apd*phivz*sin(PhiR) ) / (2.*phivz*(2*b*cos(PhiR) + amd*sin(PhiR) )) ;
-
+	uR = (2*L*PhiR*v.y() - 2*phipzvy + 2*phipyvz - a*phivz * sin(PhiR))/(2.*phivz*cos(PhiR)) ;
+	
 #ifdef G4SPECSDEBUG
 	G4cout << "solution " << i << " = " << PhiR << " , " << uR  << G4endl ;
 #endif
@@ -293,7 +277,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
     }
 
     if ( PhiR < -1000 ) {
-    //    G4cout << "TwistedTrapSide::DistanceToSurface problem with reconstruction" << G4endl ;
+    //    G4cout << "TwistedBoxSide::DistanceToSurface problem with reconstruction" << G4endl ;
       distance[0] = kInfinity;
       gxx[0]      = ComputeGlobalPoint(xx[0]);
       isvalid[0] = false ;
@@ -377,7 +361,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
       if (distance[0] >= 0) isvalid[0] = true;
     }
   } else { // kDontValidate
-    G4Exception("G4TwistedTrapSide::DistanceToSurface()",
+    G4Exception("G4TwistedBoxSide::DistanceToSurface()",
 		"NotImplemented kDontValidate", FatalException,
 		"Feature NOT implemented !");
   }
@@ -400,7 +384,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface -------------------------------------------------
 
-G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4TwistedBoxSide::DistanceToSurface(const G4ThreeVector &gp,
                                                 G4ThreeVector  gxx[],
                                                 G4double       distance[],
                                                 G4int          areacode[])
@@ -507,7 +491,7 @@ G4int G4TwistedTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* GetAreaCode -------------------------------------------------------
 
-G4int G4TwistedTrapSide::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4TwistedBoxSide::GetAreaCode(const G4ThreeVector &xx, 
                                           G4bool withTol)
 {
    // We must use the function in local coordinate system.
@@ -520,7 +504,6 @@ G4int G4TwistedTrapSide::GetAreaCode(const G4ThreeVector &xx,
    GetPhiUAtX(xx, phi,yprime ) ;
 
 #ifdef G4SPECSDEBUG
-   G4cout << "GetAreaCode: phi = " << phi << G4endl ;
    G4cout << "GetAreaCode: yprime = " << yprime << G4endl ;
 #endif
 
@@ -601,7 +584,7 @@ G4int G4TwistedTrapSide::GetAreaCode(const G4ThreeVector &xx,
       }
       return areacode;
    } else {
-      G4Exception("G4TwistedTrapSide::GetAreaCode()",
+      G4Exception("G4TwistedBoxSide::GetAreaCode()",
                   "NotImplemented", FatalException,
                   "Feature NOT implemented !");
    }
@@ -611,7 +594,7 @@ G4int G4TwistedTrapSide::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners() ------------------------------------------------------
 
-void G4TwistedTrapSide::SetCorners()
+void G4TwistedBoxSide::SetCorners()
 {
 
   // Set Corner points in local coodinate.   
@@ -619,40 +602,38 @@ void G4TwistedTrapSide::SetCorners()
   if (fAxis[0] == kYAxis && fAxis[1] == kZAxis) {
     
     G4double x, y, z;
-    G4double a1cos = fDx1 * cos(fPhiTwist/2) ;
-    G4double a1sin = fDx1 * sin(fPhiTwist/2) ;
-    G4double a2cos = fDx2 * cos(fPhiTwist/2) ;
-    G4double a2sin = fDx2 * sin(fPhiTwist/2) ;
+    G4double acos = fDx * cos(fPhiTwist/2) ;
+    G4double asin = fDx * sin(fPhiTwist/2) ;
     G4double bcos = fDy * cos(fPhiTwist/2) ;
     G4double bsin = fDy * sin(fPhiTwist/2) ;
 
     // corner of Axis0min and Axis1min
-    x = a1cos - bsin ;
-    y = -a1sin - bcos ;
+    x = acos - bsin ;
+    y = -asin - bcos ;
     z = -fDz ;
     SetCorner(sC0Min1Min, x, y, z);
       
     // corner of Axis0max and Axis1min
-    x = a2cos + bsin ;
-    y = -a2sin + bcos ;
+    x = acos + bsin ;
+    y = -asin + bcos ;
     z = -fDz ;
     SetCorner(sC0Max1Min, x, y, z);
       
     // corner of Axis0max and Axis1max
-    x = a2cos - bsin ;
-    y = a2sin + bcos ;
+    x = acos - bsin ;
+    y = asin + bcos ;
       z = fDz ;
     SetCorner(sC0Max1Max, x, y, z);
       
     // corner of Axis0min and Axis1max
-    x = a1cos + bsin ;
-    y = a1sin - bcos ;
+    x = acos + bsin ;
+    y = asin - bcos ;
     z = fDz ;
     SetCorner(sC0Min1Max, x, y, z);
 
   } else {
 
-    G4Exception("G4TwistedTrapSide::SetCorners()",
+    G4Exception("G4TwistedBoxSide::SetCorners()",
 		"NotImplemented", FatalException,
 		"Method NOT implemented !");
   }
@@ -661,7 +642,7 @@ void G4TwistedTrapSide::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4TwistedTrapSide::SetBoundaries()
+void G4TwistedBoxSide::SetBoundaries()
 {
    // Set direction-unit vector of boundary-lines in local coodinate. 
    //   
@@ -696,7 +677,7 @@ void G4TwistedTrapSide::SetBoundaries()
     
   } else {
     
-  G4Exception("G4TwistedTrapSide::SetCorners()",
+  G4Exception("G4TwistedBoxSide::SetCorners()",
 	      "NotImplemented", FatalException,
 	      "Feature NOT implemented !");
   }
@@ -705,16 +686,14 @@ void G4TwistedTrapSide::SetBoundaries()
 
 
 
-void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
+void G4TwistedBoxSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u) 
 {
   // find closest point XX on surface for a given point p
   // X0 is a point on the surface,  d is the direction ( both for a fixed z = pz)
   
   phi = p.z()/(2*fDz)*fPhiTwist ;
-  G4ThreeVector  X0 ( Xcoef(0.) * cos(phi), Xcoef(0.) * sin(phi) , p.z() ) ;  // basis with u=0
-  G4ThreeVector dvec  ( - (fDx1-fDx2)/(2*fDy) * cos(phi) - sin(phi), 
-			cos(phi) - (fDx1-fDx2)/(2*fDy)*sin(phi) ,
-			0. ) ;   // direction vector
+  G4ThreeVector  X0 ( fDx * cos(phi), fDx * sin(phi) , p.z() ) ;  // basis with u=0
+  G4ThreeVector dvec  ( - sin(phi), cos(phi) ,0. ) ;   // direction vector
   G4ThreeVector xx ;                                   // the intersection point on the line
 
   DistanceToLine(p ,X0 , dvec , xx) ;
@@ -724,7 +703,7 @@ void G4TwistedTrapSide::GetPhiUAtX( G4ThreeVector p, G4double &phi, G4double &u)
 }
 
 
-G4ThreeVector G4TwistedTrapSide::ProjectPoint(const G4ThreeVector &p, 
+G4ThreeVector G4TwistedBoxSide::ProjectPoint(const G4ThreeVector &p, 
                                                     G4bool isglobal) 
 {
   // Get Rho at p.z() on Hyperbolic Surface.

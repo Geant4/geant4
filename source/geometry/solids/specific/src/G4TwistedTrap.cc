@@ -20,8 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-//
-// $Id: G4TwistedTrapezoid.cc,v 1.4 2004-10-10 10:40:00 johna Exp $
+// $Id: G4TwistedTrap.cc,v 1.1 2004-11-10 18:05:45 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,7 +28,7 @@
 // GEANT 4 class source file
 //
 //
-// G4TwistedTrapezoid.cc
+// G4TwistedTrap.cc
 //
 // Author: 
 //   01-Aug-2002 - Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
@@ -37,11 +36,12 @@
 // History:
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
+//   04-Nov-2004   rename G4TwistedTrapezoid ->  G4TwistedBox
 // --------------------------------------------------------------------
 
 // #define DISTANCETOIN
 
-#include "G4TwistedTrapezoid.hh"
+#include "G4TwistedTrap.hh"
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -61,35 +61,39 @@
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4TwistedTrapezoid::G4TwistedTrapezoid(const G4String &pname,
-				       G4double  twistedangle,
-				       G4double  halfSideX,
-				       G4double  halfSideY,
-				       G4double  halfSideZ)
+G4TwistedTrap::G4TwistedTrap(const G4String &pname,
+			     G4double  twistedangle,
+			     G4double  pDx1,
+			     G4double  pDx2,
+			     G4double  pDy,
+			     G4double  pDz)
+
   : G4VSolid(pname), 
      fLowerEndcap(0), fUpperEndcap(0), fSide0(0),
-    fSide90(0), fSide180(0), fSide270(0), fpPolyhedron (0)
+    fSide90(0), fSide180(0), fSide270(0)
 {
 
-  if ( (    halfSideX  > 2*kCarTolerance)
-       && ( halfSideY  > 2*kCarTolerance)
-       && ( halfSideZ   > 2*kCarTolerance) 
+  if ( (    pDx1  > 2*kCarTolerance)
+       && ( pDx2  > 2*kCarTolerance)
+       && ( pDy   > 2*kCarTolerance)
+       && ( pDz   > 2*kCarTolerance) 
        && ( fabs(twistedangle) > 2*kAngTolerance )
        && ( fabs(twistedangle) < M_PI/2 ) )
     {
       
-      SetFields(twistedangle, halfSideX, halfSideY, halfSideZ);
+      SetFields(twistedangle, pDx1, pDx2, pDy, pDz);
       CreateSurfaces();
+      fCubicVolume = 8 * ( pDx1 + pDx2 ) / 2 * pDy * pDz ; 
 
   }
   else
     {
-      G4cerr << "ERROR - G4TwistedTrapezoid()::G4TwistedTrapezoid(): " << GetName() << G4endl
+      G4cerr << "ERROR - G4TwistedTrap()::G4TwistedTrap(): " << GetName() << G4endl
 	     << "        Dimensions too small ! - "
-	     << halfSideX << ", " << halfSideY << ", " << halfSideZ << G4endl 
+	     << pDx1 << ", " << pDx2 << ", " << pDy << ", " << pDz << G4endl 
 	     << " twistangle " << twistedangle/deg << " deg" << G4endl ;
       
-      G4Exception("G4TwistedTrapezoid::G4TwistedTrapezoid()", "InvalidSetup",
+      G4Exception("G4TwistedTrap::G4TwistedTrap()", "InvalidSetup",
 		  FatalException, "Invalid dimensions. Too small, or twist angle too big.");
     }
   
@@ -100,7 +104,7 @@ G4TwistedTrapezoid::G4TwistedTrapezoid(const G4String &pname,
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4TwistedTrapezoid::~G4TwistedTrapezoid()
+G4TwistedTrap::~G4TwistedTrap()
 {
 
   if (fLowerEndcap) delete fLowerEndcap ;
@@ -117,7 +121,7 @@ G4TwistedTrapezoid::~G4TwistedTrapezoid()
 //=====================================================================
 //* ComputeDimensions -------------------------------------------------
 
-void G4TwistedTrapezoid::ComputeDimensions(G4VPVParameterisation* ,
+void G4TwistedTrap::ComputeDimensions(G4VPVParameterisation* ,
                               const G4int ,
                               const G4VPhysicalVolume* )
 {
@@ -131,14 +135,16 @@ void G4TwistedTrapezoid::ComputeDimensions(G4VPVParameterisation* ,
 //=====================================================================
 //* CalculateExtent ---------------------------------------------------
 
-G4bool G4TwistedTrapezoid::CalculateExtent( const EAxis        pAxis,
+G4bool G4TwistedTrap::CalculateExtent( const EAxis        pAxis,
                                        const G4VoxelLimits     &pVoxelLimit,
                                        const G4AffineTransform &pTransform,
                                              G4double          &pMin,
                                              G4double          &pMax ) const
 {
 
-  G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
+
+  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
 
   if (!pTransform.IsRotated())
     {
@@ -191,8 +197,8 @@ G4bool G4TwistedTrapezoid::CalculateExtent( const EAxis        pAxis,
 	    }
 	}
       zoffset = pTransform.NetTranslation().z() ;
-      zMin    = zoffset - fZHalfLength ;
-      zMax    = zoffset + fZHalfLength ;
+      zMin    = zoffset - fDz ;
+      zMax    = zoffset + fDz ;
       
       if (pVoxelLimit.IsZLimited())
 	{
@@ -316,7 +322,7 @@ G4bool G4TwistedTrapezoid::CalculateExtent( const EAxis        pAxis,
 }
 
 G4ThreeVectorList*
-G4TwistedTrapezoid::CreateRotatedVertices(const G4AffineTransform& pTransform) const
+G4TwistedTrap::CreateRotatedVertices(const G4AffineTransform& pTransform) const
 {
   G4ThreeVectorList* vertices = new G4ThreeVectorList();
   vertices->reserve(8);
@@ -324,16 +330,17 @@ G4TwistedTrapezoid::CreateRotatedVertices(const G4AffineTransform& pTransform) c
   if (vertices)
   {
 
-    G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
+    G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+    G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
 
-    G4ThreeVector vertex0(-maxRad,-maxRad,-fZHalfLength) ;
-    G4ThreeVector vertex1(maxRad,-maxRad,-fZHalfLength) ;
-    G4ThreeVector vertex2(maxRad,maxRad,-fZHalfLength) ;
-    G4ThreeVector vertex3(-maxRad,maxRad,-fZHalfLength) ;
-    G4ThreeVector vertex4(-maxRad,-maxRad,fZHalfLength) ;
-    G4ThreeVector vertex5(maxRad,-maxRad,fZHalfLength) ;
-    G4ThreeVector vertex6(maxRad,maxRad,fZHalfLength) ;
-    G4ThreeVector vertex7(-maxRad,maxRad,fZHalfLength) ;
+    G4ThreeVector vertex0(-maxRad,-maxRad,-fDz) ;
+    G4ThreeVector vertex1(maxRad,-maxRad,-fDz) ;
+    G4ThreeVector vertex2(maxRad,maxRad,-fDz) ;
+    G4ThreeVector vertex3(-maxRad,maxRad,-fDz) ;
+    G4ThreeVector vertex4(-maxRad,-maxRad,fDz) ;
+    G4ThreeVector vertex5(maxRad,-maxRad,fDz) ;
+    G4ThreeVector vertex6(maxRad,maxRad,fDz) ;
+    G4ThreeVector vertex7(-maxRad,maxRad,fDz) ;
 
     vertices->push_back(pTransform.TransformPoint(vertex0));
     vertices->push_back(pTransform.TransformPoint(vertex1));
@@ -347,7 +354,7 @@ G4TwistedTrapezoid::CreateRotatedVertices(const G4AffineTransform& pTransform) c
   else
   {
     DumpInfo();
-    G4Exception("G4TwistedTrapezoid::CreateRotatedVertices()",
+    G4Exception("G4TwistedTrap::CreateRotatedVertices()",
                 "FatalError", FatalException,
                 "Error in allocation of vertices. Out of memory !");
   }
@@ -357,7 +364,7 @@ G4TwistedTrapezoid::CreateRotatedVertices(const G4AffineTransform& pTransform) c
 //=====================================================================
 //* Inside ------------------------------------------------------------
 
-EInside G4TwistedTrapezoid::Inside(const G4ThreeVector& p) const
+EInside G4TwistedTrap::Inside(const G4ThreeVector& p) const
 {
 
    G4ThreeVector *tmpp;
@@ -372,42 +379,45 @@ EInside G4TwistedTrapezoid::Inside(const G4ThreeVector& p) const
 
    *tmpin = kOutside ;
 
-   G4double phi = - p.z()/(2*fZHalfLength) * fPhiTwist ;
+   G4double phi = - p.z()/(2*fDz) * fPhiTwist ;  // rotate the point to z=0
    G4double cphi = cos(phi) ;
    G4double sphi = sin(phi) ;
    G4double posx = p.x() * cphi - p.y() * sphi   ;
    G4double posy = p.x() * sphi + p.y() * cphi   ;
    G4double posz = p.z()  ;
 
-#ifdef G4SPECSDEBUG
-   G4cout << "inside called: p = " << p << G4endl ; 
-   G4cout << "Trapezoid is 1/2*(x,y,z) : " << fHalfSides[0] << ", " << 
-   fHalfSides[1] << ", " << fZHalfLength << G4endl ;
+   G4double wpos = fDx2 + ( fDx1-fDx2)/2. - posy * (fDx1-fDx2)/(2*fDy) ;
 
-   G4cout << "distanceToOut = ( " << 
-    posx << ", " <<
-    posy << ", " <<
-    posz <<") " <<
-    G4endl ;
+
+#ifdef G4SPECSDEBUG
+
+   G4cout << "inside called: p = " << p << G4endl ; 
+   G4cout << "Trapezoid is 1/2*(x,y,z) : " << fDx1 << ", " << fDx2 << ", " << 
+   fDy << ", " << fDz << G4endl ;
+   G4cout << "posx = " << posx << G4endl ;
+   G4cout << "posy = " << posy << G4endl ;
+
+  G4cout << "wpos = " << wpos << G4endl ;
+
 #endif 
 
-  if ( fabs(posx) <= fHalfSides[0] - kCarTolerance*0.5 )
+  if ( fabs(posx) <= wpos - kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fHalfSides[1] - kCarTolerance*0.5 )
+    if (fabs(posy) <= fDy - kCarTolerance*0.5 )
     {
-      if      (fabs(posz) <= fZHalfLength - kCarTolerance*0.5 ) *tmpin = kInside ;
-      else if (fabs(posz) <= fZHalfLength + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if      (fabs(posz) <= fDz - kCarTolerance*0.5 ) *tmpin = kInside ;
+      else if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
-    else if (fabs(posy) <= fHalfSides[1] + kCarTolerance*0.5 )
+    else if (fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fZHalfLength + kCarTolerance*0.5 ) *tmpin = kSurface ;
+      if (fabs(posz) <= fDz + kCarTolerance*0.5 ) *tmpin = kSurface ;
     }
   }
-  else if (fabs(posx) <= fHalfSides[0] + kCarTolerance*0.5 )
+  else if (fabs(posx) <= wpos + kCarTolerance*0.5 )
   {
-    if (fabs(posy) <= fHalfSides[1] + kCarTolerance*0.5 )
+    if (fabs(posy) <= fDy + kCarTolerance*0.5 )
     {
-      if (fabs(posz) <= fZHalfLength + kCarTolerance*0.5) *tmpin = kSurface ;
+      if (fabs(posz) <= fDz + kCarTolerance*0.5) *tmpin = kSurface ;
     }
   }
   
@@ -418,7 +428,7 @@ EInside G4TwistedTrapezoid::Inside(const G4ThreeVector& p) const
 //=====================================================================
 //* SurfaceNormal -----------------------------------------------------
 
-G4ThreeVector G4TwistedTrapezoid::SurfaceNormal(const G4ThreeVector& p) const
+G4ThreeVector G4TwistedTrap::SurfaceNormal(const G4ThreeVector& p) const
 {
    //
    // return the normal unit vector to the Hyperbolical Surface at a point 
@@ -471,7 +481,7 @@ G4ThreeVector G4TwistedTrapezoid::SurfaceNormal(const G4ThreeVector& p) const
 //=====================================================================
 //* DistanceToIn (p, v) -----------------------------------------------
 
-G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p,
+G4double G4TwistedTrap::DistanceToIn (const G4ThreeVector& p,
                                       const G4ThreeVector& v ) const
 {
 
@@ -568,7 +578,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p,
 //=====================================================================
 //* DistanceToIn (p) --------------------------------------------------
 
-G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
+G4double G4TwistedTrap::DistanceToIn (const G4ThreeVector& p) const
 {
    // DistanceToIn(p):
    // Calculate distance to surface of shape from `outside',
@@ -610,13 +620,15 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
          // Initialize
 
 	G4double safex, safey, safez, safe = 0.0 ;
-	G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
+
+	G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+	G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
 
 	G4cout << "maxRad = " << maxRad << G4endl ;
 
 	safex = fabs(p.x()) - maxRad ;
 	safey = fabs(p.y()) - maxRad ;
-	safez = fabs(p.z()) - fZHalfLength ;
+	safez = fabs(p.z()) - fDz ;
 	
 	if (safex > safe) safe = safex ;
 	if (safey > safe) safe = safey ;
@@ -629,7 +641,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
 
 
       default : {
-         G4Exception("G4TwistedTrapezoid::DistanceToIn(p)", "InvalidCondition",
+         G4Exception("G4TwistedTrap::DistanceToIn(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -637,7 +649,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
 }
 #else
 
-G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
+G4double G4TwistedTrap::DistanceToIn (const G4ThreeVector& p) const
 {
    // DistanceToIn(p):
    // Calculate distance to surface of shape from `outside',
@@ -708,7 +720,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
       }
 
       default : {
-         G4Exception("G4TwistedTrapezoid::DistanceToIn(p)", "InvalidCondition",
+         G4Exception("G4TwistedTrap::DistanceToIn(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -720,7 +732,7 @@ G4double G4TwistedTrapezoid::DistanceToIn (const G4ThreeVector& p) const
 //=====================================================================
 //* DistanceToOut (p, v) ----------------------------------------------
 
-G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p,
+G4double G4TwistedTrap::DistanceToOut( const G4ThreeVector& p,
                                        const G4ThreeVector& v,
                                        const G4bool calcNorm,
                                        G4bool *validNorm, G4ThreeVector *norm ) const
@@ -814,12 +826,11 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p,
    return fLastDistanceToOutWithV.value;
 }
 
-
 #ifdef DISTANCETOIN
 //=====================================================================
 //* DistanceToOut (p) ----------------------------------------------
 
-G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
+G4double G4TwistedTrap::DistanceToOut( const G4ThreeVector& p ) const
 {
    // DistanceToOut(p):
    // Calculate distance to surface of shape from `inside', 
@@ -858,16 +869,17 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
       case (kInside) : {
          // Initialize
 
-	G4double      rmin = ( fHalfSides[0] < fHalfSides[1] )
-	  ? fHalfSides[0] : fHalfSides[1]  ;
+	G4double      rminX = ( fDx1 < fDx2  ? fDx1 : fDx2 )  ;
+	G4double      rmin = (  rminX < fDy  ? rminX : fDy )  ;
+
 	G4double safx1,safx2,safy1,safy2,safz1,safz2,safe=0.0;
 
 	safx1 = rmin - p.x() ;
 	safx2 = rmin + p.x() ;
 	safy1 = rmin - p.y() ;
 	safy2 = rmin + p.y() ;
-	safz1 = fZHalfLength - p.z() ;
-	safz2 = fZHalfLength + p.z() ;  
+	safz1 = fDz - p.z() ;
+	safz2 = fDz + p.z() ;  
 	
   // shortest Dist to any boundary now MIN(safx1,safx2,safy1..)
 
@@ -886,7 +898,7 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
       }
       
       default : {
-        G4Exception("G4TwistedTrapezoid::DistanceToOut(p)", "InvalidCondition",
+        G4Exception("G4TwistedTrap::DistanceToOut(p)", "InvalidCondition",
 		 FatalException, "Unknown point location!");
       }
 
@@ -898,7 +910,7 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
 
 #else
 
-G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
+G4double G4TwistedTrap::DistanceToOut( const G4ThreeVector& p ) const
 {
    // DistanceToOut(p):
    // Calculate distance to surface of shape from `inside', 
@@ -969,7 +981,7 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
       }
       
       default : {
-         G4Exception("G4TwistedTrapezoid::DistanceToOut(p)", "InvalidCondition",
+         G4Exception("G4TwistedTrap::DistanceToOut(p)", "InvalidCondition",
                      FatalException, "Unknown point location!");
       }
    } // switch end
@@ -982,7 +994,7 @@ G4double G4TwistedTrapezoid::DistanceToOut( const G4ThreeVector& p ) const
 //=====================================================================
 //* StreamInfo --------------------------------------------------------
 
-std::ostream& G4TwistedTrapezoid::StreamInfo(std::ostream& os) const
+std::ostream& G4TwistedTrap::StreamInfo(std::ostream& os) const
 {
   //
   // Stream object contents to an output stream
@@ -990,7 +1002,7 @@ std::ostream& G4TwistedTrapezoid::StreamInfo(std::ostream& os) const
   os << "-----------------------------------------------------------\n"
      << "    *** Dump for solid - " << GetName() << " ***\n"
      << "    ===================================================\n"
-     << " Solid type: G4TwistedTrapezoid\n"
+     << " Solid type: G4TwistedTrap\n"
      << " Parameters: \n"
      << "    Twist angle   : " << fPhiTwist/degree << " degrees \n"
      << "-----------------------------------------------------------\n";
@@ -1002,7 +1014,7 @@ std::ostream& G4TwistedTrapezoid::StreamInfo(std::ostream& os) const
 //=====================================================================
 //* DiscribeYourselfTo ------------------------------------------------
 
-void G4TwistedTrapezoid::DescribeYourselfTo (G4VGraphicsScene& scene) const 
+void G4TwistedTrap::DescribeYourselfTo (G4VGraphicsScene& scene) const 
 {
   scene.AddThis (*this);
 }
@@ -1010,20 +1022,21 @@ void G4TwistedTrapezoid::DescribeYourselfTo (G4VGraphicsScene& scene) const
 //=====================================================================
 //* GetExtent ---------------------------------------------------------
 
-G4VisExtent G4TwistedTrapezoid::GetExtent() const 
+G4VisExtent G4TwistedTrap::GetExtent() const 
 {
 
-  G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
+  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
 
   return G4VisExtent(-maxRad, maxRad ,
 		     -maxRad, maxRad ,
-		     -fZHalfLength, fZHalfLength );
+		     -fDz, fDz );
 }
 
 //=====================================================================
 //* CreatePolyhedron --------------------------------------------------
 
-G4Polyhedron* G4TwistedTrapezoid::CreatePolyhedron () const 
+G4Polyhedron* G4TwistedTrap::CreatePolyhedron () const 
 {
    //  return new G4PolyhedronHype (fRMin, fRMax, fDz, fSPhi, fDPhi);
    return 0;
@@ -1032,41 +1045,33 @@ G4Polyhedron* G4TwistedTrapezoid::CreatePolyhedron () const
 //=====================================================================
 //* CreateNUBS --------------------------------------------------------
 
-G4NURBS* G4TwistedTrapezoid::CreateNURBS () const 
+G4NURBS* G4TwistedTrap::CreateNURBS () const 
 {
-  G4double maxRad = sqrt( fHalfSides[0]*fHalfSides[0] + fHalfSides[1]*fHalfSides[1]);
-   return new G4NURBStube(maxRad, maxRad, fZHalfLength); 
+  G4double maxSide = ( fDx1 > fDx2 ? fDx1 : fDx2 ) ;
+  G4double maxRad = sqrt( maxSide*maxSide + fDy*fDy);
+
+  return new G4NURBStube(maxRad, maxRad, fDz); 
    // Tube for now!!!
-}
-
-//=====================================================================
-//* GetPolyhedron -----------------------------------------------------
-
-G4Polyhedron* G4TwistedTrapezoid::GetPolyhedron () const
-{
-  if (!fpPolyhedron)
-    {
-      fpPolyhedron = CreatePolyhedron ();
-    }
-  return fpPolyhedron;
 }
 
 //=====================================================================
 //* CreateSurfaces ----------------------------------------------------
 
-void G4TwistedTrapezoid::CreateSurfaces() 
+void G4TwistedTrap::CreateSurfaces() 
 {
    
    // create 6 surfaces of TwistedTub.
 
-   fSide0 = new G4TwistedTrapSide("0deg", fPhiTwist, fZHalfLength, fHalfSides, 0.*deg ,1) ;
-   fSide90 = new G4TwistedTrapSide("90deg", fPhiTwist, fZHalfLength, fHalfSides, 90.*deg,-1) ;
-   fSide180 = new G4TwistedTrapSide("180deg", fPhiTwist, fZHalfLength, fHalfSides, 180.*deg,1) ;
-   fSide270 = new G4TwistedTrapSide("270deg", fPhiTwist, fZHalfLength, fHalfSides, 270.*deg,-1) ;
 
-   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist,fZHalfLength, fHalfSides,1 ) ;
-   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist,fZHalfLength, fHalfSides,-1 ) ;
+   fSide0 = new G4TwistedTrapSide("0deg",     fPhiTwist, fDx1, fDx2, fDy, fDz, 0.*deg ) ;
+   fSide180 = new G4TwistedTrapSide("180deg", fPhiTwist, fDx2, fDx1, fDy, fDz, 180.*deg) ;
 
+   fSide90  = new G4TwistedBoxSide("90deg",  fPhiTwist, fDy, fDx2, fDz, 90.*deg) ;
+   fSide270 = new G4TwistedBoxSide("270deg", fPhiTwist, fDy, fDx1, fDz, 270.*deg) ;
+
+   fUpperEndcap = new G4FlatTrapSide("UpperCap",fPhiTwist, fDx1, fDx2, fDy, fDz,  1 ) ;
+   fLowerEndcap = new G4FlatTrapSide("LowerCap",fPhiTwist, fDx1, fDx2, fDy, fDz, -1 ) ;
+ 
    // Set neighbour surfaces
 
    fSide0->SetNeighbours(  fSide270 , fLowerEndcap , fSide90  , fUpperEndcap );
@@ -1082,7 +1087,7 @@ void G4TwistedTrapezoid::CreateSurfaces()
 //=====================================================================
 //* GetEntityType -----------------------------------------------------
 
-G4GeometryType G4TwistedTrapezoid::GetEntityType() const
+G4GeometryType G4TwistedTrap::GetEntityType() const
 {
-  return G4String("G4TwistedTrapezoid");
+  return G4String("G4TwistedTrap");
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.cc,v 1.7 2004-10-06 07:14:37 link Exp $
+// $Id: G4VSurface.cc,v 1.8 2004-11-10 18:04:54 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -45,10 +45,10 @@ const G4int  G4VSurface::sOutside        = 0x00000000;
 const G4int  G4VSurface::sInside         = 0x10000000;
 const G4int  G4VSurface::sBoundary       = 0x20000000;
 const G4int  G4VSurface::sCorner         = 0x40000000;
-const G4int  G4VSurface::sCMin1Min       = 0x40000101; 
-const G4int  G4VSurface::sCMax1Min       = 0x40000201;
-const G4int  G4VSurface::sCMax1Max       = 0x40000202; 
-const G4int  G4VSurface::sCMin1Max       = 0x40000102; 
+const G4int  G4VSurface::sC0Min1Min       = 0x40000101; 
+const G4int  G4VSurface::sC0Max1Min       = 0x40000201;
+const G4int  G4VSurface::sC0Max1Max       = 0x40000202; 
+const G4int  G4VSurface::sC0Min1Max       = 0x40000102; 
 const G4int  G4VSurface::sAxisMin        = 0x00000101; 
 const G4int  G4VSurface::sAxisMax        = 0x00000202; 
 const G4int  G4VSurface::sAxisX          = 0x00000404;
@@ -677,13 +677,13 @@ void G4VSurface::SetCorner(G4int areacode, G4double x, G4double y, G4double z)
                  FatalException, "Area code must represents corner.");
    }
 
-   if ((areacode & sCMin1Min) == sCMin1Min) {
+   if ((areacode & sC0Min1Min) == sC0Min1Min) {
       fCorners[0].set(x, y, z);
-   } else if ((areacode & sCMax1Min) == sCMax1Min) {
+   } else if ((areacode & sC0Max1Min) == sC0Max1Min) {
       fCorners[1].set(x, y, z);
-   } else if ((areacode & sCMax1Max) == sCMax1Max) {
+   } else if ((areacode & sC0Max1Max) == sC0Max1Max) {
       fCorners[2].set(x, y, z);
-   } else if ((areacode & sCMin1Max) == sCMin1Max) {
+   } else if ((areacode & sC0Min1Max) == sC0Min1Max) {
       fCorners[3].set(x, y, z);
    }
 }
@@ -736,16 +736,16 @@ void G4VSurface::GetBoundaryAxis(G4int areacode, EAxis axis[]) const
 void G4VSurface::GetBoundaryLimit(G4int areacode, G4double limit[]) const
 {
    if (areacode & sCorner) {
-      if (areacode & sCMin1Max) {
+      if (areacode & sC0Min1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sCMax1Min) {
+      } else if (areacode & sC0Max1Min) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMin[1];
-      } else if (areacode & sCMax1Max) {
+      } else if (areacode & sC0Max1Max) {
          limit[0] = fAxisMax[0];
          limit[1] = fAxisMax[1];
-      } else if (areacode & sCMin1Max) {
+      } else if (areacode & sC0Min1Max) {
          limit[0] = fAxisMin[0];
          limit[1] = fAxisMax[1];
       }
@@ -810,10 +810,10 @@ void G4VSurface::SetBoundary(const G4int         &axiscode,
 
 void G4VSurface::DebugPrint() const
 {
-   G4ThreeVector A = fRot * GetCorner(sCMin1Min) + fTrans;
-   G4ThreeVector B = fRot * GetCorner(sCMax1Min) + fTrans;
-   G4ThreeVector C = fRot * GetCorner(sCMax1Max) + fTrans;
-   G4ThreeVector D = fRot * GetCorner(sCMin1Max) + fTrans;
+   G4ThreeVector A = fRot * GetCorner(sC0Min1Min) + fTrans;
+   G4ThreeVector B = fRot * GetCorner(sC0Max1Min) + fTrans;
+   G4ThreeVector C = fRot * GetCorner(sC0Max1Max) + fTrans;
+   G4ThreeVector D = fRot * GetCorner(sC0Min1Max) + fTrans;
   
    G4cout << "/* G4VSurface::DebugPrint():-------------------------------"
           << G4endl;
@@ -826,10 +826,10 @@ void G4VSurface::DebugPrint() const
           << ", " << fAxisMax[0] << ")" << G4endl;
    G4cout << "/* BoundaryLimit(in local) fAxis1(min, max) = ("<<fAxisMin[1] 
           << ", " << fAxisMax[1] << ")" << G4endl;
-   G4cout << "/* Cornar point sCMin1Min = " << A << G4endl;
-   G4cout << "/* Cornar point sCMax1Min = " << B << G4endl;
-   G4cout << "/* Cornar point sCMax1Max = " << C << G4endl;
-   G4cout << "/* Cornar point sCMin1Max = " << D << G4endl;
+   G4cout << "/* Cornar point sC0Min1Min = " << A << G4endl;
+   G4cout << "/* Cornar point sC0Max1Min = " << B << G4endl;
+   G4cout << "/* Cornar point sC0Max1Max = " << C << G4endl;
+   G4cout << "/* Cornar point sC0Min1Max = " << D << G4endl;
    G4cout << "/*---------------------------------------------------------"
           << G4endl;
 }

@@ -21,13 +21,13 @@
 // ********************************************************************
 //
 //
-// $Id: testG4TwistedTrapezoid.cc,v 1.3 2004-10-06 07:15:26 link Exp $
+// $Id: testG4TwistedBox.cc,v 1.1 2004-11-10 18:05:47 link Exp $
 // GEANT4 tag $Name: 
 //
 
-// testG4TwistedTrapezoid
+// testG4TwistedBox
 //
-//  Test file for class G4TwistedTrapezoid
+//  Test file for class G4TwistedBox
 //
 //             Ensure asserts are compiled in
 
@@ -40,7 +40,7 @@
 #include "ApproxEqual.hh"
 
 #include "G4ThreeVector.hh"
-#include "G4TwistedTrapezoid.hh"
+#include "G4TwistedBox.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
 #include "G4VoxelLimits.hh"
@@ -71,7 +71,7 @@ G4ThreeVector NormAng( G4double phi, G4double psi, G4double b, G4double L, G4dou
 }
 
 
-G4bool testG4TwistedTrapezoid()
+G4bool testG4TwistedBox()
 {
     G4ThreeVector pzero(0,0,0);
 
@@ -114,7 +114,13 @@ G4bool testG4TwistedTrapezoid()
     G4ThreeVector pTrack2 (-71.41023511,386.3731183,800) ;
     G4ThreeVector vTrack2 (-0.1961747401,0.5389857236,-0.8191519158) ;
 
-    G4TwistedTrapezoid t1("Solid Twisted Trapezoid #1",
+
+    // track with vz = 0
+    G4ThreeVector pTrack3 = psurf1 + G4ThreeVector(100,0,0) ;
+    G4ThreeVector vTrack3 (-10.,0.,0.) ;
+   
+
+    G4TwistedBox t1("Solid Twisted Box #1",
 			  dphi ,    // twisted angle
 			  b/2,       // half x-length
 			  a/2,       // half y-length
@@ -132,10 +138,6 @@ G4bool testG4TwistedTrapezoid()
     dir = pin2 - pout2 ;
     dist = t1.DistanceToIn(pout2,dir) ;
     G4cout << "distance = " << dist << G4endl ;
-
-
-// Check name
-// assert(t1.GetName()=="Solid Twisted Trapezoid #1");
 
 // Check Inside
 
@@ -248,6 +250,8 @@ G4bool testG4TwistedTrapezoid()
     G4cout << "distanceToIn(pTrack1,vTrack1) = " << dist << G4endl ;
     dist = t1.DistanceToIn(pTrack2,vTrack2) ;
     G4cout << "distanceToIn(pTrack2,vTrack2) = " << dist << G4endl ;
+    dist = t1.DistanceToIn(pTrack3,vTrack3) ;
+    G4cout << "distanceToIn(pTrack3,vTrack3) = " << dist << G4endl ;
 
     // Normal vector
     G4ThreeVector norm ;
@@ -267,7 +271,12 @@ G4bool testG4TwistedTrapezoid()
     norm = t1.SurfaceNormal(psurf3) ;
     G4cout << "Normal vector on psurf3 = " << norm << G4endl ;
 
+    // testing the volume
 
+    G4double volume = t1.GetCubicVolume() ;
+    G4cout << G4endl << G4endl ;
+    G4cout << "Twisted Box volume = " << volume / cm / cm /cm << " cm^3" << G4endl ;
+    G4cout << "should be = " << a*b*L / cm / cm / cm << " cm^3" << G4endl ;
     G4cout << "test ended" << G4endl ;
 
     
@@ -279,7 +288,7 @@ int main()
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
-    assert(testG4TwistedTrapezoid());
+    assert(testG4TwistedBox());
     return 0;
 }
 

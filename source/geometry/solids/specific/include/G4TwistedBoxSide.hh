@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapSide.hh,v 1.4 2004-11-10 18:04:41 link Exp $
+// $Id: G4TwistedBoxSide.hh,v 1.1 2004-11-10 18:05:40 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,24 +39,23 @@
 //   Oliver Link
 //
 // --------------------------------------------------------------------
-#ifndef __G4TWISTEDTRAPSIDE__
-#define __G4TWISTEDTRAPSIDE__
+#ifndef __G4TWISTEDBOXSIDE__
+#define __G4TWISTEDBOXSIDE__
 
 #include "G4VSurface.hh"
 
-class G4TwistedTrapSide : public G4VSurface
+class G4TwistedBoxSide : public G4VSurface
 {
   public:  // with description
    
-  G4TwistedTrapSide(const G4String     &name,
+  G4TwistedBoxSide(const G4String     &name,
 		   G4double      PhiTwist,
-		   G4double      pDx1,
-		   G4double      pDx2,
-		   G4double      pDy,
-		   G4double      pDz,
+		   G4double      fDx,
+		   G4double      fDy,
+		   G4double      fDz,
 		   G4double      AngleSide);
   
-  virtual ~G4TwistedTrapSide();
+  virtual ~G4TwistedBoxSide();
    
   virtual G4ThreeVector  GetNormal(const G4ThreeVector &xx,
                                           G4bool isGlobal = false) ;   
@@ -95,17 +94,14 @@ private:
 
   inline G4ThreeVector NormAng( G4double phi, G4double u )  ;
 
-  inline G4double Xcoef(G4double u) ;    // to calculate the w(u) function
+
 
 private:
 
-  G4double       fDx1;  // Half-length along x of the side at y=-fDy1 (d in surface equation)
-  G4double       fDx2;  // Half-length along x of the side at y=+fDy1 (a in surface equation)
-  G4double       fDy;   // Half-length along y of the face  (b in surface equation)
-  G4double       fDz ;  // Half-length along the z axis     (L in surface equation)
-
-  G4double       fPhiTwist ;  // twist angle    ( dphi in surface equation)
-
+  G4double       fDx ;
+  G4double       fDy ;
+  G4double       fDz ;
+  G4double       fPhiTwist ;
   G4double       fAngleSide ;
 
 };   
@@ -117,46 +113,23 @@ private:
 //========================================================
 
 inline
-G4double G4TwistedTrapSide::Xcoef(G4double u)
-{
-  // attention a = 2 fDx1 
-  //           d = 2 fDx2
-  //           b = 2 fDy
-  //           L = 2 fDz
-
-  return  fDx2 + ( fDx1-fDx2)/2 - u * (fDx1-fDx2)/(2*fDy) ;
-}
-
-
-
-inline
-G4ThreeVector G4TwistedTrapSide::SurfacePoint( G4double phi, G4double u ) 
+G4ThreeVector G4TwistedBoxSide::SurfacePoint( G4double phi, G4double u ) 
 {
   // function to calculate a point on the surface, given by parameters phi,u
 
-  G4ThreeVector SurfPoint ( Xcoef(u) * cos(phi) - u * sin(phi),
-			    Xcoef(u) * sin(phi) + u * cos(phi),
-			    2*fDz*phi/fPhiTwist );
+  G4ThreeVector SurfPoint ( fDx * cos(phi) - u * sin(phi),
+			 fDx * sin(phi) + u * cos(phi),
+			 2*fDz*phi/fPhiTwist );
   return SurfPoint ;
-
 }
 
 inline
-G4ThreeVector G4TwistedTrapSide::NormAng( G4double phi, G4double u ) 
+G4ThreeVector G4TwistedBoxSide::NormAng( G4double phi, G4double u ) 
 {
   // function to calculate the norm at a given point on the surface
 
   G4double L = 2*fDz ;
-  G4double a = 2*fDx2 ;
-  G4double d = 2*fDx1 ;
-  G4double b = 2*fDy ;
-  G4double dphi = fPhiTwist ;
-  G4double b2 = b*b ;
-  G4double d2 = d*d ;
-  G4double a2 = a*a ;
-  G4ThreeVector nvec( ( L * (2*b*cos(phi) + (a-d)*sin(phi)))/2.,
-		      -(L*((a-d)*cos(phi) - 2*b*sin(phi)))/2.,
-		      (dphi*(-b*d2 + 8*b2*u - 4*a*d*u + 2*d2*u + a2*(b + 2*u)))/(8.*b) ) ;
+  G4ThreeVector nvec( L*cos(phi), L*sin(phi), fPhiTwist*u);
 
   return nvec.unit() ;
 }

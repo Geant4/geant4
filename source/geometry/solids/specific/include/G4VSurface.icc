@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.icc,v 1.3 2004-10-06 07:16:24 link Exp $
+// $Id: G4VSurface.icc,v 1.4 2004-11-10 18:04:44 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -304,7 +304,7 @@ void G4VSurface::SetNeighbours(G4VSurface* axis0min, G4VSurface* axis1min,
    fNeighbours[0] = axis0min;
    fNeighbours[1] = axis1min;
    fNeighbours[2] = axis0max;
-   fNeighbours[4] = axis1max;
+   fNeighbours[3] = axis1max;
 }
 
 //=====================================================================
@@ -322,20 +322,24 @@ G4int G4VSurface::GetNeighbours(G4int areacode, G4VSurface** surfaces)
    G4int i = 0;
    
   if ( (areacode & sAxis0Min ) == sAxis0Min ) {
+    surfaces[i] = fNeighbours[0] ;	
     i++ ;
   }
   
   if ( ( areacode & sAxis1Min ) == sAxis1Min ) {
-    i++ ;
+     surfaces[i] = fNeighbours[1] ;	
+   i++ ;
     if ( i == 2 ) return i ;
   }
 
   if ( ( areacode & sAxis0Max ) == sAxis0Max ) {
+    surfaces[i] = fNeighbours[2] ;	
     i++ ;
     if ( i == 2 ) return i ;
   }
   
   if ( ( areacode & sAxis1Max ) == sAxis1Max ) {
+    surfaces[i] = fNeighbours[3] ;	
     i++ ;
     if ( i == 2 ) return i ;
   }
@@ -356,13 +360,13 @@ G4ThreeVector G4VSurface::GetCorner(G4int areacode) const
                   FatalException, "Area code must represent corner.");
    }
    
-   if ((areacode & sCMin1Min) == sCMin1Min) { 
+   if ((areacode & sC0Min1Min) == sC0Min1Min) { 
       return fCorners[0];
-   } else if ((areacode & sCMax1Min) == sCMax1Min) { 
+   } else if ((areacode & sC0Max1Min) == sC0Max1Min) { 
       return fCorners[1];
-   } else if ((areacode & sCMax1Max) == sCMax1Max) {
+   } else if ((areacode & sC0Max1Max) == sC0Max1Max) {
       return fCorners[2];
-   } else if ((areacode & sCMin1Max) == sCMin1Max) { 
+   } else if ((areacode & sC0Min1Max) == sC0Min1Max) { 
       return fCorners[3];
    } else {
       G4cerr << "ERROR - G4VSurface::GetCorner()" << G4endl

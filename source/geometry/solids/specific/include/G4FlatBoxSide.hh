@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.hh,v 1.2 2004-11-10 18:04:38 link Exp $
+// $Id: G4FlatBoxSide.hh,v 1.1 2004-11-10 18:05:38 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -41,25 +41,24 @@
 // History:
 // --------------------------------------------------------------------
 
-#ifndef __G4FLATTRAPSIDE__
-#define __G4FLATTRAPSIDE__
+#ifndef __G4FLATBOXSIDE__
+#define __G4FLATBOXSIDE__
 
 #include "G4VSurface.hh"
 
-class G4FlatTrapSide : public G4VSurface
+class G4FlatBoxSide : public G4VSurface
 {
   public:  // with description
 
-  G4FlatTrapSide( const G4String        &name,
+  G4FlatBoxSide( const G4String        &name,
 		 G4double      PhiTwist,
-		 G4double      pDx1,
-		 G4double      pDx2,
+		 G4double      pDx,
 		 G4double      pDy,
 		 G4double      pDz,
 		 G4int handedness  ) ;
 
 
-   virtual ~G4FlatTrapSide();
+   virtual ~G4FlatBoxSide();
    virtual G4ThreeVector  GetNormal(const G4ThreeVector & /* xx */ ,
                                           G4bool isGlobal = false);
    virtual G4int DistanceToSurface(const G4ThreeVector &gp,
@@ -87,8 +86,7 @@ class G4FlatTrapSide : public G4VSurface
 
   private:
   
-  G4double fDx1 ;
-  G4double fDx2 ;
+  G4double fDx ;
   G4double fDy ;
   G4double fDz ;
   G4double fPhiTwist ;

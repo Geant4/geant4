@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedTrapezoid.hh,v 1.4 2004-10-10 10:39:35 johna Exp $
+// $Id: G4TwistedTrap.hh,v 1.1 2004-11-10 18:05:41 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,11 +29,11 @@
 // GEANT 4 class header file
 //
 //
-// G4TwistedTrapezoid
+// G4TwistedTrap
 //
 // Class description:
 //
-//  G4TwistedTrapezoid is a sort of twisted box.
+//  G4TwistedTrap is a sort of twisted trapezoid.
 //
 // Author:
 //                 O.Link (Oliver.Link@cern.ch)
@@ -42,29 +42,32 @@
 //   13-Nov-2003 - O.Link (Oliver.Link@cern.ch), Integration in Geant4
 //                 from original version in Jupiter-2.5.02 application.
 //                 see: Kotoyo Hoshina (hoshina@hepburn.s.chiba-u.ac.jp)
+//   04-Nov-2004   replace twisted Box code by twisted trapezoid
 // --------------------------------------------------------------------
 
-#ifndef __G4TWISTEDTRAPEZOID__
-#define __G4TWISTEDTRAPEZOID__
+#ifndef __G4TWISTEDTRAP__
+#define __G4TWISTEDTRAP__
 
 #include "G4VSolid.hh"
 #include "G4TwistedTrapSide.hh"
+#include "G4TwistedBoxSide.hh"
 #include "G4FlatTrapSide.hh" 
 
 class G4SolidExtentList;
 class G4ClippablePolygon;
 
-class G4TwistedTrapezoid : public G4VSolid
+class G4TwistedTrap: public G4VSolid
 {
  public:  // with description
  
-  G4TwistedTrapezoid(const G4String &pname,         // Name of instance
+  G4TwistedTrap(const G4String &pname,         // Name of instance
 		     G4double  twistedangle,  // Twisted angle
-		     G4double  halfSideX,     // half length in x
-		     G4double  halfSideY,     // half length in y
-		     G4double  halfSideZ)  ;   // half z length 
+		     G4double  pDx1,          // half length in x at y=-pDy
+		     G4double  pDx2,          // half length in x at y=+pDy
+		     G4double  pDy,           // half length in y
+		     G4double  pDz)  ;        // half z length 
   
-  virtual ~G4TwistedTrapezoid();
+  virtual ~G4TwistedTrap();
              
   void ComputeDimensions(G4VPVParameterisation*    ,
                          const G4int               ,
@@ -93,20 +96,22 @@ class G4TwistedTrapezoid : public G4VSolid
 
   G4ThreeVector SurfaceNormal(const G4ThreeVector &p) const;
 
+  inline G4double GetCubicVolume() ;
+
   void            DescribeYourselfTo (G4VGraphicsScene &scene) const;
   G4Polyhedron   *CreatePolyhedron   () const;
   G4NURBS        *CreateNURBS        () const;
-  G4Polyhedron   *GetPolyhedron      () const;
 
   std::ostream &StreamInfo(std::ostream& os) const;
 
   // accessors
   
   inline G4double GetPhiTwist    () const { return fPhiTwist   ; }
-  inline G4double GetZHalfLength () const { return fZHalfLength; }
 
-  inline G4double GetHalfSideX   () const { return fHalfSides[0] ; } 
-  inline G4double GetHalfSideY   () const { return fHalfSides[1] ; } 
+  inline G4double GetDx1   () const { return fDx1 ; } 
+  inline G4double GetDx2   () const { return fDx2 ; } 
+  inline G4double GetDy    () const { return fDy ; } 
+  inline G4double GetDz () const { return fDz; }
   
   G4VisExtent     GetExtent    () const;
   G4GeometryType  GetEntityType() const;
@@ -123,19 +128,20 @@ class G4TwistedTrapezoid : public G4VSolid
 
  private:
  
-  inline void  SetFields(G4double phitwist, 
-			 G4double fHalfSideX, G4double fHalfSideY, G4double fHalfSideZ);
+  inline void  SetFields(G4double phitwist, G4double pDx1, G4double pDx2, G4double pDy, G4double pDz);
                      
   void         CreateSurfaces();
 
  private:
  
   G4double fPhiTwist;       // Twist angle from -fZHalfLength to fZHalfLength
-  G4double fZHalfLength;    // Half length along z-axis
 
-  G4double fHalfSides[2];   // Half length along x and y axis
-                            // 0 : x Axis, 1: Y axis
-                            //    ( a )      ( b )   in the surface equation
+  G4double fDx ;  // temp
+
+  G4double       fDx1;  // Half-length along x of the side at y=-fDy1 (d in surface equation)
+  G4double       fDx2;  // Half-length along x of the side at y=+fDy1 (a in surface equation)
+  G4double       fDy;   // Half-length along y of the face  (b in surface equation)
+  G4double       fDz ;  // Half-length along the z axis     (L in surface equation)
      
   G4VSurface *fLowerEndcap ;  // surface of -ve z
   G4VSurface *fUpperEndcap ;  // surface of +ve z
@@ -145,7 +151,7 @@ class G4TwistedTrapezoid : public G4VSolid
   G4VSurface *fSide180 ;       // Twisted Side at phi = 180 deg
   G4VSurface *fSide270 ;       // Twisted Side at phi = 270 deg
 
-  mutable G4Polyhedron* fpPolyhedron;
+  G4double fCubicVolume ;      // volume of the twisted trapezoid
 
   class LastState              // last Inside result
   {
@@ -226,18 +232,25 @@ class G4TwistedTrapezoid : public G4VSolid
 //---------------------
 
 inline
-void G4TwistedTrapezoid::SetFields(G4double phitwist, 
-  G4double fHalfSideX, G4double fHalfSideY, G4double fHalfSideZ)
+void G4TwistedTrap::SetFields(G4double phitwist, 
+  G4double pDx1, G4double pDx2, G4double pDy , G4double pDz)
 {
   fPhiTwist     = phitwist;
 
-  fHalfSides[0]  = fHalfSideX ;
-  fHalfSides[1]  = fHalfSideY ;
-
-  fZHalfLength = fHalfSideZ ;
-
-//   G4double parity         = (fPhiTwist > 0 ? 1 : -1); 
+  fDx1 = pDx1 ;
+  fDx2 = pDx2 ;
+  fDy  = pDy  ;
+  fDz  = pDz ;
 
 }
+
+inline
+G4double G4TwistedTrap::GetCubicVolume()
+{
+  if(fCubicVolume != 0.) ;
+  else   fCubicVolume = 8 * ( fDx1 + fDx2 ) / 2 * fDy * fDz ; 
+  return fCubicVolume;
+}
+
 
 #endif

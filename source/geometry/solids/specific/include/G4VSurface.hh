@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VSurface.hh,v 1.8 2004-05-28 18:19:05 gcosmo Exp $
+// $Id: G4VSurface.hh,v 1.9 2004-11-10 18:04:43 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -204,10 +204,10 @@ class G4VSurface
    static const G4int sInside  ;
    static const G4int sBoundary;
    static const G4int sCorner;
-   static const G4int sCMin1Min;
-   static const G4int sCMax1Min;
-   static const G4int sCMax1Max;
-   static const G4int sCMin1Max;
+   static const G4int sC0Min1Min;
+   static const G4int sC0Max1Min;
+   static const G4int sC0Max1Max;
+   static const G4int sC0Min1Max;
    static const G4int sAxisMin;
    static const G4int sAxisMax;
    static const G4int sAxisX;

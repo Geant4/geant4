@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4HyperbolicSurface.cc,v 1.5 2004-05-28 13:13:36 gcosmo Exp $
+// $Id: G4HyperbolicSurface.cc,v 1.6 2004-11-10 18:04:48 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -825,25 +825,25 @@ void G4HyperbolicSurface::SetCorners(
       x = endRad[zmin]*cos(endPhi[zmin] - halfdphi);
       y = endRad[zmin]*sin(endPhi[zmin] - halfdphi);
       z = endZ[zmin];
-      SetCorner(sCMin1Min, x, y, z);
+      SetCorner(sC0Min1Min, x, y, z);
       
       // corner of Axis0max and Axis1min
       x = endRad[zmin]*cos(endPhi[zmin] + halfdphi);
       y = endRad[zmin]*sin(endPhi[zmin] + halfdphi);
       z = endZ[zmin];
-      SetCorner(sCMax1Min, x, y, z);
+      SetCorner(sC0Max1Min, x, y, z);
       
       // corner of Axis0max and Axis1max
       x = endRad[zmax]*cos(endPhi[zmax] + halfdphi);
       y = endRad[zmax]*sin(endPhi[zmax] + halfdphi);
       z = endZ[zmax];
-      SetCorner(sCMax1Max, x, y, z);
+      SetCorner(sC0Max1Max, x, y, z);
       
       // corner of Axis0min and Axis1max
       x = endRad[zmax]*cos(endPhi[zmax] - halfdphi);
       y = endRad[zmax]*sin(endPhi[zmax] - halfdphi);
       z = endZ[zmax];
-      SetCorner(sCMin1Max, x, y, z);
+      SetCorner(sC0Min1Max, x, y, z);
 
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -879,28 +879,28 @@ void G4HyperbolicSurface::SetBoundaries()
 
       G4ThreeVector direction;
       // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMin), direction, 
-                   GetCorner(sCMin1Min), sAxisZ);
+                   GetCorner(sC0Min1Min), sAxisZ);
 
       // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisPhi | sAxisMax), direction, 
-                  GetCorner(sCMax1Min), sAxisZ);
+                  GetCorner(sC0Max1Min), sAxisZ);
 
       // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-                   GetCorner(sCMin1Min), sAxisPhi);
+                   GetCorner(sC0Min1Min), sAxisPhi);
 
       // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-                  GetCorner(sCMin1Max), sAxisPhi);
+                  GetCorner(sC0Min1Max), sAxisPhi);
    } else {
       G4cerr << "ERROR - G4HyperbolicSurface::SetBoundaries()" << G4endl
              << "        fAxis[0] = " << fAxis[0] << G4endl

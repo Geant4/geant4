@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4FlatTrapSide.cc,v 1.2 2004-11-10 18:04:47 link Exp $
+// $Id: G4FlatBoxSide.cc,v 1.1 2004-11-10 18:05:42 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -29,22 +29,21 @@
 // GEANT 4 class source file
 //
 //
-// G4FlatTrapSide.cc
+// G4FlatBoxSide.cc
 //
 // Author: 
 //   30-Aug-2002 - Oliver Link (Oliver.Link@cern.ch)
 //
 // --------------------------------------------------------------------
 
-#include "G4FlatTrapSide.hh"
+#include "G4FlatBoxSide.hh"
 
 //=====================================================================
 //* constructors ------------------------------------------------------
 
-G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
+G4FlatBoxSide::G4FlatBoxSide( const G4String        &name,
 			      G4double      PhiTwist,
-			      G4double      pDx1,
-			      G4double      pDx2,
+			      G4double      pDx,
 			      G4double      pDy,
 			      G4double      pDz,
 			      G4int         handedness) 
@@ -53,8 +52,7 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
 {
    fHandedness = handedness;   // +z = +ve, -z = -ve
 
-   fDx1 = pDx1 ;
-   fDx2 = pDx2 ;
+   fDx = pDx ;
    fDy = pDy ;
    fDz = pDz ;
 
@@ -72,9 +70,9 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
 
    fAxis[0] = kXAxis ;
    fAxis[1] = kYAxis ;
-   fAxisMin[0] = kInfinity ;  // x-Axis cannot be fixed, because it 
-   fAxisMax[0] =  kInfinity ; // depends on y
-   fAxisMin[1] = -fDy ;  // y - axis
+   fAxisMin[0] = -fDx ;  // x-Axis
+   fAxisMax[0] =  fDx ;
+   fAxisMin[1] = -fDy ;
    fAxisMax[1] =  fDy ;
 
    SetCorners();
@@ -86,14 +84,14 @@ G4FlatTrapSide::G4FlatTrapSide( const G4String        &name,
 //=====================================================================
 //* destructor --------------------------------------------------------
 
-G4FlatTrapSide::~G4FlatTrapSide()
+G4FlatBoxSide::~G4FlatBoxSide()
 {
 }
 
 //=====================================================================
 //* GetNormal ---------------------------------------------------------
 
-G4ThreeVector G4FlatTrapSide::GetNormal(const G4ThreeVector & /* xx */ , 
+G4ThreeVector G4FlatBoxSide::GetNormal(const G4ThreeVector & /* xx */ , 
                                              G4bool isGlobal)
 {
    if (isGlobal) {
@@ -106,7 +104,7 @@ G4ThreeVector G4FlatTrapSide::GetNormal(const G4ThreeVector & /* xx */ ,
 //=====================================================================
 //* DistanceToSurface(p, v) -------------------------------------------
 
-G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4FlatBoxSide::DistanceToSurface(const G4ThreeVector &gp,
                                        const G4ThreeVector &gv,
                                              G4ThreeVector  gxx[],
                                              G4double       distance[],
@@ -201,7 +199,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
                                   isvalid[0], 1, validate, &gp, &gv);
 
 #ifdef G4SPECSDEBUG
-   G4cerr << "ERROR - G4FlatTrapSide::DistanceToSurface(p,v)" << G4endl;
+   G4cerr << "ERROR - G4FlatBoxSide::DistanceToSurface(p,v)" << G4endl;
    G4cerr << "        Name        : " << GetName() << G4endl;
    G4cerr << "        xx          : " << xx << G4endl;
    G4cerr << "        gxx[0]      : " << gxx[0] << G4endl;
@@ -216,7 +214,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 //=====================================================================
 //* DistanceToSurface(p) ----------------------------------------------
 
-G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
+G4int G4FlatBoxSide::DistanceToSurface(const G4ThreeVector &gp,
                                              G4ThreeVector  gxx[],
                                              G4double       distance[],
                                              G4int          areacode[])
@@ -267,7 +265,7 @@ G4int G4FlatTrapSide::DistanceToSurface(const G4ThreeVector &gp,
 
 }
 
-G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx, 
+G4int G4FlatBoxSide::GetAreaCode(const G4ThreeVector &xx, 
                                        G4bool withTol)
 {
 
@@ -275,26 +273,22 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
   G4int areacode = sInside;
   
   if (fAxis[0] == kXAxis && fAxis[1] == kYAxis) {
-
+    G4int xaxis = 0;
     G4int yaxis = 1;
     
-   G4double wmax = fDx2 + ( fDx1-fDx2)/2. - xx.y() * (fDx1-fDx2)/(2*fDy) ;
-   G4double wmin = -wmax ;
-
-
     if (withTol) {
       
       G4bool isoutside   = false;
       
       // test boundary of x-axis
       
-      if (xx.x() < wmin + ctol) {
+      if (xx.x() < fAxisMin[xaxis] + ctol) {
 	areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary; 
-	if (xx.x() <= wmin - ctol) isoutside = true;
+	if (xx.x() <= fAxisMin[xaxis] - ctol) isoutside = true;
 	
-      } else if (xx.x() > wmax - ctol) {
+      } else if (xx.x() > fAxisMax[xaxis] - ctol) {
 	areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
-	if (xx.x() >= wmax + ctol)  isoutside = true;
+	if (xx.x() >= fAxisMin[xaxis] + ctol)  isoutside = true;
       }
       
       // test boundary of y-axis
@@ -328,9 +322,9 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
       
       // boundary of x-axis
       
-      if (xx.x() < wmin ) {
+      if (xx.x() < fAxisMin[xaxis] ) {
 	areacode |= (sAxis0 & (sAxisX | sAxisMin)) | sBoundary;
-      } else if (xx.x() > wmax) {
+      } else if (xx.x() > fAxisMax[xaxis]) {
 	areacode |= (sAxis0 & (sAxisX | sAxisMax)) | sBoundary;
       }
       
@@ -353,7 +347,7 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
     }
     return areacode;
   } else {
-    G4Exception("G4FlatTrapSide::GetAreaCode()",
+    G4Exception("G4FlatBoxSide::GetAreaCode()",
 		"NotImplemented", FatalException,
 		"Feature NOT implemented !");
   }
@@ -365,7 +359,7 @@ G4int G4FlatTrapSide::GetAreaCode(const G4ThreeVector &xx,
 //=====================================================================
 //* SetCorners --------------------------------------------------------
 
-void G4FlatTrapSide::SetCorners()
+void G4FlatBoxSide::SetCorners()
 {
    // Set Corner points in local coodinate.
 
@@ -374,34 +368,34 @@ void G4FlatTrapSide::SetCorners()
      G4double x, y, z;
       
      // corner of Axis0min and Axis1min
-     x = -fDx1 ;
+     x = -fDx ;
      y = -fDy ;
      z = 0 ;
      SetCorner(sC0Min1Min, x, y, z);
       
      // corner of Axis0max and Axis1min
-     x = fDx1 ;
+     x = fDx ;
      y = -fDy ;
      z = 0 ;
      SetCorner(sC0Max1Min, x, y, z);
      
      // corner of Axis0max and Axis1max
-     x = fDx2 ;
+     x = fDx ;
      y = fDy ;
      z = 0 ;
      SetCorner(sC0Max1Max, x, y, z);
      
      // corner of Axis0min and Axis1max
-     x = -fDx2 ;
+     x = -fDx ;
      y = fDy ;
      z = 0 ;
      SetCorner(sC0Min1Max, x, y, z);
      
    } else {
-     G4cerr << "ERROR - G4FlatTrapSide::SetCorners()" << G4endl
+     G4cerr << "ERROR - G4FlatBoxSide::SetCorners()" << G4endl
 	    << "        fAxis[0] = " << fAxis[0] << G4endl
 	    << "        fAxis[1] = " << fAxis[1] << G4endl;
-     G4Exception("G4FlatTrapSide::SetCorners()",
+     G4Exception("G4FlatBoxSide::SetCorners()",
 		 "NotImplemented", FatalException,
 		 "Feature NOT implemented !");
    }
@@ -412,7 +406,7 @@ void G4FlatTrapSide::SetCorners()
 //=====================================================================
 //* SetBoundaries() ---------------------------------------------------
 
-void G4FlatTrapSide::SetBoundaries()
+void G4FlatBoxSide::SetBoundaries()
 {
    // Set direction-unit vector of phi-boundary-lines in local coodinate.
    // Don't call the function twice.
@@ -446,10 +440,10 @@ void G4FlatTrapSide::SetBoundaries()
 		GetCorner(sC0Max1Max), sAxisX);
     
   } else {
-    G4cerr << "ERROR - G4FlatTrapSide::SetBoundaries()" << G4endl
+    G4cerr << "ERROR - G4FlatBoxSide::SetBoundaries()" << G4endl
 	   << "        fAxis[0] = " << fAxis[0] << G4endl
 	   << "        fAxis[1] = " << fAxis[1] << G4endl;
-    G4Exception("G4FlatTrapSide::SetCorners()",
+    G4Exception("G4FlatBoxSide::SetCorners()",
 		"NotImplemented", FatalException,
 		"Feature NOT implemented !");
    }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4TwistedSurface.cc,v 1.7 2004-07-29 15:15:21 link Exp $
+// $Id: G4TwistedSurface.cc,v 1.8 2004-11-10 18:04:50 link Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -859,25 +859,25 @@ void G4TwistedSurface::SetCorners(
       x = endInnerRad[zmin]*cos(endPhi[zmin]);
       y = endInnerRad[zmin]*sin(endPhi[zmin]);
       z = endZ[zmin];
-      SetCorner(sCMin1Min, x, y, z);
+      SetCorner(sC0Min1Min, x, y, z);
       
       // corner of Axis0max and Axis1min
       x = endOuterRad[zmin]*cos(endPhi[zmin]);
       y = endOuterRad[zmin]*sin(endPhi[zmin]);
       z = endZ[zmin];
-      SetCorner(sCMax1Min, x, y, z);
+      SetCorner(sC0Max1Min, x, y, z);
       
       // corner of Axis0max and Axis1max
       x = endOuterRad[zmax]*cos(endPhi[zmax]);
       y = endOuterRad[zmax]*sin(endPhi[zmax]);
       z = endZ[zmax];
-      SetCorner(sCMax1Max, x, y, z);
+      SetCorner(sC0Max1Max, x, y, z);
       
       // corner of Axis0min and Axis1max
       x = endInnerRad[zmax]*cos(endPhi[zmax]);
       y = endInnerRad[zmax]*sin(endPhi[zmax]);
       z = endZ[zmax];
-      SetCorner(sCMin1Max, x, y, z);
+      SetCorner(sC0Min1Max, x, y, z);
 
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetCorners()" << G4endl
@@ -914,28 +914,28 @@ void G4TwistedSurface::SetBoundaries()
    if (fAxis[0] == kXAxis && fAxis[1] == kZAxis) {
       
       // sAxis0 & sAxisMin
-      direction = GetCorner(sCMin1Max) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Min1Max) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisX | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisZ) ;
+                  GetCorner(sC0Min1Min), sAxisZ) ;
       
       // sAxis0 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMax1Min);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Max1Min);
       direction = direction.unit();
       SetBoundary(sAxis0 & (sAxisX | sAxisMax), direction, 
-                  GetCorner(sCMax1Min), sAxisZ);
+                  GetCorner(sC0Max1Min), sAxisZ);
                   
       // sAxis1 & sAxisMin
-      direction = GetCorner(sCMax1Min) - GetCorner(sCMin1Min);
+      direction = GetCorner(sC0Max1Min) - GetCorner(sC0Min1Min);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMin), direction, 
-                  GetCorner(sCMin1Min), sAxisX);
+                  GetCorner(sC0Min1Min), sAxisX);
                   
       // sAxis1 & sAxisMax
-      direction = GetCorner(sCMax1Max) - GetCorner(sCMin1Max);
+      direction = GetCorner(sC0Max1Max) - GetCorner(sC0Min1Max);
       direction = direction.unit();
       SetBoundary(sAxis1 & (sAxisZ | sAxisMax), direction, 
-                  GetCorner(sCMin1Max), sAxisX);
+                  GetCorner(sC0Min1Max), sAxisX);
                   
    } else {
       G4cerr << "ERROR - G4FlatSurface::SetBoundaries()" << G4endl
