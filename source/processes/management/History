@@ -1,0 +1,31 @@
+$Id: History,v 1.1 1999-02-06 10:24:01 kurasige Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+- Feb 6, 99   H.Kurashige (procman-01-00-01)
+-  Add G4ParticleTypes.hh (migrated from particles/management) (Hisaya)
+-  Allow registration of processes to shortlived particles (Hisaya)
+
+
+Feb 6, 99   H.Kurashige -
+- Created.
+
+
+
+
+
+
