@@ -1,6 +1,7 @@
 #ifndef Histo_h
 #define Histo_h
 
+#include "globals.hh"
 #include "g4std/iostream"
 
 // Due to RW-STL transition problems this simpl histo class works only

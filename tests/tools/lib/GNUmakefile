@@ -4,6 +4,7 @@ endif
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS+=-I../include
+CPPFLAGS+=-I$(G4INSTALL)/source/global/management/include
 
 SRCS:=$(wildcard ../src/*.cc)
 OBJS:=$(patsubst ../src/%.cc,$(G4SYSTEM)/%.o,$(SRCS))
@@ -26,7 +27,7 @@ $(G4SYSTEM)/%.d: ../src/%.cc
 	@if [ ! -d $(G4SYSTEM) ] ; then mkdir $(G4SYSTEM) ;fi
 	@echo Making dependency for file $< ...
 	@($(ECHO) $(G4SYSTEM)/\\c ; \
-	g++ -MM -I../include $< ) | sed 's!$(G4SYSTEM)/$*.o!& $@!' >$@
+	g++ -MM $(CPPFLAGS) $< ) | sed 's!$(G4SYSTEM)/$*.o!& $@!' >$@
 -include $(dependencies)
 ###########################################################################
 
