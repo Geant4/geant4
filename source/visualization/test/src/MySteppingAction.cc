@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: MySteppingAction.cc,v 1.6 2000-08-03 09:15:48 gcosmo Exp $
+// $Id: MySteppingAction.cc,v 1.7 2000-10-18 13:52:20 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,7 @@
 #include "G4Colour.hh"
 #include "G4Polyline.hh"
 #include "G4Circle.hh"
+#include "G4Square.hh"
 
 void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
 #ifdef G4VIS_USE_OPACS
@@ -68,7 +69,47 @@ void MySteppingAction::UserSteppingAction(const G4Step* pStep) {
     G4VisAttributes iva (G4Colour(1.,0.,1));
     intercept.SetVisAttributes (&iva);
     pVVisManager -> Draw (intercept);
+
+    G4Circle circle22(G4Point3D(100.*cm,100.*cm,0.));
+    circle22.SetScreenDiameter(50.*cm);
+    circle22.SetFillStyle(G4Circle::noFill);
+    G4Colour colour22;
+    G4VisAttributes attribs22;
+    colour22=G4Colour(0.,1.,0.);
+    attribs22=G4VisAttributes(colour22);
+    circle22.SetVisAttributes(attribs22);
+    pVVisManager->Draw(circle22);
     
+    G4Square square222(G4Point3D(200.*cm,100.*cm,0.));
+    square222.SetWorldDiameter(100.*cm);
+    //square222.SetFillStyle(G4Square::filled);
+    G4Colour colour222;
+    G4VisAttributes attribs222;
+    colour222=G4Colour(0.,1.,0.);
+    attribs222=G4VisAttributes(colour222);
+    square222.SetVisAttributes(attribs222);
+    pVVisManager->Draw(square222);
+    
+    G4Square square33(G4Point3D(-100.*cm,100.*cm,0.));
+    square33.SetScreenDiameter(50.*cm);
+    square33.SetFillStyle(G4Square::hashed);
+    G4Colour colour33;
+    G4VisAttributes attribs33;
+    colour33=G4Colour(1.,0.,0.);
+    attribs33=G4VisAttributes(colour33);
+    square33.SetVisAttributes(attribs33);
+    pVVisManager->Draw(square33);
+
+    G4Circle circle333(G4Point3D(-200.*cm,100.*cm,0.));
+    circle333.SetWorldDiameter(100.*cm);
+    circle333.SetFillStyle(G4Circle::filled);
+    G4Colour colour333;
+    G4VisAttributes attribs333;
+    colour333=G4Colour(1.,0.,0.);
+    attribs333=G4VisAttributes(colour333);
+    circle333.SetVisAttributes(attribs333);
+    pVVisManager->Draw(circle333);
+
   }
   // User Action Example - end snippet.
 }
