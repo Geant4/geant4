@@ -29,7 +29,7 @@
  *          Addison-Wesley, 1983. ISBN 0-201-06672-6.
  */
 
-/* @(#) $Id: trees.cc,v 1.5 2004-11-18 23:10:55 duns Exp $ */
+/* @(#) $Id: trees.cc,v 1.6 2004-11-22 19:08:59 duns Exp $ */
 
 /* #define GEN_TREES_H */
 
@@ -898,7 +898,7 @@ void _tr_flush_block(deflate_state *s, charf *buf, ulg stored_len, int eof)
     if (s->level > 0) {
 
          /* Check if the file is ascii or binary */
-        if (s->data_type == Z_UNKNOWN) set_data_type(s);
+        if (s->strm->data_type == Z_UNKNOWN) set_data_type(s);
 
         /* Construct the literal and distance trees */
         build_tree(s, (tree_desc *)(&(s->l_desc)));
@@ -1091,7 +1091,7 @@ local void set_data_type(deflate_state *s)
     while (n < 7)        bin_freq += s->dyn_ltree[n++].Freq;
     while (n < 128)    ascii_freq += s->dyn_ltree[n++].Freq;
     while (n < LITERALS) bin_freq += s->dyn_ltree[n++].Freq;
-    s->data_type = (Byte)(bin_freq > (ascii_freq >> 2) ? Z_BINARY : Z_ASCII);
+    s->strm->data_type = bin_freq > (ascii_freq >> 2) ? Z_BINARY : Z_ASCII;
 }
 
 /* ===========================================================================

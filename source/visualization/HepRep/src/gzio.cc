@@ -5,7 +5,7 @@
  * Compile this file with -DNO_GZCOMPRESS to avoid the compression code.
  */
 
-/* @(#) $Id: gzio.cc,v 1.6 2004-11-18 22:45:29 duns Exp $ */
+/* @(#) $Id: gzio.cc,v 1.7 2004-11-22 19:08:59 duns Exp $ */
 
 #include <stdio.h>
 
@@ -437,6 +437,10 @@ int ZEXPORT gzread (gzFile file, voidp buf, unsigned len)
                 s->z_eof = 1;
                 if (ferror(s->file)) {
                     s->z_err = Z_ERRNO;
+                    break;
+                }
+                if (feof(s->file)) {        /* avoid error for empty file */
+                    s->z_err = Z_STREAM_END;
                     break;
                 }
             }

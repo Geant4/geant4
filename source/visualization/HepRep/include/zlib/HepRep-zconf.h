@@ -1,9 +1,9 @@
 /* zconf.h -- configuration of the zlib compression library
- * Copyright (C) 1995-2003 Jean-loup Gailly.
+ * Copyright (C) 1995-2004 Jean-loup Gailly.
  * For conditions of distribution and use, see copyright notice in zlib.h
  */
 
-/* @(#) $Id: HepRep-zconf.h,v 1.3 2004-11-18 22:45:28 duns Exp $ */
+/* @(#) $Id: HepRep-zconf.h,v 1.4 2004-11-22 19:08:58 duns Exp $ */
 
 #ifndef _HEPREP_ZCONF_H
 #define _HEPREP_ZCONF_H
@@ -14,45 +14,48 @@
  */
 #ifdef Z_PREFIX
 /* MD: changed z_ into heprep_z_ */
-#  define deflateInit_  heprep_z_deflateInit_
-#  define deflate       heprep_z_deflate
-#  define deflateEnd    heprep_z_deflateEnd
-#  define inflateInit_  heprep_z_inflateInit_
-#  define inflate       heprep_z_inflate
-#  define inflateEnd    heprep_z_inflateEnd
-#  define deflateInit2_ heprep_z_deflateInit2_
-#  define deflateSetDictionary heprep_z_deflateSetDictionary
-#  define deflateCopy   heprep_z_deflateCopy
-#  define deflateReset  heprep_z_deflateReset
-#  define deflatePrime  heprep_z_deflatePrime
-#  define deflateParams heprep_z_deflateParams
-#  define deflateBound  heprep_z_deflateBound
-#  define inflateInit2_ heprep_z_inflateInit2_
-#  define inflateSetDictionary heprep_z_inflateSetDictionary
-#  define inflateSync   heprep_z_inflateSync
-#  define inflateSyncPoint heprep_z_inflateSyncPoint
-#  define inflateCopy   heprep_z_inflateCopy
-#  define inflateReset  heprep_z_inflateReset
-#  define compress      heprep_z_compress
-#  define compress2     heprep_z_compress2
-#  define compressBound heprep_z_compressBound
-#  define uncompress    heprep_z_uncompress
-#  define adler32       heprep_z_adler32
-#  define crc32         heprep_z_crc32
-#  define get_crc_table heprep_z_get_crc_table
+#  define deflateInit_          heprep_z_deflateInit_
+#  define deflate               heprep_z_deflate
+#  define deflateEnd            heprep_z_deflateEnd
+#  define inflateInit_          heprep_z_inflateInit_
+#  define inflate               heprep_z_inflate
+#  define inflateEnd            heprep_z_inflateEnd
+#  define deflateInit2_         heprep_z_deflateInit2_
+#  define deflateSetDictionary  heprep_z_deflateSetDictionary
+#  define deflateCopy           heprep_z_deflateCopy
+#  define deflateReset          heprep_z_deflateReset
+#  define deflateParams         heprep_z_deflateParams
+#  define deflateBound          heprep_z_deflateBound
+#  define deflatePrime          heprep_z_deflatePrime
+#  define inflateInit2_         heprep_z_inflateInit2_
+#  define inflateSetDictionary  heprep_z_inflateSetDictionary
+#  define inflateSync           heprep_z_inflateSync
+#  define inflateSyncPoint      heprep_z_inflateSyncPoint
+#  define inflateCopy           heprep_z_inflateCopy
+#  define inflateReset          heprep_z_inflateReset
+#  define inflateBack           heprep_z_inflateBack
+#  define inflateBackEnd        heprep_z_inflateBackEnd
+#  define compress              heprep_z_compress
+#  define compress2             heprep_z_compress2
+#  define compressBound         heprep_z_compressBound
+#  define uncompress            heprep_z_uncompress
+#  define adler32               heprep_z_adler32
+#  define crc32                 heprep_z_crc32
+#  define get_crc_table         heprep_z_get_crc_table
+#  define zError               	heprep_z_zError
 /* MD: added define for lonely symbol not renamed */
-#  define z_errmsg      heprep_z_errmsg
+#  define z_errmsg              heprep_z_errmsg
 
-#  define Byte          heprep_z_Byte
-#  define uInt          heprep_z_uInt
-#  define uLong         heprep_z_uLong
-#  define Bytef         heprep_z_Bytef
-#  define charf         heprep_z_charf
-#  define intf          heprep_z_intf
-#  define uIntf         heprep_z_uIntf
-#  define uLongf        heprep_z_uLongf
-#  define voidpf        heprep_z_voidpf
-#  define voidp         heprep_z_voidp
+#  define Byte                  heprep_z_Byte
+#  define uInt                  heprep_z_uInt
+#  define uLong                 heprep_z_uLong
+#  define Bytef                 heprep_z_Bytef
+#  define charf                 heprep_z_charf
+#  define intf                  heprep_z_intf
+#  define uIntf                 heprep_z_uIntf
+#  define uLongf                heprep_z_uLongf
+#  define voidpf                heprep_z_voidpf
+#  define voidp                 heprep_z_voidp
 #endif
 
 #if defined(__MSDOS__) && !defined(MSDOS)
@@ -284,7 +287,7 @@ typedef uLong FAR uLongf;
 #  ifdef VMS
 #    include <unixio.h>   /* for off_t */
 #  endif
-#  define z_off_t  off_t
+#  define z_off_t off_t
 #endif
 #ifndef SEEK_SET
 #  define SEEK_SET        0       /* Seek from beginning of file.  */
@@ -292,11 +295,11 @@ typedef uLong FAR uLongf;
 #  define SEEK_END        2       /* Set file pointer to EOF plus "offset" */
 #endif
 #ifndef z_off_t
-#  define  z_off_t long
+#  define z_off_t long
 #endif
 
 #if defined(__OS400__)
-#define NO_vsnprintf
+#  define NO_vsnprintf
 #endif
 
 #if defined(__MVS__)
