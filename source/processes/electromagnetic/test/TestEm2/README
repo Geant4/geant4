@@ -1,0 +1,110 @@
+$Id: README,v 1.1 1999-02-19 10:28:36 maire Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            TestEm2
+                            -------
+     This example allows to do the shower development of an single primary
+     particle, and to survey the physics processes which occur,
+     with printing and visualization.
+	
+ 1- GEOMETRY DEFINITION
+ 
+     The geometry consists of a cylinder of homegenous material.
+     This cylinder is replicated longitudinaly (slice) and radialy (ring).
+  
+     The default geometry is constructed in DetectorConstruction class,
+     but all of the above parameters can be modified interactively via
+     the commands defined in the DetectorMessenger class.
+  
+     Material can be choosen: Air Water lAr Al Fe BGO PbWO4 Pb.
+     eg: /calor/setMat PbWO4
+      
+     The size of the slices and rings are expressed in radiation length units
+     and can be changed.
+     eg: /calor/setLbin 20   1.    ---> 20 slices of 1. radl
+         /calor/setRbin  5   0.25  --->  5 rings of 0.25 radl
+         /calor/update             ---> rebuild the geometry
+      
+     An uniform magnetic field along the cylinder axis can be set.
+     eg: /calor/setField 5 tesla 
+ 	    
+ 2- AN EVENT : THE PRIMARY GENERATOR
+ 
+     The primary kinematic consists of a single particle which hits the
+     cylinder perpendicular to the input face. The type of the particle
+     and its energy are set in the PrimaryGeneratorAction class, and can
+     changed via the G4 build-in commands of ParticleGun class (see
+     the macros provided with this example).
+ 	
+     A RUN is a set of events.
+ 				
+ 3- VISUALIZATION
+ 
+     The Visualization Manager is set in the main().
+     The initialisation of the drawing is done via the command
+     /vis~/create_view in the macro init.mac. This macro is
+     automatically read from the main in case of interactive running mode.
+ 	
+     The detector has a default view which is a longitudinal view of the 
+     cylinder.
+ 	
+     The tracks are drawn at the end of event, and erased at the end of run.
+     Optionaly one can choose to draw all particles, only the charged one,
+     or none. This command is defined in EventActionMessenger class.
+ 	
+ 4- PHYSICS DEMO
+ 
+     The particle's type and the physic processes which will be available
+     in this example are set in PhysicsList class.
+ 	
+     In addition a build-in interactive command (/process/inactivate proname)
+     allows to activate/inactivate the processes one by one.
+     
+     The threshold for producing secondaries can be changed.
+     eg: /run/particle/setCut 100 microm
+         /run/initialize
+	  	
+ 5- HOW TO START ?
+ 
+     - compile and link to generate an executable
+ 		% cd TestEm2
+ 		% gmake
+ 		
+     - execute TestEm2 in 'batch' mode from macro files
+ 		% TestEm2   run01.mac
+ 		
+     - execute TestEm2 in 'interactive mode' with visualization
+ 		% TestEm2
+ 		....
+ 		Idle> type your commands. For instance:
+ 		Idle> /control/execute newgeom.mac
+ 		....
+ 		Idle> exit
+ 	
+ 7- HISTOGRAMS
+ 
+     Testem2 produces several histo which are saved as testem2.histo
+     under the control of the command /run/save on
+     
+     Content of these histo:
+  
+      1 : energy deposit       per event
+      2 : charged track length per event
+      3 : neutral track length per event
+            
+      4 : longitudinal energy profile
+      5 : cumulated longitudinal energy profile
+      6 : rms of cumulated longitudinal energy profile
+      
+      7 : gamma's flux
+      8 : positron's flux
+      9 : electron's flux
+                      
+     10 : radial energy profile    
+     11 : cumulated radial energy profile
+     12 : rms of cumulated radial energy profile
+   

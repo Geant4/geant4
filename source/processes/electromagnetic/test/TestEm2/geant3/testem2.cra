@@ -1,0 +1,585 @@
++OPTION,MAPASM.
++ASM,23.
++USE,GCDES,TestEm2,T=EXE.
+*
++EXE,CRA*.
+*
++PAM,11,T=CARD,T=ATTACH.     /cern/pro/src/car/geant321.car
++PATCH,TestEm2.        
++DECK,BLANKDEK.
+* 
+* SHOWER   3.00 /01  900121 18.00 GEANT EXAMPLES
+* 
+*             TEST PROGRAM FOR GEANT/SHOWER STUDIES
+*                                                                               
+*             Authors    R.Brun, M.Maire  *********
+*                             
+* This program generates showers within a cylinder made of an
+* homogeneous material.The statistics of shower profiles and
+* particle's flux are computed and plotted.
+* It has been used to do the GEANT/EGS comparison.(CERN/DD/85/1)
+*                                               
+*     The present release has been modified :            
+*                                          
+* - to increase the flexibility of the volume definition from
+*   data cards.(see description of the common /PVOLUM/ )
+*                  
+* - to permit to define all kinds of primary particles,i.e electrons 
+*   as well pions ( ===> hadronic showers ).
+*   see data card KINE.         
+*
+*     
+* History                  
+* -------                                            
+*
+*  08-02-99 : adapted for Geant4 comparison: electromagnetic/test/TestEm2
+*  17-02-98 : adapted to Unix + interactive + graphic
+*  21-01-90 : Simplified version (i.e. near gexam1)
+*  06-04-89 : Add Hydrogen in the material library (imate=2)
+*  10-02-89 : new histgrams for the resolution of the energy profile
+*                                      
++KEEP,PVOLUM.                  
+      COMMON/PVOLUM/ IMAT,NLTOT,NRTOT,DLX0,DRX0,X0,Z1,R1  
+*                                                               
+*  IMAT   = GEANT material number.                              (data card MATE)
+*  NLTOT  = total number of longitudinal bins.                  (data card BINS)
+*  NRTOT  = total number of radial bins.                        (data card BINS)
+*  DLX0   = longitudinal bin length , in radiation length unit. (data card BINS)
+*  DRX0   = radial bin length       , in radiation length unit. (data card BINS)
+*                                                                               
++KEEP,CELOSS.                                                                   
+      PARAMETER (NBIN= 50)                                                      
+      COMMON/CELOSS/ SEL1(NBIN), SEL1C(NBIN), SER1(NBIN), SER1C(NBIN),          
+     +               SEL2(NBIN), SEL2C(NBIN), SER2(NBIN), SER2C(NBIN),                                         
+     +               DEDL(NBIN), DEDR(NBIN) , FNPAT(NBIN,3), 
+     +               STRCH,STRCH1,STRCH2,STRNE,STRNE1,STRNE2                
+
++DECK,main,if=batch.
+      PROGRAM main
+*
+*
+      PARAMETER (NGBANK=500000, NHBOOK=5000)
+      COMMON/GCBANK/Q(NGBANK)
+      COMMON/PAWC  /H(NHBOOK)
+*
+      CALL GZEBRA( NGBANK)
+      CALL HLIMIT(-NHBOOK)
+*
+* *** initialize HIGZ
+      CALL HPLINT(0)      
+*
+* *** GEANT initialisation
+      CALL UGINIT
+*
+* *** Start events processing
+      CALL GRUN
+*
+* *** End of RUN
+      CALL UGLAST
+*
+      STOP
+      END
++DECK,main,IF=-batch.
+      PROGRAM main
+*
+*     GEANT main program. To link with the MOTIF user interface
+*     the routine GPAWPP(NWGEAN,NWPAW) should be called, whereas
+*     the routine GPAW(NWGEAN,NWPAW) gives access to the basic
+*     graphics version.
+*
+      PARAMETER (NWGEAN=3000000, NWPAW=1000000)
+      COMMON/GCBANK/GEANT(NWGEAN)
+      COMMON/PAWC  /PAW  (NWPAW)
+*
+*
+      CALL GPAW (NWGEAN,NWPAW)
+*
+      END
+*
+      SUBROUTINE qnext
+      END
+*
+      SUBROUTINE czopen
+      END
+*
+      SUBROUTINE cztcp
+      END
+*
+      SUBROUTINE czclos
+      END
+*
+      SUBROUTINE czputa
+      END
++DECK,UGINIT                                                                    
+      SUBROUTINE UGINIT                                                         
+*                                                                               
+*     To initialise GEANT/USER  program and read data cards                     
+*                                                                                                                                                                                                                       
++SEQ,PVOLUM.
++SEQ,CELOSS.                                                              
+*
+      CHARACTER*20 filnam 
+*                                                                                     
+* *** Define the GEANT parameters                                                          
+      CALL GINIT 
+                                                                          
+* *** read data cards
+      PRINT *, 'G3 > gives the filename of the data cards to be read:'
+      READ (*,'(A)') filnam
+      IF (filnam.EQ.' ') filnam = 'testem2.dat'
+      OPEN (unit=5,file=filnam,status='unknown',form='formatted')
+*                                              
+* *** material definition                                                                                       
+      CALL FFKEY('MATE',IMAT,1,'INTEGER') 
+*
+* *** volumes and bins definition                                               
+      CALL FFKEY('BINS',NLTOT,4,'MIXED')
+*                                                         
+* *** read data cards                                                           
+      CALL GFFGO 
+                                                                     
+* *** achieve initialization                                                    
+      NLTOT = MIN(NLTOT,NBIN)                                                   
+      NRTOT = MIN(NRTOT,NBIN)                                                   
+      CALL VZERO(SEL1,13*NBIN+6)                                                  
+*                                                                               
+      CALL GZINIT                                                               
+      CALL GPART 
+*
+      CALL GDINIT                                                                     
+*                                                                               
+* *** Geometry and materials description                                        
+      CALL UGEOM                                                                
+*                                                                               
+* *** Energy loss and cross-sections initialisations                            
+      CALL GPHYSI                                                               
+*                                                                               
+      CALL GPRINT('MATE',0)                                                     
+      CALL GPRINT('TMED',0)                                                     
+      CALL GPRINT('VOLU',0)                                                     
+*                                                                                                                                                              
+* *** Define user histograms                                                    
+      CALL UHINIT                                                               
+*                                                                               
+      END                                                                       
++DECK,UGEOM.                                                                    
+      SUBROUTINE UGEOM                                                          
+*                                                                               
+* *** Define user geometry set up                                               
+*                                                                               
++SEQ,GCBANK.                                                                    
++SEQ,PVOLUM.                                                                    
+*                                                                                                                                       
+      DIMENSION ZAir (2),AAir (2),WAir (2)
+      DIMENSION ZH2O (2),AH2O (2),WH2O (2)                                                  
+      DIMENSION ZBGO (3),ABGO (3),WBGO (3)                                         
+      DIMENSION ZPbWO(3),APbWO(3),WPbWO(3)
+      
+      DIMENSION PAR(3)      
+                                                  
+*                                                                               
+* *** Air mixture parameters                                             
+      DATA ZAir/  7.00,  8.00 /                  
+      DATA AAir/ 14.01, 16.00 /              
+      DATA WAir/  0.70,  0.30 /
+*                                                                               
+* *** H2O compound parameters                                             
+      DATA ZH2O/  1.00,  8.00 /                  
+      DATA AH2O/  1.01, 16.00 /              
+      DATA WH2O/  2.  ,    1. /                
+*                                                                               
+* *** BGO compound parameters 
+      DATA ZBGO/  8.00, 32.00,  83.00 /                                                         
+      DATA ABGO/ 16.00, 72.59, 208.98 /                                                                                          
+      DATA WBGO/ 12.  ,  3.  , 4.     /                                                      
+*                                                                               
+* *** PbWO4 compound parameters
+      DATA ZPbWO/  8.00,  74.00,  82.00 /                                       
+      DATA APbWO/ 16.00, 183.84, 207.19 /                                                                                                 
+      DATA WPbWO/  4.  ,   1.  ,   1.   /                                          
+*                                                                               
+* *** Defines USER perticular materials
+*
+      CALL GSMIXT( 1,'Air'      , AAir , ZAir , 1.29E-3, 2,WAir)
+      CALL GSMIXT( 2,'Water'    , AH2O , ZH2O , 1.0    , 2,WH2O)
+      CALL GSMATE( 3,'Ar Liquid', 40.00, 18.  , 1.39   ,14.0 ,84.0,0,0)      
+      CALL GSMATE( 4,'Aluminium', 26.98, 13.  , 2.7    , 8.9 ,37.2,0,0)      
+      CALL GSMATE( 5,'Iron'     , 55.85, 26.  , 7.87   , 1.76,17.1,0,0)
+      CALL GSMIXT( 6,'BGO'      , ABGO , ZBGO , 7.1    ,-3,WBGO)
+      CALL GSMIXT( 7,'PbWO'     , APbWO, ZPbWO, 8.28   ,-3,WPbWO)                 
+      CALL GSMATE( 8,'Lead '    ,207.19, 82.  ,11.35   ,0.56,18.5,0,0)      
+*                                                                               
+* *** Defines USER tracking media parameters                                    
+      FIELDM = 0.0                                                             
+      IFIELD = 0                                                               
+      TMAXFD = 10.0                                                             
+      STEMAX = 1000.                                                            
+      DEEMAX = 0.20                                                            
+      EPSIL  = 0.001                                                           
+      STMIN  = 0.010                                                           
+*                                                                               
+      CALL GSTMED( 1,'Absorber',IMAT, 0 ,IFIELD,FIELDM,TMAXFD,                
+     *               STEMAX,DEEMAX,EPSIL,STMIN, 0 , 0 )        
+*                                                                               
+* ***  Defines USER'S VOLUMES                                                   
+      JMA = LQ(JMATE-IMAT)                                                      
+      X0 = Q(JMA + 9)                                                           
+      R1     =  NRTOT*DRX0*X0                                                   
+      Z1     =  NLTOT*DLX0*X0*0.5                                               
+*                                                                               
+      PAR(1) = 0.                                                               
+      PAR(2) = R1                                                               
+      PAR(3) = Z1                                                               
+      CALL GSVOLU( 'ECAL' , 'TUBE' ,    1, PAR , 3 , IVOL )                     
+*                                                                               
+      CALL GSDVN( 'SLAB' , 'ECAL' ,   NLTOT , 3)                                
+      CALL GSDVN( 'RING' , 'SLAB' ,   NRTOT , 1)                                
+*                                                                               
+* *** Close geometry banks. (obligatory system routine)                         
+      CALL GGCLOS                                                               
+**
+* *** dessin
+      CALL GSATT ('*'   ,'SEEN',1)
+      CALL GSATT ('RING','SEEN',0)
+*
+      DO IX =1,3
+         CALL GDOPEN (IX)
+         SCALE =   9.5/Z1
+         PAXIS =   0.
+         SAXIS =   0.2*Z1
+         CALL GDRAWC ('ECAL',IX,0.,10.,10.,SCALE,SCALE)
+         CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
+         CALL GDSCAL ( 10., 0.3)
+         CALL GDCLOS
+      END DO
+*
+                                                                               
+      END                                                                       
++DECK,UHINIT.                                                                   
+      SUBROUTINE UHINIT                                                         
+*                                                                               
+*     To book the user's histograms                                             
+*                                                                               
++SEQ,GCKINE                                                                     
++SEQ,PVOLUM                                                                     
+*                                                                               
+* *** Histograms for showers development                                                                                                                                                                                                                  
+*                                                                                                                                         
+      EDMIN=0.                                                              
+      EDMAX=100.                                                             
+      TRKMX=100.*PKINE(1)                                                                                                                         
+*                                                                               
+      CALL HBOOK1(1,'total energy deposition (in percent of E inc)'             
+     *,100,EDMIN,EDMAX,0.0)                                                     
+      CALL HBOOK1(2,'total charged tracklengh (in radl)'                       
+     *,100, 0. , TRKMX, 0.0)
+      CALL HBOOK1(3,'total neutral tracklengh (in radl)'                       
+     *,100, 0. , 10*TRKMX, 0.0)                                                                                        
+*                                                                               
+      CALL HIDOPT(0,'STAT')                                                     
+*
+* *** Longitudinal profile
+      ZMAX=NLTOT*DLX0
+                                                                                           
+      CALL HBPROF(4,'longit energy profile    (in percent of E inc)'          
+     *, NLTOT, 0.,ZMAX, 0., 100.,' ')
+*      
+      ZMIN = 0.5*DLX0
+      ZMAX = ZMIN + NLTOT*DLX0
+                                                                                                                          
+      CALL HBPROF(5,'cumul longit energy dep. (in percent of E inc)'          
+     *, NLTOT, ZMIN,ZMAX, 0., 100.,' ')
+      CALL HBOOK1(6,'resolution: cumul L energy dep. (% of E inc)'          
+     *, NLTOT, ZMIN,ZMAX, 0.0)
+                                                                         
+*                                                                               
+* *** Particle flux                                                   
+      CALL HBPROF(7,'nb of gamma per plane'                                    
+     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')                                                   
+      CALL HBPROF(8,'nb of posit per plane'                                    
+     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')                                                   
+      CALL HBPROF(9,'nb of elect per plane'                                    
+     *, NLTOT, ZMIN,ZMAX, 0., 1.E+6,' ')
+*
+* *** Radial profile
+      RMAX=NRTOT*DRX0
+      
+      CALL HBPROF(10,'radial energy profile    (in percent of E inc)'          
+     *, NRTOT, 0.,RMAX, 0., 100.,' ')
+*
+      RMIN = 0.5*DRX0
+      RMAX = RMIN + NRTOT*DRX0
+      
+      CALL HBPROF(11,'cumul radial energy dep. (in percent of E inc)'          
+     *, NRTOT, RMIN,RMAX, 0., 100.,' ')
+      CALL HBOOK1(12,'resolution: cumul R energy dep. (% of E inc)'          
+     *, NRTOT, RMIN,RMAX, 0.0)                                                                                                                                     
+*                                                                                                                                     
+      END                                                                       
++DECK,GUKINE                                                                    
+      SUBROUTINE GUKINE                                                         
+*                                                                               
+*    Generates Kinematics for primary track
+*
+*    Data card Kine : Itype  Ekine
+*                     (pkine(3) is used internaly to store Etot)                                       
+*                                                                               
++SEQ,GCBANK,GCFLAG,GCKINE.                                                      
++SEQ,PVOLUM                                                                     
+*                                                                               
+      DIMENSION VERTEX(3),PLAB(3)                                               
+      DATA VERTEX/3*0./                                                         
+      DATA PLAB  /3*0./                                                         
+*                                                            
+      VERTEX(3) = - Z1     + 0.01                                 
+      CALL GSVERT(VERTEX,0,0,0,0,NVERT)                          
+*                                                         
+      JPA = LQ(JPART-IKINE)                              
+      XMASS = Q(JPA+7)                                     
+      PKINE(3) = XMASS + PKINE(1)                          
+      PLAB(3)  = SQRT(PKINE(1)*(PKINE(3)+XMASS))                                 
+*                                                          
+      CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)                           
+*                                                                   
+* *** Kinematics debug                      
+      IF(IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)    
+*                                                                               
+      END                                                                       
++DECK,GUTREV                                                          
+      SUBROUTINE GUTREV                                                         
+*                                                                               
+*     User routine to control tracking of one event                 
+*     Called by GRUN                                                            
+*                                                                     
++SEQ,CELOSS                                                                     
+*                                                                          
+      CALL VZERO(DEDL,5*NBIN)                                                                                                         
+      STRCH = 0. 
+      STRNE = 0.                                                              
+*                                                                               
+      CALL GTREVE                                                               
+*                                                                               
+      END                                                                       
++DECK,GUSTEP                                                                    
+      SUBROUTINE GUSTEP                                                         
+*                                                                               
+*     User routine called at the end of each tracking step           
+*                                                               
++SEQ,GCFLAG,GCONST.
++SEQ,GCKINE,GCKING,GCTMED,GCTRAK,GCVOLU.                                 
++SEQ,PVOLUM,CELOSS.                                                             
+*
+      SAVE NLOLD                                                                               
+*                                                                               
+* *** Debug event and strore track for drawing
+      IF (IDEBUG.NE.0) CALL GPCXYZ
+      IF (ISWIT(1).EQ.1.AND.(CHARGE.NE.0.)) CALL GSXYZ
+      IF (ISWIT(1).EQ.2)                    CALL GSXYZ                                                         
+*                                                                               
+* *** Something generated ?                                                     
+      IF(NGKINE.GT.0) CALL GSKING(0)                                            
+*                                                                               
+* *** Energy deposited                                                          
+      IF (DESTEP.GT.0.)THEN                                                     
+         NL  = NUMBER(NLEVEL-1)                                                  
+         NR  = NUMBER(NLEVEL)                                                
+         DEDL(NL) = DEDL(NL) + DESTEP                                          
+         DEDR(NR) = DEDR(NR) + DESTEP                                          
+      ENDIF
+*
+* *** track length                                                                          
+      IF (CHARGE.NE.0.) THEN
+         STRCH = STRCH + STEP 
+      ELSE
+         STRNE = STRNE + STEP
+      ENDIF	 	                                                                                                     
+*                                                                               
+* ***  Particle's flux                                                          
+       NL  = NUMBER(NLEVEL-1)                                                     
+       IF(SLENG.LE.0.) NLOLD = NL                                               
+       IF(NL.NE.NLOLD) THEN                                                     
+         NPL = (NL + NLOLD)/2                                               
+	 IF (IPART.LE.3) FNPAT(NPL,IPART) = FNPAT(NPL,IPART) + 1.                                   
+         NLOLD = NL                                                             
+       ENDIF                                                                    
+*                                                                               
+      END                                                                       
++DECK,GUOUT                                                                     
+      SUBROUTINE GUOUT                                                          
+*                                                                               
+*     User routine called at the end of each event                              
+*                                                                               
++SEQ,GCFLAG,GCKINE.                                                              
++SEQ,PVOLUM,CELOSS.
+*
+* *** drawing
+*
++self,if=-batch.                                                          
+      IF (ISWIT(1).NE.0) THEN
+         CALL GDHEAD (110110,'testem2',0.)
+         CALL GDSHOW (1)
+         CALL GDXYZ  (0)
+      END IF
++self.      
+*
+*
+* *** statistic
+*                                                                              
+      DLC = 0.                                                                  
+      DRC = 0.                                                                  
+
+*     longitudinal profile
+*                                                                                
+      DO 2 I = 1,NLTOT
+         SEL1 (I) = SEL1 (I) + DEDL(I)                                          
+         SEL2 (I) = SEL2 (I) + DEDL(I)**2                                       
+         DLC      = DLC      + DEDL(I)                                          
+         SEL1C(I) = SEL1C(I) + DLC                                              
+         SEL2C(I) = SEL2C(I) + DLC**2
+         
+	 BIN = (FLOAT(I)-0.5)*DLX0
+         CALL HFILL(4,BIN,100*DEDL(I)/PKINE(3),1.)
+         BIN = FLOAT(I)*DLX0
+         CALL HFILL(5,BIN,100*DLC    /PKINE(3),1.)                                                                                                                 
+   2  CONTINUE                                                                  
+
+*     radial profile
+*                                                                                     
+      DO 3 I = 1,NRTOT                                                                     
+         SER1 (I) = SER1 (I) + DEDR(I)                                          
+         SER2 (I) = SER2 (I) + DEDR(I)**2                                       
+         DRC      = DRC      + DEDR(I)                                          
+         SER1C(I) = SER1C(I) + DRC                                              
+         SER2C(I) = SER2C(I) + DRC**2
+	 
+         BIN = (FLOAT(I)-0.5)*DRX0
+         CALL HFILL(10,BIN,100*DEDR(I)/PKINE(3),1.)
+         BIN = FLOAT(I)*DLX0
+         CALL HFILL(11,BIN,100*DRC    /PKINE(3),1.)                                                  
+   3  CONTINUE                                                                  
+
+*     particle flux
+*                                                                                
+      DO 14 IPAT = 1,3                                                          
+      DO 14 NPL  = 1,NLTOT
+         BIN = FLOAT(NPL)*DLX0
+         CALL HFILL(6+IPAT,BIN,FNPAT(NPL,IPAT),1.)                                                   
+   14 CONTINUE                                                                  
+
+*     energy deposited and track length
+*                                                                                
+      ESEEN = 100.*DLC/PKINE(3)                                                 
+      CALL HFILL(1, ESEEN,0.,1.)                                                
+      CALL HFILL(2,STRCH/X0,0.,1.)                                            
+      CALL HFILL(3,STRNE/X0,0.,1.)
+*
+      STRCH1 = STRCH1 + STRCH
+      STRCH2 = STRCH2 + STRCH**2
+      STRNE1 = STRNE1 + STRNE
+      STRNE2 = STRNE2 + STRNE**2              
+*                                                                              
+      END                                                                       
++DECK,UGLAST                                                                    
+      SUBROUTINE UGLAST                                                         
+*                                                                               
+*     Termination routine to print histograms and statistics                    
+*                                                                               
++SEQ,GCBANK,GCKINE,GCFLAG.                                                      
++SEQ,PVOLUM,CELOSS.                                                             
+*                                                                               
+      DIMENSION XSEL1(NBIN),XSEL1C(NBIN),XSER1(NBIN),XSER1C(NBIN),          
+     +          XSEL2(NBIN),XSEL2C(NBIN),XSER2(NBIN),XSER2C(NBIN)          
+
+*                                          
+*                                                                                
+      CALL GLAST
+*
+* *** close HIGZ      
+      CALL HPLEND                                                                      
+*                                                                               
+* *** Normalize and print energy distribution                                   
+      XEVENT=IEVENT                                                             
+      CNORM  = 100./(XEVENT*PKINE(3))                                           
+*
+* *** longitudinal profile                                                                               
+      DO 2 I = 1,NLTOT                                                          
+         XSEL1 (I) = CNORM * SEL1 (I)                                           
+         XSEL2 (I) = CNORM*SQRT(ABS(XEVENT*SEL2 (I) - SEL1 (I)**2))             
+         XSEL1C(I) = CNORM * SEL1C(I)                                           
+         XSEL2C(I) = CNORM*SQRT(ABS(XEVENT*SEL2C(I) - SEL1C(I)**2))
+    2 CONTINUE
+         CALL HPAK (6,XSEL2C)                                                                  
+*
+* *** radial profile                                                                                
+      DO 3 I = 1,NRTOT                                                          
+         XSER1 (I) = CNORM * SER1 (I)                                           
+         XSER2 (I) = CNORM*SQRT(ABS(XEVENT*SER2 (I) - SER1 (I)**2))             
+         XSER1C(I) = CNORM * SER1C(I)                                           
+         XSER2C(I) = CNORM*SQRT(ABS(XEVENT*SER2C(I) - SER1C(I)**2))             
+    3 CONTINUE
+         CALL HPAK (12,XSER2C)
+*
+* *** total track length
+      CNORM  = 1./(XEVENT*X0)
+      XTRCH1 = CNORM*STRCH1
+      XTRCH2 = CNORM*SQRT(ABS(XEVENT*STRCH2 - STRCH1**2))
+      XTRNE1 = CNORM*STRNE1
+      XTRNE2 = CNORM*SQRT(ABS(XEVENT*STRNE2 - STRNE1**2))      	                                       
+*
+* *** Print profiles
+*
+      PRINT 749
+      PRINT 750
+      PRINT 751
+      DO 15 I=1,NLTOT
+         B0 = (I-1)*DLX0
+         B1 = I*DLX0                                                                             
+         PRINT 754,B0,B1,XSEL1(I),XSEL2(I),B1,XSEL1C(I),XSEL2C(I)                                         
+   15 CONTINUE                                                
+
+      PRINT 760
+      PRINT 751
+      DO 16 I=1,NRTOT
+         B0 = (I-1)*DRX0
+         B1 = I*DRX0                                                                             
+         PRINT 754,B0,B1,XSER1(I),XSER2(I),B1,XSER1C(I),XSER2C(I)                                         
+   16 CONTINUE
+*
+* *** print summary
+      PRINT 770
+      PRINT 771,XSEL1C(NLTOT),XSEL2C(NLTOT)
+      PRINT 772,XTRCH1,XTRCH2
+      PRINT 773,XTRNE1,XTRNE2   
+*                                                                               
+* *** Save selected histograms                                                  
+      IF (ISWIT(2).EQ.1) THEN                                                   
+         CALL HRPUT(0,'testem2.histo','N')                                                                        
+      ENDIF
+*
+  749 FORMAT(///)                                                         
+  750 FORMAT(15X,'LATERAL PROFILE',35X,'CUMULATIVE LATERAL PROFILE'/)                                               
+  751 FORMAT( 8X,'Bin',12X,'  Mean ',5X,'  rms',
+     *       19X,'Bin', 9X,'  Mean ',5X,'  rms',/)
+  754 FORMAT( 3X,F5.2,'->',F5.2,' radl: ',F7.2,'%    ',F7.2,'%',                              
+     *       13X,    '0->',F5.2,' radl: ',F7.2,'%    ',F7.2,'%')                                                 
+  760 FORMAT(///,15X,'RADIAL PROFILE',35X,'CUMULATIVE RADIAL PROFILE'/)
+  770 FORMAT(///,30X,'SUMMARY',/)
+  771 FORMAT(    25X,'energy deposit : ',F7.2,' % E0 +- ',F7.2,' % E0')
+  772 FORMAT(    25X,'charged traklen: ',F7.2,' radl +- ',F7.2,' radl')
+  773 FORMAT(    25X,'neutral traklen: ',F7.2,' radl +- ',F7.2,' radl')                                                                           
+*
+      END
++DECK,ffread,T=data.      
+LIST
+MATE  7
+BINS  20 (nbZ)  20 (nbR)  1. (dZ/radl)   0.25 (dR/radl)
+TRIG  500
+KINE  3 (Itype)    1. (Ekine)
+DEBUG 10  5  10
+SWIT  0 (draw)  1 (save)
+CUTS  84.8e-6 (cutgam)  1.13e-3 (cutele) 3*10.e-03 (cutneu/had/muo)
+LOSS 1
+HADR 0
+ABAN 0  
+TIME 2=1.
++QUIT.

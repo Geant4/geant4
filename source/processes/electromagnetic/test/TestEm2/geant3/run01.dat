@@ -1,0 +1,17 @@
+LIST
+C
+C        PbWO4 L=20 radl  R=5 radl
+C        e- 1 GeV  500 events
+C
+C
+MATE  7
+BINS  20 (nbZ)  20 (nbR)  1. (dZ/radl)   0.25 (dR/radl)
+TRIG  500
+KINE  3 (Itype)    1. (Ekine)
+DEBUG 10  5  10
+SWIT  0 (draw)  1 (save)
+CUTS  84.8e-6 (cutgam)  1.13e-3 (cutele) 3*10.e-03 (cutneu/had/muo)
+LOSS 1
+HADR 0
+ABAN 0
+TIME 2=1.
