@@ -1,4 +1,4 @@
-$Id: History,v 1.129 2000-12-13 09:19:56 gcosmo Exp $
+$Id: History,v 1.130 2001-01-08 15:28:05 gcosmo Exp $
 $Name: not supported by cvs2svn $
 -------------------------------------------------------------------
 
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08th January 2000 Gabriele Cosmo (config-V03-00-00)
+- sys/WIN32-VC.gmk: introduced -GR compiler option to allow usage of
+  dynamic casting and type-info at run-time.
 
 13th December 2000 Gunter Folger (config-V02-00-14)
 - common.gmk: fix to rule for building dependencies, parsing is skip
