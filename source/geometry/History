@@ -1,4 +1,4 @@
-$Id: History,v 1.13 2000-04-27 16:44:31 gcosmo Exp $
+$Id: History,v 1.14 2000-05-12 15:12:36 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,22 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 12, 2000   Gabriele Cosmo               geometry-V01-01-03
+-----------------------------
+- magneticfield (field-V01-01-03):
+  o fixes to G4MagErrorStepper (check on chord endpoint),
+    G4RKG3_Stepper (deleted error message from StepNoErr),
+    G4MagIntegratorDriver (modified debug information).
+  o minor fix to dummy implementation of assignment operator
+    in G4MagneticField.hh.
+  o modified method for finding new trial step in G4ChordFinder.
+- volumes (geomvol-V01-01-00):
+  o introduced kCarTolerance for check over taken step length and
+    TruePathLength in G4PropagatorInField::ComputeStep().
+- solids/CSG (geom-solids-csg-V01-01-02):
+  o fixes in DistanceToIn(p,v) for G4Box and G4Trd to return 0 distance
+    in case computed value is less than 0.5*kCarTolerance.
 
 Apr 27, 2000   Gabriele Cosmo               geometry-V01-01-02
 -----------------------------
