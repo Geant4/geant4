@@ -119,47 +119,47 @@ G4Element* elC  = new G4Element(name="Carbon"  ,symbol="C" , z= 6., a);
 density = 1.848*g/cm3;
 a = 9.01*g/mole;
 G4Material* Be = new G4Material(name="Beryllium", z=4., a, density);
-G4cout << "Matrial available: " << Be->GetName() << G4endl; 
+G4cout << "Material available: " << Be->GetName() << G4endl; 
 
 density = 2.700*g/cm3;
 a = 26.98*g/mole;
 G4Material* Al = new G4Material(name="Aluminum", z=13., a, density);
-G4cout << "Matrial available: " << Al->GetName() << G4endl; 
+G4cout << "Material available: " << Al->GetName() << G4endl; 
 
 density = 2.0*g/cm3;
 a = 12.0107*g/mole;
 G4Material* C = new G4Material(name="Carbon", z=6., a, density);
-G4cout << "Matrial available: " << C->GetName() << G4endl; 
+G4cout << "Material available: " << C->GetName() << G4endl; 
 
 density = 2.330*g/cm3;
 a = 28.09*g/mole;
 G4Material* Si = new G4Material(name="Silicon", z=14., a, density);
-G4cout << "Matrial available: " << Si->GetName() << G4endl; 
+G4cout << "Material available: " << Si->GetName() << G4endl; 
 
 density = 1.390*g/cm3;
 a = 39.95*g/mole;
 G4Material* lAr = new G4Material(name="liquidArgon", z=18., a, density);
-G4cout << "Matrial available: " << lAr->GetName() << G4endl; 
+G4cout << "Material available: " << lAr->GetName() << G4endl; 
 
 density = 7.870*g/cm3;
 a = 55.85*g/mole;
 G4Material* Fe = new G4Material(name="Iron"   , z=26., a, density);
-G4cout << "Matrial available: " << Fe->GetName() << G4endl; 
+G4cout << "Material available: " << Fe->GetName() << G4endl; 
 
 density = 8.960*g/cm3;
 a = 63.55*g/mole;
 G4Material* Cu = new G4Material(name="Copper"   , z=29., a, density);
-G4cout << "Matrial available: " << Cu->GetName() << G4endl; 
+G4cout << "Material available: " << Cu->GetName() << G4endl; 
 
 density = 19.32*g/cm3;
 a =196.97*g/mole;
 G4Material* Au = new G4Material(name="Gold"   , z=79., a, density);
-G4cout << "Matrial available: " << Au->GetName() << G4endl; 
+G4cout << "Material available: " << Au->GetName() << G4endl; 
 
 density = 11.35*g/cm3;
 a = 207.19*g/mole;
 G4Material* Pb = new G4Material(name="Lead"     , z=82., a, density);
-G4cout << "Matrial available: " << Pb->GetName() << G4endl; 
+G4cout << "Material available: " << Pb->GetName() << G4endl; 
 
 //
 // define a material from elements.   case 1: chemical molecule
@@ -170,19 +170,19 @@ G4Material* H2O = new G4Material("Water", density, ncomponents=2);
 H2O->SetChemicalFormula("H_2O");
 H2O->AddElement(elH, natoms=2);
 H2O->AddElement(elO, natoms=1);
-G4cout << "Matrial available: " << H2O->GetName() << G4endl; 
+G4cout << "Material available: " << H2O->GetName() << G4endl; 
 
 density = 0.00066715*g/cm3;
 G4Material* CH4 = new G4Material("Methane", density, ncomponents=2);
 CH4->SetChemicalFormula("CH_4");
 CH4->AddElement(elH, natoms=4);
 CH4->AddElement(elC, natoms=1);
-G4cout << "Matrial available: " << CH4->GetName() << G4endl; 
+G4cout << "Material available: " << CH4->GetName() << G4endl; 
 
 G4Material*  Graphite = new G4Material("Graphite", 2.265*g/cm3, ncomponents=1);
 Graphite->SetChemicalFormula("Graphite");
 Graphite->AddElement( elC, 1 );
-G4cout << "Matrial available: " << Graphite->GetName() << G4endl; 
+G4cout << "Material available: " << Graphite->GetName() << G4endl; 
 
 //
 // define a material from elements.   case 2: mixture by fractional mass

@@ -4,24 +4,18 @@
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Matrial available: Beryllium
-Matrial available: Aluminum
-Matrial available: Carbon
-Matrial available: Silicon
-Matrial available: liquidArgon
-Matrial available: Iron
-Matrial available: Copper
-Matrial available: Gold
-Matrial available: Lead
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Water
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Methane
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Graphite
+Material available: Beryllium
+Material available: Aluminum
+Material available: Carbon
+Material available: Silicon
+Material available: liquidArgon
+Material available: Iron
+Material available: Copper
+Material available: Gold
+Material available: Lead
+Material available: Water
+Material available: Methane
+Material available: Graphite
 
 ***** Table : Nb of materials = 13 *****
 
@@ -109,7 +103,7 @@ msc:   Tables of transport mean free paths.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
+        delta ray energy sampled from  differential Xsection. subSecFlag = 1
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -241,7 +235,7 @@ msc:   Tables of transport mean free paths.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
+        delta ray energy sampled from  differential Xsection. subSecFlag = 1
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -354,7 +348,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.19s Real=1.19s Sys=0s
+  User=1.12s Real=1.12s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV
@@ -378,7 +372,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.4s Real=1.4s Sys=0s
+  User=1.46s Real=1.46s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV
@@ -399,7 +393,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.39s Real=1.4s Sys=0s
+  User=1.34s Real=1.34s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for IonC12 with Ekin = 6 MeV
@@ -425,7 +419,7 @@ Start Run processing.
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=109.45s Real=109.72s Sys=0.01s
+  User=105.39s Real=106.94s Sys=0.03s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV

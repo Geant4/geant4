@@ -4,24 +4,18 @@
              Copyright : Geant4 Collaboration
 **********************************************
 G4VUserPhysicsList::SetVerboseLevel  : Verbose level is set to 2
-Matrial available: Beryllium
-Matrial available: Aluminum
-Matrial available: Carbon
-Matrial available: Silicon
-Matrial available: liquidArgon
-Matrial available: Iron
-Matrial available: Copper
-Matrial available: Gold
-Matrial available: Lead
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Water
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Methane
----> warning from G4Material constructor with chemical formula. This constructor is going to be depreciated.
- Use material->SetChemicalFormula(const G4String&)
-Matrial available: Graphite
+Material available: Beryllium
+Material available: Aluminum
+Material available: Carbon
+Material available: Silicon
+Material available: liquidArgon
+Material available: Iron
+Material available: Copper
+Material available: Gold
+Material available: Lead
+Material available: Water
+Material available: Methane
+Material available: Graphite
 
 ***** Table : Nb of materials = 13 *****
 
@@ -109,7 +103,7 @@ msc:   Tables of transport mean free paths.
         PhysicsTables from 100 eV to 100 TeV in 100 bins. 
 
 eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
-        delta ray energy sampled from  differential Xsection.
+        delta ray energy sampled from  differential Xsection. subSecFlag = 1
         PhysicsTables from 1 keV to 100 TeV in 100 bins. 
 
 eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
@@ -224,7 +218,7 @@ EvtNo= 7068  length= 0.0186306  xend= -0.0118009
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=12.13s Real=12.18s Sys=0s
+  User=11.52s Real=11.6s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 9999 for proton with Ekin = 0.5 MeV
@@ -258,7 +252,7 @@ EvtNo= 8727  length= 0.00936745  xend= 0.00415206
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=14.2s Real=14.25s Sys=0s
+  User=13.62s Real=13.87s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 9990 for anti_proton with Ekin = 0.5 MeV
@@ -281,7 +275,7 @@ EvtNo= 6014  length= 0.00878602  xend= 0.00430702
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=13.94s Real=14.44s Sys=0s
+  User=13.45s Real=13.6s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 9998 for IonC12 with Ekin = 6 MeV
