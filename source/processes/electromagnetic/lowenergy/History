@@ -1,4 +1,4 @@
-$Id: History,v 1.174 2003-03-27 16:48:32 gcosmo Exp $
+$Id: History,v 1.175 2003-03-28 11:16:43 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,12 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28.03-2003   G.Cosmo, tag emlowen-V05-00-12
+             Fixed compilation errors on SUN-CC for files:
+              G4PenelopeBremsstrahlung.cc, G4PenelopeBremsstrahlungAngular.cc,
+	      G4PenelopeBremsstrahlungContinuous.cc, G4PenelopeInterpolator.cc.
+             Variables defined in for-loops scope were used outside scope!
 
 27.03-2003   G.Cosmo, tag emlowen-V05-00-11
              Fixed usage of 'abs' in G4PenelopeInterpolator.cc and
