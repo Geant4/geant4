@@ -387,7 +387,7 @@ int main(int argc, char** argv)
       phys->setCutOnP(eBound);
       phys->setCutOnPPP(kBound);
     }
-*/
+    */
     const G4ParticleDefinition* proton = G4Proton::Proton();
     const G4ParticleDefinition* neutron = G4Neutron::Neutron();
     const G4ParticleDefinition* pin = G4PionMinus::PionMinus();
@@ -689,7 +689,6 @@ int main(int argc, char** argv)
 
       G4double de = aChange->GetLocalEnergyDeposit();
       G4int n = aChange->GetNumberOfSecondaries();
-      G4int nn= n;
 
       if(iter == 1000*(iter/1000)) {
         G4cerr << "##### " << iter << "-th event  #####" << G4endl;
@@ -704,7 +703,7 @@ int main(int argc, char** argv)
         if(pd->GetPDGMass() > 100.*MeV) nbar++;
       }
 
-      for(G4int i=0; i<nn; i++) {
+      for(G4int i=0; i<n; i++) {
 
         sec = aChange->GetSecondary(i)->GetDynamicParticle();
         pd  = sec->GetDefinition();
@@ -845,9 +844,8 @@ int main(int argc, char** argv)
 	    h[1]->fill(9.0, 1.0);
 	  }
 	}
-       delete sec;
-       	 
-//        if(i<n) delete aChange->GetSecondary(i);
+	//       delete sec;       	 
+        delete aChange->GetSecondary(i);
       }
 
       if(verbose > 0) {
@@ -862,7 +860,7 @@ int main(int argc, char** argv)
       pt = sqrt(px*px +py*py);
 
       if(usepaw) {
-        h[0]->fill((float)nn,1.0);
+        h[0]->fill((float)n,1.0);
 	h[15]->fill(labv.e()/MeV, 1.0);
 	h[16]->fill(pz/GeV, 1.0);
 	h[17]->fill(pt/GeV, 1.0);
