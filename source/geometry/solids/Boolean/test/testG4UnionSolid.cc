@@ -365,9 +365,9 @@ int main()
 
     dist=t2Ut4.DistanceToOut(G4ThreeVector(-15,-45,0),vx,
                              calcNorm,pgoodNorm,pNorm);
-    assert(ApproxEqual(dist,15));
-    //  G4cout<<"(36.8) t2Ut4.DistanceToOut(G4ThreeVector(-15,-45,0),vx) = "
-    //      <<dist<<G4endl ;
+    assert(ApproxEqual(dist,36.7945));
+    // G4cout<<"(36.8) t2Ut4.DistanceToOut(G4ThreeVector(-15,-45,0),vx) = "
+    //    <<dist<<G4endl ;
 
     dist=t2Ut4.DistanceToOut(G4ThreeVector(0,-45,0),vx,
                              calcNorm,pgoodNorm,pNorm);
