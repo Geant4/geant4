@@ -434,9 +434,9 @@ int main(int argc, char** argv)
     //AIDA::ITuple* ntuple1 = 0;
 
     G4double mass = part->GetPDGMass();
-    G4double pmax = sqrt(energy*(energy + 2.0*mass));
-    G4double binlog = log10(ebinlog);
-    G4int nbinlog = (G4int)(log10(2.0*emax)/binlog);
+    G4double pmax = std::sqrt(energy*(energy + 2.0*mass));
+    G4double binlog = std::log10(ebinlog);
+    G4int nbinlog = (G4int)(std::log10(2.0*emax)/binlog);
     G4double logmax = binlog*nbinlog;
     G4double bine = emax/(G4double)nbinse;
     G4double bind = emax/(G4double)nbinsd;
@@ -597,7 +597,7 @@ int main(int argc, char** argv)
         }
 
         cng[k] = cross_sec*MeV*1000.0*(G4double)nbinsd/
-         (twopi*(cos(degree*bng1[k]) - cos(degree*bng2[k]))*
+         (twopi*(std::cos(degree*bng1[k]) - std::cos(degree*bng2[k]))*
                 barn*emax*(G4double)nevt);
       }
     }
@@ -620,7 +620,7 @@ int main(int argc, char** argv)
         }
 
         cngpi[k] = cross_sec*MeV*1000.0*(G4double)nbinspi/
-         (twopi*(cos(degree*bngpi1[k]) - cos(degree*bngpi2[k]))*
+         (twopi*(std::cos(degree*bngpi1[k]) - std::cos(degree*bngpi2[k]))*
                  barn*emax*(G4double)nevt);
       }
     }
@@ -716,7 +716,7 @@ int main(int argc, char** argv)
         if(!inclusive && nbar != 2) break;
 
         m = pd->GetPDGMass();
-	p = sqrt(e*(e + 2.0*m));
+	p = std::sqrt(e*(e + 2.0*m));
 	mom *= p;
         m  = pd->GetPDGMass();
         fm = G4LorentzVector(mom, e + m);
@@ -725,8 +725,8 @@ int main(int argc, char** argv)
         px = mom.x();
         py = mom.y();
         pz = mom.z();
-        p  = sqrt(px*px +py*py + pz*pz);
-        pt = sqrt(px*px +py*py);
+        p  = std::sqrt(px*px +py*py + pz*pz);
+        pt = std::sqrt(px*px +py*py);
 
         theta = mom.theta();
         G4double thetad = theta/degree;
@@ -745,7 +745,7 @@ int main(int argc, char** argv)
 		 << G4endl;
 	}
 	de += e;
-        if(verbose>0 || abs(mom.phi()/degree - 90.) < 0.001) {
+        if(verbose>0 || std::fabs(mom.phi()/degree - 90.) < 0.001) {
           G4cout << i << "-th secondary  "
 		 << pd->GetParticleName() << "   Ekin(MeV)= "
                  << e/MeV
@@ -764,7 +764,7 @@ int main(int argc, char** argv)
             float N = pd->GetBaryonNumber();
             float Z = pd->GetPDGCharge()/eplus;
             float Z0= bestZ[(int)N];
-            if(abs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
+            if(std::fabs(Z0 - Z) < 0.1 || Z0 == 0.0) h[26]->fill(N, factorb);
 	  }
 
           if(pd == proton) {
@@ -774,7 +774,7 @@ int main(int argc, char** argv)
             h[7]->fill(pt/MeV, 1.0);
             h[11]->fill(e/MeV, 1.0);
 	    h[21]->fill(e/MeV, factor);
-	    h[24]->fill(cos(theta), factora);
+	    h[24]->fill(std::cos(theta), factora);
 
           } else if(pd == pin) {
 
@@ -816,15 +816,15 @@ int main(int argc, char** argv)
             h[10]->fill(pt/MeV, 1.0);
             h[14]->fill(e/MeV, 1.0);
 	    h[22]->fill(e/MeV, factor);
-            G4double ee = log10(e/MeV);
+            G4double ee = std::log10(e/MeV);
             G4int    nb = (G4int)(ee/binlog);
             G4double e1 = binlog*nb;
             G4double e2 = e1 + binlog;
-            e1 = pow(10., e1);
-            e2 = pow(10., e2) - e1;
+            e1 = std::pow(10., e1);
+            e2 = std::pow(10., e2) - e1;
             G4double f  = factor*bine/e2;
 	    h[50]->fill(ee, f);
-	    if(e >= elim) h[25]->fill(cos(theta), factora);
+	    if(e >= elim) h[25]->fill(std::cos(theta), factora);
             for(G4int kk=0; kk<nangl; kk++) {
               if(bng1[kk] <= thetad && thetad <= bng2[kk]) {
                 h[27+kk]->fill(e/MeV, cng[kk]);
@@ -855,8 +855,8 @@ int main(int argc, char** argv)
       px = labv.px();
       py = labv.py();
       pz = labv.pz();
-      p  = sqrt(px*px +py*py + pz*pz);
-      pt = sqrt(px*px +py*py);
+      p  = std::sqrt(px*px +py*py + pz*pz);
+      pt = std::sqrt(px*px +py*py);
 
       if(usepaw) {
         h[0]->fill((float)n,1.0);

@@ -135,7 +135,7 @@ int main(int argc, char** argv)
 	  e0 = e;
 	  energy.push_back(e);
 	}
-        for (j=0; j<5; j++) {if(abs(a - angle[j])<1.) break;}
+        for (j=0; j<5; j++) {if(std::fabs(a - angle[j])<1.) break;}
 	cross[j]->push_back(s);
 	err[j]->push_back(s1);
       }
