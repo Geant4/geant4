@@ -12,8 +12,8 @@
 #include "globals.hh"
 #include "g4std/iostream"
 #include "Error.hh"
-#include <math.h>
-#include <algo.h>
+#include <cmath>
+#include <algorithm>
 
 const double Double::Epsilon = 1e-12;
 const double Double::EpsWarning = 1e-8;

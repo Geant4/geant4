@@ -1,6 +1,6 @@
 #include "DistributionFunction.hh"
 #include "G4ios.hh"
-#include <algo.h>
+#include <algorithm>
 
 REAL GaussDeviates::getValue() const
 {

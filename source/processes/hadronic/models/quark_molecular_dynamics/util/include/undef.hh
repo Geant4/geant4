@@ -5,13 +5,32 @@
 #endif
 
 #include "g4std/iostream"
+#include "String.hh"
 
 enum joker { DUMMY = 32767 };
+
+
+template<class t> class undef;
 
 template<class t>
 class undef
 {
-  friend G4std::istream& operator>>(G4std::istream& in,undef<t>&);
+  friend G4std::istream& operator>>(G4std::istream& in,undef<t>& x) {
+// -----------------------------------------------------
+// implementation from undef.tcc:
+    char c;
+    in >> c;
+    if ( c == '?' )
+      x.valid = false;
+    else {
+      in.putback(c);
+      if ( !(in >> x.val || in.eof()) )
+        throw "Error reading in undef<t>!";
+      x.valid = true;
+    }
+    return in;
+// -----------------------------------------------------
+  }
   t val,def;
   bool valid;
 public:
@@ -22,8 +41,5 @@ public:
   operator t() const { return valid ? val : def; }
 };
 
-#ifndef IS_GCC
-#include "undef.tcc"
-#endif
 
 #endif

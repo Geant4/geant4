@@ -1,0 +1,75 @@
+Undefined			first referenced
+ symbol  			    in file
+void std::vector<ParticleBase*,std::allocator<ParticleBase*> >::__insert_aux(ParticleBase**,ParticleBase*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+__type_1 std::copy<G4PhysicsVector**,G4PhysicsVector**>(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4PhysicsTable.o)
+void std::vector<G4UnitsCategory*,std::allocator<G4UnitsCategory*> >::__insert_aux(G4UnitsCategory**,G4UnitsCategory*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4UnitsTable.o)
+void std::vector<CollisionTab*,std::allocator<CollisionTab*> >::__insert_aux(CollisionTab**,CollisionTab*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+Pattern<double>::Pattern #Nvariant 1(int)          /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleProperties.o)
+Knot<ParticleType>::__vtbl  /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+[Hint: try checking whether the first non-inlined, non-pure virtual function of class Knot<ParticleType> is defined]
+
+__type_1 std::copy<Vektor4*,Vektor4*>(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+Knot<CollisionType>::__vtbl /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+[Hint: try checking whether the first non-inlined, non-pure virtual function of class Knot<CollisionType> is defined]
+
+void std::vector<G4UnitDefinition*,std::allocator<G4UnitDefinition*> >::__insert_aux(G4UnitDefinition**,G4UnitDefinition*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4UnitsTable.o)
+__type_1 std::copy<CollisionTab**,CollisionTab**>(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+Array<int>::Array(int)              /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(iso.o)
+Array<String>::Array()        /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_util.a(String.o)
+std::vector<ParticleType*,std::allocator<ParticleType*> >Knot<ParticleType>::getList()const /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+Array<String>::Array(const Array<String>&)     /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_util.a(String.o)
+void std::__final_insertion_sort<int*>(__type_0,__type_0) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+AmbiguousResult<Double>::__vtbl /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_util.a(MathTools.o)
+[Hint: try checking whether the first non-inlined, non-pure virtual function of class AmbiguousResult<Double> is defined]
+
+Knot<CollisionType>::~Knot #Nvariant 1() /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+Pattern<double>::Pattern #Nvariant 1(const Pattern<double>&)        /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleProperties.o)
+void std::vector<G4VStateDependent*,std::allocator<G4VStateDependent*> >::__insert_aux(G4VStateDependent**,G4VStateDependent*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4StateManager.o)
+ParticleType&Knot<ParticleType>::FindKnot(const ParticleType&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+void Knot<ParticleType>::printTree(std::basic_ostream<char,std::char_traits<char> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(G4qmd.o)
+std::vector<ParticleType*,std::allocator<ParticleType*> >Knot<ParticleType>::Find(const String&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(G4qmd.o)
+std::vector<double,std::allocator<double> >&std::vector<double,std::allocator<double> >::operator=(const std::vector<double,std::allocator<double> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4PhysicsVector.o)
+void std::vector<MultiIndex*,std::allocator<MultiIndex*> >::__insert_aux(MultiIndex**,MultiIndex*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(iso.o)
+__type_0 std::find<int*,int>(__type_0,__type_0,const __type_1&)    /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+std::vector<std::vector<__type_0,std::allocator<__type_0> >,std::allocator<std::vector<__type_0,std::allocator<__type_0> > > >Permutations<ParticleType*>(const std::vector<__type_0,std::allocator<__type_0> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+double Pattern<double>::matches(const Pattern<double>&)const   /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+std::vector<G4UnitDefinition*,std::allocator<G4UnitDefinition*> >&std::vector<G4UnitDefinition*,std::allocator<G4UnitDefinition*> >::operator=(const std::vector<G4UnitDefinition*,std::allocator<G4UnitDefinition*> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4UnitsTable.o)
+std::vector<G4VStateDependent*,std::allocator<G4VStateDependent*> >&std::vector<G4VStateDependent*,std::allocator<G4VStateDependent*> >::operator=(const std::vector<G4VStateDependent*,std::allocator<G4VStateDependent*> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4StateManager.o)
+void std::vector<decayMode*,std::allocator<decayMode*> >::__insert_aux(decayMode**,decayMode*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+Pattern<double>&Pattern<double>::operator=(const Pattern<double>&)         /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleProperties.o)
+FileRead<CollisionType>::__vtbl /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(G4qmd.o)
+[Hint: try checking whether the first non-inlined, non-pure virtual function of class FileRead<CollisionType> is defined]
+
+void std::vector<isotop*,std::allocator<isotop*> >::__insert_aux(isotop**,isotop*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+void Knot<ParticleType>::Insert(ParticleType&,const String&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+__type_1 std::copy<G4VStateDependent**,G4VStateDependent**>(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4StateManager.o)
+Array<bool>::Array(int)              /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+Array<RGB>::Array(int)          /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+void std::vector<ParticleType*,std::allocator<ParticleType*> >::__insert_aux2(ParticleType**,ParticleType*const*,ParticleType*const*) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+int Pattern<double>::joker()const        /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+__type_1 std::copy<Particle**,Particle**>(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Nbody.o)
+void std::vector<CollisionTab**,std::allocator<CollisionTab**> >::__insert_aux(CollisionTab***,CollisionTab**const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+void std::__quick_sort_loop_aux<int*,int,std::greater<int> >(__type_0,__type_0,__type_1*,__type_2) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+std::vector<std::vector<__type_0,std::allocator<__type_0> >,std::allocator<std::vector<__type_0,std::allocator<__type_0> > > >Permutations<isotop*>(const std::vector<__type_0,std::allocator<__type_0> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+__type_1 std::copy<int*,int*>(__type_0,__type_0,__type_1)      /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+void std::vector<Vektor4,std::allocator<Vektor4> >::__insert_aux(Vektor4*,const Vektor4&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+__type_0 sign<int>(__type_0)                /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+__type_1 std::copy<double*,double*>(__type_0,__type_0,__type_1)      /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4globman.a(G4PhysicsVector.o)
+CollisionType&Knot<CollisionType>::FindKnot(const CollisionType&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+void std::__reverse<int*>(__type_0,__type_0,std::random_access_iterator_tag) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+void std::vector<ParticleType*,std::allocator<ParticleType*> >::__insert_aux(ParticleType**,ParticleType*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+void std::__quick_sort_loop_aux<int*,int>(__type_0,__type_0,__type_1*) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+void Knot<CollisionType>::Insert(CollisionType&,const String&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Collision.o)
+Pattern<double>::~Pattern #Nvariant 1()           /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleProperties.o)
+ParticleType&Knot<ParticleType>::FindKnot(const String&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(G4qmd.o)
+__RTTI__1nPAmbiguousResult4nGDouble___ /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_util.a(MathTools.o)
+std::vector<Vektor4,std::allocator<Vektor4> >&std::vector<Vektor4,std::allocator<Vektor4> >::operator=(const std::vector<Vektor4,std::allocator<Vektor4> >&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(reactionChannels.o)
+FileRead<ParticleType>::__vtbl /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(G4qmd.o)
+[Hint: try checking whether the first non-inlined, non-pure virtual function of class FileRead<ParticleType> is defined]
+
+Knot<ParticleType>::~Knot #Nvariant 1() /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(ParticleType.o)
+Array<double>::Array(int)              /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(iso.o)
+void std::__final_insertion_sort<int*,std::greater<int> >(__type_0,__type_0,__type_1) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Propagation.o)
+void std::vector<Particle*,std::allocator<Particle*> >::__insert_aux(Particle**,Particle*const&) /afs/cern.ch/user/s/sscherer/sungeant/geant4/lib/SUN-CC5/libG4hadronic_quark_md_body.a(Nbody.o)
+ld: fatal: Symbol referencing errors. No output written to /afs/cern.ch/user/s/sscherer/sungeant/geant4/bin/SUN-CC5/G4qmdTest
+gmake: *** [/afs/cern.ch/user/s/sscherer/sungeant/geant4/bin/SUN-CC5/G4qmdTest] Error 1

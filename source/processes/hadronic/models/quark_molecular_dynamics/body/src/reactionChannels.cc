@@ -43,7 +43,7 @@ double FunctionType::getValue(double x)
   return value;
 }
 
-decayMode::decayMode(int C_,const vector<ParticleBase*>& P)
+decayMode::decayMode(int C_,const G4std::vector<ParticleBase*>& P)
   : SumMass(0),isoSet(false),elastic(false) 
 {
   for (int i=0; i<P.size(); i++) {
@@ -51,7 +51,7 @@ decayMode::decayMode(int C_,const vector<ParticleBase*>& P)
   }
 }
 
-decayMode::decayMode(G4std::istream& in,const vector<ParticleType*>& incoming) 
+decayMode::decayMode(G4std::istream& in,const G4std::vector<ParticleType*>& incoming) 
   : SumMass(0),isoSet(false),elastic(false)
 {
   String prods,Mode,Type;
@@ -109,9 +109,9 @@ decayMode::decayMode(G4std::istream& in,const vector<ParticleType*>& incoming)
   }
 }
 /*
-bool decayMode::compareProducts(const vector<ParticleBase*>& P) const
+bool decayMode::compareProducts(const G4std::vector<ParticleBase*>& P) const
 {
-  vector<isotop*> L;
+  G4std::vector<isotop*> L;
   for (int i=0; i<P.size(); i++)
     L.insert(L.end(),new isotop(*P[i]));
   return compare(L,products);
@@ -129,12 +129,12 @@ G4std::ostream& operator<<(G4std::ostream& o,decayMode& d)
 
 class NBodyDecay
 {
-  vector<Vektor4> MomList;
-  const vector<double>&  MassList;
+  G4std::vector<Vektor4> MomList;
+  const G4std::vector<double>&  MassList;
   double Decay(int n,int k,double& mmin,double mmax);
 public:
-  NBodyDecay(const vector<double>& M) : MassList(M) {}
-  vector<Vektor4> getMomenta(double Emax);
+  NBodyDecay(const G4std::vector<double>& M) : MassList(M) {}
+  G4std::vector<Vektor4> getMomenta(double Emax);
 };
 
 double NBodyDecay::Decay(int n,int k,double& mmin,double mmax)
@@ -175,7 +175,7 @@ MomList.insert(MomList.begin(),Vektor4(P_k_star,sqrt(sqr(double(MassList[k-1]))+
   return m_k;
 }
 
-vector<Vektor4> NBodyDecay::getMomenta(double Emax)
+G4std::vector<Vektor4> NBodyDecay::getMomenta(double Emax)
 {
   MomList.erase(MomList.begin(),MomList.end());
   double mmin = 0;
@@ -183,13 +183,13 @@ vector<Vektor4> NBodyDecay::getMomenta(double Emax)
   return MomList;
 }
 
-void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,const Vektor3& beta,const Vektor3& x,bool force)
+void decayMode::performDecay(const G4std::vector<ParticleBase*>& p_list,double Etot,const Vektor3& beta,const Vektor3& x,bool force)
 {
   Array<double> jk(N());
   Array<double> iso3(N());
   Array<double> spin3(N());
   Array<bool> isSet(N());
-  vector<double> MassList;
+  G4std::vector<double> MassList;
   int no_in = -1;
   {for (int i=0; i<N(); i++) {
     if ( products[i]->keep ) {
@@ -248,7 +248,7 @@ void decayMode::performDecay(const vector<ParticleBase*>& p_list,double Etot,con
   }
   //  Calculate momenta of outgoing particles:
   bool energyOk = ( E>=0 || !force );
-  vector<Vektor4> MomList;
+  G4std::vector<Vektor4> MomList;
   if ( energyOk ) {
     NBodyDecay Decay(MassList);
     MomList = Decay.getMomenta(Etot);

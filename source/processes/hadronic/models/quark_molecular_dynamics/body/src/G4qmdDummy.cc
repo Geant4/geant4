@@ -87,14 +87,14 @@ int G4qmdDummy::operator!=(const G4qmdDummy &right) const
 // --------------------------------------------
 //
 
-void G4qmdDummy::skipline(istream& in) 
+void G4qmdDummy::skipline(G4std::istream& in) 
 {
 	G4cout << "... read in line" << G4endl;
   char c;
   while ( in.get(c) && c != '\n' ) ;
 }
 
-double G4qmdDummy::readEvent(istream& in) 
+double G4qmdDummy::readEvent(G4std::istream& in) 
 {
   G4String name,checkstring;
 

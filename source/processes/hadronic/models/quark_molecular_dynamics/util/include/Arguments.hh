@@ -10,7 +10,12 @@
 #include "Fallible.hh"
 #include "g4std/iostream"
 
+#include "Conversions.hh"
+#include <string.h>
+
+
 class Arguments;
+
 
 class ArgumentEntryBase
 {
@@ -27,6 +32,10 @@ private:
    char* name;
 };
 
+
+
+template<class t> class ArgumentEntry : public ArgumentEntryBase,public Fallible<t>;
+
 template<class t>
 class ArgumentEntry : public ArgumentEntryBase,public Fallible<t>
 {
@@ -34,9 +43,39 @@ public:
   ArgumentEntry(char*,const t&,int = 1);
   ArgumentEntry(char*,const t*,int);
   ~ArgumentEntry() {}
-  inline void convertChar(char*,int = 0);
+  void convertChar(char*,int = 0);
   operator t() { return getValue(); }
 };
+
+// -----------------------------------------------------
+// implementation from Arguments.tcc:
+
+template<class t>
+ArgumentEntry<t>::ArgumentEntry(char* string,const t& def,int n) 
+  : ArgumentEntryBase(string,n),Fallible<t>(def)
+{
+}
+
+template<class t>
+ArgumentEntry<t>::ArgumentEntry(char* string,const t* def,int n) 
+  : ArgumentEntryBase(string,n),Fallible<t>(*def)
+{
+}
+
+template<class t>
+void ArgumentEntry<t>::convertChar(char* s,int n)
+{
+  if ( n<getNumber() || !getNumber() ) {
+    t value;
+    Conversion(s,value);
+    validate(value);
+  }
+  else
+    throw IndexOutOfRange(n,getNumber()-1);
+}
+
+// -----------------------------------------------------
+
 
 class SwitchArgument : public ArgumentEntry<Boolean>
 {
@@ -44,6 +83,9 @@ public:
   SwitchArgument(char* key,Boolean flag=Boolean::False)
     : ArgumentEntry<Boolean>(key,flag,0) {}
 };
+
+
+template<class t> class NoKeyArgument : public ArgumentEntry<t>;
 
 template<class t>
 class NoKeyArgument : public ArgumentEntry<t>
@@ -87,8 +129,5 @@ private:
   DList< ArgumentEntryBase > args;
 };
 
-#ifndef IS_GCC
-#include "Arguments.tcc"
-#endif
 
 #endif

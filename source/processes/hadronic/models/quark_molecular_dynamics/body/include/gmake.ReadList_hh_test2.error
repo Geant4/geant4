@@ -1,0 +1,12 @@
+"/afs/cern.ch/user/s/sscherer/sungeant/geant4/source/processes/hadronic/models/quark_molecular_dynamics/util/include/String.hh", line 48: Warning: String literal converted to char* in formal argument s in call to String::String(char*).
+"/afs/cern.ch/user/s/sscherer/sungeant/geant4/source/processes/hadronic/models/quark_molecular_dynamics/util/include/Error.hh", line 39: Warning: String literal converted to char* in initialization.
+"/afs/cern.ch/user/s/sscherer/sungeant/geant4/source/processes/hadronic/models/quark_molecular_dynamics/util/include/Error.hh", line 40: Warning: String literal converted to char* in initialization.
+"/afs/cern.ch/user/s/sscherer/sungeant/geant4/source/processes/hadronic/models/quark_molecular_dynamics/util/include/MathTools.hh", line 63: Warning: x hides InverseFunction::x.
+"include/DistributionFunction.hh", line 66: Warning: x hides InverseFunction::x.
+"include/DistributionFunction.hh", line 67: Warning: x hides InverseFunction::x.
+"include/DistributionFunction.hh", line 68: Warning: x hides InverseFunction::x.
+"include/ParticleProperties.hh", line 71: Warning: c hides QuantumProjections::c.
+Assertion failed: i < last_block + 10, file /export/builds/lionel_patch/nightly.Sun/sparc-S2/lang/cafe/resources/genutil/src/storage.cc, line 99
+ >> Signal 6:
+    while processing /opt/SUNWspro/WS6U1/include/CC/Cstd/./vector.cc at line 0.
+gmake: *** [/afs/cern.ch/user/s/sscherer/sungeant/geant4/tmp/SUN-CC5/G4hadronic_quark_md_body/Collision.o] Error 1

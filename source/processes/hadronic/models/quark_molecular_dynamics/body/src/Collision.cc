@@ -1,4 +1,4 @@
-#include <algo.h>
+#include <algorithm>
 #include "G4ios.hh"
 #include "globals.hh"
 #include "Collision.hh"
@@ -14,7 +14,7 @@ bool operator==(const CollisionTab& x,const CollisionTab& y)
   return x.time == y.time; 
 }
 
-vector<CollisionTab*> CollisionTab::Root;
+G4std::vector<CollisionTab*> CollisionTab::Root;
 
 CollisionTab::Entry CollisionTab::find(double t) {
   Entry X = Root.begin();
@@ -36,13 +36,13 @@ void CollisionTab::erase() {
 }
 
 void CollisionTab::perform(double t,bool force) {
-  vector<CollisionTab*> toPerform;
-  vector<CollisionTab*>::iterator W;
+  G4std::vector<CollisionTab*> toPerform;
+  G4std::vector<CollisionTab*>::iterator W;
   for ( W = Root.begin(); W!=Root.end() && (*W)->time <= t; W++) {
     toPerform.insert(toPerform.end(),*W);
   }
   Root.erase(Root.begin(),W);
-  for (vector<CollisionTab*>::iterator X = toPerform.begin(); X!=toPerform.end(); X++) {
+  for (G4std::vector<CollisionTab*>::iterator X = toPerform.begin(); X!=toPerform.end(); X++) {
     CollisionTab* Y = *X;
       if ( Y->incoming.size() ) {
 	try {
@@ -102,9 +102,9 @@ void CollisionTab::addEntry(double t,const ParticleBase& in,selection which) {
   }
 }
 
-void CollisionTab::addEntry(double t,const vector<ParticleBase*>& in,selection which) {
+void CollisionTab::addEntry(double t,const G4std::vector<ParticleBase*>& in,selection which) {
   Entry x = find(t);
-  vector<Entry> existing;
+  G4std::vector<Entry> existing;
   unsigned int i;
   for ( i=0; i<in.size(); i++) {
     Entry y = exists(in[i]);
@@ -128,18 +128,18 @@ CollisionTab::Entry CollisionTab::remove(CollisionTab::Entry x) {
   return x;
 }
 
-CollisionTab::CollisionTab(double t,const CollisionType& type,const vector<ParticleBase*>& in,selection which) 
+CollisionTab::CollisionTab(double t,const CollisionType& type,const G4std::vector<ParticleBase*>& in,selection which) 
     : time(t),incoming(in),coll(type),select(which) {}
 
 CollisionTab::CollisionTab(double t,const CollisionType& type,const ParticleBase& in,selection which) 
-    : time(t),incoming(vector<ParticleBase*>(1)),coll(type),select(which) 
+    : time(t),incoming(G4std::vector<ParticleBase*>(1)),coll(type),select(which) 
 { 
   incoming[0] = &(ParticleBase&)in; 
 }
 
 CollisionType::CollisionType() : minimalMass(0) {}
 
-CollisionType::CollisionType(const vector<ParticleBase*>& P) : minimalMass(0)
+CollisionType::CollisionType(const G4std::vector<ParticleBase*>& P) : minimalMass(0)
 {
   for (unsigned int i=0; i<P.size(); i++)
     incoming.insert(incoming.end(),&((ParticleType&)(P[i]->getType())));
@@ -196,7 +196,7 @@ double CollisionType::Crossection(double s) const
   return S;
 }
 
-CollisionType* CollisionType::checkCollision(const vector<ParticleBase*>& L)
+CollisionType* CollisionType::checkCollision(const G4std::vector<ParticleBase*>& L)
 {
   double rp = length(L[0]->Momentum()-L[1]->Momentum());
   if ( rp<1.0 ) return 0;
@@ -213,7 +213,7 @@ CollisionType* CollisionType::checkCollision(const vector<ParticleBase*>& L)
   catch ( ... ) { return 0; }
 }
 
-double CollisionType::FindDecomposition(int C,const CollisionType& X,const vector<ParticleBase*>& x)
+double CollisionType::FindDecomposition(int C,const CollisionType& X,const G4std::vector<ParticleBase*>& x)
 {
   CollisionType y;
   y.channels.insert(y.channels.end(),new decayMode(C,x));
@@ -232,7 +232,7 @@ double CollisionType::checkProducts(const CollisionType& x,bool& decFound) const
 {
   for (int l=0; l<channels.size(); l++) {
     decFound = decFound || channels[l]->isDecomposition();
-    vector< vector<isotop*> > Perm = Permutations(channels[l]->products);
+    G4std::vector< G4std::vector<isotop*> > Perm = Permutations(channels[l]->products);
     for (unsigned int i=0; i<Perm.size(); i++) {
       bool y = false,s=true;
       for (unsigned int j=0; j<channels[l]->products.size(); j++) {
@@ -253,24 +253,24 @@ double CollisionType::isEqualTo(const CollisionType& x) const
 {
     if ( incoming.size() != x.incoming.size() )
       return -1;
-    vector< vector<ParticleType*> > Perm = Permutations(incoming);
+    G4std::vector< G4std::vector<ParticleType*> > Perm = Permutations(incoming);
     int best = -1;
     double val = -1;
     for (unsigned int i=0; i<Perm.size(); i++) {
       double s = 0,y = 0;
       for (unsigned int j=0; j<incoming.size(); j++) {
-	y = Perm[i][j]->isEqualTo(*x.incoming[j]);
-	if ( y == 1.0 && *Perm[i][j] != *x.incoming[j] ) 
-	  y = -1; 
-	if ( y<0 ) 
-	  break;
-	else 
-	  s += y;
+        y = Perm[i][j]->isEqualTo(*x.incoming[j]);
+        if ( (y == 1.0) && (not (*Perm[i][j] == *x.incoming[j])) ) 
+          y = -1; 
+        if ( y<0 ) 
+          break;
+        else 
+          s += y;
       }
       // find possible "best match"
       if ( y>=0 && s > val ) {
-	best = i;
-	val = s;
+        best = i;
+        val = s;
       }
     }
     return val;
@@ -315,7 +315,7 @@ decayMode& CollisionType::chooseMode(double Emax,selection which,bool force) con
   return *act;
 }
 
-void CollisionType::perform(const vector<ParticleBase*>& p,selection which,bool force) const
+void CollisionType::perform(const G4std::vector<ParticleBase*>& p,selection which,bool force) const
 {
   if ( p.empty() ) 
     return;

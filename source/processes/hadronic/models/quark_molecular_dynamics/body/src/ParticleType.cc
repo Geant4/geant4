@@ -104,7 +104,7 @@ ParticleType::ParticleType(G4std::istream& in)
   Insert(*this,name);
 }
 
-void ParticleType::getProbab(double m,vector<double>& P,vector<ParticleType*>& L, bool Integral) const
+void ParticleType::getProbab(double m,G4std::vector<double>& P,G4std::vector<ParticleType*>& L, bool Integral) const
 {
   if ( hasSuccessors() ) {
     for (int i=0; i<NSuccessors(); i++) 
@@ -134,8 +134,8 @@ ParticleType::MassDist::MassDist(const ParticleType& h,double m)
 
 REAL ParticleType::MassDist::ToBeIntegrated(REAL x)
 {
-  vector<double> P;
-  vector<ParticleType*> L;
+  G4std::vector<double> P;
+  G4std::vector<ParticleType*> L;
   Type.getProbab(x,P,L);
   return P.back();
 }
@@ -153,8 +153,8 @@ double ParticleType::selectMass(double m_max) const
 
 ParticleType& ParticleType::selectType(double m) const
 {
-  vector<double> P;
-  vector<ParticleType*> L;
+  G4std::vector<double> P;
+  G4std::vector<ParticleType*> L;
   getProbab(m,P,L,true);
   if ( P.empty() )
     throw "No suitable ParticleType found...";
@@ -165,7 +165,7 @@ ParticleType& ParticleType::selectType(double m) const
   return *L[i];
 }
 
-ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,double m) const
+ParticleType& ParticleType::selectType(int C_,const G4std::vector<ParticleBase*>& P,double m) const
 {
   double y0 = 0;
   double i3= 0;
@@ -174,14 +174,14 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
     i3 += P[j]->Iso3();
     s3 += P[j]->Spin3();
   }
-  vector<double> y;
-  vector<int> list;
-  vector<ParticleType*> L = getList();
+  G4std::vector<double> y;
+  G4std::vector<int> list;
+  G4std::vector<ParticleType*> L = getList();
   for (int i=0; i<L.size(); i++) {
     CollisionType& X = Knot<CollisionType>::FindKnot(*L[i]);
     double pc = CollisionType::FindDecomposition(C_,X,P);
-    vector<double> P;
-    vector<ParticleType*> Lnew;
+    G4std::vector<double> P;
+    G4std::vector<ParticleType*> Lnew;
     L[i]->getProbab(m,P,Lnew,false);
     double px = 0.0;
     if ( P.size() ) 
@@ -225,8 +225,8 @@ ParticleType& ParticleType::selectType(int C_,const vector<ParticleBase*>& P,dou
 
 ParticleType& ParticleType::selectType() const
 {
-  vector<double> P;
-  vector<ParticleType*> L = getList();
+  G4std::vector<double> P;
+  G4std::vector<ParticleType*> L = getList();
   int i = int(rand_gen::Random()*L.size());
   return *L[i];
 }

@@ -183,7 +183,7 @@ REAL InverseFunctionWithNewton::FindRoot(REAL x0_,REAL,REAL y,double Accuracy) c
     if (f10==0.0) 
       throw Zero_Not_Found(x,x,f0,f10);
     x -= f0/f10;
-    G4cerr << x << "  " << x1 << "  " << f0 << "  " << f10<< endl;
+    G4cerr << x << "  " << x1 << "  " << f0 << "  " << f10<< G4endl;
   }
   while ( fabs(f0) > Accuracy  && fabs(x-x1)>Accuracy && ++n<N);
   //  cout << x << "  " << f0 << G4endl;

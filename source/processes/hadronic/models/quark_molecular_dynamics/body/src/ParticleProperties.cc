@@ -389,7 +389,7 @@ void ParticleProperties::setLifetime(double lt)
   if ( lt < 0 ) 
     lifetime = Time()+Type.getLifetime(); 
   else if ( Type.getWidth() > 0 ) {
-    vector<CollisionTab*>::iterator Y = CollisionTab::exists(this);
+    G4std::vector<CollisionTab*>::iterator Y = CollisionTab::exists(this);
     if ( Y != CollisionTab::Root.end() ) 
       CollisionTab::remove(Y);
     lifetime = lt;

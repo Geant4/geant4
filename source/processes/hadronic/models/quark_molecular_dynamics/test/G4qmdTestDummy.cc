@@ -27,7 +27,7 @@
 int main()
 {
 
-  G4String & InitialFile = "";
+  G4String  InitialFile = "";
 
   G4cout << "Please enter filename of qMD data for initialization:" << G4endl;
   G4cin >> InitialFile;

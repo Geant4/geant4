@@ -69,10 +69,10 @@ class gasEnsemble
 {
 protected:
 public:
-  vector<ParticleType*>& List;
+  G4std::vector<ParticleType*>& List;
   DistBase* K;
 public:
-  gasEnsemble(DistBase* K_,vector<ParticleType*>& List_) : List(List_),K(K_) {}
+  gasEnsemble(DistBase* K_,G4std::vector<ParticleType*>& List_) : List(List_),K(K_) {}
   virtual ~gasEnsemble() { delete K; }
   virtual REAL Mu(const ParticleType& h,const parameter&,signed int B) const = 0;
   virtual REAL N(const ParticleType& h,const parameter&,signed int B) const = 0;
@@ -91,7 +91,7 @@ public:
 class grandCanonicalEnsemble : public gasEnsemble
 {
 public:
-  grandCanonicalEnsemble( DistBase* K_,vector<ParticleType*>& List_) 
+  grandCanonicalEnsemble( DistBase* K_,G4std::vector<ParticleType*>& List_) 
     : gasEnsemble(K_,List_) {}
   REAL specificHeat(const parameter&) const { return 0; }
   //  REAL Entropy(const parameter&) const;
@@ -104,7 +104,7 @@ public:
 class canonicalEnsemble : public gasEnsemble
 {
 public:
-  canonicalEnsemble( DistBase* K_,vector<ParticleType*>& List_) 
+  canonicalEnsemble( DistBase* K_,G4std::vector<ParticleType*>& List_) 
     : gasEnsemble(K_,List_) {}
   REAL specificHeat(const parameter&) { return 0; }
   //  REAL Entropy(const parameter&);

@@ -51,16 +51,16 @@ class decayMode
   bool elastic;
   double SumMass;
   selection select;
-  vector<isotop*> products;
+  G4std::vector<isotop*> products;
 public:
-  decayMode(int C,const vector<ParticleBase*>& P);
-  decayMode(G4std::istream&,const vector<ParticleType*>&);
+  decayMode(int C,const G4std::vector<ParticleBase*>& P);
+  decayMode(G4std::istream&,const G4std::vector<ParticleType*>&);
   int N() const { return products.size(); }
   bool isDecomposition() const { return (partialCrossection(1)<0); }
   bool isElastic() const { return elastic; }
   //  bool compareProducts(const vector<ParticleBase*>& P) const;
   double partialCrossection(double s) const { return sigmaPart->getValue(s); }
-  void performDecay(const vector<ParticleBase*>& p,double Etot,const Vektor3& beta,const Vektor3& x,bool force = false);
+  void performDecay(const G4std::vector<ParticleBase*>& p,double Etot,const Vektor3& beta,const Vektor3& x,bool force = false);
 #ifdef  IS_GCC
   decayMode& operator=(const decayMode&) { return *this; }
 #endif

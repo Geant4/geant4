@@ -47,8 +47,8 @@ class G4qmdDummy
       int operator==(const G4qmdDummy &right) const;
       int operator!=(const G4qmdDummy &right) const;
 
-      void skipline(istream& in);
-      double readEvent(istream& in);
+      void skipline(G4std::istream& in);
+      double readEvent(G4std::istream& in);
 
   public:
       void SetInputFile(G4String & anInputFile);

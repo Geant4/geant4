@@ -1,8 +1,8 @@
 //
 // $RCSfile: BinIOStream.icc,v $
 //
-// $Revision: 1.1 $
-// $Date: 1999-12-09 11:50:34 $
+// $Revision: 1.2 $
+// $Date: 2001-08-10 20:03:01 $
 // $Author: sscherer $
 // $Locker:  $
 // $State: Exp $
@@ -10,6 +10,9 @@
 // UNIXfile: BinIOStream.iC
 //
 // $Log: not supported by cvs2svn $
+// Revision 1.1  1999/12/09 11:50:34  sscherer
+// adding quark_molecular_dynamics
+//
 // Revision 1.1.1.1  1998/09/22 16:31:05  mhofmann
 // U++ V0.9
 //
@@ -44,7 +47,7 @@ operator<<(BinOStream& o,signed char c) {
 
 inline BinOStream& 
 operator<<(BinOStream& o,unsigned char c) {
-  o.os->write(&c, sizeof(unsigned char));
+  o.os->write((char*)&c, sizeof(unsigned char));
   return o;
 }                        
 
@@ -163,7 +166,7 @@ operator>>(BinIStream& in,signed char& c) {
 inline BinIStream& 
 operator>>(BinIStream& in,unsigned char& c) {
   unsigned char cold = c;
-  if( !in.is->read(&c, sizeof(unsigned char)) ) {
+  if( !in.is->read((char*)&c, sizeof(unsigned char)) ) {
     c = cold;
   };
   return in;

@@ -1,5 +1,5 @@
 #include "g4std/iomanip"
-#include <algo.h>
+#include <algorithm>
 #include "G4ios.hh"
 #include "Kinematics.hh"
 

@@ -1,4 +1,3 @@
-#include "math.hh"
 #include "newvector.hh"
 #include "ParticleKinematics.hh"
 

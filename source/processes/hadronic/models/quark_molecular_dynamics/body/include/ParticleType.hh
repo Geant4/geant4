@@ -91,12 +91,12 @@ class ParticleType : public QuantumNumbers,public Knot<ParticleType>
   int id,g;
   double minmass,width,BWnorm;
   
-  void getProbab(double,vector<double>&,vector<ParticleType*>&,bool = false) const;
+  void getProbab(double,G4std::vector<double>&,G4std::vector<ParticleType*>&,bool = false) const;
   ParticleType();
 public:
   ParticleType(G4std::istream&);
   ParticleType& selectType(double mass) const;
-  ParticleType& selectType(int,const vector<ParticleBase*>& P,double m) const;
+  ParticleType& selectType(int,const G4std::vector<ParticleBase*>& P,double m) const;
   ParticleType& selectType() const;
   double selectMass(double Mmax) const;
   virtual void ClassInfo(G4std::ostream& o) const { o << " ("<<id << ") "; }

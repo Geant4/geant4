@@ -76,7 +76,7 @@ G4qmd::G4qmd(const G4String & anInputFile)
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
   Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
-  vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
+  G4std::vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
   Colour::setQuarks(Quarks);
 
   Colour theQuarkSystem(theInternalTimestep);
@@ -111,13 +111,13 @@ int G4qmd::operator!=(const G4qmd &right) const
 // --------------------------------------------
 //
 
-void G4qmd::skipline(istream& in) 
+void G4qmd::skipline(G4std::istream& in) 
 {
   char c;
   while ( in.get(c) && c != '\n' ) ;
 }
 
-double G4qmd::readEvent(istream& in) 
+double G4qmd::readEvent(G4std::istream& in) 
 {
   int S,C,col;
   double B,m,i,i3,s,s3,lt,time,flag;
@@ -247,7 +247,7 @@ G4KineticTrackVector * G4qmd::TheHadrons()
 	G4KineticTrackVector * theHadrons = new G4KineticTrackVector();
   try {
 
-    theQuarkSystem.print(cout);
+    theQuarkSystem.print(G4cout);
  
     while ( ((theFinalTime < 0) && (theQuarkSystem.Nquark > 0)) || (theQuarkSystem.Time() < theFinalTime) ) {
 
@@ -260,19 +260,19 @@ G4KineticTrackVector * G4qmd::TheHadrons()
           theQuarkSystem.one_step();
           G4cerr << theQuarkSystem.Time() << " : " << "  " 
                  << theQuarkSystem.Etot() << "  "
-                 << theQuarkSystem.Npart << "  " << -theQuarkSystem.Nquark+theQuarkSystem.Npart << endl;
+                 << theQuarkSystem.Npart << "  " << -theQuarkSystem.Nquark+theQuarkSystem.Npart << G4endl;
         }
       }
       else {
         theQuarkSystem.setTime(t1);
         CollisionTab::perform(t1);
       }
-      theQuarkSystem.print(cout);
+      theQuarkSystem.print(G4cout);
     }
     if ( theFinalHadronDecay == "yes" ) {
       CollisionTab::perform(1000,(theForcedHadronDecay == "yes"));
-      cout << "# final\n";
-      theQuarkSystem.print(cout);
+      G4cout << "# final\n";
+      theQuarkSystem.print(G4cout);
     }
 
 		theHadrons = theQuarkSystem.GetNewHadrons();
@@ -287,7 +287,7 @@ G4KineticTrackVector * G4qmd::TheHadrons()
 		G4cerr << "Track "      << i 
 		       << ", particle " << ThisTrack->GetDefinition()->GetPDGEncoding()
 		       << " originating at " << ThisTrack->GetInitialCoordinates() 
-		       << endl;
+		       << G4endl;
 	}
 
 

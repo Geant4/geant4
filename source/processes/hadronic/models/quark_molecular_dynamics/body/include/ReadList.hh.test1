@@ -1,0 +1,197 @@
+#ifndef __READLIST__
+#define __READLIST__
+
+#ifdef IS_GCC
+#pragma interface
+#endif
+
+#include "globals.hh"
+#include "g4std/iostream"
+#include "g4std/vector"
+#include "g4std/iomanip"
+#include "g4std/fstream"
+#include "g4std/strstream"
+
+//
+//  Reads members of a class t from file.
+//  '#' can be used for comments
+//
+//  Requirements to template class t:
+//
+//  - constructor  t(G4std::istream& )   for reading in properties
+//  - operator<<   for being printed out
+//  - operator==   to identify entry in the vector
+//
+//
+//  WARNING: prepocessor-definition "#define maxLineLength 80"
+//  has been replaced by explicit literal value!
+//
+
+
+template<class t> class ReadList : public vector<t>;
+
+template<class t>
+class ReadList : public vector<t>
+{
+  friend G4std::ostream& operator<<(G4std::ostream&,ReadList<t>&);
+protected:
+  int N;
+  G4std::istream* file;
+public:
+  ReadList(char* fileName);
+  void readIn();
+  virtual void bookIn(const t& item) { insert(end(),item); }
+  virtual ~ReadList();
+  int noSpecies() const { return N; }
+  int getIndex(const t& h);
+#ifdef IS_GCC
+  ReadList<t>& operator=(const ReadList<t>&) { return *this; }
+#endif
+};
+
+// -----------------------------------------------------
+// implementation from ReadList.tcc:
+
+template<class t>
+G4std::ostream& operator<<(G4std::ostream& o,ReadList<t>& L) 
+{
+  for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
+    o << *X << G4endl;
+  }
+  return o;
+}
+
+template<class t>
+ReadList<t>::ReadList(char* fileName) 
+  : vector<t>(),N(0),file(new G4std::ifstream(fileName) ) {}
+
+template<class t>
+void ReadList<t>::readIn()
+{
+  char Line[120];
+  int noLines = 0;
+  char c;
+  while ( !file->eof() && file->get(Line,80,'\n') ) {
+    file->get(c);
+    ++noLines;
+    int j=0;
+    while ( Line[j] == ' ' ) j++;
+    if ( Line[j] != '#' && Line[j] ) {
+      G4std::istrstream inputLine(Line,strlen(Line));
+      try {
+        t h(inputLine);
+        bookIn(h);
+        ++N;
+      }
+      catch (char*) { 
+        G4cerr << "Read Error in Line " << noLines << ":\n";
+        throw;
+      }
+    }
+  }
+}
+
+template<class t>
+ReadList<t>::~ReadList()
+{
+  delete file;
+  erase(begin(),end());
+}
+
+template<class t>
+int ReadList<t>::getIndex(const t& h)
+{
+  for (int i=0; i<N; i++) 
+    if ( (*this)[i] == h ) 
+      return i;
+  return -1;
+};
+
+// -----------------------------------------------------
+
+
+
+template<class t> class ReadList_P : public vector<t*>;
+
+template<class t>
+class ReadList_P : public vector<t*>
+{
+  friend G4std::ostream& operator<<(G4std::ostream&,ReadList_P<t>&);
+protected:
+  int N;
+  G4std::istream* file;
+public:
+  ReadList_P(char* fileName);
+  void readIn();
+  virtual void bookIn(t* item) { insert(end(),item); }
+  virtual ~ReadList_P();
+  int noSpecies() const { return N; }
+  int getIndex(const t& h);
+#ifdef IS_GCC
+  ReadList_P<t>& operator=(const ReadList_P<t>&) { return *this; }
+#endif
+};
+
+// -----------------------------------------------------
+// implementation from ReadList.tcc:
+
+template<class t>
+G4std::ostream& operator<<(G4std::ostream& o,ReadList_P<t>& L) 
+{
+  for (vector<t>::iterator X=L.begin(); X != L.end(); X++) {
+    o << *(*X) << G4endl;
+  }
+  return o;
+}
+
+template<class t>
+ReadList_P<t>::ReadList_P(char* fileName) 
+  : vector<t*>(),N(0),file(new G4std::ifstream(fileName) ) {}
+
+template<class t>
+void ReadList_P<t>::readIn()
+{
+  char Line[120];
+  int noLines = 0;
+  char c;
+  while ( !file->eof() && file->get(Line,80,'\n') ) {
+    file->get(c);
+    ++noLines;
+    int j=0;
+    while ( Line[j] == ' ' ) j++;
+    if ( Line[j] != '#' && Line[j] ) {
+      G4std::istrstream inputLine(Line,strlen(Line));
+      try {
+        t* h = new t(inputLine);
+        bookIn(*h);
+        ++N;
+      }
+      catch (char*) { 
+        G4cerr << "Read Error in Line " << noLines << ":\n";
+        throw;
+      }
+    }
+  }
+}
+
+template<class t>
+ReadList_P<t>::~ReadList_P()
+{
+  delete file;
+  for (int i=0; i<size(); i++)
+    delete (*this)[i];
+  erase(begin(),end());
+}
+
+template<class t>
+int ReadList_P<t>::getIndex(const t& h)
+{
+  for (int i=0; i<N; i++) 
+    if ( *(*this)[i] == h ) 
+      return i;
+  return -1;
+};
+
+// -----------------------------------------------------
+
+#endif

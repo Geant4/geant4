@@ -12,7 +12,7 @@ Nbody::Nbody(double h_)
 
 Nbody::~Nbody() 
 {
-  vector<Particle*>::iterator X=List.begin(); 
+  G4std::vector<Particle*>::iterator X=List.begin(); 
   while ( !List.empty() ) {
     delete List.back();
   }
@@ -40,10 +40,10 @@ void Nbody::add(Particle* p,int i)
 void Nbody::sub(Particle* p)
 {
   int i=0;
-  vector<Particle*>::iterator X = List.begin();
+  G4std::vector<Particle*>::iterator X = List.begin();
   while ( *X != p && X != List.end() ) { ++i; ++X; }
   if ( X!=List.end() ) {
-    for (vector<Particle*>::iterator Y = X+1; Y!=List.end(); Y++) 
+    for (G4std::vector<Particle*>::iterator Y = X+1; Y!=List.end(); Y++) 
       (*Y)->offset-=6;
     sub(i);
   }
@@ -65,7 +65,7 @@ void Nbody::handleCollisions()
   /*
   for (int i=0; i<Npart; i++)
     for (int j=i+1; j<Npart; j++) {
-      vector<ParticleBase*> L;
+      G4std::vector<ParticleBase*> L;
       L.insert(L.end(),(ParticleBase*)List[i]);
       L.insert(L.end(),(ParticleBase*)List[j]);
       CollisionType* C = CollisionType::checkCollision(L);

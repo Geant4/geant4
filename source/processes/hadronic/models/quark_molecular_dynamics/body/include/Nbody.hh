@@ -35,7 +35,7 @@ protected:
   virtual inline Vektor3 dHdx(int i) { return Vektor3(); }
 public:
   int N,Npart;
-  vector<Particle*> List;
+  G4std::vector<Particle*> List;
   Nbody(double = 1e-6);
   virtual ~Nbody();
   virtual void checkRange() {}

@@ -16,8 +16,8 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # Override some variables for binmake.gmk.
 #
-INCFLAGS := \
-            -I$(G4BASE)/global/management/include \
+INCFLAGS := -I$(G4BASE)/global/management/include \
+            -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \

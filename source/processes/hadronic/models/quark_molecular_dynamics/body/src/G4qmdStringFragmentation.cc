@@ -64,7 +64,7 @@ G4qmdStringFragmentation::G4qmdStringFragmentation()
   FileRead<ParticleType> Particles("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Particles_Radiation.dat");
   Knot<ParticleType>::Root->printTree(G4cerr);
   FileRead<CollisionType> Collisions("/afs/cern.ch/user/s/sscherer/qmd_geant/test/Collisions.dat");
-  vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
+  G4std::vector<ParticleType*> Quarks = Knot<ParticleType>::Find("SQ");
   Colour::setQuarks(Quarks);
 
   theQuarkSystem = new Colour(theInternalTimestep);
@@ -138,7 +138,7 @@ void G4qmdStringFragmentation::SetupFromG4ExcitedStringVector(const G4ExcitedStr
 		G4ExcitedString* ThisExcitedString = theStrings->at(StringCounter);
 		const G4PartonVector* ThePartons = ThisExcitedString->GetPartonList();
 
-		G4cerr << "Extract partons from G4ExcitedString " << StringCounter << endl;
+		G4cerr << "Extract partons from G4ExcitedString " << StringCounter << G4endl;
 
 	  for (G4int PartonCounter=0; PartonCounter < ThePartons->length(); PartonCounter++) {
 
@@ -366,7 +366,7 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 	G4KineticTrackVector * theHadrons = new G4KineticTrackVector();
   try {
 
-    theQuarkSystem->print(cout);
+    theQuarkSystem->print(G4cout);
  
     while ( ((theFinalTime < 0) && (theQuarkSystem->Nquark > 0)) || (theQuarkSystem->Time() < theFinalTime) ) {
 
@@ -379,19 +379,19 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
           theQuarkSystem->one_step();
           G4cerr << theQuarkSystem->Time() << " : " << "  " 
                  << theQuarkSystem->Etot() << "  "
-                 << theQuarkSystem->Npart << "  " << -theQuarkSystem->Nquark+theQuarkSystem->Npart << endl;
+                 << theQuarkSystem->Npart << "  " << -theQuarkSystem->Nquark+theQuarkSystem->Npart << G4endl;
         }
       }
       else {
         theQuarkSystem->setTime(t1);
         CollisionTab::perform(t1);
       }
-      theQuarkSystem->print(cout);
+      theQuarkSystem->print(G4cout);
     }
     if ( theFinalHadronDecay == "yes" ) {
       CollisionTab::perform(1000,(theForcedHadronDecay == "yes"));
-      cout << "# final\n";
-      theQuarkSystem->print(cout);
+      G4cout << "# final\n";
+      theQuarkSystem->print(G4cout);
     }
 
 		theHadrons = theQuarkSystem->GetNewHadrons();
@@ -406,7 +406,7 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 		G4cerr << "Track "      << i 
 		       << ", particle " << ThisTrack->GetDefinition()->GetPDGEncoding()
 		       << " originating at " << ThisTrack->GetInitialCoordinates() 
-		       << endl;
+		       << G4endl;
 	}
 
 	return theHadrons;
@@ -417,13 +417,13 @@ G4KineticTrackVector * G4qmdStringFragmentation::TheHadrons()
 // --------------------------------------------
 //
 
-void G4qmdStringFragmentation::skipline(istream& in) 
+void G4qmdStringFragmentation::skipline(G4std::istream& in) 
 {
   char c;
   while ( in.get(c) && c != '\n' ) ;
 }
 
-double G4qmdStringFragmentation::readEvent(istream& in) 
+double G4qmdStringFragmentation::readEvent(G4std::istream& in) 
 {
   int S,C,col;
   double B,m,i,i3,s,s3,lt,time,flag;

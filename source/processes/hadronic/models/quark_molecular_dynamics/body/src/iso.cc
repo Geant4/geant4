@@ -9,8 +9,8 @@
 
 void Iso::Projections(int n,double J,double M,double* jk,double* mk,bool* isSet)
 {
-  vector<MultiIndex*> all;
-  vector<double> probab;
+  G4std::vector<MultiIndex*> all;
+  G4std::vector<double> probab;
   Array<int> jkmax(n);
   {for ( int i=0; i<n; i++)
     mk[i] = 0;}
@@ -30,13 +30,13 @@ void Iso::Projections(int n,double J,double M,double* jk,double* mk,bool* isSet)
     double mtot = 0.0;
     for ( int k=0; k<n; k++)
       if ( !isSet[k] ) 
-	mtot += proj[k]-jk[k];
+        mtot += proj[k]-jk[k];
       else
-	mtot += mk[k];
+        mtot += mk[k];
     if ( mtot == M ) {
       all.insert(all.end(),new MultiIndex(proj));
       for (int i=0; i<n; i++)
-	if ( !isSet[i] ) 
+        if ( !isSet[i] ) 
 	  mk[i] = -jk[i]+proj[i];
       double P = sqr(f(n-2,jk[n-1],mk[n-1],J,M,jk,mk));
       //      G4cerr << proj << "  " << P << G4endl;

@@ -53,7 +53,7 @@ protected:
   int kk;
   REAL ToBeInverted(REAL x) const;
   REAL Derivative(REAL x) const;
-  vector<int> eraseList;
+  G4std::vector<int> eraseList;
 
 public:
 
@@ -103,8 +103,8 @@ public:
   static double minDist;  // Units: [1]  (corresponds to factors of av. hadron radius)
   static double decompDist;  // Units: [fm]
   static PotentialBase* Pot;
-  static vector<ParticleType*> Quarks;
-  static void setQuarks(vector<ParticleType*>&);
+  static G4std::vector<ParticleType*> Quarks;
+  static void setQuarks(G4std::vector<ParticleType*>&);
   int Nquark;
   int NquarkEver;
   int NhadronEver;
@@ -226,7 +226,7 @@ class ColorString
 public:
 
   ColorString(const double& Mass0,const Vektor3& Ptot,const Vektor3& Rtot,int n,
-	 const QuantumState parray[],const vector<ParticleBase*>&, int NhadronEver);
+	 const QuantumState parray[],const G4std::vector<ParticleBase*>&, int NhadronEver);
   ~ColorString();
 
 	G4int GetPDGCode() const { return PDGCode; }

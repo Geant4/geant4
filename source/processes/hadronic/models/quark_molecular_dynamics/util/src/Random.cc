@@ -1,6 +1,6 @@
 #include "Random.hh"
 #include "g4std/iostream"
-
+  
 rand_gen rand_gen::Random;
 
 #ifdef __PC__
@@ -32,8 +32,8 @@ rand_gen::rand_gen(long int seed) : rand_seed(seed)
 
 G4std::ostream& operator<<(G4std::ostream& o,rand_gen& r)
 {
-	o << "Random Seed = " << r.rand_seed << G4endl;
-	return o;
+  o << "Random Seed = " << r.rand_seed << G4endl;
+  return o;
 }
 
 

@@ -33,7 +33,7 @@ int main()
 {
 	G4KineticTrackVector * ResultingHadrons = new G4KineticTrackVector();
 
-  G4String & InitialFile = "";
+  G4String  InitialFile = "default.dat";
   G4double OutputStepping = 0.5;
 
   G4cout << "Please enter filename of qMD data for initialization:" << G4endl;

@@ -28,7 +28,7 @@ outputList::outputList(int n,char* file)
   for (int i=0; i<N; i++) {
     if ( strcmp(file,"/dev/null") ) { 
       G4std::ostrstream string(s,l);
-      string << file << "." << G4std::setw(2) << setfill('0') << i;
+      string << file << "." << G4std::setw(2) << G4std::setfill('0') << i;
       files[i] = new G4std::ofstream(s);
     }
     else 
@@ -38,7 +38,7 @@ outputList::outputList(int n,char* file)
   delete s;
 }
 
-void outputList::add(int i,ostream* f)
+void outputList::add(int i,G4std::ostream* f)
 { 
   if (f) {
     if ( files[i] ) 

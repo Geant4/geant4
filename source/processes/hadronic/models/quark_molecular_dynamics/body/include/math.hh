@@ -7,9 +7,6 @@
 #include <math.h>
 
 template<class t>
-t sqr(t x) { return x*x; }
-
-template<class t>
 t sign(t x) { return (x>0 ? 1 : ((x<0) ? -1 : 0)); }
 
 #endif

@@ -11,7 +11,7 @@ public:
   outputList(int n,char* file);
   ~outputList();
   int Number() const { return N; }
-  void add(int i,ostream*);
+  void add(int i,G4std::ostream*);
   G4std::ostream& operator[](int i) { return *files[i]; }
 };
 
@@ -22,7 +22,7 @@ public:
   PlotList(int n) : outputList(n),plots(new Binning*[n]) {}
   PlotList(int n,char* file) : outputList(n,file),plots(new Binning*[n]) {}
   ~PlotList() { delete [] plots; }
-  void add(int i,Binning& x,ostream* f = 0) { plots[i] = &x; if (f) outputList::add(i,f); }
+  void add(int i,Binning& x,G4std::ostream* f = 0) { plots[i] = &x; if (f) outputList::add(i,f); }
   Binning& content(int i) { return *plots[i]; }
 };
 

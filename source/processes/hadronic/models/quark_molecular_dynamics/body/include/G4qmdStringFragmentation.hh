@@ -28,7 +28,7 @@
 
 #include "g4std/fstream"
 #include "G4ios.hh"
-#include <algo.h>
+#include <algorithm>
 #include "newvector.hh"
 #include "Random.hh"
 #include "newBinning.hh"
@@ -91,8 +91,8 @@ class G4qmdStringFragmentation : public G4VStringFragmentation
       int operator==(const G4qmdStringFragmentation &right) const;
       int operator!=(const G4qmdStringFragmentation &right) const;
 
-      void skipline(istream& in);
-      double readEvent(istream& in);
+      void skipline(G4std::istream& in);
+      double readEvent(G4std::istream& in);
 
   public:
       void SetInputFile(G4String & anInputFile);

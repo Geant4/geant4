@@ -86,7 +86,7 @@ int main()
 		G4ExcitedString* ThisExcitedString = qmdInitialState->at(StringCounter);
 		const G4PartonVector* ThePartons = ThisExcitedString->GetPartonList();
 
-		G4cerr << "Extract partons from G4ExcitedString " << StringCounter << endl;
+		G4cerr << "Extract partons from G4ExcitedString " << StringCounter << G4endl;
 
 	  for (G4int QuarkCounter=0; QuarkCounter < ThePartons->length(); QuarkCounter++) {
 

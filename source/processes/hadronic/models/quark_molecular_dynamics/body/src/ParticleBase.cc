@@ -1,7 +1,6 @@
 #include "ParticleBase.hh"
 #include "String.hh"
 #include "ParticleType.hh"
-#include "math.hh"
 
 G4std::ostream& operator<<(G4std::ostream& o,const ParticleBase& p)
 {
