@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BREPSolidPCone.cc,v 1.25 2002-01-28 16:32:42 radoone Exp $
+// $Id: G4BREPSolidPCone.cc,v 1.26 2002-03-11 19:09:37 radoone Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -71,6 +71,17 @@ G4BREPSolidPCone::G4BREPSolidPCone(const G4String& name,
 
   G4ThreeVector PlaneAxis(0, 0, 1);
   G4ThreeVector PlaneDir (0, 1, 0);   
+
+
+  ///////////////////////////////////////////////////
+  // Test delta phi
+  
+  // At the moment (11/03/2002) the phi section is not implemented
+  // so we take a G4 application down if there is a request for such
+  // a configuration
+  if( opening_angle < 2*pi-perMillion ) {
+    G4Exception( "G4BREPSolidPCone::G4BREPSolidPCone() - phi section not supported yet, try to use G4Polycone instead!\a\n" );
+  }
 
   ///////////////////////////////////////////////////
   // Test the validity of the R values
