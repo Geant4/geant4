@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleGunMessenger.cc,v 1.6 2001-07-13 15:01:53 gcosmo Exp $
+// $Id: G4ParticleGunMessenger.cc,v 1.7 2001-10-11 13:34:59 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 
@@ -39,10 +39,9 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4ios.hh"
+#include "G4Tokenizer.hh"
 
 #include "g4std/iomanip"               
-#include "g4rw/ctoken.h"               
-#include "g4rw/rstream.h"               
 #include "g4std/strstream"
 
 G4ParticleGunMessenger::G4ParticleGunMessenger(G4ParticleGun * fPtclGun)

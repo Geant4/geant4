@@ -70,10 +70,9 @@
 #include "g4std/fstream"
 
 #include "g4std/iomanip"               
-#include "g4rw/ctoken.h"               
-#include "g4rw/rstream.h"               
 #include "g4std/strstream"
 
+#include "G4Tokenizer.hh"
 #include "G4GeneralParticleSourceMessenger.hh"
 #include "G4GeneralParticleSource.hh"
 ///////////////////////////////////////////////////////////////////////////////
