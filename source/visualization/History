@@ -1,4 +1,4 @@
-$Id: History,v 1.69 2000-04-28 14:39:11 johna Exp $
+$Id: History,v 1.70 2000-05-02 10:16:26 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,22 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+2nd May 2000  John Allison  vis-V01-01-02
+- Added /vis/viewer/reset.
+- G4VSceneHandler, G4VViewer, G4OpenGLXmMainMenubarCallbacks: corrected
+  some name anomolies - "scene" was still being used in places where it
+  meant "scene handler".
+- G4VViewer: added GetShortName(), corrected SetName(...).
+- G4ViewParameters.hh: improved class description.
+- G4VisManager: added ViewerShortName(...) and GetViewer(...) utilities.
+- G4RayTracer: set out-of-world ray to black.
+- G4RayTracerViewer: corrected trapping of orthogonal projection.
+- Some minor enhancements to tests.
+
+27th April 2000  Gabriele Cosmo
+- Removed unnecessary #include "G4Transform.hh" from VRML.  (Since
+  geometry-V01-01-02 G4Transform.hh no longer exists.)  
 
 27th April 2000  John Allison
 - Updated README file.
