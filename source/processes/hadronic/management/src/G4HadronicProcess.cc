@@ -583,10 +583,10 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 //		 <<G4endl;
       G4Nancheck go_wild;
       theTotalResult->Clear();
-      theTotalResult->SetLocalEnergyDeposit(0.);
+      theTotalResult->ProposeLocalEnergyDeposit(0.);
       theTotalResult->Initialize(aT);
       theTotalResult->SetSecondaryWeightByProcess(true);
-      theTotalResult->SetStatusChange(fAlive);
+      theTotalResult->ProposeTrackStatus(fAlive);
       G4double rotation = 2.*pi*G4UniformRand();
       G4ThreeVector it(0., 0., 1.);
       /*
@@ -604,19 +604,19 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
       {
 	if( xBiasOn && G4UniformRand()<XBiasSurvivalProbability() )
 	{
- 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
+ 	  theTotalResult->ProposeParentWeight( XBiasSurvivalProbability()*aT.GetWeight() );
 	}
 	else
 	{
-          theTotalResult->SetStatusChange(fStopAndKill);
-          theTotalResult->SetEnergyChange( 0.0 );
+          theTotalResult->ProposeTrackStatus(fStopAndKill);
+          theTotalResult->ProposeEnergy( 0.0 );
 	}
       }
       else if(aR->GetStatusChange()!=stopAndKill )
       {
         if(aR->GetStatusChange()==suspend)
         {
-          theTotalResult->SetStatusChange(fSuspend);
+          theTotalResult->ProposeTrackStatus(fSuspend);
 	  if(xBiasOn)
    	  {
             G4Exception("G4HadronicProcess", "007", FatalException,
@@ -625,7 +625,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
         }
 	if(xBiasOn && G4UniformRand()<XBiasSurvivalProbability())
 	{
- 	  theTotalResult->SetWeightChange( XBiasSurvivalProbability()*aT.GetWeight() );
+ 	  theTotalResult->ProposeParentWeight( XBiasSurvivalProbability()*aT.GetWeight() );
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
 	  if(go_wild(aR->GetEnergyChange()))
 	  {
@@ -650,7 +650,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	else
 	{
 	  G4double newWeight = aR->GetWeightChange()*aT.GetWeight();
-	  theTotalResult->SetWeightChange(newWeight); // This is multiplicative
+	  theTotalResult->ProposeParentWeight(newWeight); // This is multiplicative
 	  if(aR->GetEnergyChange()>-.5) 
 	  {
   	    if(go_wild(aR->GetEnergyChange()))
@@ -658,11 +658,11 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
               G4Exception("G4HadronicProcess", "007", FatalException,
 	                  "track received NaN energy.");  
 	    }
-	    theTotalResult->SetEnergyChange(aR->GetEnergyChange());
+	    theTotalResult->ProposeEnergy(aR->GetEnergyChange());
 	  }
 	  G4LorentzVector newDirection(aR->GetMomentumChange().unit(), 1.);
 	  newDirection*=aR->GetTrafoToLab();
-	  theTotalResult->SetMomentumDirectionChange(newDirection.vect());
+	  theTotalResult->ProposeMomentumDirection(newDirection.vect());
 	}
       }
       else
@@ -675,11 +675,11 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
          &&
 	 AlwaysKillLeadingHadron() 
          && 
-	 theTotalResult->GetStatusChange()==fAlive
+	 theTotalResult->GetTrackStatus()==fAlive
 	 &&
 	 aR->GetStatusChange()==isAlive)
       {
-        G4double newWeight = theTotalResult->GetWeightChange();
+        G4double newWeight = theTotalResult->GetParentWeight();
 	G4double newM=aT.GetDefinition()->GetPDGMass();
 	G4double newE=aR->GetEnergyChange() + newM;
 	G4double newP=sqrt(newE*newE - newM*newM);
@@ -693,11 +693,11 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	G4HadSecondary * theSec = new G4HadSecondary(aNew, newWeight);
 	aR->AddSecondary(theSec);
 	aR->SetStatusChange(stopAndKill);
-        theTotalResult->SetStatusChange(fStopAndKill);
-        theTotalResult->SetEnergyChange( 0.0 );
+        theTotalResult->ProposeTrackStatus(fStopAndKill);
+        theTotalResult->ProposeEnergy( 0.0 );
         //std::cout << "Debug 4 "<< aR->GetNumberOfSecondaries() <<std::endl;
       }
-      theTotalResult->SetLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
+      theTotalResult->ProposeLocalEnergyDeposit(aR->GetLocalEnergyDeposit());
       theTotalResult->SetNumberOfSecondaries(aR->GetNumberOfSecondaries());
 
       for(G4int i=0; i<aR->GetNumberOfSecondaries(); i++)
@@ -757,7 +757,7 @@ void G4HadronicProcess::FillTotalResult(G4HadFinalState * aR, const G4Track & aT
 	  }
 	}*/
 	
-	track->SetTouchableHandle(aT->GetTouchableHandle());
+	track->SetTouchableHandle(aT.GetTouchableHandle());
 	theTotalResult->AddSecondary(track);
       }
       aR->Clear();
