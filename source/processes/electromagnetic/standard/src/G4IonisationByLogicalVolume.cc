@@ -135,15 +135,15 @@ BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
 
   if ( fParticleName == "e+" || fParticleName == "e-" )
   {
-    return feIonisation->BuildPhysicsTable(aParticleType) ;
+    feIonisation->BuildPhysicsTable(aParticleType) ;
   }
   else if ( fParticleName == "mu+" || fParticleName == "mu-" )
   {
-    return fMuIonisation->BuildPhysicsTable(aParticleType) ;
+    fMuIonisation->BuildPhysicsTable(aParticleType) ;
   }
   else
   {
-    return fhIonisation->BuildPhysicsTable(aParticleType) ;
+    fhIonisation->BuildPhysicsTable(aParticleType) ;
   }
 }
 
