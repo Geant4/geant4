@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33SlobedConcreteShield.cc,v 1.6 2002-11-22 17:48:10 dressel Exp $
+// $Id: Tst33SlobedConcreteShield.cc,v 1.7 2003-04-09 09:41:11 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -89,7 +89,7 @@ void Tst33SlobedConcreteShield::Construct(){
   }
   fPVolumeStore.AddPVolume(G4GeometryCell(*fWorldVolume, -1));
 
-
+  
 
 
   // creating 18 slobs of 10 cm thick concrete
@@ -106,23 +106,58 @@ void Tst33SlobedConcreteShield::Construct(){
                                hightShield,
                                startAngleShield,
                                spanningAngleShield);
+
+  G4Tubs *aShieldI1 = new G4Tubs("aShieldI1",
+				 innerRadiusShield,
+				 50*cm,
+				 1*cm,
+				 startAngleShield,
+				 spanningAngleShield);
+
+
   
   // logical shield
 
-  G4LogicalVolume *aShield_log = 
-    new G4LogicalVolume(aShield, fConcrete, "aShield_log");
+  G4LogicalVolume *aShield_logI1 = 
+    new G4LogicalVolume(aShieldI1, fConcrete, "aShieldI1_log");
+
 
   G4VisAttributes* pShieldVis = new 
     G4VisAttributes(G4Colour(0.5,0.5,0.5));
   pShieldVis->SetForceSolid(true);
-  aShield_log->SetVisAttributes(pShieldVis);
-
+  //  aShield_log->SetVisAttributes(pShieldVis);
+  
   // physical shields
 
   G4int i;
   G4double startz = -85*cm; 
   for (i=1; i<=18; i++) {
     name = fPVolumeStore.GetCellName(i);
+    G4LogicalVolume *aShield_log = 
+      new G4LogicalVolume(aShield, fConcrete, "aShield_log");
+
+  
+    G4VPhysicalVolume *pvolIMinus = 
+      new G4PVPlacement(0, 
+			G4ThreeVector(0, 0, -0.5*hightShield),
+			aShield_logI1, 
+			name + "I1-", 
+			aShield_log, 
+			false, 
+			0);
+
+    G4VPhysicalVolume *pvolIPlus = 
+      new G4PVPlacement(0, 
+			G4ThreeVector(0, 0, +0.5*hightShield),
+			aShield_logI1, 
+			name + "I1+", 
+			aShield_log, 
+			false, 
+			0);
+
+    if (pvolIPlus->GetLogicalVolume()->IsAncestor(pvolIMinus)) {
+      G4cout << "Tst33SlobedConcreteShield::Construct: Error: pvolIPlus is not an ancestor of pvolIMinus" << G4endl;
+    }
 
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
@@ -137,6 +172,10 @@ void Tst33SlobedConcreteShield::Construct(){
 			0);
     G4GeometryCell cell(*pvol, 0);
     fPVolumeStore.AddPVolume(cell);
+    G4GeometryCell cellM(*pvolIMinus, 0);
+    fPVolumeStore.AddPVolume(cellM);
+    G4GeometryCell cellP(*pvolIPlus, 0);
+    fPVolumeStore.AddPVolume(cellP);
   }
 
   // filling the rest of the world volumr behind the concrete with
@@ -182,6 +221,8 @@ G4VPhysicalVolume &Tst33SlobedConcreteShield::GetWorldVolume() const{
 }
 
 
-G4GeometryCell Tst33SlobedConcreteShield::GetGeometryCell(G4int i) const {
-  return fPVolumeStore.GetGeometryCell(i);
+G4GeometryCell Tst33SlobedConcreteShield::
+GetGeometryCell(G4int i,
+		const G4String &nameExt) const {
+  return fPVolumeStore.GetGeometryCell(i, nameExt);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.hh,v 1.4 2002-11-20 13:09:15 dressel Exp $
+// $Id: Tst33ConcreteShield.hh,v 1.5 2003-04-09 09:41:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -49,7 +49,7 @@ public:
   virtual ~Tst33ConcreteShield();
 
   virtual G4VPhysicalVolume &GetWorldVolume() const;
-  virtual G4GeometryCell GetGeometryCell(G4int i) const; 
+  virtual G4GeometryCell GetGeometryCell(G4int i, const G4String &) const; 
 
   
 private:

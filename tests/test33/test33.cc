@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: test33.cc,v 1.2 2002-11-20 09:38:25 dressel Exp $
+// $Id: test33.cc,v 1.3 2003-04-09 09:41:09 dressel Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -42,9 +42,15 @@
 
 #include "Tst33AppStarter.hh"
 
+#include "geomdefs.hh"
+
 int main(int argc, char **argv)
 {  
 
+  //  kCarTolerance = 1E-9*mm;// = 1E-9*mm;
+  //  kRadTolerance = 1E-9*mm;// = 1E-9*mm;
+  //  kAngTolerance = 1E-9*rad;// = 1E-9*rad;
+  
   HepRandom::setTheSeed(345354);
 
   Tst33AppStarter *appstarter = new Tst33AppStarter;

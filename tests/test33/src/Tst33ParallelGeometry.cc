@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ParallelGeometry.cc,v 1.7 2002-11-23 12:29:20 dressel Exp $
+// $Id: Tst33ParallelGeometry.cc,v 1.8 2003-04-09 09:41:11 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -102,11 +102,20 @@ void Tst33ParallelGeometry::Construct(){
                                hightShield,
                                startAngleShield,
                                spanningAngleShield);
+
+  G4Tubs *aShieldI1 = new G4Tubs("aShieldI1",
+				 innerRadiusShield,
+				 50*cm,
+				 1*cm,
+				 startAngleShield,
+				 spanningAngleShield);
+
   
   // logical parallel cells
 
-  G4LogicalVolume *aShield_log = 
-    new G4LogicalVolume(aShield, fGalactic, "aShield_log");
+
+  G4LogicalVolume *aShield_logI1 = 
+    new G4LogicalVolume(aShieldI1, fGalactic, "aShieldI1_log");
 
   // physical parallel cells
 
@@ -115,6 +124,26 @@ void Tst33ParallelGeometry::Construct(){
   for (i=1; i<=18; ++i) {
    
     name = fPVolumeStore.GetCellName(i);
+    G4LogicalVolume *aShield_log = 
+      new G4LogicalVolume(aShield, fGalactic, "aShield_log");
+    
+    G4VPhysicalVolume *pvolIMinus = 
+      new G4PVPlacement(0, 
+			G4ThreeVector(0, 0, -0.5*hightShield),
+			aShield_logI1, 
+			name + "I1-", 
+			aShield_log, 
+			false, 
+			0);
+    
+    G4VPhysicalVolume *pvolIPlus = 
+      new G4PVPlacement(0, 
+			G4ThreeVector(0, 0, +0.5*hightShield),
+			aShield_logI1, 
+			name + "I1+", 
+			aShield_log, 
+			false, 
+			0);
     
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
@@ -129,6 +158,10 @@ void Tst33ParallelGeometry::Construct(){
 			0);
     G4GeometryCell cell(*pvol, 0);
     fPVolumeStore.AddPVolume(cell);
+    G4GeometryCell cellM(*pvolIMinus, 0);
+    fPVolumeStore.AddPVolume(cellM);
+    G4GeometryCell cellP(*pvolIPlus, 0);
+    fPVolumeStore.AddPVolume(cellP);    
   }
 
   // filling the rest of the world volumr behind the concrete with
@@ -173,6 +206,7 @@ G4VPhysicalVolume &Tst33ParallelGeometry::GetWorldVolume() const{
 }
 
 
-G4GeometryCell Tst33ParallelGeometry::GetGeometryCell(G4int i) const {
-  return fPVolumeStore.GetGeometryCell(i);
+G4GeometryCell Tst33ParallelGeometry::
+GetGeometryCell(G4int i, const G4String &nameExt) const {
+  return fPVolumeStore.GetGeometryCell(i, nameExt);
 }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33IStoreBuilder.cc,v 1.7 2003-03-10 12:39:01 dressel Exp $
+// $Id: Tst33IStoreBuilder.cc,v 1.8 2003-04-09 09:41:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -60,11 +60,18 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
   G4int i(1);
   for (i=1; i <= 19; ++i) {
     G4double imp = G4std::pow(2.0,i-1);
+    G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
+    istore->AddImportanceGeometryCell(imp, gCell);
     if (i==19) {
 	imp = G4std::pow(2.0,17);
     }
-    G4GeometryCell gCell(samplegeo->GetGeometryCell(i));
-    istore->AddImportanceGeometryCell(imp, gCell);
+    else {
+      G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));
+      G4GeometryCell gCellPlus(samplegeo->GetGeometryCell(i, "I1+"));
+    
+      istore->AddImportanceGeometryCell(imp, gCellMinus);
+      istore->AddImportanceGeometryCell(imp, gCellPlus);
+    }
   }
   return istore;
 }

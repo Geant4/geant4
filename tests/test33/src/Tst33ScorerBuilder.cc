@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ScorerBuilder.cc,v 1.5 2002-11-20 09:38:26 dressel Exp $
+// $Id: Tst33ScorerBuilder.cc,v 1.6 2003-04-09 09:41:11 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -57,10 +57,16 @@ CreateScorer(Tst33VGeometry *samplegeo,
   
   G4int i = 1;
   for (i=1; i <= 19; i++) {
-    G4GeometryCell gCell(samplegeo->GetGeometryCell(i));
+    G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
     const G4CellScorer *s = cs_store->AddCellScorer(gCell);
     if (i==18) {
       *specialCellScorer = s;
+    }
+    if (i!=19) {
+      G4GeometryCell gCellMinus(samplegeo->GetGeometryCell(i, "I1-"));
+      cs_store->AddCellScorer(gCellMinus);
+      G4GeometryCell gCellPlus(samplegeo->GetGeometryCell(i, "I1+"));
+      cs_store->AddCellScorer(gCellPlus);
     }
   }
   return cs_store;

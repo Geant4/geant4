@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.cc,v 1.4 2002-11-20 09:38:26 dressel Exp $
+// $Id: Tst33PVolumeStore.cc,v 1.5 2003-04-09 09:41:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -56,15 +56,18 @@ void Tst33PVolumeStore::AddPVolume(const G4GeometryCell &cell){
 }
 
 G4GeometryCell Tst33PVolumeStore::
-GetGeometryCell(G4int i) const {
+GetGeometryCell(G4int i, const G4String &nameExt) const {
   Tst33SetGeometryCell::const_iterator  pCell(fSetGeometryCell.end());
   G4String cellName(GetCellName(i));
+  cellName += nameExt;
 
   for (Tst33SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
+
     if (vol.GetName() == cellName) {
       pCell = it;
+      break;
     } 
   }
   if (pCell == fSetGeometryCell.end()) {

@@ -12,6 +12,9 @@ as input for testing the executable: test33.
 Please run the executable once for each macro file.
 
 
+setenv LD_LIBRARY_PATH ${LD_LIBRARY_PATH}:$G4WORKDIR/lib/${G4SYSTEM}:${CLHEP_BASE_DIR}/lib
+
+
 Very short note on what test33 does:
 =====================================
 Importance sampling and scoring (and weight roulette) is tested

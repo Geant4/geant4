@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33PVolumeStore.hh,v 1.3 2002-11-20 09:38:25 dressel Exp $
+// $Id: Tst33PVolumeStore.hh,v 1.4 2003-04-09 09:41:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -51,7 +51,7 @@ public:
   ~Tst33PVolumeStore();
   
   void AddPVolume(const G4GeometryCell &cell);
-  G4GeometryCell GetGeometryCell(G4int i) const;
+  G4GeometryCell GetGeometryCell(G4int i,const G4String &nameExt = "") const;
   G4String GetCellName(G4int i) const;
 
 private:

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33ConcreteShield.cc,v 1.6 2002-11-22 17:48:10 dressel Exp $
+// $Id: Tst33ConcreteShield.cc,v 1.7 2003-04-09 09:41:10 dressel Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -132,7 +132,8 @@ G4VPhysicalVolume &Tst33ConcreteShield::GetWorldVolume() const{
   return *fWorldVolume;
 }
 
-G4GeometryCell Tst33ConcreteShield::GetGeometryCell(G4int i) const {
+G4GeometryCell Tst33ConcreteShield::
+GetGeometryCell(G4int i, const G4String &) const {
   G4cout << "Tst33ConcreteShield::GetCellName: no cells in this geometry,\n   returning world volume cell instead!" << G4endl;
   return G4GeometryCell(*fWorldVolume, -1);
 }
