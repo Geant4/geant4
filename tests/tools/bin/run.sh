@@ -33,6 +33,12 @@ if [ -z "${G4STTDIR}" ] ; then
   exit
 fi
 
+##if [ -z "${LD_LIBRARY_PATH}" ] ; then
+#    LD_LIBRARY_PATH=$G4LIB/$G4SYSTEM
+#    export LD_LIBARY_PATH
+#    echo $LD_LIBRARY_PATH
+##fi
+
 
 # Make $G4WORKDIR/stt directory :
 dir=$G4WORKDIR/stt
@@ -79,14 +85,25 @@ if [ $1 = "all" ] ; then
 #  nice $G4STTDIR/bin/run.sh test08
   nice $G4STTDIR/bin/run.sh test09
   nice $G4STTDIR/bin/run.sh test10
+#
+# NDL
+# default value!
+#export NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.1
   nice $G4STTDIR/bin/run.sh test11
   nice $G4STTDIR/bin/run.sh test12
   nice $G4STTDIR/bin/run.sh test13
   nice $G4STTDIR/bin/run.sh test14
+#
+# NDL
+# back to old data!
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL0.2;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test15
+# ...and back again to original! 
+  NeutronHPCrossSections=/afs/cern.ch/sw/geant4/dev/data/G4NDL3.1;export NeutronHPCrossSections
   nice $G4STTDIR/bin/run.sh test16
   nice $G4STTDIR/bin/run.sh test17
   nice $G4STTDIR/bin/run.sh test18
+  nice $G4STTDIR/bin/run.sh test20
 
   nice $G4STTDIR/bin/run.sh test101
   nice $G4STTDIR/bin/run.sh test102
