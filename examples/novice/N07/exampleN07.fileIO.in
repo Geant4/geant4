@@ -51,3 +51,7 @@
 /run/dumpRegion
 /run/dumpCouples
 #
+#
+#
+/control/shell rm -rf physTableBinary physTableAscii
+#
