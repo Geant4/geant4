@@ -1,4 +1,3 @@
-
 //
 // ********************************************************************
 // * DISCLAIMER                                                       *
@@ -21,80 +20,53 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
-//         (copy of his UserAnalyser class)
 //
-// History:
-// -----------
-//  7 Nov 2001   MGP  Implemented according to A. Pfeiffer's instructions
-// 18 Nov 2001   G.Santin GammaRayTel analysis management modified
-//               according to the new design
+// $Id: GammaRayTelAnalysis.hh,v 1.7 2001-12-07 12:57:32 pfeiffer Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
+// ------------------------------------------------------------
+//      GEANT 4 class header file
+//      CERN Geneva Switzerland
+//     
 //
-// -------------------------------------------------------------------
-// Class description:
-// Example of analysis in a simulation application (histograms, ntuples etc.)
-// This class follows the singleton design pattern; 
-// it is responsible for the analysis management and algorithms 
-// Histograms are compliant with AIDA, except for the usage of IHistoManager, 
-// which is Anaphe/Lizard-specific
-// For ntuples, for which the AIDA interfaces and compliant implementations
-// are still in progress at the time of the current Geant4 release, 
-// an implementation with Anaphe/Lizard is shown
-// Other implementations specific to an analysis system are possible too
-// (see, for instance, JAS and OpenScientist documentation from the links
-// in http://aida.freehep.org/)
-// The implementation of the usage of ntuples shown in this example
-// is expected to change in future Geant4 releases, when AIDA interfaces 
-// and related implementations would be available
-// Further documentation is available from: http://www.ge.infn.it/geant4/lowE/
-//                                          http://aida.freehep.org/
-//                                          http://cern.ch/anaphe/
-
-// -------------------------------------------------------------------
-#ifdef  G4ANALYSIS_USE
+//      ------------ GammaRayTelAnalysis  ------
+//           by R.Giannitrapani, F. Longo & G.Santin (30 nov 2000)
+//
+// 07.12.2001 A.Pfeiffer
+// - integrated Guy's addition of the ntuple
+//
+// 06.12.2001 A.Pfeiffer
+// - updating to new design (singleton)
+//
+// 22.11.2001 G.Barrand
+// - Adaptation to AIDA
+//
+// ************************************************************
 
 #ifndef GammaRayTelAnalysis_h
-#define GammaRayTelAnalysis_h
+#define GammaRayTelAnalysis_h 1
 
 #include "globals.hh"
+#include "g4std/vector"
+#include "G4ThreeVector.hh"
 
-// Histogramming from AIDA 
-#include "Interfaces/IHistogram1D.h"
-#include "Interfaces/IHistogram2D.h"
-
-// Histogramming from Anaphe
-#include "Interfaces/IHistoManager.h"
-
-// Vectors from ?
-#include "Interfaces/IVector.h"
-#include "Interfaces/IVectorFactory.h"
-
-// Plotting from Anaphe?
-#include "Interfaces/IPlotter.h"
-//#include "AIDA_Plotter/AIDAPlotter.h"
-
-// Ntuples from Anaphe
-
-#ifdef G4ANALYSIS_USE_NTUPLE
-
-#include "NtupleTag/LizardNTupleFactory.h"
-#include "NtupleTag/LizardQuantity.h"
-#include "NtupleTag/LizardNTuple.h"
-
-//using namespace Lizard;
-
-#endif
-
-class G4Track;
 class GammaRayTelAnalysisMessenger;
 class GammaRayTelDetectorConstruction;
 
-class GammaRayTelAnalysis
-{
+class IAnalysisFactory;
+class IHistogramFactory;
+class ITree;
+class IHistogram1D;
+class IHistogram2D;
+class ITuple;
+class IPlotter;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class GammaRayTelAnalysis {
 public:
-
-  ~GammaRayTelAnalysis();
-
+  virtual ~GammaRayTelAnalysis();
+  
+public:
   void BeginOfRun(G4int n);
   void EndOfRun(G4int n);
   void EndOfEvent(G4int flag);
@@ -107,6 +79,7 @@ public:
   void SetHisto2DDraw(G4String str) {histo2DDraw = str;};
   void SetHisto2DSave(G4String str) {histo2DSave = str;};
   void SetHisto2DMode(G4String str) {histo2DMode = str;};
+
   G4String GetHisto2DMode() {return histo2DMode;};
 
   void InsertPositionXZ(double x, double z);
@@ -114,45 +87,29 @@ public:
   void InsertEnergy(double en);
   void InsertHits(int nplane);
 
-#ifdef G4ANALYSIS_USE_NTUPLE
   void setNtuple(float E, float p, float x, float y, float z);
-#endif
 
-  static GammaRayTelAnalysis* getInstance();
+  static GammaRayTelAnalysis* getInstance(int = 0, char** = 0);
 
 private:
-
-  GammaRayTelAnalysis();
-
+  GammaRayTelAnalysis(int = 0, char** = 0);
   void plot1D(IHistogram1D* histo);
   void plot2D(IHistogram2D* histo);
   void Plot();
-
+private:
   static GammaRayTelAnalysis* instance;
 
-  IHistoManager* histoManager;
-  IVectorFactory* vectorFactory;
-  IPlotter* plotter;
-
-#ifdef G4ANALYSIS_USE_NTUPLE
-
-  // ---- NOTE ----
-  // Histograms are compliant to AIDA interfaces, ntuples are Lizard specific
-  
-  Lizard::NTuple* ntuple;
-  Lizard::NTupleFactory* ntFactory;
-
-  // Quantities for the ntuple
-  Lizard::Quantity<float> ntEnergy;
-  Lizard::Quantity<float> ntPlane;
-  Lizard::Quantity<float> ntX;
-  Lizard::Quantity<float> ntY;
-  Lizard::Quantity<float> ntZ;
-  
-#endif
-
-  
   GammaRayTelDetectorConstruction*    GammaRayTelDetector;
+
+  IAnalysisFactory* analysisFactory;
+  ITree* tree;
+  IPlotter* plotter;
+  ITuple* tuple;
+
+  IHistogram1D* energy;
+  IHistogram1D* hits;
+  IHistogram2D* posXZ;
+  IHistogram2D* posYZ;
 
   G4String histo1DDraw;
   G4String histo1DSave;
@@ -161,11 +118,12 @@ private:
   G4String histo2DMode;
 
   GammaRayTelAnalysisMessenger* analysisMessenger;
-
 };
 
-#endif 
-#endif 
+
+#endif
+
+
 
 
 

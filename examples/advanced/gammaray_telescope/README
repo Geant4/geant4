@@ -1,4 +1,4 @@
-$Id: README,v 1.10 2001-12-07 11:15:18 pfeiffer Exp $
+$Id: README,v 1.11 2001-12-07 12:57:30 pfeiffer Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -41,12 +41,11 @@ The main features of this example are
      subdivisions of the planes of the tracker (strips) without
      affecting in a relevant way the simulation performances
 
-  d) Histograms and Ntuples for Linux platform via the Lizard system; 
-     This are a preliminary feature of Anaphe, so expect some changes 
-     and/or improvements in future releases. 
-     IMPORTANT NOTICE: due to the actual implementation of Lizard Ntuples
-     it is not possible to store Ntuple and use UI_XM at the same time.
-     In future releases this problem will be solved.
+  d) Histograming facilities are presently provided for the Linux 
+     environment either by using the AIDA interfaces, or through 
+     the Anaphe/Lizard system. The AIDA compliant version has not 
+     been tested by the developers and is here as a example of 
+     "forward compatibility" on how to use analysis.
 
   e) User interfaces via Xmotif or normal terminal provided
 
@@ -86,7 +85,7 @@ The main features of this example are
   must be up and running ; in particular 'aida-config --cflags' and
   'aida-config --libs' must be active.
 
- - Set up for analysis using Lizard 
+ - Set up for analysis using Anaphe/Lizard 
 
   To compile the GammaRayTel example with the analysis tools activated, 
   set the following variables 
