@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.8 1999-12-06 18:10:39 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.9 1999-12-06 18:21:13 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -23,6 +23,8 @@
 #include "G4ios.hh"
 #include "G4MagIntegratorDriver.hh"
 #include "G4FieldTrack.hh"
+#include "geomdefs.hh"          
+                             //  for kCarTolerance
 
 #define G4DEBUG 1
 
@@ -210,7 +212,10 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
 	if( isNewMax )
 	   maxRelError= endPointDist / h - 1.0; 
 
-        if( dbg && (h > 0) && ( prNewMax || (endPointDist >= h*(1.+eps) ) ) ){ 
+        if(    dbg 
+	    && (h > kCarTolerance) 
+	    && ( prNewMax || (endPointDist >= h*(1.+eps) ) ) 
+          ){ 
            static G4int noWarnings = 0;
            if( (noWarnings ++ < 10) || (dbg>1) ){
  	      G4cerr << " Warning (G4MagIntegratorDriver): "
@@ -227,7 +232,7 @@ G4MagInt_Driver::WarnEndPointTooFar (G4double endPointDist,
 		     << "  curve length = " <<  h
 		     << "  Diff (cl-ed)= " << (h - endPointDist)
 		     << "  rel = " << (h-endPointDist) / h 
-		     << endl;
+		     << " (from G4MagIntegratorDriver)" << endl;
 	   }
 	}
 }
