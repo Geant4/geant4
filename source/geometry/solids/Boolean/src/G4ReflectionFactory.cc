@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.cc,v 1.4 2002-10-28 11:36:29 gcosmo Exp $
+// $Id: G4ReflectionFactory.cc,v 1.5 2003-01-27 10:43:41 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Ivana Hrivnacova, 16.10.2001  (Ivana.Hrivnacova@cern.ch)
@@ -58,7 +58,7 @@
 #include "G4PVReplica.hh"  
 
 G4ReflectionFactory* G4ReflectionFactory::fInstance = 0;
-const G4String  G4ReflectionFactory::fNameExtension = "_refl";
+const G4String  G4ReflectionFactory::fDefaultNameExtension = "_refl";
 const G4Scale3D G4ReflectionFactory::fScale = G4ScaleZ3D(-1.0);
 
 //_____________________________________________________________________________
@@ -76,7 +76,8 @@ G4ReflectionFactory* G4ReflectionFactory::Instance()
 //_____________________________________________________________________________
 
 G4ReflectionFactory::G4ReflectionFactory()
-  : fVerboseLevel(0)     
+  : fVerboseLevel(0),
+    fNameExtension(fDefaultNameExtension)    
 {
   // Protected singleton constructor.
   // ---
@@ -570,7 +571,7 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
     for (G4int j=0; j<4; j++) 
       diff += abs(scale(i,j) - fScale(i,j));  
 
-  if (diff > kCarTolerance)
+  if (diff > kCarTolerance*10.)
   {
     G4cout << "ERROR - G4ReflectionFactory::CheckScale()" << G4endl
            << "        Unexpected scale. Difference: " << diff << G4endl;
@@ -580,16 +581,34 @@ void G4ReflectionFactory::CheckScale(const G4Scale3D& scale) const
   }
 }    
 
-void  G4ReflectionFactory::SetVerboseLevel(G4int verboseLevel)
+//_____________________________________________________________________________
+
+void G4ReflectionFactory::SetVerboseLevel(G4int verboseLevel)
 {
   fVerboseLevel = verboseLevel;
 }
           
+//_____________________________________________________________________________
+
 G4int G4ReflectionFactory::GetVerboseLevel() const
 {
   return fVerboseLevel;
 }
 
+//_____________________________________________________________________________
+
+void G4ReflectionFactory::SetVolumesNameExtension(const G4String& nameExtension)
+{
+  fNameExtension = nameExtension;
+}
+          
+//_____________________________________________________________________________
+
+G4String G4ReflectionFactory::GetVolumesNameExtension() const
+{
+  return fNameExtension;
+}
+          
 /*
   // placement with decomposed transformation
 

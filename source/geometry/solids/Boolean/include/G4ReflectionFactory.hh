@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectionFactory.hh,v 1.1 2001-10-18 10:05:08 gcosmo Exp $
+// $Id: G4ReflectionFactory.hh,v 1.2 2003-01-27 10:43:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -121,6 +121,11 @@ class G4ReflectionFactory
     G4int GetVerboseLevel() const;				  
       // Sets/gets verbosity level.
 
+    void     SetVolumesNameExtension(const G4String& nameExtension);	
+    G4String GetVolumesNameExtension() const;				  
+      // Returns the name extension for the reflected solids
+      // and logical volumes.
+ 
   protected:	  
 
     G4ReflectionFactory();
@@ -184,10 +189,11 @@ class G4ReflectionFactory
   private:
 
     static G4ReflectionFactory* fInstance;
-    static const G4String       fNameExtension;
+    static const G4String       fDefaultNameExtension;
     static const G4Scale3D      fScale;
     
     G4int              fVerboseLevel;
+    G4String           fNameExtension;
     LogicalVolumesMap  fConstituentLVMap;
     LogicalVolumesMap  fReflectedLVMap;
 };
