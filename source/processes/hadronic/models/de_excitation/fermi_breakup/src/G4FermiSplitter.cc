@@ -50,7 +50,11 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
   A = a;
   Z = z;
   K = n;
+  splits.clear();
 
+
+  // Form all possible partition by combination
+  // of A partitions and Z partitions (Z partitions include null parts)
   G4FermiIntegerPartition PartitionA;
   PartitionA.Initialize(A,K);
   do // for each partition of A
@@ -89,25 +93,47 @@ G4int G4FermiSplitter::Initialize(const G4int a, const G4int z, const G4int n)
 	  // fragments pool
 	  if (static_cast<G4int>(multiplicities.size()) == K)
 	    {
-	      splits.clear();
-	      splits.resize(num_rows);
+              std::vector<std::vector<const G4VFermiFragment*> > tsplits;
+              tsplits.clear();
+              tsplits.resize(num_rows);
+              G4int group_size = num_rows;
 	      for (G4int i = 0; i < K; i++)
-		{
+                {
 		  az_pair = std::make_pair(partA[i],partZ[i]);
-		  for (G4int j = 0; j < num_rows/multiplicities[i]; j++)
-		    { // number of times that we have to introduce the same data
-		      G4int k=0;
-		      std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment*,
-			std::less<const std::pair<G4int,G4int> > >::iterator pos;
-		      for (pos = theFragmentsPool->LowerBound(az_pair);
-			   pos != theFragmentsPool->UpperBound(az_pair); ++pos)
-			{
-			  G4int tmp = j*multiplicities[i]+k;
-			  splits[tmp].push_back(pos->second);
-			  k++;
-			}
-		    }
-		}
+                  group_size /= multiplicities[i];
+                  std::multimap<const std::pair<G4int,G4int>, const G4VFermiFragment*,
+                    std::less<const std::pair<G4int,G4int> > >::iterator pos;
+                  pos = theFragmentsPool->LowerBound(az_pair);
+                  for (G4int k = 0; k < num_rows/group_size; k++)
+                    {
+                      if (pos == theFragmentsPool->UpperBound(az_pair))
+                        {
+                          pos = theFragmentsPool->LowerBound(az_pair);
+                        }
+                      for (G4int l = 0; l < group_size; l++)
+                        {
+                          tsplits[k*group_size+l].push_back(pos->second);
+                        }
+                      pos++;
+                    }
+                }
+              // Remove wrong splits
+              for (std::vector<std::vector<const G4VFermiFragment*> >::iterator 
+                     itsplits = tsplits.begin(); itsplits != tsplits.end(); itsplits++)
+                {
+                  std::sort((itsplits)->begin(), (itsplits)->end(),
+                            std::greater<const G4VFermiFragment*>());
+                }
+              // add splits  (eliminating a few of them that are repeated)
+              std::vector<std::vector<const G4VFermiFragment*> >::iterator 
+                itlastsplit =  tsplits.begin();
+              splits.push_back((*itlastsplit));
+              for (std::vector<std::vector<const G4VFermiFragment*> >::iterator 
+                     itsplits = itlastsplit+1; itsplits != tsplits.end(); itsplits++)
+                {
+                  if ( (*itsplits) != (*itlastsplit)) splits.push_back((*itsplits));
+                  itlastsplit++;
+                }
 	    }
 	}
       while (PartitionZ.Next());
