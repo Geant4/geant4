@@ -1,0 +1,15 @@
+ Dear colleagues,
+
+ by using "config-01-00-04" you'll compile your code against the new
+ CLHEP version 1.4 now installed at CERN. It requires a complete
+ re-compilation of the G4 code.
+ In this version CLHEP_BASE_DIR has been temporarly moved to
+     /afs/cern.ch/sw/geant4/dev/CLHEP/$G4SYSTEM/new
+ it will be moved back to "pro" (where the "pro" link will be
+ updated) as soon as your tests will be completed.
+ Note that for DEC-cxx I installed a customized version of the CLHEP
+ library where I explicitly disabled the ISO-ANSI features which are
+ activated by default (for DEC and Win/NT) in the CLHEP installation
+ setup.
+ Tested on DEC.
+                     Cheers, Gabriele
