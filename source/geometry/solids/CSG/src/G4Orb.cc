@@ -58,9 +58,11 @@ G4Orb::G4Orb( const G4String& pName,G4double pRmax )
 
   // Check radius
 
-  if (pRmax >= 10*kCarTolerance )  fRmax = pRmax;  
-  else  G4Exception("G4Orb::G4Orb() - invalid radius > 10*kCarTolerance");
-  
+  if (pRmax >= 10*kCarTolerance )
+    fRmax = pRmax;  
+  else
+    G4Exception("G4Orb::G4Orb()", "InvalidSetup", FatalException,
+                "Invalid radius > 10*kCarTolerance.");
 }
 
 /////////////////////////////////////////////////////////////////////
@@ -288,7 +290,8 @@ G4ThreeVector G4Orb::SurfaceNormal( const G4ThreeVector& p ) const
       break;
    default:
       DumpInfo();
-      G4Exception("G4Orb::SurfaceNormal() - Logic error");
+      G4Exception("G4Orb::SurfaceNormal()", "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break;    
   } 
 
@@ -508,7 +511,9 @@ G4double G4Orb::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Orb::DistanceToOut(p,v,...) - Invalid enum");
+        G4Exception("G4Orb::DistanceToOut(p,v,...)",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }

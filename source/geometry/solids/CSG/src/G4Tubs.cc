@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Tubs.cc,v 1.37 2003-10-09 10:39:44 grichine Exp $
+// $Id: G4Tubs.cc,v 1.38 2003-10-28 16:50:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -85,13 +85,11 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
     G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
            << "        Negative Z half-length ! - "
            << pDz << G4endl;
-    G4Exception("G4Tubs::G4Tubs() - invalid Z half-length");
+    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                "Invalid Z half-length");
   }
   if ( pRMin < pRMax && pRMin >= 0 ) // Check radii
   {
@@ -100,13 +98,11 @@ G4Tubs::G4Tubs( const G4String &pName,
   }
   else
   {
-    G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
     G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
            << "        Invalid values for radii !" << G4endl
            << "        pRMin = " << pRMin << ", pRMax = " << pRMax << G4endl;
-    G4Exception("G4Tubs::G4Tubs() - invalid radii");
+    G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                "Invalid radii.");
   }
   if ( pDPhi >= 2.0*M_PI ) // Check angles
   {
@@ -120,13 +116,11 @@ G4Tubs::G4Tubs( const G4String &pName,
     }
     else
     {
-      G4cout << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
       G4cerr << "ERROR - G4Tubs()::G4Tubs(): " << GetName() << G4endl
              << "        Negative delta-Phi ! - "
              << pDPhi << G4endl;
-      G4Exception("G4Tubs::G4Tubs() - invalid dphi");
+      G4Exception("G4Tubs::G4Tubs()", "InvalidSetup", FatalException,
+                  "Invalid dphi.");
     }
   }
   
@@ -656,7 +650,8 @@ G4ThreeVector G4Tubs::SurfaceNormal( const G4ThreeVector& p ) const
     default:
     {
       DumpInfo();
-      G4Exception("G4Tubs::SurfaceNormal() - Logic error") ;
+      G4Exception("G4Tubs::SurfaceNormal()", "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break ;
     }    
   }                
@@ -1441,8 +1436,8 @@ G4double G4Tubs::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl ;
         G4cout << "Proposed distance :" << G4endl << G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-
-        G4Exception("G4Tubs::DistanceToOut() - Invalid enum") ;
+        G4Exception("G4Tubs::DistanceToOut()", "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break ;
     }
   }
@@ -1604,7 +1599,9 @@ G4Tubs::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Tubs::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Tubs::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices ;
 }

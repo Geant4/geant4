@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Box.cc,v 1.21 2003-10-09 10:39:40 grichine Exp $
+// $Id: G4Box.cc,v 1.22 2003-10-28 16:50:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -70,13 +70,11 @@ G4Box::G4Box(const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Box()::G4Box(): " << GetName() << G4endl
-           << "        Dimensions too small ! - "
-           << pX << ", " << pY << ", " << pZ << G4endl;
     G4cerr << "ERROR - G4Box()::G4Box(): " << GetName() << G4endl
            << "        Dimensions too small ! - "
            << pX << ", " << pY << ", " << pZ << G4endl;
-    G4Exception("G4Box::G4Box() - invalid dimensions");
+    G4Exception("G4Box::G4Box()", "InvalidSetup",
+                FatalException, "Invalid dimensions. Too small.");
   }
 }
 
@@ -96,13 +94,11 @@ void G4Box::SetXHalfLength(G4double dx)
     fDx = dx;
   else
   {
-    G4cout << "ERROR - G4Box()::SetXHalfLength(): " << GetName() << G4endl
-           << "        Dimension X too small ! - "
-           << dx << G4endl;
     G4cerr << "ERROR - G4Box()::SetXHalfLength(): " << GetName() << G4endl
            << "        Dimension X too small ! - "
            << dx << G4endl;
-    G4Exception("G4Box::SetXHalfLength() - invalid dimensions");
+    G4Exception("G4Box::SetXHalfLength()", "InvalidSetup",
+                FatalException, "Invalid dimensions. Too small.");
   }
 } 
 
@@ -112,13 +108,11 @@ void G4Box::SetYHalfLength(G4double dy)
     fDy = dy;
   else
   {
-    G4cout << "ERROR - G4Box()::SetYHalfLength(): " << GetName() << G4endl
-           << "        Dimension Y too small ! - "
-           << dy << G4endl;
     G4cerr << "ERROR - G4Box()::SetYHalfLength(): " << GetName() << G4endl
            << "        Dimension Y too small ! - "
            << dy << G4endl;
-    G4Exception("G4Box::SetYHalfLength() - invalid dimensions");
+    G4Exception("G4Box::SetYHalfLength()", "InvalidSetup",
+                FatalException, "Invalid dimensions. Too small.");
   }
 } 
 
@@ -128,13 +122,11 @@ void G4Box::SetZHalfLength(G4double dz)
     fDz = dz;
   else
   {
-    G4cout << "ERROR - G4Box()::SetZHalfLength(): " << GetName() << G4endl
-           << "        Dimension Z too small ! - "
-           << dz << G4endl;
     G4cerr << "ERROR - G4Box()::SetZHalfLength(): " << GetName() << G4endl
            << "        Dimension Z too small ! - "
            << dz << G4endl;
-    G4Exception("G4Box::SetZHalfLength() - invalid dimensions");
+    G4Exception("G4Box::SetZHalfLength()", "InvalidSetup",
+                FatalException, "Invalid dimensions. Too small.");
   }
 } 
     
@@ -724,7 +716,9 @@ G4double G4Box::DistanceToOut( const G4ThreeVector& p,const G4ThreeVector& v,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Box::DistanceToOut() - Invalid enum");
+        G4Exception("G4Box::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -813,7 +807,9 @@ G4Box::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   else
   {
     DumpInfo();
-    G4Exception("G4Box::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Box::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

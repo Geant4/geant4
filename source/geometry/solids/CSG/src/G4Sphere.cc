@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Sphere.cc,v 1.22 2003-10-09 10:39:41 grichine Exp $
+// $Id: G4Sphere.cc,v 1.23 2003-10-28 16:50:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Sphere
@@ -95,13 +95,11 @@ G4Sphere::G4Sphere( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
            << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Sphere::G4Sphere() - invalid radii");
+    G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
+                "Invalid radii");
   }
 
   // Check angles
@@ -116,13 +114,11 @@ G4Sphere::G4Sphere( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
-           << "        Negative delta-Phi ! - "
-           << pDPhi << G4endl;
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
            << "        Negative Z delta-Phi ! - "
            << pDPhi << G4endl;
-    G4Exception("G4Sphere::G4Sphere() - invalid DPhi");
+    G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
+                "Invalid DPhi.");
   }
 
   // Convert fSPhi to 0-2PI
@@ -145,9 +141,9 @@ G4Sphere::G4Sphere( const G4String& pName,
 
   if (pSTheta<0 || pSTheta>M_PI)
   {
-    G4cout << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl;
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl;
-    G4Exception("G4Sphere::G4Sphere() - stheta outside 0-PI range");
+    G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
+                "stheta outside 0-PI range.");
   }
   else
   {
@@ -164,13 +160,11 @@ G4Sphere::G4Sphere( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
-           << "        Negative delta-Theta ! - "
-           << pDTheta << G4endl;
     G4cerr << "ERROR - G4Sphere()::G4Sphere(): " << GetName() << G4endl
            << "        Negative delta-Theta ! - "
            << pDTheta << G4endl;
-    G4Exception("G4Sphere::G4Sphere() - invalid pDTheta");
+    G4Exception("G4Sphere::G4Sphere()", "InvalidSetup", FatalException,
+                "Invalid pDTheta.");
   }
 }
 
@@ -709,7 +703,8 @@ G4ThreeVector G4Sphere::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Sphere::SurfaceNormal() - Logic error");
+      G4Exception("G4Sphere::SurfaceNormal()", "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break;    
   } // end case
 
@@ -2493,7 +2488,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Sphere::DistanceToOut(p,v,...) - Invalid enum");
+        G4Exception("G4Sphere::DistanceToOut(p,v,...)",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -2514,7 +2511,9 @@ G4double G4Sphere::DistanceToOut( const G4ThreeVector& p,
     G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
     G4cout << "Proposed distance :" << G4endl << G4endl;
     G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl;
-    G4cout<<"G4Sphere::DistanceToOut(p,v,...): snxt = kInfinity    ???"<<G4endl;
+    G4Exception("G4Sphere::DistanceToOut(p,v,...)",
+                "Notification", JustWarning,
+                "Logic error: snxt = kInfinity  ???");
     DBG();
   }
 
@@ -2746,7 +2745,9 @@ G4Sphere::CreateRotatedVertices( const G4AffineTransform& pTransform,
   else
   {
     DumpInfo();
-    G4Exception("G4Sphere::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Sphere::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
 
   delete[] cosCrossTheta;

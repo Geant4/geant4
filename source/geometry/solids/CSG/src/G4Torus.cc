@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Torus.cc,v 1.30 2003-10-09 10:39:42 grichine Exp $
+// $Id: G4Torus.cc,v 1.31 2003-10-28 16:50:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -89,13 +89,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cout << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid swept radius !" << G4endl
-           << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
     G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid swept radius !" << G4endl
            << "pRtor = " << pRtor << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Torus::SetAllParameters() - invalid swept radius");
+    G4Exception("G4Torus::SetAllParameters()",
+                "InvalidSetup", FatalException, "Invalid swept radius.");
   }
 
   // Check radii
@@ -108,13 +106,11 @@ G4Torus::SetAllParameters( G4double pRmin,
   }
   else
   {
-    G4cout << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
     G4cerr << "ERROR - G4Torus()::SetAllParameters(): " << GetName() << G4endl
            << "        Invalid values for radii !" << G4endl
            << "        pRmin = " << pRmin << ", pRmax = " << pRmax << G4endl;
-    G4Exception("G4Torus::SetAllParameters() - invalid radii");
+    G4Exception("G4Torus::SetAllParameters()",
+                "InvalidSetup", FatalException, "Invalid radii.");
   }
 
   // Check angles
@@ -125,13 +121,11 @@ G4Torus::SetAllParameters( G4double pRmin,
     if (pDPhi > 0)   fDPhi = pDPhi ;
     else
     {
-      G4cout << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
       G4cerr << "ERROR - G4Torus::SetAllParameters(): " << GetName() << G4endl
              << "        Negative Z delta-Phi ! - "
              << pDPhi << G4endl;
-      G4Exception("G4Torus::SetAllParameters() - invalid dphi");
+     G4Exception("G4Torus::SetAllParameters()",
+                 "InvalidSetup", FatalException, "Invalid dphi.");
     }
   }
   
@@ -1134,7 +1128,9 @@ G4ThreeVector G4Torus::SurfaceNormal( const G4ThreeVector& p ) const
       break;
     default:
       DumpInfo();
-      G4Exception("G4Torus::SurfaceNormal() - Logic error");
+      G4Exception("G4Torus::SurfaceNormal()",
+                  "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.");
       break ;
   } 
   return norm ;
@@ -2075,7 +2071,9 @@ G4double G4Torus::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl << G4endl;
         G4cout << "Proposed distance :" << G4endl << G4endl;
         G4cout << "snxt = " << snxt/mm << " mm" << G4endl << G4endl;
-        G4Exception("G4Torus::DistanceToOut() - Invalid enum");
+        G4Exception("G4Torus::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -2232,7 +2230,9 @@ G4Torus::CreateRotatedVertices( const G4AffineTransform& pTransform,
   else
   {
     DumpInfo();
-    G4Exception("G4Torus::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Torus::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

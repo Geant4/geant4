@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Trd.cc,v 1.14 2003-10-09 10:39:44 grichine Exp $
+// $Id: G4Trd.cc,v 1.15 2003-10-28 16:50:27 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -87,19 +87,15 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
     }
     else
     {
-      G4cout << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
-             << G4endl
-             << "        Invalid dimensions, some are < 0 !" << G4endl
-             << "          X - " << pdx1 << ", " << pdx2 << G4endl
-             << "          Y - " << pdy1 << ", " << pdy2 << G4endl
-             << "          Z - " << pdz << G4endl;
       G4cerr << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
              << G4endl
              << "        Invalid dimensions, some are < 0 !" << G4endl
              << "          X - " << pdx1 << ", " << pdx2 << G4endl
              << "          Y - " << pdy1 << ", " << pdy2 << G4endl
              << "          Z - " << pdz << G4endl;
-      G4Exception("G4Trd::CheckAndSetAllParameters() - Invalid parameters");
+      G4Exception("G4Trd::CheckAndSetAllParameters()",
+                  "InvalidSetup", FatalException,
+                  "Invalid parameters.");
     }
   }
 }
@@ -1125,7 +1121,9 @@ G4double G4Trd::DistanceToOut( const G4ThreeVector& p,
         break;
       default:
         DumpInfo();
-        G4Exception("G4Trd::DistanceToOut() - Invalid enum");
+        G4Exception("G4Trd::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.");
         break;
     }
   }
@@ -1222,7 +1220,9 @@ G4Trd::CreateRotatedVertices( const G4AffineTransform& pTransform ) const
   else
   {
     DumpInfo();
-    G4Exception("G4Trd::CreateRotatedVertices() - Out of memory");
+    G4Exception("G4Trd::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices;
 }

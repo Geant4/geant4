@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Cons.cc,v 1.26 2003-10-09 10:39:40 grichine Exp $
+// $Id: G4Cons.cc,v 1.27 2003-10-28 16:50:23 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // class G4Cons
@@ -93,13 +93,11 @@ G4Cons::G4Cons( const G4String& pName,
     fDz = pDz ;
   else
   {
-    G4cout << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Negative Z half-length ! - "
-           << pDz << G4endl;
     G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
            << "        Negative Z half-length ! - "
            << pDz << G4endl;
-    G4Exception("G4Cons::G4Cons() - invalid Z half-length");
+    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
+                FatalException, "Invalid Z half-length.");
   }
 
   // Check radii
@@ -116,15 +114,12 @@ G4Cons::G4Cons( const G4String& pName,
   }
   else
   {
-    G4cout << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-           << "        Invalid values for radii !" << G4endl
-           << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
-           << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2 << G4endl;
     G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
            << "        Invalide values for radii ! - "
            << "        pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
            << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2 << G4endl;
-    G4Exception("G4Cons::G4Cons() - invalid radii") ;
+    G4Exception("G4Cons::G4Cons()", "InvalidSetup",
+                FatalException, "Invalid radii.") ;
   }
 
   // Check angles
@@ -139,13 +134,11 @@ G4Cons::G4Cons( const G4String& pName,
     if ( pDPhi > 0 ) fDPhi = pDPhi ;
     else
     {
-      G4cout << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
-             << "        Negative delta-Phi ! - "
-             << pDPhi << G4endl;
       G4cerr << "ERROR - G4Cons()::G4Cons(): " << GetName() << G4endl
              << "        Negative delta-Phi ! - "
              << pDPhi << G4endl;
-      G4Exception("G4Cons::G4Cons() - invalid pDPhi") ;
+      G4Exception("G4Cons::G4Cons()", "InvalidSetup",
+                  FatalException, "Invalid pDPhi.") ;
     }
 
     // Ensure pSPhi in 0-2PI or -2PI-0 range if shape crosses 0
@@ -657,7 +650,9 @@ G4ThreeVector G4Cons::SurfaceNormal( const G4ThreeVector& p) const
       break ;
     default:
       DumpInfo();
-      G4Exception("G4Cons::SurfaceNormal() - Logic error") ;
+      G4Exception("G4Cons::SurfaceNormal()",
+                  "LogicError", FatalException,
+                  "Undefined side for valid surface normal to solid.") ;
       break ;    
   }
   return norm ;
@@ -2012,7 +2007,9 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
         G4cout << "v.z() = "   << v.z() << G4endl<< G4endl ;
         G4cout << "Proposed distance :" << G4endl<< G4endl ;
         G4cout << "snxt = "    << snxt/mm << " mm" << G4endl << G4endl ;
-        G4Exception("G4Cons::DistanceToOut() - Invalid enum") ;
+        G4Exception("G4Cons::DistanceToOut()",
+                    "LogicError", FatalException,
+                    "Undefined side for valid surface normal to solid.") ;
         break ;
     }
   }
@@ -2185,7 +2182,9 @@ G4Cons::CreateRotatedVertices(const G4AffineTransform& pTransform) const
   else
   {
     DumpInfo();
-    G4Exception("G4Cons::CreateRotatedVertices() - Out of memory !");
+    G4Exception("G4Cons::CreateRotatedVertices()",
+                "FatalError", FatalException,
+                "Error in allocation of vertices. Out of memory !");
   }
   return vertices ;
 }
