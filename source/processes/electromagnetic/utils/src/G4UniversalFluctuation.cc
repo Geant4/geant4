@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4UniversalFluctuation.cc,v 1.9 2003-07-21 12:52:10 vnivanch Exp $
+// $Id: G4UniversalFluctuation.cc,v 1.10 2003-10-16 13:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -39,6 +39,7 @@
 // 28-12-02 add method Dispersion (V.Ivanchenko)
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description: 
 //
@@ -47,7 +48,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
+
 #include "G4UniversalFluctuation.hh"
 #include "Randomize.hh"
 #include "G4Poisson.hh"
@@ -57,7 +58,7 @@
 #include "G4ParticleDefinition.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
+
 G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
  :G4VEmFluctuationModel(nam),
   particle(0),
@@ -80,7 +81,7 @@ G4UniversalFluctuation::~G4UniversalFluctuation()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4UniversalFluctuation::Initialise(const G4ParticleDefinition* part)
+void G4UniversalFluctuation::InitialiseMe(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();

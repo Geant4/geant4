@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.cc,v 1.6 2003-08-06 15:21:46 vnivanch Exp $
+// $Id: G4IonFluctuations.cc,v 1.7 2003-10-16 13:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -40,6 +40,7 @@
 // 07-02-03 change signature (V.Ivanchenko)
 // 13-02-03 Add name (V.Ivanchenko)
 // 23-05-03 Add control on parthalogical cases (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -75,7 +76,7 @@ G4IonFluctuations::~G4IonFluctuations()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4IonFluctuations::Initialise(const G4ParticleDefinition* part)
+void G4IonFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();

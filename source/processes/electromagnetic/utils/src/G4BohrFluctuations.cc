@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.cc,v 1.5 2003-07-21 12:52:09 vnivanch Exp $
+// $Id: G4BohrFluctuations.cc,v 1.6 2003-10-16 13:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -37,6 +37,7 @@
 // Modifications:
 //
 // 23-05-03  Add control on parthalogical cases (V.Ivanchenko)
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description: Sampling of Gaussion fluctuations
 //
@@ -69,7 +70,7 @@ G4BohrFluctuations::~G4BohrFluctuations()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4BohrFluctuations::Initialise(const G4ParticleDefinition* part)
+void G4BohrFluctuations::InitialiseMe(const G4ParticleDefinition* part)
 {
   particle       = part;
   particleMass   = part->GetPDGMass();

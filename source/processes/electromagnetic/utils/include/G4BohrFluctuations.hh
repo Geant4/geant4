@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4BohrFluctuations.hh,v 1.4 2003-07-21 12:52:06 vnivanch Exp $
+// $Id: G4BohrFluctuations.hh,v 1.5 2003-10-16 13:06:39 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -34,8 +34,9 @@
 //
 // Creation date: 02.04.2003
 //
-// Modifications:
+// Modifications: 
 //
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -72,7 +73,7 @@ public:
  				G4double&,
                                 G4double&);
 
-  void Initialise(const G4ParticleDefinition*);
+  void InitialiseMe(const G4ParticleDefinition*);
 
 protected:
 

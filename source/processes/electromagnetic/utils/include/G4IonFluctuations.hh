@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4IonFluctuations.hh,v 1.5 2003-08-06 15:21:43 vnivanch Exp $
+// $Id: G4IonFluctuations.hh,v 1.6 2003-10-16 13:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -31,10 +31,12 @@
 // File name:     G4IonFluctuations
 //
 // Author:        Vladimir Ivanchenko
-// 
+//
 // Creation date: 02.04.2003
 //
-// Modifications:
+// Modifications: 
+//
+// 16-10-03 Changed interface to Initialisation (V.Ivanchenko)
 //
 // Class Description:
 //
@@ -69,7 +71,7 @@ public:
  				G4double&,
                                 G4double&);
 
-  void Initialise(const G4ParticleDefinition*);
+  void InitialiseMe(const G4ParticleDefinition*);
 
 private:
 

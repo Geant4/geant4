@@ -62,6 +62,8 @@ public:
   ~G4PAIModel();
 
   void Initialise(const G4ParticleDefinition*, const G4DataVector&);
+  
+  void InitialiseMe(const G4ParticleDefinition*) {};
 
   G4double HighEnergyLimit(const G4ParticleDefinition* p);
 

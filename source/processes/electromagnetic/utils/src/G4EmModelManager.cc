@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4EmModelManager.cc,v 1.17 2003-10-13 17:57:41 vnivanch Exp $
+// $Id: G4EmModelManager.cc,v 1.18 2003-10-16 13:06:40 vnivanch Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -363,7 +363,7 @@ const G4DataVector* G4EmModelManager::Initialise(const G4ParticleDefinition* p,
 
   for(G4int jj=0; jj<nEmModels; jj++) {
     models[jj]->Initialise(particle, theCuts);
-    if(flucModels[jj]) flucModels[jj]->Initialise(particle);
+    if(flucModels[jj]) flucModels[jj]->InitialiseMe(particle);
   }
 
 
