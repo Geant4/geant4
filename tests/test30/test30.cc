@@ -507,7 +507,6 @@ int main(int argc, char** argv)
       if(nanglpi>4)
        h[49]=hf->createHistogram1D("50","ds/dE for pi+ at theta = 4",nbinspi,0.,emaxpi);
 
-      if(logx) {
         h[50]=hf->createHistogram1D("51","E(MeV) neutrons",nbinlog,0.,logmax);
         if(nangl>0)
           h[51]=hf->createHistogram1D("52","ds/dE for neutrons at theta = 0",nbinlog,0.,logmax);
@@ -519,7 +518,6 @@ int main(int argc, char** argv)
           h[54]=hf->createHistogram1D("55","ds/dE for neutrons at theta = 3",nbinlog,0.,logmax);
         if(nangl>4)
           h[55]=hf->createHistogram1D("56","ds/dE for neutrons at theta = 4",nbinlog,0.,logmax);
-      }
       	
       G4cout << "Histograms is initialised nbins=" << nbins
              << G4endl;
