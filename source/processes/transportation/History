@@ -1,4 +1,4 @@
-$Id: History,v 1.72 2003-06-12 10:16:05 dressel Exp $
+$Id: History,v 1.73 2003-06-13 09:31:25 dressel Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Jun, 13th, M.Dressel       transport-V05-01-03
+--------------------
+fixed bug created by last bug fix in G4MassImportanceProcess
+and G4ParallelImportanceProcess.
 
 Jun, 12th, M.Dressel       transport-V05-01-02
 --------------------
