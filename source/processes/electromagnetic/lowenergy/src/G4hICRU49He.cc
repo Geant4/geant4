@@ -142,7 +142,8 @@ G4double G4hICRU49He::StoppingPower(const G4Material* material,
   
     if ( kinE > 20000.0 ) kinE = 20000.0 ;
     G4double e1 = kinE/1000.0 ;
-    G4double a1 = 1.0 - exp(-a[iMolecula][1]*pow(a1,-2.0+a[iMolecula][5])) ;
+    // MGP, 13/9/2000 - Changed a1 into e1 in pow(...) below
+    G4double a1 = 1.0 - exp(-a[iMolecula][1]*pow(e1,-2.0+a[iMolecula][5])) ;
     G4double a2 = (a[iMolecula][0]*log(e1)/e1+a[iMolecula][2]/e1) *
                    exp(-a[iMolecula][4]*pow(e1,-a[iMolecula][6])) +
                    a[iMolecula][3]/(e1*e1) ;
