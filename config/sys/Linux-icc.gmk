@@ -1,11 +1,9 @@
 #
-# ------ GNU/LINUX ------ gcc 2.95.2 / gcc 3.2
-#
+# ------ GNU/LINUX ------     !!! not supported !!!
+#                                 Intel icc 7.1
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi
-#  CXXFLAGS  := -W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long
-#  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   ifdef G4OPTIMISE
     CXXFLAGS  += -O
     FCFLAGS   := -O
