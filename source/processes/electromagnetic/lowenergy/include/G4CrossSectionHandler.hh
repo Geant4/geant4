@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.hh,v 1.6 2001-10-05 18:25:19 pia Exp $
+// $Id: G4CrossSectionHandler.hh,v 1.7 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)

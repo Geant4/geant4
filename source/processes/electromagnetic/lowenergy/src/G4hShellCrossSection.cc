@@ -64,7 +64,7 @@ G4std::vector<G4double> G4hShellCrossSection::Probabilities(
   // V.Ivanchenko add only implementation of the formula (53) 
   // last factor neglected because it is 1 with a good accuracy
 
-  G4AtomicTransitionManager*  transitionManager = 
+  const G4AtomicTransitionManager*  transitionManager = 
                               G4AtomicTransitionManager::Instance();
 
   size_t nShells = transitionManager->NumberOfShells(Z);

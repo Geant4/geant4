@@ -39,12 +39,11 @@ G4AtomicTransition::G4AtomicTransition(G4int finalShell,
 				       const G4std::vector<G4int>& ids,
 				       const G4DataVector& energies,
 				       const G4DataVector& prob)
-{
-  finalShellId = finalShell;
-  originatingShellIds = ids;
-  transitionEnergies = energies;
-  transitionProbabilities = prob;
-}
+  :finalShellId(finalShell),
+   originatingShellIds(ids),
+   transitionEnergies(energies),
+   transitionProbabilities(prob)
+{ }
 
 G4AtomicTransition::~G4AtomicTransition()
 { }

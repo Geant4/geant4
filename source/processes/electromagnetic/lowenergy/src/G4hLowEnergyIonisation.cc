@@ -504,7 +504,7 @@ void G4hLowEnergyIonisation::BuildDataForFluorescence(
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(LowestKineticEnergy,
 		                		       HighestKineticEnergy,
 						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = 
+  const G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
   G4double bindingEnergy;
@@ -1430,7 +1430,7 @@ G4hLowEnergyIonisation::DeexciteAtom(const G4Material* material,
   G4double r     = electron_mass_c2/hMass;
   G4double tmax  = 2.*electron_mass_c2*(gamma*gamma - 1.)/(1. + 2.*gamma*r + r*r);
   G4double tcut  = G4std::min(tmax,cutForDelta[index]);
-  G4AtomicTransitionManager* transitionManager = 
+  const G4AtomicTransitionManager* transitionManager = 
                              G4AtomicTransitionManager::Instance();
 
   size_t nElements = material->GetNumberOfElements();

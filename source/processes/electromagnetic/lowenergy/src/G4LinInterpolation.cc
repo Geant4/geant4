@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LinInterpolation.cc,v 1.1 2001-11-29 19:01:36 vnivanch Exp $
+// $Id: G4LinInterpolation.cc,v 1.2 2002-05-28 09:20:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -39,16 +39,18 @@
 G4LinInterpolation::G4LinInterpolation()
 { }
 
-
 // Destructor
 
 G4LinInterpolation::~G4LinInterpolation()
 { }
 
 
+G4VDataSetAlgorithm* G4LinInterpolation::Clone() const 
+{ return new G4LinInterpolation; }
+
 G4double G4LinInterpolation::Calculate(G4double x, G4int bin, 
-					  const G4DataVector& points, 
-					  const G4DataVector& data) const
+				       const G4DataVector& points, 
+				       const G4DataVector& data) const
 {
   G4int nBins = data.size() - 1;
   G4double value = 0.;

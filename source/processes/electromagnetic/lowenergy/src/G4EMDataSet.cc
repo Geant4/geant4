@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.cc,v 1.5 2001-10-08 07:48:57 pia Exp $
+// $Id: G4EMDataSet.cc,v 1.6 2002-05-28 09:20:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -42,7 +42,7 @@
 G4EMDataSet::G4EMDataSet(G4int Z,
 			 G4DataVector* points, 
 			 G4DataVector* values,
-			 G4VDataSetAlgorithm* interpolation,
+			 const G4VDataSetAlgorithm* interpolation,
 			 G4double unitE, G4double unitData)
   :z(Z), energies(points), data(values), algorithm(interpolation)
 {
@@ -55,7 +55,7 @@ G4EMDataSet::G4EMDataSet(G4int Z,
 
 G4EMDataSet:: G4EMDataSet(G4int Z, 
 			  const G4String& dataFile,
-			  G4VDataSetAlgorithm* interpolation,
+			  const G4VDataSetAlgorithm* interpolation,
 			  G4double unitE, G4double unitData)
       :z(Z), algorithm(interpolation)
 {
@@ -152,18 +152,22 @@ void G4EMDataSet::LoadData(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
+      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
   
   G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
+  G4String separator("/");
+
+  G4String dirFile = pathString + separator + name;
   G4std::ifstream file(dirFile);
   G4std::filebuf* lsdp = file.rdbuf();
   
   if (! (lsdp->is_open()) )
 	{
-	  G4String excep = "G4EMDataSet - data file: " + dirFile + " not found";
+	  G4String s1("G4EMDataSet - data file: ");
+          G4String s2(" not found");
+	  G4String excep = s1 + dirFile + s2;
 	  G4Exception(excep);
 	}
   G4double a = 0;
@@ -216,3 +220,13 @@ void G4EMDataSet::PrintData() const
 	     << G4endl; 
     }
 }
+
+
+const G4VEMDataSet* G4EMDataSet::GetComponent(G4int i) const 
+{ return 0; }
+
+void G4EMDataSet::AddComponent(G4VEMDataSet* dataSet) 
+{ }
+
+size_t G4EMDataSet::NumberOfComponents() const 
+{ return 0; }

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CrossSectionHandler.cc,v 1.12 2001-10-08 07:48:57 pia Exp $
+// $Id: G4CrossSectionHandler.cc,v 1.13 2002-05-28 09:20:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -74,7 +74,7 @@ G4CrossSectionHandler::BuildCrossSectionsForMaterials(const G4DataVector& energy
       const G4Material* material= (*materialTable)[m];
       energies = new G4DataVector;
       data = new G4DataVector;
-      G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
+      const G4VDataSetAlgorithm* interpolationAlgo = CreateInterpolation();
       for (size_t bin=0; bin<nOfBins; bin++)
 	{
 	  G4double e = energyVector[bin];

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4BremsstrahlungParameters.cc,v 1.11 2001-11-29 22:59:56 vnivanch Exp $
+// $Id: G4BremsstrahlungParameters.cc,v 1.12 2002-05-28 09:20:18 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -59,7 +59,7 @@ G4BremsstrahlungParameters::~G4BremsstrahlungParameters()
   // Reset the map of data sets: remove the data sets from the map 
   G4std::map<G4int,G4VEMDataSet*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = param.begin(); pos != param.end(); pos++)
+  for (pos = param.begin(); pos != param.end(); ++pos)
     {
       G4VEMDataSet* dataSet = (*pos).second;
       delete dataSet;
@@ -133,22 +133,23 @@ void G4BremsstrahlungParameters::LoadData()
   // Read parameters
    
   char* path = getenv("G4LEDATA");
-  if (!path)
+  if (path == 0)
     { 
-      G4String excep = G4String("G4BremsstrahlungParameters - G4LEDATA") 
-                     + G4String("environment variable not set");
+      G4String excep("G4BremsstrahlungParameters - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
 
   G4String pathString_a(path);
-  G4String name_a = pathString_a + "/brem/br-sp.dat";  
+  G4String stringConversion1("/brem/br-sp.dat");
+  G4String name_a = pathString_a + stringConversion1;  
   G4std::ifstream file_a(name_a);
   G4std::filebuf* lsdp_a = file_a.rdbuf();
   
-  if (! (lsdp_a->is_open()) ) {
-     G4String excep = G4String("G4BremsstrahlungParameters: cannot open file ")
-                    + name_a;
-     G4Exception(excep);
+  if (! (lsdp_a->is_open()) ) 
+    {
+      G4String stringConversion2("G4BremsstrahlungParameters: cannot open file ");
+      G4String excep = stringConversion2 + name_a;
+      G4Exception(excep);
   }  
 
   // The file is organized into two columns:
@@ -252,10 +253,13 @@ void G4BremsstrahlungParameters::LoadData()
 G4double G4BremsstrahlungParameters::ParameterC(G4int id) const
 {
   G4int n = paramC.size();
-  if (id < 0 || id >= n) {
-    G4String ex = "G4BremsstrahlungParameters::ParameterC - wrong id=" + id; 
-    G4Exception(ex);
-  }
+  if (id < 0 || id >= n) 
+    {
+      G4String stringConversion1("G4BremsstrahlungParameters::ParameterC - wrong id = ");
+      G4String stringConversion2(id);
+      G4String ex = stringConversion1 + stringConversion2;
+      G4Exception(ex);
+    }
 
   return paramC[id];
 }

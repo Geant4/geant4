@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDataSetAlgorithm.hh,v 1.5 2001-10-09 12:13:48 pia Exp $
+// $Id: G4VDataSetAlgorithm.hh,v 1.6 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -62,7 +62,7 @@ private:
   
   // Hide copy constructor and assignment operator
   G4VDataSetAlgorithm(const G4VDataSetAlgorithm&);
-  G4VDataSetAlgorithm & operator=(const G4VDataSetAlgorithm &right);
+  G4VDataSetAlgorithm& operator=(const G4VDataSetAlgorithm& right);
 
 };
  

@@ -60,32 +60,32 @@ public:
 
   // The only way to get an instance of this class is to call the 
   // function Instance() 
-  static G4AtomicTransitionManager* Instance();
+  static const G4AtomicTransitionManager* Instance();
  
   // Z is the atomic number of the element, shellIndex is the 
   // index (in EADL) of the shell
-  const G4AtomicShell* Shell(G4int Z, size_t shellIndex);
+  const G4AtomicShell* Shell(G4int Z, size_t shellIndex) const;
    
   // Z is the atomic number of the element, shellIndex is the 
   // index (in EADL) of the final shell for the transition
-  const G4AtomicTransition* ReachableShell(G4int Z, size_t shellIndex);
+  const G4AtomicTransition* ReachableShell(G4int Z, size_t shellIndex) const;
    
   // This function returns the number of shells of the element
   // whose atomic number is Z
-  G4int NumberOfShells(G4int Z);
+  G4int NumberOfShells(G4int Z) const;
  
   // This function returns the number of those shells of the element
   // whose atomic number is Z which are reachable through a radiative
   // transition
-  G4int NumberOfReachableShells(G4int Z);
+  G4int NumberOfReachableShells(G4int Z) const;
 
   // Gives the sum of the probabilities of radiative transition towards the
   // shell whose index is shellIndex
-  G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex);
+  G4double TotalRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
   
   // Gives the sum of the probabilities of non radiative transition from the
   // shell whose index is shellIndex
-  G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex);
+  G4double TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const;
    
 protected:
 
@@ -95,6 +95,10 @@ protected:
 
 private:
  
+  // Hide copy constructor and assignment operator 
+  G4AtomicTransitionManager& operator=(const G4AtomicTransitionManager& right);
+  G4AtomicTransitionManager(const G4AtomicTransitionManager&);
+
   static G4AtomicTransitionManager* instance;
   
   // the first element of the map is the atomic number Z.

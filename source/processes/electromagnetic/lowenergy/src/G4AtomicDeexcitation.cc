@@ -105,7 +105,7 @@ const G4int G4AtomicDeexcitation::SelectTypeOfTransition(G4int Z, G4int shellId)
   if (shellId <=0 ) 
     {G4Exception("G4AtomicDeexcitation: zero or negative shellId");}
   
-  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
   G4int provShellId = -1;
   G4int shellNum = 0;
   G4int maxNumOfShells = transitionManager->NumberOfReachableShells(Z);  
@@ -164,7 +164,7 @@ G4DynamicParticle* G4AtomicDeexcitation::GenerateFluorescence(G4int Z,
 							      G4int shellId,
 							      G4int provShellId )
 { 
-  G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager*  transitionManager = G4AtomicTransitionManager::Instance();
   //  G4int provenienceShell = provShellId;
 
   //isotropic angular distribution for the outcoming photon

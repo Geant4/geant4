@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.cc,v 1.4 2001-09-26 21:19:23 pia Exp $
+// $Id: G4ShellData.cc,v 1.5 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -48,12 +48,12 @@ G4ShellData::~G4ShellData()
 {
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> >::iterator pos;
 
-  for (pos = idMap.begin(); pos != idMap.end(); pos++)
+  for (pos = idMap.begin(); pos != idMap.end(); ++pos)
     {
       G4DataVector* dataSet = (*pos).second;
       delete dataSet;
     }
-  for (pos = bindingMap.begin(); pos != bindingMap.end(); pos++)
+  for (pos = bindingMap.begin(); pos != bindingMap.end(); ++pos)
     {
       G4DataVector* dataSet = (*pos).second;
       delete dataSet;
@@ -170,7 +170,7 @@ void G4ShellData::LoadData(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = "G4EMDataSet - G4LEDATA environment variable not set";
+      G4String excep("G4EMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
   
@@ -181,7 +181,9 @@ void G4ShellData::LoadData(const G4String& fileName)
 
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "G4ShellData - data file: " + dirFile + " not found";
+      G4String s1("G4ShellData - data file: ");
+      G4String s2(" not found");
+      G4String excep = s1 + dirFile + s2;
       G4Exception(excep);
     }
 

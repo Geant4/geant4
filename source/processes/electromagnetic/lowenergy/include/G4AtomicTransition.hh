@@ -51,8 +51,10 @@ class G4AtomicTransition {
 
 public:
 
-  G4AtomicTransition(G4int,const G4std::vector<G4int>&,const G4DataVector&,
-		     const G4DataVector&);
+  G4AtomicTransition(G4int finalShell,
+		     const G4std::vector<G4int>& ids,
+		     const G4DataVector& energies,
+		     const G4DataVector& probabilities);
   ~G4AtomicTransition();
   
   // All the data stored and provided by this class are relative to a

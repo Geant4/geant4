@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4CompositeEMDataSet.hh,v 1.3 2001-10-08 15:27:01 pia Exp $
+// $Id: G4CompositeEMDataSet.hh,v 1.4 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -80,6 +80,10 @@ public:
   const G4DataVector& GetData(G4int i) const;
 
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4CompositeEMDataSet& operator=(const G4CompositeEMDataSet& right);
+  G4CompositeEMDataSet(const G4CompositeEMDataSet&);
 
   void LoadData(const G4String& fileName);
 

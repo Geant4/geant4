@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eIonisationCrossSectionHandler.hh,v 1.3 2002-04-18 17:18:53 vnivanch Exp $
+// $Id: G4eIonisationCrossSectionHandler.hh,v 1.4 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -78,7 +78,11 @@ protected:
 
 private:
 
-  const G4VEnergySpectrum* theParam;
+  // Hide copy constructor and assignment operator 
+  G4eIonisationCrossSectionHandler& operator=(const G4eIonisationCrossSectionHandler& right);
+  G4eIonisationCrossSectionHandler(const G4eIonisationCrossSectionHandler&);
+
+ const G4VEnergySpectrum* theParam;
 
   G4VDataSetAlgorithm* interp;
 };

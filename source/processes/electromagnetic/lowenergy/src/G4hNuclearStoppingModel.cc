@@ -61,10 +61,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hNuclearStoppingModel::G4hNuclearStoppingModel(const G4String& name):
-  G4VLowEnergyModel(name)
+G4hNuclearStoppingModel::G4hNuclearStoppingModel(const G4String& name)
+  :G4VLowEnergyModel(name), modelName(name)
 {
-  modelName = name ;
   InitializeMe() ;
 }
 

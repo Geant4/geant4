@@ -71,8 +71,11 @@ protected:
   G4std::vector<G4VEMDataSet*>* BuildCrossSectionsForMaterials(const G4DataVector& energyVector, 
 							       const G4DataVector* energyCuts);
 
-
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4BremsstrahlungCrossSectionHandler& operator=(const G4BremsstrahlungCrossSectionHandler& right);
+  G4BremsstrahlungCrossSectionHandler(const G4BremsstrahlungCrossSectionHandler&);
 
   const G4VEnergySpectrum* theBR;
 

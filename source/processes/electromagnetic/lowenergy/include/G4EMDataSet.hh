@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4EMDataSet.hh,v 1.2 2001-10-08 07:45:32 pia Exp $
+// $Id: G4EMDataSet.hh,v 1.3 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -56,24 +56,34 @@ public:
   G4EMDataSet(G4int Z, 
 	      G4DataVector* points, 
 	      G4DataVector* values,
-	      G4VDataSetAlgorithm* interpolation,
+	      const G4VDataSetAlgorithm* interpolation,
 	      G4double unitE = MeV, G4double unitData = barn);
 
   G4EMDataSet(G4int Z, 
 	      const G4String& dataFile,
-	      G4VDataSetAlgorithm* interpolation,
+	      const G4VDataSetAlgorithm* interpolation,
 	      G4double unitE = MeV, G4double unitData = barn);
 
   ~G4EMDataSet();
  
   G4double FindValue(G4double e, G4int id = 0) const;
   
+  virtual const G4VEMDataSet* GetComponent(G4int i) const;
+
+  virtual void AddComponent(G4VEMDataSet* dataSet);
+
+  virtual size_t NumberOfComponents() const;
+
   void PrintData() const;
 
   const G4DataVector& GetEnergies(G4int i) const { return *energies; }
   const G4DataVector& GetData(G4int i) const { return *data; }
 
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4EMDataSet& operator=(const G4EMDataSet& right);
+  G4EMDataSet(const G4EMDataSet&);
 
   void LoadData(const G4String& dataFile);
   
@@ -84,7 +94,7 @@ private:
   G4DataVector* energies; // Owned pointer
   G4DataVector* data;     // Owned pointer
 
-  G4VDataSetAlgorithm* algorithm; // Owned pointer 
+  const G4VDataSetAlgorithm* algorithm; // Owned pointer 
   
   G4double unit1;
   G4double unit2;

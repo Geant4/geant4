@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCrossSectionHandler.cc,v 1.8 2001-10-10 16:46:06 pia Exp $
+// $Id: G4VCrossSectionHandler.cc,v 1.9 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -405,8 +405,7 @@ G4double G4VCrossSectionHandler::ValueForMaterial(const G4Material* material,
 }
 
 
-G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(
-                                      const G4DataVector* energyCuts) 
+G4VEMDataSet* G4VCrossSectionHandler::BuildMeanFreePathForMaterials(const G4DataVector* energyCuts) 
 {
   // Builds a CompositeDataSet containing the mean free path for each material
   // in the material table

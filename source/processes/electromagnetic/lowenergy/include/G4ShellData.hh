@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellData.hh,v 1.1 2001-08-20 16:36:01 pia Exp $
+// $Id: G4ShellData.hh,v 1.2 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -69,7 +69,11 @@ public:
 
 private:
 
-  G4int zMin;
+  // Hide copy constructor and assignment operator 
+  G4ShellData& operator=(const G4ShellData& right);
+  G4ShellData(const G4ShellData&);
+
+   G4int zMin;
   G4int zMax; 
 
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;

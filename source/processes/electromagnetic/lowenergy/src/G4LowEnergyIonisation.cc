@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4LowEnergyIonisation.cc,v 1.78 2002-03-28 11:49:07 vnivanch Exp $
+// $Id: G4LowEnergyIonisation.cc,v 1.79 2002-05-28 09:20:19 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 // --------------------------------------------------------------
@@ -246,8 +246,7 @@ void G4LowEnergyIonisation::BuildLossTable(
   G4PhysicsLogVector* bVector = new G4PhysicsLogVector(lowKineticEnergy,
 		                		       highKineticEnergy,
 						       binForFluo);
-  G4AtomicTransitionManager* transitionManager = 
-                             G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   
   // Clean up the vector of cuts
 
@@ -597,7 +596,7 @@ G4LowEnergyIonisation::DeexciteAtom(const G4Material* material,
  
   if(eLoss > cutForPhotons && eLoss > cutForElectrons) {
 
-    G4AtomicTransitionManager* transitionManager = 
+    const G4AtomicTransitionManager* transitionManager = 
                                G4AtomicTransitionManager::Instance();
       
     size_t nElements = material->GetNumberOfElements();

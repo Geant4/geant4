@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LinInterpolation.hh,v 1.1 2001-11-29 19:01:44 vnivanch Exp $
+// $Id: G4LinInterpolation.hh,v 1.2 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -57,10 +57,9 @@ public:
 		     const G4DataVector& energies, 
 		     const G4DataVector& data) const;
 
-  virtual G4VDataSetAlgorithm* Clone() const { return new G4LinInterpolation; }
+  G4VDataSetAlgorithm* Clone() const;
 
 private:
-
   
   // Hide copy constructor and assignment operator
 

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4LowEnergyPhotoElectric.cc,v 1.44 2002-04-19 17:21:20 pia Exp $
+// $Id: G4LowEnergyPhotoElectric.cc,v 1.45 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: A. Forti
@@ -163,7 +163,7 @@ G4VParticleChange* G4LowEnergyPhotoElectric::PostStepDoIt(const G4Track& aTrack,
   size_t shellIndex = shellCrossSectionHandler->SelectRandomShell(Z,photonEnergy);
 
   // Retrieve the corresponding identifier and binding energy of the selected shell
-  G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
+  const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();
   const G4AtomicShell* shell = transitionManager->Shell(Z,shellIndex);
   G4double bindingEnergy = shell->BindingEnergy();
   G4int shellId = shell->ShellId();

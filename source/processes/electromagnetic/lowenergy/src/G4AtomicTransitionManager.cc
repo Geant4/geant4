@@ -111,52 +111,46 @@ G4AtomicTransitionManager::~G4AtomicTransitionManager()
   
 { G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
  
- for (pos = shellTable.begin(); pos != shellTable.end(); pos++){
-   
-   G4std::vector< G4AtomicShell*>vec = (*pos).second;
-   
-   G4int vecSize=vec.size();
-   
-   for (G4int i=0; i< vecSize; i++){
-     
-     delete vec[i]; 
+ for (pos = shellTable.begin(); pos != shellTable.end(); ++pos)
+   {
+     G4std::vector< G4AtomicShell*>vec = (*pos).second;
+     G4int vecSize=vec.size();
+     for (G4int i=0; i< vecSize; i++)
+       {
+	 G4AtomicShell* shell = vec[i];
+	 delete shell;
+       }
    }
-   
- }
  
  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator ppos;
  
- for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ppos++){
-   
-   G4std::vector< G4AtomicTransition*>vec = (*ppos).second;
-   
-   G4int vecSize=vec.size();
-   
-   for (G4int i=0; i< vecSize; i++){
-     
-     delete vec[i]; 
-   }
-   
- }   
- 
+ for (ppos = transitionTable.begin(); ppos != transitionTable.end(); ++ppos)
+   {
+     G4std::vector< G4AtomicTransition*>vec = (*ppos).second;
+     G4int vecSize=vec.size();
+     for (G4int i=0; i< vecSize; i++)
+       {
+	 G4AtomicTransition* transition = vec[i];
+	 delete transition; 
+       }
+   }   
 }
 
 G4AtomicTransitionManager* G4AtomicTransitionManager::instance = 0;
 
-G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
+const G4AtomicTransitionManager* G4AtomicTransitionManager::Instance()
 {
-  if (instance==0)
+  if (instance == 0)
     {
       instance = new G4AtomicTransitionManager;
-     
     }
   return instance;
 }
 
 
-const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex)
+const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex) const
 { 
-  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::const_iterator pos;
   
   pos = shellTable.find(Z);
   
@@ -180,9 +174,9 @@ const G4AtomicShell* G4AtomicTransitionManager::Shell(G4int Z, size_t shellIndex
   } 
 }
 
-const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,size_t shellIndex)
+const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,size_t shellIndex) const
 {
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
   pos = transitionTable.find(Z);
   if (pos!= transitionTable.end())
     {
@@ -199,10 +193,10 @@ const G4AtomicTransition* G4AtomicTransitionManager:: ReachableShell(G4int Z,siz
   } 
 }
 
-G4int G4AtomicTransitionManager::NumberOfShells (G4int Z)
+G4int G4AtomicTransitionManager::NumberOfShells (G4int Z) const
 {
 
-G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::const_iterator pos;
 
   pos = shellTable.find(Z);
 
@@ -219,9 +213,9 @@ G4std::map<G4int,G4std::vector<G4AtomicShell*>,G4std::less<G4int> >::iterator po
   } 
 }
 
-G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z)
+G4int G4AtomicTransitionManager::NumberOfReachableShells(G4int Z) const
 {
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
 
   pos = transitionTable.find(Z);
 
@@ -238,10 +232,10 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterat
 }
 
 G4double G4AtomicTransitionManager::TotalRadiativeTransitionProbability(G4int Z, 
-									size_t shellIndex)
+									size_t shellIndex) const
 
 {
-G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
+G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
 
   pos = transitionTable.find(Z);
 
@@ -274,11 +268,11 @@ G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterat
   } 
 }
 
-G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex)
+G4double G4AtomicTransitionManager::TotalNonRadiativeTransitionProbability(G4int Z, size_t shellIndex) const
 
 {
 
-  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::iterator pos;
+  G4std::map<G4int,G4std::vector<G4AtomicTransition*>,G4std::less<G4int> >::const_iterator pos;
   
   pos = transitionTable.find(Z);
   

@@ -64,10 +64,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4hParametrisedLossModel::G4hParametrisedLossModel(const G4String& name):
-  G4VLowEnergyModel(name)
+G4hParametrisedLossModel::G4hParametrisedLossModel(const G4String& name)
+  :G4VLowEnergyModel(name), modelName(name)
 {
-  modelName = name ;
   InitializeMe();
 }
 

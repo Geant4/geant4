@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.cc,v 1.7 2001-10-11 14:10:40 pia Exp $
+// $Id: G4ShellEMDataSet.cc,v 1.8 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -65,7 +65,8 @@ G4ShellEMDataSet::~G4ShellEMDataSet()
 { 
   for (size_t i=0; i<nComponents; i++)
     {
-      delete components[i];
+      G4VEMDataSet* dataSet = components[i];
+      delete dataSet;
     }
   delete algorithm;
 }
@@ -112,18 +113,21 @@ void G4ShellEMDataSet::LoadData(const G4String& fileName)
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = "G4ShellEMDataSet - G4LEDATA environment variable not set";
+      G4String excep("G4ShellEMDataSet - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
   
   G4String pathString(path);
-  G4String dirFile = pathString + "/" + name;
+  G4String separator("/" );
+  G4String dirFile = pathString + separator + name;
   G4std::ifstream file(dirFile);
   G4std::filebuf* lsdp = file.rdbuf();
 
   if (! (lsdp->is_open()) )
     {
-      G4String excep = "G4ShellEMDataSet - data file: " + dirFile + " not found";
+      G4String s1("G4ShellEMDataSet - data file: ");
+      G4String s2(" not found");
+      G4String excep = s1 + dirFile + s2;
       G4Exception(excep);
     }
 

@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4eBremsstrahlungSpectrum.cc,v 1.5 2001-11-30 00:52:52 pia Exp $
+// $Id: G4eBremsstrahlungSpectrum.cc,v 1.6 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -344,3 +344,14 @@ G4double G4eBremsstrahlungSpectrum::Function(G4double x,
 void G4eBremsstrahlungSpectrum::PrintData() const
 { theBRparam->PrintData(); }
 
+G4double G4eBremsstrahlungSpectrum::Excitation(G4int Z, G4double kineticEnergy) const
+{
+  return 0.0;
+}
+
+G4double G4eBremsstrahlungSpectrum::MaxEnergyOfSecondaries(G4double kineticEnergy,
+							   G4int Z,
+							   const G4ParticleDefinition*) const
+{ 
+  return kineticEnergy; 
+}

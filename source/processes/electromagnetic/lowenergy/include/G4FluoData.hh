@@ -72,21 +72,25 @@ public:
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the identity of the starting one
-  G4int StartShellId(G4int initIndex,G4int vacancyIndex);
+  G4int StartShellId(G4int initIndex,G4int vacancyIndex) const;
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the transition energy
-  G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellEnergy(G4int initIndex,G4int vacancyIndex) const;
 
   // Given the indexes of the starting and final shells for the 
   // transition, returns the probability of this transition
-  G4double StartShellProb(G4int initIndex,G4int vacancyIndex);
+  G4double StartShellProb(G4int initIndex,G4int vacancyIndex) const;
 
   void LoadData( G4int Z);
 
   void PrintData();
 
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4FluoData& operator=(const G4FluoData& right);
+  G4FluoData(const G4FluoData&);
 
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > idMap;
   G4std::map<G4int,G4DataVector*,G4std::less<G4int> > energyMap;

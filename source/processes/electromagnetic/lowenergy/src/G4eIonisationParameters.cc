@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4eIonisationParameters.cc,v 1.17 2001-11-30 00:52:52 pia Exp $
+// $Id: G4eIonisationParameters.cc,v 1.18 2002-05-28 09:20:21 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -165,12 +165,13 @@ void G4eIonisationParameters::LoadData()
   char* path = getenv("G4LEDATA");
   if (!path)
     { 
-      G4String excep = "G4eIonisationParameters - G4LEDATA environment variable not set";
+      G4String excep("G4eIonisationParameters - G4LEDATA environment variable not set");
       G4Exception(excep);
     }
     
   G4String pathString(path);
-  pathString += "/ioni/io-sp-";  
+  G4String path2("/ioni/io-sp-");
+  pathString += path2;  
   
   G4double energy, sum;
   
@@ -188,8 +189,8 @@ void G4eIonisationParameters::LoadData()
     G4std::filebuf* lsdp = file.rdbuf();
   
     if (! (lsdp->is_open()) ) {
-      G4String excep = "G4IonisationParameters - data file: " 
-                     + name + " not found";
+      G4String excep = G4String("G4IonisationParameters - data file: ")
+                     + name + G4String(" not found");
       G4Exception(excep);
     }
 
@@ -264,11 +265,11 @@ void G4eIonisationParameters::LoadData()
   }
 
   G4String pathString_a(path);
-  G4String name_a = pathString_a + "/ioni/io-ex-av.dat";  
+  G4String name_a = pathString_a + G4String("/ioni/io-ex-av.dat");  
   G4std::ifstream file_a(name_a);
   G4std::filebuf* lsdp_a = file_a.rdbuf();
   G4String pathString_b(path);
-  G4String name_b = pathString_b + "/ioni/io-ex-sig.dat";  
+  G4String name_b = pathString_b + G4String("/ioni/io-ex-sig.dat");  
   G4std::ifstream file_b(name_b);
   G4std::filebuf* lsdp_b = file_b.rdbuf();
   

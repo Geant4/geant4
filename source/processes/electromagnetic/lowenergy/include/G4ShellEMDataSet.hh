@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ShellEMDataSet.hh,v 1.3 2001-09-10 18:05:16 pia Exp $
+// $Id: G4ShellEMDataSet.hh,v 1.4 2002-05-28 09:15:26 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
@@ -80,6 +80,10 @@ public:
   const G4DataVector& GetData(G4int i) const;
 
 private:
+
+  // Hide copy constructor and assignment operator 
+  G4ShellEMDataSet& operator=(const G4ShellEMDataSet& right);
+  G4ShellEMDataSet(const G4ShellEMDataSet&);
 
   void LoadData(const G4String& fileName);
 
