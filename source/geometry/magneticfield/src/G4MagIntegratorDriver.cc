@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4MagIntegratorDriver.cc,v 1.25 2002-05-07 17:18:49 japost Exp $
+// $Id: G4MagIntegratorDriver.cc,v 1.26 2002-06-10 17:25:35 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -193,7 +193,7 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      G4ThreeVector EndPos( y[0], y[1], y[2] );
 
 #ifdef  G4DEBUG_FIELD
-     if(nstp>nStpPr) {
+     if(dbg && (nstp>nStpPr)) {
        G4cout << "hdid="  << G4std::setw(12) << hdid  << " "
 	      << "hnext=" << G4std::setw(12) << hnext << " " << endl;
        PrintStatus( ystart, x1, y, x, h, (nstp==nStpPr) ? -nstp: nstp); 
@@ -208,11 +208,13 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
         //   we understand how small difference occur.
         if( endPointDist >= hdid*(1.+perThousand) ){ 
 #ifdef  G4DEBUG_FIELD
-           WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
-	   G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
-	   // G4cerr << "Mid:EndPtFar> ";
-	   if(dbg>1) PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
+           if(dbg){
+	      WarnEndPointTooFar ( endPointDist, hdid, eps, dbg ); 
+	      G4cerr << "  Total steps:  bad" << noBadSteps << " good " << noGoodSteps << endl;
+	      // G4cerr << "Mid:EndPtFar> ";
+	      PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);  
                 // Potentially add as arguments:  <dydx> - as Initial Force
+           }
 #endif
 	   no_warnings++;
 	}
@@ -230,10 +232,12 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
             (fabs(hstep) > Hmin())     //   and if we are asked, it's OK
             //   && (hnext < hstep * PerThousand ) 
 	  ){
-	     //  Issue WARNING
-	     WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
-	     // G4cerr << "Mid:SmallStep> ";
-	     if(dbg>1) PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
+             if(dbg>0){ 
+		//  Issue WARNING
+		WarnSmallStepSize( hnext, hstep, h, x-x1, nstp ); 
+		// G4cerr << "Mid:SmallStep> ";
+		PrintStatus( ystart, x1, y, x, hstep, no_warnings?nstp:-nstp);
+	     }
 	     no_warnings++;
 	}
 #endif
@@ -266,13 +270,15 @@ G4MagInt_Driver::AccurateAdvance(G4FieldTrack& y_current,
      no_warnings++;
      succeeded = false;
 #ifdef  G4DEBUG_FIELD
-        WarnTooManyStep( x1, x2, x );  //  Issue WARNING
-        if( dbg>1) PrintStatus( yEnd, x1, y, x, hstep, -nstp);
+        if(dbg){
+	   WarnTooManyStep( x1, x2, x );  //  Issue WARNING
+	   PrintStatus( yEnd, x1, y, x, hstep, -nstp);
+        }
 #endif
   }
 
 #ifdef G4DEBUG_FIELD
-  if( no_warnings ){
+  if( dbg && no_warnings ){
      G4cerr << " Exiting status: "
 	   << " no-steps " << nstp
 	   <<endl;
