@@ -69,10 +69,10 @@ the directories for binaries are re-used.</li>
 Scripts for System Testing</h1>
 These are kept in <b><tt><font size=+1>geant4/tests/tools/bin/</font></tt></b>.&nbsp;
 Be aware that there are 3 checked out versions, namely in <b><tt><font size=+1>prod/src/</font></tt></b>,
-<b><tt><font size=+1>dev1/src/</font></tt></b> and <b><tt><font size=+1>dev2/src/</font></tt></b>,
-so please maintain them with CVS, checking in when you change something,
-updating in the other areas if necessary.&nbsp; The current used scripts
-are in summary:
+<b><tt><font size=+1>dev1/src/</font></tt></b>
+and <b><tt><font size=+1>dev2/src/</font></tt></b>, so please maintain
+them with CVS, checking in when you change something, updating in the other
+areas if necessary.&nbsp; The current used scripts are in summary:
 <br>&nbsp;
 <center><table BORDER NOSAVE >
 <tr>
@@ -168,9 +168,10 @@ posted on the web automatically.
 Data files for Driving Updates and Job Submission</h1>
 These are kept in <b><tt><font size=+1>geant4/tests/</font></tt></b>. Be
 aware that there are 3 checked out versions, namely in <b><tt><font size=+1>prod/src/</font></tt></b>,
-<b><tt><font size=+1>dev1/src/</font></tt></b> and <b><tt><font size=+1>dev2/src/</font></tt></b>,
-so please maintain them with CVS, checking in when you change something,
-updating in the other areas if necessary.
+<b><tt><font size=+1>dev1/src/</font></tt></b>
+and <b><tt><font size=+1>dev2/src/</font></tt></b>, so please maintain
+them with CVS, checking in when you change something, updating in the other
+areas if necessary.
 <br>&nbsp;
 <center><table BORDER NOSAVE >
 <tr>
@@ -232,7 +233,7 @@ to the current source using <b><tt><font size=+1>tools/bin/update.sh -n
 <li>
 If a global, i.e., geant4-wide, tag has recently been made, edit <b><tt><font size=+1>stt-dev1.sdb</font></tt></b>
 appropriately, i.e., replacing previous specific tags by the equivalent
-global one, and commit to the head (don;t forget an appropriate CVS&nbsp;log
+global one, and commit to the head (don;t forget an appropriate CVS log
 message).&nbsp; Check using <b><tt><font size=+1>tools/bin/update.sh -n
 &amp;</font></tt></b>.</li>
 
@@ -255,95 +256,44 @@ for errors.</li>
 </blockquote>
 
 <h1>
-</h1>
-&nbsp;
-<p>&nbsp;
-<br>&nbsp;
-<p>===========&nbsp; This is as far as we've got at present ====== The
-following is out of date =================
-<br>&nbsp;
+Inspecting the Output</h1>
+The output is in <b><tt><font size=+1>/afs/cern.ch/sw/geant4/stt/&lt;area>/$G4SYSTEM/&lt;debug-ISO-option>/stt/$G4SYSTEM</font></tt></b>
+as appropriate (the last <b><tt><font size=+1>stt</font></tt></b> is a
+symbolic link to the current results sub-directory name).&nbsp; (<b><tt><font size=+1>area</font></tt></b>
+is <b><tt><font size=+1>dev1</font></tt></b>, <b><tt><font size=+1>dev2</font></tt></b>
+or <b><tt><font size=+1>prod</font></tt></b>.)&nbsp; Currently the output
+is inspected by eye.&nbsp; <b><tt><font size=+1>.diff</font></tt></b> files
+compare the <b><tt><font size=+1>.out</font></tt></b> files with the "reference"
+<b><tt><font size=+1>.out</font></tt></b> files in the source tree, e.g.,
+<b><tt><font size=+1>test01.diff</font></tt></b> is <b><tt><font size=+1>diff
+-w test01.out $G4INSTALL/tests/test01/test01.out</font></tt></b>.
+<p>If all's well, accept the tag (update <b><tt><font size=+1>tags_database.html</font></tt></b>
+to the head, mark it "accepted" and commit as above) and remember to include
+it in the next series of tests.&nbsp; If not, makr it "rejected" and do
+not include in the next series of tests.&nbsp; Notify the category coordinator.
+<p>After a few tags have built up, or for the monthly reference tag, consider
+placing a global tag on the geant4 source tree.
 <h1>
-Accepting or Rejecting a Tag</h1>
-These are recommended procedures for the Acting System Test Coordinator
-when tests are complete.
-<blockquote>
-<li>
-Mark the tag as <b>accepted</b> or <b>rejected </b>in the <a href="tags_database.html#TagsDatabaseTable">Tags
-Database Table</a>.</li>
-
-<br>&nbsp;
-<li>
-On occasion, make a global tag.&nbsp; In that case, copy optimised libraries
-to <b><tt><font size=+1>/afs/cern.ch/rd44/dev/lib</font></tt></b>.</li>
-
-<br>&nbsp;
-<li>
-Inform taggers of the decision.&nbsp; If accepted, ask him/her to announce
-on the Tags Blackboard.&nbsp; If rejected, ask for a new tag.</li>
-
-<br>&nbsp;
-<li>
-Inspect the <a href="tags_database.html#TagsDatabaseTable">Tags Database
-Table </a>and select a new tags set.&nbsp; Mark them as <b>testing </b>and
-commit the file.</li>
-
-<br>&nbsp;
-<li>
-Ask Platform Managers to update as required.</li>
-</blockquote>
-
+Making a Global (geant4-wide) Reference Tag</h1>
+Make sure geant/tests is up to date.&nbsp; In <b><tt><font size=+1>geant4/</font></tt></b>
+of the relevant test area, <b><tt><font size=+1>cvs tag &lt;tag-name> >&amp;
+cvs_log_&lt;tag-name>.log &amp;</font></tt></b>, where <b><tt><font size=+1>&lt;tag-name></font></tt></b>
+is <b><tt><font size=+1>geant4-xx-yy-ref-zz</font></tt></b>, where <b><tt><font size=+1>xx-yy</font></tt></b>
+refer to the most recent past Geant4 release and <b><tt><font size=+1>zz</font></tt></b>
+is a serial number.
+<p>Announce on the Tags Blackboard and invite category coordinators to
+add further information.
 <h1>
-Updating a Reference Version</h1>
-These are the recommended procedures for each System Test Platform Manager
-when the Acting System Test Coordinator asks for an update of the test
-versions.
-<blockquote>
-<li>
-Edit <b><tt><font size=+1>stt-ref.sdb</font></tt></b> and <b><tt><font size=+1>stt-ref+.sdb</font></tt></b>
-appropriately and commit.&nbsp; Simplify by using the most recent global
-tag if appropriate.</li>
-
-<br>&nbsp;
-<li>
-For each platform, save <b><tt><font size=+1>ref+/$G4SYSTEM/stt/</font></tt></b>
-in <b><tt><font size=+1>ref/$G4SYSTEM/stt-debug/</font></tt></b> to monitor
-possible problems with optimisation.</li>
-
-<br>&nbsp;
-<li>
-Update <b><tt><font size=+1>ref </font></tt></b>and <b><tt><font size=+1>ref+</font></tt></b>
-(<b><tt><font size=+1>update.sh</font></tt></b>), rebuild (<b><tt><font size=+1>build.sh
-all)</font></tt></b> and rerun tests (<b><tt><font size=+1>run.sh all</font></tt></b>).</li>
-</blockquote>
-
-<h1>
-Making a Global Tag</h1>
-Two types of global tag:
-<blockquote>
-<li>
-internal - includes <b><tt><font size=+1>config environments examples source
-tests</font></tt></b>.</li>
-
-<li>
-public - as internal, but without <b><tt><font size=+1>tests</font></tt></b>.&nbsp;
-Here are the commands for a public release.</li>
-
-<li>
-<b><tt><font size=+1>nohup cvs tag &lt;tag-name> config environments examples
-source >&amp; /tmp/cvs.log &amp;</font></tt></b>.</li>
-
-<li>
-Update to this tag:</li>
-
-<br><b><tt><font size=+1>nohup cvs update -d -P -r &lt;tag-name> config
-environments examples source >>&amp; /tmp/cvs.log &amp;</font></tt></b>.</blockquote>
-
-<blockquote>&nbsp;</blockquote>
-
+Candidate Tags</h1>
+These are simply global tags used internally by the STT to define a version
+of geant4 which has not yet been tested.&nbsp; The format is <b><tt><font size=+1>geant4-xx-yy-cand-zz</font></tt></b>,
+where <b><tt><font size=+1>zz</font></tt></b> refers to the next global
+reference tag.
+<br>
 <hr WIDTH="100%">
 <br><i><a href="mailto:John.Allison@man.ac.uk">John Allison</a> ,
 <a href="mailto:Serguei.Sadilov@cern.ch">Serguei
 Sadilov</a>&nbsp; and <a href="mailto:Steve.O'Neale@cern.ch">Steve O'Neale</a>&nbsp;
-4th April 2000</i>
+5th April 2000</i>
 </body>
 </html>
