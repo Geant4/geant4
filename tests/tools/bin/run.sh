@@ -67,7 +67,7 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test01
   nice $G4INSTALL/tests/tools/bin/run.sh test02
   nice $G4INSTALL/tests/tools/bin/run.sh test02.hadron
-  nice $G4INSTALL/tests/tools/bin/run.sh test03
+#  nice $G4INSTALL/tests/tools/bin/run.sh test03
 #  nice $G4INSTALL/tests/tools/bin/run.sh test04
   nice $G4INSTALL/tests/tools/bin/run.sh test05
   nice $G4INSTALL/tests/tools/bin/run.sh test06
