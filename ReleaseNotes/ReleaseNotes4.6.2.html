@@ -241,7 +241,6 @@ please refer to the related History files provided in most packages):
     <LI>Revisited Inventor default. Removed HEPVis dependencies
         (Inventor visualization driver does not need these libraries
         any longer).</LI>
-    <LI>Added specifications of G4LIB_USE_DLL/G4LIB_BUILD_DLL flags.</LI>
     </UL></LI>
 <LI><TT>binmake.gmk</TT>:
     <UL>
@@ -295,13 +294,12 @@ please refer to the related History files provided in most packages):
 <A NAME="emlow-notes">
 <H3><I>Electromagnetic Processes (Low-energy)</I></H3></A>
 <UL>
-<LI>Implemented optimization of Bremsstrahlung angular generators.</LI>
-<LI>Bug fixes in <TT>G4IonisationParameters</TT>, <TT>G4PenelopeCompton</TT>
-    and <TT>G4PenelopeIonisation</TT>.</LI>
-<LI>Fixed some compilation warnings on Intel/icc compiler.</LI>
-<LI>Bug fix in <TT>G4PenelopeRayleigh</TT>, related to problem report #605.</LI>
-<LI>Performance improvement in <TT>G4Generator2BN</TT> and Penelope
-    processes.</LI>
+<LI>First iteration towards new models for photoelectric angular distribution:
+    design iteration and re-implementation of non-polarized Sauter-Gavrila
+    distribution (K-shell approximation).</LI>
+<LI>New model for PIXE.</LI>
+<LI>Bug fix for Barkas effect.</LI>
+<LI>Bug fix in energy loss concerning positrons handled by Penelope.</LI>
 </UL>
 
 <A NAME="emstd-notes">
@@ -311,8 +309,17 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Correction of error when retrieving <TT>dE/dx</TT> from tables
         (affected proton around <TT>1 MeV</TT>).</LI>
+    <LI>Fixed a problem of retrieving tables from files if <TT>PreciseRange</TT>
+        is missing.</LI>
+    <LI>Fixed a problem of energy below <TT>lowestKinEnergy</TT> (simulation of
+        energy loss of low energy particles in low density gases).</LI>
+
     <LI>Updated integral method taking into account 1 peak in cross section.</LI>
-    <LI>Added method <TT>GetCurrentRange()</TT>.</LI>
+    <LI>Added new methods to define simulation options to
+        <TT>G4EmProcessOptions</TT>.</LI>
+    <LI>Added protected method <TT>GetCurrentRange()</TT> to
+        <TT>G4VEnergyLossProcess</TT>.</LI>
+    <LI>Updated printout format in <TT>G4VEnergyLossProcess</TT>.</LI>
     </UL></LI>
 <LI>EnergyLoss fluctuations:
     <UL>
@@ -321,7 +328,11 @@ please refer to the related History files provided in most packages):
         results in solid absorbers.</LI>
     <LI>Smoothed out sampling of Gaussian fluctuations, when sigma is much
         bigger than energy loss.</LI>
-    </UL></LI>
+    </UL>
+    The purpose of both changes is to provide less step dependent
+    results. For example, for steps down to 0.1 mkm in solid materials
+    energy deposition distribution in thin absorber is not dependent on the
+    step limit.</LI>
 <LI>Ionization for muons, hadrons, ions:
     <UL>
     <LI>Set integral regime to be the default (was already for electrons).
@@ -331,9 +342,12 @@ please refer to the related History files provided in most packages):
     <UL>
     <LI>Changes in <TT>G4MscModel</TT>: <TT>t->z</TT> and <TT>z->t</TT>
         transformations (true length to geometrical length and back) have
-        been rewritten.</LI>
+        been rewritten. The purpose is to remove step limit dependence of
+        results, which was mainly connected with simulation of multiple
+        scattering of low energy particles. It will affect the resolution
+        of sampling calorimeters.</LI>
     <LI>Change in the angular distribution for <TT>e+/e-</TT>: correction
-        to the Highland formula.</LI>
+        to the Highland formula for the central part of the distribution.</LI>
     <LI>Use truncated range table for estimation of energy loss inside
         multiple-scattering model.</LI>
     </UL></LI>
@@ -353,10 +367,11 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 <LI>PAI ionisation:
     <UL>
-    <LI>Introduced new model <TT>G4PAIwithPhotons</TT>, in which energy
-        transfers to electrons and excitation of media are taking into
-        account.</LI>
+    <LI>Introduced new model <TT>G4PAIPhotonModel</TT>, PAI model splitting
+        into plasmon and photon cross-sections using the interface from
+        the <TT>G4PAIxSection</TT> class.</LI>
     <LI>Removed limitations on cut values in both PAI models.</LI>
+    <LI>Use precise integrator for initialisation of PAI models.</LI>
     </UL></LI>
 </UL>
 
@@ -513,6 +528,7 @@ please refer to the related History files provided in most packages):
         reaction code.</LI>
     <LI>Added some protections fixing problems reported in bug-reports
         #574 and #593.
+    <LI>Bug fix related to bug report #607.</LI>
     </UL></LI>
 <LI>models/cascade:
     <UL>
@@ -607,9 +623,9 @@ please refer to the related History files provided in most packages):
 <UL>
 <LI><B>Track</B>
     <UL>
-    <LI>Added new methods of <TT>ProposeXXX()</TT> (and corresponding
-        <TT>GetXXX()</TT> methods) as replacements of old <TT>SetXXXChange()</TT>
-        and <TT>GetXXXChange()</TT>.</LI>
+    <LI>G4VParticleChange: added new methods <TT>ProposeXXX()</TT> (and
+        corresponding <TT>GetXXX()</TT> methods) as replacement for old
+        <TT>SetXXXChange()</TT> and <TT>GetXXXChange()</TT>, now obsolete.</LI>
     <LI><TT>G4ParticleChangeForLoss</TT>: fixed minor energy non-conservation
         problem in case of more than 1 processes changing the energy.
         Fixed initialization of <TT>ParentWeight</TT>.</LI>
@@ -667,6 +683,13 @@ please refer to the related History files provided in most packages):
     </UL></LI>
 </UL>
 
+<A NAME="data-notes">
+<H3><I>Data sets</I></H3></A>
+<UL>
+<LI>New data set for elastic-scattering data at high-energies
+    (above 1-GeV) for the <I>coherent_elastic</I> hadronic model.</LI>
+</UL>
+
 <A NAME="emlst-notes">
 <H3><I>Electromagnetic physics-lists</I></H3></A>
 <UL>
@@ -707,7 +730,7 @@ please refer to the related History files provided in most packages):
        <UL>
          <LI>New example illustrating an application aimed at simulating the
              electrostatic charging of isolated test masses in the LISA mission
-             by galactic cosmic ray protons and helium nuclei..</LI>
+             by galactic cosmic ray protons and helium nuclei.</LI>
        </UL></LI>
     <LI><I>hadrontherapy</I>
        <UL>
@@ -817,7 +840,10 @@ please refer to the related History files provided in most packages):
         </UL></LI>
     <LI><I>parallel</I>
         <UL>
-        <LI>Bug fix in ParRunManager for ParN02 and ParN04 examples.</LI>
+        <LI>New example <I>ExDiane</I> showing parallelisation of the
+            'brachytherapy' example using the DIANE framework
+            (see <A HREF="http://cern.ch/diane">http://cern.ch/diane</A>).</LI>
+        <LI>Bug fix in ParRunManager for ParN02 and ParN04 TOP-C examples.</LI>
         </UL></LI>
     </UL></LI>
 <LI><B>novice</B>
