@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.cc,v 1.60 2005-01-27 20:06:20 johna Exp $
+// $Id: G4VisManager.cc,v 1.61 2005-02-19 22:07:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -63,6 +63,7 @@ G4VisManager* G4VisManager::fpInstance = 0;
 
 G4VisManager::G4VisManager ():
   fInitialised     (false),
+  fpUserVisAction  (0),
   fpGraphicsSystem (0),
   fpScene          (0),
   fpSceneHandler   (0),
@@ -650,6 +651,21 @@ void G4VisManager::GeometryHasChanged () {
 
 }
 
+void G4VisManager::SetUserAction
+(G4VUserVisAction* pVisAction,
+ const G4VisExtent& extent) {
+  fpUserVisAction = pVisAction;
+  fUserVisActionExtent = extent;
+  if (extent.GetExtentRadius() <= 0.) {
+    if (fVerbosity >= warnings) {
+      G4cout << 
+	"WARNING: No extent set for user vis action.  (You may"
+	"\n  set it later when adding with /vis/scene/add/userAction.)"
+	     << G4endl;
+    }
+  }
+}
+
 void G4VisManager::SetCurrentGraphicsSystem (G4VGraphicsSystem* pSystem) {
   fpGraphicsSystem = pSystem;
   if (fVerbosity >= confirmations) {
@@ -799,6 +815,7 @@ void G4VisManager::RegisterMessengers () {
   fMessengerList.push_back (new G4VisCommandSceneAddScale);
   fMessengerList.push_back (new G4VisCommandSceneAddText);
   fMessengerList.push_back (new G4VisCommandSceneAddTrajectories);
+  fMessengerList.push_back (new G4VisCommandSceneAddUserAction);
   fMessengerList.push_back (new G4VisCommandSceneAddVolume);
 
   directory = new G4UIdirectory ("/vis/sceneHandler/");

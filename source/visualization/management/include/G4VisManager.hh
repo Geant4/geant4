@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisManager.hh,v 1.34 2005-01-26 17:06:40 johna Exp $
+// $Id: G4VisManager.hh,v 1.35 2005-02-19 22:07:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -94,6 +94,7 @@ class G4Scene;
 class G4UIcommand;
 class G4UImessenger;
 class G4VisStateDependent;
+class G4VUserVisAction;
 
 class G4VisManager: public G4VVisManager {
 
@@ -260,6 +261,8 @@ public: // With description
   void Disable();
   // Global enable/disable functions.
 
+  G4VUserVisAction*            GetUserAction               () const;
+  G4VisExtent                  GetUserActionExtent         () const;
   G4VGraphicsSystem*           GetCurrentGraphicsSystem    () const;
   G4Scene*                     GetCurrentScene             () const;
   G4VSceneHandler*             GetCurrentSceneHandler      () const;
@@ -273,6 +276,10 @@ public: // With description
   Verbosity                    GetVerbosity                () const;
   void  GetWindowSizeHint (G4int& xHint, G4int& yHint) const;
   // Note: GetWindowSizeHint information is returned via the G4int& arguments.
+
+  void SetUserAction (G4VUserVisAction* pVisAction,
+		      const G4VisExtent& = G4VisExtent::NullExtent);
+  void SetUserActionExtent (const G4VisExtent&);
   void              SetCurrentGraphicsSystem    (G4VGraphicsSystem* pSystem);
   void              SetCurrentScene             (G4Scene*);
   void              SetCurrentSceneHandler      (G4VSceneHandler* pScene);
@@ -325,6 +332,8 @@ protected:
 
   static G4VisManager*  fpInstance;         // Pointer to single instance.
   G4bool                fInitialised;
+  G4VUserVisAction*     fpUserVisAction;    // User vis action callback.
+  G4VisExtent           fUserVisActionExtent;
   G4VGraphicsSystem*    fpGraphicsSystem;   // Current graphics system.
   G4Scene*              fpScene;            // Current scene.
   G4VSceneHandler*      fpSceneHandler;     // Current scene handler.

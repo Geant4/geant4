@@ -1,4 +1,4 @@
-$Id: History,v 1.273 2005-02-15 14:50:22 johna Exp $
+$Id: History,v 1.274 2005-02-19 22:07:21 allison Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,11 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+19th February 2005  John Allison  (vis-V07-00-06 with greps-V07-00-00)
+- Added G4VUserVisAction and G4CallbackModel.
+- Implemented /vis/scene/add/userAction.
+- Fixed bug in /vis/viewer/update (check existence of scene handler and scene).
 
 15th February 2005  John Allison  (vis-V07-00-05)
 - Introduced drawing of readout geometry for logical volumes.

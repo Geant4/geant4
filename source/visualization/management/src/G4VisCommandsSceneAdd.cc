@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VisCommandsSceneAdd.cc,v 1.44 2005-02-15 14:51:04 johna Exp $
+// $Id: G4VisCommandsSceneAdd.cc,v 1.45 2005-02-19 22:07:21 allison Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // /vis/scene commands - John Allison  9th August 1998
 
@@ -44,6 +44,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4FlavoredParallelWorldModel.hh"
 #include "G4ApplicationState.hh"
+#include "G4VUserVisAction.hh"
+#include "G4CallbackModel.hh"
 #include "G4UIcommand.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithAnInteger.hh"
@@ -122,6 +124,13 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   x0 *= unit; y0 *= unit; z0 *= unit; length *= unit;
 
   G4VModel* model = new G4AxesModel(x0, y0, z0, length);
+
+  model->SetExtent(G4VisExtent(x0 - length, x0 + length,
+			       y0 - length, y0 + length,
+			       z0 - length, z0 + length));
+  // This extent gets "added" to existing scene extent in
+  // AddRunDurationModel below.
+
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   if (successful) {
@@ -793,6 +802,110 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
 	   << " in scene \""
 	   << currentSceneName << "\"."
 	   << G4endl;
+  }
+}
+
+////////////// /vis/scene/add/userAction ///////////////////////////////////
+
+G4VisCommandSceneAddUserAction::G4VisCommandSceneAddUserAction () {
+  G4bool omitable;
+  fpCommand = new G4UIcommand("/vis/scene/add/userAction",this);
+  fpCommand -> SetGuidance
+    ("Add Vis User Action, if any, to scene and define extent, if required.");
+  fpCommand -> SetGuidance
+    ("Optional arguments \"xmin xmax ymin ymax zmin zmax unit\" define the"
+     "\nextent of the callback drawing - default 0 0 0 0 0 0 cm.  (You may"
+     "\nnot need this if the extent has been defined in the original"
+     "\nSetUserAction or is defined by other components of the scene.  But if"
+     "\nthe user action is the only component of the scene, you will certainly"
+     "\nneed to set the extent in SetUserAction or here.)");
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("xmin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("xmax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("ymin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("ymax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("zmin", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("zmax", 'd', omitable = true);
+  parameter->SetDefaultValue (0.);
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter->SetDefaultValue ("cm");
+  fpCommand->SetParameter (parameter);
+}
+
+G4VisCommandSceneAddUserAction::~G4VisCommandSceneAddUserAction () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddUserAction::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddUserAction::SetNewValue (G4UIcommand*,
+						    G4String newValue) {
+
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4VUserVisAction* visAction = fpVisManager->GetUserAction();
+  if (!visAction) {
+    if (warn) {
+      G4cout <<	"WARNING: No User Vis Action registered." << G4endl;
+    }
+    return;
+  }
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4String unitString;
+  G4double xmin, xmax, ymin, ymax, zmin, zmax;
+  const char* s = newValue;
+  std::istrstream is ((char*)s);
+  is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
+  G4double unit = G4UIcommand::ValueOf(unitString);
+  xmin *= unit; xmax *= unit;
+  ymin *= unit; ymax *= unit;
+  zmin *= unit; zmax *= unit;
+  G4VisExtent commandExtent(xmin,xmax,ymin,ymax,zmin,zmax);
+
+  G4VisExtent extent;
+  if (commandExtent.GetExtentRadius() > 0.) {
+    extent = commandExtent;
+  } else if (fpVisManager->GetUserActionExtent().GetExtentRadius() > 0.) {
+    extent = fpVisManager->GetUserActionExtent();
+  } else {
+    if (warn) {
+      G4cout <<	"WARNING: User Vis Action extent is null." << G4endl;
+    }
+  }
+
+  G4VModel* model = new G4CallbackModel<G4VUserVisAction>(visAction);
+  model->SetExtent(extent);
+  const G4String& currentSceneName = pScene -> GetName ();
+  pScene -> AddRunDurationModel (model, warn);
+  if (verbosity >= G4VisManager::confirmations) {
+    G4cout << "User Vis Action added to scene \""
+	   << currentSceneName << "\"";
+    if (verbosity >= G4VisManager::parameters) {
+      G4cout << "\n  with extent " << extent;
+    }
+    G4cout << G4endl;
   }
 }
 
