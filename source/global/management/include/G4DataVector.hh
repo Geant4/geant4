@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4DataVector.hh,v 1.5 2001-02-02 16:23:35 gcosmo Exp $
+// $Id: G4DataVector.hh,v 1.6 2001-02-05 10:37:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -31,9 +31,11 @@ class G4DataVector : public G4std::vector<G4double>
 
  public: // with description
 
-  G4DataVector(size_t capacity=64);
-   // Constructor given a default 'capacity' defining the
-   // initial number of elements.
+  G4DataVector();
+   // Default constructor.
+
+  G4DataVector(size_t capacity);
+   // Constructor given a 'capacity' defining the initial number of elements.
 
   virtual ~G4DataVector(){;}
    // Empty destructor
@@ -53,6 +55,12 @@ class G4DataVector : public G4std::vector<G4double>
   inline size_t removeAll(const G4double&);
     // Remove all elements same as given value  
 };
+
+inline
+G4DataVector::G4DataVector()
+  : G4std::vector<G4double>()
+{
+}
 
 inline
 G4DataVector::G4DataVector(size_t capacity)

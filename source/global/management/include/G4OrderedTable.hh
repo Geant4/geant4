@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4OrderedTable.hh,v 1.5 2001-02-02 16:23:36 gcosmo Exp $
+// $Id: G4OrderedTable.hh,v 1.6 2001-02-05 10:37:12 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -38,8 +38,11 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
 
  public: // with description
 
-  G4OrderedTable(size_t capacity=64);
-    // Constructor given default 'capacity' defining the initial
+  G4OrderedTable();
+    // Deafult constructor.
+
+  G4OrderedTable(size_t capacity);
+    // Constructor given a 'capacity' defining the initial
     // number of elements (NULL pointers are filled up)
 
   virtual ~G4OrderedTable(){;}
@@ -49,6 +52,12 @@ class G4OrderedTable : public G4std::vector<G4DataVector*>
     // Removes all elements and deletes all non-NULL pointers
 
 };
+
+inline
+G4OrderedTable::G4OrderedTable()
+  : G4std::vector<G4DataVector*>()
+{
+}
 
 inline
 G4OrderedTable::G4OrderedTable(size_t capacity)
