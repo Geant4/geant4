@@ -23,31 +23,6 @@ ifdef LOAD_IV
   INTYLIBS += $(OIVLIBS)
 endif
 
-########################### HepReps #######################
-ifdef INC_HEPREP
-  CPPFLAGS += -I$(FREEHEP)/org/freehep/jni
-  CPPFLAGS += -I$(FREEHEP)/hep/graphics/heprep/jni
-  CPPFLAGS += -I$(JDK_HOME)/include/$(G4_HEPREP_OSNAME)
-  CPPFLAGS += -I$(JDK_HOME)/include
-endif
-ifdef LOAD_HEPREP
-  # I think this substitution of '/' with '\' is dealt with elsewhere (JA)...
-  # ifeq ($(G4_HEPREP_OSNAME), win32)
-  #   LDFLAGS += $(subst /,\\,$(FREEHEP)/lib/$(G4SYSTEM)/FREEHEP$(G4_HEPREP_DEBUG).lib)
-  #   LDFLAGS += $(subst /,\\,$(JDK_HOME)/lib/jvm.lib)
-  # else
-    INTYLIBS += -L$(FREEHEP)/lib/$(G4SYSTEM)/
-    INTYLIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH)/hotspot 
-    INTYLIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH)/classic 
-    INTYLIBS += -L$(JDK_HOME)/jre/lib/$(G4_HEPREP_ARCH) 
-    INTYLIBS += -L$(JDK_HOME)/jre/bin/hotspot
-    INTYLIBS += -L$(JDK_HOME)/jre/bin/classic
-    INTYLIBS += -L$(JDK_HOME)/jre/bin/
-    INTYLIBS += -lFREEHEP_g
-    INTYLIBS += -ljvm
-  # endif
-endif
-
 ########################### OPACS #######################
 # OpenGL, X11 things must come after.
 
