@@ -88,20 +88,20 @@ Cut in energy
 /run/beamOn 1000
 ### Run 0 start.
 number of event = 1000
- User=45.43s Real=57.33s Sys=11.88s
+ User=52.72s Real=110.15s Sys=5.52s
 #
 /gun/particle proton
 /run/beamOn 1000
 ### Run 1 start.
 number of event = 1000
- User=35.11s Real=44.04s Sys=8.92s
+ User=40.34s Real=94.92s Sys=4.36s
 /gun/particle pi-
 /run/beamOn 1000
 ### Run 2 start.
 number of event = 1000
- User=42.16s Real=53.37s Sys=11.2s
+ User=50.83s Real=106.04s Sys=5.51s
 /gun/particle pi+
 /run/beamOn 1000
 ### Run 3 start.
 number of event = 1000
- User=41.72s Real=52.86s Sys=11.13s
+ User=53.62s Real=87.15s Sys=5.64s

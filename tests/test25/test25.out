@@ -1,0 +1,357 @@
+**********************************************
+ Geant4 version $Name: not supported by cvs2svn $
+                                (31-Jul-2002)
+             Copyright : Geant4 Collaboration
+**********************************************
+SimpleBox is now made of U
+userDetector->Construct() start.
+physicsList->Construct() start.
+
+phot:  Total cross sections from Sandia parametrisation. 
+physicsList->setCut() start.
+Tst25PhysicsList::SetCuts:CutLength : 1000 (mm)
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 921.051 mm.
+All the gammawill be killed !
+in the material Silicon.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.79769e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 180.93 mm.
+All the gammawill be killed !
+in the material Copper.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.79769e+305GeV 
+******** SetCuts for gamma ********************
+The maximal meaningful cut is 62.2428 mm.
+All the gammawill be killed !
+in the material Uranium.
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for gamma ********************
+The cut energy is set 1.79769e+305GeV 
+
+conv:  Total cross sections from a parametrisation. Good description from 1.5 MeV to 100 GeV for all Z. 
+        e+e- energies according Bethe-Heitler
+        PhysicsTables from 1.022 MeV to 100 GeV in 100 bins. 
+
+compt:  Total cross sections from a parametrisation. Good description from 10 KeV to (100/Z) GeV. 
+       Scattered gamma energy according Klein-Nishina.
+        PhysicsTables from 1 keV to 100 GeV in 80 bins. 
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for e- ********************
+The cut energy is set 1.79769e+305GeV 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+eIoni:  delta cross sections from Moller+Bhabha. Good description from 1 KeV to 100 GeV.
+        delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+eBrem:  Total cross sections from a NEW parametrisation based on the EEDL data library. 
+ Good description from 1 KeV to 100 GeV.
+        log scale extrapolation above 100 GeV 
+        Gamma energy sampled from a parametrised formula.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+Error in G4ParticleWithCuts::ConvertCutToKineticEnergy
+******** ConvertCutToKineticEnergy for e+ ********************
+The cut energy is set 1.79769e+305GeV 
+
+annihil:  Total cross section from Heilter formula(annihilation into 2 photons).
+        gamma energies sampled according Heitler
+        PhysicsTables from 10 keV to 10 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+hIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 100 TeV in 100 bins. 
+
+msc:   Tables of transport mean free paths.
+          New model of MSC , computes the lateral 
+          displacement of the particle , too.
+        PhysicsTables from 100 eV  to 100 TeV in 100 bins. 
+
+MuIoni:    Knock-on electron cross sections . 
+         Good description above the mean excitation energy.
+         delta ray energy sampled from  differential Xsection.
+        PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuBrems:  theoretical cross section 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+
+MuPairProd:  theoretical cross sections 
+          Good description up to 1000 PeV.
+    PhysicsTables from 1 keV to 1000 PeV in 150 bins. 
+SimpleBox is now made of Cu
+Start closing geometry.
+G4GeometryManager::ReportVoxelStats -- Voxel Statistics
+
+    Total memory consumed for geometry optimisation:   0 kByte
+    Total CPU time elapsed for geometry optimisation: 0 seconds
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0.01s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=3s Real=5.3s Sys=0.6s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.4s Real=5.2s Sys=1.5s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=9.3s Real=13s Sys=1.8s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=20s Real=22s Sys=1.6s
+SimpleBox is now made of Cu
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2s Real=2.3s Sys=0.21s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.8s Real=2.1s Sys=0.19s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=10s Real=14s Sys=1.5s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=17s Real=21s Sys=2.6s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=17s Real=21s Sys=2.3s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=46s Real=54s Sys=6s
+SimpleBox is now made of U
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=4.2s Real=4.7s Sys=0.14s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=5.7s Real=6.2s Sys=0.32s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=12s Real=13s Sys=0.48s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=20s Real=21s Sys=0.77s
+SimpleBox is now made of U
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.4s Real=1.5s Sys=0.04s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.6s Real=1.7s Sys=0.05s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=8.3s Real=8.6s Sys=0.2s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=8.6s Real=9.2s Sys=0.43s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=14s Real=15s Sys=0.47s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=16s Real=17s Sys=0.43s
+SimpleBox is now made of Si
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=4.1s Real=4.7s Sys=0.22s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.08s Real=0.08s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=6.4s Real=7.9s Sys=0.39s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=3.1s Real=3.2s Sys=0.09s
+SimpleBox is now made of Si
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.27s Real=0.4s Sys=0.04s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=2.5s Real=2.9s Sys=0.12s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.1s Real=1.2s Sys=0.1s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=1.2s Real=1.3s Sys=0.04s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=8.4s Real=9.4s Sys=0.74s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=12s Real=13s Sys=0.79s
+SimpleBox is now made of H
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+SimpleBox is now made of H
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0.01s Real=0.01s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+Start Run processing.
+Run terminated.
+Run Summary
+  Number of events processed : 1
+  User=0s Real=0s Sys=0s
+G4 kernel has come to Quit state.
+Deletion of G4 kernel class start.
+UserDetectorConstruction deleted.
+UserPhysicsList deleted.
+UserRunAction deleted.
+UserPrimaryGenerator deleted.
+EventManager deleted.
+UImanager deleted.
+StateManager deleted.
+RunManager is deleting.
