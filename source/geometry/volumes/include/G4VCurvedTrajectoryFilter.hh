@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VCurvedTrajectoryFilter.hh,v 1.2 2002-11-19 15:23:24 jacek Exp $
+// $Id: G4VCurvedTrajectoryFilter.hh,v 1.3 2002-11-19 16:40:09 jacek Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //
@@ -62,7 +62,7 @@ class G4VCurvedTrajectoryFilter {
 public:
 
   G4VCurvedTrajectoryFilter(){};
-  virtual ~G4VCurvedTrajectoryFilter();
+  virtual ~G4VCurvedTrajectoryFilter(){};
 
   // Probably do not want these objects to be copied, so make the copy
   // constructor prvate (jacek 30/10/2002)
@@ -78,7 +78,7 @@ public:
   
   G4std::vector<G4ThreeVector>* GimmeThePointsAndForgetThem();
   
-private:
+protected:
   G4std::vector<G4ThreeVector>* fpFilteredPoints;
 };
 
