@@ -12,7 +12,7 @@ using namespace HEPREP;
 
 XMLHepRepWriter::XMLHepRepWriter(ostream* out, bool randomAccess, bool compress) {
 
-    if (compress && !randomAccess) cerr << "GZIP compression is unsupported, use randomAccess to get ZIP compression" << endl;
+    if (compress && !randomAccess) cerr << "WARNING: GZIP compression is unsupported, use randomAccess to get ZIP compression" << endl;
 
     this->nameSpace = NAMESPACE;
 
