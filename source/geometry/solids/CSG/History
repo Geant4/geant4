@@ -1,4 +1,4 @@
-$Id: History,v 1.16 2000-04-12 08:44:52 gcosmo Exp $
+$Id: History,v 1.17 2000-05-11 15:09:51 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 05,   00   V. Grichine               geom-solids-csg-V01-01-02
+
+- G4Box.cc, G4Trd.cc:
+  o modified DistanceToIn(p,v) to return 0 distance in case computed
+    value is less than 0.5*kCarTolerance.
+  o Cosmetic changes.
+- Updated unit tests for G4Box and G4Trd.
 
 Apr 11,   00   J. Allison
 
