@@ -1,5 +1,5 @@
 
-$Id: History,v 1.48 2004-10-10 10:50:44 johna Exp $
+$Id: History,v 1.49 2005-03-01 17:11:54 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -19,6 +19,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ Feb 22, 2005  V.Grichine                 geom-bool-V07-00-00
+  - Fix in G4IntersectionSolid::DistanceToIn(p,v) to allow for correct
+    simmetrical treatment of the solids' intersection. Algorithm reviewed
+    as proposed by D.Bazzacco in problem report #723.
+  - New unit test testBoolSurfaceInOut.cc for checking dIn-dOut and AB,
+    BA booleans on surface.
 
  Oct 10, 2004  J.Allison                  geom-bool-V06-02-01
   - Added GetPolyhedron, a smart access function that creates a G4Polyhedron
