@@ -74,26 +74,6 @@ fi
 
 if [ $1 = "all" ] ; then 
 
-  nice $G4STTDIR/bin/run.sh test101
-  nice $G4STTDIR/bin/run.sh test102
-  nice $G4STTDIR/bin/run.sh test103
-  nice $G4STTDIR/bin/run.sh test104
-  nice $G4STTDIR/bin/run.sh test104.EMtest
-  nice $G4STTDIR/bin/run.sh test105
-  nice $G4STTDIR/bin/run.sh test106
-  nice $G4STTDIR/bin/run.sh test501
-  nice $G4STTDIR/bin/run.sh test502
-  nice $G4STTDIR/bin/run.sh test503
-  nice $G4STTDIR/bin/run.sh test504
-  nice $G4STTDIR/bin/run.sh test505
-#   nice $G4STTDIR/bin/run.sh test506
-  nice $G4STTDIR/bin/run.sh test508
-  if [ $G4USE_HEPODBMS ] ; then
-    nice $G4STTDIR/bin/run.sh test401
-    nice $G4STTDIR/bin/run.sh test402
-  fi
-  nice $G4STTDIR/bin/run.sh test601
-  nice $G4STTDIR/bin/run.sh test602
   nice $G4STTDIR/bin/run.sh test01
   nice $G4STTDIR/bin/run.sh test02
   nice $G4STTDIR/bin/run.sh test02.hadron
@@ -114,6 +94,26 @@ if [ $1 = "all" ] ; then
   nice $G4STTDIR/bin/run.sh test17
   nice $G4STTDIR/bin/run.sh test18
 
+  nice $G4STTDIR/bin/run.sh test101
+  nice $G4STTDIR/bin/run.sh test102
+  nice $G4STTDIR/bin/run.sh test103
+  nice $G4STTDIR/bin/run.sh test104
+  nice $G4STTDIR/bin/run.sh test104.EMtest
+  nice $G4STTDIR/bin/run.sh test105
+  nice $G4STTDIR/bin/run.sh test106
+  nice $G4STTDIR/bin/run.sh test501
+  nice $G4STTDIR/bin/run.sh test502
+  nice $G4STTDIR/bin/run.sh test503
+  nice $G4STTDIR/bin/run.sh test504
+  nice $G4STTDIR/bin/run.sh test505
+#   nice $G4STTDIR/bin/run.sh test506
+  nice $G4STTDIR/bin/run.sh test508
+  if [ $G4USE_HEPODBMS ] ; then
+    nice $G4STTDIR/bin/run.sh test401
+    nice $G4STTDIR/bin/run.sh test402
+  fi
+  nice $G4STTDIR/bin/run.sh test601
+  nice $G4STTDIR/bin/run.sh test602
 
 else
 
@@ -135,8 +135,17 @@ else
     shortname=`basename $1 .hadron`
     shortname=`basename $shortname .EMtest`
 
-    if [ ! -f $G4WORKDIR/bin/$G4SYSTEM/$shortname ]; then
-      echo "$1 does not exist - not built?"
+
+    timestamp=`date +%Y%m%d-%H%M%S`
+    g4option=`echo $G4WORKDIR | sed "s!^.*${G4SYSTEM}/!!"`
+    g4identify=`echo $G4WORKDIR | sed "s!^.*geant4/stt!stt!"`
+    disabled=${G4INSTALL}/tests/disable.${shortname}.${G4SYSTEM}.${g4option}
+    if [ -f $disabled ]; then
+      echo "Disabled $1 in $g4identify $timestamp  $G4LARGE_N "
+      echo "Disabled $1 in $G4WORKDIR $timestamp  $G4LARGE_N " > $dir/$1$dot_G4LARGE_N.err
+      rm -f $dir/$1$dot_G4LARGE_N.out # or diff will run below
+    elif [ ! -f $G4WORKDIR/bin/$G4SYSTEM/$shortname ]; then
+      echo "Missing $1 in $g4identify $timestamp  $G4LARGE_N "
     else
 
       if [ $G4LARGE_N ]; then
@@ -145,7 +154,7 @@ else
 
       cd $G4INSTALL/tests/$shortname
 
-      echo "Starting $1 in $G4WORKDIR `date` $G4LARGE_N "
+      echo "Starting $1 in $g4identify $timestamp  $G4LARGE_N "
 
       if [ $1 = test02.hadron -o $1 = test11 -o $1 = test12 -o $1 = test13 \
         -o $1 = test15 -o $1 = test16 ]
@@ -189,7 +198,8 @@ else
         fi
       fi
 
-      echo "Finished $1 in $G4WORKDIR `date`"
+      timestamp=`date +%Y%m%d-%H%M%S`
+      echo "Finished $1 in $g4identify $timestamp"
 
       if [ -f $1$dot_G4LARGE_N.evalsh ]; then
         rm -f $dir/$1$dot_G4LARGE_N.eval
