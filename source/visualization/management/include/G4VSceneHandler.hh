@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4VSceneHandler.hh,v 1.4 1999-05-12 13:57:25 barrand Exp $
+// $Id: G4VSceneHandler.hh,v 1.5 1999-10-04 15:44:06 johna Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -39,13 +39,6 @@
 class G4VGraphicsSystem;
 class G4VViewer;
 class G4VSolid;
-class G4Polyline;
-class G4Text;
-class G4Circle;
-class G4Square;
-class G4Polymarker;
-class G4Polyhedron;
-class G4NURBS;
 class G4VisAttributes;
 class G4Colour;
 class G4Visible;
@@ -103,15 +96,16 @@ public:
   // coordinate system of the object about to be added, and visAttribs
   // is its visualization attributes.
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::PreAddThis (const G4Transform3D& objectTransformation,
-  //                              const G4VisAttributes& visAttribs) {
+  // void MyXXXSceneHandler::PreAddThis
+  //  (const G4Transform3D& objectTransformation,
+  //   const G4VisAttributes& visAttribs) {
   //   G4VSceneHandler::PreAddThis (objectTransformation, visAttribs);
   //   ...
   // }
 
   virtual void PostAddThis ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::PostAddThis () {
+  // void MyXXXSceneHandler::PostAddThis () {
   //   ...
   //   G4VSceneHandler::PostAddThis (objectTransformation, visAttribs);
   // }
@@ -135,7 +129,7 @@ public:
 
   virtual void BeginPrimitives (const G4Transform3D& objectTransformation);
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::BeginPrimitives
+  // void MyXXXSceneHandler::BeginPrimitives
   // (const G4Transform3D& objectTransformation) {
   //   G4VSceneHandler::BeginPrimitives (objectTransformation);
   //   ...
@@ -143,18 +137,19 @@ public:
 
   virtual void EndPrimitives ();
   // IMPORTANT: invoke this from your polymorphic versions, e.g.:
-  // void MyXXXScene::EndPrimitives () {
+  // void MyXXXSceneHandler::EndPrimitives () {
   //   ...
   //   G4VSceneHandler::EndPrimitives ();
   // }
 
-  virtual void AddPrimitive (const G4Polyline&) = 0;
-  virtual void AddPrimitive (const G4Text&) = 0;
-  virtual void AddPrimitive (const G4Circle&) = 0;
-  virtual void AddPrimitive (const G4Square&) = 0;
-  virtual void AddPrimitive (const G4Polymarker&);  // Uses the above.
-  virtual void AddPrimitive (const G4Polyhedron&) = 0;
-  virtual void AddPrimitive (const G4NURBS&) = 0;
+  virtual void AddPrimitive (const G4Polyline&)   = 0;
+  virtual void AddPrimitive (const G4Text&)       = 0;
+  virtual void AddPrimitive (const G4Circle&)     = 0;      
+  virtual void AddPrimitive (const G4Square&)     = 0;      
+  virtual void AddPrimitive (const G4Polymarker&);  // Implemented in terms
+  // of the above but can be over-ridden.
+  virtual void AddPrimitive (const G4Polyhedron&) = 0;  
+  virtual void AddPrimitive (const G4NURBS&)      = 0;       
 
   //////////////////////////////////////////////////////////////
   // Access functions.
