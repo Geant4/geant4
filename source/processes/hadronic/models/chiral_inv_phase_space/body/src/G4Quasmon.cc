@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4Quasmon.cc,v 1.37 2001-11-29 14:29:14 stesting Exp $
+// $Id: G4Quasmon.cc,v 1.38 2002-02-25 16:03:59 mkossov Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 //      ---------------- G4Quasmon ----------------
@@ -2025,6 +2025,19 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
 #ifdef debug
       G4cout<<"G4Q::HQ:f="<<fprob<<",d="<<dm<<",rPDG="<<rPDG<<",rM="<<rMass<<",M="<<reMass<<G4endl;
 #endif
+      if(abs(dm)<.000001)
+	  {
+        if(sPDG==iniPDG)
+	    {
+          G4QHadron* quasH = new G4QHadron(iniPDG,q4Mom);// Create Hadron for the Quasmon-hadron
+          FillHadronVector(quasH);                   // Fill "new quasH" (delete equivalent)
+          KillQuasmon();                             // This Quasmon is done          
+          qEnv=theEnvironment;                       // Keep initial environment
+          return theQHadrons;                        // The last decay of the total nucleus...
+	    }
+        else G4cerr<<"***G4Q::HQ: Q=H qPDG="<<iniPDG<<" # sPDG="<<sPDG<<", dm="<<dm<<G4endl;
+	  }
+
       G4double rWi=0.;
       if(rPDG!=10) rWi=G4QPDGCode(rPDG).GetWidth();
       if(rPDG!=10&&rMass>dm&&!rWi) // Try to use a width of the h-resonance or reduce its spin state
@@ -2090,7 +2103,7 @@ G4QHadronVector G4Quasmon::HadronizeQuasmon(G4QNucleus& qEnv, G4int nQuasms)
               reMass=0.;
 			}
             else reMass=GetRandomMass(rPDG,dm);      // Rerandomize mass of ResidQuasmon-Resonance
-            if(reMass==0.) G4cerr<<"***G4Quasmon::HadronizeQ: (2) rPDG="<<rPDG<<", dm="<<dm<<G4endl;
+            if(reMass==0.) G4cerr<<"***G4Q::HQ: (2) qM="<<quasM<<",rPDG="<<rPDG<<",dm="<<dm<<G4endl;
 		  }
           else if(rPDG==111)                         // Make a photon out of the Resid Quasmon
 		  {
