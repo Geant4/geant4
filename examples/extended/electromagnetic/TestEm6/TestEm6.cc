@@ -1,20 +1,3 @@
-/* hbu
-
-cd $G4INSTALL/examples/extended/electromagnetic/TestEm6/
-gmake
-rm -f /tmp/hbu/*out* ; $G4WORKDIR/bin/Linux-egcs/TestEm6 run01.mac > /tmp/hbu/TestEm6.out
-
-or
-
-bsub -J TestEm601 -q si_1nh subm_TestEm6
-
-or
-
-gmake visclean ; rm -f core ; $G4WORKDIR/bin/Linux-egcs/TestEm6
-/control/execute vis.mac
-
-*/
-
 //  TestEm6 by H.Burkhardt, April 2002
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
