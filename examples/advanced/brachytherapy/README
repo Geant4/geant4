@@ -1,0 +1,38 @@
+-------------------------------------------------------------------
+$Id: README,v 1.1 2000-11-09 16:44:39 sgarelli Exp $
+-------------------------------------------------------------------
+
+     =========================================================
+ 		      Geant4 - Brachytherapy example
+     =========================================================
+
+                             README
+                      ---------------------
+
+0. Introduction.
+
+Brachytherapy example simulates energy deposition on a voxel grid
+for a MicroSelectron Ir-192 HDR brachytherapy source.
+
+1. Technical description
+
+1.0. MicroSelectron HDR Ir-192 source is constructed in the 
+brachyDetectorConstruction class. The source is composed by
+an iridium core encapsulated in a stainless steel capsule 
+(body + tip). The source is put into a 30*cm water box.
+
+1.1. The water box is made sensitive detector. A longitudinal slice
+of it is associated to a planar read out geometry. At every hit
+energy deposition is read and stored into a voxel matrix.
+
+1.2. Voxel matrix is output to an ASCII file for further processing
+(e.g. anysotropy and isodose calculations).
+
+2. Make
+
+A standard Geant4 example GNUmakefile is provided.
+
+2. Usage
+
+Simply run "Brachy" executable. The ASCII "Brachy.out" file is
+produced.
