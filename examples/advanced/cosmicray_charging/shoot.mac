@@ -1,0 +1,32 @@
+#################################################################
+# Shoots 1 GeV protons randomly from generator surface
+#################################################################
+#
+/vis/enable
+/tracking/storeTrajectory 1
+/control/verbose 1
+/run/verbose 1
+/event/verbose 0
+#
+/control/suppressAbortion 1
+#
+# Random seeds
+#/run/autoSeed 1
+/random/resetEngineFrom seeds.rndm
+#
+# particle surveys
+#/surveys/surveyParticles 1
+#/surveys/surveyPrimaries 1
+#/surveys/surveyTestMasses 1
+#
+/gps/particle proton
+/gps/energy 1 GeV
+#
+# Isotropic distribution
+/gps/type Surface
+/gps/shape Sphere
+/gps/radius 1499. mm
+/gps/centre 0. 0. 0. mm
+/gps/angtype cos
+#
+/run/beamOn 100
