@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst50PrimaryGeneratorAction.cc,v 1.11 2003-05-28 08:10:11 guatelli Exp $
+// $Id: Tst50PrimaryGeneratorAction.cc,v 1.12 2004-12-08 12:24:22 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Author: Susanna Guatelli (guatelli@ge.infn.it)
@@ -78,7 +78,7 @@ void Tst50PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	c = (G4UniformRand()-0.5)/0.5;
 	n = a*a+b*b+c*c;
       }while(n > 1 || n == 0.0);
-      n = sqrt(n);
+      n = std::sqrt(n);
       a /= n;
       b /= n;
       c /= n;

@@ -79,7 +79,7 @@ Tst01PrimaryGeneratorAction::SetGunPosition(G4ThreeVector pGun)
 { 
   fGunPosition = pGun ;
  
-  fPosition = sqrt( fGunPosition.x()*fGunPosition.x() +
+  fPosition = std::sqrt( fGunPosition.x()*fGunPosition.x() +
                     fGunPosition.y()*fGunPosition.y() +
                     fGunPosition.z()*fGunPosition.z()     ) ;
 
@@ -95,7 +95,7 @@ Tst01PrimaryGeneratorAction::SetGunPosition(G4ThreeVector pGun)
     fDaughterExtent = fDaughterVolume -> GetLogicalVolume () -> 
                                          GetSolid () -> GetExtent ();
 
-    fSize = 0.6*sqrt( ( fDaughterExtent.GetXmax() - fDaughterExtent.GetXmin() )*
+    fSize = 0.6*std::sqrt( ( fDaughterExtent.GetXmax() - fDaughterExtent.GetXmin() )*
                   ( fDaughterExtent.GetXmax() - fDaughterExtent.GetXmin() ) +
 
                   ( fDaughterExtent.GetYmax() - fDaughterExtent.GetYmin() )*

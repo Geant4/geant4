@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 #include <string.h>
-#include <math.h>
+#include <cmath>
 
 #include "Histo.hh"
 
@@ -99,9 +99,9 @@ double odHisto::compare(const odHisto& ah) const
 {
   if(nbins!=ah.nbins) return -1.0;
 
-  if(fabs(lowerbound-ah.lowerbound)>fabs(lowerbound)*1.e-5) return -1.0;
+  if(std::fabs(lowerbound-ah.lowerbound)>std::fabs(lowerbound)*1.e-5) return -1.0;
   
-  if(fabs(binwidth-ah.binwidth)>binwidth*1.e-5) return -1.0;
+  if(std::fabs(binwidth-ah.binwidth)>binwidth*1.e-5) return -1.0;
 
   // Ok same booking
 
@@ -115,7 +115,7 @@ double odHisto::compare(const odHisto& ah) const
 	e=content[i];
       else
 	e=1.;
-      e=sqrt(e);
+      e=std::sqrt(e);
       d=ah.content[i]-content[i];
       dbin+=d*d/e;
     }

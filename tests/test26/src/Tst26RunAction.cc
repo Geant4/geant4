@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst26RunAction.cc,v 1.6 2003-11-12 10:22:15 vnivanch Exp $
+// $Id: Tst26RunAction.cc,v 1.7 2004-12-08 12:20:30 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 /////////////////////////////////////////////////////////////////////////
@@ -110,8 +110,8 @@ void Tst26RunAction::EndOfRunAction(const G4Run*)
     e2[i] *= norm;
     e2[i] -= e[i]*e[i];
     if(e2[i]<0.0) e2[i] = 0.0;
-    e2[i]  = sqrt(e2[i]);
-    s[i]   = e2[i]*sqrt(norm);
+    e2[i]  = std::sqrt(e2[i]);
+    s[i]   = e2[i]*std::sqrt(norm);
   }
 
   G4cout << G4endl;

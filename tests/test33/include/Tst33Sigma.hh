@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33Sigma.hh,v 1.2 2003-06-16 17:15:55 gunter Exp $
+// $Id: Tst33Sigma.hh,v 1.3 2004-12-08 12:21:34 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // ----------------------------------------------------------------------
@@ -64,7 +64,7 @@ class Tst33Sigma
     // get the weighted mean value: Sum(w*x)/Sum(w)
 
   G4double GetSigma() const;
-    // get the weighted sigma: sqrt(Sum(w*x*x)/Sum(w)-mean^2)
+    // get the weighted sigma: std::sqrt(Sum(w*x*x)/Sum(w)-mean^2)
 
   G4double GetXsum() const;
     // get sum over x: Sum(x) 

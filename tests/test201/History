@@ -1,7 +1,10 @@
-$Id: History,v 1.6 2004-07-15 16:20:16 johna Exp $
+$Id: History,v 1.7 2004-12-08 12:19:32 gcosmo Exp $
 
 History file for visualization/test subdirectory
 ------------------------------------------------
+
+8th December 2004  G.Cosmo
+- Implemented migration to <cmath>.
 
 15th July 2004  John Allison  (test201-V06-02-00)
 - Changed /vis/viewer/viewpointThetaPhi -> /vis/viewer/set/viewpointThetaPhi.

@@ -75,7 +75,7 @@ Tst01PrimaryGeneratorAction::Tst01PrimaryGeneratorAction():
     worldExtent = worldVolume -> GetLogicalVolume () -> 
                                          GetSolid () -> GetExtent ();
 
-    fSize = sqrt( ( worldExtent.GetXmax() - worldExtent.GetXmin() )*
+    fSize = std::sqrt( ( worldExtent.GetXmax() - worldExtent.GetXmin() )*
                   ( worldExtent.GetXmax() - worldExtent.GetXmin() ) +
 
                   ( worldExtent.GetYmax() - worldExtent.GetYmin() )*
@@ -132,10 +132,10 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     case randomDirectionGun:   
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 
@@ -186,10 +186,10 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	RandFlat::shoot (worldExtent.GetZmin (), worldExtent.GetZmax ())));
 
     costheta = RandFlat::shoot (-1., 1.);
-    sintheta = sqrt (1. - costheta * costheta);
+    sintheta = std::sqrt (1. - costheta * costheta);
     phi      = RandFlat::shoot (twopi);
-    cosphi   = cos (phi);
-    sinphi   = sin (phi);
+    cosphi   = std::cos (phi);
+    sinphi   = std::sin (phi);
     particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
 
@@ -205,12 +205,12 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
                                  -fGunPosition.y()/fPosition ,
                                  -fGunPosition.z()/fPosition    ) ;
 
-      costheta = RandFlat::shoot (fPosition/sqrt(fPosition*fPosition +
+      costheta = RandFlat::shoot (fPosition/std::sqrt(fPosition*fPosition +
                                                   fSize*fSize), 1.);
-      sintheta = sqrt (1. - costheta * costheta);
+      sintheta = std::sqrt (1. - costheta * costheta);
       phi      = RandFlat::shoot (twopi);
-      cosphi   = cos (phi) ;
-      sinphi   = sin (phi) ;
+      cosphi   = std::cos (phi) ;
+      sinphi   = std::sin (phi) ;
       position = G4ThreeVector (sintheta * cosphi, 
                                 sintheta * sinphi, costheta) ;
 
@@ -221,10 +221,10 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
     else
     {
       costheta = RandFlat::shoot (-1., 1.);
-      sintheta = sqrt (1. - costheta * costheta);
+      sintheta = std::sqrt (1. - costheta * costheta);
       phi      = RandFlat::shoot (twopi);
-      cosphi   = cos (phi);
-      sinphi   = sin (phi);
+      cosphi   = std::cos (phi);
+      sinphi   = std::sin (phi);
       particleGun->SetParticleMomentumDirection
       (G4ThreeVector (sintheta * cosphi, sintheta * sinphi, costheta));
     }
@@ -241,7 +241,7 @@ void Tst01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
       particleGun->SetParticleMomentumDirection(direction) ;
 
    // rho = fSize*randFlat::shoot(0.0,1.0) ; phi = RandFlat::shoot (twopi) ; 
-   // cosphi   = cos (phi); sinphi   = sin (phi);
+   // cosphi   = std::cos (phi); sinphi   = std::sin (phi);
    // position = G4ThreeVector(rho*cosphi,rho*sinphi,0.0) ;
 
       position = G4ThreeVector(RandFlat::shoot (-0.5*fSize,0.5*fSize) ,

@@ -115,7 +115,7 @@ void Test17RunAction::EndOfRunAction(const G4Run*)
     name = part0->GetParticleName();
     mass = part0->GetPDGMass();
   }
-  G4double p = sqrt(kinEnergy0*(kinEnergy0 + 2.0*mass))/MeV;
+  G4double p = std::sqrt(kinEnergy0*(kinEnergy0 + 2.0*mass))/MeV;
   G4cout << G4endl;
   //  G4int prec = G4cout.precision(6);
   G4cout << " end of Run TotNbofEvents = " <<  nEvents

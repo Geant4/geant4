@@ -87,7 +87,7 @@ public:
   double RMS() const
     {
       double av2=Average();
-      return sqrt(sumx2/sumw-av2*av2);
+      return std::sqrt(sumx2/sumw-av2*av2);
     }
 
   int Entries() const

@@ -43,7 +43,7 @@ void Tst09TrackingAction::PreUserTrackingAction(const G4Track* aTrack )
     //     Isotropic distribution of photons with transverse polarization 
     //     with respect to gamma momentum
     G4double  phi = twopi * G4UniformRand();
-    G4ThreeVector newPol(cos(phi),sin(phi),0.); 
+    G4ThreeVector newPol(std::cos(phi),std::sin(phi),0.); 
     G4ParticleMomentum aParticleDirection = aParticle->GetMomentumDirection();
     newPol.rotateUz(aParticleDirection);
     ((G4Track*)aTrack)->SetPolarization(newPol);

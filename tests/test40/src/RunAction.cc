@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: RunAction.cc,v 1.3 2004-07-06 16:42:11 japost Exp $
+// $Id: RunAction.cc,v 1.4 2004-12-08 12:22:25 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -256,11 +256,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (i=0; i<nLbin; i++)
    {
     MeanELongit[i] = norme*sumELongit[i];
-     rmsELongit[i] = norme*sqrt(abs(NbOfEvents*sumE2Longit[i]
+     rmsELongit[i] = norme*std::sqrt(std::abs(NbOfEvents*sumE2Longit[i]
                                 - sumELongit[i]*sumELongit[i]));
 
     MeanELongitCumul[i] = norme*sumELongitCumul[i];
-     rmsELongitCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2LongitCumul[i]
+     rmsELongitCumul[i] = norme*std::sqrt(std::abs(NbOfEvents*sumE2LongitCumul[i]
                                     - sumELongitCumul[i]*sumELongitCumul[i]));
 
     gammaFlux   [i] /= NbOfEvents;
@@ -293,11 +293,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   for (i=0; i<nRbin; i++)
    {
     MeanERadial[i] = norme*sumERadial[i];
-     rmsERadial[i] = norme*sqrt(abs(NbOfEvents*sumE2Radial[i]
+     rmsERadial[i] = norme*std::sqrt(std::abs(NbOfEvents*sumE2Radial[i]
                                 - sumERadial[i]*sumERadial[i]));
 
     MeanERadialCumul[i] = norme*sumERadialCumul[i];
-     rmsERadialCumul[i] = norme*sqrt(abs(NbOfEvents*sumE2RadialCumul[i]
+     rmsERadialCumul[i] = norme*std::sqrt(std::abs(NbOfEvents*sumE2RadialCumul[i]
                                     - sumERadialCumul[i]*sumERadialCumul[i]));
 
 #ifdef G4ANALYSIS_USE
@@ -313,11 +313,11 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   //
   norme = 1./(NbOfEvents*(Det->GetMaterial()->GetRadlen()));
   G4double MeanChargTrLength = norme*sumChargTrLength;
-  G4double  rmsChargTrLength = norme*sqrt(abs(NbOfEvents*sum2ChargTrLength
+  G4double  rmsChargTrLength = norme*std::sqrt(std::abs(NbOfEvents*sum2ChargTrLength
                                          - sumChargTrLength*sumChargTrLength));
 
   G4double MeanNeutrTrLength = norme*sumNeutrTrLength;
-  G4double  rmsNeutrTrLength = norme*sqrt(abs(NbOfEvents*sum2NeutrTrLength
+  G4double  rmsNeutrTrLength = norme*std::sqrt(std::abs(NbOfEvents*sum2NeutrTrLength
                                          - sumNeutrTrLength*sumNeutrTrLength));
 
   //print

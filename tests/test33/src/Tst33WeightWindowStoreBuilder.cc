@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.3 2003-11-25 10:20:25 gcosmo Exp $
+// $Id: Tst33WeightWindowStoreBuilder.cc,v 1.4 2004-12-08 12:21:34 gcosmo Exp $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
@@ -73,13 +73,13 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
   
   G4int i(1);
   for (i=1; i <= 19; ++i) {
-    G4double lowerWeight = 1./pow(2.0,i-1);
+    G4double lowerWeight = 1./std::pow(2.0,i-1);
     G4GeometryCell gCell(samplegeo->GetGeometryCell(i, ""));
 
     std::vector<G4double> lowerWeights;
 
     if (i==19) {
-	lowerWeight = 1./pow(2.0,17);
+	lowerWeight = 1./std::pow(2.0,17);
     }
 
     lowerWeights.push_back(lowerWeight);

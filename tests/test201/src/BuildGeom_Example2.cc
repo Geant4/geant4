@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: BuildGeom_Example2.cc,v 1.4 2001-08-02 23:55:43 johna Exp $
+// $Id: BuildGeom_Example2.cc,v 1.5 2004-12-08 12:19:32 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -30,7 +30,7 @@
 
 #include "BuildGeom_Example2.hh"
 
-#include <math.h>
+#include <cmath>
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
@@ -184,8 +184,8 @@ G4VPhysicalVolume* BuildGeom_Example2()
          << calCellRot->zy() << " "
          << calCellRot->zz() << " " << G4endl;
 */
-    G4double calCellX = calCellZpos * cos(cellRotAngle/rad);
-    G4double calCellY = calCellZpos * sin(cellRotAngle/rad);
+    G4double calCellX = calCellZpos * std::cos(cellRotAngle/rad);
+    G4double calCellY = calCellZpos * std::sin(cellRotAngle/rad);
     calCellPhys = new G4PVPlacement(calCellRot,
 	       G4ThreeVector(calCellX,calCellY,0.*cm),
 	       "calRowPhys",calCellLog,calRowPhys,false,iCalCell);

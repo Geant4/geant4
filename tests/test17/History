@@ -1,4 +1,4 @@
-$Id: History,v 1.38 2004-12-02 15:36:58 pia Exp $
+$Id: History,v 1.39 2004-12-08 12:17:20 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+08 Dec 2004  Gabriele Cosmo
+             Implemented missing migration to <cmath>:
+             Test17RunAction.cc.
 
 02 Dec 2004  MGP, tag test17-V06-02-00
              Migration to <cmath>

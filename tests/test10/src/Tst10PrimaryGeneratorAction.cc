@@ -20,7 +20,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: Tst10PrimaryGeneratorAction.cc,v 1.8 2004-01-26 16:17:24 gcosmo Exp $
+// $Id: Tst10PrimaryGeneratorAction.cc,v 1.9 2004-12-08 12:15:27 gcosmo Exp $
 // ------------------------------------------------------------
 //	GEANT 4 class header file 
 //
@@ -106,11 +106,11 @@ G4ThreeVector Tst10PrimaryGeneratorAction::GetRandomDirection()
   rand = G4UniformRand();
 
   CosTheta = 2.0*rand -1.0;
-  SinTheta = sqrt (1.-CosTheta*CosTheta);
+  SinTheta = std::sqrt (1.-CosTheta*CosTheta);
   rand = G4UniformRand();
   Phi = twopi*rand;
-  SinPhi = sin (Phi);
-  CosPhi = cos (Phi);
+  SinPhi = std::sin (Phi);
+  CosPhi = std::cos (Phi);
   retval.setX(SinTheta*CosPhi);
   retval.setY(SinTheta*SinPhi);
   retval.setZ(CosTheta);
