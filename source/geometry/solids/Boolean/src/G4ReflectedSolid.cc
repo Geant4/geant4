@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ReflectedSolid.cc,v 1.5 2002-03-26 14:06:23 grichine Exp $
+// $Id: G4ReflectedSolid.cc,v 1.6 2002-03-26 14:22:20 gcosmo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // Implementation for G4ReflectedSolid class for boolean 
@@ -256,8 +256,8 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   G4ReflectY3D tY ;
   G4ReflectZ3D tZ ;
 
-  G4bool extentR, extent ;
-  G4double min, max, minR, maxR ;
+  G4bool extentR ;
+  G4double minR, maxR ;
 
   pt3d= G4Transform3D(pTransform.NetRotation().inverse(),
                       pTransform.NetTranslation()          );
@@ -265,11 +265,6 @@ G4ReflectedSolid::CalculateExtent( const EAxis pAxis,
   sumT = ((sumT*tX)*tY)*tZ;
   sumTransform = G4AffineTransform( sumT.getRotation().inverse(),
                                     sumT.getTranslation()         );
-
-
-
-  //  sumTransform.Product(*fDirectTransform,pTransform) ;
-  //  extent  = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,pTransform,min,max) ;
 
   extentR = fPtrSolid->CalculateExtent(pAxis,pVoxelLimit,sumTransform,
                                        minR,maxR) ;
