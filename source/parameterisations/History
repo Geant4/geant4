@@ -1,4 +1,4 @@
-$Id: History,v 1.1 2000-11-14 16:15:01 gcosmo Exp $
+$Id: History,v 1.2 2001-09-18 09:02:28 gcosmo Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Sep 18th, 2001 V.Grichine - (parmodels-V03-02-00)
+-------------------------
+- Added new classes describing X-ray transition radiation generation
+  inside radiators (i.e. just along incident particle track):
+  G4FoamXTRdEdx[.hh.cc], G4GamDistrXTRdEdx[.hh.cc], G4IrregularXTRdEdx[.hh.cc],
+  G4PlateIrrGasXTRdEdx[.hh.cc], G4RegularXTRdEdx[.hh.cc], G4VXTRdEdx[.hh.cc]
+  and G4VXrayTRadModel[.hh.cc]
+- Modifications in existing classes, introducing some new parameters,
+  class fields and methods.
 
 Nov 14th, 2000 G.Cosmo - (parmodels-V02-00-00)
 ----------------------
