@@ -9,7 +9,7 @@ class G4VImportanceAlgorithm;
 class G4VImportanceSampler;
 class G4ParallelImportanceProcess;
 
-class G4ParallelImportanceManager : private G4ParallelManager{
+class G4ParallelImportanceManager : protected G4ParallelManager{
 public:
   G4ParallelImportanceManager(G4VIStore &iw, 
 			      const G4String &particlename);
