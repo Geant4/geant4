@@ -12,6 +12,9 @@
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
+
+/control/execute emstd.mac
+
 /gun/particle mu-
 /gun/energy 100 MeV
 /gun/vertexRadius 30. cm
@@ -26,9 +29,10 @@
 #
 # Create a scene handler for a specific graphics system
 /vis/open VRML2FILE
+#/vis/open OGLIX
 
 /vis/viewer/reset
-/vis/viewer/viewpointThetaPhi 90 0
+/vis/viewer/set/viewpointThetaPhi 90 0
 
 # Visualize of the whole detector geometry
 /vis/drawVolume

@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.16 2003-05-29 14:34:39 flongo Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.17 2003-05-30 15:09:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -61,7 +61,7 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
 //-------------------------------------------------------------------------------- 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
+GammaRayTelAnalysis::GammaRayTelAnalysis()
 :GammaRayTelDetector(0),analysisFactory(0), tree(0), plotter(0), tuple(0)
   ,energy(0), hits(0), posXZ(0), posYZ(0)
   ,histo1DDraw("enable"),histo1DSave("enable"),histo2DDraw("enable")
@@ -87,10 +87,11 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
       // Tree in memory :
       // Create a "tree" associated to an xml file 
 
-      // tree = treeFactory->create("gammaraytel.hbook", "hbook", false, false);
+      //      tree = treeFactory->create("gammaraytel.hbook", "hbook", false, false);
       // (hbook implementation)
       
       tree = treeFactory->create("gammaraytel.aida","xml",false,true,"compress=yes");
+
       if(tree) {
 	// Get a tuple factory :
 	
@@ -111,8 +112,8 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 	  int Nplane = GammaRayTelDetector->GetNbOfTKRLayers();
 	  int Nstrip = GammaRayTelDetector->GetNbOfTKRStrips();
 	  int Ntile = GammaRayTelDetector->GetNbOfTKRTiles();
-	  float sizexy = GammaRayTelDetector->GetTKRSizeXY();
-	  float sizez = GammaRayTelDetector->GetTKRSizeZ();
+	  double sizexy = GammaRayTelDetector->GetTKRSizeXY();
+	  double sizez = GammaRayTelDetector->GetTKRSizeZ();
 	  int N = Nstrip*Ntile;      
 
 	  // 1D histogram that store the energy deposition of the
@@ -132,8 +133,8 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 					   2*Nplane, 0, Nplane-1);
 	  else
 	    posXZ = histoFactory->createHistogram2D("30","Tracker Hits XZ (x,z) in mm", 
-					   sizexy/5, -sizexy/2, sizexy/2, 
-						    sizez/5, -sizez/2, sizez/2);
+					   int(sizexy/5), -sizexy/2, sizexy/2, 
+						    int(sizez/5), -sizez/2, sizez/2);
 	  
 	  // 2D histogram that store the position (mm) of the hits (YZ projection)
 
@@ -143,8 +144,8 @@ GammaRayTelAnalysis::GammaRayTelAnalysis(int argc,char** argv)
 						    2*Nplane, 0, Nplane-1);
 	  else
 	    posYZ = histoFactory->createHistogram2D("40","Tracker Hits YZ (y,z) in mm", 
-						    sizexy/5, -sizexy/2, sizexy/2, 
-					   sizez/5, -sizez/2, sizez/2);
+						    int(sizexy/5), -sizexy/2, sizexy/2, 
+					   int(sizez/5), -sizez/2, sizez/2);
 	  
 	  delete histoFactory;
 	}
@@ -194,9 +195,9 @@ void GammaRayTelAnalysis::Finish()
 #endif
 }             
 
-GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance(int argc,char** argv)
+GammaRayTelAnalysis* GammaRayTelAnalysis::getInstance()
 {
-  if (instance == 0) instance = new GammaRayTelAnalysis(argc,argv);
+  if (instance == 0) instance = new GammaRayTelAnalysis();
   return instance;
 }
 
@@ -259,7 +260,9 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
    of each run; here we put the inizialization so that the histograms have 
    always the right dimensions depending from the detector geometry
 */
-void GammaRayTelAnalysis::BeginOfRun(G4int n) 
+
+//void GammaRayTelAnalysis::BeginOfRun(G4int n) // to be reintroduced
+void GammaRayTelAnalysis::BeginOfRun() 
 { 
 #ifdef  G4ANALYSIS_USE
 
@@ -294,15 +297,15 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
       plotter->createRegions(1,1);
       sprintf(name,"posxz_%d.ps", n);
       plotter->currentRegion().plot(*posXZ);
-      //plotter->refresh();
-      //plotter->write(name,"ps");
+      plotter->refresh();
+      //      plotter->write(name,"ps"); // temporary unavailable
       
       plotter->createRegions(1,1);
       sprintf(name,"posyz_%d.ps", n);
-      //      plotter->currentRegion().plot(*posYZ);
+      plotter->currentRegion().plot(*posYZ);
       plotter->next().plot(*posYZ);
       plotter->refresh();
-      //plotter->write(name,"ps");
+      // plotter->write(name,"ps"); // temporary unavailable
     }
 
     if(histo1DSave == "enable") {
@@ -311,15 +314,20 @@ void GammaRayTelAnalysis::EndOfRun(G4int n)
       sprintf(name,"energy_%d.ps", n);
       plotter->currentRegion().plot(*energy);
       plotter->refresh();
-      //plotter->write(name,"ps");
-
-      plotter->createRegions(1,1);      
+      //      plotter->write(name,"ps"); // temporary unavailable
+      plotter->createRegions(1,1);   
       sprintf(name,"hits_%d.ps", n);
-      //plotter->clearRegion();
       plotter->currentRegion().plot(*hits);
       plotter->refresh();
-      //plotter->write(name,"ps");
+      //      plotter->write(name,"ps"); // temporary unavailable
+      plotter->createRegions(1,2);
+      plotter->currentRegion().plot(*energy);
+      plotter->next().plot(*hits);
+      plotter->refresh();
     }
+
+
+
 
   }
 
@@ -340,20 +348,23 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   // for paper output.
   if(plotter) {
     if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
-      plotter->createRegions(2,2);
-      plotter->currentRegion().plot(*posXZ);
-      //      plotter->currentRegion().plot(*posYZ);
-      plotter->next().plot(*posYZ);
-      //plotter->currentRegion().plot(*energy);
-      plotter->next().plot(*energy);
-      //      plotter->currentRegion().plot(*hits);
-      plotter->next().plot(*hits);
-    } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
-      plotter->currentRegion().plot(*energy);
+      plotter->createRegions(1,2);
+      //plotter->currentRegion().plot(*posXZ); //temporary unavailable
       plotter->currentRegion().plot(*hits);
+      //      plotter->next().plot(*posYZ); //temporary unavailable
+      plotter->next().plot(*energy);
+      //plotter->next().plot(*energy);
+      //      plotter->currentRegion().plot(*hits);
+      //plotter->next().plot(*hits);
+    } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
+      plotter->createRegions(1,2);
+      plotter->currentRegion().plot(*energy);
+      plotter->next().plot(*hits);
     } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
+      /*      plotter->createRegions(1,2);
       plotter->currentRegion().plot(*posXZ);
-      plotter->currentRegion().plot(*posYZ);
+      plotter->next().plot(*posYZ);*/
+      G4cout << "Temporary Unavailable " << G4endl;
     } else { // Nothing to plot.
       plotter->createRegions(1,1);
     }

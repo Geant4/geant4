@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerHit.cc,v 1.2 2001-07-11 09:56:58 gunter Exp $
+// $Id: GammaRayTelTrackerHit.cc,v 1.3 2003-05-30 15:09:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -56,6 +56,7 @@ GammaRayTelTrackerHit::~GammaRayTelTrackerHit()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelTrackerHit::GammaRayTelTrackerHit(const GammaRayTelTrackerHit& right)
+  :G4VHit()
 {
   EdepSil = right.EdepSil; 
   NStrip = right.NStrip; NSilPlane = right.NSilPlane;
@@ -78,7 +79,7 @@ const GammaRayTelTrackerHit& GammaRayTelTrackerHit::operator=(const GammaRayTelT
 
 int GammaRayTelTrackerHit::operator==(const GammaRayTelTrackerHit& right) const
 {
-  return 0;
+  return((EdepSil==right.EdepSil)&&(NStrip==right.NStrip)&&(IsXPlane==right.IsXPlane)&& (pos==right.pos));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelTrackerSD.cc,v 1.6 2001-12-04 11:40:28 flongo Exp $
+// $Id: GammaRayTelTrackerSD.cc,v 1.7 2003-05-30 15:09:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -77,7 +77,7 @@ GammaRayTelTrackerSD::~GammaRayTelTrackerSD()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*HCE)
+void GammaRayTelTrackerSD::Initialize(G4HCofThisEvent*)
 {
   TrackerCollection = new GammaRayTelTrackerHitsCollection
     (SensitiveDetectorName,collectionName[0]);

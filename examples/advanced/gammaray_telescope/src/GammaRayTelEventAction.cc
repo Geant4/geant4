@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelEventAction.cc,v 1.15 2002-11-14 10:55:28 flongo Exp $
+// $Id: GammaRayTelEventAction.cc,v 1.16 2003-05-30 15:09:00 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -197,7 +197,7 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 	      analysis->InsertHits(NPlane);
 	    }
 	  
-#ifdef G4ANALYSIS_USE_NTUPLE
+#ifdef G4ANALYSIS_USE
 	  analysis->setNtuple( ESil/keV, NPlane, (*THC)[i]->GetPos().x()/mm,
 			       (*THC)[i]->GetPos().y()/mm,
 			       (*THC)[i]->GetPos().z()/mm);

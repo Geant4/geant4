@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTel.cc,v 1.9 2002-06-18 18:45:39 griccard Exp $
+// $Id: GammaRayTel.cc,v 1.10 2003-05-30 15:07:45 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -134,8 +134,11 @@ int main(int argc, char** argv)
 	      UI->ApplyCommand(command+macroFileName);
 	    }
 	}
-      else  UI->ApplyCommand("/control/execute prerunGammaRayTel.mac");
-      session->SessionStart();
+      else  
+	{
+	  UI->ApplyCommand("/control/execute prerunGammaRayTel.mac");
+	  session->SessionStart();
+	}
       delete session;
     }
 

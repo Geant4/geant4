@@ -22,7 +22,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.hh,v 1.13 2003-05-29 14:34:26 flongo Exp $
+// $Id: GammaRayTelAnalysis.hh,v 1.14 2003-05-30 15:08:47 flongo Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class header file
@@ -73,7 +73,11 @@ public:
   virtual ~GammaRayTelAnalysis();
   
 public:
-  void BeginOfRun(G4int n);
+
+
+  //  void BeginOfRun(G4int n);
+
+  void BeginOfRun();
   void EndOfRun(G4int n);
   void EndOfEvent(G4int flag);
 
@@ -95,10 +99,11 @@ public:
 
   void setNtuple(float E, float p, float x, float y, float z);
 
-  static GammaRayTelAnalysis* getInstance(int = 0, char** = 0);
+  static GammaRayTelAnalysis* getInstance();
 
 private:
-  GammaRayTelAnalysis(int = 0, char** = 0);
+
+  GammaRayTelAnalysis();
 
   void plot1D(IHistogram1D* histo);
   void plot2D(IHistogram2D* histo);
