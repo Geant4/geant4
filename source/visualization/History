@@ -1,4 +1,4 @@
-$Id: History,v 1.252 2004-07-14 15:40:45 johna Exp $
+$Id: History,v 1.253 2004-07-14 16:53:36 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,7 +25,14 @@ History file for visualization category
 ---------------------------------------
 
 14th July 2004  John Allison  (vis-V06-02-01)
-- Removed deprecated commands.
+- Removed deprecated commands:
+    /vis/viewer/show               (use /vis/viewer/update)
+    /vis/viewer/lightsThetaPhi     (use /vis/viewer/set/lightsThetaPhi)
+    /vis/viewer/lightsVector       (use /vis/viewer/set/lightsVector)
+    /vis/viewer/viewpointThetaPhi  (use /vis/viewer/set/viewpointThetaPhi)
+    /vis/viewer/viewpointVector    (use /vis/viewer/set/viewpointVector)
+  (See geant4/source/visualization/README.built_in_commands for list
+  of current commands.)
 - Tidied guidance for /vis/viewer/set.
 - Included opengl-V06-02-03 (cosmetic).
 
