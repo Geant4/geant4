@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: GammaRayTelAnalysis.cc,v 1.12 2002-06-18 19:55:22 griccard Exp $
+// $Id: GammaRayTelAnalysis.cc,v 1.13 2002-06-18 20:01:57 griccard Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 // ------------------------------------------------------------
 //      GEANT 4 class implementation file
@@ -241,7 +241,6 @@ void GammaRayTelAnalysis::setNtuple(float E, float p, float x, float y, float z)
 #ifdef  G4ANALYSIS_USE
   ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("tuple") );
   if(ntuple) {
-    std::cout << "OOO" << std::endl;
     ntuple->fill(tuple->findColumn("energy"),E);
     ntuple->fill(tuple->findColumn("plane"),p);
     ntuple->fill(tuple->findColumn("x"),x);
@@ -266,42 +265,6 @@ void GammaRayTelAnalysis::BeginOfRun(G4int n)
   if(hits) hits->reset();
   if(posXZ) posXZ->reset();
   if(posYZ) posYZ->reset();
-
-  if(plotter) {
-    if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
-      plotter->createRegions(2,2);
-      plotter->plot(*posXZ);
-      plotter->show();
-      plotter->next();
-
-      plotter->plot(*posYZ);
-      plotter->show();
-      plotter->next();
-
-      plotter->plot(*energy);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*hits);
-      plotter->show();
-
-    } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
-      plotter->createRegions(1,2);
-      plotter->plot(*energy);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*hits);
-    } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
-      plotter->createRegions(1,2);
-      plotter->plot(*posXZ);
-      plotter->show();
-      plotter->next();
-      plotter->plot(*posYZ);
-    } else { // Nothing to plot.
-      plotter->createRegions(1,1);
-    }
-    plotter->refresh();
-  }
-
 
 #endif
 }
@@ -365,8 +328,40 @@ void GammaRayTelAnalysis::EndOfEvent(G4int flag)
   //  It is done here, since then EndOfRun set regions
   // for paper output.
   if(plotter) {
+    if((histo2DDraw == "enable") && (histo1DDraw == "enable")) {
+      plotter->createRegions(2,2);
+      plotter->plot(*posXZ);
+      plotter->show();
+      plotter->next();
+
+      plotter->plot(*posYZ);
+      plotter->show();
+      plotter->next();
+
+      plotter->plot(*energy);
+      plotter->show();
+      plotter->next();
+      plotter->plot(*hits);
+      plotter->show();
+
+    } else if((histo1DDraw == "enable") && (histo2DDraw != "enable")) {
+      plotter->createRegions(1,2);
+      plotter->plot(*energy);
+      plotter->show();
+      plotter->next();
+      plotter->plot(*hits);
+    } else if((histo1DDraw != "enable") && (histo2DDraw == "enable")) {
+      plotter->createRegions(1,2);
+      plotter->plot(*posXZ);
+      plotter->show();
+      plotter->next();
+      plotter->plot(*posYZ);
+    } else { // Nothing to plot.
+      plotter->createRegions(1,1);
+    }
     plotter->refresh();
   }
+
 
 #endif
 }
