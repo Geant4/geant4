@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.13 1999-10-04 17:46:52 johna Exp $
+# $Id: GNUmakefile,v 1.14 1999-11-14 16:11:51 morita Exp $
 # -----------------------------------------------------------------
 # "gmake" makes default libraries for each subdomain.
 # "gmake glob" makes global libraries for each subdomain.
@@ -13,7 +13,7 @@ MAKEFLAGS= --no-print-directory
 SUBDIR1 = global particles processes geometry digits+hits
 SUBDIR2 = event tracking track materials run graphics_reps intercoms readout
 SUBDIR3 = g3tog4 interfaces visualization
-SUBDIR4 = # persistency
+SUBDIR4 = persistency
 
 ifndef G4INSTALL
   G4INSTALL = ..
@@ -28,15 +28,36 @@ unique := $(shell echo $$$$)
 .PHONY: all glob global libmap clean_libs clean clean_all
 
 all:
+ifdef G4USE_HEPODBMS
+	@$(ECHO) Making granular libraries with HepODBMS option ...
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@if [ ! -f $(G4TMPSCHEMA_BOOT) ] ; then \
+	 $(ECHO) "Temporary boot file does not exist.  Stop." ; \
+	 exit 1 ; fi
+endif
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+ifdef G4USE_HEPODBMS
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE)); done
+endif
 	$(MAKE) libmap
 
 glob global:
+ifdef G4USE_HEPODBMS
+	@$(ECHO) Making global libraries with HepODBMS option ...
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) cleandb); done
+	@if [ ! -f $(G4TMPSCHEMA_BOOT) ] ; then \
+	 $(ECHO) "Temporary boot file does not exist.  Stop." ; \
+	 exit 1 ; fi
+endif
 	@for dir in $(SUBDIR1); do (cd $$dir; $(MAKE) global); done
 	@for dir in $(SUBDIR2); do (cd $$dir; $(MAKE)); done
 	@for dir in $(SUBDIR3); do (cd $$dir; $(MAKE)); done
+ifdef G4USE_HEPODBMS
+	@for dir in $(SUBDIR4); do (cd $$dir; $(MAKE) global); done
+endif
+
 
 libmap: $(G4LIBDIR)/liblist
 	@echo "WARNING: Making a library map of granular libraries."
