@@ -1,0 +1,32 @@
+# $Id: big.in,v 1.1 2004-07-01 11:21:32 japost Exp $
+#
+# Macro file for "TestEm2.cc" 
+# (can be run in batch, without graphic)
+#
+# PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
+#
+/control/verbose 2
+#
+##/testem/phys/addPhysics  model
+/testem/phys/addPhysics  standard
+/testem/phys/setCuts 1 mm
+#
+/run/initialize
+#
+#/run/particle/applyCuts
+#
+/run/verbose 1
+/tracking/verbose 0
+/event/verbose 0
+/testem/event/printModulo 100
+#
+# Acceptance printout is activated
+/testem/det/acceptance  0.95140202  0.0082 4.0
+#
+/gun/particle e-
+/gun/energy 5 GeV
+/run/beamOn 10000
+
+/testem/det/setField  10 gauss
+/run/beamOn 10000
+
