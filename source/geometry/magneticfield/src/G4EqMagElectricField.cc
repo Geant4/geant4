@@ -14,8 +14,8 @@ G4EqMagElectricField::SetChargeMomentumMass(G4double particleCharge, // e+ units
 		                            G4double MomentumXc,
                                             G4double particleMass)
 {
-   fElectroMagCof =  eplus*particleCharge ;
-   fMassCof = particleMass*particleMass/c_light/c_light; 
+   fElectroMagCof =  eplus*particleCharge*c_light ;
+   fMassCof = particleMass*particleMass ; 
 }
 
 
@@ -32,7 +32,7 @@ G4EqMagElectricField::EvaluateRhsGivenB(const G4double y[],
 
    G4double pSquared = y[3]*y[3] + y[4]*y[4] + y[5]*y[5] ;
 
-   G4double cof2     = sqrt( pSquared + fMassCof )/c_light ;
+   G4double cof2     = sqrt( pSquared + fMassCof )/c_squared ;
 
    G4double pModuleInverse  = 1.0/sqrt(pSquared) ;
 
