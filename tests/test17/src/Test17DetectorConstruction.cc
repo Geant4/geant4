@@ -166,19 +166,21 @@ G4cout << "Matrial available: " << Pb->GetName() << G4endl;
 //
 
 density = 1.000*g/cm3;
-G4Material* H2O = new G4Material(name="Water", symbol="H_2O", density, ncomponents=2);
+G4Material* H2O = new G4Material("Water", density, ncomponents=2);
+H2O->SetChemicalFormula("H_2O");
 H2O->AddElement(elH, natoms=2);
 H2O->AddElement(elO, natoms=1);
 G4cout << "Matrial available: " << H2O->GetName() << G4endl; 
 
 density = 0.00066715*g/cm3;
-G4Material* CH4 = new G4Material(name="Methane", symbol="CH_4", density, ncomponents=2);
+G4Material* CH4 = new G4Material("Methane", density, ncomponents=2);
+CH4->SetChemicalFormula("CH_4");
 CH4->AddElement(elH, natoms=4);
 CH4->AddElement(elC, natoms=1);
 G4cout << "Matrial available: " << CH4->GetName() << G4endl; 
 
-G4Material*  Graphite = new G4Material(name="Graphite", symbol="Graphite",
-				       density=2.265*g/cm3, ncomponents=1);
+G4Material*  Graphite = new G4Material("Graphite", 2.265*g/cm3, ncomponents=1);
+Graphite->SetChemicalFormula("Graphite");
 Graphite->AddElement( elC, 1 );
 G4cout << "Matrial available: " << Graphite->GetName() << G4endl; 
 

@@ -1,4 +1,4 @@
-$Id: History,v 1.23 2001-11-28 17:25:18 vnivanch Exp $
+$Id: History,v 1.24 2001-12-03 21:00:11 vnivanch Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03 Dec 2001  V.I., test17-V03-02-03
+             Remove warning about chemical formula. No difference in physics.
 
 28 Nov 2001  V.I., test17-V03-02-02
              Increase cuts to decrease execution time. Output is changed.
