@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4PropagatorInField.icc,v 1.32 2003-06-13 09:43:24 japost Exp $
+// $Id: G4PropagatorInField.icc,v 1.33 2003-06-21 00:38:33 japost Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -95,13 +95,13 @@ G4bool   G4PropagatorInField::IsParticleLooping() const
 inline
 G4int    G4PropagatorInField::GetMaxLoopCount() const
 {
-  return fmax_loop_count;
+  return fMax_loop_count;
 }
 
 inline
 void     G4PropagatorInField::SetMaxLoopCount( G4int new_max ) 
 {
-  fmax_loop_count = new_max;
+  fMax_loop_count = new_max;
 }
 
 inline
