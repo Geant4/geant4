@@ -108,12 +108,12 @@ private:
   
   G4double EmEdep; G4double HadEdep;
 
-  IAnalysisFactory  *af;
-  ITree             *tree;
-  IHistogramFactory *hf;
-  ITupleFactory     *tpf;
-  IPlotterFactory   *pf;
-  IPlotter          *plotter;
+  AIDA::IAnalysisFactory  *af;
+  AIDA::ITree             *tree;
+  AIDA::IHistogramFactory *hf;
+  AIDA::ITupleFactory     *tpf;
+  AIDA::IPlotterFactory   *pf;
+  AIDA::IPlotter          *plotter;
 
 };
 #endif

@@ -28,8 +28,8 @@
 //
 // History:
 // -----------
-// 16 Jan 2002 Alex Howard     Created
-// 17 June 2002 Alex Howard    Successfully Modified to AIDA 2.2
+// 3 Oct 2002 Alex Howard     Created
+// 5 Nov 2002 Alex Howard    Successfully Modified to AIDA 3.x
 //
 // -------------------------------------------------------------------
 #ifdef  G4ANALYSIS_USE
@@ -98,9 +98,9 @@ void FCALAnalysisManager::book()
   G4bool fileExists = false;
   G4bool readOnly   = false;
 
-  ITreeFactory     * tf = af->createTreeFactory();
+  AIDA::ITreeFactory     * tf = af->createTreeFactory();
 
-  tree = tf->create(histogramfile, readOnly, fileExists, "hbook");
+  tree = tf->create(histogramfile, "hbook", readOnly, fileExists);
 
   G4cout << "Tree store : " << tree->storeName() << G4endl;
 
@@ -112,38 +112,38 @@ void FCALAnalysisManager::book()
 
  // ---- primary ntuple ------
 
-  ITuple* ntuple1 = tpf->create( "1 OutOfWorld", "Number out of World", 
+  AIDA::ITuple* ntuple1 = tpf->create( "1", "Number out of World", 
 			     "float OutOfWorld,i,j" );
 
   assert(ntuple1);
 
   // ---- secondary ntuple ------   
 
-  ITuple* ntuple2 = tpf->create( "2 Secondaries", "Secondary Info", 
+  AIDA::ITuple* ntuple2 = tpf->create( "2", "Secondary Info", 
 				 "float Secondary,i,j");
 
   assert(ntuple2);
 
   // ---- tertiary ntuple ------   
 
- ITuple* ntuple3 = tpf->create( "3 EDep", "Energy Deposits", 
+ AIDA::ITuple* ntuple3 = tpf->create( "3", "Energy Deposits", 
 				"float EmEdep,HadEdep" );
 
  assert(ntuple3);
 
   // Creating an 1-dimensional histogram in the root directory of the tree
 
-  IHistogram1D* hOutOfWorld;
-  hOutOfWorld    = hf->create1D("10","Number Of OutOfWorld",  100,0.,100.);
+  AIDA::IHistogram1D* hOutOfWorld;
+  hOutOfWorld    = hf->createHistogram1D("10","Number Of OutOfWorld",  100,0.,100.);
 
-  IHistogram1D* hSecondary;
-  hSecondary      = hf->create1D("20","Number Of Secondaries", 100,0.,100.);
+  AIDA::IHistogram1D* hSecondary;
+  hSecondary      = hf->createHistogram1D("20","Number Of Secondaries", 100,0.,100.);
   
-  IHistogram1D* hEmEdep;
-  hEmEdep  = hf->create1D("30","Electromagnetic Energy /MeV", 100,0.,100.);
+  AIDA::IHistogram1D* hEmEdep;
+  hEmEdep  = hf->createHistogram1D("30","Electromagnetic Energy /MeV", 100,0.,100.);
   
-  IHistogram1D* hHadEdep;
-  hHadEdep  = hf->create1D("30","Hadronic Energy /MeV", 100,0.,100.);
+  AIDA::IHistogram1D* hHadEdep;
+  hHadEdep  = hf->createHistogram1D("30","Hadronic Energy /MeV", 100,0.,100.);
   
   delete tf;
 
@@ -180,9 +180,9 @@ void FCALAnalysisManager::finish()
 void FCALAnalysisManager::NumOutOfWorld(G4double OutOfWorld, G4int i, G4int j)
 
 {
-  IHistogram1D* h1 = dynamic_cast<IHistogram1D *> ( tree->find("10") );
+  AIDA::IHistogram1D* h1 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("10") );
   h1->fill(OutOfWorld);  // fill(x,y,weight)     
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("1 OutOfWorld") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("1") );
 
  // Fill the ntuple
   ntuple->fill( ntuple->findColumn( "OutOfWorld"   ), (G4float) OutOfWorld  );
@@ -200,9 +200,9 @@ void FCALAnalysisManager::NumOutOfWorld(G4double OutOfWorld, G4int i, G4int j)
 void FCALAnalysisManager::Secondaries(G4double Secondary, G4int i, G4int j)
 
 {
-  IHistogram1D* h2 = dynamic_cast<IHistogram1D *> ( tree->find("20") );
+  AIDA::IHistogram1D* h2 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("20") );
   h2->fill(Secondary);  // fill(x,y,weight)     
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("2 Secondaries") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("2") );
 
  // Fill the ntuple
   ntuple->fill( ntuple->findColumn( "Secondary"   ), (G4float) Secondary  );
@@ -221,12 +221,12 @@ void FCALAnalysisManager::Edep(G4double EmEdep, G4double HadEdep)
 
 {
   //EM:
-  IHistogram1D* h3 = dynamic_cast<IHistogram1D *> ( tree->find("30") );
+  AIDA::IHistogram1D* h3 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("30") );
   h3->fill(EmEdep);  // fill(x,y,weight)     
   //Had:
-  IHistogram1D* h4 = dynamic_cast<IHistogram1D *> ( tree->find("40") );
+  AIDA::IHistogram1D* h4 = dynamic_cast<AIDA::IHistogram1D *> ( tree->find("40") );
   h4->fill(HadEdep);  // fill(x,y,weight)     
-  ITuple * ntuple = dynamic_cast<ITuple *> ( tree->find("3 Edep") );
+  AIDA::ITuple * ntuple = dynamic_cast<AIDA::ITuple *> ( tree->find("3") );
 
  // Fill the ntuple
   ntuple->fill( ntuple->findColumn( "EmEdep"   ), (G4float) EmEdep  );
