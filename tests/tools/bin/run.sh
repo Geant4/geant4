@@ -70,16 +70,17 @@ if [ $1 = "all" ] ; then
   nice $G4INSTALL/tests/tools/bin/run.sh test08
   nice $G4INSTALL/tests/tools/bin/run.sh test09
   nice $G4INSTALL/tests/tools/bin/run.sh test10
-  nice $G4INSTALL/tests/tools/bin/run.sh test11
-  nice $G4INSTALL/tests/tools/bin/run.sh test12
-#  nice $G4INSTALL/tests/tools/bin/run.sh test13
-# test13 tests kinetic model which is not yet available.
   nice $G4INSTALL/tests/tools/bin/run.sh test101
   nice $G4INSTALL/tests/tools/bin/run.sh test102
   nice $G4INSTALL/tests/tools/bin/run.sh test103
   nice $G4INSTALL/tests/tools/bin/run.sh test104
   nice $G4INSTALL/tests/tools/bin/run.sh test105
   nice $G4INSTALL/tests/tools/bin/run.sh test106
+  nice $G4INSTALL/tests/tools/bin/run.sh test12
+#  nice $G4INSTALL/tests/tools/bin/run.sh test13
+# test13 tests kinetic model which is not yet available.
+  nice $G4INSTALL/tests/tools/bin/run.sh test11
+# test11 at end while it crashes on SUN in opt mode.
 else
 #
 if [ $1 = "test201" ] ; then 
