@@ -1,4 +1,4 @@
-$Id: History,v 1.207 2002-11-21 13:15:25 gcosmo Exp $
+$Id: History,v 1.208 2002-11-27 12:48:22 johna Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -23,6 +23,12 @@ committal in the CVS repository !
 
 History file for visualization category
 ---------------------------------------
+
+27th November 2002  John Allison  (vis-V04-01-08)
+- Added RegisterGraphicsSystem (new G4HepRep) in MyVisManager.cc.
+- Fix (removal) of ambiguous G4VVisCommand::GetNewDoubleValue.
+- Added /vis/viewer/set/globalMarkerScale.
+- Improved algorithm of CompareForKernelVisit on OpenGL and OpenInventor.
 
 21st November 2002  Gabriele Cosmo  (vis-V04-01-07)
 - Corrections to HepRep module to allow porting on egcs compiler
