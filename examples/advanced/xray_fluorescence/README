@@ -1,4 +1,4 @@
-$Id: README,v 1.6 2003-07-17 14:28:19 mantero Exp $
+$Id: README,v 1.7 2003-07-24 14:13:16 mantero Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -135,6 +135,20 @@ endif
 To build and execute the example on platforms where there is no
 implementation of the analysis system, the environment variables 
 must not be set.
+
+By setting visPlotter variable in XrayFluoAnalysisManager to true, 
+it is possible to display the simulated output of the detector while 
+simulation is in progress. Graph window is updated every 1000 events. 
+
 The example provides also a simple Python file used to display
 histograms with Lizard 3.0.0.x 
 
+Some commads are available for Geant4 UI. /analysis/outputFile and  
+/analysis/fileType respectively for changing the name and the 
+type (xml or Hbook) of the file in wich results are saved. 
+If these commends are used, to make the changes effective, another
+command, /anaysis/update, must be executed.
+
+NOTE: if a file named xrayfluo.hbk (default name) is present, it 
+will be deleted, even if /analysis/outputFile command is issued 
+before any run.

@@ -43,21 +43,22 @@
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
-
-
+#include "G4UIcmdWithAString.hh"
+#include "G4UIcmdWithoutParameter.hh"
+#include "XrayFluoAnalysisManager.hh"
+#include "G4UIdirectory.hh"
 class XrayFluoAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithAString;
+//class G4UIdirectory;
+//class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-class G4UIcmdWithAString;
 class XrayFluoAnalysisMessenger: public G4UImessenger
 
 {
 public:
-  XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* );
+  XrayFluoAnalysisMessenger(XrayFluoAnalysisManager*);
   ~XrayFluoAnalysisMessenger();
   
   void SetNewValue(G4UIcommand*, G4String);
@@ -67,8 +68,9 @@ private:
   //pointer to XrayFluoAnalysisManager
   XrayFluoAnalysisManager* xrayFluoAnalysis;
   G4UIdirectory* XrayFluoAnalysisDir;
-  G4UIcmdWithAString* ouputFileCommand;
-
+  G4UIcmdWithAString* outputFileCommand;
+  G4UIcmdWithAString* outputFileType;
+  G4UIcmdWithoutParameter* persistencyUpdateCommand;
 };
 #endif
 #endif

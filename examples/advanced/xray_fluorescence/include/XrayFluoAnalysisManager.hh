@@ -47,9 +47,9 @@
 #include "XrayFluoAnalysisMessenger.hh"
 
 class G4Step;
+class XrayFluoAnalysisMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 class XrayFluoAnalysisManager
 {
 public:
@@ -72,10 +72,27 @@ public:
   //method to call to create an instance of this class
   static XrayFluoAnalysisManager* getInstance();
 
-  //method intended to chenge the name of the hbook output file
+  //method to create hbook or xml file for persistency
+  
+  void CreatePersistency(G4String fileName,G4String persistencyType,
+		       G4bool readOnly = false, G4bool createNew = true);
+
+  inline  void CreatePersistency() {CreatePersistency(outputFileName,persistencyType);}
+
+  //method to chenge the name of the output file
   void SetOutputFileName(G4String);
 
+  //method to chenge the type of the output file
+  void SetOutputFileType(G4String);
  
+  // method used by the messenger 
+  G4bool GetDeletePersistencyFileFlag();
+
+  // methods used by RunManager and EvenManager to visualize partial results
+  void InitializePlotter();
+
+  void PlotCurrentResults();
+
 private:
   //private constructor in order to create a singleton
   XrayFluoAnalysisManager();
@@ -85,6 +102,8 @@ private:
   G4bool visPlotter;
 
   G4String persistencyType;
+
+  G4bool deletePersistencyFile;
 
   //Instance for singleton implementation this is the returned 
   static XrayFluoAnalysisManager* instance;
@@ -100,7 +119,7 @@ private:
   AIDA::ITree* tree;
   AIDA::IHistogramFactory* histogramFactory;
   AIDA::IPlotterFactory* plotterFactory;
-
+  AIDA::IPlotter* plotter;
 
   AIDA::IHistogram1D*   histo_1;
   AIDA::IHistogram1D*   histo_2;
