@@ -1,0 +1,18 @@
+ in global-V00-01-09 wrappers for RW Hash Dictionaries have been
+ removed from STLInterface. This tag can actually be used to check
+ accidental dependencies still remaining in the code.
+ Please, consider it for future tests.
+                                             Gabriele
+--------------------------
+- STLInterface: removed wrappers for Dictionaries.
+  Removed files: tvhdict.h, tphdict.h, rwstlhash.h.
+  Removed also hash_map wrappers for each system.
+- Removed temporary 'using' statements in g4std wrappers.
+- Reorganised inline function definitions in management/include:
+  added G4PhysicsVector.icc, G4LPhysicsFreeVector.icc and
+  G4PhysicsOrderedFreeVector.icc.
+- Fixed bug in G4PhysicsVector. Initialised data members in default
+  constructor.
+- Removed 'RD44' from header description in each file.
+- Modifications for Software Reference Manual for existing class
+  descriptions.
