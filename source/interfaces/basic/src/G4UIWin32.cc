@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.cc,v 1.3 1999-04-16 10:06:00 barrand Exp $
+// $Id: G4UIWin32.cc,v 1.4 1999-05-06 15:21:00 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // G.Barrand
@@ -36,6 +36,7 @@ class TextBuffer {
 public:
   TextBuffer():linei(0),linen(TEXT_MAX_LINES),endOfPage(0),heightOfPage(12) {
     lines = new G4String[linen];
+    for(int count=0;count<256;count++) spaces[count] = ' ';
   }
   ~TextBuffer() {
     delete [] lines;
@@ -102,6 +103,7 @@ public:
       int rowi = endOfPage - row;
       short y = a_rect->bottom - charHeight * (row + 1);
       if((rowi>=0)&&(rowi<linei)) {
+	TextOut (a_hdc,0,y,(char*)spaces,256); //Clear text background first.
 	const char* string = lines[rowi].data();
 	if(string!=NULL) {
 	  TextOut (a_hdc,0,y,(char*)string,strlen((char*)string));
@@ -114,6 +116,7 @@ private:
   int linen;
   int linei;
   int endOfPage,heightOfPage;
+  char spaces[256];
 };
 
 static char mainClassName[] = "G4UIWin32";
@@ -123,7 +126,7 @@ static G4bool exitPause = true;
 static G4bool exitHelp = true;
 static G4UIsession* tmpSession = NULL;
 
-static FARPROC oldEditWindowProc;
+static WNDPROC oldEditWindowProc;
 static G4bool ConvertStringToInt(const char*,int&);
 
 static int actionIdentifier = 0;
@@ -133,8 +136,8 @@ static unsigned CommandsHashFun(const int& identifier) {
 }
 /***************************************************************************/
 G4UIWin32::G4UIWin32 (
- HANDLE a_hInstance
-,HANDLE a_hPrevInstance
+ HINSTANCE a_hInstance
+,HINSTANCE a_hPrevInstance
 ,LPSTR  a_lpszCmdLine
 ,int    a_nCmdShow
 )
@@ -148,6 +151,7 @@ G4UIWin32::G4UIWin32 (
 ,textRows(12)
 ,fHelp(false)
 ,fHelpChoice(0)
+,fHistoryPos(-1)
 /***************************************************************************/
 /*!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!*/
 {
@@ -167,7 +171,7 @@ G4UIWin32::G4UIWin32 (
       wc.hInstance     = a_hInstance;
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(BLACK_BRUSH);
+      wc.hbrBackground = GetStockBrush(BLACK_BRUSH);
       wc.lpszMenuName  = mainClassName;
       wc.lpszClassName = mainClassName;
       ::RegisterClass  (&wc);
@@ -179,7 +183,7 @@ G4UIWin32::G4UIWin32 (
       wc.hInstance     = a_hInstance;
       wc.hIcon         = LoadIcon(NULL,IDI_APPLICATION);
       wc.hCursor       = LoadCursor(NULL,IDC_ARROW);
-      wc.hbrBackground = GetStockObject(WHITE_BRUSH);
+      wc.hbrBackground = GetStockBrush(WHITE_BRUSH);
       wc.lpszMenuName  = textClassName;
       wc.lpszClassName = textClassName;
       ::RegisterClass  (&wc);
@@ -222,7 +226,11 @@ G4UIWin32::~G4UIWin32 (
     UI->SetCoutDestination(NULL);
   }
   delete textBuffer;
-  ::DestroyWindow(mainWindow);
+  if(textWindow!=NULL) ::SetWindowLong(textWindow,GWL_USERDATA,LONG(NULL));
+  if(mainWindow!=NULL) {
+    ::SetWindowLong(mainWindow,GWL_USERDATA,LONG(NULL));
+    ::DestroyWindow(mainWindow);
+  }
 }
 /***************************************************************************/
 G4UIsession* G4UIWin32::SessionStart (
@@ -413,36 +421,36 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     ReleaseDC (a_window,hdc);
 
     G4UIWin32* This = (G4UIWin32*)tmpSession;
-
-    This->textWindow = CreateWindow (textClassName,NULL,
-			 WS_CHILD | WS_VISIBLE | WS_VSCROLL,
-			 0,0,
-			 This->textCols * charWidth,
-			 This->textRows * charHeight,
-			 a_window,NULL,
-			 GetWindowInstance(a_window),
-			 NULL);
-    ::SetWindowLong (This->textWindow,GWL_USERDATA,LONG(This));
-
-    This->editWindow = CreateWindow ("edit",NULL,
-			 WS_CHILD | WS_VISIBLE | WS_BORDER,
-			 0,This->textRows  * charHeight,
-			 This->textCols  * charWidth,charHeight,
-			 a_window,(HMENU)1,
-			 GetWindowInstance(a_window),
-			 NULL);
-    oldEditWindowProc = (FARPROC)GetWindowLong(This->editWindow,GWL_WNDPROC);
-    SetWindowLong (This->editWindow,GWL_WNDPROC,(LONG)EditWindowProc);
-
-    MoveWindow (a_window,
-		rect.left,rect.top,
-		2 * GetSystemMetrics(SM_CXFRAME) + 
-		This->textCols  * charWidth,
-		GetSystemMetrics(SM_CYCAPTION) + 
-		2 * GetSystemMetrics(SM_CYFRAME) + 
-		This->textRows * charHeight + charHeight,
-		TRUE);
-
+    if(This!=NULL) {
+      This->textWindow = CreateWindow (textClassName,NULL,
+				       WS_CHILD | WS_VISIBLE | WS_VSCROLL,
+				       0,0,
+				       This->textCols * charWidth,
+				       This->textRows * charHeight,
+				       a_window,NULL,
+				       GetWindowInstance(a_window),
+				       NULL);
+      ::SetWindowLong (This->textWindow,GWL_USERDATA,LONG(This));
+      
+      This->editWindow = CreateWindow ("edit",NULL,
+				       WS_CHILD | WS_VISIBLE | WS_BORDER,
+				       0,This->textRows  * charHeight,
+				       This->textCols  * charWidth,charHeight,
+				       a_window,(HMENU)1,
+				       GetWindowInstance(a_window),
+				       NULL);
+      oldEditWindowProc = (WNDPROC)GetWindowLong(This->editWindow,GWL_WNDPROC);
+      SetWindowLong (This->editWindow,GWL_WNDPROC,(LONG)EditWindowProc);
+      
+      MoveWindow (a_window,
+		  rect.left,rect.top,
+		  2 * GetSystemMetrics(SM_CXFRAME) + 
+		  This->textCols  * charWidth,
+		  GetSystemMetrics(SM_CYCAPTION) + 
+		  2 * GetSystemMetrics(SM_CYFRAME) + 
+		  This->textRows * charHeight + charHeight,
+		  TRUE);
+    }
     }return 0;
   case WM_SIZE:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
@@ -464,7 +472,7 @@ LRESULT CALLBACK G4UIWin32::MainWindowProc (
     }return 0;
   case WM_SETFOCUS:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
-    SetFocus (This->editWindow);
+    if(This!=NULL) SetFocus (This->editWindow);
     }return 0;
   case WM_COMMAND:{
     G4UIWin32* This = (G4UIWin32*)::GetWindowLong(a_window,GWL_USERDATA);
@@ -558,31 +566,78 @@ LRESULT CALLBACK G4UIWin32::EditWindowProc (
       char buffer[128];
       GetWindowText (a_window,buffer,128);
       G4String command (buffer);
-      SetWindowText (a_window,"");
+      //SetWindowText (a_window,"");
+      Edit_SetText(a_window,"");
+      Edit_SetSel(a_window,0,0);
 
-      if(This->fHelp==true) {
-	exitHelp = true;
-	This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
-      } else {
-	This->ApplyShellCommand (command,exitSession,exitPause);
+      if(This!=NULL) {
+	if(This->fHelp==true) {
+	  exitHelp = true;
+	  This->fHelp = ConvertStringToInt(command.data(),This->fHelpChoice);
+	} else {
+	  This->fHistory.insert(command);
+	  This->fHistoryPos = -1;
+	  This->ApplyShellCommand (command,exitSession,exitPause);
+	}
       }
 
-      }break;
+    }break;
     case VK_TAB:{
       G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
 			 GetParent(a_window),GWL_USERDATA);
-      if(This->fHelp==true) break;
+      if( (This!=NULL) && (This->fHelp==true) ) break;
       char buffer[128];
       Edit_GetText(a_window,buffer,128);
 
       G4String command(buffer);
 
-      const char* d = This->Complete(command).data();
-      Edit_SetText(a_window,d);
-      int pos = strlen(d);
-      Edit_SetSel(a_window,pos,pos);
-
-      }break;
+      if(This!=NULL) {
+	G4String cmd = This->Complete(command);
+	const char* d = cmd.data();
+	int l = strlen(d);
+	Edit_SetText(a_window,d);
+	Edit_SetSel(a_window,l,l);
+      }
+      
+    }break;
+    case VK_UP:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if(This!=NULL) {
+	int pos = This->fHistoryPos== -1 ? 
+	  This->fHistory.entries()-1 : This->fHistoryPos-1;
+	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	  G4String command = This->fHistory[pos];
+	  const char* d = command.data();
+	  int l = strlen(d);
+	  Edit_SetText(a_window,d);
+	  Edit_SetSel(a_window,l,l);
+	  //
+	  This->fHistoryPos = pos;
+	}
+      }
+    }return 0; //Do not jump into oldEditProc.
+    case VK_DOWN:{
+      G4UIWin32* This = (G4UIWin32*)::GetWindowLong(
+			 GetParent(a_window),GWL_USERDATA);
+      if(This!=NULL) {
+	int pos = This->fHistoryPos + 1;
+	if((pos>=0)&&(pos<This->fHistory.entries())) {
+	  G4String command = This->fHistory[pos];
+	  const char* d = command.data();
+	  int l = strlen(d);
+	  Edit_SetText(a_window,d);
+	  Edit_SetSel(a_window,l,l);
+	  //
+	  This->fHistoryPos = pos;
+	} else if(pos>=This->fHistory.entries()) {
+	  Edit_SetText(a_window,"");
+	  Edit_SetSel(a_window,0,0);
+	  //
+	  This->fHistoryPos = -1;
+	}
+      }
+    }return 0; //Do not jump into oldEditProc.
     }
   }
   return CallWindowProc(oldEditWindowProc,

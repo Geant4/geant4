@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: G4UIWin32.hh,v 1.2 1999-04-13 01:26:24 yhajime Exp $
+// $Id: G4UIWin32.hh,v 1.3 1999-05-06 15:20:37 barrand Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 #ifndef G4UIWin32_h
@@ -54,6 +54,8 @@ private:
   static LRESULT CALLBACK EditWindowProc(HWND,UINT,WPARAM,LPARAM);
   G4bool fHelp;
   G4int fHelpChoice;
+  RWTValOrderedVector<G4String> fHistory;
+  int fHistoryPos;
 };
 
 #endif
