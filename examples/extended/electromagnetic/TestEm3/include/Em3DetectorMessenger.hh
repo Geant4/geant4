@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3DetectorMessenger.hh,v 1.2 1999-12-15 14:49:01 gunter Exp $
+// $Id: Em3DetectorMessenger.hh,v 1.3 2001-04-13 13:17:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -46,6 +46,7 @@ class Em3DetectorMessenger: public G4UImessenger
     G4UIcmdWithAnInteger*      NbAbsorCmd;
     G4UIcommand*               AbsorCmd;        
     G4UIcmdWithADoubleAndUnit* MagFieldCmd;
+    G4UIcmdWithADoubleAndUnit* MaxStepCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 };
 

@@ -1,4 +1,4 @@
-$Id: README,v 1.4 2001-03-30 12:39:56 gcosmo Exp $
+$Id: README,v 1.5 2001-04-13 13:17:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -93,6 +93,10 @@ $Id: README,v 1.4 2001-03-30 12:39:56 gcosmo Exp $
  
  	As a homework try to visualize a gamma conversion alone, 
  	or the effect of the multiple scattering.
+	
+	Notice that one can control the maximum step size at tracking time,
+	via G4UserLimit class and the command /tracking/stepMax  
+	(see DetectorConstruction and DetectorMessenger classes)
  	
  6- HOW TO START ?
  

@@ -1,4 +1,4 @@
-$Id: History,v 1.7 2001-03-26 16:01:57 maire Exp $
+$Id: History,v 1.8 2001-04-13 13:17:29 maire Exp $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,33 +14,48 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-04-01  mma (testem3-V03-01-00)
+- In PrimaryGeneratorAction, possibility to randomize the beam spot
+- command /gun/rndm in PrimaryGeneratorMessenger
+- similar functionality in geant3: gukine.F
      
+12-04-01  mma
+- In DetectorConstruction, possibility to limit the step size, via
+  a G4UserLimit object. 
+- command /tracking/stepMax in DetectorMessenger
+- data card STEPMX in geant3
+       
+06-04-01  mma
+- in RunAction: method PrintDedxTables()
+- in DetectorConstruction: Iron density corrected (was 7.7 g/cm3)
+- in geant3: overwrite the computed radlength of scintillator 
+	        
 26-03-01  mma (testem3-V03-00-04)
-          - change in histogramming : 1d histo of Edep/Ebeam
-	  in each absorber instead of ntuple, both in G4 and G3.
-	  - interactive command /run/setHisto (in G4) and ffread
-	  data card *histo (in G3) to control the binning of the
-	  histos.
-	  - in G3, new data card cutpr to set bcute, dcute, ppcutm for
-	  each tracking medium
-	  - in gnumakefile : the cpp flag g4nohist=true by default.
-	    --> no histograms in G4 by default. 
+- change in histogramming : 1d histo of Edep/Ebeam
+  in each absorber instead of ntuple, both in G4 and G3.
+- interactive command /run/setHisto (in G4) and ffread
+  data card *histo (in G3) to control the binning of the histos.
+- in G3, new data card CUTPR to set bcute, dcute, ppcutm for each tracking 
+  medium
+- in gnumakefile : the cpp flag g4nohist=true by default.
+  --> no histograms in G4 by default. 
 	  
 	       
 21-02-01  mma (testem3-V03-00-03)
-          - hbook histograms restored
+- hbook histograms restored
 	       
 20-02-01  mma (testem3-V03-00-02)
-          -stepping verbose adapted for STL
-	  -BirkAttenuation function
-	  -save rndm at begin of event
+- stepping verbose adapted for STL
+- BirkAttenuation function
+- save rndm at begin of event
      
 07-12-00  mma (testem3-V02-00-03 & testem-noHist)
-          remove hbook histograms: GNUmakefile,runAction,eventAction
+- remove hbook histograms: GNUmakefile,runAction,eventAction
 				   
 06-12-00  mma (testem3-V02-00-02 & testem-withHist)
-          update of init.mac for new vis commands.
-	  G4UItcsh in the main()
+- update of init.mac for new vis commands.
+- G4UItcsh in the main()
 	  
 25th November 2000 Steve O'Neale (tagset210)
 - Update test outputs for min.delta energy cut and table printout

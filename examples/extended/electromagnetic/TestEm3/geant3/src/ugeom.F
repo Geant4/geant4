@@ -4,6 +4,7 @@
 * *** Define user geometry set up
 *
 #include "calor.inc"
+#include "geant321/gcbank.inc"
 *
       DIMENSION PAR(3)
 
@@ -56,7 +57,12 @@
       CALL GSMATE(11,'Tungsten ',183.85, 74., 19.30  , 0.35,  9.6, 0,0)
       CALL GSMIXT(12,'NemaG10'  , AG10 ,ZG10, 1.7    ,-4   , WG10)
       CALL GSMATE(13,'Copper   ', 63.55, 29., 8.96   , 1.43, 15.0, 0,0)
-      CALL GSMIXT(14,'Scintilla', Asci ,Zsci, 1.032  ,-2   , Wsci)      
+      CALL GSMIXT(14,'Scintilla', Asci ,Zsci, 1.032  ,-2   , Wsci)
+      CALL GSMATE(15,'Gold     ',196.97, 79., 19.32  , 0.33,  9.6, 0,0)      
+* 
+* *** overwrite the computed radlength of some mixture
+      JMA = LQ(JMATE-14)
+      Q(JMA+9) = 42.549            
 *                                               
 *                                                                               
 * *** Defines USER tracking media parameters
@@ -64,7 +70,8 @@
       IF (Field.GT.0.) IFIELD = 3
       FIELDM = 10*Field
       TMAXFD = 10.0                                                             
-      STEMAX = 1000.                                                            
+      STEMAX = 1000.
+      IF (stepmax.gt.0.) STEMAX = stepmax                                                            
       DEEMAX = 0.20                                                            
       EPSIL  = 0.001                                                           
       STMIN  = 0.010                                                           

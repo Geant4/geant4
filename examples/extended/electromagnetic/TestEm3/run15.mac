@@ -1,4 +1,4 @@
-# $Id: run15.mac,v 1.1 2001-03-26 16:01:57 maire Exp $
+# $Id: run15.mac,v 1.2 2001-04-13 13:17:30 maire Exp $
 #
 # Macro file for "TestEm3.cc" 
 # (can be run in batch, without graphic)
@@ -18,7 +18,7 @@
 /vis/camera/zoom 1.2
 /vis/drawVolume
 #
-/run/particle/setCut 1 mm
+/run/particle/setCut 1 cm
 /run/initialize
 #
 /run/verbose 2

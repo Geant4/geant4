@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PrimaryGeneratorAction.hh,v 1.3 2001-03-26 16:01:58 maire Exp $
+// $Id: Em3PrimaryGeneratorAction.hh,v 1.4 2001-04-13 13:17:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -33,13 +33,16 @@ class Em3PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
    ~Em3PrimaryGeneratorAction();
 
   public:
-    void SetDefaultKinematic(); 
+    void SetDefaultKinematic();
+    void SetRndmBeam(G4double val) { rndmBeam = val;} 
     void GeneratePrimaries(G4Event*);
     G4ParticleGun* GetParticleGun() {return particleGun;};
     
   private:
     G4ParticleGun*              particleGun;
-    Em3DetectorConstruction*    Em3Detector; 
+    Em3DetectorConstruction*    Em3Detector;
+    
+    G4double rndmBeam;   //lateral random beam extension in fraction sizeYZ/2   
     
     Em3PrimaryGeneratorMessenger* gunMessenger; 
 };

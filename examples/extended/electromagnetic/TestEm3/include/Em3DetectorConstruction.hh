@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3DetectorConstruction.hh,v 1.2 1999-12-15 14:49:01 gunter Exp $
+// $Id: Em3DetectorConstruction.hh,v 1.3 2001-04-13 13:17:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -24,6 +24,8 @@ class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
 class G4UniformMagField;
+class G4UserLimits;
+
 class Em3DetectorMessenger;
 class Em3CalorimeterSD;
 
@@ -47,7 +49,8 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      void SetCalorSizeYZ(G4double);          
      void SetNbOfLayers (G4int);   
       
-     void SetMagField(G4double);
+     void SetMagField   (G4double);
+     void SetMaxStepSize(G4double);
      
      G4VPhysicalVolume* Construct();
 
@@ -105,6 +108,7 @@ class Em3DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiAbsor[MaxAbsor]; //pointer to the physical Absorbers
      
      G4UniformMagField* magField;         //pointer to the magnetic field
+     G4UserLimits*      userLimits;       //pointer to the userLimits class     
      
      Em3DetectorMessenger* detectorMessenger;  //pointer to the Messenger
      Em3CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector

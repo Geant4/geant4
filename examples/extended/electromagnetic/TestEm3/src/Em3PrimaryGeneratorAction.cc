@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PrimaryGeneratorAction.cc,v 1.2 1999-12-15 14:49:04 gunter Exp $
+// $Id: Em3PrimaryGeneratorAction.cc,v 1.3 2001-04-13 13:17:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -22,6 +22,7 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -32,6 +33,7 @@ Em3PrimaryGeneratorAction::Em3PrimaryGeneratorAction(
   G4int n_particle = 1;
   particleGun  = new G4ParticleGun(n_particle);
   SetDefaultKinematic();
+  rndmBeam = 0.;
   
   //create a messenger for this class
   gunMessenger = new Em3PrimaryGeneratorMessenger(this);
@@ -65,8 +67,20 @@ void Em3PrimaryGeneratorAction::SetDefaultKinematic()
 void Em3PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begining of event
-  // 
-  particleGun->GeneratePrimaryVertex(anEvent);
+  //
+  //randomize the beam, if requested.
+  if (rndmBeam > 0.) 
+    {
+      G4ThreeVector oldPosition = particleGun->GetParticlePosition();    
+      G4double rbeam = 0.5*(Em3Detector->GetCalorSizeYZ())*rndmBeam;
+      G4double x0 = oldPosition.x();
+      G4double y0 = oldPosition.y() + (2*G4UniformRand()-1.)*rbeam;
+      G4double z0 = oldPosition.z() + (2*G4UniformRand()-1.)*rbeam;
+      particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+      particleGun->GeneratePrimaryVertex(anEvent);
+      particleGun->SetParticlePosition(oldPosition);      
+    }
+  else  particleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.cc,v 1.8 2001-03-26 16:01:58 maire Exp $
+// $Id: Em3RunAction.cc,v 1.9 2001-04-13 13:17:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -86,7 +86,11 @@ void Em3RunAction::BeginOfRunAction(const G4Run* aRun)
     
   //histograms
   //
-  bookHisto();     
+  bookHisto();
+  
+  //example of print dEdx tables
+  //
+  ////PrintDedxTables();     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -176,6 +180,41 @@ void Em3RunAction::EndOfRunAction(const G4Run* aRun)
     { HepRandom::showEngineStatus();
       HepRandom::saveEngineStatus("endOfRun.rndm");
     }                         
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4ParticleTable.hh"
+#include "G4ParticleDefinition.hh"
+#include "G4EnergyLossTables.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Em3RunAction::PrintDedxTables()
+{
+  G4int nt=10;
+  G4double tk[] = {10*keV,100*keV,1*MeV,10*MeV,100*MeV,1*GeV,10*GeV,
+                   20*GeV,100*GeV,200*GeV};
+		    
+  G4ParticleDefinition* 
+  part = G4ParticleTable::GetParticleTable()->FindParticle("mu+");
+  
+  G4int  oldprec = G4cout.precision(6);  
+  
+  for (G4int iab=0;iab < Detector->GetNbOfAbsor(); iab++)
+     {
+      G4Material* mat = Detector->GetAbsorMaterial(iab);
+      G4cout << "\n   dE/dx for " << part->GetParticleName() << " in "
+                                  << mat ->GetName() << "\n" ;
+      G4cout << "  kinetic energy       dE/dx (MeV/cm)" << G4endl;
+      for (G4int it=0;it<nt;it++)
+         {
+           G4double dedx = G4EnergyLossTables::GetDEDX(part,tk[it],mat);
+           G4cout << G4std::setw(12) << G4BestUnit(tk[it],"Energy")
+                  << G4std::setw(20) << dedx/(MeV/cm) << G4endl;
+         }
+     }
+     G4cout.precision(oldprec);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

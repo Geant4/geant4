@@ -3,7 +3,9 @@
 *  
 *    Generates Kinematics for primary track
 *
-*    Data card Kine : Itype  Ekine x0  y0  z0  ux  uy  uz
+*    Data card Kine : Itype  Ekine x0  y0  z0  ux  uy  uz rbeam
+*
+*    rbeam : size of the random beam extension in fraction of 0.5*calorYZ
 *
 #include "geant321/gcbank.inc"
 #include "geant321/gcflag.inc"
@@ -11,6 +13,7 @@
 #include "calor.inc"                                                          
 *                                                                               
       DIMENSION VERTEX(3),PLAB(3)
+      dimension rndm(2)
 *
 * *** set/reset default kinematic
       IF ((IKINE.LT.0).or.(abs(PKINE(2)).GT.0.5*worldX)) THEN
@@ -23,9 +26,13 @@
           PKINE(7) = 0.
       ENDIF
 *
+*     random in YZ ?
+      rbeam = pkine(8)*0.5*calorYZ
+      call GRNDM (rndm,2)
+*        
       VERTEX(1) = PKINE(2)
-      VERTEX(2) = PKINE(3)
-      VERTEX(3) = PKINE(4)
+      VERTEX(2) = PKINE(3) + (2*rndm(1)-1.)*rbeam
+      VERTEX(3) = PKINE(4) + (2*rndm(2)-1.)*rbeam
 *
       CALL GSVERT(VERTEX,0,0,0,0,NVERT)
 *

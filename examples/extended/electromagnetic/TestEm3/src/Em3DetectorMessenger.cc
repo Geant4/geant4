@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3DetectorMessenger.cc,v 1.2 1999-12-15 14:49:03 gunter Exp $
+// $Id: Em3DetectorMessenger.cc,v 1.3 2001-04-13 13:17:32 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -83,13 +83,20 @@ Em3DetectorMessenger::Em3DetectorMessenger(Em3DetectorConstruction * Em3Det)
   MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
   MagFieldCmd->SetParameterName("Bz",false);
   MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(Idle); 
+  MagFieldCmd->AvailableForStates(Idle);
      
   UpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
   UpdateCmd->SetGuidance("Update calorimeter geometry.");
   UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   UpdateCmd->SetGuidance("if you changed geometrical value(s).");
   UpdateCmd->AvailableForStates(Idle);
+      
+  MaxStepCmd = new G4UIcmdWithADoubleAndUnit("/tracking/stepMax",this);
+  MaxStepCmd->SetGuidance("Set max allowed step size");
+  MaxStepCmd->SetParameterName("Size",false);
+  MaxStepCmd->SetRange("Size>0.");
+  MaxStepCmd->SetUnitCategory("Length");
+  MaxStepCmd->AvailableForStates(Idle); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -102,6 +109,7 @@ Em3DetectorMessenger::~Em3DetectorMessenger()
   delete AbsorCmd;  
   delete MagFieldCmd;
   delete UpdateCmd;
+  delete MaxStepCmd;
   delete Em3detDir;
 }
 
@@ -136,6 +144,9 @@ void Em3DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
            
   if( command == UpdateCmd )
    { Em3Detector->UpdateGeometry();}
+   
+  if( command == MaxStepCmd )
+   { Em3Detector->SetMaxStepSize(MaxStepCmd->GetNewDoubleValue(newValue));}   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

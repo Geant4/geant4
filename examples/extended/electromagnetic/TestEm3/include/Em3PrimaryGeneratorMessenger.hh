@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3PrimaryGeneratorMessenger.hh,v 1.2 1999-12-15 14:49:02 gunter Exp $
+// $Id: Em3PrimaryGeneratorMessenger.hh,v 1.3 2001-04-13 13:17:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -21,6 +21,7 @@
 
 class Em3PrimaryGeneratorAction;
 class G4UIcmdWithoutParameter;
+class G4UIcmdWithADouble;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -35,6 +36,7 @@ class Em3PrimaryGeneratorMessenger: public G4UImessenger
   private:
     Em3PrimaryGeneratorAction* Em3Action; 
     G4UIcmdWithoutParameter*   DefaultCmd;
+    G4UIcmdWithADouble*        RndmCmd;
 };
 
 #endif

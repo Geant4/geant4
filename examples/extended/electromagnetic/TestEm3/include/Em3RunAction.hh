@@ -5,7 +5,7 @@
 // based on the Program) you indicate your acceptance of this statement,
 // and all its terms.
 //
-// $Id: Em3RunAction.hh,v 1.6 2001-03-26 16:01:58 maire Exp $
+// $Id: Em3RunAction.hh,v 1.7 2001-04-13 13:17:31 maire Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -51,6 +51,8 @@ class Em3RunAction : public G4UserRunAction
 #endif
 
     void SetHisto (G4int id, G4int nbins, G4double vmin, G4double vmax);
+    
+    void PrintDedxTables();
             
   private:
     void bookHisto();
