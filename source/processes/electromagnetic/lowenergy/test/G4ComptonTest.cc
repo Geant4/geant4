@@ -2,21 +2,21 @@
 // from: geant4/source/processes/electromagnetic/lowenergy/test/
 //
 // execute the following lines _before_ gmake, 
-// select the Anaphe version you want to use (3.6.4-sec for RH61 "old" compiler,
-// 3.6.4 for RH61, new compiler (gcc-2.95.2)):
+// select the Anaphe version you want to use (4.0.1-sec for RH61 "old" compiler,
+// 4.0.1 for RH61, new compiler (gcc-2.95.2)):
 //
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.4-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4-sec/install/sharedstart.sh
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.sh
 //
 // (for the new compiler, use (sh derivates):
-// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/3.6.4/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4/install/sharedstart.sh
+// export PATH=$PATH:/afs/cern.ch/sw/lhcxx/specific/redhat61/gcc-2.95.2/4.0.1/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1/install/sharedstart.sh
 // )
 //
-// or, for [t]csh fans:
+// or, for [t]csh fans (still "old" compiler):
 //
-// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/3.6.4-sec/bin
-// source /afs/cern.ch/sw/lhcxx/share/LHCXX/3.6.4-sec/install/sharedstart.csh
+// setenv PATH ${PATH}:/afs/cern.ch/sw/lhcxx/specific/redhat61/egcs_1.1.2/4.0.1-sec/bin
+// source /afs/cern.ch/sw/lhcxx/share/LHCXX/4.0.1-sec/install/sharedstart.csh
 //
 // [gmake and run your simulation]
 //
@@ -47,7 +47,7 @@
 // * statement, and all its terms.                                    *
 // ********************************************************************
 //
-// $Id: G4ComptonTest.cc,v 1.15 2001-11-30 01:26:19 pia Exp $
+// $Id: G4ComptonTest.cc,v 1.16 2002-05-27 17:10:13 pia Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // -------------------------------------------------------------------
@@ -98,20 +98,20 @@
 #include "G4UnitsTable.hh"
 
 // New Histogramming (from AIDA and Anaphe):
-#include "Interfaces/IHistoManager.h"
-#include "Interfaces/IHistogram1D.h"
-#include "Interfaces/IHistogram2D.h"
+#include <memory> // for the auto_ptr(T>
 
-// For NtupleTag from Anaphe
-#include "NtupleTag/LizardNTupleFactory.h"
-using namespace Lizard;
+#include "AIDA/IAnalysisFactory.h"
 
-// Old Histogramming and Ntuple:
-//#include "CLHEP/Hist/TupleManager.h"
-//#include "CLHEP/Hist/HBookFile.h"
-//#include "CLHEP/Hist/Histogram.h"
-//#include "CLHEP/Hist/Tuple.h"
-//HepTupleManager* hbookManager;
+#include "AIDA/ITreeFactory.h"
+#include "AIDA/ITree.h"
+
+#include "AIDA/IHistogramFactory.h"
+#include "AIDA/IHistogram1D.h"
+#include "AIDA/IHistogram2D.h"
+#include "AIDA/IHistogram3D.h"
+
+#include "AIDA/ITupleFactory.h"
+#include "AIDA/ITuple.h"
 
 int main()
 {
@@ -124,126 +124,54 @@ int main()
 
   // ---- HBOOK initialization
 
-  //-old  hbookManager = new HBookFile("comptontest.hbook", 58);
+  // Creating the analysis factory
+  G4std::auto_ptr< IAnalysisFactory > af( AIDA_createAnalysisFactory() );
 
-  IHistoManager *hbookManager = createIHistoManager();
-  assert (hbookManager != 0);
-  hbookManager->selectStore("comptonhisto.hbook");
+  // Creating the tree factory
+  G4std::auto_ptr< ITreeFactory > tf( af->createTreeFactory() );
 
-  // Create a nTuple factory:
-  NTupleFactory* factory = createNTupleFactory();
+  // Creating a tree mapped to a new hbook file.
+  G4std::auto_ptr< ITree > tree( tf->create( "comptonhisto.hbook", false, false, "hbook" ) );
+  G4std::cout << "Tree store : " << tree->storeName() << G4std::endl;
+
 
   // Next create the nTuples using the factory and open it for writing
+  // Creating a tuple factory, whose tuples will be handled by the tree
+  G4std::auto_ptr< ITupleFactory > tpf( af->createTupleFactory( *tree ) );
 
   // ---- primary ntuple ------
-  //-old Tuple* ntuple1 = hbookManager->ntuple("Primary Ntuple");
+  ITuple* ntuple1 = tpf->create( "1", "Primary tuple", 
+			     "float initialEnergy, energyChange, dedx, dedxNow, pxChange, pyChange, pzChange, pChange, thetaChange, nElectrons, nPositrons, nPhotons" );
 
-
-  // ntuple-name is composition of <fileName>:<dirName>:<ntupleID>
-  NTuple* ntuple1 = factory->createC( "comptonhisto.hbook::1" );
-  // Check if successful
-  assert ( ntuple1 != 0 );
 
   // ---- secondary ntuple ------   
-  //-old HepTuple* ntuple2 = hbookManager->ntuple("Secondary Ntuple");
-  NTuple* ntuple2 = factory->createC( "comptonhisto.hbook::2" );
-  // Check if successful
-  assert ( ntuple2 != 0 );
+  ITuple* ntuple2 = tpf->create( "2", "Secondary tuple", 
+			     "float px,py,pz,p,e,eKin,theta,phi,partType" );
 
-  // We do not use the factory any longer; it can be deleted.
-  delete factory;
-  factory = 0;
 
   // ---- secondaries histos ----
+  // Creating a histogram factory, whose histograms will be handled by the tree
+  G4std::auto_ptr< IHistogramFactory > hf( af->createHistogramFactory( *tree ) );
+
+  // Creating an 1-dimensional histogram in the root directory of the tree
+
   IHistogram1D* hEKin;
-  hEKin = hbookManager->create1D("10","Kinetic Energy", 100,0.,10.);
+  hEKin = hf->create1D("10","Kinetic Energy", 100,0.,10.);
   
   IHistogram1D* hP;
-  hP = hbookManager->create1D("20","Momentum", 100,0.,10.);
+  hP = hf->create1D("20","Momentum", 100,0.,10.);
   
   IHistogram1D* hNSec;
-  hNSec = hbookManager->create1D("30","Number of secondaries", 10,0.,10.);
+  hNSec = hf->create1D("30","Number of secondaries", 10,0.,10.);
   
   IHistogram1D* hDeposit;
-  hDeposit = hbookManager->create1D("40","Local energy deposit", 100,0.,10.);
+  hDeposit = hf->create1D("40","Local energy deposit", 100,0.,10.);
  
   IHistogram1D* hTheta;
-  hTheta = hbookManager->create1D("50","Theta", 100,0.,pi);
+  hTheta = hf->create1D("50","Theta", 100,0.,pi);
 
   IHistogram1D* hPhi;
-  hPhi = hbookManager->create1D("60","Phi", 100,-pi,pi);
-
-  // ================================================================================
-  // NEW: declare and bind "Quantities" to the Ntuple:
-
-  // Declare the quantities which reflect the attributes of the nTuple(s).
-  // These quantities are used as variables of their base-types (float),
-  // the binding to their nTuple makes sure the updated values are stored.
-  // Don't forget to remove the declarations of these variables in the
-  // code below.
-
-  // First tuple ("Primary"):
-  Quantity<float> initialEnergy;
-  Quantity<float> energyChange;
-  Quantity<float> dedx;
-  Quantity<float> dedxNow;
-  Quantity<float> pxChange;
-  Quantity<float> pyChange;
-  Quantity<float> pzChange;
-  Quantity<float> pChange;
-  Quantity<float> thetaChange;
-  Quantity<float> nElectrons;
-  Quantity<float> nPositrons;
-  Quantity<float> nPhotons;
-
-  //  Add and bind the attributes to the first nTuple
-  if( !( ntuple1->addAndBind( "eprimary"  , initialEnergy) &&
-	 ntuple1->addAndBind( "energyf"   , energyChange ) &&
-	 ntuple1->addAndBind( "de"        , dedx         ) &&
-	 ntuple1->addAndBind( "dedx"      , dedxNow      ) &&
-	 ntuple1->addAndBind( "pxch"      , pxChange     ) &&
-	 ntuple1->addAndBind( "pych"      , pyChange     ) &&
-	 ntuple1->addAndBind( "pzch"      , pzChange     ) &&
-	 ntuple1->addAndBind( "pch"       , pChange      ) &&
-	 ntuple1->addAndBind( "thetach"   , thetaChange  ) &&
-	 ntuple1->addAndBind( "eminus"    , nElectrons   ) &&
-	 ntuple1->addAndBind( "eplus"     , nPositrons   ) &&
-	 ntuple1->addAndBind( "nphotons"  , nPhotons     ) ) ) 
-    {
-      G4cerr << "Error: unable to add attribute to nTuple1." << G4endl;
-      // Must be cleaned up properly before any exit.
-      delete ntuple1;
-      exit(-1);
-    }
-
-  // Second nTuple ("Secondary"):
-  Quantity<float> px;
-  Quantity<float> py;
-  Quantity<float> pz;
-  Quantity<float> p;
-  Quantity<float> e;
-  Quantity<float> eKin;
-  Quantity<float> theta;
-  Quantity<float> phi;
-  Quantity<float> partType;
-  
-  //  Add and bind the attributes to the second nTuple
-  //  if( !( ntuple2->addAndBind( "eprimary",initEnergy ) &&
-  if( !( ntuple2->addAndBind( "px"	, px        ) &&
-	 ntuple2->addAndBind( "py"	, py        ) &&
-	 ntuple2->addAndBind( "pz"	, pz        ) &&
-	 ntuple2->addAndBind( "p" 	, p         ) &&
-	 ntuple2->addAndBind( "e" 	, e         ) &&
-	 ntuple2->addAndBind( "ekin"    , eKin      ) &&
-	 ntuple2->addAndBind( "theta"   , theta     ) &&
-	 ntuple2->addAndBind( "phi"     , phi       ) &&
-	 ntuple2->addAndBind( "type"    , partType  )  ) )
-    {
-      G4cerr << "Error: unable to add attribute to nTuple2" << G4endl;
-      // Must be cleaned up properly before any exit.
-      delete ntuple2;
-      exit(-1);
-    }
+  hPhi = hf->create1D("60","Phi", 100,-pi,pi);
 
   // end NEW
   // ================================================================================
@@ -300,7 +228,7 @@ int main()
   G4double initEnergy; 
   G4cin >> initEnergy ;
   initEnergy = initEnergy * MeV;
-  initialEnergy = initEnergy;
+  G4double initialEnergy = initEnergy;
   if (initEnergy  <= 0.) G4Exception("Wrong input");
 
   // Dump the material table
@@ -424,7 +352,7 @@ int main()
 
   // Do I really need this?
   G4GRSVolume* touche = new G4GRSVolume(physicalFrame, 0, position);   
-  gTrack->SetTouchable(touche);
+  // gTrack->SetTouchable(touche);
  
  // Step 
 
@@ -474,24 +402,23 @@ int main()
 
       // Primary physical quantities 
 
-      //-ap already defined as attributes (see above)
-      /*-ap G4double */ energyChange = particleChange->GetEnergyChange();
-      /*-ap G4double */ dedx = initEnergy - energyChange ;
-      /*-ap G4double */ dedxNow = dedx / (step->GetStepLength());
+      G4double energyChange = particleChange->GetEnergyChange();
+      G4double dedx = initEnergy - energyChange ;
+      G4double dedxNow = dedx / (step->GetStepLength());
       
       G4ThreeVector eChange = particleChange->CalcMomentum(energyChange,
 							   (*particleChange->GetMomentumChange()),
 							   particleChange->GetMassChange());
 
-      /*-ap G4double */ pxChange = eChange.x();
-      /*-ap G4double */ pyChange = eChange.y();
-      /*-ap G4double */ pzChange = eChange.z();
-      /*-ap G4double */ pChange = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
+      G4double pxChange = eChange.x();
+      G4double pyChange = eChange.y();
+      G4double pzChange = eChange.z();
+      G4double pChange = sqrt(pxChange*pxChange + pyChange*pyChange + pzChange*pzChange);
 
       G4double xChange = particleChange->GetPositionChange()->x();
       G4double yChange = particleChange->GetPositionChange()->y();
       G4double zChange = particleChange->GetPositionChange()->z();
-      /*-ap G4double */ thetaChange = particleChange->GetPositionChange()->theta();
+      G4double thetaChange = particleChange->GetPositionChange()->theta();
 
       G4cout << "---- Primary after the step ---- " << G4endl;
  
@@ -512,23 +439,13 @@ int main()
       G4cout << "---- Energy loss (dE) = " << dedx/keV << " keV" << G4endl;
       
       // Primary
-
-//-ap	   ntuple1->column("eprimary", initEnergy);
-//-ap	   ntuple1->column("energyf", energyChange);
-//-ap	   ntuple1->column("de", dedx);
-//-ap	   ntuple1->column("dedx", dedxNow);
-//-ap	   ntuple1->column("pxch", pxChange);
-//-ap	   ntuple1->column("pych", pyChange);
-//-ap	   ntuple1->column("pzch", pzChange);
-//-ap	   ntuple1->column("pch", pChange);  
-//-ap	   ntuple1->column("thetach", thetaChange);  
       
       hNSec->fill(particleChange->GetNumberOfSecondaries());
       hDeposit->fill(particleChange->GetLocalEnergyDeposit());
       
-      /*-ap G4int */ nElectrons = 0;
-      /*-ap G4int */ nPositrons = 0;
-      /*-ap G4int */ nPhotons = 0;
+      G4int nElectrons = 0;
+      G4int nPositrons = 0;
+      G4int nPhotons = 0;
 
       // Secondaries
       
@@ -536,14 +453,14 @@ int main()
 	{  
 	  G4Track* finalParticle = particleChange->GetSecondary(i) ;
 	  
-	  /*-ap G4double */ e  = finalParticle->GetTotalEnergy();
-	  /*-ap G4double */ eKin = finalParticle->GetKineticEnergy();
-	  /*-ap G4double */ px = (finalParticle->GetMomentum()).x();
-	  /*-ap G4double */ py = (finalParticle->GetMomentum()).y();
-	  /*-ap G4double */ pz = (finalParticle->GetMomentum()).z();
-	  /*-ap G4double */ theta = (finalParticle->GetMomentum()).theta();
-	  /*-ap G4double */ phi = (finalParticle->GetMomentum()).phi();
-	  /*-ap G4double */ p = sqrt(px*px+py*py+pz*pz);
+	  G4double e  = finalParticle->GetTotalEnergy();
+	  G4double eKin = finalParticle->GetKineticEnergy();
+	  G4double px = (finalParticle->GetMomentum()).x();
+	  G4double py = (finalParticle->GetMomentum()).y();
+	  G4double pz = (finalParticle->GetMomentum()).z();
+	  G4double theta = (finalParticle->GetMomentum()).theta();
+	  G4double phi = (finalParticle->GetMomentum()).phi();
+	  G4double p = sqrt(px*px+py*py+pz*pz);
 
 	  if (eKin > initEnergy)
 	    {
@@ -566,7 +483,7 @@ int main()
 	  hTheta->fill(theta);
 	  hPhi->fill(phi);
 	  
-	  /*-ap G4int */ partType = 0;
+	  G4int partType = 0;
 	  if (particleName == "e-") 
 	    {
 	      partType = 1;
@@ -584,18 +501,15 @@ int main()
 	    }
 	
 	  // Fill the secondaries ntuple
-//-ap	       ntuple2->column("eprimary",initEnergy);
-//-ap	       ntuple2->column("px", px);
-//-ap	       ntuple2->column("py", py);
-//-ap	       ntuple2->column("pz", pz);
-//-ap	       ntuple2->column("p", p);
-//-ap	       ntuple2->column("e", e);
-//-ap	       ntuple2->column("ekin", eKin);
-//-ap	       ntuple2->column("theta", theta);
-//-ap	       ntuple2->column("phi", phi);
-//-ap	       ntuple2->column("type", partType);
-//-ap	       
-//-ap	       ntuple2->dumpData(); 
+          ntuple2->fill( ntuple2->findColumn( "px      " ), px       );
+          ntuple2->fill( ntuple2->findColumn( "py      " ), py       );
+          ntuple2->fill( ntuple2->findColumn( "pz      " ), pz       );
+          ntuple2->fill( ntuple2->findColumn( "p       " ), p        );
+          ntuple2->fill( ntuple2->findColumn( "e       " ), e        );
+          ntuple2->fill( ntuple2->findColumn( "eKin    " ), eKin     );
+          ntuple2->fill( ntuple2->findColumn( "theta   " ), theta    );
+          ntuple2->fill( ntuple2->findColumn( "phi     " ), phi      );
+          ntuple2->fill( ntuple2->findColumn( "partType" ), partType );
 	  
           // NEW: Values of attributes are prepared; store them to the nTuple:
           ntuple2->addRow(); // check for returning true ...
@@ -603,10 +517,19 @@ int main()
 	  delete particleChange->GetSecondary(i);
 	}
 
-//-ap	   ntuple1->column("nelectrons",nElectrons);
-//-ap	   ntuple1->column("npositrons",nPositrons);
-//-ap	   ntuple1->column("nphotons",nPhotons);
-//-ap	   ntuple1->dumpData(); 
+      // Fill the primaries ntuple
+      ntuple1->fill( ntuple1->findColumn( "initialEnergy" ), initialEnergy );
+      ntuple1->fill( ntuple1->findColumn( "energyChange " ), energyChange  );
+      ntuple1->fill( ntuple1->findColumn( "dedx         " ), dedx          );
+      ntuple1->fill( ntuple1->findColumn( "dedxNow      " ), dedxNow       );
+      ntuple1->fill( ntuple1->findColumn( "pxChange     " ), pxChange      );
+      ntuple1->fill( ntuple1->findColumn( "pyChange     " ), pyChange      );
+      ntuple1->fill( ntuple1->findColumn( "pzChange     " ), pzChange      );
+      ntuple1->fill( ntuple1->findColumn( "pChange      " ), pChange       );
+      ntuple1->fill( ntuple1->findColumn( "thetaChange  " ), thetaChange   );
+      ntuple1->fill( ntuple1->findColumn( "nElectrons   " ), nElectrons    );
+      ntuple1->fill( ntuple1->findColumn( "nPositrons   " ), nPositrons    );
+      ntuple1->fill( ntuple1->findColumn( "nPhotons     " ), nPhotons      );
 
       //NEW: Values of attributes are prepared; store them to the nTuple:
       ntuple1->addRow();
@@ -618,22 +541,12 @@ int main()
   G4cout  << "-----------------------------------------------------"  
 	  <<  G4endl;
 
-  //-old  hbookManager->write();
 
-  // Tell the manager which histos to store 
-  hbookManager->store("10");
-  hbookManager->store("20");
-  hbookManager->store("30");
-  hbookManager->store("40");
-  hbookManager->store("50");
-  hbookManager->store("60");
-
-  // the destructor closes the corresponding file
-  delete ntuple1;
-  delete ntuple2;
-
-  // the destructor closes the file
-  delete hbookManager;
+  // Committing the transaction with the tree
+  G4std::cout << "Committing..." << G4std::endl;
+  tree->commit();
+  G4std::cout << "Closing the tree..." << G4std::endl;
+  tree->close();
 
   delete touche;
   delete step;

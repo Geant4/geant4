@@ -1,59 +1,66 @@
+global tree, hf
 
-# tell HistoManger where to find the histograms:
-hm.selectStore("comptonhisto.hbook")
+tree = tf.create("comptonhisto.hbook",1,1,"hbook")
+tree.thisown=1
+hf = af.createHistogramFactory(tree)
 
 # ... and load them into memory:
-hEKin    = hm.load1D(10)
-hP       = hm.load1D(20)
-hNSec    = hm.load1D(30)
-hDeposit = hm.load1D(40)
-hTheta   = hm.load1D(50)
-hPhi     = hm.load1D(60)
+hEKin    = tree.findH1D("10")
+hP       = tree.findH1D("20")
+hNSec    = tree.findH1D("30")
+hDeposit = tree.findH1D("40")
+hTheta   = tree.findH1D("50")
+hPhi     = tree.findH1D("60")
 
 # set plotter to 3*2 zones
-pl.zone(3,2)
+pl.createRegions(3,2)
+
 # ... and plot the histograms
-hplot(10)
-hplot(20)
-hplot(30)
-hplot(40)
-hplot(50)
-hplot(60)
+pl.plot(hEKin   ) ; pl.show() ; pl.next()
+pl.plot(hP      ) ; pl.show() ; pl.next()
+pl.plot(hNSec   ) ; pl.show() ; pl.next()
+pl.plot(hDeposit) ; pl.show() ; pl.next()
+pl.plot(hTheta  ) ; pl.show() ; pl.next()
+pl.plot(hPhi    ) ; pl.show() ; pl.next()
 
-# --------------------------------------------------------------------------------
-# define a helper function for simple ntuple plotting
-def nplot(_nt,_var,_cut="", _min, _max, _first=0, _num=1000000000) :
-    _histNtPlot = hm.create1D(1000000,_var,100, _min, _max)
-    _nt.project1D(_histNtPlot, _var, _cut, _first, _num)
-    vTemp=vm.from1D(_histNtPlot)
-    pl.plot(vTemp)
-    del vTemp
-    return 
-# --------------------------------------------------------------------------------
+wait()
 
-# set plotter to 2*1 zone (x*y)
-pl.zone(2,1)
+# reset number of zones
+pl.createRegions(2,1)
+
+# helper function
+def nplot(tup, col, cut, xmin, xmax, nbins=100):
+  global hf
+  h1 = hf.create1D("1000000","temp hist", nbins, xmin, xmax)
+  colId = tup.findColumn(col)
+  bNextRow=tup.start()                                         # Looping over the tuple entries
+  while bNextRow:
+    h1.fill(tup.getFloat(colId))
+    bNextRow=tup.next()                                        # Retrieving the subsequent row
+  pl.plot(h1) ; pl.show() ; pl.next()
+  tree.rm("1000000")
+  return
 
 # get the primary ntuple from the NtupleManager
-nt1 = ntm.findNtuple("comptonhisto1.hbook::1" )
-
-# see which attributes there are:
-nt1.listAttributes()
+nt1 = tree.findTuple("1" )
 
 # plot a few quantities using the shortcut
-nplot(nt1,"energyf","",0,20)
-nplot(nt1,"dedx","",0.,100)
+nplot(nt1,"initen" ,"",0,20)
+nplot(nt1,"dedx"   ,"",0.,100)
 
 # prompt user for <return>
 wait()
 
 # get the secondaries ntuple and plot a few attributes from it
-nt2 = ntm.findNtuple("comptonhisto2.hbook::2" )
-nplot(nt2, "type", "", 0., 42)
-nplot(nt2, "e", "", 0., 100.)
+nt2 = tree.findTuple("2" )
+nplot(nt2, "parttyp", "", 0., 42)
+nplot(nt2, "e"      , "", 0., 100.)
 
-pl.psPrint("secondaries.ps")
+pl.write("secondaries.ps", "ps")
 
+tree.commit()
+tree.close()
+del tree
 
 
 
