@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4VDecayChannel.cc,v 1.11 2001-07-11 10:02:04 gunter Exp $
+// $Id: G4VDecayChannel.cc,v 1.12 2001-08-17 00:14:29 kurasige Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // 
@@ -282,6 +282,7 @@ void G4VDecayChannel::FillDaughters()
     daughters = 0;
     G4Exception("G4VDecayChannel::FillDaughters");
   } 
+
   //create and set the array of pointers to daughter particles
   daughters = new G4ParticleDefinition*[numberOfDaughters];
   if (daughters_mass != 0) delete [] daughters_mass;
@@ -312,7 +313,7 @@ void G4VDecayChannel::FillDaughters()
       }
 #endif
       SetBR(0.0);
-      // G4Exception("G4VDecayChannel::FillDaughters");
+      return;
     }
 #ifdef G4VERBOSE
     if (verboseLevel>1) {
@@ -325,20 +326,29 @@ void G4VDecayChannel::FillDaughters()
   }  // end loop over all daughters
 
   // check sum of daghter mass
-  if (sumofdaughtermass > parentmass) {
-    // !!! illegal mass  !!!
+  const G4double AllowanceOfMassDifference = 1.0 * MeV;
+ if ( (sumofdaughtermass > parentmass + AllowanceOfMassDifference) ||
+      ( (parent->GetParticleType() != "nucleus") &&
+        (sumofdaughtermass > parentmass )           )            ){
+   // !!! illegal mass  !!!
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>1) {
-      G4cout << "G4VDecayChannel::FillDaughters ";
-      G4cout << "    Energy/Momentum conserevation breaks " <<G4endl;
-      G4cout << "    parent:" << *parent_name;
-      G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<G4endl;
-      for (index=0; index < numberOfDaughters; index++){
-        G4cout << "     daughter " << index << ":" << *daughters_name[index];
-        G4cout << " mass:" << daughters[index]->GetPDGMass()/GeV << "[GeV/c/c]" <<G4endl;
-      }
-    }
+   if (GetVerboseLevel()>0) {
+     G4cout << "G4VDecayChannel::FillDaughters ";
+     G4cout << "    Energy/Momentum conserevation breaks " <<G4endl;
+     if (GetVerboseLevel()>1) {
+       G4cout << "    parent:" << *parent_name;
+       G4cout << " mass:" << parentmass/GeV << "[GeV/c/c]" <<G4endl;
+       for (index=0; index < numberOfDaughters; index++){
+	 G4cout << "     daughter " << index << ":" << *daughters_name[index];
+	 G4cout << " mass:" << daughters[index]->GetPDGMass()/GeV;
+	 G4cout << "[GeV/c/c]" <<G4endl;
+       }
+     }
+     G4cout << " The BR of this decay mode is set to zero " << G4endl;
+   }
 #endif
+   SetBR(0.0);
+   return;
   }
 }
 
