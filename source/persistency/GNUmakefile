@@ -15,6 +15,7 @@
 
 name := G4persistency
 G4ODBMS := true
+G4ODBMS_INSTALLATION := true
 
 SUBDIRS = digits+hits/hits events run geometry/global \
           geometry/management geometry/solids/CSG geometry/solids/Boolean \
