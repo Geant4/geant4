@@ -21,7 +21,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4StatMFMacroCanonical.cc,v 1.2 2003-11-03 17:53:05 hpw Exp $
+// $Id: G4StatMFMacroCanonical.cc,v 1.3 2003-11-06 18:11:44 lara Exp $
 // GEANT4 tag $Name: not supported by cvs2svn $
 //
 // by V. Lara
@@ -34,17 +34,17 @@
 G4StatMFMacroCanonical::G4StatMFMacroCanonical(const G4Fragment & theFragment) 
 {
 
-    // Get memory for clusters
-    _theClusters.push_back(new G4StatMFMacroNucleon);              // Size 1
-    _theClusters.push_back(new G4StatMFMacroBiNucleon);            // Size 2
-    _theClusters.push_back(new G4StatMFMacroTriNucleon);           // Size 3
-    _theClusters.push_back(new G4StatMFMacroTetraNucleon);         // Size 4
-    for (G4int i = 4; i < theFragment.GetA(); i++)   
-	_theClusters.push_back(new G4StatMFMacroMultiNucleon(i+1)); // Size 5 ... A
-		
-    // Perform class initialization
-    Initialize(theFragment);
-
+  // Get memory for clusters
+  _theClusters.push_back(new G4StatMFMacroNucleon);              // Size 1
+  _theClusters.push_back(new G4StatMFMacroBiNucleon);            // Size 2
+  _theClusters.push_back(new G4StatMFMacroTriNucleon);           // Size 3
+  _theClusters.push_back(new G4StatMFMacroTetraNucleon);         // Size 4
+  for (G4int i = 4; i < theFragment.GetA(); i++)   
+    _theClusters.push_back(new G4StatMFMacroMultiNucleon(i+1)); // Size 5 ... A
+  
+  // Perform class initialization
+  Initialize(theFragment);
+    
 }
 
 
@@ -52,28 +52,29 @@ G4StatMFMacroCanonical::G4StatMFMacroCanonical(const G4Fragment & theFragment)
 G4StatMFMacroCanonical::~G4StatMFMacroCanonical() 
 {
   // garbage collection
-  if (!_theClusters.empty()) {
-    std::for_each(_theClusters.begin(),_theClusters.end(),DeleteFragment());
-  }
+  if (!_theClusters.empty()) 
+    {
+      std::for_each(_theClusters.begin(),_theClusters.end(),DeleteFragment());
+    }
 }
 
 // operators definitions
 G4StatMFMacroCanonical & 
 G4StatMFMacroCanonical::operator=(const G4StatMFMacroCanonical & ) 
 {
-    throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroCanonical::operator= meant to not be accessable");
-    return *this;
+  throw G4HadronicException(__FILE__, __LINE__, "G4StatMFMacroCanonical::operator= meant to not be accessable");
+  return *this;
 }
 
 G4bool G4StatMFMacroCanonical::operator==(const G4StatMFMacroCanonical & ) const 
 {
-    return false;
+  return false;
 }
 
 
 G4bool G4StatMFMacroCanonical::operator!=(const G4StatMFMacroCanonical & ) const 
 {
-    return true;
+  return true;
 }
 
 
@@ -85,7 +86,7 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
   
   G4double A = theFragment.GetA();
   G4double Z = theFragment.GetZ();
-
+  
   // Free Internal energy at T = 0
   __FreeInternalE0 = A*( -G4StatMFParameters::GetE0() +          // Volume term (for T = 0)
 			 G4StatMFParameters::GetGamma0()*        // Symmetry term
@@ -97,7 +98,7 @@ void G4StatMFMacroCanonical::Initialize(const G4Fragment & theFragment)
   
   
   CalculateTemperature(theFragment);
-
+  
   return;
 }
 
@@ -112,7 +113,7 @@ void G4StatMFMacroCanonical::CalculateTemperature(const G4Fragment & theFragment
   
   G4double A = theFragment.GetA();
   G4double Z = theFragment.GetZ();
-
+  
   // Fragment Multiplicity
   G4double FragMult = std::max((1.0+(2.31/MeV)*(U/A - 3.5*MeV))*A/100.0, 2.0);
 
@@ -147,19 +148,19 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseAandZ(const G4Fragment &theFragm
   G4double Z = theFragment.GetZ();
   
   std::vector<G4double> ANumbers(static_cast<G4int>(A));
-
+  
   G4double Multiplicity = ChooseA(A,ANumbers);
-
-
+  
+  
   std::vector<G4double> FragmentsA;
   
-    G4int i = 0;  
+  G4int i = 0;  
     for (i = 0; i < A; i++) 
       {
 	for (G4int j = 0; j < ANumbers[i]; j++) FragmentsA.push_back(i+1);
       }
 
-
+    
     // Sort fragments in decreasing order
     G4int im = 0;
     for (G4int j = 0; j < Multiplicity; j++) 
@@ -237,15 +238,15 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 						  std::vector<G4double> & FragmentsA)
     // 
 {
-    std::vector<G4double> FragmentsZ;
-	
-    G4double DeltaZ = 0.0;
-    G4double CP = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
-	(1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
-
-    G4int multiplicity = FragmentsA.size();
-
-    do 
+  std::vector<G4double> FragmentsZ;
+  
+  G4double DeltaZ = 0.0;
+  G4double CP = (3./5.)*(elm_coupling/G4StatMFParameters::Getr0())*
+    (1.0 - 1.0/pow(1.0+G4StatMFParameters::GetKappaCoulomb(),1./3.));
+  
+  G4int multiplicity = FragmentsA.size();
+  
+  do 
     {
       FragmentsZ.clear();
       G4int SumZ = 0;
@@ -281,15 +282,23 @@ G4StatMFChannel * G4StatMFMacroCanonical::ChooseZ(const G4int & Z,
 	    }
 	}
       DeltaZ = Z - SumZ;
-    } while (abs(DeltaZ) > 1.1);
+    }
+  while (abs(DeltaZ) > 1.1);
     
-    // DeltaZ can be 0, 1 or -1
-    FragmentsZ[0] += DeltaZ;
-	
-    G4StatMFChannel * theChannel = new G4StatMFChannel;
-    for (G4int i = multiplicity-1; i >= 0; i--) 
+  // DeltaZ can be 0, 1 or -1
+  G4int idx = 0;
+  if (DeltaZ < 0.0)
+    {
+      while (FragmentsZ[idx] < 0.5) ++idx;
+    }
+  FragmentsZ[idx] += DeltaZ;
+  
+  G4StatMFChannel * theChannel = new G4StatMFChannel;
+  for (G4int i = multiplicity-1; i >= 0; i--) 
+    {
       theChannel->CreateFragment(FragmentsA[i],FragmentsZ[i]);
-    
+    }
+  
     
     return theChannel;
 }
