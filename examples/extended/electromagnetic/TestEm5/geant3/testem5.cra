@@ -1,0 +1,758 @@
++OPT,MAPASM.
++ASM,23.
++USE,GCDES.
++USE,P=TESTEM5,T=EXE.
++EXE,CRA*.
++PAM,11,T=CARD,T=ATTACH.   /cern/pro/src/car/geant321.car
++PATCH,TESTEM5.
++DECK,BLANKDECK.
+* 
+* TestEm5   1.00 /01  980918 13.00 GEANT EXAMPLES
+* 
+*             TEST PROGRAM FOR GEANT TEST
+*                                                                               
+*             Author    L.Urban  *********
+*                                   
+*     
+* History                  
+* -------                                            
+*
+*  
++KEEP,EDEPO.
+      COMMON/EDEPO/EDEP,SEDEP,SEDEP2
+     +            ,DEEM,STMA,STMI,RMAX
+     +            ,anbstep,sstep,s2step,anch,anne
+     +            ,anele,anpos,sanele,sanpos
+     +            ,sanch,sanch2,sanne,sanne2 
+     +            ,tra,ref,stra,sref
+     +            ,nth0
+     +            ,NHI1,HIS1(2),NHI2 ,HIS2(2),NHI3,HIS3(2),NHI4,HIS4(2)
+     +            ,NHI5,HIS5(2),NHI6 ,HIS6(2),NHI7,HIS7(2),NHI8,HIS8(2)
+     +            ,NHI9,HIS9(2),NHI10,HIS10(2)
+      COMMON/PLOTS/NAME
+      CHARACTER*25 NAME
+      COMMON/GEOMAT/MATWLD,XWORLD,YZWORL,FieldW,
+     +              MATABS,XABSOR,YZABSO,FieldA,
+     +              XPOSAB,X1ABSO,X2ABSO, 
+     +              XVERT ,YVERT ,ZVERT
+
++DECK,main,if=batch.
+      PROGRAM main
+
+      PARAMETER (NG=200000,NH=10000)
+      COMMON/GCBANK/Q(NG)
+      COMMON/PAWC/H(NH)
+C     ALLOCATE MEMORY FOR ZEBRA/HBOOK
+C
+      CALL GZEBRA(NG)
+      CALL HLIMIT(-NH)
+C
+      CALL HPLINT(0)
+C
+C     INITIALISATION
+C
+      CALL UGINIT
+C
+C     PROCESSING
+C
+      CALL GRUN
+C
+C     TERMINATION
+C
+      CALL UGLAST
+C
+      STOP
+      END
++DECK,main,IF=-batch.
+      PROGRAM main
+*
+*     GEANT main program. To link with the MOTIF user interface
+*     the routine GPAWPP(NWGEAN,NWPAW) should be called, whereas
+*     the routine GPAW(NWGEAN,NWPAW) gives access to the basic
+*     graphics version.
+*
+      PARAMETER (NWGEAN=3000000, NWPAW=1000000)
+      COMMON/GCBANK/GEANT(NWGEAN)
+      COMMON/PAWC  /PAW  (NWPAW)
+*
+*
+      CALL GPAW (NWGEAN,NWPAW)
+*
+      END
+*
+      SUBROUTINE qnext
+      END
+*
+      SUBROUTINE czopen
+      END
+*
+      SUBROUTINE cztcp
+      END
+*
+      SUBROUTINE czclos
+      END
+*
+      SUBROUTINE czputa
+      END      
++DECK,UGINIT.
+      SUBROUTINE UGINIT
+C
++SEQ,GCUNIT
++SEQ,GCLIST
++SEQ,GCKINE
++SEQ,EDEPO
+      CHARACTER*25 filnam
+      CHARACTER*25 HF
+      CHARACTER*4 KEY
+      CHARACTER*2 SPACES 
+      DATA HF/'testem5.histo'/
+C
+C     INITIALIZE GEANT STRUCTURES
+C
+      CALL GINIT
+*
+C     default values (materials,sizes)
+*
+      MATABS = 23
+      XABSOR = 1.
+      YZABSO = 2.
+      FieldA = 0.
+*
+      MATWLD = 30      
+      XWORLD = 0.
+      YZWORL = 0.
+      FieldW = 0.
+*      
+      XPOSAB = 0.
+*      
+      XVERT = -1000.
+      YVERT = 0.
+      ZVERT = 0.
+*
+      NAME=HF  
+C
+C     DEFINE DATA CARDS
+C
+      CALL FFKEY('WORLD',MATWLD,4,'mixed')
+      CALL FFKEY('ABSOR',MATABS,4,'mixed')
+      CALL FFKEY('XPOS' ,XPOSAB,1,'real')  
+      CALL FFKEY('VERT' ,XVERT ,3,'real')  
+*
+      CALL FFKEY('HIS1',NHI1 ,3,'mixed')
+      CALL FFKEY('HIS2',NHI2 ,3,'mixed')
+      CALL FFKEY('HIS3',NHI3 ,3,'mixed')
+      CALL FFKEY('HIS4',NHI4 ,3,'mixed')
+      CALL FFKEY('HIS5',NHI5 ,3,'mixed')
+      CALL FFKEY('HIS6',NHI6 ,3,'mixed')
+      CALL FFKEY('HIS7',NHI7 ,3,'mixed')
+      CALL FFKEY('HIS8',NHI8 ,3,'mixed')
+      CALL FFKEY('HIS9',NHI9 ,3,'mixed')
+      CALL FFKEY('HI10',NHI10,3,'mixed')
+*
+      CALL FFKEY('DEEM',DEEM, 1,'REAL')
+      CALL FFKEY('STMA',STMA, 1,'REAL')
+      CALL FFKEY('STMI',STMI, 1,'REAL')
+*
+* *** read data cards
+      PRINT *, 'G3 > gives the filename of the data cards to be read:'
+      READ (*,'(A)') filnam
+      IF (filnam.EQ.' ') filnam = 'testem5.dat'
+      OPEN (unit=5,file=filnam,status='unknown',form='formatted')
+*
+*     filename should be 1st data card !
+      READ(5,98)KEY,SPACES,NAME
+98    FORMAT(A4,A2,A25)
+*
+      CALL GFFGO
+*
+        write(6,99) NAME
+99      FORMAT(/,15x,'histogram file --> NAME:',A25)
+C
+C     INITIALIZE ZEBRA STRUCTURES
+C
+      CALL GZINIT
+C
+C     DEFINE STANDARD PARTICLES AND MATERIALS
+C
+      CALL GPART
+      CALL GMATE
+*      
+      CALL GDINIT
+C
+C     DEFINE GEOMETRY
+C
+      CALL UGEOM
+C
+C     COMPUTE CROSS SECTIONS/ENERGY LOSSES
+C
+      CALL GPHYSI
+C
+C     PRINT MATERIALS,MEDIA,VOLUMES
+C
+      CALL GPRINT('MATE',0)
+      CALL GPRINT('TMED',0)
+      CALL GPRINT('VOLU',0)
+C
+C     DEFINE HISTOGRAMS
+C
+      CALL UHINIT
+C
+C     SOME MORE INITIALISATION
+C
+      SEDEP=0.
+      SEDEP2=0.
+      sanch=0.
+      sanch2=0.
+      sanne=0.
+      sanne2=0.
+      sanele=0.
+      sanpos=0.
+      sstep=0.
+      s2step=0.
+      stra=0.
+      sref=0.
+      nth0=0
+*
+      X1ABSO = XPOSAB-0.5*XABSOR
+      X2ABSO = XPOSAB+0.5*XABSOR
+*
+      if(xvert.le.-1000.) XVERT=-0.5*XWORLD
+*
+      END
++DECK,UGEOM.
+      SUBROUTINE UGEOM
+C
++SEQ,GCBANK
++SEQ,GCKINE
++SEQ,GCUNIT
++SEQ,GCTRAK
++SEQ,EDEPO
+C
+      DIMENSION AWAT(2),ZWAT(2),WWAT(2)
+      DIMENSION AAIR(2),ZAIR(2),WAIR(2)
+      DIMENSION PALL(3),PVOL(3)
+C
+C     COMPOUND/MIXTURE PARAMETERS
+C
+      DATA AWAT/1.01,16.00/
+      DATA ZWAT/1.,8./
+      DATA WWAT/2.,1./
+      DATA AAIR/14.01,16.00/
+      DATA ZAIR/7.,8./
+      DATA WAIR/0.7,0.3/
+C
+C     DEFINE  MATERIALS
+C
+      CALL GSMATE(21,'BERYLLIUM',9.010,4.,1.848,35.30,0.,0,0)
+      CALL GSMATE(22,'ALUMINIUM',26.98,13.,2.70,8.900,0.,0,0)
+      CALL GSMATE(23,'SILICON',28.09,14.,2.33,9.36,45.49,0,0)
+      CALL GSMATE(24,'LIQUID ARGON',39.95,18.,1.4,14.,83.71,0,0)
+      CALL GSMATE(25,'IRON',55.85,26.,7.87,1.760,0.,0,0)
+      CALL GSMATE(26,'COPPER',63.54,29.,8.96,1.430,0.,0,0)
+      CALL GSMATE(27,'GOLD',196.967,79.,19.32,0.33,0.,0,0)
+      CALL GSMATE(28,'LEAD',207.190,82.,11.35,0.560,0.,0,0)
+C
+      CALL GSMIXT(29,'WATER',AWAT,ZWAT,1.00,-2,WWAT)
+      CALL GSMIXT(30,'AIR',AAIR,ZAIR,1.205E-3,+2,WAIR)
+C
+C     DEFINE MEDIA
+C
+      IFIELD=0
+      if (FieldW.ne.0.) IFIELD=3
+      FIELDM=10*FieldW
+*      
+      TMAXFD=10.
+      STEMAX=1.E+10
+      DEEMAX=0.20
+      EPSIL=0.0001
+      STMIN=0.0010
+C
+      CALL GSTMED(99,'WORLD',MATWLD,0,IFIELD,
+     *            FIELDM,TMAXFD,STEMAX,DEEMAX,EPSIL,STMIN,0,0)
+C
+
+      IFIELD=0
+      if (FieldA.ne.0.) IFIELD=3
+      FIELDM=10*FieldA
+*      
+      IF(IGAUTO.LE.0) THEN
+        DEEMAX=DEEM
+        STMIN =STMI
+        STEMAX=STMA
+      ENDIF
+      CALL GSTMED(1,'ABSORBER',MATABS,0,IFIELD,
+     *            FIELDM,TMAXFD,STEMAX,DEEMAX,EPSIL,STMIN,0,0)
+C
+C
+C     DEFINE VOLUMES (WORLD+ABSORBER)
+*
+      if(XWORLD*YZWORL.le.0.) then
+        XWORLD=1.5*XABSOR 
+        YZWORL=1.2*YZABSO
+      endif
+*      	       
+      PALL(1)=0.5*XWORLD   
+      PALL(2)=0.5*YZWORL     
+      PALL(3)=0.5*YZWORL
+      CALL GSVOLU('worl','BOX ',99,PALL,3,IVOL)
+C
+      PVOL(1)=0.5*XABSOR
+      PVOL(2)=0.5*YZABSO
+      PVOL(3)=0.5*YZABSO 
+      CALL GSVOLU('abso','BOX ', 1,PVOL,3,IVOL)
+C
+C     BUILD  GEOMETRY
+C
+      CALL GSPOS('abso',1,'worl',XPOSAB,0.,0.,0,'ONLY')
+*                                                                               
+* *** Close geometry banks. (mandatory system routine)                         
+      CALL GGCLOS
+*
+*
+* *** dessin
+      CALL GSATT ('*','SEEN',1)
+*                                                                     
+      DO IX = 1,3
+        CALL GDOPEN (IX)
+        SCALE =   18./max(XWORLD,YZWORL)
+        PAXIS =   0.
+        SAXIS =   0.1*max(XWORLD,YZWORL)
+        CALL GDRAWC ('worl',IX,0.,10.,9.3,SCALE,SCALE)
+        CALL GDAXIS (PAXIS,PAXIS,PAXIS,SAXIS)
+        CALL GDSCAL (10., 0.3)
+        CALL GDCLOS
+      END DO
+*      
+      END
++DECK,UHINIT.
+      SUBROUTINE UHINIT
+C
++SEQ,GCBANK
++SEQ,GCKINE
++SEQ,EDEPO
+C
+      IF(NHI1.GT.0) THEN
+        CALL HBOOK1(1,'number of steps/event'
+     +               ,NHI1,HIS1(1),HIS1(2),0.)
+      ENDIF
+      IF(NHI2.GT.0) THEN
+        CALL HBOOK1(2,'energy deposit in absorber (MeV)'
+     +  ,NHI2,HIS2(1),HIS2(2),0.)
+      ENDIF
+      IF(NHI3.GT.0) THEN
+        CALL HBOOK1(3,'angle distribution at exit(deg)'
+     +  ,NHI3,HIS3(1),HIS3(2),0.)
+      ENDIF
+      IF(NHI4.GT.0) THEN
+        CALL HBOOK1(4,'lateral distribution at exit(mm)'
+     +  ,NHI4,HIS4(1),HIS4(2),0.)
+      ENDIF
+      IF(NHI5.GT.0) THEN
+        CALL HBOOK1(5,'kinetic energy of the primary at exit(MeV)'
+     +  ,NHI5,HIS5(1),HIS5(2),0.)
+      ENDIF
+      IF(NHI6.GT.0) THEN
+        CALL HBOOK1(6,'angle distr. of backscattered primaries(deg)'
+     +  ,NHI6,HIS6(1),HIS6(2),0.)
+      ENDIF
+      IF(NHI7.GT.0) THEN
+        CALL HBOOK1(7,'kinetic energy of backscattered primaries(deg)'
+     +  ,NHI7,HIS7(1),HIS7(2),0.)
+      ENDIF
+      IF(NHI8.GT.0) THEN
+        CALL HBOOK1(8,'kinetic energy of the charged secondaries(deg)'
+     +  ,NHI8,HIS8(1),HIS8(2),0.)
+      ENDIF
+      IF(NHI9.GT.0) THEN
+        CALL HBOOK1(9,'z of secondary charged vertices (mm)'
+     +  ,NHI9,HIS9(1),HIS9(2),0.)
+      ENDIF
+      IF(NHI10.GT.0) THEN
+        CALL HBOOK1(10,'energy of gammas escaping the absorber(MeV)'
+*    +  ,NHI10,HIS10(1),HIS10(2),0.)
+     +  ,NHI10,log10(HIS10(1)),log10(HIS10(2)),0.)
+      ENDIF
+*
+      CALL HIDOPT(0,'STAT')
+*
+      END
++DECK,GUKINE.
+      SUBROUTINE GUKINE
+C
++SEQ,GCBANK
++SEQ,GCFLAG
++SEQ,GCKINE
++SEQ,GCONST
++SEQ,EDEPO
+C
+      DIMENSION VERTEX(3),PLAB(3)
+C
+      VERTEX(1)=XVERT     
+      VERTEX(2)=YVERT     
+      VERTEX(3)=ZVERT
+      CALL GSVERT(VERTEX,0,0,0,0,NVERT)           
+*
+      JPA     = LQ(JPART-IKINE)
+      XMASS   =  Q(JPA+7)
+      PMOM    = SQRT(PKINE(1)*(PKINE(1)+2*XMASS))
+      THETA   = PKINE(2)*DEGRAD
+      PHI     = PKINE(3)*DEGRAD
+C
+      PLAB(1)=PMOM*SIN(THETA)*COS(PHI)
+      PLAB(2)=PMOM*SIN(THETA)*SIN(PHI)
+      PLAB(3)=PMOM*COS(THETA)
+C
+      CALL GSKINE(PLAB,IKINE,NVERT,0,0,NT)
+*                                                                   
+* *** Kinematics debug                     
+      IF (IEVENT.EQ.1.OR.IDEBUG.NE.0) CALL GPRINT('KINE',0)            
+C
+*
+* *** initialisation per event
+      anbstep=1.e-6
+      anch=0.
+      anne=0.
+      anele=0.
+      anpos=0.
+      EDEP=0.
+      tra=0.
+      ref=0.
+*      
+      END
++DECK,GUSTEP.
+      SUBROUTINE GUSTEP
+C
++SEQ,GCBANK
++SEQ,GCTMED
++SEQ,GCKINE
++SEQ,GCKING
++SEQ,GCFLAG
++SEQ,GCTRAK
++SEQ,GCVOLU
++SEQ,GCCUTS
++SEQ,GCONST
++SEQ,GCUNIT
++SEQ,EDEPO
+C
+      parameter ( facdeg=180./3.1415927 )
+      DATA IEVOLD/0/
+
+*                                                                               
+*                                                                               
+* *** Debug event and store tracks for drawing
+      IF (IDEBUG.NE.0)   CALL GPCXYZ      
+      IF ((ISWIT(1).EQ.1).AND.(CHARGE.NE.0.)) CALL GSXYZ
+      IF  (ISWIT(1).EQ.2)                     CALL GSXYZ                        
+*
+*   
+      IF(IEVOLD.NE.IEVENT) THEN
+        IEVOLD=IEVENT
+        ITOLD=0
+        NMOLD=0
+        XO=VERT(1)
+        RO=sqrt(vect(2)**2+vect(3)**2)
+      ENDIF
+C
+C     TRACK FLAG
+C
+      ITFL=ISTAK+10000*ITRA+100000*IVERT
+      IF(ITOLD.NE.IEVENT) THEN
+        XO=VERT(1)
+        RO=sqrt(vect(2)**2+vect(3)**2)
+      ENDIF
+C     
+      X=VECT(1)
+C
+      IF(NGKINE.GT.0) THEN
+        do 10 i=1,ngkine
+        itypa=gkin(5,i)
+*       all the charged secondaries
+        if(itypa.ne.1)  call hfill(9,10.*GPOS(1,i),0.,1.)
+*       in absorber only !
+        if(NUMED.EQ.1) then
+          if(itypa.eq.1) then
+             anne=anne+1.
+          else
+             anch=anch+1.
+             if(itypa.eq.2) anpos=anpos+1.
+             if(itypa.eq.3) anele=anele+1.
+             tsec=1000.*(GKIN(4,i)-510.999e-6)
+             call hfill(8,tsec,0.,1.)
+          endif 
+        endif 
+10      continue
+      CALL GSKING(0)
+      ENDIF
+*
+      R=SQRT(VECT(2)**2+VECT(3)**2)
+      if((r.le.YZABSO).and.(xo.lt.X2ABSO).and.(x.ge.X2ABSO)) then
+       if(vect(4).gt.0.) then
+        if(ipart.eq.1) call hfill(10,log10(1000.*gekin),0.,1.)
+        if(ipart.eq.ikine) then
+          tra=1.
+*
+          call hfill(5,1000.*gekin,0.,1.)
+
+          if((1-vect(4)).gt.1.e-6) then
+            theta=acos(vect(4))
+          else
+            theta=sqrt(2.*(1.-vect(4)))
+          endif
+          if(nhi3.gt.0) then
+            h1=his3(1)/facdeg
+            h2=his3(2)/facdeg
+            dth=(h2-h1)/float(nhi3)
+            ibin=int((theta-h1)/dth)+1
+            if((ibin.le.0).or.(ibin.gt.nhi3)) then
+              w=1.
+            else
+              th=ibin*dth
+              if(theta.GT.0.001*dth) then
+                w=PI/(64800.*dth*sin(theta))
+              else
+                nth0=nth0+1
+                if(nth0.le.10) then
+                thdeg=theta*facdeg
+                write(6,997) thdeg
+997    format('theta<0.001*dth (from plot excluded)'
+     +                 ,' theta=',e12.4,' deg') 
+                endif
+                w=0.
+              endif
+            endif
+            theta = facdeg*theta
+            call hfill(3,theta,0.,w)
+          endif
+          call hfill(4,10.*R,0.,1.)
+        endif
+       endif
+      endif
+      if((r.le.YZABSO).and.(xo.gt.X1ABSO).and.(x.le.X1ABSO)) then
+       if(vect(4).lt.0.) then
+        if(ipart.eq.ikine) then
+          ref=1.
+          call hfill(7,1000.*gekin,0.,1.)
+          if((1.+vect(4)).gt.1.e-6) then
+            theta=acos(vect(4))-PIBY2
+          else
+            theta=sqrt(2.*(1.+vect(4)))
+          endif
+          if(nhi6.gt.0) then
+            h1=his6(1)/facdeg
+            h2=his6(2)/facdeg
+            dth=(h2-h1)/float(nhi6)
+            ibin=int((theta-h1)/dth)+1
+            if((ibin.le.0).or.(ibin.gt.nhi6)) then
+              w=0.
+            else
+              th=ibin*dth
+              if(theta.GT.0.001*dth) then
+                w=PI/(64800.*dth*sin(theta))
+              else
+                thdeg=theta*facdeg
+                write(6,997) thdeg
+                w=0.
+              endif
+              theta = facdeg*theta
+              call hfill(6,theta,0.,w)
+            endif
+          endif
+        endif
+       endif
+      endif
+         
+        IF(NUMED.EQ.1) THEN
+          anbstep=anbstep+1.
+          EDEP = EDEP+DESTEP
+        ENDIF
+C
+      ITOLD=IEVENT
+      XO=X
+      RO=R
+C
+      END
++DECK,GUOUT.
+      SUBROUTINE GUOUT
+C
++SEQ,GCBANK
++SEQ,GCFLAG
++SEQ,GCUNIT
++SEQ,EDEPO
++SEQ,GCONST
+*                                                                               
+      dimension runerr(2)
+* *** drawing
+*                                                          
++self,if=-batch.
+      IF (ISWIT(1).NE.0) THEN
+         CALL GDHEAD (110110,'TestEm5',0.)
+         CALL GDSHOW (3)
+         CALL GDXYZ  (0)
+      END IF
++self.      
+*
+      call hfill(1,anbstep,0.,1.)
+      sstep=sstep+anbstep
+      s2step=s2step+anbstep*anbstep
+      sanch = sanch+anch
+      sanch2=sanch2+anch*anch
+      sanne = sanne+anne
+      sanne2=sanne2+anne*anne
+      sanele=sanele+anele
+      sanpos=sanpos+anpos
+        SEDEP=SEDEP+EDEP
+        SEDEP2=SEDEP2+EDEP**2
+      stra=stra+tra
+      sref=sref+ref
+      eein=1000.*EDEP
+      CALL HFILL(2,eein,0.,1.0)
+C
+      END
++DECK,UGLAST.
+      SUBROUTINE UGLAST
+C
++SEQ,GCBANK
++SEQ,GCFLAG
++SEQ,GCUNIT
++SEQ,GCONST
++SEQ,EDEPO
++SEQ,GCKINE.
+C
+      CALL GLAST
+C
+      IF(IEVENT.GT.0) THEN
+        AEV=FLOAT(IEVENT)
+        SEDEP=SEDEP/AEV
+        SE2=SEDEP2/AEV-SEDEP**2
+        SEDEP2=0.
+        IF(SE2.GT.0.) SEDEP2=SQRT(SE2/AEV)
+*
+        WRITE(CHMAIL,1002)SEDEP,SEDEP2
+        CALL GMAIL(0,0)
+        sstep=sstep/aev
+        s2step=s2step/aev-sstep*sstep
+        sigst=0.
+        if(s2step.gt.0.) sigst=sqrt(s2step/aev)
+        write(6,122)sstep,sigst
+122     format(/,'  mean number of steps=',f15.3,' +- ',f15.3) 
+        sanch=sanch/aev
+        sigch2=sanch2/aev-sanch*sanch
+        sigch=0.
+        if(sigch2.gt.0.) sigch=sqrt(sigch2/aev)
+        sanne=sanne/aev
+        signe2=sanne2/aev-sanne*sanne
+        signe=0.
+        if(signe2.gt.0.) signe=sqrt(signe2/aev)
+        write(6,123) sanch,sigch,sanne,signe
+123     format(/,'  mean nb of charged secondaries=',f15.4,' +- ',f15.4, 
+     +         /,'  mean nb of neutral secondaries=',f15.4,' +- ',f15.4) 
+        sanele=sanele/aev
+        sanpos=sanpos/aev
+        write(6,124)sanele,sanpos
+124     format(/,'  mean nb of e-s = ',f15.4,'  and e+s=',f15.4)
+        stra=stra/aev
+        sref=sref/aev
+        write(6,125)stra,sref
+125     format(/,'  (number) transmission coeff=',e12.4,
+     +           '  reflexion coeff=',e12.4)
+        write(6,126) nth0
+126     format(/,'  nb of (theta<0.001*bin) events=',i6)
+*
+CCC        CALL HISTDO
+*
+        CALL HPLEND
+*
+        CALL HRPUT(0,NAME,'N')
+C
+      ENDIF
+C
+1002  FORMAT(5X,'energy deposit=',E12.4,' +- ',E12.4)
+C
+      END
++DECK,GRUN.
+      SUBROUTINE GRUN
+*.
+*.    ******************************************************************
+*.    *                                                                *
+*.    *       Steering routine to process all the events               *
+*.    *                                                                *
+*.    *    ==>Called by : <USER>, main program                         *
+*.    *       Author    R.Brun  *********                              *
+*.    *                                                                *
+*.    ******************************************************************
+*.
++SEQ,GCBANK
++SEQ,GCFLAG
++SEQ,GCUNIT
++SEQ,GCTIME
+      SAVE IFIRST
+      DATA IFIRST/0/
+*.
+*.    ------------------------------------------------------------------
+*.
+*             Keep starting time
+*
+      IF(IFIRST.EQ.0)THEN
+         IFIRST=1
+         CALL TIMEL(TIMINT)
+      ENDIF
+*
+   10 IF(IEVENT.LT.NEVENT) THEN
+         IEVENT=IEVENT+1
+*
+*             Initialises event partition
+         LOUT=9
+         CALL GTRIGI
+         LOUT=6
+*             Process one event (trigger)
+*
+         CALL GTRIG
+*
+*             Clear event partition
+*
+         CALL GTRIGC
+*
+         IF(IEORUN.EQ.0) THEN
+*
+*             Check time left
+*
+            IF(ITIME.LE.0)GO TO 10
+            IF(MOD(IEVENT,ITIME).NE.0)GO TO 10
+            CALL TIMEL(TIMNOW)
+            IF(TIMNOW.GT.TIMEND)GO TO 10
+            WRITE(CHMAIL,10000)TIMEND
+            CALL GMAIL(0,2)
+            IEORUN = 1
+         ENDIF
+      ENDIF
+*
+10000 FORMAT(5X,'***** THE JOB STOPS NOW BECAUSE THE TIME LEFT IS LESS',
+     +' THAN     ',F8.3,' SECONDS *****')
+      END
+
++DECK,ffread,T=data.
+FILE  geant3.siplots 
+LIST
+ABSOR  23 (mate) 1.0 (thicknX)  2.0 (sizeYZ)  0. (field)
+KINE   3 (Itype) 0.030000 (Ekine) 90.0 (teta)  0.0 (phi)      
+TRIG   100000
+DEBUG  1  1  
+SWIT   0 (draw)
+LOSS   1
+HADR   0
+ABAN   0
+CUTS    10.0e-6 (cutgam)     10.0e-6 (cutele)  3*10.e-3 (cutneu/had/muo)
+      2*10.0e-6 (bcute/m)  2*10.0e-6 (dcute/m)
+TIME   2=5.
+HIS1  50   0.    50.
+HIS2  60   0.    1.2
+HIS3  90   0.    90.
+HIS4  50   0.    2.5
+HIS5  50   0.    1.
+HIS6  90   0.    90.
+HIS7  50   0.    1.
+HIS8  50   0.0   0.5
+HIS9  100 -0.5   0.5
+HI10  80   0.01  1.     
+END
++QUIT.
